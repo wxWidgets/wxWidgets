@@ -46,6 +46,29 @@
 
 #include "wx/msw/private/darkmode.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
+
+// In the WinUI port, the appearance is driven by the WinUI element theme, which
+// can be changed at any time (unlike the classic dark mode support which can
+// only be set up before the windows are created).
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+static wxApp::AppearanceResult wxWinUIForwardAppearance(wxApp::Appearance a)
+{
+    wxWinUIAppTheme theme;
+    switch ( a )
+    {
+        case wxApp::Appearance::Light: theme = wxWinUIAppTheme::Light; break;
+        case wxApp::Appearance::Dark:  theme = wxWinUIAppTheme::Dark;  break;
+        default:                       theme = wxWinUIAppTheme::System; break;
+    }
+
+    wxWinUISetAppTheme(theme);
+    return wxApp::AppearanceResult::Ok;
+}
+#endif
+
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
 // ----------------------------------------------------------------------------
@@ -83,6 +106,11 @@ public:
     static wxDarkModeSettings& GetSettings()
     {
         return *ms_settings;
+    }
+
+    static bool HasSettings()
+    {
+        return ms_settings != nullptr;
     }
 
     static DwmSetWindowAttribute_t GetDwmSetWindowAttribute()
@@ -353,6 +381,10 @@ bool wxApp::MSWEnableDarkMode(DarkMode flags, wxDarkModeSettings* settings)
 
 wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return wxWinUIForwardAppearance(appearance);
+#else
+
     DarkMode flags = DarkMode_Auto;
     switch ( appearance )
     {
@@ -372,6 +404,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
     // Do (try to) change it.
     return MSWEnableDarkMode(flags) ? AppearanceResult::Ok
                                     : AppearanceResult::Failure;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -508,6 +541,35 @@ bool HasChanged()
 {
     return gs_hasChanged;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool SyncWithWinUITheme(bool dark)
+{
+    // The mode is forced in both directions: the WinUI theme, and not the
+    // system-wide setting, is what the windows on screen actually use, and an
+    // application using an explicitly light theme under a dark system must not
+    // be given dark colours (nor vice versa).
+    const PreferredAppMode mode = dark ? AppMode_ForceDark : AppMode_ForceLight;
+    if ( mode == gs_appMode && wxDarkModeModule::HasSettings() )
+        return true;
+
+    if ( !wxMSWImpl::InitDarkMode() )
+        return false;
+
+    wxMSWImpl::SetPreferredAppMode(mode);
+    gs_appMode = mode;
+
+    // The settings are used by GetColour() and friends as soon as the mode is
+    // active, so they must exist before returning. Any settings previously
+    // installed by the application are preserved.
+    if ( !wxDarkModeModule::HasSettings() )
+        wxDarkModeModule::SetSettings(new wxDarkModeSettings());
+
+    return true;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 void ConfigureTLW(HWND hwnd)
 {
@@ -1182,9 +1244,14 @@ wxApp::MSWEnableDarkMode(DarkMode WXUNUSED(flags),
     return false;
 }
 
-wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return wxWinUIForwardAppearance(appearance);
+#else
+    wxUnusedVar(appearance);
     return AppearanceResult::Failure;
+#endif
 }
 
 wxColour wxDarkModeSettings::GetColour(wxSystemColour WXUNUSED(index))
@@ -1214,6 +1281,15 @@ bool HasChanged()
 {
     return false;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool SyncWithWinUITheme(bool WXUNUSED(dark))
+{
+    return false;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 void ConfigureTLW(HWND WXUNUSED(hwnd))
 {

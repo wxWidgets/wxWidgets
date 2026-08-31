@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/fdrepdlg.h"
+#include "wx/weakref.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -61,6 +62,15 @@ wxFindReplaceDialogBase::~wxFindReplaceDialogBase()
 
 void wxFindReplaceDialogBase::Send(wxFindDialogEvent& event)
 {
+    Send(event, nullptr);
+}
+
+void wxFindReplaceDialogBase::Send(wxFindDialogEvent& event,
+                                   wxFindReplaceData *dataAfterSend)
+{
+    wxCHECK_RET( m_FindReplaceData,
+                 wxS("find/replace dialog has no data") );
+
     // we copy the data to dialog->GetData() as well
 
     m_FindReplaceData->m_Flags = event.GetFlags();
@@ -83,14 +93,29 @@ void wxFindReplaceDialogBase::Send(wxFindDialogEvent& event)
         }
     }
 
-    if ( !ProcessWindowEvent(event) )
+    if ( dataAfterSend && dataAfterSend != m_FindReplaceData )
+    {
+        *dataAfterSend = *m_FindReplaceData;
+        m_FindReplaceData = dataAfterSend;
+    }
+
+    // A close handler is explicitly allowed to destroy the dialog and/or its
+    // owner. Keep only weak identities before entering client code and don't
+    // touch this object after ProcessWindowEvent() if it ceased to exist.
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxWeakRef<wxWindow> weakParent(GetParent());
+    const bool processed = ProcessWindowEvent(event);
+    if ( !weakThis.get() )
+        return;
+
+    if ( !processed )
     {
         // the event is not propagated upwards to the parent automatically
         // because the dialog is a top level window, so do it manually as
         // in 9 cases out of 10 the message must be processed by the dialog
         // owner and not the dialog itself
-        if ( GetParent() )
-            (void)GetParent()->ProcessWindowEvent(event);
+        if ( wxWindow * const parent = weakParent.get() )
+            (void)parent->ProcessWindowEvent(event);
     }
 }
 

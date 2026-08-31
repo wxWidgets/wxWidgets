@@ -45,13 +45,47 @@
 #include "wx/msw/dcprint.h"
 #include "wx/msw/enhmeta.h"
 #include "wx/display.h"
+#include "wx/scopeguard.h"
+#include "wx/weakref.h"
 
 #include "wx/private/print.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 #include <stdlib.h>
 
-// This variable is defined in src/msw/dcprint.cpp.
-extern bool wxPrinterOperationCancelled;
+namespace
+{
+
+// The abort procedure is called by GDI while arbitrary application events can
+// be dispatched. In particular, those events can destroy the progress dialog
+// (directly or together with its owner), so the legacy public raw pointer must
+// never be used as a lifetime guard.
+wxWeakRef<wxWindow> gs_abortWindow;
+wxWeakRef<wxWindow> gs_printOwner;
+bool gs_abortSessionActive = false;
+bool gs_printJobHadOwner = false;
+
+bool IsWindowUnavailable(wxWindow* window)
+{
+    if ( !window || window->IsBeingDeleted() ||
+         (wxTheApp &&
+          wxTheApp->IsScheduledForDestruction(window)) )
+    {
+        return true;
+    }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUITLWHostIsDestroyScheduled(window) )
+        return true;
+#endif
+
+    return false;
+}
+
+} // anonymous namespace
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -81,8 +115,43 @@ wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
 
 bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
+    const bool hadParent = parent != nullptr;
+    const wxWeakRef<wxWindow> parentLifetime(parent);
+    const auto isParentUnavailable =
+        [&parentLifetime, hadParent]()
+        {
+            wxWindow* const liveParent = parentLifetime.get();
+            return hadParent &&
+                   IsWindowUnavailable(liveParent);
+        };
+
+    if ( sm_printJobActive )
+    {
+        wxLogWarning(_("A print job is already active."));
+        return false;
+    }
+
+    sm_printJobActive = true;
+    wxScopeGuard clearActiveJob =
+        wxMakeGuard([]() { sm_printJobActive = false; });
+    wxUnusedVar(clearActiveJob);
+
+    gs_printOwner = parentLifetime;
+    gs_printJobHadOwner = hadParent;
+    wxScopeGuard clearPrintOwner =
+        wxMakeGuard(
+            []()
+            {
+                gs_printOwner.Release();
+                gs_printJobHadOwner = false;
+            });
+    wxUnusedVar(clearPrintOwner);
+
     sm_abortIt = false;
     sm_abortWindow = nullptr;
+    gs_abortWindow.Release();
+    gs_abortSessionActive = false;
+    sm_lastError = wxPRINTER_NO_ERROR;
 
     if (!printout)
     {
@@ -90,30 +159,82 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return false;
     }
 
-    // Small helper ensuring that we destroy sm_abortWindow if it was created.
+    // Ensure that the abort window is destroyed if we still own a live one,
+    // while tolerating it being destroyed from a callback dispatched by GDI.
     class AbortWindowCloser
     {
     public:
         AbortWindowCloser() = default;
 
-        void Initialize(wxWindow* win)
+        bool Initialize(wxWindow* win)
         {
+            m_window = wxWeakRef<wxWindow>(win);
+            gs_abortWindow = m_window;
             wxPrinterBase::sm_abortWindow = win;
+            gs_abortSessionActive = true;
+            win->Bind(
+                wxEVT_DESTROY,
+                [](wxWindowDestroyEvent& event)
+                {
+                    wxWindow* const current = gs_abortWindow.get();
+                    if ( gs_abortSessionActive &&
+                         event.GetEventObject() == current )
+                    {
+                        wxPrinterBase::sm_abortWindow = nullptr;
+                        wxPrinterBase::sm_abortIt = true;
+                    }
+                    event.Skip();
+                });
             win->Show();
             wxSafeYield();
+
+            return Get() != nullptr;
+        }
+
+        wxPrintAbortDialog* Get() const
+        {
+            wxWindow* const win = m_window.get();
+            if ( !gs_abortSessionActive ||
+                 wxPrinterBase::sm_abortWindow != win ||
+                 IsWindowUnavailable(win) ||
+                 (gs_printJobHadOwner &&
+                  IsWindowUnavailable(gs_printOwner.get())) )
+                return nullptr;
+
+            // m_window is initialized exclusively from the
+            // wxPrintAbortDialog* returned by CreateAbortWindow().
+            return static_cast<wxPrintAbortDialog*>(win);
         }
 
         ~AbortWindowCloser()
         {
-            if ( wxPrinterBase::sm_abortWindow )
+            wxWindow* win = m_window.get();
+
+            // Close the shared session before hiding/deleting the window:
+            // either action can dispatch events and re-enter wxAbortProc().
+            gs_abortSessionActive = false;
+            wxPrinterBase::sm_abortWindow = nullptr;
+            gs_abortWindow.Release();
+
+            // OnCancel() or destruction of the owner can already have queued
+            // this TLW in either the regular pending-delete list or WinUI's
+            // private retained-callback queue. Never delete it a second time.
+            if ( !IsWindowUnavailable(win) )
             {
-                wxPrinterBase::sm_abortWindow->Show(false);
-                wxDELETE(wxPrinterBase::sm_abortWindow);
+                win->Show(false);
+                win = m_window.get();
+                if ( !IsWindowUnavailable(win) )
+                    delete win;
             }
+
+            m_window.Release();
         }
 
         AbortWindowCloser(const AbortWindowCloser&) = delete;
         AbortWindowCloser& operator=(const AbortWindowCloser&) = delete;
+
+    private:
+        wxWeakRef<wxWindow> m_window;
     } abortWindowCloser;
 
     if (m_printDialogData.GetMinPage() < 1)
@@ -137,6 +258,8 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
     {
+        if ( sm_lastError == wxPRINTER_NO_ERROR )
+            sm_lastError = wxPRINTER_ERROR;
         return false;
     }
 
@@ -146,6 +269,11 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
+    wxScopeGuard clearPrintoutDC =
+        wxMakeGuard([printout]() { printout->SetDC(nullptr); });
+    wxUnusedVar(clearPrintoutDC);
+    wxPrinterDCImpl* const printerDCImpl =
+        wxDynamicCast(dc->GetImpl(), wxPrinterDCImpl);
 
     // Create an abort window
     wxBusyCursor busyCursor;
@@ -176,10 +304,26 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     m_printDialogData.SetMinPage(allPages.fromPage);
     m_printDialogData.SetMaxPage(allPages.toPage);
 
-    wxPrintAbortDialog *win = CreateAbortWindow(parent, printout);
-    wxYield();
+    // The print dialog and the printout callbacks above may have yielded.
+    // Never pass a stale owner to the abort dialog constructor.
+    if ( isParentUnavailable() )
+    {
+        sm_abortIt = true;
+        sm_lastError = wxPRINTER_CANCELLED;
+        return false;
+    }
 
-    ::SetAbortProc(GetHdcOf(*dc), wxAbortProc);
+    wxPrintAbortDialog *win =
+        CreateAbortWindow(parentLifetime.get(), printout);
+    if ( isParentUnavailable() )
+    {
+        // CreateAbortWindow() is virtual and may dispatch application code.
+        // If its owner entered destruction, do not even attach a tracker to
+        // the returned pointer: an override could already have invalidated it.
+        sm_abortIt = true;
+        sm_lastError = wxPRINTER_CANCELLED;
+        return false;
+    }
 
     if (!win)
     {
@@ -189,88 +333,226 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return false;
     }
 
-    abortWindowCloser.Initialize(win);
+    if ( !abortWindowCloser.Initialize(win) || isParentUnavailable() )
+    {
+        // Showing the progress window dispatches events and may destroy it or
+        // its owner. Treat this as cancellation instead of retaining a
+        // dangling raw pointer.
+        sm_abortWindow = nullptr;
+        sm_abortIt = true;
+        sm_lastError = wxPRINTER_CANCELLED;
+        return false;
+    }
 
-    wxPrintingGuard guard(printout);
+    ::SetAbortProc(GetHdcOf(*dc), wxAbortProc);
 
     sm_lastError = wxPRINTER_NO_ERROR;
 
-    // calculate total number of pages to print
-    int numToPrint = 0;
-    for (const wxPrintPageRange& range : pageRanges)
     {
-        for (int pn = range.fromPage; pn <= range.toPage; pn++)
-        {
-            if (printout->HasPage(pn))
-                numToPrint++;
-        }
-    }
+        wxPrintingGuard guard(printout);
 
-    // The dc we get from the PrintDialog will do multiple copies without help
-    // if the device supports it. Loop only if we have created a dc from our
-    // own m_printDialogData or the device does not support multiple copies.
-    // m_printDialogData.GetPrintData().GetNoCopies() is set from device
-    // devMode in printdlg.cpp/wxWindowsPrintDialog::ConvertFromNative()
-    const int maxCopyCount = !prompt ||
-                             !m_printDialogData.GetPrintData().GetNoCopies()
-                             ? m_printDialogData.GetNoCopies() : 1;
-    for ( int copyCount = 1; copyCount <= maxCopyCount; copyCount++ )
-    {
-        // We have no good way to return the fact that starting printing was
-        // cancelled, as can be the case e.g. when showing a dialog when
-        // printing to file, from wxPrinterDCImpl::StartDoc() which is called
-        // by OnBeginDocument() by default, so pass this information out of
-        // band using this global variable.
-        wxPrinterOperationCancelled = false;
-
-        if ( !printout->OnBeginDocument(allPages.fromPage, allPages.toPage) )
-        {
-            if ( wxPrinterOperationCancelled )
-            {
-                // No need to log an error if printing was cancelled by user.
-                sm_lastError = wxPRINTER_CANCELLED;
-            }
-            else
-            {
-                wxLogError(_("Could not start printing."));
-                sm_lastError = wxPRINTER_ERROR;
-            }
-            break;
-        }
-        if (sm_abortIt)
-        {
-            sm_lastError = wxPRINTER_CANCELLED;
-            break;
-        }
-
-        int numPrinted = 0;
-
+        // calculate total number of pages to print
+        int numToPrint = 0;
         for (const wxPrintPageRange& range : pageRanges)
         {
             for (int pn = range.fromPage; pn <= range.toPage; pn++)
             {
-                if ( !printout->HasPage(pn) )
-                    continue;
-
-                win->SetProgress(++numPrinted, numToPrint,
-                                 copyCount, maxCopyCount);
-
-                if ( sm_abortIt )
-                {
-                    sm_lastError = wxPRINTER_CANCELLED;
-                    break;
-                }
-
-                wxPrintingPageGuard pageGuard(*dc);
-                if ( !printout->OnPrintPage(pn) )
-                {
-                    sm_lastError = wxPRINTER_CANCELLED;
-                    break;
-                }
+                if (printout->HasPage(pn))
+                    numToPrint++;
             }
         }
 
-        printout->OnEndDocument();
+        // The dc we get from the PrintDialog will do multiple copies without
+        // help if the device supports it. Loop only if we have created a dc
+        // from our own data or the device does not support multiple copies.
+        const int maxCopyCount = wxMax(
+            1,
+            !prompt ||
+            !m_printDialogData.GetPrintData().GetNoCopies()
+                ? m_printDialogData.GetNoCopies()
+                : 1);
+        bool stopPrinting = false;
+        for ( int copyCount = 1;
+              copyCount <= maxCopyCount && !stopPrinting;
+              copyCount++ )
+        {
+            if ( sm_abortIt )
+            {
+                sm_lastError = wxPRINTER_CANCELLED;
+                stopPrinting = true;
+                break;
+            }
+
+            if ( !printout->OnBeginDocument(
+                     allPages.fromPage, allPages.toPage) )
+            {
+                if ( sm_abortIt ||
+                     (printerDCImpl &&
+                      printerDCImpl->WasLastStartDocCancelled()) )
+                {
+                    sm_lastError = wxPRINTER_CANCELLED;
+                }
+                else
+                {
+                    wxLogError(_("Could not start printing."));
+                    sm_lastError = wxPRINTER_ERROR;
+                }
+                stopPrinting = true;
+                break;
+            }
+
+            {
+                wxScopeGuard endDocument =
+                    wxMakeGuard(
+                        [printout]() { printout->OnEndDocument(); });
+                wxUnusedVar(endDocument);
+
+                if (sm_abortIt)
+                {
+                    sm_lastError = wxPRINTER_CANCELLED;
+                    stopPrinting = true;
+                }
+
+                int numPrinted = 0;
+                for (const wxPrintPageRange& range : pageRanges)
+                {
+                    if ( stopPrinting )
+                        break;
+
+                    for (int pn = range.fromPage;
+                         pn <= range.toPage;
+                         pn++)
+                    {
+                        if ( !printout->HasPage(pn) )
+                            continue;
+
+                        wxPrintAbortDialog* const liveAbortWindow =
+                            abortWindowCloser.Get();
+                        if ( !liveAbortWindow || isParentUnavailable() )
+                        {
+                            sm_abortWindow = nullptr;
+                            sm_abortIt = true;
+                            sm_lastError = wxPRINTER_CANCELLED;
+                            stopPrinting = true;
+                            break;
+                        }
+
+                        liveAbortWindow->SetProgress(
+                            ++numPrinted, numToPrint,
+                            copyCount, maxCopyCount);
+
+                        if ( sm_abortIt )
+                        {
+                            sm_lastError = wxPRINTER_CANCELLED;
+                            stopPrinting = true;
+                            break;
+                        }
+
+                        {
+                            dc->StartPage();
+                            if ( printerDCImpl &&
+                                 !printerDCImpl->
+                                    WasLastStartPageSuccessful() )
+                            {
+                                if ( sm_abortIt )
+                                {
+                                    sm_lastError = wxPRINTER_CANCELLED;
+                                }
+                                else if ( sm_lastError ==
+                                          wxPRINTER_NO_ERROR )
+                                {
+                                    sm_lastError = wxPRINTER_ERROR;
+                                }
+                                stopPrinting = true;
+                                break;
+                            }
+
+                            wxDC* const pageDC = dc.get();
+                            wxScopeGuard endPage =
+                                wxMakeGuard(
+                                    [pageDC]()
+                                    {
+                                        pageDC->EndPage();
+                                    });
+                            wxUnusedVar(endPage);
+
+                            if ( !printout->OnPrintPage(pn) )
+                            {
+                                sm_lastError = wxPRINTER_CANCELLED;
+                                stopPrinting = true;
+                            }
+
+                            if ( sm_abortIt )
+                            {
+                                sm_lastError = wxPRINTER_CANCELLED;
+                                stopPrinting = true;
+                            }
+
+                            if ( !abortWindowCloser.Get() ||
+                                 isParentUnavailable() )
+                            {
+                                sm_abortWindow = nullptr;
+                                sm_abortIt = true;
+                                sm_lastError = wxPRINTER_CANCELLED;
+                                stopPrinting = true;
+                            }
+                        }
+
+                        if ( printerDCImpl &&
+                             !printerDCImpl->
+                                WasLastEndPageSuccessful() )
+                        {
+                            if ( sm_abortIt )
+                            {
+                                sm_lastError = wxPRINTER_CANCELLED;
+                            }
+                            else if ( sm_lastError ==
+                                      wxPRINTER_NO_ERROR )
+                            {
+                                sm_lastError = wxPRINTER_ERROR;
+                            }
+                            stopPrinting = true;
+                        }
+
+                        if ( stopPrinting )
+                            break;
+                    }
+                }
+            } // OnEndDocument()
+
+            if ( printerDCImpl &&
+                 !printerDCImpl->WasLastEndDocSuccessful() )
+            {
+                if ( sm_abortIt )
+                    sm_lastError = wxPRINTER_CANCELLED;
+                else if ( sm_lastError == wxPRINTER_NO_ERROR )
+                    sm_lastError = wxPRINTER_ERROR;
+                stopPrinting = true;
+            }
+
+            if ( isParentUnavailable() &&
+                 sm_lastError == wxPRINTER_NO_ERROR )
+            {
+                sm_abortWindow = nullptr;
+                sm_abortIt = true;
+                sm_lastError = wxPRINTER_CANCELLED;
+                stopPrinting = true;
+            }
+
+            if ( sm_abortIt &&
+                 sm_lastError == wxPRINTER_NO_ERROR )
+            {
+                sm_lastError = wxPRINTER_CANCELLED;
+                stopPrinting = true;
+            }
+        }
+    } // OnEndPrinting()
+
+    if ( (sm_abortIt || isParentUnavailable()) &&
+         sm_lastError == wxPRINTER_NO_ERROR )
+    {
+        sm_abortIt = true;
+        sm_lastError = wxPRINTER_CANCELLED;
     }
 
     return sm_lastError == wxPRINTER_NO_ERROR;
@@ -462,20 +744,47 @@ BOOL CALLBACK wxAbortProc(HDC WXUNUSED(hdc), int WXUNUSED(error))
 {
     MSG msg;
 
-    if (!wxPrinterBase::sm_abortWindow)              /* If the abort dialog isn't up yet */
-        return(TRUE);
+    if ( !gs_abortSessionActive )
+        return TRUE;
 
-    /* Process messages intended for the abort dialog box */
-    const HWND hwnd = GetHwndOf(wxPrinterBase::sm_abortWindow);
+    const auto resolveAbortHwnd =
+        []() -> HWND
+        {
+            wxWindow* const abortWindow = gs_abortWindow.get();
+            if ( IsWindowUnavailable(abortWindow) ||
+                 (gs_printJobHadOwner &&
+                  IsWindowUnavailable(gs_printOwner.get())) ||
+                 wxPrinterBase::sm_abortWindow != abortWindow )
+            {
+                return nullptr;
+            }
+
+            const HWND hwnd = GetHwndOf(abortWindow);
+            return hwnd && ::IsWindow(hwnd) ? hwnd : nullptr;
+        };
+    const auto failClosed =
+        []() -> BOOL
+        {
+            wxPrinterBase::sm_abortWindow = nullptr;
+            wxPrinterBase::sm_abortIt = true;
+            return FALSE;
+        };
+
+    if ( !resolveAbortHwnd() )
+    {
+        wxLogDebug(wxS("Print abort dialog unexpectedly disappeared."));
+        return failClosed();
+    }
 
     while (!wxPrinterBase::sm_abortIt && ::PeekMessage(&msg, 0, 0, 0, TRUE))
     {
-        // Apparently handling the message may, somehow, result in
-        // sm_abortWindow being destroyed, so guard against this happening.
-        if (!wxPrinterBase::sm_abortWindow)
+        // Resolve the HWND for this dispatch only. IsDialogMessage() and
+        // DispatchMessage() can both destroy the dialog or its owner.
+        const HWND hwnd = resolveAbortHwnd();
+        if ( !hwnd )
         {
-            wxLogDebug(wxS("Print abort dialog unexpected disappeared."));
-            return TRUE;
+            wxLogDebug(wxS("Print abort dialog unexpectedly disappeared."));
+            return failClosed();
         }
 
         if (!IsDialogMessage(hwnd, &msg))
@@ -483,12 +792,30 @@ BOOL CALLBACK wxAbortProc(HDC WXUNUSED(hdc), int WXUNUSED(error))
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+
+        if ( !resolveAbortHwnd() )
+        {
+            wxLogDebug(wxS("Print abort dialog unexpectedly disappeared."));
+            return failClosed();
+        }
     }
 
     /* bAbort is TRUE (return is FALSE) if the user has aborted */
+    if ( !wxPrinterBase::sm_abortIt && !resolveAbortHwnd() )
+    {
+        wxLogDebug(wxS("Print abort dialog unexpectedly disappeared."));
+        return failClosed();
+    }
 
     return !wxPrinterBase::sm_abortIt;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+bool wxMSWInvokePrintAbortProcForTesting()
+{
+    return wxAbortProc(nullptr, 0) != FALSE;
+}
+#endif
 
 #endif
     // wxUSE_PRINTING_ARCHITECTURE

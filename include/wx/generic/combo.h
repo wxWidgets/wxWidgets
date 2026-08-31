@@ -86,6 +86,8 @@ protected:
 #elif defined(__WXGTK__)
     virtual GtkEditable *GetEditable() const override { return nullptr; }
     virtual GtkEntry *GetEntry() const override { return nullptr; }
+#elif defined(__WXWINUI__)
+    virtual WXHWND GetEditHWND() const override;
 #elif defined(__WXOSX__)
     virtual wxTextWidgetImpl * GetTextPeer() const override;
 #endif

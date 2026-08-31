@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+    MakePri configuration for the framework-dependent, unpackaged wxWinUI
+    runtime payload.
+
+    There is deliberately no <packaging> section: unpackaged executables need
+    one self-contained resources.pri next to the executable, not language or
+    scale resource packages that an MSIX deployment would install separately.
+    The PRI indexer merges the component PRIs binplaced by the stable
+    WindowsAppSDK NuGet packages into the application's "Application" map.
+-->
+<resources targetOsVersion="10.0.0" majorVersion="1">
+  <index root="\" startIndexAt="\">
+    <default>
+      <qualifier name="Language" value="en-US"/>
+      <qualifier name="Contrast" value="standard"/>
+      <qualifier name="Scale" value="100"/>
+      <qualifier name="HomeRegion" value="001"/>
+      <qualifier name="TargetSize" value="256"/>
+      <qualifier name="LayoutDirection" value="LTR"/>
+      <qualifier name="Theme" value="dark"/>
+      <qualifier name="AlternateForm" value=""/>
+      <qualifier name="DXFeatureLevel" value="DX9"/>
+      <qualifier name="Configuration" value=""/>
+      <qualifier name="DeviceFamily" value="Universal"/>
+      <qualifier name="Custom" value=""/>
+    </default>
+    <indexer-config type="folder"
+                    foldernameAsQualifier="true"
+                    filenameAsQualifier="true"
+                    qualifierDelimiter="."/>
+    <indexer-config type="PRI"/>
+  </index>
+</resources>

@@ -326,11 +326,15 @@ void wxMDIParentFrame::RemoveMDIChild(wxMDIChildFrame * WXUNUSED(child))
 
 void wxMDIParentFrame::AddWindowMenu()
 {
-    if ( m_windowMenu )
+    wxMenuBar * const menuBar = GetMenuBar();
+    if ( m_windowMenu && menuBar && !m_windowMenu->IsAttached() )
     {
         // For correct handling of the events from this menu we also must
-        // attach it to the menu bar.
-        m_windowMenu->Attach(GetMenuBar());
+        // attach it to the menu bar. The first MDI child may be created before
+        // the application installs any menu bar, in which case there is
+        // nothing to attach to yet and InternalSetMenuBar() will call us again
+        // when a menu bar is installed later.
+        m_windowMenu->Attach(menuBar);
 
         // Store the current translation, we can't use _("Window") later in
         // case the locale changes.
@@ -343,7 +347,7 @@ void wxMDIParentFrame::AddWindowMenu()
 
 void wxMDIParentFrame::RemoveWindowMenu()
 {
-    if ( m_windowMenu )
+    if ( m_windowMenu && m_windowMenu->IsAttached() )
     {
         MDIRemoveWindowMenu(GetClientWindow(), m_hMenu,
                             m_currentWindowMenuLabel);
@@ -362,6 +366,16 @@ void wxMDIParentFrame::UpdateWindowMenu(bool enable)
 }
 
 #if wxUSE_MENUS_NATIVE
+
+void wxMDIParentFrame::DetachMenuBar()
+{
+    // The Window menu is not part of wxMenuBar's logical menu collection: it
+    // is attached and inserted separately while an MDI child exists. Remove
+    // that association before wxFrameBase detaches or replaces the bar, so it
+    // can be attached to the next bar without retaining a stale owner.
+    RemoveWindowMenu();
+    wxFrame::DetachMenuBar();
+}
 
 void wxMDIParentFrame::InternalSetMenuBar()
 {

@@ -85,6 +85,13 @@ public:
     // with SetText() but not SetBitmap().
     void SetGradient(const wxColour& start, const wxColour& end);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Implementation-only rendering seam used to validate the generic
+    // fallback without relying on pixels from an occluded/off-screen HWND.
+    void WinUIDrawBitmapBackgroundForTesting(wxDC& dc)
+        { DrawBitmapBackground(dc); }
+#endif
+
 protected:
     virtual wxSize DoGetBestClientSize() const override;
 
@@ -94,6 +101,10 @@ private:
 
     // Fully invalidates the window.
     void OnSize(wxSizeEvent& event);
+
+    // Invalidate bitmap-derived colours and logical best size after a monitor
+    // DPI transition.
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // Redraws the window using either m_bitmap or m_title/m_message.
     void OnPaint(wxPaintEvent& event);

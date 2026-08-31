@@ -296,6 +296,8 @@ private:
 #if defined(__WX_COMPILING_MSGDLGG_CPP__) || defined(__WXUNIVERSAL__)
 
     #define wxMessageDialog wxGenericMessageDialog
+#elif defined(__WXWINUI__)
+    #include "wx/winui/msgdlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/msgdlg.h"
 #elif defined(__WXGTK__)

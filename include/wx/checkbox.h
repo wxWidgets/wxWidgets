@@ -185,6 +185,8 @@ private:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/checkbox.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/checkbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/checkbox.h"
 #elif defined(__WXGTK__)

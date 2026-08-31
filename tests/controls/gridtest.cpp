@@ -19,6 +19,7 @@
 
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
+#include "wx/weakref.h"
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
@@ -126,6 +127,18 @@ public:
         return GetCellAttr(row, col);
     }
 
+    int CallGetColLeft(int col) const { return GetColLeft(col); }
+    int CallGetColRight(int col) const { return GetColRight(col); }
+    int CallGetRowTop(int row) const { return GetRowTop(row); }
+    int CallGetRowBottom(int row) const { return GetRowBottom(row); }
+    int CallGetColMinimalWidth(int col) const
+    {
+        return GetColMinimalWidth(col);
+    }
+    int CallGetRowMinimalHeight(int row) const
+    {
+        return GetRowMinimalHeight(row);
+    }
     bool HasAttr(int row, int col,
                  wxGridCellAttr::wxAttrKind kind = wxGridCellAttr::Cell) const
     {
@@ -256,6 +269,244 @@ WaitForEventAt(
 
     return true;
 }
+
+void SendGridMouseEvent(wxWindow* window,
+                        wxEventType type,
+                        const wxPoint& position,
+                        bool leftIsDown = false)
+{
+    wxMouseEvent event(type);
+    event.SetEventObject(window);
+    event.SetId(window->GetId());
+    event.SetPosition(position);
+    event.SetLeftDown(leftIsDown);
+    window->GetEventHandler()->ProcessEvent(event);
+}
+
+class GridMutatingRenderer final : public wxGridCellStringRenderer
+{
+public:
+    explicit GridMutatingRenderer(wxGrid* grid)
+        : m_grid(grid)
+    {
+    }
+
+    wxSize GetBestSize(wxGrid& grid,
+                       wxGridCellAttr& attr,
+                       wxDC& dc,
+                       int row,
+                       int col) override
+    {
+        if ( !m_fired )
+        {
+            m_fired = true;
+            m_grid->DeleteCols(0, 1);
+        }
+
+        wxUnusedVar(grid);
+        wxUnusedVar(attr);
+        wxUnusedVar(dc);
+        wxUnusedVar(row);
+        wxUnusedVar(col);
+        return wxSize(211, 23);
+    }
+
+    wxGridCellRenderer* Clone() const override
+    {
+        return new GridMutatingRenderer(*this);
+    }
+
+private:
+    wxGrid* const m_grid;
+    bool m_fired = false;
+};
+
+class GridMutatingShowEditor final : public wxGridCellTextEditor
+{
+public:
+    explicit GridMutatingShowEditor(wxGrid* grid)
+        : m_grid(grid)
+    {
+    }
+
+    void Show(bool show, wxGridCellAttr* attr = nullptr) override
+    {
+        wxGridCellTextEditor::Show(show, attr);
+        if ( !show && m_armed )
+        {
+            m_armed = false;
+            m_grid->AppendRows(1);
+        }
+    }
+
+    wxGridCellEditor* Clone() const override
+    {
+        return new GridMutatingShowEditor(*this);
+    }
+
+private:
+    wxGrid* const m_grid;
+    bool m_armed = true;
+};
+
+class GridResizingShowEditor final : public wxGridCellTextEditor
+{
+public:
+    GridResizingShowEditor(wxGrid* grid, int width)
+        : m_grid(grid),
+          m_width(width)
+    {
+    }
+
+    void Show(bool show, wxGridCellAttr* attr = nullptr) override
+    {
+        wxGridCellTextEditor::Show(show, attr);
+        if ( !show && m_armed )
+        {
+            m_armed = false;
+            m_grid->SetColSize(0, m_width);
+        }
+    }
+
+    wxGridCellEditor* Clone() const override
+    {
+        return new GridResizingShowEditor(*this);
+    }
+
+private:
+    wxGrid* const m_grid;
+    const int m_width;
+    bool m_armed = true;
+};
+
+class GridMutatingSetViewTable final : public wxGridStringTable
+{
+public:
+    GridMutatingSetViewTable()
+        : wxGridStringTable(2, 2)
+    {
+    }
+
+    void SetView(wxGrid* grid) override
+    {
+        wxGridTableBase::SetView(grid);
+        if ( grid && !m_mutated )
+        {
+            m_mutated = true;
+
+            // Notifications are rejected while SetTable() is transactional,
+            // but the table itself has already changed.
+            REQUIRE( AppendRows(2) );
+            REQUIRE( AppendCols(3) );
+        }
+    }
+
+private:
+    bool m_mutated = false;
+};
+
+class GridDestroyingSetViewTable final : public wxGridStringTable
+{
+public:
+    GridDestroyingSetViewTable(bool* destroyed,
+                               bool* destroyedInsideSetView)
+        : wxGridStringTable(2, 2),
+          m_destroyed(destroyed),
+          m_destroyedInsideSetView(destroyedInsideSetView)
+    {
+    }
+
+    ~GridDestroyingSetViewTable() override
+    {
+        *m_destroyed = true;
+        *m_destroyedInsideSetView = m_insideSetView;
+    }
+
+    void SetView(wxGrid* grid) override
+    {
+        wxGridTableBase::SetView(grid);
+        if ( grid && !m_fired )
+        {
+            m_fired = true;
+            m_insideSetView = true;
+            delete grid;
+            m_insideSetView = false;
+        }
+    }
+
+private:
+    bool* const m_destroyed;
+    bool* const m_destroyedInsideSetView;
+    bool m_fired = false;
+    bool m_insideSetView = false;
+};
+
+#if defined(__WXMSW__) && !defined(__WXWINUI__)
+class GridHeaderThrashingTable final : public wxGridStringTable
+{
+public:
+    GridHeaderThrashingTable()
+        : wxGridStringTable(2, 2)
+    {
+    }
+
+    void SetView(wxGrid* grid) override
+    {
+        wxGridTableBase::SetView(grid);
+        m_grid = grid;
+    }
+
+    void Arm(bool arm = true)
+    {
+        m_armed = arm;
+    }
+
+    void ArmAppend()
+    {
+        m_appendOnNextLabel = true;
+    }
+
+    wxString GetColLabelValue(int col) override
+    {
+        if ( m_grid && m_appendOnNextLabel && !m_insideCallback )
+        {
+            m_insideCallback = true;
+            m_appendOnNextLabel = false;
+            m_grid->AppendCols(1);
+            m_insideCallback = false;
+        }
+        else if ( m_grid && m_armed && !m_insideCallback )
+        {
+            m_insideCallback = true;
+
+            wxArrayInt order;
+            if ( m_reverse )
+            {
+                for ( int n = m_grid->GetNumberCols() - 1; n >= 0; --n )
+                    order.push_back(n);
+            }
+            else
+            {
+                for ( int n = 0; n < m_grid->GetNumberCols(); ++n )
+                    order.push_back(n);
+            }
+
+            m_reverse = !m_reverse;
+            m_grid->SetColumnsOrder(order);
+            m_insideCallback = false;
+        }
+
+        return wxGridStringTable::GetColLabelValue(col);
+    }
+
+private:
+    wxGrid* m_grid = nullptr;
+    bool m_armed = false;
+    bool m_appendOnNextLabel = false;
+    bool m_insideCallback = false;
+    bool m_reverse = false;
+};
+#endif // __WXMSW__ && !__WXWINUI__
 
 } // anonymous namespace
 
@@ -1330,6 +1581,534 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnOrder", "[grid]")
     CHECK(m_grid->GetColPos(1) == 1);
     CHECK(m_grid->GetColPos(2) == 2);
     CHECK(m_grid->GetColPos(3) == 3);
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::OrderedColumnStructuralMutation",
+                 "[grid][column-order]")
+{
+#ifdef wxHAS_NATIVE_HEADER
+    SECTION("Default")
+    {
+    }
+    SECTION("Native header")
+    {
+        m_grid->UseNativeColHeader();
+    }
+#endif // wxHAS_NATIVE_HEADER
+
+    m_grid->AppendCols(2);
+    REQUIRE( m_grid->GetNumberCols() == 4 );
+
+    const int widths[] = { 51, 63, 77, 91 };
+    wxArrayInt order;
+    order.push_back(2);
+    order.push_back(0);
+    order.push_back(3);
+    order.push_back(1);
+
+    for ( int col = 0; col < 4; ++col )
+    {
+        m_grid->SetColSize(col, widths[col]);
+        m_grid->SetCellValue(0, col, wxString::Format("c%d", col));
+    }
+
+    m_grid->SetColumnsOrder(order);
+    m_grid->SetColMinimalWidth(3, 83);
+    m_grid->SetSortingColumn(3);
+    m_grid->SetGridCursor(4, 3);
+
+    REQUIRE( m_grid->InsertCols(1, 2) );
+    REQUIRE( m_grid->GetNumberCols() == 6 );
+
+    const int expectedAfterInsert[] = { 4, 0, 5, 1, 2, 3 };
+    for ( int pos = 0; pos < 6; ++pos )
+        CHECK( m_grid->GetColAt(pos) == expectedAfterInsert[pos] );
+
+    CHECK( m_grid->GetSortingColumn() == 5 );
+    CHECK( m_grid->GetGridCursorCol() == 5 );
+    CHECK( m_grid->CallGetColMinimalWidth(5) == 83 );
+    CHECK( m_grid->GetCellValue(0, 5) == "c3" );
+
+    // Cumulative geometry follows display order while widths remain attached
+    // to stable logical column identities.
+    CHECK( m_grid->CallGetColLeft(4) == 0 );
+    CHECK( m_grid->CallGetColRight(4) == widths[2] );
+    CHECK( m_grid->CallGetColLeft(0) == widths[2] );
+    CHECK( m_grid->CallGetColRight(0) == widths[2] + widths[0] );
+    CHECK( m_grid->CallGetColLeft(5) == widths[2] + widths[0] );
+    CHECK( m_grid->CallGetColRight(5) ==
+           widths[2] + widths[0] + widths[3] );
+
+    // Removing precisely the inserted logical columns restores all original
+    // identities and their presentation state.
+    REQUIRE( m_grid->DeleteCols(1, 2) );
+    REQUIRE( m_grid->GetNumberCols() == 4 );
+
+    for ( int pos = 0; pos < 4; ++pos )
+        CHECK( m_grid->GetColAt(pos) == order[pos] );
+
+    CHECK( m_grid->GetSortingColumn() == 3 );
+    CHECK( m_grid->GetGridCursorCol() == 3 );
+    CHECK( m_grid->CallGetColMinimalWidth(3) == 83 );
+    CHECK( m_grid->GetCellValue(0, 3) == "c3" );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::OrderedRowStructuralMutation",
+                 "[grid][row-order]")
+{
+    wxArrayInt order;
+    order.push_back(4);
+    order.push_back(0);
+    order.push_back(7);
+    order.push_back(1);
+    order.push_back(2);
+    order.push_back(3);
+    order.push_back(5);
+    order.push_back(6);
+    order.push_back(8);
+    order.push_back(9);
+
+    m_grid->SetRowsOrder(order);
+    m_grid->SetRowSize(7, 79);
+    m_grid->SetRowMinimalHeight(7, 73);
+    m_grid->SetCellValue(7, 0, "row7");
+    m_grid->SetGridCursor(7, 1);
+
+    REQUIRE( m_grid->InsertRows(1, 2) );
+    REQUIRE( m_grid->GetNumberRows() == 12 );
+
+    const int expectedAfterInsert[] =
+        { 6, 0, 9, 1, 2, 3, 4, 5, 7, 8, 10, 11 };
+    for ( int pos = 0; pos < 12; ++pos )
+        CHECK( m_grid->GetRowAt(pos) == expectedAfterInsert[pos] );
+
+    CHECK( m_grid->GetGridCursorRow() == 9 );
+    CHECK( m_grid->CallGetRowMinimalHeight(9) == 73 );
+    CHECK( m_grid->GetCellValue(9, 0) == "row7" );
+    CHECK( m_grid->CallGetRowTop(6) == 0 );
+    CHECK( m_grid->CallGetRowBottom(9) ==
+           m_grid->GetRowSize(6) +
+           m_grid->GetRowSize(0) +
+           m_grid->GetRowSize(9) );
+
+    REQUIRE( m_grid->DeleteRows(1, 2) );
+    REQUIRE( m_grid->GetNumberRows() == 10 );
+
+    for ( int pos = 0; pos < 10; ++pos )
+        CHECK( m_grid->GetRowAt(pos) == order[pos] );
+
+    CHECK( m_grid->GetGridCursorRow() == 7 );
+    CHECK( m_grid->CallGetRowMinimalHeight(7) == 73 );
+    CHECK( m_grid->GetCellValue(7, 0) == "row7" );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::ReentrantColumnDefaults",
+                 "[grid][column-order][reentrancy]")
+{
+    m_grid->AppendCols(2);
+    REQUIRE( m_grid->GetNumberCols() == 4 );
+
+    SECTION("Move callback replaces the order")
+    {
+        int moveEvents = 0;
+        m_grid->Bind(wxEVT_GRID_COL_MOVE,
+            [this, &moveEvents](wxGridEvent&)
+            {
+                ++moveEvents;
+                m_grid->SetColPos(2, 0);
+            });
+
+        REQUIRE( m_grid->EnableDragColMove() );
+        wxWindow* const header = m_grid->GetGridColLabelWindow();
+        const int y = wxMax(1, header->GetClientSize().y / 2);
+        const wxPoint source(m_grid->GetColSize(0) / 2, y);
+        const wxPoint target(m_grid->GetColSize(0) +
+                             m_grid->GetColSize(1) +
+                             m_grid->GetColSize(2) +
+                             m_grid->GetColSize(3) / 2,
+                             y);
+
+        SendGridMouseEvent(header, wxEVT_LEFT_DOWN, source, true);
+        REQUIRE( wxWindow::GetCapture() == header );
+        SendGridMouseEvent(header, wxEVT_MOTION,
+                           wxPoint(source.x + 1, source.y), true);
+        SendGridMouseEvent(header, wxEVT_MOTION, target, true);
+        SendGridMouseEvent(header, wxEVT_LEFT_UP, target);
+
+        CHECK( moveEvents == 1 );
+        const int expected[] = { 2, 0, 1, 3 };
+        for ( int pos = 0; pos < 4; ++pos )
+            CHECK( m_grid->GetColAt(pos) == expected[pos] );
+    }
+
+    SECTION("Autosize callback deletes the target")
+    {
+        int autoSizeEvents = 0;
+        int sizeEvents = 0;
+        m_grid->Bind(wxEVT_GRID_COL_AUTO_SIZE,
+            [this, &autoSizeEvents](wxGridSizeEvent&)
+            {
+                ++autoSizeEvents;
+                REQUIRE( m_grid->DeleteCols(1) );
+            });
+        m_grid->Bind(wxEVT_GRID_COL_SIZE,
+            [&sizeEvents](wxGridSizeEvent&)
+            {
+                ++sizeEvents;
+            });
+
+        wxWindow* const header = m_grid->GetGridColLabelWindow();
+        const wxPoint separator(m_grid->GetColSize(0) +
+                                m_grid->GetColSize(1) - 1,
+                                wxMax(1, header->GetClientSize().y / 2));
+        SendGridMouseEvent(header, wxEVT_LEFT_DCLICK, separator, true);
+
+        CHECK( autoSizeEvents == 1 );
+        CHECK( sizeEvents == 0 );
+        CHECK( m_grid->GetNumberCols() == 3 );
+    }
+}
+
+TEST_CASE("Grid::DestroyDuringColumnMove",
+          "[grid][column-order][reentrancy]")
+{
+    TestableGrid* const grid =
+        new TestableGrid(wxTheApp->GetTopWindow());
+    grid->CreateGrid(2, 3);
+    const wxWeakRef<wxWindow> weakGrid(grid);
+
+    grid->Bind(wxEVT_GRID_COL_MOVE,
+        [grid](wxGridEvent&)
+        {
+            grid->Destroy();
+        });
+
+    REQUIRE( grid->EnableDragColMove() );
+    wxWindow* const header = grid->GetGridColLabelWindow();
+    const int y = wxMax(1, header->GetClientSize().y / 2);
+    const wxPoint source(grid->GetColSize(0) / 2, y);
+    const wxPoint target(grid->GetColSize(0) +
+                         grid->GetColSize(1) +
+                         grid->GetColSize(2) / 2,
+                         y);
+    SendGridMouseEvent(header, wxEVT_LEFT_DOWN, source, true);
+    REQUIRE( wxWindow::GetCapture() == header );
+    SendGridMouseEvent(header, wxEVT_MOTION,
+                       wxPoint(source.x + 1, source.y), true);
+    SendGridMouseEvent(header, wxEVT_MOTION, target, true);
+    SendGridMouseEvent(header, wxEVT_LEFT_UP, target);
+    wxYield();
+
+    CHECK( !weakGrid );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::ColumnResizeCaptureLost",
+                 "[grid][capture]")
+{
+    const int originalWidth = 100;
+    m_grid->SetColSize(0, originalWidth);
+
+    wxWindow* const header = m_grid->GetGridColLabelWindow();
+    const int y = wxMax(1, header->GetClientSize().y / 2);
+    const wxPoint separator(originalWidth - 1, y);
+
+    SendGridMouseEvent(header, wxEVT_LEFT_DOWN, separator, true);
+    REQUIRE( wxWindow::GetCapture() == header );
+
+    SendGridMouseEvent(header, wxEVT_MOTION,
+                       wxPoint(separator.x + 31, y), true);
+    REQUIRE( m_grid->GetColSize(0) != originalWidth );
+
+    // Releasing capture directly exercises the real capture-lost event path
+    // without injecting physical desktop input.
+    header->ReleaseMouse();
+    wxMouseCaptureLostEvent captureLost(header->GetId());
+    captureLost.SetEventObject(header);
+    header->GetEventHandler()->ProcessEvent(captureLost);
+    wxYield();
+
+    CHECK( wxWindow::GetCapture() != header );
+    CHECK( m_grid->GetColSize(0) == originalWidth );
+
+    // A fresh gesture must not inherit any state from the cancelled one.
+    SendGridMouseEvent(header, wxEVT_LEFT_UP, separator);
+
+    int sizeEvents = 0;
+    m_grid->Bind(wxEVT_GRID_COL_SIZE,
+        [&sizeEvents](wxGridSizeEvent&)
+        {
+            ++sizeEvents;
+        });
+
+    SendGridMouseEvent(header, wxEVT_LEFT_DOWN, separator, true);
+    REQUIRE( wxWindow::GetCapture() == header );
+    SendGridMouseEvent(header, wxEVT_MOTION,
+                       wxPoint(separator.x + 17, y), true);
+    SendGridMouseEvent(header, wxEVT_LEFT_UP,
+                       wxPoint(separator.x + 17, y));
+
+    CHECK( wxWindow::GetCapture() != header );
+    CHECK( sizeEvents == 1 );
+    CHECK( m_grid->GetColSize(0) != originalWidth );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::ReentrantRedimensionFromEditorHide",
+                 "[grid][reentrancy][table]")
+{
+    const int rowsBefore = m_grid->GetNumberRows();
+    m_grid->SetCellEditor(
+        0, 0, new GridMutatingShowEditor(m_grid));
+    m_grid->SetGridCursor(0, 0);
+    m_grid->EnableCellEditControl();
+    REQUIRE( m_grid->IsCellEditControlEnabled() );
+
+    // The outer append has already mutated the table when Redimension() hides
+    // the editor. The editor synchronously appends once more, so the nested
+    // notification must be serialized behind the outer transaction.
+    REQUIRE( m_grid->AppendRows(1) );
+
+    CHECK( m_grid->GetNumberRows() == rowsBefore + 2 );
+    CHECK( m_grid->GetTable()->GetNumberRows() == rowsBefore + 2 );
+    CHECK_FALSE( m_grid->IsCellEditControlEnabled() );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::ResizeCapturesPostEditorCallbackSize",
+                 "[grid][capture][reentrancy]")
+{
+    const int widthBefore = 100;
+    const int widthFromCallback = 137;
+    m_grid->SetColSize(0, widthBefore);
+    m_grid->SetCellEditor(
+        0, 0, new GridResizingShowEditor(m_grid, widthFromCallback));
+    m_grid->SetGridCursor(0, 0);
+    m_grid->EnableCellEditControl();
+    REQUIRE( m_grid->IsCellEditControlEnabled() );
+
+    wxWindow* const header = m_grid->GetGridColLabelWindow();
+    const int y = wxMax(1, header->GetClientSize().y / 2);
+    const wxPoint separator(widthBefore - 1, y);
+    SendGridMouseEvent(header, wxEVT_LEFT_DOWN, separator, true);
+
+    REQUIRE( wxWindow::GetCapture() == header );
+    CHECK( m_grid->GetColSize(0) == widthFromCallback );
+
+    SendGridMouseEvent(
+        header, wxEVT_MOTION, wxPoint(separator.x + 29, y), true);
+    REQUIRE( m_grid->GetColSize(0) != widthFromCallback );
+
+    header->ReleaseMouse();
+    wxMouseCaptureLostEvent captureLost(header->GetId());
+    captureLost.SetEventObject(header);
+    header->GetEventHandler()->ProcessEvent(captureLost);
+
+    CHECK( m_grid->GetColSize(0) == widthFromCallback );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::SetTableResetsPresentationTopology",
+                 "[grid][table][reentrancy]")
+{
+    m_grid->AppendCols(2);
+    REQUIRE( m_grid->FreezeTo(3, 2) );
+
+    wxArrayInt rows;
+    for ( int row = m_grid->GetNumberRows() - 1; row >= 0; --row )
+        rows.push_back(row);
+    m_grid->SetRowsOrder(rows);
+
+    wxArrayInt cols;
+    cols.push_back(2);
+    cols.push_back(0);
+    cols.push_back(3);
+    cols.push_back(1);
+    m_grid->SetColumnsOrder(cols);
+    m_grid->SetSortingColumn(3);
+
+    REQUIRE( m_grid->SetTable(new wxGridStringTable(3, 3), true) );
+
+    CHECK( m_grid->GetNumberRows() == 3 );
+    CHECK( m_grid->GetNumberCols() == 3 );
+    CHECK( m_grid->GetNumberFrozenRows() == 0 );
+    CHECK( m_grid->GetNumberFrozenCols() == 0 );
+    CHECK( m_grid->GetSortingColumn() == wxNOT_FOUND );
+    for ( int row = 0; row < 3; ++row )
+        CHECK( m_grid->GetRowAt(row) == row );
+    for ( int col = 0; col < 3; ++col )
+        CHECK( m_grid->GetColAt(col) == col );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::SetTableCapturesPostSetViewDimensions",
+                 "[grid][table][reentrancy]")
+{
+    auto* const table = new GridMutatingSetViewTable;
+
+    REQUIRE( m_grid->SetTable(table, true) );
+
+    CHECK( m_grid->GetNumberRows() == 4 );
+    CHECK( m_grid->GetNumberCols() == 5 );
+    CHECK( m_grid->GetNumberRows() == table->GetNumberRows() );
+    CHECK( m_grid->GetNumberCols() == table->GetNumberCols() );
+}
+
+TEST_CASE("Grid::SetTableDefersOwnedCandidateDestruction",
+          "[grid][table][reentrancy]")
+{
+    TestableGrid* const grid =
+        new TestableGrid(wxTheApp->GetTopWindow());
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    bool tableDestroyed = false;
+    bool tableDestroyedInsideSetView = false;
+
+    CHECK_FALSE(
+        grid->SetTable(
+            new GridDestroyingSetViewTable(
+                &tableDestroyed,
+                &tableDestroyedInsideSetView),
+            true));
+
+    CHECK_FALSE( weakGrid );
+    CHECK( tableDestroyed );
+    CHECK_FALSE( tableDestroyedInsideSetView );
+}
+
+#if defined(__WXMSW__) && !defined(__WXWINUI__)
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::NativeHeaderFallbackDuringEnable",
+                 "[grid][table][native-header][reentrancy]")
+{
+    auto* const table = new GridHeaderThrashingTable;
+    REQUIRE( m_grid->SetTable(table, true) );
+
+    table->Arm();
+    CHECK_FALSE( m_grid->UseNativeColHeader() );
+    table->Arm(false);
+
+    CHECK_FALSE( m_grid->IsUsingNativeHeader() );
+    CHECK( m_grid->GetGridColLabelWindow() != nullptr );
+    CHECK( m_grid->GetNumberRows() == table->GetNumberRows() );
+    CHECK( m_grid->GetNumberCols() == table->GetNumberCols() );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::NativeHeaderDefersNestedRedimension",
+                 "[grid][table][native-header][reentrancy]")
+{
+    auto* const table = new GridHeaderThrashingTable;
+    REQUIRE( m_grid->SetTable(table, true) );
+
+    table->ArmAppend();
+    REQUIRE( m_grid->UseNativeColHeader() );
+
+    CHECK( m_grid->IsUsingNativeHeader() );
+    CHECK( m_grid->GetNumberCols() == 3 );
+    CHECK( m_grid->GetNumberCols() == table->GetNumberCols() );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::NativeHeaderFallbackDuringRedimension",
+                 "[grid][table][native-header][reentrancy]")
+{
+    auto* const table = new GridHeaderThrashingTable;
+    REQUIRE( m_grid->SetTable(table, true) );
+    REQUIRE( m_grid->UseNativeColHeader() );
+
+    table->Arm();
+    REQUIRE( m_grid->AppendCols(1) );
+    table->Arm(false);
+
+    CHECK_FALSE( m_grid->IsUsingNativeHeader() );
+    CHECK( m_grid->GetGridColLabelWindow() != nullptr );
+    CHECK( m_grid->GetNumberCols() == 3 );
+    CHECK( m_grid->GetNumberCols() == table->GetNumberCols() );
+}
+#endif // __WXMSW__ && !__WXWINUI__
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::FrozenBoundaryClampedOnDeletion",
+                 "[grid][frozen][table]")
+{
+    m_grid->AppendCols(2);
+    REQUIRE( m_grid->FreezeTo(8, 3) );
+
+    REQUIRE( m_grid->DeleteRows(4, 6) );
+    REQUIRE( m_grid->DeleteCols(1, 3) );
+
+    CHECK( m_grid->GetNumberRows() == 4 );
+    CHECK( m_grid->GetNumberCols() == 1 );
+    CHECK( m_grid->GetNumberFrozenRows() == 4 );
+    CHECK( m_grid->GetNumberFrozenCols() == 1 );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::AutosizeAbortsOnRendererTopologyMutation",
+                 "[grid][autosize][reentrancy]")
+{
+    const int preservedWidth = 83;
+    m_grid->SetColSize(1, preservedWidth);
+    m_grid->SetCellRenderer(0, 1, new GridMutatingRenderer(m_grid));
+
+    m_grid->AutoSizeColumn(1);
+
+    REQUIRE( m_grid->GetNumberCols() == 1 );
+    CHECK( m_grid->GetColSize(0) == preservedWidth );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::CellEventRejectsShiftedIdentity",
+                 "[grid][event][reentrancy]")
+{
+    m_grid->SetGridCursor(5, 0);
+    const wxRect target = m_grid->CellToRect(2, 0);
+    wxWindow* const gridWindow = m_grid->GetGridWindow();
+
+    int events = 0;
+    m_grid->Bind(wxEVT_GRID_CELL_LEFT_CLICK,
+        [this, &events](wxGridEvent& event)
+        {
+            ++events;
+            REQUIRE( m_grid->InsertRows(0, 1) );
+            event.Skip();
+        });
+
+    SendGridMouseEvent(
+        gridWindow,
+        wxEVT_LEFT_DOWN,
+        target.GetPosition() + wxPoint(target.width / 2, target.height / 2),
+        true);
+
+    CHECK( events == 1 );
+    // Structural remapping moves the previous cursor from row 5 to row 6.
+    // The stale click at logical row 2 must not overwrite it afterwards.
+    CHECK( m_grid->GetGridCursorRow() == 6 );
+}
+
+TEST_CASE_METHOD(GridTestCase,
+                 "Grid::SelectionCallbackCanReplaceTable",
+                 "[grid][selection][reentrancy]")
+{
+    m_grid->SelectBlock(0, 0, 2, 1);
+
+    int events = 0;
+    m_grid->Bind(wxEVT_GRID_RANGE_SELECTED,
+        [this, &events](wxGridRangeSelectEvent&)
+        {
+            ++events;
+            REQUIRE( m_grid->SetTable(
+                new wxGridStringTable(4, 3), true));
+        });
+
+    m_grid->DeselectCell(1, 0);
+
+    CHECK( events == 1 );
+    CHECK( m_grid->GetNumberRows() == 4 );
+    CHECK( m_grid->GetNumberCols() == 3 );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ColumnVisibility", "[grid]")

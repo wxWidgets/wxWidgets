@@ -924,7 +924,15 @@ void wxMenuBar::Refresh()
 
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
+#ifdef __WXWINUI__
+    // No native menu bar under the WinUI toolkit: rebuild the WinUI MenuBar to
+    // reflect menus added/removed/renamed while attached.
+    if ( wxFrame *frame = GetFrame() )
+        frame->MSWRefreshWinUIMenuBar();
+    return;
+#else
     DrawMenuBar(GetHwndOf(GetFrame()));
+#endif
 }
 
 WXHMENU wxMenuBar::Create()
@@ -1025,6 +1033,12 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
     int flag = enable ? MF_ENABLED : MF_GRAYED;
 
     EnableMenuItem((HMENU)m_hMenu, MSWPositionForWxMenu(GetMenu(pos),pos), MF_BYPOSITION | flag);
+
+#if wxUSE_ACCEL && defined(__WXWINUI__)
+    // The WinUI accelerator path doesn't have an attached native HMENU whose
+    // disabled state could suppress translation, so rebuild the filtered table.
+    RebuildAccelTable();
+#endif
 
     Refresh();
 }
@@ -1261,8 +1275,74 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 #if wxUSE_ACCEL
 
+#ifdef __WXWINUI__
+
+namespace
+{
+
+// Build the WinUI menu-bar accelerator table from the wx menu tree instead of
+// blindly copying wxMenu::m_accels. Unlike a native attached HMENU,
+// TranslateAccelerator() doesn't know that an item (or one of its parent
+// submenus) is disabled, so such entries must not be present in the table.
+void CollectEnabledAccels(wxMenu* menu,
+                          wxVector<wxAcceleratorEntry>& accels)
+{
+    for ( wxMenuItem* const item : menu->GetMenuItems() )
+    {
+        if ( item->IsSeparator() || !item->IsEnabled() )
+            continue;
+
+        if ( wxMenu* const submenu = item->GetSubMenu() )
+        {
+            CollectEnabledAccels(submenu, accels);
+            continue;
+        }
+
+        if ( wxAcceleratorEntry* const accel = item->GetAccel() )
+        {
+            accel->Set(accel->GetFlags(), accel->GetKeyCode(), item->GetId(),
+                       item);
+            accels.push_back(*accel);
+            delete accel;
+        }
+
+        for ( const wxAcceleratorEntry& extraAccel : item->GetExtraAccels() )
+        {
+            wxAcceleratorEntry accel(extraAccel);
+            accel.Set(accel.GetFlags(), accel.GetKeyCode(), item->GetId(), item);
+            accels.push_back(accel);
+        }
+    }
+}
+
+} // anonymous namespace
+
+#endif // __WXWINUI__
+
 void wxMenuBar::RebuildAccelTable()
 {
+#ifdef __WXWINUI__
+    wxVector<wxAcceleratorEntry> accels;
+
+    const size_t menuCount = GetMenuCount();
+    for ( size_t i = 0; i < menuCount; ++i )
+    {
+        // A disabled top-level menu disables all commands below it.
+        if ( IsEnabledTop(i) )
+            CollectEnabledAccels(GetMenu(i), accels);
+    }
+
+    if ( !accels.empty() )
+    {
+        SetAcceleratorTable(
+            wxAcceleratorTable(static_cast<int>(accels.size()),
+                               accels.data()));
+    }
+    else
+    {
+        SetAcceleratorTable(wxAcceleratorTable());
+    }
+#else
     // merge the accelerators of all menus into one accel table
     size_t nAccelCount = 0;
     size_t i, count = GetMenuCount();
@@ -1290,6 +1370,7 @@ void wxMenuBar::RebuildAccelTable()
     {
         SetAcceleratorTable(wxAcceleratorTable());
     }
+#endif // __WXWINUI__
 }
 
 #endif // wxUSE_ACCEL

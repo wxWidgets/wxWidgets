@@ -67,6 +67,7 @@ wxEND_EVENT_TABLE()
 void wxGenericFindReplaceDialog::Init()
 {
     m_FindReplaceData = nullptr;
+    m_closeEventSent = false;
 
     m_chkWord =
     m_chkCase = nullptr;
@@ -82,6 +83,9 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
                                         const wxString& title,
                                         int style)
 {
+    wxCHECK_MSG( data, false,
+                 wxT("can't create dialog without data") );
+
     parent = GetParentForModelessDialog(parent, style);
 
     if ( !wxDialog::Create(parent, wxID_ANY, title,
@@ -93,9 +97,6 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     }
 
     SetData(data);
-
-    wxCHECK_MSG( m_FindReplaceData, false,
-                 wxT("can't create dialog without data") );
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
@@ -214,11 +215,20 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     return true;
 }
 
+bool wxGenericFindReplaceDialog::Show(bool show)
+{
+    if ( show && !IsShown() )
+        m_closeEventSent = false;
+
+    return wxDialog::Show(show);
+}
+
 // ----------------------------------------------------------------------------
 // send the notification event
 // ----------------------------------------------------------------------------
 
-void wxGenericFindReplaceDialog::SendEvent(const wxEventType& evtType)
+void wxGenericFindReplaceDialog::SendEvent(const wxEventType& evtType,
+                                           bool detachClientData)
 {
     wxFindDialogEvent event(evtType, GetId());
     event.SetEventObject(this);
@@ -243,7 +253,33 @@ void wxGenericFindReplaceDialog::SendEvent(const wxEventType& evtType)
 
     event.SetFlags(flags);
 
-    wxFindReplaceDialogBase::Send(event);
+    wxFindReplaceDialogBase::Send(
+        event, detachClientData ? &m_detachedData : nullptr);
+}
+
+void wxGenericFindReplaceDialog::SendCloseEvent()
+{
+    if ( m_closeEventSent )
+    {
+        // ShowWithoutActivating() is a distinct virtual path on MSW and does
+        // not call our Show() override. Being visible again is nevertheless
+        // an unambiguous new generation; remaining hidden means this is just
+        // a duplicate/reentrant close from the current generation.
+        if ( !IsShown() )
+            return;
+
+        m_closeEventSent = false;
+    }
+
+    m_closeEventSent = true;
+
+    // The native dialog has already disappeared when it emits FR_DIALOGTERM.
+    // Match this ordering and, more importantly, perform no operation on this
+    // object after dispatch: the close handler normally destroys it.
+    if ( IsShown() )
+        (void)wxDialog::Show(false);
+
+    SendEvent(wxEVT_FIND_CLOSE, true);
 }
 
 // ----------------------------------------------------------------------------
@@ -267,9 +303,7 @@ void wxGenericFindReplaceDialog::OnReplaceAll(wxCommandEvent& WXUNUSED(event))
 
 void wxGenericFindReplaceDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    SendEvent(wxEVT_FIND_CLOSE);
-
-    Show(false);
+    SendCloseEvent();
 }
 
 void wxGenericFindReplaceDialog::OnUpdateFindUI(wxUpdateUIEvent &event)
@@ -280,7 +314,7 @@ void wxGenericFindReplaceDialog::OnUpdateFindUI(wxUpdateUIEvent &event)
 
 void wxGenericFindReplaceDialog::OnCloseWindow(wxCloseEvent &)
 {
-    SendEvent(wxEVT_FIND_CLOSE);
+    SendCloseEvent();
 }
 
 #endif // wxUSE_FINDREPLDLG

@@ -1,0 +1,154 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/winui/infobar.h
+// Purpose:     wxWinUI wxInfoBar declaration (WinUI InfoBar)
+// Author:      wxWidgets development team
+// Created:     2026-06-01
+// Copyright:   (c) wxWidgets development team
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_WINUI_INFOBAR_H_
+#define _WX_WINUI_INFOBAR_H_
+
+// wxInfoBarGeneric is built by this port too and stays visible to anything
+// including <wx/infobar.h>, exactly like under wxGTK: applications using the
+// generic class explicitly (deriving from it, typically) then build the same
+// way with every port. This is also where wxINFOBAR_CHECKBOX comes from.
+#include "wx/generic/infobar.h"
+
+#include "wx/vector.h"
+
+#include <memory>
+
+class wxWinUIInfoBarImpl;
+
+class WXDLLIMPEXP_CORE wxInfoBar : public wxInfoBarBase
+{
+public:
+    wxInfoBar();
+    wxInfoBar(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0);
+    ~wxInfoBar() override;
+
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0);
+
+    // implement base class methods
+    // ----------------------------
+
+    void ShowMessage(const wxString& msg, int flags = wxICON_INFORMATION) override;
+    void Dismiss() override;
+
+    void AddButton(wxWindowID btnid, const wxString& label = wxString()) override;
+    void RemoveButton(wxWindowID btnid) override;
+
+    size_t GetButtonCount() const override;
+    wxWindowID GetButtonId(size_t idx) const override;
+    bool HasButtonId(wxWindowID btnid) const override;
+
+    // methods with the same contract as the generic version
+    // -----------------------------------------------------
+
+    // set the effect(s) to use when showing/hiding the bar, may be
+    // wxSHOW_EFFECT_NONE to disable any effects entirely
+    //
+    // by default, slide to bottom/top is used when it's positioned on the top
+    // of the window for showing/hiding it and top/bottom when it's positioned
+    // at the bottom
+    void SetShowHideEffects(wxShowEffect showEffect, wxShowEffect hideEffect)
+    {
+        m_showEffect = showEffect;
+        m_hideEffect = hideEffect;
+    }
+
+    // get effect used when showing/hiding the window
+    wxShowEffect GetShowEffect() const;
+    wxShowEffect GetHideEffect() const;
+
+    // set the duration of animation used when showing/hiding the bar, in ms;
+    // the value is clamped to a sane range: negative values mean "use the
+    // platform default" (0) and are never passed through to the unsigned
+    // AnimateWindow() timeout, and absurdly long animations are capped
+    void SetEffectDuration(int duration)
+    {
+        if ( duration < 0 )
+            duration = 0;
+        else if ( duration > 10000 )
+            duration = 10000;
+        m_effectDuration = duration;
+    }
+
+    // get the currently used (clamped) effect animation duration
+    int GetEffectDuration() const { return m_effectDuration; }
+
+    // Whether the checkbox was checked at the time of the window
+    // being closed.
+    // This should be called in a client's handler for the
+    // wxID_CLOSE button being clicked.
+    bool IsCheckBoxChecked() const { return m_checked; }
+
+    // Sets whether the checkbox should be shown.
+    void ShowCheckBox(const wxString& checkBoxText, bool checked);
+
+    // overridden base class methods
+    // -----------------------------
+
+    // setting the font of this window sets it for the message shown inside it
+    bool SetFont(const wxFont& font) override;
+
+    // same thing with the colour: this affects the text colour
+    bool SetForegroundColour(const wxColor& colour) override;
+
+protected:
+    // info bar shouldn't have any border by default, the colour difference
+    // between it and the main window separates it well enough
+    wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+
+    wxSize DoGetBestSize() const override;
+
+    // rebuild the XAML content of the bar (custom buttons and checkbox)
+    void RebuildContent(bool externalMutation = true);
+    void UpdateParent();
+    void OnButtonClick(wxWindowID btnid);
+
+    // show/hide the bar using the configured effects
+    void DoShow();
+    void DoHide();
+
+    struct ButtonInfo
+    {
+        wxWindowID id = wxID_NONE;
+        wxString label;
+    };
+
+    std::unique_ptr<wxWinUIInfoBarImpl> m_winui;
+    wxVector<ButtonInfo> m_buttons;
+
+private:
+    friend class wxWinUIInfoBarTestAccess;
+
+    // determine the placement of the bar from its position in the containing
+    // sizer, used to pick the default show/hide effects
+    enum BarPlacement
+    {
+        BarPlacement_Top,
+        BarPlacement_Bottom,
+        BarPlacement_Unknown
+    };
+
+    BarPlacement GetBarPlacement() const;
+
+    // the effects to use when showing/hiding and duration for them: by
+    // default the effect is determined by the info bar automatically
+    // depending on its position and the default duration is used
+    wxShowEffect m_showEffect = wxSHOW_EFFECT_MAX;
+    wxShowEffect m_hideEffect = wxSHOW_EFFECT_MAX;
+    int m_effectDuration = 0;
+
+    // the checkbox label ("" while the checkbox is hidden) and its state,
+    // kept in sync with the XAML checkbox by its event handlers
+    wxString m_checkBoxLabel;
+    bool m_checked = false;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxInfoBar);
+};
+
+#endif // _WX_WINUI_INFOBAR_H_

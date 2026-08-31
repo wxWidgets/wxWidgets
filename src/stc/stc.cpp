@@ -6036,6 +6036,29 @@ WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
     WXWPARAM wParam,
     WXLPARAM lParam)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_swx && nMsg == WM_WINDOWPOSCHANGED )
+    {
+        const wxWeakRef<wxStyledTextCtrl> lifetime(this);
+        const WXHWND hwnd = GetHWND();
+        ScintillaWX* const scintilla = m_swx;
+        const wxWeakRef<wxWindow> expectedTLW(wxGetTopLevelParent(this));
+
+        scintilla->DoReconcileTopLevelParent();
+
+        // Popup retirement is an arbitrary-callback boundary. Do not read
+        // m_swx or forward the stale WINDOWPOS after destruction, HWND
+        // replacement or a nested reparent to another TLW.
+        wxStyledTextCtrl* const live = lifetime.get();
+        if ( live != this || live->IsBeingDeleted() ||
+             live->GetHWND() != hwnd || live->m_swx != scintilla ||
+             wxGetTopLevelParent(live) != expectedTLW.get() )
+        {
+            return 0;
+        }
+    }
+#endif
+
     if ( m_swx )
         return SendMsg(nMsg, wParam, lParam);
     else

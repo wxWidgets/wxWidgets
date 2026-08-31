@@ -110,8 +110,14 @@ public:
     const wxFindReplaceData *GetData() const { return m_FindReplaceData; }
     void SetData(wxFindReplaceData *data) { m_FindReplaceData = data; }
 
-    // implementation only, don't use
+    // implementation only, don't use. If dataAfterSend is non-null, the
+    // current client data is copied into it and detached before invoking any
+    // event handler. This is used by generic modeless dialogs for their close
+    // notification: the application is then free to destroy both the dialog
+    // and the client-owned data from the handler.
     void Send(wxFindDialogEvent& event);
+    void Send(wxFindDialogEvent& event,
+              wxFindReplaceData *dataAfterSend);
 
 protected:
     wxFindReplaceData *m_FindReplaceData;
@@ -123,7 +129,10 @@ protected:
 };
 
 // include wxFindReplaceDialog declaration
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+//
+// N.B.: under the winui toolkit the generic dialog is used, as it is rendered
+// with the WinUI-ported controls unlike the legacy Win32 common dialog.
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     #include "wx/msw/fdrepdlg.h"
 #else
     #define wxGenericFindReplaceDialog wxFindReplaceDialog

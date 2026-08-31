@@ -46,6 +46,7 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/headerctrl.h"
+#include "wx/private/columnorder.h"
 #include "wx/scopeguard.h"
 
 #if wxUSE_CLIPBOARD
@@ -61,6 +62,7 @@ const char wxGridNameStr[] = "grid";
 
 // Required for wxIs... functions
 #include <ctype.h>
+#include <limits>
 
 // ----------------------------------------------------------------------------
 // globals
@@ -85,6 +87,150 @@ struct DefaultHeaderRenderers
     wxGridRowHeaderRendererDefault rowRenderer;
     wxGridCornerHeaderRendererDefault cornerRenderer;
 } gs_defaultHeaderRenderers;
+
+struct GridMutationState
+{
+    struct PendingTableMessage
+    {
+        wxGridTableBase* table;
+        int id;
+        int commandInt;
+        int commandInt2;
+    };
+
+    unsigned long long columnsRevision = 0;
+    unsigned long long rowsRevision = 0;
+    unsigned long long columnIdentityRevision = 0;
+    unsigned long long rowIdentityRevision = 0;
+    bool redimensionActive = false;
+    bool tableSwapActive = false;
+    bool tableAttachActive = false;
+    bool nativeHeaderSyncActive = false;
+    std::vector<PendingTableMessage> pendingTableMessages;
+};
+
+std::unordered_map<const wxGrid*, GridMutationState> gs_gridMutationStates;
+
+GridMutationState& GetGridMutationState(const wxGrid* grid)
+{
+    return gs_gridMutationStates[grid];
+}
+
+void UnregisterGridMutationState(const wxGrid* grid)
+{
+    gs_gridMutationStates.erase(grid);
+}
+
+void BumpColumnMutationRevision(const wxGrid* grid)
+{
+    ++GetGridMutationState(grid).columnsRevision;
+}
+
+void BumpRowMutationRevision(const wxGrid* grid)
+{
+    ++GetGridMutationState(grid).rowsRevision;
+}
+
+void BumpColumnIdentityRevision(const wxGrid* grid)
+{
+    ++GetGridMutationState(grid).columnIdentityRevision;
+}
+
+void BumpRowIdentityRevision(const wxGrid* grid)
+{
+    ++GetGridMutationState(grid).rowIdentityRevision;
+}
+
+int RemapIndexAfterInsert(int index, int pos, int count)
+{
+    return index != wxNOT_FOUND && index >= pos ? index + count : index;
+}
+
+int RemapIndexAfterDelete(int index, int pos, int count)
+{
+    if ( index == wxNOT_FOUND || index < pos )
+        return index;
+
+    const int end = pos + count;
+    if ( index < end )
+        return wxNOT_FOUND;
+
+    return index - count;
+}
+
+void RemapIndexedValuesAfterInsert(std::unordered_map<int, int>& values,
+                                   int pos,
+                                   int count)
+{
+    std::unordered_map<int, int> remapped;
+    remapped.reserve(values.size());
+    for ( const auto& entry : values )
+    {
+        remapped.emplace(
+            RemapIndexAfterInsert(entry.first, pos, count),
+            entry.second);
+    }
+    values.swap(remapped);
+}
+
+void RemapIndexedValuesAfterDelete(std::unordered_map<int, int>& values,
+                                   int pos,
+                                   int count)
+{
+    std::unordered_map<int, int> remapped;
+    remapped.reserve(values.size());
+    for ( const auto& entry : values )
+    {
+        const int index = RemapIndexAfterDelete(entry.first, pos, count);
+        if ( index != wxNOT_FOUND )
+            remapped.emplace(index, entry.second);
+    }
+    values.swap(remapped);
+}
+
+void RemapFixedIndicesAfterInsert(wxGridFixedIndicesSet* indices,
+                                  int pos,
+                                  int count)
+{
+    if ( !indices )
+        return;
+
+    wxGridFixedIndicesSet remapped;
+    remapped.reserve(indices->size());
+    for ( const int index : *indices )
+        remapped.insert(RemapIndexAfterInsert(index, pos, count));
+    indices->swap(remapped);
+}
+
+void RemapFixedIndicesAfterDelete(wxGridFixedIndicesSet* indices,
+                                  int pos,
+                                  int count)
+{
+    if ( !indices )
+        return;
+
+    wxGridFixedIndicesSet remapped;
+    remapped.reserve(indices->size());
+    for ( const int oldIndex : *indices )
+    {
+        const int index = RemapIndexAfterDelete(oldIndex, pos, count);
+        if ( index != wxNOT_FOUND )
+            remapped.insert(index);
+    }
+    indices->swap(remapped);
+}
+
+int AddGridExtent(int total, int extent)
+{
+    if ( extent <= 0 )
+        return total;
+
+    const long long result =
+        static_cast<long long>(total) + static_cast<long long>(extent);
+    return result > std::numeric_limits<int>::max()
+        ? std::numeric_limits<int>::max()
+        : static_cast<int>(result);
+}
 
 } // anonymous namespace
 
@@ -188,6 +334,8 @@ wxBEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
 
     EVT_HEADER_BEGIN_REORDER(wxID_ANY, wxGridHeaderCtrl::OnBeginReorder)
     EVT_HEADER_END_REORDER(wxID_ANY, wxGridHeaderCtrl::OnEndReorder)
+    EVT_HEADER_DRAGGING_CANCELLED(wxID_ANY,
+                                 wxGridHeaderCtrl::OnDraggingCancelled)
 wxEND_EVENT_TABLE()
 
 wxGridOperations& wxGridRowOperations::Dual() const
@@ -2136,11 +2284,10 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
         return false;
     }
 
-    int colID;
-    if ( GetView() )
-        colID = GetView()->GetColAt( pos );
-    else
-        colID = pos;
+    // Column reordering is purely presentational: all other grid APIs keep
+    // using stable logical column indices (see SetColPos()). In particular,
+    // pos must not be translated through the current display order here.
+    const size_t colID = pos;
 
     if ( numCols > curNumCols - colID )
     {
@@ -2152,9 +2299,11 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
         // m_colLabels stores just as many elements as it needs, e.g. if only
         // the label of the first column had been set it would have only one
         // element and not numCols, so account for it
-        int numRemaining = m_colLabels.size() - colID;
-        if (numRemaining > 0)
-            m_colLabels.RemoveAt( colID, wxMin(numCols, numRemaining) );
+        if ( colID < m_colLabels.size() )
+        {
+            const size_t numRemaining = m_colLabels.size() - colID;
+            m_colLabels.RemoveAt(colID, wxMin(numCols, numRemaining));
+        }
     }
 
     if ( numCols >= curNumCols )
@@ -2912,12 +3061,25 @@ wxGrid::~wxGrid()
              total ? (gs_nAttrCacheHits*100) / total : 0);
 #endif
 
-    // if we own the table, just delete it, otherwise at least don't leave it
-    // with dangling view pointer
-    if ( m_ownTable )
-        delete m_table;
-    else if ( m_table && m_table->GetView() == this )
-        m_table->SetView(nullptr);
+    const auto stateIt = gs_gridMutationStates.find(this);
+    const bool tableAttachActive =
+        stateIt != gs_gridMutationStates.end() &&
+        stateIt->second.tableAttachActive;
+
+    // SetTable() keeps ownership in a local guard while a callback-capable
+    // table attachment is in progress. In this case touching the candidate
+    // here could delete it while one of its own virtual functions is still on
+    // the stack; the guard detaches and, when requested, deletes it after the
+    // callback has returned.
+    if ( !tableAttachActive )
+    {
+        // If we own the table, just delete it, otherwise at least don't leave
+        // it with a dangling view pointer.
+        if ( m_ownTable )
+            delete m_table;
+        else if ( m_table && m_table->GetView() == this )
+            m_table->SetView(nullptr);
+    }
 
     delete m_typeRegistry;
     delete m_selection;
@@ -2929,6 +3091,18 @@ wxGrid::~wxGrid()
     SetAccessible(nullptr);
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
 #endif // wxUSE_ACCESSIBILITY
+
+    UnregisterGridMutationState(this);
+}
+
+unsigned long long wxGrid::GetColumnMutationRevision() const
+{
+    return GetGridMutationState(this).columnsRevision;
+}
+
+unsigned long long wxGrid::GetRowMutationRevision() const
+{
+    return GetGridMutationState(this).rowsRevision;
 }
 
 //
@@ -3050,8 +3224,100 @@ wxGrid::SetTable(wxGridTableBase *table,
                  bool takeOwnership,
                  wxGrid::wxGridSelectionModes selmode )
 {
-    if ( m_created )
+    GridMutationState& initialState = GetGridMutationState(this);
+    if ( initialState.tableSwapActive ||
+            initialState.redimensionActive ||
+            initialState.nativeHeaderSyncActive )
     {
+        return false;
+    }
+
+    initialState.tableSwapActive = true;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxScopeGuard finishTableSwap = wxMakeGuard([this, weakThis]()
+    {
+        if ( weakThis.get() == this )
+            GetGridMutationState(this).tableSwapActive = false;
+    });
+    wxUnusedVar(finishTableSwap);
+
+    bool candidateCommitted = table == nullptr;
+    bool candidateViewAttached = false;
+    wxScopeGuard releaseCandidate = wxMakeGuard(
+        [this, weakThis, table, takeOwnership,
+         &candidateCommitted, &candidateViewAttached]()
+        {
+            if ( candidateCommitted )
+                return;
+
+            if ( weakThis.get() == this )
+            {
+                GridMutationState& state =
+                    GetGridMutationState(this);
+                state.tableAttachActive = false;
+
+                if ( m_table == table )
+                {
+                    m_created = false;
+                    m_table = nullptr;
+                    m_ownTable = false;
+                    wxDELETE(m_selection);
+                    m_numRows = 0;
+                    m_numCols = 0;
+                    m_numFrozenRows = 0;
+                    m_numFrozenCols = 0;
+                    m_colWidths.Empty();
+                    m_colRights.Empty();
+                    m_rowHeights.Empty();
+                    m_rowBottoms.Empty();
+                    m_rowAt.Empty();
+                    m_colAt.Empty();
+                    m_rowMinHeights.clear();
+                    m_colMinWidths.clear();
+                    m_sortCol = wxNOT_FOUND;
+                }
+            }
+
+            // Do this only after the callback which caused the failure has
+            // unwound. This is essential when it destroyed the grid from
+            // inside table->SetView(this).
+            if ( candidateViewAttached )
+                table->SetView(nullptr);
+
+            if ( takeOwnership )
+                delete table;
+        });
+    wxUnusedVar(releaseCandidate);
+
+    BumpRowMutationRevision(this);
+    BumpColumnMutationRevision(this);
+    BumpRowIdentityRevision(this);
+    BumpColumnIdentityRevision(this);
+
+    if ( m_created || m_table || m_selection )
+    {
+        // A table owns the identities used by every active gesture. Publish an
+        // idle interaction state before detaching it; cancellation callbacks
+        // are allowed to destroy the grid but cannot start another table swap
+        // while tableSwapActive is set.
+        if ( m_created && m_winCapture )
+        {
+            CancelMouseCapture();
+            if ( weakThis.get() != this )
+                return false;
+        }
+
+        if ( m_created && m_useNativeHeader )
+        {
+            wxGridTableBase* const tableBeforeCancel = m_table;
+            DoHeaderCancelDragCol(m_dragRowOrCol);
+            if ( weakThis.get() != this ||
+                    m_table != tableBeforeCancel )
+            {
+                return false;
+            }
+        }
+
         // stop all processing
         m_created = false;
 
@@ -3066,15 +3332,34 @@ wxGrid::SetTable(wxGridTableBase *table,
             // which might be half-deleted by now, so we have to manually mark
             // the edit control as being disabled.
             HideCellEditControl();
+            if ( weakThis.get() != this )
+                return false;
+
             m_cellEditCtrlEnabled = false;
 
             // Don't hold on to attributes cached from the old table
             ClearAttrCache();
 
-            m_table->SetView(nullptr);
-            if( m_ownTable )
-                delete m_table;
+            wxGridTableBase* const oldTable = m_table;
+            const bool ownedOldTable = m_ownTable;
+
+            // Move ownership out of the grid before invoking SetView(): a
+            // user override may synchronously destroy us, and the destructor
+            // must not delete the table while its virtual call is active.
             m_table = nullptr;
+            m_ownTable = false;
+            oldTable->SetView(nullptr);
+            if ( weakThis.get() != this )
+            {
+                if ( ownedOldTable )
+                    delete oldTable;
+                return false;
+            }
+
+            if ( ownedOldTable )
+                delete oldTable;
+            if ( weakThis.get() != this )
+                return false;
         }
 
         wxDELETE(m_selection);
@@ -3084,32 +3369,121 @@ wxGrid::SetTable(wxGridTableBase *table,
         m_numCols = 0;
         m_numFrozenRows = 0;
         m_numFrozenCols = 0;
+        InitializeFrozenWindows();
 
         // kill row and column size arrays
         m_colWidths.Empty();
         m_colRights.Empty();
         m_rowHeights.Empty();
         m_rowBottoms.Empty();
+        m_rowAt.Empty();
+        m_colAt.Empty();
+        m_rowMinHeights.clear();
+        m_colMinWidths.clear();
+        if ( m_setFixedRows )
+            m_setFixedRows->clear();
+        if ( m_setFixedCols )
+            m_setFixedCols->clear();
+        m_sortCol = wxNOT_FOUND;
+    }
+
+    // Publish the empty topology before attaching the replacement table. If
+    // the new table later rejects/destroys the attachment, the visible header
+    // still remains consistent with the grid instead of retaining the old
+    // column count.
+    if ( m_useNativeHeader )
+    {
+        if ( !SetNativeHeaderColCountOrFallback() ||
+                weakThis.get() != this )
+        {
+            return false;
+        }
     }
 
     if (table)
     {
-        m_numRows = table->GetNumberRows();
-        m_numCols = table->GetNumberCols();
+        const int numRows = table->GetNumberRows();
+        if ( weakThis.get() != this )
+            return false;
+
+        const int numCols = table->GetNumberCols();
+        if ( weakThis.get() != this )
+            return false;
+
+        wxCHECK_MSG(numRows >= 0 && numCols >= 0,
+                    false,
+                    "grid table returned a negative size");
+        m_numRows = numRows;
+        m_numCols = numCols;
 
         m_table = table;
-        m_table->SetView( this );
-        m_ownTable = takeOwnership;
+        m_ownTable = false;
+        GetGridMutationState(this).tableAttachActive = true;
+        candidateViewAttached = true;
+        table->SetView(this);
+        if ( weakThis.get() != this || m_table != table )
+            return false;
+
+        // SetView() is virtual and is allowed to mutate the table. Its
+        // notifications are intentionally rejected while tableSwapActive is
+        // set, so take a fresh, stable snapshot instead of publishing the
+        // dimensions read before the attachment callback.
+        bool dimensionsStable = false;
+        for ( int attempt = 0; attempt < 4; ++attempt )
+        {
+            const int rowsBefore = table->GetNumberRows();
+            if ( weakThis.get() != this || m_table != table )
+                return false;
+
+            const int colsBefore = table->GetNumberCols();
+            if ( weakThis.get() != this || m_table != table )
+                return false;
+
+            const int rowsAfter = table->GetNumberRows();
+            if ( weakThis.get() != this || m_table != table )
+                return false;
+
+            const int colsAfter = table->GetNumberCols();
+            if ( weakThis.get() != this || m_table != table )
+                return false;
+
+            wxCHECK_MSG(rowsBefore >= 0 && colsBefore >= 0 &&
+                            rowsAfter >= 0 && colsAfter >= 0,
+                        false,
+                        "grid table returned a negative size");
+
+            if ( rowsBefore == rowsAfter && colsBefore == colsAfter )
+            {
+                m_numRows = rowsAfter;
+                m_numCols = colsAfter;
+                dimensionsStable = true;
+                break;
+            }
+        }
+
+        if ( !dimensionsStable )
+            return false;
 
         // Notice that this must be called after setting m_table as it uses it
         // indirectly, via wxGrid::GetColLabelValue().
         if ( m_useNativeHeader )
-            SetNativeHeaderColCount();
+        {
+            if ( !SetNativeHeaderColCountOrFallback() ||
+                    weakThis.get() != this )
+            {
+                return false;
+            }
+        }
 
         m_selection = new wxGridSelection( this, selmode );
         CalcDimensions();
+        if ( weakThis.get() != this )
+            return false;
 
         m_created = true;
+        m_ownTable = takeOwnership;
+        GetGridMutationState(this).tableAttachActive = false;
+        candidateCommitted = true;
     }
 
     InvalidateBestSize();
@@ -3455,8 +3829,67 @@ void wxGrid::CalcWindowSizes()
 //
 bool wxGrid::Redimension( const wxGridTableMessage& msg )
 {
-    int i;
+    GridMutationState& state = GetGridMutationState(this);
+    if ( state.tableSwapActive )
+        return false;
+
+    if ( state.redimensionActive )
+    {
+        state.pendingTableMessages.push_back(
+            GridMutationState::PendingTableMessage{
+                msg.GetTableObject(),
+                msg.GetId(),
+                msg.GetCommandInt(),
+                msg.GetCommandInt2()
+            });
+        return true;
+    }
+
+    state.redimensionActive = true;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxScopeGuard finishTransaction = wxMakeGuard([this, weakThis]()
+    {
+        if ( weakThis.get() == this )
+        {
+            GridMutationState& current = GetGridMutationState(this);
+            current.redimensionActive = false;
+            current.pendingTableMessages.clear();
+        }
+    });
+    wxUnusedVar(finishTransaction);
+
+    bool result = DoRedimension(msg);
+    while ( weakThis.get() == this )
+    {
+        GridMutationState& current = GetGridMutationState(this);
+        if ( current.pendingTableMessages.empty() )
+            break;
+
+        const GridMutationState::PendingTableMessage pending =
+            current.pendingTableMessages.front();
+        current.pendingTableMessages.erase(
+            current.pendingTableMessages.begin());
+
+        // A stale notification from a table no longer associated with this
+        // grid must not be applied to the replacement.
+        if ( pending.table != m_table )
+            continue;
+
+        const wxGridTableMessage queued(
+            pending.table,
+            pending.id,
+            pending.commandInt,
+            pending.commandInt2);
+        result = DoRedimension(queued) || result;
+    }
+
+    return result;
+}
+
+bool wxGrid::DoRedimension( const wxGridTableMessage& msg )
+{
     int labelArea = 0;
+    const wxWeakRef<wxWindow> weakThis(this);
 
     // Clear the attribute cache as the attribute might refer to a different
     // cell than stored in the cache after adding/removing rows/columns.
@@ -3468,6 +3901,9 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
     // For now, I intentionally do not save the editor's content as the
     // cell it might want to save that stuff to might no longer exist.
     HideCellEditControl();
+    if ( weakThis.get() != this || msg.GetTableObject() != m_table )
+        return false;
+    m_cellEditCtrlEnabled = false;
 
     switch ( msg.GetId() )
     {
@@ -3478,49 +3914,39 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                          "Invalid row insertion position" );
 
             int numRows = msg.GetCommandInt2();
-            wxCHECK_MSG( numRows >= 0, false,
+            wxCHECK_MSG( numRows >= 0 &&
+                            numRows <= std::numeric_limits<int>::max() - m_numRows,
+                         false,
                          "Invalid number of rows inserted" );
-
-            m_numRows += numRows;
+            if ( !numRows )
+                break;
 
             if ( !m_rowAt.IsEmpty() )
             {
-                //Shift the row IDs
-                for ( i = 0; i < m_numRows - numRows; i++ )
-                {
-                    if ( m_rowAt[i] >= pos )
-                        m_rowAt[i] += numRows;
-                }
-
-                m_rowAt.Insert( pos, pos, numRows );
-
-                //Set the new rows' positions
-                for ( i = pos + 1; i < pos + numRows; i++ )
-                {
-                    m_rowAt[i] = i;
-                }
+                const int displayPos =
+                    pos == m_numRows ? m_numRows : GetRowPos(pos);
+                wxCHECK_MSG(
+                    wxPrivate::ColumnOrderMutation::Insert(
+                        m_rowAt, m_numRows, pos, numRows, displayPos),
+                    false,
+                    "invalid row order before insertion" );
             }
 
+            m_numRows += numRows;
 
             if ( !m_rowHeights.IsEmpty() )
             {
                 m_rowHeights.Insert( m_defaultRowHeight, pos, numRows );
                 m_rowBottoms.Insert( 0, pos, numRows );
-
-                int bottom = 0;
-                if ( pos > 0 )
-                    bottom = m_rowBottoms[GetRowAt( pos - 1 )];
-
-                int rowPos;
-                for ( rowPos = pos; rowPos < m_numRows; rowPos++ )
-                {
-                    i = GetRowAt( rowPos );
-
-                    bottom += GetRowHeight(i);
-                    m_rowBottoms[i] = bottom;
-                }
+                RecalculateRowBottoms();
             }
 
+            RemapIndexedValuesAfterInsert(
+                m_rowMinHeights, pos, numRows);
+            RemapFixedIndicesAfterInsert(m_setFixedRows, pos, numRows);
+            RemapCurrentCellOnRedim(wxGRID_ROW, pos, numRows);
+            BumpRowMutationRevision(this);
+            BumpRowIdentityRevision(this);
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
@@ -3537,44 +3963,41 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
         {
             int numRows = msg.GetCommandInt();
-            wxCHECK_MSG( numRows >= 0, false,
+            wxCHECK_MSG( numRows >= 0 &&
+                            numRows <= std::numeric_limits<int>::max() - m_numRows,
+                         false,
                          "Invalid number of rows appended" );
+            if ( !numRows )
+                break;
 
             wxASSERT_MSG( msg.GetCommandInt2() == -1, "Ignored when appending" );
 
             int oldNumRows = m_numRows;
-            m_numRows += numRows;
 
             if ( !m_rowAt.IsEmpty() )
             {
-                m_rowAt.Add( 0, numRows );
-
-                //Set the new rows' positions
-                for ( i = oldNumRows; i < m_numRows; i++ )
-                {
-                    m_rowAt[i] = i;
-                }
+                wxCHECK_MSG(
+                    wxPrivate::ColumnOrderMutation::Insert(
+                        m_rowAt,
+                        oldNumRows,
+                        oldNumRows,
+                        numRows,
+                        oldNumRows),
+                    false,
+                    "invalid row order before append" );
             }
+
+            m_numRows += numRows;
 
             if ( !m_rowHeights.IsEmpty() )
             {
                 m_rowHeights.Add( m_defaultRowHeight, numRows );
                 m_rowBottoms.Add( 0, numRows );
-
-                int bottom = 0;
-                if ( oldNumRows > 0 )
-                    bottom = m_rowBottoms[oldNumRows - 1];
-
-                int rowPos;
-                for ( rowPos = oldNumRows; rowPos < m_numRows; rowPos++ )
-                {
-                    i = GetRowAt( rowPos );
-
-                    bottom += GetRowHeight(i);
-                    m_rowBottoms[i] = bottom;
-                }
+                RecalculateRowBottoms();
             }
 
+            BumpRowMutationRevision(this);
+            BumpRowIdentityRevision(this);
             UpdateCurrentCellOnRedim();
 
             CalcDimensions();
@@ -3591,40 +4014,38 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             int numRows = msg.GetCommandInt2();
             wxCHECK_MSG( numRows >= 0 && pos + numRows <= m_numRows, false,
                          "Wrong number of rows being deleted" );
-
-            m_numRows -= numRows;
+            if ( !numRows )
+                break;
 
             if ( !m_rowAt.IsEmpty() )
             {
-                int rowID = GetRowAt( pos );
+                wxCHECK_MSG(
+                    wxPrivate::ColumnOrderMutation::Erase(
+                        m_rowAt, m_numRows, pos, numRows),
+                    false,
+                    "invalid row order before deletion" );
+            }
 
-                m_rowAt.RemoveAt( pos, numRows );
-
-                //Shift the row IDs
-                int rowPos;
-                for ( rowPos = 0; rowPos < m_numRows; rowPos++ )
-                {
-                    if ( m_rowAt[rowPos] > rowID )
-                        m_rowAt[rowPos] -= numRows;
-                }
+            m_numRows -= numRows;
+            if ( m_numFrozenRows > m_numRows )
+            {
+                m_numFrozenRows = m_numRows;
+                InitializeFrozenWindows();
             }
 
             if ( !m_rowHeights.IsEmpty() )
             {
                 m_rowHeights.RemoveAt( pos, numRows );
                 m_rowBottoms.RemoveAt( pos, numRows );
-
-                int h = 0;
-                int rowPos;
-                for ( rowPos = 0; rowPos < m_numRows; rowPos++ )
-                {
-                    i = GetRowAt( rowPos );
-
-                    h += GetRowHeight(i);
-                    m_rowBottoms[i] = h;
-                }
+                RecalculateRowBottoms();
             }
 
+            RemapIndexedValuesAfterDelete(
+                m_rowMinHeights, pos, numRows);
+            RemapFixedIndicesAfterDelete(m_setFixedRows, pos, numRows);
+            RemapCurrentCellOnRedim(wxGRID_ROW, pos, -numRows);
+            BumpRowMutationRevision(this);
+            BumpRowIdentityRevision(this);
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
@@ -3658,53 +4079,51 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                          "Invalid column insertion position" );
 
             int numCols = msg.GetCommandInt2();
-            wxCHECK_MSG( numCols >= 0, false,
+            wxCHECK_MSG( numCols >= 0 &&
+                            numCols <= std::numeric_limits<int>::max() - m_numCols,
+                         false,
                          "Invalid number of columns inserted" );
+            if ( !numCols )
+                break;
 
-            m_numCols += numCols;
+            if ( m_useNativeHeader )
+            {
+                DoHeaderCancelDragCol(m_dragRowOrCol);
+                if ( weakThis.get() != this ||
+                        msg.GetTableObject() != m_table )
+                {
+                    return false;
+                }
+            }
 
             if ( !m_colAt.IsEmpty() )
             {
-                //Shift the column IDs
-                for ( i = 0; i < m_numCols - numCols; i++ )
-                {
-                    if ( m_colAt[i] >= pos )
-                        m_colAt[i] += numCols;
-                }
-
-                m_colAt.Insert( pos, pos, numCols );
-
-                //Set the new columns' positions
-                for ( i = pos + 1; i < pos + numCols; i++ )
-                {
-                    m_colAt[i] = i;
-                }
+                const int displayPos =
+                    pos == m_numCols ? m_numCols : GetColPos(pos);
+                wxCHECK_MSG(
+                    wxPrivate::ColumnOrderMutation::Insert(
+                        m_colAt, m_numCols, pos, numCols, displayPos),
+                    false,
+                    "invalid column order before insertion" );
             }
+
+            m_numCols += numCols;
 
             if ( !m_colWidths.IsEmpty() )
             {
                 m_colWidths.Insert( m_defaultColWidth, pos, numCols );
                 m_colRights.Insert( 0, pos, numCols );
-
-                int right = 0;
-                if ( pos > 0 )
-                    right = m_colRights[GetColAt( pos - 1 )];
-
-                int colPos;
-                for ( colPos = pos; colPos < m_numCols; colPos++ )
-                {
-                    i = GetColAt( colPos );
-
-                    right += GetColWidth(i);
-                    m_colRights[i] = right;
-                }
+                RecalculateColumnRights();
             }
 
-            // See comment for wxGRIDTABLE_NOTIFY_COLS_APPENDED case explaining
-            // why this has to be done here and not before.
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
-
+            m_sortCol =
+                RemapIndexAfterInsert(m_sortCol, pos, numCols);
+            RemapIndexedValuesAfterInsert(
+                m_colMinWidths, pos, numCols);
+            RemapFixedIndicesAfterInsert(m_setFixedCols, pos, numCols);
+            RemapCurrentCellOnRedim(wxGRID_COLUMN, pos, numCols);
+            BumpColumnMutationRevision(this);
+            BumpColumnIdentityRevision(this);
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
@@ -3714,6 +4133,18 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                 attrProvider->UpdateAttrCols( pos, numCols );
 
             CalcDimensions();
+
+            // Publish the completed transaction only after every internal
+            // consumer has observed it. Native header callbacks are public
+            // reentrancy points and may start another mutation.
+            if ( m_useNativeHeader )
+            {
+                if ( !SetNativeHeaderColCountOrFallback() ||
+                        weakThis.get() != this )
+                {
+                    return true;
+                }
+            }
         }
         labelArea = wxGA_ColLabels;
         break;
@@ -3721,53 +4152,65 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
         {
             int numCols = msg.GetCommandInt();
-            wxCHECK_MSG( numCols >= 0, false,
+            wxCHECK_MSG( numCols >= 0 &&
+                            numCols <= std::numeric_limits<int>::max() - m_numCols,
+                         false,
                          "Invalid number of columns appended" );
+            if ( !numCols )
+                break;
 
             wxASSERT_MSG( msg.GetCommandInt2() == -1, "Ignored when appending" );
 
             int oldNumCols = m_numCols;
-            m_numCols += numCols;
+
+            if ( m_useNativeHeader )
+            {
+                DoHeaderCancelDragCol(m_dragRowOrCol);
+                if ( weakThis.get() != this ||
+                        msg.GetTableObject() != m_table )
+                {
+                    return false;
+                }
+            }
 
             if ( !m_colAt.IsEmpty() )
             {
-                m_colAt.Add( 0, numCols );
-
-                //Set the new columns' positions
-                for ( i = oldNumCols; i < m_numCols; i++ )
-                {
-                    m_colAt[i] = i;
-                }
+                wxCHECK_MSG(
+                    wxPrivate::ColumnOrderMutation::Insert(
+                        m_colAt,
+                        oldNumCols,
+                        oldNumCols,
+                        numCols,
+                        oldNumCols),
+                    false,
+                    "invalid column order before append" );
             }
+
+            m_numCols += numCols;
 
             if ( !m_colWidths.IsEmpty() )
             {
                 m_colWidths.Add( m_defaultColWidth, numCols );
                 m_colRights.Add( 0, numCols );
-
-                int right = 0;
-                if ( oldNumCols > 0 )
-                    right = m_colRights[GetColAt( oldNumCols - 1 )];
-
-                int colPos;
-                for ( colPos = oldNumCols; colPos < m_numCols; colPos++ )
-                {
-                    i = GetColAt( colPos );
-
-                    right += GetColWidth(i);
-                    m_colRights[i] = right;
-                }
+                RecalculateColumnRights();
             }
 
-            // Notice that this must be called after updating m_colWidths above
-            // as the native grid control will check whether the new columns
-            // are shown which results in accessing m_colWidths array.
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
-
+            BumpColumnMutationRevision(this);
+            BumpColumnIdentityRevision(this);
             UpdateCurrentCellOnRedim();
 
             CalcDimensions();
+
+            // This must be after updating m_colWidths because the native
+            // header queries column visibility while rebuilding itself.
+            if ( m_useNativeHeader )
+            {
+                if ( !SetNativeHeaderColCountOrFallback() ||
+                        weakThis.get() != this )
+                {
+                    return true;
+                }
+            }
         }
         labelArea = wxGA_ColLabels;
         break;
@@ -3779,47 +4222,52 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                          "Invalid column deletion position" );
 
             int numCols = msg.GetCommandInt2();
-            wxCHECK_MSG( numCols >= 0 && pos + numCols <= m_numCols, false,
+            wxCHECK_MSG( numCols >= 0 && numCols <= m_numCols - pos, false,
                          "Wrong number of columns being deleted" );
+            if ( !numCols )
+                break;
 
-            m_numCols -= numCols;
+            if ( m_useNativeHeader )
+            {
+                DoHeaderCancelDragCol(m_dragRowOrCol);
+                if ( weakThis.get() != this ||
+                        msg.GetTableObject() != m_table )
+                {
+                    return false;
+                }
+            }
 
             if ( !m_colAt.IsEmpty() )
             {
-                int colID = GetColAt( pos );
+                wxCHECK_MSG(
+                    wxPrivate::ColumnOrderMutation::Erase(
+                        m_colAt, m_numCols, pos, numCols),
+                    false,
+                    "invalid column order before deletion" );
+            }
 
-                m_colAt.RemoveAt( pos, numCols );
-
-                //Shift the column IDs
-                int colPos;
-                for ( colPos = 0; colPos < m_numCols; colPos++ )
-                {
-                    if ( m_colAt[colPos] > colID )
-                        m_colAt[colPos] -= numCols;
-                }
+            m_numCols -= numCols;
+            if ( m_numFrozenCols > m_numCols )
+            {
+                m_numFrozenCols = m_numCols;
+                InitializeFrozenWindows();
             }
 
             if ( !m_colWidths.IsEmpty() )
             {
                 m_colWidths.RemoveAt( pos, numCols );
                 m_colRights.RemoveAt( pos, numCols );
-
-                int w = 0;
-                int colPos;
-                for ( colPos = 0; colPos < m_numCols; colPos++ )
-                {
-                    i = GetColAt( colPos );
-
-                    w += GetColWidth(i);
-                    m_colRights[i] = w;
-                }
+                RecalculateColumnRights();
             }
 
-            // See comment for wxGRIDTABLE_NOTIFY_COLS_APPENDED case explaining
-            // why this has to be done here and not before.
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
-
+            m_sortCol =
+                RemapIndexAfterDelete(m_sortCol, pos, numCols);
+            RemapIndexedValuesAfterDelete(
+                m_colMinWidths, pos, numCols);
+            RemapFixedIndicesAfterDelete(m_setFixedCols, pos, numCols);
+            RemapCurrentCellOnRedim(wxGRID_COLUMN, pos, -numCols);
+            BumpColumnMutationRevision(this);
+            BumpColumnIdentityRevision(this);
             UpdateCurrentCellOnRedim();
 
             if ( m_selection )
@@ -3842,6 +4290,15 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             }
 
             CalcDimensions();
+
+            if ( m_useNativeHeader )
+            {
+                if ( !SetNativeHeaderColCountOrFallback() ||
+                        weakThis.get() != this )
+                {
+                    return true;
+                }
+            }
         }
         labelArea = wxGA_ColLabels;
         break;
@@ -4298,13 +4755,18 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
     {
         if ( lineEdge != wxNOT_FOUND && oper.CanDragLineSize(this, lineEdge) )
         {
-            DoStartResizeRowOrCol(lineEdge, oper.GetLineSize(this, lineEdge));
-            ChangeCursorMode(oper.GetCursorModeResize(), labelWin);
+            if ( DoStartResizeRowOrCol(lineEdge, oper) )
+            {
+                ChangeCursorMode(oper.GetCursorModeResize(), labelWin);
+            }
         }
         else if ( labelEdgeOper )
         {
-            DoStartResizeLabel(labelEdgeOper->GetLabelSize(this));
-            ChangeCursorMode(labelEdgeOper->GetCursorModeResize(), labelWin);
+            if ( DoStartResizeLabel(*labelEdgeOper) )
+            {
+                ChangeCursorMode(
+                    labelEdgeOper->GetCursorModeResize(), labelWin);
+            }
         }
         else
         {
@@ -4398,6 +4860,8 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
     //
     else if ( event.LeftUp() )
     {
+        const wxWeakRef<wxWindow> weakThis(this);
+
         if ( m_dragRowOrCol != -1 && m_cursorMode == oper.GetCursorModeResize() )
         {
             DoEndDragResizeRowOrCol(event, gridWindow, oper);
@@ -4417,7 +4881,12 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             {
                 // the line didn't actually move anywhere, "unpress" the label
                 if ( oper.GetOrientation() == wxVERTICAL && line != -1 )
+                {
                     DoColHeaderClick(line);
+                    if ( weakThis.get() != this )
+                        return;
+                }
+
                 oper.GetHeaderWindow(this)->Refresh();
             }
             else
@@ -4446,7 +4915,9 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         {
             DoColHeaderClick(line);
         }
-        EndDraggingIfNecessary();
+
+        if ( weakThis.get() == this )
+            EndDraggingIfNecessary();
     }
 
     // ------------ Right button down
@@ -4507,6 +4978,62 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
     }
 }
 
+void wxGrid::RemapCurrentCellOnRedim(wxGridDirection direction,
+                                     int pos,
+                                     int count)
+{
+    if ( m_currentCellCoords == wxGridNoCellCoords || count == 0 )
+        return;
+
+    int index = direction == wxGRID_COLUMN
+        ? m_currentCellCoords.GetCol()
+        : m_currentCellCoords.GetRow();
+
+    if ( count > 0 )
+    {
+        index = RemapIndexAfterInsert(index, pos, count);
+    }
+    else
+    {
+        const int deleted = -count;
+        const int remapped = RemapIndexAfterDelete(index, pos, deleted);
+        index = remapped == wxNOT_FOUND ? pos : remapped;
+    }
+
+    if ( direction == wxGRID_COLUMN )
+        m_currentCellCoords.SetCol(index);
+    else
+        m_currentCellCoords.SetRow(index);
+}
+
+void wxGrid::RecalculateRowBottoms()
+{
+    if ( m_rowHeights.empty() )
+        return;
+
+    int bottom = 0;
+    for ( int rowPos = 0; rowPos < m_numRows; ++rowPos )
+    {
+        const int row = GetRowAt(rowPos);
+        bottom = AddGridExtent(bottom, m_rowHeights[row]);
+        m_rowBottoms[row] = bottom;
+    }
+}
+
+void wxGrid::RecalculateColumnRights()
+{
+    if ( m_colWidths.empty() )
+        return;
+
+    int right = 0;
+    for ( int colPos = 0; colPos < m_numCols; ++colPos )
+    {
+        const int col = GetColAt(colPos);
+        right = AddGridExtent(right, m_colWidths[col]);
+        m_colRights[col] = right;
+    }
+}
+
 void wxGrid::UpdateCurrentCellOnRedim()
 {
     if (m_currentCellCoords == wxGridNoCellCoords)
@@ -4555,7 +5082,19 @@ void wxGrid::UpdateColumnSortingIndicator(int col)
     wxCHECK_RET( col != wxNOT_FOUND, "invalid column index" );
 
     if ( m_useNativeHeader )
-        GetGridColHeader()->UpdateColumn(col);
+    {
+        if ( GetGridMutationState(this).nativeHeaderSyncActive )
+        {
+            // The current rebuild may already have consumed the old sorting
+            // state for this column. Force it to retry from a fresh snapshot
+            // instead of updating the native control reentrantly.
+            BumpColumnMutationRevision(this);
+        }
+        else
+        {
+            GetGridColHeader()->UpdateColumn(col);
+        }
+    }
     else if ( m_nativeColumnLabels )
         m_colLabelWin->Refresh();
     //else: sorting indicator display not yet implemented in grid version
@@ -4595,33 +5134,80 @@ void wxGrid::SetSortingColumn(int col, bool ascending)
 
 void wxGrid::DoColHeaderClick(int col)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const unsigned long long revision = GetColumnMutationRevision();
+
     // we consider that the grid was resorted if this event is processed and
     // not vetoed
-    if ( SendEvent(wxEVT_GRID_COL_SORT, -1, col) == Event_Handled )
+    const EventResult result = SendEvent(wxEVT_GRID_COL_SORT, -1, col);
+    if ( weakThis.get() == this &&
+            GetColumnMutationRevision() == revision &&
+            col >= 0 && col < m_numCols &&
+            result == Event_Handled )
     {
         SetSortingColumn(col, IsSortingBy(col) ? !m_sortIsAscending : true);
         Refresh();
     }
 }
 
-void wxGrid::DoStartResizeRowOrCol(int col, int size)
+bool wxGrid::DoStartResizeRowOrCol(int line, const wxGridOperations& oper)
 {
+    if ( line < 0 || line >= oper.GetTotalNumberOfLines(this) )
+        return false;
+
     // Hide the editor if it's currently shown to avoid any weird interactions
     // with it while dragging the row/column separator.
-    AcceptCellEditControlIfShown();
+    const wxWeakRef<wxWindow> weakThis(this);
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
 
-    m_dragRowOrCol = col;
-    m_dragRowOrColOldSize = size;
+    // Publish a cancellable pending gesture before committing the editor.
+    // On MSW the editor callback can update the native header, which
+    // synchronously cancels HDN_BEGINTRACK. The cancellation must be able to
+    // invalidate this start before we publish its original size.
+    m_dragRowOrCol = line;
+    m_dragRowOrColOldSize = -1;
+
+    AcceptCellEditControlIfShown();
+    if ( weakThis.get() != this ||
+            GetColumnMutationRevision() != columnRevision ||
+            GetRowMutationRevision() != rowRevision ||
+            m_dragRowOrCol != line )
+    {
+        if ( weakThis.get() == this && m_dragRowOrCol == line )
+        {
+            m_dragRowOrCol = -1;
+            m_dragRowOrColOldSize = -1;
+        }
+        return false;
+    }
+
+    // Capture the identity and original size only after the editor callback:
+    // committing an editor may synchronously redimension the table.
+    m_dragRowOrColOldSize = oper.GetLineSize(this, line);
+    return true;
 }
 
-void wxGrid::DoStartResizeLabel(int size)
+bool wxGrid::DoStartResizeLabel(const wxGridOperations& oper)
 {
     // Hide the editor if it's currently shown to avoid any weird interactions
     // with it while dragging the row/column separator.
+    const wxWeakRef<wxWindow> weakThis(this);
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
     AcceptCellEditControlIfShown();
+    if ( weakThis.get() != this ||
+            GetColumnMutationRevision() != columnRevision ||
+            GetRowMutationRevision() != rowRevision )
+    {
+        return false;
+    }
 
     m_dragLabel = true;
-    m_dragRowOrColOldSize = size;
+    m_dragRowOrColOldSize = oper.GetLabelSize(this);
+    return true;
 }
 
 void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
@@ -4675,8 +5261,11 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
     {
         if ( atLabelEdge && oper->CanDragLabelSize(this) )
         {
-            DoStartResizeLabel(oper->GetLabelSize(this));
-            ChangeCursorMode(oper->GetCursorModeResize(), m_cornerLabelWin);
+            if ( DoStartResizeLabel(*oper) )
+            {
+                ChangeCursorMode(
+                    oper->GetCursorModeResize(), m_cornerLabelWin);
+            }
         }
         // indicate corner label by having both row and col args == -1
         else if ( SendEvent(wxEVT_GRID_LABEL_LEFT_CLICK, -1, -1, event) == Event_Unhandled )
@@ -4686,11 +5275,13 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
     }
     else if ( event.LeftUp() && m_isDragging && m_dragLabel )
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         if ( m_cursorMode == oper->GetCursorModeResize() )
         {
             oper->DoEndLabelResize(this, event, nullptr);
         }
-        EndDraggingIfNecessary();
+        if ( weakThis.get() == this )
+            EndDraggingIfNecessary();
     }
     else if ( event.LeftDClick() )
     {
@@ -4727,67 +5318,178 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
 
 void wxGrid::HandleRowAutosize(int row, const wxMouseEvent& event)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const unsigned long long revision = GetRowMutationRevision();
+
     // adjust row height depending on label text
     //
     // TODO: generate RESIZING event, see #10754
-    if ( !SendGridSizeEvent(wxEVT_GRID_ROW_AUTO_SIZE, row, event) )
+    const bool handled =
+        SendGridSizeEvent(wxEVT_GRID_ROW_AUTO_SIZE, row, event);
+    if ( weakThis.get() != this ||
+            GetRowMutationRevision() != revision ||
+            row < 0 || row >= m_numRows )
+    {
+        return;
+    }
+
+    if ( !handled )
         AutoSizeRowLabelSize(row);
 
-    SendGridSizeEvent(wxEVT_GRID_ROW_SIZE, row, event);
+    if ( weakThis.get() == this &&
+            GetRowMutationRevision() == revision &&
+            row >= 0 && row < m_numRows )
+    {
+        SendGridSizeEvent(wxEVT_GRID_ROW_SIZE, row, event);
+    }
 }
 
 void wxGrid::HandleColumnAutosize(int col, const wxMouseEvent& event)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const unsigned long long revision = GetColumnMutationRevision();
+
     // adjust column width depending on label text
     //
     // TODO: generate RESIZING event, see #10754
-    if ( !SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, col, event) )
+    const bool handled =
+        SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, col, event);
+    if ( weakThis.get() != this ||
+            GetColumnMutationRevision() != revision ||
+            col < 0 || col >= m_numCols )
+    {
+        return;
+    }
+
+    if ( !handled )
         AutoSizeColLabelSize(col);
 
-    SendGridSizeEvent(wxEVT_GRID_COL_SIZE, col, event);
+    if ( weakThis.get() == this &&
+            GetColumnMutationRevision() == revision &&
+            col >= 0 && col < m_numCols )
+    {
+        SendGridSizeEvent(wxEVT_GRID_COL_SIZE, col, event);
+    }
 }
 
 void wxGrid::CancelMouseCapture()
 {
     // cancel operation currently in progress, whatever it is
-    if ( m_winCapture )
+    if ( !m_winCapture )
+        return;
+
+    wxWindow* const capture = m_winCapture;
+    const wxWeakRef<wxWindow> weakCapture(capture);
+    const wxWeakRef<wxWindow> weakThis(this);
+    const CursorMode mode = m_cursorMode;
+    const int line = m_dragRowOrCol;
+    const int oldSize = m_dragRowOrColOldSize;
+    const bool dragLabel = m_dragLabel;
+    const bool wasSelecting =
+        m_isDragging &&
+        (mode == WXGRID_CURSOR_SELECT_CELL ||
+         mode == WXGRID_CURSOR_SELECT_ROW ||
+         mode == WXGRID_CURSOR_SELECT_COL);
+    const auto oper =
+        mode == WXGRID_CURSOR_RESIZE_ROW ||
+                mode == WXGRID_CURSOR_RESIZE_COL
+            ? DoGetOperationsFromCursorMode()
+            : nullptr;
+
+    // Publish the idle state before restoring geometry or cancelling a
+    // selection: both operations can invoke user code.
+    m_winCapture = nullptr;
+    m_isDragging = false;
+    m_startDragPos = wxDefaultPosition;
+    m_lastMousePos = wxDefaultPosition;
+    m_dragMoveRowOrCol = -1;
+    m_dragLastPos = -1;
+    m_dragLastColour = nullptr;
+    m_dragRowOrCol = -1;
+    m_dragRowOrColOldSize = -1;
+    m_dragLabel = false;
+    m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+    m_cancelledDragging = true;
+
+    if ( weakCapture )
     {
-        if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL ||
-             m_cursorMode == WXGRID_CURSOR_MOVE_ROW )
-            m_winCapture->Refresh();
-        DoAfterDraggingEnd();
+        if ( mode == WXGRID_CURSOR_MOVE_COL ||
+                mode == WXGRID_CURSOR_MOVE_ROW )
+        {
+            capture->Refresh();
+        }
+        capture->SetCursor(*wxSTANDARD_CURSOR);
     }
+
+    if ( oper )
+    {
+        if ( dragLabel )
+        {
+            oper->SetLabelSize(this, oldSize);
+        }
+        else
+        {
+            const int count = mode == WXGRID_CURSOR_RESIZE_COL
+                ? m_numCols
+                : m_numRows;
+            if ( line >= 0 && line < count )
+                oper->SetLineSize(this, line, oldSize);
+        }
+    }
+
+    if ( weakThis.get() == this && wasSelecting && m_selection )
+        m_selection->CancelSelecting();
 }
 
 void wxGrid::DoAfterDraggingEnd()
 {
-    if ( m_isDragging &&
-         (m_cursorMode == WXGRID_CURSOR_SELECT_CELL ||
-          m_cursorMode == WXGRID_CURSOR_SELECT_ROW ||
-          m_cursorMode == WXGRID_CURSOR_SELECT_COL) )
-    {
-        m_selection->EndSelecting();
-    }
+    wxWindow* const capture = m_winCapture;
+    const wxWeakRef<wxWindow> weakCapture(capture);
+    const bool wasSelecting =
+        m_isDragging &&
+        (m_cursorMode == WXGRID_CURSOR_SELECT_CELL ||
+         m_cursorMode == WXGRID_CURSOR_SELECT_ROW ||
+         m_cursorMode == WXGRID_CURSOR_SELECT_COL);
 
+    // Clear all state before EndSelecting(), which emits public events.
+    m_winCapture = nullptr;
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
     m_lastMousePos = wxDefaultPosition;
-    // from drag moving row/col
     m_dragMoveRowOrCol = -1;
     m_dragLastPos = -1;
     m_dragLastColour = nullptr;
-
+    m_dragRowOrCol = -1;
+    m_dragRowOrColOldSize = -1;
+    m_dragLabel = false;
     m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-    m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
-    m_winCapture = nullptr;
+
+    if ( weakCapture )
+        capture->SetCursor(*wxSTANDARD_CURSOR);
+
+    if ( wasSelecting && m_selection )
+        m_selection->EndSelecting();
 }
 
 void wxGrid::EndDraggingIfNecessary()
 {
     if ( m_winCapture )
     {
-        m_winCapture->ReleaseMouse();
+        wxWindow* const capture = m_winCapture;
+        const wxWeakRef<wxWindow> weakCapture(capture);
+        const wxWeakRef<wxWindow> weakThis(this);
 
+        // Prevent the synchronous capture-lost notification generated by
+        // ReleaseMouse() from cancelling an operation which is committing.
+        m_winCapture = nullptr;
+        if ( capture->HasCapture() )
+            capture->ReleaseMouse();
+
+        if ( weakThis.get() != this )
+            return;
+
+        if ( weakCapture )
+            m_winCapture = capture;
         DoAfterDraggingEnd();
     }
 }
@@ -4973,11 +5675,15 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
 
                 if ( dragRowOrCol != wxNOT_FOUND )
                 {
-                    DoStartResizeRowOrCol(dragRowOrCol, oper->GetLineSize(this, dragRowOrCol));
+                    if ( !DoStartResizeRowOrCol(dragRowOrCol, *oper) )
+                    {
+                        return;
+                    }
                 }
                 else
                 {
-                    DoStartResizeLabel(oper->GetLabelSize(this));
+                    if ( !DoStartResizeLabel(*oper) )
+                        return;
                     captureMouse = true;
                 }
             }
@@ -5205,9 +5911,11 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
         // Note that we must call this one first, before resetting the
         // drag-related data, as it relies on m_cursorMode being still set and
         // EndDraggingIfNecessary() resets it.
+        const wxWeakRef<wxWindow> weakThis(this);
         DoGridCellLeftUp(event, coords, gridWindow);
 
-        EndDraggingIfNecessary();
+        if ( weakThis.get() == this )
+            EndDraggingIfNecessary();
         return;
     }
 
@@ -5225,16 +5933,34 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
     // are just ignored while it's in progress.
     if ( m_isDragging )
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         if ( isDraggingWithLeft )
+        {
             DoGridDragEvent(event, coords, false /* not first drag */, gridWindow);
+            if ( weakThis.get() != this )
+                return;
+        }
 
         if ( m_winCapture != gridWindow )
         {
             if ( m_winCapture )
-                m_winCapture->ReleaseMouse();
+            {
+                // Capture-lost handlers are public reentrancy points.
+                wxWindow* const oldCapture = m_winCapture;
+                m_winCapture = nullptr;
+                const wxWeakRef<wxWindow> weakGridWindow(gridWindow);
+                if ( oldCapture->HasCapture() )
+                    oldCapture->ReleaseMouse();
+                if ( weakThis.get() != this || !weakGridWindow )
+                    return;
+            }
 
             m_winCapture = gridWindow;
-            m_winCapture->CaptureMouse();
+            if ( !gridWindow->HasCapture() )
+                gridWindow->CaptureMouse();
+
+            if ( weakThis.get() != this )
+                return;
         }
         return;
     }
@@ -5256,14 +5982,19 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
                 abs(m_startDragPos.y - pt.y) <= DRAG_SENSITIVITY )
             return;
 
+        const wxWeakRef<wxWindow> weakThis(this);
         if ( DoGridDragEvent(event, coords, true /* first drag */, gridWindow) )
         {
+            if ( weakThis.get() != this )
+                return;
+
             wxASSERT_MSG( !m_winCapture, "shouldn't capture the mouse twice" );
 
             m_winCapture = gridWindow;
             m_winCapture->CaptureMouse();
 
-            m_isDragging = true;
+            if ( weakThis.get() == this )
+                m_isDragging = true;
         }
 
         return;
@@ -5363,25 +6094,31 @@ wxPoint wxGrid::GetPositionForResizeEvent(int width) const
 void wxGrid::DoEndDragResizeRowOrCol(const wxMouseEvent& event, wxGridWindow* gridWindow, const wxGridOperations& oper)
 {
     DoGridDragResize(event.GetPosition(), oper, gridWindow);
-    SendGridSizeEvent(oper.GetEventTypeLineSize(), m_dragRowOrCol, event);
+    const int line = m_dragRowOrCol;
     m_dragRowOrCol = -1;
+    m_dragRowOrColOldSize = -1;
+    SendGridSizeEvent(oper.GetEventTypeLineSize(), line, event);
 }
 
 void wxGrid::DoEndDragResizeLabel(const wxMouseEvent& event, wxGridWindow* gridWindow,
     const wxGridOperations& oper)
 {
     DoGridDragResize(event.GetPosition(), oper, gridWindow);
-    SendGridSizeEvent(oper.GetEventTypeLabelSize(), -1, event);
     m_dragLabel = false;
+    m_dragRowOrColOldSize = -1;
+    SendGridSizeEvent(oper.GetEventTypeLabelSize(), -1, event);
 }
 
-void wxGrid::DoHeaderStartDragResizeCol(int col)
+bool wxGrid::DoHeaderStartDragResizeCol(int col)
 {
-    DoStartResizeRowOrCol(col, GetColSize(col));
+    return DoStartResizeRowOrCol(col, wxGridColumnOperations());
 }
 
 void wxGrid::DoHeaderDragResizeCol(int width)
 {
+    if ( m_dragRowOrCol == -1 )
+        return;
+
     DoGridDragResize(GetPositionForResizeEvent(width),
                      wxGridColumnOperations(),
                      m_gridWin);
@@ -5409,6 +6146,28 @@ void wxGrid::DoHeaderEndDragResizeCol(int width)
     DoEndDragResizeRowOrCol(e, m_gridWin, wxGridColumnOperations());
 }
 
+void wxGrid::DoHeaderCancelDragCol(int col)
+{
+    const int resizedCol = m_dragRowOrCol;
+    const int oldSize = m_dragRowOrColOldSize;
+
+    // Clear state first: restoring the width updates the header and may
+    // synchronously deliver another cancellation notification.
+    m_dragRowOrCol = -1;
+    m_dragRowOrColOldSize = -1;
+    m_dragMoveRowOrCol = -1;
+    m_dragLastPos = -1;
+    m_dragLastColour = nullptr;
+
+    if ( resizedCol >= 0 &&
+            resizedCol == col &&
+            resizedCol < m_numCols &&
+            oldSize >= 0 )
+    {
+        SetColSize(resizedCol, oldSize);
+    }
+}
+
 void wxGrid::DoStartMoveRowOrCol(int col)
 {
     m_dragMoveRowOrCol = col;
@@ -5417,12 +6176,23 @@ void wxGrid::DoStartMoveRowOrCol(int col)
 void wxGrid::DoEndMoveRow(int pos)
 {
     wxASSERT_MSG( m_dragMoveRowOrCol != -1, "no matching DoStartMoveRow?" );
-    // col is used for the target row
-    wxGridEvent gridEvt(GetId(), wxEVT_GRID_ROW_MOVE, this, m_dragMoveRowOrCol, pos);
-    if ( DoSendEvent(gridEvt) != Event_Vetoed )
-        SetRowPos(m_dragMoveRowOrCol, pos);
-
+    const int row = m_dragMoveRowOrCol;
     m_dragMoveRowOrCol = -1;
+
+    const unsigned long long revision = GetRowMutationRevision();
+    const wxWeakRef<wxWindow> weakThis(this);
+
+    // col is used for the target row
+    wxGridEvent gridEvt(GetId(), wxEVT_GRID_ROW_MOVE, this, row, pos);
+    const EventResult result = DoSendEvent(gridEvt);
+    if ( weakThis.get() == this &&
+            result != Event_Vetoed &&
+            GetRowMutationRevision() == revision &&
+            row >= 0 && row < m_numRows &&
+            pos >= 0 && pos < m_numRows )
+    {
+        SetRowPos(row, pos);
+    }
 }
 
 void wxGrid::RefreshAfterRowPosChange()
@@ -5430,21 +6200,7 @@ void wxGrid::RefreshAfterRowPosChange()
     // recalculate the row bottoms as the row positions have changed,
     // unless we calculate them dynamically because all rows heights are the
     // same and it's easy to do
-    if ( !m_rowHeights.empty() )
-    {
-        int rowBottom = 0;
-        for ( int rowPos = 0; rowPos < m_numRows; rowPos++ )
-        {
-            int rowID = GetRowAt( rowPos );
-
-            // Ignore the currently hidden rows.
-            const int height = m_rowHeights[rowID];
-            if ( height > 0 )
-                rowBottom += height;
-
-            m_rowBottoms[rowID] = rowBottom;
-        }
-    }
+    RecalculateRowBottoms();
 
     // and make the changes visible
     RefreshArea(wxGA_Cells | wxGA_RowLabels);
@@ -5452,31 +6208,37 @@ void wxGrid::RefreshAfterRowPosChange()
 
 void wxGrid::SetRowsOrder(const wxArrayInt& order)
 {
+    wxCHECK_RET(
+        order.size() == static_cast<size_t>(m_numRows) &&
+            wxPrivate::ColumnOrderMutation::IsValid(order, m_numRows),
+        "invalid rows order" );
+
+    if ( m_rowAt == order )
+        return;
+
     m_rowAt = order;
+    BumpRowMutationRevision(this);
 
     RefreshAfterRowPosChange();
 }
 
 void wxGrid::SetRowPos(int idx, int pos)
 {
-    // we're going to need m_rowAt now, initialize it if needed
-    if ( m_rowAt.empty() )
-    {
-        m_rowAt.reserve(m_numRows);
-        for ( int i = 0; i < m_numRows; i++ )
-            m_rowAt.push_back(i);
-    }
+    wxCHECK_RET(
+        idx >= 0 && idx < m_numRows && pos >= 0 && pos < m_numRows,
+        "invalid row index or position" );
 
-    // from wxHeaderCtrl::MoveRowInOrderArray:
-    int posOld = m_rowAt.Index(idx);
-    wxASSERT_MSG( posOld != wxNOT_FOUND, "invalid index" );
+    wxArrayInt order = m_rowAt;
+    wxCHECK_RET(
+        wxPrivate::ColumnOrderMutation::Move(
+            order, m_numRows, idx, pos),
+        "invalid rows order" );
 
-    if ( pos != posOld )
-    {
-        m_rowAt.RemoveAt(posOld);
-        m_rowAt.Insert(idx, pos);
-    }
+    if ( order == m_rowAt )
+        return;
 
+    m_rowAt.swap(order);
+    BumpRowMutationRevision(this);
     RefreshAfterRowPosChange();
 }
 
@@ -5495,7 +6257,11 @@ int wxGrid::GetRowPos(int idx) const
 
 void wxGrid::ResetRowPos()
 {
+    if ( m_rowAt.empty() )
+        return;
+
     m_rowAt.clear();
+    BumpRowMutationRevision(this);
 
     RefreshAfterRowPosChange();
 }
@@ -5518,12 +6284,23 @@ bool wxGrid::EnableDragRowMove( bool enable )
 void wxGrid::DoEndMoveCol(int pos)
 {
     wxASSERT_MSG( m_dragMoveRowOrCol != -1, "no matching DoStartMoveCol?" );
-    // row is used for the target col
-    wxGridEvent gridEvt(GetId(), wxEVT_GRID_COL_MOVE, this, pos, m_dragMoveRowOrCol);
-    if ( DoSendEvent(gridEvt) != Event_Vetoed )
-        SetColPos(m_dragMoveRowOrCol, pos);
-
+    const int col = m_dragMoveRowOrCol;
     m_dragMoveRowOrCol = -1;
+
+    const unsigned long long revision = GetColumnMutationRevision();
+    const wxWeakRef<wxWindow> weakThis(this);
+
+    // row is used for the target col
+    wxGridEvent gridEvt(GetId(), wxEVT_GRID_COL_MOVE, this, pos, col);
+    const EventResult result = DoSendEvent(gridEvt);
+    if ( weakThis.get() == this &&
+            result != Event_Vetoed &&
+            GetColumnMutationRevision() == revision &&
+            col >= 0 && col < m_numCols &&
+            pos >= 0 && pos < m_numCols )
+    {
+        SetColPos(col, pos);
+    }
 }
 
 void wxGrid::RefreshAfterColPosChange()
@@ -5531,28 +6308,22 @@ void wxGrid::RefreshAfterColPosChange()
     // recalculate the column rights as the column positions have changed,
     // unless we calculate them dynamically because all columns widths are the
     // same and it's easy to do
-    if ( !m_colWidths.empty() )
-    {
-        int colRight = 0;
-        for ( int colPos = 0; colPos < m_numCols; colPos++ )
-        {
-            int colID = GetColAt( colPos );
-
-            // Ignore the currently hidden columns.
-            const int width = m_colWidths[colID];
-            if ( width > 0 )
-                colRight += width;
-
-            m_colRights[colID] = colRight;
-        }
-    }
+    RecalculateColumnRights();
 
     int areas = wxGA_Cells;
+    const wxWeakRef<wxWindow> weakThis(this);
+    const unsigned long long revision = GetColumnMutationRevision();
 
     // and make the changes visible
-    if ( m_useNativeHeader )
+    if ( m_useNativeHeader &&
+            !GetGridMutationState(this).nativeHeaderSyncActive )
     {
         SetNativeHeaderColOrder();
+        if ( weakThis.get() != this ||
+                GetColumnMutationRevision() != revision )
+        {
+            return;
+        }
     }
     else
     {
@@ -5564,23 +6335,37 @@ void wxGrid::RefreshAfterColPosChange()
 
 void wxGrid::SetColumnsOrder(const wxArrayInt& order)
 {
+    wxCHECK_RET(
+        order.size() == static_cast<size_t>(m_numCols) &&
+            wxPrivate::ColumnOrderMutation::IsValid(order, m_numCols),
+        "invalid columns order" );
+
+    if ( m_colAt == order )
+        return;
+
     m_colAt = order;
+    BumpColumnMutationRevision(this);
 
     RefreshAfterColPosChange();
 }
 
 void wxGrid::SetColPos(int idx, int pos)
 {
-    // we're going to need m_colAt now, initialize it if needed
-    if ( m_colAt.empty() )
-    {
-        m_colAt.reserve(m_numCols);
-        for ( int i = 0; i < m_numCols; i++ )
-            m_colAt.push_back(i);
-    }
+    wxCHECK_RET(
+        idx >= 0 && idx < m_numCols && pos >= 0 && pos < m_numCols,
+        "invalid column index or position" );
 
-    wxHeaderCtrl::MoveColumnInOrderArray(m_colAt, idx, pos);
+    wxArrayInt order = m_colAt;
+    wxCHECK_RET(
+        wxPrivate::ColumnOrderMutation::Move(
+            order, m_numCols, idx, pos),
+        "invalid columns order" );
 
+    if ( order == m_colAt )
+        return;
+
+    m_colAt.swap(order);
+    BumpColumnMutationRevision(this);
     RefreshAfterColPosChange();
 }
 
@@ -5599,7 +6384,11 @@ int wxGrid::GetColPos(int idx) const
 
 void wxGrid::ResetColPos()
 {
+    if ( m_colAt.empty() )
+        return;
+
     m_colAt.clear();
+    BumpColumnMutationRevision(this);
 
     RefreshAfterColPosChange();
 }
@@ -5870,7 +6659,17 @@ wxGrid::SendGridSizeEvent(wxEventType type,
 
 wxGrid::EventResult wxGrid::DoSendEvent(wxGridEvent& gridEvt)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxGridTableBase* const table = m_table;
+    const GridMutationState& stateBefore = GetGridMutationState(this);
+    const unsigned long long rowIdentityRevision =
+        stateBefore.rowIdentityRevision;
+    const unsigned long long columnIdentityRevision =
+        stateBefore.columnIdentityRevision;
+
     const bool claimed = ProcessWindowEvent(gridEvt);
+    if ( weakThis.get() != this )
+        return Event_CellDeleted;
 
     // A Veto'd event may not be `claimed' so test this first
     if ( !gridEvt.IsAllowed() )
@@ -5880,9 +6679,17 @@ wxGrid::EventResult wxGrid::DoSendEvent(wxGridEvent& gridEvt)
     // allows to have checks in several functions that generate an event and
     // then proceed doing something by default with the selected cell: this
     // shouldn't be done if the user-defined handler deleted this cell.
-    if ( gridEvt.GetRow() >= GetNumberRows() ||
+    const GridMutationState& stateAfter = GetGridMutationState(this);
+    if ( m_table != table ||
+            (gridEvt.GetRow() >= 0 &&
+             stateAfter.rowIdentityRevision != rowIdentityRevision) ||
+            (gridEvt.GetCol() >= 0 &&
+             stateAfter.columnIdentityRevision != columnIdentityRevision) ||
+            gridEvt.GetRow() >= GetNumberRows() ||
             gridEvt.GetCol() >= GetNumberCols() )
+    {
         return Event_CellDeleted;
+    }
 
     return claimed ? Event_Handled : Event_Unhandled;
 }
@@ -6174,6 +6981,22 @@ void wxGrid::OnSize(wxSizeEvent& event)
 
 void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+
+    if ( m_winCapture )
+    {
+        CancelMouseCapture();
+        if ( weakThis.get() != this )
+            return;
+    }
+
+    if ( m_useNativeHeader )
+    {
+        DoHeaderCancelDragCol(m_dragRowOrCol);
+        if ( weakThis.get() != this )
+            return;
+    }
+
     InitPixelFields();
 
     // If we have any non-default row sizes, we need to scale them (default
@@ -6181,7 +7004,6 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
     // inside InitPixelFields() above).
     if ( !m_rowHeights.empty() )
     {
-        int total = 0;
         for ( unsigned i = 0; i < m_rowHeights.size(); ++i )
         {
             int height = m_rowHeights[i];
@@ -6191,13 +7013,8 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
             height = event.ScaleY(height);
 
             m_rowHeights[i] = height;
-
-            // But don't count hidden rows for the total height.
-            if ( height > 0 )
-                total += height;
-
-            m_rowBottoms[i] = total;
         }
+        RecalculateRowBottoms();
     }
 
     // Similarly for columns, except that here we need to update the native
@@ -6207,7 +7024,6 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
         colHeader = m_useNativeHeader ? GetGridColHeader() : nullptr;
     if ( !m_colWidths.empty() )
     {
-        int total = 0;
         for ( unsigned i = 0; i < m_colWidths.size(); ++i )
         {
             int width = m_colWidths[i];
@@ -6215,21 +7031,16 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
             width = event.ScaleX(width);
 
             m_colWidths[i] = width;
-
-            if ( width > 0 )
-                total += width;
-
-            m_colRights[i] = total;
-
-            if ( colHeader )
-                colHeader->UpdateColumn(i);
         }
+        RecalculateColumnRights();
     }
-    else if ( colHeader )
+
+    if ( colHeader )
     {
-        for ( int i = 0; i < m_numCols; ++i )
+        if ( !SetNativeHeaderColCountOrFallback() ||
+                weakThis.get() != this )
         {
-            colHeader->UpdateColumn(i);
+            return;
         }
     }
 
@@ -7512,28 +8323,70 @@ bool wxGrid::UseNativeColHeader(bool native)
     if ( native == m_useNativeHeader )
         return true;
 
+    // Deleting/replacing the header while one of its own callback-capable
+    // synchronization methods is on the stack would invalidate that method.
+    // The caller can retry the mode switch after the current callback.
+    if ( GetGridMutationState(this).nativeHeaderSyncActive )
+        return false;
+
     // Using native control doesn't work if any columns are frozen currently.
     if ( native && m_numFrozenCols )
         return false;
 
-    delete m_colLabelWin;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxWindow* const oldColumnWindow = m_colLabelWin;
+    m_colLabelWin = nullptr;
     m_useNativeHeader = native;
+    delete oldColumnWindow;
+    if ( weakThis.get() != this )
+        return false;
 
     CreateColumnWindow();
+    if ( weakThis.get() != this || !m_colLabelWin )
+        return false;
 
     if ( m_useNativeHeader )
     {
-        SetNativeHeaderColCount();
+        if ( !SetNativeHeaderColCountOrFallback() ||
+                weakThis.get() != this )
+        {
+            return false;
+        }
 
-        wxHeaderCtrl* const colHeader = GetGridColHeader();
-        colHeader->SetBackgroundColour( GetLabelBackgroundColour() );
-        colHeader->SetForegroundColour( GetLabelTextColour() );
-        colHeader->SetFont( GetLabelFont() );
+        // A failed native synchronization is recoverable, but the requested
+        // mode was not enabled: report this honestly to the caller.
+        if ( !m_useNativeHeader )
+            return false;
+    }
+
+    wxWindow* const columnWindow = m_colLabelWin;
+    const wxWeakRef<wxWindow> weakColumnWindow(columnWindow);
+    columnWindow->SetBackgroundColour(GetLabelBackgroundColour());
+    if ( weakThis.get() != this || !weakColumnWindow ||
+            m_colLabelWin != columnWindow )
+    {
+        return false;
+    }
+
+    columnWindow->SetForegroundColour(GetLabelTextColour());
+    if ( weakThis.get() != this || !weakColumnWindow ||
+            m_colLabelWin != columnWindow )
+    {
+        return false;
+    }
+
+    columnWindow->SetFont(GetLabelFont());
+    if ( weakThis.get() != this || !weakColumnWindow ||
+            m_colLabelWin != columnWindow )
+    {
+        return false;
     }
 
     CalcWindowSizes();
 
-    return true;
+    return weakThis.get() == this &&
+           m_useNativeHeader == native &&
+           m_colLabelWin == columnWindow;
 }
 
 void wxGrid::SetUseNativeColLabels( bool native )
@@ -9330,6 +10183,8 @@ void wxGrid::SetRowLabelSize( int width )
     if ( width == wxGRID_AUTOSIZE )
     {
         width = CalcColOrRowLabelAreaMinSize(wxGRID_ROW);
+        if ( width == wxDefaultCoord )
+            return;
     }
 
     if ( width != m_rowLabelWidth )
@@ -9360,6 +10215,8 @@ void wxGrid::SetColLabelSize( int height )
     if ( height == wxGRID_AUTOSIZE )
     {
         height = CalcColOrRowLabelAreaMinSize(wxGRID_COLUMN);
+        if ( height == wxDefaultCoord )
+            return;
     }
 
     if ( height != m_colLabelHeight )
@@ -10511,6 +11368,8 @@ int UpdateRowOrColSize(int& sizeCurrent, int sizeNew)
 
 void wxGrid::SetRowSize( int row, int height )
 {
+    wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
+
     // See comment in SetColSize
     if ( height > 0 && height < GetRowMinimalAcceptableHeight())
         return;
@@ -10519,11 +11378,23 @@ void wxGrid::SetRowSize( int row, int height )
     // As with the columns, ignore attempts to auto-size the hidden rows.
     if ( height == -1 && GetRowHeight(row) != 0 )
     {
+        const wxWeakRef<wxWindow> weakThis(this);
+        wxGridTableBase* const table = m_table;
+        const unsigned long long rowRevision = GetRowMutationRevision();
+
         long w, h;
         wxArrayString lines;
         wxInfoDC dc(m_rowLabelWin);
         dc.SetFont(GetLabelFont());
         StringToLines(GetRowLabelValue( row ), lines);
+        if ( weakThis.get() != this ||
+                m_table != table ||
+                GetRowMutationRevision() != rowRevision ||
+                row < 0 || row >= m_numRows )
+        {
+            return;
+        }
+
         GetTextBoxSize( dc, lines, &w, &h );
 
         // As with the columns, don't make the row smaller than minimal height.
@@ -10623,6 +11494,8 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 
 void wxGrid::SetColSize( int col, int width )
 {
+    wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
+
     // we intentionally don't test whether the width is less than
     // GetColMinimalWidth() here but we do compare it with
     // GetColMinimalAcceptableWidth() as otherwise things currently break (see
@@ -10639,6 +11512,11 @@ void wxGrid::SetColSize( int col, int width )
     // show the column back using its old size.
     if ( width == -1 && GetColWidth(col) != 0 )
     {
+        const wxWeakRef<wxWindow> weakThis(this);
+        wxGridTableBase* const table = m_table;
+        const unsigned long long columnRevision =
+            GetColumnMutationRevision();
+
         if ( m_useNativeHeader )
         {
             width = GetGridColHeader()->GetColumnTitleWidth(col);
@@ -10650,11 +11528,27 @@ void wxGrid::SetColSize( int col, int width )
             wxInfoDC dc(m_colLabelWin);
             dc.SetFont(GetLabelFont());
             StringToLines(GetColLabelValue(col), lines);
+            if ( weakThis.get() != this ||
+                    m_table != table ||
+                    GetColumnMutationRevision() != columnRevision ||
+                    col < 0 || col >= m_numCols )
+            {
+                return;
+            }
+
             if ( GetColLabelTextOrientation() == wxHORIZONTAL )
                 GetTextBoxSize( dc, lines, &w, &h );
             else
                 GetTextBoxSize( dc, lines, &h, &w );
             width = w + 6;
+        }
+
+        if ( weakThis.get() != this ||
+                m_table != table ||
+                GetColumnMutationRevision() != columnRevision ||
+                col < 0 || col >= m_numCols )
+        {
+            return;
         }
 
         // Check that it is not less than the minimal width and do use the
@@ -10682,19 +11576,6 @@ void wxGrid::DoSetColSize( int col, int width )
     const int diff = UpdateRowOrColSize(m_colWidths[col], width);
     if ( !diff )
         return;
-
-    if ( m_useNativeHeader )
-    {
-        // We have to update the native control if we're called from the
-        // program (directly or indirectly, e.g. via AutoSizeColumn()), but we
-        // want to avoid doing it when the column is being resized
-        // interactively, as this is unnecessary and results in very visible
-        // flicker, so take care to call the special method of our header
-        // control checking for whether it's being resized interactively
-        // instead of the usual UpdateColumn().
-        static_cast<wxGridHeaderCtrl*>(m_colLabelWin)->UpdateIfNotResizing(col);
-    }
-    //else: will be refreshed when the header is redrawn
 
     for ( int colPos = GetColPos(col); colPos < m_numCols; colPos++ )
     {
@@ -10747,6 +11628,26 @@ void wxGrid::DoSetColSize( int col, int width )
 
         InvalidateOverlaySelection();
     }
+
+    if ( m_useNativeHeader )
+    {
+        if ( GetGridMutationState(this).nativeHeaderSyncActive )
+        {
+            // If this column was already rebuilt, its native width is now
+            // stale. Make the outer synchronization retry all columns.
+            BumpColumnMutationRevision(this);
+        }
+        else
+        {
+            // Publish to the callback-capable native header only after all
+            // grid geometry is internally consistent. The callback may
+            // destroy this grid or mutate its topology, so nothing may follow
+            // this call.
+            static_cast<wxGridHeaderCtrl*>(m_colLabelWin)
+                ->UpdateIfNotResizing(col);
+        }
+    }
+    //else: will be refreshed when the header is redrawn
 }
 
 void wxGrid::SetColMinimalWidth( int col, int width )
@@ -10805,13 +11706,138 @@ int  wxGrid::GetRowMinimalAcceptableHeight() const
     return m_minAcceptableRowHeight;
 }
 
-void wxGrid::SetNativeHeaderColCount()
+bool wxGrid::SetNativeHeaderColCount()
 {
-    wxASSERT_MSG( m_useNativeHeader, "no column header window" );
+    wxCHECK_MSG( m_useNativeHeader, false, "no column header window" );
 
-    GetGridColHeader()->SetColumnCount(m_numCols);
+    GridMutationState& state = GetGridMutationState(this);
+    if ( state.nativeHeaderSyncActive )
+        return false;
 
-    SetNativeHeaderColOrder();
+    state.nativeHeaderSyncActive = true;
+    wxHeaderCtrl* const header = GetGridColHeader();
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxWeakRef<wxWindow> weakHeader(header);
+    wxScopeGuard finishNativeHeaderSync =
+        wxMakeGuard([this, weakThis]()
+        {
+            if ( weakThis.get() == this )
+            {
+                GetGridMutationState(this).nativeHeaderSyncActive = false;
+            }
+        });
+    wxUnusedVar(finishNativeHeaderSync);
+
+    // Platform headers can only infer append/remove-at-end when their count
+    // changes. Rebuilding a non-natural order directly is invalid on MSW
+    // because the first native item could target an order position which
+    // doesn't exist yet. A cancellation callback may change the desired order;
+    // retry from a fresh snapshot after it completes instead of publishing a
+    // half-old header. In practice the first pass cancels the gesture and the
+    // second is callback-free; the bound prevents hostile handlers looping.
+    for ( int attempt = 0; attempt < 4; ++attempt )
+    {
+        const unsigned long long revision =
+            GetColumnMutationRevision();
+
+        header->ResetColumnsOrder();
+        if ( weakThis.get() != this || !weakHeader )
+            return false;
+        if ( GetColumnMutationRevision() != revision )
+            continue;
+
+        header->SetColumnCount(m_numCols);
+        if ( weakThis.get() != this || !weakHeader )
+            return false;
+        if ( GetColumnMutationRevision() != revision )
+            continue;
+
+        SetNativeHeaderColOrder();
+        if ( weakThis.get() != this || !weakHeader )
+            return false;
+        if ( GetColumnMutationRevision() == revision )
+            return true;
+    }
+
+    return false;
+}
+
+bool wxGrid::SetNativeHeaderColCountOrFallback()
+{
+    if ( !m_useNativeHeader )
+        return true;
+
+    if ( GetGridMutationState(this).nativeHeaderSyncActive )
+    {
+        // A table callback can redimension the grid while the native header is
+        // reading a column. The outer synchronization owns the header until it
+        // returns; make it retry from the completed grid state instead of
+        // deleting the control in the middle of its own method.
+        BumpColumnMutationRevision(this);
+        return true;
+    }
+
+    wxHeaderCtrl* const attemptedHeader = GetGridColHeader();
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxWeakRef<wxWindow> weakAttemptedHeader(attemptedHeader);
+
+    if ( SetNativeHeaderColCount() )
+        return weakThis.get() == this;
+
+    if ( weakThis.get() != this )
+        return false;
+
+    // A callback may already have switched to the generic header while the
+    // native control was synchronizing. In that case its replacement is the
+    // coherent fallback we wanted and must not be disturbed.
+    if ( !m_useNativeHeader )
+        return m_colLabelWin != nullptr;
+
+    // Keep the grid usable even when hostile/reentrant callbacks prevent a
+    // stable native snapshot. Never leave a native header with a count/order
+    // that disagrees with the table.
+    wxWindow* failedHeader = m_colLabelWin;
+    if ( failedHeader == attemptedHeader && !weakAttemptedHeader )
+        failedHeader = nullptr;
+
+    m_useNativeHeader = false;
+    m_colLabelWin = nullptr;
+    delete failedHeader;
+    if ( weakThis.get() != this )
+        return false;
+
+    CreateColumnWindow();
+    if ( weakThis.get() != this || !m_colLabelWin )
+        return false;
+
+    wxWindow* const fallbackHeader = m_colLabelWin;
+    const wxWeakRef<wxWindow> weakFallbackHeader(fallbackHeader);
+
+    fallbackHeader->SetBackgroundColour(GetLabelBackgroundColour());
+    if ( weakThis.get() != this || !weakFallbackHeader ||
+            m_colLabelWin != fallbackHeader )
+    {
+        return false;
+    }
+
+    fallbackHeader->SetForegroundColour(GetLabelTextColour());
+    if ( weakThis.get() != this || !weakFallbackHeader ||
+            m_colLabelWin != fallbackHeader )
+    {
+        return false;
+    }
+
+    fallbackHeader->SetFont(GetLabelFont());
+    if ( weakThis.get() != this || !weakFallbackHeader ||
+            m_colLabelWin != fallbackHeader )
+    {
+        return false;
+    }
+
+    CalcWindowSizes();
+    return weakThis.get() == this &&
+           !m_useNativeHeader &&
+           m_colLabelWin == fallbackHeader;
 }
 
 void wxGrid::SetNativeHeaderColOrder()
@@ -10832,6 +11858,32 @@ void
 wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 {
     const bool column = direction == wxGRID_COLUMN;
+    if ( !m_table ||
+            colOrRow < 0 ||
+            colOrRow >= (column ? m_numCols : m_numRows) )
+    {
+        return;
+    }
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
+    const auto isCurrent = [this, weakThis, table,
+                            columnRevision, rowRevision, column, colOrRow]()
+    {
+        if ( weakThis.get() != this ||
+                m_table != table ||
+                GetColumnMutationRevision() != columnRevision ||
+                GetRowMutationRevision() != rowRevision )
+        {
+            return false;
+        }
+
+        return colOrRow >= 0 &&
+               colOrRow < (column ? m_numCols : m_numRows);
+    };
 
     // We don't support auto-sizing hidden rows or columns, this doesn't seem
     // to make much sense.
@@ -10852,6 +11904,8 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     wxClientDC dc(m_gridWin);
 
     AcceptCellEditControlIfShown();
+    if ( !isCurrent() )
+        return;
 
     // initialize both of them just to avoid compiler warnings even if only
     // really needs to be initialized here
@@ -10872,7 +11926,10 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     // is an important optimization (resulting in up to 80% speed up of
     // AutoSizeColumns()) as finding the attribute and renderer for the cell
     // are very slow operations, due to the number of steps involved in them.
-    const bool canReuseAttr = column && m_table->CanMeasureColUsingSameAttr(col);
+    const bool canReuseAttr =
+        column && table->CanMeasureColUsingSameAttr(col);
+    if ( !isCurrent() )
+        return;
     wxGridCellAttrPtr attr;
     wxGridCellRendererPtr renderer;
 
@@ -10902,6 +11959,9 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         // this column/row
         int numRows, numCols;
         const CellSpan span = GetCellSize(row, col, &numRows, &numCols);
+        if ( !isCurrent() )
+            return;
+
         if ( span == CellSpan_Inside )
         {
             // we need to get the size of the main cell, not of a cell hidden
@@ -10911,19 +11971,28 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 
             // get the size of the main cell too
             GetCellSize(row, col, &numRows, &numCols);
+            if ( !isCurrent() )
+                return;
         }
 
         // get cell ( main cell if CellSpan_Inside ) renderer best size
         if ( !canReuseAttr || !attr )
         {
             attr = GetCellAttrPtr(row, col);
+            if ( !isCurrent() || !attr )
+                return;
+
             renderer = attr->GetRendererPtr(this, row, col);
+            if ( !isCurrent() )
+                return;
 
             if ( canReuseAttr )
             {
                 // Try to get the best width for the entire column at once, if
                 // it's supported by the renderer.
                 extent = renderer->GetMaxBestSize(*this, *attr, dc).x;
+                if ( !isCurrent() )
+                    return;
 
                 if ( extent != wxDefaultCoord )
                 {
@@ -10942,6 +12011,8 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
                                                  GetRowHeight(row))
                         : renderer->GetBestHeight(*this, *attr, dc, row, col,
                                                   GetColWidth(col));
+            if ( !isCurrent() )
+                return;
 
             if ( span != CellSpan_None )
             {
@@ -10972,6 +12043,8 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         if ( m_useNativeHeader )
         {
             extentLabel = GetGridColHeader()->GetColumnTitleWidth(colOrRow);
+            if ( !isCurrent() )
+                return;
 
             // Note that GetColumnTitleWidth already adds margins internally,
             // so we don't need to add them here.
@@ -10980,6 +12053,9 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         {
             const wxSize
                 size = dc.GetMultiLineTextExtent(GetColLabelValue(colOrRow));
+            if ( !isCurrent() )
+                return;
+
             extentLabel = GetColLabelTextOrientation() == wxVERTICAL
                             ? size.y
                             : size.x;
@@ -10991,6 +12067,8 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     else
     {
         extentLabel = dc.GetMultiLineTextExtent(GetRowLabelValue(colOrRow)).y;
+        if ( !isCurrent() )
+            return;
 
         // As above, add some margins for readability, although a smaller one
         // in vertical direction.
@@ -11031,11 +12109,16 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             extentMax = wxMax(extentMax, GetColMinimalWidth(colOrRow));
 
         SetColSize( colOrRow, extentMax );
+        if ( !isCurrent() )
+            return;
+
         if ( ShouldRefresh() )
         {
             if ( m_useNativeHeader )
             {
                 GetGridColHeader()->UpdateColumn(colOrRow);
+                if ( !isCurrent() )
+                    return;
             }
             else
             {
@@ -11059,6 +12142,9 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             extentMax = wxMax(extentMax, GetRowMinimalHeight(colOrRow));
 
         SetRowSize(colOrRow, extentMax);
+        if ( !isCurrent() )
+            return;
+
         if ( ShouldRefresh() )
         {
             int cw, ch;
@@ -11074,6 +12160,9 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 
     if ( setAsMin )
     {
+        if ( !isCurrent() )
+            return;
+
         if ( column )
             SetColMinimalWidth(colOrRow, extentMax);
         else
@@ -11085,6 +12174,19 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
 {
     // calculate size for the rows or columns?
     const bool calcRows = direction == wxGRID_ROW;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
+    const auto isCurrent = [this, weakThis, table,
+                            columnRevision, rowRevision]()
+    {
+        return weakThis.get() == this &&
+               m_table == table &&
+               GetColumnMutationRevision() == columnRevision &&
+               GetRowMutationRevision() == rowRevision;
+    };
 
     wxInfoDC dc(calcRows ? GetGridRowLabelWindow()
                          : GetGridColLabelWindow());
@@ -11107,6 +12209,9 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
 
         wxString label = calcRows ? GetRowLabelValue(rowOrCol)
                                   : GetColLabelValue(rowOrCol);
+        if ( !isCurrent() )
+            return wxDefaultCoord;
+
         StringToLines(label, lines);
 
         long w, h;
@@ -11136,26 +12241,92 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
 
 void wxGrid::AutoSizeColumns(bool setAsMin)
 {
-    wxGridUpdateLocker locker(this);
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
+    BeginBatch();
+    wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
+    {
+        if ( weakThis.get() == this )
+            EndBatch();
+    });
+    wxUnusedVar(endBatch);
 
-    for ( int col = 0; col < m_numCols; col++ )
+    const int numCols = m_numCols;
+    for ( int col = 0; col < numCols; col++ )
+    {
         AutoSizeColumn(col, setAsMin);
+        if ( weakThis.get() != this ||
+                m_table != table ||
+                GetColumnMutationRevision() != columnRevision ||
+                GetRowMutationRevision() != rowRevision )
+        {
+            return;
+        }
+    }
 }
 
 void wxGrid::AutoSizeRows(bool setAsMin)
 {
-    wxGridUpdateLocker locker(this);
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
+    BeginBatch();
+    wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
+    {
+        if ( weakThis.get() == this )
+            EndBatch();
+    });
+    wxUnusedVar(endBatch);
 
-    for ( int row = 0; row < m_numRows; row++ )
+    const int numRows = m_numRows;
+    for ( int row = 0; row < numRows; row++ )
+    {
         AutoSizeRow(row, setAsMin);
+        if ( weakThis.get() != this ||
+                m_table != table ||
+                GetColumnMutationRevision() != columnRevision ||
+                GetRowMutationRevision() != rowRevision )
+        {
+            return;
+        }
+    }
 }
 
 void wxGrid::AutoSize()
 {
-    wxGridUpdateLocker locker(this);
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long columnRevision =
+        GetColumnMutationRevision();
+    const unsigned long long rowRevision = GetRowMutationRevision();
+    BeginBatch();
+    wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
+    {
+        if ( weakThis.get() == this )
+            EndBatch();
+    });
+    wxUnusedVar(endBatch);
+    const auto isCurrent = [this, weakThis, table,
+                            columnRevision, rowRevision]()
+    {
+        return weakThis.get() == this &&
+               m_table == table &&
+               GetColumnMutationRevision() == columnRevision &&
+               GetRowMutationRevision() == rowRevision;
+    };
 
     AutoSizeColumns();
+    if ( !isCurrent() )
+        return;
+
     AutoSizeRows();
+    if ( !isCurrent() )
+        return;
 
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
@@ -11168,24 +12339,60 @@ void wxGrid::AutoSize()
 
 void wxGrid::AutoSizeRowLabelSize( int row )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long revision = GetRowMutationRevision();
+
     // Hide the edit control, so it
     // won't interfere with drag-shrinking.
     AcceptCellEditControlIfShown();
+    if ( weakThis.get() != this ||
+            m_table != table ||
+            GetRowMutationRevision() != revision ||
+            row < 0 || row >= m_numRows )
+    {
+        return;
+    }
 
     // autosize row height depending on label text
     SetRowSize(row, -1);
+    if ( weakThis.get() != this ||
+            m_table != table ||
+            GetRowMutationRevision() != revision ||
+            row < 0 || row >= m_numRows )
+    {
+        return;
+    }
 
     ForceRefresh();
 }
 
 void wxGrid::AutoSizeColLabelSize( int col )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxGridTableBase* const table = m_table;
+    const unsigned long long revision = GetColumnMutationRevision();
+
     // Hide the edit control, so it
     // won't interfere with drag-shrinking.
     AcceptCellEditControlIfShown();
+    if ( weakThis.get() != this ||
+            m_table != table ||
+            GetColumnMutationRevision() != revision ||
+            col < 0 || col >= m_numCols )
+    {
+        return;
+    }
 
     // autosize column width depending on label text
     SetColSize(col, -1);
+    if ( weakThis.get() != this ||
+            m_table != table ||
+            GetColumnMutationRevision() != revision ||
+            col < 0 || col >= m_numCols )
+    {
+        return;
+    }
 
     ForceRefresh();
 }

@@ -14,6 +14,7 @@
 #if wxUSE_BUSYINFO
 
 #include "wx/object.h"
+#include "wx/weakref.h"
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -45,9 +46,13 @@ public:
 
 private:
     void Init(const wxBusyInfoFlags& flags);
+    void RefitAfterTextUpdate();
 
-    wxFrame *m_InfoFrame;
-    wxControl *m_text;
+    // Both controls can disappear before this RAII object when its owner is
+    // destroyed from a callback. Weak references make the final cleanup and
+    // late text updates harmless instead of dereferencing stale children.
+    wxWeakRef<wxFrame> m_InfoFrame;
+    wxWeakRef<wxControl> m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxBusyInfo);
 };

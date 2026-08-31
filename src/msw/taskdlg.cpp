@@ -1286,7 +1286,9 @@ void TDDetach(HWND hwndTD)
 void wxMSWDarkMode::AllowForTaskDialog(HWND hwnd, const TASKDIALOGCONFIG* pCfg)
 {
 #if wxUSE_DARK_MODE
-    if ( !wxMSWDarkMode::IsActive() )
+    // EnumChildWindows(nullptr, ...) enumerates all top-level windows, not an
+    // empty hierarchy. Never let an absent task dialog reach that boundary.
+    if ( !hwnd || !wxMSWDarkMode::IsActive() )
         return;
 
     // Ensure COM is initialised for UIA on this thread.
@@ -1311,6 +1313,9 @@ void wxMSWDarkMode::AllowForTaskDialog(HWND hwnd, const TASKDIALOGCONFIG* pCfg)
 void wxMSWDarkMode::RemoveFromTaskDialog(HWND hwnd)
 {
 #if wxUSE_DARK_MODE
+    if ( !hwnd )
+        return;
+
     TDDetach(hwnd);
 #else // !wxUSE_DARK_MODE
     wxUnusedVar(hwnd);

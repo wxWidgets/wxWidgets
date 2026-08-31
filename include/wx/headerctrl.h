@@ -250,7 +250,7 @@ private:
 //               control, see wxHeaderCtrlSimple for a standalone version
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     #include "wx/msw/headerctrl.h"
 #else
     #define wxHAS_GENERIC_HEADERCTRL

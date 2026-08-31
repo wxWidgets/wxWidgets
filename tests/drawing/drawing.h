@@ -124,6 +124,9 @@ protected:
         DrawingTestGCFactory& gcFactory,
         const DrawingTestCase & testCase);
 
+    bool HasExpectedImageSemantics(
+        const wxString& fileName,
+        const DrawingTestCase& testCase) const;
     void DrawToImage_Basics() {
         RunIndividualDrawingCase (ms_imageLifeCycle, ms_drawingBasicTc);
     }

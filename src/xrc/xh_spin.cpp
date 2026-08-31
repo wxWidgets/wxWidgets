@@ -47,10 +47,10 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
                     GetStyle(wxT("style"), wxSP_ARROW_KEYS),
                     GetName());
 
-    control->SetValue(GetLong( wxT("value"), DEFAULT_VALUE));
     control->SetRange(GetLong( wxT("min"), DEFAULT_MIN),
                       GetLong(wxT("max"), DEFAULT_MAX));
-    control->SetValue(GetLong(wxT( "inc" ), DEFAULT_INCREMENT));
+    control->SetValue(GetLong(wxT("value"), DEFAULT_VALUE));
+    control->SetIncrement(GetLong(wxT("inc"), DEFAULT_INCREMENT));
     SetupWindow(control);
 
     return control;
@@ -79,6 +79,7 @@ static void AddSpinCtrlStyles(wxXmlResourceHandler& handler)
     handler.XRC_ADD_STYLE(wxALIGN_CENTER);
     handler.XRC_ADD_STYLE(wxALIGN_RIGHT);
     handler.XRC_ADD_STYLE(wxTE_PROCESS_ENTER);
+    handler.AddWindowStyles();
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlXmlHandler, wxXmlResourceHandler);
@@ -131,9 +132,10 @@ wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
 {
     XRC_MAKE_INSTANCE(control, wxSpinCtrlDouble)
 
+    const wxString textValue = GetText(wxS("value"));
     control->Create(m_parentAsWindow,
                     GetID(),
-                    GetText(wxS("value")),
+                    textValue,
                     GetPosition(), GetSize(),
                     GetStyle(wxS("style"), wxSP_ARROW_KEYS),
                     double(GetFloat(wxS("min"), DEFAULT_MIN)),
@@ -144,7 +146,14 @@ wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
 
     int digits = GetLong("digits", DEFAULT_DIGITS);
     if (digits != DEFAULT_DIGITS)
+    {
         control->SetDigits(digits);
+        // Create() derives its initial precision from the increment. Reapply
+        // the original text only after an explicit XRC precision is active,
+        // so no significant digit is lost before SetDigits().
+        if ( !textValue.empty() )
+            control->SetValue(textValue);
+    }
 
     SetupWindow(control);
 

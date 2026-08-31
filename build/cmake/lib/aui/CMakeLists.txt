@@ -14,7 +14,11 @@ endif()
 
 wx_append_sources(AUI_FILES AUI_CMN)
 
-if(WXMSW)
+if(WXWINUI)
+    # The MSW sources are still built: only the tool bar art provider is
+    # replaced, and wxAuiMSWToolBarArt remains reachable by name.
+    wx_append_sources(AUI_FILES AUI_WINUI)
+elseif(WXMSW)
     wx_append_sources(AUI_FILES AUI_MSW)
 elseif(WXGTK2)
     wx_append_sources(AUI_FILES AUI_GTK)

@@ -42,6 +42,8 @@
 
 using namespace wxMSWMessageDialog;
 
+#ifndef __WXWINUI__
+
 wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 
 // the order in this array is the one in which buttons appear in the
@@ -581,6 +583,8 @@ void wxMessageDialog::DoCentre(int dir)
     wxMessageDialogBase::DoCentre(dir);
 }
 
+#endif // !__WXWINUI__
+
 // ----------------------------------------------------------------------------
 // Helpers of the wxMSWMessageDialog namespace
 // ----------------------------------------------------------------------------
@@ -812,6 +816,37 @@ void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
 // variable below with a critical section.
 wxCRIT_SECT_DECLARE(gs_csTaskDialogIndirect);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+namespace
+{
+
+wxCRIT_SECT_DECLARE(gs_csTaskDialogTestHook);
+wxTaskDialogIndirectHookForTesting gs_taskDialogTestHook;
+
+bool HasTaskDialogTestHook()
+{
+    wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogTestHook);
+    return gs_taskDialogTestHook.invoke != nullptr;
+}
+
+} // anonymous namespace
+
+void wxMSWMessageDialog::SetTaskDialogIndirectHookForTesting(
+    const wxTaskDialogIndirectHookForTesting& hook)
+{
+    wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogTestHook);
+    gs_taskDialogTestHook = hook;
+}
+
+void wxMSWMessageDialog::ResetTaskDialogIndirectHookForTesting()
+{
+    wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogTestHook);
+    gs_taskDialogTestHook = wxTaskDialogIndirectHookForTesting();
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 {
     // Initialize the function pointer to an invalid value different from nullptr
@@ -833,8 +868,41 @@ TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
     return s_TaskDialogIndirect;
 }
 
+HRESULT wxMSWMessageDialog::InvokeTaskDialogIndirect(
+    const TASKDIALOGCONFIG *config,
+    int *button,
+    int *radio,
+    BOOL *verification)
+{
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxTaskDialogIndirectHookForTesting hook;
+    {
+        wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogTestHook);
+        hook = gs_taskDialogTestHook;
+    }
+
+    if ( hook.invoke )
+    {
+        return hook.invoke(
+            hook.context, config, button, radio, verification);
+    }
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
+    const TaskDialogIndirect_t taskDialogIndirect =
+        GetTaskDialogIndirectFunc();
+    if ( !taskDialogIndirect )
+        return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);
+
+    return taskDialogIndirect(config, button, radio, verification);
+}
+
 bool wxMSWMessageDialog::HasNativeTaskDialog()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( HasTaskDialogTestHook() )
+        return true;
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
     return wxMSWMessageDialog::GetTaskDialogIndirectFunc() != nullptr;
 }
 

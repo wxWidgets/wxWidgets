@@ -47,6 +47,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/button.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/button.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/button.h"
 #elif defined(__WXGTK__)

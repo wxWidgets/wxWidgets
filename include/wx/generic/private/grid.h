@@ -16,6 +16,7 @@
 #if wxUSE_GRID
 
 #include "wx/headerctrl.h"
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -73,11 +74,20 @@ public:
     {
     }
 
-    virtual wxString GetTitle() const override { return m_grid->GetColLabelValue(m_col); }
+    virtual wxString GetTitle() const override
+    {
+        return IsValid() ? m_grid->GetColLabelValue(m_col) : wxString();
+    }
     virtual wxBitmap GetBitmap() const override { return wxNullBitmap; }
     virtual wxBitmapBundle GetBitmapBundle() const override { return wxBitmapBundle(); }
-    virtual int GetWidth() const override { return m_grid->GetColSize(m_col); }
-    virtual int GetMinWidth() const override { return m_grid->GetColMinimalWidth(m_col); }
+    virtual int GetWidth() const override
+    {
+        return IsValid() ? m_grid->GetColSize(m_col) : 0;
+    }
+    virtual int GetMinWidth() const override
+    {
+        return IsValid() ? m_grid->GetColMinimalWidth(m_col) : 0;
+    }
     virtual wxAlignment GetAlignment() const override
     {
         int horz,
@@ -89,6 +99,9 @@ public:
 
     virtual int GetFlags() const override
     {
+        if ( !IsValid() )
+            return wxCOL_HIDDEN;
+
         // we can't know in advance whether we can sort by this column or not
         // with wxGrid API so suppose we can by default
         int flags = wxCOL_SORTABLE;
@@ -104,7 +117,7 @@ public:
 
     virtual bool IsSortKey() const override
     {
-        return m_grid->IsSortingBy(m_col);
+        return IsValid() && m_grid->IsSortingBy(m_col);
     }
 
     virtual bool IsSortOrderAscending() const override
@@ -113,6 +126,11 @@ public:
     }
 
 private:
+    bool IsValid() const
+    {
+        return m_col >= 0 && m_col < m_grid->GetNumberCols();
+    }
+
     // these really should be const but are not because the column needs to be
     // assignable to be used in a wxVector (in STL build, in non-STL build we
     // avoid the need for this)
@@ -184,20 +202,38 @@ private:
     // override to implement column auto sizing
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int WXUNUSED(widthTitle)) override
     {
-        GetOwner()->HandleColumnAutosize(idx, GetDummyMouseEvent());
+        wxGrid* const owner = GetOwner();
+        const wxWeakRef<wxWindow> weakOwner(owner);
+        const unsigned long long revision =
+            owner->GetColumnMutationRevision();
 
-        return true;
+        owner->HandleColumnAutosize(idx, GetDummyMouseEvent());
+
+        return weakOwner.get() == owner &&
+               owner->GetColumnMutationRevision() == revision &&
+               idx < static_cast<unsigned int>(owner->GetNumberCols());
     }
 
     // overridden to react to the actions using the columns popup menu
     virtual void UpdateColumnVisibility(unsigned int idx, bool show) override
     {
-        GetOwner()->SetColSize(idx, show ? wxGRID_AUTOSIZE : 0);
+        wxGrid* const owner = GetOwner();
+        const wxWeakRef<wxWindow> weakOwner(owner);
+        const unsigned long long revision =
+            owner->GetColumnMutationRevision();
+
+        owner->SetColSize(idx, show ? wxGRID_AUTOSIZE : 0);
+        if ( weakOwner.get() != owner ||
+                owner->GetColumnMutationRevision() != revision ||
+                idx >= static_cast<unsigned int>(owner->GetNumberCols()) )
+        {
+            return;
+        }
 
         // as this is done by the user we should notify the main program about
         // it
-        GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, idx,
-                                      GetDummyMouseEvent());
+        owner->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, idx,
+                                 GetDummyMouseEvent());
     }
 
     // overridden to react to the columns order changes in the customization
@@ -211,11 +247,22 @@ private:
     // event handlers forwarding wxHeaderCtrl events to wxGrid
     void OnClick(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->SendEvent(wxEVT_GRID_LABEL_LEFT_CLICK,
-                              -1, event.GetColumn(),
-                              GetDummyMouseEvent());
+        wxGrid* const owner = GetOwner();
+        const wxWeakRef<wxWindow> weakOwner(owner);
+        const unsigned long long revision =
+            owner->GetColumnMutationRevision();
+        const int col = event.GetColumn();
 
-        GetOwner()->DoColHeaderClick(event.GetColumn());
+        owner->SendEvent(wxEVT_GRID_LABEL_LEFT_CLICK,
+                         -1, col,
+                         GetDummyMouseEvent());
+
+        if ( weakOwner.get() == owner &&
+                owner->GetColumnMutationRevision() == revision &&
+                col >= 0 && col < owner->GetNumberCols() )
+        {
+            owner->DoColHeaderClick(col);
+        }
     }
 
     void OnDoubleClick(wxHeaderCtrlEvent& event)
@@ -240,9 +287,10 @@ private:
 
     void OnBeginResize(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoHeaderStartDragResizeCol(event.GetColumn());
-
-        event.Skip();
+        if ( GetOwner()->DoHeaderStartDragResizeCol(event.GetColumn()) )
+            event.Skip();
+        else
+            event.Veto();
     }
 
     void OnResizing(wxHeaderCtrlEvent& event)
@@ -257,10 +305,12 @@ private:
         // duration of this function execution and checking it in our
         // UpdateIfNotResizing().
         m_inResizing++;
+        const wxWeakRef<wxWindow> weakThis(this);
 
         GetOwner()->DoHeaderDragResizeCol(event.GetWidth());
 
-        m_inResizing--;
+        if ( weakThis.get() == this )
+            m_inResizing--;
     }
 
     void OnEndResize(wxHeaderCtrlEvent& event)
@@ -278,6 +328,11 @@ private:
     void OnEndReorder(wxHeaderCtrlEvent& event)
     {
         GetOwner()->DoEndMoveCol(event.GetNewOrder());
+    }
+
+    void OnDraggingCancelled(wxHeaderCtrlEvent& event)
+    {
+        GetOwner()->DoHeaderCancelDragCol(event.GetColumn());
     }
 
     wxVector<wxGridHeaderColumn> m_columns;

@@ -109,8 +109,11 @@ protected:
     // ------------
 
     // the checkbox itself and the sizer it is in
-    wxGenericHyperlinkCtrl *m_hyperlink;
-    wxGenericHyperlinkCtrl *m_hyperlinkLong;
+    // The native implementation is not required to derive from the generic
+    // one (notably the WinUI HyperlinkButton peer). Both expose the complete
+    // public contract through wxHyperlinkCtrlBase.
+    wxHyperlinkCtrlBase *m_hyperlink;
+    wxHyperlinkCtrlBase *m_hyperlinkLong;
 
     wxTextCtrl *m_label;
     wxTextCtrl *m_url;
@@ -266,7 +269,7 @@ void HyperlinkWidgetsPage::CreateHyperlink()
 
     style |= wxHL_DEFAULT_STYLE & ~wxBORDER_MASK;
 
-    wxGenericHyperlinkCtrl *hyp;
+    wxHyperlinkCtrlBase *hyp;
     if (m_checkGeneric->IsChecked())
     {
         hyp = new wxGenericHyperlinkCtrl(this,
@@ -307,7 +310,7 @@ void HyperlinkWidgetsPage::CreateHyperlinkLong(long align)
     style |= align;
     style |= wxHL_DEFAULT_STYLE & ~(wxHL_ALIGN_CENTRE | wxBORDER_MASK);
 
-    wxGenericHyperlinkCtrl *hyp;
+    wxHyperlinkCtrlBase *hyp;
     if (m_checkGeneric->IsChecked())
     {
         hyp = new wxGenericHyperlinkCtrl(this,

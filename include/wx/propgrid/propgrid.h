@@ -18,7 +18,6 @@
 #include "wx/recguard.h"
 #include "wx/time.h" // needed for wxMilliClock_t
 #include "wx/systhemectrl.h"
-
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
 
@@ -31,6 +30,8 @@ extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
 #endif
 
 class wxPGComboBox;
+class wxPGEditorDialogAdapter;
+class wxPropertyGridEditorEventForwarder;
 
 #if wxUSE_STATUSBAR
 class WXDLLIMPEXP_FWD_CORE wxStatusBar;
@@ -563,7 +564,11 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxSystemThemedControl<wxScrol
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridManager;
+    friend class wxPGEditorDialogAdapter;
+    friend class wxPropertyGridEditorEventForwarder;
     friend class wxPGHeaderCtrl;
+    friend class wxPGDefaultRenderer;
+    friend class wxPGPropertyCallbackGuard;
 
     wxDECLARE_DYNAMIC_CLASS(wxPropertyGrid);
 public:
@@ -667,18 +672,22 @@ public:
                  long style = wxPG_DEFAULT_STYLE,
                  const wxString& name = wxASCII_STR(wxPropertyGridNameStr) );
 
+    // Rebuild transient editor/splitter geometry when switching direction at
+    // runtime. The actual mirroring remains owned by the window backend.
+    void SetLayoutDirection( wxLayoutDirection dir ) override;
+
+    // Retire editor references when a child is destroyed or reparented.
+    void RemoveChild( wxWindowBase* child ) override;
+
     // Call when editor widget's contents is modified.
     // For example, this is called when changes text in wxTextCtrl (used in
     // wxStringProperty and wxIntProperty).
     // This function should only be called by custom properties.
-    void EditorsValueWasModified() { m_iFlags |= wxPG_FL_VALUE_MODIFIED; }
+    void EditorsValueWasModified();
 
     // Reverse of EditorsValueWasModified().
     // This function should only be called by custom properties.
-    void EditorsValueWasNotModified()
-    {
-        m_iFlags &= ~(wxPG_FL_VALUE_MODIFIED);
-    }
+    void EditorsValueWasNotModified();
 
     // Enables or disables (shows/hides) categories according to parameter
     // enable.
@@ -952,11 +961,7 @@ public:
     void SetCellTextColour(const wxColour& col);
 
     // Set number of columns (2 or more).
-    void SetColumnCount( int colCount )
-    {
-        m_pState->SetColumnCount(colCount);
-        Refresh();
-    }
+    void SetColumnCount( int colCount );
 
     // Sets the 'current' category - Append will add non-category properties
     // under it.
@@ -989,10 +994,7 @@ public:
     // Splitter position cannot exceed grid size, and therefore setting it
     // during form creation may fail as initial grid size is often smaller
     // than desired splitter position, especially when sizers are being used.
-    void SetSplitterPosition( int newXPos, int col = 0 )
-    {
-        DoSetSplitter(newXPos, col, wxPGSplitterPositionFlags::Refresh);
-    }
+    void SetSplitterPosition( int newXPos, int col = 0 );
 
     // Sets the property sorting function.
     // sortFunction - The sorting function to be used. It should return a value greater
@@ -1060,12 +1062,7 @@ public:
 
     // Sets vertical spacing. Can be 1, 2, or 3 - a value relative to font
     // height. Value of 2 should be default on most platforms.
-    void SetVerticalSpacing( int vspacing )
-    {
-        m_vspacing = (unsigned char)vspacing;
-        CalculateFontAndBitmapStuff( vspacing );
-        if ( !m_pState->m_itemsAdded ) Refresh();
-    }
+    void SetVerticalSpacing( int vspacing );
 
     // Shows an brief error message that is related to a property.
     void ShowPropertyError( wxPGPropArg id, const wxString& msg )
@@ -1301,6 +1298,7 @@ public:
     // Pending value is expected to be passed in PerformValidation().
     virtual bool DoPropertyChanged( wxPGProperty* p,
                                     wxPGSelectPropertyFlags selFlags = wxPGSelectPropertyFlags::Null );
+    bool IsPropertyPendingRemoval( wxPGProperty* property ) const;
 
     // Called when validation for given property fails.
     // invalidValue - Value which failed in validation.
@@ -1312,15 +1310,7 @@ public:
                               wxVariant& invalidValue );
 
     // Called to indicate property and editor has valid value now.
-    void OnValidationFailureReset( wxPGProperty* property )
-    {
-        if ( property && property->HasFlag(wxPGFlags::InvalidValue) )
-        {
-            DoOnValidationFailureReset(property);
-            property->ClearFlag(wxPGFlags::InvalidValue);
-        }
-        m_validationInfo.ClearFailureMessage();
-    }
+    void OnValidationFailureReset( wxPGProperty* property );
 
     // Override in derived class to display error messages in custom manner
     // (these message usually only result from validation failure).
@@ -1551,7 +1541,7 @@ protected:
     unsigned short      m_coloursCustomized;
 
     // x - m_splitterx.
-    signed char                 m_dragOffset;
+    signed char         m_dragOffset;
 
     // 0 = not dragging, 1 = drag just started, 2 = drag in progress
     unsigned char       m_dragStatus;
@@ -1696,6 +1686,8 @@ protected:
     bool HandleMouseRightClick( int x, unsigned int y, wxMouseEvent &event );
     bool HandleMouseDoubleClick( int x, unsigned int y, wxMouseEvent &event );
     bool HandleMouseUp( int x, unsigned int y, wxMouseEvent &event );
+    void FinishSplitterDrag( bool cancel );
+    bool MoveSplitterFromKeyboard( int splitter, int delta );
     void HandleKeyEvent( wxKeyEvent &event, bool fromChild );
 
     void OnMouseEntry( wxMouseEvent &event );
@@ -1738,7 +1730,17 @@ protected:
     // font. It will be modified properly.
     void CalculateFontAndBitmapStuff( int vspacing );
 
+    // Kept for source and binary compatibility with derived grids.
     wxRect GetEditorWidgetRect( wxPGProperty* p, int column ) const;
+
+    // Transactional variant used internally: OnMeasureImage() is application
+    // code and may invalidate the grid, its page, or the edited property.
+    bool TryGetEditorWidgetRect( wxPGProperty* p, int column, wxRect* rect );
+
+    // Transactional counterpart of the public GetImageSize() API. The public
+    // wrapper keeps its historical signature; internal rendering paths use
+    // this form to stop if OnMeasureImage() invalidates their objects.
+    bool TryGetImageSize( wxPGProperty* p, int item, wxSize* size ) const;
 
     void CorrectEditorWidgetSizeX();
 
@@ -1989,15 +1991,13 @@ public:
 
     wxPGProperty* GetMainParent() const
     {
-        wxCHECK_MSG(m_property, nullptr, "Property cannot be null");
-        return m_property->GetMainParent();
+        wxPGProperty* const property = GetProperty();
+        wxCHECK_MSG(property, nullptr, "Property cannot be null");
+        return property->GetMainParent();
     }
 
     // Returns property associated with this event.
-    wxPGProperty* GetProperty() const
-    {
-        return m_property;
-    }
+    wxPGProperty* GetProperty() const;
 
     wxPGValidationInfo& GetValidationInfo()
     {
@@ -2031,10 +2031,7 @@ public:
     // Property value is stored in event, so it remains
     // accessible even after the associated property or
     // the property grid has been deleted.
-    wxVariant GetPropertyValue() const
-    {
-        return m_validationInfo ? m_validationInfo->GetValue() : m_value;
-    }
+    wxVariant GetPropertyValue() const;
 
     // Returns value of the associated property.
     // See GetPropertyValue()
@@ -2082,34 +2079,18 @@ public:
     bool WasVetoed() const { return m_wasVetoed; }
 
     // Changes the property associated with this event.
-    void SetProperty( wxPGProperty* p )
-    {
-        m_property = p;
-        if ( p )
-            m_propertyName = p->GetName();
-    }
+    void SetProperty( wxPGProperty* p );
 
     void SetPropertyValue( const wxVariant& value )
     {
         m_value = value;
     }
 
-    void SetPropertyGrid( wxPropertyGrid* pg )
-    {
-        m_pg = pg;
-        OnPropertyGridSet();
-    }
+    void SetPropertyGrid( wxPropertyGrid* pg );
 
-    void SetupValidationInfo()
-    {
-        wxASSERT(m_pg);
-        wxASSERT( GetEventType() == wxEVT_PG_CHANGING );
-        m_validationInfo = &m_pg->GetValidationInfo();
-        m_value = m_validationInfo->GetValue();
-    }
+    void SetupValidationInfo();
 
 private:
-    void OnPropertyGridSet();
     wxDECLARE_DYNAMIC_CLASS(wxPropertyGridEvent);
 
     wxPGProperty*       m_property;

@@ -28,6 +28,7 @@
 #include "wx/aui/auibook.h"
 #include "wx/aui/serializer.h"
 #include "wx/mdi.h"
+#include "wx/weakref.h"
 #include "wx/wupdlock.h"
 
 #ifndef WX_PRECOMP
@@ -65,6 +66,7 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 #include "wx/generic/private/drawresize.h"
 
 #include <map>
+#include <limits>
 #include <memory>
 #include <unordered_map>
 
@@ -968,10 +970,17 @@ void wxAuiManager::SetDocksForMinPanesStyle(unsigned int style)
 
 void wxAuiManager::ProcessMgrEvent(wxAuiManagerEvent& event)
 {
+    const wxWeakRef<wxAuiManager> manager(this);
+
     // first, give the owner frame a chance to override
     if (m_frame)
     {
         if (m_frame->GetEventHandler()->ProcessEvent(event))
+            return;
+
+        // Application handlers may destroy the manager and still call Skip().
+        // In that case there is no local event chain left to continue into.
+        if ( !manager )
             return;
     }
 
@@ -1002,7 +1011,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         return false;
 
     // check if the window is already managed by us
-    if (GetPane(paneInfo.window).IsOk())
+    if (GetPane(window).IsOk())
         return false;
 
     // check if the pane name already exists, this could reveal a
@@ -1863,6 +1872,20 @@ bool wxAuiManager::LoadPaneInfoVersioned(wxString layoutVersion, wxString pane_p
     pane_part.Replace(wxT("\\|"), wxT("\a"));
     pane_part.Replace(wxT("\\;"), wxT("\b"));
 
+    const auto parseInt = [](const wxString& text, int& destinationValue)
+    {
+        long value = 0;
+        if ( !text.ToLong(&value) ||
+             value < std::numeric_limits<int>::min() ||
+             value > std::numeric_limits<int>::max() )
+        {
+            return false;
+        }
+
+        destinationValue = static_cast<int>(value);
+        return true;
+    };
+
     while(1)
     {
         wxString val_part = pane_part.BeforeFirst(wxT(';'));
@@ -1883,41 +1906,100 @@ bool wxAuiManager::LoadPaneInfoVersioned(wxString layoutVersion, wxString pane_p
         else if (val_name == wxT("caption"))
             pane.caption = value;
         else if (val_name == wxT("state"))
-            pane.state = (unsigned int)wxAtoi(value.c_str());
+        {
+            unsigned long state = 0;
+            if ( !value.ToULong(&state) ||
+                 state > std::numeric_limits<unsigned int>::max() )
+            {
+                return false;
+            }
+            pane.state = static_cast<unsigned int>(state);
+        }
         else if (val_name == wxT("dir"))
-            pane.dock_direction = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.dock_direction) )
+                return false;
+        }
         else if (val_name == wxT("layer"))
-            pane.dock_layer = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.dock_layer) )
+                return false;
+        }
         else if (val_name == wxT("row"))
-            pane.dock_row = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.dock_row) )
+                return false;
+        }
         else if (val_name == wxT("pos"))
-            pane.dock_pos = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.dock_pos) )
+                return false;
+        }
         else if (val_name == wxT("prop"))
-            pane.dock_proportion = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.dock_proportion) )
+                return false;
+        }
         else if (val_name == wxT("bestw"))
-            pane.best_size.x = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.best_size.x) )
+                return false;
+        }
         else if (val_name == wxT("besth"))
-            pane.best_size.y = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.best_size.y) )
+                return false;
+        }
         else if (val_name == wxT("minw"))
-            pane.min_size.x = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.min_size.x) )
+                return false;
+        }
         else if (val_name == wxT("minh"))
-            pane.min_size.y = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.min_size.y) )
+                return false;
+        }
         else if (val_name == wxT("maxw"))
-            pane.max_size.x = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.max_size.x) )
+                return false;
+        }
         else if (val_name == wxT("maxh"))
-            pane.max_size.y = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.max_size.y) )
+                return false;
+        }
         else if (val_name == wxT("floatx"))
-            pane.floating_pos.x = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.floating_pos.x) )
+                return false;
+        }
         else if (val_name == wxT("floaty"))
-            pane.floating_pos.y = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.floating_pos.y) )
+                return false;
+        }
         else if (val_name == wxT("floatw"))
-            pane.floating_size.x = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.floating_size.x) )
+                return false;
+        }
         else if (val_name == wxT("floath"))
-            pane.floating_size.y = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.floating_size.y) )
+                return false;
+        }
         else if (val_name == wxT("floatw_cli") && layoutVersion == "layout3")
-            pane.floating_client_size.x = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.floating_client_size.x) )
+                return false;
+        }
         else if (val_name == wxT("floath_cli") && layoutVersion == "layout3")
-            pane.floating_client_size.y = wxAtoi(value.c_str());
+        {
+            if ( !parseInt(value, pane.floating_client_size.y) )
+                return false;
+        }
         else {
             return false;
         }
@@ -1983,23 +2065,28 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         layoutVersion != wxT("layout3"))
         return false;
 
-    // Mark all panes currently managed as hidden. Also, dock all panes that are dockable.
-    for ( auto& p : m_panes )
+    // Parse into detached candidates first. In particular, don't hide the
+    // live panes or clear their docks until every pane record has been
+    // validated: callers rely on a failed load leaving the current layout
+    // exactly unchanged.
+    wxAuiPaneInfoArray panes = m_panes;
+    wxAuiDockInfoArray docks;
+    bool hasMaximized = false;
+
+    // Mark all candidate panes as hidden. Also, dock all candidate panes that
+    // are dockable, just as the legacy in-place implementation did.
+    for ( auto& p : panes )
     {
         if(p.IsDockable())
             p.Dock();
         p.Hide();
     }
 
-    // clear out the dock array; this will be reconstructed
-    m_docks.Clear();
-
     // replace escaped characters so we can
     // split up the string easily
     input.Replace(wxT("\\|"), wxT("\a"));
     input.Replace(wxT("\\;"), wxT("\b"));
 
-    m_hasMaximized = false;
     while (1)
     {
         wxAuiPaneInfo pane;
@@ -2010,28 +2097,48 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
 
         // if the string is empty, we're done parsing
         if (pane_part.empty())
+        {
+            if ( !input.empty() )
+                return false;
             break;
+        }
 
         if (pane_part.Left(9) == wxT("dock_size"))
         {
             wxString val_name = pane_part.BeforeFirst(wxT('='));
             wxString value = pane_part.AfterFirst(wxT('='));
 
-            long dir, layer, row, size;
+            long dir = 0;
+            long layer = 0;
+            long row = 0;
+            long size = 0;
             wxString piece = val_name.AfterFirst(wxT('('));
             piece = piece.BeforeLast(wxT(')'));
-            piece.BeforeFirst(wxT(',')).ToLong(&dir);
+            const wxString dirPart = piece.BeforeFirst(wxT(','));
             piece = piece.AfterFirst(wxT(','));
-            piece.BeforeFirst(wxT(',')).ToLong(&layer);
-            piece.AfterFirst(wxT(',')).ToLong(&row);
-            value.ToLong(&size);
+            const wxString layerPart = piece.BeforeFirst(wxT(','));
+            const wxString rowPart = piece.AfterFirst(wxT(','));
+            if ( !val_name.StartsWith(wxT("dock_size(")) ||
+                 !val_name.EndsWith(wxT(")")) ||
+                 dirPart.empty() || layerPart.empty() || rowPart.empty() ||
+                 rowPart.Find(wxT(',')) != wxNOT_FOUND ||
+                 !dirPart.ToLong(&dir) || !layerPart.ToLong(&layer) ||
+                 !rowPart.ToLong(&row) || !value.ToLong(&size) ||
+                 dir < wxAUI_DOCK_TOP || dir > wxAUI_DOCK_CENTER ||
+                 layer < 0 || row < 0 || size < 0 ||
+                 layer > std::numeric_limits<int>::max() ||
+                 row > std::numeric_limits<int>::max() ||
+                 size > std::numeric_limits<int>::max() )
+            {
+                return false;
+            }
 
             wxAuiDockInfo dock;
             dock.dock_direction = dir;
             dock.dock_layer = layer;
             dock.dock_row = row;
             dock.size = size;
-            m_docks.Add(dock);
+            docks.Add(dock);
             continue;
         }
 
@@ -2046,18 +2153,47 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         }
 
         if ( pane.IsMaximized() )
-            m_hasMaximized = true;
+            hasMaximized = true;
 
-        wxAuiPaneInfo& p = GetPane(pane.name);
-        if (!p.IsOk())
+        wxAuiPaneInfo* existing = nullptr;
+        for ( auto& candidate : panes )
+        {
+            if ( candidate.name == pane.name )
+            {
+                existing = &candidate;
+                break;
+            }
+        }
+        if (!existing)
         {
             // the pane window couldn't be found
             // in the existing layout -- skip it
             continue;
         }
 
-        p.SafeSet(pane);
+        // SafeSet() reports invalid pane/window combinations through wxCHECK
+        // but can't propagate failure. Validate the exact candidate here so a
+        // bad toolbar direction also preserves the live perspective.
+        pane.window = existing->window;
+        pane.frame = existing->frame;
+        if ( !pane.IsValid() )
+            return false;
+        *existing = pane;
     }
+
+    // Publish the fully validated state without replacing m_panes itself:
+    // m_uiParts and application code may still hold pointers to its elements
+    // when update is false. Clear the UI projection (and the pointers into it)
+    // before replacing the docks, then update the existing pane objects in
+    // place so their addresses remain stable.
+    m_actionPart = nullptr;
+    m_hoverButton = nullptr;
+    m_uiParts.Empty();
+    wxASSERT(m_panes.size() == panes.size());
+    for ( size_t i = 0; i < panes.size(); ++i )
+        m_panes[i] = panes[i];
+    m_docks.swap(docks);
+    m_hasMaximized = hasMaximized;
 
     if (update)
         Update();
@@ -5420,6 +5556,30 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     wxASSERT_MSG(evt.pane, wxT("Pane Info passed to wxAuiManager::OnPaneButton must be non-null"));
 
     wxAuiPaneInfo& pane = *(evt.pane);
+    wxWeakRef<wxAuiManager> manager(this);
+    wxWeakRef<wxWindow> paneWindow(pane.window);
+
+    // A pane event is application code: it may detach or destroy the pane and
+    // thereby invalidate evt.pane and the reference above. Never use either
+    // after dispatch; resolve the current pane by its weakly tracked window.
+    const auto getCurrentPane = [&manager, &paneWindow]() -> wxAuiPaneInfo*
+    {
+        wxAuiManager * const self = manager.get();
+        wxWindow * const window = paneWindow.get();
+        if ( !self || !window || !self->m_frame ||
+             self->m_frame->IsBeingDeleted() )
+            return nullptr;
+
+        wxAuiPaneInfo& current = self->GetPane(window);
+        return current.IsOk() ? &current : nullptr;
+    };
+
+    const auto updateIfManaged = [&manager]()
+    {
+        wxAuiManager * const self = manager.get();
+        if ( self && self->m_frame && !self->m_frame->IsBeingDeleted() )
+            self->Update();
+    };
 
     if (evt.button == wxAUI_BUTTON_CLOSE)
     {
@@ -5435,13 +5595,10 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
             // still exists in our pane array first
             // (the event handler above might have removed it)
 
-            wxAuiPaneInfo& check = GetPane(pane.window);
-            if (check.IsOk())
-            {
-                ClosePane(pane);
-            }
+            if ( wxAuiPaneInfo * const current = getCurrentPane() )
+                ClosePane(*current);
 
-            Update();
+            updateIfManaged();
         }
     }
     else if (evt.button == wxAUI_BUTTON_MINIMIZE)
@@ -5453,8 +5610,9 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
 
         if (!e.GetVeto())
         {
-            MinimizePane(pane);
-            Update();
+            if ( wxAuiPaneInfo * const current = getCurrentPane() )
+                MinimizePane(*current);
+            updateIfManaged();
         }
     }
     else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && !pane.IsMaximized())
@@ -5467,8 +5625,9 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
 
         if (!e.GetVeto())
         {
-            MaximizePane(pane);
-            Update();
+            if ( wxAuiPaneInfo * const current = getCurrentPane() )
+                MaximizePane(*current);
+            updateIfManaged();
         }
     }
     else if (evt.button == wxAUI_BUTTON_MAXIMIZE_RESTORE && pane.IsMaximized())
@@ -5481,8 +5640,9 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
 
         if (!e.GetVeto())
         {
-            RestorePane(pane);
-            Update();
+            if ( wxAuiPaneInfo * const current = getCurrentPane() )
+                RestorePane(*current);
+            updateIfManaged();
         }
     }
     else if (evt.button == wxAUI_BUTTON_PIN &&
@@ -5504,11 +5664,17 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
                 return;
             }
 
-            RestorePane(pane);
+            wxAuiPaneInfo * const current = getCurrentPane();
+            if ( !current )
+                return;
+            RestorePane(*current);
         }
 
-        pane.Float();
-        Update();
+        wxAuiPaneInfo * const current = getCurrentPane();
+        if ( !current || !current->IsFloatable() )
+            return;
+        current->Float();
+        updateIfManaged();
     }
 }
 

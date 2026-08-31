@@ -39,6 +39,9 @@
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/wrapwin.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/inputtest.h"
+#endif
 #include <shlwapi.h>
 
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
@@ -1083,8 +1086,21 @@ extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
             // we want to process some Ctrl-foo and Shift-bar but no key
             // combinations without either Ctrl or Shift nor with both of them
             // pressed
-            const int ctrl = wxIsCtrlDown(),
-                      shift = wxIsShiftDown();
+            int ctrl;
+            int shift;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            wxWinUIKeyboardModifiers modifiers;
+            if ( wxWinUI3GetKeyboardModifiersOverrideForTesting(&modifiers) )
+            {
+                ctrl = modifiers.controlDown;
+                shift = modifiers.shiftDown;
+            }
+            else
+#endif
+            {
+                ctrl = wxIsCtrlDown();
+                shift = wxIsShiftDown();
+            }
             switch ( ctrl + shift )
             {
                 default:

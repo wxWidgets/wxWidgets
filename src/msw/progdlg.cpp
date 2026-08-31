@@ -30,6 +30,7 @@
     #include "wx/msw/private.h"
 #endif
 
+#include "wx/msw/private/gethwnd.h"
 #include "wx/evtloop.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/msgdlg.h"
@@ -60,6 +61,8 @@ const int wxSPDD_ICON_CHANGED      = 0x1000;
 const int wxSPDD_WINDOW_MOVED      = 0x2000;
 
 const int Id_SkipBtn = wxID_HIGHEST + 1;
+const long NativeRunnerStartupTimeoutMs = 5000;
+const long NativeRunnerShutdownTimeoutMs = 5000;
 
 // Enum indicating whether the native dialog was initialized.
 enum class wxProgressDialogStatus
@@ -87,7 +90,9 @@ public:
         m_skipped = false;
         m_msgChangeElementText = TDM_UPDATE_ELEMENT_TEXT;
         m_notifications = 0;
-        m_parent = nullptr;
+        m_parentHwnd = nullptr;
+        m_parentIsMinimized = false;
+        m_parentIsRtl = false;
     }
 
     wxCriticalSection m_cs;
@@ -96,7 +101,11 @@ public:
     // runner thread to indicate whether the dialog was successfully created.
     wxProgressDialogStatus m_status = wxProgressDialogStatus::Initializing;
 
-    wxWindow *m_parent;     // Parent window only used to center us over it.
+    // The runner thread must never dereference a wxWindow. Capture only the
+    // stable native owner data on the GUI thread before launching it.
+    HWND m_parentHwnd;
+    bool m_parentIsMinimized;
+    bool m_parentIsRtl;
     HWND m_hwnd;            // Task dialog handler
     long m_style;           // wxProgressDialog style
     int m_value;
@@ -236,6 +245,9 @@ BOOL CALLBACK DisplayCloseButton(HWND hwnd, LPARAM lParam)
 // so should be kept in the same state.
 void EnableCloseButtons(HWND hwnd, bool enable)
 {
+    if ( !hwnd )
+        return;
+
     ::SendMessage(hwnd, TDM_ENABLE_BUTTON, IDCANCEL, enable ? TRUE : FALSE);
 
     wxTopLevelWindow::MSWEnableCloseButton(hwnd, enable);
@@ -244,6 +256,19 @@ void EnableCloseButtons(HWND hwnd, bool enable)
 void PerformNotificationUpdates(HWND hwnd,
                                 wxProgressDialogSharedData *sharedData)
 {
+    // The WinUI test seam drives the real callback with a null HWND. Keep all
+    // state transitions identical while omitting only the final Win32 writes.
+    if ( !hwnd )
+    {
+        if ( sharedData->m_notifications & wxSPDD_MESSAGE_CHANGED )
+            sharedData->m_msgChangeElementText = TDM_UPDATE_ELEMENT_TEXT;
+
+        if ( sharedData->m_notifications & wxSPDD_FINISHED )
+            sharedData->m_state = wxProgressDialog::Finished;
+
+        return;
+    }
+
     // Update the appropriate dialog fields.
     if ( sharedData->m_notifications & wxSPDD_RANGE_CHANGED )
     {
@@ -393,6 +418,56 @@ void PerformNotificationUpdates(HWND hwnd,
     }
 }
 
+// Wait for the runner without ever blocking the GUI thread indefinitely.
+// TaskDialogIndirect() may synchronously send messages to its owner while it
+// is closing, so the main thread must continue dispatching while it waits.
+bool WaitForRunnerThread(wxProgressDialogTaskRunner *runner, long timeoutMs)
+{
+    const WXHANDLE hThread = runner->MSWGetHandle();
+    if ( !hThread )
+        return true;
+
+    wxStopWatch watch;
+    while ( watch.Time() < timeoutMs )
+    {
+        const long remaining = timeoutMs - watch.Time();
+        const DWORD timeout =
+            static_cast<DWORD>(remaining < 50 ? remaining : 50);
+        const DWORD rc = ::MsgWaitForMultipleObjects
+                         (
+                           1,
+                           &hThread,
+                           false,
+                           timeout,
+                           QS_ALLINPUT | QS_ALLPOSTMESSAGE
+                         );
+
+        if ( rc == WAIT_OBJECT_0 )
+            return true;
+
+        if ( rc == WAIT_FAILED )
+        {
+            wxLogLastError("MsgWaitForMultipleObjects");
+            return false;
+        }
+
+        if ( rc != WAIT_TIMEOUT )
+        {
+            if ( wxEventLoopBase * const loop = wxEventLoopBase::GetActive() )
+            {
+                // MsgWaitForMultipleObjects() only promises that input was
+                // observed. It can already have been consumed by the time we
+                // get here, so Dispatch() could block indefinitely and defeat
+                // this function's timeout. DispatchTimeout(0) preserves the
+                // required message pump while keeping every iteration bounded.
+                (void)loop->DispatchTimeout(0);
+            }
+        }
+    }
+
+    return false;
+}
+
 } // anonymous namespace
 
 // ============================================================================
@@ -407,6 +482,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
     : wxGenericProgressDialog(),
       m_taskDialogRunner(nullptr),
       m_sharedData(nullptr),
+      m_destroying(false),
       m_message(message),
       m_title(title)
 {
@@ -428,19 +504,30 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
         // Showing native dialog failed, fall back to the generic one.
         if ( m_taskDialogRunner )
         {
-            // This points to the data owned by m_taskDialogRunner, so don't
-            // keep it dangling after deleting the thread.
-            //
-            // This is also used by UsingNativeTaskDialog().
-            m_sharedData = nullptr;
+            if ( m_sharedData )
+            {
+                wxCriticalSectionLocker locker(m_sharedData->m_cs);
+                m_sharedData->m_notifications |= wxSPDD_DESTROYED;
+            }
 
-            // It's critical to use wxTHREAD_WAIT_YIELD here to prevent
-            // deadlocks as the task dialog runner thread might be waiting for
-            // the main thread to process some messages.
-            m_taskDialogRunner->Wait(wxTHREAD_WAIT_YIELD);
+            if ( WaitForRunnerThread(m_taskDialogRunner,
+                                     NativeRunnerShutdownTimeoutMs) )
+            {
+                delete m_taskDialogRunner;
+            }
+            else
+            {
+                // The runner owns its shared data, so abandoning the isolated
+                // allocation is safer than freeing state still used by a
+                // broken native boundary.
+                wxLogWarning(
+                    "Timed out cleaning up failed native progress dialog; "
+                    "abandoning its isolated runner");
+            }
 
-            delete m_taskDialogRunner;
             m_taskDialogRunner = nullptr;
+            // This points into the runner and must never remain dangling.
+            m_sharedData = nullptr;
         }
     }
 
@@ -449,6 +536,14 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
 
 wxProgressDialog::~wxProgressDialog()
 {
+    m_destroying = true;
+
+    // Native progress dialogs never create a wx child window. If their owner
+    // disappeared, the weak owner reference has already been cleared but the
+    // wxWindow base pointer would otherwise remain stale during base teardown.
+    if ( m_parent && !GetTopParent() )
+        m_parent = nullptr;
+
     if ( !m_taskDialogRunner )
         return;
 
@@ -458,61 +553,54 @@ wxProgressDialog::~wxProgressDialog()
         m_sharedData->m_notifications |= wxSPDD_DESTROYED;
     }
 
-    // We can't use simple wxThread::Wait() here as we would deadlock because
-    // the task dialog thread expects this thread to process some messages
-    // (presumably those the task dialog sends to its parent during its
-    // destruction).
-    const WXHANDLE hThread = m_taskDialogRunner->MSWGetHandle();
-    for ( bool cont = true; cont; )
-    {
-        DWORD rc = ::MsgWaitForMultipleObjects
-                     (
-                       1,                   // number of objects to wait for
-                       &hThread,            // the objects
-                       false,               // wait for any objects, not all
-                       INFINITE,            // no timeout
-                       QS_ALLINPUT |        // return as soon as there are any events
-                       QS_ALLPOSTMESSAGE
-                     );
-
-        switch ( rc )
-        {
-            case 0xFFFFFFFF:
-                // This is unexpected, but we can't do anything about it and
-                // probably shouldn't continue waiting as we risk doing it
-                // forever.
-                wxLogLastError("MsgWaitForMultipleObjectsEx");
-                cont = false;
-                break;
-
-            case WAIT_OBJECT_0:
-                // Thread has terminated.
-                cont = false;
-                break;
-
-            default:
-                // An event has arrive, so dispatch it.
-                wxEventLoop::GetActive()->Dispatch();
-        }
-    }
+    // We can't use simple wxThread::Wait() here as the task dialog thread can
+    // require this thread to process messages during its destruction.
+    const bool terminated =
+        WaitForRunnerThread(m_taskDialogRunner,
+                            NativeRunnerShutdownTimeoutMs);
 
     // Enable the windows before deleting the task dialog to ensure that we
     // can regain the activation.
     ReenableOtherWindows();
 
-    delete m_taskDialogRunner;
+    if ( terminated )
+    {
+        delete m_taskDialogRunner;
+    }
+    else
+    {
+        // A broken native boundary must not hang application shutdown. The
+        // runner owns all data still reachable by its thread, so deliberately
+        // abandon this exceptional allocation instead of freeing live state.
+        wxLogWarning(
+            "Timed out waiting for native progress dialog shutdown; "
+            "abandoning its isolated runner");
+    }
+
+    m_taskDialogRunner = nullptr;
+    m_sharedData = nullptr;
 }
 
 bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
     if ( UsingNativeTaskDialog() )
     {
+        if ( m_destroying )
+            return false;
+
+        const std::uint64_t generation = BeginUpdateCycle();
         if ( !DoNativeBeforeUpdate(skip) )
         {
             // Dialog was cancelled.
             return false;
         }
 
+        if ( !IsCurrentUpdateCycle(generation) )
+            return !WasCancelled();
+
+        wxASSERT_MSG( value >= 0 && value <= GetRange(),
+                      wxT("invalid progress value") );
+        SetCurrentValue(value);
         value /= m_factor;
 
         wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
@@ -580,11 +668,18 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
     if ( UsingNativeTaskDialog() )
     {
+        if ( m_destroying )
+            return false;
+
+        const std::uint64_t generation = BeginUpdateCycle();
         if ( !DoNativeBeforeUpdate(skip) )
         {
             // Dialog was cancelled.
             return false;
         }
+
+        if ( !IsCurrentUpdateCycle(generation) )
+            return !WasCancelled();
 
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
@@ -611,7 +706,7 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
     return wxGenericProgressDialog::Pulse( newmsg, skip );
 }
 
-void wxProgressDialog::DispatchEvents()
+bool wxProgressDialog::DispatchEvents()
 {
     // No need for UsingNativeTaskDialog() check, we're only called when this is
     // the case.
@@ -619,13 +714,14 @@ void wxProgressDialog::DispatchEvents()
     // We don't need to dispatch the user input events as the task dialog
     // handles its own ones in its thread and we shouldn't react to any
     // other user actions while the dialog is shown.
-    wxEventLoop::GetActive()->
-        YieldFor(wxEVT_CATEGORY_ALL & ~wxEVT_CATEGORY_USER_INPUT);
+    return YieldForEvents(
+        wxEVT_CATEGORY_ALL & ~wxEVT_CATEGORY_USER_INPUT);
 }
 
 bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 {
-    DispatchEvents();
+    if ( !DispatchEvents() || m_destroying )
+        return false;
 
     wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
@@ -696,10 +792,7 @@ WXWidget wxProgressDialog::GetHandle() const
 int wxProgressDialog::GetValue() const
 {
     if ( UsingNativeTaskDialog() )
-    {
-        wxCriticalSectionLocker locker(m_sharedData->m_cs);
-        return m_sharedData->m_value;
-    }
+        return GetCurrentValue();
 
     return wxGenericProgressDialog::GetValue();
 }
@@ -716,11 +809,13 @@ void wxProgressDialog::SetRange(int maximum)
 {
     if ( UsingNativeTaskDialog() )
     {
+        wxCHECK_RET( maximum > 0, "Invalid range" );
+
         SetMaximum(maximum);
 
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
-        m_sharedData->m_range = maximum;
+        m_sharedData->m_range = m_maximum;
         m_sharedData->m_notifications |= wxSPDD_RANGE_CHANGED;
 
         return;
@@ -769,6 +864,8 @@ void wxProgressDialog::SetTitle(const wxString& title)
             m_sharedData->m_title = title;
             m_sharedData->m_notifications |= wxSPDD_TITLE_CHANGED;
         }
+
+        return;
     }
 
     wxGenericProgressDialog::SetTitle(title);
@@ -887,6 +984,8 @@ void wxProgressDialog::Fit()
 
         // Don't change the message, but pretend that it did change.
         m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
+
+        return;
     }
 
     wxGenericProgressDialog::Fit();
@@ -905,7 +1004,16 @@ bool wxProgressDialog::InitAndShowNative()
     m_sharedData->m_range = m_maximum;
     m_sharedData->m_state = Uncancelable;
     m_sharedData->m_style = GetPDStyle();
-    m_sharedData->m_parent = GetTopParent();
+    if ( wxWindow * const parent = GetTopParent() )
+    {
+        m_sharedData->m_parentHwnd =
+            static_cast<HWND>(wxGetHWND(parent));
+        m_sharedData->m_parentIsMinimized =
+            m_sharedData->m_parentHwnd &&
+            ::IsIconic(m_sharedData->m_parentHwnd);
+        m_sharedData->m_parentIsRtl =
+            wxApp::MSWGetDefaultLayout(parent) == wxLayout_RightToLeft;
+    }
 
     if ( HasPDFlag(wxPD_CAN_ABORT) )
     {
@@ -940,16 +1048,37 @@ bool wxProgressDialog::InitAndShowNative()
     // Wait until the dialog is shown as the program may need some time
     // before it calls Update() and we want to show something to the user
     // in the meanwhile.
-    auto status = wxProgressDialogStatus::Failed;
-    while ( wxEventLoop::GetActive()->Dispatch() )
+    wxProgressDialogStatus status = wxProgressDialogStatus::Initializing;
+    wxStopWatch startupWatch;
+    while ( startupWatch.Time() < NativeRunnerStartupTimeoutMs )
     {
-        wxCriticalSectionLocker locker(m_sharedData->m_cs);
-        status = m_sharedData->m_status;
-        if ( status != wxProgressDialogStatus::Initializing )
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            status = m_sharedData->m_status;
+            if ( status != wxProgressDialogStatus::Initializing )
+                break;
+        }
+
+        wxEventLoopBase * const eventLoop = wxEventLoopBase::GetActive();
+        if ( !eventLoop )
             break;
+
+        const long remaining =
+            NativeRunnerStartupTimeoutMs - startupWatch.Time();
+        (void)eventLoop->DispatchTimeout(
+            static_cast<unsigned long>(remaining < 50 ? remaining : 50));
     }
 
-    switch ( m_sharedData->m_status )
+    if ( status == wxProgressDialogStatus::Initializing )
+    {
+        wxLogWarning(
+            "Timed out waiting for native progress dialog initialization");
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
+        m_sharedData->m_notifications |= wxSPDD_DESTROYED;
+        return false;
+    }
+
+    switch ( status )
     {
         case wxProgressDialogStatus::Initialized:
             break;
@@ -1049,10 +1178,9 @@ void* wxProgressDialogTaskRunner::Entry()
     {
         wxCriticalSectionLocker locker(m_sharedData.m_cs);
 
-        // If we have a parent, we must use it to have correct Z-order and
-        // icon, even if this comes at the price of attaching this thread input
-        // to the thread that created the parent window, i.e. the main thread.
-        wxTdc.parent = m_sharedData.m_parent;
+        // The main thread captured the HWND and layout state. Never retain or
+        // dereference a wxWindow from this task-dialog worker thread.
+        wxTdc.parent = nullptr;
         wxTdc.caption = m_sharedData.m_title.wx_str();
 
         // Split the message into the title and main body text in the same way
@@ -1070,6 +1198,24 @@ void* wxProgressDialogTaskRunner::Entry()
         wxTdc.useCustomLabels = true;
 
         wxTdc.MSWCommonTaskDialogInit( tdc );
+        if ( m_sharedData.m_parentHwnd &&
+                ::IsWindow(m_sharedData.m_parentHwnd) )
+        {
+            tdc.hwndParent = m_sharedData.m_parentHwnd;
+            if ( !m_sharedData.m_parentIsMinimized )
+                tdc.dwFlags |= TDF_POSITION_RELATIVE_TO_WINDOW;
+        }
+        else
+        {
+            tdc.hwndParent = nullptr;
+            tdc.dwFlags &= ~TDF_POSITION_RELATIVE_TO_WINDOW;
+        }
+
+        if ( m_sharedData.m_parentIsRtl )
+            tdc.dwFlags |= TDF_RTL_LAYOUT;
+        else
+            tdc.dwFlags &= ~TDF_RTL_LAYOUT;
+
         tdc.pfCallback = TaskDialogCallbackProc;
         tdc.lpCallbackData = (LONG_PTR) &m_sharedData;
 
@@ -1096,17 +1242,9 @@ void* wxProgressDialogTaskRunner::Entry()
         }
     }
 
-    HRESULT hr;
-    TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-    if ( taskDialogIndirect )
-    {
-        int msAns;
-        hr = taskDialogIndirect(&tdc, &msAns, nullptr, nullptr);
-    }
-    else
-    {
-        hr = E_UNEXPECTED;
-    }
+    int msAns = IDCANCEL;
+    const HRESULT hr =
+        InvokeTaskDialogIndirect(&tdc, &msAns, nullptr, nullptr);
 
     if ( FAILED(hr) )
     {
@@ -1162,10 +1300,13 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
             wxWakeUpIdle();
 
             // Set the maximum value and disable Close button.
-            ::SendMessage( hwnd,
-                           TDM_SET_PROGRESS_BAR_RANGE,
-                           0,
-                           MAKELPARAM(0, sharedData->m_range) );
+            if ( hwnd )
+            {
+                ::SendMessage( hwnd,
+                               TDM_SET_PROGRESS_BAR_RANGE,
+                               0,
+                               MAKELPARAM(0, sharedData->m_range) );
+            }
 
             // If we can't be aborted, the "Close" button will only be enabled
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).
@@ -1183,13 +1324,29 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         case TDN_DESTROYED:
             // Clean up all resources allocated by AllowForTaskDialog().
             wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
+
+            sharedData->m_hwnd = nullptr;
+            if ( sharedData->m_state == wxProgressDialog::Finished )
+            {
+                sharedData->m_state = wxProgressDialog::Dismissed;
+            }
+            else if ( sharedData->m_state != wxProgressDialog::Dismissed )
+            {
+                sharedData->m_timeStop = wxGetCurrentTime();
+                sharedData->m_state = wxProgressDialog::Canceled;
+            }
+            wxWakeUpIdle();
             break;
 
         case TDN_BUTTON_CLICKED:
             switch ( wParam )
             {
                 case Id_SkipBtn:
-                    ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
+                    if ( hwnd )
+                    {
+                        ::SendMessage(
+                            hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
+                    }
                     sharedData->m_skipped = true;
                     return S_FALSE;
 
@@ -1219,7 +1376,14 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                                 break;
 
                             case wxProgressDialog::Continue:
-                                ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
+                                if ( hwnd )
+                                {
+                                    ::SendMessage(
+                                        hwnd,
+                                        TDM_ENABLE_BUTTON,
+                                        Id_SkipBtn,
+                                        FALSE);
+                                }
                                 EnableCloseButtons(hwnd, false);
 
                                 sharedData->m_timeStop = wxGetCurrentTime();
@@ -1285,7 +1449,10 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
     if ( endDialog )
     {
         ::EndDialog( hwnd, IDCLOSE );
-        return S_FALSE;
+        // The deterministic WinUI seam uses a null HWND and interprets S_OK
+        // as the bounded end signal. The real TaskDialog ignores this return
+        // value for timer notifications and is closed by EndDialog() above.
+        return hwnd ? S_FALSE : S_OK;
     }
 
     // Return anything.

@@ -43,6 +43,7 @@ set(TEST_GUI_SRC
     controls/comboboxtest.cpp
     controls/dataviewctrltest.cpp
     controls/datepickerctrltest.cpp
+    controls/filesystemctrltest.cpp
     controls/frametest.cpp
     controls/gaugetest.cpp
     controls/gridtest.cpp
@@ -52,6 +53,43 @@ set(TEST_GUI_SRC
     controls/itemcontainertest.cpp
     controls/infobar.cpp
     controls/label.cpp
+    controls/mswoledropsession.cpp
+    controls/winuiactivex.cpp
+    controls/winuiolebroker.cpp
+    controls/winuihostlifecycle.cpp
+    controls/winuiadvancedharness.cpp
+    controls/winuinativewindow.cpp
+    controls/winuimdi.cpp
+    controls/winuiglcanvas.cpp
+    controls/winuiwebview.cpp
+    controls/winuimedia.cpp
+    controls/winuihtml.cpp
+    controls/winuirichtext.cpp
+    controls/winuiaui.cpp
+    controls/winuistc.cpp
+    controls/winuiribbon.cpp
+    controls/winuiinputrouter.cpp
+    controls/winuirootinput.cpp
+    controls/winuiinputstate.cpp
+    controls/winuiaccessibility.cpp
+    controls/winuiappearance.cpp
+    controls/winuichromefeedback.cpp
+    controls/winuitoolbar.cpp
+    controls/winuicombomodel.cpp
+    controls/winuiitemmodel.cpp
+    controls/winuilistmodel.cpp
+    controls/winuirangedate.cpp
+    controls/winuirangeevents.cpp
+    controls/winuispinmodel.cpp
+    controls/winuitransientstate.cpp
+    controls/winuitransientwindows.cpp
+    controls/winuiauxwindows.cpp
+    controls/winuigenericfeedback.cpp
+    controls/winuinotification.cpp
+    controls/winuitaskbaricon.cpp
+    controls/winuitaskbarbutton.cpp
+    controls/winuititlebar.cpp
+    controls/winuitextpeer.cpp
     controls/listbasetest.cpp
     controls/listbooktest.cpp
     controls/listboxtest.cpp
@@ -59,9 +97,13 @@ set(TEST_GUI_SRC
     controls/listviewtest.cpp
     controls/markuptest.cpp
     controls/notebooktest.cpp
+    controls/winuinotebook.cpp
+    controls/winuitreemodel.cpp
     controls/ownerdrawncomboboxtest.cpp
     controls/pickerbasetest.cpp
     controls/pickertest.cpp
+    controls/winuipickercontracts.cpp
+    controls/winuiwizardpropsheet.cpp
     controls/propgridtest.cpp
     controls/radioboxtest.cpp
     controls/radiobuttontest.cpp
@@ -81,10 +123,16 @@ set(TEST_GUI_SRC
     controls/treebooktest.cpp
     controls/treectrltest.cpp
     controls/treelistctrltest.cpp
+    controls/vlboxtest.cpp
     controls/virtlistctrltest.cpp
     controls/webtest.cpp
     controls/windowtest.cpp
     controls/dialogtest.cpp
+    controls/winuiframeclassdialog.cpp
+    controls/winuidialogcontracts.cpp
+    controls/winuiprinting.cpp
+    controls/winuidialogsession.cpp
+    controls/winuirichtooltip.cpp
     docview/updateallviews.cpp
     events/clone.cpp
     events/enterleave.cpp
@@ -92,6 +140,7 @@ set(TEST_GUI_SRC
     events/evtlooptest.cpp
     events/propagation.cpp
     events/keyboard.cpp
+    events/winuikeyboard.cpp
     # And duplicate this one too as wxExecute behaves differently in
     # console and GUI applications.
     exec/exec.cpp
@@ -105,6 +154,7 @@ set(TEST_GUI_SRC
     html/htmprint.cpp
     menu/accelentry.cpp
     menu/menu.cpp
+    menu/winuimenubar.cpp
     misc/guifuncs.cpp
     misc/selstoretest.cpp
     misc/garbage.cpp
@@ -235,8 +285,69 @@ wx_add_test(test_gui ${APP_TYPE} ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     RES_BUNDLE ${TEST_GUI_RES_BUNDLE}
     )
+if(TARGET test_gui AND TARGET wx_winui_test_support)
+    target_link_libraries(test_gui PRIVATE wx_winui_test_support)
+endif()
+if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
+        TARGET wx_winui_desktop_test_runner)
+    add_test(NAME wx_winui_supported_beta
+        COMMAND
+            $<TARGET_FILE:wx_winui_desktop_test_runner>
+            --timeout-ms=240000
+            --
+            $<TARGET_FILE:test_gui>
+            "[winui-v0-supported]~[.]~[physical]"
+        WORKING_DIRECTORY
+            "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+    set_tests_properties(wx_winui_supported_beta PROPERTIES
+        LABELS "winui-supported-beta"
+        RUN_SERIAL TRUE
+        TIMEOUT 300)
+endif()
+if(WXWINUI AND wxUSE_WINUI3 AND MSVC)
+    # These are the TUs pulling in the C++/WinRT projection: scope /bigobj
+    # to them instead of the whole target. wx_add_test() registers all test
+    # sources using absolute paths, so use the same identity here: CMake source
+    # properties don't match a later relative spelling of the same file.
+    wx_list_add_prefix(TEST_GUI_BIGOBJ_SRC
+        "${wxSOURCE_DIR}/tests/"
+        controls/winuihostlifecycle.cpp
+        controls/winuiadvancedharness.cpp
+        controls/winuinativewindow.cpp
+        controls/winuimdi.cpp
+        controls/winuiglcanvas.cpp
+        controls/winuiwebview.cpp
+        controls/winuimedia.cpp
+        controls/winuihtml.cpp
+        controls/winuirichtext.cpp
+        controls/winuiaui.cpp
+        controls/winuistc.cpp
+        controls/winuiribbon.cpp
+        controls/winuiaccessibility.cpp
+        controls/winuiolebroker.cpp
+        controls/winuirootinput.cpp
+        controls/winuitransientwindows.cpp
+        )
+    set_source_files_properties(${TEST_GUI_BIGOBJ_SRC}
+        PROPERTIES COMPILE_OPTIONS "/bigobj")
+endif()
+if(WXWINUI AND wxUSE_WINUI3 AND wxUSE_WEBVIEW AND wxUSE_WEBVIEW_EDGE)
+    # The XAML WebView2 interop ABI must come from the same pinned package as
+    # the generated Microsoft.Web.WebView2.Core projection. Put it before the
+    # older SDK include path published transitively by wxwebview.
+    target_include_directories(test_gui BEFORE PRIVATE
+        "${wxWINUI3_WEBVIEW2_PACKAGE_DIR}/build/native/include-winrt"
+        "${wxWINUI3_WEBVIEW2_PACKAGE_DIR}/build/native/include"
+        )
+endif()
 if(wxUSE_AUI)
     wx_exe_link_libraries(test_gui wxaui)
+endif()
+if(wxUSE_RIBBON)
+    wx_exe_link_libraries(test_gui wxribbon)
+endif()
+if(wxUSE_OPENGL)
+    wx_exe_link_libraries(test_gui wxgl)
 endif()
 if(wxUSE_RICHTEXT)
     wx_exe_link_libraries(test_gui wxrichtext)

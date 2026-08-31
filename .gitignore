@@ -1,4 +1,6 @@
 # /
+# Out-of-tree CMake build directories (build-winui, build-master, ...)
+/build-*/
 /.gdb_history
 /config.cache
 /configarg.cache

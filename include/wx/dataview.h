@@ -521,6 +521,10 @@ public:
 
     // getters:
     unsigned int GetModelColumn() const { return static_cast<unsigned int>(m_model_column); }
+    // Implementation-only: wxDataViewListCtrl owns both its view columns and
+    // its positional list-store schema and must keep them in lock-step.
+    void WXSetModelColumn(unsigned int modelColumn)
+        { m_model_column = static_cast<int>(modelColumn); }
     wxDataViewCtrl *GetOwner() const        { return m_owner; }
     wxDataViewRenderer* GetRenderer() const { return m_renderer; }
 
@@ -834,6 +838,11 @@ protected:
     // If expandChildren is true, also expand all its children recursively.
     virtual void DoExpand(const wxDataViewItem & item, bool expandChildren) = 0;
 
+    // Implementation-only setter for structural column transactions which
+    // publish the visual update separately after the topology is coherent.
+    void WXSetExpanderColumnWithoutUpdate(wxDataViewColumn* column)
+        { m_expander_column = column; }
+
 private:
     // Implementation of the public Set/GetCurrentItem() methods which are only
     // called in multi selection case (for single selection controls their
@@ -1107,6 +1116,7 @@ public:
     void PrependColumn( const wxString &varianttype );
     void InsertColumn( unsigned int pos, const wxString &varianttype );
     void AppendColumn( const wxString &varianttype );
+    void DeleteColumn( unsigned int pos );
 
     void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 );
     void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 );
@@ -1178,6 +1188,7 @@ public:
     virtual bool PrependColumn( wxDataViewColumn *col ) override;
     virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col ) override;
     virtual bool AppendColumn( wxDataViewColumn *col ) override;
+    virtual bool DeleteColumn( wxDataViewColumn *col ) override;
     virtual bool ClearColumns() override;
 
     wxDataViewColumn *AppendTextColumn( const wxString &label,

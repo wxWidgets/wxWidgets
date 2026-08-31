@@ -299,6 +299,7 @@ public:
     }
 #endif // __WIN32__
 
+#if wxUSE_EXCEPTIONS
     // Also override this method to avoid showing any dialogs from here -- and
     // show some details about the exception along the way.
     virtual bool OnExceptionInMainLoop() override
@@ -308,6 +309,7 @@ public:
 
         throw;
     }
+#endif // wxUSE_EXCEPTIONS
 
     // used by events propagation test
     virtual int FilterEvent(wxEvent& event) override;

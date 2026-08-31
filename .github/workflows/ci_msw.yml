@@ -182,3 +182,260 @@ jobs:
         working-directory: tests
         run: |
             .\vc*msw*\test_gui.exe
+
+  winui-cmake:
+    runs-on: windows-2022
+    name: wxWinUI CMake Release x64 ${{ matrix.linkage }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Compile and execute the narrow Supported V0 gate in both linkages.
+          # Its filter excludes physical probes and stress/native spikes.
+          - linkage: shared
+            shared: 'ON'
+            tests: ALL
+          - linkage: static
+            shared: 'OFF'
+            tests: ALL
+
+    env:
+      WXWINUI_NUGET_CACHE: ${{ github.workspace }}\.wxwinui-nuget
+      # The Supported V0 gate runs on a non-input desktop. Keep inherited
+      # UIActionSimulator cases out of this native-message/peer-only profile.
+      WX_UI_TESTS: '0'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: 'recursive'
+
+      # Cache just the validated archives. CMake verifies their pinned hashes
+      # and recreates the extracted package trees transactionally on each run.
+      - name: Cache Windows App SDK packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.WXWINUI_NUGET_CACHE }}\*.nupkg
+          key: wxwinui-nupkg-v1-${{ runner.os }}-x64-${{ hashFiles('build/cmake/winui.cmake') }}
+          restore-keys: |
+            wxwinui-nupkg-v1-${{ runner.os }}-x64-
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Configure wxWinUI
+        run: |
+          cmake -S . -B build-winui-${{ matrix.linkage }} `
+            -G "Visual Studio 17 2022" -A x64 `
+            -DwxBUILD_TOOLKIT=winui `
+            -DwxUSE_WINUI3=ON `
+            -DwxBUILD_SHARED=${{ matrix.shared }} `
+            -DwxBUILD_TESTS=${{ matrix.tests }} `
+            -DwxBUILD_SAMPLES=SOME `
+            "-DwxWINUI3_PACKAGE_ROOT=$env:WXWINUI_NUGET_CACHE"
+
+      - name: Build wxWinUI
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          cmake --build $buildDir --config Release --parallel 4 -- `
+            /noLogo /nr:false /fl `
+            "/flp:logfile=$buildDir\build.log;verbosity=normal" `
+            "/bl:$buildDir\build.binlog"
+
+      - name: Register pinned Windows App Runtime
+        # The Appx module requires Windows PowerShell, not PowerShell Core.
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          $versionMatch = Select-String "$buildDir\CMakeCache.txt" `
+            -Pattern '^wxWINUI3_WINDOWSAPPSDK_VERSION:STRING=(.+)$'
+          if (-not $versionMatch) {
+            throw 'Configured Windows App Runtime version not found'
+          }
+          $runtimeVersion = $versionMatch.Matches[0].Groups[1].Value
+          $runtimeRoot = Get-ChildItem $env:WXWINUI_NUGET_CACHE -Directory `
+            -Filter "Microsoft.WindowsAppSDK.Runtime.$runtimeVersion-*"
+          if (@($runtimeRoot).Count -ne 1) {
+            throw "Expected one extracted runtime $runtimeVersion, found $(@($runtimeRoot).Count)"
+          }
+          $runtime = Get-ChildItem `
+            "$($runtimeRoot.FullName)\tools\MSIX\win10-x64" -File `
+            -Filter 'Microsoft.WindowsAppRuntime.*.msix' | Where-Object {
+              $_.Name -notmatch '\.(DDLM|Main|Singleton)\.'
+            }
+          if (@($runtime).Count -ne 1) {
+            throw "Expected one pinned x64 Windows App Runtime framework MSIX, found $(@($runtime).Count)"
+          }
+
+          # Server 2022 uses the bootstrapper's DDLM path, not the Windows 11
+          # dynamic-dependency APIs. The framework alone cannot initialize it.
+          $ddlm = Get-ChildItem `
+            "$($runtimeRoot.FullName)\tools\MSIX\win10-x64" -File `
+            -Filter 'Microsoft.WindowsAppRuntime.DDLM.*.msix'
+          if (@($ddlm).Count -ne 1) {
+            throw "Expected one pinned x64 Windows App Runtime DDLM MSIX, found $(@($ddlm).Count)"
+          }
+
+          $versionHeader = "$($runtimeRoot.FullName)\include\WindowsAppSDK-VersionInfo.h"
+          $versionParts = foreach ($part in 'MAJOR', 'MINOR', 'BUILD', 'REVISION') {
+            $match = Select-String $versionHeader `
+              -Pattern "^#define\s+WINDOWSAPPSDK_RUNTIME_VERSION_$part\s+(\d+)u?\s*$"
+            if (@($match).Count -ne 1) {
+              throw "Expected one runtime version component $part in $versionHeader"
+            }
+            $match.Matches[0].Groups[1].Value
+          }
+          $minimumVersion = [version]($versionParts -join '.')
+
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $packages = foreach ($package in @($runtime, $ddlm)) {
+            $archive = [IO.Compression.ZipFile]::OpenRead($package.FullName)
+            try {
+              $reader = New-Object IO.StreamReader($archive.GetEntry('AppxManifest.xml').Open())
+              try { [xml]$manifest = $reader.ReadToEnd() } finally { $reader.Dispose() }
+              $identity = $manifest.Package.Identity
+              if ($identity.ProcessorArchitecture -ne 'x64' -or
+                  [version]$identity.Version -ne $minimumVersion) {
+                throw "Pinned MSIX identity does not match x64 runtime $minimumVersion"
+              }
+              [pscustomobject]@{
+                Path = $package.FullName
+                Name = $identity.Name
+                Publisher = $identity.Publisher
+                Architecture = $identity.ProcessorArchitecture
+                Version = $identity.Version
+              }
+            }
+            finally { $archive.Dispose() }
+          }
+          $packages | ConvertTo-Json | Tee-Object "$buildDir\winui-runtime-packages.json"
+          Start-Transcript -Path "$buildDir\winui-runtime-registration.log" -Force
+          try {
+            # Register the framework first, then its exact-version DDLM.
+            foreach ($package in $packages) {
+              Write-Host "Registering $($package.Name) $($package.Version) $($package.Architecture)"
+              Add-AppxPackage -Path $package.Path -ForceApplicationShutdown
+              $registered = @(Get-AppxPackage -Name $package.Name -PackageTypeFilter Framework, Main |
+                Where-Object {
+                  $_.Publisher -eq $package.Publisher -and
+                  $_.Architecture -eq $package.Architecture -and
+                  [version]$_.Version -ge $minimumVersion
+                })
+              if ($registered.Count -eq 0) {
+                throw "Runtime package $($package.Name) >= $minimumVersion is not registered for this user"
+              }
+              $registered | Format-List Name, PackageFullName, Architecture, Version, Status
+            }
+          }
+          finally { Stop-Transcript }
+
+      - name: Verify wxWinUI installed runtime contracts
+        timeout-minutes: 30
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          $installDir = Join-Path $buildDir 'install'
+          $consumerDir = Join-Path $buildDir 'install-consumer'
+          Start-Transcript -Path "$buildDir\winui-install-consumer-setup.log" -Force
+          try {
+            ctest --test-dir $buildDir -C Release `
+              -R '^wx_winui_selftest_header_dispatch$' --no-tests=error `
+              --timeout 60 --output-on-failure `
+              --output-junit "$buildDir\winui-header-dispatch.xml" `
+              --output-log "$buildDir\winui-header-dispatch.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            cmake --install $buildDir --config Release --prefix $installDir
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            cmake -S tests/winui/install-consumer -B $consumerDir `
+              -G "Visual Studio 17 2022" -A x64 `
+              "-DCMAKE_PREFIX_PATH=$installDir"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            cmake --build $consumerDir --config Release --parallel 4 -- /noLogo /nr:false
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            # The harness checks each child exit code and its exact success
+            # markers, including startup failures and renderer ownership.
+            ctest --test-dir $consumerDir -C Release `
+              -R '^wx_winui_install_consumer_smoke$' --no-tests=error `
+              --timeout 1500 --output-on-failure `
+              --output-junit "$buildDir\winui-install-consumer.xml" `
+              --output-log "$buildDir\winui-install-consumer.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          finally { Stop-Transcript }
+
+      - name: Verify wxWinUI installed toolkit headers
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          $installDir = Join-Path $buildDir 'install'
+          $contractDir = Join-Path $buildDir 'toolkit-contract'
+          Start-Transcript -Path "$buildDir\winui-toolkit-contract-setup.log" -Force
+          try {
+            cmake -S tests/winui/toolkit-contract -B $contractDir `
+              -G "Visual Studio 17 2022" -A x64 `
+              "-DCMAKE_PREFIX_PATH=$installDir" -DWX_EXPECT_TOOLKIT=winui
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            cmake --build $contractDir --config Release --parallel 4 `
+              --target wx_toolkit_contract -- /noLogo /nr:false
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            # This CTest contract builds only an OBJECT library: no GUI runs.
+            ctest --test-dir $contractDir -C Release `
+              -R '^wx_installed_toolkit_compile_contract$' --no-tests=error `
+              --timeout 120 --output-on-failure `
+              --output-junit "$buildDir\winui-toolkit-contract.xml" `
+              --output-log "$buildDir\winui-toolkit-contract.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          finally { Stop-Transcript }
+
+      - name: Run wxWinUI runtime smoke
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_runtime_smoke$' --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-runtime-smoke.xml" `
+            --output-log "$buildDir\winui-runtime-smoke.log"
+
+      - name: Run wxWinUI Supported V0 gate
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_supported_beta$' --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-supported-beta.xml" `
+            --output-log "$buildDir\winui-supported-beta.log"
+
+      - name: Upload wxWinUI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wxwinui-${{ matrix.linkage }}-test-results
+          path: |
+            build-winui-${{ matrix.linkage }}/winui-*.xml
+            build-winui-${{ matrix.linkage }}/winui-*.log
+            build-winui-${{ matrix.linkage }}/winui-runtime-packages.json
+            build-winui-${{ matrix.linkage }}/Testing/Temporary/LastTest.log
+            build-winui-${{ matrix.linkage }}/Testing/Temporary/LastTestsFailed.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wxwinui-${{ matrix.linkage }}-diagnostics
+          path: |
+            build-winui-${{ matrix.linkage }}/CMakeCache.txt
+            build-winui-${{ matrix.linkage }}/CMakeFiles/CMakeConfigureLog.yaml
+            build-winui-${{ matrix.linkage }}/CMakeFiles/CMakeError.log
+            build-winui-${{ matrix.linkage }}/build.log
+            build-winui-${{ matrix.linkage }}/build.binlog
+          if-no-files-found: ignore
+          retention-days: 7

@@ -76,6 +76,12 @@
 #include "wx/private/rescale.h"
 #include "wx/private/window.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/msw/wrapwin.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+    #include "wx/winui/private/transient.h"
+#endif
+
 #if defined(__WXOSX__)
     // We need wxOSXGetMainScreenContentScaleFactor() declaration.
     #include "wx/osx/core/private.h"
@@ -1530,6 +1536,12 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handlerToRemove)
 
 bool wxWindowBase::HandleWindowEvent(wxEvent& event) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // This non-virtual boundary also protects application-provided event
+    // handlers overriding ProcessEvent() without chaining to its base.
+    wxWinUITLWHostWindowEventGuard winuiHostEventGuard(this);
+#endif
+
     // SafelyProcessEvent() will handle exceptions nicely
     return GetEventHandler()->SafelyProcessEvent(event);
 }
@@ -2188,6 +2200,14 @@ void wxWindowBase::SetHelpText(const wxString& text)
     {
         helpProvider->AddHelp(this, text);
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Context help is also the primary UIA HelpText source for a hosted
+    // control. It has no native geometry/message side effect of its own, so
+    // explicitly dirty the shared slot just like tooltip mutations do.
+    if ( wxWindow * const window = wxDynamicCastThis(wxWindow) )
+        wxWinUITLWHostNotifySlotState(window);
+#endif
 }
 
 // get the help string associated with this window (may be empty)
@@ -3262,13 +3282,27 @@ void wxWindowBase::SetAccessible(wxAccessible* accessible)
     m_accessible = accessible;
     if (m_accessible)
         m_accessible->SetWindow((wxWindow*) this);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWinUITLWHostNotifyAccessibilityAuthority(
+        static_cast<wxWindow *>(this), m_accessible != nullptr);
+#endif
 }
 
 // Returns the accessible object, creating if necessary.
 wxAccessible* wxWindowBase::GetOrCreateAccessible()
 {
     if (!m_accessible)
+    {
         m_accessible = CreateAccessible();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // CreateAccessible() is virtual and can install the object itself
+        // through SetAccessible(), or simply return one. Cover both forms.
+        wxWinUITLWHostNotifyAccessibilityAuthority(
+            static_cast<wxWindow *>(this), m_accessible != nullptr);
+#endif
+    }
     return m_accessible;
 }
 
@@ -3364,9 +3398,67 @@ bool IsInCaptureStack(wxWindowBase* win)
 
 } // wxMouseCapture
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_POPUPWIN
+
+bool wxWinUIPopupReleaseCapture(wxWindow *window)
+{
+    if ( !window )
+        return true;
+
+    const WXHWND expectedHwnd = window->GetHWND();
+    const unsigned long long expectedGeneration =
+        wxWinUIMSWGetNativeHwndGeneration(expectedHwnd);
+    if ( !expectedHwnd || !expectedGeneration ||
+            ::GetCapture() != reinterpret_cast<HWND>(expectedHwnd) )
+    {
+        return true;
+    }
+
+    if ( !wxMouseCapture::stack.empty() &&
+            wxMouseCapture::stack.back() == window )
+    {
+        window->ReleaseMouse();
+    }
+    else
+    {
+        // Native peers/application code can bypass CaptureMouse(). Keep the
+        // host's capture-derived routing state coherent without asking
+        // ReleaseMouse() to pop an entry which does not exist.
+        wxWinUITLWHostNotifyCaptureMutation(window);
+        if ( ::GetCapture() != reinterpret_cast<HWND>(expectedHwnd) ||
+                wxWinUIMSWGetNativeHwndGeneration(expectedHwnd) !=
+                    expectedGeneration )
+        {
+            return true;
+        }
+
+        if ( !::ReleaseCapture() &&
+                ::GetCapture() == reinterpret_cast<HWND>(expectedHwnd) )
+        {
+            wxLogLastError(wxT("ReleaseCapture"));
+        }
+    }
+
+    return ::GetCapture() != reinterpret_cast<HWND>(expectedHwnd) ||
+           wxWinUIMSWGetNativeHwndGeneration(expectedHwnd) !=
+               expectedGeneration;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_POPUPWIN
+
 void wxWindowBase::CaptureMouse()
 {
     wxLogTrace(wxT("mousecapture"), wxT("CaptureMouse(%p)"), static_cast<void*>(this));
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_POPUPWIN
+    // Central popup cancellation removes the manager entry before invoking
+    // arbitrary application callbacks. Once that terminal transaction starts,
+    // allowing a descendant to push itself back on the wx capture stack would
+    // make it impossible to hide the shell without leaving a visible,
+    // unregistered popup behind.
+    if ( wxWinUIPopupBlocksCapture(AsWindow()) )
+        return;
+#endif
 
     wxRecursionGuard guard(wxMouseCapture::changing);
     wxASSERT_MSG( !guard.IsInside(), wxT("recursive CaptureMouse call?") );

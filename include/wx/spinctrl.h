@@ -117,6 +117,10 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 
 #if defined(__WXUNIVERSAL__)
     // nothing, use generic controls
+#elif defined(__WXWINUI__)
+    #define wxHAS_NATIVE_SPINCTRL
+    #define wxHAS_NATIVE_SPINCTRLDOUBLE
+    #include "wx/winui/spinctrl.h"
 #elif defined(__WXMSW__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/msw/spinctrl.h"

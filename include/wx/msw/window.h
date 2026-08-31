@@ -598,7 +598,25 @@ public:
     // wxDPIChangedEvent to let the user code do the same thing as well.
     //
     // Return true if the event was processed, false otherwise.
-    bool MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
+    bool MSWUpdateOnDPIChange(const wxSize& oldDPI,
+                              const wxSize& newDPI);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Apply the two halves of one already-snapshotted transition to this
+    // exact window. The WinUI driver replays Begin(parent), children,
+    // End(parent), preserving the historic MSW ordering without traversing a
+    // hierarchy that application callbacks may have mutated.
+    bool MSWBeginDPIChange(const wxSize& oldDPI,
+                           const wxSize& newDPI);
+    bool MSWEndDPIChange(const wxSize& oldDPI,
+                         const wxSize& newDPI);
+
+    // Re-evaluate an inherited layout direction without turning it into an
+    // explicit per-window override. The common projection invokes the
+    // protected peer hook, so the shared slot and local XAML state converge
+    // under one revision/lifetime transaction.
+    void MSWRefreshInheritedLayoutDirection();
+#endif
 
 protected:
     virtual void WXAdjustFontToOwnPPI(wxFont& font) const override;
@@ -616,6 +634,15 @@ protected:
     MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
     {
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Called by the common, revisioned layout-direction transaction after the
+    // native HWND and shared slot state have been updated. WinUI controls
+    // override this hook for local peer properties instead of overriding the
+    // public setter, so inherited ancestor changes and explicit calls share
+    // exactly the same lifetime/reentrancy discipline.
+    virtual bool MSWOnEffectiveLayoutDirectionChanged() { return true; }
+#endif
 
     // Struct used for MSWGetDarkModeSupport() below.
     // This specifies the arguments to the SetWindowTheme API for dark mode.
@@ -671,6 +698,19 @@ protected:
     // additional (MSW specific) flags
     bool                  m_mouseInWindow:1;
     bool                  m_lastKeydownProcessed:1;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Win32 exposes only the currently effective WS_EX_LAYOUTRTL bit. Keep
+    // the wx request provenance separately so a hot ancestor direction
+    // change updates inherited descendants without overwriting explicit
+    // child LTR/RTL choices.
+    wxLayoutDirection     m_winuiLayoutDirectionRequest;
+    wxLayoutDirection     m_winuiDesiredLayoutDirection;
+    wxLayoutDirection     m_winuiProjectedLayoutDirection;
+    unsigned long long    m_winuiLayoutDirectionRevision;
+    bool                  m_winuiLayoutProjectionActive;
+    bool                  m_winuiLayoutProjectionQuarantined;
+#endif
 
     // the size of one page for scrolling
     int                   m_xThumbSize;
@@ -784,6 +824,12 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxLayoutDirection MSWResolveRequestedLayoutDirection() const;
+    void MSWRequestLayoutDirectionProjection(
+        wxLayoutDirection effectiveDirection);
+#endif
 
     // common part of UnsubclassWin() and DissociateHandle()
     WXHWND DoDetachHWND();

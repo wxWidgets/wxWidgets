@@ -451,6 +451,13 @@ wxTextWidgetImpl * wxGenericComboCtrl::GetTextPeer() const
 }
 #endif
 
+#if defined(__WXWINUI__)
+WXHWND wxGenericComboCtrl::GetEditHWND() const
+{
+    return m_text ? m_text->GetHWND() : GetHWND();
+}
+#endif
+
 #ifdef __WXUNIVERSAL__
 
 bool wxGenericComboCtrl::PerformAction(const wxControlAction& action,

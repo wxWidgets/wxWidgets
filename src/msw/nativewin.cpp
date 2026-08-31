@@ -25,6 +25,11 @@
 #include "wx/nativewin.h"
 #include "wx/msw/private.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/weakref.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -81,12 +86,59 @@ void wxNativeWindow::DoDisown()
     // We don't do anything here, clearing m_ownedByUser flag is enough.
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+WXLRESULT wxNativeWindow::MSWWindowProc(WXUINT nMsg,
+                                        WXWPARAM wParam,
+                                        WXLPARAM lParam)
+{
+    if ( nMsg != WM_DESTROY )
+        return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
+
+    // Call the complete wxWindow/original-WNDPROC chain exactly once while
+    // the external HWND is unquestionably still this native lifetime. Either
+    // callback is allowed to delete this wrapper, so retain no unchecked
+    // access to it across the call.
+    const WXHWND hwnd = GetHWND();
+    const unsigned long long associationGeneration =
+        wxWinUIMSWGetHwndGeneration(this, hwnd);
+    const wxWeakRef<wxWindow> lifetime(this);
+    const WXLRESULT result =
+        wxWindow::MSWWindowProc(nMsg, wParam, lParam);
+
+    wxWindow * const live = lifetime.get();
+    if ( live != this || !hwnd || live->GetHWND() != hwnd ||
+         wxFindWinFromHandle(static_cast<HWND>(hwnd)) != live )
+    {
+        return result;
+    }
+
+    // A nested callback may have changed the wx/HWND association without
+    // deleting either object. Never detach a replacement generation.
+    if ( !associationGeneration ||
+         wxWinUIMSWGetHwndGeneration(live, hwnd) != associationGeneration )
+    {
+        return result;
+    }
+
+    // WM_DESTROY precedes WM_NCDESTROY, hence this is still the exact HWND
+    // lifetime above. Restore its external WNDPROC and retire the wx map now;
+    // the original proc receives WM_NCDESTROY directly afterwards.
+    static_cast<wxNativeWindow *>(live)->wxWindow::DissociateHandle();
+    return result;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 wxNativeWindow::~wxNativeWindow()
 {
     // Restore the original window proc and reset HWND to 0 to prevent it from
-    // being destroyed in the base class dtor if it's owned by user code.
+    // being destroyed in the base class dtor if it's owned by user code. The
+    // owner is also allowed to destroy its HWND before this wrapper: use the
+    // invalid-handle-aware detach path instead of assuming that IsWindow()
+    // still succeeds here.
     if ( m_ownedByUser )
-        UnsubclassWin();
+        DissociateHandle();
 }
 
 // ----------------------------------------------------------------------------

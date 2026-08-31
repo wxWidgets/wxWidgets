@@ -73,6 +73,8 @@ private:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/choice.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/choice.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/choice.h"
 #elif defined(__WXGTK__)

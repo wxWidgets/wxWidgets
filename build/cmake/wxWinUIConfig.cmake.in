@@ -1,0 +1,85 @@
+# wxWinUI installed-consumer support. This file is included by
+# wxWidgetsConfig.cmake before wxWidgetsTargets.cmake.
+
+if(CMAKE_VERSION VERSION_LESS "3.21")
+    message(FATAL_ERROR
+        "The installed wxWinUI package requires CMake 3.21 or newer")
+endif()
+
+if(NOT @wxBUILD_SHARED@)
+    set(_wx_winui3_bootstrap_lib
+        "${CMAKE_CURRENT_LIST_DIR}/winui/lib/Microsoft.WindowsAppRuntime.Bootstrap.lib")
+    set(_wx_winui3_dispatching_lib
+        "${CMAKE_CURRENT_LIST_DIR}/winui/lib/Microsoft.UI.Dispatching.lib")
+
+    foreach(_wx_winui3_import_lib IN ITEMS
+            "${_wx_winui3_bootstrap_lib}"
+            "${_wx_winui3_dispatching_lib}")
+        if(NOT EXISTS "${_wx_winui3_import_lib}")
+            message(FATAL_ERROR
+                "Incomplete static wxWinUI installation: missing "
+                "${_wx_winui3_import_lib}")
+        endif()
+    endforeach()
+
+    if(NOT TARGET wx::winui3_bootstrap)
+        add_library(wx::winui3_bootstrap UNKNOWN IMPORTED GLOBAL)
+        set_target_properties(wx::winui3_bootstrap PROPERTIES
+            IMPORTED_LOCATION "${_wx_winui3_bootstrap_lib}")
+    endif()
+    if(NOT TARGET wx::winui3_dispatching)
+        add_library(wx::winui3_dispatching UNKNOWN IMPORTED GLOBAL)
+        set_target_properties(wx::winui3_dispatching PROPERTIES
+            IMPORTED_LOCATION "${_wx_winui3_dispatching_lib}")
+    endif()
+
+    unset(_wx_winui3_import_lib)
+    unset(_wx_winui3_bootstrap_lib)
+    unset(_wx_winui3_dispatching_lib)
+endif()
+
+# Deploy the framework-dependent, unpackaged WinUI payload next to an
+# executable. Call this once for every external executable linked to wxWinUI.
+function(wx_winui3_deploy_runtime target_name)
+    if(NOT TARGET "${target_name}")
+        message(FATAL_ERROR
+            "wx_winui3_deploy_runtime(): unknown target ${target_name}")
+    endif()
+
+    get_target_property(_wx_winui3_target_type "${target_name}" TYPE)
+    get_target_property(_wx_winui3_target_imported "${target_name}" IMPORTED)
+    if(_wx_winui3_target_imported OR
+            NOT _wx_winui3_target_type STREQUAL "EXECUTABLE")
+        message(FATAL_ERROR
+            "wx_winui3_deploy_runtime() requires a non-imported executable "
+            "target, got ${target_name} (${_wx_winui3_target_type})")
+    endif()
+
+    get_target_property(_wx_winui3_already_deployed
+        "${target_name}" wxWINUI3_RUNTIME_DEPLOYED)
+    if(_wx_winui3_already_deployed)
+        return()
+    endif()
+
+    set(_wx_winui3_deploy_script
+        "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/winui/wxWinUIDeployRuntime.cmake")
+    if(NOT EXISTS "${_wx_winui3_deploy_script}")
+        message(FATAL_ERROR
+            "Incomplete wxWinUI installation: missing deployment script "
+            "${_wx_winui3_deploy_script}")
+    endif()
+
+    set_target_properties("${target_name}" PROPERTIES
+        wxWINUI3_RUNTIME_DEPLOYED TRUE)
+    set(_wx_winui3_deploy_target
+        "${target_name}_winui_runtime_deploy")
+    add_custom_target("${_wx_winui3_deploy_target}"
+        COMMAND "${CMAKE_COMMAND}"
+            "-DWX_WINUI_DEPLOY_DIR=$<TARGET_FILE_DIR:${target_name}>"
+            -P "${_wx_winui3_deploy_script}"
+        COMMENT "Deploying the wxWinUI runtime payload for ${target_name}"
+        VERBATIM)
+    set_property(TARGET "${_wx_winui3_deploy_target}"
+        PROPERTY FOLDER "Build Infrastructure")
+    add_dependencies("${target_name}" "${_wx_winui3_deploy_target}")
+endfunction()

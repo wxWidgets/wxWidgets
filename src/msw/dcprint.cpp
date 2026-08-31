@@ -60,8 +60,90 @@
 #define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
 #define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
 
-// This variable is used in src/msw/printwin.cpp.
-bool wxPrinterOperationCancelled = false;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+namespace
+{
+
+wxMSWPrinterDCNativeOpsForTesting gs_printerDCNativeOpsForTesting;
+
+int InvokeStartDoc(HDC hdc, const DOCINFO* info)
+{
+    const wxMSWPrinterDCNativeOpsForTesting ops =
+        gs_printerDCNativeOpsForTesting;
+    if ( ops.startDoc )
+        return ops.startDoc(ops.context, hdc, info);
+
+    return ::StartDoc(hdc, info);
+}
+
+int InvokeEndDoc(HDC hdc)
+{
+    const wxMSWPrinterDCNativeOpsForTesting ops =
+        gs_printerDCNativeOpsForTesting;
+    if ( ops.endDoc )
+        return ops.endDoc(ops.context, hdc);
+
+    return ::EndDoc(hdc);
+}
+
+int InvokeStartPage(HDC hdc)
+{
+    const wxMSWPrinterDCNativeOpsForTesting ops =
+        gs_printerDCNativeOpsForTesting;
+    if ( ops.startPage )
+        return ops.startPage(ops.context, hdc);
+
+    return ::StartPage(hdc);
+}
+
+int InvokeEndPage(HDC hdc)
+{
+    const wxMSWPrinterDCNativeOpsForTesting ops =
+        gs_printerDCNativeOpsForTesting;
+    if ( ops.endPage )
+        return ops.endPage(ops.context, hdc);
+
+    return ::EndPage(hdc);
+}
+
+} // anonymous namespace
+
+void wxMSWSetPrinterDCNativeOpsForTesting(
+    const wxMSWPrinterDCNativeOpsForTesting& ops)
+{
+    gs_printerDCNativeOpsForTesting = ops;
+}
+
+void wxMSWResetPrinterDCNativeOpsForTesting()
+{
+    gs_printerDCNativeOpsForTesting = {};
+}
+#else
+namespace
+{
+
+int InvokeStartDoc(HDC hdc, const DOCINFO* info)
+{
+    return ::StartDoc(hdc, info);
+}
+
+int InvokeEndDoc(HDC hdc)
+{
+    return ::EndDoc(hdc);
+}
+
+int InvokeStartPage(HDC hdc)
+{
+    return ::StartPage(hdc);
+}
+
+int InvokeEndPage(HDC hdc)
+{
+    return ::EndPage(hdc);
+}
+
+} // anonymous namespace
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -120,6 +202,8 @@ void wxPrinterDCImpl::Init()
 
 bool wxPrinterDCImpl::StartDoc(const wxString& message)
 {
+    m_lastStartDocWasCancelled = false;
+
     if (!m_hDC)
         return false;
 
@@ -137,15 +221,13 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
     docinfo.lpszDatatype = nullptr;
     docinfo.fwType = 0;
 
-    if ( ::StartDoc(GetHdc(), &docinfo) <= 0 )
+    if ( InvokeStartDoc(GetHdc(), &docinfo) <= 0 )
     {
         if ( ::GetLastError() == ERROR_CANCELLED )
         {
             // No need to log anything, this is not an unexpected error.
             //
-            // Also indicate this to wxWindowsPrinter::Print() by setting this
-            // variable.
-            wxPrinterOperationCancelled = true;
+            m_lastStartDocWasCancelled = true;
         }
         else
         {
@@ -160,19 +242,20 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
 
 void wxPrinterDCImpl::EndDoc()
 {
-    if (m_hDC) ::EndDoc((HDC) m_hDC);
+    m_lastEndDocSuccessful =
+        m_hDC && InvokeEndDoc((HDC) m_hDC) > 0;
 }
 
 void wxPrinterDCImpl::StartPage()
 {
-    if (m_hDC)
-        ::StartPage((HDC) m_hDC);
+    m_lastStartPageSuccessful =
+        m_hDC && InvokeStartPage((HDC) m_hDC) > 0;
 }
 
 void wxPrinterDCImpl::EndPage()
 {
-    if (m_hDC)
-        ::EndPage((HDC) m_hDC);
+    m_lastEndPageSuccessful =
+        m_hDC && InvokeEndPage((HDC) m_hDC) > 0;
 }
 
 

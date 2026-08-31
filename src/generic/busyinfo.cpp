@@ -35,13 +35,15 @@
 
 void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 {
-    m_InfoFrame = new wxFrame(flags.m_parent, wxID_ANY, wxString(),
-                              wxDefaultPosition, wxDefaultSize,
-                              wxSIMPLE_BORDER |
-                              wxFRAME_TOOL_WINDOW |
-                              wxSTAY_ON_TOP);
+    wxFrame * const infoFrame =
+        new wxFrame(flags.m_parent, wxID_ANY, wxString(),
+                    wxDefaultPosition, wxDefaultSize,
+                    wxSIMPLE_BORDER |
+                    wxFRAME_TOOL_WINDOW |
+                    wxSTAY_ON_TOP);
+    m_InfoFrame = infoFrame;
 
-    wxPanel* const panel = new wxPanel(m_InfoFrame);
+    wxPanel* const panel = new wxPanel(infoFrame);
 
     wxBoxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
 
@@ -91,20 +93,24 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     sizer->AddStretchSpacer();
 
 #if wxUSE_MARKUP
-    m_text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                               wxDefaultPosition,
-                                               wxDefaultSize,
-                                               wxALIGN_CENTRE);
+    wxControl * const text =
+        new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
+                                          wxDefaultPosition,
+                                          wxDefaultSize,
+                                          wxALIGN_CENTRE);
+    m_text = text;
     if ( !flags.m_text.empty() )
-        m_text->SetLabelMarkup(flags.m_text);
+        text->SetLabelMarkup(flags.m_text);
     else
-        m_text->SetLabelText(flags.m_label);
+        text->SetLabelText(flags.m_label);
 #else
-    m_text = new wxStaticText(panel, wxID_ANY, wxString());
-    m_text->SetLabelText(flags.m_label);
+    wxControl * const text =
+        new wxStaticText(panel, wxID_ANY, wxString());
+    m_text = text;
+    text->SetLabelText(flags.m_label);
 #endif // wxUSE_MARKUP
 
-    sizer->Add(m_text, wxSizerFlags().DoubleBorder().Centre());
+    sizer->Add(text, wxSizerFlags().DoubleBorder().Centre());
 
     sizer->AddStretchSpacer();
 
@@ -114,49 +120,104 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     {
         if ( title )
             title->SetForegroundColour(flags.m_foreground);
-        m_text->SetForegroundColour(flags.m_foreground);
+        text->SetForegroundColour(flags.m_foreground);
     }
 
     if ( flags.m_background.IsOk() )
         panel->SetBackgroundColour(flags.m_background);
 
     if ( flags.m_alpha != wxALPHA_OPAQUE )
-        m_InfoFrame->SetTransparent(flags.m_alpha);
+        infoFrame->SetTransparent(flags.m_alpha);
 
-    m_InfoFrame->SetCursor(*wxHOURGLASS_CURSOR);
+    infoFrame->SetCursor(*wxHOURGLASS_CURSOR);
 
     // We need to accommodate our contents, but also impose some minimal size
     // to make the busy info frame more noticeable.
     wxSize size = panel->GetBestSize();
     size.IncTo(wxSize(400, 80));
 
-    m_InfoFrame->SetClientSize(size);
-    m_InfoFrame->Layout();
+    infoFrame->SetClientSize(size);
+    infoFrame->Layout();
 
-    m_InfoFrame->Centre(wxBOTH);
-    m_InfoFrame->Show(true);
-    m_InfoFrame->Refresh();
-    m_InfoFrame->Update();
+    infoFrame->Centre(wxBOTH);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Busy information is feedback, not a new interaction surface. Keep the
+    // user's active control while still showing the transient TLW.
+    infoFrame->ShowWithoutActivating();
+#else
+    infoFrame->Show(true);
+#endif
+    infoFrame->Refresh();
+    infoFrame->Update();
 }
 
 void wxBusyInfo::UpdateText(const wxString& str)
 {
+    wxControl * const text = m_text.get();
+    if ( !text )
+        return;
+
 #if wxUSE_MARKUP
-    m_text->SetLabelMarkup(str);
+    text->SetLabelMarkup(str);
 #else // !wxUSE_MARKUP
-    m_text->SetLabelText(str);
+    text->SetLabelText(str);
 #endif // wxUSE_MARKUP/!wxUSE_MARKUP
+
+    RefitAfterTextUpdate();
 }
 
 void wxBusyInfo::UpdateLabel(const wxString& str)
 {
-    m_text->SetLabelText(str);
+    wxControl * const text = m_text.get();
+    if ( !text )
+        return;
+
+    text->SetLabelText(str);
+    RefitAfterTextUpdate();
+}
+
+void wxBusyInfo::RefitAfterTextUpdate()
+{
+    wxFrame * const infoFrame = m_InfoFrame.get();
+    wxControl * const text = m_text.get();
+    if ( !infoFrame || !text )
+        return;
+
+    text->InvalidateBestSize();
+
+    wxWindow * const panel = text->GetParent();
+    if ( !panel )
+        return;
+
+    // Realized WinUI templates can make the updated label larger than its
+    // initial estimate. Refit grow-only: long updates are never cropped and a
+    // later short update cannot make this transient jump back and forth.
+    panel->InvalidateBestSize();
+    wxSize size = panel->GetBestSize();
+    size.IncTo(wxSize(400, 80));
+    size.IncTo(infoFrame->GetClientSize());
+    infoFrame->SetClientSize(size);
+    panel->Layout();
+    infoFrame->Layout();
+    infoFrame->Refresh();
+    infoFrame->Update();
 }
 
 wxBusyInfo::~wxBusyInfo()
 {
-    m_InfoFrame->Show(false);
-    m_InfoFrame->Close();
+    wxFrame * const infoFrame = m_InfoFrame.get();
+
+    // Release both trackers before requesting destruction: the frame may be
+    // destroyed synchronously by a port or may already have gone away with
+    // its owner.
+    m_text.Release();
+    m_InfoFrame.Release();
+
+    if ( infoFrame )
+    {
+        infoFrame->Hide();
+        infoFrame->Destroy();
+    }
 }
 
 #endif // wxUSE_BUSYINFO

@@ -672,6 +672,7 @@
 #else
     #cmakedefine01 wxUSE_WINRT
 #endif
+#cmakedefine01 wxUSE_WINUI3
 
 #cmakedefine01 wxUSE_DC_CACHEING
 
@@ -1162,4 +1163,3 @@
 /* #undef wxHAS_WORKING_GTK_DC_BLIT */
 
 #endif /* __WX_SETUP_H__ */
-

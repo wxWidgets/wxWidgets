@@ -19,6 +19,7 @@
 #include "wx/timer.h"
 #include "wx/settings.h"
 
+#include <cstdint>
 #include <memory>
 
 // ============================================================================
@@ -500,7 +501,9 @@ public:
     bool HasHeader() const
         { return InReportView() && !HasFlag(wxLC_NO_HEADER); }
 
-    void HighlightAll( bool on );
+    // Return false if a synchronous notification destroyed this window or
+    // changed the item topology, making all caller-held indices stale.
+    bool HighlightAll( bool on );
 
     // all these functions only do something if the line is currently visible
 
@@ -522,7 +525,7 @@ public:
     // more efficient for virtual list controls!
     //
     // NB: unlike HighlightLine() this one does refresh the lines on screen
-    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
+    bool HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
                          SendEvent sendEvent = SendEvent_Normal );
 
     // toggle the line state and refresh it
@@ -639,10 +642,10 @@ public:
 
     int GetCountPerPage() const;
 
-    void SetItem( wxListItem &item );
+    bool SetItem( wxListItem &item );
     void GetItem( wxListItem &item ) const;
-    void SetItemState( long item, long state, long stateMask );
-    void SetItemStateAll( long state, long stateMask );
+    bool SetItemState( long item, long state, long stateMask );
+    bool SetItemStateAll( long state, long stateMask );
     int GetItemState( long item, long stateMask ) const;
     bool GetItemRect( long item, wxRect &rect ) const
     {
@@ -689,8 +692,8 @@ public:
     void RecalculatePositionsAndRefresh();
 
     long GetNextItem( long item, int geometry, int state ) const;
-    void DeleteItem( long index );
-    void DeleteAllItems();
+    bool DeleteItem( long index );
+    bool DeleteAllItems();
     void DeleteColumn( int col );
     void DeleteEverything();
     void EnsureVisible( long index );
@@ -698,10 +701,10 @@ public:
     long FindItem( long start, wxUIntPtr data);
     long FindItem( const wxPoint& pt );
     long HitTest( int x, int y, int &flags ) const;
-    void InsertItem( wxListItem &item );
+    bool InsertItem( wxListItem &item );
     long InsertColumn( long col, const wxListItem &item );
     int GetItemWidthWithImage(wxListItem * item);
-    void SortItems( wxListCtrlCompare fn, wxIntPtr data );
+    bool SortItems( wxListCtrlCompare fn, wxIntPtr data );
 
     size_t GetItemCount() const;
     bool IsEmpty() const { return GetItemCount() == 0; }
@@ -777,6 +780,11 @@ protected:
     // the array of all line objects for a non virtual list control (for the
     // virtual list control we only ever use m_lines[0])
     std::vector<wxListLineData> m_lines;
+
+    // Incremented for every item topology mutation. Synchronous list events
+    // may re-enter and mutate the same control, so callers use this to avoid
+    // continuing an outer operation with stale indices after the callback.
+    std::uint64_t m_structureRevision;
 
     // the list of column objects
     std::vector<wxListHeaderData> m_columns;
@@ -908,7 +916,8 @@ private:
     void ExtendSelection(size_t oldCurrent, size_t newCurrent);
 
     // delete all items but don't refresh: called from dtor
-    void DoDeleteAllItems();
+    // Return false if an event handler destroyed this window.
+    bool DoDeleteAllItems();
 
     // Compute the minimal width needed to fully display the column header.
     int ComputeMinHeaderWidth(const wxListHeaderData* header) const;

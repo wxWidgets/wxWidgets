@@ -400,7 +400,7 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
     SetCursor(* wxSTANDARD_CURSOR);
 
     // Erase sash tracker
-    if ( HasFlag(wxSP_LIVE_UPDATE) )
+    if ( !HasFlag(wxSP_LIVE_UPDATE) )
     {
         m_overlay.Reset();
     }

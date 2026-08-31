@@ -107,8 +107,9 @@ public:
             wxBusyInfo(wxBusyInfoFlags().Parent(parent).Label(message))
         @endcode
 
-        @note If @a parent is not @NULL you must ensure that it is not
-              closed while the busy info is shown.
+        If @a parent is destroyed while the busy info is shown, its information
+        window is destroyed with it. Subsequent text updates are harmless and
+        the wxBusyInfo destructor remains safe.
     */
     wxBusyInfo(const wxString& msg, wxWindow* parent = nullptr);
 

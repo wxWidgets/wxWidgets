@@ -47,6 +47,12 @@ protected:
     wxString m_title,
              m_message;
 
+    // Create and show the generic popup, returning its wx lifetime object.
+    // Ports which need to integrate transient windows with a central
+    // cancellation registry can use this seam while the public ShowFor()
+    // contract remains unchanged.
+    wxWindow* ShowForPopup(wxWindow* win, const wxRect* rect = nullptr);
+
 private:
     wxBitmapBundle m_icon;
 

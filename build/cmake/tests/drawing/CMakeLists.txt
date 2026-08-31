@@ -36,6 +36,12 @@ set(TEST_DRAWING_DATA
 wx_add_test(test_drawing CONSOLE_GUI ${TEST_DRAWING_SRC}
     DATA ${TEST_DRAWING_DATA}
     )
+if(TARGET test_drawing)
+    set_tests_properties(test_drawing PROPERTIES
+        ENVIRONMENT
+            "WX_TEST_SUITE_REFERENCE_DIR=${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
+        )
+endif()
 if(wxUSE_SOCKETS)
     wx_exe_link_libraries(test_drawing wxnet)
 endif()

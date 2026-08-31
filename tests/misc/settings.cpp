@@ -18,6 +18,11 @@
 #include "wx/brush.h"
 #include "wx/pen.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/msw/private/darkmode.h"
+    #include "wx/msw/private/metrics.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // tests
 // ----------------------------------------------------------------------------
@@ -25,7 +30,34 @@
 TEST_CASE("Settings::GetColour", "[settings]")
 {
     for (unsigned int i=wxSYS_COLOUR_SCROLLBAR; i < wxSYS_COLOUR_MAX; i++)
-        CHECK( wxSystemSettings::GetColour((wxSystemColour)i).IsOk() );
+        REQUIRE( wxSystemSettings::GetColour((wxSystemColour)i).IsOk() );
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( !wxMSWDarkMode::IsActive() && !wxMSWImpl::IsHighContrast() )
+    {
+        const wxSystemColour textColours[] =
+        {
+            wxSYS_COLOUR_WINDOWTEXT,
+            wxSYS_COLOUR_LISTBOXTEXT,
+            wxSYS_COLOUR_BTNTEXT,
+            wxSYS_COLOUR_CAPTIONTEXT,
+            wxSYS_COLOUR_INACTIVECAPTIONTEXT,
+            wxSYS_COLOUR_MENUTEXT,
+            wxSYS_COLOUR_INFOTEXT,
+            wxSYS_COLOUR_GRAYTEXT,
+            wxSYS_COLOUR_HIGHLIGHTTEXT,
+            wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT
+        };
+
+        for ( const wxSystemColour textColour : textColours )
+        {
+            // Exact black is reserved for the WinUI Mica composition key and
+            // must never be returned as a default light-theme text colour.
+            REQUIRE(
+                wxSystemSettings::GetColour(textColour) != wxColour(0, 0, 0));
+        }
+    }
+#endif
 }
 
 TEST_CASE("Settings::GetFont", "[settings]")

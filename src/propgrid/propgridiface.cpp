@@ -23,6 +23,9 @@
 #endif
 
 #include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/private.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/weakref.h"
 
 // ----------------------------------------------------------------------------
 // VariantDatas
@@ -178,10 +181,17 @@ wxPGProperty* wxPropertyGridInterface::GetSelection() const
 
 bool wxPropertyGridInterface::ClearSelection( bool validation )
 {
+    // DoClearSelection() can run validation and application code. Capture the
+    // concrete window first so that a destroyed manager/interface is never
+    // dereferenced after the callback returns.
+    wxPropertyGrid* const pg = GetPropertyGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
     bool res = DoClearSelection(validation, wxPGSelectPropertyFlags::DontSendEvent);
-    wxPropertyGrid* pg = GetPropertyGrid();
-    if ( pg )
+    if ( pg && wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
         pg->Refresh();
+    else if ( pg )
+        return false;
+
     return res;
 }
 
@@ -285,16 +295,20 @@ void wxPropertyGridInterface::SetPropertyReadOnly( wxPGPropArg id, bool set, wxP
 bool wxPropertyGridInterface::ExpandAll( bool doExpand )
 {
     wxPropertyGridPageState* state = m_pState;
+    wxPropertyGrid* const pg = state ? state->GetGrid() : nullptr;
+    wxCHECK_MSG( pg, false, wxS("property-grid page has no grid") );
+    const wxWeakRef<wxWindow> weakGrid(pg);
 
     if ( !state->DoGetRoot()->HasAnyChild() )
         return true;
 
-    wxPropertyGrid* pg = state->GetGrid();
-
     if ( GetSelection() && GetSelection() != state->DoGetRoot() &&
          !doExpand )
     {
-        pg->DoClearSelection();
+        if ( !pg->DoClearSelection() )
+            return false;
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
+            return false;
     }
 
     wxPGVIterator it;
@@ -322,8 +336,11 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
     }
 
     pg->RecalculateVirtualSize();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
+        return false;
 
-    RefreshGrid();
+    if ( pg->GetState() == state && !pg->IsFrozen() )
+        pg->Refresh();
 
     return true;
 }

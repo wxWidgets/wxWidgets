@@ -106,6 +106,12 @@ public:
     // normal frames but is overridden by wxMDIParentFrame
     virtual WXHMENU MSWGetActiveMenu() const { return m_hMenu; }
 
+#ifdef __WXWINUI__
+    // Rebuild the WinUI menu bar after the wxMenuBar contents changed; called
+    // from wxMenuBar::Refresh() under the WinUI toolkit.
+    void MSWRefreshWinUIMenuBar();
+#endif
+
     virtual bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu) override;
     virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu) override;
 
@@ -141,6 +147,12 @@ protected:
     virtual void InternalSetMenuBar();
 #endif // wxUSE_MENUS_NATIVE
 
+#if wxUSE_MENUS && defined(__WXWINUI__)
+    // also treat the WinUI menu-bar window as one of the frame "bars" so it is
+    // excluded from the automatic single-child layout.
+    virtual bool IsOneOfBars(const wxWindow *win) const override;
+#endif
+
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
 
@@ -172,6 +184,15 @@ protected:
     // The number of currently opened menus: 0 initially, 1 when a top level
     // menu is opened, 2 when its submenu is opened and so on.
     int m_menuDepth;
+
+#ifdef __WXWINUI__
+    // Under the WinUI toolkit the native menu bar is replaced by a WinUI
+    // MenuBar hosted in this child window across the top of the frame.
+    wxWindow *m_winuiMenuBarWin = nullptr;
+    // Reject an outer replacement superseded reentrantly from a menu CLOSE
+    // handler. The newest generation is the only one allowed to publish.
+    unsigned long long m_winuiMenuBarGeneration = 0;
+#endif // __WXWINUI__
 #endif // wxUSE_MENUS
 
 private:
@@ -184,6 +205,10 @@ private:
 
 #if wxUSE_TASKBARBUTTON
     wxTaskBarButton* m_taskBarButton;
+    // Initial controller construction crosses the injectable COM factory and
+    // Initialize() boundary. Nested access must never publish a second owner.
+    bool m_taskBarButtonCreationInProgress;
+    unsigned long long m_taskBarButtonRevision;
 #endif
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame);

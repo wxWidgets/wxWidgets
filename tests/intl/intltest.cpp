@@ -18,10 +18,10 @@
 #endif // WX_PRECOMP
 
 #include "wx/intl.h"
+#include "wx/filename.h"
 #include "wx/translation.h"
 #include "wx/uilocale.h"
 #include "wx/scopeguard.h"
-#include "wx/filename.h"
 
 #include "wx/private/glibc.h"
 

@@ -63,6 +63,25 @@ public:
 
     // Windows callbacks
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) override;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // WinUI dialogs use the regular frame window class and so don't have
+    // DefDlgProc() to provide the usual dialog keyboard contract. Keep this
+    // fallback on the dialog itself so island and native children use exactly
+    // the same wx-level button/validation path.
+    bool WinUIHandleEscapeKey();
+    bool WinUIActivateDefaultButton();
+    // Run the native wx modal loop without firing wxModalDialogHook again.
+    // WinUI common-dialog presenters already fired the hook for their public
+    // source object; their private shell must remain invisible to that API.
+    int WinUIShowModalWithoutHook();
+    bool Destroy() override;
+    bool WinUICompleteDeferredModalDestroy();
+    void WinUIBeginExternalModalLifetime();
+    void WinUIArmExternalModalLifetime();
+    void WinUIEndExternalModalLifetime();
+    bool MSWTranslateMessage(WXMSG* msg) override;
+    bool MSWProcessMessage(WXMSG* msg) override;
+#endif
 
 protected:
     // common part of all ctors
@@ -85,6 +104,17 @@ private:
 
     // this pointer is non-null only while the modal event loop is running
     wxDialogModalData *m_modalData;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void WinUIOnExternalParentDestroy(wxWindowDestroyEvent& event);
+
+    unsigned m_winuiExternalModalDepth = 0;
+    bool m_winuiExternalModalArmed = false;
+    bool m_winuiExternalDestroyRequested = false;
+    wxWindow *m_winuiExternalParent = nullptr;
+    bool m_winuiExternalParentBound = false;
+    bool m_winuiExternalParentDestroyDispatch = false;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS(wxDialog);
     wxDECLARE_NO_COPY_CLASS(wxDialog);

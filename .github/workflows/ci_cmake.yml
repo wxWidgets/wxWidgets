@@ -244,13 +244,15 @@ jobs:
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
+        timeout-minutes: 20
         working-directory: build_cmake
         run: |
           . ../build/tools/httpbin.sh
 
           httpbin_launch
 
-          ctest -V -C Debug -E test_drawing --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          # Run test_gui once, in the separately bounded GUI step below.
+          ctest -V -C Debug -E '(^test_gui$|test_drawing)' --timeout 300 --output-on-failure --interactive-debug-mode 0 . || rc=$?
           if [ -n "$rc" ]; then
               httpbin_show_log
               exit $rc
@@ -258,9 +260,11 @@ jobs:
 
       - name: Testing GUI
         if: matrix.test_gui == '1'
+        timeout-minutes: 20
         working-directory: build_cmake\lib\vc_x64_dll
         run: |
-          ./test_gui.exe
+          # Print completed cases so a stalled suite doesn't hide its progress.
+          ./test_gui.exe --durations yes
 
       - name: Testing installation
         if: matrix.skip_installation != true

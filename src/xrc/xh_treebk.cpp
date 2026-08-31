@@ -21,8 +21,12 @@
 
 #include "wx/treebook.h"
 #include "wx/imaglist.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
 
 #include "wx/xml/xml.h"
+
+#include "xmlrespriv.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTreebookXmlHandler, wxXmlResourceHandler);
 
@@ -72,15 +76,75 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
 {
     if (m_class == wxT("wxTreebook"))
     {
-        XRC_MAKE_INSTANCE(tbk, wxTreebook)
+        const bool factoryOwned =
+            wxXRCIsCurrentInstanceFactoryOwned(this);
+        const bool ownsBook = m_instance == nullptr || factoryOwned;
+        wxTreebook* const tbk =
+            m_instance ? wxDynamicCast(m_instance, wxTreebook)
+                       : new wxTreebook;
+        if ( !tbk )
+        {
+            if ( factoryOwned )
+            {
+                wxObject* const wrongInstance = m_instance;
+                m_instance = nullptr;
+                delete wrongInstance;
+            }
+            ReportError("provided instance is not a wxTreebook");
+            return nullptr;
+        }
 
-        tbk->Create(m_parentAsWindow,
-                    GetID(),
-                    GetPosition(), GetSize(),
-                    GetStyle(wxT("style")),
-                    GetName());
+        const wxWeakRef<wxWindow> weakBook(tbk);
+        wxWindow* const parent = m_parentAsWindow;
+        const wxWeakRef<wxWindow> weakParent(parent);
+        const auto contextIsLive = [&]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakBook, tbk) &&
+                   (!parent ||
+                    wxWeakWindowIsAvailableForCallbacks(weakParent, parent));
+        };
+        const auto createdBookIsLive = [&]()
+        {
+            return contextIsLive() && tbk->GetParent() == parent;
+        };
+        const auto discardOwnedBook = [&]()
+        {
+            if ( ownsBook && weakBook.get() == tbk &&
+                    !wxWindowItselfIsUnavailableForCallbacks(tbk) )
+            {
+                delete tbk;
+            }
+        };
+
+        const bool hidden = GetBool(wxT("hidden"), false);
+        const wxWindowID id = GetID();
+        const wxPoint position = GetPosition();
+        const wxSize size = GetSize();
+        const long style = GetStyle(wxT("style"));
+        const wxString name = GetName();
+        if ( !contextIsLive() )
+        {
+            discardOwnedBook();
+            return nullptr;
+        }
+
+        if ( hidden )
+            tbk->Hide();
+        if ( !contextIsLive() )
+        {
+            discardOwnedBook();
+            return nullptr;
+        }
+        const bool created =
+            tbk->Create(parent, id, position, size, style, name);
+        if ( !created || !createdBookIsLive() )
+        {
+            discardOwnedBook();
+            return nullptr;
+        }
 
         wxTreebook * old_par = m_tbk;
+        const wxWeakRef<wxWindow> weakOld(old_par);
         m_tbk = tbk;
 
         wxArrayTbkPageIndexes old_treeContext = m_treeContext;
@@ -89,30 +153,71 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         wxVector<int> parentsSave;
         m_pageParents.swap(parentsSave);
 
-        DoCreatePages(m_tbk);
+        wxScopeGuard restoreBookContext = wxMakeGuard(
+            [this, old_par, weakOld, &old_treeContext, &parentsSave]()
+            {
+                m_pageParents.swap(parentsSave);
+                m_treeContext = old_treeContext;
+
+                m_tbk = nullptr;
+                if ( old_par &&
+                        wxWeakWindowIsAvailableForCallbacks(
+                            weakOld, old_par) )
+                {
+                    m_tbk = old_par;
+                }
+            });
+        wxUnusedVar(restoreBookContext);
+
+        if ( !DoCreatePagesSafely(tbk) || !createdBookIsLive() )
+        {
+            discardOwnedBook();
+            return nullptr;
+        }
 
         wxXmlNode *node = GetParamNode("object");
-        int pageIndex = 0;
-        for (unsigned int i = 0; i < m_tbk->GetPageCount(); i++)
+        if ( !createdBookIsLive() )
         {
-            if ( m_tbk->GetPage(i) )
+            discardOwnedBook();
+            return nullptr;
+        }
+
+        int pageIndex = 0;
+        const size_t pageCount = tbk->GetPageCount();
+        if ( !createdBookIsLive() )
+        {
+            discardOwnedBook();
+            return nullptr;
+        }
+
+        for ( size_t i = 0; i < pageCount; ++i )
+        {
+            if ( tbk->GetPage(i) )
             {
+                if ( !createdBookIsLive() )
+                {
+                    discardOwnedBook();
+                    return nullptr;
+                }
+
                 wxXmlNode *child = node->GetChildren();
                 while (child)
                 {
                     if (child->GetName() == "expanded" && child->GetNodeContent() == "1")
-                        m_tbk->ExpandNode(pageIndex, true);
+                    {
+                        tbk->ExpandNode(pageIndex, true);
+                        if ( !createdBookIsLive() )
+                        {
+                            discardOwnedBook();
+                            return nullptr;
+                        }
+                    }
 
                     child = child->GetNext();
                 }
                 pageIndex++;
             }
         }
-
-        m_treeContext = old_treeContext;
-        m_tbk = old_par;
-
-        m_pageParents.swap(parentsSave);
 
         return tbk;
     }

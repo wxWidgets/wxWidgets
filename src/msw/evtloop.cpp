@@ -30,6 +30,10 @@
 #include "wx/thread.h"
 #include "wx/except.h"
 #include "wx/msw/private.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+    #include "wx/winui/private/inputtest.h"
+#endif
 
 #include "wx/tooltip.h"
 #if wxUSE_THREADS
@@ -58,6 +62,38 @@ bool wxGUIEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
 
     return false;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+bool wxWinUI3AllowMessageProcessing(wxWindow *logicalOwner)
+{
+    return logicalOwner && wxGUIEventLoop::AllowProcessing(logicalOwner);
+}
+
+bool wxWinUI3ConsumeBlockedKeyboardMessage(WXMSG *msg)
+{
+    if ( !msg ||
+            (msg->message != WM_KEYDOWN &&
+             msg->message != WM_SYSKEYDOWN) ||
+            !wxVKBlockedByKeyboardHook )
+        return false;
+
+    if ( msg->wParam == wxVKBlockedByKeyboardHook )
+    {
+        wxVKBlockedByKeyboardHook = 0;
+        return true;
+    }
+
+    wxLogDebug("Unexpected keyboard message for %x after hook blocked %x",
+               static_cast<unsigned>(msg->wParam),
+               static_cast<unsigned>(wxVKBlockedByKeyboardHook));
+    return false;
+}
+
+void wxWinUI3SetBlockedKeyboardKeyForTesting(WXWPARAM key)
+{
+    wxVKBlockedByKeyboardHook = static_cast<WPARAM>(key);
+}
+#endif
 
 bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 {
@@ -120,10 +156,29 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 
 void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Normally every keyboard message already ran through the thread-wide
+    // WH_GETMESSAGE hook. If installing (or later removing) that hook failed,
+    // run the identical navigation/accelerator -> XAML pipeline here. Never do both:
+    // ContentPreTranslateMessage must see a message exactly once.
+    if ( !wxWinUI3IsGetMessageHookActive() &&
+            wxWinUI3PreProcessMessage(msg) )
+    {
+        return;
+    }
+
+    if ( wxWinUI3DispatchIslandKeyboard(msg) )
+        return;
+#endif
+
     // Workaround for the workaround for the problem of IME hanging if it
     // doesn't get all keyboard messages in wxKeyboardHook(): as we can't
     // afford to ignore the keyboard event at Windows level, we ignore it here
     // instead.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUI3ConsumeBlockedKeyboardMessage(msg) )
+        return;
+#else
     if ( msg->message == WM_KEYDOWN && wxVKBlockedByKeyboardHook )
     {
         if ( msg->wParam == wxVKBlockedByKeyboardHook )
@@ -139,6 +194,7 @@ void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
                        static_cast<unsigned>(wxVKBlockedByKeyboardHook));
         }
     }
+#endif
 
     // give us the chance to preprocess the message first
     if ( !PreProcessMessage(msg) )

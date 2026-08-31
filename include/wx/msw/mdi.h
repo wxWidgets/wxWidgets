@@ -120,6 +120,7 @@ public:
 protected:
 #if wxUSE_MENUS_NATIVE
     virtual void InternalSetMenuBar() override;
+    virtual void DetachMenuBar() override;
 #endif // wxUSE_MENUS_NATIVE
 
     virtual WXHICON GetDefaultIcon() const override;

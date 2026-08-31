@@ -56,6 +56,13 @@
 #include "wx/persist/toplevel.h"
 #include "wx/persist/treebook.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+    #define WXWINUI_WIDGETS_LOG(...) wxWinUIDebugLog(__VA_ARGS__)
+#else
+    #define WXWINUI_WIDGETS_LOG(...) ((void)0)
+#endif
+
 #include "widgets.h"
 
 #include "../sample.xpm"
@@ -889,6 +896,9 @@ void WidgetsFrame::OnGoToPage(wxCommandEvent& event)
 
 void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 {
+    WXWINUI_WIDGETS_LOG("WidgetsFrame::OnSetTooltip enter frame=%p page=%p",
+                        static_cast<void *>(this),
+                        static_cast<void *>(CurrentPage()));
     wxTextEntryDialog dialog
                       (
                         this,
@@ -897,13 +907,28 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
                         WidgetsPage::GetAttrs().m_tooltip
                       );
 
-    if ( dialog.ShowModal() != wxID_OK )
+    WXWINUI_WIDGETS_LOG("WidgetsFrame::OnSetTooltip before ShowModal dialog=%p",
+                        static_cast<void *>(&dialog));
+    const int rc = dialog.ShowModal();
+    WXWINUI_WIDGETS_LOG("WidgetsFrame::OnSetTooltip after ShowModal dialog=%p rc=%d",
+                        static_cast<void *>(&dialog),
+                        rc);
+
+    if ( rc != wxID_OK )
+    {
+        WXWINUI_WIDGETS_LOG("WidgetsFrame::OnSetTooltip cancelled");
         return;
+    }
 
     WidgetsPage::GetAttrs().m_tooltip = dialog.GetValue();
     WidgetsPage::GetAttrs().m_tooltip.Replace("\\n", "\n");
+    WXWINUI_WIDGETS_LOG("WidgetsFrame::OnSetTooltip before SetUpWidget tooltipLen=%lu page=%p",
+                        static_cast<unsigned long>(WidgetsPage::GetAttrs().m_tooltip.length()),
+                        static_cast<void *>(CurrentPage()));
 
     CurrentPage()->SetUpWidget();
+    WXWINUI_WIDGETS_LOG("WidgetsFrame::OnSetTooltip after SetUpWidget page=%p",
+                        static_cast<void *>(CurrentPage()));
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -1461,6 +1486,10 @@ WidgetAttributes& WidgetsPage::GetAttrs()
 void WidgetsPage::SetUpWidget()
 {
     const Widgets widgets = GetWidgets();
+    WXWINUI_WIDGETS_LOG("WidgetsPage::SetUpWidget enter page=%p widgets=%lu tooltipLen=%lu",
+                        static_cast<void *>(this),
+                        static_cast<unsigned long>(widgets.size()),
+                        static_cast<unsigned long>(GetAttrs().m_tooltip.length()));
 
     for ( Widgets::const_iterator it = widgets.begin();
             it != widgets.end();
@@ -1469,7 +1498,16 @@ void WidgetsPage::SetUpWidget()
         wxCHECK_RET(*it, "null widget");
 
 #if wxUSE_TOOLTIPS
-        (*it)->SetToolTip(GetAttrs().m_tooltip);
+        wxWindow *widget = *it;
+        WXWINUI_WIDGETS_LOG("WidgetsPage::SetUpWidget before SetToolTip widget=%p hwnd=%p class=%s",
+                            static_cast<void *>(widget),
+                            reinterpret_cast<void *>(widget->GetHWND()),
+                            widget->GetClassInfo()
+                                ? widget->GetClassInfo()->GetClassName()
+                                : wxS("<null>"));
+        widget->SetToolTip(GetAttrs().m_tooltip);
+        WXWINUI_WIDGETS_LOG("WidgetsPage::SetUpWidget after SetToolTip widget=%p",
+                            static_cast<void *>(widget));
 #endif // wxUSE_TOOLTIPS
 #if wxUSE_FONTDLG
         if ( GetAttrs().m_font.IsOk() )
@@ -1498,6 +1536,8 @@ void WidgetsPage::SetUpWidget()
 
         (*it)->Refresh();
     }
+    WXWINUI_WIDGETS_LOG("WidgetsPage::SetUpWidget after widgets page=%p",
+                        static_cast<void *>(this));
 
     if ( GetAttrs().m_colPageBg.IsOk() )
     {

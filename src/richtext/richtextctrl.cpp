@@ -30,6 +30,8 @@
 #include "wx/fontenum.h"
 #include "wx/accel.h"
 
+#include <vector>
+
 #if defined (__WXGTK__) || defined(__WXX11__)
 #define wxHAVE_PRIMARY_SELECTION 1
 #else
@@ -174,6 +176,7 @@ wxBEGIN_EVENT_TABLE(wxRichTextCtrl, wxControl)
     EVT_CONTEXT_MENU(wxRichTextCtrl::OnContextMenu)
     EVT_SYS_COLOUR_CHANGED(wxRichTextCtrl::OnSysColourChanged)
     EVT_TIMER(wxID_ANY, wxRichTextCtrl::OnTimer)
+    EVT_DROP_FILES(wxRichTextCtrl::OnDropFiles)
 
     EVT_MENU(wxID_UNDO, wxRichTextCtrl::OnUndo)
     EVT_UPDATE_UI(wxID_UNDO, wxRichTextCtrl::OnUpdateUndo)
@@ -3200,6 +3203,170 @@ wxString wxRichTextCtrl::GetStringSelection() const
     GetSelection(&from, &to);
 
     return GetRange(from, to);
+}
+
+wxTextSearchResult
+wxRichTextCtrl::SearchText(const wxTextSearch& search) const
+{
+    const size_t searchLength = search.m_searchValue.length();
+
+    if ( search.m_searchValue.empty() || search.m_startingPosition < -1 )
+        return wxTextSearchResult();
+
+    const wxRichTextParagraphLayoutBox* const focus = GetFocusObject();
+    if ( !focus )
+        return wxTextSearchResult();
+
+    const wxRichTextRange searchRange = focus->GetOwnRange();
+    if ( search.m_startingPosition != -1 &&
+         (search.m_startingPosition < searchRange.GetStart() ||
+          search.m_startingPosition > searchRange.GetEnd()) )
+    {
+        return wxTextSearchResult();
+    }
+
+    const wxString needle = search.m_matchCase
+        ? search.m_searchValue
+        : search.m_searchValue.Lower();
+
+    // wxRichText positions are not offsets in GetValue(): an image, table,
+    // text box or field occupies one position in its parent even though its
+    // text is either omitted or flattened by GetValue(). Also, each editable
+    // top-level object (the main buffer, a text box or a table cell) has its
+    // own position space. Build searchable runs directly from the current
+    // focus object's immediate paragraphs so that every returned offset stays
+    // in that exact public position space. Non-text children terminate a run:
+    // a match must never tunnel through an embedded object.
+    struct TextRun
+    {
+        wxString text;
+        long start = 0;
+    };
+
+    std::vector<TextRun> runs;
+    TextRun current;
+    const auto finishRun = [&runs, &current]()
+    {
+        if ( !current.text.empty() )
+        {
+            runs.push_back(current);
+            current = TextRun();
+        }
+    };
+    const auto appendText = [&current, &finishRun](long position,
+                                                   const wxString& text)
+    {
+        if ( text.empty() )
+            return;
+
+        if ( current.text.empty() )
+        {
+            current.start = position;
+        }
+        else if ( position !=
+                    current.start + static_cast<long>(current.text.length()) )
+        {
+            // A malformed or custom object tree must not make the position
+            // mapping approximate. Split at any discontinuity and preserve
+            // the exact range of both sides.
+            finishRun();
+            current.start = position;
+        }
+
+        current.text += text;
+    };
+
+    for ( wxRichTextObjectList::compatibility_iterator paragraphNode =
+              focus->GetChildren().GetFirst();
+          paragraphNode;
+          paragraphNode = paragraphNode->GetNext() )
+    {
+        const wxRichTextParagraph* const paragraph =
+            wxDynamicCast(paragraphNode->GetData(), wxRichTextParagraph);
+        if ( !paragraph )
+        {
+            finishRun();
+            continue;
+        }
+
+        for ( wxRichTextObjectList::compatibility_iterator childNode =
+                  paragraph->GetChildren().GetFirst();
+              childNode;
+              childNode = childNode->GetNext() )
+        {
+            const wxRichTextPlainText* const plain =
+                wxDynamicCast(childNode->GetData(), wxRichTextPlainText);
+            if ( plain )
+            {
+                appendText(plain->GetRange().GetStart(), plain->GetText());
+            }
+            else
+            {
+                finishRun();
+            }
+        }
+
+        // Paragraph terminators are real public text positions except for the
+        // final paragraph's caret-only terminator.
+        if ( paragraphNode->GetNext() )
+            appendText(paragraph->GetRange().GetEnd(), "\n");
+    }
+    finishRun();
+
+    const long lowerBound = search.m_startingPosition == -1
+        ? searchRange.GetStart()
+        : search.m_startingPosition;
+    const long upperBound = search.m_startingPosition == -1
+        ? searchRange.GetEnd()
+        : search.m_startingPosition;
+
+    wxTextSearchResult best;
+    for ( const TextRun& run : runs )
+    {
+        if ( run.text.length() < searchLength )
+            continue;
+
+        const wxString haystack = search.m_matchCase
+            ? run.text
+            : run.text.Lower();
+        size_t pos = 0;
+        for ( ;; )
+        {
+            pos = haystack.find(needle, pos);
+            if ( pos == wxString::npos )
+                break;
+
+            const bool wholeWord =
+                !search.m_wholeWord ||
+                ((pos == 0 || !wxIsalnum(run.text[pos - 1])) &&
+                 (pos + searchLength == run.text.length() ||
+                  !wxIsalnum(run.text[pos + searchLength])));
+            if ( wholeWord )
+            {
+                const long start =
+                    run.start + static_cast<long>(pos);
+                const long end =
+                    start + static_cast<long>(searchLength);
+                if ( search.m_direction == wxTextSearch::Direction::Down )
+                {
+                    if ( start >= lowerBound &&
+                         (!best || start < best.m_start) )
+                    {
+                        best = wxTextSearchResult(start, end);
+                    }
+                }
+                else if ( end <= upperBound &&
+                          (!best || start > best.m_start) )
+                {
+                    best = wxTextSearchResult(start, end);
+                }
+            }
+
+            ++pos;
+        }
+    }
+
+    return best;
 }
 
 // ----------------------------------------------------------------------------

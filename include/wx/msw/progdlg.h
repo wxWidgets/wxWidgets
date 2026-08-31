@@ -62,7 +62,7 @@ private:
 
     // Dispatch the pending events to let the windows to update, just as the
     // generic version does. This is done as part of DoNativeBeforeUpdate().
-    void DispatchEvents();
+    bool DispatchEvents();
 
     // Updates the various timing information for both determinate
     // and indeterminate modes. Requires the shared object to have
@@ -82,6 +82,7 @@ private:
     wxProgressDialogTaskRunner *m_taskDialogRunner;
 
     wxProgressDialogSharedData *m_sharedData;
+    bool m_destroying;
 
     // Store the message and title we currently use to be able to return it
     // from Get{Message,Title}()

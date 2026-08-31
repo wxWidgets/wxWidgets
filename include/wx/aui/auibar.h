@@ -796,7 +796,15 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 #define wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK     wxEVT_AUITOOLBAR_MIDDLE_CLICK
 #define wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG       wxEVT_AUITOOLBAR_BEGIN_DRAG
 
-#if defined(__WXMSW__)
+// wxAuiToolBar is always drawn by its art provider, so the provider is what
+// decides whether it looks like the platform it runs on. Under the WinUI port
+// the uxtheme drawing of wxAuiMSWToolBarArt would put Windows 7 chrome inside
+// a WinUI window, so the Fluent provider takes its place there.
+#if defined(__WXWINUI__)
+    #define wxHAS_NATIVE_TOOLBAR_ART
+    #include "wx/aui/barartwinui.h"
+    #define wxAuiDefaultToolBarArt wxAuiWinUIToolBarArt
+#elif defined(__WXMSW__)
     #define wxHAS_NATIVE_TOOLBAR_ART
     #include "wx/aui/barartmsw.h"
     #define wxAuiDefaultToolBarArt wxAuiMSWToolBarArt

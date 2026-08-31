@@ -22,6 +22,8 @@
 
 #include "wx/platinfo.h"
 #include "wx/uiaction.h"
+#include "wx/filefn.h"
+#include "wx/filename.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
@@ -524,7 +526,17 @@ void TextCtrlTestCase::HitTestSingleLine()
         m_text->ChangeValue(wxString(200, 'X'));
         m_text->SetInsertionPointEnd();
 
-    #if defined(__WXGTK__) || defined(__WXQT__)
+    #if defined(__WXWINUI__)
+        // WinUI applies ChangeView() asynchronously and completes this
+        // request in a bounded number of DispatcherQueue turns. Wait for the
+        // public result instead of forcing a nested render from HitTest().
+        WaitFor("wxTextCtrl horizontal scroll", [this, sizeChar, yMid, &pos]() {
+            return m_text->HitTest(
+                       wxPoint(2*sizeChar.x, yMid), &pos) ==
+                       wxTE_HT_ON_TEXT &&
+                   pos > 3;
+        }, 1000);
+    #elif defined(__WXGTK__) || defined(__WXQT__)
         // wxGTK and wxQt must be given an opportunity to lay the text out.
         YieldForAWhile();
     #endif
@@ -866,13 +878,13 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 
     const int pos = m_text->GetInsertionPoint();
 
-    // wxGTK needs to yield here to update the text control.
-#ifdef __WXGTK__
+    // wxGTK and wxWinUI need to yield here to update the text control.
+#if defined(__WXGTK__) || defined(__WXWINUI__)
     WaitFor("wxTextCtrl update", [this, pos]() {
-        return m_text->PositionToCoords(0).y != 0 &&
+        return m_text->PositionToCoords(0).y < 0 &&
                 m_text->PositionToCoords(pos).y <= TEXT_HEIGHT;
     }, 1000);
-#endif // __WXGTK__
+#endif // __WXGTK__ || __WXWINUI__
 
     wxPoint coords = m_text->PositionToCoords(0);
     INFO("First position coords = " << coords);
@@ -1411,6 +1423,33 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
     TestProcessEnter(TextCtrlCreator());
 }
 
+#if wxUSE_UIACTIONSIMULATOR && defined(__WXWINUI__)
+TEST_CASE("wxTextCtrl::ProcessTab",
+          "[wxTextCtrl][tab][ui][.][physical]")
+{
+    wxTextCtrl text(wxTheApp->GetTopWindow(),
+                    wxID_ANY,
+                    "before",
+                    wxDefaultPosition,
+                    wxSize(180, 70),
+                    wxTE_MULTILINE | wxTE_PROCESS_TAB);
+    text.SetInsertionPointEnd();
+    text.SetFocus();
+    REQUIRE(WaitFor("wxTextCtrl PROCESS_TAB focus", [&text]()
+    {
+        return wxWindow::FindFocus() == &text;
+    }, 1000));
+
+    wxUIActionSimulator simulator;
+    REQUIRE(simulator.Char(WXK_TAB));
+    REQUIRE(WaitFor("wxTextCtrl PROCESS_TAB insertion", [&text]()
+    {
+        return text.GetValue() == "before\t";
+    }, 1000));
+    CHECK(wxWindow::FindFocus() == &text);
+}
+#endif // wxUSE_UIACTIONSIMULATOR && __WXWINUI__
+
 TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
 {
     struct GetBestSizeFor
@@ -1452,6 +1491,16 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     // that should still have the same best size.
     CHECK( sizeVeryLong.y == sizeLong.y );
 }
+
+#ifdef __WXWINUI__
+TEST_CASE("wxTextCtrl single-line best size honours the WinUI template",
+          "[wxTextCtrl][best-size][winui]")
+{
+    wxTextCtrl text(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    CHECK(text.GetBestSize().y >= text.FromDIP(32));
+}
+#endif
 
 #if wxUSE_CLIPBOARD
 
@@ -1565,12 +1614,13 @@ TEST_CASE("wxTextCtrl::GTKSetPangoMarkup", "[wxTextCtrl][pango]")
 }
 #endif
 
-#ifdef __WXOSX__
+#if defined(__WXOSX__) || defined(__WXWINUI__)
 TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
     std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE));
+    REQUIRE(text->IsRTFSupported());
 
     text->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
 {\colortbl ;\red192\green80\blue77;}
@@ -1588,6 +1638,64 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
     CHECK(result.find(L"3.3") != wxString::npos);
 }
 #endif
+
+#if defined(wxHAS_TEXTCTRL_RTF) && defined(__WXWINUI__) && wxUSE_FFILE
+TEST_CASE("wxTextCtrl::RTF file types", "[wxTextCtrl][rtf][file]")
+{
+    struct TempRtfFile
+    {
+        TempRtfFile()
+        {
+            name = wxFileName::CreateTempFileName("wxtextctrl-rtf");
+            if ( !name.empty() )
+            {
+                wxRemoveFile(name);
+                name += ".rtf";
+            }
+        }
+
+        ~TempRtfFile()
+        {
+            if ( !name.empty() && wxFileExists(name) )
+                wxRemoveFile(name);
+        }
+
+        wxString name;
+    } file;
+    REQUIRE_FALSE(file.name.empty());
+
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    wxTextCtrl source(parent, wxID_ANY, wxEmptyString,
+                      wxDefaultPosition, wxDefaultSize,
+                      wxTE_RICH2 | wxTE_MULTILINE);
+    REQUIRE(source.IsRTFSupported());
+    source.SetRTFValue(
+        R"({\rtf1\ansi first \b formatted\b0  line\par second})");
+    REQUIRE(source.SaveFile(file.name, wxTEXT_TYPE_RTF));
+
+    wxTextCtrl fromAny(parent, wxID_ANY, wxEmptyString,
+                       wxDefaultPosition, wxDefaultSize,
+                       wxTE_RICH2 | wxTE_MULTILINE);
+    REQUIRE(fromAny.LoadFile(file.name, wxTEXT_TYPE_ANY));
+    CHECK(fromAny.GetValue().Contains("first"));
+    CHECK(fromAny.GetValue().Contains("formatted"));
+    wxTextAttr bold;
+    REQUIRE(fromAny.GetStyle(
+        static_cast<long>(fromAny.GetValue().find("formatted")), bold));
+    CHECK(bold.GetFontWeight() == wxFONTWEIGHT_BOLD);
+
+    fromAny.SetRTFValue(
+        R"({\rtf1\ansi replacement \i italic\i0  value})");
+    REQUIRE(fromAny.SaveFile(file.name, wxTEXT_TYPE_ANY));
+
+    wxTextCtrl explicitRtf(parent, wxID_ANY, wxEmptyString,
+                           wxDefaultPosition, wxDefaultSize,
+                           wxTE_RICH2 | wxTE_MULTILINE);
+    REQUIRE(explicitRtf.LoadFile(file.name, wxTEXT_TYPE_RTF));
+    CHECK(explicitRtf.GetValue().Contains("replacement"));
+    CHECK(explicitRtf.GetValue().Contains("italic"));
+}
+#endif // wxHAS_TEXTCTRL_RTF && __WXWINUI__ && wxUSE_FFILE
 
 // SearchText() is not implemented in wxGTK2.
 #if !defined(__WXGTK__) || defined(__WXGTK3__)

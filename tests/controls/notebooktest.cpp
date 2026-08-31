@@ -24,6 +24,11 @@
 
 #include <memory>
 
+#ifdef __WXQT__
+    #include "wx/weakref.h"
+    #include <QtWidgets/QTabWidget>
+#endif
+
 class NotebookTestCase : public BookCtrlBaseTestCase
 {
 public:
@@ -49,11 +54,11 @@ protected:
 };
 
 wxBOOK_CTRL_BASE_TESTS(NotebookTestCase, "Notebook",
-                       "[notebook][book]");
+                       "[notebook][book][NotebookTestCase]");
 
 // wxNotebook supports images, unlike most of the other book controls.
 wxBOOK_CTRL_BASE_TEST_CASE(NotebookTestCase, "Notebook", Image,
-                           "[notebook][book]");
+                           "[notebook][book][NotebookTestCase]");
 
 NotebookTestCase::NotebookTestCase()
 {
@@ -63,7 +68,7 @@ NotebookTestCase::NotebookTestCase()
 }
 
 
-TEST_CASE_METHOD(NotebookTestCase, "Notebook::RowCount", "[notebook]")
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::RowCount", "[notebook][NotebookTestCase]")
 {
     CHECK(m_notebook->GetRowCount() == 1);
 
@@ -82,7 +87,7 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::RowCount", "[notebook]")
 }
 
 TEST_CASE_METHOD(NotebookTestCase, "Notebook::NoEventsOnDestruction",
-                 "[notebook]")
+                 "[notebook][NotebookTestCase]")
 {
     // We can't use EventCounter helper here as it doesn't deal with the window
     // it's connected to being destroyed during its life-time, so do it
@@ -103,7 +108,8 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::NoEventsOnDestruction",
     CHECK( m_numPageChanges == 1 );
 }
 
-TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
+TEST_CASE("wxNotebook::AddPageEvents",
+          "[wxNotebook][AddPage][event][winui-v0-supported]")
 {
     wxNotebook* const
         notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
@@ -148,7 +154,228 @@ TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
     CHECK( countPageChanged.GetCount() == 1 );
 }
 
-TEST_CASE_METHOD(NotebookTestCase, "Notebook::GetTabRect", "[notebook]")
+#ifdef __WXQT__
+
+TEST_CASE("Notebook::SelectionVetoKeepsNativeAndWxState", "[notebook][qt]")
+{
+    wxNotebook notebook(wxTheApp->GetTopWindow(), wxID_ANY);
+    REQUIRE(notebook.AddPage(new wxPanel(&notebook), "First", true));
+    REQUIRE(notebook.AddPage(new wxPanel(&notebook), "Second"));
+    REQUIRE(notebook.GetSelection() == 0);
+
+    int changing = 0;
+    int changed = 0;
+    bool veto = true;
+    notebook.Bind(wxEVT_NOTEBOOK_PAGE_CHANGING,
+                  [&](wxBookCtrlEvent& event)
+                  {
+                      ++changing;
+                      CHECK(event.GetOldSelection() == 0);
+                      CHECK(event.GetSelection() == 1);
+                      if ( veto )
+                          event.Veto();
+                  });
+    notebook.Bind(wxEVT_NOTEBOOK_PAGE_CHANGED,
+                  [&](wxBookCtrlEvent& event)
+                  {
+                      ++changed;
+                      CHECK(event.GetOldSelection() == 0);
+                      CHECK(event.GetSelection() == 1);
+                  });
+
+    CHECK(notebook.SetSelection(1) == 0);
+    CHECK(changing == 1);
+    CHECK(changed == 0);
+    CHECK(notebook.GetSelection() == 0);
+    CHECK(notebook.GetQTabWidget()->currentIndex() == 0);
+    CHECK(notebook.GetCurrentPage() == notebook.GetPage(0));
+
+    veto = false;
+    CHECK(notebook.SetSelection(1) == 0);
+    CHECK(changing == 2);
+    CHECK(changed == 1);
+    CHECK(notebook.GetSelection() == 1);
+    CHECK(notebook.GetQTabWidget()->currentIndex() == 1);
+
+    CHECK(notebook.ChangeSelection(0) == 1);
+    CHECK(notebook.GetSelection() == 0);
+    CHECK(notebook.GetQTabWidget()->currentIndex() == 0);
+    CHECK(changing == 2);
+    CHECK(changed == 1);
+}
+
+TEST_CASE("Notebook::RemoveLastPageKeepsEmptySelection", "[notebook][qt]")
+{
+    wxNotebook source(wxTheApp->GetTopWindow(), wxID_ANY);
+    wxNotebook destination(wxTheApp->GetTopWindow(), wxID_ANY);
+    wxPanel* const page = new wxPanel(&source);
+    const wxWeakRef<wxPanel> weakPage(page);
+    REQUIRE(source.AddPage(page, "Movable", true));
+    REQUIRE(source.GetSelection() == 0);
+
+    // Removing the final tab produces Qt currentChanged(-1), not a request to
+    // select a page with an unsigned index. RemovePage must keep the page alive.
+    REQUIRE(source.RemovePage(0));
+    CHECK(source.GetPageCount() == 0);
+    CHECK(source.GetSelection() == wxNOT_FOUND);
+    CHECK(source.GetCurrentPage() == nullptr);
+    CHECK(source.GetQTabWidget()->count() == 0);
+    CHECK(source.GetQTabWidget()->currentIndex() == -1);
+    REQUIRE(weakPage.get() == page);
+
+    REQUIRE(page->Reparent(&destination));
+    REQUIRE(destination.AddPage(page, "Moved", true));
+    CHECK(destination.GetSelection() == 0);
+    CHECK(destination.GetCurrentPage() == page);
+    CHECK(destination.GetQTabWidget()->currentIndex() == 0);
+    CHECK(destination.GetPageImage(0) == wxNOT_FOUND);
+
+    REQUIRE(source.AddPage(new wxPanel(&source), "Replacement", true));
+    CHECK(source.GetSelection() == 0);
+    CHECK(source.GetQTabWidget()->currentIndex() == 0);
+    CHECK(source.GetPageImage(0) == wxNOT_FOUND);
+    REQUIRE(source.DeletePage(0));
+    CHECK(source.GetPageCount() == 0);
+    CHECK(source.GetSelection() == wxNOT_FOUND);
+    CHECK(source.GetQTabWidget()->currentIndex() == -1);
+}
+
+#endif // __WXQT__
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+TEST_CASE("wxNotebook::TopContract",
+          "[wxNotebook][winui-v0-supported]")
+{
+    wxNotebook notebook(
+        wxTheApp->GetTopWindow(), wxID_ANY,
+        wxDefaultPosition, wxSize(400, 200), wxNB_TOP);
+    REQUIRE(notebook.AddPage(new wxPanel(&notebook), "first", true));
+    REQUIRE(notebook.AddPage(new wxPanel(&notebook), "second", false));
+
+    CHECK(notebook.GetSelection() == 0);
+    CHECK(notebook.SetSelection(1) == 0);
+    CHECK(notebook.GetSelection() == 1);
+
+    const wxRect firstTab = notebook.GetTabRect(0);
+    REQUIRE(!firstTab.IsEmpty());
+    long flags = 0;
+    const wxPoint centre(
+        firstTab.x + firstTab.width / 2,
+        firstTab.y + firstTab.height / 2);
+    CHECK(notebook.HitTest(centre, &flags) == 0);
+    CHECK((flags & wxBK_HITTEST_NOWHERE) == 0);
+}
+
+TEST_CASE("wxNotebook::ExternalSelectionDoesNotStealFocus",
+          "[wxNotebook][winui-focus]")
+{
+    wxWindow * const top = wxTheApp->GetTopWindow();
+    REQUIRE( top != nullptr );
+    wxWindow * const originalFocus = wxWindow::FindFocus();
+
+    std::unique_ptr<wxWindow> external(
+        new wxWindow(top, wxID_ANY, wxPoint(4, 4), wxSize(20, 20)));
+    std::unique_ptr<wxNotebook> notebook(
+        new wxNotebook(top, wxID_ANY, wxPoint(30, 4), wxSize(240, 140)));
+
+    external->SetFocus();
+    REQUIRE( wxWindow::FindFocus() == external.get() );
+
+    REQUIRE( notebook->AddPage(
+        new wxPanel(notebook.get()), "first", false) );
+    CHECK( wxWindow::FindFocus() == external.get() );
+    REQUIRE( notebook->AddPage(
+        new wxPanel(notebook.get()), "second", false) );
+
+    notebook->ChangeSelection(1);
+    CHECK( wxWindow::FindFocus() == external.get() );
+    notebook->SetSelection(0);
+    CHECK( wxWindow::FindFocus() == external.get() );
+
+    notebook.reset();
+    external.reset();
+    if ( originalFocus && !originalFocus->IsBeingDeleted() )
+        originalFocus->SetFocus();
+}
+
+TEST_CASE("wxNotebook::InternalSelectionTransfersFocus",
+          "[wxNotebook][winui-focus]")
+{
+    wxWindow * const top = wxTheApp->GetTopWindow();
+    REQUIRE( top != nullptr );
+    wxWindow * const originalFocus = wxWindow::FindFocus();
+
+    std::unique_ptr<wxNotebook> notebook(
+        new wxNotebook(top, wxID_ANY, wxPoint(4, 4), wxSize(240, 140)));
+    wxPanel * const first = new wxPanel(notebook.get());
+    wxPanel * const second = new wxPanel(notebook.get());
+    wxWindow * const firstChild =
+        new wxWindow(first, wxID_ANY, wxPoint(4, 4), wxSize(20, 20));
+    REQUIRE( notebook->AddPage(first, "first", true) );
+    REQUIRE( notebook->AddPage(second, "second", false) );
+
+    firstChild->SetFocus();
+    REQUIRE( wxWindow::FindFocus() == firstChild );
+
+    notebook->ChangeSelection(1);
+    wxWindow *focused = wxWindow::FindFocus();
+    CHECK( (focused == second ||
+            (focused && second->IsDescendant(focused))) );
+
+    notebook->SetSelection(0);
+    focused = wxWindow::FindFocus();
+    CHECK( (focused == first ||
+            (focused && first->IsDescendant(focused))) );
+
+    notebook.reset();
+    if ( originalFocus && !originalFocus->IsBeingDeleted() )
+        originalFocus->SetFocus();
+}
+
+TEST_CASE("wxNotebook::RTLTabRectsUseWxClientCoordinates",
+          "[wxNotebook][winui-coordinates][rtl]")
+{
+    wxWindow * const top = wxTheApp->GetTopWindow();
+    REQUIRE( top != nullptr );
+
+    wxNotebook notebook(
+        top, wxID_ANY, wxPoint(4, 4), wxSize(640, 180));
+    notebook.SetLayoutDirection(wxLayout_RightToLeft);
+    REQUIRE( notebook.GetLayoutDirection() == wxLayout_RightToLeft );
+    notebook.SetTabSize(notebook.FromDIP(wxSize(80, 42)));
+
+    constexpr size_t PageCount = 3;
+    for ( size_t page = 0; page < PageCount; ++page )
+    {
+        REQUIRE( notebook.AddPage(
+            new wxPanel(&notebook),
+            wxString::Format("RTL page %zu", page),
+            page == 0) );
+    }
+
+    const wxRect clientRect(wxPoint(), notebook.GetClientSize());
+    for ( size_t page = 0; page < PageCount; ++page )
+    {
+        const wxRect tabRect = notebook.GetTabRect(page);
+        CAPTURE(page, tabRect);
+        REQUIRE( !tabRect.IsEmpty() );
+
+        const wxPoint centre(
+            tabRect.x + tabRect.width / 2,
+            tabRect.y + tabRect.height / 2);
+        REQUIRE( clientRect.Contains(centre) );
+
+        long flags = 0;
+        CHECK( notebook.HitTest(centre, &flags) ==
+               static_cast<int>(page) );
+        CHECK( (flags & wxBK_HITTEST_NOWHERE) == 0 );
+    }
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::GetTabRect", "[notebook][NotebookTestCase]")
 {
     wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
                                           wxDefaultPosition, wxSize(400, 200));
@@ -156,7 +383,8 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::GetTabRect", "[notebook]")
 
     notebook->AddPage(new wxPanel(notebook), "Page");
 
-    // This function is only really implemented for wxMSW and wxUniv currently.
+    // MSW, wxUniv and WinUI report logical rectangles for every tab, including
+    // virtualized/off-screen WinUI TabViewItem containers.
 #if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
     // Create many pages, so that at least some of the are not visible.
     for ( size_t i = 0; i < 30; i++ )
@@ -190,12 +418,12 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::GetTabRect", "[notebook]")
 
         x += r.width;
     }
-#else // !(__WXMSW__ || __WXUNIVERSAL__)
+#else // !__WXMSW__ && !__WXUNIVERSAL__
     WX_ASSERT_FAILS_WITH_ASSERT( notebook->GetTabRect(0) );
 #endif // ports
 }
 
-TEST_CASE_METHOD(NotebookTestCase, "Notebook::HitTestFlags", "[notebook]")
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::HitTestFlags", "[notebook][NotebookTestCase]")
 {
     std::unique_ptr<wxNotebook> notebook;
 

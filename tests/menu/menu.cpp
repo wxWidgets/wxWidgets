@@ -28,6 +28,9 @@
 #include <stdarg.h>
 
 #include <memory>
+#ifdef __WXWINUI__
+    #include <vector>
+#endif
 
 // ----------------------------------------------------------------------------
 // helper
@@ -291,6 +294,117 @@ TEST_CASE_METHOD(MenuTestCase, "Menu::EnableTop", "[menu]")
     bar->EnableTop( 0, true );
     CHECK( bar->IsEnabledTop(0) );
 }
+
+#ifdef __WXWINUI__
+
+namespace
+{
+
+std::vector<ACCEL> GetNativeAccelerators(wxMenuBar* menuBar)
+{
+    const HACCEL haccel = reinterpret_cast<HACCEL>(
+        menuBar->GetAcceleratorTable()->GetHACCEL());
+    if ( !haccel )
+        return {};
+
+    const int count = ::CopyAcceleratorTable(haccel, nullptr, 0);
+    REQUIRE( count >= 0 );
+
+    std::vector<ACCEL> accels(static_cast<size_t>(count));
+    if ( count )
+    {
+        REQUIRE( (::CopyAcceleratorTable(haccel, accels.data(), count)) == (count) );
+    }
+
+    return accels;
+}
+
+bool HasAcceleratorCommand(const std::vector<ACCEL>& accels, int id)
+{
+    const WORD command = static_cast<WORD>(id);
+    for ( const ACCEL& accel : accels )
+    {
+        if ( accel.cmd == command )
+            return true;
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
+TEST_CASE_METHOD(MenuTestCase, "Menu::DisabledAccelerators", "[menu]")
+{
+    enum
+    {
+        AccelInSubmenu = 15000,
+        AccelDirect
+    };
+
+    wxMenuBar* const bar = m_frame->GetMenuBar();
+    const size_t baseline = GetNativeAccelerators(bar).size();
+
+    wxMenu* const submenu = new wxMenu;
+    wxMenuItem* const nested =
+        submenu->Append(AccelInSubmenu, "Nested\tF6");
+
+    // Exercise initial construction with an already disabled item.
+    nested->Enable(false);
+
+    wxMenu* const menu = new wxMenu;
+    wxMenuItem* const submenuItem =
+        menu->AppendSubMenu(submenu, "Submenu");
+    menu->Append(AccelDirect, "Direct\tF7");
+
+    const size_t topPos = bar->GetMenuCount();
+    REQUIRE( bar->Append(menu, "Accelerators") );
+
+    std::vector<ACCEL> accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline + 1) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
+
+    nested->Enable(true);
+    accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline + 2) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
+
+    // Disabling a submenu suppresses all accelerators below it.
+    submenuItem->Enable(false);
+    accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline + 1) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
+
+    submenuItem->Enable(true);
+    accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline + 2) );
+
+    // And disabling the top-level menu suppresses its complete table slice.
+    bar->EnableTop(topPos, false);
+    accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelDirect) );
+
+    bar->EnableTop(topPos, true);
+    accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline + 2) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
+
+    nested->Enable(false);
+    accels = GetNativeAccelerators(bar);
+    REQUIRE( (accels.size()) == (baseline + 1) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
+
+    nested->Enable(true);
+    REQUIRE( (GetNativeAccelerators(bar).size()) == (baseline + 2) );
+}
+
+#endif // __WXWINUI__
 
 TEST_CASE_METHOD(MenuTestCase, "Menu::Count", "[menu]")
 {

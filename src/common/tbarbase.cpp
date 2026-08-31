@@ -62,7 +62,12 @@ wxToolBarToolBase::~wxToolBarToolBase()
 #endif
 
     if ( IsControl() )
-        GetControl()->Destroy();
+    {
+        // A transactional native port may have observed the control being
+        // destroyed synchronously and neutralized this borrowed pointer.
+        if ( wxControl* const control = GetControl() )
+            control->Destroy();
+    }
 }
 
 
@@ -328,9 +333,14 @@ bool wxToolBarBase::DeleteToolByPos(size_t pos)
         return false;
     }
 
-    delete node->GetData();
+    wxToolBarToolBase * const tool = node->GetData();
     m_tools.Erase(node);
+    tool->Detach();
 
+    // The wrapper owns embedded controls and destroying one may synchronously
+    // destroy the toolbar. The common model is already committed and this is
+    // deliberately the final operation before returning.
+    delete tool;
     return true;
 }
 
@@ -351,9 +361,13 @@ bool wxToolBarBase::DeleteTool(int toolid)
         return false;
     }
 
-    delete node->GetData();
+    wxToolBarToolBase * const tool = node->GetData();
     m_tools.Erase(node);
+    tool->Detach();
 
+    // See DeleteToolByPos(): never leave a node pointing at a wrapper while
+    // its destructor can re-enter application code.
+    delete tool;
     return true;
 }
 
@@ -559,6 +573,44 @@ void wxToolBarBase::ToggleTool(int toolid, bool toggle)
             DoToggleTool(tool, toggle);
         }
     }
+}
+
+void wxToolBarBase::DoToggleToolByPos(size_t pos, bool toggle)
+{
+    wxCHECK_RET( pos < GetToolsCount(),
+                 wxT("invalid position in wxToolBarBase") );
+
+    wxToolBarToolBase * const tool =
+        GetToolByPos(static_cast<int>(pos));
+    if ( tool && tool->CanBeToggled() && tool->Toggle(toggle) )
+    {
+        UnToggleRadioGroup(tool);
+        DoToggleTool(tool, toggle);
+    }
+}
+
+void wxToolBarBase::DoEnableToolByPos(size_t pos, bool enable)
+{
+    wxCHECK_RET( pos < GetToolsCount(),
+                 wxT("invalid position in wxToolBarBase") );
+
+    wxToolBarToolBase * const tool =
+        GetToolByPos(static_cast<int>(pos));
+    if ( tool && tool->Enable(enable) )
+        DoEnableTool(tool, enable);
+}
+
+void wxToolBarBase::DoSetToolNormalBitmapByPos(
+    size_t pos,
+    const wxBitmapBundle& bitmap)
+{
+    wxCHECK_RET( pos < GetToolsCount(),
+                 wxT("invalid position in wxToolBarBase") );
+
+    wxToolBarToolBase * const tool =
+        GetToolByPos(static_cast<int>(pos));
+    if ( tool )
+        SetToolNormalBitmap(tool->GetId(), bitmap);
 }
 
 void wxToolBarBase::SetToggle(int toolid, bool toggle)
@@ -805,7 +857,8 @@ void wxToolBarBase::UpdateWindowUI(long flags)
         }
         else
         {
-            tool->GetControl()->UpdateWindowUI(flags);
+            if ( wxControl* const control = tool->GetControl() )
+                control->UpdateWindowUI(flags);
         }
     }
 }

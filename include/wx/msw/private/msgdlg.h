@@ -65,11 +65,39 @@ namespace wxMSWMessageDialog
     typedef HRESULT (WINAPI *TaskDialogIndirect_t)(const TASKDIALOGCONFIG *,
                                                    int *, int *, BOOL *);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Bounded test seam at the final native task-dialog boundary. The real
+    // TASKDIALOGCONFIG is still built by the production RichMessage/Progress
+    // adapters; tests only replace TaskDialogIndirect() itself and may drive
+    // its callback without displaying anything on the user's desktop.
+    struct wxTaskDialogIndirectHookForTesting
+    {
+        void *context = nullptr;
+        HRESULT (WINAPI *invoke)(void *,
+                                 const TASKDIALOGCONFIG *,
+                                 int *,
+                                 int *,
+                                 BOOL *) = nullptr;
+    };
+
+    WXDLLIMPEXP_CORE void SetTaskDialogIndirectHookForTesting(
+        const wxTaskDialogIndirectHookForTesting& hook);
+    WXDLLIMPEXP_CORE void ResetTaskDialogIndirectHookForTesting();
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
     // Return the pointer to TaskDialogIndirect(). It can return a null pointer
     // if the task dialog is not available, which may happen even under modern
     // OS versions when using comctl32.dll v5, as it happens if the application
     // doesn't provide a manifest specifying that it wants to use v6.
     TaskDialogIndirect_t GetTaskDialogIndirectFunc();
+
+    // Invoke TaskDialogIndirect() through the optional WinUI test seam above.
+    // This is intentionally separate from GetTaskDialogIndirectFunc() so the
+    // generic native-message implementation remains completely unchanged.
+    HRESULT InvokeTaskDialogIndirect(const TASKDIALOGCONFIG *config,
+                                     int *button,
+                                     int *radio,
+                                     BOOL *verification);
 
     // Return true if the task dialog is available, but we don't actually need
     // to show it yet (if we do, then GetTaskDialogIndirectFunc() should be

@@ -107,6 +107,14 @@ public:
     // Prevent the native window, not owned by us, from being destroyed by the
     // base class dtor, unless Disown() had been called.
     virtual ~wxNativeWindow();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+protected:
+    // Retire an externally-triggered terminal HWND association before USER32
+    // is allowed to recycle its numeric handle.
+    virtual WXLRESULT
+    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+#endif
 #endif // __WXMSW__
 
 private:

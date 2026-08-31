@@ -381,7 +381,7 @@ wxEnhMetaFile *wxEnhMetaFileDC::Close()
     return impl->Close();
 }
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAOBJ
 
 // ----------------------------------------------------------------------------
 // wxEnhMetaFileDataObject
@@ -579,6 +579,6 @@ bool wxEnhMetaFileSimpleDataObject::SetData(size_t WXUNUSED(len),
 }
 
 
-#endif // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DATAOBJ
 
 #endif // wxUSE_ENH_METAFILE

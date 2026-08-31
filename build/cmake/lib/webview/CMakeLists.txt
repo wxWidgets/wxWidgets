@@ -48,63 +48,74 @@ if(APPLE)
     wx_lib_link_libraries(wxwebview PUBLIC "-framework WebKit")
 elseif(WXMSW)
     if(wxUSE_WEBVIEW_EDGE)
-        # Update the following variables if updating WebView2 SDK
-        # Also update this version and the _INTERFACE_DEFINED_ check in
-        # include/wx/msw/private/webview_edge.h and interface/wx/webview.h
-        set(WEBVIEW2_VERSION "1.0.3485.44")
-        set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
-        # When updating the above version of WebView2, download the nupkg from the above URL.
-        # Then, from a PowerShell session, call Get-FileHash on the downloaded nupkg file to get its SHA256
-        # to update here.
-        set(WEBVIEW2_SHA256 "BC09150B179246AC90189649B13BE8E6B11B3AC200E817E18DF106E1F3CF489E")
-
-        set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
-
-        if(NOT EXISTS ${WEBVIEW2_PACKAGE_DIR})
-            unset(WEBVIEW2_PACKAGE_DIR CACHE)
-        endif()
-        find_path(WEBVIEW2_PACKAGE_DIR
-            NAMES build/native/include/WebView2.h
-            PATHS
-                "${PROJECT_SOURCE_DIR}/3rdparty/webview2"
-                ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
-        )
-
-        if (WEBVIEW2_PACKAGE_DIR)
-            get_filename_component(currentDir ${WEBVIEW2_PACKAGE_DIR} DIRECTORY)
-            get_filename_component(targetDir ${WEBVIEW2_DEFAULT_PACKAGE_DIR} DIRECTORY)
-            if (currentDir STREQUAL targetDir)
-                get_filename_component(currentVersion ${WEBVIEW2_PACKAGE_DIR} NAME)
-                string(SUBSTRING ${currentVersion} 23 -1 currentVersion)
-                if(${currentVersion} VERSION_LESS ${WEBVIEW2_VERSION})
-                    message(STATUS "Found outdated WebView2 SDK, downloading...")
-                    unset(WEBVIEW2_PACKAGE_DIR CACHE)
-                endif()
-            endif()
+        if(WXWINUI AND wxUSE_WINUI3)
+            # The WinUI projection includes Microsoft.Web.WebView2.Core.winmd.
+            # Compile the classic Edge backend against that exact same
+            # hash-pinned package so headers, import libraries and runtime
+            # payload can never drift to independent WebView2 versions.
+            set(WEBVIEW2_VERSION "${wxWINUI3_WEBVIEW2_VERSION}")
+            set(WEBVIEW2_SHA256 "${wxWINUI3_WEBVIEW2_SHA256}")
+            set(WEBVIEW2_PACKAGE_DIR
+                "${wxWINUI3_WEBVIEW2_PACKAGE_DIR}"
+                CACHE INTERNAL "" FORCE)
         else()
-            message(STATUS "WebView2 SDK not found, downloading...")
-        endif()
+            # Update the following variables if updating WebView2 SDK.
+            # Also update this version and the _INTERFACE_DEFINED_ check in
+            # include/wx/msw/private/webview_edge.h and interface/wx/webview.h.
+            set(WEBVIEW2_VERSION "1.0.3485.44")
+            set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
+            # When updating the above version of WebView2, download the nupkg
+            # from the above URL and update its SHA256 below.
+            set(WEBVIEW2_SHA256 "BC09150B179246AC90189649B13BE8E6B11B3AC200E817E18DF106E1F3CF489E")
 
-        if (NOT WEBVIEW2_PACKAGE_DIR)
-            set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
-            file(DOWNLOAD
-                ${WEBVIEW2_URL}
-                ${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget
-                EXPECTED_HASH SHA256=${WEBVIEW2_SHA256}
-                STATUS DOWNLOAD_RESULT)
-            # Check that the download was successful.
-            list(GET DOWNLOAD_RESULT 0 DOWNLOAD_RESULT_NUM)
-            if(NOT ${DOWNLOAD_RESULT_NUM} EQUAL 0)
-                list(GET DOWNLOAD_RESULT 1 DOWNLOAD_RESULT_STR)
-                message(FATAL_ERROR "Error ${DOWNLOAD_RESULT_NUM} downloading WebView2 SDK: ${DOWNLOAD_RESULT_STR}.")
+            set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
+
+            if(NOT EXISTS ${WEBVIEW2_PACKAGE_DIR})
+                unset(WEBVIEW2_PACKAGE_DIR CACHE)
             endif()
-            file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
-            execute_process(COMMAND
-                "${CMAKE_COMMAND}" -E tar x "${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget"
-                WORKING_DIRECTORY "${WEBVIEW2_PACKAGE_DIR}"
+            find_path(WEBVIEW2_PACKAGE_DIR
+                NAMES build/native/include/WebView2.h
+                PATHS
+                    "${PROJECT_SOURCE_DIR}/3rdparty/webview2"
+                    ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
             )
+
+            if (WEBVIEW2_PACKAGE_DIR)
+                get_filename_component(currentDir ${WEBVIEW2_PACKAGE_DIR} DIRECTORY)
+                get_filename_component(targetDir ${WEBVIEW2_DEFAULT_PACKAGE_DIR} DIRECTORY)
+                if (currentDir STREQUAL targetDir)
+                    get_filename_component(currentVersion ${WEBVIEW2_PACKAGE_DIR} NAME)
+                    string(SUBSTRING ${currentVersion} 23 -1 currentVersion)
+                    if(${currentVersion} VERSION_LESS ${WEBVIEW2_VERSION})
+                        message(STATUS "Found outdated WebView2 SDK, downloading...")
+                        unset(WEBVIEW2_PACKAGE_DIR CACHE)
+                    endif()
+                endif()
+            else()
+                message(STATUS "WebView2 SDK not found, downloading...")
+            endif()
+
+            if (NOT WEBVIEW2_PACKAGE_DIR)
+                set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
+                file(DOWNLOAD
+                    ${WEBVIEW2_URL}
+                    ${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget
+                    EXPECTED_HASH SHA256=${WEBVIEW2_SHA256}
+                    STATUS DOWNLOAD_RESULT)
+                # Check that the download was successful.
+                list(GET DOWNLOAD_RESULT 0 DOWNLOAD_RESULT_NUM)
+                if(NOT ${DOWNLOAD_RESULT_NUM} EQUAL 0)
+                    list(GET DOWNLOAD_RESULT 1 DOWNLOAD_RESULT_STR)
+                    message(FATAL_ERROR "Error ${DOWNLOAD_RESULT_NUM} downloading WebView2 SDK: ${DOWNLOAD_RESULT_STR}.")
+                endif()
+                file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
+                execute_process(COMMAND
+                    "${CMAKE_COMMAND}" -E tar x "${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget"
+                    WORKING_DIRECTORY "${WEBVIEW2_PACKAGE_DIR}"
+                )
+            endif()
+            set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_PACKAGE_DIR} CACHE INTERNAL "" FORCE)
         endif()
-        set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_PACKAGE_DIR} CACHE INTERNAL "" FORCE)
 
         wx_lib_include_directories(wxwebview "${WEBVIEW2_PACKAGE_DIR}/build/native/include")
         if(NOT MSVC)
@@ -119,7 +130,11 @@ elseif(WXMSW)
             wx_lib_link_directories(wxwebview PUBLIC
                 $<BUILD_INTERFACE:${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/>
             )
-        else()
+        elseif(NOT WXWINUI OR NOT wxUSE_WINUI3)
+            # wxWinUI's always-run, per-output runtime payload is the sole
+            # owner of this DLL. It is serialized with all other payload
+            # writes and also repairs stale outputs; a second POST_BUILD copy
+            # here would race that transaction under parallel MSBuild.
             wx_webview_copy_webview2_loader(wxwebview)
         endif()
 

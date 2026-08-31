@@ -24,6 +24,115 @@ if(WXMSW)
     if(NOT wxUSE_OLE)
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/" "src/generic/dirdlgg.cpp")
     endif()
+    if(WXWINUI AND wxUSE_WINUI3)
+        # Keep generic/hyperlinkg.cpp: wxGenericHyperlinkCtrl remains an
+        # independently selectable public control alongside the native peer.
+        # Same for generic/infobar.cpp: wxInfoBarGeneric is a public class in
+        # the other ports (wxGTK's native wxInfoBar even derives from it) and
+        # applications do use it directly, so it must remain available here as
+        # well -- see wx/winui/infobar.h.
+        list(REMOVE_ITEM CORE_SRC
+            "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
+            "${wxSOURCE_DIR}/src/generic/bmpcboxg.cpp"
+            "${wxSOURCE_DIR}/src/generic/clrpickerg.cpp"
+            "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
+            "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
+            "${wxSOURCE_DIR}/src/generic/textdlgg.cpp"
+            "${wxSOURCE_DIR}/src/msw/button.cpp"
+            "${wxSOURCE_DIR}/src/msw/calctrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/datectrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/datetimectrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/bmpcbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/choice.cpp"
+            "${wxSOURCE_DIR}/src/msw/checklst.cpp"
+            "${wxSOURCE_DIR}/src/msw/combo.cpp"
+            "${wxSOURCE_DIR}/src/msw/combobox.cpp"
+            "${wxSOURCE_DIR}/src/msw/gauge.cpp"
+            "${wxSOURCE_DIR}/src/msw/headerctrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/hyperlink.cpp"
+            "${wxSOURCE_DIR}/src/msw/listbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/listctrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/notebook.cpp"
+            "${wxSOURCE_DIR}/src/msw/radiobox.cpp"
+            "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
+            "${wxSOURCE_DIR}/src/msw/scrolbar.cpp"
+            "${wxSOURCE_DIR}/src/msw/slider.cpp"
+            "${wxSOURCE_DIR}/src/msw/spinbutt.cpp"
+            "${wxSOURCE_DIR}/src/msw/spinctrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/statbmp.cpp"
+            "${wxSOURCE_DIR}/src/msw/statbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/statline.cpp"
+            "${wxSOURCE_DIR}/src/msw/statusbar.cpp"
+            "${wxSOURCE_DIR}/src/msw/timectrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/stattext.cpp"
+            "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/tglbtn.cpp"
+            "${wxSOURCE_DIR}/src/msw/treectrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/commandlinkbutton.cpp"
+            "${wxSOURCE_DIR}/src/msw/fdrepdlg.cpp"
+            "${wxSOURCE_DIR}/src/msw/fontdlg.cpp"
+            "${wxSOURCE_DIR}/src/msw/richtooltip.cpp"
+            "${wxSOURCE_DIR}/src/msw/toolbar.cpp"
+            )
+        wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/"
+            src/generic/fdrepdlg.cpp
+            src/generic/fontdlgg.cpp
+            src/generic/listctrl.cpp
+            src/winui/winui.cpp
+            src/winui/appearance.cpp
+            src/winui/ctrlhost.cpp
+            src/winui/dropbroker.cpp
+            src/winui/inputrouter.cpp
+            src/winui/inputstate.cpp
+            src/winui/titlebar.cpp
+            src/winui/tlwhost.cpp
+            src/winui/hostresize.cpp
+            src/winui/hosttooltip.cpp
+            src/winui/visualcoordinates.cpp
+            src/winui/xamlhost.cpp
+            src/winui/activityindicator.cpp
+            src/winui/bmpcbox.cpp
+            src/winui/button.cpp
+            src/winui/calctrl.cpp
+            src/winui/checkbox.cpp
+            src/winui/checklst.cpp
+            src/winui/clrpicker.cpp
+            src/winui/colordlg.cpp
+            src/winui/datectrl.cpp
+            src/winui/dlgpresenter.cpp
+            src/winui/choice.cpp
+            src/winui/combobox.cpp
+            src/winui/gauge.cpp
+            src/winui/hyperlink.cpp
+            src/winui/infobar.cpp
+            src/winui/listbox.cpp
+            src/winui/menubar.cpp
+            src/winui/msgdlg.cpp
+            src/winui/notebook.cpp
+            src/winui/radiobox.cpp
+            src/winui/radiobut.cpp
+            src/winui/renderer.cpp
+            src/winui/richtooltip.cpp
+            src/winui/scrolbar.cpp
+            src/winui/slider.cpp
+            src/winui/spinbutt.cpp
+            src/winui/spinctrl.cpp
+            src/winui/srchctrl.cpp
+            src/winui/statbmp.cpp
+            src/winui/statbox.cpp
+            src/winui/statbar.cpp
+            src/winui/statline.cpp
+            src/winui/timectrl.cpp
+            src/winui/toolbar.cpp
+            src/winui/stattext.cpp
+            src/winui/textctrl.cpp
+            src/winui/textpeer.cpp
+            src/winui/textdlg.cpp
+            src/winui/tglbtn.cpp
+            src/winui/treectrl.cpp
+            )
+    endif()
 elseif(WXGTK)
     if(WXGTK2)
         set(GTK2_LOWLEVEL_HDR ${GTK_LOWLEVEL_HDR})
@@ -59,7 +168,76 @@ elseif(WXX11)
     wx_append_sources(CORE_SRC X11_LOWLEVEL)
 endif()
 
+if(WXWINUI AND wxUSE_WINUI3 AND wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
+    list(APPEND CORE_SRC
+        "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
+endif()
+
 wx_add_library(wxcore ${CORE_SRC})
+if(WXWINUI AND wxUSE_WINUI3)
+    wx_winui3_configure_target(wxcore)
+
+    if(wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
+        # This opt-in target is for in-tree tests only: do not install it or
+        # link it to wxcore, even privately (static exports retain link-only
+        # dependencies). Public control layouts do not depend on this define.
+        add_library(wx_winui_test_support INTERFACE)
+        target_include_directories(wx_winui_test_support INTERFACE
+            "${wxSOURCE_DIR}/tests/winui/test-support")
+        target_compile_definitions(wx_winui_test_support INTERFACE
+            WXWINUI_TEST_SUPPORT=1)
+
+        get_target_property(wx_winui_test_support_includes
+            wx_winui_test_support INTERFACE_INCLUDE_DIRECTORIES)
+        get_target_property(wx_winui_test_support_definitions
+            wx_winui_test_support INTERFACE_COMPILE_DEFINITIONS)
+        set(wx_winui_test_support_sources
+            "${wxSOURCE_DIR}/src/winui/button.cpp"
+            "${wxSOURCE_DIR}/src/winui/tglbtn.cpp"
+            "${wxSOURCE_DIR}/src/winui/stattext.cpp"
+            "${wxSOURCE_DIR}/src/winui/statbmp.cpp"
+            "${wxSOURCE_DIR}/src/winui/statbox.cpp"
+            "${wxSOURCE_DIR}/src/winui/gauge.cpp"
+            "${wxSOURCE_DIR}/src/winui/scrolbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/spinbutt.cpp"
+            "${wxSOURCE_DIR}/src/winui/radiobox.cpp"
+            "${wxSOURCE_DIR}/src/winui/activityindicator.cpp"
+            "${wxSOURCE_DIR}/src/winui/hyperlink.cpp"
+            "${wxSOURCE_DIR}/src/winui/clrpicker.cpp"
+            "${wxSOURCE_DIR}/src/winui/infobar.cpp"
+            "${wxSOURCE_DIR}/src/winui/statbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/listbox.cpp"
+            "${wxSOURCE_DIR}/src/winui/treectrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/choice.cpp"
+            "${wxSOURCE_DIR}/src/winui/combobox.cpp"
+            "${wxSOURCE_DIR}/src/winui/datectrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/timectrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/calctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/slider.cpp"
+            "${wxSOURCE_DIR}/src/winui/spinctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/textctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/srchctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/textdlg.cpp"
+            "${wxSOURCE_DIR}/src/winui/notebook.cpp"
+            "${wxSOURCE_DIR}/src/winui/toolbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/winui.cpp"
+            "${wxSOURCE_DIR}/src/winui/ctrlhost.cpp"
+            "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
+        # Source properties must be visible where the owning target is
+        # created: core here, or the parent directory in monolithic builds.
+        # Keeping them per-source avoids instrumenting all wxWidgets TUs.
+        set_property(SOURCE ${wx_winui_test_support_sources}
+            DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                      "${wxSOURCE_DIR}/build/cmake/lib"
+            APPEND PROPERTY INCLUDE_DIRECTORIES
+                ${wx_winui_test_support_includes})
+        set_property(SOURCE ${wx_winui_test_support_sources}
+            DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                      "${wxSOURCE_DIR}/build/cmake/lib"
+            APPEND PROPERTY COMPILE_DEFINITIONS
+                ${wx_winui_test_support_definitions})
+    endif()
+endif()
 foreach(lib JPEG PNG TIFF NANOSVG WebP LUNASVG)
     if(${lib}_LIBRARIES)
         wx_lib_link_libraries(wxcore PRIVATE ${${lib}_LIBRARIES})

@@ -968,9 +968,11 @@ set(GUI_CMN_HDR
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
+    wx/generic/fdrepdlg.h
     wx/generic/filectrlg.h
     wx/generic/headerctrlg.h
     wx/generic/infobar.h
+    wx/generic/listctrl.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/numdlgg.h
@@ -1042,6 +1044,7 @@ set(GUI_CMN_HDR
     wx/window.h
     wx/windowid.h
     wx/windowptr.h
+    wx/private/windowlifetime.h
     wx/withimages.h
     wx/wrapsizer.h
     wx/wupdlock.h
@@ -1827,6 +1830,45 @@ set(MSW_HDR
     wx/msw/textentry.h
     wx/msw/tglbtn.h
     wx/msw/treectrl.h
+    wx/winui/activityindicator.h
+    wx/winui/bmpcbox.h
+    wx/winui/button.h
+    wx/winui/calctrl.h
+    wx/winui/checkbox.h
+    wx/winui/checklst.h
+    wx/winui/choice.h
+    wx/winui/clrpicker.h
+    wx/winui/colordlg.h
+    wx/winui/datectrl.h
+    wx/winui/combobox.h
+    wx/winui/gauge.h
+    wx/winui/hyperlink.h
+    wx/winui/infobar.h
+    wx/winui/listbox.h
+    wx/winui/private/itemmodel.h
+    wx/winui/private/tlwhostmsw.h
+    wx/winui/msgdlg.h
+    wx/winui/notebook.h
+    wx/winui/radiobox.h
+    wx/winui/radiobut.h
+    wx/winui/scrolbar.h
+    wx/winui/slider.h
+    wx/winui/spinbutt.h
+    wx/winui/spinctrl.h
+    wx/winui/srchctrl.h
+    wx/winui/statbmp.h
+    wx/winui/statbox.h
+    wx/winui/statusbar.h
+    wx/winui/statline.h
+    wx/winui/timectrl.h
+    wx/winui/toolbar.h
+    wx/winui/stattext.h
+    wx/winui/textctrl.h
+    wx/winui/textdlg.h
+    wx/winui/tglbtn.h
+    wx/winui/treectrl.h
+    wx/winui/winui.h
+    wx/winui/xamlhost.h
     wx/msw/calctrl.h
     wx/msw/bmpcbox.h
     wx/msw/datectrl.h
@@ -2596,6 +2638,7 @@ set(XRC_SRC
     src/xrc/xh_vlistbox.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
+    src/xrc/xmlrespriv.h
     src/xrc/xmlrsall.cpp
     src/xrc/xh_dataview.cpp
     src/xrc/xh_bookctrlbase.cpp
@@ -2787,6 +2830,18 @@ set(AUI_MSW_SRC
 set(AUI_MSW_HDR
     wx/aui/tabartmsw.h
     wx/aui/barartmsw.h
+)
+
+set(AUI_WINUI_SRC
+    src/aui/tabartmsw.cpp
+    src/aui/barartmsw.cpp
+    src/aui/barartwinui.cpp
+)
+
+set(AUI_WINUI_HDR
+    wx/aui/tabartmsw.h
+    wx/aui/barartmsw.h
+    wx/aui/barartwinui.h
 )
 
 set(AUI_GTK_SRC

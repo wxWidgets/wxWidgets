@@ -125,6 +125,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/gauge.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/gauge.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/gauge.h"
 #elif defined(__WXGTK__)

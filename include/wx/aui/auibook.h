@@ -307,6 +307,12 @@ protected:
 
     wxAuiTabArt* m_art;
 
+    // wxAuiNotebook owns the canonical and per-tab containers as one
+    // transaction and must be able to erase a dead page identity before an
+    // art-provider callback can observe it.
+    friend class wxAuiNotebook;
+    friend class wxAuiTabCtrl;
+
     // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
 
@@ -348,9 +354,11 @@ class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
                                      public wxAuiTabContainer
 {
 public:
-    // This constructor is only used internally by the library, applications
-    // never create objects of this type.
+    // Keep all construction entry points public for source compatibility,
+    // even though wxAuiNotebook is their normal caller.
+    wxAuiTabCtrl();
     wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id);
+    bool Create(wxAuiNotebook* parent, wxWindowID id);
 
     ~wxAuiTabCtrl();
 
@@ -406,6 +414,10 @@ protected:
     void SetHoverTab(wxWindow* wnd);
 
 private:
+    // Allow the existing implementation-only AUI test peer to exercise the
+    // distinct window-list button route without synthesizing mouse input.
+    friend class wxAuiNotebookTestPeer;
+
     // Reset dragging-related fields above to their initial values.
     void DoEndDragging();
 
@@ -672,6 +684,7 @@ protected:
     void OnTabBeginDrag(wxAuiTabCtrl* ctrl, int tabIdx);
     void OnTabDragMotion(wxAuiTabCtrl* ctrl, int tabIdx);
     void OnTabEndDrag(wxAuiTabCtrl* ctrl, int tabIdx);
+
     void OnTabCancelDrag(wxAuiTabCtrl* ctrl, int tabIdx);
     void OnTabButton(wxAuiTabCtrl* ctrl, int tabIdx, int button_id);
     void OnTabMiddleDown(wxAuiTabCtrl* ctrl, int tabIdx);
@@ -711,6 +724,16 @@ protected:
     unsigned int m_flags;
 
 private:
+    // Implementation-only deterministic seam used by the AUI regression
+    // tests. Keeping it private avoids adding a subclass extension point to
+    // the installed API; the one test peer below is its only caller.
+    friend class wxAuiNotebookTestPeer;
+    void OnTabEndDragForTesting(wxAuiTabCtrl* ctrl,
+                                int tabIdx,
+                                wxAuiTabCtrl* destination,
+                                int destinationIndex,
+                                bool createNewPane = false);
+
     // Create a new tab frame, containing a new wxAuiTabCtrl.
     wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
 

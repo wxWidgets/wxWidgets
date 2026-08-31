@@ -76,7 +76,10 @@ protected:
 //       same prototype for their constructor (and also explains why we use
 //       define instead of a typedef)
 // since GTK > 2.4, there is GtkColorButton
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__)
+    #include "wx/winui/clrpicker.h"
+    #define wxColourPickerWidget      wxWinUIColourButton
+#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/clrpicker.h"
     #define wxColourPickerWidget      wxColourButton
 #elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
@@ -141,7 +144,8 @@ public:        // internal functions
     // update the text control to match the button's colour
     void UpdateTextCtrlFromPicker() override;
 
-    // event handler for our picker
+    // Event handler for the implementation picker. It normalizes every child
+    // notification to the public control identity before propagation.
     void OnColourChange(wxColourPickerEvent &);
 
 protected:

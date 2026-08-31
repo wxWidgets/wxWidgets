@@ -38,10 +38,14 @@ public:
                 const wxString& title,
                 int style = 0);
 
+    virtual bool Show(bool show = true) override;
+
 protected:
     void Init();
 
-    void SendEvent(const wxEventType& evtType);
+    void SendEvent(const wxEventType& evtType,
+                   bool detachClientData = false);
+    void SendCloseEvent();
 
     void OnFind(wxCommandEvent& event);
     void OnReplace(wxCommandEvent& event);
@@ -61,6 +65,12 @@ protected:
                *m_textRepl;
 
 private:
+    // Once wxEVT_FIND_CLOSE is emitted, keep only this owned snapshot. Event
+    // handlers commonly destroy the owner (and its wxFindReplaceData member)
+    // synchronously, so retaining the original raw pointer would be unsafe.
+    wxFindReplaceData m_detachedData;
+    bool m_closeEventSent;
+
     wxDECLARE_DYNAMIC_CLASS(wxGenericFindReplaceDialog);
 
     wxDECLARE_EVENT_TABLE();

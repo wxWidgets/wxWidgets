@@ -497,7 +497,19 @@ void wxWindowQt::PostCreation(bool generic)
 
     // Set the default color so Paint Event default handler clears the DC:
     wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().window().color()));
-    wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().windowText().color()));
+    if ( m_hasFgCol )
+    {
+        // A colour set before Create() must reach the new native widget,
+        // rather than being replaced by its default palette colour.
+        QWidget* const widget = QtGetParentWidget();
+        QPalette palette = widget->palette();
+        palette.setColor(widget->foregroundRole(), m_foregroundColour.GetQColor());
+        widget->setPalette(palette);
+    }
+    else
+    {
+        wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().windowText().color()));
+    }
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
@@ -691,13 +703,17 @@ bool wxWindowQt::SetFont( const wxFont &font )
 {
     // SetFont may be called before Create, so the font is stored
     // by the base class, and set in PostCreation
+    if ( !wxWindowBase::SetFont(font) )
+        return false;
 
-    if (GetHandle())
+    if ( GetHandle() )
     {
-        GetHandle()->setFont( font.GetHandle() );
+        // wxNullFont resets the explicit font: resolve the default instead
+        // of asking the invalid font for a native handle.
+        GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
     }
 
-    return wxWindowBase::SetFont(font);
+    return true;
 }
 
 
@@ -1436,8 +1452,10 @@ bool wxWindowQt::SetForegroundColour(const wxColour& colour)
     if (!wxWindowBase::SetForegroundColour(colour))
         return false;
 
-    QWidget *widget = QtGetParentWidget();
-    wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
+    // Before Create(), only the base-class state exists. PostCreation()
+    // applies it once the native widget is available.
+    if ( QWidget* const widget = QtGetParentWidget() )
+        wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
 
     return true;
 }

@@ -29,6 +29,23 @@
 #include "testableframe.h"
 #include "waitfor.h"
 
+#ifdef __WXWINUI__
+    #include "treectrl-test-access.h"
+
+namespace
+{
+
+void DrainWinUITreeDispatch()
+{
+    // Slot registration and XAML container realization cross dispatcher
+    // boundaries even though the wx control itself is already constructed.
+    for ( int i = 0; i < 6; ++i )
+        wxYield();
+}
+
+} // namespace
+#endif
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -38,9 +55,21 @@ class TreeCtrlTestCase
 public:
     explicit TreeCtrlTestCase(int exStyle = 0)
     {
-        m_tree = make_unique<wxTreeCtrl>(
-            wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400,
-            200), wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS | exStyle);
+        long style = wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS | exStyle;
+#ifdef __WXWINUI__
+        // wxWinUI also defines __WXMSW__, whose wxTR_DEFAULT_STYLE includes
+        // presentation flags that the V0 matrix explicitly does not promise.
+        // Keep this public-contract suite inside the published profile.
+        style &= ~(wxTR_LINES_AT_ROOT |
+                   wxTR_ROW_LINES |
+                   wxTR_FULL_ROW_HIGHLIGHT |
+                   wxTR_TWIST_BUTTONS);
+#endif
+        m_tree = make_unique<wxTreeCtrl>(wxTheApp->GetTopWindow(),
+                                wxID_ANY,
+                                wxDefaultPosition,
+                                wxSize(400, 200),
+                                style);
 
         m_root = m_tree->AddRoot("root");
         m_child1 = m_tree->AppendItem(m_root, "child1");
@@ -84,7 +113,8 @@ public:
 // the tests themselves
 // ----------------------------------------------------------------------------
 
-TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::HasChildren", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::HasChildren",
+                 "[treectrl][winui-v0-supported]")
 {
     CHECK( m_tree->HasChildren(m_root) );
     CHECK( m_tree->HasChildren(m_child1) );
@@ -92,12 +122,14 @@ TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::HasChildren", "[treectrl
     CHECK_FALSE( m_tree->HasChildren(m_grandchild) );
 }
 
-TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::GetCount", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::GetCount",
+                 "[treectrl][winui-v0-supported]")
 {
     CHECK(m_tree->GetCount() == 3);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemSingle", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemSingle",
+                 "[treectrl][winui-v0-supported]")
 {
     // this test should be only ran in single-selection control
     CHECK_FALSE( m_tree->HasFlag(wxTR_MULTIPLE) );
@@ -129,7 +161,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemSingle", "[treectrl]")
     CHECK_FALSE( m_tree->IsSelected(m_child2) );
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti",
+                 "[treectrl][winui-v0-supported]")
 {
     // this test should be only ran in multi-selection control
     m_tree->ToggleWindowStyle(wxTR_MULTIPLE);
@@ -170,7 +203,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti", "[treectrl]")
     CHECK( m_tree->IsSelected(m_grandchild) );
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter deleteitem(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
@@ -181,7 +215,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem", "[treectrl]")
     CHECK(deleteitem.GetCount() == 2);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter deletechildren(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
@@ -191,7 +226,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren", "[treectrl]")
     CHECK( deletechildren.GetCount() == 2 );
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter deleteall(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
@@ -200,13 +236,20 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems", "[treectrl]")
     CHECK( deleteall.GetCount() == 4 );
 }
 
-#if wxUSE_UIACTIONSIMULATOR
+#if wxUSE_UIACTIONSIMULATOR || defined(__WXWINUI__)
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter activated(m_tree.get(), wxEVT_TREE_ITEM_ACTIVATED);
     EventCounter rclick(m_tree.get(), wxEVT_TREE_ITEM_RIGHT_CLICK);
 
+#ifdef __WXWINUI__
+    // Exercise the same routed callbacks deterministically. SendInput cannot
+    // target the isolated, non-interactive desktop used by the WinUI gate.
+    REQUIRE(wxWinUITreeCtrlTestAccess::DoubleClickItem(*m_tree, m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::RightClickItem(*m_tree, m_child1));
+#else
     wxUIActionSimulator sim;
 
     wxRect pos;
@@ -223,17 +266,24 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
+#endif
 
     CHECK(activated.GetCount() == 1);
     CHECK(rclick.GetCount() == 1);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter beginedit(m_tree.get(), wxEVT_TREE_BEGIN_LABEL_EDIT);
     EventCounter endedit(m_tree.get(), wxEVT_TREE_END_LABEL_EDIT);
 
+#ifndef __WXWINUI__
     wxUIActionSimulator sim;
+#else
+    m_tree->Show();
+    DrainWinUITreeDispatch();
+#endif
 
 #ifdef __WXQT__
     m_tree->SetFocus();
@@ -243,32 +293,55 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit", "[treectrl]")
     m_tree->SetFocusedItem(m_tree->GetRootItem());
     m_tree->EditLabel(m_tree->GetRootItem());
 
+#ifdef __WXWINUI__
+    wxTextCtrl* const editor = m_tree->GetEditControl();
+    REQUIRE(editor);
+    editor->ChangeValue("newroottext");
+#else
     sim.Text("newroottext");
     wxYield();
+#endif
 
     CHECK(beginedit.GetCount() == 1);
 
+#ifdef __WXWINUI__
+    m_tree->EndEditLabel(m_tree->GetRootItem(), false);
+#else
     sim.Char(WXK_RETURN);
     wxYield();
+#endif
 
     CHECK(endedit.GetCount() == 1);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyDown", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyDown",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter keydown(m_tree.get(), wxEVT_TREE_KEY_DOWN);
 
+#ifdef __WXWINUI__
+    // wxUIActionSimulator generates two Shift key-downs for the upper-case
+    // characters in "aAbB", in addition to the four letter key-downs.
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'A');
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_SHIFT, false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'A', false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'B');
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_SHIFT, false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'B', false, true);
+#else
     wxUIActionSimulator sim;
 
     m_tree->SetFocus();
     wxYield();
     sim.Text("aAbB");
     wxYield();
+#endif
 
     CHECK(keydown.GetCount() == 6);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents",
+                 "[treectrl][winui-v0-supported]")
 {
 #ifdef __WXGTK__
     // Works locally, but not when run on Travis CI.
@@ -283,6 +356,9 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectr
     EventCounter expanded(m_tree.get(), wxEVT_TREE_ITEM_EXPANDED);
     EventCounter expanding(m_tree.get(), wxEVT_TREE_ITEM_EXPANDING);
 
+#ifdef __WXWINUI__
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, true));
+#else
     wxUIActionSimulator sim;
 
     wxRect pos;
@@ -296,6 +372,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectr
 
     sim.MouseDblClick();
     wxYield();
+#endif
 
     CHECK(expanding.GetCount() == 1);
     CHECK(expanded.GetCount() == 1);
@@ -306,15 +383,27 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectr
     wxMilliSleep(1200);
 #endif
 
+#ifdef __WXWINUI__
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, false));
+#else
     sim.MouseDblClick();
     wxYield();
+#endif
 
     CHECK(collapsing.GetCount() == 1);
     CHECK(collapsed.GetCount() == 1);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange",
+                 "[treectrl][winui-v0-supported]")
 {
+#ifndef __WXWINUI__
+    // This branch uses system-wide mouse synthesis below. Respect the same
+    // opt-out as other interactive tests, including on an isolated desktop.
+    if ( !EnableUITests() )
+        return;
+#endif
+
     m_tree->ExpandAll();
 
     // This is currently needed to work around a problem under wxMSW: clicking
@@ -324,6 +413,17 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     // anything else is non-obvious, so for now at least work around this
     // problem in the test.
     m_tree->SetFocus();
+
+#ifdef __WXWINUI__
+    REQUIRE(WaitFor(
+        "wxTreeCtrl peer items to be attached",
+        [this]()
+        {
+            return wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(*m_tree, m_child1) &&
+                   wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(*m_tree, m_child2);
+        },
+        2000));
+#endif
 
     bool vetoChange = false;
 
@@ -358,8 +458,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     m_tree->Bind(wxEVT_TREE_SEL_CHANGED, handler);
     m_tree->Bind(wxEVT_TREE_SEL_CHANGING, handler);
 
+#ifndef __WXWINUI__
     wxUIActionSimulator sim;
-
     wxRect poschild1, poschild2;
     m_tree->GetBoundingRect(m_child1, poschild1, true);
     m_tree->GetBoundingRect(m_child2, poschild2, true);
@@ -367,21 +467,30 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     // We move in slightly so we are not on the edge
     wxPoint point1 = m_tree->ClientToScreen(poschild1.GetPosition()) + wxPoint(4, 4);
     wxPoint point2 = m_tree->ClientToScreen(poschild2.GetPosition()) + wxPoint(4, 4);
+#endif
 
+#ifdef __WXWINUI__
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child1));
+#else
     sim.MouseMove(point1);
     wxYield();
 
     sim.MouseClick();
     wxYield();
+#endif
 
     CHECK(changed == 1);
     CHECK(changing == 1);
 
+#ifdef __WXWINUI__
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child2));
+#else
     sim.MouseMove(point2);
     wxYield();
 
     sim.MouseClick();
     wxYield();
+#endif
 
     CHECK(changed == (vetoChange ? 1 : 2));
     CHECK(changing == 2);
@@ -398,7 +507,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     }
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive",
+                 "[treectrl][winui-v0-supported]")
 {
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
     // FIXME: This test fails on GitHub CI under wxGTK2 although works fine on
@@ -422,6 +532,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
 
     EventCounter beginedit(m_tree.get(), wxEVT_TREE_BEGIN_LABEL_EDIT);
 
+#ifndef __WXWINUI__
     wxUIActionSimulator sim;
 
     wxRect poschild1, poschild2;
@@ -431,7 +542,13 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     // We move in slightly so we are not on the edge
     wxPoint point1 = m_tree->ClientToScreen(poschild1.GetPosition()) + wxPoint(4, 4);
     wxPoint point2 = m_tree->ClientToScreen(poschild2.GetPosition()) + wxPoint(4, 4);
+#endif
 
+#ifdef __WXWINUI__
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree,
+        m_child2, true /* addToSelection */));
+#else
     sim.MouseMove(point1);
     wxYield();
 
@@ -445,37 +562,58 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     sim.MouseClick();
     sim.KeyUp(WXK_CONTROL);
     wxYield();
+#endif
 
     // m_child1 and m_child2 should be selected.
     CHECK( m_tree->IsSelected(m_child1) );
     CHECK( m_tree->IsSelected(m_child2) );
     CHECK( beginedit.GetCount() == 0 );
 
+#ifdef __WXWINUI__
+    // A plain peer selection replaces the Ctrl-extended selection and must
+    // not start editing as a side effect.
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child2));
+#else
     // Time needed (in ms) for the editor to display. The test will not pass
     // if the value is less than 400, 510, 800 under wxQt, wxGTK, wxMSW resp.
     const int BEGIN_EDIT_TIMEOUT = 800;
-
     YieldForAWhile(BEGIN_EDIT_TIMEOUT);
     sim.MouseClick();
     YieldForAWhile(BEGIN_EDIT_TIMEOUT);
+#endif
 
     // Only m_child2 should be selected now.
     CHECK_FALSE( m_tree->IsSelected(m_child1) );
     CHECK( m_tree->IsSelected(m_child2) );
     CHECK( beginedit.GetCount() == 0 ); // No editing should take place in the event of deselection.
 
+#ifdef __WXWINUI__
+    m_tree->Show();
+    DrainWinUITreeDispatch();
+    REQUIRE(wxWinUITreeCtrlTestAccess::ScheduleLabelEdit(*m_tree, m_child2));
+    REQUIRE(wxWinUITreeCtrlTestAccess::FireLabelEditDelay(*m_tree));
+#else
     sim.MouseClick();
     YieldForAWhile(BEGIN_EDIT_TIMEOUT);
+#endif
 
     CHECK( beginedit.GetCount() == 1 ); // Start editing as usual.
 
+#ifdef __WXWINUI__
+    m_tree->EndEditLabel(m_child2, false);
+#else
     sim.Char(WXK_RETURN); // End editing and close the editor.
     wxYield();
+#endif
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu",
+                 "[treectrl][winui-v0-supported]")
 {
     EventCounter menu(m_tree.get(), wxEVT_TREE_ITEM_MENU);
+#ifdef __WXWINUI__
+    REQUIRE(wxWinUITreeCtrlTestAccess::RightClickItem(*m_tree, m_child1));
+#else
     wxUIActionSimulator sim;
 
     wxRect pos;
@@ -489,13 +627,17 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
+#endif
 
     CHECK(menu.GetCount() == 1);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation",
+                 "[treectrl][winui-v0-supported]")
 {
+#ifndef __WXWINUI__
     wxUIActionSimulator sim;
+#endif
 
     m_tree->CollapseAll();
 
@@ -503,11 +645,23 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation", "[treectrl]")
     wxYield();
 
     m_tree->SetFocus();
+#ifdef __WXWINUI__
+    // The routed key callback deliberately leaves navigation keys unhandled
+    // so TreeView can apply its native default. Reproduce that native result
+    // through the peer callback seam without SendInput.
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_RIGHT));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, true));
+#else
     sim.Char(WXK_RIGHT);
     wxYield();
+#endif
 
     CHECK(m_tree->IsExpanded(m_root));
 
+#ifdef __WXWINUI__
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_LEFT));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, false));
+#else
 #ifdef wxHAS_GENERIC_TREECTRL
     sim.Char('-');
 #else
@@ -515,26 +669,40 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation", "[treectrl]")
 #endif
 
     wxYield();
+#endif
 
     CHECK(!m_tree->IsExpanded(m_root));
 
     wxYield();
 
+#ifdef __WXWINUI__
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_RIGHT));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, true));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_DOWN));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child1));
+#else
     sim.Char(WXK_RIGHT);
     sim.Char(WXK_DOWN);
     wxYield();
+#endif
 
     CHECK(m_tree->GetSelection() == m_child1);
 
+#ifdef __WXWINUI__
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_DOWN));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child2));
+#else
     sim.Char(WXK_DOWN);
     wxYield();
+#endif
 
     CHECK(m_tree->GetSelection() == m_child2);
 }
 
-#endif // wxUSE_UIACTIONSIMULATOR
+#endif // wxUSE_UIACTIONSIMULATOR || __WXWINUI__
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemData", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemData",
+                 "[treectrl][winui-v0-supported]")
 {
     wxTreeItemData* child1data = new wxTreeItemData();
     wxTreeItemData* appenddata = new wxTreeItemData();
@@ -557,7 +725,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemData", "[treectrl]")
     CHECK(insertdata->GetId() == insert);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Iteration", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Iteration",
+                 "[treectrl][winui-v0-supported]")
 {
     // Get first / next / last child
     wxTreeItemIdValue cookie;
@@ -570,7 +739,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Iteration", "[treectrl]")
     CHECK(m_tree->GetPrevSibling(m_child2) == m_child1);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Parent", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Parent",
+                 "[treectrl][winui-v0-supported]")
 {
     CHECK(m_tree->GetRootItem() == m_root);
     CHECK(m_tree->GetItemParent(m_child1) == m_root);
@@ -578,7 +748,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Parent", "[treectrl]")
     CHECK(m_tree->GetItemParent(m_grandchild) == m_child1);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpand", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpand",
+                 "[treectrl][winui-v0-supported]")
 {
     m_tree->ExpandAll();
 
@@ -613,7 +784,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpand", "[treectrl]")
     CHECK_FALSE(m_tree->IsExpanded(m_root));
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::AssignImageList", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::AssignImageList",
+                 "[treectrl][winui-v0-supported]")
 {
     wxSize size(16, 16);
 
@@ -630,7 +802,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::AssignImageList", "[treectrl]")
     CHECK(m_tree->GetStateImageList() == statelist);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Focus", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Focus",
+                 "[treectrl][winui-v0-supported]")
 {
     m_tree->SetFocusedItem(m_child1);
 
@@ -641,7 +814,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Focus", "[treectrl]")
     CHECK_FALSE(m_tree->GetFocusedItem());
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Bold", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Bold",
+                 "[treectrl][winui-v0-supported]")
 {
     CHECK_FALSE(m_tree->IsBold(m_child1));
 
@@ -654,7 +828,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Bold", "[treectrl]")
     CHECK_FALSE(m_tree->IsBold(m_child1));
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Visible", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Visible",
+                 "[treectrl][winui-v0-supported]")
 {
     m_tree->CollapseAll();
 
@@ -676,14 +851,16 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Visible", "[treectrl]")
     CHECK_FALSE(m_tree->GetPrevVisible(m_root));
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Scroll", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Scroll",
+                 "[treectrl][winui-v0-supported]")
 {
     // This trivial test just checks that calling ScrollTo() with the root item
     // doesn't crash any longer, as it used to do when the root item was hidden.
     m_tree->ScrollTo(m_root);
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Sort", "[treectrl]")
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Sort",
+                 "[treectrl][winui-v0-supported]")
 {
     wxTreeItemId zitem = m_tree->AppendItem(m_root, "zzzz");
     wxTreeItemId aitem = m_tree->AppendItem(m_root, "aaaa");

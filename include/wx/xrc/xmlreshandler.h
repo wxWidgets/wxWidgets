@@ -169,7 +169,6 @@ public:
         m_instance = nullptr;
         m_parentAsWindow = nullptr;
         m_resource = nullptr;
-
         m_impl = nullptr;
     }
 

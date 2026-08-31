@@ -26,8 +26,15 @@
 #endif // WX_PRECOMP
 
 #include "wx/headerctrl.h"
+#include "wx/private/columnorder.h"
 #include "wx/rearrangectrl.h"
 #include "wx/renderer.h"
+#include "wx/weakref.h"
+
+#include <algorithm>
+#include <cstdint>
+#include <limits>
+#include <vector>
 
 namespace
 {
@@ -38,6 +45,115 @@ namespace
 
 const unsigned int wxNO_COLUMN = static_cast<unsigned>(-1);
 const unsigned int wxID_COLUMNS_BASE = 1;
+
+struct SimpleHeaderState
+{
+    explicit SimpleHeaderState(wxHeaderCtrlSimple* header)
+        : weakHeader(header),
+          revision(0)
+    {
+    }
+
+    wxWeakRef<wxWindow> weakHeader;
+    std::uint64_t revision;
+};
+
+std::vector<SimpleHeaderState>& GetSimpleHeaderStates()
+{
+    static std::vector<SimpleHeaderState> states;
+    return states;
+}
+
+SimpleHeaderState& GetSimpleHeaderState(wxHeaderCtrlSimple* header)
+{
+    std::vector<SimpleHeaderState>& states = GetSimpleHeaderStates();
+    states.erase(
+        std::remove_if(
+            states.begin(),
+            states.end(),
+            [](const SimpleHeaderState& state)
+            {
+                return !state.weakHeader;
+            }),
+        states.end());
+
+    for ( SimpleHeaderState& state : states )
+    {
+        if ( state.weakHeader.get() == header )
+            return state;
+    }
+
+    states.emplace_back(header);
+    return states.back();
+}
+
+std::uint64_t GetSimpleHeaderRevision(wxHeaderCtrlSimple* header)
+{
+    return GetSimpleHeaderState(header).revision;
+}
+
+void BumpSimpleHeaderRevision(wxHeaderCtrlSimple* header)
+{
+    ++GetSimpleHeaderState(header).revision;
+}
+
+// Keep the reentrancy guard out of wxHeaderCtrlSimple itself: this class is
+// exported and adding private data to it would break its ABI on every port.
+std::vector<const wxHeaderCtrlSimple*>& GetActiveSimpleHeaderMutations()
+{
+    static std::vector<const wxHeaderCtrlSimple*> active;
+    return active;
+}
+
+class SimpleHeaderMutationGuard final
+{
+public:
+    explicit SimpleHeaderMutationGuard(const wxHeaderCtrlSimple* header)
+        : m_header(header),
+          m_entered(false)
+    {
+        std::vector<const wxHeaderCtrlSimple*>& active =
+            GetActiveSimpleHeaderMutations();
+        if ( std::find(active.begin(), active.end(), header) == active.end() )
+        {
+            active.push_back(header);
+            m_entered = true;
+        }
+    }
+
+    ~SimpleHeaderMutationGuard()
+    {
+        if ( !m_entered )
+            return;
+
+        std::vector<const wxHeaderCtrlSimple*>& active =
+            GetActiveSimpleHeaderMutations();
+        wxUnusedVar(m_header);
+        wxASSERT_MSG( !active.empty() && active.back() == m_header,
+                      "unbalanced header mutation guard" );
+        active.pop_back();
+    }
+
+    bool IsEntered() const { return m_entered; }
+
+private:
+    const wxHeaderCtrlSimple* const m_header;
+    bool m_entered;
+};
+
+bool IsNaturalColumnOrder(const wxArrayInt& order, unsigned int count)
+{
+    if ( order.size() != count )
+        return false;
+
+    for ( unsigned int pos = 0; pos < count; ++pos )
+    {
+        if ( order[pos] != static_cast<int>(pos) )
+            return false;
+    }
+
+    return true;
+}
 
 // ----------------------------------------------------------------------------
 // wxHeaderColumnsRearrangeDialog: dialog for customizing our columns
@@ -107,17 +223,34 @@ void wxHeaderCtrlBase::SetColumnCount(unsigned int count)
 
 int wxHeaderCtrlBase::GetColumnTitleWidth(const wxHeaderColumn& col)
 {
-    int w = wxWindowBase::GetTextExtent(col.GetTitle()).x;
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxString title = col.GetTitle();
+    if ( !weakThis )
+        return 0;
+
+    long long width = wxWindowBase::GetTextExtent(title).x;
 
     // add some margin:
-    w += wxRendererNative::Get().GetHeaderButtonMargin(this);
+    width += wxRendererNative::Get().GetHeaderButtonMargin(this);
 
     // if a bitmap is used, add space for it and 2px border:
     wxBitmapBundle bmp = col.GetBitmapBundle();
-    if ( bmp.IsOk() )
-        w += bmp.GetPreferredLogicalSizeFor(this).GetWidth() + 2;
+    if ( !weakThis )
+        return 0;
 
-    return w;
+    if ( bmp.IsOk() )
+    {
+        width +=
+            static_cast<long long>(
+                bmp.GetPreferredLogicalSizeFor(this).GetWidth()) + 2;
+    }
+
+    if ( width <= 0 )
+        return 0;
+    if ( width > std::numeric_limits<int>::max() )
+        return std::numeric_limits<int>::max();
+
+    return static_cast<int>(width);
 }
 
 // ----------------------------------------------------------------------------
@@ -127,17 +260,38 @@ int wxHeaderCtrlBase::GetColumnTitleWidth(const wxHeaderColumn& col)
 void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
 {
     const unsigned col = event.GetColumn();
-    const wxHeaderColumn& column = GetColumn(col);
+    if ( col >= GetColumnCount() )
+        return;
 
-    if ( !column.IsResizeable() )
+    const wxHeaderColumn* const column = &GetColumn(col);
+    const wxWeakRef<wxWindow> weakThis(this);
+    const auto isSameColumn = [this, weakThis, col, column]()
     {
+        return weakThis.get() == this &&
+               col < GetColumnCount() &&
+               &GetColumn(col) == column;
+    };
+
+    if ( !column->IsResizeable() )
+    {
+        if ( !isSameColumn() )
+            return;
+
         event.Skip();
         return;
     }
+    if ( !isSameColumn() )
+        return;
 
-    int w = GetColumnTitleWidth(column);
+    int w = GetColumnTitleWidth(*column);
+    if ( !isSameColumn() )
+        return;
 
-    if ( !UpdateColumnWidthToFit(col, w) )
+    const bool updated = UpdateColumnWidthToFit(col, w);
+    if ( !isSameColumn() )
+        return;
+
+    if ( !updated )
         event.Skip();
     else
         UpdateColumn(col);
@@ -402,26 +556,103 @@ const wxHeaderColumn& wxHeaderCtrlSimple::GetColumn(unsigned int idx) const
 
 void wxHeaderCtrlSimple::DoInsert(const wxHeaderColumnSimple& col, unsigned int idx)
 {
-    m_cols.insert(m_cols.begin() + idx, col);
+    SimpleHeaderMutationGuard mutationGuard(this);
+    wxCHECK_RET( mutationGuard.IsEntered(),
+                 "reentrant column insertion is not allowed" );
 
+    const unsigned int countOld = GetColumnCount();
+    wxArrayInt order = GetColumnsOrder();
+    wxCHECK_RET(
+        wxPrivate::ColumnOrderMutation::Insert(
+            order, countOld, idx, 1, idx),
+        "invalid column order before insertion" );
+
+    const wxWeakRef<wxWindow> weakThis(this);
+
+    // SetColumnCount() can only infer an append/remove-at-end mutation. Put
+    // its platform-specific implementation in the natural order first, then
+    // publish the transactionally computed order once the new count exists.
+    ResetColumnsOrder();
+    if ( weakThis.get() != this )
+        return;
+    const wxArrayInt naturalOrder = GetColumnsOrder();
+    if ( weakThis.get() != this )
+        return;
+    wxCHECK_RET( IsNaturalColumnOrder(naturalOrder, countOld),
+                 "column order changed reentrantly while inserting" );
+
+    m_cols.insert(m_cols.begin() + idx, col);
+    if ( m_sortKey != wxNO_COLUMN && m_sortKey >= idx )
+        ++m_sortKey;
+    if ( m_cols[idx].IsSortKey() )
+    {
+        if ( m_sortKey != wxNO_COLUMN && m_sortKey != idx )
+            m_cols[m_sortKey].UnsetAsSortKey();
+        m_sortKey = idx;
+    }
+    BumpSimpleHeaderRevision(this);
     UpdateColumnCount();
+    if ( weakThis.get() != this )
+        return;
+    wxCHECK_RET( GetColumnCount() == m_cols.size(),
+                 "column count changed reentrantly while inserting" );
+
+    SetColumnsOrder(order);
 }
 
 void wxHeaderCtrlSimple::DoDelete(unsigned int idx)
 {
+    SimpleHeaderMutationGuard mutationGuard(this);
+    wxCHECK_RET( mutationGuard.IsEntered(),
+                 "reentrant column deletion is not allowed" );
+
+    const unsigned int countOld = GetColumnCount();
+    wxArrayInt order = GetColumnsOrder();
+    wxCHECK_RET(
+        wxPrivate::ColumnOrderMutation::Erase(order, countOld, idx, 1),
+        "invalid column order before deletion" );
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    ResetColumnsOrder();
+    if ( weakThis.get() != this )
+        return;
+    const wxArrayInt naturalOrder = GetColumnsOrder();
+    if ( weakThis.get() != this )
+        return;
+    wxCHECK_RET( IsNaturalColumnOrder(naturalOrder, countOld),
+                 "column order changed reentrantly while deleting" );
+
     m_cols.erase(m_cols.begin() + idx);
     if ( idx == m_sortKey )
         m_sortKey = wxNO_COLUMN;
-
+    else if ( m_sortKey != wxNO_COLUMN && m_sortKey > idx )
+        --m_sortKey;
+    BumpSimpleHeaderRevision(this);
     UpdateColumnCount();
+    if ( weakThis.get() != this )
+        return;
+    wxCHECK_RET( GetColumnCount() == m_cols.size(),
+                 "column count changed reentrantly while deleting" );
+
+    SetColumnsOrder(order);
 }
 
 void wxHeaderCtrlSimple::DeleteAllColumns()
 {
+    SimpleHeaderMutationGuard mutationGuard(this);
+    wxCHECK_RET( mutationGuard.IsEntered(),
+                 "reentrant column deletion is not allowed" );
+
     m_cols.clear();
     m_sortKey = wxNO_COLUMN;
+    BumpSimpleHeaderRevision(this);
 
+    const wxWeakRef<wxWindow> weakThis(this);
     UpdateColumnCount();
+    if ( weakThis.get() != this )
+        return;
+    wxCHECK_RET( GetColumnCount() == m_cols.size(),
+                 "column count changed reentrantly while deleting" );
 }
 
 
@@ -430,6 +661,7 @@ void wxHeaderCtrlSimple::DoShowColumn(unsigned int idx, bool show)
     if ( show != m_cols[idx].IsShown() )
     {
         m_cols[idx].SetHidden(!show);
+        BumpSimpleHeaderRevision(this);
 
         UpdateColumn(idx);
     }
@@ -437,10 +669,20 @@ void wxHeaderCtrlSimple::DoShowColumn(unsigned int idx, bool show)
 
 void wxHeaderCtrlSimple::DoShowSortIndicator(unsigned int idx, bool ascending)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const std::uint64_t revision = GetSimpleHeaderRevision(this);
+    const bool hadSortKey = m_sortKey != wxNO_COLUMN;
     RemoveSortIndicator();
+    if ( weakThis.get() != this )
+        return;
+    if ( GetSimpleHeaderRevision(this) != revision + hadSortKey )
+        return;
+    wxCHECK_RET( idx < m_cols.size(),
+                 "columns changed while updating sort indicator" );
 
     m_cols[idx].SetSortOrder(ascending);
     m_sortKey = idx;
+    BumpSimpleHeaderRevision(this);
 
     UpdateColumn(idx);
 }
@@ -453,6 +695,7 @@ void wxHeaderCtrlSimple::RemoveSortIndicator()
         m_sortKey = wxNO_COLUMN;
 
         m_cols[sortOld].UnsetAsSortKey();
+        BumpSimpleHeaderRevision(this);
 
         UpdateColumn(sortOld);
     }
@@ -461,11 +704,26 @@ void wxHeaderCtrlSimple::RemoveSortIndicator()
 bool
 wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
 {
-    const int widthContents = GetBestFittingWidth(idx);
-    if ( widthContents == -1 )
+    if ( idx >= m_cols.size() )
         return false;
 
+    wxHeaderCtrlSimple* const header = this;
+    const wxWeakRef<wxWindow> weakHeader(header);
+    const std::uint64_t revision = GetSimpleHeaderRevision(header);
+    const wxHeaderColumnSimple* const column = &m_cols[idx];
+
+    const int widthContents = GetBestFittingWidth(idx);
+    if ( weakHeader.get() != header ||
+            GetSimpleHeaderRevision(header) != revision ||
+            idx >= m_cols.size() ||
+            &m_cols[idx] != column ||
+            widthContents == -1 )
+    {
+        return false;
+    }
+
     m_cols[idx].SetWidth(wxMax(widthContents, widthTitle));
+    BumpSimpleHeaderRevision(this);
 
     return true;
 }
@@ -485,7 +743,14 @@ wxHeaderCtrlSimple::UpdateColumnsOrder(const wxArrayInt& WXUNUSED(order))
 
 void wxHeaderCtrlSimple::OnHeaderResizing(wxHeaderCtrlEvent& evt)
 {
-    m_cols[evt.GetColumn()].SetWidth(evt.GetWidth());
+    const int col = evt.GetColumn();
+    wxCHECK_RET( col >= 0 &&
+                     static_cast<size_t>(col) < m_cols.size(),
+                 "columns changed while handling resize event" );
+
+    m_cols[col].SetWidth(evt.GetWidth());
+    BumpSimpleHeaderRevision(this);
+    InvalidateBestSize();
     Refresh();
 }
 

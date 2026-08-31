@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/private/localeset.h"
+#include "wx/wxcrt.h"
 
 #include <errno.h>
 
@@ -883,6 +884,19 @@ TEST_CASE("StringToDouble", "[wxString]")
     // don't load default catalog, it may be unavailable:
     CHECK( locale.Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // XAML requires the process CRT numeric locale to remain C. Verify both
+    // the effective value returned by the wx wrapper and the resulting
+    // wxString contract after a locale with a decimal comma was initialized.
+    const char * const effective = wxSetlocale(LC_NUMERIC, "");
+    REQUIRE(effective);
+    CHECK(wxString::FromAscii(effective) == "C");
+    CHECK(wxString("1.23").ToDouble(&d));
+    CHECK(d == 1.23);
+    CHECK_FALSE(wxString("1,23").ToDouble(&d));
+    CHECK(wxString::Format("%.2f", 1.5) == "1.50");
+#else
+
     static const struct ToDoubleData doubleData2[] =
     {
         { wxT("1"), 1, true },
@@ -928,6 +942,7 @@ TEST_CASE("StringToDouble", "[wxString]")
 
     CHECK( wxString("NAN").ToDouble(&d) );
     CHECK( std::isnan(d) );
+#endif // __WXWINUI__ && wxUSE_WINUI3
 }
 
 TEST_CASE("StringFromDouble", "[wxString]")
@@ -968,9 +983,14 @@ TEST_CASE("StringFromDouble", "[wxString]")
     {
         const FromDoubleTestData& td = testData[m];
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The WinUI runtime keeps the process CRT numeric locale at C.
+        CHECK( wxString::FromDouble(td.value, td.prec) == td.str );
+#else
         wxString str(td.str);
         str.Replace(".", ",");
         CHECK( wxString::FromDouble(td.value, td.prec) == str );
+#endif
     }
 }
 

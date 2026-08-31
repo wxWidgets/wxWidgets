@@ -28,8 +28,92 @@
 #endif
 
 #include "wx/listctrl.h"
+#include "wx/private/windowlifetime.h"
 #include "wx/statline.h"
 #include "wx/imaglist.h"
+#include "wx/weakref.h"
+
+#include <vector>
+
+namespace
+{
+
+// wxListCtrl sends its item notifications from inside a controller mutation.
+// A removal must remain authoritative because a nested topology writer could
+// otherwise erase a controller item without the corresponding page (or vice
+// versa). An insertion is different: it publishes the common model before the
+// controller item and its revision checks can safely observe a nested removal.
+class wxListbookTopologyTransaction
+{
+public:
+    enum class Kind
+    {
+        Inserting,
+        Removing
+    };
+
+    wxListbookTopologyTransaction(wxListbook* const book, Kind kind)
+        : m_book(book),
+          m_lifetime(book),
+          m_kind(kind),
+          m_previous(GetActive())
+    {
+        GetActive() = this;
+    }
+
+    ~wxListbookTopologyTransaction()
+    {
+        wxASSERT(GetActive() == this);
+        GetActive() = m_previous;
+    }
+
+    static bool IsActiveFor(wxListbook* const book)
+    {
+        for ( wxListbookTopologyTransaction* transaction = GetActive();
+              transaction;
+              transaction = transaction->m_previous )
+        {
+            if ( transaction->m_book == book &&
+                    transaction->m_lifetime.get() == book )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static bool IsRemovingFor(wxListbook* const book)
+    {
+        for ( wxListbookTopologyTransaction* transaction = GetActive();
+              transaction;
+              transaction = transaction->m_previous )
+        {
+            if ( transaction->m_book == book &&
+                    transaction->m_lifetime.get() == book &&
+                    transaction->m_kind == Kind::Removing )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+private:
+    static wxListbookTopologyTransaction*& GetActive()
+    {
+        static thread_local wxListbookTopologyTransaction* active = nullptr;
+        return active;
+    }
+
+    wxListbook* const m_book;
+    const wxWeakRef<wxListbook> m_lifetime;
+    const Kind m_kind;
+    wxListbookTopologyTransaction* const m_previous;
+};
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // event table
@@ -291,8 +375,52 @@ void wxListbook::OnImagesChanged()
 
 void wxListbook::UpdateSelectedPage(size_t newsel)
 {
-    GetListView()->Select(newsel);
-    GetListView()->Focus(newsel);
+    const wxWeakRef<wxListbook> weakThis(this);
+    wxListView* const list = GetListView();
+    const wxWeakRef<wxListView> weakList(list);
+    const size_t pageCount = wxBookCtrlBase::GetPageCount();
+    wxWindow* const selectedPage =
+        newsel < pageCount
+            ? wxBookCtrlBase::GetPage(newsel)
+            : nullptr;
+    const wxWeakRef<wxWindow> weakSelectedPage(selectedPage);
+    const int selection = m_selection;
+    std::vector<wxWindow*> pages;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimes;
+    pages.reserve(pageCount);
+    pageLifetimes.reserve(pageCount);
+    for ( size_t i = 0; i < pageCount; ++i )
+    {
+        wxWindow* const page = wxBookCtrlBase::GetPage(i);
+        pages.push_back(page);
+        pageLifetimes.emplace_back(page);
+    }
+
+    list->Select(newsel);
+
+    wxListbook* const book = weakThis.get();
+    if ( !book || weakList.get() != list ||
+            book->GetListView() != list ||
+            book->wxBookCtrlBase::GetPageCount() != pageCount ||
+            list->GetItemCount() != static_cast<long>(pageCount) ||
+            newsel >= pageCount ||
+            weakSelectedPage.get() != selectedPage ||
+            book->wxBookCtrlBase::GetPage(newsel) != selectedPage ||
+            book->m_selection != selection )
+    {
+        return;
+    }
+
+    for ( size_t i = 0; i < pageCount; ++i )
+    {
+        if ( pageLifetimes[i].get() != pages[i] ||
+                book->wxBookCtrlBase::GetPage(i) != pages[i] )
+        {
+            return;
+        }
+    }
+
+    list->Focus(newsel);
 }
 
 wxBookCtrlEvent* wxListbook::CreatePageChangingEvent() const
@@ -317,56 +445,415 @@ wxListbook::InsertPage(size_t n,
                        bool bSelect,
                        int imageId)
 {
-    if ( !wxBookCtrlBase::InsertPage(n, page, text, bSelect, imageId) )
+    if ( wxListbookTopologyTransaction::IsActiveFor(this) )
         return false;
 
-    GetListView()->InsertItem(n, RemoveMnemonics(text), imageId);
+    const wxListbookTopologyTransaction transaction(
+        this, wxListbookTopologyTransaction::Kind::Inserting);
+    const InsertPageResult modelResult =
+        DoInsertPageIntoModel(n, page, text, bSelect, imageId);
+    if ( modelResult == InsertPageResult::Failed )
+        return false;
+    if ( modelResult == InsertPageResult::OwnershipConsumed )
+        return true;
 
-    // if the inserted page is before the selected one, we must update the
-    // index of the selected page
-    if ( int(n) <= m_selection )
+    const wxWeakRef<wxListbook> weakThis(this);
+    const wxWeakRef<wxWindow> weakPage(page);
+    wxListView* const list = GetListView();
+    const wxWeakRef<wxListView> weakList(list);
+    const size_t expectedCount = wxBookCtrlBase::GetPageCount();
+    const long controllerCountBefore = list->GetItemCount();
+    const int selectionBefore = m_selection;
+    const int shiftedSelection =
+        selectionBefore != wxNOT_FOUND &&
+        static_cast<int>(n) <= selectionBefore
+            ? selectionBefore + 1
+            : selectionBefore;
+    std::vector<wxWindow*> pages;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimes;
+    pages.reserve(expectedCount);
+    pageLifetimes.reserve(expectedCount);
+    for ( size_t i = 0; i < expectedCount; ++i )
     {
-        // one extra page added
-        m_selection++;
-        GetListView()->Select(m_selection);
-        GetListView()->Focus(m_selection);
+        wxWindow* const expectedPage = wxBookCtrlBase::GetPage(i);
+        pages.push_back(expectedPage);
+        pageLifetimes.emplace_back(expectedPage);
+    }
+    const auto getCurrent = [&]() -> wxListbook*
+    {
+        wxListbook* const book = weakThis.get();
+        if ( !book ||
+                weakPage.get() != page ||
+                page->GetParent() != book ||
+                weakList.get() != list ||
+                book->GetListView() != list ||
+                book->wxBookCtrlBase::GetPageCount() != expectedCount )
+        {
+            return nullptr;
+        }
+
+        for ( size_t i = 0; i < expectedCount; ++i )
+        {
+            if ( pageLifetimes[i].get() != pages[i] ||
+                    book->wxBookCtrlBase::GetPage(i) != pages[i] )
+            {
+                return nullptr;
+            }
+        }
+
+        return book;
+    };
+    const auto finishCommittedInsertion = [&]() -> bool
+    {
+        wxListbook* book = weakThis.get();
+        if ( book &&
+                (weakPage.get() != page || page->GetParent() != book) &&
+                n < book->wxBookCtrlBase::GetPageCount() &&
+                book->wxBookCtrlBase::GetPage(n) == page )
+        {
+            book->DoErasePageRange(n, 1);
+            if ( wxWeakWindowIsAvailableForCallbacks(weakList, list) &&
+                    book->GetListView() == list &&
+                    list->GetItemCount() ==
+                        static_cast<long>(expectedCount) )
+            {
+                (void)list->DeleteItem(n);
+            }
+
+            book = weakThis.get();
+            if ( book &&
+                    (book->m_selection != selectionBefore ||
+                     shiftedSelection == selectionBefore) )
+            {
+                book->DoSetSelectionAfterRemoval(n);
+            }
+        }
+
+        book = weakThis.get();
+        if ( book )
+            (void)book->DoReconcilePageVisibility();
+
+        return true;
+    };
+    const auto rollbackCommonPage = [&]() -> bool
+    {
+        wxListbook* const book = getCurrent();
+        if ( book && list->GetItemCount() == controllerCountBefore )
+        {
+            if ( book->m_selection == shiftedSelection )
+                book->m_selection = selectionBefore;
+            wxWindow* const rolledBack =
+                book->wxBookCtrlBase::DoRemovePage(n);
+            if ( rolledBack == page && weakPage.get() == page )
+                return false;
+        }
+
+        // A callback from invalidation can supersede the rollback and
+        // republish the candidate. Returning false in that case would tell
+        // the caller to delete a page that the book still owns.
+        return finishCommittedInsertion();
+    };
+
+    if ( controllerCountBefore != static_cast<long>(expectedCount - 1) )
+    {
+        return rollbackCommonPage();
     }
 
-    if ( !DoSetSelectionAfterInsertion(n, bSelect) )
+    // Publish the shifted model selection before InsertItem(): its
+    // wxEVT_LIST_INSERT_ITEM callback must observe indices in the already
+    // published page topology. If it selects another page, that newer writer
+    // is preserved below.
+    wxListbook* book = getCurrent();
+    if ( !book )
+        return finishCommittedInsertion();
+    book->m_selection = shiftedSelection;
+
+    const long inserted =
+        list->InsertItem(n, RemoveMnemonics(text), imageId);
+    book = getCurrent();
+    if ( !book )
+        return finishCommittedInsertion();
+
+    if ( inserted != static_cast<long>(n) )
+    {
+        if ( inserted != wxNOT_FOUND )
+        {
+            list->DeleteItem(inserted);
+            book = getCurrent();
+            if ( !book )
+                return finishCommittedInsertion();
+        }
+
+        return rollbackCommonPage();
+    }
+
+    if ( list->GetItemCount() != static_cast<long>(expectedCount) )
+        return finishCommittedInsertion();
+
+    const bool selectionOvertaken = book->m_selection != shiftedSelection;
+
+    // If the insertion shifted the selected page and no callback superseded
+    // it, synchronize the controller selection to the already shifted model.
+    if ( !selectionOvertaken && shiftedSelection != selectionBefore )
+    {
+        list->Select(shiftedSelection);
+
+        book = getCurrent();
+        if ( !book ||
+                list->GetItemCount() != static_cast<long>(expectedCount) ||
+                book->m_selection != shiftedSelection )
+        {
+            return finishCommittedInsertion();
+        }
+
+        list->Focus(shiftedSelection);
+        book = getCurrent();
+        if ( !book ||
+                list->GetItemCount() != static_cast<long>(expectedCount) ||
+                book->m_selection != shiftedSelection )
+        {
+            return finishCommittedInsertion();
+        }
+    }
+
+    if ( selectionOvertaken )
+    {
+        const int overtakenSelection = book->m_selection;
+        wxWindow* const selectedPage =
+            overtakenSelection != wxNOT_FOUND &&
+            static_cast<size_t>(overtakenSelection) < expectedCount
+                ? book->wxBookCtrlBase::GetPage(overtakenSelection)
+                : nullptr;
+        const bool pageShown = page->IsShown();
+        book = getCurrent();
+        if ( !book || book->m_selection != overtakenSelection )
+            return finishCommittedInsertion();
+
+        if ( selectedPage != page && pageShown )
+        {
+            page->Hide();
+            book = getCurrent();
+            if ( !book )
+                return finishCommittedInsertion();
+        }
+
+        book->UpdateSize();
+        return finishCommittedInsertion();
+    }
+
+    if ( !book->DoSetSelectionAfterInsertion(n, bSelect) )
+    {
+        book = getCurrent();
+        if ( !book )
+            return finishCommittedInsertion();
+
         page->Hide();
+        book = getCurrent();
+        if ( !book )
+            return finishCommittedInsertion();
+    }
+    else
+    {
+        book = getCurrent();
+        if ( !book )
+            return finishCommittedInsertion();
+    }
 
-    UpdateSize();
+    book->UpdateSize();
 
-    return true;
+    return finishCommittedInsertion();
 }
 
 wxWindow *wxListbook::DoRemovePage(size_t page)
 {
-    wxWindow *win = wxBookCtrlBase::DoRemovePage(page);
+    if ( wxListbookTopologyTransaction::IsRemovingFor(this) )
+        return nullptr;
 
-    if ( win )
+    const size_t pageCount = wxBookCtrlBase::GetPageCount();
+    if ( page >= pageCount )
+        return wxBookCtrlBase::DoRemovePage(page);
+
+    const wxWeakRef<wxListbook> weakThis(this);
+    wxListView* const list = GetListView();
+    const wxWeakRef<wxListView> weakList(list);
+    std::vector<wxWindow*> pages;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimes;
+    pages.reserve(pageCount);
+    pageLifetimes.reserve(pageCount);
+    for ( size_t i = 0; i < pageCount; ++i )
     {
-        GetListView()->DeleteItem(page);
-
-        DoSetSelectionAfterRemoval(page);
-
-        GetListView()->Arrange();
-        UpdateSize();
+        wxWindow* const candidate = wxBookCtrlBase::GetPage(i);
+        pages.push_back(candidate);
+        pageLifetimes.emplace_back(candidate);
     }
 
-    return win;
+    const auto getOriginal =
+        [&](long expectedControllerCount) -> wxListbook*
+        {
+            wxListbook* const book = weakThis.get();
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                    !wxWeakWindowIsAvailableForCallbacks(weakList, list) ||
+                    book->GetListView() != list ||
+                    book->wxBookCtrlBase::GetPageCount() != pageCount ||
+                    list->GetItemCount() != expectedControllerCount )
+            {
+                return nullptr;
+            }
+
+            for ( size_t i = 0; i < pageCount; ++i )
+            {
+                if ( pageLifetimes[i].get() != pages[i] ||
+                        book->wxBookCtrlBase::GetPage(i) != pages[i] )
+                {
+                    return nullptr;
+                }
+            }
+
+            return book;
+        };
+    wxListbook* book = getOriginal(static_cast<long>(pageCount));
+    if ( !book )
+        return nullptr;
+
+    // DELETE_ITEM is a synchronous application-code boundary. Keep the
+    // controller and common model under one transaction so a nested writer
+    // can't publish only one half of their shared topology.
+    const wxListbookTopologyTransaction transaction(
+        this, wxListbookTopologyTransaction::Kind::Removing);
+
+    // Stage the controller mutation first. If it fails, the common model and
+    // ownership are untouched and RemovePage()/DeletePage() correctly report
+    // failure. The delete event is an application-code boundary, so only
+    // publish the model removal if the complete original snapshot survived.
+    if ( !list->DeleteItem(page) )
+        return nullptr;
+
+    book = getOriginal(static_cast<long>(pageCount - 1));
+    if ( !book )
+    {
+        book = weakThis.get();
+        wxWindow* const expectedPage = pages[page];
+        if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                wxWeakWindowIsAvailableForCallbacks(weakList, list) &&
+                book->GetListView() == list &&
+                list->GetItemCount() ==
+                    static_cast<long>(pageCount - 1) &&
+                book->wxBookCtrlBase::GetPageCount() == pageCount &&
+                book->wxBookCtrlBase::GetPage(page) == expectedPage &&
+                pageLifetimes[page].get() != expectedPage )
+        {
+            // DELETE_ITEM consumed the page before the common publication.
+            // Remove its now-dangling identity without invoking another
+            // callback-capable controller operation.
+            book->DoErasePageRange(page, 1);
+            book->DoSetSelectionAfterRemoval(page);
+        }
+        return nullptr;
+    }
+
+    wxWindow* const removed = book->wxBookCtrlBase::DoRemovePage(page);
+    const wxWeakRef<wxWindow> weakRemoved(removed);
+    book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+        return nullptr;
+
+    if ( !removed )
+    {
+        // DoRemovePage() can commit the common erase and then lose ownership
+        // during best-size invalidation. The list projection already
+        // committed above, so only the selection/layout tail remains.
+        if ( book->wxBookCtrlBase::GetPageCount() == pageCount - 1 )
+        {
+            book->DoSetSelectionAfterRemoval(page);
+            book = weakThis.get();
+            if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                    wxWeakWindowIsAvailableForCallbacks(weakList, list) &&
+                    book->GetListView() == list )
+            {
+                list->Arrange();
+            }
+        }
+        return nullptr;
+    }
+
+    const auto getCurrent = [&]() -> wxListbook*
+    {
+        wxListbook* const currentBook = weakThis.get();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                !wxWeakWindowIsAvailableForCallbacks(weakList, list) ||
+                currentBook->GetListView() != list ||
+                weakRemoved.get() != removed ||
+                currentBook->wxBookCtrlBase::GetPageCount() != pageCount - 1 ||
+                list->GetItemCount() != static_cast<long>(pageCount - 1) )
+        {
+            return nullptr;
+        }
+
+        size_t current = 0;
+        for ( size_t i = 0; i < pageCount; ++i )
+        {
+            if ( i == page )
+                continue;
+
+            if ( pageLifetimes[i].get() != pages[i] ||
+                    currentBook->wxBookCtrlBase::GetPage(current++) != pages[i] )
+            {
+                return nullptr;
+            }
+        }
+
+        return currentBook;
+    };
+    const auto getTransferredPage = [&]() -> wxWindow*
+    {
+        wxListbook* const book = weakThis.get();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                !wxWeakWindowIsAvailableForCallbacks(weakRemoved, removed) )
+            return nullptr;
+
+        // A nested writer may have put the page back into the book. In that
+        // case ownership was not transferred to RemovePage()/DeletePage().
+        return book->wxBookCtrlBase::FindPage(removed) == wxNOT_FOUND
+                    ? removed
+                    : nullptr;
+    };
+
+    book = getCurrent();
+    if ( !book )
+        return getTransferredPage();
+
+    book->DoSetSelectionAfterRemoval(page);
+    book = getCurrent();
+    if ( !book )
+        return getTransferredPage();
+
+    list->Arrange();
+    book = getCurrent();
+    if ( !book )
+        return getTransferredPage();
+
+    book->UpdateSize();
+    return getTransferredPage();
 }
 
 
 bool wxListbook::DeleteAllPages()
 {
-    GetListView()->DeleteAllItems();
-    if (!wxBookCtrlBase::DeleteAllPages())
+    if ( wxListbookTopologyTransaction::IsActiveFor(this) ||
+            IsDeletingAllPages() )
+    {
+        return false;
+    }
+
+    const wxWeakRef<wxListbook> weakThis(this);
+    if ( !wxBookCtrlBase::DeleteAllPages() )
         return false;
 
-    UpdateSize();
-
-    return true;
+    wxListbook* const book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+        return false;
+    book->UpdateSize();
+    return wxWeakWindowIsAvailableForCallbacks(weakThis, this);
 }
 
 // ----------------------------------------------------------------------------
@@ -391,13 +878,29 @@ void wxListbook::OnListSelected(wxListEvent& eventList)
         return;
     }
 
+    const wxWeakRef<wxListbook> weakThis(this);
+    wxListView* const list = GetListView();
+    const wxWeakRef<wxListView> weakList(list);
+
     SetSelection(selNew);
 
+    wxListbook* book = weakThis.get();
+    if ( !book || weakList.get() != list || book->GetListView() != list )
+        return;
+
     // change wasn't allowed, return to previous state
-    if (m_selection != selNew)
+    if ( book->m_selection != selNew )
     {
-        GetListView()->Select(m_selection);
-        GetListView()->Focus(m_selection);
+        list->Select(book->m_selection);
+
+        book = weakThis.get();
+        if ( !book || weakList.get() != list ||
+                book->GetListView() != list )
+        {
+            return;
+        }
+
+        list->Focus(book->m_selection);
     }
 }
 

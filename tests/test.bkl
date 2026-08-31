@@ -210,6 +210,7 @@
             controls/comboboxtest.cpp
             controls/dataviewctrltest.cpp
             controls/datepickerctrltest.cpp
+            controls/filesystemctrltest.cpp
             controls/frametest.cpp
             controls/gaugetest.cpp
             controls/gridtest.cpp
@@ -219,6 +220,49 @@
             controls/itemcontainertest.cpp
             controls/infobar.cpp
             controls/label.cpp
+            controls/mswoledropsession.cpp
+            <!--
+                Keep these WinUI test translation units in parity with CMake.
+                They are safe in all generated projects because each source
+                guards its implementation with __WXWINUI__ and wxUSE_WINUI3
+                (and the relevant component feature macro where needed).
+             -->
+            controls/winuiactivex.cpp
+            controls/winuiolebroker.cpp
+            controls/winuihostlifecycle.cpp
+            controls/winuiadvancedharness.cpp
+            controls/winuinativewindow.cpp
+            controls/winuimdi.cpp
+            controls/winuiglcanvas.cpp
+            controls/winuiwebview.cpp
+            controls/winuimedia.cpp
+            controls/winuihtml.cpp
+            controls/winuirichtext.cpp
+            controls/winuiaui.cpp
+            controls/winuistc.cpp
+            controls/winuiribbon.cpp
+            controls/winuiinputrouter.cpp
+            controls/winuirootinput.cpp
+            controls/winuiinputstate.cpp
+            controls/winuiaccessibility.cpp
+            controls/winuiappearance.cpp
+            controls/winuichromefeedback.cpp
+            controls/winuitoolbar.cpp
+            controls/winuicombomodel.cpp
+            controls/winuiitemmodel.cpp
+            controls/winuilistmodel.cpp
+            controls/winuirangedate.cpp
+            controls/winuirangeevents.cpp
+            controls/winuispinmodel.cpp
+            controls/winuitransientstate.cpp
+            controls/winuitransientwindows.cpp
+            controls/winuiauxwindows.cpp
+            controls/winuigenericfeedback.cpp
+            controls/winuititlebar.cpp
+            controls/winuinotification.cpp
+            controls/winuitaskbaricon.cpp
+            controls/winuitaskbarbutton.cpp
+            controls/winuitextpeer.cpp
             controls/listbasetest.cpp
             controls/listbooktest.cpp
             controls/listboxtest.cpp
@@ -226,9 +270,13 @@
             controls/listviewtest.cpp
             controls/markuptest.cpp
             controls/notebooktest.cpp
+            controls/winuinotebook.cpp
+            controls/winuitreemodel.cpp
             controls/ownerdrawncomboboxtest.cpp
             controls/pickerbasetest.cpp
             controls/pickertest.cpp
+            controls/winuipickercontracts.cpp
+            controls/winuiwizardpropsheet.cpp
             controls/propgridtest.cpp
             controls/radioboxtest.cpp
             controls/radiobuttontest.cpp
@@ -248,10 +296,16 @@
             controls/treebooktest.cpp
             controls/treectrltest.cpp
             controls/treelistctrltest.cpp
+            controls/vlboxtest.cpp
             controls/virtlistctrltest.cpp
             controls/webtest.cpp
             controls/windowtest.cpp
             controls/dialogtest.cpp
+            controls/winuiframeclassdialog.cpp
+            controls/winuidialogcontracts.cpp
+            controls/winuiprinting.cpp
+            controls/winuidialogsession.cpp
+            controls/winuirichtooltip.cpp
             events/clone.cpp
             events/enterleave.cpp
             <!--
@@ -260,6 +314,7 @@
             events/evtlooptest.cpp
             events/propagation.cpp
             events/keyboard.cpp
+            events/winuikeyboard.cpp
             <!--
                 And duplicate this one too as wxExecute behaves differently in
                 console and GUI applications.
@@ -275,6 +330,7 @@
             html/htmprint.cpp
             menu/accelentry.cpp
             menu/menu.cpp
+            menu/winuimenubar.cpp
             misc/guifuncs.cpp
             misc/selstoretest.cpp
             misc/garbage.cpp
@@ -302,6 +358,10 @@
             window/setsize.cpp
             xml/xrctest.cpp
         </sources>
+        <!-- Bakefile has no portable per-source equivalent of CMake's
+             property used by the C++/WinRT test TUs. Keep generated MSVC
+             projects viable by applying /bigobj to this test target. -->
+        <cxxflags cond="FORMAT=='msvc'">/bigobj</cxxflags>
         <!--
             Can't use <wx-lib> here as it doesn't work with conditionally
             defined variables, so fall back <sys-lib> as we must not link with
@@ -312,6 +372,12 @@
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <wx-lib>stc</wx-lib>
         <wx-lib>aui</wx-lib>
+        <if cond="USE_RIBBON=='1'">
+            <wx-lib>ribbon</wx-lib>
+        </if>
+        <if cond="USE_OPENGL=='1'">
+            <wx-lib>gl</wx-lib>
+        </if>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
