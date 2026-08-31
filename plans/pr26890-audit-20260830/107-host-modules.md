@@ -305,7 +305,26 @@ linkage. Logs are `audit107d1-focus-before.log` and
 `audit107d1-focus-on-{focus,input,geometry,gates}.log` (the earlier input and
 geometry baselines belong to 107C). No physical input was used and no runtime
 failure was retried. Input extraction and the new combined OFF/install/
-consumer qualification remain pending.
+consumer qualification remain pending at this focus-only checkpoint.
+
+Input extraction subsequently implemented after `0b75f296d8`: the existing
+54 routing/dispatch bodies and contact-snapshot accessor move to
+`hostinput.cpp`, with three stateless intracore declarations in
+`hostinput.h`. Capture, cancellation, posted non-client dispatch, native
+resize contact identity, cursor policy and generation guards remain exact.
+The native-focus resolver stays solely in `hostfocus.cpp`; the external D2
+candidate's redundant move of that helper was not applied. The first compile
+caught the missing `hostresize.h` include for the existing shared request;
+failed logs remain `audit107d2-input-on-build.log`, fixed builds are
+`audit107d2-input-on-build-includefix.log` and pass `/warnaserror`.
+
+Both linkages retain **1205/31 input**, **132/14 focus**, **219/7 native
+resize**, **14/1 pure resize progress**, **327/14 geometry** and
+smoke/Supported **2/2**. Logs: `audit107d2-input-on-{input,focus,native,
+progress,geometry,gates}.log`. All are private-desktop/non-global-input
+checks; no runtime failure was retried. Public declarations/layout and test
+assertions are unchanged. Removal of the moved test accessor belongs to
+106, and this batch's OFF/install/consumer cycle is still pending.
 
 Extract host adapters to `src/winui/hostfocus.cpp` and
 `src/winui/hostinput.cpp`, after 107A/C. Reuse the existing pure

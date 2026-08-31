@@ -91,6 +91,7 @@ if(WXMSW)
             src/winui/hostresize.cpp
             src/winui/hosttooltip.cpp
             src/winui/hostfocus.cpp
+            src/winui/hostinput.cpp
             src/winui/hostuia.cpp
             src/winui/visualcoordinates.cpp
             src/winui/xamlhost.cpp
