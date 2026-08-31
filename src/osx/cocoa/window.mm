@@ -4400,6 +4400,10 @@ void wxWidgetCocoaImpl::ClipsToBounds(bool clip)
     m_osxView.clipsToBounds = clip;
 }
 
+bool wxWidgetCocoaImpl::DoesClipToBounds() const
+{
+    return m_osxView.clipsToBounds;
+}
 
 //
 // Factory methods

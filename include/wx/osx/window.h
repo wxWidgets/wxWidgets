@@ -246,6 +246,7 @@ public:
 
     // sets NSView.clipsToBounds property
     void                MacClipsToBounds( bool clip );
+    bool                MacDoesClipToBounds() const;
 
     // returns true if children have to clipped to the content area
     // (e.g., scrolled windows)

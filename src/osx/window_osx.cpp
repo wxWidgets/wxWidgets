@@ -270,6 +270,13 @@ void wxWindowMac::MacClipsToBounds( bool clip )
         m_peer->ClipsToBounds(clip);
 }
 
+bool wxWindowMac::MacDoesClipToBounds() const
+{
+    if ( m_peer )
+        return m_peer->DoesClipToBounds();
+    
+    return true;
+}
 
 void wxWindowMac::MacSetClipChildren()
 {
@@ -2779,6 +2786,11 @@ void wxWidgetImpl::SetDrawingEnabled(bool WXUNUSED(enabled))
 
 void wxWidgetImpl::ClipsToBounds(bool WXUNUSED(clip))
 {
+}
+
+bool wxWidgetImpl::DoesClipToBounds() const
+{
+    return false;
 }
 
 void wxWidgetImpl::AdjustClippingView(wxScrollBar* WXUNUSED(horizontal), wxScrollBar* WXUNUSED(vertical))
