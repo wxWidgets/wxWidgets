@@ -137,11 +137,6 @@ wxWinUIMSWCompleteDeferredTopLevelDestroy(
 WXDLLIMPEXP_CORE unsigned long long
 wxWinUIMSWGetHwndGeneration(wxWindow *window, WXHWND hwnd);
 
-// Force the next non-owned HWND owner publication to fail before touching
-// USER32, proving that wx logical parentage is reconciled back to the native
-// owner instead of remaining split after a failed Reparent().
-WXDLLIMPEXP_CORE void wxWinUIMSWFailNextOwnerWriteForTest();
-
 // Return a generation tied to this exact native HWND lifetime, including for
 // implementation HWNDs that have no direct wxWindow association. The value is
 // stored as a window property, so a USER32 handle recycled after WM_NCDESTROY

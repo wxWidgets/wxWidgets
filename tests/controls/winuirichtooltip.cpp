@@ -20,6 +20,7 @@
 #include "wx/utils.h"
 
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "wx/winui/private/richtooltip.h"
 #include "wx/winui/private/tlwhost.h"
 
@@ -155,7 +156,7 @@ TEST_CASE("WinUIRichToolTip::BetaPolicyUsesOnlyGenericPopup",
     CHECK(diagnostics.liveVisuals == 0);
     CHECK(diagnostics.peerOpens == 0);
     CHECK(diagnostics.operationalFailures == 0);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
 
     wxWinUICancelTransientSessions(owner);
@@ -192,7 +193,7 @@ TEST_CASE("WinUIRichToolTip::UnsupportedUsesGenericFallback",
     CHECK(diagnostics.operationalFailures == 0);
     CHECK(diagnostics.cancellations == 0);
     CHECK(diagnostics.liveGenericFallbacks == 1);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
 
     wxWinUICancelTransientSessions(owner);
@@ -232,7 +233,7 @@ TEST_CASE("WinUIRichToolTip::OperationalFailureNeverFallsBack",
     CHECK(diagnostics.unsupportedFallbacks == 0);
     CHECK(diagnostics.operationalFailures == 1);
     CHECK(diagnostics.cancellations == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
 
@@ -265,7 +266,7 @@ TEST_CASE("WinUIRichToolTip::TargetDestroyedAfterAppendIsSafe",
     CHECK(diagnostics.unsupportedFallbacks == 0);
     CHECK(diagnostics.operationalFailures == 0);
     CHECK(diagnostics.cancellations == 1);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
 
@@ -301,7 +302,7 @@ TEST_CASE("WinUIRichToolTip::TargetDestroyedAfterFlowDirectionIsSafe",
     CHECK(diagnostics.unsupportedFallbacks == 0);
     CHECK(diagnostics.operationalFailures == 0);
     CHECK(diagnostics.cancellations == 1);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
 
@@ -359,7 +360,7 @@ TEST_CASE("WinUIRichToolTip::CentralCancellation",
         tip.ShowFor(owner);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
 
     const wxWinUITeachingTipDiagnosticsForTesting activeDiagnostics =
@@ -370,7 +371,7 @@ TEST_CASE("WinUIRichToolTip::CentralCancellation",
     CHECK(activeDiagnostics.liveVisuals >= 1);
 
     wxWinUICancelTransientSessions(owner);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
 
@@ -402,7 +403,7 @@ TEST_CASE("WinUIRichToolTip::ExplicitRectAnchorsThePeer",
         tip.ShowFor(target, &rect);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     const wxWinUITeachingTipDiagnosticsForTesting diagnostics =
         wxWinUIGetTeachingTipDiagnosticsForTesting();
@@ -457,7 +458,7 @@ TEST_CASE("WinUIRichToolTip::DelayOpenTimeoutSequence",
     CHECK(diagnostics.lastRequestedTimeoutMs == 80);
     CHECK(diagnostics.delayedStarts == 1);
     CHECK(diagnostics.peerOpens == 0);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
 
     REQUIRE(WaitForTeachingTip(
@@ -471,7 +472,7 @@ TEST_CASE("WinUIRichToolTip::DelayOpenTimeoutSequence",
         {
             return wxWinUIGetTeachingTipDiagnosticsForTesting().
                        timeoutClosures == 1 &&
-                   wxWinUITransientCountForTesting(
+                   wxWinUITransientTestAccess::Count(
                        owner,
                        wxWinUITransientKind::TeachingTip) == 0;
         }));
@@ -502,7 +503,7 @@ TEST_CASE("WinUIRichToolTip::CustomAppearanceUsesGenericFallback",
     }
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
               customizationFallbacks == 1);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     wxWinUICancelTransientSessions(owner);
     CheckNoTeachingTipResidue();
@@ -515,7 +516,7 @@ TEST_CASE("WinUIRichToolTip::CustomAppearanceUsesGenericFallback",
     }
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
               customizationFallbacks == 2);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     wxWinUICancelTransientSessions(owner);
     CheckNoTeachingTipResidue();
@@ -528,7 +529,7 @@ TEST_CASE("WinUIRichToolTip::CustomAppearanceUsesGenericFallback",
     }
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
               customizationFallbacks == 3);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     wxWinUICancelTransientSessions(owner);
     CheckNoTeachingTipResidue();
@@ -569,7 +570,7 @@ TEST_CASE("WinUIRichToolTip::StartupIsTransactionalForAllExceptions",
         const wxWinUITeachingTipDiagnosticsForTesting diagnostics =
             wxWinUIGetTeachingTipDiagnosticsForTesting();
         CHECK(diagnostics.operationalFailures == 1);
-        CHECK(wxWinUITransientCountForTesting(
+        CHECK(wxWinUITransientTestAccess::Count(
                   owner, wxWinUITransientKind::TeachingTip) == 0);
         CheckNoTeachingTipResidue();
 
@@ -606,7 +607,7 @@ TEST_CASE("WinUIRichToolTip::DelayedOpenFailureClosesPeer",
             const auto diagnostics =
                 wxWinUIGetTeachingTipDiagnosticsForTesting();
             return diagnostics.operationalFailures == 1 &&
-                   wxWinUITransientCountForTesting(
+                   wxWinUITransientTestAccess::Count(
                        owner,
                        wxWinUITransientKind::TeachingTip) == 0;
         }));
@@ -638,11 +639,11 @@ TEST_CASE("WinUIRichToolTip::MultipleSessionsCancelTogether",
         second.ShowFor(owner);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 2);
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().liveStates == 2);
     wxWinUICancelTransientSessions(owner);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
     owner->Destroy();
@@ -670,10 +671,10 @@ TEST_CASE("WinUIRichToolTip::QueueShutdownClosesNativeAndFallback",
         fallback.ShowFor(owner);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 2);
     CHECK(wxWinUITriggerTeachingTipQueueShutdownForTesting(owner) == 2);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
               queueShutdownClosures == 2);
@@ -692,8 +693,8 @@ TEST_CASE("WinUIRichToolTip::ConcurrentPopupAndQueuedTeachingTip",
         wxPoint(-32000, -32000),
         wxSize(320, 200));
 
-    const wxWinUITransientRegistrySnapshot baseline =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot baseline =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     unsigned popupCancels = 0;
     auto popup = wxWinUIRegisterTransient(
         owner,
@@ -711,12 +712,12 @@ TEST_CASE("WinUIRichToolTip::ConcurrentPopupAndQueuedTeachingTip",
         tip.ShowFor(owner);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::Popup) == 1);
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
-    const wxWinUITransientRegistrySnapshot concurrent =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot concurrent =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     CHECK(concurrent.ownerCount == baseline.ownerCount + 1);
     CHECK(concurrent.transientCount == baseline.transientCount + 2);
     CHECK(concurrent.cancelCallbackCount ==
@@ -726,9 +727,9 @@ TEST_CASE("WinUIRichToolTip::ConcurrentPopupAndQueuedTeachingTip",
           baseline.teachingTipCount + 1);
 
     CHECK(wxWinUITriggerTeachingTipQueueShutdownForTesting(owner) == 1);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
     CHECK(popupCancels == 0);
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
@@ -737,9 +738,9 @@ TEST_CASE("WinUIRichToolTip::ConcurrentPopupAndQueuedTeachingTip",
 
     popup.Reset();
     CHECK(popupCancels == 0);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
-    const wxWinUITransientRegistrySnapshot cleaned =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+    const wxWinUITransientTestAccess::RegistrySnapshot cleaned =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     CHECK(cleaned.ownerCount == baseline.ownerCount);
     CHECK(cleaned.transientCount == baseline.transientCount);
     CHECK(cleaned.cancelCallbackCount == baseline.cancelCallbackCount);
@@ -765,7 +766,7 @@ TEST_CASE("WinUIRichToolTip::StandardIconResetAndUIA",
         fallback.SetTimeout(0, 60000);
         fallback.ShowFor(owner);
     }
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
               customizationFallbacks == 1);
@@ -787,7 +788,7 @@ TEST_CASE("WinUIRichToolTip::StandardIconResetAndUIA",
         nativeTip.ShowFor(owner);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     const auto diagnostics =
         wxWinUIGetTeachingTipDiagnosticsForTesting();
@@ -823,13 +824,13 @@ TEST_CASE("WinUIRichToolTip::CrossTLWAncestorReparentCancels",
         tip.SetTimeout(0);
         tip.ShowFor(target);
     }
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 firstOwner, wxWinUITransientKind::TeachingTip) == 1);
 
     REQUIRE(ancestor->Reparent(secondOwner));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               firstOwner, wxWinUITransientKind::TeachingTip) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               secondOwner, wxWinUITransientKind::TeachingTip) == 0);
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().reparentClosures == 1);
     CheckNoTeachingTipResidue();
@@ -862,13 +863,13 @@ TEST_CASE("WinUIRichToolTip::SameTLWReparentRefreshesAnchor",
         tip.SetTimeout(0);
         tip.ShowFor(target, &anchorRect);
     }
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     const wxPoint before =
         wxWinUIGetTeachingTipDiagnosticsForTesting().lastAnchorInRoot;
 
     REQUIRE(target->Reparent(secondParent));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 1);
     const auto diagnostics =
         wxWinUIGetTeachingTipDiagnosticsForTesting();
@@ -898,11 +899,11 @@ TEST_CASE("WinUIRichToolTip::TargetDestructionCancelsDelayedTip",
         tip.ShowFor(target);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
 
     target->Destroy();
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
 
@@ -927,13 +928,13 @@ TEST_CASE("WinUIRichToolTip::TargetDestructionCancelsGenericFallback",
         tip.SetTimeout(0, 60000);
         tip.ShowFor(target);
     }
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     CHECK(wxWinUIGetTeachingTipDiagnosticsForTesting().
               liveGenericFallbacks == 1);
 
     target->Destroy();
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::TeachingTip) == 0);
     CheckNoTeachingTipResidue();
     owner->Destroy();
@@ -956,7 +957,7 @@ TEST_CASE("WinUIRichToolTip::TopLevelTargetDestroyIsSafe",
         tip.ShowFor(owner);
     }
 
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 owner, wxWinUITransientKind::TeachingTip) == 1);
     owner->Destroy();
     wxYield();

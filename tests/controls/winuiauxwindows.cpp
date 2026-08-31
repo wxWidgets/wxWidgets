@@ -230,12 +230,15 @@ TEST_CASE("AuxiliaryWindows::TransientDestroyIsDeferred",
 #endif
 #if wxUSE_TIPWINDOW
     #include "wx/tipwin.h"
+    #include "tip-window-test-access.h"
 #endif
 
 #include "wx/winui/private/auxwindows.h"
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
+#include "popup-test-access.h"
 #include "wx/winui/private/transient.h"
 #include "wx/scopeguard.h"
 
@@ -308,8 +311,8 @@ wxFrame* CreateAuxiliaryOwner(const wxString& title, int ordinal)
     return owner;
 }
 
-bool SameTransientRegistry(const wxWinUITransientRegistrySnapshot& lhs,
-                           const wxWinUITransientRegistrySnapshot& rhs)
+bool SameTransientRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
+                           const wxWinUITransientTestAccess::RegistrySnapshot& rhs)
 {
     return lhs.ownerCount == rhs.ownerCount &&
            lhs.transientCount == rhs.transientCount &&
@@ -408,8 +411,8 @@ wxWeakRef<wxWindow> gs_hostileTipCaptureView;
 wxWeakRef<wxWindow> gs_reentrantCloseTipLifetime;
 wxWeakRef<wxWindow> gs_tipViewReparentDestination;
 wxWeakRef<wxWindow> gs_reparentedTipView;
-wxWinUITipHookPointForTesting gs_tipViewReparentPoint =
-    wxWinUITipHookPointForTesting::AfterViewAdjust;
+wxWinUITipWindowTestAccess::HookPoint gs_tipViewReparentPoint =
+    wxWinUITipWindowTestAccess::HookPoint::AfterViewAdjust;
 unsigned gs_hostileTipCapturePasses = 0;
 unsigned gs_reentrantCloseAttempts = 0;
 bool gs_tipViewReparented = false;
@@ -442,10 +445,10 @@ void ScheduleCreatingTipForDestructionAndThrow(wxTipWindow* tip)
 
 void DetachTipBacklinkAfterPublication(
     wxTipWindow* const tip,
-    const wxWinUITipHookPointForTesting point)
+    const wxWinUITipWindowTestAccess::HookPoint point)
 {
     if ( point ==
-            wxWinUITipHookPointForTesting::AfterPointerPublication )
+            wxWinUITipWindowTestAccess::HookPoint::AfterPointerPublication )
     {
         tip->SetTipWindowPtr(nullptr);
     }
@@ -454,10 +457,10 @@ void DetachTipBacklinkAfterPublication(
 #if wxUSE_EXCEPTIONS
 void DetachTipBacklinkAndThrowAfterPublication(
     wxTipWindow* const tip,
-    const wxWinUITipHookPointForTesting point)
+    const wxWinUITipWindowTestAccess::HookPoint point)
 {
     if ( point !=
-            wxWinUITipHookPointForTesting::AfterPointerPublication )
+            wxWinUITipWindowTestAccess::HookPoint::AfterPointerPublication )
     {
         return;
     }
@@ -469,10 +472,10 @@ void DetachTipBacklinkAndThrowAfterPublication(
 
 void ReplaceTipBacklinkWithExpiredStorageAfterPublication(
     wxTipWindow* const tip,
-    const wxWinUITipHookPointForTesting point)
+    const wxWinUITipWindowTestAccess::HookPoint point)
 {
     if ( point !=
-            wxWinUITipHookPointForTesting::AfterPointerPublication )
+            wxWinUITipWindowTestAccess::HookPoint::AfterPointerPublication )
     {
         return;
     }
@@ -486,10 +489,10 @@ void ReplaceTipBacklinkWithExpiredStorageAfterPublication(
 #if wxUSE_EXCEPTIONS
 void ReplaceTipBacklinkWithExpiredStorageAndThrowAfterPublication(
     wxTipWindow* const tip,
-    const wxWinUITipHookPointForTesting point)
+    const wxWinUITipWindowTestAccess::HookPoint point)
 {
     if ( point !=
-            wxWinUITipHookPointForTesting::AfterPointerPublication )
+            wxWinUITipWindowTestAccess::HookPoint::AfterPointerPublication )
     {
         return;
     }
@@ -570,7 +573,7 @@ bool InstallPersistentTipNativeReshow(
 
 void ReparentTipViewAtBoundary(
     wxTipWindow* const tip,
-    const wxWinUITipHookPointForTesting point)
+    const wxWinUITipWindowTestAccess::HookPoint point)
 {
     if ( point != gs_tipViewReparentPoint )
         return;
@@ -886,11 +889,11 @@ TEST_CASE("WinUIAuxiliaryWindows::PopupTerminalFallbackContracts",
         REQUIRE(popup->IsCreatedForTest());
         popup->Popup();
         REQUIRE(popup->IsShown());
-        REQUIRE(wxWinUITransientCountForTesting(
+        REQUIRE(wxWinUITransientTestAccess::Count(
                     owner, wxWinUITransientKind::Popup) == 1);
 
         const wxWeakRef<wxWindow> weakPopup(popup);
-        wxWinUIFailNextPopupTerminalNativeIdentityForTesting();
+        wxWinUIPopupTestAccess::FailNextTerminalNativeIdentity();
         REQUIRE(wxWinUIRetirePopupTerminal(popup));
 
         // This call is made directly by the test, outside any window event or
@@ -905,7 +908,7 @@ TEST_CASE("WinUIAuxiliaryWindows::PopupTerminalFallbackContracts",
         REQUIRE(DrainAuxiliaryWindowsWithoutSleepingUntil(
             [weakPopup]() { return !weakPopup; }));
         CHECK(*virtualDestroyCalls == 0);
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     }
 
     SECTION("plain_popup_is_delayed_once")
@@ -917,7 +920,7 @@ TEST_CASE("WinUIAuxiliaryWindows::PopupTerminalFallbackContracts",
         REQUIRE(popup->IsShown());
         const wxWeakRef<wxWindow> weakPopup(popup);
 
-        wxWinUIFailNextPopupTerminalNativeIdentityForTesting();
+        wxWinUIPopupTestAccess::FailNextTerminalNativeIdentity();
         REQUIRE(wxWinUIRetirePopupTerminal(popup));
         REQUIRE(weakPopup.get() == popup);
         CHECK(wxPendingDelete.Member(popup));
@@ -930,7 +933,7 @@ TEST_CASE("WinUIAuxiliaryWindows::PopupTerminalFallbackContracts",
 
         REQUIRE(DrainAuxiliaryWindowsWithoutSleepingUntil(
             [weakPopup]() { return !weakPopup; }));
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     }
 
     SECTION("destroy_scheduled_parent_replays_child_immediately")
@@ -947,7 +950,7 @@ TEST_CASE("WinUIAuxiliaryWindows::PopupTerminalFallbackContracts",
         REQUIRE(wxWinUITLWHostIsDestroyScheduled(owner));
         REQUIRE(weakPopup.get() == popup);
 
-        wxWinUIFailNextPopupTerminalNativeIdentityForTesting();
+        wxWinUIPopupTestAccess::FailNextTerminalNativeIdentity();
         REQUIRE(wxWinUIRetirePopupTerminal(popup));
         CHECK_FALSE(weakPopup);
         CHECK(*virtualDestroyCalls == 0);
@@ -971,9 +974,9 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
 {
     const AuxiliaryHostSnapshot hostsBefore;
     const std::size_t runtimeStatesBefore =
-        wxWinUIGetTipRuntimeStateCountForTesting();
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+        wxWinUITipWindowTestAccess::GetRuntimeStateCount();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame* const owner = CreateAuxiliaryOwner("tip owner", 1);
     const wxWeakRef<wxWindow> weakOwner(owner);
 
@@ -991,7 +994,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(rawTip->IsShown());
         CHECK(rawTip->GetClientSize().x > 0);
         CHECK(rawTip->GetClientSize().y > 0);
-        CHECK(wxWinUITransientCountForTesting(
+        CHECK(wxWinUITransientTestAccess::Count(
                   owner, wxWinUITransientKind::Popup) == 1);
 
         wxWindowList::compatibility_iterator childNode =
@@ -1007,7 +1010,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         CHECK_FALSE(tip);
         REQUIRE(DrainAuxiliaryWindowsUntil(
             [weakTip]() { return !weakTip; }));
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
         tip = wxTipWindow::New(owner, "outside-click seam", 120);
         REQUIRE(tip);
@@ -1016,11 +1019,11 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
 
         // This is the real popup outside-click seam: it executes CanDismiss,
         // Dismiss and wxTipWindow::OnDismiss without desktop input injection.
-        wxWinUITestPopupOutsideClick(rawTip);
+        wxWinUIPopupTestAccess::DismissFromOutside(rawTip);
         CHECK_FALSE(tip);
         REQUIRE(DrainAuxiliaryWindowsUntil(
             [weakOutsideTip]() { return !weakOutsideTip; }));
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     }
 
     SECTION("same_tip_close_reentrancy_is_bounded")
@@ -1040,18 +1043,18 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(wxWindow::GetCapture() == view);
         gs_reentrantCloseTipLifetime = rawTip;
         gs_reentrantCloseAttempts = 0;
-        wxWinUISetPopupCaptureReleaseHookForTesting(
+        wxWinUIPopupTestAccess::SetCaptureReleaseHook(
             &ReenterSameTipCloseDuringCaptureRelease);
         wxScopeGuard resetHook = wxMakeGuard(
             []()
             {
-                wxWinUIResetPopupCaptureReleaseHookForTesting();
+                wxWinUIPopupTestAccess::ResetCaptureReleaseHook();
                 gs_reentrantCloseTipLifetime.Release();
             });
         wxUnusedVar(resetHook);
 
         rawTip->Close();
-        wxWinUIResetPopupCaptureReleaseHookForTesting();
+        wxWinUIPopupTestAccess::ResetCaptureReleaseHook();
         gs_reentrantCloseTipLifetime.Release();
 
         // The existing capture-release seam called Close() on the exact same
@@ -1067,7 +1070,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
 
         REQUIRE(DrainAuxiliaryWindowsWithoutSleepingUntil(
             [weakTip]() { return !weakTip; }));
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     }
 
     SECTION("capture_release_and_destructive_create")
@@ -1103,12 +1106,12 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
 
         gs_hostileTipCaptureView = hostileView;
         gs_hostileTipCapturePasses = 0;
-        wxWinUISetPopupCaptureReleaseHookForTesting(
+        wxWinUIPopupTestAccess::SetCaptureReleaseHook(
             &RecaptureTipViewNatively);
         wxScopeGuard resetCaptureHook = wxMakeGuard(
             []()
             {
-                wxWinUIResetPopupCaptureReleaseHookForTesting();
+                wxWinUIPopupTestAccess::ResetCaptureReleaseHook();
                 gs_hostileTipCaptureView.Release();
             });
         wxUnusedVar(resetCaptureHook);
@@ -1124,14 +1127,14 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(tip);
         CHECK(wxWinUITLWHostIsDestroyScheduled(hostileTip));
 
-        wxWinUIResetPopupCaptureReleaseHookForTesting();
+        wxWinUIPopupTestAccess::ResetCaptureReleaseHook();
         gs_hostileTipCaptureView.Release();
         REQUIRE(DrainAuxiliaryWindowsUntil(
             [weakHostileTip]() { return !weakHostileTip; }));
         CHECK_FALSE(tip);
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
-        wxWinUISetTipCreateHookForTesting(
+        wxWinUITipWindowTestAccess::SetCreateHook(
             [](wxTipWindow* creatingTip)
             {
                 // Synchronous deletion is the harshest legal callback outcome:
@@ -1139,104 +1142,104 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
                 delete creatingTip;
             });
         wxScopeGuard resetHook = wxMakeGuard(
-            []() { wxWinUIResetTipCreateHookForTesting(); });
+            []() { wxWinUITipWindowTestAccess::ResetCreateHook(); });
         wxUnusedVar(resetHook);
 
         tip = wxTipWindow::New(owner, "destroy during create", 120);
         CHECK_FALSE(tip);
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
-        wxWinUIResetTipCreateHookForTesting();
+        wxWinUITipWindowTestAccess::ResetCreateHook();
         gs_scheduledTipLifetime.Release();
-        wxWinUISetTipCreateHookForTesting(
+        wxWinUITipWindowTestAccess::SetCreateHook(
             &ScheduleCreatingTipForDestruction);
         tip = wxTipWindow::New(owner, "schedule destroy during create", 120);
         CHECK_FALSE(tip);
         REQUIRE(DrainAuxiliaryWindowsUntil(
             []() { return !gs_scheduledTipLifetime; }));
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
 #if wxUSE_EXCEPTIONS
-        wxWinUISetTipCreateHookForTesting(&ThrowDuringTipCreate);
+        wxWinUITipWindowTestAccess::SetCreateHook(&ThrowDuringTipCreate);
         CHECK_THROWS_AS(
             (void)wxTipWindow::New(owner, "throw during create", 120),
             std::bad_alloc);
-        wxWinUIResetTipCreateHookForTesting();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        wxWinUITipWindowTestAccess::ResetCreateHook();
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
-        wxWinUISetTipCreateHookForTesting(&DeleteCreatingTipAndThrow);
+        wxWinUITipWindowTestAccess::SetCreateHook(&DeleteCreatingTipAndThrow);
         CHECK_THROWS_AS(
             (void)wxTipWindow::New(owner, "delete and throw", 120),
             std::bad_alloc);
-        wxWinUIResetTipCreateHookForTesting();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        wxWinUITipWindowTestAccess::ResetCreateHook();
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
         gs_scheduledTipLifetime.Release();
-        wxWinUISetTipCreateHookForTesting(
+        wxWinUITipWindowTestAccess::SetCreateHook(
             &ScheduleCreatingTipForDestructionAndThrow);
         CHECK_THROWS_AS(
             (void)wxTipWindow::New(owner, "destroy and throw", 120),
             std::bad_alloc);
-        wxWinUIResetTipCreateHookForTesting();
+        wxWinUITipWindowTestAccess::ResetCreateHook();
         REQUIRE(DrainAuxiliaryWindowsUntil(
             []() { return !gs_scheduledTipLifetime; }));
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 #endif // wxUSE_EXCEPTIONS
     }
 
     SECTION("pointer_publication_is_a_bidirectional_commit")
     {
-        wxWinUISetTipHookForTesting(&DetachTipBacklinkAfterPublication);
+        wxWinUITipWindowTestAccess::SetHook(&DetachTipBacklinkAfterPublication);
         wxScopeGuard resetHook = wxMakeGuard(
-            []() { wxWinUIResetTipHookForTesting(); });
+            []() { wxWinUITipWindowTestAccess::ResetHook(); });
         wxUnusedVar(resetHook);
 
         wxTipWindow::Ref tip =
             wxTipWindow::New(owner, "detached publication", 120);
         CHECK_FALSE(tip);
-        wxWinUIResetTipHookForTesting();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        wxWinUITipWindowTestAccess::ResetHook();
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
 #if wxUSE_EXCEPTIONS
-        wxWinUISetTipHookForTesting(
+        wxWinUITipWindowTestAccess::SetHook(
             &DetachTipBacklinkAndThrowAfterPublication);
         CHECK_THROWS_AS(
             (void)wxTipWindow::New(owner, "throw after publication", 120),
             std::bad_alloc);
-        wxWinUIResetTipHookForTesting();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        wxWinUITipWindowTestAccess::ResetHook();
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 #endif // wxUSE_EXCEPTIONS
 
-        wxWinUISetTipHookForTesting(
+        wxWinUITipWindowTestAccess::SetHook(
             &ReplaceTipBacklinkWithExpiredStorageAfterPublication);
         tip = wxTipWindow::New(
             owner, "expired replacement publication", 120);
         CHECK_FALSE(tip);
-        wxWinUIResetTipHookForTesting();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        wxWinUITipWindowTestAccess::ResetHook();
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
 #if wxUSE_EXCEPTIONS
-        wxWinUISetTipHookForTesting(
+        wxWinUITipWindowTestAccess::SetHook(
             &ReplaceTipBacklinkWithExpiredStorageAndThrowAfterPublication);
         CHECK_THROWS_AS(
             (void)wxTipWindow::New(
                 owner, "expired replacement throw", 120),
             std::bad_alloc);
-        wxWinUIResetTipHookForTesting();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        wxWinUITipWindowTestAccess::ResetHook();
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 #endif // wxUSE_EXCEPTIONS
 
@@ -1258,15 +1261,15 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(DrainAuxiliaryWindowsUntil(
             [weakHistorical]() { return !weakHistorical; }));
         sentinel.reset();
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
     }
 
     SECTION("view_parent_is_revalidated_after_callback_boundaries")
     {
         const auto exerciseReparentBoundary =
-            [&](const wxWinUITipHookPointForTesting point,
+            [&](const wxWinUITipWindowTestAccess::HookPoint point,
                 const char* const label)
             {
                 INFO("tip view boundary: " << label);
@@ -1274,11 +1277,11 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
                 gs_tipViewReparentDestination = owner;
                 gs_reparentedTipView.Release();
                 gs_tipViewReparented = false;
-                wxWinUISetTipHookForTesting(&ReparentTipViewAtBoundary);
+                wxWinUITipWindowTestAccess::SetHook(&ReparentTipViewAtBoundary);
 
                 wxTipWindow::Ref tip =
                     wxTipWindow::New(owner, "reparented view", 120);
-                wxWinUIResetTipHookForTesting();
+                wxWinUITipWindowTestAccess::ResetHook();
                 CHECK_FALSE(tip);
                 REQUIRE(gs_tipViewReparented);
                 wxWindow* const foreignView =
@@ -1292,29 +1295,29 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
                 gs_tipViewReparentDestination.Release();
                 REQUIRE(DrainAuxiliaryWindowsUntil(
                     []() { return !gs_reparentedTipView; }));
-                CHECK(wxWinUITransientCountForTesting(owner) == 0);
-                CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+                CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+                CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
                       runtimeStatesBefore);
             };
 
         exerciseReparentBoundary(
-            wxWinUITipHookPointForTesting::AfterViewAdjust,
+            wxWinUITipWindowTestAccess::HookPoint::AfterViewAdjust,
             "after Adjust");
         exerciseReparentBoundary(
-            wxWinUITipHookPointForTesting::AfterPopup,
+            wxWinUITipWindowTestAccess::HookPoint::AfterPopup,
             "after Popup");
     }
 
     SECTION("allocation_failure_and_native_reshow_are_terminal")
     {
 #if wxUSE_EXCEPTIONS
-        wxWinUIFailNextTipRuntimeAllocationForTesting();
+        wxWinUITipWindowTestAccess::FailNextRuntimeAllocation();
         CHECK_THROWS_AS(
             (void)wxTipWindow::New(owner, "runtime allocation", 120),
             std::bad_alloc);
-        CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+        CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 #endif // wxUSE_EXCEPTIONS
 
         wxTipWindow::Ref tip =
@@ -1351,7 +1354,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(DrainAuxiliaryWindowsUntil(
             [weakReshowTip]() { return !weakReshowTip; }));
         CHECK_FALSE(tip);
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
         tip = wxTipWindow::New(owner, "missing native generation", 120);
         REQUIRE(tip);
@@ -1377,7 +1380,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
             });
         wxUnusedVar(removeMissingNativeReshowSubclass);
 
-        wxWinUIFailNextPopupTerminalNativeIdentityForTesting();
+        wxWinUIPopupTestAccess::FailNextTerminalNativeIdentity();
         REQUIRE(DispatchTipCloseFromOrdinaryEvent(rawTip));
         CHECK(weakMissingNativeTip.get() == rawTip);
         REQUIRE(tip);
@@ -1387,7 +1390,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(DrainAuxiliaryWindowsUntil(
             [weakMissingNativeTip]() { return !weakMissingNativeTip; }));
         CHECK_FALSE(tip);
-        CHECK(wxWinUITransientCountForTesting(owner) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     }
 
     SECTION("teaching_tip_concurrency_and_retained_owner")
@@ -1401,7 +1404,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         wxTipWindow::Ref tip = wxTipWindow::New(owner, "concurrent tip", 100);
         REQUIRE(tip);
         const wxWeakRef<wxWindow> weakTip(tip.operator->());
-        CHECK(wxWinUITransientCountForTesting(owner) == 2);
+        CHECK(wxWinUITransientTestAccess::Count(owner) == 2);
 
         std::unique_ptr<wxWinUITLWHostWindowEventGuard> retainedOwner(
             new wxWinUITLWHostWindowEventGuard(owner));
@@ -1432,7 +1435,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
             INFO("tip cycle: " << i);
             REQUIRE(DrainAuxiliaryWindowsUntil(
                 [weakTip]() { return !weakTip; }));
-            REQUIRE(wxWinUITransientCountForTesting(owner) == 0);
+            REQUIRE(wxWinUITransientTestAccess::Count(owner) == 0);
         }
     }
 
@@ -1445,14 +1448,14 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         [&registryBefore, &hostsBefore]()
         {
             return SameTransientRegistry(
-                wxWinUIGetTransientRegistrySnapshotForTesting(),
+                wxWinUITransientTestAccess::GetRegistrySnapshot(),
                 registryBefore) &&
                    SameAuxiliaryHostSnapshot(hostsBefore);
         });
     if ( !auxiliaryStateDrained )
     {
-        const wxWinUITransientRegistrySnapshot registry =
-            wxWinUIGetTransientRegistrySnapshotForTesting();
+        const wxWinUITransientTestAccess::RegistrySnapshot registry =
+            wxWinUITransientTestAccess::GetRegistrySnapshot();
         INFO("registry owners=" << registry.ownerCount
              << " baseline=" << registryBefore.ownerCount
              << ", transients=" << registry.transientCount
@@ -1471,7 +1474,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
              << " baseline=" << hostsBefore.slotLifetimes);
     }
     REQUIRE(auxiliaryStateDrained);
-    CHECK(wxWinUIGetTipRuntimeStateCountForTesting() ==
+    CHECK(wxWinUITipWindowTestAccess::GetRuntimeStateCount() ==
           runtimeStatesBefore);
 }
 

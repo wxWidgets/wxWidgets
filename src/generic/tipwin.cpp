@@ -37,7 +37,9 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/msw/wrapwin.h"
-    #include "wx/winui/private/auxwindows.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "tip-window-test-access.h"
+#endif
     #include "wx/winui/private/tlwhostmsw.h"
     #include "wx/winui/private/transient.h"
 #endif
@@ -76,6 +78,7 @@ TipRuntimeStates& GetTipRuntimeStates()
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool gs_failNextTipRuntimeAllocationForTesting = false;
 
 void MaybeFailTipRuntimeAllocationForTesting()
@@ -88,13 +91,16 @@ void MaybeFailTipRuntimeAllocationForTesting()
 #endif
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
 
 TipRuntimeState& ResetTipRuntimeState(wxTipWindow* const tip)
 {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
     MaybeFailTipRuntimeAllocationForTesting();
+#endif // WXWINUI_TEST_SUPPORT
 #endif
     TipRuntimeState& state = GetTipRuntimeStates()[tip];
     state.tipLifetime = wxWeakRef<wxWindow>(tip);
@@ -173,16 +179,18 @@ struct ActiveTipClose
 thread_local ActiveTipClose* gs_activeTipClose = nullptr;
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-wxWinUITipCreateHookForTesting gs_tipCreateHookForTesting = nullptr;
-wxWinUITipHookForTesting gs_tipHookForTesting = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUITipWindowTestAccess::CreateHook gs_tipCreateHookForTesting = nullptr;
+wxWinUITipWindowTestAccess::Hook gs_tipHookForTesting = nullptr;
 
 void InvokeTipHookForTesting(
     wxTipWindow* const tip,
-    const wxWinUITipHookPointForTesting point)
+    const wxWinUITipWindowTestAccess::HookPoint point)
 {
     if ( gs_tipHookForTesting )
         gs_tipHookForTesting(tip, point);
 }
+#endif // WXWINUI_TEST_SUPPORT
 #endif
 
 bool IsTipCloseActive(wxTipWindow* const tip)
@@ -202,36 +210,48 @@ bool IsTipCloseActive(wxTipWindow* const tip)
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
-void wxWinUISetTipCreateHookForTesting(
-    wxWinUITipCreateHookForTesting hook)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITipWindowTestAccess::SetCreateHook(
+    wxWinUITipWindowTestAccess::CreateHook hook)
 {
     gs_tipCreateHookForTesting = hook;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIResetTipCreateHookForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITipWindowTestAccess::ResetCreateHook()
 {
     gs_tipCreateHookForTesting = nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUISetTipHookForTesting(wxWinUITipHookForTesting hook)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITipWindowTestAccess::SetHook(wxWinUITipWindowTestAccess::Hook hook)
 {
     gs_tipHookForTesting = hook;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIResetTipHookForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITipWindowTestAccess::ResetHook()
 {
     gs_tipHookForTesting = nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIFailNextTipRuntimeAllocationForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITipWindowTestAccess::FailNextRuntimeAllocation()
 {
     gs_failNextTipRuntimeAllocationForTesting = true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-std::size_t wxWinUIGetTipRuntimeStateCountForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+std::size_t wxWinUITipWindowTestAccess::GetRuntimeStateCount()
 {
     return GetTipRuntimeStates().size();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
 
@@ -478,16 +498,20 @@ bool wxTipWindow::Create(wxWindow *parent,
     }
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_tipCreateHookForTesting )
         gs_tipCreateHookForTesting(this);
+#endif // WXWINUI_TEST_SUPPORT
     if ( !transactionIsValid() )
         return false;
 #endif
 
     SetTipWindowPtr(windowPtr);
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
     InvokeTipHookForTesting(
-        this, wxWinUITipHookPointForTesting::AfterPointerPublication);
+        this, wxWinUITipWindowTestAccess::HookPoint::AfterPointerPublication);
+#endif // WXWINUI_TEST_SUPPORT
 #endif
     const auto publishedPointerIsValid = [&]()
     {
@@ -576,8 +600,10 @@ bool wxTipWindow::Create(wxWindow *parent,
     if ( !view->Adjust(text, physicalMaxLength) )
         return false;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
     InvokeTipHookForTesting(
-        this, wxWinUITipHookPointForTesting::AfterViewAdjust);
+        this, wxWinUITipWindowTestAccess::HookPoint::AfterViewAdjust);
+#endif // WXWINUI_TEST_SUPPORT
 #endif
     if ( !viewContextIsValid() )
     {
@@ -607,8 +633,10 @@ bool wxTipWindow::Create(wxWindow *parent,
 
     Popup(view);
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
     InvokeTipHookForTesting(
-        this, wxWinUITipHookPointForTesting::AfterPopup);
+        this, wxWinUITipWindowTestAccess::HookPoint::AfterPopup);
+#endif // WXWINUI_TEST_SUPPORT
 #endif
     if ( !viewContextIsValid() || !IsShown() )
     {

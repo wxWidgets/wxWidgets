@@ -29,6 +29,7 @@
 #include "wx/stc/stc.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
@@ -91,8 +92,8 @@ bool DrainToQuiescence()
     return false;
 }
 
-bool SameTransientRegistry(const wxWinUITransientRegistrySnapshot& lhs,
-                           const wxWinUITransientRegistrySnapshot& rhs)
+bool SameTransientRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
+                           const wxWinUITransientTestAccess::RegistrySnapshot& rhs)
 {
     return lhs.ownerCount == rhs.ownerCount &&
            lhs.transientCount == rhs.transientCount &&
@@ -136,7 +137,7 @@ struct RuntimeSnapshot
         snapshot.rootHandlerRevokes =
             wxWinUITopLevelHost::GetRootHandlerRevokeCount();
         snapshot.transients =
-            wxWinUIGetTransientRegistrySnapshotForTesting();
+            wxWinUITransientTestAccess::GetRegistrySnapshot();
         snapshot.wxCapture = wxWindow::GetCapture();
         snapshot.nativeCapture = ::GetCapture();
         return snapshot;
@@ -171,7 +172,7 @@ struct RuntimeSnapshot
                    wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
                        rootHandlerRevokes &&
                SameTransientRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    transients) &&
                wxWindow::GetCapture() == wxCapture &&
                ::GetCapture() == nativeCapture;
@@ -214,7 +215,7 @@ struct RuntimeSnapshot
         CHECK(rootAdds == rootRevokes);
 
         CHECK(SameTransientRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), transients));
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), transients));
         CHECK(wxWindow::GetCapture() == wxCapture);
         CHECK(::GetCapture() == nativeCapture);
     }
@@ -232,7 +233,7 @@ struct RuntimeSnapshot
     unsigned slotHandlerRevokes = 0;
     unsigned rootHandlerAdds = 0;
     unsigned rootHandlerRevokes = 0;
-    wxWinUITransientRegistrySnapshot transients;
+    wxWinUITransientTestAccess::RegistrySnapshot transients;
     wxWindow *wxCapture = nullptr;
     HWND nativeCapture = nullptr;
 };
@@ -498,10 +499,10 @@ wxWindow *GetPopupRoot(wxStyledTextCtrl *stc, wxWindow *descendant)
     return root;
 }
 
-bool PopupRegistryRestored(const wxWinUITransientRegistrySnapshot& before)
+bool PopupRegistryRestored(const wxWinUITransientTestAccess::RegistrySnapshot& before)
 {
     return SameTransientRegistry(
-        wxWinUIGetTransientRegistrySnapshotForTesting(), before);
+        wxWinUITransientTestAccess::GetRegistrySnapshot(), before);
 }
 
 struct NativeTimerIdentity
@@ -846,8 +847,8 @@ TEST_CASE("WinUISTC::AutocompleteAndCallTipUseTransientOwnerAndAPIClick",
 
     const unsigned hosts = wxWinUITopLevelHost::GetLiveHostCount();
     const unsigned slots = wxWinUITopLevelHost::GetLiveSlotCount();
-    const wxWinUITransientRegistrySnapshot transients =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot transients =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
 
     stc->SetText("ab");
     stc->GotoPos(stc->GetLength());
@@ -857,7 +858,7 @@ TEST_CASE("WinUISTC::AutocompleteAndCallTipUseTransientOwnerAndAPIClick",
     // This API returns the caret position at popup creation, not the start of
     // the prefix selected by lengthEntered.
     CHECK(stc->AutoCompPosStart() == 2);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               frame, wxWinUITransientKind::Popup) == 1);
 
     wxWindow * const list = FindDescendantNamed(stc, "AutoCompListBox");
@@ -882,7 +883,7 @@ TEST_CASE("WinUISTC::AutocompleteAndCallTipUseTransientOwnerAndAPIClick",
     REQUIRE(DrainUntil(
         [frame]()
         {
-            return wxWinUITransientCountForTesting(
+            return wxWinUITransientTestAccess::Count(
                        frame, wxWinUITransientKind::Popup) == 0;
         }));
 
@@ -897,7 +898,7 @@ TEST_CASE("WinUISTC::AutocompleteAndCallTipUseTransientOwnerAndAPIClick",
         });
     stc->CallTipShow(stc->GetCurrentPos(), "deterministic call tip");
     REQUIRE(stc->CallTipActive());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               frame, wxWinUITransientKind::Popup) == 1);
 
     wxWindow * const callTip = FindDescendantNamed(stc, "wxSTCCallTip");
@@ -1067,7 +1068,7 @@ TEST_CASE("WinUISTC::TwoTLWReparentPopupOwnerAndHundredCycles",
         });
     stc->AutoCompShow(0, "active-before-reparent");
     REQUIRE(stc->AutoCompActive());
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 fixture.GetFrameA(), wxWinUITransientKind::Popup) == 1);
     wxWindow * const oldList =
         FindDescendantNamed(stc, "AutoCompListBox");
@@ -1084,10 +1085,10 @@ TEST_CASE("WinUISTC::TwoTLWReparentPopupOwnerAndHundredCycles",
     REQUIRE(DrainUntil(
         [&fixture]()
         {
-            return wxWinUITransientCountForTesting(
+            return wxWinUITransientTestAccess::Count(
                        fixture.GetFrameA(),
                        wxWinUITransientKind::Popup) == 0 &&
-                   wxWinUITransientCountForTesting(
+                   wxWinUITransientTestAccess::Count(
                        fixture.GetFrameB(),
                        wxWinUITransientKind::Popup) == 0;
         }));
@@ -1164,9 +1165,9 @@ TEST_CASE("WinUISTC::TwoTLWReparentPopupOwnerAndHundredCycles",
         else
             stc->CallTipShow(0, "cycle-tip");
 
-        CHECK(wxWinUITransientCountForTesting(
+        CHECK(wxWinUITransientTestAccess::Count(
                   targetFrame, wxWinUITransientKind::Popup) == 1);
-        CHECK(wxWinUITransientCountForTesting(
+        CHECK(wxWinUITransientTestAccess::Count(
                   otherFrame, wxWinUITransientKind::Popup) == 0);
         if ( stc->AutoCompActive() )
             stc->AutoCompCancel();
@@ -1176,7 +1177,7 @@ TEST_CASE("WinUISTC::TwoTLWReparentPopupOwnerAndHundredCycles",
         REQUIRE(DrainUntil(
             [targetFrame]()
             {
-                return wxWinUITransientCountForTesting(
+                return wxWinUITransientTestAccess::Count(
                            targetFrame,
                            wxWinUITransientKind::Popup) == 0;
             },
@@ -1237,7 +1238,7 @@ TEST_CASE("WinUISTC::NestedReparentDuringPopupRetirementConvergesSafely",
                 nestedReparentAccepted = live->Reparent(fixture.GetPanelA());
         });
     REQUIRE(nested);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               listPopup,
               wxWinUITransientKind::TeachingTip) == 1);
 
@@ -1259,9 +1260,9 @@ TEST_CASE("WinUISTC::NestedReparentDuringPopupRetirementConvergesSafely",
           static_cast<HWND>(fixture.GetPanelB()->GetHWND()));
     CHECK_FALSE(stc->AutoCompActive());
     CHECK_FALSE(static_cast<bool>(nested));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               fixture.GetFrameA(), wxWinUITransientKind::TeachingTip) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               fixture.GetFrameB(), wxWinUITransientKind::TeachingTip) == 0);
 
     // The next popup generation must follow the converged native winner.
@@ -1356,7 +1357,7 @@ TEST_CASE("WinUISTC::PopupDestroyIsIdempotentAndOwnerSafe",
     CHECK_FALSE(stc->AutoCompActive());
     REQUIRE(DrainUntil(
         [&listPopupLifetime]() { return !listPopupLifetime; }, 200));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 0);
 
     stc->CallTipShow(0, "owner teardown");
@@ -1411,7 +1412,7 @@ TEST_CASE("WinUISTC::OldTLWCanDieBeforeNextPopupGeneration",
     stc->SetText("old-owner-lifetime");
     stc->CallTipShow(0, "owned by A");
     REQUIRE(stc->CallTipActive());
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 oldFrame, wxWinUITransientKind::Popup) == 1);
 
     REQUIRE(stc->Reparent(fixture.GetPanelB()));
@@ -1419,9 +1420,9 @@ TEST_CASE("WinUISTC::OldTLWCanDieBeforeNextPopupGeneration",
     REQUIRE(DrainUntil(
         [oldFrame, newFrame]()
         {
-            return wxWinUITransientCountForTesting(
+            return wxWinUITransientTestAccess::Count(
                        oldFrame, wxWinUITransientKind::Popup) == 0 &&
-                   wxWinUITransientCountForTesting(
+                   wxWinUITransientTestAccess::Count(
                        newFrame, wxWinUITransientKind::Popup) == 0;
         }));
 
@@ -1435,7 +1436,7 @@ TEST_CASE("WinUISTC::OldTLWCanDieBeforeNextPopupGeneration",
 
     stc->AutoCompShow(0, "safe-after-old-owner-destroy");
     REQUIRE(stc->AutoCompActive());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               newFrame, wxWinUITransientKind::Popup) == 1);
     wxWindow * const list = FindDescendantNamed(stc, "AutoCompListBox");
     REQUIRE(list);
@@ -1447,7 +1448,7 @@ TEST_CASE("WinUISTC::OldTLWCanDieBeforeNextPopupGeneration",
     REQUIRE(DrainUntil(
         [newFrame]()
         {
-            return wxWinUITransientCountForTesting(
+            return wxWinUITransientTestAccess::Count(
                        newFrame, wxWinUITransientKind::Popup) == 0;
         }));
 
@@ -1473,7 +1474,7 @@ TEST_CASE("WinUISTC::DestroyFromCallTipCallbackRetiresPopupAndArmedTimer",
     stc->SetSTCFocus(true);
     stc->CallTipShow(0, "destroy from callback");
     REQUIRE(stc->CallTipActive());
-    REQUIRE(wxWinUITransientCountForTesting(
+    REQUIRE(wxWinUITransientTestAccess::Count(
                 frame, wxWinUITransientKind::Popup) == 1);
     wxWindow * const callTip = FindDescendantNamed(stc, "wxSTCCallTip");
     REQUIRE(callTip);
@@ -1495,7 +1496,7 @@ TEST_CASE("WinUISTC::DestroyFromCallTipCallbackRetiresPopupAndArmedTimer",
     CHECK(destroyAccepted);
 
     REQUIRE(DrainUntil([&weakSTC]() { return !weakSTC; }, 200));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               frame, wxWinUITransientKind::Popup) == 0);
 
     fixture.Cleanup();

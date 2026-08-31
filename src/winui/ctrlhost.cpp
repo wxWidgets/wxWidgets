@@ -24,6 +24,10 @@
 #include "wx/winui/private/dialogcontracts.h"
 #include "wx/winui/private/shelltheme.h"
 #include "wx/winui/private/transient.h"
+#include "transientops.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "owner-backdrop-test-access.h"
+#endif
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
@@ -3820,8 +3824,10 @@ using wxWinUIBackdropPrimeStates =
 wxWinUIBackdropPrimeStates gs_winuiBackdropPrimeStates;
 std::map<HWND, unsigned long long> gs_winuiBackdropRetryGenerations;
 unsigned long long gs_nextWinUIBackdropPrimeEpoch = 0;
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUIBackdropNativeOps gs_winuiBackdropTestOps;
 bool gs_hasWinUIBackdropTestOps = false;
+#endif // WXWINUI_TEST_SUPPORT
 
 unsigned long long
 wxWinUIBackdropGetGenerationNative(void *, WXHWND hwnd)
@@ -3915,8 +3921,10 @@ wxWinUIBackdropPostNative(void *,
 
 const wxWinUIBackdropNativeOps& wxWinUIGetBackdropOps()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_hasWinUIBackdropTestOps )
         return gs_winuiBackdropTestOps;
+#endif // WXWINUI_TEST_SUPPORT
 
     static const wxWinUIBackdropNativeOps operations =
     {
@@ -4631,8 +4639,9 @@ void wxWinUIBackdropWindowDestroyed(WXHWND hwndArg)
     gs_winuiBackdropRetryGenerations.erase(hwnd);
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 void
-wxWinUI3SetBackdropNativeOpsForTesting(
+wxWinUIOwnerBackdropTestAccess::SetBackdropNativeOps(
     const wxWinUIBackdropNativeOps& operations)
 {
     wxCHECK_RET(wxWinUIBackdropOpsAreComplete(operations),
@@ -4643,17 +4652,21 @@ wxWinUI3SetBackdropNativeOpsForTesting(
     gs_winuiBackdropTestOps = operations;
     gs_hasWinUIBackdropTestOps = true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUI3ResetBackdropNativeOpsForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIOwnerBackdropTestAccess::ResetBackdropNativeOps()
 {
     gs_winuiBackdropPrimeStates.clear();
     gs_winuiBackdropRetryGenerations.clear();
     gs_winuiBackdropTestOps = wxWinUIBackdropNativeOps();
     gs_hasWinUIBackdropTestOps = false;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUITransientSnapshot
-wxWinUI3GetBackdropSnapshotForTesting(WXHWND hwndArg)
+wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(WXHWND hwndArg)
 {
     wxWinUITransientSnapshot snapshot;
     snapshot.transactionCount = gs_winuiBackdropPrimeStates.size();
@@ -4670,6 +4683,7 @@ wxWinUI3GetBackdropSnapshotForTesting(WXHWND hwndArg)
     }
     return snapshot;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUISetAppTheme(wxWinUIAppTheme theme)
 {

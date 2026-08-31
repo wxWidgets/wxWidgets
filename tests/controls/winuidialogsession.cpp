@@ -22,11 +22,13 @@
 #include "wx/weakref.h"
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
 #include "host-uia-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/transient.h"
+#include "owner-backdrop-test-access.h"
 
 #include <UIAutomation.h>
 
@@ -89,8 +91,8 @@ std::size_t CountLiveHarnessHwnds(
 }
 
 bool RegistryLifetimeEquals(
-    const wxWinUITransientRegistrySnapshot& lhs,
-    const wxWinUITransientRegistrySnapshot& rhs)
+    const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
+    const wxWinUITransientTestAccess::RegistrySnapshot& rhs)
 {
     // The two deferred-retirement counters are monotonic diagnostics and are
     // intentionally excluded. Every live ownership/callback count must match.
@@ -346,12 +348,12 @@ TEST_CASE("WinUIDialogSession::RuntimeRegistry",
         [&]() { ++otherCancelled; });
     REQUIRE(tip);
     REQUIRE(other);
-    CHECK(wxWinUITransientCountForTesting(firstOwner) == 2);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(firstOwner) == 2);
+    CHECK(wxWinUITransientTestAccess::Count(
               firstOwner, wxWinUITransientKind::ModalDialog) == 1);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               firstOwner, wxWinUITransientKind::TeachingTip) == 1);
-    CHECK(wxWinUITransientCountForTesting(secondOwner) == 1);
+    CHECK(wxWinUITransientTestAccess::Count(secondOwner) == 1);
 
     wxWinUICancelTransientSessions(firstOwner);
     CHECK(firstCancelled == 1);
@@ -360,15 +362,15 @@ TEST_CASE("WinUIDialogSession::RuntimeRegistry",
     CHECK_FALSE(first);
     CHECK_FALSE(tip);
     CHECK(other);
-    CHECK(wxWinUITransientCountForTesting(firstOwner) == 0);
-    CHECK(wxWinUITransientCountForTesting(secondOwner) == 1);
+    CHECK(wxWinUITransientTestAccess::Count(firstOwner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(secondOwner) == 1);
 
     // Stale registration cleanup is harmless after central cancellation.
     first.Reset();
     tip.Reset();
     CHECK(other);
     other.Reset();
-    CHECK(wxWinUITransientCountForTesting(secondOwner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(secondOwner) == 0);
 
     firstOwner->Destroy();
     secondOwner->Destroy();
@@ -392,15 +394,15 @@ TEST_CASE("WinUIDialogSession::RuntimeCancelAllowsReentrantReplacement",
                 []() {});
         });
     REQUIRE(original);
-    CHECK(wxWinUITransientCountForTesting(owner) == 1);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 1);
 
     wxWinUICancelTransientSessions(owner);
     CHECK_FALSE(original);
     CHECK(replacement);
-    CHECK(wxWinUITransientCountForTesting(owner) == 1);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 1);
 
     replacement.Reset();
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     owner->Destroy();
 }
 
@@ -422,7 +424,7 @@ TEST_CASE("WinUIDialogSession::RuntimeRegistrationMoveAndReset",
     CHECK_FALSE(registration);
     REQUIRE(moved);
     CHECK(moved.GetGeneration() == generation);
-    CHECK(wxWinUITransientCountForTesting(owner) == 1);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 1);
 
     wxWinUITransientRegistration assigned;
     assigned = std::move(moved);
@@ -433,7 +435,7 @@ TEST_CASE("WinUIDialogSession::RuntimeRegistrationMoveAndReset",
     assigned.Reset();
     CHECK_FALSE(assigned);
     CHECK(cancelled == 0);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     // Explicit unregister is not cancellation.
     wxWinUICancelTransientSessions(owner);
@@ -471,7 +473,7 @@ TEST_CASE("WinUIDialogSession::RuntimeOwnerDestroyCancelsCentrally",
     owner->ProcessWindowEvent(childDestroying);
     CHECK(cancelled == 0);
     CHECK(registration);
-    CHECK(wxWinUITransientCountForTesting(owner) == 1);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 1);
 
     // Drive the real wxEVT_DESTROY hook deterministically.  The manager marks
     // the TLW as shutting down before invoking cancellation callbacks, so
@@ -481,7 +483,7 @@ TEST_CASE("WinUIDialogSession::RuntimeOwnerDestroyCancelsCentrally",
     CHECK(cancelled == 1);
     CHECK_FALSE(registration);
     CHECK_FALSE(replacement);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     registration.Reset();
     owner->Destroy();
@@ -499,7 +501,7 @@ TEST_CASE("WinUIDialogSession::LogicalOwnerDestroyGatesFirstRegistration",
     REQUIRE(DrainTransientHarnessUntil(
         []()
         {
-            return wxWinUIGetTransientRegistrySnapshotForTesting()
+            return wxWinUITransientTestAccess::GetRegistrySnapshot()
                        .pendingOwnerRetireCount == 0;
         },
         // A preceding 100-cycle dialog stress can enqueue one retirement per
@@ -508,8 +510,8 @@ TEST_CASE("WinUIDialogSession::LogicalOwnerDestroyGatesFirstRegistration",
         // a busy machine.
         500));
 
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "transient-logical-destroy");
     const wxWeakRef<wxWindow> weakOwner(owner);
@@ -521,8 +523,8 @@ TEST_CASE("WinUIDialogSession::LogicalOwnerDestroyGatesFirstRegistration",
     wxWinUINotifyTransientOwnerDestroyScheduled(owner);
     REQUIRE_FALSE(wxWinUITLWHostIsDestroyScheduled(owner));
 
-    const wxWinUITransientRegistrySnapshot afterNotify =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot afterNotify =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     CHECK(afterNotify.ownerCount == registryBefore.ownerCount + 1);
     CHECK(afterNotify.pendingOwnerRetireCount ==
           registryBefore.pendingOwnerRetireCount + 1);
@@ -535,8 +537,8 @@ TEST_CASE("WinUIDialogSession::LogicalOwnerDestroyGatesFirstRegistration",
 
     // Repeated logical notifications keep the same owner epoch and observer.
     wxWinUINotifyTransientOwnerDestroyScheduled(owner);
-    const wxWinUITransientRegistrySnapshot afterSecondNotify =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot afterSecondNotify =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     CHECK(afterSecondNotify.ownerCount == afterNotify.ownerCount);
     CHECK(afterSecondNotify.pendingOwnerRetireCount ==
           afterNotify.pendingOwnerRetireCount);
@@ -546,7 +548,7 @@ TEST_CASE("WinUIDialogSession::LogicalOwnerDestroyGatesFirstRegistration",
         [weakOwner, &registryBefore]()
         {
             return !weakOwner && RegistryLifetimeEquals(
-                wxWinUIGetTransientRegistrySnapshotForTesting(),
+                wxWinUITransientTestAccess::GetRegistrySnapshot(),
                 registryBefore);
         }));
 }
@@ -557,10 +559,10 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
 {
     DrainTransientHarnessDispatch();
 
-    const wxWinUITransientRegistrySnapshot registryBaseline =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBaseline =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     const std::size_t detachedOwnerBaseline =
-        wxWinUI3GetOwnerSnapshotForTesting(nullptr).transactionCount;
+        wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(nullptr).transactionCount;
     const unsigned hostBaseline =
         wxWinUITopLevelHost::GetLiveHostCount();
     const unsigned slotBaseline =
@@ -714,8 +716,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
         CHECK_FALSE(wxWinUIRegisterTransient(
             first, wxWinUITransientKind::ModalDialog, []() {}));
 
-        const wxWinUITransientRegistrySnapshot active =
-            wxWinUIGetTransientRegistrySnapshotForTesting();
+        const wxWinUITransientTestAccess::RegistrySnapshot active =
+            wxWinUITransientTestAccess::GetRegistrySnapshot();
         CHECK(active.ownerCount == registryBaseline.ownerCount + 3);
         CHECK(active.transientCount ==
               registryBaseline.transientCount + 4);
@@ -737,7 +739,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
         secondModal.Reset();
         CHECK(secondModalCancelled == 0);
         CHECK(RegistryLifetimeEquals(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBaseline));
     }
 
@@ -751,12 +753,12 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     REQUIRE(::IsWindow(modelessOwnerHwnd));
     REQUIRE(modelessOwnerHwnd == firstHwnd);
     REQUIRE(wxWinUITransientOwnerActivation(modelessHwnd, true));
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(modelessHwnd).
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(modelessHwnd).
               transactionCount == detachedOwnerBaseline + 1);
     CHECK(::GetWindowLongPtr(modelessHwnd, GWLP_HWNDPARENT) == 0);
 
     ::SendMessage(modelessOwnerHwnd, WM_SIZE, SIZE_MINIMIZED, 0);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(modelessHwnd).
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(modelessHwnd).
               transactionCount == detachedOwnerBaseline);
     CHECK(::GetWindowLongPtr(modelessHwnd, GWLP_HWNDPARENT) ==
           modelessOwner);
@@ -813,7 +815,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     // flight. Destruction must invalidate the registration before the queued
     // callback runs; the callback itself still executes exactly once.
     REQUIRE(wxWinUITransientOwnerActivation(modelessHwnd, true));
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(modelessHwnd).
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(modelessHwnd).
               transactionCount == detachedOwnerBaseline + 1);
     const std::uint64_t queuedPopupGeneration = popup.GetGeneration();
     wxWeakRef<wxWindow> queuedOwner(modeless);
@@ -835,8 +837,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
             }
         });
 
-    const wxWinUITransientRegistrySnapshot beforeOwnerDestroy =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot beforeOwnerDestroy =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxWinUICancelTransientSessions(first);
     CHECK(outerModalCancels == 1);
     CHECK_FALSE(outerModal);
@@ -853,8 +855,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     const bool ownerDestroyDrained = DrainTransientHarnessUntil(
         [&]()
         {
-            const wxWinUITransientRegistrySnapshot registry =
-                wxWinUIGetTransientRegistrySnapshotForTesting();
+            const wxWinUITransientTestAccess::RegistrySnapshot registry =
+                wxWinUITransientTestAccess::GetRegistrySnapshot();
             return openCallbackCount == 1 &&
                    weakFirst.get() == nullptr &&
                    weakModeless.get() == nullptr &&
@@ -865,8 +867,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
         });
     if ( !ownerDestroyDrained )
     {
-        const wxWinUITransientRegistrySnapshot registry =
-            wxWinUIGetTransientRegistrySnapshotForTesting();
+        const wxWinUITransientTestAccess::RegistrySnapshot registry =
+            wxWinUITransientTestAccess::GetRegistrySnapshot();
         INFO("open callbacks=" << openCallbackCount
              << ", first alive=" << (weakFirst.get() != nullptr)
              << ", modeless alive=" << (weakModeless.get() != nullptr)
@@ -887,11 +889,11 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     CHECK_FALSE(popup);
     CHECK_FALSE(tip);
     CHECK(nestedModal);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(modelessHwnd).
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(modelessHwnd).
               transactionCount == detachedOwnerBaseline);
 
-    const wxWinUITransientRegistrySnapshot afterOwnerDestroy =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot afterOwnerDestroy =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     CHECK(afterOwnerDestroy.ownerRetireEnqueueCount ==
           beforeOwnerDestroy.ownerRetireEnqueueCount + 2);
     CHECK(afterOwnerDestroy.ownerRetireCallbackCount ==
@@ -932,12 +934,12 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
                    wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
                        slotLifetimeBaseline &&
                    RegistryLifetimeEquals(
-                       wxWinUIGetTransientRegistrySnapshotForTesting(),
+                       wxWinUITransientTestAccess::GetRegistrySnapshot(),
                        registryBaseline);
         }));
 
-    const wxWinUITransientRegistrySnapshot finalRegistry =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot finalRegistry =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     CAPTURE(finalRegistry.ownerCount, registryBaseline.ownerCount,
             finalRegistry.transientCount, registryBaseline.transientCount,
             finalRegistry.cancelCallbackCount,
@@ -951,7 +953,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
             finalRegistry.activeOwnerRetirementCount,
             registryBaseline.activeOwnerRetirementCount);
     CHECK(RegistryLifetimeEquals(finalRegistry, registryBaseline));
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(nullptr).transactionCount ==
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(nullptr).transactionCount ==
           detachedOwnerBaseline);
     CHECK(wxWinUIHostUIATestAccess::
               GetLiveAutomationNameStyleObserverCount() ==

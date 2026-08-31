@@ -23,9 +23,12 @@
 
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
+#include "popup-test-access.h"
+#include "non-owned-test-access.h"
 #include "wx/winui/private/transient.h"
 
 #include <memory>
@@ -77,8 +80,8 @@ void ShowOffscreenWithoutActivation(wxTopLevelWindow *window, int ordinal)
     window->ShowWithoutActivating();
 }
 
-bool SameLiveRegistry(const wxWinUITransientRegistrySnapshot& lhs,
-                      const wxWinUITransientRegistrySnapshot& rhs)
+bool SameLiveRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
+                      const wxWinUITransientTestAccess::RegistrySnapshot& rhs)
 {
     return lhs.ownerCount == rhs.ownerCount &&
            lhs.transientCount == rhs.transientCount &&
@@ -120,7 +123,7 @@ struct TrackedLifetime
 struct TrackedOwnerIdentity
 {
     const char *label = nullptr;
-    wxWinUITransientOwnerIdentityForTesting identity;
+    wxWinUITransientTestAccess::OwnerIdentity identity;
 };
 
 template <typename T>
@@ -137,8 +140,8 @@ void TrackOwnerIdentity(std::vector<TrackedOwnerIdentity>& tracked,
                         const char *label,
                         std::uintptr_t ownerKey)
 {
-    const wxWinUITransientOwnerIdentityForTesting identity =
-        wxWinUIGetTransientOwnerIdentityForTesting(ownerKey);
+    const wxWinUITransientTestAccess::OwnerIdentity identity =
+        wxWinUITransientTestAccess::GetOwnerIdentity(ownerKey);
     REQUIRE(identity);
     tracked.push_back({ label, identity });
 }
@@ -161,7 +164,7 @@ bool AllTrackedOwnersRetired(
 {
     for ( const TrackedOwnerIdentity& item : tracked )
     {
-        if ( wxWinUIHasTransientOwnerIdentityForTesting(item.identity) )
+        if ( wxWinUITransientTestAccess::HasOwnerIdentity(item.identity) )
             return false;
     }
 
@@ -191,7 +194,7 @@ std::string DescribeTrackedOwners(
         description << (item.label ? item.label : "unnamed") << '@'
                     << reinterpret_cast<const void *>(item.identity.ownerKey)
                     << " epoch=" << item.identity.epoch << " present="
-                    << wxWinUIHasTransientOwnerIdentityForTesting(
+                    << wxWinUITransientTestAccess::HasOwnerIdentity(
                            item.identity)
                     << "; ";
     }
@@ -213,7 +216,7 @@ std::string DescribePhysicalSnapshot(const HostPhysicalSnapshot& snapshot)
 }
 
 std::string DescribeRegistrySnapshot(
-    const wxWinUITransientRegistrySnapshot& snapshot)
+    const wxWinUITransientTestAccess::RegistrySnapshot& snapshot)
 {
     std::ostringstream description;
     description << "owners=" << snapshot.ownerCount
@@ -401,14 +404,14 @@ void ReparentPopupDuringOwnerPublication(wxPopupWindow *popup)
 {
     gs_popupPublishNestedAttempted = true;
     wxWindow * const target = gs_popupPublishReparentTarget;
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     gs_popupPublishNestedSucceeded = target && popup->Reparent(target);
 }
 
 void DestroyPopupDuringOwnerPublication(wxPopupWindow *popup)
 {
     gs_popupPublishDestroyAttempted = true;
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     (void)popup->Destroy();
 }
 
@@ -417,7 +420,7 @@ void CancelDestinationDuringPopupOwnerPublication(
 {
     wxWindow * const owner = gs_popupCancelOwnerDuringPublish;
     gs_popupPublishOwnerCancelled = true;
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     if ( !owner )
         return;
 
@@ -430,7 +433,7 @@ void CancelDestinationDuringPopupOwnerPublication(
 void ReparentPopupLogicallyDuringOwnerPublication(wxPopupWindow *popup)
 {
     wxWindow * const target = gs_popupLogicalReparentTarget;
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     if ( target )
         (void)popup->wxWindowBase::Reparent(target);
 }
@@ -438,7 +441,7 @@ void ReparentPopupLogicallyDuringOwnerPublication(wxPopupWindow *popup)
 void DestroyOwnerlessPopupDuringCreate(wxPopupWindow *popup)
 {
     gs_popupCreateDestroyAttempted = true;
-    wxWinUIResetPopupCreateHookForTesting();
+    wxWinUIPopupTestAccess::ResetCreateHook();
     (void)popup->Destroy();
 }
 
@@ -559,7 +562,7 @@ public:
         PopupCaptureReleaseScenario& scenario)
     {
         gs_popupCaptureReleaseScenario = &scenario;
-        wxWinUISetPopupCaptureReleaseHookForTesting(
+        wxWinUIPopupTestAccess::SetCaptureReleaseHook(
             &RecapturePopupChildAfterRelease);
     }
 
@@ -571,7 +574,7 @@ public:
     void Reset()
     {
         gs_popupCaptureReleaseScenario = nullptr;
-        wxWinUIResetPopupCaptureReleaseHookForTesting();
+        wxWinUIPopupTestAccess::ResetCaptureReleaseHook();
     }
 };
 
@@ -586,7 +589,7 @@ bool gs_nonOwnedLayoutReparentAttempted = false;
 void DestroyNonOwnedDuringOwnerPublication(wxWindow *window)
 {
     gs_nonOwnedDestroyAttempted = true;
-    wxWinUIResetNonOwnedOwnerPublishHookForTesting();
+    wxWinUINonOwnedTestAccess::ResetOwnerPublishHook();
     (void)window->Destroy();
 }
 
@@ -595,7 +598,7 @@ void DestroyProspectiveOwnerDuringNonOwnedPublication(
 {
     wxWindow * const owner = gs_nonOwnedOwnerDestroyTarget;
     gs_nonOwnedOwnerDestroyAttempted = true;
-    wxWinUIResetNonOwnedOwnerPublishHookForTesting();
+    wxWinUINonOwnedTestAccess::ResetOwnerPublishHook();
     if ( owner )
         (void)owner->Destroy();
 }
@@ -604,7 +607,7 @@ void ReparentNonOwnedDuringLayoutRefresh(wxWindow *window)
 {
     wxWindow * const target = gs_nonOwnedLayoutReparentTarget;
     gs_nonOwnedLayoutReparentAttempted = true;
-    wxWinUIResetNonOwnedLayoutRefreshHookForTesting();
+    wxWinUINonOwnedTestAccess::ResetLayoutRefreshHook();
     if ( window && target )
         (void)window->wxWindowBase::Reparent(target);
 }
@@ -616,8 +619,8 @@ void ReparentNonOwnedDuringLayoutRefresh(wxWindow *window)
 TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
           "[winui-beta-transients][popup][HostLifecycle]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     const HostPhysicalSnapshot physicalBefore;
     std::vector<TrackedLifetime<wxWinUIHostLifetime>> ownedHostLifetimes;
     std::vector<TrackedLifetime<wxWinUISlotLifetime>> ownedSlotLifetimes;
@@ -663,11 +666,11 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
 
     REQUIRE(popup->Show());
     CHECK(popup->IsShown());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerA, wxWinUITransientKind::Popup) == 1);
     REQUIRE(popup->Hide());
     CHECK_FALSE(popup->IsShown());
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
 
     // Reparenting the popup itself migrates its native owner and central
     // transient generation, while its children remain on the popup's own
@@ -678,15 +681,15 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
     CHECK(popup->MSWGetOwner() == ownerB);
     CHECK(::GetWindow(popupHwnd, GW_OWNER) ==
           static_cast<HWND>(ownerB->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
     CHECK(wxWinUITopLevelHost::FindSlotOwner(xaml) == popupHost);
     REQUIRE(popup->Hide());
 
     // Prove that WS_POPUP owner migration uses the checked non-owned-window
     // transaction, including rollback when GWLP_HWNDPARENT publication fails.
-    wxWinUIMSWFailNextOwnerWriteForTest();
+    wxWinUINonOwnedTestAccess::FailNextOwnerWrite();
     CHECK_FALSE(popup->Reparent(ownerA));
     CHECK(popup->GetParent() == ownerB);
     CHECK(::GetWindow(popupHwnd, GW_OWNER) ==
@@ -726,7 +729,7 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
     REQUIRE(popup->Destroy());
     TrackOwnerIdentity(ownedRegistryOwners, "popup-owner", popupKey);
     REQUIRE(DrainTransientWindowsUntil([popupWeak]() { return !popupWeak; }));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
 
     const wxWeakRef<wxWindow> ownerAWeak(ownerA);
     const wxWeakRef<wxWindow> ownerBWeak(ownerB);
@@ -744,8 +747,8 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
                AllTrackedOwnersRetired(ownedRegistryOwners);
     });
     const HostPhysicalSnapshot physicalAfter;
-    const wxWinUITransientRegistrySnapshot registryAfter =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryAfter =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     INFO("physical before: " << DescribePhysicalSnapshot(physicalBefore));
     INFO("physical after: " << DescribePhysicalSnapshot(physicalAfter));
     INFO("registry before: " << DescribeRegistrySnapshot(registryBefore));
@@ -765,8 +768,8 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
 TEST_CASE("WinUITransientWindows::OwnerlessPopup",
           "[winui-beta-transients][popup][ownerless]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     const HostPhysicalSnapshot physicalBefore;
 
     wxPopupWindow * const popup = new wxPopupWindow;
@@ -782,8 +785,8 @@ TEST_CASE("WinUITransientWindows::OwnerlessPopup",
     CHECK(popup->MSWGetOwner() == nullptr);
 
     REQUIRE(popup->Show());
-    const wxWinUITransientRegistrySnapshot registryAfter =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryAfter =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     INFO("registry before/after: owners " << registryBefore.ownerCount << "/"
          << registryAfter.ownerCount << ", transients "
          << registryBefore.transientCount << "/"
@@ -815,7 +818,7 @@ TEST_CASE("WinUITransientWindows::OwnerlessPopup",
         // independent lifetime domains have converged.
         return SameLiveHostObjects(physicalBefore) &&
                SameLiveRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    registryBefore);
     }));
     CheckBalancedHandlers(physicalBefore);
@@ -827,11 +830,11 @@ TEST_CASE("WinUITransientWindows::OwnerlessCreateDestructionIsTerminal",
     wxPopupWindow * const popup = new wxPopupWindow;
     const wxWeakRef<wxWindow> popupWeak(popup);
     gs_popupCreateDestroyAttempted = false;
-    wxWinUISetPopupCreateHookForTesting(
+    wxWinUIPopupTestAccess::SetCreateHook(
         &DestroyOwnerlessPopupDuringCreate);
 
     CHECK_FALSE(popup->Create(nullptr, wxPU_CONTAINS_CONTROLS));
-    wxWinUIResetPopupCreateHookForTesting();
+    wxWinUIPopupTestAccess::ResetCreateHook();
     CHECK(gs_popupCreateDestroyAttempted);
     REQUIRE(DrainTransientWindowsUntil([popupWeak]() { return !popupWeak; }));
 }
@@ -903,10 +906,10 @@ TEST_CASE("WinUITransientWindows::OnDismissReopenInvalidatesNativeTail",
             static_cast<HWND>(owner->GetHWND()));
 
     gs_popupOwnerDeactivateTails = 0;
-    wxWinUISetPopupOwnerDeactivateHookForTesting(
+    wxWinUIPopupTestAccess::SetOwnerDeactivateHook(
         &CountPopupOwnerDeactivateTail);
-    wxWinUITestPopupOutsideClick(popup);
-    wxWinUIResetPopupOwnerDeactivateHookForTesting();
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
+    wxWinUIPopupTestAccess::ResetOwnerDeactivateHook();
 
     CHECK(popup->IsShown());
     CHECK(popup->dismissNotifications == 1);
@@ -922,8 +925,8 @@ TEST_CASE("WinUITransientWindows::OnDismissReopenInvalidatesNativeTail",
 TEST_CASE("WinUITransientWindows::LogicalParentTLWMigration",
           "[winui-beta-transients][popup][reparent][registry]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "logical-owner-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -938,7 +941,7 @@ TEST_CASE("WinUITransientWindows::LogicalParentTLWMigration",
     new wxButton(popup, wxID_ANY, "slot");
 
     REQUIRE(popup->Show());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerA, wxWinUITransientKind::Popup) == 1);
     REQUIRE(anchor->Reparent(ownerB));
 
@@ -948,8 +951,8 @@ TEST_CASE("WinUITransientWindows::LogicalParentTLWMigration",
     CHECK(popup->MSWGetOwner() == ownerB);
     CHECK(::GetWindow(static_cast<HWND>(popup->GetHWND()), GW_OWNER) ==
           static_cast<HWND>(ownerB->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
 
     DestroyAndDrain(popup);
@@ -958,7 +961,7 @@ TEST_CASE("WinUITransientWindows::LogicalParentTLWMigration",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -966,8 +969,8 @@ TEST_CASE("WinUITransientWindows::LogicalParentTLWMigration",
 TEST_CASE("WinUITransientWindows::StaleLogicalOwnerCancelMigratesImmediately",
           "[winui-beta-transients][popup][reparent][registry][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "stale-logical-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -990,8 +993,8 @@ TEST_CASE("WinUITransientWindows::StaleLogicalOwnerCancelMigratesImmediately",
     CHECK(popup->MSWGetOwner() == ownerB);
     CHECK(::GetWindow(static_cast<HWND>(popup->GetHWND()), GW_OWNER) ==
           static_cast<HWND>(ownerB->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
 
     DestroyAndDrain(popup);
@@ -1000,7 +1003,7 @@ TEST_CASE("WinUITransientWindows::StaleLogicalOwnerCancelMigratesImmediately",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -1027,11 +1030,11 @@ TEST_CASE("WinUITransientWindows::PopupOwnerRecoveryVerifiesNativeWrite",
     REQUIRE(popup->wxWindowBase::Reparent(ownerB));
 
     gs_popupLogicalReparentTarget = ownerC;
-    wxWinUISetPopupOwnerPublishHookForTesting(
+    wxWinUIPopupTestAccess::SetOwnerPublishHook(
         &ReparentPopupLogicallyDuringOwnerPublication);
-    wxWinUIFailNextPopupOwnerRecoveryForTesting();
+    wxWinUIPopupTestAccess::FailNextOwnerRecovery();
     CHECK_FALSE(popup->Show());
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     gs_popupLogicalReparentTarget = nullptr;
 
     CHECK_FALSE(popup->IsShown());
@@ -1039,12 +1042,12 @@ TEST_CASE("WinUITransientWindows::PopupOwnerRecoveryVerifiesNativeWrite",
     CHECK(popup->MSWGetOwner() == ownerC);
     CHECK(::GetWindow(static_cast<HWND>(popup->GetHWND()), GW_OWNER) ==
           static_cast<HWND>(ownerC->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerC) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerC) == 0);
 
     REQUIRE(popup->Show());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerC, wxWinUITransientKind::Popup) == 1);
     DestroyAndDrain(popup);
     ownerA->Destroy();
@@ -1056,8 +1059,8 @@ TEST_CASE("WinUITransientWindows::PopupOwnerRecoveryVerifiesNativeWrite",
 TEST_CASE("WinUITransientWindows::NestedOwnerPublicationWins",
           "[winui-beta-transients][popup][owner][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "publish-owner-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1084,10 +1087,10 @@ TEST_CASE("WinUITransientWindows::NestedOwnerPublicationWins",
     gs_popupPublishReparentTarget = ownerC;
     gs_popupPublishNestedAttempted = false;
     gs_popupPublishNestedSucceeded = false;
-    wxWinUISetPopupOwnerPublishHookForTesting(
+    wxWinUIPopupTestAccess::SetOwnerPublishHook(
         &ReparentPopupDuringOwnerPublication);
     CHECK_FALSE(popup->Show());
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     gs_popupPublishReparentTarget = nullptr;
 
     CHECK(gs_popupPublishNestedAttempted);
@@ -1097,9 +1100,9 @@ TEST_CASE("WinUITransientWindows::NestedOwnerPublicationWins",
     CHECK(popup->MSWGetOwner() == ownerC);
     CHECK(::GetWindow(static_cast<HWND>(popup->GetHWND()), GW_OWNER) ==
           static_cast<HWND>(ownerC->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerC, wxWinUITransientKind::Popup) == 1);
 
     DestroyAndDrain(popup);
@@ -1109,7 +1112,7 @@ TEST_CASE("WinUITransientWindows::NestedOwnerPublicationWins",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -1117,8 +1120,8 @@ TEST_CASE("WinUITransientWindows::NestedOwnerPublicationWins",
 TEST_CASE("WinUITransientWindows::OwnerPublicationDestroyIsTerminal",
           "[winui-beta-transients][popup][owner][destroy][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "publish-destroy-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1136,22 +1139,22 @@ TEST_CASE("WinUITransientWindows::OwnerPublicationDestroyIsTerminal",
 
     const wxWeakRef<wxWindow> popupWeak(popup);
     gs_popupPublishDestroyAttempted = false;
-    wxWinUISetPopupOwnerPublishHookForTesting(
+    wxWinUIPopupTestAccess::SetOwnerPublishHook(
         &DestroyPopupDuringOwnerPublication);
     CHECK_FALSE(popup->Show());
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
 
     CHECK(gs_popupPublishDestroyAttempted);
     REQUIRE(DrainTransientWindowsUntil([popupWeak]() { return !popupWeak; }));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
 
     ownerA->Destroy();
     ownerB->Destroy();
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -1159,8 +1162,8 @@ TEST_CASE("WinUITransientWindows::OwnerPublicationDestroyIsTerminal",
 TEST_CASE("WinUITransientWindows::StaleOwnerCancelCannotKillMigration",
           "[winui-beta-transients][popup][owner][registry][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "cancel-migrate-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1186,7 +1189,7 @@ TEST_CASE("WinUITransientWindows::StaleOwnerCancelCannotKillMigration",
     REQUIRE(migrateFirst);
     popup->Popup();
     REQUIRE(popup->IsShown());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerA, wxWinUITransientKind::Popup) == 2);
 
     wxWinUICancelTransientSessions(ownerA);
@@ -1195,8 +1198,8 @@ TEST_CASE("WinUITransientWindows::StaleOwnerCancelCannotKillMigration",
     CHECK(popup->IsShown());
     CHECK(popup->GetParent() == ownerB);
     CHECK(popup->dismissNotifications == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
 
     migrateFirst.Reset();
@@ -1206,7 +1209,7 @@ TEST_CASE("WinUITransientWindows::StaleOwnerCancelCannotKillMigration",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -1214,8 +1217,8 @@ TEST_CASE("WinUITransientWindows::StaleOwnerCancelCannotKillMigration",
 TEST_CASE("WinUITransientWindows::NewRegistrationCancelledDuringPublication",
           "[winui-beta-transients][popup][owner][registry][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "publish-cancel-new-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1233,10 +1236,10 @@ TEST_CASE("WinUITransientWindows::NewRegistrationCancelledDuringPublication",
 
     gs_popupCancelOwnerDuringPublish = ownerB;
     gs_popupPublishOwnerCancelled = false;
-    wxWinUISetPopupOwnerPublishHookForTesting(
+    wxWinUIPopupTestAccess::SetOwnerPublishHook(
         &CancelDestinationDuringPopupOwnerPublication);
     CHECK_FALSE(popup->Show());
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     gs_popupCancelOwnerDuringPublish = nullptr;
 
     CHECK(gs_popupPublishOwnerCancelled);
@@ -1247,14 +1250,14 @@ TEST_CASE("WinUITransientWindows::NewRegistrationCancelledDuringPublication",
     CHECK(popup->MSWGetOwner() == ownerB);
     CHECK(::GetWindow(popupHwnd, GW_OWNER) ==
           static_cast<HWND>(ownerB->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
 
     // Releasing the destination retirement makes the still-hidden object
     // reusable; no cancelled local registration was committed to its sidecar.
     gs_popupPublishOwnerRetirement.reset();
     REQUIRE(popup->Show());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
 
     DestroyAndDrain(popup);
@@ -1263,15 +1266,15 @@ TEST_CASE("WinUITransientWindows::NewRegistrationCancelledDuringPublication",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), registryBefore);
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), registryBefore);
     }));
 }
 
 TEST_CASE("WinUITransientWindows::MigrationCancelledDuringPublication",
           "[winui-beta-transients][popup][owner][registry][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "publish-cancel-migrate-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1290,10 +1293,10 @@ TEST_CASE("WinUITransientWindows::MigrationCancelledDuringPublication",
 
     gs_popupCancelOwnerDuringPublish = ownerB;
     gs_popupPublishOwnerCancelled = false;
-    wxWinUISetPopupOwnerPublishHookForTesting(
+    wxWinUIPopupTestAccess::SetOwnerPublishHook(
         &CancelDestinationDuringPopupOwnerPublication);
     CHECK_FALSE(popup->Show());
-    wxWinUIResetPopupOwnerPublishHookForTesting();
+    wxWinUIPopupTestAccess::ResetOwnerPublishHook();
     gs_popupCancelOwnerDuringPublish = nullptr;
 
     CHECK(gs_popupPublishOwnerCancelled);
@@ -1304,15 +1307,15 @@ TEST_CASE("WinUITransientWindows::MigrationCancelledDuringPublication",
     CHECK(popup->MSWGetOwner() == ownerB);
     CHECK(::GetWindow(popupHwnd, GW_OWNER) ==
           static_cast<HWND>(ownerB->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
 
     gs_popupPublishOwnerRetirement.reset();
     REQUIRE(popup->Show());
     CHECK(popup->MSWGetOwner() == ownerB);
     CHECK(::GetWindow(popupHwnd, GW_OWNER) ==
           static_cast<HWND>(ownerB->GetHWND()));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
 
     DestroyAndDrain(popup);
@@ -1321,7 +1324,7 @@ TEST_CASE("WinUITransientWindows::MigrationCancelledDuringPublication",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), registryBefore);
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), registryBefore);
     }));
 }
 
@@ -1352,33 +1355,33 @@ TEST_CASE("WinUITransientWindows::OutsideDismissCaptureAndReentrancy",
 
     popup->Popup(focus);
     REQUIRE(popup->IsShown());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
     focus->CaptureMouse();
     REQUIRE(focus->HasCapture());
 
     popup->allowOutsideDismiss = false;
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK(popup->IsShown());
     CHECK(focus->HasCapture());
     CHECK(popup->dismissNotifications == 0);
 
     popup->allowOutsideDismiss = true;
     popup->reopenDuringCanDismiss = true;
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK(popup->IsShown());
     CHECK(popup->dismissNotifications == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
 
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK_FALSE(popup->IsShown());
     CHECK_FALSE(focus->HasCapture());
     CHECK_FALSE(recapture->HasCapture());
     CHECK(captureScenario.invoked);
     CHECK(wxWindow::FindFocus() == ownerFocus);
     CHECK(popup->dismissNotifications == 1);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     // A capture callback which starts a newer visibility generation wins over
     // the outer dismissal. The same visible popup is not hidden afterwards.
@@ -1388,7 +1391,7 @@ TEST_CASE("WinUITransientWindows::OutsideDismissCaptureAndReentrancy",
     popup->Popup(focus);
     REQUIRE(popup->IsShown());
     focus->CaptureMouse();
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK(popup->IsShown());
     CHECK(captureScenario.invoked);
     CHECK(popup->dismissNotifications == 1);
@@ -1421,7 +1424,7 @@ TEST_CASE("WinUITransientWindows::OutsideDismissCaptureAndReentrancy",
     REQUIRE(DrainTransientWindowsUntil(
         [popup]() { return !popup->IsShown(); }));
     CHECK(popup->dismissNotifications == 2);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     // OnDismiss() may reclaim the wrapper synchronously. The outside-click
     // tail must not read it or send owner state through a stale pointer.
@@ -1430,10 +1433,10 @@ TEST_CASE("WinUITransientWindows::OutsideDismissCaptureAndReentrancy",
     popup->deleteOnDismiss = true;
     popup->Popup(focus);
     const wxWeakRef<wxWindow> popupWeak(popup);
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     REQUIRE(DrainTransientWindowsUntil([popupWeak]() { return !popupWeak; }));
     CHECK(*finalNotifications == 1);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     owner->Destroy();
     DrainTransientWindows();
@@ -1455,7 +1458,7 @@ TEST_CASE("WinUITransientWindows::DestroyScheduledDismissSkipsNotification",
     REQUIRE(popup->IsShown());
 
     const wxWeakRef<wxWindow> popupWeak(popup);
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
 
     // Dismiss() hid and scheduled destruction synchronously. The lifetime
     // guard must not enter OnDismiss() on this unavailable generation.
@@ -1489,12 +1492,12 @@ TEST_CASE("WinUITransientWindows::CaptureHookDestroyInvalidatesDismiss",
     REQUIRE(capture->HasCapture());
 
     const wxWeakRef<wxWindow> popupWeak(popup);
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK(captureScenario.invoked);
     CHECK(*notifications == 0);
     REQUIRE(DrainTransientWindowsUntil([popupWeak]() { return !popupWeak; }));
     CHECK(*notifications == 0);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     owner->Destroy();
     DrainTransientWindows();
@@ -1503,8 +1506,8 @@ TEST_CASE("WinUITransientWindows::CaptureHookDestroyInvalidatesDismiss",
 TEST_CASE("WinUITransientWindows::ParentPendingDestroyOwnsChildTeardown",
           "[winui-beta-transients][popup][owner][destroy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "pending-parent-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1528,7 +1531,7 @@ TEST_CASE("WinUITransientWindows::ParentPendingDestroyOwnsChildTeardown",
     {
         return !ownerWeak && !popupWeak &&
                SameLiveRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    registryBefore);
     }));
 }
@@ -1536,8 +1539,8 @@ TEST_CASE("WinUITransientWindows::ParentPendingDestroyOwnsChildTeardown",
 TEST_CASE("WinUITransientWindows::NestedAndOwnerTeardown",
           "[winui-beta-transients][popup][nested][owner]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
 
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "nested-popup-owner",
@@ -1554,9 +1557,9 @@ TEST_CASE("WinUITransientWindows::NestedAndOwnerTeardown",
     inner->Popup();
     REQUIRE(outer->IsShown());
     REQUIRE(inner->IsShown());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               outer, wxWinUITransientKind::Popup) == 1);
 
     // Hiding the outer generation cancels the nested one first. The owner's
@@ -1568,8 +1571,8 @@ TEST_CASE("WinUITransientWindows::NestedAndOwnerTeardown",
     CHECK_FALSE(inner->IsShown());
     CHECK(inner->dismissNotifications == 1);
     CHECK_FALSE(inner->IsShown());
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
-    CHECK(wxWinUITransientCountForTesting(outer) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(outer) == 0);
 
     outer->Popup();
     inner->Popup();
@@ -1582,7 +1585,7 @@ TEST_CASE("WinUITransientWindows::NestedAndOwnerTeardown",
     {
         return !ownerWeak &&
                SameLiveRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    registryBefore);
     }));
 
@@ -1604,8 +1607,8 @@ TEST_CASE("WinUITransientWindows::NestedAndOwnerTeardown",
 TEST_CASE("WinUITransientWindows::NestedDesktopChildOutsideRouting",
           "[winui-beta-transients][popup][desktop-child][nested]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "desktop-nested-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1638,7 +1641,7 @@ TEST_CASE("WinUITransientWindows::NestedDesktopChildOutsideRouting",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -1663,17 +1666,17 @@ TEST_CASE("WinUITransientWindows::PersistentRecaptureIsNotFalseDismissal",
 
     popup->Popup();
     captureA->CaptureMouse();
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK(popup->IsShown());
     CHECK(popup->dismissNotifications == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
 
     CHECK(captureScenario.invoked);
     captureHook.Reset();
     if ( wxWindow * const capture = wxWindow::GetCapture() )
         capture->ReleaseMouse();
-    wxWinUITestPopupOutsideClick(popup);
+    wxWinUIPopupTestAccess::DismissFromOutside(popup);
     CHECK_FALSE(popup->IsShown());
     CHECK(popup->dismissNotifications == 1);
 
@@ -1726,7 +1729,7 @@ TEST_CASE("WinUITransientWindows::OwnerCancelBlocksCaptureLostRecapture",
         static_cast<HWND>(popup->GetHWND())));
     CHECK(wxWindow::GetCapture() == nullptr);
     CHECK(popup->dismissNotifications == 1);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     captureHook.Reset();
     DestroyAndDrain(popup);
@@ -1737,8 +1740,8 @@ TEST_CASE("WinUITransientWindows::OwnerCancelBlocksCaptureLostRecapture",
 TEST_CASE("WinUITransientWindows::NativeRecaptureIsBoundedAndTerminal",
           "[winui-beta-transients][popup][capture][owner][failure]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "native-recapture-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -1769,7 +1772,7 @@ TEST_CASE("WinUITransientWindows::NativeRecaptureIsBoundedAndTerminal",
     // cancellation adds exactly 32 terminal passes before hiding/destroying.
     CHECK(captureScenario.invocations == 48);
     CHECK(*dismissNotifications == 1);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     CHECK((!::IsWindow(popupHwnd) || !::IsWindowVisible(popupHwnd)));
 
     captureHook.Reset();
@@ -1784,7 +1787,7 @@ TEST_CASE("WinUITransientWindows::NativeRecaptureIsBoundedAndTerminal",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -1819,7 +1822,7 @@ TEST_CASE("WinUITransientWindows::PopupBridgeNativeCaptureIsReleased",
         static_cast<HWND>(popup->GetHWND())));
     CHECK(::GetCapture() != bridge);
     CHECK(wxWindow::GetCapture() == nullptr);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     DestroyAndDrain(popup);
     owner->Destroy();
@@ -1852,7 +1855,7 @@ TEST_CASE("WinUITransientWindows::ForeignNativeCaptureIsNotStolen",
     CHECK_FALSE(::IsWindowVisible(
         static_cast<HWND>(popup->GetHWND())));
     CHECK(::GetCapture() == foreignHwnd);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     if ( ::GetCapture() == foreignHwnd )
         (void)::ReleaseCapture();
@@ -1887,7 +1890,7 @@ TEST_CASE("WinUITransientWindows::RawWxHwndCaptureUsesNativeRelease",
     wxWinUICancelTransientSessions(owner);
     CHECK_FALSE(popup->IsShown());
     CHECK(::GetCapture() != childHwnd);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     DestroyAndDrain(popup);
     owner->Destroy();
@@ -1912,7 +1915,7 @@ TEST_CASE("WinUITransientWindows::PlainPopupHostileHideIsTerminal",
     CHECK_FALSE(popup->IsShown());
     CHECK_FALSE(::IsWindowVisible(
         static_cast<HWND>(popup->GetHWND())));
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     // Terminal applies to the cancelled generation, not the reusable object.
     REQUIRE(popup->Show());
@@ -1940,7 +1943,7 @@ TEST_CASE("WinUITransientWindows::PlainPopupRawReshowIsForcedHidden",
     wxWinUICancelTransientSessions(owner);
     CHECK_FALSE(popup->IsShown());
     CHECK_FALSE(::IsWindowVisible(popupHwnd));
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     popup->rawReshowAfterBaseHide = false;
     REQUIRE(popup->Show());
@@ -1967,7 +1970,7 @@ TEST_CASE("WinUITransientWindows::OnDismissRawReshowIsForcedHidden",
     CHECK(popup->dismissNotifications == 1);
     CHECK_FALSE(popup->IsShown());
     CHECK_FALSE(::IsWindowVisible(popupHwnd));
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     popup->rawReshowOnDismiss = false;
     REQUIRE(popup->Show());
@@ -1979,8 +1982,8 @@ TEST_CASE("WinUITransientWindows::OnDismissRawReshowIsForcedHidden",
 TEST_CASE("WinUITransientWindows::PersistentNativeReshowForcesDestroy",
           "[winui-beta-transients][popup][owner][reentrancy][native][failure]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "persistent-reshow-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2006,7 +2009,7 @@ TEST_CASE("WinUITransientWindows::PersistentNativeReshowForcesDestroy",
 
     wxWinUICancelTransientSessions(owner);
     CHECK(reshowState.reshowCount >= 2);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     // A subclass which defeats every SW_HIDE makes native visibility an
     // unsatisfied terminal postcondition. The manager must therefore destroy
@@ -2043,15 +2046,15 @@ TEST_CASE("WinUITransientWindows::PersistentNativeReshowForcesDestroy",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), registryBefore);
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), registryBefore);
     }));
 }
 
 TEST_CASE("WinUITransientWindows::PopupAllocationFailureRollsBack",
           "[winui-beta-transients][popup][allocation][failure][registry]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "allocation-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2064,32 +2067,32 @@ TEST_CASE("WinUITransientWindows::PopupAllocationFailureRollsBack",
 
     // The historical fail-next seam now starts at the cancel-token allocation.
     // No manager or sidecar state exists yet and the hidden object is reusable.
-    wxWinUIFailNextPopupAllocationForTesting();
+    wxWinUIPopupTestAccess::FailNextAllocation();
     REQUIRE_THROWS_AS(popup->Show(), std::bad_alloc);
     CHECK_FALSE(popup->IsShown());
     CHECK_FALSE(::IsWindowVisible(popupHwnd));
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
     REQUIRE(popup->Show());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
 
     // Ending-session allocation failure must roll back endingSession and the
     // temporary owner retirement, retaining the visible manager generation.
-    wxWinUIFailNextPopupAllocationForTesting();
+    wxWinUIPopupTestAccess::FailNextAllocation();
     REQUIRE_THROWS_AS(popup->Hide(), std::bad_alloc);
     CHECK(popup->IsShown());
     CHECK(::IsWindowVisible(popupHwnd));
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
 
     // Destroy preparation has the same strong rollback contract: no terminal
     // flags or retirement lease survive a failed ownership allocation.
-    wxWinUIFailNextPopupAllocationForTesting();
+    wxWinUIPopupTestAccess::FailNextAllocation();
     REQUIRE_THROWS_AS(popup->Destroy(), std::bad_alloc);
     CHECK(popupWeak.get() == popup);
     CHECK_FALSE(wxWinUITLWHostIsDestroyScheduled(popup));
     CHECK(popup->IsShown());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               owner, wxWinUITransientKind::Popup) == 1);
 
     REQUIRE(popup->Destroy());
@@ -2098,7 +2101,7 @@ TEST_CASE("WinUITransientWindows::PopupAllocationFailureRollsBack",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), registryBefore);
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), registryBefore);
     }));
 }
 
@@ -2107,26 +2110,26 @@ TEST_CASE("WinUITransientWindows::VisibleMigrationAllocationMatrix",
 {
     struct AllocationCase
     {
-        wxWinUITransientAllocationSite site;
+        wxWinUITransientTestAccess::AllocationSite site;
         const char *name;
     };
     const AllocationCase cases[] = {
-        { wxWinUITransientAllocationSite::PopupCancelToken,
+        { wxWinUITransientTestAccess::AllocationSite::PopupCancelToken,
           "cancel token" },
-        { wxWinUITransientAllocationSite::RegistrationImpl,
+        { wxWinUITransientTestAccess::AllocationSite::RegistrationImpl,
           "registration impl" },
-        { wxWinUITransientAllocationSite::RegistrationOwnerEntry,
+        { wxWinUITransientTestAccess::AllocationSite::RegistrationOwnerEntry,
           "owner map entry" },
-        { wxWinUITransientAllocationSite::RegistrationObserver,
+        { wxWinUITransientTestAccess::AllocationSite::RegistrationObserver,
           "owner observer" },
-        { wxWinUITransientAllocationSite::RegistrationEntry,
+        { wxWinUITransientTestAccess::AllocationSite::RegistrationEntry,
           "transient vector entry" },
-        { wxWinUITransientAllocationSite::PopupRegistrationHolder,
+        { wxWinUITransientTestAccess::AllocationSite::PopupRegistrationHolder,
           "popup registration holder" }
     };
 
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "allocation-migration-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2146,7 +2149,7 @@ TEST_CASE("WinUITransientWindows::VisibleMigrationAllocationMatrix",
         REQUIRE(popup->Show());
         REQUIRE(popup->wxWindowBase::Reparent(ownerB));
 
-        wxWinUIFailTransientAllocationAtForTesting(allocationCase.site);
+        wxWinUITransientTestAccess::FailAllocationAt(allocationCase.site);
         bool sawBadAlloc = false;
         try
         {
@@ -2159,14 +2162,14 @@ TEST_CASE("WinUITransientWindows::VisibleMigrationAllocationMatrix",
         catch ( ... )
         {
         }
-        wxWinUIResetTransientAllocationFailureForTesting();
+        wxWinUITransientTestAccess::ResetAllocationFailure();
 
         CHECK(sawBadAlloc);
         CHECK(popup->GetParent() == ownerB);
         CHECK_FALSE(popup->IsShown());
         CHECK_FALSE(::IsWindowVisible(popupHwnd));
-        CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-        CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
 
         // The failed A -> B transaction retires A instead of leaving a logical
         // B popup backed by A's manager token. A clean retry must register B.
@@ -2174,11 +2177,11 @@ TEST_CASE("WinUITransientWindows::VisibleMigrationAllocationMatrix",
         CHECK(popup->MSWGetOwner() == ownerB);
         CHECK(::GetWindow(popupHwnd, GW_OWNER) ==
               static_cast<HWND>(ownerB->GetHWND()));
-        CHECK(wxWinUITransientCountForTesting(
+        CHECK(wxWinUITransientTestAccess::Count(
                   ownerB, wxWinUITransientKind::Popup) == 1);
         DestroyAndDrain(popup);
-        CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-        CHECK(wxWinUITransientCountForTesting(ownerB) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+        CHECK(wxWinUITransientTestAccess::Count(ownerB) == 0);
     }
 
     ownerA->Destroy();
@@ -2186,15 +2189,15 @@ TEST_CASE("WinUITransientWindows::VisibleMigrationAllocationMatrix",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), registryBefore);
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), registryBefore);
     }));
 }
 
 TEST_CASE("WinUITransientWindows::OwnerRetirementRejectsEveryKind",
           "[winui-beta-transients][popup][registry][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "retirement-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2230,14 +2233,14 @@ TEST_CASE("WinUITransientWindows::OwnerRetirementRejectsEveryKind",
 
     auto retirement = wxWinUIBeginTransientOwnerRetirement(owner);
     REQUIRE(retirement);
-    CHECK(wxWinUIGetTransientRegistrySnapshotForTesting()
+    CHECK(wxWinUITransientTestAccess::GetRegistrySnapshot()
               .activeOwnerRetirementCount ==
           registryBefore.activeOwnerRetirementCount + 1);
     wxWinUICancelTransientSessions(owner);
     CHECK_FALSE(popupReplacement);
     CHECK_FALSE(tipReplacement);
     CHECK_FALSE(modalReplacement);
-    CHECK(wxWinUITransientCountForTesting(owner) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(owner) == 0);
 
     retirement.Reset();
     popup = wxWinUIRegisterTransient(
@@ -2257,7 +2260,7 @@ TEST_CASE("WinUITransientWindows::OwnerRetirementRejectsEveryKind",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -2265,8 +2268,8 @@ TEST_CASE("WinUITransientWindows::OwnerRetirementRejectsEveryKind",
 TEST_CASE("WinUITransientWindows::DefaultDesktopChildPopup",
           "[winui-beta-transients][popup][desktop-child]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const ownerA =
         new wxFrame(nullptr, wxID_ANY, "default-popup-a",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2295,14 +2298,14 @@ TEST_CASE("WinUITransientWindows::DefaultDesktopChildPopup",
     popup->Popup();
     REQUIRE(popup->IsShown());
     CHECK_FALSE(popup->Show());
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerA, wxWinUITransientKind::Popup) == 1);
     REQUIRE(popup->Reparent(ownerB));
     CHECK(popup->IsShown());
     CHECK(popup->GetParent() == ownerB);
     CHECK(::GetParent(hwnd) == ::GetDesktopWindow());
-    CHECK(wxWinUITransientCountForTesting(ownerA) == 0);
-    CHECK(wxWinUITransientCountForTesting(
+    CHECK(wxWinUITransientTestAccess::Count(ownerA) == 0);
+    CHECK(wxWinUITransientTestAccess::Count(
               ownerB, wxWinUITransientKind::Popup) == 1);
 
     popup->MSWDismissUnfocusedPopup();
@@ -2316,7 +2319,7 @@ TEST_CASE("WinUITransientWindows::DefaultDesktopChildPopup",
     REQUIRE(DrainTransientWindowsUntil([&]()
     {
         return SameLiveRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(),
+            wxWinUITransientTestAccess::GetRegistrySnapshot(),
             registryBefore);
     }));
 }
@@ -2324,8 +2327,8 @@ TEST_CASE("WinUITransientWindows::DefaultDesktopChildPopup",
 TEST_CASE("WinUITransientWindows::OwnerDestroyDismissesExactlyOnce",
           "[winui-beta-transients][popup][owner][capture][reentrancy]")
 {
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "destroy-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2354,7 +2357,7 @@ TEST_CASE("WinUITransientWindows::OwnerDestroyDismissesExactlyOnce",
     {
         return !ownerWeak && !popupWeak &&
                SameLiveRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    registryBefore);
     }));
     CHECK(*notifications == 1);
@@ -2365,8 +2368,8 @@ TEST_CASE("WinUITransientWindows::PopupHundredCycles",
           "[winui-beta-transients][popup][stress]")
 {
     const HostPhysicalSnapshot physicalBefore;
-    const wxWinUITransientRegistrySnapshot registryBefore =
-        wxWinUIGetTransientRegistrySnapshotForTesting();
+    const wxWinUITransientTestAccess::RegistrySnapshot registryBefore =
+        wxWinUITransientTestAccess::GetRegistrySnapshot();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "popup-cycle-owner",
                     wxPoint(-30000, -30000), wxSize(220, 120));
@@ -2386,7 +2389,7 @@ TEST_CASE("WinUITransientWindows::PopupHundredCycles",
         REQUIRE(DrainTransientWindowsUntil([&]()
         {
             return !popupWeak && SameLiveHostObjects(withOwner) &&
-                   wxWinUITransientCountForTesting(owner) == 0;
+                   wxWinUITransientTestAccess::Count(owner) == 0;
         }));
     }
 
@@ -2395,7 +2398,7 @@ TEST_CASE("WinUITransientWindows::PopupHundredCycles",
     {
         return SameLiveHostObjects(physicalBefore) &&
                SameLiveRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    registryBefore);
     }));
     CheckBalancedHandlers(physicalBefore);
@@ -2427,7 +2430,7 @@ TEST_CASE("WinUITransientWindows::MiniFrameLifecycleAndHost",
     CHECK(::GetWindow(static_cast<HWND>(mini->GetHWND()), GW_OWNER) ==
           static_cast<HWND>(ownerA->GetHWND()));
 
-    wxWinUIMSWFailNextOwnerWriteForTest();
+    wxWinUINonOwnedTestAccess::FailNextOwnerWrite();
     CHECK_FALSE(mini->Reparent(ownerB));
     CHECK(mini->GetParent() == ownerA);
     CHECK(::GetWindow(static_cast<HWND>(mini->GetHWND()), GW_OWNER) ==
@@ -2525,10 +2528,10 @@ TEST_CASE("WinUITransientWindows::MiniFrameDestroyDuringOwnerPublication",
 
     const wxWeakRef<wxWindow> miniWeak(mini);
     gs_nonOwnedDestroyAttempted = false;
-    wxWinUISetNonOwnedOwnerPublishHookForTesting(
+    wxWinUINonOwnedTestAccess::SetOwnerPublishHook(
         &DestroyNonOwnedDuringOwnerPublication);
     CHECK_FALSE(mini->Reparent(ownerB));
-    wxWinUIResetNonOwnedOwnerPublishHookForTesting();
+    wxWinUINonOwnedTestAccess::ResetOwnerPublishHook();
     CHECK(gs_nonOwnedDestroyAttempted);
     REQUIRE(DrainTransientWindowsUntil([miniWeak]() { return !miniWeak; }));
 
@@ -2563,10 +2566,10 @@ TEST_CASE("WinUITransientWindows::MiniFrameOwnerDestroyedDuringPublication",
     const wxWeakRef<wxWindow> ownerBWeak(ownerB);
     gs_nonOwnedOwnerDestroyTarget = ownerB;
     gs_nonOwnedOwnerDestroyAttempted = false;
-    wxWinUISetNonOwnedOwnerPublishHookForTesting(
+    wxWinUINonOwnedTestAccess::SetOwnerPublishHook(
         &DestroyProspectiveOwnerDuringNonOwnedPublication);
     CHECK_FALSE(mini->Reparent(ownerB));
-    wxWinUIResetNonOwnedOwnerPublishHookForTesting();
+    wxWinUINonOwnedTestAccess::ResetOwnerPublishHook();
     gs_nonOwnedOwnerDestroyTarget = nullptr;
 
     CHECK(gs_nonOwnedOwnerDestroyAttempted);
@@ -2616,10 +2619,10 @@ TEST_CASE("WinUITransientWindows::MiniFrameLayoutMutationConverges",
 
     gs_nonOwnedLayoutReparentTarget = ownerC;
     gs_nonOwnedLayoutReparentAttempted = false;
-    wxWinUISetNonOwnedLayoutRefreshHookForTesting(
+    wxWinUINonOwnedTestAccess::SetLayoutRefreshHook(
         &ReparentNonOwnedDuringLayoutRefresh);
     const bool reparented = mini->Reparent(ownerB);
-    wxWinUIResetNonOwnedLayoutRefreshHookForTesting();
+    wxWinUINonOwnedTestAccess::ResetLayoutRefreshHook();
     gs_nonOwnedLayoutReparentTarget = nullptr;
 
     REQUIRE(reparented);

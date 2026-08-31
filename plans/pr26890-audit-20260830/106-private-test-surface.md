@@ -360,6 +360,30 @@ Do not delete a lifetime/retirement service used by production merely because it
   private-desktop, non-input tests. Fresh shipping OFF installation and symbol
   verification remain pending.
 
+## Transient-window test boundaries (2026-08-31)
+
+- Non-owned windows, popup capture, the transient-dialog registry, owner/
+  backdrop probes and generic tip-window creation now expose their test
+  controls through non-installed support headers. Their former source-private
+  test declarations no longer enlarge the production-facing host headers.
+  Per-translation-unit test support is enabled only for the producers that
+  implement those controls.
+- Production ownership, popup capture loops, retirement generations, modal
+  registry transitions, allocation rollback, native owner validation and tip
+  identity/backlinks retain their original authorities and ordering. The real
+  owner/backdrop operation tables move intact to `src/winui/transientops.h`;
+  the injectable allocation point remains an intra-core, non-installed detail.
+  No test fixture assertion or control-flow oracle is removed.
+- Shared and static post-migration runs pass the non-owned **94/5**, popup
+  **125/8**, transient registry **55/5**, transient popup **183/3**, owner/
+  backdrop core **184/7**, shell **89/5**, native **2732/3**, and tip-window
+  **564/2** assertion/case groups. The same combined tree builds `test_gui`,
+  `minimal` and `winuispike` with warnings as errors and passes both runtime
+  gates (**2/2**) in each linkage. Logs use the
+  `audit106-lifecycle-on-{transient*,owner-backdrop*,tip}.log` family plus the
+  build and gate logs named above. Fresh shipping OFF verification remains
+  pending.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

@@ -196,7 +196,10 @@ if(WXWINUI AND wxUSE_WINUI3)
         get_target_property(wx_winui_test_support_definitions
             wx_winui_test_support INTERFACE_COMPILE_DEFINITIONS)
         set(wx_winui_test_support_sources
+            "${wxSOURCE_DIR}/src/generic/tipwin.cpp"
             "${wxSOURCE_DIR}/src/msw/evtloop.cpp"
+            "${wxSOURCE_DIR}/src/msw/nonownedwnd.cpp"
+            "${wxSOURCE_DIR}/src/msw/popupwin.cpp"
             "${wxSOURCE_DIR}/src/winui/button.cpp"
             "${wxSOURCE_DIR}/src/winui/tglbtn.cpp"
             "${wxSOURCE_DIR}/src/winui/stattext.cpp"
@@ -223,6 +226,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/textctrl.cpp"
             "${wxSOURCE_DIR}/src/winui/srchctrl.cpp"
             "${wxSOURCE_DIR}/src/winui/textdlg.cpp"
+            "${wxSOURCE_DIR}/src/winui/dlgpresenter.cpp"
             "${wxSOURCE_DIR}/src/winui/notebook.cpp"
             "${wxSOURCE_DIR}/src/winui/toolbar.cpp"
             "${wxSOURCE_DIR}/src/winui/winui.cpp"

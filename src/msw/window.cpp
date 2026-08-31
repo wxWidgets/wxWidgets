@@ -89,6 +89,10 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/private/shelltheme.h"
     #include "wx/winui/private/transient.h"
+    #include "../winui/transientops.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "owner-backdrop-test-access.h"
+#endif
     #include "wx/winui/private/tlwhostmsw.h"
     #ifdef WXWINUI_TEST_SUPPORT
         #include "msw-window-test-access.h"
@@ -486,8 +490,10 @@ using wxWinUIOwnerTransactions =
     std::unordered_map<HWND, wxWinUIOwnerTransaction>;
 wxWinUIOwnerTransactions gs_winuiOwnerTransactions;
 unsigned long long gs_nextWinUIOwnerEpoch = 0;
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUIOwnerNativeOps gs_winuiOwnerTestOps;
 bool gs_hasWinUIOwnerTestOps = false;
+#endif // WXWINUI_TEST_SUPPORT
 #endif
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
@@ -6347,8 +6353,10 @@ bool wxWinUIOwnerClearMarkerNative(void *, WXHWND hwndArg)
 
 const wxWinUIOwnerNativeOps& wxWinUIGetOwnerOps()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_hasWinUIOwnerTestOps )
         return gs_winuiOwnerTestOps;
+#endif // WXWINUI_TEST_SUPPORT
 
     static const wxWinUIOwnerNativeOps operations =
     {
@@ -6799,7 +6807,10 @@ wxWinUITransientOwnerRestoreDependents(WXHWND ownerArg, bool primeNow)
 
             const bool restored =
                 wxWinUITransientOwnerActivation(dependent, false);
-            if ( restored && !gs_hasWinUIOwnerTestOps &&
+            if ( restored &&
+#ifdef WXWINUI_TEST_SUPPORT
+                 !gs_hasWinUIOwnerTestOps &&
+#endif // WXWINUI_TEST_SUPPORT
                  ::IsWindow(dependent) &&
                  ::GetPropW(dependent, L"wxWinUIBackdropTransparent") )
             {
@@ -6811,8 +6822,9 @@ wxWinUITransientOwnerRestoreDependents(WXHWND ownerArg, bool primeNow)
     }
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 void
-wxWinUI3SetOwnerNativeOpsForTesting(
+wxWinUIOwnerBackdropTestAccess::SetOwnerNativeOps(
     const wxWinUIOwnerNativeOps& operations)
 {
     wxCHECK_RET(wxWinUIOwnerOpsAreComplete(operations),
@@ -6825,16 +6837,20 @@ wxWinUI3SetOwnerNativeOpsForTesting(
     gs_winuiOwnerTestOps = operations;
     gs_hasWinUIOwnerTestOps = true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUI3ResetOwnerNativeOpsForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIOwnerBackdropTestAccess::ResetOwnerNativeOps()
 {
     gs_winuiOwnerTransactions.clear();
     gs_winuiOwnerTestOps = wxWinUIOwnerNativeOps();
     gs_hasWinUIOwnerTestOps = false;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUITransientSnapshot
-wxWinUI3GetOwnerSnapshotForTesting(WXHWND hwndArg)
+wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(WXHWND hwndArg)
 {
     wxWinUITransientSnapshot snapshot;
     snapshot.transactionCount = gs_winuiOwnerTransactions.size();
@@ -6851,6 +6867,7 @@ wxWinUI3GetOwnerSnapshotForTesting(WXHWND hwndArg)
     }
     return snapshot;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUIMSWBeginSyntheticMouseDispatch()
 {

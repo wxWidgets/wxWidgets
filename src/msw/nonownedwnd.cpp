@@ -41,7 +41,9 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/weakref.h"
     #include "wx/winui/private/tlwhostmsw.h"
-    #include "wx/winui/private/transient.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "non-owned-test-access.h"
+    #endif
 #endif
 
 #include <memory>
@@ -195,41 +197,43 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 }
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
 namespace
 {
 bool gs_winuiFailNextOwnerWriteForTest = false;
-wxWinUINonOwnedOwnerPublishHookForTesting
+wxWinUINonOwnedTestAccess::OwnerPublishHook
     gs_winuiNonOwnedOwnerPublishHookForTesting = nullptr;
-wxWinUINonOwnedLayoutRefreshHookForTesting
+wxWinUINonOwnedTestAccess::LayoutRefreshHook
     gs_winuiNonOwnedLayoutRefreshHookForTesting = nullptr;
 }
 
-void wxWinUIMSWFailNextOwnerWriteForTest()
+void wxWinUINonOwnedTestAccess::FailNextOwnerWrite()
 {
     gs_winuiFailNextOwnerWriteForTest = true;
 }
 
-void wxWinUISetNonOwnedOwnerPublishHookForTesting(
-    wxWinUINonOwnedOwnerPublishHookForTesting hook)
+void wxWinUINonOwnedTestAccess::SetOwnerPublishHook(
+    wxWinUINonOwnedTestAccess::OwnerPublishHook hook)
 {
     gs_winuiNonOwnedOwnerPublishHookForTesting = hook;
 }
 
-void wxWinUIResetNonOwnedOwnerPublishHookForTesting()
+void wxWinUINonOwnedTestAccess::ResetOwnerPublishHook()
 {
     gs_winuiNonOwnedOwnerPublishHookForTesting = nullptr;
 }
 
-void wxWinUISetNonOwnedLayoutRefreshHookForTesting(
-    wxWinUINonOwnedLayoutRefreshHookForTesting hook)
+void wxWinUINonOwnedTestAccess::SetLayoutRefreshHook(
+    wxWinUINonOwnedTestAccess::LayoutRefreshHook hook)
 {
     gs_winuiNonOwnedLayoutRefreshHookForTesting = hook;
 }
 
-void wxWinUIResetNonOwnedLayoutRefreshHookForTesting()
+void wxWinUINonOwnedTestAccess::ResetLayoutRefreshHook()
 {
     gs_winuiNonOwnedLayoutRefreshHookForTesting = nullptr;
 }
+#endif
 #endif
 
 bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
@@ -253,9 +257,11 @@ bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
     if ( !wxWindowBase::Reparent(newParent) )
     {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
         // The seam describes the next native publication, not an unrelated
         // later Reparent() after this logical transaction already failed.
         gs_winuiFailNextOwnerWriteForTest = false;
+#endif
 #endif
         return false;
     }
@@ -378,12 +384,14 @@ bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
         ::SetLastError(ERROR_SUCCESS);
         LONG_PTR previous = 0;
         DWORD error = ERROR_SUCCESS;
+#ifdef WXWINUI_TEST_SUPPORT
         if ( gs_winuiFailNextOwnerWriteForTest )
         {
             gs_winuiFailNextOwnerWriteForTest = false;
             error = ERROR_ACCESS_DENIED;
         }
         else
+#endif
         {
             previous = ::SetWindowLongPtr(
                 reinterpret_cast<HWND>(hwnd),
@@ -400,8 +408,10 @@ bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
         if ( !ownerProjectionIsExact(afterWrite) )
             continue;
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( gs_winuiNonOwnedOwnerPublishHookForTesting )
             gs_winuiNonOwnedOwnerPublishHookForTesting(afterWrite);
+#endif
 
         wxWindow * const afterNative = getCurrentWindow();
         if ( !afterNative )
@@ -424,8 +434,10 @@ bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
         if ( !ownerProjectionIsExact(afterLayout) )
             continue;
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( gs_winuiNonOwnedLayoutRefreshHookForTesting )
             gs_winuiNonOwnedLayoutRefreshHookForTesting(afterLayout);
+#endif
 
         wxWindow * const afterLayoutHook = getCurrentWindow();
         if ( !afterLayoutHook )

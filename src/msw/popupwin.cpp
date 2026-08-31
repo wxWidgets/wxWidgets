@@ -36,6 +36,10 @@
     #include "wx/scopeguard.h"
     #include "wx/winui/private/dialogsession.h"
     #include "wx/winui/private/transient.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "popup-test-access.h"
+        #include "../winui/transientallocation.h"
+    #endif
 
     #include <algorithm>
     #include <new>
@@ -187,23 +191,29 @@ void wxWinUICancelPopupTransient(
 bool wxWinUIDismissAndNotify(wxPopupTransientWindow *popup);
 bool wxWinUINotifyDismissOnce(wxPopupTransientWindow *popup);
 
-wxWinUIPopupOwnerPublishHookForTesting
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIPopupTestAccess::OwnerPublishHook
     gs_winuiPopupOwnerPublishHookForTesting = nullptr;
-wxWinUIPopupCaptureReleaseHookForTesting
+wxWinUIPopupTestAccess::CaptureReleaseHook
     gs_winuiPopupCaptureReleaseHookForTesting = nullptr;
 bool gs_failNextPopupTerminalNativeIdentityForTesting = false;
-wxWinUIPopupCreateHookForTesting
+wxWinUIPopupTestAccess::CreateHook
     gs_winuiPopupCreateHookForTesting = nullptr;
-wxWinUIPopupOwnerDeactivateHookForTesting
+wxWinUIPopupTestAccess::OwnerDeactivateHook
     gs_winuiPopupOwnerDeactivateHookForTesting = nullptr;
 bool gs_winuiFailNextPopupOwnerRecoveryForTesting = false;
+#endif
 
 template <typename T, typename... Args>
 std::unique_ptr<T> wxWinUIMakePopupUnique(
-    wxWinUITransientAllocationSite site,
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUITransientTestAccess::AllocationSite site,
+#endif
     Args&&... args)
 {
-    wxWinUITransientAllocationPointForTesting(site);
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUITransientAllocationPoint(site);
+#endif
     return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
@@ -531,8 +541,10 @@ wxWinUIPublishPopupNativeOwner(
     if ( !live )
         return wxWinUIPopupOwnerPublishResult::WindowGone;
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_winuiPopupOwnerPublishHookForTesting )
         gs_winuiPopupOwnerPublishHookForTesting(live);
+#endif
     if ( !registrationIsActive() )
         return wxWinUIPopupOwnerPublishResult::Failed;
 
@@ -601,12 +613,14 @@ wxWinUIPublishPopupNativeOwner(
         ::SetLastError(ERROR_SUCCESS);
         LONG_PTR previousRecovery = 0;
         DWORD recoveryError = ERROR_SUCCESS;
+#ifdef WXWINUI_TEST_SUPPORT
         if ( gs_winuiFailNextPopupOwnerRecoveryForTesting )
         {
             gs_winuiFailNextPopupOwnerRecoveryForTesting = false;
             recoveryError = ERROR_ACCESS_DENIED;
         }
         else
+#endif
         {
             previousRecovery = ::SetWindowLongPtr(
                 hwnd, GWLP_HWNDPARENT,
@@ -647,66 +661,68 @@ wxWinUIPublishPopupNativeOwner(
 
 } // anonymous namespace
 
-void wxWinUISetPopupOwnerPublishHookForTesting(
-    wxWinUIPopupOwnerPublishHookForTesting hook)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIPopupTestAccess::SetOwnerPublishHook(
+    wxWinUIPopupTestAccess::OwnerPublishHook hook)
 {
     gs_winuiPopupOwnerPublishHookForTesting = hook;
 }
 
-void wxWinUIResetPopupOwnerPublishHookForTesting()
+void wxWinUIPopupTestAccess::ResetOwnerPublishHook()
 {
     gs_winuiPopupOwnerPublishHookForTesting = nullptr;
 }
 
-void wxWinUIFailNextPopupOwnerRecoveryForTesting()
+void wxWinUIPopupTestAccess::FailNextOwnerRecovery()
 {
     gs_winuiFailNextPopupOwnerRecoveryForTesting = true;
 }
 
-void wxWinUIFailNextPopupAllocationForTesting()
+void wxWinUIPopupTestAccess::FailNextAllocation()
 {
-    wxWinUIFailTransientAllocationAtForTesting(
-        wxWinUITransientAllocationSite::Any);
+    wxWinUITransientTestAccess::FailAllocationAt(
+        wxWinUITransientTestAccess::AllocationSite::Any);
 }
 
-void wxWinUISetPopupCreateHookForTesting(
-    wxWinUIPopupCreateHookForTesting hook)
+void wxWinUIPopupTestAccess::SetCreateHook(
+    wxWinUIPopupTestAccess::CreateHook hook)
 {
     gs_winuiPopupCreateHookForTesting = hook;
 }
 
-void wxWinUIResetPopupCreateHookForTesting()
+void wxWinUIPopupTestAccess::ResetCreateHook()
 {
     gs_winuiPopupCreateHookForTesting = nullptr;
 }
 
-void wxWinUISetPopupOwnerDeactivateHookForTesting(
-    wxWinUIPopupOwnerDeactivateHookForTesting hook)
+void wxWinUIPopupTestAccess::SetOwnerDeactivateHook(
+    wxWinUIPopupTestAccess::OwnerDeactivateHook hook)
 {
     gs_winuiPopupOwnerDeactivateHookForTesting = hook;
 }
 
-void wxWinUIResetPopupOwnerDeactivateHookForTesting()
+void wxWinUIPopupTestAccess::ResetOwnerDeactivateHook()
 {
     gs_winuiPopupOwnerDeactivateHookForTesting = nullptr;
 }
 
-void wxWinUISetPopupCaptureReleaseHookForTesting(
-    wxWinUIPopupCaptureReleaseHookForTesting hook)
+void wxWinUIPopupTestAccess::SetCaptureReleaseHook(
+    wxWinUIPopupTestAccess::CaptureReleaseHook hook)
 {
     gs_winuiPopupCaptureReleaseHookForTesting = hook;
 }
 
-void wxWinUIResetPopupCaptureReleaseHookForTesting()
+void wxWinUIPopupTestAccess::ResetCaptureReleaseHook()
 {
     gs_winuiPopupCaptureReleaseHookForTesting = nullptr;
 }
 
-void wxWinUIFailNextPopupTerminalNativeIdentityForTesting()
+void wxWinUIPopupTestAccess::FailNextTerminalNativeIdentity()
 {
     gs_failNextPopupTerminalNativeIdentityForTesting = true;
 }
 
+#endif
 bool wxWinUIPopupBlocksCapture(wxWindow *window)
 {
     wxPopupWindow * const popup = wxDynamicCast(
@@ -778,8 +794,10 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
     if ( !createdHwnd || !createdGeneration )
         return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_winuiPopupCreateHookForTesting )
         gs_winuiPopupCreateHookForTesting(live);
+#endif
 
     live = wxDynamicCast(weakThis.get(), wxPopupWindow);
     if ( wxWinUIPopupIsUnavailable(live) ||
@@ -1461,8 +1479,10 @@ bool wxWinUIBeginPopupTransientSession(wxPopupWindow *popup)
     // Registering can allocate, bind an owner observer and synchronously cross
     // framework code. The sidecar epoch and both identities are revalidated
     // before native publication, not only after it.
-    wxWinUITransientAllocationPointForTesting(
-        wxWinUITransientAllocationSite::PopupCancelToken);
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUITransientAllocationPoint(
+        wxWinUITransientTestAccess::AllocationSite::PopupCancelToken);
+#endif
     const auto cancelToken =
         std::make_shared<wxWinUIPopupCancelToken>();
     cancelToken->owner = ownerIdentity;
@@ -1501,7 +1521,9 @@ bool wxWinUIBeginPopupTransientSession(wxPopupWindow *popup)
 
     std::unique_ptr<wxWinUITransientRegistration> newRegistration =
         wxWinUIMakePopupUnique<wxWinUITransientRegistration>(
-            wxWinUITransientAllocationSite::PopupRegistrationHolder,
+#ifdef WXWINUI_TEST_SUPPORT
+            wxWinUITransientTestAccess::AllocationSite::PopupRegistrationHolder,
+#endif
             std::move(registration));
     if ( !*newRegistration )
         return false;
@@ -1611,7 +1633,9 @@ bool wxWinUIBeginPopupEndingSession(wxPopupWindow *popup)
 
     state->retirement =
         wxWinUIMakePopupUnique<wxWinUITransientOwnerRetirement>(
-            wxWinUITransientAllocationSite::PopupRetirementHolder,
+#ifdef WXWINUI_TEST_SUPPORT
+            wxWinUITransientTestAccess::AllocationSite::PopupRetirementHolder,
+#endif
             std::move(retirement));
     committed = true;
     return true;
@@ -1707,7 +1731,9 @@ bool wxWinUIPreparePopupForDestroy(wxPopupWindow *popup)
         {
             state->retirement =
                 wxWinUIMakePopupUnique<wxWinUITransientOwnerRetirement>(
-                    wxWinUITransientAllocationSite::PopupRetirementHolder,
+#ifdef WXWINUI_TEST_SUPPORT
+                    wxWinUITransientTestAccess::AllocationSite::PopupRetirementHolder,
+#endif
                     std::move(retirement));
         }
     }
@@ -1889,9 +1915,11 @@ void wxPopupTransientWindow::Dismiss()
         if ( !liveAfterRelease )
             return;
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( gs_winuiPopupCaptureReleaseHookForTesting )
             gs_winuiPopupCaptureReleaseHookForTesting(
                 liveAfterRelease, pass);
+#endif
 
         if ( !resolveDismissGeneration() )
             return;
@@ -2224,6 +2252,7 @@ bool wxWinUIRetirePopupTerminalImpl(
                 if ( wxWinUIPopupIsUnavailable(live) )
                     return exactNativeHidden();
 
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( gs_winuiPopupCaptureReleaseHookForTesting )
                 {
                     if ( wxPopupTransientWindow * const liveTransient =
@@ -2233,6 +2262,7 @@ bool wxWinUIRetirePopupTerminalImpl(
                             liveTransient, pass);
                     }
                 }
+#endif
 
                 live = resolveLive();
                 if ( wxWinUIPopupIsUnavailable(live) )
@@ -2432,11 +2462,13 @@ bool wxWinUIRetirePopupTerminal(wxPopupWindow *popup)
 
     wxWinUINativeHwndIdentity nativeIdentity =
         wxWinUICaptureNativeIdentity(popup);
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_failNextPopupTerminalNativeIdentityForTesting )
     {
         gs_failNextPopupTerminalNativeIdentityForTesting = false;
         nativeIdentity = wxWinUINativeHwndIdentity();
     }
+#endif
 
     if ( wxWinUINativeIdentityIsCurrent(nativeIdentity) )
         return wxWinUIRetirePopupTerminalImpl(popup, nativeIdentity);
@@ -2462,11 +2494,13 @@ bool wxWinUIRetirePopupTerminal(wxPopupWindow *popup)
            (live && wxWinUITLWHostIsDestroyScheduled(live));
 }
 
-void wxWinUITestPopupOutsideClick(wxPopupTransientWindow *popup)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIPopupTestAccess::DismissFromOutside(wxPopupTransientWindow *popup)
 {
     if ( popup )
         wxWinUIPopupSidecarAccess::DismissFromOutside(popup);
 }
+#endif
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
 
@@ -2559,8 +2593,10 @@ void wxPopupTransientWindow::DismissFromOutside()
         if ( ::GetActiveWindow() != GetHwndOf(owner) )
         {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
             if ( gs_winuiPopupOwnerDeactivateHookForTesting )
                 gs_winuiPopupOwnerDeactivateHookForTesting(owner);
+#endif
 #endif
             ::SendMessage(GetHwndOf(owner), WM_NCACTIVATE, FALSE, 0);
         }

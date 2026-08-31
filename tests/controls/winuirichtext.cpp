@@ -48,6 +48,7 @@
 #include "wx/toplevel.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "keyboard-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
@@ -55,6 +56,7 @@
 #include "host-geometry-test-access.h"
 #include "host-uia-test-access.h"
 #include "wx/winui/private/transient.h"
+#include "owner-backdrop-test-access.h"
 #include "wx/winui/winui.h"
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
@@ -143,8 +145,8 @@ bool DrainToQuiescence()
     return false;
 }
 
-bool SameTransientRegistry(const wxWinUITransientRegistrySnapshot& lhs,
-                           const wxWinUITransientRegistrySnapshot& rhs)
+bool SameTransientRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
+                           const wxWinUITransientTestAccess::RegistrySnapshot& rhs)
 {
     return lhs.ownerCount == rhs.ownerCount &&
            lhs.transientCount == rhs.transientCount &&
@@ -188,7 +190,7 @@ struct RuntimeSnapshot
         snapshot.rootHandlerRevokes =
             wxWinUITopLevelHost::GetRootHandlerRevokeCount();
         snapshot.transients =
-            wxWinUIGetTransientRegistrySnapshotForTesting();
+            wxWinUITransientTestAccess::GetRegistrySnapshot();
         snapshot.wxCapture = wxWindow::GetCapture();
         snapshot.nativeCapture = ::GetCapture();
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
@@ -226,7 +228,7 @@ struct RuntimeSnapshot
                    wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
                        rootHandlerRevokes &&
                SameTransientRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    transients) &&
                wxWindow::GetCapture() == wxCapture &&
                ::GetCapture() == nativeCapture;
@@ -271,7 +273,7 @@ struct RuntimeSnapshot
         CHECK(rootAdds == rootRevokes);
 
         CHECK(SameTransientRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), transients));
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), transients));
         CHECK(wxWindow::GetCapture() == wxCapture);
         CHECK(::GetCapture() == nativeCapture);
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
@@ -293,7 +295,7 @@ struct RuntimeSnapshot
     unsigned slotHandlerRevokes = 0;
     unsigned rootHandlerAdds = 0;
     unsigned rootHandlerRevokes = 0;
-    wxWinUITransientRegistrySnapshot transients;
+    wxWinUITransientTestAccess::RegistrySnapshot transients;
     wxWindow *wxCapture = nullptr;
     HWND nativeCapture = nullptr;
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
@@ -1678,7 +1680,7 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     const long ownerDialogPages =
         wxRICHTEXT_FORMAT_FONT | wxRICHTEXT_FORMAT_TABS;
     const std::size_t ownerTransactionBaseline =
-        wxWinUI3GetOwnerSnapshotForTesting(nullptr).transactionCount;
+        wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(nullptr).transactionCount;
     wxFrame * const owner = new wxFrame(
         nullptr, wxID_ANY, "RichText dialog owner 014",
         wxDefaultPosition, wxSize(360, 220),
@@ -1729,7 +1731,7 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     // owner-detach transaction. A null GW_OWNER is valid only when the exact
     // transaction and its USER32 marker both identify this logical owner.
     const wxWinUITransientSnapshot ownerStateAfterCreate =
-        wxWinUI3GetOwnerSnapshotForTesting(ownedDialogHwnd);
+        wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(ownedDialogHwnd);
     if ( !getNativeOwner() )
     {
         REQUIRE(ownerStateAfterCreate.transactionCount ==
@@ -1751,7 +1753,7 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     }
     REQUIRE(getNativeOwner() == nativeOwner);
     REQUIRE(getStashedOwner() == nullptr);
-    REQUIRE(wxWinUI3GetOwnerSnapshotForTesting(ownedDialogHwnd).
+    REQUIRE(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(ownedDialogHwnd).
                 transactionCount == ownerTransactionBaseline);
 
     REQUIRE(ShowOffscreenWithoutActivation(ownedDialog, 15));
@@ -1765,7 +1767,7 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     if ( !getNativeOwner() )
     {
         const wxWinUITransientSnapshot ownerStateAfterShow =
-            wxWinUI3GetOwnerSnapshotForTesting(ownedDialogHwnd);
+            wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(ownedDialogHwnd);
         REQUIRE(ownerStateAfterShow.transactionCount ==
                 ownerTransactionBaseline + 1);
         REQUIRE_FALSE(ownerStateAfterShow.inFlight);
@@ -1776,12 +1778,12 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     }
     REQUIRE(getNativeOwner() == nativeOwner);
     REQUIRE(getStashedOwner() == nullptr);
-    REQUIRE(wxWinUI3GetOwnerSnapshotForTesting(ownedDialogHwnd).
+    REQUIRE(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(ownedDialogHwnd).
                 transactionCount == ownerTransactionBaseline);
 
     REQUIRE(wxWinUITransientOwnerActivation(ownedDialogHwnd, true));
     const wxWinUITransientSnapshot detachedOwnerState =
-        wxWinUI3GetOwnerSnapshotForTesting(ownedDialogHwnd);
+        wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(ownedDialogHwnd);
     REQUIRE(getNativeOwner() == nullptr);
     REQUIRE(getStashedOwner() == nativeOwner);
     REQUIRE(detachedOwnerState.transactionCount ==
@@ -1841,7 +1843,7 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     CHECK_FALSE(ownerLifetime);
     CHECK_FALSE(dialogLifetime);
     REQUIRE(ownerAndDialogDestroyed);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(nullptr).transactionCount ==
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(nullptr).transactionCount ==
           ownerTransactionBaseline);
     REQUIRE(wxRichTextFormattingDialog::GetLastPage() ==
             wxRICHTEXT_FORMAT_TABS);

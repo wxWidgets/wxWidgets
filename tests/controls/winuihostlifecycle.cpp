@@ -60,6 +60,7 @@
 #include "host-uia-test-access.h"
 #include "control-host-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
+#include "non-owned-test-access.h"
 #include "msw-window-test-access.h"
 #include "keyboard-test-access.h"
 #include "wx/winui/winui.h"
@@ -12815,7 +12816,7 @@ TEST_CASE("HostLifecycle::NonOwnedWindowsPreserveRTLProvenanceAcrossOwners",
               reinterpret_cast<HWND>(GetHwndOf(dialog)), GW_OWNER) ==
           reinterpret_cast<HWND>(GetHwndOf(ownerLTR)));
 
-    wxWinUIMSWFailNextOwnerWriteForTest();
+    wxWinUINonOwnedTestAccess::FailNextOwnerWrite();
     CHECK_FALSE(dialog->Reparent(ownerRTL));
     CHECK(dialog->GetParent() == ownerLTR);
     CHECK(::GetWindow(

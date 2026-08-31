@@ -57,6 +57,7 @@
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/transient.h"
+#include "owner-backdrop-test-access.h"
 
 #include "waitfor.h"
 
@@ -208,7 +209,7 @@ bool DialogHasNativeOwner(HWND hwnd, HWND owner)
     // of an active backdrop window. Require its exact saved owner and HWND
     // generation, not merely a missing GW_OWNER. Hiding must restore the
     // native link and retire this transaction (checked after ShowModal).
-    const auto snapshot = wxWinUI3GetOwnerSnapshotForTesting(hwnd);
+    const auto snapshot = wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(hwnd);
     return ::GetPropW(hwnd, DialogOwnerMarker) == owner &&
            snapshot.epoch != 0 && !snapshot.inFlight &&
            snapshot.generation == wxWinUIMSWGetNativeHwndGeneration(hwnd);
@@ -437,7 +438,7 @@ void ExercisePublicDialogWindow(wxDialog *dialog,
         CHECK(::IsWindowEnabled(ownerHwnd));
         CHECK(::GetWindow(originalHwnd, GW_OWNER) == ownerHwnd);
         CHECK_FALSE(::GetPropW(originalHwnd, DialogOwnerMarker));
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(originalHwnd).epoch == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(originalHwnd).epoch == 0);
         CHECK(FindAddedTopLevel(before) == nullptr);
         expectedRect = movedRect;
     }

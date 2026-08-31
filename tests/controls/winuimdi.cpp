@@ -25,6 +25,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogsession.h"
+#include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -87,8 +88,8 @@ bool DrainToQuiescence()
     return false;
 }
 
-bool SameTransientRegistry(const wxWinUITransientRegistrySnapshot& lhs,
-                           const wxWinUITransientRegistrySnapshot& rhs)
+bool SameTransientRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
+                           const wxWinUITransientTestAccess::RegistrySnapshot& rhs)
 {
     return lhs.ownerCount == rhs.ownerCount &&
            lhs.transientCount == rhs.transientCount &&
@@ -127,7 +128,7 @@ struct RuntimeSnapshot
         snapshot.rootHandlerRevokes =
             wxWinUITopLevelHost::GetRootHandlerRevokeCount();
         snapshot.transients =
-            wxWinUIGetTransientRegistrySnapshotForTesting();
+            wxWinUITransientTestAccess::GetRegistrySnapshot();
         snapshot.wxCapture = wxWindow::GetCapture();
         snapshot.nativeCapture = ::GetCapture();
         return snapshot;
@@ -155,7 +156,7 @@ struct RuntimeSnapshot
                    wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
                        rootHandlerRevokes &&
                SameTransientRegistry(
-                   wxWinUIGetTransientRegistrySnapshotForTesting(),
+                   wxWinUITransientTestAccess::GetRegistrySnapshot(),
                    transients) &&
                wxWindow::GetCapture() == wxCapture &&
                ::GetCapture() == nativeCapture;
@@ -191,7 +192,7 @@ struct RuntimeSnapshot
         CHECK(rootAdds > 0);
         CHECK(rootAdds == rootRevokes);
         CHECK(SameTransientRegistry(
-            wxWinUIGetTransientRegistrySnapshotForTesting(), transients));
+            wxWinUITransientTestAccess::GetRegistrySnapshot(), transients));
         CHECK(wxWindow::GetCapture() == wxCapture);
         CHECK(::GetCapture() == nativeCapture);
     }
@@ -207,7 +208,7 @@ struct RuntimeSnapshot
     unsigned slotHandlerRevokes = 0;
     unsigned rootHandlerAdds = 0;
     unsigned rootHandlerRevokes = 0;
-    wxWinUITransientRegistrySnapshot transients;
+    wxWinUITransientTestAccess::RegistrySnapshot transients;
     wxWindow *wxCapture = nullptr;
     HWND nativeCapture = nullptr;
 };

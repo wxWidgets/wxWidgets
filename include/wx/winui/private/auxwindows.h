@@ -52,39 +52,6 @@ wxWinUIGetSplashRuntimeStateCountForTesting();
 
 #endif // wxUSE_SPLASH
 
-#if wxUSE_TIPWINDOW
-
-class wxTipWindow;
-
-// Additional publication boundaries inside wxTipWindow::Create(). They also
-// allow a test callback to replace the backlink with temporary storage whose
-// lifetime ends before rollback. The older native-create hook in transient.h
-// intentionally remains unchanged because it exercises destruction before the
-// external pointer is published.
-enum class wxWinUITipHookPointForTesting
-{
-    AfterPointerPublication,
-    AfterViewAdjust,
-    AfterPopup
-};
-
-using wxWinUITipHookForTesting =
-    void (*)(wxTipWindow *, wxWinUITipHookPointForTesting);
-
-WXDLLIMPEXP_CORE void wxWinUISetTipHookForTesting(
-    wxWinUITipHookForTesting hook);
-WXDLLIMPEXP_CORE void wxWinUIResetTipHookForTesting();
-
-// Fail construction of the runtime sidecar before it can be committed. Close
-// uses a stack-local intrusive TLS record and deliberately has no allocation
-// seam. This failure injection is exercised only with wxUSE_EXCEPTIONS.
-WXDLLIMPEXP_CORE void
-wxWinUIFailNextTipRuntimeAllocationForTesting();
-
-WXDLLIMPEXP_CORE std::size_t
-wxWinUIGetTipRuntimeStateCountForTesting();
-
-#endif // wxUSE_TIPWINDOW
 
 #endif // wxUSE_WINUI3
 

@@ -31,6 +31,9 @@
 
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/dialogsession.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "transientallocation.h"
+#endif
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
@@ -91,33 +94,34 @@ wxWinUIDialogPresentation wxWinUIGetDialogPresentation()
 // per-TLW transient registry
 // ----------------------------------------------------------------------------
 
+#ifdef WXWINUI_TEST_SUPPORT
 namespace
 {
 
 bool gs_transientAllocationFailureArmed = false;
-wxWinUITransientAllocationSite gs_transientAllocationFailureSite =
-    wxWinUITransientAllocationSite::Any;
+wxWinUITransientTestAccess::AllocationSite gs_transientAllocationFailureSite =
+    wxWinUITransientTestAccess::AllocationSite::Any;
 
 } // anonymous namespace
 
-void wxWinUIFailTransientAllocationAtForTesting(
-    wxWinUITransientAllocationSite site)
+void wxWinUITransientTestAccess::FailAllocationAt(
+    wxWinUITransientTestAccess::AllocationSite site)
 {
     gs_transientAllocationFailureSite = site;
     gs_transientAllocationFailureArmed = true;
 }
 
-void wxWinUIResetTransientAllocationFailureForTesting()
+void wxWinUITransientTestAccess::ResetAllocationFailure()
 {
     gs_transientAllocationFailureArmed = false;
 }
 
-void wxWinUITransientAllocationPointForTesting(
-    wxWinUITransientAllocationSite site)
+void wxWinUITransientAllocationPoint(
+    wxWinUITransientTestAccess::AllocationSite site)
 {
     if ( !gs_transientAllocationFailureArmed ||
             (gs_transientAllocationFailureSite !=
-                 wxWinUITransientAllocationSite::Any &&
+                 wxWinUITransientTestAccess::AllocationSite::Any &&
              gs_transientAllocationFailureSite != site) )
     {
         return;
@@ -128,6 +132,7 @@ void wxWinUITransientAllocationPointForTesting(
     gs_transientAllocationFailureArmed = false;
     throw std::bad_alloc();
 }
+#endif
 
 struct wxWinUITransientRegistration::Impl
 {
@@ -225,8 +230,10 @@ public:
 
         try
         {
-            wxWinUITransientAllocationPointForTesting(
-                wxWinUITransientAllocationSite::RegistrationImpl);
+#ifdef WXWINUI_TEST_SUPPORT
+            wxWinUITransientAllocationPoint(
+                wxWinUITransientTestAccess::AllocationSite::RegistrationImpl);
+#endif
             auto impl =
                 std::make_shared<wxWinUITransientRegistration::Impl>();
             impl->ownerKey = ownerKey;
@@ -240,21 +247,27 @@ public:
             active.registration = impl;
             active.cancel = std::move(cancel);
 
-            wxWinUITransientAllocationPointForTesting(
-                wxWinUITransientAllocationSite::RegistrationOwnerEntry);
+#ifdef WXWINUI_TEST_SUPPORT
+            wxWinUITransientAllocationPoint(
+                wxWinUITransientTestAccess::AllocationSite::RegistrationOwnerEntry);
+#endif
             auto& ownerEntry = m_owners[ownerKey];
             if ( !ownerEntry.observer )
             {
                 ownerEntry.owner = wxWeakRef<wxWindow>(tlw);
                 ownerEntry.epoch = NextOwnerEpoch();
-                wxWinUITransientAllocationPointForTesting(
-                    wxWinUITransientAllocationSite::RegistrationObserver);
+#ifdef WXWINUI_TEST_SUPPORT
+                wxWinUITransientAllocationPoint(
+                    wxWinUITransientTestAccess::AllocationSite::RegistrationObserver);
+#endif
                 ownerEntry.observer =
                     std::make_unique<OwnerObserver>(
                         this, tlw, ownerKey, ownerEntry.epoch);
             }
-            wxWinUITransientAllocationPointForTesting(
-                wxWinUITransientAllocationSite::RegistrationEntry);
+#ifdef WXWINUI_TEST_SUPPORT
+            wxWinUITransientAllocationPoint(
+                wxWinUITransientTestAccess::AllocationSite::RegistrationEntry);
+#endif
             ownerEntry.transients.push_back(std::move(active));
             return impl;
         }
@@ -474,6 +487,7 @@ public:
         CancelKey(ownerKey, true, ownerIt->second.epoch);
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     std::size_t Count(wxWindow *ownerOrTLW) const
     {
         const OwnerTransients * const owner = FindOwner(ownerOrTLW);
@@ -495,6 +509,7 @@ public:
                 return transient.kind == kind;
             }));
     }
+#endif
 
     bool IsOwnerShuttingDown(wxWindow *ownerOrTLW) const
     {
@@ -502,9 +517,10 @@ public:
         return owner && owner->shuttingDown;
     }
 
-    wxWinUITransientRegistrySnapshot GetSnapshot() const
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUITransientTestAccess::RegistrySnapshot GetSnapshot() const
     {
-        wxWinUITransientRegistrySnapshot snapshot;
+        wxWinUITransientTestAccess::RegistrySnapshot snapshot;
         snapshot.ownerCount = m_owners.size();
         snapshot.modalCount = m_modalGate.GetActiveCount();
         snapshot.ownerRetireEnqueueCount = m_ownerRetireEnqueueCount;
@@ -542,7 +558,7 @@ public:
         return snapshot;
     }
 
-    wxWinUITransientOwnerIdentityForTesting GetOwnerIdentityForTesting(
+    wxWinUITransientTestAccess::OwnerIdentity GetOwnerIdentityForTesting(
         std::uintptr_t ownerKey) const
     {
         const auto ownerIt = m_owners.find(ownerKey);
@@ -553,7 +569,7 @@ public:
     }
 
     bool HasOwnerIdentityForTesting(
-        const wxWinUITransientOwnerIdentityForTesting& identity) const
+        const wxWinUITransientTestAccess::OwnerIdentity& identity) const
     {
         if ( !identity )
             return false;
@@ -562,6 +578,7 @@ public:
         return ownerIt != m_owners.end() &&
                ownerIt->second.epoch == identity.epoch;
     }
+#endif
 
 private:
     struct ActiveTransient
@@ -894,35 +911,37 @@ void wxWinUINotifyTransientOwnerDestroyScheduled(wxWindow *ownerOrTLW)
     wxWinUITransientManager::Get().NotifyOwnerDestroyScheduled(ownerOrTLW);
 }
 
-std::size_t wxWinUITransientCountForTesting(wxWindow *ownerOrTLW)
+#ifdef WXWINUI_TEST_SUPPORT
+std::size_t wxWinUITransientTestAccess::Count(wxWindow *ownerOrTLW)
 {
     return wxWinUITransientManager::Get().Count(ownerOrTLW);
 }
 
 std::size_t
-wxWinUITransientCountForTesting(wxWindow *ownerOrTLW,
+wxWinUITransientTestAccess::Count(wxWindow *ownerOrTLW,
                                 wxWinUITransientKind kind)
 {
     return wxWinUITransientManager::Get().Count(ownerOrTLW, kind);
 }
 
-wxWinUITransientRegistrySnapshot
-wxWinUIGetTransientRegistrySnapshotForTesting()
+wxWinUITransientTestAccess::RegistrySnapshot
+wxWinUITransientTestAccess::GetRegistrySnapshot()
 {
     return wxWinUITransientManager::Get().GetSnapshot();
 }
 
-wxWinUITransientOwnerIdentityForTesting
-wxWinUIGetTransientOwnerIdentityForTesting(std::uintptr_t ownerKey)
+wxWinUITransientTestAccess::OwnerIdentity
+wxWinUITransientTestAccess::GetOwnerIdentity(std::uintptr_t ownerKey)
 {
     return wxWinUITransientManager::Get().GetOwnerIdentityForTesting(ownerKey);
 }
 
-bool wxWinUIHasTransientOwnerIdentityForTesting(
-    const wxWinUITransientOwnerIdentityForTesting& identity)
+bool wxWinUITransientTestAccess::HasOwnerIdentity(
+    const wxWinUITransientTestAccess::OwnerIdentity& identity)
 {
     return wxWinUITransientManager::Get().HasOwnerIdentityForTesting(identity);
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWinUIDialogShell: the top-level window used by the Window presentation

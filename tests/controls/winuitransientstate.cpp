@@ -19,6 +19,7 @@
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/shelltheme.h"
 #include "wx/winui/private/transient.h"
+#include "owner-backdrop-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/winui.h"
 
@@ -182,12 +183,12 @@ struct OwnerSeamGuard
 {
     explicit OwnerSeamGuard(FakeOwnerModel& model)
     {
-        wxWinUI3SetOwnerNativeOpsForTesting(model.MakeOps());
+        wxWinUIOwnerBackdropTestAccess::SetOwnerNativeOps(model.MakeOps());
     }
 
     ~OwnerSeamGuard()
     {
-        wxWinUI3ResetOwnerNativeOpsForTesting();
+        wxWinUIOwnerBackdropTestAccess::ResetOwnerNativeOps();
     }
 };
 
@@ -379,13 +380,13 @@ struct BackdropSeamGuard
     explicit BackdropSeamGuard(FakeBackdropModel& model_)
         : model(model_)
     {
-        wxWinUI3SetBackdropNativeOpsForTesting(model.MakeOps());
+        wxWinUIOwnerBackdropTestAccess::SetBackdropNativeOps(model.MakeOps());
     }
 
     ~BackdropSeamGuard()
     {
         model.RunAll();
-        wxWinUI3ResetBackdropNativeOpsForTesting();
+        wxWinUIOwnerBackdropTestAccess::ResetBackdropNativeOps();
     }
 
     FakeBackdropModel& model;
@@ -584,7 +585,7 @@ TEST_CASE("WinUITransient::OwnerExactlyOnceAndNested",
     CHECK(model.windows[dialog].owner == nullptr);
     CHECK(model.windows[dialog].marker == owner);
     CHECK(model.setOwnerCalls == 1);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 1);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 1);
 
     // Repeated activation coalesces into the published Detached epoch.
     CHECK_FALSE(wxWinUITransientOwnerActivation(dialog, true));
@@ -594,7 +595,7 @@ TEST_CASE("WinUITransient::OwnerExactlyOnceAndNested",
     CHECK(model.windows[dialog].owner == owner);
     CHECK(model.windows[dialog].marker == nullptr);
     CHECK(model.setOwnerCalls == 2);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
 
     CHECK_FALSE(wxWinUITransientOwnerActivation(dialog, false));
     CHECK(model.setOwnerCalls == 2);
@@ -619,7 +620,7 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == owner);
         CHECK(model.windows[dialog].marker == nullptr);
         CHECK(model.setOwnerCalls == 0);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
     }
 
     SECTION("SetWindowLongPtr failure is rolled back")
@@ -629,7 +630,7 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == owner);
         CHECK(model.windows[dialog].marker == nullptr);
         CHECK(model.setOwnerCalls == 2);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
     }
 
     SECTION("A failed rollback preserves one truthful restore opportunity")
@@ -644,13 +645,13 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == nullptr);
         CHECK(model.windows[dialog].marker == owner);
         CHECK(model.setOwnerCalls == 2);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 1);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 1);
 
         CHECK(wxWinUITransientOwnerActivation(dialog, false));
         CHECK(model.windows[dialog].owner == owner);
         CHECK(model.windows[dialog].marker == nullptr);
         CHECK(model.setOwnerCalls == 3);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
     }
 
     SECTION("A failed restore remains pending and retries exactly once")
@@ -662,13 +663,13 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == nullptr);
         CHECK(model.windows[dialog].marker == owner);
         CHECK(model.setOwnerCalls == 2);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 1);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 1);
 
         CHECK(wxWinUITransientOwnerActivation(dialog, false));
         CHECK(model.windows[dialog].owner == owner);
         CHECK(model.windows[dialog].marker == nullptr);
         CHECK(model.setOwnerCalls == 3);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
 
         CHECK_FALSE(wxWinUITransientOwnerActivation(dialog, false));
         CHECK(model.setOwnerCalls == 3);
@@ -682,7 +683,7 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == externalOwner);
         CHECK(model.windows[dialog].marker == nullptr);
         CHECK(model.setOwnerCalls == 1);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
     }
 
     SECTION("A recycled original owner is never restored")
@@ -692,7 +693,7 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK_FALSE(wxWinUITransientOwnerActivation(dialog, false));
         CHECK(model.windows[dialog].owner == nullptr);
         CHECK(model.setOwnerCalls == 1);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
     }
 
     SECTION("A failed RemoveProp does not permit a double restore")
@@ -703,7 +704,7 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == owner);
         CHECK(model.windows[dialog].marker == owner);
         CHECK(model.setOwnerCalls == 2);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
 
         // The next detach first clears the stale diagnostic marker, but is a
         // new transaction and never repeats the already-consumed restore.
@@ -720,7 +721,7 @@ TEST_CASE("WinUITransient::OwnerFaultAndExternalMutation",
         CHECK(model.windows[dialog].owner == nullptr);
         CHECK(model.windows[dialog].marker == nullptr);
         CHECK(model.setOwnerCalls == 1);
-        CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
     }
 }
 
@@ -747,7 +748,7 @@ TEST_CASE("WinUITransient::OwnerHwndReuseIsFailClosed",
     CHECK_FALSE(wxWinUITransientOwnerActivation(dialog, false));
     CHECK(model.windows[dialog].owner == replacementOwner);
     CHECK(model.setOwnerCalls == 1);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
 }
 
 TEST_CASE("WinUITransient::OwnerMinimizeRestoresNestedTree",
@@ -764,7 +765,7 @@ TEST_CASE("WinUITransient::OwnerMinimizeRestoresNestedTree",
 
     REQUIRE(wxWinUITransientOwnerActivation(dialog, true));
     REQUIRE(wxWinUITransientOwnerActivation(nested, true));
-    REQUIRE(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 2);
+    REQUIRE(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 2);
 
     // This is the WM_SIZE/SIZE_MINIMIZED and WM_SHOWWINDOW(false) seam:
     // restoring the direct child recursively restores its nested transient.
@@ -774,7 +775,7 @@ TEST_CASE("WinUITransient::OwnerMinimizeRestoresNestedTree",
     CHECK(model.windows[dialog].marker == nullptr);
     CHECK(model.windows[nested].marker == nullptr);
     CHECK(model.setOwnerCalls == 4);
-    CHECK(wxWinUI3GetOwnerSnapshotForTesting(dialog).transactionCount == 0);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(dialog).transactionCount == 0);
 }
 
 TEST_CASE("WinUITransient::BackdropSuccessCoalesceAndNested",
@@ -796,7 +797,7 @@ TEST_CASE("WinUITransient::BackdropSuccessCoalesceAndNested",
     CHECK(model.windows[dialog].marker);
     CHECK(model.setSizeCalls == 1);
     REQUIRE(model.posted.size() == 1);
-    CHECK(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
 
     wxWinUIPrimeBackdrop(dialog);
     CHECK(model.setSizeCalls == 1);
@@ -806,7 +807,7 @@ TEST_CASE("WinUITransient::BackdropSuccessCoalesceAndNested",
     CHECK(model.windows[dialog].rect == TestRect());
     CHECK(model.windows[dialog].marker);
     CHECK(model.setSizeCalls == 2);
-    CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
 
     wxWinUIInvalidateBackdropPrime(dialog);
     CHECK_FALSE(model.windows[dialog].marker);
@@ -829,7 +830,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK_FALSE(model.windows[dialog].marker);
         CHECK(model.posted.empty());
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("Marker failure rolls the exact shrink back")
@@ -839,7 +840,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK_FALSE(model.windows[dialog].marker);
         CHECK(model.posted.empty());
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("Enqueue failure rolls the exact shrink back")
@@ -849,7 +850,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK_FALSE(model.windows[dialog].marker);
         CHECK(model.posted.empty());
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("Restore gets one bounded deferred retry")
@@ -864,7 +865,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK(model.windows[dialog].marker);
         CHECK(model.posted.empty());
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("Two restore failures preserve the exact rect for a later prime")
@@ -882,7 +883,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.windows[dialog].marker);
         CHECK(model.posted.empty());
         const wxWinUITransientSnapshot pending =
-            wxWinUI3GetBackdropSnapshotForTesting(dialog);
+            wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog);
         CHECK_FALSE(pending.inFlight);
         CHECK(pending.restorePending);
         CHECK(pending.transactionCount == 1);
@@ -891,7 +892,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK(model.windows[dialog].marker);
         CHECK(model.posted.empty());
-        CHECK(wxWinUI3GetBackdropSnapshotForTesting(dialog).
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).
                   transactionCount == 0);
     }
 
@@ -909,13 +910,13 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
               TestRect(10, 20, 100, 99));
         CHECK_FALSE(model.windows[dialog].marker);
         CHECK(model.posted.empty());
-        CHECK(wxWinUI3GetBackdropSnapshotForTesting(dialog).
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).
                   restorePending);
 
         wxWinUIInvalidateBackdropPrime(dialog);
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK_FALSE(model.windows[dialog].marker);
-        CHECK(wxWinUI3GetBackdropSnapshotForTesting(dialog).
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).
                   transactionCount == 0);
     }
 
@@ -936,7 +937,7 @@ TEST_CASE("WinUITransient::BackdropFaultMatrix",
         CHECK(model.setSizeCalls == callsBefore + 1);
         CHECK(model.windows[dialog].rect == TestRect(10, 20, 100, 99));
         CHECK(model.windows[dialog].marker);
-        CHECK(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 }
 
@@ -959,7 +960,7 @@ TEST_CASE("WinUITransient::BackdropGenerationAndRectRevalidation",
         model.RunOne();
         CHECK(model.windows[dialog].rect == TestRect(50, 60, 300, 200));
         CHECK(model.setSizeCalls == callsBefore);
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("External resize supersedes instead of stale restore")
@@ -972,7 +973,7 @@ TEST_CASE("WinUITransient::BackdropGenerationAndRectRevalidation",
         CHECK(model.windows[dialog].rect == TestRect(10, 20, 160, 140));
         CHECK(model.setSizeCalls == callsBefore);
         CHECK(model.windows[dialog].marker);
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("Move-only mutation is re-sampled before size restore")
@@ -986,7 +987,7 @@ TEST_CASE("WinUITransient::BackdropGenerationAndRectRevalidation",
         model.RunOne();
         CHECK(model.windows[dialog].rect == TestRect(70, 80, 100, 100));
         CHECK(model.windows[dialog].marker);
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
     }
 
     SECTION("Invalidation restores only the exact owned shrink")
@@ -996,7 +997,7 @@ TEST_CASE("WinUITransient::BackdropGenerationAndRectRevalidation",
         wxWinUIInvalidateBackdropPrime(dialog);
         CHECK(model.windows[dialog].rect == TestRect());
         CHECK_FALSE(model.windows[dialog].marker);
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
         model.RunOne();
         CHECK(model.windows[dialog].rect == TestRect());
     }
@@ -1008,7 +1009,7 @@ TEST_CASE("WinUITransient::BackdropGenerationAndRectRevalidation",
         const unsigned int callsBefore = model.setSizeCalls;
         wxWinUIBackdropWindowDestroyed(dialog);
         CHECK(model.setSizeCalls == callsBefore);
-        CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(dialog).inFlight);
+        CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(dialog).inFlight);
         model.RunOne();
         CHECK(model.setSizeCalls == callsBefore);
     }
@@ -1252,7 +1253,7 @@ TEST_CASE("WinUITransient::ShellThemeDriverRetiresDestroyedCurrentTLW",
     CHECK(model.markerCalls.empty());
     CHECK(model.controlThemeCalls.empty());
     CHECK_FALSE(
-        wxWinUI3GetBackdropSnapshotForTesting(doomedHwnd).inFlight);
+        wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(doomedHwnd).inFlight);
 
     wxYield();
     wxYield();
@@ -1266,11 +1267,11 @@ TEST_CASE("WinUITransient::ShellThemeDriverRetiresDestroyedCurrentTLW",
     wxWinUIApplyWindowBackdrop(&replacement);
     CHECK(model.controlThemeState.count(replacement.GetHWND()) == 1);
     CHECK(
-        wxWinUI3GetBackdropSnapshotForTesting(
+        wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(
             replacement.GetHWND()).inFlight);
     backdropModel.RunAll();
     CHECK_FALSE(
-        wxWinUI3GetBackdropSnapshotForTesting(
+        wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(
             replacement.GetHWND()).inFlight);
 }
 
@@ -1356,9 +1357,9 @@ TEST_CASE("WinUITransient::FrameFailureCleanupFailureRetainsMaterial",
     CHECK(model.markerActive[root]);
     CHECK_FALSE(model.markerActive[nativeChild]);
     REQUIRE_FALSE(model.controlThemeCalls.empty());
-    CHECK(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
     backdropModel.RunAll();
-    CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
 }
 
 TEST_CASE("WinUITransient::ShellThemeMarkerFailureRollsBackWholeTree",
@@ -1414,7 +1415,7 @@ TEST_CASE("WinUITransient::ShellThemeMarkerFailureRollsBackWholeTree",
             ? wxColour(32, 32, 32)
             : wxColour(243, 243, 243);
     CHECK(frame.GetBackgroundColour() == expectedFallback);
-    CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
 }
 
 TEST_CASE("WinUITransient::ShellThemeMarkerCleanupFailureRetainsMaterial",
@@ -1463,9 +1464,9 @@ TEST_CASE("WinUITransient::ShellThemeMarkerCleanupFailureRetainsMaterial",
     CHECK(model.frameExtended[root]);
     CHECK(model.markerActive[root]);
     CHECK_FALSE(model.markerActive[nativeChild]);
-    CHECK(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
     backdropModel.RunAll();
-    CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
 }
 
 TEST_CASE("WinUITransient::HighContrastCleanupFailureRetainsMaterial",
@@ -1521,9 +1522,9 @@ TEST_CASE("WinUITransient::HighContrastCleanupFailureRetainsMaterial",
     CHECK_FALSE(model.markerActive[nativeChild]);
     REQUIRE_FALSE(model.controlThemeCalls.empty());
     CHECK(model.controlThemeCalls.back().highContrast);
-    CHECK(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
     backdropModel.RunAll();
-    CHECK_FALSE(wxWinUI3GetBackdropSnapshotForTesting(root).inFlight);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
 }
 
 TEST_CASE("WinUITransient::OwnedTopLevelsUseIndependentShellTransactions",

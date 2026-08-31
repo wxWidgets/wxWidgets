@@ -30,32 +30,6 @@ enum class wxWinUITransientKind
     TeachingTip
 };
 
-// Deterministic allocation boundaries used only by transient lifecycle tests.
-// Any preserves the historical "fail the next popup allocation" seam, while
-// named sites prove the rollback contract of each multi-allocation registry
-// transaction without replacing the process allocator.
-enum class wxWinUITransientAllocationSite
-{
-    Any,
-    PopupCancelToken,
-    RegistrationImpl,
-    RegistrationOwnerEntry,
-    RegistrationObserver,
-    RegistrationEntry,
-    PopupRegistrationHolder,
-    PopupRetirementHolder
-};
-
-WXDLLIMPEXP_CORE void wxWinUIFailTransientAllocationAtForTesting(
-    wxWinUITransientAllocationSite site);
-WXDLLIMPEXP_CORE void wxWinUIResetTransientAllocationFailureForTesting();
-
-// Production allocation sites call this immediately before the corresponding
-// allocation. It is a no-op unless a test armed this exact site (or Any), and
-// consumes the one-shot request before throwing std::bad_alloc.
-WXDLLIMPEXP_CORE void wxWinUITransientAllocationPointForTesting(
-    wxWinUITransientAllocationSite site);
-
 class wxWinUITransientRegistration;
 class wxWinUITransientOwnerRetirement;
 
@@ -202,58 +176,6 @@ wxWinUICancelTransientSessions(wxWindow *ownerOrTLW);
 // retained until wxEVT_DESTROY completes. This operation is idempotent.
 WXDLLIMPEXP_CORE void
 wxWinUINotifyTransientOwnerDestroyScheduled(wxWindow *ownerOrTLW);
-
-// Minimal diagnostic seam used by lifecycle tests (and by future TeachingTip
-// integration tests).  It observes the production registry without exposing
-// its entries or cancellation callbacks.
-WXDLLIMPEXP_CORE std::size_t
-wxWinUITransientCountForTesting(wxWindow *ownerOrTLW);
-WXDLLIMPEXP_CORE std::size_t
-wxWinUITransientCountForTesting(wxWindow *ownerOrTLW,
-                                 wxWinUITransientKind kind);
-
-// Generation-bearing identity of one exact owner-registry entry. Lifecycle
-// tests capture it synchronously after Destroy() has published owner
-// retirement, then query it without ever dereferencing the retired wxWindow.
-// The epoch prevents a recycled address from satisfying the old identity.
-struct WXDLLIMPEXP_CORE wxWinUITransientOwnerIdentityForTesting
-{
-    std::uintptr_t ownerKey = 0;
-    std::uint64_t epoch = 0;
-
-    explicit operator bool() const
-    {
-        return ownerKey != 0 && epoch != 0;
-    }
-};
-
-WXDLLIMPEXP_CORE wxWinUITransientOwnerIdentityForTesting
-wxWinUIGetTransientOwnerIdentityForTesting(std::uintptr_t ownerKey);
-WXDLLIMPEXP_CORE bool
-wxWinUIHasTransientOwnerIdentityForTesting(
-    const wxWinUITransientOwnerIdentityForTesting& identity);
-
-// Process-wide observation of the real per-TLW registry. Per-owner Count()
-// cannot prove that a destroyed owner and its retained cancellation callbacks
-// have disappeared because the wxWindow identity is no longer queryable.
-// This implementation-only snapshot deliberately exposes counts, never
-// callbacks or owner addresses.
-struct WXDLLIMPEXP_CORE wxWinUITransientRegistrySnapshot
-{
-    std::size_t ownerCount = 0;
-    std::size_t transientCount = 0;
-    std::size_t cancelCallbackCount = 0;
-    std::size_t modalCount = 0;
-    std::size_t popupCount = 0;
-    std::size_t teachingTipCount = 0;
-    std::size_t pendingOwnerRetireCount = 0;
-    std::size_t activeOwnerRetirementCount = 0;
-    std::uint64_t ownerRetireEnqueueCount = 0;
-    std::uint64_t ownerRetireCallbackCount = 0;
-};
-
-WXDLLIMPEXP_CORE wxWinUITransientRegistrySnapshot
-wxWinUIGetTransientRegistrySnapshotForTesting();
 
 // A generation-bearing lease is deliberately independent of XAML.  The
 // production overlay presenter and its deterministic tests use this exact
