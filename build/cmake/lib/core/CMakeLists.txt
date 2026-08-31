@@ -88,6 +88,7 @@ if(WXMSW)
             src/winui/titlebar.cpp
             src/winui/tlwhost.cpp
             src/winui/hostresize.cpp
+            src/winui/hosttooltip.cpp
             src/winui/xamlhost.cpp
             src/winui/activityindicator.cpp
             src/winui/bmpcbox.cpp

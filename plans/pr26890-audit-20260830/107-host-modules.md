@@ -104,6 +104,22 @@ pass, along with smoke/Supported **2/2** in each linkage. `test_gui` and
 is reserved for the combined architecture batch. UIA/tooltip extraction and
 physical held-drag qualification remain open.
 
+Tooltip policy extraction follows `eb36c450a5`: `hosttooltip.cpp` owns the
+existing observer/revocation/retry, restoration and policy methods. Its
+non-installed header shares the exact bounded suppression template with
+`SyncSlot()` without adding type erasure, another registry, cache or lifetime
+owner. Slot/host declarations and the managed registry in `ctrlhost.cpp` stay
+unchanged; the original content-fault mask has only a phase-specific forwarder.
+Ten moved function bodies are identical after expanding that forwarder.
+The **550 assertions / 22 unchanged cases** pass before/after in DLL and static,
+as do native **219/7**, progress **14/1**, coordinate **259/6** and gates **2/2**.
+These are real XAML ownership/reentrancy cases, not a newly invented pure
+state machine. The first wildcard selection matched only four ancillary cases;
+it is retained as incomplete evidence, superseded by an explicit 22-name list
+in `audit107a-tooltip-before-exact.log`. No failing case was excluded. Builds
+and runtime logs are `audit107a-tooltip-on-*`; shipping remains the combined
+batch below. UIA policy and remaining host test-surface separation stay open.
+
 Move `NativeResizeRequest`, validation, posting, dispatch, cancellation and
 termination to `src/winui/hostresize.cpp` with a private header only if needed.
 The host remains the authority for registry, TLW/island ownership and shutdown;
