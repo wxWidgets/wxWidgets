@@ -26,6 +26,7 @@
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
 #include "host-uia-test-access.h"
@@ -168,7 +169,7 @@ struct HostSnapshot
         result.loadedHooks =
             wxWinUITopLevelHost::GetLiveLoadedHookCount();
         result.contentObservers =
-            wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
+            wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount();
         result.automationObservers =
             wxWinUIHostUIATestAccess::
                 GetLiveAutomationNameStyleObserverCount();
@@ -196,8 +197,8 @@ struct HostSnapshot
                wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                    subclasses &&
                wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
-               wxWinUITopLevelHost::
-                       GetLiveContentLoadedObserverCountForTest() ==
+               wxWinUIHostContentTestAccess::
+                       GetLiveContentLoadedObserverCount() ==
                    contentObservers &&
                wxWinUIHostUIATestAccess::
                        GetLiveAutomationNameStyleObserverCount() ==
@@ -225,8 +226,8 @@ struct HostSnapshot
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               subclasses);
         CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
-        CHECK(wxWinUITopLevelHost::
-                  GetLiveContentLoadedObserverCountForTest() ==
+        CHECK(wxWinUIHostContentTestAccess::
+                  GetLiveContentLoadedObserverCount() ==
               contentObservers);
         CHECK(wxWinUIHostUIATestAccess::
                   GetLiveAutomationNameStyleObserverCount() ==

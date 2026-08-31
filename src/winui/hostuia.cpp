@@ -17,6 +17,9 @@
     #include "host-uia-test-access.h"
 #endif // WXWINUI_TEST_SUPPORT
 #include "hostuia.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-content-test-access.h"
+#endif
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/xamlhost.h"
@@ -1071,9 +1074,11 @@ bool wxWinUISlot::RestoreAutomationName()
         {
             const auto property =
                 Automation::AutomationProperties::NameProperty();
+#ifdef WXWINUI_TEST_SUPPORT
             wxWinUIMaybeInjectAutomationNameContentFault(
-                wxWinUITopLevelHost::
-                    TestContentFault_AutomationNameRestoreRead);
+                wxWinUIHostContentTestAccess::
+                    ContentFault_AutomationNameRestoreRead);
+#endif // WXWINUI_TEST_SUPPORT
             const auto actualLocal =
                 content.ReadLocalValue(property);
             wxString actualLocalString;
@@ -1207,9 +1212,11 @@ bool wxWinUISlot::ShouldPreserveAutomationNameRelinquishment() const
             winrt::Microsoft::UI::Xaml::Automation;
         namespace MUX = winrt::Microsoft::UI::Xaml;
 
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectAutomationNameContentFault(
-            wxWinUITopLevelHost::
-                TestContentFault_AutomationNameTransferRead);
+            wxWinUIHostContentTestAccess::
+                ContentFault_AutomationNameTransferRead);
+#endif // WXWINUI_TEST_SUPPORT
         const auto local = m_semanticTarget.ReadLocalValue(
             Automation::AutomationProperties::NameProperty());
         wxString localString;

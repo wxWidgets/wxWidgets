@@ -13,6 +13,9 @@
 #if wxUSE_WINUI3
 
 #include "hosttooltip.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-content-test-access.h"
+#endif
 #include "wx/winui/private/tlwhost.h"
 
 #ifndef WX_PRECOMP
@@ -30,6 +33,7 @@
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_failToolTipObserverAdds = 0;
 
 void wxWinUIMaybeInjectToolTipObserverFault()
@@ -42,6 +46,7 @@ void wxWinUIMaybeInjectToolTipObserverFault()
             L"wxWinUI test: injected tooltip observer fault");
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 } // anonymous namespace
 
@@ -111,8 +116,12 @@ bool wxWinUISlot::InstallToolTipPropertyObserver()
     {
         auto state = std::make_shared<wxWinUIToolTipPropertyState>();
         state->lifetime = expectedLifetime;
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectToolTipObserverFault();
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectToolTipContentFault();
+#endif // WXWINUI_TEST_SUPPORT
         const int64_t token = expectedContent.RegisterPropertyChangedCallback(
             winrt::Microsoft::UI::Xaml::Controls::ToolTipService::
                 ToolTipProperty(),
@@ -797,9 +806,11 @@ void wxWinUITopLevelHost::SynchronizeSlotToolTipPolicy(wxWinUISlot& slot)
 #endif
 }
 
-void wxWinUITopLevelHost::TestFailToolTipObserverAdds(unsigned count)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::FailToolTipObserverAdds(unsigned count)
 {
     gs_failToolTipObserverAdds = count;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_WINUI3

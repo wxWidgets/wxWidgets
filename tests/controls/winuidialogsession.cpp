@@ -23,6 +23,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-uia-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/transient.h"
@@ -570,7 +571,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
         wxWinUIHostUIATestAccess::
             GetLiveAutomationNameStyleObserverCount();
     const unsigned loadedObserverBaseline =
-        wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
+        wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount();
     const unsigned shellProviderBaseline =
         wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
     const unsigned handlerAddsBaseline =
@@ -955,8 +956,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     CHECK(wxWinUIHostUIATestAccess::
               GetLiveAutomationNameStyleObserverCount() ==
           automationObserverBaseline);
-    CHECK(wxWinUITopLevelHost::
-              GetLiveContentLoadedObserverCountForTest() ==
+    CHECK(wxWinUIHostContentTestAccess::
+              GetLiveContentLoadedObserverCount() ==
           loadedObserverBaseline);
     CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() -
               handlerAddsBaseline ==

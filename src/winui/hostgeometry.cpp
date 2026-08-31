@@ -603,7 +603,7 @@ void wxWinUITopLevelHost::FlushSync()
             s_since = now;
         }
     }
-    ++m_flushRunsForTest;
+    ++m_flushRuns;
 
     EnsureInnerSubclass();
     EnsureBridgeOnTop();

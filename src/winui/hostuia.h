@@ -103,6 +103,8 @@ bool wxWinUIUpdateLocalStyleSourceSnapshot(
     const winrt::Microsoft::UI::Xaml::FrameworkElement& framework);
 
 // Consume the existing host fault phase without duplicating its owner/mask.
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIMaybeInjectAutomationNameContentFault(unsigned phaseBit);
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // _WX_WINUI_HOSTUIA_H_

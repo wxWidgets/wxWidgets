@@ -20,6 +20,7 @@
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-geometry-test-access.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
@@ -653,7 +654,7 @@ TEST_CASE("wxWinUI NumberBox Configure survives synchronous Loaded destruction",
         wxSpinCtrl *spin = new wxSpinCtrl;
         wxSpinCtrl * const invoking = spin;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 attached = true;
@@ -667,7 +668,7 @@ TEST_CASE("wxWinUI NumberBox Configure survives synchronous Loaded destruction",
             parent, wxID_ANY, wxEmptyString,
             wxDefaultPosition, wxDefaultSize,
             wxSP_ARROW_KEYS, 0, 100, 17);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(spin == nullptr);
@@ -679,7 +680,7 @@ TEST_CASE("wxWinUI NumberBox Configure survives synchronous Loaded destruction",
         wxSpinCtrlDouble *spin = new wxSpinCtrlDouble;
         wxSpinCtrlDouble * const invoking = spin;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 attached = true;
@@ -693,7 +694,7 @@ TEST_CASE("wxWinUI NumberBox Configure survives synchronous Loaded destruction",
             parent, wxID_ANY, wxEmptyString,
             wxDefaultPosition, wxDefaultSize,
             wxSP_ARROW_KEYS, 0.0, 100.0, 17.5, 0.5);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(spin == nullptr);

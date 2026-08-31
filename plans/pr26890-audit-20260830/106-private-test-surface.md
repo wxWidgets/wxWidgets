@@ -330,6 +330,36 @@ Do not delete a lifetime/retirement service used by production merely because it
   Physical DPI moves/input, MSW GUI runtime and fresh shipping installation
   checks are not supplied by these local results.
 
+## Slot/content lifecycle test boundary (2026-08-31)
+
+- Eighteen observations/adapters (14 Slot, four host) and eleven fault/callback
+  setters move from source-private `tlwhost.h` to non-installed
+  `host-content-test-access.h`. Existing test-only globals and callouts now
+  require per-source test support; TLW and tooltip opt in alongside UIA.
+  The real content-fault mask still has one authority, with the same ON phase
+  consumption. Production Loaded state, registration counters, rollback,
+  generation checks, callback guards and pointer-source writes remain intact.
+  The per-host flush counter is retained unconditionally as `m_flushRuns`.
+- Candidate proofs cover 106 observer calls and 143 fault calls plus 33 type/
+  mask references. Complete producer ON/OFF token projections and unchanged
+  consumer assertion sites are recorded under
+  `F:\wxwinui-pr26890-audit107-input-foundation\test-access\content-lifecycle`.
+  Integration reconciles only neighbouring keyboard/MSW CMake/include edits,
+  trims new trailing whitespace and moves the Loaded-observer comment with
+  its private getter. No test oracle is changed.
+- Before migration, the existing binaries pass **142/5** content publication/
+  Loaded/rollback assertions/cases and **18/2** host-init titlebar destruction
+  cases in both linkages. The migrated tree then builds `test_gui`, `minimal`
+  and `winuispike` with warnings as errors for shared and static WinUI. The same
+  **142/5** and **18/2** groups pass after migration, as do both runtime gates
+  (**2/2**) in each linkage. Evidence is recorded in
+  `audit106-lifecycle-transient-on-build.log`,
+  `audit106-lifecycle-on-content.log`,
+  `audit106-lifecycle-on-content-titlebar.log` and
+  `audit106-lifecycle-on-gates.log` under the two active build trees. These are
+  private-desktop, non-input tests. Fresh shipping OFF installation and symbol
+  verification remain pending.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

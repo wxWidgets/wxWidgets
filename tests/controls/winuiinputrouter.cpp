@@ -21,6 +21,7 @@
 #include "wx/msw/private.h"
 #include "wx/winui/private/inputrouter.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include <atomic>
@@ -413,7 +414,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     wxWeakRef<wxWindow> doomedLifetime(doomed);
     wxWindow *callbackWindow = nullptr;
     bool callbackRan = false;
-    wxWinUITopLevelHost::TestOnNextWindowAtPointSlotStateRead(
+    wxWinUIHostContentTestAccess::OnNextWindowAtPointSlotStateRead(
         [&](wxWindow *window)
         {
             callbackRan = true;

@@ -28,6 +28,7 @@
 #include "wx/msw/private.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-input-test-access.h"
 #include "host-geometry-test-access.h"
@@ -132,7 +133,7 @@ struct RuntimeSnapshot
             wxWinUIHostUIATestAccess::
                 GetLiveAutomationNameStyleObserverCount();
         snapshot.contentObservers =
-            wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
+            wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount();
         snapshot.invisibleShellProviders =
             wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
         snapshot.pendingFocusMigrations =
@@ -170,8 +171,8 @@ struct RuntimeSnapshot
                wxWinUIHostUIATestAccess::
                        GetLiveAutomationNameStyleObserverCount() ==
                    automationObservers &&
-               wxWinUITopLevelHost::
-                       GetLiveContentLoadedObserverCountForTest() ==
+               wxWinUIHostContentTestAccess::
+                       GetLiveContentLoadedObserverCount() ==
                    contentObservers &&
                wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
                    invisibleShellProviders &&
@@ -206,8 +207,8 @@ struct RuntimeSnapshot
         CHECK(wxWinUIHostUIATestAccess::
                   GetLiveAutomationNameStyleObserverCount() ==
               automationObservers);
-        CHECK(wxWinUITopLevelHost::
-                  GetLiveContentLoadedObserverCountForTest() ==
+        CHECK(wxWinUIHostContentTestAccess::
+                  GetLiveContentLoadedObserverCount() ==
               contentObservers);
         CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
               invisibleShellProviders);

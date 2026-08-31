@@ -30,6 +30,7 @@
 #include "wx/uiaction.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-geometry-test-access.h"
 
 #include <winrt/Microsoft.UI.Dispatching.h>
@@ -2191,7 +2192,7 @@ TEST_CASE("wxWinUI TimePicker Create survives synchronous Loaded destruction",
     wxTimePickerCtrl *picker = new wxTimePickerCtrl;
     wxTimePickerCtrl * const invoking = picker;
     bool attached = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *window)
         {
             attached = true;
@@ -2204,7 +2205,7 @@ TEST_CASE("wxWinUI TimePicker Create survives synchronous Loaded destruction",
     const bool created = invoking->Create(
         parent, wxID_ANY,
         wxDateTime(1, wxDateTime::Jan, 2012, 8, 15, 0));
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     CHECK(attached);
     CHECK_FALSE(created);
     CHECK(picker == nullptr);
@@ -4503,7 +4504,7 @@ TEST_CASE("wxWinUI Calendar Create revalidates Loaded and ForceRender",
         wxCalendarCtrl *calendar = new wxCalendarCtrl;
         wxCalendarCtrl * const invoking = calendar;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 attached = true;
@@ -4515,7 +4516,7 @@ TEST_CASE("wxWinUI Calendar Create revalidates Loaded and ForceRender",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, initial);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(calendar == nullptr);
@@ -4533,7 +4534,7 @@ TEST_CASE("wxWinUI Calendar Create revalidates Loaded and ForceRender",
         wxCalendarCtrl * const invoking = calendar;
         bool attached = false;
         bool slotSynced = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 attached = true;
@@ -4552,7 +4553,7 @@ TEST_CASE("wxWinUI Calendar Create revalidates Loaded and ForceRender",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, initial);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(attached);
         CHECK(slotSynced);

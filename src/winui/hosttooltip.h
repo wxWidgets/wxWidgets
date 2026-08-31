@@ -27,7 +27,9 @@ void wxWinUIRestoreToolTipLocalValue(
     const winrt::Windows::Foundation::IInspectable& localValue);
 
 // Consumes the existing host content-fault phase; it owns no duplicate mask.
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIMaybeInjectToolTipContentFault();
+#endif // WXWINUI_TEST_SUPPORT
 
 enum class wxWinUIToolTipSuppressionResult
 {

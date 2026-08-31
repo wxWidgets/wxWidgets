@@ -31,6 +31,7 @@
 #include "wx/winui/private/dropbroker.h"
 #include "drop-broker-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-geometry-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
@@ -293,13 +294,13 @@ class HostInitializationFaultGuard final
 public:
     explicit HostInitializationFaultGuard(unsigned fault)
     {
-        wxWinUITopLevelHost::TestFailInitialization(fault);
+        wxWinUIHostContentTestAccess::FailInitialization(fault);
     }
 
     ~HostInitializationFaultGuard()
     {
-        wxWinUITopLevelHost::TestFailInitialization(
-            wxWinUITopLevelHost::TestInitializationFault_None);
+        wxWinUIHostContentTestAccess::FailInitialization(
+            wxWinUIHostContentTestAccess::InitializationFault_None);
     }
 };
 
@@ -308,11 +309,11 @@ unsigned gs_deferredInitializationTLWBindings = 0;
 
 void CountDeferredInitializationTLWBindings(
     wxWindow* tlw,
-    wxWinUITopLevelHost::InitializationHookPointForTest point)
+    wxWinUIHostContentTestAccess::InitializationHookPoint point)
 {
     if ( tlw == gs_deferredInitializationTLW &&
-         point == wxWinUITopLevelHost::
-                      InitializationHookPointForTest::AfterTLWBindings )
+         point == wxWinUIHostContentTestAccess::
+                      InitializationHookPoint::AfterTLWBindings )
     {
         ++gs_deferredInitializationTLWBindings;
     }
@@ -325,13 +326,13 @@ public:
     {
         gs_deferredInitializationTLW = tlw;
         gs_deferredInitializationTLWBindings = 0;
-        wxWinUITopLevelHost::TestSetInitializationHook(
+        wxWinUIHostContentTestAccess::SetInitializationHook(
             CountDeferredInitializationTLWBindings);
     }
 
     ~DeferredInitializationHookGuard()
     {
-        wxWinUITopLevelHost::TestSetInitializationHook(nullptr);
+        wxWinUIHostContentTestAccess::SetInitializationHook(nullptr);
         gs_deferredInitializationTLW = nullptr;
         gs_deferredInitializationTLWBindings = 0;
     }
@@ -347,10 +348,10 @@ bool gs_presentationInvalidationObserved = false;
 
 void InvalidatePresentationAfterDropBrokerReady(
     wxWindow* tlw,
-    wxWinUITopLevelHost::InitializationHookPointForTest point)
+    wxWinUIHostContentTestAccess::InitializationHookPoint point)
 {
     if ( tlw != gs_presentationInvalidationTLW ||
-         point != wxWinUITopLevelHost::InitializationHookPointForTest::
+         point != wxWinUIHostContentTestAccess::InitializationHookPoint::
                       AfterDropBrokerReadyBeforeCommit ||
          gs_presentationInvalidationObserved )
     {
@@ -369,13 +370,13 @@ public:
     {
         gs_presentationInvalidationTLW = tlw;
         gs_presentationInvalidationObserved = false;
-        wxWinUITopLevelHost::TestSetInitializationHook(
+        wxWinUIHostContentTestAccess::SetInitializationHook(
             InvalidatePresentationAfterDropBrokerReady);
     }
 
     ~PresentationInvalidationHookGuard()
     {
-        wxWinUITopLevelHost::TestSetInitializationHook(nullptr);
+        wxWinUIHostContentTestAccess::SetInitializationHook(nullptr);
         gs_presentationInvalidationTLW = nullptr;
     }
 
@@ -390,10 +391,10 @@ bool gs_provisionalReparentSucceeded = false;
 
 void ReparentDuringProvisionalHostInitialization(
     wxWindow* tlw,
-    wxWinUITopLevelHost::InitializationHookPointForTest point)
+    wxWinUIHostContentTestAccess::InitializationHookPoint point)
 {
-    if ( point != wxWinUITopLevelHost::
-                    InitializationHookPointForTest::AfterTLWBindings ||
+    if ( point != wxWinUIHostContentTestAccess::
+                    InitializationHookPoint::AfterTLWBindings ||
          tlw != gs_provisionalReparentDestination ||
          !gs_provisionalReparentWindow ||
          gs_provisionalReparentAttempted )
@@ -415,13 +416,13 @@ public:
         gs_provisionalReparentDestination = destination;
         gs_provisionalReparentAttempted = false;
         gs_provisionalReparentSucceeded = false;
-        wxWinUITopLevelHost::TestSetInitializationHook(
+        wxWinUIHostContentTestAccess::SetInitializationHook(
             ReparentDuringProvisionalHostInitialization);
     }
 
     ~ProvisionalReparentHookGuard()
     {
-        wxWinUITopLevelHost::TestSetInitializationHook(nullptr);
+        wxWinUIHostContentTestAccess::SetInitializationHook(nullptr);
         gs_provisionalReparentWindow = nullptr;
         gs_provisionalReparentDestination = nullptr;
     }
@@ -3960,8 +3961,8 @@ TEST_CASE("WinUI OLE broker keeps TLW target through hidden host init rollback",
 
     {
         HostInitializationFaultGuard fault(
-            wxWinUITopLevelHost::
-                TestInitializationFault_AfterTLWBindings);
+            wxWinUIHostContentTestAccess::
+                InitializationFault_AfterTLWBindings);
         CHECK(wxWinUITopLevelHost::ForWindow(frame, true) == nullptr);
     }
     DrainDispatch();

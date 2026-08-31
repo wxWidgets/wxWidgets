@@ -25,6 +25,9 @@
 #endif
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-content-test-access.h"
+#endif
 #include "hostnative.h"
 #include "hostinput.h"
 #include "hostfocus.h"
@@ -428,10 +431,13 @@ unsigned gs_slotCursorSets = 0;
 // identity or HCURSOR value.
 unsigned long long gs_cursorPolicyGeneration = 1;
 
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_failInputPointerSourceSetAt = 0;
+#endif // WXWINUI_TEST_SUPPORT
 
 // Registration-rollback fault injection (see TestFailHandlerAdd): countdown
 // to the handler subscription that must throw, 0 = disabled.
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_failHandlerAddAt = 0;
 
 void wxWinUIMaybeInjectHandlerFault()
@@ -442,22 +448,28 @@ void wxWinUIMaybeInjectHandlerFault()
                                    L"wxWinUI test: injected handler fault");
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 // Content-transaction fault injection (see TestFailContentSwap): a mask of
 // TestContentFault_* bits; each phase consumes its own bit when it fires.
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_failContentMask = 0;
 unsigned gs_failContentLoadedObserverAdds = 0;
+#endif // WXWINUI_TEST_SUPPORT
 unsigned gs_liveContentLoadedStates = 0;
+#ifdef WXWINUI_TEST_SUPPORT
 std::function<void (wxWindow *)> gs_testSlotAttachedHook;
 std::function<void (wxWindow *)> gs_testContentCarrierSetHook;
 std::function<void (wxWindow *)> gs_testContentTransactionStartedHook;
 std::function<void (wxWindow *)> gs_testWindowAtPointSlotStateHook;
-wxWinUITopLevelHost::InitializationHookForTest
+wxWinUIHostContentTestAccess::InitializationHook
     gs_testHostInitializationHook = nullptr;
 unsigned gs_testHostInitializationFaultMask =
-    wxWinUITopLevelHost::TestInitializationFault_None;
+    wxWinUIHostContentTestAccess::InitializationFault_None;
 bool gs_testHostInitializationHookInProgress = false;
+#endif // WXWINUI_TEST_SUPPORT
 
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIMaybeInjectContentFault(unsigned phaseBit)
 {
     if ( gs_failContentMask & phaseBit )
@@ -467,7 +479,9 @@ void wxWinUIMaybeInjectContentFault(unsigned phaseBit)
                                    L"wxWinUI test: injected content fault");
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIMaybeInjectContentLoadedObserverFault()
 {
     if ( gs_failContentLoadedObserverAdds )
@@ -478,6 +492,7 @@ void wxWinUIMaybeInjectContentLoadedObserverFault()
             L"wxWinUI test: injected content Loaded observer fault");
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 constexpr UINT_PTR wxWINUI_TLW_SUBCLASS_BRIDGE = 1;
 constexpr UINT_PTR wxWINUI_TLW_SUBCLASS_INNER = 2;
@@ -758,10 +773,12 @@ bool wxWinUIIsGlobalOperationActive()
 
 bool wxWinUIInputLogEnabled() { return wxWinUIInputLogFile() != nullptr; }
 
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIMaybeInjectAutomationNameContentFault(unsigned phaseBit)
 {
     wxWinUIMaybeInjectContentFault(phaseBit);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUIInputLog(const char *fmt, ...)
 {
@@ -1105,7 +1122,9 @@ bool wxWinUISlot::InstallContentLoadedObserver()
     winrt::event_token token{};
     try
     {
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectContentLoadedObserverFault();
+#endif // WXWINUI_TEST_SUPPORT
         token = framework.Loaded(
             [state](const winrt::Windows::Foundation::IInspectable&,
                     const winrt::Microsoft::UI::Xaml::RoutedEventArgs&)
@@ -1233,10 +1252,12 @@ void wxWinUISlot::HandleContentLoadedObserver(
         window, content, state->contentGeneration);
 }
 
-void wxWinUISlot::TestInvokeContentLoadedObserver()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUISlotTestAccess::InvokeContentLoadedObserver(wxWinUISlot& slot)
 {
-    HandleContentLoadedObserver(m_contentLoadedState);
+    slot.HandleContentLoadedObserver(slot.m_contentLoadedState);
 }
+#endif
 
 wxWinUISlot::OperationGuard::OperationGuard(wxWinUISlot *slot)
     : m_slot(slot)
@@ -1521,6 +1542,7 @@ bool wxWinUISlot::SetContent(
     // Deterministic equivalent of an old-content Loaded callback entering
     // immediately after the transaction became observable. Consume the hook
     // before invocation so nested content changes cannot recurse through it.
+#ifdef WXWINUI_TEST_SUPPORT
     std::function<void (wxWindow *)> transactionStartedHook =
         std::move(gs_testContentTransactionStartedHook);
     if ( transactionStartedHook )
@@ -1531,6 +1553,7 @@ bool wxWinUISlot::SetContent(
         if ( !transactionIsCurrent() )
             return false;
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     const auto publishedContentIdentityIsCurrent =
         [&](const winrt::Microsoft::UI::Xaml::UIElement& expected,
@@ -1883,8 +1906,10 @@ bool wxWinUISlot::SetContent(
     // carrier and continue/commit only from the state it actually holds.
     try
     {
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectContentFault(
-            wxWinUITopLevelHost::TestContentFault_Detach);
+            wxWinUIHostContentTestAccess::ContentFault_Detach);
+#endif // WXWINUI_TEST_SUPPORT
         m_carrier.Content(nullptr);
         if ( !transactionIsCurrent() )
             return false;
@@ -1918,8 +1943,10 @@ bool wxWinUISlot::SetContent(
     {
         if ( element )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             wxWinUIMaybeInjectContentFault(
-                wxWinUITopLevelHost::TestContentFault_Install);
+                wxWinUIHostContentTestAccess::ContentFault_Install);
+#endif // WXWINUI_TEST_SUPPORT
             m_carrier.Content(element);
             if ( !transactionIsCurrent() )
                 return false;
@@ -1929,6 +1956,7 @@ bool wxWinUISlot::SetContent(
         // Content() call. This one-shot seam deterministically exercises the
         // same state immediately afterwards, while the carrier is B and the
         // published slot model is still A.
+#ifdef WXWINUI_TEST_SUPPORT
         std::function<void (wxWindow *)> carrierSetHook =
             std::move(gs_testContentCarrierSetHook);
         if ( carrierSetHook )
@@ -1939,6 +1967,7 @@ bool wxWinUISlot::SetContent(
             if ( !transactionIsCurrent() )
                 return false;
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         // Content() and the deterministic boundary above can synchronously
         // run Loaded/application code. Never publish a descendant which that
@@ -1970,8 +1999,10 @@ bool wxWinUISlot::SetContent(
         // slot as it was (m_content and the caches still describe it).
         try
         {
+#ifdef WXWINUI_TEST_SUPPORT
             wxWinUIMaybeInjectContentFault(
-                wxWinUITopLevelHost::TestContentFault_Restore);
+                wxWinUIHostContentTestAccess::ContentFault_Restore);
+#endif // WXWINUI_TEST_SUPPORT
             m_carrier.Content(oldContent);
             if ( !transactionIsCurrent() )
                 return false;
@@ -2010,6 +2041,7 @@ bool wxWinUISlot::SetContent(
     // deterministic reentrancy boundary after the successful detach.
     if ( !element )
     {
+#ifdef WXWINUI_TEST_SUPPORT
         std::function<void (wxWindow *)> carrierSetHook =
             std::move(gs_testContentCarrierSetHook);
         if ( carrierSetHook )
@@ -2020,6 +2052,7 @@ bool wxWinUISlot::SetContent(
             if ( !transactionIsCurrent() )
                 return false;
         }
+#endif // WXWINUI_TEST_SUPPORT
     }
 
     return commitRequested();
@@ -2034,8 +2067,10 @@ bool wxWinUISlot::TryGetCarrierContent(
 
     try
     {
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectContentFault(
-            wxWinUITopLevelHost::TestContentFault_Read);
+            wxWinUIHostContentTestAccess::ContentFault_Read);
+#endif // WXWINUI_TEST_SUPPORT
         content = m_carrier.Content().
             try_as<winrt::Microsoft::UI::Xaml::UIElement>();
         return true;
@@ -2483,8 +2518,10 @@ wxWinUITopLevelHost::ForWindow(wxWindow *window, bool createIfNeeded)
             wxEVT_DESTROY, &wxWinUITopLevelHost::OnTLWDestroy, host);
         host->m_tlwDestroyBound = true;
 
-        host->InvokeInitializationHookForTest(
-            InitializationHookPointForTest::AfterProvisionalPublication);
+#ifdef WXWINUI_TEST_SUPPORT
+        wxWinUIHostContentTestAccess::InvokeInitializationHook(*host,
+            wxWinUIHostContentTestAccess::InitializationHookPoint::AfterProvisionalPublication);
+#endif // WXWINUI_TEST_SUPPORT
         if ( !host->HasInitializationContext() || !host->Initialize() ||
              !host->HasInitializationContext() )
         {
@@ -2681,15 +2718,16 @@ bool wxWinUITopLevelHost::IsReadyForLookup() const
            !m_shutdownComplete && m_tlw && m_tlwLifetime.get() == m_tlw;
 }
 
-void wxWinUITopLevelHost::InvokeInitializationHookForTest(
-    InitializationHookPointForTest point)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::InvokeInitializationHook(
+    wxWinUITopLevelHost& host, InitializationHookPoint point)
 {
-    const InitializationHookForTest callback =
+    const InitializationHook callback =
         gs_testHostInitializationHook;
     if ( !callback || gs_testHostInitializationHookInProgress )
         return;
 
-    wxWindow * const tlw = m_tlwLifetime.get();
+    wxWindow * const tlw = host.m_tlwLifetime.get();
     if ( !tlw )
         return;
 
@@ -2705,8 +2743,10 @@ void wxWinUITopLevelHost::InvokeInitializationHookForTest(
         // A test seam must never make production rollback throwing.
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::MaybeThrowInitializationFault(unsigned fault)
+#ifdef WXWINUI_TEST_SUPPORT
+static void wxWinUIMaybeInjectInitializationFault(unsigned fault)
 {
     if ( gs_testHostInitializationFaultMask & fault )
     {
@@ -2715,17 +2755,22 @@ void wxWinUITopLevelHost::MaybeThrowInitializationFault(unsigned fault)
             E_FAIL, L"wxWinUI test: injected host initialization fault");
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestSetInitializationHook(
-    InitializationHookForTest callback)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::SetInitializationHook(
+    InitializationHook callback)
 {
     gs_testHostInitializationHook = callback;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestFailInitialization(unsigned mask)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::FailInitialization(unsigned mask)
 {
     gs_testHostInitializationFaultMask = mask;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxWinUITopLevelHost::Initialize()
 {
@@ -2753,8 +2798,10 @@ bool wxWinUITopLevelHost::Initialize()
         if ( !HasInitializationContext() )
             return false;
         m_source.Initialize(tlwWindowId);
-        InvokeInitializationHookForTest(
-            InitializationHookPointForTest::AfterSourceInitialization);
+#ifdef WXWINUI_TEST_SUPPORT
+        wxWinUIHostContentTestAccess::InvokeInitializationHook(*this,
+            wxWinUIHostContentTestAccess::InitializationHookPoint::AfterSourceInitialization);
+#endif // WXWINUI_TEST_SUPPORT
         if ( !HasInitializationContext() )
             return false;
 
@@ -2918,8 +2965,10 @@ bool wxWinUITopLevelHost::Initialize()
         if ( !BindRootRouter() )
             return false;
 
-        InvokeInitializationHookForTest(
-            InitializationHookPointForTest::AfterRootRouter);
+#ifdef WXWINUI_TEST_SUPPORT
+        wxWinUIHostContentTestAccess::InvokeInitializationHook(*this,
+            wxWinUIHostContentTestAccess::InitializationHookPoint::AfterRootRouter);
+#endif // WXWINUI_TEST_SUPPORT
         if ( !HasInitializationContext() )
             return false;
 
@@ -2958,8 +3007,10 @@ bool wxWinUITopLevelHost::Initialize()
     }
     catch ( const winrt::hresult_error& e )
     {
-        InvokeInitializationHookForTest(
-            InitializationHookPointForTest::BeforeExceptionLog);
+#ifdef WXWINUI_TEST_SUPPORT
+        wxWinUIHostContentTestAccess::InvokeInitializationHook(*this,
+            wxWinUIHostContentTestAccess::InitializationHookPoint::BeforeExceptionLog);
+#endif // WXWINUI_TEST_SUPPORT
         wxWinUILogException("TLW island initialization", e);
         return false;
     }
@@ -2985,8 +3036,10 @@ bool wxWinUITopLevelHost::FinishInitializationAfterDropBroker()
 
     wxWinUITitleBarAttachSystemPolicy(
         this, m_hostLifetime, liveTLW, m_tlwHwnd);
-    InvokeInitializationHookForTest(
-        InitializationHookPointForTest::AfterTitleBarPolicy);
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIHostContentTestAccess::InvokeInitializationHook(*this,
+        wxWinUIHostContentTestAccess::InitializationHookPoint::AfterTitleBarPolicy);
+#endif // WXWINUI_TEST_SUPPORT
     if ( !HasInitializationContext() )
         return false;
 
@@ -3020,9 +3073,13 @@ bool wxWinUITopLevelHost::FinishInitializationAfterDropBroker()
         MarkAllDirty();
 #endif
 
-    InvokeInitializationHookForTest(
-        InitializationHookPointForTest::AfterTLWBindings);
-    MaybeThrowInitializationFault(TestInitializationFault_AfterTLWBindings);
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIHostContentTestAccess::InvokeInitializationHook(*this,
+        wxWinUIHostContentTestAccess::InitializationHookPoint::AfterTLWBindings);
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIMaybeInjectInitializationFault(wxWinUIHostContentTestAccess::InitializationFault_AfterTLWBindings);
+#endif // WXWINUI_TEST_SUPPORT
     if ( !HasInitializationContext() )
         return false;
 
@@ -3209,8 +3266,10 @@ void wxWinUITopLevelHost::TryInitializeDropBrokerAfterPresentation()
         return;
     }
 
-    InvokeInitializationHookForTest(
-        InitializationHookPointForTest::AfterDropBrokerReadyBeforeCommit);
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIHostContentTestAccess::InvokeInitializationHook(*this,
+        wxWinUIHostContentTestAccess::InitializationHookPoint::AfterDropBrokerReadyBeforeCommit);
+#endif // WXWINUI_TEST_SUPPORT
     if ( !IsDropBrokerPresentationStable(presentationGeneration) )
     {
         RestartDropBrokerAfterPresentationInvalidation();
@@ -3896,11 +3955,12 @@ wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest()
 }
 
 
-unsigned
-wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount()
 {
     return gs_liveContentLoadedStates;
 }
+#endif
 
 unsigned wxWinUITopLevelHost::GetSlotHandlerAddCount()
 {
@@ -3927,59 +3987,77 @@ unsigned wxWinUITopLevelHost::GetLiveSubclassContextCount()
     return gs_liveSubclassContexts;
 }
 
-void wxWinUITopLevelHost::TestFailHandlerAdd(unsigned nth)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::FailHandlerAdd(unsigned nth)
 {
     gs_failHandlerAddAt = nth;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestFailContentSwap(unsigned mask)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::FailContentSwap(unsigned mask)
 {
     gs_failContentMask = mask;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #if wxUSE_TOOLTIPS
 // Keep the content-transaction fault mask in its existing authority. The
 // extracted observer consumes exactly the same phase bit, at the same point.
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIMaybeInjectToolTipContentFault()
 {
     wxWinUIMaybeInjectContentFault(
-        wxWinUITopLevelHost::TestContentFault_ToolTipObserver);
+        wxWinUIHostContentTestAccess::ContentFault_ToolTipObserver);
 }
+#endif // WXWINUI_TEST_SUPPORT
 #endif // wxUSE_TOOLTIPS
 
-void wxWinUITopLevelHost::TestFailContentLoadedObserverAdds(unsigned count)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::FailContentLoadedObserverAdds(unsigned count)
 {
     gs_failContentLoadedObserverAdds = count;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestFailInputPointerSourceSet(unsigned nth)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::FailInputPointerSourceSet(unsigned nth)
 {
     gs_failInputPointerSourceSetAt = nth;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestOnNextSlotAttached(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::OnNextSlotAttached(
     std::function<void (wxWindow *)> callback)
 {
     gs_testSlotAttachedHook = std::move(callback);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
     std::function<void (wxWindow *)> callback)
 {
     gs_testContentCarrierSetHook = std::move(callback);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestOnNextContentTransactionStarted(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::OnNextContentTransactionStarted(
     std::function<void (wxWindow *)> callback)
 {
     gs_testContentTransactionStartedHook = std::move(callback);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestOnNextWindowAtPointSlotStateRead(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostContentTestAccess::OnNextWindowAtPointSlotStateRead(
     std::function<void (wxWindow *)> callback)
 {
     gs_testWindowAtPointSlotStateHook = std::move(callback);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 unsigned wxWinUITopLevelHost::GetSlotCursorSetCount()
 {
@@ -4578,6 +4656,7 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         // boundary as wxWinUISlot::SetContent(), but only after lifetime,
         // ownership and destroy handlers are authoritative. Application code
         // reached here may destroy, reparent or supersede this generation.
+#ifdef WXWINUI_TEST_SUPPORT
         std::function<void (wxWindow *)> carrierSetHook =
             std::move(gs_testContentCarrierSetHook);
         if ( carrierSetHook )
@@ -4588,6 +4667,7 @@ wxWinUITopLevelHost::RegisterSlotInternal(
                     : nullptr;
             carrierSetHook(currentWindow);
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         if ( !observeRequestedContent() )
             return abandonInvalidFreshSlot();
@@ -4600,10 +4680,12 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         // Test the same arbitrary-callback boundary deterministically. The
         // hook is consumed before invocation so a nested migration cannot
         // recurse through the test mechanism unless it explicitly rearms it.
+#ifdef WXWINUI_TEST_SUPPORT
         std::function<void (wxWindow *)> attachedHook =
             std::move(gs_testSlotAttachedHook);
         if ( attachedHook )
             attachedHook(window);
+#endif // WXWINUI_TEST_SUPPORT
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -7082,6 +7164,7 @@ bool wxWinUITopLevelHost::SetIslandPointerCursor(
                 }
                 m_rootPointerCursorAuthoritative = false;
             }
+#ifdef WXWINUI_TEST_SUPPORT
             if ( gs_failInputPointerSourceSetAt &&
                  --gs_failInputPointerSourceSetAt == 0 )
             {
@@ -7089,6 +7172,7 @@ bool wxWinUITopLevelHost::SetIslandPointerCursor(
                     E_FAIL,
                     L"wxWinUI test: injected InputPointerSource failure");
             }
+#endif // WXWINUI_TEST_SUPPORT
             source.Cursor(cursor);
             if ( !hostState || hostState->GetHost() != this ||
                  m_shuttingDown ||
@@ -8031,7 +8115,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
         [&slot](const RoutedEvent& routedEvent,
                 Input::PointerEventHandler handler)
         {
+#ifdef WXWINUI_TEST_SUPPORT
             wxWinUIMaybeInjectHandlerFault();
+#endif // WXWINUI_TEST_SUPPORT
             const auto boxed = winrt::box_value(std::move(handler));
             slot.m_container.AddHandler(routedEvent, boxed,
                                         true /* handledEventsToo */);
@@ -8131,7 +8217,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
             winrt::Windows::Foundation::TypedEventHandler<
                 UIElement, Input::GettingFocusEventArgs>;
 
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIMaybeInjectHandlerFault();
+#endif // WXWINUI_TEST_SUPPORT
         const auto boxed = winrt::box_value(GettingFocusHandler(
             [state](UIElement const& sender,
                     Input::GettingFocusEventArgs const& e)
@@ -8227,7 +8315,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
     // Focus arbiter, XAML -> wx side: the island holds the native focus, so
     // slotted windows never get WM_SETFOCUS; synthesize the wx focus events
     // and track the owner for FindFocus() resolution.
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIMaybeInjectHandlerFault();
+#endif // WXWINUI_TEST_SUPPORT
     slot.m_gotFocusToken = slot.m_container.GotFocus(
         [state](IInspectable const& sender, RoutedEventArgs const&)
         {
@@ -8241,7 +8331,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
         });
     ++gs_slotHandlerAdds;
 
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIMaybeInjectHandlerFault();
+#endif // WXWINUI_TEST_SUPPORT
     slot.m_lostFocusToken = slot.m_container.LostFocus(
         [state](IInspectable const& sender, RoutedEventArgs const&)
         {
@@ -10245,6 +10337,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
                 if ( !window )
                     return state;
 
+#ifdef WXWINUI_TEST_SUPPORT
                 std::function<void (wxWindow *)> boundaryHook =
                     std::move(gs_testWindowAtPointSlotStateHook);
                 if ( boundaryHook )
@@ -10256,6 +10349,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
                     if ( !window )
                         return state;
                 }
+#endif // WXWINUI_TEST_SUPPORT
 
                 const int z =
                     winrt::Microsoft::UI::Xaml::Controls::Canvas::
@@ -10696,5 +10790,55 @@ bool wxWinUIOpenPhysicalDisconnectGateBeforeSourceCloseForTesting(
     probe->OpenBeforeSourceClose();
     return true;
 }
+
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned long long wxWinUISlotTestAccess::GetSyncEpoch(const wxWinUISlot& slot)
+{ return slot.m_syncEpoch; }
+
+bool wxWinUISlotTestAccess::IsContentTransactionInProgress(const wxWinUISlot& slot)
+{ return slot.m_contentTransactionInProgress; }
+
+bool wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(const wxWinUISlot& slot)
+{ return slot.m_toolTipPropertyObserverPending; }
+
+unsigned wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(const wxWinUISlot& slot)
+{ return slot.m_toolTipPropertyObserverRetryFailures; }
+
+bool wxWinUISlotTestAccess::IsContentLoaded(const wxWinUISlot& slot)
+{ return slot.IsContentLoaded(); }
+
+void wxWinUISlotTestAccess::SetContentLoaded(wxWinUISlot& slot, bool loaded)
+{ slot.m_contentLoaded = loaded; }
+
+bool wxWinUISlotTestAccess::IsContentLoadedObserverPending(const wxWinUISlot& slot)
+{ return slot.m_contentLoadedObserverPending; }
+
+bool wxWinUISlotTestAccess::HasContentLoadedObserver(const wxWinUISlot& slot)
+{ return slot.m_contentLoadedState != nullptr; }
+
+winrt::Microsoft::UI::Xaml::UIElement wxWinUISlotTestAccess::GetAutomationNameStyleObservedContent(const wxWinUISlot& slot)
+{ return slot.m_automationNameStyleObservedContent; }
+
+unsigned wxWinUISlotTestAccess::GetContentLoadedObserverRetryFailures(const wxWinUISlot& slot)
+{ return slot.m_contentLoadedObserverRetryFailures; }
+
+std::weak_ptr<wxWinUISlotLifetime> wxWinUISlotTestAccess::GetLifetime(const wxWinUISlot& slot)
+{ return slot.m_lifetime; }
+
+void wxWinUISlotTestAccess::SetLastToolTipDPI(wxWinUISlot& slot, int dpi)
+{ slot.m_lastToolTipDPI = dpi; }
+
+std::uintptr_t wxWinUISlotTestAccess::GetPhysicalDisconnectGateIdentity(const wxWinUISlot& slot)
+{ return reinterpret_cast<std::uintptr_t>(slot.m_disconnectGate.get()); }
+
+void wxWinUIHostContentTestAccess::Shutdown(wxWinUITopLevelHost& host)
+{ host.Shutdown(); }
+
+std::weak_ptr<wxWinUIHostLifetime> wxWinUIHostContentTestAccess::GetLifetime(const wxWinUITopLevelHost& host)
+{ return host.m_hostLifetime; }
+
+unsigned wxWinUIHostContentTestAccess::GetOwnFlushRunCount(const wxWinUITopLevelHost& host)
+{ return host.m_flushRuns; }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_WINUI3

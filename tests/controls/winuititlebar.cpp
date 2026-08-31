@@ -25,6 +25,7 @@
 #include "wx/weakref.h"
 #include "wx/winui/private/titlebar.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include <memory>
@@ -185,7 +186,7 @@ public:
 };
 
 using HostInitializationPoint =
-    wxWinUITopLevelHost::InitializationHookPointForTest;
+    wxWinUIHostContentTestAccess::InitializationHookPoint;
 
 HostInitializationPoint gs_hostInitializationDestroyPoint =
     HostInitializationPoint::AfterTLWBindings;
@@ -204,7 +205,7 @@ void DestroyAndPumpDuringHostInitialization(
     gs_hostInitializationPolicyObserved =
         wxWinUITitleBarGetLivePolicyCountForTesting() >
             gs_hostInitializationPoliciesBefore;
-    wxWinUITopLevelHost::TestSetInitializationHook(nullptr);
+    wxWinUIHostContentTestAccess::SetInitializationHook(nullptr);
     window->Destroy();
     DrainTitleBarEvents(3);
 }
@@ -215,23 +216,23 @@ public:
     HostInitializationSeamGuard(
         HostInitializationPoint destroyPoint,
         unsigned faultMask =
-            wxWinUITopLevelHost::TestInitializationFault_None)
+            wxWinUIHostContentTestAccess::InitializationFault_None)
     {
         gs_hostInitializationDestroyPoint = destroyPoint;
         gs_hostInitializationHookCalled = false;
         gs_hostInitializationPolicyObserved = false;
         gs_hostInitializationPoliciesBefore =
             wxWinUITitleBarGetLivePolicyCountForTesting();
-        wxWinUITopLevelHost::TestFailInitialization(faultMask);
-        wxWinUITopLevelHost::TestSetInitializationHook(
+        wxWinUIHostContentTestAccess::FailInitialization(faultMask);
+        wxWinUIHostContentTestAccess::SetInitializationHook(
             &DestroyAndPumpDuringHostInitialization);
     }
 
     ~HostInitializationSeamGuard()
     {
-        wxWinUITopLevelHost::TestSetInitializationHook(nullptr);
-        wxWinUITopLevelHost::TestFailInitialization(
-            wxWinUITopLevelHost::TestInitializationFault_None);
+        wxWinUIHostContentTestAccess::SetInitializationHook(nullptr);
+        wxWinUIHostContentTestAccess::FailInitialization(
+            wxWinUIHostContentTestAccess::InitializationFault_None);
     }
 };
 
@@ -723,7 +724,7 @@ TEST_CASE("WinUITitleBar::DestroyAndYieldFromHostInitLogRollsBack",
     {
         HostInitializationSeamGuard seam(
             HostInitializationPoint::BeforeExceptionLog,
-            wxWinUITopLevelHost::TestInitializationFault_AfterTLWBindings);
+            wxWinUIHostContentTestAccess::InitializationFault_AfterTLWBindings);
         CHECK(wxWinUITopLevelHost::ForWindow(frame, true) == nullptr);
         CHECK(gs_hostInitializationHookCalled);
         CHECK(gs_hostInitializationPolicyObserved);

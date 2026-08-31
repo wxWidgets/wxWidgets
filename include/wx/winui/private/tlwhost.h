@@ -246,41 +246,12 @@ public:
     // area (i.e. the area the island covers).
     const wxRect& GetRectInTLW() const { return m_rectPx; }
 
-    // Deterministic transaction introspection. These values are deliberately
-    // read-only: tests use them to prove that a nested pass superseded an
-    // outer one and that a bounded observer retry eventually quiesced.
-    unsigned long long GetSyncEpochForTest() const { return m_syncEpoch; }
-    bool IsContentTransactionInProgressForTest() const
-        { return m_contentTransactionInProgress; }
-    bool IsToolTipPropertyObserverPendingForTest() const
-        { return m_toolTipPropertyObserverPending; }
-    unsigned GetToolTipPropertyObserverRetryFailuresForTest() const
-        { return m_toolTipPropertyObserverRetryFailures; }
     bool IsContentLoaded() const
         { return m_contentLoaded; }
-    bool IsContentLoadedForTest() const
-        { return IsContentLoaded(); }
-    void SetContentLoadedForTest(bool loaded)
-        { m_contentLoaded = loaded; }
-    bool IsContentLoadedObserverPendingForTest() const
-        { return m_contentLoadedObserverPending; }
-    bool HasContentLoadedObserverForTest() const
-        { return m_contentLoadedState != nullptr; }
-    winrt::Microsoft::UI::Xaml::UIElement
-    GetAutomationNameStyleObservedContentForTest() const
-        { return m_automationNameStyleObservedContent; }
-    unsigned GetContentLoadedObserverRetryFailuresForTest() const
-        { return m_contentLoadedObserverRetryFailures; }
-    std::weak_ptr<wxWinUISlotLifetime> GetLifetimeForTest() const
-        { return m_lifetime; }
-    void TestInvokeContentLoadedObserver();
-    void SetLastToolTipDPIForTest(int dpi)
-        { m_lastToolTipDPI = dpi; }
-    std::uintptr_t GetPhysicalDisconnectGateIdentityForTest() const
-        { return reinterpret_cast<std::uintptr_t>(m_disconnectGate.get()); }
 
 private:
     friend class wxWinUITopLevelHost;
+    friend class wxWinUISlotTestAccess;
     friend class wxWinUIHostInputTestAccess;
     friend class wxWinUIVisualCoordinates;
 
@@ -1102,9 +1073,6 @@ public:
     static unsigned GetLiveSlotCount();
     static unsigned GetPendingPhysicalDisconnectGateCountForTest();
     static unsigned GetPendingTLWTerminalRetirementCountForTest();
-    void ShutdownForTest() { Shutdown(); }
-    std::weak_ptr<wxWinUIHostLifetime> GetLifetimeForTest() const
-        { return m_hostLifetime; }
 
     // Re-arm physical host deletion for every logically shut down host once
     // the process-wide WinUI callback transaction has fully unwound.
@@ -1115,11 +1083,6 @@ public:
     // dispatch has drained, this must come back down to what it was.
     static unsigned GetLiveSlotLifetimeCount()
         { return wxWinUISlotLifetime::GetLiveCount(); }
-
-    // Same proof for the shared per-slot FrameworkElement.Loaded observer:
-    // retaining application content after host shutdown must not retain a
-    // callback state capable of reaching wx.
-    static unsigned GetLiveContentLoadedObserverCountForTest();
 
     // Cumulative balance of the per-slot XAML handler registrations
     // (AddHandler + GotFocus/LostFocus): every add must eventually be
@@ -1132,8 +1095,6 @@ public:
     // harness too: count CallAfter posts without altering coalescing.
     // Under Freeze() it stays flat; thawing schedules one catch-up.
     static unsigned GetFlushScheduleCount();
-    unsigned GetOwnFlushRunCountForTest() const
-        { return m_flushRunsForTest; }
 
     // Number of sibling groups for which the real HWND order asks a native
     // surface to overlap above XAML while the one shared bridge necessarily
@@ -1148,83 +1109,6 @@ public:
     static unsigned GetRootHandlerAddCount();
     static unsigned GetRootHandlerRevokeCount();
     static unsigned GetLiveSubclassContextCount();
-
-    // Deterministic seams for host construction and the provisional first
-    // OLE acquisition. The hook is invoked while an OperationGuard is held,
-    // so a test may destroy the TLW or mutate presentation without allowing
-    // the host allocation to disappear from underneath the transaction.
-    enum class InitializationHookPointForTest
-    {
-        AfterProvisionalPublication,
-        AfterSourceInitialization,
-        AfterRootRouter,
-        AfterTitleBarPolicy,
-        AfterTLWBindings,
-        AfterDropBrokerReadyBeforeCommit,
-        BeforeExceptionLog
-    };
-    using InitializationHookForTest =
-        void (*)(wxWindow *, InitializationHookPointForTest);
-    enum
-    {
-        TestInitializationFault_None = 0,
-        TestInitializationFault_AfterTLWBindings = 1
-    };
-    static void TestSetInitializationHook(
-        InitializationHookForTest callback);
-    static void TestFailInitialization(unsigned mask);
-
-    // Fault injection for the registration-rollback tests: the Nth handler
-    // subscription performed by the next BindSlotEvents() throws.  0 (the
-    // default) disables the injection, and it disarms itself after firing,
-    // so a forgotten reset cannot poison later registrations.
-    static void TestFailHandlerAdd(unsigned nth);
-
-    // Fault injection for the content-swap transaction tests: a mask of
-    // TestContentFault_* bits, each consumed by its phase when it fires.
-    enum
-    {
-        TestContentFault_Detach = 1,
-        TestContentFault_Install = 2,
-        TestContentFault_Restore = 4,
-        TestContentFault_Read = 8,  // TryGetCarrierContent() read failure
-        TestContentFault_ToolTipObserver = 16,
-        TestContentFault_AutomationNameTransferRead = 32,
-        TestContentFault_AutomationNameRestoreRead = 64
-    };
-    static void TestFailContentSwap(unsigned mask);
-    // Fail the next N tooltip-property observer registrations. Unlike the
-    // phase bit above this is a countdown, allowing deterministic coverage
-    // of multiple deferred retries before a later success.
-    static void TestFailToolTipObserverAdds(unsigned count);
-    static void TestFailContentLoadedObserverAdds(unsigned count);
-    static void TestFailInputPointerSourceSet(unsigned nth);
-
-    // One-shot seam at the actual synchronous reentrancy boundary of slot
-    // publication. XAML Loaded is intentionally not used by the lifecycle
-    // tests: a newly attached carrier can remain Collapsed until the next
-    // coalesced layout flush, making Loaded asynchronous and non-portable.
-    static void TestOnNextSlotAttached(
-        std::function<void (wxWindow *)> callback);
-    // One-shot seam after the requested element has been written to the
-    // carrier but before SetContent() publishes it as the slot model. It
-    // models a synchronous Loaded/property callback entering FlushSync().
-    static void TestOnNextContentCarrierSet(
-        std::function<void (wxWindow *)> callback);
-    // One-shot seam immediately after SetContent() publishes its transaction
-    // flag and before the old element is detached. It lets tests drive the
-    // real generation-bound Loaded callback and then choose commit/rollback
-    // without depending on asynchronous XAML layout timing.
-    static void TestOnNextContentTransactionStarted(
-        std::function<void (wxWindow *)> callback);
-    // One-shot seam immediately after ResolveWindowAtScreenPoint() reads a
-    // snapshotted slot's IsHitTestVisible value. It lets tests destroy that
-    // exact slot at the first callback boundary and prove no raw m_slots
-    // iterator or wxWinUISlot pointer survives the getter.
-    static void TestOnNextWindowAtPointSlotStateRead(
-        std::function<void (wxWindow *)> callback);
-
-
 
     // Cumulative count of per-slot cursor applications: proves the
     // wxWindow::SetCursor() plumbing reaches the slot seam.
@@ -1259,6 +1143,7 @@ public:
 
 private:
     friend class wxWinUISlot;
+    friend class wxWinUIHostContentTestAccess;
     friend class wxWinUIHostInputTestAccess;
     friend class wxWinUIHostFocusTestAccess;
     friend class wxWinUIHostResizeTestAccess;
@@ -1301,9 +1186,6 @@ private:
     bool CaptureInitializationIdentity();
     bool HasInitializationContext() const;
     bool IsReadyForLookup() const;
-    void InvokeInitializationHookForTest(
-        InitializationHookPointForTest point);
-    void MaybeThrowInitializationFault(unsigned fault);
     bool Initialize();
     bool FinishInitializationAfterDropBroker();
     void ResumeDeferredInitialization(std::uint64_t pendingId);
@@ -1822,7 +1704,7 @@ private:
     // Per-host companion to the process-wide diagnostic counter above.
     // Tests which toggle a global policy must distinguish this frozen host
     // from unrelated live hosts legitimately flushed by the same operation.
-    unsigned m_flushRunsForTest = 0;
+    unsigned m_flushRuns = 0;
     // A flush ran while the TLW was frozen: one catch-up flush is owed at
     // thaw time (see wxWinUITLWHostNotifyThaw), instead of rescheduling in
     // a loop for the whole freeze.

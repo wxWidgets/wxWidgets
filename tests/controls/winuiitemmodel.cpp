@@ -30,6 +30,7 @@
     #include "keyboard-test-access.h"
     #include "wx/winui/private/textpeer.h"
     #include "wx/winui/private/tlwhost.h"
+    #include "host-content-test-access.h"
 #endif
 #if wxUSE_BITMAPCOMBOBOX
     #include "wx/bmpcbox.h"
@@ -1285,7 +1286,7 @@ TEST_CASE("wxWinUI ComboBox shutdown seal permanently rejects Popup",
     wxWinUITopLevelHost * const host =
         wxWinUITopLevelHost::FindSlotOwner(&combo);
     REQUIRE(host != nullptr);
-    host->ShutdownForTest();
+    wxWinUIHostContentTestAccess::Shutdown(*host);
 
     combo.Popup();
     CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));

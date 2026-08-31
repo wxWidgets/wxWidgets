@@ -24,6 +24,7 @@
 #include "wx/weakref.h"
 #include "wx/winui/private/menutest.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 
 #include <winrt/base.h>
 
@@ -69,7 +70,7 @@ public:
         if ( !m_active )
             return;
 
-        wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+        wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
         m_active = false;
     }
 
@@ -238,11 +239,11 @@ TEST_CASE("WinUIMenu::ReentrantRebuildHasPersistentBudgetAndRearms",
                 0, wxString::Format("&Storm %u", callbacks));
             // Deliberately never converge. The production transaction, not
             // this adversarial hook, must stop the event-loop feedback.
-            wxWinUITopLevelHost::TestOnNextContentCarrierSet(storm);
+            wxWinUIHostContentTestAccess::OnNextContentCarrierSet(storm);
         };
 
     ContentCarrierHookReset resetHook;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(storm);
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(storm);
     fixture.menuBar->SetMenuLabel(0, "&Outer");
 
     // One public mutation consumes one bounded synchronous wave first.
@@ -299,11 +300,11 @@ TEST_CASE("WinUIMenu::StaleBuildContinuationCannotOverwriteNewEpoch",
             ++callbacks;
             fixture.menuBar->SetMenuLabel(
                 0, wxString::Format("&Old %u", callbacks));
-            wxWinUITopLevelHost::TestOnNextContentCarrierSet(storm);
+            wxWinUIHostContentTestAccess::OnNextContentCarrierSet(storm);
         };
 
     ContentCarrierHookReset resetStorm;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(storm);
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(storm);
     fixture.menuBar->SetMenuLabel(0, "&Outer");
     REQUIRE(callbacks == 8);
 
@@ -313,7 +314,7 @@ TEST_CASE("WinUIMenu::StaleBuildContinuationCannotOverwriteNewEpoch",
 
     unsigned staleWrites = 0;
     ContentCarrierHookReset resetProbe;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             if ( window == fixture.menuBarWindow )
@@ -342,7 +343,7 @@ TEST_CASE("WinUIMenu::DestroyChildDuringCreateIsTransactional",
 
     bool hookRan = false;
     ContentCarrierHookReset resetHook;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             if ( wxGetTopLevelParent(window) == frame )
@@ -376,7 +377,7 @@ TEST_CASE("WinUIMenu::DestroyFrameDuringCreateIsTransactional",
 
     bool hookRan = false;
     ContentCarrierHookReset resetHook;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             if ( wxGetTopLevelParent(window) == frame )

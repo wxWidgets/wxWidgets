@@ -228,6 +228,8 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/winui.cpp"
             "${wxSOURCE_DIR}/src/msw/window.cpp"
             "${wxSOURCE_DIR}/src/winui/ctrlhost.cpp"
+            "${wxSOURCE_DIR}/src/winui/tlwhost.cpp"
+            "${wxSOURCE_DIR}/src/winui/hosttooltip.cpp"
             "${wxSOURCE_DIR}/src/winui/dropbroker.cpp"
             "${wxSOURCE_DIR}/src/winui/hostfocus.cpp"
             "${wxSOURCE_DIR}/src/winui/hostinput.cpp"

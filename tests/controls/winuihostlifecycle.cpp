@@ -53,6 +53,7 @@
 #endif
 
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-input-test-access.h"
 #include "host-geometry-test-access.h"
@@ -848,7 +849,7 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
         wxWinUIHostUIATestAccess::
             GetLiveAutomationNameStyleObserverCount();
     const unsigned loadedObserversBefore =
-        wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
+        wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount();
 
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "shutdown-wx-name");
@@ -873,7 +874,7 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
     CHECK(wxWinUIHostUIATestAccess::
               GetLiveAutomationNameStyleObserverCount() ==
           styleObserversBefore + 1);
-    CHECK(wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest() ==
+    CHECK(wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount() ==
           loadedObserversBefore + 1);
     frame->SetToolTip("shutdown-wx-tip");
 #if wxUSE_ACCESSIBILITY
@@ -938,7 +939,7 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
     CHECK(wxWinUIHostUIATestAccess::
               GetLiveAutomationNameStyleObserverCount() ==
           styleObserversBefore);
-    CHECK(wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest() ==
+    CHECK(wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount() ==
           loadedObserversBefore);
 }
 
@@ -1027,7 +1028,7 @@ TEST_CASE("HostLifecycle::PopupGateRejectsCrossTLWReparentWithoutMutation",
     CHECK(wxWinUITopLevelHost::FindSlotOwner(button) == sourceHost);
     CHECK(sourceHost->FindSlot(button) == sourceSlot);
     CHECK(sourceSlot->GetContent() == content);
-    CHECK(sourceSlot->GetPhysicalDisconnectGateIdentityForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetPhysicalDisconnectGateIdentity(*sourceSlot) ==
           gateIdentity);
 
     // The caller closes the popup, its exact causal gate completes, and an
@@ -1043,7 +1044,7 @@ TEST_CASE("HostLifecycle::PopupGateRejectsCrossTLWReparentWithoutMutation",
         destinationHost->FindSlot(button);
     REQUIRE(destinationSlot != nullptr);
     CHECK(destinationSlot->GetContent() == content);
-    CHECK(destinationSlot->GetPhysicalDisconnectGateIdentityForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetPhysicalDisconnectGateIdentity(*destinationSlot) ==
           gateIdentity);
     CHECK(sourceHost->FindSlot(button) == nullptr);
 
@@ -1097,8 +1098,8 @@ TEST_CASE("HostLifecycle::PopupOpenedBySetParentCallbackRollsBackExactly",
     REQUIRE(destinationHost != nullptr);
     REQUIRE(destinationHost != sourceHost);
     REQUIRE(destinationHost->FindSlot(button) != nullptr);
-    CHECK(destinationHost->FindSlot(button)->
-              GetPhysicalDisconnectGateIdentityForTest() ==
+    CHECK(wxWinUISlotTestAccess::
+              GetPhysicalDisconnectGateIdentity(*destinationHost->FindSlot(button)) ==
           reinterpret_cast<std::uintptr_t>(gate.get()));
 
     destination->Destroy();
@@ -1181,7 +1182,7 @@ TEST_CASE("HostLifecycle::TLWShutdownCollectsLivePopupGate",
 
     // Child destruction has not run: Shutdown must discover the gate in the
     // live slot table and must not charge the deferred-slot counter for it.
-    host->ShutdownForTest();
+    wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUITopLevelHost::FindSlotOwner(child) == nullptr);
     CHECK(wxWinUITopLevelHost::
               GetPendingPhysicalDisconnectGateCountForTest() == pending0);
@@ -1221,7 +1222,7 @@ TEST_CASE("HostLifecycle::TLWShutdownConsumesSealedNoPopupTickets",
         gates.push_back(gate);
     }
 
-    host->ShutdownForTest();
+    wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUITopLevelHost::
               GetPendingTLWTerminalRetirementCountForTest() ==
           terminals0);
@@ -1265,7 +1266,7 @@ TEST_CASE("HostLifecycle::LateOpenAtSealedSweepUsesExistingTerminalLedger",
     REQUIRE(wxWinUIOpenPhysicalDisconnectGateAtSealedCompletionForTesting(
         gate));
 
-    host->ShutdownForTest();
+    wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(gate));
     CHECK(wxWinUITopLevelHost::
               GetPendingTLWTerminalRetirementCountForTest() ==
@@ -1306,7 +1307,7 @@ TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
     REQUIRE(wxWinUIOpenPhysicalDisconnectGateBeforeSourceCloseForTesting(
         gate));
 
-    host->ShutdownForTest();
+    wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(gate));
     CHECK(wxWinUITopLevelHost::
               GetPendingTLWTerminalRetirementCountForTest() ==
@@ -1351,7 +1352,7 @@ TEST_CASE("HostLifecycle::DegradedLivePeerPoisonsWithoutDetach",
     CHECK(wxWinUITopLevelHost::FindSlotOwner(child) == host);
     CHECK(host->FindSlot(child) == slot);
     CHECK(slot->GetContent() == content);
-    CHECK(slot->GetPhysicalDisconnectGateIdentityForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetPhysicalDisconnectGateIdentity(*slot) ==
           reinterpret_cast<std::uintptr_t>(gate.get()));
 
     REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
@@ -1430,7 +1431,7 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
 
     bool reentered = false;
     bool nestedSucceeded = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != button )
@@ -1440,7 +1441,7 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
             nestedSucceeded = button->Reparent(frameC);
         });
     REQUIRE(button->Reparent(frameB));
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     DrainToQuiescence();
 
     REQUIRE(reentered);
@@ -1547,7 +1548,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 
     // Queue a logical request while the peer is unloaded. No logical focus
     // owner exists yet and the native focus must remain on the holder.
-    slotA->SetContentLoadedForTest(false);
+    wxWinUISlotTestAccess::SetContentLoaded(*slotA, false);
     hostA->FocusSlot(target);
 
     CHECK(hostA->GetFocusOwner() != target);
@@ -1565,11 +1566,11 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
     wxScopeGuard hookGuard = wxMakeGuard(
         []()
         {
-            wxWinUITopLevelHost::TestOnNextSlotAttached({});
+            wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         });
     wxUnusedVar(hookGuard);
 
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attachedB)
         {
             if ( attachedB != target )
@@ -1582,7 +1583,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 
             wxWinUISlot * const slotB = hostB->FindSlot(target);
             REQUIRE(slotB != nullptr);
-            slotB->SetContentLoadedForTest(false);
+            wxWinUISlotTestAccess::SetContentLoaded(*slotB, false);
 
             // A to B owns exactly one transport ticket.
             CHECK(wxWinUIHostFocusTestAccess::
@@ -1590,7 +1591,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
             CHECK(hostB->GetFocusOwner() != target);
 
             // The attach hook is one-shot; arm it again for B to C.
-            wxWinUITopLevelHost::TestOnNextSlotAttached(
+            wxWinUIHostContentTestAccess::OnNextSlotAttached(
                 [&](wxWindow *attachedC)
                 {
                     if ( attachedC != target )
@@ -1604,7 +1605,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 
                     wxWinUISlot * const slotC = hostC->FindSlot(target);
                     REQUIRE(slotC != nullptr);
-                    slotC->SetContentLoadedForTest(false);
+                    wxWinUISlotTestAccess::SetContentLoaded(*slotC, false);
 
                     // The second attach forwards the same ticket.
                     CHECK(wxWinUIHostFocusTestAccess::
@@ -1619,7 +1620,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
     // Do not drain between the deferred request and completion of the
     // re-entrant A to B to C topology transaction.
     const bool outerSucceeded = target->Reparent(frameB);
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
     REQUIRE(outerSucceeded);
     REQUIRE(sawAttachB);
@@ -1639,7 +1640,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 
     wxWinUISlot * const slotC = hostC->FindSlot(target);
     REQUIRE(slotC != nullptr);
-    REQUIRE_FALSE(slotC->IsContentLoadedForTest());
+    REQUIRE_FALSE(wxWinUISlotTestAccess::IsContentLoaded(*slotC));
 
     // The migration ticket is gone, but C still owns the original deferred
     // request. It must become effective without another FocusSlot() call.
@@ -1652,7 +1653,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
     CHECK(targetKills == 0);
     CHECK(holderKills == 0);
 
-    slotC->SetContentLoadedForTest(true);
+    wxWinUISlotTestAccess::SetContentLoaded(*slotC, true);
     hostC->FlushSync();
     DrainToQuiescence();
 
@@ -1730,7 +1731,7 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursNativeRedirect",
     const HWND redirectHwnd = GetHwndOf(redirect);
     REQUIRE(redirectHwnd != nullptr);
     bool hookRan = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached == migrant )
@@ -1740,7 +1741,7 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursNativeRedirect",
             }
         });
     REQUIRE(migrant->Reparent(frameB));
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     DrainToQuiescence();
 
     REQUIRE(hookRan);
@@ -1811,7 +1812,7 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursGettingFocusRedirect",
     bool gettingFocusRan = false;
     MUXC::Button destinationPeer{ nullptr };
     winrt::event_token gettingFocusToken{};
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != migrant )
@@ -1835,7 +1836,7 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursGettingFocusRedirect",
                 });
         });
     REQUIRE(migrant->Reparent(frameB));
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     DrainToQuiescence();
 
     if ( destinationPeer )
@@ -1970,7 +1971,7 @@ TEST_CASE("HostState::FrozenTooltipPolicyIsSynchronous",
     REQUIRE(authoredObject.IsOpen());
 
     const wxRect geometryBefore = slot->GetRectInTLW();
-    const unsigned runsBefore = host->GetOwnFlushRunCountForTest();
+    const unsigned runsBefore = wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host);
     frame->Freeze();
     xamlHost->Move(70, 35);
     CHECK(slot->GetRectInTLW() == geometryBefore);
@@ -2002,13 +2003,13 @@ TEST_CASE("HostState::FrozenTooltipPolicyIsSynchronous",
     REQUIRE(deferredWrite->suppressedInline);
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
     CHECK(slot->GetRectInTLW() == geometryBefore);
-    CHECK(host->GetOwnFlushRunCountForTest() == runsBefore);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == runsBefore);
 
     wxToolTip::Enable(true);
     CHECK(MUXC::ToolTipService::GetToolTip(content) ==
           closedReplacement);
     CHECK(slot->GetRectInTLW() == geometryBefore);
-    CHECK(host->GetOwnFlushRunCountForTest() == runsBefore);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == runsBefore);
 
     // The detach setter itself is re-entrant too. A replacement published
     // from its property callback becomes the exact new restoration baseline
@@ -2038,19 +2039,19 @@ TEST_CASE("HostState::FrozenTooltipPolicyIsSynchronous",
     REQUIRE(detachReplaced);
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
     CHECK(slot->GetRectInTLW() == geometryBefore);
-    CHECK(host->GetOwnFlushRunCountForTest() == runsBefore);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == runsBefore);
 
     wxToolTip::Enable(true);
     CHECK(MUXC::ToolTipService::GetToolTip(content) ==
           detachReplacement);
     CHECK(slot->GetRectInTLW() == geometryBefore);
-    CHECK(host->GetOwnFlushRunCountForTest() == runsBefore);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == runsBefore);
 
     frame->Thaw();
     DrainToQuiescence();
     CHECK(slot->GetRectInTLW().x == 70);
     CHECK(slot->GetRectInTLW().y == 35);
-    CHECK(host->GetOwnFlushRunCountForTest() == runsBefore + 1);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == runsBefore + 1);
 
     frame->Destroy();
     DrainDispatch();
@@ -2538,7 +2539,7 @@ TEST_CASE("HostLifecycle::ReparentDeliversOrderedDPITransitions",
     wxButton *lateChild = nullptr;
     unsigned lateChildEvents = 0;
     bool lateChildCreated = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *window)
         {
             if ( window != anchor )
@@ -2556,7 +2557,7 @@ TEST_CASE("HostLifecycle::ReparentDeliversOrderedDPITransitions",
                 });
         });
     REQUIRE(lateRoot->Reparent(frame144));
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     REQUIRE(lateChildCreated);
     REQUIRE(lateChild != nullptr);
     CHECK(lateChildEvents == 0);
@@ -3276,7 +3277,7 @@ TEST_CASE("HostState::TooltipPolicySpansIndependentXamlRoots",
 
     // Preserve the physical-pixel contract across a monitor-DPI resync even
     // when text and creation-time width are unchanged.
-    slotA->SetLastToolTipDPIForTest(dpiA + 1);
+    wxWinUISlotTestAccess::SetLastToolTipDPI(*slotA, dpiA + 1);
     wxWinUITLWHostNotifySlotState(buttonA);
     hostA->FlushSync();
     const auto dpiResyncedObject =
@@ -4616,7 +4617,7 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
     {
         ~PolicyReset()
         {
-            wxWinUITopLevelHost::TestFailToolTipObserverAdds(0);
+            wxWinUIHostContentTestAccess::FailToolTipObserverAdds(0);
             wxToolTip::Enable(true);
         }
     } reset;
@@ -4628,7 +4629,7 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
     wxFrame * const freshFrame =
         new wxFrame(nullptr, wxID_ANY, "tooltip-observer-fresh-slot");
     wxWinUIXamlHost * const freshXamlHost = new wxWinUIXamlHost(freshFrame);
-    wxWinUITopLevelHost::TestFailToolTipObserverAdds(1);
+    wxWinUIHostContentTestAccess::FailToolTipObserverAdds(1);
     REQUIRE(freshXamlHost->SetContentFromXaml(
         "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/"
         "presentation\"/>"));
@@ -4637,10 +4638,10 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
     REQUIRE(freshHost != nullptr);
     wxWinUISlot * const freshSlot = freshHost->FindSlot(freshXamlHost);
     REQUIRE(freshSlot != nullptr);
-    CHECK(freshSlot->IsToolTipPropertyObserverPendingForTest());
+    CHECK(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*freshSlot));
     DrainToQuiescence();
-    CHECK_FALSE(freshSlot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(freshSlot->GetToolTipPropertyObserverRetryFailuresForTest() == 0);
+    CHECK_FALSE(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*freshSlot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*freshSlot) == 0);
     freshFrame->Destroy();
     DrainDispatch();
 
@@ -4660,17 +4661,17 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
     REQUIRE(slot != nullptr);
 
     const MUXC::Border replacement;
-    wxWinUITopLevelHost::TestFailToolTipObserverAdds(2);
+    wxWinUIHostContentTestAccess::FailToolTipObserverAdds(2);
 
     // Content placement remains truthful when the auxiliary observer fails.
     // Two coalesced deferred attempts are enough to consume the second fault
     // and then install successfully; no explicit same-content call is needed.
     CHECK(slot->SetContent(replacement));
     CHECK(slot->GetContent() == replacement);
-    CHECK(slot->IsToolTipPropertyObserverPendingForTest());
+    CHECK(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
     DrainToQuiescence();
-    CHECK_FALSE(slot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(slot->GetToolTipPropertyObserverRetryFailuresForTest() == 0);
+    CHECK_FALSE(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*slot) == 0);
 
     wxToolTip::Enable(false);
     MUXC::ToolTip authoredWhileDisabled;
@@ -4697,17 +4698,17 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
         frozenReplacement, frozenInitialBaseline);
     DrainToQuiescence();
     const unsigned frozenRuns =
-        host->GetOwnFlushRunCountForTest();
+        wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host);
     frame->Freeze();
     wxToolTip::Enable(false);
-    wxWinUITopLevelHost::TestFailToolTipObserverAdds(2);
+    wxWinUIHostContentTestAccess::FailToolTipObserverAdds(2);
 
     CHECK(slot->SetContent(frozenReplacement));
     CHECK(slot->GetContent() == frozenReplacement);
-    CHECK(slot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(slot->GetToolTipPropertyObserverRetryFailuresForTest() == 1);
+    CHECK(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*slot) == 1);
     CHECK(MUXC::ToolTipService::GetToolTip(frozenReplacement) == nullptr);
-    CHECK(host->GetOwnFlushRunCountForTest() == frozenRuns);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == frozenRuns);
 
     MUXC::ToolTip frozenSameContentBaseline;
     frozenSameContentBaseline.Content(
@@ -4719,22 +4720,22 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
 
     CHECK_FALSE(slot->SetContent(frozenReplacement));
     CHECK(slot->GetContent() == frozenReplacement);
-    CHECK(slot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(slot->GetToolTipPropertyObserverRetryFailuresForTest() == 2);
+    CHECK(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*slot) == 2);
     CHECK(MUXC::ToolTipService::GetToolTip(frozenReplacement) == nullptr);
-    CHECK(host->GetOwnFlushRunCountForTest() == frozenRuns);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == frozenRuns);
 
-    wxWinUITopLevelHost::TestFailToolTipObserverAdds(0);
+    wxWinUIHostContentTestAccess::FailToolTipObserverAdds(0);
     CHECK(slot->SetContent(frozenReplacement));
-    CHECK_FALSE(slot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(slot->GetToolTipPropertyObserverRetryFailuresForTest() == 0);
+    CHECK_FALSE(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*slot) == 0);
     CHECK(MUXC::ToolTipService::GetToolTip(frozenReplacement) == nullptr);
-    CHECK(host->GetOwnFlushRunCountForTest() == frozenRuns);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == frozenRuns);
 
     wxToolTip::Enable(true);
     CHECK(MUXC::ToolTipService::GetToolTip(frozenReplacement) ==
           frozenSameContentBaseline);
-    CHECK(host->GetOwnFlushRunCountForTest() == frozenRuns);
+    CHECK(wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*host) == frozenRuns);
     frame->Thaw();
     DrainToQuiescence();
 
@@ -4743,20 +4744,20 @@ TEST_CASE("HostState::TooltipObserverRegistrationRetry",
     // unbounded self-retry storm; a later explicit same-content call can
     // recover once the fault is removed.
     const MUXC::Border boundedReplacement;
-    wxWinUITopLevelHost::TestFailToolTipObserverAdds(20);
+    wxWinUIHostContentTestAccess::FailToolTipObserverAdds(20);
     const unsigned schedulesBefore =
         wxWinUITopLevelHost::GetFlushScheduleCount();
     CHECK(slot->SetContent(boundedReplacement));
     DrainToQuiescence();
-    CHECK(slot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(slot->GetToolTipPropertyObserverRetryFailuresForTest() == 3);
+    CHECK(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*slot) == 3);
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() -
               schedulesBefore <= 4);
 
-    wxWinUITopLevelHost::TestFailToolTipObserverAdds(0);
+    wxWinUIHostContentTestAccess::FailToolTipObserverAdds(0);
     CHECK(slot->SetContent(boundedReplacement));
-    CHECK_FALSE(slot->IsToolTipPropertyObserverPendingForTest());
-    CHECK(slot->GetToolTipPropertyObserverRetryFailuresForTest() == 0);
+    CHECK_FALSE(wxWinUISlotTestAccess::IsToolTipPropertyObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetToolTipPropertyObserverRetryFailures(*slot) == 0);
 
     wxToolTip::Enable(false);
     MUXC::ToolTip afterRecovery;
@@ -5074,12 +5075,12 @@ TEST_CASE("HostState::ContentSwapFlushSeesOnlyPublishedModel",
     MUXA::AutomationProperties::SetHelpText(contentB, L"authored-b");
 
     bool seamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
             seamRan = true;
-            CHECK(slot->IsContentTransactionInProgressForTest());
+            CHECK(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
             CHECK(slot->GetContent() == contentA);
             winrt::Microsoft::UI::Xaml::UIElement carrier{ nullptr };
             REQUIRE(slot->TryGetCarrierContent(carrier));
@@ -5089,9 +5090,9 @@ TEST_CASE("HostState::ContentSwapFlushSeesOnlyPublishedModel",
         });
 
     REQUIRE(slot->SetContent(contentB));
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
     CHECK(seamRan);
-    CHECK_FALSE(slot->IsContentTransactionInProgressForTest());
+    CHECK_FALSE(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
     CHECK(slot->GetContent() == contentB);
     CHECK(MUXC::ToolTipService::GetToolTip(contentA) == baselineA);
     CHECK(MUXA::AutomationProperties::GetHelpText(contentA) ==
@@ -5132,55 +5133,55 @@ TEST_CASE("HostState::LoadedNotificationIsContentTransactional",
     const MUXC::Border contentA;
     wxWinUISlot * const slot = host->RegisterSlot(probe, contentA);
     REQUIRE(slot != nullptr);
-    REQUIRE(slot->HasContentLoadedObserverForTest());
-    slot->SetContentLoadedForTest(false);
-    REQUIRE_FALSE(slot->IsContentLoadedForTest());
+    REQUIRE(wxWinUISlotTestAccess::HasContentLoadedObserver(*slot));
+    wxWinUISlotTestAccess::SetContentLoaded(*slot, false);
+    REQUIRE_FALSE(wxWinUISlotTestAccess::IsContentLoaded(*slot));
 
     // Force the install of B to fail after A was detached. The real observer
     // callback core fires while the transaction still publishes A; it must be
     // latched, not applied to the A-model/B-carrier intermediate state, and
     // then transferred to the restored generation only.
     bool rollbackSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted(
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted(
         [&](wxWindow *window)
         {
             REQUIRE(window == probe);
             rollbackSeamRan = true;
-            REQUIRE(slot->IsContentTransactionInProgressForTest());
-            slot->TestInvokeContentLoadedObserver();
-            CHECK_FALSE(slot->IsContentLoadedForTest());
+            REQUIRE(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
+            wxWinUISlotTestAccess::InvokeContentLoadedObserver(*slot);
+            CHECK_FALSE(wxWinUISlotTestAccess::IsContentLoaded(*slot));
         });
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(slot->SetContent(MUXC::Button()));
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted({});
-    wxWinUITopLevelHost::TestFailContentSwap(0);
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted({});
+    wxWinUIHostContentTestAccess::FailContentSwap(0);
 
     REQUIRE(rollbackSeamRan);
-    CHECK_FALSE(slot->IsContentTransactionInProgressForTest());
+    CHECK_FALSE(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
     CHECK(slot->GetContent() == contentA);
-    CHECK(slot->IsContentLoadedForTest());
-    CHECK(slot->HasContentLoadedObserverForTest());
+    CHECK(wxWinUISlotTestAccess::IsContentLoaded(*slot));
+    CHECK(wxWinUISlotTestAccess::HasContentLoadedObserver(*slot));
 
     // A successful commit must discard the same old-generation latch. Null
     // content is used so no legitimate Loaded edge for B can obscure the
     // postcondition.
     bool commitSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted(
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted(
         [&](wxWindow *window)
         {
             REQUIRE(window == probe);
             commitSeamRan = true;
-            slot->TestInvokeContentLoadedObserver();
+            wxWinUISlotTestAccess::InvokeContentLoadedObserver(*slot);
         });
     REQUIRE(slot->SetContent(nullptr));
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted({});
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted({});
 
     REQUIRE(commitSeamRan);
-    CHECK_FALSE(slot->IsContentTransactionInProgressForTest());
+    CHECK_FALSE(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
     CHECK(slot->GetContent() == nullptr);
-    CHECK_FALSE(slot->IsContentLoadedForTest());
-    CHECK_FALSE(slot->HasContentLoadedObserverForTest());
+    CHECK_FALSE(wxWinUISlotTestAccess::IsContentLoaded(*slot));
+    CHECK_FALSE(wxWinUISlotTestAccess::HasContentLoadedObserver(*slot));
 
     frame->Destroy();
     DrainDispatch();
@@ -5195,7 +5196,7 @@ TEST_CASE("HostLifecycle::LoadedObserverRetryIsBounded",
     {
         ~FaultReset()
         {
-            wxWinUITopLevelHost::TestFailContentLoadedObserverAdds(0);
+            wxWinUIHostContentTestAccess::FailContentLoadedObserverAdds(0);
         }
     } reset;
 
@@ -5211,26 +5212,26 @@ TEST_CASE("HostLifecycle::LoadedObserverRetryIsBounded",
         wxWinUITopLevelHost::ForWindow(probe, true);
     REQUIRE(host != nullptr);
 
-    wxWinUITopLevelHost::TestFailContentLoadedObserverAdds(20);
+    wxWinUIHostContentTestAccess::FailContentLoadedObserverAdds(20);
     const MUXC::Border content;
     wxWinUISlot * const slot = host->RegisterSlot(probe, content);
     REQUIRE(slot != nullptr);
-    REQUIRE(slot->IsContentLoadedObserverPendingForTest());
+    REQUIRE(wxWinUISlotTestAccess::IsContentLoadedObserverPending(*slot));
 
     DrainToQuiescence();
-    CHECK(slot->IsContentLoadedObserverPendingForTest());
-    CHECK(slot->GetContentLoadedObserverRetryFailuresForTest() == 3);
-    CHECK_FALSE(slot->HasContentLoadedObserverForTest());
+    CHECK(wxWinUISlotTestAccess::IsContentLoadedObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetContentLoadedObserverRetryFailures(*slot) == 3);
+    CHECK_FALSE(wxWinUISlotTestAccess::HasContentLoadedObserver(*slot));
     // Initial slot synchronization plus the two autonomous retries remain a
     // small constant; a permanent HRESULT never creates a CallAfter storm.
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() -
               schedulesBefore <= 4);
 
-    wxWinUITopLevelHost::TestFailContentLoadedObserverAdds(0);
+    wxWinUIHostContentTestAccess::FailContentLoadedObserverAdds(0);
     REQUIRE(slot->SetContent(content));
-    CHECK_FALSE(slot->IsContentLoadedObserverPendingForTest());
-    CHECK(slot->GetContentLoadedObserverRetryFailuresForTest() == 0);
-    CHECK(slot->HasContentLoadedObserverForTest());
+    CHECK_FALSE(wxWinUISlotTestAccess::IsContentLoadedObserverPending(*slot));
+    CHECK(wxWinUISlotTestAccess::GetContentLoadedObserverRetryFailures(*slot) == 0);
+    CHECK(wxWinUISlotTestAccess::HasContentLoadedObserver(*slot));
 
     frame->Destroy();
     DrainDispatch();
@@ -5255,7 +5256,7 @@ TEST_CASE("HostState::NestedSyncEpochSupersedesOuterEnabledPass",
     REQUIRE(slot != nullptr);
     const auto container = slot->GetContainer();
     REQUIRE(container != nullptr);
-    const unsigned long long epochBefore = slot->GetSyncEpochForTest();
+    const unsigned long long epochBefore = wxWinUISlotTestAccess::GetSyncEpoch(*slot);
 
     bool callbackRan = false;
     bool inCallback = false;
@@ -5277,7 +5278,7 @@ TEST_CASE("HostState::NestedSyncEpochSupersedesOuterEnabledPass",
     CHECK(callbackRan);
     CHECK(button->IsEnabled());
     CHECK(container.IsHitTestVisible());
-    CHECK(slot->GetSyncEpochForTest() >= epochBefore + 2);
+    CHECK(wxWinUISlotTestAccess::GetSyncEpoch(*slot) >= epochBefore + 2);
 
     container.UnregisterPropertyChangedCallback(
         MUX::UIElement::IsHitTestVisibleProperty(), token);
@@ -5775,8 +5776,8 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
 
     // A failed same-root target change restores the exact old pair and does
     // not leak host-owned UIA values onto the candidate.
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(slot->SetContent(root, targetA));
     CHECK(slot->GetVisualRoot() == root);
     CHECK(slot->GetSemanticTarget() == targetB);
@@ -5793,7 +5794,7 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
     const MUXC::TextBlock detachedCandidateTarget;
     detachedCandidateRoot.Children().Append(detachedCandidateTarget);
     bool detachSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
@@ -5803,7 +5804,7 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
     CHECK_FALSE(
         slot->SetContent(
             detachedCandidateRoot, detachedCandidateTarget));
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
     CHECK(detachSeamRan);
     CHECK(slot->GetVisualRoot() == root);
     CHECK(slot->GetSemanticTarget() == targetB);
@@ -5824,7 +5825,7 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
     const MUXC::TextBlock fallbackCandidateTarget;
     fallbackCandidateRoot.Children().Append(fallbackCandidateTarget);
     bool fallbackSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
@@ -5835,11 +5836,11 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
     CHECK_FALSE(
         slot->SetContent(
             fallbackCandidateRoot, fallbackCandidateTarget));
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
     CHECK(fallbackSeamRan);
     CHECK(slot->GetVisualRoot() == root);
     CHECK(slot->GetSemanticTarget() == root);
-    CHECK(slot->GetAutomationNameStyleObservedContentForTest() == root);
+    CHECK(wxWinUISlotTestAccess::GetAutomationNameStyleObservedContent(*slot) == root);
     REQUIRE(slot->TryGetCarrierContent(carrierContent));
     CHECK(carrierContent == root);
     CHECK(MUXA::AutomationProperties::GetName(targetB).empty());
@@ -5891,7 +5892,7 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
     REQUIRE(postCommitCallbackRan);
     CHECK(slot->GetVisualRoot() == postCommitRoot);
     CHECK(slot->GetSemanticTarget() == postCommitRoot);
-    CHECK(slot->GetAutomationNameStyleObservedContentForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetAutomationNameStyleObservedContent(*slot) ==
           postCommitRoot);
     REQUIRE(slot->TryGetCarrierContent(carrierContent));
     CHECK(carrierContent == postCommitRoot);
@@ -5942,15 +5943,15 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
                 rollbackBoundaryRoot.Children().Clear();
             });
     const MUXC::Border failedBoundaryReplacement;
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(slot->SetContent(failedBoundaryReplacement));
     rollbackBoundaryTarget.UnregisterPropertyChangedCallback(
         accessibilityViewProperty, rollbackBoundaryToken);
     REQUIRE(rollbackBoundaryCallbackRan);
     CHECK(slot->GetVisualRoot() == rollbackBoundaryRoot);
     CHECK(slot->GetSemanticTarget() == rollbackBoundaryRoot);
-    CHECK(slot->GetAutomationNameStyleObservedContentForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetAutomationNameStyleObservedContent(*slot) ==
           rollbackBoundaryRoot);
     REQUIRE(slot->TryGetCarrierContent(carrierContent));
     CHECK(carrierContent == rollbackBoundaryRoot);
@@ -5983,7 +5984,7 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
     const MUXC::TextBlock freshTarget;
     freshRoot.Children().Append(freshTarget);
     bool freshDetachSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *window)
         {
             if ( window != freshProbe )
@@ -5993,7 +5994,7 @@ TEST_CASE("HostState::SemanticTargetIsTransactionalWithVisualRoot",
             freshRoot.Children().Clear();
         });
     CHECK(host->RegisterSlot(freshProbe, freshRoot, freshTarget) == nullptr);
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     CHECK(freshDetachSeamRan);
     CHECK(host->FindSlot(freshProbe) == nullptr);
     CHECK(wxWinUITopLevelHost::FindSlotOwner(freshProbe) == nullptr);
@@ -6049,7 +6050,7 @@ TEST_CASE("HostState::MigrationDemotesDetachedSemanticTarget",
     REQUIRE(MUXA::AutomationProperties::GetName(target).empty());
 
     bool detachSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
@@ -6057,7 +6058,7 @@ TEST_CASE("HostState::MigrationDemotesDetachedSemanticTarget",
             root.Children().Clear();
         });
     REQUIRE(xamlHost->Reparent(frameB));
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
     REQUIRE(detachSeamRan);
 
     wxWinUITopLevelHost * const hostB =
@@ -6069,7 +6070,7 @@ TEST_CASE("HostState::MigrationDemotesDetachedSemanticTarget",
     REQUIRE(destinationSlot != nullptr);
     CHECK(destinationSlot->GetVisualRoot() == root);
     CHECK(destinationSlot->GetSemanticTarget() == root);
-    CHECK(destinationSlot->GetAutomationNameStyleObservedContentForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetAutomationNameStyleObservedContent(*destinationSlot) ==
           root);
     winrt::Microsoft::UI::Xaml::UIElement carrierContent{ nullptr };
     REQUIRE(destinationSlot->TryGetCarrierContent(carrierContent));
@@ -6121,14 +6122,14 @@ TEST_CASE("HostState::FailedMigrationRestoresDemotedSemanticTarget",
 
     bool detachSeamRan = false;
     bool destinationSeamRan = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
             detachSeamRan = true;
             root.Children().Clear();
         });
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *window)
         {
             if ( window != xamlHost )
@@ -6140,8 +6141,8 @@ TEST_CASE("HostState::FailedMigrationRestoresDemotedSemanticTarget",
             provisionalOwner->UnregisterSlot(window);
         });
     REQUIRE(xamlHost->Reparent(frameB));
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     REQUIRE(detachSeamRan);
     REQUIRE(destinationSeamRan);
 
@@ -6153,7 +6154,7 @@ TEST_CASE("HostState::FailedMigrationRestoresDemotedSemanticTarget",
     REQUIRE(restoredSlot != nullptr);
     CHECK(restoredSlot->GetVisualRoot() == root);
     CHECK(restoredSlot->GetSemanticTarget() == root);
-    CHECK(restoredSlot->GetAutomationNameStyleObservedContentForTest() ==
+    CHECK(wxWinUISlotTestAccess::GetAutomationNameStyleObservedContent(*restoredSlot) ==
           root);
     winrt::Microsoft::UI::Xaml::UIElement carrierContent{ nullptr };
     REQUIRE(restoredSlot->TryGetCarrierContent(carrierContent));
@@ -6634,7 +6635,7 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     // root ProtectedCursor won: a descendant XAML cursor can outrank it. The
     // failed application remains non-authoritative and the next attempt
     // retries/promotes the source-level override.
-    wxWinUITopLevelHost::TestFailInputPointerSourceSet(1);
+    wxWinUIHostContentTestAccess::FailInputPointerSourceSet(1);
     CHECK_FALSE(host->TestActivateSlotCursor(button));
     CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
     REQUIRE(host->TestActivateSlotCursor(button));
@@ -7077,7 +7078,7 @@ TEST_CASE("HostState::CursorSourceFailureIsTruthful",
         });
     const wxPoint point = text->ClientToScreen(wxPoint(20, 16));
 
-    wxWinUITopLevelHost::TestFailInputPointerSourceSet(1);
+    wxWinUIHostContentTestAccess::FailInputPointerSourceSet(1);
     CHECK_FALSE(host->TestApplySlotPointerCursor(
         text, point, wxWinUIInputKind::Move));
     CHECK(events == 1);
@@ -7830,7 +7831,7 @@ TEST_CASE("HostState::LoadedUnfocusableDoesNotStealNativeAuthority",
     // produce a useful XAML LostFocus. A subsequent focus attempt must
     // reconcile the old logical owner from the exact current visual subtree.
     REQUIRE(slot->SetContent(MUXC::Border()));
-    slot->SetContentLoadedForTest(true);
+    wxWinUISlotTestAccess::SetContentLoaded(*slot, true);
     host->FlushSync();
     host->FocusSlot(target);
     DrainToQuiescence();
@@ -7866,7 +7867,7 @@ TEST_CASE("HostState::LoadedUnfocusableDoesNotStealNativeAuthority",
             event.TryCancel();
         });
     REQUIRE(slot->SetContent(refusingPeer));
-    slot->SetContentLoadedForTest(true);
+    wxWinUISlotTestAccess::SetContentLoaded(*slot, true);
     host->FlushSync();
     host->FocusSlot(target);
     DrainToQuiescence();
@@ -7910,7 +7911,7 @@ TEST_CASE("HostState::LoadedUnfocusableDoesNotStealNativeAuthority",
             event.TryCancel();
         });
     REQUIRE(slot->SetContent(failedRollbackPeer));
-    slot->SetContentLoadedForTest(true);
+    wxWinUISlotTestAccess::SetContentLoaded(*slot, true);
     host->FlushSync();
     host->FocusSlot(target);
     DrainDispatch(3);
@@ -9407,24 +9408,24 @@ TEST_CASE("HostState::ContentSwapFaultPhases", "[HostState]")
         };
 
     // 1. detach fails: NOTHING may change, model and carrier still agree
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Detach);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Detach);
     CHECK(!slot->SetContent(replacement));
     CHECK(slot->GetContent() == oldContent);
     CHECK(carrierNow() == oldContent);
 
     // 2. install fails: the old content is restored, coherently
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK(!slot->SetContent(replacement));
     CHECK(slot->GetContent() == oldContent);
     CHECK(carrierNow() == oldContent);
 
     // 3. install AND restore fail: the model must mirror the REAL carrier
     // state (readably empty, since the detach succeeded) -- never guess
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install |
-        wxWinUITopLevelHost::TestContentFault_Restore);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install |
+        wxWinUIHostContentTestAccess::ContentFault_Restore);
     CHECK(!slot->SetContent(replacement));
     CHECK(slot->GetContent() == nullptr);
     CHECK(carrierNow() == nullptr);
@@ -9964,12 +9965,12 @@ TEST_CASE(
             L"wx before migration");
 
     bool transactionCallbackRan = false;
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted(
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
             transactionCallbackRan = true;
-            REQUIRE(slot->IsContentTransactionInProgressForTest());
+            REQUIRE(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
 
             // The final value is indistinguishable from an untouched unset
             // property. The transaction observer is what preserves this
@@ -9979,7 +9980,7 @@ TEST_CASE(
             content.ClearValue(nameProperty);
         });
     REQUIRE(xamlHost->Reparent(frameB));
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted({});
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted({});
     DrainToQuiescence();
     REQUIRE(transactionCallbackRan);
 
@@ -10035,21 +10036,21 @@ TEST_CASE(
             L"wx before rollback");
 
     bool transactionCallbackRan = false;
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted(
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted(
         [&](wxWindow *window)
         {
             REQUIRE(window == xamlHost);
             transactionCallbackRan = true;
-            REQUIRE(slot->IsContentTransactionInProgressForTest());
+            REQUIRE(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
             MUXA::AutomationProperties::SetName(
                 content, L"application transient");
             content.ClearValue(nameProperty);
         });
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     const MUXC::Button replacement;
     CHECK_FALSE(slot->SetContent(replacement));
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted({});
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted({});
     REQUIRE(transactionCallbackRan);
 
     CHECK(slot->GetSemanticTarget() == content);
@@ -10566,8 +10567,8 @@ TEST_CASE("HostState::ImplicitXamlStyleRelinquishesWxName",
     // replacement must observe the implicit witness on reattach, relinquish
     // wx's Name, and preserve that application decision transactionally.
     const MUXC::Button failedReplacement;
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(slot->SetContent(failedReplacement));
     CHECK(slot->GetContent() == nullStyleContent);
     REQUIRE(DrainUntil(
@@ -10737,12 +10738,12 @@ TEST_CASE("HostState::ImplicitXamlStyleRelinquishesWxName",
             L"empty-label-style-applied");
 
     const unsigned flushRunsBeforeLabel =
-        emptyLabelOwner->GetOwnFlushRunCountForTest();
+        wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*emptyLabelOwner);
     emptyLabelHost->SetLabel("must-not-mask-empty-implicit-name");
     REQUIRE(DrainUntil(
         [&]()
         {
-            return emptyLabelOwner->GetOwnFlushRunCountForTest() >
+            return wxWinUIHostContentTestAccess::GetOwnFlushRunCount(*emptyLabelOwner) >
                        flushRunsBeforeLabel &&
                    emptyLabelContent.ReadLocalValue(nameProperty) ==
                        MUX::DependencyProperty::UnsetValue() &&
@@ -10817,8 +10818,8 @@ TEST_CASE("HostState::AutomationNameBindingPreserved",
     // The binding expression is the authoritative application-ownership
     // signal and must survive rollback, migration and detach without SetValue.
     const MUXC::Button failedReplacement;
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(slot->SetContent(failedReplacement));
     CHECK(slot->GetContent() == content);
     CHECK(framework.GetBindingExpression(nameProperty) != nullptr);
@@ -11129,8 +11130,8 @@ TEST_CASE("HostState::AutomationNameRelinquishmentSurvivesTransactions",
     // rollback must restore the otherwise-unobservable relinquishment before
     // its catch-up SyncSlot can consider republishing the wx label.
     const MUXC::Button replacement;
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(slot->SetContent(replacement));
     CHECK(slot->GetContent() == content);
     CHECK(content.ReadLocalValue(nameProperty) ==
@@ -11202,11 +11203,11 @@ TEST_CASE("HostState::AutomationNameRelinquishmentSurvivesTransactions",
             L"restore-fault-wx-name");
 
     const MUXC::Button restoreFaultReplacement;
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::
-            TestContentFault_AutomationNameTransferRead |
-        wxWinUITopLevelHost::
-            TestContentFault_AutomationNameRestoreRead);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::
+            ContentFault_AutomationNameTransferRead |
+        wxWinUIHostContentTestAccess::
+            ContentFault_AutomationNameRestoreRead);
     CHECK_FALSE(restoreFaultSlot->SetContent(restoreFaultReplacement));
     CHECK(restoreFaultSlot->GetContent() == restoreFaultContent);
     CHECK(MUXA::AutomationProperties::GetName(restoreFaultContent) ==
@@ -11272,8 +11273,8 @@ TEST_CASE("HostState::AutomationNameRelinquishmentSurvivesTransactions",
         }));
 
     const MUXC::Button animatedReplacement;
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     CHECK_FALSE(animatedSlot->SetContent(animatedReplacement));
     CHECK(animatedSlot->GetContent() == animatedContent);
     nameStoryboard.Stop();
@@ -11366,8 +11367,8 @@ TEST_CASE("HostState::ControlHostContentTransaction", "[HostState]")
     // Failed swap through the control host: the slot, the carrier AND the
     // control host's model must all keep the OLD root, and the old Loaded
     // hook must survive (only the new one is dropped: net count unchanged).
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install);
     radio->SetString(0, "renamed");
     DrainDispatch(3);
 
@@ -11412,7 +11413,7 @@ TEST_CASE("HostState::ControlHostNestedFreshContentWins",
 
     bool seamRan = false;
     bool nestedSucceeded = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != probeWin )
@@ -11427,7 +11428,7 @@ TEST_CASE("HostState::ControlHostNestedFreshContentWins",
     // the outer operation must report loss and must neither unregister C nor
     // overwrite the control proxy's C model/Loaded hook with stale B state.
     const bool outerSucceeded = probe->SetContent("outer");
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
     CHECK(seamRan);
     CHECK(nestedSucceeded);
@@ -11486,7 +11487,7 @@ TEST_CASE("HostLifecycle::ControlHostDestroyedDuringFreshContent",
     REQUIRE(host != nullptr);
 
     bool seamRan = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != probeWin )
@@ -11499,7 +11500,7 @@ TEST_CASE("HostLifecycle::ControlHostDestroyedDuringFreshContent",
     // SetContent() must finish through locals only after the callback destroys
     // the actual wxWinUIControlHost object underneath the still-live probe.
     const bool outerSucceeded = probe->SetContent("doomed");
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
     CHECK(seamRan);
     CHECK_FALSE(outerSucceeded);
@@ -11560,8 +11561,8 @@ TEST_CASE("HostState::ControlHostClearContent", "[HostState]")
     probe->SetContent();
     DrainDispatch(3);
     REQUIRE(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Detach);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Detach);
     probe->ClearContent();
     DrainDispatch(3);
     CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
@@ -11617,9 +11618,9 @@ TEST_CASE("HostState::PoisonedSlotRebuilt", "[HostState]")
     // the public operation succeeds. Do not arm Restore here: that phase
     // cannot run after an unreadable carrier and its unused global bit would
     // contaminate the next test.
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Install |
-        wxWinUITopLevelHost::TestContentFault_Read);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Install |
+        wxWinUIHostContentTestAccess::ContentFault_Read);
     REQUIRE(xamlHost->SetContentFromXaml(
         "<Button xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/"
         "presentation\" Content=\"x\"/>"));
@@ -11740,8 +11741,8 @@ TEST_CASE("HostLifecycle::XamlHostReconcilesFailedMigration",
     // The wx parent changes, but the injected detach failure deliberately
     // leaves the only truthful slot in A. Every public mutation must find
     // that actual owner rather than inferring B and creating a duplicate.
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Detach);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Detach);
     REQUIRE(xamlHost->Reparent(frameB));
     CHECK(wxWinUITopLevelHost::FindSlotOwner(xamlHost) == hostA);
     REQUIRE(hostA->FindSlot(xamlHost) != nullptr);
@@ -11796,8 +11797,8 @@ TEST_CASE("HostLifecycle::FailedMigrationThenImmediateReparent",
     // A->B fails and truthfully leaves the slot in A. The next B->C
     // reparent happens without a yield: its notification must consult actual
     // slot owners, not just B, and synchronously migrate A's survivor to C.
-    wxWinUITopLevelHost::TestFailContentSwap(
-        wxWinUITopLevelHost::TestContentFault_Detach);
+    wxWinUIHostContentTestAccess::FailContentSwap(
+        wxWinUIHostContentTestAccess::ContentFault_Detach);
     REQUIRE(xamlHost->Reparent(frameB));
     REQUIRE(wxWinUITopLevelHost::FindSlotOwner(xamlHost) == hostA);
     REQUIRE(xamlHost->Reparent(frameC));
@@ -11856,7 +11857,7 @@ TEST_CASE("HostLifecycle::ReentrantDoubleMigration", "[HostLifecycle]")
 
     bool reentered = false;
     bool nestedReparentSucceeded = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != xamlHost )
@@ -11869,7 +11870,7 @@ TEST_CASE("HostLifecycle::ReentrantDoubleMigration", "[HostLifecycle]")
     // Re-enter at the synchronous slot-publication boundary: the nested
     // migration reaches C before the outer A->B operation returns.
     const bool outerReparentSucceeded = xamlHost->Reparent(frameB);
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     REQUIRE(outerReparentSucceeded);
     CHECK(reentered);
     CHECK(nestedReparentSucceeded);
@@ -11931,7 +11932,7 @@ TEST_CASE("HostLifecycle::ReentrantMigrationAndContentReplacement",
     bool reentered = false;
     bool nestedReparentSucceeded = false;
     bool replacementSucceeded = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != xamlHost )
@@ -11948,7 +11949,7 @@ TEST_CASE("HostLifecycle::ReentrantMigrationAndContentReplacement",
         });
 
     const bool outerReparentSucceeded = xamlHost->Reparent(frameB);
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     REQUIRE(outerReparentSucceeded);
     CHECK(reentered);
     CHECK(nestedReparentSucceeded);
@@ -12008,7 +12009,7 @@ TEST_CASE("HostLifecycle::ReparentCallbackDestroysSubtree",
     REQUIRE(contentSlot != nullptr);
 
     bool destroyRequested = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *attached)
         {
             if ( attached != xamlHost )
@@ -12021,7 +12022,7 @@ TEST_CASE("HostLifecycle::ReparentCallbackDestroysSubtree",
     // still contains B and C. The dispatcher must stop through its weak root,
     // never dereference the freed subtree for the remaining hosts.
     const bool reparentSucceeded = subtree->Reparent(frameB);
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     REQUIRE(reparentSucceeded);
     CHECK(destroyRequested);
     DrainDispatch(5);
@@ -12131,7 +12132,7 @@ TEST_CASE("HostLifecycle::RegisterRollbackOnFault", "[HostLifecycle]")
         const unsigned revokes0 =
             wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
 
-        wxWinUITopLevelHost::TestFailHandlerAdd(nth);
+        wxWinUIHostContentTestAccess::FailHandlerAdd(nth);
         wxWinUISlot * const slot = host->RegisterSlot(probe, element);
         DrainDispatch(2);
 
@@ -13884,7 +13885,7 @@ TEST_CASE("HostLifecycle::DetachClipWriterWinsMigration",
     const wxRect newestPhysical(7, 5, 91, 31);
     wxWinUIClipRectDIP newestDIP;
     bool detachWriterRan = false;
-    wxWinUITopLevelHost::TestOnNextContentTransactionStarted(
+    wxWinUIHostContentTestAccess::OnNextContentTransactionStarted(
         [&](wxWindow *transitioning)
         {
             if ( transitioning != window )
@@ -13901,7 +13902,7 @@ TEST_CASE("HostLifecycle::DetachClipWriterWinsMigration",
         });
     const auto clearDetachHook = wxMakeGuard([]()
     {
-        wxWinUITopLevelHost::TestOnNextContentTransactionStarted({});
+        wxWinUIHostContentTestAccess::OnNextContentTransactionStarted({});
     });
     wxUnusedVar(clearDetachHook);
 

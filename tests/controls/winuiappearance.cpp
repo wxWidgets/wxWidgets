@@ -35,6 +35,7 @@
 #include "wx/tglbtn.h"
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "host-geometry-test-access.h"
 
 #include <winrt/Windows.UI.Text.h>
@@ -632,7 +633,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
             wxEVT_BUTTON,
             [&](wxCommandEvent&) { ++clickEvents; });
 
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -647,7 +648,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, "&Doomed");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         CHECK(attached);
         CHECK(queued);
@@ -672,7 +673,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
         wxCheckBox *check = new wxCheckBox;
         wxCheckBox * const invoking = check;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -686,7 +687,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, "&Doomed");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(check == nullptr);
@@ -698,7 +699,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
         wxRadioButton *radio = new wxRadioButton;
         wxRadioButton * const invoking = radio;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -712,7 +713,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, "&Doomed");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(radio == nullptr);
@@ -724,7 +725,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
         wxToggleButton *toggle = new wxToggleButton;
         wxToggleButton * const invoking = toggle;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -738,7 +739,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, "&Doomed");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(toggle == nullptr);
@@ -2890,7 +2891,7 @@ TEST_CASE("wxWinUI StaticBox Create is reentrancy-safe",
     {
         wxStaticBox box;
         bool reentered = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != &box )
@@ -2902,7 +2903,7 @@ TEST_CASE("wxWinUI StaticBox Create is reentrancy-safe",
 
         const bool created =
             box.Create(parent, wxID_ANY, "&Original");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         REQUIRE(created);
         CHECK(reentered);
@@ -2921,7 +2922,7 @@ TEST_CASE("wxWinUI StaticBox Create is reentrancy-safe",
         wxStaticBox *box = new wxStaticBox;
         wxStaticBox * const invoking = box;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -2935,7 +2936,7 @@ TEST_CASE("wxWinUI StaticBox Create is reentrancy-safe",
 
         const bool created =
             invoking->Create(parent, wxID_ANY, "&Doomed");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         CHECK(attached);
         CHECK_FALSE(created);
@@ -3173,7 +3174,7 @@ TEST_CASE("wxWinUI RadioBox SetContent reentry is latest-writer-wins",
         &addedBefore, &revokedBefore);
 
     bool reentered = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             if ( window != &box )
@@ -3183,7 +3184,7 @@ TEST_CASE("wxWinUI RadioBox SetContent reentry is latest-writer-wins",
             box.SetString(0, "&Newest");
         });
     box.SetString(0, "&Outer");
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
 
     CHECK(reentered);
     CHECK(box.GetString(0) == "&Newest");
@@ -3359,7 +3360,7 @@ TEST_CASE("wxWinUI RadioBox keeps superseding model on failed replay",
         &addedBefore, &revokedBefore);
 
     bool superseded = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             if ( window != &box )
@@ -3367,12 +3368,12 @@ TEST_CASE("wxWinUI RadioBox keeps superseding model on failed replay",
 
             superseded = true;
             box.SetString(0, "&Newest");
-            wxWinUITopLevelHost::TestFailContentSwap(
-                wxWinUITopLevelHost::TestContentFault_Install);
+            wxWinUIHostContentTestAccess::FailContentSwap(
+                wxWinUIHostContentTestAccess::ContentFault_Install);
         });
     box.SetString(0, "&Outer");
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
-    wxWinUITopLevelHost::TestFailContentSwap(0);
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::FailContentSwap(0);
 
     REQUIRE(superseded);
     // The failed replay may leave the last committed peer on "Outer", but
@@ -3423,7 +3424,7 @@ TEST_CASE("wxWinUI RadioBox revokes candidates on SetContent destruction",
         WXSIZEOF(choice), choice);
     wxRadioBox * const invoking = box;
     bool destroyed = false;
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet(
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet(
         [&](wxWindow *window)
         {
             if ( window != invoking )
@@ -3435,7 +3436,7 @@ TEST_CASE("wxWinUI RadioBox revokes candidates on SetContent destruction",
             delete doomed;
         });
     invoking->SetString(0, "&Candidate");
-    wxWinUITopLevelHost::TestOnNextContentCarrierSet({});
+    wxWinUIHostContentTestAccess::OnNextContentCarrierSet({});
 
     CHECK(destroyed);
     CHECK(box == nullptr);

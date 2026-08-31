@@ -22,6 +22,7 @@
 #include "wx/winui/private/appearance.h"
 #include "host-resize-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "wx/winui/winui.h"
 
 #if wxUSE_STATUSBAR
@@ -1613,7 +1614,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
         wxHyperlinkCtrl *link = new wxHyperlinkCtrl;
         wxHyperlinkCtrl * const invoking = link;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -1627,7 +1628,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
 
         const bool created = invoking->Create(
             parent, wxID_ANY, "Doomed", "https://example.invalid");
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         CHECK(attached);
         CHECK_FALSE(created);
@@ -1658,7 +1659,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
                 link = nullptr;
                 delete doomed;
             });
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window == invoking )
@@ -1668,7 +1669,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
         const bool created = invoking->Create(
             parent, wxID_ANY, "Sized", "https://example.invalid",
             wxDefaultPosition, wxDefaultSize);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         CHECK(attached);
         CHECK(sized);
@@ -2484,7 +2485,7 @@ TEST_CASE("wxWinUI ActivityIndicator Create revalidates host and size "
         wxActivityIndicator *activity = new wxActivityIndicator;
         wxActivityIndicator * const invoking = activity;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -2497,7 +2498,7 @@ TEST_CASE("wxWinUI ActivityIndicator Create revalidates host and size "
             });
 
         const bool created = invoking->Create(parent);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         CHECK(attached);
         CHECK_FALSE(created);
@@ -2526,7 +2527,7 @@ TEST_CASE("wxWinUI ActivityIndicator Create revalidates host and size "
                 activity = nullptr;
                 delete doomed;
             });
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 if ( window == invoking )
@@ -2534,7 +2535,7 @@ TEST_CASE("wxWinUI ActivityIndicator Create revalidates host and size "
             });
 
         const bool created = invoking->Create(parent);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
 
         CHECK(attached);
         CHECK(sized);

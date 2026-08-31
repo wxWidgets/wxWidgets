@@ -24,6 +24,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/transient.h"
 
@@ -653,10 +654,10 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
         wxWinUITopLevelHost::FindForTLW(popup);
     REQUIRE(popupHost != nullptr);
     TrackLifetime(ownedHostLifetimes, "popup-host",
-                  popupHost->GetLifetimeForTest());
+                  wxWinUIHostContentTestAccess::GetLifetime(*popupHost));
     REQUIRE(popupHost->FindSlot(xaml) != nullptr);
     TrackLifetime(ownedSlotLifetimes, "popup-slot-initial",
-                  popupHost->FindSlot(xaml)->GetLifetimeForTest());
+                  wxWinUISlotTestAccess::GetLifetime(*popupHost->FindSlot(xaml)));
     CHECK(wxWinUITopLevelHost::FindSlotOwner(xaml) == popupHost);
     CHECK(wxWinUITopLevelHost::FindSlotOwner(gdi) == nullptr);
 
@@ -702,10 +703,10 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
         wxWinUITopLevelHost::FindSlotOwner(xaml);
     REQUIRE(ownerBHost != nullptr);
     TrackLifetime(ownedHostLifetimes, "owner-b-host",
-                  ownerBHost->GetLifetimeForTest());
+                  wxWinUIHostContentTestAccess::GetLifetime(*ownerBHost));
     REQUIRE(ownerBHost->FindSlot(xaml) != nullptr);
     TrackLifetime(ownedSlotLifetimes, "owner-b-slot",
-                  ownerBHost->FindSlot(xaml)->GetLifetimeForTest());
+                  wxWinUISlotTestAccess::GetLifetime(*ownerBHost->FindSlot(xaml)));
     CHECK(ownerBHost == wxWinUITopLevelHost::FindForTLW(ownerB));
     CHECK(ownerBHost != popupHost);
     REQUIRE(gdi->Reparent(ownerB));
@@ -716,7 +717,7 @@ TEST_CASE("WinUITransientWindows::PopupHostShowHideAndReparent",
     CHECK(wxWinUITopLevelHost::FindSlotOwner(xaml) == popupHost);
     REQUIRE(popupHost->FindSlot(xaml) != nullptr);
     TrackLifetime(ownedSlotLifetimes, "popup-slot-restored",
-                  popupHost->FindSlot(xaml)->GetLifetimeForTest());
+                  wxWinUISlotTestAccess::GetLifetime(*popupHost->FindSlot(xaml)));
     CHECK(wxWinUITopLevelHost::FindSlotOwner(gdi) == nullptr);
 
     const wxWeakRef<wxWindow> popupWeak(popup);

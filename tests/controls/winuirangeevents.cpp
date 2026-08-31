@@ -24,6 +24,7 @@
 #include "wx/scopeguard.h"
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-content-test-access.h"
 
 #include <cmath>
 #include <functional>
@@ -1355,7 +1356,7 @@ TEST_CASE("wxWinUI Slider Create survives Loaded and final-size destruction",
         wxSlider *slider = new wxSlider;
         wxSlider * const invoking = slider;
         bool attached = false;
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 attached = true;
@@ -1367,7 +1368,7 @@ TEST_CASE("wxWinUI Slider Create survives Loaded and final-size destruction",
 
         const bool created = invoking->Create(
             parent, wxID_ANY, 5, 0, 10);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(slider == nullptr);
@@ -1395,7 +1396,7 @@ TEST_CASE("wxWinUI Slider Create survives Loaded and final-size destruction",
                 slider = nullptr;
                 delete doomed;
             });
-        wxWinUITopLevelHost::TestOnNextSlotAttached(
+        wxWinUIHostContentTestAccess::OnNextSlotAttached(
             [&](wxWindow *window)
             {
                 CHECK(window == invoking);
@@ -1405,7 +1406,7 @@ TEST_CASE("wxWinUI Slider Create survives Loaded and final-size destruction",
         const bool created = invoking->Create(
             parent, wxID_ANY, 5, 0, 10,
             wxDefaultPosition, wxDefaultSize);
-        wxWinUITopLevelHost::TestOnNextSlotAttached({});
+        wxWinUIHostContentTestAccess::OnNextSlotAttached({});
         CHECK(attached);
         CHECK(sizeCallback);
         CHECK_FALSE(created);
@@ -1595,7 +1596,7 @@ TEST_CASE("wxWinUI ScrollBar Create survives synchronous Loaded destruction",
     wxScrollBar *bar = new wxScrollBar;
     wxScrollBar * const invoking = bar;
     bool attached = false;
-    wxWinUITopLevelHost::TestOnNextSlotAttached(
+    wxWinUIHostContentTestAccess::OnNextSlotAttached(
         [&](wxWindow *window)
         {
             attached = true;
@@ -1606,7 +1607,7 @@ TEST_CASE("wxWinUI ScrollBar Create survives synchronous Loaded destruction",
         });
 
     const bool created = invoking->Create(parent, wxID_ANY);
-    wxWinUITopLevelHost::TestOnNextSlotAttached({});
+    wxWinUIHostContentTestAccess::OnNextSlotAttached({});
     CHECK(attached);
     CHECK_FALSE(created);
     CHECK(bar == nullptr);
