@@ -712,6 +712,82 @@ void wxWinUITopLevelHost::FlushSync()
 #endif
 }
 
+// The single revalidation used by geometry, tooltip policy and UIA.
+// Its comparisons retain the original ordering and callback boundaries.
+wxWinUISlot *wxWinUITopLevelHost::ResolveSlotSync(
+    const wxWinUISlotSyncTransaction& transaction)
+{
+    auto& state = transaction.state;
+    auto& w = transaction.w;
+    auto& content = transaction.content;
+    auto& semanticTarget = transaction.semanticTarget;
+    auto& contentGeneration = transaction.contentGeneration;
+    auto& syncEpoch = transaction.syncEpoch;
+    auto& automationNameStateRevision =
+        transaction.automationNameStateRevision;
+    auto& automationNameStyleRevision =
+        transaction.automationNameStyleRevision;
+    auto& automationNameImplicitStyleRevision =
+        transaction.automationNameImplicitStyleRevision;
+    auto& clipRevision = transaction.clipRevision;
+    auto& automationNameOverrideRevision =
+        transaction.automationNameOverrideRevision;
+#if wxUSE_TOOLTIPS
+    auto& toolTipPolicyEnabled = transaction.toolTipPolicyEnabled;
+    auto& tip = transaction.tip;
+    auto& toolTipText = transaction.toolTipText;
+    auto& toolTipMaximumWidth = transaction.toolTipMaximumWidth;
+    auto& toolTipDPI = transaction.toolTipDPI;
+#endif
+
+    if ( !state || state->GetHost() != this || state->GetWindow() != w )
+        return nullptr;
+
+    wxWinUISlot * const current = FindSlot(w);
+    if ( !current ||
+         current->m_lifetime != state ||
+         current->m_content != content ||
+         current->m_semanticTarget != semanticTarget ||
+          current->m_contentGeneration != contentGeneration ||
+          current->m_syncEpoch != syncEpoch ||
+          current->m_uiaNameStateRevision !=
+              automationNameStateRevision ||
+          current->m_automationNameStyleRevision !=
+              automationNameStyleRevision ||
+          current->m_automationNameImplicitStyleRevision !=
+              automationNameImplicitStyleRevision ||
+          current->m_clipRevision != clipRevision ||
+          current->m_contentTransactionInProgress ||
+         current->m_automationNameOverrideRevision !=
+             automationNameOverrideRevision )
+    {
+        return nullptr;
+    }
+
+#if wxUSE_TOOLTIPS
+    if ( wxWinUIAreToolTipsEnabled() != toolTipPolicyEnabled )
+        return nullptr;
+
+    wxToolTip * const currentTip = w->GetToolTip();
+    if ( currentTip != tip )
+        return nullptr;
+    if ( currentTip )
+    {
+        const int currentMaximumWidth =
+            currentTip->GetWinUIMaxWidthAtCreation();
+        const int currentDPI =
+            currentMaximumWidth > 0 ? w->GetDPI().GetWidth() : 0;
+        if ( currentTip->GetTip() != toolTipText ||
+             currentMaximumWidth != toolTipMaximumWidth ||
+             currentDPI != toolTipDPI )
+        {
+            return nullptr;
+        }
+    }
+#endif
+    return current;
+}
+
 void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
 {
     wxWinUISlot::OperationGuard slotOperation(&slot);
@@ -1060,54 +1136,58 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     // Safe after any reentrant XAML callback: the shared state is invalidated
     // before a slot is removed.  Only return a slot whose generation is still
     // exactly the one snapshotted above.
+    // Bind existing stack snapshots only: no getter, allocation or new
+    // owning reference is evaluated at this module boundary.
+    const wxWinUISlotSyncTransaction transaction
+    {
+        state,
+        w,
+        content,
+        semanticTarget,
+        contentGeneration,
+        syncEpoch,
+        automationNameStateRevision,
+        automationNameStyleRevision,
+        automationNameImplicitStyleRevision,
+        clipRevision,
+        automationNameOverrideRevision,
+#if wxUSE_TOOLTIPS
+        toolTipPolicyEnabled,
+        tip,
+        toolTipText,
+        toolTipMaximumWidth,
+        toolTipDPI,
+#endif
+        slot,
+        previousHelpTextSynced,
+        previousAppliedHelpText,
+        helpTextPresent,
+        helpText,
+        wxHelpTextChanged,
+        nextHelpTextOwned,
+        nextAppliedHelpText,
+        nextOriginalHelpTextLocalValue,
+        previousUIANameSynced,
+        previousAutomationNameImplicitStyleInspectedRevision,
+        hasApplicationAuthoredXaml,
+        previousUIANameRelinquished,
+        previousUIANameOwned,
+        previousUIANameAppOwned,
+        previousUIANameSuppressedByLabeledBy,
+        previousUIAName,
+        previousAppliedUIAName,
+        uiaLabel,
+        nextUIANameOwned,
+        nextUIANameAppOwned,
+        nextUIANameRelinquished,
+        nextUIANameSuppressedByLabeledBy,
+        nextAppliedUIAName,
+        nextOriginalUIANameLocalValue,
+    };
+
     const auto getCurrentSlot = [&]() -> wxWinUISlot *
     {
-        if ( !state || state->GetHost() != this || state->GetWindow() != w )
-            return nullptr;
-
-        wxWinUISlot * const current = FindSlot(w);
-        if ( !current ||
-             current->m_lifetime != state ||
-             current->m_content != content ||
-             current->m_semanticTarget != semanticTarget ||
-              current->m_contentGeneration != contentGeneration ||
-              current->m_syncEpoch != syncEpoch ||
-              current->m_uiaNameStateRevision !=
-                  automationNameStateRevision ||
-              current->m_automationNameStyleRevision !=
-                  automationNameStyleRevision ||
-              current->m_automationNameImplicitStyleRevision !=
-                  automationNameImplicitStyleRevision ||
-              current->m_clipRevision != clipRevision ||
-              current->m_contentTransactionInProgress ||
-             current->m_automationNameOverrideRevision !=
-                 automationNameOverrideRevision )
-        {
-            return nullptr;
-        }
-
-#if wxUSE_TOOLTIPS
-        if ( wxWinUIAreToolTipsEnabled() != toolTipPolicyEnabled )
-            return nullptr;
-
-        wxToolTip * const currentTip = w->GetToolTip();
-        if ( currentTip != tip )
-            return nullptr;
-        if ( currentTip )
-        {
-            const int currentMaximumWidth =
-                currentTip->GetWinUIMaxWidthAtCreation();
-            const int currentDPI =
-                currentMaximumWidth > 0 ? w->GetDPI().GetWidth() : 0;
-            if ( currentTip->GetTip() != toolTipText ||
-                 currentMaximumWidth != toolTipMaximumWidth ||
-                 currentDPI != toolTipDPI )
-            {
-                return nullptr;
-            }
-        }
-#endif
-        return current;
+        return ResolveSlotSync(transaction);
     };
 
     SyncSlotAccessibilityAuthority(slot, hasWxAccessible);
@@ -1118,7 +1198,6 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     {
         using namespace winrt::Microsoft::UI::Xaml;
         using winrt::Microsoft::UI::Xaml::Controls::Canvas;
-        using winrt::Microsoft::UI::Xaml::Automation::AutomationProperties;
 
         Canvas::SetLeft(container, rect.x / scale);
         Canvas::SetTop(container, rect.y / scale);
@@ -1542,758 +1621,7 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
             return;
 #endif // wxUSE_TOOLTIPS
 
-        // UIA HelpText is the semantic counterpart of wx context help and,
-        // when that is absent, of the visible tooltip. ToolTipService alone
-        // is not consulted by FrameworkElementAutomationPeer::GetHelpText().
-        // Preserve local-value ownership independently so an application can
-        // author either property without the host silently clobbering it.
-        if ( semanticTarget )
-        {
-            const auto property =
-                AutomationProperties::HelpTextProperty();
-            auto actualLocal =
-                semanticTarget.ReadLocalValue(property);
-            const bool actualHasLocal =
-                actualLocal != DependencyProperty::UnsetValue();
-            const wxString actual(
-                AutomationProperties::GetHelpText(
-                    semanticTarget).c_str());
-            if ( !getCurrentSlot() )
-                return;
-
-            const auto readPostSetterHelpText =
-                [&](winrt::Windows::Foundation::IInspectable *local,
-                    bool *hasLocal,
-                    wxString *value)
-                {
-                    if ( !getCurrentSlot() )
-                        return false;
-                    *local =
-                        semanticTarget.ReadLocalValue(property);
-                    *hasLocal =
-                        *local != DependencyProperty::UnsetValue();
-                    *value = wxString(
-                        AutomationProperties::GetHelpText(
-                            semanticTarget).c_str());
-                    return getCurrentSlot() != nullptr;
-                };
-
-            const auto publishWxHelpText =
-                [&](const wxString& desired)
-                {
-                    AutomationProperties::SetHelpText(
-                        semanticTarget,
-                        winrt::hstring(desired.ToStdWstring()));
-
-                    winrt::Windows::Foundation::IInspectable postLocal{
-                        nullptr
-                    };
-                    bool postHasLocal = false;
-                    wxString postValue;
-                    if ( !readPostSetterHelpText(
-                             &postLocal, &postHasLocal, &postValue) )
-                    {
-                        return false;
-                    }
-
-                    // A dependency-property callback may replace or clear the
-                    // scalar synchronously. Re-read it before claiming
-                    // ownership; the last application write wins.
-                    if ( postHasLocal && postValue == desired )
-                    {
-                        nextHelpTextOwned = true;
-                        nextAppliedHelpText = desired;
-                    }
-                    else
-                    {
-                        nextHelpTextOwned = false;
-                        nextOriginalHelpTextLocalValue = postLocal;
-                        nextAppliedHelpText.clear();
-                    }
-                    return true;
-                };
-
-            const auto restoreHelpTextBaseline = [&]()
-            {
-                if ( !nextOriginalHelpTextLocalValue ||
-                     nextOriginalHelpTextLocalValue ==
-                         DependencyProperty::UnsetValue() )
-                {
-                    semanticTarget.ClearValue(property);
-                }
-                else
-                {
-                    semanticTarget.SetValue(
-                        property,
-                        nextOriginalHelpTextLocalValue);
-                }
-
-                winrt::Windows::Foundation::IInspectable postLocal{
-                    nullptr
-                };
-                bool postHasLocal = false;
-                wxString postValue;
-                if ( !readPostSetterHelpText(
-                         &postLocal, &postHasLocal, &postValue) )
-                {
-                    return false;
-                }
-                wxUnusedVar(postHasLocal);
-                wxUnusedVar(postValue);
-
-                nextHelpTextOwned = false;
-                nextOriginalHelpTextLocalValue = postLocal;
-                nextAppliedHelpText.clear();
-                return true;
-            };
-
-            if ( !previousHelpTextSynced )
-            {
-                nextOriginalHelpTextLocalValue = actualLocal;
-                nextHelpTextOwned = false;
-                if ( helpTextPresent )
-                {
-                    if ( !publishWxHelpText(helpText) )
-                        return;
-                }
-            }
-            else
-            {
-                if ( nextHelpTextOwned &&
-                     (!actualHasLocal ||
-                      actual != previousAppliedHelpText) )
-                {
-                    // A direct XAML mutation (including ClearValue()) wins
-                    // until the wx-side help value changes again.
-                    nextHelpTextOwned = false;
-                    nextOriginalHelpTextLocalValue = actualLocal;
-                    nextAppliedHelpText.clear();
-                }
-
-                if ( nextHelpTextOwned )
-                {
-                    if ( !helpTextPresent )
-                    {
-                        if ( !restoreHelpTextBaseline() )
-                            return;
-                    }
-                    else if ( wxHelpTextChanged )
-                    {
-                        if ( !publishWxHelpText(helpText) )
-                            return;
-                    }
-                }
-                else if ( helpTextPresent && wxHelpTextChanged )
-                {
-                    nextOriginalHelpTextLocalValue = actualLocal;
-                    if ( !publishWxHelpText(helpText) )
-                        return;
-                }
-            }
-
-            if ( !getCurrentSlot() )
-                return;
-        }
-
-        if ( wxWinUISlot * const current = getCurrentSlot() )
-        {
-            current->m_helpTextSynced = true;
-            current->m_helpTextOwned = nextHelpTextOwned;
-            current->m_lastHelpTextPresent = helpTextPresent;
-            current->m_lastHelpText = helpText;
-            current->m_lastAppliedHelpText = nextAppliedHelpText;
-            current->m_originalHelpTextLocalValue =
-                nextOriginalHelpTextLocalValue;
-        }
-        else
-            return;
-
-        // Automation name: claim only a property for which neither a local
-        // value nor an effective/style-authored value exists. ReadLocalValue
-        // alone is insufficient: Style setters live at a lower DP precedence,
-        // and a local wx value can mask a Style assigned later. An authored
-        // LabeledBy relation suspends this scalar fallback without becoming a
-        // permanent Name relinquishment.
-        if ( semanticTarget )
-        {
-            const auto nameProperty =
-                AutomationProperties::NameProperty();
-
-            struct AutomationNameObservation
-            {
-                winrt::Windows::Foundation::IInspectable
-                    local{ nullptr };
-                wxString localValue;
-                wxString effective;
-                bool hasLocal = false;
-                bool localIsString = false;
-                bool hasBinding = false;
-                bool styleAuthors = false;
-                bool hasLabeledBy = false;
-
-                bool IsAuthored() const
-                {
-                    return hasLocal ||
-                           hasBinding ||
-                           styleAuthors ||
-                           !effective.empty();
-                }
-            };
-
-            const auto observeAutomationName = [&]()
-            {
-                AutomationNameObservation observation;
-                observation.local =
-                    semanticTarget.ReadLocalValue(nameProperty);
-                observation.hasLocal =
-                    observation.local !=
-                        DependencyProperty::UnsetValue();
-                observation.hasBinding =
-                    wxWinUIHasBinding(
-                        semanticTarget, nameProperty);
-                if ( observation.hasLocal )
-                {
-                    observation.localIsString =
-                        wxWinUITryGetLocalStringValue(
-                            observation.local,
-                            &observation.localValue);
-                }
-                observation.effective = wxString(
-                    AutomationProperties::GetName(
-                        semanticTarget).c_str());
-                observation.styleAuthors =
-                    wxWinUIStyleAuthorsAutomationName(
-                        semanticTarget,
-                        !previousUIANameSynced ||
-                        automationNameImplicitStyleRevision !=
-                            previousAutomationNameImplicitStyleInspectedRevision ||
-                        (hasApplicationAuthoredXaml &&
-                         !previousUIANameRelinquished &&
-                         (previousUIANameOwned || !uiaLabel.empty())),
-                        slot.GetContainer().Resources());
-                observation.hasLabeledBy =
-                    AutomationProperties::GetLabeledBy(
-                        semanticTarget) != nullptr;
-                return observation;
-            };
-
-            AutomationNameObservation observed =
-                observeAutomationName();
-            if ( !getCurrentSlot() )
-                return;
-
-            struct AutomationNameProvenance
-            {
-                bool synced = true;
-                bool owned = false;
-                bool appOwned = false;
-                bool relinquished = false;
-                bool suppressedByLabeledBy = false;
-                wxString lastDesired;
-                wxString lastApplied;
-                winrt::Windows::Foundation::IInspectable
-                    originalLocalValue{ nullptr };
-                unsigned long long implicitStyleInspectedRevision = 0;
-            };
-
-            const auto captureNextAutomationNameState = [&]()
-            {
-                AutomationNameProvenance value;
-                value.owned = nextUIANameOwned;
-                value.appOwned = nextUIANameAppOwned;
-                value.relinquished = nextUIANameRelinquished;
-                value.suppressedByLabeledBy =
-                    nextUIANameSuppressedByLabeledBy;
-                value.lastDesired = uiaLabel;
-                value.lastApplied = nextAppliedUIAName;
-                value.originalLocalValue =
-                    nextOriginalUIANameLocalValue;
-                value.implicitStyleInspectedRevision =
-                    automationNameImplicitStyleRevision;
-                return value;
-            };
-            const auto assignNextAutomationNameState =
-                [&](const AutomationNameProvenance& value)
-                {
-                    nextUIANameOwned = value.owned;
-                    nextUIANameAppOwned = value.appOwned;
-                    nextUIANameRelinquished = value.relinquished;
-                    nextUIANameSuppressedByLabeledBy =
-                        value.suppressedByLabeledBy;
-                    nextAppliedUIAName = value.lastApplied;
-                    nextOriginalUIANameLocalValue =
-                        value.originalLocalValue;
-                };
-            const auto publishAutomationNameState =
-                [&](const AutomationNameProvenance& value)
-                {
-                    wxWinUISlot * const current = getCurrentSlot();
-                    if ( !current )
-                        return false;
-                    current->PublishAutomationNameState(
-                        value.synced,
-                        value.owned,
-                        value.appOwned,
-                        value.relinquished,
-                        value.suppressedByLabeledBy,
-                        value.lastDesired,
-                        value.lastApplied,
-                        value.originalLocalValue,
-                        value.implicitStyleInspectedRevision);
-                    automationNameStateRevision =
-                        current->m_uiaNameStateRevision;
-                    return true;
-                };
-            const auto sameAutomationNameSource =
-                [](const AutomationNameObservation& lhs,
-                   const AutomationNameObservation& rhs)
-                {
-                    return lhs.hasLocal == rhs.hasLocal &&
-                           lhs.localIsString == rhs.localIsString &&
-                           lhs.localValue == rhs.localValue &&
-                           lhs.hasBinding == rhs.hasBinding &&
-                           lhs.effective == rhs.effective;
-                };
-
-            // Remove the exact local scalar previously supplied by wx, but
-            // never overwrite a direct application replacement. Re-read after
-            // the setter because dependency-property callbacks may destroy,
-            // replace or mutate this same content synchronously.
-            const auto restoreWxAutomationName =
-                [&](const wxString& expectedLocal,
-                    const AutomationNameProvenance& restoredState)
-                {
-                    if ( observed.hasBinding ||
-                         !observed.hasLocal ||
-                         !observed.localIsString ||
-                         observed.localValue != expectedLocal )
-                    {
-                        return true;
-                    }
-
-                    const AutomationNameObservation beforeWrite =
-                        observed;
-                    const AutomationNameProvenance beforeState =
-                        captureNextAutomationNameState();
-                    assignNextAutomationNameState(restoredState);
-                    if ( !publishAutomationNameState(restoredState) )
-                        return false;
-
-                    try
-                    {
-                        if ( !beforeState.originalLocalValue ||
-                             beforeState.originalLocalValue ==
-                             DependencyProperty::UnsetValue() )
-                        {
-                            semanticTarget.ClearValue(nameProperty);
-                        }
-                        else
-                        {
-                            semanticTarget.SetValue(
-                                nameProperty,
-                                beforeState.originalLocalValue);
-                        }
-                    }
-                    catch ( ... )
-                    {
-                        // A WinRT setter may throw before or after mutating.
-                        // Roll provenance back only when the exact slot and
-                        // exact physical source are demonstrably unchanged.
-                        if ( getCurrentSlot() )
-                        {
-                            try
-                            {
-                                const AutomationNameObservation after =
-                                    observeAutomationName();
-                                if ( getCurrentSlot() &&
-                                     sameAutomationNameSource(
-                                         beforeWrite, after) )
-                                {
-                                    assignNextAutomationNameState(
-                                        beforeState);
-                                    publishAutomationNameState(beforeState);
-                                    if ( wxWinUISlot * const current =
-                                             getCurrentSlot() )
-                                    {
-                                        current->NudgeDirty();
-                                    }
-                                }
-                                else if ( wxWinUISlot * const current =
-                                              getCurrentSlot() )
-                                {
-                                    current->NudgeDirty();
-                                }
-                            }
-                            catch ( ... )
-                            {
-                                if ( wxWinUISlot * const current =
-                                         getCurrentSlot() )
-                                {
-                                    current->NudgeDirty();
-                                }
-                            }
-                        }
-                        throw;
-                    }
-                    if ( !getCurrentSlot() )
-                        return false;
-
-                    observed = observeAutomationName();
-                    return getCurrentSlot() != nullptr;
-                };
-
-            const auto publishWxAutomationName =
-                [&](const wxString& desired)
-                {
-                    const AutomationNameObservation beforeWrite =
-                        observed;
-                    const AutomationNameProvenance beforeState =
-                        captureNextAutomationNameState();
-                    nextUIANameOwned = true;
-                    nextUIANameAppOwned = false;
-                    nextUIANameRelinquished = false;
-                    nextUIANameSuppressedByLabeledBy = false;
-                    nextAppliedUIAName = desired;
-                    const AutomationNameProvenance publishedState =
-                        captureNextAutomationNameState();
-                    if ( !publishAutomationNameState(publishedState) )
-                        return false;
-
-                    try
-                    {
-                        AutomationProperties::SetName(
-                            semanticTarget,
-                            winrt::hstring(desired.ToStdWstring()));
-                    }
-                    catch ( ... )
-                    {
-                        if ( getCurrentSlot() )
-                        {
-                            try
-                            {
-                                const AutomationNameObservation after =
-                                    observeAutomationName();
-                                if ( getCurrentSlot() &&
-                                     sameAutomationNameSource(
-                                         beforeWrite, after) )
-                                {
-                                    assignNextAutomationNameState(
-                                        beforeState);
-                                    publishAutomationNameState(beforeState);
-                                    if ( wxWinUISlot * const current =
-                                             getCurrentSlot() )
-                                    {
-                                        current->NudgeDirty();
-                                    }
-                                }
-                                else if ( wxWinUISlot * const current =
-                                              getCurrentSlot() )
-                                {
-                                    current->NudgeDirty();
-                                }
-                            }
-                            catch ( ... )
-                            {
-                                if ( wxWinUISlot * const current =
-                                         getCurrentSlot() )
-                                {
-                                    current->NudgeDirty();
-                                }
-                            }
-                        }
-                        throw;
-                    }
-                    if ( !getCurrentSlot() )
-                        return false;
-
-                    observed = observeAutomationName();
-                    if ( !getCurrentSlot() )
-                        return false;
-
-                    const bool wxLocalStillExact =
-                        !observed.hasBinding &&
-                        observed.hasLocal &&
-                        observed.localIsString &&
-                        observed.localValue == desired;
-                    if ( wxLocalStillExact &&
-                         !observed.styleAuthors &&
-                         !observed.hasLabeledBy &&
-                         observed.effective == desired )
-                    {
-                        nextUIANameOwned = true;
-                        nextUIANameAppOwned = false;
-                        nextUIANameRelinquished = false;
-                        nextUIANameSuppressedByLabeledBy = false;
-                        nextAppliedUIAName = desired;
-                    }
-                    else
-                    {
-                        // A setter callback, animation or newly-assigned Style
-                        // superseded the value. If our local scalar still
-                        // exists, remove it now so it cannot mask/leak after
-                        // the external source goes away or the element detaches.
-                        AutomationNameProvenance restoredState =
-                            captureNextAutomationNameState();
-                        restoredState.owned = false;
-                        restoredState.lastApplied.clear();
-                        restoredState.originalLocalValue = nullptr;
-                        if ( observed.hasLabeledBy &&
-                             !observed.styleAuthors )
-                        {
-                            restoredState.appOwned = false;
-                            restoredState.relinquished = false;
-                            restoredState.suppressedByLabeledBy = true;
-                        }
-                        else
-                        {
-                            restoredState.appOwned = true;
-                            restoredState.relinquished = true;
-                            restoredState.suppressedByLabeledBy = false;
-                        }
-                        if ( wxLocalStillExact &&
-                             !restoreWxAutomationName(
-                                 desired, restoredState) )
-                        {
-                            return false;
-                        }
-                        nextUIANameOwned = false;
-                        nextAppliedUIAName.clear();
-                        nextOriginalUIANameLocalValue = nullptr;
-                        if ( !observed.IsAuthored() &&
-                             observed.hasLabeledBy )
-                        {
-                            nextUIANameAppOwned = false;
-                            nextUIANameRelinquished = false;
-                            nextUIANameSuppressedByLabeledBy = true;
-                        }
-                        else
-                        {
-                            nextUIANameAppOwned = true;
-                            nextUIANameRelinquished = true;
-                            nextUIANameSuppressedByLabeledBy = false;
-                        }
-                    }
-                    return true;
-                };
-
-            if ( !previousUIANameSynced )
-            {
-                nextUIANameOwned = false;
-                // A local or Style-authored empty string is meaningful:
-                // applications use it to keep a visual out of narration.
-                nextUIANameAppOwned = observed.IsAuthored();
-                nextUIANameRelinquished = nextUIANameAppOwned;
-                nextUIANameSuppressedByLabeledBy = false;
-                if ( !nextUIANameRelinquished &&
-                     observed.hasLabeledBy )
-                {
-                    // A typed relation is already the application's naming
-                    // source. Keep Name completely unset so its scalar
-                    // fallback cannot mask LabeledBy in the UIA peer.
-                    nextUIANameSuppressedByLabeledBy = true;
-                }
-                else if ( !nextUIANameRelinquished &&
-                          !uiaLabel.empty() )
-                {
-                    nextOriginalUIANameLocalValue = observed.local;
-                    if ( !publishWxAutomationName(uiaLabel) )
-                        return;
-                }
-            }
-            else
-            {
-                if ( nextUIANameOwned && observed.hasLabeledBy )
-                {
-                    // Relinquish only the exact local scalar wx supplied.
-                    // A simultaneous direct Name replacement remains
-                    // application-owned and is never cleared.
-                    const bool wxLocalStillExact =
-                        !observed.hasBinding &&
-                        observed.hasLocal &&
-                        observed.localIsString &&
-                        observed.localValue ==
-                            previousAppliedUIAName;
-                    AutomationNameProvenance suppressedState =
-                        captureNextAutomationNameState();
-                    suppressedState.owned = false;
-                    suppressedState.appOwned = false;
-                    suppressedState.relinquished = false;
-                    suppressedState.suppressedByLabeledBy = true;
-                    suppressedState.lastApplied.clear();
-                    suppressedState.originalLocalValue = nullptr;
-                    if ( !restoreWxAutomationName(
-                             previousAppliedUIAName,
-                             suppressedState) )
-                    {
-                        return;
-                    }
-
-                    nextUIANameOwned = false;
-                    nextAppliedUIAName.clear();
-                    nextOriginalUIANameLocalValue = nullptr;
-                    if ( !wxLocalStillExact ||
-                         observed.IsAuthored() )
-                    {
-                        // Missing/different local state before our restore is
-                        // a direct application mutation (ClearValue included),
-                        // not a reversible consequence of LabeledBy.
-                        nextUIANameAppOwned = true;
-                        nextUIANameRelinquished = true;
-                        nextUIANameSuppressedByLabeledBy = false;
-                    }
-                    else
-                    {
-                        nextUIANameAppOwned = false;
-                        nextUIANameRelinquished = false;
-                        nextUIANameSuppressedByLabeledBy = true;
-                    }
-                }
-
-                if ( nextUIANameOwned )
-                {
-                    const bool wxLocalStillExact =
-                        !observed.hasBinding &&
-                        observed.hasLocal &&
-                        observed.localIsString &&
-                        observed.localValue ==
-                            previousAppliedUIAName;
-                    if ( !wxLocalStillExact )
-                    {
-                        // ClearValue() is an authored decision too. Permanent
-                        // relinquishment prevents wx from reclaiming the
-                        // effective empty default on the next label change.
-                        nextUIANameOwned = false;
-                        nextUIANameAppOwned = true;
-                        nextUIANameRelinquished = true;
-                        nextUIANameSuppressedByLabeledBy = false;
-                        nextAppliedUIAName.clear();
-                        nextOriginalUIANameLocalValue = nullptr;
-                    }
-                    else if ( observed.styleAuthors ||
-                              observed.effective !=
-                                  previousAppliedUIAName )
-                    {
-                        // Style has lower precedence than our local value, and
-                        // an animation has higher precedence. Both are direct
-                        // application authorship: restore our baseline so the
-                        // external source is the sole authority.
-                        AutomationNameProvenance relinquishedState =
-                            captureNextAutomationNameState();
-                        relinquishedState.owned = false;
-                        relinquishedState.appOwned = true;
-                        relinquishedState.relinquished = true;
-                        relinquishedState.suppressedByLabeledBy = false;
-                        relinquishedState.lastApplied.clear();
-                        relinquishedState.originalLocalValue = nullptr;
-                        if ( !restoreWxAutomationName(
-                                 previousAppliedUIAName,
-                                 relinquishedState) )
-                        {
-                            return;
-                        }
-                        nextUIANameOwned = false;
-                        nextUIANameAppOwned = true;
-                        nextUIANameRelinquished = true;
-                        nextUIANameSuppressedByLabeledBy = false;
-                        nextAppliedUIAName.clear();
-                        nextOriginalUIANameLocalValue = nullptr;
-                    }
-                    else if ( uiaLabel.empty() )
-                    {
-                        // wx voluntarily stopped supplying a semantic label.
-                        // Reveal the exact pre-wx baseline; unlike an
-                        // application mutation, an actually-unset result may
-                        // be claimed again by a later non-empty label.
-                        AutomationNameProvenance freeState =
-                            captureNextAutomationNameState();
-                        freeState.owned = false;
-                        freeState.appOwned = false;
-                        freeState.relinquished = false;
-                        freeState.suppressedByLabeledBy = false;
-                        freeState.lastApplied.clear();
-                        freeState.originalLocalValue = nullptr;
-                        if ( !restoreWxAutomationName(
-                                 previousAppliedUIAName,
-                                 freeState) )
-                        {
-                            return;
-                        }
-                        nextUIANameOwned = false;
-                        nextUIANameAppOwned = observed.IsAuthored();
-                        nextUIANameRelinquished =
-                            nextUIANameAppOwned;
-                        nextUIANameSuppressedByLabeledBy = false;
-                        nextAppliedUIAName.clear();
-                        nextOriginalUIANameLocalValue = nullptr;
-                    }
-                    else if ( uiaLabel != previousUIAName )
-                    {
-                        if ( !publishWxAutomationName(uiaLabel) )
-                            return;
-                    }
-                }
-
-                if ( !nextUIANameOwned && nextUIANameRelinquished )
-                {
-                    // Keep this diagnostic bit truthful without weakening the
-                    // permanent relinquishment: empty is an intentional
-                    // application value too, not permission for wx to reclaim.
-                    nextUIANameAppOwned = observed.IsAuthored();
-                    nextUIANameSuppressedByLabeledBy = false;
-                }
-                else if ( !nextUIANameOwned )
-                {
-                    if ( observed.IsAuthored() )
-                    {
-                        nextUIANameAppOwned = true;
-                        nextUIANameRelinquished = true;
-                        nextUIANameSuppressedByLabeledBy = false;
-                    }
-                    else if ( observed.hasLabeledBy )
-                    {
-                        nextUIANameAppOwned = false;
-                        nextUIANameRelinquished = false;
-                        nextUIANameSuppressedByLabeledBy = true;
-                    }
-                    else
-                    {
-                        nextUIANameAppOwned = false;
-                        nextUIANameSuppressedByLabeledBy = false;
-                        if ( !uiaLabel.empty() &&
-                             (uiaLabel != previousUIAName ||
-                              previousUIANameOwned ||
-                              previousUIANameAppOwned ||
-                              previousUIANameSuppressedByLabeledBy) )
-                        {
-                            nextOriginalUIANameLocalValue =
-                                observed.local;
-                            if ( !publishWxAutomationName(uiaLabel) )
-                                return;
-                        }
-                    }
-                }
-            }
-
-            if ( !getCurrentSlot() )
-                return;
-        }
-
-        if ( wxWinUISlot * const current = getCurrentSlot() )
-        {
-            current->PublishAutomationNameState(
-                true,
-                nextUIANameOwned,
-                nextUIANameAppOwned,
-                nextUIANameRelinquished,
-                nextUIANameSuppressedByLabeledBy,
-                uiaLabel,
-                nextAppliedUIAName,
-                nextOriginalUIANameLocalValue,
-                automationNameImplicitStyleRevision);
-            automationNameStateRevision =
-                current->m_uiaNameStateRevision;
-        }
-        else
+        if ( !SyncSlotAutomationProperties(transaction) )
             return;
 
         if ( cursorChanged )

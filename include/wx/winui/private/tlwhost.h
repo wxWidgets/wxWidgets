@@ -69,6 +69,7 @@ class wxWinUIDropBroker;
 class wxWinUIDropBrokerState;
 class wxWinUIToolTipPropertyState;
 class wxWinUIAutomationNameStylePropertyState;
+struct wxWinUISlotSyncTransaction;
 class wxWinUIContentLoadedState;
 class wxWinUIPhysicalDisconnectGate;
 struct IRawElementProviderSimple;
@@ -1456,6 +1457,10 @@ private:
     void FlushDeferredSlotDisconnects();
     void InvalidateStructure();
     void SyncSlot(wxWinUISlot& slot);
+    wxWinUISlot *ResolveSlotSync(
+        const wxWinUISlotSyncTransaction& transaction);
+    bool SyncSlotAutomationProperties(
+        const wxWinUISlotSyncTransaction& transaction);
     void SynchronizeSlotToolTipPolicy(wxWinUISlot& slot);
     void SyncSlotAccessibilityAuthority(wxWinUISlot& slot,
                                         bool hasWxAccessible);

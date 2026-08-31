@@ -138,6 +138,24 @@ ownership, reentrant migration and real USER32/UIA shell retirement. Both
 are under `F:\wxwinui-pr26890-audit107-foundation`. No physical input was run.
 The Name/HelpText transaction within `SyncSlot()` is deliberately unchanged
 for the geometry move and still needs its own UIA projection boundary.
+The residual projection is now extracted after `7d6d65963f`: the complete
+754-line HelpText/Name policy runs in `hostuia.cpp` through a synchronous,
+non-owning stack transaction. The existing snapshots are not copied, their
+getter order is unchanged, and the shared mutable Name revision still guards
+every later geometry publication. The 16 outer early returns propagate to
+the same SyncSlot return; its existing exception boundary remains the owner.
+The ten nested lambda bodies and the re-expanded SyncSlot compare exactly.
+Only private non-virtual declarations are added to the installed host header;
+no data member or public callable API is added.
+
+Both shared/static `test_gui` and `minimal` builds pass `/warnaserror`, then
+retain **576 assertions / 18 UIA cases**, **550 / 22 tooltip cases**,
+**327 / 14 geometry cases**, and smoke/Supported **2/2**. Logs are
+`audit107a-projection-on-{build,uia,tooltips,geometry,gates}.log` in the
+existing build trees. No failed build or runtime retry occurred for this
+projection sublot. Source reconstruction and context-field proof are in
+`F:\wxwinui-pr26890-audit107-geometry\uia-projection`.
+
 Combined OFF/install/restore and new remote CI remain pending for this lot;
 the preceding batch's shipping evidence does not cover this new code.
 
