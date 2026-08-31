@@ -48,7 +48,7 @@
 #include "wx/toplevel.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogsession.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -1252,7 +1252,7 @@ TEST_CASE("WinUIRichText::LogicalKeyboardTabAndAccelerators",
     {
         KeyboardStateScope controlDown(VK_CONTROL);
         REQUIRE(controlDown.IsApplied());
-        CHECK(wxWinUI3RunKeyboardPipelineForTesting(
+        CHECK(wxWinUIKeyboardTestAccess::RunPipeline(
                   &ctrlA, rich, Modifiers(false, true), TraceXamlStage,
                   &acceleratorTrace) ==
               wxWinUIKeyboardPipelineResult::WxHandled);
@@ -1266,7 +1266,7 @@ TEST_CASE("WinUIRichText::LogicalKeyboardTabAndAccelerators",
     {
         KeyboardStateScope noModifiers;
         REQUIRE(noModifiers.IsApplied());
-        CHECK(wxWinUI3RunKeyboardPipelineForTesting(
+        CHECK(wxWinUIKeyboardTestAccess::RunPipeline(
                   &f6, rich, Modifiers(), TraceXamlStage,
                   &acceleratorTrace) ==
               wxWinUIKeyboardPipelineResult::WxHandled);
@@ -1284,7 +1284,7 @@ TEST_CASE("WinUIRichText::LogicalKeyboardTabAndAccelerators",
         static_cast<HWND>(rich->GetHWND()), WM_KEYDOWN, VK_TAB);
     CHECK_FALSE(wxWinUI3ProcessTabNavigationWithModifiers(
         &tab, false, false, false));
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &tab, Modifiers(), TraceXamlStage, &tabTrace) ==
           wxWinUIKeyboardPipelineResult::NotHandled);
     CHECK(::GetFocus() == focusBefore);
@@ -1296,7 +1296,7 @@ TEST_CASE("WinUIRichText::LogicalKeyboardTabAndAccelerators",
         static_cast<HWND>(rich->GetHWND()), WM_KEYDOWN, VK_TAB);
     CHECK_FALSE(wxWinUI3ProcessTabNavigationWithModifiers(
         &shiftTab, true, false, false));
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &shiftTab, Modifiers(true), TraceXamlStage, &tabTrace) ==
           wxWinUIKeyboardPipelineResult::NotHandled);
     CHECK(DeliverCharacter(rich, WXK_TAB, true));
@@ -1307,7 +1307,7 @@ TEST_CASE("WinUIRichText::LogicalKeyboardTabAndAccelerators",
         static_cast<HWND>(rich->GetHWND()), WM_KEYDOWN, VK_TAB);
     CHECK_FALSE(wxWinUI3ProcessTabNavigationWithModifiers(
         &controlTab, false, true, false));
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &controlTab, Modifiers(false, true),
               TraceXamlStage, &tabTrace) ==
           wxWinUIKeyboardPipelineResult::NotHandled);

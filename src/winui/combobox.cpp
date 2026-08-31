@@ -15,6 +15,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
 #include "combobox-test-access.h"
+#include "keyboard-test-access.h"
 #include "choice-test-access.h"
 #include "combobox-uia-helper.h"
 #include <UIAutomation.h>
@@ -33,7 +34,7 @@
 #include "wx/textcompleter.h"
 #include "wx/weakref.h"
 #include "wx/winui/winui.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard.h"
 #include "wx/winui/private/textpeer.h"
 
 #include <algorithm>
@@ -345,7 +346,7 @@ MUXC::ScrollViewer wxWinUIFindScrollViewer(
 wxWinUIKeyboardModifiers wxWinUIComboGetModifiers()
 {
     wxWinUIKeyboardModifiers modifiers = {};
-    if ( wxWinUI3GetKeyboardModifiersOverrideForTesting(&modifiers) )
+    if ( wxWinUIGetKeyboardModifiersOverride(&modifiers) )
         return modifiers;
 
     modifiers.shiftDown = wxIsShiftDown();
@@ -9419,15 +9420,15 @@ bool wxWinUIComboBoxTestAccess::InvokeClipboardCommand(wxComboBox* control,
 
         wxWinUIKeyboardModifiers previousModifiers{};
         const bool hadModifierOverride =
-            wxWinUI3GetKeyboardModifiersOverrideForTesting(
+            wxWinUIGetKeyboardModifiersOverride(
                 &previousModifiers);
         wxWinUIKeyboardModifiers modifiers{};
         modifiers.controlDown = true;
-        wxWinUI3SetKeyboardModifiersForTesting(&modifiers);
+        wxWinUIKeyboardTestAccess::SetKeyboardModifiers(&modifiers);
         wxScopeGuard modifierGuard = wxMakeGuard(
             [hadModifierOverride, previousModifiers]()
             {
-                wxWinUI3SetKeyboardModifiersForTesting(
+                wxWinUIKeyboardTestAccess::SetKeyboardModifiers(
                     hadModifierOverride ? &previousModifiers : nullptr);
             });
         wxUnusedVar(modifierGuard);

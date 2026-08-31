@@ -33,7 +33,7 @@
 #include "wx/scopeguard.h"
 #include "wx/textcompleter.h"
 #include "wx/weakref.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard.h"
 #include "wx/winui/private/textpeer.h"
 #include "wx/winui/private/tlwhost.h"
 
@@ -1392,7 +1392,7 @@ wxWinUIKeyboardModifiers wxWinUITextCtrlGetModifiers(WXMSG *msg)
 {
     wxWinUIKeyboardModifiers modifiers = {};
 #ifdef WXWINUI_TEST_SUPPORT
-    if ( wxWinUI3GetKeyboardModifiersOverrideForTesting(&modifiers) )
+    if ( wxWinUIGetKeyboardModifiersOverride(&modifiers) )
         return modifiers;
 #endif
 

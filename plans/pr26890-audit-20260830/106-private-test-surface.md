@@ -236,13 +236,13 @@ Do not delete a lifetime/retirement service used by production merely because it
   access when built with ALL. Without it, `--input-scenarios` is explicitly
   unavailable (exit 30), not silently successful. The normal demo, diagnostics,
   composition scenarios and real scroll-latency code remain available.
-- Both shared/static test binaries pass the unchanged focused groups:
 - The combined consumer proof covers all **22** changed test source files and
   **409** migrated calls (200 geometry/UIA, 209 input/focus/resize). Inverting
   only the declared adapters/includes gives the same **312221** C++ tokens;
   assertion expressions, comments and preprocessing directive streams are
-  unchanged. Evidence: `audit107-geometry/uia-projection/test-access/combined-host-check`
-  under the existing F: proof directory. This is source equivalence, not a
+  unchanged. Evidence is in the existing
+  `F:\wxwinui-pr26890-audit107-geometry\uia-projection\test-access\combined-host-check`.
+  This is source equivalence, not a
   runtime count or coverage for the separate sample changes.
 - Both shared/static test binaries pass the unchanged focused groups:
   input **1205/31**, focus **132/14**, native resize/lifecycle **219/7**,
@@ -277,6 +277,39 @@ Do not delete a lifetime/retirement service used by production merely because it
   evidence about held physical mouse input. OFF CLI rejection remains pending.
   The remaining slot/content, broker, keyboard, bootstrap and MSW test seams
   keep plan 106 open.
+
+## Keyboard pipeline test boundary (2026-08-31)
+
+- Eight deterministic keyboard adapters move from the mixed source-private
+  `inputtest.h` to `keyboard-test-access.h`. The real pipeline types and three
+  existing event-loop helpers live in intracore `src/winui/keyboard.h`.
+  Shipping has no fallback-forcing/modifier-override state or exported test
+  adapter. The neutral intracore modifier query returns false without test
+  support, preserving callers' native modifier reads and AltGr policy.
+- Production HWND resolution, removed-message semantics, IME veto consumption,
+  accelerator-before-XAML order and fallback behaviour remain unchanged.
+  The veto key is real event-loop state and is not removed: only its injected
+  setter is test-only. Core adds the existing private definition to
+  `src/msw/evtloop.cpp` only for WinUI/ALL, not to ordinary MSW or every source.
+- Before migration, both linkages pass exactly **417 assertions / 16 keyboard
+  cases**, **58/5** dialog cases, **4/1** keyboard-focus exclusion and **49/1**
+  RichText logical keyboard routing. Logs: `audit106-keyboard-baseline-*.log`.
+  These 23 exact cases use private desktops and no physical keyboard input;
+  physical Ctrl+T and external UIA/clipboard campaigns are not selected.
+- Candidate proof is in the existing `audit107-foundation/keyboard-separation`
+  evidence directory: seven producer and five consumer token streams are
+  unchanged after declared accessor/type/include substitutions. Source proof
+  does not replace compiler/runtime or shipping qualification.
+- Both shared/static Release builds now pass `test_gui`, `minimal` and
+  `winuispike` with `/warnaserror`; ordinary MSW Debug `test_gui` also builds.
+  The unchanged four groups repeat **417/16 + 58/5 + 4/1 + 49/1** in each
+  linkage, and runtime smoke/Supported V0 pass **2/2**. Logs are
+  `audit106-keyboard-on-*.log`, `audit106-keyboard-msw-window-on-build.log`
+  and `audit106-keyboard-msw-window-on-gates.log` in the existing WinUI trees;
+  the MSW log is `audit106-keyboard-msw-window-cross-build.log` in its existing
+  audit tree. No physical input or MSW GUI runtime is claimed. The coordinated
+  build also contains the separately tracked MSW-window adapter sublot.
+  Fresh shipping OFF/install qualification remains pending.
 
 ## Maintenance
 

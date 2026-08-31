@@ -196,6 +196,7 @@ if(WXWINUI AND wxUSE_WINUI3)
         get_target_property(wx_winui_test_support_definitions
             wx_winui_test_support INTERFACE_COMPILE_DEFINITIONS)
         set(wx_winui_test_support_sources
+            "${wxSOURCE_DIR}/src/msw/evtloop.cpp"
             "${wxSOURCE_DIR}/src/winui/button.cpp"
             "${wxSOURCE_DIR}/src/winui/tglbtn.cpp"
             "${wxSOURCE_DIR}/src/winui/stattext.cpp"

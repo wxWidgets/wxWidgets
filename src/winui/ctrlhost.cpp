@@ -20,7 +20,7 @@
 #endif // WXWINUI_TEST_SUPPORT
 
 #include "wx/winui/private/appearance.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard.h"
 #include "wx/winui/private/dialogcontracts.h"
 #include "wx/winui/private/shelltheme.h"
 #include "wx/winui/private/transient.h"

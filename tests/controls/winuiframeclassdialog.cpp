@@ -22,7 +22,7 @@
 #include "wx/msw/wrapwin.h"
 #include "textctrl-test-access.h"
 #include "wx/timer.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard-test-access.h"
 #include "wx/winui/winui.h"
 
 namespace
@@ -64,7 +64,7 @@ RunDialogPipeline(wxWindow *logicalOwner,
                   MSG& msg,
                   XamlStageTrace& trace)
 {
-    return wxWinUI3RunKeyboardPipelineForTesting(
+    return wxWinUIKeyboardTestAccess::RunPipeline(
         &msg, logicalOwner, Modifiers(), TraceXamlStage, &trace);
 }
 

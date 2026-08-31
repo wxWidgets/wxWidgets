@@ -40,7 +40,7 @@
 
 #include "wx/msw/wrapwin.h"
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-    #include "wx/winui/private/inputtest.h"
+    #include "../winui/keyboard.h"
 #endif
 #include <shlwapi.h>
 
@@ -1090,7 +1090,7 @@ extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
             int shift;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
             wxWinUIKeyboardModifiers modifiers;
-            if ( wxWinUI3GetKeyboardModifiersOverrideForTesting(&modifiers) )
+            if ( wxWinUIGetKeyboardModifiersOverride(&modifiers) )
             {
                 ctrl = modifiers.controlDown;
                 shift = modifiers.shiftDown;

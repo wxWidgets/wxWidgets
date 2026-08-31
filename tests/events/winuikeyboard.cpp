@@ -30,7 +30,7 @@
 #include "wx/utils.h"
 #include "wx/weakref.h"
 #include "wx/winui/winui.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/xamlhost.h"
 #include "choice-test-access.h"
@@ -162,7 +162,7 @@ RunPipeline(MSG& msg,
             const wxWinUIKeyboardModifiers& modifiers,
             PipelineTrace& trace)
 {
-    return wxWinUI3RunKeyboardPipelineForTesting(
+    return wxWinUIKeyboardTestAccess::RunPipeline(
         &msg, owner, modifiers, TraceXamlPreTranslate, &trace);
 }
 
@@ -336,7 +336,7 @@ TEST_CASE("WinUIKeyboard::DeferredCharHookVetoPrecedesAllStages",
         trace.xamlHandles = true;
         MSG msg = KeyMessage(message, 'K');
 
-        wxWinUI3SetBlockedKeyboardKeyForTesting('K');
+        wxWinUIKeyboardTestAccess::SetBlockedKeyboardKey('K');
         CHECK(RunPipeline(msg, &owner, Modifiers(), trace) ==
               wxWinUIKeyboardPipelineResult::WxHandled);
         CHECK(owner.shouldCalls == 0);
@@ -735,7 +735,7 @@ TEST_CASE("WinUIKeyboard::AcceleratorFocusMatrix",
             REQUIRE(noModifiers.IsApplied());
             MSG f6 = KeyMessage(WM_KEYDOWN, VK_F6);
             f6.hwnd = fixture.host->GetBridgeHwnd();
-            REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+            REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
                 HC_ACTION, PM_REMOVE, &f6, Modifiers(),
                 TraceXamlPreTranslate, &trace));
             CHECK(f6.message == WM_NULL);
@@ -750,7 +750,7 @@ TEST_CASE("WinUIKeyboard::AcceleratorFocusMatrix",
             REQUIRE(controlDown.IsApplied());
             MSG ctrlT = KeyMessage(WM_KEYDOWN, 'T');
             ctrlT.hwnd = fixture.host->GetBridgeHwnd();
-            REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+            REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
                 HC_ACTION, PM_REMOVE, &ctrlT, Modifiers(true),
                 TraceXamlPreTranslate, &trace));
             CHECK(ctrlT.message == WM_NULL);
@@ -765,7 +765,7 @@ TEST_CASE("WinUIKeyboard::AcceleratorFocusMatrix",
             REQUIRE(altDown.IsApplied());
             MSG altM = KeyMessage(WM_SYSKEYDOWN, 'M');
             altM.hwnd = fixture.host->GetBridgeHwnd();
-            REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+            REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
                 HC_ACTION, PM_REMOVE, &altM,
                 Modifiers(false, true),
                 TraceXamlPreTranslate, &trace));
@@ -787,7 +787,7 @@ TEST_CASE("WinUIKeyboard::AcceleratorFocusMatrix",
         REQUIRE(controlDown.IsApplied());
         MSG disabled = KeyMessage(WM_KEYDOWN, 'T');
         disabled.hwnd = fixture.host->GetBridgeHwnd();
-        REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+        REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
             HC_ACTION, PM_REMOVE, &disabled, Modifiers(true),
             TraceXamlPreTranslate, &trace));
         CHECK(disabled.message == WM_NULL);
@@ -879,7 +879,7 @@ TEST_CASE("WinUIKeyboard::ComboLocalKeysBeatParentAccelerators",
 
         MSG f4 = KeyMessage(WM_KEYDOWN, VK_F4);
         f4.hwnd = fixture.host->GetBridgeHwnd();
-        REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+        REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
             HC_ACTION, PM_REMOVE, &f4, Modifiers(),
             TraceXamlPreTranslate, &trace));
 
@@ -908,7 +908,7 @@ TEST_CASE("WinUIKeyboard::ComboLocalKeysBeatParentAccelerators",
         {
             MSG local = KeyMessage(WM_KEYDOWN, key);
             local.hwnd = fixture.host->GetBridgeHwnd();
-            REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+            REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
                 HC_ACTION, PM_REMOVE, &local, Modifiers(),
                 TraceXamlPreTranslate, &trace));
             CHECK(local.message == WM_NULL);
@@ -977,20 +977,20 @@ TEST_CASE("WinUIKeyboard::PrintableSequenceIsDeliveredOnce",
     {
         message.hwnd = fixture.host->GetBridgeHwnd();
         MSG peek = message;
-        CHECK(!wxWinUI3ProcessGetMessageHookForTesting(
+        CHECK(!wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
             HC_ACTION, PM_NOREMOVE, &peek, Modifiers(),
             TraceXamlPreTranslate, &hookTrace));
         CHECK(hookTrace.xamlCalls ==
               (message.message == WM_KEYDOWN ? 0u : 1u));
 
-        REQUIRE(wxWinUI3ProcessGetMessageHookForTesting(
+        REQUIRE(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
             HC_ACTION, PM_REMOVE, &message, Modifiers(),
             TraceXamlPreTranslate, &hookTrace));
         CHECK(message.message == WM_NULL);
 
         // The event loop receives the neutralized message, so no second XAML
         // delivery can occur.
-        CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+        CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
                   &message, Modifiers(),
                   TraceXamlPreTranslate, &hookTrace) ==
               wxWinUIKeyboardPipelineResult::NotApplicable);
@@ -1003,7 +1003,7 @@ TEST_CASE("WinUIKeyboard::PrintableSequenceIsDeliveredOnce",
     for ( MSG message : messages )
     {
         message.hwnd = fixture.host->GetBridgeHwnd();
-        CHECK(wxWinUI3ProcessEventLoopFallbackForTesting(
+        CHECK(wxWinUIKeyboardTestAccess::ProcessEventLoopFallback(
             &message, Modifiers(),
             TraceXamlPreTranslate, &fallbackTrace));
     }
@@ -1098,7 +1098,7 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
 
     MSG peek = KeyMessage(WM_KEYDOWN, VK_F6);
     peek.hwnd = fixture.host->GetBridgeHwnd();
-    CHECK(!wxWinUI3ProcessGetMessageHookForTesting(
+    CHECK(!wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
         HC_ACTION, PM_NOREMOVE, &peek, Modifiers(),
         TraceXamlPreTranslate, &trace));
     CHECK(peek.message == WM_KEYDOWN);
@@ -1107,7 +1107,7 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
 
     MSG removed = KeyMessage(WM_KEYDOWN, VK_F6);
     removed.hwnd = fixture.host->GetBridgeHwnd();
-    CHECK(wxWinUI3ProcessGetMessageHookForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
         HC_ACTION, PM_REMOVE, &removed, Modifiers(),
         TraceXamlPreTranslate, &trace));
     CHECK(removed.message == WM_NULL);
@@ -1115,18 +1115,18 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
     CHECK(trace.xamlCalls == 0);
 
     const bool previousFallback =
-        wxWinUI3ForceEventLoopFallbackForTesting(true);
+        wxWinUIKeyboardTestAccess::ForceEventLoopFallback(true);
     CHECK(!wxWinUI3IsGetMessageHookActive());
     MSG fallback = KeyMessage(WM_KEYDOWN, VK_F6);
     fallback.hwnd = fixture.host->GetBridgeHwnd();
     CHECK(wxWinUI3PreProcessMessage(&fallback));
     CHECK(commandCount == 2);
-    wxWinUI3ForceEventLoopFallbackForTesting(previousFallback);
+    wxWinUIKeyboardTestAccess::ForceEventLoopFallback(previousFallback);
 
     // A native wx HWND still gets wx preprocessing in a native nested loop.
     MSG nativeWx = KeyMessage(WM_KEYDOWN, VK_F6);
     nativeWx.hwnd = static_cast<HWND>(fixture.frame->GetHWND());
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &nativeWx, Modifiers(), TraceXamlPreTranslate, &trace) ==
           wxWinUIKeyboardPipelineResult::WxHandled);
     CHECK(commandCount == 3);
@@ -1137,7 +1137,7 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
     MSG nativeUnhandled = KeyMessage(WM_KEYDOWN, VK_F7);
     nativeUnhandled.hwnd =
         static_cast<HWND>(fixture.frame->GetHWND());
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &nativeUnhandled, Modifiers(),
               TraceXamlPreTranslate, &trace) ==
           wxWinUIKeyboardPipelineResult::NotHandled);
@@ -1159,7 +1159,7 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
 
     MSG foreign = KeyMessage(WM_KEYDOWN, VK_F6);
     foreign.hwnd = foreignPopup;
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &foreign, Modifiers(), TraceXamlPreTranslate, &trace) ==
           wxWinUIKeyboardPipelineResult::NotHandled);
     CHECK(commandCount == 3);
@@ -1185,8 +1185,8 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
 
     MSG imeVeto = KeyMessage(WM_KEYDOWN, 'K');
     imeVeto.hwnd = static_cast<HWND>(fixture.frame->GetHWND());
-    wxWinUI3SetBlockedKeyboardKeyForTesting('K');
-    CHECK(wxWinUI3ProcessGetMessageHookForTesting(
+    wxWinUIKeyboardTestAccess::SetBlockedKeyboardKey('K');
+    CHECK(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
         HC_ACTION, PM_REMOVE, &imeVeto, Modifiers(),
         TraceXamlPreTranslate, &trace));
     CHECK(imeVeto.message == WM_NULL);
@@ -1195,8 +1195,8 @@ TEST_CASE("WinUIKeyboard::RemovedMessageUsesHwndResolverExactlyOnce",
 
     MSG imeSystemVeto = KeyMessage(WM_SYSKEYDOWN, 'K');
     imeSystemVeto.hwnd = foreignPopup;
-    wxWinUI3SetBlockedKeyboardKeyForTesting('K');
-    CHECK(wxWinUI3ProcessGetMessageHookForTesting(
+    wxWinUIKeyboardTestAccess::SetBlockedKeyboardKey('K');
+    CHECK(wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
         HC_ACTION, PM_REMOVE, &imeSystemVeto, Modifiers(),
         TraceXamlPreTranslate, &trace));
     CHECK(imeSystemVeto.message == WM_NULL);
@@ -1237,7 +1237,7 @@ TEST_CASE("WinUIKeyboard::CriticalWindowBlocksIslandAndNativeOwners",
 
         MSG island = KeyMessage(WM_KEYDOWN, VK_F6);
         island.hwnd = fixture.host->GetBridgeHwnd();
-        CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+        CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
                   &island, Modifiers(),
                   TraceXamlPreTranslate, &trace) ==
               wxWinUIKeyboardPipelineResult::WxHandled);
@@ -1245,7 +1245,7 @@ TEST_CASE("WinUIKeyboard::CriticalWindowBlocksIslandAndNativeOwners",
         MSG nativeWx = KeyMessage(WM_KEYDOWN, VK_F6);
         nativeWx.hwnd =
             static_cast<HWND>(fixture.frame->GetHWND());
-        CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+        CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
                   &nativeWx, Modifiers(),
                   TraceXamlPreTranslate, &trace) ==
               wxWinUIKeyboardPipelineResult::WxHandled);
@@ -1258,7 +1258,7 @@ TEST_CASE("WinUIKeyboard::CriticalWindowBlocksIslandAndNativeOwners",
     // above fails while unwinding the section.
     MSG restored = KeyMessage(WM_KEYDOWN, VK_F6);
     restored.hwnd = fixture.host->GetBridgeHwnd();
-    CHECK(wxWinUI3ProcessKeyboardMessageForTesting(
+    CHECK(wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
               &restored, Modifiers(),
               TraceXamlPreTranslate, &trace) ==
           wxWinUIKeyboardPipelineResult::WxHandled);

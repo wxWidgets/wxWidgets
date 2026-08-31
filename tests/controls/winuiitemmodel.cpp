@@ -27,7 +27,7 @@
     #if wxUSE_UIACTIONSIMULATOR
     #include "wx/uiaction.h"
     #endif
-    #include "wx/winui/private/inputtest.h"
+    #include "keyboard-test-access.h"
     #include "wx/winui/private/textpeer.h"
     #include "wx/winui/private/tlwhost.h"
 #endif
@@ -280,12 +280,12 @@ public:
     explicit wxWinUIScopedKeyboardModifiers(
         const wxWinUIKeyboardModifiers& modifiers)
     {
-        wxWinUI3SetKeyboardModifiersForTesting(&modifiers);
+        wxWinUIKeyboardTestAccess::SetKeyboardModifiers(&modifiers);
     }
 
     ~wxWinUIScopedKeyboardModifiers()
     {
-        wxWinUI3SetKeyboardModifiersForTesting(nullptr);
+        wxWinUIKeyboardTestAccess::SetKeyboardModifiers(nullptr);
     }
 };
 

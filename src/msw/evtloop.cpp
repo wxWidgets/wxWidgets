@@ -32,7 +32,10 @@
 #include "wx/msw/private.h"
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/winui.h"
-    #include "wx/winui/private/inputtest.h"
+    #include "../winui/keyboard.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "keyboard-test-access.h"
+    #endif
 #endif
 
 #include "wx/tooltip.h"
@@ -89,10 +92,12 @@ bool wxWinUI3ConsumeBlockedKeyboardMessage(WXMSG *msg)
     return false;
 }
 
-void wxWinUI3SetBlockedKeyboardKeyForTesting(WXWPARAM key)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIKeyboardTestAccess::SetBlockedKeyboardKey(WXWPARAM key)
 {
     wxVKBlockedByKeyboardHook = static_cast<WPARAM>(key);
 }
+#endif
 #endif
 
 bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)

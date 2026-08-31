@@ -16,8 +16,9 @@
 #include "private.h"
 #ifdef WXWINUI_TEST_SUPPORT
     #include "runtime-test-access.h"
+    #include "keyboard-test-access.h"
 #endif
-#include "wx/winui/private/inputtest.h"
+#include "keyboard.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #ifndef WX_PRECOMP
@@ -540,10 +541,12 @@ bool wxWinUIPinXamlRuntimeModule() noexcept
 // process fail to start because the DLL is absent at load time).
 using wxWinUIContentPreTranslateMessage = BOOL (WINAPI *)(const MSG *);
 wxWinUIContentPreTranslateMessage gs_winuiContentPreTranslateMessage = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
 bool gs_winuiForceEventLoopFallbackForTesting = false;
 bool gs_winuiKeyboardModifiersOverriddenForTesting = false;
 wxWinUIKeyboardModifiers gs_winuiKeyboardModifiersForTesting =
     { false, false, false, false };
+#endif
 
 bool wxWinUIIsKeyboardMessage(const MSG *msg)
 {
@@ -576,8 +579,10 @@ bool wxWinUIIsTabMessage(const MSG *msg)
 
 wxWinUIKeyboardModifiers wxWinUIGetKeyboardModifiers()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_winuiKeyboardModifiersOverriddenForTesting )
         return gs_winuiKeyboardModifiersForTesting;
+#endif
 
     return
     {
@@ -592,7 +597,7 @@ wxWinUIKeyboardPipelineResult wxWinUIRunKeyboardPipelineImpl(
     MSG *msg,
     wxWindow *logicalOwner,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     if ( !msg || !logicalOwner || !wxWinUIIsKeyboardMessage(msg) )
@@ -2262,7 +2267,7 @@ bool wxWinUICallXamlPreTranslate(WXMSG *msg, void *context)
 wxWinUIKeyboardPipelineResult wxWinUIProcessKeyboardMessageImpl(
     MSG *msg,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     if ( !msg || !wxWinUIIsKeyboardMessage(msg) )
@@ -2336,7 +2341,7 @@ wxWinUIKeyboardPipelineResult wxWinUIProcessKeyboardMessageImpl(
 bool wxWinUIProcessMessageWithCallback(
     MSG *msg,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     if ( !msg )
@@ -2397,7 +2402,9 @@ bool gs_winuiGetMsgHookFailureLogged = false;
 LRESULT CALLBACK wxWinUIGetMsgHookProc(int code, WPARAM wParam, LPARAM lParam)
 {
     if ( gs_winuiGetMsgHookEnabled &&
+#ifdef WXWINUI_TEST_SUPPORT
             !gs_winuiForceEventLoopFallbackForTesting &&
+#endif
             code >= 0 && wParam == PM_REMOVE )
     {
         MSG * const msg = reinterpret_cast<MSG *>(lParam);
@@ -2584,11 +2591,12 @@ std::size_t wxWinUIRuntimeTestAccess::GetFrameworkRetirementCount() noexcept
 }
 
 #endif
-wxWinUIKeyboardPipelineResult wxWinUI3RunKeyboardPipelineForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIKeyboardPipelineResult wxWinUIKeyboardTestAccess::RunPipeline(
     WXMSG *msg,
     wxWindow *logicalOwner,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     // Make the same injected snapshot visible to the local text-entry filter,
@@ -2621,10 +2629,10 @@ wxWinUIKeyboardPipelineResult wxWinUI3RunKeyboardPipelineForTesting(
 }
 
 wxWinUIKeyboardPipelineResult
-wxWinUI3ProcessKeyboardMessageForTesting(
+wxWinUIKeyboardTestAccess::ProcessKeyboardMessage(
     WXMSG *msg,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     return wxWinUIProcessKeyboardMessageImpl(
@@ -2634,12 +2642,12 @@ wxWinUI3ProcessKeyboardMessageForTesting(
         xamlContext);
 }
 
-bool wxWinUI3ProcessGetMessageHookForTesting(
+bool wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
     int code,
     WXWPARAM removalMode,
     WXMSG *msg,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     if ( code < 0 || removalMode != PM_REMOVE || !msg )
@@ -2661,10 +2669,10 @@ bool wxWinUI3ProcessGetMessageHookForTesting(
     return true;
 }
 
-bool wxWinUI3ProcessEventLoopFallbackForTesting(
+bool wxWinUIKeyboardTestAccess::ProcessEventLoopFallback(
     WXMSG *msg,
     const wxWinUIKeyboardModifiers& modifiers,
-    wxWinUIXamlPreTranslateForTest xamlPreTranslate,
+    wxWinUIXamlPreTranslateCallback xamlPreTranslate,
     void *xamlContext)
 {
     return msg &&
@@ -2675,14 +2683,14 @@ bool wxWinUI3ProcessEventLoopFallbackForTesting(
                xamlContext);
 }
 
-bool wxWinUI3ForceEventLoopFallbackForTesting(bool forceFallback)
+bool wxWinUIKeyboardTestAccess::ForceEventLoopFallback(bool forceFallback)
 {
     const bool wasForced = gs_winuiForceEventLoopFallbackForTesting;
     gs_winuiForceEventLoopFallbackForTesting = forceFallback;
     return wasForced;
 }
 
-void wxWinUI3SetKeyboardModifiersForTesting(
+void wxWinUIKeyboardTestAccess::SetKeyboardModifiers(
     const wxWinUIKeyboardModifiers *modifiers)
 {
     if ( modifiers )
@@ -2696,22 +2704,36 @@ void wxWinUI3SetKeyboardModifiersForTesting(
     }
 }
 
-bool wxWinUI3GetKeyboardModifiersOverrideForTesting(
+bool wxWinUIKeyboardTestAccess::GetKeyboardModifiersOverride(
     wxWinUIKeyboardModifiers *modifiers)
 {
+    return wxWinUIGetKeyboardModifiersOverride(modifiers);
+}
+#endif
+
+bool wxWinUIGetKeyboardModifiersOverride(
+    wxWinUIKeyboardModifiers *modifiers)
+{
+#ifdef WXWINUI_TEST_SUPPORT
     if ( !gs_winuiKeyboardModifiersOverriddenForTesting )
         return false;
 
     if ( modifiers )
         *modifiers = gs_winuiKeyboardModifiersForTesting;
     return true;
+#else
+    wxUnusedVar(modifiers);
+    return false;
+#endif
 }
 
 bool wxWinUI3IsGetMessageHookActive()
 {
     return gs_winuiGetMsgHookState == wxWinUIGetMsgHookState::Active &&
            gs_winuiGetMsgHookEnabled &&
+#ifdef WXWINUI_TEST_SUPPORT
            !gs_winuiForceEventLoopFallbackForTesting &&
+#endif
            gs_winuiGetMsgHook != nullptr;
 }
 
@@ -3166,8 +3188,10 @@ void wxWinUI3Uninitialize()
     }
 
     gs_winuiContentPreTranslateMessage = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
     gs_winuiForceEventLoopFallbackForTesting = false;
     gs_winuiKeyboardModifiersOverriddenForTesting = false;
+#endif
     gs_winuiOwnerThreadId.store(0, std::memory_order_release);
     gs_winuiRuntimeState.store(
         wxWinUIRuntimeState::Idle, std::memory_order_release);

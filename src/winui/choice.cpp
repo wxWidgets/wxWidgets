@@ -24,7 +24,7 @@
 
 #include "private.h"
 #include "wx/weakref.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard.h"
 
 #include <algorithm>
 #include <cmath>
@@ -68,7 +68,7 @@ private:
 bool wxWinUIChoiceHasModifiers(WXMSG *msg)
 {
     wxWinUIKeyboardModifiers modifiers;
-    if ( wxWinUI3GetKeyboardModifiersOverrideForTesting(&modifiers) )
+    if ( wxWinUIGetKeyboardModifiersOverride(&modifiers) )
     {
         return modifiers.shiftDown || modifiers.controlDown ||
                modifiers.leftAltDown || modifiers.rightAltDown;

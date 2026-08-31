@@ -59,7 +59,7 @@
 #include "host-uia-test-access.h"
 #include "control-host-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
-#include "wx/winui/private/inputtest.h"
+#include "keyboard-test-access.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/xamlhost.h"
 
@@ -9299,9 +9299,9 @@ TEST_CASE("HostState::KeyboardFocusExclusion", "[HostState]")
     tabMsg.message = WM_KEYDOWN;
     tabMsg.wParam = VK_TAB;
     const bool previousFallback =
-        wxWinUI3ForceEventLoopFallbackForTesting(true);
+        wxWinUIKeyboardTestAccess::ForceEventLoopFallback(true);
     wxGUIEventLoop().ProcessMessage(&tabMsg);
-    wxWinUI3ForceEventLoopFallbackForTesting(previousFallback);
+    wxWinUIKeyboardTestAccess::ForceEventLoopFallback(previousFallback);
     DrainDispatch(5);
 
     // wx contract: Tab skips a window whose AcceptsFocusFromKeyboard() is
