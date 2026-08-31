@@ -18,6 +18,9 @@
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "titlebar-test-access.h"
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -78,9 +81,11 @@ using wxWinUITitleBarPolicies =
 
 wxWinUITitleBarPolicies gs_titleBarPolicies;
 unsigned long long gs_titleBarPublicationGeneration = 0;
-unsigned gs_titleBarFaultMask = wxWINUI_TITLEBAR_FAULT_NONE;
-wxWinUITitleBarHookForTesting gs_titleBarHook = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned gs_titleBarFaultMask = wxWinUITitleBarTestAccess::Fault_None;
+wxWinUITitleBarTestAccess::Hook gs_titleBarHook = nullptr;
 bool gs_titleBarHookActive = false;
+#endif
 unsigned gs_titleBarTeardownResets = 0;
 
 unsigned long long wxWinUINextTitleBarPublicationGeneration()
@@ -90,6 +95,7 @@ unsigned long long wxWinUINextTitleBarPublicationGeneration()
     return gs_titleBarPublicationGeneration;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool wxWinUIConsumeTitleBarFault(unsigned fault)
 {
     if ( !(gs_titleBarFaultMask & fault) )
@@ -110,7 +116,7 @@ void wxWinUIThrowTitleBarFaultIfRequested(unsigned fault)
 
 void wxWinUIInvokeTitleBarHook(
     const wxWinUITitleBarPolicyPtr& policy,
-    wxWinUITitleBarHookPointForTesting point)
+    wxWinUITitleBarTestAccess::HookPoint point)
 {
     if ( !policy || !gs_titleBarHook || gs_titleBarHookActive )
         return;
@@ -131,17 +137,25 @@ void wxWinUIInvokeTitleBarHook(
     }
     gs_titleBarHookActive = false;
 }
+#endif
 
 void wxWinUILogTitleBarException(
     const wxWinUITitleBarPolicyPtr& policy,
     const char *where,
     const winrt::hresult_error& error)
 {
+#ifndef WXWINUI_TEST_SUPPORT
+    wxUnusedVar(policy);
+#endif
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIInvokeTitleBarHook(
-        policy, wxWinUITitleBarHookPointForTesting::BeforeExceptionLog);
+        policy, wxWinUITitleBarTestAccess::HookPoint::BeforeExceptionLog);
+#endif
     wxWinUILogException(where, error);
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIInvokeTitleBarHook(
-        policy, wxWinUITitleBarHookPointForTesting::AfterExceptionLog);
+        policy, wxWinUITitleBarTestAccess::HookPoint::AfterExceptionLog);
+#endif
 }
 
 bool wxWinUITitleBarHasNativeIdentity(
@@ -261,6 +275,7 @@ bool wxWinUITitleBarHasAppWindowIdentity(
     }
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUITitleBarPolicyPtr wxWinUIFindTitleBarPolicy(wxWindow *tlw)
 {
     if ( !tlw )
@@ -275,11 +290,14 @@ wxWinUITitleBarPolicyPtr wxWinUIFindTitleBarPolicy(wxWindow *tlw)
 
     return {};
 }
+#endif
 
 bool wxWinUIReadExtended(
     const wxWinUITitleBarPolicyPtr& policy,
     wxWinUITitleBarUse use,
+#ifdef WXWINUI_TEST_SUPPORT
     unsigned fault,
+#endif
     bool *extended)
 {
     if ( !extended ||
@@ -289,7 +307,9 @@ bool wxWinUIReadExtended(
         return false;
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIThrowTitleBarFaultIfRequested(fault);
+#endif
     const bool value = policy->titleBar.ExtendsContentIntoTitleBar();
     if ( !wxWinUITitleBarHasAppWindowIdentity(policy, use) )
         return false;
@@ -339,7 +359,9 @@ bool wxWinUIResetTitleBarToSystemCore(
         bool wasExtended = false;
         if ( !wxWinUIReadExtended(
                  policy, use,
-                 wxWINUI_TITLEBAR_FAULT_READ_BEFORE_MUTATION,
+#ifdef WXWINUI_TEST_SUPPORT
+                 wxWinUITitleBarTestAccess::Fault_ReadBeforeMutation,
+#endif
                  &wasExtended) )
         {
             wxWinUIPublishUnknown(policy, use);
@@ -363,18 +385,24 @@ bool wxWinUIResetTitleBarToSystemCore(
         // From immediately before the call until the readback proves false,
         // teardown must conservatively assume that extension could be live.
         policy->extensionMayBeActive = true;
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIThrowTitleBarFaultIfRequested(
-            wxWINUI_TITLEBAR_FAULT_RESET_TO_DEFAULT);
+            wxWinUITitleBarTestAccess::Fault_ResetToDefault);
+#endif
         policy->titleBar.ResetToDefault();
+#ifdef WXWINUI_TEST_SUPPORT
         wxWinUIInvokeTitleBarHook(
-            policy, wxWinUITitleBarHookPointForTesting::AfterResetToDefault);
+            policy, wxWinUITitleBarTestAccess::HookPoint::AfterResetToDefault);
+#endif
         if ( !wxWinUITitleBarHasAppWindowIdentity(policy, use) )
             return false;
 
         bool extended = true;
         if ( !wxWinUIReadExtended(
                  policy, use,
-                 wxWINUI_TITLEBAR_FAULT_READ_AFTER_MUTATION,
+#ifdef WXWINUI_TEST_SUPPORT
+                 wxWinUITitleBarTestAccess::Fault_ReadAfterMutation,
+#endif
                  &extended) )
         {
             wxWinUIPublishUnknown(policy, use);
@@ -409,7 +437,9 @@ bool wxWinUIResetTitleBarToSystemCore(
             bool extended = true;
             if ( wxWinUIReadExtended(
                      policy, use,
-                     wxWINUI_TITLEBAR_FAULT_READ_AFTER_MUTATION,
+#ifdef WXWINUI_TEST_SUPPORT
+                     wxWinUITitleBarTestAccess::Fault_ReadAfterMutation,
+#endif
                      &extended) )
             {
                 policy->mode = extended
@@ -485,6 +515,7 @@ private:
     wxWinUITitleBarPolicyPtr m_policy;
 };
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool wxWinUIBeginTitleBarMutation(
     const wxWinUITitleBarPolicyPtr& policy,
     wxWinUITitleBarUse use)
@@ -498,7 +529,9 @@ bool wxWinUIBeginTitleBarMutation(
     policy->mutationInProgress = true;
     return true;
 }
+#endif
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool wxWinUIExtendTitleBarForTest(
     const wxWinUITitleBarPolicyPtr& policy)
 {
@@ -522,9 +555,9 @@ bool wxWinUIExtendTitleBarForTest(
 
         policy->titleBar.ExtendsContentIntoTitleBar(true);
         wxWinUIInvokeTitleBarHook(
-            policy, wxWinUITitleBarHookPointForTesting::AfterExtensionWrite);
+            policy, wxWinUITitleBarTestAccess::HookPoint::AfterExtensionWrite);
         wxWinUIThrowTitleBarFaultIfRequested(
-            wxWINUI_TITLEBAR_FAULT_EXTENSION_WRITE_AFTER);
+            wxWinUITitleBarTestAccess::Fault_ExtensionWriteAfter);
         if ( !wxWinUITitleBarHasAppWindowIdentity(
                  policy, wxWinUITitleBarUse::Attached) )
         {
@@ -577,9 +610,9 @@ bool wxWinUIExtendTitleBarForTest(
         policy->titleBar.SetDragRectangles(dragRects);
         wxWinUIInvokeTitleBarHook(
             policy,
-            wxWinUITitleBarHookPointForTesting::AfterDragRectanglesWrite);
+            wxWinUITitleBarTestAccess::HookPoint::AfterDragRectanglesWrite);
         wxWinUIThrowTitleBarFaultIfRequested(
-            wxWINUI_TITLEBAR_FAULT_DRAG_WRITE_AFTER);
+            wxWinUITitleBarTestAccess::Fault_DragWriteAfter);
         if ( !wxWinUITitleBarHasAppWindowIdentity(
                  policy, wxWinUITitleBarUse::Attached) )
         {
@@ -591,7 +624,7 @@ bool wxWinUIExtendTitleBarForTest(
         bool extended = false;
         if ( !wxWinUIReadExtended(
                  policy, wxWinUITitleBarUse::Attached,
-                 wxWINUI_TITLEBAR_FAULT_READ_AFTER_MUTATION,
+                 wxWinUITitleBarTestAccess::Fault_ReadAfterMutation,
                  &extended) || !extended )
         {
             wxWinUIResetTitleBarToSystemCore(
@@ -617,7 +650,9 @@ bool wxWinUIExtendTitleBarForTest(
         return false;
     }
 }
+#endif
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool wxWinUICountFirstPartyXamlTitleBars(
     const wxWinUITitleBarPolicyPtr& policy,
     unsigned *result)
@@ -699,6 +734,7 @@ bool wxWinUICountFirstPartyXamlTitleBars(
         return false;
     }
 }
+#endif
 
 } // anonymous namespace
 
@@ -902,7 +938,8 @@ void wxWinUITitleBarDetachSystemPolicy(wxWinUITopLevelHost *host)
         ++gs_titleBarTeardownResets;
 }
 
-bool wxWinUITitleBarSetExtendedForTesting(wxWindow *tlw, bool extended)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITitleBarTestAccess::SetExtended(wxWindow *tlw, bool extended)
 {
     const wxWinUITitleBarPolicyPtr policy =
         wxWinUIFindTitleBarPolicy(tlw);
@@ -925,14 +962,14 @@ bool wxWinUITitleBarSetExtendedForTesting(wxWindow *tlw, bool extended)
         policy, wxWinUITitleBarUse::Attached, false);
 }
 
-bool wxWinUITitleBarSnapshotForTesting(
+bool wxWinUITitleBarTestAccess::GetSnapshot(
     wxWindow *tlw,
-    wxWinUITitleBarSnapshot *snapshot)
+    wxWinUITitleBarTestAccess::Snapshot *snapshot)
 {
     if ( !snapshot )
         return false;
 
-    *snapshot = wxWinUITitleBarSnapshot();
+    *snapshot = wxWinUITitleBarTestAccess::Snapshot();
     const wxWinUITitleBarPolicyPtr policy =
         wxWinUIFindTitleBarPolicy(tlw);
     if ( !policy )
@@ -1005,29 +1042,29 @@ bool wxWinUITitleBarSnapshotForTesting(
     // scheduled destroy or detached/replaced publication remains unobservable.
     if ( !wxWinUITitleBarHasAttachedPublication(policy) )
     {
-        *snapshot = wxWinUITitleBarSnapshot();
+        *snapshot = wxWinUITitleBarTestAccess::Snapshot();
         return false;
     }
     return true;
 }
 
-void wxWinUITitleBarFailNextExtensionForTesting()
+void wxWinUITitleBarTestAccess::FailNextExtension()
 {
     gs_titleBarFaultMask |=
-        wxWINUI_TITLEBAR_FAULT_EXTENSION_WRITE_AFTER;
+        wxWinUITitleBarTestAccess::Fault_ExtensionWriteAfter;
 }
 
-void wxWinUITitleBarSetHookForTesting(wxWinUITitleBarHookForTesting hook)
+void wxWinUITitleBarTestAccess::SetHook(wxWinUITitleBarTestAccess::Hook hook)
 {
     gs_titleBarHook = hook;
 }
 
-void wxWinUITitleBarSetFaultMaskForTesting(unsigned mask)
+void wxWinUITitleBarTestAccess::SetFaultMask(unsigned mask)
 {
     gs_titleBarFaultMask = mask;
 }
 
-bool wxWinUITitleBarInvalidateNativeIdentityForTesting(wxWindow *tlw)
+bool wxWinUITitleBarTestAccess::InvalidateNativeIdentity(wxWindow *tlw)
 {
     const wxWinUITitleBarPolicyPtr policy =
         wxWinUIFindTitleBarPolicy(tlw);
@@ -1043,7 +1080,7 @@ bool wxWinUITitleBarInvalidateNativeIdentityForTesting(wxWindow *tlw)
         policy, wxWinUITitleBarUse::Attached);
 }
 
-bool wxWinUITitleBarInvalidateAppWindowIdentityForTesting(wxWindow *tlw)
+bool wxWinUITitleBarTestAccess::InvalidateAppWindowIdentity(wxWindow *tlw)
 {
     const wxWinUITitleBarPolicyPtr policy =
         wxWinUIFindTitleBarPolicy(tlw);
@@ -1059,14 +1096,15 @@ bool wxWinUITitleBarInvalidateAppWindowIdentityForTesting(wxWindow *tlw)
         policy, wxWinUITitleBarUse::Attached);
 }
 
-unsigned wxWinUITitleBarGetLivePolicyCountForTesting()
+unsigned wxWinUITitleBarTestAccess::GetLivePolicyCount()
 {
     return static_cast<unsigned>(gs_titleBarPolicies.size());
 }
 
-unsigned wxWinUITitleBarGetTeardownResetCountForTesting()
+unsigned wxWinUITitleBarTestAccess::GetTeardownResetCount()
 {
     return gs_titleBarTeardownResets;
 }
+#endif
 
 #endif // wxUSE_WINUI3

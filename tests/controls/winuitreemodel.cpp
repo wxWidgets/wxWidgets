@@ -23,6 +23,7 @@
 #include "wx/utils.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-geometry-test-access.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -3673,7 +3674,7 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
     migratedHost->FlushSync();
     DrainTreeDispatch(4);
     wxWinUIDropBroker * const migratedBroker =
-        migratedHost->GetDropBrokerForTest();
+        wxWinUIHostObservationTestAccess::GetDropBroker(*migratedHost);
     REQUIRE(migratedBroker);
     const wxWinUIDropBrokerSnapshot brokerBefore =
         wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*migratedBroker);

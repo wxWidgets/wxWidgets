@@ -30,6 +30,7 @@
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -1077,7 +1078,7 @@ TEST_CASE("WinUINativeWindow::CompositionFocusCaptureDropAndCrossTLWReparent",
     CHECK(bindingA.GetOwnerHwndIfCurrent() == hwnd);
     CHECK(wxWinUITLWHostOwnsOleDropRegistration(wrapper));
     wxWinUIDropBroker * const brokerA =
-        fixture.hostA->GetDropBrokerForTest();
+        wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.hostA);
     REQUIRE(brokerA != nullptr);
     winrt::com_ptr<IDropTarget> comA;
     comA.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*brokerA));
@@ -1203,7 +1204,7 @@ TEST_CASE("WinUINativeWindow::CompositionFocusCaptureDropAndCrossTLWReparent",
     CHECK(target->drops == 1);
 
     wxWinUIDropBroker * const brokerB =
-        fixture.hostB->GetDropBrokerForTest();
+        wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.hostB);
     REQUIRE(brokerB != nullptr);
     winrt::com_ptr<IDropTarget> comB;
     comB.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*brokerB));

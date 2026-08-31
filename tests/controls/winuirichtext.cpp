@@ -51,6 +51,7 @@
 #include "transient-test-access.h"
 #include "keyboard-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -1391,8 +1392,8 @@ TEST_CASE("WinUIRichText::CommonOleBrokerAndRealDropFilesRoute",
     wxWinUITopLevelHost * const hostB = fixture.GetHostB();
     REQUIRE(hostA);
     REQUIRE(hostB);
-    REQUIRE(hostA->GetDropBrokerForTest());
-    REQUIRE(hostB->GetDropBrokerForTest());
+    REQUIRE(wxWinUIHostObservationTestAccess::GetDropBroker(*hostA));
+    REQUIRE(wxWinUIHostObservationTestAccess::GetDropBroker(*hostB));
 
     wxDropTarget * const logicalTarget = rich->GetDropTarget();
     REQUIRE(logicalTarget);
@@ -1404,9 +1405,9 @@ TEST_CASE("WinUIRichText::CommonOleBrokerAndRealDropFilesRoute",
         logicalTarget, rich->GetHWND()));
 
     const wxWinUIDropBrokerSnapshot snapshotA =
-        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*hostA->GetDropBrokerForTest());
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*wxWinUIHostObservationTestAccess::GetDropBroker(*hostA));
     const wxWinUIDropBrokerSnapshot snapshotB =
-        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*hostB->GetDropBrokerForTest());
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*wxWinUIHostObservationTestAccess::GetDropBroker(*hostB));
     CHECK(snapshotA.active);
     CHECK(snapshotA.ownsRegistration);
     CHECK(snapshotA.registerCalls == 1);
@@ -1419,9 +1420,9 @@ TEST_CASE("WinUIRichText::CommonOleBrokerAndRealDropFilesRoute",
     CHECK(snapshotB.registrationHwnd != hostB->GetBridgeHwnd());
 
     DropTargetRef comA(
-        wxWinUIDropBrokerTestAccess::GetCOMTarget(*hostA->GetDropBrokerForTest()));
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*wxWinUIHostObservationTestAccess::GetDropBroker(*hostA)));
     DropTargetRef comB(
-        wxWinUIDropBrokerTestAccess::GetCOMTarget(*hostB->GetDropBrokerForTest()));
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*wxWinUIHostObservationTestAccess::GetDropBroker(*hostB)));
     REQUIRE(comA);
     REQUIRE(comB);
 

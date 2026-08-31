@@ -402,6 +402,30 @@ Do not delete a lifetime/retirement service used by production merely because it
   and `OFF` modes, including shipping symbol/header inspection, is still
   required before closing this boundary.
 
+## Host observation and policy test boundaries (2026-08-31)
+
+- Three tail observations, eight cursor adapters, nine Tooltip-policy
+  adapters and nine TitleBar adapters move from source-private host headers to
+  four non-installed test-support classes. The test-only Tooltip and TitleBar
+  enums/records move with their adapters. Their owning translation units opt in
+  explicitly where needed; no class data member, virtual function or
+  conditional production layout is added.
+- Production keeps the physical/TLW retirement atomics and ledger, borrowed
+  drop-broker ownership, native/XAML cursor properties and verdict caches,
+  Tooltip registry/replay/shutdown state and budgets, TitleBar policy map,
+  native/AppWindow identity checks, geometry and real teardown counter. The
+  migrated fixtures preserve all assertion sites and their original native
+  calls; the TitleBar snapshot deliberately remains a guarded native/XAML
+  observation rather than a passive surrogate.
+- `test_gui`, `minimal` and `winuispike` build with warnings as errors for
+  shared and static WinUI, and wxMSW `test_gui` also compiles. Post-migration
+  runs in both WinUI linkages pass cursor **175/7**, tail-host **58/5**,
+  tail-broker **44/3**, TitleBar **734/7** and Tooltip policy **81/4**
+  assertions/cases, followed by both runtime gates (**2/2**). Evidence is in
+  the `audit106-host-policy-on-*.log` files in each active build tree. These
+  are private-desktop, non-input checks; source canaries and fresh shipping OFF
+  symbol/install verification remain pending.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

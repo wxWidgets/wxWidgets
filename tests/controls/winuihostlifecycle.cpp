@@ -53,9 +53,12 @@
 #endif
 
 #include "wx/winui/private/tlwhost.h"
+#include "tooltip-policy-test-access.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-input-test-access.h"
+#include "host-cursor-test-access.h"
 #include "host-geometry-test-access.h"
 #include "host-uia-test-access.h"
 #include "control-host-test-access.h"
@@ -844,7 +847,7 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
     } reset;
     wxToolTip::Enable(true);
     const unsigned managedBefore =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 #endif
     const unsigned styleObserversBefore =
         wxWinUIHostUIATestAccess::
@@ -886,7 +889,7 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
 
 #if wxUSE_TOOLTIPS
     CHECK(MUXC::ToolTipService::GetToolTip(content) != authoredToolTip);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 #endif
     CHECK(MUXA::AutomationProperties::GetHelpText(content) ==
@@ -928,7 +931,7 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
 
 #if wxUSE_TOOLTIPS
     CHECK(MUXC::ToolTipService::GetToolTip(content) == authoredToolTip);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 #endif
     CHECK(MUXA::AutomationProperties::GetHelpText(content) ==
           L"shutdown-authored-help");
@@ -1112,9 +1115,9 @@ TEST_CASE("HostLifecycle::PhysicalGateCountersAreCausalAndBounded",
           "[HostLifecycle][popup-gate][counters][terminal]")
 {
     const unsigned pending0 =
-        wxWinUITopLevelHost::GetPendingPhysicalDisconnectGateCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingPhysicalDisconnectGateCount();
     const unsigned terminals0 =
-        wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount();
 
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "popup-gate-counters");
@@ -1136,10 +1139,10 @@ TEST_CASE("HostLifecycle::PhysicalGateCountersAreCausalAndBounded",
     host->SetSlotPhysicalDisconnectGate(neverOpened, satisfied);
     host->UnregisterSlot(neverOpened, satisfied);
     CHECK(host->FindSlot(neverOpened) == nullptr);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingPhysicalDisconnectGateCountForTest() == pending0);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() == terminals0);
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingPhysicalDisconnectGateCount() == pending0);
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() == terminals0);
 
     const auto retiring = wxWinUICreatePhysicalDisconnectGateForTesting(
         causalSlot->GetContent().DispatcherQueue(), false);
@@ -1147,15 +1150,15 @@ TEST_CASE("HostLifecycle::PhysicalGateCountersAreCausalAndBounded",
     host->SetSlotPhysicalDisconnectGate(causal, retiring);
     host->UnregisterSlot(causal, retiring);
     CHECK(host->FindSlot(causal) == nullptr);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingPhysicalDisconnectGateCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingPhysicalDisconnectGateCount() ==
           pending0 + 1);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() == terminals0);
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() == terminals0);
     REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
         retiring, true));
-    CHECK(wxWinUITopLevelHost::
-              GetPendingPhysicalDisconnectGateCountForTest() == pending0);
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingPhysicalDisconnectGateCount() == pending0);
 
     frame->Destroy();
     DrainDispatch();
@@ -1165,9 +1168,9 @@ TEST_CASE("HostLifecycle::TLWShutdownCollectsLivePopupGate",
           "[HostLifecycle][popup-gate][terminal][live-slot]")
 {
     const unsigned pending0 =
-        wxWinUITopLevelHost::GetPendingPhysicalDisconnectGateCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingPhysicalDisconnectGateCount();
     const unsigned terminals0 =
-        wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "live-popup-terminal");
     wxButton * const child = new wxButton(frame, wxID_ANY, "live-child");
@@ -1185,14 +1188,14 @@ TEST_CASE("HostLifecycle::TLWShutdownCollectsLivePopupGate",
     // live slot table and must not charge the deferred-slot counter for it.
     wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUITopLevelHost::FindSlotOwner(child) == nullptr);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingPhysicalDisconnectGateCountForTest() == pending0);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingPhysicalDisconnectGateCount() == pending0);
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0 + 1);
     REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(gate, true));
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0);
 
     frame->Destroy();
@@ -1203,7 +1206,7 @@ TEST_CASE("HostLifecycle::TLWShutdownConsumesSealedNoPopupTickets",
           "[HostLifecycle][popup-gate][terminal][seal]")
 {
     const unsigned terminals0 =
-        wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "sealed-no-popup");
     wxWinUITopLevelHost *host = nullptr;
@@ -1224,8 +1227,8 @@ TEST_CASE("HostLifecycle::TLWShutdownConsumesSealedNoPopupTickets",
     }
 
     wxWinUIHostContentTestAccess::Shutdown(*host);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0);
     for ( const auto& gate : gates )
     {
@@ -1251,7 +1254,7 @@ TEST_CASE("HostLifecycle::LateOpenAtSealedSweepUsesExistingTerminalLedger",
     });
     wxUnusedVar(resetPoison);
     const unsigned terminals0 =
-        wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "sealed-late-open");
     wxButton * const child = new wxButton(frame, wxID_ANY, "peer");
@@ -1269,13 +1272,13 @@ TEST_CASE("HostLifecycle::LateOpenAtSealedSweepUsesExistingTerminalLedger",
 
     wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(gate));
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0 + 1);
     REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
         gate, true, false));
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0);
 
     frame->Destroy();
@@ -1292,7 +1295,7 @@ TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
     });
     wxUnusedVar(resetPoison);
     const unsigned terminals0 =
-        wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "accepted-before-opened");
     wxButton * const child = new wxButton(frame, wxID_ANY, "peer");
@@ -1310,13 +1313,13 @@ TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
 
     wxWinUIHostContentTestAccess::Shutdown(*host);
     CHECK(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(gate));
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0 + 1);
     REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
         gate, true, false));
-    CHECK(wxWinUITopLevelHost::
-              GetPendingTLWTerminalRetirementCountForTest() ==
+    CHECK(wxWinUIHostObservationTestAccess::
+              GetPendingTLWTerminalRetirementCount() ==
           terminals0);
 
     frame->Destroy();
@@ -3546,14 +3549,14 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     const auto baseline = MUXC::ToolTipService::GetToolTip(content);
     REQUIRE(baseline != nullptr);
     const unsigned managedBefore =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 
     xamlHost->SetToolTip("managed-reentrant");
     host->FlushSync();
     const auto managed =
         MUXC::ToolTipService::GetToolTip(content).try_as<MUXC::ToolTip>();
     REQUIRE(managed != nullptr);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     // First interrupt suppression at its earliest side effect. IsOpen(false)
@@ -3582,7 +3585,7 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     CHECK_FALSE(managed.IsOpen());
     CHECK(managed.IsEnabled());
     CHECK(MUXC::ToolTipService::GetToolTip(content) == managed);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     // A same-value nested request at the IsEnabled boundary is coalesced.
@@ -3607,7 +3610,7 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     CHECK_FALSE(wxWinUIAreToolTipsEnabled());
     CHECK_FALSE(managed.IsEnabled());
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     wxToolTip::Enable(true);
@@ -3640,7 +3643,7 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     CHECK(wxWinUIAreToolTipsEnabled());
     CHECK(managed.IsEnabled());
     CHECK(MUXC::ToolTipService::GetToolTip(content) == managed);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     // Exercise the mirror partial state: restore attaches the candidate, and
@@ -3669,7 +3672,7 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     CHECK_FALSE(wxWinUIAreToolTipsEnabled());
     CHECK_FALSE(managed.IsEnabled());
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     // Same-value reentrancy on the restore-side IsEnabled seam must also
@@ -3693,7 +3696,7 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     CHECK(wxWinUIAreToolTipsEnabled());
     CHECK(managed.IsEnabled());
     CHECK(MUXC::ToolTipService::GetToolTip(content) == managed);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     // The transaction never adopts or reconstructs the authored value:
@@ -3701,7 +3704,7 @@ TEST_CASE("HostState::ReentrantGlobalTooltipPolicy",
     xamlHost->UnsetToolTip();
     host->FlushSync();
     CHECK(MUXC::ToolTipService::GetToolTip(content) == baseline);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     frame->Destroy();
     DrainDispatch();
@@ -3717,9 +3720,9 @@ TEST_CASE("HostState::TooltipPolicySetterFaultRollback",
     {
         ~PolicyReset()
         {
-            wxWinUISetToolTipFaultForTesting(
-                wxWinUIToolTipFault_None, 0);
-            if ( wxWinUIIsToolTipPolicyShutdownForTesting() )
+            wxWinUIToolTipPolicyTestAccess::SetFault(
+                wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
+            if ( wxWinUIToolTipPolicyTestAccess::IsShutdown() )
                 wxWinUIInitializeToolTipPolicy();
             wxToolTip::Enable(true);
         }
@@ -3729,8 +3732,8 @@ TEST_CASE("HostState::TooltipPolicySetterFaultRollback",
         [&](unsigned fault, const wxString& replacementText)
         {
             wxToolTip::Enable(true);
-            wxWinUISetToolTipFaultForTesting(
-                wxWinUIToolTipFault_None, 0);
+            wxWinUIToolTipPolicyTestAccess::SetFault(
+                wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
 
             wxFrame * const frame =
                 new wxFrame(nullptr, wxID_ANY, "tooltip-setter-fault",
@@ -3757,7 +3760,7 @@ TEST_CASE("HostState::TooltipPolicySetterFaultRollback",
                 MUXC::ToolTipService::GetToolTip(content);
             REQUIRE(baseline != nullptr);
             const unsigned managedBefore =
-                wxWinUIGetManagedToolTipCountForTesting();
+                wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 
             xamlHost->SetToolTip("fault-original");
             host->FlushSync();
@@ -3788,7 +3791,7 @@ TEST_CASE("HostState::TooltipPolicySetterFaultRollback",
                         callbackFired = true;
                         wxToolTip::Enable(true);
                         xamlHost->GetToolTip()->SetTip(replacementText);
-                        wxWinUISetToolTipFaultForTesting(fault, 1);
+                        wxWinUIToolTipPolicyTestAccess::SetFault(fault, 1);
                         host->FlushSync();
                     });
 
@@ -3799,13 +3802,13 @@ TEST_CASE("HostState::TooltipPolicySetterFaultRollback",
             CHECK(callbackFired);
             CHECK(wxWinUIAreToolTipsEnabled());
             CHECK(GetPeerToolTipText(xamlHost) == replacementText);
-            CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+            CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
                   managedBefore + 1);
 
             xamlHost->UnsetToolTip();
             host->FlushSync();
             CHECK(MUXC::ToolTipService::GetToolTip(content) == baseline);
-            CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+            CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
                   managedBefore);
 
             frame->Destroy();
@@ -3814,13 +3817,13 @@ TEST_CASE("HostState::TooltipPolicySetterFaultRollback",
 
     SECTION("failure before attached-property commit")
     {
-        runScenario(wxWinUIToolTipFault_SetBeforeCommit,
+        runScenario(wxWinUIToolTipPolicyTestAccess::Fault_SetBeforeCommit,
                     "fault-before-commit");
     }
 
     SECTION("failure reported after attached-property commit")
     {
-        runScenario(wxWinUIToolTipFault_SetAfterCommit,
+        runScenario(wxWinUIToolTipPolicyTestAccess::Fault_SetAfterCommit,
                     "fault-after-commit");
     }
 }
@@ -3834,17 +3837,17 @@ TEST_CASE("HostState::TooltipPolicyPermanentFaultIsBounded",
     {
         ~PolicyReset()
         {
-            wxWinUISetToolTipFaultForTesting(
-                wxWinUIToolTipFault_None, 0);
-            if ( wxWinUIIsToolTipPolicyShutdownForTesting() )
+            wxWinUIToolTipPolicyTestAccess::SetFault(
+                wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
+            if ( wxWinUIToolTipPolicyTestAccess::IsShutdown() )
                 wxWinUIInitializeToolTipPolicy();
             wxToolTip::Enable(true);
-            wxWinUIResetToolTipPolicyDiagnosticsForTesting();
+            wxWinUIToolTipPolicyTestAccess::ResetDiagnostics();
         }
     } reset;
 
     wxToolTip::Enable(true);
-    wxWinUISetToolTipFaultForTesting(wxWinUIToolTipFault_None, 0);
+    wxWinUIToolTipPolicyTestAccess::SetFault(wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
 
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "tooltip-policy-permanent-fault",
@@ -3869,41 +3872,41 @@ TEST_CASE("HostState::TooltipPolicyPermanentFaultIsBounded",
     host->FlushSync();
     REQUIRE(MUXC::ToolTipService::GetToolTip(content) != nullptr);
     const unsigned policyEntryCount =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
     REQUIRE(policyEntryCount > 0);
 
-    wxWinUIResetToolTipPolicyDiagnosticsForTesting();
-    wxWinUISetToolTipFaultForTesting(
-        wxWinUIToolTipFault_Policy,
+    wxWinUIToolTipPolicyTestAccess::ResetDiagnostics();
+    wxWinUIToolTipPolicyTestAccess::SetFault(
+        wxWinUIToolTipPolicyTestAccess::Fault_Policy,
         std::numeric_limits<unsigned>::max());
     wxToolTip::Enable(false);
 
     // Eight synchronous attempts yield once. The persistent per-entry budget
     // is then exhausted by the one deferred replay and the entry is
     // quarantined; no callback can perpetually reschedule itself.
-    CHECK(wxWinUIGetToolTipPolicyFaultAttemptCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetFaultAttemptCount() ==
           8 * policyEntryCount);
-    CHECK(wxWinUIGetToolTipPolicyReplayScheduleCountForTesting() == 1);
-    CHECK(wxWinUIGetToolTipPolicyReplayExecutionCountForTesting() == 0);
-    CHECK(wxWinUIIsToolTipPolicyReplayScheduledForTesting());
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetReplayScheduleCount() == 1);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount() == 0);
+    CHECK(wxWinUIToolTipPolicyTestAccess::IsReplayScheduled());
 
     DrainDispatch(3);
-    CHECK(wxWinUIGetToolTipPolicyFaultAttemptCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetFaultAttemptCount() ==
           12 * policyEntryCount);
-    CHECK(wxWinUIGetToolTipPolicyReplayScheduleCountForTesting() == 1);
-    CHECK(wxWinUIGetToolTipPolicyReplayExecutionCountForTesting() == 1);
-    CHECK(wxWinUIGetToolTipPolicyQuarantinedEntryCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetReplayScheduleCount() == 1);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount() == 1);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetQuarantinedEntryCount() ==
           policyEntryCount);
-    CHECK_FALSE(wxWinUIIsToolTipPolicyReplayScheduledForTesting());
+    CHECK_FALSE(wxWinUIToolTipPolicyTestAccess::IsReplayScheduled());
 
     const unsigned executions =
-        wxWinUIGetToolTipPolicyReplayExecutionCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount();
     DrainDispatch(10);
-    CHECK(wxWinUIGetToolTipPolicyReplayExecutionCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount() ==
           executions);
-    CHECK_FALSE(wxWinUIIsToolTipPolicyReplayScheduledForTesting());
+    CHECK_FALSE(wxWinUIToolTipPolicyTestAccess::IsReplayScheduled());
 
-    wxWinUISetToolTipFaultForTesting(wxWinUIToolTipFault_None, 0);
+    wxWinUIToolTipPolicyTestAccess::SetFault(wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
     wxToolTip::Enable(true);
     CHECK(GetPeerToolTipText(xamlHost) == "permanent-policy-fault");
 
@@ -3922,12 +3925,12 @@ TEST_CASE("HostState::TooltipPolicyShutdownCancelsReplay",
     {
         ~PolicyReset()
         {
-            wxWinUISetToolTipFaultForTesting(
-                wxWinUIToolTipFault_None, 0);
-            if ( wxWinUIIsToolTipPolicyShutdownForTesting() )
+            wxWinUIToolTipPolicyTestAccess::SetFault(
+                wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
+            if ( wxWinUIToolTipPolicyTestAccess::IsShutdown() )
                 wxWinUIInitializeToolTipPolicy();
             wxToolTip::Enable(true);
-            wxWinUIResetToolTipPolicyDiagnosticsForTesting();
+            wxWinUIToolTipPolicyTestAccess::ResetDiagnostics();
         }
     } reset;
 
@@ -3953,33 +3956,33 @@ TEST_CASE("HostState::TooltipPolicyShutdownCancelsReplay",
 
     xamlHost->SetToolTip("shutdown-policy-fault");
     host->FlushSync();
-    REQUIRE(wxWinUIGetManagedToolTipCountForTesting() > 0);
+    REQUIRE(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() > 0);
 
-    wxWinUIResetToolTipPolicyDiagnosticsForTesting();
-    wxWinUISetToolTipFaultForTesting(
-        wxWinUIToolTipFault_Policy,
+    wxWinUIToolTipPolicyTestAccess::ResetDiagnostics();
+    wxWinUIToolTipPolicyTestAccess::SetFault(
+        wxWinUIToolTipPolicyTestAccess::Fault_Policy,
         std::numeric_limits<unsigned>::max());
     wxToolTip::Enable(false);
-    REQUIRE(wxWinUIIsToolTipPolicyReplayScheduledForTesting());
-    REQUIRE(wxWinUIGetToolTipPolicyReplayExecutionCountForTesting() == 0);
+    REQUIRE(wxWinUIToolTipPolicyTestAccess::IsReplayScheduled());
+    REQUIRE(wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount() == 0);
 
     // This is the exact production teardown hook, called before
     // WindowsXamlManager::Close(): it invalidates the queued token and drops
     // every registry-held strong XAML reference synchronously.
     wxWinUIShutdownToolTipPolicy();
-    CHECK(wxWinUIIsToolTipPolicyShutdownForTesting());
-    CHECK_FALSE(wxWinUIIsToolTipPolicyReplayScheduledForTesting());
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == 0);
+    CHECK(wxWinUIToolTipPolicyTestAccess::IsShutdown());
+    CHECK_FALSE(wxWinUIToolTipPolicyTestAccess::IsReplayScheduled());
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == 0);
 
     DrainDispatch(5);
-    CHECK(wxWinUIGetToolTipPolicyReplayExecutionCountForTesting() == 0);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == 0);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount() == 0);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == 0);
 
     // Re-arm without restarting the process, as a second bootstrap would.
     wxWinUIInitializeToolTipPolicy();
-    wxWinUISetToolTipFaultForTesting(wxWinUIToolTipFault_None, 0);
+    wxWinUIToolTipPolicyTestAccess::SetFault(wxWinUIToolTipPolicyTestAccess::Fault_None, 0);
     wxToolTip::Enable(true);
-    CHECK_FALSE(wxWinUIIsToolTipPolicyShutdownForTesting());
+    CHECK_FALSE(wxWinUIToolTipPolicyTestAccess::IsShutdown());
     CHECK(GetPeerToolTipText(xamlHost) == "shutdown-policy-fault");
 
     xamlHost->UnsetToolTip();
@@ -4171,10 +4174,10 @@ TEST_CASE("HostState::XamlAuthoredTooltipOwnership", "[HostState]")
     // A content swap retires the managed entry and restores the old XAML
     // element before it leaves the carrier.
     const unsigned managedBeforeSwap =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
     xamlHost->SetToolTip("swap-owned");
     host->FlushSync();
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBeforeSwap + 1);
     REQUIRE(xamlHost->SetContentFromXaml(
         "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/"
@@ -4182,11 +4185,11 @@ TEST_CASE("HostState::XamlAuthoredTooltipOwnership", "[HostState]")
     CHECK(MUXC::ToolTipService::GetToolTip(content) == baseline);
     host->FlushSync();
     CHECK(GetPeerToolTipText(xamlHost) == "swap-owned");
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBeforeSwap + 1);
     xamlHost->UnsetToolTip();
     host->FlushSync();
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBeforeSwap);
 
     frame->Destroy();
@@ -4227,11 +4230,11 @@ TEST_CASE("HostState::TooltipOwnershipAcrossTLWReparent",
     const auto baseline = MUXC::ToolTipService::GetToolTip(content);
     REQUIRE(baseline != nullptr);
     const unsigned managedBefore =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 
     xamlHost->SetToolTip("cross-owned");
     host->FlushSync();
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     wxToolTip::Enable(false);
@@ -4244,13 +4247,13 @@ TEST_CASE("HostState::TooltipOwnershipAcrossTLWReparent",
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
     wxToolTip::Enable(true);
     CHECK(GetPeerToolTipText(xamlHost) == "cross-owned");
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     xamlHost->UnsetToolTip();
     host->FlushSync();
     CHECK(MUXC::ToolTipService::GetToolTip(content) == baseline);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     frameA->Destroy();
     frameB->Destroy();
@@ -4293,7 +4296,7 @@ TEST_CASE("HostState::AuthoredTooltipAcrossFrozenTLWReparent",
     REQUIRE(baseline != nullptr);
     CHECK(xamlHost->GetToolTip() == nullptr);
     const unsigned managedBefore =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 
     // Global suppression must not lose an authored-only baseline while the
     // exact element migrates into a TLW whose ordinary flushes are frozen.
@@ -4314,14 +4317,14 @@ TEST_CASE("HostState::AuthoredTooltipAcrossFrozenTLWReparent",
             CHECK(slot->GetContent() == content);
     }
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     // Enable() is a synchronous process policy transaction even for a frozen
     // destination. It must restore the exact authored IInspectable.
     wxToolTip::Enable(true);
     CHECK(MUXC::ToolTipService::GetToolTip(content) == baseline);
     CHECK(xamlHost->GetToolTip() == nullptr);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     frameB->Thaw();
     DrainToQuiescence();
@@ -4365,7 +4368,7 @@ TEST_CASE("HostState::EmptyTooltipMaskAcrossFrozenTLWReparent",
     const auto baseline = MUXC::ToolTipService::GetToolTip(content);
     REQUIRE(baseline != nullptr);
     const unsigned managedBefore =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 
     // An explicit empty wxToolTip owns a null mask without a managed XAML
     // object. The authored object remains its restoration baseline.
@@ -4374,7 +4377,7 @@ TEST_CASE("HostState::EmptyTooltipMaskAcrossFrozenTLWReparent",
     REQUIRE(xamlHost->GetToolTip() != nullptr);
     CHECK(xamlHost->GetToolTipText().empty());
     CHECK(MUXC::ToolTipService::GetToolTip(content) == nullptr);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     frameB->Freeze();
     wxToolTip::Enable(false);
@@ -4412,7 +4415,7 @@ TEST_CASE("HostState::EmptyTooltipMaskAcrossFrozenTLWReparent",
     CHECK(xamlHost->GetToolTip() == nullptr);
     wxToolTip::Enable(true);
     CHECK(MUXC::ToolTipService::GetToolTip(content) == baseline);
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     frameB->Thaw();
     DrainToQuiescence();
@@ -5064,7 +5067,7 @@ TEST_CASE("HostState::ContentSwapFlushSeesOnlyPublishedModel",
     DrainToQuiescence();
     CHECK(MUXC::ToolTipService::GetToolTip(contentA) != baselineA);
     const unsigned managedWithA =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
     REQUIRE(managedWithA > 0);
     const unsigned managedBefore =
         managedWithA - 1;
@@ -5101,7 +5104,7 @@ TEST_CASE("HostState::ContentSwapFlushSeesOnlyPublishedModel",
     CHECK(contentA.ReadLocalValue(
               MUXA::AutomationProperties::NameProperty()) ==
           MUX::DependencyProperty::UnsetValue());
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == managedBefore);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == managedBefore);
 
     host->FlushSync();
     CHECK(GetToolTipInspectableText(
@@ -5111,7 +5114,7 @@ TEST_CASE("HostState::ContentSwapFlushSeesOnlyPublishedModel",
           L"swap-wx-tip");
     CHECK(MUXA::AutomationProperties::GetName(contentB) ==
           L"swap-wx-name");
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
           managedBefore + 1);
 
     frame->Destroy();
@@ -6618,18 +6621,18 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     const auto checkShape =
         [&](MUI::InputSystemCursorShape expected)
         {
-            checkCursorShape(host->GetSlotCursorForTest(button), expected);
+            checkCursorShape(wxWinUIHostCursorTestAccess::GetSlotCursor(*host, button), expected);
         };
     const auto checkIslandShape =
         [&](MUI::InputSystemCursorShape expected)
         {
-            checkCursorShape(host->GetIslandCursorForTest(), expected);
+            checkCursorShape(wxWinUIHostCursorTestAccess::GetIslandCursor(*host), expected);
         };
 
     // The initial sync must discover a cursor set on a native ancestor before
     // the child slot even existed.
     checkShape(MUI::InputSystemCursorShape::Hand);
-    REQUIRE(host->TestActivateSlotCursor(button));
+    REQUIRE(wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, button));
     checkIslandShape(MUI::InputSystemCursorShape::Hand);
 
     // A transient InputPointerSource failure must not claim that the weaker
@@ -6637,10 +6640,10 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     // failed application remains non-authoritative and the next attempt
     // retries/promotes the source-level override.
     wxWinUIHostContentTestAccess::FailInputPointerSourceSet(1);
-    CHECK_FALSE(host->TestActivateSlotCursor(button));
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
-    REQUIRE(host->TestActivateSlotCursor(button));
-    CHECK(host->IsInputPointerSourceAuthoritativeForTest());
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, button));
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
+    REQUIRE(wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, button));
+    CHECK(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
 
     int setCursorMode = 1;
     int setCursorEvents = 0;
@@ -6692,45 +6695,45 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     // following Press/Release/capture-resync applications reuse that exact
     // verdict: they neither emit wxEVT_SET_CURSOR again nor regress to the
     // static hand/cross cursor.
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::Move));
     CHECK(setCursorEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::Press));
     CHECK(setCursorEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::Release));
     CHECK(setCursorEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::Wheel));
     CHECK(setCursorEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::CaptureLost));
     CHECK(setCursorEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
 
     setCursorMode = 2;
     parentCursorHandlerEnabled = true;
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::Move));
     CHECK(setCursorEvents == 2);
     CHECK(parentSetCursorEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_SIZING).GetHCURSOR());
     parentCursorHandlerEnabled = false;
     setCursorMode = 3;
-    CHECK_FALSE(host->TestApplySlotPointerCursor(
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, cursorButtonPoint, wxWinUIInputKind::Move));
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           button->GetCursor().GetHCURSOR());
     button->SetCursor(wxNullCursor);
     setCursorMode = 0;
@@ -6752,8 +6755,8 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
 
     panel->SetCursor(wxNullCursor);
     DrainToQuiescence();
-    CHECK(host->GetSlotCursorForTest(button) == nullptr);
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
+    CHECK(wxWinUIHostCursorTestAccess::GetSlotCursor(*host, button) == nullptr);
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
     checkIslandShape(MUI::InputSystemCursorShape::Arrow);
 
     // When neither wx nor busy/global policy supplies an override, leave the
@@ -6761,9 +6764,9 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     // catches an accidental Cursor(nullptr) written after every routed move.
     const auto naturalIBeam = MUI::InputSystemCursor::Create(
         MUI::InputSystemCursorShape::IBeam);
-    REQUIRE(host->TestSimulateXamlCursorSelection(naturalIBeam));
-    REQUIRE(host->TestActivateSlotCursor(button));
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
+    REQUIRE(wxWinUIHostCursorTestAccess::SimulateXamlCursorSelection(*host, naturalIBeam));
+    REQUIRE(wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, button));
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
     checkIslandShape(MUI::InputSystemCursorShape::IBeam);
 
     // The process-wide cursor is the final fallback after the complete wx
@@ -6779,7 +6782,7 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     CHECK(setCursorEvents == eventsAfterGlobalCursor);
     wxSetCursor(wxNullCursor);
     DrainToQuiescence();
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
     checkIslandShape(MUI::InputSystemCursorShape::Arrow);
 
     // The WinAppSDK interop path must preserve application-created bitmap
@@ -6796,10 +6799,10 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     REQUIRE(customCursor.IsOk());
     button->SetCursor(customCursor);
     DrainToQuiescence();
-    const auto customPeerCursor = host->GetSlotCursorForTest(button);
+    const auto customPeerCursor = wxWinUIHostCursorTestAccess::GetSlotCursor(*host, button);
     REQUIRE(customPeerCursor != nullptr);
     CHECK(customPeerCursor.try_as<MUI::InputCustomCursor>() != nullptr);
-    const auto customIslandCursor = host->GetIslandCursorForTest();
+    const auto customIslandCursor = wxWinUIHostCursorTestAccess::GetIslandCursor(*host);
     REQUIRE(customIslandCursor != nullptr);
     CHECK(customIslandCursor.try_as<MUI::InputCustomCursor>() != nullptr);
 
@@ -6809,21 +6812,21 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     {
         wxBusyCursor outerBusy;
         const WXHCURSOR busyHandle = wxHOURGLASS_CURSOR->GetHCURSOR();
-        CHECK(host->GetIslandCursorHandleForTest() == busyHandle);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == busyHandle);
         {
             wxBusyCursor innerBusy;
-            CHECK(host->GetIslandCursorHandleForTest() == busyHandle);
+            CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == busyHandle);
         }
-        CHECK(host->GetIslandCursorHandleForTest() == busyHandle);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == busyHandle);
     }
     DrainToQuiescence();
-    const auto restoredSlotCursor = host->GetSlotCursorForTest(button);
+    const auto restoredSlotCursor = wxWinUIHostCursorTestAccess::GetSlotCursor(*host, button);
     REQUIRE(restoredSlotCursor != nullptr);
     CHECK(restoredSlotCursor.try_as<MUI::InputCustomCursor>() != nullptr);
-    const auto restoredIslandCursor = host->GetIslandCursorForTest();
+    const auto restoredIslandCursor = wxWinUIHostCursorTestAccess::GetIslandCursor(*host);
     REQUIRE(restoredIslandCursor != nullptr);
     CHECK(restoredIslandCursor.try_as<MUI::InputCustomCursor>() != nullptr);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           customCursor.GetHCURSOR());
 
     const unsigned sets =
@@ -6839,12 +6842,12 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
     REQUIRE(::GetWindowRect(GetHwndOf(button), &buttonRect) != 0);
     const wxPoint buttonCentre((buttonRect.left + buttonRect.right) / 2,
                                (buttonRect.top + buttonRect.bottom) / 2);
-    REQUIRE(host->TestRefreshPointerCursorAt(buttonCentre));
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, buttonCentre));
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           customCursor.GetHCURSOR());
     button->Destroy();
     DrainToQuiescence();
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           panel->GetCursor().GetHCURSOR());
 
     frame->Destroy();
@@ -6926,10 +6929,10 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
 
     const wxPoint screenPoint =
         button->ClientToScreen(wxPoint(25, 16));
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, screenPoint, wxWinUIInputKind::Move));
     CHECK(events == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
 
     // A flush with identical geometry reuses the exact verdict.
@@ -6942,13 +6945,13 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
     resizeLeafInHandler = true;
     const wxPoint mutationPoint =
         button->ClientToScreen(wxPoint(26, 16));
-    CHECK_FALSE(host->TestApplySlotPointerCursor(
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, mutationPoint, wxWinUIInputKind::Move));
     CHECK(events == 2);
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, mutationPoint, wxWinUIInputKind::Move));
     CHECK(events == 3);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_HAND).GetHCURSOR());
 
     // Size is part of the key: handlers may compare event coordinates with
@@ -6956,7 +6959,7 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
     button->SetSize(100, 32);
     DrainToQuiescence();
     CHECK(events == 4);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
 
     // Moving the leaf changes its client coordinates at the same screen point.
@@ -6967,17 +6970,17 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
     // Geometry of an ancestor is also part of the event contract: a parent
     // handler can choose from its own current size while the leaf stays put.
     useParentCursor = true;
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         button, screenPoint, wxWinUIInputKind::Move));
     CHECK(events == 6);
     CHECK(parentEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_CROSS).GetHCURSOR());
     panelA->SetSize(200, 120);
     DrainToQuiescence();
     CHECK(events == 7);
     CHECK(parentEvents == 2);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_SIZING).GetHCURSOR());
     useParentCursor = false;
 
@@ -6989,7 +6992,7 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
     button->Move(panelB->ScreenToClient(oldScreenOrigin));
     DrainToQuiescence();
     CHECK(events == 8);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_CROSS).GetHCURSOR());
 
     // Resolving a new slot must not refresh the previously active slot when
@@ -7006,11 +7009,11 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
         });
     const wxPoint buttonBPoint =
         buttonB->ClientToScreen(wxPoint(20, 16));
-    CHECK_FALSE(host->TestApplySlotPointerCursor(
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         buttonB, buttonBPoint, wxWinUIInputKind::Move));
     CHECK(buttonBEvents == 1);
     CHECK(events == 8);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_CROSS).GetHCURSOR());
 
     // A capture transition inside the callback must not reassert the cursor
@@ -7027,10 +7030,10 @@ TEST_CASE("HostState::CursorVerdictTopologyKey",
         });
     const wxPoint capturePoint =
         captureButton->ClientToScreen(wxPoint(20, 16));
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         captureButton, capturePoint, wxWinUIInputKind::Move));
     CHECK(captureEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_SIZING).GetHCURSOR());
 
     frame->Destroy();
@@ -7057,7 +7060,7 @@ TEST_CASE("HostState::CursorSourceFailureIsTruthful",
 
     text->SetCursor(wxCursor(wxCURSOR_HAND));
     DrainToQuiescence();
-    REQUIRE(host->TestActivateSlotCursor(text));
+    REQUIRE(wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, text));
     text->SetCursor(wxNullCursor);
     DrainToQuiescence();
 
@@ -7066,8 +7069,8 @@ TEST_CASE("HostState::CursorSourceFailureIsTruthful",
     // failure and leave this truthful runtime cursor observable.
     const auto naturalIBeam = MUI::InputSystemCursor::Create(
         MUI::InputSystemCursorShape::IBeam);
-    REQUIRE(host->TestSimulateXamlCursorSelection(naturalIBeam));
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
+    REQUIRE(wxWinUIHostCursorTestAccess::SimulateXamlCursorSelection(*host, naturalIBeam));
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
 
     int events = 0;
     text->Bind(
@@ -7080,11 +7083,11 @@ TEST_CASE("HostState::CursorSourceFailureIsTruthful",
     const wxPoint point = text->ClientToScreen(wxPoint(20, 16));
 
     wxWinUIHostContentTestAccess::FailInputPointerSourceSet(1);
-    CHECK_FALSE(host->TestApplySlotPointerCursor(
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         text, point, wxWinUIInputKind::Move));
     CHECK(events == 1);
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
-    const auto afterFailure = host->GetIslandCursorForTest().
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
+    const auto afterFailure = wxWinUIHostCursorTestAccess::GetIslandCursor(*host).
         try_as<MUI::InputSystemCursor>();
     REQUIRE(afterFailure != nullptr);
     CHECK(afterFailure.CursorShape() ==
@@ -7092,11 +7095,11 @@ TEST_CASE("HostState::CursorSourceFailureIsTruthful",
 
     // The terminal replay reuses the cached callback verdict without
     // invoking application code twice, and the one-shot failure is retried.
-    REQUIRE(host->TestApplySlotPointerCursor(
+    REQUIRE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         text, point, wxWinUIInputKind::Press));
     CHECK(events == 1);
-    CHECK(host->IsInputPointerSourceAuthoritativeForTest());
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_CROSS).GetHCURSOR());
 
     frame->Destroy();
@@ -7137,19 +7140,19 @@ TEST_CASE("HostState::NativeCursorVerdictPositionKey",
         nativePanel->ClientToScreen(wxPoint(30, 30));
     const wxPoint right =
         nativePanel->ClientToScreen(wxPoint(140, 30));
-    REQUIRE(host->TestRefreshPointerCursorAt(left));
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, left));
     CHECK(events == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
 
     useRightCursor = true;
-    REQUIRE(host->TestRefreshPointerCursorAt(right));
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, right));
     CHECK(events == 2);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_HAND).GetHCURSOR());
 
     // A stationary resync reuses the complete native verdict.
-    REQUIRE(host->TestRefreshPointerCursorAt(right));
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, right));
     CHECK(events == 2);
 
     frame->Destroy();
@@ -7198,7 +7201,7 @@ TEST_CASE("HostState::NestedNativeCursorReplayIsSingleShot",
             if ( mutateOuterPolicy )
                 slotButton->SetCursor(wxCursor(wxCURSOR_HAND));
             nestedResult =
-                host->TestRefreshPointerCursorAt(nativePoint);
+                wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, nativePoint);
             event.SetCursor(wxCursor(wxCURSOR_IBEAM));
         });
 
@@ -7208,26 +7211,26 @@ TEST_CASE("HostState::NestedNativeCursorReplayIsSingleShot",
     // again. The transient event cursor cannot outrank that new policy.
     const wxPoint slotPoint =
         slotButton->ClientToScreen(wxPoint(20, 16));
-    CHECK_FALSE(host->TestApplySlotPointerCursor(
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         slotButton, slotPoint, wxWinUIInputKind::Move));
     CHECK(nestedResult);
     CHECK(slotEvents == 1);
     CHECK(nativeEvents == 1);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_CROSS).GetHCURSOR());
 
     // A pending policy inherited from the outer slot is not evidence that
     // this newer native WM_SETCURSOR changed policy. Its fresh event verdict
     // must be preserved, again without a second native callback.
     mutateOuterPolicy = true;
-    CHECK_FALSE(host->TestApplySlotPointerCursor(
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(*host,
         slotButton,
         slotButton->ClientToScreen(wxPoint(21, 16)),
         wxWinUIInputKind::Move));
     CHECK(nestedResult);
     CHECK(slotEvents == 2);
     CHECK(nativeEvents == 2);
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_IBEAM).GetHCURSOR());
 
     frame->Destroy();
@@ -7256,8 +7259,8 @@ TEST_CASE("HostState::PopupCursorScope",
     REQUIRE(host != nullptr);
     const wxPoint buttonPoint =
         button->ClientToScreen(wxPoint(70, 20));
-    REQUIRE(host->TestRefreshPointerCursorAt(buttonPoint));
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, buttonPoint));
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_HAND).GetHCURSOR());
 
     MUXCP::Popup popup;
@@ -7276,16 +7279,16 @@ TEST_CASE("HostState::PopupCursorScope",
 
     // PopupRoot is outside xamlRoot.Content(): explicit per-popup hit testing
     // must yield the island-wide wx override at the covered point.
-    REQUIRE(host->TestRefreshPointerCursorAt(buttonPoint));
-    CHECK_FALSE(host->IsInputPointerSourceAuthoritativeForTest());
-    CHECK(host->GetIslandCursorHandleForTest() == nullptr);
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, buttonPoint));
+    CHECK_FALSE(wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(*host));
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == nullptr);
 
     // An unrelated open popup elsewhere must not make the whole TLW generic.
     popup.HorizontalOffset(popupCentre.x + 120);
     popup.VerticalOffset(popupCentre.y + 70);
     DrainToQuiescence();
-    REQUIRE(host->TestRefreshPointerCursorAt(buttonPoint));
-    CHECK(host->GetIslandCursorHandleForTest() ==
+    REQUIRE(wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(*host, buttonPoint));
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
           wxCursor(wxCURSOR_HAND).GetHCURSOR());
 
     popup.IsOpen(false);
@@ -7314,9 +7317,9 @@ TEST_CASE("HostState::ModalBusyCursorPolicy",
     wxWinUITopLevelHost * const host =
         wxWinUITopLevelHost::FindSlotOwner(button);
     REQUIRE(host != nullptr);
-    REQUIRE(host->TestActivateSlotCursor(button));
+    REQUIRE(wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, button));
     const WXHCURSOR hand = button->GetCursor().GetHCURSOR();
-    CHECK(host->GetIslandCursorHandleForTest() == hand);
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == hand);
 
     int modalCursorEvents = 0;
     int modalPolicyEvents = -1;
@@ -7338,7 +7341,7 @@ TEST_CASE("HostState::ModalBusyCursorPolicy",
     {
         wxBusyCursor outerBusy;
         const WXHCURSOR wait = wxHOURGLASS_CURSOR->GetHCURSOR();
-        CHECK(host->GetIslandCursorHandleForTest() == wait);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == wait);
 
         dialog->CallAfter(
             [&]()
@@ -7346,9 +7349,9 @@ TEST_CASE("HostState::ModalBusyCursorPolicy",
                 callbackRan = true;
                 wasModalInCallback = dialog->IsModal();
                 activatedInCallback =
-                    host->TestActivateSlotCursor(button);
+                    wxWinUIHostCursorTestAccess::ActivateSlotCursor(*host, button);
                 cursorInCallback =
-                    host->GetIslandCursorHandleForTest();
+                    wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host);
                 modalCursorEvents = 0;
                 destroyOnModalCursorEvent = true;
                 wxWinUINotifyModalCursorChanged();
@@ -7366,10 +7369,10 @@ TEST_CASE("HostState::ModalBusyCursorPolicy",
 
         // Destroying the modal-data sentinel makes the still-active outer
         // busy policy authoritative again before ShowModal() returns.
-        CHECK(host->GetIslandCursorHandleForTest() == wait);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == wait);
     }
 
-    CHECK(host->GetIslandCursorHandleForTest() == hand);
+    CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) == hand);
     dialog->Destroy();
     DrainDispatch();
 }

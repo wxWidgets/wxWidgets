@@ -31,6 +31,7 @@
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -1026,8 +1027,8 @@ TEST_CASE("WinUISTC::LogicalContextMenuAndDragDropUseCommonBrokers",
     CHECK(binding.GetOwnerIfCurrent() == stc);
     CHECK(binding.GetOwnerHwndIfCurrent() == stc->GetHWND());
     REQUIRE(fixture.GetHostA()->OwnsOleDropRegistration());
-    REQUIRE(fixture.GetHostA()->GetDropBrokerForTest());
-    CHECK(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*fixture.GetHostA()->GetDropBrokerForTest())
+    REQUIRE(wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.GetHostA()));
+    CHECK(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.GetHostA()))
               .active);
     CHECK_FALSE(wxMSWOleIsShellDropTargetRegistered(
         target, stc->GetHWND()));

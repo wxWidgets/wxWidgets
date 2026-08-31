@@ -22,6 +22,7 @@
 #include "wx/winui/private/appearance.h"
 #include "host-resize-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "tooltip-policy-test-access.h"
 #include "host-content-test-access.h"
 #include "wx/winui/winui.h"
 
@@ -1562,7 +1563,7 @@ TEST_CASE("wxWinUI StatusBar rebuild and teardown retire managed tooltips",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const unsigned baseline =
-        wxWinUIGetManagedToolTipCountForTesting();
+        wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount();
 
     {
         wxStatusBar status(
@@ -1579,7 +1580,7 @@ TEST_CASE("wxWinUI StatusBar rebuild and teardown retire managed tooltips",
             0, nullptr, nullptr, nullptr, &hasToolTip,
             nullptr, nullptr, nullptr));
         REQUIRE(hasToolTip);
-        CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+        CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
               baseline + 1);
 
         for ( int i = 0; i < 20; ++i )
@@ -1587,12 +1588,12 @@ TEST_CASE("wxWinUI StatusBar rebuild and teardown retire managed tooltips",
             const int style =
                 i % 2 ? wxSB_RAISED : wxSB_SUNKEN;
             status.SetStatusStyles(1, &style);
-            CHECK(wxWinUIGetManagedToolTipCountForTesting() ==
+            CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() ==
                   baseline + 1);
         }
     }
 
-    CHECK(wxWinUIGetManagedToolTipCountForTesting() == baseline);
+    CHECK(wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount() == baseline);
 }
 
 #endif // wxUSE_TOOLTIPS

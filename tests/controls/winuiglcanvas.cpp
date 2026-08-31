@@ -29,6 +29,7 @@
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-input-test-access.h"
@@ -1250,7 +1251,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     CHECK(wxWinUITLWHostOwnsOleDropRegistration(canvas));
     CHECK_FALSE(wxMSWOleIsShellDropTargetRegistered(target, hwnd));
     wxWinUIDropBroker * const brokerA =
-        fixture.hostA->GetDropBrokerForTest();
+        wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.hostA);
     REQUIRE(brokerA != nullptr);
     winrt::com_ptr<IDropTarget> comA;
     comA.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*brokerA));
@@ -1390,7 +1391,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     CHECK(target->drops == 1);
 
     wxWinUIDropBroker * const brokerB =
-        fixture.hostB->GetDropBrokerForTest();
+        wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.hostB);
     REQUIRE(brokerB != nullptr);
     winrt::com_ptr<IDropTarget> comB;
     comB.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*brokerB));

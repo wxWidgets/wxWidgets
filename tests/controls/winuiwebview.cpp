@@ -26,6 +26,7 @@
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -1900,7 +1901,7 @@ TEST_CASE("WinUIWebView::OleBrokerMustReachDomDrop",
     CheckMainDocument(*fixture.session);
 
     wxWinUIDropBroker * const broker =
-        fixture.hostA->GetDropBrokerForTest();
+        wxWinUIHostObservationTestAccess::GetDropBroker(*fixture.hostA);
     REQUIRE(broker != nullptr);
     winrt::com_ptr<IDropTarget> target;
     target.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*broker));

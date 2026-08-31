@@ -26,7 +26,9 @@
 
 #include "private.h"
 #ifdef WXWINUI_TEST_SUPPORT
+#include "host-cursor-test-access.h"
 #include "host-content-test-access.h"
+#include "host-observation-test-access.h"
 #endif
 #include "hostnative.h"
 #include "hostinput.h"
@@ -3942,17 +3944,28 @@ unsigned wxWinUITopLevelHost::GetLiveSlotCount()
     return count;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned
-wxWinUITopLevelHost::GetPendingPhysicalDisconnectGateCountForTest()
+wxWinUIHostObservationTestAccess::GetPendingPhysicalDisconnectGateCount()
 {
     return gs_pendingPhysicalDisconnectGates.load(std::memory_order_acquire);
 }
 
 unsigned
-wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest()
+wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount()
 {
     return gs_pendingTLWTerminalRetirements.load(std::memory_order_acquire);
 }
+
+#if wxUSE_OLE && wxUSE_DRAG_AND_DROP
+wxWinUIDropBroker *
+wxWinUIHostObservationTestAccess::GetDropBroker(
+    const wxWinUITopLevelHost& host)
+{
+    return host.m_dropBroker.get();
+}
+#endif
+#endif
 
 
 #ifdef WXWINUI_TEST_SUPPORT
@@ -4064,10 +4077,13 @@ unsigned wxWinUITopLevelHost::GetSlotCursorSetCount()
     return gs_slotCursorSets;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 winrt::Microsoft::UI::Input::InputCursor
-wxWinUITopLevelHost::GetSlotCursorForTest(const wxWindow *window) const
+wxWinUIHostCursorTestAccess::GetSlotCursor(
+    const wxWinUITopLevelHost& host,
+    const wxWindow *window)
 {
-    wxWinUISlot * const slot = FindSlot(window);
+    wxWinUISlot * const slot = host.FindSlot(window);
     if ( !slot )
         return nullptr;
 
@@ -4078,19 +4094,20 @@ wxWinUITopLevelHost::GetSlotCursorForTest(const wxWindow *window) const
 }
 
 winrt::Microsoft::UI::Input::InputCursor
-wxWinUITopLevelHost::GetIslandCursorForTest() const
+wxWinUIHostCursorTestAccess::GetIslandCursor(
+    const wxWinUITopLevelHost& host)
 {
-    if ( m_rootPointerCursorAuthoritative )
-        return m_lastIslandPointerCursor;
+    if ( host.m_rootPointerCursorAuthoritative )
+        return host.m_lastIslandPointerCursor;
 
-    if ( !m_inputPointerSource )
-        return m_islandPointerCursorApplied
-             ? m_lastIslandPointerCursor
+    if ( !host.m_inputPointerSource )
+        return host.m_islandPointerCursorApplied
+             ? host.m_lastIslandPointerCursor
              : nullptr;
 
     try
     {
-        return m_inputPointerSource.Cursor();
+        return host.m_inputPointerSource.Cursor();
     }
     catch ( const winrt::hresult_error& )
     {
@@ -4098,33 +4115,39 @@ wxWinUITopLevelHost::GetIslandCursorForTest() const
     }
 }
 
-bool wxWinUITopLevelHost::TestActivateSlotCursor(
+bool
+wxWinUIHostCursorTestAccess::ActivateSlotCursor(
+    wxWinUITopLevelHost& host,
     wxWindow *window,
     bool emitSetCursorEvent)
 {
-    wxWinUISlot * const slot = FindSlot(window);
+    wxWinUISlot * const slot = host.FindSlot(window);
     return slot &&
-           ApplySlotPointerCursor(slot->m_lifetime,
+           host.ApplySlotPointerCursor(slot->m_lifetime,
                                   emitSetCursorEvent,
                                   0,
                                   !emitSetCursorEvent);
 }
 
-bool wxWinUITopLevelHost::TestApplySlotPointerCursor(
+bool
+wxWinUIHostCursorTestAccess::ApplySlotPointerCursor(
+    wxWinUITopLevelHost& host,
     wxWindow *window,
     const wxPoint& screenPoint,
     wxWinUIInputKind kind)
 {
-    m_lastPointerScreen.x = screenPoint.x;
-    m_lastPointerScreen.y = screenPoint.y;
-    return TestActivateSlotCursor(
+    host.m_lastPointerScreen.x = screenPoint.x;
+    host.m_lastPointerScreen.y = screenPoint.y;
+    return ActivateSlotCursor(host,
         window, wxWinUIShouldEmitSetCursor(kind));
 }
 
-bool wxWinUITopLevelHost::TestSimulateXamlCursorSelection(
+bool
+wxWinUIHostCursorTestAccess::SimulateXamlCursorSelection(
+    wxWinUITopLevelHost& host,
     const winrt::Microsoft::UI::Input::InputCursor& cursor)
 {
-    if ( !m_inputPointerSource )
+    if ( !host.m_inputPointerSource )
         return false;
 
     try
@@ -4133,15 +4156,40 @@ bool wxWinUITopLevelHost::TestSimulateXamlCursorSelection(
         // host's ownership bookkeeping untouched. ObserveXamlPointerCursor()
         // must discover and yield to the external/XAML mutation exactly as
         // the production routed-event path does.
-        m_inputPointerSource.Cursor(cursor);
-        ObserveXamlPointerCursor();
-        return !m_inputPointerSourceAuthoritative;
+        host.m_inputPointerSource.Cursor(cursor);
+        host.ObserveXamlPointerCursor();
+        return !host.m_inputPointerSourceAuthoritative;
     }
     catch ( const winrt::hresult_error& )
     {
         return false;
     }
 }
+
+WXHCURSOR
+wxWinUIHostCursorTestAccess::GetIslandCursorHandle(
+    const wxWinUITopLevelHost& host)
+{
+    return host.m_lastIslandPointerHandle;
+}
+
+bool
+wxWinUIHostCursorTestAccess::IsInputPointerSourceAuthoritative(
+    const wxWinUITopLevelHost& host)
+{
+    return host.m_inputPointerSourceAuthoritative;
+}
+
+bool
+wxWinUIHostCursorTestAccess::RefreshPointerCursorAt(
+    wxWinUITopLevelHost& host,
+    const wxPoint& screenPoint)
+{
+    host.m_lastPointerScreen.x = screenPoint.x;
+    host.m_lastPointerScreen.y = screenPoint.y;
+    return host.RefreshPointerCursorAtLastPoint();
+}
+#endif // WXWINUI_TEST_SUPPORT
 
 wxWinUISlot *
 wxWinUITopLevelHost::RegisterSlot(wxWindow *window,

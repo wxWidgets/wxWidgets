@@ -24,6 +24,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/titlebar.h"
+#include "titlebar-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -120,15 +121,15 @@ enum class ReentrantTitleBarAction
     Destroy
 };
 
-wxWinUITitleBarHookPointForTesting gs_reentrantTitleBarPoint =
-    wxWinUITitleBarHookPointForTesting::AfterExtensionWrite;
+wxWinUITitleBarTestAccess::HookPoint gs_reentrantTitleBarPoint =
+    wxWinUITitleBarTestAccess::HookPoint::AfterExtensionWrite;
 ReentrantTitleBarAction gs_reentrantTitleBarAction =
     ReentrantTitleBarAction::None;
 bool gs_reentrantTitleBarHookCalled = false;
 
 void ReenterTitleBarTransaction(
     wxWindow *window,
-    wxWinUITitleBarHookPointForTesting point)
+    wxWinUITitleBarTestAccess::HookPoint point)
 {
     if ( point != gs_reentrantTitleBarPoint ||
          gs_reentrantTitleBarAction == ReentrantTitleBarAction::None )
@@ -137,7 +138,7 @@ void ReenterTitleBarTransaction(
     }
 
     gs_reentrantTitleBarHookCalled = true;
-    wxWinUITitleBarSetHookForTesting(nullptr);
+    wxWinUITitleBarTestAccess::SetHook(nullptr);
     if ( gs_reentrantTitleBarAction == ReentrantTitleBarAction::Detach )
     {
         wxWinUITopLevelHost * const host =
@@ -155,22 +156,22 @@ class TitleBarTestSeamGuard
 {
 public:
     TitleBarTestSeamGuard(
-        wxWinUITitleBarHookPointForTesting point,
+        wxWinUITitleBarTestAccess::HookPoint point,
         ReentrantTitleBarAction action)
     {
         gs_reentrantTitleBarPoint = point;
         gs_reentrantTitleBarAction = action;
         gs_reentrantTitleBarHookCalled = false;
-        wxWinUITitleBarSetFaultMaskForTesting(
-            wxWINUI_TITLEBAR_FAULT_NONE);
-        wxWinUITitleBarSetHookForTesting(&ReenterTitleBarTransaction);
+        wxWinUITitleBarTestAccess::SetFaultMask(
+            wxWinUITitleBarTestAccess::Fault_None);
+        wxWinUITitleBarTestAccess::SetHook(&ReenterTitleBarTransaction);
     }
 
     ~TitleBarTestSeamGuard()
     {
-        wxWinUITitleBarSetHookForTesting(nullptr);
-        wxWinUITitleBarSetFaultMaskForTesting(
-            wxWINUI_TITLEBAR_FAULT_NONE);
+        wxWinUITitleBarTestAccess::SetHook(nullptr);
+        wxWinUITitleBarTestAccess::SetFaultMask(
+            wxWinUITitleBarTestAccess::Fault_None);
         gs_reentrantTitleBarAction = ReentrantTitleBarAction::None;
     }
 };
@@ -180,8 +181,8 @@ class TitleBarFaultGuard
 public:
     ~TitleBarFaultGuard()
     {
-        wxWinUITitleBarSetFaultMaskForTesting(
-            wxWINUI_TITLEBAR_FAULT_NONE);
+        wxWinUITitleBarTestAccess::SetFaultMask(
+            wxWinUITitleBarTestAccess::Fault_None);
     }
 };
 
@@ -203,7 +204,7 @@ void DestroyAndPumpDuringHostInitialization(
 
     gs_hostInitializationHookCalled = true;
     gs_hostInitializationPolicyObserved =
-        wxWinUITitleBarGetLivePolicyCountForTesting() >
+        wxWinUITitleBarTestAccess::GetLivePolicyCount() >
             gs_hostInitializationPoliciesBefore;
     wxWinUIHostContentTestAccess::SetInitializationHook(nullptr);
     window->Destroy();
@@ -222,7 +223,7 @@ public:
         gs_hostInitializationHookCalled = false;
         gs_hostInitializationPolicyObserved = false;
         gs_hostInitializationPoliciesBefore =
-            wxWinUITitleBarGetLivePolicyCountForTesting();
+            wxWinUITitleBarTestAccess::GetLivePolicyCount();
         wxWinUIHostContentTestAccess::FailInitialization(faultMask);
         wxWinUIHostContentTestAccess::SetInitializationHook(
             &DestroyAndPumpDuringHostInitialization);
@@ -255,7 +256,7 @@ HostInitializationCounters CaptureHostInitializationCounters()
     counters.subclassContexts =
         wxWinUITopLevelHost::GetLiveSubclassContextCount();
     counters.titleBarPolicies =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     counters.rootHandlerAdds =
         wxWinUITopLevelHost::GetRootHandlerAddCount();
     counters.rootHandlerRevokes =
@@ -271,7 +272,7 @@ bool HostInitializationStateRetired(
                before.hostLifetimes &&
            wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                before.subclassContexts &&
-           wxWinUITitleBarGetLivePolicyCountForTesting() ==
+           wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                before.titleBarPolicies;
 }
 
@@ -323,12 +324,12 @@ TEST_CASE("WinUITitleBar::SystemDefaultAndPrivateAppWindowSeam",
 {
     DrainTitleBarEvents();
     const unsigned policiesBefore =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     wxFrame * const frame = CreateTitleBarFrame("titlebar system mode");
     TitleBarFrameGuard cleanup(frame);
 
-    wxWinUITitleBarSnapshot initial;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &initial));
+    wxWinUITitleBarTestAccess::Snapshot initial;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &initial));
     CHECK(initial.attached);
     CHECK(initial.hwndIdentityCurrent);
     CHECK(initial.hwnd == frame->GetHWND());
@@ -343,7 +344,7 @@ TEST_CASE("WinUITitleBar::SystemDefaultAndPrivateAppWindowSeam",
     REQUIRE(initial.firstPartyXamlTitleBarScanSucceeded);
     CHECK_FALSE(initial.firstPartyXamlTitleBarInstalled);
     CHECK(initial.firstPartyXamlTitleBarCount == 0);
-    CHECK(wxWinUITitleBarGetLivePolicyCountForTesting() ==
+    CHECK(wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
           policiesBefore + 1);
 
     const HWND hwnd = reinterpret_cast<HWND>(frame->GetHWND());
@@ -357,10 +358,10 @@ TEST_CASE("WinUITitleBar::SystemDefaultAndPrivateAppWindowSeam",
         REQUIRE(initial.appWindowId != 0);
         CHECK(initial.appWindowIdentityCurrent);
         CHECK(initial.currentAppWindowId == initial.appWindowId);
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
 
-        wxWinUITitleBarSnapshot extended;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &extended));
+        wxWinUITitleBarTestAccess::Snapshot extended;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &extended));
         CHECK(extended.mode == wxWinUITitleBarMode::ExtendedAppWindow);
         CHECK(extended.dragRectangleWriteCommitted);
         CHECK(extended.dragRectangleWidth > 0);
@@ -373,9 +374,9 @@ TEST_CASE("WinUITitleBar::SystemDefaultAndPrivateAppWindowSeam",
         CHECK(::GetWindowLongPtr(hwnd, GWL_EXSTYLE) == exStyleBefore);
         CHECK(::GetSystemMenu(hwnd, FALSE) != nullptr);
 
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, false));
-        wxWinUITitleBarSnapshot disabled;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &disabled));
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
+        wxWinUITitleBarTestAccess::Snapshot disabled;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &disabled));
         CHECK(disabled.mode == wxWinUITitleBarMode::System);
         CHECK_FALSE(disabled.systemFallback);
         CHECK_FALSE(disabled.dragRectangleWriteCommitted);
@@ -383,24 +384,24 @@ TEST_CASE("WinUITitleBar::SystemDefaultAndPrivateAppWindowSeam",
         // One-shot failure occurs after the real extension write and must
         // roll the AppWindowTitleBar back to system mode, not merely flip a
         // test flag. A subsequent request proves that the controller re-arms.
-        wxWinUITitleBarFailNextExtensionForTesting();
-        CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
-        wxWinUITitleBarSnapshot fallback;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &fallback));
+        wxWinUITitleBarTestAccess::FailNextExtension();
+        CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
+        wxWinUITitleBarTestAccess::Snapshot fallback;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &fallback));
         CHECK(fallback.mode == wxWinUITitleBarMode::System);
         CHECK(fallback.systemFallback);
 
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, true));
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, false));
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
     }
     else
     {
         // Unsupported OS/runtime is an explicit system fallback. A failed
         // AppWindow observation is instead Unknown and never masquerades as
         // a successful fallback.
-        CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
-        wxWinUITitleBarSnapshot fallback;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &fallback));
+        CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
+        wxWinUITitleBarTestAccess::Snapshot fallback;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &fallback));
         if ( fallback.mode == wxWinUITitleBarMode::System )
             CHECK(fallback.systemFallback);
         else
@@ -412,26 +413,26 @@ TEST_CASE("WinUITitleBar::SystemDefaultAndPrivateAppWindowSeam",
 
     if ( initial.appWindowAvailable && initial.appWindowIdentityCurrent )
     {
-        REQUIRE(wxWinUITitleBarInvalidateAppWindowIdentityForTesting(frame));
-        wxWinUITitleBarSnapshot staleAppWindow;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &staleAppWindow));
+        REQUIRE(wxWinUITitleBarTestAccess::InvalidateAppWindowIdentity(frame));
+        wxWinUITitleBarTestAccess::Snapshot staleAppWindow;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &staleAppWindow));
         CHECK_FALSE(staleAppWindow.appWindowIdentityCurrent);
         CHECK(staleAppWindow.currentAppWindowId == 0);
-        CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+        CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
     }
 
     // HWND values can be recycled independently of the wxWindow/HWND
     // association generation. Make only the native identity stale and prove
     // the controller refuses every subsequent AppWindow/title-bar mutation.
-    REQUIRE(wxWinUITitleBarInvalidateNativeIdentityForTesting(frame));
-    wxWinUITitleBarSnapshot staleNative;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &staleNative));
+    REQUIRE(wxWinUITitleBarTestAccess::InvalidateNativeIdentity(frame));
+    wxWinUITitleBarTestAccess::Snapshot staleNative;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &staleNative));
     CHECK_FALSE(staleNative.hwndIdentityCurrent);
     CHECK(staleNative.hwndGeneration ==
           staleNative.currentHwndGeneration);
     CHECK(staleNative.nativeHwndGeneration !=
           staleNative.currentNativeHwndGeneration);
-    CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+    CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
 }
 
 TEST_CASE("WinUITitleBar::TwoTopLevelsKeepDistinctAppWindowIdentity",
@@ -442,10 +443,10 @@ TEST_CASE("WinUITitleBar::TwoTopLevelsKeepDistinctAppWindowIdentity",
     wxFrame * const second = CreateTitleBarFrame("titlebar second", 1);
     TitleBarFrameGuard cleanupSecond(second);
 
-    wxWinUITitleBarSnapshot firstSnapshot;
-    wxWinUITitleBarSnapshot secondSnapshot;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(first, &firstSnapshot));
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(second, &secondSnapshot));
+    wxWinUITitleBarTestAccess::Snapshot firstSnapshot;
+    wxWinUITitleBarTestAccess::Snapshot secondSnapshot;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(first, &firstSnapshot));
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(second, &secondSnapshot));
     CHECK(firstSnapshot.hwnd != secondSnapshot.hwnd);
     CHECK(firstSnapshot.hwndGeneration != 0);
     CHECK(secondSnapshot.hwndGeneration != 0);
@@ -476,16 +477,16 @@ TEST_CASE("WinUITitleBar::TwoTopLevelsKeepDistinctAppWindowIdentity",
     if ( firstSnapshot.mode == wxWinUITitleBarMode::System &&
          firstSnapshot.customizationSupported )
     {
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(first, true));
-        wxWinUITitleBarSnapshot firstExtended;
-        wxWinUITitleBarSnapshot secondStillSystem;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(first, &firstExtended));
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(first, true));
+        wxWinUITitleBarTestAccess::Snapshot firstExtended;
+        wxWinUITitleBarTestAccess::Snapshot secondStillSystem;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(first, &firstExtended));
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(
             second, &secondStillSystem));
         CHECK(firstExtended.mode ==
               wxWinUITitleBarMode::ExtendedAppWindow);
         CHECK(secondStillSystem.mode == wxWinUITitleBarMode::System);
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(first, false));
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(first, false));
     }
 }
 
@@ -496,8 +497,8 @@ TEST_CASE("WinUITitleBar::UnknownFailsClosedUntilExactRecovery",
     TitleBarFrameGuard cleanup(frame);
     TitleBarFaultGuard resetFaults;
 
-    wxWinUITitleBarSnapshot initial;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &initial));
+    wxWinUITitleBarTestAccess::Snapshot initial;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &initial));
     if ( initial.mode != wxWinUITitleBarMode::System ||
          !initial.customizationSupported )
     {
@@ -506,22 +507,22 @@ TEST_CASE("WinUITitleBar::UnknownFailsClosedUntilExactRecovery",
         return;
     }
 
-    wxWinUITitleBarSetFaultMaskForTesting(
-        wxWINUI_TITLEBAR_FAULT_RESET_TO_DEFAULT |
-        wxWINUI_TITLEBAR_FAULT_READ_AFTER_MUTATION);
-    CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, false));
+    wxWinUITitleBarTestAccess::SetFaultMask(
+        wxWinUITitleBarTestAccess::Fault_ResetToDefault |
+        wxWinUITitleBarTestAccess::Fault_ReadAfterMutation);
+    CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
 
-    wxWinUITitleBarSnapshot unknown;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &unknown));
+    wxWinUITitleBarTestAccess::Snapshot unknown;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &unknown));
     CHECK(unknown.mode == wxWinUITitleBarMode::Unknown);
     CHECK_FALSE(unknown.systemFallback);
-    CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+    CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
 
-    wxWinUITitleBarSetFaultMaskForTesting(
-        wxWINUI_TITLEBAR_FAULT_NONE);
-    REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, false));
-    wxWinUITitleBarSnapshot recovered;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &recovered));
+    wxWinUITitleBarTestAccess::SetFaultMask(
+        wxWinUITitleBarTestAccess::Fault_None);
+    REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
+    wxWinUITitleBarTestAccess::Snapshot recovered;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &recovered));
     CHECK(recovered.mode == wxWinUITitleBarMode::System);
     CHECK_FALSE(recovered.systemFallback);
 }
@@ -531,12 +532,12 @@ TEST_CASE("WinUITitleBar::DetachDuringSetterExtractsBeforeReset",
 {
     DrainTitleBarEvents();
     const unsigned policiesBefore =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     wxFrame * const frame = CreateTitleBarFrame("titlebar detach setter");
     TitleBarFrameGuard cleanup(frame);
 
-    wxWinUITitleBarSnapshot initial;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &initial));
+    wxWinUITitleBarTestAccess::Snapshot initial;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &initial));
     if ( initial.mode != wxWinUITitleBarMode::System ||
          !initial.customizationSupported )
     {
@@ -547,15 +548,15 @@ TEST_CASE("WinUITitleBar::DetachDuringSetterExtractsBeforeReset",
 
     {
         TitleBarTestSeamGuard seam(
-            wxWinUITitleBarHookPointForTesting::AfterExtensionWrite,
+            wxWinUITitleBarTestAccess::HookPoint::AfterExtensionWrite,
             ReentrantTitleBarAction::Detach);
-        CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+        CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
         CHECK(gs_reentrantTitleBarHookCalled);
     }
 
-    wxWinUITitleBarSnapshot detached;
-    CHECK_FALSE(wxWinUITitleBarSnapshotForTesting(frame, &detached));
-    CHECK(wxWinUITitleBarGetLivePolicyCountForTesting() == policiesBefore);
+    wxWinUITitleBarTestAccess::Snapshot detached;
+    CHECK_FALSE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &detached));
+    CHECK(wxWinUITitleBarTestAccess::GetLivePolicyCount() == policiesBefore);
 }
 
 TEST_CASE("WinUITitleBar::SingleResetBoundaryCannotRepublishAfterDestroy",
@@ -563,13 +564,13 @@ TEST_CASE("WinUITitleBar::SingleResetBoundaryCannotRepublishAfterDestroy",
 {
     DrainTitleBarEvents();
     const unsigned policiesBefore =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
     wxFrame * const frame = CreateTitleBarFrame("titlebar destroy reset");
     TitleBarFrameGuard cleanup(frame);
 
-    wxWinUITitleBarSnapshot initial;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &initial));
+    wxWinUITitleBarTestAccess::Snapshot initial;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &initial));
     if ( initial.mode != wxWinUITitleBarMode::System ||
          !initial.customizationSupported )
     {
@@ -578,7 +579,7 @@ TEST_CASE("WinUITitleBar::SingleResetBoundaryCannotRepublishAfterDestroy",
         return;
     }
     const wxWeakRef<wxWindow> lifetime(frame);
-    REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+    REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
 
     // ResetToDefault() is the only supported reset mutation. Poison the old
     // explicit-disable boundary with a destructive callback: a successful
@@ -586,38 +587,38 @@ TEST_CASE("WinUITitleBar::SingleResetBoundaryCannotRepublishAfterDestroy",
     // from the former false-then-ResetToDefault sequence.
     {
         TitleBarTestSeamGuard seam(
-            wxWinUITitleBarHookPointForTesting::AfterDisableWrite,
+            wxWinUITitleBarTestAccess::HookPoint::AfterDisableWrite,
             ReentrantTitleBarAction::Destroy);
-        REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, false));
+        REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
         CHECK_FALSE(gs_reentrantTitleBarHookCalled);
     }
     REQUIRE(lifetime);
-    wxWinUITitleBarSnapshot reset;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &reset));
+    wxWinUITitleBarTestAccess::Snapshot reset;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &reset));
     REQUIRE(reset.mode == wxWinUITitleBarMode::System);
 
     // Destruction immediately after the one real WinRT mutation must still
     // invalidate publication before its readback can publish System again.
-    REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+    REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
     {
         TitleBarTestSeamGuard seam(
-            wxWinUITitleBarHookPointForTesting::AfterResetToDefault,
+            wxWinUITitleBarTestAccess::HookPoint::AfterResetToDefault,
             ReentrantTitleBarAction::Destroy);
-        CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, false));
+        CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
         CHECK(gs_reentrantTitleBarHookCalled);
     }
 
     // Attached queries and setters must lose authority as soon as Destroy()
     // is scheduled, before the pending-delete pump drains the actual TLW.
-    wxWinUITitleBarSnapshot scheduled;
-    CHECK_FALSE(wxWinUITitleBarSnapshotForTesting(frame, &scheduled));
-    CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+    wxWinUITitleBarTestAccess::Snapshot scheduled;
+    CHECK_FALSE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &scheduled));
+    CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
 
     REQUIRE(DrainTitleBarEventsUntil(
         [lifetime, policiesBefore, hostsBefore]()
         {
             return !lifetime &&
-                   wxWinUITitleBarGetLivePolicyCountForTesting() ==
+                   wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                        policiesBefore &&
                    wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
         }));
@@ -628,13 +629,13 @@ TEST_CASE("WinUITitleBar::DestroyFromExceptionLogCannotRepublish",
 {
     DrainTitleBarEvents();
     const unsigned policiesBefore =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
     wxFrame * const frame = CreateTitleBarFrame("titlebar destroy log");
     TitleBarFrameGuard cleanup(frame);
 
-    wxWinUITitleBarSnapshot initial;
-    REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &initial));
+    wxWinUITitleBarTestAccess::Snapshot initial;
+    REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &initial));
     if ( initial.mode != wxWinUITitleBarMode::System ||
          !initial.customizationSupported )
     {
@@ -646,23 +647,23 @@ TEST_CASE("WinUITitleBar::DestroyFromExceptionLogCannotRepublish",
     const wxWeakRef<wxWindow> lifetime(frame);
     {
         TitleBarTestSeamGuard seam(
-            wxWinUITitleBarHookPointForTesting::BeforeExceptionLog,
+            wxWinUITitleBarTestAccess::HookPoint::BeforeExceptionLog,
             ReentrantTitleBarAction::Destroy);
-        wxWinUITitleBarSetFaultMaskForTesting(
-            wxWINUI_TITLEBAR_FAULT_EXTENSION_WRITE_AFTER);
-        CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+        wxWinUITitleBarTestAccess::SetFaultMask(
+            wxWinUITitleBarTestAccess::Fault_ExtensionWriteAfter);
+        CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
         CHECK(gs_reentrantTitleBarHookCalled);
     }
 
-    wxWinUITitleBarSnapshot scheduled;
-    CHECK_FALSE(wxWinUITitleBarSnapshotForTesting(frame, &scheduled));
-    CHECK_FALSE(wxWinUITitleBarSetExtendedForTesting(frame, false));
+    wxWinUITitleBarTestAccess::Snapshot scheduled;
+    CHECK_FALSE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &scheduled));
+    CHECK_FALSE(wxWinUITitleBarTestAccess::SetExtended(frame, false));
 
     REQUIRE(DrainTitleBarEventsUntil(
         [lifetime, policiesBefore, hostsBefore]()
         {
             return !lifetime &&
-                   wxWinUITitleBarGetLivePolicyCountForTesting() ==
+                   wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                        policiesBefore &&
                    wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
         }));
@@ -982,7 +983,7 @@ TEST_CASE("WinUITitleBar::DestroyDuringFullScreenMenuHideRetiresState",
 {
     DrainTitleBarEvents();
     const unsigned policiesBefore =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
     wxFrame * const frame = CreateTitleBarFrame(
         "destroy during fullscreen menu hide");
@@ -1017,7 +1018,7 @@ TEST_CASE("WinUITitleBar::DestroyDuringFullScreenMenuHideRetiresState",
         [lifetime, policiesBefore, hostsBefore]()
         {
             return !lifetime &&
-                   wxWinUITitleBarGetLivePolicyCountForTesting() ==
+                   wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                        policiesBefore &&
                    wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
         }));
@@ -1030,15 +1031,15 @@ TEST_CASE("WinUITitleBar::HundredHostCyclesRetireExactPolicies",
 {
     DrainTitleBarEvents();
     const unsigned policiesBefore =
-        wxWinUITitleBarGetLivePolicyCountForTesting();
+        wxWinUITitleBarTestAccess::GetLivePolicyCount();
     const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
 
     for ( int cycle = 0; cycle < 100; ++cycle )
     {
         wxFrame * const frame = CreateTitleBarFrame(
             wxString::Format("titlebar lifecycle %d", cycle));
-        wxWinUITitleBarSnapshot snapshot;
-        REQUIRE(wxWinUITitleBarSnapshotForTesting(frame, &snapshot));
+        wxWinUITitleBarTestAccess::Snapshot snapshot;
+        REQUIRE(wxWinUITitleBarTestAccess::GetSnapshot(frame, &snapshot));
         REQUIRE(snapshot.hwndIdentityCurrent);
         REQUIRE(snapshot.hwndGeneration != 0);
         if ( cycle % 25 == 0 &&
@@ -1047,14 +1048,14 @@ TEST_CASE("WinUITitleBar::HundredHostCyclesRetireExactPolicies",
         {
             // Teardown itself must relinquish an active test extension while
             // the exact HWND/native/AppWindow identity is still current.
-            REQUIRE(wxWinUITitleBarSetExtendedForTesting(frame, true));
+            REQUIRE(wxWinUITitleBarTestAccess::SetExtended(frame, true));
         }
         const bool destroyExtended =
             cycle % 25 == 0 &&
             snapshot.mode == wxWinUITitleBarMode::System &&
             snapshot.customizationSupported;
         const unsigned teardownResetsBefore =
-            wxWinUITitleBarGetTeardownResetCountForTesting();
+            wxWinUITitleBarTestAccess::GetTeardownResetCount();
 
         const wxWeakRef<wxWindow> lifetime(frame);
         frame->Destroy();
@@ -1062,18 +1063,18 @@ TEST_CASE("WinUITitleBar::HundredHostCyclesRetireExactPolicies",
             [lifetime, policiesBefore, hostsBefore]()
             {
                 return !lifetime &&
-                       wxWinUITitleBarGetLivePolicyCountForTesting() ==
+                       wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                            policiesBefore &&
                        wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
             }));
         if ( destroyExtended )
         {
-            CHECK(wxWinUITitleBarGetTeardownResetCountForTesting() ==
+            CHECK(wxWinUITitleBarTestAccess::GetTeardownResetCount() ==
                   teardownResetsBefore + 1);
         }
     }
 
-    CHECK(wxWinUITitleBarGetLivePolicyCountForTesting() == policiesBefore);
+    CHECK(wxWinUITitleBarTestAccess::GetLivePolicyCount() == policiesBefore);
     CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore);
 }
 

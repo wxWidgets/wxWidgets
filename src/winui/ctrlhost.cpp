@@ -17,6 +17,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
 #include "control-host-test-access.h"
+#include "tooltip-policy-test-access.h"
 #endif // WXWINUI_TEST_SUPPORT
 
 #include "wx/winui/private/appearance.h"
@@ -927,13 +928,16 @@ std::vector<wxWinUIManagedToolTip> gs_winuiManagedToolTips;
 constexpr unsigned wxWinUIToolTipMaxPersistentFailures = 12;
 constexpr unsigned wxWinUIToolTipMaxDeferredReplays = 2;
 
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_winuiToolTipSetBeforeCommitFaults = 0;
 unsigned gs_winuiToolTipSetAfterCommitFaults = 0;
 unsigned gs_winuiToolTipPolicyFaults = 0;
 unsigned gs_winuiToolTipPolicyFaultAttempts = 0;
+#endif // WXWINUI_TEST_SUPPORT
 unsigned gs_winuiToolTipPolicyReplaySchedules = 0;
 unsigned gs_winuiToolTipPolicyReplayExecutions = 0;
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool wxWinUIConsumeToolTipFault(unsigned& remaining)
 {
     if ( !remaining )
@@ -943,6 +947,7 @@ bool wxWinUIConsumeToolTipFault(unsigned& remaining)
         --remaining;
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 unsigned long long wxWinUINextToolTipEntryRevision()
 {
@@ -1224,17 +1229,21 @@ bool wxWinUISetToolTip(
             if ( gs_winuiToolTipsEnabled )
                 attached = toolTip;
 
+#ifdef WXWINUI_TEST_SUPPORT
             if ( wxWinUIConsumeToolTipFault(
                      gs_winuiToolTipSetBeforeCommitFaults) )
             {
                 winrt::throw_hresult(E_FAIL);
             }
+#endif // WXWINUI_TEST_SUPPORT
             MUXC::ToolTipService::SetToolTip(element, attached);
+#ifdef WXWINUI_TEST_SUPPORT
             if ( wxWinUIConsumeToolTipFault(
                      gs_winuiToolTipSetAfterCommitFaults) )
             {
                 winrt::throw_hresult(E_FAIL);
             }
+#endif // WXWINUI_TEST_SUPPORT
 
             if ( !wxWinUIManagedToolTipIsCurrent(element, toolTip, revision) )
                 return true;
@@ -1454,22 +1463,23 @@ bool wxWinUIIsManagedToolTipCurrent(
 
 #if wxUSE_TOOLTIPS
 
-unsigned wxWinUIGetManagedToolTipCountForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIToolTipPolicyTestAccess::GetManagedToolTipCount()
 {
     wxWinUIPurgeDeadManagedToolTips();
     return static_cast<unsigned>(gs_winuiManagedToolTips.size());
 }
 
-void wxWinUISetToolTipFaultForTesting(unsigned faults, unsigned count)
+void wxWinUIToolTipPolicyTestAccess::SetFault(unsigned faults, unsigned count)
 {
-    if ( faults & wxWinUIToolTipFault_SetBeforeCommit )
+    if ( faults & wxWinUIToolTipPolicyTestAccess::Fault_SetBeforeCommit )
         gs_winuiToolTipSetBeforeCommitFaults = count;
-    if ( faults & wxWinUIToolTipFault_SetAfterCommit )
+    if ( faults & wxWinUIToolTipPolicyTestAccess::Fault_SetAfterCommit )
         gs_winuiToolTipSetAfterCommitFaults = count;
-    if ( faults & wxWinUIToolTipFault_Policy )
+    if ( faults & wxWinUIToolTipPolicyTestAccess::Fault_Policy )
         gs_winuiToolTipPolicyFaults = count;
 
-    if ( faults == wxWinUIToolTipFault_None )
+    if ( faults == wxWinUIToolTipPolicyTestAccess::Fault_None )
     {
         gs_winuiToolTipSetBeforeCommitFaults = 0;
         gs_winuiToolTipSetAfterCommitFaults = 0;
@@ -1477,29 +1487,29 @@ void wxWinUISetToolTipFaultForTesting(unsigned faults, unsigned count)
     }
 }
 
-void wxWinUIResetToolTipPolicyDiagnosticsForTesting()
+void wxWinUIToolTipPolicyTestAccess::ResetDiagnostics()
 {
     gs_winuiToolTipPolicyFaultAttempts = 0;
     gs_winuiToolTipPolicyReplaySchedules = 0;
     gs_winuiToolTipPolicyReplayExecutions = 0;
 }
 
-unsigned wxWinUIGetToolTipPolicyFaultAttemptCountForTesting()
+unsigned wxWinUIToolTipPolicyTestAccess::GetFaultAttemptCount()
 {
     return gs_winuiToolTipPolicyFaultAttempts;
 }
 
-unsigned wxWinUIGetToolTipPolicyReplayScheduleCountForTesting()
+unsigned wxWinUIToolTipPolicyTestAccess::GetReplayScheduleCount()
 {
     return gs_winuiToolTipPolicyReplaySchedules;
 }
 
-unsigned wxWinUIGetToolTipPolicyReplayExecutionCountForTesting()
+unsigned wxWinUIToolTipPolicyTestAccess::GetReplayExecutionCount()
 {
     return gs_winuiToolTipPolicyReplayExecutions;
 }
 
-unsigned wxWinUIGetToolTipPolicyQuarantinedEntryCountForTesting()
+unsigned wxWinUIToolTipPolicyTestAccess::GetQuarantinedEntryCount()
 {
     wxWinUIPurgeDeadManagedToolTips();
     return static_cast<unsigned>(std::count_if(
@@ -1511,16 +1521,17 @@ unsigned wxWinUIGetToolTipPolicyQuarantinedEntryCountForTesting()
         }));
 }
 
-bool wxWinUIIsToolTipPolicyReplayScheduledForTesting()
+bool wxWinUIToolTipPolicyTestAccess::IsReplayScheduled()
 {
     return gs_winuiToolTipPolicyReplayScheduled;
 }
 
-bool wxWinUIIsToolTipPolicyShutdownForTesting()
+bool wxWinUIToolTipPolicyTestAccess::IsShutdown()
 {
     return gs_winuiToolTipPolicyShutdown;
 }
 
+#endif // WXWINUI_TEST_SUPPORT
 namespace
 {
 
@@ -1605,11 +1616,13 @@ wxWinUIToolTipPolicyEntryResult wxWinUIReconcileManagedToolTipPolicy(
                 return wxWinUIToolTipPolicyEntryResult::Complete;
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( wxWinUIConsumeToolTipFault(gs_winuiToolTipPolicyFaults) )
         {
             ++gs_winuiToolTipPolicyFaultAttempts;
             winrt::throw_hresult(E_FAIL);
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         auto actual = MUXC::ToolTipService::GetToolTip(element);
         auto actualToolTip = actual.try_as<MUXC::ToolTip>();
@@ -2190,9 +2203,11 @@ void wxWinUIShutdownToolTipPolicy()
     gs_winuiToolTipPolicyTransactionQuarantined = true;
     gs_winuiToolTipHostSyncQuarantined = true;
 
+#ifdef WXWINUI_TEST_SUPPORT
     gs_winuiToolTipSetBeforeCommitFaults = 0;
     gs_winuiToolTipSetAfterCommitFaults = 0;
     gs_winuiToolTipPolicyFaults = 0;
+#endif // WXWINUI_TEST_SUPPORT
 
     // These strong C++/WinRT references must be released while the XAML
     // manager and apartment are still alive.

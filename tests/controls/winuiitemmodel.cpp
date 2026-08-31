@@ -30,6 +30,7 @@
     #include "keyboard-test-access.h"
     #include "wx/winui/private/textpeer.h"
     #include "wx/winui/private/tlwhost.h"
+    #include "host-observation-test-access.h"
     #include "host-content-test-access.h"
 #endif
 #if wxUSE_BITMAPCOMBOBOX
@@ -1593,9 +1594,9 @@ TEST_CASE("wxWinUI ComboBox popup teardown leaves the next template focus clean"
            "[winui-itemmodel][winui-combo][popup][lifetime][order]")
 {
     const unsigned physicalGateBaseline =
-        wxWinUITopLevelHost::GetPendingPhysicalDisconnectGateCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingPhysicalDisconnectGateCount();
     const unsigned terminalRetirementBaseline =
-        wxWinUITopLevelHost::GetPendingTLWTerminalRetirementCountForTest();
+        wxWinUIHostObservationTestAccess::GetPendingTLWTerminalRetirementCount();
 
     // Preserve the exact popup predecessor which exposed the deferred XAML
     // LostFocus failure in declaration order, including its Escape close.
@@ -1669,16 +1670,16 @@ TEST_CASE("wxWinUI ComboBox popup teardown leaves the next template focus clean"
         frame.Show();
         RequireWinUIComboTemplate(combo);
         REQUIRE(
-            wxWinUITopLevelHost::
-                GetPendingPhysicalDisconnectGateCountForTest() ==
+            wxWinUIHostObservationTestAccess::
+                GetPendingPhysicalDisconnectGateCount() ==
             physicalGateBaseline);
         // The previous case in the paired regression can leave one causal TLW
         // retirement until this first template pump. It is correct for that
         // shared counter to decrease here; this case must only prove that it
         // did not publish any new terminal debt of its own.
         REQUIRE(
-            wxWinUITopLevelHost::
-                GetPendingTLWTerminalRetirementCountForTest() <=
+            wxWinUIHostObservationTestAccess::
+                GetPendingTLWTerminalRetirementCount() <=
             terminalRetirementBaseline);
         REQUIRE_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
         combo.SetFocus();

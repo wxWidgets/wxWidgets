@@ -253,6 +253,7 @@ private:
     friend class wxWinUITopLevelHost;
     friend class wxWinUISlotTestAccess;
     friend class wxWinUIHostInputTestAccess;
+    friend class wxWinUIHostCursorTestAccess;
     friend class wxWinUIVisualCoordinates;
 
     wxWinUISlot();
@@ -1006,8 +1007,6 @@ public:
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
     bool OwnsOleDropRegistration() const;
-    wxWinUIDropBroker *GetDropBrokerForTest() const
-        { return m_dropBroker.get(); }
 #endif
 #if wxUSE_DRAG_AND_DROP
     void UpdateBridgeFileAcceptance();
@@ -1071,8 +1070,6 @@ public:
     // Number of live hosts / of registered slots across every host.
     static unsigned GetLiveHostCount();
     static unsigned GetLiveSlotCount();
-    static unsigned GetPendingPhysicalDisconnectGateCountForTest();
-    static unsigned GetPendingTLWTerminalRetirementCountForTest();
 
     // Re-arm physical host deletion for every logically shut down host once
     // the process-wide WinUI callback transaction has fully unwound.
@@ -1113,28 +1110,6 @@ public:
     // Cumulative count of per-slot cursor applications: proves the
     // wxWindow::SetCursor() plumbing reaches the slot seam.
     static unsigned GetSlotCursorSetCount();
-    winrt::Microsoft::UI::Input::InputCursor
-    GetSlotCursorForTest(const wxWindow *window) const;
-    winrt::Microsoft::UI::Input::InputCursor
-    GetIslandCursorForTest() const;
-    WXHCURSOR GetIslandCursorHandleForTest() const
-        { return m_lastIslandPointerHandle; }
-    bool IsInputPointerSourceAuthoritativeForTest() const
-        { return m_inputPointerSourceAuthoritative; }
-    bool TestActivateSlotCursor(wxWindow *window,
-                                bool emitSetCursorEvent = false);
-    bool TestApplySlotPointerCursor(
-        wxWindow *window,
-        const wxPoint& screenPoint,
-        wxWinUIInputKind kind);
-    bool TestSimulateXamlCursorSelection(
-        const winrt::Microsoft::UI::Input::InputCursor& cursor);
-    bool TestRefreshPointerCursorAt(const wxPoint& screenPoint)
-    {
-        m_lastPointerScreen.x = screenPoint.x;
-        m_lastPointerScreen.y = screenPoint.y;
-        return RefreshPointerCursorAtLastPoint();
-    }
 
     // Live Loaded-hook count across the control hosts (defined in
     // ctrlhost.cpp): a failed content swap must leave the old hook in
@@ -1144,7 +1119,9 @@ public:
 private:
     friend class wxWinUISlot;
     friend class wxWinUIHostContentTestAccess;
+    friend class wxWinUIHostObservationTestAccess;
     friend class wxWinUIHostInputTestAccess;
+    friend class wxWinUIHostCursorTestAccess;
     friend class wxWinUIHostFocusTestAccess;
     friend class wxWinUIHostResizeTestAccess;
     friend class wxWinUIVisualCoordinates;
@@ -1929,34 +1906,6 @@ private:
 };
 
 #if wxUSE_TOOLTIPS
-// Internal deterministic cleanup seam; not part of the wx public API.
-WXDLLIMPEXP_CORE unsigned wxWinUIGetManagedToolTipCountForTesting();
-
-enum wxWinUIToolTipFaultForTesting
-{
-    wxWinUIToolTipFault_None = 0,
-    wxWinUIToolTipFault_SetBeforeCommit = 1,
-    wxWinUIToolTipFault_SetAfterCommit = 2,
-    wxWinUIToolTipFault_Policy = 4
-};
-
-// Faults are consumed independently for each selected seam. UINT_MAX means a
-// permanent fault, used to prove that deferred policy replay is bounded.
-WXDLLIMPEXP_CORE void
-wxWinUISetToolTipFaultForTesting(unsigned faults, unsigned count);
-WXDLLIMPEXP_CORE void wxWinUIResetToolTipPolicyDiagnosticsForTesting();
-WXDLLIMPEXP_CORE unsigned
-wxWinUIGetToolTipPolicyFaultAttemptCountForTesting();
-WXDLLIMPEXP_CORE unsigned
-wxWinUIGetToolTipPolicyReplayScheduleCountForTesting();
-WXDLLIMPEXP_CORE unsigned
-wxWinUIGetToolTipPolicyReplayExecutionCountForTesting();
-WXDLLIMPEXP_CORE unsigned
-wxWinUIGetToolTipPolicyQuarantinedEntryCountForTesting();
-WXDLLIMPEXP_CORE bool
-wxWinUIIsToolTipPolicyReplayScheduledForTesting();
-WXDLLIMPEXP_CORE bool wxWinUIIsToolTipPolicyShutdownForTesting();
-
 // Deterministic physical-retirement seam. It exercises host ownership,
 // migration, shutdown and counter contracts without using sleeps or treating
 // an arbitrary dispatcher turn as proof of popup causality.
