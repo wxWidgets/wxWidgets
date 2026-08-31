@@ -49,60 +49,6 @@ struct WXDLLIMPEXP_CORE wxWinUIDropBrokerInitResult
         { return status == wxWinUIDropBrokerInitStatus::Ready; }
 };
 
-// Injectable native boundary used only by the ownership tests. Production
-// callers pass null and use the real OLE APIs.
-struct WXDLLIMPEXP_CORE wxWinUIDropBrokerNativeOps
-{
-    void* context = nullptr;
-    HRESULT (*lock)(void*, IUnknown*, BOOL, BOOL) noexcept = nullptr;
-    HRESULT (*registerTarget)(void*, HWND, IDropTarget*) noexcept = nullptr;
-    HRESULT (*revokeTarget)(void*, HWND) noexcept = nullptr;
-};
-
-struct WXDLLIMPEXP_CORE wxWinUIDropBrokerRegistrationSnapshot
-{
-    HRESULT lockHr = E_UNEXPECTED;
-    HRESULT registerHr = E_UNEXPECTED;
-    HRESULT revokeHr = E_UNEXPECTED;
-    HRESULT unlockHr = E_UNEXPECTED;
-    HWND registrationHwnd = nullptr;
-    std::uint64_t generation = 0;
-    unsigned lockCalls = 0;
-    unsigned registerCalls = 0;
-    unsigned revokeCalls = 0;
-    unsigned unlockCalls = 0;
-    bool locked = false;
-    bool ownsRegistration = false;
-    bool current = false;
-};
-
-struct WXDLLIMPEXP_CORE wxWinUIDropBrokerSnapshot
-{
-    wxWinUIDropBrokerInitStatus status =
-        wxWinUIDropBrokerInitStatus::NotInitialized;
-    HRESULT lockHr = E_UNEXPECTED;
-    HRESULT registerHr = E_UNEXPECTED;
-    HRESULT revokeHr = E_UNEXPECTED;
-    HRESULT unlockHr = E_UNEXPECTED;
-    HRESULT resultHr = E_UNEXPECTED;
-    HWND registrationHwnd = nullptr;
-    unsigned lockCalls = 0;
-    unsigned registerCalls = 0;
-    unsigned revokeCalls = 0;
-    unsigned unlockCalls = 0;
-    unsigned dragEnterCalls = 0;
-    unsigned dragOverCalls = 0;
-    unsigned dragLeaveCalls = 0;
-    unsigned dropCalls = 0;
-    wxWinUIDropBrokerRegistrationSnapshot bridgeRegistration;
-    wxWinUIDropBrokerRegistrationSnapshot tlwRegistration;
-    bool active = false;
-    bool locked = false;
-    bool ownsRegistration = false;
-    bool ownsCompleteRegistrationSet = false;
-    bool shutdown = false;
-};
-
 // Host-owned handle. The actual COM target has independent ref-counted state,
 // so an OLE reference surviving a failed RevokeDragDrop() can only call an
 // inactive, fail-closed object and can never retain or dereference the host.
@@ -112,8 +58,7 @@ public:
     static std::unique_ptr<wxWinUIDropBroker>
     Create(wxWindow* tlw,
            HWND bridge,
-           const std::weak_ptr<wxWinUIHostLifetime>& lifetime,
-           const wxWinUIDropBrokerNativeOps* testOps = nullptr) noexcept;
+           const std::weak_ptr<wxWinUIHostLifetime>& lifetime) noexcept;
 
     ~wxWinUIDropBroker();
 
@@ -159,15 +104,14 @@ public:
     // Reconcile a reparented subtree against its current TLW host.
     static void ReconcileShellDropTargets(wxWindow* subtreeRoot) noexcept;
 
-    wxWinUIDropBrokerSnapshot GetSnapshotForTest() const noexcept;
-    IDropTarget* GetCOMTargetForTest() const noexcept;
-
 private:
+    friend class wxWinUIDropBrokerState;
+    friend class wxWinUIDropBrokerTestAccess;
+
     wxWinUIDropBroker(
         const std::shared_ptr<wxWinUIDropBrokerState>& state,
         wxWinUIDropBrokerCOMTarget* bridgeTarget,
-        wxWinUIDropBrokerCOMTarget* tlwTarget,
-        const wxWinUIDropBrokerNativeOps& nativeOps) noexcept;
+        wxWinUIDropBrokerCOMTarget* tlwTarget) noexcept;
 
     wxWinUIDropBrokerInitResult InitializeNative(
         bool deferActivation) noexcept;
@@ -209,8 +153,6 @@ private:
     // the same logical State/Session.
     wxWinUIDropBrokerCOMTarget* m_bridgeTarget = nullptr;
     wxWinUIDropBrokerCOMTarget* m_tlwTarget = nullptr;
-    wxWinUIDropBrokerNativeOps m_nativeOps;
-    bool m_testBoundary = false;
     wxWinUIDropBrokerInitResult m_initResult;
     bool m_initializeAttempted = false;
     bool m_initializePending = false;

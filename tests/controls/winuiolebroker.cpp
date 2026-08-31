@@ -29,6 +29,7 @@
 #include "wx/msw/private/dropsession.h"
 #include "wx/msw/wrapshl.h"
 #include "wx/winui/private/dropbroker.h"
+#include "drop-broker-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-geometry-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -265,7 +266,7 @@ std::unique_ptr<wxWinUIDropBroker> MakeBroker(NativeLog& log)
     // fail closed through the exact production State/Session path.
     const std::weak_ptr<wxWinUIHostLifetime> lifetime;
     const wxWinUIDropBrokerNativeOps ops = log.Ops();
-    return wxWinUIDropBroker::Create(tlw, bridgeHwnd, lifetime, &ops);
+    return wxWinUIDropBrokerTestAccess::Create(tlw, bridgeHwnd, lifetime, &ops);
 }
 
 HWND RequireDistinctBridgeHwnd(NativeLog& log, HWND tlwHwnd)
@@ -2059,7 +2060,7 @@ TEST_CASE("WinUI OLE broker qualifies physical product delivery",
         host->GetDropBrokerForTest();
     REQUIRE(productBroker);
     const wxWinUIDropBrokerSnapshot hiddenBrokerSnapshot =
-        productBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
     REQUIRE_FALSE(host->OwnsOleDropRegistration());
     REQUIRE_FALSE(hiddenBrokerSnapshot.active);
     REQUIRE_FALSE(hiddenBrokerSnapshot.ownsRegistration);
@@ -2078,7 +2079,7 @@ TEST_CASE("WinUI OLE broker qualifies physical product delivery",
     productBroker = host->GetDropBrokerForTest();
     REQUIRE(productBroker);
     const wxWinUIDropBrokerSnapshot brokerSnapshot =
-        productBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
     REQUIRE(host->OwnsOleDropRegistration());
     REQUIRE(brokerSnapshot.active);
     REQUIRE(brokerSnapshot.ownsRegistration);
@@ -2162,7 +2163,7 @@ TEST_CASE("WinUI OLE broker qualifies physical product delivery",
     // and immediately before installing the input guard. No partial or stale
     // set can reach even the harmless tagged heartbeat, let alone a drag.
     const wxWinUIDropBrokerSnapshot preInjectionBrokerSnapshot =
-        productBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
     const bool bridgeRegistration =
         preInjectionBrokerSnapshot.bridgeRegistration.ownsRegistration &&
         preInjectionBrokerSnapshot.bridgeRegistration.locked &&
@@ -2260,7 +2261,7 @@ TEST_CASE("WinUI OLE broker qualifies physical product delivery",
         REQUIRE(heldInputDecision.IsSafe());
 
         const wxWinUIDropBrokerSnapshot injectionBrokerSnapshot =
-            productBroker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
         registrationSetRevalidated =
             injectionBrokerSnapshot.active &&
             injectionBrokerSnapshot.ownsCompleteRegistrationSet &&
@@ -2302,13 +2303,13 @@ TEST_CASE("WinUI OLE broker qualifies physical product delivery",
             inputGuard.TaggedMouseEventCount();
 
         const wxWinUIDropBrokerSnapshot normalBrokerBefore =
-            productBroker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
         normal = RunProductPhysicalDrag(
             sourceWindow.Handle(), sourceWindow.GetPoint(),
             normalPoint, normalNearby, "product-normal-surface",
             logicalTarget, inputGuard, normalOwner);
         const wxWinUIDropBrokerSnapshot normalBrokerAfter =
-            productBroker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
         PrintProductPhysicalDragResult(
             "normal", normal, normalBrokerBefore, normalBrokerAfter);
 
@@ -2317,12 +2318,12 @@ TEST_CASE("WinUI OLE broker qualifies physical product delivery",
         if ( !inputGuard.WasInterrupted() &&
              normal.Delivered() && normal.buttonUpObserved )
         {
-            holeBrokerBefore = productBroker->GetSnapshotForTest();
+            holeBrokerBefore = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
             hole = RunProductPhysicalDrag(
                 sourceWindow.Handle(), sourceWindow.GetPoint(),
                 holePoint, holeNearby, "product-native-hole",
                 logicalTarget, inputGuard, holeOwner);
-            holeBrokerAfter = productBroker->GetSnapshotForTest();
+            holeBrokerAfter = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*productBroker);
         }
         PrintProductPhysicalDragResult(
             "hole", hole, holeBrokerBefore, holeBrokerAfter);
@@ -2481,7 +2482,7 @@ TEST_CASE("WinUI OLE broker owns exact bridge and TLW adapter registrations",
     CHECK(repeated.status == init.status);
     CHECK(repeated.hresult == init.hresult);
 
-    wxWinUIDropBrokerSnapshot snapshot = broker->GetSnapshotForTest();
+    wxWinUIDropBrokerSnapshot snapshot = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(snapshot.active);
     CHECK(snapshot.locked);
     CHECK(snapshot.ownsRegistration);
@@ -2529,7 +2530,7 @@ TEST_CASE("WinUI OLE broker owns exact bridge and TLW adapter registrations",
     static_cast<IUnknown*>(tlwUnknown)->Release();
     static_cast<IUnknown*>(bridgeUnknown)->Release();
 
-    IDropTarget* const external = broker->GetCOMTargetForTest();
+    IDropTarget* const external = wxWinUIDropBrokerTestAccess::GetCOMTarget(*broker);
     REQUIRE(external);
     CHECK(external == log.registeredTargets[0]);
     CHECK(external != log.registeredTargets[1]);
@@ -2546,7 +2547,7 @@ TEST_CASE("WinUI OLE broker owns exact bridge and TLW adapter registrations",
 
     broker->Shutdown();
     broker->Shutdown();
-    snapshot = broker->GetSnapshotForTest();
+    snapshot = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK_FALSE(snapshot.active);
     CHECK(snapshot.shutdown);
     CHECK_FALSE(snapshot.locked);
@@ -2619,18 +2620,18 @@ TEST_CASE("WinUI OLE broker production queries are passive",
     {
         log.revokeResult = E_FAIL;
         broker->Shutdown();
-        REQUIRE(broker->GetSnapshotForTest().ownsRegistration);
-        REQUIRE_FALSE(broker->GetSnapshotForTest().locked);
+        REQUIRE(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker).ownsRegistration);
+        REQUIRE_FALSE(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker).locked);
     }
     SECTION("failed unlock retains lock only")
     {
         log.unlockResult = E_ACCESSDENIED;
         broker->Shutdown();
-        REQUIRE_FALSE(broker->GetSnapshotForTest().ownsRegistration);
-        REQUIRE(broker->GetSnapshotForTest().locked);
+        REQUIRE_FALSE(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker).ownsRegistration);
+        REQUIRE(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker).locked);
     }
 
-    const auto before = broker->GetSnapshotForTest();
+    const auto before = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     const auto callsBefore = log.calls;
     const auto mutationBefore = wxMSWOleGetDropTargetMutationGeneration();
     const auto schedulesBefore = wxWinUITopLevelHost::GetFlushScheduleCount();
@@ -2645,7 +2646,7 @@ TEST_CASE("WinUI OLE broker production queries are passive",
 
     // In particular, observing a failed native cleanup must never retry it.
     // The production queries do not consume the diagnostic snapshot, either.
-    const auto after = broker->GetSnapshotForTest();
+    const auto after = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(log.calls == callsBefore);
     CHECK(wxMSWOleGetDropTargetMutationGeneration() == mutationBefore);
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() == schedulesBefore);
@@ -2692,7 +2693,7 @@ TEST_CASE("WinUI OLE broker failure paths never revoke foreign state",
         CHECK(result.hresult == E_ACCESSDENIED);
 
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.shutdown);
         CHECK_FALSE(snapshot.active);
         CHECK_FALSE(snapshot.locked);
@@ -2733,7 +2734,7 @@ TEST_CASE("WinUI OLE broker failure paths never revoke foreign state",
             "lock(T,F)", "register", "unlock(F,T)"
         };
         CHECK(log.calls == expected);
-        CHECK(broker->GetSnapshotForTest().revokeCalls == 0);
+        CHECK(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker).revokeCalls == 0);
     }
 
     SECTION("generic register failure has the same ownership discipline")
@@ -2762,7 +2763,7 @@ TEST_CASE("WinUI OLE broker failure paths never revoke foreign state",
         const wxWinUIDropBrokerInitResult result = broker->Initialize();
         CHECK(result.status == wxWinUIDropBrokerInitStatus::RegisterFailed);
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK_FALSE(snapshot.active);
         CHECK_FALSE(snapshot.ownsCompleteRegistrationSet);
         CHECK_FALSE(snapshot.bridgeRegistration.locked);
@@ -2798,11 +2799,11 @@ TEST_CASE("WinUI OLE broker failure paths never revoke foreign state",
         auto broker = MakeBroker(log);
         REQUIRE(broker->Initialize().IsReady());
 
-        IDropTarget* const external = broker->GetCOMTargetForTest();
+        IDropTarget* const external = wxWinUIDropBrokerTestAccess::GetCOMTarget(*broker);
         external->AddRef();
         broker->Shutdown();
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.shutdown);
         CHECK_FALSE(snapshot.locked);
         CHECK(snapshot.ownsRegistration);
@@ -2846,7 +2847,7 @@ TEST_CASE("WinUI OLE broker detects bridge churn and skips stale revoke",
     REQUIRE_FALSE(wxMSWOleIsShellDropTargetRegistered(routed, tlwHwnd));
 
     const wxWinUIDropBrokerSnapshot before =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     REQUIRE(before.bridgeRegistration.current);
     REQUIRE(before.tlwRegistration.current);
     const HWND staleBridge = before.bridgeRegistration.registrationHwnd;
@@ -2860,7 +2861,7 @@ TEST_CASE("WinUI OLE broker detects bridge churn and skips stale revoke",
     REQUIRE_FALSE(::IsWindow(staleBridge));
 
     const wxWinUIDropBrokerSnapshot afterDestroy =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(afterDestroy.bridgeRegistration.registrationHwnd == staleBridge);
     CHECK(afterDestroy.bridgeRegistration.generation == staleGeneration);
     CHECK_FALSE(afterDestroy.bridgeRegistration.current);
@@ -2883,13 +2884,13 @@ TEST_CASE("WinUI OLE broker detects bridge churn and skips stale revoke",
         CHECK(replacementGeneration != staleGeneration);
 
     const wxWinUIDropBrokerSnapshot afterReplacement =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK_FALSE(afterReplacement.bridgeRegistration.current);
     CHECK(afterReplacement.tlwRegistration.current);
 
     broker->Shutdown();
     const wxWinUIDropBrokerSnapshot afterShutdown =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(afterShutdown.shutdown);
     CHECK_FALSE(afterShutdown.active);
     CHECK(afterShutdown.bridgeRegistration.revokeCalls == 0);
@@ -2946,7 +2947,7 @@ TEST_CASE("WinUI OLE broker revalidates bridge churn pumped from revoke",
     REQUIRE_FALSE(wxMSWOleIsShellDropTargetRegistered(routed, tlwHwnd));
 
     const wxWinUIDropBrokerSnapshot before =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     const HWND bridgeHwnd = before.bridgeRegistration.registrationHwnd;
     REQUIRE(bridgeHwnd);
     REQUIRE(before.bridgeRegistration.current);
@@ -2954,7 +2955,7 @@ TEST_CASE("WinUI OLE broker revalidates bridge churn pumped from revoke",
 
     broker->Shutdown();
     const wxWinUIDropBrokerSnapshot after =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(after.shutdown);
     CHECK_FALSE(after.active);
     CHECK(after.tlwRegistration.revokeCalls == 1);
@@ -3029,7 +3030,7 @@ TEST_CASE("WinUI OLE broker oscillates exact dual PendingFixed keys",
 
     const std::weak_ptr<wxWinUIHostLifetime> lifetime;
     const wxWinUIDropBrokerNativeOps ops = log.Ops();
-    auto broker = wxWinUIDropBroker::Create(
+    auto broker = wxWinUIDropBrokerTestAccess::Create(
         tlw, bridgeHwnd, lifetime, &ops);
     REQUIRE(broker);
 
@@ -3080,7 +3081,7 @@ TEST_CASE("WinUI OLE broker retains ambiguous external unlocks exactly",
 
         const wxWinUIDropBrokerInitResult result = broker->Initialize();
         CHECK(result.status == wxWinUIDropBrokerInitStatus::RegisterFailed);
-        wxWinUIDropBrokerSnapshot snapshot = broker->GetSnapshotForTest();
+        wxWinUIDropBrokerSnapshot snapshot = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.locked);
         CHECK_FALSE(snapshot.ownsRegistration);
         CHECK(snapshot.unlockCalls == 1);
@@ -3089,7 +3090,7 @@ TEST_CASE("WinUI OLE broker retains ambiguous external unlocks exactly",
         // issue it a second time. The exact retained identity blocks a new
         // broker on this HWND generation instead.
         broker->Shutdown();
-        snapshot = broker->GetSnapshotForTest();
+        snapshot = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.unlockCalls == 1);
         broker.reset();
         CHECK(log.calls == std::vector<std::string>{
@@ -3116,7 +3117,7 @@ TEST_CASE("WinUI OLE broker retains ambiguous external unlocks exactly",
 
         broker->Shutdown();
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.locked);
         CHECK_FALSE(snapshot.ownsRegistration);
         CHECK(snapshot.revokeCalls == 2);
@@ -3151,7 +3152,7 @@ TEST_CASE("WinUI OLE broker coverage is scoped to its exact owner",
     const HWND bridgeHwnd =
         RequireDistinctBridgeHwnd(ownerLog, frameHwnd);
     const wxWinUIDropBrokerNativeOps ownerOps = ownerLog.Ops();
-    auto owner = wxWinUIDropBroker::Create(
+    auto owner = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &ownerOps);
     REQUIRE(owner);
     REQUIRE(owner->Initialize().IsReady());
@@ -3164,7 +3165,7 @@ TEST_CASE("WinUI OLE broker coverage is scoped to its exact owner",
     NativeLog retryLog;
     retryLog.registerResult = DRAGDROP_E_ALREADYREGISTERED;
     const wxWinUIDropBrokerNativeOps retryOps = retryLog.Ops();
-    auto retry = wxWinUIDropBroker::Create(
+    auto retry = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &retryOps);
     REQUIRE(retry);
     const wxWinUIDropBrokerInitResult retryResult = retry->Initialize();
@@ -3199,7 +3200,7 @@ TEST_CASE("WinUI OLE broker retry preserves a retained coverage tombstone",
     const HWND bridgeHwnd =
         RequireDistinctBridgeHwnd(ownerLog, frameHwnd);
     const wxWinUIDropBrokerNativeOps ownerOps = ownerLog.Ops();
-    auto owner = wxWinUIDropBroker::Create(
+    auto owner = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &ownerOps);
     REQUIRE(owner);
     REQUIRE(owner->Initialize().IsReady());
@@ -3209,7 +3210,7 @@ TEST_CASE("WinUI OLE broker retry preserves a retained coverage tombstone",
     // its owner token becomes the only evidence that this TLW generation is
     // still occupied by the inactive, fail-closed COM receiver.
     owner->Shutdown();
-    const wxWinUIDropBrokerSnapshot retained = owner->GetSnapshotForTest();
+    const wxWinUIDropBrokerSnapshot retained = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*owner);
     REQUIRE(retained.shutdown);
     REQUIRE(retained.ownsRegistration);
     REQUIRE(retained.revokeCalls == 2);
@@ -3227,7 +3228,7 @@ TEST_CASE("WinUI OLE broker retry preserves a retained coverage tombstone",
     NativeLog retryLog;
     retryLog.registerResult = DRAGDROP_E_ALREADYREGISTERED;
     const wxWinUIDropBrokerNativeOps retryOps = retryLog.Ops();
-    auto retry = wxWinUIDropBroker::Create(
+    auto retry = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &retryOps);
     REQUIRE(retry);
     const wxWinUIDropBrokerInitResult retryResult = retry->Initialize();
@@ -3260,7 +3261,7 @@ TEST_CASE("WinUI OLE broker acquisition is terminal under native reentrancy",
         CHECK(result.hresult == HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
 
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.shutdown);
         CHECK_FALSE(snapshot.active);
         CHECK_FALSE(snapshot.locked);
@@ -3287,7 +3288,7 @@ TEST_CASE("WinUI OLE broker acquisition is terminal under native reentrancy",
         CHECK(result.hresult == HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
 
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.shutdown);
         CHECK_FALSE(snapshot.active);
         CHECK_FALSE(snapshot.locked);
@@ -3323,7 +3324,7 @@ TEST_CASE("WinUI OLE broker acquisition is terminal under native reentrancy",
         broker->Shutdown();
 
         const wxWinUIDropBrokerSnapshot snapshot =
-            broker->GetSnapshotForTest();
+            wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
         CHECK(snapshot.shutdown);
         CHECK_FALSE(snapshot.active);
         CHECK_FALSE(snapshot.locked);
@@ -3354,7 +3355,7 @@ TEST_CASE("WinUI OLE broker rejects active cross-thread COM dispatch",
     auto broker = MakeBroker(log);
     REQUIRE(broker->Initialize().IsReady());
 
-    IDropTarget* const target = broker->GetCOMTargetForTest();
+    IDropTarget* const target = wxWinUIDropBrokerTestAccess::GetCOMTarget(*broker);
     target->AddRef();
     HRESULT hr = S_OK;
     DWORD effect = DROPEFFECT_COPY;
@@ -3389,7 +3390,7 @@ TEST_CASE("WinUI OLE broker restores detached targets on acquire failure",
     const HWND bridgeHwnd = RequireDistinctBridgeHwnd(log, frameHwnd);
     const std::weak_ptr<wxWinUIHostLifetime> lifetime;
     const wxWinUIDropBrokerNativeOps ops = log.Ops();
-    auto broker = wxWinUIDropBroker::Create(
+    auto broker = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &ops);
     REQUIRE(broker);
 
@@ -3425,18 +3426,18 @@ TEST_CASE("WinUI OLE broker restores an uncommitted Ready adoption",
     const HWND bridgeHwnd = RequireDistinctBridgeHwnd(log, frameHwnd);
     const std::weak_ptr<wxWinUIHostLifetime> lifetime;
     const wxWinUIDropBrokerNativeOps ops = log.Ops();
-    auto broker = wxWinUIDropBroker::Create(
+    auto broker = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &ops);
     REQUIRE(broker);
 
     REQUIRE(broker->InitializeAndAdoptShellDropTargets().IsReady());
     CHECK_FALSE(wxMSWOleIsShellDropTargetRegistered(routed, frameHwnd));
-    CHECK(broker->GetSnapshotForTest().ownsCompleteRegistrationSet);
+    CHECK(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker).ownsCompleteRegistrationSet);
 
     // No CommitHostInitialization(): this is the exact rollback latch used
     // when the presentation epoch changes after Ready but before host commit.
     broker->Shutdown();
-    const wxWinUIDropBrokerSnapshot stopped = broker->GetSnapshotForTest();
+    const wxWinUIDropBrokerSnapshot stopped = wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(stopped.shutdown);
     CHECK_FALSE(stopped.ownsRegistration);
     CHECK_FALSE(stopped.ownsCompleteRegistrationSet);
@@ -3468,7 +3469,7 @@ TEST_CASE("WinUI OLE broker never restores beside a retained bridge registration
     const HWND bridgeHwnd = RequireDistinctBridgeHwnd(log, frameHwnd);
     const std::weak_ptr<wxWinUIHostLifetime> lifetime;
     const wxWinUIDropBrokerNativeOps ops = log.Ops();
-    auto broker = wxWinUIDropBroker::Create(
+    auto broker = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &ops);
     REQUIRE(broker);
     log.reentrantBroker = broker.get();
@@ -3478,7 +3479,7 @@ TEST_CASE("WinUI OLE broker never restores beside a retained bridge registration
         broker->InitializeAndAdoptShellDropTargets();
     CHECK(result.status == wxWinUIDropBrokerInitStatus::InvalidContext);
     const wxWinUIDropBrokerSnapshot snapshot =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(snapshot.shutdown);
     CHECK_FALSE(snapshot.active);
     CHECK_FALSE(snapshot.locked);
@@ -3527,7 +3528,7 @@ TEST_CASE("WinUI OLE broker acquires an incumbent TLW drop target",
     REQUIRE(host);
     REQUIRE_FALSE(host->OwnsOleDropRegistration());
     const wxWinUIDropBrokerSnapshot hiddenSnapshot =
-        host->GetDropBrokerForTest()->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*host->GetDropBrokerForTest());
     CHECK_FALSE(hiddenSnapshot.active);
     CHECK_FALSE(hiddenSnapshot.ownsRegistration);
     CHECK(wxMSWOleIsShellDropTargetRegistered(routed, frameHwnd));
@@ -3539,7 +3540,7 @@ TEST_CASE("WinUI OLE broker acquires an incumbent TLW drop target",
 
     REQUIRE(host->OwnsOleDropRegistration());
     const wxWinUIDropBrokerSnapshot snapshot =
-        host->GetDropBrokerForTest()->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*host->GetDropBrokerForTest());
     CHECK(snapshot.active);
     CHECK(snapshot.registrationHwnd == frameHwnd);
     CHECK(snapshot.registrationHwnd != host->GetBridgeHwnd());
@@ -3557,7 +3558,7 @@ TEST_CASE("WinUI OLE broker acquires an incumbent TLW drop target",
     };
 
     IDropTarget* const target =
-        host->GetDropBrokerForTest()->GetCOMTargetForTest();
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*host->GetDropBrokerForTest());
     REQUIRE(target);
     target->AddRef();
     wxTextDataObject source("TLW incumbent route");
@@ -3611,11 +3612,11 @@ TEST_CASE("WinUI OLE broker acquires once after presentation",
         host->GetDropBrokerForTest();
     REQUIRE(visibleBroker == hiddenBroker);
     IDropTarget* const visibleTarget =
-        visibleBroker->GetCOMTargetForTest();
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*visibleBroker);
     REQUIRE(visibleTarget);
     visibleTarget->AddRef();
     const wxWinUIDropBrokerSnapshot firstVisible =
-        visibleBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*visibleBroker);
     CHECK(firstVisible.active);
     CHECK(firstVisible.registerCalls == 2);
     CHECK(firstVisible.revokeCalls == 0);
@@ -3631,9 +3632,9 @@ TEST_CASE("WinUI OLE broker acquires once after presentation",
     wxWinUIDropBroker* const shownAgain =
         host->GetDropBrokerForTest();
     REQUIRE(shownAgain == visibleBroker);
-    CHECK(shownAgain->GetCOMTargetForTest() == visibleTarget);
+    CHECK(wxWinUIDropBrokerTestAccess::GetCOMTarget(*shownAgain) == visibleTarget);
     const wxWinUIDropBrokerSnapshot secondVisible =
-        shownAgain->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*shownAgain);
     CHECK(secondVisible.active);
     CHECK(secondVisible.registerCalls == 2);
     CHECK(secondVisible.revokeCalls == 0);
@@ -3708,7 +3709,7 @@ TEST_CASE("WinUI OLE broker retries a reentrant presentation invalidation",
     REQUIRE(host);
     wxWinUIDropBroker* const firstBroker = host->GetDropBrokerForTest();
     REQUIRE(firstBroker);
-    IDropTarget* const firstTarget = firstBroker->GetCOMTargetForTest();
+    IDropTarget* const firstTarget = wxWinUIDropBrokerTestAccess::GetCOMTarget(*firstBroker);
     REQUIRE(firstTarget);
     firstTarget->AddRef();
 
@@ -3720,9 +3721,9 @@ TEST_CASE("WinUI OLE broker retries a reentrant presentation invalidation",
 
         wxWinUIDropBroker* const retryBroker = host->GetDropBrokerForTest();
         REQUIRE(retryBroker);
-        CHECK(retryBroker->GetCOMTargetForTest() != firstTarget);
+        CHECK(wxWinUIDropBrokerTestAccess::GetCOMTarget(*retryBroker) != firstTarget);
         CHECK_FALSE(retryBroker->IsReady());
-        CHECK_FALSE(retryBroker->GetSnapshotForTest().ownsRegistration);
+        CHECK_FALSE(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*retryBroker).ownsRegistration);
         CHECK(wxMSWOleIsShellDropTargetRegistered(routed, panelHwnd));
     }
 
@@ -3731,7 +3732,7 @@ TEST_CASE("WinUI OLE broker retries a reentrant presentation invalidation",
     wxWinUIDropBroker* const readyBroker = host->GetDropBrokerForTest();
     REQUIRE(readyBroker);
     CHECK(readyBroker->IsReady());
-    CHECK(readyBroker->GetSnapshotForTest().ownsCompleteRegistrationSet);
+    CHECK(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*readyBroker).ownsCompleteRegistrationSet);
     CHECK_FALSE(wxMSWOleIsShellDropTargetRegistered(routed, panelHwnd));
 
     firstTarget->Release();
@@ -3763,7 +3764,7 @@ TEST_CASE("WinUI OLE broker audits a manual registration race before Ready",
     const HWND bridgeHwnd = RequireDistinctBridgeHwnd(log, frameHwnd);
     const std::weak_ptr<wxWinUIHostLifetime> lifetime;
     const wxWinUIDropBrokerNativeOps ops = log.Ops();
-    auto broker = wxWinUIDropBroker::Create(
+    auto broker = wxWinUIDropBrokerTestAccess::Create(
         frame, bridgeHwnd, lifetime, &ops);
     REQUIRE(broker);
 
@@ -3773,7 +3774,7 @@ TEST_CASE("WinUI OLE broker audits a manual registration race before Ready",
     CHECK(log.shellRegisterSucceeded);
     CHECK_FALSE(wxMSWOleIsShellDropTargetRegistered(routed, panelHwnd));
     const wxWinUIDropBrokerSnapshot snapshot =
-        broker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
     CHECK(snapshot.active);
     CHECK(snapshot.ownsRegistration);
     CHECK(snapshot.ownsCompleteRegistrationSet);
@@ -3868,7 +3869,7 @@ TEST_CASE("WinUI OLE pending broker publishes XAML content before continuation",
     CHECK(hiddenPendingBroker->IsInitializationPending());
     CHECK_FALSE(hiddenPendingBroker->IsReady());
     const wxWinUIDropBrokerSnapshot hiddenPendingSnapshot =
-        hiddenPendingBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*hiddenPendingBroker);
     CHECK_FALSE(hiddenPendingSnapshot.ownsRegistration);
     CHECK_FALSE(hiddenPendingSnapshot.ownsCompleteRegistrationSet);
     CHECK(host->OwnsOleDropRegistration());
@@ -4016,7 +4017,7 @@ TEST_CASE("WinUI OLE broker routes a real slot and legacy file drop",
     REQUIRE(host->Root());
     CHECK(host->Root().AllowDrop());
     const wxWinUIDropBrokerSnapshot hiddenHostSnapshot =
-        host->GetDropBrokerForTest()->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*host->GetDropBrokerForTest());
     CHECK_FALSE(hiddenHostSnapshot.active);
     CHECK_FALSE(hiddenHostSnapshot.ownsRegistration);
     CHECK(wxMSWOleIsShellDropTargetRegistered(
@@ -4029,7 +4030,7 @@ TEST_CASE("WinUI OLE broker routes a real slot and legacy file drop",
 
     REQUIRE(host->OwnsOleDropRegistration());
     const wxWinUIDropBrokerSnapshot hostSnapshot =
-        host->GetDropBrokerForTest()->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*host->GetDropBrokerForTest());
     CHECK(hostSnapshot.active);
     CHECK(hostSnapshot.registrationHwnd == GetHwndOf(frame));
     CHECK(hostSnapshot.registrationHwnd != host->GetBridgeHwnd());
@@ -4049,7 +4050,7 @@ TEST_CASE("WinUI OLE broker routes a real slot and legacy file drop",
 
     wxWinUIDropBroker* const broker = host->GetDropBrokerForTest();
     REQUIRE(broker);
-    IDropTarget* const target = broker->GetCOMTargetForTest();
+    IDropTarget* const target = wxWinUIDropBrokerTestAccess::GetCOMTarget(*broker);
     REQUIRE(target);
     target->AddRef();
 
@@ -4278,7 +4279,7 @@ TEST_CASE("WinUI OLE broker pins COM state across synchronous TLW teardown",
         // Deliberately do not AddRef(): this proves the entry point's own pin,
         // not an external test reference masking a re-entrant destruction.
         IDropTarget* const target =
-            host->GetDropBrokerForTest()->GetCOMTargetForTest();
+            wxWinUIDropBrokerTestAccess::GetCOMTarget(*host->GetDropBrokerForTest());
         REQUIRE(target);
 
         wxTextDataObject source("destroy-owner");
@@ -4402,9 +4403,9 @@ TEST_CASE("WinUI OLE broker transfers a route across top-level hosts",
     REQUIRE(hostA != hostB);
 
     IDropTarget* const comA =
-        hostA->GetDropBrokerForTest()->GetCOMTargetForTest();
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*hostA->GetDropBrokerForTest());
     IDropTarget* const comB =
-        hostB->GetDropBrokerForTest()->GetCOMTargetForTest();
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*hostB->GetDropBrokerForTest());
     REQUIRE(comA);
     REQUIRE(comB);
     comA->AddRef();
@@ -4489,7 +4490,7 @@ TEST_CASE("WinUI OLE broker honours virtual composite target redirection",
     };
 
     IDropTarget* const com =
-        host->GetDropBrokerForTest()->GetCOMTargetForTest();
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*host->GetDropBrokerForTest());
     REQUIRE(com);
     com->AddRef();
     wxTextDataObject source("redirect");

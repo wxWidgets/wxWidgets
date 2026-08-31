@@ -59,6 +59,7 @@
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
     #include "wx/msw/private/dropsession.h"
     #include "wx/winui/private/dropbroker.h"
+#include "drop-broker-test-access.h"
 #endif
 
 #if wxUSE_XRC && wxUSE_XML
@@ -1400,9 +1401,9 @@ TEST_CASE("WinUIRichText::CommonOleBrokerAndRealDropFilesRoute",
         logicalTarget, rich->GetHWND()));
 
     const wxWinUIDropBrokerSnapshot snapshotA =
-        hostA->GetDropBrokerForTest()->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*hostA->GetDropBrokerForTest());
     const wxWinUIDropBrokerSnapshot snapshotB =
-        hostB->GetDropBrokerForTest()->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*hostB->GetDropBrokerForTest());
     CHECK(snapshotA.active);
     CHECK(snapshotA.ownsRegistration);
     CHECK(snapshotA.registerCalls == 1);
@@ -1415,9 +1416,9 @@ TEST_CASE("WinUIRichText::CommonOleBrokerAndRealDropFilesRoute",
     CHECK(snapshotB.registrationHwnd != hostB->GetBridgeHwnd());
 
     DropTargetRef comA(
-        hostA->GetDropBrokerForTest()->GetCOMTargetForTest());
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*hostA->GetDropBrokerForTest()));
     DropTargetRef comB(
-        hostB->GetDropBrokerForTest()->GetCOMTargetForTest());
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*hostB->GetDropBrokerForTest()));
     REQUIRE(comA);
     REQUIRE(comB);
 

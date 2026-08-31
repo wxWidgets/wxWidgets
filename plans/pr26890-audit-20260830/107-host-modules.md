@@ -504,10 +504,45 @@ New remote CI is separate from these local results.
 | 107E | Explicit local contracts; real Combo post-Loaded invalidation | Native Search/template inventory remains component work in 108 |
 | 107F | Production broker ownership query and passive-query regression | Broader observation/fault-injection separation with 106 |
 
-Next implementation order remains UIA/107A, geometry/107C, then focus/input/107D,
-with the remaining 106/107F boundaries handled explicitly. Plans 108–112 are not
+This table describes the frozen `e2014c053b46` shipping batch above, not later
+test-enabled source extractions. The subsequent UIA/107A, geometry/107C and
+focus/input/107D implementation and ON evidence are recorded in their sections;
+their new combined shipping proof is still pending. Plans 108–112 are not
 closed by these refactors; physical integration, performance and exhaustive
 component parity still need their own evidence.
+
+## 107F broker test boundary extraction, 2026-08-31
+
+The source-private broker no longer exposes its injected fourth factory
+argument, two test getters or diagnostic/native-operation records. The real
+operation table moves into its existing TU-local State; ownership counters,
+registration generations, two COM adapters and rollback order remain intact.
+Only the test-enabled factory can replace the table. The test-boundary flag
+has no OFF storage; the source-header class has no conditional layout.
+`dropbrokerstate.h` is intracore, while `drop-broker-test-access.h` is private
+test support. Neither is installed; `dropbroker.h` was already uninstalled.
+
+Historical snapshot consumers now explicitly call `ValidateNativeIdentity`,
+including physical pre-injection/final registration gates. The native lookup
+still precedes the snapshot mutex, with State pinned across reentrance. The
+separate passive stored-record getter is the next additive step; this extraction
+does not substitute cached identity for qualification.
+
+Both shared/static `/warnaserror` builds of `test_gui`, `minimal` and
+`winuispike` pass. The existing ownership group remains **206 assertions / 3
+cases**, and observation/presentation/churn remains **430 / 3** in both
+linkages, exactly as before extraction. Smoke/Supported V0 pass **2/2**.
+Logs: `audit107f-broker-a-on-{build,ownership,observation,gates}.log` under
+the two existing build directories. All runs use private desktops with
+`WX_UI_TESTS=0`; no physical OLE delivery is qualified.
+
+Four `/W4 /WX` MSVC x64 compile-only objects confirm equal ON/OFF and
+shared/static source-class size/alignment: host **6000/8**, slot **1224/8**,
+broker **304/8**. The broker was 344/8 before this unconditional source-private
+storage move; this is not a claim of historical binary compatibility. Inputs
+and actual include paths are verified in the existing `host-layout/broker`
+proof directory. OFF library/installation/export and consumer checks remain
+pending for the combined batch.
 
 ## Verification and test plan
 

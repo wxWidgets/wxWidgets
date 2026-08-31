@@ -40,6 +40,7 @@
     #include "wx/dnd.h"
     #include "wx/msw/private/dropsession.h"
     #include "wx/winui/private/dropbroker.h"
+#include "drop-broker-test-access.h"
 #endif
 
 #include <UIAutomation.h>
@@ -1077,7 +1078,7 @@ TEST_CASE("WinUINativeWindow::CompositionFocusCaptureDropAndCrossTLWReparent",
         fixture.hostA->GetDropBrokerForTest();
     REQUIRE(brokerA != nullptr);
     winrt::com_ptr<IDropTarget> comA;
-    comA.copy_from(brokerA->GetCOMTargetForTest());
+    comA.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*brokerA));
     REQUIRE(comA != nullptr);
     CheckTextDropRoute(comA.get(), hwnd, target,
                        "native-window-host-a", 1);
@@ -1203,7 +1204,7 @@ TEST_CASE("WinUINativeWindow::CompositionFocusCaptureDropAndCrossTLWReparent",
         fixture.hostB->GetDropBrokerForTest();
     REQUIRE(brokerB != nullptr);
     winrt::com_ptr<IDropTarget> comB;
-    comB.copy_from(brokerB->GetCOMTargetForTest());
+    comB.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*brokerB));
     REQUIRE(comB != nullptr);
     CheckTextDropRoute(comB.get(), hwnd, target,
                        "native-window-host-b", 2);

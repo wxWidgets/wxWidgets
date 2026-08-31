@@ -35,6 +35,7 @@
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
     #include "wx/dataobj.h"
     #include "wx/winui/private/dropbroker.h"
+#include "drop-broker-test-access.h"
 #endif
 
 #include <UIAutomation.h>
@@ -1901,7 +1902,7 @@ TEST_CASE("WinUIWebView::OleBrokerMustReachDomDrop",
         fixture.hostA->GetDropBrokerForTest();
     REQUIRE(broker != nullptr);
     winrt::com_ptr<IDropTarget> target;
-    target.copy_from(broker->GetCOMTargetForTest());
+    target.copy_from(wxWinUIDropBrokerTestAccess::GetCOMTarget(*broker));
     REQUIRE(target != nullptr);
 
     const POINTL point =

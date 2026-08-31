@@ -20,6 +20,10 @@
 #include "wx/msw/private/dropsession.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dropbroker.h"
+#include "dropbrokerstate.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "drop-broker-test-access.h"
+#endif
 #include "wx/winui/private/inputrouter.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -80,9 +84,9 @@ HRESULT NativeRevoke(void*, HWND hwnd) noexcept
     return ::RevokeDragDrop(hwnd);
 }
 
-wxWinUIDropBrokerNativeOps GetNativeOps()
+wxWinUIDropBrokerNativeOperations GetNativeOps()
 {
-    wxWinUIDropBrokerNativeOps ops;
+    wxWinUIDropBrokerNativeOperations ops;
     ops.lock = NativeLock;
     ops.registerTarget = NativeRegister;
     ops.revokeTarget = NativeRevoke;
@@ -162,6 +166,25 @@ class wxWinUIDropBrokerState final : public wxMSWOleDropResolver,
                                      public wxMSWOleDropFeedback
 {
 public:
+    static std::unique_ptr<wxWinUIDropBroker> CreateBroker(
+        wxWindow* tlw, HWND bridge,
+        const std::weak_ptr<wxWinUIHostLifetime>& lifetime
+#ifdef WXWINUI_TEST_SUPPORT
+        , const wxWinUIDropBrokerNativeOperations* testOps = nullptr
+#endif
+        ) noexcept;
+
+    const wxWinUIDropBrokerNativeOperations& GetNativeOperations() const noexcept
+        { return m_nativeOperations; }
+    bool IsTestBoundary() const noexcept
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        return m_testBoundary;
+#else
+        return false;
+#endif
+    }
+
     wxWinUIDropBrokerState(
         wxWindow* tlw,
         HWND bridge,
@@ -296,7 +319,8 @@ public:
     std::uint64_t GetRegistrationGeneration() const noexcept
         { return m_registrationGeneration; }
 
-    wxWinUIDropBrokerSnapshot GetSnapshot() const noexcept
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIDropBrokerSnapshot ValidateNativeIdentity() const noexcept
     {
         // Query native identity before taking the snapshot mutex. Generation
         // lookup may initialize a HWND cookie and therefore crosses a USER32
@@ -315,6 +339,7 @@ public:
         snapshot.tlwRegistration.current = tlwCurrent;
         return snapshot;
     }
+#endif
 
     template <typename F>
     void MutateSnapshot(F&& fn) noexcept
@@ -746,6 +771,14 @@ private:
 #endif
     }
 
+    // Kept in this TU-local existing state, not in the source broker class.
+    // Real operations remain in OFF. The test flag is private to this complete
+    // TU-local class and does not affect any installed class layout.
+    wxWinUIDropBrokerNativeOperations m_nativeOperations;
+#ifdef WXWINUI_TEST_SUPPORT
+    bool m_testBoundary = false;
+#endif
+
     std::weak_ptr<wxWinUIHostLifetime> m_lifetime;
     wxWeakRef<wxWindow> m_tlw;
     HWND m_registrationHwnd = nullptr;
@@ -881,11 +914,14 @@ private:
 };
 
 std::unique_ptr<wxWinUIDropBroker>
-wxWinUIDropBroker::Create(
+wxWinUIDropBrokerState::CreateBroker(
     wxWindow* tlw,
     HWND bridge,
-    const std::weak_ptr<wxWinUIHostLifetime>& lifetime,
-    const wxWinUIDropBrokerNativeOps* testOps) noexcept
+    const std::weak_ptr<wxWinUIHostLifetime>& lifetime
+#ifdef WXWINUI_TEST_SUPPORT
+    , const wxWinUIDropBrokerNativeOperations* testOps
+#endif
+    ) noexcept
 {
 #if wxUSE_EXCEPTIONS
     try
@@ -927,16 +963,22 @@ wxWinUIDropBroker::Create(
         } targetGuard{ bridgeTarget, nullptr };
         auto* tlwTarget = new wxWinUIDropBrokerCOMTarget(state);
         targetGuard.tlw = tlwTarget;
-        const wxWinUIDropBrokerNativeOps ops =
-            testOps ? *testOps : GetNativeOps();
+        const wxWinUIDropBrokerNativeOperations ops =
+#ifdef WXWINUI_TEST_SUPPORT
+            testOps ? *testOps :
+#endif
+            GetNativeOps();
         if ( !ops.lock || !ops.registerTarget || !ops.revokeTarget )
             return nullptr;
 
+        state->m_nativeOperations = ops;
         std::unique_ptr<wxWinUIDropBroker> broker(
-            new wxWinUIDropBroker(state, bridgeTarget, tlwTarget, ops));
+            new wxWinUIDropBroker(state, bridgeTarget, tlwTarget));
         targetGuard.bridge = nullptr;
         targetGuard.tlw = nullptr;
-        broker->m_testBoundary = testOps != nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+        state->m_testBoundary = testOps != nullptr;
+#endif
         return broker;
 #if wxUSE_EXCEPTIONS
     }
@@ -947,15 +989,21 @@ wxWinUIDropBroker::Create(
 #endif
 }
 
+std::unique_ptr<wxWinUIDropBroker>
+wxWinUIDropBroker::Create(
+    wxWindow* tlw, HWND bridge,
+    const std::weak_ptr<wxWinUIHostLifetime>& lifetime) noexcept
+{
+    return wxWinUIDropBrokerState::CreateBroker(tlw, bridge, lifetime);
+}
+
 wxWinUIDropBroker::wxWinUIDropBroker(
     const std::shared_ptr<wxWinUIDropBrokerState>& state,
     wxWinUIDropBrokerCOMTarget* bridgeTarget,
-    wxWinUIDropBrokerCOMTarget* tlwTarget,
-    const wxWinUIDropBrokerNativeOps& nativeOps) noexcept
+    wxWinUIDropBrokerCOMTarget* tlwTarget) noexcept
     : m_state(state),
       m_bridgeTarget(bridgeTarget),
-      m_tlwTarget(tlwTarget),
-      m_nativeOps(nativeOps)
+      m_tlwTarget(tlwTarget)
 {
 }
 
@@ -1124,8 +1172,8 @@ HRESULT wxWinUIDropBroker::ReleaseExternalLock(
         return E_UNEXPECTED;
     }
 
-    const HRESULT unlockHr = m_nativeOps.lock(
-        m_nativeOps.context, GetRegistrationTarget(role), FALSE, TRUE);
+    const HRESULT unlockHr = m_state->GetNativeOperations().lock(
+        m_state->GetNativeOperations().context, GetRegistrationTarget(role), FALSE, TRUE);
     if ( SUCCEEDED(unlockHr) )
         registration.locked = false;
     else
@@ -1195,7 +1243,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
     {
         return !m_shutdown && m_state && m_bridgeTarget && m_tlwTarget &&
                m_state->IsOnUIThread() &&
-               (m_testBoundary || m_state->IsContextCurrent());
+               (m_state->IsTestBoundary() || m_state->IsContextCurrent());
     };
 
     const auto finishTerminalAcquisition = [&](
@@ -1239,7 +1287,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
         return PublishInitResult(result);
     }
 
-    if ( !m_testBoundary && !m_state->IsContextCurrent() )
+    if ( !m_state->IsTestBoundary() && !m_state->IsContextCurrent() )
     {
         result.status = wxWinUIDropBrokerInitStatus::InvalidContext;
         result.hresult = E_HANDLE;
@@ -1384,8 +1432,8 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
     for ( const RegistrationRole role : roles )
     {
         ShellRegistration& registration = GetRegistration(role);
-        const HRESULT lockHr = m_nativeOps.lock(
-            m_nativeOps.context, GetRegistrationTarget(role),
+        const HRESULT lockHr = m_state->GetNativeOperations().lock(
+            m_state->GetNativeOperations().context, GetRegistrationTarget(role),
             TRUE, FALSE);
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
         {
@@ -1437,8 +1485,8 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
         }
 
         const HWND registrationHwnd = GetRegistrationHwnd(role);
-        const HRESULT registerHr = m_nativeOps.registerTarget(
-            m_nativeOps.context, registrationHwnd,
+        const HRESULT registerHr = m_state->GetNativeOperations().registerTarget(
+            m_state->GetNativeOperations().context, registrationHwnd,
             GetRegistrationTarget(role));
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
         {
@@ -1664,8 +1712,8 @@ void wxWinUIDropBroker::Shutdown() noexcept
                  wxMSWOleArmExternalShellOperation(&revokeOperation) )
             {
                 revokeCalled = true;
-                revokeHr = m_nativeOps.revokeTarget(
-                    m_nativeOps.context, GetRegistrationHwnd(role));
+                revokeHr = m_state->GetNativeOperations().revokeTarget(
+                    m_state->GetNativeOperations().context, GetRegistrationHwnd(role));
                 const bool revoked = SUCCEEDED(revokeHr) ||
                     revokeHr == DRAGDROP_E_NOTREGISTERED;
                 ledgerCommitted = wxMSWOleCompleteExternalShellOperation(
@@ -1797,7 +1845,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
     // Never traverse wxWindow state or revoke apartment-affine registrations
     // before the same context checks used by Initialize() have passed.
     if ( !m_state->IsOnUIThread() ||
-         (!m_testBoundary && !m_state->IsContextCurrent()) )
+         (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
     {
         return Initialize();
     }
@@ -1963,7 +2011,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             if ( !CollectBoundTargets(tlw, &auditTargets) ||
                  tlwLifetime.get() != tlw || tlw->IsBeingDeleted() ||
                  m_shutdown || !OwnsCompleteRegistrationSet() ||
-                 (!m_testBoundary && !m_state->IsContextCurrent()) )
+                 (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
             {
                 break;
             }
@@ -2000,7 +2048,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             if ( !passValid || tlwLifetime.get() != tlw ||
                  tlw->IsBeingDeleted() || m_shutdown ||
                  !OwnsCompleteRegistrationSet() ||
-                 (!m_testBoundary && !m_state->IsContextCurrent()) )
+                 (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
             {
                 break;
             }
@@ -2030,7 +2078,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
         // or TLW fails closed and rolls both registrations back.
         RefreshAggregateRegistrationSnapshot();
         if ( m_shutdown || !OwnsCompleteRegistrationSet() ||
-             (!m_testBoundary && !m_state->IsContextCurrent()) )
+             (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
         {
             m_acquiring = false;
             UpdateShellDropCoverage();
@@ -2145,18 +2193,32 @@ void wxWinUIDropBroker::ReconcileShellDropTargets(
 #endif
 }
 
-wxWinUIDropBrokerSnapshot
-wxWinUIDropBroker::GetSnapshotForTest() const noexcept
+#ifdef WXWINUI_TEST_SUPPORT
+std::unique_ptr<wxWinUIDropBroker>
+wxWinUIDropBrokerTestAccess::Create(
+    wxWindow* tlw, HWND bridge,
+    const std::weak_ptr<wxWinUIHostLifetime>& lifetime,
+    const wxWinUIDropBrokerNativeOps* nativeOps) noexcept
 {
-    return m_state ? m_state->GetSnapshot()
-                   : wxWinUIDropBrokerSnapshot();
+    return wxWinUIDropBrokerState::CreateBroker(tlw, bridge, lifetime, nativeOps);
 }
 
-IDropTarget* wxWinUIDropBroker::GetCOMTargetForTest() const noexcept
+wxWinUIDropBrokerSnapshot
+wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(
+    const wxWinUIDropBroker& broker) noexcept
 {
-    // Preserve the historical direct-routing seam. Either adapter reaches
-    // the same State/Session; return the bridge adapter deterministically.
-    return static_cast<IDropTarget*>(m_bridgeTarget);
+    // Native identity lookup can re-enter. Keep the existing COM state alive
+    // independently of the host-owned handle until the query has returned.
+    const std::shared_ptr<wxWinUIDropBrokerState> state = broker.m_state;
+    return state ? state->ValidateNativeIdentity() : wxWinUIDropBrokerSnapshot();
 }
+
+IDropTarget* wxWinUIDropBrokerTestAccess::GetCOMTarget(
+    const wxWinUIDropBroker& broker) noexcept
+{
+    // Preserve the historical borrowed, deterministic bridge adapter.
+    return static_cast<IDropTarget*>(broker.m_bridgeTarget);
+}
+#endif
 
 #endif // wxUSE_WINUI3 && wxUSE_OLE && wxUSE_DRAG_AND_DROP

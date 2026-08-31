@@ -39,6 +39,7 @@
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
     #include "wx/msw/private/dropsession.h"
     #include "wx/winui/private/dropbroker.h"
+#include "drop-broker-test-access.h"
 #endif
 
 // Private exported seam from ScintillaWX.cpp. Deliberately not declared in
@@ -1024,9 +1025,7 @@ TEST_CASE("WinUISTC::LogicalContextMenuAndDragDropUseCommonBrokers",
     CHECK(binding.GetOwnerHwndIfCurrent() == stc->GetHWND());
     REQUIRE(fixture.GetHostA()->OwnsOleDropRegistration());
     REQUIRE(fixture.GetHostA()->GetDropBrokerForTest());
-    CHECK(fixture.GetHostA()
-              ->GetDropBrokerForTest()
-              ->GetSnapshotForTest()
+    CHECK(wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*fixture.GetHostA()->GetDropBrokerForTest())
               .active);
     CHECK_FALSE(wxMSWOleIsShellDropTargetRegistered(
         target, stc->GetHWND()));

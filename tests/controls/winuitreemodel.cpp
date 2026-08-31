@@ -28,6 +28,7 @@
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
     #include "wx/winui/private/dropbroker.h"
+#include "drop-broker-test-access.h"
 #endif
 
 #include <array>
@@ -3675,7 +3676,7 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
         migratedHost->GetDropBrokerForTest();
     REQUIRE(migratedBroker);
     const wxWinUIDropBrokerSnapshot brokerBefore =
-        migratedBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*migratedBroker);
     CHECK(brokerBefore.active);
 #endif
     REQUIRE(wxWinUITreeCtrlTestAccess::CompleteInternalDrag(
@@ -3717,7 +3718,7 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
         clientScreen.top + slotRect.y + slotRect.height / 2
     };
     IDropTarget * const comTarget =
-        migratedBroker->GetCOMTargetForTest();
+        wxWinUIDropBrokerTestAccess::GetCOMTarget(*migratedBroker);
     REQUIRE(comTarget);
     wxTextDataObject source("tree-ole-drop");
     const int beginBeforeOle = firstBegin;
@@ -3735,7 +3736,7 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
     CHECK(firstEnd == endBeforeOle);
 
     const wxWinUIDropBrokerSnapshot brokerAfter =
-        migratedBroker->GetSnapshotForTest();
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*migratedBroker);
     CHECK(brokerAfter.active);
     CHECK(brokerAfter.registerCalls == brokerBefore.registerCalls);
     CHECK(brokerAfter.revokeCalls == brokerBefore.revokeCalls);
