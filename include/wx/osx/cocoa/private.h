@@ -236,7 +236,7 @@ public :
 
     virtual void                ClipsToBounds(bool clip) override;
     virtual bool                DoesClipToBounds() const override;
-    
+
     virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
     virtual void                UseClippingView() override;
     virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
