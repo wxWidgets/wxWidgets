@@ -137,49 +137,6 @@ wxWinUIMSWCompleteDeferredTopLevelDestroy(
 WXDLLIMPEXP_CORE unsigned long long
 wxWinUIMSWGetHwndGeneration(wxWindow *window, WXHWND hwnd);
 
-// Deterministic seams for the cross-TLW DPI transaction tests. Production
-// uses the HWND DPI and real SetParent(); tests supply per-TLW values without
-// moving windows across the user's physical monitors and can inject one
-// native-parent failure to verify the logical rollback.
-using wxWinUIReparentDPIQueryForTest = wxSize (*)(wxWindow *window);
-WXDLLIMPEXP_CORE void
-wxWinUIMSWSetReparentDPIQueryForTest(
-    wxWinUIReparentDPIQueryForTest query);
-WXDLLIMPEXP_CORE void
-wxWinUIMSWFailNextSetParentForTest();
-using wxWinUIAfterSetParentForTest = void (*)(wxWindow *window);
-WXDLLIMPEXP_CORE void
-wxWinUIMSWSetAfterSetParentForTest(
-    wxWinUIAfterSetParentForTest callback);
-
-// One-shot seam after SubclassWin() has propagated WS_EX_CONTROLPARENT to
-// the native parent chain. It proves that the adopted-window transaction
-// revalidates the exact logical/native lifetime before wxEVT_CREATE.
-using wxWinUIAfterEnsureControlParentStyleForTest =
-    void (*)(wxWindow *window);
-WXDLLIMPEXP_CORE void
-wxWinUIMSWSetAfterEnsureControlParentStyleForTest(
-    wxWinUIAfterEnsureControlParentStyleForTest callback);
-
-// One-shot seam after a native HWND has been removed from the wx map and the
-// window object, but before raw-HWND UIA cleanup. Tests may destroy the window
-// here to prove that detach finishes exclusively from local snapshots.
-using wxWinUIAfterMSWHandleDepublishedForTest =
-    void (*)(wxWindow *window);
-WXDLLIMPEXP_CORE void
-wxWinUIMSWSetAfterHandleDepublishedForTest(
-    wxWinUIAfterMSWHandleDepublishedForTest callback);
-
-// One-shot seam immediately after the native layout-direction style write
-// and before the revision is committed. It lets tests perform a nested
-// explicit request or destroy/reparent the exact window at the same
-// last-writer boundary as WM_STYLECHANGING/WM_STYLECHANGED reentrance.
-using wxWinUIAfterLayoutDirectionNativeWriteForTest =
-    void (*)(wxWindow *window);
-WXDLLIMPEXP_CORE void
-wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
-    wxWinUIAfterLayoutDirectionNativeWriteForTest callback);
-
 // Force the next non-owned HWND owner publication to fail before touching
 // USER32, proving that wx logical parentage is reconciled back to the native
 // owner instead of remaining split after a failed Reparent().

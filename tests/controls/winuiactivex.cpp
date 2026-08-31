@@ -22,6 +22,7 @@
 #include "wx/eventfilter.h"
 #include "wx/msw/private.h"
 #include "wx/winui/private/tlwhostmsw.h"
+#include "msw-window-test-access.h"
 
 #include <algorithm>
 #include <cstring>
@@ -1594,7 +1595,7 @@ public:
             failure == ProbeActiveX::Failure::ReentrantControlParentStyle;
         if ( armControlParentCallback )
         {
-            wxWinUIMSWSetAfterEnsureControlParentStyleForTest(
+            wxWinUIMSWWindowTestAccess::SetAfterEnsureControlParentStyle(
                 DeleteActiveXAfterControlParentStyle);
         }
         if ( lifecycleFilter && lifecycleFilter->NeedsSignatureProbe() )
@@ -1608,7 +1609,7 @@ public:
                 parent, IID_IUnknown, static_cast<IOleObject *>(control));
         }
         if ( armControlParentCallback )
-            wxWinUIMSWSetAfterEnsureControlParentStyleForTest(nullptr);
+            wxWinUIMSWWindowTestAccess::SetAfterEnsureControlParentStyle(nullptr);
         if ( (lifecycleFilter && lifecycleFilter->DidDelete()) ||
              gs_deletedAfterControlParentStyle )
         {
@@ -2009,10 +2010,10 @@ TEST_CASE("WinUI ActiveX detach survives destruction after HWND depublish",
     REQUIRE(wxFindWinFromHandle(hwnd) == container);
 
     gs_containerToDeleteAfterHandleDepublished = &fixture.container;
-    wxWinUIMSWSetAfterHandleDepublishedForTest(
+    wxWinUIMSWWindowTestAccess::SetAfterHandleDepublished(
         DeleteActiveXAfterHandleDepublished);
     container->DissociateHandle();
-    wxWinUIMSWSetAfterHandleDepublishedForTest(nullptr);
+    wxWinUIMSWWindowTestAccess::SetAfterHandleDepublished(nullptr);
     gs_containerToDeleteAfterHandleDepublished = nullptr;
 
     CHECK(fixture.container == nullptr);

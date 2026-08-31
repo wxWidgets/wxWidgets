@@ -311,6 +311,25 @@ Do not delete a lifetime/retirement service used by production merely because it
   build also contains the separately tracked MSW-window adapter sublot.
   Fresh shipping OFF/install qualification remains pending.
 
+## MSW window transaction adapters (2026-08-31)
+
+- Six test operations and five aliases leave the installed `tlwhostmsw.h`
+  header. Their narrow replacement is the non-installed
+  `msw-window-test-access.h`; only WinUI/ALL opts `src/msw/window.cpp` in.
+  Ordinary MSW does not acquire test instrumentation. Real native-parent,
+  DPI, style publication, HWND detach/UIA retirement and RTL transactions
+  retain their existing guards and ordering. Injected failure/callback slots
+  are absent from shipping, with consume-before-call semantics retained ON.
+- Shared/static baselines and post-migration private-desktop runs pass the
+  same **178 assertions / 5 cases**: reentrant SetParent popup rollback,
+  ordered DPI transitions, reentrant RTL and two ActiveX destruction paths.
+  Logs: `audit106-msw-window-{baseline,on}.log`. The coordinated Release
+  builds pass `test_gui`, `minimal`, `winuispike` with `/warnaserror`, ordinary
+  MSW Debug `test_gui` builds, and both WinUI smoke/Supported V0 gates pass
+  **2/2**. See the keyboard section for the exact shared build/gate log names.
+  Physical DPI moves/input, MSW GUI runtime and fresh shipping installation
+  checks are not supplied by these local results.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

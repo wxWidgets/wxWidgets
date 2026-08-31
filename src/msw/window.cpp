@@ -90,6 +90,9 @@
     #include "wx/winui/private/shelltheme.h"
     #include "wx/winui/private/transient.h"
     #include "wx/winui/private/tlwhostmsw.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "msw-window-test-access.h"
+    #endif // WXWINUI_TEST_SUPPORT
     #include "wx/weakref.h"
 #endif
 #include "wx/msw/dcclient.h"
@@ -358,15 +361,17 @@ std::deque<std::shared_ptr<wxWinUIReparentDPIRequest>>
     gs_winuiReparentDPIRequests;
 unsigned gs_winuiReparentDPINesting = 0;
 bool gs_winuiReparentDPIDispatching = false;
-wxWinUIReparentDPIQueryForTest gs_winuiReparentDPIQueryForTest = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIMSWWindowTestAccess::ReparentDPIQuery gs_winuiReparentDPIQueryForTest = nullptr;
 bool gs_winuiFailNextSetParentForTest = false;
-wxWinUIAfterSetParentForTest gs_winuiAfterSetParentForTest = nullptr;
-wxWinUIAfterEnsureControlParentStyleForTest
+wxWinUIMSWWindowTestAccess::WindowCallback gs_winuiAfterSetParentForTest = nullptr;
+wxWinUIMSWWindowTestAccess::WindowCallback
     gs_winuiAfterEnsureControlParentStyleForTest = nullptr;
-wxWinUIAfterMSWHandleDepublishedForTest
+wxWinUIMSWWindowTestAccess::WindowCallback
     gs_winuiAfterMSWHandleDepublishedForTest = nullptr;
-wxWinUIAfterLayoutDirectionNativeWriteForTest
+wxWinUIMSWWindowTestAccess::WindowCallback
     gs_winuiAfterLayoutDirectionNativeWriteForTest = nullptr;
+#endif // WXWINUI_TEST_SUPPORT
 
 // Reparent can be called recursively from wxEVT_DPI_CHANGED itself. Queue the
 // transitions in physical-parent order and drain them only after the outer
@@ -1705,6 +1710,7 @@ void wxWindowMSW::MSWRequestLayoutDirectionProjection(
             wxUpdateLayoutDirection(hwnd, desired);
         bool localPeerProjectionFailed = false;
 
+#ifdef WXWINUI_TEST_SUPPORT
         // Simulate reentrance from inside SetWindowLongPtr's synchronous
         // style notifications. Clear the one-shot seam before invoking it.
         if ( gs_winuiAfterLayoutDirectionNativeWriteForTest )
@@ -1715,6 +1721,7 @@ void wxWindowMSW::MSWRequestLayoutDirectionProjection(
             if ( wxWindow * const live = getCurrentWindow() )
                 callback(live);
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         wxWindow * live = getCurrentWindow();
         if ( !live )
@@ -1952,6 +1959,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
                 return;
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
             if ( gs_winuiAfterEnsureControlParentStyleForTest )
             {
                 const auto callback =
@@ -1962,6 +1970,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
                 if ( !live )
                     return;
             }
+#endif // WXWINUI_TEST_SUPPORT
 #endif
         }
     }
@@ -2162,6 +2171,7 @@ WXHWND wxWindowMSW::DoDetachHWND()
 #endif
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
     wxWindow * const liveAfterDropRevoke = lifetime.get()
         ? lifetime.get()->AsWindow()
         : nullptr;
@@ -2173,6 +2183,7 @@ WXHWND wxWindowMSW::DoDetachHWND()
         gs_winuiAfterMSWHandleDepublishedForTest = nullptr;
         callback(liveAfterDropRevoke);
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     // UIA is keyed only by the HWND snapshot. It can dispatch arbitrary COM
     // code, but the wx object is already undiscoverable and is never touched
@@ -2861,12 +2872,14 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
                 preparedFocusReparent, false);
         });
     wxUnusedVar(preparedNativeBoundaryGuard);
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_winuiFailNextSetParentForTest )
     {
         gs_winuiFailNextSetParentForTest = false;
         setParentError = ERROR_ACCESS_DENIED;
     }
     else
+#endif // WXWINUI_TEST_SUPPORT
     {
         previousNativeParent = ::SetParent(hWndChild, hWndParent);
         setParentError = ::GetLastError();
@@ -2902,6 +2915,7 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
         return false;
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     // Test-only one-shot seam at the actual synchronous USER32 boundary. It
     // is cleared before invocation so a nested Reparent() cannot consume it
     // twice. Production always takes the null branch.
@@ -2911,6 +2925,7 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
         gs_winuiAfterSetParentForTest = nullptr;
         callback(this);
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     // SetParent messages and the one-shot seam are synchronous application
     // boundaries too. If they opened a popup, undo this exact A->B native and
@@ -8069,8 +8084,12 @@ namespace
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 static wxSize wxWinUIGetNativeReparentDPI(wxWindow *window, HWND hwnd)
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_winuiReparentDPIQueryForTest )
         return gs_winuiReparentDPIQueryForTest(window);
+#else
+    wxUnusedVar(window);
+#endif // WXWINUI_TEST_SUPPORT
 
     wxSize dpi = wxGetWindowDPI(hwnd);
     if ( (!dpi.x || !dpi.y) && hwnd )
@@ -8083,40 +8102,52 @@ static wxSize wxWinUIGetNativeReparentDPI(wxWindow *window, HWND hwnd)
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
-void wxWinUIMSWSetReparentDPIQueryForTest(
-    wxWinUIReparentDPIQueryForTest query)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetReparentDPIQuery(
+    wxWinUIMSWWindowTestAccess::ReparentDPIQuery query)
 {
     gs_winuiReparentDPIQueryForTest = query;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIMSWFailNextSetParentForTest()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::FailNextSetParent()
 {
     gs_winuiFailNextSetParentForTest = true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIMSWSetAfterSetParentForTest(
-    wxWinUIAfterSetParentForTest callback)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterSetParent(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
 {
     gs_winuiAfterSetParentForTest = callback;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIMSWSetAfterEnsureControlParentStyleForTest(
-    wxWinUIAfterEnsureControlParentStyleForTest callback)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterEnsureControlParentStyle(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
 {
     gs_winuiAfterEnsureControlParentStyleForTest = callback;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIMSWSetAfterHandleDepublishedForTest(
-    wxWinUIAfterMSWHandleDepublishedForTest callback)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterHandleDepublished(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
 {
     gs_winuiAfterMSWHandleDepublishedForTest = callback;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
-    wxWinUIAfterLayoutDirectionNativeWriteForTest callback)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
 {
     gs_winuiAfterLayoutDirectionNativeWriteForTest = callback;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
 

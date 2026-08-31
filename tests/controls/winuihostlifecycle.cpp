@@ -59,6 +59,7 @@
 #include "host-uia-test-access.h"
 #include "control-host-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
+#include "msw-window-test-access.h"
 #include "keyboard-test-access.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/xamlhost.h"
@@ -160,7 +161,7 @@ void OscillateNestedLayoutDirection(wxWindow *window)
             window->GetLayoutDirection() == wxLayout_RightToLeft
                 ? wxLayout_LeftToRight
                 : wxLayout_RightToLeft);
-        wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
+        wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
             &OscillateNestedLayoutDirection);
     }
 }
@@ -277,14 +278,14 @@ class SyntheticReparentDPI final
 public:
     SyntheticReparentDPI()
     {
-        wxWinUIMSWSetReparentDPIQueryForTest(
+        wxWinUIMSWWindowTestAccess::SetReparentDPIQuery(
             QuerySyntheticReparentDPI);
     }
 
     ~SyntheticReparentDPI()
     {
-        wxWinUIMSWSetReparentDPIQueryForTest(nullptr);
-        wxWinUIMSWSetAfterSetParentForTest(nullptr);
+        wxWinUIMSWWindowTestAccess::SetReparentDPIQuery(nullptr);
+        wxWinUIMSWWindowTestAccess::SetAfterSetParent(nullptr);
         gs_reparentDPIByTLW.clear();
         gs_syntheticDPIQueryWindow = nullptr;
         gs_syntheticDPIQueryTLW = nullptr;
@@ -331,7 +332,7 @@ public:
         std::function<void(wxWindow *)> callback)
     {
         gs_afterSetParentCallback = std::move(callback);
-        wxWinUIMSWSetAfterSetParentForTest(
+        wxWinUIMSWWindowTestAccess::SetAfterSetParent(
             InvokeAfterSetParentForTest);
     }
 
@@ -2642,7 +2643,7 @@ TEST_CASE("HostLifecycle::ReparentDeliversOrderedDPITransitions",
             ++failingKillFocusEvents;
             event.Skip();
         });
-    wxWinUIMSWFailNextSetParentForTest();
+    wxWinUIMSWWindowTestAccess::FailNextSetParent();
     CHECK_FALSE(failingRoot->Reparent(frame144));
     CHECK(failingRoot->GetParent() == frame96);
     CHECK(::GetParent(failingHwnd) == failingNativeParent);
@@ -12647,7 +12648,7 @@ TEST_CASE("HostLifecycle::HotRTLIsLastWriterWinsAndDeletionSafe",
 
     wxScopeGuard seamGuard = wxMakeGuard([]()
     {
-        wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(nullptr);
+        wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(nullptr);
         gs_nestedLayoutDirectionRequest = wxLayout_Default;
         gs_nestedLayoutDirectionRequestCalls = 0;
         gs_oscillatingLayoutDirectionCalls = 0;
@@ -12659,7 +12660,7 @@ TEST_CASE("HostLifecycle::HotRTLIsLastWriterWinsAndDeletionSafe",
     // the outer SetWindowLongPtr result to win accidentally.
     gs_nestedLayoutDirectionRequest = wxLayout_RightToLeft;
     gs_nestedLayoutDirectionRequestCalls = 0;
-    wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
+    wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
         &RequestNestedLayoutDirection);
     frame->SetLayoutDirection(wxLayout_LeftToRight);
     CHECK(gs_nestedLayoutDirectionRequestCalls == 1);
@@ -12668,7 +12669,7 @@ TEST_CASE("HostLifecycle::HotRTLIsLastWriterWinsAndDeletionSafe",
 
     gs_nestedLayoutDirectionRequest = wxLayout_LeftToRight;
     gs_nestedLayoutDirectionRequestCalls = 0;
-    wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
+    wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
         &RequestNestedLayoutDirection);
     frame->SetLayoutDirection(wxLayout_RightToLeft);
     CHECK(gs_nestedLayoutDirectionRequestCalls == 1);
@@ -12678,7 +12679,7 @@ TEST_CASE("HostLifecycle::HotRTLIsLastWriterWinsAndDeletionSafe",
     // USER32/style handlers can retain a value different from the one just
     // requested without changing HWND identity. The transaction must read
     // the actual bit back and retry before publishing peer success.
-    wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
+    wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
         &FlipNativeLayoutDirectionStyle);
     frame->SetLayoutDirection(wxLayout_RightToLeft);
     CHECK((::GetWindowLongPtr(GetHwndOf(frame), GWL_EXSTYLE) &
@@ -12689,11 +12690,11 @@ TEST_CASE("HostLifecycle::HotRTLIsLastWriterWinsAndDeletionSafe",
     // not converted into an infinite synchronous/CallAfter loop. Clearing
     // the seam and issuing the next external request must recover.
     gs_oscillatingLayoutDirectionCalls = 0;
-    wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(
+    wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
         &OscillateNestedLayoutDirection);
     frame->SetLayoutDirection(wxLayout_LeftToRight);
     CHECK(gs_oscillatingLayoutDirectionCalls == 32);
-    wxWinUIMSWSetAfterLayoutDirectionNativeWriteForTest(nullptr);
+    wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(nullptr);
     frame->SetLayoutDirection(wxLayout_LeftToRight);
     CHECK((::GetWindowLongPtr(GetHwndOf(frame), GWL_EXSTYLE) &
            WS_EX_LAYOUTRTL) == 0);
