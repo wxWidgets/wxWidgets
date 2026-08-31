@@ -7963,6 +7963,28 @@ bool wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(const wxComboBox* control,
     return true;
 }
 
+winrt::weak_ref<MUXC::ComboBox>
+wxWinUIComboBoxTestAccess::GetNativePeer(const wxComboBox& control)
+{
+    if ( !control.m_winui || control.m_winui->simpleRoot ||
+         !control.m_winui->comboBox )
+    {
+        return {};
+    }
+
+    const wxWeakRef<wxComboBox> self(const_cast<wxComboBox *>(&control));
+    wxWinUIChoiceImpl * const impl = control.m_winui.get();
+    const MUXC::ComboBox peer = impl->comboBox;
+    const auto weakPeer = winrt::make_weak(peer);
+    if ( !self || !self->m_winui || self->m_winui.get() != impl ||
+         self->m_winui->comboBox != peer )
+    {
+        return {};
+    }
+
+    return weakPeer;
+}
+
 bool wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(const wxComboBox* control,
     WinUITemplatePeerSnapshot *snapshot)
 {

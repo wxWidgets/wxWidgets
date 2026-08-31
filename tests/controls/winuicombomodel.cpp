@@ -23,6 +23,7 @@
 #include "combobox-test-access.h"
 #include "wx/event.h"
 #include "choice-test-access.h"
+#include "wx/frame.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 #if wxUSE_TOOLTIPS
@@ -30,6 +31,7 @@
 #endif
 #include "wx/winui/private/textpeer.h"
 
+#include "../../src/winui/private.h"
 #include <sstream>
 #include <vector>
 
@@ -186,6 +188,96 @@ void RequireReadOnlyComboPopupPeer(wxComboBox& combo)
 }
 
 } // anonymous namespace
+
+TEST_CASE("wxWinUI ComboBox invalidates its cache after native Loaded",
+          "[winui-template-contract][winui-itemmodel][winui-combo]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+
+    // Give the transition its own real island. It must not change the theme
+    // of the shared test frame or require keyboard, pointer or external UIA.
+    wxFrame frame(parent, wxID_ANY, "Native template invalidation",
+                  wxPoint(20, 20), wxSize(360, 160));
+    wxComboBox combo(&frame, wxID_ANY, "foundation",
+                     wxPoint(10, 10), wxSize(240, 32));
+    frame.ShowWithoutActivating();
+    RequireRealizedComboTemplate(combo);
+
+    const auto nativePeer =
+        wxWinUIComboBoxTestAccess::GetNativePeer(combo).get();
+    REQUIRE(nativePeer);
+    REQUIRE(nativePeer.IsLoaded());
+    const auto nativeRoot = nativePeer.XamlRoot();
+    REQUIRE(nativeRoot);
+    const auto boundary = nativeRoot.Content().try_as<
+        winrt::Microsoft::UI::Xaml::FrameworkElement>();
+    REQUIRE(boundary);
+
+    using ElementTheme = winrt::Microsoft::UI::Xaml::ElementTheme;
+    const ElementTheme initialTheme = boundary.ActualTheme();
+    REQUIRE(initialTheme != ElementTheme::Default);
+    const ElementTheme targetTheme = initialTheme == ElementTheme::Light
+                                       ? ElementTheme::Dark
+                                       : ElementTheme::Light;
+
+    unsigned repeatedLoaded = 0;
+    unsigned nativeThemeChanges = 0;
+    unsigned textEvents = 0;
+    const auto loadedRevoker = nativePeer.Loaded(
+        winrt::auto_revoke,
+        [&](const auto&, const auto&) { ++repeatedLoaded; });
+    const auto themeRevoker = boundary.ActualThemeChanged(
+        winrt::auto_revoke,
+        [&](const auto&, const auto&) { ++nativeThemeChanges; });
+    wxUnusedVar(loadedRevoker);
+    wxUnusedVar(themeRevoker);
+    combo.Bind(wxEVT_TEXT, [&](wxCommandEvent&) { ++textEvents; });
+
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot before;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeDiagnostic;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(
+        &combo, &before));
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(
+        &combo, &beforeDiagnostic));
+    REQUIRE(before.editIdentity != 0);
+
+    // This is the real inherited-theme notification consumed by production,
+    // not RunTemplateLayoutEdge(), a synthetic Loaded callback, or an injected
+    // part. Do not clear/restore Template or force layout: WinUI owns its native
+    // reconstruction, and the passive LayoutUpdated edge owns only the enqueue.
+    boundary.RequestedTheme(targetTheme);
+
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot after;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot afterDiagnostic;
+    REQUIRE(WaitForSettledComboTemplateGeneration(
+        combo, before.editGeneration, &after, &afterDiagnostic));
+    CHECK(nativeThemeChanges != 0);
+    CHECK(boundary.ActualTheme() == targetTheme);
+    CHECK(repeatedLoaded == 0);
+    CHECK(nativePeer.IsLoaded());
+    CHECK(after.comboIdentity == before.comboIdentity);
+    CHECK(after.xamlRootIdentity == before.xamlRootIdentity);
+    CHECK(after.state ==
+          wxWinUIComboBoxTestAccess::WinUITemplate_Complete);
+    CHECK(after.editGeneration > before.editGeneration);
+    CHECK(afterDiagnostic.templateTransitions >
+          beforeDiagnostic.templateTransitions);
+    CHECK(afterDiagnostic.templateReplaySuccesses >
+          beforeDiagnostic.templateReplaySuccesses);
+    CHECK(afterDiagnostic.comboLayoutResolveRuns >
+          beforeDiagnostic.comboLayoutResolveRuns);
+    CHECK(afterDiagnostic.comboLayoutSynchronousRealizations ==
+          beforeDiagnostic.comboLayoutSynchronousRealizations);
+    CHECK(afterDiagnostic.comboLayoutUnlatchedRealizations ==
+          beforeDiagnostic.comboLayoutUnlatchedRealizations);
+    CHECK(combo.GetValue() == "foundation");
+    CHECK(textEvents == 0);
+
+    // WinUI may reuse the TextBox across a theme change. Its object address is
+    // not the generation authority; this test deliberately requires a newer
+    // callback/cache generation without requiring a different ABI address.
+}
 
 TEST_CASE("wxWinUI ComboBox LayoutUpdated realization is deferred",
           "[winui-itemmodel][winui-combo]")

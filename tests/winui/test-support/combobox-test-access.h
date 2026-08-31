@@ -14,10 +14,24 @@
 #include <cstdint>
 #include <memory>
 
+namespace winrt
+{
+    template <typename T> struct weak_ref;
+}
+namespace winrt::Microsoft::UI::Xaml::Controls
+{
+    struct ComboBox;
+}
+
 #if wxUSE_COMBOBOX
 class WXDLLIMPEXP_CORE wxWinUIComboBoxTestAccess final
 {
 public:
+    // Passive, non-owning access to the real native peer. No realization,
+    // template transition or layout work is performed by this observation.
+    static winrt::weak_ref<winrt::Microsoft::UI::Xaml::Controls::ComboBox>
+    GetNativePeer(const wxComboBox& control);
+
     // Implementation-only deterministic seams. They mutate the real WinUI
     // dependency properties/delegates without synthesizing keyboard or mouse
     // input and are intentionally not part of wxComboBoxBase.

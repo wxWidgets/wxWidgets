@@ -223,6 +223,29 @@ Baseline filter:
 
 ### 107E — Template identity/invalidation foundation
 
+Implemented and characterized on 2026-08-31 after `92c69b478c`: the two
+local contracts remain explicit instead of introducing an empty common
+resolver. Search owns three independently invalidated parts and two bounded
+synchronous passes. Combo owns editor/choice/text generations, exact root
+identities, replay state and a weak Low-priority continuation. Sharing that
+policy would change its passive layout contract rather than simplify it.
+
+A new test uses a real, already-Loaded ComboBox in its own XamlRoot, changes
+that root's RequestedTheme, and observes the production ActualThemeChanged
+invalidation and deferred replay. It requires a new cache generation without
+another Loaded event, synchronous realization, text event or model change.
+The only accessor added is a passive weak native-peer getter in non-installed
+test support; no production control algorithm or public layout changes.
+The unchanged four-case baseline passes **887 assertions / 4 cases** and the
+new native case **28 / 1**, DLL and static, with smoke/Supported **2/2**.
+The initial build exposed a GetCurrentTime macro collision and a missing
+Foundation event projection. Forward declarations in the private test header
+and the existing WinRT include boundary in the test fix both; original logs
+remain `audit107e-on-build.log`, corrected builds `*-build-headerfix.log`.
+No runtime failure was retried. Shipping checks remain part of the combined
+batch. Search's native post-Loaded template replacement is still a component
+qualification item in 108, not claimed by its detached characterization cases.
+
 First compare SearchCtrl and ComboBox's real resolution contracts. If their
 identity/invalidation core is equivalent, add `src/winui/templatecontract.h`
 for a typed part result and resolved/missing/superseded identity, using only
