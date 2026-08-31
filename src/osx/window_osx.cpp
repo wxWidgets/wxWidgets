@@ -274,7 +274,7 @@ bool wxWindowMac::MacDoesClipToBounds() const
 {
     if ( m_peer )
         return m_peer->DoesClipToBounds();
-    
+
     return true;
 }
 
