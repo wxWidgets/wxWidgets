@@ -98,6 +98,28 @@ function Get-TextSha256
     }
 }
 
+function Get-FileSha256
+{
+    param([Parameter(Mandatory = $true)][string] $Path)
+
+    $sha = [Security.Cryptography.SHA256]::Create()
+    $stream = $null
+    try
+    {
+        $stream = [IO.File]::OpenRead($Path)
+        return ([BitConverter]::ToString(
+            $sha.ComputeHash($stream))).Replace('-', '').ToLowerInvariant()
+    }
+    finally
+    {
+        if ($null -ne $stream)
+        {
+            $stream.Dispose()
+        }
+        $sha.Dispose()
+    }
+}
+
 function Test-JsonInteger
 {
     param($Value)
@@ -248,8 +270,7 @@ else
         Out-Null
 }
 
-$binaryHashBefore = (Get-FileHash -LiteralPath $executablePath `
-    -Algorithm SHA256).Hash.ToLowerInvariant()
+$binaryHashBefore = Get-FileSha256 -Path $executablePath
 $campaignStarted = Get-Date
 $records = [Collections.Generic.List[object]]::new()
 $aggregateLines = [Collections.Generic.List[string]]::new()
@@ -339,8 +360,7 @@ try
         try
         {
             $record.ExecutableSha256Before =
-                (Get-FileHash -LiteralPath $executablePath `
-                    -Algorithm SHA256).Hash.ToLowerInvariant()
+                Get-FileSha256 -Path $executablePath
             if ($record.ExecutableSha256Before -ne $binaryHashBefore)
             {
                 throw 'winuispike.exe changed before this iteration'
@@ -385,11 +405,9 @@ try
                 Set-Content -LiteralPath $stderrPath `
                     -Value $stderrTask.Result -NoNewline -Encoding UTF8
                 $record.StdoutSha256 =
-                    (Get-FileHash -LiteralPath $stdoutPath `
-                        -Algorithm SHA256).Hash.ToLowerInvariant()
+                    Get-FileSha256 -Path $stdoutPath
                 $record.StderrSha256 =
-                    (Get-FileHash -LiteralPath $stderrPath `
-                        -Algorithm SHA256).Hash.ToLowerInvariant()
+                    Get-FileSha256 -Path $stderrPath
             }
 
             if (-not $record.TimedOut)
@@ -403,8 +421,7 @@ try
                 else
                 {
                     $record.ResultSha256 =
-                        (Get-FileHash -LiteralPath $resultPath `
-                            -Algorithm SHA256).Hash.ToLowerInvariant()
+                        Get-FileSha256 -Path $resultPath
                     try
                     {
                         $result = Get-Content -LiteralPath $resultPath -Raw |
@@ -544,8 +561,7 @@ try
             try
             {
                 $record.ExecutableSha256After =
-                    (Get-FileHash -LiteralPath $executablePath `
-                        -Algorithm SHA256).Hash.ToLowerInvariant()
+                    Get-FileSha256 -Path $executablePath
                 if ($record.ExecutableSha256After -ne $binaryHashBefore)
                 {
                     $infrastructureFailure =
@@ -640,8 +656,7 @@ finally
 $binaryHashAfter = $null
 try
 {
-    $binaryHashAfter = (Get-FileHash -LiteralPath $executablePath `
-        -Algorithm SHA256).Hash.ToLowerInvariant()
+    $binaryHashAfter = Get-FileSha256 -Path $executablePath
     if ($binaryHashAfter -ne $binaryHashBefore)
     {
         $infrastructureFailure =
@@ -729,8 +744,7 @@ $summary = [ordered]@{
 $summaryPath = Join-Path $resolvedOutputDir 'summary.json'
 $summary | ConvertTo-Json -Depth 8 |
     Set-Content -LiteralPath $summaryPath -Encoding UTF8
-$summaryHash = (Get-FileHash -LiteralPath $summaryPath `
-    -Algorithm SHA256).Hash.ToLowerInvariant()
+$summaryHash = Get-FileSha256 -Path $summaryPath
 
 Write-Host "Scenario campaign: $($summary.Status)"
 Write-Host "Runs: $passedCount passed / $failedCount failed / $timedOutCount timed out"

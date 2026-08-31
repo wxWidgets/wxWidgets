@@ -504,6 +504,17 @@ Do not delete a lifetime/retirement service used by production merely because it
   and `winuispike` with warnings as errors, pass RichToolTip **277/22** on a
   private desktop, and pass runtime smoke plus Supported V0 **2/2**. The full
   fresh install/symbol/consumer campaign is still required before closure.
+- The restored-ALL private scenario campaign also exposed an environmental
+  dependency in `run-input-scenarios.ps1`: Windows PowerShell 5.1 launched on
+  the isolated desktop can resolve the PowerShell 7 Utility module first, so
+  the `Get-FileHash` cmdlet is unavailable. All eight file hashes now use one
+  local .NET `SHA256` stream helper, matching the script's existing text-hash
+  implementation and avoiding module autoload entirely. The exact isolated
+  Windows PowerShell path passes one bounded iteration: **1/1** run, **9/9**
+  scenarios, no timeout or orphan process, with the executable and summary
+  hashes independently reproduced outside the private desktop. This remains
+  a non-input qualification helper change; a fresh coupled shipping campaign
+  is still required on the resulting commit.
 
 ## Maintenance
 
