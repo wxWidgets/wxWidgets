@@ -2591,6 +2591,79 @@ TEST_CASE("WinUI OLE broker owns exact bridge and TLW adapter registrations",
     external->Release();
 }
 
+TEST_CASE("WinUI OLE broker production queries are passive",
+          "[winui-drop-broker][winui-broker-observation]")
+{
+    NativeLog log;
+    auto broker = MakeBroker(log);
+    REQUIRE(broker);
+    CHECK_FALSE(broker->HasNativeOwnership());
+    CHECK_FALSE(broker->IsReady());
+    REQUIRE(broker->Initialize().IsReady());
+    CHECK(broker->HasNativeOwnership());
+    CHECK(broker->IsReady());
+
+    bool expectedOwnership = true;
+    bool expectedReady = false;
+    SECTION("ready pair")
+    {
+        expectedReady = true;
+    }
+    SECTION("clean shutdown")
+    {
+        broker->Shutdown();
+        expectedOwnership = false;
+    }
+    SECTION("failed revoke retains registration only")
+    {
+        log.revokeResult = E_FAIL;
+        broker->Shutdown();
+        REQUIRE(broker->GetSnapshotForTest().ownsRegistration);
+        REQUIRE_FALSE(broker->GetSnapshotForTest().locked);
+    }
+    SECTION("failed unlock retains lock only")
+    {
+        log.unlockResult = E_ACCESSDENIED;
+        broker->Shutdown();
+        REQUIRE_FALSE(broker->GetSnapshotForTest().ownsRegistration);
+        REQUIRE(broker->GetSnapshotForTest().locked);
+    }
+
+    const auto before = broker->GetSnapshotForTest();
+    const auto callsBefore = log.calls;
+    const auto mutationBefore = wxMSWOleGetDropTargetMutationGeneration();
+    const auto schedulesBefore = wxWinUITopLevelHost::GetFlushScheduleCount();
+    const auto runsBefore = wxWinUITopLevelHost::GetFlushRunCount();
+    const auto attemptsBefore =
+        wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+    for ( unsigned i = 0; i < 32; ++i )
+    {
+        CHECK(broker->HasNativeOwnership() == expectedOwnership);
+        CHECK(broker->IsReady() == expectedReady);
+    }
+
+    // In particular, observing a failed native cleanup must never retry it.
+    // The production queries do not consume the diagnostic snapshot, either.
+    const auto after = broker->GetSnapshotForTest();
+    CHECK(log.calls == callsBefore);
+    CHECK(wxMSWOleGetDropTargetMutationGeneration() == mutationBefore);
+    CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() == schedulesBefore);
+    CHECK(wxWinUITopLevelHost::GetFlushRunCount() == runsBefore);
+    CHECK(wxWinUITopLevelHost::GetFlushCallbackAttemptCount() == attemptsBefore);
+    CHECK(after.status == before.status);
+    CHECK(after.active == before.active);
+    CHECK(after.ownsRegistration == before.ownsRegistration);
+    CHECK(after.locked == before.locked);
+    CHECK(after.lockCalls == before.lockCalls);
+    CHECK(after.registerCalls == before.registerCalls);
+    CHECK(after.revokeCalls == before.revokeCalls);
+    CHECK(after.unlockCalls == before.unlockCalls);
+    CHECK(after.dragEnterCalls == before.dragEnterCalls);
+    CHECK(after.dragOverCalls == before.dragOverCalls);
+    CHECK(after.dragLeaveCalls == before.dragLeaveCalls);
+    CHECK(after.dropCalls == before.dropCalls);
+}
+
 TEST_CASE("WinUI OLE broker failure paths never revoke foreign state",
           "[winui-drop-broker]")
 {

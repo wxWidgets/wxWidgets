@@ -120,6 +120,12 @@ public:
     wxWinUIDropBrokerInitResult Initialize() noexcept;
     void Shutdown() noexcept;
     bool IsReady() const noexcept;
+
+    // UI-thread ownership query, including a retained registration or an
+    // ambiguous external unlock after shutdown. Does not inspect HWNDs,
+    // invoke COM, refresh diagnostics, or schedule a retry.
+    bool HasNativeOwnership() const noexcept;
+
     bool IsInitializationPending() const noexcept
         { return m_initializePending; }
     bool IsPendingContinuation(std::uint64_t pendingId) const noexcept

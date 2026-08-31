@@ -230,6 +230,34 @@ changing retry policy, report that constraint and retain local resolvers.
 
 ### 107F — Production decisions, passive observation and fault injection
 
+First production boundary implemented (2026-08-31, after `00fe7a3b21`):
+`RestartDropBrokerAfterPresentationInvalidation()` now calls
+`HasNativeOwnership()` on the broker's authoritative registration/lock state,
+preserving exactly `ownsRegistration || locked`. It no longer requests a test
+snapshot or native identity refresh to make that rollback decision.
+`IsReady()` uses `m_initResult.status`, the same value copied by the sole
+`PublishInitResult()` writer into diagnostics, and retains its UI-thread,
+active-state, complete-pair and current-context checks.
+
+The new `[winui-broker-observation]` case covers a ready pair, clean shutdown,
+failed revocation retaining only registration, and failed unlock retaining
+only the lock. Repeated production queries must not change native-call logs,
+the shell mutation epoch, host flush scheduling/runs, or broker counters.
+It adds **372 assertions / 1 case**, distinct from the unchanged host **70/4**,
+ownership **206/3**, and real-island presentation rollback **15/1** baselines.
+Both shared/static Release builds of `test_gui` and `minimal` pass with
+`/warnaserror`; all these cases and smoke/Supported **2/2** pass in each
+linkage, without retries. Logs use `audit107f-*` in the two existing build
+trees, with unchanged binaries captured first as `audit107foundation-before-*`
+(static presentation: `audit107f-before-presentation.log`). Shipping qualification
+will be recorded against the combined architecture source after the separately
+tested implementation commits; this entry alone does not claim an OFF build.
+
+The broker's remaining installed testing declarations and the broader passive
+observation/fault separation remain in 106/107F. In particular, the diagnostic
+snapshot still revalidates native HWND identities for qualification: this
+small change does not relabel every observer as side-effect-free.
+
 After the relevant 106 extraction, replace the production use of the broker's
 test snapshot with a narrow, non-mutating production ownership predicate in
 `src/winui/dropbroker.cpp` and its existing private declaration. Preserve the

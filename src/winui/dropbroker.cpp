@@ -1029,6 +1029,12 @@ bool wxWinUIDropBroker::OwnsAnyRegistration() const noexcept
            m_tlwRegistration.ownsRegistration;
 }
 
+bool wxWinUIDropBroker::HasNativeOwnership() const noexcept
+{
+    return OwnsAnyRegistration() ||
+           m_bridgeRegistration.locked || m_tlwRegistration.locked;
+}
+
 bool wxWinUIDropBroker::OwnsCompleteRegistrationSet() const noexcept
 {
     return m_bridgeRegistration.ownsRegistration &&
@@ -1766,8 +1772,7 @@ bool wxWinUIDropBroker::IsReady() const noexcept
 {
     return m_state &&
            m_state->IsOnUIThread() &&
-           m_state->GetSnapshot().status ==
-                wxWinUIDropBrokerInitStatus::Ready &&
+           m_initResult.status == wxWinUIDropBrokerInitStatus::Ready &&
            m_state->IsActive() &&
            OwnsCompleteRegistrationSet() &&
            m_state->IsContextCurrent();

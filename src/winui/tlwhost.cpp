@@ -6186,9 +6186,7 @@ void wxWinUITopLevelHost::RestartDropBrokerAfterPresentationInvalidation()
     if ( !HasInitializationContext() )
         return;
 
-    const wxWinUIDropBrokerSnapshot stopped =
-        m_dropBroker->GetSnapshotForTest();
-    if ( stopped.ownsRegistration || stopped.locked )
+    if ( m_dropBroker->HasNativeOwnership() )
     {
         // Native cleanup could not prove that both old identities are gone.
         // Retain this fail-closed broker and never create a concurrent pair.
