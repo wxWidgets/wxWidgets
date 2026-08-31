@@ -197,9 +197,12 @@ if(WXWINUI AND wxUSE_WINUI3)
             wx_winui_test_support INTERFACE_COMPILE_DEFINITIONS)
         set(wx_winui_test_support_sources
             "${wxSOURCE_DIR}/src/generic/tipwin.cpp"
+            "${wxSOURCE_DIR}/src/generic/splash.cpp"
             "${wxSOURCE_DIR}/src/msw/evtloop.cpp"
             "${wxSOURCE_DIR}/src/msw/nonownedwnd.cpp"
             "${wxSOURCE_DIR}/src/msw/popupwin.cpp"
+            "${wxSOURCE_DIR}/src/msw/taskbar.cpp"
+            "${wxSOURCE_DIR}/src/msw/rt/notifmsgrt.cpp"
             "${wxSOURCE_DIR}/src/winui/button.cpp"
             "${wxSOURCE_DIR}/src/winui/tglbtn.cpp"
             "${wxSOURCE_DIR}/src/winui/stattext.cpp"
@@ -226,6 +229,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/spinctrl.cpp"
             "${wxSOURCE_DIR}/src/winui/textctrl.cpp"
             "${wxSOURCE_DIR}/src/winui/srchctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/textpeer.cpp"
             "${wxSOURCE_DIR}/src/winui/textdlg.cpp"
             "${wxSOURCE_DIR}/src/winui/dlgpresenter.cpp"
             "${wxSOURCE_DIR}/src/winui/notebook.cpp"
@@ -233,6 +237,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/winui.cpp"
             "${wxSOURCE_DIR}/src/msw/window.cpp"
             "${wxSOURCE_DIR}/src/winui/ctrlhost.cpp"
+            "${wxSOURCE_DIR}/src/winui/richtooltip.cpp"
             "${wxSOURCE_DIR}/src/winui/tlwhost.cpp"
             "${wxSOURCE_DIR}/src/winui/titlebar.cpp"
             "${wxSOURCE_DIR}/src/winui/hosttooltip.cpp"

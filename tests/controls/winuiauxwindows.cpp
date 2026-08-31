@@ -227,6 +227,7 @@ TEST_CASE("AuxiliaryWindows::TransientDestroyIsDeferred",
 #include <commctrl.h>
 #if wxUSE_SPLASH
     #include "wx/splash.h"
+    #include "splash-test-access.h"
 #endif
 #if wxUSE_TIPWINDOW
     #include "wx/tipwin.h"
@@ -355,19 +356,19 @@ bool gs_splashReparented = false;
 #if wxUSE_EXCEPTIONS
 void ThrowAfterSplashFilter(
     wxSplashScreen*,
-    const wxWinUISplashHookPointForTesting point)
+    const wxWinUISplashTestAccess::HookPoint point)
 {
     if ( point ==
-            wxWinUISplashHookPointForTesting::AfterFilterRegistration )
+            wxWinUISplashTestAccess::HookPoint::AfterFilterRegistration )
         throw std::bad_alloc();
 }
 #endif // wxUSE_EXCEPTIONS
 
 void DestroySplashAfterUpdate(
     wxSplashScreen* const splash,
-    const wxWinUISplashHookPointForTesting point)
+    const wxWinUISplashTestAccess::HookPoint point)
 {
-    if ( point != wxWinUISplashHookPointForTesting::AfterUpdate )
+    if ( point != wxWinUISplashTestAccess::HookPoint::AfterUpdate )
         return;
 
     gs_scheduledSplashLifetime = splash;
@@ -376,10 +377,10 @@ void DestroySplashAfterUpdate(
 
 void DestroySplashAfterFilter(
     wxSplashScreen* const splash,
-    const wxWinUISplashHookPointForTesting point)
+    const wxWinUISplashTestAccess::HookPoint point)
 {
     if ( point !=
-            wxWinUISplashHookPointForTesting::AfterFilterRegistration )
+            wxWinUISplashTestAccess::HookPoint::AfterFilterRegistration )
     {
         return;
     }
@@ -390,9 +391,9 @@ void DestroySplashAfterFilter(
 
 void ReparentSplashAfterShow(
     wxSplashScreen* const splash,
-    const wxWinUISplashHookPointForTesting point)
+    const wxWinUISplashTestAccess::HookPoint point)
 {
-    if ( point != wxWinUISplashHookPointForTesting::AfterShow )
+    if ( point != wxWinUISplashTestAccess::HookPoint::AfterShow )
         return;
 
     wxWindow* const destination = gs_splashReparentDestination.get();
@@ -665,7 +666,7 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
 {
     const AuxiliaryHostSnapshot hostsBefore;
     const std::size_t runtimeStatesBefore =
-        wxWinUIGetSplashRuntimeStateCountForTesting();
+        wxWinUISplashTestAccess::GetRuntimeStateCount();
     wxFrame* const owner = CreateAuxiliaryOwner("splash owner", 0);
     const wxWeakRef<wxWindow> weakOwner(owner);
     wxBitmap bitmap(80, 40, 32);
@@ -763,9 +764,9 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
     SECTION("construction_rollback_and_update_revalidation")
     {
 #if wxUSE_EXCEPTIONS
-        wxWinUISetSplashHookForTesting(&ThrowAfterSplashFilter);
+        wxWinUISplashTestAccess::SetHook(&ThrowAfterSplashFilter);
         wxScopeGuard resetHook = wxMakeGuard(
-            []() { wxWinUIResetSplashHookForTesting(); });
+            []() { wxWinUISplashTestAccess::ResetHook(); });
         wxUnusedVar(resetHook);
 
         CHECK_THROWS_AS(
@@ -773,8 +774,8 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
                 bitmap, wxSPLASH_NO_CENTRE | wxSPLASH_NO_TIMEOUT, 0,
                 owner, wxID_ANY, wxPoint(-30000, -30000)),
             std::bad_alloc);
-        wxWinUIResetSplashHookForTesting();
-        CHECK(wxWinUIGetSplashRuntimeStateCountForTesting() ==
+        wxWinUISplashTestAccess::ResetHook();
+        CHECK(wxWinUISplashTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
         // Processing an unrelated event after constructor unwinding also
@@ -786,38 +787,38 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
 #endif // wxUSE_EXCEPTIONS
 
         gs_scheduledSplashLifetime.Release();
-        wxWinUISetSplashHookForTesting(&DestroySplashAfterFilter);
+        wxWinUISplashTestAccess::SetHook(&DestroySplashAfterFilter);
         (void)new wxSplashScreen(
             bitmap, wxSPLASH_NO_CENTRE | wxSPLASH_NO_TIMEOUT, 0,
             owner, wxID_ANY, wxPoint(-30000, -30000));
-        wxWinUIResetSplashHookForTesting();
+        wxWinUISplashTestAccess::ResetHook();
         REQUIRE(gs_scheduledSplashLifetime);
         REQUIRE(DrainAuxiliaryWindowsUntil(
             []() { return !gs_scheduledSplashLifetime; }));
-        CHECK(wxWinUIGetSplashRuntimeStateCountForTesting() ==
+        CHECK(wxWinUISplashTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
 #if wxUSE_EXCEPTIONS
-        wxWinUIFailNextSplashRuntimeAllocationForTesting();
+        wxWinUISplashTestAccess::FailNextRuntimeAllocation();
         CHECK_THROWS_AS(
             (void)new wxSplashScreen(
                 bitmap, wxSPLASH_NO_CENTRE | wxSPLASH_NO_TIMEOUT, 0,
                 owner, wxID_ANY, wxPoint(-30000, -30000)),
             std::bad_alloc);
-        CHECK(wxWinUIGetSplashRuntimeStateCountForTesting() ==
+        CHECK(wxWinUISplashTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 #endif // wxUSE_EXCEPTIONS
 
         gs_scheduledSplashLifetime.Release();
-        wxWinUISetSplashHookForTesting(&DestroySplashAfterUpdate);
+        wxWinUISplashTestAccess::SetHook(&DestroySplashAfterUpdate);
         (void)new wxSplashScreen(
             bitmap, wxSPLASH_NO_CENTRE | wxSPLASH_NO_TIMEOUT, 0,
             owner, wxID_ANY, wxPoint(-30000, -30000));
-        wxWinUIResetSplashHookForTesting();
+        wxWinUISplashTestAccess::ResetHook();
         REQUIRE(gs_scheduledSplashLifetime);
         REQUIRE(DrainAuxiliaryWindowsUntil(
             []() { return !gs_scheduledSplashLifetime; }));
-        CHECK(wxWinUIGetSplashRuntimeStateCountForTesting() ==
+        CHECK(wxWinUISplashTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
         wxFrame* const reparentDestination =
@@ -827,12 +828,12 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
         gs_splashReparentDestination = reparentDestination;
         gs_reparentedSplashLifetime.Release();
         gs_splashReparented = false;
-        wxWinUISetSplashHookForTesting(&ReparentSplashAfterShow);
+        wxWinUISplashTestAccess::SetHook(&ReparentSplashAfterShow);
 
         wxSplashScreen* const reparentedSplash = new wxSplashScreen(
             bitmap, wxSPLASH_NO_CENTRE | wxSPLASH_NO_TIMEOUT, 0,
             nullptr, wxID_ANY, wxPoint(-30000, -30000));
-        wxWinUIResetSplashHookForTesting();
+        wxWinUISplashTestAccess::ResetHook();
         gs_splashReparentDestination.Release();
 
         REQUIRE(gs_splashReparented);
@@ -840,7 +841,7 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
         CHECK(reparentedSplash->GetParent() == reparentDestination);
         CHECK_FALSE(reparentedSplash->IsShown());
         CHECK(reparentedSplash->GetSplashWindow() == nullptr);
-        CHECK(wxWinUIGetSplashRuntimeStateCountForTesting() ==
+        CHECK(wxWinUISplashTestAccess::GetRuntimeStateCount() ==
               runtimeStatesBefore);
 
         // The original owner is deliberately null: this catches an owner check
@@ -866,7 +867,7 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
         {
             return !weakOwner && SameAuxiliaryHostSnapshot(hostsBefore);
         }));
-    CHECK(wxWinUIGetSplashRuntimeStateCountForTesting() ==
+    CHECK(wxWinUISplashTestAccess::GetRuntimeStateCount() ==
           runtimeStatesBefore);
 }
 

@@ -19,6 +19,7 @@
 #include "wx/textctrl.h"
 #include "textctrl-test-access.h"
 #include "searchctrl-test-access.h"
+#include "text-peer-test-access.h"
 #include "wx/textcompleter.h"
 #include "wx/uiaction.h"
 #include "wx/weakref.h"
@@ -456,18 +457,18 @@ TEST_CASE("wxWinUI text position mapping", "[winui-textpeer]")
 TEST_CASE("wxWinUI text callback state", "[winui-textpeer][lifetime]")
 {
     const std::size_t baseline =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
     int owner = 17;
     {
         const auto state =
             std::make_shared<wxWinUITextCallbackState>(&owner);
-        CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() ==
+        CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
               baseline + 1);
         CHECK(state->GetOwner<int>() == &owner);
         state->Invalidate();
         CHECK(state->GetOwner<int>() == nullptr);
     }
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI text controls revoke callbacks",
@@ -493,7 +494,7 @@ TEST_CASE("wxWinUI text controls revoke callbacks",
     }
 
     const std::size_t baseline =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
 
     for ( int i = 0; i < 100; ++i )
     {
@@ -509,7 +510,7 @@ TEST_CASE("wxWinUI text controls revoke callbacks",
     }
 
     wxYield();
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI text test state survives rejected Create",
@@ -753,7 +754,7 @@ TEST_CASE("wxWinUI text Create survives destruction from Loaded",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const std::size_t baseline =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
 
     SECTION("TextCtrl")
     {
@@ -804,7 +805,7 @@ TEST_CASE("wxWinUI text Create survives destruction from Loaded",
 #endif // wxUSE_SEARCHCTRL
 
     wxYield();
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI text Create reacquires after SetInitialSize",
@@ -813,7 +814,7 @@ TEST_CASE("wxWinUI text Create reacquires after SetInitialSize",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const std::size_t baseline =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
 
     SECTION("TextCtrl")
     {
@@ -873,7 +874,7 @@ TEST_CASE("wxWinUI text Create reacquires after SetInitialSize",
 #endif // wxUSE_SEARCHCTRL
 
     wxYield();
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI TextCtrl applies wxTE_NO_VSCROLL to ContentElement",
@@ -913,7 +914,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
           "[winui-textpeer][textctrl][scroll][lifetime]")
 {
     const std::size_t statesBefore =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "text visibility lifetime",
                     wxPoint(48, 48), wxSize(280, 160),
@@ -1138,7 +1139,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
     text = nullptr;
     REQUIRE(WaitFor("destroyed visibility callback quiescence", [&]()
     {
-        return wxWinUITextCallbackState::GetLiveCountForTesting() ==
+        return wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
                statesBefore;
     }));
 
@@ -1159,7 +1160,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
     SECTION("queued retry is inert after destruction")
     {
         const std::size_t statesBefore =
-            wxWinUITextCallbackState::GetLiveCountForTesting();
+            wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
         wxTextCtrl *text = new wxTextCtrl;
         wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
         REQUIRE(text->Create(
@@ -1188,7 +1189,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         text = nullptr;
         REQUIRE(WaitFor("destroyed TextBox retry quiescence", [&]()
         {
-            return wxWinUITextCallbackState::GetLiveCountForTesting() ==
+            return wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
                    statesBefore;
         }));
     }
@@ -1262,7 +1263,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
     SECTION("Replace cancels a queued request before destruction")
     {
         const std::size_t statesBefore =
-            wxWinUITextCallbackState::GetLiveCountForTesting();
+            wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
         const wxString value(600, 'W');
         wxTextCtrl *text = new wxTextCtrl;
         wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
@@ -1308,7 +1309,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         text = nullptr;
         REQUIRE(WaitFor("destroyed TextBox Replace continuation", [&]()
         {
-            return wxWinUITextCallbackState::GetLiveCountForTesting() ==
+            return wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
                    statesBefore;
         }));
     }
@@ -1316,7 +1317,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
     SECTION("Remove cancels a queued request before destruction")
     {
         const std::size_t statesBefore =
-            wxWinUITextCallbackState::GetLiveCountForTesting();
+            wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
         const wxString value(600, 'W');
         wxTextCtrl *text = new wxTextCtrl;
         wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
@@ -1359,7 +1360,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         text = nullptr;
         REQUIRE(WaitFor("destroyed TextBox Remove continuation", [&]()
         {
-            return wxWinUITextCallbackState::GetLiveCountForTesting() ==
+            return wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
                    statesBefore;
         }));
     }
@@ -2873,7 +2874,7 @@ TEST_CASE("wxWinUI SearchCtrl survives destruction from query Click",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const std::size_t statesBefore =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
 
     wxSearchCtrl *search =
         new wxSearchCtrl(parent, wxID_ANY, "destroy");
@@ -2893,7 +2894,7 @@ TEST_CASE("wxWinUI SearchCtrl survives destruction from query Click",
     CHECK(search == nullptr);
     CHECK(searchEvents == 1);
     wxYield();
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() ==
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
           statesBefore);
 }
 

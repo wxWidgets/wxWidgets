@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/winui/private/richtooltip.h
-// Purpose:     Testable WinUI rich-tooltip presentation contract
+// Purpose:     WinUI rich-tooltip presentation contract
 // Author:      wxWidgets development team
 // Created:     2026-07-24
 // Copyright:   (c) wxWidgets development team
@@ -95,86 +95,6 @@ wxWinUITeachingTipAllowsGenericFallback(wxWinUITeachingTipShowResult result)
 {
     return result == wxWinUITeachingTipShowResult::Unsupported;
 }
-
-// One-shot deterministic seams for lifetime and failure-path tests. They are
-// private port infrastructure, not part of the wxRichToolTip API.
-enum class wxWinUITeachingTipFaultForTesting
-{
-    None,
-    Unsupported,
-    OperationalAfterAppend,
-    StartHResult,
-    StartStdException,
-    StartUnknownException,
-    OpenAfterPeerHResult,
-    QueueUnavailable
-};
-
-enum class wxWinUITeachingTipHookPointForTesting
-{
-    None,
-    AfterAppend,
-    AfterFlowDirection,
-    AfterPeerOpen
-};
-
-using wxWinUITeachingTipHookForTesting = void (*)(wxWindow *);
-
-struct wxWinUITeachingTipDiagnosticsForTesting
-{
-    unsigned liveStates = 0;
-    unsigned liveXamlHandlers = 0;
-    unsigned liveTargetBindings = 0;
-    unsigned liveVisuals = 0;
-    unsigned liveGenericFallbacks = 0;
-    unsigned nativeBackendAttempts = 0;
-    unsigned genericFallbackStarts = 0;
-    unsigned betaGenericFallbacks = 0;
-    unsigned unsupportedFallbacks = 0;
-    unsigned operationalFailures = 0;
-    unsigned cancellations = 0;
-    unsigned customizationFallbacks = 0;
-    unsigned genericFallbackCancellations = 0;
-    unsigned delayedStarts = 0;
-    unsigned peerOpens = 0;
-    unsigned peerCloseRequests = 0;
-    unsigned timeoutClosures = 0;
-    unsigned queueShutdownClosures = 0;
-    unsigned reparentClosures = 0;
-    unsigned cleanupTipRemovalAttempts = 0;
-    unsigned cleanupAnchorRemovalAttempts = 0;
-    // Monotonic observation order for asynchronous tests. Unlike wall-clock
-    // sampling, these remain deterministic if one wxYield() drains both the
-    // delayed-open and timeout ticks.
-    unsigned long long lastPeerOpenSequence = 0;
-    unsigned long long lastTimeoutCloseSequence = 0;
-    unsigned lastRequestedTimeoutMs = 0;
-    unsigned lastRequestedDelayMs = 0;
-    bool lastHadTargetRect = false;
-    bool lastRightToLeft = false;
-    wxRect lastTargetRect;
-    wxPoint lastAnchorInRoot;
-    wxString lastAutomationName;
-    wxString lastAutomationHelpText;
-};
-
-WXDLLIMPEXP_CORE void wxWinUISetTeachingTipFaultForTesting(
-    wxWinUITeachingTipFaultForTesting fault);
-// Exported only because shared-library tests cannot reach internal symbols.
-// This private port test seam is not exposed by wxRichToolTip, has no
-// environment-variable route, defaults off and is reset by the fixture.
-// Production presentation therefore remains fail-closed on the bounded
-// generic backend unless test code deliberately includes this private header.
-WXDLLIMPEXP_CORE void
-wxWinUISetNativeTeachingTipBackendForTesting(bool enable);
-WXDLLIMPEXP_CORE void wxWinUISetTeachingTipHookForTesting(
-    wxWinUITeachingTipHookPointForTesting point,
-    wxWinUITeachingTipHookForTesting hook);
-WXDLLIMPEXP_CORE void wxWinUIResetTeachingTipDiagnosticsForTesting();
-WXDLLIMPEXP_CORE wxWinUITeachingTipDiagnosticsForTesting
-wxWinUIGetTeachingTipDiagnosticsForTesting();
-WXDLLIMPEXP_CORE std::size_t
-wxWinUITriggerTeachingTipQueueShutdownForTesting(wxWindow *ownerOrTLW);
 
 // Synchronous reparent notification from the shared TLW host. The
 // implementation keeps only weak state/window references and closes sessions

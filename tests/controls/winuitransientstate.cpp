@@ -19,6 +19,7 @@
 #include "wx/winui/private/appearance.h"
 #include "appearance-test-access.h"
 #include "wx/winui/private/shelltheme.h"
+#include "shell-theme-test-access.h"
 #include "wx/winui/private/transient.h"
 #include "owner-backdrop-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -498,9 +499,9 @@ struct FakeShellThemeModel
         return true;
     }
 
-    wxWinUIShellThemeNativeOps MakeOps()
+    wxWinUIShellThemeTestAccess::NativeOps MakeOps()
     {
-        wxWinUIShellThemeNativeOps operations;
+        wxWinUIShellThemeTestAccess::NativeOps operations;
         operations.context = this;
         operations.setImmersiveDarkMode = SetImmersiveDark;
         operations.setSystemBackdrop = SetBackdrop;
@@ -515,12 +516,12 @@ struct ShellThemeSeamGuard
 {
     explicit ShellThemeSeamGuard(FakeShellThemeModel& model)
     {
-        wxWinUI3SetShellThemeNativeOpsForTesting(model.MakeOps());
+        wxWinUIShellThemeTestAccess::SetNativeOps(model.MakeOps());
     }
 
     ~ShellThemeSeamGuard()
     {
-        wxWinUI3ResetShellThemeNativeOpsForTesting();
+        wxWinUIShellThemeTestAccess::ResetNativeOps();
     }
 };
 
@@ -1022,32 +1023,32 @@ TEST_CASE("WinUITransient::ShellThemePolicyMatrix",
     using Theme = wxWinUIAppTheme;
 
     wxWinUIShellThemePolicy policy =
-        wxWinUI3ResolveShellThemePolicyForTesting(
+        wxWinUIShellThemeTestAccess::ResolvePolicy(
             Theme::System, false, false);
     CHECK_FALSE(policy.highContrast);
     CHECK_FALSE(policy.dark);
     CHECK(policy.allowBackdrop);
 
-    policy = wxWinUI3ResolveShellThemePolicyForTesting(
+    policy = wxWinUIShellThemeTestAccess::ResolvePolicy(
         Theme::System, true, false);
     CHECK_FALSE(policy.highContrast);
     CHECK(policy.dark);
     CHECK(policy.allowBackdrop);
 
-    policy = wxWinUI3ResolveShellThemePolicyForTesting(
+    policy = wxWinUIShellThemeTestAccess::ResolvePolicy(
         Theme::Light, true, false);
     CHECK_FALSE(policy.highContrast);
     CHECK_FALSE(policy.dark);
     CHECK(policy.allowBackdrop);
 
-    policy = wxWinUI3ResolveShellThemePolicyForTesting(
+    policy = wxWinUIShellThemeTestAccess::ResolvePolicy(
         Theme::Dark, false, false);
     CHECK_FALSE(policy.highContrast);
     CHECK(policy.dark);
     CHECK(policy.allowBackdrop);
 
     // High Contrast is authoritative even over an explicit Dark request.
-    policy = wxWinUI3ResolveShellThemePolicyForTesting(
+    policy = wxWinUIShellThemeTestAccess::ResolvePolicy(
         Theme::Dark, true, true);
     CHECK(policy.highContrast);
     CHECK_FALSE(policy.dark);

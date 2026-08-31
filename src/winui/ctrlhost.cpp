@@ -25,6 +25,9 @@
 #include "keyboard.h"
 #include "wx/winui/private/dialogcontracts.h"
 #include "wx/winui/private/shelltheme.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "shell-theme-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 #include "wx/winui/private/transient.h"
 #include "transientops.h"
 #ifdef WXWINUI_TEST_SUPPORT
@@ -103,8 +106,21 @@ const wchar_t wxWinUIBackdropTransparentProp[] =
 wxWinUIAppTheme gs_winuiAppTheme = wxWinUIAppTheme::System;
 winrt::Microsoft::UI::Xaml::ElementTheme gs_winuiElementTheme =
     winrt::Microsoft::UI::Xaml::ElementTheme::Default;
+struct wxWinUIShellThemeNativeOps
+{
+    void *context = nullptr;
+
+    bool (*setImmersiveDarkMode)(void *, WXHWND, bool) = nullptr;
+    bool (*setSystemBackdrop)(void *, WXHWND, bool) = nullptr;
+    bool (*extendFrameIntoClientArea)(void *, WXHWND, bool) = nullptr;
+    bool (*setBackdropMarker)(void *, WXHWND, bool) = nullptr;
+    bool (*setControlTheme)(void *, WXHWND, bool, bool) = nullptr;
+};
+
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUIShellThemeNativeOps gs_winuiShellThemeTestOps;
 bool gs_hasWinUIShellThemeTestOps = false;
+#endif // WXWINUI_TEST_SUPPORT
 
 // Read the system "apps use light theme" preference directly from the registry,
 // which works regardless of whether the classic MSW dark mode support has been
@@ -315,9 +331,11 @@ bool wxWinUISetControlThemeNative(void *,
 
 const wxWinUIShellThemeNativeOps& wxWinUIGetShellThemeOps()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_hasWinUIShellThemeTestOps )
         return gs_winuiShellThemeTestOps;
 
+#endif // WXWINUI_TEST_SUPPORT
     static const wxWinUIShellThemeNativeOps operations =
     {
         nullptr,
@@ -697,8 +715,9 @@ wxWinUIShellPresentationResult wxWinUIApplyMicaBackground(
 
 } // namespace
 
+#ifdef WXWINUI_TEST_SUPPORT
 wxWinUIShellThemePolicy
-wxWinUI3ResolveShellThemePolicyForTesting(wxWinUIAppTheme appTheme,
+wxWinUIShellThemeTestAccess::ResolvePolicy(wxWinUIAppTheme appTheme,
                                           bool systemDark,
                                           bool highContrast)
 {
@@ -706,22 +725,32 @@ wxWinUI3ResolveShellThemePolicyForTesting(wxWinUIAppTheme appTheme,
         appTheme, systemDark, highContrast);
 }
 
-void wxWinUI3SetShellThemeNativeOpsForTesting(
-    const wxWinUIShellThemeNativeOps& operations)
+void wxWinUIShellThemeTestAccess::SetNativeOps(
+    const NativeOps& operations)
 {
+    const wxWinUIShellThemeNativeOps nativeOperations
+    {
+        operations.context,
+        operations.setImmersiveDarkMode,
+        operations.setSystemBackdrop,
+        operations.extendFrameIntoClientArea,
+        operations.setBackdropMarker,
+        operations.setControlTheme
+    };
+
     wxCHECK_RET(wxIsMainThread(),
                 "WinUI shell-theme seam is UI-thread only");
-    wxCHECK_RET(wxWinUIShellThemeOpsAreComplete(operations),
+    wxCHECK_RET(wxWinUIShellThemeOpsAreComplete(nativeOperations),
                 "incomplete WinUI shell-theme operation table");
     wxCHECK_RET(gs_winuiShellApplyEpochs.empty() &&
                     gs_winuiShellApplyDrivers.empty(),
                 "cannot replace WinUI shell-theme operations in flight");
 
-    gs_winuiShellThemeTestOps = operations;
+    gs_winuiShellThemeTestOps = nativeOperations;
     gs_hasWinUIShellThemeTestOps = true;
 }
 
-void wxWinUI3ResetShellThemeNativeOpsForTesting()
+void wxWinUIShellThemeTestAccess::ResetNativeOps()
 {
     wxCHECK_RET(wxIsMainThread(),
                 "WinUI shell-theme seam is UI-thread only");
@@ -732,6 +761,8 @@ void wxWinUI3ResetShellThemeNativeOpsForTesting()
     gs_winuiShellThemeTestOps = wxWinUIShellThemeNativeOps();
     gs_hasWinUIShellThemeTestOps = false;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUIShellThemeWindowDestroyed(WXHWND hwndArg)
 {

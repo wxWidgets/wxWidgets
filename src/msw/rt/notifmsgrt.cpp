@@ -24,6 +24,9 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "wx/winui/private/notification.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "notification-test-access.h"
+#endif
 
 #include "wx/app.h"
 #include "wx/module.h"
@@ -964,10 +967,12 @@ public:
         return true;
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     void Shutdown()
     {
         ShutdownImpl(false);
     }
+#endif
 
     void Finalize()
     {
@@ -977,6 +982,7 @@ public:
         ShutdownImpl(true);
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     void ResetFinalizationForTesting()
     {
         // Production has no path back from Finalize(). Tests reset it only
@@ -998,7 +1004,9 @@ public:
         m_finalized = false;
         m_finalizationRequested.store(false, std::memory_order_release);
     }
+#endif
 
+#ifdef WXWINUI_TEST_SUPPORT
     bool ReplaceNativeForTesting(
         const std::shared_ptr<wxWinUIAppNotificationNative>& native)
     {
@@ -1076,18 +1084,22 @@ public:
         m_registered = false;
         return true;
     }
+#endif
 
+#ifdef WXWINUI_TEST_SUPPORT
     void SetDispatchHookForTesting(
-        const wxWinUIAppNotificationDispatchHookForTesting hook)
+        const wxWinUIAppNotificationTestAccess::DispatchHook hook)
     {
         std::lock_guard<std::mutex> lock(m_mutex);
         m_dispatchHookForTesting = hook;
     }
+#endif
 
-    wxWinUIAppNotificationSnapshot Snapshot() const
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIAppNotificationTestAccess::Snapshot Snapshot() const
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        wxWinUIAppNotificationSnapshot snapshot;
+        wxWinUIAppNotificationTestAccess::Snapshot snapshot;
         snapshot.enabled = m_enabled;
         snapshot.registered = m_registered;
         snapshot.shuttingDown = m_shuttingDown || IsShutdownRequested();
@@ -1103,6 +1115,7 @@ public:
         snapshot.shutdownSerial = m_shutdownSerial;
         return snapshot;
     }
+#endif
 
 private:
     void ShutdownImpl(const bool finalize)
@@ -1318,9 +1331,13 @@ private:
 
     bool IsShutdownRequested() const
     {
-        return m_shutdownRequestCount.load(std::memory_order_acquire) != 0 ||
+        return m_shutdownRequestCount.load(std::memory_order_acquire) != 0
+#ifdef WXWINUI_TEST_SUPPORT
+ ||
                m_nativeReplacementRequested.load(
-                   std::memory_order_acquire);
+                   std::memory_order_acquire)
+#endif
+        ;
     }
 
     bool IsFinalizationRequested() const
@@ -1585,7 +1602,9 @@ private:
         const bool dismissedByApp)
     {
         wxApp* app = nullptr;
-        wxWinUIAppNotificationDispatchHookForTesting hook = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+        wxWinUIAppNotificationTestAccess::DispatchHook hook = nullptr;
+#endif
         std::uint64_t deliveryToken = 0;
         std::uint64_t shutdownSerial = 0;
         {
@@ -1604,7 +1623,9 @@ private:
             ++m_queuedCallbackCount;
             ++m_dispatchLeaseCount;
             app = m_dispatchTarget;
+#ifdef WXWINUI_TEST_SUPPORT
             hook = m_dispatchHookForTesting;
+#endif
         }
 
         ++gs_appNotificationDispatchLeaseDepth;
@@ -1614,8 +1635,10 @@ private:
 
         try
         {
+#ifdef WXWINUI_TEST_SUPPORT
             if ( hook )
                 hook();
+#endif
 
             // The hook and wxApp dispatch implementations are user-controlled
             // boundaries and may re-enter Shutdown(). Revalidate before using
@@ -1796,7 +1819,9 @@ private:
     mutable std::mutex m_mutex;
     mutable std::recursive_mutex m_nativeOperationMutex;
     std::atomic<unsigned> m_shutdownRequestCount{0};
+#ifdef WXWINUI_TEST_SUPPORT
     std::atomic<bool> m_nativeReplacementRequested{false};
+#endif
     std::atomic<bool> m_finalizationRequested{false};
     std::shared_ptr<wxWinUIAppNotificationNative> m_native;
     std::shared_ptr<wxWinUIAppNotificationNative> m_deferredShutdownNative;
@@ -1806,8 +1831,10 @@ private:
              std::weak_ptr<wxWinUIAppNotificationInstanceState>> m_states;
     std::condition_variable m_completionLeaseChanged;
     wxApp* m_dispatchTarget = nullptr;
-    wxWinUIAppNotificationDispatchHookForTesting m_dispatchHookForTesting =
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIAppNotificationTestAccess::DispatchHook m_dispatchHookForTesting =
         nullptr;
+#endif
     std::uint64_t m_lastGeneration = 0;
     std::uint64_t m_lastCleanupToken = 0;
     std::uint64_t m_shutdownSerial = 0;
@@ -1903,50 +1930,52 @@ private:
     std::shared_ptr<wxWinUIAppNotificationInstanceState> m_state;
 };
 
-bool wxWinUISetAppNotificationNativeForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIAppNotificationTestAccess::SetNative(
     const std::shared_ptr<wxWinUIAppNotificationNative>& native)
 {
     return wxWinUIAppNotificationBroker::Get().ReplaceNativeForTesting(
         native);
 }
 
-bool wxWinUIResetAppNotificationNativeForTesting()
+bool wxWinUIAppNotificationTestAccess::ResetNative()
 {
     return wxWinUIAppNotificationBroker::Get().ReplaceNativeForTesting(
         nullptr);
 }
 
-void wxWinUIShutdownAppNotificationsForTesting()
+void wxWinUIAppNotificationTestAccess::Shutdown()
 {
     wxWinUIAppNotificationBroker::Get().Shutdown();
 }
 
-void wxWinUIFinalizeAppNotificationsForTesting()
+void wxWinUIAppNotificationTestAccess::Finalize()
 {
     wxWinUIAppNotificationBroker::Get().Finalize();
 }
 
-void wxWinUIResetAppNotificationFinalizationForTesting()
+void wxWinUIAppNotificationTestAccess::ResetFinalization()
 {
     wxWinUIAppNotificationBroker::Get().ResetFinalizationForTesting();
 }
 
-void wxWinUISetAppNotificationDispatchHookForTesting(
-    const wxWinUIAppNotificationDispatchHookForTesting hook)
+void wxWinUIAppNotificationTestAccess::SetDispatchHook(
+    const wxWinUIAppNotificationTestAccess::DispatchHook hook)
 {
     wxWinUIAppNotificationBroker::Get().SetDispatchHookForTesting(hook);
 }
 
-void wxWinUIResetAppNotificationDispatchHookForTesting()
+void wxWinUIAppNotificationTestAccess::ResetDispatchHook()
 {
     wxWinUIAppNotificationBroker::Get().SetDispatchHookForTesting(nullptr);
 }
 
-wxWinUIAppNotificationSnapshot
-wxWinUIGetAppNotificationSnapshotForTesting()
+wxWinUIAppNotificationTestAccess::Snapshot
+wxWinUIAppNotificationTestAccess::GetSnapshot()
 {
     return wxWinUIAppNotificationBroker::Get().Snapshot();
 }
+#endif
 
 class wxToastNotifMsgModule : public wxModule
 {

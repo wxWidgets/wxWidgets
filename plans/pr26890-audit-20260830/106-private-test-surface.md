@@ -461,6 +461,39 @@ Do not delete a lifetime/retirement service used by production merely because it
   qualify physical input. Fresh shipping OFF/ON source, symbol, install and
   installed-consumer proof remains pending and keeps plan 106 open.
 
+## Auxiliary, shell and notification test boundaries (2026-09-01)
+
+- TaskBarIcon native-call replacement, popup hooks, snapshots and helper
+  adapters; TextPeer callback live-count observation; shell-theme native-op
+  replacement; Splash constructor hooks/fault/count; AppNotification native
+  replacement, dispatch hook and broker snapshot; and RichToolTip fault,
+  hook, backend override and diagnostics now live in six non-installed
+  `tests/winui/test-support/*-test-access.h` headers. Only their producer
+  translation units opt in when `wxBUILD_TESTS=ALL`.
+- Shipping code keeps TaskBarIcon desired/applied generations and Explorer
+  restart reconciliation, TextPeer callback generations, the real shell/DWM
+  theme operations, Splash runtime ownership and rollback, the Windows App
+  SDK notification manager/finalization/lease ledgers, and both RichToolTip
+  presentation backends with their ownership, timer, reparent and close
+  protocol. No public class layout or virtual surface is conditional.
+- Before migration, both linkages pass TaskBarIcon **4411/18**, TextPeer and
+  its extra comma-named ComboBox case **1484/9 + 17/1**, shell theme
+  **198/12**, Splash **247/1**, AppNotification **637/19** and RichToolTip
+  **277/22** assertions/cases. Candidate source projections and mutation
+  canaries are retained under the corresponding
+  `F:\wxwinui-pr26890-audit107-foundation\*-test-access` evidence folders.
+- After migration, shared and static Release build `test_gui`, `minimal` and
+  `winuispike` with warnings as errors, and ordinary wxMSW Debug builds
+  `test_gui` the same way. Each WinUI linkage repeats all **7271 assertions /
+  82 cases**, followed by runtime smoke and Supported V0 **2/2**. Logs are
+  `audit106-helper-surfaces-on-{build,tests,gates}.log` in both active WinUI
+  build trees and `audit106-helper-surfaces-cross-build.log` in the wxMSW
+  audit tree.
+- All runtime checks use private desktops with `WX_UI_TESTS=0`; they neither
+  inject nor qualify physical input. A fresh shipping OFF install, symbol/
+  source canaries and restored-ALL rerun are still required, so plan 106
+  remains open.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

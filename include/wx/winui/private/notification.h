@@ -16,16 +16,14 @@
 
 #include "wx/string.h"
 
-#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <memory>
 #include <vector>
 
 // This is the only boundary between wxNotificationMessage and the Windows
-// App SDK.  Production installs a C++/WinRT implementation.  Tests install a
-// fake so their gates never depend on Explorer, notification permissions or
-// an actual notification-centre surface.
+// App SDK. Production installs the C++/WinRT implementation; deterministic
+// replacement and observation live in the non-installed test-access header.
 struct WXDLLIMPEXP_CORE wxWinUIAppNotificationAction
 {
     wxWindowID id = wxID_NONE;
@@ -69,46 +67,6 @@ public:
     // it never blocks the GUI thread waiting for Explorer.
     virtual bool Remove(std::uint32_t notificationId) = 0;
 };
-
-struct WXDLLIMPEXP_CORE wxWinUIAppNotificationSnapshot
-{
-    bool enabled = false;
-    bool registered = false;
-    bool shuttingDown = false;
-    bool finalized = false;
-    std::size_t activeGenerationCount = 0;
-    std::size_t liveInstanceCount = 0;
-    std::size_t queuedCallbackCount = 0;
-    std::size_t dispatchLeaseCount = 0;
-    std::size_t nativeShowLeaseCount = 0;
-    std::size_t cleanupOnlyCount = 0;
-    bool dispatchEnabled = false;
-    std::uint64_t lastGeneration = 0;
-    std::uint64_t shutdownSerial = 0;
-};
-
-using wxWinUIAppNotificationDispatchHookForTesting = void (*)();
-
-// Implementation-only seams. Replacement succeeds only after every retained
-// compensation has been removed by the current native boundary; it then
-// shuts down that registration and invalidates every outstanding generation.
-// A false return leaves the current native boundary installed; it is never
-// unregistered merely to complete a failed replacement.
-WXDLLIMPEXP_CORE bool wxWinUISetAppNotificationNativeForTesting(
-    const std::shared_ptr<wxWinUIAppNotificationNative>& native);
-WXDLLIMPEXP_CORE bool wxWinUIResetAppNotificationNativeForTesting();
-WXDLLIMPEXP_CORE void wxWinUIShutdownAppNotificationsForTesting();
-WXDLLIMPEXP_CORE void wxWinUIFinalizeAppNotificationsForTesting();
-// Finalization is permanent in production. This seam exists solely to keep
-// independent test cases isolated after exercising the terminal latch.
-WXDLLIMPEXP_CORE void
-wxWinUIResetAppNotificationFinalizationForTesting();
-WXDLLIMPEXP_CORE void wxWinUISetAppNotificationDispatchHookForTesting(
-    wxWinUIAppNotificationDispatchHookForTesting hook);
-WXDLLIMPEXP_CORE void
-wxWinUIResetAppNotificationDispatchHookForTesting();
-WXDLLIMPEXP_CORE wxWinUIAppNotificationSnapshot
-wxWinUIGetAppNotificationSnapshotForTesting();
 
 #endif // wxUSE_WINUI3 && wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
 

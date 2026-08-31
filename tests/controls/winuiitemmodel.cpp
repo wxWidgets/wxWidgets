@@ -29,6 +29,7 @@
     #endif
     #include "keyboard-test-access.h"
     #include "wx/winui/private/textpeer.h"
+    #include "text-peer-test-access.h"
     #include "wx/winui/private/tlwhost.h"
 #include "physical-disconnect-test-access.h"
     #include "host-observation-test-access.h"
@@ -3129,7 +3130,7 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
           destinationSurface.xamlRootIdentity);
 
     const std::size_t baseline =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
     wxComboBox *doomed =
         new wxComboBox(&destinationPanel, wxID_ANY, wxString(),
                        wxDefaultPosition, wxSize(180, 140),
@@ -3144,7 +3145,7 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
     REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(invoking, 1));
     CHECK(doomed == nullptr);
     wxYield();
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 #endif // wxUSE_COMBOBOX

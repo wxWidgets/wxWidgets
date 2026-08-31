@@ -18,7 +18,7 @@
 #include "wx/thread.h"
 #include "wx/utils.h"
 #include "wx/weakref.h"
-#include "wx/winui/private/notification.h"
+#include "notification-test-access.h"
 
 #include <algorithm>
 #include <atomic>
@@ -64,7 +64,7 @@ void BlockNotificationDispatchForTesting()
 
 void ShutdownDuringNotificationDispatchForTesting()
 {
-    wxWinUIShutdownAppNotificationsForTesting();
+    wxWinUIAppNotificationTestAccess::Shutdown();
     if ( gs_reentrantShutdownReturned )
         gs_reentrantShutdownReturned->store(true);
 }
@@ -152,11 +152,11 @@ bool WaitForShutdownIntent()
 {
     for ( unsigned i = 0; i < 200; ++i )
     {
-        if ( wxWinUIGetAppNotificationSnapshotForTesting().shuttingDown )
+        if ( wxWinUIAppNotificationTestAccess::GetSnapshot().shuttingDown )
             return true;
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
-    return wxWinUIGetAppNotificationSnapshotForTesting().shuttingDown;
+    return wxWinUIAppNotificationTestAccess::GetSnapshot().shuttingDown;
 }
 
 bool WaitForShutdownRevocation()
@@ -164,7 +164,7 @@ bool WaitForShutdownRevocation()
     for ( unsigned i = 0; i < 200; ++i )
     {
         const auto snapshot =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         if ( snapshot.shuttingDown && !snapshot.enabled &&
              !snapshot.registered && !snapshot.dispatchEnabled )
         {
@@ -173,7 +173,7 @@ bool WaitForShutdownRevocation()
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 
-    const auto snapshot = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto snapshot = wxWinUIAppNotificationTestAccess::GetSnapshot();
     return snapshot.shuttingDown && !snapshot.enabled &&
            !snapshot.registered && !snapshot.dispatchEnabled;
 }
@@ -429,18 +429,18 @@ public:
     NotificationNativeScope()
         : native(std::make_shared<FakeAppNotificationNative>())
     {
-        wxWinUIResetAppNotificationDispatchHookForTesting();
-        wxWinUIResetAppNotificationFinalizationForTesting();
-        REQUIRE(wxWinUISetAppNotificationNativeForTesting(native));
+        wxWinUIAppNotificationTestAccess::ResetDispatchHook();
+        wxWinUIAppNotificationTestAccess::ResetFinalization();
+        REQUIRE(wxWinUIAppNotificationTestAccess::SetNative(native));
     }
 
     ~NotificationNativeScope()
     {
-        wxWinUIResetAppNotificationDispatchHookForTesting();
+        wxWinUIAppNotificationTestAccess::ResetDispatchHook();
         DrainNotifications();
-        wxWinUIResetAppNotificationFinalizationForTesting();
+        wxWinUIAppNotificationTestAccess::ResetFinalization();
         const bool resetNative =
-            wxWinUIResetAppNotificationNativeForTesting();
+            wxWinUIAppNotificationTestAccess::ResetNative();
         CHECK(resetNative);
         DrainNotifications();
     }
@@ -455,7 +455,7 @@ void RequireEnabled(const NotificationNativeScope& scope)
     CHECK(scope.native->registerCalls == 1);
     CHECK(scope.native->activationPresentDuringRegister);
     const auto snapshot =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(snapshot.enabled);
     CHECK(snapshot.registered);
 }
@@ -477,7 +477,7 @@ TEST_CASE("WinUIAppNotification::Registration",
         CHECK_FALSE(wxNotificationMessage::MSWUseToasts());
         CHECK(scope.native->registerCalls == 1);
         const auto snapshot =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK_FALSE(snapshot.enabled);
         CHECK_FALSE(snapshot.registered);
     }
@@ -487,24 +487,24 @@ TEST_CASE("WinUIAppNotification::Registration",
         NotificationNativeScope scope;
         RequireEnabled(scope);
         const std::uint64_t serialBefore =
-            wxWinUIGetAppNotificationSnapshotForTesting().shutdownSerial;
-        wxWinUIShutdownAppNotificationsForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot().shutdownSerial;
+        wxWinUIAppNotificationTestAccess::Shutdown();
         const std::uint64_t serialAfterFirst =
-            wxWinUIGetAppNotificationSnapshotForTesting().shutdownSerial;
-        wxWinUIShutdownAppNotificationsForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot().shutdownSerial;
+        wxWinUIAppNotificationTestAccess::Shutdown();
         const std::uint64_t serialAfterNoOp =
-            wxWinUIGetAppNotificationSnapshotForTesting().shutdownSerial;
+            wxWinUIAppNotificationTestAccess::GetSnapshot().shutdownSerial;
         CHECK(scope.native->unregisterCalls == 1);
         CHECK(serialAfterFirst > serialBefore);
         CHECK(serialAfterNoOp > serialAfterFirst);
         CHECK_FALSE(
-            wxWinUIGetAppNotificationSnapshotForTesting().registered);
+            wxWinUIAppNotificationTestAccess::GetSnapshot().registered);
 
         // Models Explorer/native-manager restart without using a system
         // notification surface.
         REQUIRE(wxNotificationMessage::MSWUseToasts());
         CHECK(scope.native->registerCalls == 2);
-        CHECK(wxWinUIGetAppNotificationSnapshotForTesting().dispatchEnabled);
+        CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot().dispatchEnabled);
     }
 
     SECTION("recursive_enable_does_not_start_a_second_register")
@@ -522,7 +522,7 @@ TEST_CASE("WinUIAppNotification::Registration",
         CHECK(scope.native->registerCalls == 1);
         CHECK(scope.native->activationPresentDuringRegister);
         const auto snapshot =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK(snapshot.enabled);
         CHECK(snapshot.registered);
 
@@ -534,15 +534,15 @@ TEST_CASE("WinUIAppNotification::Registration",
     {
         NotificationNativeScope scope;
         const std::uint64_t serialBefore =
-            wxWinUIGetAppNotificationSnapshotForTesting().shutdownSerial;
+            wxWinUIAppNotificationTestAccess::GetSnapshot().shutdownSerial;
         scope.native->SetRegisterHook(
-            []() { wxWinUIShutdownAppNotificationsForTesting(); });
+            []() { wxWinUIAppNotificationTestAccess::Shutdown(); });
 
         CHECK_FALSE(wxNotificationMessage::MSWUseToasts());
         CHECK(scope.native->registerCalls == 1);
         CHECK(scope.native->unregisterCalls == 1);
         const auto snapshot =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK(snapshot.shutdownSerial > serialBefore);
         CHECK_FALSE(snapshot.enabled);
         CHECK_FALSE(snapshot.registered);
@@ -567,7 +567,7 @@ TEST_CASE("WinUIAppNotification::Registration",
                 }
 
                 std::thread shutdown(
-                    []() { wxWinUIShutdownAppNotificationsForTesting(); });
+                    []() { wxWinUIAppNotificationTestAccess::Shutdown(); });
                 shutdownObserved.store(WaitForShutdownIntent());
                 scope.native->ReleaseRegister();
                 shutdown.join();
@@ -582,7 +582,7 @@ TEST_CASE("WinUIAppNotification::Registration",
         CHECK(scope.native->registerCalls == 1);
         CHECK(scope.native->unregisterCalls == 1);
         const auto snapshot =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK_FALSE(snapshot.enabled);
         CHECK_FALSE(snapshot.registered);
         CHECK_FALSE(snapshot.dispatchEnabled);
@@ -593,10 +593,10 @@ TEST_CASE("WinUIAppNotification::Registration",
         NotificationNativeScope scope;
         RequireEnabled(scope);
         scope.native->throwNextUnregister = true;
-        wxWinUIShutdownAppNotificationsForTesting();
+        wxWinUIAppNotificationTestAccess::Shutdown();
 
         const auto stopped =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK_FALSE(stopped.enabled);
         CHECK_FALSE(stopped.registered);
         CHECK_FALSE(stopped.dispatchEnabled);
@@ -604,7 +604,7 @@ TEST_CASE("WinUIAppNotification::Registration",
 
         REQUIRE(wxNotificationMessage::MSWUseToasts());
         CHECK(scope.native->registerCalls == 2);
-        CHECK(wxWinUIGetAppNotificationSnapshotForTesting().registered);
+        CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot().registered);
     }
 
     SECTION("finalize_is_a_permanent_production_latch")
@@ -613,9 +613,9 @@ TEST_CASE("WinUIAppNotification::Registration",
         RequireEnabled(scope);
         const unsigned registerCalls = scope.native->registerCalls;
 
-        wxWinUIFinalizeAppNotificationsForTesting();
+        wxWinUIAppNotificationTestAccess::Finalize();
         const auto finalized =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK(finalized.finalized);
         CHECK_FALSE(finalized.enabled);
         CHECK_FALSE(finalized.registered);
@@ -624,7 +624,7 @@ TEST_CASE("WinUIAppNotification::Registration",
 
         CHECK_FALSE(wxNotificationMessage::MSWUseToasts());
         CHECK(scope.native->registerCalls == registerCalls);
-        CHECK(wxWinUIGetAppNotificationSnapshotForTesting().finalized);
+        CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot().finalized);
     }
 }
 
@@ -657,12 +657,12 @@ TEST_CASE("WinUIAppNotification::ShowReplaceClose",
     CHECK(second.generation > first.generation);
     REQUIRE(scope.native->removedIds.size() == 1);
     CHECK(scope.native->removedIds.front() == 1);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 1);
 
     scope.native->failNextRemove = true;
     CHECK_FALSE(notification.Close());
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 1);
     REQUIRE(notification.Close());
     // The first Close() already committed its dismissal delivery. A second,
@@ -672,7 +672,7 @@ TEST_CASE("WinUIAppNotification::ShowReplaceClose",
     CHECK(dismissalReason == static_cast<int>(
         wxNotificationMessage::DismissalReason::ByApp));
     CHECK(scope.native->removedIds.back() == 2);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
     CHECK_FALSE(notification.Close());
 }
@@ -700,7 +700,7 @@ TEST_CASE("WinUIAppNotification::SerializedTransactions",
                 }
 
                 std::thread shutdown(
-                    []() { wxWinUIShutdownAppNotificationsForTesting(); });
+                    []() { wxWinUIAppNotificationTestAccess::Shutdown(); });
                 shutdownObserved.store(WaitForShutdownIntent());
                 scope.native->ReleaseShow();
                 shutdown.join();
@@ -717,7 +717,7 @@ TEST_CASE("WinUIAppNotification::SerializedTransactions",
         CHECK(scope.native->removedIds.front() ==
               scope.native->shownIds.front());
         const auto snapshot =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK_FALSE(snapshot.enabled);
         CHECK_FALSE(snapshot.registered);
         CHECK(snapshot.activeGenerationCount == 0);
@@ -741,7 +741,7 @@ TEST_CASE("WinUIAppNotification::SerializedTransactions",
               scope.native->shownIds.front());
         CHECK(scope.native->shown[1].generation >
               scope.native->shown[0].generation);
-        CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+        CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
                   .activeGenerationCount == 1);
 
         int clicks = 0;
@@ -768,7 +768,7 @@ TEST_CASE("WinUIAppNotification::SerializedTransactions",
         REQUIRE(scope.native->removedIds.size() == 1);
         CHECK(scope.native->removedIds.front() ==
               scope.native->shownIds.front());
-        CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+        CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
                   .activeGenerationCount == 0);
     }
 }
@@ -794,7 +794,7 @@ TEST_CASE("WinUIAppNotification::CloseOwnsSynchronousActivation",
     REQUIRE(DrainNotificationsUntil([&]() { return clicks == 1; }));
     DrainNotifications();
     CHECK(dismissals == 0);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 
     // If removal succeeds, the app dismissal wins and the same synchronous
@@ -806,7 +806,7 @@ TEST_CASE("WinUIAppNotification::CloseOwnsSynchronousActivation",
     DrainNotifications();
     CHECK(clicks == 1);
     CHECK(dismissals == 1);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 }
 
@@ -857,7 +857,7 @@ TEST_CASE("WinUIAppNotification::ActivationAndGeneration",
     CHECK_FALSE(notification.Close());
     REQUIRE(DrainNotificationsUntil([&]() { return clicks.load() == 1; }));
     CHECK(callbackOnGui.load());
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 
     REQUIRE(notification.Show());
@@ -895,7 +895,7 @@ TEST_CASE("WinUIAppNotification::FailureAndSynchronousActivation",
 
     scope.native->failNextShow = true;
     CHECK_FALSE(notification.Show());
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 
     // A native boundary can make a surface visible, assign its id, and only
@@ -904,14 +904,14 @@ TEST_CASE("WinUIAppNotification::FailureAndSynchronousActivation",
     CHECK_FALSE(notification.Show());
     REQUIRE(scope.native->shownIds.size() >= 3);
     CHECK(scope.native->removedIds.back() == scope.native->shownIds.back());
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 
     scope.native->throwAfterNextShow = true;
     CHECK_FALSE(notification.Show());
     REQUIRE(scope.native->shownIds.size() >= 4);
     CHECK(scope.native->removedIds.back() == scope.native->shownIds.back());
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 
     // The new generation remains authoritative even if activation arrives
@@ -919,7 +919,7 @@ TEST_CASE("WinUIAppNotification::FailureAndSynchronousActivation",
     scope.native->activateInsideShow = true;
     REQUIRE(notification.Show());
     REQUIRE(DrainNotificationsUntil([&]() { return clicks == 2; }));
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 }
 
@@ -955,7 +955,7 @@ TEST_CASE("WinUIAppNotification::QueuedDeliveryAndActionAuthority",
                            wxID_CANCEL);
     DrainNotifications();
     CHECK(actions == 0);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 1);
     scope.native->Activate(second.generation,
                            wxWinUIAppNotificationActivationKind::Action,
@@ -983,7 +983,7 @@ TEST_CASE("WinUIAppNotification::DestructionAndShutdown",
         generation, wxWinUIAppNotificationActivationKind::Click);
     DrainNotifications();
     CHECK(callbacks == 0);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .activeGenerationCount == 0);
 
     wxNotificationMessage notification("shutdown");
@@ -993,7 +993,7 @@ TEST_CASE("WinUIAppNotification::DestructionAndShutdown",
     generation = scope.native->LastPayload().generation;
     const auto lateActivation = scope.native->CopyActivation();
     REQUIRE(static_cast<bool>(lateActivation));
-    wxWinUIShutdownAppNotificationsForTesting();
+    wxWinUIAppNotificationTestAccess::Shutdown();
     lateActivation(generation,
                    wxWinUIAppNotificationActivationKind::Click,
                    wxID_NONE);
@@ -1017,7 +1017,7 @@ TEST_CASE("WinUIAppNotification::CleanupOnlyLedger",
         REQUIRE(scope.native->shownIds.size() == 1);
         shownId = scope.native->shownIds.front();
         const auto retained =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK(retained.cleanupOnlyCount == 1);
         CHECK(retained.activeGenerationCount == 1);
         CHECK(scope.native->removedIds.empty());
@@ -1026,13 +1026,13 @@ TEST_CASE("WinUIAppNotification::CleanupOnlyLedger",
     // Wrapper destruction retries only the failed compensation. A successful
     // fire-and-forget Show follows the separate DestructionAndShutdown
     // contract and is deliberately never removed by DestroyState().
-    const auto cleaned = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto cleaned = wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(cleaned.cleanupOnlyCount == 0);
     CHECK(cleaned.activeGenerationCount == 0);
     REQUIRE(scope.native->removedIds.size() == 1);
     CHECK(scope.native->removedIds.front() == shownId);
 
-    wxWinUIShutdownAppNotificationsForTesting();
+    wxWinUIAppNotificationTestAccess::Shutdown();
     const std::vector<std::string> expected = {
         "Register",
         "Show " + std::to_string(shownId),
@@ -1041,7 +1041,7 @@ TEST_CASE("WinUIAppNotification::CleanupOnlyLedger",
         "Unregister"
     };
     CHECK(scope.native->OperationLog() == expected);
-    const auto stopped = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto stopped = wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(stopped.cleanupOnlyCount == 0);
     CHECK(stopped.nativeShowLeaseCount == 0);
 }
@@ -1064,7 +1064,7 @@ TEST_CASE("WinUIAppNotification::CleanupOnlySurvivesWrapper",
         REQUIRE(scope.native->shownIds.size() == 1);
         shownId = scope.native->shownIds.front();
         generation = scope.native->LastPayload().generation;
-        REQUIRE(wxWinUIGetAppNotificationSnapshotForTesting()
+        REQUIRE(wxWinUIAppNotificationTestAccess::GetSnapshot()
                     .cleanupOnlyCount == 1);
 
         // DestroyState performs an immediate exact retry; fail it as well so
@@ -1073,7 +1073,7 @@ TEST_CASE("WinUIAppNotification::CleanupOnlySurvivesWrapper",
     }
 
     const auto orphanOwned =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(orphanOwned.cleanupOnlyCount == 1);
     CHECK(orphanOwned.activeGenerationCount == 0);
     CHECK(scope.native->removedIds.empty());
@@ -1082,11 +1082,11 @@ TEST_CASE("WinUIAppNotification::CleanupOnlySurvivesWrapper",
         generation, wxWinUIAppNotificationActivationKind::Click);
     DrainNotifications();
     CHECK(callbacks == 0);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .cleanupOnlyCount == 1);
 
     scope.native->rejectRemoveWhenUnregistered = true;
-    wxWinUIShutdownAppNotificationsForTesting();
+    wxWinUIAppNotificationTestAccess::Shutdown();
     REQUIRE(scope.native->removedIds.size() == 1);
     CHECK(scope.native->removedIds.front() == shownId);
     const std::vector<std::string> expected = {
@@ -1098,7 +1098,7 @@ TEST_CASE("WinUIAppNotification::CleanupOnlySurvivesWrapper",
         "Unregister"
     };
     CHECK(scope.native->OperationLog() == expected);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .cleanupOnlyCount == 0);
 }
 
@@ -1113,7 +1113,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRetainsCleanupAuthority",
     CHECK_FALSE(notification.Show());
     REQUIRE(scope.native->shownIds.size() == 1);
     const std::uint32_t shownId = scope.native->shownIds.front();
-    REQUIRE(wxWinUIGetAppNotificationSnapshotForTesting()
+    REQUIRE(wxWinUIAppNotificationTestAccess::GetSnapshot()
                 .cleanupOnlyCount == 1);
 
     const auto replacement =
@@ -1122,9 +1122,9 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRetainsCleanupAuthority",
     // The preflight retry must fail closed. In particular, it must not
     // unregister or swap out the only manager which can still remove the id.
     scope.native->failNextRemove = true;
-    CHECK_FALSE(wxWinUISetAppNotificationNativeForTesting(replacement));
+    CHECK_FALSE(wxWinUIAppNotificationTestAccess::SetNative(replacement));
     const auto retained =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(retained.enabled);
     CHECK(retained.registered);
     CHECK(retained.cleanupOnlyCount == 1);
@@ -1134,7 +1134,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRetainsCleanupAuthority",
 
     // Once the exact old id can be removed, replacement is ordered as
     // Remove(old) -> Unregister(old) -> publication of the new boundary.
-    REQUIRE(wxWinUISetAppNotificationNativeForTesting(replacement));
+    REQUIRE(wxWinUIAppNotificationTestAccess::SetNative(replacement));
     CHECK_FALSE(scope.native->registered);
     CHECK(scope.native->unregisterCalls == 1);
     REQUIRE(scope.native->removedIds.size() == 1);
@@ -1150,7 +1150,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRetainsCleanupAuthority",
     CHECK(scope.native->OperationLog() == expectedOld);
 
     const auto replaced =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK_FALSE(replaced.enabled);
     CHECK_FALSE(replaced.registered);
     CHECK(replaced.cleanupOnlyCount == 0);
@@ -1175,7 +1175,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementLosesToFinalization",
     scope.native->SetRemoveHook(
         [&]()
         {
-            wxWinUIFinalizeAppNotificationsForTesting();
+            wxWinUIAppNotificationTestAccess::Finalize();
             finalizeReturned.store(true);
         });
     const auto replacement =
@@ -1184,10 +1184,10 @@ TEST_CASE("WinUIAppNotification::NativeReplacementLosesToFinalization",
     // Finalize() re-enters from the exact successful preflight Remove(). Its
     // permanent latch wins before replacement publication: the old boundary
     // is retained even though finalization has already unregistered it.
-    CHECK_FALSE(wxWinUISetAppNotificationNativeForTesting(replacement));
+    CHECK_FALSE(wxWinUIAppNotificationTestAccess::SetNative(replacement));
     REQUIRE(finalizeReturned.load());
     const auto finalized =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(finalized.finalized);
     CHECK_FALSE(finalized.shuttingDown);
     CHECK_FALSE(finalized.enabled);
@@ -1206,7 +1206,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementLosesToFinalization",
 
     // Reset only the test latch, then prove identity by re-enabling: Register
     // must target the retained old boundary, never the rejected replacement.
-    wxWinUIResetAppNotificationFinalizationForTesting();
+    wxWinUIAppNotificationTestAccess::ResetFinalization();
     REQUIRE(wxNotificationMessage::MSWUseToasts());
     CHECK(scope.native->registerCalls == 2);
     CHECK(scope.native->registered);
@@ -1228,7 +1228,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
     scope.native->failAfterNextShow = true;
     scope.native->failNextRemove = true;
     CHECK_FALSE(cleanupNotification.Show());
-    REQUIRE(wxWinUIGetAppNotificationSnapshotForTesting()
+    REQUIRE(wxWinUIAppNotificationTestAccess::GetSnapshot()
                 .cleanupOnlyCount == 1);
 
     DispatchBarrier barrier;
@@ -1238,7 +1238,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
     gs_dispatchCloseNotification = &leasedNotification;
     gs_dispatchCloseReturned = &closeReturned;
     gs_dispatchCloseResult = &closeResult;
-    wxWinUISetAppNotificationDispatchHookForTesting(
+    wxWinUIAppNotificationTestAccess::SetDispatchHook(
         &BlockThenCloseDuringNotificationDispatchForTesting);
 
     std::thread callback(
@@ -1264,14 +1264,14 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
     if ( !entered )
     {
         callback.join();
-        wxWinUIResetAppNotificationDispatchHookForTesting();
+        wxWinUIAppNotificationTestAccess::ResetDispatchHook();
         gs_dispatchBarrier = nullptr;
         gs_dispatchCloseNotification = nullptr;
         gs_dispatchCloseReturned = nullptr;
         gs_dispatchCloseResult = nullptr;
     }
     REQUIRE(entered);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .dispatchLeaseCount == 1);
 
     std::atomic<bool> removeHookEntered{false};
@@ -1280,7 +1280,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
         [&]()
         {
             removeHookEntered.store(true);
-            wxWinUIShutdownAppNotificationsForTesting();
+            wxWinUIAppNotificationTestAccess::Shutdown();
             nestedShutdownReturned.store(true);
         });
     const unsigned removeCallsBefore = scope.native->removeCalls;
@@ -1290,7 +1290,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
     // Calling Remove() while retaining an outer operation-lock level would
     // deadlock if its hook waited for this lease and the leased callback then
     // entered Close(). Replacement must therefore fail before native Remove.
-    CHECK_FALSE(wxWinUISetAppNotificationNativeForTesting(replacement));
+    CHECK_FALSE(wxWinUIAppNotificationTestAccess::SetNative(replacement));
     CHECK_FALSE(removeHookEntered.load());
     CHECK(scope.native->removeCalls == removeCallsBefore);
     CHECK(replacement->registerCalls == 0);
@@ -1301,7 +1301,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
         barrier.changed.notify_all();
     }
     callback.join();
-    wxWinUIResetAppNotificationDispatchHookForTesting();
+    wxWinUIAppNotificationTestAccess::ResetDispatchHook();
     gs_dispatchBarrier = nullptr;
     gs_dispatchCloseNotification = nullptr;
     gs_dispatchCloseReturned = nullptr;
@@ -1315,7 +1315,7 @@ TEST_CASE("WinUIAppNotification::NativeReplacementRefusesDispatchLease",
     REQUIRE(removeHookEntered.load());
     REQUIRE(nestedShutdownReturned.load());
     const auto stopped =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK_FALSE(stopped.shuttingDown);
     CHECK_FALSE(stopped.enabled);
     CHECK_FALSE(stopped.registered);
@@ -1369,7 +1369,7 @@ TEST_CASE("WinUIAppNotification::ShutdownWaitsForDispatchLease",
     gs_dispatchCloseNotification = &notification;
     gs_dispatchCloseReturned = &closeReturned;
     gs_dispatchCloseResult = &closeResult;
-    wxWinUISetAppNotificationDispatchHookForTesting(
+    wxWinUIAppNotificationTestAccess::SetDispatchHook(
         &BlockThenCloseDuringNotificationDispatchForTesting);
 
     std::thread callback(
@@ -1395,14 +1395,14 @@ TEST_CASE("WinUIAppNotification::ShutdownWaitsForDispatchLease",
     if ( !entered )
     {
         callback.join();
-        wxWinUIResetAppNotificationDispatchHookForTesting();
+        wxWinUIAppNotificationTestAccess::ResetDispatchHook();
         gs_dispatchBarrier = nullptr;
         gs_dispatchCloseNotification = nullptr;
         gs_dispatchCloseReturned = nullptr;
         gs_dispatchCloseResult = nullptr;
     }
     REQUIRE(entered);
-    CHECK(wxWinUIGetAppNotificationSnapshotForTesting()
+    CHECK(wxWinUIAppNotificationTestAccess::GetSnapshot()
               .dispatchLeaseCount == 1);
 
     std::atomic<bool> shutdownObserved{false};
@@ -1419,17 +1419,17 @@ TEST_CASE("WinUIAppNotification::ShutdownWaitsForDispatchLease",
     // releases the native-operation mutex before waiting. The leased worker
     // must therefore be able to enter Close(), observe revocation and return;
     // holding that mutex across the wait would deadlock this exact sequence.
-    wxWinUIShutdownAppNotificationsForTesting();
+    wxWinUIAppNotificationTestAccess::Shutdown();
     release.join();
     callback.join();
-    wxWinUIResetAppNotificationDispatchHookForTesting();
+    wxWinUIAppNotificationTestAccess::ResetDispatchHook();
     gs_dispatchBarrier = nullptr;
     gs_dispatchCloseNotification = nullptr;
     gs_dispatchCloseReturned = nullptr;
     gs_dispatchCloseResult = nullptr;
     DrainNotifications();
 
-    const auto after = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto after = wxWinUIAppNotificationTestAccess::GetSnapshot();
     REQUIRE(shutdownObserved.load());
     REQUIRE(closeReturned.load());
     CHECK_FALSE(closeResult.load());
@@ -1454,7 +1454,7 @@ TEST_CASE("WinUIAppNotification::ReentrantShutdownDefersItsOwnLease",
 
     std::atomic<bool> shutdownReturned{false};
     gs_reentrantShutdownReturned = &shutdownReturned;
-    wxWinUISetAppNotificationDispatchHookForTesting(
+    wxWinUIAppNotificationTestAccess::SetDispatchHook(
         &ShutdownDuringNotificationDispatchForTesting);
 
     // This runs on the same thread that owns QueueEvent()'s dispatch lease.
@@ -1463,12 +1463,12 @@ TEST_CASE("WinUIAppNotification::ReentrantShutdownDefersItsOwnLease",
     scope.native->Activate(
         generation, wxWinUIAppNotificationActivationKind::Click);
 
-    wxWinUIResetAppNotificationDispatchHookForTesting();
+    wxWinUIAppNotificationTestAccess::ResetDispatchHook();
     gs_reentrantShutdownReturned = nullptr;
     REQUIRE(shutdownReturned.load());
     DrainNotifications();
 
-    const auto stopped = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto stopped = wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK_FALSE(stopped.shuttingDown);
     CHECK_FALSE(stopped.enabled);
     CHECK_FALSE(stopped.registered);
@@ -1492,8 +1492,8 @@ TEST_CASE("WinUIAppNotification::ShowLeaseDefersFinalization",
     scope.native->SetShowHook(
         []()
         {
-            wxWinUIShutdownAppNotificationsForTesting();
-            wxWinUIFinalizeAppNotificationsForTesting();
+            wxWinUIAppNotificationTestAccess::Shutdown();
+            wxWinUIAppNotificationTestAccess::Finalize();
         });
 
     wxNotificationMessage notification("reentrant Show finalization");
@@ -1509,7 +1509,7 @@ TEST_CASE("WinUIAppNotification::ShowLeaseDefersFinalization",
     };
     CHECK(scope.native->OperationLog() == expected);
     const auto finalized =
-        wxWinUIGetAppNotificationSnapshotForTesting();
+        wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(finalized.finalized);
     CHECK_FALSE(finalized.shuttingDown);
     CHECK_FALSE(finalized.enabled);
@@ -1532,7 +1532,7 @@ TEST_CASE("WinUIAppNotification::ShutdownCompletionReentrancy",
         CHECK_FALSE(notification.Show());
         REQUIRE(scope.native->shownIds.size() == 1);
         const std::uint32_t shownId = scope.native->shownIds.front();
-        REQUIRE(wxWinUIGetAppNotificationSnapshotForTesting()
+        REQUIRE(wxWinUIAppNotificationTestAccess::GetSnapshot()
                     .cleanupOnlyCount == 1);
 
         std::atomic<bool> nestedReturned{false};
@@ -1540,11 +1540,11 @@ TEST_CASE("WinUIAppNotification::ShutdownCompletionReentrancy",
         scope.native->SetRemoveHook(
             [&]()
             {
-                wxWinUIShutdownAppNotificationsForTesting();
+                wxWinUIAppNotificationTestAccess::Shutdown();
                 nestedReturned.store(true);
             });
 
-        wxWinUIShutdownAppNotificationsForTesting();
+        wxWinUIAppNotificationTestAccess::Shutdown();
         REQUIRE(nestedReturned.load());
         const std::vector<std::string> expected = {
             "Register",
@@ -1555,7 +1555,7 @@ TEST_CASE("WinUIAppNotification::ShutdownCompletionReentrancy",
         };
         CHECK(scope.native->OperationLog() == expected);
         const auto stopped =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK_FALSE(stopped.shuttingDown);
         CHECK_FALSE(stopped.registered);
         CHECK(stopped.cleanupOnlyCount == 0);
@@ -1570,12 +1570,12 @@ TEST_CASE("WinUIAppNotification::ShutdownCompletionReentrancy",
         scope.native->SetUnregisterHook(
             [&]()
             {
-                wxWinUIShutdownAppNotificationsForTesting();
-                wxWinUIFinalizeAppNotificationsForTesting();
+                wxWinUIAppNotificationTestAccess::Shutdown();
+                wxWinUIAppNotificationTestAccess::Finalize();
                 nestedReturned.store(true);
             });
 
-        wxWinUIShutdownAppNotificationsForTesting();
+        wxWinUIAppNotificationTestAccess::Shutdown();
         REQUIRE(nestedReturned.load());
         const std::vector<std::string> expected = {
             "Register",
@@ -1583,7 +1583,7 @@ TEST_CASE("WinUIAppNotification::ShutdownCompletionReentrancy",
         };
         CHECK(scope.native->OperationLog() == expected);
         const auto finalized =
-            wxWinUIGetAppNotificationSnapshotForTesting();
+            wxWinUIAppNotificationTestAccess::GetSnapshot();
         CHECK(finalized.finalized);
         CHECK_FALSE(finalized.shuttingDown);
         CHECK_FALSE(finalized.registered);
@@ -1597,7 +1597,7 @@ TEST_CASE("WinUIAppNotification::HundredCycles",
 {
     NotificationNativeScope scope;
     RequireEnabled(scope);
-    const auto before = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto before = wxWinUIAppNotificationTestAccess::GetSnapshot();
 
     for ( int i = 0; i < 100; ++i )
     {
@@ -1619,7 +1619,7 @@ TEST_CASE("WinUIAppNotification::HundredCycles",
     }
     DrainNotifications();
 
-    const auto after = wxWinUIGetAppNotificationSnapshotForTesting();
+    const auto after = wxWinUIAppNotificationTestAccess::GetSnapshot();
     CHECK(after.liveInstanceCount == before.liveInstanceCount);
     CHECK(after.activeGenerationCount == before.activeGenerationCount);
     CHECK(after.queuedCallbackCount == before.queuedCallbackCount);

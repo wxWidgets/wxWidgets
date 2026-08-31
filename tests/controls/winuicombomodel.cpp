@@ -30,6 +30,7 @@
     #include "wx/tooltip.h"
 #endif
 #include "wx/winui/private/textpeer.h"
+#include "text-peer-test-access.h"
 
 #include "../../src/winui/private.h"
 #include <sstream>
@@ -951,7 +952,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     REQUIRE(parent);
 
     const std::size_t baseline =
-        wxWinUITextCallbackState::GetLiveCountForTesting();
+        wxWinUITextPeerTestAccess::GetLiveCallbackStateCount();
     const wxString choices[] = { "zero", "one" };
 
     wxComboBox *combo =
@@ -1093,7 +1094,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
         delete deleting;
         CHECK_FALSE(queuedRef);
         wxYield();
-        CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() ==
+        CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
               baseline);
     }
 
@@ -1119,7 +1120,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     }
 
     wxYield();
-    CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() ==
+    CHECK(wxWinUITextPeerTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 

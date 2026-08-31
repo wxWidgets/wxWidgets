@@ -29,6 +29,9 @@
 
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/richtooltip.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "rich-tooltip-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 #include "wx/winui/private/tlwhost.h"
 
 #include <algorithm>
@@ -51,14 +54,16 @@ namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
 namespace
 {
 
-wxWinUITeachingTipFaultForTesting gs_teachingTipFaultForTesting =
-    wxWinUITeachingTipFaultForTesting::None;
-wxWinUITeachingTipHookPointForTesting gs_teachingTipHookPointForTesting =
-    wxWinUITeachingTipHookPointForTesting::None;
-wxWinUITeachingTipHookForTesting gs_teachingTipHookForTesting = nullptr;
-wxWinUITeachingTipDiagnosticsForTesting gs_teachingTipDiagnostics;
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIRichToolTipTestAccess::Fault gs_teachingTipFaultForTesting =
+    wxWinUIRichToolTipTestAccess::Fault::None;
+wxWinUIRichToolTipTestAccess::HookPoint gs_teachingTipHookPointForTesting =
+    wxWinUIRichToolTipTestAccess::HookPoint::None;
+wxWinUIRichToolTipTestAccess::Hook gs_teachingTipHookForTesting = nullptr;
+wxWinUIRichToolTipTestAccess::Diagnostics gs_teachingTipDiagnostics;
 bool gs_nativeTeachingTipBackendForTesting = false;
 
+#endif // WXWINUI_TEST_SUPPORT
 class wxWinUIRichTipSession
 {
 public:
@@ -106,25 +111,27 @@ wxWinUISnapshotRichTipSessions()
     return sessions;
 }
 
-wxWinUITeachingTipFaultForTesting wxWinUITakeTeachingTipFaultForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIRichToolTipTestAccess::Fault wxWinUITakeTeachingTipFaultForTesting()
 {
     return std::exchange(
         gs_teachingTipFaultForTesting,
-        wxWinUITeachingTipFaultForTesting::None);
+        wxWinUIRichToolTipTestAccess::Fault::None);
 }
 
-wxWinUITeachingTipHookForTesting
+wxWinUIRichToolTipTestAccess::Hook
 wxWinUITakeTeachingTipHookForTesting(
-    wxWinUITeachingTipHookPointForTesting point)
+    wxWinUIRichToolTipTestAccess::HookPoint point)
 {
     if ( gs_teachingTipHookPointForTesting != point )
         return nullptr;
 
     gs_teachingTipHookPointForTesting =
-        wxWinUITeachingTipHookPointForTesting::None;
+        wxWinUIRichToolTipTestAccess::HookPoint::None;
     return std::exchange(gs_teachingTipHookForTesting, nullptr);
 }
 
+#endif // WXWINUI_TEST_SUPPORT
 bool wxWinUIIsTeachingTipUnavailable(const winrt::hresult_error& e)
 {
     const HRESULT hr = static_cast<HRESULT>(e.code());
@@ -176,7 +183,9 @@ public:
 
     wxWinUITeachingTipState()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.liveStates;
+#endif // WXWINUI_TEST_SUPPORT
     }
 
     ~wxWinUITeachingTipState()
@@ -185,7 +194,9 @@ public:
         // backstop is essential for failures/reentrance between Append() and
         // Start(): the state already owns every appended visual at that point.
         Cleanup(false);
+#ifdef WXWINUI_TEST_SUPPORT
         --gs_teachingTipDiagnostics.liveStates;
+#endif // WXWINUI_TEST_SUPPORT
     }
 
     bool PrepareTarget(wxWindow *target)
@@ -199,11 +210,13 @@ public:
         return GetLiveTarget() != nullptr;
     }
 
-    void SetFaultForTesting(wxWinUITeachingTipFaultForTesting fault)
+#ifdef WXWINUI_TEST_SUPPORT
+    void SetFaultForTesting(wxWinUIRichToolTipTestAccess::Fault fault)
     {
         faultForTesting = fault;
     }
 
+#endif // WXWINUI_TEST_SUPPORT
     wxWindow *GetLiveTarget() const
     {
         wxWindow * const target = targetWindow.get();
@@ -239,7 +252,9 @@ public:
         if ( !active || closing )
             return;
 
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.queueShutdownClosures;
+#endif // WXWINUI_TEST_SUPPORT
         Close(true);
     }
 
@@ -259,7 +274,9 @@ public:
         wxWindow * const originalTLW = targetTLW.get();
         if ( !originalTLW || wxGetTopLevelParent(target) != originalTLW )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.reparentClosures;
+#endif // WXWINUI_TEST_SUPPORT
             Close(true);
             return;
         }
@@ -268,7 +285,9 @@ public:
         // must follow the target synchronously.
         if ( !RefreshTarget() )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.reparentClosures;
+#endif // WXWINUI_TEST_SUPPORT
             Close(true);
         }
     }
@@ -280,7 +299,9 @@ public:
 
         root.Children().Append(anchor);
         anchorAppended = true;
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.liveVisuals;
+#endif // WXWINUI_TEST_SUPPORT
         return true;
     }
 
@@ -291,7 +312,9 @@ public:
 
         root.Children().Append(tip);
         tipAppended = true;
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.liveVisuals;
+#endif // WXWINUI_TEST_SUPPORT
         return true;
     }
 
@@ -399,13 +422,15 @@ public:
                 return false;
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( const auto hook = wxWinUITakeTeachingTipHookForTesting(
-                 wxWinUITeachingTipHookPointForTesting::
+                 wxWinUIRichToolTipTestAccess::HookPoint::
                      AfterFlowDirection) )
         {
             if ( wxWindow * const currentTarget = GetLiveTarget() )
                 hook(currentTarget);
         }
+#endif // WXWINUI_TEST_SUPPORT
         if ( !reacquireTarget() )
             return false;
 
@@ -454,12 +479,16 @@ public:
             if ( !reacquireTarget() )
                 return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastAnchorInRoot =
                 wxPoint(static_cast<int>(std::lround(dip.X)),
                         static_cast<int>(std::lround(dip.Y)));
+#endif // WXWINUI_TEST_SUPPORT
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         gs_teachingTipDiagnostics.lastRightToLeft = rightToLeft;
+#endif // WXWINUI_TEST_SUPPORT
         return true;
     }
 
@@ -484,8 +513,12 @@ public:
 
         try
         {
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastRequestedTimeoutMs = timeout;
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastRequestedDelayMs = delay;
+#endif // WXWINUI_TEST_SUPPORT
             wxWindow *target = GetLiveTarget();
             if ( !target )
             {
@@ -509,14 +542,18 @@ public:
                         state->Close(false);
                 });
             hasClosedToken = true;
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.liveXamlHandlers;
+#endif // WXWINUI_TEST_SUPPORT
 
             queue = root.DispatcherQueue();
+#ifdef WXWINUI_TEST_SUPPORT
             if ( faultForTesting ==
-                    wxWinUITeachingTipFaultForTesting::QueueUnavailable )
+                    wxWinUIRichToolTipTestAccess::Fault::QueueUnavailable )
             {
                 queue = nullptr;
             }
+#endif // WXWINUI_TEST_SUPPORT
             if ( !queue )
                 return wxWinUITeachingTipShowResult::OperationalFailure;
 
@@ -530,7 +567,9 @@ public:
                         state->CloseForQueueShutdown();
                 });
             hasShutdownToken = true;
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.liveXamlHandlers;
+#endif // WXWINUI_TEST_SUPPORT
 
             target = GetLiveTarget();
             if ( !target )
@@ -569,31 +608,37 @@ public:
                 &wxWinUITeachingTipState::OnTargetDestroy,
                 this);
             targetDestroyBound = true;
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.liveTargetBindings;
+#endif // WXWINUI_TEST_SUPPORT
 
             wxWinUITrackRichTipSession(shared_from_this());
 
+#ifdef WXWINUI_TEST_SUPPORT
             switch ( faultForTesting )
             {
-                case wxWinUITeachingTipFaultForTesting::StartHResult:
+                case wxWinUIRichToolTipTestAccess::Fault::StartHResult:
                     throw winrt::hresult_error(
                         E_FAIL,
                         L"Injected HRESULT during TeachingTip startup");
 
-                case wxWinUITeachingTipFaultForTesting::StartStdException:
+                case wxWinUIRichToolTipTestAccess::Fault::StartStdException:
                     throw std::runtime_error(
                         "Injected std::exception during TeachingTip startup");
 
-                case wxWinUITeachingTipFaultForTesting::StartUnknownException:
+                case wxWinUIRichToolTipTestAccess::Fault::StartUnknownException:
                     throw 17;
 
                 default:
                     break;
             }
 
+#endif // WXWINUI_TEST_SUPPORT
             if ( delay )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.delayedStarts;
+#endif // WXWINUI_TEST_SUPPORT
                 if ( !CreateTimer(delay, TimerPhase::Delay) )
                 {
                     if ( !active || closing )
@@ -693,7 +738,9 @@ private:
         hasTickToken = false;
         if ( revokeTick )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveXamlHandlers;
+#endif // WXWINUI_TEST_SUPPORT
             try
             {
                 if ( timer )
@@ -710,7 +757,9 @@ private:
         hasShutdownToken = false;
         if ( revokeShutdown )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveXamlHandlers;
+#endif // WXWINUI_TEST_SUPPORT
             try
             {
                 if ( queue )
@@ -726,7 +775,9 @@ private:
         hasClosedToken = false;
         if ( revokeClosed )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveXamlHandlers;
+#endif // WXWINUI_TEST_SUPPORT
             try
             {
                 if ( tip )
@@ -739,7 +790,9 @@ private:
 
         if ( closePeer && tip )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.peerCloseRequests;
+#endif // WXWINUI_TEST_SUPPORT
             try
             {
                 // Never read IsOpen() during teardown: the getter is another
@@ -756,8 +809,12 @@ private:
         tipAppended = false;
         if ( removeTip )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.cleanupTipRemovalAttempts;
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveVisuals;
+#endif // WXWINUI_TEST_SUPPORT
             try
             {
                 if ( root && tip )
@@ -776,8 +833,12 @@ private:
         anchorAppended = false;
         if ( removeAnchor )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.cleanupAnchorRemovalAttempts;
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveVisuals;
+#endif // WXWINUI_TEST_SUPPORT
             try
             {
                 if ( root && anchor )
@@ -822,7 +883,9 @@ private:
 
         if ( detached )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveTargetBindings;
+#endif // WXWINUI_TEST_SUPPORT
             targetDestroyBound = false;
         }
         else
@@ -870,7 +933,9 @@ private:
         tickToken = candidateToken;
         timerPhase = phase;
         hasTickToken = true;
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.liveXamlHandlers;
+#endif // WXWINUI_TEST_SUPPORT
         timer.Start();
         return active && !closing && timer;
     }
@@ -893,14 +958,19 @@ private:
             // Close() to clear all state members before this call returns.
             const MUXC::TeachingTip peer = tip;
             peer.IsOpen(true);
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.peerOpens;
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastPeerOpenSequence =
                 std::max(
                     gs_teachingTipDiagnostics.lastPeerOpenSequence,
                     gs_teachingTipDiagnostics.lastTimeoutCloseSequence) + 1;
+#endif // WXWINUI_TEST_SUPPORT
 
+#ifdef WXWINUI_TEST_SUPPORT
             if ( faultForTesting ==
-                    wxWinUITeachingTipFaultForTesting::
+                    wxWinUIRichToolTipTestAccess::Fault::
                         OpenAfterPeerHResult )
             {
                 throw winrt::hresult_error(
@@ -908,13 +978,16 @@ private:
                     L"Injected HRESULT after TeachingTip opened");
             }
 
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             if ( const auto hook = wxWinUITakeTeachingTipHookForTesting(
-                    wxWinUITeachingTipHookPointForTesting::AfterPeerOpen) )
+                    wxWinUIRichToolTipTestAccess::HookPoint::AfterPeerOpen) )
             {
                 if ( wxWindow * const target = GetLiveTarget() )
                     hook(target);
             }
 
+#endif // WXWINUI_TEST_SUPPORT
             // IsOpen(true) is the presentation boundary. Any re-entrant
             // close after it succeeded (including wxWindow::Destroy(),
             // whose native destruction is deferred for TLWs) is a normal
@@ -989,22 +1062,30 @@ private:
             const wxWinUITeachingTipShowResult result = Open();
             if ( result == wxWinUITeachingTipShowResult::OperationalFailure )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
+#endif // WXWINUI_TEST_SUPPORT
                 wxLogWarning(
                     "Delayed WinUI TeachingTip presentation failed.");
             }
             else if ( result == wxWinUITeachingTipShowResult::Cancelled )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.cancellations;
+#endif // WXWINUI_TEST_SUPPORT
             }
         }
         else if ( timerPhase == TimerPhase::Visible )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.timeoutClosures;
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastTimeoutCloseSequence =
                 std::max(
                     gs_teachingTipDiagnostics.lastPeerOpenSequence,
                     gs_teachingTipDiagnostics.lastTimeoutCloseSequence) + 1;
+#endif // WXWINUI_TEST_SUPPORT
             Close(true);
         }
     }
@@ -1027,7 +1108,9 @@ private:
             if ( targetDestroyBound )
             {
                 targetDestroyBound = false;
+#ifdef WXWINUI_TEST_SUPPORT
                 --gs_teachingTipDiagnostics.liveTargetBindings;
+#endif // WXWINUI_TEST_SUPPORT
             }
             targetWindow = nullptr;
             targetTLW = nullptr;
@@ -1059,8 +1142,10 @@ private:
     bool closing = false;
     bool tipAppended = false;
     bool anchorAppended = false;
-    wxWinUITeachingTipFaultForTesting faultForTesting =
-        wxWinUITeachingTipFaultForTesting::None;
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIRichToolTipTestAccess::Fault faultForTesting =
+        wxWinUIRichToolTipTestAccess::Fault::None;
+#endif // WXWINUI_TEST_SUPPORT
 };
 
 // The generic wx popup is the supported beta backend and also represents API
@@ -1074,8 +1159,10 @@ class wxWinUIGenericTipState final
 public:
     ~wxWinUIGenericTipState()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         if ( genericCounted )
             --gs_teachingTipDiagnostics.liveGenericFallbacks;
+#endif // WXWINUI_TEST_SUPPORT
     }
 
     bool Start(wxWindow *target, wxWindow *popup)
@@ -1105,7 +1192,9 @@ public:
             active = true;
             self = shared_from_this();
             genericCounted = true;
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.liveGenericFallbacks;
+#endif // WXWINUI_TEST_SUPPORT
 
             const std::weak_ptr<wxWinUIGenericTipState> weakState =
                 shared_from_this();
@@ -1139,7 +1228,9 @@ public:
                 return false;
 
             wxWinUITrackRichTipSession(shared_from_this());
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.genericFallbackStarts;
+#endif // WXWINUI_TEST_SUPPORT
             rollback.Dismiss();
             return true;
         }
@@ -1172,7 +1263,9 @@ public:
         if ( !active || closing )
             return;
 
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.queueShutdownClosures;
+#endif // WXWINUI_TEST_SUPPORT
         Close(true);
     }
 
@@ -1191,7 +1284,9 @@ public:
 
         if ( wxGetTopLevelParent(target) != targetTLW.get() )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.reparentClosures;
+#endif // WXWINUI_TEST_SUPPORT
             Close(true);
         }
     }
@@ -1208,7 +1303,9 @@ private:
 
     void CancelFromManager()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_teachingTipDiagnostics.genericFallbackCancellations;
+#endif // WXWINUI_TEST_SUPPORT
         Close(true);
     }
 
@@ -1312,7 +1409,9 @@ private:
         if ( genericCounted )
         {
             genericCounted = false;
+#ifdef WXWINUI_TEST_SUPPORT
             --gs_teachingTipDiagnostics.liveGenericFallbacks;
+#endif // WXWINUI_TEST_SUPPORT
         }
         if ( targetDetached )
         {
@@ -1439,12 +1538,18 @@ public:
         // physical XAML-popup rundown boundary. Until that boundary is
         // causally observable, the beta backend must not publish a native
         // TeachingTip: use the bounded, centrally cancelled generic popup.
+#ifdef WXWINUI_TEST_SUPPORT
         if ( !gs_nativeTeachingTipBackendForTesting )
+#endif // WXWINUI_TEST_SUPPORT
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.betaGenericFallbacks;
+#endif // WXWINUI_TEST_SUPPORT
             if ( !ShowManagedGenericFallback(win, rect) )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
+#endif // WXWINUI_TEST_SUPPORT
                 wxLogWarning(
                     "WinUI rich-tooltip beta fallback could not be "
                     "registered and was destroyed.");
@@ -1459,10 +1564,14 @@ public:
                 m_hasCustomIcon ||
                 m_hasCustomTitleFont )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.customizationFallbacks;
+#endif // WXWINUI_TEST_SUPPORT
             if ( !ShowManagedGenericFallback(win, rect) )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
+#endif // WXWINUI_TEST_SUPPORT
                 wxLogWarning(
                     "WinUI rich-tooltip generic fallback could not be "
                     "registered and was destroyed.");
@@ -1474,10 +1583,14 @@ public:
             ShowTeachingTip(win, rect);
         if ( wxWinUITeachingTipAllowsGenericFallback(result) )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.unsupportedFallbacks;
+#endif // WXWINUI_TEST_SUPPORT
             if ( !ShowManagedGenericFallback(win, rect) )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
+#endif // WXWINUI_TEST_SUPPORT
                 wxLogWarning(
                     "WinUI rich-tooltip unsupported fallback could not be "
                     "registered and was destroyed.");
@@ -1485,7 +1598,9 @@ public:
         }
         else if ( result == wxWinUITeachingTipShowResult::OperationalFailure )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.operationalFailures;
+#endif // WXWINUI_TEST_SUPPORT
             wxLogWarning(
                 "WinUI TeachingTip presentation failed; the generic "
                 "fallback was not used because the native presentation "
@@ -1493,7 +1608,9 @@ public:
         }
         else if ( result == wxWinUITeachingTipShowResult::Cancelled )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.cancellations;
+#endif // WXWINUI_TEST_SUPPORT
         }
     }
 
@@ -1568,17 +1685,21 @@ wxWinUITeachingTipShowResult
 wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
                                        const wxRect* rect)
 {
+#ifdef WXWINUI_TEST_SUPPORT
     ++gs_teachingTipDiagnostics.nativeBackendAttempts;
+#endif // WXWINUI_TEST_SUPPORT
     auto state = std::make_shared<wxWinUITeachingTipState>();
     if ( !state->PrepareTarget(win) )
         return wxWinUITeachingTipShowResult::Cancelled;
 
-    const wxWinUITeachingTipFaultForTesting fault =
+#ifdef WXWINUI_TEST_SUPPORT
+    const wxWinUIRichToolTipTestAccess::Fault fault =
         wxWinUITakeTeachingTipFaultForTesting();
-    if ( fault == wxWinUITeachingTipFaultForTesting::Unsupported )
+    if ( fault == wxWinUIRichToolTipTestAccess::Fault::Unsupported )
         return wxWinUITeachingTipShowResult::Unsupported;
     state->SetFaultForTesting(fault);
 
+#endif // WXWINUI_TEST_SUPPORT
     if ( !wxWinUI3Initialize() )
         return wxWinUITeachingTipShowResult::OperationalFailure;
 
@@ -1628,10 +1749,14 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
         MUXA::AutomationProperties::SetHelpText(
             tip,
             wxWinUIToHString(m_message));
+#ifdef WXWINUI_TEST_SUPPORT
         gs_teachingTipDiagnostics.lastAutomationName =
             wxString(MUXA::AutomationProperties::GetName(tip).c_str());
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
         gs_teachingTipDiagnostics.lastAutomationHelpText =
             wxString(MUXA::AutomationProperties::GetHelpText(tip).c_str());
+#endif // WXWINUI_TEST_SUPPORT
         tip.IsLightDismissEnabled(true);
         tip.ShouldConstrainToRootBounds(false);
         const wxWinUITeachingTipContract contract =
@@ -1647,8 +1772,12 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
         {
             state->targetRect = *rect;
             state->hasTargetRect = true;
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastHadTargetRect = true;
+#endif // WXWINUI_TEST_SUPPORT
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastTargetRect = *rect;
+#endif // WXWINUI_TEST_SUPPORT
         }
 
         // An explicit wx client rectangle always wins. Otherwise anchor to
@@ -1707,9 +1836,11 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
             {
                 return wxWinUITeachingTipShowResult::Cancelled;
             }
+#ifdef WXWINUI_TEST_SUPPORT
             gs_teachingTipDiagnostics.lastAnchorInRoot =
                 wxPoint(static_cast<int>(std::lround(dip.X)),
                         static_cast<int>(std::lround(dip.Y)));
+#endif // WXWINUI_TEST_SUPPORT
 
             MUXC::Border anchor;
             anchor.IsHitTestVisible(false);
@@ -1732,24 +1863,28 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
 
         state->AppendTip();
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( const auto hook = wxWinUITakeTeachingTipHookForTesting(
-                wxWinUITeachingTipHookPointForTesting::AfterAppend) )
+                wxWinUIRichToolTipTestAccess::HookPoint::AfterAppend) )
         {
             if ( wxWindow * const targetAfterAppend = state->GetLiveTarget() )
                 hook(targetAfterAppend);
         }
 
+#endif // WXWINUI_TEST_SUPPORT
         if ( !state->GetLiveTarget() )
             return wxWinUITeachingTipShowResult::Cancelled;
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( fault ==
-                wxWinUITeachingTipFaultForTesting::OperationalAfterAppend )
+                wxWinUIRichToolTipTestAccess::Fault::OperationalAfterAppend )
         {
             throw winrt::hresult_error(
                 E_FAIL,
                 L"Injected TeachingTip failure after visual attachment");
         }
 
+#endif // WXWINUI_TEST_SUPPORT
         return state->Start(m_winuiTimeout, m_winuiDelay);
     }
     catch ( const winrt::hresult_error& e )
@@ -1773,26 +1908,27 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
 
 } // anonymous namespace
 
-void wxWinUISetTeachingTipFaultForTesting(
-    wxWinUITeachingTipFaultForTesting fault)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIRichToolTipTestAccess::SetFault(
+    wxWinUIRichToolTipTestAccess::Fault fault)
 {
     gs_teachingTipFaultForTesting = fault;
 }
 
-void wxWinUISetNativeTeachingTipBackendForTesting(bool enable)
+void wxWinUIRichToolTipTestAccess::SetNativeBackendEnabled(bool enable)
 {
     gs_nativeTeachingTipBackendForTesting = enable;
 }
 
-void wxWinUISetTeachingTipHookForTesting(
-    wxWinUITeachingTipHookPointForTesting point,
-    wxWinUITeachingTipHookForTesting hook)
+void wxWinUIRichToolTipTestAccess::SetHook(
+    wxWinUIRichToolTipTestAccess::HookPoint point,
+    wxWinUIRichToolTipTestAccess::Hook hook)
 {
     gs_teachingTipHookPointForTesting = point;
     gs_teachingTipHookForTesting = hook;
 }
 
-void wxWinUIResetTeachingTipDiagnosticsForTesting()
+void wxWinUIRichToolTipTestAccess::ResetDiagnostics()
 {
     const unsigned liveStates = gs_teachingTipDiagnostics.liveStates;
     const unsigned liveXamlHandlers =
@@ -1812,22 +1948,22 @@ void wxWinUIResetTeachingTipDiagnosticsForTesting()
         liveGenericFallbacks;
 
     gs_teachingTipFaultForTesting =
-        wxWinUITeachingTipFaultForTesting::None;
+        wxWinUIRichToolTipTestAccess::Fault::None;
     gs_teachingTipHookPointForTesting =
-        wxWinUITeachingTipHookPointForTesting::None;
+        wxWinUIRichToolTipTestAccess::HookPoint::None;
     gs_teachingTipHookForTesting = nullptr;
     gs_nativeTeachingTipBackendForTesting = false;
     wxWinUIPruneRichTipSessions();
 }
 
-wxWinUITeachingTipDiagnosticsForTesting
-wxWinUIGetTeachingTipDiagnosticsForTesting()
+wxWinUIRichToolTipTestAccess::Diagnostics
+wxWinUIRichToolTipTestAccess::GetDiagnostics()
 {
     return gs_teachingTipDiagnostics;
 }
 
 std::size_t
-wxWinUITriggerTeachingTipQueueShutdownForTesting(wxWindow *ownerOrTLW)
+wxWinUIRichToolTipTestAccess::TriggerQueueShutdown(wxWindow *ownerOrTLW)
 {
     wxWindow * const tlw =
         ownerOrTLW ? wxGetTopLevelParent(ownerOrTLW) : nullptr;
@@ -1852,6 +1988,7 @@ wxWinUITriggerTeachingTipQueueShutdownForTesting(wxWindow *ownerOrTLW)
     return closed;
 }
 
+#endif // WXWINUI_TEST_SUPPORT
 void wxWinUINotifyTeachingTipReparent(wxWindow *subtreeRoot)
 {
     if ( !subtreeRoot )

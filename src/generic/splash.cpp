@@ -29,6 +29,9 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/private/auxwindows.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "splash-test-access.h"
+    #endif // WXWINUI_TEST_SUPPORT
 #endif
 
 #include <new>
@@ -72,9 +75,9 @@ SplashRuntimeState* FindSplashRuntimeState(
         : nullptr;
 }
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 
-wxWinUISplashHookForTesting gs_splashHookForTesting = nullptr;
+wxWinUISplashTestAccess::Hook gs_splashHookForTesting = nullptr;
 bool gs_failNextSplashRuntimeAllocationForTesting = false;
 
 void MaybeFailSplashRuntimeAllocationForTesting()
@@ -90,17 +93,17 @@ void MaybeFailSplashRuntimeAllocationForTesting()
 
 void InvokeSplashHookForTesting(
     wxSplashScreen* const splash,
-    const wxWinUISplashHookPointForTesting point)
+    const wxWinUISplashTestAccess::HookPoint point)
 {
     if ( gs_splashHookForTesting )
         gs_splashHookForTesting(splash, point);
 }
 
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
 SplashRuntimeState& ResetSplashRuntimeState(wxSplashScreen* const splash)
 {
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
     MaybeFailSplashRuntimeAllocationForTesting();
 #endif
     SplashRuntimeState& state = GetSplashRuntimeStates()[splash];
@@ -139,29 +142,29 @@ wxWindow* GetSplashContent(wxSplashScreen* const splash,
 
 } // anonymous namespace
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 
-void wxWinUISetSplashHookForTesting(wxWinUISplashHookForTesting hook)
+void wxWinUISplashTestAccess::SetHook(Hook hook)
 {
     gs_splashHookForTesting = hook;
 }
 
-void wxWinUIResetSplashHookForTesting()
+void wxWinUISplashTestAccess::ResetHook()
 {
     gs_splashHookForTesting = nullptr;
 }
 
-void wxWinUIFailNextSplashRuntimeAllocationForTesting()
+void wxWinUISplashTestAccess::FailNextRuntimeAllocation()
 {
     gs_failNextSplashRuntimeAllocationForTesting = true;
 }
 
-std::size_t wxWinUIGetSplashRuntimeStateCountForTesting()
+std::size_t wxWinUISplashTestAccess::GetRuntimeStateCount()
 {
     return GetSplashRuntimeStates().size();
 }
 
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSplashScreen, wxFrame);
 wxBEGIN_EVENT_TABLE(wxSplashScreen, wxFrame)
@@ -299,9 +302,9 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
                        GetSplashContent(this, m_window) == content;
             };
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
         InvokeSplashHookForTesting(
-            this, wxWinUISplashHookPointForTesting::AfterContent);
+            this, wxWinUISplashTestAccess::HookPoint::AfterContent);
 #endif
         if ( !splashContextIsValid() )
             return false;
@@ -324,9 +327,9 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
             if ( !splashContextIsValid() )
                 return false;
             m_timer.Start(wxMax(1, m_milliseconds), true);
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
             InvokeSplashHookForTesting(
-                this, wxWinUISplashHookPointForTesting::AfterTimerStart);
+                this, wxWinUISplashTestAccess::HookPoint::AfterTimerStart);
 #endif
             if ( !splashContextIsValid() )
                 return false;
@@ -341,19 +344,19 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
             return false;
         runtime->filterRegistered = true;
         wxEvtHandler::AddFilter(this);
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
         InvokeSplashHookForTesting(
             this,
-            wxWinUISplashHookPointForTesting::AfterFilterRegistration);
+            wxWinUISplashTestAccess::HookPoint::AfterFilterRegistration);
 #endif
         if ( !splashContextIsValid() )
             return false;
 
         if ( !Show(true) )
             return false;
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
         InvokeSplashHookForTesting(
-            this, wxWinUISplashHookPointForTesting::AfterShow);
+            this, wxWinUISplashTestAccess::HookPoint::AfterShow);
 #endif
         if ( !splashContextIsValid() )
             return false;
@@ -383,9 +386,9 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
             }
         }
 #endif
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
         InvokeSplashHookForTesting(
-            this, wxWinUISplashHookPointForTesting::AfterUpdate);
+            this, wxWinUISplashTestAccess::HookPoint::AfterUpdate);
 #endif
         // Update()/wxYieldIfNeeded() can synchronously run arbitrary user code.
         // It is the final boundary, not a fire-and-forget paint request.

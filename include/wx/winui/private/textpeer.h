@@ -40,8 +40,6 @@ public:
 
     std::uint64_t GetGeneration() const { return m_generation; }
 
-    static std::size_t GetLiveCountForTesting();
-
 private:
     std::atomic<void *> m_owner;
     std::uint64_t m_generation;

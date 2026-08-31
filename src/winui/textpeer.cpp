@@ -10,6 +10,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/winui/private/textpeer.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "text-peer-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 
 #include <algorithm>
 #include <limits>
@@ -18,7 +21,9 @@ namespace
 {
 
 std::atomic<std::uint64_t> gs_nextTextCallbackGeneration{ 0 };
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<std::size_t> gs_liveTextCallbackStates{ 0 };
+#endif // WXWINUI_TEST_SUPPORT
 
 } // anonymous namespace
 
@@ -28,19 +33,25 @@ wxWinUITextCallbackState::wxWinUITextCallbackState(void *owner)
           gs_nextTextCallbackGeneration.fetch_add(
               1, std::memory_order_relaxed) + 1)
 {
+#ifdef WXWINUI_TEST_SUPPORT
     gs_liveTextCallbackStates.fetch_add(1, std::memory_order_relaxed);
+#endif // WXWINUI_TEST_SUPPORT
 }
 
 wxWinUITextCallbackState::~wxWinUITextCallbackState()
 {
     Invalidate();
+#ifdef WXWINUI_TEST_SUPPORT
     gs_liveTextCallbackStates.fetch_sub(1, std::memory_order_relaxed);
+#endif // WXWINUI_TEST_SUPPORT
 }
 
-std::size_t wxWinUITextCallbackState::GetLiveCountForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+std::size_t wxWinUITextPeerTestAccess::GetLiveCallbackStateCount()
 {
     return gs_liveTextCallbackStates.load(std::memory_order_relaxed);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 wxWinUITextPositionMap::wxWinUITextPositionMap(
     const wxString& value,

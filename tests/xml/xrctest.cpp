@@ -200,6 +200,7 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/private/textpeer.h"
+    #include "text-peer-test-access.h"
     #include "wx/winui/private/tlwhost.h"
     #include "host-geometry-test-access.h"
     #include "wx/winui/private/tlwhostmsw.h"
@@ -2170,7 +2171,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
             wxWinUITopLevelHost::GetRootHandlerAddCount(),
             wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
             wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount(),
-            wxWinUITextCallbackState::GetLiveCountForTesting(),
+            wxWinUITextPeerTestAccess::GetLiveCallbackStateCount(),
             wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
             wxWinUINotebookTestAccess::GetLiveCallbackStateCount(),
             wxWinUINotebookTestAccess::GetFrameworkRetirementCount(),

@@ -19,7 +19,7 @@
 #include "wx/weakref.h"
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
-#include "wx/winui/private/taskbaricon.h"
+#include "taskbar-icon-test-access.h"
 
 #include <algorithm>
 #include <deque>
@@ -166,7 +166,7 @@ bool TaskBarShellHook(unsigned message, const void *data)
         wxTaskBarIcon * const icon = gs_nativeScript->destroyHelperOnAdd;
         gs_nativeScript->destroyHelperOnAdd = nullptr;
         gs_nativeScript->nestedHelperDestroyResults.push_back(
-            wxWinUITaskBarIconDestroyHelperForTesting(icon));
+            wxWinUITaskBarIconTestAccess::DestroyHelper(icon));
     }
 
     if ( message == NIM_ADD && gs_nativeScript->destroyOwnerOnAdd )
@@ -216,7 +216,7 @@ bool TaskBarShellHook(unsigned message, const void *data)
             gs_nativeScript->recreateHelperOnModify;
         gs_nativeScript->recreateHelperOnModify = nullptr;
         gs_nativeScript->nestedHelperDestroyResults.push_back(
-            wxWinUITaskBarIconDestroyHelperForTesting(icon));
+            wxWinUITaskBarIconTestAccess::DestroyHelper(icon));
         gs_nativeScript->nestedSetResults.push_back(
             icon->SetIcon(MakeTaskBarTestIcon(), "replacement helper"));
     }
@@ -260,12 +260,12 @@ public:
     {
         REQUIRE(gs_nativeScript == nullptr);
         gs_nativeScript = &script;
-        wxWinUISetTaskBarIconShellNotifyHookForTesting(&TaskBarShellHook);
+        wxWinUITaskBarIconTestAccess::SetShellNotifyHook(&TaskBarShellHook);
     }
 
     ~TaskBarShellHookScope()
     {
-        wxWinUIResetTaskBarIconShellNotifyHookForTesting();
+        wxWinUITaskBarIconTestAccess::ResetShellNotifyHook();
         gs_nativeScript = nullptr;
     }
 };
@@ -282,10 +282,10 @@ void DrainTaskBarDeletes(unsigned rounds = 16)
     }
 }
 
-wxWinUITaskBarIconSnapshotForTesting Snapshot(wxTaskBarIcon *icon)
+wxWinUITaskBarIconTestAccess::Snapshot Snapshot(wxTaskBarIcon *icon)
 {
-    wxWinUITaskBarIconSnapshotForTesting snapshot;
-    REQUIRE(wxWinUIGetTaskBarIconSnapshotForTesting(icon, &snapshot));
+    wxWinUITaskBarIconTestAccess::Snapshot snapshot;
+    REQUIRE(wxWinUITaskBarIconTestAccess::GetSnapshot(icon, &snapshot));
     return snapshot;
 }
 
@@ -385,7 +385,7 @@ private:
         }
 
         m_observation->destructionAccepted =
-            wxWinUITaskBarIconDestroyHelperForTesting(this);
+            wxWinUITaskBarIconTestAccess::DestroyHelper(this);
     }
 
     const Destruction m_destruction;
@@ -416,14 +416,14 @@ class TaskBarPopupHookScope final
 {
 public:
     explicit TaskBarPopupHookScope(
-        wxWinUITaskBarIconPopupHookForTesting hook)
+        wxWinUITaskBarIconTestAccess::PopupHook hook)
     {
-        wxWinUISetTaskBarIconPopupHookForTesting(hook);
+        wxWinUITaskBarIconTestAccess::SetPopupHook(hook);
     }
 
     ~TaskBarPopupHookScope()
     {
-        wxWinUIResetTaskBarIconPopupHookForTesting();
+        wxWinUITaskBarIconTestAccess::ResetPopupHook();
     }
 };
 
@@ -433,14 +433,14 @@ TEST_CASE("WinUITaskBarIcon::DesiredAndAppliedLifecycle",
           "[winui-beta-aux][taskbaricon]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
 
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore + 1);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore + 1);
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "first"));
     CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION });
     REQUIRE(script.payloads.size() == 2);
@@ -456,7 +456,7 @@ TEST_CASE("WinUITaskBarIcon::DesiredAndAppliedLifecycle",
 
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK(snapshot.appliedExplorerGeneration == snapshot.explorerGeneration);
@@ -471,7 +471,7 @@ TEST_CASE("WinUITaskBarIcon::DesiredAndAppliedLifecycle",
     CheckCalls(script.calls, { NIM_DELETE });
     snapshot = Snapshot(icon);
     CHECK_FALSE(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Absent);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Absent);
     CHECK_FALSE(snapshot.versionApplied);
     CHECK_FALSE(icon->IsIconInstalled());
 
@@ -480,8 +480,8 @@ TEST_CASE("WinUITaskBarIcon::DesiredAndAppliedLifecycle",
     CHECK(script.calls.empty());
     delete icon;
     DrainTaskBarDeletes();
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::ExplorerRestartNeverResurrectsRemovedIntent",
@@ -496,7 +496,7 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartNeverResurrectsRemovedIntent",
     const auto beforeRestart = Snapshot(icon);
     ClearNativeTrace(script);
 
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CHECK(script.calls.empty());
     CHECK(std::find(script.calls.begin(), script.calls.end(),
                     static_cast<unsigned>(NIM_ADD)) ==
@@ -507,7 +507,7 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartNeverResurrectsRemovedIntent",
     const auto removedRestart = Snapshot(icon);
     CHECK_FALSE(removedRestart.desiredInstalled);
     CHECK(removedRestart.applied ==
-          wxWinUITaskBarIconAppliedState::Absent);
+          wxWinUITaskBarIconTestAccess::AppliedState::Absent);
     CHECK(removedRestart.explorerGeneration !=
           beforeRestart.explorerGeneration);
 
@@ -515,12 +515,12 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartNeverResurrectsRemovedIntent",
     ClearNativeTrace(script);
     script.results.push_back({ NIM_ADD, true });
     script.results.push_back({ NIM_SETVERSION, true });
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION });
     auto presentRestart = Snapshot(icon);
     CHECK(presentRestart.desiredInstalled);
     CHECK(presentRestart.applied ==
-          wxWinUITaskBarIconAppliedState::Present);
+          wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(presentRestart.versionApplied);
 
     // Explorer can also broadcast TaskbarCreated as a refresh while the old
@@ -529,13 +529,13 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartNeverResurrectsRemovedIntent",
     script.results.push_back({ NIM_ADD, false });
     script.results.push_back({ NIM_MODIFY, true });
     script.results.push_back({ NIM_SETVERSION, true });
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CheckCalls(script.calls,
                { NIM_ADD, NIM_MODIFY, NIM_SETVERSION });
     presentRestart = Snapshot(icon);
     CHECK(presentRestart.desiredInstalled);
     CHECK(presentRestart.applied ==
-          wxWinUITaskBarIconAppliedState::Present);
+          wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(presentRestart.versionApplied);
 
     delete icon;
@@ -546,9 +546,9 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartHonoursReentrantIntent",
           "[winui-beta-aux][taskbaricon][restart][reentrancy]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon *icon = new wxTaskBarIcon;
@@ -556,18 +556,18 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartHonoursReentrantIntent",
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "before restart remove"));
     ClearNativeTrace(script);
     script.removeOnAdd = icon;
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CheckCalls(script.calls, { NIM_ADD, NIM_DELETE });
     REQUIRE(script.nestedRemoveResults.size() == 1);
     CHECK_FALSE(script.nestedRemoveResults[0]);
     auto snapshot = Snapshot(icon);
     CHECK_FALSE(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Absent);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Absent);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK_FALSE(icon->IsIconInstalled());
 
     ClearNativeTrace(script);
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CHECK(script.calls.empty());
     delete icon;
     DrainTaskBarDeletes();
@@ -581,7 +581,7 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartHonoursReentrantIntent",
     ClearNativeTrace(script);
     const wxWeakRef<wxEvtHandler> weakIcon(icon);
     script.destroyOwnerOnAdd = icon;
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CheckCalls(script.calls, { NIM_ADD, NIM_DELETE });
     CHECK_FALSE(weakIcon);
     REQUIRE(script.payloads.size() == 2);
@@ -589,37 +589,37 @@ TEST_CASE("WinUITaskBarIcon::ExplorerRestartHonoursReentrantIntent",
     CHECK(script.payloads[0].iconValidAfterReentrance);
 
     DrainTaskBarDeletes(32);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::HelperCanDieBeforeItsOwnerAndBeRecreated",
           "[winui-beta-aux][taskbaricon][lifetime]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
 
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "first helper"));
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() ==
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() ==
           helpersBefore + 1);
 
     // wxTaskBarIconWindow is itself a TLW. In a real shutdown
     // wxApp::DeleteAllTLWs() can delete it while the non-window owner remains
     // alive, so exercise that exact ordering synchronously here.
     ClearNativeTrace(script);
-    REQUIRE(wxWinUITaskBarIconDestroyHelperForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DestroyHelper(icon));
     CheckCalls(script.calls, { NIM_DELETE });
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore + 1);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore + 1);
 
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
     CHECK_FALSE(snapshot.versionApplied);
     CHECK_FALSE(icon->IsIconInstalled());
     wxMenu unavailableMenu;
@@ -628,28 +628,28 @@ TEST_CASE("WinUITaskBarIcon::HelperCanDieBeforeItsOwnerAndBeRecreated",
     ClearNativeTrace(script);
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "replacement helper"));
     CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION });
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() ==
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() ==
           helpersBefore + 1);
     snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
 
     ClearNativeTrace(script);
     delete icon;
     CheckCalls(script.calls, { NIM_DELETE });
     DrainTaskBarDeletes();
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::HelperWindowProcDefersCallbackDestruction",
           "[winui-beta-aux][taskbaricon][lifetime][native-message]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
 
@@ -660,15 +660,15 @@ TEST_CASE("WinUITaskBarIcon::HelperWindowProcDefersCallbackDestruction",
     REQUIRE(ownerProbe->SetIcon(MakeTaskBarTestIcon(), "owner callback"));
     ClearNativeTrace(script);
 
-    REQUIRE(wxWinUITaskBarIconDispatchEventForTesting(
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchEvent(
         ownerProbe, WM_LBUTTONUP));
     CHECK(ownerObservation.events == 1);
     CHECK(ownerObservation.destructionAccepted);
     DrainTaskBarDeletes(32);
     CHECK_FALSE(weakOwner);
     CheckCalls(script.calls, { NIM_DELETE });
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 
     ClearNativeTrace(script);
     TaskBarDispatchObservation helperObservation;
@@ -677,18 +677,18 @@ TEST_CASE("WinUITaskBarIcon::HelperWindowProcDefersCallbackDestruction",
     REQUIRE(helperProbe->SetIcon(MakeTaskBarTestIcon(), "helper callback"));
     ClearNativeTrace(script);
 
-    REQUIRE(wxWinUITaskBarIconDispatchEventForTesting(
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchEvent(
         helperProbe, WM_LBUTTONUP));
     CHECK(helperObservation.events == 1);
     CHECK(helperObservation.destructionAccepted);
     // The helper C++ object is deliberately still alive until its member
     // callback returns; draining then performs the requested destruction.
     DrainTaskBarDeletes(32);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
     CheckCalls(script.calls, { NIM_DELETE });
     auto snapshot = Snapshot(helperProbe);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
     CHECK_FALSE(helperProbe->IsIconInstalled());
 
     ClearNativeTrace(script);
@@ -699,8 +699,8 @@ TEST_CASE("WinUITaskBarIcon::HelperWindowProcDefersCallbackDestruction",
 
     delete helperProbe;
     DrainTaskBarDeletes(32);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::ReconciliationIsStrictlyBounded",
@@ -725,7 +725,7 @@ TEST_CASE("WinUITaskBarIcon::ReconciliationIsStrictlyBounded",
                       }));
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
     CHECK_FALSE(snapshot.reconciling);
 
     script.rewriteOnEveryAdd = nullptr;
@@ -733,7 +733,7 @@ TEST_CASE("WinUITaskBarIcon::ReconciliationIsStrictlyBounded",
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "stable"));
     CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION });
     snapshot = Snapshot(icon);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
 
     delete icon;
@@ -744,9 +744,9 @@ TEST_CASE("WinUITaskBarIcon::HelperLossInvalidatesAnInFlightNativeCall",
           "[winui-beta-aux][taskbaricon][lifetime][reentrancy]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
@@ -764,34 +764,34 @@ TEST_CASE("WinUITaskBarIcon::HelperLossInvalidatesAnInFlightNativeCall",
     CHECK(script.payloads[0].iconAdvertised);
     CHECK(script.payloads[0].iconValidBeforeReentrance);
     CHECK(script.payloads[0].iconValidAfterReentrance);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
     CHECK_FALSE(snapshot.versionApplied);
     CHECK_FALSE(snapshot.reconciling);
 
     script.calls.clear();
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "retry"));
     CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION });
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() ==
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() ==
           helpersBefore + 1);
 
     script.calls.clear();
     delete icon;
     CheckCalls(script.calls, { NIM_DELETE });
     DrainTaskBarDeletes();
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::InitialFailureIsNotPubliclyInstalled",
           "[winui-beta-aux][taskbaricon][failure][generation]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
@@ -802,7 +802,7 @@ TEST_CASE("WinUITaskBarIcon::InitialFailureIsNotPubliclyInstalled",
     CHECK_FALSE(icon->IsIconInstalled());
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
 
 #if wxUSE_TASKBARICON_BALLOONS
     ClearNativeTrace(script);
@@ -817,20 +817,20 @@ TEST_CASE("WinUITaskBarIcon::InitialFailureIsNotPubliclyInstalled",
     CheckCalls(script.calls, { NIM_DELETE });
     snapshot = Snapshot(icon);
     CHECK_FALSE(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Absent);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Absent);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK_FALSE(icon->IsIconInstalled());
 
     // Drive the production TaskbarCreated message path: a cancelled failed
     // intent is never resurrected.
     ClearNativeTrace(script);
-    REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(icon));
     CHECK(script.calls.empty());
 
     delete icon;
     DrainTaskBarDeletes();
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::FailedModifyKeepsSuccessfulHistory",
@@ -849,7 +849,7 @@ TEST_CASE("WinUITaskBarIcon::FailedModifyKeepsSuccessfulHistory",
     CheckCalls(script.calls, { NIM_MODIFY });
     CHECK(icon->IsIconInstalled());
     CHECK(Snapshot(icon).applied ==
-          wxWinUITaskBarIconAppliedState::Unknown);
+          wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
 
     ClearNativeTrace(script);
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "explicit retry"));
@@ -871,32 +871,32 @@ TEST_CASE("WinUITaskBarIcon::FailuresRemainUnknownUntilAProvenRetry",
     CHECK_FALSE(icon->SetIcon(MakeTaskBarTestIcon(), "failed add"));
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
     CHECK_FALSE(snapshot.versionApplied);
 
     script.calls.clear();
     script.results.push_back({ NIM_ADD, false });
     script.results.push_back({ NIM_MODIFY, true });
     script.results.push_back({ NIM_SETVERSION, true });
-    REQUIRE(wxWinUITaskBarIconRestartExplorerForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::RestartExplorer(icon));
     CheckCalls(script.calls,
                { NIM_ADD, NIM_MODIFY, NIM_SETVERSION });
     CHECK(Snapshot(icon).applied ==
-          wxWinUITaskBarIconAppliedState::Present);
+          wxWinUITaskBarIconTestAccess::AppliedState::Present);
 
     script.calls.clear();
     script.results.push_back({ NIM_DELETE, false });
     CHECK_FALSE(icon->RemoveIcon());
     snapshot = Snapshot(icon);
     CHECK_FALSE(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
 
     script.calls.clear();
     script.results.push_back({ NIM_DELETE, true });
-    REQUIRE(wxWinUITaskBarIconRestartExplorerForTesting(icon));
+    REQUIRE(wxWinUITaskBarIconTestAccess::RestartExplorer(icon));
     CheckCalls(script.calls, { NIM_DELETE });
     CHECK(Snapshot(icon).applied ==
-          wxWinUITaskBarIconAppliedState::Absent);
+          wxWinUITaskBarIconTestAccess::AppliedState::Absent);
 
     delete icon;
     DrainTaskBarDeletes();
@@ -916,7 +916,7 @@ TEST_CASE("WinUITaskBarIcon::SetVersionFailureIsRetried",
 
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK_FALSE(snapshot.versionApplied);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK_FALSE(icon->IsIconInstalled());
@@ -931,7 +931,7 @@ TEST_CASE("WinUITaskBarIcon::SetVersionFailureIsRetried",
     REQUIRE(icon->SetIcon(MakeTaskBarTestIcon(), "version retry"));
     CheckCalls(script.calls, { NIM_MODIFY, NIM_SETVERSION });
     snapshot = Snapshot(icon);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK(icon->IsIconInstalled());
@@ -944,9 +944,9 @@ TEST_CASE("WinUITaskBarIcon::NativeIconLeaseOutlivesOwnerReentrance",
           "[winui-beta-aux][taskbaricon][lifetime][payload]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
@@ -968,8 +968,8 @@ TEST_CASE("WinUITaskBarIcon::NativeIconLeaseOutlivesOwnerReentrance",
     CHECK(payload.iconValidAfterReentrance);
 
     DrainTaskBarDeletes(32);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 #if wxUSE_TASKBARICON_BALLOONS
@@ -978,7 +978,7 @@ TEST_CASE("WinUITaskBarIcon::BalloonResultCannotClobberNewerState",
           "[winui-beta-aux][taskbaricon][balloon][reentrancy]")
 {
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
@@ -994,7 +994,7 @@ TEST_CASE("WinUITaskBarIcon::BalloonResultCannotClobberNewerState",
                { NIM_MODIFY, NIM_MODIFY, NIM_SETVERSION });
     auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredGeneration != beforeRewrite.desiredGeneration);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
 
@@ -1005,7 +1005,7 @@ TEST_CASE("WinUITaskBarIcon::BalloonResultCannotClobberNewerState",
     CheckCalls(script.calls, { NIM_MODIFY, NIM_DELETE });
     snapshot = Snapshot(icon);
     CHECK_FALSE(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Absent);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Absent);
     CHECK_FALSE(snapshot.versionApplied);
 
     script.calls.clear();
@@ -1020,10 +1020,10 @@ TEST_CASE("WinUITaskBarIcon::BalloonResultCannotClobberNewerState",
                { NIM_MODIFY, NIM_DELETE, NIM_ADD, NIM_SETVERSION });
     snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() ==
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() ==
           helpersBefore + 1);
 
     const auto beforeRestart = snapshot;
@@ -1034,7 +1034,7 @@ TEST_CASE("WinUITaskBarIcon::BalloonResultCannotClobberNewerState",
     CheckCalls(script.calls, { NIM_MODIFY, NIM_ADD, NIM_SETVERSION });
     snapshot = Snapshot(icon);
     CHECK(snapshot.explorerGeneration != beforeRestart.explorerGeneration);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
     CHECK(snapshot.appliedExplorerGeneration ==
           snapshot.explorerGeneration);
@@ -1046,28 +1046,28 @@ TEST_CASE("WinUITaskBarIcon::BalloonResultCannotClobberNewerState",
     CHECK_FALSE(icon->ShowBalloon("title", "current failure"));
     CheckCalls(script.calls, { NIM_MODIFY });
     snapshot = Snapshot(icon);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Unknown);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Unknown);
     CHECK_FALSE(snapshot.versionApplied);
 
     script.calls.clear();
     REQUIRE(icon->ShowBalloon("title", "retry"));
     CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION, NIM_MODIFY });
     snapshot = Snapshot(icon);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.versionApplied);
 
     delete icon;
     DrainTaskBarDeletes();
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::BalloonAllowsOwnerDestructionInNativeSeam",
           "[winui-beta-aux][taskbaricon][balloon][lifetime]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
     wxTaskBarIcon * const icon = new wxTaskBarIcon;
@@ -1090,8 +1090,8 @@ TEST_CASE("WinUITaskBarIcon::BalloonAllowsOwnerDestructionInNativeSeam",
     CHECK(balloonPayload.balloonIconValidAfterReentrance);
     DrainTaskBarDeletes();
     CHECK_FALSE(weakIcon);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 #endif // wxUSE_TASKBARICON_BALLOONS
@@ -1112,7 +1112,7 @@ TEST_CASE("WinUITaskBarIcon::ReentrantRemoveWinsTheExactGeneration",
     CHECK_FALSE(script.nestedRemoveResults[0]);
     const auto snapshot = Snapshot(icon);
     CHECK_FALSE(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Absent);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Absent);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK_FALSE(icon->IsIconInstalled());
 
@@ -1141,7 +1141,7 @@ TEST_CASE("WinUITaskBarIcon::ReentrantSetSupersedesOnlyItsOwnGeneration",
     CHECK_FALSE(script.nestedSetResults[0]);
     const auto snapshot = Snapshot(icon);
     CHECK(snapshot.desiredInstalled);
-    CHECK(snapshot.applied == wxWinUITaskBarIconAppliedState::Present);
+    CHECK(snapshot.applied == wxWinUITaskBarIconTestAccess::AppliedState::Present);
     CHECK(snapshot.appliedGeneration == snapshot.desiredGeneration);
     CHECK(snapshot.versionApplied);
     CHECK(icon->IsIconInstalled());
@@ -1154,9 +1154,9 @@ TEST_CASE("WinUITaskBarIcon::LifecycleStressReturnsEveryBaseline",
           "[winui-beta-aux][taskbaricon][lifetime][stress]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope hookScope(script);
 
@@ -1170,7 +1170,7 @@ TEST_CASE("WinUITaskBarIcon::LifecycleStressReturnsEveryBaseline",
         if ( cycle % 2 == 0 )
         {
             ClearNativeTrace(script);
-            REQUIRE(wxWinUITaskBarIconDestroyHelperForTesting(icon.get()));
+            REQUIRE(wxWinUITaskBarIconTestAccess::DestroyHelper(icon.get()));
             CheckCalls(script.calls, { NIM_DELETE });
             CHECK_FALSE(icon->IsIconInstalled());
 
@@ -1184,7 +1184,7 @@ TEST_CASE("WinUITaskBarIcon::LifecycleStressReturnsEveryBaseline",
         if ( cycle % 3 == 0 )
         {
             ClearNativeTrace(script);
-            REQUIRE(wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(
+            REQUIRE(wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(
                 icon.get()));
             CheckCalls(script.calls, { NIM_ADD, NIM_SETVERSION });
         }
@@ -1194,22 +1194,22 @@ TEST_CASE("WinUITaskBarIcon::LifecycleStressReturnsEveryBaseline",
         CheckCalls(script.calls, { NIM_DELETE });
         icon.reset();
         DrainTaskBarDeletes(2);
-        CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-        CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+        CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+        CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
     }
 
     DrainTaskBarDeletes(32);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 TEST_CASE("WinUITaskBarIcon::PopupRoutingIsWeakAndScopeBound",
           "[winui-beta-aux][taskbaricon][menu][lifetime]")
 {
     const unsigned statesBefore =
-        wxWinUIGetTaskBarIconStateCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetStateCount();
     const unsigned helpersBefore =
-        wxWinUIGetTaskBarIconHelperCountForTesting();
+        wxWinUITaskBarIconTestAccess::GetHelperCount();
     TaskBarNativeScript script;
     TaskBarShellHookScope shellHookScope(script);
     TaskBarPopupHookScope popupHookScope(&DispatchTaskBarPopup);
@@ -1229,9 +1229,9 @@ TEST_CASE("WinUITaskBarIcon::PopupRoutingIsWeakAndScopeBound",
     DrainTaskBarDeletes();
 
 #if wxUSE_EXCEPTIONS
-    wxWinUISetTaskBarIconPopupHookForTesting(&ThrowFromTaskBarPopup);
+    wxWinUITaskBarIconTestAccess::SetPopupHook(&ThrowFromTaskBarPopup);
     CHECK_THROWS_AS(icon->PopupMenu(&menu), std::runtime_error);
-    wxWinUISetTaskBarIconPopupHookForTesting(&DispatchTaskBarPopup);
+    wxWinUITaskBarIconTestAccess::SetPopupHook(&DispatchTaskBarPopup);
     REQUIRE(icon->PopupMenu(&menu));
     CHECK(icon->updates == 2);
     CHECK(icon->commands == 2);
@@ -1242,8 +1242,8 @@ TEST_CASE("WinUITaskBarIcon::PopupRoutingIsWeakAndScopeBound",
     REQUIRE(icon->PopupMenu(&menu));
     DrainTaskBarDeletes(32);
     CHECK_FALSE(weakIcon);
-    CHECK(wxWinUIGetTaskBarIconStateCountForTesting() == statesBefore);
-    CHECK(wxWinUIGetTaskBarIconHelperCountForTesting() == helpersBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetStateCount() == statesBefore);
+    CHECK(wxWinUITaskBarIconTestAccess::GetHelperCount() == helpersBefore);
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_TASKBARICON

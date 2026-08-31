@@ -18,6 +18,7 @@
 #include "keyboard-test-access.h"
 #include "choice-test-access.h"
 #include "combobox-uia-helper.h"
+#include "text-peer-test-access.h"
 #include <UIAutomation.h>
 #endif
 
@@ -9066,8 +9067,8 @@ bool wxWinUIComboBoxTestAccess::SetRawEditSelectionAndDestroy(wxComboBox* contro
                             [snapshot]()
                             {
                                 snapshot->liveCountAfterDestroy =
-                                    wxWinUITextCallbackState::
-                                        GetLiveCountForTesting();
+                                    wxWinUITextPeerTestAccess::
+                                        GetLiveCallbackStateCount();
                             });
                         // The confirmation was queued at Low before this
                         // hook. A second Low sentinel is therefore a causal

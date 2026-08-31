@@ -34,6 +34,9 @@
     #include "wx/scopeguard.h"
     #include "wx/weakref.h"
     #include "wx/winui/private/taskbaricon.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "taskbar-icon-test-access.h"
+    #endif
     #include "wx/winui/private/tlwhostmsw.h"
 
     #include <memory>
@@ -83,7 +86,9 @@ struct wxWinUITaskBarIconState
     unsigned long long appliedGeneration = 0;
     unsigned long long explorerGeneration = 1;
     unsigned long long appliedExplorerGeneration = 1;
+#ifdef WXWINUI_TEST_SUPPORT
     unsigned nativeCallCount = 0;
+#endif
 };
 
 using wxWinUITaskBarIconStatePtr =
@@ -164,11 +169,13 @@ unsigned long long wxWinUIBumpTaskBarIconGeneration(
     return generation;
 }
 
-wxWinUITaskBarIconShellNotifyHookForTesting
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUITaskBarIconTestAccess::ShellNotifyHook
     gs_taskBarIconShellNotifyHookForTesting = nullptr;
-wxWinUITaskBarIconPopupHookForTesting
+wxWinUITaskBarIconTestAccess::PopupHook
     gs_taskBarIconPopupHookForTesting = nullptr;
 unsigned gs_taskBarIconHelperCount = 0;
+#endif
 bool gs_taskBarIconPopupActive = false;
 
 class wxWinUITaskBarIconCallbackLease final
@@ -227,7 +234,9 @@ public:
 #if defined(__WXWINUI__) && wxUSE_WINUI3
         Bind(wxEVT_MENU, &wxTaskBarIconWindow::OnMenu, this);
         Bind(wxEVT_UPDATE_UI, &wxTaskBarIconWindow::OnUpdateUI, this);
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_taskBarIconHelperCount;
+#endif
 #endif
     }
 
@@ -243,9 +252,11 @@ public:
         // classes tear down and may dispatch final native notifications.
         m_icon = nullptr;
 
+#ifdef WXWINUI_TEST_SUPPORT
         wxASSERT(gs_taskBarIconHelperCount != 0);
         if ( gs_taskBarIconHelperCount != 0 )
             --gs_taskBarIconHelperCount;
+#endif
     }
 
     void DetachIcon(wxTaskBarIcon *icon)
@@ -452,6 +463,10 @@ bool wxWinUICallTaskBarIconShell(
     DWORD message,
     NotifyIconData *data)
 {
+#ifndef WXWINUI_TEST_SUPPORT
+    wxUnusedVar(state);
+#endif
+#ifdef WXWINUI_TEST_SUPPORT
     if ( state )
         ++state->nativeCallCount;
 
@@ -460,13 +475,16 @@ bool wxWinUICallTaskBarIconShell(
         return gs_taskBarIconShellNotifyHookForTesting(
             static_cast<unsigned>(message), data);
     }
+#endif
 
     return ::Shell_NotifyIcon(message, data) != 0;
 }
 
 void wxWinUILogTaskBarIconShellFailure(const wxString& operation)
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( !gs_taskBarIconShellNotifyHookForTesting )
+#endif
         wxLogLastError(operation);
 }
 
@@ -1253,9 +1271,13 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
         return false;
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     const bool result = gs_taskBarIconPopupHookForTesting
         ? gs_taskBarIconPopupHookForTesting(helper, menu)
         : helper->PopupMenu(menu, 0, 0);
+#else
+    const bool result = helper->PopupMenu(menu, 0, 0);
+#endif
 
     wxWindow * const liveHelper = weakHelper.get();
     if ( liveHelper && !liveHelper->IsBeingDeleted() &&
@@ -1400,29 +1422,30 @@ long wxTaskBarIcon::WindowProc(unsigned int msg,
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
-void wxWinUISetTaskBarIconShellNotifyHookForTesting(
-    wxWinUITaskBarIconShellNotifyHookForTesting hook)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITaskBarIconTestAccess::SetShellNotifyHook(
+    wxWinUITaskBarIconTestAccess::ShellNotifyHook hook)
 {
     gs_taskBarIconShellNotifyHookForTesting = hook;
 }
 
-void wxWinUIResetTaskBarIconShellNotifyHookForTesting()
+void wxWinUITaskBarIconTestAccess::ResetShellNotifyHook()
 {
     gs_taskBarIconShellNotifyHookForTesting = nullptr;
 }
 
-void wxWinUISetTaskBarIconPopupHookForTesting(
-    wxWinUITaskBarIconPopupHookForTesting hook)
+void wxWinUITaskBarIconTestAccess::SetPopupHook(
+    wxWinUITaskBarIconTestAccess::PopupHook hook)
 {
     gs_taskBarIconPopupHookForTesting = hook;
 }
 
-void wxWinUIResetTaskBarIconPopupHookForTesting()
+void wxWinUITaskBarIconTestAccess::ResetPopupHook()
 {
     gs_taskBarIconPopupHookForTesting = nullptr;
 }
 
-bool wxWinUITaskBarIconRestartExplorerForTesting(wxTaskBarIcon *icon)
+bool wxWinUITaskBarIconTestAccess::RestartExplorer(wxTaskBarIcon *icon)
 {
     return icon && wxWinUIRestartTaskBarIcon(
                        icon, wxWinUIFindTaskBarIconState(icon));
@@ -1460,14 +1483,14 @@ bool wxWinUIDispatchTaskBarIconHelperMessageForTesting(
 
 } // anonymous namespace
 
-bool wxWinUITaskBarIconDispatchTaskbarCreatedForTesting(
+bool wxWinUITaskBarIconTestAccess::DispatchTaskbarCreated(
     wxTaskBarIcon *icon)
 {
     return wxWinUIDispatchTaskBarIconHelperMessageForTesting(
         icon, gs_msgRestartTaskbar, 0);
 }
 
-bool wxWinUITaskBarIconDispatchEventForTesting(
+bool wxWinUITaskBarIconTestAccess::DispatchEvent(
     wxTaskBarIcon *icon,
     long nativeEvent)
 {
@@ -1475,14 +1498,14 @@ bool wxWinUITaskBarIconDispatchEventForTesting(
         icon, gs_msgTaskbar, static_cast<LPARAM>(nativeEvent));
 }
 
-bool wxWinUITaskBarIconDestroyHelperForTesting(wxTaskBarIcon *icon)
+bool wxWinUITaskBarIconTestAccess::DestroyHelper(wxTaskBarIcon *icon)
 {
     return wxWinUITaskBarIconSidecarAccess::DestroyHelper(icon);
 }
 
-bool wxWinUIGetTaskBarIconSnapshotForTesting(
+bool wxWinUITaskBarIconTestAccess::GetSnapshot(
     wxTaskBarIcon *icon,
-    wxWinUITaskBarIconSnapshotForTesting *snapshot)
+    wxWinUITaskBarIconTestAccess::Snapshot *snapshot)
 {
     if ( !icon || !snapshot )
         return false;
@@ -1506,15 +1529,16 @@ bool wxWinUIGetTaskBarIconSnapshotForTesting(
     return true;
 }
 
-unsigned wxWinUIGetTaskBarIconStateCountForTesting()
+unsigned wxWinUITaskBarIconTestAccess::GetStateCount()
 {
     return static_cast<unsigned>(wxWinUIGetTaskBarIconStates().size());
 }
 
-unsigned wxWinUIGetTaskBarIconHelperCountForTesting()
+unsigned wxWinUITaskBarIconTestAccess::GetHelperCount()
 {
     return gs_taskBarIconHelperCount;
 }
+#endif
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
 
