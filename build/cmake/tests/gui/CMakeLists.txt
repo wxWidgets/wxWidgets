@@ -389,3 +389,10 @@ endif()
 if(wxUSE_PROPGRID)
     wx_exe_link_libraries(test_gui wxpropgrid)
 endif()
+if(TARGET test_gui AND wxUSE_PROPGRID AND
+        wxBUILD_TESTS STREQUAL "ALL")
+    target_include_directories(test_gui PRIVATE
+        "${wxSOURCE_DIR}/tests/winui/test-support")
+    target_compile_definitions(test_gui PRIVATE
+        WXPROPGRID_TEST_SUPPORT=1)
+endif()

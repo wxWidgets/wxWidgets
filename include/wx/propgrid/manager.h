@@ -171,7 +171,7 @@ class WXDLLIMPEXP_PROPGRID
     wxDECLARE_CLASS(wxPropertyGridManager);
     friend class wxPropertyGrid;
 #if wxUSE_HEADERCTRL
-    friend class wxPGHeaderTestBridge;
+    friend class wxPropertyGridTestAccess;
 #endif
 public:
 

@@ -978,6 +978,37 @@ Do not delete a lifetime/retirement service used by production merely because it
   again, and runtime smoke plus Supported V0 pass **2/2** in each WinUI
   linkage with `WX_UI_TESTS=0`.
 
+## PropertyGrid manager and editor-parking boundary (2026-09-01)
+
+- The toolbar-removal failure pair, header-resize dispatcher and six MSW
+  editor-parking functions leave the installed PropertyGrid private header.
+  Tests use one non-installed `property-grid-test-access.h` adapter, compiled
+  only into `manager.cpp`, MSW/WinUI `propgrid.cpp` and `test_gui` when
+  `wxBUILD_TESTS=ALL`. The same source properties cover component and
+  monolithic builds.
+- Production retains the complete toolbar detach/rollback transaction, header
+  BEGIN/RESIZING/END state machine, editor snapshots, callback epochs,
+  quarantine paths and host/batch lifetime counters. Only the artificial
+  toolbar failure state and two one-shot `SetParent()` failure flags are absent
+  from shipping. The real `TrySetParent()` no longer accepts a test parameter.
+- Before and after the manager/header extraction, WinUI shared/static preserve
+  **62 assertions / 2 toolbar cases** and **30 / 2 header cases**; ordinary
+  wxMSW shared Debug preserves **66/2** and **30/2** respectively. The parking
+  replay passes **43/2** for unassigned-editor deferral, **41/2** for double
+  failure and **201/2** for the three DPI parking routes in every configuration.
+- The complete serialized `[propgrid]` replay passes with **1227 assertions / 2
+  cases** shared, **1217/2** static and **1169/2** wxMSW Debug. These totals may
+  vary slightly with native paint callbacks; the bounded seam sections above
+  are the stable comparison. One initial concurrent static DPI run observed
+  the shared process's live message-only host; the isolated rerun passes
+  **201/2**, so final whole-suite evidence is intentionally serialized.
+- With `wxBUILD_TESTS=OFF`, all three `wxpropgrid` artefacts build with warnings
+  as errors. Shared exports, static symbols and installed headers contain zero
+  former function, replacement adapter, failure state or one-shot flag. All
+  caches are restored to `wxBUILD_TESTS=ALL`; focused and full tests pass again,
+  followed by runtime smoke plus Supported V0 **2/2** in each WinUI linkage
+  with `WX_UI_TESTS=0`. This closes Plan 106 locally; remote CI remains pending.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

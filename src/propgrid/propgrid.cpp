@@ -49,6 +49,10 @@
 #include "wx/propgrid/editors.h"
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/private.h"
+
+#ifdef WXPROPGRID_TEST_SUPPORT
+    #include "property-grid-test-access.h"
+#endif
 #include "wx/private/windowlifetime.h"
 
 #if wxPG_USE_RENDERER_NATIVE
@@ -131,8 +135,10 @@ thread_local EditorDeferredDeleteBatch*
 #endif
 
 #ifdef __WXMSW__
+#ifdef WXPROPGRID_TEST_SUPPORT
 thread_local bool gs_failNextDirectEditorParkingForTesting = false;
 thread_local bool gs_failNextFallbackEditorParkingForTesting = false;
+#endif
 thread_local unsigned int gs_editorParkingHostCount = 0;
 thread_local unsigned int gs_deferredEditorBatchCount = 0;
 
@@ -1080,12 +1086,21 @@ public:
         if ( ::IsWindowVisible(editorHwnd) )
             return EditorParkingOutcome::Failed;
 
-        const bool failDirect =
-            gs_failNextDirectEditorParkingForTesting;
-        gs_failNextDirectEditorParkingForTesting = false;
-
         DWORD directError = ERROR_SUCCESS;
-        if ( TrySetParent(snapshot, HWND_MESSAGE, failDirect, &directError) )
+        bool directParked = false;
+#ifdef WXPROPGRID_TEST_SUPPORT
+        if ( gs_failNextDirectEditorParkingForTesting )
+        {
+            gs_failNextDirectEditorParkingForTesting = false;
+            directError = ERROR_ACCESS_DENIED;
+        }
+        else
+#endif
+        {
+            directParked = TrySetParent(
+                snapshot, HWND_MESSAGE, &directError);
+        }
+        if ( directParked )
         {
             snapshot.SetParked();
             return EditorParkingOutcome::Parked;
@@ -1102,15 +1117,21 @@ public:
                 ? EditorParkingOutcome::Failed
                 : EditorParkingOutcome::Destroyed;
 
-        const bool failFallback =
-            gs_failNextFallbackEditorParkingForTesting;
-        gs_failNextFallbackEditorParkingForTesting = false;
-
         DWORD fallbackError = ERROR_SUCCESS;
-        if ( TrySetParent(snapshot,
-                          hostHwnd,
-                          failFallback,
-                          &fallbackError) )
+        bool fallbackParked = false;
+#ifdef WXPROPGRID_TEST_SUPPORT
+        if ( gs_failNextFallbackEditorParkingForTesting )
+        {
+            gs_failNextFallbackEditorParkingForTesting = false;
+            fallbackError = ERROR_ACCESS_DENIED;
+        }
+        else
+#endif
+        {
+            fallbackParked = TrySetParent(
+                snapshot, hostHwnd, &fallbackError);
+        }
+        if ( fallbackParked )
         {
             snapshot.SetParked();
             return EditorParkingOutcome::Parked;
@@ -1202,15 +1223,8 @@ private:
 #ifdef __WXMSW__
     static bool TrySetParent(EditorNativeSnapshot& snapshot,
                              HWND parent,
-                             bool failForTesting,
                              DWORD* error)
     {
-        if ( failForTesting )
-        {
-            *error = ERROR_ACCESS_DENIED;
-            return false;
-        }
-
         ::SetLastError(ERROR_SUCCESS);
         const HWND oldParent =
             ::SetParent(snapshot.GetRootHwnd(), parent);
@@ -1767,34 +1781,34 @@ wxPGDeferredEditorCallbackEpoch::~wxPGDeferredEditorCallbackEpoch()
 }
 #endif
 
-#ifdef __WXMSW__
-void wxPGMSWFailNextDirectEditorParkingForTesting()
+#if defined(__WXMSW__) && defined(WXPROPGRID_TEST_SUPPORT)
+void wxPropertyGridTestAccess::FailNextDirectEditorParking()
 {
     gs_failNextDirectEditorParkingForTesting = true;
 }
 
-void wxPGMSWFailNextFallbackEditorParkingForTesting()
+void wxPropertyGridTestAccess::FailNextFallbackEditorParking()
 {
     gs_failNextFallbackEditorParkingForTesting = true;
 }
 
-void wxPGMSWResetEditorParkingFailuresForTesting()
+void wxPropertyGridTestAccess::ResetEditorParkingFailures()
 {
     gs_failNextDirectEditorParkingForTesting = false;
     gs_failNextFallbackEditorParkingForTesting = false;
 }
 
-unsigned int wxPGMSWGetEditorParkingHostCountForTesting()
+unsigned int wxPropertyGridTestAccess::GetEditorParkingHostCount()
 {
     return gs_editorParkingHostCount;
 }
 
-unsigned int wxPGMSWGetDeferredEditorBatchCountForTesting()
+unsigned int wxPropertyGridTestAccess::GetDeferredEditorBatchCount()
 {
     return gs_deferredEditorBatchCount;
 }
 
-bool wxPGMSWIsEditorParkingHostForTesting(WXWidget hwnd)
+bool wxPropertyGridTestAccess::IsEditorParkingHost(WXWidget hwnd)
 {
     const HWND nativeHwnd = reinterpret_cast<HWND>(hwnd);
     return nativeHwnd &&

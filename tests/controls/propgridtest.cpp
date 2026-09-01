@@ -30,6 +30,8 @@
 #include "wx/odcombo.h"
 #include "wx/weakref.h"
 
+#include "property-grid-test-access.h"
+
 #ifdef __WXMSW__
 #include "wx/msw/wrapwin.h"
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
@@ -54,47 +56,23 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_PROPGRID,
                          wxEVT_PG_COLS_RESIZED,
                          wxPropertyGridEvent);
 
-#if wxUSE_HEADERCTRL
-WXDLLIMPEXP_PROPGRID bool
-wxPGProcessHeaderResizeEventForTesting(wxPropertyGridManager* manager,
-                                       wxHeaderCtrlEvent& event);
-#endif
-
 #if wxUSE_TOOLBAR
-WXDLLIMPEXP_PROPGRID void
-wxPGManagerFailToolbarRemovalForTesting(unsigned int ordinal);
-WXDLLIMPEXP_PROPGRID void
-wxPGManagerResetToolbarRemovalFailuresForTesting();
-
 class ToolbarRemovalFailureReset final
 {
 public:
     ToolbarRemovalFailureReset()
     {
-        wxPGManagerResetToolbarRemovalFailuresForTesting();
+        wxPropertyGridTestAccess::ResetToolbarRemovalFailures();
     }
 
     ~ToolbarRemovalFailureReset()
     {
-        wxPGManagerResetToolbarRemovalFailuresForTesting();
+        wxPropertyGridTestAccess::ResetToolbarRemovalFailures();
     }
 };
 #endif
 
 #ifdef __WXMSW__
-WXDLLIMPEXP_PROPGRID void
-wxPGMSWFailNextDirectEditorParkingForTesting();
-WXDLLIMPEXP_PROPGRID void
-wxPGMSWFailNextFallbackEditorParkingForTesting();
-WXDLLIMPEXP_PROPGRID void
-wxPGMSWResetEditorParkingFailuresForTesting();
-WXDLLIMPEXP_PROPGRID unsigned int
-wxPGMSWGetEditorParkingHostCountForTesting();
-WXDLLIMPEXP_PROPGRID unsigned int
-wxPGMSWGetDeferredEditorBatchCountForTesting();
-WXDLLIMPEXP_PROPGRID bool
-wxPGMSWIsEditorParkingHostForTesting(WXWidget hwnd);
-
 static bool IsMessageOnlyWindow(HWND target)
 {
     HWND child = nullptr;
@@ -115,7 +93,7 @@ static HWND FindPropertyGridEditorParkingHost()
                                     nullptr,
                                     nullptr)) )
     {
-        if ( wxPGMSWIsEditorParkingHostForTesting(
+        if ( wxPropertyGridTestAccess::IsEditorParkingHost(
                  reinterpret_cast<WXWidget>(child)) )
         {
             return child;
@@ -155,12 +133,12 @@ class EditorParkingFailureReset final
 public:
     EditorParkingFailureReset()
     {
-        wxPGMSWResetEditorParkingFailuresForTesting();
+        wxPropertyGridTestAccess::ResetEditorParkingFailures();
     }
 
     ~EditorParkingFailureReset()
     {
-        wxPGMSWResetEditorParkingFailuresForTesting();
+        wxPropertyGridTestAccess::ResetEditorParkingFailures();
     }
 };
 #endif
@@ -629,7 +607,7 @@ static void SendPropertyGridKeyEvent(wxPropertyGrid* grid,
 static bool ProcessPropertyGridHeaderEvent(wxPropertyGridManager* manager,
                                            wxHeaderCtrlEvent& event)
 {
-    return wxPGProcessHeaderResizeEventForTesting(manager, event);
+    return wxPropertyGridTestAccess::ProcessHeaderResizeEvent(manager, event);
 }
 #endif
 
@@ -3853,7 +3831,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 toolsBefore.push_back(toolbar->GetToolByPos(i));
             }
 
-            wxPGManagerFailToolbarRemovalForTesting(failureOrdinal);
+            wxPropertyGridTestAccess::FailToolbarRemoval(failureOrdinal);
             CHECK_FALSE( manager->RemovePage(0) );
 
             CHECK( manager->GetPageCount() == 1 );
@@ -6161,9 +6139,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     SECTION("CreateControls_destroying_grid_defers_unassigned_editor")
     {
         const unsigned int batchesBefore =
-            wxPGMSWGetDeferredEditorBatchCountForTesting();
+            wxPropertyGridTestAccess::GetDeferredEditorBatchCount();
         const unsigned int hostsBefore =
-            wxPGMSWGetEditorParkingHostCountForTesting();
+            wxPropertyGridTestAccess::GetEditorParkingHostCount();
         DestroyingCreateControlsEditor editor;
         ReentrantPropertyGrid* const pg =
             new ReentrantPropertyGrid(wxTheApp->GetTopWindow(),
@@ -6190,18 +6168,18 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             IsMessageOnlyWindow(editor.GetCreatedHwnd());
         const bool parkedUnderHost =
             createdParent &&
-            wxPGMSWIsEditorParkingHostForTesting(
+            wxPropertyGridTestAccess::IsEditorParkingHost(
                 reinterpret_cast<WXWidget>(createdParent));
         CHECK( (parkedDirectly || parkedUnderHost) );
-        CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetDeferredEditorBatchCount() ==
                batchesBefore + 1 );
 
         wxTheApp->ProcessIdle();
         CHECK_FALSE( editor.IsEditorAlive() );
         CHECK_FALSE( ::IsWindow(editor.GetCreatedHwnd()) );
-        CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetDeferredEditorBatchCount() ==
                batchesBefore );
-        CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetEditorParkingHostCount() ==
                hostsBefore );
     }
 
@@ -6367,9 +6345,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         EditorParkingFailureReset resetParkingFailures;
         wxUnusedVar(resetParkingFailures);
         const unsigned int batchesBefore =
-            wxPGMSWGetDeferredEditorBatchCountForTesting();
+            wxPropertyGridTestAccess::GetDeferredEditorBatchCount();
         const unsigned int hostsBefore =
-            wxPGMSWGetEditorParkingHostCountForTesting();
+            wxPropertyGridTestAccess::GetEditorParkingHostCount();
 
         ReentrantPropertyGrid* const pg =
             new ReentrantPropertyGrid(wxTheApp->GetTopWindow(),
@@ -6388,20 +6366,20 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         const HWND editorHwnd =
             reinterpret_cast<HWND>(editor->GetHandle());
 
-        wxPGMSWFailNextDirectEditorParkingForTesting();
-        wxPGMSWFailNextFallbackEditorParkingForTesting();
+        wxPropertyGridTestAccess::FailNextDirectEditorParking();
+        wxPropertyGridTestAccess::FailNextFallbackEditorParking();
         REQUIRE( pg->ClearSelection() );
         CHECK( weakEditor );
         CHECK( ::IsWindow(editorHwnd) );
-        CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetDeferredEditorBatchCount() ==
                batchesBefore + 1 );
 
         wxTheApp->ProcessIdle();
         CHECK_FALSE( weakEditor );
         CHECK_FALSE( ::IsWindow(editorHwnd) );
-        CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetDeferredEditorBatchCount() ==
                batchesBefore );
-        CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetEditorParkingHostCount() ==
                hostsBefore );
         delete pg;
     }
@@ -6496,9 +6474,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         wxUnusedVar(resetParkingFailures);
 
         const unsigned int parkingHostsBefore =
-            wxPGMSWGetEditorParkingHostCountForTesting();
+            wxPropertyGridTestAccess::GetEditorParkingHostCount();
         const unsigned int batchesBefore =
-            wxPGMSWGetDeferredEditorBatchCountForTesting();
+            wxPropertyGridTestAccess::GetDeferredEditorBatchCount();
         REQUIRE( FindPropertyGridEditorParkingHost() == nullptr );
 
         ParkingPath parkingPath = ParkingPath::Direct;
@@ -6508,13 +6486,13 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         SECTION("dedicated DPI-compatible host")
         {
             parkingPath = ParkingPath::HostFallback;
-            wxPGMSWFailNextDirectEditorParkingForTesting();
+            wxPropertyGridTestAccess::FailNextDirectEditorParking();
         }
         SECTION("selective dissociation after both parking paths fail")
         {
             parkingPath = ParkingPath::DissociateFallback;
-            wxPGMSWFailNextDirectEditorParkingForTesting();
-            wxPGMSWFailNextFallbackEditorParkingForTesting();
+            wxPropertyGridTestAccess::FailNextDirectEditorParking();
+            wxPropertyGridTestAccess::FailNextFallbackEditorParking();
         }
 
         ReentrantPropertyGrid* const pg =
@@ -6590,7 +6568,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 hostWasAliveDuringEditorDestroy =
                     !parkingHostHwnd ||
                     (::IsWindow(parkingHostHwnd) &&
-                     wxPGMSWIsEditorParkingHostForTesting(
+                     wxPropertyGridTestAccess::IsEditorParkingHost(
                          reinterpret_cast<WXWidget>(parkingHostHwnd)));
             });
 
@@ -6610,7 +6588,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                     CHECK( weakPopup );
                     CHECK_FALSE( ::IsWindowVisible(popupHwnd) );
                     CHECK( ::GetWindow(popupHwnd, GW_OWNER) == popupOwner );
-                    CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+                    CHECK( wxPropertyGridTestAccess::
+                               GetDeferredEditorBatchCount() ==
                            batchesBefore + 1 );
 
                     if ( parkingPath == ParkingPath::Direct )
@@ -6618,21 +6597,23 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                         CHECK( IsMessageOnlyWindow(editorHwnd) );
                         CHECK( ::GetParent(textChildHwnd) ==
                                textChildParent );
-                        CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+                        CHECK( wxPropertyGridTestAccess::
+                                   GetEditorParkingHostCount() ==
                                parkingHostsBefore );
                     }
                     else if ( parkingPath == ParkingPath::HostFallback )
                     {
                         parkingHostHwnd = ::GetParent(editorHwnd);
                         REQUIRE( parkingHostHwnd );
-                        CHECK( wxPGMSWIsEditorParkingHostForTesting(
+                        CHECK( wxPropertyGridTestAccess::IsEditorParkingHost(
                                    reinterpret_cast<WXWidget>(
                                        parkingHostHwnd)) );
                         CHECK( ::GetParent(textChildHwnd) ==
                                textChildParent );
                         CHECK( HaveEqualWindowDpiContexts(editorHwnd,
                                                           parkingHostHwnd) );
-                        CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+                        CHECK( wxPropertyGridTestAccess::
+                                   GetEditorParkingHostCount() ==
                                parkingHostsBefore + 1 );
                     }
                     else
@@ -6646,7 +6627,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                         CHECK_FALSE( ::IsWindow(textChildHwnd) );
                         CHECK( ::IsWindow(popupHwnd) );
                         CHECK( ::GetParent(popupHwnd) != parkingHostHwnd );
-                        CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+                        CHECK( wxPropertyGridTestAccess::
+                                   GetEditorParkingHostCount() ==
                                parkingHostsBefore + 1 );
                     }
 
@@ -6657,7 +6639,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                         weakEditor &&
                         weakTextChild &&
                         weakPopup &&
-                        wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+                        wxPropertyGridTestAccess::
+                            GetDeferredEditorBatchCount() ==
                             batchesBefore + 1 &&
                         (parkingPath == ParkingPath::Direct ||
                          ::IsWindow(parkingHostHwnd));
@@ -6698,9 +6681,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK_FALSE( ::IsWindow(textChildHwnd) );
         if ( parkingHostHwnd )
             CHECK_FALSE( ::IsWindow(parkingHostHwnd) );
-        CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetEditorParkingHostCount() ==
                parkingHostsBefore );
-        CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+        CHECK( wxPropertyGridTestAccess::GetDeferredEditorBatchCount() ==
                batchesBefore );
 
         // wxComboCtrl destroys its external transient asynchronously. It was
@@ -6753,12 +6736,13 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             CHECK( secondDestroyed );
             REQUIRE( weakSecondEditor );
             CHECK( IsMessageOnlyWindow(secondEditorHwnd) );
-            CHECK( wxPGMSWGetEditorParkingHostCountForTesting() ==
+            CHECK( wxPropertyGridTestAccess::GetEditorParkingHostCount() ==
                    parkingHostsBefore );
             wxTheApp->ProcessIdle();
             CHECK_FALSE( weakSecondEditor );
             CHECK_FALSE( ::IsWindow(secondEditorHwnd) );
-            CHECK( wxPGMSWGetDeferredEditorBatchCountForTesting() ==
+            CHECK( wxPropertyGridTestAccess::
+                       GetDeferredEditorBatchCount() ==
                    batchesBefore );
             wxTheApp->GetTopWindow()->SetFocus();
             wxYield();

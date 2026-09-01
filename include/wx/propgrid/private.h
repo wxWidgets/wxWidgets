@@ -79,24 +79,6 @@ wxPGResetPropertyGridManagerTransientState(wxPropertyGridManager* manager);
 WXDLLIMPEXP_PROPGRID void
 wxPGErasePropertyGridManagerTransientState(wxPropertyGridManager* manager);
 
-#if wxUSE_TOOLBAR
-// Make the Nth toolbar detachment performed by RemovePage() fail before any
-// native or common toolbar state is changed. This is an implementation-only
-// seam for proving both rollback branches of the page-removal transaction.
-WXDLLIMPEXP_PROPGRID void
-wxPGManagerFailToolbarRemovalForTesting(unsigned int ordinal);
-WXDLLIMPEXP_PROPGRID void
-wxPGManagerResetToolbarRemovalFailuresForTesting();
-#endif
-
-#if wxUSE_HEADERCTRL
-class WXDLLIMPEXP_FWD_CORE wxHeaderCtrlEvent;
-
-WXDLLIMPEXP_PROPGRID bool
-wxPGProcessHeaderResizeEventForTesting(wxPropertyGridManager* manager,
-                                       wxHeaderCtrlEvent& event);
-#endif
-
 #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
     defined(__WXQT__)
     #define wxPG_USE_EDITOR_CALLBACK_EPOCH 1
@@ -133,24 +115,6 @@ public:
     wxPGDeferredEditorCallbackEpoch() {}
     ~wxPGDeferredEditorCallbackEpoch() {}
 };
-#endif
-
-#ifdef __WXMSW__
-// One-shot seam for the otherwise exceptional first SetParent(HWND_MESSAGE)
-// failure in deferred editor teardown. The fallback still invokes the real
-// Win32 APIs and is observable only through the bounded host count.
-WXDLLIMPEXP_PROPGRID void
-wxPGMSWFailNextDirectEditorParkingForTesting();
-WXDLLIMPEXP_PROPGRID void
-wxPGMSWFailNextFallbackEditorParkingForTesting();
-WXDLLIMPEXP_PROPGRID void
-wxPGMSWResetEditorParkingFailuresForTesting();
-WXDLLIMPEXP_PROPGRID unsigned int
-wxPGMSWGetEditorParkingHostCountForTesting();
-WXDLLIMPEXP_PROPGRID unsigned int
-wxPGMSWGetDeferredEditorBatchCountForTesting();
-WXDLLIMPEXP_PROPGRID bool
-wxPGMSWIsEditorParkingHostForTesting(WXWidget hwnd);
 #endif
 
 // -----------------------------------------------------------------------

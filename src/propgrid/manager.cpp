@@ -29,6 +29,10 @@
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 
+#ifdef WXPROPGRID_TEST_SUPPORT
+    #include "property-grid-test-access.h"
+#endif
+
 #include <unordered_map>
 
 
@@ -56,6 +60,7 @@ wxPGGetPropertyGridManagerTransientStates()
 }
 
 #if wxUSE_TOOLBAR
+#ifdef WXPROPGRID_TEST_SUPPORT
 struct wxPGToolbarRemovalFailureState
 {
     unsigned int ordinal = 0;
@@ -67,10 +72,12 @@ wxPGToolbarRemovalFailureState& wxPGGetToolbarRemovalFailureState()
     static wxPGToolbarRemovalFailureState state;
     return state;
 }
+#endif
 
 wxToolBarToolBase* wxPGDetachToolbarToolByPos(wxToolBar* toolbar,
                                               size_t position)
 {
+#ifdef WXPROPGRID_TEST_SUPPORT
     wxPGToolbarRemovalFailureState& failure =
         wxPGGetToolbarRemovalFailureState();
     if ( failure.ordinal && ++failure.calls == failure.ordinal )
@@ -78,6 +85,7 @@ wxToolBarToolBase* wxPGDetachToolbarToolByPos(wxToolBar* toolbar,
         failure.ordinal = 0;
         return nullptr;
     }
+#endif
 
     if ( position >= toolbar->GetToolsCount() )
         return nullptr;
@@ -106,8 +114,8 @@ wxToolBarToolBase* wxPGDetachToolbarToolByPos(wxToolBar* toolbar,
 
 } // anonymous namespace
 
-#if wxUSE_TOOLBAR
-void wxPGManagerFailToolbarRemovalForTesting(unsigned int ordinal)
+#if wxUSE_TOOLBAR && defined(WXPROPGRID_TEST_SUPPORT)
+void wxPropertyGridTestAccess::FailToolbarRemoval(unsigned int ordinal)
 {
     wxASSERT_MSG(ordinal > 0, "toolbar failure ordinal must be positive");
     wxPGToolbarRemovalFailureState& state =
@@ -116,7 +124,7 @@ void wxPGManagerFailToolbarRemovalForTesting(unsigned int ordinal)
     state.calls = 0;
 }
 
-void wxPGManagerResetToolbarRemovalFailuresForTesting()
+void wxPropertyGridTestAccess::ResetToolbarRemovalFailures()
 {
     wxPGGetToolbarRemovalFailureState() = wxPGToolbarRemovalFailureState();
 }
@@ -512,7 +520,7 @@ void wxPropertyGridPage::DoSetSplitter(int pos, int splitterColumn, wxPGSplitter
 
 class wxPGHeaderCtrl : public wxHeaderCtrl
 {
-    friend class wxPGHeaderTestBridge;
+    friend class wxPropertyGridTestAccess;
 
 public:
     wxPGHeaderCtrl(wxPropertyGridManager* manager, wxWindowID id, const wxPoint& pos,
@@ -869,37 +877,30 @@ private:
     bool                            m_resizeInvalidated;
 };
 
-class wxPGHeaderTestBridge
+#ifdef WXPROPGRID_TEST_SUPPORT
+bool wxPropertyGridTestAccess::ProcessHeaderResizeEvent(
+    wxPropertyGridManager* manager,
+    wxHeaderCtrlEvent& event)
 {
-public:
-    static bool Dispatch(wxPropertyGridManager* manager,
-                         wxHeaderCtrlEvent& event)
-    {
-        if ( !manager || !manager->m_pHeaderCtrl )
-            return false;
+    if ( !manager || !manager->m_pHeaderCtrl )
+        return false;
 
-        wxPGHeaderCtrl* const pgHeader = manager->m_pHeaderCtrl;
-        event.SetId(pgHeader->GetId());
-        event.SetEventObject(pgHeader);
+    wxPGHeaderCtrl* const pgHeader = manager->m_pHeaderCtrl;
+    event.SetId(pgHeader->GetId());
+    event.SetEventObject(pgHeader);
 
-        if ( event.GetEventType() == wxEVT_HEADER_BEGIN_RESIZE )
-            pgHeader->OnBeginResize(event);
-        else if ( event.GetEventType() == wxEVT_HEADER_RESIZING )
-            pgHeader->OnResizing(event);
-        else if ( event.GetEventType() == wxEVT_HEADER_END_RESIZE )
-            pgHeader->OnEndResize(event);
-        else
-            return false;
+    if ( event.GetEventType() == wxEVT_HEADER_BEGIN_RESIZE )
+        pgHeader->OnBeginResize(event);
+    else if ( event.GetEventType() == wxEVT_HEADER_RESIZING )
+        pgHeader->OnResizing(event);
+    else if ( event.GetEventType() == wxEVT_HEADER_END_RESIZE )
+        pgHeader->OnEndResize(event);
+    else
+        return false;
 
-        return true;
-    }
-};
-
-bool wxPGProcessHeaderResizeEventForTesting(wxPropertyGridManager* manager,
-                                            wxHeaderCtrlEvent& event)
-{
-    return wxPGHeaderTestBridge::Dispatch(manager, event);
+    return true;
 }
+#endif
 
 #endif // wxUSE_HEADERCTRL
 
