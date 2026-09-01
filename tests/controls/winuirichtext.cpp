@@ -1410,12 +1410,26 @@ TEST_CASE("WinUIRichText::CommonOleBrokerAndRealDropFilesRoute",
         wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*wxWinUIHostObservationTestAccess::GetDropBroker(*hostB));
     CHECK(snapshotA.active);
     CHECK(snapshotA.ownsRegistration);
-    CHECK(snapshotA.registerCalls == 1);
+    CHECK(snapshotA.ownsCompleteRegistrationSet);
+    CHECK(snapshotA.registerCalls == 2);
+    CHECK(snapshotA.bridgeRegistration.registerCalls == 1);
+    CHECK(snapshotA.tlwRegistration.registerCalls == 1);
+    CHECK(snapshotA.bridgeRegistration.registrationHwnd ==
+          hostA->GetBridgeHwnd());
+    CHECK(snapshotA.tlwRegistration.registrationHwnd ==
+          GetHwndOf(fixture.GetFrameA()));
     CHECK(snapshotA.registrationHwnd == GetHwndOf(fixture.GetFrameA()));
     CHECK(snapshotA.registrationHwnd != hostA->GetBridgeHwnd());
     CHECK(snapshotB.active);
     CHECK(snapshotB.ownsRegistration);
-    CHECK(snapshotB.registerCalls == 1);
+    CHECK(snapshotB.ownsCompleteRegistrationSet);
+    CHECK(snapshotB.registerCalls == 2);
+    CHECK(snapshotB.bridgeRegistration.registerCalls == 1);
+    CHECK(snapshotB.tlwRegistration.registerCalls == 1);
+    CHECK(snapshotB.bridgeRegistration.registrationHwnd ==
+          hostB->GetBridgeHwnd());
+    CHECK(snapshotB.tlwRegistration.registrationHwnd ==
+          GetHwndOf(fixture.GetFrameB()));
     CHECK(snapshotB.registrationHwnd == GetHwndOf(fixture.GetFrameB()));
     CHECK(snapshotB.registrationHwnd != hostB->GetBridgeHwnd());
 
