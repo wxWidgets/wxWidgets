@@ -37,7 +37,7 @@
 #include "host-geometry-test-access.h"
 #include "host-uia-test-access.h"
 #if wxUSE_MENUS
-    #include "wx/winui/private/menutest.h"
+    #include "menu-test-access.h"
 #endif
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
     #include "wx/msw/private/dropsession.h"
@@ -603,7 +603,7 @@ class PopupMenuFailureReset final
 public:
     ~PopupMenuFailureReset()
     {
-        wxWinUI3FailNextPopupTimersForTesting(false, false);
+        wxWinUIMenuTestAccess::FailNextPopupTimers(false, false);
     }
 };
 #endif
@@ -980,9 +980,9 @@ TEST_CASE("WinUISTC::LogicalContextMenuAndDragDropUseCommonBrokers",
         });
 
     PopupMenuFailureReset resetPopupFailures;
-    wxWinUI3FailNextPopupTimersForTesting(true, true);
+    wxWinUIMenuTestAccess::FailNextPopupTimers(true, true);
     wxStopWatch popupElapsed;
-    CHECK(wxWinUI3PopupMenuForTesting(stc, &menu, 6, 6));
+    CHECK(wxWinUIMenuTestAccess::PopupMenu(stc, &menu, 6, 6));
     CHECK(popupElapsed.Time() < 2000);
     CHECK(opens == 1);
     CHECK(closes == 1);

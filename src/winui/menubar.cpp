@@ -28,9 +28,12 @@
 #include "wx/weakref.h"
 
 #include "private.h"
-#include "wx/winui/private/menutest.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "menu-test-access.h"
+#endif
 
 #include <algorithm>
 #include <chrono>
@@ -89,7 +92,9 @@ struct wxWinUIMenuProjectionState
     bool rebuildPending = false;
     bool deferredActionsScheduled = false;
     unsigned openMenus = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     double bitmapScaleForTesting = 0.0;
+#endif
     MUX::FlowDirection flowDirection =
         MUX::FlowDirection::LeftToRight;
 
@@ -238,13 +243,22 @@ void wxWinUIAttachMenuHighlight(
         });
 }
 
-wxBitmap wxWinUIGetMenuItemBitmap(wxMenuItem *item,
-                                  double requestedScale)
+wxBitmap wxWinUIGetMenuItemBitmap(wxMenuItem *item)
 {
     const bool checkedBitmap =
         !item->IsCheckable() || item->IsChecked();
+
+    return item->GetBitmap(checkedBitmap);
+}
+
+#ifdef WXWINUI_TEST_SUPPORT
+wxBitmap wxWinUIGetMenuItemBitmap(wxMenuItem *item,
+                                  double requestedScale)
+{
     if ( requestedScale > 0.0 )
     {
+        const bool checkedBitmap =
+            !item->IsCheckable() || item->IsChecked();
         const wxBitmapBundle bundle =
             item->GetBitmapBundle(checkedBitmap);
         if ( bundle.IsOk() )
@@ -255,8 +269,9 @@ wxBitmap wxWinUIGetMenuItemBitmap(wxMenuItem *item,
         }
     }
 
-    return item->GetBitmap(checkedBitmap);
+    return wxWinUIGetMenuItemBitmap(item);
 }
+#endif
 
 void wxWinUIApplyMenuItemPresentation(
     const MUXC::MenuFlyoutItemBase& peer,
@@ -272,8 +287,12 @@ void wxWinUIApplyMenuItemPresentation(
     MUXC::IconElement icon{ nullptr };
     peer.FlowDirection(state.flowDirection);
 
+#ifdef WXWINUI_TEST_SUPPORT
     const wxBitmap bitmap = wxWinUIGetMenuItemBitmap(
         item, state.bitmapScaleForTesting);
+#else
+    const wxBitmap bitmap = wxWinUIGetMenuItemBitmap(item);
+#endif
     if ( bitmap.IsOk() )
     {
         if ( auto source = wxWinUIWriteableBitmapFromBitmap(bitmap) )
@@ -1523,6 +1542,7 @@ public:
         }
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     bool TestOpenMenu(const size_t *menuPath, size_t menuPathLength)
     {
         const wxWeakRef<wxWindow> stillAlive(this);
@@ -1623,7 +1643,7 @@ public:
     bool TestSnapshot(const size_t *menuPath,
                       size_t menuPathLength,
                       size_t itemPosition,
-                      wxWinUIMenuItemSnapshot *snapshot)
+                      wxWinUIMenuTestAccess::ItemSnapshot *snapshot)
     {
         if ( !snapshot )
             return false;
@@ -1652,11 +1672,11 @@ public:
         if ( !peer || !item || item->IsSeparator() )
             return false;
 
-        wxWinUIMenuItemSnapshot result;
+        wxWinUIMenuTestAccess::ItemSnapshot result;
         result.accessKey = wxString(peer.AccessKey().c_str());
         result.enabled = peer.IsEnabled();
         result.flowDirection =
-            static_cast<wxWinUIMenuFlowDirection>(
+            static_cast<wxWinUIMenuTestAccess::FlowDirection>(
                 static_cast<int>(peer.FlowDirection()));
         result.radio =
             static_cast<bool>(peer.try_as<MUXC::RadioMenuFlyoutItem>());
@@ -1862,8 +1882,8 @@ public:
     int TestGetBarHeight() const { return m_barHeight; }
 
     bool TestGetFlowDirection(
-        wxWinUIMenuFlowDirection *barDirection,
-        wxWinUIMenuFlowDirection *firstTopDirection) const
+        wxWinUIMenuTestAccess::FlowDirection *barDirection,
+        wxWinUIMenuTestAccess::FlowDirection *firstTopDirection) const
     {
         if ( !barDirection || !firstTopDirection || !m_bar ||
              m_bar.Items().Size() == 0 )
@@ -1874,10 +1894,10 @@ public:
         try
         {
             *barDirection =
-                static_cast<wxWinUIMenuFlowDirection>(
+                static_cast<wxWinUIMenuTestAccess::FlowDirection>(
                     static_cast<int>(m_bar.FlowDirection()));
             *firstTopDirection =
-                static_cast<wxWinUIMenuFlowDirection>(
+                static_cast<wxWinUIMenuTestAccess::FlowDirection>(
                     static_cast<int>(
                         m_bar.Items().GetAt(0).FlowDirection()));
             return true;
@@ -1903,8 +1923,10 @@ public:
     }
 
     bool TestBuildQuarantined() const { return m_buildQuarantined; }
+#endif
 
 private:
+#ifdef WXWINUI_TEST_SUPPORT
     MUX::FrameworkElement ResolveAutomationElement(
         const size_t *menuPath,
         size_t menuPathLength) const
@@ -2024,6 +2046,7 @@ private:
 
         return true;
     }
+#endif
 
     void OnFrameSize(wxSizeEvent& event)
     {
@@ -2203,8 +2226,10 @@ private:
             auto state =
                 std::make_shared<wxWinUIMenuProjectionState>();
             state->menuBarMode = true;
+#ifdef WXWINUI_TEST_SUPPORT
             state->bitmapScaleForTesting =
                 owner->m_bitmapScaleForTesting;
+#endif
             state->flowDirection =
                 owner->GetLayoutDirection() ==
                         wxLayout_RightToLeft
@@ -2363,7 +2388,9 @@ private:
     bool m_buildQuarantined = false;
     unsigned m_buildPassesRemaining = 0;
     unsigned long long m_buildEpoch = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     double m_bitmapScaleForTesting = 0.0;
+#endif
     bool m_deactivating = false;
     bool m_destroyScheduled = false;
 };
@@ -2488,20 +2515,24 @@ private:
     std::weak_ptr<wxWinUIDrainState> m_state;
 };
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool gs_rejectNextPopupDrainForTesting = false;
 bool gs_failNextDrainTimerForTesting = false;
 bool gs_failNextPopupWatchdogForTesting = false;
+#endif
 
 bool wxWinUIDrainDispatcher(const MUXD::DispatcherQueue& queue)
 {
     if ( !queue )
         return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_rejectNextPopupDrainForTesting )
     {
         gs_rejectNextPopupDrainForTesting = false;
         return false;
     }
+#endif
 
     auto state = std::make_shared<wxWinUIDrainState>();
     const std::weak_ptr<wxWinUIDrainState> weakState(state);
@@ -2530,9 +2561,13 @@ bool wxWinUIDrainDispatcher(const MUXD::DispatcherQueue& queue)
     wxEventLoop loop;
     state->loop = &loop;
     wxWinUIDrainTimeout timeout(state);
+#ifdef WXWINUI_TEST_SUPPORT
     const bool timerStarted =
         !std::exchange(gs_failNextDrainTimerForTesting, false) &&
         timeout.StartOnce(250);
+#else
+    const bool timerStarted = timeout.StartOnce(250);
+#endif
     if ( !timerStarted )
     {
         state->loop = nullptr;
@@ -2610,30 +2645,33 @@ void wxWinUIRefreshFrameMenuBar(wxWindow *menuBarWin)
         static_cast<wxWinUIMenuBarWindow *>(menuBarWin)->Rebuild();
 }
 
-bool wxWinUI3MenuBarOpenForTesting(wxWindow *menuBarWindow,
-                                   const size_t *menuPath,
-                                   size_t menuPathLength)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIMenuTestAccess::Open(
+    wxWindow *menuBarWindow,
+    const size_t *menuPath,
+    size_t menuPathLength)
 {
     return menuBarWindow &&
            static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
                ->TestOpenMenu(menuPath, menuPathLength);
 }
 
-bool wxWinUI3MenuBarCloseForTesting(wxWindow *menuBarWindow,
-                                    const size_t *menuPath,
-                                    size_t menuPathLength)
+bool wxWinUIMenuTestAccess::Close(
+    wxWindow *menuBarWindow,
+    const size_t *menuPath,
+    size_t menuPathLength)
 {
     return menuBarWindow &&
            static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
                ->TestCloseMenu(menuPath, menuPathLength);
 }
 
-bool wxWinUI3MenuBarSnapshotForTesting(
+bool wxWinUIMenuTestAccess::GetSnapshot(
     wxWindow *menuBarWindow,
     const size_t *menuPath,
     size_t menuPathLength,
     size_t itemPosition,
-    wxWinUIMenuItemSnapshot *snapshot)
+    wxWinUIMenuTestAccess::ItemSnapshot *snapshot)
 {
     return menuBarWindow &&
            static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
@@ -2641,17 +2679,18 @@ bool wxWinUI3MenuBarSnapshotForTesting(
                    menuPath, menuPathLength, itemPosition, snapshot);
 }
 
-bool wxWinUI3MenuBarInvokeForTesting(wxWindow *menuBarWindow,
-                                     const size_t *menuPath,
-                                     size_t menuPathLength,
-                                     size_t itemPosition)
+bool wxWinUIMenuTestAccess::Invoke(
+    wxWindow *menuBarWindow,
+    const size_t *menuPath,
+    size_t menuPathLength,
+    size_t itemPosition)
 {
     return menuBarWindow &&
            static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
                ->TestInvoke(menuPath, menuPathLength, itemPosition);
 }
 
-bool wxWinUI3MenuBarSetExpandedForTesting(
+bool wxWinUIMenuTestAccess::SetExpanded(
     wxWindow *menuBarWindow,
     const size_t *menuPath,
     size_t menuPathLength,
@@ -2662,7 +2701,7 @@ bool wxWinUI3MenuBarSetExpandedForTesting(
                ->TestSetExpanded(menuPath, menuPathLength, expanded);
 }
 
-bool wxWinUI3MenuBarGetExpandedForTesting(
+bool wxWinUIMenuTestAccess::GetExpanded(
     wxWindow *menuBarWindow,
     const size_t *menuPath,
     size_t menuPathLength,
@@ -2673,7 +2712,7 @@ bool wxWinUI3MenuBarGetExpandedForTesting(
                ->TestGetExpanded(menuPath, menuPathLength, expanded);
 }
 
-size_t wxWinUI3MenuBarProjectionCountForTesting(wxWindow *menuBarWindow)
+size_t wxWinUIMenuTestAccess::GetProjectionCount(wxWindow *menuBarWindow)
 {
     return menuBarWindow
         ? static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
@@ -2681,7 +2720,7 @@ size_t wxWinUI3MenuBarProjectionCountForTesting(wxWindow *menuBarWindow)
         : 0;
 }
 
-bool wxWinUI3MenuBarSentinelContractForTesting(
+bool wxWinUIMenuTestAccess::HasSentinelContract(
     wxWindow *menuBarWindow,
     const size_t *menuPath,
     size_t menuPathLength)
@@ -2691,7 +2730,7 @@ bool wxWinUI3MenuBarSentinelContractForTesting(
                ->TestSentinelContract(menuPath, menuPathLength);
 }
 
-bool wxWinUI3MenuBarTopEnabledForTesting(wxWindow *menuBarWindow,
+bool wxWinUIMenuTestAccess::GetTopEnabled(wxWindow *menuBarWindow,
                                          size_t topIndex,
                                          bool *enabled)
 {
@@ -2700,7 +2739,7 @@ bool wxWinUI3MenuBarTopEnabledForTesting(wxWindow *menuBarWindow,
                ->TestTopEnabled(topIndex, enabled);
 }
 
-bool wxWinUI3MenuBarTopLabelForTesting(wxWindow *menuBarWindow,
+bool wxWinUIMenuTestAccess::GetTopLabel(wxWindow *menuBarWindow,
                                        size_t topIndex,
                                        wxString *label,
                                        wxString *accessKey)
@@ -2710,7 +2749,7 @@ bool wxWinUI3MenuBarTopLabelForTesting(wxWindow *menuBarWindow,
                ->TestTopLabel(topIndex, label, accessKey);
 }
 
-int wxWinUI3MenuBarHeightForTesting(wxWindow *menuBarWindow)
+int wxWinUIMenuTestAccess::GetBarHeight(wxWindow *menuBarWindow)
 {
     return menuBarWindow
         ? static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
@@ -2718,10 +2757,10 @@ int wxWinUI3MenuBarHeightForTesting(wxWindow *menuBarWindow)
         : 0;
 }
 
-bool wxWinUI3MenuBarFlowDirectionForTesting(
+bool wxWinUIMenuTestAccess::GetFlowDirection(
     wxWindow *menuBarWindow,
-    wxWinUIMenuFlowDirection *barDirection,
-    wxWinUIMenuFlowDirection *firstTopDirection)
+    wxWinUIMenuTestAccess::FlowDirection *barDirection,
+    wxWinUIMenuTestAccess::FlowDirection *firstTopDirection)
 {
     return menuBarWindow &&
            static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
@@ -2729,7 +2768,7 @@ bool wxWinUI3MenuBarFlowDirectionForTesting(
                    barDirection, firstTopDirection);
 }
 
-bool wxWinUI3MenuBarRefreshForScaleForTesting(
+bool wxWinUIMenuTestAccess::RefreshForScale(
     wxWindow *menuBarWindow,
     double scale)
 {
@@ -2738,23 +2777,24 @@ bool wxWinUI3MenuBarRefreshForScaleForTesting(
                ->TestRefreshForScale(scale);
 }
 
-bool wxWinUI3MenuBarBuildQuarantinedForTesting(wxWindow *menuBarWindow)
+bool wxWinUIMenuTestAccess::IsBuildQuarantined(wxWindow *menuBarWindow)
 {
     return menuBarWindow &&
            static_cast<wxWinUIMenuBarWindow *>(menuBarWindow)
                ->TestBuildQuarantined();
 }
 
-void wxWinUI3RejectNextPopupDrainForTesting()
+void wxWinUIMenuTestAccess::RejectNextPopupDrain()
 {
     gs_rejectNextPopupDrainForTesting = true;
 }
 
-void wxWinUI3FailNextPopupTimersForTesting(bool drain, bool watchdog)
+void wxWinUIMenuTestAccess::FailNextPopupTimers(bool drain, bool watchdog)
 {
     gs_failNextDrainTimerForTesting = drain;
     gs_failNextPopupWatchdogForTesting = watchdog;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // WinUI popup menus
@@ -2910,10 +2950,14 @@ bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
             wxEventLoop loop;
             loopState->loop = &loop;
             wxWinUIPopupWatchdog watchdog(loopState);
+#ifdef WXWINUI_TEST_SUPPORT
             const bool watchdogStarted =
                 !std::exchange(
                     gs_failNextPopupWatchdogForTesting, false) &&
                 watchdog.Start(100);
+#else
+            const bool watchdogStarted = watchdog.Start(100);
+#endif
             if ( watchdogStarted )
             {
                 loop.Run();
@@ -2990,12 +3034,14 @@ bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
     return menuSessionStarted;
 }
 
-bool wxWinUI3PopupMenuForTesting(wxWindow *win,
-                                 wxMenu *menu,
-                                 int x,
-                                 int y)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIMenuTestAccess::PopupMenu(wxWindow *win,
+                                      wxMenu *menu,
+                                      int x,
+                                      int y)
 {
     return wxWinUIPopupMenu(win, menu, x, y);
 }
+#endif
 
 #endif // wxUSE_WINUI3 && wxUSE_MENUS

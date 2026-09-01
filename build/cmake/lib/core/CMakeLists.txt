@@ -218,6 +218,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/clrpicker.cpp"
             "${wxSOURCE_DIR}/src/winui/infobar.cpp"
             "${wxSOURCE_DIR}/src/winui/statbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/menubar.cpp"
             "${wxSOURCE_DIR}/src/winui/listbox.cpp"
             "${wxSOURCE_DIR}/src/winui/treectrl.cpp"
             "${wxSOURCE_DIR}/src/winui/choice.cpp"

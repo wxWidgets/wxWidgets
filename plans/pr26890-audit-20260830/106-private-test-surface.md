@@ -548,6 +548,32 @@ Do not delete a lifetime/retirement service used by production merely because it
   restored to `wxBUILD_TESTS=ALL` and the same builds and runtime gates pass
   again.
 
+## Menu projection and popup test boundary (2026-09-01)
+
+- The private-but-exported `menutest.h` surface is removed. Its seventeen
+  menu projection, automation, fault-injection and popup operations, together
+  with the snapshot and flow-direction types, now live in the non-installed
+  `menu-test-access.h` class. Only `menubar.cpp` opts in when
+  `WXWINUI_TEST_SUPPORT` is enabled.
+- Shipping retains the real projection/sentinel lifecycle, build quarantine
+  budgets and epochs, UIA reconciliation, dispatcher drain, timeout/watchdog,
+  modal popup loop and command routing. The three one-shot fault injectors,
+  the forced bitmap-scale storage and all diagnostic resolver methods compile
+  only in test-enabled builds; the production bitmap helper has no dormant
+  forced-scale branch.
+- Shared and static Release each rebuild `test_gui`, `minimal` and
+  `winuispike` with warnings as errors. On private desktops with
+  `WX_UI_TESTS=0`, the complete `[WinUIMenu]` group passes **312 assertions /
+  17 cases** and the STC common-broker context-menu case passes **41/1** in
+  each linkage. Runtime smoke and Supported V0 then pass **2/2** per linkage.
+  These checks inject no physical input.
+- Focused `wxBUILD_TESTS=OFF` builds of `wxcore` pass `/warnaserror` in both
+  linkages. `dumpbin` finds no former menu-test export/type, new access-class
+  symbol, fault-injector storage or forced-scale storage in either the shared
+  DLL or static archive. The trees are restored to `wxBUILD_TESTS=ALL`, the
+  three targets rebuild, and the same focused tests and runtime gates pass
+  again.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

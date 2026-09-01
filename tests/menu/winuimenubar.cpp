@@ -22,7 +22,7 @@
 #include "wx/bmpbndl.h"
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
-#include "wx/winui/private/menutest.h"
+#include "menu-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
 
@@ -164,7 +164,7 @@ struct MenuBarFixture
         DrainMenuEvents();
         menuBarWindow = FindOnlyFrameChild(frame);
         REQUIRE(menuBarWindow != nullptr);
-        REQUIRE(wxWinUI3MenuBarHeightForTesting(menuBarWindow) > 0);
+        REQUIRE(wxWinUIMenuTestAccess::GetBarHeight(menuBarWindow) > 0);
     }
 
     void Destroy()
@@ -251,7 +251,7 @@ TEST_CASE("WinUIMenu::ReentrantRebuildHasPersistentBudgetAndRearms",
     REQUIRE(WaitForMenuCondition(
         [&]()
         {
-            return wxWinUI3MenuBarBuildQuarantinedForTesting(
+            return wxWinUIMenuTestAccess::IsBuildQuarantined(
                 fixture.menuBarWindow);
         }));
 
@@ -261,7 +261,7 @@ TEST_CASE("WinUIMenu::ReentrantRebuildHasPersistentBudgetAndRearms",
     const unsigned callbacksAtQuarantine = callbacks;
     DrainMenuEvents(16);
     CHECK(callbacks == callbacksAtQuarantine);
-    CHECK(wxWinUI3MenuBarBuildQuarantinedForTesting(
+    CHECK(wxWinUIMenuTestAccess::IsBuildQuarantined(
         fixture.menuBarWindow));
 
     // Never let the global one-shot seam retain this stack frame. A later,
@@ -269,12 +269,12 @@ TEST_CASE("WinUIMenu::ReentrantRebuildHasPersistentBudgetAndRearms",
     // converges normally.
     resetHook.Clear();
     fixture.menuBar->SetMenuLabel(0, "&Stable");
-    CHECK_FALSE(wxWinUI3MenuBarBuildQuarantinedForTesting(
+    CHECK_FALSE(wxWinUIMenuTestAccess::IsBuildQuarantined(
         fixture.menuBarWindow));
 
     wxString label;
     wxString accessKey;
-    REQUIRE(wxWinUI3MenuBarTopLabelForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::GetTopLabel(
         fixture.menuBarWindow, 0, &label, &accessKey));
     CHECK(label == "Stable");
     CHECK(accessKey.CmpNoCase("S") == 0);
@@ -326,7 +326,7 @@ TEST_CASE("WinUIMenu::StaleBuildContinuationCannotOverwriteNewEpoch",
 
     wxString label;
     wxString accessKey;
-    REQUIRE(wxWinUI3MenuBarTopLabelForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::GetTopLabel(
         fixture.menuBarWindow, 0, &label, &accessKey));
     CHECK(label == "Winning");
     CHECK(accessKey.CmpNoCase("W") == 0);
@@ -450,13 +450,13 @@ TEST_CASE("WinUIMenu::OpenBeforeProjectionAndExactClose",
     fixture.Attach();
 
     const size_t topPath[] = { 0 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
     REQUIRE(opened.size() == 1);
     CHECK(opened.back() == top);
 
-    wxWinUIMenuItemSnapshot dynamicPeer;
-    REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+    wxWinUIMenuTestAccess::ItemSnapshot dynamicPeer;
+    REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
         fixture.menuBarWindow,
         topPath,
         WXSIZEOF(topPath),
@@ -468,8 +468,8 @@ TEST_CASE("WinUIMenu::OpenBeforeProjectionAndExactClose",
     CHECK(!dynamicPeer.enabled);
     CHECK(dynamicPeer.hasIcon);
 
-    wxWinUIMenuItemSnapshot checkPeer;
-    REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+    wxWinUIMenuTestAccess::ItemSnapshot checkPeer;
+    REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
         fixture.menuBarWindow,
         topPath,
         WXSIZEOF(topPath),
@@ -477,7 +477,7 @@ TEST_CASE("WinUIMenu::OpenBeforeProjectionAndExactClose",
         &checkPeer));
     CHECK(checkPeer.checked);
 
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
     REQUIRE(closed.size() == 1);
     CHECK(closed.back() == top);
@@ -486,11 +486,11 @@ TEST_CASE("WinUIMenu::OpenBeforeProjectionAndExactClose",
     // A menu with no public items still has the private sentinel, hence an
     // exact balanced OPEN/CLOSE pair.
     const size_t emptyPath[] = { 1 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, emptyPath, WXSIZEOF(emptyPath)));
     REQUIRE(opened.size() == 2);
     CHECK(opened.back() == empty);
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, emptyPath, WXSIZEOF(emptyPath)));
     REQUIRE(closed.size() == 2);
     CHECK(closed.back() == empty);
@@ -499,14 +499,14 @@ TEST_CASE("WinUIMenu::OpenBeforeProjectionAndExactClose",
     // Opening a submenu opens its ancestors first and closing is balanced in
     // reverse order, with each exact wxMenu pointer preserved.
     const size_t subPath[] = { 0, 2 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
     REQUIRE(opened.size() == 4);
     CHECK(opened[2] == top);
     CHECK(opened[3] == sub);
 
-    wxWinUIMenuItemSnapshot subPeer;
-    REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+    wxWinUIMenuTestAccess::ItemSnapshot subPeer;
+    REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
         fixture.menuBarWindow,
         subPath,
         WXSIZEOF(subPath),
@@ -515,7 +515,7 @@ TEST_CASE("WinUIMenu::OpenBeforeProjectionAndExactClose",
     CHECK(subPeer.label == "Sub item");
     CHECK(subPeer.accessKey == "u");
 
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
     REQUIRE(closed.size() == 4);
     CHECK(closed[2] == sub);
@@ -580,16 +580,16 @@ TEST_CASE("WinUIMenu::CanonicalCommandRouting",
         });
 
     const size_t branchAPath[] = { 0, 0 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath)));
-    REQUIRE(wxWinUI3MenuBarInvokeForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Invoke(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath),
         0));
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath)));
@@ -605,16 +605,16 @@ TEST_CASE("WinUIMenu::CanonicalCommandRouting",
 
     route.clear();
     commandInt = -99;
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath)));
-    REQUIRE(wxWinUI3MenuBarInvokeForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Invoke(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath),
         1));
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath)));
@@ -625,13 +625,13 @@ TEST_CASE("WinUIMenu::CanonicalCommandRouting",
     // Selecting an already selected radio is a no-op in the canonical MSW
     // command implementation.
     route.clear();
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath)));
 
-    wxWinUIMenuItemSnapshot selectedRadio;
-    REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+    wxWinUIMenuTestAccess::ItemSnapshot selectedRadio;
+    REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath),
@@ -640,8 +640,8 @@ TEST_CASE("WinUIMenu::CanonicalCommandRouting",
     CHECK(selectedRadio.radio);
     CHECK(selectedRadio.checked);
 
-    wxWinUIMenuItemSnapshot unselectedRadio;
-    REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+    wxWinUIMenuTestAccess::ItemSnapshot unselectedRadio;
+    REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath),
@@ -650,12 +650,12 @@ TEST_CASE("WinUIMenu::CanonicalCommandRouting",
     CHECK(unselectedRadio.radio);
     CHECK(!unselectedRadio.checked);
 
-    REQUIRE(wxWinUI3MenuBarInvokeForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Invoke(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath),
         2));
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow,
         branchAPath,
         WXSIZEOF(branchAPath)));
@@ -676,28 +676,28 @@ TEST_CASE("WinUIMenu::DisabledSubmenuAndMetrics",
     fixture.Attach();
 
     bool topEnabled = false;
-    REQUIRE(wxWinUI3MenuBarTopEnabledForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::GetTopEnabled(
         fixture.menuBarWindow, 0, &topEnabled));
     CHECK(topEnabled);
 
     fixture.menuBar->EnableTop(0, false);
     DrainMenuEvents();
-    REQUIRE(wxWinUI3MenuBarTopEnabledForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::GetTopEnabled(
         fixture.menuBarWindow, 0, &topEnabled));
     CHECK(!topEnabled);
 
     fixture.menuBar->EnableTop(0, true);
     DrainMenuEvents();
-    REQUIRE(wxWinUI3MenuBarTopEnabledForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::GetTopEnabled(
         fixture.menuBarWindow, 0, &topEnabled));
     CHECK(topEnabled);
 
     const size_t topPath[] = { 0 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
 
-    wxWinUIMenuItemSnapshot snapshot;
-    REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+    wxWinUIMenuTestAccess::ItemSnapshot snapshot;
+    REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
         fixture.menuBarWindow,
         topPath,
         WXSIZEOF(topPath),
@@ -706,10 +706,10 @@ TEST_CASE("WinUIMenu::DisabledSubmenuAndMetrics",
     CHECK(snapshot.submenu);
     CHECK(!snapshot.enabled);
     CHECK(snapshot.accessKey == "D");
-    CHECK(wxWinUI3MenuBarHeightForTesting(fixture.menuBarWindow) ==
+    CHECK(wxWinUIMenuTestAccess::GetBarHeight(fixture.menuBarWindow) ==
           fixture.frame->FromDIP(40));
 
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
 }
 
@@ -739,43 +739,43 @@ TEST_CASE("WinUIMenu::DPIBundleAndHotFlowDirectionProjection",
 
     const size_t topPath[] = { 0 };
     const size_t subPath[] = { 0, 1 };
-    REQUIRE(wxWinUI3MenuBarRefreshForScaleForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::RefreshForScale(
         fixture.menuBarWindow, 1.0));
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
 
     const auto snapshot =
         [&](const size_t *path, size_t pathLength,
             size_t itemPosition)
         {
-            wxWinUIMenuItemSnapshot result;
-            REQUIRE(wxWinUI3MenuBarSnapshotForTesting(
+            wxWinUIMenuTestAccess::ItemSnapshot result;
+            REQUIRE(wxWinUIMenuTestAccess::GetSnapshot(
                 fixture.menuBarWindow,
                 path, pathLength, itemPosition, &result));
             return result;
         };
 
-    wxWinUIMenuFlowDirection barFlow =
-        wxWinUIMenuFlowDirection::Unknown;
-    wxWinUIMenuFlowDirection topFlow =
-        wxWinUIMenuFlowDirection::Unknown;
-    REQUIRE(wxWinUI3MenuBarFlowDirectionForTesting(
+    wxWinUIMenuTestAccess::FlowDirection barFlow =
+        wxWinUIMenuTestAccess::FlowDirection::Unknown;
+    wxWinUIMenuTestAccess::FlowDirection topFlow =
+        wxWinUIMenuTestAccess::FlowDirection::Unknown;
+    REQUIRE(wxWinUIMenuTestAccess::GetFlowDirection(
         fixture.menuBarWindow, &barFlow, &topFlow));
-    CHECK(barFlow == wxWinUIMenuFlowDirection::LeftToRight);
-    CHECK(topFlow == wxWinUIMenuFlowDirection::LeftToRight);
+    CHECK(barFlow == wxWinUIMenuTestAccess::FlowDirection::LeftToRight);
+    CHECK(topFlow == wxWinUIMenuTestAccess::FlowDirection::LeftToRight);
 
-    wxWinUIMenuItemSnapshot commandPeer =
+    wxWinUIMenuTestAccess::ItemSnapshot commandPeer =
         snapshot(topPath, WXSIZEOF(topPath), 0);
-    wxWinUIMenuItemSnapshot childPeer =
+    wxWinUIMenuTestAccess::ItemSnapshot childPeer =
         snapshot(subPath, WXSIZEOF(subPath), 0);
     CHECK(commandPeer.iconPixelWidth == 16);
     CHECK(commandPeer.iconPixelHeight == 16);
     CHECK(childPeer.iconPixelWidth == 16);
     CHECK(childPeer.iconPixelHeight == 16);
     CHECK(commandPeer.flowDirection ==
-          wxWinUIMenuFlowDirection::LeftToRight);
+          wxWinUIMenuTestAccess::FlowDirection::LeftToRight);
     CHECK(childPeer.flowDirection ==
-          wxWinUIMenuFlowDirection::LeftToRight);
+          wxWinUIMenuTestAccess::FlowDirection::LeftToRight);
 
     // Keep both presenters logically open: the hot direction transaction
     // must update the bar, its top items, and the already-detached nested
@@ -784,7 +784,7 @@ TEST_CASE("WinUIMenu::DPIBundleAndHotFlowDirectionProjection",
     REQUIRE(WaitForMenuCondition(
         [&]()
         {
-            if ( !wxWinUI3MenuBarFlowDirectionForTesting(
+            if ( !wxWinUIMenuTestAccess::GetFlowDirection(
                      fixture.menuBarWindow, &barFlow, &topFlow) )
             {
                 return false;
@@ -794,20 +794,20 @@ TEST_CASE("WinUIMenu::DPIBundleAndHotFlowDirectionProjection",
             childPeer =
                 snapshot(subPath, WXSIZEOF(subPath), 0);
             return barFlow ==
-                       wxWinUIMenuFlowDirection::RightToLeft &&
+                       wxWinUIMenuTestAccess::FlowDirection::RightToLeft &&
                    topFlow ==
-                       wxWinUIMenuFlowDirection::RightToLeft &&
+                       wxWinUIMenuTestAccess::FlowDirection::RightToLeft &&
                    commandPeer.flowDirection ==
-                       wxWinUIMenuFlowDirection::RightToLeft &&
+                       wxWinUIMenuTestAccess::FlowDirection::RightToLeft &&
                    childPeer.flowDirection ==
-                       wxWinUIMenuFlowDirection::RightToLeft;
+                       wxWinUIMenuTestAccess::FlowDirection::RightToLeft;
         }));
 
     fixture.frame->SetLayoutDirection(wxLayout_LeftToRight);
     REQUIRE(WaitForMenuCondition(
         [&]()
         {
-            if ( !wxWinUI3MenuBarFlowDirectionForTesting(
+            if ( !wxWinUIMenuTestAccess::GetFlowDirection(
                      fixture.menuBarWindow, &barFlow, &topFlow) )
             {
                 return false;
@@ -817,22 +817,22 @@ TEST_CASE("WinUIMenu::DPIBundleAndHotFlowDirectionProjection",
             childPeer =
                 snapshot(subPath, WXSIZEOF(subPath), 0);
             return barFlow ==
-                       wxWinUIMenuFlowDirection::LeftToRight &&
+                       wxWinUIMenuTestAccess::FlowDirection::LeftToRight &&
                    topFlow ==
-                       wxWinUIMenuFlowDirection::LeftToRight &&
+                       wxWinUIMenuTestAccess::FlowDirection::LeftToRight &&
                    commandPeer.flowDirection ==
-                       wxWinUIMenuFlowDirection::LeftToRight &&
+                       wxWinUIMenuTestAccess::FlowDirection::LeftToRight &&
                    childPeer.flowDirection ==
-                       wxWinUIMenuFlowDirection::LeftToRight;
+                       wxWinUIMenuTestAccess::FlowDirection::LeftToRight;
         }));
 
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
     DrainMenuEvents();
 
-    REQUIRE(wxWinUI3MenuBarRefreshForScaleForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::RefreshForScale(
         fixture.menuBarWindow, 2.0));
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
     commandPeer = snapshot(topPath, WXSIZEOF(topPath), 0);
     childPeer = snapshot(subPath, WXSIZEOF(subPath), 0);
@@ -840,18 +840,18 @@ TEST_CASE("WinUIMenu::DPIBundleAndHotFlowDirectionProjection",
     CHECK(commandPeer.iconPixelHeight == 32);
     CHECK(childPeer.iconPixelWidth == 32);
     CHECK(childPeer.iconPixelHeight == 32);
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
     DrainMenuEvents();
 
-    REQUIRE(wxWinUI3MenuBarRefreshForScaleForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::RefreshForScale(
         fixture.menuBarWindow, 1.0));
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
     commandPeer = snapshot(topPath, WXSIZEOF(topPath), 0);
     CHECK(commandPeer.iconPixelWidth == 16);
     CHECK(commandPeer.iconPixelHeight == 16);
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
 }
 
@@ -885,17 +885,17 @@ TEST_CASE("WinUIMenu::PhysicalFlyoutLifecycleAndBoundedProjection",
 
     const size_t topPath[] = { 0 };
     const size_t subPath[] = { 0, 0 };
-    REQUIRE(wxWinUI3MenuBarSentinelContractForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::HasSentinelContract(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
     bool expanded = true;
-    REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath), &expanded));
     CHECK_FALSE(expanded);
     size_t stableProjectionCount = 0;
 
     for ( int iteration = 0; iteration < 3; ++iteration )
     {
-        REQUIRE(wxWinUI3MenuBarSetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::SetExpanded(
             fixture.menuBarWindow, topPath, WXSIZEOF(topPath), true));
         REQUIRE(WaitForMenuCondition(
             [&]()
@@ -905,16 +905,16 @@ TEST_CASE("WinUIMenu::PhysicalFlyoutLifecycleAndBoundedProjection",
             }));
         REQUIRE(opened.size() == static_cast<size_t>(iteration * 2 + 1));
         CHECK(opened.back() == top);
-        REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
             fixture.menuBarWindow,
             topPath,
             WXSIZEOF(topPath),
             &expanded));
         CHECK(expanded);
-        REQUIRE(wxWinUI3MenuBarSentinelContractForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::HasSentinelContract(
             fixture.menuBarWindow, subPath, WXSIZEOF(subPath)));
 
-        REQUIRE(wxWinUI3MenuBarSetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::SetExpanded(
             fixture.menuBarWindow, subPath, WXSIZEOF(subPath), true));
         REQUIRE(WaitForMenuCondition(
             [&]()
@@ -924,13 +924,13 @@ TEST_CASE("WinUIMenu::PhysicalFlyoutLifecycleAndBoundedProjection",
             }));
         REQUIRE(opened.size() == static_cast<size_t>(iteration * 2 + 2));
         CHECK(opened.back() == sub);
-        REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
             fixture.menuBarWindow,
             topPath,
             WXSIZEOF(topPath),
             &expanded));
         CHECK(expanded);
-        REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
             fixture.menuBarWindow,
             subPath,
             WXSIZEOF(subPath),
@@ -939,13 +939,13 @@ TEST_CASE("WinUIMenu::PhysicalFlyoutLifecycleAndBoundedProjection",
         CHECK(closed.size() == static_cast<size_t>(iteration * 2));
 
         const size_t projectionCount =
-            wxWinUI3MenuBarProjectionCountForTesting(
+            wxWinUIMenuTestAccess::GetProjectionCount(
                 fixture.menuBarWindow);
         if ( iteration == 0 )
             stableProjectionCount = projectionCount;
         CHECK(projectionCount == stableProjectionCount);
 
-        REQUIRE(wxWinUI3MenuBarSetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::SetExpanded(
             fixture.menuBarWindow, subPath, WXSIZEOF(subPath), false));
         REQUIRE(WaitForMenuCondition(
             [&]()
@@ -955,20 +955,20 @@ TEST_CASE("WinUIMenu::PhysicalFlyoutLifecycleAndBoundedProjection",
             }));
         REQUIRE(closed.size() == static_cast<size_t>(iteration * 2 + 1));
         CHECK(closed.back() == sub);
-        REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
             fixture.menuBarWindow,
             subPath,
             WXSIZEOF(subPath),
             &expanded));
         CHECK_FALSE(expanded);
-        REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
             fixture.menuBarWindow,
             topPath,
             WXSIZEOF(topPath),
             &expanded));
         CHECK(expanded);
 
-        REQUIRE(wxWinUI3MenuBarSetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::SetExpanded(
             fixture.menuBarWindow, topPath, WXSIZEOF(topPath), false));
         REQUIRE(WaitForMenuCondition(
             [&]()
@@ -978,7 +978,7 @@ TEST_CASE("WinUIMenu::PhysicalFlyoutLifecycleAndBoundedProjection",
             }));
         REQUIRE(closed.size() == static_cast<size_t>(iteration * 2 + 2));
         CHECK(closed.back() == top);
-        REQUIRE(wxWinUI3MenuBarGetExpandedForTesting(
+        REQUIRE(wxWinUIMenuTestAccess::GetExpanded(
             fixture.menuBarWindow,
             topPath,
             WXSIZEOF(topPath),
@@ -1016,7 +1016,7 @@ TEST_CASE("WinUIMenu::OpenCanRemoveAndDeleteCurrentMenu",
     // path. The seam must stop before looking up its child; deleting the
     // detached menu immediately afterwards must then be harmless.
     const size_t childPath[] = { 0, 0 };
-    CHECK_FALSE(wxWinUI3MenuBarOpenForTesting(
+    CHECK_FALSE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, childPath, WXSIZEOF(childPath)));
     CHECK(removedFromOpen);
     CHECK(removedMenu == top);
@@ -1053,7 +1053,7 @@ TEST_CASE("WinUIMenu::OpenCanReplaceAndDeleteMenuBar",
         });
 
     const size_t childPath[] = { 0, 0 };
-    CHECK_FALSE(wxWinUI3MenuBarOpenForTesting(
+    CHECK_FALSE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, childPath, WXSIZEOF(childPath)));
     delete firstBar;
     firstBar = nullptr;
@@ -1096,7 +1096,7 @@ TEST_CASE("WinUIMenu::OpenCanDestroyFrame",
         });
 
     const size_t childPath[] = { 0, 0 };
-    CHECK_FALSE(wxWinUI3MenuBarOpenForTesting(
+    CHECK_FALSE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, childPath, WXSIZEOF(childPath)));
     CHECK(destroyedFromOpen);
 
@@ -1144,7 +1144,7 @@ TEST_CASE("WinUIMenu::ReentrantReplacementFromClose",
         });
 
     const size_t firstPath[] = { 0 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, firstPath, WXSIZEOF(firstPath)));
 
     // The outer replacement retires the open bar and emits CLOSE. Its handler
@@ -1159,7 +1159,7 @@ TEST_CASE("WinUIMenu::ReentrantReplacementFromClose",
     fixture.menuBar = winningBar;
     fixture.menuBarWindow = FindOnlyFrameChild(fixture.frame);
     REQUIRE(fixture.menuBarWindow != nullptr);
-    CHECK(wxWinUI3MenuBarHeightForTesting(fixture.menuBarWindow) > 0);
+    CHECK(wxWinUIMenuTestAccess::GetBarHeight(fixture.menuBarWindow) > 0);
 
     delete firstBar;
     delete supersededBar;
@@ -1198,15 +1198,15 @@ TEST_CASE("WinUIMenu::DescendantCloseCanReplaceAndDeleteMenuBar",
 
     const size_t childPath[] = { 0, 0 };
     const size_t topPath[] = { 0 };
-    REQUIRE(wxWinUI3MenuBarOpenForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, childPath, WXSIZEOF(childPath)));
 
     // Closing a parent is a real cascade: its descendant CLOSE is emitted
     // first. Deleting the old wxMenuBar from that descendant callback must
     // stop the parent transition and all work on the retired XAML generation.
-    REQUIRE(wxWinUI3MenuBarCloseForTesting(
+    REQUIRE(wxWinUIMenuTestAccess::Close(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
-    CHECK_FALSE(wxWinUI3MenuBarOpenForTesting(
+    CHECK_FALSE(wxWinUIMenuTestAccess::Open(
         fixture.menuBarWindow, topPath, WXSIZEOF(topPath)));
 
     DrainMenuEvents();
@@ -1218,7 +1218,7 @@ TEST_CASE("WinUIMenu::DescendantCloseCanReplaceAndDeleteMenuBar",
     fixture.menuBar = winningBar;
     fixture.menuBarWindow = FindOnlyFrameChild(fixture.frame);
     REQUIRE(fixture.menuBarWindow != nullptr);
-    CHECK(wxWinUI3MenuBarHeightForTesting(fixture.menuBarWindow) > 0);
+    CHECK(wxWinUIMenuTestAccess::GetBarHeight(fixture.menuBarWindow) > 0);
 }
 
 TEST_CASE("WinUIMenu::PopupTimerFailureIsBounded",
@@ -1249,24 +1249,24 @@ TEST_CASE("WinUIMenu::PopupTimerFailureIsBounded",
             event.Skip();
         });
 
-    wxWinUI3FailNextPopupTimersForTesting(true, true);
+    wxWinUIMenuTestAccess::FailNextPopupTimers(true, true);
     wxStopWatch elapsed;
-    CHECK(wxWinUI3PopupMenuForTesting(frame, &popup, 4, 4));
+    CHECK(wxWinUIMenuTestAccess::PopupMenu(frame, &popup, 4, 4));
     CHECK(elapsed.Time() < 2000);
     CHECK(opens == 1);
     CHECK(closes == 1);
-    wxWinUI3FailNextPopupTimersForTesting(false, false);
+    wxWinUIMenuTestAccess::FailNextPopupTimers(false, false);
 
     opens = 0;
     closes = 0;
-    wxWinUI3FailNextPopupTimersForTesting(false, true);
-    wxWinUI3RejectNextPopupDrainForTesting();
+    wxWinUIMenuTestAccess::FailNextPopupTimers(false, true);
+    wxWinUIMenuTestAccess::RejectNextPopupDrain();
     wxStopWatch rejectedDrainElapsed;
-    CHECK(wxWinUI3PopupMenuForTesting(frame, &popup, 4, 4));
+    CHECK(wxWinUIMenuTestAccess::PopupMenu(frame, &popup, 4, 4));
     CHECK(rejectedDrainElapsed.Time() < 2000);
     CHECK(opens == 1);
     CHECK(closes == 1);
-    wxWinUI3FailNextPopupTimersForTesting(false, false);
+    wxWinUIMenuTestAccess::FailNextPopupTimers(false, false);
 
     frame->Destroy();
     DrainMenuEvents();
@@ -1303,7 +1303,7 @@ TEST_CASE("WinUIMenu::PopupFrameDestroyedFromOpenIsBounded",
         });
 
     wxStopWatch elapsed;
-    CHECK(wxWinUI3PopupMenuForTesting(frame, &popup, 4, 4));
+    CHECK(wxWinUIMenuTestAccess::PopupMenu(frame, &popup, 4, 4));
     CHECK(elapsed.Time() < 2000);
     CHECK(opens == 1);
     CHECK(closes == 1);
@@ -1328,7 +1328,7 @@ TEST_CASE("WinUIMenu::PopupOpenExceptionDoesNotFallBack",
     // that prevents wxWindow::PopupMenu() from starting a second native
     // OPEN/CLOSE session after the first one has already begun.
     wxStopWatch elapsed;
-    CHECK(wxWinUI3PopupMenuForTesting(frame, &popup, 4, 4));
+    CHECK(wxWinUIMenuTestAccess::PopupMenu(frame, &popup, 4, 4));
     CHECK(elapsed.Time() < 2000);
     CHECK(frame->opens == 1);
     CHECK(frame->closes == 1);
