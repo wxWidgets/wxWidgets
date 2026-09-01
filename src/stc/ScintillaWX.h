@@ -90,6 +90,9 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 class wxSTCTimer;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxSTCTimerTestAccess;
+#endif
 class SurfaceData;
 
 //----------------------------------------------------------------------
@@ -178,7 +181,6 @@ public:
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     void DoReconcileTopLevelParent();
-    wxUIntPtr GetCaretTimerIdForTesting() const;
 #endif
 
 #if wxUSE_DRAG_AND_DROP
@@ -259,6 +261,9 @@ private:
 
     friend class wxSTCCallTip;
     friend class wxSTCTimer; // To get access to TickReason declaration
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxSTCTimerTestAccess;
+#endif
 };
 
 //----------------------------------------------------------------------

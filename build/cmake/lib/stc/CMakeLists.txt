@@ -22,6 +22,24 @@ endif()
 
 wx_add_library(wxstc ${STC_FILES})
 
+if(WXWINUI AND wxUSE_WINUI3 AND wxBUILD_TESTS STREQUAL "ALL")
+    # ScintillaWX exposes one native timer identity only to the in-tree WinUI
+    # lifetime test. Keep the adapter out of installed headers and shipping
+    # wxstc builds, including the monolithic target created by the parent.
+    set(wx_winui_stc_test_support_source
+        "${wxSOURCE_DIR}/src/stc/ScintillaWX.cpp")
+    set_property(SOURCE ${wx_winui_stc_test_support_source}
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                  "${wxSOURCE_DIR}/build/cmake/lib"
+        APPEND PROPERTY INCLUDE_DIRECTORIES
+            "${wxSOURCE_DIR}/tests/winui/test-support")
+    set_property(SOURCE ${wx_winui_stc_test_support_source}
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                  "${wxSOURCE_DIR}/build/cmake/lib"
+        APPEND PROPERTY COMPILE_DEFINITIONS
+            WXWINUI_TEST_SUPPORT=1)
+endif()
+
 get_target_property(SCINTILLA_INCLUDE wxscintilla INCLUDE_DIRECTORIES)
 get_target_property(LEXILLA_INCLUDE wxlexilla INCLUDE_DIRECTORIES)
 wx_lib_include_directories(wxstc PRIVATE ${SCINTILLA_INCLUDE} ${LEXILLA_INCLUDE})

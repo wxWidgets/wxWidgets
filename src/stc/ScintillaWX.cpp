@@ -45,6 +45,9 @@
     #include "wx/msw/private.h" // GetHwndOf()
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/msw/private/timer.h"
+#if defined(WXWINUI_TEST_SUPPORT)
+    #include "stc-timer-test-access.h"
+#endif
 #endif
 #endif
 #ifdef __WXGTK__
@@ -65,13 +68,14 @@ public:
         m_swx->TickFor(m_reason);
     }
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    wxUIntPtr GetNativeIdForTesting() const
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    wxUIntPtr GetNativeIdForTestAccess() const
     {
         const wxMSWTimerImpl* const impl =
             static_cast<const wxMSWTimerImpl*>(m_impl);
         return impl
-                   ? static_cast<wxUIntPtr>(impl->GetNativeIdForTesting())
+                   ? static_cast<wxUIntPtr>(
+                         wxMSWTimerTestAccess::GetNativeId(*impl))
                    : 0;
     }
 #endif
@@ -1280,26 +1284,24 @@ void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
         SetIdle(false);
 }
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-wxUIntPtr ScintillaWX::GetCaretTimerIdForTesting() const
-{
-    const TimersHash::const_iterator caretTimer = timers.find(tickCaret);
-    return caretTimer == timers.end()
-               ? 0
-               : caretTimer->second->GetNativeIdForTesting();
-}
-
-WXDLLIMPEXP_STC wxUIntPtr
-wxSTCGetCaretTimerIdForTesting(wxStyledTextCtrl* control)
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+wxUIntPtr wxSTCTimerTestAccess::GetCaretTimerId(wxStyledTextCtrl* control)
 {
     if ( !control || control->IsBeingDeleted() )
         return 0;
 
     ScintillaWX* const scintilla = reinterpret_cast<ScintillaWX*>(
         control->GetDirectPointer());
-    return scintilla ? scintilla->GetCaretTimerIdForTesting() : 0;
+    if ( !scintilla )
+        return 0;
+
+    const ScintillaWX::TimersHash::const_iterator caretTimer =
+        scintilla->timers.find(ScintillaWX::tickCaret);
+    return caretTimer == scintilla->timers.end()
+               ? 0
+               : caretTimer->second->GetNativeIdForTestAccess();
 }
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 void ScintillaWX::DoReconcileTopLevelParent()

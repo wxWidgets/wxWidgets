@@ -36,6 +36,7 @@
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
 #include "host-uia-test-access.h"
+#include "stc-timer-test-access.h"
 #if wxUSE_MENUS
     #include "menu-test-access.h"
 #endif
@@ -44,11 +45,6 @@
     #include "wx/winui/private/dropbroker.h"
 #include "drop-broker-test-access.h"
 #endif
-
-// Private exported seam from ScintillaWX.cpp. Deliberately not declared in
-// the public wxStyledTextCtrl header: it is only a timer-lifetime oracle.
-WXDLLIMPEXP_STC wxUIntPtr
-wxSTCGetCaretTimerIdForTesting(wxStyledTextCtrl* control);
 
 namespace
 {
@@ -1522,7 +1518,8 @@ TEST_CASE("WinUISTC::NativeCaretTimerIdentityIsKilledOnImmediateDestroy",
     // exactly ten former native periods rather than ten nominal wx periods.
     stc->SetCaretPeriod(10);
     stc->SetSTCFocus(true);
-    const wxUIntPtr caretTimerId = wxSTCGetCaretTimerIdForTesting(stc);
+    const wxUIntPtr caretTimerId =
+        wxSTCTimerTestAccess::GetCaretTimerId(stc);
     REQUIRE(caretTimerId > 0);
     NativeTimerIdentity timer;
     REQUIRE(DispatchUntilWxTimer(

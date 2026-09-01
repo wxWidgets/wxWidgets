@@ -787,6 +787,49 @@ Do not delete a lifetime/retirement service used by production merely because it
   helper/component surfaces and their fresh installed-consumer proof keep plan
   106 in progress.
 
+## Appearance observation boundary (2026-09-01)
+
+- `wxWinUIAppearanceSnapshot` and both `wxWinUICaptureAppearance()` overloads
+  leave the production `appearance.h` contract. The record and capture entry
+  points now live in the non-installed `appearance-test-access.h`; their local
+  DependencyProperty/UIA helpers and implementations compile only with
+  `WXWINUI_TEST_SUPPORT`.
+- Seven test-only consumers use the private adapter: the direct appearance
+  contract plus ActivityIndicator, Hyperlink, RadioBox, StatusBar, StaticBox
+  and StaticText observations. Font/colour/application, High Contrast, theme
+  brush and accessibility projection code used by real controls is unchanged.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. `[winui-appearance],[winui-chrome-feedback]` passes exactly **2263
+  assertions / 67 cases** in each linkage; the broader coupled run with STC
+  passes **4591/78**.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore`, `wxstc` and `minimal`
+  with warnings as errors. Shared DLL exports and static-library symbols have
+  zero match for the old capture functions, snapshot and new private adapter.
+- Both caches are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat
+  **2263/67** plus runtime smoke and Supported V0 **2/2** in each linkage.
+  These are private-desktop, non-physical results.
+
+## STC native-timer observation boundary (2026-09-01)
+
+- `wxMSWTimerImpl::GetNativeIdForTesting()`,
+  `ScintillaWX::GetCaretTimerIdForTesting()` and the exported free
+  `wxSTCGetCaretTimerIdForTesting()` leave production headers and sources.
+  The one required USER32 timer identity is now reached through the
+  non-installed `stc-timer-test-access.h` only in test-enabled WinUI builds.
+- The `wxMSWTimerImpl` and `ScintillaWX` definitions gain only friend
+  declarations: no data member, layout or virtual-table change. CMake applies
+  `WXWINUI_TEST_SUPPORT` and the private include directory to
+  `ScintillaWX.cpp` per source, including the parent monolithic directory,
+  instead of instrumenting all of wxstc.
+- Before and after extraction, the complete `[winui-stc]` group passes exactly
+  **2328 assertions / 11 cases** in shared and static Release. This includes
+  `NativeCaretTimerIdentityIsKilledOnImmediateDestroy` at **27/1**; the timer
+  start/stop/destruction path and assertions are unchanged.
+- The same `wxBUILD_TESTS=OFF` builds pass for `wxcore`, `wxstc` and `minimal`.
+  Shared DLL exports and static-library symbols have zero match for all three
+  removed seams or either new private test-access class. Restored `ALL` builds
+  repeat **2328/11** and runtime smoke plus Supported V0 **2/2** per linkage.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

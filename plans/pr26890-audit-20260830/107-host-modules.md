@@ -597,6 +597,22 @@ none of the old getters, private adapter or counter storage; restored ALL builds
 repeat the group and smoke/Supported V0 **2/2**. This closes a test-surface
 cleanup around the existing host modules, not a new physical lifecycle claim.
 
+### Appearance and STC test-boundary follow-up, 2026-09-01
+
+Two additional observation seams are now isolated without changing host or
+control behaviour. Appearance snapshots and their XAML/UIA capture helpers
+move from the production appearance contract into the non-installed test
+adapter. The STC caret-timer oracle likewise moves out of `wxMSWTimerImpl`,
+`ScintillaWX` and the exported free-function surface into a per-source,
+test-enabled adapter; the two class layouts remain unchanged.
+
+Shared/static Release builds pass with warnings as errors. Appearance/chrome
+remains **2263 assertions / 67 cases**, and full STC remains **2328/11**.
+OFF builds of `wxcore`, `wxstc` and `minimal` expose none of the removed or new
+test names; restored ALL builds repeat both groups and smoke/Supported V0
+**2/2**. This is test-surface cleanup supporting 107's module boundaries, not
+a new component-parity or physical-input claim.
+
 ## Local completion reconciliation (2026-09-01)
 
 - The six named architecture boundaries are implemented: resize, tooltip and
