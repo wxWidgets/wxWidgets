@@ -288,6 +288,13 @@ wx_add_test(test_gui ${APP_TYPE} ${TEST_GUI_SRC}
 if(TARGET test_gui AND TARGET wx_winui_test_support)
     target_link_libraries(test_gui PRIVATE wx_winui_test_support)
 endif()
+if(TARGET test_gui AND WXMSW AND wxUSE_TASKBARBUTTON AND
+        wxBUILD_TESTS STREQUAL "ALL")
+    target_include_directories(test_gui PRIVATE
+        "${wxSOURCE_DIR}/tests/winui/test-support")
+    target_compile_definitions(test_gui PRIVATE
+        WXMSW_TASKBARBUTTON_TEST_SUPPORT=1)
+endif()
 if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
         TARGET wx_winui_desktop_test_runner)
     add_test(NAME wx_winui_supported_beta

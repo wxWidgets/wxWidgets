@@ -26,6 +26,9 @@
 #include "wx/event.h"
 #include "wx/msw/taskbarbutton.h"
 #include "wx/msw/private/taskbarbutton.h"
+#ifdef WXMSW_TASKBARBUTTON_TEST_SUPPORT
+    #include "taskbar-button-test-access.h"
+#endif
 #include "wx/private/windowlifetime.h"
 #include "wx/dynlib.h"
 #include "wx/msw/private/comptr.h"
@@ -631,8 +634,10 @@ namespace
 const wchar_t wxTASKBAR_BUTTON_GENERATION_PROPERTY[] =
     L"wxWidgets.TaskBarButton.HwndGeneration";
 ULONG_PTR gs_nextTaskBarButtonHwndGeneration = 0;
-wxMSWTaskBarButtonNativeFactoryForTesting
+#ifdef WXMSW_TASKBARBUTTON_TEST_SUPPORT
+wxMSWTaskBarButtonTestAccess::NativeFactory
     gs_taskBarButtonNativeFactoryForTesting = nullptr;
+#endif
 
 bool wxMSWTaskBarResultSucceeded(long result)
 {
@@ -958,9 +963,12 @@ private:
 std::shared_ptr<wxMSWTaskBarButtonNativeBackend>
 wxMSWCreateTaskBarButtonNativeBackend()
 {
-    return gs_taskBarButtonNativeFactoryForTesting
-        ? gs_taskBarButtonNativeFactoryForTesting()
-        : std::make_shared<wxMSWTaskBarButtonCOMBackend>();
+#ifdef WXMSW_TASKBARBUTTON_TEST_SUPPORT
+    if ( gs_taskBarButtonNativeFactoryForTesting )
+        return gs_taskBarButtonNativeFactoryForTesting();
+#endif
+
+    return std::make_shared<wxMSWTaskBarButtonCOMBackend>();
 }
 
 } // anonymous namespace
@@ -1629,11 +1637,17 @@ bool wxMSWTaskBarRequestRebind(
 
 } // anonymous namespace
 
-void wxMSWTaskBarButtonSetNativeFactoryForTesting(
-    wxMSWTaskBarButtonNativeFactoryForTesting factory)
+#ifdef WXMSW_TASKBARBUTTON_TEST_SUPPORT
+void wxMSWTaskBarButtonTestAccess::SetNativeFactory(NativeFactory factory)
 {
     gs_taskBarButtonNativeFactoryForTesting = factory;
 }
+
+void wxMSWTaskBarButtonTestAccess::ResetNativeFactory()
+{
+    gs_taskBarButtonNativeFactoryForTesting = nullptr;
+}
+#endif
 
 /* static */
 wxTaskBarButton* wxTaskBarButton::New(wxWindow* parent)
@@ -2033,14 +2047,20 @@ wxTaskBarButtonImpl::BuildNativeThumbButtons() const
     return buttons;
 }
 
-bool wxTaskBarButtonImpl::GetSnapshotForTesting(
-    wxMSWTaskBarButtonSnapshot* snapshot) const
+#ifdef WXMSW_TASKBARBUTTON_TEST_SUPPORT
+bool wxMSWTaskBarButtonTestAccess::GetSnapshot(
+    wxTaskBarButton* button,
+    wxMSWTaskBarButtonTestAccess::Snapshot* snapshot)
 {
-    if ( !snapshot || !m_state )
+    // All instances returned by the only public factory are this MSW
+    // implementation. Avoid C++ RTTI: wxWidgets is commonly built with /GR-.
+    wxTaskBarButtonImpl* const impl =
+        static_cast<wxTaskBarButtonImpl*>(button);
+    if ( !impl || !snapshot || !impl->m_state )
         return false;
 
-    *snapshot = wxMSWTaskBarButtonSnapshot();
-    const std::shared_ptr<wxTaskBarButtonStateData> state = m_state;
+    *snapshot = Snapshot();
+    const std::shared_ptr<wxTaskBarButtonStateData> state = impl->m_state;
     snapshot->available = wxMSWTaskBarHasExactIdentity(state);
     snapshot->retired = state->retired;
     snapshot->hwnd = state->hwnd;
@@ -2068,17 +2088,7 @@ bool wxTaskBarButtonImpl::GetSnapshotForTesting(
         state->appliedThumbButtonCount;
     return true;
 }
-
-bool wxMSWTaskBarButtonGetSnapshotForTesting(
-    wxTaskBarButton* button,
-    wxMSWTaskBarButtonSnapshot* snapshot)
-{
-    // All instances returned by the only public factory are this MSW
-    // implementation. Avoid C++ RTTI: wxWidgets is commonly built with /GR-.
-    wxTaskBarButtonImpl* const impl =
-        static_cast<wxTaskBarButtonImpl*>(button);
-    return impl && impl->GetSnapshotForTesting(snapshot);
-}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpListItem Implementation.

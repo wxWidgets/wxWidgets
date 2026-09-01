@@ -65,47 +65,6 @@ public:
         const wxMSWTaskBarThumbButtonNative* buttons) = 0;
 };
 
-using wxMSWTaskBarButtonNativeFactoryForTesting =
-    std::shared_ptr<wxMSWTaskBarButtonNativeBackend> (*)();
-
-// GUI-thread-only replacement seam. Passing nullptr restores the production
-// COM factory. Existing taskbar-button objects retain their exact backend.
-WXDLLIMPEXP_CORE void wxMSWTaskBarButtonSetNativeFactoryForTesting(
-    wxMSWTaskBarButtonNativeFactoryForTesting factory);
-
-struct wxMSWTaskBarButtonSnapshot
-{
-    bool available { false };
-    bool retired { false };
-    WXHWND hwnd { nullptr };
-    unsigned long long hwndGeneration { 0 };
-    unsigned long long shellEpoch { 0 };
-
-    int desiredProgressRange { 0 };
-    int desiredProgressValue { 0 };
-    bool desiredProgressValueKnown { false };
-    wxTaskBarButtonState desiredProgressState {
-        wxTASKBAR_BUTTON_NO_PROGRESS
-    };
-
-    bool progressValueAppliedKnown { false };
-    int appliedProgressRange { 0 };
-    int appliedProgressValue { 0 };
-    bool progressStateAppliedKnown { false };
-    wxTaskBarButtonState appliedProgressState {
-        wxTASKBAR_BUTTON_NO_PROGRESS
-    };
-
-    bool thumbButtonsAppliedKnown { false };
-    bool thumbButtonsInitialized { false };
-    std::size_t desiredThumbButtonCount { 0 };
-    std::size_t appliedThumbButtonCount { 0 };
-};
-
-WXDLLIMPEXP_CORE bool wxMSWTaskBarButtonGetSnapshotForTesting(
-    wxTaskBarButton* button,
-    wxMSWTaskBarButtonSnapshot* snapshot);
-
 // Replay every wxAppProgressIndicator sidecar targeting this exact TLW after
 // Explorer recreates its taskbar button. Unlike wxFrame::MSWGetTaskBarButton(),
 // app-progress controllers are deliberately not stored in wxFrame.

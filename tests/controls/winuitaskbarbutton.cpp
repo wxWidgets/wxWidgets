@@ -9,7 +9,8 @@
 
 #include "testprec.h"
 
-#if defined(__WXMSW__) && wxUSE_TASKBARBUTTON
+#if defined(__WXMSW__) && wxUSE_TASKBARBUTTON && \
+        defined(WXMSW_TASKBARBUTTON_TEST_SUPPORT)
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
@@ -21,6 +22,7 @@
 #include "wx/msw/taskbarbutton.h"
 #include "wx/msw/private/taskbarbutton.h"
 #include "wx/taskbarbutton.h"
+#include "taskbar-button-test-access.h"
 
 #include <functional>
 #include <map>
@@ -309,13 +311,13 @@ public:
     {
         REQUIRE(gs_taskBarRecorder == nullptr);
         gs_taskBarRecorder = &recorder;
-        wxMSWTaskBarButtonSetNativeFactoryForTesting(
+        wxMSWTaskBarButtonTestAccess::SetNativeFactory(
             &CreateRecordingTaskBarBackend);
     }
 
     ~TaskBarNativeFactoryGuard()
     {
-        wxMSWTaskBarButtonSetNativeFactoryForTesting(nullptr);
+        wxMSWTaskBarButtonTestAccess::ResetNativeFactory();
         gs_taskBarRecorder = nullptr;
     }
 };
@@ -390,8 +392,8 @@ TEST_CASE("WinUITaskBarButton::DefaultThumbAndSevenButtonLimit",
     CHECK(rejected->GetParent() == nullptr);
     delete rejected;
 
-    wxMSWTaskBarButtonSnapshot snapshot;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot snapshot;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &snapshot));
     CHECK(snapshot.desiredThumbButtonCount == 7);
     CHECK(snapshot.appliedThumbButtonCount == 7);
@@ -529,8 +531,8 @@ TEST_CASE("WinUITaskBarButton::UnknownRetryAndExplorerReconcile",
     CHECK_FALSE(taskbar->AppendThumbBarButton(retained));
     CHECK(retained->GetParent() == taskbar.get());
 
-    wxMSWTaskBarButtonSnapshot failedThumb;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot failedThumb;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &failedThumb));
     CHECK(failedThumb.desiredThumbButtonCount == 1);
     CHECK_FALSE(failedThumb.thumbButtonsInitialized);
@@ -538,8 +540,8 @@ TEST_CASE("WinUITaskBarButton::UnknownRetryAndExplorerReconcile",
 
     REQUIRE(static_cast<wxTaskBarButtonImpl*>(taskbar.get())->
                 InitOrUpdateThumbBarButtons());
-    wxMSWTaskBarButtonSnapshot recoveredThumb;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot recoveredThumb;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &recoveredThumb));
     CHECK(recoveredThumb.thumbButtonsInitialized);
     CHECK(recoveredThumb.thumbButtonsAppliedKnown);
@@ -551,8 +553,8 @@ TEST_CASE("WinUITaskBarButton::UnknownRetryAndExplorerReconcile",
     taskbar->SetProgressRange(100);
     recorder.failNextProgressValue = true;
     taskbar->SetProgressValue(42);
-    wxMSWTaskBarButtonSnapshot failedProgress;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot failedProgress;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &failedProgress));
     CHECK(failedProgress.desiredProgressValue == 42);
     CHECK(failedProgress.desiredProgressValueKnown);
@@ -563,8 +565,8 @@ TEST_CASE("WinUITaskBarButton::UnknownRetryAndExplorerReconcile",
     const unsigned long long oldEpoch = failedProgress.shellEpoch;
 
     taskbar->Realize();
-    wxMSWTaskBarButtonSnapshot reconciled;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot reconciled;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &reconciled));
     CHECK(reconciled.shellEpoch > oldEpoch);
     CHECK(reconciled.progressValueAppliedKnown);
@@ -625,8 +627,8 @@ TEST_CASE("WinUITaskBarButton::RealizeRejectsStaleThumbSnapshot",
     CHECK(finalCall.buttons[1].token == 1);
     CHECK(finalCall.buttons[1].tooltip == "snapshot A");
 
-    wxMSWTaskBarButtonSnapshot snapshot;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot snapshot;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &snapshot));
     CHECK(snapshot.thumbButtonsInitialized);
     CHECK(snapshot.thumbButtonsAppliedKnown);
@@ -647,8 +649,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     REQUIRE(taskbar);
     const WXHWND hwnd = frame->GetHWND();
 
-    wxMSWTaskBarButtonSnapshot initial;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot initial;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &initial));
     CHECK_FALSE(initial.desiredProgressValueKnown);
 
@@ -672,8 +674,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     REQUIRE_FALSE(recorder.progressCalls.empty());
     CHECK(recorder.progressCalls.back().value == 0);
     CHECK(recorder.progressCalls.back().range == 100);
-    wxMSWTaskBarButtonSnapshot zero;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot zero;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &zero));
     CHECK(zero.desiredProgressValueKnown);
     CHECK(zero.desiredProgressValue == 0);
@@ -687,8 +689,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     // The public wx contract dismisses a determinate bar at completion even
     // though SetProgressValue() itself first forces the Shell to NORMAL.
     taskbar->SetProgressValue(100);
-    wxMSWTaskBarButtonSnapshot completed;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot completed;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &completed));
     CHECK(completed.desiredProgressValueKnown);
     CHECK(completed.desiredProgressValue == 100);
@@ -709,8 +711,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     CHECK(recorder.stateCalls.size() == statesBeforePulseValue);
     CHECK(recorder.ShellProgressStateFor(hwnd) ==
           static_cast<unsigned>(wxTASKBAR_BUTTON_NORMAL));
-    wxMSWTaskBarButtonSnapshot afterPulseValue;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot afterPulseValue;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &afterPulseValue));
     CHECK(afterPulseValue.desiredProgressState ==
           wxTASKBAR_BUTTON_NORMAL);
@@ -724,8 +726,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     CHECK(recorder.stateCalls.size() == statesBeforeErrorValue);
     CHECK(recorder.ShellProgressStateFor(hwnd) ==
           static_cast<unsigned>(wxTASKBAR_BUTTON_ERROR));
-    wxMSWTaskBarButtonSnapshot afterErrorValue;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot afterErrorValue;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &afterErrorValue));
     CHECK(afterErrorValue.desiredProgressState == wxTASKBAR_BUTTON_ERROR);
     CHECK(afterErrorValue.appliedProgressState == wxTASKBAR_BUTTON_ERROR);
@@ -737,8 +739,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     CHECK(recorder.stateCalls.size() == statesBeforePausedValue);
     CHECK(recorder.ShellProgressStateFor(hwnd) ==
           static_cast<unsigned>(wxTASKBAR_BUTTON_PAUSED));
-    wxMSWTaskBarButtonSnapshot afterPausedValue;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot afterPausedValue;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &afterPausedValue));
     CHECK(afterPausedValue.desiredProgressState == wxTASKBAR_BUTTON_PAUSED);
     CHECK(afterPausedValue.appliedProgressState == wxTASKBAR_BUTTON_PAUSED);
@@ -762,8 +764,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
         wxLogNull suppressExpectedFailure;
         taskbar->SetProgressValue(40);
     }
-    wxMSWTaskBarButtonSnapshot failed;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot failed;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &failed));
     CHECK(failed.desiredProgressState == wxTASKBAR_BUTTON_NORMAL);
     CHECK_FALSE(failed.progressValueAppliedKnown);
@@ -774,8 +776,8 @@ TEST_CASE("WinUITaskBarButton::ExactProgressValueStateMachine",
     const std::size_t statesBeforeRetry = recorder.stateCalls.size();
     taskbar->SetProgressValue(40);
     CHECK(recorder.stateCalls.size() == statesBeforeRetry + 1);
-    wxMSWTaskBarButtonSnapshot retried;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot retried;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &retried));
     CHECK(retried.progressValueAppliedKnown);
     CHECK(retried.progressStateAppliedKnown);
@@ -807,8 +809,8 @@ TEST_CASE("WinUITaskBarButton::ProgressStatesAndAuxiliaryShellState",
     for ( const wxTaskBarButtonState state : states )
     {
         taskbar->SetProgressState(state);
-        wxMSWTaskBarButtonSnapshot snapshot;
-        REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+        wxMSWTaskBarButtonTestAccess::Snapshot snapshot;
+        REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
             taskbar.get(), &snapshot));
         CHECK(snapshot.desiredProgressState == state);
         CHECK(snapshot.progressStateAppliedKnown);
@@ -816,8 +818,8 @@ TEST_CASE("WinUITaskBarButton::ProgressStatesAndAuxiliaryShellState",
     }
 
     taskbar->PulseProgress();
-    wxMSWTaskBarButtonSnapshot pulse;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(taskbar.get(), &pulse));
+    wxMSWTaskBarButtonTestAccess::Snapshot pulse;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(taskbar.get(), &pulse));
     CHECK(pulse.desiredProgressState ==
           wxTASKBAR_BUTTON_INDETERMINATE);
     CHECK(pulse.progressStateAppliedKnown);
@@ -854,8 +856,8 @@ TEST_CASE("WinUITaskBarButton::DestroyDuringNativeCallCannotPublish",
     };
     taskbar->SetProgressValue(37);
 
-    wxMSWTaskBarButtonSnapshot snapshot;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot snapshot;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar.get(), &snapshot));
     CHECK(snapshot.retired);
     CHECK_FALSE(snapshot.available);
@@ -884,8 +886,8 @@ TEST_CASE("WinUITaskBarButton::FrameRebindPreservesPointerAndDesiredState",
     REQUIRE(first->AppendThumbBarButton(
         new wxThumbBarButton(980, overlay, "generation thumb")));
 
-    wxMSWTaskBarButtonSnapshot before;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(first, &before));
+    wxMSWTaskBarButtonTestAccess::Snapshot before;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(first, &before));
     REQUIRE(before.hwndGeneration != 0);
     const int factoriesBefore = recorder.factories;
     const int destroyedBefore = recorder.destroyed;
@@ -903,8 +905,8 @@ TEST_CASE("WinUITaskBarButton::FrameRebindPreservesPointerAndDesiredState",
     wxTaskBarButton* const rebound = frame->MSWGetTaskBarButton();
     REQUIRE(rebound);
     CHECK(rebound == first);
-    wxMSWTaskBarButtonSnapshot after;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot after;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         rebound, &after));
     CHECK(after.available);
     CHECK(after.hwnd == before.hwnd);
@@ -942,8 +944,8 @@ TEST_CASE("WinUITaskBarButton::FrameRebindsGenerationInsideNativeSeam",
     REQUIRE(first);
     first->SetProgressRange(100);
 
-    wxMSWTaskBarButtonSnapshot before;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(first, &before));
+    wxMSWTaskBarButtonTestAccess::Snapshot before;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(first, &before));
     const int factoriesBefore = recorder.factories;
     const int destroyedBefore = recorder.destroyed;
     wxTaskBarButton* rebound = nullptr;
@@ -970,8 +972,8 @@ TEST_CASE("WinUITaskBarButton::FrameRebindsGenerationInsideNativeSeam",
     REQUIRE(generationRemoved);
     REQUIRE(rebound);
     CHECK(rebound == first);
-    wxMSWTaskBarButtonSnapshot after;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot after;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         rebound, &after));
     CHECK(after.available);
     CHECK(after.hwndGeneration != before.hwndGeneration);
@@ -1018,8 +1020,8 @@ TEST_CASE("WinUITaskBarButton::RebindConvergenceIsBoundedAndRetryable",
 
     CHECK(frame->MSWGetTaskBarButton() == taskbar);
     CHECK(invalidations == 32);
-    wxMSWTaskBarButtonSnapshot exhausted;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot exhausted;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar, &exhausted));
     CHECK_FALSE(exhausted.available);
     CHECK_FALSE(exhausted.progressValueAppliedKnown);
@@ -1028,8 +1030,8 @@ TEST_CASE("WinUITaskBarButton::RebindConvergenceIsBoundedAndRetryable",
     // The next accessor is a fresh bounded transaction and must converge once
     // the hostile callback stops invalidating each newly published identity.
     CHECK(frame->MSWGetTaskBarButton() == taskbar);
-    wxMSWTaskBarButtonSnapshot recovered;
-    REQUIRE(wxMSWTaskBarButtonGetSnapshotForTesting(
+    wxMSWTaskBarButtonTestAccess::Snapshot recovered;
+    REQUIRE(wxMSWTaskBarButtonTestAccess::GetSnapshot(
         taskbar, &recovered));
     CHECK(recovered.available);
     CHECK(recovered.progressValueAppliedKnown);
@@ -1303,4 +1305,4 @@ TEST_CASE("WinUIAppProgress::PerTLWWeakIdentityAndHundredCycles",
     CHECK(recorder.initialized == recorder.factories);
 }
 
-#endif // __WXMSW__ && wxUSE_TASKBARBUTTON
+#endif // __WXMSW__ && wxUSE_TASKBARBUTTON && test support

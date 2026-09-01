@@ -901,6 +901,33 @@ Do not delete a lifetime/retirement service used by production merely because it
   **1010/3** replay and runtime smoke plus Supported V0 **2/2** pass again in
   each linkage with `WX_UI_TESTS=0`.
 
+## MSW taskbar-button backend boundary (2026-09-01)
+
+- The native-backend factory typedef/setter, implementation snapshot method,
+  snapshot record and exported snapshot function leave the installed MSW
+  taskbar-button headers. The same deterministic backend and state observation
+  are available only through the non-installed
+  `taskbar-button-test-access.h` adapter.
+- A dedicated `WXMSW_TASKBARBUTTON_TEST_SUPPORT` definition is applied only to
+  `src/msw/taskbarbutton.cpp` and `test_gui` when CMake builds all tests. This
+  preserves ordinary wxMSW and wxWinUI characterization without enabling the
+  broader WinUI test-support surface for wxMSW. Shipping calls the COM backend
+  directly and contains no replacement factory or snapshot implementation.
+- `wxTaskBarButtonImpl` gains only a friend declaration. No data member,
+  virtual function, size or vtable changes; the removed functions were
+  pre-release PR test exports rather than supported wxTaskBarButton API.
+- Before and after extraction, `[winui-beta-taskbarbutton]` passes exactly
+  **605 assertions / 18 cases** in shared and static Release, covering shell
+  retries, generation rebinding, callback destruction and progress/thumb state
+  convergence. An ordinary wxMSW shared Debug rebuild with warnings as errors
+  also executes the dedicated support path and passes the same **605/18**.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. The installed headers contain none of the former test
+  declarations, and shared exports/static symbols contain zero former or new
+  taskbar-button test seam. Both caches are restored to
+  `wxBUILD_TESTS=ALL`; the exact **605/18** replay and runtime smoke plus
+  Supported V0 **2/2** pass again in each linkage with `WX_UI_TESTS=0`.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

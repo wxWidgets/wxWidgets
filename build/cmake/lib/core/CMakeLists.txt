@@ -177,6 +177,24 @@ if(WXWINUI AND wxUSE_WINUI3 AND wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
         "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
 endif()
 
+if(WXMSW AND wxUSE_GUI AND wxUSE_TASKBARBUTTON AND
+        wxBUILD_TESTS STREQUAL "ALL")
+    # Keep the deterministic taskbar backend seam out of normal wxcore
+    # builds, while retaining the same coverage for ordinary wxMSW and WinUI.
+    set(wx_msw_taskbarbutton_test_support_source
+        "${wxSOURCE_DIR}/src/msw/taskbarbutton.cpp")
+    set_property(SOURCE ${wx_msw_taskbarbutton_test_support_source}
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                  "${wxSOURCE_DIR}/build/cmake/lib"
+        APPEND PROPERTY INCLUDE_DIRECTORIES
+            "${wxSOURCE_DIR}/tests/winui/test-support")
+    set_property(SOURCE ${wx_msw_taskbarbutton_test_support_source}
+        DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                  "${wxSOURCE_DIR}/build/cmake/lib"
+        APPEND PROPERTY COMPILE_DEFINITIONS
+            WXMSW_TASKBARBUTTON_TEST_SUPPORT=1)
+endif()
+
 wx_add_library(wxcore ${CORE_SRC})
 if(WXWINUI AND wxUSE_WINUI3)
     wx_winui3_configure_target(wxcore)

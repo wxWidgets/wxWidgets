@@ -20,9 +20,9 @@
 #include <vector>
 
 class WXDLLIMPEXP_FWD_CORE wxMSWTaskBarButtonNativeBackend;
-struct wxMSWTaskBarButtonSnapshot;
 struct wxMSWTaskBarThumbButtonNative;
 struct wxTaskBarButtonStateData;
+class wxMSWTaskBarButtonTestAccess;
 
 class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton
 {
@@ -54,7 +54,6 @@ public:
     virtual void Realize() override;
 
     bool IsAvailable() const;
-    bool GetSnapshotForTesting(wxMSWTaskBarButtonSnapshot* snapshot) const;
 
 private:
     // This ctor is only used by wxTaskBarButton::New()
@@ -77,6 +76,7 @@ private:
 
     friend wxTaskBarButton* wxTaskBarButton::New(wxWindow*);
     friend class wxFrame;
+    friend class wxMSWTaskBarButtonTestAccess;
 
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButtonImpl);
 };

@@ -20,7 +20,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL / REMOTE PASS; EXTERNAL UIA IN 109 |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
-| [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + MAJOR HOST/RUNTIME/DIALOG SEAMS QUALIFIED LOCALLY; AUI/PRINTING/TASKBAR/PROPGRID OPEN |
+| [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + MAJOR HOST/RUNTIME/DIALOG SEAMS QUALIFIED LOCALLY; AUI/PRINTING/PROPGRID OPEN |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | LOCAL COMPLETE / REMOTE PENDING; PHYSICAL WORK RETAINED IN 109/110 |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
