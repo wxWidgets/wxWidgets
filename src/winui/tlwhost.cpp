@@ -426,7 +426,9 @@ void wxWinUIScheduleDeferredTLWDestroyReplay();
 
 // Cumulative count of per-slot cursor applications, for the state tests:
 // proves the wxWindow::SetCursor() plumbing reaches the slot seam.
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_slotCursorSets = 0;
+#endif
 
 // Every application-wide cursor-policy mutation advances this generation.
 // Per-slot and island-level caches include it, so nested busy-cursor
@@ -459,8 +461,8 @@ void wxWinUIMaybeInjectHandlerFault()
 unsigned gs_failContentMask = 0;
 unsigned gs_failContentLoadedObserverAdds = 0;
 #endif // WXWINUI_TEST_SUPPORT
-unsigned gs_liveContentLoadedStates = 0;
 #ifdef WXWINUI_TEST_SUPPORT
+unsigned gs_liveContentLoadedStates = 0;
 std::function<void (wxWindow *)> gs_testSlotAttachedHook;
 std::function<void (wxWindow *)> gs_testContentCarrierSetHook;
 std::function<void (wxWindow *)> gs_testContentTransactionStartedHook;
@@ -655,10 +657,12 @@ unsigned long long wxWinUIGetCursorPolicyGeneration()
     return gs_cursorPolicyGeneration;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUINoteSlotCursorSet()
 {
     ++gs_slotCursorSets;
 }
+#endif
 
 // Host-wide invalidations seen while routing pointer input: one of these
 // per pointer move means every hosted control is re-synchronised for
@@ -1028,8 +1032,19 @@ private:
 class wxWinUIContentLoadedState
 {
 public:
-    wxWinUIContentLoadedState() { ++gs_liveContentLoadedStates; }
-    ~wxWinUIContentLoadedState() { --gs_liveContentLoadedStates; }
+    wxWinUIContentLoadedState()
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        ++gs_liveContentLoadedStates;
+#endif
+    }
+
+    ~wxWinUIContentLoadedState()
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        --gs_liveContentLoadedStates;
+#endif
+    }
 
     std::weak_ptr<wxWinUISlotLifetime> lifetime;
     winrt::weak_ref<winrt::Microsoft::UI::Xaml::UIElement> content;
@@ -4075,12 +4090,12 @@ void wxWinUIHostContentTestAccess::OnNextWindowAtPointSlotStateRead(
 }
 #endif // WXWINUI_TEST_SUPPORT
 
-unsigned wxWinUITopLevelHost::GetSlotCursorSetCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostCursorTestAccess::GetSlotCursorSetCount()
 {
     return gs_slotCursorSets;
 }
 
-#ifdef WXWINUI_TEST_SUPPORT
 winrt::Microsoft::UI::Input::InputCursor
 wxWinUIHostCursorTestAccess::GetSlotCursor(
     const wxWinUITopLevelHost& host,

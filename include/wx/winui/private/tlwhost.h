@@ -1100,10 +1100,6 @@ public:
     static unsigned GetRootHandlerRevokeCount();
     static unsigned GetLiveSubclassContextCount();
 
-    // Cumulative count of per-slot cursor applications: proves the
-    // wxWindow::SetCursor() plumbing reaches the slot seam.
-    static unsigned GetSlotCursorSetCount();
-
     // Live Loaded-hook count across the control hosts (defined in
     // ctrlhost.cpp): a failed content swap must leave the old hook in
     // place and drop only the new one.

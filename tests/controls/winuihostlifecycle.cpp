@@ -5485,10 +5485,11 @@ TEST_CASE("HostState::AutomationState", "[HostState]")
     CHECK(!peer.IsEnabled());
 
     // the per-window cursor plumbing reaches the slot seam
-    const unsigned cursors0 = wxWinUITopLevelHost::GetSlotCursorSetCount();
+    const unsigned cursors0 =
+        wxWinUIHostCursorTestAccess::GetSlotCursorSetCount();
     button->SetCursor(wxCursor(wxCURSOR_HAND));
     DrainToQuiescence();
-    CHECK(wxWinUITopLevelHost::GetSlotCursorSetCount() > cursors0);
+    CHECK(wxWinUIHostCursorTestAccess::GetSlotCursorSetCount() > cursors0);
 
     frame->Destroy();
     DrainDispatch();
@@ -6832,9 +6833,9 @@ TEST_CASE("HostState::InheritedCursorState", "[HostState]")
           customCursor.GetHCURSOR());
 
     const unsigned sets =
-        wxWinUITopLevelHost::GetSlotCursorSetCount();
+        wxWinUIHostCursorTestAccess::GetSlotCursorSetCount();
     host->FlushSync();
-    CHECK(wxWinUITopLevelHost::GetSlotCursorSetCount() == sets);
+    CHECK(wxWinUIHostCursorTestAccess::GetSlotCursorSetCount() == sets);
 
     // A topology mutation under a stationary pointer must re-hit-test, not
     // blindly retain the destroyed slot or fall back to arrow. Expose the

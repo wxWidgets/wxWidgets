@@ -1651,7 +1651,9 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
             {
                 return;
             }
+#ifdef WXWINUI_TEST_SUPPORT
             wxWinUINoteSlotCursorSet();
+#endif
             if ( wxWinUIGetCursorPolicyGeneration() !=
                     resolvedCursorPolicyGeneration ||
                  !getCurrentSlot() )

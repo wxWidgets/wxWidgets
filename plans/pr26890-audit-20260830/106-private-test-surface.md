@@ -664,6 +664,32 @@ Do not delete a lifetime/retirement service used by production merely because it
   sublot locally; the TLW lifecycle ledger and deeper DropBroker test storage
   still keep plan 106 open.
 
+## Host diagnostic-counter boundary (2026-09-01)
+
+- The per-slot cursor-set count leaves `wxWinUITopLevelHost` and moves to the
+  existing non-installed `wxWinUIHostCursorTestAccess`. Its storage, recorder
+  declaration/definition and the single hot-path call now compile only with
+  `WXWINUI_TEST_SUPPORT`; shipping cursor projection contains no no-op test
+  call. The four existing observations keep their assertions unchanged.
+- The already-private live ContentLoaded-observer getter keeps its contract,
+  while its counter and constructor/destructor accounting also compile only
+  in test-enabled builds. Real Loaded subscriptions, weak lifetime state,
+  cursor policy generations, setters and reconciliation remain production
+  code. No class member, object layout or virtual table changes.
+- Before migration and after the initial test-enabled build, the three exact
+  cursor/Loaded cases pass **121 assertions / 3 cases** in each linkage.
+  Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors, followed by runtime smoke and Supported V0 **2/2** per linkage.
+- Reusing the same two build trees, `wxBUILD_TESTS=OFF` builds of `wxcore` and
+  `minimal` pass with warnings as errors. `dumpbin` reports zero match for the
+  old getter, new test accessor, cursor recorder and both counter symbols in
+  the shipping shared DLL and static archive.
+- Both caches are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat the
+  exact **121/3** cases plus both runtime gates **2/2**. No new build
+  directory, physical input or global interaction was used. The larger TLW
+  lifecycle-observation family and DropBroker snapshot storage remain separate
+  open sublots of plan 106.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

@@ -18,6 +18,7 @@ public:
     // Reads and actions use the existing host/slot state and native policy.
     // The XAML-selection action writes the actual Cursor property without
     // manufacturing ownership, then uses the production observer to reconcile.
+    static unsigned GetSlotCursorSetCount();
     static winrt::Microsoft::UI::Input::InputCursor
     GetSlotCursor(
         const wxWinUITopLevelHost& host,
