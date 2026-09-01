@@ -574,6 +574,40 @@ Do not delete a lifetime/retirement service used by production merely because it
   three targets rebuild, and the same focused tests and runtime gates pass
   again.
 
+## Choice/ComboBox implementation-state boundary (2026-09-01)
+
+- `wxWinUIChoiceImpl` leaves the 52-consumer `src/winui/private.h` umbrella
+  and now lives in the source-private `src/winui/choiceimpl.h`, included only
+  by `choice.cpp` and `combobox.cpp`. This keeps the real popup, edit-part,
+  text-selection, autocomplete, template and layout state shared by the two
+  implementation units without making every WinUI translation unit depend on
+  the control's internal layout.
+- Popup-reopen counters, retired-edit observation, three range-order hooks and
+  all passive ComboBox diagnostics are present only with
+  `WXWINUI_TEST_SUPPORT`. Shipping keeps the actual popup generation and
+  retirement protocol, physical-disconnect gate, range projection/finalizer,
+  edit-part tokens, selection tickets, autocomplete generations and real
+  template/layout replay. The shipping path no longer reads the XAML list
+  height solely to populate a diagnostic field.
+- Shared and static `wxBUILD_TESTS=OFF` `wxcore` builds pass with warnings as
+  errors. `dumpbin` finds no Choice/ComboBox test-access type, automation test
+  state, reopen counter, range hook, retired-edit field or diagnostic symbol
+  in either the shared DLL or static archive. Both trees are restored to
+  `wxBUILD_TESTS=ALL` and rebuild `test_gui`, `minimal` and `winuispike` with
+  warnings as errors.
+- On private desktops with `WX_UI_TESTS=0`, eleven exact fresh-process cases
+  cover Loaded/LayoutUpdated realization, template generations, destruction,
+  popup reopen, selection snapshots, the real XAML editor, SIMPLE layout,
+  theme retirement, host/DPI/theme transitions and local-key routing. They
+  pass **1299 assertions / 11 cases** in each linkage; runtime smoke and
+  Supported V0 then pass **2/2** per linkage. These checks inject no physical
+  input.
+- A single-process aggregate `[winui-combo]` run remains order-dependent: some
+  later controls lose realization after earlier cases. It is not reported as
+  passing or retried. The fresh-process results above establish this bounded
+  implementation-state migration; aggregate test-fixture isolation remains a
+  separate open test-suite defect and keeps the wider plan open.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

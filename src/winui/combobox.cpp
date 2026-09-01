@@ -30,7 +30,7 @@
 #include "wx/dataobj.h"
 #include "wx/dir.h"
 #include "wx/filename.h"
-#include "private.h"
+#include "choiceimpl.h"
 #include "wx/scopeguard.h"
 #include "wx/textcompleter.h"
 #include "wx/weakref.h"
@@ -656,9 +656,11 @@ void wxComboBox::ClearPendingTextSelection()
     impl->pendingTextSelectionGeneration = 0;
     impl->pendingTextSelectionRevision = 0;
     impl->pendingTextSelectionEditIdentity = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     impl->pendingRangeProjectionHookForTesting = nullptr;
     impl->pendingRangeFinalizationHookForTesting = nullptr;
     impl->independentRangeObservationHookForTesting = nullptr;
+#endif
 }
 
 #ifdef WXWINUI_TEST_SUPPORT
@@ -741,7 +743,9 @@ bool wxComboBox::HandlePendingTextSelectionChange()
         // no-op; no LayoutUpdated count or artificial arrange is involved.
         if ( ++impl->pendingTextSelectionRevision == 0 )
             ++impl->pendingTextSelectionRevision;
+#ifdef WXWINUI_TEST_SUPPORT
         ++impl->diagnosticRangeProjectionMismatches;
+#endif
 
         const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
             impl->callbackState;
@@ -847,16 +851,20 @@ bool wxComboBox::HandlePendingTextSelectionChange()
                         // all test hooks, then invoke it as the final operation:
                         // this Low continuation is already outside the routed
                         // SelectionChanged callback.
+#ifdef WXWINUI_TEST_SUPPORT
                         std::function<void(wxComboBox *)> finalizationHook =
                             std::move(queuedImpl->
                                 pendingRangeFinalizationHookForTesting);
                         ++queuedImpl->diagnosticRangeFinalizations;
+#endif
                         queuedOwner->ClearPendingTextSelection();
+#ifdef WXWINUI_TEST_SUPPORT
                         if ( finalizationHook )
                         {
                             finalizationHook(queuedOwner);
                             return;
                         }
+#endif
                     }
                 }
                 catch ( const winrt::hresult_error& e )
@@ -871,6 +879,7 @@ bool wxComboBox::HandlePendingTextSelectionChange()
         // the exact weak confirmation has been accepted by the dispatcher.
         // The hook may delete this control: move it out and never touch the
         // owner/implementation again.
+#ifdef WXWINUI_TEST_SUPPORT
         if ( confirmationQueued &&
              impl->pendingRangeProjectionHookForTesting )
         {
@@ -879,6 +888,9 @@ bool wxComboBox::HandlePendingTextSelectionChange()
             hook(this);
             return true;
         }
+#else
+        wxUnusedVar(confirmationQueued);
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -1179,7 +1191,9 @@ void wxComboBox::CloseTextPeer()
         impl->dropDownClosedToken = {};
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     impl->retiredEditBoxForTesting = nullptr;
+#endif
     impl->editBox = nullptr;
     impl->textCallbackState.reset();
     ClearPendingTextValue();
@@ -1371,7 +1385,9 @@ bool wxComboBox::AttachEditPeerHandlers()
                     return;
                 }
 
+#ifdef WXWINUI_TEST_SUPPORT
                 ++owner->m_winui->diagnosticEditLayoutEdges;
+#endif
                 owner->ReconcilePendingTextValueAtPeerEdge();
                 owner = callbackState->GetOwner<wxComboBox>();
                 if ( owner && owner->m_winui &&
@@ -1391,9 +1407,11 @@ bool wxComboBox::AttachEditPeerHandlers()
                 }
             });
 
+#ifdef WXWINUI_TEST_SUPPORT
         impl->diagnosticKeyTargetIdentity =
             reinterpret_cast<std::uintptr_t>(winrt::get_abi(
                 wxWinUIComboObjectIdentity(outerKeyTarget)));
+#endif
         const auto keyHandler =
             [callbackState, impl, editGeneration, editBox, keyTarget,
              outerKeyTarget](
@@ -1411,6 +1429,7 @@ bool wxComboBox::AttachEditPeerHandlers()
                     return;
                 }
 
+#ifdef WXWINUI_TEST_SUPPORT
                 ++owner->m_winui->diagnosticKeyPreviewCallbacks;
                 owner->m_winui->diagnosticLastPreviewKey =
                     static_cast<unsigned>(args.Key());
@@ -1420,6 +1439,7 @@ bool wxComboBox::AttachEditPeerHandlers()
                             sender.try_as<MUX::UIElement>())));
                 owner->m_winui->diagnosticLastPreviewHandledOnEntry =
                     args.Handled();
+#endif
                 const MUX::UIElement senderElement =
                     sender.try_as<MUX::UIElement>();
                 if ( args.Handled() ||
@@ -1464,7 +1484,9 @@ bool wxComboBox::AttachEditPeerHandlers()
                      (keyCode == static_cast<unsigned>('C') ||
                       key == winrt::Windows::System::VirtualKey::Insert) )
                 {
+#ifdef WXWINUI_TEST_SUPPORT
                     ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                     args.Handled(true);
                     owner->Copy();
                     return;
@@ -1474,7 +1496,9 @@ bool wxComboBox::AttachEditPeerHandlers()
                      (shiftOnly &&
                       key == winrt::Windows::System::VirtualKey::Delete) )
                 {
+#ifdef WXWINUI_TEST_SUPPORT
                     ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                     args.Handled(true);
                     owner->Cut();
                     return;
@@ -1484,7 +1508,9 @@ bool wxComboBox::AttachEditPeerHandlers()
                      (shiftOnly &&
                       key == winrt::Windows::System::VirtualKey::Insert) )
                 {
+#ifdef WXWINUI_TEST_SUPPORT
                     ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                     args.Handled(true);
                     owner->Paste();
                     return;
@@ -1543,13 +1569,17 @@ bool wxComboBox::AttachEditPeerHandlers()
                 switch ( key )
                 {
                     case winrt::Windows::System::VirtualKey::Down:
+#ifdef WXWINUI_TEST_SUPPORT
                         ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                         args.Handled(true);
                         owner->NavigateAutoComplete(1);
                         return;
 
                     case winrt::Windows::System::VirtualKey::Up:
+#ifdef WXWINUI_TEST_SUPPORT
                         ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                         args.Handled(true);
                         owner->NavigateAutoComplete(-1);
                         return;
@@ -1558,14 +1588,18 @@ bool wxComboBox::AttachEditPeerHandlers()
                         if ( owner->m_winui->autoCompleteSelection !=
                                  wxNOT_FOUND )
                         {
+#ifdef WXWINUI_TEST_SUPPORT
                             ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                             args.Handled(true);
                             owner->AcceptAutoCompleteSelection();
                         }
                         return;
 
                     case winrt::Windows::System::VirtualKey::Escape:
+#ifdef WXWINUI_TEST_SUPPORT
                         ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
                         args.Handled(true);
                         owner->DismissAutoComplete();
                         return;
@@ -4474,8 +4508,10 @@ void wxComboBox::OnPeerTextChanged()
         return;
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->diagnosticPeerTextCallbacks;
     impl->diagnosticLastPeerText = text;
+#endif
 
     const bool peerMutationInProgress =
         impl->callbackState->IsPeerMutationInProgress();
@@ -4677,7 +4713,9 @@ void wxComboBox::OnPeerTextChanged()
 
     if ( valueChanged )
     {
-        ++impl->diagnosticPeerTextDeliveries;
+#ifdef WXWINUI_TEST_SUPPORT
+    ++impl->diagnosticPeerTextDeliveries;
+#endif
         owner->SendTextEvent();
         owner = getLiveOwner();
         if ( !owner )
@@ -5147,7 +5185,9 @@ bool wxComboBox::RealizeSimplePeerLayout()
     }
 
     wxWinUIChoiceImpl * const impl = m_winui.get();
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->diagnosticSimpleRealizeAttempts;
+#endif
     std::uint64_t layoutEpoch = ++impl->simpleLayoutEpoch;
     if ( layoutEpoch == 0 )
         layoutEpoch = ++impl->simpleLayoutEpoch;
@@ -5277,6 +5317,7 @@ bool wxComboBox::RealizeSimplePeerLayout()
         if ( !owner )
             return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
         impl->diagnosticSimpleSourceWidthPixels = clientPixels.x;
         impl->diagnosticSimpleSourceHeightPixels = clientPixels.y;
         impl->diagnosticSimpleRasterizationScale = scale;
@@ -5286,6 +5327,7 @@ bool wxComboBox::RealizeSimplePeerLayout()
             static_cast<int>(std::lround(requestedWidth));
         impl->diagnosticSimpleRequestedHeight =
             static_cast<int>(std::lround(requestedHeight));
+#endif
 
         edit.ApplyTemplate();
         owner = getExactOwner();
@@ -5447,7 +5489,6 @@ bool wxComboBox::RealizeSimplePeerLayout()
         const double editWidth = edit.ActualWidth();
         const double editHeight = edit.ActualHeight();
         const double listWidth = list.ActualWidth();
-        const double listHeight = list.ActualHeight();
         owner = getExactOwner();
         if ( !owner )
             return false;
@@ -5455,11 +5496,14 @@ bool wxComboBox::RealizeSimplePeerLayout()
         wxUnusedVar(editWidth);
         wxUnusedVar(editHeight);
         wxUnusedVar(listWidth);
+#ifdef WXWINUI_TEST_SUPPORT
+        const double listHeight = list.ActualHeight();
         impl->diagnosticSimpleArrangedHeight = root.ActualHeight();
         impl->diagnosticSimpleListHeight = listHeight;
         const MUXC::ScrollViewer scroll = wxWinUIFindScrollViewer(list);
         impl->diagnosticSimpleViewportHeight =
             scroll ? scroll.ActualHeight() : 0.0;
+#endif
         const bool sharesRoot = rootXaml && editXaml && listXaml &&
             wxWinUIComboObjectIdentity(rootXaml) ==
                 wxWinUIComboObjectIdentity(editXaml) &&
@@ -5946,7 +5990,9 @@ bool wxComboBox::ReplayTemplateStateToEditPart()
     }
 
     wxWinUIChoiceImpl * const impl = m_winui.get();
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->diagnosticTemplateReplayAttempts;
+#endif
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
@@ -6086,8 +6132,10 @@ bool wxComboBox::ReplayTemplateStateToEditPart()
            (!needsRangeTicket ||
             (owner->m_winui->hasPendingTextSelection &&
              owner->m_winui->pendingTextSelectionEpoch == rangeEpoch));
+#ifdef WXWINUI_TEST_SUPPORT
     if ( replayed )
         ++owner->m_winui->diagnosticTemplateReplaySuccesses;
+#endif
     return replayed;
 }
 
@@ -6101,7 +6149,9 @@ void wxComboBox::OnPeerTemplateTransition(bool forceEditableReload)
     }
 
     wxWinUIChoiceImpl * const impl = m_winui.get();
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->diagnosticTemplateTransitions;
+#endif
     const std::shared_ptr<wxWinUITextCallbackState> textState =
         impl->textCallbackState;
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
@@ -6305,7 +6355,9 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge()
 #endif
     if ( impl->comboLayoutResolveQueued )
     {
+#ifdef WXWINUI_TEST_SUPPORT
         ++impl->diagnosticComboLayoutCoalescedEdges;
+#endif
         return;
     }
 
@@ -6460,7 +6512,9 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge()
         if ( revision == 0 )
             revision = ++owner->m_winui->comboLayoutResolveRevision;
         owner->m_winui->comboLayoutResolveQueued = true;
+#ifdef WXWINUI_TEST_SUPPORT
         ++owner->m_winui->diagnosticComboLayoutResolveRequests;
+#endif
 
         const MUXD::DispatcherQueue queue = combo.DispatcherQueue();
         owner = getExactOwner();
@@ -6603,7 +6657,9 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge()
                     }
 
                     owner->m_winui->comboLayoutResolveRunning = true;
+#ifdef WXWINUI_TEST_SUPPORT
                     ++owner->m_winui->diagnosticComboLayoutResolveRuns;
+#endif
 
 #ifdef WXWINUI_TEST_SUPPORT
                     if ( forceTransitionForTesting )
@@ -6758,7 +6814,9 @@ void wxComboBox::OnPeerLayoutUpdated()
     wxWinUIChoiceImpl * const impl = m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> textState =
         impl->textCallbackState;
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->diagnosticComboLayoutEdges;
+#endif
     ++impl->comboLayoutCallbackDepth;
     wxScopeGuard callbackGuard = wxMakeGuard([textState, impl]()
     {
@@ -6790,13 +6848,17 @@ void wxComboBox::ResolveEditPartOnce(bool updateLayout)
     {
         if ( impl->comboLayoutCallbackDepth )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++impl->diagnosticComboLayoutSynchronousRealizations;
+#endif
         }
         if ( impl->comboLayoutResolveRunning )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++impl->diagnosticComboLayoutRealizations;
             if ( !impl->comboLayoutResolveQueued )
                 ++impl->diagnosticComboLayoutUnlatchedRealizations;
+#endif
         }
     }
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
@@ -9617,9 +9679,11 @@ bool wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(const wxComboBox* control,
 
 void wxComboBox::SendSelectionEvent()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIChoiceImpl * const diagnosticImpl = m_winui.get();
     if ( diagnosticImpl )
         ++diagnosticImpl->diagnosticSelectionDispatches;
+#endif
 
     const int sel = wxChoice::GetSelection();
     wxWinUIItemModel::Id selectedId = 0;
@@ -9652,17 +9716,21 @@ void wxComboBox::SendSelectionEvent()
     // Force an owning copy too: this value crosses arbitrary application
     // re-entry and must not share writable storage with the live document.
     const wxString selectionValue(m_value.c_str(), m_value.length());
+#ifdef WXWINUI_TEST_SUPPORT
     if ( diagnosticImpl )
         diagnosticImpl->diagnosticSelectionBeforeHandler = selectionValue;
+#endif
 
     // wxMSW sends wxEVT_COMBOBOX for the selection followed by wxEVT_TEXT for
     // the resulting text change.
     const bool sendSnapshotText = m_allowTextEvents;
+#ifdef WXWINUI_TEST_SUPPORT
     if ( diagnosticImpl )
     {
         diagnosticImpl->diagnosticSelectionTextAllowed = sendSnapshotText;
         diagnosticImpl->diagnosticSelectionOwnerSurvived = false;
     }
+#endif
     const std::shared_ptr<wxWinUITextCallbackState> snapshotState =
         m_winui ? m_winui->textCallbackState : nullptr;
     wxCommandEvent event(wxEVT_COMBOBOX, GetId());
@@ -9678,8 +9746,10 @@ void wxComboBox::SendSelectionEvent()
         : wxDynamicCast(self.get(), wxComboBox);
     if ( owner != this || !owner->m_winui || !sendSnapshotText )
         return;
+#ifdef WXWINUI_TEST_SUPPORT
     owner->m_winui->diagnosticSelectionOwnerSurvived = true;
     owner->m_winui->diagnosticSelectionAfterHandler = owner->m_value;
+#endif
 
     // The COMBOBOX handler may delete, clear or sort the item model. Never
     // reuse the stale numeric index (and hence potentially freed client
@@ -9699,7 +9769,9 @@ void wxComboBox::SendSelectionEvent()
     wxCommandEvent textEvent(wxEVT_TEXT, owner->GetId());
     owner->InitCommandEventWithItems(textEvent, textItem);
     textEvent.SetString(selectionValue);
+#ifdef WXWINUI_TEST_SUPPORT
     ++owner->m_winui->diagnosticSelectionSnapshotDeliveries;
+#endif
     wxWinUIChoiceImpl * const snapshotImpl = owner->m_winui.get();
     ++owner->m_snapshotTextDispatchDepth;
     wxComboBox * const expectedSnapshotOwner = owner;

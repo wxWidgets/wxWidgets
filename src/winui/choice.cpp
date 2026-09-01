@@ -24,7 +24,7 @@
     #include "wx/validate.h"
 #endif
 
-#include "private.h"
+#include "choiceimpl.h"
 #include "wx/weakref.h"
 #include "keyboard.h"
 
@@ -3047,7 +3047,9 @@ bool wxChoice::WinUICoalescePopupReopen(
         ++impl->popupReopenGeneration;
     const std::uint64_t generation = impl->popupReopenGeneration;
     impl->popupReopenPending = true;
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->popupReopenSchedulesForTesting;
+#endif
 
     try
     {
@@ -3070,7 +3072,9 @@ bool wxChoice::WinUICoalescePopupReopen(
                      }
 
                      owner->m_winui->popupReopenPending = false;
+#ifdef WXWINUI_TEST_SUPPORT
                      ++owner->m_winui->popupReopenRunsForTesting;
+#endif
                      replay(owner);
                  }) )
         {
