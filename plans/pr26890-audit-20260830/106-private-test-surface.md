@@ -875,6 +875,32 @@ Do not delete a lifetime/retirement service used by production merely because it
   plus Supported V0 **2/2** in each linkage with `WX_UI_TESTS=0`. No physical
   input or visible native shell was used.
 
+## Generic progress-dialog yield boundary (2026-09-01)
+
+- The public `WinUIYieldHookForTesting` typedef and
+  `WinUISetYieldHookForTesting()` method leave `wxGenericProgressDialog`, as do
+  the two test-only pointer fields that stored the callback and its context.
+  Tests install the same one-shot callback through the non-installed
+  `progress-dialog-test-access.h` adapter.
+- In test-enabled WinUI builds, callback state is held in a source-local
+  registry keyed by the dialog. Taking a hook erases it before invocation, so
+  nested updates retain the previous one-shot/reentrance contract. `Init()` and
+  destruction also erase any stale entry; no callback state or registry is
+  compiled into shipping builds.
+- This intentionally reduces the pre-release WinUI progress-dialog layout by
+  two pointers in both test-enabled and shipping configurations. It is not
+  claimed as historical ABI preservation; all affected binaries and consumers
+  are rebuilt, and no configuration-dependent class layout is introduced.
+- Before and after extraction, `[winui-progress-dialog]` passes exactly **1010
+  assertions / 3 cases** in shared and static Release. The cases retain the
+  destruction-during-yield, owner-destruction and reentrant-update boundaries.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. The installed headers and shared/static symbol tables
+  contain zero match for the former public seam, the replacement adapter or
+  its registry. Both caches are restored to `wxBUILD_TESTS=ALL`; the exact
+  **1010/3** replay and runtime smoke plus Supported V0 **2/2** pass again in
+  each linkage with `WX_UI_TESTS=0`.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

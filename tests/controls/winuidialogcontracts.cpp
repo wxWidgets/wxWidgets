@@ -13,6 +13,7 @@
 
 #include "button-test-access.h"
 #include "native-dialog-test-access.h"
+#include "progress-dialog-test-access.h"
 #include "textdialog-test-access.h"
 
 #include "wx/winui/private/dialogcontracts.h"
@@ -3035,7 +3036,8 @@ TEST_CASE("WinUIDialogContracts::GenericProgressContractAndReentrance",
             "reentrant", "initial", 100,
             &owner, wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
         wxWeakRef<wxGenericProgressDialog> weakProgress(&progress);
-        progress.WinUISetYieldHookForTesting(
+        wxWinUIProgressDialogTestAccess::SetYieldHook(
+            progress,
             &weakProgress,
             [](void *rawProgress)
             {
@@ -3106,7 +3108,8 @@ TEST_CASE("WinUIDialogContracts::GenericProgressContractAndReentrance",
                 "destroy in update", "initial", 10,
                 &owner, wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
         wxWeakRef<wxGenericProgressDialog> weakProgress(progress);
-        progress->WinUISetYieldHookForTesting(
+        wxWinUIProgressDialogTestAccess::SetYieldHook(
+            *progress,
             &weakProgress,
             [](void *rawProgress)
             {
@@ -3139,7 +3142,8 @@ TEST_CASE("WinUIDialogContracts::GenericProgressContractAndReentrance",
                 wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
         wxWeakRef<wxWindow> weakOwner(transientOwner);
         const wxWeakRef<wxGenericProgressDialog> weakProgress(progress);
-        progress->WinUISetYieldHookForTesting(
+        wxWinUIProgressDialogTestAccess::SetYieldHook(
+            *progress,
             &weakOwner,
             [](void *rawOwner)
             {
@@ -3304,7 +3308,8 @@ TEST_CASE("WinUIDialogContracts::NativeProgressBoundaryAndLifetime",
             wxWeakRef<wxProgressDialog> progress;
             bool deleted;
         } deleteContext(progress);
-        progress->WinUISetYieldHookForTesting(
+        wxWinUIProgressDialogTestAccess::SetYieldHook(
+            *progress,
             &deleteContext,
             [](void *rawContext)
             {

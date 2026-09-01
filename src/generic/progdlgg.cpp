@@ -39,6 +39,12 @@
 #include "wx/progdlg.h"
 #include "wx/evtloop.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "progress-dialog-test-access.h"
+    #include <mutex>
+    #include <unordered_map>
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -57,6 +63,56 @@ wxBEGIN_EVENT_TABLE(wxGenericProgressDialog, wxDialog)
 
     EVT_CLOSE(wxGenericProgressDialog::OnClose)
 wxEND_EVENT_TABLE()
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+
+namespace
+{
+
+struct wxWinUIProgressYieldHookState
+{
+    void *context = nullptr;
+    wxWinUIProgressDialogTestAccess::YieldHook hook = nullptr;
+};
+
+std::mutex gs_progressYieldHookMutex;
+std::unordered_map<wxGenericProgressDialog *, wxWinUIProgressYieldHookState>
+    gs_progressYieldHooks;
+
+void ForgetProgressYieldHook(wxGenericProgressDialog *dialog)
+{
+    const std::lock_guard<std::mutex> lock(gs_progressYieldHookMutex);
+    gs_progressYieldHooks.erase(dialog);
+}
+
+wxWinUIProgressYieldHookState
+TakeProgressYieldHook(wxGenericProgressDialog *dialog)
+{
+    const std::lock_guard<std::mutex> lock(gs_progressYieldHookMutex);
+    const auto it = gs_progressYieldHooks.find(dialog);
+    if ( it == gs_progressYieldHooks.end() )
+        return {};
+
+    const wxWinUIProgressYieldHookState state = it->second;
+    gs_progressYieldHooks.erase(it);
+    return state;
+}
+
+} // anonymous namespace
+
+void wxWinUIProgressDialogTestAccess::SetYieldHook(
+    wxGenericProgressDialog& dialog,
+    void *context,
+    YieldHook hook)
+{
+    const std::lock_guard<std::mutex> lock(gs_progressYieldHookMutex);
+    if ( hook )
+        gs_progressYieldHooks[&dialog] = { context, hook };
+    else
+        gs_progressYieldHooks.erase(&dialog);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
 // ============================================================================
 // wxGenericProgressDialog implementation
@@ -116,10 +172,9 @@ void wxGenericProgressDialog::Init()
     m_insideYield = false;
     m_updateGeneration = 0;
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    m_winuiYieldHookContext = nullptr;
-    m_winuiYieldHook = nullptr;
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    ForgetProgressYieldHook(this);
+#endif
 
     SetWindowStyle(wxDEFAULT_DIALOG_STYLE);
 }
@@ -597,17 +652,15 @@ bool wxGenericProgressDialog::YieldForEvents(long categories)
     m_insideYield = true;
     const wxWeakRef<wxWindow> weakThis(this);
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    WinUIYieldHookForTesting const hook = m_winuiYieldHook;
-    void * const hookContext = m_winuiYieldHookContext;
-    m_winuiYieldHook = nullptr;
-    m_winuiYieldHookContext = nullptr;
-    if ( hook )
-        hook(hookContext);
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    const wxWinUIProgressYieldHookState hookState =
+        TakeProgressYieldHook(this);
+    if ( hookState.hook )
+        hookState.hook(hookState.context);
 
     if ( !weakThis.get() )
         return false;
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
     eventLoop->YieldFor(categories);
 
@@ -781,6 +834,10 @@ void wxGenericProgressDialog::OnClose(wxCloseEvent& event)
 
 wxGenericProgressDialog::~wxGenericProgressDialog()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    ForgetProgressYieldHook(this);
+#endif
+
     // normally this should have been already done, but just in case
     ReenableOtherWindows();
 

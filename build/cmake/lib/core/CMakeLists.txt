@@ -198,6 +198,7 @@ if(WXWINUI AND wxUSE_WINUI3)
         set(wx_winui_test_support_sources
             "${wxSOURCE_DIR}/src/generic/tipwin.cpp"
             "${wxSOURCE_DIR}/src/generic/splash.cpp"
+            "${wxSOURCE_DIR}/src/generic/progdlgg.cpp"
             "${wxSOURCE_DIR}/src/msw/evtloop.cpp"
             "${wxSOURCE_DIR}/src/msw/dirdlg.cpp"
             "${wxSOURCE_DIR}/src/msw/msgdlg.cpp"

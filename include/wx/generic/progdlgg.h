@@ -54,19 +54,6 @@ public:
 
     virtual void SetRange(int maximum);
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    // Implementation-only, one-shot seam used to exercise destruction and
-    // reentrance at the exact inherited YieldFor() boundary without input or
-    // timing. It is cleared before invocation.
-    typedef void (*WinUIYieldHookForTesting)(void *);
-    void WinUISetYieldHookForTesting(void *context,
-                                     WinUIYieldHookForTesting hook)
-    {
-        m_winuiYieldHookContext = context;
-        m_winuiYieldHook = hook;
-    }
-#endif // __WXWINUI__ && wxUSE_WINUI3
-
     // Return whether "Cancel" or "Skip" button was pressed, always return
     // false if the corresponding button is not shown.
     virtual bool WasCancelled() const;
@@ -259,12 +246,6 @@ private:
 
     bool m_insideYield;
     std::uint64_t m_updateGeneration;
-
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    void *m_winuiYieldHookContext;
-    WinUIYieldHookForTesting m_winuiYieldHook;
-#endif // __WXWINUI__ && wxUSE_WINUI3
-
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);
