@@ -33,6 +33,8 @@
     #include "wx/animate.h"
 #endif
 
+#include "generic-feedback-test-access.h"
+
 #if wxUSE_XRC
     #include "wx/sstream.h"
     #include "wx/xml/xml.h"
@@ -350,7 +352,7 @@ void PaintAndRequireArmed(wxGenericAnimationCtrl& control)
 {
     control.Update();
     REQUIRE(control.IsPlaying());
-    REQUIRE(control.WinUIIsTimerRunningForTesting());
+    REQUIRE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(control));
 }
 
 #endif // wxUSE_ANIMATIONCTRL
@@ -407,7 +409,7 @@ TEST_CASE("WinUIGenericFeedback::BannerFallbackContracts",
             dc.SelectObject(rendered);
             dc.SetBackground(*wxWHITE_BRUSH);
             dc.Clear();
-            painted.WinUIDrawBitmapBackgroundForTesting(dc);
+            wxWinUIBannerTestAccess::DrawBitmapBackground(painted, dc);
             dc.SelectObject(wxNullBitmap);
         }
 
@@ -690,7 +692,7 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     CHECK(convertStopped);
     CHECK_FALSE(control->IsPlaying());
     CHECK(control->GetAnimation().GetSize() == timed.GetSize());
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
 
     control->SetAnimation(timed);
     bool nestedPlayResult = false;
@@ -730,34 +732,34 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     control->Update();
     CHECK(delayStopped);
     CHECK_FALSE(control->IsPlaying());
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
 
     // Non-looping consumes both frame delays, then stops and resets.
     control->SetAnimation(timed);
     REQUIRE(control->Play(false));
     PaintAndRequireArmed(*control);
-    int timerId = control->WinUIGetTimerIdForTesting();
+    int timerId = wxWinUIGenericAnimationTestAccess::GetTimerId(*control);
     DispatchAnimationTimer(*control, timerId);
-    CHECK(control->WinUIGetCurrentFrameForTesting() == 1);
+    CHECK(wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 1);
     PaintAndRequireArmed(*control);
-    timerId = control->WinUIGetTimerIdForTesting();
+    timerId = wxWinUIGenericAnimationTestAccess::GetTimerId(*control);
     DispatchAnimationTimer(*control, timerId);
     CHECK_FALSE(control->IsPlaying());
-    CHECK(control->WinUIGetCurrentFrameForTesting() == 0);
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK(wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 0);
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
 
     // Looping advances through the same terminal boundary and restarts at 0.
     REQUIRE(control->Play(true));
     PaintAndRequireArmed(*control);
     DispatchAnimationTimer(
-        *control, control->WinUIGetTimerIdForTesting());
+        *control, wxWinUIGenericAnimationTestAccess::GetTimerId(*control));
     PaintAndRequireArmed(*control);
     DispatchAnimationTimer(
-        *control, control->WinUIGetTimerIdForTesting());
+        *control, wxWinUIGenericAnimationTestAccess::GetTimerId(*control));
     CHECK(control->IsPlaying());
-    CHECK(control->WinUIGetCurrentFrameForTesting() == 0);
+    CHECK(wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 0);
     control->Update();
-    CHECK(control->WinUIIsTimerRunningForTesting());
+    CHECK(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
     control->Stop();
 
     // Delay 0 is clamped to a real timer; delay -1 holds the selected frame
@@ -765,13 +767,13 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     control->SetAnimation(zeroThenForever);
     REQUIRE(control->Play(false));
     PaintAndRequireArmed(*control);
-    CHECK(control->WinUIGetTimerIntervalForTesting() == 10);
+    CHECK(wxWinUIGenericAnimationTestAccess::GetTimerInterval(*control) == 10);
     DispatchAnimationTimer(
-        *control, control->WinUIGetTimerIdForTesting());
-    CHECK(control->WinUIGetCurrentFrameForTesting() == 1);
+        *control, wxWinUIGenericAnimationTestAccess::GetTimerId(*control));
+    CHECK(wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 1);
     control->Update();
     CHECK(control->IsPlaying());
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
     control->Stop();
     CHECK_FALSE(control->IsPlaying());
 
@@ -779,8 +781,8 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     REQUIRE(control->Play());
     control->Update();
     CHECK(control->IsPlaying());
-    CHECK(control->WinUIGetCurrentFrameForTesting() == 0);
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK(wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 0);
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
     control->Stop();
 
     // A notification from an earlier generation cannot advance a restarted
@@ -788,15 +790,17 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     control->SetAnimation(timed);
     REQUIRE(control->Play());
     PaintAndRequireArmed(*control);
-    const int staleTimerId = control->WinUIGetTimerIdForTesting();
+    const int staleTimerId =
+        wxWinUIGenericAnimationTestAccess::GetTimerId(*control);
     control->Stop();
     REQUIRE(control->Play());
     PaintAndRequireArmed(*control);
-    REQUIRE(control->WinUIGetTimerIdForTesting() != staleTimerId);
+    REQUIRE(wxWinUIGenericAnimationTestAccess::GetTimerId(*control) !=
+            staleTimerId);
     DispatchAnimationTimer(*control, staleTimerId);
-    CHECK(control->WinUIGetCurrentFrameForTesting() == 0);
+    CHECK(wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 0);
     CHECK(control->IsPlaying());
-    CHECK(control->WinUIIsTimerRunningForTesting());
+    CHECK(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
     control->Stop();
 
     // Resize rebuilds the exact clipped backing dimensions while stopped and
@@ -822,29 +826,31 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     REQUIRE(control->GetClientSize() == wxSize(0, 0));
     CHECK(control->GetAnimation().IsOk());
     CHECK(control->IsPlaying());
-    CHECK(control->WinUIIsPausedForHiddenForTesting());
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK(wxWinUIGenericAnimationTestAccess::IsPausedForHidden(*control));
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
     control->SetClientSize(wxSize(5, 4));
     REQUIRE(control->GetClientSize() == wxSize(5, 4));
     CHECK(control->GetAnimation().IsOk());
     CHECK(control->GetBackingStore().GetSize() == wxSize(5, 4));
     control->Update();
     CHECK(control->IsPlaying());
-    CHECK_FALSE(control->WinUIIsPausedForHiddenForTesting());
-    CHECK(control->WinUIIsTimerRunningForTesting());
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsPausedForHidden(*control));
+    CHECK(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
 
     control->Hide();
     CHECK(control->IsPlaying());
-    CHECK(control->WinUIIsPausedForHiddenForTesting());
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK(wxWinUIGenericAnimationTestAccess::IsPausedForHidden(*control));
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
     REQUIRE(control->Show());
     REQUIRE(DrainGenericFeedbackUntil(
         [control]()
         {
             control->Update();
             return control->IsPlaying() &&
-                   !control->WinUIIsPausedForHiddenForTesting() &&
-                   control->WinUIIsTimerRunningForTesting();
+                   !wxWinUIGenericAnimationTestAccess::IsPausedForHidden(
+                       *control) &&
+                   wxWinUIGenericAnimationTestAccess::IsTimerRunning(
+                       *control);
         }));
     control->Stop();
 
@@ -867,7 +873,8 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
         oneX.GetSize().IsAtLeast(wanted) ? oneX.GetSize() : twoX.GetSize();
     CHECK(control->GetAnimation().GetSize() == expectedSelected);
     CHECK(control->GetBackingStore().GetSize() == expectedSelected);
-    CHECK(control->WinUIGetPreferredAnimationSizeForScaleForTesting(2.0) ==
+    CHECK(wxWinUIGenericAnimationTestAccess::
+              GetPreferredAnimationSizeForScale(*control, 2.0) ==
           twoX.GetSize());
 
     wxDPIChangedEvent dpiEvent(wxSize(96, 96), wxSize(192, 192));
@@ -899,7 +906,7 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
     CHECK(nestedDpiCount == 1);
     CHECK(control->GetAnimation().IsSameAs(forever));
     CHECK_FALSE(control->IsPlaying());
-    CHECK_FALSE(control->WinUIIsTimerRunningForTesting());
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
 
     // Every stress iteration now reaches a genuinely armed native timer
     // before revoking it, then delivers the retired generation explicitly.
@@ -910,12 +917,15 @@ TEST_CASE("WinUIGenericFeedback::AnimationFallbackTransactions",
         INFO("animation cycle=" << i);
         REQUIRE(control->Play());
         PaintAndRequireArmed(*control);
-        const int retiredId = control->WinUIGetTimerIdForTesting();
+        const int retiredId =
+            wxWinUIGenericAnimationTestAccess::GetTimerId(*control);
         control->Stop();
         REQUIRE_FALSE(control->IsPlaying());
-        REQUIRE_FALSE(control->WinUIIsTimerRunningForTesting());
+        REQUIRE_FALSE(
+            wxWinUIGenericAnimationTestAccess::IsTimerRunning(*control));
         DispatchAnimationTimer(*control, retiredId);
-        REQUIRE(control->WinUIGetCurrentFrameForTesting() == 0);
+        REQUIRE(
+            wxWinUIGenericAnimationTestAccess::GetCurrentFrame(*control) == 0);
     }
 
 #if wxUSE_XRC
@@ -1048,7 +1058,8 @@ TEST_CASE("WinUIGenericFeedback::AnimationDecoderSelfDestruction",
             doomed->Destroy();
         }));
     wxAnimationCtrl* const delayCaller = delayVictim;
-    CHECK_FALSE(delayCaller->WinUIScheduleNextFrameForTesting());
+    CHECK_FALSE(
+        wxWinUIGenericAnimationTestAccess::ScheduleNextFrame(*delayCaller));
     CHECK(delayDeleteCount == 1);
     REQUIRE(DrainGenericFeedbackUntil(
         [weakDelayVictim]() { return !weakDelayVictim; }));
@@ -1088,7 +1099,7 @@ TEST_CASE("WinUIGenericFeedback::AnimationDecoderSelfDestruction",
     REQUIRE(loader->Play());
     PaintAndRequireArmed(*loader);
     loader->Stop();
-    CHECK_FALSE(loader->WinUIIsTimerRunningForTesting());
+    CHECK_FALSE(wxWinUIGenericAnimationTestAccess::IsTimerRunning(*loader));
 }
 
 #endif // wxUSE_ANIMATIONCTRL

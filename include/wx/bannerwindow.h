@@ -20,6 +20,9 @@
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxDC;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxWinUIBannerTestAccess;
+#endif
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxBannerWindowNameStr[];
 
@@ -85,13 +88,6 @@ public:
     // with SetText() but not SetBitmap().
     void SetGradient(const wxColour& start, const wxColour& end);
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    // Implementation-only rendering seam used to validate the generic
-    // fallback without relying on pixels from an occluded/off-screen HWND.
-    void WinUIDrawBitmapBackgroundForTesting(wxDC& dc)
-        { DrawBitmapBackground(dc); }
-#endif
-
 protected:
     virtual wxSize DoGetBestClientSize() const override;
 
@@ -145,6 +141,10 @@ private:
              m_colEnd;
 
     wxDECLARE_EVENT_TABLE();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIBannerTestAccess;
+#endif
 
     wxDECLARE_NO_COPY_CLASS(wxBannerWindow);
 };

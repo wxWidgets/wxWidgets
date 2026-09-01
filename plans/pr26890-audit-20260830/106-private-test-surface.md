@@ -830,6 +830,26 @@ Do not delete a lifetime/retirement service used by production merely because it
   removed seams or either new private test-access class. Restored `ALL` builds
   repeat **2328/11** and runtime smoke plus Supported V0 **2/2** per linkage.
 
+## Generic feedback observation boundary (2026-09-01)
+
+- The Banner bitmap-background oracle and seven generic-animation timer,
+  frame, visibility and preferred-size helpers leave the public
+  `wx/bannerwindow.h` and `wx/generic/animate.h` APIs. Tests reach the same
+  state through the non-installed `generic-feedback-test-access.h` adapter.
+- Both production classes gain only friend declarations: no data member,
+  object-layout, virtual-table or exported-function change. The adapter is
+  rejected unless `WXWINUI_TEST_SUPPORT` is enabled and contains inline-only
+  forwarding code, so it creates no separate shipping ABI.
+- Before and after extraction, `WinUIGenericFeedback::*` passes exactly
+  **7563 assertions / 3 cases** in shared and static Release; `test_gui` and
+  `minimal` build with warnings as errors in both linkages.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. Shared DLL exports and static-library symbols have zero
+  match for the eight removed methods or either new private accessor class.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; the same **7563/3** group
+  and runtime smoke plus Supported V0 **2/2** pass again in each linkage with
+  `WX_UI_TESTS=0`. No physical input or global interaction was used.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

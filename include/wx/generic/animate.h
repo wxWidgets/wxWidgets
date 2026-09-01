@@ -15,6 +15,9 @@
 
 #include <cstdint>
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxWinUIGenericAnimationTestAccess;
+#endif
 
 // ----------------------------------------------------------------------------
 // wxGenericAnimationCtrl
@@ -94,27 +97,6 @@ public:     // extended API specific to this implementation of wxAnimateCtrl
     // Returns a wxBitmap with the current frame drawn in it
     wxBitmap& GetBackingStore()
         { return m_backingStore; }
-
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-    // Implementation-only diagnostics for deterministic lifecycle tests.
-    int WinUIGetTimerIdForTesting() const { return m_activeTimerId; }
-    bool WinUIIsTimerRunningForTesting() const
-        { return m_timer.IsRunning(); }
-    int WinUIGetTimerIntervalForTesting() const
-        { return m_timer.IsRunning() ? m_timer.GetInterval() : 0; }
-    unsigned int WinUIGetCurrentFrameForTesting() const
-        { return m_currentFrame; }
-    bool WinUIIsPausedForHiddenForTesting() const
-        { return m_pausedForHidden; }
-    bool WinUIScheduleNextFrameForTesting()
-        { return ScheduleNextFrame(); }
-    wxSize WinUIGetPreferredAnimationSizeForScaleForTesting(double scale) const
-    {
-        const wxAnimation selected =
-            SelectAnimationForScale(m_animations, scale);
-        return selected.IsOk() ? selected.GetSize() : wxDefaultSize;
-    }
-#endif
 
 protected:      // internal utilities
     virtual wxAnimationImpl* DoCreateAnimationImpl() const override;
@@ -203,6 +185,10 @@ private:
     typedef wxAnimationCtrlBase base_type;
     wxDECLARE_DYNAMIC_CLASS(wxGenericAnimationCtrl);
     wxDECLARE_EVENT_TABLE();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIGenericAnimationTestAccess;
+#endif
 };
 
 #endif // _WX_GENERIC_ANIMATEH__
