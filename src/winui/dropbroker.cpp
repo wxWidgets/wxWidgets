@@ -31,7 +31,9 @@
 #include <algorithm>
 #include <atomic>
 #include <initguid.h>
+#ifdef WXWINUI_TEST_SUPPORT
 #include <mutex>
+#endif
 #include <roerrorapi.h>
 #include <set>
 #include <vector>
@@ -205,6 +207,7 @@ public:
           m_session(*this, *this,
                     wxMSWOleDropSessionMode::DynamicBroker)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         m_snapshot.registrationHwnd = m_registrationHwnd;
         m_snapshot.bridgeRegistration.registrationHwnd = m_bridge;
         m_snapshot.bridgeRegistration.generation = m_bridgeGeneration;
@@ -212,6 +215,7 @@ public:
         m_snapshot.tlwRegistration.generation = m_registrationGeneration;
         m_snapshot.bridgeRegistration.current = IsBridgeCurrent();
         m_snapshot.tlwRegistration.current = IsRegistrationCurrent();
+#endif
     }
 
     ~wxWinUIDropBrokerState() override
@@ -345,7 +349,41 @@ public:
         snapshot.tlwRegistration.current = tlwCurrent;
         return snapshot;
     }
-#endif
+
+    void RefreshAggregateRegistrationSnapshot(
+        bool bridgeLocked,
+        bool tlwLocked,
+        bool bridgeOwned,
+        bool tlwOwned) noexcept
+    {
+        const bool bridgeCurrent = IsBridgeCurrent();
+        const bool tlwCurrent = IsRegistrationCurrent();
+        MutateSnapshot([&](wxWinUIDropBrokerSnapshot& snapshot)
+        {
+            snapshot.lockCalls =
+                snapshot.bridgeRegistration.lockCalls +
+                snapshot.tlwRegistration.lockCalls;
+            snapshot.registerCalls =
+                snapshot.bridgeRegistration.registerCalls +
+                snapshot.tlwRegistration.registerCalls;
+            snapshot.revokeCalls =
+                snapshot.bridgeRegistration.revokeCalls +
+                snapshot.tlwRegistration.revokeCalls;
+            snapshot.unlockCalls =
+                snapshot.bridgeRegistration.unlockCalls +
+                snapshot.tlwRegistration.unlockCalls;
+            snapshot.bridgeRegistration.locked = bridgeLocked;
+            snapshot.tlwRegistration.locked = tlwLocked;
+            snapshot.bridgeRegistration.ownsRegistration = bridgeOwned;
+            snapshot.tlwRegistration.ownsRegistration = tlwOwned;
+            snapshot.bridgeRegistration.current = bridgeCurrent;
+            snapshot.tlwRegistration.current = tlwCurrent;
+            snapshot.locked = bridgeLocked || tlwLocked;
+            snapshot.ownsRegistration = bridgeOwned || tlwOwned;
+            snapshot.ownsCompleteRegistrationSet =
+                bridgeOwned && tlwOwned;
+        });
+    }
 
     template <typename F>
     void MutateSnapshot(F&& fn) noexcept
@@ -363,16 +401,19 @@ public:
         }
 #endif
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     HRESULT COMDragEnter(IDataObject* data,
                          DWORD keyState,
                          POINTL point,
                          DWORD* effect) noexcept
     {
+#ifdef WXWINUI_TEST_SUPPORT
         MutateSnapshot([](wxWinUIDropBrokerSnapshot& snapshot)
         {
             ++snapshot.dragEnterCalls;
         });
+#endif
         return InvokeEffect(effect, [&]()
         {
             return m_session.DragEnter(data, keyState, point, effect);
@@ -383,10 +424,12 @@ public:
                         POINTL point,
                         DWORD* effect) noexcept
     {
+#ifdef WXWINUI_TEST_SUPPORT
         MutateSnapshot([](wxWinUIDropBrokerSnapshot& snapshot)
         {
             ++snapshot.dragOverCalls;
         });
+#endif
         return InvokeEffect(effect, [&]()
         {
             return m_session.DragOver(keyState, point, effect);
@@ -395,10 +438,12 @@ public:
 
     HRESULT COMDragLeave() noexcept
     {
+#ifdef WXWINUI_TEST_SUPPORT
         MutateSnapshot([](wxWinUIDropBrokerSnapshot& snapshot)
         {
             ++snapshot.dragLeaveCalls;
         });
+#endif
         if ( !IsActive() )
             return S_OK;
         if ( !IsOnUIThread() )
@@ -424,10 +469,12 @@ public:
                     POINTL point,
                     DWORD* effect) noexcept
     {
+#ifdef WXWINUI_TEST_SUPPORT
         MutateSnapshot([](wxWinUIDropBrokerSnapshot& snapshot)
         {
             ++snapshot.dropCalls;
         });
+#endif
         return InvokeEffect(effect, [&]()
         {
             return m_session.Drop(data, keyState, point, effect);
@@ -794,8 +841,10 @@ private:
     DWORD m_uiThread = 0;
     std::atomic<bool> m_active{ false };
 
+#ifdef WXWINUI_TEST_SUPPORT
     mutable std::mutex m_snapshotMutex;
     wxWinUIDropBrokerSnapshot m_snapshot;
+#endif
 
     wxWinUIDropTargetHelper* m_helper = nullptr;
     bool m_physicalActive = false;
@@ -1095,39 +1144,6 @@ bool wxWinUIDropBroker::OwnsCompleteRegistrationSet() const noexcept
            m_tlwRegistration.ownsRegistration;
 }
 
-void wxWinUIDropBroker::RefreshAggregateRegistrationSnapshot() noexcept
-{
-    if ( !m_state )
-        return;
-
-    const bool bridgeLocked = m_bridgeRegistration.locked;
-    const bool tlwLocked = m_tlwRegistration.locked;
-    const bool bridgeOwned = m_bridgeRegistration.ownsRegistration;
-    const bool tlwOwned = m_tlwRegistration.ownsRegistration;
-    const bool bridgeCurrent = m_state->IsBridgeCurrent();
-    const bool tlwCurrent = m_state->IsRegistrationCurrent();
-    m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
-    {
-        s.lockCalls = s.bridgeRegistration.lockCalls +
-                      s.tlwRegistration.lockCalls;
-        s.registerCalls = s.bridgeRegistration.registerCalls +
-                          s.tlwRegistration.registerCalls;
-        s.revokeCalls = s.bridgeRegistration.revokeCalls +
-                        s.tlwRegistration.revokeCalls;
-        s.unlockCalls = s.bridgeRegistration.unlockCalls +
-                        s.tlwRegistration.unlockCalls;
-        s.bridgeRegistration.locked = bridgeLocked;
-        s.tlwRegistration.locked = tlwLocked;
-        s.bridgeRegistration.ownsRegistration = bridgeOwned;
-        s.tlwRegistration.ownsRegistration = tlwOwned;
-        s.bridgeRegistration.current = bridgeCurrent;
-        s.tlwRegistration.current = tlwCurrent;
-        s.locked = bridgeLocked || tlwLocked;
-        s.ownsRegistration = bridgeOwned || tlwOwned;
-        s.ownsCompleteRegistrationSet = bridgeOwned && tlwOwned;
-    });
-}
-
 bool wxWinUIDropBroker::UpdateShellDropCoverage() noexcept
 {
     if ( !m_state )
@@ -1189,6 +1205,7 @@ HRESULT wxWinUIDropBroker::ReleaseExternalLock(
 
     wxMSWOleCompleteExternalShellUnlock(
         &registration.operation, SUCCEEDED(unlockHr));
+#ifdef WXWINUI_TEST_SUPPORT
     m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
     {
         wxWinUIDropBrokerRegistrationSnapshot& registrationSnapshot =
@@ -1200,7 +1217,12 @@ HRESULT wxWinUIDropBroker::ReleaseExternalLock(
         registrationSnapshot.locked = registration.locked;
         s.unlockHr = unlockHr;
     });
-    RefreshAggregateRegistrationSnapshot();
+    m_state->RefreshAggregateRegistrationSnapshot(
+        m_bridgeRegistration.locked,
+        m_tlwRegistration.locked,
+        m_bridgeRegistration.ownsRegistration,
+        m_tlwRegistration.ownsRegistration);
+#endif
     return unlockHr;
 }
 
@@ -1208,6 +1230,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::PublishInitResult(
     const wxWinUIDropBrokerInitResult& value) noexcept
 {
     m_initResult = value;
+#ifdef WXWINUI_TEST_SUPPORT
     if ( m_state )
     {
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& snapshot)
@@ -1216,6 +1239,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::PublishInitResult(
             snapshot.resultHr = value.hresult;
         });
     }
+#endif
     return value;
 }
 
@@ -1441,6 +1465,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
         const HRESULT lockHr = m_state->GetNativeOperations().lock(
             m_state->GetNativeOperations().context, GetRegistrationTarget(role),
             TRUE, FALSE);
+#ifdef WXWINUI_TEST_SUPPORT
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
         {
             wxWinUIDropBrokerRegistrationSnapshot& registrationSnapshot =
@@ -1451,12 +1476,19 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
             registrationSnapshot.lockHr = lockHr;
             s.lockHr = lockHr;
         });
+#endif
         if ( SUCCEEDED(lockHr) )
         {
             registration.locked = true;
             wxMSWOleNoteExternalShellLock(&registration.operation);
         }
-        RefreshAggregateRegistrationSnapshot();
+#ifdef WXWINUI_TEST_SUPPORT
+        m_state->RefreshAggregateRegistrationSnapshot(
+            m_bridgeRegistration.locked,
+            m_tlwRegistration.locked,
+            m_bridgeRegistration.ownsRegistration,
+            m_tlwRegistration.ownsRegistration);
+#endif
 
         if ( !contextIsCurrent() )
         {
@@ -1494,6 +1526,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
         const HRESULT registerHr = m_state->GetNativeOperations().registerTarget(
             m_state->GetNativeOperations().context, registrationHwnd,
             GetRegistrationTarget(role));
+#ifdef WXWINUI_TEST_SUPPORT
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
         {
             wxWinUIDropBrokerRegistrationSnapshot& registrationSnapshot =
@@ -1504,13 +1537,20 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
             registrationSnapshot.registerHr = registerHr;
             s.registerHr = registerHr;
         });
+#endif
 
         const bool ledgerCommitted =
             wxMSWOleCompleteExternalShellOperation(
                 &registration.operation, registerHr == S_OK);
         if ( registerHr == S_OK && ledgerCommitted )
             registration.ownsRegistration = true;
-        RefreshAggregateRegistrationSnapshot();
+#ifdef WXWINUI_TEST_SUPPORT
+        m_state->RefreshAggregateRegistrationSnapshot(
+            m_bridgeRegistration.locked,
+            m_tlwRegistration.locked,
+            m_bridgeRegistration.ownsRegistration,
+            m_tlwRegistration.ownsRegistration);
+#endif
 
         if ( registerHr == S_OK &&
              registration.operation.WasRetireRequested() )
@@ -1569,7 +1609,13 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
     }
 
     m_state->PrepareHelper();
-    RefreshAggregateRegistrationSnapshot();
+#ifdef WXWINUI_TEST_SUPPORT
+    m_state->RefreshAggregateRegistrationSnapshot(
+        m_bridgeRegistration.locked,
+        m_tlwRegistration.locked,
+        m_bridgeRegistration.ownsRegistration,
+        m_tlwRegistration.ownsRegistration);
+#endif
     if ( !contextIsCurrent() || !OwnsCompleteRegistrationSet() )
     {
         return finishTerminalAcquisition(
@@ -1615,10 +1661,12 @@ void wxWinUIDropBroker::Shutdown() noexcept
         // fails. Acquisition rollback itself is deferred to the outer frame,
         // which alone knows whether each native call eventually succeeded.
         m_state->FailClosed();
+#ifdef WXWINUI_TEST_SUPPORT
         m_state->MutateSnapshot([](wxWinUIDropBrokerSnapshot& s)
         {
             s.shutdown = true;
         });
+#endif
     }
 
     if ( m_acquiring || m_shutdownCleanupStarted )
@@ -1690,6 +1738,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
             wxLogError("wxWinUI: %s was destroyed while balancing OLE "
                        "drop shutdown; retaining the inactive COM target "
                        "instead of revoking a stale HWND", roleName);
+#ifdef WXWINUI_TEST_SUPPORT
             m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
             {
                 wxWinUIDropBrokerRegistrationSnapshot&
@@ -1703,6 +1752,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
                 registrationSnapshot.current = false;
                 s.revokeHr = E_HANDLE;
             });
+#endif
         }
         else if ( registration.ownsRegistration )
         {
@@ -1742,6 +1792,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
                     static_cast<unsigned long>(revokeHr));
             }
 
+#ifdef WXWINUI_TEST_SUPPORT
             m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
             {
                 wxWinUIDropBrokerRegistrationSnapshot&
@@ -1756,9 +1807,16 @@ void wxWinUIDropBroker::Shutdown() noexcept
                     registration.ownsRegistration;
                 s.revokeHr = revokeHr;
             });
+#endif
         }
 
-        RefreshAggregateRegistrationSnapshot();
+#ifdef WXWINUI_TEST_SUPPORT
+        m_state->RefreshAggregateRegistrationSnapshot(
+            m_bridgeRegistration.locked,
+            m_tlwRegistration.locked,
+            m_bridgeRegistration.ownsRegistration,
+            m_tlwRegistration.ownsRegistration);
+#endif
 
         // This FALSE balances only this adapter's one TRUE even when native
         // Revoke fails. Each role has a distinct COM identity, so its own
@@ -1800,7 +1858,13 @@ void wxWinUIDropBroker::Shutdown() noexcept
             }
         }
 
-        RefreshAggregateRegistrationSnapshot();
+#ifdef WXWINUI_TEST_SUPPORT
+        m_state->RefreshAggregateRegistrationSnapshot(
+            m_bridgeRegistration.locked,
+            m_tlwRegistration.locked,
+            m_bridgeRegistration.ownsRegistration,
+            m_tlwRegistration.ownsRegistration);
+#endif
     }
 
     if ( m_rollbackUncommittedAdoption )
@@ -2082,7 +2146,13 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
         // No callback-bearing boundary remains between this exact two-key
         // commit audit and activation. Generation churn on either the bridge
         // or TLW fails closed and rolls both registrations back.
-        RefreshAggregateRegistrationSnapshot();
+#ifdef WXWINUI_TEST_SUPPORT
+        m_state->RefreshAggregateRegistrationSnapshot(
+            m_bridgeRegistration.locked,
+            m_tlwRegistration.locked,
+            m_bridgeRegistration.ownsRegistration,
+            m_tlwRegistration.ownsRegistration);
+#endif
         if ( m_shutdown || !OwnsCompleteRegistrationSet() ||
              (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
         {

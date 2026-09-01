@@ -690,6 +690,40 @@ Do not delete a lifetime/retirement service used by production merely because it
   lifecycle-observation family and DropBroker snapshot storage remain separate
   open sublots of plan 106.
 
+## DropBroker snapshot boundary (2026-09-01)
+
+- The registration and aggregate snapshot records leave the source-private
+  `dropbrokerstate.h` contract and now live in the non-installed
+  `drop-broker-test-access.h`. Snapshot initialization, mutex/storage, passive
+  copies, native-identity validation, COM callback counters and every
+  lock/register/revoke/unlock mutation compile only with
+  `WXWINUI_TEST_SUPPORT`.
+- Shipping retains the native-operation table and the exact production
+  protocol: `CoLockObjectExternal`, `RegisterDragDrop` and `RevokeDragDrop`
+  calls, the two bridge/TLW adapter identities, operation ledger, generations,
+  ownership flags, coverage token, activation, rollback and fail-closed
+  shutdown order are unchanged. The aggregate refresh is TU-local test code,
+  so shipping no longer performs HWND/generation queries solely for telemetry.
+- Before and after extraction, `[winui-drop-broker]~[physical]` passes the same
+  **1912 assertions / 33 cases** in shared and static Release. Five consumers
+  also pass in fresh processes in each linkage: GLCanvas **340/1**,
+  NativeWindow **165/1**, RichText **82/1**, STC **41/1** and TreeCtrl **51/1**.
+  The RichText baseline exposed a stale one-registration oracle; separate
+  commit `d92d15b04a` corrects it to the production bridge+TLW contract and
+  asserts both role-specific counters and HWNDs rather than weakening the
+  broker check.
+- Focused `wxBUILD_TESTS=OFF` builds of `wxcore` and `minimal` pass with
+  warnings as errors in both linkages. `dumpbin` reports zero match in the
+  shipping shared exports and static symbols for the two snapshot types,
+  mutator/aggregate helpers, read/native-validation methods and new test-access
+  class.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; `test_gui` and `minimal`
+  rebuild with warnings as errors, then repeat **1912/33**, all five
+  fresh-process consumers and runtime smoke plus Supported V0 **2/2** per
+  linkage on private desktops with `WX_UI_TESTS=0`. No physical input or
+  global interaction was used. The TLW lifecycle ledger and native-operation
+  injection boundary remain separate open sublots of plan 106.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

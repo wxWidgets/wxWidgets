@@ -145,7 +145,6 @@ private:
     HRESULT ReleaseExternalLock(RegistrationRole role) noexcept;
     bool OwnsAnyRegistration() const noexcept;
     bool OwnsCompleteRegistrationSet() const noexcept;
-    void RefreshAggregateRegistrationSnapshot() noexcept;
 
     std::shared_ptr<wxWinUIDropBrokerState> m_state;
     // OLE associates an IDropTarget identity with an HWND. Keep one adapter

@@ -14,6 +14,53 @@
 
 using wxWinUIDropBrokerNativeOps = wxWinUIDropBrokerNativeOperations;
 
+// The current flags below record the last production update in a
+// test-enabled build. A passive copy is not a claim of current native
+// identity; explicit validation is separate.
+struct wxWinUIDropBrokerRegistrationSnapshot
+{
+    HRESULT lockHr = E_UNEXPECTED;
+    HRESULT registerHr = E_UNEXPECTED;
+    HRESULT revokeHr = E_UNEXPECTED;
+    HRESULT unlockHr = E_UNEXPECTED;
+    HWND registrationHwnd = nullptr;
+    std::uint64_t generation = 0;
+    unsigned lockCalls = 0;
+    unsigned registerCalls = 0;
+    unsigned revokeCalls = 0;
+    unsigned unlockCalls = 0;
+    bool locked = false;
+    bool ownsRegistration = false;
+    bool current = false;
+};
+
+struct wxWinUIDropBrokerSnapshot
+{
+    wxWinUIDropBrokerInitStatus status =
+        wxWinUIDropBrokerInitStatus::NotInitialized;
+    HRESULT lockHr = E_UNEXPECTED;
+    HRESULT registerHr = E_UNEXPECTED;
+    HRESULT revokeHr = E_UNEXPECTED;
+    HRESULT unlockHr = E_UNEXPECTED;
+    HRESULT resultHr = E_UNEXPECTED;
+    HWND registrationHwnd = nullptr;
+    unsigned lockCalls = 0;
+    unsigned registerCalls = 0;
+    unsigned revokeCalls = 0;
+    unsigned unlockCalls = 0;
+    unsigned dragEnterCalls = 0;
+    unsigned dragOverCalls = 0;
+    unsigned dragLeaveCalls = 0;
+    unsigned dropCalls = 0;
+    wxWinUIDropBrokerRegistrationSnapshot bridgeRegistration;
+    wxWinUIDropBrokerRegistrationSnapshot tlwRegistration;
+    bool active = false;
+    bool locked = false;
+    bool ownsRegistration = false;
+    bool ownsCompleteRegistrationSet = false;
+    bool shutdown = false;
+};
+
 class WXDLLIMPEXP_CORE wxWinUIDropBrokerTestAccess final
 {
 public:
