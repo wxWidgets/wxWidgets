@@ -91,6 +91,8 @@ MUXCP::RepeatButton wxWinUIMakeArrow(const wchar_t* glyph,
     button.VerticalAlignment(MUX::VerticalAlignment::Stretch);
     button.HorizontalContentAlignment(MUX::HorizontalAlignment::Center);
     button.VerticalContentAlignment(MUX::VerticalAlignment::Center);
+    button.IsTabStop(false);
+    button.AllowFocusOnInteraction(false);
     MUXA::AutomationProperties::SetName(
         button, wxWinUIToHString(automationName));
     MUXA::AutomationProperties::SetAutomationId(
@@ -262,9 +264,8 @@ bool wxSpinButton::Create(wxWindow *parent,
         impl->down = wxWinUIMakeArrow(
             vertical ? L"\uE70D" : L"\uE76B",
             _("Decrement"), L"SmallDecrement");
-        // The pair is a single logical control: only its preferred child
-        // participates in Tab traversal.
-        impl->down.IsTabStop(false);
+        // The pair is a single logical action surface. As under wxMSW, neither
+        // arrow enters the tab order or takes focus when clicked.
         impl->grid = wxWinUICreateAccessibleGrid(
             MUXAP::AutomationControlType::Spinner, "wxSpinButton");
         MUXA::AutomationProperties::SetLocalizedControlType(
@@ -371,23 +372,11 @@ bool wxSpinButton::Create(wxWindow *parent,
         }
 
         // SetContent() can synchronously realize the XAML peer and enter user
-        // code. Publish no preferred element through a retired implementation.
+        // code. Revalidate before continuing, but do not publish a preferred
+        // focus element: wxSpinButton::AcceptsFocus() is false under wxMSW.
         wxSpinButton * const liveOwner = state->GetOwner(generation);
         if ( !liveOwner || !liveOwner->m_winui ||
              liveOwner->m_winui.get() != impl )
-        {
-            return false;
-        }
-        impl->host.SetPreferredFocus(impl->up);
-
-        // SetPreferredFocus() crosses the shared host and can synchronously
-        // run application code. Do not fall through to SetInitialSize() on a
-        // retired wx object or replacement implementation.
-        const wxSpinButton * const ownerAfterFocus =
-            state->GetOwner(generation);
-        if ( !ownerAfterFocus || !ownerAfterFocus->m_winui ||
-             ownerAfterFocus->m_winui.get() != impl ||
-             ownerAfterFocus->m_winui->callbackState != state )
         {
             return false;
         }
@@ -541,7 +530,11 @@ bool wxWinUIRangeTestAccess::GetAutomation(
     wxString *incrementId,
     wxString *decrementId,
     wxString *incrementName,
-    wxString *decrementName)
+    wxString *decrementName,
+    bool *incrementTabStop,
+    bool *decrementTabStop,
+    bool *incrementInteractionFocus,
+    bool *decrementInteractionFocus)
 {
     if ( !spin.m_winui || !spin.m_winui->grid || !spin.m_winui->up ||
          !spin.m_winui->down )
@@ -594,6 +587,20 @@ bool wxWinUIRangeTestAccess::GetAutomation(
             *decrementName = wxString(
                 MUXA::AutomationProperties::GetName(
                     spin.m_winui->down).c_str());
+        }
+        if ( incrementTabStop )
+            *incrementTabStop = spin.m_winui->up.IsTabStop();
+        if ( decrementTabStop )
+            *decrementTabStop = spin.m_winui->down.IsTabStop();
+        if ( incrementInteractionFocus )
+        {
+            *incrementInteractionFocus =
+                spin.m_winui->up.AllowFocusOnInteraction();
+        }
+        if ( decrementInteractionFocus )
+        {
+            *decrementInteractionFocus =
+                spin.m_winui->down.AllowFocusOnInteraction();
         }
         return true;
     }

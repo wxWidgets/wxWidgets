@@ -185,10 +185,21 @@ TEST_CASE("wxWinUI SpinButton exposes the native UIA spinner topology",
     wxString decrementId;
     wxString incrementName;
     wxString decrementName;
+    bool incrementTabStop = true;
+    bool decrementTabStop = true;
+    bool incrementInteractionFocus = true;
+    bool decrementInteractionFocus = true;
     REQUIRE(wxWinUIRangeTestAccess::GetAutomation(spin,
         &rootType, &rootClass,
         &incrementId, &decrementId,
-        &incrementName, &decrementName));
+        &incrementName, &decrementName,
+        &incrementTabStop, &decrementTabStop,
+        &incrementInteractionFocus, &decrementInteractionFocus));
+    CHECK_FALSE(spin.AcceptsFocus());
+    CHECK_FALSE(incrementTabStop);
+    CHECK_FALSE(decrementTabStop);
+    CHECK_FALSE(incrementInteractionFocus);
+    CHECK_FALSE(decrementInteractionFocus);
     CHECK(rootType ==
           static_cast<int>(MUXAP::AutomationControlType::Spinner));
     CHECK(rootClass == "wxSpinButton");

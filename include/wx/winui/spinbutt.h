@@ -39,6 +39,10 @@ public:
     void SetIncrement(int value) override;
     int GetIncrement() const override;
 
+    // Match wxMSW: a standalone spin button is an action surface, not a
+    // keyboard-focus destination. Its buddy (when any) owns text focus.
+    bool AcceptsFocus() const override { return false; }
+
 protected:
     wxSize DoGetBestSize() const override;
 

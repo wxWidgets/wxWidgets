@@ -52,7 +52,11 @@ public:
                                wxString* incrementId,
                                wxString* decrementId,
                                wxString* incrementName,
-                               wxString* decrementName);
+                               wxString* decrementName,
+                               bool* incrementTabStop = nullptr,
+                               bool* decrementTabStop = nullptr,
+                               bool* incrementInteractionFocus = nullptr,
+                               bool* decrementInteractionFocus = nullptr);
     static bool InvokeArrow(wxSpinButton& spin, int direction);
 #endif
 };
