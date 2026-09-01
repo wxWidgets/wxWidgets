@@ -1025,15 +1025,33 @@ TEST_CASE("WinUIPrinting::PageSetupUnitsCancelAndCommit",
     REQUIRE(context.margins.size() == 1);
     CHECK(context.owners[0] == GetWindowHWND(&owner));
     CHECK(context.shown);
-    CHECK((context.flags[0] & PSD_INTHOUSANDTHSOFINCHES) != 0);
-    CHECK((context.flags[0] & PSD_INHUNDREDTHSOFMILLIMETERS) == 0);
+
+    wxChar measurementSystem[2] = {};
+    const bool usesMetricUnits =
+        !::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_IMEASURE,
+                         measurementSystem, WXSIZEOF(measurementSystem)) ||
+        measurementSystem[0] == wxT('0');
+    const DWORD expectedUnits = usesMetricUnits
+        ? PSD_INHUNDREDTHSOFMILLIMETERS
+        : PSD_INTHOUSANDTHSOFINCHES;
+    const DWORD unexpectedUnits = usesMetricUnits
+        ? PSD_INTHOUSANDTHSOFINCHES
+        : PSD_INHUNDREDTHSOFMILLIMETERS;
+    const auto toNativeUnits =
+        [expectedUnits](int millimetres)
+        {
+            return expectedUnits == PSD_INTHOUSANDTHSOFINCHES
+                ? ::MulDiv(millimetres, 10000, 254)
+                : millimetres * 100;
+        };
+
+    CHECK((context.flags[0] & expectedUnits) != 0);
+    CHECK((context.flags[0] & unexpectedUnits) == 0);
     CHECK((context.flags[0] & PSD_MINMARGINS) != 0);
-    CHECK(context.paperSizes[0].x ==
-          ::MulDiv(inputPaperSize.x, 10000, 254));
-    CHECK(context.paperSizes[0].y ==
-          ::MulDiv(inputPaperSize.y, 10000, 254));
-    CHECK(context.margins[0].left == ::MulDiv(11, 10000, 254));
-    CHECK(context.margins[0].top == ::MulDiv(12, 10000, 254));
+    CHECK(context.paperSizes[0].x == toNativeUnits(inputPaperSize.x));
+    CHECK(context.paperSizes[0].y == toNativeUnits(inputPaperSize.y));
+    CHECK(context.margins[0].left == toNativeUnits(11));
+    CHECK(context.margins[0].top == toNativeUnits(12));
     CHECK_FALSE(wxMSWIsPrinterDialogShownForTesting());
 
     CHECK(originalNative->GetDevMode() == originalHandle);
