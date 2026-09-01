@@ -414,9 +414,9 @@ protected:
     void SetHoverTab(wxWindow* wnd);
 
 private:
-    // Allow the existing implementation-only AUI test peer to exercise the
-    // distinct window-list button route without synthesizing mouse input.
-    friend class wxAuiNotebookTestPeer;
+    // Non-installed test adapter. Friendship does not change this class's
+    // layout or vtable and avoids exposing a test method in the public API.
+    friend class wxAuiNotebookTestAccess;
 
     // Reset dragging-related fields above to their initial values.
     void DoEndDragging();
@@ -724,15 +724,9 @@ protected:
     unsigned int m_flags;
 
 private:
-    // Implementation-only deterministic seam used by the AUI regression
-    // tests. Keeping it private avoids adding a subclass extension point to
-    // the installed API; the one test peer below is its only caller.
-    friend class wxAuiNotebookTestPeer;
-    void OnTabEndDragForTesting(wxAuiTabCtrl* ctrl,
-                                int tabIdx,
-                                wxAuiTabCtrl* destination,
-                                int destinationIndex,
-                                bool createNewPane = false);
+    // Non-installed test adapter. Friendship does not change this class's
+    // layout or vtable and avoids exposing a test method in the public API.
+    friend class wxAuiNotebookTestAccess;
 
     // Create a new tab frame, containing a new wxAuiTabCtrl.
     wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());

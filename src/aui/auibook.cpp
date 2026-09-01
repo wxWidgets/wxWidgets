@@ -18,6 +18,9 @@
 #if wxUSE_AUI
 
 #include "wx/aui/auibook.h"
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
+    #include "aui-notebook-test-access.h"
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -817,6 +820,7 @@ void wxAuiForgetNotebookMutationEpochs(const wxAuiNotebook* const book)
     wxAuiGetNotebookMutationEpochs().erase(book);
 }
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
 // Mouse hit-testing is the only non-deterministic input to OnTabEndDrag().
 // Tests install this narrow, synchronous override and still execute the real
 // drag transaction and all of its callbacks.
@@ -856,6 +860,7 @@ struct wxAuiNotebookEndDragOverride
 
 thread_local const wxAuiNotebookEndDragOverride*
     gs_auiNotebookEndDragOverride = nullptr;
+#endif
 
 class wxAuiNotebookTopologyTransaction final
 {
@@ -8547,19 +8552,22 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiTabCtrl* src_tabs, int src_idx)
 
     m_mgr.UpdateHint(hintRect);
 }
-void wxAuiNotebook::OnTabEndDragForTesting(wxAuiTabCtrl* const srcTabs,
-                                           const int srcIndex,
-                                           wxAuiTabCtrl* const destination,
-                                           const int destinationIndex,
-                                           const bool createNewPane)
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
+void wxAuiNotebookTestAccess::EndDrag(wxAuiNotebook* const book,
+                                      wxAuiTabCtrl* const srcTabs,
+                                      const int srcIndex,
+                                      wxAuiTabCtrl* const destination,
+                                      const int destinationIndex,
+                                      const bool createNewPane)
 {
+    wxCHECK_RET(book, "null notebook for deterministic AUI drag override");
     wxCHECK_RET(!gs_auiNotebookEndDragOverride,
                 "nested deterministic AUI drag override");
     wxCHECK_RET(!createNewPane || !destination,
                 "a new-pane drag cannot have an existing destination");
 
     const wxAuiNotebookEndDragOverride override =
-        {this, srcTabs, destination, destinationIndex, createNewPane};
+        {book, srcTabs, destination, destinationIndex, createNewPane};
     gs_auiNotebookEndDragOverride = &override;
     wxScopeGuard resetOverride = wxMakeGuard([]()
     {
@@ -8567,8 +8575,15 @@ void wxAuiNotebook::OnTabEndDragForTesting(wxAuiTabCtrl* const srcTabs,
     });
     wxUnusedVar(resetOverride);
 
-    OnTabEndDrag(srcTabs, srcIndex);
+    book->OnTabEndDrag(srcTabs, srcIndex);
 }
+
+void wxAuiNotebookTestAccess::ClickWindowList(wxAuiTabCtrl* const tabs)
+{
+    wxCHECK_RET(tabs, "null tab control for AUI window-list click");
+    tabs->OnButton(wxNOT_FOUND, wxAUI_BUTTON_WINDOWLIST);
+}
+#endif
 
 void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
 {
@@ -8817,6 +8832,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
     if ( !source )
         return;
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
     const wxAuiNotebookEndDragOverride* dragOverride =
         gs_auiNotebookEndDragOverride;
     if ( dragOverride )
@@ -8858,16 +8874,24 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
                                             dragOverride->createNewPane
         ? wxDefaultPosition
         : source->ScreenToClient(mouse_screen_pt);
+#else
+    const wxPoint mouse_screen_pt = ::wxGetMousePosition();
+    const wxPoint mouse_client_pt = source->ScreenToClient(mouse_screen_pt);
+#endif
 
 
 
     // check for an external move
     if (source->m_flags & wxAUI_NB_TAB_EXTERNAL_MOVE)
     {
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
         wxWindow* tab_ctrl = dragOverride &&
                                      !dragOverride->createNewPane
             ? dragOverride->destinationTabsLifetime.get()
             : ::wxFindWindowAtPoint(mouse_screen_pt);
+#else
+        wxWindow* tab_ctrl = ::wxFindWindowAtPoint(mouse_screen_pt);
+#endif
 
         while (tab_ctrl)
         {
@@ -9109,6 +9133,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
 
                 // found out the insert idx
                 int insert_idx = -1;
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
                 if ( dragOverride &&
                         dragOverride->destinationTabsLifetime.get() ==
                             destinationTabs )
@@ -9116,6 +9141,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
                     insert_idx = dragOverride->destinationIndex;
                 }
                 else
+#endif
                 {
                     const wxPoint pt =
                         destinationTabs->ScreenToClient(mouse_screen_pt);
@@ -9480,11 +9506,15 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
         wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
 
         // If the pointer is in an existing tab frame, do a tab insert.
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
         wxWindow* const hit_wnd = dragOverride
             ? (dragOverride->createNewPane
                    ? nullptr
                    : dragOverride->destinationTabsLifetime.get())
             : ::wxFindWindowAtPoint(mouse_screen_pt);
+#else
+        wxWindow* const hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
+#endif
         wxAuiTabFrame* tab_frame = static_cast<wxAuiTabFrame*>(
             source->GetTabFrameFromTabCtrl(hit_wnd));
         int insert_idx = -1;
@@ -9631,22 +9661,32 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
             if (dest_tabs == src_tabs)
                 return;
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
             insert_idx = dragOverride &&
                                  dragOverride->destinationTabsLifetime.get() ==
                                      dest_tabs
                 ? dragOverride->destinationIndex
                 : source->GetDropIndex(
                       page_info, dest_tabs, mouse_screen_pt);
+#else
+            insert_idx = source->GetDropIndex(
+                page_info, dest_tabs, mouse_screen_pt);
+#endif
             if ( insert_idx == wxNOT_FOUND )
                 return;
         }
         else
         {
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
             const wxRect rect = dragOverride &&
                                         dragOverride->createNewPane
                 ? wxRect(wxPoint(0, 0), wxSize(1, 1))
                 : source->m_mgr.CalculateHintRect(
                       source->m_dummyWnd, mouse_client_pt);
+#else
+            const wxRect rect = source->m_mgr.CalculateHintRect(
+                source->m_dummyWnd, mouse_client_pt);
+#endif
             source = hasOriginalSourceTopology();
             if ( !source )
                 return;

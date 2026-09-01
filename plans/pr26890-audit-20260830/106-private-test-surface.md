@@ -954,6 +954,30 @@ Do not delete a lifetime/retirement service used by production merely because it
   **1323/7** replay and runtime smoke plus Supported V0 **2/2** pass again in
   each linkage with `WX_UI_TESTS=0`.
 
+## wxAUI notebook interaction boundary (2026-09-01)
+
+- The exported `wxAuiNotebook::OnTabEndDragForTesting()` method and the two
+  `wxAuiNotebookTestPeer` friend declarations leave the installed AUI header.
+  Tests perform the same end-drag and window-list interactions through the
+  non-installed `aui-notebook-test-access.h` adapter.
+- A dedicated `WXAUI_NOTEBOOK_TEST_SUPPORT` definition is applied only to
+  `src/aui/auibook.cpp` and `test_gui` when CMake builds all tests. The source
+  property is applied in both the AUI library and parent monolithic source
+  collection paths. Shipping uses the direct mouse position, hit-test, drop
+  index and hint-rectangle paths and contains no test override storage.
+- `wxAuiNotebook` gains only an adapter friend declaration: no data member,
+  virtual function, object size or vtable changes. Drag completion, cancel,
+  capture and event sequencing remain production code.
+- Before and after extraction, WinUI shared/static Release and ordinary wxMSW
+  shared Debug pass exactly **74 assertions / 5 `[aui][drag]` cases** plus
+  **31 assertions / 1 window-list projection case**.
+- With `wxBUILD_TESTS=OFF`, all three AUI artefacts build with warnings as
+  errors and contain zero former method, adapter, override or support symbol;
+  the installed header contains none of the removed test declarations. All
+  three caches are restored to `wxBUILD_TESTS=ALL`; the same focused tests pass
+  again, and runtime smoke plus Supported V0 pass **2/2** in each WinUI
+  linkage with `WX_UI_TESTS=0`.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

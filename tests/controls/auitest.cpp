@@ -29,6 +29,8 @@
 #include "wx/aui/serializer.h"
 #include "wx/weakref.h"
 
+#include "aui-notebook-test-access.h"
+
 #include "asserthelper.h"
 
 #include <algorithm>
@@ -911,9 +913,8 @@ private:
 
 } // anonymous namespace
 
-// This peer is named in wxAuiNotebook's private test seam. It deliberately
-// lives in the global namespace so the friendship doesn't expose a protected
-// extension point to arbitrary subclasses.
+// This subclass exposes protected production state used by the regression
+// tests. Private operations go through the non-installed test adapter.
 class wxAuiNotebookTestPeer final : public wxAuiNotebook
 {
 public:
@@ -925,8 +926,9 @@ public:
                  const int destinationIndex,
                  const bool createNewPane = false)
     {
-        OnTabEndDragForTesting(source, sourceIndex, destination,
-                               destinationIndex, createNewPane);
+        wxAuiNotebookTestAccess::EndDrag(this, source, sourceIndex,
+                                         destination, destinationIndex,
+                                         createNewPane);
     }
 
     wxBitmapBundle GetCanonicalBitmap(size_t page) const
@@ -953,7 +955,7 @@ public:
 
     void ClickWindowListForTesting(wxAuiTabCtrl* const tabs)
     {
-        tabs->OnButton(wxNOT_FOUND, wxAUI_BUTTON_WINDOWLIST);
+        wxAuiNotebookTestAccess::ClickWindowList(tabs);
     }
 };
 

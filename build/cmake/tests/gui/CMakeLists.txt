@@ -295,6 +295,12 @@ if(TARGET test_gui AND WXMSW AND wxUSE_TASKBARBUTTON AND
     target_compile_definitions(test_gui PRIVATE
         WXMSW_TASKBARBUTTON_TEST_SUPPORT=1)
 endif()
+if(TARGET test_gui AND wxUSE_AUI AND wxBUILD_TESTS STREQUAL "ALL")
+    target_include_directories(test_gui PRIVATE
+        "${wxSOURCE_DIR}/tests/winui/test-support")
+    target_compile_definitions(test_gui PRIVATE
+        WXAUI_NOTEBOOK_TEST_SUPPORT=1)
+endif()
 if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
         TARGET wx_winui_desktop_test_runner)
     add_test(NAME wx_winui_supported_beta
