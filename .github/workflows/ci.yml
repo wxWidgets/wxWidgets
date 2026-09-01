@@ -345,7 +345,7 @@ jobs:
           fuzz_out="$RUNNER_TEMP/wx-fuzz-smoke"
           mkdir -p "$fuzz_out"
 
-          for target in zip tar fileconf; do
+          for target in zip tar fileconf winuiitemmodel; do
             ${CXX-g++} -g -fsanitize=address -fno-omit-frame-pointer \
               "tests/fuzz/$target.cpp" tests/fuzz/runner.cpp \
               $(./wx-config --cxxflags --libs base) \

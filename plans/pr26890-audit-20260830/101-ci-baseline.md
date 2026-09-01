@@ -227,20 +227,31 @@ If installation reaches a different package/dependency error, retain the evidenc
 ### Bounded fuzz regression replay (2026-09-01)
 
 - The existing Unix AddressSanitizer matrix now compiles the versioned `zip`,
-  `tar` and `fileconf` fuzz harnesses with `tests/fuzz/runner.cpp` and replays
-  all **5** checked-in corpus files. The runner invokes
+  `tar`, `fileconf` and pure `winuiitemmodel` fuzz harnesses with
+  `tests/fuzz/runner.cpp` and replays all **8** checked-in corpus files. The
+  runner invokes
   `LLVMFuzzerTestOneInput()` exactly once per file: this is deterministic
   regression replay, not an unbounded or random fuzzing campaign on pull
   requests.
+- `winuiitemmodel` exercises the real header-only WinUI item model without a
+  HWND, WinRT apartment or physical input. Its independent oracle checks exact
+  insert/update/move/erase changes, stable dictionary ordering and duplicates,
+  ID uniqueness/non-reuse across `Clear()`, `IndexOf()` and preservation of
+  selection, checked and client-data state. Three bounded seeds cover sorted,
+  unsorted and clear/reuse histories; libFuzzer limits future mutation inputs
+  to 4096 bytes.
 - An empty target corpus fails explicitly. Every input has a 30-second hard
   timeout with a five-second kill grace, and the complete step is limited to
   five minutes. Compilation failure, ASan failure, harness failure or timeout
   therefore fails the job.
-- The workflow parses as YAML, its extracted Bash body passes `bash -n`, the
-  three corpus counts are **3 + 1 + 1**, and an independent read-only review
-  confirms the GCC/ASan link and runner contract on the existing Ubuntu job.
-  Remote execution remains pending until the commit is published; no remote
-  PASS is inferred from these structural checks.
+- `tests/fuzz/ossfuzz.sh` also builds the new target, publishes its options and
+  packages its seed corpus, so continuous mutation remains with the existing
+  OSS-Fuzz integration instead of making pull-request CI random or unbounded.
+  The shell script passes `bash -n`; independent MSVC Release and Debug
+  `/W4 /WX` builds replay all three new seeds (**6/6 PASS**). The workflow
+  change is one addition to the already validated target loop. Remote GCC/ASan
+  and OSS-Fuzz execution remain pending until the commit is published; no
+  remote PASS is inferred from these local checks.
 
 ## Maintenance
 
