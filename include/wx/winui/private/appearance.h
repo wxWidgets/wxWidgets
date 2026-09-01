@@ -44,28 +44,6 @@ struct WXDLLIMPEXP_CORE wxWinUILabelPresentation
     wxString accessKey;
 };
 
-// A compact deterministic observation used by the WinUI-only tests.  The
-// "has" flags report local DependencyProperty ownership, which is what matters
-// for wxNullFont/wxNullColour: an inherited theme value is not a reset if a
-// stale local value is still present.
-struct WXDLLIMPEXP_CORE wxWinUIAppearanceSnapshot
-{
-    bool hasFontFamily = false;
-    bool hasFontSize = false;
-    bool hasFontWeight = false;
-    bool hasFontStyle = false;
-    bool hasForeground = false;
-    bool hasBackground = false;
-    wxString automationName;
-    wxString accessKey;
-    wxString localizedControlType;
-    bool hasAutomationPeer = false;
-    int automationControlType = -1;
-    wxString automationClassName;
-    wxString peerName;
-    wxString peerLocalizedControlType;
-};
-
 class wxWindow;
 
 // Centralize the native High Contrast policy so controls can relinquish local
@@ -161,16 +139,5 @@ winrt::Microsoft::UI::Xaml::Controls::Border
 wxWinUICreateThemeBrushBorder(
     const wxString& resourceKey,
     wxWinUIThemeBrushProperty property);
-
-WXDLLIMPEXP_CORE wxWinUIAppearanceSnapshot
-wxWinUICaptureAppearance(
-    const winrt::Microsoft::UI::Xaml::Controls::TextBlock& text,
-    const winrt::Microsoft::UI::Xaml::Controls::Border& background,
-    const winrt::Microsoft::UI::Xaml::UIElement& accessibleElement);
-
-WXDLLIMPEXP_CORE wxWinUIAppearanceSnapshot
-wxWinUICaptureAppearance(
-    const winrt::Microsoft::UI::Xaml::Controls::Control& control,
-    const winrt::Microsoft::UI::Xaml::UIElement& accessibleElement);
 
 #endif // _WX_WINUI_PRIVATE_APPEARANCE_H_

@@ -24,6 +24,7 @@
 #include "private.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
+#include "appearance-test-access.h"
 #include "radiobox-test-access.h"
 #endif
 #include "wx/winui/private/appearance.h"
@@ -1936,11 +1937,11 @@ bool wxWinUIRadioBoxTestAccess::GetAppearance(
 
     try
     {
-        *snapshot = wxWinUICaptureAppearance(
+        *snapshot = wxWinUIAppearanceTestAccess::Capture(
             box.m_winui->buttons.front(),
             box.m_winui->root);
         snapshot->hasBackground =
-            wxWinUICaptureAppearance(
+            wxWinUIAppearanceTestAccess::Capture(
                 MUXC::TextBlock(), box.m_winui->background,
                 box.m_winui->root).hasBackground;
 

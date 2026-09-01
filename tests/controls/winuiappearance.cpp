@@ -13,6 +13,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "button-test-access.h"
+#include "appearance-test-access.h"
 #include "static-test-access.h"
 #include "radiobox-test-access.h"
 
@@ -2704,7 +2705,7 @@ TEST_CASE("wxWinUI appearance adapter owns and resets local properties",
     wxWinUIApplyAccessibleLabel(accessible, "Save && E&xit", "probe");
 
     wxWinUIAppearanceSnapshot snapshot =
-        wxWinUICaptureAppearance(text, background, accessible);
+        wxWinUIAppearanceTestAccess::Capture(text, background, accessible);
     CheckFontLocals(snapshot, true);
     CHECK(snapshot.hasForeground);
     CHECK(snapshot.hasBackground);
@@ -2718,7 +2719,8 @@ TEST_CASE("wxWinUI appearance adapter owns and resets local properties",
     wxWinUIApplyAccessKey(accessible, "Reset");
     wxWinUIApplyAccessibleLabel(accessible, "Reset");
 
-    snapshot = wxWinUICaptureAppearance(text, background, accessible);
+    snapshot =
+        wxWinUIAppearanceTestAccess::Capture(text, background, accessible);
     CheckFontLocals(snapshot, false);
     CHECK_FALSE(snapshot.hasForeground);
     CHECK_FALSE(snapshot.hasBackground);

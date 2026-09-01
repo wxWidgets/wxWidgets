@@ -19,6 +19,7 @@
 #include "private.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
+#include "appearance-test-access.h"
 #include "feedback-test-access.h"
 #endif
 #include "wx/winui/private/appearance.h"
@@ -664,7 +665,7 @@ bool wxWinUIActivityIndicatorTestAccess::GetState(
         }
         if ( appearance )
         {
-            *appearance = wxWinUICaptureAppearance(
+            *appearance = wxWinUIAppearanceTestAccess::Capture(
                 activity.m_winui->ring, activity.m_winui->ring);
         }
         return true;

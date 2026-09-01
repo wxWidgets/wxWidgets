@@ -27,6 +27,7 @@
 #include "private.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
+#include "appearance-test-access.h"
 #include "feedback-test-access.h"
 #endif
 #include "wx/winui/private/appearance.h"
@@ -1355,7 +1356,7 @@ bool wxWinUIHyperlinkTestAccess::GetState(
         }
         if ( appearance )
         {
-            *appearance = wxWinUICaptureAppearance(
+            *appearance = wxWinUIAppearanceTestAccess::Capture(
                 link.m_winui->button, link.m_winui->button);
         }
         if ( peerEnabled )

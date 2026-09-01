@@ -19,6 +19,7 @@
 #include "wx/winui/private/tlwhostmsw.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
+    #include "appearance-test-access.h"
     #include "static-test-access.h"
 #endif
 
@@ -634,7 +635,7 @@ bool wxWinUIStaticTestAccess::GetAppearance(
 
     try
     {
-        *snapshot = wxWinUICaptureAppearance(
+        *snapshot = wxWinUIAppearanceTestAccess::Capture(
             text.m_winui->textBlock, text.m_winui->root,
             text.m_winui->textBlock);
         return true;

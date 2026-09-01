@@ -96,6 +96,7 @@ private:
     winrt::hstring m_className;
 };
 
+#ifdef WXWINUI_TEST_SUPPORT
 template <typename T>
 bool wxWinUIHasLocalValue(const T& object,
                           const MUX::DependencyProperty& property)
@@ -103,6 +104,7 @@ bool wxWinUIHasLocalValue(const T& object,
     return object &&
            object.ReadLocalValue(property) != MUX::DependencyProperty::UnsetValue();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 winrt::Windows::UI::Text::FontWeight
 wxWinUIFontWeight(const wxFont& font)
@@ -166,6 +168,7 @@ void wxWinUIApplyFontImpl(const T& element,
     element.FontStyle(wxWinUIFontStyle(font));
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUICaptureAccessibleValues(
     const MUX::UIElement& element,
     wxWinUIAppearanceSnapshot& snapshot)
@@ -201,6 +204,7 @@ void wxWinUICaptureAccessibleValues(
     snapshot.peerLocalizedControlType =
         wxString(peer.GetLocalizedControlType().c_str());
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 } // namespace
 
@@ -437,10 +441,12 @@ wxWinUICreateThemeBrushBorder(const wxString& resourceKey,
     }
 }
 
-wxWinUIAppearanceSnapshot
-wxWinUICaptureAppearance(const MUXC::TextBlock& text,
-                         const MUXC::Border& background,
-                         const MUX::UIElement& accessibleElement)
+#ifdef WXWINUI_TEST_SUPPORT
+
+wxWinUIAppearanceSnapshot wxWinUIAppearanceTestAccess::Capture(
+    const MUXC::TextBlock& text,
+    const MUXC::Border& background,
+    const MUX::UIElement& accessibleElement)
 {
     wxWinUIAppearanceSnapshot snapshot;
     if ( text )
@@ -465,9 +471,9 @@ wxWinUICaptureAppearance(const MUXC::TextBlock& text,
     return snapshot;
 }
 
-wxWinUIAppearanceSnapshot
-wxWinUICaptureAppearance(const MUXC::Control& control,
-                         const MUX::UIElement& accessibleElement)
+wxWinUIAppearanceSnapshot wxWinUIAppearanceTestAccess::Capture(
+    const MUXC::Control& control,
+    const MUX::UIElement& accessibleElement)
 {
     wxWinUIAppearanceSnapshot snapshot;
     if ( control )
@@ -488,3 +494,5 @@ wxWinUICaptureAppearance(const MUXC::Control& control,
     wxWinUICaptureAccessibleValues(accessibleElement, snapshot);
     return snapshot;
 }
+
+#endif // WXWINUI_TEST_SUPPORT

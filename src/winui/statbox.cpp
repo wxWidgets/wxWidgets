@@ -22,6 +22,7 @@
 #include "wx/weakref.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
+    #include "appearance-test-access.h"
     #include "static-test-access.h"
 #endif
 
@@ -580,7 +581,7 @@ bool wxWinUIStaticTestAccess::GetAppearance(
 
     try
     {
-        *snapshot = wxWinUICaptureAppearance(
+        *snapshot = wxWinUIAppearanceTestAccess::Capture(
             box.m_winui->title, box.m_winui->root, box.m_winui->automationRoot);
         return true;
     }

@@ -14,6 +14,7 @@
 #include "wx/statusbr.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
+    #include "appearance-test-access.h"
     #include "statusbar-test-access.h"
     #include "control-host-test-access.h"
 #endif
@@ -2416,7 +2417,7 @@ bool wxWinUIStatusBarTestAccess::GetAppearance(
     try
     {
         *snapshot =
-            wxWinUICaptureAppearance(
+            wxWinUIAppearanceTestAccess::Capture(
                 bar.m_winui->root, bar.m_winui->automationRoot);
         return true;
     }
