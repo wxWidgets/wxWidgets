@@ -2862,7 +2862,7 @@ bool wxTextCtrl::MSWShouldDrawDarkThemeBorder() const
     // We need to draw the border for rich edit and when we are not using
     // DarkMode_DarkTheme. The non-rich control draws a good themed border
     // with DarkMode_DarkTheme.
-    return IsRich() && !wxMSWDarkMode::HasDarkTheme();
+    return IsRich() || !wxMSWDarkMode::HasDarkTheme();
 }
 
 void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc)
