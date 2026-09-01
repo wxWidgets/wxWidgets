@@ -1,6 +1,6 @@
 # Plan 107: Split host responsibilities behind private ownership boundaries
 
-- Status: IN PROGRESS — 107B/E and bounded 107A/C/F extractions qualified locally; remaining host modules and wider test separation pending
+- Status: LOCAL COMPLETE / REMOTE PENDING — 107A–F implemented and shipping-qualified; physical integration remains in 109/110
 - Planned at: f6ae07e1ade037e570b99df5369edd070b728a48, refreshed 2026-08-31
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -497,19 +497,18 @@ New remote CI is separate from these local results.
 
 | Sublot | Qualified boundary | Still open |
 | --- | --- | --- |
-| 107A | Native resize and tooltip modules | UIA policy module; remaining host testing surface |
-| 107B | Gauge/ScrollBar owner/generation primitive | No third consumer assumed equivalent |
-| 107C | Fractional, generation-qualified coordinate mapping | Geometry projection/coalescing module |
-| 107D | Existing input policies retained unchanged | Focus and input adapter extraction |
-| 107E | Explicit local contracts; real Combo post-Loaded invalidation | Native Search/template inventory remains component work in 108 |
-| 107F | Production broker ownership query and passive-query regression | Broader observation/fault-injection separation with 106 |
+| 107A | Native resize, tooltip, UIA ownership and Name/HelpText projection modules | Physical resize/UIA qualification remains in 109 |
+| 107B | Gauge/ScrollBar owner/generation primitive; no unjustified third consumer | Remote CI pending |
+| 107C | Fractional coordinates plus geometry projection/coalescing/clipping/Z-order | Physical cross-monitor DPI remains in 109 |
+| 107D | Focus migration and input/capture/native-dispatch adapters | Physical input remains in 109 |
+| 107E | Explicit local Search/Combo contracts; real Combo post-Loaded invalidation | Native Search/template inventory remains component work in 108 |
+| 107F | Production broker predicate, private test boundary, passive record and explicit native validation | Physical OLE remains in 109 |
 
-This table describes the frozen `e2014c053b46` shipping batch above, not later
-test-enabled source extractions. The subsequent UIA/107A, geometry/107C and
-focus/input/107D implementation and ON evidence are recorded in their sections;
-their new combined shipping proof is still pending. Plans 108–112 are not
-closed by these refactors; physical integration, performance and exhaustive
-component parity still need their own evidence.
+The original table described the frozen `e2014c053b46` batch. It is reconciled
+below with the later UIA/107A, geometry/107C, focus/input/107D and broker
+boundary work. Plans 108–112 are not closed by these refactors; physical
+integration, performance and exhaustive component parity retain their own
+evidence requirements.
 
 ## 107F broker test boundary extraction, 2026-08-31
 
@@ -561,6 +560,30 @@ existing groups still pass **206/3 + 430/3** after the addition. Both test_gui
 builds pass `/warnaserror`; logs are `audit107f-broker-b-on-build.log` and
 `audit106-broker-b-{ownership,observation,passive}.log`. These tests do not
 provide physical OLE or shipping qualification.
+
+## Local completion reconciliation (2026-09-01)
+
+- The six named architecture boundaries are implemented: resize, tooltip and
+  UIA policy/projection (107A); the two-consumer lifetime nucleus (107B);
+  coordinates and atomic geometry publication (107C); focus and input adapters
+  (107D); the explicit decision to retain distinct Search/Combo contracts
+  (107E); and the production/passive/native broker split (107F).
+- `git diff --name-only 8a03edb793..46c0c56542` is empty for the complete
+  architecture path set: `tlwhost.*`, every extracted `host*.{cpp,h}` module,
+  `visualcoordinates.*`, `peerlifetime.h`, and the broker implementation/state
+  headers. The coupled shipping-v6 campaign at `8a03edb793` therefore covers
+  these exact sources in shared and static OFF builds, fresh installs and
+  consumers, restored-ALL builds, private scenarios and smoke/Supported V0.
+  This is source-identity evidence, not a fabricated rerun at the later SHA.
+- The active shared/static trees at `46c0c56542` are restored to
+  `wxBUILD_TESTS=ALL`; `test_gui`, `minimal` and `winuispike` build with
+  warnings as errors and runtime smoke/Supported V0 pass **2/2** in each
+  linkage. Remote CI for the unpublished HEAD remains pending.
+- A possible future `hostcursor.cpp` would move roughly 1300 tightly coupled
+  lines, COM cursor ownership and geometry adapters. It is not a missing small
+  107A–F extraction and is not smuggled into this completion commit. If wanted,
+  it needs its own bounded design and baseline. Physical resize/input/OLE/DPI
+  and performance remain in 109/110.
 
 ## Verification and test plan
 

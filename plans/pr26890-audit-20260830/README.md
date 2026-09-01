@@ -21,7 +21,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + RETIREMENT + CONTROLHOST QUALIFIED LOCALLY; OTHER HOST HELPERS OPEN |
-| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107B/E QUALIFIED; BOUNDED 107A/C/F QUALIFIED; UIA/GEOMETRY/FOCUS/INPUT OPEN |
+| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | LOCAL COMPLETE / REMOTE PENDING; PHYSICAL WORK RETAINED IN 109/110 |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
@@ -37,11 +37,14 @@ observation boundaries. Their exact source anchors, filters and stop
 conditions are in 107. Existing single-island and toolkit-ABI decisions are
 preserved; changing them requires a separate design decision. The minimal
 Gauge/ScrollBar lifetime primitive (107B) is implemented and locally qualified.
-Native resize and tooltip policy (107A), coordinate mapping (107C), the real
-Combo template regression (107E), and the first production/observation boundary
-(107F) now pass DLL/static ON/OFF/install/ON qualification. UIA, geometry
-publication, focus/input and the wider observation/test separation remain
-open. This is not full host decomposition or completion of plans 108–112.
+Native resize, tooltip and UIA policy/projection (107A), coordinate mapping and
+geometry publication (107C), focus/input adapters (107D), the real Combo
+template regression and explicit non-sharing decision (107E), plus the broker
+production/passive/native boundary (107F) now pass their local DLL/static and
+shipping qualification. The final source set is identical to the later
+shipping-v6 evidence recorded in 107. Remote HEAD CI is pending; physical
+resize/input/OLE/DPI and performance remain in 109/110. This does not complete
+plans 108–112.
 
 ## Findings coverage
 
