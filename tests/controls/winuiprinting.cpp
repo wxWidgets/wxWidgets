@@ -24,9 +24,9 @@
 #include "wx/weakref.h"
 #include "wx/msw/printdlg.h"
 #include "wx/msw/printwin.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/gethwnd.h"
 #include "wx/msw/wrapcdlg.h"
+#include "printing-test-access.h"
 
 #include <vector>
 

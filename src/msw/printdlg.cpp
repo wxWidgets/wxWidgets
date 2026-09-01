@@ -40,6 +40,10 @@
 #include "wx/modalhook.h"
 #include "wx/scopeguard.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "printing-test-access.h"
+#endif
+
 #include <stdlib.h>
 
 // This variable is used from src/msw/window.cpp.
@@ -81,13 +85,13 @@ HGLOBAL DuplicateGlobalHandle(const void* sourceHandle)
     return copy;
 }
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 wxMSWPrintDialogNativeOpsForTesting gs_printDialogNativeOpsForTesting;
 #endif
 
 HRESULT InvokePrintDialogEx(PRINTDLGEX* dialog)
 {
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
     const wxMSWPrintDialogNativeOpsForTesting ops =
         gs_printDialogNativeOpsForTesting;
     if ( ops.printDialogEx )
@@ -100,7 +104,7 @@ HRESULT InvokePrintDialogEx(PRINTDLGEX* dialog)
 
 BOOL InvokePageSetupDialog(PAGESETUPDLG* dialog)
 {
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
     const wxMSWPrintDialogNativeOpsForTesting ops =
         gs_printDialogNativeOpsForTesting;
     if ( ops.pageSetupDialog )
@@ -131,7 +135,7 @@ private:
 
 } // anonymous namespace
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 void wxMSWSetPrintDialogNativeOpsForTesting(
     const wxMSWPrintDialogNativeOpsForTesting& ops)
 {

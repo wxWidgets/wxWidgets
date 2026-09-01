@@ -928,6 +928,32 @@ Do not delete a lifetime/retirement service used by production merely because it
   `wxBUILD_TESTS=ALL`; the exact **605/18** replay and runtime smoke plus
   Supported V0 **2/2** pass again in each linkage with `WX_UI_TESTS=0`.
 
+## WinUI printing native-call boundary (2026-09-01)
+
+- The two native-operation records and six printing test functions leave the
+  installed `wx/msw/private.h` header. They now live only in the non-installed
+  `printing-test-access.h` adapter and are compiled for test-enabled WinUI
+  builds in `printdlg.cpp`, `dcprint.cpp` and `printwin.cpp`.
+- Production still builds the real `PRINTDLGEX`/`PAGESETUPDLG`, printer DC and
+  abort loop, then invokes the Win32 APIs directly. The dialog-shown guard used
+  by `window.cpp`, native handle ownership, conversion, cancellation and error
+  sequencing remain production code. Test callbacks are still copied before
+  invocation, preserving nested/reentrant replacement behaviour.
+- A separate oracle correction first made page-setup expectations follow the
+  same `LOCALE_IMEASURE` contract and fallback as production. It keeps the
+  expected/opposite unit bits and all four conversions checked. `[page-setup]`
+  then passes **49 assertions / 2 cases** in both linkages instead of the six
+  locale-dependent failures; no printing seam assertion was removed.
+- Before and after extraction, the complete `[winui-printing]` group passes
+  exactly **1323 assertions / 7 cases** in shared and static Release, including
+  common dialogs, page setup, printer loop, print preview and cancellation.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. Shared exports, static symbols and the installed private
+  header contain zero match for the operation tables, six functions or the new
+  adapter. Both caches are restored to `wxBUILD_TESTS=ALL`; the exact
+  **1323/7** replay and runtime smoke plus Supported V0 **2/2** pass again in
+  each linkage with `WX_UI_TESTS=0`.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

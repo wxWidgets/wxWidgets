@@ -43,6 +43,10 @@
 #include "wx/display.h"
 #include "wx/msw/printdlg.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "printing-test-access.h"
+#endif
+
 // mingw32 defines GDI_ERROR incorrectly
 #if defined(__GNUWIN32__) || !defined(GDI_ERROR)
     #undef GDI_ERROR
@@ -60,7 +64,7 @@
 #define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
 #define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 namespace
 {
 

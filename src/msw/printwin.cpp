@@ -53,6 +53,9 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/private/tlwhostmsw.h"
 #endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "printing-test-access.h"
+#endif
 
 #include <stdlib.h>
 
@@ -810,7 +813,7 @@ BOOL CALLBACK wxAbortProc(HDC WXUNUSED(hdc), int WXUNUSED(error))
     return !wxPrinterBase::sm_abortIt;
 }
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 bool wxMSWInvokePrintAbortProcForTesting()
 {
     return wxAbortProc(nullptr, 0) != FALSE;
