@@ -29,6 +29,7 @@
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
@@ -136,16 +137,16 @@ struct HostSnapshot
     static HostSnapshot Capture()
     {
         HostSnapshot result;
-        result.hosts = wxWinUITopLevelHost::GetLiveHostCount();
+        result.hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
         result.hostLifetimes =
-            wxWinUITopLevelHost::GetLiveHostLifetimeCount();
-        result.slots = wxWinUITopLevelHost::GetLiveSlotCount();
+            wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
+        result.slots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
         result.slotLifetimes =
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
         result.subclasses =
-            wxWinUITopLevelHost::GetLiveSubclassContextCount();
+            wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
         result.loadedHooks =
-            wxWinUITopLevelHost::GetLiveLoadedHookCount();
+            wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
         result.contentObservers =
             wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount();
         result.automationObservers =
@@ -155,26 +156,26 @@ struct HostSnapshot
             wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
         result.pendingFocusMigrations =
             wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
-        result.slotAdds = wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        result.slotAdds = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
         result.slotRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
-        result.rootAdds = wxWinUITopLevelHost::GetRootHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
+        result.rootAdds = wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
         result.rootRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
         return result;
     }
 
     bool IsRestored() const
     {
-        return wxWinUITopLevelHost::GetLiveHostCount() == hosts &&
-               wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        return wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts &&
+               wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                    hostLifetimes &&
-               wxWinUITopLevelHost::GetLiveSlotCount() == slots &&
-               wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots &&
+               wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                    slotLifetimes &&
-               wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                    subclasses &&
-               wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
+               wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == loadedHooks &&
                wxWinUIHostContentTestAccess::
                        GetLiveContentLoadedObserverCount() ==
                    contentObservers &&
@@ -185,25 +186,25 @@ struct HostSnapshot
                    invisibleProviders &&
                wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
-               wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotAdds ==
-                   wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+               wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotAdds ==
+                   wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                        slotRevokes &&
-               wxWinUITopLevelHost::GetRootHandlerAddCount() - rootAdds ==
-                   wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+               wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootAdds ==
+                   wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                        rootRevokes;
     }
 
     void CheckRestored(bool requireHostTraffic = true) const
     {
-        CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts);
-        CHECK(wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
               hostLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
               slotLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
               subclasses);
-        CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == loadedHooks);
         CHECK(wxWinUIHostContentTestAccess::
                   GetLiveContentLoadedObserverCount() ==
               contentObservers);
@@ -216,13 +217,13 @@ struct HostSnapshot
               pendingFocusMigrations);
 
         const unsigned addedSlots =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotAdds;
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotAdds;
         const unsigned revokedSlots =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - slotRevokes;
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - slotRevokes;
         const unsigned addedRoots =
-            wxWinUITopLevelHost::GetRootHandlerAddCount() - rootAdds;
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootAdds;
         const unsigned revokedRoots =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount() - rootRevokes;
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() - rootRevokes;
         if ( requireHostTraffic )
         {
             CHECK(addedSlots > 0);
@@ -3135,8 +3136,8 @@ TEST_CASE("WinUIMedia::OfflineWaveAviPlaybackEventsAndRecovery",
     const HostSnapshot before = HostSnapshot::Capture();
     TwoTLWMediaFixture fixture;
     REQUIRE(fixture.Create());
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 2);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == before.slots + 3);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts + 2);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == before.slots + 3);
 
     MediaPeerSession& media = *fixture.session;
     REQUIRE(media.LoadUrl(files.WaveUrl()));
@@ -4574,9 +4575,9 @@ TEST_CASE("WinUIMedia::HundredLoadRetireAndRepeatedLoadCycles",
     REQUIRE(ShowOffscreenWithoutActivation(frame.get(), 3));
     REQUIRE(DrainToQuiescence());
 
-    const unsigned steadySlots = wxWinUITopLevelHost::GetLiveSlotCount();
+    const unsigned steadySlots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
     const unsigned steadySlotLifetimes =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned steadyFocusMigrations =
         wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     const wxStopWatch cycles;
@@ -4685,9 +4686,9 @@ TEST_CASE("WinUIMedia::HundredLoadRetireAndRepeatedLoadCycles",
         REQUIRE(DrainUntil(
             [steadySlots, steadySlotLifetimes]()
             {
-                return wxWinUITopLevelHost::GetLiveSlotCount() ==
+                return wxWinUIHostObservationTestAccess::GetLiveSlotCount() ==
                            steadySlots &&
-                       wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+                       wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                            steadySlotLifetimes;
             }, slotRounds));
         CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
@@ -4702,8 +4703,8 @@ TEST_CASE("WinUIMedia::HundredLoadRetireAndRepeatedLoadCycles",
         {
             REQUIRE(RemainingSoakRounds(cycles, 1) != 0);
             REQUIRE(DrainToQuiescence());
-            CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots);
-            CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+            CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots);
+            CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                   steadySlotLifetimes);
         }
     }

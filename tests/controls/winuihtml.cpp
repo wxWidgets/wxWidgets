@@ -28,6 +28,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
 
@@ -251,81 +252,81 @@ struct RuntimeSnapshot
     static RuntimeSnapshot Capture()
     {
         RuntimeSnapshot snapshot;
-        snapshot.hosts = wxWinUITopLevelHost::GetLiveHostCount();
+        snapshot.hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
         snapshot.hostLifetimes =
-            wxWinUITopLevelHost::GetLiveHostLifetimeCount();
-        snapshot.slots = wxWinUITopLevelHost::GetLiveSlotCount();
+            wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
+        snapshot.slots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
         snapshot.slotLifetimes =
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
         snapshot.subclasses =
-            wxWinUITopLevelHost::GetLiveSubclassContextCount();
+            wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
         snapshot.loadedHooks =
-            wxWinUITopLevelHost::GetLiveLoadedHookCount();
+            wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
         snapshot.pendingFocusMigrations =
             wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.buttonCallbacks =
             wxWinUIButtonTestAccess::LiveCallbackStateCount();
         snapshot.slotHandlerAdds =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
         snapshot.rootHandlerAdds =
-            wxWinUITopLevelHost::GetRootHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
         snapshot.rootHandlerRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
         return snapshot;
     }
 
     bool IsRestored() const
     {
-        return wxWinUITopLevelHost::GetLiveHostCount() == hosts &&
-               wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        return wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts &&
+               wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                    hostLifetimes &&
-               wxWinUITopLevelHost::GetLiveSlotCount() == slots &&
-               wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots &&
+               wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                    slotLifetimes &&
-               wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                    subclasses &&
-               wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
+               wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == loadedHooks &&
                wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
                    buttonCallbacks &&
-               wxWinUITopLevelHost::GetSlotHandlerAddCount() -
+               wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
-                   wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+                   wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                        slotHandlerRevokes &&
-               wxWinUITopLevelHost::GetRootHandlerAddCount() -
+               wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() -
                        rootHandlerAdds ==
-                   wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+                   wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                        rootHandlerRevokes;
     }
 
     void CheckRestored(bool expectHostActivity = true) const
     {
-        CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts);
-        CHECK(wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
               hostLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
               slotLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
               subclasses);
-        CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == loadedHooks);
         CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
         CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               buttonCallbacks);
 
         const unsigned slotAdds =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotHandlerAdds;
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotHandlerAdds;
         const unsigned slotRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                 slotHandlerRevokes;
         const unsigned rootAdds =
-            wxWinUITopLevelHost::GetRootHandlerAddCount() - rootHandlerAdds;
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootHandlerAdds;
         const unsigned rootRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                 rootHandlerRevokes;
 
         if ( expectHostActivity )
@@ -722,8 +723,8 @@ TEST_CASE("WinUIHtml::SetAppendSelectionAndURLGate",
     REQUIRE(html);
 
     // Hosts are lazy: frame B has no XAML slot until the pane migrates there.
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 1);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == before.slots + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == before.slots + 1);
     CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
           before.buttonCallbacks + 1);
     CHECK(fixture.IsOwnedOnlyBy(fixture.GetFrameA()));
@@ -865,8 +866,8 @@ TEST_CASE("WinUIHtml::LargeScrollAndTwoTLWStress",
         CHECK(fixture.IsOwnedOnlyBy(fixture.GetFrameA()));
     }
 
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 2);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == before.slots + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts + 2);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == before.slots + 1);
     CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
           before.buttonCallbacks + 1);
 

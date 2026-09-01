@@ -580,6 +580,23 @@ contain none of the callback record, wrapper, table-getter or test-access
 names. Both caches are restored to ALL and repeat the same results. These are
 private-desktop, non-input results, not physical OLE delivery evidence.
 
+### TLW lifecycle observation follow-up, 2026-09-01
+
+The host coordination API no longer carries ten static methods used only by
+tests. They move to the existing non-installed observation adapter, and their
+669 consumers retain the same assertions. Lifetime, handler, subclass, Loaded
+hook and pending-retirement telemetry is absent from OFF builds; constructors
+for the two shared lifetime records are out of line to keep one definition in
+all translation units. Real registries, subscriptions, gates, retirements and
+shutdown transitions are unchanged, as are the production flush/z-order
+diagnostics.
+
+Shared/static `[HostLifecycle]` remains **23818 assertions / 108 cases** before
+and after. OFF `wxcore`/`minimal` builds pass with warnings as errors and expose
+none of the old getters, private adapter or counter storage; restored ALL builds
+repeat the group and smoke/Supported V0 **2/2**. This closes a test-surface
+cleanup around the existing host modules, not a new physical lifecycle claim.
+
 ## Local completion reconciliation (2026-09-01)
 
 - The six named architecture boundaries are implemented: resize, tooltip and

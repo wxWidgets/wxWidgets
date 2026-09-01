@@ -25,6 +25,7 @@
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "popup-test-access.h"
@@ -96,20 +97,20 @@ bool SameLiveRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& lhs,
 
 struct HostPhysicalSnapshot
 {
-    unsigned hosts = wxWinUITopLevelHost::GetLiveHostCount();
+    unsigned hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     unsigned hostLifetimes =
-        wxWinUITopLevelHost::GetLiveHostLifetimeCount();
-    unsigned slots = wxWinUITopLevelHost::GetLiveSlotCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
+    unsigned slots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
     unsigned slotLifetimes =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     unsigned slotHandlerAdds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
     unsigned slotHandlerRevokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
     unsigned rootHandlerAdds =
-        wxWinUITopLevelHost::GetRootHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
     unsigned rootHandlerRevokes =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
 };
 
 template <typename T>
@@ -235,23 +236,23 @@ std::string DescribeRegistrySnapshot(
 
 bool SameLiveHostObjects(const HostPhysicalSnapshot& before)
 {
-    return wxWinUITopLevelHost::GetLiveHostCount() == before.hosts &&
-           wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+    return wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts &&
+           wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                before.hostLifetimes &&
-           wxWinUITopLevelHost::GetLiveSlotCount() == before.slots &&
-           wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+           wxWinUIHostObservationTestAccess::GetLiveSlotCount() == before.slots &&
+           wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                before.slotLifetimes;
 }
 
 void CheckBalancedHandlers(const HostPhysicalSnapshot& before)
 {
-    CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() -
+    CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() -
               before.slotHandlerAdds ==
-          wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+          wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
               before.slotHandlerRevokes);
-    CHECK(wxWinUITopLevelHost::GetRootHandlerAddCount() -
+    CHECK(wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() -
               before.rootHandlerAdds ==
-          wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+          wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
               before.rootHandlerRevokes);
 }
 

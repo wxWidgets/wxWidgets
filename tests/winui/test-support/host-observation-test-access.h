@@ -16,7 +16,23 @@ class wxWinUIDropBroker;
 class WXDLLIMPEXP_CORE wxWinUIHostObservationTestAccess final
 {
 public:
-    // Passive acquire loads of the existing real counters: no drain or sweep.
+    // Counts derived from the live production registries. They do not add
+    // any shipping state of their own.
+    static unsigned GetLiveHostCount();
+    static unsigned GetLiveSlotCount();
+
+    // Test-only lifecycle telemetry. Shipping builds neither store nor
+    // update these counters.
+    static unsigned GetLiveSlotLifetimeCount();
+    static unsigned GetSlotHandlerAddCount();
+    static unsigned GetSlotHandlerRevokeCount();
+    static unsigned GetLiveHostLifetimeCount();
+    static unsigned GetRootHandlerAddCount();
+    static unsigned GetRootHandlerRevokeCount();
+    static unsigned GetLiveSubclassContextCount();
+    static unsigned GetLiveLoadedHookCount();
+
+    // Passive acquire loads of test telemetry: no drain or sweep.
     static unsigned GetPendingPhysicalDisconnectGateCount();
     static unsigned GetPendingTLWTerminalRetirementCount();
 

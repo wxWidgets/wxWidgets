@@ -27,6 +27,7 @@
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -107,26 +108,26 @@ struct RuntimeSnapshot
     static RuntimeSnapshot Capture()
     {
         RuntimeSnapshot snapshot;
-        snapshot.hosts = wxWinUITopLevelHost::GetLiveHostCount();
+        snapshot.hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
         snapshot.hostLifetimes =
-            wxWinUITopLevelHost::GetLiveHostLifetimeCount();
-        snapshot.slots = wxWinUITopLevelHost::GetLiveSlotCount();
+            wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
+        snapshot.slots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
         snapshot.slotLifetimes =
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
         snapshot.subclasses =
-            wxWinUITopLevelHost::GetLiveSubclassContextCount();
+            wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
         snapshot.loadedHooks =
-            wxWinUITopLevelHost::GetLiveLoadedHookCount();
+            wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
         snapshot.pendingFocusMigrations =
             wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.slotHandlerAdds =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
         snapshot.rootHandlerAdds =
-            wxWinUITopLevelHost::GetRootHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
         snapshot.rootHandlerRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
         snapshot.transients =
             wxWinUITransientTestAccess::GetRegistrySnapshot();
         snapshot.wxCapture = wxWindow::GetCapture();
@@ -136,24 +137,24 @@ struct RuntimeSnapshot
 
     bool IsRestored() const
     {
-        return wxWinUITopLevelHost::GetLiveHostCount() == hosts &&
-               wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        return wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts &&
+               wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                    hostLifetimes &&
-               wxWinUITopLevelHost::GetLiveSlotCount() == slots &&
-               wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots &&
+               wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                    slotLifetimes &&
-               wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                    subclasses &&
-               wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
+               wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == loadedHooks &&
                wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
-               wxWinUITopLevelHost::GetSlotHandlerAddCount() -
+               wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
-                   wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+                   wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                        slotHandlerRevokes &&
-               wxWinUITopLevelHost::GetRootHandlerAddCount() -
+               wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() -
                        rootHandlerAdds ==
-                   wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+                   wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                        rootHandlerRevokes &&
                SameTransientRegistry(
                    wxWinUITransientTestAccess::GetRegistrySnapshot(),
@@ -164,30 +165,30 @@ struct RuntimeSnapshot
 
     void CheckRestored() const
     {
-        CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts);
-        CHECK(wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
               hostLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
               slotLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
               subclasses);
-        CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == loadedHooks);
         CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned slotAdds =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotHandlerAdds;
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotHandlerAdds;
         const unsigned slotRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                 slotHandlerRevokes;
         CHECK(slotAdds > 0);
         CHECK(slotAdds == slotRevokes);
 
         const unsigned rootAdds =
-            wxWinUITopLevelHost::GetRootHandlerAddCount() - rootHandlerAdds;
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootHandlerAdds;
         const unsigned rootRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                 rootHandlerRevokes;
         CHECK(rootAdds > 0);
         CHECK(rootAdds == rootRevokes);
@@ -614,7 +615,7 @@ TEST_CASE("WinUI native MDI routes every child slot through the parent host",
     CHECK(wxWinUITopLevelHost::ForWindow(second.child, false) == host);
     CHECK(wxWinUITopLevelHost::FindForTLW(first.child) == nullptr);
     CHECK(wxWinUITopLevelHost::FindForTLW(second.child) == nullptr);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts + 1);
 
     unsigned firstActivations = 0;
     unsigned secondActivations = 0;
@@ -799,7 +800,7 @@ TEST_CASE("WinUI native MDI records the single-bridge overlap STOP",
         wxWinUITopLevelHost::GetImpossibleZOrderCount();
     INFO("native-MDI overlap diagnostics: " << impossible);
     CHECK(impossible == 1);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts + 1);
     CHECK(wxWinUITopLevelHost::FindForTLW(lower.child) == nullptr);
     CHECK(wxWinUITopLevelHost::FindForTLW(upper.child) == nullptr);
 
@@ -956,7 +957,7 @@ TEST_CASE("WinUI native MDI accepts a menu bar installed after its first child",
     wxWinUITopLevelHost * const host =
         wxWinUITopLevelHost::ForWindow(parent, true);
     REQUIRE(host);
-    const unsigned steadySlots = wxWinUITopLevelHost::GetLiveSlotCount();
+    const unsigned steadySlots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
 
     MdiChildSurface first = CreateChildSurface(
         parent, "Document before menu", wxRect(40, 40, 420, 300));
@@ -1007,7 +1008,7 @@ TEST_CASE("WinUI native MDI accepts a menu bar installed after its first child",
     CHECK(::GetMenuItemCount(lateFrameMenu) == 2);
     CHECK(countWindowMenu(lateFrameMenu) == 1);
     CHECK(HasSingleHostOwner(first.button, host));
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots + 1);
 
     // Replacing the bar must first remove the separately inserted Window menu
     // from the old HMENU and detach its wx ownership. The replacement then
@@ -1066,7 +1067,7 @@ TEST_CASE("WinUI native MDI accepts a menu bar installed after its first child",
     CHECK(::GetMenuItemCount(finalFrameMenu) == 2);
     CHECK(countWindowMenu(finalFrameMenu) == 1);
     CHECK(HasSingleHostOwner(first.button, host));
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots + 1);
 
     REQUIRE(environment.DestroyAndWait(before));
     CHECK_FALSE(weakFirst);
@@ -1113,7 +1114,7 @@ TEST_CASE("WinUI native MDI migrates child content between parent hosts",
     REQUIRE(hostA != hostB);
     REQUIRE(DrainUntil([migrating, hostA]()
                        { return HasSingleHostOwner(migrating, hostA); }));
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 2);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts + 2);
 
     childA.child->Activate();
     migrating->SetFocus();
@@ -1193,7 +1194,7 @@ TEST_CASE("WinUI native MDI revokes child slots and destroys live children",
     wxWinUITopLevelHost * const host =
         wxWinUITopLevelHost::ForWindow(parent, true);
     REQUIRE(host);
-    const unsigned steadySlots = wxWinUITopLevelHost::GetLiveSlotCount();
+    const unsigned steadySlots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
 
     for ( unsigned cycle = 0; cycle < 100; ++cycle )
     {
@@ -1213,7 +1214,7 @@ TEST_CASE("WinUI native MDI revokes child slots and destroys live children",
             [&weakChild, &weakButton, steadySlots]()
             {
                 return !weakChild && !weakButton &&
-                       wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots;
+                       wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots;
             }));
     }
 
@@ -1235,10 +1236,10 @@ TEST_CASE("WinUI native MDI revokes child slots and destroys live children",
         {
             return HasSingleHostOwner(vetoed.button, host) &&
                    HasSingleHostOwner(liveAtParentDestroy.button, host) &&
-                   wxWinUITopLevelHost::GetLiveSlotCount() ==
+                   wxWinUIHostObservationTestAccess::GetLiveSlotCount() ==
                        steadySlots + 2;
         }));
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots + 2);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots + 2);
 
     bool vetoClose = true;
     vetoed.child->Bind(
@@ -1255,7 +1256,7 @@ TEST_CASE("WinUI native MDI revokes child slots and destroys live children",
     CHECK(weakVetoedButton);
     CHECK(HasSingleHostOwner(vetoed.button, host));
     CHECK(HasSingleHostOwner(liveAtParentDestroy.button, host));
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots + 2);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots + 2);
     vetoClose = false;
     REQUIRE(vetoed.child->Close());
     REQUIRE(DrainUntil(
@@ -1264,10 +1265,10 @@ TEST_CASE("WinUI native MDI revokes child slots and destroys live children",
         {
             return !weakVetoed && !weakVetoedButton &&
                    HasSingleHostOwner(liveAtParentDestroy.button, host) &&
-                   wxWinUITopLevelHost::GetLiveSlotCount() ==
+                   wxWinUIHostObservationTestAccess::GetLiveSlotCount() ==
                        steadySlots + 1;
         }));
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == steadySlots + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == steadySlots + 1);
     CHECK(HasSingleHostOwner(liveAtParentDestroy.button, host));
 
     // Deliberately leave the second child and its slot alive. Unlike AUI MDI,

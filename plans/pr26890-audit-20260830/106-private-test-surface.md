@@ -754,6 +754,39 @@ Do not delete a lifetime/retirement service used by production merely because it
   No physical input or global interaction was used. The remaining TLW
   lifecycle-observation family is a separate sublot.
 
+## TLW lifecycle-observation boundary (2026-09-01)
+
+- Ten lifecycle observers leave `wxWinUITopLevelHost` and move to the existing
+  non-installed `wxWinUIHostObservationTestAccess`. Their **669** call sites in
+  **19** test translation units keep the same assertions. The host header no
+  longer declares live-host/slot/lifetime, handler-balance, subclass-context or
+  Loaded-hook counters.
+- `wxWinUIHostLifetime` and `wxWinUISlotLifetime` construction/destruction move
+  out of line so test support cannot create differing inline definitions across
+  translation units. Their counts, the slot/root handler balances, subclass and
+  Loaded-hook counts, plus pending terminal/gate telemetry are stored and
+  updated only with `WXWINUI_TEST_SUPPORT`.
+- The real host/slot registries, handler subscriptions and revocations,
+  subclass ownership, Loaded state, disconnect gates, terminal retirements,
+  source/root graph, generations and shutdown order are unchanged. Flush
+  scheduling and impossible-z-order counts remain deliberate passive
+  production diagnostics because `winuispike` consumes them.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. Before and after the extraction, the complete `[HostLifecycle]`
+  group passes exactly **23818 assertions / 108 cases** in each linkage; the
+  known WebView2 focus warning is unchanged and is not counted as a failure.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. Shared exports and static symbols have zero match for the
+  ten old host getters, the private observation accessor and all ten test-only
+  storage families. Source checks also confirm zero old consumer calls and
+  balanced guards around every targeted write.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; the same **23818/108** group,
+  coupled DropBroker **1912/33**, its five fresh-process consumers and runtime
+  smoke plus Supported V0 **2/2** all pass again in both linkages. Runs use
+  private desktops with `WX_UI_TESTS=0`; no physical input is claimed. Other
+  helper/component surfaces and their fresh installed-consumer proof keep plan
+  106 in progress.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

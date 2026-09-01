@@ -45,6 +45,7 @@
 #endif
 
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 
 #include <winrt/Microsoft.UI.Text.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -283,28 +284,28 @@ HostBalance CaptureHostBalance()
     DrainDispatch();
     return
     {
-        wxWinUITopLevelHost::GetLiveSlotCount(),
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount(),
-        wxWinUITopLevelHost::GetLiveLoadedHookCount(),
-        wxWinUITopLevelHost::GetSlotHandlerAddCount(),
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount()
+        wxWinUIHostObservationTestAccess::GetLiveSlotCount(),
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount(),
+        wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount(),
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount(),
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount()
     };
 }
 
 void CheckHostBalanceRestored(const HostBalance& before)
 {
     DrainDispatch(16);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == before.slots);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == before.slots);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
           before.lifetimes);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() ==
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() ==
           before.loadedHooks);
 
     const unsigned adds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount() -
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() -
         before.handlerAdds;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
         before.handlerRevokes;
     CHECK(adds > 0);
     CHECK(adds == revokes);

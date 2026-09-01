@@ -126,23 +126,14 @@ struct wxWinUIRootPointerOutcome
 class wxWinUIHostLifetime
 {
 public:
-    explicit wxWinUIHostLifetime(wxWinUITopLevelHost *host)
-        : m_host(host)
-    {
-        ++ms_liveCount;
-    }
-
-    ~wxWinUIHostLifetime() { --ms_liveCount; }
+    explicit wxWinUIHostLifetime(wxWinUITopLevelHost *host);
+    ~wxWinUIHostLifetime();
 
     wxWinUITopLevelHost *GetHost() const { return m_host; }
     void Invalidate() { m_host = nullptr; }
 
-    static unsigned GetLiveCount() { return ms_liveCount; }
-
 private:
     wxWinUITopLevelHost *m_host;
-
-    static unsigned ms_liveCount;
 
     wxDECLARE_NO_COPY_CLASS(wxWinUIHostLifetime);
 };
@@ -162,13 +153,8 @@ private:
 class wxWinUISlotLifetime
 {
 public:
-    wxWinUISlotLifetime(wxWindow *window, wxWinUITopLevelHost *host)
-        : m_window(window), m_host(host)
-    {
-        ++ms_liveCount;
-    }
-
-    ~wxWinUISlotLifetime() { --ms_liveCount; }
+    wxWinUISlotLifetime(wxWindow *window, wxWinUITopLevelHost *host);
+    ~wxWinUISlotLifetime();
 
     bool IsValid() const { return m_window != nullptr; }
     wxWindow *GetWindow() const { return m_window; }
@@ -180,13 +166,9 @@ public:
         m_host = nullptr;
     }
 
-    static unsigned GetLiveCount() { return ms_liveCount; }
-
 private:
     wxWindow *m_window;
     wxWinUITopLevelHost *m_host;
-
-    static unsigned ms_liveCount;
 
     wxDECLARE_NO_COPY_CLASS(wxWinUISlotLifetime);
 };
@@ -1058,28 +1040,9 @@ public:
         std::function<bool ()> isCurrent);
     static void ScheduleNativeResizeWakesAfterGlobalOperation();
 
-    // ----- lifetime introspection (used by the lifecycle unit tests) -----
-
-    // Number of live hosts / of registered slots across every host.
-    static unsigned GetLiveHostCount();
-    static unsigned GetLiveSlotCount();
-
     // Re-arm physical host deletion for every logically shut down host once
     // the process-wide WinUI callback transaction has fully unwound.
     static void SchedulePendingDeletesAfterGlobalOperation();
-
-    // Number of live per-slot callback states (wxWinUISlotLifetime): once
-    // every hosted window of a TLW has been destroyed and the pending
-    // dispatch has drained, this must come back down to what it was.
-    static unsigned GetLiveSlotLifetimeCount()
-        { return wxWinUISlotLifetime::GetLiveCount(); }
-
-    // Cumulative balance of the per-slot XAML handler registrations
-    // (AddHandler + GotFocus/LostFocus): every add must eventually be
-    // matched by a revocation, on every removal path -- unregister,
-    // registration rollback and host shutdown alike.
-    static unsigned GetSlotHandlerAddCount();
-    static unsigned GetSlotHandlerRevokeCount();
 
     // Passive production diagnostic used by the composition/latency
     // harness too: count CallAfter posts without altering coalescing.
@@ -1091,19 +1054,6 @@ public:
     // renders all XAML above every native child. This is a diagnostic limit,
     // not an attempt to manufacture another island.
     static unsigned GetImpossibleZOrderCount();
-
-    // Host-owned callback state and subscriptions are tracked separately
-    // from the per-slot ones.
-    static unsigned GetLiveHostLifetimeCount()
-        { return wxWinUIHostLifetime::GetLiveCount(); }
-    static unsigned GetRootHandlerAddCount();
-    static unsigned GetRootHandlerRevokeCount();
-    static unsigned GetLiveSubclassContextCount();
-
-    // Live Loaded-hook count across the control hosts (defined in
-    // ctrlhost.cpp): a failed content swap must leave the old hook in
-    // place and drop only the new one.
-    static unsigned GetLiveLoadedHookCount();
 
 private:
     friend class wxWinUISlot;
@@ -1686,8 +1636,8 @@ private:
     // logical shutdown (DestroyChildren() is later). Snapshot them before
     // the slot map and source/root ownership are retired, then merge them
     // with already-deferred slots into the TLW's one terminal retirement.
-    // These aliases were never counted by
-    // gs_pendingPhysicalDisconnectGates and must not affect that counter.
+    // These aliases are not independent pending disconnect gates and must not
+    // affect the test-only gate telemetry.
     std::vector<std::shared_ptr<wxWinUIPhysicalDisconnectGate>>
         m_shutdownPhysicalDisconnectGates;
     unsigned m_operationDepth = 0;

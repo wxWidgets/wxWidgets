@@ -17,6 +17,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
 #include "control-host-test-access.h"
+#include "host-observation-test-access.h"
 #include "tooltip-policy-test-access.h"
 #include "physical-disconnect-test-access.h"
 #endif // WXWINUI_TEST_SUPPORT
@@ -2391,7 +2392,9 @@ namespace
 // removal failed remains counted until the element finally releases its
 // inactive callback; this is more truthful than decrementing on an attempted
 // removal and proves that no raw host pointer survives.
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_liveLoadedHooks = 0;
+#endif
 std::atomic<bool> gs_physicalDisconnectPublicationPoisoned{false};
 } // anonymous namespace
 
@@ -2428,18 +2431,31 @@ void wxWinUIPhysicalDisconnectTestAccess::PoisonPublication() noexcept
 class wxWinUILoadedState
 {
 public:
-    wxWinUILoadedState() { ++gs_liveLoadedHooks; }
-    ~wxWinUILoadedState() { --gs_liveLoadedHooks; }
+    wxWinUILoadedState()
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        ++gs_liveLoadedHooks;
+#endif
+    }
+
+    ~wxWinUILoadedState()
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        --gs_liveLoadedHooks;
+#endif
+    }
 
     wxWinUIControlHost *host = nullptr;
     bool fired = false;
     bool active = false;
 };
 
-unsigned wxWinUITopLevelHost::GetLiveLoadedHookCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount()
 {
     return gs_liveLoadedHooks;
 }
+#endif
 
 void wxWinUIControlHost::RevokeLoadedHook()
 {

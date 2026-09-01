@@ -200,13 +200,16 @@ std::map<const wxWindow *, wxWinUITopLevelHost *> gs_slotOwners;
 // source/root graph to one retirement. Exact gate completion can consume that
 // ticket during normal dispatcher operation; XamlShutdownCompletedOnThread is
 // the fail-closed fallback when causal completion never arrives.
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<unsigned> gs_pendingTLWTerminalRetirements{ 0 };
 std::atomic<unsigned> gs_pendingPhysicalDisconnectGates{ 0 };
+#endif
 std::uint64_t gs_nextPhysicalDisconnectRetirementId = 0;
 
 class wxWinUITLWTerminalRetirement final
 {
 public:
+#ifdef WXWINUI_TEST_SUPPORT
     void Promote() noexcept
     {
         if ( m_completed.load(std::memory_order_acquire) )
@@ -219,6 +222,7 @@ public:
                 1, std::memory_order_relaxed);
         }
     }
+#endif
 
     ~wxWinUITLWTerminalRetirement()
     {
@@ -334,11 +338,13 @@ private:
         m_source = nullptr;
         m_root = nullptr;
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_counted.load(std::memory_order_acquire) )
         {
             gs_pendingTLWTerminalRetirements.fetch_sub(
                 1, std::memory_order_relaxed);
         }
+#endif
     }
 
     winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource
@@ -348,21 +354,24 @@ private:
     std::atomic<bool> m_completionArmed{false};
     std::atomic<bool> m_completionRequested{false};
     std::atomic<bool> m_completed{false};
+#ifdef WXWINUI_TEST_SUPPORT
     std::atomic<bool> m_counted{false};
+#endif
     std::atomic<unsigned> m_pendingGates{0};
     std::atomic<wxWinUIFrameworkRetirementId> m_retirementId{0};
 };
 
-// Cumulative counters for the lifecycle unit tests: the add/revoke balance
-// of the per-slot XAML handlers (every add must be matched by a revocation
-// on every removal path) and the schedule/run balance of the coalesced
-// flush (a Freeze() must not turn a MarkDirty() storm into a CallAfter
-// storm).
+// Cumulative counters for the lifecycle unit tests. Shipping builds retain
+// the real registrations and lifetime protocol without this telemetry.
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned gs_liveHostLifetimes = 0;
+unsigned gs_liveSlotLifetimes = 0;
 unsigned gs_slotHandlerAdds = 0;
 unsigned gs_slotHandlerRevokes = 0;
 unsigned gs_rootHandlerAdds = 0;
 unsigned gs_rootHandlerRevokes = 0;
 unsigned gs_liveSubclassContexts = 0;
+#endif
 
 // WinUI delegates can synchronously reparent a slot from host A to host B
 // before application code asks to destroy B. A per-host operation depth is
@@ -623,16 +632,53 @@ bool wxWinUICursorFromHCURSOR(
 
 } // anonymous namespace
 
+wxWinUIHostLifetime::wxWinUIHostLifetime(wxWinUITopLevelHost *host)
+    : m_host(host)
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    ++gs_liveHostLifetimes;
+#endif
+}
+
+wxWinUIHostLifetime::~wxWinUIHostLifetime()
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    --gs_liveHostLifetimes;
+#endif
+}
+
+wxWinUISlotLifetime::wxWinUISlotLifetime(
+    wxWindow *window,
+    wxWinUITopLevelHost *host)
+    : m_window(window),
+      m_host(host)
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    ++gs_liveSlotLifetimes;
+#endif
+}
+
+wxWinUISlotLifetime::~wxWinUISlotLifetime()
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    --gs_liveSlotLifetimes;
+#endif
+}
+
 wxWinUISubclassContext::wxWinUISubclassContext(
     const std::shared_ptr<wxWinUIHostLifetime>& hostState)
     : host(hostState)
 {
+#ifdef WXWINUI_TEST_SUPPORT
     ++gs_liveSubclassContexts;
+#endif
 }
 
 wxWinUISubclassContext::~wxWinUISubclassContext()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     --gs_liveSubclassContexts;
+#endif
 }
 
 winrt::com_ptr<wxWinUISlotGrid> wxWinUIGetSlotGrid(const wxWinUISlot *slot)
@@ -2977,8 +3023,10 @@ bool wxWinUITopLevelHost::Initialize()
                         XamlSourceFocusNavigationReason::Last;
                 host->OnTakeFocusRequested(previous);
             });
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_takeFocusToken.value )
             ++gs_rootHandlerAdds;
+#endif
         if ( !HasInitializationContext() )
             return false;
 
@@ -3728,7 +3776,9 @@ void wxWinUITopLevelHost::Shutdown()
         try
         {
             m_source.TakeFocusRequested(m_takeFocusToken);
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_rootHandlerRevokes;
+#endif
         }
         catch ( const winrt::hresult_error& )
         {
@@ -3743,7 +3793,9 @@ void wxWinUITopLevelHost::Shutdown()
             try
             {
                 m_root.RemoveHandler(handler.first, handler.second);
+#ifdef WXWINUI_TEST_SUPPORT
                 ++gs_rootHandlerRevokes;
+#endif
             }
             catch ( const winrt::hresult_error& )
             {
@@ -3901,8 +3953,10 @@ void wxWinUITopLevelHost::Shutdown()
         slot->m_deferredDisconnectHost = nullptr;
         if ( slot->m_disconnectGate )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             gs_pendingPhysicalDisconnectGates.fetch_sub(
                 1, std::memory_order_relaxed);
+#endif
             slot->m_disconnectGate.reset();
         }
         slot->m_disconnectRetirementId = 0;
@@ -3933,8 +3987,10 @@ void wxWinUITopLevelHost::Shutdown()
             if ( gate )
                 gate->CompleteSealedWithoutPopup();
         }
+#ifdef WXWINUI_TEST_SUPPORT
         if ( terminalRetirement->GetPendingGateCount() != 0 )
             terminalRetirement->Promote();
+#endif
     }
     sealedGateAliases.clear();
 
@@ -3946,15 +4002,13 @@ void wxWinUITopLevelHost::Shutdown()
 // slots
 // ============================================================================
 
-unsigned wxWinUIHostLifetime::ms_liveCount = 0;
-unsigned wxWinUISlotLifetime::ms_liveCount = 0;
-
-unsigned wxWinUITopLevelHost::GetLiveHostCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostObservationTestAccess::GetLiveHostCount()
 {
     return static_cast<unsigned>(gs_tlwHosts.size());
 }
 
-unsigned wxWinUITopLevelHost::GetLiveSlotCount()
+unsigned wxWinUIHostObservationTestAccess::GetLiveSlotCount()
 {
     unsigned count = 0;
     for ( const auto& kv : gs_tlwHosts )
@@ -3962,7 +4016,41 @@ unsigned wxWinUITopLevelHost::GetLiveSlotCount()
     return count;
 }
 
-#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount()
+{
+    return gs_liveSlotLifetimes;
+}
+
+unsigned wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount()
+{
+    return gs_slotHandlerAdds;
+}
+
+unsigned wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount()
+{
+    return gs_slotHandlerRevokes;
+}
+
+unsigned wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount()
+{
+    return gs_liveHostLifetimes;
+}
+
+unsigned wxWinUIHostObservationTestAccess::GetRootHandlerAddCount()
+{
+    return gs_rootHandlerAdds;
+}
+
+unsigned wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount()
+{
+    return gs_rootHandlerRevokes;
+}
+
+unsigned wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount()
+{
+    return gs_liveSubclassContexts;
+}
+
 unsigned
 wxWinUIHostObservationTestAccess::GetPendingPhysicalDisconnectGateCount()
 {
@@ -3992,31 +4080,6 @@ unsigned wxWinUIHostContentTestAccess::GetLiveContentLoadedObserverCount()
     return gs_liveContentLoadedStates;
 }
 #endif
-
-unsigned wxWinUITopLevelHost::GetSlotHandlerAddCount()
-{
-    return gs_slotHandlerAdds;
-}
-
-unsigned wxWinUITopLevelHost::GetSlotHandlerRevokeCount()
-{
-    return gs_slotHandlerRevokes;
-}
-
-unsigned wxWinUITopLevelHost::GetRootHandlerAddCount()
-{
-    return gs_rootHandlerAdds;
-}
-
-unsigned wxWinUITopLevelHost::GetRootHandlerRevokeCount()
-{
-    return gs_rootHandlerRevokes;
-}
-
-unsigned wxWinUITopLevelHost::GetLiveSubclassContextCount()
-{
-    return gs_liveSubclassContexts;
-}
 
 #ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIHostContentTestAccess::FailHandlerAdd(unsigned nth)
@@ -4826,7 +4889,9 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
         try
         {
             slot.m_container.RemoveHandler(handler.first, handler.second);
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerRevokes;
+#endif
         }
         catch ( const winrt::hresult_error& )
         {
@@ -4839,7 +4904,9 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
         try
         {
             slot.m_container.GotFocus(slot.m_gotFocusToken);
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerRevokes;
+#endif
         }
         catch ( const winrt::hresult_error& )
         {
@@ -4850,7 +4917,9 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
         try
         {
             slot.m_container.LostFocus(slot.m_lostFocusToken);
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerRevokes;
+#endif
         }
         catch ( const winrt::hresult_error& )
         {
@@ -5050,11 +5119,13 @@ void wxWinUITopLevelHost::UnregisterSlot(
         slot->m_disconnectPending = true;
         slot->m_deferredDisconnectHost = this;
         m_deferredDisconnectSlots.push_back(slot);
+#ifdef WXWINUI_TEST_SUPPORT
         if ( deferredGate )
         {
             gs_pendingPhysicalDisconnectGates.fetch_add(
                 1, std::memory_order_relaxed);
         }
+#endif
     }
     else
     {
@@ -5116,8 +5187,10 @@ bool wxWinUITopLevelHost::CompleteDeferredSlotDisconnect(
     slot.m_deferredDisconnectHost = nullptr;
     if ( slot.m_disconnectGate )
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_pendingPhysicalDisconnectGates.fetch_sub(
             1, std::memory_order_relaxed);
+#endif
         slot.m_disconnectGate.reset();
     }
     slot.m_disconnectRetirementId = 0;
@@ -8188,7 +8261,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
             slot.m_container.AddHandler(routedEvent, boxed,
                                         true /* handledEventsToo */);
             slot.m_routedHandlers.emplace_back(routedEvent, boxed);
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerAdds;
+#endif
         };
 
     const auto routeFromSender =
@@ -8375,7 +8450,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
                                     true /* handledEventsToo */);
         slot.m_routedHandlers.emplace_back(UIElement::GettingFocusEvent(),
                                            boxed);
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_slotHandlerAdds;
+#endif
     }
 
     // Focus arbiter, XAML -> wx side: the island holds the native focus, so
@@ -8395,7 +8472,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
                 try_as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
             host->OnXamlSlotGotFocus(state, container);
         });
+#ifdef WXWINUI_TEST_SUPPORT
     ++gs_slotHandlerAdds;
+#endif
 
 #ifdef WXWINUI_TEST_SUPPORT
     wxWinUIMaybeInjectHandlerFault();
@@ -8411,7 +8490,9 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
                 try_as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
             host->OnXamlSlotLostFocus(state, container);
         });
+#ifdef WXWINUI_TEST_SUPPORT
     ++gs_slotHandlerAdds;
+#endif
 }
 
 // ============================================================================
@@ -8449,7 +8530,9 @@ bool wxWinUITopLevelHost::BindRootRouter()
                 m_rootHandlers.pop_back();
                 throw;
             }
+#ifdef WXWINUI_TEST_SUPPORT
             ++gs_rootHandlerAdds;
+#endif
             return HasInitializationContext();
         };
 

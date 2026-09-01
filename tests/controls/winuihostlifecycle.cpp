@@ -771,10 +771,10 @@ TEST_CASE("HostLifecycle::RegisterUnregisterLoop", "[HostLifecycle]")
 {
     PrimeTopWindowHost();
 
-    const unsigned slots0 = wxWinUITopLevelHost::GetLiveSlotCount();
-    const unsigned states0 = wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
-    const unsigned adds0 = wxWinUITopLevelHost::GetSlotHandlerAddCount();
-    const unsigned revokes0 = wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+    const unsigned slots0 = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
+    const unsigned states0 = wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
+    const unsigned adds0 = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
+    const unsigned revokes0 = wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     for ( int i = 0; i < 100; ++i )
     {
@@ -787,27 +787,27 @@ TEST_CASE("HostLifecycle::RegisterUnregisterLoop", "[HostLifecycle]")
 
     // no slot may leak, and -- the real point -- no callback state may
     // outlive its slot: every handler must have been revoked
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
 
     // and not just by the shared state going null: every AddHandler /
     // focus subscription of the loop was individually revoked
     const unsigned adds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0;
     CHECK(adds > 0);
     CHECK(adds == revokes);
 }
 
 TEST_CASE("HostLifecycle::DestroyTLWWithSlots", "[HostLifecycle]")
 {
-    const unsigned hosts0 = wxWinUITopLevelHost::GetLiveHostCount();
-    const unsigned states0 = wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+    const unsigned hosts0 = wxWinUIHostObservationTestAccess::GetLiveHostCount();
+    const unsigned states0 = wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned subclasses0 =
-        wxWinUITopLevelHost::GetLiveSubclassContextCount();
-    const unsigned adds0 = wxWinUITopLevelHost::GetSlotHandlerAddCount();
-    const unsigned revokes0 = wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
+    const unsigned adds0 = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
+    const unsigned revokes0 = wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     wxFrame * const frame = new wxFrame(nullptr, wxID_ANY, "lifecycle-tlw");
     for ( int i = 0; i < 10; ++i )
@@ -815,21 +815,21 @@ TEST_CASE("HostLifecycle::DestroyTLWWithSlots", "[HostLifecycle]")
     frame->Show();
     DrainDispatch(5);
 
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() > hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() > hosts0);
 
     frame->Destroy();
     DrainDispatch();
 
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
-    CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() == subclasses0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() == subclasses0);
 
     // the TLW teardown goes through Shutdown(), not UnregisterSlot(): that
     // path too must revoke every single handler before closing the source
     const unsigned adds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0;
     CHECK(adds > 0);
     CHECK(adds == revokes);
 }
@@ -952,10 +952,10 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
 TEST_CASE("HostLifecycle::ReparentAcrossTLW",
           "[HostLifecycle][winui-009]")
 {
-    const unsigned hosts0 = wxWinUITopLevelHost::GetLiveHostCount();
-    const unsigned states0 = wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
-    const unsigned adds0 = wxWinUITopLevelHost::GetSlotHandlerAddCount();
-    const unsigned revokes0 = wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+    const unsigned hosts0 = wxWinUIHostObservationTestAccess::GetLiveHostCount();
+    const unsigned states0 = wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
+    const unsigned adds0 = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
+    const unsigned revokes0 = wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     wxFrame * const frameA = new wxFrame(nullptr, wxID_ANY, "lifecycle-A");
     wxFrame * const frameB = new wxFrame(nullptr, wxID_ANY, "lifecycle-B");
@@ -991,15 +991,15 @@ TEST_CASE("HostLifecycle::ReparentAcrossTLW",
     frameB->Destroy();
     DrainDispatch();
 
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
 
     // every migration is an unregister + register pair: the handler
     // add/revoke balance must close over the whole shuffle
     const unsigned adds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0;
     CHECK(adds > 0);
     CHECK(adds == revokes);
 }
@@ -1373,9 +1373,9 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
     const unsigned migrations0 =
         wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     const unsigned slots0 =
-        wxWinUITopLevelHost::GetLiveSlotCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotCount();
     const unsigned slotLifetimes0 =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     wxFrame * const frameA =
         new wxFrame(nullptr, wxID_ANY, "focused-reparent-A");
     wxFrame * const frameB =
@@ -1476,8 +1476,8 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
     DrainDispatch();
     CHECK(wxWinUIHostFocusTestAccess::
               GetPendingFocusMigrationCount() == migrations0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
           slotLifetimes0);
 }
 
@@ -1486,13 +1486,13 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 {
     const unsigned pending0 =
         wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
-    const unsigned slots0 = wxWinUITopLevelHost::GetLiveSlotCount();
+    const unsigned slots0 = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
     const unsigned lifetimes0 =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned adds0 =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
     const unsigned revokes0 =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     wxFrame * const frameA =
         new wxFrame(nullptr, wxID_ANY, "deferred-focus-A");
@@ -1676,15 +1676,15 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
     frameC->Destroy();
     DrainToQuiescence();
 
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == lifetimes0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == lifetimes0);
     CHECK(wxWinUIHostFocusTestAccess::
               GetPendingFocusMigrationCount() == pending0);
 
     const unsigned adds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0;
     CHECK(adds > 0);
     CHECK(adds == revokes);
 }
@@ -2066,19 +2066,19 @@ TEST_CASE("HostState::FrozenTooltipPolicyIsSynchronous",
 
 TEST_CASE("HostLifecycle::TopLevelWindowIsASlot", "[HostLifecycle]")
 {
-    const unsigned hosts0 = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hosts0 = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     const unsigned slotStates0 =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned hostStates0 =
-        wxWinUITopLevelHost::GetLiveHostLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
     const unsigned slotAdds0 =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
     const unsigned slotRevokes0 =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
     const unsigned rootAdds0 =
-        wxWinUITopLevelHost::GetRootHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
     const unsigned rootRevokes0 =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
 
     // Frame-class dialogs register their TLW itself as a slot.  Destroying it
     // dispatches wxEVT_DESTROY through both the slot and TLW handlers; the
@@ -2096,13 +2096,13 @@ TEST_CASE("HostLifecycle::TopLevelWindowIsASlot", "[HostLifecycle]")
     frame->Destroy();
     DrainDispatch();
 
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == slotStates0);
-    CHECK(wxWinUITopLevelHost::GetLiveHostLifetimeCount() == hostStates0);
-    CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotAdds0 ==
-          wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - slotRevokes0);
-    CHECK(wxWinUITopLevelHost::GetRootHandlerAddCount() - rootAdds0 ==
-          wxWinUITopLevelHost::GetRootHandlerRevokeCount() - rootRevokes0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == slotStates0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() == hostStates0);
+    CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotAdds0 ==
+          wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - slotRevokes0);
+    CHECK(wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootAdds0 ==
+          wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() - rootRevokes0);
 }
 
 TEST_CASE("HostLifecycle::ReparentIsSynchronous", "[HostLifecycle]")
@@ -5389,7 +5389,7 @@ TEST_CASE("HostState::SyncSlotUnregisterReentrancy", "[HostState]")
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
     const unsigned states0 =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "state-sync-unregister");
     wxWinUIXamlHost * const xamlHost = new wxWinUIXamlHost(frame);
@@ -5426,7 +5426,7 @@ TEST_CASE("HostState::SyncSlotUnregisterReentrancy", "[HostState]")
 
     CHECK(callbackFired);
     CHECK(host->FindSlot(xamlHost) == nullptr);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
 
     frame->Destroy();
     DrainDispatch();
@@ -7993,15 +7993,15 @@ TEST_CASE("HostLifecycle::DestroyTLWFromGettingFocusDefersPhysicalShutdown",
     namespace MUX = winrt::Microsoft::UI::Xaml;
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     const unsigned statesBefore =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned subclassesBefore =
-        wxWinUITopLevelHost::GetLiveSubclassContextCount();
+        wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
     const unsigned addsBefore =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
     const unsigned revokesBefore =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     wxFrame *frame =
         new wxFrame(nullptr, wxID_ANY, "getting-focus-destroy-tlw");
@@ -8035,16 +8035,16 @@ TEST_CASE("HostLifecycle::DestroyTLWFromGettingFocusDefersPhysicalShutdown",
 
     REQUIRE(DrainUntil([&]()
     {
-        return wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore &&
-               wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+        return wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore &&
+               wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                    statesBefore &&
-               wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                    subclassesBefore;
     }));
     const unsigned adds =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount() - addsBefore;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - addsBefore;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokesBefore;
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokesBefore;
     CHECK(adds > 0);
     CHECK(adds == revokes);
 }
@@ -8055,19 +8055,19 @@ TEST_CASE("HostLifecycle::DestroyTLWFromButtonCallbackDefersPhysicalShutdown",
     namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     const unsigned statesBefore =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned subclassesBefore =
-        wxWinUITopLevelHost::GetLiveSubclassContextCount();
+        wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
     const unsigned slotAddsBefore =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
     const unsigned slotRevokesBefore =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
     const unsigned rootAddsBefore =
-        wxWinUITopLevelHost::GetRootHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
     const unsigned rootRevokesBefore =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
 
     const auto virtualCounters =
         std::make_shared<DeferredDestroyVirtualCounters>();
@@ -8089,9 +8089,9 @@ TEST_CASE("HostLifecycle::DestroyTLWFromButtonCallbackDefersPhysicalShutdown",
     const MUXAP::ButtonAutomationPeer automationPeer(peer);
 
     const unsigned slotRevokesAtInvoke =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
     const unsigned rootRevokesAtInvoke =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
     struct CallbackObservation
     {
         wxFrame *frame = nullptr;
@@ -8175,12 +8175,12 @@ TEST_CASE("HostLifecycle::DestroyTLWFromButtonCallbackDefersPhysicalShutdown",
             // Button.Click/UIA Invoke callback is still on the stack.
             wxYield();
             state->nativeDestroyDeferredInsideHandler =
-                wxWinUITopLevelHost::GetLiveHostCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostCount() ==
                     state->hostsBefore + 1;
             state->physicalHandlersStillAttachedInsideHandler =
-                wxWinUITopLevelHost::GetSlotHandlerRevokeCount() ==
+                wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() ==
                     state->slotRevokesAtInvoke &&
-                wxWinUITopLevelHost::GetRootHandlerRevokeCount() ==
+                wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() ==
                     state->rootRevokesAtInvoke;
         });
 
@@ -8195,10 +8195,10 @@ TEST_CASE("HostLifecycle::DestroyTLWFromButtonCallbackDefersPhysicalShutdown",
 
     REQUIRE(DrainUntil([&]()
     {
-        return wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore &&
-               wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+        return wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore &&
+               wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                    statesBefore &&
-               wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                    subclassesBefore;
     }));
     CHECK(observation->hideEventSeen);
@@ -8210,11 +8210,11 @@ TEST_CASE("HostLifecycle::DestroyTLWFromButtonCallbackDefersPhysicalShutdown",
     CHECK(virtualCounters->hideCalls == 1);
     CHECK(observation->destroyEventSeen);
     CHECK(observation->resurrectionRejected);
-    CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotAddsBefore ==
-          wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+    CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotAddsBefore ==
+          wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
               slotRevokesBefore);
-    CHECK(wxWinUITopLevelHost::GetRootHandlerAddCount() - rootAddsBefore ==
-          wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+    CHECK(wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootAddsBefore ==
+          wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
               rootRevokesBefore);
 }
 
@@ -8224,7 +8224,7 @@ TEST_CASE("HostLifecycle::PendingTLWSurvivesRetainedButtonCallbackYield",
     namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "pending-before-xaml-callback",
                     wxPoint(-32000, -32000), wxSize(280, 160));
@@ -8264,7 +8264,7 @@ TEST_CASE("HostLifecycle::PendingTLWSurvivesRetainedButtonCallbackYield",
             state->frameAliveAfterNestedYield =
                 weak.get() != nullptr && ::IsWindow(frameHwnd);
             state->hostAliveAfterNestedYield =
-                wxWinUITopLevelHost::GetLiveHostCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostCount() ==
                     hostsBefore + 1;
         });
 
@@ -8282,7 +8282,7 @@ TEST_CASE("HostLifecycle::PendingTLWSurvivesRetainedButtonCallbackYield",
     REQUIRE(DrainUntil([&]()
     {
         return frameWeak.get() == nullptr &&
-               wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
+               wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore;
     }));
 }
 
@@ -8292,7 +8292,7 @@ TEST_CASE("HostLifecycle::ModalDialogDestroyWaitsForButtonCallback",
     namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxDialog * const dialog =
         new wxDialog(nullptr, wxID_ANY, "modal-destroy-from-xaml",
                      wxPoint(-32000, -32000), wxSize(280, 160));
@@ -8349,7 +8349,7 @@ TEST_CASE("HostLifecycle::ModalDialogDestroyWaitsForButtonCallback",
             state->dialogAliveAfterNestedYield =
                 weak.get() != nullptr && ::IsWindow(dialogHwnd);
             state->hostAliveAfterNestedYield =
-                wxWinUITopLevelHost::GetLiveHostCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostCount() ==
                     hostsBefore + 1;
         });
 
@@ -8373,7 +8373,7 @@ TEST_CASE("HostLifecycle::ModalDialogDestroyWaitsForButtonCallback",
     REQUIRE(DrainUntil([&]()
     {
         return dialogWeak.get() == nullptr &&
-               wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
+               wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore;
     }));
 }
 
@@ -8385,9 +8385,9 @@ TEST_CASE("HostLifecycle::PopupImmediateDestroyWaitsForButtonCallback",
     namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     const unsigned lifetimesBefore =
-        wxWinUITopLevelHost::GetLiveHostLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "popup-owner",
                     wxPoint(-32000, -32000), wxSize(220, 120));
@@ -8441,7 +8441,7 @@ TEST_CASE("HostLifecycle::PopupImmediateDestroyWaitsForButtonCallback",
             state->aliveAfterYield =
                 weak.get() != nullptr && ::IsWindow(popupHwnd);
             state->hostPhysicalLifetimeAfterYield =
-                wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                     lifetimesBefore + 1;
         });
 
@@ -8461,8 +8461,8 @@ TEST_CASE("HostLifecycle::PopupImmediateDestroyWaitsForButtonCallback",
     REQUIRE(DrainUntil([&]()
     {
         return weakPopup.get() == nullptr &&
-               wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore &&
-               wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore &&
+               wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                    lifetimesBefore;
     }));
     // The replay is explicitly non-virtual: no third override entry appears.
@@ -8480,7 +8480,7 @@ TEST_CASE("HostLifecycle::TransientPopupDestroyWaitsForButtonCallback",
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
     const unsigned lifetimesBefore =
-        wxWinUITopLevelHost::GetLiveHostLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
     wxFrame * const owner =
         new wxFrame(nullptr, wxID_ANY, "transient-popup-owner",
                     wxPoint(-32000, -32000), wxSize(220, 120));
@@ -8530,7 +8530,7 @@ TEST_CASE("HostLifecycle::TransientPopupDestroyWaitsForButtonCallback",
             state->aliveAfterYield =
                 weak.get() != nullptr && ::IsWindow(popupHwnd);
             state->hostPhysicalLifetimeAfterYield =
-                wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                     lifetimesBefore + 1;
         });
 
@@ -8542,7 +8542,7 @@ TEST_CASE("HostLifecycle::TransientPopupDestroyWaitsForButtonCallback",
     REQUIRE(DrainUntil([&]()
     {
         return weakPopup.get() == nullptr &&
-               wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                    lifetimesBefore;
     }));
     owner->Destroy();
@@ -8677,7 +8677,7 @@ TEST_CASE("HostLifecycle::PendingModalSurvivesOtherRetainedPeerYield",
             state->globalOnlyDialogAliveAfterYield =
                 weak.get() != nullptr && ::IsWindow(dialogHwnd);
             state->globalOnlyPhysicalHostAliveAfterYield =
-                wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                     state->physicalHostsAtInvoke;
         });
     driver->Bind(
@@ -8692,7 +8692,7 @@ TEST_CASE("HostLifecycle::PendingModalSurvivesOtherRetainedPeerYield",
             state->dialogAliveAfterYield =
                 weakDialog.get() != nullptr && ::IsWindow(dialogHwnd);
             state->physicalHostAliveAfterYield =
-                wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+                wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                     state->physicalHostsAtInvoke;
         });
 
@@ -8709,7 +8709,7 @@ TEST_CASE("HostLifecycle::PendingModalSurvivesOtherRetainedPeerYield",
                 dialog->IsBeingDeleted() &&
                 ::IsWindow(static_cast<HWND>(dialog->GetHWND()));
             observation->physicalHostsAtInvoke =
-                wxWinUITopLevelHost::GetLiveHostLifetimeCount();
+                wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
 
             // Logical shutdown removed the dialog host and invalidated its
             // XAML callbacks, but a wx event already materialized by a
@@ -11369,7 +11369,7 @@ TEST_CASE("HostState::ControlHostContentTransaction", "[HostState]")
     REQUIRE(slot != nullptr);
     const auto oldRoot = slot->GetContent();
     REQUIRE(oldRoot != nullptr);
-    const unsigned hooks0 = wxWinUITopLevelHost::GetLiveLoadedHookCount();
+    const unsigned hooks0 = wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
 
     // Failed swap through the control host: the slot, the carrier AND the
     // control host's model must all keep the OLD root, and the old Loaded
@@ -11386,7 +11386,7 @@ TEST_CASE("HostState::ControlHostContentTransaction", "[HostState]")
         REQUIRE(slot->TryGetCarrierContent(actual));
         CHECK(actual == oldRoot);
     }
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
 
     // ... and the control recovers: a clean rebuild really swaps, with the
     // hook balance still closed (old revoked + new added).
@@ -11394,7 +11394,7 @@ TEST_CASE("HostState::ControlHostContentTransaction", "[HostState]")
     DrainDispatch(3);
     CHECK(slot->GetContent() != oldRoot);
     CHECK(slot->GetContent() != nullptr);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
 
     frame->Destroy();
     DrainDispatch();
@@ -11408,7 +11408,7 @@ TEST_CASE("HostState::ControlHostNestedFreshContentWins",
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "state-ctrlhost-nested");
     wxWindow * const probeWin = new wxWindow(frame, wxID_ANY);
-    const unsigned hooks0 = wxWinUITopLevelHost::GetLiveLoadedHookCount();
+    const unsigned hooks0 = wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
 
     wxWinUIControlHostProbe * const probe =
         wxWinUIControlHostProbe::CreateEmpty(probeWin);
@@ -11453,7 +11453,7 @@ TEST_CASE("HostState::ControlHostNestedFreshContentWins",
           L"inner");
 
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0 + 1);
 
     // The preserved slot/proxy remains a normal reusable transaction.
     REQUIRE(probe->SetContent("after"));
@@ -11465,12 +11465,12 @@ TEST_CASE("HostState::ControlHostNestedFreshContentWins",
     CHECK(winrt::unbox_value<winrt::hstring>(afterButton.Content()) ==
           L"after");
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0 + 1);
 
     delete probe;
     DrainDispatch(3);
     CHECK(host->FindSlot(probeWin) == nullptr);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
 
     frame->Destroy();
     DrainDispatch();
@@ -11482,9 +11482,9 @@ TEST_CASE("HostLifecycle::ControlHostDestroyedDuringFreshContent",
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "state-ctrlhost-destroy");
     wxWindow * const probeWin = new wxWindow(frame, wxID_ANY);
-    const unsigned hooks0 = wxWinUITopLevelHost::GetLiveLoadedHookCount();
+    const unsigned hooks0 = wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
     const unsigned states0 =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
 
     wxWinUIControlHostProbe * const probe =
         wxWinUIControlHostProbe::CreateEmpty(probeWin);
@@ -11514,8 +11514,8 @@ TEST_CASE("HostLifecycle::ControlHostDestroyedDuringFreshContent",
     CHECK(probe->GetContentForTesting() == nullptr);
     CHECK(host->FindSlot(probeWin) == nullptr);
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
 
     delete probe;
     frame->Destroy();
@@ -11535,7 +11535,7 @@ TEST_CASE("HostState::ControlHostClearContent", "[HostState]")
 
     // The bare window is no winui control, so the frame has no island yet;
     // the probe's control host creates it (and sets an initial content).
-    const unsigned hooks0 = wxWinUITopLevelHost::GetLiveLoadedHookCount();
+    const unsigned hooks0 = wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount();
 
     wxWinUIControlHostProbe * const probe =
         wxWinUIControlHostProbe::Create(probeWin);
@@ -11546,7 +11546,7 @@ TEST_CASE("HostState::ControlHostClearContent", "[HostState]")
     REQUIRE(host != nullptr);
 
     // content set: exactly one new live Loaded hook, a slot with content
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0 + 1);
     REQUIRE(host->FindSlot(probeWin) != nullptr);
     CHECK(host->FindSlot(probeWin)->GetContent() != nullptr);
 
@@ -11554,7 +11554,7 @@ TEST_CASE("HostState::ControlHostClearContent", "[HostState]")
     // slot and carrier are truly empty
     probe->ClearContent();
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
     wxWinUISlot * const slot = host->FindSlot(probeWin);
     REQUIRE(slot != nullptr);
     CHECK(slot->GetContent() == nullptr);
@@ -11567,27 +11567,27 @@ TEST_CASE("HostState::ControlHostClearContent", "[HostState]")
     // a FAILED detach must change nothing: content and hook both survive
     probe->SetContent();
     DrainDispatch(3);
-    REQUIRE(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
+    REQUIRE(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0 + 1);
     wxWinUIHostContentTestAccess::FailContentSwap(
         wxWinUIHostContentTestAccess::ContentFault_Detach);
     probe->ClearContent();
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0 + 1);
     CHECK(host->FindSlot(probeWin)->GetContent() != nullptr);
 
     // recovers: a real clear drops the hook, a real set adds one again
     probe->ClearContent();
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
     probe->SetContent();
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0 + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0 + 1);
     CHECK(host->FindSlot(probeWin)->GetContent() != nullptr);
 
     // destroying the probe closes the host: the last hook goes too
     delete probe;
     DrainDispatch(3);
-    CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == hooks0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount() == hooks0);
 
     frame->Destroy();
     DrainDispatch();
@@ -11615,9 +11615,9 @@ TEST_CASE("HostState::PoisonedSlotRebuilt", "[HostState]")
     const auto originalContainer = original->GetContainer();
     REQUIRE(originalContainer != nullptr);
 
-    const unsigned states0 = wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
-    const unsigned adds0 = wxWinUITopLevelHost::GetSlotHandlerAddCount();
-    const unsigned revokes0 = wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+    const unsigned states0 = wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
+    const unsigned adds0 = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
+    const unsigned revokes0 = wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     // Install fails and the immediate carrier read fails: the old slot is
     // poisoned before the restore phase is reachable. RegisterSlotInternal
@@ -11674,9 +11674,9 @@ TEST_CASE("HostState::PoisonedSlotRebuilt", "[HostState]")
 
     // no zombie: exactly one live lifetime for this window (old released,
     // new created), and every handler of the disposed slot was revoked.
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
-    CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0 ==
-          wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0 ==
+          wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0);
 
     frame->Destroy();
     DrainDispatch();
@@ -12046,8 +12046,8 @@ TEST_CASE("HostLifecycle::XamlHostSharesTheIsland", "[HostLifecycle]")
 {
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hosts0 = wxWinUITopLevelHost::GetLiveHostCount();
-    const unsigned states0 = wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+    const unsigned hosts0 = wxWinUIHostObservationTestAccess::GetLiveHostCount();
+    const unsigned states0 = wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
 
     wxFrame * const frame = new wxFrame(nullptr, wxID_ANY, "lifecycle-xaml");
     new wxButton(frame, wxID_ANY, "native");
@@ -12060,7 +12060,7 @@ TEST_CASE("HostLifecycle::XamlHostSharesTheIsland", "[HostLifecycle]")
 
     // ONE island per TLW: the XAML host's content is a slot of the shared
     // host...
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0 + 1);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0 + 1);
     wxWinUITopLevelHost * const host = wxWinUITopLevelHost::FindForTLW(frame);
     REQUIRE(host != nullptr);
     REQUIRE(host->FindSlot(xamlHost) != nullptr);
@@ -12109,8 +12109,8 @@ TEST_CASE("HostLifecycle::XamlHostSharesTheIsland", "[HostLifecycle]")
     frame->Destroy();
     DrainDispatch();
 
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
 }
 
 TEST_CASE("HostLifecycle::RegisterRollbackOnFault", "[HostLifecycle]")
@@ -12132,12 +12132,12 @@ TEST_CASE("HostLifecycle::RegisterRollbackOnFault", "[HostLifecycle]")
     // that the transaction leaves strictly nothing behind.
     for ( unsigned nth = 1; nth <= 11; ++nth )
     {
-        const unsigned slots0 = wxWinUITopLevelHost::GetLiveSlotCount();
+        const unsigned slots0 = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
         const unsigned states0 =
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
-        const unsigned adds0 = wxWinUITopLevelHost::GetSlotHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
+        const unsigned adds0 = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
         const unsigned revokes0 =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
         wxWinUIHostContentTestAccess::FailHandlerAdd(nth);
         wxWinUISlot * const slot = host->RegisterSlot(probe, element);
@@ -12146,11 +12146,11 @@ TEST_CASE("HostLifecycle::RegisterRollbackOnFault", "[HostLifecycle]")
         INFO("failing subscription #" << nth);
         CHECK(slot == nullptr);
         CHECK(host->FindSlot(probe) == nullptr);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots0);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
         // whatever was subscribed before the fault was revoked again
-        CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0 ==
-              wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0);
+        CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0 ==
+              wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0);
     }
 
     // the injection disarmed itself and the rollbacks left the element
@@ -13282,10 +13282,10 @@ TEST_CASE("HostLifecycle::DestroyWithFlushInFlight", "[HostLifecycle]")
 {
     PrimeTopWindowHost();
 
-    const unsigned slots0 = wxWinUITopLevelHost::GetLiveSlotCount();
-    const unsigned states0 = wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
-    const unsigned adds0 = wxWinUITopLevelHost::GetSlotHandlerAddCount();
-    const unsigned revokes0 = wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+    const unsigned slots0 = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
+    const unsigned states0 = wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
+    const unsigned adds0 = wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
+    const unsigned revokes0 = wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     for ( int i = 0; i < 25; ++i )
     {
@@ -13298,10 +13298,10 @@ TEST_CASE("HostLifecycle::DestroyWithFlushInFlight", "[HostLifecycle]")
     }
 
     DrainDispatch();
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == states0);
-    CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0 ==
-          wxWinUITopLevelHost::GetSlotHandlerRevokeCount() - revokes0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() == states0);
+    CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - adds0 ==
+          wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() - revokes0);
 }
 
 TEST_CASE("HostLifecycle::NativeSiblingZOrderAndImpossibleOverlap",
@@ -13388,7 +13388,7 @@ TEST_CASE("HostLifecycle::NativeSiblingZOrderAndImpossibleOverlap",
 TEST_CASE("HostLifecycle::NativeLayoutNotificationDoesNotCreateHost",
           "[HostLifecycle][winui-zorder]")
 {
-    const unsigned hosts0 = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hosts0 = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxFrame * const frameNoHost =
         new wxFrame(nullptr, wxID_ANY, "native-layout-no-host",
                     wxPoint(-30000, -30000), wxSize(240, 140),
@@ -13398,7 +13398,7 @@ TEST_CASE("HostLifecycle::NativeLayoutNotificationDoesNotCreateHost",
 
     wxWinUITLWHostNotifyNativeLayout(nativeNoHost, true);
     nativeNoHost->SetScrollbar(wxHORIZONTAL, 0, 10, 100);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0);
 
     frameNoHost->Destroy();
     DrainDispatch();
@@ -13553,7 +13553,7 @@ TEST_CASE("HostLifecycle::ZOrderFlushPinsHostAcrossDestroyYield",
 {
     namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-    const unsigned hosts0 = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hosts0 = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxFrame * const frame =
         new wxFrame(nullptr, wxID_ANY, "z-order-destroy-offscreen",
                     wxPoint(-30000, -30000), wxSize(240, 140),
@@ -13585,7 +13585,7 @@ TEST_CASE("HostLifecycle::ZOrderFlushPinsHostAcrossDestroyYield",
     if ( !hookRan )
         frame->Destroy();
     DrainDispatch();
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts0);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts0);
 }
 
 TEST_CASE("HostLifecycle::TopLevelSlotDiagnosesNativeChildOnce",

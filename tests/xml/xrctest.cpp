@@ -202,6 +202,7 @@
     #include "wx/winui/private/textpeer.h"
     #include "text-peer-test-access.h"
     #include "wx/winui/private/tlwhost.h"
+    #include "host-observation-test-access.h"
     #include "host-geometry-test-access.h"
     #include "wx/winui/private/tlwhostmsw.h"
 #endif
@@ -1448,16 +1449,16 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
     {
         return LifetimeSnapshot
         {
-            wxWinUITopLevelHost::GetLiveHostCount(),
-            wxWinUITopLevelHost::GetLiveSlotCount(),
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount(),
-            wxWinUITopLevelHost::GetLiveHostLifetimeCount(),
-            wxWinUITopLevelHost::GetLiveSubclassContextCount(),
-            wxWinUITopLevelHost::GetLiveLoadedHookCount(),
-            wxWinUITopLevelHost::GetSlotHandlerAddCount(),
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount(),
-            wxWinUITopLevelHost::GetRootHandlerAddCount(),
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
+            wxWinUIHostObservationTestAccess::GetLiveHostCount(),
+            wxWinUIHostObservationTestAccess::GetLiveSlotCount(),
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount(),
+            wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount(),
+            wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount(),
+            wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount(),
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount(),
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount(),
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount(),
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount(),
             wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount(),
             wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
             wxWinUINotebookTestAccess::GetLiveCallbackStateCount(),
@@ -1556,7 +1557,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
                 wxWinUITopLevelHost::FindSlotOwner(infoBar);
             REQUIRE( expectedHost );
             CHECK( wxWinUITopLevelHost::FindForTLW(&frame) == expectedHost );
-            CHECK( wxWinUITopLevelHost::GetLiveHostCount() ==
+            CHECK( wxWinUIHostObservationTestAccess::GetLiveHostCount() ==
                    baseline.hosts + 1 );
 
             CHECK( infoBar->GetId() == XRCID("supportedInfoBar") );
@@ -1781,7 +1782,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
                      expectedHost );
             REQUIRE( wxWinUITopLevelHost::FindSlotOwner(treeCtrl) ==
                      expectedHost );
-            CHECK( wxWinUITopLevelHost::GetLiveSlotCount() >=
+            CHECK( wxWinUIHostObservationTestAccess::GetLiveSlotCount() >=
                    baseline.slots + 3 );
 
             // Composite books may introduce native controller children, but
@@ -2160,16 +2161,16 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
     {
         return LifetimeSnapshot
         {
-            wxWinUITopLevelHost::GetLiveHostCount(),
-            wxWinUITopLevelHost::GetLiveSlotCount(),
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount(),
-            wxWinUITopLevelHost::GetLiveHostLifetimeCount(),
-            wxWinUITopLevelHost::GetLiveSubclassContextCount(),
-            wxWinUITopLevelHost::GetLiveLoadedHookCount(),
-            wxWinUITopLevelHost::GetSlotHandlerAddCount(),
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount(),
-            wxWinUITopLevelHost::GetRootHandlerAddCount(),
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
+            wxWinUIHostObservationTestAccess::GetLiveHostCount(),
+            wxWinUIHostObservationTestAccess::GetLiveSlotCount(),
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount(),
+            wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount(),
+            wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount(),
+            wxWinUIHostObservationTestAccess::GetLiveLoadedHookCount(),
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount(),
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount(),
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount(),
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount(),
             wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount(),
             wxWinUITextPeerTestAccess::GetLiveCallbackStateCount(),
             wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
@@ -2417,7 +2418,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
         wxWinUITopLevelHost* const host =
             wxWinUITopLevelHost::FindForTLW(frame);
         REQUIRE( host );
-        CHECK( wxWinUITopLevelHost::GetLiveHostCount() ==
+        CHECK( wxWinUIHostObservationTestAccess::GetLiveHostCount() ==
                baseline.hosts + 1 );
 
         const std::vector<wxWindow*> slottedWindows
@@ -2435,7 +2436,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
         // wxMenuBar is not itself a wxWindow, so the WinUI port owns one
         // private wxControl bridge under the frame. It is deliberately a
         // slot of this same host and is the only non-resource slot here.
-        CHECK( wxWinUITopLevelHost::GetLiveSlotCount() ==
+        CHECK( wxWinUIHostObservationTestAccess::GetLiveSlotCount() ==
                baseline.slots + slottedWindows.size() + 1 );
 
         // Generic foundation containers are represented by the same island

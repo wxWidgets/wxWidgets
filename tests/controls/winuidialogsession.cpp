@@ -24,6 +24,7 @@
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "host-uia-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -564,11 +565,11 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     const std::size_t detachedOwnerBaseline =
         wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(nullptr).transactionCount;
     const unsigned hostBaseline =
-        wxWinUITopLevelHost::GetLiveHostCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostCount();
     const unsigned slotBaseline =
-        wxWinUITopLevelHost::GetLiveSlotCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotCount();
     const unsigned slotLifetimeBaseline =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
     const unsigned automationObserverBaseline =
         wxWinUIHostUIATestAccess::
             GetLiveAutomationNameStyleObserverCount();
@@ -577,9 +578,9 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     const unsigned shellProviderBaseline =
         wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
     const unsigned handlerAddsBaseline =
-        wxWinUITopLevelHost::GetSlotHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
     const unsigned handlerRevokesBaseline =
-        wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
 
     wxFrame * const first =
         new wxFrame(nullptr, wxID_ANY, "transient harness first",
@@ -646,8 +647,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
                   firstSlotHwnd, secondSlotHwnd, modelessSlotHwnd }) == 6);
     CHECK(modeless->IsShown());
     CHECK(modeless->GetParent() == first);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() >= hostBaseline + 3);
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slotBaseline + 3);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() >= hostBaseline + 3);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slotBaseline + 3);
 
     // Retain one real Raw-only shell provider across owner destruction. Its
     // state must become unavailable immediately and the COM fragment itself
@@ -776,7 +777,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
             return wxWinUITopLevelHost::FindSlotOwner(firstSlot) ==
                    secondHost;
         }));
-    CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slotBaseline + 3);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slotBaseline + 3);
 
     // Model a nested presentation from the real cancellation callback: the
     // first TLW releases its modal lease before arbitrary user code opens the
@@ -927,11 +928,11 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
                        { firstHwnd, secondHwnd, modelessHwnd,
                          firstSlotHwnd, secondSlotHwnd,
                          modelessSlotHwnd }) == 0 &&
-                   wxWinUITopLevelHost::GetLiveHostCount() ==
+                   wxWinUIHostObservationTestAccess::GetLiveHostCount() ==
                        hostBaseline &&
-                   wxWinUITopLevelHost::GetLiveSlotCount() ==
+                   wxWinUIHostObservationTestAccess::GetLiveSlotCount() ==
                        slotBaseline &&
-                   wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+                   wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                        slotLifetimeBaseline &&
                    RegistryLifetimeEquals(
                        wxWinUITransientTestAccess::GetRegistrySnapshot(),
@@ -961,9 +962,9 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     CHECK(wxWinUIHostContentTestAccess::
               GetLiveContentLoadedObserverCount() ==
           loadedObserverBaseline);
-    CHECK(wxWinUITopLevelHost::GetSlotHandlerAddCount() -
+    CHECK(wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() -
               handlerAddsBaseline ==
-          wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+          wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
               handlerRevokesBaseline);
     CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
           shellProviderBaseline);

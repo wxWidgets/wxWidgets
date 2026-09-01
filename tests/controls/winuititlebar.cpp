@@ -26,6 +26,7 @@
 #include "wx/winui/private/titlebar.h"
 #include "titlebar-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-content-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
@@ -250,27 +251,27 @@ struct HostInitializationCounters
 HostInitializationCounters CaptureHostInitializationCounters()
 {
     HostInitializationCounters counters;
-    counters.hosts = wxWinUITopLevelHost::GetLiveHostCount();
+    counters.hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     counters.hostLifetimes =
-        wxWinUITopLevelHost::GetLiveHostLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
     counters.subclassContexts =
-        wxWinUITopLevelHost::GetLiveSubclassContextCount();
+        wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
     counters.titleBarPolicies =
         wxWinUITitleBarTestAccess::GetLivePolicyCount();
     counters.rootHandlerAdds =
-        wxWinUITopLevelHost::GetRootHandlerAddCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
     counters.rootHandlerRevokes =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
     return counters;
 }
 
 bool HostInitializationStateRetired(
     const HostInitializationCounters& before)
 {
-    return wxWinUITopLevelHost::GetLiveHostCount() == before.hosts &&
-           wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+    return wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts &&
+           wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                before.hostLifetimes &&
-           wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+           wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                before.subclassContexts &&
            wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                before.titleBarPolicies;
@@ -565,7 +566,7 @@ TEST_CASE("WinUITitleBar::SingleResetBoundaryCannotRepublishAfterDestroy",
     DrainTitleBarEvents();
     const unsigned policiesBefore =
         wxWinUITitleBarTestAccess::GetLivePolicyCount();
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxFrame * const frame = CreateTitleBarFrame("titlebar destroy reset");
     TitleBarFrameGuard cleanup(frame);
 
@@ -620,7 +621,7 @@ TEST_CASE("WinUITitleBar::SingleResetBoundaryCannotRepublishAfterDestroy",
             return !lifetime &&
                    wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                        policiesBefore &&
-                   wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
+                   wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore;
         }));
 }
 
@@ -630,7 +631,7 @@ TEST_CASE("WinUITitleBar::DestroyFromExceptionLogCannotRepublish",
     DrainTitleBarEvents();
     const unsigned policiesBefore =
         wxWinUITitleBarTestAccess::GetLivePolicyCount();
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxFrame * const frame = CreateTitleBarFrame("titlebar destroy log");
     TitleBarFrameGuard cleanup(frame);
 
@@ -665,7 +666,7 @@ TEST_CASE("WinUITitleBar::DestroyFromExceptionLogCannotRepublish",
             return !lifetime &&
                    wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                        policiesBefore &&
-                   wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
+                   wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore;
         }));
 }
 
@@ -693,7 +694,7 @@ TEST_CASE("WinUITitleBar::DestroyAndYieldDuringHostInitializationRollsBack",
     // whether the nested yield completed the TLW delete or left it scheduled.
     if ( wxWindow * const live = lifetime.get() )
         CHECK(wxWinUITopLevelHost::FindForTLW(live) == nullptr);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts);
     REQUIRE(DrainTitleBarEventsUntil(
         [lifetime, before]()
         {
@@ -701,10 +702,10 @@ TEST_CASE("WinUITitleBar::DestroyAndYieldDuringHostInitializationRollsBack",
         }));
 
     const unsigned adds =
-        wxWinUITopLevelHost::GetRootHandlerAddCount() -
+        wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() -
         before.rootHandlerAdds;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
         before.rootHandlerRevokes;
     CHECK(adds != 0);
     CHECK(adds == revokes);
@@ -733,7 +734,7 @@ TEST_CASE("WinUITitleBar::DestroyAndYieldFromHostInitLogRollsBack",
 
     if ( wxWindow * const live = lifetime.get() )
         CHECK(wxWinUITopLevelHost::FindForTLW(live) == nullptr);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts);
     REQUIRE(DrainTitleBarEventsUntil(
         [lifetime, before]()
         {
@@ -741,10 +742,10 @@ TEST_CASE("WinUITitleBar::DestroyAndYieldFromHostInitLogRollsBack",
         }));
 
     const unsigned adds =
-        wxWinUITopLevelHost::GetRootHandlerAddCount() -
+        wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() -
         before.rootHandlerAdds;
     const unsigned revokes =
-        wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+        wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
         before.rootHandlerRevokes;
     CHECK(adds != 0);
     CHECK(adds == revokes);
@@ -984,7 +985,7 @@ TEST_CASE("WinUITitleBar::DestroyDuringFullScreenMenuHideRetiresState",
     DrainTitleBarEvents();
     const unsigned policiesBefore =
         wxWinUITitleBarTestAccess::GetLivePolicyCount();
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     wxFrame * const frame = CreateTitleBarFrame(
         "destroy during fullscreen menu hide");
     TitleBarFrameGuard cleanup(frame);
@@ -1020,7 +1021,7 @@ TEST_CASE("WinUITitleBar::DestroyDuringFullScreenMenuHideRetiresState",
             return !lifetime &&
                    wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                        policiesBefore &&
-                   wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
+                   wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore;
         }));
 }
 
@@ -1032,7 +1033,7 @@ TEST_CASE("WinUITitleBar::HundredHostCyclesRetireExactPolicies",
     DrainTitleBarEvents();
     const unsigned policiesBefore =
         wxWinUITitleBarTestAccess::GetLivePolicyCount();
-    const unsigned hostsBefore = wxWinUITopLevelHost::GetLiveHostCount();
+    const unsigned hostsBefore = wxWinUIHostObservationTestAccess::GetLiveHostCount();
 
     for ( int cycle = 0; cycle < 100; ++cycle )
     {
@@ -1065,7 +1066,7 @@ TEST_CASE("WinUITitleBar::HundredHostCyclesRetireExactPolicies",
                 return !lifetime &&
                        wxWinUITitleBarTestAccess::GetLivePolicyCount() ==
                            policiesBefore &&
-                       wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore;
+                       wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore;
             }));
         if ( destroyExtended )
         {
@@ -1075,7 +1076,7 @@ TEST_CASE("WinUITitleBar::HundredHostCyclesRetireExactPolicies",
     }
 
     CHECK(wxWinUITitleBarTestAccess::GetLivePolicyCount() == policiesBefore);
-    CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hostsBefore);
+    CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hostsBefore);
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3

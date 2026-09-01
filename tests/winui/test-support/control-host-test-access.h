@@ -45,7 +45,7 @@ public:
 // path.  This exported probe lets the lifecycle unit tests exercise that
 // path directly: create a host on a window, set/clear its content and close
 // it, observing the results through the shared host's introspection
-// (FindSlot / GetContent / GetLiveLoadedHookCount).
+// (FindSlot / GetContent / wxWinUIHostObservationTestAccess lifecycle count).
 // ----------------------------------------------------------------------------
 
 class wxWinUIControlHost;

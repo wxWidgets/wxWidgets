@@ -26,6 +26,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
 
@@ -115,74 +116,74 @@ struct HostSnapshot
     static HostSnapshot Capture()
     {
         HostSnapshot snapshot;
-        snapshot.hosts = wxWinUITopLevelHost::GetLiveHostCount();
+        snapshot.hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
         snapshot.hostLifetimes =
-            wxWinUITopLevelHost::GetLiveHostLifetimeCount();
-        snapshot.slots = wxWinUITopLevelHost::GetLiveSlotCount();
+            wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
+        snapshot.slots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
         snapshot.slotLifetimes =
-            wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+            wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
         snapshot.subclasses =
-            wxWinUITopLevelHost::GetLiveSubclassContextCount();
+            wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount();
         snapshot.pendingFocusMigrations =
             wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.slotHandlerAdds =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount();
         snapshot.rootHandlerAdds =
-            wxWinUITopLevelHost::GetRootHandlerAddCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount();
         snapshot.rootHandlerRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount();
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount();
         return snapshot;
     }
 
     bool IsRestored() const
     {
-        return wxWinUITopLevelHost::GetLiveHostCount() == hosts &&
-               wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        return wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts &&
+               wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                    hostLifetimes &&
-               wxWinUITopLevelHost::GetLiveSlotCount() == slots &&
-               wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots &&
+               wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                    slotLifetimes &&
-               wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+               wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
                    subclasses &&
                wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
-               wxWinUITopLevelHost::GetSlotHandlerAddCount() -
+               wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
-                   wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+                   wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                        slotHandlerRevokes &&
-               wxWinUITopLevelHost::GetRootHandlerAddCount() -
+               wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() -
                        rootHandlerAdds ==
-                   wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+                   wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                        rootHandlerRevokes;
     }
 
     void CheckRestored() const
     {
-        CHECK(wxWinUITopLevelHost::GetLiveHostCount() == hosts);
-        CHECK(wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostCount() == hosts);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
               hostLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots);
-        CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotCount() == slots);
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
               slotLifetimes);
-        CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
+        CHECK(wxWinUIHostObservationTestAccess::GetLiveSubclassContextCount() ==
               subclasses);
         CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned slotAdds =
-            wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotHandlerAdds;
+            wxWinUIHostObservationTestAccess::GetSlotHandlerAddCount() - slotHandlerAdds;
         const unsigned slotRevokes =
-            wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
+            wxWinUIHostObservationTestAccess::GetSlotHandlerRevokeCount() -
                 slotHandlerRevokes;
         CHECK(slotAdds > 0);
         CHECK(slotAdds == slotRevokes);
 
         const unsigned rootAdds =
-            wxWinUITopLevelHost::GetRootHandlerAddCount() - rootHandlerAdds;
+            wxWinUIHostObservationTestAccess::GetRootHandlerAddCount() - rootHandlerAdds;
         const unsigned rootRevokes =
-            wxWinUITopLevelHost::GetRootHandlerRevokeCount() -
+            wxWinUIHostObservationTestAccess::GetRootHandlerRevokeCount() -
                 rootHandlerRevokes;
         CHECK(rootAdds > 0);
         CHECK(rootAdds == rootRevokes);

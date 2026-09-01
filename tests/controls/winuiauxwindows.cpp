@@ -238,6 +238,7 @@ TEST_CASE("AuxiliaryWindows::TransientDestroyIsDeferred",
 #include "wx/winui/private/dialogsession.h"
 #include "transient-test-access.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-observation-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "popup-test-access.h"
 #include "wx/winui/private/transient.h"
@@ -328,21 +329,21 @@ bool SameTransientRegistry(const wxWinUITransientTestAccess::RegistrySnapshot& l
 
 struct AuxiliaryHostSnapshot
 {
-    unsigned hosts = wxWinUITopLevelHost::GetLiveHostCount();
+    unsigned hosts = wxWinUIHostObservationTestAccess::GetLiveHostCount();
     unsigned hostLifetimes =
-        wxWinUITopLevelHost::GetLiveHostLifetimeCount();
-    unsigned slots = wxWinUITopLevelHost::GetLiveSlotCount();
+        wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount();
+    unsigned slots = wxWinUIHostObservationTestAccess::GetLiveSlotCount();
     unsigned slotLifetimes =
-        wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
+        wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount();
 };
 
 bool SameAuxiliaryHostSnapshot(const AuxiliaryHostSnapshot& before)
 {
-    return wxWinUITopLevelHost::GetLiveHostCount() == before.hosts &&
-           wxWinUITopLevelHost::GetLiveHostLifetimeCount() ==
+    return wxWinUIHostObservationTestAccess::GetLiveHostCount() == before.hosts &&
+           wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount() ==
                before.hostLifetimes &&
-           wxWinUITopLevelHost::GetLiveSlotCount() == before.slots &&
-           wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
+           wxWinUIHostObservationTestAccess::GetLiveSlotCount() == before.slots &&
+           wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount() ==
                before.slotLifetimes;
 }
 
@@ -1463,15 +1464,15 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
              << " baseline=" << registryBefore.transientCount
              << ", pending retire=" << registry.pendingOwnerRetireCount
              << " baseline=" << registryBefore.pendingOwnerRetireCount
-             << ", hosts=" << wxWinUITopLevelHost::GetLiveHostCount()
+             << ", hosts=" << wxWinUIHostObservationTestAccess::GetLiveHostCount()
              << " baseline=" << hostsBefore.hosts
              << ", host lifetimes="
-             << wxWinUITopLevelHost::GetLiveHostLifetimeCount()
+             << wxWinUIHostObservationTestAccess::GetLiveHostLifetimeCount()
              << " baseline=" << hostsBefore.hostLifetimes
-             << ", slots=" << wxWinUITopLevelHost::GetLiveSlotCount()
+             << ", slots=" << wxWinUIHostObservationTestAccess::GetLiveSlotCount()
              << " baseline=" << hostsBefore.slots
              << ", slot lifetimes="
-             << wxWinUITopLevelHost::GetLiveSlotLifetimeCount()
+             << wxWinUIHostObservationTestAccess::GetLiveSlotLifetimeCount()
              << " baseline=" << hostsBefore.slotLifetimes);
     }
     REQUIRE(auxiliaryStateDrained);
