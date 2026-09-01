@@ -224,6 +224,24 @@ If installation reaches a different package/dependency error, retain the evidenc
 - Final Qt `/warnaserror` build and the preferences/modal/Toolbook/PropertySheet group pass **1067 assertions / 19 registered cases**. The existing Qt/Windows `Modal::FileDialog` warning/early return remains one unqualified case, not file-dialog coverage. Logs: `audit101-qt-modal-final-group.xml` and `audit101-qt-modal-final-group-cdb.log` in the Qt build tree. The targeted debugger runs armed all five global-input breakpoints before execution; none fired, and the final XML is complete. These are private-desktop, `WX_UI_TESTS=0` results, not physical input qualification.
 - Cross-port verification: MSW Debug `/warnaserror` build and full preferences pass **311 assertions / 1 case** (`audit101-qt-modal-msw-build.log`, `audit101-qt-modal-msw-preferences.log` in the MSW build tree). A separate local broad Qt diagnostic had reported `Grid::CellEditResize` at line 745; it is not this hang, is not fixed by this modal change, and is not converted into a pass. New Windows Qt 5.15 and 6.10 CI executions remain required before closing this lot.
 
+### Bounded fuzz regression replay (2026-09-01)
+
+- The existing Unix AddressSanitizer matrix now compiles the versioned `zip`,
+  `tar` and `fileconf` fuzz harnesses with `tests/fuzz/runner.cpp` and replays
+  all **5** checked-in corpus files. The runner invokes
+  `LLVMFuzzerTestOneInput()` exactly once per file: this is deterministic
+  regression replay, not an unbounded or random fuzzing campaign on pull
+  requests.
+- An empty target corpus fails explicitly. Every input has a 30-second hard
+  timeout with a five-second kill grace, and the complete step is limited to
+  five minutes. Compilation failure, ASan failure, harness failure or timeout
+  therefore fails the job.
+- The workflow parses as YAML, its extracted Bash body passes `bash -n`, the
+  three corpus counts are **3 + 1 + 1**, and an independent read-only review
+  confirms the GCC/ASan link and runner contract on the existing Ubuntu job.
+  Remote execution remains pending until the commit is published; no remote
+  PASS is inferred from these structural checks.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

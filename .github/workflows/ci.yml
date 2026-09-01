@@ -335,6 +335,34 @@ jobs:
           fi
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
+      - name: Replay fuzz seed corpora under ASAN
+        if: matrix.use_asan
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          fuzz_out="$RUNNER_TEMP/wx-fuzz-smoke"
+          mkdir -p "$fuzz_out"
+
+          for target in zip tar fileconf; do
+            ${CXX-g++} -g -fsanitize=address -fno-omit-frame-pointer \
+              "tests/fuzz/$target.cpp" tests/fuzz/runner.cpp \
+              $(./wx-config --cxxflags --libs base) \
+              -o "$fuzz_out/$target"
+
+            seeds=(tests/fuzz/corpus/"$target"/*)
+            if (( ${#seeds[@]} == 0 )); then
+              echo "::error ::No seed corpus found for $target."
+              exit 1
+            fi
+
+            for seed in "${seeds[@]}"; do
+              echo "Replaying $seed with $target."
+              timeout --kill-after=5s 30s "$fuzz_out/$target" "$seed"
+            done
+          done
+
       - name: Building tests
         working-directory: tests
         run: |
