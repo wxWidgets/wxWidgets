@@ -637,6 +637,33 @@ Do not delete a lifetime/retirement service used by production merely because it
   sublot locally; InputState, the TLW lifecycle ledger and deeper DropBroker
   test storage still keep plan 106 open.
 
+## InputState observation boundary (2026-09-01)
+
+- The test-only `CountActions()`, `IsStormGuardArmed()` and
+  `GetStormInterventionCount()` observers leave the source-private
+  `inputstate.h` contract. They now live behind the non-installed
+  `input-state-test-access.h`, and `inputstate.cpp` opts in only when
+  `WXWINUI_TEST_SUPPORT` is enabled.
+- Production behaviour is unchanged: `HasAction()`, `ArmStormGuard()`,
+  `DisarmStormGuard()`, the transition data, the storm budget and every state
+  decision remain in shipping code. All 25 test observations use the private
+  adapter without changing an assertion or exposing mutable state.
+- Before and after the extraction, the exact `[winui-input-state]` group passes
+  **734 assertions / 7 cases** in each linkage. Shared and static Release also
+  build `test_gui` and `minimal` with warnings as errors, followed on private
+  desktops with `WX_UI_TESTS=0` by runtime smoke and Supported V0 **2/2** per
+  linkage.
+- Reusing the same two build trees, focused `wxBUILD_TESTS=OFF` builds of
+  `wxcore` and `minimal` pass with warnings as errors. `dumpbin` reports zero
+  match for the removed observer methods or the new test-access class in the
+  shared DLL and static archive. The source-private header contains none of
+  the former declarations.
+- Both trees are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat the exact
+  **734/7** group plus both runtime gates **2/2**. No new build directory,
+  physical input or global interaction was used. This closes the InputState
+  sublot locally; the TLW lifecycle ledger and deeper DropBroker test storage
+  still keep plan 106 open.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

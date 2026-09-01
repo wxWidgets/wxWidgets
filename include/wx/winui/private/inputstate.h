@@ -20,6 +20,8 @@
 #include <cstdint>
 #include <memory>
 
+class wxWinUIInputStateTestAccess;
+
 // These types deliberately don't expose any WinRT or HWND type. The adapter
 // in tlwhost.cpp owns conversion to and from platform events; this layer owns
 // only the ordering and lifetime-independent parts of the input contract.
@@ -283,7 +285,6 @@ struct WXDLLIMPEXP_CORE wxWinUIInputTransition
         wxWinUIInputStormDecision::Deliver;
 
     bool HasAction(wxWinUIInputActionKind kind) const;
-    std::size_t CountActions(wxWinUIInputActionKind kind) const;
 };
 
 enum class wxWinUIInputUpdateKind
@@ -414,10 +415,10 @@ public:
                        unsigned maxPeriod = 4,
                        std::uint64_t maxGap = 8);
     void DisarmStormGuard();
-    bool IsStormGuardArmed() const;
-    unsigned GetStormInterventionCount() const;
 
 private:
+    friend class wxWinUIInputStateTestAccess;
+
     struct HoverState;
     struct PressState;
     struct PressTable;

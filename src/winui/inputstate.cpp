@@ -11,6 +11,10 @@
 
 #include "wx/winui/private/inputstate.h"
 
+#if defined(WXWINUI_TEST_SUPPORT)
+    #include "input-state-test-access.h"
+#endif
+
 #if wxUSE_WINUI3
 
 #include <algorithm>
@@ -212,8 +216,6 @@ public:
         m_historySize = 0;
     }
 
-    bool IsArmed() const { return m_armed; }
-    unsigned GetInterventionCount() const { return m_interventions; }
     void ResetHistory() { m_historySize = 0; }
 
     Result Observe(const wxWinUIPointerSample& sample,
@@ -318,6 +320,8 @@ public:
     }
 
 private:
+    friend class wxWinUIInputStateTestAccess;
+
     bool m_armed = false;
     unsigned m_maxInterventions = 0;
     unsigned m_repeatedCycles = 3;
@@ -337,16 +341,21 @@ bool wxWinUIInputTransition::HasAction(wxWinUIInputActionKind kind) const
         });
 }
 
-std::size_t
-wxWinUIInputTransition::CountActions(wxWinUIInputActionKind kind) const
+#if defined(WXWINUI_TEST_SUPPORT)
+
+std::size_t wxWinUIInputStateTestAccess::CountActions(
+    const wxWinUIInputTransition& transition,
+    wxWinUIInputActionKind kind)
 {
     return static_cast<std::size_t>(std::count_if(
-        actions.begin(), actions.end(),
+        transition.actions.begin(), transition.actions.end(),
         [kind](const wxWinUIInputAction& action)
         {
             return action.action == kind;
         }));
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 wxWinUIInputMapping
 wxWinUIMapPointerUpdate(wxWinUIInputUpdateKind update)
@@ -446,15 +455,21 @@ void wxWinUIInputState::DisarmStormGuard()
     m_storm->Disarm();
 }
 
-bool wxWinUIInputState::IsStormGuardArmed() const
+#if defined(WXWINUI_TEST_SUPPORT)
+
+bool wxWinUIInputStateTestAccess::IsStormGuardArmed(
+    const wxWinUIInputState& state)
 {
-    return m_storm->IsArmed();
+    return state.m_storm->m_armed;
 }
 
-unsigned wxWinUIInputState::GetStormInterventionCount() const
+unsigned wxWinUIInputStateTestAccess::GetStormInterventionCount(
+    const wxWinUIInputState& state)
 {
-    return m_storm->GetInterventionCount();
+    return state.m_storm->m_interventions;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUIInputState::LeaveHover(
     wxWinUIInputTransition& transition,

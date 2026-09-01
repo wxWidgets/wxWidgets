@@ -12,6 +12,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "wx/winui/private/inputstate.h"
+#include "input-state-test-access.h"
 
 #include <limits>
 #include <vector>
@@ -93,6 +94,22 @@ const wxWinUIInputAction *FindDispatch(
     const wxWinUIInputTransition& transition)
 {
     return FindAction(transition, wxWinUIInputActionKind::Dispatch);
+}
+
+std::size_t CountActions(const wxWinUIInputTransition& transition,
+                         wxWinUIInputActionKind kind)
+{
+    return wxWinUIInputStateTestAccess::CountActions(transition, kind);
+}
+
+bool IsStormGuardArmed(const wxWinUIInputState& state)
+{
+    return wxWinUIInputStateTestAccess::IsStormGuardArmed(state);
+}
+
+unsigned GetStormInterventionCount(const wxWinUIInputState& state)
+{
+    return wxWinUIInputStateTestAccess::GetStormInterventionCount(state);
 }
 
 wxWinUIInputTransition RouteCommitted(
@@ -238,8 +255,10 @@ TEST_CASE("wxWinUI input state surface and hover authority",
     CHECK(transition.disposition == wxWinUIInputDisposition::Xaml);
 
     transition = RouteCommitted(state, Sample(wxWinUIInputKind::Move), Native(a));
-    CHECK(transition.CountActions(wxWinUIInputActionKind::HoverEnter) == 1);
-    CHECK(transition.CountActions(wxWinUIInputActionKind::Dispatch) == 1);
+    CHECK(CountActions(
+              transition, wxWinUIInputActionKind::HoverEnter) == 1);
+    CHECK(CountActions(
+              transition, wxWinUIInputActionKind::Dispatch) == 1);
     CHECK(FindAction(transition,
                      wxWinUIInputActionKind::HoverEnter)->target == a);
     CHECK(transition.cancelSource);
@@ -249,7 +268,8 @@ TEST_CASE("wxWinUI input state surface and hover authority",
         transition.HasAction(wxWinUIInputActionKind::HoverEnter));
     CHECK_FALSE(
         transition.HasAction(wxWinUIInputActionKind::HoverLeave));
-    CHECK(transition.CountActions(wxWinUIInputActionKind::Dispatch) == 1);
+    CHECK(CountActions(
+              transition, wxWinUIInputActionKind::Dispatch) == 1);
 
     transition = RouteCommitted(state,
         Sample(wxWinUIInputKind::Move),
@@ -714,10 +734,10 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         wxWinUIInputTransition transition =
             RouteCommitted(state, cancel,
                         Surface(wxWinUIInputSurface::Indeterminate));
-        CHECK(transition.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
-        CHECK(transition.CountActions(
-                  wxWinUIInputActionKind::ReleaseCapture) == 1);
+        CHECK(CountActions(
+                  transition, wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  transition, wxWinUIInputActionKind::ReleaseCapture) == 1);
         REQUIRE(transition.actions.size() == 2);
         CHECK(transition.actions[0].action ==
               wxWinUIInputActionKind::ReleaseCapture);
@@ -741,8 +761,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         wxWinUIInputTransition transition =
             RouteCommitted(state, Sample(wxWinUIInputKind::CaptureLost),
                         Surface(wxWinUIInputSurface::Outside));
-        CHECK(transition.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  transition, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK_FALSE(transition.HasAction(
             wxWinUIInputActionKind::ReleaseCapture));
 
@@ -872,8 +892,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         const wxWinUIInputTransition transfer =
             state.NativeCaptureChanged(
                 bShell, Sample(wxWinUIInputKind::Move));
-        REQUIRE(transfer.CountActions(
-                    wxWinUIInputActionKind::CancelPress) == 1);
+        REQUIRE(CountActions(
+                    transfer, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK(FindAction(
                   transfer,
                   wxWinUIInputActionKind::CancelPress)->target == aChild);
@@ -901,10 +921,10 @@ TEST_CASE("wxWinUI input state capture and cancellation",
 
         const wxWinUIInputTargetKey recycledShell =
             OwnedTarget(0xA0, 8, 0xA0, 8);
-        CHECK(state.NativeCaptureChanged(
-                  recycledShell,
-                  Sample(wxWinUIInputKind::Move)).CountActions(
-                    wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  state.NativeCaptureChanged(
+                      recycledShell, Sample(wxWinUIInputKind::Move)),
+                  wxWinUIInputActionKind::CancelPress) == 1);
 
         wxWinUIInputTargetKey partial =
             OwnedTarget(0xB1, 1, 0xB0, 2);
@@ -1120,8 +1140,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         leave.timestamp = 120;
         const wxWinUIInputTransition canceled =
             state.CancelActiveGesture(leftGesture, leave);
-        CHECK(canceled.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  canceled, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK_FALSE(state.HasActiveGesture(leftGesture));
         CHECK(state.HasActiveGesture(rightGesture));
 
@@ -1182,8 +1202,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         const wxWinUIInputTransition finished =
             state.FinishSynchronousDown(
                 leftGesture, left, 101, false);
-        CHECK(finished.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  finished, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK_FALSE(state.HasActiveGesture(leftGesture));
         CHECK(state.HasActiveGesture(rightGesture));
         const wxWinUIInputAction *cancel =
@@ -1227,8 +1247,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         const wxWinUIInputTransition interruption =
             state.Route(
                 lost, Surface(wxWinUIInputSurface::Indeterminate));
-        CHECK(interruption.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  interruption, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK_FALSE(state.CommitBeforeDispatch(*rightDown));
     }
 
@@ -1298,8 +1318,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         const wxWinUIInputTransition canceled =
             RouteCommitted(state, pen,
                 Surface(wxWinUIInputSurface::Indeterminate));
-        REQUIRE(canceled.CountActions(
-                    wxWinUIInputActionKind::CancelPress) == 1);
+        REQUIRE(CountActions(
+                    canceled, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK(FindAction(
                   canceled,
                   wxWinUIInputActionKind::CancelPress)->target == b);
@@ -1332,8 +1352,8 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         const wxWinUIInputTransition canceled =
             state.Route(
                 pen, Surface(wxWinUIInputSurface::Indeterminate));
-        CHECK(canceled.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  canceled, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK_FALSE(canceled.HasAction(
             wxWinUIInputActionKind::ReleaseCapture));
 
@@ -1368,10 +1388,10 @@ TEST_CASE("wxWinUI input state capture and cancellation",
         const wxWinUIInputTransition canceled =
             state.Route(
                 pen, Surface(wxWinUIInputSurface::Indeterminate));
-        CHECK(canceled.CountActions(
-                  wxWinUIInputActionKind::ReleaseCapture) == 1);
-        CHECK(canceled.CountActions(
-                  wxWinUIInputActionKind::CancelPress) == 1);
+        CHECK(CountActions(
+                  canceled, wxWinUIInputActionKind::ReleaseCapture) == 1);
+        CHECK(CountActions(
+                  canceled, wxWinUIInputActionKind::CancelPress) == 1);
         CHECK_FALSE(state.CommitBeforeDispatch(*mouseDown));
     }
 
@@ -1635,12 +1655,12 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
         {
             const wxWinUIInputTransition transition =
                 RouteCommitted(state, Sample(wxWinUIInputKind::Move), native);
-            CHECK(transition.CountActions(
-                      wxWinUIInputActionKind::Dispatch) == 1);
+            CHECK(CountActions(
+                      transition, wxWinUIInputActionKind::Dispatch) == 1);
             CHECK_FALSE(transition.HasAction(
                 wxWinUIInputActionKind::BreakStorm));
         }
-        CHECK(state.GetStormInterventionCount() == 0);
+        CHECK(GetStormInterventionCount(state) == 0);
     }
 
     SECTION("identical redundant moves are bounded")
@@ -1669,8 +1689,8 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
         }
         CHECK(suppressed == 2);
         CHECK(delivered == 4);
-        CHECK(state.GetStormInterventionCount() == 2);
-        CHECK_FALSE(state.IsStormGuardArmed());
+        CHECK(GetStormInterventionCount(state) == 2);
+        CHECK_FALSE(IsStormGuardArmed(state));
     }
 
     SECTION("a repeating two-position cycle requests a break without loss")
@@ -1689,7 +1709,7 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
               wxWinUIInputStormDecision::BreakCycle);
         CHECK(transition.HasAction(wxWinUIInputActionKind::BreakStorm));
         CHECK(FindDispatch(transition));
-        CHECK_FALSE(state.IsStormGuardArmed());
+        CHECK_FALSE(IsStormGuardArmed(state));
     }
 
     SECTION("an armed enter-leave cycle is detected and bounded")
@@ -1709,7 +1729,7 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
         CHECK(transition.stormDecision ==
               wxWinUIInputStormDecision::BreakCycle);
         CHECK(transition.HasAction(wxWinUIInputActionKind::BreakStorm));
-        CHECK_FALSE(state.IsStormGuardArmed());
+        CHECK_FALSE(IsStormGuardArmed(state));
     }
 
     SECTION("root boundary cycles are detected without native dispatch")
@@ -1735,7 +1755,7 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
         CHECK(transition.stormDecision ==
               wxWinUIInputStormDecision::BreakCycle);
         CHECK(transition.HasAction(wxWinUIInputActionKind::BreakStorm));
-        CHECK_FALSE(state.IsStormGuardArmed());
+        CHECK_FALSE(IsStormGuardArmed(state));
     }
 
     SECTION("a real revisiting path outside the proven cadence is delivered")
@@ -1755,7 +1775,7 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
             CHECK_FALSE(transition.HasAction(
                 wxWinUIInputActionKind::BreakStorm));
         }
-        CHECK(state.GetStormInterventionCount() == 0);
+        CHECK(GetStormInterventionCount(state) == 0);
     }
 
     SECTION("significant state changes are not equal signatures")
@@ -1816,7 +1836,7 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
             CHECK_FALSE(transition.HasAction(
                 wxWinUIInputActionKind::BreakStorm));
         }
-        CHECK(state.GetStormInterventionCount() == 0);
+        CHECK(GetStormInterventionCount(state) == 0);
     }
 
     SECTION("cancel resets an armed partial signature")
@@ -1862,7 +1882,7 @@ TEST_CASE("wxWinUI input state proof-driven storm guard",
             }
         }
         CHECK(interventions <= 16);
-        CHECK_FALSE(state.IsStormGuardArmed());
+        CHECK_FALSE(IsStormGuardArmed(state));
         CHECK(wxWinUIInputActions::Capacity == 12);
     }
 }
