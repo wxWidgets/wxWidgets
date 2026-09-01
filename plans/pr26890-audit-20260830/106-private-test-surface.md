@@ -850,6 +850,31 @@ Do not delete a lifetime/retirement service used by production merely because it
   and runtime smoke plus Supported V0 **2/2** pass again in each linkage with
   `WX_UI_TESTS=0`. No physical input or global interaction was used.
 
+## Native dialog invocation boundary (2026-09-01)
+
+- The IFileDialog Show substitution, owner-close counter and
+  TaskDialogIndirect substitution leave the installed MSW private headers.
+  Their records and entry points now live only in the non-installed
+  `native-dialog-test-access.h` and compile into wxcore only when
+  `WXWINUI_TEST_SUPPORT` is enabled.
+- Production keeps the real IFileDialog owner-destruction guard and direct
+  shell/TaskDialog invocation. Only the counter increment and final-call
+  substitutions are conditional; dialog configuration, nested ownership,
+  result translation and close ordering are unchanged.
+- The first post-extraction replay deliberately exposed that the picker cases
+  also consume `wxUSE_IFILEOPENDIALOG` from the production private header: it
+  ran **2067/9** instead of the **2413/12** baseline. Restoring that required
+  feature-contract include, without restoring any test declarations, returns
+  the exact shared/static suite to **2413 assertions / 12 cases**.
+- With `wxBUILD_TESTS=OFF`, shared and static `wxcore` plus `minimal` build
+  with warnings as errors. The installed source headers contain zero targeted
+  test declaration, and `dumpbin` reports zero shared export or static symbol
+  for the hook records, setters, resetters, counter or test storage.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; `test_gui` and `minimal`
+  rebuild with warnings as errors, then repeat **2413/12** and runtime smoke
+  plus Supported V0 **2/2** in each linkage with `WX_UI_TESTS=0`. No physical
+  input or visible native shell was used.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

@@ -199,6 +199,8 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/generic/tipwin.cpp"
             "${wxSOURCE_DIR}/src/generic/splash.cpp"
             "${wxSOURCE_DIR}/src/msw/evtloop.cpp"
+            "${wxSOURCE_DIR}/src/msw/dirdlg.cpp"
+            "${wxSOURCE_DIR}/src/msw/msgdlg.cpp"
             "${wxSOURCE_DIR}/src/msw/nonownedwnd.cpp"
             "${wxSOURCE_DIR}/src/msw/popupwin.cpp"
             "${wxSOURCE_DIR}/src/msw/taskbar.cpp"

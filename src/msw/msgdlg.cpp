@@ -28,6 +28,9 @@
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
 #include "wx/msw/private/taskdlg.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "native-dialog-test-access.h"
+#endif
 #include "wx/modalhook.h"
 #include "wx/fontutil.h"
 #include "wx/textbuf.h"
@@ -816,7 +819,7 @@ void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
 // variable below with a critical section.
 wxCRIT_SECT_DECLARE(gs_csTaskDialogIndirect);
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
 
 namespace
 {
@@ -845,7 +848,7 @@ void wxMSWMessageDialog::ResetTaskDialogIndirectHookForTesting()
     gs_taskDialogTestHook = wxTaskDialogIndirectHookForTesting();
 }
 
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
 TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 {
@@ -874,7 +877,7 @@ HRESULT wxMSWMessageDialog::InvokeTaskDialogIndirect(
     int *radio,
     BOOL *verification)
 {
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
     wxTaskDialogIndirectHookForTesting hook;
     {
         wxCRIT_SECT_LOCKER(lock, gs_csTaskDialogTestHook);
@@ -886,7 +889,7 @@ HRESULT wxMSWMessageDialog::InvokeTaskDialogIndirect(
         return hook.invoke(
             hook.context, config, button, radio, verification);
     }
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
     const TaskDialogIndirect_t taskDialogIndirect =
         GetTaskDialogIndirectFunc();
@@ -898,10 +901,10 @@ HRESULT wxMSWMessageDialog::InvokeTaskDialogIndirect(
 
 bool wxMSWMessageDialog::HasNativeTaskDialog()
 {
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
     if ( HasTaskDialogTestHook() )
         return true;
-#endif // __WXWINUI__ && wxUSE_WINUI3
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
     return wxMSWMessageDialog::GetTaskDialogIndirectFunc() != nullptr;
 }

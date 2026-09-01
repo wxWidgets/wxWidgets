@@ -30,11 +30,16 @@
 
 #include "wx/weakref.h"
 #include "wx/msw/private/filedialog.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "native-dialog-test-access.h"
+#endif
 
 #if wxUSE_IFILEOPENDIALOG
 
 #include <initguid.h>
-#include <atomic>
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include <atomic>
+#endif
 
 #include "wx/msw/private/cotaskmemptr.h"
 #include "wx/msw/private/gethwnd.h"
@@ -286,6 +291,7 @@ namespace wxMSWImpl
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#ifdef WXWINUI_TEST_SUPPORT
 namespace
 {
 
@@ -310,6 +316,7 @@ unsigned long GetIFileDialogOwnerCloseCountForTesting()
 {
     return gs_ownerCloseCountForTesting.load(std::memory_order_relaxed);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 class IFileDialogOwnerDestroyGuard
 {
@@ -355,8 +362,10 @@ private:
             // may pump messages while unwinding IFileDialog::Show().
             self->m_owner = nullptr;
             (void)::RemoveWindowSubclass(hwnd, &SubclassProc, id);
+#ifdef WXWINUI_TEST_SUPPORT
             gs_ownerCloseCountForTesting.fetch_add(
                 1, std::memory_order_relaxed);
+#endif
             (void)self->m_dialog->Close(
                 HRESULT_FROM_WIN32(ERROR_CANCELLED));
         }
@@ -434,6 +443,7 @@ int wxIFileDialog::Show(HWND owner, int options,
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     IFileDialogOwnerDestroyGuard ownerGuard(owner, m_fileDialog.Get());
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_showHookForTesting.show )
     {
         wxArrayString selectedPaths;
@@ -465,6 +475,7 @@ int wxIFileDialog::Show(HWND owner, int options,
 
         return wxID_OK;
     }
+#endif // WXWINUI_TEST_SUPPORT
 #endif // __WXWINUI__ && wxUSE_WINUI3
 
     hr = m_fileDialog->Show(owner);

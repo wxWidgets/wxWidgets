@@ -12,6 +12,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "button-test-access.h"
+#include "native-dialog-test-access.h"
 #include "textdialog-test-access.h"
 
 #include "wx/winui/private/dialogcontracts.h"
@@ -51,7 +52,6 @@
 #include "wx/weakref.h"
 #include "wx/msw/private/filedialog.h"
 #include "wx/msw/private/gethwnd.h"
-#include "wx/msw/private/msgdlg.h"
 #include "wx/msw/private.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/private/tlwhost.h"

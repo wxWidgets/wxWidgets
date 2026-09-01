@@ -33,31 +33,6 @@
 namespace wxMSWImpl
 {
 
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-
-// Bounded test seam at the last native-shell boundary. Production still
-// creates and configures the real IFileDialog; only Show() is substituted so
-// deterministic tests can exercise owner/nested/result transactions without
-// driving the user's desktop. A null callback restores the physical shell.
-struct wxIFileDialogShowHookForTesting
-{
-    void* context = nullptr;
-    int (*show)(void *,
-                WXHWND,
-                int,
-                wxArrayString *,
-                wxString *) = nullptr;
-};
-
-WXDLLIMPEXP_CORE void
-SetIFileDialogShowHookForTesting(
-    const wxIFileDialogShowHookForTesting& hook);
-WXDLLIMPEXP_CORE void ResetIFileDialogShowHookForTesting();
-WXDLLIMPEXP_CORE unsigned long
-GetIFileDialogOwnerCloseCountForTesting();
-
-#endif // __WXWINUI__ && wxUSE_WINUI3
-
 // For historical reasons, this class is defined in src/msw/dirdlg.cpp.
 class wxIFileDialog
 {
