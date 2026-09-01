@@ -243,6 +243,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/titlebar.cpp"
             "${wxSOURCE_DIR}/src/winui/hosttooltip.cpp"
             "${wxSOURCE_DIR}/src/winui/dropbroker.cpp"
+            "${wxSOURCE_DIR}/src/winui/inputrouter.cpp"
             "${wxSOURCE_DIR}/src/winui/hostfocus.cpp"
             "${wxSOURCE_DIR}/src/winui/hostinput.cpp"
             "${wxSOURCE_DIR}/src/winui/hostresize.cpp"

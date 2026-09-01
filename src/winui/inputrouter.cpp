@@ -11,23 +11,31 @@
 
 #include "wx/winui/private/inputrouter.h"
 
+#if defined(WXWINUI_TEST_SUPPORT)
+    #include "input-router-test-access.h"
+#endif
+
 #if wxUSE_WINUI3
 
 #include "wx/msw/private.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include <algorithm>
-#include <atomic>
+#if defined(WXWINUI_TEST_SUPPORT)
+    #include <atomic>
+#endif
 #include <utility>
 #include <vector>
 
 namespace
 {
 
+#if defined(WXWINUI_TEST_SUPPORT)
 std::atomic<unsigned long long> gs_resolveAttempts{0};
 std::atomic<unsigned long long> gs_resolveRestarts{0};
 std::atomic<unsigned long long> gs_resolveUnstable{0};
 std::atomic<unsigned long long> gs_transparentCandidates{0};
+#endif
 thread_local bool gs_nativeResolveActive = false;
 
 // WM_NCHITTEST is application code and, with a WinUI island in the same
@@ -194,7 +202,9 @@ public:
         wxWeakRef<wxWindow> weakTLW(tlw);
         for ( unsigned attempt = 0; attempt != 3; ++attempt )
         {
+#if defined(WXWINUI_TEST_SUPPORT)
             ++gs_resolveAttempts;
+#endif
 
             if ( !bridgeIdentity.IsValid() || !innerIdentity.IsValid() )
                 return Unstable();
@@ -255,7 +265,9 @@ public:
 
                 if ( ht == HTTRANSPARENT )
                 {
+#if defined(WXWINUI_TEST_SUPPORT)
                     ++gs_transparentCandidates;
+#endif
                     continue;
                 }
                 if ( ht == HTNOWHERE )
@@ -297,7 +309,9 @@ public:
             if ( !restart )
                 return wxWinUIHitResolution::Miss;
 
+#if defined(WXWINUI_TEST_SUPPORT)
             ++gs_resolveRestarts;
+#endif
         }
 
         return Unstable();
@@ -340,7 +354,9 @@ public:
         wxWeakRef<wxWindow> weakTLW(tlw);
         for ( unsigned attempt = 0; attempt != 3; ++attempt )
         {
+#if defined(WXWINUI_TEST_SUPPORT)
             ++gs_resolveAttempts;
+#endif
             if ( !bridgeIdentity.IsValid() || !innerIdentity.IsValid() )
                 return Unstable();
 
@@ -359,7 +375,9 @@ public:
                 snapshot.candidates.front();
             if ( !candidate.IsValid() )
             {
+#if defined(WXWINUI_TEST_SUPPORT)
                 ++gs_resolveRestarts;
+#endif
                 continue;
             }
 
@@ -414,7 +432,9 @@ public:
 private:
     static wxWinUIHitResolution Unstable()
     {
+#if defined(WXWINUI_TEST_SUPPORT)
         ++gs_resolveUnstable;
+#endif
         return wxWinUIHitResolution::Unstable;
     }
 
@@ -947,9 +967,12 @@ bool wxWinUIRefreshNativeHit(wxWindow *tlw,
     return true;
 }
 
-wxWinUIInputRouterCounters wxWinUIGetInputRouterCounters()
+#if defined(WXWINUI_TEST_SUPPORT)
+
+wxWinUIInputRouterTestAccess::Counters
+wxWinUIInputRouterTestAccess::GetCounters()
 {
-    wxWinUIInputRouterCounters counters;
+    Counters counters;
     counters.resolveAttempts = gs_resolveAttempts.load();
     counters.resolveRestarts = gs_resolveRestarts.load();
     counters.resolveUnstable = gs_resolveUnstable.load();
@@ -957,12 +980,14 @@ wxWinUIInputRouterCounters wxWinUIGetInputRouterCounters()
     return counters;
 }
 
-void wxWinUIResetInputRouterCounters()
+void wxWinUIInputRouterTestAccess::ResetCounters()
 {
     gs_resolveAttempts = 0;
     gs_resolveRestarts = 0;
     gs_resolveUnstable = 0;
     gs_transparentCandidates = 0;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_WINUI3

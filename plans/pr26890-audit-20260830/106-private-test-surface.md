@@ -608,6 +608,35 @@ Do not delete a lifetime/retirement service used by production merely because it
   implementation-state migration; aggregate test-fixture isolation remains a
   separate open test-suite defect and keeps the wider plan open.
 
+## InputRouter diagnostic boundary (2026-09-01)
+
+- The four resolution counters and their exported getter/reset functions leave
+  `wx/winui/private/inputrouter.h`. They now live behind the non-installed
+  `input-router-test-access.h`, and `inputrouter.cpp` opts in only when
+  `WXWINUI_TEST_SUPPORT` is enabled. Shipping builds contain neither the four
+  atomics nor their six passive increment sites.
+- The native resolver is otherwise unchanged: the shared thread-local
+  reentrance guard, three-attempt budget, topology and generation snapshots,
+  restart rules and all fail-closed `Unstable` paths remain production code.
+  The 23 test references move to the private adapter without changing an
+  assertion or substituting a successful result.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. On private desktops with `WX_UI_TESTS=0`, the complete
+  `[winui-input-router]` group passes **229 assertions / 20 cases** in each
+  linkage, followed by runtime smoke and Supported V0 **2/2**.
+- Reusing the same two build trees, focused `wxBUILD_TESTS=OFF` builds of
+  `wxcore` and `minimal` pass with warnings as errors. `dumpbin` reports zero
+  match for the former counter type/functions or the new test-access class in
+  both the shared DLL exports and static archive symbols. The source-private
+  header contains none of the former names; the four atomics and all six
+  increment sites are lexically guarded by the same test-only definition,
+  while the new adapter remains under `tests/winui/test-support`.
+- Both trees are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat the exact
+  **229/20** group plus both runtime gates **2/2**. No new build directory,
+  physical input or global interaction was used. This closes the InputRouter
+  sublot locally; InputState, the TLW lifecycle ledger and deeper DropBroker
+  test storage still keep plan 106 open.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

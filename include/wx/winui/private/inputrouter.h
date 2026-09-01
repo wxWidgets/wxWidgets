@@ -115,15 +115,6 @@ private:
     unsigned long long m_innerGeneration = 0;
 };
 
-
-struct WXDLLIMPEXP_CORE wxWinUIInputRouterCounters
-{
-    unsigned long long resolveAttempts = 0;
-    unsigned long long resolveRestarts = 0;
-    unsigned long long resolveUnstable = 0;
-    unsigned long long transparentCandidates = 0;
-};
-
 // Resolve the deepest native target under a screen point while excluding the
 // island bridge/input windows. HTTRANSPARENT advances to the next underlying
 // sibling at the same Z level. If WM_NCHITTEST mutates the topology, the
@@ -190,11 +181,6 @@ wxWinUIRefreshNativeHit(wxWindow *tlw,
                         WXHWND inner,
                         wxWinUINativeHit *refreshed,
                         bool layoutUnchanged = false);
-
-WXDLLIMPEXP_CORE wxWinUIInputRouterCounters
-wxWinUIGetInputRouterCounters();
-
-WXDLLIMPEXP_CORE void wxWinUIResetInputRouterCounters();
 
 #endif // wxUSE_WINUI3
 

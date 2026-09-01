@@ -22,6 +22,7 @@
 #include "wx/winui/private/inputrouter.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
+#include "input-router-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include <atomic>
@@ -238,7 +239,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     HitTestWindow * const upper = NewWindow(HTTRANSPARENT);
     PutOnTop(upper);
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     wxWinUINativeHit hit;
     REQUIRE(Resolve(hit) == wxWinUIHitResolution::Hit);
     CHECK(hit.GetTarget().GetWindow() == lower);
@@ -246,7 +247,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     CHECK(hit.GetArea() == wxWinUINativeArea::Client);
     CHECK(upper->GetHitCount() == 1);
     CHECK(lower->GetHitCount() == 1);
-    CHECK(wxWinUIGetInputRouterCounters().transparentCandidates == 1);
+    CHECK(wxWinUIInputRouterTestAccess::GetCounters().transparentCandidates == 1);
 }
 
 TEST_CASE_METHOD(WinUIInputRouterFixture,
@@ -440,13 +441,13 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     HitTestWindow * const upper = NewWindow(HTERROR);
     PutOnTop(upper);
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     wxWinUINativeHit hit;
     CHECK(Resolve(hit) == wxWinUIHitResolution::Unstable);
     CHECK_FALSE(hit.IsOk());
     CHECK(upper->GetHitCount() == 1);
     CHECK(lower->GetHitCount() == 0);
-    CHECK(wxWinUIGetInputRouterCounters().resolveUnstable == 1);
+    CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveUnstable == 1);
 }
 
 TEST_CASE_METHOD(WinUIInputRouterFixture,
@@ -497,7 +498,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
             });
     }
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     wxWinUINativeHit hit;
     REQUIRE(Resolve(hit) == wxWinUIHitResolution::Hit);
     CHECK(hit.GetTarget().GetWindow() == window);
@@ -507,8 +508,8 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     CHECK_FALSE(nestedOutputWasValid);
     CHECK(window->GetHitCount() == initialHitCount + 1);
 
-    wxWinUIInputRouterCounters counters =
-        wxWinUIGetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::Counters counters =
+        wxWinUIInputRouterTestAccess::GetCounters();
     CHECK(counters.resolveAttempts == 1);
     CHECK(counters.resolveRestarts == 0);
     CHECK(counters.resolveUnstable == 1);
@@ -522,7 +523,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     CHECK(sequentialHit.GetTarget().GetWindow() == window);
     CHECK(window->GetHitCount() == initialHitCount + 2);
 
-    counters = wxWinUIGetInputRouterCounters();
+    counters = wxWinUIInputRouterTestAccess::GetCounters();
     CHECK(counters.resolveAttempts == 2);
     CHECK(counters.resolveRestarts == 0);
     CHECK(counters.resolveUnstable == 1);
@@ -834,11 +835,11 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
         }
     });
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     wxWinUINativeHit hit;
     REQUIRE(Resolve(hit) == wxWinUIHitResolution::Hit);
     CHECK(hit.GetTarget().GetWindow() == lower);
-    CHECK(wxWinUIGetInputRouterCounters().resolveRestarts == 1);
+    CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveRestarts == 1);
 }
 
 TEST_CASE_METHOD(WinUIInputRouterFixture,
@@ -878,13 +879,13 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
                                SWP_NOACTIVATE) != 0;
         });
 
-        wxWinUIResetInputRouterCounters();
+        wxWinUIInputRouterTestAccess::ResetCounters();
         wxWinUINativeHit hit;
         REQUIRE(Resolve(hit) == wxWinUIHitResolution::Hit);
         REQUIRE(mutationSucceeded);
         CHECK(hit.GetTarget().GetWindow() == upper);
         CHECK(upper->GetHitCount() == 2);
-        CHECK(wxWinUIGetInputRouterCounters().resolveRestarts == 1);
+        CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveRestarts == 1);
     }
 
     SECTION("window style")
@@ -913,13 +914,13 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
                 previous != 0 || ::GetLastError() == ERROR_SUCCESS;
         });
 
-        wxWinUIResetInputRouterCounters();
+        wxWinUIInputRouterTestAccess::ResetCounters();
         wxWinUINativeHit hit;
         REQUIRE(Resolve(hit) == wxWinUIHitResolution::Hit);
         REQUIRE(mutationSucceeded);
         CHECK(hit.GetTarget().GetWindow() == upper);
         CHECK(upper->GetHitCount() == 2);
-        CHECK(wxWinUIGetInputRouterCounters().resolveRestarts == 1);
+        CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveRestarts == 1);
     }
 
     SECTION("window region")
@@ -950,13 +951,13 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
             // USER32 owns `region` after successful SetWindowRgn().
         });
 
-        wxWinUIResetInputRouterCounters();
+        wxWinUIInputRouterTestAccess::ResetCounters();
         wxWinUINativeHit hit;
         REQUIRE(Resolve(hit) == wxWinUIHitResolution::Hit);
         REQUIRE(mutationSucceeded);
         CHECK(hit.GetTarget().GetWindow() == upper);
         CHECK(upper->GetHitCount() == 2);
-        CHECK(wxWinUIGetInputRouterCounters().resolveRestarts == 1);
+        CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveRestarts == 1);
     }
 }
 
@@ -1025,13 +1026,13 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
         toggled->Show(!toggled->IsShown());
     });
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     wxWinUINativeHit hit;
     CHECK(Resolve(hit) == wxWinUIHitResolution::Unstable);
     CHECK_FALSE(hit.IsOk());
 
-    const wxWinUIInputRouterCounters counters =
-        wxWinUIGetInputRouterCounters();
+    const wxWinUIInputRouterTestAccess::Counters counters =
+        wxWinUIInputRouterTestAccess::GetCounters();
     CHECK(counters.resolveAttempts == 3);
     CHECK(counters.resolveRestarts == 3);
     CHECK(counters.resolveUnstable == 1);
@@ -1049,11 +1050,11 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     // worker to process WM_WINDOWPOSCHANGING/WM_WINDOWPOSCHANGED and test the
     // harness rather than the resolver's fail-closed traversal.
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     wxWinUINativeHit hit;
     CHECK(Resolve(hit) == wxWinUIHitResolution::Unstable);
     CHECK_FALSE(hit.IsOk());
-    CHECK(wxWinUIGetInputRouterCounters().resolveUnstable == 1);
+    CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveUnstable == 1);
 }
 
 TEST_CASE_METHOD(WinUIInputRouterFixture,
@@ -1066,7 +1067,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
         static_cast<int>(wxWinUIHitResolution::Miss)};
     std::atomic<bool> hitWasValid{true};
 
-    wxWinUIResetInputRouterCounters();
+    wxWinUIInputRouterTestAccess::ResetCounters();
     std::thread worker([this, point, &resolution, &hitWasValid]()
     {
         wxWinUINativeHit hit;
@@ -1082,7 +1083,7 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
               resolution.load(std::memory_order_acquire)) ==
           wxWinUIHitResolution::Unstable);
     CHECK_FALSE(hitWasValid.load(std::memory_order_acquire));
-    CHECK(wxWinUIGetInputRouterCounters().resolveUnstable == 1);
+    CHECK(wxWinUIInputRouterTestAccess::GetCounters().resolveUnstable == 1);
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
