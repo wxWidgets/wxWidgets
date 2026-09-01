@@ -34,6 +34,7 @@
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/xamlhost.h"
 #include "choice-test-access.h"
+#include "combo-popup-test-access.h"
 #include "combobox-test-access.h"
 
 #include <array>
@@ -883,10 +884,10 @@ TEST_CASE("WinUIKeyboard::ComboLocalKeysBeatParentAccelerators",
             HC_ACTION, PM_REMOVE, &f4, Modifiers(),
             TraceXamlPreTranslate, &trace));
 
-        wxWinUIResetComboPopupResolutionDiagnosticForTesting();
+        wxWinUIComboPopupTestAccess::ResetDiagnostic();
         combo->Popup();
-        const wxWinUIComboPopupResolutionDiagnosticForTesting popup =
-            wxWinUIGetComboPopupResolutionDiagnosticForTesting();
+        const wxWinUIComboPopupTestAccess::Diagnostic popup =
+            wxWinUIComboPopupTestAccess::GetDiagnostic();
         INFO("popup resolution origin/result=" <<
                  static_cast<unsigned>(popup.origin) << "/" <<
                  static_cast<unsigned>(popup.result) <<

@@ -15,6 +15,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
 #include "choice-test-access.h"
+#include "combo-popup-test-access.h"
 #include "physical-disconnect-test-access.h"
 #endif
 
@@ -130,8 +131,33 @@ namespace MUXI = winrt::Microsoft::UI::Xaml::Input;
 namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 namespace WF = winrt::Windows::Foundation;
 
-wxWinUIComboPopupResolutionDiagnosticForTesting
-    gs_comboPopupResolutionDiagnosticForTesting;
+#ifdef WXWINUI_TEST_SUPPORT
+using wxWinUIComboPopupResolutionOrigin =
+    wxWinUIComboPopupTestAccess::Origin;
+using wxWinUIComboPopupFailCloseReason =
+    wxWinUIComboPopupTestAccess::FailCloseReason;
+wxWinUIComboPopupTestAccess::Diagnostic gs_comboPopupResolutionDiagnostic;
+#else
+enum class wxWinUIComboPopupResolutionOrigin : unsigned
+{
+    None,
+    DropDownOpenedNewSession,
+    DropDownOpenedExistingSession,
+    AfterNativeSetter
+};
+
+enum class wxWinUIComboPopupFailCloseReason : unsigned
+{
+    None,
+    HostShutdownSealed,
+    PublicationPoisoned,
+    ReopenBeforeRetirement,
+    BeginSessionRejected,
+    ObserveOpenedException,
+    StrictResolutionRejected,
+    RequestCloseException
+};
+#endif
 
 enum class wxWinUIElementRelationship
 {
@@ -346,8 +372,10 @@ public:
     bool IsSealedForHostShutdown() const noexcept override
         { return m_hostShutdownSealed; }
     bool IsSessionActive() const noexcept { return m_sessionActive; }
+#ifdef WXWINUI_TEST_SUPPORT
     bool HasCompletionForTesting() const noexcept
         { return static_cast<bool>(m_completion); }
+#endif
 
     MUXD::DispatcherQueue GetDispatcherQueue() const noexcept override
     {
@@ -1240,16 +1268,18 @@ private:
 
 } // anonymous namespace
 
-void wxWinUIResetComboPopupResolutionDiagnosticForTesting() noexcept
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIComboPopupTestAccess::ResetDiagnostic() noexcept
 {
-    gs_comboPopupResolutionDiagnosticForTesting = {};
+    gs_comboPopupResolutionDiagnostic = {};
 }
 
-wxWinUIComboPopupResolutionDiagnosticForTesting
-wxWinUIGetComboPopupResolutionDiagnosticForTesting() noexcept
+wxWinUIComboPopupTestAccess::Diagnostic
+wxWinUIComboPopupTestAccess::GetDiagnostic() noexcept
 {
-    return gs_comboPopupResolutionDiagnosticForTesting;
+    return gs_comboPopupResolutionDiagnostic;
 }
+#endif
 
 class wxWinUIComboPopupRetirementState final :
     public wxWinUIPhysicalDisconnectGate
@@ -1354,7 +1384,7 @@ public:
             catch ( ... )
             {
                 FailClose(
-                    wxWinUIComboPopupFailCloseReasonForTesting::
+                    wxWinUIComboPopupFailCloseReason::
                         ObserveOpenedException);
                 return false;
             }
@@ -1385,7 +1415,7 @@ public:
             if ( !identitiesMatch )
             {
                 FailClose(
-                    wxWinUIComboPopupFailCloseReasonForTesting::
+                    wxWinUIComboPopupFailCloseReason::
                         StrictResolutionRejected);
                 return false;
             }
@@ -1403,7 +1433,7 @@ public:
             if ( !propertyOpen || !popupOpen )
             {
                 FailClose(
-                    wxWinUIComboPopupFailCloseReasonForTesting::
+                    wxWinUIComboPopupFailCloseReason::
                         StrictResolutionRejected);
                 return false;
             }
@@ -1413,7 +1443,7 @@ public:
         catch ( ... )
         {
             FailClose(
-                wxWinUIComboPopupFailCloseReasonForTesting::
+                wxWinUIComboPopupFailCloseReason::
                     ObserveOpenedException);
             return false;
         }
@@ -1428,7 +1458,7 @@ public:
         // ambiguous. Retain the real queue/root through the degraded terminal
         // owner and close best-effort; never erase the preparation blindly.
         FailClose(
-            wxWinUIComboPopupFailCloseReasonForTesting::
+            wxWinUIComboPopupFailCloseReason::
                 ObserveOpenedException);
     }
 
@@ -1445,7 +1475,7 @@ public:
             // ledger, so close/degrade and let that terminal owner retire it;
             // this is not the pre-existing-poison fail-fast path.
             FailClose(
-                wxWinUIComboPopupFailCloseReasonForTesting::
+                wxWinUIComboPopupFailCloseReason::
                     HostShutdownSealed);
             return false;
         }
@@ -1470,12 +1500,12 @@ public:
             if ( m_ownerClosedObserved )
             {
                 FailClose(
-                    wxWinUIComboPopupFailCloseReasonForTesting::
+                    wxWinUIComboPopupFailCloseReason::
                         ReopenBeforeRetirement);
                 return false;
             }
             return ResolveOpenedPopupStrict(
-                wxWinUIComboPopupResolutionOriginForTesting::
+                wxWinUIComboPopupResolutionOrigin::
                     DropDownOpenedExistingSession);
         }
 
@@ -1485,16 +1515,18 @@ public:
             const MUXD::DispatcherQueue queue = m_combo.DispatcherQueue();
             StartOpenResolutionGeneration(xamlRoot);
             BeginResolutionDiagnostic(
-                wxWinUIComboPopupResolutionOriginForTesting::
+                wxWinUIComboPopupResolutionOrigin::
                     DropDownOpenedNewSession);
-            gs_comboPopupResolutionDiagnosticForTesting.rootAvailable =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.rootAvailable =
                 xamlRoot != nullptr;
-            gs_comboPopupResolutionDiagnosticForTesting.queueAvailable =
+            gs_comboPopupResolutionDiagnostic.queueAvailable =
                 queue != nullptr;
-            gs_comboPopupResolutionDiagnosticForTesting.sessionActive =
+            gs_comboPopupResolutionDiagnostic.sessionActive =
                 m_gate->IsSessionActive();
-            gs_comboPopupResolutionDiagnosticForTesting.completionArmed =
+            gs_comboPopupResolutionDiagnostic.completionArmed =
                 m_gate->HasCompletionForTesting();
+#endif
             if ( !m_gate->BeginUnresolvedSession(
                      xamlRoot, queue,
                      [combo = m_combo]()
@@ -1503,12 +1535,12 @@ public:
                      }) )
             {
                 FailClose(
-                    wxWinUIComboPopupFailCloseReasonForTesting::
+                    wxWinUIComboPopupFailCloseReason::
                         BeginSessionRejected);
                 return false;
             }
             const bool resolved = ResolveOpenedPopupStrict(
-                wxWinUIComboPopupResolutionOriginForTesting::
+                wxWinUIComboPopupResolutionOrigin::
                     DropDownOpenedNewSession);
             ClearPreparedOpen();
             return resolved;
@@ -1516,7 +1548,7 @@ public:
         catch ( ... )
         {
             FailClose(
-                wxWinUIComboPopupFailCloseReasonForTesting::
+                wxWinUIComboPopupFailCloseReason::
                     ObserveOpenedException);
             return false;
         }
@@ -1528,7 +1560,7 @@ public:
              !m_gate->IsSessionActive() )
         {
             RecordUnavailableResolution(
-                wxWinUIComboPopupResolutionOriginForTesting::
+                wxWinUIComboPopupResolutionOrigin::
                     AfterNativeSetter);
             return false;
         }
@@ -1540,7 +1572,7 @@ public:
         // to cover a platform path which deferred the source event). Never
         // install Popup.Closed from a later dispatcher turn.
         return ResolveOpenedPopupStrict(
-            wxWinUIComboPopupResolutionOriginForTesting::AfterNativeSetter);
+            wxWinUIComboPopupResolutionOrigin::AfterNativeSetter);
     }
 
     void ObserveClosed() noexcept
@@ -1568,7 +1600,7 @@ public:
         catch ( ... )
         {
             FailClose(
-                wxWinUIComboPopupFailCloseReasonForTesting::
+                wxWinUIComboPopupFailCloseReason::
                     RequestCloseException);
         }
     }
@@ -1684,67 +1716,75 @@ private:
         m_preparedForOpen = false;
     }
 
-    static wxWinUIComboPopupResolutionResultForTesting
+#ifdef WXWINUI_TEST_SUPPORT
+    static wxWinUIComboPopupTestAccess::Result
     DiagnosticResult(OpenResolution result) noexcept
     {
         switch ( result )
         {
             case OpenResolution::Resolved:
-                return wxWinUIComboPopupResolutionResultForTesting::Resolved;
+                return wxWinUIComboPopupTestAccess::Result::Resolved;
             case OpenResolution::TemplatePending:
-                return wxWinUIComboPopupResolutionResultForTesting::
+                return wxWinUIComboPopupTestAccess::Result::
                     TemplatePending;
             case OpenResolution::PublicationPending:
-                return wxWinUIComboPopupResolutionResultForTesting::
+                return wxWinUIComboPopupTestAccess::Result::
                     PublicationPending;
             case OpenResolution::Closing:
-                return wxWinUIComboPopupResolutionResultForTesting::Closing;
+                return wxWinUIComboPopupTestAccess::Result::Closing;
             case OpenResolution::Failed:
-                return wxWinUIComboPopupResolutionResultForTesting::Failed;
+                return wxWinUIComboPopupTestAccess::Result::Failed;
         }
 
-        return wxWinUIComboPopupResolutionResultForTesting::Failed;
+        return wxWinUIComboPopupTestAccess::Result::Failed;
     }
+#endif
 
     void BeginResolutionDiagnostic(
-        wxWinUIComboPopupResolutionOriginForTesting origin) noexcept
+        wxWinUIComboPopupResolutionOrigin origin) noexcept
     {
+#ifdef WXWINUI_TEST_SUPPORT
         const auto previousReason =
-            gs_comboPopupResolutionDiagnosticForTesting.failCloseReason;
+            gs_comboPopupResolutionDiagnostic.failCloseReason;
         const unsigned previousCount =
-            gs_comboPopupResolutionDiagnosticForTesting.failCloseCount;
-        gs_comboPopupResolutionDiagnosticForTesting = {};
-        gs_comboPopupResolutionDiagnosticForTesting.origin = origin;
-        gs_comboPopupResolutionDiagnosticForTesting.failCloseReason =
+            gs_comboPopupResolutionDiagnostic.failCloseCount;
+        gs_comboPopupResolutionDiagnostic = {};
+        gs_comboPopupResolutionDiagnostic.origin = origin;
+        gs_comboPopupResolutionDiagnostic.failCloseReason =
             previousReason;
-        gs_comboPopupResolutionDiagnosticForTesting.failCloseCount =
+        gs_comboPopupResolutionDiagnostic.failCloseCount =
             previousCount;
-        gs_comboPopupResolutionDiagnosticForTesting.hooksArmed =
+        gs_comboPopupResolutionDiagnostic.hooksArmed =
             m_openPopupHooksArmed;
-        gs_comboPopupResolutionDiagnosticForTesting.sessionActive =
+        gs_comboPopupResolutionDiagnostic.sessionActive =
             m_gate->IsSessionActive();
-        gs_comboPopupResolutionDiagnosticForTesting.completionArmed =
+        gs_comboPopupResolutionDiagnostic.completionArmed =
             m_gate->HasCompletionForTesting();
+#else
+        (void)origin;
+#endif
     }
 
     OpenResolution FinishResolutionDiagnostic(OpenResolution result) noexcept
     {
-        gs_comboPopupResolutionDiagnosticForTesting.result =
+#ifdef WXWINUI_TEST_SUPPORT
+        gs_comboPopupResolutionDiagnostic.result =
             DiagnosticResult(result);
-        gs_comboPopupResolutionDiagnosticForTesting.hooksArmed =
+        gs_comboPopupResolutionDiagnostic.hooksArmed =
             m_openPopupHooksArmed;
+#endif
         return result;
     }
 
     void RecordUnavailableResolution(
-        wxWinUIComboPopupResolutionOriginForTesting origin) noexcept
+        wxWinUIComboPopupResolutionOrigin origin) noexcept
     {
         BeginResolutionDiagnostic(origin);
         (void)FinishResolutionDiagnostic(OpenResolution::Failed);
     }
 
     OpenResolution TryResolveOpenedPopup(
-        wxWinUIComboPopupResolutionOriginForTesting origin) noexcept
+        wxWinUIComboPopupResolutionOrigin origin) noexcept
     {
         BeginResolutionDiagnostic(origin);
         if ( m_hostShutdownSealed || m_gate->IsDegraded() ||
@@ -1759,21 +1799,26 @@ private:
             // masquerade as a successfully observed opening. The caller will
             // fail-close the queue-backed gate without publishing wx state.
             const bool propertyOpen = m_combo.IsDropDownOpen();
-            gs_comboPopupResolutionDiagnosticForTesting.propertyOpen =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.propertyOpen =
                 propertyOpen;
+#endif
             if ( !propertyOpen )
                 return FinishResolutionDiagnostic(OpenResolution::Closing);
 
             const MUX::XamlRoot xamlRoot = m_combo.XamlRoot();
-            gs_comboPopupResolutionDiagnosticForTesting.rootAvailable =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.rootAvailable =
                 xamlRoot != nullptr;
+#endif
             const bool rootMatches =
                 xamlRoot && m_openXamlRootIdentity &&
                 reinterpret_cast<std::uintptr_t>(winrt::get_abi(
                     wxWinUIChoiceObjectIdentity(xamlRoot))) ==
                     m_openXamlRootIdentity;
-            gs_comboPopupResolutionDiagnosticForTesting.rootMatches =
-                rootMatches;
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.rootMatches = rootMatches;
+#endif
             if ( !rootMatches )
             {
                 return FinishResolutionDiagnostic(OpenResolution::Failed);
@@ -1789,22 +1834,28 @@ private:
 
             const MUXC::IControlProtected control =
                 m_combo.try_as<MUXC::IControlProtected>();
-            gs_comboPopupResolutionDiagnosticForTesting.controlAvailable =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.controlAvailable =
                 control != nullptr;
+#endif
             if ( !control )
                 return FinishResolutionDiagnostic(OpenResolution::Failed);
             const MUXCP::Popup popup =
                 control.GetTemplateChild(L"Popup").try_as<MUXCP::Popup>();
-            gs_comboPopupResolutionDiagnosticForTesting.popupAvailable =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.popupAvailable =
                 popup != nullptr;
+#endif
             if ( !popup )
             {
                 return FinishResolutionDiagnostic(
                     OpenResolution::TemplatePending);
             }
             const MUX::UIElement child = popup.Child();
-            gs_comboPopupResolutionDiagnosticForTesting.childAvailable =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.childAvailable =
                 child != nullptr;
+#endif
             if ( !child )
             {
                 return FinishResolutionDiagnostic(
@@ -1848,7 +1899,9 @@ private:
                 m_openPopupIdentity = popupIdentity;
                 m_openPopupChildIdentity = childIdentity;
                 m_openPopupHooksArmed = true;
-                gs_comboPopupResolutionDiagnosticForTesting.hooksArmed = true;
+#ifdef WXWINUI_TEST_SUPPORT
+                gs_comboPopupResolutionDiagnostic.hooksArmed = true;
+#endif
             }
 
             // A synchronous Dismiss() can win after the exact Closed hook was
@@ -1856,13 +1909,17 @@ private:
             // unsatisfied gate to consume Popup.Closed/owner close and its one
             // causal tail; this is a normal close, not a resolution failure.
             const bool stillOpen = m_combo.IsDropDownOpen();
-            gs_comboPopupResolutionDiagnosticForTesting.propertyOpen =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.propertyOpen =
                 stillOpen;
+#endif
             if ( !stillOpen )
                 return FinishResolutionDiagnostic(OpenResolution::Closing);
             const bool popupIsOpen = popup.IsOpen();
-            gs_comboPopupResolutionDiagnosticForTesting.popupIsOpen =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.popupIsOpen =
                 popupIsOpen;
+#endif
             if ( !popupIsOpen )
             {
                 return FinishResolutionDiagnostic(
@@ -1880,16 +1937,20 @@ private:
                 {
                     if ( exactOpenPopup )
                     {
-                        gs_comboPopupResolutionDiagnosticForTesting.
+#ifdef WXWINUI_TEST_SUPPORT
+                        gs_comboPopupResolutionDiagnostic.
                             duplicateOpenList = true;
+#endif
                         return FinishResolutionDiagnostic(
                             OpenResolution::Failed);
                     }
                     exactOpenPopup = true;
                 }
             }
-            gs_comboPopupResolutionDiagnosticForTesting.exactOpenList =
+#ifdef WXWINUI_TEST_SUPPORT
+            gs_comboPopupResolutionDiagnostic.exactOpenList =
                 exactOpenPopup;
+#endif
             if ( !exactOpenPopup )
             {
                 return FinishResolutionDiagnostic(
@@ -1904,7 +1965,7 @@ private:
     }
 
     bool ResolveOpenedPopupStrict(
-        wxWinUIComboPopupResolutionOriginForTesting origin) noexcept
+        wxWinUIComboPopupResolutionOrigin origin) noexcept
     {
         const OpenResolution result = TryResolveOpenedPopup(origin);
         if ( result == OpenResolution::Resolved )
@@ -1914,16 +1975,20 @@ private:
         // before any wx callback. Missing/ambiguous facts here are therefore
         // a protocol fault, not a reason to install Closed asynchronously.
         FailClose(
-            wxWinUIComboPopupFailCloseReasonForTesting::
+            wxWinUIComboPopupFailCloseReason::
                 StrictResolutionRejected);
         return false;
     }
 
     void FailClose(
-        wxWinUIComboPopupFailCloseReasonForTesting reason) noexcept
+        wxWinUIComboPopupFailCloseReason reason) noexcept
     {
-        gs_comboPopupResolutionDiagnosticForTesting.failCloseReason = reason;
-        ++gs_comboPopupResolutionDiagnosticForTesting.failCloseCount;
+#ifdef WXWINUI_TEST_SUPPORT
+        gs_comboPopupResolutionDiagnostic.failCloseReason = reason;
+        ++gs_comboPopupResolutionDiagnostic.failCloseCount;
+#else
+        (void)reason;
+#endif
         InvalidateOpenResolution();
         try
         {
@@ -1956,7 +2021,7 @@ private:
         // owner before asking WinUI to close it; otherwise the still-
         // satisfied reusable child would permit synchronous slot detach.
         FailClose(
-            wxWinUIComboPopupFailCloseReasonForTesting::
+            wxWinUIComboPopupFailCloseReason::
                 PublicationPoisoned);
         try
         {

@@ -21,68 +21,6 @@
 #include <utility>
 #include <vector>
 
-enum class wxWinUIComboPopupResolutionOriginForTesting : unsigned
-{
-    None,
-    DropDownOpenedNewSession,
-    DropDownOpenedExistingSession,
-    AfterNativeSetter
-};
-
-enum class wxWinUIComboPopupResolutionResultForTesting : unsigned
-{
-    None,
-    Resolved,
-    TemplatePending,
-    PublicationPending,
-    Closing,
-    Failed
-};
-
-enum class wxWinUIComboPopupFailCloseReasonForTesting : unsigned
-{
-    None,
-    HostShutdownSealed,
-    PublicationPoisoned,
-    ReopenBeforeRetirement,
-    BeginSessionRejected,
-    ObserveOpenedException,
-    StrictResolutionRejected,
-    RequestCloseException
-};
-
-// Passive snapshot of the last exact-popup resolution attempt. Production
-// code records only values it already had to read for the retirement gate;
-// retrieving this structure never calls into XAML or changes peer state.
-struct wxWinUIComboPopupResolutionDiagnosticForTesting
-{
-    wxWinUIComboPopupResolutionOriginForTesting origin =
-        wxWinUIComboPopupResolutionOriginForTesting::None;
-    wxWinUIComboPopupResolutionResultForTesting result =
-        wxWinUIComboPopupResolutionResultForTesting::None;
-    wxWinUIComboPopupFailCloseReasonForTesting failCloseReason =
-        wxWinUIComboPopupFailCloseReasonForTesting::None;
-    unsigned failCloseCount = 0;
-    bool propertyOpen = false;
-    bool rootAvailable = false;
-    bool queueAvailable = false;
-    bool sessionActive = false;
-    bool completionArmed = false;
-    bool rootMatches = false;
-    bool controlAvailable = false;
-    bool popupAvailable = false;
-    bool childAvailable = false;
-    bool hooksArmed = false;
-    bool popupIsOpen = false;
-    bool exactOpenList = false;
-    bool duplicateOpenList = false;
-};
-
-WXDLLIMPEXP_CORE void
-wxWinUIResetComboPopupResolutionDiagnosticForTesting() noexcept;
-WXDLLIMPEXP_CORE wxWinUIComboPopupResolutionDiagnosticForTesting
-wxWinUIGetComboPopupResolutionDiagnosticForTesting() noexcept;
-
 // This model deliberately does not own clientData: wxItemContainer remains
 // its sole owner and destroys wxClientData objects before asking the backend
 // to erase an item. Stable IDs let XAML delegates refer to an item without

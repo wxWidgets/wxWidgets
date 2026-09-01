@@ -18,6 +18,7 @@
 #include "wx/button.h"
 #include "wx/choice.h"
 #include "choice-test-access.h"
+#include "combo-popup-test-access.h"
 #if wxUSE_COMBOBOX
     #include "wx/combobox.h"
     #include "combobox-test-access.h"
@@ -962,10 +963,10 @@ TEST_CASE("wxWinUI ComboBox immediate popup operations are idempotent",
     // the exact Popup.Closed hook, the duplicates are public no-ops, and the
     // same-stack close must remain a normal pending retirement rather than
     // poisoning publication.
-    wxWinUIResetComboPopupResolutionDiagnosticForTesting();
+    wxWinUIComboPopupTestAccess::ResetDiagnostic();
     combo.Popup();
-    const wxWinUIComboPopupResolutionDiagnosticForTesting popupDiagnostic =
-        wxWinUIGetComboPopupResolutionDiagnosticForTesting();
+    const wxWinUIComboPopupTestAccess::Diagnostic popupDiagnostic =
+        wxWinUIComboPopupTestAccess::GetDiagnostic();
     INFO("popup resolution origin/result=" <<
          static_cast<unsigned>(popupDiagnostic.origin) << "/" <<
          static_cast<unsigned>(popupDiagnostic.result) <<

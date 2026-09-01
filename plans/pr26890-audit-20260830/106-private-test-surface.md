@@ -515,6 +515,38 @@ Do not delete a lifetime/retirement service used by production merely because it
   hashes independently reproduced outside the private desktop. This remains
   a non-input qualification helper change; a fresh coupled shipping campaign
   is still required on the resulting commit.
+- The coupled v6 campaign subsequently passes on clean commit
+  `8a03edb793f4f074577e13c7dfcd77c4c38b5eac` in both shared and static
+  linkages. Each shipping-OFF half builds **16 libraries, 6 samples and
+  wxrc** with warnings as errors, installs to a fresh prefix, passes the
+  private symbol/header scan, installed four-TU compile contract **1/1**,
+  installed runtime campaign **1/1** with twelve child launches, source
+  canary, and the expected `winuispike` exit 30 without a result file. Each
+  restored-ALL half rebuilds and reinstalls, passes the installed runtime ON
+  campaign, one private **9-scenario** sample run, and runtime smoke plus
+  Supported V0 **2/2**. The final source proof revalidates the clean HEAD and
+  all **101** pinned hashes after each phase. Preserved evidence is under
+  `F:\wxwinui-pr26890-audit107-foundation\shipping-host-runtime-v6`.
+
+## ComboBox popup diagnostic boundary (2026-09-01)
+
+- The three exact-popup diagnostic enums, passive snapshot and two exported
+  recorder functions leave the installed `wx/winui/private/itemmodel.h`.
+  They now live behind `WXWINUI_TEST_SUPPORT` in the non-installed
+  `combo-popup-test-access.h`; shipping builds do not allocate or update the
+  recorder. The real popup resolution, fail-close and retirement protocol is
+  unchanged.
+- Shared and static Release each build `test_gui`, `minimal` and `winuispike`
+  with warnings as errors. On private desktops with `WX_UI_TESTS=0`, the
+  immediate popup idempotence case passes **8/1** and the ComboBox local-key
+  routing case passes **16/1** in each linkage; runtime smoke and Supported V0
+  then pass **2/2** per linkage.
+- A focused `wxBUILD_TESTS=OFF` rebuild of `wxcore` passes `/warnaserror` in
+  both linkages. The installed header contains none of the former diagnostic
+  names, the shared DLL exports none of them or the new access class, and the
+  static library contains no matching symbol. Both active build trees are
+  restored to `wxBUILD_TESTS=ALL` and the same builds and runtime gates pass
+  again.
 
 ## Maintenance
 
