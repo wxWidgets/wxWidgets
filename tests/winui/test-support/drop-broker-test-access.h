@@ -8,11 +8,17 @@
 #error Link the private wx_winui_test_support target to use this header
 #endif
 
-#include "../../../src/winui/dropbrokerstate.h"
+#include "wx/winui/private/dropbroker.h"
 
 #if wxUSE_WINUI3 && wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
-using wxWinUIDropBrokerNativeOps = wxWinUIDropBrokerNativeOperations;
+struct wxWinUIDropBrokerNativeOps
+{
+    void* context = nullptr;
+    HRESULT (*lock)(void*, IUnknown*, BOOL, BOOL) noexcept = nullptr;
+    HRESULT (*registerTarget)(void*, HWND, IDropTarget*) noexcept = nullptr;
+    HRESULT (*revokeTarget)(void*, HWND) noexcept = nullptr;
+};
 
 // The current flags below record the last production update in a
 // test-enabled build. A passive copy is not a claim of current native

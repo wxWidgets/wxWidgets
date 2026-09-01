@@ -561,6 +561,25 @@ builds pass `/warnaserror`; logs are `audit107f-broker-b-on-build.log` and
 `audit106-broker-b-{ownership,observation,passive}.log`. These tests do not
 provide physical OLE or shipping qualification.
 
+### Shipping direct-call follow-up, 2026-09-01
+
+The earlier extraction deliberately left one real operation table in the
+TU-local State. That final table is now gone from shipping too. Its callback
+record lives only in `drop-broker-test-access.h` under test support;
+`dropbrokerstate.h` is deleted. Production performs direct OLE calls at the
+same four protocol boundaries, while test-enabled builds can still copy a
+complete fake record for reentrancy and rollback coverage. The neutral
+`IsOperationContextCurrent()` helper compiles to the real context check in OFF
+builds and admits a synthetic boundary only with test support.
+
+Shared/static ON builds pass the complete non-physical broker group
+**1912/33**, five fresh-process consumers (**340/1**, **165/1**, **82/1**,
+**41/1**, **51/1**) and smoke/Supported V0 **2/2**. Both OFF builds pass
+`wxcore`/`minimal` with warnings as errors; shared exports and static symbols
+contain none of the callback record, wrapper, table-getter or test-access
+names. Both caches are restored to ALL and repeat the same results. These are
+private-desktop, non-input results, not physical OLE delivery evidence.
+
 ## Local completion reconciliation (2026-09-01)
 
 - The six named architecture boundaries are implemented: resize, tooltip and

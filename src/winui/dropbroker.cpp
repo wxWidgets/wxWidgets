@@ -20,7 +20,6 @@
 #include "wx/msw/private/dropsession.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dropbroker.h"
-#include "dropbrokerstate.h"
 #ifdef WXWINUI_TEST_SUPPORT
 #include "drop-broker-test-access.h"
 #endif
@@ -60,40 +59,6 @@ DEFINE_GUID(wxWinUICLSID_DragDropHelper,
 DEFINE_GUID(wxWinUIIID_IDropTargetHelper,
             0x4657278B, 0x411B, 0x11D2, 0x83, 0x9A,
             0x00, 0xC0, 0x4F, 0xD9, 0x18, 0xD0);
-
-HRESULT NativeLock(void*, IUnknown* object, BOOL lock, BOOL lastUnlockReleases)
-    noexcept
-{
-    return ::CoLockObjectExternal(object, lock, lastUnlockReleases);
-}
-
-HRESULT NativeRegister(void*, HWND hwnd, IDropTarget* target) noexcept
-{
-    const HRESULT hr = ::RegisterDragDrop(hwnd, target);
-    if ( SUCCEEDED(hr) )
-    {
-        // RegisterDragDrop() can internally originate a recoverable WinRT
-        // error while still succeeding. A successful ABI result cannot convey
-        // that restricted error, so don't let it poison the next XAML call.
-        ::RoClearError();
-    }
-
-    return hr;
-}
-
-HRESULT NativeRevoke(void*, HWND hwnd) noexcept
-{
-    return ::RevokeDragDrop(hwnd);
-}
-
-wxWinUIDropBrokerNativeOperations GetNativeOps()
-{
-    wxWinUIDropBrokerNativeOperations ops;
-    ops.lock = NativeLock;
-    ops.registerTarget = NativeRegister;
-    ops.revokeTarget = NativeRevoke;
-    return ops;
-}
 
 struct BoundTarget
 {
@@ -172,19 +137,64 @@ public:
         wxWindow* tlw, HWND bridge,
         const std::weak_ptr<wxWinUIHostLifetime>& lifetime
 #ifdef WXWINUI_TEST_SUPPORT
-        , const wxWinUIDropBrokerNativeOperations* testOps = nullptr
+        , const wxWinUIDropBrokerNativeOps* testOps = nullptr
 #endif
         ) noexcept;
 
-    const wxWinUIDropBrokerNativeOperations& GetNativeOperations() const noexcept
-        { return m_nativeOperations; }
-    bool IsTestBoundary() const noexcept
+    bool IsOperationContextCurrent() const noexcept
     {
 #ifdef WXWINUI_TEST_SUPPORT
-        return m_testBoundary;
-#else
-        return false;
+        if ( m_testBoundary )
+            return true;
 #endif
+        return IsContextCurrent();
+    }
+
+    HRESULT LockExternal(IUnknown* object, BOOL lock,
+                         BOOL lastUnlockReleases) noexcept
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( m_testBoundary )
+        {
+            return m_testNativeOperations.lock(
+                m_testNativeOperations.context, object, lock,
+                lastUnlockReleases);
+        }
+#endif
+        return ::CoLockObjectExternal(object, lock, lastUnlockReleases);
+    }
+
+    HRESULT RegisterTarget(HWND hwnd, IDropTarget* target) noexcept
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( m_testBoundary )
+        {
+            return m_testNativeOperations.registerTarget(
+                m_testNativeOperations.context, hwnd, target);
+        }
+#endif
+        const HRESULT hr = ::RegisterDragDrop(hwnd, target);
+        if ( SUCCEEDED(hr) )
+        {
+            // RegisterDragDrop() can internally originate a recoverable WinRT
+            // error while still succeeding. A successful ABI result cannot
+            // convey that restricted error, so don't let it poison the next
+            // XAML call.
+            ::RoClearError();
+        }
+        return hr;
+    }
+
+    HRESULT RevokeTarget(HWND hwnd) noexcept
+    {
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( m_testBoundary )
+        {
+            return m_testNativeOperations.revokeTarget(
+                m_testNativeOperations.context, hwnd);
+        }
+#endif
+        return ::RevokeDragDrop(hwnd);
     }
 
     wxWinUIDropBrokerState(
@@ -824,11 +834,10 @@ private:
 #endif
     }
 
-    // Kept in this TU-local existing state, not in the source broker class.
-    // Real operations remain in OFF. The test flag is private to this complete
-    // TU-local class and does not affect any installed class layout.
-    wxWinUIDropBrokerNativeOperations m_nativeOperations;
 #ifdef WXWINUI_TEST_SUPPORT
+    // The callback table exists only in test-enabled builds. Production calls
+    // the OLE APIs directly while preserving the same broker sequencing.
+    wxWinUIDropBrokerNativeOps m_testNativeOperations;
     bool m_testBoundary = false;
 #endif
 
@@ -974,7 +983,7 @@ wxWinUIDropBrokerState::CreateBroker(
     HWND bridge,
     const std::weak_ptr<wxWinUIHostLifetime>& lifetime
 #ifdef WXWINUI_TEST_SUPPORT
-    , const wxWinUIDropBrokerNativeOperations* testOps
+    , const wxWinUIDropBrokerNativeOps* testOps
 #endif
     ) noexcept
 {
@@ -1018,22 +1027,22 @@ wxWinUIDropBrokerState::CreateBroker(
         } targetGuard{ bridgeTarget, nullptr };
         auto* tlwTarget = new wxWinUIDropBrokerCOMTarget(state);
         targetGuard.tlw = tlwTarget;
-        const wxWinUIDropBrokerNativeOperations ops =
 #ifdef WXWINUI_TEST_SUPPORT
-            testOps ? *testOps :
+        if ( testOps )
+        {
+            if ( !testOps->lock || !testOps->registerTarget ||
+                 !testOps->revokeTarget )
+            {
+                return nullptr;
+            }
+            state->m_testNativeOperations = *testOps;
+            state->m_testBoundary = true;
+        }
 #endif
-            GetNativeOps();
-        if ( !ops.lock || !ops.registerTarget || !ops.revokeTarget )
-            return nullptr;
-
-        state->m_nativeOperations = ops;
         std::unique_ptr<wxWinUIDropBroker> broker(
             new wxWinUIDropBroker(state, bridgeTarget, tlwTarget));
         targetGuard.bridge = nullptr;
         targetGuard.tlw = nullptr;
-#ifdef WXWINUI_TEST_SUPPORT
-        state->m_testBoundary = testOps != nullptr;
-#endif
         return broker;
 #if wxUSE_EXCEPTIONS
     }
@@ -1194,8 +1203,8 @@ HRESULT wxWinUIDropBroker::ReleaseExternalLock(
         return E_UNEXPECTED;
     }
 
-    const HRESULT unlockHr = m_state->GetNativeOperations().lock(
-        m_state->GetNativeOperations().context, GetRegistrationTarget(role), FALSE, TRUE);
+    const HRESULT unlockHr = m_state->LockExternal(
+        GetRegistrationTarget(role), FALSE, TRUE);
     if ( SUCCEEDED(unlockHr) )
         registration.locked = false;
     else
@@ -1273,7 +1282,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
     {
         return !m_shutdown && m_state && m_bridgeTarget && m_tlwTarget &&
                m_state->IsOnUIThread() &&
-               (m_state->IsTestBoundary() || m_state->IsContextCurrent());
+               m_state->IsOperationContextCurrent();
     };
 
     const auto finishTerminalAcquisition = [&](
@@ -1317,7 +1326,7 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
         return PublishInitResult(result);
     }
 
-    if ( !m_state->IsTestBoundary() && !m_state->IsContextCurrent() )
+    if ( !m_state->IsOperationContextCurrent() )
     {
         result.status = wxWinUIDropBrokerInitStatus::InvalidContext;
         result.hresult = E_HANDLE;
@@ -1462,9 +1471,8 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
     for ( const RegistrationRole role : roles )
     {
         ShellRegistration& registration = GetRegistration(role);
-        const HRESULT lockHr = m_state->GetNativeOperations().lock(
-            m_state->GetNativeOperations().context, GetRegistrationTarget(role),
-            TRUE, FALSE);
+        const HRESULT lockHr = m_state->LockExternal(
+            GetRegistrationTarget(role), TRUE, FALSE);
 #ifdef WXWINUI_TEST_SUPPORT
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
         {
@@ -1523,9 +1531,8 @@ wxWinUIDropBrokerInitResult wxWinUIDropBroker::InitializeNative(
         }
 
         const HWND registrationHwnd = GetRegistrationHwnd(role);
-        const HRESULT registerHr = m_state->GetNativeOperations().registerTarget(
-            m_state->GetNativeOperations().context, registrationHwnd,
-            GetRegistrationTarget(role));
+        const HRESULT registerHr = m_state->RegisterTarget(
+            registrationHwnd, GetRegistrationTarget(role));
 #ifdef WXWINUI_TEST_SUPPORT
         m_state->MutateSnapshot([&](wxWinUIDropBrokerSnapshot& s)
         {
@@ -1768,8 +1775,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
                  wxMSWOleArmExternalShellOperation(&revokeOperation) )
             {
                 revokeCalled = true;
-                revokeHr = m_state->GetNativeOperations().revokeTarget(
-                    m_state->GetNativeOperations().context, GetRegistrationHwnd(role));
+                revokeHr = m_state->RevokeTarget(GetRegistrationHwnd(role));
                 const bool revoked = SUCCEEDED(revokeHr) ||
                     revokeHr == DRAGDROP_E_NOTREGISTERED;
                 ledgerCommitted = wxMSWOleCompleteExternalShellOperation(
@@ -1915,7 +1921,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
     // Never traverse wxWindow state or revoke apartment-affine registrations
     // before the same context checks used by Initialize() have passed.
     if ( !m_state->IsOnUIThread() ||
-         (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
+         !m_state->IsOperationContextCurrent() )
     {
         return Initialize();
     }
@@ -2081,7 +2087,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             if ( !CollectBoundTargets(tlw, &auditTargets) ||
                  tlwLifetime.get() != tlw || tlw->IsBeingDeleted() ||
                  m_shutdown || !OwnsCompleteRegistrationSet() ||
-                 (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
+                 !m_state->IsOperationContextCurrent() )
             {
                 break;
             }
@@ -2118,7 +2124,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             if ( !passValid || tlwLifetime.get() != tlw ||
                  tlw->IsBeingDeleted() || m_shutdown ||
                  !OwnsCompleteRegistrationSet() ||
-                 (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
+                 !m_state->IsOperationContextCurrent() )
             {
                 break;
             }
@@ -2154,7 +2160,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             m_tlwRegistration.ownsRegistration);
 #endif
         if ( m_shutdown || !OwnsCompleteRegistrationSet() ||
-             (!m_state->IsTestBoundary() && !m_state->IsContextCurrent()) )
+             !m_state->IsOperationContextCurrent() )
         {
             m_acquiring = false;
             UpdateShellDropCoverage();

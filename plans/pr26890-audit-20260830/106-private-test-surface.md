@@ -724,6 +724,36 @@ Do not delete a lifetime/retirement service used by production merely because it
   global interaction was used. The TLW lifecycle ledger and native-operation
   injection boundary remain separate open sublots of plan 106.
 
+## DropBroker native-operation injection boundary (2026-09-01)
+
+- The replaceable OLE operation record now exists only in the non-installed
+  `drop-broker-test-access.h`. The unconditional table and its source-private
+  `dropbrokerstate.h` carrier are removed. A shipping broker calls
+  `CoLockObjectExternal`, `RegisterDragDrop` and `RevokeDragDrop` directly;
+  only `WXWINUI_TEST_SUPPORT` retains a copied callback record and the
+  synthetic-context exception used by the existing transaction tests.
+- The four callback-bearing boundaries retain their exact ledger order:
+  claim/unlock/complete, lock/note, arm/register/complete and
+  arm/revoke/complete. `RoClearError()` still runs only after the real
+  `RegisterDragDrop()` succeeds, never after an injected operation. Bridge/TLW
+  acquisition, inverse shutdown order, generations, coverage, rollback and
+  fail-closed ownership are unchanged.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. `[winui-drop-broker]~[physical]` remains **1912 assertions / 33
+  cases** in each linkage. The fresh-process GLCanvas **340/1**, NativeWindow
+  **165/1**, RichText **82/1**, STC **41/1** and TreeCtrl **51/1** consumers
+  also remain unchanged.
+- Reusing the same build trees with `wxBUILD_TESTS=OFF`, `wxcore` and `minimal`
+  build with warnings as errors in both linkages. `dumpbin` reports zero match
+  in the shipping shared exports and static symbols for the old/new operation
+  record names, test accessor, table getter, native wrapper functions and any
+  test-shaped `CreateBroker` signature.
+- Both caches are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat
+  **1912/33**, all five fresh-process consumers and runtime smoke plus
+  Supported V0 **2/2** per linkage on private desktops with `WX_UI_TESTS=0`.
+  No physical input or global interaction was used. The remaining TLW
+  lifecycle-observation family is a separate sublot.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
