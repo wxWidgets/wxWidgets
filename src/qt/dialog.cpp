@@ -85,9 +85,16 @@ int wxDialog::ShowModal()
 
     Show(true);
 
-    bool ret = qDialog->exec();
-    if ( GetReturnCode() == 0 )
-        return ret ? wxID_OK : wxID_CANCEL;
+    // EndModal may have been called from InitDialog handler (called from
+    // inside Show()) and hidden the dialog back again
+
+    if ( IsShown() )
+    {
+        bool ret = qDialog->exec();
+        if ( GetReturnCode() == 0 )
+            return ret ? wxID_OK : wxID_CANCEL;
+    }
+
     return GetReturnCode();
 }
 
