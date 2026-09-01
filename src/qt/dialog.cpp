@@ -104,7 +104,14 @@ void wxDialog::EndModal(int retCode)
     wxASSERT_MSG( IsModal(), "EndModal() called for non modal dialog" );
 
     SetReturnCode(retCode);
-    GetDialogHandle()->done( QDialog::Accepted );
+
+    QDialog* qDialog = GetDialogHandle();
+    qDialog->done( QDialog::Accepted );
+    qDialog->setModal(false);
+
+    // QDialog::done() closes and hides the dialog at Qt level, so we need
+    // to reflect this status at wx level too.
+    wxDialogBase::Show(false);
 }
 
 bool wxDialog::IsModal() const
