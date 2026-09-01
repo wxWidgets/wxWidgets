@@ -73,6 +73,7 @@ int wxDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != nullptr, -1, "Invalid dialog" );
+    wxASSERT_MSG( !IsModal(), "ShowModal() can't be called twice" );
 
     // Release the mouse if it's currently captured as the window having it
     // will be disabled when this dialog is shown -- but will still keep the
@@ -93,6 +94,7 @@ int wxDialog::ShowModal()
 void wxDialog::EndModal(int retCode)
 {
     wxCHECK_RET( GetDialogHandle() != nullptr, "Invalid dialog" );
+    wxASSERT_MSG( IsModal(), "EndModal() called for non modal dialog" );
 
     SetReturnCode(retCode);
     GetDialogHandle()->done( QDialog::Accepted );
