@@ -3655,13 +3655,22 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                 // WM_HELP doesn't use lParam under CE
                 HELPINFO* info = (HELPINFO*) lParam;
+
+                // WM_HELP is sent both when F1 is pressed and when the "?"
+                // title bar button is used, so check the key state to find out
+                // which one it was.
+                const wxHelpEvent::Origin origin = wxGetKeyState(WXK_F1)
+                                            ? wxHelpEvent::Origin_Keyboard
+                                            : wxHelpEvent::Origin_HelpButton;
+
                 if ( info->iContextType == HELPINFO_WINDOW )
                 {
                     wxHelpEvent helpEvent
                                 (
                                     wxEVT_HELP,
                                     GetId(),
-                                    wxPoint(info->MousePos.x, info->MousePos.y)
+                                    wxPoint(info->MousePos.x, info->MousePos.y),
+                                    origin
                                 );
 
                     helpEvent.SetEventObject(this);
@@ -3669,7 +3678,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 }
                 else if ( info->iContextType == HELPINFO_MENUITEM )
                 {
-                    wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId);
+                    wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId,
+                                          wxDefaultPosition, origin);
                     helpEvent.SetEventObject(this);
                     HandleWindowEvent(helpEvent);
 

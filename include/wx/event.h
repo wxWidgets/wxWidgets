@@ -3468,7 +3468,7 @@ public:
                 Origin origin = Origin_Unknown)
         : wxCommandEvent(type, winid),
           m_pos(pt),
-          m_origin(GuessOrigin(origin))
+          m_origin(origin)
     { }
     wxHelpEvent(const wxHelpEvent& event)
         : wxCommandEvent(event),
@@ -3501,10 +3501,6 @@ protected:
     wxString  m_target;
     wxString  m_link;
     Origin    m_origin;
-
-    // we can try to guess the event origin ourselves, even if none is
-    // specified in the ctor
-    static Origin GuessOrigin(Origin origin);
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHelpEvent);
