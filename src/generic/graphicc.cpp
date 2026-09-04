@@ -416,7 +416,9 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
 #endif
-#ifdef __WXGTK__
+// GdkWindow is gone under GTK4 and there is no drawable to make a Cairo
+// context from outside of a paint handler, see src/gtk/dc.cpp.
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window );
 #endif
 #ifdef __WXMSW__
@@ -2319,7 +2321,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 }
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window )
 : wxGraphicsContext(renderer)
 {
@@ -2335,7 +2337,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window 
     m_height = height;
 #endif
 }
-#endif // __WXGTK__
+#endif // __WXGTK__ && !__WXGTK4__
 
 #ifdef __WXMSW__
 
@@ -2451,7 +2453,15 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 
     wxASSERT_MSG( window->m_wxwindow, wxT("wxCairoContext needs a widget") );
 
+#ifdef __WXGTK4__
+    // Nothing to draw on: a GdkSurface has no Cairo context of its own and
+    // GTK only hands one out from its own snapshot vfunc. The context stays
+    // null, which Init() and every operation below cope with, so the size is
+    // still reported correctly but the drawing goes nowhere.
+    Init(nullptr, false);
+#else
     Init(gdk_cairo_create(window->GTKGetDrawingWindow()), true);
+#endif
 
     wxSize sz = window->GetSize();
     m_width = sz.x;
@@ -2538,8 +2548,25 @@ void wxCairoContext::Init(cairo_t *context, bool storeInitClip)
     // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling
     // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
     // GDK_DPI_SCALE environment variable).
+#ifdef __WXGTK4__
+    // GdkScreen is gone, but gdk_screen_get_resolution() only ever reported
+    // the "gtk-xft-dpi" setting it is read from directly here, in 1024ths of
+    // a point. A negative value means "unset".
+    if ( GtkSettings* const settings = gtk_settings_get_default() )
+    {
+        int xftDpi = -1;
+        g_object_get(settings, "gtk-xft-dpi", &xftDpi, nullptr);
+
+        m_fontScalingFactor = xftDpi > 0 ? float(xftDpi / 1024.0 / 96.0) : 1.0f;
+    }
+    else
+    {
+        m_fontScalingFactor = 1.0f;
+    }
+#else
     GdkScreen* screen = gdk_screen_get_default();
     m_fontScalingFactor = screen ? float(gdk_screen_get_resolution(screen) / 96.0) : 1.0f;
+#endif
 #endif
 
     m_context = context;
@@ -3445,7 +3472,11 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * conte
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * window )
 {
     ENSURE_LOADED_OR_RETURN(nullptr);
-#ifdef __WXGTK__
+#ifdef __WXGTK4__
+    // There are no native windows to draw on left under GTK4.
+    wxUnusedVar(window);
+    return nullptr;
+#elif defined(__WXGTK__)
     return new wxCairoContext(this, static_cast<GdkWindow*>(window));
 #elif defined(__WXMSW__)
     return new wxCairoContext(this, static_cast<HWND>(window));
@@ -3473,7 +3504,20 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromImage(wxImage& image)
 
 wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
 {
-#ifdef __WXGTK__
+#ifdef __WXGTK4__
+    // GTK4 has no root window to measure against, and measuring never needed
+    // a real target in the first place: any surface will do.
+    cairo_surface_t* const surface =
+        cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+    cairo_t* const cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
+
+    // The ctor takes a reference of its own.
+    wxGraphicsContext* const gc = new wxCairoContext(this, cr);
+    cairo_destroy(cr);
+
+    return gc;
+#elif defined(__WXGTK__)
     return CreateContextFromNativeWindow(gdk_get_default_root_window());
 #elif defined(__WXMSW__)
     ENSURE_LOADED_OR_RETURN(nullptr);

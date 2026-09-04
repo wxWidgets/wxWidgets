@@ -1505,9 +1505,19 @@
  */
 #if wxUSE_GUI
 
+/*
+   wxGTK implements this for GTK4 only, and only from GTK 4.10, which is where
+   an accessible object stopped having to be a widget -- without that a
+   wxAccessible cannot describe anything that has no window of its own, which
+   is what the whole API is for. The GTK version cannot be tested here, as no
+   GTK header has been seen yet at this point, so configure refuses
+   --enable-accessibility against an older GTK instead.
+ */
 #if wxUSE_ACCESSIBILITY && !defined(__WXMSW__)
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_ACCESSIBILITY is currently only supported under wxMSW"
+#   if defined(__WXGTK4__)
+        /* supported */
+#   elif defined(wxABORT_ON_CONFIG_ERROR)
+#       error "wxUSE_ACCESSIBILITY is only supported under wxMSW and wxGTK4"
 #   else
 #       undef wxUSE_ACCESSIBILITY
 #       define wxUSE_ACCESSIBILITY 0

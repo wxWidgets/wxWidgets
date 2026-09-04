@@ -332,9 +332,69 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     }
 }
 
+#ifdef __WXGTK4__
+
+extern "C" {
+
+// Called when the popover GTK4 builds a wxPopupWindow out of closes itself,
+// which with autohide turned on below is how a click outside of it arrives.
+static void wx_popup_closed(GtkPopover*, wxPopupTransientWindow* popup)
+{
+    popup->GTKOnPopoverClosed();
+}
+
+} // extern "C"
+
+#endif // __WXGTK4__
+
 bool wxPopupTransientWindow::Show( bool show )
 {
-#ifdef __WXGTK__
+#ifdef __WXGTK4__
+    // GTK4 has no grabs of any kind: gtk_grab_add(), gdk_seat_grab() and
+    // gdk_pointer_grab() are all gone. What replaces them for this particular
+    // job -- keeping a popup up until the user clicks somewhere else -- is a
+    // GtkPopover's own "autohide" mode, in which GTK takes and releases the
+    // grab itself and tells us about the dismissal through "closed".
+    //
+    // wxPopupWindow leaves autohide off, as a plain wxPopupWindow is not
+    // supposed to disappear on its own; it is only the transient flavour,
+    // here, that wants it.
+    if ( show )
+    {
+        if ( !m_gtkClosedHandler )
+        {
+            m_gtkClosedHandler = g_signal_connect(m_widget, "closed",
+                                                  G_CALLBACK(wx_popup_closed),
+                                                  this);
+        }
+
+        gtk_popover_set_autohide(GTK_POPOVER(m_widget), TRUE);
+    }
+    else
+    {
+        // Ask GTK to close the popover, and leave the autohide flag alone.
+        //
+        // GTK takes its grab when an autohiding popover is shown and gives it
+        // back when that popover is popped down, so the flag has to still be
+        // set at popdown. Clearing it while the popover is up means no popdown
+        // happens as far as GTK is concerned: the grab is never returned, and
+        // from then on GTK routes keyboard input to a popover that is not
+        // there any more. src/gtk/popupwin.cpp says the same about this flag --
+        // set it once, rather than switching it on and off around Show().
+        //
+        // "closed" means "the user dismissed this", so block the handler for
+        // the one emission caused here; otherwise every programmatic
+        // Dismiss() would report itself back through OnDismiss() as though
+        // the user had clicked outside.
+        if ( m_gtkClosedHandler )
+            g_signal_handler_block(m_widget, m_gtkClosedHandler);
+
+        gtk_popover_popdown(GTK_POPOVER(m_widget));
+
+        if ( m_gtkClosedHandler )
+            g_signal_handler_unblock(m_widget, m_gtkClosedHandler);
+    }
+#elif defined(__WXGTK__)
     if (!show)
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
@@ -369,7 +429,7 @@ bool wxPopupTransientWindow::Show( bool show )
 
     bool ret = wxPopupWindow::Show( show );
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     if (show)
     {
         gtk_grab_add( m_widget );

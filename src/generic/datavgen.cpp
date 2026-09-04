@@ -19,11 +19,15 @@
 
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
-        #include "wx/app.h"          // GetRegisteredClassName()
         #include "wx/msw/private.h"
         #include "wx/msw/wrapwin.h"
         #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #endif
+    // Needed everywhere, not only under MSW for GetRegisteredClassName():
+    // wxTheApp is used in the destructor below. This only showed once this
+    // file was built for a port that has no precompiled headers, which until
+    // now it never was -- the generic control was used by wxMSW alone.
+    #include "wx/app.h"
     #include "wx/sizer.h"
     #include "wx/log.h"
     #include "wx/dcclient.h"

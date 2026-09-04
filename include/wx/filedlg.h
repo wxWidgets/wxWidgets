@@ -271,7 +271,16 @@ wxSaveFileSelector(const wxString& what,
                    wxWindow *parent = nullptr);
 
 
-#if defined (__WXUNIVERSAL__)
+#if defined (__WXUNIVERSAL__) || defined(__WXGTK4__)
+    // GTK4 too: the GtkFileChooser interface the native version is built on is
+    // deprecated, and its replacement GtkFileDialog does not reliably open at
+    // all -- it builds its window and never shows it on a machine whose portal
+    // produces no dialog, with no error and no timeout, so ShowModal() does
+    // not return. Measured in
+    // docs/gtk/probes/gtk4-filedialog-portal-hang.c; wxDirDialog moved for the
+    // same reason. The generic dialog is the one every port without a native
+    // version already uses, and it supports the extra control that the GTK4
+    // native one had to give up.
     #define wxHAS_GENERIC_FILEDIALOG
     #include "wx/generic/filedlgg.h"
 #elif defined(__WXMSW__) || (defined(__WXQT__) && defined(__WINDOWS__))

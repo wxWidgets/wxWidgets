@@ -95,3 +95,51 @@ public:
      */
     void Disown();
 };
+
+/**
+    @class wxNativeContainerWindow
+
+    Wraps an existing native top-level window so that it can be used as
+    the parent of other wxWidgets windows.
+
+    This is the counterpart of wxNativeWindow: while that class lets you
+    embed a native control inside a wxWidgets window, this one lets you
+    use an existing native top-level window as a container for wxWidgets
+    windows, e.g. when wxWidgets is used to implement a plugin hosted in
+    a native application.
+
+    @note Check whether @c wxHAS_NATIVE_CONTAINER_WINDOW is defined before
+        using this class as it is not available under all platforms. In
+        particular, it is @b not available when using wxGTK built against
+        GTK+ 4: this class relies on reparenting an arbitrary foreign
+        native window into a GTK widget hierarchy, and GTK 4 removed both
+        @c GdkWindow and this reparenting capability with no replacement,
+        so there is currently no way to implement this class for that
+        port.
+
+    @since 3.1.0
+
+    @library{wxcore}
+    @category{managedwnd}
+ */
+class wxNativeContainerWindow : public wxTopLevelWindow
+{
+public:
+    /**
+        Default ctor, Create() must be called later to really create the window.
+     */
+    wxNativeContainerWindow();
+
+    /**
+        Create a window from an existing native window handle.
+
+        Use GetHandle() to check if the creation was successful, it will
+        return 0 if the handle was invalid.
+     */
+    wxNativeContainerWindow(wxNativeContainerWindowHandle handle);
+
+    /**
+        Same as the non-default constructor, but with a return code.
+     */
+    bool Create(wxNativeContainerWindowHandle handle);
+};

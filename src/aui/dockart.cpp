@@ -558,7 +558,31 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     if (!window->m_wxwindow) return;
     if (!gtk_widget_is_drawable(window->m_wxwindow)) return;
 
-#ifdef __WXGTK3__
+#if defined(__WXGTK4__)
+    // gtk_render_handle() and the style context it wants are deprecated, and
+    // what replaces them -- snapshotting a real GtkPaned separator -- is
+    // already behind wxRendererNative, which is where wxSplitterWindow gets
+    // the same sash from. Going through it keeps one implementation of "what
+    // a sash looks like" rather than two.
+    //
+    // It draws a sash that runs the length of the window, since that is what a
+    // splitter's does, so the drawing is clipped to the piece this call is
+    // about.
+    {
+        wxDCClipper clip(dc, rect);
+
+        const bool isVert = orientation == wxVERTICAL;
+
+        wxRendererNative::Get().DrawSplitterSash
+        (
+            window,
+            dc,
+            wxSize(rect.x + rect.width, rect.y + rect.height),
+            isVert ? rect.x : rect.y,
+            isVert ? wxVERTICAL : wxHORIZONTAL
+        );
+    }
+#elif defined(__WXGTK3__)
     cairo_t* cr = static_cast<cairo_t*>(dc.GetGraphicsContext()->GetNativeContext());
     // invert orientation for widget (horizontal GtkPaned has a vertical splitter)
     wxOrientation orient = orientation == wxVERTICAL ? wxHORIZONTAL : wxVERTICAL;

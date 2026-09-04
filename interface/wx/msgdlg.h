@@ -23,6 +23,14 @@ const char wxMessageBoxCaptionStr[] = "Message";
     in the message dialogs while macOS does use an icon, but it uses the
     application icon for the informational dialogs.
 
+    @note Under GTK4 this dialog is a @c GtkAlertDialog, which GTK gives no
+        title and no icon, and whose message text cannot be selected. So the
+        @a caption is not shown, the icon styles have no effect, and the user
+        cannot copy the message out of the dialog. This is not a limitation of
+        wxWidgets: GTK4 removed the deprecated @c GtkMessageDialog, which had
+        all three, and its replacement offers a message, an optional detail
+        line and a row of buttons and nothing else.
+
     @beginStyleTable
     @style{wxOK}
         Puts an Ok button in the message box. May be combined with @c wxCANCEL.

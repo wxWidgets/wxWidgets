@@ -60,10 +60,14 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     // is going to disappear soon, indicate it by giving it this special style
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
 
-#if defined(__WXGTK__)
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     gtk_window_set_type_hint(GTK_WINDOW(m_widget),
                              GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
 #endif
+    // Note that there is nothing to do here under GTK4: window type hints were
+    // removed entirely, as they can't be honoured under Wayland where it's up
+    // to the compositor to decide how to present a window. This means the
+    // splash screen is no longer marked as such for the window manager.
 
     m_splashStyle = splashStyle;
     m_milliseconds = milliseconds;

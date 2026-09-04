@@ -2413,8 +2413,16 @@ void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
     {
         m_windowSizer->SetContainingWindow(nullptr);
 
+        // Stop pointing at the old sizer before destroying it, not after.
+        // Destroying a sizer tree detaches windows, which can reach the event
+        // loop, and anything that calls Layout() from there would otherwise
+        // find m_windowSizer still pointing into a tree that is halfway
+        // through being freed.
+        wxSizer* const oldSizer = m_windowSizer;
+        m_windowSizer = nullptr;
+
         if ( deleteOld )
-            delete m_windowSizer;
+            delete oldSizer;
     }
 
     m_windowSizer = sizer;

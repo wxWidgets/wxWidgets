@@ -68,7 +68,17 @@ wxFLAGS_MEMBER(wxCB_DROPDOWN)
 
 wxEND_FLAGS( wxComboBoxStyle )
 
+#ifdef __WXGTK4__
+// wxComboBox is the generic, wxOwnerDrawnComboBox-based one there, and the
+// runtime base has to say so: wxVListBoxComboPopup asks
+// wxDynamicCast(combo, wxOwnerDrawnComboBox) before it will measure or draw
+// an item, and a class info claiming wxControl fails that even though the
+// C++ type does derive from it.
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxOwnerDrawnComboBox,
+                              "wx/combobox.h");
+#else
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h");
+#endif
 
 wxBEGIN_PROPERTIES_TABLE(wxComboBox)
 wxEVENT_PROPERTY( Select, wxEVT_COMBOBOX, wxCommandEvent )
@@ -1219,7 +1229,15 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     }
     else
     {
+#ifdef __WXGTK4__
+        // Measure a text control rather than a wxComboBox. GTK4 has no native
+        // combo box, so wxComboBox is itself a wxComboCtrl there -- creating
+        // one here to ask its height would ask this same function again, and
+        // not stop. A text entry is the part whose height is wanted anyway.
+        wxTextCtrl* cb = new wxTextCtrl;
+#else
         wxComboBox* cb = new wxComboBox;
+#endif
 #ifndef __WXGTK3__
         // GTK3 returns zero for the preferred size of a hidden widget
         cb->Hide();
@@ -1650,9 +1668,19 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
     wxCommandEvent evt2(event);
     evt2.SetId(GetId());
     evt2.SetEventObject(this);
-    HandleWindowEvent(evt2);
+    const bool handled = HandleWindowEvent(evt2);
 
+    // The re-sent event is the one that propagates, so stop this one either
+    // way: letting both travel would deliver two to every parent.
     event.StopPropagation();
+
+    // Say so when nobody handled the re-sent event, so that the text
+    // control's own handling of this one carries on. For Enter that is what
+    // activates the dialog's default button: wxTextCtrl::OnChar() only calls
+    // ClickDefaultButtonIfPossible() if its wxEVT_TEXT_ENTER came back
+    // unhandled, and this handler is inside that call.
+    if ( !handled )
+        event.Skip();
 }
 
 // call if cursor is on button area or mouse is captured for the button

@@ -170,6 +170,12 @@ public:
     // Overridden to grab the input on some platforms
     virtual bool Show( bool show = true ) override;
 
+#ifdef __WXGTK4__
+    // Called from the GtkPopover "closed" handler, which is how GTK4 reports
+    // the click-outside dismissal a grab used to give us, see popupcmn.cpp.
+    void GTKOnPopoverClosed() { DismissAndNotify(); }
+#endif // __WXGTK4__
+
 protected:
     // common part of all ctors
     void Init();
@@ -199,6 +205,13 @@ protected:
     // the handlers we created, may be null (if not, must be deleted)
     wxPopupWindowHandler *m_handlerPopup;
     wxPopupFocusHandler  *m_handlerFocus;
+
+#ifdef __WXGTK4__
+    // Id of the GtkPopover "closed" handler, or 0 if not connected yet: GTK4
+    // reports the click-outside dismissal there rather than through a grab,
+    // see src/common/popupcmn.cpp.
+    unsigned long m_gtkClosedHandler = 0;
+#endif // __WXGTK4__
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxPopupTransientWindow);

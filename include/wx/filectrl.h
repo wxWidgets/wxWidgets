@@ -66,7 +66,13 @@ void wxGenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
 void wxGenerateSelectionChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
 void wxGenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString& filename = wxEmptyString );
 
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+// Not under GTK4: wxGtkFileCtrl is a GtkFileChooserWidget, which GTK 4.10
+// deprecated and GTK4 gives nothing to replace it with -- GtkFileDialog and
+// GtkFileLauncher are controller objects, not widgets, and there is no
+// embeddable file chooser at all any more. wxWidgets has its own, which every
+// platform without a native one already uses, so use that rather than carry a
+// control that stops compiling at GTK5.
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__) && !defined(__WXGTK4__)
     #define wxFileCtrl wxGtkFileCtrl
     #include "wx/gtk/filectrl.h"
 #else

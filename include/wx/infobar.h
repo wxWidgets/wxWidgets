@@ -56,7 +56,13 @@ private:
 };
 
 // currently only GTK+ has a native implementation
-#if defined(__WXGTK218__) && !defined(__WXUNIVERSAL__)
+//
+// Not under GTK4: GtkInfoBar is deprecated there with no replacement at all --
+// GTK's own advice is to build the banner yourself, which is exactly what
+// wxInfoBarGeneric already is, and what every other platform uses. Keeping the
+// native one would mean carrying four deprecated calls for a widget that goes
+// away in GTK5 regardless.
+#if defined(__WXGTK218__) && !defined(__WXUNIVERSAL__) && !defined(__WXGTK4__)
     #include "wx/gtk/infobar.h"
     #define wxHAS_NATIVE_INFOBAR
 #endif // wxGTK2

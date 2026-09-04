@@ -85,7 +85,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
 wxBEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_SIZE(wxStatusBarGeneric::OnSize)
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
 #endif
@@ -198,7 +198,16 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 bool wxStatusBarGeneric::ShowsSizeGrip() const
 {
     // Currently drawing size grip is implemented only in wxGTK.
-#ifdef __WXGTK__
+    //
+    // And not under GTK4: resizing a window from a grip needs
+    // gdk_toplevel_begin_resize(), which wants the pointer position in
+    // surface coordinates and the GdkDevice it belongs to, i.e. exactly the
+    // coordinate translation and input device questions the Phase 2 and
+    // Phase 3 designs haven't settled yet. GTK itself dropped resize grips
+    // back in 3.14 on the grounds that windows are resized by dragging their
+    // edges, which is still how it works under GTK4, so not showing one is a
+    // reasonable state to be in meanwhile rather than a broken one.
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     if ( !HasFlag(wxSTB_SIZEGRIP) )
         return false;
 
@@ -411,7 +420,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     // Draw grip first
     if ( ShowsSizeGrip() )
     {
@@ -463,7 +472,7 @@ void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
     event.Skip();
 }
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
 void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
 {
     int width, height;

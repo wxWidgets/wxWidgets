@@ -26,6 +26,13 @@
         wxWidgets 3.1.3).
     @endStyleTable
 
+    @note In wxGTK built against GTK 4 a popup window must have a parent:
+        creating one without a parent fails. GTK 4 removed @c GTK_WINDOW_POPUP,
+        and the only widget left that still gets a surface of its own which may
+        extend past the edges of its top level window is @c GtkPopover, which
+        is anchored to a rectangle inside a parent widget. There is nothing to
+        anchor a parentless popup to.
+
     @library{wxcore}
     @category{managedwnd}
 

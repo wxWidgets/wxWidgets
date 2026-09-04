@@ -14,6 +14,18 @@
 #include "wx/dc.h"
 #include "wx/overlay.h"
 
+#ifdef __WXGTK4__
+    // Under GTK4 wxOverlay::Create() always returns a native implementation,
+    // so the caret is always drawn in an overlay widget of its own and never
+    // draws on the window it belongs to. Hiding it around drawing is then not
+    // merely unnecessary but actively harmful: hiding and showing it again
+    // restarts the blink timer, and each of them queues a draw of the overlay,
+    // which invalidates its parent too and so arrives back here as another
+    // paint event -- with the result that the timer was restarted before it
+    // could ever expire and the caret stayed permanently on.
+    #define wxHAS_CARET_USING_OVERLAYS
+#endif
+
 class WXDLLIMPEXP_FWD_CORE wxCaret;
 
 class WXDLLIMPEXP_CORE wxCaretTimer : public wxTimer

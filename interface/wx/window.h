@@ -2045,12 +2045,18 @@ public:
         Returns the window position in screen coordinates, whether the window is a
         child window or a top level one.
 
+        @note Under Wayland these are not screen coordinates; see
+            ClientToScreen() for what they are and what may be done with them.
+
         @see GetPosition()
     */
     wxPoint GetScreenPosition() const;
 
     /**
         Returns the position and size of the window on the screen as a wxRect object.
+
+        @note Under Wayland these are not screen coordinates; see
+            ClientToScreen() for what they are and what may be done with them.
 
         @see GetRect()
     */
@@ -2145,6 +2151,16 @@ public:
 
         @param pt
             The client position for the second form of the function.
+
+        @note Under Wayland these are not screen coordinates. A client is not
+            told where the compositor placed its window, so wxGTK can only
+            map as far as the top level window and the coordinates it returns
+            are relative to that. Converting one way and back is consistent,
+            and so is comparing such a value with another obtained the same
+            way -- including wxGetMousePosition(), which answers in the same
+            space while the pointer is over that window. What does not work
+            is mixing one with a coordinate from anywhere else: a second top
+            level window, wxDisplay, or the compositor.
     */
     wxPoint ClientToScreen(const wxPoint& pt) const;
 
@@ -2208,6 +2224,9 @@ public:
 
         @param pt
             The screen position.
+
+        @note Under Wayland these are not screen coordinates; see
+            ClientToScreen() for what they are and what may be done with them.
     */
     wxPoint ScreenToClient(const wxPoint& pt) const;
 

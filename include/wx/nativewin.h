@@ -38,13 +38,22 @@
     typedef HWND wxNativeContainerWindowHandle;
     typedef HWND wxNativeWindowHandle;
 #elif defined(__WXGTK__)
-    // GdkNativeWindow is guint32 under GDK/X11 and gpointer under GDK/WIN32
-    #ifdef __UNIX__
-        typedef unsigned long wxNativeContainerWindowId;
+    #ifdef __WXGTK4__
+        // GTK 4 removed GdkWindow entirely, along with any way to reparent
+        // an arbitrary foreign native window into a GTK widget hierarchy
+        // (the mechanism wxNativeContainerWindow relies on), and has no
+        // replacement for it, so this class can't be implemented for this
+        // port any more.
+        #undef wxHAS_NATIVE_CONTAINER_WINDOW
     #else
-        typedef void *wxNativeContainerWindowId;
+        // GdkNativeWindow is guint32 under GDK/X11 and gpointer under GDK/WIN32
+        #ifdef __UNIX__
+            typedef unsigned long wxNativeContainerWindowId;
+        #else
+            typedef void *wxNativeContainerWindowId;
+        #endif
+        typedef GdkWindow *wxNativeContainerWindowHandle;
     #endif
-    typedef GdkWindow *wxNativeContainerWindowHandle;
     typedef GtkWidget *wxNativeWindowHandle;
 #elif defined(__WXOSX_COCOA__)
     typedef NSView *wxNativeWindowHandle;

@@ -732,6 +732,17 @@ private:
     // minimized, in which case we postpone updating it until it is restored.
     bool m_updateOnRestore = false;
 
+    // How many DoFrameLayout() walks over the frame's sizer are in progress.
+    // OnMotion() must not act while any of them is inside it: handling a
+    // motion goes on to call Update(), which replaces that sizer and deletes
+    // the old one underneath the walk. GTK4 dispatches input from within a
+    // layout, so such a motion really does arrive there.
+    //
+    // This is a count and not a flag because DoFrameLayout() nests, and an
+    // inner walk finishing would otherwise clear the state the outer one
+    // still needs.
+    int m_frameLayoutDepth = 0;
+
     // Toolbars used to show minimized panes. Some, or all, of them can be null.
     //
     // This is indexed by wxAUI_DOCK_TOP, wxAUI_DOCK_BOTTOM, wxAUI_DOCK_RIGHT

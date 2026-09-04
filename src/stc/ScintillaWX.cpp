@@ -1131,6 +1131,35 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
             // look for any available layout that would produce an ASCII letter for
             // the given hardware keycode
             const unsigned keycode = evt.GetRawKeyFlags();
+#ifdef __WXGTK4__
+            // GdkKeymap is gone: gdk_display_map_keycode() returns all the
+            // (group, level) entries for the keycode at once, so filter them
+            // for the same shifted level and groups the loop below looks at.
+            GdkKeymapKey* keys;
+            guint* keyvals;
+            int nEntries;
+            if (gdk_display_map_keycode(gdk_display_get_default(), keycode,
+                                        &keys, &keyvals, &nEntries))
+            {
+                for (int group = 0; group < 4 && key == WXK_NONE; group++)
+                {
+                    for (int i = 0; i < nEntries; i++)
+                    {
+                        if (keys[i].group != group || keys[i].level != 1)
+                            continue;
+
+                        const unsigned keyval = keyvals[i];
+                        if (keyval >= 'A' && keyval <= 'Z')
+                        {
+                            key = keyval;
+                            break;
+                        }
+                    }
+                }
+                g_free(keys);
+                g_free(keyvals);
+            }
+#else
             GdkKeymap* keymap = gdk_keymap_get_for_display(gdk_display_get_default());
             GdkKeymapKey keymapKey = { keycode, 0, 1 };
             do {
@@ -1142,6 +1171,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
                 }
                 keymapKey.group++;
             } while (keymapKey.group < 4);
+#endif // __WXGTK4__/!__WXGTK4__
             if (key == WXK_NONE)
             {
                 // There may be no keyboard layouts with Latin keys available,

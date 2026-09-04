@@ -1224,6 +1224,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
                  pageObj->GetToolId());
 
             m_pToolbar->Realize();
+            RecalculatePositions(m_width, m_height);
         }
     }
 #else

@@ -68,6 +68,16 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 #include <memory>
 #include <unordered_map>
 
+// Where the pointer was, in the managed frame's client coordinates, the last
+// time a motion event arrived while a floating pane was being dragged.
+//
+// A file static rather than a member because only one pane can be dragged at a
+// time -- the drag holds the mouse capture -- and because adding a member to
+// wxAuiManager would change its size, which is not a reasonable price for a bug
+// fix. wxGTK keeps g_lastMouseEvent the same way and for the same reason.
+static wxPoint gs_dragClientPos;
+static bool gs_hasDragClientPos = false;
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
 wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
@@ -3375,7 +3385,26 @@ void wxAuiManager::Update()
 
 void wxAuiManager::DoFrameLayout()
 {
-    m_frame->Layout();
+    // Nothing may replace the frame's sizer while this walk is inside it.
+    // Counted rather than flagged, and unwound even if Layout() throws --
+    // leaving the count raised would make OnMotion() ignore the mouse for
+    // good.
+    class LayoutDepth
+    {
+    public:
+        explicit LayoutDepth(int& depth) : m_depth(depth) { ++m_depth; }
+        ~LayoutDepth() { --m_depth; }
+
+    private:
+        int& m_depth;
+
+        wxDECLARE_NO_COPY_CLASS(LayoutDepth);
+    };
+
+    {
+        LayoutDepth inLayout(m_frameLayoutDepth);
+        m_frame->Layout();
+    }
 
     for ( auto& part : m_uiParts )
     {
@@ -4073,6 +4102,7 @@ void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
     else
     {
         m_action = actionDragFloatingPane;
+        gs_hasDragClientPos = false;
     }
 
     m_actionWindow = pane_window;
@@ -4205,6 +4235,27 @@ void wxAuiManager::UpdateHint(const wxRect& rect)
      }
 }
 
+// Where the pointer is, in the managed frame's client coordinates.
+//
+// While a floating pane is being dragged this comes from that drag's own
+// motion events rather than from wxGetMousePosition(), which cannot answer it
+// everywhere: under Wayland it reports coordinates relative to whichever
+// surface the pointer is over, and during a drag that is the floating pane,
+// not the frame the pane might be dropped onto. Asking there returns a
+// position inside the wrong window, and ScreenToClient() cannot correct it
+// because a Wayland toplevel does not know where it is either.
+//
+// Everywhere else the two agree, so this is not a special case for one
+// platform: it is using the position the drag already reported instead of
+// asking the windowing system to reconstruct it.
+static wxPoint wxAuiGetDragClientPosition(wxWindow* frame)
+{
+    if ( gs_hasDragClientPos )
+        return gs_dragClientPos;
+
+    return frame->ScreenToClient(::wxGetMousePosition());
+}
+
 void wxAuiManager::OnFloatingPaneMoveStart(wxWindow* wnd)
 {
     // try to find the pane
@@ -4265,7 +4316,7 @@ void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
     wxUnusedVar(dir);
 #endif
 
-    wxPoint client_pt = m_frame->ScreenToClient(pt);
+    wxPoint client_pt = wxAuiGetDragClientPosition(m_frame);
 
     // calculate the offset from the upper left-hand corner
     // of the frame to the mouse pointer
@@ -4368,7 +4419,7 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     wxUnusedVar(dir);
 #endif
 
-    wxPoint client_pt = m_frame->ScreenToClient(pt);
+    wxPoint client_pt = wxAuiGetDragClientPosition(m_frame);
 
     // calculate the offset from the upper left-hand corner
     // of the frame to the mouse pointer
@@ -5154,6 +5205,15 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
 
 void wxAuiManager::OnMotion(wxMouseEvent& event)
 {
+    // GTK4 dispatches input from inside a layout, so this can arrive while
+    // DoFrameLayout() is still walking the frame's sizer. Acting on it goes
+    // back into Update(), which replaces and deletes that sizer underneath the
+    // walk. Dropping the motion is safe -- another one follows immediately --
+    // and it is the only place that covers every route back in, rather than
+    // guarding Update() itself, which some callers need to run synchronously.
+    if ( m_frameLayoutDepth > 0 )
+        return;
+
     // sometimes when Update() is called from inside this method,
     // a spurious mouse move event is generated; this check will make
     // sure that only real mouse moves will get anywhere in this method;
@@ -5217,6 +5277,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     paneInfo->IsFloatable())
                 {
                     m_action = actionDragFloatingPane;
+                    gs_hasDragClientPos = false;
 
                     // set initial float position
                     wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
@@ -5263,6 +5324,13 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
     }
     else if (m_action == actionDragFloatingPane)
     {
+        // Remember where the pointer is while we still have an event saying
+        // so: OnFloatingPaneMoving() and OnFloatingPaneMoved() decide from it
+        // and cannot ask for it themselves everywhere. See
+        // wxAuiGetDragClientPosition().
+        gs_dragClientPos = event.GetPosition();
+        gs_hasDragClientPos = true;
+
         if (m_actionWindow)
         {
             // We can't move the child window so we need to get the frame that
@@ -5337,6 +5405,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
         {
             pane.state &= ~wxAuiPaneInfo::actionPane;
             m_action = actionDragFloatingPane;
+            gs_hasDragClientPos = false;
             m_actionWindow = pane.frame;
         }
     }

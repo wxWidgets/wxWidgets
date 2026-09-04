@@ -368,6 +368,8 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/access.h"
+#elif defined(__WXGTK4__)
+    #include "wx/gtk/access.h"
 #endif
 
 #endif // wxUSE_ACCESSIBILITY

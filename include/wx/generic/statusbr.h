@@ -63,8 +63,12 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
 
+    // These only exist to drag the size grip, which isn't shown under GTK4,
+    // see wxStatusBarGeneric::ShowsSizeGrip().
+#if defined(__WXGTK__) && !defined(__WXGTK4__)
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
+#endif
 
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);

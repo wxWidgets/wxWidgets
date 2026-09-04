@@ -5004,6 +5004,15 @@ public:
     windows in all ports, but are not generated for the child windows in
     wxGTK.
 
+    Under Wayland a client may neither position its own top level window nor
+    learn where the compositor has put it. In wxGTK built against GTK 4 this
+    means no @c wxEVT_MOVE is sent for a wxWindow::Move() call, because the
+    move does not happen, and none is sent when the user drags the window,
+    because the application is never told. Code that has to follow a top
+    level window's position cannot be made to work on that platform; note
+    that wxWindow::GetPosition() still answers with the position that was
+    last requested, which is not where the window is.
+
     @beginEventTable{wxMoveEvent}
     @event{EVT_MOVE(func)}
         Process a @c wxEVT_MOVE event, which is generated when a window is moved.

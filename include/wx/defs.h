@@ -2978,6 +2978,27 @@ typedef struct _GtkTextBuffer     GtkTextBuffer;
 typedef struct _GtkRange          GtkRange;
 typedef struct _GtkCellRenderer   GtkCellRenderer;
 
+#ifdef __WXGTK4__
+/*
+   Stand-ins for the GTK4 and GLib types used by the menu classes: GTK4 builds
+   menus from a GMenu model and GActions rather than from widgets, and its
+   accelerators are shortcuts held by a controller, see
+   docs/gtk/gtk4-phase-menu-design.md.
+ */
+typedef struct _GMenu                 GMenu;
+typedef struct _GActionGroup          GActionGroup;
+typedef struct _GSimpleActionGroup    GSimpleActionGroup;
+typedef struct _GMainLoop             GMainLoop;
+typedef struct _GtkEventController    GtkEventController;
+typedef struct _GtkShortcutController GtkShortcutController;
+typedef struct _GdkSurface            GdkSurface;
+typedef struct _GdkDrop               GdkDrop;
+typedef struct _GdkDrag               GdkDrag;
+typedef struct _GdkContentFormats     GdkContentFormats;
+typedef struct _GdkClipboard          GdkClipboard;
+typedef struct _GdkContentProvider    GdkContentProvider;
+#endif /* __WXGTK4__ */
+
 typedef GtkWidget *WXWidget;
 
 #endif /*  __WXGTK__ */

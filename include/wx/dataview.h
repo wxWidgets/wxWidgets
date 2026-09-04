@@ -34,7 +34,7 @@ class wxItemAttr;
 class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 
 #if wxUSE_NATIVE_DATAVIEWCTRL && !defined(__WXUNIVERSAL__)
-    #if defined(__WXGTK__) || defined(__WXOSX__)
+    #if (defined(__WXGTK__) && !defined(__WXGTK4__)) || defined(__WXOSX__)
         #define wxHAS_NATIVE_DATAVIEWCTRL
     #endif
 #endif

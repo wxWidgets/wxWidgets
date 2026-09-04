@@ -115,6 +115,17 @@ protected:
     #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__) || (defined(__WXQT__) && defined(__WINDOWS__))
     #include "wx/msw/dirdlg.h"  // Native MSW or Qt under MSW
+#elif defined(__WXGTK4__)
+    // GTK4's own folder chooser, GtkFileDialog, does not open at all on a
+    // machine whose portal never produces a dialog: it builds its window and
+    // never shows it, with no error and no timeout, so ShowModal() does not
+    // return. Measured in docs/gtk/probes/gtk4-filedialog-portal-hang.c.
+    //
+    // wx has a folder chooser of its own, which every port without a native
+    // one already uses, so wxGTK4 uses that rather than a dialog that can
+    // hang the application.
+    #include "wx/generic/dirdlgg.h"
+    #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXGTK__)
     #include "wx/gtk/dirdlg.h"  // Native GTK for gtk2.4
 #elif defined(__WXMAC__)

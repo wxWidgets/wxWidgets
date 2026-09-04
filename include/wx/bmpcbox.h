@@ -24,7 +24,13 @@ class WXDLLIMPEXP_FWD_CORE wxItemContainer;
 // Define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED for platforms which
 // wxBitmapComboBox implementation utilizes ownerdrawn combobox
 // (either native or generic).
-#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__)
+//
+// GTK4 is among them: the native implementation is built on GtkComboBox,
+// which is deprecated there and has no replacement that can show a bitmap
+// beside each entry. The generic one is wxOwnerDrawnComboBox, which every
+// platform without a native version already uses and which GTK4 builds and
+// passes the tests for today.
+#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__) || defined(__WXGTK4__)
     #define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
@@ -113,7 +119,7 @@ private:
     #include "wx/generic/bmpcbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/bmpcbox.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK__) && !defined(__WXGTK4__)
     #include "wx/gtk/bmpcbox.h"
 #else
     #include "wx/generic/bmpcbox.h"

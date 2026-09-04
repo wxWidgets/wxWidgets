@@ -127,6 +127,12 @@ void wxCaret::DoMove()
     if (m_overlay.IsNative())
     {
         m_overlay.Reset();
+
+        // Resetting a native overlay clears its contents, so redraw the caret
+        // immediately at its new position if it is currently visible.
+        if ( IsVisible() && !m_blinkedOut )
+            Refresh();
+
         return;
     }
 
