@@ -37,7 +37,10 @@ GdkWindow* wxGetTopLevelGDK();
 
 static inline GdkDisplay* GetDisplay()
 {
-    return gdk_window_get_display(wxGetTopLevelGDK());
+    if (GdkWindow* window = wxGetTopLevelGDK())
+        return gdk_window_get_display(window);
+
+    return nullptr;
 }
 
 // This class is always defined as it's used for the main display even when
@@ -80,21 +83,27 @@ wxDisplayImpl* wxDisplayFactoryGTK::CreateDisplay(unsigned n)
 
 unsigned wxDisplayFactoryGTK::GetCount()
 {
-    return gdk_display_get_n_monitors(::GetDisplay());
+    GdkDisplay* display = ::GetDisplay();
+    return display ? gdk_display_get_n_monitors(display) : 0;
 }
 
 int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
 {
-    GdkRectangle rect;
-    GdkDisplay* display = ::GetDisplay();
-    GdkMonitor* monitor = gdk_display_get_monitor_at_point(display, pt.x, pt.y);
-    gdk_monitor_get_geometry(monitor, &rect);
-    if (wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
+    if (GdkDisplay* display = ::GetDisplay())
     {
-        for (unsigned i = gdk_display_get_n_monitors(display); i--;)
+        if (GdkMonitor* monitor = gdk_display_get_monitor_at_point(
+                display, pt.x, pt.y))
         {
-            if (gdk_display_get_monitor(display, i) == monitor)
-                return i;
+            GdkRectangle rect;
+            gdk_monitor_get_geometry(monitor, &rect);
+            if (wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
+            {
+                for (unsigned i = gdk_display_get_n_monitors(display); i--;)
+                {
+                    if (gdk_display_get_monitor(display, i) == monitor)
+                        return i;
+                }
+            }
         }
     }
     return wxNOT_FOUND;
@@ -236,7 +245,10 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
 
 static inline GdkScreen* GetScreen()
 {
-    return gdk_window_get_screen(wxGetTopLevelGDK());
+    if (GdkWindow* window = wxGetTopLevelGDK())
+        return gdk_window_get_screen(window);
+
+    return nullptr;
 }
 
 class wxDisplayImplGTK : public wxDisplayImpl
@@ -281,18 +293,24 @@ wxDisplayImpl* wxDisplayFactoryGTK::CreateDisplay(unsigned n)
 
 unsigned wxDisplayFactoryGTK::GetCount()
 {
-    return gdk_screen_get_n_monitors(GetScreen());
+    GdkScreen* screen = GetScreen();
+    return screen ? gdk_screen_get_n_monitors(screen) : 0;
 }
 
 int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
 {
-    GdkRectangle rect;
     GdkScreen* screen = GetScreen();
-    int monitor = gdk_screen_get_monitor_at_point(screen, pt.x, pt.y);
-    gdk_screen_get_monitor_geometry(screen, monitor, &rect);
-    if (!wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
-        monitor = wxNOT_FOUND;
-    return monitor;
+    if (screen)
+    {
+        GdkRectangle rect;
+        int monitor = gdk_screen_get_monitor_at_point(screen, pt.x, pt.y);
+        gdk_screen_get_monitor_geometry(screen, monitor, &rect);
+        if (!wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
+            monitor = wxNOT_FOUND;
+        return monitor;
+    }
+
+    return wxNOT_FOUND;
 }
 
 int wxDisplayFactoryGTK::GetFromWindow(const wxWindow* win)
