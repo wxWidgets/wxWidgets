@@ -52,6 +52,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIParentFrame, wxFrame);
 
 wxBEGIN_EVENT_TABLE(wxAuiMDIParentFrame, wxFrame)
     EVT_CLOSE(wxAuiMDIParentFrame::OnClose)
+    EVT_SIZE(wxAuiMDIParentFrame::OnSize)
 #if wxUSE_MENUS
     EVT_MENU (wxID_ANY, wxAuiMDIParentFrame::DoHandleMenu)
     EVT_UPDATE_UI (wxID_ANY, wxAuiMDIParentFrame::DoHandleUpdateUI)
@@ -115,6 +116,9 @@ bool wxAuiMDIParentFrame::Create(wxWindow *parent,
         return false;
 
     m_pClientWindow = OnCreateClient();
+    if ( m_pClientWindow )
+        m_pClientWindow->SetSize(GetClientSize());
+
     return m_pClientWindow != nullptr;
 }
 
@@ -245,6 +249,14 @@ void wxAuiMDIParentFrame::OnClose(wxCloseEvent& event)
         event.Veto();
     else
         event.Skip();
+}
+
+void wxAuiMDIParentFrame::OnSize(wxSizeEvent& event)
+{
+    if ( m_pClientWindow )
+        m_pClientWindow->SetSize(GetClientSize());
+
+    event.Skip();
 }
 
 bool wxAuiMDIParentFrame::CloseAll()
