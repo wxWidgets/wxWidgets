@@ -505,8 +505,35 @@ if(wxUSE_GUI)
                         # Check if we have GTK new enough to allow using the
                         # XDG protocols requiring access to xdg_toplevel: we
                         # need gdk_wayland_window_get_xdg_toplevel() which was
-                        # added in 3.24.53.
+                        # added in 3.24.53, but also allow using it with the
+                        # versions of 3.24.52 that already have the support
+                        # required for it, at least until 3.24.53 is released.
                         if(GTK3_VERSION VERSION_GREATER_EQUAL 3.24.53)
+                            set(wx_gtk_xdg_toplevel TRUE)
+                        elseif(GTK3_VERSION VERSION_EQUAL 3.24.52)
+                            include(CheckCSourceCompiles)
+                            include(CMakePushCheckState)
+
+                            cmake_push_check_state()
+                            set(CMAKE_REQUIRED_INCLUDES ${wxTOOLKIT_INCLUDE_DIRS})
+                            set(CMAKE_REQUIRED_LIBRARIES ${wxTOOLKIT_LIBRARIES})
+                            foreach(dir ${wxTOOLKIT_LIBRARY_DIRS})
+                                list(APPEND CMAKE_REQUIRED_LIBRARIES "-L${dir}")
+                            endforeach()
+                            check_c_source_compiles("
+                                    #include <gdk/gdkwayland.h>
+
+                                    int main() {
+                                        gdk_wayland_window_get_xdg_toplevel(0);
+                                        return 0;
+                                    }
+                                "
+                                wx_gtk_xdg_toplevel
+                            )
+                            cmake_pop_check_state()
+                        endif()
+
+                        if(wx_gtk_xdg_toplevel)
                             # We also need wayland-protocols as this protocol
                             # depends on xdg-shell one.
                             pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
