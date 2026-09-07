@@ -477,7 +477,7 @@ static gboolean wxgtk_tlw_xdg_realized(GdkWindow* window, wxTopLevelWindow* win)
     xdgSession.reset(xdg_session_manager_v1_get_session(
         wxWayland::WLGlobals.session_manager.get(),
         XDG_SESSION_MANAGER_V1_REASON_LAUNCH,
-        data->m_sessionId.empty() ? nullptr : data->m_sessionId.utf8_str()
+        data->m_sessionId.empty() ? nullptr : data->m_sessionId.utf8_str().data()
     ));
     wxCHECK_MSG( xdgSession, FALSE, "Failed to get xdg_session" );
 
