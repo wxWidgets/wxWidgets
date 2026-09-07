@@ -257,19 +257,8 @@ void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
     const int dpi = wxGetWindowDPI(hwnd).x;
 
-    if ( TDHasNativeDarkTheme() )
-    {
-        const wchar_t* mainClass = L"DarkMode_Explorer::TaskDialog";
-        const wchar_t* btnClass = L"DarkMode_Explorer::Button";
-
-        s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, mainClass, mainClass, dpi);
-        s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, btnClass, btnClass, dpi);
-    }
-    else // Try the best we can with the themes available on older OS versions.
-    {
-        s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, L"TaskDialog", dpi);
-        s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, L"Button", dpi);
-    }
+    s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, L"TaskDialog", dpi);
+    s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, L"Button", dpi);
 
     s.themesOk = true;
 }
@@ -839,7 +828,7 @@ TDPageSubclassProc(HWND hwnd,
             TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
             ::InvalidateRect(hwnd, nullptr, FALSE);
             break;
-
+        case WM_DPICHANGED_AFTERPARENT:
         case WM_THEMECHANGED:
             {
                 TDPageState& s = TDPageState::Get(hwnd);
