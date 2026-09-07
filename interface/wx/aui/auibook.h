@@ -232,7 +232,14 @@ struct wxAuiNotebookPosition
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed. Processes a  @c wxEVT_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        The window list button has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event.
+        A button in the tab control, e.g. the close or the window list button,
+        has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event. Use
+        wxCommandEvent::GetInt() to retrieve the id of the button, which is one
+        of @c wxAUI_BUTTON_XXX constants. Handling this event without skipping
+        it prevents the default action associated with the button, e.g. closing
+        the page for @c wxAUI_BUTTON_CLOSE or showing the list of the pages for
+        @c wxAUI_BUTTON_WINDOWLIST, from taking place, so the handler must call
+        wxEvent::Skip() if this is not desired.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
         Dragging is about to begin. Processes a @c wxEVT_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
@@ -1323,7 +1330,14 @@ using wxAuiDefaultTabArt = wxAuiFlatTabArt;
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed. Processes a  @c wxEVT_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        The window list button has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event.
+        A button in the tab control, e.g. the close or the window list button,
+        has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event. Use
+        wxCommandEvent::GetInt() to retrieve the id of the button, which is one
+        of @c wxAUI_BUTTON_XXX constants. Handling this event without skipping
+        it prevents the default action associated with the button, e.g. closing
+        the page for @c wxAUI_BUTTON_CLOSE or showing the list of the pages for
+        @c wxAUI_BUTTON_WINDOWLIST, from taking place, so the handler must call
+        wxEvent::Skip() if this is not desired.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
         Dragging is about to begin. Processes a @c wxEVT_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}

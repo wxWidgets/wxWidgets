@@ -149,6 +149,11 @@ Changes in behaviour not resulting in compilation errors
   values was previously silently allowed but couldn't work correctly, so now
   attempting to do it will assert. Don't set these values for the central pane.
 
+- Handling wxEVT_AUINOTEBOOK_BUTTON events without calling event.Skip() now
+  consistently prevents the default handling from taking place, for whichever
+  button that was pressed. Check the button ID and call Skip() if you want the
+  the default handling to take place.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

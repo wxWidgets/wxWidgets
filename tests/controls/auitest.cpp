@@ -76,6 +76,7 @@ public:
     {
     }
 
+    using wxAuiNotebook::OnTabButton;
     using wxAuiNotebook::OnTabMiddleDown;
     using wxAuiNotebook::OnTabMiddleUp;
     using wxAuiNotebook::OnTabRightDown;
@@ -332,6 +333,76 @@ TEST_CASE("wxAuiNotebook::SplitTabEventSelections", "[aui]")
 
     REQUIRE( selections.size() == 1 );
     CHECK( selections[0] == 1 );
+}
+
+// This tests for the problem of https://github.com/wxWidgets/wxWidgets/issues/26801
+TEST_CASE("wxAuiNotebook::ButtonEvent", "[aui]")
+{
+    TestAuiNotebook nb;
+    wxPanel *p1 = new wxPanel(&nb);
+    wxPanel *p2 = new wxPanel(&nb);
+    REQUIRE( nb.AddPage(p1, "Page 1") );
+    REQUIRE( nb.AddPage(p2, "Page 2") );
+
+    // Split the notebook to check that the event uses the index of the page in
+    // the notebook and not its position in its own tab control.
+    nb.Split(1, wxRIGHT);
+
+    wxAuiTabCtrl *tabCtrl = nullptr;
+    int tabIdx = wxNOT_FOUND;
+    REQUIRE( nb.FindTab(p2, &tabCtrl, &tabIdx) );
+    REQUIRE( tabCtrl );
+    REQUIRE( tabIdx == 0 );
+
+    int numEvents = 0;
+    int selection = wxNOT_FOUND;
+    int button = wxID_NONE;
+    bool skip = true;
+
+    nb.Bind(wxEVT_AUINOTEBOOK_BUTTON,
+            [&](wxAuiNotebookEvent& event)
+            {
+                numEvents++;
+                selection = event.GetSelection();
+                button = event.GetInt();
+                event.Skip(skip);
+            });
+
+    // Note that this event must be skipped by the handler if the default
+    // action, e.g. closing the page, is still to be performed.
+
+    SECTION( "Custom button" )
+    {
+        nb.OnTabButton(tabCtrl, tabIdx, wxAUI_BUTTON_CUSTOM1);
+
+        CHECK( numEvents == 1 );
+        CHECK( selection == 1 );
+        CHECK( button == wxAUI_BUTTON_CUSTOM1 );
+    }
+
+    SECTION( "Close button" )
+    {
+        nb.OnTabButton(tabCtrl, tabIdx, wxAUI_BUTTON_CLOSE);
+
+        CHECK( numEvents == 1 );
+        CHECK( selection == 1 );
+        CHECK( button == wxAUI_BUTTON_CLOSE );
+
+        CHECK( nb.GetPageCount() == 1 );
+    }
+
+    SECTION( "Close button not skipped" )
+    {
+        skip = false;
+
+        nb.OnTabButton(tabCtrl, tabIdx, wxAUI_BUTTON_CLOSE);
+
+        CHECK( numEvents == 1 );
+
+        // Handling the event without skipping it prevents the page from being
+        // closed, as this was the case in the previous versions too.
+        CHECK( nb.GetPageCount() == 2 );
+    }
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::Layout", "[aui]")
