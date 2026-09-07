@@ -248,10 +248,20 @@ registry_handle_global(void* data,
 
     if ( strcmp(interface, xdg_toplevel_drag_manager_v1_interface.name) == 0 )
     {
-        WLGlobals.toplevel_drag_manager.reset(static_cast<xdg_toplevel_drag_manager_v1*>(
-            wl_registry_bind(registry, name,
-                             &xdg_toplevel_drag_manager_v1_interface, 1)
-        ));
+        // We can only use this protocol when this function is available, so
+        // don't bother with it if it isn't.
+        if ( gdk_wayland_window_get_xdg_toplevel )
+        {
+            WLGlobals.toplevel_drag_manager.reset(static_cast<xdg_toplevel_drag_manager_v1*>(
+                wl_registry_bind(registry, name,
+                                 &xdg_toplevel_drag_manager_v1_interface, 1)
+            ));
+        }
+        else
+        {
+            wxLogTrace(TRACE_WAYLAND,
+                       "Wayland toplevel drag manager is supported but GTK is too old to use it");
+        }
     }
 #endif // wxHAVE_WAYLAND_TOPLEVEL_DRAG
 
