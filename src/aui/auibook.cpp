@@ -3707,7 +3707,6 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
-            e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
             const int idx = m_tabs.GetIdxFromWindow(close_wnd);
             e.SetSelection(idx);
             e.SetOldSelection(selection);
