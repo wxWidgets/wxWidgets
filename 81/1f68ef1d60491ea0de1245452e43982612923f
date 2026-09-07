@@ -1,0 +1,1 @@
+wxAll (GUI): Fix spurious jumps of AUI sash when clicking on it (Richard Thomson, #4547).
