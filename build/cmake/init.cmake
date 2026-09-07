@@ -502,53 +502,20 @@ if(wxUSE_GUI)
 
                         wx_generate_wayland_protocol(${wx_protocols_input_dir} pointer-warp-v1)
 
-                        # Check if we have GTK new enough to allow using the
-                        # XDG protocols requiring access to xdg_toplevel: we
-                        # need gdk_wayland_window_get_xdg_toplevel() which was
-                        # added in 3.24.53, but also allow using it with the
-                        # versions of 3.24.52 that already have the support
-                        # required for it, at least until 3.24.53 is released.
-                        if(GTK3_VERSION VERSION_GREATER_EQUAL 3.24.53)
-                            set(wx_gtk_xdg_toplevel TRUE)
-                        elseif(GTK3_VERSION VERSION_EQUAL 3.24.52)
-                            include(CheckCSourceCompiles)
-                            include(CMakePushCheckState)
+                        # We also need wayland-protocols as this protocol
+                        # depends on xdg-shell one.
+                        pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
+                        if(WAYLAND_PROTOCOLS_FOUND)
+                            pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
 
-                            cmake_push_check_state()
-                            set(CMAKE_REQUIRED_INCLUDES ${wxTOOLKIT_INCLUDE_DIRS})
-                            set(CMAKE_REQUIRED_LIBRARIES ${wxTOOLKIT_LIBRARIES})
-                            foreach(dir ${wxTOOLKIT_LIBRARY_DIRS})
-                                list(APPEND CMAKE_REQUIRED_LIBRARIES "-L${dir}")
-                            endforeach()
-                            check_c_source_compiles("
-                                    #include <gdk/gdkwayland.h>
+                            wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
+                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
+                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/staging/xdg-toplevel-drag xdg-toplevel-drag-v1)
 
-                                    int main() {
-                                        gdk_wayland_window_get_xdg_toplevel(0);
-                                        return 0;
-                                    }
-                                "
-                                wx_gtk_xdg_toplevel
-                            )
-                            cmake_pop_check_state()
-                        endif()
-
-                        if(wx_gtk_xdg_toplevel)
-                            # We also need wayland-protocols as this protocol
-                            # depends on xdg-shell one.
-                            pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
-                            if(WAYLAND_PROTOCOLS_FOUND)
-                                pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
-
-                                wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
-                                wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
-                                wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/staging/xdg-toplevel-drag xdg-toplevel-drag-v1)
-
-                                set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
-                                set(wxHAVE_WAYLAND_TOPLEVEL_DRAG ON)
-                            else()
-                                message(WARNING "wayland-protocols package not found, Wayland-specific functionality will be disabled")
-                            endif()
+                            set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
+                            set(wxHAVE_WAYLAND_TOPLEVEL_DRAG ON)
+                        else()
+                            message(WARNING "wayland-protocols package not found, Wayland-specific functionality will be disabled")
                         endif()
 
                         set(wxHAVE_WAYLAND_CLIENT ON)

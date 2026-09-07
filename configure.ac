@@ -3128,62 +3128,23 @@ installed, where VER is 2, 3 or 4.
             fi
 
             if test -n "$WAYLAND_SCANNER" ; then
-                dnl Check if we can get xdg_toplevel from GDK, as this is
-                dnl required by both the session management and the toplevel
-                dnl drag protocols used below: this normally requires GTK
-                dnl >= 3.24.53 but allow using it with the versions of 3.24.52
-                dnl that already have the support required for it, at least
-                dnl until 3.24.53 is released.
-                AC_CACHE_CHECK([for support of getting xdg_toplevel from GDK],
-                    wx_cv_gtk_xdg_toplevel,
+                dnl wayland-protocols is normally a dependency of
+                dnl libgtk-3-dev or similar, but it's not always pulled in
+                dnl automatically, so still check that it's really there.
+                AC_CACHE_CHECK([for wayland-protocols data directory],
+                    wx_cv_wayland_protocols_dir,
                     [
-                        GTK_VERSION=`$PKG_CONFIG --modversion gtk+-3.0`
-                        AS_VERSION_COMPARE([$GTK_VERSION], [3.24.52],
-                            wx_cv_gtk_xdg_toplevel=no,
-                            wx_cv_gtk_xdg_toplevel=maybe,
-                            wx_cv_gtk_xdg_toplevel=yes
-                        )
-
-                        if test "$wx_cv_gtk_xdg_toplevel" = "maybe"; then
-                            save_CFLAGS=$CFLAGS
-                            save_LIBS=$LIBS
-                            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
-                            LIBS="$LIBS $GUI_TK_LIBRARY"
-                            AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <gdk/gdkwayland.h>],
-                                [
-                                    gdk_wayland_window_get_xdg_toplevel(0)
-                                ])],
-                                wx_cv_gtk_xdg_toplevel=yes,
-                                wx_cv_gtk_xdg_toplevel=no
-                            )
-                            LIBS=$save_LIBS
-                            CFLAGS=$save_CFLAGS
-                        fi
+                        wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols 2>/dev/null`
                     ]
                 )
+                WAYLAND_PROTOCOLS_DIR=$wx_cv_wayland_protocols_dir
 
-                if test "$wx_cv_gtk_xdg_toplevel" = "yes"; then
-                    dnl wayland-protocols is normally a dependency of
-                    dnl libgtk-3-dev or similar, but it's not always pulled in
-                    dnl automatically, so still check that it's really there.
-                    AC_CACHE_CHECK([for wayland-protocols data directory],
-                        wx_cv_wayland_protocols_dir,
-                        [
-                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols 2>/dev/null`
-                        ]
-                    )
-                    WAYLAND_PROTOCOLS_DIR=$wx_cv_wayland_protocols_dir
-
-                    if test -n "$WAYLAND_PROTOCOLS_DIR" -a \
-                            -f "$WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml"; then
-                        AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
-                        AC_DEFINE(wxHAVE_WAYLAND_TOPLEVEL_DRAG)
-                    else
-                        AC_MSG_WARN([wayland-protocols package not found, Wayland-specific functionality will be disabled])
-                        WAYLAND_XDG_SUPPORT=':'
-                    fi
+                if test -n "$WAYLAND_PROTOCOLS_DIR" -a \
+                        -f "$WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml"; then
+                    AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
+                    AC_DEFINE(wxHAVE_WAYLAND_TOPLEVEL_DRAG)
                 else
-                    dnl Don't bother running wayland-scanner for these protocols.
+                    AC_MSG_WARN([wayland-protocols package not found, Wayland-specific functionality will be disabled])
                     WAYLAND_XDG_SUPPORT=':'
                 fi
 
