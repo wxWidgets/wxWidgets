@@ -37,9 +37,10 @@
 // ----------------------------------------------------------------------------
 
 // Create the frame used for testing.
-static wxFrame* CreatePersistenceTestFrame()
+static std::unique_ptr<wxFrame> CreatePersistenceTestFrame()
 {
-    wxFrame* const frame = new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "wxTest");
+    auto frame =
+        make_unique<wxFrame>(wxTheApp->GetTopWindow(), wxID_ANY, "wxTest");
     frame->SetName("frame");
 
     return frame;
@@ -64,16 +65,16 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 
     // Save the frame geometry.
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
+        auto frame = CreatePersistenceTestFrame();
 
         // Set the geometry before saving.
         frame->SetPosition(pos);
         frame->SetSize(size);
 
-        CHECK(wxPersistenceManager::Get().Register(frame));
+        CHECK(wxPersistenceManager::Get().Register(frame.get()));
 
         // Destroy the frame immediately, i.e. don't use Destroy() here.
-        delete frame;
+        frame.reset();
 
         // Test that the relevant keys have been stored correctly.
         int val = -1;
@@ -100,10 +101,10 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     // Now try recreating the frame using the restored values.
     bool checkIconized = true;
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
+        auto const frame = CreatePersistenceTestFrame();
 
         // Test that the object was registered and restored.
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
 
         if ( checkPosition )
         {
@@ -129,7 +130,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         }
         else
         {
-            if ( !WaitFor("frame to be iconized", [frame]() {
+            if ( !WaitFor("frame to be iconized", [&]() {
                         return frame->IsIconized();
                     }) )
             {
@@ -137,15 +138,13 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
             }
         }
 #endif // __WXGTK__
-
-        delete frame;
     }
 
     // Check geometry after restoring the minimized frame.
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
+        auto const frame = CreatePersistenceTestFrame();
 
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
 
         // As above, we need to show the frame for it to be actually iconized.
         frame->Show();
@@ -154,7 +153,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         if ( checkIconized )
         {
 #ifdef __WXGTK__
-            WaitFor("frame to be iconized", [frame]() {
+            WaitFor("frame to be iconized", [&]() {
                 return frame->IsIconized();
             });
 #endif // __WXGTK__
@@ -176,8 +175,6 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         // for it to be really maximized, it must be shown.
         frame->Maximize();
         frame->Show();
-
-        delete frame;
     }
 
     // Check geometry after restoring the maximized frame.
@@ -186,9 +183,9 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     // maximized frame size, and its normal size is lost and can't be restored.
 #ifdef __WXMSW__
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
+        auto const frame = CreatePersistenceTestFrame();
 
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
 
         CHECK(frame->IsMaximized());
         CHECK(!frame->IsIconized());
@@ -199,8 +196,6 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         CHECK(pos.y == frame->GetPosition().y);
         CHECK(size.x == frame->GetSize().GetWidth());
         CHECK(size.y == frame->GetSize().GetHeight());
-
-        delete frame;
     }
 #endif // __WXMSW__
 }
