@@ -393,5 +393,12 @@ long wxToolBar::GetButtonStyle()
     return Qt::ToolButtonTextOnly;
 }
 
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
+{
+    wxToolBarBase::DoSetToolBitmapSize(size);
+
+    GetQToolBar()->setIconSize( wxQtConvertSize(size) );
+}
+
 #endif // wxUSE_TOOLBAR
 
