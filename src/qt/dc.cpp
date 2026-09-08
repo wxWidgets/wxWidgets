@@ -881,9 +881,26 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord WXUNUSED(xsrcMask),
                     wxCoord WXUNUSED(ysrcMask) )
 {
-    wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
+    QPixmap  qtDummySource;
+    QPixmap* qtSource = &qtDummySource;
 
-    QPixmap *qtSource = implSource->GetQPixmap();
+    if ( rop == wxCLEAR || rop == wxINVERT || rop == wxNO_OP || rop == wxSET )
+    {
+        // qtSource is already initialized to point to qtDummySource.
+        // Notice that all we need to do is make qtDummySource a valid object,
+        // i.e. ensure that !qtDummySource.isNull() is true, before passing it to
+        // drawPixmap() or drawImage() below. The actual content of qtDummySource
+        // doesn't matter for these raster operations since it will not actually
+        // be used by either function.
+
+        qtDummySource = std::move(QPixmap(1, 1));
+    }
+    else
+    {
+        wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
+
+        qtSource = implSource->GetQPixmap();
+    }
 
     // Not a CHECK on purpose
     if ( !qtSource )
