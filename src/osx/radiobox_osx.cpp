@@ -252,7 +252,9 @@ void wxRadioBox::SetString(unsigned int item,const wxString& label)
         current = current->NextInCycle();
     }
 
-    return current->SetLabel( label );
+    current->SetLabel( label );
+
+    InvalidateBestSize();
 }
 
 // Sets a button by passing the desired position. This does not cause

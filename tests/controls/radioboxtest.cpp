@@ -194,6 +194,15 @@ TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::SetString", "[radiobox]")
     CHECK( m_radio->GetString(2) == "" );
 }
 
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::SetStringBestSize", "[radiobox][bestsize]")
+{
+    const wxSize sizeOld = m_radio->GetBestSize();
+
+    m_radio->SetString(0, "a much longer item label than the original one");
+
+    CHECK( m_radio->GetBestSize().x > sizeOld.x );
+}
+
 TEST_CASE("RadioBox::NoItems", "[radiobox]")
 {
     auto radio = make_unique<wxRadioBox>(wxTheApp->GetTopWindow(), wxID_ANY,

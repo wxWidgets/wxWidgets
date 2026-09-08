@@ -273,6 +273,8 @@ void wxRadioBox::SetString(unsigned int n, const wxString& label)
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxRadioBox::SetString") );
 
     m_buttons[n]->SetLabel(label);
+
+    InvalidateBestSize();
 }
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
