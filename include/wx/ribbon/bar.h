@@ -176,7 +176,7 @@ public:
     wxDEPRECATED_MSG("wxRibbonButtonBar now uses wxBitmapBundle for DPI support")
     wxImageList* GetButtonImageList(wxSize size, int initialCount = 1);
 
-    // KeyTips (Office-style keyboard access mode).
+    // Key tips (popup windows showing associated keys).
     void SetPageKeyTip(size_t page, const wxString& keytip);
     void SetPageKeyTip(wxRibbonPage* page, const wxString& keytip);
     void SetToggleButtonKeyTip(const wxString& keytip);
@@ -263,7 +263,7 @@ protected:
 
     wxVector<wxImageList*> m_image_lists;
 
-    // KeyTips (Office-style keyboard access mode) implementation.
+    // Key tips implementation.
 private:
     struct wxRibbonKeyTipInfo
     {
