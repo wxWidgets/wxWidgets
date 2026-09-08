@@ -175,7 +175,7 @@ public:
     // Get bitmap for button (DPI-aware resolution)
     wxBitmap GetButtonBitmap(int imageIndex, bool large) const;
 
-    // KeyTips (Office-style keyboard access mode).
+    // KeyTips (keyboard access mode).
     void SetKeyTip(wxWindowID button_id, const wxString& keytip);
     wxString GetKeyTip(wxWindowID button_id) const;
 

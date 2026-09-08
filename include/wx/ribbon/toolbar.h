@@ -164,7 +164,7 @@ public:
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const override;
 
-    // KeyTips (Office-style keyboard access mode).
+    // KeyTips (keyboard access mode).
     void SetKeyTip(wxWindowID tool_id, const wxString& keytip);
     wxString GetKeyTip(wxWindowID tool_id) const;
 

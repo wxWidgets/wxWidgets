@@ -1389,7 +1389,7 @@ void wxRibbonBar::OnKillFocus(wxFocusEvent& WXUNUSED(evt))
 }
 
 // ----------------------------------------------------------------------------
-// KeyTips (Office-style keyboard access mode)
+// KeyTips (keyboard access mode)
 // ----------------------------------------------------------------------------
 
 void wxRibbonBar::SetPageKeyTip(size_t page, const wxString& keytip)

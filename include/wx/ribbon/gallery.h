@@ -71,7 +71,7 @@ public:
     bool ScrollPixels(int pixels);
     void EnsureVisible(const wxRibbonGalleryItem* item);
 
-    // KeyTips (Office-style keyboard access mode).
+    // KeyTips (keyboard access mode).
     void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
     wxString GetKeyTip() const { return m_keyTip; }
 

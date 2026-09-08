@@ -153,7 +153,7 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
 
     @section ribbonbar_keytips KeyTips
 
-    Since wxWidgets 3.3.4, pressing @c WXK_F10 shows Office-style "KeyTips":
+    Since wxWidgets 3.3.4, pressing @c WXK_F10 shows "KeyTips":
     a badge over every element which has one, listing the letters to type to
     activate it. Unlike mnemonics, KeyTips are not derived from labels; an
     element only takes part if it was assigned one explicitly. See

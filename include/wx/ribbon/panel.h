@@ -84,7 +84,7 @@ public:
 
     void HideIfExpanded();
 
-    // KeyTips (Office-style keyboard access mode).
+    // KeyTips (keyboard access mode).
     void SetExtButtonKeyTip(const wxString& keytip) { m_extButtonKeyTip = keytip.Upper(); }
     wxString GetExtButtonKeyTip() const { return m_extButtonKeyTip; }
     wxRect GetExtButtonRect() const { return m_ext_button_rect; }
