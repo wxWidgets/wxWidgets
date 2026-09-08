@@ -18,7 +18,7 @@
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
 
-#include <map>
+#include <unordered_map>
 
 class wxRibbonButtonBar;
 class wxRibbonButtonBarButtonBase;
@@ -238,8 +238,8 @@ protected:
 
 private:
     wxRibbonBar* m_ribbonBar = nullptr;
-    std::map<wxWindowID, wxString> m_keyTips;
-    std::map<wxWindowID, wxString> m_dropdownKeyTips;
+    std::unordered_map<wxWindowID, wxString> m_keyTips;
+    std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
 
 
 #ifndef SWIG

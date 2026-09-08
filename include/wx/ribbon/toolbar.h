@@ -17,7 +17,7 @@
 #include "wx/ribbon/art.h"
 #include "wx/bmpbndl.h"
 
-#include <map>
+#include <unordered_map>
 
 class wxRibbonToolBarToolBase;
 class wxRibbonToolBarToolGroup;
@@ -211,8 +211,8 @@ protected:
     wxSize* m_sizes = nullptr;
     int m_nrows_min = 0;
     int m_nrows_max = 0;
-    std::map<wxWindowID, wxString> m_keyTips;
-    std::map<wxWindowID, wxString> m_dropdownKeyTips;
+    std::unordered_map<wxWindowID, wxString> m_keyTips;
+    std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonToolBar);
