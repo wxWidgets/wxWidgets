@@ -723,10 +723,8 @@ void wxRibbonButtonBar::EnableButton(int button_id, bool enable)
 
 bool wxRibbonButtonBar::GetButtonEnabled(int button_id) const
 {
-    size_t count = m_buttons.GetCount();
-    for ( size_t i = 0; i < count; ++i )
+    for ( auto const* button : m_buttons )
     {
-        wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
         if ( button->id == button_id )
             return (button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0;
     }
@@ -735,11 +733,8 @@ bool wxRibbonButtonBar::GetButtonEnabled(int button_id) const
 
 void wxRibbonButtonBar::ToggleButton(int button_id, bool checked)
 {
-    size_t count = m_buttons.GetCount();
-    size_t i;
-    for(i = 0; i < count; ++i)
+    for ( auto* button : m_buttons )
     {
-        wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
         if(button->id == button_id)
         {
             if(checked)
