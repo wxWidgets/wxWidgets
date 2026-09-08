@@ -36,8 +36,11 @@
 // local helpers
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 // Create the frame used for testing.
-static std::unique_ptr<wxFrame> CreatePersistenceTestFrame()
+std::unique_ptr<wxFrame> CreatePersistenceTestFrame()
 {
     auto frame =
         make_unique<wxFrame>(wxTheApp->GetTopWindow(), wxID_ANY, "wxTest");
@@ -45,6 +48,28 @@ static std::unique_ptr<wxFrame> CreatePersistenceTestFrame()
 
     return frame;
 }
+
+void SavePersistenceTestFrame(const wxPoint& pos, const wxSize& size)
+{
+    auto frame = CreatePersistenceTestFrame();
+    frame->SetPosition(pos);
+    frame->SetSize(size);
+
+    CHECK(wxPersistenceManager::Get().Register(frame.get()));
+
+    // Destroy the frame immediately to cause its geometry to be saved.
+}
+
+std::unique_ptr<wxFrame> RestorePersistenceTestFrame()
+{
+    auto frame = CreatePersistenceTestFrame();
+
+    CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
+
+    return frame;
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -65,16 +90,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 
     // Save the frame geometry.
     {
-        auto frame = CreatePersistenceTestFrame();
-
-        // Set the geometry before saving.
-        frame->SetPosition(pos);
-        frame->SetSize(size);
-
-        CHECK(wxPersistenceManager::Get().Register(frame.get()));
-
-        // Destroy the frame immediately, i.e. don't use Destroy() here.
-        frame.reset();
+        SavePersistenceTestFrame(pos, size);
 
         // Test that the relevant keys have been stored correctly.
         int val = -1;
@@ -101,11 +117,9 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     // Now try recreating the frame using the restored values.
     bool checkIconized = true;
     {
-        auto const frame = CreatePersistenceTestFrame();
+        auto const frame = RestorePersistenceTestFrame();
 
-        // Test that the object was registered and restored.
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
-
+        // Test that the object was restored.
         if ( checkPosition )
         {
             CHECK(pos.x == frame->GetPosition().x);
@@ -142,9 +156,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 
     // Check geometry after restoring the minimized frame.
     {
-        auto const frame = CreatePersistenceTestFrame();
-
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
+        auto const frame = RestorePersistenceTestFrame();
 
         // As above, we need to show the frame for it to be actually iconized.
         frame->Show();
@@ -183,9 +195,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     // maximized frame size, and its normal size is lost and can't be restored.
 #ifdef __WXMSW__
     {
-        auto const frame = CreatePersistenceTestFrame();
-
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
+        auto const frame = RestorePersistenceTestFrame();
 
         CHECK(frame->IsMaximized());
         CHECK(!frame->IsIconized());
