@@ -267,25 +267,25 @@ protected:
 private:
     struct wxRibbonKeyTipInfo
     {
-        enum Kind
+        enum class Kind
         {
-            KeyTip_PageTab,
-            KeyTip_ToggleButton,
-            KeyTip_HelpButton,
-            KeyTip_ExtButton,
-            KeyTip_MinimisedPanel,
-            KeyTip_ButtonBarItem,
-            KeyTip_ToolBarItem,
-            KeyTip_Gallery
+            PageTab,
+            ToggleButton,
+            HelpButton,
+            ExtButton,
+            MinimisedPanel,
+            ButtonBarItem,
+            ToolBarItem,
+            Gallery
         };
 
         wxString fullKeyTip;
         wxString remaining;
         wxRect rect;
         wxWindow* window = nullptr;
-        Kind kind = KeyTip_PageTab;
+        Kind kind = Kind::PageTab;
 
-        // For KeyTip_ButtonBarItem/KeyTip_ToolBarItem: targets the item's
+        // For Kind::ButtonBarItem/Kind::ToolBarItem: targets the item's
         // dropdown arrow instead of its main click area.
         bool dropdown = false;
 

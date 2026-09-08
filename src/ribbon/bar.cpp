@@ -1500,7 +1500,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
         info.fullKeyTip = tab.keytip;
         info.rect = tab.rect;
         info.window = this;
-        info.kind = wxRibbonKeyTipInfo::KeyTip_PageTab;
+        info.kind = wxRibbonKeyTipInfo::Kind::PageTab;
         info.pageIndex = i;
         m_keyTipsTargets.push_back(info);
     }
@@ -1511,7 +1511,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
         info.fullKeyTip = m_toggleButtonKeyTip;
         info.rect = m_toggle_button_rect;
         info.window = this;
-        info.kind = wxRibbonKeyTipInfo::KeyTip_ToggleButton;
+        info.kind = wxRibbonKeyTipInfo::Kind::ToggleButton;
         m_keyTipsTargets.push_back(info);
     }
 
@@ -1521,7 +1521,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
         info.fullKeyTip = m_helpButtonKeyTip;
         info.rect = m_help_button_rect;
         info.window = this;
-        info.kind = wxRibbonKeyTipInfo::KeyTip_HelpButton;
+        info.kind = wxRibbonKeyTipInfo::Kind::HelpButton;
         m_keyTipsTargets.push_back(info);
     }
 
@@ -1544,7 +1544,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                     info.fullKeyTip = keytip;
                     info.rect = wxRect(wxPoint(0, 0), panel->GetSize());
                     info.window = panel;
-                    info.kind = wxRibbonKeyTipInfo::KeyTip_MinimisedPanel;
+                    info.kind = wxRibbonKeyTipInfo::Kind::MinimisedPanel;
                     info.panel = panel;
                     m_keyTipsTargets.push_back(info);
                 }
@@ -1560,7 +1560,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                     info.fullKeyTip = keytip;
                     info.rect = panel->GetExtButtonRect();
                     info.window = panel;
-                    info.kind = wxRibbonKeyTipInfo::KeyTip_ExtButton;
+                    info.kind = wxRibbonKeyTipInfo::Kind::ExtButton;
                     info.panel = panel;
                     m_keyTipsTargets.push_back(info);
                 }
@@ -1598,7 +1598,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                         info.fullKeyTip = keytip;
                         info.rect = rect;
                         info.window = bb;
-                        info.kind = wxRibbonKeyTipInfo::KeyTip_ButtonBarItem;
+                        info.kind = wxRibbonKeyTipInfo::Kind::ButtonBarItem;
                         info.buttonBar = bb;
                         info.buttonBarItemId = id;
                         m_keyTipsTargets.push_back(info);
@@ -1611,7 +1611,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                             dropdownInfo.fullKeyTip = dropdownKeytip;
                             dropdownInfo.rect = dropdownRect;
                             dropdownInfo.window = bb;
-                            dropdownInfo.kind = wxRibbonKeyTipInfo::KeyTip_ButtonBarItem;
+                            dropdownInfo.kind = wxRibbonKeyTipInfo::Kind::ButtonBarItem;
                             dropdownInfo.buttonBar = bb;
                             dropdownInfo.buttonBarItemId = id;
                             dropdownInfo.dropdown = true;
@@ -1642,7 +1642,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                         info.fullKeyTip = keytip;
                         info.rect = rect;
                         info.window = tb;
-                        info.kind = wxRibbonKeyTipInfo::KeyTip_ToolBarItem;
+                        info.kind = wxRibbonKeyTipInfo::Kind::ToolBarItem;
                         info.toolBar = tb;
                         info.toolBarItemId = id;
                         m_keyTipsTargets.push_back(info);
@@ -1655,7 +1655,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                             dropdownInfo.fullKeyTip = dropdownKeytip;
                             dropdownInfo.rect = dropdownRect;
                             dropdownInfo.window = tb;
-                            dropdownInfo.kind = wxRibbonKeyTipInfo::KeyTip_ToolBarItem;
+                            dropdownInfo.kind = wxRibbonKeyTipInfo::Kind::ToolBarItem;
                             dropdownInfo.toolBar = tb;
                             dropdownInfo.toolBarItemId = id;
                             dropdownInfo.dropdown = true;
@@ -1672,7 +1672,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                         info.fullKeyTip = keytip;
                         info.rect = wxRect(wxPoint(0, 0), gallery->GetSize());
                         info.window = gallery;
-                        info.kind = wxRibbonKeyTipInfo::KeyTip_Gallery;
+                        info.kind = wxRibbonKeyTipInfo::Kind::Gallery;
                         m_keyTipsTargets.push_back(info);
                     }
                 }
@@ -1716,7 +1716,7 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
 {
     switch ( target.kind )
     {
-        case wxRibbonKeyTipInfo::KeyTip_PageTab:
+        case wxRibbonKeyTipInfo::Kind::PageTab:
         {
             wxRibbonPageTabInfo& tab = m_pages.Item(target.pageIndex);
             if ( m_ribbon_state == wxRIBBON_BAR_MINIMIZED )
@@ -1742,7 +1742,7 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
             break;
         }
 
-        case wxRibbonKeyTipInfo::KeyTip_ToggleButton:
+        case wxRibbonKeyTipInfo::Kind::ToggleButton:
         {
             ShowPanels(ArePanelsShown() ? wxRIBBON_BAR_MINIMIZED : wxRIBBON_BAR_PINNED);
             wxRibbonBarEvent event(wxEVT_RIBBONBAR_TOGGLED, GetId());
@@ -1751,7 +1751,7 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
             break;
         }
 
-        case wxRibbonKeyTipInfo::KeyTip_HelpButton:
+        case wxRibbonKeyTipInfo::Kind::HelpButton:
         {
             wxRibbonBarEvent event(wxEVT_RIBBONBAR_HELP_CLICK, GetId());
             event.SetEventObject(this);
@@ -1759,7 +1759,7 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
             break;
         }
 
-        case wxRibbonKeyTipInfo::KeyTip_ExtButton:
+        case wxRibbonKeyTipInfo::Kind::ExtButton:
         {
             wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, target.panel->GetId());
             notification.SetEventObject(target.panel);
@@ -1768,11 +1768,11 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
             break;
         }
 
-        case wxRibbonKeyTipInfo::KeyTip_MinimisedPanel:
+        case wxRibbonKeyTipInfo::Kind::MinimisedPanel:
             target.panel->ShowExpanded();
             break;
 
-        case wxRibbonKeyTipInfo::KeyTip_ButtonBarItem:
+        case wxRibbonKeyTipInfo::Kind::ButtonBarItem:
         {
             wxRibbonButtonBarButtonBase* button = target.buttonBar->GetItemById(target.buttonBarItemId);
             if ( button != nullptr )
@@ -1780,7 +1780,7 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
             break;
         }
 
-        case wxRibbonKeyTipInfo::KeyTip_ToolBarItem:
+        case wxRibbonKeyTipInfo::Kind::ToolBarItem:
         {
             wxRibbonToolBarToolBase* tool = target.toolBar->FindById(target.toolBarItemId);
             if ( tool != nullptr )
@@ -1788,7 +1788,7 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
             break;
         }
 
-        case wxRibbonKeyTipInfo::KeyTip_Gallery:
+        case wxRibbonKeyTipInfo::Kind::Gallery:
             target.window->SetFocus();
             break;
     }
