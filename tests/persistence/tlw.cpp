@@ -26,6 +26,12 @@
     #include "wx/gtk/private/backend.h"
 #endif // __WXGTK__
 
+#ifdef __WXMSW__
+    #include "asserthelper.h"
+
+    #include "wx/display.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -209,3 +215,115 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     }
 #endif // __WXMSW__
 }
+
+// This test is MSW-specific because the generic implementation used elsewhere
+// has its own, different, check for the window being off screen.
+#ifdef __WXMSW__
+
+TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW::OffScreen", "[persist][tlw]")
+{
+    const wxSize size(450, 350);
+
+    // Find a position at which only a small part of the frame is inside a
+    // display: this is what happens when the geometry saved while using a
+    // bigger desktop is restored on a smaller one, e.g. after disconnecting a
+    // monitor or when connecting to the machine remotely.
+    wxPoint pos;
+    const unsigned count = wxDisplay::GetCount();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        pos = wxDisplay(n).GetClientArea().GetBottomRight() - wxPoint(20, 20);
+
+        if ( wxDisplay::GetFromPoint(pos) != wxNOT_FOUND &&
+             wxDisplay::GetFromPoint(pos + size) == wxNOT_FOUND )
+        {
+            // Found a suitable position.
+            break;
+        }
+
+        pos = wxDefaultPosition;
+    }
+
+    if ( pos == wxDefaultPosition )
+    {
+        WARN("Unexpectedly didn't find a suitable position, skipping the test");
+        return;
+    }
+
+    // Simulate the geometry saved by a previous version of the program, which
+    // didn't record whether the window was off screen at all.
+    const auto saveGeometry = [this, size](const wxPoint& posSaved)
+    {
+        wxConfigBase& config = GetConfig();
+
+        config.Write(FRAME_OPTIONS_PREFIX "/x", posSaved.x);
+        config.Write(FRAME_OPTIONS_PREFIX "/y", posSaved.y);
+        config.Write(FRAME_OPTIONS_PREFIX "/w", size.x);
+        config.Write(FRAME_OPTIONS_PREFIX "/h", size.y);
+
+        // The previous versions didn't save this value at all.
+        config.DeleteEntry(FRAME_OPTIONS_PREFIX "/offscreen");
+    };
+
+    // Without this entry the window is assumed to have been fully visible
+    // when its geometry was saved and so has to be moved back on screen.
+    SECTION("Fix up")
+    {
+        saveGeometry(pos);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        // The frame shouldn't have been left almost completely off screen.
+        const wxRect rect = frame->GetScreenRect();
+        CHECK(wxDisplay::GetFromPoint(rect.GetTopLeft()) != wxNOT_FOUND);
+        CHECK(wxDisplay::GetFromPoint(rect.GetBottomRight()) != wxNOT_FOUND);
+
+        // The size should have been preserved.
+        CHECK(size == rect.GetSize());
+    }
+
+    // But if the window had already been off screen when its geometry was
+    // saved, it had been put there on purpose and must be left alone.
+    SECTION("Preserve")
+    {
+        saveGeometry(pos);
+        GetConfig().Write(FRAME_OPTIONS_PREFIX "/offscreen", 1);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        CHECK(wxRect(pos, size) == frame->GetScreenRect());
+    }
+
+    // Even a window which had been deliberately moved off screen must be
+    // moved back if it wouldn't be visible at all, as the user couldn't move
+    // it back in this case.
+    SECTION("Fix up hidden")
+    {
+        const wxRect rectPrimary = wxDisplay().GetClientArea();
+        const wxPoint posHidden =
+            rectPrimary.GetTopLeft() - wxPoint(10000, 10000);
+        REQUIRE(wxDisplay::GetFromRect(wxRect(posHidden, size)) == wxNOT_FOUND);
+
+        saveGeometry(posHidden);
+        GetConfig().Write(FRAME_OPTIONS_PREFIX "/offscreen", 1);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        // The frame should have been moved to the position inside the primary
+        // display closest to its saved one, i.e. its top left corner.
+        CHECK(wxRect(rectPrimary.GetTopLeft(), size) == frame->GetScreenRect());
+    }
+
+    // Check that saving the geometry of a window which is off screen does set
+    // the flag relied upon by the tests above.
+    SECTION("Save")
+    {
+        SavePersistenceTestFrame(pos, size);
+
+        int val = -1;
+        REQUIRE(GetConfig().Read(FRAME_OPTIONS_PREFIX "/offscreen", &val));
+        CHECK(val == 1);
+    }
+}
+
+#endif // __WXMSW__
