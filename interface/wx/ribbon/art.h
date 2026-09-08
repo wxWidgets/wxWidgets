@@ -728,7 +728,8 @@ public:
         Draw a KeyTip badge over a ribbon element in keyboard access mode.
 
         This should draw a small labelled badge which stands out against the
-        element beneath it, similar to the ones Office uses.
+        element beneath it, similar to the ones commonly used in programs using
+        ribbon interface.
 
         @param dc
             The device context to draw onto.
