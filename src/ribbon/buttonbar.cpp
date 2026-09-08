@@ -212,7 +212,7 @@ public:
         }
         for ( auto& instance : buttons )
         {
-            if ( instance.base == base )
+            if(instance.base == base)
             {
                 return &instance;
             }
