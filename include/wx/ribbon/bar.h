@@ -184,7 +184,7 @@ public:
 
     bool ShowKeyTips();
     void HideKeyTips();
-    bool IsKeyTipsShown() const { return m_keyTipsActive; }
+    bool AreKeyTipsShown() const { return m_keyTipsActive; }
 
     struct TriggerKey
     {

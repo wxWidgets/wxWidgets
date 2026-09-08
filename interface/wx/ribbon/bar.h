@@ -595,7 +595,7 @@ public:
 
         @since 3.3.4
     */
-    bool IsKeyTipsShown() const;
+    bool AreKeyTipsShown() const;
 
     /**
         A key combination which shows the KeyTips.
