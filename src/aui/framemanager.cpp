@@ -5207,9 +5207,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
             if (HasLiveResize())
             {
-                m_frame->ReleaseMouse();
                 DoEndResizeAction(event);
-                m_frame->CaptureMouse();
             }
             else
             {
