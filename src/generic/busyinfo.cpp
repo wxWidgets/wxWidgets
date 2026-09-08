@@ -25,7 +25,8 @@
 
 // wxStaticText currently supports markup only in wxGTK and wxOSX/Cocoa, so use
 // the generic version for markup support in the other ports.
-#if wxUSE_MARKUP && !(defined(__WXGTK__) || defined(__WXOSX_COCOA__))
+#if wxUSE_MARKUP && !(defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+                      defined(__WXMSW__) || defined(__WXQT__))
     #include "wx/generic/stattextg.h"
 
     #define wxStaticTextWithMarkupSupport wxGenericStaticText
