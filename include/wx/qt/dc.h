@@ -146,18 +146,6 @@ protected:
     std::unique_ptr<QTransform> m_matrixCurrentInv;
 
 private:
-    enum wxQtRasterColourOp
-    {
-        wxQtNONE,
-        wxQtWHITE,
-        wxQtBLACK,
-        wxQtINVERT
-    };
-    wxQtRasterColourOp m_rasterColourOp;
-    QColor *m_qtPenColor;
-    QColor *m_qtBrushColor;
-    void ApplyRasterColourOp();
-
     wxDECLARE_CLASS(wxQtDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxQtDCImpl);
 
