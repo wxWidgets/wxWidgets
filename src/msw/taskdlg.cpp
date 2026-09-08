@@ -658,11 +658,13 @@ void TDPaintText(HDC hdc, const TDPageState& s)
         {
             part = TDLG_MAININSTRUCTIONPANE;
             brBg = s.brPrimary;
+            dtF |= DT_WORD_ELLIPSIS;
         }
         else if ( el.automationId == L"ContentText" )
         {
             part = TDLG_CONTENTPANE;
             brBg = s.brPrimary;
+            dtF |= DT_WORD_ELLIPSIS;
         }
         else if ( el.automationId == L"ExpandedFooterText" )
         {
@@ -701,8 +703,6 @@ void TDPaintText(HDC hdc, const TDPageState& s)
 
             part = TDLG_VERIFICATIONTEXT;
             brBg = s.brSecondary;
-
-            dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
 
         if ( !part )
