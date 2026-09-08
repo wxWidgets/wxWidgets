@@ -142,6 +142,9 @@ protected:
     bool m_hovered = false;
     bool m_ext_button_hovered = false;
     wxRect m_ext_button_rect;
+
+    // Both are always stored in upper case, to allow case-insensitive
+    // matching.
     wxString m_extButtonKeyTip;
     wxString m_keyTip;
 

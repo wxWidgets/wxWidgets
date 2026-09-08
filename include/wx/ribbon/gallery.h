@@ -121,6 +121,8 @@ protected:
     wxRibbonGalleryButtonState m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     wxRibbonGalleryButtonState m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     bool m_hovered = false;
+
+    // Always stored in upper case, to allow case-insensitive matching.
     wxString m_keyTip;
 
 #ifndef SWIG

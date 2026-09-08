@@ -211,6 +211,8 @@ protected:
     wxSize* m_sizes = nullptr;
     int m_nrows_min = 0;
     int m_nrows_max = 0;
+    // The KeyTips are always stored in upper case, to allow case-insensitive
+    // matching.
     std::unordered_map<wxWindowID, wxString> m_keyTips;
     std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
 
