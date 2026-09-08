@@ -69,6 +69,8 @@ protected:
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) override;
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
 
+    virtual void DoSetToolBitmapSize(const wxSize& size) override;
+
 private:
     long GetButtonStyle();
 
