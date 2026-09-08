@@ -2437,7 +2437,12 @@ wxGTKImpl::WindowLeaveCallback(GtkWidget* WXUNUSED_UNLESS_DEBUG(widget),
     if ( AreGTKEventsBlocked() )
         return FALSE;
 
-    if (win->m_needCursorReset)
+    // If the mouse is captured, we don't send wxSetCursorEvent at all (see the
+    // motion and enter handlers), so we shouldn't reset the cursor set by an
+    // earlier one neither: the window can well get leave events while dragging
+    // something, e.g. when the mouse moves over one of its children, but the
+    // cursor set for the duration of the drag must remain in effect.
+    if (!g_captureWindow && win->m_needCursorReset)
         win->GTKUpdateCursor();
 
     // Event was emitted after an ungrab
