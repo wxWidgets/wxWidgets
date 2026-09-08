@@ -342,12 +342,7 @@ void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
         wxRibbonBar* bar = GetAncestorRibbonBar();
         if ( bar != nullptr )
-        {
-            std::vector<wxRibbonBar::KeyTipBadge> badges;
-            bar->GetKeyTipTargetsFor(this, &badges);
-            for ( const auto& badge : badges )
-                m_art->DrawKeyTip(dc, this, badge.rect, badge.text);
-        }
+            bar->DrawKeyTipsFor(dc, this, m_art);
     }
 }
 

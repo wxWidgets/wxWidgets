@@ -731,6 +731,11 @@ public:
         element beneath it, similar to the ones commonly used in programs using
         ribbon interface.
 
+        Unlike the other drawing functions, this one is not pure virtual, as it
+        was added after the other ones and so implementing it is optional: the
+        base class version simply returns @false and a default badge is drawn
+        instead.
+
         @param dc
             The device context to draw onto.
         @param wnd
@@ -744,14 +749,18 @@ public:
             The characters to draw, which are the ones still to be typed, rather
             than the whole KeyTip if the user has already typed a prefix.
 
+        @return
+            @true if the badge was drawn or @false to let the caller draw the
+            default badge instead.
+
         @see wxRibbonBar::ShowKeyTips()
 
         @since 3.3.4
     */
-    virtual void DrawKeyTip(wxDC& dc,
+    virtual bool DrawKeyTip(wxDC& dc,
                             wxWindow* wnd,
                             const wxRect& rect,
-                            const wxString& keytip) = 0;
+                            const wxString& keytip);
 
     /**
         Calculate the ideal and minimum width (in pixels) of a tab in a ribbon

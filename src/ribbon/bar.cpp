@@ -14,6 +14,7 @@
 
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
+#include "wx/ribbon/art_internal.h"
 #include "wx/ribbon/panel.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/toolbar.h"
@@ -971,10 +972,7 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
         // The toggle and help buttons leave a clipping region set.
         dc.DestroyClippingRegion();
-        std::vector<KeyTipBadge> badges;
-        GetKeyTipTargetsFor(this, &badges);
-        for ( const auto& badge : badges )
-            m_art->DrawKeyTip(dc, this, badge.rect, badge.text);
+        DrawKeyTipsFor(dc, this, m_art);
     }
 }
 
@@ -1796,20 +1794,24 @@ void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
     }
 }
 
-void wxRibbonBar::GetKeyTipTargetsFor(wxWindow* window, std::vector<KeyTipBadge>* badges) const
+void wxRibbonBar::DrawKeyTipsFor(wxDC& dc,
+                                 wxWindow* window,
+                                 wxRibbonArtProvider* art) const
 {
-    badges->clear();
-    if ( !m_keyTipsActive )
+    if ( !m_keyTipsActive || art == nullptr )
         return;
 
     for ( const auto& target : m_keyTipsTargets )
     {
-        if ( target.window == window )
+        if ( target.window != window )
+            continue;
+
+        // Fall back to the default badge if the art provider doesn't
+        // implement DrawKeyTip() itself.
+        if ( !art->DrawKeyTip(dc, window, target.rect, target.remaining) )
         {
-            KeyTipBadge badge;
-            badge.rect = target.rect;
-            badge.text = target.remaining;
-            badges->push_back(badge);
+            wxRibbonDrawKeyTip(dc, window, target.rect, target.remaining,
+                               window->GetFont());
         }
     }
 }

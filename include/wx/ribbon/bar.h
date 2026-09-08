@@ -199,13 +199,9 @@ public:
     void ClearKeyTipsTriggerKeys();
     const std::vector<TriggerKey>& GetKeyTipsTriggerKeys() const { return m_keyTipsTriggerKeys; }
 
-    // Implementation only: badges for the keytip targets on 'window'.
-    struct KeyTipBadge
-    {
-        wxRect rect;
-        wxString text;
-    };
-    void GetKeyTipTargetsFor(wxWindow* window, std::vector<KeyTipBadge>* badges) const;
+    // Implementation only: draw the badges of the keytip targets on 'window',
+    // if any, using the given art provider.
+    void DrawKeyTipsFor(wxDC& dc, wxWindow* window, wxRibbonArtProvider* art) const;
 
 protected:
     friend class wxRibbonPage;
