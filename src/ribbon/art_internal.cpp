@@ -157,9 +157,15 @@ void wxRibbonDrawKeyTip(wxDC& dc,
 
     wxRect badge_rect(pos, badge_size);
 
-    const bool dark = wxSystemSettings::GetAppearance().IsDark();
-    const wxColour badge_bg = dark ? wxColour{ 255, 214, 51 } : wxColour{ 97, 97, 97 };
-    const wxColour badge_fg = dark ? *wxBLACK : *wxWHITE;
+    // These colours match the ones used by other established ribbon
+    // implementations, and no system colour would give the same appearance.
+    const wxColour badge_bg_light(97, 97, 97);
+    const wxColour badge_bg_dark(255, 214, 51);
+
+    const wxColour badge_bg =
+        wxSystemSettings::SelectLightDark(badge_bg_light, badge_bg_dark);
+    const wxColour badge_fg =
+        wxSystemSettings::SelectLightDark(*wxWHITE, *wxBLACK);
 
     dc.SetPen(wxPen(badge_bg));
     dc.SetBrush(wxBrush(badge_bg));
