@@ -6794,8 +6794,27 @@ void wxWindowGTK::DoCaptureMouse()
     {
         GdkDisplay* display = gdk_window_get_display(window);
         GdkSeat* seat = gdk_display_get_default_seat(display);
+
+        // Under Wayland, GDK resets the cursor to the default one when taking
+        // the grab unless the cursor to use during it is given explicitly, so
+        // pass it the cursor currently used by this window to avoid losing it,
+        // e.g. while dragging a sash. Note that we can't just use m_cursor
+        // here because the current cursor could have been set by a handler of
+        // wxSetCursorEvent, so retrieve it from the window itself, taking into
+        // account that it can be inherited from one of its parents.
+        GdkCursor* cursor = nullptr;
+        if (wxGTKImpl::IsWayland(window))
+        {
+            for (GdkWindow* w = window; w; w = gdk_window_get_effective_parent(w))
+            {
+                cursor = gdk_window_get_cursor(w);
+                if (cursor)
+                    break;
+            }
+        }
+
         gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_ALL_POINTING, false,
-            nullptr, nullptr, nullptr, nullptr);
+            cursor, nullptr, nullptr, nullptr);
     }
     else
 #endif
