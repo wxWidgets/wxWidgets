@@ -2352,16 +2352,21 @@ void MyFrame::DlgCenteredParent(wxCommandEvent& WXUNUSED(event))
 void MyFrame::MiniFrame(wxCommandEvent& WXUNUSED(event))
 {
     wxFrame *frame = new wxMiniFrame(this, wxID_ANY, "Mini frame",
-                                     wxDefaultPosition, wxSize(300, 100),
+                                     wxDefaultPosition, wxDefaultSize,
                                      wxCAPTION | wxCLOSE_BOX);
-    new wxStaticText(frame,
-                     wxID_ANY,
-                     "Mini frames have slightly different appearance",
-                     wxPoint(5, 5));
-    new wxStaticText(frame,
-                     wxID_ANY,
-                     "from the normal frames but that's the only difference.",
-                     wxPoint(5, 25));
+    auto* const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(
+        new wxStaticText(frame,
+                         wxID_ANY,
+                         "Mini frames have slightly different appearance"),
+        wxSizerFlags().Border());
+    sizer->Add(
+        new wxStaticText(frame,
+                         wxID_ANY,
+                         "from the normal frames but that's the only difference."),
+        wxSizerFlags().Border());
+    frame->SetSizer(sizer);
+    frame->SetSize(frame->GetBestSize());
 
     frame->CentreOnParent();
     frame->Show();
