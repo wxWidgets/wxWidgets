@@ -3333,7 +3333,11 @@ void DrawGridLines(wxListCtrl* listctrl, int item, int gap = 0)
 // taking into account whether the control is enabled or not.
 wxColour GetEffectiveBackgroundColour(wxListCtrl* listctrl)
 {
-    if ( listctrl->IsEnabled() )
+    // Note that we must use IsThisEnabled() and not IsEnabled() here: the
+    // latter is also false when just a parent is disabled, which notably
+    // happens while a modal dialog is shown, and the items shouldn't appear
+    // disabled then, if only because the native control doesn't do it either.
+    if ( listctrl->IsThisEnabled() )
         return listctrl->GetBackgroundColour();
     else
         return wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
