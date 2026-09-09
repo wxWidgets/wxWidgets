@@ -23,17 +23,6 @@
 
 #include "wx/busyinfo.h"
 
-// wxStaticText currently supports markup only in wxGTK and wxOSX/Cocoa, so use
-// the generic version for markup support in the other ports.
-#if wxUSE_MARKUP && !(defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
-                      defined(__WXMSW__) || defined(__WXQT__))
-    #include "wx/generic/stattextg.h"
-
-    #define wxStaticTextWithMarkupSupport wxGenericStaticText
-#else
-    #define wxStaticTextWithMarkupSupport wxStaticText
-#endif
-
 void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 {
     m_InfoFrame = new wxFrame(flags.m_parent, wxID_ANY, wxString(),
@@ -55,10 +44,10 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     wxControl* title;
     if ( !flags.m_title.empty() )
     {
-        title = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                                  wxDefaultPosition,
-                                                  wxDefaultSize,
-                                                  wxALIGN_CENTRE);
+        title = new wxStaticText(panel, wxID_ANY, wxString(),
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
 
 #ifdef __WXGTK__
@@ -92,10 +81,10 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     sizer->AddStretchSpacer();
 
 #if wxUSE_MARKUP
-    m_text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                               wxDefaultPosition,
-                                               wxDefaultSize,
-                                               wxALIGN_CENTRE);
+    m_text = new wxStaticText(panel, wxID_ANY, wxString(),
+                              wxDefaultPosition,
+                              wxDefaultSize,
+                              wxALIGN_CENTRE);
     if ( !flags.m_text.empty() )
         m_text->SetLabelMarkup(flags.m_text);
     else
