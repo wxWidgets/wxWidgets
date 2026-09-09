@@ -255,7 +255,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
     else
     {
         // Generate disabled bitmap from normal bitmap
-        tool->bitmap_disabled = wxRibbonControl::MakeDisabledBundle(bitmap);
+        tool->bitmap_disabled = bitmap.MakeDisabled();
     }
     tool->help_string = help_string;
     tool->kind = kind;
@@ -672,7 +672,9 @@ bool wxRibbonToolBar::GetToolState(int tool_id)const
 
 wxBitmap wxRibbonToolBar::MakeDisabledBitmap(const wxBitmap& original)
 {
-    return wxRibbonControl::MakeDisabledBitmap(original);
+    wxBitmap bmp = original;
+    wxBitmap::MakeDisabled(bmp);
+    return bmp;
 }
 
 void wxRibbonToolBar::AppendGroup()

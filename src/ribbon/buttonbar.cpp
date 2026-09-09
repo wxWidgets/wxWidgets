@@ -373,7 +373,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         else
         {
             // Generate disabled bitmap from normal one
-            m_bundlesLargeDisabled.push_back(MakeDisabledBundle(bitmap));
+            m_bundlesLargeDisabled.push_back(bitmap.MakeDisabled());
         }
     }
 
@@ -390,7 +390,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         else
         {
             // Generate disabled bitmap from normal one
-            m_bundlesSmallDisabled.push_back(MakeDisabledBundle(bitmap_small));
+            m_bundlesSmallDisabled.push_back(bitmap_small.MakeDisabled());
         }
     }
     else if(bitmap.IsOk())
@@ -413,7 +413,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
 
         idxSmallDisabled = m_bundlesSmallDisabled.size();
         m_bundlesSmallDisabled.push_back(
-            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp)));
+            wxBitmapBundle::FromBitmap(smallBmp).MakeDisabled());
     }
 
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
@@ -768,7 +768,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         }
         else
         {
-            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] = MakeDisabledBundle(bitmap);
+            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] = bitmap.MakeDisabled();
         }
     }
 
@@ -782,7 +782,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         }
         else
         {
-            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] = MakeDisabledBundle(bitmap_small);
+            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] = bitmap_small.MakeDisabled();
         }
     }
     else if ( bitmap.IsOk() && base->imageIndexSmall >= 0 )
@@ -800,7 +800,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         m_bundlesSmall[base->imageIndexSmall] =
             wxBitmapBundle::FromBitmap(smallBmp);
         m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
-            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp));
+            wxBitmapBundle::FromBitmap(smallBmp).MakeDisabled();
     }
 
     Refresh();

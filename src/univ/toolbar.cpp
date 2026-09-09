@@ -289,9 +289,9 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
     // created disabled-state bitmap on demand
     if ( !enable && !tool->GetDisabledBitmap().IsOk() )
     {
-        wxImage image(tool->GetNormalBitmap().ConvertToImage());
-
-        tool->SetDisabledBitmap(image.ConvertToGreyscale());
+        wxBitmap bmp = tool->GetNormalBitmap();
+        wxBitmap::MakeDisabled(bmp);
+        tool->SetDisabledBitmap(bmp);
     }
 #endif // wxUSE_IMAGE
 

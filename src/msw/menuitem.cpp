@@ -1084,9 +1084,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             {
                 // we need to grey out the bitmap as we don't have any specific
                 // disabled bitmap
-                wxImage imgGrey = bmp.ConvertToImage().ConvertToGreyscale();
-                if ( imgGrey.IsOk() )
-                    bmp = wxBitmap(imgGrey);
+                wxBitmap::MakeDisabled(bmp);
             }
 #endif // wxUSE_IMAGE
         }
