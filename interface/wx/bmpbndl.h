@@ -212,6 +212,20 @@ public:
     static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     /**
+        Return a bundle providing disabled ("greyed out") versions of the
+        bitmaps in this bundle.
+
+        The disabled bitmaps are generated on demand from the bitmaps of this
+        bundle, so all the scales it provides, including SVG images rendered at
+        arbitrary sizes, are preserved.
+
+        Returns an empty bundle if this bundle is empty.
+
+        @since 3.3.4
+     */
+    wxBitmapBundle MakeDisabled() const;
+
+    /**
         Create a bundle from the bitmaps in the application resources.
 
         This function can only be used on the platforms supporting storing

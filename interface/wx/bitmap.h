@@ -921,6 +921,20 @@ public:
     static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
 
     /**
+        Convert the given bitmap to a disabled ("greyed out") appearance
+        in place.
+
+        The bitmap is replaced with its greyscale version, keeping the same
+        physical size and scale factor, so that it is still drawn at the same
+        logical size as the original.
+
+        The bitmap must be valid.
+
+        @since 3.3.4
+     */
+    static void MakeDisabled(wxBitmap& bmp);
+
+    /**
         Remove alpha channel from the bitmap.
 
         This is the same as calling UseAlpha() with @false argument.

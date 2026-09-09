@@ -96,6 +96,20 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
 #endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
 
+/* static */
+void wxBitmapHelpers::MakeDisabled(wxBitmap& bmp)
+{
+    wxCHECK_RET( bmp.IsOk(), wxS("Invalid bitmap") );
+
+#if wxUSE_IMAGE
+    // Keep the scale factor so the result is drawn at the same logical size.
+    const double scale = bmp.GetScaleFactor();
+    bmp = wxBitmap(bmp.ConvertToImage().ConvertToGreyscale(), -1, scale);
+#else // !wxUSE_IMAGE
+    // Can't convert to greyscale without wxImage, so leave the bitmap unchanged.
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmapBase
 // ----------------------------------------------------------------------------
