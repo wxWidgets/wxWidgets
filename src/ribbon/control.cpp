@@ -24,6 +24,26 @@
 
 wxIMPLEMENT_CLASS(wxRibbonControl, wxControl);
 
+wxBitmap wxRibbonControl::MakeDisabledBitmap(const wxBitmap& original)
+{
+    wxImage img(original.ConvertToImage());
+    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
+}
+
+wxBitmapBundle wxRibbonControl::MakeDisabledBundle(const wxBitmapBundle& bundle)
+{
+    wxSize sizeDef = bundle.GetDefaultSize();
+    wxVector<wxBitmap> bitmaps;
+    bitmaps.reserve(2);
+    wxBitmap bmp1 = bundle.GetBitmap(sizeDef);
+    bitmaps.push_back(MakeDisabledBitmap(bmp1));
+    wxSize size2x = sizeDef * 2;
+    wxBitmap bmp2 = bundle.GetBitmap(size2x);
+    if ( bmp2.GetSize() != bmp1.GetSize() )
+        bitmaps.push_back(MakeDisabledBitmap(bmp2));
+    return wxBitmapBundle::FromBitmaps(bitmaps);
+}
+
 bool wxRibbonControl::Create(wxWindow *parent, wxWindowID id,
                     const wxPoint& pos,
                     const wxSize& size, long style,

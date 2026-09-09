@@ -14,6 +14,7 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/bmpbndl.h"
 #include "wx/control.h"
 #include "wx/dynarray.h"
 
@@ -61,6 +62,9 @@ public:
 
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
+
+    static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
+    static wxBitmapBundle MakeDisabledBundle(const wxBitmapBundle& bundle);
 
 protected:
     wxRibbonArtProvider* m_art;

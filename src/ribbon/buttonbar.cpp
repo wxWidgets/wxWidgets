@@ -65,10 +65,13 @@ public:
 
 namespace
 {
-wxBitmap MakeDisabledBitmap(const wxBitmap& original)
+wxBitmapBundle MakeDisabledBundleForDerivedSmall(const wxBitmapBundle& largeBundle,
+                                                 const wxSize& sizeSmallPhys,
+                                                 double scale)
 {
-    wxImage img(original.ConvertToImage());
-    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
+    wxBitmap smallBmp = largeBundle.GetBitmap(sizeSmallPhys);
+    smallBmp.SetScaleFactor(scale);
+    return wxBitmapBundle::FromBitmap(wxRibbonControl::MakeDisabledBitmap(smallBmp));
 }
 
 } // anonymous namespace
@@ -383,8 +386,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         else
         {
             // Generate disabled bitmap from normal one
-            wxBitmap bmp = bitmap.GetBitmap(m_bitmap_size_large);
-            m_bundlesLargeDisabled.push_back(wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp)));
+            m_bundlesLargeDisabled.push_back(MakeDisabledBundle(bitmap));
         }
     }
 
@@ -401,8 +403,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         else
         {
             // Generate disabled bitmap from normal one
-            wxBitmap bmp = bitmap_small.GetBitmap(m_bitmap_size_small);
-            m_bundlesSmallDisabled.push_back(wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp)));
+            m_bundlesSmallDisabled.push_back(MakeDisabledBundle(bitmap_small));
         }
     }
     else if(bitmap.IsOk())
@@ -417,15 +418,16 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         // Tag the derived bitmap with the small logical size (its scale factor
         // is simply physical/logical) so that the resulting bundle's default
         // size is correct and small buttons are not drawn at the large size.
-        smallBmp.SetScaleFactor(static_cast<double>(sizeSmallPhys.y) /
-                                m_bitmap_size_small.y);
+        const double smallScale = static_cast<double>(sizeSmallPhys.y) /
+                                  m_bitmap_size_small.y;
+        smallBmp.SetScaleFactor(smallScale);
 
         idxSmall = m_bundlesSmall.size();
         m_bundlesSmall.push_back(wxBitmapBundle::FromBitmap(smallBmp));
 
         idxSmallDisabled = m_bundlesSmallDisabled.size();
         m_bundlesSmallDisabled.push_back(
-            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp)));
+            MakeDisabledBundleForDerivedSmall(bitmap, sizeSmallPhys, smallScale));
     }
 
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
@@ -780,9 +782,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         }
         else
         {
-            wxBitmap bmp = bitmap.GetBitmap(m_bitmap_size_large);
-            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] =
-                wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
+            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] = MakeDisabledBundle(bitmap);
         }
     }
 
@@ -796,9 +796,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         }
         else
         {
-            wxBitmap bmp = bitmap_small.GetBitmap(m_bitmap_size_small);
-            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
-                wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
+            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] = MakeDisabledBundle(bitmap_small);
         }
     }
     else if ( bitmap.IsOk() && base->imageIndexSmall >= 0 )
@@ -810,13 +808,14 @@ void wxRibbonButtonBar::SetButtonIcon(
         // too big.
         const wxSize sizeSmallPhys = ToPhys(FromDIP(m_bitmap_size_small));
         wxBitmap smallBmp = bitmap.GetBitmap(sizeSmallPhys);
-        smallBmp.SetScaleFactor(static_cast<double>(sizeSmallPhys.y) /
-                                m_bitmap_size_small.y);
+        const double smallScale = static_cast<double>(sizeSmallPhys.y) /
+                                  m_bitmap_size_small.y;
+        smallBmp.SetScaleFactor(smallScale);
 
         m_bundlesSmall[base->imageIndexSmall] =
             wxBitmapBundle::FromBitmap(smallBmp);
         m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
-            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp));
+            MakeDisabledBundleForDerivedSmall(bitmap, sizeSmallPhys, smallScale);
     }
 
     Refresh();
