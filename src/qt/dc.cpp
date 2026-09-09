@@ -31,19 +31,6 @@
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
 
-static void SetPenColour( QPainter *qtPainter, QColor col )
-{
-    QPen p = qtPainter->pen();
-    p.setColor( col );
-    qtPainter->setPen( p );
-}
-
-static void SetBrushColour( QPainter *qtPainter, QColor col )
-{
-    QBrush b = qtPainter->brush();
-    b.setColor( col );
-    qtPainter->setBrush( b );
-}
 
 class QtDCOffsetHelper
 {
@@ -95,9 +82,6 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
 {
     m_qtPixmap = nullptr;
     m_qtPainter = nullptr;
-    m_rasterColourOp = wxQtNONE;
-    m_qtPenColor = new QColor;
-    m_qtBrushColor = new QColor;
     m_ok = true;
 
     m_matrixCurrent.reset(new QTransform);
@@ -114,9 +98,6 @@ wxQtDCImpl::~wxQtDCImpl()
         }
         delete m_qtPainter;
     }
-
-    delete m_qtPenColor;
-    delete m_qtBrushColor;
 }
 
 void wxQtDCImpl::QtPreparePainter( )
@@ -236,8 +217,6 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
     if ( !m_pen.IsOk() ) return;
 
     m_qtPainter->setPen(pen.GetHandle());
-
-    ApplyRasterColourOp();
 }
 
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
@@ -253,8 +232,6 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
     }
 
     m_qtPainter->setBrush(m_brush.GetHandle());
-
-    ApplyRasterColourOp();
 }
 
 void wxQtDCImpl::SetBackground(const wxBrush& brush)
@@ -327,29 +304,25 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     m_logicalFunction = function;
 
-    wxQtRasterColourOp rasterColourOp = wxQtNONE;
     switch ( function )
     {
         case wxCLEAR:       // 0
-            m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
-            rasterColourOp = wxQtBLACK;
+            m_qtPainter->setCompositionMode( QPainter::RasterOp_ClearDestination );
             break;
         case wxXOR:         // src XOR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceXorDestination );
             break;
-        case wxINVERT:      // NOT dst => dst XOR WHITE
-            m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceXorDestination );
-            rasterColourOp = wxQtWHITE;
+        case wxINVERT:      // NOT dst
+            m_qtPainter->setCompositionMode( QPainter::RasterOp_NotDestination );
             break;
-        case wxOR_REVERSE:  // src OR (NOT dst) => (NOT (NOT src)) OR (NOT dst)
-            m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceOrNotDestination );
-            rasterColourOp = wxQtINVERT;
+        case wxOR_REVERSE:  // src OR (NOT dst)
+            m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrNotDestination );
             break;
         case wxAND_REVERSE: // src AND (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceAndNotDestination );
             break;
         case wxCOPY:        // src
-            m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
+            m_qtPainter->setCompositionMode( QPainter::CompositionMode_Source );
             break;
         case wxAND:         // src AND dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceAndDestination );
@@ -358,7 +331,7 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceAndDestination );
             break;
         case wxNO_OP:       // dst
-            m_qtPainter->setCompositionMode( QPainter::CompositionMode_DestinationOver );
+            m_qtPainter->setCompositionMode( QPainter::CompositionMode_Destination );
             break;
         case wxNOR:         // (NOT src) AND (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceAndNotDestination );
@@ -370,8 +343,7 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSource );
             break;
         case wxOR_INVERT:   // (NOT src) OR dst
-            m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrDestination );
-            rasterColourOp = wxQtINVERT;
+            m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceOrDestination );
             break;
         case wxNAND:        // (NOT src) OR (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceOrNotDestination );
@@ -380,47 +352,7 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrDestination );
             break;
         case wxSET:          // 1
-            m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
-            rasterColourOp = wxQtWHITE;
-            break;
-    }
-
-    if ( rasterColourOp != m_rasterColourOp )
-    {
-        // Source colour mode changed
-        m_rasterColourOp = rasterColourOp;
-
-        // Restore original colours and apply new mode
-        SetPenColour( m_qtPainter, *m_qtPenColor );
-        SetBrushColour( m_qtPainter, *m_qtPenColor );
-
-        ApplyRasterColourOp();
-    }
-}
-
-void wxQtDCImpl::ApplyRasterColourOp()
-{
-    // Save colours
-    *m_qtPenColor = m_qtPainter->pen().color();
-    *m_qtBrushColor = m_qtPainter->brush().color();
-
-    // Apply op
-    switch ( m_rasterColourOp )
-    {
-        case wxQtWHITE:
-            SetPenColour( m_qtPainter, QColor( Qt::white ) );
-            SetBrushColour( m_qtPainter, QColor( Qt::white ) );
-            break;
-        case wxQtBLACK:
-            SetPenColour( m_qtPainter, QColor( Qt::black ) );
-            SetBrushColour( m_qtPainter, QColor( Qt::black ) );
-            break;
-        case wxQtINVERT:
-            SetPenColour( m_qtPainter, QColor( ~m_qtPenColor->rgb() ) );
-            SetBrushColour( m_qtPainter, QColor( ~m_qtBrushColor->rgb() ) );
-            break;
-        case wxQtNONE:
-            // No op
+            m_qtPainter->setCompositionMode( QPainter::RasterOp_SetDestination );
             break;
     }
 }
@@ -949,9 +881,26 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord WXUNUSED(xsrcMask),
                     wxCoord WXUNUSED(ysrcMask) )
 {
-    wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
+    QPixmap  qtDummySource;
+    QPixmap* qtSource = &qtDummySource;
 
-    QPixmap *qtSource = implSource->GetQPixmap();
+    if ( rop == wxCLEAR || rop == wxINVERT || rop == wxNO_OP || rop == wxSET )
+    {
+        // qtSource is already initialized to point to qtDummySource.
+        // Notice that all we need to do is make qtDummySource a valid object,
+        // i.e. ensure that !qtDummySource.isNull() is true, before passing it to
+        // drawPixmap() or drawImage() below. The actual content of qtDummySource
+        // doesn't matter for these raster operations since it will not actually
+        // be used by either function.
+
+        qtDummySource = std::move(QPixmap(1, 1));
+    }
+    else
+    {
+        wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
+
+        qtSource = implSource->GetQPixmap();
+    }
 
     // Not a CHECK on purpose
     if ( !qtSource )
