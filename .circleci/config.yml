@@ -63,6 +63,23 @@ jobs:
             WX_TEST_WEBREQUEST_URL="0" ./test
 
       - run:
+          name: Run GUI tests
+          command: |
+            cat > /usr/local/bin/bwrap \<<'EOF'
+            #!/bin/sh
+            # glycin's loader sandbox needs user namespaces unavailable in this container;
+            # run glycin image loaders unsandboxed, pass everything else to the real bwrap.
+            for a in "$@"; do case "$a" in /usr/libexec/glycin-loaders/*)
+              while [ $# -gt 0 ]; do case "$1" in /usr/libexec/glycin-loaders/*) exec "$@";; esac; shift; done;;
+            esac; done
+            exec /usr/bin/bwrap "$@"
+            EOF
+            chmod +x /usr/local/bin/bwrap
+
+            cd tests
+            wlheadless-run -- ./test_gui
+
+      - run:
           name: Show ccache statistics
           when: always
           command: ccache -vv -s
