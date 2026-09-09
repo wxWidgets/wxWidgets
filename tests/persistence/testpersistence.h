@@ -27,7 +27,7 @@ public:
     }
 
     // Access the config object used for storing the settings.
-    const wxConfigBase& GetConfig() const
+    wxConfigBase& GetConfig() const
     {
         return *m_manager.GetConfig();
     }
