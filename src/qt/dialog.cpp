@@ -59,12 +59,10 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
 
     // Qt adds the context help button by default and we need to explicitly
     // remove it to avoid having it if it's not explicitly requested.
-    if ( !HasExtraStyle(wxDIALOG_EX_CONTEXTHELP) )
-    {
-        Qt::WindowFlags qtFlags = m_qtWindow->windowFlags();
-        qtFlags &= ~Qt::WindowContextHelpButtonHint;
-        m_qtWindow->setWindowFlags(qtFlags);
-    }
+    m_qtWindow->setWindowFlag(Qt::WindowContextHelpButtonHint,
+                              HasExtraStyle(wxDIALOG_EX_CONTEXTHELP));
+
+    GetDialogHandle()->setSizeGripEnabled((style & wxRESIZE_BORDER) != 0);
 
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
@@ -73,6 +71,7 @@ int wxDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != nullptr, -1, "Invalid dialog" );
+    wxASSERT_MSG( !IsModal(), "ShowModal() can't be called twice" );
 
     // Release the mouse if it's currently captured as the window having it
     // will be disabled when this dialog is shown -- but will still keep the
@@ -84,18 +83,33 @@ int wxDialog::ShowModal()
 
     Show(true);
 
-    bool ret = qDialog->exec();
-    if ( GetReturnCode() == 0 )
-        return ret ? wxID_OK : wxID_CANCEL;
+    // EndModal may have been called from InitDialog handler (called from
+    // inside Show()) and hidden the dialog back again
+
+    if ( IsShown() )
+    {
+        bool ret = qDialog->exec();
+        if ( GetReturnCode() == 0 )
+            return ret ? wxID_OK : wxID_CANCEL;
+    }
+
     return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
     wxCHECK_RET( GetDialogHandle() != nullptr, "Invalid dialog" );
+    wxASSERT_MSG( IsModal(), "EndModal() called for non modal dialog" );
 
     SetReturnCode(retCode);
-    GetDialogHandle()->done( QDialog::Accepted );
+
+    QDialog* qDialog = GetDialogHandle();
+    qDialog->done( QDialog::Accepted );
+    qDialog->setModal(false);
+
+    // QDialog::done() closes and hides the dialog at Qt level, so we need
+    // to reflect this status at wx level too.
+    wxDialogBase::Show(false);
 }
 
 bool wxDialog::IsModal() const
