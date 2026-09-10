@@ -112,6 +112,11 @@ public:
     // Create from existing implementation
     wxNODISCARD static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
+    // Return a bundle providing disabled ("greyed out") versions of the bitmaps.
+    // The bitmaps are converted on demand, so SVG and any other
+    // scales provided by this bundle are preserved.
+    wxNODISCARD wxBitmapBundle MakeDisabled() const;
+
     // Check if bitmap bundle is non-empty.
     wxNODISCARD bool IsOk() const { return m_impl.get() != nullptr; }
 

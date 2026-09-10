@@ -63,16 +63,6 @@ public:
     wxRibbonButtonBarButtonState size;
 };
 
-namespace
-{
-wxBitmap MakeDisabledBitmap(const wxBitmap& original)
-{
-    wxImage img(original.ConvertToImage());
-    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
-}
-
-} // anonymous namespace
-
 class wxRibbonButtonBarButtonBase
 {
 public:
@@ -383,8 +373,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         else
         {
             // Generate disabled bitmap from normal one
-            wxBitmap bmp = bitmap.GetBitmap(m_bitmap_size_large);
-            m_bundlesLargeDisabled.push_back(wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp)));
+            m_bundlesLargeDisabled.push_back(bitmap.MakeDisabled());
         }
     }
 
@@ -401,8 +390,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         else
         {
             // Generate disabled bitmap from normal one
-            wxBitmap bmp = bitmap_small.GetBitmap(m_bitmap_size_small);
-            m_bundlesSmallDisabled.push_back(wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp)));
+            m_bundlesSmallDisabled.push_back(bitmap_small.MakeDisabled());
         }
     }
     else if(bitmap.IsOk())
@@ -425,7 +413,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
 
         idxSmallDisabled = m_bundlesSmallDisabled.size();
         m_bundlesSmallDisabled.push_back(
-            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp)));
+            wxBitmapBundle::FromBitmap(smallBmp).MakeDisabled());
     }
 
     wxRibbonButtonBarButtonBase* base = new wxRibbonButtonBarButtonBase;
@@ -780,9 +768,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         }
         else
         {
-            wxBitmap bmp = bitmap.GetBitmap(m_bitmap_size_large);
-            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] =
-                wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
+            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] = bitmap.MakeDisabled();
         }
     }
 
@@ -796,9 +782,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         }
         else
         {
-            wxBitmap bmp = bitmap_small.GetBitmap(m_bitmap_size_small);
-            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
-                wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
+            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] = bitmap_small.MakeDisabled();
         }
     }
     else if ( bitmap.IsOk() && base->imageIndexSmall >= 0 )
@@ -816,7 +800,7 @@ void wxRibbonButtonBar::SetButtonIcon(
         m_bundlesSmall[base->imageIndexSmall] =
             wxBitmapBundle::FromBitmap(smallBmp);
         m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
-            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp));
+            wxBitmapBundle::FromBitmap(smallBmp).MakeDisabled();
     }
 
     Refresh();

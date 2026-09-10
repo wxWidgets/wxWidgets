@@ -93,6 +93,10 @@ public:
     // Rescale the given bitmap to the requested size.
     static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
 
+    // Convert the given bitmap to a disabled ("greyed out") appearance in place,
+    // preserving its scale factor.
+    static void MakeDisabled(wxBitmap& bmp);
+
     // wxVariant support
     wxDECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap, WXDLLIMPEXP_CORE);
 };
