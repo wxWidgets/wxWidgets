@@ -120,9 +120,9 @@ private:
         ctrl->GetBook()->OnTabCancelDrag(ctrl, tabIdx);
     }
 
-    static void TabButton(wxAuiTabCtrl* ctrl, int tabIdx, int button_id)
+    static bool TabButton(wxAuiTabCtrl* ctrl, int tabIdx, int button_id)
     {
-        ctrl->GetBook()->OnTabButton(ctrl, tabIdx, button_id);
+        return ctrl->GetBook()->OnTabButton(ctrl, tabIdx, button_id);
     }
 
     static void TabMiddleDown(wxAuiTabCtrl* ctrl, int tabIdx)
@@ -1704,6 +1704,17 @@ wxAuiTabCtrl::UpdateButtonStateAndRefresh(wxAuiTabContainerButton& button,
 
 void wxAuiTabCtrl::OnButton(int tabIdx, int button)
 {
+    // Let wxAuiNotebook generate the event for this button click and perform
+    // the default action for the buttons handled at its level, such as closing
+    // or pinning the tab.
+    //
+    // It only returns true the application handled the event without skipping
+    // it, which means that it handled the button completely on its own.
+    if (wxAuiTabEventSource::TabButton(this, tabIdx, button))
+        return;
+
+    // For mostly historical (but also convenience) reasons, some buttons are
+    // handled here instead of in wxAuiNotebook.
     if (button == wxAUI_BUTTON_LEFT || button == wxAUI_BUTTON_RIGHT)
     {
         if (button == wxAUI_BUTTON_LEFT)
@@ -1730,10 +1741,6 @@ void wxAuiTabCtrl::OnButton(int tabIdx, int button)
         {
             wxAuiTabEventSource::TabClicked(this, idx);
         }
-    }
-    else
-    {
-        wxAuiTabEventSource::TabButton(this, tabIdx, button);
     }
 }
 
@@ -3685,32 +3692,50 @@ void wxAuiNotebook::OnNavigationKeyNotebook(wxNavigationKeyEvent& event)
     }
 }
 
-void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
+bool wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
 {
+    int selection = tabIdx;
+    if (selection == -1 && button_id == wxAUI_BUTTON_CLOSE)
+    {
+        // if the close button is to the right, use the active
+        // page selection to determine which page to close
+        selection = tabs->GetActivePage();
+    }
+
+    // Notify the application about the button click.
+    {
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BUTTON, m_windowId);
+        e.SetSelection(selection != -1
+            ? m_tabs.GetIdxFromWindow(tabs->GetWindowFromIdx(selection))
+            : wxNOT_FOUND
+        );
+        e.SetInt(button_id);
+        e.SetEventObject(this);
+
+        // Note that if the application handles this event without skipping
+        // it, we don't do anything else, neither here nor in wxAuiTabCtrl:
+        // this is compatible with the previous versions, in which handling
+        // this event prevented our own handler, executed after the application
+        // one, from running at all.
+        if (ProcessWindowEvent(e))
+            return true;
+    }
+
     if (button_id == wxAUI_BUTTON_CLOSE)
     {
-        int selection = tabIdx;
-        if (selection == -1)
-        {
-            // if the close button is to the right, use the active
-            // page selection to determine which page to close
-            selection = tabs->GetActivePage();
-        }
-
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
-            e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
             const int idx = m_tabs.GetIdxFromWindow(close_wnd);
             e.SetSelection(idx);
             e.SetOldSelection(selection);
             e.SetEventObject(this);
             ProcessWindowEvent(e);
             if (!e.IsAllowed())
-                return;
+                return false;
 
 
 #if wxUSE_MDI
@@ -3722,7 +3747,8 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
 #endif
             {
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
-                wxCHECK_RET( main_idx != wxNOT_FOUND, wxT("no page to delete?") );
+                wxCHECK_MSG( main_idx != wxNOT_FOUND, false,
+                             wxT("no page to delete?") );
 
                 DeletePage(main_idx);
             }
@@ -3736,8 +3762,9 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
     }
     else if (button_id == wxAUI_BUTTON_PIN)
     {
-        // For now we don't send any event, this can be always added later if
-        // necessary.
+        // Note that we don't send any event specific to pinning the tab, the
+        // generic button event above is the only notification for it, but such
+        // event could be always added later if necessary.
         wxWindow* const wnd = tabs->GetWindowFromIdx(tabIdx);
 
         const auto idx = m_tabs.GetIdxFromWindow(wnd);
@@ -3758,11 +3785,13 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
                 break;
         }
 
-        wxCHECK_RET(newKind != wxAuiTabKind::Locked,
+        wxCHECK_MSG(newKind != wxAuiTabKind::Locked, false,
                     "locked pages shouldn't have pin button");
 
         SetPageKind(idx, newKind);
     }
+
+    return false;
 }
 
 
