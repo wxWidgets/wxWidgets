@@ -109,7 +109,7 @@ std::wstring GetCurrentAutomationId(IUIAutomationElement* element)
     return result;
 }
 
-// Cached bounding rect + metadata for a single TaskDialog UI element.
+// Bounding rect + metadata for a single TaskDialog UI element.
 struct TDLayoutElement
 {
     RECT         rect = {};
@@ -123,14 +123,12 @@ struct TDPageState
 {
     wxUxThemeHandle hTD ; // TaskDialog panel + glyph parts
     wxUxThemeHandle hButton ; // Button (checkbox glyph)
-    bool themesOk = false;
 
     AutoHBRUSH brPrimary{TDDarkCol::kPrimary};
     AutoHBRUSH brSecondary{TDDarkCol::kSecondary};
     AutoHBRUSH brFootnote{TDDarkCol::kFootnote};
 
     std::vector<TDLayoutElement> elements;
-    bool elemsOk = false;
 
     // Mouse interaction (message-driven, no polling)
     bool tracking = false;
@@ -270,8 +268,6 @@ void TDRefreshThemes(HWND hwnd, TDPageState& s)
         s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, L"TaskDialog", dpi);
         s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, L"Button", dpi);
     }
-
-    s.themesOk = true;
 }
 
 COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
@@ -346,10 +342,10 @@ HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
 }
 
 // ============================================================================
-// UIA layout cache
+// UIA layout
 // ============================================================================
 
-void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
+void TDBuildLayout(HWND hwnd, std::vector<TDLayoutElement>& out)
 {
     out.clear();
     IUIAutomation* const pAuto = wxTaskDialogDarkModule::GetUIAutomation();
@@ -431,13 +427,9 @@ void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
     }
 }
 
-void TDUpdateLayoutCache(HWND hwnd, TDPageState& s)
+void TDUpdateLayout(HWND hwnd, TDPageState& s)
 {
-    if ( !s.elemsOk )
-    {
-        TDBuildLayoutCache(hwnd, s.elements);
-        s.elemsOk = true;
-    }
+    TDBuildLayout(hwnd, s.elements);
 
     for ( const auto& el : s.elements )
     {
@@ -733,8 +725,7 @@ void TDPaintText(HDC hdc, const TDPageState& s)
 
 void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 {
-    if ( !s.themesOk )
-        TDRefreshThemes(hwnd, s);
+    TDRefreshThemes(hwnd, s);
 
     const RECT rc = wxGetClientRect(hwnd);
     HDC hdcBuf = 0;
@@ -784,8 +775,7 @@ TDPageSubclassProc(HWND hwnd,
                 HDC hdc = ::BeginPaint(hwnd, &ps);
                 TDPageState& s = TDPageState::Get(hwnd);
                 s.isExpanded = ::GetPropW(GetParent(hwnd), L"IsExpanded");
-                s.elemsOk = false;
-                TDUpdateLayoutCache(hwnd, s);
+                TDUpdateLayout(hwnd, s);
                 TDPaintPage(hwnd, hdc, s);
                 ::EndPaint(hwnd, &ps);
             }
@@ -830,23 +820,14 @@ TDPageSubclassProc(HWND hwnd,
 
         case WM_LBUTTONDOWN:
             TDPageState::Get(hwnd).pressing = true;
-            TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
+            TDUpdateLayout(hwnd, TDPageState::Get(hwnd));
             ::InvalidateRect(hwnd, nullptr, FALSE);
             break;
 
         case WM_LBUTTONUP:
             TDPageState::Get(hwnd).pressing = false;
-            TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
+            TDUpdateLayout(hwnd, TDPageState::Get(hwnd));
             ::InvalidateRect(hwnd, nullptr, FALSE);
-            break;
-
-        case WM_THEMECHANGED:
-            {
-                TDPageState& s = TDPageState::Get(hwnd);
-                s.themesOk = false;
-                s.elemsOk = false;
-                ::InvalidateRect(hwnd, nullptr, FALSE);
-            }
             break;
 
         case WM_DESTROY:
@@ -1196,8 +1177,7 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     s.defChecked = d->pCfg && (d->pCfg->dwFlags & TDF_VERIFICATION_FLAG_CHECKED);
     s.isExpanded = ::GetPropW(d->hwndTD, L"IsExpanded");
     s.isChecked = s.defChecked || ::GetPropW(d->hwndTD, L"IsChecked");
-    s.elemsOk = false;
-    TDUpdateLayoutCache(hDUI, s);
+    TDUpdateLayout(hDUI, s);
 
     SetWindowSubclassIfNeeded
     (
