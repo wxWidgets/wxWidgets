@@ -126,6 +126,7 @@ class MyWaitingThread : public wxThread
 {
 public:
     MyWaitingThread( wxMutex *mutex, wxCondition *condition )
+        : wxThread(wxTHREAD_JOINABLE)
     {
         m_mutex = mutex;
         m_condition = condition;
@@ -345,22 +346,22 @@ TEST_CASE("MiscThread::ThreadConditions", "[thread]")
     //           condition.GetId(), gs_cond.GetId());
 
     // create and launch threads
-    MyWaitingThread *threads[10];
+    static const size_t NUM_THREADS = 10;
 
-    size_t n;
-    for ( n = 0; n < WXSIZEOF(threads); n++ )
+    std::vector<std::unique_ptr<MyWaitingThread>> threads;
+    for ( size_t n = 0; n < NUM_THREADS; n++ )
     {
-        threads[n] = new MyWaitingThread( &mutex, &condition );
+        threads.push_back(make_unique<MyWaitingThread>(&mutex, &condition));
     }
 
-    for ( n = 0; n < WXSIZEOF(threads); n++ )
+    for ( auto& t : threads )
     {
-        CHECK( threads[n]->Run() == wxTHREAD_NO_ERROR );
+        CHECK( t->Run() == wxTHREAD_NO_ERROR );
     }
 
     // wait until all threads run
     size_t nRunning = 0;
-    while ( nRunning < WXSIZEOF(threads) )
+    while ( nRunning < NUM_THREADS )
     {
         CHECK( gs_cond.Wait() == wxSEMA_NO_ERROR );
 
@@ -378,10 +379,15 @@ TEST_CASE("MiscThread::ThreadConditions", "[thread]")
     // wake all the (remaining) threads up, so that they can exit
     CHECK( condition.Broadcast() == wxCOND_NO_ERROR );
 
-    while ( nFinished < WXSIZEOF(threads) )
+    while ( nFinished < NUM_THREADS )
     {
         CHECK( gs_cond.Wait() == wxSEMA_NO_ERROR );
 
         nFinished++;
+    }
+
+    for ( auto& t : threads )
+    {
+        t->Wait();
     }
 }
