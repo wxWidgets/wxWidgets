@@ -302,7 +302,7 @@ private:
 ArchiveTempDir::ArchiveTempDir()
     : m_tmp(wxT("arctest-"))
 {
-    CHECK(m_tmp.IsOk());
+    m_tmp.RequireOk();
     m_original = wxGetCwd();
     CHECK(wxSetWorkingDirectory(m_tmp.GetName()));
 }

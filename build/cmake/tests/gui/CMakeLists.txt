@@ -235,6 +235,13 @@ wx_add_test(test_gui ${APP_TYPE} ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     RES_BUNDLE ${TEST_GUI_RES_BUNDLE}
     )
+
+# wxUIActionSimulator uses global input state, so this test must not run
+# concurrently with other CTest processes.
+if(TEST test_gui)
+    set_tests_properties(test_gui PROPERTIES RUN_SERIAL TRUE)
+endif()
+
 if(wxUSE_AUI)
     wx_exe_link_libraries(test_gui wxaui)
 endif()
