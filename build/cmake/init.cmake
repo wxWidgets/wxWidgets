@@ -510,7 +510,7 @@ if(wxUSE_GUI)
 
                             wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
                             wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
-                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/staging/xdg-toplevel-drag xdg-toplevel-drag-v1)
+                            wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-toplevel-drag-v1)
 
                             set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
                             set(wxHAVE_WAYLAND_TOPLEVEL_DRAG ON)

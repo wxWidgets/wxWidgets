@@ -3158,8 +3158,8 @@ installed, where VER is 2, 3 or 4.
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.c
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.h
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.c
-                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/staging/xdg-toplevel-drag/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.h
-                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/staging/xdg-toplevel-drag/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.c
+                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.h
+                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.c
                     ],
                     [
                         WAYLAND_SCANNER=$WAYLAND_SCANNER
