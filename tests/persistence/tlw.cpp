@@ -148,6 +148,13 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         {
             checkIconized = false;
         }
+#ifdef __WXGTK3__
+        // Also skip this check on non-X11 (ie, Wayland)
+        else if ( !wxGTKImpl::IsX11(nullptr) )
+        {
+            checkIconized = false;
+        }
+#endif // __WXGTK3__
         else
         {
             if ( !WaitFor("frame to be iconized", [&]() {
