@@ -17,6 +17,9 @@ public:
     wxFontDialog(wxWindow *parent) { Create(parent); }
     wxFontDialog(wxWindow *parent, const wxFontData& data) { Create(parent, data); }
 
+    // Use Qt's standard font dialog instead of the operating system font dialog.
+    void QtDontUseNativeDialog();
+
 protected:
     bool DoCreate(wxWindow *parent) override;
 

@@ -52,6 +52,11 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     return wxFontDialogBase::DoCreate(parent);
 }
 
+void wxFontDialog::QtDontUseNativeDialog()
+{
+    GetQFontDialog()->setOption(QFontDialog::DontUseNativeDialog, true);
+}
+
 QFontDialog* wxFontDialog::GetQFontDialog() const
 {
     return static_cast<QFontDialog*>(m_qtWindow);
