@@ -237,6 +237,17 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         // without wxYielding a bit because this seems to cause the extension
         // to hang with webkit 2.40.0+.
         YieldForAWhile();
+
+        if ( IsRunningUnderWayland() )
+        {
+            // Waiting 50ms doesn't seem to be enough under Wayland, so wait
+            // for the selection to become available for longer time.
+            if ( !WaitFor("selection",
+                          [this]() { return m_browser->HasSelection(); }) )
+            {
+                return;
+            }
+        }
 #endif // wxUSE_WEBVIEW_WEBKIT2
 
         CHECK(m_browser->HasSelection());
