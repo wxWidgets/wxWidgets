@@ -617,8 +617,8 @@ wxSemaError wxSemaphoreInternal::Wait()
             return wxSEMA_MISC_ERROR;
 
         wxLogTrace(TRACE_SEMA,
-                   wxT("Thread %p finished waiting for semaphore, count = %lu"),
-                   THR_ID_CAST(wxThread::GetCurrentId()), (unsigned long)m_count);
+                   "Thread %p finished waiting for semaphore, count = %zu",
+                   THR_ID_CAST(wxThread::GetCurrentId()), m_count);
     }
 
     m_count--;
@@ -684,8 +684,8 @@ wxSemaError wxSemaphoreInternal::Post()
     m_count++;
 
     wxLogTrace(TRACE_SEMA,
-               wxT("Thread %p about to signal semaphore, count = %lu"),
-               THR_ID_CAST(wxThread::GetCurrentId()), (unsigned long)m_count);
+               "Thread %p about to signal semaphore, count = %zu",
+               THR_ID_CAST(wxThread::GetCurrentId()), m_count);
 
     return m_cond.Signal() == wxCOND_NO_ERROR ? wxSEMA_NO_ERROR
                                               : wxSEMA_MISC_ERROR;
@@ -896,8 +896,8 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                 pthread->m_exitcode = thread->Entry();
 
                 wxLogTrace(TRACE_THREADS,
-                           wxT("Thread %p Entry() returned %lu."),
-                           THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+                           "Thread %p Entry() returned %p.",
+                           THR_ID(pthread), pthread->m_exitcode);
 #ifdef CATCH_AND_RETHROW_FORCED_UNWIND
             }
             catch ( abi::__forced_unwind& )
@@ -1345,8 +1345,8 @@ bool wxThread::SetConcurrency(size_t level)
 
     if ( rc != 0 )
     {
-        wxLogSysError(rc, _("Failed to set thread concurrency level to %lu"),
-                      static_cast<unsigned long>(level));
+        wxLogSysError(rc, _("Failed to set thread concurrency level to %zu"),
+                      level);
         return false;
     }
 
@@ -1920,8 +1920,8 @@ void wxThreadModule::OnExit()
         while ( gs_nThreadsBeingDeleted > 0 )
         {
             wxLogTrace(TRACE_THREADS,
-                       wxT("Waiting for %lu threads to disappear"),
-                       (unsigned long)gs_nThreadsBeingDeleted);
+                       "Waiting for %zu threads to disappear",
+                       gs_nThreadsBeingDeleted);
 
             gs_condAllDeleted->Wait();
         }
@@ -1938,8 +1938,8 @@ void wxThreadModule::OnExit()
         const size_t count = gs_allThreads.GetCount();
         if ( count != 0u )
         {
-            wxLogDebug(wxT("%lu threads were not terminated by the application."),
-                       (unsigned long)count);
+            wxLogDebug("%zu threads were not terminated by the application.",
+                       count);
 
             // We can't delete the mutexes below because they can still be used
             // from the still running threads, so leak them too: it's better
@@ -1976,9 +1976,9 @@ static void ScheduleThreadForDeletion()
 
     gs_nThreadsBeingDeleted++;
 
-    wxLogTrace(TRACE_THREADS, wxT("%lu thread%s waiting to be deleted"),
-               (unsigned long)gs_nThreadsBeingDeleted,
-               gs_nThreadsBeingDeleted == 1 ? wxT("") : wxT("s"));
+    wxLogTrace(TRACE_THREADS, "%zu thread%s waiting to be deleted",
+               gs_nThreadsBeingDeleted,
+               gs_nThreadsBeingDeleted == 1 ? "" : "s");
 }
 
 static void DeleteThread(wxThread *This)
@@ -1995,8 +1995,8 @@ static void DeleteThread(wxThread *This)
     wxCHECK_RET( gs_nThreadsBeingDeleted > 0,
                  wxT("no threads scheduled for deletion, yet we delete one?") );
 
-    wxLogTrace(TRACE_THREADS, wxT("%lu threads remain scheduled for deletion."),
-               (unsigned long)gs_nThreadsBeingDeleted - 1);
+    wxLogTrace(TRACE_THREADS, "%zu threads remain scheduled for deletion.",
+               gs_nThreadsBeingDeleted - 1);
 
     if ( !--gs_nThreadsBeingDeleted )
     {
