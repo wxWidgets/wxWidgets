@@ -571,7 +571,7 @@ void TDPaintIcons(HDC hdc, const TDPageState& s)
     }
 }
 
-void TDPaintGlyphs(HDC hdc, TDPageState& s)
+void TDPaintGlyphs(HDC hdc, TDPageState& s, HWND hwnd)
 {
     if ( !s.hTD && !s.hButton )
         return;
@@ -612,9 +612,6 @@ void TDPaintGlyphs(HDC hdc, TDPageState& s)
             const wxSize size =
                 s.hButton.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL, hdc);
 
-            const int mg = (el.rect.bottom - el.rect.top - size.y) / 3;
-            RECT rc = { el.rect.left + mg + 1,el.rect.top + mg + 1,el.rect.left + mg + 1 + size.x,el.rect.bottom };
-
             int state;
             if ( press )
                 state = s.isChecked ? CBS_CHECKEDPRESSED : CBS_UNCHECKEDPRESSED;
@@ -623,7 +620,17 @@ void TDPaintGlyphs(HDC hdc, TDPageState& s)
             else
                 state = s.isChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
 
-            ::FillRect(hdc, &rc, s.brSecondary);
+            // Erase the entire area because we are not sure exactly where the
+            // system-drawn checkbox might be. The text is drawn later.
+            ::FillRect(hdc, &el.rect, s.brSecondary);
+
+            // Draw the checkbox at the position observed on Windows 11 25H2.
+            wxSize dpi = wxGetWindowDPI(hwnd);
+            RECT rc = el.rect;
+            rc.left += ::MulDiv(3, dpi.x, 96);
+            rc.top += ::MulDiv(5, dpi.y, 96);
+            rc.right = rc.left + size.x;
+            rc.bottom = rc.top + size.y;
             s.hButton.DrawBackground(hdc, rc, BP_CHECKBOX, state);
         }
     }
@@ -746,7 +753,7 @@ void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
     }
 
     TDPaintIcons(hdcBuf, s);
-    TDPaintGlyphs(hdcBuf, s);
+    TDPaintGlyphs(hdcBuf, s, hwnd);
     TDPaintText(hdcBuf, s);
 
     ::EndBufferedPaint(hbp, TRUE);
