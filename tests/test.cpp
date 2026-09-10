@@ -533,6 +533,18 @@ extern bool IsAutomaticTest()
     return s_isAutomatic == 1;
 }
 
+#if wxUSE_GUI
+
+extern bool IsRunningUnderWayland()
+{
+#ifdef __WXGTK3__
+    if ( !wxGTKImpl::IsX11(nullptr) )
+        return true;
+#endif // __WXGTK3__
+
+    return false;
+}
+
 extern bool IsRunningUnderXVFB()
 {
     static int s_isRunningUnderXVFB = -1;
@@ -544,8 +556,6 @@ extern bool IsRunningUnderXVFB()
 
     return s_isRunningUnderXVFB == 1;
 }
-
-#if wxUSE_GUI
 
 bool EnableUITests()
 {
@@ -577,7 +587,7 @@ bool EnableUITests()
             // wxUIActionSimulator injects X11 events, which never reach a
             // native Wayland client, so disable UI tests by default there
             // (WX_UI_TESTS=1 above still overrides this).
-            if ( s_enabled == 1 && !wxGTKImpl::IsX11(nullptr) )
+            if ( s_enabled == 1 && IsRunningUnderWayland() )
             {
                 s_enabled = 0;
                 wxFprintf(stderr, wxASCII_STR(

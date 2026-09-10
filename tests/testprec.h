@@ -238,7 +238,13 @@ extern bool IsNetworkAvailable();
 
 extern bool IsAutomaticTest();
 
+#if wxUSE_GUI
+
+extern bool IsRunningUnderWayland();
+
 extern bool IsRunningUnderXVFB();
+
+#endif // wxUSE_GUI
 
 #if wxUSE_LOG
 // Logging is disabled by default when running the tests, but sometimes it can
