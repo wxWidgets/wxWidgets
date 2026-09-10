@@ -1914,17 +1914,14 @@ void wxThreadModule::OnExit()
 
     {
         wxMutexLocker lock( *gs_mutexDeleteThread );
-        // are there any threads left which are being deleted right now?
-        size_t nThreadsBeingDeleted;
-        nThreadsBeingDeleted = gs_nThreadsBeingDeleted;
 
-        if ( nThreadsBeingDeleted > 0 )
+        // Check the predicate in a loop in to handle spurious wakeups.
+        while ( gs_nThreadsBeingDeleted > 0 )
         {
             wxLogTrace(TRACE_THREADS,
                        wxT("Waiting for %lu threads to disappear"),
-                       (unsigned long)nThreadsBeingDeleted);
+                       (unsigned long)gs_nThreadsBeingDeleted);
 
-            // have to wait until all of them disappear
             gs_condAllDeleted->Wait();
         }
     }
