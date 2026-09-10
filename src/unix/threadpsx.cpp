@@ -1942,9 +1942,24 @@ void wxThreadModule::OnExit()
 
     for ( size_t n = 0u; n < count; n++ )
     {
-        // Delete calls the destructor which removes the current entry. We
-        // should only delete the first one each time.
-        gs_allThreads[0]->Delete();
+        wxThread* thread;
+
+        {
+            wxMutexLocker lock(*gs_mutexAllThreads);
+
+            // The threads may remove themselves from the array in their dtor
+            // while we're not holding the mutex, so check that there are still
+            // any of them left and always take the first one, as deleting it
+            // removes the corresponding entry from the array.
+            if ( gs_allThreads.empty() )
+                break;
+
+            thread = gs_allThreads[0];
+        }
+
+        // Note that we must not hold the mutex while doing this, as the thread
+        // dtor locks it too.
+        thread->Delete();
     }
 
     delete gs_mutexAllThreads;
