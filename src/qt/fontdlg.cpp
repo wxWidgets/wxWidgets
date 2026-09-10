@@ -35,7 +35,20 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {
     m_qtWindow = new wxQtFontDialog( parent, this );
+
     GetQFontDialog()->setCurrentFont(m_fontData.GetInitialFont().GetHandle());
+
+    const int flags = m_fontData.GetRestrictSelection();
+
+    if ( flags != wxFONTRESTRICT_NONE )
+    {
+        GetQFontDialog()->setOption(QFontDialog::ScalableFonts,
+                                    flags | wxFONTRESTRICT_SCALABLE);
+
+        GetQFontDialog()->setOption(QFontDialog::MonospacedFonts,
+                                    flags | wxFONTRESTRICT_FIXEDPITCH);
+    }
+
     return wxFontDialogBase::DoCreate(parent);
 }
 
