@@ -142,6 +142,9 @@
     @event{EVT_TREE_ITEM_EXPANDING(id, func)}
           The item is being expanded. This can be prevented by calling Veto().
           Processes a @c wxEVT_TREE_ITEM_EXPANDING event type.
+    @event{EVT_TREE_ITEM_LEFT_CLICK(id, func)}
+          The user has clicked the item with the left mouse button.
+          Processes a @c wxEVT_TREE_ITEM_LEFT_CLICK event type.
     @event{EVT_TREE_ITEM_RIGHT_CLICK(id, func)}
           The user has clicked the item with the right mouse button.
           Processes a @c wxEVT_TREE_ITEM_RIGHT_CLICK event type.
