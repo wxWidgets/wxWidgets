@@ -57,6 +57,11 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data )
     return wxTopLevelWindow::Create( parent, wxID_ANY, "");
 }
 
+void wxColourDialog::QtDontUseNativeDialog()
+{
+    GetQColorDialog()->setOption(QColorDialog::DontUseNativeDialog, true);
+}
+
 wxColourData &wxColourDialog::GetColourData()
 {
     for (int i=0; i<wxColourData::NUM_CUSTOM; i++)
