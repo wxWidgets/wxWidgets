@@ -35,8 +35,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {
     m_qtWindow = new wxQtFontDialog( parent, this );
-    static_cast<QFontDialog*>(m_qtWindow)->setCurrentFont(m_fontData.GetInitialFont().GetHandle());
+    GetQFontDialog()->setCurrentFont(m_fontData.GetInitialFont().GetHandle());
     return wxFontDialogBase::DoCreate(parent);
+}
+
+QFontDialog* wxFontDialog::GetQFontDialog() const
+{
+    return static_cast<QFontDialog*>(m_qtWindow);
 }
 
 #endif // wxUSE_FONTDLG

@@ -21,8 +21,7 @@ protected:
     bool DoCreate(wxWindow *parent) override;
 
 private:
-
-    wxFontData m_data;
+    QFontDialog* GetQFontDialog() const;
 
     wxDECLARE_DYNAMIC_CLASS(wxFontDialog);
 };
