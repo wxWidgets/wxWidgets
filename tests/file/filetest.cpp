@@ -15,6 +15,7 @@
 
 #if wxUSE_FILE
 
+#include "wx/ffile.h"
 #include "wx/file.h"
 
 #include "testfile.h"
@@ -100,7 +101,13 @@ static void CheckFileContents(const wxString& name, const wxString& data)
     CHECK( s == data );
 }
 
-TEST_CASE("wxTempFile", "[file][temp]")
+// wxTempFile and wxTempFFile have exactly the same API, so run the same test
+// for both of them instead of duplicating it.
+#if wxUSE_FFILE
+TEMPLATE_TEST_CASE("wxTempFile", "[file][temp]", wxTempFile, wxTempFFile)
+#else
+TEMPLATE_TEST_CASE("wxTempFile", "[file][temp]", wxTempFile)
+#endif
 {
     constexpr const char* name = "wxtemp_test";
     const wxString dataOld("what is the meaning of life?");
@@ -128,7 +135,7 @@ TEST_CASE("wxTempFile", "[file][temp]")
 
     // First check that not committing the file doesn't do anything.
     {
-        wxTempFile discarded(name);
+        TestType discarded(name);
         CHECK( discarded.IsOpened() );
         CHECK( discarded.Write(dataNew) );
     }
@@ -145,7 +152,7 @@ TEST_CASE("wxTempFile", "[file][temp]")
     }
 
     // Next check that committing it does.
-    wxTempFile tmpFile;
+    TestType tmpFile;
     CHECK( tmpFile.Open(name) );
     CHECK( tmpFile.Write(dataNew) );
     CHECK( tmpFile.Commit() );
