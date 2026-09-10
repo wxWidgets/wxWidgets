@@ -30,8 +30,8 @@
     #define wxColourDialog wxGenericColourDialog
 #endif
 
-// Under some platforms (currently only wxMSW) wxColourDialog can send events
-// of this type while it is shown.
+// Under some platforms (currently, only wxMSW and wxQt) wxColourDialog can
+// send events of this type while it is shown.
 //
 // Notice that this class is almost identical to wxColourPickerEvent but it
 // doesn't really sense to reuse the same class for both controls.

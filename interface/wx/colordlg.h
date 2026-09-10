@@ -10,9 +10,9 @@
 
     This class represents the colour chooser dialog.
 
-    Starting from wxWidgets 3.1.3 and currently in the MSW port only, this
-    dialog generates wxEVT_COLOUR_CHANGED events while it is being shown, i.e.
-    from inside its ShowModal() method, that notify the program about the
+    Starting from wxWidgets 3.1.3 (MSW) and wxWidgets 3.3.2 (Qt) ports only,
+    this dialog generates wxEVT_COLOUR_CHANGED events while it is being shown,
+    i.e. from inside its ShowModal() method, that notify the program about the
     change of the currently selected colour and allow it to e.g. preview the
     effect of selecting this colour. Note that if you react to this event, you
     should also correctly revert to the previously selected colour if the
