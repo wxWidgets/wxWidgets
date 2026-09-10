@@ -1912,6 +1912,7 @@ void wxThreadModule::OnExit()
 {
     wxASSERT_MSG( wxThread::IsMain(), wxT("only main thread can be here") );
 
+    // Wait until the threads which are already exiting really disappear.
     {
         wxMutexLocker lock( *gs_mutexDeleteThread );
 
@@ -1926,40 +1927,26 @@ void wxThreadModule::OnExit()
         }
     }
 
-    size_t count;
-
+    // If there any threads still left, warn about them but don't try to do
+    // anything: there is no thread-safe way of deleting them, we can't wait
+    // for a detached thread to finish and if it doesn't terminate before we
+    // delete gs_mutexAllThreads below, it will crash, so it's safer to just
+    // let it keep running and get killed when the process terminates.
     {
         wxMutexLocker lock(*gs_mutexAllThreads);
 
-        // terminate any threads left
-        count = gs_allThreads.GetCount();
+        const size_t count = gs_allThreads.GetCount();
         if ( count != 0u )
         {
             wxLogDebug(wxT("%lu threads were not terminated by the application."),
                        (unsigned long)count);
+
+            // We can't delete the mutexes below because they can still be used
+            // from the still running threads, so leak them too: it's better
+            // than crashing (and the leaks are not even reported as such by
+            // LSAN because we still keep pointers to the leaked objects).
+            return;
         }
-    } // unlock mutex before deleting the threads as they lock it in their dtor
-
-    for ( size_t n = 0u; n < count; n++ )
-    {
-        wxThread* thread;
-
-        {
-            wxMutexLocker lock(*gs_mutexAllThreads);
-
-            // The threads may remove themselves from the array in their dtor
-            // while we're not holding the mutex, so check that there are still
-            // any of them left and always take the first one, as deleting it
-            // removes the corresponding entry from the array.
-            if ( gs_allThreads.empty() )
-                break;
-
-            thread = gs_allThreads[0];
-        }
-
-        // Note that we must not hold the mutex while doing this, as the thread
-        // dtor locks it too.
-        thread->Delete();
     }
 
     delete gs_mutexAllThreads;
