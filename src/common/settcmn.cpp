@@ -24,6 +24,8 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
+#include <cmath>
+
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------
@@ -115,4 +117,13 @@ bool wxSystemAppearance::IsUsingDarkBackground() const
 wxSystemAppearance wxSystemSettingsNative::GetAppearance()
 {
     return wxSystemAppearance();
+}
+
+bool
+wxSystemSettingsNative::ExceedsDragThreshold(const wxPoint& origin,
+                                             const wxPoint& current,
+                                             const wxWindow* win)
+{
+    return std::abs(current.x - origin.x) > GetMetric(wxSYS_DRAG_X, win) ||
+           std::abs(current.y - origin.y) > GetMetric(wxSYS_DRAG_Y, win);
 }

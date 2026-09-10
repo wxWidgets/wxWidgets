@@ -637,6 +637,13 @@
 #undef wxHAVE_WAYLAND_SESSION_MANAGEMENT
 
 /*
+    Use Wayland xdg-toplevel-drag protocol.
+
+    This is defined if GTK is new enough to support it.
+ */
+#undef wxHAVE_WAYLAND_TOPLEVEL_DRAG
+
+/*
    Use XTest extension to implement wxUIActionSimulator?
 
    Default is 1, it is set to 0 if the necessary headers/libraries are not

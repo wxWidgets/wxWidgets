@@ -502,23 +502,20 @@ if(wxUSE_GUI)
 
                         wx_generate_wayland_protocol(${wx_protocols_input_dir} pointer-warp-v1)
 
-                        # Check if we have GTK new enough to allow using XDG
-                        # session management protocol: 3.24.53 is the earliest one
-                        # with gdk_wayland_window_get_xdg_toplevel() that we need.
-                        if(GTK3_VERSION VERSION_GREATER_EQUAL 3.24.53)
-                            # We also need wayland-protocols as this protocol
-                            # depends on xdg-shell one.
-                            pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
-                            if(WAYLAND_PROTOCOLS_FOUND)
-                                pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
+                        # We also need wayland-protocols as this protocol
+                        # depends on xdg-shell one.
+                        pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
+                        if(WAYLAND_PROTOCOLS_FOUND)
+                            pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
 
-                                wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
-                                wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
+                            wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
+                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
+                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/staging/xdg-toplevel-drag xdg-toplevel-drag-v1)
 
-                                set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
-                            else()
-                                message(WARNING "wayland-protocols not found, xdg-session-management protocol won't be used")
-                            endif()
+                            set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
+                            set(wxHAVE_WAYLAND_TOPLEVEL_DRAG ON)
+                        else()
+                            message(WARNING "wayland-protocols package not found, Wayland-specific functionality will be disabled")
                         endif()
 
                         set(wxHAVE_WAYLAND_CLIENT ON)

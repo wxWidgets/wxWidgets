@@ -471,5 +471,23 @@ public:
         @since 3.3.0
      */
     static wxColour SelectLightDark(wxColour colForLight, wxColour colForDark);
+
+    /**
+        Check if the mouse moved far enough to start a drag operation.
+
+        This function simply checks if the mouse has travelled further than the
+        configured drag threshold from the click position to consider that the
+        user intends to drag something.
+
+        @param origin Position of the mouse click.
+        @param current Current position of the mouse.
+        @param win Window to use for determining the drag threshold.
+            May be @NULL but it's recommended to provide it, see GetMetric().
+
+        @since 3.3.4
+     */
+    static bool ExceedsDragThreshold(const wxPoint& origin,
+                                     const wxPoint& current,
+                                     const wxWindow* win = nullptr);
 };
 

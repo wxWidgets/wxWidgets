@@ -1625,11 +1625,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     }
 
 
-    int drag_x_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_X, this);
-    int drag_y_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_Y, this);
-
-    if (abs(pos.x - m_clickPt.x) > drag_x_threshold ||
-        abs(pos.y - m_clickPt.y) > drag_y_threshold)
+    if (wxSystemSettings::ExceedsDragThreshold(m_clickPt, pos, this))
     {
         const int idx = GetIdxFromWindow(m_clickTab);
         if ( idx != wxNOT_FOUND )
