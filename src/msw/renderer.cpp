@@ -671,7 +671,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                  const wxRect& rect,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW", L"DarkMode_Explorer::TreeView");
     if ( !hTheme )
     {
         m_rendererNative.DrawTreeItemButton(win, dc, rect, flags);
@@ -855,7 +855,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
     // Do not specify a dark theme as we do in DrawTreeItemButton() because
     // that may give incorrect high DPI behavior, particularly on old Windows
     // versions. The light mode theme gives the correct size.
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW");
     if ( hTheme )
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
