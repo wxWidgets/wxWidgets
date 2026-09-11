@@ -302,6 +302,28 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RTTI", "[aui][rtti]")
     CHECK( wxDynamicCast(nb.get(), wxBookCtrlBase) == book );
 }
 
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::NonTabPaneRejected",
+                 "[aui]")
+{
+    wxPanel *page = new wxPanel(nb.get());
+    REQUIRE( nb->AddPage(page, "Page") );
+
+    wxPanel *pane = new wxPanel(nb.get());
+    wxAuiManager* const mgr = wxAuiManager::GetManager(nb.get());
+    REQUIRE( mgr );
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.Name("plain-pane").Right().CaptionVisible(false);
+
+#if wxDEBUG_LEVEL
+    WX_ASSERT_FAILS_WITH_ASSERT( mgr->AddPane(pane, paneInfo) );
+#else
+    CHECK( !mgr->AddPane(pane, paneInfo) );
+#endif
+
+    CHECK( !mgr->GetPane("plain-pane").IsOk() );
+}
+
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
 {
     wxPanel *p1 = new wxPanel(nb.get());
