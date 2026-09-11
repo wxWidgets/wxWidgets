@@ -79,6 +79,7 @@
 #include  "wx/filename.h"
 #include  "wx/file.h"
 #include  "wx/filefn.h"
+#include  "wx/private/filename.h"
 
 // there is no distinction between text and binary files under Unix, so define
 // O_BINARY as 0 if the system headers don't do it already
@@ -546,29 +547,7 @@ bool wxTempFile::Open(const wxString& strName)
         return false;
     }
 
-    // The temp file should have the same attributes as the original one.
-    if ( wxFileExists(m_strName) )
-    {
-        if ( !wxFileName(m_strTemp).CopyAttributesFrom(m_strName) )
-        {
-            wxLogError(_("Error preserving all attributes of '%s'"), m_strName);
-        }
-    }
-#ifdef __UNIX__
-    else
-    {
-        // The file didn't exist, so just give it the default mode _using_
-        // user's umask (new files creation should respect umask)
-        mode_t mask = umask(0777);
-        mode_t mode = 0666 & ~mask;
-        umask(mask);
-
-        if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
-        {
-            wxLogSysError(_("Failed to set temporary file permissions"));
-        }
-    }
-#endif // Unix
+    wxInitTempFile(m_strTemp, m_strName);
 
     return true;
 }
