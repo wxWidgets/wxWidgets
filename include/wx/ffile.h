@@ -63,6 +63,10 @@ public:
   bool Write(const wxString& s, const wxMBConv& conv = wxConvAuto());
     // flush data not yet written
   bool Flush();
+    // flush the data and also ensure that it reaches the physical disk: this
+    // is slower than Flush(), which only flushes the buffers to the OS, but
+    // guarantees that the data survives a system crash
+  bool FlushAndSync();
 
   // file pointer operations (return ofsInvalid on failure)
     // move ptr ofs bytes related to start/current pos/end of file

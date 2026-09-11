@@ -564,7 +564,19 @@ wxTempFile::~wxTempFile()
 
 bool wxTempFile::Commit()
 {
+    // Ensure that the data really reaches the disk before replacing the old
+    // file with this one: otherwise a crash just after the rename could leave
+    // us with neither the old nor the new contents.
+    const bool flushed = m_file.Flush();
+
     m_file.Close();
+
+    if ( !flushed )
+    {
+        // Don't replace the old file if we're not sure that the new contents
+        // was written successfully.
+        return false;
+    }
 
     if ( !wxRenameFile(m_strTemp, m_strName) ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
