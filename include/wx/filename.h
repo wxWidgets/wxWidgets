@@ -266,6 +266,9 @@ public:
         // values
     bool SetPermissions(int permissions);
 
+        // copy the supported attributes of the given file to this one
+    bool CopyAttributesFrom(const wxFileName& source) const;
+
     // Returns the native path for a file URL
     static wxFileName URLToFileName(const wxString& url);
 

@@ -1406,6 +1406,37 @@ public:
     bool SetPermissions(int permissions);
 
     /**
+        Copies the attributes of the given file to this one.
+
+        This function is useful when replacing an existing file by writing the
+        new contents to a temporary file and then renaming it over the old
+        one, as it allows the replacement to keep the attributes of the file
+        being replaced, which would be lost otherwise.
+
+        Under Unix this copies the file permissions (including setuid and
+        setgid bits). Under MSW it copies the hidden, system and
+        not-content-indexed attributes and the creation time (access and
+        modification times will presumably be modified by the program anyhow
+        and so are not copied). Under other platforms this function currently
+        does nothing but still returns @true.
+
+        Note that this function does @e not copy everything and, in
+        particular, under MSW it doesn't copy the read-only attribute, as this
+        would prevent the destination file from being modified or removed
+        later. It also currently doesn't copy the compressed and encrypted
+        attributes nor the access control lists.
+
+        @param source
+            The file to copy the attributes from. It must exist.
+
+        @return @true if all supported attributes were copied, @false if any of
+            them couldn't be (some of them may still have been copied).
+
+        @since 3.3.4
+    */
+    bool CopyAttributesFrom(const wxFileName& source) const;
+
+    /**
         Converts URL into a well-formed filename.
         The URL must use the @c file protocol.
         If the URL does not use @c file protocol

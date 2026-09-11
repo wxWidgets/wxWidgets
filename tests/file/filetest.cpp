@@ -17,6 +17,7 @@
 
 #include "wx/ffile.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 
 #include "testfile.h"
 
@@ -158,6 +159,60 @@ TEMPLATE_TEST_CASE("wxTempFile", "[file][temp]", wxTempFile)
     CHECK( tmpFile.Commit() );
 
     CheckFileContents(name, dataNew);
+}
+
+// Check that replacing an existing file preserves its attributes: this is
+// what wxFileName::CopyAttributesFrom() is used for in wxTempFile::Open().
+#if wxUSE_FFILE
+TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]",
+                   wxTempFile, wxTempFFile)
+#else
+TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]", wxTempFile)
+#endif
+{
+    constexpr const char* name = "wxtemp_attr_test";
+
+    // Ensure that it will be removed at the end of the test in any case.
+    TempFile tf(name);
+
+    {
+        wxFile f(name, wxFile::write);
+        REQUIRE( f.IsOpened() );
+        CHECK( f.Write("old") );
+    }
+
+    wxFileName fn(name);
+
+    // Give the file to be replaced some distinctive attributes.
+#if wxUSE_DATETIME
+    const wxDateTime dtOld(1, wxDateTime::Jan, 2000);
+    REQUIRE( fn.SetTimes(nullptr, nullptr, &dtOld) );
+#endif // wxUSE_DATETIME
+
+#ifndef __WINDOWS__
+    REQUIRE( fn.SetPermissions(wxS_IRUSR | wxS_IWUSR) );
+#endif // !__WINDOWS__
+
+    TestType tmpFile;
+    REQUIRE( tmpFile.Open(name) );
+    CHECK( tmpFile.Write("new") );
+    CHECK( tmpFile.Commit() );
+
+    CheckFileContents(name, "new");
+
+#ifdef __WINDOWS__
+#if wxUSE_DATETIME
+    // Under MSW the creation time of the replaced file must be preserved.
+    wxDateTime dtCreate;
+    REQUIRE( fn.GetTimes(nullptr, nullptr, &dtCreate) );
+    CHECK( dtCreate == dtOld );
+#endif // wxUSE_DATETIME
+#else // !__WINDOWS__
+    // Elsewhere its permissions must be.
+    wxStructStat st;
+    REQUIRE( wxStat(name, &st) == 0 );
+    CHECK( (st.st_mode & 0777) == 0600 );
+#endif // __WINDOWS__/!__WINDOWS__
 }
 
 #ifdef __LINUX__

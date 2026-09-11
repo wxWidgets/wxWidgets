@@ -2743,6 +2743,109 @@ bool wxFileName::SetPermissions(int permissions)
     return wxChmod(GetFullPath(), permissions) == 0;
 }
 
+#if defined(__WINDOWS__)
+
+namespace
+{
+
+bool CopyFileAttributes(const wxString& pathSrc, const wxString& pathDst)
+{
+    const DWORD attrsSrc = ::GetFileAttributes(pathSrc.t_str());
+    if ( attrsSrc == INVALID_FILE_ATTRIBUTES )
+    {
+        wxLogSysError(_("Failed to get attributes of '%s'"), pathSrc);
+        return false;
+    }
+
+    const DWORD attrsDst = ::GetFileAttributes(pathDst.t_str());
+    if ( attrsDst == INVALID_FILE_ATTRIBUTES )
+    {
+        wxLogSysError(_("Failed to get attributes of '%s'"), pathDst);
+        return false;
+    }
+
+    // Only these attributes can be usefully and successfully copied: notably
+    // FILE_ATTRIBUTE_READONLY is not copied because it would prevent the
+    // destination file from being written to or removed later, while the
+    // compressed and encrypted ones simply can't be set using this function.
+    constexpr DWORD ATTRS_TO_COPY = FILE_ATTRIBUTE_HIDDEN |
+                                    FILE_ATTRIBUTE_SYSTEM |
+                                    FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
+
+    // Note that this clears the attributes not set in the source file too.
+    const DWORD attrsNew = (attrsDst & ~ATTRS_TO_COPY) |
+                           (attrsSrc & ATTRS_TO_COPY);
+    if ( attrsNew != attrsDst &&
+            !::SetFileAttributes(pathDst.t_str(), attrsNew) )
+    {
+        wxLogSysError(_("Failed to set attributes of '%s'"), pathDst);
+        return false;
+    }
+
+    return true;
+}
+
+#if wxUSE_DATETIME
+bool CopyFileTimes(const wxFileName& src, const wxFileName& dst)
+{
+    // Preserve just the creation time, the others are going to be modified
+    // anyhow soon by the caller.
+    wxDateTime dtCreate;
+
+    return src.GetTimes(nullptr, nullptr, &dtCreate) &&
+                dst.SetTimes(nullptr, nullptr, &dtCreate);
+}
+#endif // wxUSE_DATETIME
+
+} // anonymous namespace
+
+#endif // __WINDOWS__
+
+bool wxFileName::CopyAttributesFrom(const wxFileName& source) const
+{
+    const wxString pathSrc = source.GetFullPath();
+    const wxString pathDst = GetFullPath();
+
+#if defined(__WINDOWS__)
+    bool ok = true;
+
+    if ( !CopyFileAttributes(pathSrc, pathDst) )
+        ok = false;
+
+#if wxUSE_DATETIME
+    if ( !CopyFileTimes(source, *this) )
+        ok = false;
+#endif // wxUSE_DATETIME
+
+    return ok;
+#elif defined(__UNIX_LIKE__)
+    // Under Unix we copy just the file mode: we can't set creation time.
+    wxStructStat st;
+    if ( wxStat(pathSrc, &st) != 0 )
+    {
+        wxLogSysError(_("Failed to get mode of '%s'"), pathSrc);
+        return false;
+    }
+
+    if ( wxChmod(pathDst, st.st_mode) != 0 )
+    {
+        wxLogSysError(_("Failed to set mode of '%s'"), pathDst);
+        return false;
+    }
+
+    return true;
+#else // other platform
+    wxUnusedVar(pathSrc);
+    wxUnusedVar(pathDst);
+
+    // Returning false from here would result in an error message being logged
+    // by the caller, which would be incomprehensible and there won't be
+    // anything that could possibly be done about it, so just pretend that we
+    // succeeded.
+    return true;
+#endif // platforms
+}
+
 // Returns the native path for a file URL
 wxFileName wxFileName::URLToFileName(const wxString& url)
 {
