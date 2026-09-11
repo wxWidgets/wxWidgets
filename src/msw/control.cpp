@@ -599,7 +599,10 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
     {
         RECT oldLabelRect = rectLabel; // needed if right aligned
 
-        if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel,
+        // If the label is empty, use a space character to avoid a focus
+        // rectangle size 0x0.
+        wxString s = label.empty() ? " " : label;
+        if ( !::DrawText(hdc, s.t_str(), s.length(), &rectLabel,
                          fmt | DT_CALCRECT) )
         {
             wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
