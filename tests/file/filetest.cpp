@@ -15,7 +15,9 @@
 
 #if wxUSE_FILE
 
+#include "wx/ffile.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 
 #include "testfile.h"
 
@@ -100,7 +102,13 @@ static void CheckFileContents(const wxString& name, const wxString& data)
     CHECK( s == data );
 }
 
-TEST_CASE("wxTempFile", "[file][temp]")
+// wxTempFile and wxTempFFile have exactly the same API, so run the same test
+// for both of them instead of duplicating it.
+#if wxUSE_FFILE
+TEMPLATE_TEST_CASE("wxTempFile", "[file][temp]", wxTempFile, wxTempFFile)
+#else
+TEMPLATE_TEST_CASE("wxTempFile", "[file][temp]", wxTempFile)
+#endif
 {
     constexpr const char* name = "wxtemp_test";
     const wxString dataOld("what is the meaning of life?");
@@ -128,7 +136,7 @@ TEST_CASE("wxTempFile", "[file][temp]")
 
     // First check that not committing the file doesn't do anything.
     {
-        wxTempFile discarded(name);
+        TestType discarded(name);
         CHECK( discarded.IsOpened() );
         CHECK( discarded.Write(dataNew) );
     }
@@ -145,12 +153,81 @@ TEST_CASE("wxTempFile", "[file][temp]")
     }
 
     // Next check that committing it does.
-    wxTempFile tmpFile;
+    TestType tmpFile;
     CHECK( tmpFile.Open(name) );
     CHECK( tmpFile.Write(dataNew) );
     CHECK( tmpFile.Commit() );
 
     CheckFileContents(name, dataNew);
+}
+
+// Check that replacing an existing file preserves its attributes: this is
+// what wxFileName::CopyAttributesFrom() is used for in wxTempFile::Open().
+#if wxUSE_FFILE
+TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]",
+                   wxTempFile, wxTempFFile)
+#else
+TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]", wxTempFile)
+#endif
+{
+    constexpr const char* name = "wxtemp_attr_test";
+
+    // Ensure that it will be removed at the end of the test in any case.
+    TempFile tf(name);
+
+    {
+        wxFile f(name, wxFile::write);
+        REQUIRE( f.IsOpened() );
+        CHECK( f.Write("old") );
+    }
+
+    wxFileName fn(name);
+
+    // Give the file to be replaced some distinctive attributes.
+#if wxUSE_DATETIME
+    const wxDateTime dtOld(1, wxDateTime::Jan, 2000);
+    REQUIRE( fn.SetTimes(nullptr, nullptr, &dtOld) );
+
+#ifdef __WINDOWS__
+    // Setting the creation time is not always supported: notably, Wine
+    // silently ignores it, as there is no way to do it under Linux. So check
+    // that it was really set before checking that it is preserved below.
+    wxDateTime dtSet;
+    REQUIRE( fn.GetTimes(nullptr, nullptr, &dtSet) );
+
+    const bool canSetCreationTime = dtSet == dtOld;
+    if ( !canSetCreationTime )
+        WARN("Setting file creation time is not supported, not testing it.");
+#endif // __WINDOWS__
+#endif // wxUSE_DATETIME
+
+#ifndef __WINDOWS__
+    REQUIRE( fn.SetPermissions(wxS_IRUSR | wxS_IWUSR) );
+#endif // !__WINDOWS__
+
+    TestType tmpFile;
+    REQUIRE( tmpFile.Open(name) );
+    CHECK( tmpFile.Write("new") );
+    CHECK( tmpFile.Commit() );
+
+    CheckFileContents(name, "new");
+
+#ifdef __WINDOWS__
+#if wxUSE_DATETIME
+    // Under MSW the creation time of the replaced file must be preserved.
+    if ( canSetCreationTime )
+    {
+        wxDateTime dtCreate;
+        REQUIRE( fn.GetTimes(nullptr, nullptr, &dtCreate) );
+        CHECK( dtCreate == dtOld );
+    }
+#endif // wxUSE_DATETIME
+#else // !__WINDOWS__
+    // Elsewhere its permissions must be.
+    wxStructStat st;
+    REQUIRE( wxStat(name, &st) == 0 );
+    CHECK( (st.st_mode & 0777) == 0600 );
+#endif // __WINDOWS__/!__WINDOWS__
 }
 
 #ifdef __LINUX__

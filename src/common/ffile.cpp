@@ -29,6 +29,7 @@
 
 #include "wx/filename.h"
 #include "wx/ffile.h"
+#include "wx/private/filename.h"
 
 // ============================================================================
 // implementation of wxFFile
@@ -326,29 +327,7 @@ bool wxTempFFile::Open(const wxString& strName)
         return false;
     }
 
-#ifdef __UNIX__
-    // the temp file should have the same permissions as the original one
-    mode_t mode;
-
-    wxStructStat st;
-    if ( wxStat(m_strName, &st) == 0 )
-    {
-        mode = st.st_mode;
-    }
-    else
-    {
-        // file probably didn't exist, just give it the default mode _using_
-        // user's umask (new files creation should respect umask)
-        mode_t mask = umask(0777);
-        mode = 0666 & ~mask;
-        umask(mask);
-    }
-
-    if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
-    {
-        wxLogSysError(_("Failed to set temporary file permissions"));
-    }
-#endif // Unix
+    wxInitTempFile(m_strTemp, m_strName);
 
     return true;
 }
@@ -367,12 +346,7 @@ bool wxTempFFile::Commit()
 {
     m_file.Close();
 
-    if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
-        wxLogSysError(_("can't remove file '%s'"), m_strName);
-        return false;
-    }
-
-    if ( !wxRenameFile(m_strTemp, m_strName)  ) {
+    if ( !wxRenameFile(m_strTemp, m_strName) ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }

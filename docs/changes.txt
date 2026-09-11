@@ -267,6 +267,16 @@ Changes in behaviour which may result in build errors
 3.3.4: (released 2026-??-??)
 ----------------------------
 
+Please note that this is a list of changes compared to 3.2.11, the full list of
+changes since 3.3.3 also includes all changes between 3.2.11 and 3.2.12.
+
+wxMSW:
+
+- Incompatible change in wxRenameFile() behaviour: it doesn't copy the file
+  attributes any longer as it did since 3.3.0 (but only under Windows), use
+  wxFileName::CopyAttributesFrom() if you need to preserve them.
+
+
 NOTE: In addition to the note below, also incorporate (either by
       copy or by reference) all the changes in the 3.2 branch (i.e.
       everything in this file after 3.2.0 in that branch).
