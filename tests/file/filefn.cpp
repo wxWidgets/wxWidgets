@@ -320,8 +320,7 @@ FileFunctionsTestCase::DoRenameFile(const wxString& oldFilePath,
     }
 
     CHECK( wxFileExists(oldFilePath) );
-    CHECK( wxFileExists(oldFilePath) );
-    CHECK( wxFileExists(oldFilePath) );
+
     bool shouldFail = !overwrite && withNew;
     if ( shouldFail )
     {
