@@ -247,8 +247,29 @@ public:
 
     /**
         Flushes the file and returns @true on success.
+
+        Note that this only flushes the data buffered by the C run-time
+        library to the operating system, it does not guarantee that it
+        reaches the physical disk. Use FlushAndSync() if you need this.
     */
     bool Flush();
+
+    /**
+        Flushes the file and ensures that its data reaches the disk.
+
+        Unlike Flush(), this function also calls @c fsync() (or the
+        equivalent) for the underlying file descriptor, so that the data
+        survives even if the system crashes immediately afterwards.
+
+        This is significantly slower than Flush() and is not necessary for
+        all file systems, so it should only be used when the data really must
+        not be lost.
+
+        @return @true on success, @false if flushing the data failed.
+
+        @since 3.3.4
+    */
+    bool FlushAndSync();
 
     /**
         Returns the type of the file.

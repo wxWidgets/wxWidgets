@@ -189,6 +189,29 @@ bool wxFFile::Flush()
     return true;
 }
 
+bool wxFFile::FlushAndSync()
+{
+    if ( !Flush() )
+        return false;
+
+#ifdef HAVE_FSYNC
+    // As in wxFile::Flush(), don't call fsync() for the files for which it
+    // doesn't work, such as pipes.
+    if ( IsOpened() && GetKind() == wxFILE_KIND_DISK )
+    {
+        const int fd = wxGetFileDescriptor(m_fp);
+        if ( fd != -1 && wxFsync(fd) != 0 )
+        {
+            wxLogSysError(_("failed to sync data of the file '%s'"), m_name);
+
+            return false;
+        }
+    }
+#endif // HAVE_FSYNC
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // seeking
 // ----------------------------------------------------------------------------
