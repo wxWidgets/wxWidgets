@@ -704,9 +704,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
     // GTK3 with a native Wayland backend doesn't support partial redraws at
     // all: any invalidation anywhere ends up repainting every window with
     // its own full bounds, so don't check this there.
-#ifdef __WXGTK3__
-    if ( wxGTKImpl::IsX11(nullptr) )
-#endif // __WXGTK3__
+    if ( !IsRunningUnderWayland() )
         CHECK(isChild1Painted == false);
     CHECK(isParentPainted == true);
     CHECK(isChild2Painted == true);

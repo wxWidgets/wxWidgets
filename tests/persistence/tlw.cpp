@@ -88,11 +88,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 
     // Wayland doesn't allow clients to position their own top-level windows
     // at all, unlike X11, so don't check the restored position there.
-#ifdef __WXGTK3__
-    const bool checkPosition = wxGTKImpl::IsX11(nullptr);
-#else
-    const bool checkPosition = true;
-#endif
+    const bool checkPosition = !IsRunningUnderWayland();
 
     // Save the frame geometry.
     {
@@ -144,17 +140,13 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 #ifdef __WXGTK__
         // When using Xvfb, the frame will never get iconized, presumably
         // because there is no WM, so don't even bother waiting or warning.
-        if ( IsRunningUnderXVFB() )
+        //
+        // Also skip this check under Wayland where we use a headless
+        // compositor without WM as well.
+        if ( IsRunningUnderXVFB() || IsRunningUnderWayland() )
         {
             checkIconized = false;
         }
-#ifdef __WXGTK3__
-        // Also skip this check on non-X11 (ie, Wayland)
-        else if ( !wxGTKImpl::IsX11(nullptr) )
-        {
-            checkIconized = false;
-        }
-#endif // __WXGTK3__
         else
         {
             if ( !WaitFor("frame to be iconized", [&]() {
