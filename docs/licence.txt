@@ -20,9 +20,7 @@
   General Public Licence for more details.
 
   You should have received a copy of the GNU Library General Public Licence
-  along with this software, usually in a file named COPYING.LIB.  If not,
-  write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301 USA.
+  along with this library; if not, see <https://www.gnu.org/licenses/>.
 
   EXCEPTION NOTICE
 
