@@ -546,6 +546,21 @@ enum wxFileKind
 /** @addtogroup group_funcmacro_file */
 ///@{
 /**
+    Returns the file descriptor for the given @a fp.
+
+    @param fp
+        A valid pointer to a @c FILE.
+    @returns
+        The file descriptor for the given @a fp, or -1 on error.
+
+    @since 3.3.4
+ */
+int wxGetFileDescriptor(FILE *fp);
+///@}
+
+/** @addtogroup group_funcmacro_file */
+///@{
+/**
     Returns the type of an open file. Possible return values are enumerations
     of ::wxFileKind.
 
