@@ -270,6 +270,29 @@ void FileFunctionsTestCase::DoRemoveFile(const wxString& filePath)
     CHECK( !file.Exists() );
 }
 
+namespace
+{
+
+void CreateFileWithContents(const wxString& path, const wxString& contents)
+{
+    wxFFile f(path, "w");
+    REQUIRE( f.IsOpened() );
+    REQUIRE( f.Write(contents) );
+}
+
+wxString GetFileContents(const wxString& path)
+{
+    wxFFile f(path, "r");
+    REQUIRE( f.IsOpened() );
+
+    wxString contents;
+    REQUIRE( f.ReadAll(&contents) );
+
+    return contents;
+}
+
+} // anonymous namespace
+
 TEST_CASE_METHOD(FileFunctionsTestCase,
                  "FileFunctions::RenameFile",
                  "[filefn]")
@@ -294,17 +317,18 @@ FileFunctionsTestCase::DoRenameFile(const wxString& oldFilePath,
 {
     INFO("File 1:" << oldFilePath << "  File 2: " << newFilePath);
 
+    // Use different contents for the two files to allow checking which of
+    // them the destination file has at the end.
+    const wxString contentsSrc("source");
+    const wxString contentsDst("destination");
+
     // Create temporary source file.
-    wxTextFile file;
-    REQUIRE( file.Create(oldFilePath) );
-    CHECK( file.Close() );
+    CreateFileWithContents(oldFilePath, contentsSrc);
 
     if ( withNew )
     {
         // Create destination file to test overwriting.
-        wxTextFile file2;
-        REQUIRE( file2.Create(newFilePath) );
-        CHECK( file2.Close() );
+        CreateFileWithContents(newFilePath, contentsDst);
 
         CHECK( wxFileExists(newFilePath) );
     }
@@ -329,6 +353,10 @@ FileFunctionsTestCase::DoRenameFile(const wxString& oldFilePath,
         CHECK( wxFileExists(oldFilePath) );
         CHECK( wxFileExists(newFilePath) );
 
+        // Neither file should have been modified.
+        CHECK( GetFileContents(oldFilePath) == contentsSrc );
+        CHECK( GetFileContents(newFilePath) == contentsDst );
+
         // Cleanup.
         wxRemoveFile(oldFilePath);
     }
@@ -338,6 +366,9 @@ FileFunctionsTestCase::DoRenameFile(const wxString& oldFilePath,
         // Verify that file has been renamed.
         CHECK( !wxFileExists(oldFilePath) );
         CHECK( wxFileExists(newFilePath) );
+
+        // And that it really has the contents of the source file.
+        CHECK( GetFileContents(newFilePath) == contentsSrc );
     }
 
     // Cleanup.
