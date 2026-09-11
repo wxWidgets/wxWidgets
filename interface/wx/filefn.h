@@ -227,16 +227,23 @@ time_t wxFileModificationTime(const wxString& filename);
 /**
     Renames @a oldpath to @e newpath, returning @true if successful.
 
-    If @a newpath is a directory, @a oldpath is moved into it (@a overwrite is
-    ignored in this case). Otherwise, if @a newpath is an existing file, it is
-    overwritten if @a overwrite is @true (default) and the function fails if @a
-    overwrite is @false.
+    If @a newpath is an existing file, it is overwritten if @a overwrite is
+    @true (default) and the function fails if @a overwrite is @false.
 
     Since wxWidgets 3.3.4, `MoveFileEx()` is used under MSW, which makes
     replacing the existing @a newpath atomic if both files are on the same
     volume. Note that this function does @e not preserve the attributes of the
     replaced file: use wxFileName::CopyAttributesFrom() before renaming if you
     need to keep them.
+
+    @param oldpath
+        The path of the existing file to rename.
+    @param newpath
+        The new path for the file. Must be a file, not a directory.
+    @param overwrite
+        If @a newpath exists, it will be overwritten if @a overwrite is @true,
+        otherwise the function will fail. If it doesn't exist, this parameter
+        is ignored.
 
     @header{wx/filefn.h}
 */
