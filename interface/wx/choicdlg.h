@@ -259,6 +259,12 @@ public:
     Same as wxGetSingleChoice() but returns the index representing the
     selected string. If the user pressed cancel, -1 is returned.
 
+    The dialog is created at the given position (@a x, @a y), unless @a centre
+    is @true, in which case it is centred on the screen or on its parent
+    window. The dialog is also sized to be at least @a width by @a height if
+    these values are provided (i.e. not wxDefaultCoord), but it will never be
+    shrunk below its minimal sizer-fitted size.
+
     @header{wx/choicdlg.h}
 
     @beginWxPerlOnly
@@ -272,8 +278,8 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 
 int wxGetSingleChoiceIndex(const wxString& message,
@@ -284,8 +290,8 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 
 
@@ -319,10 +325,11 @@ int wxGetSingleChoiceIndex(const wxString& message,
     If @c centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
 
-    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
-    all ignored. To change the dialog's position or size, create a @c
-    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
-    change its size before showing it.
+    The dialog is created at the given position (@a x, @a y), unless @a centre
+    is @true, in which case it is centred on the screen or on its parent
+    window. The dialog is also sized to be at least @a width by @a height if
+    these values are provided (i.e. not wxDefaultCoord), but it will never be
+    shrunk below its minimal sizer-fitted size.
 
     @header{wx/choicdlg.h}
 
@@ -337,8 +344,8 @@ wxString wxGetSingleChoice(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
@@ -348,8 +355,8 @@ wxString wxGetSingleChoice(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 
 
@@ -376,10 +383,11 @@ wxString wxGetSingleChoice(const wxString& message,
     if Cancel was pressed. The @c client_data array must have the same number
     of elements as @c choices or @c aChoices!
 
-    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
-    all ignored. To change the dialog's position or size, create a @c
-    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
-    change its size before showing it.
+    The dialog is created at the given position (@a x, @a y), unless @a centre
+    is @true, in which case it is centred on the screen or on its parent
+    window. The dialog is also sized to be at least @a width by @a height if
+    these values are provided (i.e. not wxDefaultCoord), but it will never be
+    shrunk below its minimal sizer-fitted size.
 
     @header{wx/choicdlg.h}
 
@@ -395,8 +403,8 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = wxCHOICE_WIDTH,
-                               int height = wxCHOICE_HEIGHT,
+                               int width = wxDefaultCoord,
+                               int height = wxDefaultCoord,
                                int initialSelection = 0);
 
 wxString wxGetSingleChoiceData(const wxString& message,
@@ -408,8 +416,8 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = wxCHOICE_WIDTH,
-                               int height = wxCHOICE_HEIGHT,
+                               int width = wxDefaultCoord,
+                               int height = wxDefaultCoord,
                                int initialSelection = 0);
 
 void* wxGetSingleChoiceData(const wxString& message,
@@ -443,10 +451,11 @@ void* wxGetSingleChoiceData(const wxString& message,
     which is an array of @a n strings for the listbox or by using a single
     @c aChoices parameter of type wxArrayString.
 
-    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
-    all ignored. To change the dialog's position or size, create a @c
-    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
-    change its size before showing it.
+    The dialog is created at the given position (@a x, @a y), unless @a centre
+    is @true, in which case it is centred on the screen or on its parent
+    window. The dialog is also sized to be at least @a width by @a height if
+    these values are provided (i.e. not wxDefaultCoord), but it will never be
+    shrunk below its minimal sizer-fitted size.
 
     @header{wx/choicdlg.h}
 
@@ -464,8 +473,8 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int x = wxDefaultCoord,
                             int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = wxCHOICE_WIDTH,
-                            int height = wxCHOICE_HEIGHT);
+                            int width = wxDefaultCoord,
+                            int height = wxDefaultCoord);
 
 int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
@@ -476,8 +485,8 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int x = wxDefaultCoord,
                             int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = wxCHOICE_WIDTH,
-                            int height = wxCHOICE_HEIGHT);
+                            int width = wxDefaultCoord,
+                            int height = wxDefaultCoord);
 
 ///@}
 

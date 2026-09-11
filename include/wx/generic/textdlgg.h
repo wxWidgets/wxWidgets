@@ -134,7 +134,8 @@ WXDLLIMPEXP_CORE wxString
                     wxWindow *parent = nullptr,
                     wxCoord x = wxDefaultCoord,
                     wxCoord y = wxDefaultCoord,
-                    bool centre = true);
+                    bool centre = true,
+                    wxCoord width = wxDefaultCoord);
 
 WXDLLIMPEXP_CORE wxString
     wxGetPasswordFromUser(const wxString& message,

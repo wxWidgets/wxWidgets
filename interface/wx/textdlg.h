@@ -232,7 +232,15 @@ public:
     more convenient to use, using the dialog directly is more flexible, e.g. it
     allows you to specify the @c wxTE_MULTILINE to allow the user enter
     multiple lines of text while this function is limited to single line entry
-    only.
+    only. See also wxTextEntryDialog for more control.
+
+    The dialog is created at the given position (@a x, @a y), unless @a centre
+    is @true, in which case it is centred on the screen or on its parent
+    window. The dialog is also widened as needed to be at least @a width pixels
+    wide if this value is provided (i.e. not wxDefaultCoord). There is no
+    corresponding height parameter, as the height of this dialog is entirely
+    determined by its contents, given that it can only ever show a single line
+    of text.
 
     @header{wx/textdlg.h}
 */
@@ -242,7 +250,8 @@ wxString wxGetTextFromUser(const wxString& message,
                            wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
-                           bool centre = true);
+                           bool centre = true,
+                           int width = wxDefaultCoord);
 
 /**
     Similar to wxGetTextFromUser() but the text entered in the dialog is not

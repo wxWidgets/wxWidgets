@@ -1415,7 +1415,7 @@ void wxInfoMessageBox(wxWindow* parent)
 
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
-                        wxCoord x, wxCoord y, bool centre )
+                        wxCoord x, wxCoord y, bool centre, wxCoord width )
 {
     wxString str;
     long style = wxTextEntryDialogStyle;
@@ -1426,6 +1426,21 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
         style &= ~wxCENTRE;
 
     wxTextEntryDialog dialog(parent, message, caption, defaultValue, style, wxPoint(x, y));
+
+    if (width != wxDefaultCoord)
+    {
+        wxSize sz = dialog.GetSize();
+        sz.SetWidth(wxMax(sz.GetWidth(), width));
+        dialog.SetSize(sz);
+    }
+
+    if ( x != wxDefaultCoord || y != wxDefaultCoord )
+    {
+        if ( centre )
+            dialog.Centre();
+        else
+            dialog.Move(x, y);
+    }
 
     if (dialog.ShowModal() == wxID_OK)
     {
