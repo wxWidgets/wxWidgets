@@ -503,31 +503,6 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 bool
 wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 {
-#ifdef __WINDOWS__
-    // When overwriting, prefer using ReplaceFile() which allows to preserve
-    // the destination file attributes while replacing its contents.
-    if ( overwrite && wxFileExists(file2) )
-    {
-        if ( ::ReplaceFile
-               (
-                    file2.t_str(),  // File to replace.
-                    file1.t_str(),  // File to replace it with.
-                    nullptr,        // No backup file.
-                    REPLACEFILE_IGNORE_MERGE_ERRORS,
-                                    // Don't return error just because ACLs
-                                    // couldn't be preserved.
-                    wxRESERVED_PARAM,
-                    wxRESERVED_PARAM
-               ) )
-        {
-            return true;
-        }
-
-        // Continue with the normal rename logic if ReplaceFile() failed, it
-        // will probably fail as well but it shouldn't hurt to try.
-    }
-#endif // __WINDOWS__
-
     if ( !overwrite && wxFileExists(file2) )
     {
         wxLogError
@@ -538,6 +513,25 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 
         return false;
     }
+
+#ifdef __WINDOWS__
+    // Prefer MoveFileEx() to the CRT rename() used below because it can
+    // replace the already existing destination file and does it atomically,
+    // at least when both files are on the same volume (when they are not,
+    // MOVEFILE_COPY_ALLOWED makes it fall back on copying the file, which
+    // can't be atomic).
+    DWORD flags = MOVEFILE_COPY_ALLOWED;
+    if ( overwrite )
+        flags |= MOVEFILE_REPLACE_EXISTING;
+
+    if ( ::MoveFileEx(file1.t_str(), file2.t_str(), flags) )
+        return true;
+
+    // Still fall back on the generic code below if it failed: it may succeed
+    // in some cases in which MoveFileEx() doesn't, e.g. when the destination
+    // file is opened by another process, which prevents it from being
+    // replaced but not necessarily from being overwritten.
+#endif // __WINDOWS__
 
     // Normal system call
   if ( wxRename (file1, file2) == 0 )

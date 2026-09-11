@@ -232,9 +232,11 @@ time_t wxFileModificationTime(const wxString& filename);
     overwritten if @a overwrite is @true (default) and the function fails if @a
     overwrite is @false.
 
-    Since wxWidgets 3.3.0, if @a overwrite is @true `ReplaceFile()` function is
-    used under MSW which allows to preserve the file attributes while replacing
-    its contents.
+    Since wxWidgets 3.3.4, `MoveFileEx()` is used under MSW, which makes
+    replacing the existing @a newpath atomic if both files are on the same
+    volume. Note that this function does @e not preserve the attributes of the
+    replaced file: use wxFileName::CopyAttributesFrom() before renaming if you
+    need to keep them.
 
     @header{wx/filefn.h}
 */
