@@ -88,11 +88,13 @@ public:
         Flush the data written to the file to disk.
 
         This simply calls wxFFile::Flush() for the underlying file and may be
-        necessary with file systems such as XFS and Ext4 under Linux. Calling
-        this function may however have serious performance implications and
-        also is not necessary with many other file systems so it is not done by
-        default -- but you can call it before calling Commit() to absolutely
-        ensure that the data was indeed written to the disk correctly.
+        necessary with file systems such as XFS and Ext4 under Linux.
+
+        Since wxWidgets 3.3.4 Commit() flushes the data itself, so there is no
+        need to call this function before it any more. Note that this does
+        have performance implications, but committing the changes without
+        being sure that they really reached the disk risks losing both the old
+        and the new file contents if the system crashes just afterwards.
      */
     bool Flush();
 
