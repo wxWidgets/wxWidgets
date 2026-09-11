@@ -187,6 +187,18 @@ TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]", wxTempFile)
 #if wxUSE_DATETIME
     const wxDateTime dtOld(1, wxDateTime::Jan, 2000);
     REQUIRE( fn.SetTimes(nullptr, nullptr, &dtOld) );
+
+#ifdef __WINDOWS__
+    // Setting the creation time is not always supported: notably, Wine
+    // silently ignores it, as there is no way to do it under Linux. So check
+    // that it was really set before checking that it is preserved below.
+    wxDateTime dtSet;
+    REQUIRE( fn.GetTimes(nullptr, nullptr, &dtSet) );
+
+    const bool canSetCreationTime = dtSet == dtOld;
+    if ( !canSetCreationTime )
+        WARN("Setting file creation time is not supported, not testing it.");
+#endif // __WINDOWS__
 #endif // wxUSE_DATETIME
 
 #ifndef __WINDOWS__
@@ -203,9 +215,12 @@ TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]", wxTempFile)
 #ifdef __WINDOWS__
 #if wxUSE_DATETIME
     // Under MSW the creation time of the replaced file must be preserved.
-    wxDateTime dtCreate;
-    REQUIRE( fn.GetTimes(nullptr, nullptr, &dtCreate) );
-    CHECK( dtCreate == dtOld );
+    if ( canSetCreationTime )
+    {
+        wxDateTime dtCreate;
+        REQUIRE( fn.GetTimes(nullptr, nullptr, &dtCreate) );
+        CHECK( dtCreate == dtOld );
+    }
 #endif // wxUSE_DATETIME
 #else // !__WINDOWS__
     // Elsewhere its permissions must be.
