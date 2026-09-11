@@ -601,7 +601,7 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
 
         // If the label is empty, use a space character to avoid a focus
         // rectangle size 0x0.
-        wxString s = label.empty() ? " " : label;
+        auto s = label.empty() ? wxString(" ") : label;
         if ( !::DrawText(hdc, s.t_str(), s.length(), &rectLabel,
                          fmt | DT_CALCRECT) )
         {
