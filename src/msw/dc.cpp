@@ -2179,13 +2179,45 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxRasterOperationMode rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( source, false, wxT("wxMSWDCImpl::Blit(): null wxDC pointer") );
+    DWORD dwRop;
+    switch (rop)
+    {
+        case wxXOR:          dwRop = SRCINVERT;        break;
+        case wxINVERT:       dwRop = DSTINVERT;        break;
+        case wxOR_REVERSE:   dwRop = 0x00DD0228;       break;
+        case wxAND_REVERSE:  dwRop = SRCERASE;         break;
+        case wxCLEAR:        dwRop = BLACKNESS;        break;
+        case wxSET:          dwRop = WHITENESS;        break;
+        case wxOR_INVERT:    dwRop = MERGEPAINT;       break;
+        case wxAND:          dwRop = SRCAND;           break;
+        case wxOR:           dwRop = SRCPAINT;         break;
+        case wxEQUIV:        dwRop = 0x00990066;       break;
+        case wxNAND:         dwRop = 0x007700E6;       break;
+        case wxAND_INVERT:   dwRop = 0x00220326;       break;
+        case wxCOPY:         dwRop = SRCCOPY;          break;
+        case wxNO_OP:        dwRop = DSTCOPY;          break;
+        case wxSRC_INVERT:   dwRop = NOTSRCCOPY;       break;
+        case wxNOR:          dwRop = NOTSRCCOPY;       break;
+        default:
+           wxFAIL_MSG( wxT("unsupported logical function") );
+           return false;
+    }
 
-    wxMSWDCImpl *implSrc = wxDynamicCast( source->GetImpl(), wxMSWDCImpl );
-    if ( !implSrc )
+    wxMSWDCImpl* implSrc;
+    // Most of the operations involve the source or the pattern, but a few of
+    // them (and only those few, no other are possible) only use destination
+    // HDC. For them we must not give a valid source HDC to MaskBlt() as it
+    // still uses it, somehow, and the result is garbage.
+    if ( dwRop == BLACKNESS || dwRop == WHITENESS ||
+            dwRop == DSTINVERT || dwRop == DSTCOPY )
+    {
+        implSrc = nullptr;
+    }
+    else
     {
         // TODO: Do we want to be able to blit from other DCs too?
-        return false;
+        wxCHECK_MSG(source, false, wxT("wxMSWDCImpl::Blit(): null wxDC pointer"));
+        implSrc = wxDynamicCast( source->GetImpl(), wxMSWDCImpl );
     }
 
     const wxRect bbox(xdest, ydest, dstWidth, dstHeight);
@@ -2199,14 +2231,14 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     const int ysrcOrig = ysrc;
 
     // This does the same thing as XLOG2DEV() but for the source DC.
-    xsrc += implSrc->m_deviceOriginX / implSrc->m_scaleX;
-    ysrc += implSrc->m_deviceOriginY / implSrc->m_scaleY;
+    xsrc += implSrc ? ( implSrc->m_deviceOriginX / implSrc->m_scaleX ) : 0;
+    ysrc += implSrc ? ( implSrc->m_deviceOriginY / implSrc->m_scaleY ) : 0;
 
-    HDC hdcSrc = GetHdcOf(*implSrc);
+    HDC hdcSrc = implSrc ? GetHdcOf(*implSrc) : nullptr;
 
     // if either the source or destination has alpha channel, we must use
     // AlphaBlt() as other function don't handle it correctly
-    const wxBitmap& bmpSrc = implSrc->GetSelectedBitmap();
+    const wxBitmap& bmpSrc = implSrc ? implSrc->GetSelectedBitmap() : wxBitmap();
     if ( bmpSrc.IsOk() && (bmpSrc.HasAlpha() ||
             (m_selectedBitmap.IsOk() && m_selectedBitmap.HasAlpha())) )
     {
@@ -2238,40 +2270,6 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     }
 
     wxTextColoursChanger textCol(GetHdc(), *this);
-
-    DWORD dwRop;
-    switch (rop)
-    {
-        case wxXOR:          dwRop = SRCINVERT;        break;
-        case wxINVERT:       dwRop = DSTINVERT;        break;
-        case wxOR_REVERSE:   dwRop = 0x00DD0228;       break;
-        case wxAND_REVERSE:  dwRop = SRCERASE;         break;
-        case wxCLEAR:        dwRop = BLACKNESS;        break;
-        case wxSET:          dwRop = WHITENESS;        break;
-        case wxOR_INVERT:    dwRop = MERGEPAINT;       break;
-        case wxAND:          dwRop = SRCAND;           break;
-        case wxOR:           dwRop = SRCPAINT;         break;
-        case wxEQUIV:        dwRop = 0x00990066;       break;
-        case wxNAND:         dwRop = 0x007700E6;       break;
-        case wxAND_INVERT:   dwRop = 0x00220326;       break;
-        case wxCOPY:         dwRop = SRCCOPY;          break;
-        case wxNO_OP:        dwRop = DSTCOPY;          break;
-        case wxSRC_INVERT:   dwRop = NOTSRCCOPY;       break;
-        case wxNOR:          dwRop = NOTSRCCOPY;       break;
-        default:
-           wxFAIL_MSG( wxT("unsupported logical function") );
-           return false;
-    }
-
-    // Most of the operations involve the source or the pattern, but a few of
-    // them (and only those few, no other are possible) only use destination
-    // HDC. For them we must not give a valid source HDC to MaskBlt() as it
-    // still uses it, somehow, and the result is garbage.
-    if ( dwRop == BLACKNESS || dwRop == WHITENESS ||
-            dwRop == DSTINVERT || dwRop == DSTCOPY )
-    {
-        hdcSrc = nullptr;
-    }
 
     bool success = false;
 
