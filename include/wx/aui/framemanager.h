@@ -580,6 +580,9 @@ protected:
 
     void DoFrameLayout();
 
+    virtual bool CanAddPane(wxWindow* window,
+                            const wxAuiPaneInfo& paneInfo) const;
+
     void LayoutAddPane(wxSizer* container,
                        wxAuiDockInfo& dock,
                        wxAuiPaneInfo& pane,
