@@ -197,7 +197,7 @@ virtual$(EXEEXT): $(VIRTUAL_OBJECTS) $(__virtual___win32rc)
 
 data: 
 	@mkdir -p .
-	@for f in start.htm; do \
+	@for f in virtual.htm; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

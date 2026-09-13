@@ -202,7 +202,7 @@ htmlprinting$(EXEEXT): $(HTMLPRINTING_OBJECTS) $(__htmlprinting___win32rc)
 
 data: 
 	@mkdir -p .
-	@for f in logo6.gif test.htm; do \
+	@for f in logo6.gif printing.htm; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

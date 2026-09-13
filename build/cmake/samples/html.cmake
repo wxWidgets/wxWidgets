@@ -25,7 +25,7 @@ wx_list_add_prefix(HELP_DATA_FILES helpfiles/
     )
 wx_add_sample(help DATA ${HELP_DATA_FILES} LIBRARIES wxhtml NAME htmlhelp DEPENDS wxUSE_HELP)
 wx_add_sample(helpview DATA test.zip LIBRARIES wxhtml DEPENDS wxUSE_HELP)
-wx_add_sample(printing DATA logo6.gif test.htm LIBRARIES wxhtml NAME htmlprinting
+wx_add_sample(printing DATA logo6.gif printing.htm LIBRARIES wxhtml NAME htmlprinting
     DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(test
     DATA
@@ -33,9 +33,9 @@ wx_add_sample(test
         imagemap.htm tables.htm test.htm id.html listtest.htm 8859_2.htm cp1250.htm
         regres.htm foo.png subsup.html
     LIBRARIES wxnet wxhtml NAME htmltest DEPENDS wxUSE_SOCKETS)
-wx_add_sample(virtual DATA start.htm LIBRARIES wxhtml)
-wx_add_sample(widget DATA start.htm LIBRARIES wxhtml)
-wx_add_sample(zip DATA pages.zip start.htm LIBRARIES wxhtml NAME htmlzip
+wx_add_sample(virtual DATA virtual.htm LIBRARIES wxhtml)
+wx_add_sample(widget DATA widget.htm LIBRARIES wxhtml)
+wx_add_sample(zip DATA pages.zip zip.htm LIBRARIES wxhtml NAME htmlzip
     DEPENDS wxUSE_FS_ZIP)
 
 set(wxSAMPLE_SUBDIR)

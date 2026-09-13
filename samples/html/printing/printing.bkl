@@ -12,7 +12,7 @@
     </exe>
 
     <wx-data id="data">
-        <files>logo6.gif test.htm</files>
+        <files>logo6.gif printing.htm</files>
     </wx-data>
 
 </makefile>

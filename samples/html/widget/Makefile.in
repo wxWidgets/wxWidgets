@@ -197,7 +197,7 @@ widget$(EXEEXT): $(WIDGET_OBJECTS) $(__widget___win32rc)
 
 data: 
 	@mkdir -p .
-	@for f in start.htm; do \
+	@for f in widget.htm; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

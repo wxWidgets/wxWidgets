@@ -12,7 +12,7 @@
     </exe>
 
     <wx-data id="data">
-        <files>pages.zip start.htm</files>
+        <files>pages.zip zip.htm</files>
     </wx-data>
 
 </makefile>
