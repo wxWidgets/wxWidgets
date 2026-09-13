@@ -608,6 +608,15 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
             wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
         }
 
+        // For empty label, mimic the native control by extending to the
+        // client width.
+        if ( label.empty() )
+        {
+            RECT rectClient;
+            ::GetClientRect(dis->hwndItem, &rectClient);
+            rectLabel.right = rectClient.right - 1;
+        }
+
         if ( isRightAligned )
         {
             // move the label rect to the right
