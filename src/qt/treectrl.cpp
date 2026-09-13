@@ -254,6 +254,15 @@ public:
                     EmitEvent(treeEvent);
                     break;
                 }
+                case Qt::LeftButton:
+                {
+                    wxTreeEvent treeEvent(wxEVT_TREE_ITEM_LEFT_CLICK,
+                        GetHandler(),
+                        wxQtConvertTreeItem(item));
+                    treeEvent.SetPoint(pos);
+                    EmitEvent(treeEvent);
+                    break;
+                }
                 default:
                     break;
                 }
