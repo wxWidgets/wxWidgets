@@ -238,7 +238,11 @@ WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 void wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    support.themeName = L"ItemsView";
+    // Use DarkMode_DarkTheme if available as it looks better.
+    if ( wxMSWDarkMode::HasDarkTheme() )
+        support.themeName = L"DarkMode_DarkTheme";
+    else
+        support.themeName = L"ItemsView";
 }
 
 void wxMSWHeaderCtrl::MSWSetDarkOrLightMode(SetMode setmode)
