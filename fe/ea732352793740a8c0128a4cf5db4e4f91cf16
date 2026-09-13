@@ -1,0 +1,1 @@
+wxAll: Call fsync() in wxTemp{F,}File (#27001).
