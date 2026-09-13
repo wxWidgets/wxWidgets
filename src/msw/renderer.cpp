@@ -636,7 +636,10 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
                                wxHeaderSortIconType sortArrow,
                                wxHeaderButtonParams* params)
 {
-    wxUxThemeHandle hTheme(win, L"Explorer::HEADER");
+    // Use DarkMode_DarkTheme if available as it looks better.
+    auto dark = wxMSWDarkMode::HasDarkTheme() ?
+        L"DarkMode_DarkTheme::Header" : L"ItemsView::Header";
+    wxUxThemeHandle hTheme(win, L"HEADER", dark);
     if ( !hTheme )
     {
         return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
