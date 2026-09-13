@@ -459,6 +459,9 @@ WXDLLIMPEXP_BASE bool wxMkdir(const wxString& dir, int perm = wxS_DIR_DEFAULT);
 // Remove directory. Flags reserved for future use.
 WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 
+// Return file descriptor of an open file, -1 if not available.
+WXDLLIMPEXP_BASE int wxGetFileDescriptor(FILE *fp);
+
 // Return the type of an open file
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);

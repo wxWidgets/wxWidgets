@@ -1038,13 +1038,21 @@ wxFileKind wxGetFileKind(FILE *fp)
 #if defined(wxFILEKIND_STUB)
     (void)fp;
     return wxFILE_KIND_DISK;
-#elif defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(__WINE__)
-    return fp ? wxGetFileKind(_fileno(fp)) : wxFILE_KIND_UNKNOWN;
 #else
-    return fp ? wxGetFileKind(fileno(fp)) : wxFILE_KIND_UNKNOWN;
+    return fp ? wxGetFileKind(wxGetFileDescriptor(fp)) : wxFILE_KIND_UNKNOWN;
 #endif
 }
 
+int wxGetFileDescriptor(FILE *fp)
+{
+    wxCHECK_MSG( fp, -1, wxT("invalid file") );
+
+#if defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(__WINE__)
+    return _fileno(fp);
+#else
+    return fileno(fp);
+#endif
+}
 
 //------------------------------------------------------------------------
 // wild character routines
