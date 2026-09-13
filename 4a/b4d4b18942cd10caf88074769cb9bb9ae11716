@@ -1,0 +1,1 @@
+wxMSW: wxRenderer::DrawTreeItemButton() draws "modern" icons (PB, #27002).
