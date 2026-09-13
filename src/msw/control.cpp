@@ -611,11 +611,7 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
         // For empty label, mimic the native control by extending to the
         // client width.
         if ( label.empty() )
-        {
-            RECT rectClient;
-            ::GetClientRect(dis->hwndItem, &rectClient);
-            rectLabel.right = rectClient.right - 1;
-        }
+            rectLabel.right = dis->rcItem.right - 1;
 
         if ( isRightAligned )
         {
