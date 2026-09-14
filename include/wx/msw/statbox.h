@@ -78,6 +78,8 @@ public:
 protected:
     virtual wxWindowList GetCompositeWindowParts() const override;
 
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+
     // return the region with all the windows inside this static box excluded
     WXHRGN MSWGetRegionWithoutChildren();
 
