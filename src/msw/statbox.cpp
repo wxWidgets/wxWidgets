@@ -95,6 +95,19 @@ bool wxStaticBox::Create(wxWindow *parent,
     return true;
 }
 
+void wxStaticBox::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxStaticBoxBase::MSWSetDarkOrLightMode(setmode);
+
+    // Set custom painting because the native control does not support dark mode.
+    //
+    // Note that it's not useful to check if we're using dark mode now because
+    // we must either be starting to use it now or had been using it at some
+    // point for this function to be called and once custom painting is
+    // enabled, calling this function doesn't do anything anyhow.
+    UseCustomPaint();
+}
+
 bool wxStaticBox::ShouldUseCustomPaint() const
 {
     // When not using double buffering, we paint the box ourselves by default
