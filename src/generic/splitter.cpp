@@ -512,6 +512,13 @@ void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
     m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
     m_sashPosition = event.ScaleX(m_sashPosition);
     m_lastSize = event.Scale(m_lastSize);
+
+    // Any saved or pending positions need to be updated too.
+    m_lastSplitPosition = event.Scale(m_lastSplitPosition);
+
+    // But this one should only be scaled if it is really valid.
+    if ( m_requestedSashPosition != INT_MAX )
+        m_requestedSashPosition = event.ScaleX(m_requestedSashPosition);
 #endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
     event.Skip();
