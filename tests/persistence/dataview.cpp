@@ -98,6 +98,29 @@ void GTKWaitRealized(wxDataViewCtrl* list)
 #endif // __WXGTK__/!__WXGTK__
 }
 
+// Save the state of the test control with the given column widths and return
+// the DPI in which they are expressed (which is not the same as the physical
+// DPI under the platforms using DPI-independent pixels).
+static void SavePersistenceTestDVC(int width1, int width2)
+{
+    wxDataViewCtrl* const list = CreatePersistenceTestDVC();
+
+    list->GetColumn(0)->SetWidth(width1);
+    list->GetColumn(1)->SetWidth(width2);
+    list->GetColumn(1)->SetSortOrder(false);
+
+    CHECK(wxPersistenceManager::Get().Register(list));
+
+    // We need to wait until the window is fully realized and the column
+    // widths are actually set.
+    GTKWaitRealized(list);
+
+    // Deleting the control itself doesn't allow it to save its state as
+    // the wxEVT_DESTROY handler is called too late, so delete its parent
+    // (as would usually be the case) instead.
+    delete list->GetParent();
+}
+
 // --------------------------------------------------------------------------
 // tests themselves
 // --------------------------------------------------------------------------
@@ -107,23 +130,7 @@ void GTKWaitRealized(wxDataViewCtrl* list)
 TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
 {
     {
-        wxDataViewCtrl* const list = CreatePersistenceTestDVC();
-
-        // Adjust the initial settings.
-        list->GetColumn(0)->SetWidth(150);
-        list->GetColumn(1)->SetWidth(250);
-        list->GetColumn(1)->SetSortOrder(false);
-
-        CHECK(wxPersistenceManager::Get().Register(list));
-
-        // We need to wait until the window is fully realized and the column
-        // widths are actually set.
-        GTKWaitRealized(list);
-
-        // Deleting the control itself doesn't allow it to save its state as
-        // the wxEVT_DESTROY handler is called too late, so delete its parent
-        // (as would usually be the case) instead.
-        delete list->GetParent();
+        SavePersistenceTestDVC(150, 250);
 
         // Test that the relevant keys have been stored correctly.
         int val = -1;
