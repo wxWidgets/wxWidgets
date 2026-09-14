@@ -27,6 +27,7 @@ if(wxUSE_XRC)
 
     wx_get_install_dir(runtime)
     wx_install(TARGETS wxrc
+        EXPORT wxWidgetsTargets
         RUNTIME DESTINATION "${runtime_dir}"
         BUNDLE DESTINATION "${runtime_dir}"
         )
