@@ -68,8 +68,8 @@ public:
         // Note that it's possible that default position was not stored, in
         // which case lastSplitPos will just remain as (0, 0) and that's ok.
         wxPoint lastSplitPos;
-        RestoreValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, &lastSplitPos.x);
-        RestoreValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, &lastSplitPos.y);
+        RestoreValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, &lastSplitPos.y);
+        RestoreValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, &lastSplitPos.x);
 
         Get()->SetLastSplitPosition(lastSplitPos);
 
