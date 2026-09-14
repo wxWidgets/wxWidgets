@@ -1,0 +1,1 @@
+wxAll: Provide wxrc as an imported target in CMake (Marc Aldorasi, #27008).
