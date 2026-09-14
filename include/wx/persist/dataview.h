@@ -73,7 +73,7 @@ public:
             // entire control width.
             const int width = column->WXGetSpecifiedWidth();
             if ( width > 0 )
-                SaveValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), width);
+                SaveCoord(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), width);
 
             // Check if this column is the current sort key.
             if ( column->IsSortKey() )
@@ -115,7 +115,7 @@ public:
 
             // Restore the column width.
             int width;
-            if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), &width) )
+            if ( RestoreCoord(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), &width) )
                 column->SetWidth(width);
 
             // Restore the column's view position.

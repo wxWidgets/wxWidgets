@@ -68,6 +68,10 @@ public:
              !store.SaveValue(wxPERSIST_TLW_MAX_Y, pt.y) )
             return false;
 
+        // Finally save the DPI at which all the values above were taken.
+        if ( !SaveDPI(store) )
+            return false;
+
         // We don't currently save the minimized window position, it doesn't
         // seem useful for anything and is probably just a left over from
         // Windows 3.1 days, when icons were positioned on the desktop instead
@@ -115,6 +119,8 @@ public:
 
         m_offScreen = store.RestoreValue(wxPERSIST_TLW_OFF_SCREEN, &tmp) && tmp;
 
+        RestoreDPI(store);
+
         return true;
     }
 
@@ -160,11 +166,17 @@ public:
 
         m_offScreen = !IsFullyOnScreen(GetNormalRect());
 
+        SetDPIFrom(tlw);
+
         return true;
     }
 
     virtual bool ApplyTo(wxTopLevelWindow* tlw) override
     {
+        // If the DPI has changed since the geometry was saved, the window size
+        // needs to be adjusted to keep its contents at the same apparent size.
+        RescaleIfNeeded();
+
         // The saved geometry may not make sense any more, e.g. if the window
         // had been shown on a monitor which is not connected any longer, and
         // restoring it as is would leave the window invisible, so adjust it if
@@ -213,6 +225,31 @@ public:
     }
 
 private:
+    // Rescale the normal window size if the DPI of the display where it is
+    // going to be shown is different from the one at which it was saved.
+    void RescaleIfNeeded()
+    {
+        wxRect rect = GetNormalRect();
+
+        // Note that we can't use the current DPI of the window here, as it is
+        // going to be moved to the display containing its saved position,
+        // which may well use a different DPI.
+        const int n = wxDisplay::GetFromRect(rect);
+        const wxSize dpi = n == wxNOT_FOUND
+                            ? wxDisplay().GetPPI()
+                            : wxDisplay(static_cast<unsigned>(n)).GetPPI();
+
+        const wxSize size = RescaleSize(rect.GetSize(), dpi);
+        if ( size == rect.GetSize() )
+            return;
+
+        // Note that the position is deliberately not changed here, see comment
+        // before RescaleSize().
+        rect.SetSize(size);
+
+        wxCopyRectToRECT(rect, m_placement.rcNormalPosition);
+    }
+
     // Return the normal, i.e. neither maximized nor iconized, window rect.
     wxRect GetNormalRect() const
     {
