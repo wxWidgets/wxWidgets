@@ -464,17 +464,11 @@ public:
 
     /**
         Returns the number of frames for this animation.
-
-        This method is not implemented in the native wxGTK implementation of
-        this class and always returns 0 there.
     */
     unsigned int GetFrameCount() const;
 
     /**
         Returns the i-th frame as a wxImage.
-
-        This method is not implemented in the native wxGTK implementation of
-        this class and always returns an invalid image there.
     */
     wxImage GetFrame(unsigned int frame) const;
 

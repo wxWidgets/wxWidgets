@@ -186,6 +186,15 @@ MyFrame::MyFrame(wxWindow *parent,
     }
 
     sz->Add(m_animationCtrl, wxSizerFlags().Centre().Border());
+
+    wxSizer *frameSizer = new wxBoxSizer( wxHORIZONTAL );
+    sz->Add( frameSizer, 0, wxALL|wxCENTER, 10 );
+    for (unsigned int i = 0; i < throbber.GetFrameCount(); i++) 
+    {
+        wxImage image = throbber.GetFrame( i );
+        frameSizer->Add( new wxStaticBitmap(this, -1, wxBitmap( image ) ) );
+    }
+
     SetSizer(sz);
 
     SetSize(FromDIP(wxSize(500, 400)));
