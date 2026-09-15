@@ -893,6 +893,49 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
     bool processed = false;
 
 #if wxUSE_MENUBAR
+    static const UINT s_msgTaskbarCreated = ::RegisterWindowMessage(wxT("TaskbarCreated"));
+
+    if ( s_msgTaskbarCreated && message == s_msgTaskbarCreated )
+    {
+        // Re-initialize system menu and refresh menu bar when explorer restarts
+        // to prevent getting a stale system menu if the user tries to navigate
+        // the menu bar with the keyboard.
+        ::GetSystemMenu(GetHwnd(), TRUE);
+        ::DrawMenuBar(GetHwnd());
+        // Allow base class processing to continue.
+    }
+    else if ( message == WM_NEXTMENU )
+    {
+        MDINEXTMENU* const pNextMenu = reinterpret_cast<MDINEXTMENU*>(lParam);
+        if ( pNextMenu )
+        {
+            HMENU hSysMenu = ::GetSystemMenu(GetHwnd(), FALSE);
+
+            // If explorer.exe restarted and didn't broadcast TaskbarCreated (e.g., custom shells),
+            // the system menu will be corrupted. Reset it here as a fail-safe.
+            if ( !hSysMenu || !::IsMenu(hSysMenu) )
+            {
+                ::GetSystemMenu(GetHwnd(), TRUE);
+                hSysMenu = ::GetSystemMenu(GetHwnd(), FALSE);
+                ::DrawMenuBar(GetHwnd());
+            }
+
+            // If it is STILL broken, force focus to stay on the main menu bar to prevent a lockup.
+            if ( !hSysMenu || !::IsMenu(hSysMenu) )
+            {
+                HMENU hMenuBar = ::GetMenu(GetHwnd());
+                if ( hMenuBar )
+                {
+                    pNextMenu->hmenuNext = hMenuBar;
+                    pNextMenu->hwndNext = GetHwnd();
+                    processed = true;
+                    rc = 0;
+                }
+            }
+            // else: Delegate to base class for full native wrap-around
+        }
+    }
+
     if ( GetMenuBar() &&
           HandleMenuMessage(&rc, this, message, wParam, lParam) )
     {
