@@ -166,9 +166,156 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
     return data_written;
 }
 
-wxImage wxAnimationGTKImpl::GetFrame(unsigned int WXUNUSED(frame)) const
+unsigned int wxAnimationGTKImpl::GetFrameCount() const
 {
-    return wxNullImage;
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter( gdk_pixbuf_animation_get_iter(m_pixbuf, &start_time) );
+
+    int frame_count = 0;
+    int total_delay_ms = 0;
+
+    while (true)
+    {
+        frame_count++;
+
+        int delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+
+        if (gdk_pixbuf_animation_iter_on_currently_loading_frame(iter))
+        {
+            // We are back to the first frame
+            break;
+        }
+    }
+
+    return frame_count;
+}
+
+int wxAnimationGTKImpl::GetDelay(unsigned int frame) const
+{
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter( gdk_pixbuf_animation_get_iter(m_pixbuf, &start_time) );
+
+    int delay = 0;
+    int total_delay_ms = 0;
+
+    for (unsigned int i = 0; i < frame; i++)
+    {
+        delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+    }
+
+    return delay;
+}
+
+void wxGtkCopyPixbufDataToImage(
+    guchar* dst, int dstChannels, int dstStride,
+    const guchar* src, int srcChannels, int srcStride,
+    int w, int h)
+{
+    if (dstChannels == srcChannels)
+    {
+        if (dstStride == srcStride)
+            memcpy(dst, src, size_t(dstStride) * h);
+        else
+        {
+            const int stride = dstStride < srcStride ? dstStride : srcStride;
+            for (int j = 0; j < h; j++, src += srcStride, dst += dstStride)
+                memcpy(dst, src, stride);
+        }
+    }
+    else
+    {
+        for (int j = 0; j < h; j++, src += srcStride, dst += dstStride)
+        {
+            guchar* d = dst;
+            const guchar* s = src;
+            if (dstChannels == 4)
+            {
+                for (int i = 0; i < w; i++, d += 4, s += 3)
+                {
+                    d[0] = s[0];
+                    d[1] = s[1];
+                    d[2] = s[2];
+                    d[3] = 0xff;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < w; i++, d += 3, s += 4)
+                {
+                    d[0] = s[0];
+                    d[1] = s[1];
+                    d[2] = s[2];
+                }
+            }
+        }
+    }
+}
+
+wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
+{
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter( gdk_pixbuf_animation_get_iter(m_pixbuf, &start_time) );
+
+    int delay = 0;
+    int total_delay_ms = 0;
+
+    for (unsigned int i = 0; i < frame; i++)
+    {
+        delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+    }
+
+    GdkPixbuf *buf = gdk_pixbuf_animation_iter_get_pixbuf(iter);
+    const int w = gdk_pixbuf_get_width(buf);
+    const int h = gdk_pixbuf_get_height(buf);
+
+    wxImage image;
+    image.Create(w, h, false);
+    guchar* dst = image.GetData();
+
+    const guchar* src = gdk_pixbuf_get_pixels(buf);
+    const int srcStride = gdk_pixbuf_get_rowstride(buf);
+    const int srcChannels = gdk_pixbuf_get_n_channels(buf);
+    wxGtkCopyPixbufDataToImage(dst, 3, 3 * w, src, srcChannels, srcStride, w, h);
+    if (srcChannels == 4)
+    {
+        image.SetAlpha();
+        guchar* alpha = image.GetAlpha();
+        for (int j = 0; j < h; j++, src += srcStride)
+        {
+            const guchar* s = src;
+            for (int i = 0; i < w; i++, s += 4)
+                *alpha++ = s[3];
+        }
+    }
+
+    return image;
 }
 
 wxSize wxAnimationGTKImpl::GetSize() const
