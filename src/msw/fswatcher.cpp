@@ -256,8 +256,9 @@ bool wxIOCPThread::ReadEvents()
             // It isn't useful to continue watching this directory as it
             // doesn't exist any more -- and even recreating a directory with
             // the same name still wouldn't resume generating events for the
-            // existing wxIOCPService, so it's useless to continue.
-            return false;
+            // existing wxIOCPService, so don't start a new read for it. But
+            // keep reading the events for all the other watches, if any.
+            return true;
 
         case wxIOCPService::Status_Exit:
             return false; // stop reading events

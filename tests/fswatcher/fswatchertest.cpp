@@ -925,4 +925,92 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     tester.Run();
 }
 
+// ----------------------------------------------------------------------------
+// TestEventsAfterDeletingWatchedDir
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Watches two directories, deletes one of them and checks that the events for the other one are
+// still received.
+class DeletedDirTester : public wxEvtHandler
+{
+public:
+    DeletedDirTester() : m_timeout(this)
+    {
+        Bind(wxEVT_FSWATCHER, &DeletedDirTester::OnFileSystemEvent, this);
+        Bind(wxEVT_TIMER, &DeletedDirTester::OnTimeout, this);
+
+        // wxFileSystemWatcher can be created only once the event loop is running.
+        CallAfter(&DeletedDirTester::DoTest);
+    }
+
+    void Run() { m_loop.Run(); }
+
+    bool GotEventForKeptDir() const { return m_gotEvent; }
+
+private:
+    void DoTest()
+    {
+        const wxFileName& base = EventGenerator::Get().GetWatchDir();
+
+        wxFileName deletedDir;
+        deletedDir.AssignDir(base.GetFullPath());
+        deletedDir.AppendDir("deleted");
+        REQUIRE( deletedDir.Mkdir() );
+
+        wxFileName keptDir;
+        keptDir.AssignDir(base.GetFullPath());
+        keptDir.AppendDir("kept");
+        REQUIRE( keptDir.Mkdir() );
+
+        m_watcher.reset(new wxFileSystemWatcher());
+        m_watcher->SetOwner(this);
+        REQUIRE( m_watcher->Add(deletedDir) );
+        REQUIRE( m_watcher->Add(keptDir) );
+
+        REQUIRE( deletedDir.Rmdir() );
+        wxMilliSleep(200);
+
+        m_file = wxFileName(keptDir.GetFullPath(), "test.txt");
+        wxFile file(m_file.GetFullPath(), wxFile::write);
+        REQUIRE( file.IsOpened() );
+
+        // Don't wait forever if the event is never received.
+        m_timeout.Start(3000, wxTIMER_ONE_SHOT);
+    }
+
+    void OnFileSystemEvent(wxFileSystemWatcherEvent& evt)
+    {
+        if ( evt.GetPath() == m_file )
+        {
+            m_gotEvent = true;
+            m_loop.Exit();
+        }
+    }
+
+    void OnTimeout(wxTimerEvent& WXUNUSED(evt))
+    {
+        m_loop.Exit();
+    }
+
+    wxEventLoop m_loop;
+    wxTimer m_timeout;
+    std::unique_ptr<wxFileSystemWatcher> m_watcher;
+    wxFileName m_file;
+    bool m_gotEvent = false;
+};
+
+} // anonymous namespace
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventsAfterDeletingWatchedDir", "[fsw]")
+{
+    DeletedDirTester tester;
+    tester.Run();
+
+    CHECK( tester.GotEventForKeptDir() );
+}
+
 #endif // wxUSE_FSWATCHER
