@@ -43,21 +43,21 @@ public:
         wxSplitterWindow* const splitter = Get();
 
         int pos = splitter->IsSplit() ? splitter->GetSashPosition() : -1;
-        SaveValue(wxPERSIST_SPLITTER_POSITION, pos);
+        SaveCoord(wxPERSIST_SPLITTER_POSITION, pos);
 
         // Save the previously used position too if we have them.
         const wxPoint lastSplitPos = splitter->GetLastSplitPosition();
         if ( lastSplitPos.x || lastSplitPos.y )
         {
-            SaveValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, lastSplitPos.y);
-            SaveValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, lastSplitPos.x);
+            SaveCoord(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, lastSplitPos.y);
+            SaveCoord(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, lastSplitPos.x);
         }
     }
 
     virtual bool Restore() override
     {
         int pos;
-        if ( !RestoreValue(wxPERSIST_SPLITTER_POSITION, &pos) )
+        if ( !RestoreCoord(wxPERSIST_SPLITTER_POSITION, &pos) )
             return false;
 
         if ( pos == -1 )
@@ -68,8 +68,8 @@ public:
         // Note that it's possible that default position was not stored, in
         // which case lastSplitPos will just remain as (0, 0) and that's ok.
         wxPoint lastSplitPos;
-        RestoreValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, &lastSplitPos.x);
-        RestoreValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, &lastSplitPos.y);
+        RestoreCoord(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, &lastSplitPos.y);
+        RestoreCoord(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, &lastSplitPos.x);
 
         Get()->SetLastSplitPosition(lastSplitPos);
 

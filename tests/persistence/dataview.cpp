@@ -98,6 +98,27 @@ void GTKWaitRealized(wxDataViewCtrl* list)
 #endif // __WXGTK__/!__WXGTK__
 }
 
+// Save the state of the test control with the given column widths.
+static void SavePersistenceTestDVC(int width1, int width2)
+{
+    wxDataViewCtrl* const list = CreatePersistenceTestDVC();
+
+    list->GetColumn(0)->SetWidth(width1);
+    list->GetColumn(1)->SetWidth(width2);
+    list->GetColumn(1)->SetSortOrder(false);
+
+    CHECK(wxPersistenceManager::Get().Register(list));
+
+    // We need to wait until the window is fully realized and the column
+    // widths are actually set.
+    GTKWaitRealized(list);
+
+    // Deleting the control itself doesn't allow it to save its state as
+    // the wxEVT_DESTROY handler is called too late, so delete its parent
+    // (as would usually be the case) instead.
+    delete list->GetParent();
+}
+
 // --------------------------------------------------------------------------
 // tests themselves
 // --------------------------------------------------------------------------
@@ -107,23 +128,7 @@ void GTKWaitRealized(wxDataViewCtrl* list)
 TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
 {
     {
-        wxDataViewCtrl* const list = CreatePersistenceTestDVC();
-
-        // Adjust the initial settings.
-        list->GetColumn(0)->SetWidth(150);
-        list->GetColumn(1)->SetWidth(250);
-        list->GetColumn(1)->SetSortOrder(false);
-
-        CHECK(wxPersistenceManager::Get().Register(list));
-
-        // We need to wait until the window is fully realized and the column
-        // widths are actually set.
-        GTKWaitRealized(list);
-
-        // Deleting the control itself doesn't allow it to save its state as
-        // the wxEVT_DESTROY handler is called too late, so delete its parent
-        // (as would usually be the case) instead.
-        delete list->GetParent();
+        SavePersistenceTestDVC(150, 250);
 
         // Test that the relevant keys have been stored correctly.
         int val = -1;
@@ -161,5 +166,64 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
         delete list->GetParent();
     }
 }
+
+#ifdef __WXMSW__
+
+// Check that the column widths saved at one DPI are rescaled when they are
+// restored at a different one.
+TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC::DPI",
+                 "[persist][wxDataViewCtrl][dpi]")
+{
+    // Use half of the widths used by the other tests, so that the columns have
+    // exactly those widths after being scaled by 2 below.
+    SavePersistenceTestDVC(75, 125);
+
+    const int dpi = wxTheApp->GetTopWindow()->GetDPI().y;
+
+    // All the DPI values used in practice are even, which allows us to use
+    // exact values in the checks below.
+    REQUIRE(dpi % 2 == 0);
+
+    // The DPI must have been saved together with the widths.
+    int dpiSaved = -1;
+    CHECK(GetConfig().Read(DVC_PREFIX "/DPI", &dpiSaved));
+    CHECK(dpiSaved == dpi);
+
+    SECTION("Rescale")
+    {
+        // Pretend that the widths had been saved at half the current DPI, in
+        // which case they must be doubled when restoring them.
+        GetConfig().Write(DVC_PREFIX "/DPI", dpi / 2);
+
+        wxDataViewCtrl* const list = CreatePersistenceTestDVC();
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(list));
+
+        GTKWaitRealized(list);
+
+        CHECK(list->GetColumn(0)->GetWidth() == 150);
+        CHECK(list->GetColumn(1)->GetWidth() == 250);
+
+        delete list->GetParent();
+    }
+
+    SECTION("Compatibility")
+    {
+        // The values saved by the previous versions of the library don't have
+        // any DPI associated with them and must be restored as is.
+        GetConfig().DeleteEntry(DVC_PREFIX "/DPI");
+
+        wxDataViewCtrl* const list = CreatePersistenceTestDVC();
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(list));
+
+        GTKWaitRealized(list);
+
+        CHECK(list->GetColumn(0)->GetWidth() == 75);
+        CHECK(list->GetColumn(1)->GetWidth() == 125);
+
+        delete list->GetParent();
+    }
+}
+
+#endif // __WXMSW__
 
 #endif
