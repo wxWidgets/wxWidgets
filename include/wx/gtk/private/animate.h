@@ -60,9 +60,4 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxAnimationGTKImpl);
 };
 
-void wxGtkCopyPixbufDataToImage(
-    guchar* dst, int dstChannels, int dstStride,
-    const guchar* src, int srcChannels, int srcStride,
-    int w, int h);
-
 #endif // _WX_GTK_PRIVATE_ANIMATEH__
