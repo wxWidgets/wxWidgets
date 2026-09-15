@@ -45,7 +45,7 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
 // ----------------------------------------------------------------------------
 
 // Helper function to copy data from a GdkPixbuf to wxImage
-void wxGtkCopyPixbufDataToImage(
+WXDLLIMPEXP_CORE void wxGtkCopyPixbufDataToImage(
     guchar* dst, int dstChannels, int dstStride,
     const guchar* src, int srcChannels, int srcStride,
     int w, int h);

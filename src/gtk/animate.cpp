@@ -283,7 +283,7 @@ wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
         delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
         if (delay <= 0)
             break; // static state or an error
-        
+
         total_delay_ms += delay;
 
         GTimeVal next_time = start_time;
