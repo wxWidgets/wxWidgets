@@ -12,6 +12,7 @@
 #define _WX_GTK_PRIVATE_ANIMATEH__
 
 #include "wx/private/animate.h"
+#include <glib.h>
 
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
@@ -59,5 +60,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxAnimationGTKImpl);
 };
 
+void wxGtkCopyPixbufDataToImage(
+    guchar* dst, int dstChannels, int dstStride,
+    const guchar* src, int srcChannels, int srcStride,
+    int w, int h);
 
 #endif // _WX_GTK_PRIVATE_ANIMATEH__
