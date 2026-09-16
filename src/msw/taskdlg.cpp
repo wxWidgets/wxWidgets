@@ -1068,13 +1068,18 @@ void TDApplyToChildren(IUIAutomationElement* pEl)
 
                 if ( ct == UIA_ProgressBarControlTypeId )
                 {
-                    wxMSWDarkMode::SetTheme
-                    (
-                        hBtn,
-                        wxHasRealDarkTheme(L"Progress", L"DarkMode_CopyEngine::Progress")
-                            ? L"DarkMode_CopyEngine"
-                            : L"DarkMode_Explorer"
-                    );
+                    if ( wxMSWDarkMode::HasDarkTheme() )
+                    {
+                        ::SetWindowTheme(hBtn, L"DarkMode_DarkTheme", L"Progress");
+                    }
+                    else
+                    {
+                        // Disable visual styles so colour messages take effect.
+                        ::SetWindowTheme(hBtn, L"", L"");
+                        // Colours taken from a progress bar with DarkMode_DarkTheme.
+                        ::SendMessage(hBtn, PBM_SETBKCOLOR, 0, 0x131313);
+                        ::SendMessage(hBtn, PBM_SETBARCOLOR, 0, 0x5fcb6c);
+                    }
                 }
                 else if ( ct == UIA_RadioButtonControlTypeId ||
                             id.find(L"RadioButton_") == 0 ||
