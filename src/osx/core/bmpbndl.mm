@@ -28,6 +28,7 @@
 #include "wx/private/bmpbndl.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -154,6 +155,217 @@ wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& WXUNUSED(size))
 wxBitmapBundle wxOSXMakeBundleFromImage( WXImage img)
 {
     return wxBitmapBundle::FromImpl( new wxOSXImageBundleImpl(img) );
+}
+
+// ============================================================================
+// wxOSXSFSymbolBundleImpl
+// ============================================================================
+//
+// Bundle implementation for macOS SF Symbols. Unlike wxOSXImageBundleImpl,
+// this keeps the symbol name around so we can regenerate the underlying
+// NSImage at any requested size.  SF symbols are effectively vector images,
+// so regenerating produces crisp output for every display scale.  The native
+// image cache is pre-populated with the symbol at the bundle's default size,
+// ensuring widgets retrieving the bundle's native NSImage still receive a
+// proper template image that adapts to light/dark appearance.
+
+#if wxOSX_USE_COCOA
+
+namespace
+{
+
+class wxOSXSFSymbolBundleImpl : public wxBitmapBundleImpl
+{
+public:
+    wxOSXSFSymbolBundleImpl(const wxString& symbolName, const wxSize& defaultSize)
+        : m_symbolName(symbolName), m_defaultSize(defaultSize)
+    {
+        // Pre-populate the native image cache so widget code paths that
+        // retrieve the NSImage directly (via wxOSXGetImageFromBundle) get
+        // the SF symbol image with its template flag intact.
+        WXImage image = CreateSymbolImage(defaultSize);
+        if ( image )
+            wxOSXSetImageForBundleImpl(this, image);
+    }
+
+    virtual wxSize GetDefaultSize() const override { return m_defaultSize; }
+
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+    {
+        return wxSize(wxRound(m_defaultSize.x * scale),
+                      wxRound(m_defaultSize.y * scale));
+    }
+
+    virtual wxBitmap GetBitmap(const wxSize& size) override
+    {
+        const wxSize sz = (size == wxDefaultSize) ? m_defaultSize : size;
+
+        const bool darkTint = IsDarkDrawingAppearance();
+        if ( m_cachedBitmap.IsOk() && m_cachedBitmap.GetSize() == sz &&
+                m_cachedForDark == darkTint )
+            return m_cachedBitmap;
+
+        // The requested size is in pixels, while NSImage sizes are in
+        // points, so we can't simply wrap an NSImage of this size in
+        // wxBitmap: it would be rasterized using the main screen scale
+        // factor and end up e.g. twice as big as requested on a Retina
+        // display. Instead, rasterize the symbol ourselves at exactly the
+        // requested pixel size, just as the SVG-based bundle implementation
+        // does, and let wxBitmapBundle::GetBitmap() adjust the scale factor
+        // of the returned bitmap if needed.
+        wxBitmap bmp;
+        WXImage image = CreateSymbolImage(sz);
+        if ( image )
+        {
+            CGContextRef context = CGBitmapContextCreate(
+                nullptr, sz.x, sz.y, 8, 0,
+                wxMacGetGenericRGBColorSpace(),
+                kCGImageAlphaPremultipliedFirst);
+            if ( context )
+            {
+                CGContextClearRect(context, CGRectMake(0, 0, sz.x, sz.y));
+
+                NSGraphicsContext* const previous = NSGraphicsContext.currentContext;
+                NSGraphicsContext.currentContext =
+                    [NSGraphicsContext graphicsContextWithCGContext:context
+                                                            flipped:NO];
+                [image drawInRect:NSMakeRect(0, 0, sz.x, sz.y)
+                         fromRect:NSZeroRect
+                        operation:NSCompositingOperationSourceOver
+                         fraction:1.0];
+
+                // When AppKit draws a symbol image, it renders it using the
+                // label color of the current appearance (e.g. light in dark
+                // mode). The rasterized bitmap loses that machinery, so
+                // bake the label color in here, keeping the alpha channel as
+                // the symbol shape.
+                CGContextSetBlendMode(context, kCGBlendModeSourceIn);
+                CGContextSetFillColorWithColor(context,
+                                               NSColor.labelColor.CGColor);
+                CGContextFillRect(context, CGRectMake(0, 0, sz.x, sz.y));
+
+                NSGraphicsContext.currentContext = previous;
+
+                CGImageRef cgImage = CGBitmapContextCreateImage(context);
+                if ( cgImage )
+                {
+                    // Mark the bitmap as a template so that, when it is
+                    // drawn, it is tinted for the current (light or dark)
+                    // appearance just as the SF symbol NSImage itself
+                    // would be.
+                    bmp = wxBitmap(cgImage, 1.0, true /* template */);
+                    CGImageRelease(cgImage);
+                }
+                CGContextRelease(context);
+            }
+        }
+
+        // Cache only the last used bitmap, as the SVG implementation does,
+        // to avoid unbounded growth while still helping the common case of
+        // the same size being requested repeatedly.
+        m_cachedBitmap = bmp;
+        m_cachedForDark = darkTint;
+
+        return bmp;
+    }
+
+    // Return true if the symbol name resolved to an actual SF symbol.
+    bool IsOk() const { return wxOSXGetImageFromBundleImpl(this) != nullptr; }
+
+    // Return true if the current drawing appearance is a dark one, i.e. if
+    // the label color used for tinting resolves to a light color.
+    static bool IsDarkDrawingAppearance()
+    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+        if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+        {
+            NSAppearance* const appearance =
+                NSAppearance.currentDrawingAppearance;
+            return [appearance bestMatchFromAppearancesWithNames:
+                        @[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]]
+                    == NSAppearanceNameDarkAqua;
+        }
+#endif
+        return false;
+    }
+
+private:
+    WXImage CreateSymbolImage(const wxSize& size) const
+    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+        if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+        {
+            wxCFStringRef cfname(m_symbolName);
+            NSImage* symbol =
+                [NSImage imageWithSystemSymbolName:cfname.AsNSString()
+                          accessibilityDescription:nil];
+            if ( symbol )
+            {
+                // Configure the symbol at a point size matching the
+                // requested height (symbols are laid out relative to the cap
+                // height, so the height, and not the width, determines the
+                // appropriate stroke weight for the rendered size).
+                NSImageSymbolConfiguration* config =
+                    [NSImageSymbolConfiguration
+                        configurationWithPointSize:size.GetHeight()
+                                            weight:NSFontWeightRegular];
+                NSImage* configured =
+                    [symbol imageWithSymbolConfiguration:config];
+                if ( configured )
+                    symbol = configured;
+
+                [symbol setSize:NSMakeSize(size.x, size.y)];
+                // SF symbols are template images; ensure the flag is set
+                // so AppKit tints them for the current light/dark mode.
+                [symbol setTemplate:YES];
+                return symbol;
+            }
+        }
+#else
+        wxUnusedVar(size);
+#endif
+        return nullptr;
+    }
+
+    const wxString m_symbolName;
+    const wxSize   m_defaultSize;
+
+    // Last returned bitmap and the appearance it was tinted for, see
+    // GetBitmap().
+    wxBitmap       m_cachedBitmap;
+    bool           m_cachedForDark = false;
+};
+
+} // anonymous namespace
+
+#endif // wxOSX_USE_COCOA
+
+wxBitmapBundle wxOSXMakeBundleForSystemSymbol(const wxString& name, const wxSize& defaultSize)
+{
+#if wxOSX_USE_COCOA
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        wxSize sz = defaultSize;
+        if ( sz == wxDefaultSize )
+            sz = wxSize(32, 32);
+
+        // The ctor tries to create the symbol image to pre-populate the
+        // native image cache, so it also serves as the existence check for
+        // the symbol name, without requiring a separate lookup here.
+        wxOSXSFSymbolBundleImpl* const impl =
+            new wxOSXSFSymbolBundleImpl(name, sz);
+        if ( impl->IsOk() )
+            return wxBitmapBundle::FromImpl(impl);
+
+        impl->DecRef();
+    }
+#endif
+#else
+    wxUnusedVar(name);
+    wxUnusedVar(defaultSize);
+#endif
+    return wxBitmapBundle();
 }
 
 // ============================================================================
