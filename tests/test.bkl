@@ -129,28 +129,6 @@
         <wx-lib>base</wx-lib>
     </exe>
 
-    <!--
-      This test program is targeted to "headless GUI" tests, tests which are
-      typically tied to the "core" component but that should run nicely in a
-      console only program. This program should be executable from a console
-      only Unix session (such as telnet or ssh) although it uses graphics
-      contexts, so if you modify this project, please check that it can still
-      be ran in such configuration and doesn't require an X server connection.
-      -->
-    <exe id="test_drawing" template="wx_sample_console,wx_test"
-                           template_append="wx_append"
-         cond="USE_GUI=='1'">
-        <sources>
-            test.cpp
-            drawing/drawing.cpp
-            drawing/basictest.cpp
-            drawing/fonttest.cpp
-        </sources>
-        <wx-lib>core</wx-lib>
-        <wx-lib>net</wx-lib>
-        <wx-lib>base</wx-lib>
-    </exe>
-
     <template id="stc_append">
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
