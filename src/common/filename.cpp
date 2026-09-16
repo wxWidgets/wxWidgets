@@ -1319,6 +1319,19 @@ bool wxFileName::Rmdir(int flags) const
 
 bool wxFileName::Rmdir(const wxString& dir, int flags)
 {
+    if ( (flags & wxPATH_RMDIR_RECURSIVE) && (flags & wxPATH_RMDIR_PARENTS) )
+    {
+        // Combining these two flags would mean automatically removing the
+        // ancestors of a directory whose contents were just force-deleted,
+        // possibly wiping out more than what was explicitly asked for. If
+        // this combination is really needed, it can always be emulated by
+        // calling Rmdir(wxPATH_RMDIR_RECURSIVE) followed by a separate call
+        // to Rmdir(wxPATH_RMDIR_PARENTS) on its parent directory.
+        wxFAIL_MSG( "wxPATH_RMDIR_PARENTS can't be combined with "
+                    "wxPATH_RMDIR_RECURSIVE" );
+        return false;
+    }
+
 #ifdef __WINDOWS__
     if ( flags & wxPATH_RMDIR_RECURSIVE )
     {
@@ -1349,7 +1362,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
     }
     else if ( flags & wxPATH_RMDIR_FULL )
 #else // !__WINDOWS__
-    if ( flags != 0 )   // wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE
+    if ( flags & (wxPATH_RMDIR_FULL | wxPATH_RMDIR_RECURSIVE) )
 #endif // !__WINDOWS__
     {
 #ifndef __WINDOWS__
@@ -1384,7 +1397,10 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
                                wxDIR_DIRS | wxDIR_HIDDEN | wxDIR_NO_FOLLOW);
         while ( cont )
         {
-            wxFileName::Rmdir(path + filename, flags);
+            // wxPATH_RMDIR_PARENTS only applies to the original directory
+            // itself, once it, and everything under it, has been removed -- it
+            // must not be propagated to the subdirectories being deleted here.
+            wxFileName::Rmdir(path + filename, flags & ~wxPATH_RMDIR_PARENTS);
             cont = d.GetNext(&filename);
         }
 
@@ -1405,7 +1421,27 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
 #endif // !__WINDOWS__
     }
 
-    return ::wxRmdir(dir);
+    if ( !::wxRmdir(dir) )
+        return false;
+
+    if ( flags & wxPATH_RMDIR_PARENTS )
+    {
+        wxFileName fn = wxFileName::DirName(dir);
+        while ( fn.GetDirCount() > 1 )
+        {
+            fn.RemoveLastDir();
+
+            // Note that we intentionally call wxRmDir() which is just the
+            // standard rmdir() function and not ::wxRmdir() which is a wx
+            // wrapper around it giving an error message because we don't want
+            // to log any errors here: we can be sure to get one, sooner or
+            // later, but they don't indicate a real problem.
+            if ( wxRmDir(fn.GetPath()) != 0 )
+                break;
+        }
+    }
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

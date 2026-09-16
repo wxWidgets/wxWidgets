@@ -845,6 +845,10 @@
  */
 #cmakedefine01 wxUSE_LIBGNOMEVFS
 /*
+ * Use AppIndicator for wxTaskBarIcon (required for Wayland).
+ */
+#cmakedefine01 wxUSE_APPINDICATOR
+/*
  * Use libnotify library.
  */
 #cmakedefine01 wxUSE_LIBNOTIFY
