@@ -266,6 +266,23 @@ public:
         return false;
     }
 
+    // Forget a watch successfully passed to Add() if no read could be started
+    // for it: as there is no pending I/O using it, it can be dropped at once.
+    void CancelAdd(const wxSharedPtr<wxFSWatchEntryMSW>& watch)
+    {
+        wxCriticalSectionLocker lock(m_critsect);
+
+        const auto it = m_watches.find(watch->GetPath());
+
+        if ( it != m_watches.end() && it->second.get() == watch.get() )
+        {
+            m_watches.erase(it);
+            return;
+        }
+
+        wxFAIL_MSG("No watch to cancel");
+    }
+
     // post completion packet
     bool PostEmptyStatus()
     {
@@ -348,6 +365,7 @@ protected:
     HANDLE m_iocp;
 
     // Protects the watch lists shared by the user thread and IOCP thread.
+    // wxFSWatcherImplMSW::SetUpWatch() holds it while starting a new read.
     wxCriticalSection m_critsect;
 
     // The hash containing all the wxFSWatchEntryMSW objects currently being
@@ -357,6 +375,8 @@ protected:
     // Contains the watches which had been removed but are still pending.
     typedef wxVector< wxSharedPtr<wxFSWatchEntryMSW> > Watches;
     Watches m_removedWatches;
+
+    friend class wxFSWatcherImplMSW;
 };
 
 

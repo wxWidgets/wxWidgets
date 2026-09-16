@@ -95,12 +95,20 @@ bool wxFSWatcherImplMSW::Init()
 // adds watch to be monitored for file system changes
 bool wxFSWatcherImplMSW::DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch)
 {
-    // setting up wait for directory changes
-    if (!DoSetUpWatch(*watch))
+    // Associate the handle with the completion port and register the watch
+    // before starting to wait for directory changes: otherwise the worker
+    // thread could get a completion for a watch it doesn't know about yet and
+    // would never start a new read for it.
+    if ( !m_iocp.Add(watch) )
         return false;
 
-    // associating handle with completion port
-    return m_iocp.Add(watch);
+    if ( !DoSetUpWatch(*watch) )
+    {
+        m_iocp.CancelAdd(watch);
+        return false;
+    }
+
+    return true;
 }
 
 bool
@@ -109,18 +117,21 @@ wxFSWatcherImplMSW::DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch)
     return m_iocp.ScheduleForRemoval(watch);
 }
 
-// TODO ensuring that we have not already set watch for this handle/dir?
+// This is called from the worker thread, so it must not use m_watches, which is
+// only used by the main thread, and asks wxIOCPService instead.
 bool wxFSWatcherImplMSW::SetUpWatch(wxFSWatchEntryMSW& watch)
 {
     wxCHECK_MSG( watch.IsOk(), false, "Invalid watch" );
-    if (m_watches.find(watch.GetPath()) == m_watches.end())
-    {
-        wxLogTrace(wxTRACE_FSWATCHER, "Path '%s' is not watched",
-                   watch.GetPath());
+
+    // Don't let the watch be removed between checking for it and starting a
+    // new read. CompleteRemoval() locks the same recursive critical section.
+    wxCriticalSectionLocker lock(m_iocp.m_critsect);
+
+    if ( m_iocp.CompleteRemoval(&watch) )
         return false;
-    }
 
     wxLogTrace(wxTRACE_FSWATCHER, "Setting up watch for file system changes...");
+
     return DoSetUpWatch(watch);
 }
 
@@ -245,8 +256,9 @@ bool wxIOCPThread::ReadEvents()
             // It isn't useful to continue watching this directory as it
             // doesn't exist any more -- and even recreating a directory with
             // the same name still wouldn't resume generating events for the
-            // existing wxIOCPService, so it's useless to continue.
-            return false;
+            // existing wxIOCPService, so don't start a new read for it. But
+            // keep reading the events for all the other watches, if any.
+            return true;
 
         case wxIOCPService::Status_Exit:
             return false; // stop reading events
@@ -306,10 +318,9 @@ bool wxIOCPThread::ReadEvents()
     // process events
     ProcessNativeEvents(events);
 
-    if ( m_iocp->CompleteRemoval(watch) )
-        return true;
-
-    // reissue the watch. ignore possible errors, we will return true anyway
+    // reissue the watch unless it was removed while processing the events, in
+    // which case this completes its removal. ignore possible errors, we will
+    // return true anyway
     (void) m_service->SetUpWatch(*watch);
 
     return true;
