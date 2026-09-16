@@ -54,9 +54,8 @@ goto :cmake
 
 :cmake
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
-if "%CMAKE_TEST_REGEX%"=="" set CMAKE_TEST_REGEX="test_drawing"
 cd ..\build_cmake
-ctest -V -C %CONFIGURATION% -E %CMAKE_TEST_REGEX% --output-on-failure --interactive-debug-mode 0 .
+ctest -V -C %CONFIGURATION% --output-on-failure --interactive-debug-mode 0 .
 if %errorlevel% NEQ 0 goto :error
 goto :eof
 

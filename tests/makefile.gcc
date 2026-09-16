@@ -117,20 +117,6 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_weakref.o \
 	$(OBJS)\test_xlocale.o \
 	$(OBJS)\test_xmltest.o
-TEST_DRAWING_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
-	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. \
-	$(__DLLFLAG_p) -DwxUSE_GUI=0 -I.\..\3rdparty\catch\single_include \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
-TEST_DRAWING_OBJECTS =  \
-	$(OBJS)\test_drawing_test_rc.o \
-	$(OBJS)\test_drawing_dummy.o \
-	$(OBJS)\test_drawing_test.o \
-	$(OBJS)\test_drawing_drawing.o \
-	$(OBJS)\test_drawing_basictest.o \
-	$(OBJS)\test_drawing_fonttest.o
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -305,9 +291,6 @@ EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(MONOLITHIC),1)
 __LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
-endif
-ifeq ($(USE_GUI),1)
-__test_drawing___depname = $(OBJS)\test_drawing.exe
 endif
 ifeq ($(MONOLITHIC),1)
 ifeq ($(USE_STC),1)
@@ -514,13 +497,12 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
+all: $(OBJS)\test.exe $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
-	-if exist $(OBJS)\test_drawing.exe del $(OBJS)\test_drawing.exe
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
 	-if exist $(OBJS)\test_allheaders.exe del $(OBJS)\test_allheaders.exe
 
@@ -529,14 +511,6 @@ $(OBJS)\test.exe: $(TEST_OBJECTS) $(OBJS)\test_test_rc.o
 	@move /y $@.rsp.tmp $@.rsp >nul
 	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)     $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lgdiplus -lmsimg32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\test_drawing.exe: $(TEST_DRAWING_OBJECTS) $(OBJS)\test_drawing_test_rc.o
-	$(foreach f,$(subst \,/,$(TEST_DRAWING_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
-	@move /y $@.rsp.tmp $@.rsp >nul
-	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)     $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lgdiplus -lmsimg32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
-	@-del $@.rsp
-endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_test_rc.o
@@ -848,24 +822,6 @@ $(OBJS)\test_xlocale.o: ./xlocale/xlocale.cpp
 
 $(OBJS)\test_xmltest.o: ./xml/xmltest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_drawing_test_rc.o: ./../tests/test.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9) $(__NDEBUG_DEFINE_p_9) $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_9) --define wxUSE_GUI=0 --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
-
-$(OBJS)\test_drawing_dummy.o: ./dummy.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_drawing_test.o: ./test.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_drawing_drawing.o: ./drawing/drawing.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_drawing_basictest.o: ./drawing/basictest.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_drawing_fonttest.o: ./drawing/fonttest.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
