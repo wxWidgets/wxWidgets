@@ -2366,13 +2366,14 @@ public:
 public:
     // Do not use these fields directly, they are initialized on demand, so
     // call GetX() and GetY() or GetPosition() instead.
-    wxCoord       m_x, m_y;
+    wxCoord       m_x = wxDefaultCoord;
+    wxCoord       m_y = wxDefaultCoord;
 
-    long          m_keyCode;
+    long          m_keyCode = WXK_NONE;
 
     // This contains the full Unicode character
     // in a character events in Unicode mode
-    wxChar        m_uniChar;
+    wxChar        m_uniChar = WXK_NONE;
 
     // these fields contain the platform-specific information about
     // key that was pressed
