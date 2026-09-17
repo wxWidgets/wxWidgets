@@ -43,10 +43,10 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     if ( flags != wxFONTRESTRICT_NONE )
     {
         GetQFontDialog()->setOption(QFontDialog::ScalableFonts,
-                                    flags | wxFONTRESTRICT_SCALABLE);
+                                    flags & wxFONTRESTRICT_SCALABLE);
 
         GetQFontDialog()->setOption(QFontDialog::MonospacedFonts,
-                                    flags | wxFONTRESTRICT_FIXEDPITCH);
+                                    flags & wxFONTRESTRICT_FIXEDPITCH);
     }
 
     return wxFontDialogBase::DoCreate(parent);
