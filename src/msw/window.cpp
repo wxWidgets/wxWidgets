@@ -208,6 +208,31 @@ bool gs_insideCaptureChanged = false;
 // their destruction.
 bool gs_gotEndSession = false;
 
+// Characters outside of the BMP are sent to us in 2 WM_CHAR messages
+// containing the high and low surrogates of their UTF-16 representation.
+inline bool IsHighSurrogate(WXWPARAM wParam)
+{
+    return wParam >= 0xd800 && wParam < 0xdc00;
+}
+
+inline bool IsLowSurrogate(WXWPARAM wParam)
+{
+    return wParam >= 0xdc00 && wParam < 0xe000;
+}
+
+inline wxUniChar MakeFromSurrogates(WXWPARAM high, WXWPARAM low)
+{
+    return wxUniChar(0x10000 + ((high - 0xd800) << 10) + (low - 0xdc00));
+}
+
+// High surrogate from the last WM_CHAR message if we're waiting for the low
+// surrogate following it or 0 otherwise.
+WXWPARAM gs_pendingHighSurrogate = 0;
+
+// Set to true while resending WM_CHAR with the high surrogate to let the
+// default window procedure process it, see wxWindowMSW::HandleChar().
+bool gs_resendingHighSurrogate = false;
+
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -3379,7 +3404,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 // The key was handled in the EVT_KEY_DOWN and handling
                 // a key in an EVT_KEY_DOWN handler is meant, by
                 // design, to prevent EVT_CHARs from happening
-                m_lastKeydownProcessed = false;
+                //
+                // Note that if this is a high surrogate, we need to also
+                // ignore the low surrogate which will follow it.
+                if ( !IsHighSurrogate(wParam) )
+                    m_lastKeydownProcessed = false;
                 processed = true;
             }
             else
@@ -6628,6 +6657,7 @@ wxWindowMSW::CreateKeyEvent(wxEventType evType,
                                         lParam
                                         , &event.m_uniChar
                                      );
+    event.SetUnicodeChar(event.m_uniChar);
 
     return event;
 }
@@ -6640,21 +6670,35 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
     wxKeyEvent event(evType);
     InitAnyKeyEvent(event, wParam, lParam);
 
-    // TODO: wParam uses UTF-16 so this is incorrect for characters outside of
-    //       the BMP, we should use WM_UNICHAR to handle them.
-    event.m_uniChar = wParam;
+    // This must be checked in the caller.
+    wxASSERT( !IsHighSurrogate(wParam) );
+
+    // Construct the full Unicode character by recombining the surrogate pair
+    // if necessary.
+    const wxUniChar unichar = IsLowSurrogate(wParam)
+        ? MakeFromSurrogates(gs_pendingHighSurrogate, wParam)
+        : static_cast<wxUniChar>(wParam);
+
+    event.SetUnicodeChar(unichar);
+
+    // Characters outside of the BMP can't be represented by wxChar, so leave
+    // m_uniChar and m_keyCode as WXK_NONE for them.
+    if ( !unichar.IsBMP() )
+        return event;
+
+    event.m_uniChar = unichar;
 
     // Set non-Unicode key code too for compatibility if possible.
-    if ( wParam < 0x80 )
+    if ( unichar.IsAscii() )
     {
         // It's an ASCII character, no need to translate it.
-        event.m_keyCode = wParam;
+        event.m_keyCode = unichar.GetValue();
     }
     else
     {
         // Check if this key can be represented (as a single character) in the
         // current locale.
-        const wchar_t wc = wParam;
+        const wchar_t wc = unichar;
         char ch;
         if ( wxConvLibc.FromWChar(&ch, 1, &wc, 1) != wxCONV_FAILED )
         {
@@ -6684,6 +6728,11 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
 
 void wxWindowMSW::SendAfterCharEvent(WXWPARAM wParam, WXLPARAM lParam)
 {
+    // Don't do this for surrogate pairs, otherwise we'd need to handle
+    // recomposing them here too.
+    if ( IsHighSurrogate(wParam) || IsLowSurrogate(wParam) )
+        return;
+
     wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
     HandleWindowEvent(event);
 }
@@ -6692,8 +6741,55 @@ void wxWindowMSW::SendAfterCharEvent(WXWPARAM wParam, WXLPARAM lParam)
 // WM_KEYDOWN one
 bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam)
 {
+    // We're called for the high surrogate we had previously swallowed, just
+    // let the default window procedure handle it now.
+    if ( gs_resendingHighSurrogate )
+        return false;
+
+    // Characters outside of the BMP are sent in 2 WM_CHAR messages, but we
+    // want to generate a single wxEVT_CHAR for them, so just remember the
+    // high surrogate and wait for the low one to arrive.
+    if ( IsHighSurrogate(wParam) )
+    {
+        gs_pendingHighSurrogate = wParam;
+
+        // Always pretend to have handled this message because we don't know
+        // yet if the eventual wxEVT_CHAR event will be handled or not.
+        return true;
+    }
+
+    if ( IsLowSurrogate(wParam) && !gs_pendingHighSurrogate )
+    {
+        // We got a low surrogate without a high one, this is invalid, but
+        // just ignore it and let the default window procedure handle it.
+        return false;
+    }
+
     wxKeyEvent event(CreateCharEvent(wxEVT_CHAR, wParam, lParam));
-    return HandleWindowEvent(event);
+
+    const WXWPARAM previousHighSurrogate = gs_pendingHighSurrogate;
+    gs_pendingHighSurrogate = 0;
+
+    if ( HandleWindowEvent(event) )
+        return true;
+
+    if ( previousHighSurrogate && IsLowSurrogate(wParam) )
+    {
+        // Let the default window procedure process the high surrogate before
+        // the low one, which it will get when we return false.
+        //
+        // Send it to the window which received the original message, which may
+        // be a child of this one for the composite controls.
+        HWND hwnd = ::GetFocus();
+        if ( hwnd != GetHwnd() && !::IsChild(GetHwnd(), hwnd) )
+            hwnd = GetHwnd();
+
+        gs_resendingHighSurrogate = true;
+        ::SendMessage(hwnd, WM_CHAR, previousHighSurrogate, lParam);
+        gs_resendingHighSurrogate = false;
+    }
+
+    return false;
 }
 
 bool wxWindowMSW::HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam)
@@ -7557,6 +7653,7 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 
                 event.m_keyCode = id;
                 event.m_uniChar = uc;
+                event.SetUnicodeChar(uc);
 
                 wxEvtHandler * const handler = win ? win->GetEventHandler()
                                                    : wxTheApp;
