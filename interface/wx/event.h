@@ -1330,9 +1330,9 @@ enum wxKeyCategoryFlags
     This event class contains information about key press and release events.
 
     The main information carried by this event is the key being pressed or
-    released. It can be accessed using one of GetUnicodeKey(), GetKeyCode()
+    released. It can be accessed using one of GetUnicodeChar(), GetKeyCode()
     or GetRawKeyCode() functions.
-    For the printable characters, GetUnicodeKey() should be used as it works
+    For the printable characters, GetUnicodeChar() should be used as it works
     for any keys, including non-Latin-1 characters that can be entered when
     using national keyboard layouts. GetKeyCode() should be used to handle
     special characters (such as cursor arrows keys or @c HOME or @c INS and so
@@ -1340,11 +1340,11 @@ enum wxKeyCategoryFlags
     constant. While GetKeyCode() also returns the character code for Latin-1
     keys for compatibility, it doesn't work for Unicode characters in general
     and will return @c WXK_NONE for any non-Latin-1 ones.
-    If both GetUnicodeKey() and GetKeyCode() return @c WXK_NONE then the key
+    If both GetUnicodeChar() and GetKeyCode() return @c WXK_NONE then the key
     has no @c WXK_xxx mapping and GetRawKeyCode() can be used to distinguish
     between keys, but raw key codes are platform specific.
-    For these reasons, it is recommended to always use GetUnicodeKey() and
-    only fall back to GetKeyCode() if GetUnicodeKey() returned @c WXK_NONE,
+    For these reasons, it is recommended to always use GetUnicodeChar() and
+    only fall back to GetKeyCode() if GetUnicodeChar() returned @c WXK_NONE,
     meaning that the event corresponds to a non-printable special keys, then
     optionally check GetRawKeyCode() if GetKeyCode() also returned @c WXK_NONE
     or simply ignore that key.
@@ -1357,7 +1357,7 @@ enum wxKeyCategoryFlags
     value depends on the current state of the Shift key and, for the letters,
     on the state of Caps Lock modifier. For example, if @c A key is pressed
     without Shift being held down, wxKeyEvent of type @c wxEVT_CHAR generated
-    for this key press will return (from either GetKeyCode() or GetUnicodeKey()
+    for this key press will return (from either GetKeyCode() or GetUnicodeChar()
     as their meanings coincide for ASCII characters) key code of 97
     corresponding the ASCII value of @c a. And if the same key is pressed but
     with Shift being held (or Caps Lock being active), then the key could would
@@ -1539,17 +1539,17 @@ public:
         non-alphanumeric keys or if the user entered a Latin-1 character (this
         includes ASCII and the accented letters found in Western European
         languages but not letters of other alphabets such as e.g. Cyrillic).
-        Otherwise it simply method returns @c WXK_NONE and GetUnicodeKey()
+        Otherwise it simply method returns @c WXK_NONE and GetUnicodeChar()
         should be used to obtain the corresponding Unicode character.
 
-        Using GetUnicodeKey() is in general the right thing to do if you are
+        Using GetUnicodeChar() is in general the right thing to do if you are
         interested in the characters typed by the user, GetKeyCode() should be
-        only used for special keys (for which GetUnicodeKey() returns @c
+        only used for special keys (for which GetUnicodeChar() returns @c
         WXK_NONE). To handle both kinds of keys you might write:
         @code
             void MyHandler::OnChar(wxKeyEvent& event)
             {
-                wxChar uc = event.GetUnicodeKey();
+                wxUniChar uc = event.GetUnicodeChar();
                 if ( uc != WXK_NONE )
                 {
                     // It's a "normal" character. Notice that this includes
@@ -1664,6 +1664,22 @@ public:
         If the key pressed doesn't have any character value (e.g. a cursor key)
         this method will return @c WXK_NONE. In this case you should use
         GetKeyCode() to retrieve the value of the key.
+
+        @since 3.3.4
+    */
+    wxUniChar GetUnicodeChar() const;
+
+    /**
+        Returns the Unicode character corresponding to this key event.
+
+        This function is similar to GetUnicodeChar(), but its return value
+        can't represent characters outside of the Unicode BMP (Basic
+        Multilingual Plane), such as emojis, on the platforms where
+        wxChar is 16 bits and so in wxMSW it returns @c WXK_NONE for such
+        characters.
+
+        Use GetUnicodeChar() to handle such characters correctly under all
+        platforms.
     */
     wxChar GetUnicodeKey() const;
 

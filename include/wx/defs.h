@@ -2171,7 +2171,7 @@ enum wxKeyCode
 
     /* These are not compatible with unicode characters.
        If you want to get a unicode character from a key event, use
-       wxKeyEvent::GetUnicodeKey                                    */
+       wxKeyEvent::GetUnicodeChar() */
     WXK_START   = 300,
     WXK_LBUTTON,
     WXK_RBUTTON,
