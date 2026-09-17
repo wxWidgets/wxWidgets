@@ -2377,8 +2377,8 @@ public:
 
     // these fields contain the platform-specific information about
     // key that was pressed
-    wxUint32      m_rawCode;
-    wxUint32      m_rawFlags;
+    wxUint32      m_rawCode = 0;
+    wxUint32      m_rawFlags = 0;
 
     // Indicates whether the key event is a repeat
     bool          m_isRepeat = false;
