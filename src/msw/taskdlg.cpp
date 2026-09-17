@@ -58,14 +58,7 @@ namespace TDDarkCol
     static constexpr COLORREF kFootnote = RGB(0x2c, 0x2c, 0x2c);
     static constexpr COLORREF kSeparator = RGB(0x3c, 0x3c, 0x3c);
 
-    static constexpr COLORREF kTextNormal = RGB(0xe0, 0xe0, 0xe0);
-    static constexpr COLORREF kTextInstruct = RGB(0x00, 0x99, 0xff);
-    static constexpr COLORREF kTextContent = RGB(0xe0, 0xe0, 0xe0);
-    static constexpr COLORREF kTextExpando = RGB(0xe0, 0xe0, 0xe0);
-    static constexpr COLORREF kTextVerify = RGB(0xe0, 0xe0, 0xe0);
-    static constexpr COLORREF kTextFootnote = RGB(0xb0, 0xb0, 0xb0);
-    static constexpr COLORREF kTextFtrExp = RGB(0xb0, 0xb0, 0xb0);
-    static constexpr COLORREF kTextRadio = RGB(0xe0, 0xe0, 0xe0);
+    static constexpr COLORREF kTextInstruct = RGB(0x99, 0xeb, 0xff);
 }
 
 namespace
@@ -267,36 +260,6 @@ void TDRefreshThemes(HWND hwnd, TDPageState& s)
     {
         s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, L"TaskDialog", dpi);
         s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, L"Button", dpi);
-    }
-}
-
-COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
-{
-    if ( TDHasNativeDarkTheme() )
-    {
-        const wxColour col = s.hTD.GetColour(uiPart, TMT_TEXTCOLOR);
-        if ( col.IsOk() )
-            return wxColourToRGB(col);
-    }
-
-    switch ( uiPart )
-    {
-        case TDLG_MAININSTRUCTIONPANE:
-            return TDDarkCol::kTextInstruct;
-        case TDLG_CONTENTPANE:
-            return TDDarkCol::kTextContent;
-        case TDLG_EXPANDOTEXT:
-            return TDDarkCol::kTextExpando;
-        case TDLG_VERIFICATIONTEXT:
-            return TDDarkCol::kTextVerify;
-        case TDLG_FOOTNOTEPANE:
-            return TDDarkCol::kTextFootnote;
-        case TDLG_EXPANDEDFOOTERAREA:
-            return TDDarkCol::kTextFtrExp;
-        case TDLG_RADIOBUTTONPANE:
-            return TDDarkCol::kTextRadio;
-        default:
-            return TDDarkCol::kTextNormal;
     }
 }
 
@@ -721,7 +684,10 @@ void TDPaintText(HDC hdc, const TDPageState& s)
         else
         {
             opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
-            opts.crText = TDGetTextColour(s, part);
+            if ( part == TDLG_MAININSTRUCTIONPANE )
+                opts.crText = TDDarkCol::kTextInstruct;
+            else
+                opts.crText = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
 
             ::FillRect(hdc, &rcText, brBg);
         }
@@ -886,7 +852,8 @@ TDCtrlContainerSubclassProc(HWND hwnd,
                 }
 
                 ::SetBkColor(hdc, bg);
-                ::SetTextColor(hdc, TDDarkCol::kTextNormal);
+                auto fg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
+                ::SetTextColor(hdc, fg);
 
                 if ( !hbr )
                     hbr = GetSolidBrush(TDDarkCol::kSecondary);
@@ -935,7 +902,7 @@ TDRadioButtonSubclassProc(HWND hwnd,
 
                 WinStructWordSize<DTTOPTS> opts;
                 opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
-                opts.crText = TDDarkCol::kTextNormal;
+                opts.crText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel();
 
                 LOGFONT lf = {};
                 if ( hStyle.GetFont(lf, hdcBuf, TDLG_RADIOBUTTONPANE) )
