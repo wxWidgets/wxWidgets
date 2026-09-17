@@ -2521,8 +2521,7 @@ WXLRESULT wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM l
     // pressed into account.
     if ( nMsg == WM_CHAR )
     {
-        wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
-        HandleWindowEvent(event);
+        SendAfterCharEvent(wParam, lParam);
     }
 
     return rc;
@@ -6681,6 +6680,12 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
     }
 
     return event;
+}
+
+void wxWindowMSW::SendAfterCharEvent(WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
+    HandleWindowEvent(event);
 }
 
 // isASCII is true only when we're called from WM_CHAR handler and not from

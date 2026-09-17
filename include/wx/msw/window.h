@@ -750,6 +750,9 @@ protected:
                                WXWPARAM wParam,
                                WXLPARAM lParam) const;
 
+    // Helper for sending wxEVT_AFTER_CHAR.
+    void SendAfterCharEvent(WXWPARAM wParam, WXLPARAM lParam);
+
 
     // default OnEraseBackground() implementation, return true if we did erase
     // the background, false otherwise (i.e. the system should erase it)
