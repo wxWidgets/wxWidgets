@@ -70,6 +70,51 @@ static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
 }
 #endif
 
+static void CopyPixbufDataToImage(
+    guchar* dst, int dstChannels, int dstStride,
+    const guchar* src, int srcChannels, int srcStride,
+    int w, int h)
+{
+    if (dstChannels == srcChannels)
+    {
+        if (dstStride == srcStride)
+            memcpy(dst, src, size_t(dstStride) * h);
+        else
+        {
+            const int stride = dstStride < srcStride ? dstStride : srcStride;
+            for (int j = 0; j < h; j++, src += srcStride, dst += dstStride)
+                memcpy(dst, src, stride);
+        }
+    }
+    else
+    {
+        for (int j = 0; j < h; j++, src += srcStride, dst += dstStride)
+        {
+            guchar* d = dst;
+            const guchar* s = src;
+            if (dstChannels == 4)
+            {
+                for (int i = 0; i < w; i++, d += 4, s += 3)
+                {
+                    d[0] = s[0];
+                    d[1] = s[1];
+                    d[2] = s[2];
+                    d[3] = 0xff;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < w; i++, d += 3, s += 4)
+                {
+                    d[0] = s[0];
+                    d[1] = s[1];
+                    d[2] = s[2];
+                }
+            }
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------
@@ -562,7 +607,7 @@ void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
 
     guchar* dst = gdk_pixbuf_get_pixels(pixbuf_dst);
     const int dstStride = gdk_pixbuf_get_rowstride(pixbuf_dst);
-    wxGtkCopyPixbufDataToImage(dst, gdk_pixbuf_get_n_channels(pixbuf_dst), dstStride, src, 3, 3 * w, w, h);
+    CopyPixbufDataToImage(dst, gdk_pixbuf_get_n_channels(pixbuf_dst), dstStride, src, 3, 3 * w, w, h);
 
     if (depth == 32 && alpha)
     {
@@ -768,7 +813,7 @@ wxImage wxBitmap::ConvertToImage() const
         const guchar* src = gdk_pixbuf_get_pixels(pixbuf_src);
         const int srcStride = gdk_pixbuf_get_rowstride(pixbuf_src);
         const int srcChannels = gdk_pixbuf_get_n_channels(pixbuf_src);
-        wxGtkCopyPixbufDataToImage(dst, 3, 3 * w, src, srcChannels, srcStride, w, h);
+        CopyPixbufDataToImage(dst, 3, 3 * w, src, srcChannels, srcStride, w, h);
 
         if (srcChannels == 4)
         {
@@ -1475,7 +1520,7 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
 
     guchar* dst = gdk_pixbuf_get_pixels(bmpData->m_pixbufMask);
     const int dstStride = gdk_pixbuf_get_rowstride(bmpData->m_pixbufMask);
-    wxGtkCopyPixbufDataToImage(dst, 4, dstStride,
+    CopyPixbufDataToImage(dst, 4, dstStride,
         gdk_pixbuf_get_pixels(bmpData->m_pixbufNoMask),
         gdk_pixbuf_get_n_channels(bmpData->m_pixbufNoMask),
         gdk_pixbuf_get_rowstride(bmpData->m_pixbufNoMask),
@@ -1510,7 +1555,7 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
     guchar* src = gdk_pixbuf_get_pixels(bmpData->m_pixbuf);
     const int dstStride = gdk_pixbuf_get_rowstride(bmpData->m_pixbufMask);
     const int srcStride = gdk_pixbuf_get_rowstride(bmpData->m_pixbuf);
-    wxGtkCopyPixbufDataToImage(dst, 4, dstStride,
+    CopyPixbufDataToImage(dst, 4, dstStride,
                   src, gdk_pixbuf_get_n_channels(bmpData->m_pixbuf), srcStride,
                   w, h);
     MaskToAlpha(mask, bmpData->m_pixbufMask, w, h);

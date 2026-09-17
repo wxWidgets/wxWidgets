@@ -224,51 +224,6 @@ int wxAnimationGTKImpl::GetDelay(unsigned int frame) const
     return delay;
 }
 
-void wxGtkCopyPixbufDataToImage(
-    guchar* dst, int dstChannels, int dstStride,
-    const guchar* src, int srcChannels, int srcStride,
-    int w, int h)
-{
-    if (dstChannels == srcChannels)
-    {
-        if (dstStride == srcStride)
-            memcpy(dst, src, size_t(dstStride) * h);
-        else
-        {
-            const int stride = dstStride < srcStride ? dstStride : srcStride;
-            for (int j = 0; j < h; j++, src += srcStride, dst += dstStride)
-                memcpy(dst, src, stride);
-        }
-    }
-    else
-    {
-        for (int j = 0; j < h; j++, src += srcStride, dst += dstStride)
-        {
-            guchar* d = dst;
-            const guchar* s = src;
-            if (dstChannels == 4)
-            {
-                for (int i = 0; i < w; i++, d += 4, s += 3)
-                {
-                    d[0] = s[0];
-                    d[1] = s[1];
-                    d[2] = s[2];
-                    d[3] = 0xff;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < w; i++, d += 3, s += 4)
-                {
-                    d[0] = s[0];
-                    d[1] = s[1];
-                    d[2] = s[2];
-                }
-            }
-        }
-    }
-}
-
 wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
 {
     GTimeVal start_time;
@@ -292,30 +247,7 @@ wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
     }
 
     GdkPixbuf *buf = gdk_pixbuf_animation_iter_get_pixbuf(iter);
-    const int w = gdk_pixbuf_get_width(buf);
-    const int h = gdk_pixbuf_get_height(buf);
-
-    wxImage image;
-    image.Create(w, h, false);
-    guchar* dst = image.GetData();
-
-    const guchar* src = gdk_pixbuf_get_pixels(buf);
-    const int srcStride = gdk_pixbuf_get_rowstride(buf);
-    const int srcChannels = gdk_pixbuf_get_n_channels(buf);
-    wxGtkCopyPixbufDataToImage(dst, 3, 3 * w, src, srcChannels, srcStride, w, h);
-    if (srcChannels == 4)
-    {
-        image.SetAlpha();
-        guchar* alpha = image.GetAlpha();
-        for (int j = 0; j < h; j++, src += srcStride)
-        {
-            const guchar* s = src;
-            for (int i = 0; i < w; i++, s += 4)
-                *alpha++ = s[3];
-        }
-    }
-
-    return image;
+    return wxBitmap( buf ).ConvertToImage();
 }
 
 wxSize wxAnimationGTKImpl::GetSize() const
