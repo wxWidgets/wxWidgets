@@ -15,6 +15,7 @@
 #include "wx/object.h"
 #include "wx/clntdata.h"
 #include "wx/math.h"
+#include "wx/unichar.h"
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
@@ -2309,6 +2310,16 @@ public:
     bool IsKeyInCategory(int category) const;
 
     // get the Unicode character corresponding to this key
+    wxNODISCARD wxUniChar GetUnicodeChar() const
+    {
+#ifdef __WXMSW__
+        return m_unicodeChar;
+#else
+        return m_uniChar;
+#endif
+    }
+
+    // same but limited to the BMP under MSW, prefer using GetUnicodeChar()
     wxChar GetUnicodeKey() const { return m_uniChar; }
 
     // get the raw key code (platform-dependent)
@@ -2363,21 +2374,30 @@ public:
     // example)
     wxKeyEvent& operator=(const wxKeyEvent& evt);
 
+    // Implementation only, don't use.
+#ifdef __WXMSW__
+    void SetUnicodeChar(wxUniChar uc) { m_unicodeChar = uc; }
+#endif // __WXMSW__
+
 public:
     // Do not use these fields directly, they are initialized on demand, so
     // call GetX() and GetY() or GetPosition() instead.
-    wxCoord       m_x, m_y;
+    wxCoord       m_x = wxDefaultCoord;
+    wxCoord       m_y = wxDefaultCoord;
 
-    long          m_keyCode;
+    long          m_keyCode = WXK_NONE;
 
-    // This contains the full Unicode character
-    // in a character events in Unicode mode
-    wxChar        m_uniChar;
+    // Kept for backwards compatibility only, use GetUnicodeChar() instead.
+    //
+    // Contains the Unicode character if it can be represented by a single
+    // wxChar, otherwise -- i.e. for the characters outside of the BMP on
+    // platforms where wxChar is 16 bits, such as MSW -- is WXK_NONE.
+    wxChar        m_uniChar = WXK_NONE;
 
     // these fields contain the platform-specific information about
     // key that was pressed
-    wxUint32      m_rawCode;
-    wxUint32      m_rawFlags;
+    wxUint32      m_rawCode = 0;
+    wxUint32      m_rawFlags = 0;
 
     // Indicates whether the key event is a repeat
     bool          m_isRepeat = false;
@@ -2404,12 +2424,23 @@ private:
         m_rawCode = evt.m_rawCode;
         m_rawFlags = evt.m_rawFlags;
         m_uniChar = evt.m_uniChar;
+#ifdef __WXMSW__
+        m_unicodeChar = evt.m_unicodeChar;
+#endif
         m_isRepeat = evt.m_isRepeat;
     }
 
     // Initialize m_x and m_y using the current mouse cursor position if
     // necessary.
     void InitPositionIfNecessary() const;
+
+    // Under the platforms with 32-bit wxChar this is not necessary and wxMSW
+    // is currently the only platform with 16-bit wxChar implementing support
+    // for this.
+#ifdef __WXMSW__
+    // Contains the full Unicode character for character events.
+    wxUniChar m_unicodeChar = WXK_NONE;
+#endif
 
     // If this flag is true, the normal key events should still be generated
     // even if wxEVT_CHAR_HOOK had been handled. By default it is false as

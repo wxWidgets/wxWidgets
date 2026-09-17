@@ -288,8 +288,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
                          msg, wParam, lParam);
 
         // Send the event allowing completion code to do its thing.
-        wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
-        HandleWindowEvent(event);
+        SendAfterCharEvent(wParam, lParam);
 
         // Default window proc was already called, don't call it again.
         processed = true;
