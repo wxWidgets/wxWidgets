@@ -693,8 +693,14 @@ protected:
     }
 
 protected:
+    class wxAuiNotebookManager : public wxAuiManager
+    {
+    protected:
+        virtual bool CanAddPane(wxWindow* window,
+                                const wxAuiPaneInfo& paneInfo) const override;
+    };
 
-    wxAuiManager m_mgr;
+    wxAuiNotebookManager m_mgr;
 
     // Contains all pages in the insertion order.
     wxAuiTabContainer m_tabs;
