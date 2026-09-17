@@ -20,6 +20,15 @@
 #include "wx/stc/stc.h"
 #include "wx/uiaction.h"
 
+#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
+    #include "wx/private/textinput.h"
+#endif
+
+#ifdef __WXOSX_COCOA__
+    #include <objc/message.h>
+    #include <objc/runtime.h>
+#endif
+
 #include "testwindow.h"
 
 #if defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
@@ -162,6 +171,263 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
 }
 
 #endif // !defined(__WXOSX_COCOA__)
+
+#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
+
+class StcTextInputTestCase
+{
+public:
+    StcTextInputTestCase()
+        : m_stc(new wxStyledTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY))
+    {
+    }
+
+    ~StcTextInputTestCase()
+    {
+        delete m_stc;
+    }
+
+protected:
+    wxTextInputClient* GetTextInputClient() const
+    {
+        return wxFindTextInputClient(m_stc);
+    }
+
+    wxStyledTextCtrl* const m_stc;
+};
+
+#ifdef __WXGTK__
+
+TEST_CASE_METHOD(StcTextInputTestCase,
+                 "wxStyledTextCtrl::GTKTextInput",
+                 "[wxStyledTextCtrl][ime]")
+{
+    wxTextInputClient* const client = GetTextInputClient();
+    REQUIRE( client );
+    CHECK( client->IsTextInputEnabled() );
+
+    const wxString hiragana =
+        wxString::FromUTF8("\xe3\x81\xab");
+    const wxString kanji =
+        wxString::FromUTF8("\xe6\x97\xa5\xe6\x9c\xac");
+
+    m_stc->SetText("AB");
+    m_stc->EmptyUndoBuffer();
+
+    m_stc->SetSelection(0, 2);
+    REQUIRE( client->UpdateComposition("", 0) );
+    CHECK( m_stc->GetText() == "AB" );
+    CHECK( m_stc->GetSelectionStart() == 0 );
+    CHECK( m_stc->GetSelectionEnd() == 2 );
+    CHECK_FALSE( client->HasActiveComposition() );
+    CHECK_FALSE( client->CommitComposition(kanji) );
+
+    m_stc->SetEmptySelection(1);
+
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    CHECK( m_stc->GetText() == "A" + hiragana + "B" );
+
+    client->CancelComposition();
+    CHECK( m_stc->GetText() == "AB" );
+
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    REQUIRE( client->CommitComposition(kanji) );
+    CHECK( m_stc->GetText() == "A" + kanji + "B" );
+    CHECK_FALSE( client->CommitComposition(kanji) );
+
+    m_stc->Undo();
+    CHECK( m_stc->GetText() == "AB" );
+
+    m_stc->SetEmptySelection(1);
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    m_stc->SetIMEInteraction(wxSTC_IME_WINDOWED);
+    CHECK( m_stc->GetText() == "AB" );
+    CHECK_FALSE( client->IsTextInputEnabled() );
+    m_stc->SetIMEInteraction(wxSTC_IME_INLINE);
+    CHECK( client->IsTextInputEnabled() );
+
+    // Rolling the pre-edit text back relies on undo collection.
+    m_stc->SetUndoCollection(false);
+    CHECK_FALSE( client->IsTextInputEnabled() );
+    CHECK_FALSE( client->UpdateComposition(hiragana, 1) );
+    CHECK( m_stc->GetText() == "AB" );
+    m_stc->SetUndoCollection(true);
+    CHECK( client->IsTextInputEnabled() );
+
+    // Disabling it mid-composition must roll the pre-edit text back while
+    // its undo actions are still available.
+    m_stc->SetEmptySelection(1);
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    m_stc->SetUndoCollection(false);
+    CHECK_FALSE( client->HasActiveComposition() );
+    CHECK( m_stc->GetText() == "AB" );
+    m_stc->SetUndoCollection(true);
+
+    // Composing in virtual space first realizes it as actual whitespace and
+    // the composition starts after it.
+    m_stc->SetText("A");
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetVirtualSpaceOptions(wxSTC_VS_USERACCESSIBLE);
+    m_stc->SetEmptySelection(1);
+    m_stc->SetSelectionNCaretVirtualSpace(0, 3);
+    m_stc->SetSelectionNAnchorVirtualSpace(0, 3);
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    CHECK( m_stc->GetText() == "A   " + hiragana );
+    REQUIRE( client->CommitComposition(kanji) );
+    CHECK( m_stc->GetText() == "A   " + kanji );
+}
+
+#endif // __WXGTK__
+
+#ifdef __WXOSX_COCOA__
+
+TEST_CASE_METHOD(StcTextInputTestCase,
+                 "wxStyledTextCtrl::CocoaTextInput",
+                 "[wxStyledTextCtrl][ime]")
+{
+    wxTextInputClient* const client = GetTextInputClient();
+    REQUIRE( client );
+    CHECK( client->IsTextInputEnabled() );
+
+    const wxString hiragana =
+        wxString::FromUTF8("\xe3\x81\xab");
+    const wxString kanji =
+        wxString::FromUTF8("\xe6\x97\xa5\xe6\x9c\xac");
+    const wxString original =
+        wxString::FromUTF8("A\xf0\x9f\x98\x80" "B");
+
+    m_stc->SetText(original);
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetSelection(1, 5);
+
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( m_stc->GetText() == "A" + hiragana + "B" );
+    CHECK( client->HasMarkedText() );
+
+    long start, length;
+    REQUIRE( client->GetMarkedTextRange(&start, &length) );
+    CHECK( start == 1 );
+    CHECK( length == 1 );
+    REQUIRE( client->GetSelectedTextRange(&start, &length) );
+    CHECK( start == 2 );
+    CHECK( length == 0 );
+
+    REQUIRE( client->SetMarkedText(
+        kanji, 2, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( m_stc->GetText() == "A" + kanji + "B" );
+    REQUIRE( client->InsertText(
+        kanji, wxTextInputClient::NoPosition, 0) );
+    CHECK_FALSE( client->HasMarkedText() );
+    CHECK( m_stc->GetText() == "A" + kanji + "B" );
+
+    m_stc->Undo();
+    CHECK( m_stc->GetText() == "AB" );
+    m_stc->Undo();
+    CHECK( m_stc->GetText() == original );
+
+    // After choosing a candidate, some input methods send insertNewline: to
+    // accept it instead of calling insertText:. It must commit the marked
+    // text without inserting a newline.
+    m_stc->SetSelection(1, 5);
+    REQUIRE( client->SetMarkedText(
+        kanji, 2, 0, wxTextInputClient::NoPosition, 0) );
+    using SendSelector = void (*)(void*, SEL, SEL);
+    reinterpret_cast<SendSelector>(objc_msgSend)(
+        m_stc->GetHandle(),
+        sel_registerName("doCommandBySelector:"),
+        sel_registerName("insertNewline:"));
+    CHECK_FALSE( client->HasMarkedText() );
+    CHECK( m_stc->GetText() == "A" + kanji + "B" );
+
+    m_stc->Undo();
+    CHECK( m_stc->GetText() == "AB" );
+    m_stc->Undo();
+    CHECK( m_stc->GetText() == original );
+
+    wxString text;
+    long actualStart, actualLength;
+    REQUIRE( client->GetTextInRange(0, 4, &text,
+                                    &actualStart, &actualLength) );
+    CHECK( text == original );
+    CHECK( actualStart == 0 );
+    CHECK( actualLength == 4 );
+
+    REQUIRE( client->InsertText("X", 1, 2) );
+    CHECK( m_stc->GetText() == "AXB" );
+    REQUIRE( client->InsertText(
+        "ignored", wxTextInputClient::InvalidPosition, 0) );
+    CHECK( m_stc->GetText() == "AXB" );
+
+    m_stc->SetEmptySelection(m_stc->GetTextLength());
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( client->HasMarkedText() );
+    m_stc->SetIMEInteraction(wxSTC_IME_WINDOWED);
+    CHECK( m_stc->GetText() == "AXB" );
+    CHECK_FALSE( client->HasMarkedText() );
+    CHECK_FALSE( client->IsTextInputEnabled() );
+    m_stc->SetIMEInteraction(wxSTC_IME_INLINE);
+    CHECK( client->IsTextInputEnabled() );
+
+    // Rolling the pre-edit text back relies on undo collection.
+    m_stc->SetUndoCollection(false);
+    CHECK_FALSE( client->IsTextInputEnabled() );
+    CHECK_FALSE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( m_stc->GetText() == "AXB" );
+    m_stc->SetUndoCollection(true);
+    CHECK( client->IsTextInputEnabled() );
+
+    // Disabling it mid-composition must roll the pre-edit text back while
+    // its undo actions are still available.
+    m_stc->SetEmptySelection(1);
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( client->HasMarkedText() );
+    m_stc->SetUndoCollection(false);
+    CHECK_FALSE( client->HasMarkedText() );
+    CHECK( m_stc->GetText() == "AXB" );
+    m_stc->SetUndoCollection(true);
+
+    // Ranges splitting a surrogate pair are extended to the boundaries of
+    // the character containing them.
+    m_stc->SetText(original);
+    m_stc->EmptyUndoBuffer();
+    REQUIRE( client->GetTextInRange(1, 1, &text,
+                                    &actualStart, &actualLength) );
+    CHECK( text == wxString::FromUTF8("\xf0\x9f\x98\x80") );
+    CHECK( actualStart == 1 );
+    CHECK( actualLength == 2 );
+
+    REQUIRE( client->GetTextInRange(2, 1, &text,
+                                    &actualStart, &actualLength) );
+    CHECK( text == "B" );
+    CHECK( actualStart == 3 );
+    CHECK( actualLength == 1 );
+
+    REQUIRE( client->InsertText("X", 1, 1) );
+    CHECK( m_stc->GetText() == "AXB" );
+
+    // Composing in virtual space first realizes it as actual whitespace and
+    // the composition starts after it.
+    m_stc->SetText("A");
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetVirtualSpaceOptions(wxSTC_VS_USERACCESSIBLE);
+    m_stc->SetEmptySelection(1);
+    m_stc->SetSelectionNCaretVirtualSpace(0, 3);
+    m_stc->SetSelectionNAnchorVirtualSpace(0, 3);
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( m_stc->GetText() == "A   " + hiragana );
+    REQUIRE( client->InsertText(
+        kanji, wxTextInputClient::NoPosition, 0) );
+    CHECK( m_stc->GetText() == "A   " + kanji );
+}
+
+#endif // __WXOSX_COCOA__
+
+#endif // __WXOSX_COCOA__ || __WXGTK__
 
 #endif // defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
 
