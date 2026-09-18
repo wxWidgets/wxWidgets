@@ -819,8 +819,8 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
             return;
     }
 
-    // If the font "Segoe MDL2 Assets" is available, draw the character.
-    // This font is included starting with Windows 10.
+    // If the font "Segoe MDL2 Assets" is available, use it to manually draw
+    // the button. This font is included starting with Windows 10.
     LOGFONT lf = { };
     wcscpy(lf.lfFaceName, L"Segoe MDL2 Assets");
     // Font height to match Windows 7 proportions.
@@ -835,16 +835,40 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
     if ( wcscmp(faceName, L"Segoe MDL2 Assets") == 0 )
     {
-        auto textCol = wxMSWDarkMode::IsActive() ? 0xffffff : 0;
+        // Check for dark mode using wxSystemSettings rather than
+        // wxMSWDarkMode to take into account high contrast modes.
+        const auto isDark = wxSystemSettings::GetAppearance().IsDark();
+        auto textCol = isDark ? 0xffffff : 0;
         RECT r = ConvertToRECT(dc, rect);
-        // The hot and pressed states look similar, handle them the same.
-        if ( flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
+
+        // Handle states. The hot and pressed states look similar, handle them
+        // the same.
+        if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
         {
-            // GetThemeColor() fails, so use the default observed fill colour.
-            AutoHBRUSH hBrush(0x1c2bc4);
-            ::FillRect(hdc, &r, hBrush);
-            textCol = 0xffffff;
+            if ( button == wxTITLEBAR_BUTTON_CLOSE )
+            {
+                // Fill background with the observed red colour.
+                // GetThemeColor() is no use, it fails.
+                AutoHBRUSH hBrush(0x1c2bc4);
+                ::FillRect(hdc, &r, hBrush);
+                textCol = 0xffffff;
+            }
+            else
+            {
+                // Make the background slightly darker for light mode or
+                // slightly lighter for dark mode.
+                wxColor bg = dc.GetBackground().GetColour();
+                if ( bg.IsOk() )
+                {
+                    bg = bg.ChangeLightness(isDark ? 109 : 95);
+                    AutoHBRUSH hBrush(bg.GetPixel());
+                    ::FillRect(hdc, &r, hBrush);
+                }
+            }
+
         }
+
+        // Draw the character.
         ::SetTextColor(hdc, textCol);
         ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
         return;
