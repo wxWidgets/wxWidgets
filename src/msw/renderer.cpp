@@ -783,39 +783,78 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
                                  wxTitleBarButton button,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"WINDOW");
-    if ( !hTheme )
-    {
-        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
-        return;
-    }
-
     int part;
+    wchar_t chr;    // Character in font "Segoe MDL2 Assets"
+    LONG weight = FW_NORMAL;
     switch ( button )
     {
         case wxTITLEBAR_BUTTON_CLOSE:
             part = WP_CLOSEBUTTON;
+            chr = L'\xe8bb';
             break;
 
         case wxTITLEBAR_BUTTON_MAXIMIZE:
             part = WP_MAXBUTTON;
+            chr = L'\xe922';
             break;
 
         case wxTITLEBAR_BUTTON_ICONIZE:
             part = WP_MINBUTTON;
+            chr = L'\xe921';
             break;
 
         case wxTITLEBAR_BUTTON_RESTORE:
             part = WP_RESTOREBUTTON;
+            chr = L'\xe923';
             break;
 
         case wxTITLEBAR_BUTTON_HELP:
             part = WP_HELPBUTTON;
+            chr = L'\xe897';
+            weight = FW_BOLD;
             break;
 
         default:
             wxFAIL_MSG( "unsupported title bar button" );
             return;
+    }
+
+    // If the font "Segoe MDL2 Assets" is available, draw the character.
+    // This font is included starting with Windows 10.
+    LOGFONT lf = { };
+    wcscpy(lf.lfFaceName, L"Segoe MDL2 Assets");
+    // Font height to match Windows 7 proportions.
+    lf.lfHeight = -::MulDiv(rect.GetHeight(), 9, 16);
+    lf.lfWeight = weight;
+    lf.lfCharSet = DEFAULT_CHARSET;
+    AutoHFONT hFont(lf);
+    HDC hdc = GetHdcOf(dc.GetTempHDC());
+    SelectInHDC sel(hdc, hFont);
+    // Check whether the font was found (not substituted).
+    wchar_t faceName[LF_FACESIZE];
+    ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
+    if ( wcscmp(faceName, L"Segoe MDL2 Assets") == 0 )
+    {
+        auto textCol = wxMSWDarkMode::IsActive() ? 0xffffff : 0;
+        RECT r = ConvertToRECT(dc, rect);
+        // The hot and pressed states look similar, handle them the same.
+        if ( flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
+        {
+            // GetThemeColor() fails, so use the default observed fill colour.
+            AutoHBRUSH hBrush(0x1c2bc4);
+            ::FillRect(hdc, &r, hBrush);
+            textCol = 0xffffff;
+        }
+        ::SetTextColor(hdc, textCol);
+        ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+        return;
+    }
+
+    wxUxThemeHandle hTheme(win, L"WINDOW");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
+        return;
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
