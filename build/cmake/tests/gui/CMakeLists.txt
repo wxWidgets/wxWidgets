@@ -25,6 +25,7 @@ set(TEST_GUI_SRC
     graphics/clipper.cpp
     graphics/clippingbox.cpp
     graphics/svgattributes.cpp
+    graphics/svgfiledc.cpp
     graphics/coords.cpp
     graphics/graphbitmap.cpp
     graphics/graphmatrix.cpp

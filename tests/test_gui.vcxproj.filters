@@ -320,6 +320,9 @@
     <ClCompile Include="graphics\svgattributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\svgfiledc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="graphics\coords.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
