@@ -242,7 +242,7 @@ wxGCC_ONLY_WARNING_SUPPRESS(format-security)
 template <typename... Targs>
 int wxPrintf(const wxFormatString& format, Targs... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
@@ -259,7 +259,7 @@ int wxPrintf(const wxFormatString& format, Targs... args)
 template <typename... Targs>
 int wxFprintf(FILE* fp, const wxFormatString& format, Targs... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
@@ -325,7 +325,7 @@ int WXDLLIMPEXP_BASE wxDoSprintfUtf8(wchar_t *str, const char *format, ...);
 template <typename CharType, typename... Targs>
 int wxSprintf(CharType* str, const wxFormatString& format, Targs... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
@@ -354,7 +354,7 @@ int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *for
 template <typename CharType, typename... Targs>
 int wxSnprintf(CharType* str, size_t size, const wxFormatString& format, Targs... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY

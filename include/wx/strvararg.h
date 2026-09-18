@@ -211,6 +211,11 @@ public:
     // format specifiers corresponding to the actually given arguments.
     void Validate(const std::vector<int>& argTypes) const;
 
+    // Preprocess the format string for being used with the given arguments:
+    // currently this just validates it but is more general.
+    template <typename... Targs>
+    void Preprocess(const Targs&... args) const;
+
     // returns the type of format specifier for n-th variadic argument (this is
     // not necessarily n-th format specifier if positional specifiers are used);
     // called by wxArgNormalizer<> specializations to get information about
@@ -466,6 +471,13 @@ wxFORMAT_STRING_SPECIFIER(std::nullptr_t, wxFormatString::Arg_Pointer)
 
 #undef wxFORMAT_STRING_SPECIFIER
 #undef wxDISABLED_FORMAT_STRING_SPECIFIER
+
+
+template<typename... Targs>
+void wxFormatString::Preprocess(const Targs&...) const
+{
+    Validate({wxFormatStringSpecifier<Targs>::value...});
+}
 
 
 // Converts an argument passed to wxPrint etc. into standard form expected,
