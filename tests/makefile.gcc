@@ -145,6 +145,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_clipper.o \
 	$(OBJS)\test_gui_clippingbox.o \
 	$(OBJS)\test_gui_svgattributes.o \
+	$(OBJS)\test_gui_svgfiledc.o \
 	$(OBJS)\test_gui_coords.o \
 	$(OBJS)\test_gui_graphbitmap.o \
 	$(OBJS)\test_gui_graphmatrix.o \
@@ -876,6 +877,9 @@ $(OBJS)\test_gui_clippingbox.o: ./graphics/clippingbox.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_svgattributes.o: ./graphics/svgattributes.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_svgfiledc.o: ./graphics/svgfiledc.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_coords.o: ./graphics/coords.cpp
