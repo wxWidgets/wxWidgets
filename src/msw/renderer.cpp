@@ -783,39 +783,104 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
                                  wxTitleBarButton button,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"WINDOW");
-    if ( !hTheme )
-    {
-        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
-        return;
-    }
-
     int part;
+    wchar_t chr;    // Character in icon font
+    LONG weight = FW_NORMAL;
     switch ( button )
     {
         case wxTITLEBAR_BUTTON_CLOSE:
             part = WP_CLOSEBUTTON;
+            chr = L'\xe8bb';
             break;
 
         case wxTITLEBAR_BUTTON_MAXIMIZE:
             part = WP_MAXBUTTON;
+            chr = L'\xe922';
             break;
 
         case wxTITLEBAR_BUTTON_ICONIZE:
             part = WP_MINBUTTON;
+            chr = L'\xe921';
             break;
 
         case wxTITLEBAR_BUTTON_RESTORE:
             part = WP_RESTOREBUTTON;
+            chr = L'\xe923';
             break;
 
         case wxTITLEBAR_BUTTON_HELP:
             part = WP_HELPBUTTON;
+            chr = L'\xe897';
+            weight = FW_BOLD;
             break;
 
         default:
             wxFAIL_MSG( "unsupported title bar button" );
             return;
+    }
+
+    // If the icon font is available, use it to manually draw the button. Font
+    // "Segoe MDL2 Assets" appeared in Windows 10. Although this font has not
+    // been removed, Microsoft recommends "Segoe Fluent Icons" for Windows 11.
+    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
+    const wchar_t* iconFont = isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons";
+    LOGFONT lf = { };
+    wcscpy(lf.lfFaceName, iconFont);
+    // Font height to match Windows 7 proportions.
+    lf.lfHeight = -::MulDiv(rect.GetHeight(), 9, 16);
+    lf.lfWeight = weight;
+    lf.lfCharSet = DEFAULT_CHARSET;
+    AutoHFONT hFont(lf);
+    HDC hdc = GetHdcOf(dc.GetTempHDC());
+    SelectInHDC sel(hdc, hFont);
+    // Check whether the font was found (not substituted).
+    wchar_t faceName[LF_FACESIZE];
+    ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
+    if ( wcscmp(faceName, iconFont) == 0 )
+    {
+        // Check for dark mode using wxSystemSettings rather than
+        // wxMSWDarkMode to take into account high contrast modes.
+        const auto isDark = wxSystemSettings::GetAppearance().IsDark();
+        auto textCol = isDark ? 0xffffff : 0;
+        RECT r = ConvertToRECT(dc, rect);
+
+        // Handle states. The hot and pressed states look similar, handle them
+        // the same.
+        if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
+        {
+            if ( button == wxTITLEBAR_BUTTON_CLOSE )
+            {
+                // Fill background with the observed red colour.
+                // GetThemeColor() is no use, it fails.
+                AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
+                ::FillRect(hdc, &r, hBrush);
+                textCol = 0xffffff;
+            }
+            else
+            {
+                // Make the background slightly darker for light mode or
+                // slightly lighter for dark mode.
+                wxColor bg = dc.GetBackground().GetColour();
+                if ( bg.IsOk() )
+                {
+                    bg = bg.ChangeLightness(isDark ? 109 : 95);
+                    AutoHBRUSH hBrush(bg.GetPixel());
+                    ::FillRect(hdc, &r, hBrush);
+                }
+            }
+        }
+
+        // Draw the character.
+        ::SetTextColor(hdc, textCol);
+        ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+        return;
+    }
+
+    wxUxThemeHandle hTheme(win, L"WINDOW");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
+        return;
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
