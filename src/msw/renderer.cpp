@@ -784,7 +784,7 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
                                  int flags)
 {
     int part;
-    wchar_t chr;    // Character in font "Segoe MDL2 Assets"
+    wchar_t chr;    // Character in icon font
     LONG weight = FW_NORMAL;
     switch ( button )
     {
@@ -819,10 +819,13 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
             return;
     }
 
-    // If the font "Segoe MDL2 Assets" is available, use it to manually draw
-    // the button. This font is included starting with Windows 10.
+    // If the icon font is available, use it to manually draw the button. Font
+    // "Segoe MDL2 Assets" appeared in Windows 10. Although this font has not
+    // been removed, Microsoft recommends "Segoe Fluent Icons" for Windows 11.
+    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
+    const wchar_t* iconFont = isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons";
     LOGFONT lf = { };
-    wcscpy(lf.lfFaceName, L"Segoe MDL2 Assets");
+    wcscpy(lf.lfFaceName, iconFont);
     // Font height to match Windows 7 proportions.
     lf.lfHeight = -::MulDiv(rect.GetHeight(), 9, 16);
     lf.lfWeight = weight;
@@ -833,7 +836,7 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     // Check whether the font was found (not substituted).
     wchar_t faceName[LF_FACESIZE];
     ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
-    if ( wcscmp(faceName, L"Segoe MDL2 Assets") == 0 )
+    if ( wcscmp(faceName, iconFont) == 0 )
     {
         // Check for dark mode using wxSystemSettings rather than
         // wxMSWDarkMode to take into account high contrast modes.
@@ -849,7 +852,7 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
             {
                 // Fill background with the observed red colour.
                 // GetThemeColor() is no use, it fails.
-                AutoHBRUSH hBrush(0x1c2bc4);
+                AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
                 ::FillRect(hdc, &r, hBrush);
                 textCol = 0xffffff;
             }
@@ -865,7 +868,6 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
                     ::FillRect(hdc, &r, hBrush);
                 }
             }
-
         }
 
         // Draw the character.
