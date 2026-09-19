@@ -84,6 +84,12 @@ public:
 
     void ClickWithoutMoving(wxAuiDockUIPart* part)
     {
+        DragBy(part, wxPoint());
+    }
+
+    // Simulate a complete drag of the given sash by the given offset.
+    void DragBy(wxAuiDockUIPart* part, const wxPoint& offset)
+    {
         const wxPoint pos = part->rect.GetPosition() +
             wxPoint(part->rect.GetWidth()/2, part->rect.GetHeight()/2);
 
@@ -93,13 +99,13 @@ public:
         OnLeftDown(down);
 
         wxMouseEvent motion(wxEVT_MOTION);
-        motion.m_x = pos.x;
-        motion.m_y = pos.y;
+        motion.m_x = pos.x + offset.x;
+        motion.m_y = pos.y + offset.y;
         OnMotion(motion);
 
         wxMouseEvent up(wxEVT_LEFT_UP);
-        up.m_x = pos.x;
-        up.m_y = pos.y;
+        up.m_x = pos.x + offset.x;
+        up.m_y = pos.y + offset.y;
         OnLeftUp(up);
     }
 };
@@ -199,6 +205,39 @@ TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::SizerClick", "[aui]")
     CHECK( second->GetSize() == secondSize );
     CHECK( manager.GetPane(first).dock_proportion == firstProportion );
     CHECK( manager.GetPane(second).dock_proportion == secondProportion );
+}
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::SizerDragReleasesMouse", "[aui]")
+{
+    // Use a dock in which the resizable pane is followed by a fixed one: there
+    // is then no pane after it to take the space from and DoEndResizeAction()
+    // gives up -- but this must still not leave the mouse captured once the
+    // drag is over.
+    wxWindow* const first = new wxPanel(frame.get());
+    wxWindow* const second = new wxPanel(frame.get());
+    wxWindow* const center = new wxPanel(frame.get());
+
+    REQUIRE( manager.AddPane(first, wxAuiPaneInfo().Top().
+        MinSize(200, 100).CaptionVisible(false).PaneBorder(false)) );
+    REQUIRE( manager.AddPane(second, wxAuiPaneInfo().Top().Fixed().
+        MinSize(200, 100).CaptionVisible(false).PaneBorder(false)) );
+    REQUIRE( manager.AddPane(center, wxAuiPaneInfo().CenterPane()) );
+
+    manager.Update();
+
+    wxAuiDockUIPart* const sizer = manager.FindPaneSizer();
+    REQUIRE( sizer );
+
+    manager.DragBy(sizer, wxPoint(20, 0));
+
+    const bool stillCaptured = wxWindow::GetCapture() == frame.get();
+
+    // Don't let the rest of the tests run with the mouse captured even if the
+    // check below fails.
+    if ( stillCaptured )
+        frame->ReleaseMouse();
+
+    CHECK( !stillCaptured );
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
