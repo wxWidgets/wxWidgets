@@ -247,6 +247,7 @@ wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
     }
 
     GdkPixbuf *buf = gdk_pixbuf_animation_iter_get_pixbuf(iter);
+    g_object_ref( buf );
     return wxBitmap( buf ).ConvertToImage();
 }
 

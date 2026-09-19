@@ -12,7 +12,6 @@
 #define _WX_GTK_PRIVATE_ANIMATEH__
 
 #include "wx/private/animate.h"
-#include <glib.h>
 
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;

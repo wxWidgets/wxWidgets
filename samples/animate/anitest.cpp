@@ -186,7 +186,6 @@ MyFrame::MyFrame(wxWindow *parent,
     }
 
     sz->Add(m_animationCtrl, wxSizerFlags().Centre().Border());
-
     SetSizer(sz);
 
     SetSize(FromDIP(wxSize(500, 400)));
