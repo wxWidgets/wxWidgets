@@ -1223,6 +1223,60 @@ wxWindowMSW::AdjustForLayoutDirection(wxCoord x,
     return x;
 }
 
+// ----------------------------------------------------------------------------
+// input method support
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// We use dynamic loading to avoid having to link with imm32.lib.
+class wxIMMFunctions
+{
+public:
+    // Return the global object, IsOk() must be checked before using it.
+    static const wxIMMFunctions& Get()
+    {
+        static const wxIMMFunctions s_imm;
+        return s_imm;
+    }
+
+    bool IsOk() const { return m_ok; }
+
+    typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
+    typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
+    typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
+
+    ImmGetContext_t GetContext = nullptr;
+    ImmGetOpenStatus_t GetOpenStatus = nullptr;
+    ImmReleaseContext_t ReleaseContext = nullptr;
+
+private:
+    wxIMMFunctions()
+    {
+        wxLoadedDLL dllImm32("imm32.dll");
+        if ( !dllImm32.IsLoaded() )
+            return;
+
+#define wxINIT_IMM_FUNC(name) \
+        name = (Imm ## name ## _t)dllImm32.RawGetSymbol("Imm" #name); \
+        if ( !name ) \
+            return
+
+        wxINIT_IMM_FUNC(GetContext);
+        wxINIT_IMM_FUNC(GetOpenStatus);
+        wxINIT_IMM_FUNC(ReleaseContext);
+
+        m_ok = true;
+    }
+
+    bool m_ok = false;
+
+    wxDECLARE_NO_COPY_CLASS(wxIMMFunctions);
+};
+
+} // anonymous namespace
+
 // ---------------------------------------------------------------------------
 // subclassing
 // ---------------------------------------------------------------------------
@@ -7468,42 +7522,23 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 namespace
 {
 
-// We use dynamic loading to avoid having to link with imm32.lib
-// (another positive side effect is that imm32.dll is loaded only if the
-// program actually handles wxEVT_CHAR_HOOK events without skipping them, as
-// it's the only case when we need to use these IME functions).
-typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
-typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
-typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
-
-ImmGetContext_t gs_pfnImmGetContext = nullptr;
-ImmGetOpenStatus_t gs_pfnImmGetOpenStatus = nullptr;
-ImmReleaseContext_t gs_pfnImmReleaseContext = nullptr;
-
 bool wxIsIMEOpen(const wxWindow* win)
 {
     if ( !win )
         return false;
 
-    if ( !gs_pfnImmGetContext )
-    {
-        wxLoadedDLL dllImm32("imm32.dll");
-        if ( !dllImm32.IsLoaded() )
-            return false;
-
-        wxDL_INIT_FUNC(gs_pfn, ImmGetContext, dllImm32);
-        wxDL_INIT_FUNC(gs_pfn, ImmGetOpenStatus, dllImm32);
-        wxDL_INIT_FUNC(gs_pfn, ImmReleaseContext, dllImm32);
-    }
+    const wxIMMFunctions& imm = wxIMMFunctions::Get();
+    if ( !imm.IsOk() )
+        return false;
 
     const HWND hwnd = GetHwndOf(win);
 
-    const HIMC hIMC = gs_pfnImmGetContext(hwnd);
+    const HIMC hIMC = imm.GetContext(hwnd);
     if ( !hIMC )
         return false;
 
-    const BOOL isOpen = gs_pfnImmGetOpenStatus(hIMC);
-    gs_pfnImmReleaseContext(hwnd, hIMC);
+    const BOOL isOpen = imm.GetOpenStatus(hIMC);
+    imm.ReleaseContext(hwnd, hIMC);
 
     return isOpen;
 }
