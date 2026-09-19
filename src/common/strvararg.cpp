@@ -563,6 +563,158 @@ const wxScopedWCharBuffer wxScanfConvertFormatW(const wchar_t *format)
 // wxFormatString
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+// Return the given part of the format string, which uses the same
+// representation as wxString itself, as a wxString.
+inline wxString FormatToString(const wxStringCharType* format, size_t len)
+{
+#if wxUSE_UNICODE_UTF8
+    return wxString::FromUTF8(format, len);
+#else
+    return wxString(format, len);
+#endif
+}
+
+} // anonymous namespace
+
+void
+wxFormatString::PreprocessUniCharArgs(const wxUint32* values,
+                                      size_t numArgs) const
+{
+    // Check whether there is anything to do at all before doing any work: this
+    // is the case for all the arguments inside the BMP, i.e. almost always.
+    bool hasSupplementary = false;
+    for ( size_t numArg = 0; numArg < numArgs; ++numArg )
+    {
+        if ( values[numArg] )
+        {
+            hasSupplementary = true;
+            break;
+        }
+    }
+
+    if ( !hasSupplementary )
+        return;
+
+    const wxString orig = InputAsString();
+    const wxStringCharType* const format = orig.wx_str();
+
+    wxPrintfConvSpecParser<wxStringCharType> parser(format);
+
+    wxString out;
+
+    // The part of the format string which hasn't been copied to "out" yet.
+    const wxStringCharType* rest = format;
+
+    // Note that the specifiers are examined in the order of their appearance
+    // in the format string, which is what allows us to build the result in a
+    // single pass, even if positional arguments are used.
+    for ( unsigned i = 0; i < parser.nspecs; ++i )
+    {
+        const wxPrintfConvSpec<wxStringCharType>& spec = parser.specs[i];
+
+        // The extra entries created for "*" don't correspond to any specifier.
+        if ( !spec.m_pArgPos )
+            continue;
+
+        const size_t n = spec.m_pos;
+        if ( n >= numArgs || !values[n] )
+            continue;
+
+        // "*" uses another argument for the width, which we can't know here,
+        // so we can't pre-format the text and have to leave things as they are
+        // in this (hopefully never happening in practice) case.
+        if ( strchr(spec.m_szFlags, '*') )
+        {
+            wxFAIL_MSG( "\"*\" can't be used with non-BMP wxUniChar arguments" );
+            continue;
+        }
+
+        wxString text;
+        switch ( spec.m_type )
+        {
+            case wxPAT_CHAR:
+            case wxPAT_WCHAR:
+                // Do the padding ourselves: the width is the number of
+                // characters, which is always exactly 1 here, and not the
+                // number of the wchar_t values used to represent them.
+                text = wxUniChar(values[n]);
+                if ( spec.m_nMinWidth > 1 )
+                {
+                    const wxString pad(' ', spec.m_nMinWidth - 1);
+                    if ( spec.m_bAlignLeft )
+                        text += pad;
+                    else
+                        text = pad + text;
+                }
+                break;
+
+            case wxPAT_INT:
+                // Reuse the original specifier, which is exactly what
+                // m_szFlags contains, for the integer conversions.
+                text = wxString::Format(wxString::FromAscii(spec.m_szFlags),
+                                        static_cast<int>(values[n]));
+                break;
+
+            case wxPAT_LONGINT:
+                text = wxString::Format(wxString::FromAscii(spec.m_szFlags),
+                                        static_cast<long>(values[n]));
+                break;
+
+            default:
+                // Anything else doesn't make sense for a character and would
+                // have already resulted in an assert in Validate(), so just
+                // leave this specifier alone: it will use the 0 passed for
+                // this argument, which is wrong, but at least it won't shift
+                // all the subsequent arguments.
+                wxFAIL_MSG( "unexpected format specifier for wxUniChar" );
+                continue;
+        }
+
+        out += FormatToString(rest, spec.m_pArgPos - rest);
+        out += text;
+
+        // The same positional argument may be used by more than one specifier,
+        // so the specifier discarding it must stay positional too, otherwise
+        // the second one would consume the next argument instead. Note that if
+        // positional arguments are used at all, they must be used for all the
+        // specifiers, so this can't result in mixing the two forms.
+        if ( parser.posarg_present )
+        {
+            out += wxString::Format(wxASCII_STR("%%%zu$.0d"), n + 1);
+        }
+        else
+        {
+            out += wxASCII_STR("%.0d");
+        }
+
+        rest = spec.m_pArgEnd + 1;
+    }
+
+    if ( rest == format )
+        return;
+
+    out += FormatToString(rest, wxStrlen(rest));
+
+    // Finally replace the format string used by this object with the new one:
+    // both InputAsChar() and InputAsWChar() check the corresponding buffer
+    // first, so this is all that needs to be done, but we don't know yet which
+    // one of them is going to be used and so have to set both of them.
+    wxFormatString* const self = const_cast<wxFormatString*>(this);
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    const std::wstring outWC = out.ToStdWstring();
+    self->m_wchar = wxCharTypeBuffer<wchar_t>(outWC.c_str(), outWC.length());
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if !wxUSE_UNICODE_WCHAR
+    const std::string outUtf8 = out.utf8_string();
+    self->m_char = wxCharTypeBuffer<char>(outUtf8.c_str(), outUtf8.length());
+#endif // !wxUSE_UNICODE_WCHAR
+}
+
 #if !wxUSE_UNICODE_WCHAR
 const char* wxFormatString::InputAsChar()
 {
