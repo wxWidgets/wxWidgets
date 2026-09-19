@@ -1247,11 +1247,15 @@ public:
     typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
     typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
     typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
+    typedef BOOL (WINAPI *ImmSetCompositionWindow_t)(HIMC, LPCOMPOSITIONFORM);
+    typedef BOOL (WINAPI *ImmSetCandidateWindow_t)(HIMC, LPCANDIDATEFORM);
 
     ImmAssociateContextEx_t AssociateContextEx = nullptr;
     ImmGetContext_t GetContext = nullptr;
     ImmGetOpenStatus_t GetOpenStatus = nullptr;
     ImmReleaseContext_t ReleaseContext = nullptr;
+    ImmSetCompositionWindow_t SetCompositionWindow = nullptr;
+    ImmSetCandidateWindow_t SetCandidateWindow = nullptr;
 
 private:
     wxIMMFunctions()
@@ -1269,6 +1273,8 @@ private:
         wxINIT_IMM_FUNC(GetContext);
         wxINIT_IMM_FUNC(GetOpenStatus);
         wxINIT_IMM_FUNC(ReleaseContext);
+        wxINIT_IMM_FUNC(SetCompositionWindow);
+        wxINIT_IMM_FUNC(SetCandidateWindow);
 
         m_ok = true;
     }
@@ -1304,6 +1310,42 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxIMCContext);
 };
+
+// Position the IME windows at the location returned by the window
+// GetInputMethodCursorRect(), if it returns anything.
+void wxPositionIMEWindows(const wxWindowMSW* win)
+{
+    const wxRect rect = win->GetInputMethodCursorRect();
+    if ( rect.IsEmpty() )
+        return;
+
+    const wxIMMFunctions& imm = wxIMMFunctions::Get();
+    if ( !imm.IsOk() )
+        return;
+
+    wxIMCContext hIMC(GetHwndOf(win));
+    if ( !hIMC )
+        return;
+
+    // Show the composition string at the start of the rectangle...
+    COMPOSITIONFORM cf = {};
+    cf.dwStyle = CFS_POINT;
+    cf.ptCurrentPos.x = rect.x;
+    cf.ptCurrentPos.y = rect.y;
+    imm.SetCompositionWindow(hIMC, &cf);
+
+    // ... and the candidates list below it, without covering it.
+    CANDIDATEFORM cand = {};
+    cand.dwIndex = 0;
+    cand.dwStyle = CFS_EXCLUDE;
+    cand.ptCurrentPos.x = rect.x;
+    cand.ptCurrentPos.y = rect.y + rect.height;
+    cand.rcArea.left = rect.x;
+    cand.rcArea.top = rect.y;
+    cand.rcArea.right = rect.x + rect.width;
+    cand.rcArea.bottom = rect.y + rect.height;
+    imm.SetCandidateWindow(hIMC, &cand);
+}
 
 } // anonymous namespace
 
@@ -3498,6 +3540,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // entry window instead of e.g. closing the dialog for which the
             // IME is used (and losing all the changes in the IME window).
             gs_modalEntryWindowCount++;
+
+            wxPositionIMEWindows(this);
             break;
 
         case WM_IME_ENDCOMPOSITION:

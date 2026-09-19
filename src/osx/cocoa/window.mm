@@ -1085,6 +1085,22 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 {
     wxUnusedVar(aRange);
     wxUnusedVar(actualRange);
+
+    // We don't support ranges, but at least return the position where the
+    // text is being input, if the window provides it.
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( wxWindowMac* const win = impl ? impl->GetWXPeer() : nullptr )
+    {
+        const wxRect rect = win->GetInputMethodCursorRect();
+        if ( !rect.IsEmpty() )
+        {
+            // This function must return the rectangle in screen coordinates.
+            const wxRect rectScreen(win->ClientToScreen(rect.GetPosition()),
+                                    rect.GetSize());
+            return wxToNSRect(nil, rectScreen);
+        }
+    }
+
     return NSMakeRect(0, 0, 0, 0);
 }
 

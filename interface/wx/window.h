@@ -630,6 +630,44 @@ public:
      */
     bool IsInputMethodEnabled() const;
 
+    /**
+        Set the area where the text is being entered.
+
+        Custom windows accepting text input should call this function to let
+        the input method know where to show its windows, e.g. the one with the
+        text being composed or the list of candidates for it. For a custom
+        text control, @a rect would be the rectangle corresponding to the
+        current insertion point position.
+
+        This function must be called whenever this rectangle changes, e.g.
+        when the insertion point moves or the window is scrolled. Note that
+        it is not sufficient to update the rectangle when a key is pressed
+        because some input methods, e.g. Fcitx under Linux, process the keys
+        before the window receives them.
+
+        This function is currently implemented for wxMSW, wxGTK and wxOSX.
+
+        @param rect
+            The rectangle in client coordinates or an empty rectangle to let
+            the input method use its default position.
+
+        @see GetInputMethodCursorRect()
+
+        @since 3.3.4
+     */
+    void UpdateInputMethodCursorRect(const wxRect& rect);
+
+    /**
+        Return the area where the text is being entered.
+
+        This is the rectangle last passed to UpdateInputMethodCursorRect() for
+        this window or an empty rectangle if it hadn't been called for it or
+        if another window has called it since.
+
+        @since 3.3.4
+     */
+    wxRect GetInputMethodCursorRect() const;
+
     ///@}
 
 

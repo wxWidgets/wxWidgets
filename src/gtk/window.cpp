@@ -1476,6 +1476,12 @@ int wxWindowGTK::GTKIMFilterKeypress(GdkEventKey* event) const
     if ( !m_imContext || !IsInputMethodEnabled() )
         return FALSE;
 
+    // Note that the input method may handle the keys before we get them, e.g.
+    // Fcitx does this by default, so updating the cursor location here is not
+    // enough and UpdateInputMethodCursorRect() must be called when it
+    // changes, but still do it here to be sure it's up to date.
+    GTKUpdateIMCursorRect(m_imContext);
+
     return gtk_im_context_filter_keypress(m_imContext, event);
 }
 
@@ -1488,6 +1494,7 @@ void wxWindowGTK::DoEnableInputMethod(bool enable)
 
     if ( enable )
     {
+        GTKUpdateIMCursorRect(m_imContext);
         gtk_im_context_focus_in(m_imContext);
     }
     else
@@ -1495,6 +1502,23 @@ void wxWindowGTK::DoEnableInputMethod(bool enable)
         gtk_im_context_reset(m_imContext);
         gtk_im_context_focus_out(m_imContext);
     }
+}
+
+void wxWindowGTK::DoUpdateInputMethodCursorRect()
+{
+    if ( m_imContext )
+        GTKUpdateIMCursorRect(m_imContext);
+}
+
+// Let the input method know where to show its windows, if we know it.
+void wxWindowGTK::GTKUpdateIMCursorRect(GtkIMContext* imContext) const
+{
+    const wxRect rect = GetInputMethodCursorRect();
+    if ( rect.IsEmpty() )
+        return;
+
+    GdkRectangle area = { rect.x, rect.y, rect.width, rect.height };
+    gtk_im_context_set_cursor_location(imContext, &area);
 }
 
 extern "C" {
@@ -5072,7 +5096,12 @@ bool wxWindowGTK::GTKHandleFocusIn()
                wxDumpWindow(this));
 
     if (m_imContext && IsInputMethodEnabled())
+    {
+        // Set the cursor location before giving focus to the input method,
+        // as it may use it immediately.
+        GTKUpdateIMCursorRect(m_imContext);
         gtk_im_context_focus_in(m_imContext);
+    }
 
     gs_currentFocus = this;
 

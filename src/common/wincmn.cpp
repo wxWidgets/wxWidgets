@@ -462,6 +462,9 @@ wxWindowBase::~wxWindowBase()
     // immediately: don't leave dangling pointers.
     wxPendingDelete.DeleteObject(this);
 
+    if ( ms_imeCursorWindow == this )
+        ms_imeCursorWindow = nullptr;
+
     // Just in case we've loaded a top-level window via LoadNativeDialog but
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject(this);
@@ -1801,6 +1804,32 @@ void wxWindowBase::EnableInputMethod(bool enable)
     m_enableIME = enable;
 
     DoEnableInputMethod(enable);
+}
+
+// Store just a single IME rectangle for all windows instead of adding wxRect
+// member to each window because only one window can have the IME focus at a
+// time and it would be wasteful to increase the size of all windows when we
+// can avoid it.
+const wxWindowBase* wxWindowBase::ms_imeCursorWindow = nullptr;
+wxRect wxWindowBase::ms_imeCursorRect;
+
+wxRect wxWindowBase::GetInputMethodCursorRect() const
+{
+    return ms_imeCursorWindow == this ? ms_imeCursorRect : wxRect();
+}
+
+void wxWindowBase::UpdateInputMethodCursorRect(const wxRect& rect)
+{
+    if ( ms_imeCursorWindow == this && rect == ms_imeCursorRect )
+        return;
+
+    ms_imeCursorWindow = this;
+    ms_imeCursorRect = rect;
+
+    // Don't bother updating the position if the input method is not used, it
+    // will be updated when it is enabled.
+    if ( m_enableIME )
+        DoUpdateInputMethodCursorRect();
 }
 
 #if wxUSE_VALIDATORS

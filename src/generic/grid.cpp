@@ -116,36 +116,6 @@ const int GRID_TEXT_MARGIN = 1;
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
-// input method support
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-// Enable input method for the grid windows only if the current cell can be
-// edited: otherwise typing just shows the IME windows without doing anything.
-void UpdateGridIME(wxGrid* grid)
-{
-    const bool enable = grid->CanEnableCellControl();
-
-    wxWindow* const windows[] =
-    {
-        grid->GetGridWindow(),
-        grid->GetFrozenCornerGridWindow(),
-        grid->GetFrozenRowGridWindow(),
-        grid->GetFrozenColGridWindow(),
-    };
-
-    for ( wxWindow* win : windows )
-    {
-        if ( win )
-            win->EnableInputMethod(enable);
-    }
-}
-
-} // anonymous namespace
-
-// ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
 
@@ -2820,6 +2790,9 @@ void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
 
     m_rowLabelWin->ScrollWindow( 0, dy, rect );
     m_colLabelWin->ScrollWindow( dx, 0, rect );
+
+    // The position of the current cell has changed.
+    UpdateIME();
 }
 
 void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
@@ -2886,10 +2859,35 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
     // Update IME state in case the current cell editability changed while we
     // didn't have focus.
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
-        UpdateGridIME(m_owner);
+        m_owner->UpdateIME();
 
     if ( !m_owner->ProcessWindowEvent( event ) )
         event.Skip();
+}
+
+void wxGridWindow::UpdateIMECursorRect()
+{
+    // We don't have any caret, so put the input method windows over the
+    // current cell.
+    const wxGridCellCoords& coords = m_owner->GetGridCursorCoords();
+    if ( coords == wxGridNoCellCoords )
+    {
+        UpdateInputMethodCursorRect(wxRect());
+        return;
+    }
+
+    // The current cell may be in a different grid window when using frozen
+    // rows or columns, so compute its position in this window coordinates.
+    wxGridWindow* const cellWin = m_owner->CellToGridWindow(coords);
+
+    wxRect rect = m_owner->CellToRect(coords);
+    rect.Offset(-m_owner->GetGridWindowOffset(cellWin));
+    rect.SetPosition(m_owner->CalcGridWindowScrolledPosition(rect.GetPosition(),
+                                                             cellWin));
+    if ( cellWin != this )
+        rect.SetPosition(ScreenToClient(cellWin->ClientToScreen(rect.GetPosition())));
+
+    UpdateInputMethodCursorRect(rect);
 }
 
 // Unlike XToCol() and YToRow() these macros always return a valid column/row,
@@ -6316,6 +6314,36 @@ void wxGrid::UpdateColours()
     }
 }
 
+// ----------------------------------------------------------------------------
+// keyboard handling
+// ----------------------------------------------------------------------------
+
+// Enable input method for the grid windows only if the current cell can be
+// edited: otherwise typing just shows the IME windows without doing anything.
+//
+// Also update the IME windows position, as it depends on the current cell.
+void wxGrid::UpdateIME()
+{
+    const bool enable = CanEnableCellControl();
+
+    wxGridWindow* const allGridWindows[] =
+    {
+        m_gridWin,
+        m_frozenCornerGridWin,
+        m_frozenRowGridWin,
+        m_frozenColGridWin,
+    };
+
+    for ( wxGridWindow* win : allGridWindows )
+    {
+        if ( !win )
+            continue;
+
+        win->EnableInputMethod(enable);
+        win->UpdateIMECursorRect();
+    }
+}
+
 void wxGrid::OnKeyDown( wxKeyEvent& event )
 {
     // propagate the event up and see if it gets processed
@@ -6745,7 +6773,7 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     m_currentCellCoords = coords;
 
-    UpdateGridIME(this);
+    UpdateIME();
 
     RefreshBlock(coords);
 
@@ -7977,7 +8005,7 @@ void wxGrid::EnableEditing( bool edit )
             EnableCellEditControl(edit);
         m_editable = edit;
 
-        UpdateGridIME(this);
+        UpdateIME();
     }
 }
 
@@ -10373,7 +10401,7 @@ void wxGrid::SetReadOnly(int row, int col, bool isReadOnly)
         GetOrCreateCellAttrPtr(row, col)->SetReadOnly(isReadOnly);
 
         if ( wxGridCellCoords(row, col) == m_currentCellCoords )
-            UpdateGridIME(this);
+            UpdateIME();
     }
 }
 
