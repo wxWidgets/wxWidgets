@@ -5239,10 +5239,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
 
         // prevent division by zero
         if (dock_pixels == 0 || total_proportion == 0 || borrow_pane == -1)
-        {
-            m_action = actionNone;
             return false;
-        }
 
         // calculate the new proportion of the pane
         int new_proportion = (new_pixsize*total_proportion)/dock_pixels;
@@ -5395,6 +5392,11 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
 
     m_action = actionNone;
     m_lastMouseMove = wxPoint(); // see comment in OnMotion()
+
+    // The branches above each release the capture for the action they end, so
+    // this is only for an action cancelled while it was still held.
+    if (wxWindow::GetCapture() == m_frame)
+        m_frame->ReleaseMouse();
 }
 
 
