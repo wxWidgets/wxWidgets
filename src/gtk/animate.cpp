@@ -166,9 +166,89 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
     return data_written;
 }
 
-wxImage wxAnimationGTKImpl::GetFrame(unsigned int WXUNUSED(frame)) const
+unsigned int wxAnimationGTKImpl::GetFrameCount() const
 {
-    return wxNullImage;
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter( gdk_pixbuf_animation_get_iter(m_pixbuf, &start_time) );
+
+    int frame_count = 0;
+    int total_delay_ms = 0;
+
+    while (true)
+    {
+        frame_count++;
+
+        int delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+
+        if (gdk_pixbuf_animation_iter_on_currently_loading_frame(iter))
+        {
+            // We are back to the first frame
+            break;
+        }
+    }
+
+    return frame_count;
+}
+
+int wxAnimationGTKImpl::GetDelay(unsigned int frame) const
+{
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter( gdk_pixbuf_animation_get_iter(m_pixbuf, &start_time) );
+
+    int delay = 0;
+    int total_delay_ms = 0;
+
+    for (unsigned int i = 0; i < frame; i++)
+    {
+        delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+    }
+
+    return delay;
+}
+
+wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
+{
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter( gdk_pixbuf_animation_get_iter(m_pixbuf, &start_time) );
+
+    int delay = 0;
+    int total_delay_ms = 0;
+
+    for (unsigned int i = 0; i < frame; i++)
+    {
+        delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+    }
+
+    GdkPixbuf *buf = gdk_pixbuf_animation_iter_get_pixbuf(iter);
+    g_object_ref( buf );
+    return wxBitmap( buf ).ConvertToImage();
 }
 
 wxSize wxAnimationGTKImpl::GetSize() const
