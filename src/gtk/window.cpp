@@ -1473,8 +1473,28 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
 int wxWindowGTK::GTKIMFilterKeypress(GdkEventKey* event) const
 {
-    return m_imContext ? gtk_im_context_filter_keypress(m_imContext, event)
-                       : FALSE;
+    if ( !m_imContext || !IsInputMethodEnabled() )
+        return FALSE;
+
+    return gtk_im_context_filter_keypress(m_imContext, event);
+}
+
+void wxWindowGTK::DoEnableInputMethod(bool enable)
+{
+    // We don't need to do anything if we don't have the focus, as the input
+    // method state will be taken into account when we get it.
+    if ( !m_imContext || gs_currentFocus != this )
+        return;
+
+    if ( enable )
+    {
+        gtk_im_context_focus_in(m_imContext);
+    }
+    else
+    {
+        gtk_im_context_reset(m_imContext);
+        gtk_im_context_focus_out(m_imContext);
+    }
 }
 
 extern "C" {
@@ -5051,7 +5071,7 @@ bool wxWindowGTK::GTKHandleFocusIn()
                "handling focus_in event for %s",
                wxDumpWindow(this));
 
-    if (m_imContext)
+    if (m_imContext && IsInputMethodEnabled())
         gtk_im_context_focus_in(m_imContext);
 
     gs_currentFocus = this;
@@ -5138,7 +5158,7 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
 
     gs_lastFocus = this;
 
-    if (m_imContext)
+    if (m_imContext && IsInputMethodEnabled())
         gtk_im_context_focus_out(m_imContext);
 
     if ( gs_currentFocus != this )

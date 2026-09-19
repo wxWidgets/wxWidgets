@@ -416,6 +416,7 @@ protected:
     virtual void DoSetClientSize(int width, int height) override;
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
     virtual void DoEnable(bool enable) override;
+    virtual void DoEnableInputMethod(bool enable) override;
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;

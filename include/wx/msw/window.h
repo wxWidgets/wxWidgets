@@ -698,6 +698,7 @@ protected:
     virtual void DoReleaseMouse() override;
 
     virtual void DoEnable(bool enable) override;
+    virtual void DoEnableInputMethod(bool enable) override;
 
     virtual void DoFreeze() override;
     virtual void DoThaw() override;

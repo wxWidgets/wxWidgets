@@ -1243,10 +1243,12 @@ public:
 
     bool IsOk() const { return m_ok; }
 
+    typedef BOOL (WINAPI *ImmAssociateContextEx_t)(HWND, HIMC, DWORD);
     typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
     typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
     typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
 
+    ImmAssociateContextEx_t AssociateContextEx = nullptr;
     ImmGetContext_t GetContext = nullptr;
     ImmGetOpenStatus_t GetOpenStatus = nullptr;
     ImmReleaseContext_t ReleaseContext = nullptr;
@@ -1263,6 +1265,7 @@ private:
         if ( !name ) \
             return
 
+        wxINIT_IMM_FUNC(AssociateContextEx);
         wxINIT_IMM_FUNC(GetContext);
         wxINIT_IMM_FUNC(GetOpenStatus);
         wxINIT_IMM_FUNC(ReleaseContext);
@@ -1304,6 +1307,22 @@ private:
 
 } // anonymous namespace
 
+void wxWindowMSW::DoEnableInputMethod(bool enable)
+{
+    // If the window hasn't been created yet, this will be done in
+    // SubclassWin() when it is.
+    if ( !m_hWnd )
+        return;
+
+    const wxIMMFunctions& imm = wxIMMFunctions::Get();
+    if ( !imm.IsOk() )
+        return;
+
+    // Passing null IMC handle disables IME with the default flags and is
+    // completely ignored with IACE_DEFAULT which restores the default IME.
+    imm.AssociateContextEx(GetHwnd(), nullptr, enable ? IACE_DEFAULT : 0);
+}
+
 // ---------------------------------------------------------------------------
 // subclassing
 // ---------------------------------------------------------------------------
@@ -1340,6 +1359,10 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
         // simply check m_oldWndProc
         m_oldWndProc = nullptr;
     }
+
+    // Input method may have been disabled before the window was created.
+    if ( !IsInputMethodEnabled() )
+        DoEnableInputMethod(false);
 
     // we're officially created now, send the event
     wxWindowCreateEvent event((wxWindow *)this);

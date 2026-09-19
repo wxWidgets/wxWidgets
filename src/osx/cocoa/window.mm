@@ -1087,6 +1087,20 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
     wxUnusedVar(actualRange);
     return NSMakeRect(0, 0, 0, 0);
 }
+
+- (NSTextInputContext *)inputContext
+{
+    // Returning nil from here disables the input method for this view.
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( wxWindowMac* const win = impl ? impl->GetWXPeer() : nullptr )
+    {
+        if ( !win->IsInputMethodEnabled() )
+            return nil;
+    }
+
+    return [super inputContext];
+}
+
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
 {
     wxUnusedVar(aPoint);

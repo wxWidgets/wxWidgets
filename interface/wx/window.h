@@ -584,6 +584,56 @@ public:
 
 
     /**
+        @name Input method functions
+
+        Input methods (IMEs) are used for entering text in languages such as
+        Chinese or Japanese, in which a single character is typically composed
+        using several key presses.
+
+        Native controls, such as wxTextCtrl, handle input methods on their own,
+        but custom windows may need to use these functions to indicate whether
+        they accept text input at all and where the IME window should be shown
+        if they do.
+    */
+    ///@{
+
+    /**
+        Enable or disable input method for this window.
+
+        Input method is enabled for all windows by default, but it may be
+        useful to disable it for custom windows which don't accept text input,
+        as otherwise the input method windows may still be shown when the user
+        types in them, even though the text entered in them is ignored.
+
+        Note that input method can be disabled or enabled at any time, e.g. a
+        custom control could enable it only when its current item is
+        editable.
+
+        This function is currently implemented for wxMSW, wxGTK and wxOSX. In
+        wxGTK and wxOSX it doesn't affect native controls which always handle
+        input method themselves.
+
+        @see IsInputMethodEnabled()
+
+        @since 3.3.4
+     */
+    void EnableInputMethod(bool enable = true);
+
+    /**
+        Return @true if input method is enabled for this window.
+
+        Note that this function simply returns @false if EnableInputMethod()
+        was called with @false argument and doesn't check whether the input
+        method is actually used by the window or not.
+
+        @since 3.3.4
+     */
+    bool IsInputMethodEnabled() const;
+
+    ///@}
+
+
+    /**
         @name Child management functions
     */
     ///@{
