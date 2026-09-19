@@ -16,6 +16,8 @@
 
 #include "wx/private/webrequest_curl.h"
 
+#include <algorithm>
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/translation.h"
@@ -1157,6 +1159,19 @@ static int SocketPoller2EventSource(int pollAction)
 
 bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 {
+    // A cleanup deferred by StopPolling() while we were inside
+    // OnWriteWaiting() for this socket is obsolete as soon as curl asks us
+    // to poll the same socket again: the source it meant to remove has
+    // already been replaced below. Running it afterwards -- which happens
+    // when GLib reports G_IO_OUT and G_IO_ERR in the same notification, so
+    // that OnExceptionWaiting() drains m_socketsToCleanUp right after
+    // OnWriteWaiting() re-registered the socket -- removes the *new* source
+    // instead, leaving the socket unwatched: the response then sits unread
+    // in the kernel buffer and the transfer never completes or fails.
+    m_socketsToCleanUp.erase(std::remove(m_socketsToCleanUp.begin(),
+                                         m_socketsToCleanUp.end(), sock),
+                             m_socketsToCleanUp.end());
+
     SocketDataMap::iterator it = m_socketData.find(sock);
     wxEventLoopSourceHandler* srcHandler = nullptr;
 
