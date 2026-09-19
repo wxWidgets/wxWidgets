@@ -1275,6 +1275,33 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxIMMFunctions);
 };
 
+// RAII helper acquiring and releasing the input method context.
+//
+// This should be only used after checking that wxIMMFunctions is valid.
+class wxIMCContext
+{
+public:
+    wxIMCContext(HWND hwnd)
+        : m_hwnd(hwnd),
+          m_hIMC(wxIMMFunctions::Get().GetContext(hwnd))
+    {
+    }
+
+    operator HIMC() const { return m_hIMC; }
+
+    ~wxIMCContext()
+    {
+        if ( m_hIMC )
+            wxIMMFunctions::Get().ReleaseContext(m_hwnd, m_hIMC);
+    }
+
+private:
+    const HWND m_hwnd;
+    const HIMC m_hIMC;
+
+    wxDECLARE_NO_COPY_CLASS(wxIMCContext);
+};
+
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -7531,16 +7558,11 @@ bool wxIsIMEOpen(const wxWindow* win)
     if ( !imm.IsOk() )
         return false;
 
-    const HWND hwnd = GetHwndOf(win);
-
-    const HIMC hIMC = imm.GetContext(hwnd);
+    wxIMCContext hIMC(GetHwndOf(win));
     if ( !hIMC )
         return false;
 
-    const BOOL isOpen = imm.GetOpenStatus(hIMC);
-    imm.ReleaseContext(hwnd, hIMC);
-
-    return isOpen;
+    return imm.GetOpenStatus(hIMC) != 0;
 }
 
 } // anonymous namespace
