@@ -1078,10 +1078,12 @@ static bool wxIsLocaleUtf8()
     const char *lc_ctype = setlocale(LC_CTYPE, nullptr);
     if ( lc_ctype )
     {
+#if wxUSE_UTF8_LOCALE_ONLY
         // check if we're running under the "C" locale: it is 7bit subset
         // of UTF-8, so it can be safely used with the UTF-8 build:
         if ( (strcmp(lc_ctype, "C") == 0 || strcmp(lc_ctype, "POSIX") == 0) )
             return true;
+#endif // wxUSE_UTF8_LOCALE_ONLY
 
         // any other locale can also use UTF-8 encoding if it's explicitly
         // specified
