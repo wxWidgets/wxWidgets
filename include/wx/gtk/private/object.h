@@ -18,13 +18,38 @@ template <typename T>
 class wxGtkObject
 {
 public:
+    wxGtkObject()
+    {
+        m_ptr = NULL;
+    }
+
     explicit wxGtkObject(T *p) : m_ptr(p) { }
     ~wxGtkObject() { if ( m_ptr ) g_object_unref(m_ptr); }
 
+    wxGtkObject& operator=(T *p)
+    {
+        if ( p != m_ptr )
+        {
+            if ( m_ptr )
+                g_object_unref(m_ptr);
+            m_ptr = p;
+        }
+
+        return *this;
+    }
+
+    T* get() const { return m_ptr; }
     operator T *() const { return m_ptr; }
 
+    T** Out()
+    {
+        wxASSERT_MSG( !m_ptr, wxS("Can't reuse the same object.") );
+
+        return &m_ptr;
+    }
+
 private:
-    T * const m_ptr;
+    T* m_ptr;
 
     // copying could be implemented by using g_object_ref() but for now there
     // is no need for it so don't implement it
