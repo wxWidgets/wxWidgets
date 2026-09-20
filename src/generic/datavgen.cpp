@@ -2154,6 +2154,10 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_count = -1;
     m_underMouse = nullptr;
 
+    // Disable IME for this window: it accepts focus but doesn't accept text
+    // input, only in-place text controls created when editing do.
+    EnableInputMethod(false);
+
     UpdateDisplay();
 }
 
