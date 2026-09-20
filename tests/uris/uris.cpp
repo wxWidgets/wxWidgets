@@ -590,7 +590,7 @@ TEST_CASE("URI::Compatibility", "[uri]")
         wxURL urlProblem(pszProblemUrls[i]);
         REQUIRE(urlProblem.GetError() == wxURL_NOERR);
 
-        wxInputStream* is = urlProblem.GetInputStream();
+        std::unique_ptr<wxInputStream> is = urlProblem.GetInputStream();
         REQUIRE(is != nullptr);
 
         wxFile fOut(wxT("test.html"), wxFile::write);
@@ -606,8 +606,6 @@ TEST_CASE("URI::Compatibility", "[uri]")
             buf[n] = 0;
             fOut.Write(buf, n);
         }
-
-        delete is;
     }
 #endif
 }
@@ -681,7 +679,7 @@ private:
             return nullptr;
         }
 
-        wxSocketBase * const socket = m_server.Accept(false);
+        std::unique_ptr<wxSocketBase> const socket{m_server.Accept(false)};
         if ( !socket )
         {
             m_error = "Failed to accept proxy connection";
@@ -690,7 +688,7 @@ private:
 
         socket->SetTimeout(5);
 
-        if ( wxProtocol::ReadLine(socket, m_requestLine) != wxPROTO_NOERR )
+        if ( wxProtocol::ReadLine(socket.get(), m_requestLine) != wxPROTO_NOERR )
         {
             m_error = "Failed to read proxy request line";
         }
@@ -699,7 +697,7 @@ private:
             for ( ;; )
             {
                 wxString line;
-                if ( wxProtocol::ReadLine(socket, line) != wxPROTO_NOERR )
+                if ( wxProtocol::ReadLine(socket.get(), line) != wxPROTO_NOERR )
                 {
                     m_error = "Failed to read proxy request headers";
                     break;
@@ -719,8 +717,6 @@ private:
             "\r\n"
             "OK";
         socket->Write(response, WXSIZEOF(response) - 1);
-
-        delete socket;
 
         return nullptr;
     }
@@ -762,9 +758,8 @@ void CheckURLProxyHost(const wxString& urlString,
         http.SetHeader(wxT("Host"), hostHeader);
     }
 
-    wxInputStream *stream = url.GetInputStream();
+    std::unique_ptr<wxInputStream> stream{url.GetInputStream()};
     const bool streamOk = stream != nullptr;
-    delete stream;
 
     CHECK( thread.Wait() == nullptr );
     REQUIRE( thread.GetError().empty() );
