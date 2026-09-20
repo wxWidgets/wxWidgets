@@ -2620,12 +2620,12 @@ public:
     /**
         Returns the character pressed, within a @c wxEVT_RICHTEXT_CHARACTER event.
     */
-    wxChar GetCharacter() const { return m_char; }
+    wxUniChar GetCharacter() const { return m_char; }
 
     /**
         Sets the character variable.
     */
-    void SetCharacter(wxChar ch) { m_char = ch; }
+    void SetCharacter(wxUniChar ch) { m_char = ch; }
 
     /**
         Returns the container for which the event is relevant.
@@ -2655,7 +2655,7 @@ protected:
     wxRichTextStyleSheet*           m_oldStyleSheet;
     wxRichTextStyleSheet*           m_newStyleSheet;
     wxRichTextRange                 m_range;
-    wxChar                          m_char;
+    wxUniChar                       m_char;
     wxRichTextParagraphLayoutBox*   m_container;
     wxRichTextParagraphLayoutBox*   m_oldContainer;
 
