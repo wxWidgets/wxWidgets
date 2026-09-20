@@ -77,6 +77,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_ipc_test_server.o \
 	$(OBJS)\test_socket.o \
 	$(OBJS)\test_webrequest.o \
+	$(OBJS)\test_webrequest_local.o \
 	$(OBJS)\test_regextest.o \
 	$(OBJS)\test_wxregextest.o \
 	$(OBJS)\test_scopeguardtest.o \
@@ -231,6 +232,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.o \
 	$(OBJS)\test_gui_ipc.o \
 	$(OBJS)\test_gui_ipc_test_server.o \
+	$(OBJS)\test_gui_webrequest_local.o \
 	$(OBJS)\test_gui_tlw.o \
 	$(OBJS)\test_gui_dataview.o \
 	$(OBJS)\test_gui_rowheightcachetest.o \
@@ -699,6 +701,9 @@ $(OBJS)\test_socket.o: ./net/socket.cpp
 $(OBJS)\test_webrequest.o: ./net/webrequest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_webrequest_local.o: ./net/webrequest_local.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_regextest.o: ./regex/regextest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -1135,6 +1140,9 @@ $(OBJS)\test_gui_ipc.o: ./net/ipc.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_ipc_test_server.o: ./net/ipc_test_server.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_webrequest_local.o: ./net/webrequest_local.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_tlw.o: ./persistence/tlw.cpp

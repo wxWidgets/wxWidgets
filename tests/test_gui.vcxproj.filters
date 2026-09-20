@@ -242,6 +242,9 @@
     <ClCompile Include="net\socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\webrequest_local.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="persistence\tlw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -1028,6 +1028,7 @@
     <ClCompile Include="net\ipc.cpp" />
     <ClCompile Include="net\ipc_test_server.cpp" />
     <ClCompile Include="net\socket.cpp" />
+    <ClCompile Include="net\webrequest_local.cpp" />
     <ClCompile Include="persistence\tlw.cpp" />
     <ClCompile Include="persistence\dataview.cpp" />
     <ClCompile Include="sizers\boxsizer.cpp" />

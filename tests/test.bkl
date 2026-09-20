@@ -83,6 +83,7 @@
             net/ipc_test_server.cpp
             net/socket.cpp
             net/webrequest.cpp
+            net/webrequest_local.cpp
             regex/regextest.cpp
             regex/wxregextest.cpp
             scopeguard/scopeguardtest.cpp
@@ -262,12 +263,13 @@
             misc/textwrap.cpp
             <!--
                 These are intentionally duplicated here (they are also part of
-                the non-GUI test) as sockets and IPC behave differently in
-                console and GUI applications.
+                the non-GUI test) as sockets, IPC and web requests behave
+                differently in console and GUI applications.
              -->
             net/socket.cpp
             net/ipc.cpp
             net/ipc_test_server.cpp
+            net/webrequest_local.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
             rowheightcache/rowheightcachetest.cpp
