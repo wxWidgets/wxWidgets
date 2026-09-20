@@ -1048,13 +1048,11 @@ using SocketPollerBase = WinSock1SocketPoller;
 
 // SocketPollerSourceHandler - a source handler used by the SocketPoller class.
 
-class SourceSocketPoller;
-
 class SocketPollerSourceHandler: public wxEventLoopSourceHandler
 {
 public:
-    SocketPollerSourceHandler(curl_socket_t sock, SourceSocketPoller* poller)
-        : m_socket(sock), m_poller(poller) {}
+    SocketPollerSourceHandler(curl_socket_t sock, wxEvtHandler* hndlr)
+        : m_socket(sock), m_handler(hndlr) {}
 
     void OnReadWaiting() override;
     void OnWriteWaiting() override;
@@ -1063,7 +1061,7 @@ public:
 private:
     void SendEvent(int);
     curl_socket_t m_socket;
-    SourceSocketPoller* const m_poller;
+    wxEvtHandler* const m_handler;
 };
 
 void SocketPollerSourceHandler::OnReadWaiting()
@@ -1081,6 +1079,14 @@ void SocketPollerSourceHandler::OnExceptionWaiting()
     SendEvent(PollResult::HAS_ERROR);
 }
 
+void SocketPollerSourceHandler::SendEvent(int result)
+{
+    wxThreadEvent event(wxEVT_SOCKET_POLLER_RESULT);
+    event.SetPayload<curl_socket_t>(m_socket);
+    event.SetInt(result);
+    m_handler->ProcessEvent(event);
+}
+
 // SourceSocketPoller - a SocketPollerImpl based on event loop sources.
 
 class SourceSocketPoller
@@ -1092,8 +1098,6 @@ public:
     void StopPolling(curl_socket_t);
     void ResumePolling(curl_socket_t);
 
-    void SendEvent(curl_socket_t sock, int result);
-
 private:
     using SocketDataMap = std::unordered_map<curl_socket_t, wxEventLoopSource*>;
 
@@ -1101,20 +1105,7 @@ private:
 
     SocketDataMap m_socketData;
     wxEvtHandler* m_handler;
-
-    // The socket for which we're currently processing a write IO notification.
-    curl_socket_t m_activeWriteSocket = 0;
-
-    // The sockets that we couldn't clean up yet but should do if/when we get
-    // an error notification for them.
-    std::vector<curl_socket_t> m_socketsToCleanUp;
 };
-
-// This function must be implemented after full SourceSocketPoller declaration.
-void SocketPollerSourceHandler::SendEvent(int result)
-{
-    m_poller->SendEvent(m_socket, result);
-}
 
 SourceSocketPoller::SourceSocketPoller(wxEvtHandler* hndlr)
 {
@@ -1175,7 +1166,7 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     {
         wxLogTrace(TRACE_CURL, "Creating new socket poller for %d", sock);
 
-        srcHandler = new SocketPollerSourceHandler(sock, this);
+        srcHandler = new SocketPollerSourceHandler(sock, m_handler);
     }
 
     // Get a new source object for these polling checks.
@@ -1207,17 +1198,9 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 
 void SourceSocketPoller::StopPolling(curl_socket_t sock)
 {
-    if ( sock == m_activeWriteSocket )
-    {
-        // We can't clean up the socket while we're inside OnWriteWaiting() for
-        // it because it could be followed by OnExceptionWaiting() and we'd
-        // crash if we deleted it already.
-        wxLogTrace(TRACE_CURL, "Delaying cleanup of socket poller for %d", sock);
-
-        m_socketsToCleanUp.push_back(sock);
-        return;
-    }
-
+    // Note that it is safe to do this even if we're called from inside one of
+    // the handler methods for this socket: the event loop source takes care of
+    // not using the handler we delete here any more, see wxEventLoopSource.
     SocketDataMap::iterator it = m_socketData.find(sock);
 
     if ( it != m_socketData.end() )
@@ -1231,35 +1214,6 @@ void SourceSocketPoller::StopPolling(curl_socket_t sock)
 
 void SourceSocketPoller::ResumePolling(curl_socket_t WXUNUSED(sock))
 {
-}
-
-void SourceSocketPoller::SendEvent(curl_socket_t sock, int result)
-{
-    if ( result == PollResult::READY_FOR_WRITE )
-    {
-        // Prevent the handler from this socket from being deleted in case we
-        // get a HAS_ERROR event for it immediately after this one.
-        m_activeWriteSocket = sock;
-    }
-
-    wxThreadEvent event(wxEVT_SOCKET_POLLER_RESULT);
-    event.SetPayload<curl_socket_t>(sock);
-    event.SetInt(result);
-    m_handler->ProcessEvent(event);
-
-    m_activeWriteSocket = 0;
-
-    if ( result == PollResult::HAS_ERROR )
-    {
-        // Check if we have any sockets to clean up and do it now, it should be
-        // safe.
-        for ( auto sck : m_socketsToCleanUp )
-        {
-            StopPolling(sck);
-        }
-
-        m_socketsToCleanUp.clear();
-    }
 }
 
 void SourceSocketPoller::CleanUpSocketSource(wxEventLoopSource* source)
