@@ -21,6 +21,7 @@
 #include "wx/buffer.h"
 
 #include "bstream.h"
+#include "testfile.h"
 
 using std::string;
 
@@ -277,9 +278,16 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
     size_t fail_pos;
     char last_value = 0;
     bool bWasEOF;
+    TempDir tempDir(wxT("zlibtest"));
+    REQUIRE(tempDir.IsOk());
+
+    // Catch-discovered stream tests may run in parallel, so avoid sharing
+    // this scratch file through the process working directory.
+    const wxString filename =
+        wxFileName(tempDir.GetName(), FILENAME_GZ).GetFullPath();
 
     {   // Part one: Create a compressed file.
-        wxFileOutputStream fstream_out(FILENAME_GZ);
+        wxFileOutputStream fstream_out(filename);
         CHECK(fstream_out.IsOk());
         {
             wxZlibOutputStream zstream_out(fstream_out, compress_level, output_flag);
@@ -300,7 +308,7 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
 
     {   // Part two: Verify that the compressed data when uncompressed
         //           matches the original data.
-        wxFileInputStream fstream_in(FILENAME_GZ);
+        wxFileInputStream fstream_in(filename);
         CHECK(fstream_in.IsOk());
         wxZlibInputStream zstream_in(fstream_in, input_flag);
         INFO("Could not create the input stream");
@@ -323,7 +331,7 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
     }
 
     // Remove the temp file...
-    ::wxRemoveFile(FILENAME_GZ);
+    ::wxRemoveFile(filename);
 
     // Check state of the verify action.
     if (fail_pos != DATABUFFER_SIZE || !bWasEOF)
