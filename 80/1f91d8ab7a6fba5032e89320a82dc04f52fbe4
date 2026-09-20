@@ -1,0 +1,1 @@
+wxMSW: Fix wxString::Format() with wxUniChar (#27023).
