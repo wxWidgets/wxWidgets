@@ -3430,16 +3430,18 @@ WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1, (wxFONTENCODING_ISO8859_1));
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = wxGet_wxConvLibcPtr();
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = wxGet_wxConvLocalPtr();
 
-#ifdef __DARWIN__
-// It is important to use this conversion object under Darwin as it ensures
-// that Unicode strings are (re)composed correctly even though xnu kernel uses
-// decomposed form internally (at least for the file names).
-static wxMBConvD_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
-#endif
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = nullptr;
 
-WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =
+wxMBConv* wxGetFileNameConvPtr()
+{
 #ifdef __DARWIN__
-                                    &wxConvMacUTF8DObj;
+    // It is important to use this conversion object under Darwin as it ensures
+    // that Unicode strings are (re)composed correctly even though xnu kernel uses
+    // decomposed form internally (at least for the file names).
+    static wxMBConvD_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
+
+    return &wxConvMacUTF8DObj;
 #else // !__DARWIN__
-                                    wxGet_wxConvWhateverWorksPtr();
+    return wxGet_wxConvWhateverWorksPtr();
 #endif // __DARWIN__/!__DARWIN__
+}
