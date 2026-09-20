@@ -247,7 +247,7 @@ public:
     TranslationsTestCatalogs()
         : m_prefix("wxintltest-")
     {
-        REQUIRE(m_prefix.IsOk());
+        m_prefix.RequireOk();
 
         CopyCatalog("en_GB");
         CopyCatalog("fr");

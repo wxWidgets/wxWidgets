@@ -17,7 +17,9 @@
 
 #include "wx/ffile.h"
 #include "wx/file.h"
+#include "wx/filefn.h"
 #include "wx/filename.h"
+#include "wx/scopeguard.h"
 
 #include "testfile.h"
 
@@ -100,6 +102,17 @@ static void CheckFileContents(const wxString& name, const wxString& data)
     wxString s;
     CHECK( f.ReadAll(&s) );
     CHECK( s == data );
+}
+
+static bool RemoveTempPath(const wxString& path)
+{
+    if ( wxDirExists(path) )
+        return wxFileName::Rmdir(path, wxPATH_RMDIR_RECURSIVE);
+
+    if ( wxFileExists(path) )
+        return wxRemoveFile(path);
+
+    return true;
 }
 
 // wxTempFile and wxTempFFile have exactly the same API, so run the same test
@@ -228,6 +241,88 @@ TEMPLATE_TEST_CASE("wxTempFile::Attributes", "[file][temp]", wxTempFile)
     REQUIRE( wxStat(name, &st) == 0 );
     CHECK( (st.st_mode & 0777) == 0600 );
 #endif // __WINDOWS__/!__WINDOWS__
+}
+
+TEST_CASE("TempDir", "[file][temp]")
+{
+    SECTION("Create")
+    {
+        TempDir dir("wxtest-tempdir");
+        dir.RequireOk();
+        CHECK( wxDirExists(dir.GetName()) );
+        CHECK( dir.GetError().empty() );
+    }
+
+    SECTION("RetryExistingFile")
+    {
+        const wxString prefix = "wxtest-tempdir-file";
+        const unsigned long nameId = TempDir::ReserveNameId();
+        const wxString firstPath = TempDir::GetCandidateName(prefix, nameId, 0);
+        const wxString secondPath =
+            TempDir::GetCandidateName(prefix, nameId, 1);
+
+        REQUIRE( RemoveTempPath(firstPath) );
+        REQUIRE( RemoveTempPath(secondPath) );
+        wxON_BLOCK_EXIT1(RemoveTempPath, firstPath);
+        wxON_BLOCK_EXIT1(RemoveTempPath, secondPath);
+
+        {
+            wxFile file(firstPath, wxFile::write);
+            REQUIRE( file.IsOpened() );
+            REQUIRE( file.Close() );
+        }
+
+        TempDir dir(prefix, nameId);
+        dir.RequireOk();
+        CHECK( dir.GetName() == secondPath );
+        CHECK( wxFileExists(firstPath) );
+        CHECK( wxDirExists(secondPath) );
+        CHECK( dir.GetError().empty() );
+    }
+
+    SECTION("RetryExistingDir")
+    {
+        const wxString prefix = "wxtest-tempdir-dir";
+        const unsigned long nameId = TempDir::ReserveNameId();
+        const wxString firstPath = TempDir::GetCandidateName(prefix, nameId, 0);
+        const wxString secondPath =
+            TempDir::GetCandidateName(prefix, nameId, 1);
+
+        REQUIRE( RemoveTempPath(firstPath) );
+        REQUIRE( RemoveTempPath(secondPath) );
+        wxON_BLOCK_EXIT1(RemoveTempPath, firstPath);
+        wxON_BLOCK_EXIT1(RemoveTempPath, secondPath);
+
+        REQUIRE( wxMkdir(firstPath) );
+
+        TempDir dir(prefix, nameId);
+        dir.RequireOk();
+        CHECK( dir.GetName() == secondPath );
+        CHECK( wxDirExists(firstPath) );
+        CHECK( wxDirExists(secondPath) );
+        CHECK( dir.GetError().empty() );
+    }
+
+    SECTION("BadParent")
+    {
+        TempDir parent("wxtest-tempdir-parent");
+        parent.RequireOk();
+
+        const wxString parentFile =
+            wxFileName(parent.GetName(), "file").GetFullPath();
+
+        {
+            wxFile file(parentFile, wxFile::write);
+            REQUIRE( file.IsOpened() );
+            REQUIRE( file.Close() );
+        }
+
+        TempDir dir(wxFileName(parentFile, "child").GetFullPath());
+        CHECK_FALSE( dir.IsOk() );
+        CHECK( dir.GetName().empty() );
+        CHECK( dir.GetError().Contains("wxMkdir failed for") );
+        CHECK( dir.GetError().Contains(parentFile) );
+    }
 }
 
 #ifdef __LINUX__
