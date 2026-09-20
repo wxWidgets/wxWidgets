@@ -688,6 +688,13 @@ public:
 
        If the key is F2 (special), editing will always start and this
        method will not be called at all (but StartingKey() will)
+
+       Note that this function must not change the editor contents: this should
+       be only done in StartingKey() which will be called later.
+
+       Also note that this function is called with a special synthetic event
+       for the letter "A" to check if the editor accepts text input and whether
+       the IME should be enabled for it.
     */
     virtual bool IsAcceptedKey(wxKeyEvent& event);
 

@@ -6324,7 +6324,21 @@ void wxGrid::UpdateColours()
 // Also update the IME windows position, as it depends on the current cell.
 void wxGrid::UpdateIME()
 {
-    const bool enable = CanEnableCellControl();
+    bool enable = CanEnableCellControl();
+
+    if ( enable )
+    {
+        // Even if the current cell can be edited, its editor may not accept
+        // any text at all, as is the case for the boolean editor, for
+        // example, and showing IME for it would be useless. Check for this by
+        // asking the editor whether it would start editing if a letter were
+        // typed.
+        wxKeyEvent event(wxEVT_CHAR);
+        event.m_keyCode = 'a';
+        event.m_uniChar = 'a';
+
+        enable = GetCurrentCellEditorPtr()->IsAcceptedKey(event);
+    }
 
     wxGridWindow* const allGridWindows[] =
     {
