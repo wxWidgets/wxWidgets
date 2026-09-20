@@ -44,8 +44,6 @@ public:
     wxStandardPathsDefault() { }
 };
 
-static wxStandardPathsDefault gs_stdPaths;
-
 } // anonymous namespace
 
 // ============================================================================
@@ -79,7 +77,9 @@ wxString wxStandardPathsBase::GetExecutablePath() const
 
 wxStandardPaths& wxAppTraitsBase::GetStandardPaths()
 {
-    return gs_stdPaths;
+    static wxStandardPathsDefault s_stdPaths;
+
+    return s_stdPaths;
 }
 
 wxStandardPathsBase::wxStandardPathsBase()

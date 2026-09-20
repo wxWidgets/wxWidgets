@@ -627,12 +627,23 @@ WX_DECLARE_GLOBAL_CONV(wxWhateverWorksConv, wxConvWhateverWorks)
 //
 // this is used by all file functions, can be changed by the application
 //
+// Don't access this variable directly, use wxGetFileNameConv() to ensure that
+// it is initialized before use.
+//
 // by default UTF-8 under Mac OS X and wxConvLibc elsewhere (but it's not used
 // under Windows normally)
 extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName;
 
+extern WXDLLIMPEXP_BASE wxMBConv* wxGetFileNameConvPtr();
+inline wxMBConv& wxGetFileNameConv()
+{
+    if ( !wxConvFileName )
+        wxConvFileName = wxGetFileNameConvPtr();
+    return *wxConvFileName;
+}
+
 // backwards compatible define
-#define wxConvFile (*wxConvFileName)
+#define wxConvFile (wxGetFileNameConv())
 
 // the current conversion object, may be set to any conversion, is used by
 // default in a couple of places inside wx (initially same as wxConvLibc)
@@ -668,11 +679,11 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 
 // filenames are multibyte on Unix and widechar on Windows
 #if wxMBFILES
-    #define wxFNCONV(name) wxConvFileName->cWX2MB(name)
+    #define wxFNCONV(name) wxGetFileNameConv().cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST
 #else
 #if defined(__WXOSX__) && wxMBFILES
-    #define wxFNCONV(name) wxConvFileName->cWC2MB( wxConvLocal.cWX2WC(name) )
+    #define wxFNCONV(name) wxGetFileNameConv().cWC2MB( wxConvLocal.cWX2WC(name) )
 #else
     #define wxFNCONV(name) name
 #endif
