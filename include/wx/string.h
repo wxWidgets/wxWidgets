@@ -2508,7 +2508,7 @@ public:
   template <typename... Targs>
   int Printf(const wxFormatString& format, Targs... args)
   {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
