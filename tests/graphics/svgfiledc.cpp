@@ -36,19 +36,18 @@ TEST_CASE("wxSVGFileDC::Ctor", "[svg][dcsvg]")
     CHECK( size.GetWidth() == 320 );
     CHECK( size.GetHeight() == 240 );
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.StartsWith("<?xml") );
-    CHECK( svg.Contains("<svg ") );
-    CHECK( svg.Contains("viewBox=\"0 0 320 240\"") );
-    CHECK( svg.Contains("</svg>") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::StartsWith("<?xml") );
+    CHECK_THAT( svg, Catch::Contains("<svg") );
+    CHECK_THAT( svg, Catch::Contains("viewBox=\"0 0 320 240\"") );
+    CHECK_THAT( svg, Catch::Contains("</svg>") );
 }
 
 TEST_CASE("wxSVGFileDC::Title", "[svg][dcsvg]")
 {
     wxSVGFileDC dc(wxString{}, 100, 100, wxSVG_DEFAULT_DPI, "My Drawing");
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<title>My Drawing</title>") );
+    CHECK_THAT( dc.GetSVGDocument().utf8_string(), Catch::Contains("<title>My Drawing</title>") );
 }
 
 TEST_CASE("wxSVGFileDC::DrawLine", "[svg][dcsvg]")
@@ -58,10 +57,10 @@ TEST_CASE("wxSVGFileDC::DrawLine", "[svg][dcsvg]")
 
     dc.DrawLine(10, 20, 110, 20);
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<path d=\"M10 20 L110 20\"") );
-    CHECK( svg.Contains("stroke=\"#FF0000\"") );
-    CHECK( svg.Contains("stroke-width=\"2\"") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<path d=\"M10 20 L110 20\"") );
+    CHECK_THAT( svg, Catch::Contains("stroke=\"#FF0000\"") );
+    CHECK_THAT( svg, Catch::Contains("stroke-width=\"2\"") );
 }
 
 TEST_CASE("wxSVGFileDC::DrawRectangle", "[svg][dcsvg]")
@@ -72,10 +71,10 @@ TEST_CASE("wxSVGFileDC::DrawRectangle", "[svg][dcsvg]")
 
     dc.DrawRectangle(10, 10, 50, 30);
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<rect x=\"10\" y=\"10\" width=\"50\" height=\"30\"") );
-    CHECK( svg.Contains("fill=\"#0000FF\"") );
-    CHECK( svg.Contains("stroke=\"#FF0000\"") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<rect x=\"10\" y=\"10\" width=\"50\" height=\"30\"") );
+    CHECK_THAT( svg, Catch::Contains("fill=\"#0000FF\"") );
+    CHECK_THAT( svg, Catch::Contains("stroke=\"#FF0000\"") );
 }
 
 TEST_CASE("wxSVGFileDC::DrawEllipse", "[svg][dcsvg]")
@@ -85,9 +84,9 @@ TEST_CASE("wxSVGFileDC::DrawEllipse", "[svg][dcsvg]")
 
     dc.DrawEllipse(0, 0, 40, 20);
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<ellipse cx=\"20.00\" cy=\"10.00\" rx=\"20.00\" ry=\"10.00\"") );
-    CHECK( svg.Contains("fill=\"#00FF00\"") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<ellipse cx=\"20.00\" cy=\"10.00\" rx=\"20.00\" ry=\"10.00\"") );
+    CHECK_THAT( svg, Catch::Contains("fill=\"#00FF00\"") );
 }
 
 TEST_CASE("wxSVGFileDC::DrawPolygon", "[svg][dcsvg]")
@@ -98,10 +97,10 @@ TEST_CASE("wxSVGFileDC::DrawPolygon", "[svg][dcsvg]")
     const wxPoint points[3] = { wxPoint{0, 0}, wxPoint{10, 0}, wxPoint{5, 10} };
     dc.DrawPolygon(3, points);
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<polygon points=\"0 0 10 0 5 10 \"") );
-    CHECK( svg.Contains("fill=\"#00FFFF\"") );
-    CHECK( svg.Contains("fill-rule=\"evenodd\"") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<polygon points=\"0 0 10 0 5 10 \"") );
+    CHECK_THAT( svg, Catch::Contains("fill=\"#00FFFF\"") );
+    CHECK_THAT( svg, Catch::Contains("fill-rule=\"evenodd\"") );
 }
 
 TEST_CASE("wxSVGFileDC::DrawText", "[svg][dcsvg]")
@@ -110,9 +109,9 @@ TEST_CASE("wxSVGFileDC::DrawText", "[svg][dcsvg]")
 
     dc.DrawText("Hello SVG", 5, 5);
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<text ") );
-    CHECK( svg.Contains(">Hello SVG</text>") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<text ") );
+    CHECK_THAT( svg, Catch::Contains(">Hello SVG</text>") );
 }
 
 TEST_CASE("wxSVGFileDC::DrawRotatedText", "[svg][dcsvg]")
@@ -121,9 +120,9 @@ TEST_CASE("wxSVGFileDC::DrawRotatedText", "[svg][dcsvg]")
 
     dc.DrawRotatedText("Angled", 5, 5, 45.0);
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains(">Angled</text>") );
-    CHECK( svg.Contains("rotate(-45.00") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains(">Angled</text>") );
+    CHECK_THAT( svg, Catch::Contains("rotate(-45.00") );
 }
 
 TEST_CASE("wxSVGFileDC::AccessibleGroup", "[svg][dcsvg]")
@@ -138,11 +137,11 @@ TEST_CASE("wxSVGFileDC::AccessibleGroup", "[svg][dcsvg]")
     dc.DrawRectangle(0, 0, 10, 10);
     dc.EndAccessibleGroup();
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("role=\"img\"") );
-    CHECK( svg.Contains("aria-label=\"A red square\"") );
-    CHECK( svg.Contains("<title>Square</title>") );
-    CHECK( svg.Contains("<desc>A simple red square</desc>") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("role=\"img\"") );
+    CHECK_THAT( svg, Catch::Contains("aria-label=\"A red square\"") );
+    CHECK_THAT( svg, Catch::Contains("<title>Square</title>") );
+    CHECK_THAT( svg, Catch::Contains("<desc>A simple red square</desc>") );
 }
 
 TEST_CASE("wxSVGFileDC::Layer", "[svg][dcsvg]")
@@ -154,9 +153,9 @@ TEST_CASE("wxSVGFileDC::Layer", "[svg][dcsvg]")
     dc.DrawRectangle(0, 0, 10, 10);
     dc.EndLayer();
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<g opacity=\"0.50\">") );
-    CHECK( svg.Contains("fill=\"#0000FF\"") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<g opacity=\"0.50\">") );
+    CHECK_THAT( svg, Catch::Contains("fill=\"#0000FF\"") );
 }
 
 TEST_CASE("wxSVGFileDC::Clipping", "[svg][dcsvg]")
@@ -168,10 +167,10 @@ TEST_CASE("wxSVGFileDC::Clipping", "[svg][dcsvg]")
     dc.DrawRectangle(0, 0, 100, 100);
     dc.DestroyClippingRegion();
 
-    const wxString svg = dc.GetSVGDocument();
-    CHECK( svg.Contains("<clipPath id=\"clip") );
-    CHECK( svg.Contains("clip-path=\"url(#clip") );
-    CHECK( svg.Contains("x=\"10\" y=\"10\" width=\"50\" height=\"50\"") );
+    const std::string svg = dc.GetSVGDocument().utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<clipPath id=\"clip") );
+    CHECK_THAT( svg, Catch::Contains("clip-path=\"url(#clip") );
+    CHECK_THAT( svg, Catch::Contains("x=\"10\" y=\"10\" width=\"50\" height=\"50\"") );
 }
 
 TEST_CASE("wxSVGFileDC::Save", "[svg][dcsvg]")
@@ -188,9 +187,11 @@ TEST_CASE("wxSVGFileDC::Save", "[svg][dcsvg]")
     }
 
     wxString content;
-    REQUIRE(wxFFile{ filename, "r" }.ReadAll(&content));
-    CHECK( content.Contains("<svg ") );
-    CHECK( content.Contains("fill=\"#FFFF00\"") );
+    REQUIRE( wxFFile{ filename, "r" }.ReadAll(&content) );
+
+    const std::string svg = content.utf8_string();
+    CHECK_THAT( svg, Catch::Contains("<svg") );
+    CHECK_THAT( svg, Catch::Contains("fill=\"#FFFF00\"") );
 }
 
 #endif // wxUSE_SVG
