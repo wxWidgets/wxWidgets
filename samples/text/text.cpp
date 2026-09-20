@@ -752,7 +752,7 @@ void MyTextCtrl::LogKeyEvent(const wxString& name, wxKeyEvent& event) const
         }
     }
 
-    key += wxString::Format(" (Unicode: %#04x)", event.GetUnicodeKey());
+    key += wxString::Format(" (Unicode: %#04x)", event.GetUnicodeChar());
 
     wxLogMessage( "%s event: %s (flags = %c%c%c%c)",
                   name,

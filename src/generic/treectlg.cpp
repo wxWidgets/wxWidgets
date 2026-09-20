@@ -569,7 +569,7 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
         default:
             if ( !m_aboutToFinish )
             {
-                wxChar ch = event.GetUnicodeKey();
+                const wxUniChar ch = event.GetUnicodeChar();
                 if ( ch != WXK_NONE )
                 {
                     wxString value = GetValue();

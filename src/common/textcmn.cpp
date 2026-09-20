@@ -1120,7 +1120,7 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
     bool handled = false;
     // we have a native implementation for Win32 and so don't need this one
 #ifndef __WIN32__
-    wxChar ch = 0;
+    wxUniChar ch = 0;
     int keycode = event.GetKeyCode();
 
     long from, to;
@@ -1218,9 +1218,9 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
             break;
 
         default:
-            if ( event.GetUnicodeKey() )
+            if ( event.GetUnicodeChar() )
             {
-                ch = event.GetUnicodeKey();
+                ch = event.GetUnicodeChar();
             }
             else if ( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
             {

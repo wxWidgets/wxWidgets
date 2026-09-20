@@ -1787,8 +1787,8 @@ void MyFrame::OnSorted( wxDataViewEvent &event )
 void MyFrame::OnDataViewChar(wxKeyEvent& event)
 {
     wxString key;
-    if ( event.GetUnicodeKey() != WXK_NONE )
-        key.Printf("\"%c\"", event.GetUnicodeKey());
+    if ( event.GetUnicodeChar() != WXK_NONE )
+        key.Printf("\"%c\"", event.GetUnicodeChar());
     else if ( event.GetKeyCode() != WXK_NONE )
         key.Printf("wxKeyCode(%d)", event.GetKeyCode());
     else
