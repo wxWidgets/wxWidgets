@@ -75,6 +75,15 @@ public:
     void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
     wxString GetKeyTip() const { return m_keyTip; }
 
+    // Keyboard navigation
+    bool HasFocusableItems() const override;
+    bool FocusFirstItem() override;
+    bool FocusLastItem() override;
+    bool FocusNextItem(bool forward) override;
+    bool FocusItemInDirection(wxDirection direction) override;
+    void ClearFocusedItem() override;
+    void ActivateFocusedItem(bool dropdown = false) override;
+
 protected:
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     void CommonInit(long style);
@@ -95,6 +104,13 @@ protected:
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
     int GetScrollLineSize() const;
 
+    void DoActivateItem(wxRibbonGalleryItem* item);
+    bool DoFocusItemFrom(int pos, int step);
+    int DoGetFocusedItemIndex() const;
+    bool DoFocusExtensionButton();
+    void DoClearExtensionFocus();
+    void DoActivateExtensionButton();
+
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const override;
@@ -105,6 +121,7 @@ protected:
     wxRibbonGalleryItem* m_selected_item = nullptr;
     wxRibbonGalleryItem* m_hovered_item = nullptr;
     wxRibbonGalleryItem* m_active_item = nullptr;
+    wxRibbonGalleryItem* m_focused_item = nullptr;
     wxSize m_bitmap_size;
     wxSize m_bitmap_padded_size;
     wxSize m_best_size;
@@ -121,6 +138,8 @@ protected:
     wxRibbonGalleryButtonState m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     wxRibbonGalleryButtonState m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     bool m_hovered = false;
+    // True if the keyboard focus is on the extension button, not on an item.
+    bool m_extension_focused = false;
 
     // Always stored in upper case, to allow case-insensitive matching.
     wxString m_keyTip;
