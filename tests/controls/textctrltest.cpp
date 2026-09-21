@@ -1628,6 +1628,20 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     CHECK( updated.GetCount() == 1 );
 }
 
+#ifdef __WXMSW__
+TEST_CASE("wxTextCtrl::EnableFocusFromKeyboard", "[wxTextCtrl][focus]")
+{
+    auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        "Hello", wxDefaultPosition,
+                                        wxDefaultSize, wxTE_READONLY);
+
+    CHECK( !text->AcceptsFocusFromKeyboard() );
+
+    text->EnableFocusFromKeyboard();
+    CHECK( text->AcceptsFocusFromKeyboard() );
+}
+#endif // __WXMSW__
+
 #ifdef __WXGTK3__
 TEST_CASE("wxTextCtrl::GTKSetPangoMarkup", "[wxTextCtrl][pango]")
 {

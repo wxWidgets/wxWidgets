@@ -741,7 +741,13 @@ public:
         { return !m_disableFocusFromKbd && AcceptsFocus(); }
 
         // Disable any input focus from the keyboard
-    void DisableFocusFromKeyboard() { m_disableFocusFromKbd = true; }
+    void DisableFocusFromKeyboard()
+        { m_disableFocusFromKbd = true; m_enableFocusFromKbd = false; }
+
+        // Allow focus from the keyboard even for the windows which don't
+        // accept it by default, e.g. read-only text controls under MSW
+    void EnableFocusFromKeyboard()
+        { m_enableFocusFromKbd = true; m_disableFocusFromKbd = false; }
 
 
         // Can this window be focused right now, in its current state? This
@@ -1880,8 +1886,9 @@ protected:
     bool                 m_inheritFgCol:1;
     bool                 m_inheritFont:1;
 
-    // flag disabling accepting focus from keyboard
+    // flags disabling or enabling accepting focus from keyboard
     bool                 m_disableFocusFromKbd:1;
+    bool                 m_enableFocusFromKbd:1;
 
     // window attributes
     long                 m_windowStyle,
