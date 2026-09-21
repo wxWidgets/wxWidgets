@@ -40,6 +40,19 @@
 // implementation
 // ============================================================================
 
+namespace
+{
+
+class wxFocusableStaticText : public wxStaticText
+{
+public:
+    using wxStaticText::wxStaticText;
+
+    virtual bool AcceptsFocus() const override { return true; }
+};
+
+} // anonymous namespace
+
 // helper function: returns all array elements in a single comma-separated and
 // newline-terminated string
 static wxString AllAsString(const wxArrayString& a)
@@ -320,9 +333,9 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
 {
     wxCollapsiblePane *pane = new wxCollapsiblePane(m_contents, wxID_ANY, title);
     wxWindow * const paneContents = pane->GetPane();
-    wxStaticText *txt = new wxStaticText(paneContents, wxID_ANY, text,
-                                         wxDefaultPosition, wxDefaultSize,
-                                         wxALIGN_CENTRE);
+    wxStaticText *txt = new wxFocusableStaticText(paneContents, wxID_ANY, text,
+                                                  wxDefaultPosition, wxDefaultSize,
+                                                  wxALIGN_CENTRE);
 
     // don't make the text unreasonably wide
     static const int maxWidth = wxGetDisplaySize().x/3;
