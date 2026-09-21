@@ -46,6 +46,14 @@ public:
 
     virtual bool HasTransparentBackground() override { return true; }
 
+#ifdef __WXMSW__
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) override;
+#endif // __WXMSW__
+
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
 
     virtual wxSize DoGetBestClientSize() const override;
@@ -77,6 +85,10 @@ private:
     void OnChar(wxKeyEvent& event);
 
     void DoSetCollapsed(bool collapsed);
+
+#if wxUSE_ACCESSIBILITY
+    friend class wxCollapsibleHeaderCtrlAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
     wxDECLARE_NO_COPY_CLASS(wxGenericCollapsibleHeaderCtrl);
 };

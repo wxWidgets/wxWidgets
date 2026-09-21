@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
     #include "wx/sizer.h"
+    #include "wx/intl.h"
 #endif // !WX_PRECOMP
 
 #include "wx/renderer.h"
@@ -36,6 +37,81 @@
 const char wxCollapsibleHeaderCtrlNameStr[] = "collapsibleHeader";
 
 wxDEFINE_EVENT(wxEVT_COLLAPSIBLEHEADER_CHANGED, wxCommandEvent);
+
+#if wxUSE_ACCESSIBILITY
+
+class wxCollapsibleHeaderCtrlAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxCollapsibleHeaderCtrlAccessible(wxGenericCollapsibleHeaderCtrl* win)
+        : wxWindowAccessible(win)
+    {
+    }
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *role = wxROLE_SYSTEM_PUSHBUTTON;
+        return wxACC_OK;
+    }
+
+    virtual wxAccStatus GetState(int childId, long* state) override
+    {
+        wxGenericCollapsibleHeaderCtrl* const header = GetHeader();
+        wxCHECK( header, wxACC_FAIL );
+
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        long st = header->IsCollapsed() ? wxACC_STATE_SYSTEM_COLLAPSED
+                                        : wxACC_STATE_SYSTEM_EXPANDED;
+        if ( !header->IsEnabled() )
+            st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+        if ( !header->IsShownOnScreen() )
+            st |= wxACC_STATE_SYSTEM_INVISIBLE;
+        if ( header->IsFocusable() )
+            st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+        if ( header->HasFocus() )
+            st |= wxACC_STATE_SYSTEM_FOCUSED;
+
+        *state = st;
+        return wxACC_OK;
+    }
+
+    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        wxGenericCollapsibleHeaderCtrl* const header = GetHeader();
+        wxCHECK( header, wxACC_FAIL );
+
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = header->IsCollapsed() ? _("Expand") : _("Collapse");
+        return wxACC_OK;
+    }
+
+    virtual wxAccStatus DoDefaultAction(int childId) override
+    {
+        wxGenericCollapsibleHeaderCtrl* const header = GetHeader();
+        wxCHECK( header, wxACC_FAIL );
+
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        header->DoSetCollapsed(!header->IsCollapsed());
+        return wxACC_OK;
+    }
+
+private:
+    wxGenericCollapsibleHeaderCtrl* GetHeader()
+    {
+        return static_cast<wxGenericCollapsibleHeaderCtrl*>(GetWindow());
+    }
+};
+
+#endif // wxUSE_ACCESSIBILITY
 
 // ============================================================================
 // implementation
@@ -106,6 +182,11 @@ void wxGenericCollapsibleHeaderCtrl::SetCollapsed(bool collapsed)
 {
     m_collapsed = collapsed;
     Refresh();
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this,
+                              wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 void wxGenericCollapsibleHeaderCtrl::DoSetCollapsed(bool collapsed)
@@ -116,6 +197,29 @@ void wxGenericCollapsibleHeaderCtrl::DoSetCollapsed(bool collapsed)
     evt.SetEventObject(this);
     ProcessEvent(evt);
 }
+
+#ifdef __WXMSW__
+
+bool wxGenericCollapsibleHeaderCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
+{
+    // Let Enter toggle the header instead of pressing the default button.
+    if ( msg->message == WM_KEYDOWN && msg->wParam == VK_RETURN &&
+            !wxIsCtrlDown() )
+        return false;
+
+    return wxCollapsibleHeaderCtrlBase::MSWShouldPreProcessMessage(msg);
+}
+
+#endif // __WXMSW__
+
+#if wxUSE_ACCESSIBILITY
+
+wxAccessible* wxGenericCollapsibleHeaderCtrl::CreateAccessible()
+{
+    return new wxCollapsibleHeaderCtrlAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 void wxGenericCollapsibleHeaderCtrl::OnFocus(wxFocusEvent& event)
 {
