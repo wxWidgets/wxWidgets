@@ -4496,6 +4496,22 @@ void wxWindowGTK::DoSetClientSize( int width, int height )
     SetSize(width + (size.x - clientSize.x), height + (size.y - clientSize.y));
 }
 
+// Return the spacing between the scrollbars and the contents of the window.
+static int wxGetScrollbarSpacing(GtkWidget* widget)
+{
+    // get scrollbar spacing the same way the GTK-private function
+    // _gtk_scrolled_window_get_scrollbar_spacing() does it
+    int scrollbar_spacing =
+        GTK_SCROLLED_WINDOW_GET_CLASS(widget)->scrollbar_spacing;
+    if (scrollbar_spacing < 0)
+    {
+        gtk_widget_style_get(
+            widget, "scrollbar-spacing", &scrollbar_spacing, nullptr);
+    }
+
+    return scrollbar_spacing;
+}
+
 #ifdef __WXGTK3__
 
 // Check whether the given scrolled window uses overlay scrollbars, i.e. the
@@ -4572,15 +4588,7 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
                                            &policy[ScrollDir_Horz],
                                            &policy[ScrollDir_Vert]);
 
-            // get scrollbar spacing the same way the GTK-private function
-            // _gtk_scrolled_window_get_scrollbar_spacing() does it
-            int scrollbar_spacing =
-                GTK_SCROLLED_WINDOW_GET_CLASS(m_widget)->scrollbar_spacing;
-            if (scrollbar_spacing < 0)
-            {
-                gtk_widget_style_get(
-                    m_widget, "scrollbar-spacing", &scrollbar_spacing, nullptr);
-            }
+            const int scrollbar_spacing = wxGetScrollbarSpacing(m_widget);
 
             for ( int i = 0; i < ScrollDir_Max; i++ )
             {
