@@ -4774,6 +4774,11 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 
 int wxListMainWindow::GetCountPerPage() const
 {
+    // The number of lines per page may be out of date if we're dirty, so
+    // recompute it in this case.
+    if ( m_dirty )
+        wxConstCast(this, wxListMainWindow)->RecalculatePositions();
+
     if ( !m_linesPerPage )
     {
         wxConstCast(this, wxListMainWindow)->
