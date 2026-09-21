@@ -1639,6 +1639,64 @@ void wxRibbonBar::ClearPageFocus()
     RefreshTabBar();
 }
 
+wxWindow* wxRibbonBar::FindFocusableWindow(wxWindow* window, bool forward)
+{
+    if ( window->IsTopLevel() || !window->IsShown() )
+        return nullptr;
+
+    if ( window->CanAcceptFocusFromKeyboard() )
+        return window;
+
+    const wxWindowList& children = window->GetChildren();
+    for ( wxWindowList::compatibility_iterator node =
+              forward ? children.GetFirst() : children.GetLast();
+          node;
+          node = forward ? node->GetNext() : node->GetPrevious() )
+    {
+        if ( wxWindow* found = FindFocusableWindow(node->GetData(), forward) )
+            return found;
+    }
+    return nullptr;
+}
+
+void wxRibbonBar::NavigateOut(int flags)
+{
+    if ( Navigate(flags) )
+        return;
+
+    // The parent didn't do anything, which is the case if it's not a wxPanel
+    // or similar (e.g., a wxFrame). Look for the next (or previous) window
+    // ourselves, but leave Ctrl+Tab to the parent.
+    wxWindow* const parent = GetParent();
+    if ( parent == nullptr || (flags & wxNavigationKeyEvent::WinChange) )
+        return;
+
+    const bool forward = (flags & wxNavigationKeyEvent::IsForward) != 0;
+
+    std::vector<wxWindow*> siblings;
+    size_t pos = 0;
+    for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
+          node; node = node->GetNext() )
+    {
+        if ( node->GetData() == this )
+            pos = siblings.size();
+        siblings.push_back(node->GetData());
+    }
+
+    // Wrap around, like a wxPanel does.
+    const size_t count = siblings.size();
+    for ( size_t n = 1; n < count; ++n )
+    {
+        const size_t i = forward ? (pos + n) % count
+                                 : (pos + count - n) % count;
+        if ( wxWindow* target = FindFocusableWindow(siblings[i], forward) )
+        {
+            target->SetFocus();
+            return;
+        }
+    }
+}
+
 void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
 {
     const int keyCode = evt.GetKeyCode();
@@ -1667,7 +1725,7 @@ void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
             {
                 // Past the last item: leave the ribbon.
                 ClearPageFocus();
-                Navigate(wxNavigationKeyEvent::IsForward);
+                NavigateOut(wxNavigationKeyEvent::IsForward);
             }
             return;
 
@@ -1757,7 +1815,7 @@ void wxRibbonBar::OnKeyDown(wxKeyEvent& evt)
             m_focusedButton = BarButton_None;
             RefreshTabBar();
             if ( !evt.ShiftDown() )
-                Navigate(wxNavigationKeyEvent::IsForward);
+                NavigateOut(wxNavigationKeyEvent::IsForward);
             return;
         }
 
@@ -1769,7 +1827,7 @@ void wxRibbonBar::OnKeyDown(wxKeyEvent& evt)
                                     : wxNavigationKeyEvent::IsForward;
         if ( evt.ControlDown() )
             flags |= wxNavigationKeyEvent::WinChange;
-        Navigate(flags);
+        NavigateOut(flags);
         return;
     }
 

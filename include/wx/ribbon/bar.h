@@ -259,6 +259,10 @@ protected:
     void ClearPageFocus();
     void OnPageKeyDown(wxKeyEvent& evt);
 
+    // Like Navigate(), but also works if the parent doesn't handle Tab.
+    void NavigateOut(int flags);
+    static wxWindow* FindFocusableWindow(wxWindow* window, bool forward);
+
     // The buttons after the tabs which can also have the keyboard focus.
     enum BarButton
     {
