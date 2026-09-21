@@ -67,8 +67,10 @@ public:
     // Implementation only: keyboard navigation of the items inside a control.
     //
     // The keyboard focus always stays on wxRibbonBar, which forwards the keys
-    // to these functions. A control with items which can be selected with the
-    // keyboard returns true from HasFocusableItems() and overrides the rest.
+    // to these functions. Note that this is not about the control itself
+    // getting the focus (see wxWindow::CanAcceptFocus()). A control with
+    // items which can be selected with the keyboard returns true from
+    // HasFocusableItems() and overrides the rest.
     virtual bool HasFocusableItems() const { return false; }
     // Return false, changing nothing, if there is no such item.
     virtual bool FocusFirstItem() { return false; }
@@ -81,12 +83,12 @@ public:
     // Fires the focused item's action (or its dropdown, if there is one).
     virtual void ActivateFocusedItem(bool WXUNUSED(dropdown) = false) { }
 
-    // Move through 'stops' (i.e., the controls with focusable items).
+    // Move through 'controls' (the ones with focusable items).
     // Return the control reached, or null if there is nowhere to go.
-    static wxRibbonControl* FocusFirstStopItem(
-        const std::vector<wxRibbonControl*>& stops, bool forward);
-    static wxRibbonControl* FocusNextStopItem(
-        const std::vector<wxRibbonControl*>& stops,
+    static wxRibbonControl* FocusFirstItemIn(
+        const std::vector<wxRibbonControl*>& controls, bool forward);
+    static wxRibbonControl* FocusNextItemIn(
+        const std::vector<wxRibbonControl*>& controls,
         wxRibbonControl* current, bool forward);
 
 protected:

@@ -971,7 +971,7 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             m_art->DrawTabSeparator(dc, this, rect, sep_visibility);
         }
     }
-    if ( m_current_page != wxNOT_FOUND && HasFocus() && !m_focusedStop &&
+    if ( m_current_page != wxNOT_FOUND && HasFocus() && !m_focusedControl &&
          m_focusedButton == BarButton_None )
     {
         const wxRibbonPageTabInfo& info = m_pages.Item(m_current_page);
@@ -1568,11 +1568,11 @@ bool wxRibbonBar::DoChangeActivePage(size_t page)
     return true;
 }
 
-std::vector<wxRibbonControl*> wxRibbonBar::GetFocusStops() const
+std::vector<wxRibbonControl*> wxRibbonBar::GetFocusableControls() const
 {
-    std::vector<wxRibbonControl*> stops;
+    std::vector<wxRibbonControl*> controls;
     if ( m_current_page == wxNOT_FOUND || !m_arePanelsShown )
-        return stops;
+        return controls;
 
     wxRibbonPage* page = m_pages.Item(m_current_page).page;
     for ( wxWindowList::compatibility_iterator node = page->GetChildren().GetFirst();
@@ -1580,34 +1580,34 @@ std::vector<wxRibbonControl*> wxRibbonBar::GetFocusStops() const
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
         if ( panel != nullptr && panel->IsShown() )
-            panel->AppendFocusStops(stops);
+            panel->AppendFocusableControls(controls);
     }
-    return stops;
+    return controls;
 }
 
 bool wxRibbonBar::FocusPageItem(bool forward)
 {
-    wxRibbonControl* stop = FocusFirstStopItem(GetFocusStops(), forward);
-    if ( stop == nullptr )
+    wxRibbonControl* control = FocusFirstItemIn(GetFocusableControls(), forward);
+    if ( control == nullptr )
         return false;
 
-    m_focusedStop = stop;
+    m_focusedControl = control;
     RefreshTabBar();
     return true;
 }
 
 bool wxRibbonBar::MoveFocusedItem(bool forward)
 {
-    wxRibbonControl* stop = FocusNextStopItem(GetFocusStops(),
-                                              m_focusedStop.get(), forward);
-    if ( stop == nullptr )
+    wxRibbonControl* control = FocusNextItemIn(GetFocusableControls(),
+                                              m_focusedControl.get(), forward);
+    if ( control == nullptr )
         return false;
 
-    m_focusedStop = stop;
+    m_focusedControl = control;
     return true;
 }
 
-void wxRibbonBar::FocusItemOf(wxRibbonControl* stop)
+void wxRibbonBar::FocusItemOf(wxRibbonControl* control)
 {
     SetFocus();
     ClearPageFocus();
@@ -1616,25 +1616,25 @@ void wxRibbonBar::FocusItemOf(wxRibbonControl* stop)
     // focus, so show it again or the focus would end up on invisible items.
     if ( m_ribbon_state == wxRIBBON_BAR_MINIMIZED )
     {
-        wxWeakRef<wxRibbonControl> stopRef(stop);
+        wxWeakRef<wxRibbonControl> controlRef(control);
         ShowPanels(wxRIBBON_BAR_EXPANDED);
-        stop = stopRef.get();
+        control = controlRef.get();
     }
 
-    if ( stop != nullptr && stop->FocusFirstItem() )
+    if ( control != nullptr && control->FocusFirstItem() )
     {
-        m_focusedStop = stop;
+        m_focusedControl = control;
         RefreshTabBar();
     }
 }
 
 void wxRibbonBar::ClearPageFocus()
 {
-    wxRibbonControl* current = m_focusedStop.get();
+    wxRibbonControl* current = m_focusedControl.get();
     if ( current == nullptr )
         return;
 
-    m_focusedStop = nullptr;
+    m_focusedControl = nullptr;
     current->ClearFocusedItem();
     RefreshTabBar();
 }
@@ -1749,7 +1749,7 @@ void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
 
         case WXK_UP:
             // Move up a row in the control, if it has rows, or else go back.
-            if ( wxRibbonControl* current = m_focusedStop.get() )
+            if ( wxRibbonControl* current = m_focusedControl.get() )
             {
                 if ( current->FocusItemInDirection(wxUP) )
                     return;
@@ -1762,7 +1762,7 @@ void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
             return;
 
         case WXK_DOWN:
-            if ( wxRibbonControl* current = m_focusedStop.get() )
+            if ( wxRibbonControl* current = m_focusedControl.get() )
             {
                 if ( !current->FocusItemInDirection(wxDOWN) )
                     current->ActivateFocusedItem(true);
@@ -1772,7 +1772,7 @@ void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
         case WXK_RETURN:
         case WXK_NUMPAD_ENTER:
         case WXK_SPACE:
-            if ( wxRibbonControl* current = m_focusedStop.get() )
+            if ( wxRibbonControl* current = m_focusedControl.get() )
                 current->ActivateFocusedItem();
             return;
 
@@ -1784,7 +1784,7 @@ void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
 
 void wxRibbonBar::OnKeyDown(wxKeyEvent& evt)
 {
-    if ( m_focusedStop )
+    if ( m_focusedControl )
     {
         OnPageKeyDown(evt);
         return;

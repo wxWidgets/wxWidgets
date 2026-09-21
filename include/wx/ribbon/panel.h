@@ -103,7 +103,7 @@ public:
 
     // Implementation only: appends the controls of this panel which can be
     // navigated to with the keyboard, in navigation order.
-    void AppendFocusStops(std::vector<wxRibbonControl*>& stops);
+    void AppendFocusableControls(std::vector<wxRibbonControl*>& controls);
 
 protected:
     virtual wxSize DoGetBestSize() const override;
@@ -159,7 +159,7 @@ protected:
     bool m_item_focused = false;
     wxRect m_ext_button_rect;
 
-    wxWeakRef<wxRibbonControl> m_focusedStop;
+    wxWeakRef<wxRibbonControl> m_focusedControl;
 
     // Both are always stored in upper case, to allow case-insensitive
     // matching.

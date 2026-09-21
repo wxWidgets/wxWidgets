@@ -117,21 +117,21 @@ wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
     return nullptr;
 }
 
-wxRibbonControl* wxRibbonControl::FocusFirstStopItem(
-    const std::vector<wxRibbonControl*>& stops, bool forward)
+wxRibbonControl* wxRibbonControl::FocusFirstItemIn(
+    const std::vector<wxRibbonControl*>& controls, bool forward)
 {
-    const int count = static_cast<int>(stops.size());
+    const int count = static_cast<int>(controls.size());
     for ( int n = 0; n < count; ++n )
     {
-        wxRibbonControl* stop = stops[forward ? n : count - 1 - n];
-        if ( forward ? stop->FocusFirstItem() : stop->FocusLastItem() )
-            return stop;
+        wxRibbonControl* control = controls[forward ? n : count - 1 - n];
+        if ( forward ? control->FocusFirstItem() : control->FocusLastItem() )
+            return control;
     }
     return nullptr;
 }
 
-wxRibbonControl* wxRibbonControl::FocusNextStopItem(
-    const std::vector<wxRibbonControl*>& stops,
+wxRibbonControl* wxRibbonControl::FocusNextItemIn(
+    const std::vector<wxRibbonControl*>& controls,
     wxRibbonControl* current, bool forward)
 {
     if ( current == nullptr )
@@ -141,11 +141,11 @@ wxRibbonControl* wxRibbonControl::FocusNextStopItem(
         return current;
 
     // try the neighboring controls
-    const int count = static_cast<int>(stops.size());
+    const int count = static_cast<int>(controls.size());
     int pos = wxNOT_FOUND;
     for ( int i = 0; i < count; ++i )
     {
-        if ( stops[i] == current )
+        if ( controls[i] == current )
         {
             pos = i;
             break;
@@ -157,10 +157,10 @@ wxRibbonControl* wxRibbonControl::FocusNextStopItem(
     const int step = forward ? 1 : -1;
     for ( int i = pos + step; i >= 0 && i < count; i += step )
     {
-        if ( forward ? stops[i]->FocusFirstItem() : stops[i]->FocusLastItem() )
+        if ( forward ? controls[i]->FocusFirstItem() : controls[i]->FocusLastItem() )
         {
             current->ClearFocusedItem();
-            return stops[i];
+            return controls[i];
         }
     }
     return nullptr;

@@ -205,8 +205,8 @@ public:
     void DrawKeyTipsFor(wxDC& dc, wxWindow* window, wxRibbonArtProvider* art) const;
 
     // Implementation only: give the keyboard focus back to the bar, with
-    // the focus on the first item of 'stop'.
-    void FocusItemOf(wxRibbonControl* stop);
+    // the focus on the first item of 'control'.
+    void FocusItemOf(wxRibbonControl* control);
 
 protected:
     friend class wxRibbonPage;
@@ -253,7 +253,7 @@ protected:
     int FindShownPage(int from, int step) const;
 
     // Keyboard focus in the active page's controls.
-    std::vector<wxRibbonControl*> GetFocusStops() const;
+    std::vector<wxRibbonControl*> GetFocusableControls() const;
     bool FocusPageItem(bool forward);
     bool MoveFocusedItem(bool forward);
     void ClearPageFocus();
@@ -304,8 +304,8 @@ protected:
     wxVector<wxImageList*> m_image_lists;
 
     // The control whose item has the keyboard focus, null if it's on the tabs.
-    wxWeakRef<wxRibbonControl> m_focusedStop;
-    // The button with the keyboard focus, if it isn't on a tab or a stop.
+    wxWeakRef<wxRibbonControl> m_focusedControl;
+    // The button with the keyboard focus, if it isn't on a tab or in the page.
     BarButton m_focusedButton = BarButton_None;
 
     // Key tips implementation.
