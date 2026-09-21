@@ -1692,10 +1692,10 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
     if ( !(mswStyle & WS_HSCROLL) )
-        size.y -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+        size.y -= GetScrollbarSize(wxHORIZONTAL);
 
     if ( mswStyle & WS_VSCROLL )
-        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
+        size.x += GetScrollbarSize(wxVERTICAL);
 
     // This is a dirty hack, but while the size returned by the control does
     // fit its contents, it results in asymmetric horizontal margins around it,

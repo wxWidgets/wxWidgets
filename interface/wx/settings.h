@@ -208,8 +208,24 @@ enum wxSystemMetric
     wxSYS_FRAMESIZE_Y,        //!< Height of the window frame for a window with wxRESIZE_BORDER.
     wxSYS_SMALLICON_X,        //!< Recommended width of a small icon (in window captions, and small icon view).
     wxSYS_SMALLICON_Y,        //!< Recommended height of a small icon (in window captions, and small icon view).
-    wxSYS_HSCROLL_Y,          //!< Height of horizontal scrollbar in pixels.
-    wxSYS_VSCROLL_X,          //!< Width of vertical scrollbar in pixels.
+    /**
+        Height of horizontal scrollbar in pixels.
+
+        Use wxWindow::GetScrollbarSize() instead of this metric when
+        determining the space taken by the scrollbars of a window.
+
+        See also wxSYS_HSCROLL_X.
+    */
+    wxSYS_HSCROLL_Y,
+    /**
+        Width of vertical scrollbar in pixels
+
+        Use wxWindow::GetScrollbarSize() instead of this metric when
+        determining the space taken by the scrollbars of a window.
+
+        See also wxSYS_HSCROLL_Y.
+     */
+    wxSYS_VSCROLL_X,
     wxSYS_VSCROLL_ARROW_X,    //!< Width of arrow bitmap on a vertical scrollbar.
     wxSYS_VSCROLL_ARROW_Y,    //!< Height of arrow bitmap on a vertical scrollbar.
     wxSYS_VTHUMB_Y,           //!< Height of vertical scrollbar thumb.

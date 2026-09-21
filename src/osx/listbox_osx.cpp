@@ -264,7 +264,7 @@ wxSize wxListBox::DoGetBestSize() const
         }
 
         // Add room for the scrollbar
-        lbWidth += wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+        lbWidth += GetScrollbarSize( wxVERTICAL );
 
         // And just a bit more
         int cy = 12;

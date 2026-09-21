@@ -131,7 +131,7 @@ void MyResizableListCtrl::SetColumnWidths()
     // Subtract width of other columns, scrollbar, and some padding
     leftmostColumnWidth -= GetColumnWidth( ACTION_COLUMN );
     leftmostColumnWidth -= GetColumnWidth( PRIORITY_COLUMN );
-    leftmostColumnWidth -= wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+    leftmostColumnWidth -= GetScrollbarSize( wxVERTICAL );
     leftmostColumnWidth -= 5;
 
     // Set the column width to the new value.
