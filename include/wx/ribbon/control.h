@@ -17,6 +17,8 @@
 #include "wx/control.h"
 #include "wx/dynarray.h"
 
+#include <vector>
+
 class wxRibbonBar;
 class wxRibbonArtProvider;
 
@@ -61,6 +63,33 @@ public:
 
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
+
+    // Implementation only: keyboard navigation of the items inside a control.
+    //
+    // The keyboard focus always stays on wxRibbonBar, which forwards the keys
+    // to these functions. Note that this is not about the control itself
+    // getting the focus (see wxWindow::CanAcceptFocus()). A control with
+    // items which can be selected with the keyboard returns true from
+    // HasFocusableItems() and overrides the rest.
+    virtual bool HasFocusableItems() const { return false; }
+    // Return false, changing nothing, if there is no such item.
+    virtual bool FocusFirstItem() { return false; }
+    virtual bool FocusLastItem() { return false; }
+    virtual bool FocusNextItem(bool WXUNUSED(forward)) { return false; }
+    // Moves to the item above or below (wxUP or wxDOWN), for controls with
+    // items arranged in rows.
+    virtual bool FocusItemInDirection(wxDirection WXUNUSED(direction)) { return false; }
+    virtual void ClearFocusedItem() { }
+    // Fires the focused item's action (or its dropdown, if there is one).
+    virtual void ActivateFocusedItem(bool WXUNUSED(dropdown) = false) { }
+
+    // Move through 'controls' (the ones with focusable items).
+    // Return the control reached, or null if there is nowhere to go.
+    static wxRibbonControl* FocusFirstItemIn(
+        const std::vector<wxRibbonControl*>& controls, bool forward);
+    static wxRibbonControl* FocusNextItemIn(
+        const std::vector<wxRibbonControl*>& controls,
+        wxRibbonControl* current, bool forward);
 
 protected:
     wxRibbonArtProvider* m_art;

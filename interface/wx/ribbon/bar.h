@@ -176,6 +176,18 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
     consumed if there is something to show, so applications using no KeyTips
     keep their existing @c WXK_F10 handling.
 
+    @section ribbonbar_keyboard Keyboard navigation
+
+    Since wxWidgets 3.3.4, the ribbon can be used with the keyboard. For
+    the best results, put it in a wxPanel (or other window supporting tab
+    navigation) instead of directly in a wxFrame.
+
+    On the tabs, the arrow keys, @c WXK_HOME, and @c WXK_END switch the page,
+    and @c WXK_RETURN, @c WXK_SPACE, or @c WXK_DOWN go into it. In the page,
+    @c WXK_TAB and the arrow keys move between the items of the button bars,
+    tool bars, galleries, and panels. @c WXK_RETURN or @c WXK_SPACE activate
+    the current one, and @c WXK_ESCAPE goes back to the tabs.
+
     @see wxRibbonPage
     @see wxRibbonPanel
 

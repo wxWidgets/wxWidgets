@@ -25,6 +25,7 @@ class wxRibbonToolBar;
 #include "wx/ribbon/page.h"
 
 #include "wx/vector.h"
+#include "wx/weakref.h"
 
 #include <vector>
 
@@ -203,6 +204,10 @@ public:
     // if any, using the given art provider.
     void DrawKeyTipsFor(wxDC& dc, wxWindow* window, wxRibbonArtProvider* art) const;
 
+    // Implementation only: give the keyboard focus back to the bar, with
+    // the focus on the first item of 'control'.
+    void FocusItemOf(wxRibbonControl* control);
+
 protected:
     friend class wxRibbonPage;
 
@@ -236,6 +241,41 @@ protected:
     void OnMouseDoubleClick(wxMouseEvent& evt);
     void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
     void OnKillFocus(wxFocusEvent& evt);
+    void OnSetFocus(wxFocusEvent& evt);
+    void OnKeyDown(wxKeyEvent& evt);
+
+    // Make the bar a tab stop so that it can be reached with the keyboard.
+    bool AcceptsFocus() const override { return IsShown() && IsEnabled(); }
+
+    // Activate the given page the same way a click on its tab does.
+    bool DoChangeActivePage(size_t page);
+
+    int FindShownPage(int from, int step) const;
+
+    // Keyboard focus in the active page's controls.
+    std::vector<wxRibbonControl*> GetFocusableControls() const;
+    bool FocusPageItem(bool forward);
+    bool MoveFocusedItem(bool forward);
+    void ClearPageFocus();
+    void OnPageKeyDown(wxKeyEvent& evt);
+
+    // Like Navigate(), but also works if the parent doesn't handle Tab.
+    void NavigateOut(int flags);
+    static wxWindow* FindFocusableWindow(wxWindow* window, bool forward);
+
+    // The buttons after the tabs which can also have the keyboard focus.
+    enum BarButton
+    {
+        BarButton_None,
+        BarButton_Toggle,
+        BarButton_Help
+    };
+
+    std::vector<BarButton> GetFocusableBarButtons() const;
+    wxRect GetBarButtonRect(BarButton button) const;
+    bool MoveBarButtonFocus(bool forward);
+    void DoActivateToggleButton();
+    void DoActivateHelpButton();
 
     wxRibbonPageTabInfoArray m_pages;
     wxRect m_tab_scroll_left_button_rect;
@@ -262,6 +302,11 @@ protected:
     wxRibbonDisplayMode m_ribbon_state = wxRIBBON_BAR_PINNED;
 
     wxVector<wxImageList*> m_image_lists;
+
+    // The control whose item has the keyboard focus, null if it's on the tabs.
+    wxWeakRef<wxRibbonControl> m_focusedControl;
+    // The button with the keyboard focus, if it isn't on a tab or in the page.
+    BarButton m_focusedButton = BarButton_None;
 
     // Key tips implementation.
 private:

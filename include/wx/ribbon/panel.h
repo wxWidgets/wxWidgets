@@ -14,6 +14,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/bmpbndl.h"
+#include "wx/weakref.h"
 #include "wx/ribbon/control.h"
 
 enum wxRibbonPanelOption
@@ -93,6 +94,17 @@ public:
     void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
     wxString GetKeyTip() const { return m_keyTip; }
 
+    // Keyboard navigation.
+    bool HasFocusableItems() const override;
+    bool FocusFirstItem() override;
+    bool FocusLastItem() override;
+    void ClearFocusedItem() override;
+    void ActivateFocusedItem(bool dropdown = false) override;
+
+    // Implementation only: appends the controls of this panel which can be
+    // navigated to with the keyboard, in navigation order.
+    void AppendFocusableControls(std::vector<wxRibbonControl*>& controls);
+
 protected:
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize GetPanelSizerBestSize() const;
@@ -117,6 +129,8 @@ protected:
     void OnMotion(wxMouseEvent& evt);
     void OnKillFocus(wxFocusEvent& evt);
     void OnChildKillFocus(wxFocusEvent& evt);
+    void OnKeyDown(wxKeyEvent& evt);
+    void DoActivateExtButton();
     void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
 
@@ -141,7 +155,11 @@ protected:
     bool m_minimised = false;
     bool m_hovered = false;
     bool m_ext_button_hovered = false;
+    // True if the keyboard focus is on this panel's item.
+    bool m_item_focused = false;
     wxRect m_ext_button_rect;
+
+    wxWeakRef<wxRibbonControl> m_focusedControl;
 
     // Both are always stored in upper case, to allow case-insensitive
     // matching.
