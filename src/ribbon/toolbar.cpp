@@ -16,6 +16,7 @@
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
+#include "wx/renderer.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -340,6 +341,7 @@ void wxRibbonToolBar::ClearTools()
 
     m_hover_tool = nullptr;
     m_active_tool = nullptr;
+    m_focused_tool = nullptr;
     m_keyTips.clear();
     m_dropdownKeyTips.clear();
 
@@ -365,6 +367,8 @@ bool wxRibbonToolBar::DeleteTool(int tool_id)
                     m_hover_tool = nullptr;
                 if ( tool == m_active_tool )
                     m_active_tool = nullptr;
+                if ( tool == m_focused_tool )
+                    m_focused_tool = nullptr;
                 delete tool;
                 m_keyTips.erase(tool_id);
                 m_dropdownKeyTips.erase(tool_id);
@@ -438,6 +442,93 @@ void wxRibbonToolBar::ActivateTool(wxRibbonToolBarToolBase* tool, bool dropdown)
     Refresh(false);
 }
 
+std::vector<wxRibbonToolBarToolBase*> wxRibbonToolBar::GetEnabledTools() const
+{
+    std::vector<wxRibbonToolBarToolBase*> tools;
+    for ( size_t g = 0; g < m_groups.GetCount(); ++g )
+    {
+        wxRibbonToolBarToolGroup* group = m_groups.Item(g);
+        for ( size_t t = 0; t < group->tools.GetCount(); ++t )
+        {
+            wxRibbonToolBarToolBase* tool = group->tools.Item(t);
+            if ( !(tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) )
+                tools.push_back(tool);
+        }
+    }
+    return tools;
+}
+
+bool wxRibbonToolBar::HasFocusableItems() const
+{
+    return !GetEnabledTools().empty();
+}
+
+bool wxRibbonToolBar::FocusFirstItem()
+{
+    const std::vector<wxRibbonToolBarToolBase*> tools = GetEnabledTools();
+    if ( tools.empty() )
+        return false;
+
+    m_focused_tool = tools.front();
+    Refresh(false);
+    return true;
+}
+
+bool wxRibbonToolBar::FocusLastItem()
+{
+    const std::vector<wxRibbonToolBarToolBase*> tools = GetEnabledTools();
+    if ( tools.empty() )
+        return false;
+
+    m_focused_tool = tools.back();
+    Refresh(false);
+    return true;
+}
+
+bool wxRibbonToolBar::FocusNextItem(bool forward)
+{
+    const std::vector<wxRibbonToolBarToolBase*> tools = GetEnabledTools();
+    if ( tools.empty() )
+        return false;
+
+    size_t pos{ 0 };
+    while ( pos < tools.size() && tools[pos] != m_focused_tool )
+        ++pos;
+
+    if ( pos == tools.size() )
+        return forward ? FocusFirstItem() : FocusLastItem();
+
+    if ( forward ? (pos + 1 == tools.size()) : (pos == 0) )
+        return false;
+
+    m_focused_tool = tools[forward ? pos + 1 : pos - 1];
+    Refresh(false);
+    return true;
+}
+
+void wxRibbonToolBar::ClearFocusedItem()
+{
+    if ( m_focused_tool != nullptr )
+    {
+        m_focused_tool = nullptr;
+        Refresh(false);
+    }
+}
+
+void wxRibbonToolBar::ActivateFocusedItem(bool dropdown)
+{
+    wxRibbonToolBarToolBase* tool = m_focused_tool;
+    if ( tool == nullptr )
+        return;
+
+    // Only tools with a dropdown have something to open.
+    if ( dropdown && tool->kind != wxRIBBON_BUTTON_DROPDOWN &&
+         tool->kind != wxRIBBON_BUTTON_HYBRID )
+        return;
+
+    ActivateTool(tool, dropdown);
+}
+
 bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
 {
     size_t group_count = m_groups.GetCount();
@@ -455,6 +546,8 @@ bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
                 m_hover_tool = nullptr;
             if ( tool == m_active_tool )
                 m_active_tool = nullptr;
+            if ( tool == m_focused_tool )
+                m_focused_tool = nullptr;
             m_keyTips.erase(tool->id);
             m_dropdownKeyTips.erase(tool->id);
             delete tool;
@@ -1174,7 +1267,24 @@ void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                     bmp = tool->bitmap_disabled.GetBitmapFor(this);
                 else
                     bmp = tool->bitmap.GetBitmapFor(this);
-                m_art->DrawTool(dc, this, rect, bmp, tool->kind, tool->state);
+
+                // Show the tool with the keyboard focus as hovered, and mark it too.
+                long state{ tool->state };
+                const bool focused{ (tool == m_focused_tool) };
+                if ( focused )
+                {
+                    state |= (tool->kind == wxRIBBON_BUTTON_DROPDOWN)
+                                ? wxRIBBON_TOOLBAR_TOOL_DROPDOWN_HOVERED
+                                : wxRIBBON_TOOLBAR_TOOL_NORMAL_HOVERED;
+                }
+
+                m_art->DrawTool(dc, this, rect, bmp, tool->kind, state);
+
+                if ( focused )
+                {
+                    rect.Deflate(FromDIP(2));
+                    wxRendererNative::Get().DrawFocusRect(this, dc, rect);
+                }
             }
         }
     }
