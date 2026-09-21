@@ -19,6 +19,7 @@
 #include "wx/clipbrd.h"
 #include "wx/filename.h"
 #include "wx/recguard.h"
+#include "wx/tokenzr.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -321,17 +322,10 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     wxUnusedVar(session);
     wxUnusedVar(context);
 
-    NSDragOperation allowedDragOperations = NSDragOperationEvery;
+    NSDragOperation allowedDragOperations = NSDragOperationCopy;
 
-    // NSDragOperationGeneric also makes a drag to the trash possible
-    // resulting in something we don't support (NSDragOperationDelete)
-
-    allowedDragOperations &= ~(NSDragOperationDelete | NSDragOperationGeneric);
-
-    if (m_dragFlags == wxDrag_CopyOnly)
-    {
-        allowedDragOperations &= ~NSDragOperationMove;
-    }
+    if ( m_dragFlags != wxDrag_CopyOnly )
+        allowedDragOperations |= NSDragOperationMove;
 
     // we might adapt flags here in the future
     // context can be NSDraggingContextOutsideApplication or NSDraggingContextWithinApplication
@@ -433,6 +427,36 @@ wxDropSource* wxDropSource::GetCurrentDropSource()
     return gCurrentSource;
 }
 
+static wxArrayString GetFilenamesFromDataObject(wxDataObject* data)
+{
+    wxArrayString files;
+    if ( !data )
+        return files;
+
+    const wxDataFormat format(wxDF_FILENAME);
+    if ( !data->IsSupported(format, wxDataObjectBase::Direction::Get) )
+        return files;
+
+    const size_t size = data->GetDataSize(format);
+    if ( size == 0 )
+        return files;
+
+    wxMemoryBuffer buf(size + 1);
+    void* raw = buf.GetWriteBuf(size + 1);
+    if ( !raw )
+        return files;
+
+    memset(raw, 0, size + 1);
+    if ( !data->GetDataHere(format, raw) )
+        return files;
+
+    buf.UngetWriteBuf(size);
+
+    wxString filenames((const char*)raw, *wxConvFileName);
+    files = wxStringTokenize(filenames, "\n", wxTOKEN_STRTOK);
+    return files;
+}
+
 #if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 typedef NSString* NSPasteboardType;
 #endif
@@ -462,11 +486,25 @@ typedef NSString* NSPasteboardType;
     if ( m_data )
     {
         wxDataFormat format((wxDataFormat::NativeFormat) type);
+        if ( format.GetType() == wxDF_FILENAME )
+        {
+            wxArrayString files = GetFilenamesFromDataObject(m_data);
+            if ( files.IsEmpty() )
+                return nil;
+
+            wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(files[0]));
+            if ( !url )
+                return nil;
+
+            CFDataRef data = CFURLCreateData(nullptr, url, kCFStringEncodingUTF8, true);
+            return (id)data;
+        }
+
         size_t size = m_data->GetDataSize(format);
         CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault,size );
         m_data->GetDataHere(format, CFDataGetMutableBytePtr(data));
         CFDataSetLength(data, size);
-        return (id) data;
+        return (id)data;
     }
     return nil;
 }
@@ -541,11 +579,39 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         NSPoint down = [theEvent locationInWindow];
         NSPoint p = [view convertPoint:down fromView:nil];
 
-        wxPasteBoardWriter* writer = [[wxPasteBoardWriter alloc] initWithDataObject:m_data];
         wxCFMutableArrayRef<NSDraggingItem*> items;
-        NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:writer];
-        [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
-        items.push_back(item);
+        wxPasteBoardWriter* writer = nil;
+
+        wxArrayString files = GetFilenamesFromDataObject(m_data);
+        if ( !files.IsEmpty() )
+        {
+            for ( size_t i = 0; i < files.GetCount(); ++i )
+            {
+                wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(files[i]));
+                if ( !url )
+                    continue;
+
+                wxCFRef<CFDataRef> data(CFURLCreateData(nullptr, url, kCFStringEncodingUTF8, true));
+                if ( !data )
+                    continue;
+
+                NSPasteboardItem* pbItem = [[NSPasteboardItem alloc] init];
+                [pbItem setData:(NSData*)data.get() forType:(NSString*)kUTTypeFileURL];
+
+                NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:pbItem];
+                [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
+                items.push_back(item);
+
+                [pbItem release];
+            }
+        }
+        else
+        {
+            writer = [[wxPasteBoardWriter alloc] initWithDataObject:m_data];
+            NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:writer];
+            [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
+            items.push_back(item);
+        }
         [view beginDraggingSessionWithItems:items event:theEvent source:delegate];
 
         wxEventLoopBase * const loop = wxEventLoop::GetActive();
