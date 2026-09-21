@@ -117,6 +117,55 @@ wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
     return nullptr;
 }
 
+wxRibbonControl* wxRibbonControl::FocusFirstStopItem(
+    const std::vector<wxRibbonControl*>& stops, bool forward)
+{
+    const int count = static_cast<int>(stops.size());
+    for ( int n = 0; n < count; ++n )
+    {
+        wxRibbonControl* stop = stops[forward ? n : count - 1 - n];
+        if ( forward ? stop->FocusFirstItem() : stop->FocusLastItem() )
+            return stop;
+    }
+    return nullptr;
+}
+
+wxRibbonControl* wxRibbonControl::FocusNextStopItem(
+    const std::vector<wxRibbonControl*>& stops,
+    wxRibbonControl* current, bool forward)
+{
+    if ( current == nullptr )
+        return nullptr;
+
+    if ( current->FocusNextItem(forward) )
+        return current;
+
+    // try the neighboring controls
+    const int count = static_cast<int>(stops.size());
+    int pos = wxNOT_FOUND;
+    for ( int i = 0; i < count; ++i )
+    {
+        if ( stops[i] == current )
+        {
+            pos = i;
+            break;
+        }
+    }
+    if ( pos == wxNOT_FOUND )
+        return nullptr;
+
+    const int step = forward ? 1 : -1;
+    for ( int i = pos + step; i >= 0 && i < count; i += step )
+    {
+        if ( forward ? stops[i]->FocusFirstItem() : stops[i]->FocusLastItem() )
+        {
+            current->ClearFocusedItem();
+            return stops[i];
+        }
+    }
+    return nullptr;
+}
+
 void wxRibbonControl::DismissKeyTips()
 {
     if ( wxRibbonBar* bar = GetAncestorRibbonBar() )

@@ -188,6 +188,13 @@ public:
     // activation. If dropdown is true, fires the dropdown-clicked event.
     void ActivateButton(wxRibbonButtonBarButtonBase* button, bool dropdown = false);
 
+    bool HasFocusableItems() const override;
+    bool FocusFirstItem() override;
+    bool FocusLastItem() override;
+    bool FocusNextItem(bool forward) override;
+    void ClearFocusedItem() override;
+    void ActivateFocusedItem(bool dropdown = false) override;
+
 protected:
     friend class wxRibbonButtonBarEvent;
     virtual wxSize DoGetBestSize() const override;
@@ -218,10 +225,14 @@ protected:
         wxRibbonButtonBarButtonState size, wxReadOnlyDC& dc);
     virtual void UpdateWindowUI(long flags) override;
 
+    bool DoFocusButtonFrom(int pos, int step);
+    int DoGetFocusedButtonIndex() const;
+
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
     wxRibbonButtonBarButtonInstance* m_hovered_button = nullptr;
     wxRibbonButtonBarButtonInstance* m_active_button = nullptr;
+    wxRibbonButtonBarButtonBase* m_focused_button = nullptr;
 
     wxPoint m_layout_offset;
     wxSize m_bitmap_size_large;

@@ -17,6 +17,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
 #include "wx/dcbuffer.h"
+#include "wx/renderer.h"
 #include "wx/imaglist.h"
 
 #ifndef WX_PRECOMP
@@ -568,6 +569,7 @@ void wxRibbonButtonBar::ClearButtons()
     m_dropdownKeyTips.clear();
     m_hovered_button = nullptr;
     m_active_button = nullptr;
+    m_focused_button = nullptr;
     Realize();
 }
 
@@ -586,6 +588,8 @@ bool wxRibbonButtonBar::DeleteButton(int button_id)
                 m_hovered_button = nullptr;
             if (m_active_button  && m_active_button->base  == button)
                 m_active_button = nullptr;
+            if (m_focused_button == button)
+                m_focused_button = nullptr;
             delete button;
             m_keyTips.erase(button_id);
             m_dropdownKeyTips.erase(button_id);
@@ -1099,8 +1103,24 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             }
         }
 
+        // Show the item with the keyboard focus as hovered, and mark it too.
+        long state = base->state | button.size;
+        const bool focused = (base == m_focused_button);
+        if ( focused )
+        {
+            state |= (base->kind == wxRIBBON_BUTTON_DROPDOWN)
+                        ? wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED
+                        : wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED;
+        }
+
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
-            base->state | button.size, base->label, bitmap, bitmap_small);
+            state, base->label, bitmap, bitmap_small);
+
+        if ( focused )
+        {
+            rect.Deflate(FromDIP(2));
+            wxRendererNative::Get().DrawFocusRect(this, dc, rect);
+        }
      }
 
     wxRibbonBar* bar = GetAncestorRibbonBar();
@@ -1617,6 +1637,96 @@ void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     }
     if(repaint)
         Refresh(false);
+}
+
+bool wxRibbonButtonBar::DoFocusButtonFrom(int pos, int step)
+{
+    const std::vector<wxRibbonButtonBarButtonInstance>& buttons =
+        m_layouts.Item(m_current_layout)->buttons;
+    const int count = static_cast<int>(buttons.size());
+    for ( int i = pos; i >= 0 && i < count; i += step )
+    {
+        wxRibbonButtonBarButtonBase* base = buttons[i].base;
+        if ( base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED )
+            continue;
+
+        m_focused_button = base;
+        Refresh(false);
+        return true;
+    }
+    return false;
+}
+
+int wxRibbonButtonBar::DoGetFocusedButtonIndex() const
+{
+    if ( m_focused_button == nullptr )
+        return wxNOT_FOUND;
+
+    const std::vector<wxRibbonButtonBarButtonInstance>& buttons =
+        m_layouts.Item(m_current_layout)->buttons;
+    for ( size_t i = 0; i < buttons.size(); ++i )
+    {
+        if ( buttons[i].base == m_focused_button )
+            return static_cast<int>(i);
+    }
+    return wxNOT_FOUND;
+}
+
+bool wxRibbonButtonBar::HasFocusableItems() const
+{
+    for ( const auto& button : m_layouts.Item(m_current_layout)->buttons )
+    {
+        if ( !(button.base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) )
+            return true;
+    }
+    return false;
+}
+
+bool wxRibbonButtonBar::FocusFirstItem()
+{
+    return DoFocusButtonFrom(0, 1);
+}
+
+bool wxRibbonButtonBar::FocusLastItem()
+{
+    const int count = static_cast<int>(m_layouts.Item(m_current_layout)->buttons.size());
+    return DoFocusButtonFrom(count - 1, -1);
+}
+
+bool wxRibbonButtonBar::FocusNextItem(bool forward)
+{
+    const int current = DoGetFocusedButtonIndex();
+    if ( current == wxNOT_FOUND )
+        return forward ? FocusFirstItem() : FocusLastItem();
+
+    const int step = forward ? 1 : -1;
+    return DoFocusButtonFrom(current + step, step);
+}
+
+void wxRibbonButtonBar::ClearFocusedItem()
+{
+    if ( m_focused_button != nullptr )
+    {
+        m_focused_button = nullptr;
+        Refresh(false);
+    }
+}
+
+void wxRibbonButtonBar::ActivateFocusedItem(bool dropdown)
+{
+    wxRibbonButtonBarButtonBase* button = m_focused_button;
+    if ( button == nullptr )
+        return;
+
+    if ( dropdown )
+    {
+        // Only buttons with a dropdown have something to open.
+        if ( button->kind != wxRIBBON_BUTTON_DROPDOWN &&
+             button->kind != wxRIBBON_BUTTON_HYBRID )
+            return;
+    }
+
+    ActivateButton(button, dropdown);
 }
 
 wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetActiveItem() const
