@@ -40,6 +40,10 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const override { return false; }
 
+#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+
 protected:
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const override;
