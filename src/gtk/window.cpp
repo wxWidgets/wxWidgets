@@ -6994,12 +6994,37 @@ int wxWindowGTK::GetScrollRange( int orient ) const
 
 int wxWindowGTK::GetScrollbarSize( int orient ) const
 {
+    if ( GTK_IS_SCROLLED_WINDOW(m_widget) )
+    {
 #ifdef __WXGTK3__
-    // Overlay scrollbars are drawn on top of the window contents and so don't
-    // take any space in it.
-    if ( GTK_IS_SCROLLED_WINDOW(m_widget) && wxUsesOverlayScrollbars(m_widget) )
-        return 0;
+        // Overlay scrollbars are drawn on top of the window contents and so
+        // don't take any space in it.
+        if ( wxUsesOverlayScrollbars(m_widget) )
+            return 0;
 #endif // __WXGTK3__
+
+        // Account for the spacing between the scrollbar and the window
+        // contents as this is what DoGetClientSize() above does.
+        const ScrollDir dir = ScrollDirFromOrient(orient);
+        if ( GtkRange* const range = m_scrollBar[dir] )
+        {
+            GtkWidget* const widget = GTK_WIDGET(range);
+
+            int size;
+#ifdef __WXGTK3__
+            if ( dir == ScrollDir_Horz )
+                gtk_widget_get_preferred_height(widget, nullptr, &size);
+            else
+                gtk_widget_get_preferred_width(widget, nullptr, &size);
+#else // !__WXGTK3__
+            GtkRequisition req;
+            gtk_widget_size_request(widget, &req);
+            size = dir == ScrollDir_Horz ? req.height : req.width;
+#endif // __WXGTK3__/!__WXGTK3__
+
+            return size + wxGetScrollbarSpacing(m_widget);
+        }
+    }
 
     return wxWindowBase::GetScrollbarSize(orient);
 }
