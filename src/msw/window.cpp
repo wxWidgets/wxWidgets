@@ -6965,7 +6965,7 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
 
 #if 1 // Bricsys change (refs RM-44840) 
 // add keyboard layout to virtual key conversion
-WXWORD WXToVK(int wxk, bool *isExtended, HKL *hkl)
+WXWORD WXToVK(int wxk, bool* isExtended, HKL* hkl)
 #else
 WXWORD WXToVK(int wxk, bool *isExtended)
 #endif
