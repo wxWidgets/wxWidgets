@@ -102,6 +102,10 @@ public:
     // same thing with the colour: this affects the text colour
     virtual bool SetForegroundColour(const wxColor& colour) override;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
     // info bar shouldn't have any border by default, the colour difference
     // between it and the main window separates it well enough
@@ -153,6 +157,10 @@ private:
     int m_effectDuration;
 
     bool m_checked = false;
+
+#if wxUSE_ACCESSIBILITY
+    friend class wxInfoBarGenericAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);

@@ -38,6 +38,40 @@
 #include "wx/valgen.h"
 #include "wx/checkbox.h"
 
+#if wxUSE_ACCESSIBILITY
+
+class wxInfoBarGenericAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxInfoBarGenericAccessible(wxInfoBarGeneric* win)
+        : wxWindowAccessible(win)
+    {
+    }
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *role = wxROLE_SYSTEM_ALERT;
+        return wxACC_OK;
+    }
+
+    virtual wxAccStatus GetName(int childId, wxString* name) override
+    {
+        wxInfoBarGeneric* const infoBar = static_cast<wxInfoBarGeneric*>(GetWindow());
+        wxCHECK( infoBar, wxACC_FAIL );
+
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *name = infoBar->m_text->GetLabelText();
+        return wxACC_OK;
+    }
+};
+
+#endif // wxUSE_ACCESSIBILITY
+
 #ifdef __WXGTK3__
     #include "wx/gtk/private/wrapgtk.h"
 
@@ -277,7 +311,21 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
         // just update the layout to correspond to the new message
         Layout();
     }
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_SYSTEM_ALERT, this,
+                              wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
+
+#if wxUSE_ACCESSIBILITY
+
+wxAccessible* wxInfoBarGeneric::CreateAccessible()
+{
+    return new wxInfoBarGenericAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 void wxInfoBarGeneric::Dismiss()
 {
