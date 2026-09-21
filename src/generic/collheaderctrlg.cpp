@@ -134,7 +134,8 @@ bool wxGenericCollapsibleHeaderCtrl::Create(wxWindow *parent,
     const wxString& name)
 {
     if ( !wxCollapsibleHeaderCtrlBase::Create(parent, id, label, pos, size,
-                                              style, validator, name) )
+                                              style | wxWANTS_CHARS,
+                                              validator, name) )
     {
         return false;
     }
@@ -198,20 +199,6 @@ void wxGenericCollapsibleHeaderCtrl::DoSetCollapsed(bool collapsed)
     ProcessEvent(evt);
 }
 
-#ifdef __WXMSW__
-
-bool wxGenericCollapsibleHeaderCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
-{
-    // Let Enter toggle the header instead of pressing the default button.
-    if ( msg->message == WM_KEYDOWN && msg->wParam == VK_RETURN &&
-            !wxIsCtrlDown() )
-        return false;
-
-    return wxCollapsibleHeaderCtrlBase::MSWShouldPreProcessMessage(msg);
-}
-
-#endif // __WXMSW__
-
 #if wxUSE_ACCESSIBILITY
 
 wxAccessible* wxGenericCollapsibleHeaderCtrl::CreateAccessible()
@@ -236,7 +223,8 @@ void wxGenericCollapsibleHeaderCtrl::OnChar(wxKeyEvent& event)
         DoSetCollapsed(!m_collapsed);
         break;
     default:
-        event.Skip();
+        if ( !HandleAsNavigationKey(event) )
+            event.Skip();
         break;
     }
 }

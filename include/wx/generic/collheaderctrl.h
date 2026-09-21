@@ -46,10 +46,6 @@ public:
 
     virtual bool HasTransparentBackground() override { return true; }
 
-#ifdef __WXMSW__
-    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) override;
-#endif // __WXMSW__
-
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
 #endif // wxUSE_ACCESSIBILITY
