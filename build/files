@@ -597,6 +597,7 @@ BASE_CMN_HDR =
     wx/ptr_scpd.h
     wx/ptr_shrd.h
     wx/recguard.h
+    wx/refcountermt.h
     wx/regex.h
     wx/rtti.h
     wx/scopedarray.h

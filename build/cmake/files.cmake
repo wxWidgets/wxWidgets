@@ -653,6 +653,7 @@ set(BASE_CMN_HDR
     wx/localedefs.h
     wx/uilocale.h
     wx/fs_data.h
+    wx/refcountermt.h
 )
 
 set(NET_UNIX_SRC

@@ -739,6 +739,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/localedefs.h
     wx/uilocale.h
     wx/fs_data.h
+    wx/refcountermt.h
 </set>
 
 

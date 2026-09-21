@@ -29,6 +29,7 @@
 // - the "new" one (defined by xti.h)
 #include "wx/xti.h"
 #include "wx/rtti.h"
+#include "wx/refcountermt.h"
 
 #define wxIMPLEMENT_CLASS(name, basename)                                     \
     wxIMPLEMENT_ABSTRACT_CLASS(name, basename)
@@ -186,7 +187,7 @@ private:
 // wxObjectRefData: ref counted data meant to be stored in wxObject
 // ----------------------------------------------------------------------------
 
-typedef wxRefCounter wxObjectRefData;
+typedef wxRefCounterMT wxObjectRefData;
 
 // ----------------------------------------------------------------------------
 // wxObjectDataPtr: helper class to avoid memleaks because of missing calls

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/refcountermt.h
+// Name:        wx/refcountermt.h
 // Purpose:     wxRefCounterMT class: MT-safe version of wxRefCounter
 // Author:      Vadim Zeitlin
 // Created:     2021-01-11
@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_REFCOUNTERMT_H_
-#define _WX_PRIVATE_REFCOUNTERMT_H_
+#ifndef _WX_REFCOUNTERMT_H_
+#define _WX_REFCOUNTERMT_H_
 
 #include "wx/atomic.h"
 
@@ -16,10 +16,12 @@
 // Version of wxRefCounter with MT-safe count
 // ----------------------------------------------------------------------------
 
-class wxRefCounterMT
+class WXDLLIMPEXP_BASE wxRefCounterMT
 {
 public:
     wxRefCounterMT() { m_count = 1; }
+
+    int GetRefCount() const { return m_count; }
 
     void IncRef() { wxAtomicInc(m_count); }
     void DecRef()
@@ -39,4 +41,4 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxRefCounterMT);
 };
 
-#endif // _WX_PRIVATE_REFCOUNTERMT_H_
+#endif // _WX_REFCOUNTERMT_H_

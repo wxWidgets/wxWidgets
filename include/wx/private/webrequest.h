@@ -12,7 +12,7 @@
 
 #include "wx/ffile.h"
 
-#include "wx/private/refcountermt.h"
+#include "wx/refcountermt.h"
 
 #include <memory>
 #include <unordered_map>

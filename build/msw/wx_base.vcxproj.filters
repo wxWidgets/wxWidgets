@@ -748,6 +748,9 @@
     <ClInclude Include="..\..\include\wx\recguard.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\refcountermt.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\regex.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

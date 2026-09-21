@@ -10,11 +10,13 @@
 #ifndef _WX_PRIVATE_ANIMATEH__
 #define _WX_PRIVATE_ANIMATEH__
 
+#include "wx/refcountermt.h"
+
 // ----------------------------------------------------------------------------
 // wxAnimationImpl
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxAnimationImpl : public wxRefCounter
+class WXDLLIMPEXP_CORE wxAnimationImpl : public wxRefCounterMT
 {
 public:
     wxAnimationImpl() = default;
