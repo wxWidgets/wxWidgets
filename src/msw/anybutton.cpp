@@ -461,6 +461,38 @@ static inline bool NeedsOwnerDrawnForImageLayout(wxDirection dir, int margH, int
     return (dir == wxRIGHT && margH != 0) || (dir == wxBOTTOM && margV != 0);
 }
 
+#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+
+class wxAnyButtonAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxAnyButtonAccessible(wxAnyButton* win)
+        : wxWindowAccessible(win)
+    {
+    }
+
+    // Buttons showing only a bitmap have no label, so use their tooltip as
+    // the name to let screen readers say something more useful than just
+    // "button".
+    virtual wxAccStatus GetName(int childId, wxString* name) override
+    {
+        wxWindow* const win = GetWindow();
+        wxCHECK( win, wxACC_FAIL );
+
+        if ( childId != wxACC_SELF || !win->GetLabel().empty() )
+            return wxACC_NOT_IMPLEMENTED;
+
+        const wxString tip = win->GetToolTipText();
+        if ( tip.empty() )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *name = tip;
+        return wxACC_OK;
+    }
+};
+
+#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -1587,5 +1619,14 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
     return true;
 }
+
+#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+
+wxAccessible* wxAnyButton::CreateAccessible()
+{
+    return new wxAnyButtonAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
 
 #endif // wxHAS_ANY_BUTTON
