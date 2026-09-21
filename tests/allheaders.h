@@ -294,6 +294,7 @@
 #include <wx/rawbmp.h>
 #include <wx/rearrangectrl.h>
 #include <wx/recguard.h>
+#include <wx/refcountermt.h>
 #include <wx/regex.h>
 #include <wx/region.h>
 #include <wx/renderer.h>
