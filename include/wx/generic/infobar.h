@@ -10,6 +10,8 @@
 #ifndef _WX_GENERIC_INFOBAR_H_
 #define _WX_GENERIC_INFOBAR_H_
 
+#include "wx/containr.h"
+
 class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
@@ -24,7 +26,7 @@ enum
     wxINFOBAR_CHECKBOX = 0x0010
 };
 
-class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxInfoBarBase
+class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxNavigationEnabled<wxInfoBarBase>
 {
 public:
     // the usual ctors and Create() but remember that info bar is created
