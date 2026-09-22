@@ -1586,8 +1586,7 @@ public:
     // ----------------------
 
     // Sets the name used by screen readers for this window.
-    void SetAccessibleName(const wxString& name);
-    const wxString& GetAccessibleName() const { return m_accessibleName; }
+    virtual void SetAccessibleName(const wxString& name);
 
 #if wxUSE_ACCESSIBILITY
     // Override to create a specific accessible object.
@@ -1899,7 +1898,6 @@ protected:
     bool                 m_hasCustomPalette;
 #endif // wxUSE_PALETTE
 
-    wxString            m_accessibleName;
 
 #if wxUSE_ACCESSIBILITY
     wxAccessible*       m_accessible;
@@ -2021,8 +2019,6 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // called by SetAccessibleName() to update the native name, if any
-    virtual void DoSetAccessibleName(const wxString& WXUNUSED(name)) { }
 
 #if wxUSE_MENUS
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y) = 0;

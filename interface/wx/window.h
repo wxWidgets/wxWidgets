@@ -3600,25 +3600,11 @@ public:
 
         Currently this function is implemented under MSW, where it requires
         @c wxUSE_ACCESSIBILITY to be enabled, and macOS. Under the other
-        platforms it only stores the name, which is returned by
-        GetAccessibleName().
-
-        @see GetAccessibleName()
+        platforms it doesn't do anything.
 
         @since 3.3.4
     */
-    void SetAccessibleName(const wxString& name);
-
-    /**
-        Returns the name set by SetAccessibleName().
-
-        Notice that this function doesn't return the name used by screen
-        readers by default, it returns an empty string if
-        SetAccessibleName() hadn't been called.
-
-        @since 3.3.4
-    */
-    const wxString& GetAccessibleName() const;
+    virtual void SetAccessibleName(const wxString& name);
 
     /**
         Override to create a specific accessible object.

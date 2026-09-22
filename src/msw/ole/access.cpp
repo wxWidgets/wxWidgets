@@ -1189,17 +1189,13 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
         return E_INVALIDARG;
     }
 
-    // The name set with SetAccessibleName() takes precedence over anything
-    // else, but only for the window itself and not its child elements.
-    if ( varID.lVal == CHILDID_SELF )
+    // The name set with wxWindow::SetAccessibleName() takes precedence over
+    // anything else, but only for the object itself and not its children.
+    const wxString& nameOverride = m_pAccessible->GetNameOverride();
+    if ( varID.lVal == CHILDID_SELF && !nameOverride.empty() )
     {
-        wxWindow* const win = m_pAccessible->GetWindow();
-        if ( win && win->GetAccessible() == m_pAccessible &&
-                !win->GetAccessibleName().empty() )
-        {
-            *pszName = wxBasicString(win->GetAccessibleName()).Detach();
-            return S_OK;
-        }
+        *pszName = wxBasicString(nameOverride).Detach();
+        return S_OK;
     }
 
     wxString name;
