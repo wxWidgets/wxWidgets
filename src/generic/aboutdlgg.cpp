@@ -321,16 +321,30 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
 {
     wxCollapsiblePane *pane = new wxCollapsiblePane(m_contents, wxID_ANY, title);
     wxWindow * const paneContents = pane->GetPane();
-    // Use a read-only text control and not a static text to allow the users
-    // of screen readers to focus it and read possibly long text line by line.
-    wxTextCtrl *txt = new wxTextCtrl(paneContents, wxID_ANY,
-                                     wxString(text).Trim(),
-                                     wxDefaultPosition, wxDefaultSize,
-                                     wxTE_MULTILINE | wxTE_READONLY);
+    const wxString contents = wxString(text).Trim();
 
     // don't make the text unreasonably wide
     static const int maxWidth = wxGetDisplaySize().x/3;
-    txt->SetInitialSize(txt->GetSizeFromTextSize(maxWidth));
+
+    // Short text fitting on a single line doesn't need a scrollbar. Notice
+    // that we still use a multiline control for it because single line
+    // read-only controls can't be focused from keyboard under MSW.
+    const int textWidth = paneContents->GetTextExtent(contents).x;
+    const bool singleLine = !contents.Contains('\n') && textWidth <= maxWidth;
+
+    long style = wxTE_MULTILINE | wxTE_READONLY;
+    if ( singleLine )
+        style |= wxTE_NO_VSCROLL;
+
+    // Use a read-only text control and not a static text to allow the users
+    // of screen readers to focus it and read possibly long text line by line.
+    wxTextCtrl *txt = new wxTextCtrl(paneContents, wxID_ANY, contents,
+                                     wxDefaultPosition, wxDefaultSize, style);
+
+    txt->SetInitialSize(singleLine
+                            ? txt->GetSizeFromTextSize(textWidth,
+                                                       txt->GetCharHeight())
+                            : txt->GetSizeFromTextSize(maxWidth));
 
 
     // we need a sizer to make this text expand to fill the entire pane area
