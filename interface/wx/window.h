@@ -3588,6 +3588,39 @@ public:
     void SetAccessible(wxAccessible* accessible);
 
     /**
+        Sets the name used by screen readers for this window.
+
+        By default, screen readers use the label of the window, if it has
+        one, or, for some controls such as wxTextCtrl, the text of the label
+        preceding it. This function allows to give a name to the windows
+        without a label, e.g. buttons showing only a bitmap, or to use a
+        different name than the label.
+
+        Pass an empty string to use the default name again.
+
+        Currently this function is implemented under MSW, where it requires
+        @c wxUSE_ACCESSIBILITY to be enabled, and macOS. Under the other
+        platforms it only stores the name, which is returned by
+        GetAccessibleName().
+
+        @see GetAccessibleName()
+
+        @since 3.3.4
+    */
+    void SetAccessibleName(const wxString& name);
+
+    /**
+        Returns the name set by SetAccessibleName().
+
+        Notice that this function doesn't return the name used by screen
+        readers by default, it returns an empty string if
+        SetAccessibleName() hadn't been called.
+
+        @since 3.3.4
+    */
+    const wxString& GetAccessibleName() const;
+
+    /**
         Override to create a specific accessible object.
     */
     virtual wxAccessible* CreateAccessible();

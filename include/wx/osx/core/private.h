@@ -396,6 +396,8 @@ public :
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
+    virtual void        SetAccessibilityLabel(const wxString& WXUNUSED(label)) { }
+
     // is the clicked event sent AFTER the state already changed, so no additional
     // state changing logic is required from the outside
     virtual bool        ButtonClickDidStateChange() = 0;

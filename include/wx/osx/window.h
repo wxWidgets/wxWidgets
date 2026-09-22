@@ -415,6 +415,8 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip ) override;
 #endif
 
+    virtual void DoSetAccessibleName(const wxString& name) override;
+
     // common part of Show/HideWithEffect()
     virtual bool OSXShowWithEffect(bool show,
                                    wxShowEffect effect,

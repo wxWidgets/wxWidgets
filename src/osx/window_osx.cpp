@@ -927,6 +927,12 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 
 #endif
 
+void wxWindowMac::DoSetAccessibleName(const wxString& name)
+{
+    if (GetPeer())
+        GetPeer()->SetAccessibilityLabel(name);
+}
+
 void wxWindowMac::MacInvalidateBorders()
 {
     if ( GetPeer() == nullptr )

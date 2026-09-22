@@ -3970,6 +3970,30 @@ void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
     }
 }
 
+void wxWidgetCocoaImpl::SetAccessibilityLabel(const wxString& label)
+{
+    // VoiceOver reads the view inside a scroll view, e.g. the text view of a
+    // multiline wxTextCtrl, and not the scroll view itself.
+    NSView* view = m_osxView;
+    if ( [view isKindOfClass:[NSScrollView class]] )
+    {
+        NSView* const documentView = [(NSScrollView*)view documentView];
+        if ( documentView )
+            view = documentView;
+    }
+
+    wxCFStringRef cf(label);
+    NSString* const str = label.empty() ? nil : cf.AsNSString();
+
+    // VoiceOver uses the title of the buttons instead of their label.
+    // Notice that we must not set both of them: resetting them both to nil
+    // afterwards results in an empty title instead of the default one.
+    if ( [view isKindOfClass:[NSButton class]] )
+        [view setAccessibilityTitle:str];
+    else
+        [view setAccessibilityLabel:str];
+}
+
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
     WXWidget c =  control ? control : (WXWidget) m_osxView;
