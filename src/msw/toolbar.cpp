@@ -1716,19 +1716,20 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 // Check if button is in the the fully pressed state.
                 if ( nmtbcd->nmcd.uItemState & CDIS_CHECKED )
                 {
-                    customBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+                    // Draw background lighter, like the Windows 10 Explorer
+                    // "View" tool bar.
+                    customBg = colBg.ChangeLightness(125);
                 }
                 // Check if the mouse is over the button or the button is
                 // being pressed.
                 else if ( nmtbcd->nmcd.uItemState & (CDIS_HOT | CDIS_SELECTED) )
                 {
-                    customBg = colBg;
+                    // Draw background slightly lighter.
+                    customBg = colBg.ChangeLightness(110);
                 }
 
                 if ( customBg.IsOk() )
                 {
-                    customBg = customBg.ChangeLightness(110);
-
                     AutoHBRUSH br(wxColourToRGB(customBg));
                     ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
                     *result |= TBCDRF_NOBACKGROUND;
