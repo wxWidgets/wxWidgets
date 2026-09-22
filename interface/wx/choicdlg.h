@@ -259,12 +259,6 @@ public:
     Same as wxGetSingleChoice() but returns the index representing the
     selected string. If the user pressed cancel, -1 is returned.
 
-    The dialog is created at the given position (@a x, @a y), unless @a centre
-    is @true, in which case it is centred on the screen or on its parent
-    window. The dialog is also sized to be at least @a width by @a height if
-    these values are provided (i.e. not wxDefaultCoord), but it will never be
-    shrunk below its minimal sizer-fitted size.
-
     @header{wx/choicdlg.h}
 
     @beginWxPerlOnly
@@ -322,14 +316,20 @@ int wxGetSingleChoiceIndex(const wxString& message,
     which is an array of @a n strings for the listbox or by using a single
     @c aChoices parameter of type wxArrayString.
 
-    If @c centre is @true, the message text (which may include new line
-    characters) is centred; if @false, the message is left-justified.
+    If both @a x and @a y are specified, i.e. are not wxDefaultCoord, the dialog
+    is shown at this position and @a centre is ignored. It is an error to
+    specify only one of them. Otherwise, the dialog is centred on the screen or
+    on its parent window if @a centre is @true (which is the default) or shown
+    at the default position if it is @false.
 
-    The dialog is created at the given position (@a x, @a y), unless @a centre
-    is @true, in which case it is centred on the screen or on its parent
-    window. The dialog is also sized to be at least @a width by @a height if
-    these values are provided (i.e. not wxDefaultCoord), but it will never be
-    shrunk below its minimal sizer-fitted size.
+    If @a width and/or @a height are specified, i.e. are not wxDefaultCoord,
+    the dialog is made at least this big, but it is never made smaller than the
+    size needed to show all its contents.
+
+    @note Before wxWidgets 3.3.4 the @a x, @a y, @a centre, @a width and
+        @a height parameters were ignored. To change the dialog position or
+        size in the previous versions, create a wxSingleChoiceDialog object
+        instead of calling this function and change them before showing it.
 
     @header{wx/choicdlg.h}
 
@@ -382,12 +382,6 @@ wxString wxGetSingleChoice(const wxString& message,
     corresponding to the strings, and returns one of these pointers or @NULL
     if Cancel was pressed. The @c client_data array must have the same number
     of elements as @c choices or @c aChoices!
-
-    The dialog is created at the given position (@a x, @a y), unless @a centre
-    is @true, in which case it is centred on the screen or on its parent
-    window. The dialog is also sized to be at least @a width by @a height if
-    these values are provided (i.e. not wxDefaultCoord), but it will never be
-    shrunk below its minimal sizer-fitted size.
 
     @header{wx/choicdlg.h}
 
@@ -451,11 +445,9 @@ void* wxGetSingleChoiceData(const wxString& message,
     which is an array of @a n strings for the listbox or by using a single
     @c aChoices parameter of type wxArrayString.
 
-    The dialog is created at the given position (@a x, @a y), unless @a centre
-    is @true, in which case it is centred on the screen or on its parent
-    window. The dialog is also sized to be at least @a width by @a height if
-    these values are provided (i.e. not wxDefaultCoord), but it will never be
-    shrunk below its minimal sizer-fitted size.
+    The @a x, @a y, @a centre, @a width and @a height parameters are used in
+    the same way as in wxGetSingleChoice() and were ignored before wxWidgets
+    3.3.4.
 
     @header{wx/choicdlg.h}
 

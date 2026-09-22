@@ -225,22 +225,26 @@ public:
     @c default_value. The user may type in text and press OK to return this
     text, or press Cancel to return the empty string.
 
-    If @c centre is @true, the message text (which may include new line
-    characters) is centred; if @false, the message is left-justified.
+    If both @a x and @a y are specified, i.e. are not wxDefaultCoord, the dialog
+    is shown at this position and @a centre is ignored. It is an error to
+    specify only one of them. Otherwise, the dialog is centred on the screen or
+    on its parent window if @a centre is @true (which is the default) or shown
+    at the default position if it is @false.
+
+    The second overload also allows to specify the @a size of the dialog, which
+    is then made at least this big, but never smaller than the size needed to
+    show its contents. As the dialog can only show a single line of text, its
+    height is normally determined by its contents and only the width of @a size
+    is useful, so the height should usually be left as wxDefaultCoord.
 
     This function is a wrapper around wxTextEntryDialog and while it is usually
     more convenient to use, using the dialog directly is more flexible, e.g. it
     allows you to specify the @c wxTE_MULTILINE to allow the user enter
     multiple lines of text while this function is limited to single line entry
-    only. See also wxTextEntryDialog for more control.
+    only.
 
-    The dialog is created at the given position (@a x, @a y), unless @a centre
-    is @true, in which case it is centred on the screen or on its parent
-    window. The dialog is also widened as needed to be at least @a width pixels
-    wide if this value is provided (i.e. not wxDefaultCoord). There is no
-    corresponding height parameter, as the height of this dialog is entirely
-    determined by its contents, given that it can only ever show a single line
-    of text.
+    @note Before wxWidgets 3.3.4, the position was ignored if @a centre was
+        @true, i.e. by default, and the second overload didn't exist.
 
     @header{wx/textdlg.h}
 */
@@ -250,8 +254,15 @@ wxString wxGetTextFromUser(const wxString& message,
                            wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
-                           bool centre = true,
-                           int width = wxDefaultCoord);
+                           bool centre = true);
+
+wxString wxGetTextFromUser(const wxString& message,
+                           const wxString& caption,
+                           const wxString& default_value,
+                           wxWindow* parent,
+                           const wxPoint& pos,
+                           const wxSize& size = wxDefaultSize,
+                           bool centre = true);
 
 /**
     Similar to wxGetTextFromUser() but the text entered in the dialog is not

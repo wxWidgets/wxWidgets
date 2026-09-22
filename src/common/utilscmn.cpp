@@ -1415,32 +1415,33 @@ void wxInfoMessageBox(wxWindow* parent)
 
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
-                        wxCoord x, wxCoord y, bool centre, wxCoord width )
+                        wxCoord x, wxCoord y, bool centre )
 {
+    return wxGetTextFromUser(message, caption, defaultValue, parent,
+                             wxPoint(x, y), wxDefaultSize, centre);
+}
+
+wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
+                        const wxString& defaultValue, wxWindow *parent,
+                        const wxPoint& pos, const wxSize& size, bool centre )
+{
+    bool hasPos = pos != wxDefaultPosition;
+    if ( hasPos && !pos.IsFullySpecified() )
+    {
+        wxFAIL_MSG("Either both x and y must be valid or none of them.");
+        hasPos = false;
+    }
+
     wxString str;
     long style = wxTextEntryDialogStyle;
 
-    if (centre)
+    if ( centre && !hasPos )
         style |= wxCENTRE;
     else
         style &= ~wxCENTRE;
 
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style, wxPoint(x, y));
-
-    if (width != wxDefaultCoord)
-    {
-        wxSize sz = dialog.GetSize();
-        sz.SetWidth(wxMax(sz.GetWidth(), width));
-        dialog.SetSize(sz);
-    }
-
-    if ( x != wxDefaultCoord || y != wxDefaultCoord )
-    {
-        if ( centre )
-            dialog.Centre();
-        else
-            dialog.Move(x, y);
-    }
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style,
+                             hasPos ? pos : wxDefaultPosition, size);
 
     if (dialog.ShowModal() == wxID_OK)
     {

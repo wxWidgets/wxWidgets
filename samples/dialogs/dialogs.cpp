@@ -185,6 +185,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_CHOICEDLG
     EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
+    EVT_MENU(DIALOGS_SINGLE_CHOICE_DATA,            MyFrame::SingleChoiceData)
     EVT_MENU(DIALOGS_MULTI_CHOICE,                  MyFrame::MultiChoice)
 #endif // wxUSE_CHOICEDLG
 
@@ -437,6 +438,7 @@ bool MyApp::OnInit()
 
     #if wxUSE_CHOICEDLG
         choices_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice\tCtrl-C");
+        choices_menu->Append(DIALOGS_SINGLE_CHOICE_DATA, "Single choice with &data");
         choices_menu->Append(DIALOGS_MULTI_CHOICE,  "M&ultiple choice\tCtrl-U");
     #endif // wxUSE_CHOICEDLG
 
@@ -648,6 +650,10 @@ bool MyApp::OnInit()
     menuDlg->Append(DIALOGS_TEST_DEFAULT_ACTION, "&Test dialog default action");
     menuDlg->AppendCheckItem(DIALOGS_MODAL_HOOK, "Enable modal dialog hook");
     menuDlg->AppendCheckItem(DIALOGS_SIMULATE_UNSAVED, "Simulate an unsaved document at exit");
+#if wxUSE_CHOICEDLG || wxUSE_TEXTDLG
+    menuDlg->AppendCheckItem(DIALOGS_USE_WRAPPER_FUNCTIONS,
+                             "Use wrapper functions for dialogs");
+#endif // wxUSE_CHOICEDLG || wxUSE_TEXTDLG
 
     menuDlg->AppendSeparator();
     menuDlg->Append(wxID_EXIT, "E&xit\tAlt-X");
@@ -1172,6 +1178,22 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
 {
+    if ( GetMenuBar()->IsChecked(DIALOGS_USE_WRAPPER_FUNCTIONS) )
+    {
+        const wxString value = wxGetTextFromUser(
+                                    "This is a small sample\n"
+                                    "A long, long string to test out the text entrybox",
+                                    "Please enter a string",
+                                    "Default value",
+                                    this,
+                                    GetPosition() + wxPoint(50, 50),
+                                    wxSize(500, wxDefaultCoord));
+        if ( !value.empty() )
+            wxMessageBox(value, "Got string", wxOK | wxICON_INFORMATION, this);
+
+        return;
+    }
+
     wxTextEntryDialog dialog(this,
                              "This is a small sample\n"
                              "A long, long string to test out the text entrybox",
@@ -1183,23 +1205,6 @@ void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxMessageBox(dialog.GetValue(), "Got string", wxOK | wxICON_INFORMATION, this);
-    }
-
-    // wxGetTextFromUser() can also be used directly, without having to
-    // create a wxTextEntryDialog object explicitly. This overload honours
-    // the given position and width.
-    const wxString value = wxGetTextFromUser(
-                                "This is a small sample\n"
-                                "Using an explicit position and width this time",
-                                "Please enter a string",
-                                "Default value",
-                                this,
-                                GetPosition().x + 50, GetPosition().y + 50,
-                                true,
-                                500);
-    if ( !value.empty() )
-    {
-        wxLogMessage("You entered \"%s\"", value);
     }
 }
 
@@ -1247,6 +1252,26 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
 {
     const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
 
+    if ( GetMenuBar()->IsChecked(DIALOGS_USE_WRAPPER_FUNCTIONS) )
+    {
+        // wxGetSingleChoiceIndex() wraps wxSingleChoiceDialog and can be
+        // given the position and size of the dialog.
+        const int index = wxGetSingleChoiceIndex(
+                                "This is a small sample\n"
+                                "A single-choice convenience dialog",
+                                "Please select a value",
+                                WXSIZEOF(choices), choices,
+                                this,
+                                GetPosition().x + 50, GetPosition().y + 50,
+                                true,
+                                500, 400,
+                                2);
+        if ( index != -1 )
+            wxLogMessage("You selected \"%s\"", choices[index]);
+
+        return;
+    }
+
     wxSingleChoiceDialog dialog(this,
                                 "This is a small sample\n"
                                 "A single-choice convenience dialog",
@@ -1260,24 +1285,35 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, dialog.GetStringSelection(), "Got string");
         dialog2.ShowModal();
     }
+}
 
-    // wxGetSingleChoiceIndex() can also be used directly, without having to
-    // create a wxSingleChoiceDialog object explicitly. This overload honours
-    // the given position and size.
-    const int index = wxGetSingleChoiceIndex(
-                            "This is a small sample\n"
-                            "A single-choice convenience dialog\n"
-                            "using an explicit position and size",
-                            "Please select a value",
-                            WXSIZEOF(choices), choices,
-                            this,
-                            GetPosition().x + 50, GetPosition().y + 50,
-                            true,
-                            500, 400,
-                            2);
-    if ( index != -1 )
+void MyFrame::SingleChoiceData(wxCommandEvent& WXUNUSED(event) )
+{
+    const wxString choices[] = { "One", "Two", "Three", "Four", "Five" };
+    const int data[] = { 1, 2, 3, 4, 5 };
+
+    void *clientData[WXSIZEOF(data)];
+    for ( size_t i = 0; i < WXSIZEOF(data); i++ )
     {
-        wxLogMessage("You selected \"%s\"", choices[index]);
+        clientData[i] = const_cast<int *>(&data[i]);
+    }
+
+    const int * const result = static_cast<const int *>(wxGetSingleChoiceData(
+                                   "This is a small sample\n"
+                                   "A single-choice convenience dialog\n"
+                                   "using an explicit position and size",
+                                   "Please select a value",
+                                   WXSIZEOF(choices), choices,
+                                   clientData,
+                                   this,
+                                   GetPosition().x + 50, GetPosition().y + 50,
+                                   true,
+                                   500, 400,
+                                   2));
+    if ( result != nullptr )
+    {
+        wxLogMessage("You selected \"%s\" (%d)",
+                     choices[result - data], *result);
     }
 }
 
@@ -1290,20 +1326,41 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
         "Eleven", "Twelve", "Seventeen",
     };
 
-    // Use the overload taking an explicit position and size, unlike the
-    // other overloads of this function, to demonstrate that doing this
-    // actually works.
     wxArrayInt selections;
-    const int count = wxGetSelectedChoices(selections,
-                                        "This is a small sample\n"
-                                        "A multi-choice convenience dialog\n"
-                                        "using an explicit position and size",
-                                        "Please select a value",
-                                        WXSIZEOF(choices), choices,
-                                        this,
-                                        GetPosition().x + 50, GetPosition().y + 50,
-                                        true,
-                                        500, 400);
+    int count;
+    if ( GetMenuBar()->IsChecked(DIALOGS_USE_WRAPPER_FUNCTIONS) )
+    {
+        count = wxGetSelectedChoices(selections,
+                                     "This is a small sample\n"
+                                     "A multi-choice convenience dialog",
+                                     "Please select a value",
+                                     WXSIZEOF(choices), choices,
+                                     this,
+                                     GetPosition().x + 50, GetPosition().y + 50,
+                                     true,
+                                     500, 400);
+    }
+    else
+    {
+        wxMultiChoiceDialog dialog(this,
+                                   "This is a small sample\n"
+                                   "A multi-choice convenience dialog",
+                                   "Please select a value",
+                                   WXSIZEOF(choices), choices);
+
+        dialog.SetSelections(selections);
+
+        if ( dialog.ShowModal() == wxID_OK )
+        {
+            selections = dialog.GetSelections();
+            count = static_cast<int>(selections.GetCount());
+        }
+        else
+        {
+            count = -1;
+        }
+    }
+
     if ( count >= 0 )
     {
         wxString msg;
