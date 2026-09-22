@@ -505,6 +505,23 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     {
         EnableCloseButton(false);
     }
+    else
+    {
+        // Work around a Windows bug: the system menu is created on demand
+        // (it's a Win16 optimization se
+        // https://devblogs.microsoft.com/oldnewthing/20100528-00/?p=13893/)
+        // and -- the buggy part -- when it does get created, its handle is
+        // owned by the process which called GetSystemMenu() which might not be
+        // this process at all but, for example, Explorer, which apparently
+        // needs the system menu to show the taskbar icon for the application.
+        // Because of this, if Explorer is killed, our system menu HMENU
+        // becomes invalid and using it breaks in weird ways (see #26799).
+        //
+        // Eagerly create the system menu here to avoid this problem. Note that
+        // EnableCloseButton() already calls GetSystemMenu() so we don't need
+        // to do it in the "if" branch above.
+        ::GetSystemMenu(GetHwnd(), FALSE);
+    }
 
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
