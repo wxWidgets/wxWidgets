@@ -8,11 +8,16 @@ httpbin_launch() {
         return 0
     fi
 
+    # Disable the tests by default and only reenable them below if we do manage
+    # to launch httpbin.
     WX_TEST_WEBREQUEST_URL=0
     export WX_TEST_WEBREQUEST_URL
 
     go version
-    go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+    if ! go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2; then
+        echo '::warning::Failed to install httpbin, skipping wxWebRequest tests.'
+        return 0
+    fi
 
     echo 'Launching httpbin...'
     go-httpbin -host 127.0.0.1 -port 8081 2>&1 >httpbin.log &
