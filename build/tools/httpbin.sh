@@ -20,7 +20,7 @@ httpbin_launch() {
     fi
 
     echo 'Launching httpbin...'
-    go-httpbin -host 127.0.0.1 -port 8081 2>&1 >httpbin.log &
+    go-httpbin -host 127.0.0.1 -port 8081 >httpbin.log 2>&1 &
     WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
 }
 
