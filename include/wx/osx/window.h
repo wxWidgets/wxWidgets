@@ -61,6 +61,7 @@ public:
 
     // implement base class pure virtuals
     virtual void SetLabel( const wxString& label ) override;
+    virtual void SetAccessibleName(const wxString& name) override;
     virtual wxString GetLabel() const override;
 
     virtual void Raise() override;
@@ -414,8 +415,6 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip ) override;
 #endif
-
-    virtual void SetAccessibleName(const wxString& name) override;
 
     // common part of Show/HideWithEffect()
     virtual bool OSXShowWithEffect(bool show,
