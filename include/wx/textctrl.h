@@ -851,11 +851,6 @@ public:
     bool IsSingleLine() const { return !HasFlag(wxTE_MULTILINE); }
     bool IsMultiLine() const { return !IsSingleLine(); }
 
-    // allow read-only controls to accept focus from keyboard even on the
-    // platforms where they don't do it by default
-    void SetAcceptFocusFromKeyboard(bool accept = true)
-        { m_acceptFocusFromKeyboard = accept; }
-
     // stream-like insertion operators: these are always available, whether we
     // were, or not, compiled with streambuf support
     wxTextCtrl& operator<<(const wxString& s);
@@ -956,8 +951,6 @@ protected:
 
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() override { return this; }
-
-    bool m_acceptFocusFromKeyboard = false;
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);

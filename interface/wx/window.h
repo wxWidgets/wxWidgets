@@ -501,9 +501,29 @@ public:
         on it, but it will still be possible to focus it by clicking on it with
         a pointing device.
 
+        @see EnableFocusFromKeyboard()
+
         @since 3.1.4
      */
     void DisableFocusFromKeyboard();
+
+    /**
+        Allow giving focus to this window using the keyboard navigation keys.
+
+        Some windows don't accept focus from keyboard by default, even though
+        they can be focused by clicking on them. Currently this is the case
+        for single line read-only wxTextCtrl under MSW, which is consistent
+        with the native applications behaviour, but makes it impossible for
+        the users relying on the keyboard, e.g. because they use a screen
+        reader, to reach them. Calling this function allows pressing @c TAB
+        to focus such windows too.
+
+        This function undoes the effect of DisableFocusFromKeyboard() and
+        vice versa.
+
+        @since 3.3.4
+     */
+    void EnableFocusFromKeyboard();
 
     /**
      Can this window itself have focus?

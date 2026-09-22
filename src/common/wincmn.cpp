@@ -315,6 +315,7 @@ wxWindowBase::wxWindowBase()
     m_autoLayout = false;
 
     m_disableFocusFromKbd = false;
+    m_enableFocusFromKbd = false;
 
 #if wxUSE_DRAG_AND_DROP
     m_dropTarget = nullptr;

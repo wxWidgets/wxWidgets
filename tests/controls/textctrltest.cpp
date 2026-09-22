@@ -1629,7 +1629,7 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
 }
 
 #ifdef __WXMSW__
-TEST_CASE("wxTextCtrl::AcceptFocusFromKeyboard", "[wxTextCtrl][focus]")
+TEST_CASE("wxTextCtrl::EnableFocusFromKeyboard", "[wxTextCtrl][focus]")
 {
     auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
                                         "Hello", wxDefaultPosition,
@@ -1637,7 +1637,7 @@ TEST_CASE("wxTextCtrl::AcceptFocusFromKeyboard", "[wxTextCtrl][focus]")
 
     CHECK( !text->AcceptsFocusFromKeyboard() );
 
-    text->SetAcceptFocusFromKeyboard();
+    text->EnableFocusFromKeyboard();
     CHECK( text->AcceptsFocusFromKeyboard() );
 }
 #endif // __WXMSW__

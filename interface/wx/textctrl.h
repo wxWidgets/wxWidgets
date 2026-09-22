@@ -1900,25 +1900,6 @@ public:
     bool IsSingleLine() const;
 
     /**
-        Allow the control to accept focus from keyboard even if it is read-only.
-
-        By default, single line read-only controls can't be focused using
-        the keyboard under MSW, which is consistent with the native
-        applications behaviour, but makes it impossible for the users
-        relying on keyboard, e.g. because they use a screen reader, to reach
-        them. Call this function to allow them to accept focus from keyboard
-        too.
-
-        Currently this function only has an effect under MSW.
-
-        @param accept If @true, the control always accepts focus from
-            keyboard. If @false, the default platform behaviour is used.
-
-        @since 3.3.4
-    */
-    void SetAcceptFocusFromKeyboard(bool accept = true);
-
-    /**
         Returns the current text proofing options.
 
         This function is implemented for the same platforms as
