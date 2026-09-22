@@ -55,9 +55,9 @@ public:
     {
          int w = GetSize().x;
 #ifdef __WXMSW__
-         w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this) + 6;
+         w -= GetScrollbarSize(wxVERTICAL) + 6;
 #else
-         w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this);
+         w -= 2*GetScrollbarSize(wxVERTICAL);
 #endif
          if (w < 0) w = 0;
          SetColumnWidth(0, w);

@@ -3846,10 +3846,11 @@ wxRect wxListMainWindow::GetViewRect() const
 
     // account for the scrollbars if necessary
     const wxSize sizeAll = GetClientSize();
+    const wxGenericListCtrl* const listctrl = GetListCtrl();
     if ( xMax > sizeAll.x )
-        yMax += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+        yMax += listctrl->GetScrollbarSize(wxHORIZONTAL);
     if ( yMax > sizeAll.y )
-        xMax += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        xMax += listctrl->GetScrollbarSize(wxVERTICAL);
 
     return wxRect(0, 0, xMax, yMax);
 }
@@ -4202,8 +4203,8 @@ void wxListMainWindow::RecalculatePositions()
                     if ( (tries == 0) &&
                             (entireWidth + SCROLL_UNIT_X > clientWidth) )
                     {
-                        clientHeight -= wxSystemSettings::
-                                            GetMetric(wxSYS_HSCROLL_Y);
+                        clientHeight -=
+                            GetListCtrl()->GetScrollbarSize(wxHORIZONTAL);
                         m_linesPerPage = 0;
                         break;
                     }
@@ -4774,6 +4775,11 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 
 int wxListMainWindow::GetCountPerPage() const
 {
+    // The number of lines per page may be out of date if we're dirty, so
+    // recompute it in this case.
+    if ( m_dirty )
+        wxConstCast(this, wxListMainWindow)->RecalculatePositions();
+
     if ( !m_linesPerPage )
     {
         wxConstCast(this, wxListMainWindow)->
@@ -5810,10 +5816,10 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
         const wxSize sizeVirt = m_mainWin->GetVirtualSize();
 
         if ( sizeVirt.x > sizeClient.x /* HasScrollbar(wxHORIZONTAL) */ )
-            sizeBest.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+            sizeBest.y += GetScrollbarSize(wxHORIZONTAL);
 
         if ( sizeVirt.y > sizeClient.y /* HasScrollbar(wxVERTICAL) */ )
-            sizeBest.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+            sizeBest.x += GetScrollbarSize(wxVERTICAL);
     }
 
     return sizeBest;

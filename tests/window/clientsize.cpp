@@ -163,8 +163,8 @@ TEST_CASE("wxScrolled::ClientSize", "[window][client-size][scroll]")
     {
         const wxSize sizeScrollbar
                      (
-                        wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win),
-                        wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win)
+                        win->GetScrollbarSize(wxVERTICAL),
+                        win->GetScrollbarSize(wxHORIZONTAL)
                      );
 
         // Allow for a small tolerance because the scrollbars may be separated

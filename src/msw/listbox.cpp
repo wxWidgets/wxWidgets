@@ -633,7 +633,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     wListbox += 3*GetCharWidth();
 
     // add room for the scrollbar
-    wListbox += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
+    wListbox += GetScrollbarSize(wxVERTICAL);
 
     // don't make the listbox too tall (limit height to 10 items) but don't
     // make it too small either

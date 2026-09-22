@@ -812,7 +812,7 @@ void wxPropertyGridManager::SetId( wxWindowID winid )
 wxSize wxPropertyGridManager::DoGetBestSize() const
 {
     // Width: margin=15 + columns=2*40 + scroll bar
-    return wxSize(15+2*40+wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_pPropGrid), 150);
+    return wxSize(15+2*40+m_pPropGrid->GetScrollbarSize(wxVERTICAL), 150);
 }
 
 // -----------------------------------------------------------------------
