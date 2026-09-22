@@ -975,6 +975,7 @@
     <ClCompile Include="net\ipc_test_server.cpp" />
     <ClCompile Include="net\socket.cpp" />
     <ClCompile Include="net\webrequest.cpp" />
+    <ClCompile Include="net\webrequest_local.cpp" />
     <ClCompile Include="regex\regextest.cpp" />
     <ClCompile Include="regex\wxregextest.cpp" />
     <ClCompile Include="scopeguard\scopeguardtest.cpp" />

@@ -112,10 +112,11 @@ set(TEST_GUI_SRC
     misc/safearrayconverttest.cpp
     misc/settings.cpp
     misc/textwrap.cpp
-    # This one is intentionally duplicated here (it is also part of
-    # non-GUI test) as sockets behave differently in console and GUI
-    # applications.
+    # These ones are intentionally duplicated here (they are also part of
+    # non-GUI test) as sockets and web requests behave differently in
+    # console and GUI applications.
     net/socket.cpp
+    net/webrequest_local.cpp
     persistence/tlw.cpp
     persistence/dataview.cpp
     rowheightcache/rowheightcachetest.cpp

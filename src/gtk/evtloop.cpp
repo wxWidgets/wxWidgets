@@ -136,24 +136,39 @@ static gboolean wx_on_channel_event(GIOChannel *channel,
     wxEventLoopSourceHandler * const
         handler = static_cast<wxEventLoopSourceHandler *>(data);
 
+    // We may have to call several handler methods for a single notification
+    // here, as GLib reports all the conditions at once. Any of them may delete
+    // the wxEventLoopSource using this handler, and the handler itself with
+    // it, so we must stop as soon as this happens instead of using the handler
+    // again: GLib keeps the source alive until we return, but the conditions
+    // it reported don't apply to it any longer once it has been destroyed.
+    GSource* const source = g_main_current_source();
+
     if ( (condition & G_IO_IN) || (condition & G_IO_PRI) || (condition & G_IO_HUP) )
+    {
         handler->OnReadWaiting();
 
+        if ( g_source_is_destroyed(source) )
+            return TRUE;
+    }
+
     if (condition & G_IO_OUT)
+    {
         handler->OnWriteWaiting();
+
+        if ( g_source_is_destroyed(source) )
+            return TRUE;
+    }
 
     if ( (condition & G_IO_ERR) || (condition & G_IO_NVAL) )
         handler->OnExceptionWaiting();
 
     // we never want to remove source here, so always return true
     //
-    // The source may have been removed by the handler, so it may be
-    // a good idea to return FALSE when the source has already been
-    // removed.  However, that would involve somehow informing this function
-    // that the source was removed, which is not trivial to implement
-    // and handle all cases.  It has been found through testing
-    // that if the source was removed by the handler, that even if we
-    // return TRUE here, the source/callback will not get called again.
+    // Note that the source could have been removed by the handler above, in
+    // which case returning FALSE could seem better, but this is not necessary:
+    // it has been found through testing that the callback is not called again
+    // in this case even if we return TRUE.
     return TRUE;
 }
 }

@@ -234,7 +234,7 @@ public:
     wxQtSocketNotifier<&wxEventLoopSourceHandler::OnExceptionWaiting> * m_exception;
 
     wxQtEventLoopSource(int fd, wxEventLoopSourceHandler *handler, int flags)
-        : wxEventLoopSource(handler, fd)
+        : wxEventLoopSource(handler, flags)
     {
         if ( flags & wxEVENT_SOURCE_INPUT )
             m_reader = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnReadWaiting>
