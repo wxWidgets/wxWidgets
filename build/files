@@ -2075,6 +2075,7 @@ OSX_SHARED_HDR =
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
+    wx/osx/hyperlink.h
     wx/osx/listbox.h
     wx/osx/mdi.h
     wx/osx/menu.h
@@ -2152,6 +2153,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/evtloop.mm
     src/osx/cocoa/filedlg.mm
     src/osx/cocoa/gauge.mm
+    src/osx/cocoa/hyperlink.mm
     src/osx/cocoa/listbox.mm
     src/osx/cocoa/menu.mm
     src/osx/cocoa/menuitem.mm
