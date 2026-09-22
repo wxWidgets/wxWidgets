@@ -313,6 +313,7 @@
 		E17048DEEF1138318314F1D0 /* pcre2_valid_utf.c in Sources */ = {isa = PBXBuildFile; fileRef = FAE49A61DFE9375AAB18E8DD /* pcre2_valid_utf.c */; };
 		A1A7B833061C35B4AABD093C /* preferencesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */; };
 		23E9AF567E873B948EFEA180 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		15FE683EBB5FB02CF64A3D63 /* hyperlink.mm in Sources */ = {isa = PBXBuildFile; fileRef = B38233C4B68F13943A66C521 /* hyperlink.mm */; };
 		131B879180AE3FB481F81CC7 /* fs_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A305CEC03B3085B159B617 /* fs_mem.cpp */; };
 		785823C5C1C43D2CB0A21558 /* lossless_enc_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = F3EC925F04DA39AF97F50324 /* lossless_enc_sse2.c */; };
 		03035C5CE4BC3288A5A18424 /* choicdgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF23AF3EFC5731B2A5BCF4A3 /* choicdgg.cpp */; };
@@ -1987,6 +1988,7 @@
 		05814571E7A83F5DBFB6E4C5 /* msgout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E968913A9A593B258BD8EACB /* msgout.cpp */; };
 		63F895D6F5643E4B9E666B7A /* creddlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8DE97F5A2AD393CBD31AED3 /* creddlgg.cpp */; };
 		23E9AF567E873B948EFEA181 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		CA518AD5434C9BA4827D5857 /* hyperlink.mm in Sources */ = {isa = PBXBuildFile; fileRef = B38233C4B68F13943A66C521 /* hyperlink.mm */; };
 		91BDA5B04CF33C9AB7358B8B /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69F098E47EBF34368ABAE7ED /* timer.cpp */; };
 		7F62946D497A32CE857F65CA /* pcre2_maketables.c in Sources */ = {isa = PBXBuildFile; fileRef = D016F584D14C31E192DB3179 /* pcre2_maketables.c */; };
 		22EC132AEF863BFBAA6EDEC4 /* LexPowerPro.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 2A5FC30FF3743DBAAF8910EC /* LexPowerPro.cxx */; };
@@ -2282,6 +2284,7 @@
 		C8C68927DB243AEAB51E11F3 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = AF9EE701DD653E2299293E5F /* pngwio.c */; };
 		B640A8A74D973A8FBEF63918 /* LexConf.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 04082EC1C91334379425802D /* LexConf.cxx */; };
 		23E9AF567E873B948EFEA182 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		1B5256D9C4A99321883C8342 /* hyperlink.mm in Sources */ = {isa = PBXBuildFile; fileRef = B38233C4B68F13943A66C521 /* hyperlink.mm */; };
 		603DF49D176737D383CE4F02 /* choice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F838F853CB03CF7932C08C3 /* choice.mm */; };
 		0FFFFA2F762B3160955D1D89 /* gauge_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC28591B403B32B7AFCC079D /* gauge_osx.cpp */; };
 		060E095718B03EF98C754799 /* treelist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5190E3E110443FD29F2474FC /* treelist.cpp */; };
@@ -5735,6 +5738,7 @@
 		5F094B0B07DF33BCA6077BC0 /* fdrepdlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fdrepdlg.cpp; path = ../../src/generic/fdrepdlg.cpp; sourceTree = SOURCE_ROOT; };
 		F1E724EA70AB35DDB130F84F /* stringops.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringops.cpp; path = ../../src/common/stringops.cpp; sourceTree = SOURCE_ROOT; };
 		98A7F0605AAC3D28A8C9F253 /* gauge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = gauge.mm; path = ../../src/osx/cocoa/gauge.mm; sourceTree = SOURCE_ROOT; };
+		B38233C4B68F13943A66C521 /* hyperlink.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = hyperlink.mm; path = ../../src/osx/cocoa/hyperlink.mm; sourceTree = SOURCE_ROOT; };
 		12EFC31E6FB631998E44B49C /* statbmpcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statbmpcmn.cpp; path = ../../src/common/statbmpcmn.cpp; sourceTree = SOURCE_ROOT; };
 		8ECA6434E2DE3C628E169F83 /* lossless_enc_mips_dsp_r2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = lossless_enc_mips_dsp_r2.c; path = ../../3rdparty/libwebp/src/dsp/lossless_enc_mips_dsp_r2.c; sourceTree = SOURCE_ROOT; };
 		1800B1884CC73C78A09E7FF1 /* htmlpars.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmlpars.cpp; path = ../../src/html/htmlpars.cpp; sourceTree = SOURCE_ROOT; };
@@ -7181,6 +7185,7 @@
 				8D2549709E0133C9A267E3A5 /* evtloop.mm */,
 				DC8A52CA69053B27B09F1037 /* filedlg.mm */,
 				98A7F0605AAC3D28A8C9F253 /* gauge.mm */,
+				B38233C4B68F13943A66C521 /* hyperlink.mm */,
 				D324650313003AAD96E12962 /* listbox.mm */,
 				1D799486AD7F336BB1F33DDC /* menu.mm */,
 				61548D0FE1353D7C846DD721 /* menuitem.mm */,
@@ -9082,6 +9087,7 @@
 				58AABAD40AA236438347DDDF /* evtloop.mm in Sources */,
 				C40AA245D5773351979A2851 /* filedlg.mm in Sources */,
 				23E9AF567E873B948EFEA181 /* gauge.mm in Sources */,
+				CA518AD5434C9BA4827D5857 /* hyperlink.mm in Sources */,
 				6E1FD7D3DEF03748AEE3A29D /* listbox.mm in Sources */,
 				2A79B68D20FE3C9B98A15536 /* menu.mm in Sources */,
 				127E255EE601383A9E0EF7EA /* menuitem.mm in Sources */,
@@ -9778,6 +9784,7 @@
 				58AABAD40AA236438347DDE0 /* evtloop.mm in Sources */,
 				C40AA245D5773351979A2850 /* filedlg.mm in Sources */,
 				23E9AF567E873B948EFEA180 /* gauge.mm in Sources */,
+				15FE683EBB5FB02CF64A3D63 /* hyperlink.mm in Sources */,
 				6E1FD7D3DEF03748AEE3A29F /* listbox.mm in Sources */,
 				2A79B68D20FE3C9B98A15535 /* menu.mm in Sources */,
 				127E255EE601383A9E0EF7EC /* menuitem.mm in Sources */,
@@ -11271,6 +11278,7 @@
 				58AABAD40AA236438347DDDE /* evtloop.mm in Sources */,
 				C40AA245D5773351979A2852 /* filedlg.mm in Sources */,
 				23E9AF567E873B948EFEA182 /* gauge.mm in Sources */,
+				1B5256D9C4A99321883C8342 /* hyperlink.mm in Sources */,
 				6E1FD7D3DEF03748AEE3A29E /* listbox.mm in Sources */,
 				2A79B68D20FE3C9B98A15534 /* menu.mm in Sources */,
 				127E255EE601383A9E0EF7EB /* menuitem.mm in Sources */,
