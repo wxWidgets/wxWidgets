@@ -2853,6 +2853,14 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         HTREEITEM htOldItem = TreeView_GetSelection(GetHwnd());
         HTREEITEM htItem = TreeView_HitTest(GetHwnd(), &tvht);
 
+        // If a label is currently being edited, clicking in the tree just
+        // dismisses the editor and shouldn't do anything else, as it happens
+        // in the native control, but we have to check for this here because
+        // calling SetFocus() below ends the editing.
+        bool wasEditing = false;
+        if ( nMsg == WM_LBUTTONDOWN )
+            wasEditing = TreeView_GetEditControl(GetHwnd()) != nullptr;
+
         switch ( nMsg )
         {
             case WM_LBUTTONDOWN:
@@ -3034,8 +3042,9 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         m_htClickedItem.Unset();
 
                         // prevent in-place editing from starting if focus lost
-                        // since previous click
-                        if ( m_focusLost )
+                        // since previous click or if this click just dismissed
+                        // the editor used for editing another label
+                        if ( m_focusLost || wasEditing )
                         {
                             ClearFocusedItem();
                             DoSelectItem(wxTreeItemId(htItem));
@@ -3278,7 +3287,16 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         if ( nMsg == WM_KILLFOCUS )
         {
-            m_focusLost = true;
+            // Losing the focus to our own in-place editor doesn't really
+            // count as losing it: if we did consider it lost here, the click
+            // on the selected item after the end of the label editing
+            // wouldn't start editing it again, as it should, because we would
+            // have taken it for a click just restoring the focus to the
+            // control (if the editor loses the focus to another window later,
+            // we do set the flag from the EN_KILLFOCUS handler below).
+            const HWND hwndEdit = TreeView_GetEditControl(GetHwnd());
+            if ( !hwndEdit || (HWND)wParam != hwndEdit )
+                m_focusLost = true;
         }
     }
     else if ( (nMsg == WM_KEYDOWN || nMsg == WM_SYSKEYDOWN) && isMultiple )
@@ -3328,6 +3346,12 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         {
             if ( m_textCtrl && m_textCtrl->GetHandle() == hwnd )
             {
+                // We don't set m_focusLost when giving the focus to the
+                // editor (see WM_KILLFOCUS handling above), so do it now if
+                // the focus goes to some other window and not back to us.
+                if ( ::GetFocus() != GetHwnd() )
+                    m_focusLost = true;
+
                 DoEndEditLabel();
 
                 processed = true;
