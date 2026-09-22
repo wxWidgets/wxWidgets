@@ -24,6 +24,7 @@
 
 #include "wx/artprov.h"
 #include "wx/imaglist.h"
+#include "wx/settings.h"
 #include "wx/treectrl.h"
 #include "wx/uiaction.h"
 #include "testableframe.h"
@@ -471,7 +472,14 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
 
     // Time needed (in ms) for the editor to display. The test will not pass
     // if the value is less than 400, 510, 800 under wxQt, wxGTK, wxMSW resp.
-    const int BEGIN_EDIT_TIMEOUT = 800;
+    //
+    // Note that under MSW the native control doesn't start editing the label
+    // immediately but only from a timer with GetDoubleClickTime() delay and
+    // that the clicks below must also be separated by more than this interval
+    // to avoid being taken for a double click, so don't assume that the
+    // default value of this setting is in effect but use the real one.
+    const int BEGIN_EDIT_TIMEOUT =
+        wxMax(800, 2*wxSystemSettings::GetMetric(wxSYS_DCLICK_MSEC));
 
     YieldForAWhile(BEGIN_EDIT_TIMEOUT);
     sim.MouseClick();
@@ -483,9 +491,12 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     CHECK( beginedit.GetCount() == 0 ); // No editing should take place in the event of deselection.
 
     sim.MouseClick();
-    YieldForAWhile(BEGIN_EDIT_TIMEOUT);
 
-    CHECK( beginedit.GetCount() == 1 ); // Start editing as usual.
+    // Editing should start as usual now, but don't just wait for a fixed
+    // amount of time for it: the editor may take much longer than usual to
+    // appear on a loaded machine, as it happens under CI, and failing the
+    // test in this case would be a false positive.
+    CHECK( beginedit.WaitEvent(5*BEGIN_EDIT_TIMEOUT) );
 
     sim.Char(WXK_RETURN); // End editing and close the editor.
     wxYield();
