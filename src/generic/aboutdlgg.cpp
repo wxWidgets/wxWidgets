@@ -270,6 +270,16 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 
         sizerTop->Add(sizerBtns, wxSizerFlags().Expand().DoubleBorder());
     }
+#else
+    // Without any buttons, Escape doesn't close the dialog by default, so do
+    // it ourselves, as closing it using the title bar button does.
+    Bind(wxEVT_CHAR_HOOK, [this](wxKeyEvent& event)
+    {
+        if ( IsEscapeKey(event) )
+            Close();
+        else
+            event.Skip();
+    });
 #endif
 
     SetSizerAndFit(sizerTop);
