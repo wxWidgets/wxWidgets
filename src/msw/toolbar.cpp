@@ -1711,17 +1711,16 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                           TBCDRF_HILITEHOTTRACK;
 
                 // Draw custom button background when it would be drawn with a
-                // light background by default: this is the case for checked
-                // buttons under Windows 11 (unless they are "hot") and for
-                // selected buttons (which is a state the button is in when
-                // the mouse is pressed over it).
+                // light background otherwise.
                 wxColour customBg;
-                if ( (nmtbcd->nmcd.uItemState &
-                        (CDIS_CHECKED | CDIS_HOT)) == CDIS_CHECKED )
+                // Check if button is in the the fully pressed state.
+                if ( nmtbcd->nmcd.uItemState & CDIS_CHECKED )
                 {
                     customBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
                 }
-                else if ( nmtbcd->nmcd.uItemState == CDIS_SELECTED )
+                // Check if the mouse is over the button or the button is
+                // being pressed.
+                else if ( nmtbcd->nmcd.uItemState & (CDIS_HOT | CDIS_SELECTED) )
                 {
                     customBg = colBg;
                 }
