@@ -739,8 +739,9 @@ TEST_CASE("Window::AccessibleName", "[window][accessibility]")
     CHECK( wxString(name) == "Name" );
 
     button->SetAccessibleName(wxString());
-    CHECK( acc->get_accName(self, name.ByRef()) == S_OK );
-    CHECK( wxString(name) == "Label" );
+    wxBasicString defaultName;
+    CHECK( acc->get_accName(self, defaultName.ByRef()) == S_OK );
+    CHECK( wxString(defaultName) == "Label" );
 
     acc->Release();
 }
