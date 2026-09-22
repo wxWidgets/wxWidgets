@@ -2130,6 +2130,7 @@ set(OSX_SHARED_HDR
     wx/osx/appprogress.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/osx/collheaderctrl.h
 )
 
 set(OSX_COCOA_SRC
@@ -2190,6 +2191,7 @@ set(OSX_COCOA_SRC
     src/osx/core/display.cpp
     src/osx/cocoa/renderer.mm
     src/osx/cocoa/power.mm
+    src/osx/cocoa/collheaderctrl.mm
 )
 
 set(OSX_COCOA_HDR
