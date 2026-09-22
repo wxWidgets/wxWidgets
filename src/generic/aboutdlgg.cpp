@@ -27,6 +27,7 @@
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
+    #include "wx/textctrl.h"
     #include "wx/button.h"
 #endif //WX_PRECOMP
 
@@ -320,13 +321,16 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
 {
     wxCollapsiblePane *pane = new wxCollapsiblePane(m_contents, wxID_ANY, title);
     wxWindow * const paneContents = pane->GetPane();
-    wxStaticText *txt = new wxStaticText(paneContents, wxID_ANY, text,
-                                         wxDefaultPosition, wxDefaultSize,
-                                         wxALIGN_CENTRE);
+    // Use a read-only text control and not a static text to allow the users
+    // of screen readers to focus it and read possibly long text line by line.
+    wxTextCtrl *txt = new wxTextCtrl(paneContents, wxID_ANY,
+                                     wxString(text).Trim(),
+                                     wxDefaultPosition, wxDefaultSize,
+                                     wxTE_MULTILINE | wxTE_READONLY);
 
     // don't make the text unreasonably wide
     static const int maxWidth = wxGetDisplaySize().x/3;
-    txt->Wrap(maxWidth);
+    txt->SetInitialSize(txt->GetSizeFromTextSize(maxWidth));
 
 
     // we need a sizer to make this text expand to fill the entire pane area
