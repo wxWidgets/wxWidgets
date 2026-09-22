@@ -26,7 +26,6 @@
     #include "wx/msgdlg.h"
     #include "wx/scrolbar.h"
     #include "wx/statbox.h"
-    #include "wx/stattext.h"
     #include "wx/textctrl.h"
     #include "wx/toolbar.h"
     #include "wx/layout.h"
@@ -457,11 +456,12 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
     // Controls without their own label are typically preceded by a label
     // describing them, which screen readers use as their name under MSW, so
     // do the same here.
-    if ( GetLabel().empty() && !wxDynamicCast(this, wxStaticText) )
+    if ( GetLabel().empty() && !GetLabelPeer() )
     {
-        wxStaticText* const label = wxDynamicCast(GetPrevSibling(), wxStaticText);
-        if ( label && label->GetPeer() )
-            GetPeer()->SetAccessibilityTitleElement(label->GetPeer());
+        const wxWindow* const prev = GetPrevSibling();
+        wxOSXWidgetImpl* const labelPeer = prev ? prev->GetLabelPeer() : nullptr;
+        if ( labelPeer )
+            GetPeer()->SetAccessibilityTitleElement(labelPeer);
     }
 
 }
