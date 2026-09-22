@@ -102,7 +102,10 @@ void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
 #if wxUSE_REGKEY
     // Open the registry key for user preferred languages
     wxRegKey key(wxRegKey::HKCU, L"Control Panel\\International\\User Profile");
-    if ( !key.Open(wxRegKey::Read) )
+
+    // This key doesn't necessarily exist (e.g. it doesn't under Wine) and this
+    // is not an error, so check for it first to avoid Open() logging one.
+    if ( !key.Exists() || !key.Open(wxRegKey::Read) )
         return;
 
     // Retrieve the "Languages" value from the key
