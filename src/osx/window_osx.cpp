@@ -453,6 +453,17 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
     }
 #endif
 
+    // Controls without their own label are typically preceded by a label
+    // describing them, which screen readers use as their name under MSW, so
+    // do the same here.
+    if ( GetLabel().empty() && !GetLabelPeer() )
+    {
+        const wxWindow* const prev = GetPrevSibling();
+        wxOSXWidgetImpl* const labelPeer = prev ? prev->GetLabelPeer() : nullptr;
+        if ( labelPeer )
+            GetPeer()->SetAccessibilityTitleElement(labelPeer);
+    }
+
 }
 
 void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
