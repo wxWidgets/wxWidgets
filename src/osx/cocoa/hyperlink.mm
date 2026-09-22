@@ -54,6 +54,8 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     SetFont(f);
     SetForegroundColour(GetNormalColour());
 
+    SetCursor(wxCursor(wxCURSOR_HAND));
+
     if ( HasFlag(wxHL_CONTEXTMENU) )
         ConnectMenuHandlers();
 
