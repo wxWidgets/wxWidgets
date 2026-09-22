@@ -38,6 +38,12 @@
     #include "wx/gtk/private/backend.h"
 #endif // __WXGTK__
 
+#if defined(__WXMSW__) && wxUSE_ACCESSIBILITY
+    #include "wx/msw/private.h"
+    #include "wx/msw/ole/oleutils.h"
+    #include <oleacc.h>
+#endif // __WXMSW__ && wxUSE_ACCESSIBILITY
+
 
 class WindowTestCase
 {
@@ -749,3 +755,34 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
     CHECK(isChild2Painted == true);
     CHECK(isChild3Painted == true);
 }
+
+#if defined(__WXMSW__) && wxUSE_ACCESSIBILITY
+
+TEST_CASE("Window::AccessibleName", "[window][accessibility]")
+{
+    auto button = make_unique<wxButton>(wxTheApp->GetTopWindow(), wxID_ANY, "Label");
+    button->SetAccessibleName("Name");
+
+    IAccessible* acc = nullptr;
+    REQUIRE( ::AccessibleObjectFromWindow(GetHwndOf(button.get()),
+                                          static_cast<DWORD>(OBJID_CLIENT),
+                                          IID_IAccessible,
+                                          reinterpret_cast<void**>(&acc)) == S_OK );
+
+    VARIANT self;
+    self.vt = VT_I4;
+    self.lVal = CHILDID_SELF;
+
+    wxBasicString name;
+    CHECK( acc->get_accName(self, name.ByRef()) == S_OK );
+    CHECK( wxString(name) == "Name" );
+
+    button->SetAccessibleName(wxString());
+    wxBasicString defaultName;
+    CHECK( acc->get_accName(self, defaultName.ByRef()) == S_OK );
+    CHECK( wxString(defaultName) == "Label" );
+
+    acc->Release();
+}
+
+#endif // __WXMSW__ && wxUSE_ACCESSIBILITY

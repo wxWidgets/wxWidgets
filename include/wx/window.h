@@ -1611,6 +1611,10 @@ public:
 
     // accessibility
     // ----------------------
+
+    // Sets the name used by screen readers for this window.
+    virtual void SetAccessibleName(const wxString& name);
+
 #if wxUSE_ACCESSIBILITY
     // Override to create a specific accessible object.
     virtual wxAccessible* CreateAccessible() { return nullptr; }

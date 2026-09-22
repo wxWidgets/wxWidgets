@@ -61,6 +61,7 @@ public:
 
     // implement base class pure virtuals
     virtual void SetLabel( const wxString& label ) override;
+    virtual void SetAccessibleName(const wxString& name) override;
     virtual wxString GetLabel() const override;
 
     virtual void Raise() override;
