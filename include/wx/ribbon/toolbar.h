@@ -186,8 +186,15 @@ public:
     void ClearFocusedItem() override;
     void ActivateFocusedItem(bool dropdown = false) override;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
     friend class wxRibbonToolBarEvent;
+#if wxUSE_ACCESSIBILITY
+    friend class wxRibbonToolBarAccessible;
+#endif // wxUSE_ACCESSIBILITY
     virtual wxSize DoGetBestSize() const override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 

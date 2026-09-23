@@ -1851,4 +1851,174 @@ void wxRibbonButtonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
         m_art->UpdateColoursFromSystem();
 }
 
+#if wxUSE_ACCESSIBILITY
+
+class wxRibbonButtonBarAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRibbonButtonBarAccessible(wxRibbonButtonBar* bar) : wxWindowAccessible(bar) { }
+
+    wxAccStatus GetChildCount(int* childCount) override
+    {
+        wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        *childCount = static_cast<int>(bar->m_layouts.Item(bar->m_current_layout)->buttons.size());
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetChild(int childId, wxAccessible** child) override
+    {
+        *child = childId == wxACC_SELF ? this : nullptr;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId == wxACC_SELF )
+        {
+            *role = wxROLE_SYSTEM_TOOLBAR;
+            return wxACC_OK;
+        }
+
+        wxRibbonButtonBarButtonBase* button = GetButton(childId);
+        wxCHECK(button, wxACC_FAIL);
+
+        if ( button->kind == wxRIBBON_BUTTON_TOGGLE )
+            *role = wxROLE_SYSTEM_CHECKBUTTON;
+        else if ( button->kind & wxRIBBON_BUTTON_DROPDOWN )
+            *role = wxROLE_SYSTEM_BUTTONDROPDOWN;
+        else
+            *role = wxROLE_SYSTEM_PUSHBUTTON;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long* state) override
+    {
+        wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId == wxACC_SELF )
+        {
+            long st = 0;
+            if ( !bar->IsEnabled() )
+                st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+            if ( !bar->IsShownOnScreen() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            *state = st;
+            return wxACC_OK;
+        }
+
+        wxRibbonButtonBarButtonBase* button = GetButton(childId);
+        wxCHECK(button, wxACC_FAIL);
+
+        long st{ 0 };
+        if ( button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED )
+            st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+        else
+            st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+        if ( button->state & wxRIBBON_BUTTONBAR_BUTTON_TOGGLED )
+            st |= wxACC_STATE_SYSTEM_CHECKED;
+        if ( button->state & wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK )
+            st |= wxACC_STATE_SYSTEM_PRESSED;
+
+        wxRibbonBar* ribbonBar = bar->GetAncestorRibbonBar();
+        if ( bar->m_focused_button == button && ribbonBar && ribbonBar->HasFocus() )
+            st |= wxACC_STATE_SYSTEM_FOCUSED;
+
+        *state = st;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetName(int childId, wxString* name) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetName(childId, name);
+
+        wxRibbonButtonBarButtonBase* button = GetButton(childId);
+        wxCHECK(button, wxACC_FAIL);
+
+        *name = wxStripMenuCodes(button->label, wxStrip_Mnemonics);
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetLocation(wxRect& rect, int elementId) override
+    {
+        if ( elementId == wxACC_SELF )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
+        wxCHECK(bar, wxACC_FAIL);
+        wxRibbonButtonBarButtonBase* button = GetButton(elementId);
+        wxCHECK(button, wxACC_FAIL);
+
+        rect = bar->GetItemRect(button->id);
+        rect.SetPosition(bar->ClientToScreen(rect.GetPosition()));
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = _("Press");
+        return wxACC_OK;
+    }
+
+    wxAccStatus DoDefaultAction(int childId) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
+        wxCHECK(bar, wxACC_FAIL);
+        wxRibbonButtonBarButtonBase* button = GetButton(childId);
+        wxCHECK(button, wxACC_FAIL);
+
+        bar->ActivateButton(button);
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetFocus(int* childId, wxAccessible** child) override
+    {
+        wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        const int index = bar->DoGetFocusedButtonIndex();
+        if ( index == wxNOT_FOUND )
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+        else
+        {
+            *childId = index + 1;
+            *child = nullptr;
+        }
+        return wxACC_OK;
+    }
+
+private:
+    wxRibbonButtonBarButtonBase* GetButton(int childId)
+    {
+        wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
+        wxCHECK(bar, nullptr);
+
+        const std::vector<wxRibbonButtonBarButtonInstance>& buttons =
+            bar->m_layouts.Item(bar->m_current_layout)->buttons;
+        const int index = childId - 1;
+        if ( index < 0 || index >= static_cast<int>(buttons.size()) )
+            return nullptr;
+        return buttons[index].base;
+    }
+};
+
+wxAccessible* wxRibbonButtonBar::CreateAccessible()
+{
+    return new wxRibbonButtonBarAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
+
 #endif // wxUSE_RIBBON

@@ -1116,4 +1116,201 @@ wxRibbonGalleryButtonState wxRibbonGallery::GetExtensionButtonState() const
     return m_extension_button_state;
 }
 
+#if wxUSE_ACCESSIBILITY
+
+class wxRibbonGalleryAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRibbonGalleryAccessible(wxRibbonGallery* gallery) : wxWindowAccessible(gallery) { }
+
+    wxAccStatus GetChildCount(int* childCount) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        *childCount = static_cast<int>(gallery->GetCount()) + (HasExtensionButton(gallery) ? 1 : 0);
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetChild(int childId, wxAccessible** child) override
+    {
+        *child = (childId == wxACC_SELF) ? this : nullptr;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId == wxACC_SELF )
+        {
+            *role = wxROLE_SYSTEM_LIST;
+            return wxACC_OK;
+        }
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        *role = static_cast<unsigned>(childId) <= gallery->GetCount()
+            ? wxROLE_SYSTEM_LISTITEM : wxROLE_SYSTEM_PUSHBUTTON;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long* state) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        if ( childId == wxACC_SELF )
+        {
+            long st{ 0 };
+            if ( !gallery->IsEnabled() )
+                st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+            if ( !gallery->IsShownOnScreen() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            *state = st;
+            return wxACC_OK;
+        }
+
+        wxRibbonBar* ribbonBar = gallery->GetAncestorRibbonBar();
+        const bool barFocused = ribbonBar && ribbonBar->HasFocus();
+
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
+        {
+            wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
+            wxCHECK(item, wxACC_FAIL);
+
+            long st = wxACC_STATE_SYSTEM_SELECTABLE;
+            if ( !item->IsVisible() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            else
+                st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+            if ( item == gallery->GetSelection() )
+                st |= wxACC_STATE_SYSTEM_SELECTED;
+            if ( item == gallery->m_focused_item && barFocused )
+                st |= wxACC_STATE_SYSTEM_FOCUSED;
+            *state = st;
+            return wxACC_OK;
+        }
+
+        long st = wxACC_STATE_SYSTEM_FOCUSABLE;
+        if ( gallery->GetExtensionButtonState() == wxRIBBON_GALLERY_BUTTON_DISABLED )
+            st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+        if ( gallery->m_extension_focused && barFocused )
+            st |= wxACC_STATE_SYSTEM_FOCUSED;
+        *state = st;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetName(int childId, wxString* name) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetName(childId, name);
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        if ( childId >= 0 && static_cast<unsigned>(childId) < gallery->GetCount() )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *name = _("More");
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetLocation(wxRect& rect, int elementId) override
+    {
+        if ( elementId == wxACC_SELF )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        if ( elementId >= 0 && static_cast<unsigned>(elementId) <= gallery->GetCount() )
+        {
+            wxRibbonGalleryItem* item = gallery->GetItem(elementId - 1);
+            wxCHECK(item, wxACC_FAIL);
+            if ( !item->IsVisible() )
+                return wxACC_FAIL;
+
+            rect = GetOnScreenItemRect(gallery, item);
+        }
+        else
+            rect = gallery->m_extension_button_rect;
+
+        rect.SetPosition(gallery->ClientToScreen(rect.GetPosition()));
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = _("Press");
+        return wxACC_OK;
+    }
+
+    wxAccStatus DoDefaultAction(int childId) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        if ( childId == wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
+            gallery->DoActivateItem(gallery->GetItem(childId - 1));
+        else
+            gallery->DoActivateExtensionButton();
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetFocus(int* childId, wxAccessible** child) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        wxCHECK(gallery, wxACC_FAIL);
+
+        const int index = gallery->DoGetFocusedItemIndex();
+        if ( gallery->m_extension_focused )
+        {
+            *childId = static_cast<int>(gallery->GetCount()) + 1;
+            *child = nullptr;
+        }
+        else if ( index != wxNOT_FOUND )
+        {
+            *childId = index + 1;
+            *child = nullptr;
+        }
+        else
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+        return wxACC_OK;
+    }
+
+private:
+    static bool HasExtensionButton(wxRibbonGallery* gallery)
+    {
+        return !gallery->m_extension_button_rect.IsEmpty();
+    }
+
+    static wxRect GetOnScreenItemRect(wxRibbonGallery* gallery, wxRibbonGalleryItem* item)
+    {
+        wxRect rect{ item->GetPosition() };
+        const bool vertical = gallery->m_art &&
+            (gallery->m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL);
+        if ( vertical )
+            rect.SetLeft(rect.GetLeft() - gallery->m_scroll_amount);
+        else
+            rect.SetTop(rect.GetTop() - gallery->m_scroll_amount);
+        return rect;
+    }
+};
+
+wxAccessible* wxRibbonGallery::CreateAccessible()
+{
+    return new wxRibbonGalleryAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
+
 #endif // wxUSE_RIBBON
