@@ -77,8 +77,9 @@ public:
     bool AcceptsFocusRecursively() const
         { return AcceptsFocus() || HasAnyChildrenAcceptingFocus(); }
 
-    // We accept focus from keyboard if we accept it at all.
-    bool AcceptsFocusFromKeyboard() const { return AcceptsFocusRecursively(); }
+    // We accept focus from keyboard if we accept it at all, except if we
+    // only have children which can't be focused, see the implementation.
+    bool AcceptsFocusFromKeyboard() const;
 
     // Call this when the number of children of the window changes.
     //
@@ -101,6 +102,9 @@ protected:
 
     // return true if we have any children accepting focus
     bool HasAnyFocusableChildren() const;
+
+    // return true if we have any children in our client area at all
+    bool HasAnyClientAreaChildren() const;
 
     // return true if we have any children that do accept focus right now
     bool HasAnyChildrenAcceptingFocus() const;

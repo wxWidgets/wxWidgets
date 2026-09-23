@@ -14,7 +14,10 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/button.h"
+    #include "wx/panel.h"
     #include "wx/sizer.h"
+    #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "asserthelper.h"
@@ -481,6 +484,37 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Focus", "[window]")
         CHECK_FOCUS_IS(m_window);
     }
 #endif
+}
+
+TEST_CASE("Window::ContainerFocus", "[window][focus]")
+{
+    long style = wxTAB_TRAVERSAL;
+
+    SECTION("Not scrollable") { }
+
+    SECTION("Scrollable") { style |= wxVSCROLL; }
+
+    auto panel = make_unique<wxPanel>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                      wxDefaultPosition, wxDefaultSize, style);
+    const bool scrollable = (style & wxVSCROLL) != 0;
+
+    // Windows without any children at all can still be focused, as they may
+    // handle the keyboard input themselves.
+    CHECK( panel->AcceptsFocus() );
+    CHECK( panel->AcceptsFocusFromKeyboard() );
+
+    new wxStaticText(panel.get(), wxID_ANY, "Label");
+
+    // But TAB shouldn't stop on a window containing only children which can't
+    // be focused, unless it can be scrolled from keyboard.
+    CHECK( panel->AcceptsFocus() );
+    CHECK( panel->AcceptsFocusFromKeyboard() == scrollable );
+
+    // Buttons don't accept focus from keyboard under macOS by default, so use
+    // a control which always does.
+    new wxTextCtrl(panel.get(), wxID_ANY);
+
+    CHECK( panel->AcceptsFocusFromKeyboard() );
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Positioning", "[window]")
