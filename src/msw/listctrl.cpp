@@ -3780,6 +3780,24 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 return 0;
             break;
 
+        case WM_KEYDOWN:
+        case WM_MOUSEWHEEL:
+        case WM_VSCROLL:
+        case LVM_ENSUREVISIBLE:
+        case LVM_SCROLL:
+            // Scrolling moves the rows drawn as hot by HandleItemPaint()
+            // without repainting them.
+            if ( wxMSWDarkMode::IsActive() && InReportView() )
+            {
+                const long top = GetTopItem();
+                auto const rc =
+                    wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+                if ( GetTopItem() != top )
+                    Refresh();
+                return rc;
+            }
+            break;
+
         case WM_SIZE:
             m_inResize++;
             auto const rc = wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
