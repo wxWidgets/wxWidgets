@@ -1277,7 +1277,7 @@ bool HasDarkTheme()
     return false;
 }
 
-void wxMSWImpl::DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
+void DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
     int WXUNUSED(value), int WXUNUSED(max), int WXUNUSED(flags))
 {
 }
