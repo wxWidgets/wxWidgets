@@ -337,7 +337,7 @@ public:
             this bundle. If an empty wxSize or wxDefaultSize is provided,
             the size of the SVG will be the default size.
 
-        @since 3.3.3
+        @since 3.3.4
      */
 
     /// @overload
@@ -349,7 +349,7 @@ public:
         This function loads the SVG data from the given @a path and calls
         FromSVG() with it. If the filename has a .svgz extension, then it
         will first be decompressed before converting it into a bundle (new
-        since wxWidgets 3.3.3). As this function is just a wrapper for
+        since wxWidgets 3.3.4). As this function is just a wrapper for
         FromSVG(), please see that function documentation for more information
         about SVG support.
 
