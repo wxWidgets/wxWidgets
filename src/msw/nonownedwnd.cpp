@@ -229,9 +229,9 @@ bool wxNonOwnedWindow::IsThisEnabled() const
                   : m_isEnabled;
 }
 
-void wxNonOwnedWindow::MSWSetDarkOrLightMode(SetMode setmode)
+void wxNonOwnedWindow::MSWSetDarkOrLightMode()
 {
-    wxNonOwnedWindowBase::MSWSetDarkOrLightMode(setmode);
+    wxNonOwnedWindowBase::MSWSetDarkOrLightMode();
 
     // Update non-client area
     wxMSWDarkMode::ConfigureTLW(GetHwnd());

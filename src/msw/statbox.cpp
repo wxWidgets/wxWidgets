@@ -95,9 +95,9 @@ bool wxStaticBox::Create(wxWindow *parent,
     return true;
 }
 
-void wxStaticBox::MSWSetDarkOrLightMode(SetMode setmode)
+void wxStaticBox::MSWSetDarkOrLightMode()
 {
-    wxStaticBoxBase::MSWSetDarkOrLightMode(setmode);
+    wxStaticBoxBase::MSWSetDarkOrLightMode();
 
     // Set custom painting because the native control does not support dark mode.
     //

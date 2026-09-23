@@ -339,9 +339,9 @@ void wxRadioButton::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
     wxRendererNative::Get().DrawRadioBitmap(this, dc, rect, flags);
 }
 
-void wxRadioButton::MSWSetDarkOrLightMode(SetMode setmode)
+void wxRadioButton::MSWSetDarkOrLightMode()
 {
-    wxRadioButtonBase::MSWSetDarkOrLightMode(setmode);
+    wxRadioButtonBase::MSWSetDarkOrLightMode();
 
     // Use owner-draw mode if needed for dark mode or custom text colour
     MSWMakeOwnerDrawn(wxMSWDarkMode::IsActive() || m_hasFgCol);

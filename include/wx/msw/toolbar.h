@@ -109,7 +109,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+    virtual void MSWSetDarkOrLightMode() override;
     virtual int MSWGetToolTipMessage() const override;
 
     // create the native toolbar control

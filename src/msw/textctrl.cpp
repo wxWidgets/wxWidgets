@@ -2996,9 +2996,9 @@ void wxTextCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
         wxTextCtrlBase::MSWGetDarkModeSupport(support);
 }
 
-void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
+void wxTextCtrl::MSWSetDarkOrLightMode()
 {
-    wxTextCtrlBase::MSWSetDarkOrLightMode(setmode);
+    wxTextCtrlBase::MSWSetDarkOrLightMode();
 
     // Update the background for non-rich read-only multiline, unless there
     // are custom colours. The foreground is updated by
@@ -3020,7 +3020,7 @@ void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
         // True if we need to update the background colour.
         bool setBackground = false;
 
-        if ( setmode == SetMode::Change )
+        if ( wxMSWDarkMode::HasChanged() )
         {
             // Get formatting info for all the text.
             long sel1, sel2;

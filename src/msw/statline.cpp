@@ -68,9 +68,9 @@ WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle ;
 }
 
-void wxStaticLine::MSWSetDarkOrLightMode(SetMode setmode)
+void wxStaticLine::MSWSetDarkOrLightMode()
 {
-    wxStaticLineBase::MSWSetDarkOrLightMode(setmode);
+    wxStaticLineBase::MSWSetDarkOrLightMode();
 
     // Sunken 3D border looks too bright in dark mode as it uses white colour.
     // Style SS_SUNKEN enables WS_EX_STATICEDGE, so update them both.
