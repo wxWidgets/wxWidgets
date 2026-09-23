@@ -123,6 +123,37 @@ pointer_handle_axis(void* WXUNUSED(data),
 {
 }
 
+// We don't use these v5 pointer events, but must provide handlers for them:
+// libwayland aborts when dispatching an event with a null handler.
+void
+pointer_handle_frame(void* WXUNUSED(data),
+                     wl_pointer* WXUNUSED(pointer))
+{
+}
+
+void
+pointer_handle_axis_source(void* WXUNUSED(data),
+                           wl_pointer* WXUNUSED(pointer),
+                           uint32_t WXUNUSED(axis_source))
+{
+}
+
+void
+pointer_handle_axis_stop(void* WXUNUSED(data),
+                         wl_pointer* WXUNUSED(pointer),
+                         uint32_t WXUNUSED(time),
+                         uint32_t WXUNUSED(axis))
+{
+}
+
+void
+pointer_handle_axis_discrete(void* WXUNUSED(data),
+                             wl_pointer* WXUNUSED(pointer),
+                             uint32_t WXUNUSED(axis),
+                             int32_t WXUNUSED(discrete))
+{
+}
+
 wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 const wl_pointer_listener pointer_listener = {
     pointer_handle_enter,
@@ -130,6 +161,10 @@ const wl_pointer_listener pointer_listener = {
     pointer_handle_motion,
     pointer_handle_button,
     pointer_handle_axis,
+    pointer_handle_frame,
+    pointer_handle_axis_source,
+    pointer_handle_axis_stop,
+    pointer_handle_axis_discrete,
 };
 wxGCC_WARNING_RESTORE(missing-field-initializers)
 
@@ -188,10 +223,11 @@ void Seat::UpdateCapabilities(int capabilities)
 // Globals implementation
 // ----------------------------------------------------------------------------
 
-// Use v2 of the wl_seat interface, as this is enough for our needs and frees
-// us from providing empty implementations of the new pointer events introduced
-// in v5.
-constexpr uint32_t SEAT_VERSION = 2;
+// Use v5 so that both wl_seat_release() (since v5) and wl_pointer_release()
+// (since v3) can notify the compositor that these objects are no longer used.
+// Pointers created from this seat also use v5, so pointer_listener must handle
+// the events introduced in that version.
+constexpr uint32_t SEAT_VERSION = 5;
 
 #ifdef wxHAVE_WAYLAND_TOPLEVEL_DRAG
 // Use v3 of wl_data_device_manager interface required for the drag and drop
