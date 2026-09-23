@@ -1015,7 +1015,7 @@ static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
     }
 
     // If available, apply DarkMode_DarkTheme. It makes most controls look good.
-    if ( wxCheckOsVersion(10, 0, 26200) )
+    if ( HasDarkTheme() )
     {
         AllowForWindow(hwnd, L"DarkMode_DarkTheme");
         return true;
