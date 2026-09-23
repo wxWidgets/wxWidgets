@@ -1107,8 +1107,10 @@ DrawNotebookTab(wxDC& dc,
             }
         }
 
+        // Check if mouse is over the tab.
         if ( flags & wxCONTROL_CURRENT )
-            colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+            // Draw background slightly lighter, like Windows 11 Explorer.
+            colTab = dc.GetBackground().GetColour().ChangeLightness(107);
         else
             colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
     }
