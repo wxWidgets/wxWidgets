@@ -590,9 +590,9 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::MSWSetDarkOrLightMode(SetMode setmode)
+void wxListCtrl::MSWSetDarkOrLightMode()
 {
-    wxListCtrlBase::MSWSetDarkOrLightMode(setmode);
+    wxListCtrlBase::MSWSetDarkOrLightMode();
 
     // Update header.
     MSWInitHeader();

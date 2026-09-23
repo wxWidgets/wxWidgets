@@ -251,7 +251,7 @@ protected:
     virtual void MSWDrawThemeBorder(WXHDC hdc) override;
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
-    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+    virtual void MSWSetDarkOrLightMode() override;
 
 #if wxUSE_RICHEDIT
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;

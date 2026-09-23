@@ -719,9 +719,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxToolBar::MSWSetDarkOrLightMode(SetMode setmode)
+void wxToolBar::MSWSetDarkOrLightMode()
 {
-    wxToolBarBase::MSWSetDarkOrLightMode(setmode);
+    wxToolBarBase::MSWSetDarkOrLightMode();
 
     // Update the separator above the toolbar which is drawn partially in
     // white by default and so looks very ugly in dark mode.

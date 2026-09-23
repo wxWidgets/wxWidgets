@@ -21,10 +21,8 @@ WXDLLIMPEXP_CORE
 bool IsActive();
 
 // Return true if the system has switched between dark and light modes.
-// Some controls need to take extra actions to switch from light mode to dark
-// mode compared with just creating the window in dark mode. This function
-// helps us do only what is needed, to avoid overwriting user settings such as
-// background and foreground colours.
+// A control might need to take different actions to switch modes compared
+// with just creating the control in dark mode.
 WXDLLIMPEXP_CORE
 bool HasChanged();
 

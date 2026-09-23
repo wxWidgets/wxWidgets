@@ -92,9 +92,9 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxCheckBox::MSWSetDarkOrLightMode(SetMode setmode)
+void wxCheckBox::MSWSetDarkOrLightMode()
 {
-    wxCheckBoxBase::MSWSetDarkOrLightMode(setmode);
+    wxCheckBoxBase::MSWSetDarkOrLightMode();
 
     // Use owner-draw mode if needed for dark mode or custom text colour
     MSWMakeOwnerDrawn(wxMSWDarkMode::IsActive() || m_hasFgCol);
