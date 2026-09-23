@@ -28,6 +28,8 @@
     #include "wx/utils.h"                   // Only for wxMin()
 #endif
 
+#include "wx/filename.h"
+
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
@@ -42,10 +44,10 @@
     #include "wx/mstream.h"
 #endif // wxUSE_STREAMS
 
-#if wxUSE_ZLIB
+#if wxUSE_ZLIB && wxUSE_STREAMS
     #include "wx/wfstream.h"
     #include "wx/zstream.h"
-#endif // wxUSE_ZLIB
+#endif // wxUSE_ZLIB && wxUSE_STREAMS
 
 // ============================================================================
 // private helpers
@@ -449,9 +451,9 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
 {
-#if wxUSE_ZLIB
+#if wxUSE_ZLIB && wxUSE_STREAMS
     // Handle gzip-compressed SVG files (.svgz)
-    if ( path.Lower().EndsWith(".svgz") )
+    if ( wxFileName(path).GetExt().Lower() == "svgz" )
     {
         wxFileInputStream fileStream(path);
         if ( fileStream.IsOk() )
@@ -462,7 +464,7 @@ wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& s
 
         return wxBitmapBundle();
     }
-#endif // wxUSE_ZLIB
+#endif // wxUSE_ZLIB && wxUSE_STREAMS
 
     wxCharBuffer buf = LoadSVGFile(path);
     if ( buf.data() )
