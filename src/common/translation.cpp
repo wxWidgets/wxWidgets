@@ -1483,58 +1483,54 @@ using UntranslatedStrings = std::unordered_set<wxString>;
 
 class UntranslatedStringHolder
 {
-
 public:
-
     UntranslatedStringHolder()
     {
-        m_flsIndex = FlsAlloc( &UntranslatedStringHolder::FlsCleanup );
+        m_flsIndex = FlsAlloc(&UntranslatedStringHolder::FlsCleanup);
     }
 
     ~UntranslatedStringHolder()
     {
-        if ( m_flsIndex != FLS_OUT_OF_INDEXES )
+        if (m_flsIndex != FLS_OUT_OF_INDEXES)
         {
-            FlsFree( m_flsIndex );
+            FlsFree(m_flsIndex);
         }
     }
 
     const wxString& get(const wxString& str)
     {
         static wxString emptyString;
-        
-        if ( m_flsIndex == FLS_OUT_OF_INDEXES )
+
+        if (m_flsIndex == FLS_OUT_OF_INDEXES)
             return emptyString;
-        
-        UntranslatedStrings *pData = static_cast<UntranslatedStrings *>( FlsGetValue(m_flsIndex) );
-        
-        if ( pData == nullptr )
+
+        UntranslatedStrings* pData = static_cast<UntranslatedStrings*>(FlsGetValue(m_flsIndex));
+
+        if (pData == nullptr)
         {
             pData = new UntranslatedStrings();
-            
-            if ( pData == nullptr )
+
+            if (pData == nullptr)
                 return emptyString;
-            
-            FlsSetValue( m_flsIndex, pData );
+
+            FlsSetValue(m_flsIndex, pData);
         }
-        
+
         return *pData->insert(str).first;
     }
 
     wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-    
-private:
 
+private:
     DWORD m_flsIndex;
-    
-    static void WINAPI FlsCleanup( PVOID lpFlsData )
-    {       
-        UntranslatedStrings *pData = static_cast<UntranslatedStrings *>( lpFlsData );
-        
-        if ( pData )
+
+    static void WINAPI FlsCleanup(PVOID lpFlsData)
+    {
+        UntranslatedStrings* pData = static_cast<UntranslatedStrings*>(lpFlsData);
+
+        if (pData)
             delete pData;
     }
-    
 };
 
 const wxString& DoGetUntranslatedString(const wxString& str)
@@ -1569,15 +1565,14 @@ const wxString& DoGetUntranslatedString(const wxString& str)
     return wxPerThreadStrings.get(str);
 }
 
+#endif // __MINGW32__ // !__MINGW32__
 
-#endif // __MINGW32__/!__MINGW32__
-
-} // Anonymous namespace
+} // namespace
 
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-	return DoGetUntranslatedString(str);
+    return DoGetUntranslatedString(str);
 }
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
