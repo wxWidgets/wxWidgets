@@ -8,36 +8,36 @@
 	branch = wx
 [submodule "src/png"]
 	path = src/png
-	url = https://github.com/wxWidgets/libpng.git
-	branch = wx
+	url = https://github.com/MaartenBent/libpng.git
+	branch = wx-png-v1.6.58
 [submodule "src/expat"]
 	path = src/expat
-	url = https://github.com/wxWidgets/libexpat.git
-	branch = wx
+	url = https://github.com/MaartenBent/libexpat.git
+	branch = wx-expat-v2.8.5
 [submodule "src/tiff"]
 	path = src/tiff
-	url = https://github.com/wxWidgets/libtiff.git
-	branch = wx
+	url = https://github.com/MaartenBent/libtiff.git
+	branch = wx-libtiff-v4.7.2
 [submodule "src/jpeg"]
 	path = src/jpeg
 	url = https://github.com/wxWidgets/libjpeg-turbo.git
 	branch = wx
 [submodule "3rdparty/pcre"]
 	path = 3rdparty/pcre
-	url = https://github.com/wxWidgets/pcre.git
-	branch = wx
+	url = https://github.com/MaartenBent/pcre.git
+	branch = wx-pcre2-10.48
 [submodule "3rdparty/nanosvg"]
 	path = 3rdparty/nanosvg
-	url = https://github.com/wxWidgets/nanosvg.git
-	branch = wx
+	url = https://github.com/MaartenBent/nanosvg.git
+	branch = wx-nanosvg-20260709
 [submodule "src/stc/scintilla"]
 	path = src/stc/scintilla
 	url = https://github.com/wxWidgets/scintilla.git
 	branch = wx
 [submodule "src/stc/lexilla"]
 	path = src/stc/lexilla
-	url = https://github.com/wxWidgets/lexilla.git
-	branch = wx
+	url = https://github.com/MaartenBent/lexilla.git
+	branch = wx-lexilla-v5.5.3
 [submodule "3rdparty/libwebp"]
 	path = 3rdparty/libwebp
 	url = https://github.com/wxWidgets/libwebp.git
