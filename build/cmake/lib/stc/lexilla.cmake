@@ -56,6 +56,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexEiffel.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexErlang.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexErrorList.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexEscSeq.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexFSharp.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexFlagship.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexForth.cxx
