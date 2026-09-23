@@ -1483,41 +1483,65 @@ using UntranslatedStrings = std::unordered_set<wxString>;
 
 class UntranslatedStringHolder
 {
-private:
-    static wxCriticalSection ms_criticalSection;
-    static std::map<wxThreadIdType, UntranslatedStrings> ms_setsMap;
-
-    // This will be set to point to an element of ms_setsMap.
-    UntranslatedStrings* m_holder = nullptr;
 
 public:
-    UntranslatedStringHolder() = default;
 
-    const wxString& get(const wxString& str)
+    UntranslatedStringHolder()
     {
-        if ( m_holder == nullptr )
-        {
-            wxCriticalSectionLocker locker(ms_criticalSection);
-            m_holder = &ms_setsMap[wxThread::GetCurrentId()];
-        }
-
-        return *m_holder->insert(str).first;
+        m_flsIndex = FlsAlloc( &UntranslatedStringHolder::FlsCleanup );
     }
 
     ~UntranslatedStringHolder()
     {
-        // This code is run after this object memory has been deallocated so we
-        // cannot access any member variables, but we can access global ones.
-        wxCriticalSectionLocker locker(ms_criticalSection);
-        ms_setsMap.erase(wxThread::GetCurrentId());
+        if ( m_flsIndex != FLS_OUT_OF_INDEXES )
+        {
+            FlsFree( m_flsIndex );
+        }
+    }
+
+    const wxString& get(const wxString& str)
+    {
+        static wxString emptyString;
+        
+        if ( m_flsIndex == FLS_OUT_OF_INDEXES )
+            return emptyString;
+        
+        UntranslatedStrings *pData = static_cast<UntranslatedStrings *>( FlsGetValue(m_flsIndex) );
+        
+        if ( pData == nullptr )
+        {
+            pData = new UntranslatedStrings();
+            
+            if ( pData == nullptr )
+                return emptyString;
+            
+            FlsSetValue( m_flsIndex, pData );
+        }
+        
+        return *pData->insert(str).first;
     }
 
     wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
+    
+private:
+
+    DWORD m_flsIndex;
+    
+    static void WINAPI FlsCleanup( PVOID lpFlsData )
+    {       
+        UntranslatedStrings *pData = static_cast<UntranslatedStrings *>( lpFlsData );
+        
+        if ( pData )
+            delete pData;
+    }
+    
 };
 
-wxCriticalSection UntranslatedStringHolder::ms_criticalSection;
-
-std::map<wxThreadIdType, UntranslatedStrings> UntranslatedStringHolder::ms_setsMap;
+const wxString& DoGetUntranslatedString(const wxString& str)
+{
+    static UntranslatedStringHolder wxPerThreadStrings;
+    return wxPerThreadStrings.get(str);
+}
 
 #else // !__MINGW32__
 
@@ -1539,18 +1563,22 @@ public:
     wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
 };
 
-#endif // __MINGW32__/!__MINGW32__
-
-} // Anonymous namespace
-
-
-/* static */
-const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
+const wxString& DoGetUntranslatedString(const wxString& str)
 {
     thread_local UntranslatedStringHolder wxPerThreadStrings;
     return wxPerThreadStrings.get(str);
 }
 
+
+#endif // __MINGW32__/!__MINGW32__
+
+} // Anonymous namespace
+
+/* static */
+const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
+{
+	return DoGetUntranslatedString(str);
+}
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     const wxString& domain,
