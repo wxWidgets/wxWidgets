@@ -32,13 +32,12 @@
 
 #include "wx/gifdecod.h"
 #include "wx/artprov.h"
+#include "wx/filename.h"
 
 #include "wx/bmpbndl.h"
 #include "wx/mstream.h"
 
-#if wxUSE_ZLIB
-    #include "wx/zstream.h"
-#endif
+#include "htmlsvg.h"
 
 FORCE_LINK_ME(m_image)
 
@@ -402,38 +401,21 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
             if ( s )
             {
                 bool readImg = true;
-                wxString loc = input->GetLocation();
-#ifdef wxHAS_SVG
-#if wxUSE_ZLIB
-                if ( loc.Lower().EndsWith(".svgz") )
-                {
-                    wxZlibInputStream zlibStream(*s);
-                    wxBitmapBundle svgBundle =
-                        wxBitmapBundle::FromSVG(zlibStream, wxDefaultSize);
-                    if ( svgBundle.IsOk() )
-                    {
-                        SetImage(svgBundle);
-                        readImg = false;
-                    }
-                }
-#endif // wxUSE_ZLIB
+
+                // Determine the extension of the file in a case-insensitive
+                // way once, to use the same check for all image types below.
+                const wxString ext = wxFileName(input->GetLocation()).GetExt().Lower();
 
                 // SVG image path
-                if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
+                wxBitmapBundle svgBundle;
+                if ( wxHtmlLoadSVGBundle(*s, ext, svgBundle) && svgBundle.IsOk() )
                 {
-                    wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*s, wxDefaultSize);
-                    if ( svgBundle.IsOk() )
-                    {
-                        SetImage(svgBundle);
-                        readImg = false;
-                    }
+                    SetImage(svgBundle);
+                    readImg = false;
                 }
-#endif // wxHAS_SVG
 
 #if wxUSE_GIF && wxUSE_TIMER
-                if ( readImg && m_windowIface &&
-                     (loc.Matches(wxT("*.gif")) ||
-                      loc.Matches(wxT("*.GIF"))) )
+                if ( readImg && m_windowIface && ext == "gif" )
                 {
                     m_gifDecoder = new wxGIFDecoder();
                     if ( m_gifDecoder->LoadGIF(*s) == wxGIF_OK )
@@ -564,9 +546,11 @@ void wxHtmlImageCell::Layout(int w)
 
         m_Width = w*m_bmpW/100;
 
-        // Make certain to avoid a division by zero if the bitmap has no width.
-        if (!m_bmpHpresent && m_bitmapBundle.IsOk() && m_bitmapBundle.GetDefaultSize().GetWidth() != 0)
-            m_Height = m_bitmapBundle.GetDefaultSize().GetHeight()*m_Width/m_bitmapBundle.GetDefaultSize().GetWidth();
+        wxSize bmpSize;
+        if ( !m_bmpHpresent && m_bitmapBundle.IsOk() )
+            bmpSize = m_bitmapBundle.GetDefaultSize();
+        if ( bmpSize.GetWidth() )
+            m_Height = bmpSize.GetHeight()*m_Width/bmpSize.GetWidth();
         else
             m_Height = static_cast<int>(m_scale*m_bmpH);
     } else
