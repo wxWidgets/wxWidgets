@@ -161,13 +161,13 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
     {
         // For Latin-1 our key code is the same as Unicode character value.
         INFO("wrong Unicode key in " + msg);
-        CHECK((char)ev.GetUnicodeKey() == (char)desc.m_keycode);
+        CHECK(ev.GetUnicodeChar() == desc.m_keycode);
     }
     else // Special key
     {
         // Key codes above WXK_START don't correspond to printable characters.
         INFO("wrong non-zero Unicode key in " + msg);
-        CHECK((int)ev.GetUnicodeKey() == 0);
+        CHECK(ev.GetUnicodeChar() == 0);
     }
 
     INFO("wrong modifiers in " + msg);

@@ -263,6 +263,11 @@ Changes in behaviour which may result in build errors
 - wxWithImages::GetImageLogicalSize() overload taking the icon index didn't
   make sense and was removed, please use the other overload instead if needed.
 
+- wxRichTextEvent::GetCharacter() now returns wxUniChar instead of wxChar to
+  allow it to represent non-BMP characters under all platforms. You may need
+  to add an explicit call to wxUniChar::GetValue() to some code using this
+  function (but most code should still compile and work without any changes).
+
 
 3.3.4: (released 2026-??-??)
 ----------------------------

@@ -736,9 +736,14 @@ protected:
     //
     // The wParam and lParam here must come from WM_CHAR event parameters, i.e.
     // wParam must be a character and not a virtual code.
+    //
+    // Also note that wParam must not be a high surrogate, see the code.
     wxKeyEvent CreateCharEvent(wxEventType evType,
                                WXWPARAM wParam,
                                WXLPARAM lParam) const;
+
+    // Helper for sending wxEVT_AFTER_CHAR.
+    void SendAfterCharEvent(WXWPARAM wParam, WXLPARAM lParam);
 
 
     // default OnEraseBackground() implementation, return true if we did erase

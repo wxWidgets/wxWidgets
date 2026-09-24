@@ -530,7 +530,7 @@ wxString GetKeyName(const wxKeyEvent &event)
     if ( keycode >= 32 && keycode < 128 )
         return wxString::Format("'%c'", (unsigned char)keycode);
 
-    int uc = event.GetUnicodeKey();
+    const wxUniChar uc = event.GetUnicodeChar();
     if ( uc != WXK_NONE )
         return wxString::Format("'%c'", uc);
 
@@ -587,8 +587,8 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                event.AltDown()     ? 'A' : '-',
                event.ShiftDown()   ? 'S' : '-',
                event.MetaDown()    ? 'M' : '-'
-               , event.GetUnicodeKey()
-               , event.GetUnicodeKey()
+               , event.GetUnicodeChar()
+               , event.GetUnicodeChar()
 #ifdef wxHAS_RAW_KEY_CODES
                , (unsigned long) event.GetRawKeyCode()
                , (unsigned long) event.GetRawKeyFlags()

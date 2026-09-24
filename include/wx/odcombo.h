@@ -119,7 +119,7 @@ public:
 protected:
 
     // Called by OnComboDoubleClick and OnCombo{Key,Char}Event
-    bool HandleKey( int keycode, bool saturate, wxChar keychar = 0 );
+    bool HandleKey( int keycode, bool saturate, wxUniChar keychar = 0 );
 
     // sends combobox select event from the parent combo control
     void SendComboBoxEvent( int selection );
