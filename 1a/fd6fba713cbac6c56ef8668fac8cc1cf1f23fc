@@ -1,0 +1,1 @@
+wxMSW: Support keyboard input of non-BMP characters such as emojis (#27016).
