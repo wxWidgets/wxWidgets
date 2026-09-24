@@ -894,8 +894,9 @@ TDRadioButtonSubclassProc(HWND hwnd,
 
                 ::DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
 
-                wchar_t text[512] = {};
-                GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
+                const size_t textSize = 512;
+                wchar_t text[textSize] = {};
+                GetWindowTextW(hwnd, text, static_cast<int>(textSize));
 
                 auto gs = hBtn.GetTrueSize(BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL);
                 RECT rcText = { gs.x + 2, 0, rcClient.right, rcClient.bottom };
