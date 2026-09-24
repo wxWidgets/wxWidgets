@@ -2448,6 +2448,11 @@ public:
     {
 #ifdef __WXMSW__
         SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+        Bind(wxEVT_SYS_COLOUR_CHANGED, [this](wxSysColourChangedEvent& event)
+            {
+                SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+                event.Skip();
+            });
 #endif
         wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
@@ -2563,7 +2568,6 @@ public:
 
         m_textStatus = new wxStaticText(this, wxID_ANY, "", wxDefaultPosition, wxDefaultSize,
             wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
-        m_textStatus->SetForegroundColour(*wxBLUE);
         sizerTop->Add(m_textStatus, wxSizerFlags().Expand().Border());
 
         wxSizer* sizerButtons = new wxBoxSizer(wxHORIZONTAL);
@@ -3038,7 +3042,10 @@ private:
                 break;
 
             case Bg_Gradient:
-                tip.SetBackgroundColour(*wxWHITE, wxColour(0xe4, 0xe5, 0xf0));
+                if ( wxSystemSettings::GetAppearance().IsDark() )
+                    tip.SetBackgroundColour(*wxBLACK, wxColour(0x30, 0x30, 0x30));
+                else
+                    tip.SetBackgroundColour(*wxWHITE, wxColour(0xe4, 0xe5, 0xf0));
                 break;
         }
 
@@ -3721,6 +3728,9 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
+    wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    dc.SetBackground(brush);
+    dc.Clear();
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.DrawText(
                 "wxWidgets common dialogs"
@@ -4293,7 +4303,6 @@ bool TestMessageBoxDialog::Create()
     m_labelResult = new wxStaticText(this, wxID_ANY, "",
                                      wxDefaultPosition, wxDefaultSize,
                                      wxST_NO_AUTORESIZE | wxALIGN_CENTRE);
-    m_labelResult->SetForegroundColour(*wxBLUE);
     sizerTop->Add(m_labelResult, wxSizerFlags().Expand().DoubleBorder());
 
     // finally buttons to show the resulting message box and close this dialog
