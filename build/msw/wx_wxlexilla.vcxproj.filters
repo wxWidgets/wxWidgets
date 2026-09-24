@@ -196,6 +196,9 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexErrorList.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEscSeq.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEScript.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>

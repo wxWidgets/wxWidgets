@@ -369,6 +369,12 @@ WXEXPAT_CFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
+	$(OBJS)\wxexpat_random_arc4random.obj \
+	$(OBJS)\wxexpat_random_arc4random_buf.obj \
+	$(OBJS)\wxexpat_random_dev_urandom.obj \
+	$(OBJS)\wxexpat_random_getentropy.obj \
+	$(OBJS)\wxexpat_random_getrandom.obj \
+	$(OBJS)\wxexpat_random_rand_s.obj \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
 	$(OBJS)\wxexpat_xmltok.obj
@@ -467,6 +473,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexEiffel.obj \
 	$(OBJS)\wxlexilla_LexErlang.obj \
 	$(OBJS)\wxlexilla_LexErrorList.obj \
+	$(OBJS)\wxlexilla_LexEscSeq.obj \
 	$(OBJS)\wxlexilla_LexFSharp.obj \
 	$(OBJS)\wxlexilla_LexFlagship.obj \
 	$(OBJS)\wxlexilla_LexForth.obj \
@@ -7681,6 +7688,24 @@ $(OBJS)\wxtiff_tif_zip.obj: ..\..\src\tiff\libtiff\tif_zip.c
 $(OBJS)\wxtiff_tif_zstd.obj: ..\..\src\tiff\libtiff\tif_zstd.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zstd.c
 
+$(OBJS)\wxexpat_random_arc4random.obj: ..\..\src\expat\expat\lib\random_arc4random.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_arc4random.c
+
+$(OBJS)\wxexpat_random_arc4random_buf.obj: ..\..\src\expat\expat\lib\random_arc4random_buf.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_arc4random_buf.c
+
+$(OBJS)\wxexpat_random_dev_urandom.obj: ..\..\src\expat\expat\lib\random_dev_urandom.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_dev_urandom.c
+
+$(OBJS)\wxexpat_random_getentropy.obj: ..\..\src\expat\expat\lib\random_getentropy.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_getentropy.c
+
+$(OBJS)\wxexpat_random_getrandom.obj: ..\..\src\expat\expat\lib\random_getrandom.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_getrandom.c
+
+$(OBJS)\wxexpat_random_rand_s.obj: ..\..\src\expat\expat\lib\random_rand_s.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_rand_s.c
+
 $(OBJS)\wxexpat_xmlparse.obj: ..\..\src\expat\expat\lib\xmlparse.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xmlparse.c
 
@@ -7902,6 +7927,9 @@ $(OBJS)\wxlexilla_LexErlang.obj: ..\..\src\stc\lexilla\lexers\LexErlang.cxx
 
 $(OBJS)\wxlexilla_LexErrorList.obj: ..\..\src\stc\lexilla\lexers\LexErrorList.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexErrorList.cxx
+
+$(OBJS)\wxlexilla_LexEscSeq.obj: ..\..\src\stc\lexilla\lexers\LexEscSeq.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexEscSeq.cxx
 
 $(OBJS)\wxlexilla_LexFSharp.obj: ..\..\src\stc\lexilla\lexers\LexFSharp.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexFSharp.cxx

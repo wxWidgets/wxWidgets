@@ -82,6 +82,7 @@
             src/stc/lexilla/lexers/LexEiffel.cxx
             src/stc/lexilla/lexers/LexErlang.cxx
             src/stc/lexilla/lexers/LexErrorList.cxx
+            src/stc/lexilla/lexers/LexEscSeq.cxx
             src/stc/lexilla/lexers/LexFSharp.cxx
             src/stc/lexilla/lexers/LexFlagship.cxx
             src/stc/lexilla/lexers/LexForth.cxx

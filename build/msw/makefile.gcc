@@ -342,6 +342,12 @@ WXTIFF_OBJECTS =  \
 WXEXPAT_CFLAGS = -I$(LIBDIRNAME) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(__THREADSFLAG) -DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
+	$(OBJS)\wxexpat_random_arc4random.o \
+	$(OBJS)\wxexpat_random_arc4random_buf.o \
+	$(OBJS)\wxexpat_random_dev_urandom.o \
+	$(OBJS)\wxexpat_random_getentropy.o \
+	$(OBJS)\wxexpat_random_getrandom.o \
+	$(OBJS)\wxexpat_random_rand_s.o \
 	$(OBJS)\wxexpat_xmlparse.o \
 	$(OBJS)\wxexpat_xmlrole.o \
 	$(OBJS)\wxexpat_xmltok.o
@@ -430,6 +436,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexEiffel.o \
 	$(OBJS)\wxlexilla_LexErlang.o \
 	$(OBJS)\wxlexilla_LexErrorList.o \
+	$(OBJS)\wxlexilla_LexEscSeq.o \
 	$(OBJS)\wxlexilla_LexFSharp.o \
 	$(OBJS)\wxlexilla_LexFlagship.o \
 	$(OBJS)\wxlexilla_LexForth.o \
@@ -7179,6 +7186,24 @@ $(OBJS)\wxtiff_tif_zip.o: ../../src/tiff/libtiff/tif_zip.c
 $(OBJS)\wxtiff_tif_zstd.o: ../../src/tiff/libtiff/tif_zstd.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxexpat_random_arc4random.o: ../../src/expat/expat/lib/random_arc4random.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxexpat_random_arc4random_buf.o: ../../src/expat/expat/lib/random_arc4random_buf.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxexpat_random_dev_urandom.o: ../../src/expat/expat/lib/random_dev_urandom.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxexpat_random_getentropy.o: ../../src/expat/expat/lib/random_getentropy.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxexpat_random_getrandom.o: ../../src/expat/expat/lib/random_getrandom.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxexpat_random_rand_s.o: ../../src/expat/expat/lib/random_rand_s.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxexpat_xmlparse.o: ../../src/expat/expat/lib/xmlparse.c
 	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
 
@@ -7399,6 +7424,9 @@ $(OBJS)\wxlexilla_LexErlang.o: ../../src/stc/lexilla/lexers/LexErlang.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexErrorList.o: ../../src/stc/lexilla/lexers/LexErrorList.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexEscSeq.o: ../../src/stc/lexilla/lexers/LexEscSeq.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexFSharp.o: ../../src/stc/lexilla/lexers/LexFSharp.cxx
