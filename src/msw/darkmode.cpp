@@ -818,7 +818,77 @@ HandleMenuMessage(WXLRESULT* result,
                 // correct colours in the dark mode, at least not when using
                 // the "Menu" theme.
                 ::FillRect(dis.hDC, &dis.rcItem, hbr ? hbr : GetMenuBrush());
+                const UINT itemID = dis.itemID;
+                HWND hwndChild = (HWND)dis.itemData;
+                bool isMDIChildItem = (hwndChild && ::IsWindow(hwndChild) && (::GetWindowLongPtr(hwndChild, GWL_STYLE) & WS_CHILD));
 
+                if (itemID == SC_MINIMIZE || itemID == SC_CLOSE || itemID == SC_RESTORE)
+                {
+                    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
+                    const wchar_t* iconFont = isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons";
+                    auto drawSysButton = [&](RECT rc, wchar_t glyphChar)
+                        {
+                            int btnHeight = rc.bottom - rc.top;
+                            LOGFONT lf = { };
+                            wcscpy(lf.lfFaceName, iconFont);
+                            lf.lfHeight = -::MulDiv(btnHeight, 9, 16); // Scale icon cleanly inside button bounding box
+                            lf.lfWeight = FW_NORMAL;
+                            lf.lfCharSet = DEFAULT_CHARSET;
+                            HFONT hFont = ::CreateFontIndirectW(&lf);
+                            HDC hdc = dis.hDC;
+                            HFONT hOldFont = (HFONT)::SelectObject(hdc, hFont);
+                            COLORREF textCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
+                            COLORREF oldTextCol = ::SetTextColor(hdc, textCol);
+                            int oldBkMode = ::SetBkMode(hdc, TRANSPARENT);
+                            ::DrawText(hdc, &glyphChar, 1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                            ::SetBkMode(hdc, oldBkMode);
+                            ::SetTextColor(hdc, oldTextCol);
+                            ::SelectObject(hdc, hOldFont);
+                            ::DeleteObject(hFont);
+                        };
+
+                    wchar_t glyphToDraw = L'\0';
+                    switch (itemID)
+                    {
+                    case SC_CLOSE:
+                        glyphToDraw = L'\uE8BB';
+                        break;
+                    case SC_MINIMIZE:
+                        glyphToDraw = L'\uE921';
+                        break;
+                    case SC_RESTORE:
+                        glyphToDraw = L'\uE923';
+                        break;
+                    }
+
+                    drawSysButton(dis.rcItem, glyphToDraw);
+                    return true;
+                }
+
+                else if (isMDIChildItem)
+                {
+                    HICON hIcon = (HICON)::SendMessage(hwndChild, WM_GETICON, ICON_SMALL2, 0);
+                    if (!hIcon)
+                        hIcon = (HICON)::SendMessage(hwndChild, WM_GETICON, ICON_SMALL, 0);
+                    if (!hIcon)
+                        hIcon = (HICON)::SendMessage(hwndChild, WM_GETICON, ICON_BIG, 0);
+                    if (!hIcon)
+                       hIcon = wxICON(wxICON_APPLICATION).GetHICON();
+                    // 2. Draw the icon
+                    if (hIcon) {
+                        int cxIcon = ::GetSystemMetrics(SM_CXSMICON);
+                        int cyIcon = ::GetSystemMetrics(SM_CYSMICON);
+                        RECT rcIcon = dis.rcItem;
+                        rcIcon.left += 2; // small padding
+                        rcIcon.right = rcIcon.left + cxIcon;
+                        rcIcon.top += (rcIcon.bottom - rcIcon.top - cyIcon) / 2;
+                        rcIcon.bottom = rcIcon.top + cyIcon;
+                        ::DrawIconEx(dis.hDC, rcIcon.left, rcIcon.top, hIcon, cxIcon, cyIcon, 0, nullptr, DI_NORMAL);
+                    }
+                }
+
+                else
+                {
                 // We have to specify the text colour explicitly as by default
                 // black would be used, making the menu label unreadable on the
                 // (almost) black background.
@@ -837,6 +907,7 @@ HandleMenuMessage(WXLRESULT* result,
             }
             return true;
     }
+}
 
     return false;
 }
