@@ -1248,6 +1248,148 @@ wxWindowMSW::AdjustForLayoutDirection(wxCoord x,
     return x;
 }
 
+// ----------------------------------------------------------------------------
+// input method support
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// We use dynamic loading to avoid having to link with imm32.lib.
+class wxIMMFunctions
+{
+public:
+    // Return the global object, IsOk() must be checked before using it.
+    static const wxIMMFunctions& Get()
+    {
+        static const wxIMMFunctions s_imm;
+        return s_imm;
+    }
+
+    bool IsOk() const { return m_ok; }
+
+    typedef BOOL (WINAPI *ImmAssociateContextEx_t)(HWND, HIMC, DWORD);
+    typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
+    typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
+    typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
+    typedef BOOL (WINAPI *ImmSetCompositionWindow_t)(HIMC, LPCOMPOSITIONFORM);
+    typedef BOOL (WINAPI *ImmSetCandidateWindow_t)(HIMC, LPCANDIDATEFORM);
+
+    ImmAssociateContextEx_t AssociateContextEx = nullptr;
+    ImmGetContext_t GetContext = nullptr;
+    ImmGetOpenStatus_t GetOpenStatus = nullptr;
+    ImmReleaseContext_t ReleaseContext = nullptr;
+    ImmSetCompositionWindow_t SetCompositionWindow = nullptr;
+    ImmSetCandidateWindow_t SetCandidateWindow = nullptr;
+
+private:
+    wxIMMFunctions()
+    {
+        wxLoadedDLL dllImm32("imm32.dll");
+        if ( !dllImm32.IsLoaded() )
+            return;
+
+#define wxINIT_IMM_FUNC(name) \
+        name = (Imm ## name ## _t)dllImm32.RawGetSymbol("Imm" #name); \
+        if ( !name ) \
+            return
+
+        wxINIT_IMM_FUNC(AssociateContextEx);
+        wxINIT_IMM_FUNC(GetContext);
+        wxINIT_IMM_FUNC(GetOpenStatus);
+        wxINIT_IMM_FUNC(ReleaseContext);
+        wxINIT_IMM_FUNC(SetCompositionWindow);
+        wxINIT_IMM_FUNC(SetCandidateWindow);
+
+        m_ok = true;
+    }
+
+    bool m_ok = false;
+
+    wxDECLARE_NO_COPY_CLASS(wxIMMFunctions);
+};
+
+// RAII helper acquiring and releasing the input method context.
+//
+// This should be only used after checking that wxIMMFunctions is valid.
+class wxIMCContext
+{
+public:
+    wxIMCContext(HWND hwnd)
+        : m_hwnd(hwnd),
+          m_hIMC(wxIMMFunctions::Get().GetContext(hwnd))
+    {
+    }
+
+    operator HIMC() const { return m_hIMC; }
+
+    ~wxIMCContext()
+    {
+        if ( m_hIMC )
+            wxIMMFunctions::Get().ReleaseContext(m_hwnd, m_hIMC);
+    }
+
+private:
+    const HWND m_hwnd;
+    const HIMC m_hIMC;
+
+    wxDECLARE_NO_COPY_CLASS(wxIMCContext);
+};
+
+// Position the IME windows at the location returned by the window
+// GetInputMethodCursorRect(), if it returns anything.
+void wxPositionIMEWindows(const wxWindowMSW* win)
+{
+    const wxRect rect = win->GetInputMethodCursorRect();
+    if ( rect.IsEmpty() )
+        return;
+
+    const wxIMMFunctions& imm = wxIMMFunctions::Get();
+    if ( !imm.IsOk() )
+        return;
+
+    wxIMCContext hIMC(GetHwndOf(win));
+    if ( !hIMC )
+        return;
+
+    // Show the composition string at the start of the rectangle...
+    COMPOSITIONFORM cf = {};
+    cf.dwStyle = CFS_POINT;
+    cf.ptCurrentPos.x = rect.x;
+    cf.ptCurrentPos.y = rect.y;
+    imm.SetCompositionWindow(hIMC, &cf);
+
+    // ... and the candidates list below it, without covering it.
+    CANDIDATEFORM cand = {};
+    cand.dwIndex = 0;
+    cand.dwStyle = CFS_EXCLUDE;
+    cand.ptCurrentPos.x = rect.x;
+    cand.ptCurrentPos.y = rect.y + rect.height;
+    cand.rcArea.left = rect.x;
+    cand.rcArea.top = rect.y;
+    cand.rcArea.right = rect.x + rect.width;
+    cand.rcArea.bottom = rect.y + rect.height;
+    imm.SetCandidateWindow(hIMC, &cand);
+}
+
+} // anonymous namespace
+
+void wxWindowMSW::DoEnableInputMethod(bool enable)
+{
+    // If the window hasn't been created yet, this will be done in
+    // SubclassWin() when it is.
+    if ( !m_hWnd )
+        return;
+
+    const wxIMMFunctions& imm = wxIMMFunctions::Get();
+    if ( !imm.IsOk() )
+        return;
+
+    // Passing null IMC handle disables IME with the default flags and is
+    // completely ignored with IACE_DEFAULT which restores the default IME.
+    imm.AssociateContextEx(GetHwnd(), nullptr, enable ? IACE_DEFAULT : 0);
+}
+
 // ---------------------------------------------------------------------------
 // subclassing
 // ---------------------------------------------------------------------------
@@ -1284,6 +1426,10 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
         // simply check m_oldWndProc
         m_oldWndProc = nullptr;
     }
+
+    // Input method may have been disabled before the window was created.
+    if ( !IsInputMethodEnabled() )
+        DoEnableInputMethod(false);
 
     // we're officially created now, send the event
     wxWindowCreateEvent event((wxWindow *)this);
@@ -3422,6 +3568,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // entry window instead of e.g. closing the dialog for which the
             // IME is used (and losing all the changes in the IME window).
             gs_modalEntryWindowCount++;
+
+            wxPositionIMEWindows(this);
             break;
 
         case WM_IME_ENDCOMPOSITION:
@@ -7569,44 +7717,20 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 namespace
 {
 
-// We use dynamic loading to avoid having to link with imm32.lib
-// (another positive side effect is that imm32.dll is loaded only if the
-// program actually handles wxEVT_CHAR_HOOK events without skipping them, as
-// it's the only case when we need to use these IME functions).
-typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
-typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
-typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
-
-ImmGetContext_t gs_pfnImmGetContext = nullptr;
-ImmGetOpenStatus_t gs_pfnImmGetOpenStatus = nullptr;
-ImmReleaseContext_t gs_pfnImmReleaseContext = nullptr;
-
 bool wxIsIMEOpen(const wxWindow* win)
 {
     if ( !win )
         return false;
 
-    if ( !gs_pfnImmGetContext )
-    {
-        wxLoadedDLL dllImm32("imm32.dll");
-        if ( !dllImm32.IsLoaded() )
-            return false;
+    const wxIMMFunctions& imm = wxIMMFunctions::Get();
+    if ( !imm.IsOk() )
+        return false;
 
-        wxDL_INIT_FUNC(gs_pfn, ImmGetContext, dllImm32);
-        wxDL_INIT_FUNC(gs_pfn, ImmGetOpenStatus, dllImm32);
-        wxDL_INIT_FUNC(gs_pfn, ImmReleaseContext, dllImm32);
-    }
-
-    const HWND hwnd = GetHwndOf(win);
-
-    const HIMC hIMC = gs_pfnImmGetContext(hwnd);
+    wxIMCContext hIMC(GetHwndOf(win));
     if ( !hIMC )
         return false;
 
-    const BOOL isOpen = gs_pfnImmGetOpenStatus(hIMC);
-    gs_pfnImmReleaseContext(hwnd, hIMC);
-
-    return isOpen;
+    return imm.GetOpenStatus(hIMC) != 0;
 }
 
 } // anonymous namespace

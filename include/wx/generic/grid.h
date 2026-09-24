@@ -3223,6 +3223,10 @@ private:
     // the edit control is shown, but just supposes that it is.
     void DoSaveEditControlValue();
 
+    // Update the state of the IME when anything affecting it changed.
+    void UpdateIME();
+
+
     // these sets contain the indices of fixed, i.e. non-resizable
     // interactively, grid rows or columns and are null if there are no fixed
     // elements (which is the default)

@@ -156,21 +156,30 @@ public:
 
         m_scrollWindowCallCount++;
         m_lastScrollWindowDelta = wxPoint(dx, dy);
+        m_lastScrollWindowViewStart = GetViewStart();
     }
 
     void ResetScrollWindowCalls()
     {
         m_scrollWindowCallCount = 0;
         m_lastScrollWindowDelta = wxPoint();
+        m_lastScrollWindowViewStart = wxDefaultPosition;
     }
 
     int GetScrollWindowCallCount() const { return m_scrollWindowCallCount; }
 
     wxPoint GetLastScrollWindowDelta() const { return m_lastScrollWindowDelta; }
 
+    // Return the view start as it was during the last ScrollWindow() call.
+    wxPoint GetLastScrollWindowViewStart() const
+    {
+        return m_lastScrollWindowViewStart;
+    }
+
 private:
     int m_scrollWindowCallCount = 0;
     wxPoint m_lastScrollWindowDelta;
+    wxPoint m_lastScrollWindowViewStart;
 };
 
 #endif // wxUSE_SCROLLBAR
@@ -214,6 +223,36 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ScrolledWindowPhysicalScrolling",
     CHECK( win->GetViewStart() == wxPoint(1, 2) );
     REQUIRE( win->GetScrollWindowCallCount() == 1 );
     CHECK( win->GetLastScrollWindowDelta() == wxPoint(-10, 0) );
+}
+
+TEST_CASE_METHOD(WindowTestCase, "Window::ScrolledWindowViewStart",
+                 "[window][scroll]")
+{
+    auto win = make_unique<ScrollCountingWindow>(wxTheApp->GetTopWindow());
+
+    // ScrollWindow() must be called after updating the scroll position, so
+    // that it can be used, e.g. to convert between logical and device
+    // coordinates, in the overridden version of this function.
+    win->Scroll(0, 3);
+
+    REQUIRE( win->GetScrollWindowCallCount() == 1 );
+    CHECK( win->GetLastScrollWindowDelta() == wxPoint(0, -30) );
+    CHECK( win->GetLastScrollWindowViewStart() == wxPoint(0, 3) );
+
+    win->ResetScrollWindowCalls();
+    win->Scroll(2, -1);
+
+    REQUIRE( win->GetScrollWindowCallCount() == 1 );
+    CHECK( win->GetLastScrollWindowDelta() == wxPoint(-20, 0) );
+    CHECK( win->GetLastScrollWindowViewStart() == wxPoint(2, 3) );
+
+    // When scrolling in both directions, ScrollWindow() is called twice and
+    // the view start must be fully updated by the time of the last call.
+    win->ResetScrollWindowCalls();
+    win->Scroll(1, 1);
+
+    REQUIRE( win->GetScrollWindowCallCount() == 2 );
+    CHECK( win->GetLastScrollWindowViewStart() == wxPoint(1, 1) );
 }
 
 #endif // wxUSE_SCROLLBAR

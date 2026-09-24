@@ -147,11 +147,17 @@ void wxScrollHelper::DoScrollOneDir(int orient,
         m_win->SetScrollPos(orient, pos);
         pos = m_win->GetScrollPos(orient);
 
+        const int diff = (*posOld - pos)*pixelsPerLine;
+
+        // Update the position before calling ScrollWindow(), as it may use
+        // GetViewStart(), which must already return the new position, as it
+        // does in the other ports.
+        *posOld = pos;
+
         const bool scrollingEnabled =
             orient == wxHORIZONTAL ? m_xScrollingEnabled : m_yScrollingEnabled;
         if ( scrollingEnabled )
         {
-            int diff = (*posOld - pos)*pixelsPerLine;
             m_targetWindow->ScrollWindow(orient == wxHORIZONTAL ? diff : 0,
                                          orient == wxHORIZONTAL ? 0 : diff);
         }
@@ -161,8 +167,6 @@ void wxScrollHelper::DoScrollOneDir(int orient,
             // physical move of the pixels is disabled.
             m_targetWindow->Refresh(true, GetScrollRect());
         }
-
-        *posOld = pos;
     }
 }
 

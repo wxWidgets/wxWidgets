@@ -1304,6 +1304,27 @@ public:
     wxCaret *GetCaret() const { return m_caret; }
 #endif // wxUSE_CARET
 
+    // input method (IME) support
+    // --------------------------
+
+        // enable or disable input method for this window, it's enabled by
+        // default but can be disabled for windows not accepting text input
+    void EnableInputMethod(bool enable = true);
+    bool IsInputMethodEnabled() const { return m_enableIME; }
+
+        // set the rectangle, in client coordinates, where the text is being
+        // input: the input method windows are positioned near it
+        //
+        // this must be called by the windows accepting text input whenever
+        // this rectangle changes, e.g. because the insertion point moved or
+        // the window was scrolled
+    void UpdateInputMethodCursorRect(const wxRect& rect);
+
+        // return the rectangle set by the function above for this window, or
+        // an empty rectangle, meaning that the input method default position
+        // is used, if it wasn't set for it
+    wxRect GetInputMethodCursorRect() const;
+
         // get the (average) character size for the current font
     virtual int GetCharHeight() const = 0;
     virtual int GetCharWidth() const = 0;
@@ -1799,6 +1820,15 @@ protected:
     // widgets state are necessary
     virtual void DoEnable(bool WXUNUSED(enable)) { }
 
+    // this method should be implemented to really enable or disable input
+    // method for this window, it's only called if the state changes
+    virtual void DoEnableInputMethod(bool WXUNUSED(enable)) { }
+
+    // this method can be implemented to really update the input method
+    // windows position, using GetInputMethodCursorRect(), it's only called if
+    // the input method is enabled
+    virtual void DoUpdateInputMethodCursorRect() { }
+
 
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is wxID_ANY
@@ -1889,6 +1919,9 @@ protected:
     // flags disabling or enabling accepting focus from keyboard
     bool                 m_disableFocusFromKbd:1;
     bool                 m_enableFocusFromKbd:1;
+
+    // flag controlling the use of IME (enabled by default)
+    bool                 m_enableIME:1;
 
     // window attributes
     long                 m_windowStyle,
@@ -2076,6 +2109,12 @@ private:
     // number of Freeze() calls minus the number of Thaw() calls: we're frozen
     // (i.e. not being updated) if it is positive
     unsigned int m_freezeCount;
+
+    // The window for which the input method cursor rectangle was set and the
+    // rectangle itself: as only the window having the focus can use it, we
+    // don't need to store it in every window.
+    static const wxWindowBase* ms_imeCursorWindow;
+    static wxRect ms_imeCursorRect;
 
     wxDECLARE_ABSTRACT_CLASS(wxWindowBase);
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);

@@ -339,6 +339,9 @@ public:
     // "commit" signal handler.
     bool GTKDoInsertTextFromIM(const char* text);
 
+    // Actual implementation of DoUpdateInputMethodCursorRect().
+    void GTKUpdateIMCursorRect(GtkIMContext* imContext) const;
+
 
     // indices for the arrays below
     enum ScrollDir { ScrollDir_Horz, ScrollDir_Vert, ScrollDir_Max };
@@ -416,6 +419,8 @@ protected:
     virtual void DoSetClientSize(int width, int height) override;
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
     virtual void DoEnable(bool enable) override;
+    virtual void DoEnableInputMethod(bool enable) override;
+    virtual void DoUpdateInputMethodCursorRect() override;
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;

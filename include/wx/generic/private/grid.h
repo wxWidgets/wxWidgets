@@ -427,6 +427,10 @@ public:
 
     wxGridWindowType GetType() const { return m_type; }
 
+    // Update the position of the input method windows to correspond to the
+    // current cell.
+    void UpdateIMECursorRect();
+
 private:
     const wxGridWindowType m_type;
 
