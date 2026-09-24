@@ -1463,6 +1463,8 @@ namespace
 // access.
 using UntranslatedStrings = std::unordered_set<wxString>;
 
+}
+
 /*
     As of October 2025, MinGW still has a long-standing bug in its thread_local
     variables implementation: their memory is de-allocated *before* their
@@ -1481,59 +1483,58 @@ using UntranslatedStrings = std::unordered_set<wxString>;
 #if defined(__MINGW32__) && \
     (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 15)
 
+namespace
+{
+
 class UntranslatedStringHolder
 {
-public:
-    UntranslatedStringHolder()
+private:
+    DWORD m_flsIndex = ::FlsAlloc(&UntranslatedStringHolder::FlsCleanup);
+
+    static void WINAPI FlsCleanup(PVOID lpFlsData)
     {
-        m_flsIndex = FlsAlloc(&UntranslatedStringHolder::FlsCleanup);
+        delete static_cast<UntranslatedStrings*>(lpFlsData);
+    }
+
+public:
+    UntranslatedStringHolder() = default;
+
+    const wxString& get(const wxString& str)
+    {
+        static const wxString emptyString;
+
+        if ( m_flsIndex == FLS_OUT_OF_INDEXES )
+            return emptyString;
+
+        UntranslatedStrings*
+            data = static_cast<UntranslatedStrings*>(::FlsGetValue(m_flsIndex));
+
+        if ( data == nullptr )
+        {
+            data = new UntranslatedStrings();
+
+            ::FlsSetValue(m_flsIndex, data);
+        }
+
+        return *data->insert(str).first;
     }
 
     ~UntranslatedStringHolder()
     {
-        if (m_flsIndex != FLS_OUT_OF_INDEXES)
+        if ( m_flsIndex != FLS_OUT_OF_INDEXES )
         {
-            FlsFree(m_flsIndex);
+            ::FlsFree(m_flsIndex);
         }
-    }
-
-    const wxString& get(const wxString& str)
-    {
-        static wxString emptyString;
-
-        if (m_flsIndex == FLS_OUT_OF_INDEXES)
-            return emptyString;
-
-        UntranslatedStrings* pData = static_cast<UntranslatedStrings*>(FlsGetValue(m_flsIndex));
-
-        if (pData == nullptr)
-        {
-            pData = new UntranslatedStrings();
-
-            if (pData == nullptr)
-                return emptyString;
-
-            FlsSetValue(m_flsIndex, pData);
-        }
-
-        return *pData->insert(str).first;
     }
 
     wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-
-private:
-    DWORD m_flsIndex;
-
-    static void WINAPI FlsCleanup(PVOID lpFlsData)
-    {
-        UntranslatedStrings* pData = static_cast<UntranslatedStrings*>(lpFlsData);
-
-        if (pData)
-            delete pData;
-    }
 };
 
-const wxString& DoGetUntranslatedString(const wxString& str)
+} // Anonymous namespace
+
+
+/* static */
+const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
     static UntranslatedStringHolder wxPerThreadStrings;
     return wxPerThreadStrings.get(str);
@@ -1541,39 +1542,17 @@ const wxString& DoGetUntranslatedString(const wxString& str)
 
 #else // !__MINGW32__
 
-// When not using MinGW, thread_local variables to work correctly but we still
-// define this class, even if it's trivial, to use the same code below.
-class UntranslatedStringHolder
-{
-private:
-    UntranslatedStrings m_holder;
-
-public:
-    UntranslatedStringHolder() = default;
-
-    const wxString& get(const wxString& str)
-    {
-        return *m_holder.insert(str).first;
-    }
-
-    wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-};
-
-const wxString& DoGetUntranslatedString(const wxString& str)
-{
-    thread_local UntranslatedStringHolder wxPerThreadStrings;
-    return wxPerThreadStrings.get(str);
-}
-
-#endif // __MINGW32__ // !__MINGW32__
-
-} // namespace
+// When not using (old) MinGW, thread_local variables work correctly so just
+// use them directly.
 
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-    return DoGetUntranslatedString(str);
+    thread_local UntranslatedStrings wxPerThreadStrings;
+    return *wxPerThreadStrings.insert(str).first;
 }
+
+#endif // __MINGW32__ // !__MINGW32__
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     const wxString& domain,
