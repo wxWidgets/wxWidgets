@@ -41,6 +41,14 @@ public:
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
+    bool Create(int size,
+                wxFontFamily family,
+                wxFontStyle style,
+                wxFontWeight weight,
+                bool underlined = false,
+                const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
     bool Create(wxSize size,
                 wxFontFamily family,
                 wxFontStyle style,

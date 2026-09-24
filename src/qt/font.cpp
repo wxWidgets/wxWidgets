@@ -219,6 +219,18 @@ wxFont::wxFont(int size,
     Create(wxSize(0, size), (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
 }
 
+bool wxFont::Create(int size, wxFontFamily family, wxFontStyle style,
+        wxFontWeight weight, bool underlined, const wxString& face,
+        wxFontEncoding encoding)
+{
+    UnRef();
+
+    m_refData = new wxFontRefData(InfoFromLegacyParams(size, family, style,
+                                                       weight, underlined, face,
+                                                       encoding));
+
+    return true;
+}
 
 bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,
