@@ -575,8 +575,6 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas(wxWindow *parent) : wxScrolledWindow(parent, wxID_ANY)
     {
-        SetForegroundColour(*wxBLACK);
-        SetBackgroundColour(*wxWHITE);
         SetFont(*wxNORMAL_FONT);
     }
 
