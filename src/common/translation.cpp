@@ -1463,6 +1463,8 @@ namespace
 // access.
 using UntranslatedStrings = std::unordered_set<wxString>;
 
+}
+
 /*
     As of October 2025, MinGW still has a long-standing bug in its thread_local
     variables implementation: their memory is de-allocated *before* their
@@ -1481,65 +1483,52 @@ using UntranslatedStrings = std::unordered_set<wxString>;
 #if defined(__MINGW32__) && \
     (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 15)
 
+namespace
+{
+
 class UntranslatedStringHolder
 {
 private:
-    static wxCriticalSection ms_criticalSection;
-    static std::map<wxThreadIdType, UntranslatedStrings> ms_setsMap;
+    DWORD m_flsIndex = ::FlsAlloc(&UntranslatedStringHolder::FlsCleanup);
 
-    // This will be set to point to an element of ms_setsMap.
-    UntranslatedStrings* m_holder = nullptr;
+    static void WINAPI FlsCleanup(PVOID lpFlsData)
+    {
+        delete static_cast<UntranslatedStrings*>(lpFlsData);
+    }
 
 public:
     UntranslatedStringHolder() = default;
 
     const wxString& get(const wxString& str)
     {
-        if ( m_holder == nullptr )
+        static const wxString emptyString;
+
+        if ( m_flsIndex == FLS_OUT_OF_INDEXES )
+            return emptyString;
+
+        UntranslatedStrings*
+            data = static_cast<UntranslatedStrings*>(::FlsGetValue(m_flsIndex));
+
+        if ( data == nullptr )
         {
-            wxCriticalSectionLocker locker(ms_criticalSection);
-            m_holder = &ms_setsMap[wxThread::GetCurrentId()];
+            data = new UntranslatedStrings();
+
+            ::FlsSetValue(m_flsIndex, data);
         }
 
-        return *m_holder->insert(str).first;
+        return *data->insert(str).first;
     }
 
     ~UntranslatedStringHolder()
     {
-        // This code is run after this object memory has been deallocated so we
-        // cannot access any member variables, but we can access global ones.
-        wxCriticalSectionLocker locker(ms_criticalSection);
-        ms_setsMap.erase(wxThread::GetCurrentId());
+        if ( m_flsIndex != FLS_OUT_OF_INDEXES )
+        {
+            ::FlsFree(m_flsIndex);
+        }
     }
 
     wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
 };
-
-wxCriticalSection UntranslatedStringHolder::ms_criticalSection;
-
-std::map<wxThreadIdType, UntranslatedStrings> UntranslatedStringHolder::ms_setsMap;
-
-#else // !__MINGW32__
-
-// When not using MinGW, thread_local variables to work correctly but we still
-// define this class, even if it's trivial, to use the same code below.
-class UntranslatedStringHolder
-{
-private:
-    UntranslatedStrings m_holder;
-
-public:
-    UntranslatedStringHolder() = default;
-
-    const wxString& get(const wxString& str)
-    {
-        return *m_holder.insert(str).first;
-    }
-
-    wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-};
-
-#endif // __MINGW32__/!__MINGW32__
 
 } // Anonymous namespace
 
@@ -1547,10 +1536,23 @@ public:
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-    thread_local UntranslatedStringHolder wxPerThreadStrings;
+    static UntranslatedStringHolder wxPerThreadStrings;
     return wxPerThreadStrings.get(str);
 }
 
+#else // !__MINGW32__
+
+// When not using (old) MinGW, thread_local variables work correctly so just
+// use them directly.
+
+/* static */
+const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
+{
+    thread_local UntranslatedStrings wxPerThreadStrings;
+    return *wxPerThreadStrings.insert(str).first;
+}
+
+#endif // __MINGW32__ // !__MINGW32__
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     const wxString& domain,
