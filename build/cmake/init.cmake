@@ -242,10 +242,6 @@ if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
 endif()
 
-if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
-    add_compile_options("-DwxDEBUG_LEVEL=${wxBUILD_DEBUG_LEVEL}")
-endif()
-
 # Constants for setup.h creation
 if(NOT wxUSE_EXPAT)
     set(wxUSE_XRC OFF)
