@@ -331,6 +331,7 @@ All (GUI):
 - Add wxSizer::DetachItem() (Ryan Ogurek, #26512).
 - Add wxWebView::PrintToPDF() (Blake-Madden, #26583).
 - Add wxWebViewConfiguration::DisableGPUAcceleration() (Blake-Madden, #26626).
+- Allow opening wxSearchCtrl menu from keyboard with Alt-Down (#18457).
 - Fix wxRibbon icons in high DPI (Blake-Madden, #26409).
 - Use wxBitmapBundle in wxRibbon (Randalphwa, #26117).
 
