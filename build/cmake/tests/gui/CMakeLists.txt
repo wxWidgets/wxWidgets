@@ -3,7 +3,7 @@
 # Purpose:     CMake file for gui test
 # Author:      Tobias Taschner
 # Created:     2016-10-31
-# Copyright:   (c) 2016 wxWidgets development team
+# Copyright:   (c) 2016-2026 wxWidgets development team
 # Licence:     wxWindows licence
 #############################################################################
 
@@ -44,6 +44,7 @@ set(TEST_GUI_SRC
     controls/comboboxtest.cpp
     controls/dataviewctrltest.cpp
     controls/datepickerctrltest.cpp
+    controls/dirctrltest.cpp
     controls/frametest.cpp
     controls/gaugetest.cpp
     controls/gridtest.cpp
