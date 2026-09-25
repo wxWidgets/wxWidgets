@@ -74,9 +74,11 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COLLAPSIBLEHEADER_CHANGED, wxCo
 #define EVT_COLLAPSIBLEHEADER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COLLAPSIBLEHEADER_CHANGED, id, wxCollapsibleHeaderChangedHandler(fn))
 
-// Currently there is only the native implementation, use it for all ports.
-
 #include "wx/generic/collheaderctrl.h"
+
+#if defined(__WXOSX_COCOA__)
+    #include "wx/osx/collheaderctrl.h"
+#else
 
 class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrl
     : public wxGenericCollapsibleHeaderCtrl
@@ -100,6 +102,8 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxCollapsibleHeaderCtrl);
 };
+
+#endif // __WXOSX_COCOA__/!__WXOSX_COCOA__
 
 #endif // wxUSE_COLLPANE
 

@@ -539,6 +539,7 @@
 		395272DA55143692B70137A1 /* curbndl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92397CC541713A07BC2446E9 /* curbndl.cpp */; };
 		F5B0B26BD0803719A3FCB4D7 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 0E45F6DF601A34BCB3CC0206 /* adler32.c */; };
 		603DF49D176737D383CE4F01 /* choice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F838F853CB03CF7932C08C3 /* choice.mm */; };
+		DF82022A46291AA7C53DDCA7 /* collheaderctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 296A6F443D7646D64ADA0F59 /* collheaderctrl.mm */; };
 		7FF5EDA555823A92950F2447 /* random_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F6827969CC937D2B9673395 /* random_utils.c */; };
 		3141FEDED0943BD6A2EF858F /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA93D41B11683E758D456531 /* log.cpp */; };
 		159E4248CB1333AD841D9F03 /* LexYAML.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 9CC7C6FFD67233788EEDFC5E /* LexYAML.cxx */; };
@@ -621,6 +622,7 @@
 		BCAAFDF28C29339D866195ED /* LexZig.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C7CF723DC7143CAEAF5FB634 /* LexZig.cxx */; };
 		4DD98A9436C83CF3B9425A79 /* sysopt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F32F6B47EBB23068B1FCDC0D /* sysopt.cpp */; };
 		603DF49D176737D383CE4F02 /* choice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F838F853CB03CF7932C08C3 /* choice.mm */; };
+		441BDBD70D0DC3BC4E8CBA48 /* collheaderctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 296A6F443D7646D64ADA0F59 /* collheaderctrl.mm */; };
 		E2A73751CECF32A68FFAEE83 /* panelcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70E9B2C076673C87B4218A01 /* panelcmn.cpp */; };
 		17F0494F87533196904F5313 /* xh_toolbk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B17FC30EF9D035689B68C955 /* xh_toolbk.cpp */; };
 		9A83D365AD1F37FA9C7030C2 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF330EAACFA53877BE289896 /* matrix.cpp */; };
@@ -1609,6 +1611,7 @@
 		F55F3887CDE633D7877C607C /* LexSmalltalk.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3551A51B4A493090B67CA216 /* LexSmalltalk.cxx */; };
 		49BEDFBC3661339D90EF6936 /* LexTCL.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C0929D5DDFE337329FA8C6BC /* LexTCL.cxx */; };
 		603DF49D176737D383CE4F03 /* choice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F838F853CB03CF7932C08C3 /* choice.mm */; };
+		7C20D92D909F35380B6BB41E /* collheaderctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 296A6F443D7646D64ADA0F59 /* collheaderctrl.mm */; };
 		86787E4138CC334BB74EC7B6 /* palette_neon_intrinsics.c in Sources */ = {isa = PBXBuildFile; fileRef = FB17368A86EC30E6B843E32F /* palette_neon_intrinsics.c */; };
 		DF861EBD9C483E79ADF98603 /* CharacterCategory.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 308B9C05F5A839B5BE8ACBE9 /* CharacterCategory.cxx */; };
 		C32EF2EC1A103BC3A6254322 /* xh_spin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 950D51915EF83B57B5E8306F /* xh_spin.cpp */; };
@@ -5239,6 +5242,7 @@
 		FC6A8FAE9CA63EEB8883B6BD /* pcre2_config.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_config.c; path = ../../3rdparty/pcre/src/pcre2_config.c; sourceTree = SOURCE_ROOT; };
 		E8EE191DC59F362AAED2CDC1 /* bmpbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpbase.cpp; path = ../../src/common/bmpbase.cpp; sourceTree = SOURCE_ROOT; };
 		9F838F853CB03CF7932C08C3 /* choice.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = choice.mm; path = ../../src/osx/cocoa/choice.mm; sourceTree = SOURCE_ROOT; };
+		296A6F443D7646D64ADA0F59 /* collheaderctrl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = collheaderctrl.mm; path = ../../src/osx/cocoa/collheaderctrl.mm; sourceTree = SOURCE_ROOT; };
 		02D2E8B5C89939CE90B99E2B /* archive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = archive.cpp; path = ../../src/common/archive.cpp; sourceTree = SOURCE_ROOT; };
 		C839E49184663A7CBB7EEB06 /* mediactrlcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mediactrlcmn.cpp; path = ../../src/common/mediactrlcmn.cpp; sourceTree = SOURCE_ROOT; };
 		C9A305CEC03B3085B159B617 /* fs_mem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fs_mem.cpp; path = ../../src/common/fs_mem.cpp; sourceTree = SOURCE_ROOT; };
@@ -6740,6 +6744,7 @@
 				C06FED83BF933DF98C2466AE /* button.mm */,
 				81708CFA21A03013ACB8DDD7 /* checkbox.mm */,
 				9F838F853CB03CF7932C08C3 /* choice.mm */,
+				296A6F443D7646D64ADA0F59 /* collheaderctrl.mm */,
 				7CC8B73BB8C0391E9EC1B2D1 /* colour.mm */,
 				57C06D5DB5F733A4A235B206 /* combobox.mm */,
 				83B878A16ABC396E8C03A15E /* dialog.mm */,
@@ -9028,6 +9033,7 @@
 				14D6D5F8F5ED3C71936DD2AF /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D14 /* checkbox.mm in Sources */,
 				603DF49D176737D383CE4F02 /* choice.mm in Sources */,
+				441BDBD70D0DC3BC4E8CBA48 /* collheaderctrl.mm in Sources */,
 				8C2B50E3FC7A37C58CC9DC0B /* colour.mm in Sources */,
 				8C52B1985BAA371FA22CCEBD /* combobox.mm in Sources */,
 				6C3A459236F736B8A14A13AC /* dialog.mm in Sources */,
@@ -9722,6 +9728,7 @@
 				14D6D5F8F5ED3C71936DD2B0 /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D13 /* checkbox.mm in Sources */,
 				603DF49D176737D383CE4F03 /* choice.mm in Sources */,
+				7C20D92D909F35380B6BB41E /* collheaderctrl.mm in Sources */,
 				8C2B50E3FC7A37C58CC9DC0C /* colour.mm in Sources */,
 				8C52B1985BAA371FA22CCEBC /* combobox.mm in Sources */,
 				6C3A459236F736B8A14A13AD /* dialog.mm in Sources */,
@@ -11200,6 +11207,7 @@
 				14D6D5F8F5ED3C71936DD2B1 /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D12 /* checkbox.mm in Sources */,
 				603DF49D176737D383CE4F01 /* choice.mm in Sources */,
+				DF82022A46291AA7C53DDCA7 /* collheaderctrl.mm in Sources */,
 				8C2B50E3FC7A37C58CC9DC0A /* colour.mm in Sources */,
 				8C52B1985BAA371FA22CCEBB /* combobox.mm in Sources */,
 				6C3A459236F736B8A14A13AE /* dialog.mm in Sources */,
