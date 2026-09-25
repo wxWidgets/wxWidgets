@@ -399,6 +399,7 @@ public:
 
 #if wxUSE_CHOICEDLG
     void SingleChoice(wxCommandEvent& event);
+    void SingleChoiceData(wxCommandEvent& event);
     void MultiChoice(wxCommandEvent& event);
 #endif // wxUSE_CHOICEDLG
 
@@ -602,6 +603,7 @@ enum
     DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_RICH_MESSAGE_DIALOG,
     DIALOGS_SINGLE_CHOICE,
+    DIALOGS_SINGLE_CHOICE_DATA,
     DIALOGS_MULTI_CHOICE,
     DIALOGS_REARRANGE,
     DIALOGS_ADDREMOVE,
@@ -659,7 +661,8 @@ enum
     DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
     DIALOGS_TEST_DEFAULT_ACTION,
     DIALOGS_MODAL_HOOK,
-    DIALOGS_SIMULATE_UNSAVED
+    DIALOGS_SIMULATE_UNSAVED,
+    DIALOGS_USE_WRAPPER_FUNCTIONS
 };
 
 #endif

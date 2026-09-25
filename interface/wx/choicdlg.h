@@ -272,8 +272,8 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 
 int wxGetSingleChoiceIndex(const wxString& message,
@@ -284,8 +284,8 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 
 
@@ -316,13 +316,20 @@ int wxGetSingleChoiceIndex(const wxString& message,
     which is an array of @a n strings for the listbox or by using a single
     @c aChoices parameter of type wxArrayString.
 
-    If @c centre is @true, the message text (which may include new line
-    characters) is centred; if @false, the message is left-justified.
+    If both @a x and @a y are specified, i.e. are not wxDefaultCoord, the dialog
+    is shown at this position and @a centre is ignored. It is an error to
+    specify only one of them. Otherwise, the dialog is centred on the screen or
+    on its parent window if @a centre is @true (which is the default) or shown
+    at the default position if it is @false.
 
-    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
-    all ignored. To change the dialog's position or size, create a @c
-    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
-    change its size before showing it.
+    If @a width and/or @a height are specified, i.e. are not wxDefaultCoord,
+    the dialog is made at least this big, but it is never made smaller than the
+    size needed to show all its contents.
+
+    @note Before wxWidgets 3.3.4 the @a x, @a y, @a centre, @a width and
+        @a height parameters were ignored. To change the dialog position or
+        size in the previous versions, create a wxSingleChoiceDialog object
+        instead of calling this function and change them before showing it.
 
     @header{wx/choicdlg.h}
 
@@ -337,8 +344,8 @@ wxString wxGetSingleChoice(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
@@ -348,8 +355,8 @@ wxString wxGetSingleChoice(const wxString& message,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = wxCHOICE_WIDTH,
-                           int height = wxCHOICE_HEIGHT,
+                           int width = wxDefaultCoord,
+                           int height = wxDefaultCoord,
                            int initialSelection = 0);
 
 
@@ -376,11 +383,6 @@ wxString wxGetSingleChoice(const wxString& message,
     if Cancel was pressed. The @c client_data array must have the same number
     of elements as @c choices or @c aChoices!
 
-    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
-    all ignored. To change the dialog's position or size, create a @c
-    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
-    change its size before showing it.
-
     @header{wx/choicdlg.h}
 
     @beginWxPerlOnly
@@ -395,8 +397,8 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = wxCHOICE_WIDTH,
-                               int height = wxCHOICE_HEIGHT,
+                               int width = wxDefaultCoord,
+                               int height = wxDefaultCoord,
                                int initialSelection = 0);
 
 wxString wxGetSingleChoiceData(const wxString& message,
@@ -408,8 +410,8 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = wxCHOICE_WIDTH,
-                               int height = wxCHOICE_HEIGHT,
+                               int width = wxDefaultCoord,
+                               int height = wxDefaultCoord,
                                int initialSelection = 0);
 
 void* wxGetSingleChoiceData(const wxString& message,
@@ -443,10 +445,9 @@ void* wxGetSingleChoiceData(const wxString& message,
     which is an array of @a n strings for the listbox or by using a single
     @c aChoices parameter of type wxArrayString.
 
-    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
-    all ignored. To change the dialog's position or size, create a @c
-    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
-    change its size before showing it.
+    The @a x, @a y, @a centre, @a width and @a height parameters are used in
+    the same way as in wxGetSingleChoice() and were ignored before wxWidgets
+    3.3.4.
 
     @header{wx/choicdlg.h}
 
@@ -464,8 +465,8 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int x = wxDefaultCoord,
                             int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = wxCHOICE_WIDTH,
-                            int height = wxCHOICE_HEIGHT);
+                            int width = wxDefaultCoord,
+                            int height = wxDefaultCoord);
 
 int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
@@ -476,8 +477,8 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int x = wxDefaultCoord,
                             int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = wxCHOICE_WIDTH,
-                            int height = wxCHOICE_HEIGHT);
+                            int width = wxDefaultCoord,
+                            int height = wxDefaultCoord);
 
 ///@}
 

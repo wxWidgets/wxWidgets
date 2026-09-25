@@ -137,6 +137,15 @@ WXDLLIMPEXP_CORE wxString
                     bool centre = true);
 
 WXDLLIMPEXP_CORE wxString
+    wxGetTextFromUser(const wxString& message,
+                    const wxString& caption,
+                    const wxString& default_value,
+                    wxWindow *parent,
+                    const wxPoint& pos,
+                    const wxSize& size = wxDefaultSize,
+                    bool centre = true);
+
+WXDLLIMPEXP_CORE wxString
     wxGetPasswordFromUser(const wxString& message,
                         const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                         const wxString& default_value = wxEmptyString,
