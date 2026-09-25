@@ -139,6 +139,9 @@ public:
         Sets the search control's menu object.
         If there is already a menu associated with the search control it is deleted.
 
+        In the ports using the generic implementation of this control, e.g.
+        wxMSW, the menu can be opened from the keyboard using Alt-Down.
+
         @param menu
             Menu to attach to the search control.
     */
