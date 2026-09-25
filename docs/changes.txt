@@ -356,6 +356,7 @@ wxMSW:
 
 wxOSX:
 
+- Allow VoiceOver to read wxStatusBar fields (#24305).
 - Fix dataview icons rendering under macOS 26 (#26374).
 - Fix wxOverlay leaving phantoms in Mission Control (Daniel DeMoney, #26380).
 - Set value in EVT_DATAVIEW_ITEM_EDITING_DONE (Robert Roebling, #26367).

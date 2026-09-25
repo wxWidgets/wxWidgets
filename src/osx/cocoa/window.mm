@@ -4335,6 +4335,49 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
     }
 }
 
+void
+wxOSXSetAccessibilityChildren(wxWindowMac* win,
+                              const wxArrayString& labels,
+                              const wxVector<wxRect>& rects)
+{
+    wxCHECK_RET( labels.size() == rects.size(), "mismatched labels and rects" );
+
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    if ( labels.empty() )
+    {
+        [view setAccessibilityChildren:nil];
+        return;
+    }
+
+    NSMutableArray* const children =
+        [NSMutableArray arrayWithCapacity:labels.size()];
+
+    for ( size_t n = 0; n < labels.size(); ++n )
+    {
+        // The frame of an accessibility element is in screen coordinates, the
+        // helper below does the conversion for us.
+        const NSRect frame =
+            NSAccessibilityFrameInView(view, wxToNSRect(view, rects[n]));
+
+        NSAccessibilityElement* const element =
+            [NSAccessibilityElement
+                accessibilityElementWithRole:NSAccessibilityStaticTextRole
+                                       frame:frame
+                                       label:wxCFStringRef(labels[n]).AsNSString()
+                                      parent:view];
+
+        [children addObject:element];
+    }
+
+    // The container itself must be visible to the accessibility clients for
+    // them to reach its children.
+    [view setAccessibilityRole:NSAccessibilityGroupRole];
+    [view setAccessibilityChildren:children];
+}
+
 void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
 {
     if ( !wxIsBusy() )
