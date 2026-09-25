@@ -212,7 +212,7 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
             wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL(imageURL));
             CGImageRef image = nullptr;
 
-            if ( ext == "jpeg" )
+            if (( ext == "jpeg" ) || (ext == "jpg"))
                 image = CGImageCreateWithJPEGDataProvider (provider, nullptr, true,
                                                        kCGRenderingIntentDefault);
             else if ( ext == "png" )
