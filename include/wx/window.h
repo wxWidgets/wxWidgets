@@ -962,7 +962,8 @@ public:
         { m_acceleratorTable = accel; }
     wxAcceleratorTable *GetAcceleratorTable()
         { return &m_acceleratorTable; }
-
+    const wxAcceleratorTable* GetAcceleratorTable() const
+        { return &m_acceleratorTable; }
 #endif // wxUSE_ACCEL
 
 #if wxUSE_HOTKEY

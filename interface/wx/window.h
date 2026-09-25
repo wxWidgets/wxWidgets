@@ -3673,9 +3673,20 @@ public:
     void SetWindowVariant(wxWindowVariant variant);
 
     /**
-        Gets the accelerator table for this window. See wxAcceleratorTable.
+        Gets the accelerator table for this window, if any.
+
+        @see SetAcceleratorTable(), wxAcceleratorTable
     */
     wxAcceleratorTable* GetAcceleratorTable();
+
+    /**
+        Gets the accelerator table for this window, if any.
+
+        @see SetAcceleratorTable(), wxAcceleratorTable
+
+        @since 3.3.4
+    */
+    const wxAcceleratorTable* GetAcceleratorTable() const;
 
     /**
         Returns the accessible object for this window, if any.
