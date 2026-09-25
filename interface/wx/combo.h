@@ -585,13 +585,6 @@ public:
     wxTextCtrl* GetTextCtrl() const;
 
     /**
-        Returns actual indentation in pixels.
-
-        @deprecated Use GetMargins() instead.
-    */
-    wxCoord GetTextIndent() const;
-
-    /**
         Returns area covered by the text field (includes everything except
         borders and the dropdown button).
     */
@@ -887,15 +880,6 @@ public:
         @endcode
     */
     void SetTextCtrlStyle( int style );
-
-    /**
-        This will set the space in pixels between left edge of the control and
-        the text, regardless whether control is read-only or not. Value -1 can
-        be given to indicate platform default.
-
-        @deprecated Use SetMargins() instead.
-    */
-    void SetTextIndent(int indent);
 
     /**
         Sets the text for the combo control text field.

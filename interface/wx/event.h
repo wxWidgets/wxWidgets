@@ -4964,11 +4964,6 @@ public:
         hidden.
     */
     bool IsShown() const;
-
-    /**
-        @deprecated This function is deprecated in favour of IsShown().
-    */
-    bool GetShow() const;
 };
 
 

@@ -161,13 +161,6 @@ public:
     wxDC* GetDC();
 
     /**
-        Returns wxEncodingConverter class used to do conversion between the
-        @ref GetInputEncoding() "input encoding" and the
-        @ref GetOutputEncoding() "output encoding".
-    */
-    wxEncodingConverter* GetEncodingConverter() const;
-
-    /**
         Returns @true if actual font is bold, @false otherwise.
     */
     int GetFontBold() const;
@@ -198,11 +191,6 @@ public:
     int GetFontUnderlined() const;
 
     /**
-        Returns input encoding.
-    */
-    wxFontEncoding GetInputEncoding() const;
-
-    /**
         Returns actual hypertext link.
         (This value has a non-empty @ref wxHtmlLinkInfo::GetHref Href string
         if the parser is between \<A\> and \</A\> tags, wxEmptyString otherwise.)
@@ -213,12 +201,6 @@ public:
         Returns the colour of hypertext link text.
     */
     const wxColour& GetLinkColor() const;
-
-    /**
-        Returns output encoding, i.e. closest match to document's input encoding
-        that is supported by operating system.
-    */
-    wxFontEncoding GetOutputEncoding() const;
 
     /**
         Returns associated window (wxHtmlWindow). This may be @NULL!
@@ -298,12 +280,6 @@ public:
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = 0);
-
-    /**
-        Sets input encoding. The parser uses this information to build conversion
-        tables from document's encoding to some encoding supported by operating system.
-    */
-    void SetInputEncoding(wxFontEncoding enc);
 
     /**
         Sets actual hypertext link.
