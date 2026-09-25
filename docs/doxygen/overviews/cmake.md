@@ -73,6 +73,7 @@ wxBUILD_COMPATIBILITY     | STRING | 3.2     | Enable API compatibility with 3.0
 wxBUILD_PRECOMP           | BOOL   | ON      | Use precompiled headers
 wxBUILD_MONOLITHIC        | BOOL   | OFF     | Build a single library
 wxBUILD_DEBUG_LEVEL       | STRING | 1       | 0, 1, or 2 (corresponds to wxDEBUG_LEVEL)
+wxUSE_LUNASVG             | STRING | OFF     | builtin or OFF (requires C++17. Also, set `wxUSE_NANOSVG` to OFF, as it takes precedence)
 
 Note that on macOS, the option `CMAKE_OSX_ARCHITECTURES` is used to specify which architecture(s) to build.
 For example, the following will build a "universal binary 2" (i.e., ARM64 and Intel x86_64) library.
