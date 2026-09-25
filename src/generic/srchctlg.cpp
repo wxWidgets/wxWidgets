@@ -81,6 +81,23 @@ protected:
         m_search->GetEventHandler()->ProcessEvent(event);
     }
 
+#if wxUSE_MENUS
+    void OnKeyDown(wxKeyEvent& event)
+    {
+        // Alt-Down is the usual way of opening a drop-down menu and the only
+        // way of opening the search menu from the keyboard, as the button
+        // showing it doesn't accept focus.
+        if ( event.GetKeyCode() == WXK_DOWN && event.AltDown() &&
+                m_search->HasMenu() )
+        {
+            m_search->PopupSearchMenu();
+            return;
+        }
+
+        event.Skip();
+    }
+#endif // wxUSE_MENUS
+
     void OnTextEnter(wxCommandEvent& WXUNUSED(event))
     {
         if ( !IsEmpty() )
@@ -135,6 +152,9 @@ private:
 };
 
 wxBEGIN_EVENT_TABLE(wxSearchTextCtrl, wxTextCtrl)
+#if wxUSE_MENUS
+    EVT_KEY_DOWN(wxSearchTextCtrl::OnKeyDown)
+#endif // wxUSE_MENUS
     EVT_TEXT(wxID_ANY, wxSearchTextCtrl::OnText)
     EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnTextEnter)
     EVT_TEXT_MAXLEN(wxID_ANY, wxSearchTextCtrl::OnText)
