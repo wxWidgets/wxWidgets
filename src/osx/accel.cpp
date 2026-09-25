@@ -72,14 +72,8 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 
     for ( const auto& entry : M_ACCELDATA->m_accels )
     {
-        if ((event.m_keyCode == entry.GetKeyCode()) &&
-           (((entry.GetFlags() & wxACCEL_RAW_CTRL) != 0) == event.RawControlDown()) &&
-           (((entry.GetFlags() & wxACCEL_SHIFT) != 0) == event.ShiftDown()) &&
-           (((entry.GetFlags() & wxACCEL_ALT) != 0) == event.AltDown()) &&
-           (((entry.GetFlags() & wxACCEL_CTRL) != 0) == event.ControlDown()))
-        {
+        if ( entry.MatchesEvent(event) )
             return entry.GetCommand();
-        }
     }
 
     return -1;

@@ -105,6 +105,21 @@ public:
     bool IsOk() const;
 
     /**
+        Returns @true if the given key event corresponds to this accelerator.
+
+        All the modifiers must match exactly and the key codes are compared
+        case-insensitively for the letters, i.e. an accelerator created from
+        the string @c "Ctrl-a" matches the event for @c Ctrl-A.
+
+        Note that this function should be used with the key press events, i.e.
+        @c wxEVT_KEY_DOWN or @c wxEVT_CHAR_HOOK but not with @c wxEVT_CHAR
+        whose key codes are different.
+
+        @since 3.3.4
+    */
+    bool MatchesEvent(const wxKeyEvent& event) const;
+
+    /**
         Returns a textual representation of this accelerator.
 
         The returned string is of the form <code>[Alt+][Ctrl+][RawCtrl+][Shift+]Key</code>

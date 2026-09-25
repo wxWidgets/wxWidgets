@@ -91,6 +91,9 @@ public:
         return  m_keyCode != 0;
     }
 
+    // Return true if the given key event corresponds to this accelerator.
+    bool MatchesEvent(const wxKeyEvent& event) const;
+
 
     // string <-> wxAcceleratorEntry conversion
     // ----------------------------------------
