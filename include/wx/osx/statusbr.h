@@ -36,9 +36,20 @@ public:
 protected:
     virtual int GetEffectiveFieldStyle(int WXUNUSED(i)) const override { return wxSB_NORMAL; }
 
+    virtual void DoUpdateStatusText(int number) override;
+
+    // Let VoiceOver read the fields, which are not windows and so are invisible
+    // to it otherwise. Does nothing if nothing has changed since the last call,
+    // as replacing the elements would make VoiceOver lose its position.
+    void UpdateAccessibleFields();
+
     virtual void InitColours() override;
 
     void InitCornerInset();
+
+    // The labels and the rectangles used by the last UpdateAccessibleFields().
+    wxArrayString m_accessibleLabels;
+    wxVector<wxRect> m_accessibleRects;
 
     virtual int GetAvailableWidthForFields(int width) const override;
 

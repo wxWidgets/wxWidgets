@@ -22,6 +22,12 @@
 #include "wx/osx/core/cfarray.h"
 #include "wx/osx/core/cfdictionary.h"
 
+#if wxUSE_GUI
+    #include "wx/arrstr.h"
+    #include "wx/gdicmn.h"
+    #include "wx/vector.h"
+#endif
+
 // platform specific Clang analyzer support
 #ifndef NS_RETURNS_RETAINED
 #   if WX_HAS_CLANG_FEATURE(attribute_ns_returns_retained)
@@ -1070,6 +1076,19 @@ protected :
     wxNonOwnedWindow*   m_wxPeer;
     wxDECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl);
 };
+
+// Let the accessibility clients, e.g. VoiceOver, see the given labelled
+// rectangles as the children of this window.
+//
+// This is used for the custom drawn controls whose parts are not windows and so
+// are completely invisible to them otherwise. The rectangles are in the client
+// coordinates of the window and are shown with the "static text" role.
+//
+// Passing an empty array removes the children set by a previous call.
+WXDLLIMPEXP_CORE void
+wxOSXSetAccessibilityChildren(wxWindowMac* win,
+                              const wxArrayString& labels,
+                              const wxVector<wxRect>& rects);
 
 #endif // __WXOSX__
 

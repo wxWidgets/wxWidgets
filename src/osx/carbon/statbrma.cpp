@@ -189,6 +189,10 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 #endif
 
+    // The field rectangles may have changed, e.g. because the window was
+    // resized, so refresh the accessibility elements using them too.
+    UpdateAccessibleFields();
+
     // Draw the text:
 
     dc.SetTextForeground(tlw == keyWindow ? m_textActive : m_textInactive);
@@ -237,6 +241,39 @@ bool wxStatusBarMac::GetFieldRect(int i, wxRect& rect) const
 
     rect.x += MacGetCornerInset();
     return true;
+}
+
+void wxStatusBarMac::DoUpdateStatusText(int number)
+{
+    wxStatusBarGeneric::DoUpdateStatusText(number);
+
+    UpdateAccessibleFields();
+}
+
+void wxStatusBarMac::UpdateAccessibleFields()
+{
+    const int count = GetFieldsCount();
+
+    wxArrayString labels;
+    wxVector<wxRect> rects;
+
+    for ( int i = 0; i < count; ++i )
+    {
+        wxRect rect;
+        if ( !GetFieldRect(i, rect) )
+            continue;
+
+        labels.push_back(GetStatusText(i));
+        rects.push_back(rect);
+    }
+
+    if ( labels == m_accessibleLabels && rects == m_accessibleRects )
+        return;
+
+    m_accessibleLabels = labels;
+    m_accessibleRects = rects;
+
+    wxOSXSetAccessibilityChildren(this, labels, rects);
 }
 
 void wxStatusBarMac::MacHiliteChanged()
