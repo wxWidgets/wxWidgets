@@ -168,6 +168,7 @@ public :
 
     void                SetFont(const wxFont & font) override;
     void                SetToolTip( wxToolTip* tooltip ) override;
+    void                SetAccessibilityTitleElement(wxWidgetImpl* title) override;
 
     void                InstallEventHandler( WXWidget control = nullptr ) override;
     bool                EnableTouchEvents(int eventsMask) override;
