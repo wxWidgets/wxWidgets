@@ -469,8 +469,7 @@ bool wxRibbonToolBar::FocusFirstItem()
     if ( tools.empty() )
         return false;
 
-    m_focused_tool = tools.front();
-    Refresh(false);
+    DoFocusTool(tools.front());
     return true;
 }
 
@@ -480,8 +479,7 @@ bool wxRibbonToolBar::FocusLastItem()
     if ( tools.empty() )
         return false;
 
-    m_focused_tool = tools.back();
-    Refresh(false);
+    DoFocusTool(tools.back());
     return true;
 }
 
@@ -501,9 +499,22 @@ bool wxRibbonToolBar::FocusNextItem(bool forward)
     if ( forward ? (pos + 1 == tools.size()) : (pos == 0) )
         return false;
 
-    m_focused_tool = tools[forward ? pos + 1 : pos - 1];
-    Refresh(false);
+    DoFocusTool(tools[forward ? pos + 1 : pos - 1]);
     return true;
+}
+
+void wxRibbonToolBar::DoFocusTool(wxRibbonToolBarToolBase* tool)
+{
+    m_focused_tool = tool;
+    Refresh(false);
+
+#if wxUSE_ACCESSIBILITY
+    const int pos = GetToolPos(tool->id);
+    if ( pos != wxNOT_FOUND )
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, pos + 1);
+    }
+#endif // wxUSE_ACCESSIBILITY
 }
 
 void wxRibbonToolBar::ClearFocusedItem()

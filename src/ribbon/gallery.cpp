@@ -356,6 +356,7 @@ void wxRibbonGallery::DoActivateItem(wxRibbonGalleryItem* item)
     if(m_selected_item != item)
     {
         m_selected_item = item;
+        DoNotifySelectionChanged();
         wxRibbonGalleryEvent notification(
             wxEVT_RIBBONGALLERY_SELECTED, GetId());
         notification.SetEventObject(this);
@@ -400,6 +401,10 @@ bool wxRibbonGallery::DoFocusItemFrom(int pos, int step)
 
         DoClearExtensionFocus();
         m_focused_item = item;
+
+#if wxUSE_ACCESSIBILITY
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, i + 1);
+#endif // wxUSE_ACCESSIBILITY
 
         // Scroll the item into view, if needed.
         if ( m_art != nullptr )
@@ -456,6 +461,12 @@ bool wxRibbonGallery::DoFocusExtensionButton()
     // The art providers draw the button from its state, so show it as hovered.
     m_extension_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
     Refresh(false);
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                              static_cast<int>(m_items.Count()) + 1);
+#endif // wxUSE_ACCESSIBILITY
+
     return true;
 }
 
@@ -1082,8 +1093,28 @@ void wxRibbonGallery::SetSelection(wxRibbonGalleryItem* item)
     if(item != m_selected_item)
     {
         m_selected_item = item;
+        DoNotifySelectionChanged();
         Refresh(false);
     }
+}
+
+void wxRibbonGallery::DoNotifySelectionChanged()
+{
+#if wxUSE_ACCESSIBILITY
+    if ( m_selected_item == nullptr )
+        return;
+
+    const int count = static_cast<int>(m_items.Count());
+    for ( int i = 0; i < count; ++i )
+    {
+        if ( m_items.Item(i) == m_selected_item )
+        {
+            wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTION, this,
+                                      wxOBJID_CLIENT, i + 1);
+            break;
+        }
+    }
+#endif // wxUSE_ACCESSIBILITY
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::GetSelection() const

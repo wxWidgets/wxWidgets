@@ -1652,6 +1652,13 @@ bool wxRibbonButtonBar::DoFocusButtonFrom(int pos, int step)
 
         m_focused_button = base;
         Refresh(false);
+
+#if wxUSE_ACCESSIBILITY
+        // The focus moves inside this window, so there is no native focus
+        // event. Tell the screen readers about it explicitly.
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, i + 1);
+#endif // wxUSE_ACCESSIBILITY
+
         return true;
     }
     return false;

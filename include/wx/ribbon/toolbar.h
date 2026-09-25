@@ -222,6 +222,7 @@ protected:
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
 
     std::vector<wxRibbonToolBarToolBase*> GetEnabledTools() const;
+    void DoFocusTool(wxRibbonToolBarToolBase* tool);
 
     wxArrayRibbonToolBarToolGroup m_groups;
     wxRibbonToolBarToolBase* m_hover_tool = nullptr;

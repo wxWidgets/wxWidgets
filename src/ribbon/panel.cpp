@@ -837,6 +837,13 @@ bool wxRibbonPanel::FocusFirstItem()
 
     m_item_focused = true;
     Refresh(false);
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                              IsMinimised() ? wxACC_SELF
+                                            : static_cast<int>(GetChildren().GetCount()) + 1);
+#endif // wxUSE_ACCESSIBILITY
+
     return true;
 }
 

@@ -93,6 +93,7 @@ protected:
     friend class wxRibbonGalleryAccessible;
 #endif // wxUSE_ACCESSIBILITY
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    void DoNotifySelectionChanged();
     void CommonInit(long style);
     void CalculateMinSize();
     bool TestButtonHover(const wxRect& rect, wxPoint pos,
