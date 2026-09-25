@@ -15,9 +15,14 @@
 #if wxUSE_TREELISTCTRL
 
 
+#include "wx/dataview.h"
 #include "wx/treelist.h"
+#include "wx/uiaction.h"
 
 #include "wx/app.h"
+
+#include "testableframe.h"
+#include "waitfor.h"
 
 #include <memory>
 
@@ -186,6 +191,58 @@ TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ItemCheck", "[treelistctrl
     m_treelist->UpdateItemParentStateRecursively(m_code_osx_cocoa);
     CHECK( m_treelist->GetCheckedState(m_code_osx) == wxCHK_UNCHECKED );
     CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_UNDETERMINED );
+}
+
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::MultiSelectionClick",
+                 "[treelistctrl]")
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxTreeListItem item2 = m_treelist->GetNextSibling(m_code);
+    REQUIRE( item2.IsOk() );
+
+    m_treelist->Select(m_code);
+    m_treelist->Select(item2);
+
+    wxTreeListItems selections;
+    CHECK( m_treelist->GetSelections(selections) == 2u );
+
+    EventCounter selection(m_treelist.get(), wxEVT_TREELIST_SELECTION_CHANGED);
+
+    const wxDataViewItem item(m_code.GetID());
+    wxRect rect;
+
+    m_treelist->GetDataView()->Layout();
+#ifdef __WXGTK__
+    // GTK may not know row cell areas until its pending layout has run.
+    REQUIRE( WaitFor("wxTreeListCtrl item to be realized", [&]() {
+        rect = m_treelist->GetDataView()->GetItemRect(item);
+        return !rect.IsEmpty();
+    }) );
+#else // !__WXGTK__
+    rect = m_treelist->GetDataView()->GetItemRect(item);
+    REQUIRE( !rect.IsEmpty() );
+#endif // __WXGTK__/!__WXGTK__
+
+    wxPoint point = rect.GetPosition() + wxPoint(rect.GetWidth() / 2,
+                                                 rect.GetHeight() / 2);
+    point = m_treelist->GetDataView()->ClientToScreen(point);
+
+    wxUIActionSimulator sim;
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+
+    REQUIRE( WaitFor("wxTreeListCtrl selection", [&]() {
+        return selection.GetCount() != 0;
+    }) );
+
+    CHECK( m_treelist->GetSelections(selections) == 1u );
+    CHECK( selections[0] == m_code );
+#endif // wxUSE_UIACTIONSIMULATOR
 }
 
 #endif // wxUSE_TREELISTCTRL
