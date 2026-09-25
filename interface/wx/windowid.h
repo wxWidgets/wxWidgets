@@ -43,7 +43,7 @@ public:
     /**
         Called directly by wxWindow::UnreserveControlId(), this function will
         unreserve an ID or range of IDs that is currently reserved.
-        This should only be called for IDs returned by ReserveControlId() that
+        This should only be called for IDs returned by ReserveId() that
         have NOT been assigned to a wxWindowIDRef (see @ref overview_windowids).
 
         @param id

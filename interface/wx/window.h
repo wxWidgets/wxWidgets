@@ -4621,13 +4621,6 @@ protected:
     virtual int DoGetBestClientWidth(int height) const;
 
     /**
-        Sets the initial window size if none is given (i.e.\ at least one of the
-        components of the size passed to ctor/Create() is wxDefaultCoord).
-        @deprecated Use SetInitialSize() instead.
-    */
-    virtual void SetInitialBestSize(const wxSize& size);
-
-    /**
         Generate wxWindowDestroyEvent for this window.
 
         This is called by the window itself when it is being destroyed and
