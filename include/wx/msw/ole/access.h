@@ -44,6 +44,11 @@ public:
     // Returns the IAccessible standard interface pointer
     IAccessible* GetIAccessibleStd();
 
+    // Sets the name used for the object itself instead of the one returned
+    // by GetName(), used by wxWindow::SetAccessibleName().
+    void SetNameOverride(const wxString& name) { m_nameOverride = name; }
+    const wxString& GetNameOverride() const { return m_nameOverride; }
+
 // Operations
 
     // Sends an event when something changes in an accessible object.
@@ -57,6 +62,7 @@ private:
     wxIAccessible * m_pIAccessible;  // the pointer to COM interface
     IAccessible*    m_pIAccessibleStd;  // the pointer to the standard COM interface,
                                         // for default processing
+    wxString        m_nameOverride;     // the name set by SetNameOverride()
 
     wxDECLARE_NO_COPY_CLASS(wxAccessible);
 };

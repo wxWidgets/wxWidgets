@@ -1189,6 +1189,15 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
         return E_INVALIDARG;
     }
 
+    // The name set with wxWindow::SetAccessibleName() takes precedence over
+    // anything else, but only for the object itself and not its children.
+    const wxString& nameOverride = m_pAccessible->GetNameOverride();
+    if ( varID.lVal == CHILDID_SELF && !nameOverride.empty() )
+    {
+        *pszName = wxBasicString(nameOverride).Detach();
+        return S_OK;
+    }
+
     wxString name;
 
     wxAccStatus status = m_pAccessible->GetName(varID.lVal, & name);
