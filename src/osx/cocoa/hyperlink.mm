@@ -39,7 +39,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
 
     // There is no native hyperlink control, so use a borderless button looking
     // like a link, but still report it as a link to VoiceOver.
-    [v setButtonType:NSButtonTypeMomentaryChange];
+    [v setButtonType:NSButtonTypeMomentaryPushIn];
     [v setBordered:NO];
     [v setAccessibilityRole:NSAccessibilityLinkRole];
 
