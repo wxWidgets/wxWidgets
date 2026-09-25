@@ -388,6 +388,23 @@ bool wxWindowMac::MacIsUserPane() const
 //
 //
 
+static bool HasHandlerForEventType(  const wxEventTable *table, wxEventType eventType )
+{
+    while (table)
+    {
+        const wxEventTableEntry *entry = table->entries;
+        while (entry->m_fn != nullptr)
+        {
+            if (entry->m_eventType == eventType)
+                return true;
+            entry++;
+        }
+
+        table = table->baseTable;
+    }
+    return false;
+}
+
 // Constructor
 bool wxWindowMac::Create(wxWindowMac *parent,
     wxWindowID id,
@@ -416,9 +433,24 @@ bool wxWindowMac::Create(wxWindowMac *parent,
             m_peer->UseClippingView();
     }
 
+    if (HasHandlerForEventType( GetEventTable(), wxEVT_PAINT)) {
+        // Only override drawRect if needed
+        GetPeer()->PaintHandlerAdded();
+    }    
+    
     wxWindowCreateEvent event((wxWindow*)this);
     GetEventHandler()->AddPendingEvent(event);
 
+    return true;
+}
+
+bool wxWindowMac::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    if (entry.m_eventType == wxEVT_PAINT)
+    {
+        // Only override drawRect if needed
+        GetPeer()->PaintHandlerAdded();
+    }
     return true;
 }
 

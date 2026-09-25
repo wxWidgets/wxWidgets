@@ -28,6 +28,7 @@
 #include "wx/private/bmpbndl.h"
 
 #include "wx/evtloop.h"
+#include "wx/spinctrl.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
@@ -175,6 +176,28 @@ void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
     [static_cast<NSScrollView*>(m_osxView) setBorderType:borderType];
 }
 
+
+@interface wxNSViewWithDrawing : NSView
+{
+}
+
+@end // wxNSViewWithDrawing
+
+@interface wxNSViewWithDrawing(TextInput) <NSTextInputClient>
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
+- (void)doCommandBySelector:(SEL)aSelector;
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange;
+- (void)unmarkText;
+- (NSRange)selectedRange;
+- (NSRange)markedRange;
+- (BOOL)hasMarkedText;
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSArray*)validAttributesForMarkedText;
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint;
+
+@end
 
 @interface wxNSView : NSView
 {
@@ -946,7 +969,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
 }
 
-@implementation wxNSView
+@implementation wxNSViewWithDrawing
 
 + (void)initialize
 {
@@ -955,6 +978,28 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
+
+@end // wxNSViewWithDrawing
+
+@implementation wxNSView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -1019,6 +1064,79 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 #endif
 
 @end // wxNSView
+
+// Not very elegant to have the same - almost empty - interface for 
+// wxNSViewWithDrawing and wxNSView, but we don't get any wxCHAR_EVENTs
+// otherwise
+
+@implementation wxNSViewWithDrawing(TextInput)
+
+void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
+
+- (void)doCommandBySelector:(SEL)aSelector
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+        impl->doCommandBySelector(aSelector, self, _cmd);
+}
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+{
+    wxUnusedVar(replacementRange);
+    wxOSX_insertText(self, @selector(insertText:), aString);
+}
+
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
+{
+    wxUnusedVar(aString);
+    wxUnusedVar(selectedRange);
+    wxUnusedVar(replacementRange);
+}
+
+- (void)unmarkText
+{
+}
+
+- (NSRange)selectedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (NSRange)markedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (BOOL)hasMarkedText
+{
+    return NO;
+}
+
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
+    return nil;
+}
+
+- (NSArray*)validAttributesForMarkedText
+{
+    return nil;
+}
+
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
+    return NSMakeRect(0, 0, 0, 0);
+}
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
+{
+    wxUnusedVar(aPoint);
+    return NSNotFound;
+}
+
+@end // wxNSViewWithDrawing(TextInput)
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
 // Currently, only insertText:(replacementRange:) is
@@ -4451,6 +4569,23 @@ void wxWidgetCocoaImpl::ClipsToBounds(bool clip)
 bool wxWidgetCocoaImpl::DoesClipToBounds() const
 {
     return m_osxView.clipsToBounds;
+}
+
+void wxWidgetCocoaImpl::PaintHandlerAdded()
+{
+    // Not needed without a user pane
+    if (!IsUserPane()) return;
+
+    if (m_wxPeer->IsKindOf(wxCLASSINFO(wxSpinCtrl))
+      || m_wxPeer->IsKindOf(wxCLASSINFO(wxSpinCtrlDouble)))
+    {
+        // The spinctrl classes have paint event handlers, but
+        // using them break the appearance on wxMac
+        return;
+    }
+
+    // Change class on the fly to allow drawing
+    object_setClass( (NSView*) m_osxView, [wxNSViewWithDrawing class] );
 }
 
 //

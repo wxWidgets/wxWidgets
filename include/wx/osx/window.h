@@ -163,6 +163,9 @@ public:
     virtual bool CanSetTransparent() override;
     virtual wxByte GetTransparent() const;
 
+    // Code to catch wxEVT_PAINT
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& entry) override;
+
     // event handlers
     // --------------
 

@@ -242,7 +242,8 @@ public :
     virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
 
     virtual void                ApplyScrollViewBorderType() override;
-
+    
+    virtual void                PaintHandlerAdded() override;
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;
