@@ -1902,6 +1902,7 @@
 		99E7A46106C03484BA70D2A0 /* tif_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F8259CC99380CB8217DEF /* tif_unix.c */; };
 		1937FBA0A0DD32A8A743CFE2 /* valtext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8701E1CF2B352B945C17E5 /* valtext.cpp */; };
 		23E9AF567E873B948EFEA180 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		15FE683EBB5FB02CF64A3D63 /* hyperlink.mm in Sources */ = {isa = PBXBuildFile; fileRef = B38233C4B68F13943A66C521 /* hyperlink.mm */; };
 		8A9C3C04D00334418C3446F9 /* dirdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0B0DC125AFFC322E8E496262 /* dirdlg.mm */; };
 		5F6B4F226B473AACB7AC8DF7 /* xh_slidr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38E0F60AE1F83633A0CC18FC /* xh_slidr.cpp */; };
 		D18E2985C48733B2B7B3D443 /* evtloopunix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B79C8C7C4302AA057843E /* evtloopunix.cpp */; };
@@ -2491,6 +2492,7 @@
 		3ACCC2EB8E973C11835EB599 /* bmpbtncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 772AD4682A3E38538511D341 /* bmpbtncmn.cpp */; };
 		652CFDD9A1C1366E99B5D6BE /* socketiohandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDE22D7DDAC93DCABAE5AED0 /* socketiohandler.cpp */; };
 		23E9AF567E873B948EFEA181 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		CA518AD5434C9BA4827D5857 /* hyperlink.mm in Sources */ = {isa = PBXBuildFile; fileRef = B38233C4B68F13943A66C521 /* hyperlink.mm */; };
 		A3C4D47A84E8362295867527 /* LexPOV.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8EECA8EB93BF3C7A9CC827AD /* LexPOV.cxx */; };
 		F1E4D7CA634E33808AE3B524 /* fontenumcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 373242CD08F330208A7CF438 /* fontenumcmn.cpp */; };
 		17F0494F87533196904F5315 /* xh_toolbk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B17FC30EF9D035689B68C955 /* xh_toolbk.cpp */; };
@@ -2985,6 +2987,7 @@
 		D3EC9191D94837CABFF05DC6 /* LexNim.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B1AA9AF75D233FFC9FC90E7C /* LexNim.cxx */; };
 		2F7F5B9BBCD83D90B237A1A2 /* markupparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7F7633279936EFA0B9C5CF /* markupparser.cpp */; };
 		23E9AF567E873B948EFEA182 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		1B5256D9C4A99321883C8342 /* hyperlink.mm in Sources */ = {isa = PBXBuildFile; fileRef = B38233C4B68F13943A66C521 /* hyperlink.mm */; };
 		FF50EC0EC5F23DF890C6E960 /* colour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D1F14339D1C331087650931 /* colour.cpp */; };
 		131B879180AE3FB481F81CCA /* fs_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A305CEC03B3085B159B617 /* fs_mem.cpp */; };
 		1CD4F67F48CF3A5FA477D870 /* datavcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95DEEF60B1E9358A8CCCC67E /* datavcmn.cpp */; };
@@ -5088,6 +5091,7 @@
 		F8638A6CCF773CCFB70DFC29 /* xh_collpane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_collpane.cpp; path = ../../src/xrc/xh_collpane.cpp; sourceTree = SOURCE_ROOT; };
 		61658C3EABB4341AA38C691E /* m_pre.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_pre.cpp; path = ../../src/html/m_pre.cpp; sourceTree = SOURCE_ROOT; };
 		98A7F0605AAC3D28A8C9F253 /* gauge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = gauge.mm; path = ../../src/osx/cocoa/gauge.mm; sourceTree = SOURCE_ROOT; };
+		B38233C4B68F13943A66C521 /* hyperlink.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = hyperlink.mm; path = ../../src/osx/cocoa/hyperlink.mm; sourceTree = SOURCE_ROOT; };
 		CF99634F16AE38F1B964FD2D /* LexTOML.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTOML.cxx; path = ../../src/stc/lexilla/lexers/LexTOML.cxx; sourceTree = SOURCE_ROOT; };
 		080597FC0436378E96EDA94B /* m_links.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_links.cpp; path = ../../src/html/m_links.cpp; sourceTree = SOURCE_ROOT; };
 		76337016F2CA3C85831702E6 /* grid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = grid.cpp; path = ../../src/generic/grid.cpp; sourceTree = SOURCE_ROOT; };
@@ -6748,6 +6752,7 @@
 				8D2549709E0133C9A267E3A5 /* evtloop.mm */,
 				DC8A52CA69053B27B09F1037 /* filedlg.mm */,
 				98A7F0605AAC3D28A8C9F253 /* gauge.mm */,
+				B38233C4B68F13943A66C521 /* hyperlink.mm */,
 				D324650313003AAD96E12962 /* listbox.mm */,
 				1D799486AD7F336BB1F33DDC /* menu.mm */,
 				61548D0FE1353D7C846DD721 /* menuitem.mm */,
@@ -9036,6 +9041,7 @@
 				58AABAD40AA236438347DDDF /* evtloop.mm in Sources */,
 				C40AA245D5773351979A2850 /* filedlg.mm in Sources */,
 				23E9AF567E873B948EFEA181 /* gauge.mm in Sources */,
+				CA518AD5434C9BA4827D5857 /* hyperlink.mm in Sources */,
 				6E1FD7D3DEF03748AEE3A29D /* listbox.mm in Sources */,
 				2A79B68D20FE3C9B98A15536 /* menu.mm in Sources */,
 				127E255EE601383A9E0EF7EA /* menuitem.mm in Sources */,
@@ -9730,6 +9736,7 @@
 				58AABAD40AA236438347DDDE /* evtloop.mm in Sources */,
 				C40AA245D5773351979A2851 /* filedlg.mm in Sources */,
 				23E9AF567E873B948EFEA182 /* gauge.mm in Sources */,
+				1B5256D9C4A99321883C8342 /* hyperlink.mm in Sources */,
 				6E1FD7D3DEF03748AEE3A29F /* listbox.mm in Sources */,
 				2A79B68D20FE3C9B98A15534 /* menu.mm in Sources */,
 				127E255EE601383A9E0EF7EB /* menuitem.mm in Sources */,
@@ -11208,6 +11215,7 @@
 				58AABAD40AA236438347DDE0 /* evtloop.mm in Sources */,
 				C40AA245D5773351979A2852 /* filedlg.mm in Sources */,
 				23E9AF567E873B948EFEA180 /* gauge.mm in Sources */,
+				15FE683EBB5FB02CF64A3D63 /* hyperlink.mm in Sources */,
 				6E1FD7D3DEF03748AEE3A29E /* listbox.mm in Sources */,
 				2A79B68D20FE3C9B98A15535 /* menu.mm in Sources */,
 				127E255EE601383A9E0EF7EC /* menuitem.mm in Sources */,
