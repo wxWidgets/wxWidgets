@@ -21,6 +21,8 @@
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
+
+#import <objc/runtime.h>
     #include "wx/osx/private/available.h"
     #include "wx/osx/private/datatransfer.h"
 #endif
@@ -944,6 +946,22 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 
         SetDrawingEnabledIfFrozenRecursive((wxWidgetCocoaImpl *)child->GetPeer(), enable);
     }
+}
+
+// The key of the row elements associated with the view, see
+// wxOSXSetAccessibilityTable().
+static const char* const wxOSXAccessibilityRowsKey = "wxOSXAXRows";
+
+// Return the row element of this view with the given index or nil.
+static id wxOSXFindAccessibilityRow(NSView* view, long row)
+{
+    for ( id element in [view accessibilityRows] )
+    {
+        if ( (long)[element accessibilityRowIndexRange].location == row )
+            return element;
+    }
+
+    return nil;
 }
 
 @implementation wxNSView
@@ -4333,6 +4351,187 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             event.SetWindow(otherWindow->GetWXPeer());
         thisWindow->HandleWindowEvent(event) ;
     }
+}
+
+void
+wxOSXSetAccessibilityTable(wxWindowMac* win,
+                           const wxString& label,
+                           const wxVector<wxOSXAccessibleRow>& rows)
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    // Update the existing elements if their number didn't change, as recreating
+    // them would make VoiceOver forget which row it was on.
+    NSMutableArray* existing =
+        objc_getAssociatedObject(view, wxOSXAccessibilityRowsKey);
+    if ( existing && [existing count] == rows.size() )
+    {
+        size_t n = 0;
+        for ( const auto& row : rows )
+        {
+            id rowElement = [existing objectAtIndex:n++];
+
+            [rowElement setAccessibilityFrame:NSAccessibilityFrameInView(view, wxToNSRect(view, row.rect))];
+            [rowElement setAccessibilityIndex:row.index];
+            [rowElement setAccessibilityRowIndexRange:NSMakeRange(row.index, 1)];
+            [rowElement setAccessibilitySelected:row.selected];
+
+            NSArray* const cells = [rowElement accessibilityChildren];
+            if ( [cells count] != row.values.size() )
+            {
+                // The number of columns has changed, just start from scratch.
+                existing = nil;
+                break;
+            }
+
+            for ( size_t col = 0; col < row.values.size(); ++col )
+            {
+                const wxRect& cellRect = col < row.cellRects.size()
+                                            ? row.cellRects[col] : row.rect;
+
+                // Note that the string must be kept alive while it is used, as
+                // wxCFStringRef owns it and would release it otherwise.
+                const wxCFStringRef cfValue(row.values[col]);
+
+                id text = [cells objectAtIndex:col];
+                [text setAccessibilityFrame:NSAccessibilityFrameInView(view, wxToNSRect(view, cellRect))];
+                [text setAccessibilityValue:cfValue.AsNSString()];
+            }
+        }
+
+        if ( existing )
+        {
+            NSMutableArray* const selected = [NSMutableArray array];
+            size_t sel = 0;
+            for ( const auto& row : rows )
+            {
+                if ( row.selected )
+                    [selected addObject:[existing objectAtIndex:sel]];
+                ++sel;
+            }
+
+            [view setAccessibilitySelectedRows:selected];
+            return;
+        }
+    }
+
+    NSMutableArray* const rowElements =
+        [NSMutableArray arrayWithCapacity:rows.size()];
+
+    for ( const auto& row : rows )
+    {
+        NSAccessibilityElement* const rowElement =
+            [NSAccessibilityElement
+                accessibilityElementWithRole:NSAccessibilityRowRole
+                                       frame:NSAccessibilityFrameInView(view, wxToNSRect(view, row.rect))
+                                       label:nil
+                                      parent:view];
+
+        [rowElement setAccessibilitySubrole:NSAccessibilityTableRowSubrole];
+        [rowElement setAccessibilityEnabled:YES];
+        [rowElement setAccessibilityIndex:row.index];
+        [rowElement setAccessibilityRowIndexRange:NSMakeRange(row.index, 1)];
+        [rowElement setAccessibilitySelected:row.selected];
+
+        NSMutableArray* const cells =
+            [NSMutableArray arrayWithCapacity:row.values.size()];
+
+        for ( size_t col = 0; col < row.values.size(); ++col )
+        {
+            const wxRect& cellRect = col < row.cellRects.size()
+                                        ? row.cellRects[col] : row.rect;
+
+            NSAccessibilityElement* const text =
+                [NSAccessibilityElement
+                    accessibilityElementWithRole:NSAccessibilityStaticTextRole
+                                           frame:NSAccessibilityFrameInView(view, wxToNSRect(view, cellRect))
+                                           label:nil
+                                          parent:rowElement];
+
+            const wxCFStringRef cfValue(row.values[col]);
+            [text setAccessibilityValue:cfValue.AsNSString()];
+            [text setAccessibilityEnabled:YES];
+
+            [cells addObject:text];
+        }
+
+        [rowElement setAccessibilityChildren:cells];
+        [rowElements addObject:rowElement];
+    }
+
+    // The columns are exposed too, as VoiceOver uses them to tell which column
+    // a cell is in.
+    NSMutableArray* const columnElements = [NSMutableArray array];
+    if ( !rows.empty() )
+    {
+        const wxOSXAccessibleRow& first = rows.front();
+        for ( size_t col = 0; col < first.cellRects.size(); ++col )
+        {
+            wxRect colRect = first.cellRects[col];
+            colRect.y = 0;
+            colRect.height = win->GetClientSize().y;
+
+            NSAccessibilityElement* const column =
+                [NSAccessibilityElement
+                    accessibilityElementWithRole:NSAccessibilityColumnRole
+                                           frame:NSAccessibilityFrameInView(view, wxToNSRect(view, colRect))
+                                           label:nil
+                                          parent:view];
+
+            [column setAccessibilityColumnIndexRange:NSMakeRange(col, 1)];
+            [columnElements addObject:column];
+        }
+    }
+
+    NSMutableArray* const selectedRows = [NSMutableArray array];
+    size_t n = 0;
+    for ( const auto& row : rows )
+    {
+        if ( row.selected )
+            [selectedRows addObject:[rowElements objectAtIndex:n]];
+        ++n;
+    }
+
+    // The control must be an accessibility element itself, as otherwise it is
+    // ignored and its rows appear directly under the window.
+    [view setAccessibilityElement:YES];
+    [view setAccessibilityRole:NSAccessibilityTableRole];
+    [view setAccessibilityEnabled:YES];
+    if ( !label.empty() )
+    {
+        const wxCFStringRef cfLabel(label);
+        [view setAccessibilityLabel:cfLabel.AsNSString()];
+    }
+    [view setAccessibilityChildren:rowElements];
+    [view setAccessibilityRows:rowElements];
+    [view setAccessibilityVisibleRows:rowElements];
+    [view setAccessibilitySelectedRows:selectedRows];
+    [view setAccessibilityColumns:columnElements];
+    [view setAccessibilityVisibleColumns:columnElements];
+
+    objc_setAssociatedObject(view, wxOSXAccessibilityRowsKey, rowElements,
+                             OBJC_ASSOCIATION_RETAIN);
+}
+
+void
+wxOSXSetAccessibilityFocusedRow(wxWindowMac* win, long row)
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    id focused = wxOSXFindAccessibilityRow(view, row);
+    if ( !focused )
+        return;
+
+    [view setAccessibilitySelectedRows:@[focused]];
+
+    NSAccessibilityPostNotification(view,
+                                    NSAccessibilitySelectedRowsChangedNotification);
+    NSAccessibilityPostNotification(
+        focused, NSAccessibilityFocusedUIElementChangedNotification);
 }
 
 void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)

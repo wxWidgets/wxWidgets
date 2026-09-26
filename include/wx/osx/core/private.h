@@ -1071,6 +1071,37 @@ protected :
     wxDECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl);
 };
 
+// One row of a custom drawn control presented as a table, see below.
+struct wxOSXAccessibleRow
+{
+    // The rectangle of the whole row in the client coordinates of the window.
+    wxRect rect;
+
+    // The value and the rectangle of each cell of this row.
+    wxArrayString values;
+    wxVector<wxRect> cellRects;
+
+    // The index of this row in the control and whether it is selected.
+    long index = 0;
+    bool selected = false;
+};
+
+// Let the accessibility clients see a custom drawn control as a table with the
+// given rows, which is what they expect from a list or a report view.
+//
+// Only the rows which are currently shown need to be given, the elements are
+// simply replaced by the next call.
+WXDLLIMPEXP_CORE void
+wxOSXSetAccessibilityTable(wxWindowMac* win,
+                           const wxString& label,
+                           const wxVector<wxOSXAccessibleRow>& rows);
+
+// Tell the accessibility clients which row of the table set by the function
+// above is the current one, so that VoiceOver announces it: it follows the
+// focused element and can't find it out on its own for a custom drawn control.
+WXDLLIMPEXP_CORE void
+wxOSXSetAccessibilityFocusedRow(wxWindowMac* win, long row);
+
 #endif // __WXOSX__
 
 //---------------------------------------------------------------------------

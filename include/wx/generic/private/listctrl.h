@@ -548,6 +548,16 @@ public:
     // modes but are here because the lines don't store their positions in the
     // report mode
 
+#ifdef __WXOSX__
+    // Let VoiceOver see the shown items: they are drawn by us and so are
+    // invisible to it otherwise.
+    void UpdateAccessibleItems();
+
+    // The item announced to VoiceOver by the last call to the function above or
+    // -1 if there was no current item then.
+    long m_lastAccessibleCurrent = -1;
+#endif // __WXOSX__
+
     // get the bound rect for the entire line
     wxRect GetLineRect(size_t line) const;
 
