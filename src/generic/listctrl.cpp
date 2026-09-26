@@ -2024,6 +2024,62 @@ void wxListMainWindow::RefreshSelected()
     }
 }
 
+#ifdef __WXOSX__
+
+void wxListMainWindow::UpdateAccessibleItems()
+{
+    wxVector<wxOSXAccessibleRow> rows;
+
+    if ( !IsEmpty() )
+    {
+        // Only the shown items are exposed: the control may have thousands of
+        // them and the elements of the ones which are not shown would be
+        // useless anyhow, as their rectangles would be outside of it.
+        size_t visibleFrom, visibleTo;
+        GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+        const int numCols = InReportView() ? GetColumnCount() : 1;
+
+        for ( size_t line = visibleFrom; line <= visibleTo; ++line )
+        {
+            wxOSXAccessibleRow row;
+            row.rect = GetLineRect(line);
+            row.index = line;
+            row.selected = IsHighlighted(line);
+
+            for ( int col = 0; col < numCols; ++col )
+            {
+                row.values.push_back(GetItemText(line, col));
+
+                // Only the report view has real columns, in the other ones the
+                // single value covers the whole line.
+                row.cellRects.push_back(InReportView()
+                                            ? GetLineRect(line)
+                                            : GetLineLabelRect(line));
+            }
+
+            rows.push_back(row);
+        }
+    }
+
+    // Don't pass any label: the control doesn't have any and using the window
+    // name, which is "listCtrl" by default, would just be confusing.
+    wxOSXSetAccessibilityTable(this, wxString(), rows);
+
+    // Announce the current item if it has changed, as VoiceOver has no other
+    // way of knowing that the user has moved to another one.
+    const long current = HasCurrent() ? (long)m_current : -1;
+    if ( current != m_lastAccessibleCurrent )
+    {
+        m_lastAccessibleCurrent = current;
+
+        if ( current != -1 )
+            wxOSXSetAccessibilityFocusedRow(this, current);
+    }
+}
+
+#endif // __WXOSX__
+
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
@@ -2203,6 +2259,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxRendererNative::Get().DrawFocusRect(this, dc, rect, flags);
     }
 #endif // !__WXMAC__
+
+#ifdef __WXOSX__
+    // The items we've just drawn may be different from the previous ones, e.g.
+    // because the control was scrolled, so refresh the elements using them.
+    UpdateAccessibleItems();
+#endif // __WXOSX__
 }
 
 void wxListMainWindow::OnSysColourChanged( wxSysColourChangedEvent &event )
