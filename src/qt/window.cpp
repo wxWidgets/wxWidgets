@@ -327,7 +327,6 @@ void wxWindowQt::Init()
 
 #if wxUSE_ACCEL
     m_qtShortcutHandler.reset(new wxQtShortcutHandler(this));
-    m_processingShortcut = false;
 #endif
     m_qtWindow = nullptr;
     m_qtContainer = nullptr;
@@ -1655,6 +1654,29 @@ void wxWindowQt::QtFillKeyEvent( wxKeyEvent& e, const QKeyEvent *event ) const
     wxQtFillKeyboardModifiers( event->modifiers(), &e );
 }
 
+#if wxUSE_ACCEL
+
+wxWindowQt::AcceleratorVerdict
+wxWindowQt::QtShouldUseAccelerator ( QKeyEvent *event )
+{
+    wxKeyEvent e( wxEVT_KEY_DOWN );
+    QtFillKeyEvent( e, event );
+
+    wxAcceleratorEntry entry;
+    if ( !FindAcceleratorForKey(e, entry, nullptr) )
+    {
+        // This key is not used by any accelerator anyhow.
+        return AcceleratorVerdict::Nothing;
+    }
+
+    if ( ShouldUseAcceleratorForKey(e, entry.GetCommand(), entry.GetMenuItem()) )
+        return AcceleratorVerdict::Accel;
+
+    return AcceleratorVerdict::Window;
+}
+
+#endif // wxUSE_ACCEL
+
 bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
 {
     // qt sends keyup and keydown events for autorepeat, but this is not
@@ -1662,18 +1684,6 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
     // discard repeated keyup events
     if ( event->isAutoRepeat() && event->type() == QEvent::KeyRelease )
         return true;
-
-#if wxUSE_ACCEL
-    if ( m_processingShortcut )
-    {
-        /* Enter here when a shortcut isn't handled by Qt.
-         * Return true to avoid Qt-processing of the event
-         * Instead, use the flag to indicate that it wasn't processed */
-        m_processingShortcut = false;
-
-        return true;
-    }
-#endif // wxUSE_ACCEL
 
     bool handled = false;
 
@@ -1686,26 +1696,6 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
     // On key presses, send the EVT_CHAR event
     if ( !handled && event->type() == QEvent::KeyPress )
     {
-#if wxUSE_ACCEL
-        // Check for accelerators
-        if ( !m_processingShortcut )
-        {
-            /* The call to notify() will try to execute a shortcut. If it fails
-             * it will call keyPressEvent() in our wxQtWidget which calls back
-             * to this function. We use the m_processingShortcut flag to avoid
-             * processing that recursive call and return back to this one. */
-            m_processingShortcut = true;
-
-            QApplication::instance()->notify( GetHandle(), event );
-
-            handled = m_processingShortcut;
-            m_processingShortcut = false;
-
-            if ( handled )
-                return true;
-        }
-#endif // wxUSE_ACCEL
-
         // For compatibility with wxMSW, don't generate wxEVT_CHAR event for
         // the following keys: SHIFT, CONTROL, MENU, CAPITAL, NUMLOCK and SCROLL.
         switch ( event->key() )

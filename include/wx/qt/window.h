@@ -184,6 +184,16 @@ public:
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
+
+    // Called when Qt is about to use a shortcut for the given key to decide
+    // what should really happen with it.
+    enum class AcceleratorVerdict
+    {
+        Nothing,    // No accelerator defined for this key event.
+        Accel,      // The accelerator should be used.
+        Window      // Window claims the key event and will process it itself.
+    };
+    AcceleratorVerdict QtShouldUseAccelerator ( QKeyEvent *event );
 #endif // wxUSE_ACCEL
 
 #if wxUSE_TOOLTIPS
@@ -267,7 +277,6 @@ private:
 #if wxUSE_ACCEL
     wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
     std::unique_ptr<wxQtShortcutHandler> m_qtShortcutHandler; // always allocated
-    bool m_processingShortcut;
 #endif // wxUSE_ACCEL
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindowQt );

@@ -85,6 +85,11 @@ public:
 
     virtual bool QtHandleFocusEvent(QWidget *handler, QFocusEvent *event) override;
 protected:
+#if wxUSE_ACCEL
+    // Reserve the keys used for editing the text in this control.
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const override;
+#endif // wxUSE_ACCEL
 
     // From wxTextEntry:
     virtual wxString DoGetValue() const override;
