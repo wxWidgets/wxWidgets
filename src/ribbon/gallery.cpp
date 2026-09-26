@@ -1239,7 +1239,7 @@ public:
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
         wxCHECK(gallery, wxACC_FAIL);
 
-        if ( childId >= 0 && static_cast<unsigned>(childId) < gallery->GetCount() )
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
             return wxACC_NOT_IMPLEMENTED;
 
         *name = _("More");
