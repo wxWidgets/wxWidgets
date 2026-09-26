@@ -28,19 +28,11 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 // wxDialog
 //-----------------------------------------------------------------------------
 
-void wxDialog::Init()
-{
-    m_modalLoop = nullptr;
-    m_modalShowing = false;
-}
-
 wxDialog::wxDialog( wxWindow *parent,
                     wxWindowID id, const wxString &title,
                     const wxPoint &pos, const wxSize &size,
                     long style, const wxString &name )
 {
-    Init();
-
     (void)Create( parent, id, title, pos, size, style, name );
 }
 
@@ -59,32 +51,35 @@ bool wxDialog::Create( wxWindow *parent,
 
 bool wxDialog::Show( bool show )
 {
-    if (!show && IsModal())
+    if (show == IsShown())
+        return false;
+
+    if (!show && m_modalLoop && m_modalLoop->IsRunning())
     {
-        EndModal( wxID_CANCEL );
+        m_modalLoop->Exit();
     }
 
-    if (show && CanDoLayoutAdaptation())
-        DoLayoutAdaptation();
+    if ( show )
+    {
+        if (CanDoLayoutAdaptation())
+            DoLayoutAdaptation();
 
-    bool ret = wxDialogBase::Show(show);
-
-    if (show)
+        // this usually will result in TransferDataToWindow() being called
+        // which will change the controls values so do it before showing as
+        // otherwise we could have some flicker
         InitDialog();
 
-    return ret;
+        // Don't show the dialog if EndModal() has been called from InitDialog()
+        show = GetReturnCode() == 0;
+    }
+
+    return wxDialogBase::Show(show);
 }
 
 wxDialog::~wxDialog()
 {
-    // if the dialog is modal, this will end its event loop
-    if ( IsModal() )
-        EndModal(wxID_CANCEL);
-}
-
-bool wxDialog::IsModal() const
-{
-    return m_modalShowing;
+    // this will also reenable all the other windows for a modal dialog
+    Show(false);
 }
 
 // Workaround for Ubuntu overlay scrollbar, which adds our GtkWindow to a
@@ -157,27 +152,31 @@ int wxDialog::ShowModal()
     // NOTE: this will cause a gtk_grab_add() during Show()
     gtk_window_set_modal(GTK_WINDOW(m_widget), true);
 
-    m_modalShowing = true;
-
     Show( true );
 
-    // Prevent the widget from being destroyed if the user closes the window.
-    // Needed for derived classes which bypass wxTLW::Create(), and therefore
-    // the wxTLW "delete-event" handler is not connected
-    gulong handler_id = g_signal_connect(
-        m_widget, "delete-event", G_CALLBACK(gtk_true), this);
+    // EndModal may have been called from InitDialog handler (called from
+    // inside Show()) and hidden the dialog back again
 
-    // Run modal dialog event loop.
+    if ( IsShown() )
     {
-        wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxGUIEventLoop());
-        m_modalLoop->Run();
-    }
+        // Prevent the widget from being destroyed if the user closes the window.
+        // Needed for derived classes which bypass wxTLW::Create(), and therefore
+        // the wxTLW "delete-event" handler is not connected
+        gulong handler_id = g_signal_connect(
+            m_widget, "delete-event", G_CALLBACK(gtk_true), this);
 
-    g_signal_handler_disconnect(m_widget, handler_id);
+        // Run modal dialog event loop.
+        {
+            wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxGUIEventLoop());
+            m_modalLoop->Run();
+        }
+
+        g_signal_handler_disconnect(m_widget, handler_id);
 #if GTK_CHECK_VERSION(2,10,0)
-    if (sigId)
-        g_signal_remove_emission_hook(sigId, hookId);
+        if (sigId)
+            g_signal_remove_emission_hook(sigId, hookId);
 #endif
+    }
 
     gtk_window_set_modal(GTK_WINDOW(m_widget), FALSE);
 
@@ -188,18 +187,10 @@ void wxDialog::EndModal( int retCode )
 {
     SetReturnCode( retCode );
 
-    if (!IsModal())
+    if ( IsShown() )
     {
-        wxFAIL_MSG( "either wxDialog:EndModal called twice or ShowModal wasn't called" );
-        return;
+        wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
+
+        Hide();
     }
-
-    m_modalShowing = false;
-
-    // Ensure Exit() is only called once. The dialog's event loop may be terminated
-    // externally due to an uncaught exception.
-    if (m_modalLoop && m_modalLoop->IsRunning())
-        m_modalLoop->Exit();
-
-    Show( false );
 }

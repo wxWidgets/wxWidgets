@@ -146,9 +146,6 @@ GripperProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
 
 void wxDialog::Init()
 {
-    m_isShown = false;
-    m_modalData = nullptr;
-    m_hGripper = 0;
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -216,6 +213,9 @@ bool wxDialog::Show(bool show)
         // which will change the controls values so do it before showing as
         // otherwise we could have some flicker
         InitDialog();
+
+        // Don't show the dialog if EndModal() has been called from InitDialog()
+        show = GetReturnCode() == 0;
     }
 
     wxDialogBase::Show(show);
@@ -243,28 +243,31 @@ int wxDialog::ShowModal()
 
     wxASSERT_MSG( !IsModal(), wxT("ShowModal() can't be called twice") );
 
-    wxDialogModalDataTiedPtr modalData(&m_modalData,
-                                       new wxDialogModalData(this));
-
     Show();
 
     // EndModal may have been called from InitDialog handler (called from
     // inside Show()) and hidden the dialog back again
     if ( IsShown() )
+    {
+        wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                           new wxDialogModalData(this));
+
         modalData->RunLoop();
-    else
-        m_modalData->ExitLoop();
+    }
 
     return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-    wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
-
     SetReturnCode(retCode);
 
-    Hide();
+    if ( IsShown() )
+    {
+        wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
+
+        Hide();
+    }
 }
 
 // ----------------------------------------------------------------------------
