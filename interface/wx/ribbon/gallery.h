@@ -125,6 +125,26 @@ public:
     wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id);
 
     /**
+        Add an item to the gallery with a label.
+
+        The label is not shown in the gallery itself, but it is used as the
+        accessible name of the item, allowing the screen readers to announce it,
+        so it is recommended to specify it for all the items.
+
+        @param bitmap
+            The bitmap to display for the item. Note that all items must
+            have equally sized bitmaps.
+        @param id
+            ID number to associate with the item. Not currently used for
+            anything important.
+        @param label
+            The label of the item.
+
+        @since 3.3.2
+    */
+    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, const wxString& label);
+
+    /**
         Add an item to the gallery (with simple client data).
         @param bitmap
             The bitmap to display for the item. Note that all items must
@@ -152,6 +172,22 @@ public:
             destroyed.
     */
     wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, wxClientData* clientData);
+
+    /**
+        Set the label of a gallery item.
+
+        See Append() for the description of the label.
+
+        @since 3.3.2
+    */
+    void SetItemLabel(wxRibbonGalleryItem* item, const wxString& label);
+
+    /**
+        Return the label of a gallery item.
+
+        @since 3.3.2
+    */
+    wxString GetItemLabel(const wxRibbonGalleryItem* item) const;
 
     /**
         Set the client object associated with a gallery item.

@@ -1268,7 +1268,7 @@ wxRibbonGalleryItem* MyFrame::AddColourToGallery(wxRibbonGallery *gallery,
             (iHeight - size.GetHeight()) / 2);
         dc.SelectObjectAsSource(wxNullBitmap);
 
-        item = gallery->Append(bitmap, wxID_ANY);
+        item = gallery->Append(bitmap, wxID_ANY, colour);
         gallery->SetItemClientObject(item, new ColourClientData(colour, c));
     }
     return item;
