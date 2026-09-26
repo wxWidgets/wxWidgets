@@ -33,6 +33,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/keyboard.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
@@ -1066,79 +1067,19 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
 // it from there.
 extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
 {
-    // check for our special keys here: if we don't do it and the parent frame
-    // uses them as accelerators, they wouldn't work at all, so we disable
-    // usual preprocessing for them
+    // Check for the keys used for editing the text here: if we don't do it
+    // and the parent frame uses them as accelerators, they wouldn't work at
+    // all, so we disable usual preprocessing for them.
     if ( msg->message == WM_KEYDOWN )
     {
-        const WPARAM vkey = msg->wParam;
-        if ( HIWORD(msg->lParam) & KF_ALTDOWN )
-        {
-            // Alt-Backspace is accelerator for "Undo"
-            if ( vkey == VK_BACK )
-                return false;
-        }
-        else // no Alt
-        {
-            // we want to process some Ctrl-foo and Shift-bar but no key
-            // combinations without either Ctrl or Shift nor with both of them
-            // pressed
-            const int ctrl = wxIsCtrlDown(),
-                      shift = wxIsShiftDown();
-            switch ( ctrl + shift )
-            {
-                default:
-                    wxFAIL_MSG( wxT("how many modifiers have we got?") );
-                    wxFALLTHROUGH;
+        wxKeyEvent event(wxEVT_KEY_DOWN);
+        event.m_keyCode = wxMSWKeyboard::VKToWX(msg->wParam, msg->lParam);
+        event.SetControlDown(wxIsCtrlDown());
+        event.SetShiftDown(wxIsShiftDown());
+        event.SetAltDown((HIWORD(msg->lParam) & KF_ALTDOWN) != 0);
 
-                case 0:
-                    switch ( vkey )
-                    {
-                        case VK_DELETE:
-                        case VK_HOME:
-                        case VK_END:
-                            return false;
-                    }
-                    break;
-
-                case 1:
-                    // either Ctrl or Shift pressed
-                    if ( ctrl )
-                    {
-                        switch ( vkey )
-                        {
-                            case 'A':
-                            case 'C':
-                            case 'V':
-                            case 'X':
-                            case VK_INSERT:
-                            case VK_DELETE:
-                            case VK_HOME:
-                            case VK_END:
-                            case VK_LEFT:
-                            case VK_RIGHT:
-                                return false;
-                        }
-                    }
-                    else // Shift is pressed
-                    {
-                        switch ( vkey )
-                        {
-                            case VK_INSERT:
-                            case VK_DELETE:
-                            case VK_HOME:
-                            case VK_END:
-                            case VK_LEFT:
-                            case VK_RIGHT:
-                                return false;
-                        }
-                    }
-                    break;
-
-                case 2:
-                    break;
-            }
-        }
+        if ( wxTextEntryBase::IsUsedForEditing(event) )
+            return false;
     }
 
     return true;
