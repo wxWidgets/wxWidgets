@@ -50,6 +50,9 @@ public:
     bool IsVisible() const {return m_is_visible;}
     const wxRect& GetPosition() const {return m_position;}
 
+    void SetLabel(const wxString& label) {m_label = label;}
+    const wxString& GetLabel() const {return m_label;}
+
     void SetClientObject(wxClientData *data) {m_client_data.SetClientObject(data);}
     wxClientData *GetClientObject() const {return m_client_data.GetClientObject();}
     void SetClientData(void *data) {m_client_data.SetClientData(data);}
@@ -57,6 +60,7 @@ public:
 
 protected:
     wxBitmapBundle m_bitmap;
+    wxString m_label;
     wxClientDataContainer m_client_data;
     wxRect m_position;
     int m_id = 0;
@@ -802,6 +806,14 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
+                                             const wxString& label)
+{
+    wxRibbonGalleryItem *item = Append(bitmap, id);
+    item->SetLabel(label);
+    return item;
+}
+
+wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
                                              void* clientData)
 {
     wxRibbonGalleryItem *item = Append(bitmap, id);
@@ -815,6 +827,21 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
     wxRibbonGalleryItem *item = Append(bitmap, id);
     item->SetClientObject(clientData);
     return item;
+}
+
+void wxRibbonGallery::SetItemLabel(wxRibbonGalleryItem* item,
+                                   const wxString& label)
+{
+    wxCHECK_RET( item, "invalid gallery item" );
+
+    item->SetLabel(label);
+}
+
+wxString wxRibbonGallery::GetItemLabel(const wxRibbonGalleryItem* item) const
+{
+    wxCHECK_MSG( item, wxString(), "invalid gallery item" );
+
+    return item->GetLabel();
 }
 
 void wxRibbonGallery::Clear()
@@ -1239,8 +1266,18 @@ public:
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
         wxCHECK(gallery, wxACC_FAIL);
 
-        if ( childId >= 0 && static_cast<unsigned>(childId) < gallery->GetCount() )
-            return wxACC_NOT_IMPLEMENTED;
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
+        {
+            wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
+            wxCHECK(item, wxACC_FAIL);
+
+            const wxString label = gallery->GetItemLabel(item);
+            if ( label.empty() )
+                return wxACC_NOT_IMPLEMENTED;
+
+            *name = label;
+            return wxACC_OK;
+        }
 
         *name = _("More");
         return wxACC_OK;
