@@ -51,27 +51,35 @@ bool wxDialog::Create( wxWindow *parent,
 
 bool wxDialog::Show( bool show )
 {
-    if (!show && IsModal())
+    if (show == IsShown())
+        return false;
+
+    if (!show && m_modalLoop && m_modalLoop->IsRunning())
     {
-        EndModal( wxID_CANCEL );
+        m_modalLoop->Exit();
     }
 
-    if (show && CanDoLayoutAdaptation())
-        DoLayoutAdaptation();
+    if ( show )
+    {
+        if (CanDoLayoutAdaptation())
+            DoLayoutAdaptation();
 
-    bool ret = wxDialogBase::Show(show);
-
-    if (show)
+        // this usually will result in TransferDataToWindow() being called
+        // which will change the controls values so do it before showing as
+        // otherwise we could have some flicker
         InitDialog();
 
-    return ret;
+        // Don't show the dialog if EndModal() has been called from InitDialog()
+        show = GetReturnCode() == 0;
+    }
+
+    return wxDialogBase::Show(show);
 }
 
 wxDialog::~wxDialog()
 {
-    // if the dialog is modal, this will end its event loop
-    if ( IsModal() )
-        EndModal(wxID_CANCEL);
+    // this will also reenable all the other windows for a modal dialog
+    Show(false);
 }
 
 // Workaround for Ubuntu overlay scrollbar, which adds our GtkWindow to a
@@ -179,16 +187,10 @@ void wxDialog::EndModal( int retCode )
 {
     SetReturnCode( retCode );
 
-    if (!IsModal())
+    if ( IsShown() )
     {
-        wxFAIL_MSG( "either wxDialog:EndModal called twice or ShowModal wasn't called" );
-        return;
+        wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
+
+        Hide();
     }
-
-    // Ensure Exit() is only called once. The dialog's event loop may be terminated
-    // externally due to an uncaught exception.
-    if (m_modalLoop && m_modalLoop->IsRunning())
-        m_modalLoop->Exit();
-
-    Show( false );
 }
