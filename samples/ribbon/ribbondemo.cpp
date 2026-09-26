@@ -12,6 +12,7 @@
 
 #include "wx/app.h"
 #include "wx/frame.h"
+#include "wx/panel.h"
 #include "wx/textctrl.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
@@ -168,6 +169,7 @@ protected:
     void SetArtProvider(int button_id, wxRibbonArtProvider* prov);
     void SetBarStyle(long style);
 
+    wxPanel* m_panel;
     wxRibbonBar* m_ribbon;
     wxRibbonButtonBar* m_provider_bar;
     wxRibbonGallery* m_primary_gallery;
@@ -468,7 +470,9 @@ wxBitmapBundle MakeSvgBundle(const char* svg_data, const wxSize& size,
 MyFrame::MyFrame()
     : wxFrame(nullptr, wxID_ANY, "wxRibbon Sample Application", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
-    m_ribbon = new wxRibbonBar(this,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
+    m_panel = new wxPanel(this);
+
+    m_ribbon = new wxRibbonBar(m_panel,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
                                 | wxRIBBON_BAR_SHOW_PAGE_LABELS
                                 | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
                                 | wxRIBBON_BAR_SHOW_TOGGLE_BUTTON
@@ -495,13 +499,13 @@ MyFrame::MyFrame()
         toolbar_panel->SetExtButtonKeyTip("X");
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddToggleTool(wxID_JUSTIFY_LEFT,
-            MakeSvgBundle(align_left_svg, wxSize(16, 16)));
+            MakeSvgBundle(align_left_svg, wxSize(16, 16)), "Align left");
         toolbar->AddToggleTool(wxID_JUSTIFY_CENTER,
-            MakeSvgBundle(align_center_svg, wxSize(16, 16)));
+            MakeSvgBundle(align_center_svg, wxSize(16, 16)), "Center");
         toolbar->AddToggleTool(wxID_JUSTIFY_RIGHT,
-            MakeSvgBundle(align_right_svg, wxSize(16, 16)));
+            MakeSvgBundle(align_right_svg, wxSize(16, 16)), "Align right");
         toolbar->AddSeparator();
-        toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)), "New");
         toolbar->AddTool(wxID_OPEN, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)), "Open something");
         toolbar->AddTool(wxID_SAVE, wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, wxSize(16, 15)), "Save something");
         toolbar->AddTool(wxID_SAVEAS, wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, wxSize(16, 15)), "Save something as ...");
@@ -512,11 +516,11 @@ MyFrame::MyFrame()
         toolbar->EnableTool(wxID_SAVE, false);
         toolbar->EnableTool(wxID_SAVEAS, false);
         toolbar->AddSeparator();
-        toolbar->AddDropdownTool(wxID_UNDO, wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddDropdownTool(wxID_REDO, wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddDropdownTool(wxID_UNDO, wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16, 15)), "Undo");
+        toolbar->AddDropdownTool(wxID_REDO, wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16, 15)), "Redo");
         toolbar->AddSeparator();
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)), "Report view");
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)), "List view");
         toolbar->AddSeparator();
         toolbar->AddHybridTool(ID_POSITION_LEFT,
                                 MakeSvgBundle(position_left_svg, wxSize(16, 16)),
@@ -769,11 +773,11 @@ MyFrame::MyFrame()
     }
     m_ribbon->Realize();
 
-    m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+    m_logwindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY |
         wxTE_LEFT | wxTE_BESTWRAP | wxBORDER_NONE);
 
-    m_togglePanels = new wxToggleButton(this, ID_TOGGLE_PANELS, "&Toggle panels");
+    m_togglePanels = new wxToggleButton(m_panel, ID_TOGGLE_PANELS, "&Toggle panels");
     m_togglePanels->SetValue(true);
 
     wxSizer *s = new wxBoxSizer(wxVERTICAL);
@@ -782,14 +786,18 @@ MyFrame::MyFrame()
     s->Add(m_logwindow, wxSizerFlags(1).Expand());
     s->Add(m_togglePanels, wxSizerFlags().Border());
 
-    SetSizer(s);
+    m_panel->SetSizer(s);
+
+    wxSizer* frameSizer = new wxBoxSizer{ wxVERTICAL };
+    frameSizer->Add(m_panel, wxSizerFlags{ 1 }.Expand());
+    SetSizer(frameSizer);
 }
 
 void MyFrame::SetBarStyle(long style)
 {
     m_ribbon->Freeze();
     m_ribbon->SetWindowStyleFlag(style);
-    wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(GetSizer());
+    wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(m_panel->GetSizer());
     wxRibbonToolBar *pToolbar = wxDynamicCast(FindWindow(ID_MAIN_TOOLBAR), wxRibbonToolBar);
     if(style & wxRIBBON_BAR_FLOW_VERTICAL)
     {
@@ -806,7 +814,7 @@ void MyFrame::SetBarStyle(long style)
             pToolbar->SetRows(2, 3);
     }
     m_ribbon->Realise();
-    Layout();
+    m_panel->Layout();
     m_ribbon->Thaw();
 }
 
@@ -1369,7 +1377,7 @@ void MyFrame::SetArtProvider(int button_id, wxRibbonArtProvider *prov)
 
     m_ribbon->Realize();
     m_ribbon->Thaw();
-    GetSizer()->Layout();
+    m_panel->Layout();
 }
 
 void MyFrame::OnRemovePage(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -1406,7 +1414,7 @@ void MyFrame::OnRemovePanel(wxRibbonButtonBarEvent& WXUNUSED(evt))
 
     // Not reached if the stale entry was used above.
     m_ribbon->Realize();
-    GetSizer()->Layout();
+    m_panel->Layout();
 }
 
 void MyFrame::OnHidePages(wxRibbonButtonBarEvent& WXUNUSED(evt))

@@ -84,8 +84,16 @@ public:
     void ClearFocusedItem() override;
     void ActivateFocusedItem(bool dropdown = false) override;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
+#if wxUSE_ACCESSIBILITY
+    friend class wxRibbonGalleryAccessible;
+#endif // wxUSE_ACCESSIBILITY
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    void DoNotifySelectionChanged();
     void CommonInit(long style);
     void CalculateMinSize();
     bool TestButtonHover(const wxRect& rect, wxPoint pos,
