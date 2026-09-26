@@ -146,9 +146,6 @@ GripperProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
 
 void wxDialog::Init()
 {
-    m_isShown = false;
-    m_modalData = nullptr;
-    m_hGripper = 0;
 }
 
 bool wxDialog::Create(wxWindow *parent,
