@@ -37,11 +37,10 @@ public:
     virtual bool Show( bool show = true ) override;
     virtual int ShowModal() override;
     virtual void EndModal( int retCode ) override;
-    virtual bool IsModal() const override;
+    virtual bool IsModal() const override { return m_modalLoop != nullptr; }
 
 private:
-    bool m_modalShowing = false;
-    wxGUIEventLoop *m_modalLoop = nullptr;
+    wxGUIEventLoop* m_modalLoop = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxDialog);
 };

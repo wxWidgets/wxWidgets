@@ -74,11 +74,6 @@ wxDialog::~wxDialog()
         EndModal(wxID_CANCEL);
 }
 
-bool wxDialog::IsModal() const
-{
-    return m_modalShowing;
-}
-
 // Workaround for Ubuntu overlay scrollbar, which adds our GtkWindow to a
 // private window group in a GtkScrollbar realize handler. This breaks the grab
 // done by gtk_window_set_modal(), and allows menus and toolbars in the parent
@@ -149,8 +144,6 @@ int wxDialog::ShowModal()
     // NOTE: this will cause a gtk_grab_add() during Show()
     gtk_window_set_modal(GTK_WINDOW(m_widget), true);
 
-    m_modalShowing = true;
-
     Show( true );
 
     // Prevent the widget from being destroyed if the user closes the window.
@@ -185,8 +178,6 @@ void wxDialog::EndModal( int retCode )
         wxFAIL_MSG( "either wxDialog:EndModal called twice or ShowModal wasn't called" );
         return;
     }
-
-    m_modalShowing = false;
 
     // Ensure Exit() is only called once. The dialog's event loop may be terminated
     // externally due to an uncaught exception.
