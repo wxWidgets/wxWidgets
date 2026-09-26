@@ -3728,7 +3728,9 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
-    wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    wxColour bg = UseBackgroundColour() ? GetBackgroundColour() :
+        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    wxBrush brush(bg);
     dc.SetBackground(brush);
     dc.Clear();
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
