@@ -278,7 +278,7 @@ public:
         planned, but not yet implemented in LunaSVG).
 
         @remark To enable LunaSVG library support, use `--with-lunasvg`
-            configure option, set `wxUSE_LUNASVG=ON` when using CMake or change
+            configure option, set `wxUSE_LUNASVG=builtin` when using CMake or change
             wxUSE_LUNASVG set to 1 in your setup.h file when using other build
             systems. Note that you will also need to use a C++17 (or later)
             compiler required by this library.

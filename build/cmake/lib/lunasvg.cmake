@@ -11,7 +11,7 @@ if(wxUSE_LUNASVG STREQUAL "sys")
     message(FATAL_ERROR "Not supported")
 endif()
 
-if(wxUSE_LUNASVG STREQUAL "ON" OR wxUSE_LUNASVG STREQUAL "builtin")
+if(wxUSE_LUNASVG STREQUAL "builtin")
     wx_add_builtin_library(wxlunasvg
         3rdparty/lunasvg/source/lunasvg.cpp
         3rdparty/lunasvg/source/graphics.cpp
