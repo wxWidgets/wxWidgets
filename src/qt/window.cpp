@@ -1636,6 +1636,25 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
 }
 
 
+void wxWindowQt::QtFillKeyEvent( wxKeyEvent& e, const QKeyEvent *event ) const
+{
+    e.SetEventObject(const_cast<wxWindowQt*>(this));
+    // TODO: m_x, m_y
+    e.m_keyCode = wxQtConvertKeyCode( event->key(), event->modifiers() );
+
+    if ( event->text().isEmpty() )
+        e.m_uniChar = 0;
+    else
+        e.m_uniChar = event->text().at( 0 ).unicode();
+
+    e.m_rawCode = event->nativeVirtualKey();
+    e.m_rawFlags = event->nativeModifiers();
+    e.m_isRepeat = event->isAutoRepeat();
+
+    // Modifiers
+    wxQtFillKeyboardModifiers( event->modifiers(), &e );
+}
+
 bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
 {
     // qt sends keyup and keydown events for autorepeat, but this is not
@@ -1660,21 +1679,7 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 
     // Build the event
     wxKeyEvent e( event->type() == QEvent::KeyPress ? wxEVT_KEY_DOWN : wxEVT_KEY_UP );
-    e.SetEventObject(this);
-    // TODO: m_x, m_y
-    e.m_keyCode = wxQtConvertKeyCode( event->key(), event->modifiers() );
-
-    if ( event->text().isEmpty() )
-        e.m_uniChar = 0;
-    else
-        e.m_uniChar = event->text().at( 0 ).unicode();
-
-    e.m_rawCode = event->nativeVirtualKey();
-    e.m_rawFlags = event->nativeModifiers();
-    e.m_isRepeat = event->isAutoRepeat();
-
-    // Modifiers
-    wxQtFillKeyboardModifiers( event->modifiers(), &e );
+    QtFillKeyEvent( e, event );
 
     handled = ProcessWindowEvent( e );
 

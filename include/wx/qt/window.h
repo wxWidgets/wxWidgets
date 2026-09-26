@@ -179,6 +179,9 @@ public:
     static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
     static void QtSendSetCursorEvent(wxWindowQt* win, const wxPoint& posClient);
 
+    // Fill in the given wx key event from the Qt one.
+    void QtFillKeyEvent ( wxKeyEvent& e, const QKeyEvent *event ) const;
+
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
