@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxDialogModalData;
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {
 public:
-    wxDialog() { Init(); }
+    wxDialog() = default;
 
     // full ctor
     wxDialog(wxWindow *parent, wxWindowID id,
@@ -30,8 +30,6 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxASCII_STR(wxDialogNameStr))
     {
-        Init();
-
         (void)Create(parent, id, title, pos, size, style, name);
     }
 
@@ -66,6 +64,7 @@ public:
 
 protected:
     // common part of all ctors
+    // Kept only for backwards compatibility as it does nothing now,
     void Init();
 
 private:
@@ -81,10 +80,10 @@ private:
     void OnWindowCreate(wxWindowCreateEvent& event);
 
     // gripper window for a resizable dialog, nullptr if we're not resizable
-    WXHWND m_hGripper;
+    WXHWND m_hGripper = 0;
 
     // this pointer is non-null only while the modal event loop is running
-    wxDialogModalData *m_modalData;
+    wxDialogModalData* m_modalData = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxDialog);
     wxDECLARE_NO_COPY_CLASS(wxDialog);
