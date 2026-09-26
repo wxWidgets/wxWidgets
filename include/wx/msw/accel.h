@@ -36,6 +36,13 @@ public:
     // translate the accelerator, return true if done
     bool Translate(wxWindow *window, WXMSG *msg) const;
 
+    // Find the entry corresponding to the given key event or nullptr.
+    //
+    // Note that the entries are reconstructed from the native accelerator
+    // table when necessary, so this function may be relatively slow when it's
+    // called for the first time.
+    const wxAcceleratorEntry *GetEntry(const wxKeyEvent& event) const;
+
 private:
     wxDECLARE_DYNAMIC_CLASS(wxAcceleratorTable);
 };

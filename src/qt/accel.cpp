@@ -67,6 +67,21 @@ wxAcceleratorTable::wxAcceleratorTable()
 {
 }
 
+const wxAcceleratorEntry *
+wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
+{
+    if ( !IsOk() )
+        return nullptr;
+
+    for ( const auto& entry : M_ACCELDATA->m_accels )
+    {
+        if ( entry.MatchesEvent(event) )
+            return &entry;
+    }
+
+    return nullptr;
+}
+
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     if ( n == 0 )

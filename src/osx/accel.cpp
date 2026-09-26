@@ -66,17 +66,25 @@ bool wxAcceleratorTable::IsOk() const
     return (m_refData != nullptr);
 }
 
-int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
+const wxAcceleratorEntry *
+wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
 {
-    if (!IsOk()) return -1;
+    if (!IsOk()) return nullptr;
 
     for ( const auto& entry : M_ACCELDATA->m_accels )
     {
         if ( entry.MatchesEvent(event) )
-            return entry.GetCommand();
+            return &entry;
     }
 
-    return -1;
+    return nullptr;
+}
+
+int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
+{
+    const wxAcceleratorEntry* const entry = GetEntry(event);
+
+    return entry ? entry->GetCommand() : -1;
 }
 
 #endif // wxUSE_ACCEL
