@@ -28,19 +28,11 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 // wxDialog
 //-----------------------------------------------------------------------------
 
-void wxDialog::Init()
-{
-    m_modalLoop = nullptr;
-    m_modalShowing = false;
-}
-
 wxDialog::wxDialog( wxWindow *parent,
                     wxWindowID id, const wxString &title,
                     const wxPoint &pos, const wxSize &size,
                     long style, const wxString &name )
 {
-    Init();
-
     (void)Create( parent, id, title, pos, size, style, name );
 }
 

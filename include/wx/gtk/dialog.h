@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxGUIEventLoop;
 class WXDLLIMPEXP_CORE wxDialog: public wxDialogBase
 {
 public:
-    wxDialog() { Init(); }
+    wxDialog() = default;
     wxDialog( wxWindow *parent, wxWindowID id,
             const wxString &title,
             const wxPoint &pos = wxDefaultPosition,
@@ -40,11 +40,8 @@ public:
     virtual bool IsModal() const override;
 
 private:
-    // common part of all ctors
-    void Init();
-
-    bool m_modalShowing;
-    wxGUIEventLoop *m_modalLoop;
+    bool m_modalShowing = false;
+    wxGUIEventLoop *m_modalLoop = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxDialog);
 };
