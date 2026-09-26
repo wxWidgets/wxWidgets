@@ -43,6 +43,7 @@ enum
     MenuTestCase_Bar,
     MenuTestCase_ExtraAccel,
     MenuTestCase_ExtraAccels,
+    MenuTestCase_SubmenuAccel,
     MenuTestCase_First
 };
 
@@ -281,6 +282,57 @@ TEST_CASE_METHOD(MenuTestCase, "Menu::FindInMenu", "[menu]")
         }
     }
 }
+
+#if wxUSE_ACCEL
+
+TEST_CASE_METHOD(MenuTestCase, "Menu::FindItemForAccelKey", "[menu][accelentry]")
+{
+    wxMenuBar* const bar = m_frame->GetMenuBar();
+
+    wxKeyEvent event(wxEVT_KEY_DOWN);
+    event.m_keyCode = 'F';
+    event.SetControlDown(true);
+
+    wxMenuItem* item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_Foo );
+
+    // Items of the other menus are found too.
+    event.m_keyCode = WXK_F1;
+    event.SetControlDown(false);
+    item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_Bar );
+
+    // Extra accelerators are taken into account as well.
+    event.m_keyCode = 'V';
+    event.SetControlDown(true);
+    item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_ExtraAccel );
+
+    // And so are the items of the submenus.
+    wxMenu* submenu = nullptr;
+    REQUIRE( bar->FindItem(m_submenuItemId, &submenu) );
+    REQUIRE( submenu );
+    submenu->Append(MenuTestCase_SubmenuAccel, "Submenu accel\tCtrl-J");
+
+    event.m_keyCode = 'J';
+    item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_SubmenuAccel );
+
+    // Keys not used by any accelerator are not found.
+    event.m_keyCode = 'Z';
+    CHECK( !bar->FindItemForAccelKey(event) );
+
+    // Neither are the keys used by them with different modifiers.
+    event.m_keyCode = 'F';
+    event.SetShiftDown(true);
+    CHECK( !bar->FindItemForAccelKey(event) );
+}
+
+#endif // wxUSE_ACCEL
 
 TEST_CASE_METHOD(MenuTestCase, "Menu::EnableTop", "[menu]")
 {

@@ -582,6 +582,45 @@ wxMenuItem *wxMenuBase::FindItem(int itemId, wxMenu **itemMenu) const
     return item;
 }
 
+#if wxUSE_ACCEL
+
+wxMenuItem *wxMenuBase::FindItemForAccelKey(const wxKeyEvent& event) const
+{
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenuItem* const item = node->GetData();
+
+        if ( item->IsSubMenu() )
+        {
+            wxMenuItem* const
+                itemFound = item->GetSubMenu()->FindItemForAccelKey(event);
+            if ( itemFound )
+                return itemFound;
+
+            continue;
+        }
+
+        if ( item->IsSeparator() )
+            continue;
+
+        std::unique_ptr<wxAcceleratorEntry> const accel(item->GetAccel());
+        if ( accel && accel->MatchesEvent(event) )
+            return item;
+
+        for ( const auto& accelExtra : item->GetExtraAccels() )
+        {
+            if ( accelExtra.MatchesEvent(event) )
+                return item;
+        }
+    }
+
+    return nullptr;
+}
+
+#endif // wxUSE_ACCEL
+
 // non recursive search
 wxMenuItem *wxMenuBase::FindChildItem(int itemid, size_t *ppos) const
 {
@@ -1037,6 +1076,24 @@ wxMenuItem *wxMenuBarBase::FindItem(int itemid, wxMenu **menu) const
 
     return item;
 }
+
+#if wxUSE_ACCEL
+
+wxMenuItem *wxMenuBarBase::FindItemForAccelKey(const wxKeyEvent& event) const
+{
+    for ( wxMenuList::const_iterator it = m_menus.begin();
+          it != m_menus.end();
+          ++it )
+    {
+        wxMenuItem* const item = (*it)->FindItemForAccelKey(event);
+        if ( item )
+            return item;
+    }
+
+    return nullptr;
+}
+
+#endif // wxUSE_ACCEL
 
 int wxMenuBarBase::FindMenuItem(const wxString& menu, const wxString& item) const
 {
