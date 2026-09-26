@@ -12,6 +12,7 @@
 
 #include "wx/app.h"
 #include "wx/frame.h"
+#include "wx/panel.h"
 #include "wx/textctrl.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
@@ -168,6 +169,7 @@ protected:
     void SetArtProvider(int button_id, wxRibbonArtProvider* prov);
     void SetBarStyle(long style);
 
+    wxPanel* m_panel;
     wxRibbonBar* m_ribbon;
     wxRibbonButtonBar* m_provider_bar;
     wxRibbonGallery* m_primary_gallery;
@@ -468,7 +470,9 @@ wxBitmapBundle MakeSvgBundle(const char* svg_data, const wxSize& size,
 MyFrame::MyFrame()
     : wxFrame(nullptr, wxID_ANY, "wxRibbon Sample Application", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
-    m_ribbon = new wxRibbonBar(this,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
+    m_panel = new wxPanel(this);
+
+    m_ribbon = new wxRibbonBar(m_panel,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
                                 | wxRIBBON_BAR_SHOW_PAGE_LABELS
                                 | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
                                 | wxRIBBON_BAR_SHOW_TOGGLE_BUTTON
@@ -769,11 +773,11 @@ MyFrame::MyFrame()
     }
     m_ribbon->Realize();
 
-    m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+    m_logwindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY |
         wxTE_LEFT | wxTE_BESTWRAP | wxBORDER_NONE);
 
-    m_togglePanels = new wxToggleButton(this, ID_TOGGLE_PANELS, "&Toggle panels");
+    m_togglePanels = new wxToggleButton(m_panel, ID_TOGGLE_PANELS, "&Toggle panels");
     m_togglePanels->SetValue(true);
 
     wxSizer *s = new wxBoxSizer(wxVERTICAL);
@@ -782,14 +786,18 @@ MyFrame::MyFrame()
     s->Add(m_logwindow, wxSizerFlags(1).Expand());
     s->Add(m_togglePanels, wxSizerFlags().Border());
 
-    SetSizer(s);
+    m_panel->SetSizer(s);
+
+    wxSizer* frameSizer = new wxBoxSizer{ wxVERTICAL };
+    frameSizer->Add(m_panel, wxSizerFlags{ 1 }.Expand());
+    SetSizer(frameSizer);
 }
 
 void MyFrame::SetBarStyle(long style)
 {
     m_ribbon->Freeze();
     m_ribbon->SetWindowStyleFlag(style);
-    wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(GetSizer());
+    wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(m_panel->GetSizer());
     wxRibbonToolBar *pToolbar = wxDynamicCast(FindWindow(ID_MAIN_TOOLBAR), wxRibbonToolBar);
     if(style & wxRIBBON_BAR_FLOW_VERTICAL)
     {
@@ -806,7 +814,7 @@ void MyFrame::SetBarStyle(long style)
             pToolbar->SetRows(2, 3);
     }
     m_ribbon->Realise();
-    Layout();
+    m_panel->Layout();
     m_ribbon->Thaw();
 }
 
@@ -1369,7 +1377,7 @@ void MyFrame::SetArtProvider(int button_id, wxRibbonArtProvider *prov)
 
     m_ribbon->Realize();
     m_ribbon->Thaw();
-    GetSizer()->Layout();
+    m_panel->Layout();
 }
 
 void MyFrame::OnRemovePage(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -1406,7 +1414,7 @@ void MyFrame::OnRemovePanel(wxRibbonButtonBarEvent& WXUNUSED(evt))
 
     // Not reached if the stale entry was used above.
     m_ribbon->Realize();
-    GetSizer()->Layout();
+    m_panel->Layout();
 }
 
 void MyFrame::OnHidePages(wxRibbonButtonBarEvent& WXUNUSED(evt))
