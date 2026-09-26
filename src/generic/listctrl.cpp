@@ -3080,6 +3080,28 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     }
 
     int keyCode = event.GetKeyCode();
+
+#ifdef __WXOSX__
+    // Cmd-Up and Cmd-Down are the standard shortcuts for going to the first and
+    // the last item under macOS, where the keyboards often don't have Home and
+    // End keys at all, so handle them in the same way as those keys.
+    if ( event.CmdDown() && (keyCode == WXK_UP || keyCode == WXK_DOWN) )
+    {
+        if ( !IsEmpty() )
+        {
+            // Cmd is Control for wx under macOS and leaving it set would just
+            // move the current item without selecting it in a control with
+            // multiple selection, which is not what we want here.
+            wxKeyEvent eventHomeEnd(event);
+            eventHomeEnd.SetControlDown(false);
+
+            OnArrowChar(keyCode == WXK_UP ? 0 : GetItemCount() - 1, eventHomeEnd);
+        }
+
+        return;
+    }
+#endif // __WXOSX__
+
     switch ( keyCode )
     {
         case WXK_UP:
