@@ -1806,6 +1806,61 @@ protected:
     // implementation of Navigate() and NavigateIn()
     virtual bool DoNavigateIn(int flags);
 
+#if wxUSE_ACCEL
+    // Return true if this window wants the key to be used for its own needs,
+    // even if it's registered as an accelerator for the given command.
+    //
+    // By default returns false meaning that accelerators are used if nothing
+    // special is done.
+    //
+    // Note that this function is not called at all if the application handles
+    // wxEVT_ACCELERATOR_KEY, it only defines the default behaviour.
+    //
+    // This function may be overridden in user-defined classes.
+    virtual bool
+    ClaimsKeyBeforeAccelerator(const wxKeyEvent& WXUNUSED(event),
+                               int WXUNUSED(command)) const
+    {
+        return false;
+    }
+
+    // Find the accelerator corresponding to the given key in this window or
+    // any of its (grand)parents and searching both the accelerator tables and
+    // the accelerators used by the menu bar menus items.
+    //
+    // If the function returns true, "entry" is filled with the found
+    // accelerator, otherwise it's left unchanged.
+    //
+    // "owner" may be null but if it isn't, it is filled with the window owning
+    // the accelerator table or the menu bar containing the accelerator.
+    //
+    // This function is only used by wx internally.
+    bool
+    FindAcceleratorForKey(const wxKeyEvent& event,
+                          wxAcceleratorEntry& entry,
+                          wxWindow** owner) const;
+
+    // Find the accelerator corresponding to the given key in the menu bar of
+    // this window.
+    //
+    // This is used by FindAcceleratorForKey() and simply returns false, it's
+    // overridden in wxFrame to really search the menu bar.
+    virtual bool
+    FindAcceleratorForKeyInMenuBar(const wxKeyEvent& event,
+                                   wxAcceleratorEntry& entry) const;
+
+    // Return true if the given key event should be processed as an accelerator
+    // or false if it should be handled as a normal key press.
+    //
+    // Sends wxEVT_ACCELERATOR_KEY and calls ClaimsKeyBeforeAccelerator() to
+    // decide what to do.
+    //
+    // This function is only used by wx internally.
+    bool ShouldUseAcceleratorForKey(const wxKeyEvent& event,
+                                    int command,
+                                    wxMenuItem* menuItem) const;
+#endif // wxUSE_ACCEL
+
 #if wxUSE_CONSTRAINTS
     // satisfy the constraints for the windows but don't set the window sizes
     void SatisfyConstraints();

@@ -377,12 +377,20 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
     return true;
 }
 
-bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
+#if wxUSE_ACCEL
+
+bool
+wxComboBox::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                       int WXUNUSED(command)) const
 {
-    return (HasFlag(wxCB_READONLY) ||
-            wxTextEntry::MSWShouldPreProcessMessage(pMsg)) &&
-                wxChoice::MSWShouldPreProcessMessage(pMsg);
+    // We don't need any keys if we're not editing any text at all.
+    if ( HasFlag(wxCB_READONLY) )
+        return false;
+
+    return IsUsedForEditing(event);
 }
+
+#endif // wxUSE_ACCEL
 
 #if wxUSE_OLE
 

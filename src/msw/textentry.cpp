@@ -33,7 +33,6 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
-#include "wx/msw/private/keyboard.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
@@ -1061,33 +1060,6 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
     return !wxIsAnyModifierDown() &&
                 wxWindow::MSWClickButtonIfPossible(
                     wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
-}
-
-// This function is also used by wxSpinCtrl, so make it extern to allow reusing
-// it from there.
-extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
-{
-    // Check for the keys used for editing the text here: if we don't do it
-    // and the parent frame uses them as accelerators, they wouldn't work at
-    // all, so we disable usual preprocessing for them.
-    if ( msg->message == WM_KEYDOWN )
-    {
-        wxKeyEvent event(wxEVT_KEY_DOWN);
-        event.m_keyCode = wxMSWKeyboard::VKToWX(msg->wParam, msg->lParam);
-        event.SetControlDown(wxIsCtrlDown());
-        event.SetShiftDown(wxIsShiftDown());
-        event.SetAltDown((HIWORD(msg->lParam) & KF_ALTDOWN) != 0);
-
-        if ( wxTextEntryBase::IsUsedForEditing(event) )
-            return false;
-    }
-
-    return true;
-}
-
-bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
-{
-    return wxMSWTextEntryShouldPreProcessMessage(msg);
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

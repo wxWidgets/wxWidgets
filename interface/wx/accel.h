@@ -112,8 +112,8 @@ public:
         the string @c "Ctrl-a" matches the event for @c Ctrl-A.
 
         Note that this function should be used with the key press events, i.e.
-        @c wxEVT_KEY_DOWN or @c wxEVT_CHAR_HOOK but not with @c wxEVT_CHAR
-        whose key codes are different.
+        @c wxEVT_KEY_DOWN, @c wxEVT_CHAR_HOOK or @c wxEVT_ACCELERATOR_KEY,
+        but not with @c wxEVT_CHAR whose key codes are different.
 
         @since 3.3.4
     */
