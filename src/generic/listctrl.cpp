@@ -2971,8 +2971,9 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     {
         // all previously selected items are unselected unless ctrl is held in
         // a multi-selection control. in single selection mode we must always
-        // have a selected item.
-        if ( !event.ControlDown() || IsSingleSel() )
+        // have a selected item. note that we use the real Ctrl key here and
+        // not Cmd under macOS, where Cmd-arrows have a different meaning.
+        if ( !event.RawControlDown() || IsSingleSel() )
         {
             HighlightOnly(m_current, oldCurrent);
 
@@ -3080,6 +3081,20 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     }
 
     int keyCode = event.GetKeyCode();
+
+#ifdef __WXOSX__
+    // Cmd-Up and Cmd-Down are the standard shortcuts for going to the first and
+    // the last item under macOS, where the keyboards often don't have Home and
+    // End keys at all, so handle them in the same way as those keys.
+    if ( event.CmdDown() && (keyCode == WXK_UP || keyCode == WXK_DOWN) )
+    {
+        if ( !IsEmpty() )
+            OnArrowChar(keyCode == WXK_UP ? 0 : GetItemCount() - 1, event);
+
+        return;
+    }
+#endif // __WXOSX__
+
     switch ( keyCode )
     {
         case WXK_UP:
