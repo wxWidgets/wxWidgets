@@ -105,7 +105,14 @@ public:
     // navigated to with the keyboard, in navigation order.
     void AppendFocusableControls(std::vector<wxRibbonControl*>& controls);
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
+#if wxUSE_ACCESSIBILITY
+    friend class wxRibbonPanelAccessible;
+#endif // wxUSE_ACCESSIBILITY
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize GetPanelSizerBestSize() const;
     wxSize  GetPanelSizerMinSize() const;
