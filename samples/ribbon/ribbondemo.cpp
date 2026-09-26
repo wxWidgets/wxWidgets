@@ -495,13 +495,13 @@ MyFrame::MyFrame()
         toolbar_panel->SetExtButtonKeyTip("X");
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddToggleTool(wxID_JUSTIFY_LEFT,
-            MakeSvgBundle(align_left_svg, wxSize(16, 16)));
+            MakeSvgBundle(align_left_svg, wxSize(16, 16)), "Align left");
         toolbar->AddToggleTool(wxID_JUSTIFY_CENTER,
-            MakeSvgBundle(align_center_svg, wxSize(16, 16)));
+            MakeSvgBundle(align_center_svg, wxSize(16, 16)), "Center");
         toolbar->AddToggleTool(wxID_JUSTIFY_RIGHT,
-            MakeSvgBundle(align_right_svg, wxSize(16, 16)));
+            MakeSvgBundle(align_right_svg, wxSize(16, 16)), "Align right");
         toolbar->AddSeparator();
-        toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)), "New");
         toolbar->AddTool(wxID_OPEN, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)), "Open something");
         toolbar->AddTool(wxID_SAVE, wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, wxSize(16, 15)), "Save something");
         toolbar->AddTool(wxID_SAVEAS, wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, wxSize(16, 15)), "Save something as ...");
@@ -512,11 +512,11 @@ MyFrame::MyFrame()
         toolbar->EnableTool(wxID_SAVE, false);
         toolbar->EnableTool(wxID_SAVEAS, false);
         toolbar->AddSeparator();
-        toolbar->AddDropdownTool(wxID_UNDO, wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddDropdownTool(wxID_REDO, wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddDropdownTool(wxID_UNDO, wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16, 15)), "Undo");
+        toolbar->AddDropdownTool(wxID_REDO, wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16, 15)), "Redo");
         toolbar->AddSeparator();
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
-        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)), "Report view");
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)), "List view");
         toolbar->AddSeparator();
         toolbar->AddHybridTool(ID_POSITION_LEFT,
                                 MakeSvgBundle(position_left_svg, wxSize(16, 16)),
