@@ -538,6 +538,38 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
     }
 }
 
+// Fill a rectangle with the given colour while forcing the alpha channel to
+// opaque (0xFF).
+//
+// uxtheme draws the ExplorerStatusBar borders / field backgrounds with BGRA
+// pixels that have A = 0 (fully transparent).  A normal FillRect (or solid
+// brush) therefore has no visible effect.  We must explicitly set the alpha
+// channel; the StretchDIBits + SRCPAINT trick below is a lightweight
+// equivalent of BufferedPaintMakeOpaque().
+static void FillAlphaAndClip(HDC hdc,  COLORREF clr, wxRect rect)
+{
+    BITMAPINFO bi = {};
+    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bi.bmiHeader.biWidth = 1;
+    bi.bmiHeader.biHeight = 1;
+    bi.bmiHeader.biPlanes = 1;
+    bi.bmiHeader.biBitCount = 32;
+    bi.bmiHeader.biCompression = BI_RGB;
+    RGBQUAD bitmapBits = { GetBValue(clr), GetGValue(clr), GetRValue(clr), 0xFF};
+
+    ::StretchDIBits(hdc,
+                    rect.GetLeft(), rect.GetTop(),
+                    rect.GetWidth(), rect.GetHeight(),
+                    0, 0, 1, 1,
+                    &bitmapBits, &bi,
+                    DIB_RGB_COLORS,
+                    SRCPAINT);
+
+    ::ExcludeClipRect(hdc,
+                      rect.GetLeft(), rect.GetTop(),
+                      rect.GetRight(), rect.GetBottom());
+}
+
 WXLRESULT
 wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
@@ -623,12 +655,48 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
                 // Draw the grip in the lower right corner of the window.
                 //
-                // TODO-RTL: Is this correct for RTL layout?
+                // TODO-RTL: This is incorrect for RTL layout.
                 wxRect rect(sizeGrip);
                 rect.x = rectTotal.width - sizeGrip.x;
                 rect.y = rectTotal.height - sizeGrip.y;
 
                 theme.DrawBackground(dc.GetHDC(), rect, SP_GRIPPER);
+
+                wxColour col = GetDefaultAttributes().colBg;
+                if ( col.IsOk() )
+                {
+                    HDC hdc = GetHdcOf(dc);
+
+                    // We intentionally don't pass "this" to GetMetric() to
+                    // avoid scaling the edge by DPI as Windows doesn't do it
+                    // for small gaps like this.
+                    const int edge = wxSystemSettings::GetMetric(wxSYS_EDGE_X);
+
+                    wxRect rectField;
+                    const int count = GetFieldsCount();
+                    for ( int i = 0; i < count; i++ )
+                    {
+                        GetFieldRect(i, rectField);
+
+                        rectField.Inflate(0, edge);
+                        rectField.width += edge;
+
+                        // Draw field background without affecting the text.
+                        FillAlphaAndClip(hdc, col.GetPixel(), rectField);
+                    }
+
+                    // Draw grip background without affecting the glyphs.
+                    rect.x = rectField.GetRight();
+                    rect.width = rectTotal.width - rect.x + 1;
+                    rect.y = rectField.y;
+                    rect.height = rectTotal.height - rect.y + 1;
+                    FillAlphaAndClip(hdc, col.GetPixel(), rect);
+
+                    // Fill status bar borders and field separators with fixed
+                    // border color.
+                    COLORREF backColor = col.ChangeLightness(109).GetPixel();
+                    FillAlphaAndClip(hdc, backColor, rectTotal);
+                }
 
                 return bmp;
             }
