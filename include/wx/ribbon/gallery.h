@@ -46,11 +46,15 @@ public:
     unsigned int GetCount() const;
     wxRibbonGalleryItem* GetItem(unsigned int n);
     wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, const wxString& label);
     wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, void* clientData);
     wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, wxClientData* clientData);
 
     void SetItemClientObject(wxRibbonGalleryItem* item, wxClientData* data);
     wxClientData* GetItemClientObject(const wxRibbonGalleryItem* item) const;
+    void SetItemLabel(wxRibbonGalleryItem* item, const wxString& label);
+    wxString GetItemLabel(const wxRibbonGalleryItem* item) const;
+
     void SetItemClientData(wxRibbonGalleryItem* item, void* data);
     void* GetItemClientData(const wxRibbonGalleryItem* item) const;
 
