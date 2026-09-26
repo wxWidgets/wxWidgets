@@ -596,7 +596,7 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // is simply invisible.
     if ( nMsg == WM_PAINT &&
             (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
-                wxMSWDarkMode::IsActive() )
+                wxMSWDarkMode::IsActive() && !wxMSWDarkMode::HasDarkTheme() )
     {
         wxMSWImpl::CustomPaint
         (
@@ -671,7 +671,7 @@ void wxStatusBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     //
     // Note that we should _not_ set the theme name to "Explorer", this ID only
     // works if we do _not_ do it.
-    support.themeId = L"ExplorerStatusBar";
+    support.themeId = wxMSWDarkMode::HasDarkTheme() ? L"DarkMode_DarkTheme::Status" : L"ExplorerStatusBar";
 }
 
 wxVisualAttributes wxStatusBar::GetDefaultAttributes() const
