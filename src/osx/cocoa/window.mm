@@ -1706,11 +1706,31 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     {
         // there are key equivalents that are not command-combos and therefore not handled by cocoa automatically,
         // therefore we call the menubar directly here, exit if the menu is handling the shortcut
-        if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+#if wxUSE_ACCEL
+        // The focused window may want to handle this key itself instead of
+        // letting the menu use it as an accelerator, so ask it first.
+        bool useMenuAccel = true;
+
+        if ( wxWindowMac* const peer = GetWXPeer() )
         {
-            wxLogTrace(TRACE_KEYS, "%s processed as key equivalent by the menu",
-                       wxDumpSelector((SEL)_cmd));
-            return;
+            wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+            SetupKeyEvent(wxevent, event);
+
+            // SetupKeyEvent() may change the event type, so check that this
+            // is really a key press.
+            if ( wxevent.GetEventType() == wxEVT_KEY_DOWN )
+                useMenuAccel = peer->OSXShouldUseMenuAcceleratorForKey(wxevent);
+        }
+
+        if ( useMenuAccel )
+#endif // wxUSE_ACCEL
+        {
+            if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+            {
+                wxLogTrace(TRACE_KEYS, "%s processed as key equivalent by the menu",
+                           wxDumpSelector((SEL)_cmd));
+                return;
+            }
         }
 
         BeginNativeKeyDownEvent(event);

@@ -1780,6 +1780,14 @@ public:
     the parents of this window, up to the top level one, which allows to handle
     it in the frame containing the control having the focus.
 
+    @note Under macOS this event is sent before `wxEVT_CHAR_HOOK` and not after
+        it. It is also not generated at all for the key combinations
+        involving the Command key used by the menu items because such keys are
+        handled by the system before the application has any chance to
+        intercept them. This is not usually a problem because the standard
+        macOS shortcuts such as `Cmd-C` are implemented by the menu items
+        acting on the currently focused control anyhow.
+
     @beginEventTable{wxAcceleratorKeyEvent}
     @event{EVT_ACCELERATOR_KEY(func)}
         Process a `wxEVT_ACCELERATOR_KEY` event.

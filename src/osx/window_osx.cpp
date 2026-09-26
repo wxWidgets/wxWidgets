@@ -2616,11 +2616,16 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 #if wxUSE_ACCEL
     if (event.GetEventType() == wxEVT_CHAR_HOOK)
     {
-        wxWindow *ancestor = this;
-        while (ancestor)
+        // Check if this key is used by one of the accelerators defined by
+        // wxAcceleratorTable: note that the accelerators of the menu items
+        // are not handled here, they are used by the menu bar itself, see
+        // OSXShouldUseMenuAcceleratorForKey().
+        wxAcceleratorEntry entry;
+        wxWindow* ancestor = nullptr;
+        if ( FindAcceleratorForKey(event, entry, &ancestor) && !entry.GetMenuItem() )
         {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
+            const int command = entry.GetCommand();
+            if ( ShouldUseAcceleratorForKey(event, command, nullptr) )
             {
                 wxEvtHandler * const handler = ancestor->GetEventHandler();
 
@@ -2636,17 +2641,38 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
                 // accelerator.
                 return true;
             }
-
-            if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
-                break;
-
-            ancestor = ancestor->GetParent();
         }
     }
 #endif // wxUSE_ACCEL
 
     return false;
 }
+
+#if wxUSE_ACCEL
+
+bool wxWindowMac::OSXShouldUseMenuAcceleratorForKey( const wxKeyEvent& event )
+{
+    wxAcceleratorEntry entry;
+    if ( !FindAcceleratorForKey(event, entry, nullptr /* don't need owner */) )
+    {
+        // This key is not used by any accelerator at all.
+        return true;
+    }
+
+    wxMenuItem* const item = entry.GetMenuItem();
+    if ( !item )
+    {
+        // This one comes from wxAcceleratorTable and will be dealt with in
+        // OSXHandleKeyEvent() when we get wxEVT_CHAR_HOOK for this key, don't
+        // do anything here (and, in particular, don't send the accelerator
+        // event twice for the same key).
+        return true;
+    }
+
+    return ShouldUseAcceleratorForKey(event, entry.GetCommand(), item);
+}
+
+#endif // wxUSE_ACCEL
 
 wxSize wxWindowMac::GetDPI() const
 {

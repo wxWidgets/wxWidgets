@@ -319,6 +319,18 @@ public:
 
     virtual bool        OSXHandleClicked( double timestampsec );
     virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
+
+#if wxUSE_ACCEL
+    // Return false if the menu accelerator using the key corresponding to the
+    // given event shouldn't be used because this window needs this key for
+    // its own purposes.
+    //
+    // Note that this function only deals with the accelerators of the menu
+    // items, the ones defined by wxAcceleratorTable are checked later, from
+    // OSXHandleKeyEvent() itself.
+    bool                OSXShouldUseMenuAcceleratorForKey( const wxKeyEvent& event );
+#endif // wxUSE_ACCEL
+
     virtual void        OSXSimulateFocusEvents();
 
     bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }
