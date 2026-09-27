@@ -79,6 +79,12 @@ if(WXGTK)
         set(gtk_lib GTK2)
     endif()
 
+    # Unset variables from FindGTK3
+    if(NOT WXGTK3)
+       set(wxHAVE_GDK_WAYLAND OFF)
+       set(wxHAVE_GDK_X11 OFF)
+    endif()
+
     find_package(${gtk_lib} REQUIRED)
     list(APPEND wxTOOLKIT_INCLUDE_DIRS ${${gtk_lib}_INCLUDE_DIRS})
     list(APPEND wxTOOLKIT_LIBRARIES ${${gtk_lib}_LIBRARIES})
