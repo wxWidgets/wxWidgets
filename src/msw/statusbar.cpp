@@ -538,6 +538,22 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
     }
 }
 
+void FillAlpha(HDC hdc,  COLORREF clr, wxRect rc)
+{
+    BITMAPINFO bi = {};
+    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bi.bmiHeader.biWidth = 1;
+    bi.bmiHeader.biHeight = 1;
+    bi.bmiHeader.biPlanes = 1;
+    bi.bmiHeader.biBitCount = 32;
+    bi.bmiHeader.biCompression = BI_RGB;
+    RGBQUAD bitmapBits = { GetBValue(clr), GetGValue(clr), GetRValue(clr), 0xFF};
+
+    StretchDIBits(hdc, rc.GetLeft(), rc.GetTop(), rc.GetWidth(), rc.GetHeight(),
+        0, 0, 1, 1, &bitmapBits, &bi,
+        DIB_RGB_COLORS, SRCPAINT);
+}
+
 WXLRESULT
 wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
@@ -595,46 +611,56 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // We need to paint the size grip ourselves in dark mode as the default one
     // is simply invisible.
     if ( nMsg == WM_PAINT &&
-            (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
-                wxMSWDarkMode::IsActive() && !wxMSWDarkMode::HasDarkTheme() )
-    {
-        wxMSWImpl::CustomPaint
-        (
-            GetHwnd(),
-            [this](HWND hwnd, WPARAM wParam)
-            {
-                m_oldWndProc(hwnd, WM_PAINT, wParam, 0);
-            },
-            [this](const wxBitmap& bmpOrig)
-            {
-                wxBitmap bmp(bmpOrig);
-                wxMemoryDC dc(bmp);
+    (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
+    wxMSWDarkMode::IsActive() )
+{
+    wxMSWImpl::CustomPaint
+    (
+        GetHwnd(),
+        [this](HWND hwnd, WPARAM wParam)
+        {
+            m_oldWndProc(hwnd, WM_PAINT, wParam, 0);
+        },
+        [this](const wxBitmap& bmpOrig)
+        {
+            wxBitmap bmp(bmpOrig);
+            wxMemoryDC dc(bmp);
 
-                // Note that we must _not_ open theme data for this window: it
-                // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
-                // correctly (which is why we have to draw it ourselves).
-                auto theme = wxUxThemeHandle::NewAtDPI(0, L"Status", GetDPI().y);
-                if ( !theme )
-                    return bmp;
-
-                const wxRect rectTotal(bmp.GetSize());
-
-                const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
-
-                // Draw the grip in the lower right corner of the window.
-                //
-                // TODO-RTL: Is this correct for RTL layout?
-                wxRect rect(sizeGrip);
-                rect.x = rectTotal.width - sizeGrip.x;
-                rect.y = rectTotal.height - sizeGrip.y;
-
-                theme.DrawBackground(dc.GetHDC(), rect, SP_GRIPPER);
-
+            // Note that we must _not_ open theme data for this window: it
+            // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
+            // correctly (which is why we have to draw it ourselves).
+            auto theme = wxUxThemeHandle::NewAtDPI(0, L"Status", GetDPI().y);
+            if ( !theme )
                 return bmp;
-            }
-        );
-    }
 
+            const wxRect rectTotal(bmp.GetSize());
+
+            const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
+
+            // Draw the grip in the lower right corner of the window.
+            //
+            // TODO-RTL: Is this correct for RTL layout?
+            wxRect rect(sizeGrip);
+            rect.x = rectTotal.width - sizeGrip.x;
+            rect.y = rectTotal.height - sizeGrip.y;
+            COLORREF backColor = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel();
+
+            // Fill alpha channel with Fixed BackColor;
+            FillAlpha(dc.GetHDC(), backColor , rectTotal);
+            theme.DrawBackground(dc.GetHDC(), rect, SP_GRIPPER);
+            wxColour col = GetDefaultAttributes().colBg;
+            if (col.IsOk())
+            {
+                wxRect sbRect ;
+                GetFieldRect(0, sbRect);
+                rect.SetTop(sbRect.GetTop());
+                // Fill alpha channel in Grip with Default BackColor;
+                FillAlpha(dc.GetHDC(), col.GetPixel(), rect);
+            }
+            return bmp;
+        }
+    );
+}
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
@@ -671,7 +697,7 @@ void wxStatusBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     //
     // Note that we should _not_ set the theme name to "Explorer", this ID only
     // works if we do _not_ do it.
-    support.themeId = wxMSWDarkMode::HasDarkTheme() ? L"DarkMode_DarkTheme::Status" : L"ExplorerStatusBar";
+   support.themeId = L"ExplorerStatusBar";
 }
 
 wxVisualAttributes wxStatusBar::GetDefaultAttributes() const
