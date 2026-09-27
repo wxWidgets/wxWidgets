@@ -191,9 +191,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(nullptr, wxID_ANY, "TabOrder wxWidgets Sample",
-                 wxDefaultPosition, wxSize(700, 450))
+       : wxFrame(nullptr, wxID_ANY, "TabOrder wxWidgets Sample")
 {
+    SetClientSize(FromDIP(wxSize(700, 700)));
+
     SetIcon(wxICON(sample));
 
     wxMenu *menuFile = new wxMenu;
