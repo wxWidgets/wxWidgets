@@ -303,22 +303,19 @@ wxWindow *MyPanel::CreateButtonPage(wxWindow *parent)
 
 wxWindow *MyPanel::CreateTextPage(wxWindow *parent)
 {
-    wxSizerFlags flagsBorder = wxSizerFlags().Border();
-
-    wxSizer *sizerPage = new wxBoxSizer(wxVERTICAL);
+    auto* const sizerPage = new wxFlexGridSizer(2, FromDIP(wxSize(5, 5)));
+    sizerPage->AddGrowableCol(1);
     wxPanel *page = new wxPanel(parent);
 
-    wxSizer *sizerH = new wxBoxSizer(wxHORIZONTAL);
-    sizerH->Add(new wxStaticText(page, wxID_ANY, "&Label:"), flagsBorder);
-    sizerH->Add(new MyTabTextCtrl(page, "TAB ignored here"), flagsBorder);
-    sizerPage->Add(sizerH, wxSizerFlags(1).Expand());
+    sizerPage->Add(new wxStaticText(page, wxID_ANY, "&Label:"),
+                   wxSizerFlags().Right().CentreVertical());
+    sizerPage->Add(new MyTabTextCtrl(page, "TAB ignored here"),
+                   wxSizerFlags(1).Expand());
 
-    sizerH = new wxBoxSizer(wxHORIZONTAL);
-    sizerH->Add(new wxStaticText(page, wxID_ANY, "&Another one:"),
-                flagsBorder);
-    sizerH->Add(new MyTabTextCtrl(page, "press Tab here", wxTE_PROCESS_TAB),
-                flagsBorder);
-    sizerPage->Add(sizerH, wxSizerFlags(1).Expand());
+    sizerPage->Add(new wxStaticText(page, wxID_ANY, "&Another one:"),
+                   wxSizerFlags().Right().CentreVertical());
+    sizerPage->Add(new MyTabTextCtrl(page, "press Tab here", wxTE_PROCESS_TAB),
+                    wxSizerFlags(1).Expand());
 
     page->SetSizer(sizerPage);
 
