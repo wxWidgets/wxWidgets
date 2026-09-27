@@ -72,7 +72,7 @@ wxUSE_GUI                 | BOOL   | ON      | Build the UI libraries
 wxBUILD_COMPATIBILITY     | STRING | 3.2     | Enable API compatibility with 3.0, 3.2 or neither ("NONE")
 wxBUILD_PRECOMP           | BOOL   | ON      | Use precompiled headers
 wxBUILD_MONOLITHIC        | BOOL   | OFF     | Build a single library
-wxBUILD_DEBUG_LEVEL       | STRING | 1       | 0, 1, or 2 (corresponds to wxDEBUG_LEVEL)
+wxBUILD_DEBUG_LEVEL       | STRING | Default | Default, 0, 1, or 2 (corresponds to wxDEBUG_LEVEL)
 wxUSE_LUNASVG             | STRING | OFF     | builtin or OFF (requires C++17. Also, set `wxUSE_NANOSVG` to OFF, as it takes precedence)
 
 Note that on macOS, the option `CMAKE_OSX_ARCHITECTURES` is used to specify which architecture(s) to build.
@@ -96,7 +96,7 @@ in CMake, the following generators are recommended:
 * macOS: Xcode
 * Linux: Ninja or Makefiles
 
-CMake 3.10 or newer is recommended. The minimum tested version is 3.5.
+CMake 3.10 or newer is required.
 
 Using CMake with your applications     {#cmake_apps}
 ==================================
