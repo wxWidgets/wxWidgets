@@ -460,6 +460,9 @@ protected:
     // needing to be updated.
     void GTKInvalidateParentsTabOrder();
 
+    // Called when a child is added or removed to update the TAB order.
+    void GTKOnChildrenChanged();
+
 #ifdef __WXGTK3__
     // Use the given CSS string for styling the widget. The provider must be
     // allocated, and remains owned, by the caller.

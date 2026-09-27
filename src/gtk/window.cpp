@@ -2806,6 +2806,11 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
+    // Update the TAB order of our parents if it wasn't done when our children
+    // were added, see GTKOnChildrenChanged().
+    if ( !m_children.empty() )
+        GTKInvalidateParentsTabOrder();
+
     wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
     GTKProcessEvent( event );
@@ -5354,15 +5359,37 @@ void wxWindowGTK::DoAddChild(wxWindowGTK *child)
 void wxWindowGTK::AddChild(wxWindowBase *child)
 {
     wxWindowBase::AddChild(child);
-    m_dirtyTabOrder = true;
-    wxTheApp->WakeUpIdle();
+
+    GTKOnChildrenChanged();
 }
 
 void wxWindowGTK::RemoveChild(wxWindowBase *child)
 {
     wxWindowBase::RemoveChild(child);
+
+    // Don't bother updating the TAB order if we're being destroyed, which is
+    // when most of the children are removed.
+    if ( IsBeingDeleted() )
+        return;
+
+    GTKOnChildrenChanged();
+}
+
+void wxWindowGTK::GTKOnChildrenChanged()
+{
     m_dirtyTabOrder = true;
-    wxTheApp->WakeUpIdle();
+
+    // Whether this window accepts focus from keyboard may depend on its
+    // children, see wxControlContainerBase::AcceptsFocusFromKeyboard(), so
+    // the focus chains of our parents may need to be updated too. But avoid
+    // doing it for every child added when the windows are initially created
+    // and do it only once, from GTKHandleRealized(), if we're not realized
+    // yet: this is fine because we can't have focus before being realized.
+    GtkWidget* const connectWidget = GetConnectWidget();
+    if ( connectWidget && gtk_widget_get_realized(connectWidget) )
+        GTKInvalidateParentsTabOrder();
+    else
+        wxTheApp->WakeUpIdle();
 }
 
 void wxWindowGTK::GTKInvalidateParentsTabOrder()
