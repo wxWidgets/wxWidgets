@@ -611,56 +611,81 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // We need to paint the size grip ourselves in dark mode as the default one
     // is simply invisible.
     if ( nMsg == WM_PAINT &&
-    (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
-    wxMSWDarkMode::IsActive() )
-{
-    wxMSWImpl::CustomPaint
-    (
-        GetHwnd(),
-        [this](HWND hwnd, WPARAM wParam)
-        {
-            m_oldWndProc(hwnd, WM_PAINT, wParam, 0);
-        },
-        [this](const wxBitmap& bmpOrig)
-        {
-            wxBitmap bmp(bmpOrig);
-            wxMemoryDC dc(bmp);
-
-            // Note that we must _not_ open theme data for this window: it
-            // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
-            // correctly (which is why we have to draw it ourselves).
-            auto theme = wxUxThemeHandle::NewAtDPI(0, L"Status", GetDPI().y);
-            if ( !theme )
-                return bmp;
-
-            const wxRect rectTotal(bmp.GetSize());
-
-            const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
-
-            // Draw the grip in the lower right corner of the window.
-            //
-            // TODO-RTL: Is this correct for RTL layout?
-            wxRect rect(sizeGrip);
-            rect.x = rectTotal.width - sizeGrip.x;
-            rect.y = rectTotal.height - sizeGrip.y;
-            COLORREF backColor = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel();
-
-            // Fill alpha channel with Fixed BackColor;
-            FillAlpha(dc.GetHDC(), backColor , rectTotal);
-            theme.DrawBackground(dc.GetHDC(), rect, SP_GRIPPER);
-            wxColour col = GetDefaultAttributes().colBg;
-            if (col.IsOk())
+        (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
+        wxMSWDarkMode::IsActive() )
+    {
+        wxMSWImpl::CustomPaint
+        (
+            GetHwnd(),
+            [this](HWND hwnd, WPARAM wParam)
             {
-                wxRect sbRect ;
-                GetFieldRect(0, sbRect);
-                rect.SetTop(sbRect.GetTop());
-                // Fill alpha channel in Grip with Default BackColor;
-                FillAlpha(dc.GetHDC(), col.GetPixel(), rect);
+                m_oldWndProc(hwnd, WM_PAINT, wParam, 0);
+            },
+            [this](const wxBitmap& bmpOrig)
+            {
+                wxBitmap bmp(bmpOrig);
+                wxMemoryDC dc(bmp);
+
+                // Note that we must _not_ open theme data for this window: it
+                // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
+                // correctly (which is why we have to draw it ourselves).
+                auto theme = wxUxThemeHandle::NewAtDPI(0, L"Status", GetDPI().y);
+                if ( !theme )
+                    return bmp;
+
+                const wxRect rectTotal(bmp.GetSize());
+
+                const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
+
+                // Draw the grip in the lower right corner of the window.
+                //
+                // TODO-RTL: Is this correct for RTL layout?
+                wxRect rect(sizeGrip);
+                rect.x = rectTotal.width - sizeGrip.x;
+                rect.y = rectTotal.height - sizeGrip.y;
+                theme.DrawBackground(dc.GetHDC(), rect, SP_GRIPPER);
+
+                wxColour col = GetDefaultAttributes().colBg;
+                int top = -1;
+                int bottom = -1;
+                if (col.IsOk())
+                {
+                    int count =  GetFieldsCount();
+                   for (int i = 0; i < count; i++)
+                   {
+                       wxRect sbRect;
+                       GetFieldRect(i, sbRect);
+                       top = sbRect.GetTop();
+                       bottom = sbRect.GetBottom();
+                       sbRect.SetTop(top - GetSystemMetrics(SM_CXEDGE));
+                       sbRect.SetBottom(sbRect.GetBottom() + GetSystemMetrics(SM_CXEDGE)* 2);
+                       sbRect.SetRight(sbRect.GetRight() + GetSystemMetrics(SM_CXEDGE));
+                       // Fill Field Background with Theme Color Without affect the Text.
+                       FillAlpha(dc.GetHDC(), col.GetPixel(), sbRect);
+                       ::ExcludeClipRect(dc.GetHDC(), sbRect.GetLeft(), sbRect.GetTop(), sbRect.GetRight(), sbRect.GetBottom());
+                   }
+
+                   if (top != -1)
+                   {
+                       rect.SetTop(top - GetSystemMetrics(SM_CXEDGE));
+                   }
+
+                   if (bottom != -1)
+                   {
+                       rect.SetBottom(bottom + GetSystemMetrics(SM_CXEDGE) * 2);
+                   }
+                   // Fill Grip Background with Theme Color Without affect the glyphs.
+                   FillAlpha(dc.GetHDC(), col.GetPixel(), rect);
+                   ::ExcludeClipRect(dc.GetHDC(), rect.GetLeft(), rect.GetTop(), rect.GetRight(), rect.GetBottom());
+                   COLORREF backColor = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel();
+                   // Fill Status Bar Borders and Field separators with Fixed Border Color.
+                   FillAlpha(dc.GetHDC(), backColor , rectTotal);
+                }
+                return bmp;
             }
-            return bmp;
-        }
-    );
-}
+        );
+    }
+
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
