@@ -165,6 +165,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_comboboxtest.o \
 	$(OBJS)\test_gui_dataviewctrltest.o \
 	$(OBJS)\test_gui_datepickerctrltest.o \
+	$(OBJS)\test_gui_dirctrltest.o \
 	$(OBJS)\test_gui_frametest.o \
 	$(OBJS)\test_gui_gaugetest.o \
 	$(OBJS)\test_gui_gridtest.o \
@@ -939,6 +940,9 @@ $(OBJS)\test_gui_dataviewctrltest.o: ./controls/dataviewctrltest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_datepickerctrltest.o: ./controls/datepickerctrltest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_dirctrltest.o: ./controls/dirctrltest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_frametest.o: ./controls/frametest.cpp
