@@ -456,6 +456,10 @@ protected:
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();
 
+    // Mark the TAB order of all our parents, up to the top level one, as
+    // needing to be updated.
+    void GTKInvalidateParentsTabOrder();
+
 #ifdef __WXGTK3__
     // Use the given CSS string for styling the widget. The provider must be
     // allocated, and remains owned, by the caller.

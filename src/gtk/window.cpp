@@ -4931,16 +4931,7 @@ void wxWindowGTK::DoEnable( bool enable )
         gtk_widget_set_sensitive( m_wxwindow, enable );
 
     if (enable && AcceptsFocusFromKeyboard())
-    {
-        wxWindowGTK* parent = this;
-        while ((parent = parent->GetParent()))
-        {
-            parent->m_dirtyTabOrder = true;
-            if (parent->IsTopLevel())
-                break;
-        }
-        wxTheApp->WakeUpIdle();
-    }
+        GTKInvalidateParentsTabOrder();
 }
 
 int wxWindowGTK::GetCharHeight() const
@@ -5371,6 +5362,20 @@ void wxWindowGTK::RemoveChild(wxWindowBase *child)
 {
     wxWindowBase::RemoveChild(child);
     m_dirtyTabOrder = true;
+    wxTheApp->WakeUpIdle();
+}
+
+void wxWindowGTK::GTKInvalidateParentsTabOrder()
+{
+    for ( wxWindowGTK* win = this; !win->IsTopLevel(); )
+    {
+        win = win->GetParent();
+        if ( !win )
+            break;
+
+        win->m_dirtyTabOrder = true;
+    }
+
     wxTheApp->WakeUpIdle();
 }
 
