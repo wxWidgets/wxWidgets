@@ -624,14 +624,14 @@ int wxStyledTextCtrl::GetIMEInteraction() const
 
 // Choose to display the IME in a window or inline.
 void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction) {
-    SendMsg(SCI_SETIMEINTERACTION, imeInteraction);
-#ifdef __WXGTK__
-    wxUpdateTextInputClient(this);
-#endif
 #ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Roll the composition back first, while the pre-edit state is still
+    // fully consistent with the current mode.
     if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
         m_swx->CancelComposition();
 #endif
+    SendMsg(SCI_SETIMEINTERACTION, imeInteraction);
+    wxUpdateTextInputClient(this);
 }
 
 // Set the symbol used for a particular marker number,

@@ -298,6 +298,38 @@ TEST_CASE_METHOD(StcTextInputTestCase,
     m_stc->ClearAll();
     CHECK( m_stc->GetText().empty() );
     CHECK_FALSE( client->HasActiveComposition() );
+
+    m_stc->SetText("AB");
+    m_stc->SetEmptySelection(1);
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    m_stc->AppendText("C");
+    CHECK( m_stc->GetText() == "ABC" );
+    CHECK_FALSE( client->HasActiveComposition() );
+
+    // The whole composition is reported as a single action, even though
+    // each update replaces the previous pre-edit text.
+    m_stc->SetText("AB");
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetEmptySelection(2);
+    auto actionsStarted = std::make_shared<int>(0);
+    m_stc->Bind(wxEVT_STC_MODIFIED,
+                [actionsStarted](wxStyledTextEvent& event)
+                {
+                    if ( event.GetModificationType() & wxSTC_STARTACTION )
+                        ++*actionsStarted;
+                    event.Skip();
+                });
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    REQUIRE( client->UpdateComposition(hiragana + hiragana, 2) );
+    REQUIRE( client->UpdateComposition(hiragana + hiragana + hiragana, 3) );
+    REQUIRE( client->CommitComposition(kanji) );
+    CHECK( m_stc->GetText() == "AB" + kanji );
+    CHECK( *actionsStarted == 1 );
+
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    CHECK( *actionsStarted == 2 );
+    client->CancelComposition();
+    CHECK( m_stc->GetText() == "AB" + kanji );
 }
 
 #endif // __WXGTK__
@@ -475,6 +507,45 @@ TEST_CASE_METHOD(StcTextInputTestCase,
     m_stc->ClearAll();
     CHECK( m_stc->GetText().empty() );
     CHECK_FALSE( client->HasMarkedText() );
+
+    m_stc->SetText("AB");
+    m_stc->SetEmptySelection(1);
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    m_stc->AppendText("C");
+    CHECK( m_stc->GetText() == "ABC" );
+    CHECK_FALSE( client->HasMarkedText() );
+
+    // The whole composition is reported as a single action, even though
+    // each update replaces the previous marked text.
+    m_stc->SetText("AB");
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetEmptySelection(2);
+    auto actionsStarted = std::make_shared<int>(0);
+    m_stc->Bind(wxEVT_STC_MODIFIED,
+                [actionsStarted](wxStyledTextEvent& event)
+                {
+                    if ( event.GetModificationType() & wxSTC_STARTACTION )
+                        ++*actionsStarted;
+                    event.Skip();
+                });
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    REQUIRE( client->SetMarkedText(
+        hiragana + hiragana, 2, 0, wxTextInputClient::NoPosition, 0) );
+    REQUIRE( client->SetMarkedText(
+        hiragana + hiragana + hiragana, 3, 0,
+        wxTextInputClient::NoPosition, 0) );
+    REQUIRE( client->InsertText(
+        kanji, wxTextInputClient::NoPosition, 0) );
+    CHECK( m_stc->GetText() == "AB" + kanji );
+    CHECK( *actionsStarted == 1 );
+
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( *actionsStarted == 2 );
+    client->CancelComposition();
+    CHECK( m_stc->GetText() == "AB" + kanji );
 }
 
 #endif // __WXOSX_COCOA__

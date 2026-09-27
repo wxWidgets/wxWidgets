@@ -5526,6 +5526,10 @@ public:
         The other ports use windowed IME interaction by default.
         Inline interaction also requires undo collection to be enabled,
         windowed interaction is used while it is disabled.
+        With inline interaction, IME input doesn't generate wxEVT_CHAR
+        events, use wxEVT_STC_CHARADDED to be notified about the added
+        text instead. Programmatically modifying the control contents
+        ends the composition in progress, if any.
         @since 3.1.0
     */
     void SetIMEInteraction(int imeInteraction);

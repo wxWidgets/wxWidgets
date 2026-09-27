@@ -154,6 +154,14 @@ Changes in behaviour not resulting in compilation errors
   button that was pressed. Check the button ID and call Skip() if you want the
   the default handling to take place.
 
+- wxStyledTextCtrl now composes IME input inline by default under wxGTK and
+  wxOSX. Text entered using an IME doesn't generate wxEVT_CHAR events in this
+  mode, use wxEVT_STC_CHARADDED to be notified about it instead. Additionally,
+  programmatically modifying the control contents (e.g. with AppendText())
+  ends the composition in progress, if any. Call
+  SetIMEInteraction(wxSTC_IME_WINDOWED) to restore the previous behaviour if
+  necessary.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

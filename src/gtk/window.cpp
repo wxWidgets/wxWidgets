@@ -1560,12 +1560,30 @@ void wxUpdateTextInputClient(wxWindow* window)
     gtk_im_context_set_use_preedit(window->m_imContext, usePreedit);
 }
 
+// Non-null while wxResetTextInput() resets the context of this window.
+static const wxWindowGTK* gs_imResetWindow = nullptr;
+
+void wxResetTextInput(wxWindow* window)
+{
+    if ( !window->m_imContext )
+        return;
+
+    // Some input methods commit the pending text instead of discarding it
+    // when the context is reset, so ignore everything it sends in response.
+    gs_imResetWindow = window;
+    gtk_im_context_reset(window->m_imContext);
+    gs_imResetWindow = nullptr;
+}
+
 extern "C" {
 static void
 gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
                         const gchar  *str,
                         wxWindowGTK  *window)
 {
+    if ( window == gs_imResetWindow )
+        return;
+
     wxTextInputClient* const client = wxFindTextInputClient(window);
     if ( client && client->IsTextInputEnabled() &&
          client->CommitComposition(wxString::FromUTF8Unchecked(str)) )
@@ -1581,48 +1599,42 @@ static void
 gtk_wxwindow_preedit_changed_cb(GtkIMContext *context,
                                 wxWindowGTK  *window)
 {
-    gchar* text = nullptr;
+    if ( window == gs_imResetWindow )
+        return;
+
+    wxTextInputClient* const client = wxFindTextInputClient(window);
+    if ( !client )
+        return;
+
+    wxGtkString text(nullptr);
     PangoAttrList* attrs = nullptr;
     gint cursor = 0;
-    gtk_im_context_get_preedit_string(context, &text, &attrs, &cursor);
-
-    wxTextInputClient* const clientFound = wxFindTextInputClient(window);
-    wxTextInputClient* const client =
-        clientFound && clientFound->IsTextInputEnabled()
-            ? clientFound
-            : nullptr;
-    const bool handled =
-        client && client->UpdateComposition(
-                      wxString::FromUTF8Unchecked(text ? text : ""), cursor);
-
+    gtk_im_context_get_preedit_string(context, text.Out(), &attrs, &cursor);
     if ( attrs )
         pango_attr_list_unref(attrs);
-    g_free(text);
+
+    // UpdateComposition() modifies the document, which can run application
+    // event handlers changing the text input state, so it must be checked
+    // again below. The client itself can't disappear here: destroying its
+    // window from an event handler is only allowed via a delayed Destroy().
+    const bool handled =
+        client->IsTextInputEnabled() &&
+        client->UpdateComposition(
+            wxString::FromUTF8Unchecked(text ? text.c_str() : ""), cursor);
 
     if ( !handled )
     {
-        wxTextInputClient* const clientCurrent =
-            wxFindTextInputClient(window);
-        if ( clientCurrent && clientCurrent->IsTextInputEnabled() )
+        if ( client->IsTextInputEnabled() )
             // A synchronous empty preedit notification is handled without
             // trying to reset the context again.
             gtk_im_context_reset(context);
     }
-    else
+    else if ( client->IsTextInputEnabled() && client->HasActiveComposition() )
     {
-        wxTextInputClient* const clientCurrent =
-            wxFindTextInputClient(window);
-        if ( clientCurrent && clientCurrent->IsTextInputEnabled() &&
-             clientCurrent->HasActiveComposition() )
-        {
-            const wxRect rect = clientCurrent->GetIMEContextRect();
-            GdkRectangle cursorRect;
-            cursorRect.x = rect.x;
-            cursorRect.y = rect.y;
-            cursorRect.width = rect.width;
-            cursorRect.height = rect.height;
-            gtk_im_context_set_cursor_location(context, &cursorRect);
-        }
+        // Let the input method place its windows next to the composition.
+        // Outside of one, clients keep the rectangle up to date themselves
+        // whenever their caret moves.
+        window->UpdateInputMethodCursorRect(client->GetIMEContextRect());
     }
 }
 
@@ -1638,7 +1650,7 @@ gtk_wxwindow_preedit_end_cb(GtkIMContext * WXUNUSED(context),
 static void
 gtk_wxwindow_end_preedit(wxWindowGTK* window)
 {
-    wxTextInputClient* client = wxFindTextInputClient(window);
+    wxTextInputClient* const client = wxFindTextInputClient(window);
     if ( !window->m_imContext || !client ||
          !client->IsTextInputEnabled() ||
          !client->HasActiveComposition() )
@@ -1646,24 +1658,24 @@ gtk_wxwindow_end_preedit(wxWindowGTK* window)
         return;
     }
 
-    gchar* text = nullptr;
+    wxGtkString text(nullptr);
     PangoAttrList* attrs = nullptr;
     gint cursor = 0;
     gtk_im_context_get_preedit_string(
-        window->m_imContext, &text, &attrs, &cursor);
+        window->m_imContext, text.Out(), &attrs, &cursor);
     const wxString preedit =
-        wxString::FromUTF8Unchecked(text ? text : "");
+        wxString::FromUTF8Unchecked(text ? text.c_str() : "");
 
     if ( attrs )
         pango_attr_list_unref(attrs);
-    g_free(text);
 
     // Reset the native state first and let any signals it emits decide
-    // whether the composition is committed or cancelled. Some IM modules
-    // don't emit them, so finish the client state explicitly as a fallback.
+    // whether the composition is committed or cancelled. Those signals run
+    // application event handlers which can change the text input state, so
+    // it must be checked again afterwards. Some IM modules don't emit them
+    // at all, so finish the client state explicitly as a fallback.
     gtk_im_context_reset(window->m_imContext);
-    client = wxFindTextInputClient(window);
-    if ( client && client->IsTextInputEnabled() &&
+    if ( client->IsTextInputEnabled() &&
          client->HasActiveComposition() &&
          !client->CommitComposition(preedit) )
     {

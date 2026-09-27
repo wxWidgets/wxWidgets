@@ -249,6 +249,11 @@ public:
 private:
     bool                capturedMouse;
     bool                focusEvent;
+
+    // True while the dtor runs: notifications are suppressed then, as the
+    // control may already be partially destroyed.
+    bool                m_destroying = false;
+
     wxStyledTextCtrl*   stc;
 
     WX_DECLARE_HASH_MAP(TickReason, wxSTCTimer*, wxIntegerHash, wxIntegerEqual, TimersHash);
@@ -264,9 +269,15 @@ private:
     SurfaceData*        m_surfaceData;
 
 #ifdef wxHAS_TEXT_INPUT_CLIENT
-    bool                m_compositionActive;
-    Sci::Position       m_compositionStart;
-    Sci::Position       m_compositionLength;
+    bool                m_compositionActive = false;
+    Sci::Position       m_compositionStart = 0;
+    Sci::Position       m_compositionLength = 0;
+
+    // Whether the first modification of the current composition was already
+    // reported as starting an action, and whether its result is being
+    // inserted: see NotifyParent().
+    bool                m_compositionActionStarted = false;
+    bool                m_committingComposition = false;
 
     bool StartComposition(long replacementStart, long replacementLength);
     void UndoCompositionText();
@@ -276,7 +287,9 @@ private:
     Sci::Position PositionFromUTF16(long position) const;
     long PositionToUTF16(Sci::Position position) const;
     Sci::Position RelativePositionUTF16Clamped(Sci::Position position,
-                                               long lengthUTF16) const;
+                                               long lengthUTF16,
+                                               long* unitsShort = nullptr)
+                                               const;
 #endif
 
     // For use in creating a system caret

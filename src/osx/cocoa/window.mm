@@ -1055,6 +1055,12 @@ static void wxOSXEndTextInput(NSView* view)
     client->UnmarkText();
 }
 
+void wxResetTextInput(wxWindow* window)
+{
+    NSView* const view = window->GetHandle();
+    [[view inputContext] discardMarkedText];
+}
+
 static void wxOSXTextInputEventHandled(NSView* view)
 {
     wxWidgetCocoaImpl* const impl =

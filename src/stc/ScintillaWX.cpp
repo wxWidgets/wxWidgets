@@ -213,11 +213,6 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     stc   = win;
     wheelVRotation = 0;
     wheelHRotation = 0;
-#ifdef wxHAS_TEXT_INPUT_CLIENT
-    m_compositionActive = false;
-    m_compositionStart = 0;
-    m_compositionLength = 0;
-#endif
     Initialise();
 #ifdef wxHAS_TEXT_INPUT_CLIENT
     wxAssociateTextInputClient(stc, this);
@@ -249,8 +244,13 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 
 
 ScintillaWX::~ScintillaWX() {
+    m_destroying = true;
+
 #ifdef wxHAS_TEXT_INPUT_CLIENT
     wxAssociateTextInputClient(stc, nullptr);
+    // Still roll any composition back, as the document may be shared with
+    // another control and outlive this one, but with m_destroying set the
+    // modifications this makes won't be notified to the application.
     CancelComposition();
 #endif
 
@@ -469,11 +469,34 @@ bool ScintillaWX::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
 
 
 void ScintillaWX::NotifyChange() {
+    // Don't send events from a control which is being destroyed.
+    if (m_destroying)
+        return;
+
     stc->NotifyChange();
 }
 
 
 void ScintillaWX::NotifyParent(SCNotification scn) {
+    if (m_destroying)
+        return;
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Each composition update rolls back the previous pre-edit text and
+    // inserts the new one, which Scintilla reports as starting a new action
+    // every time. From the application point of view the whole composition,
+    // including the insertion of its result, is a single user action, so
+    // only report the start of the first one.
+    if ( scn.nmhdr.code == SCN_MODIFIED &&
+         (m_compositionActive || m_committingComposition) )
+    {
+        if ( m_compositionActionStarted )
+            scn.modificationType &= ~SC_STARTACTION;
+        else if ( scn.modificationType & SC_STARTACTION )
+            m_compositionActionStarted = true;
+    }
+#endif // wxHAS_TEXT_INPUT_CLIENT
+
     stc->NotifyParent(&scn);
 }
 
@@ -673,6 +696,14 @@ void ScintillaWX::UpdateSystemCaret() {
         ::SetCaretPos(wxRound(pos.x), wxRound(pos.y));
     }
 #endif
+#ifdef __WXGTK__
+    // Let the input method know where its windows should appear, so that
+    // their position is correct from the very start of a composition.
+    // During one, the pre-edit update callback positions them itself,
+    // using the caret position it computes after applying the update.
+    if ( hasFocus && IsTextInputEnabled() && !HasActiveComposition() )
+        stc->UpdateInputMethodCursorRect(GetIMEContextRect());
+#endif
 }
 
 
@@ -809,11 +840,36 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
 #ifdef wxHAS_TEXT_INPUT_CLIENT
         case SCI_SETTEXT:
         case SCI_CLEARALL:
+            // Unlike after the local modifications below, nothing remains
+            // for the pending composition to apply to after replacing the
+            // entire contents, so also make the input method drop it instead
+            // of letting it reappear in the new contents.
+            CancelComposition();
+            if ( hasFocus )
+                wxResetTextInput(stc);
+            break;
+
+        case SCI_ADDTEXT:
+        case SCI_ADDSTYLEDTEXT:
+        case SCI_INSERTTEXT:
+        case SCI_APPENDTEXT:
+        case SCI_DELETERANGE:
+        case SCI_REPLACESEL:
+        case SCI_REPLACETARGET:
+        case SCI_REPLACETARGETRE:
+        case SCI_UNDO:
+        case SCI_REDO:
+            // Undo history is linear, so rolling the pre-edit text back
+            // after any other modification would undo that modification
+            // together with it. End composition before the modification
+            // instead, while the tentative actions are still the last ones.
+            CancelComposition();
+            break;
+
         case SCI_EMPTYUNDOBUFFER:
-            // Replacing the document contents, or dropping the undo history
-            // needed to roll the pre-edit text back, must end composition
-            // first: a later rollback would otherwise restore the replaced
-            // contents, or keep the pre-edit text with nothing to undo it.
+            // Doesn't modify the contents, but drops the tentative actions
+            // needed to roll the pre-edit text back, so roll back while
+            // they still exist.
             CancelComposition();
             break;
 
@@ -827,14 +883,18 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             if ( iMessage != SCI_SETUNDOCOLLECTION || !wParam )
                 CancelComposition();
 
+            // As with SCI_SETTEXT above, the new document has nothing to do
+            // with the pending composition.
+            if ( iMessage == SCI_SETDOCPOINTER && hasFocus )
+                wxResetTextInput(stc);
+
             const sptr_t result =
                 ScintillaBase::WndProc(iMessage, wParam, lParam);
 
-#ifdef __WXGTK__
             // Both messages can change IsTextInputEnabled(), so apply the
-            // new mode to the GTK IM context.
+            // new mode to the native IM context.
             wxUpdateTextInputClient(stc);
-#endif
+
             return result;
         }
 #endif
@@ -1147,11 +1207,16 @@ long ScintillaWX::PositionToUTF16(Sci::Position position) const
 // walking off the document end stops there. Native text input APIs may
 // propose ranges with either problem and expect them to be adjusted to the
 // nearest valid ones rather than rejected.
+//
+// If unitsShort is non-null, it's set to the number of UTF-16 code units by
+// which the walk fell short of lengthUTF16 because the document ended.
 Sci::Position
 ScintillaWX::RelativePositionUTF16Clamped(Sci::Position position,
-                                          long lengthUTF16) const
+                                          long lengthUTF16,
+                                          long* unitsShort) const
 {
-    for ( long remaining = lengthUTF16; remaining > 0; )
+    long remaining = lengthUTF16;
+    while ( remaining > 0 )
     {
         const Sci::Position next = pdoc->NextPosition(position, 1);
         if ( next == position )
@@ -1161,6 +1226,9 @@ ScintillaWX::RelativePositionUTF16Clamped(Sci::Position position,
         remaining -= next - position > 3 ? 2 : 1;
         position = next;
     }
+
+    if ( unitsShort )
+        *unitsShort = std::max<long>(0, remaining);
 
     return position;
 }
@@ -1265,6 +1333,7 @@ bool ScintillaWX::StartComposition(long replacementStart,
     m_compositionStart = insertionPosition;
     m_compositionLength = 0;
     m_compositionActive = true;
+    m_compositionActionStarted = false;
     return true;
 }
 
@@ -1316,7 +1385,9 @@ bool ScintillaWX::CommitComposition(const wxString& text)
     UndoCompositionText();
     m_compositionActive = false;
     m_compositionLength = 0;
+    m_committingComposition = true;
     InsertCompositionText(text, CharacterSource::imeResult);
+    m_committingComposition = false;
     ShowCaretAtCurrentPosition();
     return true;
 }
@@ -1381,9 +1452,11 @@ bool ScintillaWX::InsertText(const wxString& text,
 
     m_compositionActive = false;
     m_compositionLength = 0;
+    m_committingComposition = wasComposing;
     InsertCompositionText(text, wasComposing
                                 ? CharacterSource::imeResult
                                 : CharacterSource::directInput);
+    m_committingComposition = false;
     ShowCaretAtCurrentPosition();
     return true;
 }
@@ -1470,14 +1543,23 @@ bool ScintillaWX::GetTextInRange(long start, long length,
                                 long* actualStart,
                                 long* actualLength) const
 {
-    const long documentLength = PositionToUTF16(pdoc->Length());
-    if ( start < 0 || start > documentLength )
+    if ( start < 0 )
         return false;
 
-    length = std::max<long>(0, std::min(length, documentLength - start));
-    const Sci::Position positionStart = PositionFromUTF16(start);
+    // Convert the start position directly instead of comparing against the
+    // total document length in UTF-16, which would need a walk over the
+    // whole document to compute.
+    long unitsShort = 0;
+    const Sci::Position positionStart =
+        RelativePositionUTF16Clamped(0, start, &unitsShort);
+    if ( unitsShort > 0 )
+    {
+        // The start position lies beyond the end of the document.
+        return false;
+    }
+
     const Sci::Position positionEnd =
-        RelativePositionUTF16Clamped(positionStart, length);
+        RelativePositionUTF16Clamped(positionStart, std::max<long>(0, length));
 
     const std::string range = RangeText(positionStart, positionEnd);
     *text = wxString::FromUTF8(range.data(), range.length());

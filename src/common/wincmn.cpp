@@ -73,6 +73,7 @@
 #include "wx/display.h"
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
+#include "wx/module.h"
 #include "wx/private/rescale.h"
 #include "wx/private/textinput.h"
 #include "wx/private/window.h"
@@ -126,6 +127,20 @@ wxTextInputClient* wxFindTextInputClient(const wxWindowBase* window)
     const auto it = wxGetTextInputClients().find(window);
     return it == wxGetTextInputClients().end() ? nullptr : it->second;
 }
+
+// Module clearing the client map on library shutdown: entries normally
+// unregister themselves, but a leaked window mustn't leave a dangling
+// pointer behind if the library is initialized again.
+class wxTextInputClientsModule : public wxModule
+{
+public:
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxGetTextInputClients().clear(); }
+
+    wxDECLARE_DYNAMIC_CLASS(wxTextInputClientsModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextInputClientsModule, wxModule);
 
 #endif // wxHAS_TEXT_INPUT_CLIENT
 
