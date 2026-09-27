@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/notebook.h"
+#include "wx/scrolwin.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -119,6 +120,7 @@ public:
 private:
     wxWindow *CreateButtonPage(wxWindow *parent);
     wxWindow *CreateTextPage(wxWindow *parent);
+    wxWindow *CreateContainersPage(wxWindow *parent);
 };
 
 // a text control which checks if processing Tab presses in controls with
@@ -273,6 +275,7 @@ MyPanel::MyPanel(wxWindow *parent)
     wxNotebook *notebook = new wxNotebook(this, wxID_ANY);
     notebook->AddPage(CreateButtonPage(notebook), "Button");
     notebook->AddPage(CreateTextPage(notebook), "Text");
+    notebook->AddPage(CreateContainersPage(notebook), "Containers");
 
     wxSizer *sizerV = new wxBoxSizer(wxVERTICAL);
     sizerV->Add(notebook, wxSizerFlags(1).Expand());
@@ -323,3 +326,119 @@ wxWindow *MyPanel::CreateTextPage(wxWindow *parent)
     return page;
 }
 
+wxWindow *MyPanel::CreateContainersPage(wxWindow *parent)
+{
+    const wxSizerFlags flagsBorder = wxSizerFlags().Expand().Border();
+
+    wxPanel *page = new wxPanel(parent);
+    wxSizer *sizerPage = new wxBoxSizer(wxVERTICAL);
+
+    // Create a panel with a border, to make it visible, and optionally a
+    // label inside it.
+    const auto createPanel = [](wxWindow* parentPanel,
+                                const wxString& name,
+                                const wxString& label = wxString())
+    {
+        wxPanel* const panel = new wxPanel(parentPanel, wxID_ANY,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxTAB_TRAVERSAL | wxBORDER_SIMPLE,
+                                           name);
+        panel->SetSizer(new wxBoxSizer(wxHORIZONTAL));
+        if ( !label.empty() )
+        {
+            panel->GetSizer()->Add(new wxStaticText(panel, wxID_ANY, label),
+                                   wxSizerFlags().Border());
+        }
+
+        return panel;
+    };
+
+    sizerPage->Add(new wxButton(page, wxID_ANY, "&Before"), flagsBorder);
+
+    // TAB shouldn't stop on the panels containing only labels...
+    sizerPage->Add(createPanel(page, "label-only panel",
+                               "Only a label: TAB should skip this panel"),
+                   flagsBorder);
+
+    // ... even if they're nested.
+    wxPanel* const outer = createPanel(page, "outer panel");
+    outer->GetSizer()->Add(createPanel(outer, "inner panel",
+                                       "Nested panel with only a label: "
+                                       "TAB should skip both panels"),
+                           flagsBorder);
+    sizerPage->Add(outer, flagsBorder);
+
+    // Unless they explicitly request it.
+    wxPanel* const optIn = createPanel(page, "opt-in panel",
+                                       "EnableFocusFromKeyboard() was called: "
+                                       "TAB should stop here");
+    optIn->EnableFocusFromKeyboard();
+    sizerPage->Add(optIn, flagsBorder);
+
+    // Or if they can be scrolled, as this can only be done from keyboard if
+    // they have focus.
+    auto* const scrolled = new wxScrolledWindow(page, wxID_ANY,
+                                                wxDefaultPosition,
+                                                wxDefaultSize,
+                                                wxVSCROLL | wxBORDER_SIMPLE,
+                                                "scrollable panel");
+    auto* const sizerScrolled = new wxBoxSizer(wxVERTICAL);
+    for ( int n = 1; n <= 10; n++ )
+    {
+        sizerScrolled->Add(new wxStaticText(scrolled, wxID_ANY,
+            wxString::Format("Scrollable panel line #%d: TAB should stop "
+                             "here and arrows should scroll", n)));
+    }
+    scrolled->SetSizer(sizerScrolled);
+    scrolled->SetScrollRate(0, FromDIP(10));
+    scrolled->SetMinSize(FromDIP(wxSize(-1, 40)));
+    sizerPage->Add(scrolled, flagsBorder);
+
+    // Check that adding focusable children to a panel containing only labels
+    // makes TAB stop at them, both when the panel is already shown and when
+    // it is shown later (only the first click on the corresponding button
+    // tests the latter, subsequent ones just add more text controls).
+    wxPanel* const dynamic = createPanel(page, "dynamic panel",
+                                         "Initially only a label");
+    sizerPage->Add(dynamic, flagsBorder);
+
+    wxPanel* const hidden = createPanel(page, "hidden panel",
+                                        "Initially hidden and only a label");
+    hidden->Hide();
+    sizerPage->Add(hidden, flagsBorder);
+
+    wxSizer* const sizerButtons = new wxBoxSizer(wxHORIZONTAL);
+
+    wxButton* const btnAdd = new wxButton(page, wxID_ANY,
+                                          "&Add text to dynamic panel");
+    btnAdd->Bind(wxEVT_BUTTON, [this, page, dynamic](wxCommandEvent&)
+        {
+            dynamic->GetSizer()->Add(new wxTextCtrl(dynamic, wxID_ANY,
+                                                    "TAB should stop here"),
+                                     wxSizerFlags(1).Border());
+            page->InvalidateBestSize();
+            Layout();
+        });
+    sizerButtons->Add(btnAdd, wxSizerFlags().Border(wxRIGHT));
+
+    wxButton* const btnShow = new wxButton(page, wxID_ANY,
+                                           "Add text to &hidden panel and show it");
+    btnShow->Bind(wxEVT_BUTTON, [this, page, hidden](wxCommandEvent&)
+        {
+            hidden->GetSizer()->Add(new wxTextCtrl(hidden, wxID_ANY,
+                                                   "TAB should stop here too"),
+                                    wxSizerFlags(1).Border());
+            hidden->Show();
+            page->InvalidateBestSize();
+            Layout();
+        });
+    sizerButtons->Add(btnShow);
+
+    sizerPage->Add(sizerButtons, wxSizerFlags().Border());
+
+    sizerPage->Add(new wxButton(page, wxID_ANY, "A&fter"), flagsBorder);
+
+    page->SetSizer(sizerPage);
+
+    return page;
+}
