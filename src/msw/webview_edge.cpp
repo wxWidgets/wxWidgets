@@ -667,6 +667,7 @@ HRESULT wxWebViewEdgeImpl::HandleNavigationStarting(ICoreWebView2NavigationStart
 void wxWebViewEdgeImpl::SendErrorEventForAPI(const wxString& api, HRESULT errorCode)
 {
     wxLogApiError(api, errorCode);
+    wxUnusedVar(api); // unused with wxDEBUG_LEVEL=0
 
     wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), wxString(), wxString());
     event.SetEventObject(m_ctrl);

@@ -1001,6 +1001,7 @@ void wxSizer::SetContainingWindow(wxWindow *win)
             if ( wxWindow* const w = item->GetWindow() )
             {
                 ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+                wxUnusedVar(w); // unused with wxDEBUG_LEVEL=0
             }
         }
     }

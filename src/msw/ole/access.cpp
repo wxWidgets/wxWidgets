@@ -556,6 +556,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( LONG navDir, VARIANT varStart, VARIANT
         }
     }
     wxLogTrace(wxT("access"), navStr);
+    wxUnusedVar(navStr); // unused with wxDEBUG_LEVEL=0
 
     wxAccStatus status = m_pAccessible->Navigate(navDirWX, varStart.lVal, & elementId,
         & elementObject);
