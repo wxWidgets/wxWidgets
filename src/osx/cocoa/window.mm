@@ -4018,17 +4018,21 @@ void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
     }
 }
 
+NSView* wxWidgetCocoaImpl::GetAccessibleView() const
+{
+    if ( [m_osxView isKindOfClass:[NSScrollView class]] )
+    {
+        NSView* const documentView = [(NSScrollView*)m_osxView documentView];
+        if ( documentView )
+            return documentView;
+    }
+
+    return m_osxView;
+}
+
 void wxWidgetCocoaImpl::SetAccessibilityLabel(const wxString& label)
 {
-    // VoiceOver reads the view inside a scroll view, e.g. the text view of a
-    // multiline wxTextCtrl, and not the scroll view itself.
-    NSView* view = m_osxView;
-    if ( [view isKindOfClass:[NSScrollView class]] )
-    {
-        NSView* const documentView = [(NSScrollView*)view documentView];
-        if ( documentView )
-            view = documentView;
-    }
+    NSView* const view = GetAccessibleView();
 
     wxCFStringRef cf(label);
     NSString* const str = label.empty() ? nil : cf.AsNSString();
@@ -4044,19 +4048,9 @@ void wxWidgetCocoaImpl::SetAccessibilityLabel(const wxString& label)
 
 void wxWidgetCocoaImpl::SetAccessibilityTitleElement(wxWidgetImpl* title)
 {
-    // VoiceOver reads the view inside a scroll view, e.g. the text view of a
-    // multiline wxTextCtrl, and not the scroll view itself.
-    NSView* view = m_osxView;
-    if ( [view isKindOfClass:[NSScrollView class]] )
-    {
-        NSView* const documentView = [(NSScrollView*)view documentView];
-        if ( documentView )
-            view = documentView;
-    }
-
     // For most controls the accessibility element is not the view itself but
     // its cell, so link the elements actually used by VoiceOver.
-    [NSAccessibilityUnignoredDescendant(view) setAccessibilityTitleUIElement:
+    [NSAccessibilityUnignoredDescendant(GetAccessibleView()) setAccessibilityTitleUIElement:
         NSAccessibilityUnignoredDescendant(title->GetWXWidget())];
 }
 

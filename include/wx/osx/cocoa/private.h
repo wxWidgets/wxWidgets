@@ -268,6 +268,14 @@ protected:
     // Return the view to apply the font/colour to.
     NSView* GetViewWithText() const;
 
+    // Return the view used for accessibility purposes, which is different
+    // from m_osxView for controls inside a scroll view, e.g. multiline
+    // wxTextCtrl, as VoiceOver reads the document view and not the scroll view.
+    //
+    // Note that the element actually used by VoiceOver may be a descendant
+    // of this view, e.g. its cell.
+    NSView* GetAccessibleView() const;
+
     NSEvent* m_lastKeyDownEvent;
     bool m_lastKeyDownWXSent;
     bool m_lastLeftDownWasDClick;
