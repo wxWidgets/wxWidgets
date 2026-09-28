@@ -52,6 +52,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent);
 wxBEGIN_EVENT_TABLE(wxGenericCollapsiblePane, wxControl)
     EVT_COLLAPSIBLEHEADER_CHANGED(wxID_ANY, wxGenericCollapsiblePane::OnButton)
     EVT_SIZE(wxGenericCollapsiblePane::OnSize)
+    EVT_CHAR(wxGenericCollapsiblePane::OnChar)
 wxEND_EVENT_TABLE()
 
 void wxGenericCollapsiblePane::Init()
@@ -253,6 +254,35 @@ void wxGenericCollapsiblePane::OnSize(wxSizeEvent& WXUNUSED(event))
 #endif
 
     Layout();
+}
+
+void wxGenericCollapsiblePane::OnChar(wxKeyEvent& event)
+{
+    bool collapse = false;
+
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_RETURN:
+        case WXK_SPACE:
+            collapse = !IsCollapsed();
+            break;
+
+        case '+':
+        case WXK_NUMPAD_ADD:
+            collapse = false;
+            break;
+
+        case '-':
+        case WXK_NUMPAD_SUBTRACT:
+            collapse = true;
+            break;
+
+        default:
+            event.Skip();
+            return;
+    }
+
+    Collapse(collapse);
 }
 
 #endif // wxUSE_COLLPANE && wxUSE_BUTTON && wxUSE_STATLINE

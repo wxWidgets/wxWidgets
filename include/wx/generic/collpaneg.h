@@ -87,6 +87,7 @@ private:
     // event handlers
     void OnButton(wxCommandEvent &ev);
     void OnSize(wxSizeEvent &ev);
+    void OnChar(wxKeyEvent &ev);
 
     wxDECLARE_DYNAMIC_CLASS(wxGenericCollapsiblePane);
     wxDECLARE_EVENT_TABLE();
