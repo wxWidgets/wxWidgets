@@ -41,8 +41,6 @@
 namespace
 {
 
-#ifdef __WXMSW__
-
 int FindFirstNonWhitePixelX(const wxBitmap& bmp)
 {
     const wxImage img = bmp.ConvertToImage();
@@ -62,13 +60,13 @@ int FindFirstNonWhitePixelX(const wxBitmap& bmp)
     return width;
 }
 
-enum DrawTextWithTabsMode
+enum class DrawTextWithTabs
 {
-    DrawTextDirectly,
-    DrawTextAsLabel
+    Directly,
+    AsLabel
 };
 
-int DrawTextWithTabAndFindFirstInk(DrawTextWithTabsMode mode, int* charWidth)
+int DrawTextWithTabAndFindFirstInk(DrawTextWithTabs mode, int* charWidth)
 {
     wxBitmap bmp(200, 50, 24);
     wxMemoryDC dc(bmp);
@@ -82,17 +80,21 @@ int DrawTextWithTabAndFindFirstInk(DrawTextWithTabsMode mode, int* charWidth)
     *charWidth = dc.GetCharWidth();
 
     const wxString text("\tX");
-    if ( mode == DrawTextAsLabel )
-        dc.DrawLabel(text, wxRect(0, 0, bmp.GetWidth(), bmp.GetHeight()));
-    else
-        dc.DrawText(text, 0, 0);
+    switch ( mode )
+    {
+        case DrawTextWithTabs::Directly:
+            dc.DrawText(text, 0, 0);
+            break;
+
+        case DrawTextWithTabs::AsLabel:
+            dc.DrawLabel(text, bmp.GetSize());
+            break;
+    }
 
     dc.SelectObject(wxNullBitmap);
 
     return FindFirstNonWhitePixelX(bmp);
 }
-
-#endif // __WXMSW__
 
 // Run a couple of simple tests for GetTextExtent().
 template <typename T>
@@ -138,21 +140,20 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
     CHECK( dc.GetMultiLineTextExtent(wxString()) == wxSize(0, sz.y) );
 }
 
-TEST_CASE("wxDC::DrawTextWithTabs", "[dc][text][msw]")
+TEST_CASE("wxDC::DrawTextWithTabs", "[dc][text]")
 {
-#ifdef __WXMSW__
     int charWidth = 0;
     int firstInkX =
-        DrawTextWithTabAndFindFirstInk(DrawTextDirectly, &charWidth);
+        DrawTextWithTabAndFindFirstInk(DrawTextWithTabs::Directly, &charWidth);
 
     REQUIRE( firstInkX < 200 );
     CHECK( firstInkX > 2*charWidth );
 
-    firstInkX = DrawTextWithTabAndFindFirstInk(DrawTextAsLabel, &charWidth);
+    firstInkX =
+        DrawTextWithTabAndFindFirstInk(DrawTextWithTabs::AsLabel, &charWidth);
 
     REQUIRE( firstInkX < 200 );
     CHECK( firstInkX > 2*charWidth );
-#endif // __WXMSW__
 }
 
 TEST_CASE("wxMemoryDC::GetTextExtent", "[memdc][text-extent]")
