@@ -239,7 +239,7 @@ void wxOSXPasteboard::Clear()
 
 WX_NSArray wxOSXPasteboard::Flush()
 {
-    NSArray* nsarray = Flush();
+    NSArray* nsarray = wxOSXPasteboardSink::Flush();
     [m_pasteboard writeObjects:nsarray];
     return nsarray;
 }
