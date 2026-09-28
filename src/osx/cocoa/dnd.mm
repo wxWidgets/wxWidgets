@@ -163,17 +163,17 @@ private:
     NSPasteboard* m_pasteboard;
 };
 
-wxOSXPasteboard::wxOSXPasteboard(OSXPasteboard native)
+wxOSXPasteboardSink::wxOSXPasteboardSink()
 {
-    m_pasteboard = native;
+    
 }
 
-wxOSXPasteboard::~wxOSXPasteboard()
+wxOSXPasteboardSink::~wxOSXPasteboardSink()
 {
     DeleteSinkItems();
 }
 
-void wxOSXPasteboard::DeleteSinkItems()
+void wxOSXPasteboardSink::DeleteSinkItems()
 {
     for ( wxVector<wxOSXDataSinkItem*>::iterator it = m_sinkItems.begin();
      it != m_sinkItems.end();
@@ -184,15 +184,27 @@ void wxOSXPasteboard::DeleteSinkItems()
     m_sinkItems.clear();
 }
 
-// data sink methods
-
-void wxOSXPasteboard::Clear()
+void wxOSXPasteboardSink::Clear()
 {
-    [m_pasteboard clearContents];
     DeleteSinkItems();
 }
 
-void wxOSXPasteboard::Flush()
+wxOSXDataSinkItem* wxOSXPasteboardSink::CreateItem()
+{
+    wxOSXDataSinkItem* item = DoCreateItem();
+    m_sinkItems.push_back(item);
+
+    return item;
+
+}
+
+wxOSXDataSinkItem* wxOSXPasteboardSink::DoCreateItem()
+{
+    NSPasteboardItem* nsitem = [[NSPasteboardItem alloc] init];
+    return new wxOSXPasteboardSinkItem(nsitem);
+}
+
+WX_NSArray wxOSXPasteboardSink::Flush()
 {
     NSMutableArray* nsarray = [[NSMutableArray alloc] init];
     for ( wxVector<wxOSXDataSinkItem*>::iterator it = m_sinkItems.begin();
@@ -204,17 +216,33 @@ void wxOSXPasteboard::Flush()
         delete item;
     }
     m_sinkItems.clear();
-    [m_pasteboard writeObjects:nsarray];
-    [nsarray release];
+    return [nsarray autorelease];
 }
 
-wxOSXDataSinkItem* wxOSXPasteboard::CreateItem()
+wxOSXPasteboard::wxOSXPasteboard(OSXPasteboard native)
 {
-    NSPasteboardItem* nsitem = [[NSPasteboardItem alloc] init];
-    wxOSXPasteboardSinkItem* item = new wxOSXPasteboardSinkItem(nsitem);
-    m_sinkItems.push_back(item);
+    m_pasteboard = native;
+}
 
-    return item;
+wxOSXPasteboard::~wxOSXPasteboard()
+{
+}
+
+
+// data sink methods
+
+void wxOSXPasteboard::Clear()
+{
+    [m_pasteboard clearContents];
+    wxOSXPasteboardSink::Clear();
+}
+
+
+WX_NSArray wxOSXPasteboard::Flush()
+{
+    NSArray* nsarray = Flush();
+    [m_pasteboard writeObjects:nsarray];
+    return nsarray;
 }
 
 // data source methods
@@ -540,12 +568,20 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         NSPoint down = [theEvent locationInWindow];
         NSPoint p = [view convertPoint:down fromView:nil];
-
-        wxPasteBoardWriter* writer = [[wxPasteBoardWriter alloc] initWithDataObject:m_data];
+        
+        wxOSXPasteboardSink datasink;
+        m_data->WriteToSink(&datasink);
+        NSArray* dataitems = datasink.Flush();
+        
         wxCFMutableArrayRef<NSDraggingItem*> items;
-        NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:writer];
-        [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
-        items.push_back(item);
+        for (NSPasteboardItem* dataitem in dataitems )
+        {
+            NSDraggingItem* item = [[NSDraggingItem alloc] initWithPasteboardWriter:dataitem];
+            [item setDraggingFrame:NSMakeRect(p.x, p.y, 16, 16) contents:image];
+            items.push_back(item);
+            [item release];
+        }
+
         [view beginDraggingSessionWithItems:items event:theEvent source:delegate];
 
         wxEventLoopBase * const loop = wxEventLoop::GetActive();
@@ -555,8 +591,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         result = NSDragOperationToWxDragResult([delegate code]);
         [delegate release];
         [image release];
-        [writer clearDataObject];
-        [writer release];
 
         wxWindow* mouseUpTarget = wxWindow::GetCapture();
 

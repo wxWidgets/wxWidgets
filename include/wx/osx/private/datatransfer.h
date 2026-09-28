@@ -76,11 +76,30 @@ public:
     // create a new sink item
     virtual wxOSXDataSinkItem* CreateItem() = 0;
 
-    // flush the created sink items into the system sink representation
-    virtual void Flush() = 0 ;
+    // flush the created sink items into the system sink representation (autoreleased)
+    virtual WX_NSArray Flush() = 0 ;
 };
 
-class WXDLLIMPEXP_CORE wxOSXPasteboard : public wxOSXDataSink, public wxOSXDataSource
+class WXDLLIMPEXP_CORE wxOSXPasteboardSink : public wxOSXDataSink
+{
+public:
+    wxOSXPasteboardSink();
+    ~wxOSXPasteboardSink();
+    
+    virtual wxOSXDataSinkItem* CreateItem() override;
+
+    void Clear() override;
+    
+    WX_NSArray Flush() override;
+private:
+    virtual wxOSXDataSinkItem* DoCreateItem();
+    
+    void DeleteSinkItems();
+    wxVector<wxOSXDataSinkItem*> m_sinkItems;
+
+};
+
+class WXDLLIMPEXP_CORE wxOSXPasteboard : public wxOSXPasteboardSink, public wxOSXDataSource
 {
 public:
     wxOSXPasteboard(OSXPasteboard native);
@@ -88,11 +107,9 @@ public:
 
     // sink methods
 
-    virtual wxOSXDataSinkItem* CreateItem() override;
-
     void Clear() override;
 
-    void Flush() override;
+    WX_NSArray Flush() override;
 
     // source methods
 
@@ -104,10 +121,7 @@ public:
 
     static wxOSXPasteboard* GetGeneralClipboard();
 private:
-    void DeleteSinkItems();
-
     OSXPasteboard m_pasteboard;
-    wxVector<wxOSXDataSinkItem*> m_sinkItems;
 };
 
 #endif
