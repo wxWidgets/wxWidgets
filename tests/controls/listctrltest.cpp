@@ -178,17 +178,20 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnDrag", "[listctrl]")
     sim.MouseMove(pt);
     wxYield();
 
-    // The simulated input is processed asynchronously and may take more than
-    // a single wxYield() to arrive when the machine is busy (as is often the
-    // case in the CI builds), so wait for each expected event explicitly.
     sim.MouseDown();
-    WaitFor("drag start", [&]() { return begindrag.GetCount() > 0; });
+    wxYield();
 
     sim.MouseMove(pt.x + 50, pt.y);
-    WaitFor("dragging", [&]() { return dragging.GetCount() > 0; });
+    wxYield();
 
     sim.MouseUp();
-    WaitFor("drag end", [&]() { return enddrag.GetCount() > 0; });
+
+    // The simulated input is processed asynchronously and may take quite a
+    // while to arrive when the machine is busy (as is often the case in the CI
+    // builds), so wait until the last event is received: as the input events
+    // are processed in order, all the previous ones must have been received
+    // by then too.
+    WaitFor("drag end", [&]() { return enddrag.GetCount() > 0; }, 5000);
 
     CHECK( begindrag.GetCount() == 1 );
     CHECK( dragging.GetCount() > 0 );
