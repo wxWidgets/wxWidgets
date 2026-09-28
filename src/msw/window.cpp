@@ -2917,6 +2917,40 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* WXUNUSED(msg))
     return true;
 }
 
+bool wxWindowMSW::MSWShouldUseAcceleratorForKey(const WXMSG* pMsg)
+{
+#if wxUSE_ACCEL
+    const MSG* const msg = reinterpret_cast<const MSG*>(pMsg);
+
+    // Only the key presses can be used as accelerators.
+    if ( msg->message != WM_KEYDOWN && msg->message != WM_SYSKEYDOWN )
+        return true;
+
+    const auto event(CreateKeyEvent(wxEVT_KEY_DOWN, msg->wParam, msg->lParam));
+
+    // Check if this key is used by some of accelerators we define.
+    wxAcceleratorEntry entry;
+    if ( !FindAcceleratorForKey(event, entry, nullptr /* don't need owner */) )
+    {
+        // It isn't, let it be translated/processed normally.
+        return true;
+    }
+
+    // Ask the application if it wants to process this key normally.
+    if ( !ShouldUseAcceleratorForKey(event,
+                                     entry.GetCommand(),
+                                     entry.GetMenuItem()) )
+    {
+        // The application wants to handle it, so skip the default processing.
+        return false;
+    }
+#else // !wxUSE_ACCEL
+    wxUnusedVar(pMsg);
+#endif // wxUSE_ACCEL/!wxUSE_ACCEL
+
+    return true;
+}
+
 #ifndef __WXUNIVERSAL__
 
 bool wxWindowMSW::MSWSafeIsDialogMessage(WXMSG* msg)

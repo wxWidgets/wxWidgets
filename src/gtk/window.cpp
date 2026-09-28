@@ -240,6 +240,11 @@ static wxWindowGTK *gs_deferredFocusOut = nullptr;
 GdkEvent    *g_lastMouseEvent = nullptr; // use SetLastMouseEvent below
 int          g_lastButtonNumber = 0;
 
+// The last key event which the focused window has claimed for itself, meaning
+// that it must not be used as a menu accelerator by the top level window, see
+// wxgtk_tlw_key_press_event() in toplevel.cpp.
+GdkEventKey *wxKeyEventClaimedByWindow = nullptr;
+
 namespace wxGTKImpl
 {
 
@@ -1339,29 +1344,48 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     // Next check for accelerators.
 #if wxUSE_ACCEL
-    wxWindowGTK *ancestor = win;
-    while (ancestor)
+    wxKeyEventClaimedByWindow = nullptr;
+
+    wxWindowGTK *ancestor = nullptr;
+    int command = 0;
+    switch ( win->GTKShouldUseAccelerator(event, &ancestor, &command) )
     {
-        int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-        if (command != -1)
-        {
-            wxCommandEvent menu_event( wxEVT_MENU, command );
-            ret = ancestor->HandleWindowEvent( menu_event );
+        case wxWindowGTK::AcceleratorVerdict::Nothing:
+            // There is no accelerator for this key, process it normally.
+            break;
 
-            if ( !ret )
+        case wxWindowGTK::AcceleratorVerdict::Menu:
+            // This one comes from the menu bar, let GTK activate it as it
+            // would have done by default.
+            if ( auto tlw = gtk_widget_get_ancestor(win->m_widget,
+                                                    GTK_TYPE_WINDOW) )
             {
-                // if the accelerator wasn't handled as menu event, try
-                // it as button click (for compatibility with other
-                // platforms):
-                wxCommandEvent button_event( wxEVT_BUTTON, command );
-                ret = ancestor->HandleWindowEvent( button_event );
+                ret = gtk_window_activate_key(GTK_WINDOW(tlw), gdk_event);
             }
+            break;
 
+        case wxWindowGTK::AcceleratorVerdict::Table:
+            {
+                wxCommandEvent menu_event( wxEVT_MENU, command );
+                ret = ancestor->HandleWindowEvent( menu_event );
+
+                if ( !ret )
+                {
+                    // if the accelerator wasn't handled as menu event, try
+                    // it as button click (for compatibility with other
+                    // platforms):
+                    wxCommandEvent button_event( wxEVT_BUTTON, command );
+                    ret = ancestor->HandleWindowEvent( button_event );
+                }
+            }
             break;
-        }
-        if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
+
+        case wxWindowGTK::AcceleratorVerdict::Window:
+            // The window wants to handle this key itself, so prevent the key
+            // from being used as accelerator from wxgtk_tlw_key_press_event()
+            // after we return from here.
+            wxKeyEventClaimedByWindow = gdk_event;
             break;
-        ancestor = ancestor->GetParent();
     }
 #endif // wxUSE_ACCEL
 
@@ -1469,6 +1493,24 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     return ret;
 }
+}
+
+wxWindowGTK::AcceleratorVerdict
+wxWindowGTK::GTKShouldUseAccelerator(const wxKeyEvent& event,
+                                     wxWindowGTK** accelOwner,
+                                     int* command) const
+{
+    wxAcceleratorEntry accelEntry;
+    if ( !FindAcceleratorForKey(event, accelEntry, accelOwner) )
+        return AcceleratorVerdict::Nothing;
+
+    wxMenuItem* const menuItem = accelEntry.GetMenuItem();
+    *command = accelEntry.GetCommand();
+
+    if ( !ShouldUseAcceleratorForKey(event, *command, menuItem) )
+        return AcceleratorVerdict::Window;
+
+    return menuItem ? AcceleratorVerdict::Menu : AcceleratorVerdict::Table;
 }
 
 int wxWindowGTK::GTKIMFilterKeypress(GdkEventKey* event) const

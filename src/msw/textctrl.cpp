@@ -2120,9 +2120,8 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
         }
     }
 
-    // Delegate all the other checks to the base classes.
-    return wxTextEntry::MSWShouldPreProcessMessage(msg) &&
-                wxControl::MSWShouldPreProcessMessage(msg);
+    // Delegate all the other checks to the base class.
+    return wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)

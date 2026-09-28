@@ -131,6 +131,12 @@ public:
     virtual const wxTextEntry* WXGetTextEntry() const override { return this; }
 
 protected:
+#if wxUSE_ACCEL
+    // Reserve the keys used for editing the text in this control.
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const override;
+#endif // wxUSE_ACCEL
+
     // From wxWindowGTK:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 

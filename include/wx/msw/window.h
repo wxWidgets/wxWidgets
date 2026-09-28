@@ -439,6 +439,11 @@ public:
     // dispatched normally
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
 
+    // return false if the accelerators shouldn't be used for this message
+    // because this window prefers to handle this key itself, this is
+    // determined by sending wxEVT_ACCELERATOR_KEY event
+    bool MSWShouldUseAcceleratorForKey(const WXMSG* pMsg);
+
     // return true if the message was preprocessed and shouldn't be dispatched
     virtual bool MSWProcessMessage(WXMSG* pMsg);
 

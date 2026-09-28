@@ -81,23 +81,27 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         return true;
     }
 
-    // allow the window to prevent certain messages from being
-    // translated/processed (this is currently used by wxTextCtrl to always
-    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
+    // allow the window to prevent messages from being not just translated
+    // (this can be done portably by overriding ClaimsKeyBeforeAccelerator())
+    // but also preprocessed by ::IsDialogMessage(), which remains MSW-specific
     if ( !wndThis->MSWShouldPreProcessMessage((WXMSG *)msg) )
     {
         return false;
     }
 
-    // try translations first: the accelerators override everything
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    // try translations first: the accelerators override everything, unless the
+    // focused window claims this key for itself
+    if ( wndThis->MSWShouldUseAcceleratorForKey((WXMSG *)msg) )
     {
-        if ( wnd->MSWTranslateMessage((WXMSG *)msg))
-            return true;
+        for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+        {
+            if ( wnd->MSWTranslateMessage((WXMSG *)msg))
+                return true;
 
-        // stop at top navigation domain, i.e. typically a top level window
-        if ( wnd->IsTopNavigationDomain(wxWindow::Navigation_Accel) )
-            break;
+            // stop at top navigation domain, i.e. typically a top level window
+            if ( wnd->IsTopNavigationDomain(wxWindow::Navigation_Accel) )
+                break;
+        }
     }
 
     // now try the other hooks (kbd navigation is handled here)

@@ -952,6 +952,13 @@ protected:
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() override { return this; }
 
+#if wxUSE_ACCEL
+    // Reserve the keys used for editing the text for this control instead of
+    // letting the accelerators using them be triggered.
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const override;
+#endif // wxUSE_ACCEL
+
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);
 };
