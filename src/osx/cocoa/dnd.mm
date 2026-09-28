@@ -560,11 +560,11 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         NSPoint down = [theEvent locationInWindow];
         NSPoint p = [view convertPoint:down fromView:nil];
-        
+
         wxOSXPasteboardSink datasink;
         m_data->WriteToSink(&datasink);
         NSArray* dataitems = datasink.Flush();
-        
+
         wxCFMutableArrayRef<NSDraggingItem*> items;
         for (NSPasteboardItem* dataitem in dataitems )
         {
