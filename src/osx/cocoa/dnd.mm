@@ -165,7 +165,6 @@ private:
 
 wxOSXPasteboardSink::wxOSXPasteboardSink()
 {
-    
 }
 
 wxOSXPasteboardSink::~wxOSXPasteboardSink()

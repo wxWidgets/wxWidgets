@@ -85,15 +85,15 @@ class WXDLLIMPEXP_CORE wxOSXPasteboardSink : public wxOSXDataSink
 public:
     wxOSXPasteboardSink();
     ~wxOSXPasteboardSink();
-    
+
     virtual wxOSXDataSinkItem* CreateItem() override;
 
     void Clear() override;
-    
+
     WX_NSArray Flush() override;
 private:
     virtual wxOSXDataSinkItem* DoCreateItem();
-    
+
     void DeleteSinkItems();
     wxVector<wxOSXDataSinkItem*> m_sinkItems;
 
