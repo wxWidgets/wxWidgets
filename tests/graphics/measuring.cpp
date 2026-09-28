@@ -190,9 +190,6 @@ TEST_CASE("wxGC::GetTextExtent", "[dc][text-extent]")
 
 #endif // TEST_GC
 
-// Text with tabs is not rendered correctly in wxQt.
-#ifndef __WXQT__
-
 namespace
 {
 
@@ -269,4 +266,3 @@ TEST_CASE("wxDC::DrawTextWithTabs", "[dc][text]")
     CHECK( firstInkX > 2*charWidth );
 }
 
-#endif // !wxQt
