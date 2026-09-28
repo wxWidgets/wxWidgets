@@ -61,6 +61,7 @@ public:
 
     // implement base class pure virtuals
     virtual void SetLabel( const wxString& label ) override;
+    virtual void SetAccessibleName(const wxString& name) override;
     virtual wxString GetLabel() const override;
 
     virtual void Raise() override;
@@ -278,6 +279,10 @@ public:
 
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*    GetPeer() const;
+
+    // the peer of this window if it is a label which can be used as the
+    // accessibility title of the next control, or nullptr otherwise
+    virtual wxOSXWidgetImpl* GetLabelPeer() const { return nullptr; }
 
     // optimization to avoid creating a user pane in wxWindow::Create if we already know
     // we will replace it with our own peer

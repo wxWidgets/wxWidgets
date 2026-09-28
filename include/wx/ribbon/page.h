@@ -67,6 +67,10 @@ public:
     wxRibbonPanel* GetPanelById(wxWindowID id);
     size_t GetPanelCount() const;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
     virtual wxSize DoGetBestSize() const override;
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }

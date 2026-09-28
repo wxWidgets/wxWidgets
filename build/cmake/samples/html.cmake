@@ -32,6 +32,7 @@ wx_add_sample(test
         imagemap.png pic.png pic2.bmp i18n.gif
         imagemap.htm tables.htm test.htm id.html listtest.htm 8859_2.htm cp1250.htm
         regres.htm foo.png subsup.html
+        svg_test.html wxlogo.svg wxlogo.svgz
     LIBRARIES wxnet wxhtml NAME htmltest DEPENDS wxUSE_SOCKETS)
 wx_add_sample(virtual DATA virtual.htm LIBRARIES wxhtml)
 wx_add_sample(widget DATA widget.htm LIBRARIES wxhtml)

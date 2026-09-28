@@ -191,6 +191,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_comboboxtest.o \
 	test_gui_dataviewctrltest.o \
 	test_gui_datepickerctrltest.o \
+	test_gui_dirctrltest.o \
 	test_gui_frametest.o \
 	test_gui_gaugetest.o \
 	test_gui_gridtest.o \
@@ -1002,6 +1003,9 @@ test_gui_dataviewctrltest.o: $(srcdir)/controls/dataviewctrltest.cpp $(TEST_GUI_
 
 test_gui_datepickerctrltest.o: $(srcdir)/controls/datepickerctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/datepickerctrltest.cpp
+
+test_gui_dirctrltest.o: $(srcdir)/controls/dirctrltest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/dirctrltest.cpp
 
 test_gui_frametest.o: $(srcdir)/controls/frametest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/frametest.cpp

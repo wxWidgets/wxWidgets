@@ -36,6 +36,220 @@
 
 #include "wx/imaglist.h"
 
+#if wxUSE_ACCESSIBILITY
+
+class wxRibbonBarAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRibbonBarAccessible(wxRibbonBar* bar) : wxWindowAccessible(bar) { }
+
+    wxAccStatus GetChildCount(int* childCount) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        *childCount = static_cast<int>(bar->GetPageCount())
+                    + static_cast<int>(bar->GetFocusableBarButtons().size());
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetChild(int childId, wxAccessible** child) override
+    {
+        if ( childId == wxACC_SELF )
+        {
+            *child = this;
+            return wxACC_OK;
+        }
+
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxWindowAccessible::GetChild(childId, child);
+
+        *child = nullptr;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId == wxACC_SELF )
+        {
+            *role = wxROLE_SYSTEM_PAGETABLIST;
+            return wxACC_OK;
+        }
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *role = wxROLE_SYSTEM_PUSHBUTTON;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long* state) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId == wxACC_SELF )
+        {
+            long st{ 0 };
+            if ( !bar->IsEnabled() )
+                st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+            if ( !bar->IsShownOnScreen() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            if ( bar->IsFocusable() )
+                st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+            if ( bar->HasFocus() )
+                st |= wxACC_STATE_SYSTEM_FOCUSED;
+
+            *state = st;
+            return wxACC_OK;
+        }
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        const wxRibbonBar::BarButton button = GetBarButton(bar, childId);
+        long st{ wxACC_STATE_SYSTEM_FOCUSABLE };
+        if ( bar->HasFocus() && bar->m_focusedButton == button )
+            st |= wxACC_STATE_SYSTEM_FOCUSED;
+        if ( button == wxRibbonBar::BarButton_Toggle && !bar->ArePanelsShown() )
+            st |= wxACC_STATE_SYSTEM_PRESSED;
+
+        *state = st;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetName(int childId, wxString* name) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetName(childId, name);
+
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        const wxRibbonBar::BarButton button = GetBarButton(bar, childId);
+        *name = button == wxRibbonBar::BarButton_Toggle
+            ? (bar->ArePanelsShown() ? _("Minimize the Ribbon") : _("Expand the Ribbon"))
+            : _("Help");
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetLocation(wxRect& rect, int elementId) override
+    {
+        if ( elementId == wxACC_SELF )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( elementId >= 0 && elementId <= static_cast<int>(bar->GetPageCount()) )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        const wxRibbonBar::BarButton button = GetBarButton(bar, elementId);
+        rect = bar->GetBarButtonRect(button);
+        rect.SetPosition(bar->ClientToScreen(rect.GetPosition()));
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = _("Press");
+        return wxACC_OK;
+    }
+
+    wxAccStatus DoDefaultAction(int childId) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        if ( GetBarButton(bar, childId) == wxRibbonBar::BarButton_Toggle )
+            bar->DoActivateToggleButton();
+        else
+            bar->DoActivateHelpButton();
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetFocus(int* childId, wxAccessible** child) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        wxCHECK(bar, wxACC_FAIL);
+
+        if ( !bar->HasFocus() )
+        {
+            *childId = 0;
+            *child = nullptr;
+            return wxACC_OK;
+        }
+
+        if ( wxRibbonControl* control = bar->m_focusedControl.get() )
+        {
+            *childId = 0;
+            *child = control->GetOrCreateAccessible();
+            return wxACC_OK;
+        }
+
+        if ( bar->m_focusedButton != wxRibbonBar::BarButton_None )
+        {
+            const std::vector<wxRibbonBar::BarButton> buttons = bar->GetFocusableBarButtons();
+            const auto it = std::find(buttons.begin(), buttons.end(), bar->m_focusedButton);
+            if ( it != buttons.end() )
+            {
+                *childId = static_cast<int>(bar->GetPageCount()) +
+                           static_cast<int>(it - buttons.begin()) + 1;
+                *child = nullptr;
+                return wxACC_OK;
+            }
+        }
+
+        wxRibbonPage* page = bar->IsTabRowFocused()
+            ? bar->GetPage(bar->GetActivePage()) : nullptr;
+        if ( page )
+        {
+            *childId = 0;
+            *child = page->GetOrCreateAccessible();
+        }
+        else
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+
+        return wxACC_OK;
+    }
+
+private:
+    static wxRibbonBar::BarButton GetBarButton(wxRibbonBar* bar, int childId)
+    {
+        const std::vector<wxRibbonBar::BarButton> buttons = bar->GetFocusableBarButtons();
+        const size_t index = childId - bar->GetPageCount() - 1;
+        return index < buttons.size() ? buttons[index] : wxRibbonBar::BarButton_None;
+    }
+};
+
+wxAccessible* wxRibbonBar::CreateAccessible()
+{
+    return new wxRibbonBarAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
+
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN, wxRibbonBarEvent);
@@ -1565,6 +1779,11 @@ bool wxRibbonBar::DoChangeActivePage(size_t page)
     notification.SetEventObject(this);
     ProcessWindowEvent(notification);
 
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                               m_current_page + 1);
+#endif // wxUSE_ACCESSIBILITY
+
     return true;
 }
 
@@ -1637,6 +1856,14 @@ void wxRibbonBar::ClearPageFocus()
     m_focusedControl = nullptr;
     current->ClearFocusedItem();
     RefreshTabBar();
+
+#if wxUSE_ACCESSIBILITY
+    if ( m_current_page != wxNOT_FOUND )
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                                   m_current_page + 1);
+    }
+#endif // wxUSE_ACCESSIBILITY
 }
 
 wxWindow* wxRibbonBar::FindFocusableWindow(wxWindow* window, bool forward)

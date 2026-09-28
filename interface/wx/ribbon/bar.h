@@ -188,6 +188,12 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
     tool bars, galleries, and panels. @c WXK_RETURN or @c WXK_SPACE activate
     the current one, and @c WXK_ESCAPE goes back to the tabs.
 
+    @section ribbonbar_accessibility Screen readers
+
+    Since wxWidgets 3.3.4, the ribbon also reports itself to screen readers
+    (wxUSE_ACCESSIBILITY), following the same keyboard model above: the tabs,
+    pages, and the items within them are all exposed.
+
     @see wxRibbonPage
     @see wxRibbonPanel
 

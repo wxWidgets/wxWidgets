@@ -438,12 +438,12 @@ void wxGenericDirCtrl::ShowHidden( bool show )
     if ( m_showHidden == show )
         return;
 
-    m_showHidden = show;
-
     if ( HasFlag(wxDIRCTRL_MULTIPLE) )
     {
         wxArrayString paths;
         GetPaths(paths);
+
+        m_showHidden = show;
         ReCreateTree();
         for ( unsigned n = 0; n < paths.size(); n++ )
         {
@@ -453,6 +453,29 @@ void wxGenericDirCtrl::ShowHidden( bool show )
     else
     {
         wxString path = GetPath();
+
+        if ( show && !m_defaultPath.empty() && path != m_defaultPath )
+        {
+            // If hidden entries prevented selecting the default path, the
+            // current item is its last visible ancestor.
+            bool done = false;
+            wxTreeItemId treeid = FindChild(m_rootId, m_defaultPath, done);
+            wxTreeItemId lastId = treeid;
+
+            while ( treeid.IsOk() && !done )
+            {
+                ExpandDir(treeid);
+
+                treeid = FindChild(treeid, m_defaultPath, done);
+                if ( treeid.IsOk() )
+                    lastId = treeid;
+            }
+
+            if ( lastId.IsOk() && !done && GetPath(lastId) == path )
+                path = m_defaultPath;
+        }
+
+        m_showHidden = show;
         ReCreateTree();
         SetPath(path);
     }

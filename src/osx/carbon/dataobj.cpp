@@ -199,7 +199,7 @@ void wxDataFormat::SetId( NativeFormat format )
     }
     else if (  UTTypeConformsTo( (CFStringRef)format,kUTTypeUTF8PlainText ) )
     {
-        m_type = wxDF_UNICODETEXT;
+        m_type = wxDF_TEXT;
     }
     else if ( UTTypeConformsTo( (CFStringRef)format, kUTTypePlainText ) )
     {

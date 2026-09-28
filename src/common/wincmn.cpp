@@ -3308,6 +3308,30 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 // accessibility
 // ----------------------------------------------------------------------------
 
+void wxWindowBase::SetAccessibleName(const wxString& name)
+{
+#if wxUSE_ACCESSIBILITY
+    wxWindow* const self = static_cast<wxWindow*>(this);
+
+    // Native controls don't have any accessible object by default, but we
+    // need one for our name to be used instead of the one provided by the
+    // system. Plain wxAccessible leaves everything else to the system.
+    wxAccessible* accessible = GetOrCreateAccessible();
+    if ( !accessible )
+    {
+        accessible = new wxAccessible(self);
+        SetAccessible(accessible);
+    }
+
+    accessible->SetNameOverride(name);
+
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_NAMECHANGE, self,
+                              wxOBJID_CLIENT, wxACC_SELF);
+#else // !wxUSE_ACCESSIBILITY
+    wxUnusedVar(name);
+#endif // wxUSE_ACCESSIBILITY/!wxUSE_ACCESSIBILITY
+}
+
 #if wxUSE_ACCESSIBILITY
 void wxWindowBase::SetAccessible(wxAccessible* accessible)
 {

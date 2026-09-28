@@ -169,6 +169,11 @@ public:
     bool IsToggleButtonHovered() const { return m_toggle_button_hovered; }
     bool IsHelpButtonHovered() const { return m_help_button_hovered; }
 
+    // Implementation only: true if the keyboard focus is on the tabs
+    // themselves, rather than on an item in the page or on a bar button.
+    bool IsTabRowFocused() const
+        { return m_focusedControl == nullptr && m_focusedButton == BarButton_None; }
+
     void HideIfExpanded();
 
     // Deprecated: wxRibbonButtonBar now uses wxBitmapBundle directly for
@@ -208,8 +213,15 @@ public:
     // the focus on the first item of 'control'.
     void FocusItemOf(wxRibbonControl* control);
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
     friend class wxRibbonPage;
+#if wxUSE_ACCESSIBILITY
+    friend class wxRibbonBarAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
     virtual wxSize DoGetBestSize() const override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }

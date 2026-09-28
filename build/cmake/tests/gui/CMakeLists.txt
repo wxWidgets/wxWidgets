@@ -44,6 +44,7 @@ set(TEST_GUI_SRC
     controls/comboboxtest.cpp
     controls/dataviewctrltest.cpp
     controls/datepickerctrltest.cpp
+    controls/dirctrltest.cpp
     controls/frametest.cpp
     controls/gaugetest.cpp
     controls/gridtest.cpp

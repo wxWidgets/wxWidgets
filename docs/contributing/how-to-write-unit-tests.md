@@ -97,6 +97,13 @@ configuration, so `MouseClick()` still produces a primary-button click,
 while `MouseClick(wxMOUSE_BTN_RIGHT)` still produces a secondary-button
 click.
 
+Under GTK, GUI controls may still have pending realization, layout, or
+paint work after being created, updated, or shown. Before using control
+geometry as an input target, wait for the exact condition needed by the
+test with `WaitFor()` from `tests/waitfor.h`, such as a non-empty item
+rectangle, instead of relying on a single `wxYield()` or a proxy condition
+such as a non-zero window size.
+
 There are a number of classes that are available to help with testing GUI
 elements. Firstly throughout the test run there is a frame of type
 `wxTestableFrame` that you can access through `wxTheApp->GetTopWindow()`. This

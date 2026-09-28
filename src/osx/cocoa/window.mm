@@ -4018,6 +4018,42 @@ void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
     }
 }
 
+NSView* wxWidgetCocoaImpl::GetAccessibleView() const
+{
+    if ( [m_osxView isKindOfClass:[NSScrollView class]] )
+    {
+        NSView* const documentView = [(NSScrollView*)m_osxView documentView];
+        if ( documentView )
+            return documentView;
+    }
+
+    return m_osxView;
+}
+
+void wxWidgetCocoaImpl::SetAccessibilityLabel(const wxString& label)
+{
+    NSView* const view = GetAccessibleView();
+
+    wxCFStringRef cf(label);
+    NSString* const str = label.empty() ? nil : cf.AsNSString();
+
+    // VoiceOver uses the title of the buttons instead of their label.
+    // Notice that we must not set both of them: resetting them both to nil
+    // afterwards results in an empty title instead of the default one.
+    if ( [view isKindOfClass:[NSButton class]] )
+        [view setAccessibilityTitle:str];
+    else
+        [view setAccessibilityLabel:str];
+}
+
+void wxWidgetCocoaImpl::SetAccessibilityTitleElement(wxWidgetImpl* title)
+{
+    // For most controls the accessibility element is not the view itself but
+    // its cell, so link the elements actually used by VoiceOver.
+    [NSAccessibilityUnignoredDescendant(GetAccessibleView()) setAccessibilityTitleUIElement:
+        NSAccessibilityUnignoredDescendant(title->GetWXWidget())];
+}
+
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
     WXWidget c =  control ? control : (WXWidget) m_osxView;

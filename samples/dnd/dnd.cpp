@@ -1087,6 +1087,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc(this);
     dc.SetFont( wxFontInfo(24).Family(wxFONTFAMILY_DECORATIVE).FaceName("charter") );
+    dc.SetTextForeground( *wxBLUE );
     dc.DrawText( "Drag text from here!", 100, h-50 );
 }
 
