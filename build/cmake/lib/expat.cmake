@@ -49,6 +49,12 @@ if(wxUSE_EXPAT STREQUAL "builtin")
     )
 
     wx_add_builtin_library(wxexpat
+        src/expat/expat/lib/random_arc4random.c
+        src/expat/expat/lib/random_arc4random_buf.c
+        src/expat/expat/lib/random_dev_urandom.c
+        src/expat/expat/lib/random_getentropy.c
+        src/expat/expat/lib/random_getrandom.c
+        src/expat/expat/lib/random_rand_s.c
         src/expat/expat/lib/xmlparse.c
         src/expat/expat/lib/xmlrole.c
         src/expat/expat/lib/xmltok.c

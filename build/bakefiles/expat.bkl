@@ -34,6 +34,12 @@
         <cflags-borland>-w-8004 -w-8008 -w-8012 -w-8057 -w-8066</cflags-borland>
         <cflags cond="FORMAT=='autoconf'">$(wxCFLAGS_C99)</cflags>
         <sources>
+            src/expat/expat/lib/random_arc4random.c
+            src/expat/expat/lib/random_arc4random_buf.c
+            src/expat/expat/lib/random_dev_urandom.c
+            src/expat/expat/lib/random_getentropy.c
+            src/expat/expat/lib/random_getrandom.c
+            src/expat/expat/lib/random_rand_s.c
             src/expat/expat/lib/xmlparse.c
             src/expat/expat/lib/xmlrole.c
             src/expat/expat/lib/xmltok.c

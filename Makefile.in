@@ -389,6 +389,12 @@ WXTIFF_OBJECTS =  \
 WXEXPAT_CFLAGS = -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H $(WX_CPPFLAGS) \
 	-DNDEBUG $(wxCFLAGS_C99) $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
+	wxexpat_random_arc4random.o \
+	wxexpat_random_arc4random_buf.o \
+	wxexpat_random_dev_urandom.o \
+	wxexpat_random_getentropy.o \
+	wxexpat_random_getrandom.o \
+	wxexpat_random_rand_s.o \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
@@ -479,6 +485,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexEiffel.o \
 	wxlexilla_LexErlang.o \
 	wxlexilla_LexErrorList.o \
+	wxlexilla_LexEscSeq.o \
 	wxlexilla_LexFSharp.o \
 	wxlexilla_LexFlagship.o \
 	wxlexilla_LexForth.o \
@@ -14733,6 +14740,24 @@ wxtiff_tif_zstd.o: $(srcdir)/src/tiff/libtiff/tif_zstd.c
 @COND_PLATFORM_MACOSX_1@wxtiff_tif_unix.o: $(srcdir)/src/tiff/libtiff/tif_unix.c
 @COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_unix.c
 
+wxexpat_random_arc4random.o: $(srcdir)/src/expat/expat/lib/random_arc4random.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/random_arc4random.c
+
+wxexpat_random_arc4random_buf.o: $(srcdir)/src/expat/expat/lib/random_arc4random_buf.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/random_arc4random_buf.c
+
+wxexpat_random_dev_urandom.o: $(srcdir)/src/expat/expat/lib/random_dev_urandom.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/random_dev_urandom.c
+
+wxexpat_random_getentropy.o: $(srcdir)/src/expat/expat/lib/random_getentropy.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/random_getentropy.c
+
+wxexpat_random_getrandom.o: $(srcdir)/src/expat/expat/lib/random_getrandom.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/random_getrandom.c
+
+wxexpat_random_rand_s.o: $(srcdir)/src/expat/expat/lib/random_rand_s.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/random_rand_s.c
+
 wxexpat_xmlparse.o: $(srcdir)/src/expat/expat/lib/xmlparse.c
 	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/xmlparse.c
 
@@ -14954,6 +14979,9 @@ wxlexilla_LexErlang.o: $(srcdir)/src/stc/lexilla/lexers/LexErlang.cxx
 
 wxlexilla_LexErrorList.o: $(srcdir)/src/stc/lexilla/lexers/LexErrorList.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexErrorList.cxx
+
+wxlexilla_LexEscSeq.o: $(srcdir)/src/stc/lexilla/lexers/LexEscSeq.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexEscSeq.cxx
 
 wxlexilla_LexFSharp.o: $(srcdir)/src/stc/lexilla/lexers/LexFSharp.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexFSharp.cxx
