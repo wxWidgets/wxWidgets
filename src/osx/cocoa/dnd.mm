@@ -349,17 +349,10 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     wxUnusedVar(session);
     wxUnusedVar(context);
 
-    NSDragOperation allowedDragOperations = NSDragOperationEvery;
+    NSDragOperation allowedDragOperations = NSDragOperationCopy;
 
-    // NSDragOperationGeneric also makes a drag to the trash possible
-    // resulting in something we don't support (NSDragOperationDelete)
-
-    allowedDragOperations &= ~(NSDragOperationDelete | NSDragOperationGeneric);
-
-    if (m_dragFlags == wxDrag_CopyOnly)
-    {
-        allowedDragOperations &= ~NSDragOperationMove;
-    }
+    if ( m_dragFlags != wxDrag_CopyOnly )
+        allowedDragOperations |= NSDragOperationMove;
 
     // we might adapt flags here in the future
     // context can be NSDraggingContextOutsideApplication or NSDraggingContextWithinApplication
