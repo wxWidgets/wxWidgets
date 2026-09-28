@@ -271,6 +271,36 @@ bool wxClipboard::SetData( wxDataObject *data )
         return true;
 }
 
+namespace
+{
+
+// OLE clipboard functions fail with CLIPBRD_E_CANT_OPEN if another application
+// has the clipboard open, which happens routinely, e.g. because clipboard
+// managers or the system itself read the clipboard contents whenever they
+// change. As this is a transient condition, retry a few times before giving up.
+template <typename F>
+HRESULT CallRetryingIfClipboardBusy(F func)
+{
+    for ( int n = 0;; ++n )
+    {
+        HRESULT hr = func();
+        if ( hr != CLIPBRD_E_CANT_OPEN )
+            return hr;
+
+        // 10 retries here is arbitrary but seems reasonable.
+        if ( n == 10 )
+            break;
+
+        // Wait time here is chosen to limit the total time spent waiting to
+        // ~200ms which shouldn't be too long.
+        wxMilliSleep(20);
+    }
+
+    return CLIPBRD_E_CANT_OPEN;
+}
+
+} // anonymous namespace
+
 bool wxClipboard::AddData( wxDataObject *data )
 {
     if ( IsUsingPrimarySelection() )
@@ -278,7 +308,10 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
-    HRESULT hr = OleSetClipboard(data->GetInterface());
+    HRESULT hr = CallRetryingIfClipboardBusy([data]()
+        {
+            return OleSetClipboard(data->GetInterface());
+        });
     if ( FAILED(hr) )
     {
         wxLogSysError(hr, _("Failed to put data on the clipboard"));
@@ -320,7 +353,10 @@ bool wxClipboard::GetData( wxDataObject& data )
         return false;
 
     IDataObject *pDataObject = nullptr;
-    HRESULT hr = OleGetClipboard(&pDataObject);
+    HRESULT hr = CallRetryingIfClipboardBusy([&pDataObject]()
+        {
+            return OleGetClipboard(&pDataObject);
+        });
     if ( FAILED(hr) || !pDataObject )
     {
         wxLogSysError(hr, _("Failed to get data from the clipboard"));
