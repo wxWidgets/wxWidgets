@@ -841,7 +841,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     while ( tokenizer.HasMoreTokens() )
     {
         const wxString line = tokenizer.GetNextToken();
-        m_qtPainter->drawText(0, lineSpacing, 1, 1, Qt::TextDontClip,
+        m_qtPainter->drawText(0, lineSpacing, 1, 1, Qt::TextDontClip|Qt::TextExpandTabs,
                               wxQtConvertString(line), boundingRectPtr);
         lineSpacing += metrics.lineSpacing();
 
