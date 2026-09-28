@@ -36,7 +36,9 @@
     #include "wx/mstream.h"
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+#ifndef wxOSX_USE_NSCELL_RENDERER
 #define wxOSX_USE_NSCELL_RENDERER 1
+#endif
 
 // check if we're having a CGContext we can draw into
 inline bool wxHasCGContext(wxWindow* WXUNUSED(win), wxDC& dc)
