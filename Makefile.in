@@ -3344,6 +3344,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/appprogress.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
+	wx/osx/hyperlink.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
 	wx/generic/region.h \
@@ -3446,6 +3447,7 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/appprogress.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
+	wx/osx/hyperlink.h \
 	wx/osx/iphone/private.h \
 	wx/generic/region.h \
 	wx/osx/sound.h
@@ -5440,7 +5442,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_statbmp.o \
 	monodll_core_display.o \
 	monodll_cocoa_renderer.o \
-	monodll_cocoa_power.o
+	monodll_cocoa_power.o \
+	monodll_cocoa_hyperlink.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_COMMON_SRC_OBJECTS) \
@@ -7230,7 +7233,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_statbmp.o \
 	monolib_core_display.o \
 	monolib_cocoa_renderer.o \
-	monolib_cocoa_power.o
+	monolib_cocoa_power.o \
+	monolib_cocoa_hyperlink.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_0) \
@@ -9166,7 +9170,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_statbmp.o \
 	coredll_core_display.o \
 	coredll_cocoa_renderer.o \
-	coredll_cocoa_power.o
+	coredll_cocoa_power.o \
+	coredll_cocoa_hyperlink.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_8) \
@@ -10681,7 +10686,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_statbmp.o \
 	corelib_core_display.o \
 	corelib_cocoa_renderer.o \
-	corelib_cocoa_power.o
+	corelib_cocoa_power.o \
+	corelib_cocoa_hyperlink.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_9) \
@@ -16086,6 +16092,9 @@ monodll_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(MONODLL_ODEP)
 monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
+monodll_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
+
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -20882,6 +20891,9 @@ monolib_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(MONOLIB_ODEP)
 
 monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+monolib_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
 
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -26346,6 +26358,9 @@ coredll_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(COREDLL_ODEP)
 coredll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
+coredll_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
+
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -30104,6 +30119,9 @@ corelib_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(CORELIB_ODEP)
 
 corelib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+corelib_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
 
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
