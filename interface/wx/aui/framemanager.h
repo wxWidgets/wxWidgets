@@ -287,7 +287,7 @@ public:
         // window.
         mgr.AddPane(someWindow, wxAuiPaneInfo().Left().MinimizeButton());
 
-        // But so will will this one, as creating a toolbar along the bottom
+        // But so will this one, as creating a toolbar along the bottom
         // side is not allowed.
         mgr.AddPane(otherWindow, wxAuiPaneInfo().Bottom().MinimizeButton());
         @endcode

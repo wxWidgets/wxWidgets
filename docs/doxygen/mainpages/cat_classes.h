@@ -379,7 +379,7 @@ Related Overviews: @ref overview_events
 @li wxCalendarEvent: Used with wxCalendarCtrl
 @li wxCalculateLayoutEvent: Used to calculate window layout
 @li wxChildFocusEvent: A child window focus event
-@li wxClipboardTextEvent: A clipboard copy/cut/paste treebook event event
+@li wxClipboardTextEvent: A clipboard copy/cut/paste event
 @li wxCloseEvent: A close window or end session event
 @li wxCommandEvent: An event from a variety of standard controls
 @li wxContextMenuEvent: An event generated when the user issues a context menu
