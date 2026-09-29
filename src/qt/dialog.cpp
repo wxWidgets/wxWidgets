@@ -71,6 +71,7 @@ int wxDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != nullptr, -1, "Invalid dialog" );
+    wxASSERT_MSG( !IsModal(), "ShowModal() can't be called twice" );
 
     // Release the mouse if it's currently captured as the window having it
     // will be disabled when this dialog is shown -- but will still keep the
