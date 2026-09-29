@@ -112,6 +112,11 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 
 wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
+    CleanUp();
+}
+
+void wxAuiFloatingFrame::CleanUp()
+{
     // if we do not do this, then we can crash...
     if (m_ownerMgr && m_ownerMgr->m_actionWindow == this)
     {

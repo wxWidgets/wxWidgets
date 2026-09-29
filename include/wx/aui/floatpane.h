@@ -56,6 +56,7 @@ protected:
     virtual void OnMoveFinished();
 
 private:
+    void CleanUp();
     bool DockPane();
     void OnSize(wxSizeEvent& event);
     void OnClose(wxCloseEvent& event);
