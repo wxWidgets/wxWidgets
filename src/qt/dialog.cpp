@@ -62,6 +62,8 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
     m_qtWindow->setWindowFlag(Qt::WindowContextHelpButtonHint,
                               HasExtraStyle(wxDIALOG_EX_CONTEXTHELP));
 
+    GetDialogHandle()->setSizeGripEnabled((style & wxRESIZE_BORDER) != 0);
+
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 
