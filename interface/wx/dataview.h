@@ -2050,7 +2050,7 @@ public:
     wxDataViewColumn* GetOwner() const;
 
     /**
-        This methods retrieves the value from the renderer in order to
+        This method retrieves the value from the renderer in order to
         transfer the value back to the data model.
 
         Returns @false on failure.

@@ -1463,7 +1463,7 @@ public:
         Return the standard English name of the given month.
 
         This function always returns "January", "Jan" or "JA" for January, use
-        GetMonthName() to retrieve the name of the month in the users current
+        GetMonthName() to retrieve the name of the month in the user's current
         locale.
 
         @param month
@@ -1485,7 +1485,7 @@ public:
         Return the standard English name of the given week day.
 
         This function always returns "Monday", "Mon" or "Mo" for Monday, use
-        GetWeekDayName() to retrieve the name of the month in the user's current
+        GetWeekDayName() to retrieve the name of the weekday in the user's current
         locale.
 
         @param weekday

@@ -29,7 +29,7 @@ enum wxAuiNotebookOption
         Allow the user to pin tabs by using the pin button.
 
         With this style, the active page shows either a "pin" icon allowing to
-        pin it if it it's currently not pinned or an "unpin" icon if it is
+        pin it if it's currently not pinned or an "unpin" icon if it is
         already pinned. Note that "unpin" icon may be shown even if this style
         is not specified, but ::wxAUI_NB_UNPIN_ON_ALL_PINNED is.
 
@@ -627,7 +627,7 @@ public:
 
         Can be used to pin or lock a tab.
 
-        Tabs are are grouped in 3 subsets (each of which can possibly be
+        Tabs are grouped in 3 subsets (each of which can possibly be
         empty):
 
         - Shown first are locked tabs which are typically used for showing some

@@ -23,7 +23,7 @@ download from:
 
 * https://www.wxwidgets.org/downloads/
 
-or, for a more more permanent but less convenient to use link, from
+or, for a more permanent but less convenient to use link, from
 
 * https://github.com/wxWidgets/wxWidgets/releases/tag/v3.3.4/
 

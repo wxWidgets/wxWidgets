@@ -358,7 +358,7 @@ fully populated when GetNextEntry() returns, with the following exceptions:
     Eof() is @true.
 
 This mechanism allows wxArchiveOutputStream::CopyEntry() to always fully
-preserve entries' meta-data. No matter what order order the meta-data occurs
+preserve entries' meta-data. No matter what order the meta-data occurs
 within the archive, the input stream will always have read it before the output
 stream must write it.
 

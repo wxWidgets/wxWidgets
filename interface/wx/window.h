@@ -2087,7 +2087,7 @@ public:
             Specifies the direction for the centring. May be wxHORIZONTAL, wxVERTICAL
             or wxBOTH.
 
-        @remarks This methods provides for a way to centre top level windows over
+        @remarks This method provides for a way to centre top level windows over
                  their parents instead of the entire screen.  If there
                  is no parent or if the window is not a top level
                  window, then behaviour is the same as Centre().

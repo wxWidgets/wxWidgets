@@ -5063,7 +5063,7 @@ public:
         there is a cell at the right and, similarly, Shift-TAB moves the cursor
         to the left in the current row if it's not in the first column.
 
-        What happens if the cursor can't be moved because it it's already at
+        What happens if the cursor can't be moved because it's already at
         the beginning or end of the row can be configured using this function,
         see wxGrid::TabBehaviour documentation for the detailed description.
 
