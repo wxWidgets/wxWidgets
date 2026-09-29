@@ -50,6 +50,9 @@ public:
 
     wxAuiManager& GetAuiManager()  { return m_mgr; }
 
+    // Override to prevent leaving dangling pointers.
+    virtual bool Destroy() override;
+
 protected:
     virtual void OnMoveStart();
     virtual void OnMoving(const wxRect& windowRect, wxDirection dir);
