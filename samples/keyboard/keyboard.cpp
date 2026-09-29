@@ -38,7 +38,9 @@ enum
 
     TestAccelA,
     TestAccelCtrlA,
-    TestAccelEsc
+    TestAccelEsc,
+
+    ForceAccel
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -91,6 +93,7 @@ private:
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_logText->Clear(); }
     void OnSkipDown(wxCommandEvent& event) { m_skipDown = event.IsChecked(); }
     void OnSkipHook(wxCommandEvent& event) { m_skipHook = event.IsChecked(); }
+    void OnForceAccel(wxCommandEvent& event) { m_forceAccel = event.IsChecked(); }
 
     void OnKeyDown(wxKeyEvent& event)
     {
@@ -117,6 +120,20 @@ private:
             event.Skip();
     }
 
+    void OnAcceleratorKey(wxAcceleratorKeyEvent& event)
+    {
+        LogEvent(wxString::Format("Accel(cmd=%d)", event.GetCommand()), event);
+
+        // By default the accelerator is used unless the focused window, e.g. a
+        // text control, reserves the key for itself, but we can override this
+        // by explicitly asking for the accelerator to be used -- note that we
+        // must not skip the event in this case.
+        if ( m_forceAccel )
+            event.UseAccelerator();
+        else
+            event.Skip();
+    }
+
     void OnPaintInputWin(wxPaintEvent& event);
 
     void OnIdle(wxIdleEvent& event);
@@ -136,7 +153,8 @@ private:
     wxTextCtrl *m_logText;
     wxWindow *m_inputWin;
     bool m_skipHook,
-         m_skipDown;
+         m_skipDown,
+         m_forceAccel;
 };
 
 
@@ -172,7 +190,8 @@ MyFrame::MyFrame(const wxString& title)
        : wxFrame(nullptr, wxID_ANY, title),
          m_inputWin(nullptr),
          m_skipHook(true),
-         m_skipDown(true)
+         m_skipDown(true),
+         m_forceAccel(false)
 {
     SetIcon(wxICON(sample));
 
@@ -185,6 +204,9 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->Append(TestAccelA, "Test accelerator &1\tA");
     menuFile->Append(TestAccelCtrlA, "Test accelerator &2\tCtrl-A");
     menuFile->Append(TestAccelEsc, "Test accelerator &3\tEsc");
+    menuFile->AppendCheckItem(ForceAccel, "Always use &accelerators",
+        "Use the accelerators above even if the focused window wants the key"
+    );
     menuFile->AppendSeparator();
 
     menuFile->AppendCheckItem(SkipHook, "Skip CHAR_HOOK event",
@@ -271,6 +293,7 @@ MyFrame::MyFrame(const wxString& title)
     Bind(wxEVT_MENU, &MyFrame::OnTestAccelA, this, TestAccelA);
     Bind(wxEVT_MENU, &MyFrame::OnTestAccelCtrlA, this, TestAccelCtrlA);
     Bind(wxEVT_MENU, &MyFrame::OnTestAccelEsc, this, TestAccelEsc);
+    Bind(wxEVT_MENU, &MyFrame::OnForceAccel, this, ForceAccel);
 #if wxUSE_HOTKEY
     Bind(wxEVT_MENU, &MyFrame::OnRegisterHotKey, this, HotKeyRegister);
     Bind(wxEVT_MENU, &MyFrame::OnUnregisterHotKey, this, HotKeyUnregister);
@@ -280,6 +303,7 @@ MyFrame::MyFrame(const wxString& title)
     // notice that we don't connect OnCharHook() to the input window, unlike
     // the usual key events this one is propagated upwards
     Bind(wxEVT_CHAR_HOOK, &MyFrame::OnCharHook, this);
+    Bind(wxEVT_ACCELERATOR_KEY, &MyFrame::OnAcceleratorKey, this);
 
     Bind(wxEVT_IDLE, &MyFrame::OnIdle, this);
 

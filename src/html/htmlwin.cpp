@@ -28,6 +28,7 @@
 #include "wx/html/htmlproc.h"
 #include "wx/clipbrd.h"
 #include "wx/recguard.h"
+#include "wx/renderer.h"
 
 #include <array>
 #include <list>
@@ -1187,6 +1188,19 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
 
+    if ( HasFocus() )
+    {
+        int xFocus, yFocus;
+        CalcUnscrolledPosition(0, 0, &xFocus, &yFocus);
+
+        wxRect rectFocus(xFocus, yFocus, sz.x, sz.y);
+        if ( rectFocus.width > 2 && rectFocus.height > 2 )
+            rectFocus.Deflate(1);
+
+        wxRendererNative::Get().DrawFocusRect(this, *dc, rectFocus,
+                                              wxCONTROL_FOCUSED);
+    }
+
 #ifdef DEBUG_HTML_SELECTION
     {
     int xc, yc, x, y;
@@ -1312,6 +1326,8 @@ wxRect GetBoundingRect(const wxHtmlCell* const fromCell,
 void wxHtmlWindow::OnFocusEvent(wxFocusEvent& event)
 {
     event.Skip();
+
+    Refresh(false);
 
     // Redraw selection, because its background colour depends on
     // whether the window has keyboard focus or not.

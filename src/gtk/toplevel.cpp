@@ -69,6 +69,9 @@ extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
 extern wxRecursionGuardFlag g_inSizeAllocate;
 
+// This is defined in window.cpp.
+extern GdkEventKey *wxKeyEventClaimedByWindow;
+
 #ifdef GDK_WINDOWING_X11
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
 static enum {
@@ -230,11 +233,30 @@ wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
     // customize this by reversing the order of the steps done in the standard
     // GTK+ gtk_window_key_press_event() handler.
 
+    // Small helper to ensure wxKeyEventClaimedByWindow is never stale.
+    struct ResetClaimedByWindow
+    {
+        ResetClaimedByWindow()
+        {
+            wxKeyEventClaimedByWindow = nullptr;
+        }
+
+        ~ResetClaimedByWindow()
+        {
+            wxKeyEventClaimedByWindow = nullptr;
+        }
+    } resetClaimedByWindow;
+
     if ( gtk_window_propagate_key_event(window, event) )
         return true;
 
-    if ( gtk_window_activate_key(window, event) )
-        return true;
+    // Check if the focused window claimed this key for its own use by setting
+    // this variable: we must not use it as an accelerator then.
+    if ( wxKeyEventClaimedByWindow != event )
+    {
+        if ( gtk_window_activate_key(window, event) )
+            return true;
+    }
 
     void* parent_class = g_type_class_peek_parent(G_OBJECT_GET_CLASS(widget));
     GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);

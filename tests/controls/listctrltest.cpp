@@ -25,6 +25,7 @@
 #include "wx/imaglist.h"
 #include "listbasetest.h"
 #include "testableframe.h"
+#include "waitfor.h"
 #include "wx/uiaction.h"
 
 // ----------------------------------------------------------------------------
@@ -184,7 +185,13 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnDrag", "[listctrl]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+
+    // The simulated input is processed asynchronously and may take quite a
+    // while to arrive when the machine is busy (as is often the case in the CI
+    // builds), so wait until the last event is received: as the input events
+    // are processed in order, all the previous ones must have been received
+    // by then too.
+    WaitFor("drag end", [&]() { return enddrag.GetCount() > 0; }, 5000);
 
     CHECK( begindrag.GetCount() == 1 );
     CHECK( dragging.GetCount() > 0 );

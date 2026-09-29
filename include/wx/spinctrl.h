@@ -56,6 +56,14 @@ public:
     // Select text in the textctrl
     virtual void SetSelection(long from, long to) = 0;
 
+protected:
+#if wxUSE_ACCEL
+    // Reserve the keys used for editing the text in this control, as the
+    // controls implemented in terms of wxTextCtrl already do.
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const override;
+#endif // wxUSE_ACCEL
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxSpinCtrlBase);
 };

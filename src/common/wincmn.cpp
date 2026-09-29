@@ -3710,6 +3710,71 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
     }
 }
 
+#if wxUSE_ACCEL
+
+bool
+wxWindowBase::FindAcceleratorForKeyInMenuBar(const wxKeyEvent&,
+                                             wxAcceleratorEntry&) const
+{
+    return false;
+}
+
+bool
+wxWindowBase::FindAcceleratorForKey(const wxKeyEvent& event,
+                                    wxAcceleratorEntry& entry,
+                                    wxWindow** owner) const
+{
+    auto* const self = const_cast<wxWindowBase*>(this);
+    for ( auto* win = self; win; win = win->GetParent() )
+    {
+        const wxAcceleratorTable* const table = win->GetAcceleratorTable();
+        if ( table && table->IsOk() )
+        {
+            const wxAcceleratorEntry* const found = table->GetEntry(event);
+            if ( found )
+            {
+                entry = *found;
+                if ( owner )
+                    *owner = static_cast<wxWindow*>(win);
+
+                return true;
+            }
+        }
+
+        if ( win->FindAcceleratorForKeyInMenuBar(event, entry) )
+        {
+            if ( owner )
+                *owner = static_cast<wxWindow*>(win);
+
+            return true;
+        }
+
+        if ( win->IsTopNavigationDomain(Navigation_Accel) )
+            break;
+    }
+
+    return false;
+}
+
+bool
+wxWindowBase::ShouldUseAcceleratorForKey(const wxKeyEvent& event,
+                                         int command,
+                                         wxMenuItem* menuItem) const
+{
+    wxAcceleratorKeyEvent eventAccel(event, command, menuItem);
+    eventAccel.SetId(GetId());
+    eventAccel.SetEventObject(const_cast<wxWindowBase*>(this));
+
+    // If the event is handled, its handler determines what to do.
+    if ( HandleWindowEvent(eventAccel) )
+        return eventAccel.ShouldUseAccelerator();
+
+    // Otherwise allow using it as accelerator if the window doesn't claim it.
+    return !ClaimsKeyBeforeAccelerator(event, command);
+}
+
+#endif // wxUSE_ACCEL
+
 // ----------------------------------------------------------------------------
 // focus handling
 // ----------------------------------------------------------------------------

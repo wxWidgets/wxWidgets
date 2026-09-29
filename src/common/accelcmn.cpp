@@ -23,6 +23,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/accel.h"
+    #include "wx/event.h"
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -323,6 +324,31 @@ wxAcceleratorEntry *wxAcceleratorEntry::Create(const wxString& str)
 bool wxAcceleratorEntry::FromString(const wxString& str)
 {
     return ParseAccel(str, &m_flags, &m_keyCode);
+}
+
+bool wxAcceleratorEntry::MatchesEvent(const wxKeyEvent& event) const
+{
+    // Normalize the key code to allow comparing the key codes of the
+    // accelerator entries, which may use either case for the letters, with the
+    // key codes of the key events, which always use the upper case ones.
+    auto const normalizeKeyCode = [](int keyCode)
+    {
+        return wxIsascii(keyCode) ? static_cast<int>(wxToupper(keyCode))
+                                  : keyCode;
+    };
+
+    if ( normalizeKeyCode(m_keyCode) != normalizeKeyCode(event.GetKeyCode()) )
+        return false;
+
+    return ((m_flags & wxACCEL_CTRL) != 0) == event.ControlDown() &&
+           ((m_flags & wxACCEL_SHIFT) != 0) == event.ShiftDown() &&
+           ((m_flags & wxACCEL_ALT) != 0) == event.AltDown()
+#ifdef __WXMAC__
+           // Under Mac wxACCEL_CTRL corresponds to Command key, so we also
+           // need to check the real Control key separately.
+           && ((m_flags & wxACCEL_RAW_CTRL) != 0) == event.RawControlDown()
+#endif // __WXMAC__
+           ;
 }
 
 namespace

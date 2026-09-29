@@ -14,6 +14,7 @@
 
 
 #ifndef WX_PRECOMP
+    #include "wx/event.h"
 #endif // WX_PRECOMP
 
 #include "wx/accel.h"
@@ -118,4 +119,32 @@ TEST_CASE( "wxAcceleratorTable::Create", "[accelentry]" )
     };
 
     CHECK( wxAcceleratorTable(WXSIZEOF(entries), entries).IsOk() );
+}
+
+TEST_CASE( "wxAcceleratorEntry::MatchesEvent", "[accelentry]" )
+{
+    wxKeyEvent event(wxEVT_KEY_DOWN);
+    event.m_keyCode = 'A';
+    event.SetControlDown(true);
+
+    CHECK( wxAcceleratorEntry(wxACCEL_CTRL, 'A').MatchesEvent(event) );
+
+    // The case of the letters doesn't matter.
+    CHECK( wxAcceleratorEntry(wxACCEL_CTRL, 'a').MatchesEvent(event) );
+
+    // But the key and all the modifiers must match exactly.
+    CHECK( !wxAcceleratorEntry(wxACCEL_CTRL, 'B').MatchesEvent(event) );
+    CHECK( !wxAcceleratorEntry(wxACCEL_NORMAL, 'A').MatchesEvent(event) );
+    CHECK( !wxAcceleratorEntry(wxACCEL_CTRL | wxACCEL_SHIFT, 'A')
+                .MatchesEvent(event) );
+
+    wxKeyEvent eventDel(wxEVT_KEY_DOWN);
+    eventDel.m_keyCode = WXK_DELETE;
+
+    CHECK( wxAcceleratorEntry(wxACCEL_NORMAL, WXK_DELETE)
+                .MatchesEvent(eventDel) );
+
+    // The keypad keys are different from the normal ones.
+    CHECK( !wxAcceleratorEntry(wxACCEL_NORMAL, WXK_NUMPAD_DELETE)
+                .MatchesEvent(eventDel) );
 }

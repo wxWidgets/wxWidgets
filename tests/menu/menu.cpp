@@ -40,9 +40,11 @@ enum
 {
     MenuTestCase_Foo = 10000,
     MenuTestCase_SelectAll,
+    MenuTestCase_Delete,
     MenuTestCase_Bar,
     MenuTestCase_ExtraAccel,
     MenuTestCase_ExtraAccels,
+    MenuTestCase_SubmenuAccel,
     MenuTestCase_First
 };
 
@@ -140,6 +142,9 @@ void MenuTestCase::CreateFrame()
     m_itemCount++;
     fileMenu->Append(MenuTestCase_SelectAll, "Select &all\tCtrl-A",
                      "Accelerator conflicting with wxTextCtrl");
+    m_itemCount++;
+    fileMenu->Append(MenuTestCase_Delete, "&Delete\tDEL",
+                     "Another accelerator conflicting with wxTextCtrl");
     m_itemCount++;
 
     // Test adding an extra accelerator to the item before adding it to the menu.
@@ -281,6 +286,57 @@ TEST_CASE_METHOD(MenuTestCase, "Menu::FindInMenu", "[menu]")
         }
     }
 }
+
+#if wxUSE_ACCEL
+
+TEST_CASE_METHOD(MenuTestCase, "Menu::FindItemForAccelKey", "[menu][accelentry]")
+{
+    wxMenuBar* const bar = m_frame->GetMenuBar();
+
+    wxKeyEvent event(wxEVT_KEY_DOWN);
+    event.m_keyCode = 'F';
+    event.SetControlDown(true);
+
+    wxMenuItem* item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_Foo );
+
+    // Items of the other menus are found too.
+    event.m_keyCode = WXK_F1;
+    event.SetControlDown(false);
+    item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_Bar );
+
+    // Extra accelerators are taken into account as well.
+    event.m_keyCode = 'V';
+    event.SetControlDown(true);
+    item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_ExtraAccel );
+
+    // And so are the items of the submenus.
+    wxMenu* submenu = nullptr;
+    REQUIRE( bar->FindItem(m_submenuItemId, &submenu) );
+    REQUIRE( submenu );
+    submenu->Append(MenuTestCase_SubmenuAccel, "Submenu accel\tCtrl-J");
+
+    event.m_keyCode = 'J';
+    item = bar->FindItemForAccelKey(event);
+    REQUIRE( item );
+    CHECK( item->GetId() == MenuTestCase_SubmenuAccel );
+
+    // Keys not used by any accelerator are not found.
+    event.m_keyCode = 'Z';
+    CHECK( !bar->FindItemForAccelKey(event) );
+
+    // Neither are the keys used by them with different modifiers.
+    event.m_keyCode = 'F';
+    event.SetShiftDown(true);
+    CHECK( !bar->FindItemForAccelKey(event) );
+}
+
+#endif // wxUSE_ACCEL
 
 TEST_CASE_METHOD(MenuTestCase, "Menu::EnableTop", "[menu]")
 {
@@ -754,6 +810,172 @@ key specialKeys[] =
 };
 
 }
+
+#if wxUSE_ACCEL && wxUSE_UIACTIONSIMULATOR
+
+// What should the handler of the accelerator key event do.
+enum class AccelAction
+{
+    Skip,           // Skip the event, i.e. use the default behaviour.
+    Handle,         // Handle it, i.e. let the window have the key.
+    Use             // Explicitly ask for the accelerator to be used.
+};
+
+// Handler for wxEVT_ACCELERATOR_KEY allowing to check the events received and
+// to change what is done with them.
+class AccelKeyEventHandler
+{
+public:
+    explicit AccelKeyEventHandler(wxWindow* win, AccelAction action)
+        : m_win(win),
+          m_action(action)
+    {
+        m_win->Bind(wxEVT_ACCELERATOR_KEY,
+                    &AccelKeyEventHandler::OnAccelKey, this);
+    }
+
+    ~AccelKeyEventHandler()
+    {
+        m_win->Unbind(wxEVT_ACCELERATOR_KEY,
+                      &AccelKeyEventHandler::OnAccelKey, this);
+    }
+
+    // Return the command of the last event received and forget it.
+    int GetLastCommand()
+    {
+        const int command = m_command;
+        m_command = wxID_NONE;
+        return command;
+    }
+
+private:
+    void OnAccelKey(wxAcceleratorKeyEvent& event)
+    {
+        CHECK( m_command == wxID_NONE );
+
+        m_command = event.GetCommand();
+
+        switch ( m_action )
+        {
+            case AccelAction::Skip:
+                event.Skip();
+                break;
+
+            case AccelAction::Handle:
+                break;
+
+            case AccelAction::Use:
+                event.UseAccelerator();
+                break;
+        }
+    }
+
+    wxWindow* const m_win;
+    const AccelAction m_action;
+
+    int m_command = wxID_NONE;
+
+    wxDECLARE_NO_COPY_CLASS(AccelKeyEventHandler);
+};
+
+TEST_CASE_METHOD(MenuTestCase, "Menu::AcceleratorKeyEvent", "[menu][accelentry]")
+{
+    if ( !EnableUITests() )
+        return;
+
+    m_frame->Show();
+
+    // Note that we need a focused child window and not just the frame itself
+    // because the key events are only sent to the focused window.
+    wxWindow* const win = new wxWindow(m_frame, wxID_ANY);
+    win->SetFocus();
+
+    WaitFor("the window to become focused", [win]() {
+        return win->HasFocus();
+    });
+
+    MenuEventHandler menuHandler(m_frame);
+    wxUIActionSimulator sim;
+
+    // Note that the accelerators used here must not involve Ctrl because it
+    // corresponds to Cmd under macOS and the key combinations using it are
+    // handled by the system before the application gets any key events for
+    // them at all, so wxEVT_ACCELERATOR_KEY is never generated for them there.
+
+    SECTION( "Sent for the accelerator keys only" )
+    {
+        AccelKeyEventHandler accelHandler(m_frame, AccelAction::Skip);
+
+        // F1 is used by MenuTestCase_Bar accelerator.
+        sim.Char(WXK_F1);
+        wxYield();
+
+        CHECK( accelHandler.GetLastCommand() == MenuTestCase_Bar );
+        menuHandler.CheckGot(MenuTestCase_Bar);
+
+        // While "Z" is not used by anything, so no event should be sent.
+        sim.Char('Z');
+        wxYield();
+
+        CHECK( accelHandler.GetLastCommand() == wxID_NONE );
+        CHECK( !menuHandler.GotEvent() );
+    }
+
+    SECTION( "Handling it prevents using the accelerator" )
+    {
+        AccelKeyEventHandler accelHandler(m_frame, AccelAction::Handle);
+
+        sim.Char(WXK_F1);
+        wxYield();
+
+        CHECK( accelHandler.GetLastCommand() == MenuTestCase_Bar );
+        CHECK( !menuHandler.GotEvent() );
+    }
+
+    // Note that a multiline text control is used here because single line
+    // ones use the native field editor under macOS and so don't go through
+    // the same code path as the other windows there.
+    const long styleText = wxTE_MULTILINE;
+
+    SECTION( "Text control keys are not used as accelerators" )
+    {
+        wxTextCtrl* const text = new wxTextCtrl(m_frame, wxID_ANY, "Testing",
+                                                wxDefaultPosition,
+                                                wxDefaultSize,
+                                                styleText);
+        text->SetFocus();
+        wxYield();
+
+        AccelKeyEventHandler accelHandler(m_frame, AccelAction::Skip);
+
+        // Del is used for deleting the text in the control itself.
+        sim.Char(WXK_DELETE);
+        wxYield();
+
+        CHECK( accelHandler.GetLastCommand() == MenuTestCase_Delete );
+        CHECK( !menuHandler.GotEvent() );
+    }
+
+    SECTION( "UseAccelerator() overrides the control" )
+    {
+        wxTextCtrl* const text = new wxTextCtrl(m_frame, wxID_ANY, "Testing",
+                                                wxDefaultPosition,
+                                                wxDefaultSize,
+                                                styleText);
+        text->SetFocus();
+        wxYield();
+
+        AccelKeyEventHandler accelHandler(m_frame, AccelAction::Use);
+
+        sim.Char(WXK_DELETE);
+        wxYield();
+
+        CHECK( accelHandler.GetLastCommand() == MenuTestCase_Delete );
+        menuHandler.CheckGot(MenuTestCase_Delete);
+    }
+}
+
+#endif // wxUSE_ACCEL && wxUSE_UIACTIONSIMULATOR
 
 TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 {

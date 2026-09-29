@@ -194,6 +194,21 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     return true;
 }
 
+#if wxUSE_ACCEL
+
+bool
+wxComboBox::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                       int WXUNUSED(command)) const
+{
+    // We don't need any keys if we're not editing any text at all.
+    if ( HasFlag(wxCB_READONLY) )
+        return false;
+
+    return IsUsedForEditing(event);
+}
+
+#endif // wxUSE_ACCEL
+
 void wxComboBox::GTKCreateComboBoxWidget()
 {
 #ifdef __WXGTK3__

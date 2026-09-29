@@ -130,6 +130,17 @@ wxDEFINE_EVENT( wxEVT_TEXT_MAXLEN, wxCommandEvent );
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl);
 
+#if wxUSE_ACCEL
+
+bool
+wxTextCtrlBase::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                           int WXUNUSED(command)) const
+{
+    return IsUsedForEditing(event);
+}
+
+#endif // wxUSE_ACCEL
+
 // ============================================================================
 // wxTextAttr implementation
 // ============================================================================
