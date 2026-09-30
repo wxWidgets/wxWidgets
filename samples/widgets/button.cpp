@@ -130,7 +130,8 @@ protected:
                *m_chkUseMarkup,
 #endif // wxUSE_MARKUP
                *m_chkDefault,
-               *m_chkUseBitmapClass;
+               *m_chkUseBitmapClass,
+               *m_chkDisabled;
 
     // more checkboxes for wxBitmapButton only
     wxCheckBox *m_chkUsePressed,
@@ -220,6 +221,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkUseMarkup =
 #endif // wxUSE_MARKUP
     m_chkDefault =
+    m_chkDisabled =
     m_chkUseBitmapClass =
     m_chkUsePressed =
     m_chkUseFocused =
@@ -261,6 +263,7 @@ void ButtonWidgetsPage::CreateContent()
     m_chkUseMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Interpret &markup", wxID_ANY, sizerLeftBox);
 #endif // wxUSE_MARKUP
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, "&Default", wxID_ANY, sizerLeftBox);
+    m_chkDisabled = CreateCheckBoxAndAddToSizer(sizerLeft, "&Disable", wxID_ANY, sizerLeftBox);
 
     m_chkUseBitmapClass = CreateCheckBoxAndAddToSizer(sizerLeft,
         "Use wxBitmapButton", wxID_ANY, sizerLeftBox);
@@ -399,6 +402,7 @@ void ButtonWidgetsPage::Reset()
     m_chkAuthNeeded->SetValue(false);
     m_chkTextAndBitmap->SetValue(false);
     m_chkDefault->SetValue(false);
+    m_chkDisabled->SetValue(false);
 #if wxUSE_COMMANDLINKBUTTON
     m_chkCommandLink->SetValue(false);
 #endif
@@ -583,6 +587,8 @@ void ButtonWidgetsPage::CreateButton()
         if ( m_chkUseDisabled->GetValue() )
             m_button->SetBitmapDisabled(wxArtProvider::GetIcon(wxART_MISSING_IMAGE, wxART_BUTTON));
     }
+
+    m_button->Enable(!m_chkDisabled->IsChecked());
 
     m_chkTextAndBitmap->Enable(!m_chkBitmapOnly->IsChecked());
     m_chkBitmapOnly->Enable(!m_chkTextAndBitmap->IsChecked());
