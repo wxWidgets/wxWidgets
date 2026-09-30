@@ -215,6 +215,8 @@ MyFrame::MyFrame()
                        wxSizerFlags().Left().Border() );
     paneSubSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ),
                        wxSizerFlags().Left().Border() );
+    paneSubSizer->Add( new wxCollapsiblePane(win, -1, "Nested empty wxCollapsiblePane"),
+                       wxSizerFlags().Expand().Border() );
 
     win->SetSizer( m_paneSizer );
 
