@@ -32,13 +32,22 @@
 #include "wx/msw/private.h"
 
 #include "wx/tooltip.h"
+struct wxMSWMessage
+{
+    MSG msg;
+    bool processedByKeyboardHook;
+};
+
 #if wxUSE_THREADS
     #include <list>
-    using wxMsgList = std::list<MSG>;
+    using wxMsgList = std::list<wxMSWMessage>;
 #endif // wxUSE_THREADS
 
 // This is defined in src/msw/window.cpp.
 extern WPARAM wxVKBlockedByKeyboardHook;
+extern WPARAM wxVKProcessedByKeyboardHook;
+extern WXLPARAM wxLParamProcessedByKeyboardHook;
+extern UINT wxMessageProcessedByKeyboardHook;
 
 // ============================================================================
 // GUI wxEventLoop implementation
@@ -61,6 +70,52 @@ bool wxGUIEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
 
 bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 {
+    // TSF must see key messages before wx's global character hook. This lets
+    // an IME cancel a composition/candidate list with Escape instead of
+    // letting wxDialogBase close the dialog first, see #16059. Keep this in
+    // PreProcessMessage(), rather than ProcessMessage(), as this method is
+    // also used directly by wxMFCApp::PreTranslateMessage().
+    const bool isKeyDown = msg->message == WM_KEYDOWN ||
+                           msg->message == WM_SYSKEYDOWN;
+    const bool isKeyUp = msg->message == WM_KEYUP ||
+                         msg->message == WM_SYSKEYUP;
+
+    // The keyboard hook cannot always block a key at the Windows level when
+    // an IME is active. In this case the message must be eaten here too. Do
+    // this before checking wxVKProcessedByKeyboardHook as the same key can be
+    // marked by the hook before the IME workaround is applied.
+    if ( isKeyDown && wxVKBlockedByKeyboardHook != 0 &&
+            msg->wParam == wxVKBlockedByKeyboardHook )
+    {
+        wxVKBlockedByKeyboardHook = 0;
+        wxVKProcessedByKeyboardHook = 0;
+        wxLParamProcessedByKeyboardHook = 0;
+        wxMessageProcessedByKeyboardHook = 0;
+        return true;
+    }
+
+    const bool processedByKeyboardHook =
+        (isKeyDown || isKeyUp) && wxVKProcessedByKeyboardHook != 0 &&
+            msg->wParam == wxVKProcessedByKeyboardHook &&
+            msg->lParam == wxLParamProcessedByKeyboardHook &&
+            msg->message == wxMessageProcessedByKeyboardHook;
+
+    if ( (isKeyDown || isKeyUp) && msg->wParam == VK_ESCAPE &&
+            !processedByKeyboardHook )
+    {
+        if ( wxMSWProcessTSFKey(msg) ||
+                (isKeyDown &&
+                    wxMSWProcessKeyHook(msg->wParam, msg->lParam)) )
+            return true;
+    }
+
+    if ( isKeyDown || isKeyUp )
+    {
+        wxVKProcessedByKeyboardHook = 0;
+        wxLParamProcessedByKeyboardHook = 0;
+        wxMessageProcessedByKeyboardHook = 0;
+    }
+
     HWND hwnd = msg->hwnd;
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
     wxWindow *wnd;
@@ -128,11 +183,15 @@ void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
     // doesn't get all keyboard messages in wxKeyboardHook(): as we can't
     // afford to ignore the keyboard event at Windows level, we ignore it here
     // instead.
-    if ( msg->message == WM_KEYDOWN && wxVKBlockedByKeyboardHook )
+    if ( (msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN) &&
+            wxVKBlockedByKeyboardHook != 0 )
     {
         if ( msg->wParam == wxVKBlockedByKeyboardHook )
         {
             wxVKBlockedByKeyboardHook = 0;
+            wxVKProcessedByKeyboardHook = 0;
+            wxLParamProcessedByKeyboardHook = 0;
+            wxMessageProcessedByKeyboardHook = 0;
             return;
         }
         else
@@ -177,7 +236,24 @@ bool wxGUIEventLoop::Dispatch()
         // the message will be processed twice
         if ( !wxIsWaitingForThread() || msg.message != WM_COMMAND )
         {
-            s_aSavedMessages.push_back(msg);
+            const bool processedByKeyboardHook =
+                (msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN ||
+                 msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP) &&
+                msg.wParam == wxVKProcessedByKeyboardHook &&
+                msg.lParam == wxLParamProcessedByKeyboardHook &&
+                msg.message == wxMessageProcessedByKeyboardHook;
+
+            if ( processedByKeyboardHook )
+            {
+                wxVKProcessedByKeyboardHook = 0;
+                wxLParamProcessedByKeyboardHook = 0;
+                wxMessageProcessedByKeyboardHook = 0;
+            }
+
+            s_aSavedMessages.push_back
+            (
+                { msg, processedByKeyboardHook }
+            );
         }
 
         return true;
@@ -195,7 +271,16 @@ bool wxGUIEventLoop::Dispatch()
 
             for ( ; !s_aSavedMessages.empty(); s_aSavedMessages.pop_front() )
             {
-                ProcessMessage(&s_aSavedMessages.front());
+                wxMSWMessage& savedMessage = s_aSavedMessages.front();
+
+                if ( savedMessage.processedByKeyboardHook )
+                {
+                    wxVKProcessedByKeyboardHook = savedMessage.msg.wParam;
+                    wxLParamProcessedByKeyboardHook = savedMessage.msg.lParam;
+                    wxMessageProcessedByKeyboardHook = savedMessage.msg.message;
+                }
+
+                ProcessMessage(&savedMessage.msg);
             }
         }
     }
@@ -232,7 +317,7 @@ void wxGUIEventLoop::OnNextIteration()
 
 void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 {
-    std::vector<MSG> msgsToProcess;
+    std::vector<wxMSWMessage> msgsToProcess;
 
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
@@ -392,7 +477,25 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 
             // and perhaps save it for processing later
             if ( processLater )
-                msgsToProcess.push_back(msg);
+            {
+                const bool processedByKeyboardHook =
+                    (msg.message == WM_KEYDOWN ||
+                     msg.message == WM_SYSKEYDOWN ||
+                     msg.message == WM_KEYUP ||
+                     msg.message == WM_SYSKEYUP) &&
+                    msg.wParam == wxVKProcessedByKeyboardHook &&
+                    msg.lParam == wxLParamProcessedByKeyboardHook &&
+                    msg.message == wxMessageProcessedByKeyboardHook;
+
+                if ( processedByKeyboardHook )
+                {
+                    wxVKProcessedByKeyboardHook = 0;
+                    wxLParamProcessedByKeyboardHook = 0;
+                    wxMessageProcessedByKeyboardHook = 0;
+                }
+
+                msgsToProcess.push_back({ msg, processedByKeyboardHook });
+            }
         }
     }
 
@@ -402,6 +505,12 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     DWORD id = GetCurrentThreadId();
     for ( const auto& m : msgsToProcess )
     {
-        PostThreadMessage(id, m.message, m.wParam, m.lParam);
+        if ( ::PostThreadMessage(id, m.msg.message, m.msg.wParam,
+                                 m.msg.lParam) &&
+                m.processedByKeyboardHook )
+        {
+            wxMSWQueueKeyboardHookMessage(m.msg.wParam, m.msg.lParam,
+                                          m.msg.message);
+        }
     }
 }

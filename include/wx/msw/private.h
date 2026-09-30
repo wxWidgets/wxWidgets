@@ -64,6 +64,16 @@ extern "C"
 
 WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 
+// Process a key through TSF before the wxEVT_CHAR_HOOK path.
+bool wxMSWProcessTSFKey(WXMSG* msg);
+
+// Process a key through the wxEVT_CHAR_HOOK path after TSF declined it.
+bool wxMSWProcessKeyHook(WXWPARAM wParam, WXLPARAM lParam);
+
+// Preserve keyboard-hook processing when a message is reposted after yielding.
+void wxMSWQueueKeyboardHookMessage(WXWPARAM wParam, WXLPARAM lParam,
+                                   UINT message);
+
 // ---------------------------------------------------------------------------
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------

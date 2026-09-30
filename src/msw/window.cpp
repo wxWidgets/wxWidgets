@@ -75,6 +75,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/comptr.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/keyboard.h"
 #include "wx/msw/private/metrics.h"
@@ -108,8 +109,12 @@
 #include "wx/display.h"
 
 #include <string.h>
+#include <deque>
 
 #include <imm.h>
+#if wxUSE_OLE
+    #include <msctf.h>
+#endif // wxUSE_OLE
 #include <shellapi.h>
 #include <mmsystem.h>
 
@@ -152,6 +157,26 @@ wxWindowMSW *wxWindowBeingErased = nullptr;
 // return 1 from the keyboard hook because we had to leave the IME edit this
 // event, see wxKeyboardHook() code.
 WPARAM wxVKBlockedByKeyboardHook = 0;
+
+// Set to the complete keyboard message for Escape already examined by the
+// keyboard hook. This avoids processing it a second time in the event loop.
+WPARAM wxVKProcessedByKeyboardHook = 0;
+WXLPARAM wxLParamProcessedByKeyboardHook = 0;
+UINT wxMessageProcessedByKeyboardHook = 0;
+
+namespace
+{
+
+struct wxKeyboardHookMessage
+{
+    WXWPARAM wParam;
+    WXLPARAM lParam;
+    UINT message;
+};
+
+std::deque<wxKeyboardHookMessage> gs_keyboardHookMessages;
+
+} // anonymous namespace
 
 namespace
 {
@@ -3140,6 +3165,28 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     // (expanded from wxSEH_TRY below) with MSVC.
     wxTraceMSWMessage(hWnd, message, wParam, lParam);
 #endif // wxDEBUG_LEVEL >= 2
+
+    if ( (message == WM_KEYDOWN || message == WM_SYSKEYDOWN ||
+          message == WM_KEYUP || message == WM_SYSKEYUP) &&
+            wxVKProcessedByKeyboardHook != 0 &&
+            wParam == wxVKProcessedByKeyboardHook &&
+            lParam == wxLParamProcessedByKeyboardHook &&
+            message == wxMessageProcessedByKeyboardHook )
+    {
+        wxVKProcessedByKeyboardHook = 0;
+        wxLParamProcessedByKeyboardHook = 0;
+        wxMessageProcessedByKeyboardHook = 0;
+    }
+
+    // Direct message pumps don't go through wxGUIEventLoop::ProcessMessage(),
+    // so handle the IME workaround here too.
+    if ( (message == WM_KEYDOWN || message == WM_SYSKEYDOWN) &&
+            wxVKBlockedByKeyboardHook != 0 &&
+            wParam == wxVKBlockedByKeyboardHook )
+    {
+        wxVKBlockedByKeyboardHook = 0;
+        return 0;
+    }
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);
 
@@ -7769,18 +7816,286 @@ bool wxIsIMEOpen(const wxWindow* win)
 
 } // anonymous namespace
 
-// Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
-// in active frames and dialogs, regardless of where the focus is.
+// Windows keyboard hook. Allows interception of keys such as F1 in active
+// frames and dialogs, regardless of where the focus is. Escape is passed to
+// TSF before the wx character hook.
 static HHOOK wxTheKeyboardHook = 0;
+
+namespace
+{
+
+#if wxUSE_OLE
+
+// Use TSF's key manager before generating wxEVT_CHAR_HOOK. Keep this separate
+// from the IMM32 wrappers below: both APIs are needed for compatibility with
+// modern and legacy input methods.
+class wxTSFFunctions
+{
+public:
+    static const wxTSFFunctions& Get()
+    {
+        static const wxTSFFunctions s_tsf;
+        return s_tsf;
+    }
+
+    typedef HRESULT (WINAPI *TF_GetThreadMgr_t)(ITfThreadMgr **);
+
+    TF_GetThreadMgr_t GetThreadMgr = nullptr;
+
+    bool IsOk() const { return GetThreadMgr != nullptr; }
+
+private:
+    wxTSFFunctions()
+        : m_dll(wxT("msctf.dll"), wxDL_VERBATIM | wxDL_QUIET)
+    {
+        if ( m_dll.IsLoaded() )
+        {
+            GetThreadMgr = reinterpret_cast<TF_GetThreadMgr_t>
+                           (
+                             m_dll.RawGetSymbol("TF_GetThreadMgr")
+                           );
+        }
+    }
+
+    wxDynamicLibrary m_dll;
+
+    wxDECLARE_NO_COPY_CLASS(wxTSFFunctions);
+};
+
+#endif // wxUSE_OLE
+
+} // anonymous namespace
+
+bool wxMSWProcessTSFKey(WXMSG* msg)
+{
+#if wxUSE_OLE
+    // Escape is used to release mouse capture, so let the captured window
+    // handle it instead of allowing TSF to consume it first.
+    if ( ::GetCapture() )
+        return false;
+
+    const bool isKeyDown = msg->message == WM_KEYDOWN ||
+                           msg->message == WM_SYSKEYDOWN;
+    const bool isKeyUp = msg->message == WM_KEYUP ||
+                         msg->message == WM_SYSKEYUP;
+    if ( !isKeyDown && !isKeyUp )
+        return false;
+
+    const wxTSFFunctions& tsf = wxTSFFunctions::Get();
+    if ( !tsf.IsOk() )
+        return false;
+
+    wxCOMPtr<ITfThreadMgr> threadMgr;
+    // TF_GetThreadMgr() may not return a thread manager, including when it
+    // fails, so fall back to creating one below.
+    tsf.GetThreadMgr(&threadMgr);
+
+    if ( !threadMgr )
+    {
+        // Keep this local to avoid a link-time dependency on uuid.lib, which
+        // is useful for MinGW and older wxMSW build setups.
+        static const CLSID clsidThreadMgr =
+            { 0x529a9e6b, 0x6587, 0x4f23,
+              { 0xab, 0x9e, 0x9c, 0x7d, 0x68, 0x3e, 0x3c, 0x50 } };
+        static const IID iidThreadMgr =
+            { 0xaa80e801, 0x2021, 0x11d2,
+              { 0x93, 0xe0, 0x00, 0x60, 0xb0, 0x67, 0xb8, 0x6e } };
+
+        if ( FAILED(::CoCreateInstance
+                    (
+                      clsidThreadMgr,
+                      nullptr,
+                      CLSCTX_INPROC_SERVER,
+                      iidThreadMgr,
+                      reinterpret_cast<void **>(&threadMgr)
+                    )) )
+        {
+            return false;
+        }
+    }
+
+    // Keep this local to avoid a link-time dependency on uuid.lib, which is
+    // useful for MinGW and older wxMSW build setups.
+    static const IID iidKeystrokeMgr =
+        { 0xaa80e7f0, 0x2021, 0x11d2,
+          { 0x93, 0xe0, 0x00, 0x60, 0xb0, 0x67, 0xb8, 0x6e } };
+
+    wxCOMPtr<ITfKeystrokeMgr> keystrokeMgr;
+    const HRESULT hr = threadMgr->QueryInterface
+                       (
+                         iidKeystrokeMgr,
+                         reinterpret_cast<void **>(&keystrokeMgr)
+                       );
+    if ( FAILED(hr) || !keystrokeMgr )
+        return false;
+
+    BOOL eaten = FALSE;
+    const HRESULT hrTest = isKeyDown
+        ? keystrokeMgr->TestKeyDown(msg->wParam, msg->lParam, &eaten)
+        : keystrokeMgr->TestKeyUp(msg->wParam, msg->lParam, &eaten);
+    if ( FAILED(hrTest) || !eaten )
+        return false;
+
+    // TestKeyDown/TestKeyUp only asks the active text service whether it wants
+    // the key. KeyDown/KeyUp performs the actual processing, as required by
+    // the TSF message pump contract.
+    eaten = FALSE;
+    const HRESULT hrKey = isKeyDown
+        ? keystrokeMgr->KeyDown(msg->wParam, msg->lParam, &eaten)
+        : keystrokeMgr->KeyUp(msg->wParam, msg->lParam, &eaten);
+
+    return SUCCEEDED(hrKey) && eaten;
+#else // !wxUSE_OLE
+    wxUnusedVar(msg);
+    return false;
+#endif // wxUSE_OLE/!wxUSE_OLE
+}
+
+namespace
+{
+
+bool wxProcessKeyHookEvent(WXWPARAM wParam, WXLPARAM lParam,
+                           bool blockIfIMEOpen)
+{
+    if ( gs_modalEntryWindowCount || ::GetCapture() )
+        return false;
+
+    wchar_t uc = 0;
+    int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
+
+    if ( id == WXK_NONE && static_cast<int>(uc) == WXK_NONE )
+        return false;
+
+    wxWindow const* win = wxWindow::DoFindFocus();
+    if ( !win )
+    {
+        // Even if the focus got lost somehow, still send the event to the
+        // top level parent to allow a wxDialog to always close on Escape.
+        win = wxGetActiveWindow();
+    }
+
+    wxKeyEvent event(wxEVT_CHAR_HOOK);
+    MSWInitAnyKeyEvent(event, wParam, lParam, win);
+
+    event.m_keyCode = id;
+    event.m_uniChar = uc;
+    event.SetUnicodeChar(uc);
+
+    wxEvtHandler * const handler = win ? win->GetEventHandler()
+                                       : wxTheApp;
+
+    // Do not let exceptions propagate out of the hook, it's a module boundary.
+    if ( handler )
+    {
+        const bool processed = handler->SafelyProcessEvent(event);
+
+        if ( !processed )
+            return false;
+
+        if ( !event.IsNextEventAllowed() )
+        {
+            // When IME is active, we must let it have the event as otherwise
+            // it could just hang, see #22473.
+            if ( !wxIsIMEOpen(win) )
+                return true;
+
+            if ( blockIfIMEOpen )
+                return true;
+
+            // Because we don't stop processing of the event at Windows level,
+            // we are going to get WM_KEYDOWN for this key, but we need to
+            // ignore it as it's not supposed to be generated if
+            // wxEVT_CHAR_HOOK handled the event.
+            wxVKBlockedByKeyboardHook = wParam;
+        }
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
+bool wxMSWProcessKeyHook(WXWPARAM wParam, WXLPARAM lParam)
+{
+    return wxProcessKeyHookEvent(wParam, lParam, true);
+}
+
+void wxMSWQueueKeyboardHookMessage(WXWPARAM wParam, WXLPARAM lParam,
+                                   UINT message)
+{
+    gs_keyboardHookMessages.push_back({ wParam, lParam, message });
+}
 
 LRESULT APIENTRY
 wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 {
+    if ( nCode < 0 )
+        return CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
+
     DWORD hiWord = HIWORD(lParam);
-    if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
+
+    if ( nCode != HC_NOREMOVE )
     {
         wchar_t uc = 0;
         int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
+        const bool isKeyUp = (hiWord & KF_UP) != 0;
+        const UINT message = (hiWord & KF_ALTDOWN)
+            ? (isKeyUp ? WM_SYSKEYUP : WM_SYSKEYDOWN)
+            : (isKeyUp ? WM_KEYUP : WM_KEYDOWN);
+
+        if ( !gs_keyboardHookMessages.empty() &&
+                wParam == gs_keyboardHookMessages.front().wParam &&
+                lParam == gs_keyboardHookMessages.front().lParam &&
+                message == gs_keyboardHookMessages.front().message )
+        {
+            gs_keyboardHookMessages.pop_front();
+            wxVKProcessedByKeyboardHook = wParam;
+            wxLParamProcessedByKeyboardHook = lParam;
+            wxMessageProcessedByKeyboardHook = message;
+            return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam,
+                                       lParam);
+        }
+
+        // A message deferred by wxGUIEventLoop::DoYieldFor() is posted back
+        // to the queue after it has already passed through this hook. Keep
+        // the marker for its second trip through the hook and skip processing
+        // it again.
+        if ( wParam == wxVKProcessedByKeyboardHook &&
+                lParam == wxLParamProcessedByKeyboardHook &&
+                message == wxMessageProcessedByKeyboardHook )
+        {
+            return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam,
+                                       lParam);
+        }
+
+        wxVKProcessedByKeyboardHook = 0;
+        wxLParamProcessedByKeyboardHook = 0;
+        wxMessageProcessedByKeyboardHook = 0;
+
+        if ( id == WXK_ESCAPE )
+        {
+            WXMSG msg;
+            wxZeroMemory(msg);
+            msg.message = message;
+            msg.wParam = wParam;
+            msg.lParam = lParam;
+
+            if ( wxMSWProcessTSFKey(&msg) )
+                return 1;
+
+            // The message will pass through the Windows hook and may reach
+            // wxGUIEventLoop::PreProcessMessage(), where it must not be sent
+            // to TSF a second time. Set this even when the character hook is
+            // skipped below because of modal input or mouse capture.
+            wxVKProcessedByKeyboardHook = wParam;
+            wxLParamProcessedByKeyboardHook = lParam;
+            wxMessageProcessedByKeyboardHook = message;
+        }
+
+        if ( hiWord & KF_UP )
+        {
+            return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
+        }
 
         // Don't intercept keyboard entry (notably Escape) if a modal window
         // (not managed by wx, e.g. IME one) is currently opened as more often
@@ -7793,50 +8108,14 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
         // certain to have focus while it has the capture.
         if ( !gs_modalEntryWindowCount && !::GetCapture() )
         {
-            if ( id != WXK_NONE
-                    || static_cast<int>(uc) != WXK_NONE
-                    )
+            if ( id != WXK_NONE || static_cast<int>(uc) != WXK_NONE )
             {
-                wxWindow const* win = wxWindow::DoFindFocus();
-                if ( !win )
+                if ( wxProcessKeyHookEvent(wParam, lParam, false) )
                 {
-                    // Even if the focus got lost somehow, still send the event
-                    // to the top level parent to allow a wxDialog to always
-                    // close on Escape.
-                    win = wxGetActiveWindow();
-                }
-
-                wxKeyEvent event(wxEVT_CHAR_HOOK);
-                MSWInitAnyKeyEvent(event, wParam, lParam, win);
-
-                event.m_keyCode = id;
-                event.m_uniChar = uc;
-                event.SetUnicodeChar(uc);
-
-                wxEvtHandler * const handler = win ? win->GetEventHandler()
-                                                   : wxTheApp;
-
-                // Do not let exceptions propagate out of the hook, it's a
-                // module boundary.
-                if ( handler && handler->SafelyProcessEvent(event) )
-                {
-                    if ( !event.IsNextEventAllowed() )
-                    {
-                        // When IME is active, we must let it have the event as
-                        // otherwise it could just hang, see #22473.
-                        if ( !wxIsIMEOpen(win) )
-                        {
-                            // Stop processing of this event.
-                            return 1;
-                        }
-
-                        // Because we don't stop processing of the event at
-                        // Windows level, we are going to get WM_KEYDOWN for
-                        // this key, but we need to ignore it as it's not
-                        // supposed to be generated if wxEVT_CHAR_HOOK handled
-                        // the event.
-                        wxVKBlockedByKeyboardHook = wParam;
-                    }
+                    wxVKProcessedByKeyboardHook = 0;
+                    wxLParamProcessedByKeyboardHook = 0;
+                    wxMessageProcessedByKeyboardHook = 0;
+                    return 1;
                 }
             }
         }
@@ -7865,6 +8144,11 @@ void wxSetKeyboardHook(bool doIt)
     {
         if ( wxTheKeyboardHook )
             ::UnhookWindowsHookEx(wxTheKeyboardHook);
+
+        wxVKProcessedByKeyboardHook = 0;
+        wxLParamProcessedByKeyboardHook = 0;
+        wxMessageProcessedByKeyboardHook = 0;
+        gs_keyboardHookMessages.clear();
     }
 }
 
