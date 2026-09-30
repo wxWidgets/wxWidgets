@@ -211,7 +211,7 @@ MyFrame::MyFrame()
                        wxSizerFlags().Left().Border() );
     paneSubSizer->Add( new wxStaticText(win, -1, "Yet another one!" ),
                        wxSizerFlags().Left().Border() );
-    paneSubSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control", wxDefaultPosition, wxSize(80,-1) ),
+    paneSubSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control" ),
                        wxSizerFlags().Left().Border() );
     paneSubSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ),
                        wxSizerFlags().Left().Border() );
@@ -337,7 +337,7 @@ MyDialog::MyDialog(wxFrame *parent)
                       wxSizerFlags().Left() );
     m_paneSizer->Add( new wxStaticText(win, -1, "Yet another one!" ),
                       wxSizerFlags().Left() );
-    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control", wxDefaultPosition, wxSize(80,-1) ),
+    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control" ),
                       wxSizerFlags().Left() );
     m_paneSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ),
                       wxSizerFlags().Left() );
