@@ -2971,8 +2971,9 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     {
         // all previously selected items are unselected unless ctrl is held in
         // a multi-selection control. in single selection mode we must always
-        // have a selected item.
-        if ( !event.ControlDown() || IsSingleSel() )
+        // have a selected item. note that we use the real Ctrl key here and
+        // not Cmd under macOS, where Cmd-arrows have a different meaning.
+        if ( !event.RawControlDown() || IsSingleSel() )
         {
             HighlightOnly(m_current, oldCurrent);
 
@@ -3088,15 +3089,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     if ( event.CmdDown() && (keyCode == WXK_UP || keyCode == WXK_DOWN) )
     {
         if ( !IsEmpty() )
-        {
-            // Cmd is Control for wx under macOS and leaving it set would just
-            // move the current item without selecting it in a control with
-            // multiple selection, which is not what we want here.
-            wxKeyEvent eventHomeEnd(event);
-            eventHomeEnd.SetControlDown(false);
-
-            OnArrowChar(keyCode == WXK_UP ? 0 : GetItemCount() - 1, eventHomeEnd);
-        }
+            OnArrowChar(keyCode == WXK_UP ? 0 : GetItemCount() - 1, event);
 
         return;
     }
