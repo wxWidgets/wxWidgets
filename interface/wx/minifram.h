@@ -38,9 +38,8 @@
     @endStyleTable
 
     @remarks
-    This class has miniframe functionality under Windows and GTK, i.e. the presence
-    of mini frame will not be noted in the task bar and focus behaviour is different.
-    On other platforms, it behaves like a normal frame.
+    Under Windows, wxMiniFrame additionally doesn't appear in the task bar
+    unlike a normal wxFrame.
 
     @library{wxcore}
     @category{managedwnd}
