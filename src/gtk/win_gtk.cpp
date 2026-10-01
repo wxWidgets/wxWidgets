@@ -8,8 +8,22 @@
 
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/window.h"
+#endif
+
+#include "wx/private/access.h"
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/win_gtk.h"
+
+// We use GTK accessibility classes, which are only public since GTK 3.8, to
+// implement wxPrivate::SetAccessibleElements().
+#if GTK_CHECK_VERSION(3,8,0) && !defined(__WXGTK4__)
+    #define wxHAS_GTK_ACCESSIBLE
+
+    #include <gtk/gtk-a11y.h>
+#endif
 
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget
@@ -44,6 +58,394 @@ enum {
     PROP_VSCROLL_POLICY
 };
 #endif
+
+#ifdef wxHAS_GTK_ACCESSIBLE
+
+// ----------------------------------------------------------------------------
+// Accessibility support
+// ----------------------------------------------------------------------------
+
+/*
+    wxPizza uses its own accessible type, which is just GtkContainerAccessible
+    unless wxPrivate::SetAccessibleElements() is called, in which case it also
+    reports the elements passed to it as its children, after the real ones.
+
+    Each of these elements is represented by a wxPizzaAccessibleElement object.
+*/
+
+namespace
+{
+
+// Register a new static type with the name based on the given one but unique:
+// this is needed in case several copies of wxWidgets are loaded into the same
+// process, see also wxPizza::type().
+GType RegisterUniqueType(GType parent, const char* baseName, const GTypeInfo& info)
+{
+    const char* name = baseName;
+    char buf[64];
+    for (unsigned i = 0; g_type_from_name(name); i++)
+    {
+        g_snprintf(buf, sizeof(buf), "%s%u", baseName, i);
+        name = buf;
+    }
+
+    return g_type_register_static(parent, name, &info, GTypeFlags(0));
+}
+
+} // anonymous namespace
+
+extern "C" {
+
+struct wxPizzaAccessibleElement
+{
+    AtkObject parent;
+
+    // The container, which owns us, may be null if it has been destroyed or
+    // if this element has been removed from it.
+    AtkObject* container;
+
+    // Rectangle in the client coordinates of the container window.
+    GdkRectangle rect;
+};
+
+struct wxPizzaAccessibleElementClass
+{
+    AtkObjectClass parent;
+};
+
+struct wxPizzaAccessible
+{
+    GtkContainerAccessible parent;
+
+    // Array of wxPizzaAccessibleElement objects, all of which we own.
+    GPtrArray* elements;
+};
+
+struct wxPizzaAccessibleClass
+{
+    GtkContainerAccessibleClass parent;
+};
+
+static AtkObjectClass* element_parent_class;
+static AtkObjectClass* accessible_parent_class;
+
+static GType wxPizzaAccessibleElement_get_type();
+static GType wxPizzaAccessible_get_type();
+
+#define WX_PIZZA_ACCESSIBLE_ELEMENT(obj) \
+    G_TYPE_CHECK_INSTANCE_CAST(obj, wxPizzaAccessibleElement_get_type(), wxPizzaAccessibleElement)
+#define WX_PIZZA_ACCESSIBLE(obj) \
+    G_TYPE_CHECK_INSTANCE_CAST(obj, wxPizzaAccessible_get_type(), wxPizzaAccessible)
+#define WX_IS_PIZZA_ACCESSIBLE(obj) \
+    G_TYPE_CHECK_INSTANCE_TYPE(obj, wxPizzaAccessible_get_type())
+
+static AtkObject* element_get_parent(AtkObject* obj)
+{
+    return WX_PIZZA_ACCESSIBLE_ELEMENT(obj)->container;
+}
+
+static int element_get_index_in_parent(AtkObject* obj)
+{
+    AtkObject* const container = WX_PIZZA_ACCESSIBLE_ELEMENT(obj)->container;
+    if ( !container )
+        return -1;
+
+    const GPtrArray* const elements = WX_PIZZA_ACCESSIBLE(container)->elements;
+    for ( guint n = 0; n < elements->len; n++ )
+    {
+        if ( g_ptr_array_index(elements, n) == obj )
+            return accessible_parent_class->get_n_children(container) + int(n);
+    }
+
+    return -1;
+}
+
+static AtkStateSet* element_ref_state_set(AtkObject* obj)
+{
+    AtkStateSet* const states = element_parent_class->ref_state_set(obj);
+
+    AtkObject* const container = WX_PIZZA_ACCESSIBLE_ELEMENT(obj)->container;
+    GtkWidget* const widget = container
+        ? gtk_accessible_get_widget(GTK_ACCESSIBLE(container))
+        : nullptr;
+    if ( !widget )
+    {
+        atk_state_set_add_state(states, ATK_STATE_DEFUNCT);
+        return states;
+    }
+
+    atk_state_set_add_state(states, ATK_STATE_ENABLED);
+    atk_state_set_add_state(states, ATK_STATE_SENSITIVE);
+
+    if ( gtk_widget_get_visible(widget) )
+    {
+        atk_state_set_add_state(states, ATK_STATE_VISIBLE);
+
+        if ( gtk_widget_get_mapped(widget) )
+            atk_state_set_add_state(states, ATK_STATE_SHOWING);
+    }
+
+    return states;
+}
+
+static void element_get_extents(AtkComponent* component,
+                                int* x, int* y, int* width, int* height,
+                                AtkCoordType coord_type)
+{
+    const wxPizzaAccessibleElement* const
+        element = WX_PIZZA_ACCESSIBLE_ELEMENT(component);
+
+    *width = element->rect.width;
+    *height = element->rect.height;
+
+    GtkWidget* const widget = element->container
+        ? gtk_accessible_get_widget(GTK_ACCESSIBLE(element->container))
+        : nullptr;
+    if ( !widget || !gtk_widget_is_drawable(widget) )
+    {
+        *x =
+        *y = G_MININT;
+        return;
+    }
+
+    *x = element->rect.x;
+    *y = element->rect.y;
+
+    // The window of wxPizza corresponds to the client area of wxWindow, so
+    // its origin is the origin of the client coordinates.
+    int xOrigin = 0,
+        yOrigin = 0;
+    switch ( coord_type )
+    {
+        case ATK_XY_SCREEN:
+        case ATK_XY_WINDOW:
+            {
+                GdkWindow* const window = gtk_widget_get_window(widget);
+                gdk_window_get_origin(window, &xOrigin, &yOrigin);
+
+                if ( coord_type == ATK_XY_WINDOW )
+                {
+                    int xTLW, yTLW;
+                    gdk_window_get_origin(gdk_window_get_toplevel(window),
+                                          &xTLW, &yTLW);
+                    xOrigin -= xTLW;
+                    yOrigin -= yTLW;
+                }
+            }
+            break;
+
+        default:
+            // This must be ATK_XY_PARENT, only available since ATK 2.30, and
+            // our coordinates are already relative to the parent.
+            break;
+    }
+
+    *x += xOrigin;
+    *y += yOrigin;
+}
+
+static void element_component_init(void* g_iface, void*)
+{
+    AtkComponentIface* const iface = static_cast<AtkComponentIface*>(g_iface);
+    iface->get_extents = element_get_extents;
+}
+
+static void element_class_init(void* g_class, void*)
+{
+    AtkObjectClass* const klass = ATK_OBJECT_CLASS(g_class);
+    klass->get_parent = element_get_parent;
+    klass->get_index_in_parent = element_get_index_in_parent;
+    klass->ref_state_set = element_ref_state_set;
+
+    element_parent_class = ATK_OBJECT_CLASS(g_type_class_peek_parent(g_class));
+}
+
+static gint accessible_get_n_children(AtkObject* obj)
+{
+    return accessible_parent_class->get_n_children(obj) +
+            int(WX_PIZZA_ACCESSIBLE(obj)->elements->len);
+}
+
+static AtkObject* accessible_ref_child(AtkObject* obj, gint i)
+{
+    const gint numReal = accessible_parent_class->get_n_children(obj);
+    if ( i < numReal )
+        return accessible_parent_class->ref_child(obj, i);
+
+    const GPtrArray* const elements = WX_PIZZA_ACCESSIBLE(obj)->elements;
+    const guint n = guint(i - numReal);
+    if ( n >= elements->len )
+        return nullptr;
+
+    return ATK_OBJECT(g_object_ref(g_ptr_array_index(elements, n)));
+}
+
+static void accessible_finalize(GObject* obj)
+{
+    GPtrArray* const elements = WX_PIZZA_ACCESSIBLE(obj)->elements;
+    for ( guint n = 0; n < elements->len; n++ )
+    {
+        wxPizzaAccessibleElement* const element =
+            WX_PIZZA_ACCESSIBLE_ELEMENT(g_ptr_array_index(elements, n));
+
+        // The accessibility clients may still hold references to the element,
+        // so it can outlive us: ensure it doesn't use a dangling pointer.
+        element->container = nullptr;
+        g_object_unref(element);
+    }
+
+    g_ptr_array_free(elements, TRUE);
+
+    G_OBJECT_CLASS(accessible_parent_class)->finalize(obj);
+}
+
+static void accessible_init(GTypeInstance* instance, void*)
+{
+    WX_PIZZA_ACCESSIBLE(instance)->elements = g_ptr_array_new();
+}
+
+static void accessible_class_init(void* g_class, void*)
+{
+    G_OBJECT_CLASS(g_class)->finalize = accessible_finalize;
+
+    AtkObjectClass* const klass = ATK_OBJECT_CLASS(g_class);
+    klass->get_n_children = accessible_get_n_children;
+    klass->ref_child = accessible_ref_child;
+
+    accessible_parent_class = ATK_OBJECT_CLASS(g_type_class_peek_parent(g_class));
+}
+
+static GType wxPizzaAccessibleElement_get_type()
+{
+    static GType type;
+    if (type == 0)
+    {
+        const GTypeInfo info = {
+            sizeof(wxPizzaAccessibleElementClass),
+            nullptr, nullptr,
+            element_class_init,
+            nullptr, nullptr,
+            sizeof(wxPizzaAccessibleElement), 0,
+            nullptr, nullptr
+        };
+        type = RegisterUniqueType(ATK_TYPE_OBJECT, "wxPizzaAccessibleElement", info);
+
+        const GInterfaceInfo component_info = {
+            element_component_init, nullptr, nullptr
+        };
+        g_type_add_interface_static(type, ATK_TYPE_COMPONENT, &component_info);
+    }
+    return type;
+}
+
+static GType wxPizzaAccessible_get_type()
+{
+    static GType type;
+    if (type == 0)
+    {
+        const GTypeInfo info = {
+            sizeof(wxPizzaAccessibleClass),
+            nullptr, nullptr,
+            accessible_class_init,
+            nullptr, nullptr,
+            sizeof(wxPizzaAccessible), 0,
+            accessible_init,
+            nullptr
+        };
+        type = RegisterUniqueType(GTK_TYPE_CONTAINER_ACCESSIBLE, "wxPizzaAccessible", info);
+    }
+    return type;
+}
+
+} // extern "C"
+
+void
+wxPrivate::SetAccessibleElements(wxWindow* win, const AccessibleElements& elements)
+{
+    GtkWidget* const widget = win->m_wxwindow;
+    if ( !widget )
+        return;
+
+    AtkObject* const obj = gtk_widget_get_accessible(widget);
+    if ( !WX_IS_PIZZA_ACCESSIBLE(obj) )
+        return;
+
+    GPtrArray* const current = WX_PIZZA_ACCESSIBLE(obj)->elements;
+    const guint numReal = guint(accessible_parent_class->get_n_children(obj));
+    const guint numNew = guint(elements.size());
+
+    // Update the existing elements in place rather than replacing them, as
+    // this preserves the position of the screen reader in them.
+    for ( guint n = 0; n < current->len && n < numNew; n++ )
+    {
+        wxPizzaAccessibleElement* const element =
+            WX_PIZZA_ACCESSIBLE_ELEMENT(g_ptr_array_index(current, n));
+
+        const wxRect& rect = elements[n].rect;
+        element->rect.x = rect.x;
+        element->rect.y = rect.y;
+        element->rect.width = rect.width;
+        element->rect.height = rect.height;
+
+        // Don't generate a notification if the text didn't change.
+        const wxString& label = elements[n].label;
+        const char* const name = atk_object_get_name(ATK_OBJECT(element));
+        if ( !name || wxString::FromUTF8(name) != label )
+            atk_object_set_name(ATK_OBJECT(element), label.utf8_str());
+    }
+
+    // Remove the extra elements, if any, starting from the end.
+    while ( current->len > numNew )
+    {
+        const guint n = current->len - 1;
+
+        wxPizzaAccessibleElement* const element =
+            WX_PIZZA_ACCESSIBLE_ELEMENT(g_ptr_array_index(current, n));
+        g_ptr_array_remove_index(current, n);
+
+        element->container = nullptr;
+        g_object_notify(G_OBJECT(element), "accessible-parent");
+        g_signal_emit_by_name(obj, "children-changed::remove",
+                              numReal + n, element, nullptr);
+
+        g_object_unref(element);
+    }
+
+    // And add the new ones.
+    for ( guint n = current->len; n < numNew; n++ )
+    {
+        wxPizzaAccessibleElement* const element = WX_PIZZA_ACCESSIBLE_ELEMENT(
+            g_object_new(wxPizzaAccessibleElement_get_type(), nullptr));
+
+        element->container = obj;
+
+        const wxRect& rect = elements[n].rect;
+        element->rect.x = rect.x;
+        element->rect.y = rect.y;
+        element->rect.width = rect.width;
+        element->rect.height = rect.height;
+
+        atk_object_set_role(ATK_OBJECT(element), ATK_ROLE_LABEL);
+        atk_object_set_name(ATK_OBJECT(element), elements[n].label.utf8_str());
+
+        g_ptr_array_add(current, element);
+
+        g_object_notify(G_OBJECT(element), "accessible-parent");
+        g_signal_emit_by_name(obj, "children-changed::add",
+                              numReal + n, element, nullptr);
+    }
+}
+
+#elif defined(__WXGTK3__) && !defined(__WXGTK4__)
+
+// Provide a dummy version if we can't implement it.
+void
+wxPrivate::SetAccessibleElements(wxWindow* WXUNUSED(win),
+                                 const AccessibleElements& WXUNUSED(elements))
+{
+}
+
+#endif // wxHAS_GTK_ACCESSIBLE/wxGTK3 without it
 
 extern "C" {
 
@@ -317,6 +719,10 @@ static void class_init(void* g_class, void*)
             g_cclosure_user_marshal_VOID__OBJECT_OBJECT,
             G_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 #endif
+#ifdef wxHAS_GTK_ACCESSIBLE
+    gtk_widget_class_set_accessible_type(widget_class, wxPizzaAccessible_get_type());
+#endif
+
     parent_class = GTK_WIDGET_CLASS(g_type_class_peek_parent(g_class));
 }
 

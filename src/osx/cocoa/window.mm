@@ -25,6 +25,7 @@
     #include "wx/osx/private/datatransfer.h"
 #endif
 
+#include "wx/private/access.h"
 #include "wx/private/bmpbndl.h"
 
 #include "wx/evtloop.h"
@@ -4389,6 +4390,75 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             event.SetWindow(otherWindow->GetWXPeer());
         thisWindow->HandleWindowEvent(event) ;
     }
+}
+
+void
+wxPrivate::SetAccessibleElements(wxWindow* win, const AccessibleElements& elements)
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    // Check if anything has changed since the last call, as replacing the
+    // elements would make VoiceOver lose its position in them.
+    NSArray* const current = [view accessibilityChildren];
+    if ( current.count == elements.size() )
+    {
+        bool changed = false;
+        for ( size_t n = 0; n < elements.size(); ++n )
+        {
+            id const child = current[n];
+            if ( ![child isKindOfClass:[NSAccessibilityElement class]] )
+            {
+                changed = true;
+                break;
+            }
+
+            NSAccessibilityElement* const element = child;
+            const wxString label = wxCFStringRef::AsString([element accessibilityLabel]);
+            const NSRect frame = wxToNSRect(view, elements[n].rect);
+            if ( label != elements[n].label ||
+                    !NSEqualRects([element accessibilityFrameInParentSpace], frame) )
+            {
+                changed = true;
+                break;
+            }
+        }
+
+        if ( !changed )
+            return;
+    }
+
+    if ( elements.empty() )
+    {
+        [view setAccessibilityChildren:nil];
+        return;
+    }
+
+    NSMutableArray* const children =
+        [NSMutableArray arrayWithCapacity:elements.size()];
+
+    for ( const auto& e : elements )
+    {
+        NSAccessibilityElement* const element =
+            [NSAccessibilityElement
+                accessibilityElementWithRole:NSAccessibilityStaticTextRole
+                                       frame:NSZeroRect
+                                       label:wxCFStringRef(e.label).AsNSString()
+                                      parent:view];
+
+        // Use the frame relative to the parent view and not the screen frame
+        // for the element to remain at the correct position if the window
+        // moves.
+        [element setAccessibilityFrameInParentSpace:wxToNSRect(view, e.rect)];
+
+        [children addObject:element];
+    }
+
+    // The container itself must be visible to the accessibility clients for
+    // them to reach its children.
+    [view setAccessibilityRole:NSAccessibilityGroupRole];
+    [view setAccessibilityChildren:children];
 }
 
 void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
