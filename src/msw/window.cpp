@@ -4020,9 +4020,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 rc.result = MSWDefWindowProc(message, TRUE, lParam);
                 processed = true;
             }
-            else
 #endif
 
+#ifndef __WXUNIVERSAL__
             // If a top level window is activating in dark mode, paint the
             // scroll bar corner.
             if ( wParam && IsTopLevel() && wxMSWDarkMode::IsActive()  )
@@ -4035,6 +4035,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxMSWImpl::PaintScrollBarCorner(this);
                 }
             }
+#endif
             break;
 
         // If we want the default themed border then we need to draw it ourselves
