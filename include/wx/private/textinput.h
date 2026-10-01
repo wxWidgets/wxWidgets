@@ -106,6 +106,12 @@ wxTextInputClient* wxFindTextInputClient(const wxWindowBase* window);
 WXDLLIMPEXP_CORE
 void wxResetTextInput(wxWindow* window);
 
+// Deliver the result of a composition to the window in the same way as text
+// entered without one, i.e. as wxEVT_CHAR events which can be filtered by
+// the application.
+WXDLLIMPEXP_CORE
+void wxSendTextInputAsChars(wxWindow* window, const wxString& text);
+
 #endif // wxHAS_TEXT_INPUT_CLIENT
 
 #ifdef __WXGTK__

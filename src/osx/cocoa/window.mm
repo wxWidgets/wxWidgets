@@ -1061,6 +1061,12 @@ void wxResetTextInput(wxWindow* window)
     [[view inputContext] discardMarkedText];
 }
 
+void wxSendTextInputAsChars(wxWindow* window, const wxString& text)
+{
+    wxOSX_insertText(window->GetHandle(), @selector(insertText:),
+                     wxCFStringRef(text).AsNSString());
+}
+
 static void wxOSXTextInputEventHandled(NSView* view)
 {
     wxWidgetCocoaImpl* const impl =

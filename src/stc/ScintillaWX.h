@@ -284,6 +284,7 @@ private:
     void ClearCompositionIndicator();
     Sci::Position InsertCompositionText(const wxString& text,
                                         CharacterSource source);
+    void SendCompositionResult(const wxString& text);
     Sci::Position PositionFromUTF16(long position) const;
     long PositionToUTF16(Sci::Position position) const;
     Sci::Position RelativePositionUTF16Clamped(Sci::Position position,

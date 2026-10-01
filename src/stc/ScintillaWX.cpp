@@ -1256,6 +1256,17 @@ Sci::Position ScintillaWX::InsertCompositionText(const wxString& text,
     return CurrentPosition() - start;
 }
 
+void ScintillaWX::SendCompositionResult(const wxString& text)
+{
+    // Insert the result in the same way as text typed without composition,
+    // via wxEVT_CHAR events, so that the application can filter it as usual.
+    // Whether the key pressed before was consumed or not is irrelevant for
+    // this text, so don't let OnChar() drop it because of that.
+    stc->SetLastKeydownProcessed(false);
+    wxSendTextInputAsChars(stc, text);
+    ShowCaretAtCurrentPosition();
+}
+
 void ScintillaWX::ClearCompositionIndicator()
 {
     pdoc->DecorationSetCurrentIndicator(INDICATOR_IME);
@@ -1386,9 +1397,8 @@ bool ScintillaWX::CommitComposition(const wxString& text)
     m_compositionActive = false;
     m_compositionLength = 0;
     m_committingComposition = true;
-    InsertCompositionText(text, CharacterSource::imeResult);
+    SendCompositionResult(text);
     m_committingComposition = false;
-    ShowCaretAtCurrentPosition();
     return true;
 }
 
@@ -1453,11 +1463,8 @@ bool ScintillaWX::InsertText(const wxString& text,
     m_compositionActive = false;
     m_compositionLength = 0;
     m_committingComposition = wasComposing;
-    InsertCompositionText(text, wasComposing
-                                ? CharacterSource::imeResult
-                                : CharacterSource::directInput);
+    SendCompositionResult(text);
     m_committingComposition = false;
-    ShowCaretAtCurrentPosition();
     return true;
 }
 
@@ -1509,12 +1516,21 @@ void ScintillaWX::UnmarkText()
     if ( !m_compositionActive )
         return;
 
-    if ( pdoc->TentativeActive() )
-        pdoc->TentativeCommit();
+    // Accept the marked text by delivering it in the same way as the result
+    // passed to InsertText() instead of keeping the tentative text.
+    const std::string marked =
+        RangeText(m_compositionStart, m_compositionStart + m_compositionLength);
 
-    ClearCompositionIndicator();
+    UndoCompositionText();
     m_compositionActive = false;
     m_compositionLength = 0;
+
+    if ( !marked.empty() )
+    {
+        m_committingComposition = true;
+        SendCompositionResult(wxString::FromUTF8(marked.data(), marked.length()));
+        m_committingComposition = false;
+    }
 }
 
 bool ScintillaWX::GetMarkedTextRange(long* start, long* length) const

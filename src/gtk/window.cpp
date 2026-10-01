@@ -1575,6 +1575,12 @@ void wxResetTextInput(wxWindow* window)
     gs_imResetWindow = nullptr;
 }
 
+void wxSendTextInputAsChars(wxWindow* window, const wxString& text)
+{
+    // Ignore the return value, the text is consumed either way.
+    window->GTKDoInsertTextFromIM(text.utf8_str());
+}
+
 extern "C" {
 static void
 gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),

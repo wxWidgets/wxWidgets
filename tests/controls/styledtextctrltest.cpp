@@ -330,6 +330,26 @@ TEST_CASE_METHOD(StcTextInputTestCase,
     CHECK( *actionsStarted == 2 );
     client->CancelComposition();
     CHECK( m_stc->GetText() == "AB" + kanji );
+
+    // The result of the composition, but not the text being composed, is
+    // inserted using wxEVT_CHAR events which can be used to filter it.
+    m_stc->SetText("AB");
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetEmptySelection(2);
+    auto chars = std::make_shared<wxString>();
+    const wxUniChar vetoed = kanji[1];
+    m_stc->Bind(wxEVT_CHAR,
+                [chars, vetoed](wxKeyEvent& event)
+                {
+                    *chars += event.GetUnicodeKey();
+                    if ( event.GetUnicodeKey() != vetoed )
+                        event.Skip();
+                });
+    REQUIRE( client->UpdateComposition(hiragana, 1) );
+    CHECK( chars->empty() );
+    REQUIRE( client->CommitComposition(kanji) );
+    CHECK( *chars == kanji );
+    CHECK( m_stc->GetText() == "AB" + kanji.Left(1) );
 }
 
 #endif // __WXGTK__
@@ -546,6 +566,36 @@ TEST_CASE_METHOD(StcTextInputTestCase,
     CHECK( *actionsStarted == 2 );
     client->CancelComposition();
     CHECK( m_stc->GetText() == "AB" + kanji );
+
+    // The result of the composition, but not the text being composed, is
+    // inserted using wxEVT_CHAR events which can be used to filter it.
+    m_stc->SetText("AB");
+    m_stc->EmptyUndoBuffer();
+    m_stc->SetEmptySelection(2);
+    auto chars = std::make_shared<wxString>();
+    const wxUniChar vetoed = kanji[1];
+    m_stc->Bind(wxEVT_CHAR,
+                [chars, vetoed](wxKeyEvent& event)
+                {
+                    *chars += event.GetUnicodeKey();
+                    if ( event.GetUnicodeKey() != vetoed )
+                        event.Skip();
+                });
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    CHECK( chars->empty() );
+    REQUIRE( client->InsertText(
+        kanji, wxTextInputClient::NoPosition, 0) );
+    CHECK( *chars == kanji );
+    CHECK( m_stc->GetText() == "AB" + kanji.Left(1) );
+
+    // The same applies to the marked text accepted without InsertText().
+    chars->clear();
+    REQUIRE( client->SetMarkedText(
+        hiragana, 1, 0, wxTextInputClient::NoPosition, 0) );
+    client->UnmarkText();
+    CHECK( *chars == hiragana );
+    CHECK( m_stc->GetText() == "AB" + kanji.Left(1) + hiragana );
 }
 
 #endif // __WXOSX_COCOA__
