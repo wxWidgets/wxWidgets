@@ -112,10 +112,19 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 
 wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
-    // if we do not do this, then we can crash...
-    if (m_ownerMgr && m_ownerMgr->m_actionWindow == this)
+    CleanUp();
+}
+
+void wxAuiFloatingFrame::CleanUp()
+{
+    // Ensure that the owner manager doesn't have a dangling pointer to us and
+    // that we don't notify it about anything any more.
+    if (m_ownerMgr)
     {
-        m_ownerMgr->m_actionWindow = nullptr;
+        if (m_ownerMgr->m_actionWindow == this)
+            m_ownerMgr->m_actionWindow = nullptr;
+
+        m_ownerMgr = nullptr;
     }
 
     m_mgr.UnInit();
@@ -226,6 +235,23 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 
         SetClientSize(size);
     }
+}
+
+bool wxAuiFloatingFrame::Destroy()
+{
+    // We are not going to be deleted immediately, but can still get events
+    // until then, e.g. macOS may send size events even to the hidden window,
+    // so ensure we reset any dangling pointers to avoid crashes while handling
+    // such events.
+    CleanUp();
+
+    // Delete our sizer to detach the pane window from it and allow adding it
+    // to another one.
+    //
+    // Note that this must be done after m_mgr.UnInit() called from CleanUp().
+    SetSizer(nullptr);
+
+    return wxAuiFloatingFrameBaseClass::Destroy();
 }
 
 wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const

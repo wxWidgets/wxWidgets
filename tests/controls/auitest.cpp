@@ -204,6 +204,56 @@ TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::DockFloatingPaneOnDClick", "
     CHECK( panel->GetParent() == frame.get() );
 }
 
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::DestroyFloatingFrame", "[aui]")
+{
+    wxPanel* const panel = new wxPanel(frame.get());
+
+    REQUIRE( manager.AddPane(panel,
+                             wxAuiPaneInfo().Name("pane").Caption("Pane").Left()) );
+    manager.Update();
+
+    manager.GetPane(panel).Float();
+    manager.Update();
+
+    wxFrame* const floatingFrame = manager.GetPane(panel).frame;
+    REQUIRE( floatingFrame );
+
+    SECTION( "Dock" )
+    {
+        manager.GetPane(panel).Dock();
+        manager.Update();
+    }
+
+    SECTION( "Detach" )
+    {
+        REQUIRE( manager.DetachPane(panel) );
+    }
+
+    SECTION( "Close" )
+    {
+        wxAuiPaneInfo& pane = manager.GetPane(panel);
+        pane.DestroyOnClose();
+        manager.ClosePane(pane);
+    }
+
+    SECTION( "Close frame" )
+    {
+        // This calls Destroy() twice: first from wxAuiManager::ClosePane()
+        // called by the frame close event handler and then from the handler
+        // itself.
+        floatingFrame->Close();
+
+        CHECK( manager.GetPane(panel).frame == nullptr );
+        CHECK( !manager.GetPane(panel).IsShown() );
+    }
+
+    // The floating frame is destroyed only during the next idle time, but it
+    // may still get events before this happens and this used to result in
+    // accessing already deleted sizer items, see #26264.
+    REQUIRE( wxPendingDelete.Member(floatingFrame) );
+    floatingFrame->SendSizeEvent();
+}
+
 TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::SizerClick", "[aui]")
 {
     wxWindow* const first = new wxPanel(frame.get());
