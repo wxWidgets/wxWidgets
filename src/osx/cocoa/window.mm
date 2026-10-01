@@ -4074,6 +4074,30 @@ void wxWidgetCocoaImpl::SetAccessibilityTitleElement(wxWidgetImpl* title)
         NSAccessibilityUnignoredDescendant(title->GetWXWidget())];
 }
 
+namespace
+{
+
+bool HasAccessibilityTitleOrLabel(id element)
+{
+    return [[element accessibilityTitle] length] != 0 ||
+            [[element accessibilityLabel] length] != 0;
+}
+
+} // anonymous namespace
+
+bool wxWidgetCocoaImpl::HasAccessibilityTitle() const
+{
+    // Check both the view, as SetAccessibilityLabel() may set the title or
+    // label for it, and the element used by VoiceOver, which is the cell for
+    // most controls, as explained in SetAccessibilityTitleElement() comment.
+    NSView* const view = GetAccessibleView();
+    if ( HasAccessibilityTitleOrLabel(view) )
+        return true;
+
+    id const element = NSAccessibilityUnignoredDescendant(view);
+    return element != view && HasAccessibilityTitleOrLabel(element);
+}
+
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
     WXWidget c =  control ? control : (WXWidget) m_osxView;
