@@ -1,0 +1,1 @@
+wxAll (GUI): Fix best size for auto-wrapped wxGrid rows (Richard Thomson, #14072).
