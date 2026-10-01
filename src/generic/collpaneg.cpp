@@ -180,6 +180,10 @@ void wxGenericCollapsiblePane::SetLabel(const wxString &label)
 
 wxString wxGenericCollapsiblePane::GetLabel() const
 {
+    // wxOSX calls this from MacPostControlCreate(), before the button exists.
+    if ( !m_pButton )
+        return wxString();
+
     return m_pButton->GetLabel();
 }
 
