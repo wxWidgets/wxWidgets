@@ -48,8 +48,8 @@ const size_t wxLZMA_BUF_SIZE = 4096;
 struct wxLZMAStream : lzma_stream
 {
     wxLZMAStream()
+      : lzma_stream(LZMA_STREAM_INIT)
     {
-        memset(this, 0, sizeof(lzma_stream));
     }
 
     ~wxLZMAStream()
