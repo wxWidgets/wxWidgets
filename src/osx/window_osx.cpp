@@ -456,12 +456,20 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
     // Controls without their own label are typically preceded by a label
     // describing them, which screen readers use as their name under MSW, so
     // do the same here.
-    if ( GetLabel().empty() && !GetLabelPeer() )
+    //
+    // We do it for the native controls only as generic windows are not
+    // accessible anyhow.
+    //
+    // Also note that this function is called from Create() and the window is
+    // not fully initialized yet, and wxStaticText doesn't have its own label
+    // set yet, so we need to explicitly check for GetLabelPeer() to exclude it.
+    wxOSXWidgetImpl* const peer = GetPeer();
+    if ( !peer->IsUserPane() && !GetLabelPeer() )
     {
         const wxWindow* const prev = GetPrevSibling();
         wxOSXWidgetImpl* const labelPeer = prev ? prev->GetLabelPeer() : nullptr;
-        if ( labelPeer )
-            GetPeer()->SetAccessibilityTitleElement(labelPeer);
+        if ( labelPeer && !peer->HasAccessibilityTitle() )
+            peer->SetAccessibilityTitleElement(labelPeer);
     }
 
 }

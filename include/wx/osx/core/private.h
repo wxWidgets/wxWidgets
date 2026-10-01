@@ -399,6 +399,10 @@ public :
     virtual void        SetAccessibilityLabel(const wxString& WXUNUSED(label)) { }
     virtual void        SetAccessibilityTitleElement(wxWidgetImpl* WXUNUSED(title)) { }
 
+    // return true if the native control already has its own accessibility
+    // title or label, e.g. because it's a button with a non-empty label
+    virtual bool        HasAccessibilityTitle() const { return false; }
+
     // is the clicked event sent AFTER the state already changed, so no additional
     // state changing logic is required from the outside
     virtual bool        ButtonClickDidStateChange() = 0;
