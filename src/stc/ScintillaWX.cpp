@@ -495,6 +495,17 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
         else if ( scn.modificationType & SC_STARTACTION )
             m_compositionActionStarted = true;
     }
+
+    // Scintilla notifies about each character of the text being composed
+    // too, and does it again whenever it's updated. Applications can't
+    // distinguish these notifications from the normal ones, as the character
+    // source isn't available in wxStyledTextEvent, so don't send them: the
+    // result of the composition is notified about once it's confirmed.
+    if ( scn.nmhdr.code == SCN_CHARADDED &&
+         scn.characterSource == SC_CHARACTERSOURCE_TENTATIVE_INPUT )
+    {
+        return;
+    }
 #endif // wxHAS_TEXT_INPUT_CLIENT
 
     stc->NotifyParent(&scn);
