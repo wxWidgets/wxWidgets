@@ -728,6 +728,28 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 {
     wxPGProperty* p = pCb->GetProperty();
 
+    // m_selProp (returned by GetProperty()) is set once at editor creation
+    // and never cleared, so a combo retired into m_deletedEditorObjects can
+    // hold a dangling (non-null) property pointer after the grid contents
+    // are rebuilt. HidePopup()'s focus-loss processing can re-fire
+    // OnMeasureItem()/OnComboItemPaint() on such a retired combo, and
+    // painting would then dereference the freed property and crash. A null
+    // check alone doesn't catch the dangling case, so first bail out if
+    // this combo is pending deletion.
+    for ( wxObject* o : m_deletedEditorObjects )
+    {
+        if ( o == pCb )
+        {
+            rect.height = 0;
+            return;
+        }
+    }
+    if ( !p )
+    {
+        rect.height = 0;
+        return;
+    }
+
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
