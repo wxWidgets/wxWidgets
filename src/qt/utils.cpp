@@ -66,14 +66,14 @@ wxMouseState wxGetMouseState()
 #endif
 
 
-wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
-    /* Another option is to use QApplication::topLevelAt()
-     * but that gives the QWidget so the wxWindow list must
-     * be traversed comparing with this, or use the pointer from
-     * a wxQtWidget/wxQtFrame to the window, but they have
-     * no standard interface to return that. */
-    return wxGenericFindWindowAtPoint( pt );
+    if ( QWidget* qtWidget = QApplication::widgetAt( wxQtConvertPoint(pt) ) )
+    {
+        return wxWindow::QtRetrieveWindowPointer(qtWidget);
+    }
+
+    return nullptr;
 }
 
 bool wxGetKeyState(wxKeyCode key)
