@@ -47,6 +47,9 @@ static const int TEXT_HEIGHT = 200;
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 #define wxHAS_2CHAR_NEWLINES 1
+    #if wxUSE_UIACTIONSIMULATOR && wxUSE_RICHEDIT
+        #define wxHAS_TEXT_URL_TEST
+    #endif
 #else
 #define wxHAS_2CHAR_NEWLINES 0
 #endif
@@ -80,7 +83,9 @@ protected:
     // And these ones only make sense for the multi-line ones.
     void MultiLineReplace();
     //void ProcessEnter();
+#ifdef wxHAS_TEXT_URL_TEST
     void Url();
+#endif
     void Style();
     void FontStyle();
     void Lines();
@@ -169,9 +174,9 @@ wxTEXT_CTRL_SINGLE_LINE_TEST(PositionToXYSingleLine)
 wxTEXT_CTRL_SINGLE_LINE_TEST(XYToPositionSingleLine)
 
 wxTEXT_CTRL_MULTI_LINE_TEST(MultiLineReplace)
-#if wxUSE_UIACTIONSIMULATOR
+#ifdef wxHAS_TEXT_URL_TEST
     wxTEXT_CTRL_MULTI_LINE_TEST(Url)
-#endif // wxUSE_UIACTIONSIMULATOR
+#endif
 wxTEXT_CTRL_MULTI_LINE_TEST(Style)
 wxTEXT_CTRL_MULTI_LINE_TEST(FontStyle)
 wxTEXT_CTRL_MULTI_LINE_TEST(Lines)
@@ -647,32 +652,43 @@ void TextCtrlTestCase::ProcessEnter()
 }
 #endif
 
+#ifdef wxHAS_TEXT_URL_TEST
 void TextCtrlTestCase::Url()
 {
-#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    if ( !EnableUITests() )
-        return;
-
-    // For some reason, this test sporadically fails when run in AppVeyor or
-    // GitHub Actions CI environments, even though it passes locally.
-    if ( IsAutomaticTest() )
-        return;
-
     CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
     m_text->AppendText("http://www.wxwidgets.org");
 
-    wxUIActionSimulator sim;
-    REQUIRE(sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5))));
+    YieldForAWhile();
+
+    const long urlStart = 0;
+    const long urlEnd = m_text->GetLastPosition();
+
+    const wxPoint posStart = m_text->PositionToCoords(urlStart);
+    const wxPoint posEnd = m_text->PositionToCoords(urlEnd);
+    REQUIRE(posStart != wxDefaultPosition);
+    REQUIRE(posEnd != wxDefaultPosition);
+
+    const wxPoint urlPoint((posStart.x + posEnd.x) / 2,
+                           posStart.y +
+                               std::max(1, m_text->GetCharHeight() / 2));
+
+    long hitPos = wxNOT_FOUND;
+    REQUIRE(m_text->HitTest(urlPoint, &hitPos) == wxTE_HT_ON_TEXT);
+    REQUIRE(hitPos >= urlStart);
+    REQUIRE(hitPos < urlEnd);
 
     EventCounter url(m_text.get(), wxEVT_TEXT_URL);
 
+    wxUIActionSimulator sim;
+    REQUIRE(sim.MouseMove(m_text->ClientToScreen(urlPoint)));
     REQUIRE(sim.MouseClick());
+
     wxYield();
 
     CHECK(url.GetCount() >= 1);
-#endif
 }
+#endif // wxHAS_TEXT_URL_TEST
 
 void TextCtrlTestCase::Style()
 {
