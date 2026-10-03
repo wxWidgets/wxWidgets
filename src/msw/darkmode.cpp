@@ -45,6 +45,7 @@
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/private/darkmode.h"
+#include <wx/msw/private/renderer.h>
 
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
@@ -136,7 +137,6 @@ wxDarkModeSettings::~wxDarkModeSettings() = default;
 #if wxUSE_LOG_TRACE
 static const char* TRACE_DARKMODE = "msw-darkmode";
 #endif // wxUSE_LOG_TRACE
-#include <wx/msw/private/renderer.h>
 
 namespace
 {
