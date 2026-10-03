@@ -1868,7 +1868,8 @@ public:
     wxAccStatus GetChildCount(int* childCount) override
     {
         wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         *childCount = static_cast<int>(bar->m_layouts.Item(bar->m_current_layout)->buttons.size());
         return wxACC_OK;
@@ -1889,7 +1890,8 @@ public:
         }
 
         wxRibbonButtonBarButtonBase* button = GetButton(childId);
-        wxCHECK(button, wxACC_FAIL);
+        if ( button == nullptr )
+            return wxACC_FAIL;
 
         if ( button->kind == wxRIBBON_BUTTON_TOGGLE )
             *role = wxROLE_SYSTEM_CHECKBUTTON;
@@ -1903,7 +1905,8 @@ public:
     wxAccStatus GetState(int childId, long* state) override
     {
         wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -1917,7 +1920,8 @@ public:
         }
 
         wxRibbonButtonBarButtonBase* button = GetButton(childId);
-        wxCHECK(button, wxACC_FAIL);
+        if ( button == nullptr )
+            return wxACC_FAIL;
 
         long st{ 0 };
         if ( button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED )
@@ -1943,7 +1947,8 @@ public:
             return wxWindowAccessible::GetName(childId, name);
 
         wxRibbonButtonBarButtonBase* button = GetButton(childId);
-        wxCHECK(button, wxACC_FAIL);
+        if ( button == nullptr )
+            return wxACC_FAIL;
 
         *name = wxStripMenuCodes(button->label, wxStrip_Mnemonics);
         return wxACC_OK;
@@ -1955,9 +1960,12 @@ public:
             return wxWindowAccessible::GetLocation(rect, elementId);
 
         wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
         wxRibbonButtonBarButtonBase* button = GetButton(elementId);
-        wxCHECK(button, wxACC_FAIL);
+        if ( button == nullptr )
+            return wxACC_FAIL;
 
         rect = bar->GetItemRect(button->id);
         rect.SetPosition(bar->ClientToScreen(rect.GetPosition()));
@@ -1979,9 +1987,12 @@ public:
             return wxACC_NOT_IMPLEMENTED;
 
         wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
         wxRibbonButtonBarButtonBase* button = GetButton(childId);
-        wxCHECK(button, wxACC_FAIL);
+        if ( button == nullptr )
+            return wxACC_FAIL;
 
         bar->ActivateButton(button);
         return wxACC_OK;
@@ -1990,7 +2001,8 @@ public:
     wxAccStatus GetFocus(int* childId, wxAccessible** child) override
     {
         wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         const int index = bar->DoGetFocusedButtonIndex();
         if ( index == wxNOT_FOUND )
@@ -2010,7 +2022,8 @@ private:
     wxRibbonButtonBarButtonBase* GetButton(int childId)
     {
         wxRibbonButtonBar* bar = wxDynamicCast(GetWindow(), wxRibbonButtonBar);
-        wxCHECK(bar, nullptr);
+        if ( bar == nullptr )
+            return nullptr;
 
         const std::vector<wxRibbonButtonBarButtonInstance>& buttons =
             bar->m_layouts.Item(bar->m_current_layout)->buttons;
