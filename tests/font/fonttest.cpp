@@ -83,10 +83,7 @@ TEST_CASE("wxFont::Construct", "[font][ctor]")
 #if WXWIN_COMPATIBILITY_3_0
     // Disable the warning about deprecated wxNORMAL as we use it here
     // intentionally.
-    #ifdef __VISUALC__
-        #pragma warning(push)
-        #pragma warning(disable:4996)
-    #endif
+    wxMSVC_WARNING_SUPPRESS(4996)
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
@@ -96,9 +93,7 @@ TEST_CASE("wxFont::Construct", "[font][ctor]")
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    #ifdef __VISUALC__
-        #pragma warning(pop)
-    #endif
+    wxMSVC_WARNING_RESTORE(4996)
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 
@@ -162,10 +157,7 @@ TEST_CASE("wxFont::Style", "[font][style]")
 #if WXWIN_COMPATIBILITY_3_0
     // Disable the warning about deprecated wxNORMAL as we use it here
     // intentionally.
-    #ifdef __VISUALC__
-        #pragma warning(push)
-        #pragma warning(disable:4996)
-    #endif
+    wxMSVC_WARNING_SUPPRESS(4996)
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
@@ -184,9 +176,7 @@ TEST_CASE("wxFont::Style", "[font][style]")
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    #ifdef __VISUALC__
-        #pragma warning(pop)
-    #endif
+    wxMSVC_WARNING_RESTORE(4996)
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 
@@ -213,10 +203,7 @@ TEST_CASE("wxFont::Weight", "[font][weight]")
 #if WXWIN_COMPATIBILITY_3_0
     // Disable the warning about deprecated wxNORMAL as we use it here
     // intentionally.
-    #ifdef __VISUALC__
-        #pragma warning(push)
-        #pragma warning(disable:4996)
-    #endif
+    wxMSVC_WARNING_SUPPRESS(4996) // 'xxx': was declared deprecated
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
@@ -231,9 +218,7 @@ TEST_CASE("wxFont::Weight", "[font][weight]")
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    #ifdef __VISUALC__
-        #pragma warning(pop)
-    #endif
+    wxMSVC_WARNING_RESTORE(4996)
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 

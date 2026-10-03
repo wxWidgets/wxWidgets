@@ -57,10 +57,7 @@
 #include "wx/osx/private/webview_chromium.h"
 #endif
 
-#ifdef __VISUALC__
-#pragma warning(push)
-#pragma warning(disable:4100)
-#endif
+wxMSVC_WARNING_SUPPRESS(4100) // unreferenced formal parameter
 
 wxGCC_WARNING_SUPPRESS(unused-parameter)
 
@@ -76,9 +73,7 @@ wxGCC_WARNING_SUPPRESS(unused-parameter)
 
 wxGCC_WARNING_RESTORE(unused-parameter)
 
-#ifdef __VISUALC__
-#pragma warning(pop)
-#endif
+wxMSVC_WARNING_RESTORE(4100)
 
 #ifdef wxUNDEF_NDEBUG
     #undef NDEBUG

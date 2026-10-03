@@ -1055,10 +1055,7 @@ OSVERSIONINFOEXW wxGetWindowsVersionInfo()
         }
     }
 
-#ifdef __VISUALC__
-    #pragma warning(push)
-    #pragma warning(disable:4996) // 'xxx': was declared deprecated
-#endif
+    wxMSVC_WARNING_SUPPRESS(4996) // 'xxx': was declared deprecated
 
     if ( !::GetVersionExW(reinterpret_cast<OSVERSIONINFOW *>(&info)) )
     {
@@ -1066,9 +1063,7 @@ OSVERSIONINFOEXW wxGetWindowsVersionInfo()
         wxFAIL_MSG( "GetVersionEx() unexpectedly failed" );
     }
 
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
+    wxMSVC_WARNING_RESTORE()
 
     return info;
 }
