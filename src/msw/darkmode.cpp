@@ -1168,9 +1168,15 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
     rectToPaint.right = rectToPaint.left + wxGetSystemMetrics(SM_CXVSCROLL, w);
     rectToPaint.bottom = rectToPaint.top + wxGetSystemMetrics(SM_CYHSCROLL, w);
 
+    // Replace the background colour with the scroll bar background colour.
+    // Use flood fill to preserve the gripper, if present.
     WindowHDC hdcWin(hwnd);
+    // The colour below is the observed scroll bar background.
     AutoHBRUSH hBrush(RGB(0x17, 0x17, 0x17));
-    ::FillRect(hdcWin, &rectToPaint, hBrush);
+    SelectInHDC selectBrush(hdcWin, hBrush);
+    auto bg = ::GetPixel(hdcWin, rectToPaint.left, rectToPaint.top);
+    ::ExtFloodFill(hdcWin, rectToPaint.left, rectToPaint.top, bg,
+        FLOODFILLSURFACE);
 }
 
 #else // !wxUSE_DARK_MODE
