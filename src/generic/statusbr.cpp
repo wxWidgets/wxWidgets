@@ -23,6 +23,8 @@
     #include "wx/control.h"
 #endif
 
+#include "wx/private/access.h"
+
 #ifdef __WXGTK__
     #include "wx/gtk/private.h"
 #endif
@@ -43,6 +45,37 @@
 
 // Margin between the field text and the field rect
 #define wxFIELD_TEXT_MARGIN 2
+
+// ----------------------------------------------------------------------------
+// helpers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Let the screen readers read the fields, which are not windows and so are
+// invisible to them otherwise.
+//
+// This must be called whenever either the text or the position of the fields
+// changes.
+void UpdateAccessibleFields(wxStatusBarGeneric* statbar)
+{
+    wxPrivate::AccessibleElements elements;
+
+    const int count = statbar->GetFieldsCount();
+    for ( int i = 0; i < count; ++i )
+    {
+        wxRect rect;
+        if ( !statbar->GetFieldRect(i, rect) )
+            continue;
+
+        elements.emplace_back(statbar->GetStatusText(i), rect);
+    }
+
+    wxPrivate::SetAccessibleElements(statbar, elements);
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // GTK+ signal handler
@@ -123,6 +156,12 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
     SetFieldsCount(1);
 
+#if defined(__WXGTK3__) && !defined(__WXGTK4__)
+    // Let the screen readers know that this is a status bar, e.g. Orca has a
+    // command for reading it.
+    atk_object_set_role(gtk_widget_get_accessible(m_widget), ATK_ROLE_STATUSBAR);
+#endif
+
 #if defined( __WXGTK__ )
 #if GTK_CHECK_VERSION(2,12,0)
     if (HasFlag(wxSTB_SHOW_TIPS) && wx_is_at_least_gtk2(12))
@@ -160,6 +199,8 @@ void wxStatusBarGeneric::DoUpdateStatusText(int number)
 
     Refresh(true, &rect);
 
+    UpdateAccessibleFields(this);
+
     // it's common to show some text in the status bar before starting a
     // relatively lengthy operation, ensure that the text is shown to the
     // user immediately and not after the lengthy operation end
@@ -193,6 +234,8 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 
     // recompute the cache of the field widths if the status bar width has changed
     m_widthsAbs = CalculateAbsWidths(width);
+
+    UpdateAccessibleFields(this);
 }
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
