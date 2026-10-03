@@ -22,7 +22,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | LOCAL COMPLETE / REMOTE PENDING; SHIPPING TEST SURFACE REMOVED |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | LOCAL COMPLETE / REMOTE PENDING; PHYSICAL WORK RETAINED IN 109/110 |
-| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: FOCUS/CHECKLIST/TOOLBAR ROWS LOCAL PASS; FLUENT FAMILY MATRIX OPEN |
+| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: FOCUS/CHECKLIST/TOOLBAR ROWS/NATIVE RIBBON COMMANDS LOCAL PASS; FLUENT FAMILY MATRIX OPEN |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
 | [111](111-capability-manifest.md) | Keep support documentation and feature evidence synchronized | TODO |
@@ -81,8 +81,15 @@ DataView; existing generic chrome is not completion. The isolated Toolkit
 probe now builds and renders native Ribbon/table peers with clean shutdown,
 but rejects the pinned alpha's DataTable property contract (`ColumnSpacing(8)`
 reads back 1). No Toolkit package is adopted into the shipping runtime. The
-table candidate needs correction/replacement; real public Ribbon integration
-and the rest of the family matrix remain open.
+table candidate needs correction/replacement. The first real public Ribbon
+command sublot is now locally qualified at `aca65d6f15`: normal, toggle,
+dropdown and hybrid ButtonBar commands use native WinUI peers. Shared/static
+pass 352 assertions / 5 native cases, 3874 / 17 full Ribbon cases and both
+runtime gates. The associated host nested-yield fix passes 279 / 19 exact
+Content/Flush cases. A dedicated native Ribbon CTest is wired into CI, with
+remote execution pending. Ribbon Bar/Page/Panel/ToolBar/Gallery presentation,
+full custom-art compatibility, physical qualification and the rest of the
+family matrix remain open; ButtonBar integration is not whole-Ribbon parity.
 
 - Foundations: runtime, host, control host/XamlHost, slots, geometry, z-order/clip/scroll, pointer/capture, keyboard/focus/cursors, tooltip, UIA, OLE, modal/transients, theme/Mica/renderer.
 - Buttons/selection: Button, BitmapButton, Toggle/BitmapToggle, CheckBox, RadioButton, RadioBox, generic CommandLink.

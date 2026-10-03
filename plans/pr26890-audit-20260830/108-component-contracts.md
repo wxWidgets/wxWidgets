@@ -391,9 +391,127 @@ RTL arrangement failure and rollback geometry leak are not hidden.
 | Static `minimal.exe` | `D5AC8354D67506C3DF33A3E9D228114EF9430EBCC30D9A61B3AE76982B63AF2F` |
 
 This closes the bounded row-layout gap locally, not all ToolBar contracts or
-physical/remote qualification. Next: the opt-in native Toolkit activation and
-resource proof described above, followed by real public Ribbon and tabular
-adapters. Tooltip timing and the remaining family matrix are still open.
+physical/remote qualification. The subsequent opt-in Toolkit activation proof
+is recorded above, and the first public native Ribbon command sublot below.
+Tabular adapters, tooltip timing and the remaining family matrix are still open.
+
+### Public Ribbon ButtonBar native projection (2026-10-03)
+
+The actual `wxRibbonButtonBar::m_buttons` now drives native command peers in
+its production shared-host slot. Normal/dropdown/hybrid primaries use
+`AppBarButton`; toggles use `AppBarToggleButton` and native Checked/Unchecked
+notifications; dropdown/hybrid carets use a native Button. The public model
+and stable per-item keys remain authoritative, including duplicate command
+IDs and reuse of an ID after deletion. Native callbacks hold weak owner and
+generation/revision identities, not raw layout-instance pointers across
+application handlers. Setters and `UpdateWindowUI` are silent projections.
+
+The existing common adaptive layout still selects/group sizes, but all three
+size classes are measured from native command peers. Public item rectangles
+and menu anchors use the existing visual-coordinate adapter. No generic
+ButtonBar background/button painting is layered over the XAML peers. The
+source-private ControlHost and conversion helpers are shared by wxcore and
+wxribbon; their header is not installed. CMake configures wxribbon with the
+already pinned C++/WinRT projection. No Toolkit package or managed runtime
+is added to shipping libraries or samples.
+
+Native content callbacks also exposed an existing host scheduling defect:
+`SyncSlot()` immediately requeued an in-progress content transaction. If its
+Content callback entered `wxYield()`, that queued flush requeued itself and
+prevented the suspended transaction from finishing. The transaction's existing
+commit/rollback boundary already schedules the required catch-up. In-progress
+sync now leaves that scheduling to the finish boundary, without a new timer,
+hook or bypass. This causal host correction is part of the command-integration
+lot, and needs the existing Content/Flush regressions in addition to Ribbon.
+
+The host fix is committed separately as `61e3cc7246`. In both existing Release
+trees, all 19 exact `HostState`/`HostLifecycle` cases whose names contain
+`Content` or `Flush` pass (279 assertions per linkage), including the extended
+`ContentSwapFlushSeesOnlyPublishedModel` case which now pumps `wxYield()` at
+the native setter boundary. Evidence: `audit108-ribbon-content-host-exact-20261003.log`
+in each build root. The earlier wildcard selector matched no cases and is not
+qualification. The failing Ribbon nested-loop run is retained as
+`audit108-ribbon-native-targeted3-20261003.log` (240-second timeout); its passive
+UI-thread stack is `audit108-ribbon-native-reentry-stack-20261003.log` in the
+shared build root. The subsequent transaction case completes; separate Ribbon
+qualification is recorded below.
+
+ButtonBar layout publication is transactional too: candidate native sizes,
+common adaptive layouts, active layout, offsets and best/minimum sizes remain
+unpublished until the host accepts their matching root. A native Content
+callback can fail the swap or resize/yield without leaking rejected geometry.
+Viewport changes are separate from command-model revisions and receive a
+bounded catch-up after publication.
+
+Cross-TLW reparenting also exposed an incorrect caller rollback: a resize
+callback can reach `SetContent()` while host migration temporarily refuses
+registration. The host already preserves the previous publication on failure;
+unconditionally trying to restore it again could fail and close a valid peer.
+Rollback now restores native content only when this operation's candidate is
+actually the host's current publication. The original refusal remains a
+failure, and the explicit `Realize()` after migration succeeds normally.
+The causal trace is retained in the shared build root as
+`audit108-ribbon-reparent-trace-20261003.log`; temporary diagnostics are removed
+from the final sources. No test oracle or timeout was relaxed.
+
+This is the first public native command sublot, **not complete native Ribbon
+parity**. Bar/Page/Panel/ToolBar/Gallery presentation, physical keyboard and
+menu loops, full DPI/RTL/theme/font behavior, tooltip timing/disabled-help
+behavior and custom art-provider integration remain open. In particular,
+custom `DrawButtonBarButton()` drawing is no longer used for these native
+commands: calling `SetArtProvider()` still affects the generic parent shells,
+but this lot does not establish a native equivalent of every custom drawing
+contract. Do not describe that limitation as completed compatibility.
+
+#### Local qualification of the native ButtonBar sublot
+
+Source: `aca65d6f15d69845c65b3818516735239ff3450a`, following the separately
+qualified host fix `61e3cc7246`. No Toolkit binary dependency is adopted.
+Both existing WinUI Release build trees compile `test_gui`, `ribbondemo`,
+`showcase` and `xrcdemo` with `/warnaserror`. Ordinary wxMSW Debug `wxribbon`
+also compiles with `/warnaserror`; its presentation remains unchanged.
+
+Private-desktop results (`WX_UI_TESTS=0`), per linkage:
+
+- Native command group: 352 assertions / 5 cases PASS. Covers actual native
+  peers and UIA events, silent setters/UpdateUI, menu routing/anchors, atomic
+  layout rollback, nested resize/yield, retired providers, ID reuse,
+  reentrant destruction and cross-TLW reparenting.
+- Full `[winui-ribbon]~[physical]` group: 3874 assertions / 17 cases PASS,
+  retaining the original public-contract and 100-cycle stress cases.
+- Runtime smoke and Supported V0: 2/2 PASS.
+- New `wx_winui_ribbon_native` CTest executes the five native cases with a
+  bounded private-desktop runner. Both local CTest runs pass; the Windows
+  shared/static CI workflow now selects this gate separately from Supported
+  V0 and archives its log/XML. Its remote execution is still pending.
+
+Build logs: shared `audit108-ribbon-native-build8-20261003.log`, static
+`audit108-ribbon-native-build7-20261003.log`, and ordinary MSW
+`audit108-ribbon-native-build4-20261003.log`, each in its existing build root.
+Both WinUI roots contain `audit108-ribbon-native-ctest-20261003.log`,
+`audit108-ribbon-native-full-final-20261003.log` and
+`audit108-ribbon-native-gates-final-20261003.log`. Earlier compile failures,
+reparent failures and the nested-loop timeout are retained, not overwritten.
+
+Final binary SHA256 values:
+
+| Artifact | SHA256 |
+|---|---|
+| Shared `test_gui.exe` | `07564A5A16306EAB787925F61B27B6E946698761E9CAC8CBD589971F4CE6FCA4` |
+| Static `test_gui.exe` | `8E381DA232F71C7737AD80BAB93B675977697ECFE1FB2A6495CD9B24EE645E6F` |
+| Shared `ribbondemo.exe` | `49E3CBB3BF40BF2079E8C86E0B7C73E861C91871FEC86F957C9F0FABC75D0C44` |
+| Static `ribbondemo.exe` | `188E429C5CE91E82C4BF6D1AC3FA119A7E030FBC6FBCDC865D152FB29C67C41D` |
+| Shared `showcase.exe` | `38F2671BE4B9C1AA443807ABA896306CECE625E732BC4133FC1690704FEFEE7C` |
+| Static `showcase.exe` | `9247B895CF27C9956BD49395978266F22B4A0666B84D2324E2DC13A505A069E8` |
+| Shared `xrcdemo.exe` | `FD849361CDF55AF057E172A44344C2EB6AAABA4ED8F68FEF5EF914FB4A0DE953` |
+| Static `xrcdemo.exe` | `14CFEA7E32319CB4EBB83107085DF9D7C321E3645599BEA2FAD69018F7A2DAB5` |
+| Shared Ribbon DLL | `6DA4FF47C4AD7B53D9DE9284589D01026F71511435846E66F256E62DDDFFB92A` |
+| Static Ribbon library | `A1E80FBA161CBD19632F76C7C7920F493FAA6FAA92997E1356ED29972CB16D62` |
+
+Rebuilt demos are under `F:\wxwinui-pr26890-feedback-build\lib\vc_x64_dll`
+and `F:\wxwinui-pr26890-feedback-build-static\lib\vc_x64_lib`. Their successful
+build is not a human visual sign-off. Physical input, external UIA, full native
+Ribbon presentation and the remaining component matrix are still open.
 
 ## Maintenance
 
