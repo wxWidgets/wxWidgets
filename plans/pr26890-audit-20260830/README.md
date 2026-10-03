@@ -22,7 +22,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | LOCAL COMPLETE / REMOTE PENDING; SHIPPING TEST SURFACE REMOVED |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | LOCAL COMPLETE / REMOTE PENDING; PHYSICAL WORK RETAINED IN 109/110 |
-| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: ACTIVATION/CHECKLIST LOCAL PASS; FAMILY MATRIX OPEN |
+| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: FOCUS/CHECKLIST/TOOLBAR ROWS LOCAL PASS; FLUENT FAMILY MATRIX OPEN |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
 | [111](111-capability-manifest.md) | Keep support documentation and feature evidence synchronized | TODO |
@@ -73,7 +73,13 @@ verification passes 427 assertions / 21 host-focus cases, 392296 / 36 list/tree
 cases, 3020 / 70 extended range cases, and both runtime gates. These are local
 results at `b05210bdd5`, not 100% port parity or physical production sign-off.
 Calendar's old budget failure did not reproduce but has no demonstrated causal
-repair. The next concrete family gap is ToolBar `SetRows()`/multi-row layout.
+repair. ToolBar `SetRows()`/multi-row layout is now implemented and locally
+qualified at `24f4ee2a22`: shared/static 595 assertions / 5 new cases,
+1696 / 28 total toolbar cases and both runtime gates PASS. Native WinUI/Fluent
+presentation is now required for all families, including Ribbon, Grid and
+DataView; existing generic chrome is not completion. The next step is an
+isolated native Toolkit activation/resource proof, not immediate adoption of
+an experimental dependency into the shipping runtime.
 
 - Foundations: runtime, host, control host/XamlHost, slots, geometry, z-order/clip/scroll, pointer/capture, keyboard/focus/cursors, tooltip, UIA, OLE, modal/transients, theme/Mica/renderer.
 - Buttons/selection: Button, BitmapButton, Toggle/BitmapToggle, CheckBox, RadioButton, RadioBox, generic CommandLink.

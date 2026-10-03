@@ -46,6 +46,60 @@ Dependency candidates checked against upstream sources on 2026-10-03:
   consumption by this C++ backend is not established; do not introduce an
   implicit managed runtime dependency or call NuGet availability integration.
 
+#### Dependency feasibility: native Toolkit package inspection
+
+Read-only inspection on 2026-10-03 downloaded and decoded the exact NuGet
+`XamlToolkit.Labs.WinUI.Native` **0.8.0-alpha** archive and its six Toolkit
+dependencies in memory. No package was installed or loaded, no build ran,
+and this is **not runtime PASS, adoption or production qualification**.
+
+Primary sources: [versioned package](https://www.nuget.org/packages/XamlToolkit.Labs.WinUI.Native/0.8.0-alpha),
+[exact Labs archive](https://api.nuget.org/v3-flatcontainer/xamltoolkit.labs.winui.native/0.8.0-alpha/xamltoolkit.labs.winui.native.0.8.0-alpha.nupkg),
+and [source tree inspected at 5f0c861a46d2fd93ae2f6e9aba1ce6d4e8d1e2da](https://github.com/lgztx96/CommunityToolkit.WinUI/tree/5f0c861a46d2fd93ae2f6e9aba1ce6d4e8d1e2da).
+The package nuspec does not record a source commit; do not assume that this
+inspected source tree reproduces the published archive byte-for-byte.
+
+- The Labs nuspec declares MIT and `Microsoft.WindowsAppSDK.WinUI` minimum
+  `1.8.260224000`. The current wx pins are AppSDK runtime `1.8.260710003`,
+  WinUI `1.8.260709004` and Foundation `1.8.260709000`; the WinUI pin satisfies
+  the declared minimum, but compatibility still needs the activation gate.
+- Labs contains native DLLs for x86/x64/ARM64, a 70656-byte `.winmd`, and a
+  72944-byte `.pri`. The x64 DLL is 17209344 bytes. Its inspected PE export
+  table includes `DllGetActivationFactory` and `DllCanUnloadNow`; its normal
+  import table contains Win32/COM/UCRT, with no CLR/MSVCP/VCRUNTIME import
+  observed. Consuming the WinRT ABI is the bounded candidate, not compiling
+  the source tree's v145/C++23/module-based projects with our v143 toolchain.
+- The actual package `.winmd` exposes `XamlToolkit.Labs.WinUI.Ribbon`,
+  `RibbonGroup`, `RibbonCollapsibleGroup`, `RibbonPanel`, `DataTable`,
+  `DataColumn`, `DataRow`, and `XamlToolkit.Labs.WinUI.XamlMetaDataProvider`.
+  DataTable offers column-spacing/layout primitives, DataColumn offers
+  resizing and desired width, and Ribbon offers an Items collection plus
+  group/layout primitives. This is not a complete Grid/DataView or wxRibbon
+  API implementation; the wx adapters and missing semantics remain required.
+- The native MSBuild targets reference the `.winmd` and copy DLL/PRI payloads;
+  the archive supplies neither generated C++ headers nor a standalone
+  activation manifest. CMake consumption must generate projections, deploy
+  payloads, establish unpackaged activation, and aggregate Toolkit metadata
+  providers with the existing `XamlControlsXamlMetaDataProvider`. The current
+  `wxWinUIApplication` forwards metadata queries only to the latter.
+- The dependency closure includes all seven Toolkit packages below, each at
+  `0.8.0-alpha`, plus **Microsoft.Graphics.Win2D 1.4.0** through Controls.
+  Labs and Controls carry PRI files. The existing fingerprinted projection
+  and resource-deployment contracts must include all required metadata,
+  DLLs/resources and notices; copying only the Labs DLL is not qualification.
+
+SHA256 values computed over the downloaded `.nupkg` bytes (not DLL hashes):
+
+| Package, version 0.8.0-alpha | SHA256 |
+|---|---|
+| XamlToolkit.Labs.WinUI.Native | `A6B345F647D99931E93FBD20A555697D939642499BDA88D128FE797F69086ED2` |
+| XamlToolkit.WinUI.Native | `76A6D0A2ABCB7D9F44511ECD0E62C82EFB25FC6BC079732FB11DA6AA2D9B49DF` |
+| XamlToolkit.WinUI.Converters.Native | `D4593EC6564A66FBCF3654730B85A92AFE7AE395C3ED398AC7AE1EDE016CC7F5` |
+| XamlToolkit.WinUI.Controls.Native | `82D0D3B8034FDDE4F3036B71C4F6F9DC3DB1D218C31F030BF8389BC7C93C52DE` |
+| XamlToolkit.WinUI.Helpers.Native | `2A0CED054FF4337872963D0A6E5CEE568808CA53A9E9C1C148EE2FF166B185F3` |
+| XamlToolkit.WinUI.Animations.Native | `FE3F7299E55CEBF07368FAEAE7C52F7580F7FC0EC99FECD9CD18F63A57B47AC8` |
+| XamlToolkit.WinUI.Interactivity.Native | `3733AC07DDFF57EE76A569AED76F9803BD2DAAF0301EDF8897C349B97CFD8C65` |
+
 Implementation sequence after the current ToolBar lot:
 
 1. Select and pin a reproducible native component boundary (version, source,
@@ -211,17 +265,53 @@ unchanged budget remains enforced, and the historical defect is not called
 causally repaired. Other component families, physical qualification and
 current-HEAD remote CI remain open.
 
-### Next bounded component lot: ToolBar rows
+### ToolBar rows: local shared/static qualification (2026-10-03)
 
-The audit's `SetRows()` gap is confirmed: WinUI inherits the common no-op and
-does not consult `GetMaxRows()`/`GetMaxCols()`. Address it through the retained
-native Grid, not a state-only setter. One coherent lot must cover transactional
-`SetRows()`/`Realize()`, row-aware overflow and best size, per-row RTL placement,
-embedded-control rectangles, and rollback of Grid definitions/coordinates.
-Retain peer identity, event ordering and reentrant destruction guards. Tests
-must cover one-to-many-to-one rows, vertical/RTL layout, shrinking/expanding
-overflow, embedded controls and failed/reentrant rebuilds. This lot is not yet
-implemented or qualified.
+Source: `24f4ee2a22f05782622dc03df498a573c124aba3`.
+`SetRows()` now projects the public model into the retained native XAML Grid,
+instead of inheriting the common no-op. Construction, overflow and best size
+share one layout calculation. This includes ragged rows, vertical columns,
+per-row RTL, embedded controls and hidden multiline flexible spacers.
+Inherited `SetMaxRowsCols()` limits are accepted by a successful `Realize()`;
+an impossible pinned-control/overflow capacity is rejected transactionally.
+Published limits remain attached to their root/generation, so a failed Loaded
+transaction cannot later rearrange the old root using rejected limits.
+Rollback and direction changes publish arranged geometry before returning.
+
+The original 23 cases pass unchanged. Five new public-API/native-peer cases
+exercise row transitions, best/actual sizes, hit-testing, vertical/RTL and
+inherited caps, embedded controls, overflow identity/state, failed Loaded
+publication, nested mutation and destruction. The size fixture uses a plain
+panel to avoid a frame's single-child auto-sizing and clears its explicit
+construction minimum; geometry oracles are not relaxed.
+
+Both existing Release trees compile `test_gui`, `toolbar` and `minimal` with
+`/warnaserror`. Private-desktop results (`WX_UI_TESTS=0`), per linkage:
+
+- `[winui-toolbar][rows]`: 595 assertions / 5 cases PASS.
+- `[winui-toolbar]~[physical]`: 1696 assertions / 28 cases PASS.
+- CTest runtime smoke and Supported V0: 2/2 PASS.
+
+Evidence in each build root: `audit108-toolbar-rows-build3-20261003.log`,
+`audit108-toolbar-rows-targeted3-20261003.log`,
+`audit108-toolbar-rows-full3-20261003.log`, and
+`audit108-toolbar-rows-gates-20261003.log`. Earlier build and failing-test
+logs are retained; the initial const UIElement/FrameworkElement compile error,
+RTL arrangement failure and rollback geometry leak are not hidden.
+
+| Artifact | SHA256 |
+|---|---|
+| Shared `test_gui.exe` | `65C76A139190C479460D137AACA180D53170E1C678F6515C005913463AC30F50` |
+| Static `test_gui.exe` | `B95FBD351A6DF5E6E894A14CE5AF21A623B3B468079DD188152360EC0CA7C0B5` |
+| Shared `toolbar.exe` | `EE0A41BD4954A38CD5E03D18CECE7A7D3FF444FE0673D94F355D206FD7DD1638` |
+| Static `toolbar.exe` | `8E817DC996BE155B5F785BDC788A9E3CC4A5155C8F7D537C37F8B56468CD63B9` |
+| Shared `minimal.exe` | `EC210D148A2D64EBC15B33846DA4CA9C8934CF19C6EE7CBC752C576B2BF82D75` |
+| Static `minimal.exe` | `D5AC8354D67506C3DF33A3E9D228114EF9430EBCC30D9A61B3AE76982B63AF2F` |
+
+This closes the bounded row-layout gap locally, not all ToolBar contracts or
+physical/remote qualification. Next: the opt-in native Toolkit activation and
+resource proof described above, followed by real public Ribbon and tabular
+adapters. Tooltip timing and the remaining family matrix are still open.
 
 ## Maintenance
 
