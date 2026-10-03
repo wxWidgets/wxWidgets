@@ -5092,6 +5092,11 @@ TEST_CASE("HostState::ContentSwapFlushSeesOnlyPublishedModel",
             REQUIRE(slot->TryGetCarrierContent(carrier));
             CHECK(carrier == contentB);
             host->FlushSync();
+            // Application code may enter a nested event loop at this native
+            // setter boundary. A deferred flush must not requeue itself while
+            // the suspended content transaction still owns publication.
+            wxYield();
+            CHECK(wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot));
             CHECK(slot->GetContent() == contentA);
         });
 

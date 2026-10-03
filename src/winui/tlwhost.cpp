@@ -1550,7 +1550,7 @@ bool wxWinUISlot::SetContent(
 
     // Publish the transaction state BEFORE the first carrier setter. Loaded,
     // property callbacks and test seams may synchronously call FlushSync();
-    // such a pass must requeue and leave without syncing old model A against
+    // such a pass must leave without syncing old model A against
     // a carrier which already contains B (or is temporarily empty).
     if ( ++m_contentTransactionEpoch == 0 )
         ++m_contentTransactionEpoch;
@@ -1599,8 +1599,8 @@ bool wxWinUISlot::SetContent(
         m_contentLoadedTransactionGeneration = 0;
         if ( ++m_contentTransactionEpoch == 0 )
             ++m_contentTransactionEpoch;
-        // Dirty only after the carrier/model pair is truthful. Any nested
-        // flush that saw the in-progress flag also marked this same next pass.
+        // Dirty only after the carrier/model pair is truthful. Nested flushes
+        // leave the in-progress slot alone; this boundary owns their catch-up.
         NudgeDirty();
         return true;
     };

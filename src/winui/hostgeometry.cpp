@@ -816,13 +816,12 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
 
     // SetContent() has already crossed (or is about to cross) a carrier
     // setter, but has not yet published the matching model. Never sync that
-    // deliberately unobservable state. Requeue one coalesced pass for after
-    // the transaction publishes commit or rollback.
+    // deliberately unobservable state. SetContent's finishTransaction()
+    // schedules the catch-up after commit/rollback. Requeueing from here
+    // would keep a nested wxYield() draining this same slot forever, preventing
+    // the suspended content transaction from reaching that finish boundary.
     if ( slot.m_contentTransactionInProgress )
-    {
-        slot.NudgeDirty();
         return;
-    }
 
     if ( slot.m_contentLoadedObserverPending )
     {
