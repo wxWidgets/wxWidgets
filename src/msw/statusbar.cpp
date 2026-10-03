@@ -538,6 +538,14 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
     }
 }
 
+// Fill a rectangle with the given colour while forcing the alpha channel to
+// opaque (0xFF).
+//
+// uxtheme draws the ExplorerStatusBar borders / field backgrounds with
+// BGRA pixels that have A = 0 (fully transparent).  A normal FillRect (or
+// solid brush) therefore has no visible effect.  We must explicitly set the
+// alpha channel; the StretchDIBits + SRCPAINT trick below is a lightweight
+// equivalent of BufferedPaintMakeOpaque().
 void FillAlpha(HDC hdc,  COLORREF clr, wxRect rc)
 {
     BITMAPINFO bi = {};
@@ -611,8 +619,8 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // We need to paint the size grip ourselves in dark mode as the default one
     // is simply invisible.
     if ( nMsg == WM_PAINT &&
-        (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
-        wxMSWDarkMode::IsActive() )
+            (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
+                wxMSWDarkMode::IsActive() )
     {
         wxMSWImpl::CustomPaint
         (
@@ -629,6 +637,7 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 // Note that we must _not_ open theme data for this window: it
                 // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
                 // correctly (which is why we have to draw it ourselves).
+                // TODO-RTL: CustomPaint breaks RTL layout because it renders to an in-memory HDC, bypassing native OS layout mirroring.
                 auto theme = wxUxThemeHandle::NewAtDPI(0, L"Status", GetDPI().y);
                 if ( !theme )
                     return bmp;
@@ -638,8 +647,6 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
 
                 // Draw the grip in the lower right corner of the window.
-                //
-                // TODO-RTL: Is this correct for RTL layout?
                 wxRect rect(sizeGrip);
                 rect.x = rectTotal.width - sizeGrip.x;
                 rect.y = rectTotal.height - sizeGrip.y;
@@ -674,10 +681,12 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                    {
                        rect.SetBottom(bottom + GetSystemMetrics(SM_CXEDGE) * 2);
                    }
+                    rect.SetLeft(rect.GetLeft() - GetSystemMetrics(SM_CXEDGE));
+                    rect.SetWidth(rect.GetWidth() + GetSystemMetrics(SM_CXEDGE)* 2);
                    // Fill Grip Background with Theme Color Without affect the glyphs.
                    FillAlpha(dc.GetHDC(), col.GetPixel(), rect);
                    ::ExcludeClipRect(dc.GetHDC(), rect.GetLeft(), rect.GetTop(), rect.GetRight(), rect.GetBottom());
-                   COLORREF backColor = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel();
+                   COLORREF backColor = col.ChangeLightness(109).GetPixel();
                    // Fill Status Bar Borders and Field separators with Fixed Border Color.
                    FillAlpha(dc.GetHDC(), backColor , rectTotal);
                 }
