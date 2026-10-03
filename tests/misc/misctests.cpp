@@ -188,15 +188,13 @@ TEST_CASE("wxRound", "[math]")
     // For compatibility reasons, we allow using wxRound() with integer types
     // as well, even if this doesn't really make sense/
 #if WXWIN_COMPATIBILITY_3_0
-    wxMSVC_WARNING_SUPPRESS(4996)
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+    wxWARNING_SUPPRESS_DEPRECATED()
 
     CHECK( wxRound(-9) == -9 );
     CHECK( wxRound((size_t)17) == 17 );
     CHECK( wxRound((short)289) == 289 );
 
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
-    wxMSVC_WARNING_RESTORE(4996)
+    wxWARNING_RESTORE_DEPRECATED()
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 

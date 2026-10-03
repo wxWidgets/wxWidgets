@@ -738,6 +738,21 @@ int wxSsize(const C& c)
 #endif
 
 /*
+    Macros to suppress and restore warnings about deprecated functions.
+ */
+#ifdef __VISUALC__
+#   define wxWARNING_SUPPRESS_DEPRECATED() \
+        wxMSVC_WARNING_SUPPRESS(4996)
+#   define wxWARNING_RESTORE_DEPRECATED() \
+        wxMSVC_WARNING_RESTORE(4996)
+#else /* Not MSVC, so either gcc/clang or we can't define it at all */
+#   define wxWARNING_SUPPRESS_DEPRECATED() \
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+#   define wxWARNING_RESTORE_DEPRECATED() \
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+#endif
+
+/*
     Specific macro for disabling warnings related to not using override: this
     has to be done differently for gcc and clang and is only supported since
     gcc 5.1.

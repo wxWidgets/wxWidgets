@@ -1055,7 +1055,8 @@ OSVERSIONINFOEXW wxGetWindowsVersionInfo()
         }
     }
 
-    wxMSVC_WARNING_SUPPRESS(4996) // 'xxx': was declared deprecated
+    // GetVersionExW() is deprecated in Windows SDK now.
+    wxWARNING_SUPPRESS_DEPRECATED()
 
     if ( !::GetVersionExW(reinterpret_cast<OSVERSIONINFOW *>(&info)) )
     {
@@ -1063,7 +1064,7 @@ OSVERSIONINFOEXW wxGetWindowsVersionInfo()
         wxFAIL_MSG( "GetVersionEx() unexpectedly failed" );
     }
 
-    wxMSVC_WARNING_RESTORE()
+    wxWARNING_RESTORE_DEPRECATED()
 
     return info;
 }
