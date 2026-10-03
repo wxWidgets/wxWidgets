@@ -227,7 +227,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -365,7 +365,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -475,7 +475,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -600,7 +600,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 

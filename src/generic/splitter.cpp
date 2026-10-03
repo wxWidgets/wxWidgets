@@ -60,7 +60,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow);
 wxIMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent);
 
 wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
-    EVT_PAINT(wxSplitterWindow::OnPaint)
     EVT_SIZE(wxSplitterWindow::OnSize)
     EVT_DPI_CHANGED(wxSplitterWindow::OnDPIChanged)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
@@ -102,6 +101,13 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
         SetBackgroundStyle(wxBG_STYLE_PAINT);
     }
 
+    if (! WX_IS_MACOS_AVAILABLE(26, 0) )
+    {
+        // Don't draw sash on macOS 26 and above as this will cause
+        // legacy rendering in all subsequent child windows
+        Bind( wxEVT_PAINT, &wxSplitterWindow::OnPaint, this );
+    }
+    
     return true;
 }
 
