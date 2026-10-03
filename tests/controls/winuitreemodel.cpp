@@ -8,6 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
+#include "waitfor.h"
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_TREECTRL
 
@@ -911,6 +912,28 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
     multi.SelectItem(multiSecond);
     multi.Show();
     DrainTreeDispatch(6);
+
+    // The item-focus seam only navigates inside the XAML tree: it does not
+    // activate the containing HWND. Establish the public control-focus
+    // precondition explicitly, including when an earlier test left another
+    // top-level host active.
+    wxFrame otherFrame(nullptr, wxID_ANY, "tree focus predecessor",
+                       wxPoint(-24000, -24000), wxSize(240, 140));
+    wxTextCtrl otherText(&otherFrame, wxID_ANY);
+    otherFrame.Show();
+    otherText.SetFocus();
+    REQUIRE(WaitFor("WinUI TreeCtrl predecessor focus", [&]()
+    {
+        return wxWindow::FindFocus() == &otherText;
+    }, 2000));
+    REQUIRE(otherFrame.IsActive());
+
+    multi.SetFocus();
+    REQUIRE(WaitFor("WinUI TreeCtrl control focus", [&]()
+    {
+        return wxWindow::FindFocus() == &multi;
+    }, 2000));
+
     wxArrayTreeItemIds focusedSelections;
     REQUIRE(multi.GetSelections(focusedSelections) == 2);
     REQUIRE(wxWinUITreeCtrlTestAccess::FocusPeerItem(multi, multiFirst));
