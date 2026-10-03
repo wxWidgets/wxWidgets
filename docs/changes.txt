@@ -160,6 +160,10 @@ Changes in behaviour not resulting in compilation errors
   button that was pressed. Check the button ID and call Skip() if you want the
   the default handling to take place.
 
+- Panels and other control container windows without any children accepting
+  focus from keyboard now don't accept focus themselves. If you need them to do
+  it, call EnableFocusFromKeyboard() on them explicitly.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

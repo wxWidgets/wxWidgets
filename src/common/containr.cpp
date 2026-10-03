@@ -63,6 +63,27 @@ bool wxControlContainerBase::UpdateCanFocusChildren()
     return acceptsFocusChildren;
 }
 
+bool wxControlContainerBase::HasOnlyChildrenNotFocusableFromKeyboard() const
+{
+    bool hasChildren = false;
+    for ( const wxWindow* child : m_winParent->GetChildren() )
+    {
+        if ( !m_winParent->IsClientAreaChild(child) )
+            continue;
+
+        // Note that we must check whether the child accepts focus from
+        // keyboard and not just whether it accepts focus at all here, as the
+        // child can be another container which doesn't, even though it does
+        // accept focus in principle.
+        if ( child->AcceptsFocusFromKeyboard() )
+            return false;
+
+        hasChildren = true;
+    }
+
+    return hasChildren;
+}
+
 bool wxControlContainerBase::HasAnyFocusableChildren() const
 {
     const wxWindowList& children = m_winParent->GetChildren();
@@ -151,6 +172,22 @@ bool wxControlContainerBase::DoSetFocus()
 bool wxControlContainerBase::AcceptsFocus() const
 {
     return m_acceptsFocusSelf && m_winParent->CanBeFocused();
+}
+
+bool wxControlContainerBase::AcceptsFocusFromKeyboard() const
+{
+    // A window with children, none of which can get focus from keyboard, is
+    // just a container for them and TAB shouldn't stop on it, as there is
+    // nothing to do there. The exception is a window which can be scrolled,
+    // as this can only be done from keyboard if it can be focused.
+    if ( !m_winParent->CanScroll(wxVERTICAL) &&
+            !m_winParent->CanScroll(wxHORIZONTAL) )
+    {
+        if ( HasOnlyChildrenNotFocusableFromKeyboard() )
+            return false;
+    }
+
+    return AcceptsFocusRecursively();
 }
 
 bool wxControlContainerBase::SetFocusToChild()
