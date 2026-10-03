@@ -136,6 +136,7 @@ wxDarkModeSettings::~wxDarkModeSettings() = default;
 #if wxUSE_LOG_TRACE
 static const char* TRACE_DARKMODE = "msw-darkmode";
 #endif // wxUSE_LOG_TRACE
+#include <wx/msw/private/renderer.h>
 
 namespace
 {
@@ -818,50 +819,35 @@ HandleMenuMessage(WXLRESULT* result,
                 // correct colours in the dark mode, at least not when using
                 // the "Menu" theme.
                 ::FillRect(dis.hDC, &dis.rcItem, hbr ? hbr : GetMenuBrush());
+                wxUxThemeHandle menuTheme(w, L"MENU", L"DarkMode::MENU");
                 const UINT itemID = dis.itemID;
                 HWND hwndChild = (HWND)dis.itemData;
                 bool isMDIChildItem = (hwndChild && ::IsWindow(hwndChild) && (::GetWindowLongPtr(hwndChild, GWL_STYLE) & WS_CHILD));
 
                 if (itemID == SC_MINIMIZE || itemID == SC_CLOSE || itemID == SC_RESTORE)
                 {
-                    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
-                    const wchar_t* iconFont = isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons";
-                    auto drawSysButton = [&](RECT rc, wchar_t glyphChar)
-                        {
-                            int btnHeight = rc.bottom - rc.top;
-                            LOGFONT lf = { };
-                            wcscpy(lf.lfFaceName, iconFont);
-                            lf.lfHeight = -::MulDiv(btnHeight, 9, 16); // Scale icon cleanly inside button bounding box
-                            lf.lfWeight = FW_NORMAL;
-                            lf.lfCharSet = DEFAULT_CHARSET;
-                            HFONT hFont = ::CreateFontIndirectW(&lf);
-                            HDC hdc = dis.hDC;
-                            HFONT hOldFont = (HFONT)::SelectObject(hdc, hFont);
-                            COLORREF textCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
-                            COLORREF oldTextCol = ::SetTextColor(hdc, textCol);
-                            int oldBkMode = ::SetBkMode(hdc, TRANSPARENT);
-                            ::DrawText(hdc, &glyphChar, 1, &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-                            ::SetBkMode(hdc, oldBkMode);
-                            ::SetTextColor(hdc, oldTextCol);
-                            ::SelectObject(hdc, hOldFont);
-                            ::DeleteObject(hFont);
-                        };
-
+                    int part = -1;
                     wchar_t glyphToDraw = L'\0';
                     switch (itemID)
                     {
                     case SC_CLOSE:
                         glyphToDraw = L'\uE8BB';
+                        part = MENU_SYSTEMCLOSE;
                         break;
                     case SC_MINIMIZE:
                         glyphToDraw = L'\uE921';
+                        part = MENU_SYSTEMMINIMIZE;
                         break;
                     case SC_RESTORE:
                         glyphToDraw = L'\uE923';
+                        part = MENU_SYSTEMRESTORE;
                         break;
                     }
+                    COLORREF textCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
+                    if (wxMSWDrawCaptionGlyph(dis.hDC, dis.rcItem, glyphToDraw, textCol))
+                        return true;
 
-                    drawSysButton(dis.rcItem, glyphToDraw);
+                    menuTheme.DrawBackground(dis.hDC, dis.rcItem, part, partState, nullptr);
                     return true;
                 }
 
@@ -900,7 +886,6 @@ HandleMenuMessage(WXLRESULT* result,
                 if ( itemState & ODS_NOACCEL)
                     drawTextFlags |= DT_HIDEPREFIX;
 
-                wxUxThemeHandle menuTheme(w, L"Menu");
                 ::DrawThemeTextEx(menuTheme, dis.hDC, MENU_BARITEM, partState,
                                   buf, mii.cch, drawTextFlags, rcItem,
                                   &textOpts);
