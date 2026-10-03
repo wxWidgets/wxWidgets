@@ -1,0 +1,1 @@
+wxMSW: Fix closing dialogs on Esc used by IME or auto-completion (#16059, #27145).
