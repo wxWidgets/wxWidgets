@@ -57,7 +57,7 @@ class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 public:
     wxBitmapRefData(int width , int height , int depth, double logicalscale = 1.0);
     wxBitmapRefData(CGContextRef context);
-    wxBitmapRefData(CGImageRef image, double scale);
+    wxBitmapRefData(CGImageRef image, double scale, bool isTemplate = false);
     wxBitmapRefData(WXImage image);
     wxBitmapRefData();
     wxBitmapRefData(const wxBitmapRefData &tocopy);
@@ -201,10 +201,11 @@ wxBitmapRefData::wxBitmapRefData(CGContextRef context)
     Create( context );
 }
 
-wxBitmapRefData::wxBitmapRefData(CGImageRef image, double scale)
+wxBitmapRefData::wxBitmapRefData(CGImageRef image, double scale, bool isTemplate)
 {
     Init();
     Create( image, scale );
+    m_isTemplate = isTemplate;
 }
 
 wxBitmapRefData::wxBitmapRefData(WXImage image)
@@ -860,9 +861,9 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(CGImageRef image, double scale)
+wxBitmap::wxBitmap(CGImageRef image, double scale, bool isTemplate)
 {
-    (void) Create(image,scale);
+    (void) Create(image, scale, isTemplate);
 }
 
 wxGDIRefData* wxBitmap::CreateGDIRefData() const
@@ -1067,11 +1068,11 @@ bool wxBitmap::DoCreate(const wxSize& size, double scale, int d)
     return GetBitmapData()->IsOk() ;
 }
 
-bool wxBitmap::Create(CGImageRef image, double scale)
+bool wxBitmap::Create(CGImageRef image, double scale, bool isTemplate)
 {
     UnRef();
 
-    m_refData = new wxBitmapRefData( image, scale );
+    m_refData = new wxBitmapRefData( image, scale, isTemplate );
 
     return GetBitmapData()->IsOk() ;
 }
