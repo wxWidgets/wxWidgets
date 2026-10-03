@@ -1673,6 +1673,24 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
     }
     else
     {
+        // We get these events for all the windows under the mouse and not just
+        // the deepest one, but only the window really under the mouse must set
+        // the cursor, as otherwise a parent window would override the cursor of
+        // its children.
+        NSView* const hitView =
+            [[[m_osxView window] contentView] hitTest:[event locationInWindow]];
+        for ( NSView* v = hitView; v != nil; v = [v superview] )
+        {
+            wxWidgetImpl* const impl = wxWidgetImpl::FindFromWXWidget(v);
+            if ( impl )
+            {
+                if ( impl != this )
+                    return false;
+
+                break;
+            }
+        }
+
         wxWindow* cursorTarget = GetWXPeer();
         wxCoord x,y;
         SetupCoordinates(x, y, event);
