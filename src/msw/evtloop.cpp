@@ -37,8 +37,9 @@
     using wxMsgList = std::list<MSG>;
 #endif // wxUSE_THREADS
 
-// This is defined in src/msw/window.cpp.
+// These are defined in src/msw/window.cpp.
 extern WPARAM wxVKBlockedByKeyboardHook;
+extern bool wxMSWHandleEscapeKey(WXMSG* msg);
 
 // ============================================================================
 // GUI wxEventLoop implementation
@@ -61,6 +62,12 @@ bool wxGUIEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
 
 bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 {
+    // Escape is special as wxEVT_CHAR_HOOK is generated for it from here and
+    // not from the keyboard hook, see the comment before this function in
+    // src/msw/window.cpp.
+    if ( wxMSWHandleEscapeKey(msg) )
+        return true;
+
     HWND hwnd = msg->hwnd;
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
     wxWindow *wnd;
