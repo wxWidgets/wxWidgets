@@ -9157,6 +9157,12 @@ wxWinUITLWHostShouldSuppressNativeKillFocus(wxWindow *window,
                                                               destination);
 }
 
+WXDLLIMPEXP_CORE bool
+wxWinUITLWHostShouldPreserveFocusOnActivate(wxWindow *window)
+{
+    return wxWinUITopLevelHost::ShouldPreserveFocusOnActivate(window);
+}
+
 // ============================================================================
 // wx event plumbing
 // ============================================================================

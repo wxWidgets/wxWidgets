@@ -2257,6 +2257,23 @@ bool wxWinUITopLevelHost::ShouldSuppressNativeKillFocus(
             (host->m_bridge && ::IsChild(host->m_bridge, target)));
 }
 
+bool wxWinUITopLevelHost::ShouldPreserveFocusOnActivate(wxWindow *window)
+{
+    wxWinUITopLevelHost * const host = ForWindow(window, false);
+    if ( !host || host->m_tlw != window || host->m_shuttingDown )
+        return false;
+
+    const auto transfer = host->m_nativeFocusTransferTarget.lock();
+    wxWindow * const target = transfer ? transfer->GetWindow() : nullptr;
+    if ( !target || transfer->GetHost() != host )
+        return false;
+
+    wxWinUISlot * const slot = host->FindSlot(target);
+    const FocusRequest * const request = host->FindFocusRequest(target);
+    return slot && slot->m_lifetime == transfer &&
+           request && request->target == transfer;
+}
+
 #ifdef WXWINUI_TEST_SUPPORT
 unsigned wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount()
 {

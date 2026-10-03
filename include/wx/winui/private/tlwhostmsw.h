@@ -233,6 +233,12 @@ WXDLLIMPEXP_CORE bool
 wxWinUITLWHostShouldSuppressNativeKillFocus(wxWindow *window,
                                             WXHWND destination);
 
+// True only during the synchronous bridge transfer of a current child focus
+// request. Skip default TLW activation restoration at this boundary: the
+// requested child has not acquired XAML focus yet, but remains authoritative.
+WXDLLIMPEXP_CORE bool
+wxWinUITLWHostShouldPreserveFocusOnActivate(wxWindow *window);
+
 // End-of-freeze notification (wxTopLevelWindowMSW::DoThaw): run the single
 // catch-up geometry flush the freeze held back.
 WXDLLIMPEXP_CORE void wxWinUITLWHostNotifyThaw(wxWindow *window);

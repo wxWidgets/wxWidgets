@@ -9275,6 +9275,102 @@ TEST_CASE("HostState::DeferredFocusDoesNotReactivateAnotherTLW",
     DrainDispatch();
 }
 
+TEST_CASE("HostState::ExplicitFocusSurvivesTopLevelActivation",
+          "[HostState][focus][activation][winui-009][winui-v0-supported]")
+{
+    namespace MUX = winrt::Microsoft::UI::Xaml;
+
+    unsigned activations = 0;
+    bool redirectOnActivate = false;
+    wxFrame * const frame =
+        new wxFrame(nullptr, wxID_ANY, "focus-activation-target",
+                    wxPoint(-22000, -22000), wxSize(360, 200));
+    wxFrame * const other =
+        new wxFrame(nullptr, wxID_ANY, "focus-activation-holder",
+                    wxPoint(-21600, -22000), wxSize(260, 120));
+    wxScopeGuard cleanup = wxMakeGuard([frame, other]()
+    {
+        frame->Destroy();
+        other->Destroy();
+        DrainDispatch();
+    });
+    wxUnusedVar(cleanup);
+
+    wxButton * const first =
+        new wxButton(frame, wxID_ANY, "previous", wxPoint(10, 10));
+    wxButton * const requested =
+        new wxButton(frame, wxID_ANY, "requested", wxPoint(10, 50));
+    wxButton * const redirected =
+        new wxButton(frame, wxID_ANY, "redirected", wxPoint(10, 90));
+    wxWindow * const holder =
+        new wxWindow(other, wxID_ANY, wxPoint(10, 10), wxSize(80, 30));
+
+    frame->Show();
+    DrainToQuiescence();
+    first->SetFocus();
+    REQUIRE(DrainUntil([&]() { return wxWindow::FindFocus() == first; }));
+    other->Show();
+    holder->SetFocus();
+    REQUIRE(DrainUntil([&]() { return wxWindow::FindFocus() == holder; }));
+    REQUIRE(::GetActiveWindow() == static_cast<HWND>(other->GetHWND()));
+
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::FindSlotOwner(requested);
+    REQUIRE(host);
+    const wxWinUISlot * const requestedSlot = host->FindSlot(requested);
+    REQUIRE(requestedSlot);
+    REQUIRE(requestedSlot->IsContentLoaded());
+    REQUIRE_FALSE(wxWinUITLWHostShouldPreserveFocusOnActivate(frame));
+
+    SECTION("default restoration keeps the explicit target")
+    {
+    }
+    SECTION("application activation redirection still wins")
+    {
+        redirectOnActivate = true;
+    }
+
+    frame->Bind(wxEVT_ACTIVATE,
+        [&, redirected](wxActivateEvent& event)
+        {
+            if ( event.GetActive() )
+            {
+                ++activations;
+                if ( redirectOnActivate )
+                    redirected->SetFocus();
+            }
+            event.Skip();
+        });
+
+    wxWindow * const expected = redirectOnActivate ? redirected : requested;
+    // This is a real native activation caused by the public child request;
+    // no synthetic activation event or direct peer Focus() supplies success.
+    requested->SetFocus();
+    REQUIRE(DrainUntil([&]()
+    {
+        return wxWindow::FindFocus() == expected &&
+               host->GetFocusOwner() == expected;
+    }));
+    CHECK(activations == 1);
+    CHECK(::GetActiveWindow() == static_cast<HWND>(frame->GetHWND()));
+    const wxWinUISlot * const focusedSlot = host->FindSlot(expected);
+    REQUIRE(focusedSlot);
+    CHECK(IsInVisualSubtree(
+        MUX::Input::FocusManager::GetFocusedElement(host->GetXamlRoot()),
+        focusedSlot->GetContent()));
+    CHECK_FALSE(wxWinUITLWHostShouldPreserveFocusOnActivate(frame));
+
+    // The transfer guard is scoped to SetFocus(). A later ordinary
+    // activation must still restore the saved child without another request.
+    redirectOnActivate = false;
+    holder->SetFocus();
+    REQUIRE(DrainUntil([&]() { return wxWindow::FindFocus() == holder; }));
+    ::SetActiveWindow(static_cast<HWND>(frame->GetHWND()));
+    REQUIRE(DrainUntil([&]() { return wxWindow::FindFocus() == expected; }));
+    CHECK(activations == 2);
+    CHECK_FALSE(wxWinUITLWHostShouldPreserveFocusOnActivate(frame));
+}
+
 TEST_CASE("HostState::KeyboardFocusExclusion", "[HostState]")
 {
     wxFrame * const frame = new wxFrame(nullptr, wxID_ANY, "state-tab");

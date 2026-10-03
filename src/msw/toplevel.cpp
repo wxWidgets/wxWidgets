@@ -1552,6 +1552,17 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
         // activated)
         wxLogTrace(wxT("focus"), wxT("wxTLW %p activated."), m_hWnd);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // Setting focus to an island child can synchronously activate this
+        // TLW before XAML has focused the requested peer. FindFocus() still
+        // reports no child then, so restoring the old child here would
+        // supersede the explicit request which caused this activation.
+        // Application activation handlers have already run and any newer
+        // explicit focus request remains authoritative.
+        if ( wxWinUITLWHostShouldPreserveFocusOnActivate(this) )
+            return;
+#endif
+
         wxWindow* const winFocus = FindFocus();
         if ( winFocus == this || !IsDescendant(winFocus) )
             DoRestoreLastFocus();

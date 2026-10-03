@@ -804,6 +804,11 @@ public:
     static bool ShouldSuppressNativeKillFocus(wxWindow *window,
                                               WXHWND destination);
 
+    // An explicit child focus request can activate its TLW while handing
+    // native focus to the bridge. Default activation restoration must not
+    // replace that request with the previously focused child.
+    static bool ShouldPreserveFocusOnActivate(wxWindow *window);
+
     // The wx window whose slot currently holds the XAML focus, if any.
     wxWindow *GetFocusOwner() const { return m_focusOwner; }
 
