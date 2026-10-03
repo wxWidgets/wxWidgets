@@ -19,6 +19,7 @@
 
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
+#include "wx/textctrl.h"
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
@@ -1741,6 +1742,35 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
     wxYield();
 
     CHECK(created.GetCount() == 1);
+#endif
+}
+
+TEST_CASE_METHOD(GridTestCase, "Grid::ChoiceEditorEnter", "[grid]")
+{
+#if wxUSE_COMBOBOX
+    wxArrayString choices;
+    choices.push_back("one");
+    choices.push_back("two");
+
+    m_grid->SetCellValue(1, 1, choices[0]);
+    m_grid->SetCellEditor(1, 1, new wxGridCellChoiceEditor(choices));
+
+    wxGridCellEditorPtr editor(m_grid->GetCellEditor(1, 1));
+    REQUIRE( editor );
+
+    m_grid->SetGridCursor(1, 1);
+    m_grid->EnableCellEditControl();
+
+    wxWindow* const editorWindow = editor->GetWindow();
+    REQUIRE( editorWindow );
+
+    wxCommandEvent event(wxEVT_TEXT_ENTER, editorWindow->GetId());
+    event.SetEventObject(editorWindow);
+    editorWindow->ProcessWindowEvent(event);
+
+    CHECK( WaitFor("choice editor to close", [&]() {
+        return !m_grid->IsCellEditControlEnabled();
+    }) );
 #endif
 }
 
