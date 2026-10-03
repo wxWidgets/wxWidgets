@@ -1737,6 +1737,11 @@ public:
             Height of source area to be copied.
         @param source
             Source device context.
+
+            When @a logicalFunc is @c wxCLEAR, @c wxSET, @c wxINVERT,
+            or @c wxNO_OP, @a source is ignored.  In those cases,
+            @a source may be @c nullptr.  For all other values of
+            @a logicalFunc, @a source may not be @c nullptr.
         @param xsrc
             Source device context x position.
         @param ysrc
