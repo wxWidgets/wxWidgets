@@ -24,6 +24,6 @@
 // Returns:
 //  true if glyph was drawn successfully using one of the preferred fonts,
 //  false if no suitable font was found or glyphChar was null
-bool wxMSWDrawCaptionGlyph(HDC hdc, const RECT& rc, wchar_t glyphChar, COLORREF textCol);
+WXDLLEXPORT bool wxMSWDrawCaptionGlyph(HDC hdc, const RECT& rc, wchar_t glyphChar, COLORREF textCol);
 
 #endif // _WX_MSW_PRIVATE_RENDERER_H_
