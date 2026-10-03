@@ -7769,22 +7769,26 @@ bool wxIsIMEOpen(const wxWindow* win)
 
 } // anonymous namespace
 
-// Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
-// in active frames and dialogs, regardless of where the focus is.
+// Windows keyboard hook. Allows interception of keys in active frames and
+// dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
+
+static bool
+wxSendCharHookEvent(WXWPARAM wParam,
+                    WXLPARAM lParam,
+                    const wxWindow** win = nullptr);
 
 LRESULT APIENTRY
 wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 {
+    // We specifically exclude Esc here to avoid handling it too early, see
+    // wxMSWHandleEscapeKey() below for details.
     DWORD hiWord = HIWORD(lParam);
-    if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
+    if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) && wParam != VK_ESCAPE )
     {
-        wchar_t uc = 0;
-        int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
-
-        // Don't intercept keyboard entry (notably Escape) if a modal window
-        // (not managed by wx, e.g. IME one) is currently opened as more often
-        // than not it needs all the keys for itself.
+        // Don't intercept keyboard entry if a modal window (not managed by wx,
+        // e.g. IME one) is currently opened as more often than not it needs
+        // all the keys for itself.
         //
         // Also don't catch it if a window currently captures the mouse as
         // Escape is normally used to release the mouse capture and if you
@@ -7793,56 +7797,112 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
         // certain to have focus while it has the capture.
         if ( !gs_modalEntryWindowCount && !::GetCapture() )
         {
-            if ( id != WXK_NONE
-                    || static_cast<int>(uc) != WXK_NONE
-                    )
+            const wxWindow* win = nullptr;
+            if ( wxSendCharHookEvent(wParam, lParam, &win) )
             {
-                wxWindow const* win = wxWindow::DoFindFocus();
-                if ( !win )
+                // When IME is active, we must let it have the event as
+                // otherwise it could just hang, see #22473.
+                if ( !wxIsIMEOpen(win) )
                 {
-                    // Even if the focus got lost somehow, still send the event
-                    // to the top level parent to allow a wxDialog to always
-                    // close on Escape.
-                    win = wxGetActiveWindow();
+                    // Stop processing of this event.
+                    return 1;
                 }
 
-                wxKeyEvent event(wxEVT_CHAR_HOOK);
-                MSWInitAnyKeyEvent(event, wParam, lParam, win);
-
-                event.m_keyCode = id;
-                event.m_uniChar = uc;
-                event.SetUnicodeChar(uc);
-
-                wxEvtHandler * const handler = win ? win->GetEventHandler()
-                                                   : wxTheApp;
-
-                // Do not let exceptions propagate out of the hook, it's a
-                // module boundary.
-                if ( handler && handler->SafelyProcessEvent(event) )
-                {
-                    if ( !event.IsNextEventAllowed() )
-                    {
-                        // When IME is active, we must let it have the event as
-                        // otherwise it could just hang, see #22473.
-                        if ( !wxIsIMEOpen(win) )
-                        {
-                            // Stop processing of this event.
-                            return 1;
-                        }
-
-                        // Because we don't stop processing of the event at
-                        // Windows level, we are going to get WM_KEYDOWN for
-                        // this key, but we need to ignore it as it's not
-                        // supposed to be generated if wxEVT_CHAR_HOOK handled
-                        // the event.
-                        wxVKBlockedByKeyboardHook = wParam;
-                    }
-                }
+                // Because we don't stop processing of the event at
+                // Windows level, we are going to get WM_KEYDOWN for
+                // this key, but we need to ignore it as it's not
+                // supposed to be generated if wxEVT_CHAR_HOOK handled
+                // the event.
+                wxVKBlockedByKeyboardHook = wParam;
             }
         }
     }
 
     return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
+}
+
+// Send wxEVT_CHAR_HOOK for the given key to the focused window and return true
+// if it was handled and no further events should be generated for this key.
+//
+// The window the event was sent to, which may be null, is returned in the
+// output parameter.
+static bool
+wxSendCharHookEvent(WXWPARAM wParam, WXLPARAM lParam, const wxWindow** out)
+{
+    wchar_t uc = 0;
+    int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
+
+    if ( id == WXK_NONE && static_cast<int>(uc) == WXK_NONE )
+        return false;
+
+    const wxWindow* win = wxWindow::DoFindFocus();
+    if ( !win )
+    {
+        // Even if the focus got lost somehow, still send the event
+        // to the top level parent to allow a wxDialog to always
+        // close on Escape.
+        win = wxGetActiveWindow();
+    }
+
+    wxKeyEvent event(wxEVT_CHAR_HOOK);
+    MSWInitAnyKeyEvent(event, wParam, lParam, win);
+
+    event.m_keyCode = id;
+    event.m_uniChar = uc;
+    event.SetUnicodeChar(uc);
+
+    wxEvtHandler * const handler = win ? win->GetEventHandler()
+                                       : wxTheApp;
+
+    // Do not let exceptions propagate out of the hook, it's a
+    // module boundary.
+    if ( handler && handler->SafelyProcessEvent(event) )
+    {
+        if ( !event.IsNextEventAllowed() )
+        {
+            if ( out )
+                *out = win;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// This function is called by wxGUIEventLoop::PreProcessMessage() to generate
+// wxEVT_CHAR_HOOK for Escape. Unlike for the other keys, we can't do it from
+// wxKeyboardHook() above because it is called too early, before the IME or the
+// focused control get a chance to handle this key, and they often need it,
+// e.g. to cancel the IME composition or to close the auto-completion popup.
+//
+// Returns true if the message was handled and must not be processed further.
+bool wxMSWHandleEscapeKey(WXMSG* msg)
+{
+    if ( msg->message != WM_KEYDOWN || msg->wParam != VK_ESCAPE )
+        return false;
+
+    // See the comments in wxKeyboardHook() explaining these checks.
+    if ( gs_modalEntryWindowCount || ::GetCapture() )
+        return false;
+
+    if ( const HWND hwndFocus = ::GetFocus() )
+    {
+        // Multiline EDIT controls or wxWindow with wxWANTS_CHARS style, always
+        // ask for all keys, but this shouldn't prevent Escape from closing the
+        // dialog containing them, so only take these flags into account if
+        // they're returned specifically for this message, as it's done by the
+        // windows which need Escape only temporarily, e.g. the edit control
+        // using auto-completion while its drop down is shown.
+        const LRESULT codeAny = ::SendMessage(hwndFocus, WM_GETDLGCODE, 0, 0);
+        const LRESULT codeEsc = ::SendMessage(hwndFocus, WM_GETDLGCODE,
+                                              msg->wParam, (LPARAM)msg);
+
+        if ( (codeEsc & ~codeAny) & (DLGC_WANTALLKEYS | DLGC_WANTMESSAGE) )
+            return false;
+    }
+
+    return wxSendCharHookEvent(msg->wParam, msg->lParam);
 }
 
 void wxSetKeyboardHook(bool doIt)
