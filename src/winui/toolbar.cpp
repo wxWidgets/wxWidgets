@@ -76,6 +76,131 @@ constexpr int wxWINUI_TOOL_SEPARATOR_WIDTH = 12;
 constexpr int wxWINUI_TOOL_DROPDOWN_WIDTH = 24;
 constexpr int wxWINUI_TOOL_OVERFLOW_WIDTH = 40;
 
+// Compute the same retained Grid placement for construction, overflow and
+// best-size queries. Horizontal rows are deliberately ragged: four commands
+// requested on three rows occupy 2, 1, 1 cells, not two rows and an empty one.
+struct wxWinUIToolGridItem
+{
+    double width = 0.0;
+    double height = 0.0;
+    bool visible = true;
+    bool stretchable = false;
+};
+
+struct wxWinUIToolGridLayout
+{
+    struct Cell
+    {
+        int row = -1;
+        int column = -1;
+    };
+    std::vector<Cell> cells;
+    std::vector<double> widths;
+    std::vector<double> heights;
+    std::vector<bool> stretchColumns;
+    std::vector<bool> stretchRows;
+    bool withinLimits = true;
+
+    double GetExtent(bool vertical) const
+    {
+        double extent = 0.0;
+        for ( double value : vertical ? heights : widths )
+            extent += value;
+        return extent;
+    }
+};
+
+wxWinUIToolGridLayout wxWinUIGetToolGridLayout(
+    const std::vector<wxWinUIToolGridItem>& items,
+    bool vertical, bool rtl, int maxRows, int maxCols)
+{
+    wxWinUIToolGridLayout result;
+    result.cells.resize(items.size());
+    size_t count = 0;
+    for ( const auto& item : items )
+    {
+        if ( item.visible )
+            ++count;
+    }
+
+    const auto getRows = [&](size_t n)
+    {
+        if ( !n )
+            return size_t{1};
+        size_t rows = maxRows > 0
+            ? std::min(n, static_cast<size_t>(maxRows))
+            : vertical ? n : size_t{1};
+        if ( maxCols > 0 )
+        {
+            const size_t columns = static_cast<size_t>(maxCols);
+            rows = std::max(rows, n / columns + (n % columns != 0));
+        }
+        return rows;
+    };
+
+    size_t rows = getRows(count);
+    size_t columns = count ? (count + rows - 1) / rows : 1;
+    // Match wxMSW: flexible spacers have a meaning only on a single
+    // horizontal row or a single vertical column.
+    const bool stretch = vertical ? columns == 1 : rows == 1;
+    if ( !stretch )
+    {
+        for ( const auto& item : items )
+        {
+            if ( item.visible && item.stretchable )
+                --count;
+        }
+        rows = getRows(count);
+        columns = count ? (count + rows - 1) / rows : 1;
+    }
+    result.withinLimits =
+        (maxRows <= 0 || rows <= static_cast<size_t>(maxRows)) &&
+        (maxCols <= 0 || columns <= static_cast<size_t>(maxCols));
+    result.widths.resize(columns, 0.0);
+    result.heights.resize(rows, 0.0);
+    result.stretchColumns.resize(columns, false);
+    result.stretchRows.resize(rows, false);
+
+    size_t ordinal = 0;
+    size_t row = 0;
+    size_t column = 0;
+    for ( size_t i = 0; i < items.size(); ++i )
+    {
+        const auto& item = items[i];
+        if ( !item.visible || (!stretch && item.stretchable) )
+            continue;
+        if ( vertical )
+        {
+            row = ordinal % rows;
+            column = ordinal / rows;
+        }
+        const size_t projectedColumn = rtl ? columns - 1 - column : column;
+        result.cells[i] = { static_cast<int>(row),
+                            static_cast<int>(projectedColumn) };
+        result.widths[projectedColumn] =
+            std::max(result.widths[projectedColumn], item.width);
+        result.heights[row] = std::max(result.heights[row], item.height);
+        if ( item.stretchable )
+        {
+            if ( vertical )
+                result.stretchRows[row] = true;
+            else
+                result.stretchColumns[projectedColumn] = true;
+        }
+        ++ordinal;
+        if ( !vertical )
+        {
+            const size_t rowLength = count / rows + (row < count % rows);
+            if ( ++column == rowLength )
+            {
+                column = 0;
+                ++row;
+            }
+        }
+    }
+    return result;
+}
+
 std::atomic<std::uint64_t> gs_nextToolPeerKey{0};
 #ifdef WXWINUI_TEST_SUPPORT
 std::atomic<std::size_t> gs_liveToolBarCallbackStates{0};
@@ -775,6 +900,7 @@ struct wxWinUIToolPeer
     winrt::event_token rightTappedToken{};
     wxSize selectedPixelSize;
     double naturalExtent = 0.0;
+    double naturalCrossExtent = 0.0;
     bool hasIcon = false;
     bool usesDisabledBitmap = false;
     bool inOverflow = false;
@@ -1480,6 +1606,11 @@ public:
     std::uint64_t bitmapSizeRevision = 0;
     std::vector<wxSize> requestedBitmapSizeRollbackStack;
     std::uint64_t layoutRevision = 0;
+    // SetMaxRowsCols() is inherited and changes only the requested model.
+    // Overflow must keep using the limits of the published root until a
+    // successful Realize(), including after a rejected Loaded transaction.
+    int publishedRows = 0;
+    int publishedColumns = 0;
     std::set<std::uint64_t> pendingShortHelpKeys;
     std::set<std::uint64_t> pendingEnabledKeys;
     std::uint64_t shortHelpFairnessCursor = 0;
@@ -2514,6 +2645,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
 #endif
     const std::uint64_t candidateModelRevision =
         rebuildImpl->modelRevision;
+    const int candidateRows = GetMaxRows();
+    const int candidateColumns = GetMaxCols();
     wxScopeGuard reconcileLabelsOnEarlyExit = wxMakeGuard(
         [callbackState, rebuildImpl, candidateModelRevision]()
         {
@@ -2566,6 +2699,27 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
                      static_cast<wxWinUIToolBarTool *>(inserted));
     }
 
+    if ( candidateRows > 0 && candidateColumns > 0 )
+    {
+        size_t pinned = 0;
+        bool hasCommand = false;
+        for ( const auto *tool : tools )
+        {
+            if ( tool->IsControl() )
+                ++pinned;
+            else if ( !tool->IsSeparator() )
+                hasCommand = true;
+        }
+        const std::uint64_t capacity =
+            static_cast<std::uint64_t>(candidateRows) * candidateColumns;
+        if ( pinned > capacity || (pinned == capacity && hasCommand) )
+        {
+            wxLogWarning("WinUI toolbar row/column limits cannot contain "
+                         "the embedded controls and overflow button");
+            return false;
+        }
+    }
+
     // A control may die at any synchronous wx/XAML boundary below. Existing
     // tools remain owned by a live toolbar model; an inserted candidate remains
     // owned by DoInsertNewTool(). Neutralize only those provably-live tool
@@ -2613,7 +2767,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
     const auto allControlsCurrent = [&]() -> bool
     {
         wxToolBar * const owner = getRebuildOwner();
-        if ( !owner )
+        if ( !owner || owner->GetMaxRows() != candidateRows ||
+             owner->GetMaxCols() != candidateColumns )
             return false;
 
         if ( insertedTool )
@@ -2648,6 +2803,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
     winrt::event_token previousSizeChangedToken{};
     std::uint64_t previousPeerGeneration = 0;
     std::uint64_t previousCallbackGeneration = 0;
+    int previousRows = 0;
+    int previousColumns = 0;
     bool provisionalPublished = false;
     bool candidateAttached = false;
 
@@ -2731,6 +2888,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             rebuildImpl->sizeChangedToken = previousSizeChangedToken;
             rebuildImpl->peers.swap(previousPeers);
             rebuildImpl->peerGeneration = previousPeerGeneration;
+            rebuildImpl->publishedRows = previousRows;
+            rebuildImpl->publishedColumns = previousColumns;
             callbackState->CommitGeneration(previousCallbackGeneration);
             provisionalPublished = false;
             const MUXC::Grid rootToRestore = rebuildImpl->root;
@@ -2802,9 +2961,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             // SetContent() may already have attached the rejected candidate
             // before a Loaded callback invalidated one of its control tools.
             // Restore the exact previous root after the implementation model
-            // and generation are coherent again. No implementation member is
-            // touched after a successful restore: it can synchronously run
-            // Loaded/focus application code and destroy the toolbar.
+            // and generation are coherent again. Revalidate after SetContent:
+            // it can run Loaded/focus code and destroy the toolbar.
             wxToolBar * const restoreOwner =
                 callbackState->GetOwnerDuringRebuild(generation);
             if ( !restoreOwner || !restoreOwner->m_winui ||
@@ -2834,6 +2992,22 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
                         "Could not restore the previous WinUI toolbar peer; "
                         "the peer has been closed to avoid a ghost tree");
                     rebuildImpl->Close();
+                }
+                return;
+            }
+            if ( restoreHostContent )
+            {
+                wxToolBar * const liveOwner =
+                    callbackState->GetLiveOwner();
+                if ( liveOwner && liveOwner->m_winui &&
+                     liveOwner->m_winui.get() == rebuildImpl &&
+                     liveOwner->m_winui->callbackState == callbackState &&
+                     rebuildImpl->peerGeneration == previousPeerGeneration )
+                {
+                    // Reattaching a measured tree resets its visual offsets
+                    // until arrange. Preserve usable pre-transaction bounds,
+                    // not just peer identities, before reporting rejection.
+                    rebuildImpl->host.ForceRender();
                 }
             }
         };
@@ -2893,27 +3067,6 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             // (never cloned) when it enters the overflow flyout.
             peer.overflowEligible =
                 !tool->IsControl() && !tool->IsStretchable();
-
-            if ( vertical )
-            {
-                MUXC::RowDefinition row;
-                row.Height(
-                    tool->IsStretchable()
-                        ? MUX::GridLengthHelper::FromValueAndType(
-                              1.0, MUX::GridUnitType::Star)
-                        : MUX::GridLengthHelper::Auto());
-                candidate.root.RowDefinitions().Append(row);
-            }
-            else
-            {
-                MUXC::ColumnDefinition column;
-                column.Width(
-                    tool->IsStretchable()
-                        ? MUX::GridLengthHelper::FromValueAndType(
-                              1.0, MUX::GridUnitType::Star)
-                        : MUX::GridLengthHelper::Auto());
-                candidate.root.ColumnDefinitions().Append(column);
-            }
 
             if ( tool->IsStretchable() )
             {
@@ -3412,29 +3565,9 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
                               leading, 0.0f, trailing, 0.0f });
             }
 
-            if ( vertical )
-                MUXC::Grid::SetRow(peer.element, static_cast<int>(index));
-            else
-                MUXC::Grid::SetColumn(
-                    peer.element,
-                    static_cast<int>(
-                        rtl ? tools.size() - index : index));
             candidate.root.Children().Append(
                 peer.element.as<MUX::UIElement>());
             candidate.peers.push_back(std::move(peer));
-        }
-
-        if ( vertical )
-        {
-            MUXC::RowDefinition overflowRow;
-            overflowRow.Height(MUX::GridLengthHelper::Auto());
-            candidate.root.RowDefinitions().Append(overflowRow);
-        }
-        else
-        {
-            MUXC::ColumnDefinition overflowColumn;
-            overflowColumn.Width(MUX::GridLengthHelper::Auto());
-            candidate.root.ColumnDefinitions().Append(overflowColumn);
         }
 
         candidate.overflowPanel = MUXC::StackPanel();
@@ -3472,19 +3605,74 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             return false;
         }
         candidate.overflowButton.Flyout(candidate.overflowFlyout);
-        if ( vertical )
-        {
-            MUXC::Grid::SetRow(
-                candidate.overflowButton,
-                static_cast<int>(tools.size()));
-        }
-        else
-        {
-            MUXC::Grid::SetColumn(
-                candidate.overflowButton,
-                rtl ? 0 : static_cast<int>(tools.size()));
-        }
         candidate.root.Children().Append(candidate.overflowButton);
+
+        std::vector<wxWinUIToolGridItem> gridItems(tools.size() + 1);
+        for ( size_t index = 0; index < tools.size(); ++index )
+            gridItems[index].stretchable = tools[index]->IsStretchable();
+        gridItems.back().visible = false;
+        wxWinUIToolGridLayout grid = wxWinUIGetToolGridLayout(
+            gridItems, vertical, rtl, candidateRows, candidateColumns);
+        for ( size_t reverse = tools.size();
+              !grid.withinLimits && reverse != 0; --reverse )
+        {
+            const size_t index = reverse - 1;
+            if ( !candidate.peers[index].overflowEligible )
+                continue;
+            candidate.peers[index].inOverflow = true;
+            gridItems[index].visible = false;
+            if ( !tools[index]->IsSeparator() )
+                gridItems.back().visible = true;
+            grid = wxWinUIGetToolGridLayout(
+                gridItems, vertical, rtl, candidateRows, candidateColumns);
+        }
+        if ( !grid.withinLimits )
+            return false;
+        for ( bool stretch : grid.stretchRows )
+        {
+            MUXC::RowDefinition row;
+            row.Height(stretch
+                ? MUX::GridLengthHelper::FromValueAndType(
+                      1.0, MUX::GridUnitType::Star)
+                : MUX::GridLengthHelper::Auto());
+            candidate.root.RowDefinitions().Append(row);
+        }
+        for ( bool stretch : grid.stretchColumns )
+        {
+            MUXC::ColumnDefinition column;
+            column.Width(stretch
+                ? MUX::GridLengthHelper::FromValueAndType(
+                      1.0, MUX::GridUnitType::Star)
+                : MUX::GridLengthHelper::Auto());
+            candidate.root.ColumnDefinitions().Append(column);
+        }
+        for ( size_t index = 0; index < tools.size(); ++index )
+        {
+            auto& peer = candidate.peers[index];
+            if ( peer.inOverflow )
+            {
+                uint32_t childIndex = 0;
+                if ( candidate.root.Children().IndexOf(peer.element, childIndex) )
+                    candidate.root.Children().RemoveAt(childIndex);
+                candidate.overflowPanel.Children().Append(peer.element);
+            }
+            else if ( grid.cells[index].row < 0 )
+            {
+                peer.element.Visibility(MUX::Visibility::Collapsed);
+            }
+            else
+            {
+                MUXC::Grid::SetRow(peer.element, grid.cells[index].row);
+                MUXC::Grid::SetColumn(peer.element, grid.cells[index].column);
+            }
+        }
+        if ( gridItems.back().visible )
+        {
+            MUXC::Grid::SetRow(candidate.overflowButton, grid.cells.back().row);
+            MUXC::Grid::SetColumn(
+                candidate.overflowButton, grid.cells.back().column);
+            candidate.overflowButton.Visibility(MUX::Visibility::Visible);
+        }
 
         candidate.sizeChangedToken = candidate.root.SizeChanged(
             [callbackState, generation](
@@ -3569,6 +3757,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
         previousSizeChangedToken = rebuildImpl->sizeChangedToken;
         previousPeers.swap(rebuildImpl->peers);
         previousPeerGeneration = rebuildImpl->peerGeneration;
+        previousRows = rebuildImpl->publishedRows;
+        previousColumns = rebuildImpl->publishedColumns;
         previousCallbackGeneration =
             callbackState->GetCommittedGeneration();
 
@@ -3579,6 +3769,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
         rebuildImpl->sizeChangedToken = candidate.sizeChangedToken;
         rebuildImpl->peers.swap(candidate.peers);
         rebuildImpl->peerGeneration = generation;
+        rebuildImpl->publishedRows = candidateRows;
+        rebuildImpl->publishedColumns = candidateColumns;
         callbackState->CommitGeneration(generation);
         candidate.published = true;
         provisionalPublished = true;
@@ -5493,6 +5685,87 @@ void wxToolBar::SetToolSeparation(int separation)
     owner->InvalidateBestSize();
 }
 
+void wxToolBar::SetRows(int rows)
+{
+    wxCHECK_RET(rows >= 0, "toolbar row count must not be negative");
+    if ( rows == GetMaxRows() )
+        return;
+
+    if ( !m_winui || !m_winui->callbackState )
+    {
+        m_maxRows = rows;
+        InvalidateBestSize();
+        return;
+    }
+    wxWinUIToolBarImpl * const rebuildImpl = m_winui.get();
+    const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
+        rebuildImpl->callbackState;
+    // A Loaded callback cannot publish a second Grid while the first is
+    // provisional. Leave the current transaction's geometry authoritative.
+    if ( callbackState->IsRebuildActive() )
+        return;
+
+    const int previous = m_maxRows;
+    const int columns = m_maxCols;
+    m_maxRows = rows;
+    std::uint64_t revision = ++rebuildImpl->layoutRevision;
+    if ( revision == 0 )
+        revision = ++rebuildImpl->layoutRevision;
+    if ( ++rebuildImpl->modelRevision == 0 )
+        ++rebuildImpl->modelRevision;
+
+    const bool rebuilt = !rebuildImpl->realized || RebuildPeer();
+    wxToolBar * const owner = callbackState->GetLiveOwner();
+    if ( !owner || !owner->m_winui || owner->m_winui.get() != rebuildImpl ||
+         owner->m_winui->callbackState != callbackState )
+    {
+        return;
+    }
+    if ( !rebuilt && rebuildImpl->layoutRevision == revision &&
+         owner->GetMaxRows() == rows )
+    {
+        owner->m_maxRows = previous;
+        ++rebuildImpl->layoutRevision;
+        ++rebuildImpl->modelRevision;
+    }
+    owner->InvalidateBestSize();
+    if ( rebuilt && rebuildImpl->realized )
+    {
+        const std::uint64_t generation = rebuildImpl->peerGeneration;
+        const auto getCurrentOwner = [&]() -> wxToolBar *
+        {
+            wxToolBar * const current = callbackState->GetLiveOwner();
+            return current && current->m_winui &&
+                       current->m_winui.get() == rebuildImpl &&
+                       current->m_winui->callbackState == callbackState &&
+                       rebuildImpl->peerGeneration == generation &&
+                       rebuildImpl->layoutRevision == revision &&
+                       current->GetMaxRows() == rows &&
+                       current->GetMaxCols() == columns
+                ? current : nullptr;
+        };
+        wxToolBar *current = getCurrentOwner();
+        if ( !current )
+            return;
+        current->m_winui->host.ForceRender();
+        current = getCurrentOwner();
+        if ( !current )
+            return;
+        const wxSize best = current->GetBestSize();
+        current = getCurrentOwner();
+        if ( !current )
+            return;
+        current->SetSize(best);
+        current = getCurrentOwner();
+        if ( !current )
+            return;
+        current->SendSizeEventToParent();
+        current = getCurrentOwner();
+        if ( current )
+            current->m_winui->host.ForceRender();
+    }
+}
+
 bool wxToolBar::MSWOnEffectiveLayoutDirectionChanged()
 {
     wxWinUIToolBarImpl * const updateImpl = m_winui.get();
@@ -5541,62 +5814,23 @@ bool wxToolBar::MSWOnEffectiveLayoutDirectionChanged()
             return false;
         }
 
-        if ( !owner->IsVertical() )
-        {
-            const bool rtl =
-                owner->GetLayoutDirection() ==
-                wxLayout_RightToLeft;
-            const size_t count =
-                owner->m_winui->peers.size();
-            for ( size_t index = 0; index < count; ++index )
-            {
-                const std::uint64_t peerKey =
-                    owner->m_winui->peers[index].tool
-                        ? owner->m_winui->peers[index].tool->peerKey
-                        : 0;
-                const MUX::FrameworkElement element =
-                    owner->m_winui->peers[index].element;
-                if ( !element )
-                    continue;
-                MUXC::Grid::SetColumn(
-                    element,
-                    static_cast<int>(
-                        rtl ? count - index : index));
-
-                owner =
-                    callbackState->GetOwnerForModelMutation(
-                        generation);
-                if ( !owner || !owner->m_winui ||
-                     owner->m_winui.get() != updateImpl ||
-                     owner->m_winui->callbackState != callbackState ||
-                     owner->m_winui->peerGeneration != generation ||
-                     (peerKey &&
-                      !owner->m_winui->FindPeerByKey(peerKey)) )
-                {
-                    return false;
-                }
-            }
-            MUXC::Grid::SetColumn(
-                owner->m_winui->overflowButton,
-                rtl ? 0 : static_cast<int>(count));
-            owner =
-                callbackState->GetOwnerForModelMutation(
-                    generation);
-            if ( !owner || !owner->m_winui ||
-                 owner->m_winui.get() != updateImpl ||
-                 owner->m_winui->callbackState != callbackState ||
-                 owner->m_winui->peerGeneration != generation )
-            {
-                return false;
-            }
-        }
-
         const double extent = owner->IsVertical()
             ? updateImpl->root.ActualHeight()
             : updateImpl->root.ActualWidth();
         const bool overflowProjected =
             extent <= 0.0 ||
             owner->UpdateOverflow(extent, generation);
+        owner = callbackState->GetOwnerForModelMutation(generation);
+        if ( overflowProjected && owner && owner->m_winui &&
+             owner->m_winui.get() == updateImpl &&
+             owner->m_winui->callbackState == callbackState &&
+             owner->m_winui->peerGeneration == generation )
+        {
+            // A direction change updates both the native client mapping and
+            // XAML's FlowDirection/attached columns. Publish one arranged
+            // geometry before returning, as Realize() does for a new root.
+            updateImpl->host.ForceRender();
+        }
         owner = callbackState->GetOwnerForModelMutation(generation);
         return overflowProjected && owner && owner->m_winui &&
                owner->m_winui.get() == updateImpl &&
@@ -5701,19 +5935,34 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
         double radioSpacing = 0.0;
         bool hasRadioPresentation = false;
         bool inOverflow = false;
+        int row = 0;
+        int column = 0;
     };
 
     const bool vertical = IsVertical();
     const bool showText = HasFlag(wxTB_TEXT);
+    const bool rtl = GetLayoutDirection() == wxLayout_RightToLeft;
+    const int requestedRows = GetMaxRows();
+    const int requestedColumns = GetMaxCols();
+    const int publishedRows = updateImpl->publishedRows;
+    const int publishedColumns = updateImpl->publishedColumns;
     std::vector<OverflowPlan> plan(updateImpl->peers.size());
-    std::vector<double> extents(updateImpl->peers.size(), 0.0);
-    double primaryExtent = 0.0;
+    std::vector<wxWinUIToolGridItem> gridItems(plan.size() + 1);
+    gridItems.back().width = wxWINUI_TOOL_OVERFLOW_WIDTH;
+    gridItems.back().height = showText && !HasFlag(wxTB_HORZ_LAYOUT)
+        ? wxWINUI_TOOL_HEIGHT_LABEL_BELOW : wxWINUI_TOOL_HEIGHT;
+    gridItems.back().visible = false;
+    wxWinUIToolGridLayout grid;
     std::vector<MUX::UIElement> originalRootChildren;
     std::vector<MUX::UIElement> originalOverflowChildren;
+    std::vector<MUXC::RowDefinition> originalRows;
+    std::vector<MUXC::ColumnDefinition> originalColumns;
     std::vector<PeerRollbackState> rollbackPeers;
     MUX::Visibility originalChevronVisibility =
         MUX::Visibility::Collapsed;
     bool originalChevronEnabled = false;
+    int originalChevronRow = 0;
+    int originalChevronColumn = 0;
     bool rollbackSnapshotReady = false;
     bool forwardMutationStarted = false;
     bool superseded = false;
@@ -5775,6 +6024,29 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             if ( !owner )
                 return false;
 
+            owner->m_winui->root.RowDefinitions().Clear();
+            owner = getLiveOwner();
+            if ( !owner )
+                return false;
+            for ( const auto& row : originalRows )
+            {
+                owner->m_winui->root.RowDefinitions().Append(row);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+            }
+            owner->m_winui->root.ColumnDefinitions().Clear();
+            owner = getLiveOwner();
+            if ( !owner )
+                return false;
+            for ( const auto& column : originalColumns )
+            {
+                owner->m_winui->root.ColumnDefinitions().Append(column);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+            }
+
             auto rootChildren = owner->m_winui->root.Children();
             rootChildren.Clear();
             owner = getLiveOwner();
@@ -5812,6 +6084,17 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     return false;
 
                 const MUX::FrameworkElement element = peer->element;
+                MUXC::Grid::SetRow(element, state.row);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+                MUXC::Grid::SetColumn(element, state.column);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+                peer = owner->m_winui->FindPeerByKey(state.peerKey);
+                if ( !peer )
+                    return false;
                 if ( element.Visibility() != state.visibility )
                 {
                     element.Visibility(state.visibility);
@@ -5892,6 +6175,16 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 peer->inOverflow = state.inOverflow;
             }
 
+            MUXC::Grid::SetRow(owner->m_winui->overflowButton,
+                               originalChevronRow);
+            owner = getLiveOwner();
+            if ( !owner )
+                return false;
+            MUXC::Grid::SetColumn(owner->m_winui->overflowButton,
+                                  originalChevronColumn);
+            owner = getLiveOwner();
+            if ( !owner )
+                return false;
             if ( owner->m_winui->overflowButton.Visibility() !=
                  originalChevronVisibility )
             {
@@ -5926,6 +6219,7 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 continue;
 
             plan[index].peerKey = peer.tool->peerKey;
+            gridItems[index].stretchable = peer.tool->IsStretchable();
             if ( !peer.tool->IsStretchable() )
             {
                 if ( peer.naturalExtent <= 0.0 )
@@ -5958,6 +6252,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                                 ? desired.Height
                                 : desired.Width),
                         1.0);
+                    currentPeer->naturalCrossExtent = std::max(
+                        static_cast<double>(vertical
+                            ? desired.Width : desired.Height), 1.0);
                 }
 
                 owner = getLiveOwner();
@@ -5968,17 +6265,20 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                         plan[index].peerKey);
                 if ( !currentPeer )
                     return false;
-                extents[index] = currentPeer->naturalExtent;
-                primaryExtent += extents[index];
+                gridItems[index].width = vertical
+                    ? currentPeer->naturalCrossExtent
+                    : currentPeer->naturalExtent;
+                gridItems[index].height = vertical
+                    ? currentPeer->naturalExtent
+                    : currentPeer->naturalCrossExtent;
             }
         }
 
-        const double primaryLimit = std::max(
-            0.0,
-            availableExtent -
-                static_cast<double>(wxWINUI_TOOL_OVERFLOW_WIDTH));
+        grid = wxWinUIGetToolGridLayout(gridItems, vertical, rtl,
+                                        publishedRows, publishedColumns);
         bool hasOverflowAction = false;
-        if ( primaryExtent > availableExtent + 0.5 )
+        if ( !grid.withinLimits ||
+             grid.GetExtent(vertical) > availableExtent + 0.5 )
         {
             for ( size_t reverse = plan.size(); reverse != 0; --reverse )
             {
@@ -5992,13 +6292,15 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     continue;
 
                 plan[index].overflow = true;
-                primaryExtent =
-                    std::max(0.0, primaryExtent - extents[index]);
+                gridItems[index].visible = false;
                 if ( !peer.tool->IsSeparator() )
                     hasOverflowAction = true;
+                gridItems.back().visible = hasOverflowAction;
+                grid = wxWinUIGetToolGridLayout(gridItems, vertical, rtl,
+                                                publishedRows, publishedColumns);
 
-                if ( hasOverflowAction &&
-                     primaryExtent <= primaryLimit + 0.5 )
+                if ( hasOverflowAction && grid.withinLimits &&
+                     grid.GetExtent(vertical) <= availableExtent + 0.5 )
                 {
                     break;
                 }
@@ -6007,8 +6309,11 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
 
         if ( !hasOverflowAction )
         {
-            for ( OverflowPlan& item : plan )
-                item.overflow = false;
+            for ( size_t index = 0; index < plan.size(); ++index )
+            {
+                plan[index].overflow = false;
+                gridItems[index].visible = true;
+            }
         }
 
         // Separators are group punctuation, not commands. Keep at most one
@@ -6070,10 +6375,30 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 hasBefore && hasAfter && !duplicate;
         }
 
+        for ( size_t index = 0; index < plan.size(); ++index )
+            gridItems[index].visible =
+                plan[index].visible && !plan[index].overflow;
+        gridItems.back().visible = hasOverflowAction;
+        grid = wxWinUIGetToolGridLayout(gridItems, vertical, rtl,
+                                        publishedRows, publishedColumns);
+        if ( !grid.withinLimits )
+        {
+            wxLogWarning("WinUI toolbar row/column limits cannot contain "
+                         "the embedded controls and overflow button");
+            return false;
+        }
+        for ( size_t index = 0; index < plan.size(); ++index )
+        {
+            if ( !plan[index].overflow && grid.cells[index].row < 0 )
+                plan[index].visible = false;
+        }
+
         wxToolBar *owner = getLiveOwner();
         if ( !owner )
             return false;
-        if ( owner->m_winui->modelRevision != startModelRevision )
+        if ( owner->m_winui->modelRevision != startModelRevision ||
+             owner->GetMaxRows() != requestedRows ||
+             owner->GetMaxCols() != requestedColumns )
             return false;
 
         if ( owner->m_winui->overflowFlyout &&
@@ -6090,6 +6415,10 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             copyChildren(owner->m_winui->root.Children());
         originalOverflowChildren =
             copyChildren(owner->m_winui->overflowPanel.Children());
+        for ( const auto& row : owner->m_winui->root.RowDefinitions() )
+            originalRows.push_back(row);
+        for ( const auto& column : owner->m_winui->root.ColumnDefinitions() )
+            originalColumns.push_back(column);
         rollbackPeers.reserve(plan.size());
         for ( const OverflowPlan& item : plan )
         {
@@ -6105,6 +6434,8 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             state.element = peer->element.as<MUX::UIElement>();
             state.visibility = peer->element.Visibility();
             state.inOverflow = peer->inOverflow;
+            state.row = MUXC::Grid::GetRow(peer->element);
+            state.column = MUXC::Grid::GetColumn(peer->element);
             if ( const auto button =
                      peer->primaryButton.try_as<MUXC::AppBarButton>() )
             {
@@ -6134,6 +6465,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             owner->m_winui->overflowButton.Visibility();
         originalChevronEnabled =
             owner->m_winui->overflowButton.IsEnabled();
+        originalChevronRow = MUXC::Grid::GetRow(owner->m_winui->overflowButton);
+        originalChevronColumn =
+            MUXC::Grid::GetColumn(owner->m_winui->overflowButton);
         rollbackSnapshotReady = true;
 
 #ifdef WXWINUI_TEST_SUPPORT
@@ -6163,8 +6497,68 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
         uint32_t rootPosition = 0;
         uint32_t overflowPosition = 0;
 
-        for ( const OverflowPlan& item : plan )
+        bool definitionsChanged =
+            originalRows.size() != grid.heights.size() ||
+            originalColumns.size() != grid.widths.size();
+        for ( size_t index = 0;
+              !definitionsChanged && index < originalRows.size(); ++index )
         {
+            definitionsChanged =
+                originalRows[index].Height().GridUnitType !=
+                (grid.stretchRows[index] ? MUX::GridUnitType::Star
+                                         : MUX::GridUnitType::Auto);
+        }
+        for ( size_t index = 0;
+              !definitionsChanged && index < originalColumns.size(); ++index )
+        {
+            definitionsChanged =
+                originalColumns[index].Width().GridUnitType !=
+                (grid.stretchColumns[index] ? MUX::GridUnitType::Star
+                                            : MUX::GridUnitType::Auto);
+        }
+        if ( definitionsChanged )
+        {
+            beforeForwardMutation();
+            owner->m_winui->root.RowDefinitions().Clear();
+            owner = getLiveOwner();
+            if ( !owner )
+                return false;
+            for ( bool stretch : grid.stretchRows )
+            {
+                MUXC::RowDefinition row;
+                row.Height(stretch
+                    ? MUX::GridLengthHelper::FromValueAndType(
+                          1.0, MUX::GridUnitType::Star)
+                    : MUX::GridLengthHelper::Auto());
+                beforeForwardMutation();
+                owner->m_winui->root.RowDefinitions().Append(row);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+            }
+            beforeForwardMutation();
+            owner->m_winui->root.ColumnDefinitions().Clear();
+            owner = getLiveOwner();
+            if ( !owner )
+                return false;
+            for ( bool stretch : grid.stretchColumns )
+            {
+                MUXC::ColumnDefinition column;
+                column.Width(stretch
+                    ? MUX::GridLengthHelper::FromValueAndType(
+                          1.0, MUX::GridUnitType::Star)
+                    : MUX::GridLengthHelper::Auto());
+                beforeForwardMutation();
+                owner->m_winui->root.ColumnDefinitions().Append(column);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+            }
+        }
+
+        for ( size_t planIndex = 0; planIndex < plan.size(); ++planIndex )
+        {
+            const OverflowPlan& item = plan[planIndex];
             owner = getLiveOwner();
             if ( !owner )
                 return false;
@@ -6174,8 +6568,7 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             if ( !peer || !peer->element )
                 continue;
 
-            const MUX::UIElement element =
-                peer->element.as<MUX::UIElement>();
+            const MUX::FrameworkElement element = peer->element;
 #ifdef WXWINUI_TEST_SUPPORT
             bool changed = false;
 #endif
@@ -6242,6 +6635,26 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             }
             else
             {
+                const auto& cell = grid.cells[planIndex];
+                if ( cell.row >= 0 )
+                {
+                    if ( MUXC::Grid::GetRow(element) != cell.row )
+                    {
+                        beforeForwardMutation();
+                        MUXC::Grid::SetRow(element, cell.row);
+                        owner = getLiveOwner();
+                        if ( !owner )
+                            return false;
+                    }
+                    if ( MUXC::Grid::GetColumn(element) != cell.column )
+                    {
+                        beforeForwardMutation();
+                        MUXC::Grid::SetColumn(element, cell.column);
+                        owner = getLiveOwner();
+                        if ( !owner )
+                            return false;
+                    }
+                }
                 uint32_t index = 0;
                 auto overflowChildren =
                     owner->m_winui->overflowPanel.Children();
@@ -6436,6 +6849,26 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             hasOverflowAction
                 ? MUX::Visibility::Visible
                 : MUX::Visibility::Collapsed;
+        if ( hasOverflowAction )
+        {
+            const MUXC::Button chevron = owner->m_winui->overflowButton;
+            if ( MUXC::Grid::GetRow(chevron) != grid.cells.back().row )
+            {
+                beforeForwardMutation();
+                MUXC::Grid::SetRow(chevron, grid.cells.back().row);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+            }
+            if ( MUXC::Grid::GetColumn(chevron) != grid.cells.back().column )
+            {
+                beforeForwardMutation();
+                MUXC::Grid::SetColumn(chevron, grid.cells.back().column);
+                owner = getLiveOwner();
+                if ( !owner )
+                    return false;
+            }
+        }
         {
             const MUX::UIElement chevron =
                 owner->m_winui->overflowButton.as<MUX::UIElement>();
@@ -6481,7 +6914,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 return false;
         }
 
-        if ( owner->m_winui->modelRevision != startModelRevision )
+        if ( owner->m_winui->modelRevision != startModelRevision ||
+             owner->GetMaxRows() != requestedRows ||
+             owner->GetMaxCols() != requestedColumns )
         {
             superseded = true;
             throw winrt::hresult_error(
@@ -6923,15 +7358,26 @@ wxSize wxToolBar::DoGetBestSize() const
             : FromDIP(wxWINUI_TOOL_SEPARATOR_WIDTH);
     const int packing = std::max(GetToolPacking(), 0);
 
-    int length = 0;
-    int thickness = defaultThickness;
+    std::vector<wxWinUIToolGridItem> gridItems;
+    std::vector<bool> overflowEligible;
+    std::vector<bool> action;
+    gridItems.reserve(m_tools.GetCount() + 1);
+    overflowEligible.reserve(m_tools.GetCount());
+    action.reserve(m_tools.GetCount());
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
         const wxToolBarToolBase * const tool = node->GetData();
+        overflowEligible.push_back(!tool->IsControl() && !tool->IsStretchable());
+        action.push_back(!tool->IsSeparator());
         if ( tool->IsStretchable() )
+        {
+            wxWinUIToolGridItem spacer;
+            spacer.stretchable = true;
+            gridItems.push_back(spacer);
             continue;
+        }
 
         wxSize itemSize;
         if ( tool->IsSeparator() )
@@ -6991,27 +7437,59 @@ wxSize wxToolBar::DoGetBestSize() const
             itemSize = wxSize(itemWidth, defaultThickness);
         }
 
-        if ( vertical )
+        wxWinUIToolGridItem item;
+        item.width = std::max(itemSize.x, 1) + (vertical ? 0 : packing);
+        item.height = std::max(itemSize.y, 1) + (vertical ? packing : 0);
+        // The live native template may be wider than the API's minimum
+        // button estimate. Use its retained primary-surface measurement so
+        // SetRows() does not resize the toolbar too narrowly and immediately
+        // overflow the very commands it was asked to lay out.
+        const wxWinUIToolPeer * const peer =
+            m_winui ? m_winui->FindPeerByTool(tool) : nullptr;
+        if ( peer && peer->naturalExtent > 0.0 &&
+             peer->naturalCrossExtent > 0.0 )
         {
-            length += std::max(itemSize.y, 1) + packing;
-            thickness = std::max(thickness, itemSize.x);
+            const wxSize measured = FromDIP(wxSize(
+                static_cast<int>(std::ceil(vertical
+                    ? peer->naturalCrossExtent : peer->naturalExtent)),
+                static_cast<int>(std::ceil(vertical
+                    ? peer->naturalExtent : peer->naturalCrossExtent))));
+            item.width = measured.x;
+            item.height = measured.y;
         }
-        else
-        {
-            length += std::max(itemSize.x, 1) + packing;
-            thickness = std::max(thickness, itemSize.y);
-        }
+        gridItems.push_back(item);
     }
 
-    if ( length == 0 )
-        length = FromDIP(wxWINUI_TOOL_MIN_WIDTH);
+    wxWinUIToolGridItem chevron;
+    chevron.width = FromDIP(wxWINUI_TOOL_OVERFLOW_WIDTH);
+    chevron.height = defaultThickness;
+    chevron.visible = false;
+    gridItems.push_back(chevron);
+    const int rows = GetMaxRows();
+    const int columns = GetMaxCols();
+    wxWinUIToolGridLayout grid =
+        wxWinUIGetToolGridLayout(gridItems, vertical, false, rows, columns);
+    for ( size_t reverse = overflowEligible.size();
+          !grid.withinLimits && reverse != 0; --reverse )
+    {
+        const size_t index = reverse - 1;
+        if ( !overflowEligible[index] )
+            continue;
+        gridItems[index].visible = false;
+        if ( action[index] )
+            gridItems.back().visible = true;
+        grid = wxWinUIGetToolGridLayout(gridItems, vertical, false, rows, columns);
+    }
+    int width = static_cast<int>(std::ceil(grid.GetExtent(false)));
+    int height = static_cast<int>(std::ceil(grid.GetExtent(true)));
+    if ( width == 0 )
+        width = vertical ? defaultThickness : FromDIP(wxWINUI_TOOL_MIN_WIDTH);
+    if ( height == 0 )
+        height = vertical ? FromDIP(wxWINUI_TOOL_MIN_WIDTH) : defaultThickness;
     const wxSize margins = GetToolMargins();
-    length += 2 * std::max(
-        vertical ? margins.y : margins.x, 0);
-    thickness += 2 * std::max(
-        vertical ? margins.x : margins.y, 0);
-    return vertical ? wxSize(thickness, length)
-                    : wxSize(length, thickness);
+    width += 2 * std::max(margins.x, 0);
+    height += 2 * std::max(margins.y, 0);
+    return wxSize(width, height);
 }
 
 // ----------------------------------------------------------------------------

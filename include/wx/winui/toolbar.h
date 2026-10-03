@@ -59,6 +59,7 @@ public:
     void SetMargins(int x, int y) override;
     void SetToolPacking(int packing) override;
     void SetToolSeparation(int separation) override;
+    void SetRows(int rows) override;
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const override;
 
     bool CanApplyThemeBorder() const override { return false; }

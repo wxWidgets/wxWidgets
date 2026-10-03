@@ -14,6 +14,7 @@
 #include "wx/app.h"
 #include "wx/bitmap.h"
 #include "wx/log.h"
+#include "wx/panel.h"
 #include "wx/toolbar.h"
 #include "../winui/test-support/toolbar-test-access.h"
 #include "wx/weakref.h"
@@ -25,8 +26,10 @@
     #include "wx/tooltip.h"
 #endif
 
+#include <array>
 #include <memory>
 #include <new>
+#include <set>
 
 namespace
 {
@@ -113,6 +116,72 @@ void RequestNestedBitmapSize(wxToolBar *toolbar, void *context)
         static_cast<NestedBitmapSizeProbe *>(context);
     probe->invoked = true;
     toolbar->SetToolBitmapSize(probe->requestedSize);
+}
+
+struct NestedRowsProbe
+{
+    bool invoked = false;
+    int requestedRows = 0;
+};
+
+void RequestNestedRows(wxToolBar *toolbar, void *context)
+{
+    NestedRowsProbe * const probe = static_cast<NestedRowsProbe *>(context);
+    probe->invoked = true;
+    toolbar->SetRows(probe->requestedRows);
+}
+
+struct NestedRowLimitsProbe
+{
+    bool invoked = false;
+    int rows = 0;
+    int columns = 0;
+};
+
+void SetInheritedRowLimitsDuringLoaded(wxToolBar *toolbar, void *context)
+{
+    NestedRowLimitsProbe * const probe =
+        static_cast<NestedRowLimitsProbe *>(context);
+    probe->invoked = true;
+    wxToolBarBase& base = *toolbar;
+    base.SetMaxRowsCols(probe->rows, probe->columns);
+}
+
+template <size_t N>
+std::array<wxWinUIToolBarTestAccess::PeerSnapshot, N>
+GetToolbarRowSnapshots(wxToolBar& toolbar, int firstId)
+{
+    std::array<wxWinUIToolBarTestAccess::PeerSnapshot, N> snapshots;
+    for ( size_t i = 0; i < N; ++i )
+    {
+        REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(
+            toolbar, firstId + static_cast<int>(i), &snapshots[i]));
+    }
+    return snapshots;
+}
+
+template <size_t N>
+void CheckToolbarRowGeometry(
+    wxToolBar& toolbar,
+    const std::array<wxWinUIToolBarTestAccess::PeerSnapshot, N>& snapshots,
+    int firstId, size_t rows, size_t columns)
+{
+    std::set<int> rowPositions;
+    std::set<int> columnPositions;
+    for ( size_t i = 0; i < N; ++i )
+    {
+        const wxRect& bounds = snapshots[i].bounds;
+        REQUIRE_FALSE(bounds.IsEmpty());
+        CHECK_FALSE(snapshots[i].overflowed);
+        rowPositions.insert(bounds.y);
+        columnPositions.insert(bounds.x);
+        wxToolBarToolBase * const hit = toolbar.FindToolForPosition(
+            bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+        REQUIRE(hit);
+        CHECK(hit->GetId() == firstId + static_cast<int>(i));
+    }
+    CHECK(rowPositions.size() == rows);
+    CHECK(columnPositions.size() == columns);
 }
 
 struct DestroyDuringLoadedProbe
@@ -712,6 +781,419 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     delete removedAgain;
     DrainToolbarCallbacks();
     CHECK(embeddedLifetime.get() == nullptr);
+}
+
+TEST_CASE("wxWinUI ToolBar SetRows updates native rows before and after Realize",
+          "[winui-toolbar][rows][layout]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
+    // A frame expands its sole child when notified of a size change. Give
+    // this size-contract fixture a plain panel parent without a sizer.
+    wxPanel container(
+        parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+    wxToolBar toolbar(
+        &container, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+    // An explicit construction size is also the control's initial minimum.
+    // This fixture measures the natural row size, without that constraint.
+    toolbar.SetMinSize(wxDefaultSize);
+    for ( int id = 701; id != 705; ++id )
+        REQUIRE(toolbar.AddTool(id, "Tool", bitmap));
+    SECTION("rows requested before Realize")
+    {
+        toolbar.SetRows(2);
+        CHECK(toolbar.GetMaxRows() == 2);
+        REQUIRE(toolbar.Realize());
+    }
+    SECTION("rows requested after Realize")
+    {
+        REQUIRE(toolbar.Realize());
+        DrainToolbarCallbacks();
+        // Establish the one-row baseline using the realized native template.
+        // All subsequent size transitions are performed by SetRows itself.
+        toolbar.SetSize(toolbar.GetBestSize());
+        DrainToolbarCallbacks();
+        CHECK(toolbar.GetMaxRows() == 0);
+        CheckToolbarRowGeometry(toolbar,
+            GetToolbarRowSnapshots<4>(toolbar, 701), 701, 1, 4);
+        const int oneRowHeight = toolbar.GetSize().y;
+        toolbar.SetRows(2);
+        DrainToolbarCallbacks();
+        CHECK(toolbar.GetSize().y > oneRowHeight);
+    }
+    DrainToolbarCallbacks();
+    CHECK(toolbar.GetMaxRows() == 2);
+    CheckToolbarRowGeometry(toolbar,
+        GetToolbarRowSnapshots<4>(toolbar, 701), 701, 2, 2);
+    const wxSize twoRowBest = toolbar.GetBestSize();
+    const wxSize twoRowSize = toolbar.GetSize();
+
+    toolbar.SetRows(1);
+    DrainToolbarCallbacks();
+    CHECK(toolbar.GetMaxRows() == 1);
+    CheckToolbarRowGeometry(toolbar,
+        GetToolbarRowSnapshots<4>(toolbar, 701), 701, 1, 4);
+    CHECK(toolbar.GetBestSize().x > twoRowBest.x);
+    CHECK(toolbar.GetBestSize().y < twoRowBest.y);
+    CHECK(toolbar.GetSize().y < twoRowSize.y);
+    const int oneRowHeight = toolbar.GetSize().y;
+
+    // Four tools cannot be split into three equally sized rows. The request
+    // still needs three nonempty native rows, rather than rounding down to two.
+    toolbar.SetRows(3);
+    DrainToolbarCallbacks();
+    CHECK(toolbar.GetMaxRows() == 3);
+    CHECK(toolbar.GetSize().y > oneRowHeight);
+    const auto threeRows = GetToolbarRowSnapshots<4>(toolbar, 701);
+    CheckToolbarRowGeometry(toolbar, threeRows, 701, 3, 2);
+    const wxSize client = toolbar.GetClientSize();
+    for ( const auto& snapshot : threeRows )
+    {
+        CHECK(snapshot.bounds.x >= 0);
+        CHECK(snapshot.bounds.y >= 0);
+        CHECK(snapshot.bounds.GetRight() < client.x);
+        CHECK(snapshot.bounds.GetBottom() < client.y);
+    }
+}
+
+TEST_CASE("wxWinUI ToolBar rows honor vertical layout RTL and inherited limits",
+          "[winui-toolbar][rows][layout][vertical][rtl]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
+
+    SECTION("vertical SetRows counts physical rows")
+    {
+        wxToolBar toolbar(
+            parent, wxID_ANY, wxDefaultPosition, wxSize(300, 400),
+            wxTB_VERTICAL);
+        toolbar.SetMinSize(wxDefaultSize);
+        for ( int id = 711; id != 715; ++id )
+            REQUIRE(toolbar.AddTool(id, "Tool", bitmap));
+        REQUIRE(toolbar.Realize());
+        DrainToolbarCallbacks();
+        CHECK(toolbar.GetMaxRows() == 0);
+        CheckToolbarRowGeometry(toolbar,
+            GetToolbarRowSnapshots<4>(toolbar, 711), 711, 4, 1);
+        const wxSize singleColumnBest = toolbar.GetBestSize();
+
+        toolbar.SetRows(2);
+        DrainToolbarCallbacks();
+        CHECK(toolbar.GetMaxRows() == 2);
+        CheckToolbarRowGeometry(toolbar,
+            GetToolbarRowSnapshots<4>(toolbar, 711), 711, 2, 2);
+        CHECK(toolbar.GetBestSize().x > singleColumnBest.x);
+        CHECK(toolbar.GetBestSize().y < singleColumnBest.y);
+    }
+
+    SECTION("Realize reads inherited row and column limits")
+    {
+        wxToolBar toolbar(
+            parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+        for ( int id = 721; id != 725; ++id )
+            REQUIRE(toolbar.AddTool(id, "Tool", bitmap));
+        // Deliberately use the base API: SetMaxRowsCols is not virtual.
+        wxToolBarBase& base = toolbar;
+        base.SetMaxRowsCols(2, 2);
+        REQUIRE(toolbar.Realize());
+        DrainToolbarCallbacks();
+        CHECK(base.GetMaxRows() == 2);
+        CHECK(base.GetMaxCols() == 2);
+        const auto ltr = GetToolbarRowSnapshots<4>(toolbar, 721);
+        CheckToolbarRowGeometry(toolbar, ltr, 721, 2, 2);
+
+        toolbar.SetLayoutDirection(wxLayout_RightToLeft);
+        const auto immediate = GetToolbarRowSnapshots<4>(toolbar, 721);
+        std::array<wxWinUIToolBarTestAccess::PeerSnapshot, 4> rtl;
+        const bool mirrorSettled = WaitToolbarCondition([&]()
+        {
+            for ( size_t i = 0; i < rtl.size(); ++i )
+            {
+                if ( !wxWinUIToolBarTestAccess::GetToolPeerState(
+                        toolbar, 721 + static_cast<int>(i), &rtl[i]) ||
+                     rtl[i].peerIdentity != ltr[i].peerIdentity )
+                {
+                    return false;
+                }
+            }
+            for ( size_t i = 0; i < rtl.size(); ++i )
+            {
+                for ( size_t j = i + 1; j < rtl.size(); ++j )
+                {
+                    if ( ltr[i].bounds.y == ltr[j].bounds.y &&
+                         (ltr[i].bounds.x < ltr[j].bounds.x) ==
+                             (rtl[i].bounds.x < rtl[j].bounds.x) )
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+        INFO("mirror settled " << mirrorSettled);
+        CheckToolbarRowGeometry(toolbar, rtl, 721, 2, 2);
+        for ( size_t i = 0; i < ltr.size(); ++i )
+        {
+            INFO("LTR bounds " << ltr[i].bounds
+                 << ", immediate RTL bounds " << immediate[i].bounds
+                 << ", settled RTL bounds " << rtl[i].bounds);
+            CHECK(rtl[i].peerIdentity == ltr[i].peerIdentity);
+            CHECK(rtl[i].bounds.y == ltr[i].bounds.y);
+            for ( size_t j = i + 1; j < ltr.size(); ++j )
+            {
+                if ( ltr[i].bounds.y == ltr[j].bounds.y )
+                {
+                    CHECK((ltr[i].bounds.x < ltr[j].bounds.x) !=
+                          (rtl[i].bounds.x < rtl[j].bounds.x));
+                }
+            }
+        }
+    }
+
+    SECTION("impossible limits preserve the published control geometry")
+    {
+        wxToolBar toolbar(
+            parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+        wxButton * const first = new wxButton(
+            &toolbar, 725, "First", wxDefaultPosition, wxSize(92, 30));
+        wxButton * const second = new wxButton(
+            &toolbar, 726, "Second", wxDefaultPosition, wxSize(92, 30));
+        REQUIRE(toolbar.AddControl(first));
+        REQUIRE(toolbar.AddControl(second));
+        REQUIRE(toolbar.Realize());
+        DrainToolbarCallbacks();
+        const auto before = GetToolbarRowSnapshots<2>(toolbar, 725);
+        const wxRect firstRect = first->GetRect();
+        const wxRect secondRect = second->GetRect();
+        toolbar.SetMaxRowsCols(1, 1);
+        CHECK_FALSE(toolbar.Realize());
+        // The inline base setter retains the requested limits even though
+        // Realize must reject a projection which cannot hold both controls.
+        CHECK(toolbar.GetMaxRows() == 1);
+        CHECK(toolbar.GetMaxCols() == 1);
+        const auto after = GetToolbarRowSnapshots<2>(toolbar, 725);
+        for ( size_t i = 0; i < before.size(); ++i )
+        {
+            CHECK(after[i].peerIdentity == before[i].peerIdentity);
+            CHECK(after[i].bounds == before[i].bounds);
+        }
+        CHECK(first->GetRect() == firstRect);
+        CHECK(second->GetRect() == secondRect);
+        CHECK(first->IsShown());
+        CHECK(second->IsShown());
+    }
+
+    SECTION("inherited limit mutation in Loaded rejects a stale candidate")
+    {
+        wxToolBar toolbar(
+            parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+        for ( int id = 727; id != 731; ++id )
+            REQUIRE(toolbar.AddTool(id, "Tool", bitmap));
+        REQUIRE(toolbar.Realize());
+        DrainToolbarCallbacks();
+        const auto before = GetToolbarRowSnapshots<4>(toolbar, 727);
+        NestedRowLimitsProbe limits;
+        limits.rows = 3;
+        limits.columns = 2;
+        wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
+            &SetInheritedRowLimitsDuringLoaded, &limits);
+        // The inherited inline setter cannot increment a WinUI revision.
+        // Its changed limits must still invalidate this pending publication.
+        CHECK_FALSE(toolbar.Realize());
+        CHECK(limits.invoked);
+        CHECK(toolbar.GetMaxRows() == 3);
+        CHECK(toolbar.GetMaxCols() == 2);
+        const auto after = GetToolbarRowSnapshots<4>(toolbar, 727);
+        DrainToolbarCallbacks();
+        const auto settled = GetToolbarRowSnapshots<4>(toolbar, 727);
+        for ( size_t i = 0; i < before.size(); ++i )
+        {
+            INFO("settled bounds " << settled[i].bounds);
+            CHECK(after[i].peerIdentity == before[i].peerIdentity);
+            CHECK(after[i].bounds == before[i].bounds);
+        }
+    }
+}
+
+TEST_CASE("wxWinUI ToolBar rows position controls and hide multiline stretch",
+          "[winui-toolbar][rows][layout][control]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
+    wxToolBar toolbar(
+        parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+    REQUIRE(toolbar.AddTool(731, "First", bitmap));
+    REQUIRE(toolbar.AddStretchableSpace());
+    REQUIRE(toolbar.AddTool(732, "Second", bitmap));
+    wxButton * const embedded = new wxButton(
+        &toolbar, 733, "Embedded", wxDefaultPosition, wxSize(92, 30));
+    REQUIRE(toolbar.AddControl(embedded));
+    REQUIRE(toolbar.Realize());
+    DrainToolbarCallbacks();
+    wxWinUIToolBarTestAccess::PeerSnapshot stretch;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(
+        toolbar, wxID_SEPARATOR, &stretch));
+    CHECK(stretch.stretchable);
+    CHECK_FALSE(stretch.bounds.IsEmpty());
+
+    toolbar.SetRows(2);
+    DrainToolbarCallbacks();
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(
+        toolbar, wxID_SEPARATOR, &stretch));
+    CHECK(stretch.bounds.IsEmpty());
+    wxWinUIToolBarTestAccess::PeerSnapshot first;
+    wxWinUIToolBarTestAccess::PeerSnapshot control;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 731, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 733, &control));
+    REQUIRE_FALSE(control.bounds.IsEmpty());
+    CHECK(control.bounds.y > first.bounds.y);
+    CHECK(embedded->IsShown());
+    CHECK(embedded->GetPosition().x >= control.bounds.x - 1);
+    CHECK(embedded->GetPosition().y >= control.bounds.y - 1);
+    CHECK(embedded->GetRect().GetRight() <= control.bounds.GetRight() + 1);
+    CHECK(embedded->GetRect().GetBottom() <= control.bounds.GetBottom() + 1);
+    const wxPoint multirowPosition = embedded->GetPosition();
+
+    toolbar.SetRows(1);
+    DrainToolbarCallbacks();
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(
+        toolbar, wxID_SEPARATOR, &stretch));
+    CHECK_FALSE(stretch.bounds.IsEmpty());
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 733, &control));
+    CHECK(embedded->GetPosition().y < multirowPosition.y);
+    CHECK(embedded->GetPosition().x >= control.bounds.x - 1);
+    CHECK(embedded->GetPosition().y >= control.bounds.y - 1);
+}
+
+TEST_CASE("wxWinUI ToolBar multiline overflow keeps peer identity and state",
+          "[winui-toolbar][rows][overflow][identity][events]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
+    wxToolBar toolbar(
+        parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+    REQUIRE(toolbar.AddTool(741, "First", bitmap));
+    REQUIRE(toolbar.AddTool(742, "Second", bitmap));
+    REQUIRE(toolbar.AddCheckTool(743, "Check", bitmap));
+    REQUIRE(toolbar.AddRadioTool(744, "Radio one", bitmap));
+    REQUIRE(toolbar.AddRadioTool(745, "Radio two", bitmap));
+    REQUIRE(toolbar.AddTool(746, "Last", bitmap));
+    toolbar.SetRows(2);
+    REQUIRE(toolbar.Realize());
+    REQUIRE(WaitToolbarCondition([&]()
+        { return wxWinUIToolBarTestAccess::IsRootLoaded(toolbar); }));
+    DrainToolbarCallbacks();
+    toolbar.ToggleTool(743, true);
+    toolbar.ToggleTool(745, true);
+    const wxCoord roomy = toolbar.FromDIP(1000);
+    const wxCoord narrow = toolbar.FromDIP(80);
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar, roomy));
+    const auto before = GetToolbarRowSnapshots<6>(toolbar, 741);
+    CheckToolbarRowGeometry(toolbar, before, 741, 2, 3);
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) == 0);
+
+    int checkEvents = 0;
+    int radioEvents = 0;
+    toolbar.Bind(wxEVT_TOOL, [&](wxCommandEvent& event)
+    {
+        if ( event.GetId() == 743 )
+            ++checkEvents;
+        else if ( event.GetId() == 744 )
+            ++radioEvents;
+    });
+    toolbar.SetSize(wxSize(narrow, toolbar.GetSize().y));
+    DrainToolbarCallbacks();
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar, narrow));
+    const auto overflow = GetToolbarRowSnapshots<6>(toolbar, 741);
+    CHECK(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+    CHECK(overflow[2].overflowed);
+    CHECK(overflow[3].overflowed);
+    CHECK(overflow[4].overflowed);
+    CHECK(overflow[5].overflowed);
+    CHECK(overflow[2].toggled);
+    CHECK(overflow[4].toggled);
+    for ( size_t i = 0; i < before.size(); ++i )
+        CHECK(overflow[i].peerIdentity == before[i].peerIdentity);
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 743));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 744));
+    CHECK(checkEvents == 1);
+    CHECK(radioEvents == 1);
+    CHECK_FALSE(toolbar.GetToolState(743));
+    CHECK(toolbar.GetToolState(744));
+    CHECK_FALSE(toolbar.GetToolState(745));
+
+    toolbar.SetSize(wxSize(roomy, toolbar.GetSize().y));
+    DrainToolbarCallbacks();
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar, roomy));
+    const auto after = GetToolbarRowSnapshots<6>(toolbar, 741);
+    CheckToolbarRowGeometry(toolbar, after, 741, 2, 3);
+    CHECK_FALSE(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) == 0);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 6);
+    for ( size_t i = 0; i < before.size(); ++i )
+        CHECK(after[i].peerIdentity == before[i].peerIdentity);
+    CHECK_FALSE(after[2].toggled);
+    CHECK(after[3].toggled);
+    CHECK_FALSE(after[4].toggled);
+    CHECK(checkEvents == 1);
+    CHECK(radioEvents == 1);
+}
+
+TEST_CASE("wxWinUI ToolBar SetRows rollback reentry and destruction are bounded",
+          "[winui-toolbar][rows][transaction][reentrancy][lifetime]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
+    wxToolBar toolbar(
+        parent, wxID_ANY, wxDefaultPosition, wxSize(560, 240));
+    for ( int id = 751; id != 755; ++id )
+        REQUIRE(toolbar.AddTool(id, "Tool", bitmap));
+    REQUIRE(toolbar.Realize());
+    DrainToolbarCallbacks();
+    const auto before = GetToolbarRowSnapshots<4>(toolbar, 751);
+    const wxSize bestBefore = toolbar.GetBestSize();
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
+    toolbar.SetRows(2);
+    CHECK(toolbar.GetMaxRows() == 0);
+    const auto rejected = GetToolbarRowSnapshots<4>(toolbar, 751);
+    CHECK(toolbar.GetBestSize() == bestBefore);
+    for ( size_t i = 0; i < before.size(); ++i )
+    {
+        CHECK(rejected[i].peerIdentity == before[i].peerIdentity);
+        CHECK(rejected[i].bounds == before[i].bounds);
+    }
+
+    NestedRowsProbe nested;
+    nested.requestedRows = 3;
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
+        &RequestNestedRows, &nested);
+    toolbar.SetRows(2);
+    CHECK(nested.invoked);
+    CHECK(toolbar.GetMaxRows() == 2);
+    DrainToolbarCallbacks();
+    CheckToolbarRowGeometry(toolbar,
+        GetToolbarRowSnapshots<4>(toolbar, 751), 751, 2, 2);
+
+    const size_t baseline =
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
+    wxToolBar * const doomed = new wxToolBar(
+        parent, wxID_ANY, wxDefaultPosition, wxSize(320, 160));
+    REQUIRE(doomed->AddTool(761, "First", bitmap));
+    REQUIRE(doomed->AddTool(762, "Second", bitmap));
+    REQUIRE(doomed->Realize());
+    wxWeakRef<wxWindow> lifetime(doomed);
+    DestroyDuringLoadedProbe destruction;
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(*doomed,
+        &DestroyToolbarDuringLoaded, &destruction);
+    doomed->SetRows(2);
+    CHECK(destruction.invoked);
+    CHECK(lifetime.get() == nullptr);
+    CHECK(wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
