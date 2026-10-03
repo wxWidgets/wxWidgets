@@ -1316,13 +1316,15 @@ public:
     wxAccStatus GetState(int childId, long* state) override
     {
         wxRibbonPage* page = wxDynamicCast(GetWindow(), wxRibbonPage);
-        wxCHECK(page, wxACC_FAIL);
+        if ( page == nullptr )
+            return wxACC_FAIL;
 
         if ( childId != wxACC_SELF )
             return wxACC_NOT_IMPLEMENTED;
 
         wxRibbonBar* bar = page->GetAncestorRibbonBar();
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         long st{ wxACC_STATE_SYSTEM_SELECTABLE };
         if ( !page->IsShown() )
@@ -1359,10 +1361,12 @@ public:
             return wxACC_NOT_IMPLEMENTED;
 
         wxRibbonPage* page = wxDynamicCast(GetWindow(), wxRibbonPage);
-        wxCHECK(page, wxACC_FAIL);
+        if ( page == nullptr )
+            return wxACC_FAIL;
 
         wxRibbonBar* bar = page->GetAncestorRibbonBar();
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         return bar->SetActivePage(page) ? wxACC_OK : wxACC_FAIL;
     }
