@@ -1,5 +1,12 @@
 # Fiche 10 — Data controls et fallbacks génériques
 
+> Décision historique V0, supersédée le 2026-10-03 : le port complet demandé
+> inclut désormais une présentation WinUI/Fluent réelle pour les contrôles de
+> données, tableaux, Grid et DataView. Le maintien du générique ne clôt plus
+> ces familles. Voir le [plan 108](../../pr26890-audit-20260830/108-component-contracts.md#required-winui-presentation-user-clarification-2026-10-03).
+> Les risques et qualifications génériques ci-dessous restent utiles, sans
+> constituer une preuve de port natif.
+
 Baseline `20207bdbbb`. Décision V0 : **ne pas réécrire ces contrôles en XAML**.
 Les qualifier sous le bridge partagé avec le renderer Fluent.
 

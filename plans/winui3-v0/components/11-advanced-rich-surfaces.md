@@ -1,5 +1,12 @@
 # Fiche 11 — AUI, Ribbon, rich content et surfaces embarquées
 
+> Périmètre historique V0, supersédé le 2026-10-03 : les familles avancées,
+> notamment Ribbon, restent dans le port complet avec le design WinUI/Fluent.
+> « Post-beta » n'est plus une exclusion du chantier demandé. Voir le
+> [plan 108](../../pr26890-audit-20260830/108-component-contracts.md#required-winui-presentation-user-clarification-2026-10-03).
+> Conserver les risques et tests ci-dessous ; les preuves génériques et les
+> prototypes ne valent pas qualification des classes publiques natives.
+
 Baseline `20207bdbbb`. Ces familles sont principalement post-beta. La feuille
 de route vise à éviter qu’elles bloquent la fondation tout en laissant des gates
 précis pour une promotion future.

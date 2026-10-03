@@ -13,6 +13,60 @@ Work in F:\\wxwinui-pr26890-feedback on codex/pr26890-feedback. C:\\wxWidgets-ma
 
 The user explicitly requested planning AND implementation. This is not permission to weaken tests, hide unimplemented features, fabricate physical sign-off, or rewrite published Git history. Make bounded implementation commits after verification; no mass opportunistic cleanup.
 
+### Required WinUI presentation (user clarification, 2026-10-03)
+
+"Ported" now explicitly requires the WinUI/Fluent design for every component,
+including data tables, wxGrid, wxDataViewCtrl/List/Tree, TreeList and Ribbon.
+A generic GDI control merely hosted by WinUI, a Fluent-painted border, or a
+standalone prototype with a separate model does not satisfy this requirement.
+Keep compatibility tests for those existing implementations, but do not count
+them as completed WinUI presentation. Preserve the public wx model, APIs,
+events and custom renderer/art-provider contracts while changing presentation.
+
+This clarification supersedes the historical V0 "do not rewrite in XAML" and
+"post-beta" scope exclusions in components/10 and components/11. It does not
+erase their risks or turn their old generic-runtime evidence into native-peer
+evidence. Third-party component libraries are explicitly allowed by the user.
+
+Dependency candidates checked against upstream sources on 2026-10-03:
+
+- [Community Toolkit Labs Ribbon](https://github.com/CommunityToolkit/Labs-Windows/blob/main/components/Ribbon/samples/Ribbon.md)
+  provides responsive command groups, but is still marked experimental.
+- [Toolkit DataTable](https://github.com/CommunityToolkit/Labs-Windows/blob/main/components/DataTable/samples/DataTable.md)
+  provides coordinated columns on ListView/TreeView. It is not a complete
+  wxGrid replacement: built-in cell selection/editing, row headers, sorting and
+  grid lines are explicitly absent. Its reuse must include those wx contracts.
+- [XamlToolkit C++/WinRT port](https://github.com/lgztx96/CommunityToolkit.WinUI)
+  includes Ribbon and DataTable under MIT. Its current source uses v145/C++23;
+  the current wx build uses v143. WinRT binary consumption or a narrowly scoped
+  compatible source integration must be proved before adoption. The published
+  Labs Native package series is alpha, not production qualification.
+- [WinUI.TableView](https://github.com/w-ahmad/WinUI.TableView) is an MIT,
+  C#/.NET candidate with Fluent cells and richer table behavior. Direct
+  consumption by this C++ backend is not established; do not introduce an
+  implicit managed runtime dependency or call NuGet availability integration.
+
+Implementation sequence after the current ToolBar lot:
+
+1. Select and pin a reproducible native component boundary (version, source,
+   hashes, notices, runtime payload and CMake/installed-consumer contract).
+   Compare actual required functionality before importing a whole toolkit.
+2. Connect the public wxRibbon command model to real WinUI peers, beginning
+   with ButtonBar commands and then Bar/Page/Panel, Gallery, Toolbar,
+   responsive/minimized states and keyboard navigation. The existing R2 test
+   prototype is exploratory evidence only, not public wxRibbon implementation.
+3. Build a private native tabular surface with separate Grid and DataView
+   adapters. The existing wx data model remains authoritative. First cover
+   virtualized text rows/columns, model changes, selection and edit commit/
+   cancel; then typed/custom renderers, DataView trees, Grid spans/frozen panes,
+   column manipulation, clipboard/OLE and UIA Grid/Table semantics.
+4. For each family, require public-API tests that also observe actual native
+   peers, plus visual light/dark/high-contrast/DPI/RTL checks. Keep the existing
+   semantic suites. A demonstration is not full API or production sign-off.
+
+These are open implementation requirements, not completed work or a promise
+that one third-party widget covers the entire wx API.
+
 ## Drift check and current state
 
 Run git diff --stat c5cf4677b9..HEAD -- <in-scope paths> and git status --short first. Reconcile relevant intervening changes instead of overwriting them. Read each target before editing.
