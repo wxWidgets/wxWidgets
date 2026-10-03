@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/controls/winuiribbon.cpp
-// Purpose:     WinUI generic ribbon public-contract and host-lifecycle tests
+// Purpose:     WinUI ribbon public-contract, native-peer and lifecycle tests
 // Author:      wxWidgets development team
 // Created:     2026-08-08
 // Copyright:   (c) wxWidgets development team
@@ -21,6 +21,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/msw/wrapwin.h"
+#include "wx/log.h"
+#include "wx/menu.h"
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
@@ -31,12 +33,14 @@
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-observation-test-access.h"
+#include "host-content-test-access.h"
 #include "host-focus-test-access.h"
 #include "host-geometry-test-access.h"
 #include "wx/winui/winui.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
+#include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
 
 #if wxUSE_XRC
@@ -257,9 +261,34 @@ wxRibbonPanel *CreatePanel(wxRibbonPage *page,
     return nullptr;
 }
 
-wxRibbonButtonBar *CreateButtonBar(wxRibbonPanel *panel,
-                                   bool useDefaultCreate)
+class PopupObservingRibbonButtonBar final : public wxRibbonButtonBar
 {
+public:
+    explicit PopupObservingRibbonButtonBar(wxRibbonPanel *panel)
+        : wxRibbonButtonBar(panel, wxID_ANY)
+    {
+    }
+
+    unsigned popupCalls = 0;
+    wxPoint popupAnchor = wxDefaultPosition;
+    wxRibbonButtonBarButtonBase *popupActiveItem = nullptr;
+
+protected:
+    bool DoPopupMenu(wxMenu *, int x, int y) override
+    {
+        ++popupCalls;
+        popupAnchor = wxPoint(x, y);
+        popupActiveItem = GetActiveItem();
+        return true; // Observe the public routing; never enter a menu loop.
+    }
+};
+
+wxRibbonButtonBar *CreateButtonBar(wxRibbonPanel *panel,
+                                   bool useDefaultCreate,
+                                   bool observePopup = false)
+{
+    if ( observePopup )
+        return new PopupObservingRibbonButtonBar(panel);
     if ( !useDefaultCreate )
         return new wxRibbonButtonBar(panel, wxID_ANY);
 
@@ -310,7 +339,7 @@ public:
         DrainDispatch();
     }
 
-    bool Create(bool useDefaultCreate, int ordinal)
+    bool Create(bool useDefaultCreate, int ordinal, bool observePopup = false)
     {
         wxFrame * const frameA = new wxFrame(
             nullptr, wxID_ANY, "WinUI ribbon harness A",
@@ -369,7 +398,7 @@ public:
         m_sentinelPanel = wxWeakRef<wxRibbonPanel>(sentinelPanel);
 
         wxRibbonButtonBar * const buttonBar =
-            CreateButtonBar(buttonPanel, useDefaultCreate);
+            CreateButtonBar(buttonPanel, useDefaultCreate, observePopup);
         wxRibbonToolBar * const toolBar =
             CreateToolBar(toolPanel, useDefaultCreate);
         wxRibbonGallery * const gallery =
@@ -466,14 +495,28 @@ public:
     bool ReparentTo(wxFrame *destination)
     {
         wxRibbonBar * const bar = GetBar();
-        if ( !bar || !destination || !bar->Reparent(destination) )
+        if ( !bar || !destination )
+        {
+            WARN("Ribbon ReparentTo: missing bar or destination");
             return false;
+        }
+        if ( !bar->Reparent(destination) )
+        {
+            WARN("Ribbon ReparentTo: wxRibbonBar::Reparent returned false");
+            return false;
+        }
 
         bar->SetSize(destination->GetClientRect());
         if ( !bar->Realize() )
+        {
+            WARN("Ribbon ReparentTo: wxRibbonBar::Realize returned false");
             return false;
+        }
         destination->Layout();
-        return WaitForSingleOwner(destination);
+        const bool owned = WaitForSingleOwner(destination);
+        if ( !owned )
+            WARN("Ribbon ReparentTo: WaitForSingleOwner returned false");
+        return owned;
     }
 
     bool HasSingleOwner(wxWindow *expectedTLW) const
@@ -704,6 +747,123 @@ void CheckPanelOrder(const RibbonFixture& fixture, wxOrientation orientation)
     }
 }
 
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
+namespace MUXAPR = winrt::Microsoft::UI::Xaml::Automation::Provider;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
+
+// Observe the production ButtonBar's actual shared-host slot. Unlike the R2
+// prototype below, these helpers neither construct controls nor route events.
+MUXC::Canvas GetNativeButtonBarRoot(wxRibbonButtonBar *bar)
+{
+    wxWinUITopLevelHost * const host = wxWinUITopLevelHost::FindSlotOwner(bar);
+    if ( !host )
+        return nullptr;
+    host->FlushSync();
+    const wxWinUISlot * const slot = host->FindSlot(bar);
+    return slot ? slot->GetContent().try_as<MUXC::Canvas>() : nullptr;
+}
+
+MUXC::Control FindNativeRibbonCommandInTree(
+    const MUX::DependencyObject& element, const wchar_t *name)
+{
+    if ( !element )
+        return nullptr;
+    const auto control = element.try_as<MUXC::Control>();
+    if ( control &&
+         winrt::Microsoft::UI::Xaml::Automation::AutomationProperties::
+             GetName(control) == name )
+    {
+        return control;
+    }
+    const int count = MUX::Media::VisualTreeHelper::GetChildrenCount(element);
+    for ( int child = 0; child < count; ++child )
+    {
+        if ( const auto found = FindNativeRibbonCommandInTree(
+                 MUX::Media::VisualTreeHelper::GetChild(element, child), name) )
+            return found;
+    }
+    return nullptr;
+}
+
+MUXC::Control FindNativeRibbonCommand(wxRibbonButtonBar *bar,
+                                     const wchar_t *name)
+{
+    return FindNativeRibbonCommandInTree(GetNativeButtonBarRoot(bar), name);
+}
+
+template <typename T>
+T GetNativeRibbonPattern(const MUXC::Control& control,
+                         MUXAP::PatternInterface pattern)
+{
+    if ( !control )
+        return nullptr;
+    const auto peer =
+        MUXAP::FrameworkElementAutomationPeer::CreatePeerForElement(control);
+    return peer ? peer.GetPattern(pattern).try_as<T>() : nullptr;
+}
+
+struct NativeRibbonEvent
+{
+    wxEventType type;
+    int id;
+    wxObject *object;
+    wxRibbonButtonBar *bar;
+    wxRibbonButtonBarButtonBase *button;
+    bool checked;
+};
+
+using NativeRibbonEvents = std::vector<NativeRibbonEvent>;
+
+NativeRibbonEvent ObserveNativeRibbonEvent(wxRibbonButtonBarEvent& event)
+{
+    return { event.GetEventType(), event.GetId(), event.GetEventObject(),
+             event.GetBar(), event.GetButton(), event.IsChecked() };
+}
+
+std::shared_ptr<NativeRibbonEvents> RecordNativeRibbonEvents(
+    wxRibbonButtonBar *bar)
+{
+    const auto events = std::make_shared<NativeRibbonEvents>();
+    const auto record = [events](wxRibbonButtonBarEvent& event)
+    {
+        events->push_back(ObserveNativeRibbonEvent(event));
+    };
+    bar->Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, record);
+    bar->Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, record);
+    return events;
+}
+
+void CheckNativeRibbonEvent(const NativeRibbonEvents& events, size_t count,
+                           wxRibbonButtonBar *bar, int id, wxEventType type,
+                           bool checked = false)
+{
+    REQUIRE(events.size() == count);
+    const auto& event = events.back();
+    CHECK(event.type == type);
+    CHECK(event.id == id);
+    CHECK(event.object == bar);
+    CHECK(event.bar == bar);
+    CHECK(event.button == bar->GetItemById(id));
+    CHECK(event.checked == checked);
+}
+
+template <typename Action>
+void ExerciseRetiredRibbonProvider(Action action)
+{
+    // WinUI may keep a detached control invokable, or reject its provider.
+    // In either case the exact oracle is no callback into any wx generation.
+    try
+    {
+        action();
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+    DrainDispatch();
+}
+
 // ---------------------------------------------------------------------------
 // R2 bounded native spike
 //
@@ -713,12 +873,6 @@ void CheckPanelOrder(const RibbonFixture& fixture, wxOrientation orientation)
 // while retaining exact mutation and callback lifetime semantics?  It is not
 // a partial production backend and therefore cannot silently replace R1.
 // ---------------------------------------------------------------------------
-
-namespace MUX = winrt::Microsoft::UI::Xaml;
-namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
-namespace MUXAPR = winrt::Microsoft::UI::Xaml::Automation::Provider;
-namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
-namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
 
 enum class NativeRibbonCommandKind
 {
@@ -2870,6 +3024,562 @@ TEST_CASE("WinUIRibbon::CrossTLWStress",
 
     REQUIRE(fixture.DestroyAndWait(before));
     before.CheckRestored();
+}
+
+TEST_CASE("WinUIRibbon::NativeButtonBarPeersAndEvents",
+          "[winui-advanced][winui-ribbon][native-buttonbar][uia]")
+{
+    REQUIRE(DrainToQuiescence());
+    const HostSnapshot before = HostSnapshot::Capture();
+    RibbonFixture fixture;
+    REQUIRE(fixture.Create(false, 90));
+    wxRibbonButtonBar * const bar = fixture.GetButtonBar();
+    REQUIRE(bar);
+    REQUIRE(DrainUntil([bar]()
+    {
+        const auto root = GetNativeButtonBarRoot(bar);
+        return root && root.IsLoaded() && root.XamlRoot() &&
+               root.ActualWidth() > 0 && root.ActualHeight() > 0;
+    }));
+    const auto root = GetNativeButtonBarRoot(bar);
+    REQUIRE(root);
+    CHECK(wxWinUITopLevelHost::FindSlotOwner(bar) ==
+          wxWinUITopLevelHost::FindForTLW(fixture.GetFrameA()));
+
+    for ( const auto name : { L"Normal", L"Toggle", L"Dropdown",
+                             L"Dropdown menu", L"Hybrid", L"Hybrid menu" } )
+    {
+        INFO(wxString(name));
+        const auto command = FindNativeRibbonCommand(bar, name);
+        REQUIRE(command);
+        REQUIRE(DrainUntil([command]()
+        {
+            return command.IsLoaded() && command.XamlRoot() &&
+                   command.ActualWidth() > 0 && command.ActualHeight() > 0;
+        }));
+        CHECK(command.XamlRoot() == root.XamlRoot());
+        const auto peer =
+            MUXAP::FrameworkElementAutomationPeer::CreatePeerForElement(command);
+        REQUIRE(peer);
+        CHECK(wxString(peer.GetName().c_str()) == name);
+        CHECK(peer.IsEnabled());
+    }
+    CHECK(FindNativeRibbonCommand(bar, L"Normal").try_as<MUXC::AppBarButton>());
+    CHECK(FindNativeRibbonCommand(bar, L"Toggle")
+              .try_as<MUXC::AppBarToggleButton>());
+    CHECK(FindNativeRibbonCommand(bar, L"Dropdown").try_as<MUXC::AppBarButton>());
+    CHECK(FindNativeRibbonCommand(bar, L"Hybrid").try_as<MUXC::AppBarButton>());
+    CHECK(FindNativeRibbonCommand(bar, L"Dropdown menu").try_as<MUXC::Button>());
+    CHECK(FindNativeRibbonCommand(bar, L"Hybrid menu").try_as<MUXC::Button>());
+
+    const auto events = RecordNativeRibbonEvents(bar);
+    const auto invoke = [bar](const wchar_t *name)
+    {
+        const auto provider = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
+            FindNativeRibbonCommand(bar, name), MUXAP::PatternInterface::Invoke);
+        REQUIRE(provider);
+        provider.Invoke();
+        DrainDispatch();
+    };
+    invoke(L"Normal");
+    CheckNativeRibbonEvent(*events, 1, bar, ID_RIBBON_BUTTON_NORMAL,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED);
+
+    auto toggle = GetNativeRibbonPattern<MUXAPR::IToggleProvider>(
+        FindNativeRibbonCommand(bar, L"Toggle"), MUXAP::PatternInterface::Toggle);
+    REQUIRE(toggle);
+    CHECK(toggle.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::Off);
+    toggle.Toggle();
+    DrainDispatch();
+    CheckNativeRibbonEvent(*events, 2, bar, ID_RIBBON_BUTTON_TOGGLE,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED, true);
+    CHECK(toggle.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::On);
+    toggle.Toggle();
+    DrainDispatch();
+    CheckNativeRibbonEvent(*events, 3, bar, ID_RIBBON_BUTTON_TOGGLE,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED, false);
+
+    invoke(L"Dropdown");
+    CheckNativeRibbonEvent(*events, 4, bar, ID_RIBBON_BUTTON_DROPDOWN,
+                           wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED);
+    invoke(L"Dropdown menu");
+    CheckNativeRibbonEvent(*events, 5, bar, ID_RIBBON_BUTTON_DROPDOWN,
+                           wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED);
+    invoke(L"Hybrid");
+    CheckNativeRibbonEvent(*events, 6, bar, ID_RIBBON_BUTTON_HYBRID,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED);
+    invoke(L"Hybrid menu");
+    CheckNativeRibbonEvent(*events, 7, bar, ID_RIBBON_BUTTON_HYBRID,
+                           wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED);
+
+    // Setters project the wx model without manufacturing user commands.
+    bar->ToggleButton(ID_RIBBON_BUTTON_TOGGLE, true);
+    bar->SetButtonText(ID_RIBBON_BUTTON_NORMAL, "Renamed normal");
+    bar->EnableButton(ID_RIBBON_BUTTON_NORMAL, false);
+    DrainDispatch();
+    CHECK(events->size() == 7);
+    toggle = GetNativeRibbonPattern<MUXAPR::IToggleProvider>(
+        FindNativeRibbonCommand(bar, L"Toggle"), MUXAP::PatternInterface::Toggle);
+    REQUIRE(toggle);
+    CHECK(toggle.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::On);
+    const auto disabled = FindNativeRibbonCommand(bar, L"Renamed normal");
+    REQUIRE(disabled);
+    CHECK_FALSE(disabled.IsEnabled());
+    const auto disabledInvoke = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
+        disabled, MUXAP::PatternInterface::Invoke);
+    REQUIRE(disabledInvoke);
+    ExerciseRetiredRibbonProvider([disabledInvoke]() { disabledInvoke.Invoke(); });
+    CHECK(events->size() == 7);
+    bar->EnableButton(ID_RIBBON_BUTTON_NORMAL, true);
+    bar->ToggleButton(ID_RIBBON_BUTTON_TOGGLE, false);
+    DrainDispatch();
+    CHECK(events->size() == 7);
+    invoke(L"Renamed normal");
+    CheckNativeRibbonEvent(*events, 8, bar, ID_RIBBON_BUTTON_NORMAL,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED);
+
+    bar->Disable();
+    DrainDispatch();
+    const auto disabledToggle = FindNativeRibbonCommand(bar, L"Toggle");
+    REQUIRE(disabledToggle);
+    CHECK_FALSE(disabledToggle.IsEnabled());
+    const auto disabledToggleProvider =
+        GetNativeRibbonPattern<MUXAPR::IToggleProvider>(
+            disabledToggle, MUXAP::PatternInterface::Toggle);
+    REQUIRE(disabledToggleProvider);
+    ExerciseRetiredRibbonProvider(
+        [disabledToggleProvider]() { disabledToggleProvider.Toggle(); });
+    CHECK(events->size() == 8);
+    CHECK(disabledToggleProvider.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::Off);
+    bar->Enable();
+    DrainDispatch();
+    CHECK(events->size() == 8);
+
+    REQUIRE(fixture.ReparentTo(fixture.GetFrameB()));
+    CHECK(wxWinUITopLevelHost::FindSlotOwner(bar) ==
+          wxWinUITopLevelHost::FindForTLW(fixture.GetFrameB()));
+    invoke(L"Renamed normal");
+    CheckNativeRibbonEvent(*events, 9, bar, ID_RIBBON_BUTTON_NORMAL,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED);
+    REQUIRE(fixture.DestroyAndWait(before));
+    before.CheckRestored();
+}
+
+TEST_CASE("WinUIRibbon::NativeButtonBarPopupAndUpdateUIContracts",
+          "[winui-advanced][winui-ribbon][native-buttonbar][uia][update-ui]")
+{
+    // Public menu geometry and UI updates use the same realized native peers.
+    REQUIRE(DrainToQuiescence());
+    const HostSnapshot before = HostSnapshot::Capture();
+    RibbonFixture fixture;
+    REQUIRE(fixture.Create(false, 102, true));
+    auto * const bar = static_cast<PopupObservingRibbonButtonBar *>(
+        fixture.GetButtonBar());
+    REQUIRE(bar);
+    REQUIRE(DrainUntil([bar]()
+    {
+        const auto command = FindNativeRibbonCommand(bar, L"Dropdown");
+        return command && command.IsLoaded() &&
+               !bar->GetItemRect(ID_RIBBON_BUTTON_DROPDOWN).IsEmpty();
+    }));
+    for ( const int id : { ID_RIBBON_BUTTON_NORMAL, ID_RIBBON_BUTTON_TOGGLE,
+                          ID_RIBBON_BUTTON_DROPDOWN, ID_RIBBON_BUTTON_HYBRID } )
+    {
+        CAPTURE(id);
+        CHECK_FALSE(bar->GetItemRect(id).IsEmpty());
+    }
+    CHECK(bar->GetItemRect(ID_RIBBON_BUTTON_TEMPORARY).IsEmpty());
+    CHECK(bar->GetActiveItem() == nullptr);
+    struct Observation
+    {
+        NativeRibbonEvents events;
+        wxRibbonButtonBarButtonBase *activeInside = nullptr;
+        wxRibbonButtonBarButtonBase *activeAfterPopup = nullptr;
+        wxPoint expectedAnchor;
+        bool popupResult = false;
+        unsigned updates = 0;
+        bool secondUpdate = false;
+    };
+    const auto state = std::make_shared<Observation>();
+    const auto onCommand = [state, bar](wxRibbonButtonBarEvent& event)
+    {
+        state->events.push_back(ObserveNativeRibbonEvent(event));
+        if ( event.GetEventType() == wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED )
+        {
+            state->activeInside = bar->GetActiveItem();
+            state->expectedAnchor = bar->GetItemRect(event.GetId()).GetBottomLeft();
+            ++state->expectedAnchor.y;
+            wxMenu menu;
+            menu.Append(wxID_ANY, "Intercepted menu");
+            state->popupResult = event.PopupMenu(&menu);
+            state->activeAfterPopup = bar->GetActiveItem();
+        }
+    };
+    bar->Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, onCommand);
+    bar->Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, onCommand);
+    const auto dropdown = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
+        FindNativeRibbonCommand(bar, L"Dropdown menu"),
+        MUXAP::PatternInterface::Invoke);
+    REQUIRE(dropdown);
+    dropdown.Invoke();
+    DrainDispatch();
+    CheckNativeRibbonEvent(state->events, 1, bar, ID_RIBBON_BUTTON_DROPDOWN,
+                           wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED);
+    CHECK(state->activeInside == bar->GetItemById(ID_RIBBON_BUTTON_DROPDOWN));
+    CHECK(state->activeAfterPopup == state->activeInside);
+    CHECK(state->popupResult);
+    CHECK(bar->popupCalls == 1);
+    CHECK(bar->popupActiveItem == state->activeInside);
+    CHECK(bar->popupAnchor == state->expectedAnchor);
+    CHECK(bar->GetActiveItem() == nullptr);
+
+    bar->Bind(wxEVT_UPDATE_UI, [state](wxUpdateUIEvent& event)
+    {
+        ++state->updates;
+        event.SetText(state->secondUpdate ? "Restored toggle" : "Updated toggle");
+        event.Check(!state->secondUpdate);
+        event.Enable(state->secondUpdate);
+    }, ID_RIBBON_BUTTON_TOGGLE);
+    // The base public entry point dispatches the protected Ribbon override.
+    static_cast<wxWindow *>(bar)->UpdateWindowUI(wxUPDATE_UI_NONE);
+    DrainDispatch();
+    CHECK(state->updates > 0);
+    auto command = FindNativeRibbonCommand(bar, L"Updated toggle");
+    REQUIRE(command);
+    CHECK_FALSE(command.IsEnabled());
+    auto toggle = GetNativeRibbonPattern<MUXAPR::IToggleProvider>(
+        command, MUXAP::PatternInterface::Toggle);
+    REQUIRE(toggle);
+    CHECK(toggle.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::On);
+    CHECK(state->events.size() == 1);
+    ExerciseRetiredRibbonProvider([toggle]() { toggle.Toggle(); });
+    CHECK(state->events.size() == 1);
+    CHECK(toggle.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::On);
+
+    const unsigned firstUpdates = state->updates;
+    state->secondUpdate = true;
+    static_cast<wxWindow *>(bar)->UpdateWindowUI(wxUPDATE_UI_NONE);
+    DrainDispatch();
+    CHECK(state->updates > firstUpdates);
+    command = FindNativeRibbonCommand(bar, L"Restored toggle");
+    REQUIRE(command);
+    CHECK(command.IsEnabled());
+    toggle = GetNativeRibbonPattern<MUXAPR::IToggleProvider>(
+        command, MUXAP::PatternInterface::Toggle);
+    REQUIRE(toggle);
+    CHECK(toggle.ToggleState() ==
+          winrt::Microsoft::UI::Xaml::Automation::ToggleState::Off);
+    CHECK(state->events.size() == 1);
+    CHECK(bar->GetActiveItem() == nullptr);
+    REQUIRE(fixture.DestroyAndWait(before));
+    before.CheckRestored();
+}
+
+TEST_CASE("WinUIRibbon::NativeButtonBarLayoutPublicationTransaction",
+          "[winui-advanced][winui-ribbon][native-buttonbar][transaction]")
+{
+    REQUIRE(DrainToQuiescence());
+    const HostSnapshot before = HostSnapshot::Capture();
+    RibbonFixture fixture;
+    REQUIRE(fixture.Create(false, 104));
+    wxRibbonButtonBar * const bar = fixture.GetButtonBar();
+    REQUIRE(bar);
+    REQUIRE(DrainUntil([bar]()
+    {
+        const auto root = GetNativeButtonBarRoot(bar);
+        return root && root.IsLoaded() &&
+               !bar->GetItemRect(ID_RIBBON_BUTTON_NORMAL).IsEmpty();
+    }));
+    const auto originalRoot = GetNativeButtonBarRoot(bar);
+    REQUIRE(originalRoot);
+    const auto events = RecordNativeRibbonEvents(bar);
+    wxWinUITopLevelHost * const host = wxWinUITopLevelHost::FindSlotOwner(bar);
+    REQUIRE(host);
+    wxWinUISlot * const slot = host->FindSlot(bar);
+    REQUIRE(slot);
+
+    // Find the real host carrier by observing the native visual ancestry.
+    // A Content dependency-property callback runs inside the actual swap;
+    // no Ribbon-specific test hook or surrogate projection participates.
+    MUXC::ContentControl carrier{nullptr};
+    MUX::DependencyObject ancestor = originalRoot;
+    while ( (ancestor = MUX::Media::VisualTreeHelper::GetParent(ancestor)) )
+    {
+        const auto candidate = ancestor.try_as<MUXC::ContentControl>();
+        if ( candidate && candidate.Content() == originalRoot )
+        {
+            carrier = candidate;
+            break;
+        }
+    }
+    REQUIRE(carrier);
+    struct Geometry
+    {
+        std::array<wxSize, 6> sizes;
+        std::array<wxRect, 4> rectangles;
+    };
+    const auto geometry = [bar]()
+    {
+        const wxSize best = bar->GetBestSize();
+        const wxSize minimum = bar->GetMinSize();
+        Geometry result;
+        result.sizes = { best, minimum,
+            bar->GetNextSmallerSize(wxHORIZONTAL, best),
+            bar->GetNextLargerSize(wxHORIZONTAL, minimum),
+            bar->GetNextSmallerSize(wxVERTICAL, best),
+            bar->GetNextLargerSize(wxVERTICAL, minimum) };
+        result.rectangles = {
+            bar->GetItemRect(ID_RIBBON_BUTTON_NORMAL),
+            bar->GetItemRect(ID_RIBBON_BUTTON_TOGGLE),
+            bar->GetItemRect(ID_RIBBON_BUTTON_DROPDOWN),
+            bar->GetItemRect(ID_RIBBON_BUTTON_HYBRID) };
+        return result;
+    };
+    const Geometry baseline = geometry();
+    struct SwapObservation
+    {
+        bool rejectNextInstall = true;
+        bool rejectedInsideTransaction = false;
+        bool resizeNextInstall = false;
+        bool resizedInsideTransaction = false;
+        wxSize requestedSize;
+    };
+    const auto state = std::make_shared<SwapObservation>();
+    const auto token = carrier.RegisterPropertyChangedCallback(
+        MUXC::ContentControl::ContentProperty(),
+        [state, bar, slot](const MUX::DependencyObject& sender,
+                           const MUX::DependencyProperty&)
+        {
+            const auto content = sender.as<MUXC::ContentControl>().Content();
+            if ( state->rejectNextInstall && !content )
+            {
+                state->rejectNextInstall = false;
+                state->rejectedInsideTransaction =
+                    wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot);
+                // Existing private test-support fault, consumed once by the
+                // real host install phase after this native detach callback.
+                wxWinUIHostContentTestAccess::FailContentSwap(
+                    wxWinUIHostContentTestAccess::ContentFault_Install);
+            }
+            else if ( state->resizeNextInstall && content )
+            {
+                state->resizeNextInstall = false;
+                state->resizedInsideTransaction =
+                    wxWinUISlotTestAccess::IsContentTransactionInProgress(*slot);
+                bar->SetSize(state->requestedSize);
+                // Consume an early queued repair while the outer native
+                // transaction is still active; it must be rearmed, not lost.
+                wxYield();
+            }
+        });
+    struct CallbackReset
+    {
+        MUXC::ContentControl carrier;
+        std::int64_t token;
+        void Reset()
+        {
+            if ( carrier )
+            {
+                carrier.UnregisterPropertyChangedCallback(
+                    MUXC::ContentControl::ContentProperty(), token);
+                carrier = nullptr;
+            }
+            wxWinUIHostContentTestAccess::FailContentSwap(0);
+        }
+        ~CallbackReset() { Reset(); }
+    } reset{carrier, token};
+    {
+        wxLogNull suppressExpectedSwapFailure;
+        const int width = bar->FromDIP(400);
+        bar->SetButtonTextMinWidth(ID_RIBBON_BUTTON_NORMAL, width, width);
+    }
+    REQUIRE(state->rejectedInsideTransaction);
+    CHECK_FALSE(state->rejectNextInstall);
+    CHECK(GetNativeButtonBarRoot(bar) == originalRoot);
+    carrier.UpdateLayout();
+    const Geometry rolledBack = geometry();
+    CHECK(rolledBack.sizes == baseline.sizes);
+    CHECK(rolledBack.rectangles == baseline.rectangles);
+    CHECK(events->empty());
+
+    // The requested model change is retained, but a later successful
+    // realization alone may publish its new native/public geometry.
+    REQUIRE(bar->Realize());
+    DrainDispatch();
+    CHECK(GetNativeButtonBarRoot(bar) != originalRoot);
+    CHECK(bar->GetBestSize().x > baseline.sizes[0].x);
+    const auto rootBeforeResize = GetNativeButtonBarRoot(bar);
+    state->requestedSize = bar->GetSize() + wxSize(137, 21);
+    state->resizeNextInstall = true;
+    // A synchronous native Content callback changes client geometry after
+    // candidate measurement. The bounded repair must use that newest size.
+    (void)bar->Realize();
+    REQUIRE(state->resizedInsideTransaction);
+    CHECK_FALSE(state->resizeNextInstall);
+    DrainDispatch();
+    REQUIRE(DrainToQuiescence());
+    CHECK(bar->GetSize() == state->requestedSize);
+    REQUIRE(GetNativeButtonBarRoot(bar) != rootBeforeResize);
+    const Geometry repaired = geometry();
+    for ( const auto& rectangle : repaired.rectangles )
+        CHECK_FALSE(rectangle.IsEmpty());
+    REQUIRE(bar->Realize());
+    DrainDispatch();
+    const Geometry fresh = geometry();
+    CHECK(repaired.sizes == fresh.sizes);
+    CHECK(repaired.rectangles == fresh.rectangles);
+    CHECK(events->empty());
+    reset.Reset();
+    REQUIRE(fixture.DestroyAndWait(before));
+    before.CheckRestored();
+}
+
+TEST_CASE("WinUIRibbon::NativeButtonBarRetiredProviders",
+          "[winui-advanced][winui-ribbon][native-buttonbar][uia][lifetime]")
+{
+    REQUIRE(DrainToQuiescence());
+    const HostSnapshot before = HostSnapshot::Capture();
+    RibbonFixture fixture;
+    REQUIRE(fixture.Create(true, 92));
+    wxRibbonButtonBar * const bar = fixture.GetButtonBar();
+    REQUIRE(bar);
+    REQUIRE(DrainUntil([bar]()
+    {
+        const auto command = FindNativeRibbonCommand(bar, L"Normal");
+        return command && command.IsLoaded();
+    }));
+    const auto events = RecordNativeRibbonEvents(bar);
+    const auto retired = FindNativeRibbonCommand(bar, L"Normal");
+    const auto retiredInvoke = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
+        retired, MUXAP::PatternInterface::Invoke);
+    const auto retiredToggle = GetNativeRibbonPattern<MUXAPR::IToggleProvider>(
+        FindNativeRibbonCommand(bar, L"Toggle"), MUXAP::PatternInterface::Toggle);
+    REQUIRE(retiredInvoke);
+    REQUIRE(retiredToggle);
+    REQUIRE(bar->DeleteButton(ID_RIBBON_BUTTON_NORMAL));
+    wxBitmap bitmap;
+    REQUIRE(bitmap.Create(32, 32, 32));
+    REQUIRE(bar->AddButton(ID_RIBBON_BUTTON_NORMAL, "Replacement",
+                           wxBitmapBundle::FromBitmap(bitmap)));
+    REQUIRE(bar->Realize());
+    REQUIRE(DrainUntil([bar]()
+    {
+        const auto replacement = FindNativeRibbonCommand(bar, L"Replacement");
+        return replacement && replacement.IsLoaded();
+    }));
+    const auto replacement = FindNativeRibbonCommand(bar, L"Replacement");
+    CHECK(replacement != retired);
+    CHECK_FALSE(FindNativeRibbonCommand(bar, L"Normal"));
+    ExerciseRetiredRibbonProvider([retiredInvoke]() { retiredInvoke.Invoke(); });
+    CHECK(events->empty());
+    const auto current = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
+        replacement, MUXAP::PatternInterface::Invoke);
+    REQUIRE(current);
+    current.Invoke();
+    DrainDispatch();
+    CheckNativeRibbonEvent(*events, 1, bar, ID_RIBBON_BUTTON_NORMAL,
+                           wxEVT_RIBBONBUTTONBAR_CLICKED);
+
+    bar->ClearButtons();
+    REQUIRE(bar->Realize());
+    DrainDispatch();
+    CHECK(bar->GetButtonCount() == 0);
+    const auto emptyRoot = GetNativeButtonBarRoot(bar);
+    REQUIRE(emptyRoot);
+    CHECK(emptyRoot.Children().Size() == 0);
+    ExerciseRetiredRibbonProvider([current]() { current.Invoke(); });
+    ExerciseRetiredRibbonProvider([retiredToggle]() { retiredToggle.Toggle(); });
+    CHECK(events->size() == 1);
+    REQUIRE(fixture.DestroyAndWait(before));
+    ExerciseRetiredRibbonProvider([retiredInvoke]() { retiredInvoke.Invoke(); });
+    ExerciseRetiredRibbonProvider([current]() { current.Invoke(); });
+    ExerciseRetiredRibbonProvider([retiredToggle]() { retiredToggle.Toggle(); });
+    CHECK(events->size() == 1);
+    before.CheckRestored();
+}
+
+TEST_CASE("WinUIRibbon::NativeButtonBarReentrantDestruction",
+          "[winui-advanced][winui-ribbon][native-buttonbar][uia][lifetime]")
+{
+    for ( int mode = 0; mode != 3; ++mode )
+    {
+        DYNAMIC_SECTION("native callback deletes " <<
+                        (mode == 0 ? "button" : mode == 1 ? "bar" : "owner"))
+        {
+            REQUIRE(DrainToQuiescence());
+            const HostSnapshot before = HostSnapshot::Capture();
+            RibbonFixture fixture;
+            REQUIRE(fixture.Create(false, 94 + mode * 2));
+            wxRibbonButtonBar * const bar = fixture.GetButtonBar();
+            REQUIRE(bar);
+            REQUIRE(DrainUntil([bar]()
+            {
+                const auto command = FindNativeRibbonCommand(bar, L"Normal");
+                return command && command.IsLoaded();
+            }));
+            const auto provider = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
+                FindNativeRibbonCommand(bar, L"Normal"),
+                MUXAP::PatternInterface::Invoke);
+            REQUIRE(provider);
+            struct Observation
+            {
+                wxWeakRef<wxRibbonButtonBar> bar;
+                wxWeakRef<wxFrame> owner;
+                NativeRibbonEvents events;
+                bool mutationCompleted = false;
+            };
+            const auto state = std::make_shared<Observation>();
+            state->bar = bar;
+            state->owner = fixture.GetFrameA();
+            wxRibbonButtonBarButtonBase * const expectedButton =
+                bar->GetItemById(ID_RIBBON_BUTTON_NORMAL);
+            bar->Bind(wxEVT_RIBBONBUTTONBAR_CLICKED,
+                [state, mode](wxRibbonButtonBarEvent& event)
+                {
+                    // The binding itself can disappear in this callback.
+                    const auto keepAlive = state;
+                    keepAlive->events.push_back(ObserveNativeRibbonEvent(event));
+                    if ( mode == 0 )
+                        keepAlive->mutationCompleted =
+                            keepAlive->bar->DeleteButton(event.GetId());
+                    else if ( mode == 1 )
+                    {
+                        delete keepAlive->bar.get();
+                        keepAlive->mutationCompleted = !keepAlive->bar;
+                    }
+                    else
+                    {
+                        keepAlive->mutationCompleted = keepAlive->owner->Destroy();
+                        wxYield();
+                    }
+                }, ID_RIBBON_BUTTON_NORMAL);
+            provider.Invoke();
+            DrainDispatch();
+            REQUIRE(state->events.size() == 1);
+            CHECK(state->events[0].id == ID_RIBBON_BUTTON_NORMAL);
+            CHECK(state->events[0].bar == bar);
+            CHECK(state->events[0].object == bar);
+            CHECK(state->events[0].button == expectedButton);
+            CHECK(state->mutationCompleted);
+            if ( mode == 0 )
+            {
+                REQUIRE(state->bar);
+                CHECK(state->bar->GetItemById(ID_RIBBON_BUTTON_NORMAL) == nullptr);
+            }
+            else
+                CHECK_FALSE(state->bar);
+            ExerciseRetiredRibbonProvider([provider]() { provider.Invoke(); });
+            CHECK(state->events.size() == 1);
+            REQUIRE(fixture.DestroyAndWait(before));
+            before.CheckRestored();
+        }
+    }
 }
 
 TEST_CASE("WinUIRibbon::NativeR2BoundedSharedHostSpike",

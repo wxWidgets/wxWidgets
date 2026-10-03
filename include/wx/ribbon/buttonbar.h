@@ -18,6 +18,11 @@
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonButtonBarWinUI;
+#endif
+
 class wxRibbonButtonBar;
 class wxRibbonButtonBarButtonBase;
 class wxRibbonButtonBarLayout;
@@ -221,6 +226,14 @@ protected:
 
 private:
     wxRibbonBar* m_ribbonBar = nullptr;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxRibbonButtonBarWinUI;
+    bool InitializeWinUI();
+    void SyncWinUI();
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    std::shared_ptr<wxRibbonButtonBarWinUI> m_winui;
+#endif
 
 
 #ifndef SWIG

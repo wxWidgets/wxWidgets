@@ -316,6 +316,22 @@ if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
         LABELS "winui-supported-beta"
         RUN_SERIAL TRUE
         TIMEOUT 300)
+    if(wxUSE_RIBBON)
+        add_test(NAME wx_winui_ribbon_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-ribbon][native-buttonbar]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_ribbon_native PROPERTIES
+            LABELS "winui-native-ribbon"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
 endif()
 if(WXWINUI AND wxUSE_WINUI3 AND MSVC)
     # These are the TUs pulling in the C++/WinRT projection: scope /bigobj

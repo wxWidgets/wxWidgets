@@ -146,7 +146,9 @@ wxWinUINotePhysicalDisconnectGateDegraded() noexcept;
 WXDLLIMPEXP_CORE bool
 wxWinUIIsPhysicalDisconnectPublicationPoisoned() noexcept;
 
-class wxWinUIControlHost
+// Shared production peer host for core controls and optional libraries such as
+// wxribbon. This source-private header is not part of the installed API.
+class WXDLLIMPEXP_CORE wxWinUIControlHost
 {
 public:
     wxWinUIControlHost();
@@ -250,14 +252,15 @@ private:
 winrt::Microsoft::UI::Xaml::ElementTheme wxWinUIGetCurrentElementTheme();
 bool wxWinUIIsDarkTheme();
 
-void wxWinUILogException(const char *what, const winrt::hresult_error& e);
-winrt::hstring wxWinUIToHString(const wxString& str);
-wxString wxWinUIFromHString(const winrt::hstring& str);
+WXDLLIMPEXP_CORE void
+wxWinUILogException(const char *what, const winrt::hresult_error& e);
+WXDLLIMPEXP_CORE winrt::hstring wxWinUIToHString(const wxString& str);
+WXDLLIMPEXP_CORE wxString wxWinUIFromHString(const winrt::hstring& str);
 
 // Convert a wxBitmap to a WinUI WriteableBitmap (premultiplied BGRA).  Returns
 // nullptr for an invalid bitmap.
 class wxBitmap;
-winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
+WXDLLIMPEXP_CORE winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
 wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap);
 
 // Peer state shared by wxChoice and wxComboBox (which reconfigures the same

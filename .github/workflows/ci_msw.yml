@@ -413,6 +413,14 @@ jobs:
             --output-junit "$buildDir\winui-supported-beta.xml" `
             --output-log "$buildDir\winui-supported-beta.log"
 
+      - name: Run wxWinUI native Ribbon contracts
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_ribbon_native$' --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-ribbon-native.xml" `
+            --output-log "$buildDir\winui-ribbon-native.log"
+
       - name: Upload wxWinUI test results
         if: always()
         uses: actions/upload-artifact@v4
