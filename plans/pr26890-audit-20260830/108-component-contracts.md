@@ -73,9 +73,101 @@ Baseline logs and exact counts are recorded in plan 106. The isolated focus run 
 - Before the change, `[winui-spin-model][spinbutton]` passed **45 assertions / 4 cases** in each linkage. After it, shared and static pass **50 assertions / 4 cases**; Release `/warnaserror` builds of `test_gui` and `minimal` pass, and runtime-smoke plus Supported V0 pass **2/2** in each linkage. Runs used private desktops with `WX_UI_TESTS=0`; they are native automation evidence, not physical keyboard sign-off.
 - The override uses the existing virtual contract and adds no data member or new virtual slot. Shipping behavior changes only the intended focus policy; UIA invocation, event ordering, range normalization and reentrancy/lifetime guards are unchanged. Remote CI remains pending.
 
-## Current range follow-up
+## Earlier range follow-up
 
 Fresh full shared/static range replays confirm both historical DatePicker focus targets now pass on the current host baseline. The static replay instead exposes the separate Calendar coalescing budget at **15 <= 10**, finishing **3019/3020 assertions, 69/70 cases**. Keep that Calendar defect open; do not reclassify the former focus failures or claim physical focus qualification.
+
+## Activation, compact CheckListBox and Tree focus (2026-10-03)
+
+Source baseline: `ce00e7be04`; qualified source set:
+`b05210bdd527372e1063ac12635f072dbe192247`.
+
+- `d2b2138459` fixes an actual host activation race. Both DatePicker focus
+  cases reproduce in the passive full range sequence (45/47 cases), despite
+  passing together in isolation (71 assertions / 2 cases). The input trace
+  shows native focus transfer activating the TLW, whose implicit last-child
+  restoration supersedes the explicit requested child. Only this implicit
+  restoration is now suppressed during the exact live, current bridge focus
+  transfer. Application activation handlers and newer explicit requests still
+  win. The new real-HWND regression covers both paths, real FocusManager state
+  and a later ordinary activation; it is included in Supported V0 CI.
+- `317b51c29a` removes the standalone CheckBox theme's 120x32 DIP minimum from
+  compact list peers. Measurements show a requested 23x17 DIP owner-draw margin
+  previously arranged at 120x32, and at 23x17 after correction. The initial
+  failures also queried hit-testing before the native item entrance transition
+  had settled. A private, non-installed observer now lets the fixtures wait
+  for the actual CheckBox hit target, without focusing, toggling or injecting
+  input. Added assertions check compact geometry and observer silence; all
+  original focus, pointer-target and exactly-once event checks are retained.
+  Diagnostic prints and the exploratory fixed delay are removed.
+- `b05210bdd5` corrects the Tree fixture, not Tree production code. The
+  list-to-tree sequence reproduced its initial `FocusPeerItem()` failure even
+  after the host fix. It had never acquired wx/native control focus after
+  preceding temporary frames. The fixture now deliberately activates a
+  competing host, proves that precondition, and calls `multi.SetFocus()` once.
+  The three strict item-focus/FocusManager checks and selection/key checks are
+  unchanged. No logical-focus substitute or success retry is introduced.
+
+Both existing WinUI Release build trees pass `test_gui` and `minimal` with
+`/warnaserror`. Ordinary wxMSW shared Debug `wxcore` also compiles with
+`/warnaserror`; no ordinary-MSW runtime behavior is changed. Both WinUI caches
+remain `wxBUILD_TESTS=ALL`. All GUI results below use the existing private
+desktop runner and `WX_UI_TESTS=0`; these are local native-automation results,
+not physical input, external UIA, remote CI or soak qualification.
+
+| Filter / gate | Shared | Static |
+|---|---|---|
+| New activation case + two owner-drawn CheckListBox cases | 95 assertions / 3 cases PASS | 95 / 3 PASS |
+| All 21 exact `HostState`/`HostLifecycle` names containing `Focus` | 427 / 21 PASS | 427 / 21 PASS |
+| `[winui-listmodel]~[physical],[winui-treemodel]~[physical]` | 392296 / 36 PASS | 392296 / 36 PASS |
+| `[winui-range-date]~[physical]` | 2226 / 47 PASS | 2226 / 47 PASS |
+| Historical extended range/date/spin/XRC/UIA filter below | 3020 / 70 PASS | 3020 / 70 PASS |
+| CTest runtime smoke + Supported V0 (including new activation case) | 2/2 PASS | 2/2 PASS |
+
+Exact extended filter:
+`[winui-range-date]~[physical]~[gauge],[winui-range-events][slider],[winui-spin-model]~[spinbutton],XRC::WinUI 008c range and date controls,wxWinUI UIA RangeValue tracks the public numeric contract`.
+
+Evidence in each existing build root:
+`audit108-final-build-20261003.log`,
+`audit108-focus-checklist-targeted-20261003.log`,
+`audit108-host-focus-exact-20261003.log`,
+`audit108-list-tree-qualified-20261003.log`,
+`audit108-range-final-20261003.log`,
+`audit108-full-range-qualified-20261003.log`, and
+`audit108-runtime-gates-final-20261003.log`.
+Failing sequence evidence remains in the shared
+`audit108-list-tree-final-20261003.log` and
+`audit108-list-tree-trace-run-20261003.log`, with passive native focus traces
+in `audit108-list-tree-focus-trace-20261003.log` (shared) and
+`audit108-range-focus-20261003.log` (static). Empty-filter exploratory runs are
+not counted as successful tests.
+
+Final binary SHA256 values:
+
+| Artifact | SHA256 |
+|---|---|
+| Shared `test_gui.exe` | `384C360EAA50DCA11002ACD7023A6B5F5CB9E02EC436945AACFA37AE27F7FDC3` |
+| Static `test_gui.exe` | `340BB6C3EE892B97E78E1A166A8A357376D18530D728FFC00595299F9D7B5384` |
+| Shared `minimal.exe` | `EFCDA6900A6DC6790ABED768A705FBC84CFD5C5460A105318042F3AE4C846A03` |
+| Static `minimal.exe` | `97B5D2E021D7F8BF7803494CA46B71A59610C6FEC30446B3998E0B83C51B47DC` |
+
+Calendar's historical coalescing budget failure does not reproduce in either
+current extended sequence. No speculative scheduler change is made, its
+unchanged budget remains enforced, and the historical defect is not called
+causally repaired. Other component families, physical qualification and
+current-HEAD remote CI remain open.
+
+### Next bounded component lot: ToolBar rows
+
+The audit's `SetRows()` gap is confirmed: WinUI inherits the common no-op and
+does not consult `GetMaxRows()`/`GetMaxCols()`. Address it through the retained
+native Grid, not a state-only setter. One coherent lot must cover transactional
+`SetRows()`/`Realize()`, row-aware overflow and best size, per-row RTL placement,
+embedded-control rectangles, and rollback of Grid definitions/coordinates.
+Retain peer identity, event ordering and reentrant destruction guards. Tests
+must cover one-to-many-to-one rows, vertical/RTL layout, shrinking/expanding
+overflow, embedded controls and failed/reentrant rebuilds. This lot is not yet
+implemented or qualified.
 
 ## Maintenance
 
