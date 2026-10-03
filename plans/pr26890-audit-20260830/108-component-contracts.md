@@ -100,6 +100,84 @@ SHA256 values computed over the downloaded `.nupkg` bytes (not DLL hashes):
 | XamlToolkit.WinUI.Animations.Native | `FE3F7299E55CEBF07368FAEAE7C52F7580F7FC0EC99FECD9CD18F63A57B47AC8` |
 | XamlToolkit.WinUI.Interactivity.Native | `3733AC07DDFF57EE76A569AED76F9803BD2DAAF0301EDF8897C349B97CFD8C65` |
 
+#### Isolated native-consumption probe
+
+`wxWINUI3_BUILD_TOOLKIT_PROBE` is OFF by default. Explicitly enabling it in
+an existing MSVC WinUI test build adds only the excluded-from-all
+`wx_winui_toolkit_activation_probe` target and its CTest entry. Its projection,
+merged PRI, native DLLs and metadata are separate from wxcore and ordinary
+sample/test payloads. It never installs an activation hook or registers COM
+classes globally. No physical input is injected.
+
+The probe loads DLL factories and Toolkit metadata providers, creates actual
+Ribbon and table peers, checks their property contracts and Loaded geometry,
+checks native control templates, and retains the existing XAML/DispatcherQueue
+shutdown oracle. This is dependency feasibility, not the public wxRibbon or
+wxGrid/wxDataView adapters and not production qualification.
+
+The transitive Win2D 1.4.0 archive SHA256 is
+`E13866088B3C50205AAE36E9E4CB3C23B21D11C4B4590DDCBEAAFA9EA2C79F48`.
+Its nuspec is copied separately and is not relabelled with the Toolkit MIT
+declaration. The official Win2D source provides an
+[MIT license](https://github.com/microsoft/Win2D/blob/winappsdk/main/LICENSE.txt),
+but package redistribution/provenance must still be reviewed before shipping.
+
+In the existing shared build, configure with
+`-DwxWINUI3_BUILD_TOOLKIT_PROBE=ON`, build only
+`--target wx_winui_toolkit_activation_probe --config Release`, and run the
+result in `winui/toolkit-probe/bin/Release` with
+`--toolkit-activation-probe`. Prefer the existing private-desktop runner.
+No experimental package is required by a default build or installed consumer.
+
+2026-10-03 local result, x64/MSVC Release:
+
+- Configure and the isolated target build pass with `/warnaserror`; all eight
+  DLLs load and both Toolkit metadata providers activate.
+- Ribbon, RibbonGroup and RibbonCollapsibleGroup pass native Loaded,
+  finite/nonzero geometry and real-template checks (600x110, 130x100 and
+  160x100 respectively).
+- DataTable and DataRow are absent from both metadata lookup overloads. Their
+  exact winmd projects an ordinary `IActivationFactory` constructor, so the
+  probe separately exercises direct DLL activation for only these two Panel
+  types, verifies their runtime class and interface, and reports
+  `metadata_complete=false`. It does not call the original metadata gate PASS.
+  DataColumn still uses the strict metadata/template path. The resulting table,
+  two columns and row all load with nonzero dimensions and real column templates.
+- **The consumption gate FAILS (exit 22):** `DataTable.ColumnSpacing(8)` reads
+  back **1**, not 8, in the actual pinned binary. The two 220-pixel columns yield
+  a 441-pixel row. The property oracle is retained; a successful presentation
+  is not used to hide the failed contract. Dispatcher/XAML shutdown passes.
+- Eight build-system self-tests pass, including five negative alpha-opt-in
+  cases and an archive-verified synthetic positive. The normal smoke rebuilds
+  with `/warnaserror`; smoke + Supported V0 remain 2/2 PASS in both shared and
+  static builds. The static/default-OFF executable rejects the probe flag with
+  exit 22 before initialization, as intended.
+
+Logs in the shared build root: `audit108-toolkit-configure2-20261003.log`,
+`audit108-toolkit-build3-20261003.log`,
+`audit108-toolkit-activation3-20261003.log`,
+`audit108-toolkit-selftests-all-20261003.log`, and
+`audit108-toolkit-normal-gates-20261003.log`. Earlier strict metadata failures
+remain in `audit108-toolkit-activation-20261003.log` and
+`audit108-toolkit-activation2-20261003.log`. Static/default-OFF evidence:
+`audit108-toolkit-off-configure-20261003.log`,
+`audit108-toolkit-off-smoke-build-20261003.log`,
+`audit108-toolkit-off-normal-gates-20261003.log`, and
+`audit108-toolkit-off-refusal-20261003.log`.
+Probe executable SHA256:
+`0406E50D71C9FACBC183A835253947AD43C821CDB223744283B3A2C65AF6DF99`.
+The ordinary shared library and runtime-smoke directories contain no Toolkit
+files and retain the same PRI hash
+`3BADA227F5AE4C0039A9E580DABB1703B2AF70F906CC2D3D8D2A7E78ABF07C91`.
+The probe's distinct merged PRI is
+`EA6D4F450415C3C66727AF89E375E69BC2992BCEC5FEE99B8305D1F3B31C3929`.
+
+Decision: native consumption/presentation is feasible, but this alpha package
+is **not accepted unchanged for production DataTable use**. Correct and rebuild
+the third-party implementation with reproducible source provenance, or choose
+a different native table implementation; do not bypass the property test.
+Ribbon still needs public wx API integration and interaction qualification.
+
 Implementation sequence after the current ToolBar lot:
 
 1. Select and pin a reproducible native component boundary (version, source,
@@ -109,6 +187,10 @@ Implementation sequence after the current ToolBar lot:
    with ButtonBar commands and then Bar/Page/Panel, Gallery, Toolbar,
    responsive/minimized states and keyboard navigation. The existing R2 test
    prototype is exploratory evidence only, not public wxRibbon implementation.
+   Keep the actual `wxRibbonButtonBar::m_buttons` as the model; route native
+   invocation through the same public event semantics as the generic path.
+   Its host boundary must be private production code exported from wxcore to
+   wxribbon, not direct slot registration copied from the test prototype.
 3. Build a private native tabular surface with separate Grid and DataView
    adapters. The existing wx data model remains authoritative. First cover
    virtualized text rows/columns, model changes, selection and edit commit/

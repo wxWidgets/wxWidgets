@@ -73,6 +73,31 @@ if(DEFINED CASE AND CASE STREQUAL "corrupt")
 endif()
 
 # ---- driver ---------------------------------------------------------------
+if(DEFINED CASE AND CASE MATCHES "^alpha-")
+    set(wxWINUI3_BUILD_TOOLKIT_PROBE ON)
+    set(alpha_package "XamlToolkit.Labs.WinUI.Native")
+    set(alpha_version "0.8.0-alpha")
+    set(alpha_argument PROBE_TOOLKIT_ALPHA)
+    if(CASE STREQUAL "alpha-no-opt-in")
+        set(wxWINUI3_BUILD_TOOLKIT_PROBE OFF)
+    elseif(CASE STREQUAL "alpha-wrong-name")
+        set(alpha_package "Microsoft.WindowsAppSDK.WinUI")
+    elseif(CASE STREQUAL "alpha-wrong-version")
+        set(alpha_version "0.9.0-alpha")
+    elseif(CASE STREQUAL "alpha-unknown-argument")
+        set(alpha_argument ALLOW_ANY_ALPHA)
+    elseif(CASE STREQUAL "alpha-default-stable")
+        set(alpha_argument)
+    else()
+        message(FATAL_ERROR "unknown alpha self-test case")
+    endif()
+    # This invalid marker is a second, independent no-I/O barrier if a version
+    # guard regresses. The driver requires the specific earlier diagnostic.
+    wx_winui3_find_nuget_package(OUT_DIR "${alpha_package}" "${alpha_version}"
+        "../must-not-reach-package-io" "unused" ${alpha_argument})
+    message(FATAL_ERROR "alpha guard accepted an invalid request")
+endif()
+
 file(REMOVE_RECURSE "${WORK_DIR}")
 set(wxSOURCE_DIR "${WORK_DIR}/no-such-source")
 
@@ -218,6 +243,42 @@ endif()
 message(STATUS
     "case 5 OK: managed root change resolves below the new root and "
     "preserves the old cache")
+
+# --- case 5b: experimental exception is exact and explicit ----------------
+foreach(alpha_case IN ITEMS alpha-no-opt-in alpha-wrong-name
+        alpha-wrong-version alpha-unknown-argument alpha-default-stable)
+    if(alpha_case STREQUAL "alpha-default-stable")
+        set(expected_diagnostic "numeric NuGet version is required")
+    elseif(alpha_case STREQUAL "alpha-unknown-argument")
+        set(expected_diagnostic "unknown NuGet package retrieval arguments")
+    else()
+        set(expected_diagnostic "invalid experimental Toolkit package request")
+    endif()
+    execute_process(COMMAND "${CMAKE_COMMAND}"
+        "-DCASE=${alpha_case}" "-DWINUI_CMAKE=${WINUI_CMAKE}"
+        "-DWORK_DIR=${WORK_DIR}" "-DSAFE_ROOT=${SAFE_ROOT}"
+        -P "${CMAKE_CURRENT_LIST_FILE}"
+        RESULT_VARIABLE alpha_result OUTPUT_VARIABLE alpha_stdout
+        ERROR_VARIABLE alpha_stderr)
+    if(alpha_result EQUAL 0 OR NOT alpha_stderr MATCHES "${expected_diagnostic}")
+        message(FATAL_ERROR "case 5b ${alpha_case}: unexpected result: ${alpha_stderr}")
+    endif()
+endforeach()
+
+set(saved_test_package "${TEST_PACKAGE}")
+set(TEST_PACKAGE "XamlToolkit.Labs.WinUI.Native")
+set(wxWINUI3_BUILD_TOOLKIT_PROBE ON)
+make_managed_nupkg(alpha_archive alpha_sha "${wxWINUI3_PACKAGE_ROOT}"
+    "0.8.0-alpha" "${WORK_DIR}/staging" "synthetic-alpha")
+wx_winui3_find_nuget_package(alpha_dir "${TEST_PACKAGE}" "0.8.0-alpha"
+    "${TEST_MARKER}" "${alpha_sha}" PROBE_TOOLKIT_ALPHA)
+wx_winui3_validate_nupkg_integrity(alpha_integrity "${alpha_dir}" "${alpha_sha}")
+if(NOT alpha_integrity)
+    message(FATAL_ERROR "case 5b: explicit pinned alpha lost archive verification")
+endif()
+set(TEST_PACKAGE "${saved_test_package}")
+unset(wxWINUI3_BUILD_TOOLKIT_PROBE)
+message(STATUS "case 5b OK: explicit Toolkit alpha works; stable/unknown requests reject")
 
 # --- case 6: a user-provided directory is trusted and never deleted -------
 # Pointing the cache variable outside the managed package root simulates

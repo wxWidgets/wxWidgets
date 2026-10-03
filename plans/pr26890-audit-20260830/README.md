@@ -77,9 +77,12 @@ repair. ToolBar `SetRows()`/multi-row layout is now implemented and locally
 qualified at `24f4ee2a22`: shared/static 595 assertions / 5 new cases,
 1696 / 28 total toolbar cases and both runtime gates PASS. Native WinUI/Fluent
 presentation is now required for all families, including Ribbon, Grid and
-DataView; existing generic chrome is not completion. The next step is an
-isolated native Toolkit activation/resource proof, not immediate adoption of
-an experimental dependency into the shipping runtime.
+DataView; existing generic chrome is not completion. The isolated Toolkit
+probe now builds and renders native Ribbon/table peers with clean shutdown,
+but rejects the pinned alpha's DataTable property contract (`ColumnSpacing(8)`
+reads back 1). No Toolkit package is adopted into the shipping runtime. The
+table candidate needs correction/replacement; real public Ribbon integration
+and the rest of the family matrix remain open.
 
 - Foundations: runtime, host, control host/XamlHost, slots, geometry, z-order/clip/scroll, pointer/capture, keyboard/focus/cursors, tooltip, UIA, OLE, modal/transients, theme/Mica/renderer.
 - Buttons/selection: Button, BitmapButton, Toggle/BitmapToggle, CheckBox, RadioButton, RadioBox, generic CommandLink.

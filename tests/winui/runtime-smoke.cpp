@@ -66,6 +66,8 @@
 //      the physical-probe process was terminated without unsafe COM cleanup
 //  21  the DispatcherQueue shutdown phases, deferral or deferred timer did not
 //      satisfy the documented synchronous shutdown contract
+//  22  the explicitly requested native Toolkit consumption probe failed (or
+//      this executable was built without the opt-in probe support)
 
 #include <windows.h>
 #include <ole2.h>
@@ -101,6 +103,10 @@
 #include <winrt/Microsoft.UI.Xaml.Hosting.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.XamlTypeInfo.h>
+
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+    #include "toolkit-activation-probe.h"
+#endif
 
 namespace
 {
@@ -1153,7 +1159,14 @@ struct SmokeApplication :
         winrt::Microsoft::UI::Xaml::Markup::IXamlMetadataProvider
     >
 {
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+    explicit SmokeApplication(wxWinUIToolkitProbe::State* toolkit = nullptr)
+        : m_toolkit(toolkit)
+    {
+    }
+#else
     SmokeApplication() = default;
+#endif
 
     void OnLaunched(
         winrt::Microsoft::UI::Xaml::LaunchActivatedEventArgs const&)
@@ -1163,24 +1176,50 @@ struct SmokeApplication :
     winrt::Microsoft::UI::Xaml::Markup::IXamlType GetXamlType(
         winrt::Windows::UI::Xaml::Interop::TypeName const& type)
     {
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        if ( auto result = m_provider.GetXamlType(type) )
+            return result;
+        return m_toolkit ? m_toolkit->GetXamlType(type) : nullptr;
+#else
         return m_provider.GetXamlType(type);
+#endif
     }
 
     winrt::Microsoft::UI::Xaml::Markup::IXamlType GetXamlType(
         winrt::hstring const& fullName)
     {
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        if ( auto result = m_provider.GetXamlType(fullName) )
+            return result;
+        return m_toolkit ? m_toolkit->GetXamlType(fullName) : nullptr;
+#else
         return m_provider.GetXamlType(fullName);
+#endif
     }
 
     winrt::com_array<winrt::Microsoft::UI::Xaml::Markup::XmlnsDefinition>
     GetXmlnsDefinitions()
     {
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        const auto base = m_provider.GetXmlnsDefinitions();
+        std::vector<winrt::Microsoft::UI::Xaml::Markup::XmlnsDefinition>
+            entries(base.begin(), base.end());
+        if ( m_toolkit )
+            m_toolkit->AppendXmlnsDefinitions(entries);
+        return winrt::com_array<
+            winrt::Microsoft::UI::Xaml::Markup::XmlnsDefinition>(
+                entries.begin(), entries.end());
+#else
         return m_provider.GetXmlnsDefinitions();
+#endif
     }
 
 private:
     winrt::Microsoft::UI::Xaml::XamlTypeInfo::XamlControlsXamlMetaDataProvider
         m_provider;
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+    wxWinUIToolkitProbe::State* m_toolkit;
+#endif
 };
 
 LRESULT CALLBACK SmokeWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -2999,6 +3038,7 @@ int main(int argc, char **argv)
 {
     bool oleDropProbe = false;
     bool oleDropDeliveryProbe = false;
+    bool toolkitActivationProbe = false;
     if ( argc == 2 && std::strcmp(argv[1], "--ole-drop-probe") == 0 )
     {
         oleDropProbe = true;
@@ -3009,12 +3049,18 @@ int main(int argc, char **argv)
     {
         oleDropDeliveryProbe = true;
     }
+    else if ( argc == 2 &&
+              std::strcmp(argv[1], "--toolkit-activation-probe") == 0 )
+    {
+        toolkitActivationProbe = true;
+    }
     else if ( argc != 1 )
     {
         std::fprintf(
             stderr,
             "wx_winui_runtime_smoke: usage: wx_winui_runtime_smoke "
-            "[--ole-drop-probe|--ole-drop-delivery-probe]\n"
+            "[--ole-drop-probe|--ole-drop-delivery-probe|"
+            "--toolkit-activation-probe]\n"
             "  --ole-drop-delivery-probe moves the physical cursor by a "
             "bounded amount and is disabled unless\n"
             "  %s=%s\n",
@@ -3022,6 +3068,17 @@ int main(int argc, char **argv)
             PhysicalProbeArmValue);
         return 8;
     }
+
+#ifndef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+    if ( toolkitActivationProbe )
+    {
+        std::fprintf(stderr,
+            "wx_winui_toolkit_probe: NOT BUILT: enable "
+            "wxWINUI3_BUILD_TOOLKIT_PROBE and build the separate "
+            "wx_winui_toolkit_activation_probe target.\n");
+        return 22;
+    }
+#endif
 
     if ( oleDropDeliveryProbe && !IsPhysicalProbeArmed() )
     {
@@ -3035,7 +3092,8 @@ int main(int argc, char **argv)
     // original, wider budget.
     const DWORD watchdogTimeoutMs = oleDropDeliveryProbe
                                         ? 120000
-                                        : (oleDropProbe ? 55000 : 25000);
+                                        : ((oleDropProbe || toolkitActivationProbe)
+                                            ? 55000 : 25000);
     std::thread([watchdogTimeoutMs]()
     {
         ::Sleep(watchdogTimeoutMs);
@@ -3124,7 +3182,16 @@ int main(int argc, char **argv)
         // Application first, XAML manager second: same ordering constraint
         // as wxWinUI3Initialize().
         ReportStage("creating application object");
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        std::unique_ptr<wxWinUIToolkitProbe::State> toolkit;
+        int toolkitResult = 0;
+        if ( toolkitActivationProbe )
+            toolkit = std::make_unique<wxWinUIToolkitProbe::State>();
+        auto application =
+            winrt::make<SmokeApplication>(toolkit.get()).as<Application>();
+#else
         auto application = winrt::make<SmokeApplication>().as<Application>();
+#endif
 
         ReportStage("initializing XAML manager");
         auto xamlManager = WindowsXamlManager::InitializeForCurrentThread();
@@ -3135,6 +3202,21 @@ int main(int argc, char **argv)
             ::MddBootstrapShutdown();
             return 6;
         }
+
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        if ( toolkit )
+        {
+            ReportStage("probing native Toolkit DLL activation and metadata");
+            try
+            {
+                toolkit->Initialize();
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                toolkitResult = FailWinRT(22, "Toolkit activation/provider", e);
+            }
+        }
+#endif
 
         ReportStage("loading XamlControlsResources");
         try
@@ -3208,6 +3290,21 @@ int main(int argc, char **argv)
         tabs.TabItems().Append(tab);
         panel.Children().Append(tabs);
 
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        if ( toolkit && toolkitResult == 0 )
+        {
+            ReportStage("creating native Toolkit Ribbon and DataTable peers");
+            try
+            {
+                toolkit->Attach(panel);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                toolkitResult = FailWinRT(22, "Toolkit native peers", e);
+            }
+        }
+#endif
+
         source.Content(panel);
 
         const bool loaded = PumpUntil(
@@ -3254,6 +3351,27 @@ int main(int argc, char **argv)
                 tabs.DesiredSize().Width, tabs.DesiredSize().Height);
             rc = 0;
         }
+
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        if ( toolkit && toolkit->HasPeers() )
+        {
+            ReportStage("verifying native Toolkit Loaded templates and geometry");
+            try
+            {
+                const bool toolkitLoaded = PumpUntil(
+                    [&]() { return toolkit->IsLoaded(); }, 15000);
+                panel.UpdateLayout();
+                if ( !toolkit->VerifyPresentation() || !toolkitLoaded )
+                    toolkitResult = 22;
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                toolkitResult = FailWinRT(22, "Toolkit presentation", e);
+            }
+        }
+        if ( toolkitResult != 0 && rc == 0 )
+            rc = toolkitResult;
+#endif
 
         if ( rc == 0 && oleDropProbe )
         {
@@ -3711,6 +3829,19 @@ int main(int argc, char **argv)
                 rc = 21;
         }
         ReportStage("shutdown complete");
+#ifdef WX_WINUI_TOOLKIT_ACTIVATION_PROBE
+        if ( toolkit )
+        {
+            std::printf(
+                "wx_winui_toolkit_probe: {\"event\":\"summary\","
+                "\"result\":\"%s\",\"shutdown_passed\":%s,"
+                "\"scope\":\"direct-cpp-consumption\",\"metadata_complete\":%s,"
+                "\"production_adopted\":false,\"exit_code\":%d}\n",
+                rc == 0 ? "passed" : "failed",
+                shutdownPassed ? "true" : "false",
+                toolkit->MetadataComplete() ? "true" : "false", rc);
+        }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {

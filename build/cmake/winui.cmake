@@ -261,8 +261,26 @@ endfunction()
 
 function(wx_winui3_find_nuget_package out_var package version marker expected_sha256)
     wx_winui3_validate_package_token("${package}" "NuGet package name")
-    wx_winui3_validate_package_version("${version}"
-        "NuGet package version for ${package}")
+    if(ARGC EQUAL 5)
+        wx_winui3_validate_package_version("${version}"
+            "NuGet package version for ${package}")
+    elseif(ARGC EQUAL 6 AND "${ARGV5}" STREQUAL "PROBE_TOOLKIT_ALPHA")
+        # A deliberately closed exception for the standalone opt-in probe.
+        # Ordinary runtime packages still use the unchanged numeric validator.
+        set(probe_packages
+            XamlToolkit.Labs.WinUI.Native XamlToolkit.WinUI.Native
+            XamlToolkit.WinUI.Converters.Native XamlToolkit.WinUI.Controls.Native
+            XamlToolkit.WinUI.Helpers.Native XamlToolkit.WinUI.Animations.Native
+            XamlToolkit.WinUI.Interactivity.Native)
+        list(FIND probe_packages "${package}" probe_package_index)
+        if(NOT wxWINUI3_BUILD_TOOLKIT_PROBE OR
+                NOT "${version}" STREQUAL "0.8.0-alpha" OR
+                probe_package_index EQUAL -1)
+            message(FATAL_ERROR "wxWinUI: invalid experimental Toolkit package request")
+        endif()
+    else()
+        message(FATAL_ERROR "wxWinUI: unknown NuGet package retrieval arguments: ${ARGN}")
+    endif()
     if(IS_ABSOLUTE "${marker}" OR
             "${marker}" MATCHES "(^|[/\\\\])\\.\\.([/\\\\]|$)")
         message(FATAL_ERROR
@@ -1628,6 +1646,10 @@ if(NOT wxBUILD_TESTS STREQUAL "OFF")
         COMMAND wx_winui_runtime_smoke --ole-drop-probe
         WORKING_DIRECTORY "${wxBINARY_DIR}/winui/runtime-smoke")
     set_tests_properties(wx_winui_ole_drop_probe PROPERTIES TIMEOUT 60)
+
+    # Separate opt-in dependency experiment; never changes wxcore's projection
+    # or the payload deployed to normal samples and tests.
+    include("${wxSOURCE_DIR}/build/cmake/winui-toolkit-probe.cmake")
 
     # Offline self-tests of the configure-time machinery above (they load
     # this file with wxWINUI3_SELFTEST_FUNCTIONS_ONLY).
