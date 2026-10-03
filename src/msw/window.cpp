@@ -7769,8 +7769,8 @@ bool wxIsIMEOpen(const wxWindow* win)
 
 } // anonymous namespace
 
-// Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
-// in active frames and dialogs, regardless of where the focus is.
+// Windows keyboard hook. Allows interception of keys in active frames and
+// dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
 
 static bool
@@ -7781,12 +7781,14 @@ wxSendCharHookEvent(WXWPARAM wParam,
 LRESULT APIENTRY
 wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 {
+    // We specifically exclude Esc here to avoid handling it too early, see
+    // wxMSWHandleEscapeKey() below for details.
     DWORD hiWord = HIWORD(lParam);
-    if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
+    if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) && wParam != VK_ESCAPE )
     {
-        // Don't intercept keyboard entry (notably Escape) if a modal window
-        // (not managed by wx, e.g. IME one) is currently opened as more often
-        // than not it needs all the keys for itself.
+        // Don't intercept keyboard entry if a modal window (not managed by wx,
+        // e.g. IME one) is currently opened as more often than not it needs
+        // all the keys for itself.
         //
         // Also don't catch it if a window currently captures the mouse as
         // Escape is normally used to release the mouse capture and if you
@@ -7866,6 +7868,41 @@ wxSendCharHookEvent(WXWPARAM wParam, WXLPARAM lParam, const wxWindow** out)
     }
 
     return false;
+}
+
+// This function is called by wxGUIEventLoop::PreProcessMessage() to generate
+// wxEVT_CHAR_HOOK for Escape. Unlike for the other keys, we can't do it from
+// wxKeyboardHook() above because it is called too early, before the IME or the
+// focused control get a chance to handle this key, and they often need it,
+// e.g. to cancel the IME composition or to close the auto-completion popup.
+//
+// Returns true if the message was handled and must not be processed further.
+bool wxMSWHandleEscapeKey(WXMSG* msg)
+{
+    if ( msg->message != WM_KEYDOWN || msg->wParam != VK_ESCAPE )
+        return false;
+
+    // See the comments in wxKeyboardHook() explaining these checks.
+    if ( gs_modalEntryWindowCount || ::GetCapture() )
+        return false;
+
+    if ( const HWND hwndFocus = ::GetFocus() )
+    {
+        // Multiline EDIT controls or wxWindow with wxWANTS_CHARS style, always
+        // ask for all keys, but this shouldn't prevent Escape from closing the
+        // dialog containing them, so only take these flags into account if
+        // they're returned specifically for this message, as it's done by the
+        // windows which need Escape only temporarily, e.g. the edit control
+        // using auto-completion while its drop down is shown.
+        const LRESULT codeAny = ::SendMessage(hwndFocus, WM_GETDLGCODE, 0, 0);
+        const LRESULT codeEsc = ::SendMessage(hwndFocus, WM_GETDLGCODE,
+                                              msg->wParam, (LPARAM)msg);
+
+        if ( (codeEsc & ~codeAny) & (DLGC_WANTALLKEYS | DLGC_WANTMESSAGE) )
+            return false;
+    }
+
+    return wxSendCharHookEvent(msg->wParam, msg->lParam);
 }
 
 void wxSetKeyboardHook(bool doIt)
