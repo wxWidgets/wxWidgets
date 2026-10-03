@@ -46,7 +46,8 @@ public:
     wxAccStatus GetChildCount(int* childCount) override
     {
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         *childCount = static_cast<int>(bar->GetPageCount())
                     + static_cast<int>(bar->GetFocusableBarButtons().size());
@@ -62,7 +63,8 @@ public:
         }
 
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
             return wxWindowAccessible::GetChild(childId, child);
@@ -74,7 +76,8 @@ public:
     wxAccStatus GetRole(int childId, wxAccRole* role) override
     {
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -92,7 +95,8 @@ public:
     wxAccStatus GetState(int childId, long* state) override
     {
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -130,7 +134,8 @@ public:
             return wxWindowAccessible::GetName(childId, name);
 
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
             return wxACC_NOT_IMPLEMENTED;
@@ -148,7 +153,8 @@ public:
             return wxWindowAccessible::GetLocation(rect, elementId);
 
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( elementId >= 0 && elementId <= static_cast<int>(bar->GetPageCount()) )
             return wxWindowAccessible::GetLocation(rect, elementId);
@@ -162,7 +168,8 @@ public:
     wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
     {
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
             return wxACC_NOT_IMPLEMENTED;
@@ -174,7 +181,8 @@ public:
     wxAccStatus DoDefaultAction(int childId) override
     {
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
             return wxACC_NOT_IMPLEMENTED;
@@ -189,7 +197,8 @@ public:
     wxAccStatus GetFocus(int* childId, wxAccessible** child) override
     {
         wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( !bar->HasFocus() )
         {

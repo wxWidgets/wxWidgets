@@ -1523,7 +1523,8 @@ public:
     wxAccStatus GetChildCount(int* childCount) override
     {
         wxRibbonToolBar* bar = wxDynamicCast(GetWindow(), wxRibbonToolBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         *childCount = static_cast<int>(bar->GetToolCount());
         return wxACC_OK;
@@ -1562,7 +1563,8 @@ public:
     wxAccStatus GetState(int childId, long* state) override
     {
         wxRibbonToolBar* bar = wxDynamicCast(GetWindow(), wxRibbonToolBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -1619,7 +1621,9 @@ public:
             return wxWindowAccessible::GetLocation(rect, elementId);
 
         wxRibbonToolBar* bar = wxDynamicCast(GetWindow(), wxRibbonToolBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
         wxRibbonToolBarToolBase* tool = GetTool(elementId);
         if ( tool == nullptr )
             return wxACC_NOT_IMPLEMENTED; // A separator isn't clickable.
@@ -1641,7 +1645,9 @@ public:
     wxAccStatus DoDefaultAction(int childId) override
     {
         wxRibbonToolBar* bar = wxDynamicCast(GetWindow(), wxRibbonToolBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
         wxRibbonToolBarToolBase* tool = GetTool(childId);
         if ( tool == nullptr )
             return wxACC_NOT_IMPLEMENTED;
@@ -1653,7 +1659,8 @@ public:
     wxAccStatus GetFocus(int* childId, wxAccessible** child) override
     {
         wxRibbonToolBar* bar = wxDynamicCast(GetWindow(), wxRibbonToolBar);
-        wxCHECK(bar, wxACC_FAIL);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
 
         const int pos = bar->m_focused_tool
             ? bar->GetToolPos(bar->m_focused_tool->id) : wxNOT_FOUND;
@@ -1677,7 +1684,8 @@ private:
             return nullptr;
 
         wxRibbonToolBar* bar = wxDynamicCast(GetWindow(), wxRibbonToolBar);
-        wxCHECK(bar, nullptr);
+        if ( bar == nullptr )
+            return nullptr;
 
         return bar->GetToolByPos(static_cast<size_t>(childId - 1));
     }

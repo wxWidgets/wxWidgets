@@ -1184,7 +1184,8 @@ public:
     wxAccStatus GetChildCount(int* childCount) override
     {
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         *childCount = static_cast<int>(gallery->GetCount()) + (HasExtensionButton(gallery) ? 1 : 0);
         return wxACC_OK;
@@ -1205,7 +1206,8 @@ public:
         }
 
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         *role = static_cast<unsigned>(childId) <= gallery->GetCount()
             ? wxROLE_SYSTEM_LISTITEM : wxROLE_SYSTEM_PUSHBUTTON;
@@ -1215,7 +1217,8 @@ public:
     wxAccStatus GetState(int childId, long* state) override
     {
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -1264,7 +1267,8 @@ public:
             return wxWindowAccessible::GetName(childId, name);
 
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
         {
@@ -1289,7 +1293,8 @@ public:
             return wxWindowAccessible::GetLocation(rect, elementId);
 
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         if ( elementId >= 0 && static_cast<unsigned>(elementId) <= gallery->GetCount() )
         {
@@ -1319,7 +1324,8 @@ public:
     wxAccStatus DoDefaultAction(int childId) override
     {
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
             return wxACC_NOT_IMPLEMENTED;
@@ -1334,7 +1340,8 @@ public:
     wxAccStatus GetFocus(int* childId, wxAccessible** child) override
     {
         wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
-        wxCHECK(gallery, wxACC_FAIL);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
 
         const int index = gallery->DoGetFocusedItemIndex();
         if ( gallery->m_extension_focused )

@@ -1319,7 +1319,8 @@ public:
     wxAccStatus GetChildCount(int* childCount) override
     {
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         *childCount = static_cast<int>(panel->GetChildren().GetCount())
                     + (panel->HasExtButton() ? 1 : 0);
@@ -1335,7 +1336,8 @@ public:
         }
 
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && childId <= static_cast<int>(panel->GetChildren().GetCount()) )
             return wxWindowAccessible::GetChild(childId, child);
@@ -1347,7 +1349,8 @@ public:
     wxAccStatus GetRole(int childId, wxAccRole* role) override
     {
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -1366,7 +1369,8 @@ public:
     wxAccStatus GetState(int childId, long* state) override
     {
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         long st{ 0 };
         if ( !panel->IsEnabled() )
@@ -1407,7 +1411,8 @@ public:
             return wxWindowAccessible::GetName(childId, name);
 
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( childId >= 0 && childId <= static_cast<int>(panel->GetChildren().GetCount()) )
             return wxACC_NOT_IMPLEMENTED;
@@ -1424,7 +1429,8 @@ public:
             return wxWindowAccessible::GetLocation(rect, elementId);
 
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( elementId >= 0 && elementId <= static_cast<int>(panel->GetChildren().GetCount()) )
             return wxWindowAccessible::GetLocation(rect, elementId);
@@ -1437,7 +1443,8 @@ public:
     wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
     {
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -1457,7 +1464,8 @@ public:
     wxAccStatus DoDefaultAction(int childId) override
     {
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( childId == wxACC_SELF )
         {
@@ -1477,7 +1485,8 @@ public:
     wxAccStatus GetFocus(int* childId, wxAccessible** child) override
     {
         wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
-        wxCHECK(panel, wxACC_FAIL);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
 
         if ( panel->m_item_focused )
         {
