@@ -588,41 +588,22 @@ private:
                 if ( m_win->HasFlag(wxTE_PROCESS_TAB) )
                     specialKey = true;
                 break;
-
-            case WXK_ESCAPE:
-                specialKey = true;
-                break;
         }
 
         if ( specialKey )
         {
-            // Check if the drop down is currently open.
+            // Check if the drop down is currently open: if it is, it handles
+            // these keys itself.
             DWORD dwFlags = 0;
-            if ( SUCCEEDED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
-                                                                     nullptr))
-                    && dwFlags == ACDD_VISIBLE )
+            if ( FAILED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
+                                                                  nullptr))
+                    || dwFlags != ACDD_VISIBLE )
             {
-                if ( event.GetKeyCode() == WXK_ESCAPE )
-                {
-                    // We need to dismiss the drop-down manually as Escape
-                    // could be eaten by something else (e.g. EVT_CHAR_HOOK in
-                    // the dialog that this control is found in) otherwise.
-                    ::SendMessage(GetHwndOf(m_win), WM_KEYDOWN, WXK_ESCAPE, 0);
-
-                    // Do not skip the event in this case, we've already handled it.
-                    return;
-                }
-            }
-            else // Drop down is not open.
-            {
-                // In this case we need to handle Return and Tab as both of
+                // But if it isn't, we need to handle Return and Tab as both of
                 // them are simply eaten by the auto completer and never reach
                 // us at all otherwise.
-                if ( event.GetKeyCode() != WXK_ESCAPE )
-                {
-                    m_entry->MSWProcessSpecialKey(event);
-                    return;
-                }
+                m_entry->MSWProcessSpecialKey(event);
+                return;
             }
         }
 
