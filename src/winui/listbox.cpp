@@ -4110,6 +4110,13 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
             }
 
             checkBox = bindingIt->second.checkBox;
+            // The standalone CheckBox theme imposes a 120x32 DIP minimum.
+            // A list row owns its dimensions instead: in particular an
+            // owner-drawn check margin can be much narrower and shorter.
+            // Let the retained peer fit that area instead of arranging its
+            // input surface outside the row's clipping bounds.
+            checkBox.MinWidth(0.0);
+            checkBox.MinHeight(0.0);
             wxWinUIApplyFont(checkBox, GetFont());
         }
 
@@ -5050,24 +5057,18 @@ bool wxWinUIListBoxTestAccess::SetPeerCheck(wxListBox &control, unsigned int n,
 #endif // WXWINUI_TEST_SUPPORT
 
 #ifdef WXWINUI_TEST_SUPPORT
-bool wxWinUIListBoxTestAccess::ActivatePeerCheck(wxListBox &control,
-                                                 unsigned int n, bool *focused,
-                                                 bool *pointerTarget)
+bool wxWinUIListBoxTestAccess::GetCheckPeerPresentation(
+    const wxListBox& control, unsigned int n, CheckPeerMetrics& metrics)
 {
-    wxListBox *const self = &control;
-    if ( focused )
-        *focused = false;
-    if ( pointerTarget )
-        *pointerTarget = false;
-    if ( !self->m_winui || !self->m_winui->callbackState ||
+    const wxListBox *const self = &control;
+    metrics = CheckPeerMetrics{};
+    if ( !self->m_winui || !self->m_winui->listView ||
          n >= self->m_itemModel.GetCount() )
     {
         return false;
     }
 
     wxWinUIListBoxImpl *const implementation = self->m_winui.get();
-    const std::shared_ptr<wxWinUIListBoxCallbackState> callbackState =
-        implementation->callbackState;
     const auto it =
         implementation->checkBindings.find(self->m_itemModel.At(n).id);
     if ( it == implementation->checkBindings.end() ||
@@ -5083,6 +5084,17 @@ bool wxWinUIListBoxTestAccess::ActivatePeerCheck(wxListBox &control,
         // island pointer routing without relying on physical SendInput.
         const MUXC::CheckBox checkBox = it->second.checkBox;
         bool isPointerTarget = false;
+        metrics.widthDips = checkBox.ActualWidth();
+        metrics.heightDips = checkBox.ActualHeight();
+        metrics.minWidthDips = checkBox.MinWidth();
+        metrics.minHeightDips = checkBox.MinHeight();
+        const auto items = implementation->listView.Items();
+        if ( n >= items.Size() )
+            return false;
+        const auto item = items.GetAt(n).try_as<MUXC::ListViewItem>();
+        if ( !item )
+            return false;
+        metrics.rowHeightDips = item.ActualHeight();
         if ( checkBox.Visibility() == MUX::Visibility::Visible &&
              checkBox.IsHitTestVisible() && checkBox.IsEnabled() &&
              checkBox.ActualWidth() > 0.0 &&
@@ -5124,9 +5136,50 @@ bool wxWinUIListBoxTestAccess::ActivatePeerCheck(wxListBox &control,
                 }
             }
         }
+        metrics.pointerTarget = isPointerTarget;
+        return true;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI CheckListBox peer observation test", e);
+        return false;
+    }
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::ActivatePeerCheck(wxListBox &control,
+                                                 unsigned int n, bool *focused,
+                                                 bool *pointerTarget)
+{
+    wxListBox *const self = &control;
+    if ( focused )
+        *focused = false;
+    if ( pointerTarget )
+        *pointerTarget = false;
+    if ( !self->m_winui || !self->m_winui->callbackState ||
+         n >= self->m_itemModel.GetCount() )
+    {
+        return false;
+    }
+
+    wxWinUIListBoxImpl *const implementation = self->m_winui.get();
+    const std::shared_ptr<wxWinUIListBoxCallbackState> callbackState =
+        implementation->callbackState;
+    const auto it =
+        implementation->checkBindings.find(self->m_itemModel.At(n).id);
+    if ( it == implementation->checkBindings.end() || !it->second.checkBox )
+        return false;
+
+    try
+    {
+        const MUXC::CheckBox checkBox = it->second.checkBox;
+        CheckPeerMetrics metrics;
+        if ( !GetCheckPeerPresentation(control, n, metrics) )
+            return false;
         if ( pointerTarget )
-            *pointerTarget = isPointerTarget;
-        if ( !isPointerTarget )
+            *pointerTarget = metrics.pointerTarget;
+        if ( !metrics.pointerTarget )
             return false;
 
         // A pointer entering a shared island first focuses its wx slot, then

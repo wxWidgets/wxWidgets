@@ -1555,6 +1555,22 @@ TEST_CASE("wxWinUI CheckListBox redraws owner bitmap before one toggle event",
         return list.GetItemRect(0, rect);
     }, 2000));
 
+    // An arranged ListViewItem can precede the end of its native entrance
+    // transition. Observe the actual CheckBox hit target without focusing or
+    // toggling it, then exercise the unchanged activation/event contract.
+    wxWinUIListBoxTestAccess::CheckPeerMetrics checkMetrics;
+    REQUIRE(WaitFor("WinUI checklist input presentation", [&]()
+    {
+        return wxWinUIListBoxTestAccess::GetCheckPeerPresentation(
+                   list, 0, checkMetrics) && checkMetrics.pointerTarget;
+    }, 2000));
+    CHECK(checkMetrics.minWidthDips == 0.0);
+    CHECK(checkMetrics.minHeightDips == 0.0);
+    CHECK(checkMetrics.widthDips > 0.0);
+    CHECK(checkMetrics.heightDips > 0.0);
+    CHECK(checkMetrics.heightDips <= checkMetrics.rowHeightDips);
+    CHECK(events == 0);
+    CHECK_FALSE(list.IsChecked(0));
     bool peerFocused = false;
     bool peerPointerTarget = false;
     REQUIRE(wxWinUIListBoxTestAccess::ActivatePeerCheck(list, 0, &peerFocused,
@@ -1621,6 +1637,18 @@ TEST_CASE("wxWinUI CheckListBox restores focus after owner projection rebuild",
         return list.GetItemRect(0, rect);
     }, 2000));
 
+    wxWinUIListBoxTestAccess::CheckPeerMetrics checkMetrics;
+    REQUIRE(WaitFor("WinUI direct checklist input presentation", [&]()
+    {
+        return wxWinUIListBoxTestAccess::GetCheckPeerPresentation(
+                   list, 0, checkMetrics) && checkMetrics.pointerTarget;
+    }, 2000));
+    CHECK(checkMetrics.minWidthDips == 0.0);
+    CHECK(checkMetrics.minHeightDips == 0.0);
+    CHECK(checkMetrics.widthDips > 0.0);
+    CHECK(checkMetrics.heightDips > 0.0);
+    CHECK(checkMetrics.heightDips <= checkMetrics.rowHeightDips);
+    CHECK_FALSE(list.IsChecked(0));
     bool peerFocused = false;
     bool peerPointerTarget = false;
     REQUIRE(wxWinUIListBoxTestAccess::ActivatePeerCheck(list, 0, &peerFocused,

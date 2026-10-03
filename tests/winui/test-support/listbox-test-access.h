@@ -16,6 +16,15 @@
 class WXDLLIMPEXP_CORE wxWinUIListBoxTestAccess final
 {
   public:
+    struct CheckPeerMetrics
+    {
+        double widthDips = 0.0;
+        double heightDips = 0.0;
+        double minWidthDips = 0.0;
+        double minHeightDips = 0.0;
+        double rowHeightDips = 0.0;
+        bool pointerTarget = false;
+    };
     struct ScrollMetrics
     {
         bool hasItemsPanelRoot = false;
@@ -61,6 +70,9 @@ class WXDLLIMPEXP_CORE wxWinUIListBoxTestAccess final
     static bool FocusPeerItem(wxListBox &control, unsigned int n);
     static bool DoubleTapPeer(wxListBox &control, unsigned int n);
     static bool SetPeerCheck(wxListBox &control, unsigned int n, bool check);
+    static bool GetCheckPeerPresentation(const wxListBox &control,
+                                         unsigned int n,
+                                         CheckPeerMetrics& metrics);
     static bool ActivatePeerCheck(wxListBox &control, unsigned int n,
                                   bool *focused = nullptr,
                                   bool *pointerTarget = nullptr);
