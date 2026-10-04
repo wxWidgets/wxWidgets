@@ -169,6 +169,10 @@ Changes in behaviour not resulting in compilation errors
   in progress, if any. Call SetIMEInteraction(wxSTC_IME_WINDOWED) to restore
   the previous behaviour if necessary.
 
+- Generic wxListCtrl (used in wxGTK and wxOSX) CheckItem() now only sends
+  wxEVT_LIST_ITEM_[UN]CHECKED events when the state really changed, for
+  consistency with wxMSW.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

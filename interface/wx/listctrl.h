@@ -1433,6 +1433,11 @@ public:
         @c EVT_LIST_ITEM_CHECKED and @c EVT_LIST_ITEM_UNCHECKED events. See
         OnGetItemIsChecked() for information on how to update the checkbox state.
 
+        For a non-virtual control, @c EVT_LIST_ITEM_CHECKED or @c
+        EVT_LIST_ITEM_UNCHECKED event is generated only if the state of the
+        item actually changes (i.e. nothing happens if @a check is the same as
+        the value returned by IsItemChecked()).
+
         @param item Item (zero-based) index.
         @param check If @true, check the item, otherwise uncheck.
 
