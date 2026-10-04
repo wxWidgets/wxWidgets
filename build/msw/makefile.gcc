@@ -1670,6 +1670,8 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_art_msw.o \
 	$(OBJS)\ribbondll_art_aui.o \
 	$(OBJS)\ribbondll_art_msw_flat.o \
+	$(OBJS)\ribbondll_backstage.o \
+	$(OBJS)\ribbondll_backstagecontrols.o \
 	$(OBJS)\ribbondll_bar.o \
 	$(OBJS)\ribbondll_buttonbar.o \
 	$(OBJS)\ribbondll_control.o \
@@ -1692,6 +1694,8 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_art_msw.o \
 	$(OBJS)\ribbonlib_art_aui.o \
 	$(OBJS)\ribbonlib_art_msw_flat.o \
+	$(OBJS)\ribbonlib_backstage.o \
+	$(OBJS)\ribbonlib_backstagecontrols.o \
 	$(OBJS)\ribbonlib_bar.o \
 	$(OBJS)\ribbonlib_buttonbar.o \
 	$(OBJS)\ribbonlib_control.o \
@@ -2058,6 +2062,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_art_msw.o \
 	$(OBJS)\monodll_art_aui.o \
 	$(OBJS)\monodll_art_msw_flat.o \
+	$(OBJS)\monodll_backstage.o \
+	$(OBJS)\monodll_backstagecontrols.o \
 	$(OBJS)\monodll_bar.o \
 	$(OBJS)\monodll_ribbon_buttonbar.o \
 	$(OBJS)\monodll_ribbon_control.o \
@@ -2930,6 +2936,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_art_msw.o \
 	$(OBJS)\monolib_art_aui.o \
 	$(OBJS)\monolib_art_msw_flat.o \
+	$(OBJS)\monolib_backstage.o \
+	$(OBJS)\monolib_backstagecontrols.o \
 	$(OBJS)\monolib_bar.o \
 	$(OBJS)\monolib_ribbon_buttonbar.o \
 	$(OBJS)\monolib_ribbon_control.o \
@@ -8905,6 +8913,12 @@ $(OBJS)\monodll_art_aui.o: ../../src/ribbon/art_aui.cpp
 $(OBJS)\monodll_art_msw_flat.o: ../../src/ribbon/art_msw_flat.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_backstage.o: ../../src/ribbon/backstage.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_backstagecontrols.o: ../../src/ribbon/backstagecontrols.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_bar.o: ../../src/ribbon/bar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11536,6 +11550,12 @@ $(OBJS)\monolib_art_aui.o: ../../src/ribbon/art_aui.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_art_msw_flat.o: ../../src/ribbon/art_msw_flat.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_backstage.o: ../../src/ribbon/backstage.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_backstagecontrols.o: ../../src/ribbon/backstagecontrols.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_bar.o: ../../src/ribbon/bar.cpp
@@ -18231,6 +18251,12 @@ $(OBJS)\ribbondll_art_aui.o: ../../src/ribbon/art_aui.cpp
 $(OBJS)\ribbondll_art_msw_flat.o: ../../src/ribbon/art_msw_flat.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\ribbondll_backstage.o: ../../src/ribbon/backstage.cpp
+	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\ribbondll_backstagecontrols.o: ../../src/ribbon/backstagecontrols.cpp
+	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\ribbondll_bar.o: ../../src/ribbon/bar.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -18268,6 +18294,12 @@ $(OBJS)\ribbonlib_art_aui.o: ../../src/ribbon/art_aui.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_art_msw_flat.o: ../../src/ribbon/art_msw_flat.cpp
+	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\ribbonlib_backstage.o: ../../src/ribbon/backstage.cpp
+	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\ribbonlib_backstagecontrols.o: ../../src/ribbon/backstagecontrols.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_bar.o: ../../src/ribbon/bar.cpp
