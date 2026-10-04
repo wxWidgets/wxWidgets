@@ -32,8 +32,27 @@
 #include "wx/collheaderctrl.h"
 
 // ----------------------------------------------------------------------------
-// constants
+// local classes
 // ----------------------------------------------------------------------------
+
+namespace
+{
+
+// The pane window is just a container for the user-defined controls and
+// shouldn't get focus itself, notably when it's completely empty.
+class wxCollapsiblePanePanel : public wxPanel
+{
+public:
+    explicit wxCollapsiblePanePanel(wxWindow* parent)
+        : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                  wxTAB_TRAVERSAL | wxNO_BORDER,
+                  wxS("wxCollapsiblePanePanel"))
+    {
+        m_container.DisableSelfFocus();
+    }
+};
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -89,8 +108,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 #endif
 
     // do not set sz as our sizers since we handle the pane window without using sizers
-    m_pPane = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                          wxTAB_TRAVERSAL|wxNO_BORDER, wxT("wxCollapsiblePanePane") );
+    m_pPane = new wxCollapsiblePanePanel(this);
 
     // start as collapsed:
     m_pPane->Hide();
