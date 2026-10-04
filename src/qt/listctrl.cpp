@@ -727,14 +727,14 @@ public:
 
     bool IsItemChecked(long item) const
     {
-        wxCHECK_MSG(item >= 0 && item <= wxSsize(m_rows), false, "Invalid row");
+        wxCHECK_MSG(item >= 0 && item < wxSsize(m_rows), false, "Invalid row");
 
         return m_rows[item].m_checked;
     }
 
     void CheckItem(long item, bool check)
     {
-        wxCHECK_RET(item >= 0 && item <= wxSsize(m_rows), "Invalid row");
+        wxCHECK_RET(item >= 0 && item < wxSsize(m_rows), "Invalid row");
 
         // Don't send any events if nothing changes, for consistency with
         // wxMSW, where the native control doesn't send them in this case.
