@@ -641,7 +641,9 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 wxBitmap bmp(bmpOrig);
                 wxMemoryDC dc(bmp);
-
+                 // We need to set the layout direction of the DC to match the window's layout direction,
+                 //otherwise the grip will be drawn in the wrong corner in RTL.
+                dc.SetLayoutDirection(this->GetLayoutDirection());
                 // Note that we must _not_ open theme data for this window: it
                 // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
                 // correctly (which is why we have to draw it ourselves).
@@ -654,8 +656,6 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
 
                 // Draw the grip in the lower right corner of the window.
-                //
-                // TODO-RTL: This is incorrect for RTL layout.
                 wxRect rect(sizeGrip);
                 rect.x = rectTotal.width - sizeGrip.x;
                 rect.y = rectTotal.height - sizeGrip.y;
