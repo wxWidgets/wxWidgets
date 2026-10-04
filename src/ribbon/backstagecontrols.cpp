@@ -110,7 +110,7 @@ wxBackstageButton::wxBackstageButton(wxWindow* parent, wxWindowID id, const wxSt
     const wxBitmapBundle& icon /*= wxBitmapBundle{}*/,
     const wxBackstageButtonStyle style /*= wxBackstageButtonStyle::wxBackstageButtonTile*/,
     wxString description /*= wxString{}*/)
-    : wxControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE,
+    : wxControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxWANTS_CHARS,
         wxDefaultValidator, "wxBackstageButton"),
     m_icon(icon), m_description(std::move(description)), m_style(style)
 {
@@ -440,6 +440,11 @@ void wxBackstageButton::OnKeyDown(wxKeyEvent& event)
         {
             Activate();
         }
+    }
+    else if ( event.GetKeyCode() == WXK_TAB )
+    {
+        Navigate(event.ShiftDown() ?
+            wxNavigationKeyEvent::IsBackward : wxNavigationKeyEvent::IsForward);
     }
     else
     {
