@@ -641,7 +641,7 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 wxBitmap bmp(bmpOrig);
                 wxMemoryDC dc(bmp);
-                 // We need to set the layout direction of the DC to match the window's layout direction, 
+                 // We need to set the layout direction of the DC to match the window's layout direction,
                  //otherwise the grip will be drawn in the wrong corner in RTL.
                 dc.SetLayoutDirection(this->GetLayoutDirection());
                 // Note that we must _not_ open theme data for this window: it
