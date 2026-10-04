@@ -36,6 +36,9 @@ assigned IDs discussed above and should @e not have values 0 or 1, that can
 result in surprising behaviour under some platforms. Finally, you also need to
 avoid defining IDs in the range from ::wxID_LOWEST to ::wxID_HIGHEST which is
 reserved for wxWidgets-defined IDs, see ::wxStandardID for more details.
+Under wxMSW, the IDs must also not be greater than 32767, as Windows stores
+them as 16-bit values and so greater IDs become negative and can clash with the
+automatically assigned ones.
 
 To avoid all these restrictions, it is best to avoid using hard-coded IDs at
 all, they are not needed when using wxEvtHandler::Bind() for event handling
