@@ -706,14 +706,6 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
 {
     wxWindow* const parent = m_window;
 
-    // Ensure that the window doesn't need a redraw before starting this test:
-    // it could need one if some other window overlapping it created by a
-    // previously running test was destroyed but this window was not repainted
-    // after that yet. Without this, child1 could still get repainted even if
-    // we don't refresh it and this is exactly what happened under Mac.
-    parent->Refresh();
-    WaitForPaint waitForPaint(parent);
-
     wxWindow* const child1 = new wxWindow(parent, wxID_ANY, wxPoint(10, 20), wxSize(80, 50));
     wxWindow* const child2 = new wxWindow(parent, wxID_ANY, wxPoint(110, 20), wxSize(80, 50));
     wxWindow* const child3 = new wxWindow(parent, wxID_ANY, wxPoint(210, 20), wxSize(80, 50));
@@ -729,10 +721,10 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
     // Notice that using EventCounter here will give incorrect results,
     // so we have to bind each window to a distinct event handler instead.
 
-    bool isParentPainted;
-    bool isChild1Painted;
-    bool isChild2Painted;
-    bool isChild3Painted;
+    bool isParentPainted = false;
+    bool isChild1Painted = false;
+    bool isChild2Painted = false;
+    bool isChild3Painted = false;
 
     const auto setFlagOnPaint = [](wxWindow* win, bool* flag)
     {
@@ -748,8 +740,22 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
     setFlagOnPaint(child2, &isChild2Painted);
     setFlagOnPaint(child3, &isChild3Painted);
 
-    // Prepare for the RefreshRect() call below
-    wxYield();
+    // Ensure that none of the windows needs to be redrawn before calling
+    // RefreshRect() below, otherwise child1 could still get repainted even if
+    // we don't refresh it. All of them must be painted at least once because
+    // they were just created, but just calling wxYield() once is not enough
+    // for this, at least under Mac, where painting happens asynchronously and
+    // may be postponed until later, so wait until they're actually painted.
+    //
+    // Note that this also takes care of any repaints still pending for the
+    // parent window because another window overlapping it, created by a
+    // previously running test, was destroyed, as the entire parent is
+    // invalidated by changing its size and background colour above anyhow.
+    WaitFor("initial repaint", [&]()
+    {
+        return isParentPainted &&
+               isChild1Painted && isChild2Painted && isChild3Painted;
+    });
 
     // Now initialize/reset the flags before calling RefreshRect()
     isParentPainted =
