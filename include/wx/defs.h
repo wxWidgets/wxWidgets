@@ -685,17 +685,6 @@ int wxSsize(const C& c)
 #   define wxGCC_ONLY_WARNING_RESTORE(x)
 #endif
 
-/* Specific macros for -Wcast-function-type warning new in gcc 8. */
-#if wxCHECK_GCC_VERSION(8, 0)
-    #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
-        wxGCC_WARNING_SUPPRESS(cast-function-type)
-    #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE() \
-        wxGCC_WARNING_RESTORE(cast-function-type)
-#else
-    #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
-    #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
-#endif
-
 /*
    Macros to suppress and restore clang warning only when it is valid.
 
@@ -717,6 +706,23 @@ int wxSsize(const C& c)
 #else
 #    define wxCLANG_WARNING_SUPPRESS(x)
 #    define wxCLANG_WARNING_RESTORE(x)
+#endif
+
+/*
+    Specific macros for -Wcast-function-type warning new in gcc 8 and also
+    supported by clang, which enables its -Wcast-function-type-mismatch subset
+    by default in some versions (e.g. Apple clang 17).
+ */
+#if wxCHECK_GCC_VERSION(8, 0)
+    #define wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
+        wxGCC_WARNING_SUPPRESS(cast-function-type)
+    #define wxWARNING_RESTORE_CAST_FUNCTION_TYPE() \
+        wxGCC_WARNING_RESTORE(cast-function-type)
+#else
+    #define wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
+        wxCLANG_WARNING_SUPPRESS(cast-function-type)
+    #define wxWARNING_RESTORE_CAST_FUNCTION_TYPE() \
+        wxCLANG_WARNING_RESTORE(cast-function-type)
 #endif
 
 /*

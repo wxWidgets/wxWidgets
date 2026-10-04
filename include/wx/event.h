@@ -139,13 +139,11 @@ inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
     // them locally to avoid generating hundreds of them when compiling any
     // code using event table macros.
 
-    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
-    wxCLANG_WARNING_SUPPRESS(cast-function-type)
+    wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE()
 
     return reinterpret_cast<wxEventFunction>(func);
 
-    wxCLANG_WARNING_RESTORE(cast-function-type)
-    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+    wxWARNING_RESTORE_CAST_FUNCTION_TYPE()
 }
 
 // In good old pre-C++17 times we could just static_cast the event handler,

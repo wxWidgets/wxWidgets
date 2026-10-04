@@ -90,7 +90,7 @@ jobs:
           configuration: 'Release'
           project: samples/minimal/minimal_cocoa.xcodeproj
         - name: iOS static Debug
-          runner: macos-14
+          runner: macos-15
           scheme: 'static'
           destination: 'generic/platform=iOS'
           arch: x86_64

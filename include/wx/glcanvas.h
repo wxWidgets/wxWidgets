@@ -209,11 +209,11 @@ public:
     template <typename T>
     static T GetProcAddress(const wxString& name)
     {
-        wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+        wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE()
 
         return reinterpret_cast<T>(GetProcAddress(name));
 
-        wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+        wxWARNING_RESTORE_CAST_FUNCTION_TYPE()
     }
 
 protected:
