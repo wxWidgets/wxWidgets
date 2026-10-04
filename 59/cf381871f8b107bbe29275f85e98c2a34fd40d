@@ -1,0 +1,1 @@
+wxMSW: Speed up wxListCtrl columns autosizing in dark mode (#24011).
