@@ -41,6 +41,22 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         return;
     }
 
+#ifdef __WINDOWS__
+    if ( wxIsRunningUnderWine() )
+    {
+        WARN("Skipping testing wxEVT_{ENTER,LEAVE}_WINDOW known to fail under Wine");
+        return;
+    }
+
+#ifdef __WXQT__
+    if ( IsAutomaticTest() )
+    {
+        WARN("Skipping testing wxEVT_{ENTER,LEAVE}_WINDOW known to fail on Windows under GitHub Actions");
+        return;
+    }
+#endif // __WXQT__
+#endif // __WINDOWS__
+
     auto panel = make_unique<wxPanel>(wxTheApp->GetTopWindow(), wxID_ANY);
     auto button = new wxButton(panel.get(), wxID_ANY, "button", {50, 50});
     auto textctrl = new wxTextCtrl(panel.get(), wxID_ANY, "", {160, 50});
@@ -56,18 +72,34 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
 
     wxUIActionSimulator sim;
 
+    wxPoint pos = panel->GetScreenPosition() + panel->GetSize();
+
+    sim.MouseMove(pos);
+    YieldForAWhile();
+    enter.Clear();
+    leave.Clear();
+
+    // Make sure the mouse is outside the window before starting the tests.
+    REQUIRE(panel.get() != wxFindWindowAtPoint(pos));
+
     SECTION("Without mouse capture")
     {
-        sim.MouseMove(panel->GetScreenPosition() + wxPoint(5, 5));
+        pos = panel->GetScreenPosition() + wxPoint(5, 5);
+        sim.MouseMove(pos);
         YieldForAWhile();
+
+        REQUIRE(panel.get() == wxFindWindowAtPoint(pos));
 
         CHECK( enter.GetCount() == 1 );
         CHECK( leave.GetCount() == 0 );
 
         enter.Clear();
 
-        sim.MouseMove(button->GetScreenPosition() + wxPoint(5, 5));
+        pos = button->GetScreenPosition() + wxPoint(5, 5);
+        sim.MouseMove(pos);
         YieldForAWhile();
+
+        REQUIRE(panel.get() != wxFindWindowAtPoint(pos));
 
         // The parent window (panel) should receive wxEVT_LEAVE_WINDOW event
         // when mouse enters the child window (button)
@@ -76,8 +108,11 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
 
         leave.Clear();
 
-        sim.MouseMove(panel->GetScreenPosition() + wxPoint(5, 5));
+        pos = panel->GetScreenPosition() + wxPoint(5, 5);
+        sim.MouseMove(pos);
         YieldForAWhile();
+
+        REQUIRE(panel.get() == wxFindWindowAtPoint(pos));
 
         // Now it (panel) should receive wxEVT_ENTER_WINDOW event when
         // the mouse leaves the button and enters the panel again.
