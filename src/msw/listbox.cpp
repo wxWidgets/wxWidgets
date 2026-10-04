@@ -515,6 +515,10 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::SetString") );
 
+    // don't do anything if the string doesn't change, see wxChoice::SetString()
+    if ( s == GetString(n) )
+        return;
+
     // remember the state of the item
     bool wasSelected = IsSelected(n);
 
