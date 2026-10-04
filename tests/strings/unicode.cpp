@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/encconv.h"
+#include "wx/ustring.h"
 
 // ----------------------------------------------------------------------------
 // helper class holding the matching MB and WC strings
@@ -278,6 +279,36 @@ TEST_CASE("Unicode::ConversionUTF8", "[unicode]")
     // even if it happens after an embedded NUL.
     CHECK( wxString::FromUTF8("abc\xff").empty() );
     CHECK( wxString::FromUTF8("abc\0\xff", 5).empty() );
+}
+
+TEST_CASE("Unicode::EncodeUTF8BMPEnd", "[unicode]")
+{
+    // The last code points of the BMP must be encoded using 3 bytes and the
+    // first one after it using 4 of them.
+    static const struct
+    {
+        wxChar32 code;
+        const char* utf8;
+    } data[] =
+    {
+        { 0xFFFE,  "\xef\xbf\xbe" },
+        { 0xFFFF,  "\xef\xbf\xbf" },
+        { 0x10000, "\xf0\x90\x80\x80" },
+    };
+
+    for ( const auto& d : data )
+    {
+        INFO( "Code point U+" << std::hex << d.code );
+
+        // In UTF-8 build, this uses wxUniChar::AsUTF8().
+        const wxString s(wxUniChar(d.code));
+        CHECK( strcmp(s.utf8_str(), d.utf8) == 0 );
+
+        const wxChar32 str[] = { d.code, 0 };
+        const wxCharBuffer buf = wxUString(str).utf8_str();
+        CHECK( buf.length() == strlen(d.utf8) );
+        CHECK( strcmp(buf.data(), d.utf8) == 0 );
+    }
 }
 
 TEST_CASE("Unicode::ConversionUTF16", "[unicode]")

@@ -259,7 +259,7 @@ wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const
         out[1] = 0x80 | (code & 0x3F);  code >>= 6;
         out[0] = 0xC0 | code;
     }
-    else if ( code < 0xFFFF )
+    else if ( code <= 0xFFFF )
     {
         out[3] = 0;
         out[2] = 0x80 | (code & 0x3F);  code >>= 6;
