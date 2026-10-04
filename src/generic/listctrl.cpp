@@ -40,6 +40,8 @@
 #include "wx/generic/private/listctrl.h"
 #include "wx/generic/private/widthcalc.h"
 
+#include "wx/private/access.h"
+
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
 #endif
@@ -2024,6 +2026,78 @@ void wxListMainWindow::RefreshSelected()
     }
 }
 
+void wxListMainWindow::UpdateAccessibleItems()
+{
+    wxPrivate::AccessibleRows rows;
+
+    const size_t count = GetItemCount();
+    if ( count )
+    {
+        const bool inReportView = InReportView();
+
+        // Only the shown items are exposed: the control may have thousands of
+        // them and the elements of the ones which are not shown would be
+        // useless anyhow, as their rectangles would be outside of it.
+        size_t visibleFrom, visibleTo;
+        if ( inReportView )
+        {
+            GetVisibleLinesRange(&visibleFrom, &visibleTo);
+        }
+        else // There is no simple way to find the visible items in this case.
+        {
+            visibleFrom = 0;
+            visibleTo = count - 1;
+        }
+
+        const wxRect rectClient(GetClientSize());
+        const int numCols = inReportView ? GetColumnCount() : 1;
+
+        for ( size_t line = visibleFrom; line <= visibleTo; ++line )
+        {
+            wxRect rect;
+            GetItemRect(line, rect);
+            if ( !inReportView && !rect.Intersects(rectClient) )
+                continue;
+
+            wxPrivate::AccessibleRow row(line, rect);
+            row.selected = IsHighlighted(line);
+
+            for ( int col = 0; col < numCols; ++col )
+            {
+                // Only the report view has real columns, in the other ones the
+                // single value is the item label.
+                wxRect rectCell;
+                if ( inReportView )
+                {
+                    GetSubItemRect(line, col, rectCell);
+                }
+                else
+                {
+                    rectCell = GetLineLabelRect(line);
+                    GetListCtrl()->CalcScrolledPosition(rectCell.x, rectCell.y,
+                                                        &rectCell.x, &rectCell.y);
+                }
+
+                row.cells.emplace_back(GetItemText(line, col), rectCell);
+            }
+
+            rows.push_back(row);
+        }
+    }
+
+    wxPrivate::SetAccessibleTable(this, rows, count);
+
+    // Announce the current item if it has changed, as the screen readers have
+    // no other way of knowing that the user has moved to another one.
+    const long current = HasCurrent() ? (long)m_current : -1;
+    if ( current != m_lastAccessibleCurrent )
+    {
+        m_lastAccessibleCurrent = current;
+
+        wxPrivate::SetAccessibleCurrentRow(this, current);
+    }
+}
+
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
@@ -2032,6 +2106,9 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if ( IsEmpty() )
     {
+        // Remove the accessible elements for the previously shown items.
+        UpdateAccessibleItems();
+
         // nothing to draw or not the moment to draw it
         return;
     }
@@ -2203,6 +2280,10 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxRendererNative::Get().DrawFocusRect(this, dc, rect, flags);
     }
 #endif // !__WXMAC__
+
+    // The items we've just drawn may be different from the previous ones, e.g.
+    // because the control was scrolled, so refresh the elements using them.
+    UpdateAccessibleItems();
 }
 
 void wxListMainWindow::OnSysColourChanged( wxSysColourChangedEvent &event )
