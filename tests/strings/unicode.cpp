@@ -298,7 +298,7 @@ TEST_CASE("Unicode::EncodeUTF8BMPEnd", "[unicode]")
 
     for ( const auto& d : data )
     {
-        INFO( "Code point U+" << std::hex << d.code );
+        INFO( "Code point U+" << std::hex << static_cast<unsigned>(d.code) );
 
         // In UTF-8 build, this uses wxUniChar::AsUTF8().
         const wxString s(wxUniChar(d.code));
