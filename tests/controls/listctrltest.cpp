@@ -154,6 +154,117 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnCount", "[listctrl]")
     CHECK(m_list->GetColumnCount() == 0);
 }
 
+TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::CheckItem", "[listctrl]")
+{
+    if ( !m_list->EnableCheckBoxes() )
+        return;
+
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertItem(0, "Item 0");
+
+    EventCounter checked(m_list, wxEVT_LIST_ITEM_CHECKED);
+    EventCounter unchecked(m_list, wxEVT_LIST_ITEM_UNCHECKED);
+
+    CHECK( !m_list->IsItemChecked(0) );
+
+    // Unchecking an unchecked item doesn't do anything.
+    m_list->CheckItem(0, false);
+    CHECK( !m_list->IsItemChecked(0) );
+    CHECK( checked.GetCount() == 0 );
+    CHECK( unchecked.GetCount() == 0 );
+
+    m_list->CheckItem(0, true);
+    CHECK( m_list->IsItemChecked(0) );
+    CHECK( checked.GetCount() == 1 );
+    CHECK( unchecked.GetCount() == 0 );
+    checked.Clear();
+
+    // And neither does checking an already checked one.
+    m_list->CheckItem(0, true);
+    CHECK( m_list->IsItemChecked(0) );
+    CHECK( checked.GetCount() == 0 );
+    CHECK( unchecked.GetCount() == 0 );
+
+    m_list->CheckItem(0, false);
+    CHECK( !m_list->IsItemChecked(0) );
+    CHECK( checked.GetCount() == 0 );
+    CHECK( unchecked.GetCount() == 1 );
+}
+
+// wxQt doesn't support virtual list controls with checkboxes currently.
+#ifndef __WXQT__
+
+TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::CheckItemVirtual", "[listctrl]")
+{
+    // Virtual list control storing the checked state of its single item
+    // itself, as a real application would do.
+    //
+    // Note that we can't use EventCounter here because it doesn't skip the
+    // command events, so our handlers wouldn't be called if we did, and we
+    // count the events ourselves instead.
+    class CheckableVirtualListCtrl : public wxListCtrl
+    {
+    public:
+        CheckableVirtualListCtrl()
+            : wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                         wxDefaultPosition, wxDefaultSize,
+                         wxLC_REPORT | wxLC_VIRTUAL)
+        {
+            Bind(wxEVT_LIST_ITEM_CHECKED, [this](wxListEvent&)
+                {
+                    m_checked = true;
+                    m_checkedCount++;
+                });
+            Bind(wxEVT_LIST_ITEM_UNCHECKED, [this](wxListEvent&)
+                {
+                    m_checked = false;
+                    m_uncheckedCount++;
+                });
+        }
+
+        wxString OnGetItemText(long, long) const override { return "Item"; }
+        bool OnGetItemIsChecked(long) const override { return m_checked; }
+
+        int m_checkedCount = 0;
+        int m_uncheckedCount = 0;
+
+    private:
+        bool m_checked = false;
+    };
+
+    delete m_list;
+    auto* const list = new CheckableVirtualListCtrl();
+    m_list = list;
+
+    if ( !m_list->EnableCheckBoxes() )
+        return;
+
+    m_list->InsertColumn(0, "Column 0");
+    m_list->SetItemCount(1);
+
+    CHECK( !m_list->IsItemChecked(0) );
+
+    m_list->CheckItem(0, true);
+    CHECK( m_list->IsItemChecked(0) );
+    CHECK( list->m_checkedCount == 1 );
+    CHECK( list->m_uncheckedCount == 0 );
+
+    // Unlike for non-virtual controls, the events are always generated for
+    // the virtual ones, even if the state doesn't change, as it's not stored
+    // by the control itself.
+    m_list->CheckItem(0, true);
+    CHECK( m_list->IsItemChecked(0) );
+    CHECK( list->m_checkedCount == 2 );
+    CHECK( list->m_uncheckedCount == 0 );
+
+    m_list->CheckItem(0, false);
+    CHECK( !m_list->IsItemChecked(0) );
+    CHECK( list->m_checkedCount == 2 );
+    CHECK( list->m_uncheckedCount == 1 );
+}
+
+#endif // __WXQT__
+
 #if wxUSE_UIACTIONSIMULATOR
 
 TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnDrag", "[listctrl]")

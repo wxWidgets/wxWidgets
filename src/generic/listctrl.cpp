@@ -4071,6 +4071,12 @@ void wxListMainWindow::CheckItem(long item, bool state)
     if ( !IsVirtual() )
     {
         wxListLineData* line = GetLine((size_t)item);
+
+        // Don't send any events if nothing changes, for consistency with
+        // wxMSW, where the native control doesn't send them in this case.
+        if ( line->IsChecked() == state )
+            return;
+
         line->Check(state);
 
         RefreshLine(item);

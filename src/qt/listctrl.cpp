@@ -271,16 +271,8 @@ public:
 
         if ( role == Qt::CheckStateRole && col == 0 )
         {
-            m_rows[row].m_checked =
-                static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
-
-            wxListEvent event;
-            InitListEvent(event,
-                          m_listCtrl,
-                          m_rows[row].m_checked ? wxEVT_LIST_ITEM_CHECKED
-                                                : wxEVT_LIST_ITEM_UNCHECKED,
-                          index);
-            m_listCtrl->HandleWindowEvent(event);
+            CheckItem(row,
+                      static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked);
             return true;
         }
 
@@ -744,12 +736,25 @@ public:
     {
         wxCHECK_RET(item >= 0 && item <= wxSsize(m_rows), "Invalid row");
 
+        // Don't send any events if nothing changes, for consistency with
+        // wxMSW, where the native control doesn't send them in this case.
+        if ( m_rows[item].m_checked == check )
+            return;
+
         m_rows[item].m_checked = check;
 
         QVector<int> roles;
         roles.push_back(Qt::CheckStateRole);
         const QModelIndex modelIndex = index(item, 0);
         dataChanged(modelIndex, modelIndex, roles);
+
+        wxListEvent event;
+        InitListEvent(event,
+                      m_listCtrl,
+                      check ? wxEVT_LIST_ITEM_CHECKED
+                            : wxEVT_LIST_ITEM_UNCHECKED,
+                      modelIndex);
+        m_listCtrl->HandleWindowEvent(event);
     }
 
     virtual bool IsVirtual() const
