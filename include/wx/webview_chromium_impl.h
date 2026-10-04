@@ -12,11 +12,7 @@
 
 // Note that this header includes CEF headers and so the appropriate include
 // path should be set up when using it.
-
-#ifdef __VISUALC__
-#pragma warning(push)
-#pragma warning(disable:4100)
-#endif
+wxMSVC_WARNING_SUPPRESS(4100) // unreferenced formal parameter
 
 wxGCC_WARNING_SUPPRESS(unused-parameter)
 
@@ -24,9 +20,7 @@ wxGCC_WARNING_SUPPRESS(unused-parameter)
 
 wxGCC_WARNING_RESTORE(unused-parameter)
 
-#ifdef __VISUALC__
-#pragma warning(pop)
-#endif
+wxMSVC_WARNING_RESTORE(4100)
 
 // ----------------------------------------------------------------------------
 // Convenient base class for custom CefClient implementations.

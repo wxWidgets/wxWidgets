@@ -25,17 +25,12 @@ using std::max;
 // in the standard gdiplus.h header and each of them results in C4458 with
 // VC14, so disable this warning for this file as there is no other way to
 // avoid it.
-#ifdef __VISUALC__
-    #pragma warning(push)
-    #pragma warning(disable:4458) // declaration of 'xxx' hides class member
-#endif
+wxMSVC_WARNING_SUPPRESS(4458) // declaration of 'xxx' hides class member
 
 #include <gdiplus.h>
 using namespace Gdiplus;
 
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
+wxMSVC_WARNING_RESTORE(4458)
 
 #endif // _WX_MSW_WRAPGDIP_H_
 

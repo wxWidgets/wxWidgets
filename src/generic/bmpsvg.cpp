@@ -266,11 +266,7 @@ private:
 // these headers with errors about ambiguous operator==(char,enum).
 
 // Disable some warnings inside NanoSVG code that we're not interested in.
-#ifdef __VISUALC__
-    #pragma warning(push)
-    #pragma warning(disable:4456)
-    #pragma warning(disable:4702)
-#endif
+wxMSVC_WARNING_SUPPRESS(4456 4702)
 
 wxGCC_WARNING_SUPPRESS(cast-qual)
 wxGCC_WARNING_SUPPRESS(double-promotion)
@@ -300,9 +296,7 @@ wxGCC_WARNING_SUPPRESS(double-promotion)
 wxGCC_WARNING_RESTORE(double-promotion)
 wxGCC_WARNING_RESTORE(cast-qual)
 
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
+wxMSVC_WARNING_RESTORE(4456 4702)
 
 
 class wxBitmapBundleNanoSVG : public wxBitmapBundleImplSVG

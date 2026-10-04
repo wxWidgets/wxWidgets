@@ -321,12 +321,13 @@ public:
 
         virtual bool RestoreValue(const wxString& name, int* value) const override
         {
-            // gcc 4.8 gives a warning for const-cast below.
-            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            // Compilers not using [[deprecated]] for wxDEPRECATED_MSG() give a
+            // warning for referencing deprecated class in the const-cast below.
+            wxWARNING_SUPPRESS_DEPRECATED()
 
             return const_cast<GeometrySerializer*>(this)->RestoreField(name, value);
 
-            wxGCC_WARNING_RESTORE(deprecated-declarations)
+            wxWARNING_RESTORE_DEPRECATED()
         }
 
         virtual bool SaveField(const wxString& name, int value) const = 0;
