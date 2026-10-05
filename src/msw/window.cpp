@@ -3952,8 +3952,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-#if wxUSE_POPUPWIN
         case WM_NCACTIVATE:
+#if wxUSE_POPUPWIN
             // When we're losing activation to our own popup window, we want to
             // retain the "active" appearance of the title bar, as dropping
             // down a combobox popup shouldn't deactivate the window containing
@@ -3968,8 +3968,24 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 rc.result = MSWDefWindowProc(message, TRUE, lParam);
                 processed = true;
             }
-            break;
 #endif
+
+#ifndef __WXUNIVERSAL__
+            // If top level window, paint the scroll bar corner. We need this
+            // because a change in activation does not always result in
+            // a WM_NCPAINT message.
+            if ( IsTopLevel() && wxMSWDarkMode::IsActive()  )
+            {
+                const long style = ::GetWindowLong(m_hWnd, GWL_STYLE);
+                if ( (style & WS_HSCROLL) && (style & WS_VSCROLL) )
+                {
+                    rc.result = MSWDefWindowProc(message, wParam, lParam);
+                    processed = true;
+                    wxMSWImpl::PaintScrollBarCorner(this);
+                }
+            }
+#endif
+            break;
 
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:

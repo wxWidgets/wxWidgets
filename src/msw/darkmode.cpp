@@ -1143,6 +1143,36 @@ void DrawGauge(wxDC& dc, const wxRect& rect, int value, int max, int flags)
 
 } // namespace wxMSWDarkMode
 
+// Return true if the window should have a gripper in the scroll bar corner.
+static bool HasGripper(HWND hwnd)
+{
+    // Check whether the top level parent has a sizing border or is maximized.
+    HWND topHwnd = ::GetAncestor(hwnd, GA_ROOT);
+    auto style = ::GetWindowLong(topHwnd, GWL_STYLE);
+    if ( (style & WS_THICKFRAME) == 0 || ::IsZoomed(topHwnd) )
+        return false;
+
+    // If this is a top level window, there is a gripper.
+    if ( hwnd == topHwnd )
+        return true;
+
+    // Check whether the scroll bar corner aligns with the top level window
+    // client area.
+    RECT winRect;
+    ::GetWindowRect(hwnd, &winRect);
+    RECT topRect;
+    ::GetClientRect(topHwnd, &topRect);
+    wxMapWindowPoints(topHwnd, HWND_DESKTOP, &topRect);
+    if ( winRect.bottom == topRect.bottom )
+    {
+        if ( ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL )
+            return winRect.left == topRect.left;
+        else
+            return winRect.right == topRect.right;
+    }
+    return false;
+}
+
 void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
 {
     HWND hwnd = GetHwndOf(w);
@@ -1160,7 +1190,8 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
 
     RECT rectToPaint;
 
-    if ( ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL )
+    auto exStyle = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+    if ( exStyle & WS_EX_LAYOUTRTL )
         rectToPaint.left = windowRect.right - sbiV.rcScrollBar.right;
     else
         rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
@@ -1168,9 +1199,25 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
     rectToPaint.right = rectToPaint.left + wxGetSystemMetrics(SM_CXVSCROLL, w);
     rectToPaint.bottom = rectToPaint.top + wxGetSystemMetrics(SM_CYHSCROLL, w);
 
+    // Draw the background because the default colour is too light. In light
+    // mode, the scroll bar corner colour matches the adjacent scroll bars.
+    // Get the colour by sampling the corner of the arrow button above.
     WindowHDC hdcWin(hwnd);
-    AutoHBRUSH hBrush(RGB(0x17, 0x17, 0x17));
+    auto bg = ::GetPixel(hdcWin, rectToPaint.left, rectToPaint.top - 1);
+    AutoHBRUSH hBrush(bg);
     ::FillRect(hdcWin, &rectToPaint, hBrush);
+
+    if ( HasGripper(hwnd) )
+    {
+        // Redraw the gripper we erased above.
+        wxUxThemeHandle theme(w, L"SCROLLBAR");
+        // Choose the left or right gripper according to the RTL mode.
+        // wxTextCtrl does not use WS_EX_LAYOUTRTL, so also check for another
+        // style that it uses.
+        auto state = (exStyle & (WS_EX_LAYOUTRTL | WS_EX_LEFTSCROLLBAR)) ?
+            SZB_LEFTALIGN : SZB_RIGHTALIGN;
+        theme.DrawBackground(hdcWin, rectToPaint, SBP_SIZEBOX, state);
+    }
 }
 
 #else // !wxUSE_DARK_MODE
