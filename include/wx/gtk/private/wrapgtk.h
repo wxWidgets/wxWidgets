@@ -18,4 +18,16 @@ wxGCC_WARNING_RESTORE(deprecated-declarations)
 
 #include "wx/gtk/private/gtk2-compat.h"
 
+#ifdef __ELF__
+#define wxHAS_GTK_SELECTION_SET_TARGETS
+
+// (Re)declare this function with weak attribute to allow easily checking
+// for its presence at runtime (i.e. easier than with dlsym()).
+extern "C"
+void gtk_selection_set_targets(GtkWidget *widget,
+                               GdkAtom selection,
+                               const GtkTargetEntry *targets,
+                               guint ntargets) __attribute__((weak));
+#endif
+
 #endif // _WX_GTK_PRIVATE_WRAPGTK_H_

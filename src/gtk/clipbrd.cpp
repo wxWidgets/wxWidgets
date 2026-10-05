@@ -710,26 +710,35 @@ bool wxClipboard::AddData( wxDataObject *data )
         ++target;
     }
 
-    // Clear any previously set targets before adding the new ones, otherwise
-    // they will accumulate endlessly.
-    //
-    // Note: do not call Clear() here as it also resets the ownership of the
-    // selection and we don't want to relinquish it here.
-    //
-    // TODO: We should use gtk_selection_set_targets() when it becomes more
-    // widely available (it was added in GTK commit cc1f66d999 (gdk/wayland:
-    // Set clipboard targets atomically, 2026-06-04) which is not part of any
-    // released GTK version yet) because it would avoid briefly offering an
-    // empty data source before offering the actual data, as it happens now.
-    gtk_selection_clear_targets(m_clipboardWidget, GTKGetClipboardAtom());
+#ifdef wxHAS_GTK_SELECTION_SET_TARGETS
+    if ( gtk_selection_set_targets )
+    {
+        gtk_selection_set_targets
+        (
+            m_clipboardWidget,
+            GTKGetClipboardAtom(),
+            targets.data(),
+            targets.size()
+        );
+    }
+    else
+#endif
+    {
+        // Clear any previously set targets before adding the new ones, otherwise
+        // they will accumulate endlessly.
+        //
+        // Note: do not call Clear() here as it also resets the ownership of the
+        // selection and we don't want to relinquish it here.
+        gtk_selection_clear_targets(m_clipboardWidget, GTKGetClipboardAtom());
 
-    gtk_selection_add_targets
-    (
-        m_clipboardWidget,
-        GTKGetClipboardAtom(),
-        targets.data(),
-        targets.size()
-    );
+        gtk_selection_add_targets
+        (
+            m_clipboardWidget,
+            GTKGetClipboardAtom(),
+            targets.data(),
+            targets.size()
+        );
+    }
 
     if ( !m_idSelectionGetHandler )
     {
