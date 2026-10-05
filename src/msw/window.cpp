@@ -4023,9 +4023,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 #endif
 
 #ifndef __WXUNIVERSAL__
-            // If a top level window is activating in dark mode, paint the
-            // scroll bar corner.
-            if ( wParam && IsTopLevel() && wxMSWDarkMode::IsActive()  )
+            // If top level window, paint the scroll bar corner. We need this
+            // because a change in activation does not always result in
+            // a WM_NCPAINT message.
+            if ( IsTopLevel() && wxMSWDarkMode::IsActive()  )
             {
                 const long style = ::GetWindowLong(m_hWnd, GWL_STYLE);
                 if ( (style & WS_HSCROLL) && (style & WS_VSCROLL) )
