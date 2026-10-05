@@ -31,6 +31,3 @@ get_target_property(LEXILLA_DEFINITIONS wxlexilla COMPILE_DEFINITIONS)
 wx_lib_compile_definitions(wxstc PRIVATE ${SCINTILLA_DEFINITIONS} ${LEXILLA_DEFINITIONS})
 
 wx_lib_link_libraries(wxstc PRIVATE wxscintilla wxlexilla)
-if(WXMSW)
-    wx_lib_link_libraries(wxstc PRIVATE imm32)
-endif()

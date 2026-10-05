@@ -515,9 +515,8 @@ MSVC, you also need to:
   libraries that are used by wxWidgets to the linker input. Currently this
   means linking with the following libraries (some of which might be
   unnecessary depending on your build configuration): `advapi32 comctl32
-  comdlg32 gdi32 gdiplus imm32 kernel32 msimg32 ole32 oleacc oleaut32 opengl32
-  rpcrt4 shell32 shlwapi user32 uuid uxtheme version wininet winmm winspool
-  ws2_32`.
+  comdlg32 gdi32 gdiplus kernel32 msimg32 ole32 oleacc oleaut32 opengl32 rpcrt4
+  shell32 shlwapi user32 uuid uxtheme version wininet winmm winspool ws2_32`.
 
 For example, to compile your program with gcc using debug wxWidgets DLLs
 you would need to use the following options for the compiler (and `windres`

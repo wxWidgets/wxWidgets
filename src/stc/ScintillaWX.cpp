@@ -43,6 +43,7 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h" // GetHwndOf()
+    #include "wx/msw/private/imm.h"
 #endif
 #ifdef __WXGTK__
     #include <gdk/gdk.h>
@@ -1946,10 +1947,6 @@ sptr_t ScintillaWX::DirectFunction(
 
 #ifdef __WXMSW__
 
-#ifdef __VISUALC__
-#pragma comment(lib, "imm32.lib")
-#endif
-
 namespace {
 
 POINT POINTFromPoint(Point pt) noexcept {
@@ -1958,24 +1955,6 @@ POINT POINTFromPoint(Point pt) noexcept {
     ret.y = static_cast<LONG>(pt.y);
     return ret;
 }
-
-class IMContext {
-    HWND hwnd;
-public:
-    HIMC hIMC;
-    IMContext(HWND hwnd_) noexcept :
-        hwnd(hwnd_), hIMC(::ImmGetContext(hwnd_)) {
-    }
-    ~IMContext() {
-        if (hIMC)
-            ::ImmReleaseContext(hwnd, hIMC);
-    }
-
-private:
-    // Private so IMContext objects can not be copied.
-    IMContext(const IMContext&);
-    IMContext& operator=(const IMContext&);
-};
 
 }
 
@@ -1990,35 +1969,39 @@ HWND ScintillaWX::MainHWND() const noexcept {
 void ScintillaWX::ImeStartComposition() {
     if (caret.active) {
         // Move IME Window to current caret position
-        IMContext imc(stc->GetHandle());
-        const Point pos = PointMainCaret();
-        COMPOSITIONFORM CompForm;
-        CompForm.dwStyle = CFS_POINT;
-        CompForm.ptCurrentPos = POINTFromPoint(pos);
+        wxIMCContext imc(stc->GetHandle());
+        if (imc) {
+            const wxIMMFunctions& imm = wxIMMFunctions::Get();
 
-        ::ImmSetCompositionWindow(imc.hIMC, &CompForm);
+            const Point pos = PointMainCaret();
+            COMPOSITIONFORM CompForm;
+            CompForm.dwStyle = CFS_POINT;
+            CompForm.ptCurrentPos = POINTFromPoint(pos);
 
-        // Set font of IME window to same as surrounded text.
-        if (stylesValid) {
-            // Since the style creation code has been made platform independent,
-            // The logfont for the IME is recreated here.
-            const int styleHere = pdoc->StyleIndexAt(sel.MainCaret());
-            LOGFONTW lf = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, L"" };
-            int sizeZoomed = vs.styles[styleHere].size + vs.zoomLevel * SC_FONT_SIZE_MULTIPLIER;
-            if (sizeZoomed <= 2 * SC_FONT_SIZE_MULTIPLIER) // Hangs if sizeZoomed <= 1
-                sizeZoomed = 2 * SC_FONT_SIZE_MULTIPLIER;
-            // The negative is to allow for leading
-            lf.lfHeight = -::MulDiv(sizeZoomed, stc->GetDPI().y, 72 * SC_FONT_SIZE_MULTIPLIER);
-            lf.lfWeight = vs.styles[styleHere].weight;
-            lf.lfItalic = static_cast<BYTE>(vs.styles[styleHere].italic ? 1 : 0);
-            lf.lfCharSet = DEFAULT_CHARSET;
-            lf.lfFaceName[0] = L'\0';
-            if (vs.styles[styleHere].fontName) {
-                const char* fontName = vs.styles[styleHere].fontName;
-                UTF16FromUTF8(fontName, lf.lfFaceName, LF_FACESIZE);
+            imm.SetCompositionWindow(imc, &CompForm);
+
+            // Set font of IME window to same as surrounded text.
+            if (stylesValid) {
+                // Since the style creation code has been made platform independent,
+                // The logfont for the IME is recreated here.
+                const int styleHere = pdoc->StyleIndexAt(sel.MainCaret());
+                LOGFONTW lf = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, L"" };
+                int sizeZoomed = vs.styles[styleHere].size + vs.zoomLevel * SC_FONT_SIZE_MULTIPLIER;
+                if (sizeZoomed <= 2 * SC_FONT_SIZE_MULTIPLIER) // Hangs if sizeZoomed <= 1
+                    sizeZoomed = 2 * SC_FONT_SIZE_MULTIPLIER;
+                // The negative is to allow for leading
+                lf.lfHeight = -::MulDiv(sizeZoomed, stc->GetDPI().y, 72 * SC_FONT_SIZE_MULTIPLIER);
+                lf.lfWeight = vs.styles[styleHere].weight;
+                lf.lfItalic = static_cast<BYTE>(vs.styles[styleHere].italic ? 1 : 0);
+                lf.lfCharSet = DEFAULT_CHARSET;
+                lf.lfFaceName[0] = L'\0';
+                if (vs.styles[styleHere].fontName) {
+                    const char* fontName = vs.styles[styleHere].fontName;
+                    UTF16FromUTF8(fontName, lf.lfFaceName, LF_FACESIZE);
+                }
+
+                imm.SetCompositionFontW(imc, &lf);
             }
-
-            ::ImmSetCompositionFontW(imc.hIMC, &lf);
         }
         // Caret is displayed in IME window. So, caret in Scintilla is useless.
         DropCaret();
