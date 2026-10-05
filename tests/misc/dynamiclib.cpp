@@ -130,5 +130,12 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
             FAIL(FUNC_NAME_AW << " wasn't found in " << LIB_NAME);
         }
     }
+
+    SECTION("Ordinal")
+    {
+        // Ordinals of the functions exported from system DLLs are not stable,
+        // so we can only check that a (surely) non-existent one is not found.
+        CHECK( !lib.GetByOrdinal(0xffff) );
+    }
 #endif // __WINDOWS__
 }

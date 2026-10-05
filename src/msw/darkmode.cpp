@@ -161,7 +161,7 @@ bool gs_hasChanged = false;
 template <typename T>
 bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
 {
-    func = (T)::GetProcAddress(lib.GetLibHandle(), MAKEINTRESOURCEA(ordinal));
+    func = (T)lib.GetByOrdinal(ordinal);
     if ( !func )
     {
         wxLogTrace(TRACE_DARKMODE,

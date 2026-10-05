@@ -302,6 +302,11 @@ public:
     {
         return RawGetSymbolAorW(m_handle, name);
     }
+
+    // Return the symbol exported with the given ordinal or null if not found.
+    //
+    // Unlike GetSymbol(), this function doesn't log any errors.
+    void *GetByOrdinal(int ordinal) const;
 #endif // __WINDOWS__
 
     // return all modules/shared libraries in the address space of this process
