@@ -36,7 +36,7 @@
 
     #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         #define wxHAS_QT5
-#endif
+    #endif
 #endif
 
 #include "waitfor.h"
@@ -114,7 +114,9 @@ struct EditInfo
         : pos(pos), count(count), direction(direction) { }
 };
 
-#if wxUSE_COMBOBOX && defined(__WXOSX_COCOA__)
+#if wxUSE_COMBOBOX
+
+#if defined(__WXOSX_COCOA__)
 
 // Avoid opening or focusing the native wxOSX popup in this test helper: it
 // waits for real user interaction on CI, while the test sends wxEVT_TEXT_ENTER
@@ -149,7 +151,9 @@ using TestChoiceEditor = TestChoiceEditorNoPopup;
 // Otherwise use regular grid cell choice editor
 using TestChoiceEditor = wxGridCellChoiceEditor;
 
-#endif // wxUSE_COMBOBOX && __WXOSX_COCOA__
+#endif // __WXOSX_COCOA__
+
+#endif // wxUSE_COMBOBOX
 
 // Derive a new class inheriting from wxGrid, also to get access to its
 // protected GetCellAttr(). This is not pretty, but we don't have any other way
@@ -1812,7 +1816,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ChoiceEditorEnter", "[grid]")
         return !m_grid->IsCellEditControlEnabled();
     }) );
 }
-    #endif
+#endif // wxUSE_COMBOBOX
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {

@@ -395,8 +395,6 @@ protected:
     wxComboBox *Combo() const { return (wxComboBox *)m_control; }
 
     void DismissEditor();
-    void OnComboCloseUp(wxCommandEvent& evt);
-    void OnTextEnter(wxCommandEvent& evt);
 
     wxString        m_value;
     wxArrayString   m_choices;

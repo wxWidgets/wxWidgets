@@ -1476,10 +1476,9 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 
-    m_control->Bind(wxEVT_COMBOBOX_CLOSEUP,
-                    &wxGridCellChoiceEditor::OnComboCloseUp, this);
-    m_control->Bind(wxEVT_TEXT_ENTER,
-                    &wxGridCellChoiceEditor::OnTextEnter, this);
+    auto const dismissEditor = [this](wxCommandEvent&) { DismissEditor(); };
+    m_control->Bind(wxEVT_COMBOBOX_CLOSEUP, dismissEditor);
+    m_control->Bind(wxEVT_TEXT_ENTER, dismissEditor);
 }
 
 void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
@@ -1507,7 +1506,7 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
                                    wxGridCellEditorEvtHandler);
 
     // Don't immediately end if we get a kill focus event within BeginEdit
-    if ( evtHandler )
+    if (evtHandler)
         evtHandler->SetInSetFocus(true);
 
     m_value = grid->GetTable()->GetValue(row, col);
@@ -1524,7 +1523,7 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     Combo()->Popup();
 #endif
 
-    if ( evtHandler )
+    if (evtHandler)
     {
         // When dropping down the menu, a kill focus event
         // happens after this point, so we can't reset the flag yet.
@@ -1620,16 +1619,6 @@ void wxGridCellChoiceEditor::DismissEditor()
     // Close the grid editor through the regular deferred path to avoid
     // leaving the dropdown arrow visible in the cell.
     evtHandler->DismissEditor();
-}
-
-void wxGridCellChoiceEditor::OnComboCloseUp(wxCommandEvent& WXUNUSED(evt))
-{
-    DismissEditor();
-}
-
-void wxGridCellChoiceEditor::OnTextEnter(wxCommandEvent& WXUNUSED(evt))
-{
-    DismissEditor();
 }
 
 #endif // wxUSE_COMBOBOX
