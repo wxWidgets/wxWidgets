@@ -756,12 +756,18 @@
   </ImportGroup>
   <Target Name="SkipIfOlderThanCpp17" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ActualLanguageStandard>%(ClCompile.LanguageStandard)</ActualLanguageStandard>
+      <ClLanguageStandard>%(ClCompile.LanguageStandard)</ClLanguageStandard>
+      <ClAdditionalOptions>%(ClCompile.AdditionalOptions)</ClAdditionalOptions>
+      <HasCpp17>True</HasCpp17>
+      <HasCpp17 Condition="'$(ClLanguageStandard)' == '' Or '$(ClLanguageStandard)' == 'Default' Or '$(ClLanguageStandard)' == 'stdcpp11' Or '$(ClLanguageStandard)' == 'stdcpp14'">False</HasCpp17>
+      <HasCpp17 Condition="$(ClAdditionalOptions.Contains('/std:c++17')) Or $(ClAdditionalOptions.Contains('/std:c++2')) Or $(ClAdditionalOptions.Contains('/std:c++latest'))">True</HasCpp17>
     </PropertyGroup>
-    <Message Importance="High" Text="$(ProjectName) ActualLanguageStandard is: '$(ActualLanguageStandard)'" />
-    <ItemGroup Condition="'$(ActualLanguageStandard)' == '' Or '$(ActualLanguageStandard)' == 'Default' Or '$(ActualLanguageStandard)' == 'stdcpp11' Or '$(ActualLanguageStandard)' == 'stdcpp14'">
+    <ItemGroup Condition="'$(HasCpp17)' == 'False'">
       <ClCompile Remove="@(ClCompile)" />
+      <ClCompile Include="..\..\src\common\dummy.cpp">
+        <AdditionalIncludeDirectories>$(OutDir)$(wxIncSubDir);..\..\include;;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      </ClCompile>
     </ItemGroup>
-    <Message Importance="High" Condition="'$(ActualLanguageStandard)' == '' Or '$(ActualLanguageStandard)' == 'Default' Or '$(ActualLanguageStandard)' == 'stdcpp11' Or '$(ActualLanguageStandard)' == 'stdcpp14'" Text="--&gt; $(ProjectName) has been skipped because it is configured with an older C++ standard." />
+    <Message Importance="High" Condition="'$(HasCpp17)' == 'False'" Text="$(ProjectName) requires at least c++17, creating dummy library instead." />
   </Target>
 </Project>
