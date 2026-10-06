@@ -3015,6 +3015,11 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
+    // Update the TAB order of our parents if it wasn't done when our children
+    // were added, see GTKOnChildrenChanged().
+    if ( !m_children.empty() )
+        GTKInvalidateParentsTabOrder();
+
     wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
     GTKProcessEvent( event );
@@ -5140,16 +5145,7 @@ void wxWindowGTK::DoEnable( bool enable )
         gtk_widget_set_sensitive( m_wxwindow, enable );
 
     if (enable && AcceptsFocusFromKeyboard())
-    {
-        wxWindowGTK* parent = this;
-        while ((parent = parent->GetParent()))
-        {
-            parent->m_dirtyTabOrder = true;
-            if (parent->IsTopLevel())
-                break;
-        }
-        wxTheApp->WakeUpIdle();
-    }
+        GTKInvalidateParentsTabOrder();
 }
 
 int wxWindowGTK::GetCharHeight() const
@@ -5575,14 +5571,50 @@ void wxWindowGTK::DoAddChild(wxWindowGTK *child)
 void wxWindowGTK::AddChild(wxWindowBase *child)
 {
     wxWindowBase::AddChild(child);
-    m_dirtyTabOrder = true;
-    wxTheApp->WakeUpIdle();
+
+    GTKOnChildrenChanged();
 }
 
 void wxWindowGTK::RemoveChild(wxWindowBase *child)
 {
     wxWindowBase::RemoveChild(child);
+
+    // Don't bother updating the TAB order if we're being destroyed, which is
+    // when most of the children are removed.
+    if ( IsBeingDeleted() )
+        return;
+
+    GTKOnChildrenChanged();
+}
+
+void wxWindowGTK::GTKOnChildrenChanged()
+{
     m_dirtyTabOrder = true;
+
+    // Whether this window accepts focus from keyboard may depend on its
+    // children, see wxControlContainerBase::AcceptsFocusFromKeyboard(), so
+    // the focus chains of our parents may need to be updated too. But avoid
+    // doing it for every child added when the windows are initially created
+    // and do it only once, from GTKHandleRealized(), if we're not realized
+    // yet: this is fine because we can't have focus before being realized.
+    GtkWidget* const connectWidget = GetConnectWidget();
+    if ( connectWidget && gtk_widget_get_realized(connectWidget) )
+        GTKInvalidateParentsTabOrder();
+    else
+        wxTheApp->WakeUpIdle();
+}
+
+void wxWindowGTK::GTKInvalidateParentsTabOrder()
+{
+    for ( wxWindowGTK* win = this; !win->IsTopLevel(); )
+    {
+        win = win->GetParent();
+        if ( !win )
+            break;
+
+        win->m_dirtyTabOrder = true;
+    }
+
     wxTheApp->WakeUpIdle();
 }
 
