@@ -6847,7 +6847,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid window") );
 
-    GTKSetLayout(menu->m_menu, GetLayoutDirection());
+    menu->SetLayoutDirection(GetLayoutDirection());
 
     menu->SetupBitmaps(this);
 
