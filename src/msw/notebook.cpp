@@ -1623,7 +1623,30 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
                 wxWindow *page = m_pages[m_selection];
                 if ( !page->HandleWindowEvent(event) )
                 {
-                    page->SetFocus();
+                    if ( page->CanAcceptFocusFromKeyboard() )
+                    {
+                        page->SetFocus();
+                    }
+                    else if ( isFromSelf )
+                    {
+                        // there is nothing to focus in this page, e.g. it
+                        // contains only static controls, so go to the next
+                        // control after the notebook, if there is any
+                        event.SetCurrentFocus(this);
+                        parent->HandleWindowEvent(event);
+                    }
+                    else
+                    {
+                        // coming backwards from outside, as above, but the
+                        // notebook itself is the first control
+                        SetFocus();
+                    }
+
+                    // the page has skipped the event, but we did handle it
+                    // and must not let IsDialogMessage() handle it too, as it
+                    // would move the focus to the (possibly hidden) native
+                    // up-down control of the tab control and get stuck there
+                    event.Skip(false);
                 }
                 //else: page manages focus inside it itself
             }

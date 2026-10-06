@@ -14,6 +14,8 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/panel.h"
+    #include "wx/stattext.h"
+    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
@@ -147,6 +149,42 @@ TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
     CHECK( countPageChanging.GetCount() == 1 );
     CHECK( countPageChanged.GetCount() == 1 );
 }
+
+#ifdef __WXMSW__
+
+TEST_CASE("wxNotebook::NavigateToPageWithoutFocusableChildren",
+          "[wxNotebook][focus]")
+{
+    std::unique_ptr<wxPanel> panel(new wxPanel(wxTheApp->GetTopWindow()));
+
+    wxNotebook* const notebook = new wxNotebook(panel.get(), wxID_ANY);
+    wxPanel* const page = new wxPanel(notebook);
+    new wxStaticText(page, wxID_ANY, "Only a label");
+    notebook->AddPage(page, "Page without focusable children");
+
+    wxTextCtrl* const text = new wxTextCtrl(panel.get(), wxID_ANY);
+
+    // TAB from the tab control should go to the next control after the
+    // notebook, as there is nothing to focus in the page.
+    notebook->SetFocus();
+
+    wxNavigationKeyEvent eventForward;
+    eventForward.SetDirection(true);
+    eventForward.SetFromTab(true);
+    eventForward.SetEventObject(notebook);
+    CHECK( notebook->HandleWindowEvent(eventForward) );
+    CHECK( wxWindow::FindFocus() == text );
+
+    // And Shift-TAB from outside should stop at the tab control itself.
+    wxNavigationKeyEvent eventBackward;
+    eventBackward.SetDirection(false);
+    eventBackward.SetFromTab(true);
+    eventBackward.SetEventObject(panel.get());
+    CHECK( notebook->HandleWindowEvent(eventBackward) );
+    CHECK( wxWindow::FindFocus() == notebook );
+}
+
+#endif // __WXMSW__
 
 TEST_CASE_METHOD(NotebookTestCase, "Notebook::GetTabRect", "[notebook]")
 {
