@@ -1764,7 +1764,9 @@ if test -n "$LARGEFILE_CPPFLAGS"; then
     fi
 fi
 
-dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and $ac_cv_sys_largefile_source
+dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and indicates whether _LARGEFILE_SOURCE is
+dnl needed for fseeko() via $ac_cv_sys_largefile_source in autoconf < 2.72 or
+dnl $ac_cv_func_fseeko_ftello in later versions
 dnl
 dnl it may be affected by large file flags (this happens under HP-UX 11 for
 dnl example) so set them before using it and also use C++ to ensure that we get
@@ -1775,8 +1777,9 @@ CPPFLAGS="$CPPFLAGS $LARGEFILE_CPPFLAGS"
 AC_FUNC_FSEEKO
 CPPFLAGS="$old_CPPFLAGS"
 AC_LANG_POP()
-if test "$ac_cv_sys_largefile_source" != no; then
-    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+if test "$ac_cv_sys_largefile_source" = 1 || \
+   test "$ac_cv_func_fseeko_ftello" = "need _LARGEFILE_SOURCE"; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=1"
 fi
 
 AC_C_BIGENDIAN
