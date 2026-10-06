@@ -24715,8 +24715,9 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-if test "$ac_cv_sys_largefile_source" != no; then
-    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+if test "$ac_cv_sys_largefile_source" = 1 || \
+   test "$ac_cv_func_fseeko_ftello" = "need _LARGEFILE_SOURCE"; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=1"
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether byte ordering is bigendian" >&5
