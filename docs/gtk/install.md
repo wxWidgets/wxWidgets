@@ -192,6 +192,10 @@ used to override this.
    Disables SVG rasterizing support in wxBitmapBundle. Use neither the system
    nor the builtin copy of NanoSVG.
 
+ * `--with-lunasvg` \n
+   Use LunaSVG for SVG rasterizing support in wxBitmapBundle.
+   NanoSVG takes precedence, so should be disabled.
+
  * `--without-expat` \n
    Disable XML classes based on Expat parser. Don't use expat library.
 

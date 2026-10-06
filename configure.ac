@@ -8599,6 +8599,7 @@ echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
 echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 echo "                                       nanosvg            ${wxUSE_NANOSVG-none}"
+echo "                                       lunasvg            ${wxUSE_LUNASVG-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
