@@ -500,11 +500,7 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc'">-lopengl32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
-        <set var="EXTRALIBS_STC">
-            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">imm32.lib</if>
-            <if cond="COMPILER=='vc' and TOOLKIT=='MSW'">imm32.lib</if>
-            <if cond="COMPILER=='gcc' and TOOLKIT=='MSW'">-limm32</if>
-        </set>
+        <set var="EXTRALIBS_STC"/>
         <set var="EXTRALIBS_WEBVIEW"/>
         <set var="EXTRALDFLAGS_WEBVIEW"/>
 
