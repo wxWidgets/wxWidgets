@@ -252,6 +252,26 @@ AttachToFrame(wxMenu* menu, wxFrame* frame)
 
 } // anonymous namespace
 
+extern "C" {
+// Set layout direction for a GtkMenu or GtkMenuBar,
+// and all of its children and sub-menus
+static void SetLayoutDirAll(GtkWidget* widget, void* data)
+{
+    wxWindow::GTKSetLayout(widget, wxLayoutDirection(GPOINTER_TO_INT(data)));
+
+    if (GTK_IS_CONTAINER(widget))
+    {
+        gtk_container_foreach((GtkContainer*)widget, SetLayoutDirAll, data);
+        if (GTK_IS_MENU_ITEM(widget))
+        {
+            widget = gtk_menu_item_get_submenu((GtkMenuItem*)widget);
+            if (widget)
+                SetLayoutDirAll(widget, data);
+        }
+    }
+}
+}
+
 void wxMenuBar::SetLayoutDirection(wxLayoutDirection dir)
 {
     if ( dir == wxLayout_Default )
@@ -271,14 +291,7 @@ void wxMenuBar::SetLayoutDirection(wxLayoutDirection dir)
     if ( dir == wxLayout_Default )
         return;
 
-    GTKSetLayout(m_menubar, dir);
-
-    // also set the layout of all menus we already have (new ones will inherit
-    // the current layout)
-    for (auto* menu: m_menus)
-    {
-        menu->SetLayoutDirection(dir);
-    }
+    SetLayoutDirAll(m_menubar, GINT_TO_POINTER(dir));
 }
 
 wxLayoutDirection wxMenuBar::GetLayoutDirection() const
@@ -875,24 +888,8 @@ wxMenu::~wxMenu()
 
 void wxMenu::SetLayoutDirection(wxLayoutDirection dir)
 {
-    if ( m_owner )
-    {
-        wxWindow::GTKSetLayout(m_owner, dir);
-
-        for (auto* item: m_items)
-        {
-            if (wxMenu* subMenu = item->GetSubMenu())
-                subMenu->SetLayoutDirection(dir);
-            else if (GtkWidget* widget = item->GetMenuItem())
-            {
-                wxWindow::GTKSetLayout(widget, dir);
-                widget = gtk_bin_get_child(GTK_BIN(widget));
-                if (widget)
-                    wxWindow::GTKSetLayout(widget, dir);
-            }
-        }
-    }
-    //else: will be called later by wxMenuBar again
+    if (dir != wxLayout_Default)
+        SetLayoutDirAll(m_menu, GINT_TO_POINTER(dir));
 }
 
 wxLayoutDirection wxMenu::GetLayoutDirection() const
