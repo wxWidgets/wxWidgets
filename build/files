@@ -608,6 +608,7 @@ BASE_CMN_HDR =
     wx/sstream.h
     wx/stack.h
     wx/stackwalk.h
+    wx/stdformat.h
     wx/stdpaths.h
     wx/stdstream.h
     wx/stockitem.h

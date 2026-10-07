@@ -1853,6 +1853,11 @@ public:
 
     const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
 
+    // This is used by {fmt} library to format wxString objects. It is defined
+    // as a hidden friend to ensure that it is only found by ADL for wxString
+    // arguments and not for the other types implicitly convertible to it.
+    friend std::string format_as(const wxString& s) { return s.utf8_string(); }
+
     // functions for storing binary data in wxString:
     static wxString From8BitData(const char *data, size_t len)
       { return wxString(data, wxConvISO8859_1, len); }
