@@ -825,8 +825,6 @@ MyFrame::MyFrame()
     SetSizer(frameSizer);
 
     m_ribbon->SetBackstage(m_backstage, m_logwindow);
-    // The File tab is the first page, so it starts out selected; go to the next one.
-    m_ribbon->ShowBackstage(false);
 }
 
 void MyFrame::CreateBackstage()

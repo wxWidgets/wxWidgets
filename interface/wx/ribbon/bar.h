@@ -551,6 +551,8 @@ public:
         and occupying the same spot. The backstage's navigation area follows
         the colours of the ribbon bar's art provider.
 
+        The backstage starts out hidden; call ShowBackstage() to show it.
+
         Setting another pair puts the previous pair back to normal (a shown
         backstage is shown again from the new pair).
 

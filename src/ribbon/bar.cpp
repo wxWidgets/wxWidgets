@@ -1837,8 +1837,9 @@ void wxRibbonBar::SetBackstage(wxBackstage* backstage, wxWindow* content)
     m_backstageContent = content;
     UpdateBackstageColours();
 
-    if ( wasShown )
-        ShowBackstage(true);
+    // The backstage is never shown until asked for (this also leaves the File
+    // tab if it happens to be the active page).
+    ShowBackstage(wasShown);
 }
 
 void wxRibbonBar::ShowBackstage(bool show)
