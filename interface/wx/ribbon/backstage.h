@@ -13,10 +13,10 @@
 enum class wxBackstageHighlightStyle
 {
     /// A solid fill (the default).
-    wxBackstageHighlightFlat,
+    Flat,
 
     /// A glossy fill.
-    wxBackstageHighlightGlossy
+    Glossy
 };
 
 /**
@@ -258,96 +258,6 @@ public:
         that its own colours are left alone.
     */
     void KeepWindowColours(wxWindow* window);
-
-    ///@}
-
-    /**
-        @name Helpers
-
-        Static functions for controls that are drawn on a page.
-    */
-    ///@{
-
-    /**
-        Returns @true if the colour is dark.
-    */
-    static bool IsDark(const wxColour& colour);
-
-    /**
-        Returns a darker version of a light colour, or a lighter version of a
-        dark one.
-
-        @param colour
-            The colour to shade or tint.
-        @param shadeOrTintValue
-            How much to change it, from 0 to 1.
-    */
-    static wxColour ShadeOrTint(const wxColour& colour, double shadeOrTintValue = 0.2);
-
-    /**
-        Returns black for a light colour or white for a dark one.
-    */
-    static wxColour BlackOrWhiteContrast(const wxColour& colour);
-
-    /**
-        Mixes two colours.
-
-        @param from
-            The colour to start from.
-        @param to
-            The colour to mix in.
-        @param amount
-            How much of @a to to use, from 0 to 1.
-    */
-    static wxColour Blend(const wxColour& from, const wxColour& to, double amount);
-
-    /**
-        Returns the backstage that a window is on, or @NULL if there is none.
-    */
-    static const wxBackstage* FindBackstage(const wxWindow* window);
-
-    /**
-        Gets the colours that a window on a page should be drawn with.
-
-        If the window isn't on a backstage, then system colours are returned.
-    */
-    static void GetPageColours(const wxWindow* window, wxColour& background,
-                              wxColour& foreground);
-
-    /**
-        Draws a bitmap, scaled to fit in a rectangle while keeping its aspect ratio.
-    */
-    static void DrawBitmapFit(wxDC& dc, const wxWindow* window,
-                              const wxBitmapBundle& bundle, const wxRect& rect);
-
-    /**
-        Draws a rectangle with a glossy fill.
-    */
-    static void DrawGlossyRect(wxDC& dc, const wxRect& rect, const wxColour& colour);
-
-    /**
-        Draws a keyboard focus rectangle.
-    */
-    static void DrawFocusRect(wxDC& dc, const wxRect& rect, const wxColour& colour);
-
-    /**
-        Returns the size of text (which can be multi-line) in a font.
-    */
-    static wxSize MeasureText(const wxWindow* window, const wxString& text,
-                              const wxFont& font);
-
-    /**
-        Skips a key event if it has modifiers (such as Alt+Space or Ctrl+Tab),
-        leaving it to the system.
-
-        @return @true if the event was skipped.
-    */
-    static bool SkipIfShortcutKey(wxKeyEvent& event);
-
-    /**
-        Returns @true if the key is Space, Enter, or numpad Enter.
-    */
-    static bool IsActivateKey(int keyCode);
 
     ///@}
 };

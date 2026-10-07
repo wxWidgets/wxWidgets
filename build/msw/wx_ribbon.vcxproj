@@ -908,6 +908,7 @@
     <ClInclude Include="..\..\include\wx\ribbon\gallery.h" />
     <ClInclude Include="..\..\include\wx\ribbon\page.h" />
     <ClInclude Include="..\..\include\wx\ribbon\panel.h" />
+    <ClInclude Include="..\..\include\wx\ribbon\private\backstage.h" />
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h" />
   </ItemGroup>

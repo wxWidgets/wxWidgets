@@ -13,13 +13,13 @@
 enum class wxBackstageButtonStyle
 {
     /// A framed tile with the icon above its label (the default).
-    wxBackstageButtonTile,
+    Tile,
 
     /// The icon on the left, with a title and description to its right.
-    wxBackstageButtonWide,
+    Wide,
 
     /// A large framed thumbnail with a caption (and description) below it.
-    wxBackstageButtonCard
+    Card
 };
 
 /**
@@ -30,10 +30,10 @@ enum class wxBackstageButtonStyle
 enum class wxBackstageHeadingStyle
 {
     /// A large page title (e.g., "Save As" (the default)).
-    wxBackstageHeadingTitle,
+    Title,
 
     /// A smaller, bold section heading.
-    wxBackstageHeadingSection
+    Section
 };
 
 /**
@@ -72,7 +72,7 @@ public:
     */
     wxBackstageButton(wxWindow* parent, wxWindowID id, const wxString& label,
                       const wxBitmapBundle& icon = wxBitmapBundle(),
-                      wxBackstageButtonStyle style = wxBackstageButtonStyle::wxBackstageButtonTile,
+                      wxBackstageButtonStyle style = wxBackstageButtonStyle::Tile,
                       wxString description = wxString());
 
     /**
@@ -134,7 +134,7 @@ public:
             Whether this is a page title or a section heading.
     */
     wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
-                       wxBackstageHeadingStyle style = wxBackstageHeadingStyle::wxBackstageHeadingTitle);
+                       wxBackstageHeadingStyle style = wxBackstageHeadingStyle::Title);
 };
 
 /**

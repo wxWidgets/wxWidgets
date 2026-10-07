@@ -3093,6 +3093,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/ribbon/gallery.h
     wx/ribbon/page.h
     wx/ribbon/panel.h
+    wx/ribbon/private/backstage.h
     wx/ribbon/toolbar.h
     wx/xrc/xh_ribbon.h
 </set>

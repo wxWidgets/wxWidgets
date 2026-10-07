@@ -18,8 +18,6 @@
 #include "wx/bmpbndl.h"
 #include "wx/colour.h"
 #include "wx/dc.h"
-#include "wx/dcbuffer.h"
-#include "wx/dcgraph.h"
 #include "wx/scrolwin.h"
 #include "wx/settings.h"
 #include "wx/simplebook.h"
@@ -38,8 +36,8 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_BACKSTAGE_CLICKED, wxNotifyEv
 
 enum class wxBackstageHighlightStyle
 {
-    wxBackstageHighlightFlat,
-    wxBackstageHighlightGlossy
+    Flat,
+    Glossy
 };
 
 class WXDLLIMPEXP_RIBBON wxBackstagePage final : public wxScrolledWindow
@@ -119,75 +117,9 @@ public:
     }
     void SetPageBackgroundColour(const wxColour& colour);
     wxNODISCARD
-    wxColour GetPageForegroundColour() const
-    {
-        return BlackOrWhiteContrast(GetPageBackgroundColour());
-    }
+    wxColour GetPageForegroundColour() const;
     void KeepWindowColours(wxWindow* window);
 
-
-    wxNODISCARD
-    static bool IsDark(const wxColour& colour)
-    {
-        wxASSERT_MSG(colour.IsOk(), "Invalid colour passed to IsDark()!");
-        return (colour.IsOk() &&
-            colour.Alpha() > 32 &&
-            colour.GetLuminance() < 0.5);
-    }
-    wxNODISCARD
-    static wxColour ShadeOrTint(const wxColour& colour,
-        const double shadeOrTintValue = 0.2)
-    {
-        return (IsDark(colour) ?
-            colour.ChangeLightness(100 + static_cast<int>(shadeOrTintValue * 100)) :
-            colour.ChangeLightness(100 - static_cast<int>(shadeOrTintValue * 100)));
-    }
-    wxNODISCARD
-    static wxColour BlackOrWhiteContrast(const wxColour& colour)
-    {
-        return (IsDark(colour) ? wxColour{ 255, 255, 255 } : wxColour{ 0, 0, 0 });
-    }
-    wxNODISCARD
-    static wxColour Blend(const wxColour& from, const wxColour& to, const double amount)
-    {
-        const auto mix = [amount](const unsigned char a, const unsigned char b)
-            {
-                return static_cast<unsigned char>(
-                    wxRound(a + (static_cast<double>(b) - a) * amount));
-            };
-        return wxColour{ mix(from.Red(), to.Red()),
-                         mix(from.Green(), to.Green()),
-                         mix(from.Blue(), to.Blue()) };
-    }
-    wxNODISCARD
-    static const wxBackstage* FindBackstage(const wxWindow* window);
-    static void GetPageColours(const wxWindow* window, wxColour& background,
-                               wxColour& foreground);
-
-
-    static void DrawBitmapFit(wxDC& dc, const wxWindow* window,
-                              const wxBitmapBundle& bundle, const wxRect& rect);
-    static void DrawGlossyRect(wxDC& dc, const wxRect& rect, const wxColour& colour);
-    static void DrawFocusRect(wxDC& dc, const wxRect& rect, const wxColour& colour);
-    wxNODISCARD
-    static wxSize MeasureText(const wxWindow* window, const wxString& text,
-                              const wxFont& font);
-
-    static bool SkipIfShortcutKey(wxKeyEvent& event)
-    {
-        if ( event.HasModifiers() )
-        {
-            event.Skip();
-            return true;
-        }
-        return false;
-    }
-    wxNODISCARD
-    static bool IsActivateKey(const int keyCode) noexcept
-    {
-        return keyCode == WXK_SPACE || keyCode == WXK_RETURN ||
-            keyCode == WXK_NUMPAD_ENTER;
-    }
 private:
     enum class ItemKind
     {
@@ -297,26 +229,10 @@ private:
     wxWindowID m_selectedId{ wxNOT_FOUND };
     wxColour m_navBackgroundColour;
     wxColour m_highlightColour;
-    wxBackstageHighlightStyle m_highlightStyle{ wxBackstageHighlightStyle::wxBackstageHighlightFlat };
+    wxBackstageHighlightStyle m_highlightStyle{ wxBackstageHighlightStyle::Flat };
     wxColour m_pageBackgroundColour;
     wxColour m_appliedPageBackground;
     wxColour m_appliedPageForeground;
-};
-
-struct WXDLLIMPEXP_RIBBON wxBackstagePaintBuffer
-{
-    explicit wxBackstagePaintBuffer(wxWindow* win);
-
-    wxAutoBufferedPaintDC m_buffer;
-    wxColour m_background;
-    wxColour m_foreground;
-};
-
-struct WXDLLIMPEXP_RIBBON wxBackstagePaintGraphics : public wxBackstagePaintBuffer
-{
-    wxBackstagePaintGraphics(wxWindow* win, const wxFont& font);
-
-    wxGCDC m_graphics;
 };
 
 #endif // wxUSE_RIBBON

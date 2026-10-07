@@ -12,6 +12,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/backstage.h"
+#include "wx/ribbon/private/backstage.h"
 
 #ifndef WX_PRECOMP
     #include "wx/sizer.h"
@@ -352,7 +353,13 @@ void wxBackstage::OnPageDestroyed(wxWindowDestroyEvent& event)
 }
 
 //-------------------------------------------
-const wxBackstage* wxBackstage::FindBackstage(const wxWindow* window)
+wxColour wxBackstage::GetPageForegroundColour() const
+{
+    return wxBackstageHelpers::BlackOrWhiteContrast(GetPageBackgroundColour());
+}
+
+//-------------------------------------------
+const wxBackstage* wxBackstageHelpers::FindBackstage(const wxWindow* window)
 {
     while ( window != nullptr )
     {
@@ -366,10 +373,10 @@ const wxBackstage* wxBackstage::FindBackstage(const wxWindow* window)
 }
 
 //-------------------------------------------
-void wxBackstage::GetPageColours(const wxWindow* window, wxColour& background,
+void wxBackstageHelpers::GetPageColours(const wxWindow* window, wxColour& background,
                                 wxColour& foreground)
 {
-    if ( const auto* backstage = FindBackstage(window) )
+    if ( const auto* backstage = wxBackstageHelpers::FindBackstage(window) )
     {
         background = backstage->GetPageBackgroundColour();
         foreground = backstage->GetPageForegroundColour();
@@ -384,7 +391,7 @@ void wxBackstage::GetPageColours(const wxWindow* window, wxColour& background,
 //-------------------------------------------
 wxBackstagePaintBuffer::wxBackstagePaintBuffer(wxWindow* win) : m_buffer(win)
 {
-    wxBackstage::GetPageColours(win, m_background, m_foreground);
+    wxBackstageHelpers::GetPageColours(win, m_background, m_foreground);
     m_buffer.SetBackground(wxBrush{ m_background });
     m_buffer.Clear();
 }
@@ -397,7 +404,7 @@ wxBackstagePaintGraphics::wxBackstagePaintGraphics(wxWindow* win, const wxFont& 
 }
 
 //-------------------------------------------
-void wxBackstage::DrawBitmapFit(wxDC& dc, const wxWindow* window,
+void wxBackstageHelpers::DrawBitmapFit(wxDC& dc, const wxWindow* window,
                                 const wxBitmapBundle& bundle, const wxRect& rect)
 {
     if ( !bundle.IsOk() || rect.IsEmpty() )
@@ -434,7 +441,7 @@ void wxBackstage::DrawBitmapFit(wxDC& dc, const wxWindow* window,
 }
 
 //-------------------------------------------
-wxSize wxBackstage::MeasureText(const wxWindow* window, const wxString& text,
+wxSize wxBackstageHelpers::MeasureText(const wxWindow* window, const wxString& text,
                                 const wxFont& font)
 {
     if ( text.empty() )
@@ -878,23 +885,23 @@ void wxBackstage::OnResize(wxSizeEvent& event)
 }
 
 //-------------------------------------------
-void wxBackstage::DrawGlossyRect(wxDC& dc, const wxRect& rect, const wxColour& colour)
+void wxBackstageHelpers::DrawGlossyRect(wxDC& dc, const wxRect& rect, const wxColour& colour)
 {
     const int topHeight = rect.GetHeight() / 2;
     const wxRect topRect{ rect.GetX(), rect.GetY(), rect.GetWidth(), topHeight };
     const wxRect bottomRect{ rect.GetX(), rect.GetY() + topHeight, rect.GetWidth(),
                              rect.GetHeight() - topHeight };
-    dc.GradientFillLinear(topRect, Blend(colour, *wxWHITE, 0.35), Blend(colour, *wxWHITE, 0.10),
+    dc.GradientFillLinear(topRect, wxBackstageHelpers::Blend(colour, *wxWHITE, 0.35), wxBackstageHelpers::Blend(colour, *wxWHITE, 0.10),
                           wxSOUTH);
-    dc.GradientFillLinear(bottomRect, Blend(colour, *wxBLACK, 0.06), Blend(colour, *wxWHITE, 0.12),
+    dc.GradientFillLinear(bottomRect, wxBackstageHelpers::Blend(colour, *wxBLACK, 0.06), wxBackstageHelpers::Blend(colour, *wxWHITE, 0.12),
                           wxSOUTH);
-    const wxDCPenChanger pc{ dc, wxPen{ Blend(colour, *wxBLACK, 0.30), 1 } };
+    const wxDCPenChanger pc{ dc, wxPen{ wxBackstageHelpers::Blend(colour, *wxBLACK, 0.30), 1 } };
     dc.DrawLine(rect.GetLeft(), rect.GetTop(), rect.GetRight() + 1, rect.GetTop());
     dc.DrawLine(rect.GetLeft(), rect.GetBottom(), rect.GetRight() + 1, rect.GetBottom());
 }
 
 //-------------------------------------------
-void wxBackstage::DrawFocusRect(wxDC& dc, const wxRect& rect, const wxColour& colour)
+void wxBackstageHelpers::DrawFocusRect(wxDC& dc, const wxRect& rect, const wxColour& colour)
 {
     const wxDCPenChanger pc{ dc, wxPen{ colour, 1, wxPENSTYLE_DOT } };
     const wxDCBrushChanger bc{ dc, *wxTRANSPARENT_BRUSH };
@@ -916,12 +923,12 @@ void wxBackstage::OnPaintWindow(wxPaintEvent& WXUNUSED(event))
     }
     dc.SetClippingRegion(navRect);
 
-    const wxColour navTextColour = BlackOrWhiteContrast(navColour);
+    const wxColour navTextColour = wxBackstageHelpers::BlackOrWhiteContrast(navColour);
     const bool glossy =
-        (m_highlightStyle == wxBackstageHighlightStyle::wxBackstageHighlightGlossy);
+        (m_highlightStyle == wxBackstageHighlightStyle::Glossy);
     const bool customFill = glossy || m_highlightColour.IsOk();
     const wxColour highlightColour =
-        m_highlightColour.IsOk() ? m_highlightColour : ShadeOrTint(navColour, 0.22);
+        m_highlightColour.IsOk() ? m_highlightColour : wxBackstageHelpers::ShadeOrTint(navColour, 0.22);
     const NavMetrics metrics = GetNavMetrics();
 
     for ( size_t i = 0; i < m_items.size(); ++i )
@@ -936,7 +943,7 @@ void wxBackstage::OnPaintWindow(wxPaintEvent& WXUNUSED(event))
         if ( item.m_kind == ItemKind::Separator )
         {
             const wxDCPenChanger pc{ dc,
-                wxPen{ Blend(navColour, navTextColour, 0.3), std::max(1, FromDIP(1)) } };
+                wxPen{ wxBackstageHelpers::Blend(navColour, navTextColour, 0.3), std::max(1, FromDIP(1)) } };
             const wxCoord lineY = item.m_rect.GetTop() + (item.m_rect.GetHeight() / 2);
             dc.DrawLine(metrics.m_padX, lineY, m_navWidth - metrics.m_padX, lineY);
             continue;
@@ -948,8 +955,8 @@ void wxBackstage::OnPaintWindow(wxPaintEvent& WXUNUSED(event))
         {
             if ( static_cast<long>(i) == m_pressedIndex )
             {
-                fillColour = customFill ? Blend(highlightColour, *wxBLACK, 0.15) :
-                                         ShadeOrTint(navColour, 0.3);
+                fillColour = customFill ? wxBackstageHelpers::Blend(highlightColour, *wxBLACK, 0.15) :
+                                         wxBackstageHelpers::ShadeOrTint(navColour, 0.3);
             }
             else if ( isSelected )
             {
@@ -957,15 +964,15 @@ void wxBackstage::OnPaintWindow(wxPaintEvent& WXUNUSED(event))
             }
             else if ( static_cast<long>(i) == m_hoverIndex )
             {
-                fillColour = customFill ? Blend(highlightColour, *wxWHITE, 0.25) :
-                                         ShadeOrTint(navColour, 0.12);
+                fillColour = customFill ? wxBackstageHelpers::Blend(highlightColour, *wxWHITE, 0.25) :
+                                         wxBackstageHelpers::ShadeOrTint(navColour, 0.12);
             }
         }
         if ( fillColour != navColour )
         {
             if ( glossy )
             {
-                DrawGlossyRect(dc, item.m_rect, fillColour);
+                wxBackstageHelpers::DrawGlossyRect(dc, item.m_rect, fillColour);
             }
             else
             {
@@ -975,17 +982,17 @@ void wxBackstage::OnPaintWindow(wxPaintEvent& WXUNUSED(event))
             }
         }
 
-        wxColour textColour = BlackOrWhiteContrast(fillColour);
+        wxColour textColour = wxBackstageHelpers::BlackOrWhiteContrast(fillColour);
         if ( !item.m_enabled )
         {
-            textColour = Blend(textColour, fillColour, 0.55);
+            textColour = wxBackstageHelpers::Blend(textColour, fillColour, 0.55);
         }
         const wxDCTextColourChanger tcc{ dc, textColour };
 
         wxCoord textX = item.m_rect.GetLeft() + metrics.m_padX;
         if ( item.m_icon.IsOk() )
         {
-            DrawBitmapFit(dc, this, item.m_icon,
+            wxBackstageHelpers::DrawBitmapFit(dc, this, item.m_icon,
                 wxRect{ wxPoint{ textX, item.m_rect.GetTop() +
                                     ((item.m_rect.GetHeight() - metrics.m_iconSize.GetHeight()) / 2) },
                         metrics.m_iconSize });
@@ -1002,7 +1009,7 @@ void wxBackstage::OnPaintWindow(wxPaintEvent& WXUNUSED(event))
 
         if ( HasFocus() && m_showFocusRect && static_cast<long>(i) == m_focusIndex )
         {
-            DrawFocusRect(dc, item.m_rect.Deflate(FromDIP(2), FromDIP(2)), textColour);
+            wxBackstageHelpers::DrawFocusRect(dc, item.m_rect.Deflate(FromDIP(2), FromDIP(2)), textColour);
         }
 
         if ( isSelected && item.m_enabled )
@@ -1212,7 +1219,7 @@ void wxBackstage::OnNavigationKey(wxNavigationKeyEvent& event)
 //-------------------------------------------
 void wxBackstage::OnKeyDown(wxKeyEvent& event)
 {
-    if ( SkipIfShortcutKey(event) )
+    if ( wxBackstageHelpers::SkipIfShortcutKey(event) )
     {
         return;
     }
@@ -1248,7 +1255,7 @@ void wxBackstage::OnKeyDown(wxKeyEvent& event)
         }
         break;
     default:
-        if ( IsActivateKey(event.GetKeyCode()) && !event.IsAutoRepeat() &&
+        if ( wxBackstageHelpers::IsActivateKey(event.GetKeyCode()) && !event.IsAutoRepeat() &&
             m_focusIndex != wxNOT_FOUND &&
             IsSelectable(static_cast<size_t>(m_focusIndex)) )
         {

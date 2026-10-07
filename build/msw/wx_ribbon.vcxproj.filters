@@ -104,6 +104,9 @@
     <ClInclude Include="..\..\include\wx\ribbon\panel.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\ribbon\private\backstage.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

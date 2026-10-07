@@ -4037,6 +4037,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/ribbon/gallery.h \
 	wx/ribbon/page.h \
 	wx/ribbon/panel.h \
+	wx/ribbon/private/backstage.h \
 	wx/ribbon/toolbar.h \
 	wx/xrc/xh_ribbon.h \
 	wx/richtext/richtextbackgroundpage.h \

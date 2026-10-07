@@ -29,15 +29,15 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_BACKSTAGE_ITEM_CLICKED, wxCom
 
 enum class wxBackstageButtonStyle
 {
-    wxBackstageButtonTile,
-    wxBackstageButtonWide,
-    wxBackstageButtonCard
+    Tile,
+    Wide,
+    Card
 };
 
 enum class wxBackstageHeadingStyle
 {
-    wxBackstageHeadingTitle,
-    wxBackstageHeadingSection
+    Title,
+    Section
 };
 
 class WXDLLIMPEXP_RIBBON wxBackstageButton final : public wxControl
@@ -45,7 +45,7 @@ class WXDLLIMPEXP_RIBBON wxBackstageButton final : public wxControl
 public:
     wxBackstageButton(wxWindow* parent, wxWindowID id, const wxString& label,
         const wxBitmapBundle& icon = wxBitmapBundle{},
-        wxBackstageButtonStyle style = wxBackstageButtonStyle::wxBackstageButtonTile,
+        wxBackstageButtonStyle style = wxBackstageButtonStyle::Tile,
         wxString  description = wxString{});
     wxBackstageButton() = delete;
     wxBackstageButton(const wxBackstageButton&) = delete;
@@ -102,7 +102,7 @@ class WXDLLIMPEXP_RIBBON wxBackstageHeading final : public wxControl
 {
 public:
     wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
-        wxBackstageHeadingStyle style = wxBackstageHeadingStyle::wxBackstageHeadingTitle);
+        wxBackstageHeadingStyle style = wxBackstageHeadingStyle::Title);
     wxBackstageHeading() = delete;
     wxBackstageHeading(const wxBackstageHeading&) = delete;
     wxBackstageHeading& operator=(const wxBackstageHeading&) = delete;

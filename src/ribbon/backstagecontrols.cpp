@@ -12,6 +12,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/backstagecontrols.h"
+#include "wx/ribbon/private/backstage.h"
 
 #ifndef WX_PRECOMP
     #include "wx/sizer.h"
@@ -108,13 +109,13 @@ private:
 
 wxBackstageButton::wxBackstageButton(wxWindow* parent, wxWindowID id, const wxString& label,
     const wxBitmapBundle& icon /*= wxBitmapBundle{}*/,
-    const wxBackstageButtonStyle style /*= wxBackstageButtonStyle::wxBackstageButtonTile*/,
+    const wxBackstageButtonStyle style /*= wxBackstageButtonStyle::Tile*/,
     wxString description /*= wxString{}*/)
     : wxControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxWANTS_CHARS,
         wxDefaultValidator, "wxBackstageButton"),
     m_icon(icon), m_description(std::move(description)), m_style(style)
 {
-    m_iconSizeDIP = (style == wxBackstageButtonStyle::wxBackstageButtonCard) ?
+    m_iconSizeDIP = (style == wxBackstageButtonStyle::Card) ?
         wxSize{ 180, 110 } : wxSize{ 32, 32 };
 
     wxControl::SetLabel(label);
@@ -205,13 +206,13 @@ wxSize wxBackstageButton::DoGetBestSize() const
     const wxCoord gap = FromDIP(6);
     const wxSize iconSize = FromDIP(m_iconSizeDIP);
     const bool hasIcon = m_icon.IsOk();
-    const wxSize labelSize = wxBackstage::MeasureText(this, GetDisplayLabel(),
-        m_style == wxBackstageButtonStyle::wxBackstageButtonTile ? GetFont() : GetFont().Bold());
-    const wxSize descSize = wxBackstage::MeasureText(this, m_description, GetFont());
+    const wxSize labelSize = wxBackstageHelpers::MeasureText(this, GetDisplayLabel(),
+        m_style == wxBackstageButtonStyle::Tile ? GetFont() : GetFont().Bold());
+    const wxSize descSize = wxBackstageHelpers::MeasureText(this, m_description, GetFont());
 
     switch ( m_style )
     {
-    case wxBackstageButtonStyle::wxBackstageButtonWide:
+    case wxBackstageButtonStyle::Wide:
         {
             const wxCoord textHeight = labelSize.GetHeight() + descSize.GetHeight() +
                 (descSize.GetHeight() > 0 ? gap / 2 : 0);
@@ -219,12 +220,12 @@ wxSize wxBackstageButton::DoGetBestSize() const
                                std::max(labelSize.GetWidth(), descSize.GetWidth()) + pad,
                            (2 * pad) + std::max(hasIcon ? iconSize.GetHeight() : 0, textHeight) };
         }
-    case wxBackstageButtonStyle::wxBackstageButtonCard:
+    case wxBackstageButtonStyle::Card:
         return wxSize{ std::max({ iconSize.GetWidth(), labelSize.GetWidth(),
                                   descSize.GetWidth() }) + (2 * pad),
                        pad + iconSize.GetHeight() + gap + labelSize.GetHeight() +
                            descSize.GetHeight() + pad };
-    case wxBackstageButtonStyle::wxBackstageButtonTile:
+    case wxBackstageButtonStyle::Tile:
     default:
         return wxSize{ std::max(std::max(hasIcon ? iconSize.GetWidth() : 0,
                                          labelSize.GetWidth()) + (2 * pad), FromDIP(80)),
@@ -245,40 +246,40 @@ void wxBackstageButton::OnPaint(wxPaintEvent& WXUNUSED(event))
     const wxCoord pad = FromDIP(8);
     const wxCoord gap = FromDIP(6);
     const wxSize iconSize = FromDIP(m_iconSizeDIP);
-    const bool isCard = (m_style == wxBackstageButtonStyle::wxBackstageButtonCard);
+    const bool isCard = (m_style == wxBackstageButtonStyle::Card);
     const bool enabled = IsEnabled();
 
     wxColour fill = m_calloutColour.IsOk() ? m_calloutColour : bg;
     const bool highlighted = enabled && (m_pressed || m_hover);
     if ( highlighted && !isCard )
     {
-        fill = wxBackstage::ShadeOrTint(fill, m_pressed ? 0.22 : 0.10);
+        fill = wxBackstageHelpers::ShadeOrTint(fill, m_pressed ? 0.22 : 0.10);
     }
-    wxColour textColour = wxBackstage::BlackOrWhiteContrast(fill);
-    wxColour dimColour = wxBackstage::Blend(textColour, fill, 0.35);
+    wxColour textColour = wxBackstageHelpers::BlackOrWhiteContrast(fill);
+    wxColour dimColour = wxBackstageHelpers::Blend(textColour, fill, 0.35);
     if ( !enabled )
     {
-        textColour = wxBackstage::Blend(textColour, fill, 0.55);
-        dimColour = wxBackstage::Blend(dimColour, fill, 0.55);
+        textColour = wxBackstageHelpers::Blend(textColour, fill, 0.55);
+        dimColour = wxBackstageHelpers::Blend(dimColour, fill, 0.55);
     }
-    const wxColour frameColour = wxBackstage::Blend(bg, fg, 0.25);
+    const wxColour frameColour = wxBackstageHelpers::Blend(bg, fg, 0.25);
 
     dc.SetTextForeground(textColour);
 
     switch ( m_style )
     {
-    case wxBackstageButtonStyle::wxBackstageButtonTile:
+    case wxBackstageButtonStyle::Tile:
         {
             {
                 const wxDCPenChanger pc{ dc,
-                    wxPen{ highlighted ? wxBackstage::Blend(bg, fg, 0.55) : frameColour, 1 } };
+                    wxPen{ highlighted ? wxBackstageHelpers::Blend(bg, fg, 0.55) : frameColour, 1 } };
                 const wxDCBrushChanger bc{ dc, wxBrush{ fill } };
                 dc.DrawRectangle(rect.Deflate(0, 0));
             }
             wxCoord y = rect.GetTop() + pad;
             if ( m_icon.IsOk() )
             {
-                wxBackstage::DrawBitmapFit(dc, this, m_icon,
+                wxBackstageHelpers::DrawBitmapFit(dc, this, m_icon,
                     wxRect{ rect.GetLeft() + ((rect.GetWidth() - iconSize.GetWidth()) / 2),
                             y, iconSize.GetWidth(), iconSize.GetHeight() });
                 y += iconSize.GetHeight() + gap;
@@ -289,27 +290,27 @@ void wxBackstageButton::OnPaint(wxPaintEvent& WXUNUSED(event))
                 wxALIGN_CENTER_HORIZONTAL | wxALIGN_TOP);
         }
         break;
-    case wxBackstageButtonStyle::wxBackstageButtonWide:
+    case wxBackstageButtonStyle::Wide:
         {
             {
                 const wxDCPenChanger pc{ dc,
                     (highlighted || m_calloutColour.IsOk()) ?
-                        wxPen{ wxBackstage::Blend(bg, fg, 0.3), 1 } : *wxTRANSPARENT_PEN };
+                        wxPen{ wxBackstageHelpers::Blend(bg, fg, 0.3), 1 } : *wxTRANSPARENT_PEN };
                 const wxDCBrushChanger bc{ dc, wxBrush{ fill } };
                 dc.DrawRectangle(rect);
             }
             wxCoord textX = rect.GetLeft() + pad;
             if ( m_icon.IsOk() )
             {
-                wxBackstage::DrawBitmapFit(dc, this, m_icon,
+                wxBackstageHelpers::DrawBitmapFit(dc, this, m_icon,
                     wxRect{ textX,
                             rect.GetTop() + ((rect.GetHeight() - iconSize.GetHeight()) / 2),
                             iconSize.GetWidth(), iconSize.GetHeight() });
                 textX += iconSize.GetWidth() + (2 * gap);
             }
             const wxFont titleFont = GetFont().Bold();
-            const wxSize titleSize = wxBackstage::MeasureText(this, GetDisplayLabel(), titleFont);
-            const wxSize descSize = wxBackstage::MeasureText(this, m_description, GetFont());
+            const wxSize titleSize = wxBackstageHelpers::MeasureText(this, GetDisplayLabel(), titleFont);
+            const wxSize descSize = wxBackstageHelpers::MeasureText(this, m_description, GetFont());
             const wxCoord blockHeight = titleSize.GetHeight() + descSize.GetHeight() +
                 (descSize.GetHeight() > 0 ? gap / 2 : 0);
             wxCoord y = rect.GetTop() + ((rect.GetHeight() - blockHeight) / 2);
@@ -329,7 +330,7 @@ void wxBackstageButton::OnPaint(wxPaintEvent& WXUNUSED(event))
             }
         }
         break;
-    case wxBackstageButtonStyle::wxBackstageButtonCard:
+    case wxBackstageButtonStyle::Card:
         {
             const wxRect thumbRect{ rect.GetLeft() + pad, rect.GetTop() + pad,
                                     rect.GetWidth() - (2 * pad), iconSize.GetHeight() };
@@ -339,13 +340,13 @@ void wxBackstageButton::OnPaint(wxPaintEvent& WXUNUSED(event))
                     wxPen{ highlighted ? accent : frameColour,
                            highlighted ? std::max(2, FromDIP(2)) : 1 } };
                 const wxDCBrushChanger bc{ dc, wxBrush{ m_pressed && enabled ?
-                    wxBackstage::ShadeOrTint(bg, 0.12) : bg } };
+                    wxBackstageHelpers::ShadeOrTint(bg, 0.12) : bg } };
                 dc.DrawRectangle(thumbRect);
             }
-            wxBackstage::DrawBitmapFit(dc, this, m_icon, thumbRect.Deflate(FromDIP(2), FromDIP(2)));
+            wxBackstageHelpers::DrawBitmapFit(dc, this, m_icon, thumbRect.Deflate(FromDIP(2), FromDIP(2)));
 
             const wxFont titleFont = GetFont().Bold();
-            const wxSize titleSize = wxBackstage::MeasureText(this, GetDisplayLabel(), titleFont);
+            const wxSize titleSize = wxBackstageHelpers::MeasureText(this, GetDisplayLabel(), titleFont);
             wxCoord y = thumbRect.GetBottom() + gap;
             {
                 const wxDCFontChanger fc{ dc, titleFont };
@@ -368,7 +369,7 @@ void wxBackstageButton::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( HasFocus() && m_showFocusRect )
     {
-        wxBackstage::DrawFocusRect(dc, rect.Deflate(FromDIP(2), FromDIP(2)), textColour);
+        wxBackstageHelpers::DrawFocusRect(dc, rect.Deflate(FromDIP(2), FromDIP(2)), textColour);
     }
 }
 
@@ -425,7 +426,7 @@ void wxBackstageButton::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(eve
 //-------------------------------------------
 void wxBackstageButton::OnKeyDown(wxKeyEvent& event)
 {
-    if ( wxBackstage::SkipIfShortcutKey(event) )
+    if ( wxBackstageHelpers::SkipIfShortcutKey(event) )
     {
         return;
     }
@@ -434,7 +435,7 @@ void wxBackstageButton::OnKeyDown(wxKeyEvent& event)
         m_showFocusRect = true;
         Refresh();
     }
-    if ( wxBackstage::IsActivateKey(event.GetKeyCode()) )
+    if ( wxBackstageHelpers::IsActivateKey(event.GetKeyCode()) )
     {
         if ( !event.IsAutoRepeat() )
         {
@@ -518,7 +519,7 @@ private:
 #endif
 
 wxBackstageHeading::wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
-    const wxBackstageHeadingStyle style /*= wxBackstageHeadingStyle::wxBackstageHeadingTitle*/)
+    const wxBackstageHeadingStyle style /*= wxBackstageHeadingStyle::Title*/)
     : wxControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE,
         wxDefaultValidator, "wxBackstageHeading"),
     m_style(style)
@@ -538,7 +539,7 @@ wxBackstageHeading::wxBackstageHeading(wxWindow* parent, wxWindowID id, const wx
 //-------------------------------------------
 wxFont wxBackstageHeading::GetHeadingFont() const
 {
-    return m_style == wxBackstageHeadingStyle::wxBackstageHeadingTitle ?
+    return m_style == wxBackstageHeadingStyle::Title ?
         GetFont().Scaled(2.2F) : GetFont().Scaled(1.25F).Bold();
 }
 
@@ -553,7 +554,7 @@ void wxBackstageHeading::SetLabel(const wxString& label)
 //-------------------------------------------
 wxSize wxBackstageHeading::DoGetBestSize() const
 {
-    const wxSize textSize = wxBackstage::MeasureText(this, GetLabel(), GetHeadingFont());
+    const wxSize textSize = wxBackstageHelpers::MeasureText(this, GetLabel(), GetHeadingFont());
     return wxSize{ textSize.GetWidth() + FromDIP(2), textSize.GetHeight() + FromDIP(8) };
 }
 
@@ -614,8 +615,8 @@ void wxBackstageCallout::SetAction(wxBackstageButton* action)
 void wxBackstageCallout::ApplyButtonColours()
 {
     wxColour bg, fg;
-    wxBackstage::GetPageColours(this, bg, fg);
-    const wxColour fill = wxBackstage::Blend(bg, fg, 0.02);
+    wxBackstageHelpers::GetPageColours(this, bg, fg);
+    const wxColour fill = wxBackstageHelpers::Blend(bg, fg, 0.02);
     if ( m_tile.get() != nullptr )
     {
         m_tile->SetCalloutColour(fill);
@@ -635,8 +636,8 @@ wxFont wxBackstageCallout::GetTitleFont() const
 //-------------------------------------------
 wxSize wxBackstageCallout::GetTextSize() const
 {
-    const wxSize titleSize = wxBackstage::MeasureText(this, m_title, GetTitleFont());
-    const wxSize messageSize = wxBackstage::MeasureText(this, m_message, GetFont());
+    const wxSize titleSize = wxBackstageHelpers::MeasureText(this, m_title, GetTitleFont());
+    const wxSize messageSize = wxBackstageHelpers::MeasureText(this, m_message, GetFont());
     return wxSize{ std::max(titleSize.GetWidth(), messageSize.GetWidth()),
                    titleSize.GetHeight() +
                        (messageSize.GetHeight() > 0 ? FromDIP(4) + messageSize.GetHeight() : 0) };
@@ -693,24 +694,24 @@ void wxBackstageCallout::OnSize(wxSizeEvent& event)
 void wxBackstageCallout::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxColour bg, fg;
-    wxBackstage::GetPageColours(this, bg, fg);
-    const bool isDark = wxBackstage::IsDark(bg);
+    wxBackstageHelpers::GetPageColours(this, bg, fg);
+    const bool isDark = wxBackstageHelpers::IsDark(bg);
     ApplyButtonColours();
 
     wxAutoBufferedPaintDC dc{ this };
     const wxRect rect = GetClientRect();
     dc.GradientFillLinear(rect,
-        wxBackstage::Blend(bg, wxColour{ 255, 214, 102 }, isDark ? 0.32 : 0.6), bg, wxSOUTH);
+        wxBackstageHelpers::Blend(bg, wxColour{ 255, 214, 102 }, isDark ? 0.32 : 0.6), bg, wxSOUTH);
     {
         const wxDCPenChanger pc{ dc,
-            wxPen{ wxBackstage::Blend(bg, wxColour{ 224, 178, 48 }, isDark ? 0.5 : 0.55), 1 } };
+            wxPen{ wxBackstageHelpers::Blend(bg, wxColour{ 224, 178, 48 }, isDark ? 0.5 : 0.55), 1 } };
         const wxDCBrushChanger bc{ dc, *wxTRANSPARENT_BRUSH };
         dc.DrawRectangle(rect);
     }
 
     const wxPoint origin = GetTextOrigin();
-    const wxSize titleSize = wxBackstage::MeasureText(this, m_title, GetTitleFont());
-    const wxSize messageSize = wxBackstage::MeasureText(this, m_message, GetFont());
+    const wxSize titleSize = wxBackstageHelpers::MeasureText(this, m_title, GetTitleFont());
+    const wxSize messageSize = wxBackstageHelpers::MeasureText(this, m_message, GetFont());
     const wxCoord textWidth = std::max(0, rect.GetRight() - origin.x);
     dc.SetFont(GetTitleFont());
     dc.SetTextForeground(isDark ? wxColour{ 255, 176, 64 } : wxColour{ 204, 102, 0 });
@@ -1125,7 +1126,7 @@ void wxBackstageItemList::OnPaint(wxPaintEvent& WXUNUSED(event))
     // scroll offset needs to go on the DC that we are drawing with
     DoPrepareDC(dc);
 
-    const wxColour dimColour = wxBackstage::Blend(fg, bg, 0.4);
+    const wxColour dimColour = wxBackstageHelpers::Blend(fg, bg, 0.4);
     const wxCoord width = GetClientSize().GetWidth();
     const wxCoord pad = GetPadding();
     const wxCoord iconSize = GetIconSize();
@@ -1171,15 +1172,15 @@ void wxBackstageItemList::OnPaint(wxPaintEvent& WXUNUSED(event))
         wxColour fill = bg;
         if ( static_cast<long>(i) == m_pressedRow )
         {
-            fill = wxBackstage::ShadeOrTint(bg, 0.14);
+            fill = wxBackstageHelpers::ShadeOrTint(bg, 0.14);
         }
         else if ( isSelected && HasFocus() )
         {
-            fill = wxBackstage::ShadeOrTint(bg, 0.08);
+            fill = wxBackstageHelpers::ShadeOrTint(bg, 0.08);
         }
         else if ( isHover )
         {
-            fill = wxBackstage::ShadeOrTint(bg, 0.06);
+            fill = wxBackstageHelpers::ShadeOrTint(bg, 0.06);
         }
         if ( fill != bg )
         {
@@ -1187,13 +1188,13 @@ void wxBackstageItemList::OnPaint(wxPaintEvent& WXUNUSED(event))
             const wxDCBrushChanger bc{ dc, wxBrush{ fill } };
             dc.DrawRectangle(rowRect);
         }
-        const wxColour textColour = wxBackstage::BlackOrWhiteContrast(fill);
-        const wxColour rowDimColour = wxBackstage::Blend(textColour, fill, 0.4);
+        const wxColour textColour = wxBackstageHelpers::BlackOrWhiteContrast(fill);
+        const wxColour rowDimColour = wxBackstageHelpers::Blend(textColour, fill, 0.4);
 
         wxCoord textX = pad;
         if ( anyIcons )
         {
-            wxBackstage::DrawBitmapFit(dc, this, row.m_icon,
+            wxBackstageHelpers::DrawBitmapFit(dc, this, row.m_icon,
                 wxRect{ pad, top + ((height - iconSize) / 2), iconSize, iconSize });
             textX += iconSize + pad;
         }
@@ -1226,7 +1227,7 @@ void wxBackstageItemList::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         if ( isSelected && HasFocus() )
         {
-            wxBackstage::DrawFocusRect(dc, rowRect.Deflate(FromDIP(2), FromDIP(1)), textColour);
+            wxBackstageHelpers::DrawFocusRect(dc, rowRect.Deflate(FromDIP(2), FromDIP(1)), textColour);
         }
     }
 }
@@ -1362,7 +1363,7 @@ void wxBackstageItemList::MoveSelection(const int direction)
 //-------------------------------------------
 void wxBackstageItemList::OnKeyDown(wxKeyEvent& event)
 {
-    if ( wxBackstage::SkipIfShortcutKey(event) )
+    if ( wxBackstageHelpers::SkipIfShortcutKey(event) )
     {
         return;
     }
@@ -1387,7 +1388,7 @@ void wxBackstageItemList::OnKeyDown(wxKeyEvent& event)
             wxNavigationKeyEvent::IsBackward : wxNavigationKeyEvent::IsForward);
         break;
     default:
-        if ( wxBackstage::IsActivateKey(event.GetKeyCode()) && !event.IsAutoRepeat() &&
+        if ( wxBackstageHelpers::IsActivateKey(event.GetKeyCode()) && !event.IsAutoRepeat() &&
             m_selectedRow != wxNOT_FOUND )
         {
             Activate(static_cast<size_t>(m_selectedRow));

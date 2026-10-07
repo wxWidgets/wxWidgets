@@ -20,6 +20,7 @@
 #include "wx/ribbon/toolbar.h"
 #include "wx/ribbon/gallery.h"
 #include "wx/ribbon/backstage.h"
+#include "wx/ribbon/private/backstage.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 #include "wx/app.h"
@@ -1829,7 +1830,7 @@ void wxRibbonBar::SetBackstage(wxBackstage* backstage, wxWindow* content)
     {
         m_backstage->SetNavBackgroundColour(wxColour());
         m_backstage->SetHighlightColour(wxColour());
-        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::wxBackstageHighlightFlat);
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Flat);
     }
 
     m_backstage = backstage;
@@ -1902,12 +1903,12 @@ void wxRibbonBar::UpdateBackstageColours()
     if ( !IsFlatArtProvider(m_art) && secondary.IsOk() )
     {
         m_backstage->SetHighlightColour(secondary);
-        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::wxBackstageHighlightGlossy);
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Glossy);
     }
     else
     {
         m_backstage->SetHighlightColour(wxColour());
-        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::wxBackstageHighlightFlat);
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Flat);
     }
 }
 
@@ -1915,11 +1916,11 @@ void wxRibbonBar::DrawBackstageTab(wxDC& dc, const wxRibbonPageTabInfo& tab)
 {
     const wxColour accent = GetBackstageTabColour();
     const wxColour fill = (tab.hovered && !tab.active) ?
-        wxBackstage::Blend(accent, *wxWHITE, 0.2) : accent;
+        wxBackstageHelpers::Blend(accent, *wxWHITE, 0.2) : accent;
 
     if ( !IsFlatArtProvider(m_art) )
     {
-        wxBackstage::DrawGlossyRect(dc, tab.rect, fill);
+        wxBackstageHelpers::DrawGlossyRect(dc, tab.rect, fill);
     }
     else
     {
@@ -1931,7 +1932,7 @@ void wxRibbonBar::DrawBackstageTab(wxDC& dc, const wxRibbonPageTabInfo& tab)
     if ( m_art != nullptr )
         dc.SetFont(m_art->GetFont(wxRIBBON_ART_TAB_LABEL_FONT));
 
-    dc.SetTextForeground(wxBackstage::BlackOrWhiteContrast(fill));
+    dc.SetTextForeground(wxBackstageHelpers::BlackOrWhiteContrast(fill));
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     const wxString label = tab.page != nullptr ? tab.page->GetLabel() : wxString();
     const wxSize textSize = dc.GetTextExtent(label);

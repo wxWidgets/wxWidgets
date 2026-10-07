@@ -857,12 +857,12 @@ void MyFrame::CreateBackstage()
             "until it is checked in.");
         callout->SetAction(new wxBackstageButton(callout, ID_BACKSTAGE_DISCARD,
             "Discard Check Out", wxBitmapBundle(),
-            wxBackstageButtonStyle::wxBackstageButtonWide));
+            wxBackstageButtonStyle::Wide));
         sizer->Add(callout, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxTOP, margin));
 
         wxBackstageButton* protect = new wxBackstageButton(page, ID_BACKSTAGE_PROTECT,
             "Protect Document", wxBitmapBundle(),
-            wxBackstageButtonStyle::wxBackstageButtonWide,
+            wxBackstageButtonStyle::Wide,
             "Control what types of changes people can make");
         protect->ShowDropDownArrow();
         sizer->Add(protect, wxSizerFlags().Border(wxLEFT | wxTOP, margin));
@@ -875,7 +875,7 @@ void MyFrame::CreateBackstage()
         sizer->Add(new wxBackstageHeading(page, wxID_ANY, "New"),
                    wxSizerFlags().Border(wxLEFT | wxTOP, margin));
         sizer->Add(new wxBackstageHeading(page, wxID_ANY, "Featured",
-                       wxBackstageHeadingStyle::wxBackstageHeadingSection),
+                       wxBackstageHeadingStyle::Section),
                    wxSizerFlags().Border(wxLEFT | wxTOP, margin));
 
         // wxREMOVE_LEADING_SPACES keeps the last card on a row from being stretched
@@ -895,7 +895,7 @@ void MyFrame::CreateBackstage()
         {
             cards->Add(new wxBackstageButton(page, tmpl.m_id, tmpl.m_label,
                            MakeSvgBundle(tmpl.m_svg, wxSize(64, 64)),
-                           wxBackstageButtonStyle::wxBackstageButtonCard),
+                           wxBackstageButtonStyle::Card),
                        cardFlags);
         }
         sizer->Add(cards, wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT, margin));

@@ -2825,6 +2825,7 @@ set(RIBBON_HDR
     wx/ribbon/gallery.h
     wx/ribbon/page.h
     wx/ribbon/panel.h
+    wx/ribbon/private/backstage.h
     wx/ribbon/toolbar.h
     wx/xrc/xh_ribbon.h
 )
