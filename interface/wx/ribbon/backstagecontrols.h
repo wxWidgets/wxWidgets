@@ -118,7 +118,7 @@ public:
 
     @since 3.3.4
 */
-class wxBackstageHeading : public wxControl
+class wxBackstageHeading : public wxStaticText
 {
 public:
     /**

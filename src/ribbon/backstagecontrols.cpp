@@ -484,96 +484,22 @@ void wxBackstageButton::Activate()
 //-------------------------------------------
 // wxBackstageHeading
 //-------------------------------------------
-#if wxUSE_ACCESSIBILITY
-//-------------------------------------------
-// Exposes the heading to assistive technology.
-class wxBackstageHeading::Accessible final : public wxAccessible
-{
-public:
-    explicit Accessible(wxBackstageHeading* heading) : wxAccessible(heading), m_heading(heading)
-    {
-    }
-
-    wxAccStatus GetName(const int, wxString* name) override
-    {
-        *name = m_heading->GetLabel();
-        name->Replace("\n", " ");
-        return wxACC_OK;
-    }
-
-    wxAccStatus GetRole(const int, wxAccRole* role) override
-    {
-        *role = wxROLE_SYSTEM_STATICTEXT;
-        return wxACC_OK;
-    }
-
-    wxAccStatus GetState(const int, long* state) override
-    {
-        *state = wxACC_STATE_SYSTEM_READONLY;
-        return wxACC_OK;
-    }
-
-private:
-    wxBackstageHeading* m_heading{ nullptr };
-};
-#endif
-
 wxBackstageHeading::wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
     const wxBackstageHeadingStyle style /*= wxBackstageHeadingStyle::Title*/)
-    : wxControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE,
-        wxDefaultValidator, "wxBackstageHeading"),
+    : wxStaticText(parent, id, label, wxDefaultPosition, wxDefaultSize, 0,
+        "wxBackstageHeading"),
     m_style(style)
 {
-    wxControl::SetLabel(label);
-    wxWindow::SetBackgroundStyle(wxBG_STYLE_PAINT);
-
-    Bind(wxEVT_PAINT, &wxBackstageHeading::OnPaint, this);
-    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxBackstageHeading::OnSysColourChanged, this);
-
-#if wxUSE_ACCESSIBILITY
-    SetAccessible(new Accessible{ this });
-#endif
-    SetInitialSize(wxDefaultSize);
-}
-
-//-------------------------------------------
-wxFont wxBackstageHeading::GetHeadingFont() const
-{
-    return m_style == wxBackstageHeadingStyle::Title ?
-        GetFont().Scaled(2.2F) : GetFont().Scaled(1.25F).Bold();
-}
-
-//-------------------------------------------
-void wxBackstageHeading::SetLabel(const wxString& label)
-{
-    wxControl::SetLabel(label);
-    InvalidateBestSize();
-    Refresh();
+    SetFont(m_style == wxBackstageHeadingStyle::Title ?
+        GetFont().Scaled(2.2F) : GetFont().Scaled(1.25F).Bold());
 }
 
 //-------------------------------------------
 wxSize wxBackstageHeading::DoGetBestSize() const
 {
-    const wxSize textSize = wxBackstageHelpers::MeasureText(this, GetLabel(), GetHeadingFont());
-    return wxSize{ textSize.GetWidth() + FromDIP(2), textSize.GetHeight() + FromDIP(8) };
-}
-
-//-------------------------------------------
-void wxBackstageHeading::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    wxBackstagePaintBuffer paint{ this };
-    wxDC& dc = paint.m_buffer;
-    dc.SetFont(GetHeadingFont());
-    dc.SetTextForeground(paint.m_foreground);
-    const wxSize textSize = dc.GetTextExtent(GetLabel());
-    dc.DrawText(GetLabel(), 0, (GetClientSize().GetHeight() - textSize.GetHeight()) / 2);
-}
-
-//-------------------------------------------
-void wxBackstageHeading::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-    Refresh();
-    event.Skip();
+    wxSize size = wxStaticText::DoGetBestSize();
+    size.IncBy(0, FromDIP(8));
+    return size;
 }
 
 //-------------------------------------------

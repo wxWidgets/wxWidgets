@@ -19,6 +19,7 @@
 #include "wx/datetime.h"
 #include "wx/panel.h"
 #include "wx/scrolwin.h"
+#include "wx/stattext.h"
 
 #include <functional>
 
@@ -98,7 +99,7 @@ private:
     bool m_showFocusRect{ false };
 };
 
-class WXDLLIMPEXP_RIBBON wxBackstageHeading final : public wxControl
+class WXDLLIMPEXP_RIBBON wxBackstageHeading final : public wxStaticText
 {
 public:
     wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
@@ -106,23 +107,9 @@ public:
     wxBackstageHeading() = delete;
     wxBackstageHeading(const wxBackstageHeading&) = delete;
     wxBackstageHeading& operator=(const wxBackstageHeading&) = delete;
-
-    void SetLabel(const wxString& label) override;
-    bool AcceptsFocus() const override
-    {
-        return false;
-    }
 protected:
     wxSize DoGetBestSize() const override;
 private:
-    void OnPaint(wxPaintEvent& event);
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-    wxNODISCARD
-    wxFont GetHeadingFont() const;
-#if wxUSE_ACCESSIBILITY
-    class Accessible;
-#endif
-
     wxBackstageHeadingStyle m_style;
 };
 
