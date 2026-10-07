@@ -49,9 +49,14 @@ public:
         const wxBitmapBundle& icon = wxBitmapBundle{},
         wxBackstageButtonStyle style = wxBackstageButtonStyle::Tile,
         wxString  description = wxString{});
-    wxBackstageButton() = delete;
+    wxBackstageButton() = default;
     wxBackstageButton(const wxBackstageButton&) = delete;
     wxBackstageButton& operator=(const wxBackstageButton&) = delete;
+
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+        const wxBitmapBundle& icon = wxBitmapBundle{},
+        wxBackstageButtonStyle style = wxBackstageButtonStyle::Tile,
+        wxString description = wxString{});
 
     void SetDescription(const wxString& description);
     wxNODISCARD
@@ -90,9 +95,9 @@ private:
     wxString GetDisplayLabel() const;
 
     wxBitmapBundle m_icon;
-    wxSize m_iconSizeDIP;
+    wxSize m_iconSizeDIP{ 32, 32 };
     wxString m_description;
-    wxBackstageButtonStyle m_style;
+    wxBackstageButtonStyle m_style{ wxBackstageButtonStyle::Tile };
     wxColour m_calloutColour;
     bool m_dropDownArrow{ false };
     bool m_hover{ false };
@@ -105,13 +110,16 @@ class WXDLLIMPEXP_RIBBON wxBackstageHeading final : public wxStaticText
 public:
     wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
         wxBackstageHeadingStyle style = wxBackstageHeadingStyle::Title);
-    wxBackstageHeading() = delete;
+    wxBackstageHeading() = default;
     wxBackstageHeading(const wxBackstageHeading&) = delete;
     wxBackstageHeading& operator=(const wxBackstageHeading&) = delete;
+
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+        wxBackstageHeadingStyle style = wxBackstageHeadingStyle::Title);
 protected:
     wxSize DoGetBestSize() const override;
 private:
-    wxBackstageHeadingStyle m_style;
+    wxBackstageHeadingStyle m_style{ wxBackstageHeadingStyle::Title };
 };
 
 class WXDLLIMPEXP_RIBBON wxBackstageCallout final : public wxPanel
@@ -119,9 +127,12 @@ class WXDLLIMPEXP_RIBBON wxBackstageCallout final : public wxPanel
 public:
     wxBackstageCallout(wxWindow* parent, wxWindowID id, const wxString& title,
                        const wxString& message = wxString{});
-    wxBackstageCallout() = delete;
+    wxBackstageCallout() = default;
     wxBackstageCallout(const wxBackstageCallout&) = delete;
     wxBackstageCallout& operator=(const wxBackstageCallout&) = delete;
+
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
+                const wxString& message = wxString{});
 
     void SetTile(wxBackstageButton* tile);
     void SetAction(wxBackstageButton* action);
@@ -149,9 +160,11 @@ class WXDLLIMPEXP_RIBBON wxBackstageItemList : public wxScrolledCanvas
 {
 public:
     explicit wxBackstageItemList(wxWindow* parent, wxWindowID id = wxID_ANY);
-    wxBackstageItemList() = delete;
+    wxBackstageItemList() = default;
     wxBackstageItemList(const wxBackstageItemList&) = delete;
     wxBackstageItemList& operator=(const wxBackstageItemList&) = delete;
+
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY);
 
     void AddHeader(const wxString& text);
     size_t AddItem(const wxString& title, const wxString& subtitle = wxString{},
@@ -238,9 +251,11 @@ class WXDLLIMPEXP_RIBBON wxBackstageMRUList final : public wxBackstageItemList
 {
 public:
     explicit wxBackstageMRUList(wxWindow* parent, wxWindowID id = wxID_ANY);
-    wxBackstageMRUList() = delete;
+    wxBackstageMRUList() = default;
     wxBackstageMRUList(const wxBackstageMRUList&) = delete;
     wxBackstageMRUList& operator=(const wxBackstageMRUList&) = delete;
+
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY);
 
     void SetFiles(const wxArrayString& paths);
 #if wxUSE_FILE_HISTORY

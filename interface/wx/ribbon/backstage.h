@@ -79,6 +79,13 @@ class wxBackstage : public wxWindow
 {
 public:
     /**
+        Default constructor.
+
+        Call Create() before using the backstage.
+    */
+    wxBackstage();
+
+    /**
         Constructor.
 
         @param parent
@@ -87,6 +94,13 @@ public:
             The window ID.
     */
     explicit wxBackstage(wxWindow* parent, wxWindowID id = wxID_ANY);
+
+    /**
+        Creates the backstage, for use with the default constructor.
+
+        @return @true if the backstage was created.
+    */
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY);
 
     /**
         @name Buttons

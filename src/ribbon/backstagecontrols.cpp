@@ -111,10 +111,26 @@ wxBackstageButton::wxBackstageButton(wxWindow* parent, wxWindowID id, const wxSt
     const wxBitmapBundle& icon /*= wxBitmapBundle{}*/,
     const wxBackstageButtonStyle style /*= wxBackstageButtonStyle::Tile*/,
     wxString description /*= wxString{}*/)
-    : wxControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxWANTS_CHARS,
-        wxDefaultValidator, "wxBackstageButton"),
-    m_icon(icon), m_description(std::move(description)), m_style(style)
 {
+    Create(parent, id, label, icon, style, std::move(description));
+}
+
+//-------------------------------------------
+bool wxBackstageButton::Create(wxWindow* parent, wxWindowID id, const wxString& label,
+    const wxBitmapBundle& icon /*= wxBitmapBundle{}*/,
+    const wxBackstageButtonStyle style /*= wxBackstageButtonStyle::Tile*/,
+    wxString description /*= wxString{}*/)
+{
+    if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize,
+                            wxBORDER_NONE | wxWANTS_CHARS, wxDefaultValidator,
+                            "wxBackstageButton") )
+    {
+        return false;
+    }
+
+    m_icon = icon;
+    m_description = std::move(description);
+    m_style = style;
     m_iconSizeDIP = (style == wxBackstageButtonStyle::Card) ?
         wxSize{ 180, 110 } : wxSize{ 32, 32 };
 
@@ -138,6 +154,8 @@ wxBackstageButton::wxBackstageButton(wxWindow* parent, wxWindowID id, const wxSt
     SetAccessible(new Accessible{ this });
 #endif
     SetInitialSize(wxDefaultSize);
+
+    return true;
 }
 
 //-------------------------------------------
@@ -486,12 +504,24 @@ void wxBackstageButton::Activate()
 //-------------------------------------------
 wxBackstageHeading::wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
     const wxBackstageHeadingStyle style /*= wxBackstageHeadingStyle::Title*/)
-    : wxStaticText(parent, id, label, wxDefaultPosition, wxDefaultSize, 0,
-        "wxBackstageHeading"),
-    m_style(style)
 {
+    Create(parent, id, label, style);
+}
+
+//-------------------------------------------
+bool wxBackstageHeading::Create(wxWindow* parent, wxWindowID id, const wxString& label,
+    const wxBackstageHeadingStyle style /*= wxBackstageHeadingStyle::Title*/)
+{
+    if ( !wxStaticText::Create(parent, id, label, wxDefaultPosition, wxDefaultSize, 0,
+                               "wxBackstageHeading") )
+    {
+        return false;
+    }
+
+    m_style = style;
     SetFont(m_style == wxBackstageHeadingStyle::Title ?
         GetFont().Scaled(2.2F) : GetFont().Scaled(1.25F).Bold());
+    return true;
 }
 
 //-------------------------------------------
@@ -507,14 +537,27 @@ wxSize wxBackstageHeading::DoGetBestSize() const
 //-------------------------------------------
 wxBackstageCallout::wxBackstageCallout(wxWindow* parent, wxWindowID id, const wxString& title,
                                        const wxString& message /*= wxString{}*/)
-    : wxPanel(parent, id, wxDefaultPosition, wxDefaultSize,
-              wxTAB_TRAVERSAL | wxFULL_REPAINT_ON_RESIZE, "wxBackstageCallout"),
-      m_title(title), m_message(message)
 {
+    Create(parent, id, title, message);
+}
+
+//-------------------------------------------
+bool wxBackstageCallout::Create(wxWindow* parent, wxWindowID id, const wxString& title,
+                                const wxString& message /*= wxString{}*/)
+{
+    if ( !wxPanel::Create(parent, id, wxDefaultPosition, wxDefaultSize,
+                          wxTAB_TRAVERSAL | wxFULL_REPAINT_ON_RESIZE, "wxBackstageCallout") )
+    {
+        return false;
+    }
+
+    m_title = title;
+    m_message = message;
     wxWindow::SetBackgroundStyle(wxBG_STYLE_PAINT);
     wxWindow::SetLabel(message.empty() ? title : title + ". " + message);
     Bind(wxEVT_PAINT, &wxBackstageCallout::OnPaint, this);
     Bind(wxEVT_SIZE, &wxBackstageCallout::OnSize, this);
+    return true;
 }
 
 //-------------------------------------------
@@ -856,9 +899,19 @@ private:
 #endif
 
 wxBackstageItemList::wxBackstageItemList(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
-    : wxScrolledCanvas(parent, id, wxDefaultPosition, wxDefaultSize,
-        wxHSCROLL | wxVSCROLL | wxWANTS_CHARS | wxBORDER_NONE, "wxBackstageItemList")
 {
+    Create(parent, id);
+}
+
+//-------------------------------------------
+bool wxBackstageItemList::Create(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
+{
+    if ( !wxScrolledCanvas::Create(parent, id, wxDefaultPosition, wxDefaultSize,
+            wxHSCROLL | wxVSCROLL | wxWANTS_CHARS | wxBORDER_NONE, "wxBackstageItemList") )
+    {
+        return false;
+    }
+
     wxWindow::SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetCanFocus(true);
     SetScrollRate(0, FromDIP(12));
@@ -887,6 +940,8 @@ wxBackstageItemList::wxBackstageItemList(wxWindow* parent, wxWindowID id /*= wxI
 #if wxUSE_ACCESSIBILITY
     SetAccessible(new Accessible{ this });
 #endif
+
+    return true;
 }
 
 //-------------------------------------------
@@ -1501,8 +1556,18 @@ wxString wxBackstageMRUList::SimplifyFolderPath(wxString path)
 
 //-------------------------------------------
 wxBackstageMRUList::wxBackstageMRUList(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
-    : wxBackstageItemList(parent, id)
 {
+    Create(parent, id);
+}
+
+//-------------------------------------------
+bool wxBackstageMRUList::Create(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
+{
+    if ( !wxBackstageItemList::Create(parent, id) )
+    {
+        return false;
+    }
+
     Bind(wxEVT_SHOW,
         [this](wxShowEvent& event)
         {
@@ -1512,6 +1577,7 @@ wxBackstageMRUList::wxBackstageMRUList(wxWindow* parent, wxWindowID id /*= wxID_
             }
             event.Skip();
         });
+    return true;
 }
 
 //-------------------------------------------

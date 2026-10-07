@@ -279,9 +279,19 @@ void wxBackstage::NotifyAccessibility(const AccessibleEvent event, const long in
 
 //-------------------------------------------
 wxBackstage::wxBackstage(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
-    : wxWindow(parent, id, wxDefaultPosition, wxDefaultSize,
-        wxFULL_REPAINT_ON_RESIZE | wxWANTS_CHARS, "wxBackstage")
 {
+    Create(parent, id);
+}
+
+//-------------------------------------------
+bool wxBackstage::Create(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
+{
+    if ( !wxWindow::Create(parent, id, wxDefaultPosition, wxDefaultSize,
+                           wxFULL_REPAINT_ON_RESIZE | wxWANTS_CHARS, "wxBackstage") )
+    {
+        return false;
+    }
+
     m_navWidth = FromDIP(200);
 
     wxWindow::SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -310,6 +320,8 @@ wxBackstage::wxBackstage(wxWindow* parent, wxWindowID id /*= wxID_ANY*/)
     Bind(wxEVT_KILL_FOCUS, &wxBackstage::OnKillFocus, this);
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxBackstage::OnSysColourChanged, this);
     Bind(wxEVT_DPI_CHANGED, &wxBackstage::OnDPIChanged, this);
+
+    return true;
 }
 
 //-------------------------------------------

@@ -55,6 +55,13 @@ class wxBackstageButton : public wxControl
 {
 public:
     /**
+        Default constructor.
+
+        Call Create() before using the button.
+    */
+    wxBackstageButton();
+
+    /**
         Constructor.
 
         @param parent
@@ -74,6 +81,16 @@ public:
                       const wxBitmapBundle& icon = wxBitmapBundle(),
                       wxBackstageButtonStyle style = wxBackstageButtonStyle::Tile,
                       wxString description = wxString());
+
+    /**
+        Creates the button, for use with the default constructor.
+
+        @return @true if the button was created.
+    */
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
+                wxBackstageButtonStyle style = wxBackstageButtonStyle::Tile,
+                wxString description = wxString());
 
     /**
         Sets the description.
@@ -122,6 +139,13 @@ class wxBackstageHeading : public wxStaticText
 {
 public:
     /**
+        Default constructor.
+
+        Call Create() before using the heading.
+    */
+    wxBackstageHeading();
+
+    /**
         Constructor.
 
         @param parent
@@ -135,6 +159,14 @@ public:
     */
     wxBackstageHeading(wxWindow* parent, wxWindowID id, const wxString& label,
                        wxBackstageHeadingStyle style = wxBackstageHeadingStyle::Title);
+
+    /**
+        Creates the heading, for use with the default constructor.
+
+        @return @true if the heading was created.
+    */
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+                wxBackstageHeadingStyle style = wxBackstageHeadingStyle::Title);
 };
 
 /**
@@ -153,6 +185,13 @@ class wxBackstageCallout : public wxPanel
 {
 public:
     /**
+        Default constructor.
+
+        Call Create() before using the callout.
+    */
+    wxBackstageCallout();
+
+    /**
         Constructor.
 
         @param parent
@@ -166,6 +205,14 @@ public:
     */
     wxBackstageCallout(wxWindow* parent, wxWindowID id, const wxString& title,
                        const wxString& message = wxString());
+
+    /**
+        Creates the callout, for use with the default constructor.
+
+        @return @true if the callout was created.
+    */
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
+                const wxString& message = wxString());
 
     /**
         Sets the button shown on the left.
@@ -207,9 +254,23 @@ class wxBackstageItemList : public wxScrolledCanvas
 {
 public:
     /**
+        Default constructor.
+
+        Call Create() before using the list.
+    */
+    wxBackstageItemList();
+
+    /**
         Constructor.
     */
     explicit wxBackstageItemList(wxWindow* parent, wxWindowID id = wxID_ANY);
+
+    /**
+        Creates the list, for use with the default constructor.
+
+        @return @true if the list was created.
+    */
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY);
 
     /**
         Adds a group header.
@@ -286,9 +347,23 @@ class wxBackstageMRUList : public wxBackstageItemList
 {
 public:
     /**
+        Default constructor.
+
+        Call Create() before using the list.
+    */
+    wxBackstageMRUList();
+
+    /**
         Constructor.
     */
     explicit wxBackstageMRUList(wxWindow* parent, wxWindowID id = wxID_ANY);
+
+    /**
+        Creates the list, for use with the default constructor.
+
+        @return @true if the list was created.
+    */
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY);
 
     /**
         Sets the files to show, reading their modified dates from disk.

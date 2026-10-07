@@ -52,9 +52,10 @@ public:
 class WXDLLIMPEXP_RIBBON wxBackstage final : public wxWindow
 {
 public:
+    wxBackstage() = default;
     explicit wxBackstage(wxWindow* parent, wxWindowID id = wxID_ANY);
     ~wxBackstage() override;
-    wxBackstage() = delete;
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY);
     wxBackstage(const wxBackstage&) = delete;
     wxBackstage& operator=(const wxBackstage&) = delete;
 
