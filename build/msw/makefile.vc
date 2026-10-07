@@ -1861,6 +1861,8 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_art_msw.obj \
 	$(OBJS)\ribbondll_art_aui.obj \
 	$(OBJS)\ribbondll_art_msw_flat.obj \
+	$(OBJS)\ribbondll_backstage.obj \
+	$(OBJS)\ribbondll_backstagecontrols.obj \
 	$(OBJS)\ribbondll_bar.obj \
 	$(OBJS)\ribbondll_buttonbar.obj \
 	$(OBJS)\ribbondll_control.obj \
@@ -1890,6 +1892,8 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_art_msw.obj \
 	$(OBJS)\ribbonlib_art_aui.obj \
 	$(OBJS)\ribbonlib_art_msw_flat.obj \
+	$(OBJS)\ribbonlib_backstage.obj \
+	$(OBJS)\ribbonlib_backstagecontrols.obj \
 	$(OBJS)\ribbonlib_bar.obj \
 	$(OBJS)\ribbonlib_buttonbar.obj \
 	$(OBJS)\ribbonlib_control.obj \
@@ -2445,6 +2449,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_art_msw.obj \
 	$(OBJS)\monodll_art_aui.obj \
 	$(OBJS)\monodll_art_msw_flat.obj \
+	$(OBJS)\monodll_backstage.obj \
+	$(OBJS)\monodll_backstagecontrols.obj \
 	$(OBJS)\monodll_bar.obj \
 	$(OBJS)\monodll_ribbon_buttonbar.obj \
 	$(OBJS)\monodll_ribbon_control.obj \
@@ -3317,6 +3323,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_art_msw.obj \
 	$(OBJS)\monolib_art_aui.obj \
 	$(OBJS)\monolib_art_msw_flat.obj \
+	$(OBJS)\monolib_backstage.obj \
+	$(OBJS)\monolib_backstagecontrols.obj \
 	$(OBJS)\monolib_bar.obj \
 	$(OBJS)\monolib_ribbon_buttonbar.obj \
 	$(OBJS)\monolib_ribbon_control.obj \
@@ -9407,6 +9415,12 @@ $(OBJS)\monodll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\monodll_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
 
+$(OBJS)\monodll_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\monodll_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
+
 $(OBJS)\monodll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
@@ -12039,6 +12053,12 @@ $(OBJS)\monolib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\monolib_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
+
+$(OBJS)\monolib_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\monolib_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
 
 $(OBJS)\monolib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp
@@ -18733,6 +18753,12 @@ $(OBJS)\ribbondll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\ribbondll_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
 
+$(OBJS)\ribbondll_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\ribbondll_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
+
 $(OBJS)\ribbondll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
@@ -18771,6 +18797,12 @@ $(OBJS)\ribbonlib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\ribbonlib_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
+
+$(OBJS)\ribbonlib_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\ribbonlib_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
 
 $(OBJS)\ribbonlib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp

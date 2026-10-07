@@ -20,6 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxActivateEvent;
 class WXDLLIMPEXP_FWD_CORE wxWindowDestroyEvent;
 class wxRibbonButtonBar;
 class wxRibbonToolBar;
+class WXDLLIMPEXP_FWD_RIBBON wxBackstage;
 
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/page.h"
@@ -160,6 +161,22 @@ public:
 
     virtual bool HasMultiplePages() const override { return true; }
 
+    void SetBackstagePage(wxRibbonPage* page);
+    wxRibbonPage* GetBackstagePage() const { return m_backstagePage.get(); }
+
+    void SetBackstage(wxBackstage* backstage, wxWindow* content);
+
+    void ShowBackstage(bool show = true);
+    bool IsBackstageShown() const { return m_backstageShown; }
+
+    void StyleBackstageTab(bool style = true);
+    bool IsBackstageTabStyled() const { return m_styleBackstageTab; }
+
+    void SetBackstageTabColour(const wxColour& colour);
+    wxColour GetBackstageTabColour() const;
+
+    void UpdateBackstageColours();
+
     void SetWindowStyleFlag(long style) override;
     long GetWindowStyleFlag() const override;
     virtual bool Realize() override;
@@ -256,6 +273,12 @@ protected:
     void OnSetFocus(wxFocusEvent& evt);
     void OnKeyDown(wxKeyEvent& evt);
 
+    void OnBackstagePageChanged(wxRibbonBarEvent& evt);
+    void OnBackstageToggled(wxRibbonBarEvent& evt);
+    void UpdateBackstageViews(bool showBackstage);
+    void DrawBackstageTab(wxDC& dc, const wxRibbonPageTabInfo& tab);
+    bool IsBackstageTabHit(const wxPoint& position);
+
     // Make the bar a tab stop so that it can be reached with the keyboard.
     bool AcceptsFocus() const override { return IsShown() && IsEnabled(); }
 
@@ -313,6 +336,15 @@ protected:
 
     wxRibbonDisplayMode m_ribbon_state = wxRIBBON_BAR_PINNED;
 
+    wxWeakRef<wxRibbonPage> m_backstagePage;
+    wxWeakRef<wxBackstage> m_backstage;
+    wxWeakRef<wxWindow> m_backstageContent;
+    // The ribbon's display mode from before the backstage was shown.
+    wxRibbonDisplayMode m_backstageSavedMode = wxRIBBON_BAR_PINNED;
+    wxColour m_backstageTabColour;
+    bool m_backstageShown = false;
+    bool m_styleBackstageTab = true;
+
     wxVector<wxImageList*> m_image_lists;
 
     // The control whose item has the keyboard focus, null if it's on the tabs.
@@ -320,8 +352,10 @@ protected:
     // The button with the keyboard focus, if it isn't on a tab or in the page.
     BarButton m_focusedButton = BarButton_None;
 
-    // Key tips implementation.
 private:
+    static bool IsFlatArtProvider(const wxRibbonArtProvider* art);
+
+    // Key tips implementation.
     struct wxRibbonKeyTipInfo
     {
         enum class Kind

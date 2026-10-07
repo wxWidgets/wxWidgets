@@ -14,6 +14,8 @@
 #include "wx/frame.h"
 #include "wx/panel.h"
 #include "wx/textctrl.h"
+#include "wx/ribbon/backstage.h"
+#include "wx/ribbon/backstagecontrols.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/gallery.h"
@@ -28,6 +30,7 @@
 #include "wx/combobox.h"
 #include "wx/tglbtn.h"
 #include "wx/wrapsizer.h"
+#include "wx/datetime.h"
 
 // -- application --
 
@@ -94,7 +97,20 @@ public:
         ID_SMALL_BUTTON_3,
         ID_SMALL_BUTTON_4,
         ID_SMALL_BUTTON_5,
-        ID_SMALL_BUTTON_6
+        ID_SMALL_BUTTON_6,
+        ID_BACKSTAGE_INFO,
+        ID_BACKSTAGE_NEW,
+        ID_BACKSTAGE_OPEN,
+        ID_BACKSTAGE_SAVE,
+        ID_BACKSTAGE_SAVE_AS,
+        ID_BACKSTAGE_EXIT,
+        ID_BACKSTAGE_DISCARD,
+        ID_BACKSTAGE_PROTECT,
+        ID_BACKSTAGE_TEMPLATE_BLANK,
+        ID_BACKSTAGE_TEMPLATE_RIBBON,
+        ID_BACKSTAGE_TEMPLATE_COLOURS,
+        ID_BACKSTAGE_RECENT_LIST,
+        ID_BACKSTAGE_FOLDER_LIST
     };
 
     void OnEnableUpdateUI(wxUpdateUIEvent& evt);
@@ -157,7 +173,12 @@ public:
 
     void OnExtButton(wxRibbonPanelEvent& evt);
 
+    void OnBackstageClicked(wxNotifyEvent& evt);
+    void OnBackstageItemClicked(wxCommandEvent& evt);
+    void OnBackstageButton(wxCommandEvent& evt);
+
 protected:
+    void CreateBackstage();
     wxRibbonGallery* PopulateColoursPanel(wxWindow* panel, wxColour def,
         int gallery_id);
     void AddText(wxString msg);
@@ -175,6 +196,7 @@ protected:
     wxRibbonGallery* m_primary_gallery;
     wxRibbonGallery* m_secondary_gallery;
     wxTextCtrl* m_logwindow;
+    wxBackstage* m_backstage;
     wxToggleButton* m_togglePanels;
 
     wxColourData m_colour_data;
@@ -488,6 +510,11 @@ MyFrame::MyFrame()
     const wxBitmapBundle ribbon_large = MakeSvgBundle(ribbon_svg, wxSize(32, 32));
     const wxBitmapBundle empty_small = MakeSvgBundle(empty_svg, wxSize(16, 16));
 
+    // The File tab shows the backstage.
+    wxRibbonPage* file = new wxRibbonPage(m_ribbon, wxID_ANY, "File");
+    m_ribbon->SetBackstagePage(file);
+    m_ribbon->SetPageKeyTip(file, "F");
+
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, "Examples",
             ribbon_small);
@@ -784,6 +811,11 @@ MyFrame::MyFrame()
 
     s->Add(m_ribbon, wxSizerFlags().Expand());
     s->Add(m_logwindow, wxSizerFlags(1).Expand());
+
+    // The backstage takes the place of the log window while the File tab is selected.
+    CreateBackstage();
+    m_backstage->Hide();
+    s->Add(m_backstage, wxSizerFlags(1).Expand());
     s->Add(m_togglePanels, wxSizerFlags().Border());
 
     m_panel->SetSizer(s);
@@ -791,6 +823,183 @@ MyFrame::MyFrame()
     wxSizer* frameSizer = new wxBoxSizer{ wxVERTICAL };
     frameSizer->Add(m_panel, wxSizerFlags{ 1 }.Expand());
     SetSizer(frameSizer);
+
+    m_ribbon->SetBackstage(m_backstage, m_logwindow);
+}
+
+void MyFrame::CreateBackstage()
+{
+    m_backstage = new wxBackstage(m_panel);
+
+    m_backstage->AddButton(ID_BACKSTAGE_INFO, "Info");
+    m_backstage->AddButton(ID_BACKSTAGE_NEW, "New");
+    m_backstage->AddButton(ID_BACKSTAGE_OPEN, "Open");
+    m_backstage->AddButton(ID_BACKSTAGE_SAVE, "Save");
+    m_backstage->AddButton(ID_BACKSTAGE_SAVE_AS, "Save As");
+    m_backstage->AddSeparator();
+    m_backstage->AddFlexibleSpace();
+    m_backstage->AddButton(ID_BACKSTAGE_EXIT, "Exit");
+
+    // Save and Exit have no page, so they are just actions.
+    const int margin = FromDIP(30);
+
+    {
+        wxBackstagePage* page = m_backstage->AddPage(ID_BACKSTAGE_INFO);
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(new wxBackstageHeading(page, wxID_ANY, "Information"),
+                   wxSizerFlags().Border(wxLEFT | wxTOP, margin));
+
+        wxBackstageCallout* callout = new wxBackstageCallout(page, wxID_ANY,
+            "Checked Out Document",
+            "No one else can edit this document or view your changes\n"
+            "until it is checked in.");
+        callout->SetAction(new wxBackstageButton(callout, ID_BACKSTAGE_DISCARD,
+            "Discard Check Out", wxBitmapBundle(),
+            wxBackstageButtonStyle::Wide));
+        sizer->Add(callout, wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT | wxTOP, margin));
+
+        wxBackstageButton* protect = new wxBackstageButton(page, ID_BACKSTAGE_PROTECT,
+            "Protect Document", wxBitmapBundle(),
+            wxBackstageButtonStyle::Wide,
+            "Control what types of changes people can make");
+        protect->ShowDropDownArrow();
+        sizer->Add(protect, wxSizerFlags().Border(wxLEFT | wxTOP, margin));
+        page->SetSizer(sizer);
+    }
+
+    {
+        wxBackstagePage* page = m_backstage->AddPage(ID_BACKSTAGE_NEW);
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(new wxBackstageHeading(page, wxID_ANY, "New"),
+                   wxSizerFlags().Border(wxLEFT | wxTOP, margin));
+        sizer->Add(new wxBackstageHeading(page, wxID_ANY, "Featured",
+                       wxBackstageHeadingStyle::Section),
+                   wxSizerFlags().Border(wxLEFT | wxTOP, margin));
+
+        // wxREMOVE_LEADING_SPACES keeps the last card on a row from being stretched
+        wxWrapSizer* cards = new wxWrapSizer(wxHORIZONTAL, wxREMOVE_LEADING_SPACES);
+        const wxSizerFlags cardFlags = wxSizerFlags().Border(wxRIGHT | wxTOP, FromDIP(16));
+        const struct
+        {
+            wxWindowID m_id;
+            const char* m_label;
+            const char* m_svg;
+        } templates[] = {
+            { ID_BACKSTAGE_TEMPLATE_BLANK, "Blank Document", empty_svg },
+            { ID_BACKSTAGE_TEMPLATE_RIBBON, "Ribbon Layout", ribbon_svg },
+            { ID_BACKSTAGE_TEMPLATE_COLOURS, "Colour Study", colours_svg }
+        };
+        for ( const auto& tmpl : templates )
+        {
+            cards->Add(new wxBackstageButton(page, tmpl.m_id, tmpl.m_label,
+                           MakeSvgBundle(tmpl.m_svg, wxSize(64, 64)),
+                           wxBackstageButtonStyle::Card),
+                       cardFlags);
+        }
+        sizer->Add(cards, wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT, margin));
+        page->SetSizer(sizer);
+    }
+
+    {
+        wxBackstagePage* page = m_backstage->AddPage(ID_BACKSTAGE_OPEN);
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(new wxBackstageHeading(page, wxID_ANY, "Open"),
+                   wxSizerFlags().Border(wxLEFT | wxTOP, margin));
+
+        // The list sorts by modified date and groups the files into sections
+        // ("Today", "Yesterday", ...). The files here don't need to exist.
+        wxBackstageMRUList* recent = new wxBackstageMRUList(page, ID_BACKSTAGE_RECENT_LIST);
+        recent->SetEmptyText("You haven't opened any files recently.");
+        const wxDateTime now = wxDateTime::Now();
+        recent->AddFile("/Documents/Marketing Proposal.txt", now - wxTimeSpan::Minutes(12));
+        recent->AddFile("/Documents/Invoices/March.txt", now - wxTimeSpan::Hours(5));
+        recent->AddFile("/Documents/Notes.txt", now - wxDateSpan::Days(1));
+        recent->AddFile("/Documents/Reports/Q1.txt", now - wxDateSpan::Days(4));
+        recent->AddFile("/Documents/Old/Archive.txt", now - wxDateSpan::Days(40));
+        recent->SetMinSize(FromDIP(wxSize(560, 340)));
+        sizer->Add(recent, wxSizerFlags(1).Expand().Border(wxALL, margin));
+        page->SetSizer(sizer);
+    }
+
+    {
+        wxBackstagePage* page = m_backstage->AddPage(ID_BACKSTAGE_SAVE_AS);
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(new wxBackstageHeading(page, wxID_ANY, "Save As"),
+                   wxSizerFlags().Border(wxLEFT | wxTOP, margin));
+
+        wxBackstageItemList* folders = new wxBackstageItemList(page, ID_BACKSTAGE_FOLDER_LIST);
+        folders->AddHeader("Current Folder");
+        const wxString folderSeparator = wxString::FromUTF8(" » ");
+        folders->AddItem("Marketing", "Documents" + folderSeparator + "Marketing", wxString(),
+                         wxBitmapBundle(), "/Documents/Marketing");
+        folders->AddHeader("Recent");
+        folders->AddItem("Reports", "Documents" + folderSeparator + "Reports", wxString(),
+                         wxBitmapBundle(), "/Documents/Reports");
+        folders->AddItem("Downloads", wxString(), wxString(),
+                         wxBitmapBundle(), "/Downloads");
+        folders->SetMinSize(FromDIP(wxSize(380, 340)));
+        sizer->Add(folders, wxSizerFlags(1).Expand().Border(wxALL, margin));
+        page->SetSizer(sizer);
+    }
+
+    Bind(wxEVT_BACKSTAGE_CLICKED, &MyFrame::OnBackstageClicked, this);
+    Bind(wxEVT_BACKSTAGE_ITEM_CLICKED, &MyFrame::OnBackstageItemClicked, this);
+    Bind(wxEVT_BUTTON, &MyFrame::OnBackstageButton, this,
+         ID_BACKSTAGE_DISCARD, ID_BACKSTAGE_TEMPLATE_COLOURS);
+}
+
+void MyFrame::OnBackstageClicked(wxNotifyEvent& evt)
+{
+    // A button with a page shows it after this returns, unless evt.Veto() is called.
+    switch ( evt.GetId() )
+    {
+        case ID_BACKSTAGE_SAVE:
+            wxMessageBox(wxString::Format("The \"%s\" button was clicked.", evt.GetString()),
+                         "Backstage Button", wxOK | wxICON_INFORMATION, this);
+            break;
+
+        case ID_BACKSTAGE_EXIT:
+            Close(true);
+            break;
+    }
+}
+
+void MyFrame::OnBackstageItemClicked(wxCommandEvent& evt)
+{
+    // GetId() is the ID of the list, GetInt() is the index of the item, and
+    // GetString() is its user string (here it's the path).
+    wxMessageBox(wxString::Format("Item #%d of list %d was clicked:\n%s",
+                                  evt.GetInt(), evt.GetId(), evt.GetString()),
+                 evt.GetId() == ID_BACKSTAGE_RECENT_LIST ? "Open Recent File"
+                                                         : "Save To Folder",
+                 wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnBackstageButton(wxCommandEvent& evt)
+{
+    if ( evt.GetId() == ID_BACKSTAGE_PROTECT )
+    {
+        wxMenu menu;
+        const wxString choices[] = { "Mark as Final", "Encrypt with Password", "Restrict Access" };
+        for ( const wxString& choice : choices )
+        {
+            const wxMenuItem* item = menu.Append(wxID_ANY, choice);
+            menu.Bind(wxEVT_MENU,
+                [choice](wxCommandEvent&)
+                {
+                    wxMessageBox(wxString::Format("\"%s\" was chosen.", choice),
+                                 "Protect Document", wxOK | wxICON_INFORMATION);
+                },
+                item->GetId());
+        }
+        if ( wxWindow* button = wxDynamicCast(evt.GetEventObject(), wxWindow) )
+            button->PopupMenu(&menu, wxPoint(0, button->GetSize().GetHeight()));
+        return;
+    }
+
+    wxMessageBox(wxString::Format("The button \"%s\" (ID %d) was clicked.",
+                                  evt.GetString(), evt.GetId()),
+                 "Backstage Page Button", wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::SetBarStyle(long style)
@@ -1419,17 +1628,17 @@ void MyFrame::OnRemovePanel(wxRibbonButtonBarEvent& WXUNUSED(evt))
 
 void MyFrame::OnHidePages(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_ribbon->HidePage(1);
     m_ribbon->HidePage(2);
     m_ribbon->HidePage(3);
+    m_ribbon->HidePage(4);
     m_ribbon->Realize();
 }
 
 void MyFrame::OnShowPages(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_ribbon->ShowPage(1);
     m_ribbon->ShowPage(2);
     m_ribbon->ShowPage(3);
+    m_ribbon->ShowPage(4);
     m_ribbon->Realize();
 }
 

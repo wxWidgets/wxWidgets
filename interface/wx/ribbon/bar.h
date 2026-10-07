@@ -148,6 +148,9 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
     wxRibbonBar as parent), when a page is created, it is automatically added
     to the bar - there is no AddPage equivalent to call.
 
+    A ribbon bar can also show a wxBackstage from a "File" tab
+    (see SetBackstagePage() and SetBackstage()).
+
     After all pages have been created, and all controls and panels placed on
     those pages, Realize() must be called.
 
@@ -513,6 +516,135 @@ public:
         @since 3.1.0
     */
     wxRibbonDisplayMode GetDisplayMode() const;
+
+    /**
+        Sets the page that acts as the "File" tab of the backstage.
+
+        The page should not contain any panels. Only one page can be the File
+        tab at a time. (Setting another one turns the previous page back into
+        an ordinary tab.) If the backstage is currently shown, it is shown again
+        from the new tab.
+
+        The File tab is drawn in the system's accent colour (see
+        StyleBackstageTab() and SetBackstageTabColour()).
+
+        @param page
+            The File tab's page, or @NULL to disable the backstage.
+
+        @see SetBackstage(), ShowBackstage()
+
+        @since 3.3.4
+    */
+    void SetBackstagePage(wxRibbonPage* page);
+
+    /**
+        Returns the page that acts as the File tab, or @NULL if there is none.
+
+        @since 3.3.4
+    */
+    wxRibbonPage* GetBackstagePage() const;
+
+    /**
+        Sets the backstage and the application's content that it replaces.
+
+        Both windows should be siblings of the ribbon bar, in the same sizer
+        and occupying the same spot. The backstage's navigation area follows
+        the colours of the ribbon bar's art provider.
+
+        The backstage starts out hidden; call ShowBackstage() to show it.
+
+        Setting another pair puts the previous pair back to normal (a shown
+        backstage is shown again from the new pair).
+
+        @param backstage
+            The backstage to show when the File tab is selected.
+        @param content
+            The window that the backstage replaces, or @NULL if there is
+            nothing to hide.
+
+        @since 3.3.4
+    */
+    void SetBackstage(wxBackstage* backstage, wxWindow* content);
+
+    /**
+        Shows or hides the backstage.
+
+        Showing the backstage selects the File tab, collapses the panels, and
+        swaps the content for the backstage. Hiding it selects the first other
+        tab (if the File tab was selected), restores the display mode that the
+        ribbon had, and brings back the content.
+
+        Selecting the File tab or any other tab with the mouse or keyboard does
+        this automatically. As the ribbon bar does not send a page changed
+        event when a page is selected from code, use this function to show or
+        hide the backstage programmatically.
+
+        While the backstage is shown, the toggle button and double-clicking the
+        File tab do nothing, and no @c wxEVT_RIBBONBAR_TOGGLED event is sent.
+
+        @see IsBackstageShown()
+
+        @since 3.3.4
+    */
+    void ShowBackstage(bool show = true);
+
+    /**
+        Returns @true if the backstage is currently shown.
+
+        @since 3.3.4
+    */
+    bool IsBackstageShown() const;
+
+    /**
+        Sets whether the File tab is drawn in an accent colour.
+
+        If @true (the default), the File tab is filled with the colour given by
+        GetBackstageTabColour() and its label is drawn in a contrasting colour.
+        The fill has a glossy sheen, unless the art provider is
+        wxRibbonMSWFlatArtProvider, in which case it is flat. If @false, the
+        File tab is drawn like any other tab.
+
+        @since 3.3.4
+    */
+    void StyleBackstageTab(bool style = true);
+
+    /**
+        Returns @true if the File tab is drawn in an accent colour.
+
+        @see StyleBackstageTab()
+
+        @since 3.3.4
+    */
+    bool IsBackstageTabStyled() const;
+
+    /**
+        Sets the colour of the File tab when it is styled.
+
+        @param colour
+            The colour, or an invalid colour to use the system's accent colour
+            (the default).
+
+        @since 3.3.4
+    */
+    void SetBackstageTabColour(const wxColour& colour);
+
+    /**
+        Returns the colour of the File tab when it is styled.
+
+        @since 3.3.4
+    */
+    wxColour GetBackstageTabColour() const;
+
+    /**
+        Applies the art provider's colours to the backstage.
+
+        This is done automatically when the backstage or art provider is
+        changed, and when the system colours change. Call it if the art
+        provider's colours were changed afterwards.
+
+        @since 3.3.4
+    */
+    void UpdateBackstageColours();
 
     /**
         Returns whether the bar contains multiple pages.

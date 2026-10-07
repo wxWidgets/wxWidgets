@@ -19,6 +19,8 @@
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/toolbar.h"
 #include "wx/ribbon/gallery.h"
+#include "wx/ribbon/backstage.h"
+#include "wx/ribbon/private/backstage.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 #include "wx/app.h"
@@ -1060,6 +1062,9 @@ void wxRibbonBar::CommonInit(long style)
     }
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
+    Bind(wxEVT_RIBBONBAR_PAGE_CHANGED, &wxRibbonBar::OnBackstagePageChanged, this);
+    Bind(wxEVT_RIBBONBAR_TOGGLED, &wxRibbonBar::OnBackstageToggled, this);
+
     if ( m_keyTipsTriggerKeys.empty() )
         m_keyTipsTriggerKeys.push_back({ WXK_F10, wxMOD_NONE });
 
@@ -1114,6 +1119,8 @@ void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
     }
 
     delete old;
+
+    UpdateBackstageColours();
 }
 
 void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
@@ -1157,7 +1164,10 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             dc.SetClippingRegion(tabs_rect);
         }
         dc.SetClippingRegion(info.rect);
-        m_art->DrawTab(dc, this, info);
+        if ( m_styleBackstageTab && info.page == m_backstagePage.get() )
+            DrawBackstageTab(dc, info);
+        else
+            m_art->DrawTab(dc, this, info);
 
         if(info.rect.width < info.small_begin_need_separator_width)
         {
@@ -1304,6 +1314,7 @@ void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     event.Skip();
     if ( m_art )
         m_art->UpdateColoursFromSystem();
+    UpdateBackstageColours();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)
@@ -1351,6 +1362,12 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
 {
     if ( m_keyTipsActive )
         HideKeyTips();
+
+    if ( IsBackstageTabHit(evt.GetPosition()) )
+    {
+        SetFocus();
+        return;
+    }
 
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
@@ -1539,6 +1556,12 @@ void wxRibbonBar::OnMouseRightUp(wxMouseEvent& evt)
 
 void wxRibbonBar::OnMouseDoubleClick(wxMouseEvent& evt)
 {
+    if ( IsBackstageTabHit(evt.GetPosition()) )
+    {
+        SetFocus();
+        return;
+    }
+
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
     if ( tab && tab == &m_pages.Item(m_current_page) )
@@ -1766,6 +1789,216 @@ int wxRibbonBar::FindShownPage(int from, int step) const
             return i;
     }
     return wxNOT_FOUND;
+}
+
+// ----------------------------------------------------------------------------
+// Backstage
+// ----------------------------------------------------------------------------
+
+bool wxRibbonBar::IsFlatArtProvider(const wxRibbonArtProvider* art)
+{
+    return dynamic_cast<const wxRibbonMSWFlatArtProvider*>(art) != nullptr;
+}
+
+void wxRibbonBar::SetBackstagePage(wxRibbonPage* page)
+{
+    if ( page == m_backstagePage.get() )
+        return;
+
+    const bool wasShown = m_backstageShown;
+    if ( wasShown )
+        ShowBackstage(false);
+
+    m_backstagePage = page;
+
+    if ( wasShown )
+        ShowBackstage(true);
+
+    Refresh();
+}
+
+void wxRibbonBar::SetBackstage(wxBackstage* backstage, wxWindow* content)
+{
+    if ( backstage == m_backstage.get() && content == m_backstageContent.get() )
+        return;
+
+    const bool wasShown = m_backstageShown;
+    if ( wasShown )
+        ShowBackstage(false);
+
+    if ( m_backstage.get() != nullptr && m_backstage.get() != backstage )
+    {
+        m_backstage->SetNavBackgroundColour(wxColour());
+        m_backstage->SetHighlightColour(wxColour());
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Flat);
+    }
+
+    m_backstage = backstage;
+    m_backstageContent = content;
+    UpdateBackstageColours();
+
+    // The backstage is never shown until asked for (this also leaves the File
+    // tab if it happens to be the active page).
+    ShowBackstage(wasShown);
+}
+
+void wxRibbonBar::ShowBackstage(bool show)
+{
+    if ( m_backstagePage.get() == nullptr )
+    {
+        // nothing to select, but the backstage can still be dismissed
+        if ( !show )
+            UpdateBackstageViews(false);
+        return;
+    }
+
+    const int backstageTab = GetPageNumber(m_backstagePage.get());
+    if ( show )
+    {
+        if ( GetActivePage() != backstageTab )
+            SetActivePage(m_backstagePage.get());
+    }
+    else if ( GetActivePage() == backstageTab )
+    {
+        for ( size_t i = 0; i < GetPageCount(); ++i )
+        {
+            if ( static_cast<int>(i) != backstageTab )
+            {
+                SetActivePage(i);
+                break;
+            }
+        }
+    }
+    UpdateBackstageViews(show);
+}
+
+void wxRibbonBar::StyleBackstageTab(bool style)
+{
+    m_styleBackstageTab = style;
+    Refresh();
+}
+
+void wxRibbonBar::SetBackstageTabColour(const wxColour& colour)
+{
+    m_backstageTabColour = colour;
+    Refresh();
+}
+
+wxColour wxRibbonBar::GetBackstageTabColour() const
+{
+    return m_backstageTabColour.IsOk() ? m_backstageTabColour
+                                       : wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+}
+
+void wxRibbonBar::UpdateBackstageColours()
+{
+    if ( m_backstage.get() == nullptr || m_art == nullptr )
+        return;
+
+    wxColour primary, secondary;
+    m_art->GetColourScheme(&primary, &secondary, nullptr);
+    if ( primary.IsOk() )
+        m_backstage->SetNavBackgroundColour(primary);
+
+    // glossy highlights only on non-flat interface
+    if ( !IsFlatArtProvider(m_art) && secondary.IsOk() )
+    {
+        m_backstage->SetHighlightColour(secondary);
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Glossy);
+    }
+    else
+    {
+        m_backstage->SetHighlightColour(wxColour());
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Flat);
+    }
+}
+
+void wxRibbonBar::DrawBackstageTab(wxDC& dc, const wxRibbonPageTabInfo& tab)
+{
+    const wxColour accent = GetBackstageTabColour();
+    const wxColour fill = (tab.hovered && !tab.active) ?
+        wxBackstageHelpers::Blend(accent, *wxWHITE, 0.2) : accent;
+
+    if ( !IsFlatArtProvider(m_art) )
+    {
+        wxBackstageHelpers::DrawGlossyRect(dc, tab.rect, fill);
+    }
+    else
+    {
+        const wxDCPenChanger pc{ dc, *wxTRANSPARENT_PEN };
+        const wxDCBrushChanger bc{ dc, wxBrush{ fill } };
+        dc.DrawRectangle(tab.rect);
+    }
+
+    if ( m_art != nullptr )
+        dc.SetFont(m_art->GetFont(wxRIBBON_ART_TAB_LABEL_FONT));
+
+    dc.SetTextForeground(wxBackstageHelpers::BlackOrWhiteContrast(fill));
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    const wxString label = tab.page != nullptr ? tab.page->GetLabel() : wxString();
+    const wxSize textSize = dc.GetTextExtent(label);
+    dc.DrawText(label,
+                tab.rect.x + (tab.rect.width - textSize.GetWidth()) / 2,
+                tab.rect.y + (tab.rect.height - textSize.GetHeight()) / 2);
+}
+
+bool wxRibbonBar::IsBackstageTabHit(const wxPoint& position)
+{
+    int tabIndex = wxNOT_FOUND;
+    return m_backstageShown &&
+           HitTestTabs(position, &tabIndex) != nullptr &&
+           GetPage(tabIndex) == m_backstagePage.get();
+}
+
+void wxRibbonBar::OnBackstagePageChanged(wxRibbonBarEvent& evt)
+{
+    UpdateBackstageViews(m_backstagePage.get() != nullptr &&
+                         evt.GetPage() == m_backstagePage.get());
+    evt.Skip();
+}
+
+void wxRibbonBar::OnBackstageToggled(wxRibbonBarEvent& evt)
+{
+    if ( !m_backstageShown )
+    {
+        evt.Skip();
+        return;
+    }
+
+    // the ribbon has already toggled by now, so undo that (and swallow the event)
+    ShowPanels(wxRIBBON_BAR_MINIMIZED);
+}
+
+void wxRibbonBar::UpdateBackstageViews(bool showBackstage)
+{
+    if ( showBackstage == m_backstageShown )
+        return;
+    m_backstageShown = showBackstage;
+
+    if ( showBackstage )
+    {
+        // a collapsed ribbon reports itself as expanded until the next click
+        const wxRibbonDisplayMode mode = GetDisplayMode();
+        m_backstageSavedMode = (mode == wxRIBBON_BAR_EXPANDED) ? wxRIBBON_BAR_MINIMIZED : mode;
+
+        ShowPanels(wxRIBBON_BAR_MINIMIZED);
+        if ( m_backstageContent.get() != nullptr )
+            m_backstageContent->Hide();
+        if ( m_backstage.get() != nullptr )
+            m_backstage->Show();
+        GetParent()->Layout();
+        if ( m_backstage.get() != nullptr )
+            m_backstage->SetFocus();
+    }
+    else
+    {
+        if ( m_backstage.get() != nullptr )
+            m_backstage->Hide();
+        if ( m_backstageContent.get() != nullptr )
+            m_backstageContent->Show();
+
+        ShowPanels(m_backstageSavedMode);
+    }
 }
 
 bool wxRibbonBar::DoChangeActivePage(size_t page)
