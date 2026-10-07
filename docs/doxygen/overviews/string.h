@@ -66,6 +66,14 @@ for ( auto c : s )
     auto, as in the example above.
 
 
+@section overview_string_format Using wxString with {fmt}
+
+wxString objects can be used directly with the `{fmt}` library functions such
+as `fmt::format()` or `fmt::print()`, without doing anything special, as long
+as `{fmt}` 10 or later is used. Note that only narrow strings are supported in
+this case and that wxString is always formatted using UTF-8 encoding.
+
+
 @section overview_string_internal wxString Internal Representation
 
 @note This section can be skipped at first reading and is provided solely for
