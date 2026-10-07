@@ -17,7 +17,10 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#include "wx/stdformat.h"
+
 #include <algorithm>
+#include <iterator>
 
 TEST_CASE("StdString::Constructors", "[stdstring]")
 {
@@ -702,3 +705,35 @@ TEST_CASE("StdString::View", "[stdstring]")
     CHECK( wview == wstr );
 }
 #endif // wxHAS_STD_STRING_VIEW
+
+#ifdef wxHAS_STD_FORMAT
+TEST_CASE("StdString::Format", "[stdstring][format]")
+{
+    const wxString s("abc");
+
+    CHECK( std::format("{}", s) == "abc" );
+    CHECK( std::format("[{:>5}]", s) == "[  abc]" );
+    CHECK( std::format("[{:*<5}]", s) == "[abc**]" );
+    CHECK( std::format("[{:.2}]", s) == "[ab]" );
+    CHECK( std::format("{0}-{0}", s) == "abc-abc" );
+    CHECK( std::format("{}", wxString()) == "" );
+
+    std::string out;
+    std::format_to(std::back_inserter(out), "<{:^7}>", s);
+    CHECK( out == "<  abc  >" );
+
+    CHECK( std::format(L"{}", s) == L"abc" );
+    CHECK( std::format(L"[{:>5}]", s) == L"[  abc]" );
+
+    // Narrow strings must use UTF-8, independently of the current locale.
+    const wxString nonASCII = wxString::FromUTF8("\xC3\xA9t\xC3\xA9"); // U+00E9 t U+00E9
+    CHECK( std::format("{}", nonASCII) == "\xC3\xA9t\xC3\xA9" );
+    CHECK( std::format(L"{}", nonASCII) == L"\u00E9t\u00E9" );
+
+    // Also check that a character outside of the BMP is handled correctly
+    // when using UTF-16 for wchar_t.
+    const wxString cat = wxString::FromUTF8("\xF0\x9F\x90\xB1"); // U+1F431
+    CHECK( std::format("{}", cat) == "\xF0\x9F\x90\xB1" );
+    CHECK( std::format(L"{}", cat) == L"\U0001F431" );
+}
+#endif // wxHAS_STD_FORMAT

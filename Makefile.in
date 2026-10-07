@@ -780,6 +780,7 @@ ALL_BASE_HEADERS =  \
 	wx/localedefs.h \
 	wx/uilocale.h \
 	wx/fs_data.h \
+	wx/stdformat.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -966,6 +967,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/localedefs.h \
 	wx/uilocale.h \
 	wx/fs_data.h \
+	wx/stdformat.h \
 	wx/unix/fswatcher_inotify.h \
 	wx/unix/stdpaths.h \
 	wx/unix/mimetype.h \
