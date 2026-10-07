@@ -584,15 +584,18 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_WordList.o \
 	wxlexilla_Lexilla.o
 WXLUNASVG_CFLAGS = -I$(top_srcdir)/3rdparty/lunasvg/include \
-	-I$(top_srcdir)/3rdparty/lunasvg/plutovg/include $(WX_CPPFLAGS) -DNDEBUG \
+	-I$(top_srcdir)/3rdparty/lunasvg/plutovg/include \
+	-I$(top_srcdir)/3rdparty/lunasvg/plutovg/source $(WX_CPPFLAGS) -DNDEBUG \
 	$(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXLUNASVG_CXXFLAGS = -I$(top_srcdir)/3rdparty/lunasvg/include \
-	-I$(top_srcdir)/3rdparty/lunasvg/plutovg/include $(WX_CPPFLAGS) -DNDEBUG \
+	-I$(top_srcdir)/3rdparty/lunasvg/plutovg/include \
+	-I$(top_srcdir)/3rdparty/lunasvg/plutovg/source $(WX_CPPFLAGS) -DNDEBUG \
 	$(WX_CXXFLAGS) $(____SHARED) $(CPPFLAGS) $(CXXFLAGS)
 WXLUNASVG_OBJECTS =  \
 	wxlunasvg_lunasvg.o \
 	wxlunasvg_graphics.o \
 	wxlunasvg_svgelement.o \
+	wxlunasvg_svgfilterelement.o \
 	wxlunasvg_svggeometryelement.o \
 	wxlunasvg_svglayoutstate.o \
 	wxlunasvg_svgpaintelement.o \
@@ -608,6 +611,7 @@ WXLUNASVG_OBJECTS =  \
 	wxlunasvg_plutovg_path.o \
 	wxlunasvg_plutovg_rasterize.o \
 	wxlunasvg_plutovg_surface.o \
+	wxlunasvg_plutovg_filter.o \
 	wxlunasvg_plutovg_ft_math.o \
 	wxlunasvg_plutovg_ft_raster.o \
 	wxlunasvg_plutovg_ft_stroker.o
@@ -15296,6 +15300,9 @@ wxlunasvg_graphics.o: $(srcdir)/3rdparty/lunasvg/source/graphics.cpp
 wxlunasvg_svgelement.o: $(srcdir)/3rdparty/lunasvg/source/svgelement.cpp
 	$(CXXC) -c -o $@ $(WXLUNASVG_CXXFLAGS) $(srcdir)/3rdparty/lunasvg/source/svgelement.cpp
 
+wxlunasvg_svgfilterelement.o: $(srcdir)/3rdparty/lunasvg/source/svgfilterelement.cpp
+	$(CXXC) -c -o $@ $(WXLUNASVG_CXXFLAGS) $(srcdir)/3rdparty/lunasvg/source/svgfilterelement.cpp
+
 wxlunasvg_svggeometryelement.o: $(srcdir)/3rdparty/lunasvg/source/svggeometryelement.cpp
 	$(CXXC) -c -o $@ $(WXLUNASVG_CXXFLAGS) $(srcdir)/3rdparty/lunasvg/source/svggeometryelement.cpp
 
@@ -15340,6 +15347,9 @@ wxlunasvg_plutovg_rasterize.o: $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg
 
 wxlunasvg_plutovg_surface.o: $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg-surface.c
 	$(CCC) -c -o $@ $(WXLUNASVG_CFLAGS) $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg-surface.c
+
+wxlunasvg_plutovg_filter.o: $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg-filter.c
+	$(CCC) -c -o $@ $(WXLUNASVG_CFLAGS) $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg-filter.c
 
 wxlunasvg_plutovg_ft_math.o: $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg-ft-math.c
 	$(CCC) -c -o $@ $(WXLUNASVG_CFLAGS) $(srcdir)/3rdparty/lunasvg/plutovg/source/plutovg-ft-math.c

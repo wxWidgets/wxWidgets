@@ -535,16 +535,19 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_WordList.o \
 	$(OBJS)\wxlexilla_Lexilla.o
 WXLUNASVG_CFLAGS = -I..\..\3rdparty\lunasvg\include \
-	-I..\..\3rdparty\lunasvg\plutovg\include $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
+	-I..\..\3rdparty\lunasvg\plutovg\include \
+	-I..\..\3rdparty\lunasvg\plutovg\source $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(__THREADSFLAG) -DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXLUNASVG_CXXFLAGS = -I..\..\3rdparty\lunasvg\include \
-	-I..\..\3rdparty\lunasvg\plutovg\include $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
+	-I..\..\3rdparty\lunasvg\plutovg\include \
+	-I..\..\3rdparty\lunasvg\plutovg\source $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(__THREADSFLAG) -DNDEBUG $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
 	$(CXXFLAGS)
 WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_lunasvg.o \
 	$(OBJS)\wxlunasvg_graphics.o \
 	$(OBJS)\wxlunasvg_svgelement.o \
+	$(OBJS)\wxlunasvg_svgfilterelement.o \
 	$(OBJS)\wxlunasvg_svggeometryelement.o \
 	$(OBJS)\wxlunasvg_svglayoutstate.o \
 	$(OBJS)\wxlunasvg_svgpaintelement.o \
@@ -560,6 +563,7 @@ WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_plutovg_path.o \
 	$(OBJS)\wxlunasvg_plutovg_rasterize.o \
 	$(OBJS)\wxlunasvg_plutovg_surface.o \
+	$(OBJS)\wxlunasvg_plutovg_filter.o \
 	$(OBJS)\wxlunasvg_plutovg_ft_math.o \
 	$(OBJS)\wxlunasvg_plutovg_ft_raster.o \
 	$(OBJS)\wxlunasvg_plutovg_ft_stroker.o
@@ -7737,6 +7741,9 @@ $(OBJS)\wxlunasvg_graphics.o: ../../3rdparty/lunasvg/source/graphics.cpp
 $(OBJS)\wxlunasvg_svgelement.o: ../../3rdparty/lunasvg/source/svgelement.cpp
 	$(CXX) -c -o $@ $(WXLUNASVG_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxlunasvg_svgfilterelement.o: ../../3rdparty/lunasvg/source/svgfilterelement.cpp
+	$(CXX) -c -o $@ $(WXLUNASVG_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxlunasvg_svggeometryelement.o: ../../3rdparty/lunasvg/source/svggeometryelement.cpp
 	$(CXX) -c -o $@ $(WXLUNASVG_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7780,6 +7787,9 @@ $(OBJS)\wxlunasvg_plutovg_rasterize.o: ../../3rdparty/lunasvg/plutovg/source/plu
 	$(CC) -c -o $@ $(WXLUNASVG_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlunasvg_plutovg_surface.o: ../../3rdparty/lunasvg/plutovg/source/plutovg-surface.c
+	$(CC) -c -o $@ $(WXLUNASVG_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlunasvg_plutovg_filter.o: ../../3rdparty/lunasvg/plutovg/source/plutovg-filter.c
 	$(CC) -c -o $@ $(WXLUNASVG_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlunasvg_plutovg_ft_math.o: ../../3rdparty/lunasvg/plutovg/source/plutovg-ft-math.c

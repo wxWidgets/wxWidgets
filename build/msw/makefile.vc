@@ -573,15 +573,17 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_Lexilla.obj
 WXLUNASVG_CFLAGS = /M$(__RUNTIME_LIBS_145)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\3rdparty\lunasvg\include /I..\..\3rdparty\lunasvg\plutovg\include \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/I..\..\3rdparty\lunasvg\plutovg\source $(__DEBUGINFO) \
+	/Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXLUNASVG_CXXFLAGS = /M$(__RUNTIME_LIBS_145)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\3rdparty\lunasvg\include /I..\..\3rdparty\lunasvg\plutovg\include \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/I..\..\3rdparty\lunasvg\plutovg\source $(__DEBUGINFO) \
+	/Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
@@ -590,6 +592,7 @@ WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_lunasvg.obj \
 	$(OBJS)\wxlunasvg_graphics.obj \
 	$(OBJS)\wxlunasvg_svgelement.obj \
+	$(OBJS)\wxlunasvg_svgfilterelement.obj \
 	$(OBJS)\wxlunasvg_svggeometryelement.obj \
 	$(OBJS)\wxlunasvg_svglayoutstate.obj \
 	$(OBJS)\wxlunasvg_svgpaintelement.obj \
@@ -605,6 +608,7 @@ WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_plutovg_path.obj \
 	$(OBJS)\wxlunasvg_plutovg_rasterize.obj \
 	$(OBJS)\wxlunasvg_plutovg_surface.obj \
+	$(OBJS)\wxlunasvg_plutovg_filter.obj \
 	$(OBJS)\wxlunasvg_plutovg_ft_math.obj \
 	$(OBJS)\wxlunasvg_plutovg_ft_raster.obj \
 	$(OBJS)\wxlunasvg_plutovg_ft_stroker.obj
@@ -8239,6 +8243,9 @@ $(OBJS)\wxlunasvg_graphics.obj: ..\..\3rdparty\lunasvg\source\graphics.cpp
 $(OBJS)\wxlunasvg_svgelement.obj: ..\..\3rdparty\lunasvg\source\svgelement.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLUNASVG_CXXFLAGS) ..\..\3rdparty\lunasvg\source\svgelement.cpp
 
+$(OBJS)\wxlunasvg_svgfilterelement.obj: ..\..\3rdparty\lunasvg\source\svgfilterelement.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLUNASVG_CXXFLAGS) ..\..\3rdparty\lunasvg\source\svgfilterelement.cpp
+
 $(OBJS)\wxlunasvg_svggeometryelement.obj: ..\..\3rdparty\lunasvg\source\svggeometryelement.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLUNASVG_CXXFLAGS) ..\..\3rdparty\lunasvg\source\svggeometryelement.cpp
 
@@ -8283,6 +8290,9 @@ $(OBJS)\wxlunasvg_plutovg_rasterize.obj: ..\..\3rdparty\lunasvg\plutovg\source\p
 
 $(OBJS)\wxlunasvg_plutovg_surface.obj: ..\..\3rdparty\lunasvg\plutovg\source\plutovg-surface.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXLUNASVG_CFLAGS) ..\..\3rdparty\lunasvg\plutovg\source\plutovg-surface.c
+
+$(OBJS)\wxlunasvg_plutovg_filter.obj: ..\..\3rdparty\lunasvg\plutovg\source\plutovg-filter.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXLUNASVG_CFLAGS) ..\..\3rdparty\lunasvg\plutovg\source\plutovg-filter.c
 
 $(OBJS)\wxlunasvg_plutovg_ft_math.obj: ..\..\3rdparty\lunasvg\plutovg\source\plutovg-ft-math.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXLUNASVG_CFLAGS) ..\..\3rdparty\lunasvg\plutovg\source\plutovg-ft-math.c
