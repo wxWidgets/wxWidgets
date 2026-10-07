@@ -11,11 +11,12 @@ if(wxUSE_LUNASVG STREQUAL "sys")
     message(FATAL_ERROR "Not supported")
 endif()
 
-if(wxUSE_LUNASVG STREQUAL "builtin")
+if(wxUSE_LUNASVG STREQUAL "ON" OR wxUSE_LUNASVG STREQUAL "builtin")
     wx_add_builtin_library(wxlunasvg
         3rdparty/lunasvg/source/lunasvg.cpp
         3rdparty/lunasvg/source/graphics.cpp
         3rdparty/lunasvg/source/svgelement.cpp
+        3rdparty/lunasvg/source/svgfilterelement.cpp
         3rdparty/lunasvg/source/svggeometryelement.cpp
         3rdparty/lunasvg/source/svglayoutstate.cpp
         3rdparty/lunasvg/source/svgpaintelement.cpp
@@ -32,6 +33,7 @@ if(wxUSE_LUNASVG STREQUAL "builtin")
         3rdparty/lunasvg/plutovg/source/plutovg-path.c
         3rdparty/lunasvg/plutovg/source/plutovg-rasterize.c
         3rdparty/lunasvg/plutovg/source/plutovg-surface.c
+        3rdparty/lunasvg/plutovg/source/plutovg-filter.c
         3rdparty/lunasvg/plutovg/source/plutovg-ft-math.c
         3rdparty/lunasvg/plutovg/source/plutovg-ft-raster.c
         3rdparty/lunasvg/plutovg/source/plutovg-ft-stroker.c
@@ -39,6 +41,7 @@ if(wxUSE_LUNASVG STREQUAL "builtin")
     target_include_directories(wxlunasvg PRIVATE
         ${wxSOURCE_DIR}/3rdparty/lunasvg/include
         ${wxSOURCE_DIR}/3rdparty/lunasvg/plutovg/include
+        ${wxSOURCE_DIR}/3rdparty/lunasvg/plutovg/source
     )
 
     set(LUNASVG_LIBRARIES wxlunasvg)
