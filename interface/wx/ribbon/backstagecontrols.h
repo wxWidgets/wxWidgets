@@ -262,6 +262,10 @@ public:
 
     A most-recently-used (MRU) file list for a wxBackstagePage.
 
+    Unlike wxFileHistory, which stores and saves the list of files,
+    this control only displays files. It can be filled
+    from a wxFileHistory (see SetFiles()).
+
     Provide file paths (or paths with modified dates) and it:
     - sorts them
     - shows human-readable modified dates next to them (e.g., "Just now", "12 minutes
@@ -293,6 +297,14 @@ public:
         application's own MRU list.
     */
     void SetFiles(const wxArrayString& paths);
+
+    /**
+        Sets the files to show from an application's wxFileHistory.
+
+        This information is copied, so call this again whenever the
+        history changes.
+    */
+    void SetFiles(const wxFileHistory& history);
 
     /**
         Adds a file with a modified date that you provide, instead of reading it

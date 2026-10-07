@@ -17,6 +17,7 @@
 #include "wx/ribbon/backstage.h"
 #include "wx/control.h"
 #include "wx/datetime.h"
+#include "wx/filehistory.h"
 #include "wx/panel.h"
 #include "wx/scrolwin.h"
 #include "wx/stattext.h"
@@ -242,6 +243,9 @@ public:
     wxBackstageMRUList& operator=(const wxBackstageMRUList&) = delete;
 
     void SetFiles(const wxArrayString& paths);
+#if wxUSE_FILE_HISTORY
+    void SetFiles(const wxFileHistory& history);
+#endif
     void AddFile(const wxString& path, const wxDateTime& modified);
     void ClearFiles();
     wxNODISCARD

@@ -1572,6 +1572,19 @@ void wxBackstageMRUList::SetFiles(const wxArrayString& paths)
     Rebuild();
 }
 
+#if wxUSE_FILE_HISTORY
+//-------------------------------------------
+void wxBackstageMRUList::SetFiles(const wxFileHistory& history)
+{
+    wxArrayString paths;
+    for ( size_t i = 0; i < history.GetCount(); ++i )
+    {
+        paths.Add(history.GetHistoryFile(i));
+    }
+    SetFiles(paths);
+}
+#endif
+
 //-------------------------------------------
 void wxBackstageMRUList::AddFile(const wxString& path, const wxDateTime& modified)
 {
