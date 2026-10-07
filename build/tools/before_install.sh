@@ -29,13 +29,47 @@ case $(uname -s) in
             echo '--- End of APT files dump ---'
 
             run_apt() {
-                echo "-> Running apt-get $@"
+                # Downloading packages fails sporadically due to network
+                # errors, so retry a few times if this happens: as already
+                # downloaded files are kept, subsequent attempts are cheap.
+                #
+                # Note that we need to check the output and not just the exit
+                # code because "apt-get update" returns 0 even if it fails to
+                # download some files and we also don't want to retry if
+                # "apt-get install" fails for some other reason.
+                apt_log=$(mktemp)
+                apt_rc=$(mktemp)
+                max_attempts=3
+                attempt=1
+                while :; do
+                    echo "-> Running apt-get $@ (attempt $attempt/$max_attempts)"
 
-                # Disable some (but not all) output.
-                $SUDO apt-get -q -o=Dpkg::Use-Pty=0 "$@"
+                    # Disable some (but not all) output and ask apt itself to
+                    # retry failed downloads too.
+                    {
+                        $SUDO apt-get -q -o=Dpkg::Use-Pty=0 -o Acquire::Retries=3 "$@" 2>&1 && rc=0 || rc=$?
+                        echo $rc > "$apt_rc"
+                    } | tee "$apt_log"
 
-                rc=$?
-                echo "-> Done with $rc"
+                    rc=$(cat "$apt_rc")
+                    echo "-> Done with $rc"
+
+                    if ! grep -q 'Failed to fetch' "$apt_log"; then
+                        break
+                    fi
+
+                    if [ $attempt -ge $max_attempts ]; then
+                        echo "-> Giving up after $attempt attempts."
+                        break
+                    fi
+
+                    delay=$((attempt * 30))
+                    echo "-> Network error, retrying in $delay seconds..."
+                    sleep $delay
+                    attempt=$((attempt + 1))
+                done
+
+                rm -f "$apt_log" "$apt_rc"
 
                 return $rc
             }
