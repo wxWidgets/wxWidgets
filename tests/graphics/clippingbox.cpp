@@ -3978,11 +3978,10 @@ TEST_CASE("ClippingBoxTestCase::wxPaintDC", "[clip][dc][paintdc]")
     winSize.x = wxMax(winSize.x, s_dcSize.x + 50);
     winSize.y = wxMax(winSize.y, s_dcSize.y + 50);
     wxTheApp->GetTopWindow()->SetClientSize(winSize);
-#if defined(__WXGTK__)
-    // Under wxGTK we need to have two children (at least) because if there
-    // is one child its paint area is set to fill the whole parent frame.
+    // We need to have two children (at least) because if there is only one,
+    // it is resized to fill the whole parent frame whenever the frame gets a
+    // size event, which can happen at any moment (and always does in wxGTK).
     auto w0 = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
-#endif // wxGTK
     auto win = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY, wxPoint(0, 0));
     win->SetClientSize(s_dcSize);
 
