@@ -699,17 +699,6 @@ int wxAuiManager::GetActionPartIndex() const
     return wxNOT_FOUND;
 }
 
-int wxAuiManager::GetContainingDockSize(const wxAuiPaneInfo& paneInfo) const
-{
-    for ( const auto& d : m_docks )
-    {
-        if ( FindPaneInDock(d, paneInfo.window) )
-            return d.size;
-    }
-
-    return 0;
-}
-
 void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_art->UpdateColoursFromSystem();
@@ -1789,10 +1778,6 @@ void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
 
     paneInfo.Hide();
 
-    // Remember the size of the dock to make sure it has the same size if/when
-    // it is recreated when the pane is restored later.
-    paneInfo.dock_size = GetContainingDockSize(paneInfo);
-
     auto& dock = GetMinDockInDirection(minDirection);
     if ( !dock )
     {
@@ -2202,17 +2187,13 @@ wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
     dockInfo.dock_row = paneInfo.dock_row;
     dockInfo.dock_pos = paneInfo.dock_pos;
     dockInfo.dock_proportion = paneInfo.dock_proportion;
+    dockInfo.dock_size = paneInfo.dock_size;
 
     // Storing the default proportion is not really useful and it looks weird
     // as it's an arbitrary huge number, so replace it with 0 in serialized
     // representation, it will be mapped back to maxDockProportion after load.
     if ( dockInfo.dock_proportion == maxDockProportion )
         dockInfo.dock_proportion = 0;
-
-    // The dock size is typically not set in the pane itself, but set in its
-    // containing dock, so find it and copy it from there, as we do need to
-    // save it when serializing.
-    dockInfo.dock_size = GetContainingDockSize(paneInfo);
 }
 
 void
