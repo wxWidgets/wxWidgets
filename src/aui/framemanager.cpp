@@ -3312,6 +3312,23 @@ void wxAuiManager::Update()
     // create a layout for all of the panes
     sizer = LayoutAll(m_panes, m_docks, m_uiParts, false);
 
+    // Store the current dock size in all of its panes, as the docks may be
+    // recreated from the panes later, e.g. when all panes in the dock are
+    // hidden and then shown again or when the docks are cleared on DPI change,
+    // and we want to preserve the size in this case.
+    for ( const auto& dock : m_docks )
+    {
+        // Don't do it for fixed docks, however, as their size is computed from
+        // the size of their panes and storing the dock size in the panes would
+        // prevent the dock from shrinking when an element with the biggest
+        // size across the dock's orientation is removed from it.
+        if ( dock.fixed )
+            continue;
+
+        for ( auto* p : dock.panes )
+            p->dock_size = dock.size;
+    }
+
     // hide or show panes as necessary,
     // and float panes as necessary
     for ( auto& p : m_panes )
@@ -3602,7 +3619,20 @@ bool wxAuiManager::ProcessDockResult(wxAuiPaneInfo& target,
 
     if (allowed)
     {
+        // If the pane is moved to a dock with the same orientation, e.g. from
+        // the left side to the right one, keep the size of its old dock, so
+        // that the pane keeps its width (or height) if a new dock is created
+        // for it. But if the orientation changes, the old size is meaningless
+        // and the new dock size needs to be computed from the pane size.
+        const bool keepsSameOrientation =
+            (target.IsHorizontal() && new_pos.IsHorizontal()) ||
+            (target.IsVertical() && new_pos.IsVertical());
+
         target = new_pos;
+
+        if ( !keepsSameOrientation )
+            target.dock_size = 0;
+
         // Should this RTTI and function call be rewritten as
         // sending a new event type to allow other window types
         // to vary size based on dock location?
