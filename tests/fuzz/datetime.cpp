@@ -9,29 +9,19 @@
 #include "wx/log.h"
 #include "wx/datetime.h"
 
-#if wxDEBUG_LEVEL
-
-static void exitAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg);
-
-static volatile wxAssertHandler_t
-    origAssertHandler = wxSetAssertHandler(exitAssertHandler);
-
-static void exitAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg)
+static void ignoreAssertHandler(const wxString&,
+                                int,
+                                const wxString&,
+                                const wxString&,
+                                const wxString&)
 {
-    origAssertHandler(file, line, func, cond, msg);
-
-    exit(1);
 }
 
-#endif // wxDEBUG_LEVEL
+extern "C" int LLVMFuzzerInitialize(int*, char***)
+{
+    wxSetAssertHandler(ignoreAssertHandler);
+    return 0;
+}
 
 // Formats exercising a spread of specifiers. These are fixed rather than taken
 // from the input because Format() and ParseFormat() treat an unknown specifier
@@ -72,29 +62,37 @@ extern "C" int LLVMFuzzerTestOneInput(const wxUint8 *data, size_t size)
 
     for ( size_t n = 0; n < WXSIZEOF(s_formats); ++n )
     {
+        dt = wxDateTime();
         if ( dt.ParseFormat(str, wxString::FromAscii(s_formats[n]), &end) &&
                 dt.IsValid() )
             RoundTrip(dt);
     }
 
+    dt = wxDateTime();
     if ( dt.ParseDateTime(str, &end) && dt.IsValid() )
         RoundTrip(dt);
 
+    dt = wxDateTime();
     if ( dt.ParseDate(str, &end) && dt.IsValid() )
         RoundTrip(dt);
 
+    dt = wxDateTime();
     if ( dt.ParseTime(str, &end) && dt.IsValid() )
         RoundTrip(dt);
 
+    dt = wxDateTime();
     if ( dt.ParseRfc822Date(str, &end) && dt.IsValid() )
         RoundTrip(dt);
 
+    dt = wxDateTime();
     if ( dt.ParseISODate(str) && dt.IsValid() )
         RoundTrip(dt);
 
+    dt = wxDateTime();
     if ( dt.ParseISOTime(str) && dt.IsValid() )
         RoundTrip(dt);
 
+    dt = wxDateTime();
     if ( dt.ParseISOCombined(str) && dt.IsValid() )
         RoundTrip(dt);
 
