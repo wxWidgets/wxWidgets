@@ -1,0 +1,100 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        tests/fuzz/datetime.cpp
+// Purpose:     wxDateTime parsing and formatting code fuzzing test
+// Author:      Arthur Chan
+// Created:     2026-09-02
+// Copyright:   (c) 2026 Arthur Chan
+///////////////////////////////////////////////////////////////////////////////
+
+#include "wx/log.h"
+#include "wx/datetime.h"
+
+static void ignoreAssertHandler(const wxString&,
+                                int,
+                                const wxString&,
+                                const wxString&,
+                                const wxString&)
+{
+}
+
+extern "C" int LLVMFuzzerInitialize(int*, char***)
+{
+    wxSetAssertHandler(ignoreAssertHandler);
+    return 0;
+}
+
+// Formats exercising a spread of specifiers. These are fixed rather than taken
+// from the input because Format() and ParseFormat() treat an unknown specifier
+// as a programmer error and assert on it, so a fuzzed format string would only
+// ever report wxWidgets telling us the format is wrong.
+static const char* const s_formats[] =
+{
+    "%Y-%m-%d %H:%M:%S",
+    "%d/%m/%Y",
+    "%a, %d %b %Y %H:%M:%S %z",
+    "%c",
+    "%x %X",
+    "%j %U %W %p %I:%M",
+};
+
+static void RoundTrip(const wxDateTime& dt)
+{
+    // Format() falls back to an internal remapping for years outside the range
+    // strftime() handles, and that path asserts its own invariant, so keep the
+    // round-trip to years where it does not apply.
+    const int year = dt.GetYear();
+    if ( year < 1970 || year >= 2038 )
+        return;
+
+    for ( size_t n = 0; n < WXSIZEOF(s_formats); ++n )
+        dt.Format(wxString::FromAscii(s_formats[n]));
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const wxUint8 *data, size_t size)
+{
+    wxLogNull noLog;
+
+    const wxString str =
+        wxString::FromUTF8(reinterpret_cast<const char*>(data), size);
+
+    wxString::const_iterator end;
+    wxDateTime dt;
+
+    for ( size_t n = 0; n < WXSIZEOF(s_formats); ++n )
+    {
+        dt = wxDateTime();
+        if ( dt.ParseFormat(str, wxString::FromAscii(s_formats[n]), &end) &&
+                dt.IsValid() )
+            RoundTrip(dt);
+    }
+
+    dt = wxDateTime();
+    if ( dt.ParseDateTime(str, &end) && dt.IsValid() )
+        RoundTrip(dt);
+
+    dt = wxDateTime();
+    if ( dt.ParseDate(str, &end) && dt.IsValid() )
+        RoundTrip(dt);
+
+    dt = wxDateTime();
+    if ( dt.ParseTime(str, &end) && dt.IsValid() )
+        RoundTrip(dt);
+
+    dt = wxDateTime();
+    if ( dt.ParseRfc822Date(str, &end) && dt.IsValid() )
+        RoundTrip(dt);
+
+    dt = wxDateTime();
+    if ( dt.ParseISODate(str) && dt.IsValid() )
+        RoundTrip(dt);
+
+    dt = wxDateTime();
+    if ( dt.ParseISOTime(str) && dt.IsValid() )
+        RoundTrip(dt);
+
+    dt = wxDateTime();
+    if ( dt.ParseISOCombined(str) && dt.IsValid() )
+        RoundTrip(dt);
+
+    return 0;
+}
