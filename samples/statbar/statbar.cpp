@@ -169,6 +169,7 @@ private:
     void OnStatusBarToggle(wxCommandEvent& event);
     void DoCreateStatusBar(StatusBarKind kind, long style);
     void ApplyPaneStyle();
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     int m_statbarPaneStyle;
 
@@ -262,6 +263,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, BaseFrame)
                         MyFrame::OnUpdateSetPaneStyle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetStyleSizeGrip, StatusBar_SetStyleShowTips,
                         MyFrame::OnUpdateSetStyle)
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
@@ -588,9 +590,10 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
     // SetFieldsCount() with the same number of fields should be ok
     if ( nFields != -1 )
     {
-        static const int widthsFor2Fields[] = { 200, -1 };
+        static const int widthsFor2Fields[] = { FromDIP(200), -1 };
         static const int widthsFor3Fields[] = { -1, -2, -1 };
-        static const int widthsFor4Fields[] = { 100, -1, 100, -2, 100 };
+        static const int widthsFor4Fields[] =
+            { FromDIP(100), -1, FromDIP(100), -2, FromDIP(100) };
 
         static const int *widthsAll[] =
         {
@@ -774,6 +777,32 @@ void MyFrame::ApplyPaneStyle()
     delete [] styles;
 }
 
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Adjust fixed field widths to the new DPI.
+    wxStatusBar *sb = GetStatusBar();
+    std::vector<int> widths;
+    const int n = sb->GetFieldsCount();
+    for (int i = 0; i < n; i++)
+    {
+        int width = sb->GetStatusWidth(i);
+        if (width < 0)
+        {
+            // Preserve variable width
+            widths.push_back(width);
+        }
+        else
+        {
+            // Scale the fixed width to the new DPI.
+            float newDPI = event.GetNewDPI().x;
+            float oldDPI = event.GetOldDPI().x;
+            widths.push_back(width * newDPI / oldDPI);
+        }
+    }
+    SetStatusWidths(n, widths.data());
+    event.Skip();
+}
+
 void MyFrame::OnUpdateSetStyle(wxUpdateUIEvent& event)
 {
     long currentStyle = wxSTB_DEFAULT_STYLE;
@@ -912,10 +941,10 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
 
     int widths[Field_Max];
     widths[Field_Text] = -1; // growable
-    widths[Field_Checkbox] = 150;
+    widths[Field_Checkbox] = FromDIP(150);
     widths[Field_Bitmap] = -1; // growable
     widths[Field_NumLockIndicator] = sizeNumLock.x;
-    widths[Field_Clock] = 100;
+    widths[Field_Clock] = FromDIP(100);
     widths[Field_CapsLockIndicator] = dc.GetTextExtent(capslockIndicators[1]).x;
 
     SetFieldsCount(Field_Max);
