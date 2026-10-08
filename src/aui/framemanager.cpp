@@ -3243,8 +3243,8 @@ void wxAuiManager::Update()
     {
         if ( minDock && minDock->RealizeIfNeeded() )
         {
-            // Force recalculation of the minimized dock size.
-            GetPane(minDock).BestSize(wxDefaultSize);
+            // Update best size to account for the added or removed tools.
+            GetPane(minDock).BestSize(minDock->GetBestSize());
         }
     }
 
