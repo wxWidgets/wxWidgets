@@ -2723,7 +2723,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
             int amount = pane_pos - offset;
             if (amount > 0)
             {
-                if (dock.IsVertical())
+                if (dock.IsVerticalOrCenter())
                     sizer_item = dock_sizer->Add(1, amount, 0, wxEXPAND);
                 else
                     sizer_item = dock_sizer->Add(amount, 1, 0, wxEXPAND);
@@ -3572,7 +3572,7 @@ int wxAuiManager::GetDockPixelOffset(wxAuiPaneInfo& test)
         if (test.dock_direction == dock.dock_direction &&
             test.dock_layer==dock.dock_layer && test.dock_row==dock.dock_row)
         {
-            if (dock.IsVertical())
+            if (dock.IsVerticalOrCenter())
                 return dock.rect.y;
             else
                 return dock.rect.x;
@@ -3780,7 +3780,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
         if ((
             ((pt.y < part->dock->rect.y + 1) && part->dock->IsHorizontal()) ||
-            ((pt.x < part->dock->rect.x + 1) && part->dock->IsVertical())
+            ((pt.x < part->dock->rect.x + 1) && part->dock->IsVerticalOrCenter())
             ) && part->dock->panes.GetCount() > 1)
         {
             if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
@@ -3803,7 +3803,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
         if ((
             ((pt.y > part->dock->rect.y + part->dock->rect.height - 2 ) && part->dock->IsHorizontal()) ||
-            ((pt.x > part->dock->rect.x + part->dock->rect.width - 2 ) && part->dock->IsVertical())
+            ((pt.x > part->dock->rect.x + part->dock->rect.width - 2 ) && part->dock->IsVerticalOrCenter())
             ) && part->dock->panes.GetCount() > 1)
         {
             if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||

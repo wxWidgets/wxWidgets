@@ -168,7 +168,8 @@ public:
     bool IsHorizontal() const { return dock_direction == wxAUI_DOCK_TOP ||
                              dock_direction == wxAUI_DOCK_BOTTOM; }
     bool IsVertical() const { return dock_direction == wxAUI_DOCK_LEFT ||
-                             dock_direction == wxAUI_DOCK_RIGHT ||
+                             dock_direction == wxAUI_DOCK_RIGHT; }
+    bool IsVerticalOrCenter() const { return IsVertical() ||
                              dock_direction == wxAUI_DOCK_CENTER; }
 
     int dock_direction;     // dock direction (top, bottom, left, right, center)
