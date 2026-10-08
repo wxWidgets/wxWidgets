@@ -154,8 +154,29 @@ extern WXDLLIMPEXP_AUI wxAuiDockInfo wxAuiNullDockInfo;
 extern WXDLLIMPEXP_AUI wxAuiPaneInfo wxAuiNullPaneInfo;
 
 
+// Basic information about a dock, used by wxAuiPaneInfo and wxAuiDockInfo.
+class wxAuiDockCoords
+{
+public:
+    wxAuiDockCoords()
+    {
+        dock_direction = 0;
+        dock_layer = 0;
+        dock_row = 0;
+    }
 
-class WXDLLIMPEXP_AUI wxAuiPaneInfo
+    bool IsHorizontal() const { return dock_direction == wxAUI_DOCK_TOP ||
+                             dock_direction == wxAUI_DOCK_BOTTOM; }
+    bool IsVertical() const { return dock_direction == wxAUI_DOCK_LEFT ||
+                             dock_direction == wxAUI_DOCK_RIGHT ||
+                             dock_direction == wxAUI_DOCK_CENTER; }
+
+    int dock_direction;     // dock direction (top, bottom, left, right, center)
+    int dock_layer;         // layer number (0 = innermost layer)
+    int dock_row;           // row number on the docking bar (0 = first row)
+};
+
+class WXDLLIMPEXP_AUI wxAuiPaneInfo : public wxAuiDockCoords
 {
 public:
 
@@ -171,8 +192,6 @@ public:
         frame = nullptr;
         state = 0;
         dock_direction = wxAUI_DOCK_LEFT;
-        dock_layer = 0;
-        dock_row = 0;
         dock_pos = 0;
         dock_size = 0;
         dock_proportion = 0;
@@ -400,9 +419,6 @@ public:
     wxFrame* frame;       // floating frame window that holds the pane
     unsigned int state;   // a combination of wxPaneState values
 
-    int dock_direction;   // dock direction (top, bottom, left, right, center)
-    int dock_layer;       // layer number (0 = innermost layer)
-    int dock_row;         // row number on the docking bar (0 = first row)
     int dock_pos;         // position inside the row (0 = first position)
     int dock_size;        // size of the containing dock (0 if not set)
 
@@ -856,14 +872,11 @@ private:
 };
 
 
-class WXDLLIMPEXP_AUI wxAuiDockInfo
+class WXDLLIMPEXP_AUI wxAuiDockInfo : public wxAuiDockCoords
 {
 public:
     wxAuiDockInfo()
     {
-        dock_direction = 0;
-        dock_layer = 0;
-        dock_row = 0;
         size = 0;
         min_size = 0;
         resizable = true;
@@ -873,17 +886,10 @@ public:
     }
 
     bool IsOk() const { return dock_direction != 0; }
-    bool IsHorizontal() const { return dock_direction == wxAUI_DOCK_TOP ||
-                             dock_direction == wxAUI_DOCK_BOTTOM; }
-    bool IsVertical() const { return dock_direction == wxAUI_DOCK_LEFT ||
-                             dock_direction == wxAUI_DOCK_RIGHT ||
-                             dock_direction == wxAUI_DOCK_CENTER; }
+
 public:
     wxAuiPaneInfoPtrArray panes; // array of panes
     wxRect rect;              // current rectangle
-    int dock_direction;       // dock direction (top, bottom, left, right, center)
-    int dock_layer;           // layer number (0 = innermost layer)
-    int dock_row;             // row number on the docking bar (0 = first row)
     int size;                 // size of the dock
     int min_size;             // minimum size of a dock (0 if there is no min)
     bool resizable;           // flag indicating whether the dock is resizable
