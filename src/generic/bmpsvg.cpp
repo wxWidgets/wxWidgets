@@ -136,7 +136,7 @@ private:
 // lunasvg implementation
 // ============================================================================
 
-#if !wxCHECK_CXX_STD(17)
+#if !wxCHECK_CXX_STD(201703L)
     #error wxUSE_LUNASVG requires C++17 or later
 #endif
 
