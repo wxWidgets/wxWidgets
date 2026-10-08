@@ -719,19 +719,22 @@ void wxAuiManager::OnDPIChanged(wxDPIChangedEvent& event)
         pinfo.min_size = event.Scale(pinfo.min_size);
         pinfo.best_size = event.Scale(pinfo.best_size);
 
+        // Note that the position is along the dock while the size is across
+        // it, i.e. for vertical docks the position is vertical but the size
+        // is horizontal, and vice versa for the horizontal ones.
         switch ( pinfo.dock_direction )
         {
             case wxAUI_DOCK_LEFT:
             case wxAUI_DOCK_RIGHT:
             case wxAUI_DOCK_CENTER:
                 pinfo.dock_pos = event.ScaleY(pinfo.dock_pos);
-                pinfo.dock_size = event.ScaleY(pinfo.dock_size);
+                pinfo.dock_size = event.ScaleX(pinfo.dock_size);
                 break;
 
             case wxAUI_DOCK_TOP:
             case wxAUI_DOCK_BOTTOM:
                 pinfo.dock_pos = event.ScaleX(pinfo.dock_pos);
-                pinfo.dock_size = event.ScaleX(pinfo.dock_size);
+                pinfo.dock_size = event.ScaleY(pinfo.dock_size);
                 break;
         }
     }
