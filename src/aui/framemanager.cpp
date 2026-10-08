@@ -699,17 +699,6 @@ int wxAuiManager::GetActionPartIndex() const
     return wxNOT_FOUND;
 }
 
-int wxAuiManager::GetContainingDockSize(const wxAuiPaneInfo& paneInfo) const
-{
-    for ( const auto& d : m_docks )
-    {
-        if ( FindPaneInDock(d, paneInfo.window) )
-            return d.size;
-    }
-
-    return 0;
-}
-
 void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_art->UpdateColoursFromSystem();
@@ -730,19 +719,34 @@ void wxAuiManager::OnDPIChanged(wxDPIChangedEvent& event)
         pinfo.min_size = event.Scale(pinfo.min_size);
         pinfo.best_size = event.Scale(pinfo.best_size);
 
+        // The position is in pixels only for the panes in fixed docks, for
+        // all the others it's just the index of the pane in its dock, which
+        // must not be scaled.
+        const auto docks = FindDocks(m_docks,
+                                     pinfo.dock_direction,
+                                     pinfo.dock_layer,
+                                     pinfo.dock_row,
+                                     FindDocksFlags::OnlyFirst);
+        const bool scalePos = !docks.IsEmpty() && docks[0]->fixed;
+
+        // Note that the position is along the dock while the size is across
+        // it, i.e. for vertical docks the position is vertical but the size
+        // is horizontal, and vice versa for the horizontal ones.
         switch ( pinfo.dock_direction )
         {
             case wxAUI_DOCK_LEFT:
             case wxAUI_DOCK_RIGHT:
             case wxAUI_DOCK_CENTER:
-                pinfo.dock_pos = event.ScaleY(pinfo.dock_pos);
-                pinfo.dock_size = event.ScaleY(pinfo.dock_size);
+                if ( scalePos )
+                    pinfo.dock_pos = event.ScaleY(pinfo.dock_pos);
+                pinfo.dock_size = event.ScaleX(pinfo.dock_size);
                 break;
 
             case wxAUI_DOCK_TOP:
             case wxAUI_DOCK_BOTTOM:
-                pinfo.dock_pos = event.ScaleX(pinfo.dock_pos);
-                pinfo.dock_size = event.ScaleX(pinfo.dock_size);
+                if ( scalePos )
+                    pinfo.dock_pos = event.ScaleX(pinfo.dock_pos);
+                pinfo.dock_size = event.ScaleY(pinfo.dock_size);
                 break;
         }
     }
@@ -1789,10 +1793,6 @@ void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
 
     paneInfo.Hide();
 
-    // Remember the size of the dock to make sure it has the same size if/when
-    // it is recreated when the pane is restored later.
-    paneInfo.dock_size = GetContainingDockSize(paneInfo);
-
     auto& dock = GetMinDockInDirection(minDirection);
     if ( !dock )
     {
@@ -2202,17 +2202,13 @@ wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
     dockInfo.dock_row = paneInfo.dock_row;
     dockInfo.dock_pos = paneInfo.dock_pos;
     dockInfo.dock_proportion = paneInfo.dock_proportion;
+    dockInfo.dock_size = paneInfo.dock_size;
 
     // Storing the default proportion is not really useful and it looks weird
     // as it's an arbitrary huge number, so replace it with 0 in serialized
     // representation, it will be mapped back to maxDockProportion after load.
     if ( dockInfo.dock_proportion == maxDockProportion )
         dockInfo.dock_proportion = 0;
-
-    // The dock size is typically not set in the pane itself, but set in its
-    // containing dock, so find it and copy it from there, as we do need to
-    // save it when serializing.
-    dockInfo.dock_size = GetContainingDockSize(paneInfo);
 }
 
 void
@@ -2723,7 +2719,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
             int amount = pane_pos - offset;
             if (amount > 0)
             {
-                if (dock.IsVertical())
+                if (dock.IsVerticalOrCenter())
                     sizer_item = dock_sizer->Add(1, amount, 0, wxEXPAND);
                 else
                     sizer_item = dock_sizer->Add(amount, 1, 0, wxEXPAND);
@@ -3247,8 +3243,8 @@ void wxAuiManager::Update()
     {
         if ( minDock && minDock->RealizeIfNeeded() )
         {
-            // Force recalculation of the minimized dock size.
-            GetPane(minDock).BestSize(wxDefaultSize);
+            // Update best size to account for the added or removed tools.
+            GetPane(minDock).BestSize(minDock->GetBestSize());
         }
     }
 
@@ -3311,6 +3307,23 @@ void wxAuiManager::Update()
 
     // create a layout for all of the panes
     sizer = LayoutAll(m_panes, m_docks, m_uiParts, false);
+
+    // Store the current dock size in all of its panes, as the docks may be
+    // recreated from the panes later, e.g. when all panes in the dock are
+    // hidden and then shown again or when the docks are cleared on DPI change,
+    // and we want to preserve the size in this case.
+    for ( const auto& dock : m_docks )
+    {
+        // Don't do it for fixed docks, however, as their size is computed from
+        // the size of their panes and storing the dock size in the panes would
+        // prevent the dock from shrinking when an element with the biggest
+        // size across the dock's orientation is removed from it.
+        if ( dock.fixed )
+            continue;
+
+        for ( auto* p : dock.panes )
+            p->dock_size = dock.size;
+    }
 
     // hide or show panes as necessary,
     // and float panes as necessary
@@ -3572,7 +3585,7 @@ int wxAuiManager::GetDockPixelOffset(wxAuiPaneInfo& test)
         if (test.dock_direction == dock.dock_direction &&
             test.dock_layer==dock.dock_layer && test.dock_row==dock.dock_row)
         {
-            if (dock.IsVertical())
+            if (dock.IsVerticalOrCenter())
                 return dock.rect.y;
             else
                 return dock.rect.x;
@@ -3602,7 +3615,20 @@ bool wxAuiManager::ProcessDockResult(wxAuiPaneInfo& target,
 
     if (allowed)
     {
+        // If the pane is moved to a dock with the same orientation, e.g. from
+        // the left side to the right one, keep the size of its old dock, so
+        // that the pane keeps its width (or height) if a new dock is created
+        // for it. But if the orientation changes, the old size is meaningless
+        // and the new dock size needs to be computed from the pane size.
+        const bool keepsSameOrientation =
+            (target.IsHorizontal() && new_pos.IsHorizontal()) ||
+            (target.IsVertical() && new_pos.IsVertical());
+
         target = new_pos;
+
+        if ( !keepsSameOrientation )
+            target.dock_size = 0;
+
         // Should this RTTI and function call be rewritten as
         // sending a new event type to allow other window types
         // to vary size based on dock location?
@@ -3780,7 +3806,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
         if ((
             ((pt.y < part->dock->rect.y + 1) && part->dock->IsHorizontal()) ||
-            ((pt.x < part->dock->rect.x + 1) && part->dock->IsVertical())
+            ((pt.x < part->dock->rect.x + 1) && part->dock->IsVerticalOrCenter())
             ) && part->dock->panes.GetCount() > 1)
         {
             if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
@@ -3803,7 +3829,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
         if ((
             ((pt.y > part->dock->rect.y + part->dock->rect.height - 2 ) && part->dock->IsHorizontal()) ||
-            ((pt.x > part->dock->rect.x + part->dock->rect.width - 2 ) && part->dock->IsVertical())
+            ((pt.x > part->dock->rect.x + part->dock->rect.width - 2 ) && part->dock->IsVerticalOrCenter())
             ) && part->dock->panes.GetCount() > 1)
         {
             if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
