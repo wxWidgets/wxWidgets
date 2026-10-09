@@ -56,7 +56,13 @@ public:
 
 private:
     // This class has no public ctors, use Get() instead.
-    wxUIActionSimulatorQtImpl() { m_mousePosition = QCursor::pos(); }
+    wxUIActionSimulatorQtImpl()
+    {
+        // Position the cursor away from the target area before
+        // each simulation starts.5000 was chosen arbitrarily.
+        m_mousePosition = QPoint(5000, 5000);
+        QCursor::setPos(m_mousePosition);
+    }
 
     // Simulating mouse clicks with one or more modifiers only works if the modifier(s)
     // is/are passed along with the mouse click. We just put SaveModifierForMouseClicks()
