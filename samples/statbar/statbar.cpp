@@ -169,7 +169,6 @@ private:
     void OnStatusBarToggle(wxCommandEvent& event);
     void DoCreateStatusBar(StatusBarKind kind, long style);
     void ApplyPaneStyle();
-    void OnDPIChanged(wxDPIChangedEvent& event);
 
     int m_statbarPaneStyle;
 
@@ -263,7 +262,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, BaseFrame)
                         MyFrame::OnUpdateSetPaneStyle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetStyleSizeGrip, StatusBar_SetStyleShowTips,
                         MyFrame::OnUpdateSetStyle)
-    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
@@ -775,32 +773,6 @@ void MyFrame::ApplyPaneStyle()
     sb->SetStatusStyles(fields, styles);
 
     delete [] styles;
-}
-
-void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
-{
-    // Adjust fixed field widths to the new DPI.
-    wxStatusBar *sb = GetStatusBar();
-    std::vector<int> widths;
-    const int n = sb->GetFieldsCount();
-    for (int i = 0; i < n; i++)
-    {
-        int width = sb->GetStatusWidth(i);
-        if (width < 0)
-        {
-            // Preserve variable width
-            widths.push_back(width);
-        }
-        else
-        {
-            // Scale the fixed width to the new DPI.
-            float newDPI = event.GetNewDPI().x;
-            float oldDPI = event.GetOldDPI().x;
-            widths.push_back(width * newDPI / oldDPI);
-        }
-    }
-    SetStatusWidths(n, widths.data());
-    event.Skip();
 }
 
 void MyFrame::OnUpdateSetStyle(wxUpdateUIEvent& event)
