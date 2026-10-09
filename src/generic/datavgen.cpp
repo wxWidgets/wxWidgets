@@ -2492,8 +2492,8 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
     bitmap.CreateWithLogicalSize( width, height, GetDPIScaleFactor() );
     wxMemoryDC dc( bitmap );
     dc.SetFont( GetFont() );
-    dc.SetPen( *wxBLACK_PEN );
-    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.SetPen( GetOwner()->GetForegroundColour() );
+    dc.SetBrush( GetOwner()->GetBackgroundColour() );
     dc.DrawRectangle( 0,0,width,height );
 
     wxDataViewModel *model = m_owner->GetModel();
