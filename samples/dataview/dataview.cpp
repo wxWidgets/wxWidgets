@@ -64,7 +64,7 @@ public:
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h);
+    MyFrame();
     ~MyFrame();
 
     void BuildDataViewCtrl(wxPanel* parent,
@@ -384,8 +384,7 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    MyFrame *frame =
-        new MyFrame(nullptr, "wxDataViewCtrl sample", 40, 40, 1000, 540);
+    MyFrame *frame = new MyFrame();
 
     frame->Show(true);
     return true;
@@ -561,8 +560,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
-  wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame():
+  wxFrame(nullptr, wxID_ANY, "wxDataViewCtrl sample")
 {
     m_log = nullptr;
     m_col = nullptr;
@@ -639,7 +638,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     // redirect logs from our event handlers to text control
     m_log = new wxTextCtrl( this, wxID_ANY, wxString(), wxDefaultPosition,
                             wxDefaultSize, wxTE_MULTILINE );
-    m_log->SetMinSize(wxSize(-1, 100));
+    m_log->SetMinSize(wxSize(-1, FromDIP(100)));
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
     wxLogMessage( "This is the log window" );
 
@@ -673,7 +672,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                                    "Change ninth &title"), border);
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
-    m_ctrl[Page_Music]->SetMinSize(wxSize(-1, 200));
+    m_ctrl[Page_Music]->SetMinSize(wxSize(-1, FromDIP(200)));
     firstPanelSz->Add(m_ctrl[Page_Music], wxSizerFlags(1).Expand().Border());
     firstPanelSz->Add(button_sizer);
     firstPanelSz->Add(sizerCurrent);
