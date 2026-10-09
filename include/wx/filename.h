@@ -266,6 +266,10 @@ public:
         // values
     bool SetPermissions(int permissions);
 
+        // return the name of the account owning the file or directory, or an
+        // empty string upon failure
+    wxString GetOwner() const;
+
         // copy the supported attributes of the given file to this one
     bool CopyAttributesFrom(const wxFileName& source) const;
 
