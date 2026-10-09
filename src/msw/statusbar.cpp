@@ -133,6 +133,8 @@ bool wxStatusBar::Create(wxWindow *parent,
     // work correctly, we need to wait until we return to the main loop
     PostSizeEventToParent();
 
+    Bind(wxEVT_DPI_CHANGED, &wxStatusBar::OnDPIChanged, this);
+
     return true;
 }
 

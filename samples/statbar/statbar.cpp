@@ -588,9 +588,10 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
     // SetFieldsCount() with the same number of fields should be ok
     if ( nFields != -1 )
     {
-        static const int widthsFor2Fields[] = { 200, -1 };
+        static const int widthsFor2Fields[] = { FromDIP(200), -1 };
         static const int widthsFor3Fields[] = { -1, -2, -1 };
-        static const int widthsFor4Fields[] = { 100, -1, 100, -2, 100 };
+        static const int widthsFor4Fields[] =
+            { FromDIP(100), -1, FromDIP(100), -2, FromDIP(100) };
 
         static const int *widthsAll[] =
         {
@@ -912,10 +913,10 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
 
     int widths[Field_Max];
     widths[Field_Text] = -1; // growable
-    widths[Field_Checkbox] = 150;
+    widths[Field_Checkbox] = FromDIP(150);
     widths[Field_Bitmap] = -1; // growable
     widths[Field_NumLockIndicator] = sizeNumLock.x;
-    widths[Field_Clock] = 100;
+    widths[Field_Clock] = FromDIP(100);
     widths[Field_CapsLockIndicator] = dc.GetTextExtent(capslockIndicators[1]).x;
 
     SetFieldsCount(Field_Max);

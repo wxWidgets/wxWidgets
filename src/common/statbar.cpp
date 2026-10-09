@@ -324,4 +324,29 @@ void wxStatusBarBase::OnSize(wxSizeEvent& event)
     }
 }
 
+void wxStatusBarBase::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Adjust fixed field widths to the new DPI.
+    std::vector<int> widths;
+    const int n = GetFieldsCount();
+    for ( int i = 0; i < n; i++ )
+    {
+        int width = GetStatusWidth(i);
+        if ( width < 0 )
+        {
+            // Preserve variable width
+            widths.push_back(width);
+        }
+        else
+        {
+            // Scale the fixed width to the new DPI.
+            float newDPI = event.GetNewDPI().x;
+            float oldDPI = event.GetOldDPI().x;
+            widths.push_back(width * newDPI / oldDPI);
+        }
+    }
+    SetStatusWidths(n, widths.data());
+    event.Skip();
+}
+
 #endif // wxUSE_STATUSBAR
