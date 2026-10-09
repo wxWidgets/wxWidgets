@@ -378,8 +378,27 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    // non-MSW platforms need to support wxDF_TEXT in addition to wxDF_UNICODETEXT
-#if defined(wxNEEDS_UTF8_FOR_TEXT_DATAOBJ) || defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
+    // some platforms need to support wxDF_TEXT in addition to wxDF_UNICODETEXT
+#if defined(__WXMSW__)
+    // Accept wxDF_TEXT from other applications, but don't advertise it for
+    // output as Windows already synthesizes it from wxDF_UNICODETEXT.
+    virtual size_t GetFormatCount(Direction dir = Get) const override { return dir == Set ? 2 : 1; }
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               wxDataObjectBase::Direction dir = Get) const override
+    {
+        *formats++ = wxDataFormat(wxDF_UNICODETEXT);
+        if ( dir == Set )
+            *formats = wxDataFormat(wxDF_TEXT);
+    }
+
+    virtual size_t GetDataSize() const override { return GetDataSize(GetPreferredFormat()); }
+    virtual bool GetDataHere(void *buf) const override { return GetDataHere(GetPreferredFormat(), buf); }
+    virtual bool SetData(size_t len, const void *buf) override { return SetData(GetPreferredFormat(), len, buf); }
+
+    size_t GetDataSize(const wxDataFormat& format) const override;
+    bool GetDataHere(const wxDataFormat& format, void *pBuf) const override;
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf) override;
+#elif defined(wxNEEDS_UTF8_FOR_TEXT_DATAOBJ) || defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
     virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const override { return 2; }
     virtual void GetAllFormats(wxDataFormat *formats,
                                wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override
