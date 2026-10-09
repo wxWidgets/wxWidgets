@@ -61,9 +61,9 @@ void GetTextExtentTester(const T& obj)
     CHECK( obj.GetTextExtent(wxString()) == wxSize() );
 }
 
-// Currently this is known to work in wxMSW and wxGTK3, to be checked (and
-// enabled) for the other ports.
-#if defined(__WXMSW__) || defined(__WXGTK3__)
+// Currently this is known to work in wxMSW, wxGTK3 and wxQt, to be checked
+// (and enabled) for the other ports.
+#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__)
     #define wxHAS_ROTATED_TEXT_RIGHT_ANGLE_TEST
 #endif
 
