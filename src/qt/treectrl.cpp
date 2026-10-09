@@ -220,6 +220,18 @@ public:
                 });
     }
 
+    virtual void mousePressEvent(QMouseEvent * event) override
+    {
+        // Any previous click is done with by now, so don't let the flag set
+        // by it prevent this one from starting editing: this could happen if
+        // the delayed editing timer started by the previous click hadn't
+        // expired yet, as Qt ignores the new click in this case and uses the
+        // existing timer instead, see the comment before m_blockEditing.
+        m_blockEditing = false;
+
+        BaseClass::mousePressEvent(event);
+    }
+
     virtual void mouseReleaseEvent(QMouseEvent * event) override
     {
         const QPoint qPos = event->pos();
@@ -342,6 +354,10 @@ protected:
     // setEditTriggers(QTreeWidget::SelectedClicked), we need to block editing if
     // the item is part of a multiple selection, because wxMSW only deselects the
     // other items without starting editing the selected item.
+    //
+    // Note that Qt starts a timer when such click is released and only calls
+    // edit() with AllEditTriggers when it expires, so this flag is checked
+    // (and reset) only then, but it is also reset in mousePressEvent().
     bool m_blockEditing = false;
 
     void selectionChanged(const QItemSelection& selected,
