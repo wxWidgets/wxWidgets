@@ -1406,6 +1406,20 @@ public:
     bool SetPermissions(int permissions);
 
     /**
+        Returns the name of the account that owns this file or directory.
+
+        Under MSW this is the account name of the owner, without the domain.
+        Under Unix this is the user name corresponding to the owning user ID.
+        Note that the owner of a file created by an administrator under MSW
+        may be the "Administrators" group rather than an individual user.
+
+        @since 3.3.4
+
+        @return The owner's name, or an empty string on failure.
+    */
+    wxString GetOwner() const;
+
+    /**
         Copies the attributes of the given file to this one.
 
         This function is useful when replacing an existing file by writing the

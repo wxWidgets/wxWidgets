@@ -101,6 +101,7 @@
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
     #include "wx/msw/wrapshl.h"         // for CLSID_ShellLink
+    #include <aclapi.h>                 // for GetNamedSecurityInfo()
     #include "wx/msw/missing.h"
     #include "wx/msw/ole/oleutils.h"
     #include "wx/msw/private/comptr.h"
@@ -116,6 +117,9 @@
 #include <utime.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <cerrno>
+#include <vector>
 #endif
 
 #ifndef S_ISREG
@@ -2771,6 +2775,61 @@ bool wxFileName::SetPermissions(int permissions)
 #endif // __WINDOWS__
 
     return wxChmod(GetFullPath(), permissions) == 0;
+}
+
+wxString wxFileName::GetOwner() const
+{
+#if defined(__WINDOWS__)
+    PSID ownerSid = nullptr;
+    PSECURITY_DESCRIPTOR secDesc = nullptr;
+    if ( ::GetNamedSecurityInfo(GetFullPath().t_str(), SE_FILE_OBJECT,
+                                OWNER_SECURITY_INFORMATION,
+                                &ownerSid, nullptr, nullptr, nullptr,
+                                &secDesc) == ERROR_SUCCESS )
+    {
+        wxString owner, domain;
+
+        DWORD nameLen = 0,
+              domainLen = 0;
+        SID_NAME_USE use;
+        // get the buffer length needed for the name
+        ::LookupAccountSid(nullptr, ownerSid, nullptr, &nameLen,
+                           nullptr, &domainLen, &use);
+        if ( nameLen > 0 )
+        {
+            wxStringBuffer nameBuf(owner, nameLen);
+            wxStringBuffer domainBuf(domain, domainLen);
+            ::LookupAccountSid(nullptr, ownerSid, nameBuf, &nameLen,
+                               domainBuf, &domainLen, &use);
+        }
+
+        ::LocalFree(secDesc);
+
+        if ( !owner.empty() )
+            return owner;
+    }
+#elif defined(wxHAVE_LSTAT)
+    wxStructStat stBuf;
+    if ( StatAny(stBuf, *this) )
+    {
+        struct passwd pwd;
+        struct passwd* result = nullptr;
+        std::vector<char> buf(1024);
+        int rc;
+        while ( (rc = getpwuid_r(stBuf.st_uid, &pwd, buf.data(), buf.size(),
+                                 &result)) == ERANGE )
+        {
+            buf.resize(buf.size() * 2);
+        }
+
+        if ( rc == 0 && result != nullptr )
+            return wxString::FromUTF8(result->pw_name);
+    }
+#endif // platforms
+
+    wxLogSysError(_("Failed to retrieve the owner of '%s'"), GetFullPath());
+
+    return {};
 }
 
 #if defined(__WINDOWS__)
