@@ -1,75 +1,45 @@
-July 7, 2026 -- The wxWidgets team is pleased to announce the latest stable
+October 10, 2026 -- The wxWidgets team is pleased to announce the latest stable
 release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.2.11 is part of the API and ABI-stable 3.2.x release series and is
+wxWidgets 3.2.12 is part of the API and ABI-stable 3.2.x release series and is
 now available from
 
     https://www.wxwidgets.org/downloads/
 
 and
 
-    https://github.com/wxWidgets/wxWidgets/releases/v3.2.11
+    https://github.com/wxWidgets/wxWidgets/releases/v3.2.12
 
 
-This release contains a big number of important fixes, including for potential
-security problems, and upgrading to it is strongly recommended for all
-wxWidgets users.
+This is mostly a bug fix release, the only important addition is support for
+wxTaskBarIcon under Wayland (#26845). Other changes are:
 
-The following bugs were fixed:
-
-- Fix wxCondition and wxSemaphore::WaitTimeout() after 2038 under Unix (#26466).
-- Fix buffer overflow in wxGethostby{addr,name}_r() (#26528).
-- Fix buffer overflow in wxTarInputStream (#26530).
-- Fix out-of-bounds read in wxFileType::ExpandCommand() (#26531).
-- Fix buffer overflow in wxVsnprintf() (#26522).
-- Fix out-of-bounds read in wxRegEx::Replace() (#26541).
-- Fix out-of-bounds read in wxUString (#26548).
-- Fix wxDateTime::Format() handling of invalid format (#26543).
-- Fix buffer overflow in wxGethostbyxxx_r() on some systems (#26553).
-- Fix wxCaret position in scrolled windows (#26282).
-- Correct delta-RLE bitmap background colour (#23599).
-- Correct loading of `BI_BITFIELDS` bitmaps (#23601).
-- Fix loading 32bpp BMP files without valid alpha (#24219).
-- Fix buffer overwrite when loading malformed BMPs with invalid RLE data.
-- Avoid out-of-bounds palette read in 8bpp BMP decoder (#26438).
-- Avoid out-of-bounds palette write in wxIFFDecoder (#26440).
-- Avoid out-of-bounds read in wxPCXHandler (#26441).
-- Avoid out-of-bounds read in wxXPMDecoder (#26442).
-- Fix reading ANI images with invalid frame count (#26492).
-- Avoid out-of-bounds write for invalid BMP RLE runs (#26496).
-- Fix out-of-bounds read when loading invalid 4bpp BMPs (#26511).
-- Avoid out-of-bounds write on bad BMHD chunk in wxIFFDecoder (#26497).
-- Fix write overflow in TGA files with invalid colour map (#26493).
-- Fix read overflow in wxXPMDecoder on unterminated quote (#26499).
-- Fix read overflow in wxXPMDecoder on invalid width (#26519).
-- Reject more invalid GIFs and do it without leaking memory (#26501).
-- Fix buffer overflows decoding invalid GIFs (#26521, #26524).
-- Fix multiple buffer overflows in wxIFFDecoder (#26505, #26518).
-- Fix multiple buffer overflows in wxSound (#26506, #26525).
-- Fix reading too short extra field in ZIP64 files (#26507).
-- Fix out-of-bounds table read in wxMBConvUTF7::ToWChar(#26517).
-- Fix buffer overflow reading corrupted message catalogs (#26513).
-- Fix buffer overflow for too big tables in wxHTML (#26554).
-- Add wxGrid::GetFrozen{Row,Col}LabelWindow() (#26617).
-- Fix wxPropertyGrid macros with wxNO_IMPLICIT_WXSTRING_ENCODING (#26651).
-- Fix copy/paste in wxGTK when a clipboard manager is running (#26265).
-- Fix crash with EGL-based wxGLCanvas in wxNotebook (#26340).
-- Fix possible wxTextCtrl crash with GSpell attached (#26464).
-- Fix drawing of very large bitmaps in wxGTK (#25656).
-- Fix memory leak in wxDataViewChoiceRenderer.
-- Fix resource leak when using EGL with X11 (#26341).
-- Fix showing title bar under Wayland with wxBORDER_NONE (#26357).
-- Remove maximum text length limitation in "picker" controls in wxGTK (#26314).
-- Fix appearance of dashed lines drawn by wxDC::DrawLine() in wxGTK (#26449).
-- Fix non-resizable TLW size when setting client size in wxGTK (#26480).
-- Fix wxBufferedPaintDC when using RTL layout in wxMSW (#26266).
-- Fix crash after destroying wxFileSystemWatcher in wxOSX (#26658).
-- Fix possible crash in wxFont::SetNativeFontInfo() in wxOSX (#26411).
+- Update Unicode mapping tables to current versions (#26700).
+- Add wxPATH_RMDIR_PARENTS flag to wxFileName::Rmdir().
+- Handle mouse capture loss when using wxContextHelp (#21534).
+- Always recognize common file types in wxHTML (#20967).
+- Respect background colour when printing in wxHTML (#20652).
+- Fix handling of image map coordinates in wxHTML (#3163).
+- Don't show modal HTML help window for not found topic (#3219).
+- Recognize "Dstrok" as an entity in wxHTML (#3996).
+- Fix XRC unknown-control size hints after attaching (#2726).
+- Fix handling spacing in wxGridBagSizer (#3105).
+- Fix handling TGA files with invalid size (#26760).
+- Fix buffer overflow with invalid cached help books (#26765).
+- Fix possible hang in wxWebRequestCURL after connection error (#27041).
+- Fix using SetBitmap() on wxMenuItem created without a bitmap in wxGTK (#26771).
+- Fix memory leak with using custom handlers in WebKit-based wxWebView (#26784).
+- Use string passed to wxApp::SetClassName() as Wayland app-id in wxGTK (#24668).
+- Fix wrong refresh in wxStaticBitmap::SetBitmap() in wxMSW (#26730).
+- Fix drawing of 1x1 rectangles in wxMSW (#3096).
+- Account for the column header in wxMSW wxListCtrl::HitTest() (#22239).
+- Fix system menu corruption when Explorer is restarted (#26799).
+- Fix crash toggling a toolbar item without a bitmap in wxOSX (#26763).
 
 Please see the full change log for more details:
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.11/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.12/docs/changes.txt
 
 This release is API and ABI-compatible with the previous 3.2.x, meaning that
 the existing applications don't even need to be rebuilt to profit from all the

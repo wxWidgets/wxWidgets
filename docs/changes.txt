@@ -252,7 +252,7 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.12: (released 2026-??-??)
+3.2.12: (released 2026-10-10)
 -----------------------------
 
 All:
@@ -285,7 +285,7 @@ wxMSW:
 
 - Fix wrong refresh in wxStaticBitmap::SetBitmap() (Steve Murphree, #26730).
 - Fix drawing of 1x1 rectangles (Richard Thomson, #3096).
-- Account for the column header in wxMSW wxListCtrl::HitTest() (PB, #22239).
+- Account for the column header in wxListCtrl::HitTest() (PB, #22239).
 - Fix system menu corruption when Explorer is restarted (#26799).
 
 wxOSX:
