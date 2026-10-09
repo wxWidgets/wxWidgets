@@ -292,11 +292,53 @@ Changes in behaviour which may result in build errors
   function (but most code should still compile and work without any changes).
 
 
-3.3.4: (released 2026-??-??)
+3.3.4: (released 2026-10-10)
 ----------------------------
 
 Please note that this is a list of changes compared to 3.2.11, the full list of
 changes since 3.3.3 also includes all changes between 3.2.11 and 3.2.12.
+
+All
+
+- Add support for using wxString with {fmt} library or std::format() (#27180).
+- Add wxDateTime fuzzer for OSS-Fuzz (Arthur Chan, #26963).
+- Add wxPATH_RMDIR_PARENTS flag for wxFileName::Rmdir().
+- Call fsync() in wxTemp{F,}File (#27001).
+- Fix crash when unregistering wxFDIOHandler while dispatching (got3nks, #26924).
+- Make wxDateTime::GetAsDOS() work for dates after 2038 (Richard Thomson, #4393).
+- Many bug fixes in TCP-based wxIPC (JP Mattia, #24858).
+- Provide wxrc as an imported target in CMake (Marc Aldorasi, #27008).
+- Update all 3rd party libraries to latest versions (Maarten Bent, #27074).
+
+All (GUI):
+
+- Add backstage support to Ribbon (Blake Madden, #27155).
+- Add inline IME support to wxStyledTextCtrl (Ryan Lucia, #26228).
+- Add key accessibility to ribbon (Blake Madden, #26935).
+- Add keyboard navigation to Ribbon (Blake Madden, #27046).
+- Add support for (compressed) SVG images to wxHTML (Randalphwa, #26474).
+- Add support for BASE tag to wxHTML (Richard Thomson, #13125).
+- Allow customizing accelerators priority (#22630).
+- Allow opening wxSearchCtrl menu from keyboard (Quin Gillespie, #27093).
+- Always send selection changed after removing wxAuiNotebook page  (Richard Thomson, #9920).
+- Fix "align" attribute with tables in wxHTML (Richard Thomson, #21853).
+- Fix UI problems in wxGridCellChoiceEditor (Richard Thomson, #12094).
+- Fix best size for auto-wrapped wxGrid rows (Richard Thomson, #14072).
+- Fix bug in wxGrid::MakeCellVisible() with variable row heights (Richard Thomson, #4371).
+- Fix center image alignment in wxHTML (Richard Thomson, #2976).
+- Fix crash in wxGrid when changing the editor (Richard Thomson, #21986).
+- Fix crashes when wxPreviewCanvas was not in wxPreviewFrame (Richard Thomson, #9822).
+- Fix custom background colour in generic wxCalendarCtrl (Richard Thomson, #21885).
+- Fix line breaking with NBSP in wxHTML (Richard Thomson, #20399).
+- Fix nested definition lists in wxHTML (Richard Thomson, #20752).
+- Fix ribbon buttons in high DPI and/or dark mode (Blake Madden, #26663).
+- Fix spurious jumps of AUI sash when clicking on it (Richard Thomson, #4547).
+- Implement accessibility support in wxListCtrl (Quin Gillespie, #15411).
+- Implement accessibility support in wxStatusBar (Quin Gillespie, #24305).
+- Improve clipboard handling in wxRichTextCtrl (Richard Thomson, #26865).
+- Respect best size of added wxAUI pane (Richard Thomson, #4404).
+- Restore wxEVT_AUINOTEBOOK_BUTTON broken in 3.3.2 (#26978).
+- Use latest LunaSVG with filters support (Randalphwa, #27176).
 
 wxMSW:
 
@@ -304,29 +346,43 @@ wxMSW:
   attributes any longer as it did since 3.3.0 (but only under Windows), use
   wxFileName::CopyAttributesFrom() if you need to preserve them.
 
+- Allow enabling dark mode dynamically (Steve Cornett, #26734).
+- Dark mode fixes for wxFontPickerCtrl (Steve Cornett, #26667).
+- Dark mode fixes for wxNotebook (Steve Cornett, #26694, #26695).
+- Dark mode fixes for wxSpinButton (Steve Cornett, #26682, #26683).
+- Fix closing dialogs on Esc used by IME or auto-completion (#16059, #27145).
+- Fix icon returned for .exe files from wxFileType (Richard Thomson, #21794).
+- Fix possible crash in wxWebView Edge backend (Scott Talbert, #26491).
+- Fix wxCollapsibleHeaderCtrl accessibility (Quin Gillespie, #27048).
+- Fix wxString::Format() with wxUniChar (#27023).
+- Implement dark mode support for common dialogs (Steve Cornett, #26780).
+- Improve handling of IME, notably in wxGrid (#24558).
+- Make wxPersitent controls DPI aware (#18752).
+- Make wxRibbon accessible (Blake-Madden, #27075).
+- Provide reason when blocking shutdown (merhoumTaki, #26874).
+- Speed up wxListCtrl columns autosizing in dark mode (#24011).
+- Support keyboard input of non-BMP characters such as emojis (#27016).
+- Use Windows units in page setup dialog (Richard Thomson, #3649).
+- wxRenderer::DrawTreeItemButton() draws "modern" icons (PB, #27002).
 
-NOTE: In addition to the note below, also incorporate (either by
-      copy or by reference) all the changes in the 3.2 branch (i.e.
-      everything in this file after 3.2.0 in that branch).
+wxGTK:
 
-NOTE: This file is updated only before the release, please use
-    $ git log --notes=changelog --format='%N' v3.3.2..|grep .
-      to see all the change log entries since the last release.
+- Fix client size computation when using overlay scrollbars (#26889).
+- Fix crash on Wayland pointer/seat disconnect (BlackTeaLeaf, #27069).
+- Support dragging AUI panes under Wayland (#26969).
+- Support restoring window geometry under Wayland (#26324).
+- Support using SDL 3 for wxSound (Andy Vandijck, #26773).
 
-      To update the notes, fetch them first:
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
-      then use the following command to update them locally
-    $ git notes --ref=changelog add -m 'wxPort: description.'
-      and finally push it to the server.
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+wxOSX:
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+- Fix context menus accessibility (Quin Gillespie, #13010).
+- Fix wxEVT_CHAR key codes for events with Ctrl (Michael Adler, #26810).
+- Support custom controls in wxFileDialog in sandboxed apps (Daniel Kulp, #26908).
 
-      and then redo "git-notes add" and git-push.
+wxQt:
+
+- Implement support for markup in wxStaticText (AliKet, #26984).
+- Many changes making wxQt more compatible with the other ports.
 
 
 3.3.3: (released 2026-07-07)

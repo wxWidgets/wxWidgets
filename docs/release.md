@@ -1,6 +1,6 @@
 Welcome to wxWidgets, a free and open source cross-platform C++ framework for writing advanced GUI applications using native controls.
 
-wxWidgets 3.3.4 is the fourth release in the 3.3 development branch, bringing many new features and improvements compared to the stable 3.2 branch while remaining mostly API-compatible with it.
+wxWidgets 3.3.4 is the fifth release in the 3.3 development branch, bringing many new features and improvements compared to the stable 3.2 branch while remaining mostly API-compatible with it.
 
 Please note that even this is not a "stable" release, it is still considered to be suitable to be used in production, the only difference with the stable releases is that API and ABI compatibility are not guaranteed for the releases in this series. In practice, however, backwards-incompatible API changes are expected to be rare.
 

@@ -32,34 +32,22 @@ installation instructions.
 
 
 
-Changes since 3.3.2
+Changes since 3.3.3
 -------------------
 
-This release contains more than 600 commits from 55 contributors since 3.3.2,
-including a number of new features and improvements:
+This release contains about 900 commits from 52 unique contributors done since
+3.3.3. The amount of changes is too big to list them all here, but most of them
+fall into the following categories:
 
-- Add dark mode support to wxMessageBox and other dialogs in wxMSW (#26570).
-- Support switching between light/dark modes in wxMSW (#26516).
-- Add support for stylus events to wxMSW (#26223).
-- Add accessibility support to wxSVGFileDC (#26379).
-- Add wxWebView::Print() and PrintToPDF() (#26239, #26583).
-- Improve wxRibbon appearance in high DPI (#26117, #26409).
-- Improve wxStaticText label wrapping in wxGTK.
-- Add wxMoveToTrash() function (#26256).
-- Enable drawing color emoji using Direct2D in wxMSW (#26657).
-- Implement C++20 <=> operator for wxString (#26306).
-- Add support for private fonts to wxQt (#26403).
-- Support building wxOSX under macOS 27 (#26578).
-
-There were also a number of bug fixes, the most important ones being:
-
-- Improve wxTarInputStream robustness (#26607).
-- Treat truncated reads as errors in wxDataInputStream (#26600).
-- Fix regression when using wxImageList in high DPI in wxGTK (#26349).
-- Fix regression with wxCheckBox label in screen readers in wxMSW (#26270).
-- Fix regression with wxPD_CAN_SKIP in 3.3.2 in wxMSW (#26287).
-- Fix dataview icons rendering under macOS 26 (#26374).
-- Fix wxOSX wxOverlay leaving phantoms in Mission Control (#26380).
+- Numerous bug fixes and improvements for wxMSW dark mode.
+- Better Wayland support in wxGTK, notably implementing wxAUI panes dragging
+  and restoring top level windows positions (when the required protocols are
+  available). wxTaskBarIcon also works under Wayland now (with AppIndicator).
+- Improved accessibility support on all platforms, including wxOSX and wxGTK.
+- Improved handling of IME under all platforms.
+- Several major new features added to wxRibbon.
+- Some long standing bugs in (TCP-based) wxIPC and wxSocket have been fixed.
+- Accelerator key handling has been made more flexible and consistent.
 
 Please see the change log for the more complete list:
 
@@ -67,11 +55,9 @@ https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.4/docs/changes.txt
 
 and also see
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.11/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.12/docs/changes.txt
 
-as the changes in 3.2.11 release are also included in this one and notably
-include multiple buffer overflows in different image handlers and other
-components.
+as all the changes in 3.2.12 release are also included in this one.
 
 
 Note that in spite of all these changes, wxWidgets 3.3.4 is almost fully
@@ -87,13 +73,13 @@ Supported Platforms
 This version of wxWidgets supports the following primary platforms:
 
 * Windows 7, 8, 10 and 11 (32/64 bits).
-* Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
+* Most Unix variants using the GTK 3 toolkit (version 3.6 or newer)
 * macOS (10.10 or newer, up to 27) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
 
 * Most Unix variants with X11
-* Most Unix variants with GTK+ 1.2
+* Most Unix variants with GTK+ 1.2 and 2.x.
 * Most Unix variants with Qt 5 or newer (experimental)
 
 All C++ compilers in common use are supported.
@@ -171,4 +157,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, July 2026
+The wxWidgets Team, October 2026
