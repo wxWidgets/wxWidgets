@@ -4098,7 +4098,6 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
-DEFAULT_wxUSE_LUNASVG=no
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
@@ -46822,6 +46821,7 @@ echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
 echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 echo "                                       nanosvg            ${wxUSE_NANOSVG-none}"
+echo "                                       lunasvg            ${wxUSE_LUNASVG-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
