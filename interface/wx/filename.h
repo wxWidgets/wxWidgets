@@ -178,6 +178,74 @@ wxULongLong wxInvalidSize;
 
 
 /**
+    @class wxLocalAccount
+
+    Identifies a user account of the local system.
+
+    Objects of this class are returned by wxFileName::GetOwner().
+
+    The identity of an account is its ID, which is the numeric user ID under
+    Unix and the string form of the security identifier (SID) under MSW. The
+    name is only looked up on a best-effort basis and may be unavailable. For
+    example, when a file was copied from another system using different user
+    IDs or when the account has been deleted. In this case, GetName() returns
+    an empty string even though IsOk() returns @true.
+
+    @library{wxbase}
+    @category{file}
+
+    @since 3.3.4
+*/
+class wxLocalAccount
+{
+public:
+    /**
+        Default constructor creates an invalid account object.
+    */
+    wxLocalAccount();
+
+    /**
+        Returns @true if the account was determined.
+
+        This can be @true even if the account name is not known, use GetName()
+        to check for this.
+    */
+    bool IsOk() const;
+
+    /**
+        Returns the name of the account without the domain.
+
+        The returned string is empty if the name couldn't be found.
+    */
+    const wxString& GetName() const;
+
+    /**
+        Returns the domain of the account (e.g., @c "CORP").
+
+        This is always empty under Unix, which has no account domains.
+    */
+    const wxString& GetDomain() const;
+
+    /**
+        Returns the ID of the account.
+
+        This is the numeric user ID under Unix and the string form of the SID
+        (e.g., @c "S-1-5-18") under MSW.
+    */
+    const wxString& GetId() const;
+
+    /**
+        Returns the account in human-readable form for the user.
+
+        This is:
+        - @c "domain\\name" if both the domain and the name are known
+        - just the name if there is no domain
+        - or the ID if the name is unknown
+    */
+    wxString GetAsString() const;
+};
+
+/**
     @class wxFileName
 
     wxFileName encapsulates a file name.
@@ -1406,18 +1474,23 @@ public:
     bool SetPermissions(int permissions);
 
     /**
-        Returns the name of the account that owns this file or directory.
+        Returns the account that owns this file or directory.
 
-        Under MSW this is the account name of the owner, without the domain.
-        Under Unix this is the user name corresponding to the owning user ID.
         Note that the owner of a file created by an administrator under MSW
         may be the "Administrators" group rather than an individual user.
 
+        The owner of the file may not have a name (e.g., if it was copied from
+        another system), but this is not an error. wxLocalAccount::IsOk()
+        returns @true and wxLocalAccount::GetId() can be used in this case.
+
         @since 3.3.4
 
-        @return The owner's name, or an empty string on failure.
+        @return The owner account, which is not valid if it couldn't be
+                determined (for example, because the file doesn't exist).
+
+        @see wxLocalAccount
     */
-    wxString GetOwner() const;
+    wxLocalAccount GetOwner() const;
 
     /**
         Copies the attributes of the given file to this one.

@@ -128,6 +128,49 @@ extern WXDLLIMPEXP_DATA_BASE(const wxULongLong) wxInvalidSize;
 
 
 // ----------------------------------------------------------------------------
+// wxLocalAccount: identifies a user or group account of the local system
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxLocalAccount
+{
+public:
+    // Creates an invalid account object.
+    wxLocalAccount() = default;
+
+    // Returns true if the account was determined, even if its name could not
+    // be resolved. In that case, GetName() is empty but GetId() is not.
+    bool IsOk() const { return !m_id.empty(); }
+
+    // Name of the account without the domain, empty if it couldn't be found.
+    const wxString& GetName() const { return m_name; }
+
+    // Domain of the account (e.g., "CORP"). Always empty under Unix, which has
+    // no account domains.
+    const wxString& GetDomain() const { return m_domain; }
+
+    // Numeric user or group ID under Unix, string form of the SID under MSW.
+    const wxString& GetId() const { return m_id; }
+
+    // Returns "domain\name" or just "name" if there is no domain, falling
+    // back to GetId() if the name is unknown.
+    wxString GetAsString() const;
+
+private:
+    friend class wxFileName;
+
+    wxLocalAccount(const wxString& name,
+                   const wxString& domain,
+                   const wxString& id)
+        : m_name(name), m_domain(domain), m_id(id)
+    {
+    }
+
+    wxString m_name,
+             m_domain,
+             m_id;
+};
+
+// ----------------------------------------------------------------------------
 // wxFileName: encapsulates a file path
 // ----------------------------------------------------------------------------
 
@@ -266,9 +309,9 @@ public:
         // values
     bool SetPermissions(int permissions);
 
-        // return the name of the account owning the file or directory, or an
-        // empty string upon failure
-    wxString GetOwner() const;
+        // return the account owning the file or directory, the returned object
+        // is not ok if the owner couldn't be determined
+    wxLocalAccount GetOwner() const;
 
         // copy the supported attributes of the given file to this one
     bool CopyAttributesFrom(const wxFileName& source) const;
