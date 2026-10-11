@@ -660,6 +660,21 @@ public:
     virtual void Reset() = 0;
 
     /**
+        Returns @true if the editor accepts text input, i.e.\ if it is a text
+        control or similar.
+
+        This is used to determine whether IME should be enabled for it.
+
+        The default implementation returns @true for compatibility, the derived
+        classes which don't accept text input should override it to return
+        @false to avoid showing IME unnecessarily for the cells using the
+        editor.
+
+        @since 3.4.0
+     */
+    virtual bool AcceptsTextInput() const;
+
+    /**
         Size and position the edit control.
     */
     virtual void SetSize(const wxRect& rect);
@@ -691,10 +706,6 @@ public:
 
        Note that this function must not change the editor contents: this should
        be only done in StartingKey() which will be called later.
-
-       Also note that this function is called with a special synthetic event
-       for the letter "A" to check if the editor accepts text input and whether
-       the IME should be enabled for it.
     */
     virtual bool IsAcceptedKey(wxKeyEvent& event);
 
