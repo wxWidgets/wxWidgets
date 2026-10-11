@@ -9,29 +9,7 @@
 #include "wx/log.h"
 #include "wx/datetime.h"
 
-#if wxDEBUG_LEVEL
-
-static void exitAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg);
-
-static volatile wxAssertHandler_t
-    origAssertHandler = wxSetAssertHandler(exitAssertHandler);
-
-static void exitAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg)
-{
-    origAssertHandler(file, line, func, cond, msg);
-
-    exit(1);
-}
-
-#endif // wxDEBUG_LEVEL
+#include "exitassert.cpp"
 
 // Formats exercising a spread of specifiers. These are fixed rather than taken
 // from the input because Format() and ParseFormat() treat an unknown specifier
