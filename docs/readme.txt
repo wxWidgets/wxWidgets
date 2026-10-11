@@ -1,4 +1,4 @@
-wxWidgets 3.2.12 Release Notes
+wxWidgets 3.2.13 Release Notes
 =============================
 
 Welcome to the new stable release of wxWidgets, a free and open source
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.2.12/
+* https://docs.wxwidgets.org/3.2.13/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,9 +25,9 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.12/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.13/
 
-Please see https://docs.wxwidgets.org/3.2.12/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.2.13/overview_install.html for full
 installation instructions.
 
 
@@ -64,7 +64,7 @@ Upgrading to the new version is recommended for all existing 3.2 users.
 
 Please see the full change log for more details:
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.12/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.13/docs/changes.txt
 
 This release is API and ABI-compatible with the previous 3.2.x releases, so
 the existing applications don't even need to be rebuilt to profit from all the
