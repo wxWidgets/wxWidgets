@@ -230,6 +230,9 @@ public:
     // the focus on the first item of 'control'.
     void FocusItemOf(wxRibbonControl* control);
 
+    // Make the bar a tab stop so that it can be reached with the keyboard.
+    bool AcceptsFocus() const override { return IsShown() && IsEnabled(); }
+
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
 #endif // wxUSE_ACCESSIBILITY
@@ -278,9 +281,6 @@ protected:
     void UpdateBackstageViews(bool showBackstage);
     void DrawBackstageTab(wxDC& dc, const wxRibbonPageTabInfo& tab);
     bool IsBackstageTabHit(const wxPoint& position);
-
-    // Make the bar a tab stop so that it can be reached with the keyboard.
-    bool AcceptsFocus() const override { return IsShown() && IsEnabled(); }
 
     // Activate the given page the same way a click on its tab does.
     bool DoChangeActivePage(size_t page);
