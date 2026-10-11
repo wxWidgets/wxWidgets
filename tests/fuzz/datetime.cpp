@@ -9,19 +9,29 @@
 #include "wx/log.h"
 #include "wx/datetime.h"
 
-static void ignoreAssertHandler(const wxString&,
-                                int,
-                                const wxString&,
-                                const wxString&,
-                                const wxString&)
+#if wxDEBUG_LEVEL
+
+static void exitAssertHandler(const wxString& file,
+                              int line,
+                              const wxString& func,
+                              const wxString& cond,
+                              const wxString& msg);
+
+static volatile wxAssertHandler_t
+    origAssertHandler = wxSetAssertHandler(exitAssertHandler);
+
+static void exitAssertHandler(const wxString& file,
+                              int line,
+                              const wxString& func,
+                              const wxString& cond,
+                              const wxString& msg)
 {
+    origAssertHandler(file, line, func, cond, msg);
+
+    exit(1);
 }
 
-extern "C" int LLVMFuzzerInitialize(int*, char***)
-{
-    wxSetAssertHandler(ignoreAssertHandler);
-    return 0;
-}
+#endif // wxDEBUG_LEVEL
 
 // Formats exercising a spread of specifiers. These are fixed rather than taken
 // from the input because Format() and ParseFormat() treat an unknown specifier
