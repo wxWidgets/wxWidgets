@@ -708,6 +708,27 @@ TEST_CASE("wxFileName::SetTimes", "[filename]")
 #endif // __WINDOWS__
 }
 
+TEST_CASE("wxFileName::GetOwner", "[filename]")
+{
+    wxFileName fn{ wxFileName::CreateTempFileName("filenametest") };
+    REQUIRE( fn.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
+
+    const wxLocalAccount owner = fn.GetOwner();
+    REQUIRE( owner.IsOk() );
+    CHECK( !owner.GetId().empty() );
+    CHECK( !owner.GetAsString().empty() );
+
+#ifdef __WINDOWS__
+    CHECK( owner.GetId().StartsWith("S-1-") );
+#endif
+
+    // A file that doesn't exist has no owner.
+    wxFileName fnNone{ fn.GetFullPath() + ".doesnotexist" };
+    wxLogNull noLog;
+    CHECK( !fnNone.GetOwner().IsOk() );
+}
+
 TEST_CASE("wxFileName::Exists", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
