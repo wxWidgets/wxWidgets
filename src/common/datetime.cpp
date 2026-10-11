@@ -1260,16 +1260,30 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
                             wxDateTime_t second,
                             wxDateTime_t millisec)
 {
-    wxDATETIME_CHECK( hour < 24 &&
-                      second < 62 &&
-                      minute < 60 &&
-                      millisec < 1000,
-                      wxT("Invalid time in wxDateTime::Set()") );
+    wxDATETIME_CHECK
+    (
+        SetIfValid(day, month, year, hour, minute, second, millisec),
+        wxT("Invalid date/time in wxDateTime::Set()")
+    );
+
+    return *this;
+}
+
+bool wxDateTime::SetIfValid(wxDateTime_t day,
+                            Month        month,
+                            int          year,
+                            wxDateTime_t hour,
+                            wxDateTime_t minute,
+                            wxDateTime_t second,
+                            wxDateTime_t millisec)
+{
+    if ( hour >= 24 || second >= 61 || minute >= 60 || millisec >= 1000 )
+        return false;
 
     ReplaceDefaultYearMonthWithCurrent(&year, &month);
 
-    wxDATETIME_CHECK( (0 < day) && (day <= GetNumberOfDays(month, year)),
-                      wxT("Invalid date in wxDateTime::Set()") );
+    if ( day == 0 || day > GetNumberOfDays(month, year) )
+        return false;
 
     // Check if we can use the standard library implementation: this only works
     // for the dates representable by time_t, i.e. after the beginning of the
@@ -1307,8 +1321,6 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         // and finally adjust milliseconds
         if (IsValid())
             SetMillisecond(millisec);
-
-        return *this;
     }
     else
     {
@@ -1324,7 +1336,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         Add(wxTimeSpan(hour, minute, second + wxGetTimeZone(), millisec));
     }
 
-    return *this;
+    return true;
 }
 
 wxDateTime& wxDateTime::Set(double jdn)

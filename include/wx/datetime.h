@@ -1176,6 +1176,16 @@ private:
     // functions
     inline bool IsInStdRange() const;
 
+    // unlike public Set() this function just returns false if the date
+    // components are invalid without asserting.
+    bool SetIfValid(wxDateTime_t day,
+                    Month        month,
+                    int          year,
+                    wxDateTime_t hour,
+                    wxDateTime_t minute,
+                    wxDateTime_t second,
+                    wxDateTime_t millisec);
+
     // assign the preferred first day of a week to flags, if necessary
     void UseEffectiveWeekDayFlags(WeekFlags &flags) const;
 
