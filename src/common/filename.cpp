@@ -2778,17 +2778,6 @@ bool wxFileName::SetPermissions(int permissions)
     return wxChmod(GetFullPath(), permissions) == 0;
 }
 
-wxString wxLocalAccount::GetAsString() const
-{
-    if ( m_name.empty() )
-        return m_id;
-
-    if ( m_domain.empty() )
-        return m_name;
-
-    return m_domain + wxS("\\") + m_name;
-}
-
 #ifdef wxHAVE_LSTAT
 
 namespace

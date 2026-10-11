@@ -16,6 +16,7 @@
 #include "wx/intl.h"
 #include "wx/longlong.h"
 #include "wx/file.h"
+#include "wx/localaccount.h"
 
 #if wxUSE_FILE
 class WXDLLIMPEXP_FWD_BASE wxFile;
@@ -126,49 +127,6 @@ enum
 extern WXDLLIMPEXP_DATA_BASE(const wxULongLong) wxInvalidSize;
 
 
-
-// ----------------------------------------------------------------------------
-// wxLocalAccount: identifies a user or group account of the local system
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxLocalAccount
-{
-public:
-    // Creates an invalid account object.
-    wxLocalAccount() = default;
-
-    // Returns true if the account was determined, even if its name could not
-    // be resolved. In that case, GetName() is empty but GetId() is not.
-    bool IsOk() const { return !m_id.empty(); }
-
-    // Name of the account without the domain, empty if it couldn't be found.
-    const wxString& GetName() const { return m_name; }
-
-    // Domain of the account (e.g., "CORP"). Always empty under Unix, which has
-    // no account domains.
-    const wxString& GetDomain() const { return m_domain; }
-
-    // Numeric user or group ID under Unix, string form of the SID under MSW.
-    const wxString& GetId() const { return m_id; }
-
-    // Returns "domain\name" or just "name" if there is no domain, falling
-    // back to GetId() if the name is unknown.
-    wxString GetAsString() const;
-
-private:
-    friend class wxFileName;
-
-    wxLocalAccount(const wxString& name,
-                   const wxString& domain,
-                   const wxString& id)
-        : m_name(name), m_domain(domain), m_id(id)
-    {
-    }
-
-    wxString m_name,
-             m_domain,
-             m_id;
-};
 
 // ----------------------------------------------------------------------------
 // wxFileName: encapsulates a file path
