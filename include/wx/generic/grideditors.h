@@ -144,6 +144,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
     virtual void StartingKey(wxKeyEvent& event) override;
 
     // parameters string format is "min,max"
@@ -242,6 +243,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
     virtual void StartingKey(wxKeyEvent& event) override;
 
     wxNODISCARD virtual wxGridCellEditor *Clone() const override
@@ -303,6 +305,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
     virtual void StartingClick() override;
     virtual void StartingKey(wxKeyEvent& event) override;
 
@@ -380,6 +383,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return m_allowOthers; }
     virtual void StartingClick() override;
 
     // parameters string format is "item1[,item2[...,itemN]]"
@@ -481,6 +485,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
 
     wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellDateEditor(*this); }
