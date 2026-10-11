@@ -171,6 +171,7 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
 // open the file
 bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 {
+    m_filename = fileName;
     int flags = O_BINARY;
 
     switch ( mode )
@@ -227,12 +228,16 @@ bool wxFile::Close()
     if ( IsOpened() ) {
         if ( CheckForError(wxClose(m_fd)) )
         {
-            wxLogSysError(_("can't close file descriptor %d"), m_fd);
+            wxLogSysError(_("can't close file %s (descriptor %d)"), m_filename, m_fd);
             m_fd = fd_invalid;
+            m_filename.clear();
             return false;
         }
         else
+        {
             m_fd = fd_invalid;
+            m_filename.clear();
+        }
     }
 
     return true;
@@ -330,7 +335,7 @@ ssize_t wxFile::Read(void *pBuf, size_t nCount)
 
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't read from file descriptor %d"), m_fd);
+        wxLogSysError(_("can't read from file %s (descriptor %d)"), m_filename, m_fd);
         return wxInvalidOffset;
     }
 
@@ -349,7 +354,8 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't write to file descriptor %d"), m_fd);
+        wxLogSysError(_("can't write to file %s (descriptor %d)"),
+                      m_filename, m_fd);
         iRc = 0;
     }
 
@@ -388,7 +394,7 @@ bool wxFile::Flush()
     {
         if ( CheckForError(wxFsync(m_fd)) )
         {
-            wxLogSysError(_("can't flush file descriptor %d"), m_fd);
+            wxLogSysError(_("can't flush file %s (descriptor %d)"), m_filename, m_fd);
             return false;
         }
     }
@@ -430,7 +436,7 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     wxFileOffset iRc = wxSeek(m_fd, ofs, origin);
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
+        wxLogSysError(_("can't seek on file %s (descriptor %d)"), m_filename, m_fd);
     }
 
     return iRc;
@@ -444,7 +450,8 @@ wxFileOffset wxFile::Tell() const
     wxFileOffset iRc = wxTell(m_fd);
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
+        wxLogSysError(_("can't get seek position on file %s (descriptor %d)"),
+                      m_filename, m_fd);
     }
 
     return iRc;
@@ -473,7 +480,8 @@ wxFileOffset wxFile::Length() const
     if ( iRc == wxInvalidOffset )
     {
         // last error was already set by Tell()
-        wxLogSysError(_("can't find length of file on file descriptor %d"), m_fd);
+        wxLogSysError(_("can't find length of file on file %s (descriptor %d)"),
+                      m_filename, m_fd);
     }
 
     return iRc;
@@ -503,7 +511,8 @@ bool wxFile::Eof() const
 
     if ( iRc == wxInvalidOffset )
     {
-        wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
+        wxLogSysError(_("can't determine if the end of file is reached on %s (descriptor %d)"),
+                      m_filename, m_fd);
     }
 
     return true;
