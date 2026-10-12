@@ -18,7 +18,7 @@ class WXDLLIMPEXP_FWD_BASE wxFileName;
 // wxLocalAccount: identifies a user account of the local system
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxLocalAccount
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxLocalAccount
 {
 public:
     // Creates an invalid account object.
