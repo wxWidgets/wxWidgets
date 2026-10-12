@@ -34,6 +34,8 @@
 #endif
 
 #if wxUSE_APPINDICATOR
+    #include <memory>
+
     #include <libayatana-appindicator/app-indicator.h>
 
     #include "wx/app.h"
