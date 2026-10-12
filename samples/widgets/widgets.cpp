@@ -595,9 +595,9 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     InitBook();
 
     wxMenu* menuTheme = new wxMenu;
-    menuTheme->Append(Theme_System, "&System");
-    menuTheme->Append(Theme_Light, "&Light");
-    menuTheme->Append(Theme_Dark, "&Dark");
+    menuTheme->AppendRadioItem(Theme_System, "&System");
+    menuTheme->AppendRadioItem(Theme_Light, "&Light");
+    menuTheme->AppendRadioItem(Theme_Dark, "&Dark");
     mbar->Append(menuTheme, "T&heme");
 
     // the lower one only has the log listbox and a button to clear it
