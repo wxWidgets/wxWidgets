@@ -94,6 +94,7 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour) override;
 
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) override;
 
 protected:
     // common part of all ctors

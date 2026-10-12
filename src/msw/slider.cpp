@@ -29,6 +29,7 @@
     #include "wx/brush.h"
 #endif
 
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/subwin.h"
 
 // ----------------------------------------------------------------------------
@@ -252,6 +253,51 @@ wxSlider::~wxSlider()
 // ----------------------------------------------------------------------------
 // event handling
 // ----------------------------------------------------------------------------
+
+bool wxSlider::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
+{
+    NMHDR* hdr = (NMHDR*)lParam;
+    if ( wxMSWDarkMode::IsActive() && hdr->code == NM_CUSTOMDRAW )
+    {
+        // Draw the thumb always blue. The default system drawing changes the
+        // colour to black when the mouse is hovering and to gray when
+        // dragging. In dark mode, the black colour causes the thumb to
+        // disappear.
+        NMCUSTOMDRAW* nmcd = (NMCUSTOMDRAW*)lParam;
+        switch ( nmcd->dwDrawStage )
+        {
+            case CDDS_PREPAINT:
+                *result = CDRF_NOTIFYITEMDRAW;
+                return true;
+
+            case CDDS_ITEMPREPAINT:
+                if ( nmcd->dwItemSpec == TBCD_THUMB )
+                {
+                    // Draw a polygon that matches the shape of the thumb.
+                    const RECT& rc = nmcd->rc;
+                    LONG y = ((rc.bottom - rc.top) / 4) * 3;
+                    POINT points[] = {
+                        { rc.left, rc.top },
+                        { rc.right - 1, rc.top },
+                        { rc.right - 1, y },
+                        { (rc.right + rc.left) / 2, rc.bottom - 2 },
+                        { rc.left, y }
+                    };
+                    // The observed colour of the thumb in light mode.
+                    const COLORREF fg = 0xd77800;
+                    AutoHBRUSH hBrush(fg);
+                    AutoHPEN hPen(fg);
+                    SelectInHDC selectBrush(nmcd->hdc, hBrush);
+                    SelectInHDC selectPen(nmcd->hdc, hPen);
+                    ::Polygon(nmcd->hdc, points, WXSIZEOF(points));
+                    *result = CDRF_SKIPDEFAULT;
+                    return true;
+                }
+                break;
+        }
+    }
+    return wxSliderBase::MSWOnNotify(idCtrl, lParam, result);
+}
 
 bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
                            WXWORD wParam,
