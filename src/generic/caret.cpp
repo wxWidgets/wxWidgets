@@ -29,6 +29,7 @@
 
 #include "wx/caret.h"
 #include "wx/graphics.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // global variables for this module
@@ -265,19 +266,25 @@ void wxCaret::Refresh()
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
 {
+    // Set caret colour black or white depending on background colour.
     wxPen pen(*wxBLACK_PEN);
     wxBrush brush(*wxBLACK_BRUSH);
-    if (win)
+    if ( win && win->UseBackgroundColour() )
     {
-        wxColour backgroundColour(win->GetBackgroundColour());
-        if (backgroundColour.Red() < 100 &&
-            backgroundColour.Green() < 100 &&
-            backgroundColour.Blue() < 100)
+        if ( win->GetBackgroundColour().GetLuminance() < 0.5 )
         {
+            // Custom background is dark, so use white.
             pen = *wxWHITE_PEN;
             brush = *wxWHITE_BRUSH;
         }
     }
+    else if ( wxSystemSettings::GetAppearance().IsDark() )
+    {
+        // Background is default colour and default is dark, so use white.
+        pen = *wxWHITE_PEN;
+        brush = *wxWHITE_BRUSH;
+    }
+
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsContext* gc = dc->GetGraphicsContext();
 #endif
