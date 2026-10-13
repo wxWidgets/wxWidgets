@@ -1015,7 +1015,8 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
         return false;
 
     // the spec was correct, construct the date from the values we found
-    Set(day, mon, year, hour, min, sec);
+    if ( !SetIfValid(day, mon, year, hour, min, sec, 0 /* ms */) )
+        return false;
 
     // 7. now the interesting part: the timezone
 
