@@ -1,0 +1,1 @@
+All (GUI): Add wxGridCellEditor::AcceptsTextInput() to enable or disable IME (#27206).
