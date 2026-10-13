@@ -179,3 +179,27 @@ TEST_CASE("Modal::EndModalDuringInit", "[modal]")
     CHECK_FALSE( dlg.IsModal() );
     CHECK_FALSE( dlg.IsShown() );
 }
+
+TEST_CASE("Modal::ShowModalTwice", "[modal]")
+{
+    wxDialog dlg(nullptr, wxID_ANY, "Modal Dialog");
+
+    int timerCalls = 0;
+
+    wxTimer watchdog;
+    watchdog.Bind(wxEVT_TIMER,
+                    [&dlg, &timerCalls](wxTimerEvent&)
+                    {
+                        ++timerCalls;
+                        dlg.EndModal(timerCalls == 1 ? wxID_OK : wxID_CANCEL);
+                    });
+
+    for ( int i = 0; i < 2; ++i )
+    {
+        watchdog.StartOnce(200);
+        const int result = dlg.ShowModal();
+
+        CHECK( ((timerCalls == 1 && result == wxID_OK) ||
+               (timerCalls == 2 && result == wxID_CANCEL)) );
+    }
+}
