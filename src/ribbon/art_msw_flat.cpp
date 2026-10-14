@@ -1040,8 +1040,6 @@ wxRibbonMSWFlatArtProvider::DrawToggleButton(wxDC& dc,
                                          const wxRect& rect,
                                          wxRibbonDisplayMode mode)
 {
-    DrawPartialPageBackground(dc, wnd, rect, false);
-
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
@@ -1091,8 +1089,6 @@ void wxRibbonMSWFlatArtProvider::DrawHelpButton(wxDC& dc,
                                        wxRibbonBar* wnd,
                                        const wxRect& rect)
 {
-    DrawPartialPageBackground(dc, wnd, rect, false);
-
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
