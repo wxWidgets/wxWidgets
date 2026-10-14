@@ -1129,18 +1129,10 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
             AC_MSG_ERROR([Using wxWebView Chromium backend requires C++14 or later.])
         fi
 
-        if test "$wxUSE_LUNASVG" = "yes"; then
-            AC_MSG_ERROR([Using LunaSVG requires C++17 or later])
-        fi
-
         AX_CXX_COMPILE_STDCXX(11)
         ;;
 
     14)
-        if test "$wxUSE_LUNASVG" = "yes"; then
-            AC_MSG_ERROR([Using LunaSVG requires C++17 or later])
-        fi
-
         AX_CXX_COMPILE_STDCXX(14)
         ;;
 
