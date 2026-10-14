@@ -1578,6 +1578,12 @@ void wxVLogError(const char* formatString, va_list argPtr);
     desired trace masks with wxLog::AddTraceMask() or by setting the
     @ref overview_envvars "@c WXTRACE environment variable".
 
+    Note that, since wxWidgets 3.4.0, the arguments following the @a mask are
+    not evaluated at all if the mask is not enabled, so it is safe to pass
+    expressions which are expensive to compute to this function. However the
+    @a mask itself may be evaluated more than once and so must not have any
+    side effects.
+
     The predefined string trace masks used by wxWidgets are:
 
     @beginDefList

@@ -137,6 +137,21 @@ TEST_CASE_METHOD(LogTestCase, "wxLog::Trace", "[log]")
 
     TraceTest("Not shown again");
     CHECK( m_log->GetLog(wxLOG_Trace) == "" );
+
+    // Check that the arguments are not evaluated if the mask is disabled.
+    int evaluated = 0;
+    const auto getArg = [&evaluated]() { return ++evaluated; };
+
+    wxLogTrace(TEST_MASK, "Not evaluated: %d", getArg());
+    CHECK( evaluated == 0 );
+    CHECK( m_log->GetLog(wxLOG_Trace) == "" );
+
+    wxLog::AddTraceMask(TEST_MASK);
+    wxLogTrace(TEST_MASK, "Evaluated: %d", getArg());
+    CHECK( evaluated == 1 );
+    CHECK( m_log->GetLog(wxLOG_Trace) == wxString::Format("(%s) Evaluated: 1", TEST_MASK) );
+
+    wxLog::RemoveTraceMask(TEST_MASK);
 }
 
 #endif // wxDEBUG_LEVEL

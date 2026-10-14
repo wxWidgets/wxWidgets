@@ -1068,15 +1068,15 @@ public:
         DoCallOnLog(level, s);
     }
 
-    // special versions for wxLogTrace() which is passed either string or
-    // integer mask as first argument determining whether the message should be
-    // logged or not
+    // special versions for wxLogTrace() which is passed the trace mask as
+    // first argument
+    //
+    // notice that these functions are only called after wxLogTrace() has
+    // checked that the mask is enabled, so they don't need to check it again
+    // and only store the mask which is used as part of the log message later
     template <typename... Targs>
     void LogTrace(const wxString& mask, const wxString& format, Targs... args)
     {
-        if ( !wxLog::IsAllowedTraceMask(mask) )
-            return;
-
         Store(wxLOG_KEY_TRACE_MASK, mask);
 
         DoCallOnLog(wxString::Format(format, args...));
@@ -1084,9 +1084,6 @@ public:
 
     void LogTrace(const wxString& mask, const wxString& s)
     {
-        if ( !wxLog::IsAllowedTraceMask(mask) )
-            return;
-
         Store(wxLOG_KEY_TRACE_MASK, mask);
 
         DoCallOnLog(s);
@@ -1358,7 +1355,11 @@ inline void wxLogNop() { }
 #endif // wxUSE_LOG_DEBUG/!wxUSE_LOG_DEBUG
 
 #if wxUSE_LOG_TRACE
-    #define wxLogTrace wxDO_LOG_IF_ENABLED_WITH_FUNC(Trace, LogTrace)
+    // Check the mask before calling LogTrace() to avoid evaluating the other
+    // arguments, which may be expensive, if it is not enabled.
+    #define wxLogTrace(mask, ...)                                             \
+        wxDO_IF(wxLOG_IS_ENABLED(Trace) && wxLog::IsAllowedTraceMask(mask))   \
+        wxDO_LOG_WITH_FUNC(Trace, LogTrace)(mask, __VA_ARGS__)
     #define wxVLogTrace wxDO_LOG_IF_ENABLED_WITH_FUNC(Trace, LogVTrace)
 #else  // !wxUSE_LOG_TRACE
     #define wxVLogTrace(mask, fmt, valist) wxLogNop()
