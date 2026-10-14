@@ -408,6 +408,10 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
 
 void wxSplitterWindow::OnSize(wxSizeEvent& event)
 {
+    // don't process it if we're being deleted as it doesn't matter any more
+    if ( IsBeingDeleted() )
+        return;
+
     // only process this message if we're not iconized - otherwise iconizing
     // and restoring a window containing the splitter has a funny side effect
     // of changing the splitter position!
