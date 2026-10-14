@@ -1,0 +1,1 @@
+wxMSW: Fix wxSlider thumb appearance in dark mode (Steve Cornett, #27211).
