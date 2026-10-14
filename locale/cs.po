@@ -65,7 +65,7 @@ msgstr "OK"
 #: ../src/msw/msgdlg.cpp:430 ../src/msw/progdlg.cpp:884
 #: ../src/richtext/richtextstyledlg.cpp:295
 msgid "Cancel"
-msgstr "Storno"
+msgstr "Zrušit"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:168
 #: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
@@ -2027,7 +2027,7 @@ msgid ""
 msgstr ""
 "Znaková sada '%s' je neznámá. Můžete vybrat\n"
 "jinou sadu jako náhradu nebo stiskněte\n"
-"[Storno], pokud ji nelze nahradit"
+"[Zrušit], pokud ji nelze nahradit"
 
 #: ../src/common/fontmap.cpp:241
 #, c-format
@@ -3288,7 +3288,7 @@ msgstr "Dolů"
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
 msgid "&Cancel"
-msgstr "&Storno"
+msgstr "&Zrušit"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&CD-ROM"
