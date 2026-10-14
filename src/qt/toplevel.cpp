@@ -28,9 +28,15 @@ bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
     const wxString &title, const wxPoint &pos, const wxSize &size,
     long style, const wxString &name )
 {
+    wxSize sizeReal = size;
+    if ( !sizeReal.IsFullySpecified() )
+    {
+        sizeReal.SetDefaults(GetDefaultSize());
+    }
+
     wxTopLevelWindows.Append( this );
 
-    if (!wxWindow::Create( parent, winId, pos, size, style, name ))
+    if (!wxWindow::Create( parent, winId, pos, sizeReal, style, name ))
     {
         wxFAIL_MSG( wxT("wxTopLevelWindowNative creation failed") );
         return false;

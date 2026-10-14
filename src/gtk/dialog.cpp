@@ -156,6 +156,12 @@ int wxDialog::ShowModal()
     // NOTE: this will cause a gtk_grab_add() during Show()
     gtk_window_set_modal(GTK_WINDOW(m_widget), true);
 
+    // Reset the return code to avoid it being interpreted as an indication that
+    // EndModal() was called from InitDialog() when Show() is called below.
+    // Otherwise, subsequent calls to ShowModal() on the same wxDialog object
+    // would fail to show the dialog again.
+    SetReturnCode(0);
+
     Show( true );
 
     // EndModal may have been called from InitDialog handler (called from
