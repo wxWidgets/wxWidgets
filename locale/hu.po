@@ -66,7 +66,7 @@ msgstr "Ok"
 #: ../src/msw/msgdlg.cpp:430 ../src/msw/progdlg.cpp:884
 #: ../src/richtext/richtextstyledlg.cpp:295
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:168
 #: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
@@ -2110,7 +2110,7 @@ msgid ""
 msgstr ""
 "A(z) '%s' jelkészlet ismeretlen.Választhat másik\n"
 "készletet ennek helyettesítésére vagy\n"
-"[Mégsem]-t ha nem helyettesíthető"
+"[Mégse]-t ha nem helyettesíthető"
 
 #: ../src/common/fontmap.cpp:241
 #, c-format
@@ -3401,7 +3401,7 @@ msgstr ""
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
 msgid "&Cancel"
-msgstr "&Mégsem"
+msgstr "&Mégse"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&CD-ROM"
@@ -4623,7 +4623,7 @@ msgid ""
 "at all possible please do continue with the report generation.\n"
 msgstr ""
 "Ha teljesen mellőzni akarja ennek a hibajavítási jelentésnek az elküldését, "
-"kérem válassza a \"Mégsem\" gombot,\n"
+"kérem válassza a \"Mégse\" gombot,\n"
 "de kérem vegye figyelembe hogy ez hátráltathatja a program fejlesztését, "
 "tehát\n"
 "ha csak lehetséges, kérem folytassa a jelentés előállítását.\n"
