@@ -33,7 +33,9 @@
 
 #include "wx/msw/private/datecontrols.h"
 #include "wx/msw/private/uilocale.h"
-
+#include "wx/msw/private/darkmode.h"
+#include "wx/msw/private/custompaint.h"
+#include "wx/msw/uxtheme.h"
 // apparently some versions of mingw define these macros erroneously
 #ifndef DateTime_GetSystemtime
     #define DateTime_GetSystemtime DateTime_GetSystemTime
@@ -279,13 +281,146 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
     return size;
 }
 
+WXLRESULT
+wxDateTimePickerCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if (nMsg == WM_PAINT && wxMSWDarkMode::IsActive())
+    {
+        LONG_PTR style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        // Skip in the up-down (spinner) variant – no dropdown button there.
+        if ((!(style & DTS_UPDOWN)) || (style & DTS_SHOWNONE))
+        {
+            wxMSWImpl::CustomPaint
+            (
+                GetHwnd(),
+                [this](HWND hwnd, WPARAM wParamPaint)
+                {
+                    m_oldWndProc(hwnd, WM_PAINT, wParamPaint, 0);
+                },
+                [this](const wxBitmap& bmpOrig)
+                {
+                    wxBitmap bmp(bmpOrig);
+                    wxMemoryDC dc(bmp);
+                    dc.SetLayoutDirection(this->GetLayoutDirection());
+                    HDC hdc = GetHdcOf(dc);
+                    // 1. Ask the control where its elements are.
+                    DATETIMEPICKERINFO dtpi = {};
+                    dtpi.cbSize = sizeof(DATETIMEPICKERINFO);
+                    ::SendMessage(GetHwnd(),
+                        DTM_GETDATETIMEPICKERINFO,
+                        0,
+                        reinterpret_cast<LPARAM>(&dtpi));
+
+                    RECT rcButton = dtpi.rcButton;
+                    RECT rcCheck = dtpi.rcCheck;
+
+                    auto theme = wxUxThemeHandle::NewAtDPI(0, L"DATEPICKER", GetDPI().y);
+                    auto chTheme = wxUxThemeHandle::NewAtStdDPI(0, L"Button", L"DarkMode_Explorer::Button");
+                    // --- DRAW DROPDOWN CALENDAR BUTTON ---
+                    if (rcButton.right > rcButton.left && rcButton.bottom > rcButton.top)
+                    {
+                        int state = DPSCBR_NORMAL;
+
+                        POINT ptCursor;
+                        GetCursorPos(&ptCursor);
+                        // 2. Convert screen coordinates to coordinates relative to this control's window
+                        MapWindowPoints(HWND_DESKTOP, GetHwnd(), (LPPOINT)&ptCursor, 1);
+
+                        if (PtInRect(&rcButton, ptCursor))
+                        {
+                            int alpha = dtpi.stateButton & STATE_SYSTEM_PRESSED ? 116 : 126;
+                            dc.SetBrush(wxBrush(wxColour(GetPixel(hdc, rcButton.left, rcButton.top)).ChangeLightness(alpha)));
+                            dc.SetPen(wxNullPen);
+                            dc.DrawRectangle(rcButton.left, rcButton.top, rcButton.right - rcButton.left, rcButton.bottom - rcButton.top);
+                        }
+
+                        theme.DrawBackground(hdc, rcButton, (int)DP_SHOWCALENDARBUTTONRIGHT, state);
+
+                        // Draw a hairline separator on the left edge so the
+                        // button visually separates from the date field.
+                        dc.SetPen(wxPen(wxColour(80, 80, 80)));
+                        dc.DrawLine(rcButton.left, rcButton.top + 1,
+                            rcButton.left, rcButton.bottom - 1);
+                    }
+
+                    // --- DRAW CHECKBOX ---
+                    if (rcCheck.right > rcCheck.left && rcCheck.bottom > rcCheck.top)
+                    {
+                        const int edge = wxSystemSettings::GetMetric(wxSYS_EDGE_X);
+                        rcCheck.left += edge;
+                        rcCheck.right -= edge;
+                        rcCheck.top += edge;
+                        rcCheck.bottom -= edge;
+                        SYSTEMTIME st;
+                        LRESULT result = SendMessage(GetHwnd(), DTM_GETSYSTEMTIME, 0, (LPARAM)&st);
+
+                        bool isChecked = (result == GDT_VALID);
+                        // Determine the theme part state index (BP_CHECKBOX)
+                        int chState = isChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
+
+                        // Draw the custom theme background over the double-buffered DC
+                        const int BP_CHECKBOX = 3;
+                        chTheme.DrawBackground(hdc, rcCheck, BP_CHECKBOX, chState);
+                    }
+
+                    return bmp;
+                }
+            );
+
+            return 0;
+        }
+    }
+    return wxDateTimePickerCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+}
+void wxDateTimePickerCtrl::MSWSetDarkOrLightMode()
+{
+    wxDateTimePickerCtrlBase::MSWSetDarkOrLightMode();
+    wxMSWDarkMode::SetTheme(GetHwnd(), nullptr, L"DarkMode::FileExplorerBannerContainer");
+    if (wxMSWDarkMode::IsActive())
+        wxMSWDarkMode::AllowForWindow(GetHwnd(), nullptr, L"DarkMode::FileExplorerBannerContainer");
+    else
+        wxMSWDarkMode::AllowForWindow(GetHwnd());
+#ifdef _MSC_VER
+    auto darkModeCallback = [](HWND hwnd, LPARAM)->BOOL
+#else
+    auto darkModeCallback = [](HWND hwnd, LPARAM) -> BOOL CALLBACK
+#endif
+        {
+        wchar_t className[256];
+        GetClassName(hwnd, className, 256);
+
+        if (_wcsicmp(className, L"msctls_updown32") == 0 || _wcsicmp(className, L"EDIT") == 0)
+        {
+            wxMSWDarkMode::SetTheme(hwnd, wxMSWDarkMode::HasDarkTheme() ? L"DarkMode_DarkTheme" : L"DarkMode_Explorer", nullptr);
+        }
+        return TRUE;
+        };
+    EnumChildWindows(GetHwnd(), darkModeCallback, 0);
+}
+
 bool
 wxDateTimePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     NMHDR* hdr = (NMHDR *)lParam;
     switch ( hdr->code )
     {
-        case DTN_DATETIMECHANGE:
+        case DTN_DROPDOWN:
+        {
+            HWND hwndMonthCal = (HWND)SendMessage(hdr->hwndFrom, DTM_GETMONTHCAL, 0, 0);
+            if (hwndMonthCal)
+            {
+                //TODO-MonthCal: need custome paint NavNext,NavPrev parts.
+                const wchar_t* themeName = wxMSWDarkMode::IsActive() ? L"DarkMode::FileExplorerBannerContainer" : nullptr;
+                wxMSWDarkMode::SetTheme(hwndMonthCal, nullptr, themeName);
+                wxUxThemeHandle theme(this, L"FileExplorerBannerContainer");
+                wxColour themeColor = theme.GetColour(0, TMT_FILLCOLOR);
+                COLORREF backColor = themeColor.IsOk() ? themeColor.GetPixel() : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel();
+                DateTime_SetMonthCalColor(hdr->hwndFrom, MCSC_BACKGROUND, backColor);
+            }
+        }
+        break;
+
+         case DTN_DATETIMECHANGE:
             const NMDATETIMECHANGE& dtch = *(NMDATETIMECHANGE*)(hdr);
 
             // Update the format before showing the new date if necessary.
