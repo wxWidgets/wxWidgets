@@ -196,7 +196,7 @@ TEST_CASE("Modal::ShowModalTwice", "[modal]")
 
     for ( int i = 0; i < 2; ++i )
     {
-        watchdog.StartOnce(200);
+        watchdog.StartOnce(10);
         const int result = dlg.ShowModal();
 
         switch ( timerCalls )
