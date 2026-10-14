@@ -199,7 +199,18 @@ TEST_CASE("Modal::ShowModalTwice", "[modal]")
         watchdog.StartOnce(200);
         const int result = dlg.ShowModal();
 
-        CHECK( ((timerCalls == 1 && result == wxID_OK) ||
-               (timerCalls == 2 && result == wxID_CANCEL)) );
+        switch ( timerCalls )
+        {
+            case 1:
+                CHECK( result == wxID_OK );
+                break;
+
+            case 2:
+                CHECK( result == wxID_CANCEL );
+                break;
+
+            default:
+                FAIL("Unexpected number of timer calls");
+        }
     }
 }
