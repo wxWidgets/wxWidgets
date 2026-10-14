@@ -1600,6 +1600,55 @@ public:
                            int horizAlign,
                            int vertAlign,
                            int textOrientation) const;
+
+    /**
+        Flags for DrawHighlighted().
+
+        @since 3.3.0
+     */
+    enum DrawFlags
+    {
+        /// Draw the header as if it was pressed, e.g. while it is being dragged.
+        Draw_Pressed = 1
+    };
+
+    /**
+        Called by the grid to draw a highlighted header cell.
+
+        The grid calls this method instead of DrawBorder() for the header cells
+        it highlights. This happens only if the grid uses the overlay selection
+        (see wxGrid::UsesOverlaySelection()) and the highlighted cells are those
+        of the rows or columns spanned by the selection, if it is a single
+        block, or of the row or column of the current cell if there is no
+        selection. Like DrawBorder(), this method is responsible for drawing the
+        border inside the given @a rect and for adjusting the rectangle to the
+        area inside the border. DrawLabel() is called after it.
+
+        The default implementation of this class does nothing, so a renderer
+        that doesn't override it draws no border for highlighted header cells.
+        The default renderers, e.g. wxGridColumnHeaderRendererDefault, draw the
+        highlighted appearance.
+
+        @param grid
+            The grid whose header cell window is being drawn.
+        @param dc
+            The device context to use for drawing.
+        @param rect
+            Input/output parameter which contains the border rectangle on input
+            and should be updated to contain the area inside the border on
+            function return.
+        @param rowOrCol
+            The index of the row or column being drawn.
+        @param flags
+            Combination of DrawFlags values.
+
+        @since 3.3.0
+     */
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int rowOrCol,
+                                 int flags = 0) const;
 };
 
 /**
@@ -6345,6 +6394,8 @@ public:
     wxColour GetCellHighlightColour() const;
     int      GetCellHighlightPenWidth() const;
     int      GetCellHighlightROPenWidth() const;
+    wxColour GetGridFrozenBorderColour() const;
+    int      GetGridFrozenBorderPenWidth() const;
 
     void SetCellHighlightColour( const wxColour& );
     void SetCellHighlightPenWidth(int width);
