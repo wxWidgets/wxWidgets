@@ -866,20 +866,6 @@ TEST_CASE_METHOD(RequestFixture,
     request.Cancel();
     RunLoopWithTimeout();
 
-#ifdef __WINDOWS__
-    // This is another weird test failure that happens only on AppVeyor:
-    // sometimes (perhaps because the test machine is too slow?) the request
-    // fails instead of (before?) being cancelled.
-    if ( IsAutomaticTest() )
-    {
-        if ( request.GetState() == wxWebRequest::State_Failed )
-        {
-            WARN("Request unexpectedly failed after cancelling.");
-            return;
-        }
-    }
-#endif // __WINDOWS__
-
     REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
 }
 
