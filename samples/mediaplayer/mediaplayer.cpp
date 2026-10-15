@@ -1361,7 +1361,7 @@ void wxMediaPlayerFrame::OnVolumeUp(wxCommandEvent& WXUNUSED(event))
 // wxMediaPlayerTimer::Notify
 //
 // 1) Updates media information on the status bar
-// 2) Sets the max/min length of the slider and guage
+// 2) Sets the max/min length of the slider and gauge
 //
 // Note that the reason we continually do this and don't cache it is because
 // some backends such as GStreamer are dynamic change values all the time
@@ -1523,7 +1523,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     //  Where Column one is a character representing the state the file is in:
     //  * - not the current file
-    //  E - Error has occured
+    //  E - Error has occurred
     //  > - Currently Playing
     //  [] - Stopped
     //  || - Paused
