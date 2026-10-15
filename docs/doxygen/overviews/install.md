@@ -207,7 +207,7 @@ project, there are several things you must do.
 
 - Enable the usage of environment variables in xcode:<br>
   `defaults write com.apple.dt.Xcode UseSanitizedBuildSystemEnvironment -bool NO`
-- Set the variables for use with the launch agent (application to OSX 10.10
+- Set the variables for use with the launch agent (applicable to macOS 10.10
 and up)
 
 ~~~{xml}

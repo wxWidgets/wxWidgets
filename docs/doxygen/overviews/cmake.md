@@ -5,7 +5,7 @@ CMake Overview                         {#overview_cmake}
 CMake allows building wxWidgets on various platforms with your preferred build
 system.
 
-Most linux distributions contain CMake as a package on Windows and macOS you can
+Most Linux distributions contain CMake as a package, while on Windows and macOS you can
 download an installer at the [CMake Page](https://cmake.org).
 
 Using the CMake GUI                    {#cmake_gui}
@@ -29,9 +29,9 @@ Using the CMake Command Line           {#cmake_cli}
    directly use your chosen build system.
 
 Run `cmake --help` to see a list of available generators on your platform.
-These can than be specified using the -G command line option. On Windows it
+These can then be specified using the -G command line option. On Windows it
 is recommended to use Visual Studio and on macOS Xcode is recommended.
-Various build options can be specified using -D see
+Various build options can be specified using -D, see
 [available options](#cmake_options).
 
 Command Line Examples                  {#cmake_cli_samples}
@@ -113,7 +113,7 @@ You can use `find_package(wxWidgets)` to use a compiled version of wxWidgets.
 Have a look at the [CMake Documentation](https://cmake.org/cmake/help/latest/module/FindwxWidgets.html)
 for detailed instructions. wxWidgets also provides an example CMake file in the minimal sample folder.
 
-*WARNING*: Please note that CMake `findwxWidgets` module unfortunately doesn't
+*WARNING*: Please note that CMake `FindwxWidgets` module unfortunately doesn't
 detect wxWidgets 3.2.0 in versions of CMake older than 3.24. You may copy the
 latest version of `FindwxWidgets.cmake` from [CMake sources][1] to your system
 to fix this or, if you build wxWidgets itself using CMake, use `CONFIG` mode of
@@ -160,7 +160,7 @@ Using an out-of-tree directory         {#cmake_outerdir}
 Likewise, wxWidgets can also be outside of your project, but still be part
 of your application's build process. To do this, you will need to provide a
 build directory argument to `add_subdirectory()`.
-This will tell CMake where to place wxWidget's build files.
+This will tell CMake where to place wxWidgets's build files.
 
 For example, if wxWidgets is one folder up from your project:
 ~~~
@@ -182,7 +182,7 @@ If building wxWidgets statically into your program, these values will
 be available:
 
 Name               | Description
------------------- | -----------  |
+------------------ | -----------
 wxVERSION          | wxWidgets's version number
 wxCOPYRIGHT        | The copyright string
 
