@@ -357,8 +357,13 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     logger->OnDataReceived(lpvStatusInformation, dwStatusInformationLength);
 
                 m_response->ReportDataReceived(dwStatusInformationLength);
-                if ( !m_response->ReadData() && !WasCancelled() )
-                    SetFailedWithLastError("Reading data");
+                if ( !m_response->ReadData() )
+                {
+                    if ( WasCancelled() )
+                        SetState(wxWebRequest::State_Cancelled);
+                    else
+                        SetFailedWithLastError("Reading data");
+                }
             }
             else
             {
