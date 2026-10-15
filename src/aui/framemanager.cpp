@@ -65,6 +65,7 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 #include "wx/dcgraph.h"
 
 #include "wx/generic/private/drawresize.h"
+#include "wx/private/make_unique.h"
 
 #include <map>
 #include <memory>
