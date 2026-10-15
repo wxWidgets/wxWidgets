@@ -357,8 +357,16 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     logger->OnDataReceived(lpvStatusInformation, dwStatusInformationLength);
 
                 m_response->ReportDataReceived(dwStatusInformationLength);
-                if ( !m_response->ReadData() )
+
+                // The check for WasCancelled() here is not sufficient, as
+                // there is no synchronization between this code and
+                // DoCancel(), but it avoids calling ReadData() on an already
+                // closed handle to get an error which we'd just ignore anyhow.
+                if ( WasCancelled() || !m_response->ReadData() )
                 {
+                    // This check is still needed in case the handle got closed
+                    // between the check above and WinHttpReadData() called
+                    // from ReadData().
                     if ( WasCancelled() )
                         SetState(wxWebRequest::State_Cancelled);
                     else
