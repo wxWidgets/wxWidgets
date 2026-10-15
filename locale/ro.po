@@ -3315,7 +3315,7 @@ msgstr "Jos"
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
 msgid "&Cancel"
-msgstr "&Renunță"
+msgstr "&Anulează"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&CD-ROM"
