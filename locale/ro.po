@@ -66,7 +66,7 @@ msgstr "OK"
 #: ../src/msw/msgdlg.cpp:430 ../src/msw/progdlg.cpp:884
 #: ../src/richtext/richtextstyledlg.cpp:295
 msgid "Cancel"
-msgstr "Anulare"
+msgstr "Anulează"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:168
 #: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
@@ -2043,7 +2043,7 @@ msgid ""
 msgstr ""
 "Setul de caractere '%s' este necunoscut. Puteți selecta\n"
 "alt set de caractere care să-l înlocuiască sau alegeți\n"
-"[Anulare] dacă nu poate fi înlocuit"
+"[Anulează] dacă nu poate fi înlocuit"
 
 #: ../src/common/fontmap.cpp:241
 #, c-format
@@ -3315,7 +3315,7 @@ msgstr "Jos"
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
 msgid "&Cancel"
-msgstr "&Anulare"
+msgstr "&Renunță"
 
 #: ../src/common/stockitem.cpp:151
 msgid "&CD-ROM"
@@ -4481,7 +4481,7 @@ msgid ""
 "at all possible please do continue with the report generation.\n"
 msgstr ""
 "Pentru suprimarea definitivă a acestui raport de depanare apăsați butonul "
-"\"Anulare\",\n"
+"\"Anulează\",\n"
 "dar atenție, aceasta ar putea împiedica îmbunătățirea programului, astfel "
 "că\n"
 "dacă se poate este indicat să fie permisă generarea raportului.\n"
