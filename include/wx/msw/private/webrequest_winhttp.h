@@ -15,6 +15,7 @@
 #include "wx/msw/wrapwin.h"
 #include <winhttp.h>
 #include "wx/buffer.h"
+#include "wx/thread.h"
 
 class wxWebSessionWinHTTP;
 class wxWebRequestWinHTTP;
@@ -128,6 +129,12 @@ private:
     wxString m_url;
     HINTERNET m_connect = nullptr;
     HINTERNET m_request = nullptr;
+
+    // Protects m_request from being closed in DoCancel(), called in the main
+    // thread, while it's being used by HandleCallback(), which runs in a
+    // WinHTTP worker thread.
+    wxCRIT_SECT_DECLARE_MEMBER(m_handleCS);
+
     wxObjectDataPtr<wxWebResponseWinHTTP> m_response;
     wxObjectDataPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
