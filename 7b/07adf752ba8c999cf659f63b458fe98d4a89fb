@@ -1,0 +1,1 @@
+All: Fix C++11 build (Konstantin S. Matveyev, #27229).
