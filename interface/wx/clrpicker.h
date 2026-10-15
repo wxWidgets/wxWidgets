@@ -88,7 +88,7 @@ public:
         Creates a colour picker with the given arguments.
 
         @param parent
-            Parent window, must not be non-null.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param colour
