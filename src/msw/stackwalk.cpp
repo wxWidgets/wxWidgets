@@ -56,6 +56,11 @@ void wxStackFrame::OnGetName()
     {
         wxDbgHelpDLL::LogError(wxT("SymFromAddr"));
     }
+    else
+    {
+        // make the offset relative to the frame address and not GetSymAddr()
+        m_offset += m_symAddrAdjust;
+    }
 }
 
 void wxStackFrame::OnGetLocation()
@@ -289,9 +294,15 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
         // don't show this frame itself in the output
         if ( nLevel >= skip )
         {
+            // only the innermost frame address comes from the context, all the
+            // other ones are return addresses (this is not true for the frame
+            // interrupted by an exception if we're called from an exception
+            // handler and not via WalkFromException(), but we can't detect it)
             wxStackFrame frame(nLevel - skip,
                                wxUIntToPtr(sf.AddrPC.Offset),
-                               sf.AddrFrame.Offset);
+                               sf.AddrFrame.Offset,
+                               nLevel == 0 ? wxStackFrame::AddrKind::Current
+                                           : wxStackFrame::AddrKind::Return);
 
             OnStackFrame(frame);
         }
