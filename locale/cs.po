@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
-"PO-Revision-Date: 2025-05-16 21:09+0200\n"
+"PO-Revision-Date: 2026-10-16 23:38+0200\n"
 "Last-Translator: PB <pbfordev@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 1524,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.10\n"
 
 #: ../include/wx/defs.h:2609
 msgid "All files (*.*)|*.*"
@@ -78,9 +78,9 @@ msgid "Cannot initialize OLE"
 msgstr "Nelze zavést OLE"
 
 #: ../include/wx/msw/private/fswatcher.h:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to finish cancelling the watch for '%s'"
-msgstr "Nelze nastavit sledování pro '%s'"
+msgstr "Nelze dokončit zrušení sledování pro '%s'"
 
 #: ../include/wx/msw/private/fswatcher.h:149
 #, c-format
@@ -1236,9 +1236,9 @@ msgid "failed to flush the file '%s'"
 msgstr "nelze vyprázdnit buffer souboru '%s'"
 
 #: ../src/common/ffile.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "failed to sync data of the file '%s'"
-msgstr "nelze vyprázdnit buffer souboru '%s'"
+msgstr "nelze synchronizovat data souboru '%s'"
 
 #: ../src/common/ffile.cpp:246
 #, c-format
@@ -1416,7 +1416,7 @@ msgstr "nelze smazat uživatelský konfigurační soubor '%s'"
 #: ../src/common/fileconf.cpp:1523
 #, c-format
 msgid "duplicate group '%s'"
-msgstr ""
+msgstr "duplicitní skupina '%s'"
 
 #: ../src/common/fileconf.cpp:2014
 #, c-format
@@ -1434,9 +1434,9 @@ msgid "trailing backslash ignored in '%s'"
 msgstr "zpětné lomítko na konci ignorováno v '%s'"
 
 #: ../src/common/fileconf.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected \" at position %zu in '%s'."
-msgstr "neočekávané \" na pozici %d v '%s'."
+msgstr "neočekávané \" na pozici %zu v '%s'."
 
 #: ../src/common/filefn.cpp:403
 #, c-format
@@ -1472,7 +1472,7 @@ msgstr ""
 "Nelze přejmenovat soubor '%s' na '%s' protože cílový soubor již existuje."
 
 #: ../src/common/filefn.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed to '%s'"
 msgstr "Soubor '%s' nelze přejmenovat na '%s'"
 
@@ -1534,31 +1534,31 @@ msgstr "Nelze otevřít dočasný soubor."
 #: ../src/common/filename.cpp:1220
 #, c-format
 msgid "Error preserving all attributes of '%s'"
-msgstr ""
+msgstr "Nelze zachovat všechny atributy pro '%s'"
 
 #: ../src/common/filename.cpp:1234
 msgid "Failed to set temporary file permissions"
 msgstr "Nelze nastavit přístupová práva k dočasnému souboru"
 
 #: ../src/common/filename.cpp:2786 ../src/common/filename.cpp:2793
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get attributes of '%s'"
-msgstr "Nelze spustit '%s'\n"
+msgstr "Nelze získat atributy pro '%s'"
 
 #: ../src/common/filename.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set attributes of '%s'"
-msgstr "Nelze prověřit zámkový soubor '%s'"
+msgstr "Nelze nastavit atributy pro '%s'"
 
 #: ../src/common/filename.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get mode of '%s'"
-msgstr "Nelze odstranit zámkový soubor '%s'"
+msgstr "Nelze získat režim pro '%s'"
 
 #: ../src/common/filename.cpp:2862
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set mode of '%s'"
-msgstr "Nelze odstranit zámkový soubor '%s'"
+msgstr "Nelze nastavit režim pro '%s'"
 
 #: ../src/common/filename.cpp:3031
 #, c-format
@@ -2356,7 +2356,7 @@ msgstr "Nelze zavést hash tabulku GIF."
 
 #: ../src/common/imaggif.cpp:565
 msgid "Image palette has too many colours to save as GIF."
-msgstr ""
+msgstr "Paleta barev obsahuje příliš mnoho barev pro uložení ve formátu GIF."
 
 #: ../src/common/imagiff.cpp:764
 msgid "IFF: error in IFF image format."
@@ -2494,9 +2494,8 @@ msgid "WebP: Decoding RGB image data failed."
 msgstr "WebP: Nelze dekódovat obrazová RGB data."
 
 #: ../src/common/imagwebp.cpp:112 ../src/common/imagwebp.cpp:197
-#, fuzzy
 msgid "WebP: Error reading data."
-msgstr "WebP: Chyba při dekódování animace."
+msgstr "WebP: Chyba při čtení dat."
 
 #: ../src/common/imagwebp.cpp:130
 msgid "WebP: Failed to parse container data."
@@ -3875,7 +3874,7 @@ msgstr "selhání kontrolního součtu při čtení bloku tar hlavičky"
 #: ../src/common/tarstrm.cpp:920
 #, c-format
 msgid "Extended tar header size %zu is greater than maximum allowed."
-msgstr ""
+msgstr "Velikost rozšířené hlavičky tar %zu je větší než povolené maximum."
 
 #: ../src/common/tarstrm.cpp:983
 msgid "invalid data in extended tar header"
@@ -5231,7 +5230,7 @@ msgid ""
 "old, 1.38 or later required."
 msgstr ""
 "Na tomto systému nelze použít privátní fonty: Knihovna Pango je příliš "
-"stará, je požadována verze 1.38 a novější"
+"stará, je požadována verze 1.38 a novější."
 
 #: ../src/gtk/font.cpp:558
 msgid "Failed to create font configuration object."
@@ -5319,9 +5318,9 @@ msgid "Page Setup"
 msgstr "Nastavení stránky"
 
 #: ../src/gtk/utilsgtk.cpp:347 ../src/osx/carbon/utilscocoa.mm:718
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' couldn't be moved to trash: %s"
-msgstr "Soubor '%s' nelze odstranit"
+msgstr "'%s' nelze přesunout do koše: %s"
 
 #: ../src/gtk/webview_webkit.cpp:936
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
@@ -6405,8 +6404,8 @@ msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
-"Není možné vytvořit prvek rich edit, místo něj použit obyčejný. "
-"Přeinstalujte prosím riched32.dll."
+"Není možné vytvořit editor formátovaného textu, použit editor "
+"neformátovaného textu. Přeinstalujte prosím riched32.dll."
 
 #: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:846
 msgid "Cannot start thread: error writing TLS."
@@ -6507,7 +6506,7 @@ msgstr "Chyba při volání příkazu '%s'"
 #: ../src/msw/utilswin.cpp:203
 #, c-format
 msgid "'%s' couldn't be moved to trash: error 0x%08x"
-msgstr ""
+msgstr "'%s' nelze přesunout do koše: chyba 0x%08x"
 
 #: ../src/msw/volume.cpp:337
 msgid "Failed to load mpr.dll."
@@ -6529,7 +6528,7 @@ msgstr "Aplikace byla sestavena bez podpory nastavení proxy v Edge."
 
 #: ../src/msw/webview_edge.cpp:1545
 msgid "PDF export requires a newer version of the WebView2 runtime."
-msgstr ""
+msgstr "Export do PDF vyžaduje novější verzi běhového prostředí WebView2."
 
 #: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to find web view emulation level in the registry"
@@ -7116,127 +7115,116 @@ msgid "&Tile"
 msgstr "&Dlaždice"
 
 #: ../src/ribbon/backstage.cpp:110
-#, fuzzy
 msgid "Backstage"
-msgstr "Backspace"
+msgstr "Backstage"
 
 #: ../src/ribbon/backstage.cpp:176 ../src/ribbon/backstagecontrols.cpp:91
 #: ../src/ribbon/bar.cpp:179 ../src/ribbon/buttonbar.cpp:1980
 #: ../src/ribbon/gallery.cpp:1320 ../src/ribbon/panel.cpp:1460
 #: ../src/ribbon/toolbar.cpp:1641
-#, fuzzy
 msgid "Press"
-msgstr "Postup:"
+msgstr "Stisknout"
 
 #: ../src/ribbon/backstagecontrols.cpp:844
-#, fuzzy
 msgid "Open"
-msgstr "&Otevřít..."
+msgstr "Otevřít"
 
 #: ../src/ribbon/backstagecontrols.cpp:1469
-#, fuzzy
 msgid "Today"
-msgstr "dnes"
+msgstr "Dnes"
 
 #: ../src/ribbon/backstagecontrols.cpp:1471
-#, fuzzy
 msgid "Yesterday"
-msgstr "včera"
+msgstr "Včera"
 
 #: ../src/ribbon/backstagecontrols.cpp:1473
 msgid "This Week"
-msgstr ""
+msgstr "Tento týden"
 
 #: ../src/ribbon/backstagecontrols.cpp:1475
-#, fuzzy
 msgid "Last Week"
-msgstr "Poslední stránka"
+msgstr "Minulý týden"
 
 #: ../src/ribbon/backstagecontrols.cpp:1477
 msgid "Earlier This Month"
-msgstr ""
+msgstr "Dříve tento měsíc"
 
 #: ../src/ribbon/backstagecontrols.cpp:1480
 msgid "Older"
-msgstr ""
+msgstr "Starší"
 
 #: ../src/ribbon/backstagecontrols.cpp:1520
-#, fuzzy
 msgid "Documents"
-msgstr "Dokument:"
+msgstr "Dokumenty"
 
 #: ../src/ribbon/backstagecontrols.cpp:1522
-#, fuzzy
 msgid "Pictures"
-msgstr "&Obrázek"
+msgstr "Obrázky"
 
 #: ../src/ribbon/backstagecontrols.cpp:1523
 msgid "Videos"
-msgstr ""
+msgstr "Videa"
 
 #: ../src/ribbon/backstagecontrols.cpp:1524
 msgid "Music"
-msgstr ""
+msgstr "Hudba"
 
 #: ../src/ribbon/backstagecontrols.cpp:1525
-#, fuzzy
 msgid "Downloads"
-msgstr "Dolů"
+msgstr "Stažené soubory"
 
 #: ../src/ribbon/backstagecontrols.cpp:1594
 msgid "Just now"
-msgstr ""
+msgstr "Právě teď"
 
 #: ../src/ribbon/backstagecontrols.cpp:1602
 #, c-format
 msgid "%d minute ago"
 msgid_plural "%d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "před minutou"
+msgstr[1] "před %d minutami"
+msgstr[2] "před %d minutami"
 
 #: ../src/ribbon/backstagecontrols.cpp:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Yesterday at %s"
-msgstr "včera"
+msgstr "Včera v %s"
 
 #: ../src/ribbon/backstagecontrols.cpp:1614
 #, c-format
 msgid "%s at %s"
-msgstr ""
+msgstr "%s v %s"
 
 #. TRANSLATORS: Month (abbreviated) and day of the month (e.g., "Mar 03").
 #: ../src/ribbon/backstagecontrols.cpp:1621
 #, c-format
 msgid "%b %d"
-msgstr ""
+msgstr "%b %d"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Minimize the Ribbon"
-msgstr ""
+msgstr "Sbalit pás karet"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Expand the Ribbon"
-msgstr ""
+msgstr "Rozbalit pás karet"
 
 #: ../src/ribbon/gallery.cpp:1286
-#, fuzzy
 msgid "More"
-msgstr "Více..."
+msgstr "Další"
 
 #: ../src/ribbon/page.cpp:1354 ../src/ribbon/panel.cpp:1453
 msgid "Switch"
-msgstr ""
+msgstr "Přepnout"
 
 #: ../src/ribbon/panel.cpp:1421
-#, fuzzy
 msgid "More options"
-msgstr "Nastavení tiskárny"
+msgstr "Další možnosti"
 
 #: ../src/ribbon/panel.cpp:1422
-#, fuzzy, c-format
+#, c-format
 msgid "More %s options"
-msgstr "Nastavení tiskárny"
+msgstr "Další možnosti %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -8040,7 +8028,7 @@ msgstr "Nahradit"
 
 #: ../src/richtext/richtextctrl.cpp:5663
 msgid "Rich Text Control"
-msgstr ""
+msgstr "Editor formátovaného textu"
 
 #: ../src/richtext/richtextfontpage.cpp:146
 #: ../src/richtext/richtextsymboldlg.cpp:384
@@ -9245,7 +9233,7 @@ msgstr "Nelze získat události z kqueue"
 #: ../src/unix/glegl.cpp:833
 #, c-format
 msgid "EGL version is %d.%d but version 1.4 or greater is required."
-msgstr ""
+msgstr "Verze EGL je %d.%d ale je vyžadována verze 1.4 a vyšší."
 
 #: ../src/unix/mediactrl.cpp:968
 #, c-format
@@ -9374,9 +9362,9 @@ msgstr ""
 "prosím program"
 
 #: ../src/unix/threadpsx.cpp:1348
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %zu"
-msgstr "Nelze nastavit úroveň souběžnosti vlákna na %lu"
+msgstr "Nelze nastavit úroveň souběžnosti vlákna na %zu"
 
 #: ../src/unix/threadpsx.cpp:1477
 #, c-format
@@ -9432,14 +9420,14 @@ msgstr "Nelze zjistit oficiální jméno počítače"
 #: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
-msgstr ""
+msgstr ", založeno na %s (%s)"
 
 #. TRANSLATORS: %s is a Linux distribution parent name.
 #. TRANSLATORS: %s is an upstream codename.
 #: ../src/unix/utilsunx.cpp:1318 ../src/unix/utilsunx.cpp:1324
-#, fuzzy, c-format
+#, c-format
 msgid ", based on %s"
-msgstr "&Založeno na:"
+msgstr ", založeno na %s"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
