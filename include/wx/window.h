@@ -1170,6 +1170,14 @@ public:
         // return true if window had been frozen and not unthawed yet
     bool IsFrozen() const { return m_freezeCount != 0; }
 
+        // Get the view start in pixels
+    virtual void GetViewStartPixels(int* x, int* y) const
+    {
+        if ( x ) *x = 0;
+        if ( y ) *y = 0;
+    }
+    virtual wxPoint GetViewStartPixels() const { return wxPoint(); }
+
         // adjust DC for measuring or drawing on this window
     virtual void PrepareReadOnlyDC( wxReadOnlyDC & WXUNUSED(dc) ) { }
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
