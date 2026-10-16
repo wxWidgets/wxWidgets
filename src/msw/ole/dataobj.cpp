@@ -1483,12 +1483,13 @@ bool wxURLDataObject::SetData(const wxDataFormat& format,
                               size_t len,
                               const void *buf)
 {
-    m_dataObjectLast = GetObject(format);
+    // Look up formats we can receive, not formats we can provide.
+    m_dataObjectLast = GetObject(format, Set);
 
     wxCHECK_MSG( m_dataObjectLast, FALSE,
                  wxT("unsupported format in wxURLDataObject"));
 
-    return m_dataObjectLast->SetData(len, buf);
+    return m_dataObjectLast->SetData(format, len, buf);
 }
 
 wxString wxURLDataObject::GetURL() const
