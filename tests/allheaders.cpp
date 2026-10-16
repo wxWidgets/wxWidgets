@@ -364,6 +364,11 @@
     CLANG_TURN_ON(shorten-64-to-32)
 #endif // clang
 
+// Temporarily suppressing warnings about deprecated functions is broken in
+// gcc 4.8, so disable these warnings globally for it.
+#if CHECK_GCC_VERSION(4, 8) && !CHECK_GCC_VERSION(4, 9)
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 // UTF-8-only build is the only one in which we actually want to use implicit
 // encoding (UTF-8).
