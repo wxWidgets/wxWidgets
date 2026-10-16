@@ -226,11 +226,13 @@ void wxCaret::Refresh()
 
     if (m_overlay.IsNative())
     {
-        wxDCOverlay dcOverlay(m_overlay, &dcWin, m_x, m_y, m_width, m_height);
         if (m_blinkedOut)
-            dcOverlay.Clear();
+            m_overlay.Reset();
         else
+        {
+            wxDCOverlay dcOverlay(m_overlay, &dcWin, m_x, m_y, m_width, m_height);
             DoDraw(&dcWin, GetWindow());
+        }
 
         return;
     }
