@@ -23,6 +23,8 @@
 #include "wx/log.h"
 #include "wx/window.h"
 
+#include "wx/private/make_unique.h"
+
 #include "wx/gtk/private/backend.h"
 
 #include <string.h>
