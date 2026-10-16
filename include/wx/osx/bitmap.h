@@ -100,7 +100,7 @@ public:
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
 
     // creates an bitmap from the native image format
-    wxBitmap(CGImageRef image, double scale = 1.0);
+    wxBitmap(CGImageRef image, double scale = 1.0, bool isTemplate = false);
     wxBitmap(WXImage image);
     wxBitmap(CGContextRef bitmapcontext);
 
@@ -133,7 +133,7 @@ public:
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
     bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    bool Create( CGImageRef image, double scale = 1.0 );
+    bool Create( CGImageRef image, double scale = 1.0, bool isTemplate = false );
     bool Create( WXImage image );
     bool Create( CGContextRef bitmapcontext);
 
