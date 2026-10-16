@@ -1028,7 +1028,15 @@ wxTLWDragSession::Create(wxWindow* origin,
         if ( !session->Start(seat, originTLW, target, targetTLW) )
             return nullptr;
 
+#if wxCHECK_GCC_VERSION(4, 8) && !wxCHECK_GCC_VERSION(5, 0)
+        // Explicitly convert to the return type: implicit move with
+        // conversion (CWG 1579) is not supported by g++ < 5, but we can't
+        // use "return std::move(session)" either as this would result in
+        // -Wredundant-move warnings from newer compilers.
+        return std::unique_ptr<wxTLWDragSession>(std::move(session));
+#else
         return session;
+#endif
     }
 
     return nullptr;
