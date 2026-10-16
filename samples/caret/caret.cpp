@@ -76,6 +76,7 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnSize( wxSizeEvent &event );
     void OnChar( wxKeyEvent &event );
+    void OnScroll(wxScrollWinEvent& event);
 
 private:
     // move the caret to m_xCaret, m_yCaret
@@ -296,6 +297,7 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
     EVT_SIZE(MyCanvas::OnSize)
     EVT_CHAR(MyCanvas::OnChar)
+    EVT_SCROLLWIN(MyCanvas::OnScroll)
 wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
@@ -384,6 +386,9 @@ void MyCanvas::ChangeSize()
 
     free(m_text);
     m_text = (wxChar *)calloc(m_xChars * m_yChars, sizeof(wxChar));
+
+    // Make the client area scrollable.
+    SetScrollbars(m_widthChar, m_heightChar, m_xChars + 10, m_yChars + 10);
 
 #if wxUSE_STATUSBAR
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
@@ -489,3 +494,11 @@ void MyCanvas::OnChar( wxKeyEvent &event )
     DoMoveCaret();
 }
 
+void MyCanvas::OnScroll(wxScrollWinEvent &event)
+{
+    wxPoint pos = GetCaret()->GetPosition();
+    m_xCaret = (pos.x - m_xMargin) / m_widthChar;
+    m_yCaret = (pos.y - m_yMargin) / m_heightChar;
+    wxLogStatus("Caret is at (%d, %d)", m_xCaret, m_yCaret);
+    event.Skip();
+}
