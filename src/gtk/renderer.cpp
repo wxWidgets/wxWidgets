@@ -461,9 +461,17 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
     sc.AddWindow();
     gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
 
-    sc.Add(GTK_TYPE_PANED, "paned", "pane-separator", nullptr);
+    // Note that the orientation of GtkPaned is the opposite of that of its
+    // separator, i.e. a horizontal GtkPaned has a vertical sash, and that it
+    // must be specified for the theme to draw the separator correctly.
+    sc.Add(GTK_TYPE_PANED, "paned", "pane-separator",
+           isVert ? GTK_STYLE_CLASS_HORIZONTAL : GTK_STYLE_CLASS_VERTICAL,
+           nullptr);
+
+    // Our sash is wider than the normal GTK one, which is typically just 1px
+    // wide, so use the style of GtkPaned with "wide-handle" property set.
     if (gtk_check_version(3,20,0) == nullptr)
-        sc.Add("separator");
+        sc.Add(G_TYPE_NONE, "separator", "wide", nullptr);
 
     gtk_style_context_set_state(sc,
         flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
