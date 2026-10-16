@@ -129,6 +129,7 @@ private:
 
   int m_fd; // file descriptor or INVALID_FD if not opened
   int m_lasterror; // errno value of last error
+  wxString m_filename; // remember filename for error messages
 };
 
 // ----------------------------------------------------------------------------
