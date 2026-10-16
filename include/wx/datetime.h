@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxTimeSpan;
 class WXDLLIMPEXP_FWD_BASE wxDateSpan;
 #ifdef __WINDOWS__
-struct _SYSTEMTIME;
+using SYSTEMTIME = struct _SYSTEMTIME;
 #endif
 
 #include "wx/dynarray.h"
@@ -519,7 +519,7 @@ public:
                       wxDateTime_t second = 0,
                       wxDateTime_t millisec = 0);
 #ifdef __WINDOWS__
-    wxDateTime(const struct _SYSTEMTIME& st)
+    wxDateTime(const SYSTEMTIME& st)
     {
         SetFromMSWSysTime(st);
     }
@@ -819,14 +819,14 @@ public:
     // ------------------------------------------------------------------------
 #ifdef __WINDOWS__
     // convert SYSTEMTIME to wxDateTime
-    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
+    wxDateTime& SetFromMSWSysTime(const SYSTEMTIME& st);
 
     // convert wxDateTime to SYSTEMTIME
-    void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
+    void GetAsMSWSysTime(SYSTEMTIME* st) const;
 
     // same as above but only take date part into account, time is always zero
-    wxDateTime& SetFromMSWSysDate(const struct _SYSTEMTIME& st);
-    void GetAsMSWSysDate(struct _SYSTEMTIME* st) const;
+    wxDateTime& SetFromMSWSysDate(const SYSTEMTIME& st);
+    void GetAsMSWSysDate(SYSTEMTIME* st) const;
 #endif // __WINDOWS__
 
     // comparison (see also functions below for operator versions)

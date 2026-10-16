@@ -427,7 +427,7 @@ public:
         @remarks MSW only
         @onlyfor{wxmsw}
     */
-    wxDateTime(const struct _SYSTEMTIME& st);
+    wxDateTime(const SYSTEMTIME& st);
 
 
     /**
@@ -573,7 +573,7 @@ public:
         @remarks MSW only
         @onlyfor{wxmsw}
     */
-    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
+    wxDateTime& SetFromMSWSysTime(const SYSTEMTIME& st);
 
     /**
         Returns the date and time in the Windows SYSTEMTIME format.
@@ -583,7 +583,7 @@ public:
         @remarks MSW only
         @onlyfor{wxmsw}
     */
-    void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
+    void GetAsMSWSysTime(SYSTEMTIME* st) const;
 
     /**
         Returns the century of this date.
