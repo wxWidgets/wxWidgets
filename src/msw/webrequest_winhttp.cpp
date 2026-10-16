@@ -343,6 +343,25 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: callback %08x, len=%lu",
                this, dwInternetStatus, dwStatusInformationLength);
 
+    // Keep this object alive until we return: calling SetState() below could
+    // result in it being destroyed in the main thread otherwise.
+    IncRef();
+    const wxWebRequestImplPtr callDecRefOnScopeExit(this);
+
+    // Ensure that the handle can't be closed by DoCancel() while we use it.
+    wxCRIT_SECT_LOCKER(lock, m_handleCS);
+
+    // If we were cancelled, there is no pending operation any more: it must
+    // have either just completed or been cancelled by closing the handle, so
+    // we won't get any more callbacks and must update the state now.
+    if ( WasCancelled() )
+    {
+        // But don't do it if the operation had somehow failed before.
+        if ( GetState() == wxWebRequest::State_Active )
+            SetState(wxWebRequest::State_Cancelled);
+        return;
+    }
+
     switch ( dwInternetStatus )
     {
         case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
@@ -357,7 +376,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     logger->OnDataReceived(lpvStatusInformation, dwStatusInformationLength);
 
                 m_response->ReportDataReceived(dwStatusInformationLength);
-                if ( !m_response->ReadData() && !WasCancelled() )
+                if ( !m_response->ReadData() )
                     SetFailedWithLastError("Reading data");
             }
             else
@@ -382,13 +401,7 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             LPWINHTTP_ASYNC_RESULT
                 asyncResult = reinterpret_cast<LPWINHTTP_ASYNC_RESULT>(lpvStatusInformation);
 
-            // "Failing" with "cancelled" error is not actually an error if
-            // we're expecting it, i.e. if our Cancel() had been called.
-            if ( asyncResult->dwError == ERROR_WINHTTP_OPERATION_CANCELLED &&
-                    WasCancelled() )
-                SetState(wxWebRequest::State_Cancelled);
-            else
-                SetFailed("Async request", asyncResult->dwError);
+            SetFailed("Async request", asyncResult->dwError);
             break;
         }
     }
@@ -922,6 +935,10 @@ wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()
 
 void wxWebRequestWinHTTP::DoCancel()
 {
+    // WinHTTP doesn't allow using the handle after closing it, so ensure that
+    // it isn't being used by HandleCallback() in another thread right now.
+    wxCRIT_SECT_LOCKER(lock, m_handleCS);
+
     wxWinHTTPCloseHandle(m_request);
     m_request = nullptr;
 }
