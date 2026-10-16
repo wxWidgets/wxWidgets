@@ -448,6 +448,8 @@ protected:
 
 class WXDLLIMPEXP_HTML wxHtmlWordCell : public wxHtmlCell
 {
+    friend class wxHtmlWinParser;
+
 public:
     wxHtmlWordCell(const wxString& word, const wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
@@ -471,6 +473,7 @@ protected:
                const wxPoint& selFrom, const wxPoint& selTo,
                unsigned& pos1, unsigned& pos2,
                unsigned& ext1, unsigned& ext2) const;
+    void AdjustWidthForKerning(const wxDC& dc, const wxString& nextWord);
 
     wxString m_Word;
     bool     m_allowLinebreak;
