@@ -101,6 +101,8 @@
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
     #include "wx/msw/wrapshl.h"         // for CLSID_ShellLink
+    #include <aclapi.h>                 // for GetNamedSecurityInfo()
+    #include <sddl.h>                   // for ConvertSidToStringSid()
     #include "wx/msw/missing.h"
     #include "wx/msw/ole/oleutils.h"
     #include "wx/msw/private/comptr.h"
@@ -116,6 +118,9 @@
 #include <utime.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <cerrno>
+#include <vector>
 #endif
 
 #ifndef S_ISREG
@@ -2771,6 +2776,118 @@ bool wxFileName::SetPermissions(int permissions)
 #endif // __WINDOWS__
 
     return wxChmod(GetFullPath(), permissions) == 0;
+}
+
+#ifdef wxHAVE_LSTAT
+
+namespace
+{
+
+// Look up the name of the user with the given ID. Returns false if there is no
+// such user (which is not an error, the ID may come from another system).
+bool GetUserNameFromUid(uid_t uid, wxString& name)
+{
+#ifdef HAVE_GETPWUID_R
+    struct passwd pwd;
+    struct passwd* result = nullptr;
+    std::vector<char> buf(1024);
+    int rc;
+    while ( (rc = getpwuid_r(uid, &pwd, buf.data(), buf.size(),
+                             &result)) == ERANGE && buf.size() < 1024 * 1024 )
+    {
+        buf.resize(buf.size() * 2);
+    }
+
+    if ( rc != 0 || !result || !result->pw_name )
+        return false;
+
+    name = wxString{ result->pw_name, wxConvLibc };
+#else // !HAVE_GETPWUID_R
+    const struct passwd* const pwd = getpwuid(uid);
+    if ( !pwd || !pwd->pw_name )
+        return false;
+
+    name = wxString{ pwd->pw_name, wxConvLibc };
+#endif // HAVE_GETPWUID_R/!HAVE_GETPWUID_R
+
+    return true;
+}
+
+} // anonymous namespace
+
+#endif // wxHAVE_LSTAT
+
+wxLocalAccount wxFileName::GetOwner() const
+{
+#if defined(__WINDOWS__)
+    PSID ownerSid = nullptr;
+    PSECURITY_DESCRIPTOR secDesc = nullptr;
+    const DWORD rc = ::GetNamedSecurityInfo(GetFullPath().t_str(),
+                                            SE_FILE_OBJECT,
+                                            OWNER_SECURITY_INFORMATION,
+                                            &ownerSid, nullptr, nullptr,
+                                            nullptr, &secDesc);
+    if ( rc == ERROR_SUCCESS )
+    {
+        wxString sid;
+        LPTSTR sidStr = nullptr;
+        if ( ::ConvertSidToStringSid(ownerSid, &sidStr) )
+        {
+            sid = sidStr;
+            ::LocalFree(sidStr);
+        }
+
+        wxString name, domain;
+
+        DWORD nameLen = 0,
+              domainLen = 0;
+        SID_NAME_USE use;
+        // get the buffer lengths needed for the name and domain
+        ::LookupAccountSid(nullptr, ownerSid, nullptr, &nameLen,
+                           nullptr, &domainLen, &use);
+        if ( nameLen > 0 )
+        {
+            {
+                wxStringBuffer nameBuf(name, nameLen);
+                wxStringBuffer domainBuf(domain, domainLen);
+                if ( !::LookupAccountSid(nullptr, ownerSid,
+                                         nameBuf, &nameLen,
+                                         domainBuf, &domainLen, &use) )
+                {
+                    // The SID can't be resolved (e.g., because the account has
+                    // been deleted), but this is not an error as we still have
+                    // its string form.
+                    nameBuf[0] = wxS('\0');
+                    domainBuf[0] = wxS('\0');
+                }
+            }
+        }
+
+        ::LocalFree(secDesc);
+
+        if ( !sid.empty() )
+            return wxLocalAccount{ name, domain, sid };
+    }
+    else
+    {
+        ::SetLastError(rc);
+    }
+#elif defined(wxHAVE_LSTAT)
+    wxStructStat stBuf;
+    if ( StatAny(stBuf, *this) )
+    {
+        wxString name;
+        GetUserNameFromUid(stBuf.st_uid, name);
+
+        return wxLocalAccount{ name, wxString{},
+                               wxString::Format("%lu",
+                                   static_cast<unsigned long>(stBuf.st_uid)) };
+    }
+#endif // platforms
+
+    wxLogSysError(_("Failed to retrieve the owner of '%s'"), GetFullPath());
+
+    return wxLocalAccount{};
 }
 
 #if defined(__WINDOWS__)
