@@ -1,22 +1,22 @@
 # translation of wxstd.pot to Ukrainian
 # This file is distributed under the same license as the wxWidgets package.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2007-2022, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007-2022, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
-"PO-Revision-Date: 2025-05-16 19:34+0300\n"
+"PO-Revision-Date: 2026-10-16 19:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 25.12.1\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n%10>="
+"2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../include/wx/defs.h:2609
 msgid "All files (*.*)|*.*"
@@ -81,9 +81,9 @@ msgid "Cannot initialize OLE"
 msgstr "Не вдалося ініціювати OLE"
 
 #: ../include/wx/msw/private/fswatcher.h:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to finish cancelling the watch for '%s'"
-msgstr "Не вдалося налаштувати спостереження за «%s»"
+msgstr "Не вдалося скасувати спостереження за «%s»"
 
 #: ../include/wx/msw/private/fswatcher.h:149
 #, c-format
@@ -1242,9 +1242,9 @@ msgid "failed to flush the file '%s'"
 msgstr "не вдалося скинути буфер файла «%s»."
 
 #: ../src/common/ffile.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "failed to sync data of the file '%s'"
-msgstr "не вдалося скинути буфер файла «%s»."
+msgstr "не вдалося синхронізувати дані файла «%s»"
 
 #: ../src/common/ffile.cpp:246
 #, c-format
@@ -1423,7 +1423,7 @@ msgstr "Не вдалося вилучити файл налаштувань к�
 #: ../src/common/fileconf.cpp:1523
 #, c-format
 msgid "duplicate group '%s'"
-msgstr ""
+msgstr "дублювання групи «%s»"
 
 #: ../src/common/fileconf.cpp:2014
 #, c-format
@@ -1441,9 +1441,9 @@ msgid "trailing backslash ignored in '%s'"
 msgstr "у «%s» проігноровано кінцеву похилу риску"
 
 #: ../src/common/fileconf.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected \" at position %zu in '%s'."
-msgstr "несподіваний \" в позиції %d в «%s»."
+msgstr "неочікувані \" у позиції %zu у «%s»."
 
 #: ../src/common/filefn.cpp:403
 #, c-format
@@ -1480,7 +1480,7 @@ msgstr ""
 "існує."
 
 #: ../src/common/filefn.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed to '%s'"
 msgstr "Не вдалося перейменувати файл «%s» на «%s»"
 
@@ -1542,31 +1542,31 @@ msgstr "Не вдалося відкрити тимчасовий файл."
 #: ../src/common/filename.cpp:1220
 #, c-format
 msgid "Error preserving all attributes of '%s'"
-msgstr ""
+msgstr "Помилка під час спроби зберегти усі атрибути «%s»"
 
 #: ../src/common/filename.cpp:1234
 msgid "Failed to set temporary file permissions"
 msgstr "Не вдалося встановити дозволи на тимчасовий файл"
 
 #: ../src/common/filename.cpp:2786 ../src/common/filename.cpp:2793
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get attributes of '%s'"
-msgstr "Не вдалося виконати «%s»\n"
+msgstr "Не вдалося отримати атрибути «%s»"
 
 #: ../src/common/filename.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set attributes of '%s'"
-msgstr "Не вдалося перевірити файл замка «%s»."
+msgstr "Не вдалося встановити атрибути «%s»"
 
 #: ../src/common/filename.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get mode of '%s'"
-msgstr "Помилка вилучення файла замка «%s»"
+msgstr "Не вдалося отримати режим «%s»"
 
 #: ../src/common/filename.cpp:2862
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set mode of '%s'"
-msgstr "Помилка вилучення файла замка «%s»"
+msgstr "Не вдалося встановити режим «%s»"
 
 #: ../src/common/filename.cpp:3031
 #, c-format
@@ -2368,7 +2368,7 @@ msgstr "Не вдалося ініціалізувати таблицю хеші
 
 #: ../src/common/imaggif.cpp:565
 msgid "Image palette has too many colours to save as GIF."
-msgstr ""
+msgstr "У палітрі зображення забагато кольорів, щоб зберегти його як GIF."
 
 #: ../src/common/imagiff.cpp:764
 msgid "IFF: error in IFF image format."
@@ -2507,9 +2507,8 @@ msgid "WebP: Decoding RGB image data failed."
 msgstr "WebP: не вдалося декодувати дані зображення RGB."
 
 #: ../src/common/imagwebp.cpp:112 ../src/common/imagwebp.cpp:197
-#, fuzzy
 msgid "WebP: Error reading data."
-msgstr "WebP: помилка під час спроби декодування анімації."
+msgstr "WebP: помилка під час читання даних."
 
 #: ../src/common/imagwebp.cpp:130
 msgid "WebP: Failed to parse container data."
@@ -2583,7 +2582,8 @@ msgstr "Не вдалося отримати область пам'яті для
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr "Не вдалося ініціалізувати розпаковування LZMA: неочікувана помилка %u."
+msgstr ""
+"Не вдалося ініціалізувати розпаковування LZMA: неочікувана помилка %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
@@ -3894,6 +3894,8 @@ msgstr "помилка під час перевірки контрольної �
 #, c-format
 msgid "Extended tar header size %zu is greater than maximum allowed."
 msgstr ""
+"Розмір розширеного заголовка tar %zu перевищує максимальне дозволене значення"
+"."
 
 #: ../src/common/tarstrm.cpp:983
 msgid "invalid data in extended tar header"
@@ -5352,9 +5354,9 @@ msgid "Page Setup"
 msgstr "Налаштування сторінки"
 
 #: ../src/gtk/utilsgtk.cpp:347 ../src/osx/carbon/utilscocoa.mm:718
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' couldn't be moved to trash: %s"
-msgstr "Не вдалося вилучити файл «%s»"
+msgstr "Не вдалося пересунути «%s» до смітника: %s"
 
 #: ../src/gtk/webview_webkit.cpp:936
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
@@ -5950,7 +5952,8 @@ msgstr "внутрішня помилка у DDEML."
 
 #: ../src/msw/dde.cpp:1183
 msgid "a request to end an advise transaction has timed out."
-msgstr "строк виконання запиту щодо завершення дії з надання поради вичерпано."
+msgstr ""
+"строк виконання запиту щодо завершення дії з надання поради вичерпано."
 
 #: ../src/msw/dde.cpp:1186
 msgid ""
@@ -6023,7 +6026,8 @@ msgstr "Оберіть інтернет провайдера"
 
 #: ../src/msw/dialup.cpp:733
 msgid "Please choose which ISP do you want to connect to"
-msgstr "Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
+msgstr ""
+"Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
 
 #: ../src/msw/dialup.cpp:766
 msgid "Failed to connect: missing username/password."
@@ -6433,7 +6437,8 @@ msgstr "Не вдалося підрахувати підключі ключа �
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr "Експорт ключа реєстру: файл «%s» вже існує, його не буде перезаписано."
+msgstr ""
+"Експорт ключа реєстру: файл «%s» вже існує, його не буде перезаписано."
 
 #: ../src/msw/registry.cpp:1411
 #, c-format
@@ -6554,7 +6559,7 @@ msgstr "Помилка виконання команди «%s»"
 #: ../src/msw/utilswin.cpp:203
 #, c-format
 msgid "'%s' couldn't be moved to trash: error 0x%08x"
-msgstr ""
+msgstr "Не вдалося пересунути «%s» до смітника: помилка 0x%08x"
 
 #: ../src/msw/volume.cpp:337
 msgid "Failed to load mpr.dll."
@@ -6578,6 +6583,7 @@ msgstr ""
 #: ../src/msw/webview_edge.cpp:1545
 msgid "PDF export requires a newer version of the WebView2 runtime."
 msgstr ""
+"Експортування до PDF потребує новішої версії середовища виконання WebView2."
 
 #: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to find web view emulation level in the registry"
@@ -7171,127 +7177,117 @@ msgid "&Tile"
 msgstr "&Мозаїка"
 
 #: ../src/ribbon/backstage.cpp:110
-#, fuzzy
 msgid "Backstage"
-msgstr "Backspace"
+msgstr "За лаштунками"
 
 #: ../src/ribbon/backstage.cpp:176 ../src/ribbon/backstagecontrols.cpp:91
 #: ../src/ribbon/bar.cpp:179 ../src/ribbon/buttonbar.cpp:1980
 #: ../src/ribbon/gallery.cpp:1320 ../src/ribbon/panel.cpp:1460
 #: ../src/ribbon/toolbar.cpp:1641
-#, fuzzy
 msgid "Press"
-msgstr "Поступ:"
+msgstr "Натискання"
 
 #: ../src/ribbon/backstagecontrols.cpp:844
-#, fuzzy
 msgid "Open"
-msgstr "Відкрити…"
+msgstr "Відкрити"
 
 #: ../src/ribbon/backstagecontrols.cpp:1469
-#, fuzzy
 msgid "Today"
-msgstr "сьогодні"
+msgstr "Сьогодні"
 
 #: ../src/ribbon/backstagecontrols.cpp:1471
-#, fuzzy
 msgid "Yesterday"
-msgstr "вчора"
+msgstr "Вчора"
 
 #: ../src/ribbon/backstagecontrols.cpp:1473
 msgid "This Week"
-msgstr ""
+msgstr "Цього тижня"
 
 #: ../src/ribbon/backstagecontrols.cpp:1475
-#, fuzzy
 msgid "Last Week"
-msgstr "Остання сторінка"
+msgstr "Минулого тижня"
 
 #: ../src/ribbon/backstagecontrols.cpp:1477
 msgid "Earlier This Month"
-msgstr ""
+msgstr "Раніше цього місяця"
 
 #: ../src/ribbon/backstagecontrols.cpp:1480
 msgid "Older"
-msgstr ""
+msgstr "Старіше"
 
 #: ../src/ribbon/backstagecontrols.cpp:1520
-#, fuzzy
 msgid "Documents"
-msgstr "Документ:"
+msgstr "Документи"
 
 #: ../src/ribbon/backstagecontrols.cpp:1522
-#, fuzzy
 msgid "Pictures"
-msgstr "&Зображення"
+msgstr "Зображення"
 
 #: ../src/ribbon/backstagecontrols.cpp:1523
 msgid "Videos"
-msgstr ""
+msgstr "Відео"
 
 #: ../src/ribbon/backstagecontrols.cpp:1524
 msgid "Music"
-msgstr ""
+msgstr "Музика"
 
 #: ../src/ribbon/backstagecontrols.cpp:1525
-#, fuzzy
 msgid "Downloads"
-msgstr "Донизу"
+msgstr "Отримання"
 
 #: ../src/ribbon/backstagecontrols.cpp:1594
 msgid "Just now"
-msgstr ""
+msgstr "Щойно"
 
 #: ../src/ribbon/backstagecontrols.cpp:1602
 #, c-format
 msgid "%d minute ago"
 msgid_plural "%d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d хвилину тому"
+msgstr[1] "%d хвилини тому"
+msgstr[2] "%d хвилин тому"
+msgstr[3] "%d хвилину тому"
 
 #: ../src/ribbon/backstagecontrols.cpp:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Yesterday at %s"
-msgstr "вчора"
+msgstr "Вчора о %s"
 
 #: ../src/ribbon/backstagecontrols.cpp:1614
 #, c-format
 msgid "%s at %s"
-msgstr ""
+msgstr "%s о %s"
 
 #. TRANSLATORS: Month (abbreviated) and day of the month (e.g., "Mar 03").
 #: ../src/ribbon/backstagecontrols.cpp:1621
 #, c-format
 msgid "%b %d"
-msgstr ""
+msgstr "%b %d"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Minimize the Ribbon"
-msgstr ""
+msgstr "Мінімізувати лінійку"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Expand the Ribbon"
-msgstr ""
+msgstr "Розгорнути лінійку"
 
 #: ../src/ribbon/gallery.cpp:1286
 msgid "More"
-msgstr ""
+msgstr "Більше"
 
 #: ../src/ribbon/page.cpp:1354 ../src/ribbon/panel.cpp:1453
 msgid "Switch"
-msgstr ""
+msgstr "Перемкнутися"
 
 #: ../src/ribbon/panel.cpp:1421
-#, fuzzy
 msgid "More options"
-msgstr "Параметри принтера"
+msgstr "Додаткові параметри"
 
 #: ../src/ribbon/panel.cpp:1422
-#, fuzzy, c-format
+#, c-format
 msgid "More %s options"
-msgstr "Параметри принтера"
+msgstr "Додаткові параметри %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -8094,9 +8090,8 @@ msgid "Replace"
 msgstr "Замінити"
 
 #: ../src/richtext/richtextctrl.cpp:5663
-#, fuzzy
 msgid "Rich Text Control"
-msgstr "wxRichTextFontPage"
+msgstr "Керування форматованим текстом"
 
 #: ../src/richtext/richtextfontpage.cpp:146
 #: ../src/richtext/richtextsymboldlg.cpp:384
@@ -9303,7 +9298,7 @@ msgstr "Не вдалося отримати список подій від kque
 #: ../src/unix/glegl.cpp:833
 #, c-format
 msgid "EGL version is %d.%d but version 1.4 or greater is required."
-msgstr ""
+msgstr "Маємо версію EGL %d.%dЛ, а потрібна версія 1.4 або новіша."
 
 #: ../src/unix/mediactrl.cpp:968
 #, c-format
@@ -9432,9 +9427,9 @@ msgstr ""
 "перезапустіть програму"
 
 #: ../src/unix/threadpsx.cpp:1348
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %zu"
-msgstr "Не вдалося встановити рівень пріоритетності нитки у значення %lu"
+msgstr "Не вдалося встановити рівень пріоритетності нитки у значення %zu"
 
 #: ../src/unix/threadpsx.cpp:1477
 #, c-format
@@ -9492,14 +9487,14 @@ msgstr "Не вдалося отримати офіційне назву вуз�
 #: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
-msgstr ""
+msgstr ", на основі %s (%s)"
 
 #. TRANSLATORS: %s is a Linux distribution parent name.
 #. TRANSLATORS: %s is an upstream codename.
 #: ../src/unix/utilsunx.cpp:1318 ../src/unix/utilsunx.cpp:1324
-#, fuzzy, c-format
+#, c-format
 msgid ", based on %s"
-msgstr "На &основі:"
+msgstr ", на основі %s"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
@@ -9563,1088 +9558,3 @@ msgstr "Не вдалося завантажити ресурси з файла 
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Не вдалося створити %s «%s»."
-
-#, c-format
-#~ msgid "Unable to close the handle for '%s'"
-#~ msgstr "Не вдалося завершити роботу обробника «%s»"
-
-#, c-format
-#~ msgid "can't remove file '%s'"
-#~ msgstr "помилка вилучення файла «%s»"
-
-#~ msgid "WebP: Allocating stream buffer failed."
-#~ msgstr "WebP: не вдалося розмістити у пам'яті буфер потоку даних."
-
-#, c-format
-#~ msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-#~ msgstr "BMP: у заголовку вказано biClrUsed=%d, а biBitCount=%d."
-
-#~ msgctxt "keyboard key"
-#~ msgid "Alt+"
-#~ msgstr "Alt+"
-
-#~ msgctxt "keyboard key"
-#~ msgid "Ctrl+"
-#~ msgstr "Ctrl+"
-
-#~ msgctxt "keyboard key"
-#~ msgid "Shift+"
-#~ msgstr "Shift+"
-
-#~ msgctxt "keyboard key"
-#~ msgid "RawCtrl+"
-#~ msgstr "RawCtrl+"
-
-#~ msgid "Copying more than one selected block to clipboard is not supported."
-#~ msgstr ""
-#~ "Підтримки копіювання декількох позначених блоків до буфера обміну даними "
-#~ "не передбачено."
-
-#~ msgid "Unsupported clipboard format."
-#~ msgstr "Непідтримуваний формат clipboard."
-
-#~ msgid "Background colour"
-#~ msgstr "Колір тла"
-
-#~ msgid "Font:"
-#~ msgstr "Шрифт:"
-
-#~ msgid "Size:"
-#~ msgstr "Розмір:"
-
-#~ msgid "The font size in points."
-#~ msgstr "Розмір шрифту у пунктах."
-
-#~ msgid "Style:"
-#~ msgstr "Стиль:"
-
-#~ msgid "Check to make the font bold."
-#~ msgstr "Позначте, щоб зробити шрифт жирним."
-
-#~ msgid "Check to make the font italic."
-#~ msgstr "Позначте, щоб зробити шрифт курсивним."
-
-#~ msgid "Check to make the font underlined."
-#~ msgstr "Позначте, щоб зробити шрифт підкресленим."
-
-#~ msgid "Colour:"
-#~ msgstr "Колір:"
-
-#~ msgid "Click to change the font colour."
-#~ msgstr "Клацніть, щоб змінити колір шрифту."
-
-#~ msgid "Shows a preview of the font."
-#~ msgstr "Показує попередній перегляд шрифту."
-
-#~ msgid "Click to cancel changes to the font."
-#~ msgstr "Клацніть, щоб скасувати зміну шрифту."
-
-#~ msgid "Click to confirm changes to the font."
-#~ msgstr "Клацніть, щоб підтвердити зміну шрифту."
-
-#~ msgid "<Any>"
-#~ msgstr "<Будь-який>"
-
-#~ msgid "<Any Roman>"
-#~ msgstr "<Будь-який романський>"
-
-#~ msgid "<Any Decorative>"
-#~ msgstr "<Будь-який декоративний>"
-
-#~ msgid "<Any Modern>"
-#~ msgstr "<Будь-який модерний>"
-
-#~ msgid "<Any Script>"
-#~ msgstr "<Будь-який для індексів>"
-
-#~ msgid "<Any Swiss>"
-#~ msgstr "<Будь-який Swiss>"
-
-#~ msgid "<Any Teletype>"
-#~ msgstr "<Будь-який машинописний>"
-
-#~ msgid "Printing "
-#~ msgstr "Друк"
-
-#~ msgid "Failed to insert text in the control."
-#~ msgstr "Не вдалося додати текст до контрола."
-
-#~ msgid "Please choose a valid font."
-#~ msgstr "Будь ласка, виберіть коректний шрифт."
-
-#, c-format
-#~ msgid "Failed to display HTML document in %s encoding"
-#~ msgstr "Не вдалося показати документ HTML у кодуванні %s"
-
-#, c-format
-#~ msgid "wxWidgets could not open display for '%s': exiting."
-#~ msgstr "wxWidgets не зміг відкрити дисплей для «%s»: виходжу."
-
-#~ msgid "Filter"
-#~ msgstr "Фільтр"
-
-#~ msgid "Directories"
-#~ msgstr "Теки"
-
-#~ msgid "Files"
-#~ msgstr "Файли"
-
-#~ msgid "Selection"
-#~ msgstr "Позначене"
-
-#~ msgid "conversion to 8-bit encoding failed"
-#~ msgstr "перетворення у 8-бітове кодування зазнало невдачі"
-
-#, fuzzy
-#~ msgid "failed to retrieve execution result"
-#~ msgstr "Не вдалося прочитати повідомлення про помилку RAS"
-
-#~ msgid "&Save as"
-#~ msgstr "З&берегти як"
-
-#~ msgid "'%s' doesn't consist only of valid characters"
-#~ msgstr "«%s» містить некоректні символи"
-
-#~ msgid "'%s' should be numeric."
-#~ msgstr "«%s» повинно бути числом."
-
-#~ msgid "'%s' should only contain ASCII characters."
-#~ msgstr "«%s» має містити тільки символи ASCII."
-
-#~ msgid "'%s' should only contain alphabetic characters."
-#~ msgstr "«%s» має містити тільки символи алфавіту."
-
-#~ msgid "'%s' should only contain alphabetic or numeric characters."
-#~ msgstr "«%s» має містити тільки символи алфавіту або цифри."
-
-#~ msgid "'%s' should only contain digits."
-#~ msgstr "«%s» має містити лише цифри."
-
-#~ msgid "Can't create window of class %s"
-#~ msgstr "Не вдалося створити вікно класу %s"
-
-#~ msgid "Couldn't create the overlay window"
-#~ msgstr "Не вдалося створити вікно оверлею"
-
-#~ msgid "Couldn't init the context on the overlay window"
-#~ msgstr "Не вдалося ініціювати контекст вікна оверлею"
-
-#~ msgid "Failed to convert file \"%s\" to Unicode."
-#~ msgstr "Не вдалося перетворити вміст файла «%s» на Unicode."
-
-#~ msgid "Failed to set text in the text control."
-#~ msgstr "Не вдалося встановити текст у контрол тексту."
-
-#~ msgid "Invalid GTK+ command line option, use \"%s --help\""
-#~ msgstr ""
-#~ "Некоректний параметр командного рядка GTK+, скористайтеся командою «%s --"
-#~ "help»"
-
-#~ msgid "No unused colour in image."
-#~ msgstr "У зображенні немає невикористаного кольору."
-
-#~ msgid "Not available"
-#~ msgstr "Недоступний"
-
-#~ msgid "Replace selection"
-#~ msgstr "Замінити позначене"
-
-#~ msgid "Save as"
-#~ msgstr "Зберегти як"
-
-#~ msgid "Style Organiser"
-#~ msgstr "Записник стилів"
-
-#~ msgid "The following standard GTK+ options are also supported:\n"
-#~ msgstr "Крім того, підтримуються такі стандартні параметри GTK+:\n"
-
-#~ msgid "You cannot Clear an overlay that is not inited"
-#~ msgstr "Ви не можете спорожнити оверлей, який не ініційовано"
-
-#~ msgid "You cannot Init an overlay twice"
-#~ msgstr "Ви не можете двічі викликати Init для оверлеїв"
-
-#~ msgid "locale '%s' cannot be set."
-#~ msgstr "локаль «%s» не може бути встановлена."
-
-#~ msgid "Adding flavor TEXT failed"
-#~ msgstr "Спроба додавання варіанта TEXT зазнала невдачі"
-
-#~ msgid "Adding flavor utxt failed"
-#~ msgstr "Спроба додавання варіанта utxt зазнала невдачі"
-
-#~ msgid "Bitmap renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Інструменту обробки растру не вдалося обробити значення; тип значення: "
-
-#~ msgid ""
-#~ "Cannot create new column's ID. Probably max. number of columns reached."
-#~ msgstr ""
-#~ "Не вдалося створити ідентифікатор нового стовпчика. Ймовірно, перевищено "
-#~ "значення максимальної кількості стовпчиків."
-
-#~ msgid "Column could not be added."
-#~ msgstr "Не вдалося додати стовпчик."
-
-#~ msgid "Column index not found."
-#~ msgstr "Не знайдено стовпчика з відповідним номером."
-
-#~ msgid "Column width could not be determined"
-#~ msgstr "Не вдалося визначити ширину стовпчика"
-
-#~ msgid "Column width could not be set."
-#~ msgstr "Не вдалося встановити ширину стовпчика."
-
-#~ msgid "Confirm registry update"
-#~ msgstr "Підтвердити запис реєстру"
-
-#~ msgid "Could not determine column index."
-#~ msgstr "Не вдалося визначити номер стовпчика."
-
-#~ msgid "Could not determine column's position"
-#~ msgstr "Не вдалося визначити позицію стовпчика"
-
-#~ msgid "Could not determine number of columns."
-#~ msgstr "Не вдалося визначити кількість стовпчиків."
-
-#~ msgid "Could not determine number of items"
-#~ msgstr "Не вдалося визначити кількість пунктів"
-
-#~ msgid "Could not get header description."
-#~ msgstr "Не вдалося отримати опис заголовка."
-
-#~ msgid "Could not get items."
-#~ msgstr "Не вдалося отримати пункти."
-
-#~ msgid "Could not get property flags."
-#~ msgstr "Не вдалося отримати прапорці властивості."
-
-#~ msgid "Could not get selected items."
-#~ msgstr "Не вдалося отримати позначені пункти."
-
-#~ msgid "Could not remove column."
-#~ msgstr "Не вдалося вилучити стовпчик."
-
-#~ msgid "Could not retrieve number of items"
-#~ msgstr "Не вдалося отримати кількість пунктів"
-
-#~ msgid "Could not set column width."
-#~ msgstr "Не вдалося встановити ширину стовпчика."
-
-#~ msgid "Could not set header description."
-#~ msgstr "Не вдалося встановити опис заголовка."
-
-#~ msgid "Could not set icon."
-#~ msgstr "Не вдалося встановити піктограму."
-
-#~ msgid "Could not set maximum width."
-#~ msgstr "Не вдалося встановити максимальну ширину."
-
-#~ msgid "Could not set minimum width."
-#~ msgstr "Не вдалося встановити мінімальну ширину."
-
-#~ msgid "Could not set property flags."
-#~ msgstr "Не вдалося встановити прапорці властивості."
-
-#~ msgid "Data object has invalid data format"
-#~ msgstr "Дані об’єкта даних мають некоректний формат"
-
-#~ msgid "Date renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Інструменту обробки даних не вдалося обробити значення; тип значення: "
-
-#~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension "
-#~ "\"%s\" ?\n"
-#~ "Current value is \n"
-#~ "%s, \n"
-#~ "New value is \n"
-#~ "%s %1"
-#~ msgstr ""
-#~ "Ви бажаєте перезаписати команду використану для %s файлів з суфіксом "
-#~ "назви «%s»?\n"
-#~ "Поточне значення \n"
-#~ "%s, \n"
-#~ "Нове значення \n"
-#~ "%s %1"
-
-#~ msgid "Failed to retrieve data from the clipboard."
-#~ msgstr "Не вдалося прочитати дані з clipboard."
-
-#~ msgid "GIF: Invalid gif index."
-#~ msgstr "GIF: Помилковий індекс gif."
-
-#~ msgid "GIF: unknown error!!!"
-#~ msgstr "GIF: невідома помилка!!!"
-
-#~ msgid "Icon & text renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Інструменту обробки піктограм і тексту не вдалося обробити значення; тип "
-#~ "значення: "
-
-#~ msgid "New directory"
-#~ msgstr "Створити теку"
-
-#~ msgid "Next"
-#~ msgstr "Далі"
-
-#~ msgid "No column existing."
-#~ msgstr "Не знайдено стовпчика."
-
-#~ msgid "No column for the specified column existing."
-#~ msgstr "Для вказаного номера не існує відповідного стовпчика."
-
-#~ msgid "No column for the specified column position existing."
-#~ msgstr "Для вказаної позиції не існує відповідного стовпчика."
-
-#~ msgid ""
-#~ "No renderer or invalid renderer type specified for custom data column."
-#~ msgstr ""
-#~ "Для стовпчика нетипових даних не вказано інструменту обробки або вказано "
-#~ "помилковий інструмент."
-
-#~ msgid "No renderer specified for column."
-#~ msgstr "Для стовпчика не вказано інструменту обробки."
-
-#~ msgid "Number of columns could not be determined."
-#~ msgstr "Не вдалося визначити кількість стовпчиків."
-
-#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
-#~ msgstr "Помилка у функції OpenGL «%s»: %s (помилка %d)"
-
-#~ msgid ""
-#~ "Please install a newer version of comctl32.dll\n"
-#~ "(at least version 4.70 is required but you have %d.%02d)\n"
-#~ "or this program won't operate correctly."
-#~ msgstr ""
-#~ "Будь ласка, встановіть новішу версію comctl32.dll\n"
-#~ "(потрібна принаймні версія 4.70, а ви маєте лише %d.%02d),\n"
-#~ "інакше ця програма працюватиме некоректно."
-
-#~ msgid "Pointer to data view control not set correctly."
-#~ msgstr ""
-#~ "Встановлено помилкове значення вказівника на інструмент керування "
-#~ "переглядом даних."
-
-#~ msgid "Pointer to model not set correctly."
-#~ msgstr "Встановлено помилкове значення вказівника на модель."
-
-#~ msgid "Progress renderer cannot render value type; value type: "
-#~ msgstr ""
-#~ "Інструменту обробки поступу не вдалося обробити тип значення; тип "
-#~ "значення: "
-
-#~ msgid "Rendering failed."
-#~ msgstr "Спроба показу зазнала невдачі."
-
-#~ msgid ""
-#~ "Setting directory access times is not supported under this OS version"
-#~ msgstr ""
-#~ "У цій версії операційної системи не передбачено встановлення часу доступу "
-#~ "до каталогів"
-
-#~ msgid "Show hidden directories"
-#~ msgstr "Показати приховані теки"
-
-#~ msgid "Text renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Інструменту обробки тексту не вдалося обробити значення; тип значення: "
-
-#~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr ""
-#~ "Для вказаного номера стовпчика не передбачено стовпчика або інструменту "
-#~ "обробки."
-
-#~ msgid ""
-#~ "This system doesn't support date controls, please upgrade your version of "
-#~ "comctl32.dll"
-#~ msgstr ""
-#~ "Ця система не підтримує елементи визначення дати, будь ласка, оновіть "
-#~ "вашу версію comctl32.dll"
-
-#~ msgid "Toggle renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Інструменту обробки перемикання не вдалося обробити значення; тип "
-#~ "значення: "
-
-#~ msgid "Too many colours in PNG, the image may be slightly blurred."
-#~ msgstr "Забагато кольорів у PNG, картинка може бути трохи змазаною."
-
-#~ msgid "Unable to handle native drag&drop data"
-#~ msgstr "Не вдалося обробити власні дані перетягування зі скиданням"
-
-#~ msgid "Unable to initialize Hildon program"
-#~ msgstr "Не вдалося ініціалізувати програму Hildon"
-
-#~ msgid "Unknown data format"
-#~ msgstr "Невідомий формат даних"
-
-#~ msgid "Valid pointer to native data view control does not exist"
-#~ msgstr ""
-#~ "Не існує коректного вказівника на типовий інструмент керування переглядом"
-
-#~ msgid "Win32s on Windows 3.1"
-#~ msgstr "Win32s на Windows 3.1"
-
-#, fuzzy
-#~ msgid "Windows 10"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 7"
-#~ msgstr "Windows 7"
-
-#~ msgid "Windows 8"
-#~ msgstr "Windows 8"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows CE (%d.%d)"
-#~ msgstr "Windows CE (%d.%d)"
-
-#~ msgid "Windows ME"
-#~ msgstr "Windows ME"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#, fuzzy
-#~ msgid "Windows Server 10"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows Vista"
-#~ msgstr "Windows Vista"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
-
-#~ msgid "can't execute '%s'"
-#~ msgstr "неможливо виконати «%s»"
-
-#~ msgid "error opening '%s'"
-#~ msgstr "помилка під час відкриття «%s»"
-
-#~ msgid "unknown seek origin"
-#~ msgstr "невідомий відлік пошуку"
-
-#~ msgid "wxWidget control pointer is not a data view pointer"
-#~ msgstr ""
-#~ "Вказівник елемента керування wxWidget не є вказівником перегляду даних"
-
-#~ msgid "wxWidget's control not initialized."
-#~ msgstr "Керування wxWidget не ініціалізовано."
-
-#~ msgid "ADD"
-#~ msgstr "ДОДАТИ"
-
-#~ msgid "BACK"
-#~ msgstr "НАЗАД"
-
-#~ msgid "CANCEL"
-#~ msgstr "СКАСУВАТИ"
-
-#~ msgid "CAPITAL"
-#~ msgstr "ПРОПИСНА"
-
-#~ msgid "CLEAR"
-#~ msgstr "ОЧИСТИТИ"
-
-#~ msgid "COMMAND"
-#~ msgstr "КОМАНДА"
-
-#~ msgid "Cannot create mutex."
-#~ msgstr "Не вдалося створити синхронізацію."
-
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "Не вдалося відновити нитку %lu"
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "Не вдалося призупинити нитку %lu"
-
-#~ msgid "Couldn't acquire a mutex lock"
-#~ msgstr "Не вдалося опитати замок семафора"
-
-#~ msgid "Couldn't get hatch style from wxBrush."
-#~ msgstr "Не вдалося отримати стиль штриха з wxBrush."
-
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "Не вдалося звільнити семафор"
-
-#~ msgid "DECIMAL"
-#~ msgstr "ДЕСЯТКОВИЙ"
-
-#~ msgid "DEL"
-#~ msgstr "DEL"
-
-#~ msgid "DELETE"
-#~ msgstr "ВИЛУЧИТИ"
-
-#~ msgid "DIVIDE"
-#~ msgstr "DIVIDE"
-
-#~ msgid "DOWN"
-#~ msgstr "ВНИЗ"
-
-#~ msgid "END"
-#~ msgstr "КІНЕЦЬ"
-
-#~ msgid "ENTER"
-#~ msgstr "ENTER"
-
-#~ msgid "ESC"
-#~ msgstr "ESC"
-
-#~ msgid "ESCAPE"
-#~ msgstr "ESCAPE"
-
-#~ msgid "EXECUTE"
-#~ msgstr "ВИКОНАТИ"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "Виконання команди «%s» закінчилося з помилкою: %ul"
-
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "Файл «%s» вже присутній.\n"
-#~ "Ви справді хочете його переписати?"
-
-#~ msgid "HELP"
-#~ msgstr "ДОПОМОГА"
-
-#~ msgid "HOME"
-#~ msgstr "HOME"
-
-#~ msgid "INS"
-#~ msgstr "ВСТ"
-
-#~ msgid "INSERT"
-#~ msgstr "ВСТАВИТИ"
-
-#~ msgid "KP_BEGIN"
-#~ msgstr "KP_BEGIN"
-
-#~ msgid "KP_DECIMAL"
-#~ msgstr "KP_DECIMAL"
-
-#~ msgid "KP_DELETE"
-#~ msgstr "KP_DELETE"
-
-#~ msgid "KP_DIVIDE"
-#~ msgstr "KP_DIVIDE"
-
-#~ msgid "KP_DOWN"
-#~ msgstr "KP_DOWN"
-
-#~ msgid "KP_ENTER"
-#~ msgstr "KP_ENTER"
-
-#~ msgid "KP_EQUAL"
-#~ msgstr "KP_EQUAL"
-
-#~ msgid "KP_HOME"
-#~ msgstr "KP_HOME"
-
-#~ msgid "KP_INSERT"
-#~ msgstr "KP_INSERT"
-
-#~ msgid "KP_LEFT"
-#~ msgstr "KP_LEFT"
-
-#~ msgid "KP_MULTIPLY"
-#~ msgstr "KP_MULTIPLY"
-
-#~ msgid "KP_NEXT"
-#~ msgstr "KP_NEXT"
-
-#~ msgid "KP_PAGEDOWN"
-#~ msgstr "KP_PAGEDOWN"
-
-#~ msgid "KP_PAGEUP"
-#~ msgstr "KP_PAGEUP"
-
-#~ msgid "KP_PRIOR"
-#~ msgstr "KP_PRIOR"
-
-#~ msgid "KP_RIGHT"
-#~ msgstr "KP_RIGHT"
-
-#~ msgid "KP_SEPARATOR"
-#~ msgstr "KP_SEPARATOR"
-
-#~ msgid "KP_SPACE"
-#~ msgstr "KP_SPACE"
-
-#~ msgid "KP_SUBTRACT"
-#~ msgstr "KP_SUBTRACT"
-
-#~ msgid "LEFT"
-#~ msgstr "LEFT"
-
-#~ msgid "MENU"
-#~ msgstr "MENU"
-
-#~ msgid "NUM_LOCK"
-#~ msgstr "NUM_LOCK"
-
-#~ msgid "PAGEDOWN"
-#~ msgstr "PAGEDOWN"
-
-#~ msgid "PAGEUP"
-#~ msgstr "PAGEUP"
-
-#~ msgid "PAUSE"
-#~ msgstr "PAUSE"
-
-#~ msgid "PGDN"
-#~ msgstr "PGDN"
-
-#~ msgid "PGUP"
-#~ msgstr "PGUP"
-
-#~ msgid "PRINT"
-#~ msgstr "ДРУК"
-
-#~ msgid "RETURN"
-#~ msgstr "RETURN"
-
-#~ msgid "RIGHT"
-#~ msgstr "RIGHT"
-
-#~ msgid "SCROLL_LOCK"
-#~ msgstr "SCROLL_LOCK"
-
-#~ msgid "SELECT"
-#~ msgstr "SELECT"
-
-#~ msgid "SEPARATOR"
-#~ msgstr "SEPARATOR"
-
-#~ msgid "SNAPSHOT"
-#~ msgstr "SNAPSHOT"
-
-#~ msgid "SPACE"
-#~ msgstr "ПРОБІЛ"
-
-#~ msgid "SUBTRACT"
-#~ msgstr "МІНУС"
-
-#~ msgid "TAB"
-#~ msgstr "TAB"
-
-#~ msgid "The print dialog returned an error."
-#~ msgstr "Діалоговим вікном друку повернуто повідомлення про помилку."
-
-#~ msgid "The wxGtkPrinterDC cannot be used."
-#~ msgstr "Не вдалося використати wxGtkPrinterDC."
-
-#~ msgid "Timer creation failed."
-#~ msgstr "Помилка створення таймера."
-
-#~ msgid "UP"
-#~ msgstr "ВГОРУ"
-
-#~ msgid "WINDOWS_LEFT"
-#~ msgstr "WINDOWS_LEFT"
-
-#~ msgid "WINDOWS_MENU"
-#~ msgstr "WINDOWS_MENU"
-
-#~ msgid "WINDOWS_RIGHT"
-#~ msgstr "WINDOWS_RIGHT"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "буфер замалий для теки Windows."
-
-#~ msgid "not implemented"
-#~ msgstr "не реалізовано"
-
-#~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
-#~ msgstr "wxPrintout::GetPageInfo надано значення null для maxPage."
-
-#~ msgid "Event queue overflowed"
-#~ msgstr "Чергу подій переповнено"
-
-#~ msgid "percent"
-#~ msgstr "відсоток"
-
-#~ msgid "Print preview"
-#~ msgstr "Попередній перегляд друку"
-
-#~ msgid "'"
-#~ msgstr "'"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "7"
-#~ msgstr "7"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "9"
-#~ msgstr "9"
-
-#~ msgid "Can't monitor non-existent path \"%s\" for changes."
-#~ msgstr ""
-#~ "Спостереження за змінами у каталозі «%s», якого не існує, неможливе."
-
-#~ msgid "File system containing watched object was unmounted"
-#~ msgstr ""
-#~ "Файлову систему, на якій зберігається об’єкт спостереження, було "
-#~ "демонтовано"
-
-#~ msgid "&Preview..."
-#~ msgstr "П&ереглянути…"
-
-#~ msgid "Preview..."
-#~ msgstr "Перегляд…"
-
-#~ msgid "The vertical offset relative to the paragraph."
-#~ msgstr "Вертикальний відступ відносно абзацу."
-
-#~ msgid "Units for the object offset."
-#~ msgstr "Одиниці виміру відступу об’єкта."
-
-#~ msgid "&Save..."
-#~ msgstr "&Зберегти…"
-
-#~ msgid "About "
-#~ msgstr "Про програму "
-
-#~ msgid "All files (*.*)|*"
-#~ msgstr "Всі файли (*.*)|*"
-
-#~ msgid "Cannot initialize SciTech MGL!"
-#~ msgstr "Не вдалося ініціювати SciTech MGL!"
-
-#~ msgid "Cannot initialize display."
-#~ msgstr "Не вдалося ініціювати дисплей."
-
-#~ msgid "Cannot start thread: error writing TLS"
-#~ msgstr "Не вдалося стартувати нитку: помилка запису TLS"
-
-#~ msgid "Close\tAlt-F4"
-#~ msgstr "Закрити\tAlt-F4"
-
-#~ msgid "Couldn't create cursor."
-#~ msgstr "Не вдалося створити курсор"
-
-#~ msgid "Directory '%s' doesn't exist!"
-#~ msgstr "Каталог «%s» не існує!"
-
-#~ msgid "Mode %ix%i-%i not available."
-#~ msgstr "Режим %ix%i-%i не працює."
-
-#~ msgid "Paper Size"
-#~ msgstr "Розмір паперу"
-
-#~ msgid "%.*f GB"
-#~ msgstr "%.*f ГБ"
-
-#~ msgid "%.*f MB"
-#~ msgstr "%.*f МБ"
-
-#~ msgid "%.*f TB"
-#~ msgstr "%.*f ТБ"
-
-#~ msgid "%.*f kB"
-#~ msgstr "%.*f КБ"
-
-#~ msgid "%s B"
-#~ msgstr "%s Б"
-
-#~ msgid "&Goto..."
-#~ msgstr "Перейти..."
-
-#~ msgid "<<"
-#~ msgstr "<<"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid ">>|"
-#~ msgstr ">>|"
-
-#~ msgid "Added item is invalid."
-#~ msgstr "Доданий пункт є некоректним."
-
-#~ msgid "Archive doesnt contain #SYSTEM file"
-#~ msgstr "Архів не містить файла #SYSTEM"
-
-#~ msgid "BIG5"
-#~ msgstr "BIG5"
-
-#~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr "Не можу перевірити формат зображення файла «%s»: файла не існує."
-
-#~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr "Не можу завантажити зображення з файла «%s»: файла не існує."
-
-#~ msgid "Cannot convert dialog units: dialog unknown."
-#~ msgstr "Не можу перетворити одиниці діалогу: невідомий діалог"
-
-#~ msgid "Cannot convert from the charset '%s'!"
-#~ msgstr "Не вдалося перетворити з кодування «%s»!"
-
-#~ msgid "Cannot find container for unknown control '%s'."
-#~ msgstr "Не вдалося знайти контейнер для невідомого контрола «%s»."
-
-#~ msgid "Cannot find font node '%s'."
-#~ msgstr "Не вдалося знайти вузол шрифту «%s»."
-
-#~ msgid "Cannot open file '%s'."
-#~ msgstr "Не вдалося відкрити файл «%s»."
-
-#~ msgid "Cannot parse coordinates from '%s'."
-#~ msgstr "Не вдалося обробити координати з %s"
-
-#~ msgid "Cannot parse dimension from '%s'."
-#~ msgstr "Не вдалося обробити розміри з «%s»"
-
-#~ msgid "Cant create the thread event queue"
-#~ msgstr "Не вдалося створити чергу подій нитки"
-
-#~ msgid "Changed item is invalid."
-#~ msgstr "Змінений пункт є некоректним."
-
-#~ msgid "Click to cancel this window."
-#~ msgstr "Клацніть, щоб закрити це вікно."
-
-#~ msgid "Click to confirm your selection."
-#~ msgstr "Клацніть, щоб підтвердити ваш вибір."
-
-#~ msgid "Column does not have a renderer."
-#~ msgstr "Не визначено обробника для стовпчика."
-
-#~ msgid "Column pointer must not be NULL."
-#~ msgstr "Вказівник стовпчика не повинен дорівнювати NULL."
-
-#~ msgid "Column's model column has no equivalent in the associated model."
-#~ msgstr "Не вдалося виявити еквівалент моделі стовпчика у пов’язаній моделі."
-
-#~ msgid "Control is wrongly initialized."
-#~ msgstr "Помилкова ініціалізація інструменту керування."
-
-#~ msgid "Could not add column to internal structures."
-#~ msgstr "Не вдалося додати стовпчик до вбудованих структур."
-
-#~ msgid "Could not unlock mutex"
-#~ msgstr "Не вдалося відімкнути семафор"
-
-#~ msgid "Data view control is not correctly initialized"
-#~ msgstr "Інструмент керування переглядом даних ініціалізовано з помилкою"
-
-#~ msgid "Error while waiting on semaphore"
-#~ msgstr "Помилка під час очікування семафору"
-
-#~ msgid "Failed to create a status bar."
-#~ msgstr "Помилка створення рядка стану."
-
-#~ msgid "Failed to register OpenGL window class."
-#~ msgstr "Не вдалося зареєструвати клас вікон OpenGL."
-
-#~ msgid "Fatal error: "
-#~ msgstr "Критична помилка: "
-
-#~ msgid "GB-2312"
-#~ msgstr "GB-2312"
-
-#~ msgid "Go forward to the next HTML page"
-#~ msgstr "Перейти до наступної сторінки HTML"
-
-#~ msgid "Goto Page"
-#~ msgstr "Іти на сторінку"
-
-#~ msgid ""
-#~ "HTML pagination algorithm generated more than the allowed maximum number "
-#~ "of pages and it can't continue any longer!"
-#~ msgstr ""
-#~ "Алгоритм розбиття на сторінки HTML виробив кількість сторінок, більшу за "
-#~ "максимальну дозволену, він не може продовжувати далі!"
-
-#~ msgid "Help : %s"
-#~ msgstr "Довідка: %s"
-
-#~ msgid "I64"
-#~ msgstr "I64"
-
-#~ msgid "Internal error, illegal wxCustomTypeInfo"
-#~ msgstr "Внутрішня помилка, некоректна wxCustomTypeInfo"
-
-#~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-#~ msgstr "Неправильний ресурс XRC «%s»: немає коріння дерева 'ресурсу'."
-
-#~ msgid "No handler found for XML node '%s', class '%s'!"
-#~ msgstr "Не знайдено обробника на XML листок «%s», клас «%s»!"
-
-#~ msgid "No image handler for type %ld defined."
-#~ msgstr "Не визначено обробника для типу картинок %ld."
-
-#~ msgid "No model associated with control."
-#~ msgstr "З цим елементом керування не пов’язано моделі."
-
-#~ msgid "Owner not initialized."
-#~ msgstr "Не вдалося ініціювати власника."
-
-#~ msgid "Passed item is invalid."
-#~ msgstr "Переданий пункт є некоректним."
-
-#~ msgid "Passing a already registered object to SetObjectName"
-#~ msgstr "Передача вже зареєстрованого об'єкта до SetObjectName"
-
-#~ msgid "Preparing help window..."
-#~ msgstr "Підготовка вікна довідки..."
-
-#~ msgid "Program aborted."
-#~ msgstr "Програму зупинено."
-
-#~ msgid "Referenced object node with ref=\"%s\" not found!"
-#~ msgstr "Загаданий об'єкт листку з згадкою=«%s» не знайдений!"
-
-#~ msgid "Resource files must have same version number!"
-#~ msgstr "Файли ресурсів повинні мати однаковий номер версії!"
-
-#~ msgid "SHIFT-JIS"
-#~ msgstr "SHIFT-JIS"
-
-#~ msgid "Search!"
-#~ msgstr "Пошук!"
-
-#~ msgid "Sorry, could not open this file for saving."
-#~ msgstr "Цей файл не може бути відкритий для запису."
-
-#~ msgid "Sorry, could not save this file."
-#~ msgstr "Не вдалося записати цей файл."
-
-#~ msgid "Sorry, print preview needs a printer to be installed."
-#~ msgstr "Вибачте, для перегляду друку має бути встановлено друкарку."
-
-#~ msgid "Status: "
-#~ msgstr "Статус: "
-
-#~ msgid ""
-#~ "Streaming delegates for not already streamed objects not yet supported"
-#~ msgstr ""
-#~ "Streaming delegates для об'єктів, що ще не в потоці, ще не підтримується"
-
-#~ msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-#~ msgstr "Підклас «%s» не знайдений для ресурсу «%s», не успадковується!"
-
-#~ msgid "TIFF library error."
-#~ msgstr "Помилка бібліотеки TIFF."
-
-#~ msgid "TIFF library warning."
-#~ msgstr "Попередження бібліотеки TIFF."
-
-#~ msgid ""
-#~ "The file '%s' couldn't be opened.\n"
-#~ "It has been removed from the most recently used files list."
-#~ msgstr ""
-#~ "Файл «%s» неможливо відкрити.\n"
-#~ "Його було вилучено зі списку файлів, що нещодавно використовувалися."
-
-#~ msgid "The path '%s' contains too many \"..\"!"
-#~ msgstr "Шлях «%s» має забагато «..»!"
-
-#~ msgid "Trying to solve a NULL hostname: giving up"
-#~ msgstr "Спроба встановити назву вузла NULL: скасування"
-
-#~ msgid "Unknown style flag "
-#~ msgstr "Невідомий стиль прапорця "
-
-#~ msgid "Warning"
-#~ msgstr "Попередження"
-
-#~ msgid "Windows 2000 (build %lu"
-#~ msgstr "Windows 2000 (build %lu"
-
-#~ msgid "XRC resource '%s' (class '%s') not found!"
-#~ msgstr "Не знайдено XRC ресурсу «%s» (клас «%s»)!"
-
-#~ msgid "XRC resource: Cannot create animation from '%s'."
-#~ msgstr "Ресурс XRC: Не вдалося створити анімацію з «%s»."
-
-#~ msgid "XRC resource: Cannot create bitmap from '%s'."
-#~ msgstr "XRC ресурс: Не можу створити bitmap з «%s»"
-
-#~ msgid ""
-#~ "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
-#~ msgstr "XRC-ресурс: неправильно заданий колір «%s» для атрибута «%s»."
-
-#~ msgid "[EMPTY]"
-#~ msgstr "[ПУСТО]"
-
-#~ msgid "catalog file for domain '%s' not found."
-#~ msgstr "файл каталогу для домену «%s» не знайдений."
-
-#~ msgid "delegate has no type info"
-#~ msgstr "delegate не містить інформації про тип"
-
-#~ msgid "looking for catalog '%s' in path '%s'."
-#~ msgstr "Пошук каталогу «%s» у шляху «%s»."
-
-#~ msgid "m_peer is not or incorrectly initialized"
-#~ msgstr "m_peer не ініціалізовано або ініціалізовано з помилкою"
-
-#~ msgid "wxSearchEngine::LookFor must be called before scanning!"
-#~ msgstr "wxSearchEngine::LookFor слід викликати до сканування!"
-
-#~ msgid "wxSocket: invalid signature in ReadMsg."
-#~ msgstr "wxSocket: недійсний підпис в ReadMsg."
-
-#~ msgid "wxSocket: unknown event!."
-#~ msgstr "wxSocket: невідома подія!"
-
-#~ msgid "|<<"
-#~ msgstr "|<<"
