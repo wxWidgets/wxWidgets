@@ -1443,6 +1443,16 @@ public:
     virtual int GetScrollThumb( int orient ) const = 0;
     virtual int GetScrollRange( int orient ) const = 0;
 
+        // get the view start in pixels
+    virtual void GetViewStartPixels(int* x, int* y) const
+    {
+        if ( x )
+            *x = 0;
+        if ( y )
+            *y = 0;
+    }
+    virtual wxPoint GetViewStartPixels() const { return wxPoint(); }
+
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = nullptr ) = 0;
