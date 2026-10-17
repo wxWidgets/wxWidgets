@@ -3022,11 +3022,46 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         return true;
     }
 
+    // GetTicks() returns -1 for the dates which can't be represented as
+    // time_t, i.e. those before 1970 or, if time_t is 32 bits, after 2038, and
+    // passing this value to utime() would silently set the wrong time.
+    time_t tAccess = 0,
+           tMod = 0;
+
+    bool allTimesAreValid = true;
+    if ( dtAccess )
+    {
+        tAccess = dtAccess->GetTicks();
+        if ( tAccess == (time_t)-1 )
+        {
+            wxLogError(_("Access time %s is out of range."),
+                       dtAccess->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
+    if ( dtMod )
+    {
+        tMod = dtMod->GetTicks();
+        if ( tMod == (time_t)-1 )
+        {
+            wxLogError(_("Modification time %s is out of range."),
+                       dtMod->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
+    if ( !allTimesAreValid )
+    {
+        wxLogError(_("Failed to modify file times for '%s'"), GetFullPath());
+        return false;
+    }
+
     // if dtAccess or dtMod is not specified, use the other one (which must be
     // non null because of the test above) for both times
     utimbuf utm;
-    utm.actime = dtAccess ? dtAccess->GetTicks() : dtMod->GetTicks();
-    utm.modtime = dtMod ? dtMod->GetTicks() : dtAccess->GetTicks();
+    utm.actime = dtAccess ? tAccess : tMod;
+    utm.modtime = dtMod ? tMod : tAccess;
     if ( utime(GetFullPath().fn_str(), &utm) == 0 )
     {
         return true;
