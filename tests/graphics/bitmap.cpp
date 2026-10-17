@@ -13,11 +13,11 @@
 #include "testprec.h"
 
 #include "wx/bitmap.h"
+#include "wx/dcmemory.h"
 
 #ifdef wxHAS_RAW_BITMAP
 
 #include "wx/rawbmp.h"
-#include "wx/dcmemory.h"
 #include "wx/dcsvg.h"
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
@@ -2091,4 +2091,17 @@ TEST_CASE("wxBitmap::ResourceExhaustion", "[.]")
 
     wxBitmap bmp2x2 = bmp2;
     bmp2x2.SetScaleFactor(2);
+}
+
+TEST_CASE("wxDC::Blit", "[dc]")
+{
+    SECTION("allow !source when appropriate")
+    {
+        wxBitmap bmp(8, 8);
+        wxMemoryDC dc(bmp);
+        CHECK( dc.Blit(0, 0, 8, 8, nullptr, 0, 0, wxCLEAR) );
+        CHECK( dc.Blit(0, 0, 8, 8, nullptr, 0, 0, wxINVERT) );
+        CHECK( dc.Blit(0, 0, 8, 8, nullptr, 0, 0, wxNO_OP) );
+        CHECK( dc.Blit(0, 0, 8, 8, nullptr, 0, 0, wxSET) );
+    }
 }
