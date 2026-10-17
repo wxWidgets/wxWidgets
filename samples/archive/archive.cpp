@@ -301,8 +301,10 @@ int ArchiveApp::DoExtract()
             if (!entry)
                 break;
 
-            wxPrintf("Extracting: %s...\n", entry->GetName());
-            wxTempFileOutputStream outputFileStream(entry->GetName());
+            const wxString& entryName = entry->GetName();
+
+            wxPrintf("Extracting: %s...\n", entryName);
+            wxTempFileOutputStream outputFileStream(entryName);
             if (!CopyStreamData(*archiveStream, outputFileStream, entry->GetSize()))
                 return 1;
             outputFileStream.Commit();
