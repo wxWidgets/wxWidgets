@@ -621,6 +621,46 @@ TEST_CASE("wxFileName::MakeValidName", "[filename]")
     }
 }
 
+TEST_CASE("wxFileName::MakeSafeRelativePath", "[filename]")
+{
+    SECTION("DOS")
+    {
+        const wxPathFormat f = wxPATH_DOS;
+
+        CHECK( wxFileName::MakeSafeRelativePath("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\file", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/sub/file", f) == "dir\\sub\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\dir\\\\file\\", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath(".\\dir\\.\\file", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("c:\\dir\\file", f) == "c_\\dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\\\server\\share\\file", f) == "server\\share\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\\\?\\c:\\file", f) == "_\\c_\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("nul\\aux.txt", f) == "_nul\\_aux.txt" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir.\\...\\file? ", f) == "dir\\___\\file_" );
+
+        CHECK( wxFileName::MakeSafeRelativePath("..\\evil.txt", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/../file", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\..", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\/.\\", f) == "" );
+    }
+
+    SECTION("Unix")
+    {
+        const wxPathFormat f = wxPATH_UNIX;
+
+        CHECK( wxFileName::MakeSafeRelativePath("dir/file", f) == "dir/file" );
+        CHECK( wxFileName::MakeSafeRelativePath("/etc/passwd", f) == "etc/passwd" );
+        CHECK( wxFileName::MakeSafeRelativePath("./dir//file/", f) == "dir/file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\..\\file", f) == "dir\\..\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/.../file", f) == "dir/.../file" );
+
+        CHECK( wxFileName::MakeSafeRelativePath("../evil", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/../../evil", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("/", f) == "" );
+    }
+}
+
 #ifdef __WINDOWS__
 
 TEST_CASE("wxFileName::ShortLongPath", "[filename]")

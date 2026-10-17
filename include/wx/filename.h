@@ -487,6 +487,13 @@ public:
     static wxString MakeValidName(const wxString& name,
                                   wxPathFormat format = wxPATH_NATIVE);
 
+    // Returns a safe relative path, i.e. one which can't refer to anything
+    // outside of the directory it is relative to, with all its components
+    // made valid using MakeValidName(), or empty string if the path contains
+    // any parent directory references.
+    static wxString MakeSafeRelativePath(const wxString& path,
+                                         wxPathFormat format = wxPATH_NATIVE);
+
     // Information about path format
 
     // get the string separating the volume from the path for this format,

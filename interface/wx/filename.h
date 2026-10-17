@@ -755,10 +755,72 @@ public:
         @param format
             The path format to use.
 
+        @see MakeSafeRelativePath()
+
         @since 3.3.5
     */
     static wxString MakeValidName(const wxString& name,
                                   wxPathFormat format = wxPATH_NATIVE);
+
+    /**
+        Returns a safe relative path based on the given string.
+
+        This function is useful for handling paths coming from untrusted
+        sources, e.g. the names of the entries in an archive or of the files
+        dropped from another application, which must be created inside some
+        target directory and never outside of it.
+
+        The path is split into components at the separators returned by
+        GetPathSeparators() and the result contains all of them, separated by
+        GetPathSeparator(), with the following exceptions:
+
+        - Empty components are ignored, so that the leading separators, which
+          would make the path absolute, are removed, as are the trailing and
+          duplicate ones.
+        - "." components are ignored too.
+        - If any component is "..", the path is rejected entirely and an empty
+          string is returned. Such components are not interpreted in any way,
+          as even when they don't escape the target directory, as in
+          "dir/../file", using them is suspicious.
+
+        All the other components are passed to MakeValidName(), so the result
+        contains only valid file and directory names. Note that this means that
+        a DOS path starting with a drive letter, e.g. `c:\dir\file`, is
+        transformed into `c_\dir\file`, which is a relative path too.
+
+        An empty string is also returned if the path doesn't contain any
+        components at all, e.g. if it is empty or consists only of separators.
+
+        Note that this function only works with the path strings and doesn't
+        check whether the path exists or whether any of its components are
+        symbolic links, which could still point outside of the target
+        directory if they were created there before.
+
+        Example of using this function for extracting a file:
+        @code
+        const wxString path = wxFileName::MakeSafeRelativePath(entryName);
+        if ( path.empty() )
+        {
+            wxLogWarning("Skipping entry with invalid name \"%s\".", entryName);
+            return;
+        }
+
+        wxFileName fn(targetDir + wxFILE_SEP_PATH + path);
+        ...
+        @endcode
+
+        @param path
+            Any string to make a safe relative path from.
+        @param format
+            The path format to use. ::wxPATH_VMS is not supported by this
+            function.
+        @return
+            A relative path or empty string if the path couldn't be made safe.
+
+        @since 3.3.5
+    */
+    static wxString MakeSafeRelativePath(const wxString& path,
+                                         wxPathFormat format = wxPATH_NATIVE);
 
     /**
         Returns the canonical path format for this platform.

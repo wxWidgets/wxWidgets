@@ -2091,6 +2091,41 @@ wxString wxFileName::MakeValidName(const wxString& name, wxPathFormat format)
 }
 
 /* static */
+wxString
+wxFileName::MakeSafeRelativePath(const wxString& path, wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // VMS paths use different syntax for the directories and the file name,
+    // so they can't be handled by just splitting them at separators.
+    wxCHECK_MSG( format != wxPATH_VMS, wxString(),
+                 wxS("VMS paths are not supported") );
+
+    wxString safe;
+
+    // Using wxTOKEN_STRTOK skips empty components, which also makes the path
+    // relative if it started with separator(s).
+    wxStringTokenizer tk(path, GetPathSeparators(format), wxTOKEN_STRTOK);
+    while ( tk.HasMoreTokens() )
+    {
+        const wxString component = tk.GetNextToken();
+        if ( component == "." )
+            continue;
+
+        // Don't try to interpret the parent directory references in any way,
+        // as such path may be an attempt to escape the target directory.
+        if ( component == ".." )
+            return wxString();
+
+        if ( !safe.empty() )
+            safe += GetPathSeparator(format);
+        safe += MakeValidName(component, format);
+    }
+
+    return safe;
+}
+
+/* static */
 wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
 {
     wxString sepVol;
