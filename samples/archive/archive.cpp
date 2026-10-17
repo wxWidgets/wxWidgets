@@ -294,9 +294,13 @@ int ArchiveApp::DoExtract()
     {
         std::unique_ptr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
         wxPrintf("Extracting from: %s\n", m_archiveFileName);
-        for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
-             entry = archiveStream->GetNextEntry())
+        std::unique_ptr<wxArchiveEntry> entry;
+        for ( ;; )
         {
+            entry.reset(archiveStream->GetNextEntry());
+            if (!entry)
+                break;
+
             wxPrintf("Extracting: %s...\n", entry->GetName());
             wxTempFileOutputStream outputFileStream(entry->GetName());
             if (!CopyStreamData(*archiveStream, outputFileStream, entry->GetSize()))
