@@ -27,6 +27,7 @@ class WXDLLIMPEXP_FWD_BASE wxTimeSpan;
 class WXDLLIMPEXP_FWD_BASE wxDateSpan;
 #ifdef __WINDOWS__
 using SYSTEMTIME = struct _SYSTEMTIME;
+using FILETIME = struct _FILETIME;
 #endif
 
 #include "wx/dynarray.h"
@@ -523,6 +524,11 @@ public:
     {
         SetFromMSWSysTime(st);
     }
+
+    wxDateTime(const FILETIME& ft)
+    {
+        SetFromMSWFileTime(ft);
+    }
 #endif
 
         // default copy ctor ok
@@ -815,9 +821,10 @@ public:
         // pack the date in DOS format
     unsigned long GetAsDOS() const;
 
+#ifdef __WINDOWS__
     // SYSTEMTIME format
     // ------------------------------------------------------------------------
-#ifdef __WINDOWS__
+
     // convert SYSTEMTIME to wxDateTime
     wxDateTime& SetFromMSWSysTime(const SYSTEMTIME& st);
 
@@ -827,6 +834,16 @@ public:
     // same as above but only take date part into account, time is always zero
     wxDateTime& SetFromMSWSysDate(const SYSTEMTIME& st);
     void GetAsMSWSysDate(SYSTEMTIME* st) const;
+
+    // FILETIME format
+    // ------------------------------------------------------------------------
+
+    // convert FILETIME, which is always in UTC, to wxDateTime (notice that
+    // sub-millisecond part of FILETIME is lost)
+    wxDateTime& SetFromMSWFileTime(const FILETIME& ft);
+
+    // convert wxDateTime to FILETIME, return false if it's out of range
+    bool GetAsMSWFileTime(FILETIME* ft) const;
 #endif // __WINDOWS__
 
     // comparison (see also functions below for operator versions)

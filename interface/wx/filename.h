@@ -1466,6 +1466,14 @@ public:
         be changed, but at least one of them must be non-@NULL. And if a
         parameter is non-@NULL, the corresponding time must be valid (see
         wxDateTime::IsValid()).
+
+        Moreover, the times must be in the range supported by the platform,
+        otherwise an error is logged, @false is returned and the file times
+        are not changed. Under Windows this range covers the dates from year
+        1601 until year 30828. Under Unix it starts in 1970 and ends in 2038
+        if `time_t` is 32 bits, while with 64-bit `time_t` there is no
+        universal upper limit, although particular file systems have their
+        own limits.
     */
     bool SetTimes(const wxDateTime* dtAccess,
                   const wxDateTime* dtMod,
