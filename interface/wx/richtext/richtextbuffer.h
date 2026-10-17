@@ -2534,6 +2534,26 @@ public:
 #endif
 
     /**
+        Returns the Rich Text Format (RTF) representation of this object.
+
+        wxRichTextBuffer::GetAsRTF() calls this function for objects it
+        doesn't know how to export, such as application-defined objects. The
+        default implementation returns @false, in which case the object's text,
+        as returned by GetTextForRange(), is exported if it isn't empty, and
+        otherwise the export fails.
+
+        Override it to return a self-contained RTF group in @a rtf, e.g.
+        a picture group, and @true. The group is inserted in the text flow at
+        the position of the object. It must not refer to the font, colour,
+        style or list tables of the document, whose contents are not
+        available to the object, and should use only 7-bit ASCII characters,
+        escaping all others as described by the RTF specification.
+
+        @since 3.5.0
+    */
+    virtual bool ExportRTF(wxString& rtf) const;
+
+    /**
         Returns @true if this object takes note of paragraph attributes (text and image objects don't).
     */
     virtual bool UsesParagraphAttributes() const;
@@ -5106,7 +5126,57 @@ public:
     virtual bool SuppressingUndo() const { return m_suppressUndo > 0; }
 
     /**
+        Serializes the buffer contents as Rich Text Format (RTF).
+
+        The generated RTF can be saved directly to a file or placed on the
+        clipboard. Returns @true on success and stores the result in @a rtf.
+        RTF export is experimental: its output may change in future versions.
+
+        Returns @false if an object cannot be exported, an image cannot be
+        decoded or encoded, a table has invalid spans or is too narrow for its
+        columns, the padding of a floating image is too large to represent, or
+        the supplied page geometry is invalid. On failure, @a rtf is left
+        unchanged. Export does not require the buffer to be laid out.
+
+        Pixel dimensions are converted at 96 dpi. As in wx layout, percentage
+        dimensions are resolved against the content of the containing box,
+        except the width of a text box that doesn't float, which is resolved
+        against the whole containing box, including its margins and padding.
+        Percentage margins and padding are exported as no space: wx doesn't
+        support them, and lays them out as about one pixel.
+        The buffer content corresponds to the page size minus its margins:
+        like wx layout, which uses the window or the printed page, the export
+        ignores the size of the buffer itself. Fields are
+        exported as their current value, not as executable field instructions.
+
+        If @a pageSetup is @NULL, uses portrait Letter paper with one-inch
+        margins. Otherwise uses its paper size, print orientation and margins
+        (in millimetres), without querying a printer or changing the supplied
+        data. The paper size is resolved from these settings, falling back to
+        Letter if unspecified and the paper id cannot be resolved. An explicit
+        custom size takes precedence over an inconsistent id. Standard paper
+        sizes retain the precision of the paper database. Landscape swaps the
+        paper axes, but does not rotate the margins. Negative margins and
+        margins leaving no usable page area are invalid. Dialog options,
+        printer minimum margins and other printer settings are ignored.
+
+        A default-constructed page setup uses the Letter fallback and zero
+        margins, unlike @NULL which uses one-inch margins.
+        When wxUSE_PRINTING_ARCHITECTURE is 0, only @NULL is supported.
+
+        @since 3.5.0
+    */
+    bool GetAsRTF(wxString& rtf, const wxPageSetupDialogData* pageSetup = nullptr) const;
+
+    /**
         Copy the range to the clipboard.
+
+        For a buffer associated with a control, RTF is included only if
+        wxRichTextCtrl::EnableRTF() has enabled it. Standalone buffers include
+        RTF independently of this per-control setting. The RTF is generated
+        from a copy of the range only when another application requests it.
+        If the range contains an object that can't be exported (see
+        wxRichTextObject::ExportRTF()), the RTF data is then empty.
     */
     virtual bool CopyToClipboard(const wxRichTextRange& range);
 
@@ -5510,13 +5580,24 @@ public:
     static wxString GetExtWildcard(bool combine = false, bool save = false, wxArrayInt* types = nullptr);
 
     /**
+        Like GetExtWildcard(), but omits RTF when @a includeRTF is @false.
+        Controls should use wxRichTextCtrl::GetExtWildcard() to respect their
+        per-control EnableRTF() setting without changing global handlers.
+
+        @since 3.5.0
+    */
+    static wxString GetExtWildcard(bool combine, bool save, wxArrayInt* types,
+                                   bool includeRTF);
+
+    /**
         Clean up file handlers.
     */
     static void CleanUpHandlers();
 
     /**
         Initialise the standard file handlers.
-        Currently, only the plain text loading/saving handler is initialised by default.
+        The plain text handler and the RTF handler, which only saves, are
+        initialised by default.
     */
     static void InitStandardHandlers();
 
@@ -6404,6 +6485,22 @@ protected:
 // in a larger document
 #define wxRICHTEXT_HANDLER_CONVERT_FACENAMES        0x0100
 
+/**
+    Don't write RTF shape results.
+
+    Text boxes and floating images are exported as RTF shapes. By default,
+    each shape is followed by a shape result: an in-flow copy of its contents
+    shown by readers without shape support, such as those based on RichEdit.
+    This flag omits these copies, which roughly halves the size of documents
+    whose text boxes or floating images contain large pictures.
+
+    The flag applies to wxRichTextRTFHandler, wxRichTextBuffer::GetAsRTF()
+    and the RTF clipboard format, using wxRichTextBuffer::GetHandlerFlags().
+
+    @since 3.5.0
+*/
+#define wxRICHTEXT_HANDLER_RTF_NO_SHAPE_FALLBACKS   0x0200
+
 // Use CSS where possible in the HTML handler, otherwise use workarounds that will
 // show in wxHtmlWindow.
 #define wxRICHTEXT_HANDLER_USE_CSS                  0x1000
@@ -6587,6 +6684,40 @@ protected:
     virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
     virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 
+};
+
+/**
+    @class wxRichTextRTFHandler
+
+    Implements saving a buffer as Rich Text Format (RTF).
+
+    This handler currently supports output only. RTF export is experimental:
+    its output may change in future versions.
+
+    @since 3.5.0
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextFileHandler, wxRichTextBuffer, wxRichTextCtrl
+*/
+
+class wxRichTextRTFHandler: public wxRichTextFileHandler
+{
+public:
+    wxRichTextRTFHandler(const wxString& name = "Rich Text Format",
+                         const wxString& ext = "rtf",
+                         wxRichTextFileType type = wxRICHTEXT_TYPE_RTF)
+        : wxRichTextFileHandler(name, ext, type)
+        { }
+
+    virtual bool CanSave() const { return true; }
+    virtual bool CanLoad() const { return false; }
+
+protected:
+
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
 };
 
 /**
