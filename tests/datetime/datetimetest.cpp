@@ -25,6 +25,10 @@
 
 #include "wx/private/localeset.h"
 
+#ifdef __WINDOWS__
+    #include "wx/msw/wrapwin.h"
+#endif
+
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
@@ -2029,6 +2033,81 @@ TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
 
     CHECK( gotMS );
 }
+
+#ifdef __WINDOWS__
+
+TEST_CASE("wxDateTime::MSWFileTime", "[datetime][msw]")
+{
+    // This FILETIME value corresponds to the Unix epoch.
+    FILETIME ft;
+    ft.dwHighDateTime = 0x019DB1DE;
+    ft.dwLowDateTime = 0xD53E8000;
+    CHECK( wxDateTime(ft).GetValue() == 0 );
+
+    // And 0 corresponds to the FILETIME epoch.
+    ft.dwHighDateTime =
+    ft.dwLowDateTime = 0;
+    CHECK( wxDateTime(ft).Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC)
+            == "1601-01-01 00:00:00" );
+
+    const wxDateTime dt(17, wxDateTime::Oct, 2026, 12, 34, 56, 789);
+    REQUIRE( dt.GetAsMSWFileTime(&ft) );
+    CHECK( wxDateTime(ft) == dt );
+
+    // Check that the result is the same as with the system conversion.
+    SYSTEMTIME st;
+    REQUIRE( ::FileTimeToSystemTime(&ft, &st) );
+
+    const wxDateTime::Tm tm = dt.GetTm(wxDateTime::UTC);
+    CHECK( st.wYear == tm.year );
+    CHECK( st.wMonth == tm.mon - wxDateTime::Jan + 1 );
+    CHECK( st.wDay == tm.mday );
+    CHECK( st.wHour == tm.hour );
+    CHECK( st.wMinute == tm.min );
+    CHECK( st.wSecond == tm.sec );
+    CHECK( st.wMilliseconds == tm.msec );
+
+    // Sub-millisecond part is ignored.
+    ULARGE_INTEGER value;
+    value.LowPart = ft.dwLowDateTime;
+    value.HighPart = ft.dwHighDateTime;
+    value.QuadPart += 9999;
+    ft.dwLowDateTime = value.LowPart;
+    ft.dwHighDateTime = value.HighPart;
+    CHECK( wxDateTime(ft) == dt );
+
+    // FILETIME values with the highest bit set are invalid.
+    ft.dwHighDateTime = 0x80000000;
+    ft.dwLowDateTime = 0;
+    CHECK( !wxDateTime(ft).IsValid() );
+
+    // The maximal valid FILETIME value can be converted in both directions
+    // (after truncating it to milliseconds).
+    ft.dwHighDateTime = 0x7FFFFFFF;
+    ft.dwLowDateTime = 0xFFFFFFFF;
+    const wxDateTime dtMax(ft);
+    REQUIRE( dtMax.IsValid() );
+    CHECK( dtMax.GetYear(wxDateTime::UTC) == 30828 );
+
+    FILETIME ft2;
+    REQUIRE( dtMax.GetAsMSWFileTime(&ft2) );
+    CHECK( wxDateTime(ft2) == dtMax );
+
+    // But even a millisecond later can't be represented.
+    CHECK( !wxDateTime(dtMax.GetValue() + 1).GetAsMSWFileTime(&ft2) );
+
+    // Neither can the dates before the FILETIME epoch.
+    ft.dwHighDateTime =
+    ft.dwLowDateTime = 0;
+    const wxDateTime dtMin(ft);
+    REQUIRE( dtMin.GetAsMSWFileTime(&ft2) );
+    CHECK( ft2.dwHighDateTime == 0 );
+    CHECK( ft2.dwLowDateTime == 0 );
+
+    CHECK( !wxDateTime(dtMin.GetValue() - 1).GetAsMSWFileTime(&ft2) );
+}
+
+#endif // __WINDOWS__
 
 TEST_CASE("Easter", "[datetime][holiday][easter]")
 {
