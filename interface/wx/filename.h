@@ -276,6 +276,7 @@ wxULongLong wxInvalidSize;
     @li wxFileName::AssignDir()
     @li wxFileName::AssignHomeDir()
     @li wxFileName::AssignTempFileName()
+    @li wxFileName::AssignTempDirName()
     @li wxFileName::DirName()
     @li wxFileName::FileName()
     @li wxFileName::operator=()
@@ -511,6 +512,17 @@ public:
     void AssignTempFileName(const wxString& prefix, wxFFile* fileTemp);
 
     /**
+        The function calls CreateTempDirName() to create a temporary directory
+        and sets this object to the name of this directory.
+
+        If a temporary directory couldn't be created, the object is put into
+        an invalid state (see IsOk()).
+
+        @since 3.3.5
+    */
+    void AssignTempDirName(const wxString& prefix);
+
+    /**
         Reset all components to default, uninitialized state.
     */
     void Clear();
@@ -559,6 +571,47 @@ public:
     */
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFFile* fileTemp = nullptr);
+
+    /**
+        Creates a new directory with a unique name starting with the given
+        @a prefix.
+
+        Like with CreateTempFileName(), if @a prefix contains a path, the new
+        directory is created in this location (so it must end with a
+        separator if @a prefix specifies just the directory), otherwise it is
+        created in the directory returned by GetTempDir(). Unlike with
+        CreateTempFileName(), the extension of @a prefix, if any, is preserved.
+
+        The directory is created atomically, i.e. this function never returns
+        the name of an existing directory, even if another process tries to
+        create a directory with the same name at the same time. Under Unix,
+        the new directory has read, write and execute permissions for the
+        owner only.
+
+        Note that the directory is not removed automatically, use Rmdir()
+        with ::wxPATH_RMDIR_RECURSIVE flag to remove it together with all of
+        its contents when it is not needed any more, e.g.
+        @code
+        const wxString dir = wxFileName::CreateTempDirName("myapp");
+        if ( dir.empty() )
+            return; // Error was already logged.
+
+        ... create some files in the directory ...
+
+        wxFileName::Rmdir(dir, wxPATH_RMDIR_RECURSIVE);
+        @endcode
+
+        @param prefix
+            The prefix for the directory name, possibly including the path of
+            the directory in which it should be created.
+        @return The full path of the new directory or an empty string on
+            error, which is logged in this case.
+
+        @see AssignTempDirName()
+
+        @since 3.3.5
+    */
+    static wxString CreateTempDirName(const wxString& prefix);
 
 
     /**

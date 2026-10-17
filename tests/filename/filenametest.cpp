@@ -667,6 +667,96 @@ TEST_CASE("wxFileName::CreateTempFileName", "[filename]")
     }
 }
 
+TEST_CASE("wxFileName::CreateTempDirName", "[filename]")
+{
+    static const struct TestData
+    {
+        const char *prefix;
+        const char *expectedFolder;
+        bool shouldSucceed;
+    } testData[] =
+    {
+        { "", "$SYSTEM_TEMP", true },
+        { "foo", "$SYSTEM_TEMP", true },
+        { "foo.bar", "$SYSTEM_TEMP", true },
+        { "foo.", "$SYSTEM_TEMP", true },
+        { "../bar", "..", true },
+#ifdef __WINDOWS__
+        { "$USER_DOCS_DIR\\", "$USER_DOCS_DIR", true },
+        { "c:\\a\\directory\\which\\does\\not\\exist", "", false },
+#elif defined( __UNIX__ )
+        { "$USER_DOCS_DIR/", "$USER_DOCS_DIR", true },
+        { "/tmp/foo", "/tmp", true },
+        { "/tmp/a/directory/which/does/not/exist", "", false },
+#endif // __UNIX__
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        wxString prefix = testData[n].prefix;
+        prefix.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+
+        INFO("Prefix: " << prefix);
+
+        wxString path;
+        {
+            wxLogNull noLog;
+            path = wxFileName::CreateTempDirName(prefix);
+        }
+        CHECK( path.empty() == !testData[n].shouldSucceed );
+
+        if ( path.empty() )
+            continue;
+
+        INFO("Path: " << path);
+
+        const wxFileName fn(path);
+
+        wxString expected = testData[n].expectedFolder;
+        expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
+        expected.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+        CHECK( fn.GetPath() == expected );
+
+        wxString name = wxFileName(prefix).GetFullName();
+        CHECK( fn.GetFullName().StartsWith(name) );
+        CHECK( fn.GetFullName() != name );
+
+        CHECK( wxDirExists(path) );
+
+#ifdef __UNIX__
+        wxStructStat st;
+        REQUIRE( wxStat(path, &st) == 0 );
+        CHECK( (st.st_mode & 0777) == 0700 );
+#endif // __UNIX__
+
+        // Check that another directory with the same prefix is different.
+        const wxString path2 = wxFileName::CreateTempDirName(prefix);
+        CHECK( wxDirExists(path2) );
+        CHECK( path2 != path );
+
+        CHECK( wxFileName::Rmdir(path) );
+        CHECK( wxFileName::Rmdir(path2) );
+    }
+
+    wxFileName fn;
+    fn.AssignTempDirName("foo");
+    REQUIRE( fn.IsOk() );
+    CHECK( fn.IsDir() );
+    CHECK( fn.GetDirs().Last().StartsWith("foo") );
+    CHECK( fn.DirExists() );
+    CHECK( fn.Rmdir() );
+
+    {
+        wxLogNull noLog;
+#ifdef __WINDOWS__
+        fn.AssignTempDirName("c:\\a\\directory\\which\\does\\not\\exist");
+#else
+        fn.AssignTempDirName("/tmp/a/directory/which/does/not/exist");
+#endif
+    }
+    CHECK( !fn.IsOk() );
+}
+
 TEST_CASE("wxFileName::GetTimes", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
