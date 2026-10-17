@@ -19,6 +19,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <winsock2.h>
 #include <Windows.h>
+#include <commctrl.h> // BS_SPLITBUTTON
 #ifndef UNICODE
     #define wxNO_WIN32_W
 #endif
