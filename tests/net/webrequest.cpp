@@ -1020,6 +1020,18 @@ TEST_CASE_METHOD(SyncRequestFixture,
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::SuggestedFileName", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    REQUIRE( Execute("response-headers?Content-Disposition="
+                     "attachment%3B%20filename%3D%22a%3Fb%2A.txt%22") );
+
+    CHECK( response.GetSuggestedFileName() == "a_b_.txt" );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
                  "WebRequest::Sync::Get::Param", "[net][webrequest][sync][get]")
 {
     if ( !InitBaseURL() )
