@@ -507,13 +507,13 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 
     if (orient == wxHORIZONTAL)
     {
-        oldPos = GetViewStartPixels().x;
+        DoGetViewStartPixels(&oldPos, nullptr);
         // reset to 0 assuming scrolling by scrollbar or mouse wheel
         m_xScrollPositionPixelOffset = 0;
     }
     else
     {
-        oldPos = GetViewStartPixels().y;
+        DoGetViewStartPixels(nullptr, &oldPos);
         // reset to 0 assuming scrolling by scrollbar or mouse wheel
         m_yScrollPositionPixelOffset = 0;
     }
