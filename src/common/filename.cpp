@@ -90,6 +90,10 @@
 #include "wx/longlong.h"
 #include "wx/uri.h"
 
+#ifdef __WINDOWS__
+    #include <atomic>
+#endif
+
 #if defined(wxHAS_NATIVE_READLINK)
     #include "wx/vector.h"
 #endif
@@ -1213,6 +1217,65 @@ void wxInitTempFile(const wxString& strTemp, const wxString& strName)
 // directory operations
 // ----------------------------------------------------------------------------
 
+void wxFileName::AssignTempDirName(const wxString& prefix)
+{
+    const wxString dir = CreateTempDirName(prefix);
+    if ( dir.empty() )
+        Clear();
+    else
+        AssignDir(dir);
+}
+
+/* static */
+wxString wxFileName::CreateTempDirName(const wxString& prefix)
+{
+    // Use the directory specified by the prefix, if any, as with temporary
+    // files, but keep the extension, if any, as part of the name, including
+    // the trailing dot, which is commonly used as separator in the prefixes.
+    const wxFileName fnPrefix(prefix);
+    wxString dir = fnPrefix.GetPath();
+    const wxString name = fnPrefix.GetFullName();
+
+    if ( dir.empty() )
+        dir = GetTempDir();
+
+    wxString path = dir;
+    if ( !wxEndsWithPathSeparator(path) )
+        path += wxFILE_SEP_PATH;
+    path += name;
+
+#ifdef __WINDOWS__
+    // There is no mkdtemp() under Windows, so we have to find a unique name
+    // ourselves. This is safe as CreateDirectory() fails if the directory
+    // already exists, so it's just a question of trying different names.
+    static std::atomic<unsigned> s_counter(0);
+
+    const wxString base = path;
+    for ( int attempt = 0; attempt < 1000; attempt++ )
+    {
+        path = wxString::Format("%s%lx-%x", base, wxGetProcessId(), s_counter++);
+        if ( ::CreateDirectory(path.t_str(), nullptr) )
+            return path;
+
+        if ( ::GetLastError() != ERROR_ALREADY_EXISTS )
+            break;
+    }
+#else // !__WINDOWS__
+    // mkdtemp() is a part of POSIX.1-2008 and is available everywhere, it
+    // creates the directory with the permissions for the owner only.
+    path += wxS("XXXXXX");
+
+    // We need to copy the path to the buffer which mkdtemp() can modify.
+    wxCharBuffer buf(path.fn_str());
+    if ( mkdtemp(buf.data()) )
+        return wxConvFile.cMB2WX(buf);
+#endif // __WINDOWS__/!__WINDOWS__
+
+    wxLogSysError(_("Failed to create a temporary directory in \"%s\""), dir);
+
+    return wxString();
+}
+
 // helper of GetTempDir(): check if the given directory exists and return it if
 // it does or an empty string otherwise
 namespace
@@ -1971,6 +2034,128 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
     }
 
     return strForbiddenChars;
+}
+
+/* static */
+bool wxFileName::IsReservedName(const wxString& name, wxPathFormat format)
+{
+    // Only DOS-compatible systems have reserved names.
+    if ( GetFormat(format) != wxPATH_DOS )
+        return false;
+
+    // The extension doesn't matter, e.g. "nul.txt" still refers to the NUL
+    // device, and neither do the trailing spaces.
+    wxString base = name.BeforeFirst('.');
+    base.Trim();
+    base.MakeUpper();
+
+    if ( base == "CON" || base == "PRN" || base == "AUX" || base == "NUL" )
+        return true;
+
+    // COM and LPT followed by a digit are reserved too, and this includes the
+    // superscript digits 1, 2 and 3.
+    if ( base.length() == 4 && (base.StartsWith("COM") || base.StartsWith("LPT")) )
+    {
+        const wxUniChar ch = base[3];
+        return (ch >= '0' && ch <= '9') ||
+                ch == wxUniChar(0x00B9) ||
+                ch == wxUniChar(0x00B2) ||
+                ch == wxUniChar(0x00B3);
+    }
+
+    return false;
+}
+
+/* static */
+wxString wxFileName::MakeValidName(const wxString& name, wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // Path separators can't appear in a single path component, but they're
+    // not included in the forbidden characters for all formats. The exception
+    // is VMS, where the separator is '.' which is also used in file names.
+    wxString forbidden = GetForbiddenChars(format);
+    if ( format != wxPATH_VMS )
+        forbidden += GetPathSeparators(format);
+
+    wxString valid;
+    valid.reserve(name.length());
+    for ( wxUniChar ch : name )
+    {
+        if ( ch < 32 || forbidden.find(ch) != wxString::npos )
+            ch = '_';
+
+        valid += ch;
+    }
+
+    if ( valid == "." || valid == ".." )
+    {
+        // These special names refer to the current and parent directories and
+        // can't be used, so replace them with the same number of underscores,
+        // as for any other invalid characters.
+        valid.assign(valid.length(), '_');
+    }
+    else if ( format == wxPATH_DOS )
+    {
+        // Windows silently strips trailing spaces and dots from the names, so
+        // remove them ourselves to avoid surprises.
+        const size_t len = valid.length();
+        while ( !valid.empty() &&
+                    (valid.Last() == '.' || valid.Last() == ' ') )
+            valid.RemoveLast();
+
+        if ( valid.empty() )
+        {
+            // The name consisted only of dots and spaces, replace all of them
+            // instead of returning an empty name.
+            valid.assign(len, '_');
+        }
+        else if ( IsReservedName(valid, format) )
+        {
+            valid.Prepend("_");
+        }
+    }
+
+    // Empty name is never valid.
+    if ( valid.empty() )
+        valid = "_";
+
+    return valid;
+}
+
+/* static */
+wxString
+wxFileName::MakeSafeRelativePath(const wxString& path, wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // VMS paths use different syntax for the directories and the file name,
+    // so they can't be handled by just splitting them at separators.
+    wxCHECK_MSG( format != wxPATH_VMS, wxString(),
+                 wxS("VMS paths are not supported") );
+
+    wxString safe;
+
+    // Using wxTOKEN_STRTOK skips empty components, which also makes the path
+    // relative if it started with separator(s).
+    wxStringTokenizer tk(path, GetPathSeparators(format), wxTOKEN_STRTOK);
+    while ( tk.HasMoreTokens() )
+    {
+        const wxString component = tk.GetNextToken();
+        if ( component == "." )
+            continue;
+
+        // Don't try to interpret the parent directory references in any way,
+        // as such path may be an attempt to escape the target directory.
+        if ( component == ".." )
+            return wxString();
+
+        if ( !safe.empty() )
+            safe += GetPathSeparator(format);
+        safe += MakeValidName(component, format);
+    }
+
+    return safe;
 }
 
 /* static */
