@@ -2004,6 +2004,93 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
 }
 
 /* static */
+bool wxFileName::IsReservedName(const wxString& name, wxPathFormat format)
+{
+    // Only DOS-compatible systems have reserved names.
+    if ( GetFormat(format) != wxPATH_DOS )
+        return false;
+
+    // The extension doesn't matter, e.g. "nul.txt" still refers to the NUL
+    // device, and neither do the trailing spaces.
+    wxString base = name.BeforeFirst('.');
+    base.Trim();
+    base.MakeUpper();
+
+    if ( base == "CON" || base == "PRN" || base == "AUX" || base == "NUL" )
+        return true;
+
+    // COM and LPT followed by a digit are reserved too, and this includes the
+    // superscript digits 1, 2 and 3.
+    if ( base.length() == 4 && (base.StartsWith("COM") || base.StartsWith("LPT")) )
+    {
+        const wxUniChar ch = base[3];
+        return (ch >= '0' && ch <= '9') ||
+                ch == wxUniChar(0x00B9) ||
+                ch == wxUniChar(0x00B2) ||
+                ch == wxUniChar(0x00B3);
+    }
+
+    return false;
+}
+
+/* static */
+wxString wxFileName::MakeValidName(const wxString& name, wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // Path separators can't appear in a single path component, but they're
+    // not included in the forbidden characters for all formats. The exception
+    // is VMS, where the separator is '.' which is also used in file names.
+    wxString forbidden = GetForbiddenChars(format);
+    if ( format != wxPATH_VMS )
+        forbidden += GetPathSeparators(format);
+
+    wxString valid;
+    valid.reserve(name.length());
+    for ( wxUniChar ch : name )
+    {
+        if ( ch < 32 || forbidden.find(ch) != wxString::npos )
+            ch = '_';
+
+        valid += ch;
+    }
+
+    if ( valid == "." || valid == ".." )
+    {
+        // These special names refer to the current and parent directories and
+        // can't be used, so replace them with the same number of underscores,
+        // as for any other invalid characters.
+        valid.assign(valid.length(), '_');
+    }
+    else if ( format == wxPATH_DOS )
+    {
+        // Windows silently strips trailing spaces and dots from the names, so
+        // remove them ourselves to avoid surprises.
+        const size_t len = valid.length();
+        while ( !valid.empty() &&
+                    (valid.Last() == '.' || valid.Last() == ' ') )
+            valid.RemoveLast();
+
+        if ( valid.empty() )
+        {
+            // The name consisted only of dots and spaces, replace all of them
+            // instead of returning an empty name.
+            valid.assign(len, '_');
+        }
+        else if ( IsReservedName(valid, format) )
+        {
+            valid.Prepend("_");
+        }
+    }
+
+    // Empty name is never valid.
+    if ( valid.empty() )
+        valid = "_";
+
+    return valid;
+}
+
+/* static */
 wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
 {
     wxString sepVol;

@@ -704,6 +704,63 @@ public:
     static wxString GetForbiddenChars(wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Returns @true if the given name can't be used as a file or directory
+        name even if it doesn't contain any forbidden characters.
+
+        Currently only the Windows device names are considered to be
+        reserved, so this function always returns @false for formats other
+        than ::wxPATH_DOS. For it, the reserved names are @c CON, @c PRN,
+        @c AUX, @c NUL and @c COM or @c LPT followed by a single digit
+        (including superscript 1, 2 or 3). The names are case-insensitive and
+        are reserved even when followed by an extension or trailing spaces,
+        e.g. @c "nul.txt" or @c "Com1 .log" are reserved too.
+
+        @param name
+            A single path component, i.e. file or directory name without any
+            path separators.
+        @param format
+            The path format to use.
+
+        @see MakeValidName()
+
+        @since 3.3.5
+    */
+    static bool IsReservedName(const wxString& name,
+                               wxPathFormat format = wxPATH_NATIVE);
+
+    /**
+        Returns a valid file or directory name based on the given string.
+
+        This function is useful for constructing file names from strings
+        coming from elsewhere, e.g. from the document title or a network
+        resource name. It replaces all the characters returned by
+        GetForbiddenChars(), the path separators and all control characters
+        with underscores. For ::wxPATH_DOS format, it also removes trailing
+        spaces and dots, which are silently removed by Windows, and prepends
+        an underscore to the reserved names (see IsReservedName()).
+
+        It never returns an empty string, nor "." or "..": the special names
+        "." and ".." are replaced with "_" and "__" respectively and, for
+        ::wxPATH_DOS, a name consisting only of dots and spaces is replaced
+        with the same number of underscores instead of being stripped
+        entirely. An empty string is replaced with "_".
+
+        Note that this function doesn't limit the length of the returned
+        name.
+
+        @param name
+            Any string to make a valid file or directory name from. Note that
+            any path separators in it are replaced, as it is supposed to
+            become a single path component.
+        @param format
+            The path format to use.
+
+        @since 3.3.5
+    */
+    static wxString MakeValidName(const wxString& name,
+                                  wxPathFormat format = wxPATH_NATIVE);
+
+    /**
         Returns the canonical path format for this platform.
     */
     static wxPathFormat GetFormat(wxPathFormat format = wxPATH_NATIVE);

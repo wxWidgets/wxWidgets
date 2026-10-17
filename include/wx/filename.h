@@ -475,6 +475,18 @@ public:
     // on the specified platform.
     static wxString GetForbiddenChars(wxPathFormat format = wxPATH_NATIVE);
 
+    // Returns true if the given name can't be used as a file or directory
+    // name on the specified platform even if it doesn't contain any forbidden
+    // characters, e.g. "NUL" or "com1.txt" under Windows.
+    static bool IsReservedName(const wxString& name,
+                               wxPathFormat format = wxPATH_NATIVE);
+
+    // Returns a valid file or directory name for the specified platform
+    // obtained by replacing all invalid characters in the given string and
+    // modifying it in other ways if necessary.
+    static wxString MakeValidName(const wxString& name,
+                                  wxPathFormat format = wxPATH_NATIVE);
+
     // Information about path format
 
     // get the string separating the volume from the path for this format,
