@@ -2970,6 +2970,15 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
                           const wxDateTime *dtCreate) const
 {
+    wxCHECK_MSG( dtAccess || dtMod || dtCreate, false,
+                 "At least one of the times must be specified" );
+    wxCHECK_MSG( !dtAccess || dtAccess->IsValid(), false,
+                 "Access time must be valid if specified" );
+    wxCHECK_MSG( !dtMod || dtMod->IsValid(), false,
+                 "Modification time must be valid if specified" );
+    wxCHECK_MSG( !dtCreate || dtCreate->IsValid(), false,
+                 "Creation time must be valid if specified" );
+
 #if defined(__WINDOWS__)
     FILETIME ftAccess, ftCreate, ftWrite;
 

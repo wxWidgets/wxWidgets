@@ -1456,12 +1456,16 @@ public:
     static wxString FileNameToURL(const wxFileName& filename);
 
     /**
-        Sets the file creation and last access/modification times (any of the pointers
-        may be @NULL).
+        Sets the file creation and/or last access/modification times.
 
         Notice that the file creation time can't be changed under Unix, so @a
         dtCreate is ignored there (but @true is still returned). Under Windows
         all three times can be set.
+
+        Any of the parameters may be @NULL if the corresponding time is not to
+        be changed, but at least one of them must be non-@NULL. And if a
+        parameter is non-@NULL, the corresponding time must be valid (see
+        wxDateTime::IsValid()).
     */
     bool SetTimes(const wxDateTime* dtAccess,
                   const wxDateTime* dtMod,
