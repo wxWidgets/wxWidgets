@@ -550,6 +550,117 @@ TEST_CASE("wxFileName::Strip", "[filename]")
     CHECK( wxFileName::StripExtension("good.wav.wav") == "good.wav" );
 }
 
+TEST_CASE("wxFileName::IsReservedName", "[filename]")
+{
+    CHECK( wxFileName::IsReservedName("CON", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("nul", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("Aux.txt", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("prn.tar.gz", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("com1", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("LPT9.log", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("COM0", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName(wxString::FromUTF8("COM\xc2\xb9"),
+                                      wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("nul ", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("con .txt", wxPATH_DOS) );
+
+    CHECK( !wxFileName::IsReservedName("", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("console", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("nullptr.h", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("com", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("com10", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("lptx", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName(".nul", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("_nul", wxPATH_DOS) );
+
+    // There are no reserved names in the other formats.
+    CHECK( !wxFileName::IsReservedName("nul", wxPATH_UNIX) );
+    CHECK( !wxFileName::IsReservedName("com1", wxPATH_MAC) );
+}
+
+TEST_CASE("wxFileName::MakeValidName", "[filename]")
+{
+    SECTION("DOS")
+    {
+        const wxPathFormat f = wxPATH_DOS;
+
+        CHECK( wxFileName::MakeValidName("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeValidName(" leading space", f) == " leading space" );
+        CHECK( wxFileName::MakeValidName("Re: hello?", f) == "Re_ hello_" );
+        CHECK( wxFileName::MakeValidName("a<b>c\"d|e*f", f) == "a_b_c_d_e_f" );
+        CHECK( wxFileName::MakeValidName("dir\\file/name", f) == "dir_file_name" );
+        CHECK( wxFileName::MakeValidName("tab\there", f) == "tab_here" );
+        CHECK( wxFileName::MakeValidName("trailing. . ", f) == "trailing" );
+        CHECK( wxFileName::MakeValidName("nul", f) == "_nul" );
+        CHECK( wxFileName::MakeValidName("COM1.txt", f) == "_COM1.txt" );
+        CHECK( wxFileName::MakeValidName("con.", f) == "_con" );
+        CHECK( wxFileName::MakeValidName("", f) == "_" );
+        CHECK( wxFileName::MakeValidName(".", f) == "_" );
+        CHECK( wxFileName::MakeValidName("..", f) == "__" );
+        CHECK( wxFileName::MakeValidName("...", f) == "___" );
+        CHECK( wxFileName::MakeValidName(". .", f) == "___" );
+        CHECK( wxFileName::MakeValidName("   ", f) == "___" );
+        CHECK( wxFileName::MakeValidName(".hidden", f) == ".hidden" );
+    }
+
+    SECTION("Unix")
+    {
+        const wxPathFormat f = wxPATH_UNIX;
+
+        CHECK( wxFileName::MakeValidName("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeValidName("dir/file", f) == "dir_file" );
+        CHECK( wxFileName::MakeValidName("back\\slash: ok", f) == "back\\slash: ok" );
+        CHECK( wxFileName::MakeValidName("what?*", f) == "what__" );
+        CHECK( wxFileName::MakeValidName(wxString("nul\0char", 8), f) == "nul_char" );
+        CHECK( wxFileName::MakeValidName("trailing. ", f) == "trailing. " );
+        CHECK( wxFileName::MakeValidName("nul", f) == "nul" );
+        CHECK( wxFileName::MakeValidName("", f) == "_" );
+        CHECK( wxFileName::MakeValidName(".", f) == "_" );
+        CHECK( wxFileName::MakeValidName("..", f) == "__" );
+        CHECK( wxFileName::MakeValidName("...", f) == "..." );
+    }
+}
+
+TEST_CASE("wxFileName::MakeSafeRelativePath", "[filename]")
+{
+    SECTION("DOS")
+    {
+        const wxPathFormat f = wxPATH_DOS;
+
+        CHECK( wxFileName::MakeSafeRelativePath("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\file", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/sub/file", f) == "dir\\sub\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\dir\\\\file\\", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath(".\\dir\\.\\file", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("c:\\dir\\file", f) == "c_\\dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\\\server\\share\\file", f) == "server\\share\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\\\?\\c:\\file", f) == "_\\c_\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("nul\\aux.txt", f) == "_nul\\_aux.txt" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir.\\...\\file? ", f) == "dir\\___\\file_" );
+
+        CHECK( wxFileName::MakeSafeRelativePath("..\\evil.txt", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/../file", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\..", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\/.\\", f) == "" );
+    }
+
+    SECTION("Unix")
+    {
+        const wxPathFormat f = wxPATH_UNIX;
+
+        CHECK( wxFileName::MakeSafeRelativePath("dir/file", f) == "dir/file" );
+        CHECK( wxFileName::MakeSafeRelativePath("/etc/passwd", f) == "etc/passwd" );
+        CHECK( wxFileName::MakeSafeRelativePath("./dir//file/", f) == "dir/file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\..\\file", f) == "dir\\..\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/.../file", f) == "dir/.../file" );
+
+        CHECK( wxFileName::MakeSafeRelativePath("../evil", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/../../evil", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("/", f) == "" );
+    }
+}
+
 #ifdef __WINDOWS__
 
 TEST_CASE("wxFileName::ShortLongPath", "[filename]")

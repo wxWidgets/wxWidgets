@@ -1239,6 +1239,16 @@ public:
 
     /**
         Returns a suggested filename for the response data.
+
+        The name is typically taken from the @c Content-Disposition header,
+        if present, or from the URL otherwise. As it comes from the server and
+        can't be trusted, it is sanitized using wxFileName::MakeValidName()
+        since wxWidgets 3.3.5, so it never contains path separators or any
+        other characters not allowed in file names on the current platform.
+        Note that a file with this name may still already exist, so the caller
+        should check for this before using it.
+
+        Returns empty string if no file name could be determined.
     */
     wxString GetSuggestedFileName() const;
 
