@@ -141,16 +141,18 @@ public:
         // before a file promise can be resolved, we must pass a paste location
         if ( UTTypeConformsTo((CFStringRef)type, kPasteboardTypeFileURLPromise ) )
         {
-            wxString tempdir = wxFileName::GetTempDir() + wxFILE_SEP_PATH + "wxtemp.XXXXXX";
-            char* result = mkdtemp(const_cast<char*>(tempdir.fn_str().data()));
-
-            wxCFRef<CFURLRef> dest(CFURLCreateFromFileSystemRepresentation(nullptr, (const UInt8*)result, strlen(result), true));
-            PasteboardRef pboardRef = nullptr;
-            PasteboardCreate((CFStringRef)[m_pasteboard name], &pboardRef);
-            if (pboardRef != nullptr) {
-                PasteboardSynchronize(pboardRef);
-                PasteboardSetPasteLocation(pboardRef, (CFURLRef)dest);
-                CFRelease(pboardRef);
+            const wxString tempdir = wxFileName::CreateTempDirName("wxtemp-paste-");
+            if ( !tempdir.empty() )
+            {
+                const wxCharBuffer path(tempdir.fn_str());
+                wxCFRef<CFURLRef> dest(CFURLCreateFromFileSystemRepresentation(nullptr, (const UInt8*)path.data(), path.length(), true));
+                PasteboardRef pboardRef = nullptr;
+                PasteboardCreate((CFStringRef)[m_pasteboard name], &pboardRef);
+                if (pboardRef != nullptr) {
+                    PasteboardSynchronize(pboardRef);
+                    PasteboardSetPasteLocation(pboardRef, (CFURLRef)dest);
+                    CFRelease(pboardRef);
+                }
             }
         }
 

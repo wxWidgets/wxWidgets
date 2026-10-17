@@ -80,6 +80,8 @@
 #ifdef __WINDOWS__
     #include <winnls.h>
     #include <locale.h>
+
+    #include "wx/msw/private/filetime.h"
 #endif
 
 #include "wx/datetime.h"
@@ -2559,6 +2561,43 @@ void wxDateTime::GetAsMSWSysDate(SYSTEMTIME* st) const
     st->wMinute =
     st->wSecond =
     st->wMilliseconds = 0;
+}
+
+// Number of FILETIME 100ns intervals in one millisecond.
+static const int FILETIME_100NS_PER_MSEC = 10000;
+
+wxDateTime& wxDateTime::SetFromMSWFileTime(const FILETIME& ft)
+{
+    if ( !wxMSWImpl::IsValidFileTime(ft) )
+    {
+        *this = wxInvalidDateTime;
+        return *this;
+    }
+
+    m_time = wxMSWImpl::FileTimeToUnix100ns(ft) / FILETIME_100NS_PER_MSEC;
+
+    return *this;
+}
+
+bool wxDateTime::GetAsMSWFileTime(FILETIME* ft) const
+{
+    wxCHECK_MSG( IsValid(), false, wxS("invalid wxDateTime") );
+
+    // Check that the value can be represented as FILETIME before multiplying
+    // it to avoid overflow. Note that the explicit conversions are needed as
+    // wxLongLong comparison operators only exist for long, which is 32 bits
+    // under Windows.
+    using namespace wxMSWImpl;
+    const wxLongLong
+        minMSec(-FILETIME_UNIX_EPOCH_OFFSET / FILETIME_100NS_PER_MSEC),
+        maxMSec((FILETIME_MAX - FILETIME_UNIX_EPOCH_OFFSET) /
+                    FILETIME_100NS_PER_MSEC);
+    if ( m_time < minMSec || m_time > maxMSec )
+        return false;
+
+    *ft = Unix100nsToFileTime(m_time * FILETIME_100NS_PER_MSEC);
+
+    return true;
 }
 
 #endif // __WINDOWS__

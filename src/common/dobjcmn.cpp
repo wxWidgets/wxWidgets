@@ -148,6 +148,16 @@ void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
     return dataObj->SetSizeInBuffer( buffer, size, format );
 }
 
+void wxDataObjectComposite::MSWSetDataSource(IDataObject* source,
+                                             const wxDataFormat& format)
+{
+    wxDataObjectSimple *dataObj = GetObject(format, Set);
+
+    wxCHECK_RET( dataObj, wxT("unsupported format in wxDataObjectComposite"));
+
+    dataObj->MSWSetDataSource(source, format);
+}
+
 #endif
 
 size_t wxDataObjectComposite::GetFormatCount(Direction dir) const
