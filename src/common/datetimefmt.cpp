@@ -1749,8 +1749,9 @@ wxDateTime::ParseFormat(const wxString& date,
     if ( haveMsec )
         tm.msec = msec;
 
-    SetIfValid(tm.mday, (Month)tm.mon, tm.year,
-               tm.hour, tm.min, tm.sec, tm.msec);
+    if ( !SetIfValid(tm.mday, (Month)tm.mon, tm.year,
+                     tm.hour, tm.min, tm.sec, tm.msec) )
+        return false;
 
     if ( haveTimeZone )
         MakeFromTimezone(timeZone);
