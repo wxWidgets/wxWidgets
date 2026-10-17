@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
-"PO-Revision-Date: 2009-07-26 20:12+0100\n"
-"Last-Translator: Oaron <oaron1@gmail.com>\n"
+"PO-Revision-Date: 2026-10-17 18:01+0200\n"
+"Last-Translator: Torma Zsolt <torma.zsolt@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "Nem"
 #: ../src/msw/msgdlg.cpp:435 ../src/msw/msgdlg.cpp:766
 #: ../src/richtext/richtextstyledlg.cpp:292
 msgid "OK"
-msgstr "Ok"
+msgstr "OK"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:150
 #: ../src/msw/msgdlg.cpp:435 ../src/msw/progdlg.cpp:913
@@ -224,10 +224,9 @@ msgid "&Window"
 msgstr "&Ablak"
 
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Delete"
-msgstr "&Törlés"
+msgstr "Delete"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
@@ -235,137 +234,124 @@ msgid "Del"
 msgstr "Del"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Back"
-msgstr "&Vissza"
+msgstr "Back"
 
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Backspace"
-msgstr "&Vissza"
+msgstr "Backspace"
 
 #: ../src/common/accelcmn.cpp:51
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Insert"
-msgstr "Bekezdés"
+msgstr "Insert"
 
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Ins"
-msgstr "Bekezdés"
+msgstr "Ins"
 
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Enter"
-msgstr "Nyomtató"
+msgstr "Enter"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageUp"
-msgstr "Oldalak"
+msgstr "PageUp"
 
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Up"
-msgstr "%d. oldal"
+msgstr "Page Up"
 
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgctxt "keyboard key"
 msgid "PageDown"
-msgstr "Le"
+msgstr "PageDown"
 
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Page Down"
-msgstr "%d. oldal"
+msgstr "Page Down"
 
 #: ../src/common/accelcmn.cpp:57
 msgctxt "keyboard key"
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../src/common/accelcmn.cpp:58
 msgctxt "keyboard key"
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Left"
-msgstr ""
+msgstr "Left"
 
 #: ../src/common/accelcmn.cpp:60
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Right"
-msgstr "Vékony"
+msgstr "Right"
 
 #: ../src/common/accelcmn.cpp:61
 msgctxt "keyboard key"
 msgid "Up"
-msgstr "Fel"
+msgstr "Up"
 
 #: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
 msgid "Down"
-msgstr "Le"
+msgstr "Down"
 
 #: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
 msgid "Home"
-msgstr "Haza"
+msgstr "Home"
 
 #: ../src/common/accelcmn.cpp:64
 msgctxt "keyboard key"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Space"
-msgstr "Keresek..."
+msgstr "Space"
 
 #: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../src/common/accelcmn.cpp:67
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr "Tájkép"
+msgstr "Escape"
 
 #: ../src/common/accelcmn.cpp:69
 msgctxt "keyboard key"
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Cancel"
 
 #: ../src/common/accelcmn.cpp:70
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Clear"
-msgstr "&Törlés"
+msgstr "Clear"
 
 #: ../src/common/accelcmn.cpp:71
 msgctxt "keyboard key"
@@ -375,344 +361,327 @@ msgstr "Menu"
 #: ../src/common/accelcmn.cpp:72
 msgctxt "keyboard key"
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Capital"
-msgstr "dőlt"
+msgstr "Capital"
 
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Select"
-msgstr "Kiválasztott"
+msgstr "Select"
 
 #: ../src/common/accelcmn.cpp:75
 msgctxt "keyboard key"
 msgid "Print"
-msgstr "Nyomtatás"
+msgstr "Print"
 
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Execute"
-msgstr ""
+msgstr "Execute"
 
 #: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: ../src/common/accelcmn.cpp:78
 msgctxt "keyboard key"
 msgid "Help"
-msgstr "Súgó"
+msgstr "Help"
 
 #: ../src/common/accelcmn.cpp:79
 msgctxt "keyboard key"
 msgid "Add"
-msgstr "Add hozzá"
+msgstr "Add"
 
 #: ../src/common/accelcmn.cpp:80
 msgctxt "keyboard key"
 msgid "Separator"
-msgstr ""
+msgstr "Separator"
 
 #: ../src/common/accelcmn.cpp:81
 msgctxt "keyboard key"
 msgid "Subtract"
-msgstr ""
+msgstr "Subtract"
 
 #: ../src/common/accelcmn.cpp:82
 msgctxt "keyboard key"
 msgid "Decimal"
-msgstr ""
+msgstr "Decimal"
 
 #: ../src/common/accelcmn.cpp:83
 msgctxt "keyboard key"
 msgid "Multiply"
-msgstr ""
+msgstr "Multiply"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Divide"
-msgstr ""
+msgstr "Divide"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Num_lock"
-msgstr ""
+msgstr "Num_lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr ""
+msgstr "Num Lock"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Scroll_lock"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Scroll Lock"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr ""
+msgstr "KP_Space"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr ""
+msgstr "Num Space"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr ""
+msgstr "Num Tab"
 
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Enter"
-msgstr "Nyomtató"
+msgstr "KP_Enter"
 
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr ""
+msgstr "Num Enter"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Home"
-msgstr "Haza"
+msgstr "KP_Home"
 
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Home"
-msgstr "Haza"
+msgstr "Num Home"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr ""
+msgstr "KP_Left"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr ""
+msgstr "Num left"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "Num Up"
-msgstr ""
+msgstr "Num Up"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Right"
-msgstr "Vékony"
+msgstr "KP_Right"
 
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Right"
-msgstr "Vékony"
+msgstr "Num Right"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Down"
-msgstr "Le"
+msgstr "KP_Down"
 
 #: ../src/common/accelcmn.cpp:94
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Down"
-msgstr "Le"
+msgstr "Num Down"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr ""
+msgstr "KP_PageUp"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr ""
+msgstr "Num Page Up"
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr ""
+msgstr "KP_PageDown"
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr ""
+msgstr "Num Page Down"
 
 #: ../src/common/accelcmn.cpp:97
 msgctxt "keyboard key"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Next"
-msgstr "Következő "
+msgstr "KP_Next"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr ""
+msgstr "Num End"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "Num Begin"
-msgstr ""
+msgstr "Num Begin"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Insert"
-msgstr "Bekezdés"
+msgstr "KP_Insert"
 
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Insert"
-msgstr "Bekezdés"
+msgstr "Num Insert"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "KP_Delete"
-msgstr "&Törlés"
+msgstr "KP_Delete"
 
 #: ../src/common/accelcmn.cpp:102
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Num Delete"
-msgstr "&Törlés"
+msgstr "Num Delete"
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "KP_Equal"
-msgstr ""
+msgstr "KP_Equal"
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr ""
+msgstr "Num ="
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "KP_Multiply"
-msgstr ""
+msgstr "KP_Multiply"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr ""
+msgstr "Num *"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "KP_Add"
-msgstr ""
+msgstr "KP_Add"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr ""
+msgstr "Num +"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "KP_Separator"
-msgstr ""
+msgstr "KP_Separator"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr ""
+msgstr "Num ,"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr ""
+msgstr "KP_Subtract"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr ""
+msgstr "Num -"
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr ""
+msgstr "KP_Decimal"
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr ""
+msgstr "Num ."
 
 #: ../src/common/accelcmn.cpp:109
 msgctxt "keyboard key"
 msgid "KP_Divide"
-msgstr ""
+msgstr "KP_Divide"
 
 #: ../src/common/accelcmn.cpp:109
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr ""
+msgstr "Num /"
 
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Left"
-msgstr "Windows 95"
+msgstr "Windows_Left"
 
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Right"
-msgstr "Windows 95"
+msgstr "Windows_Right"
 
 #: ../src/common/accelcmn.cpp:112
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Windows_Menu"
 
 #: ../src/common/accelcmn.cpp:113
 msgctxt "keyboard key"
 msgid "Command"
-msgstr ""
+msgstr "Command"
 
 #: ../src/common/accelcmn.cpp:187 ../src/common/accelcmn.cpp:384
 msgctxt "keyboard key"
@@ -732,27 +701,27 @@ msgstr "Shift"
 #: ../src/common/accelcmn.cpp:197
 msgctxt "keyboard key"
 msgid "num "
-msgstr ""
+msgstr "num "
 
 #: ../src/common/accelcmn.cpp:261 ../src/common/accelcmn.cpp:407
 msgctxt "keyboard key"
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:410
 msgctxt "keyboard key"
 msgid "KP_F"
-msgstr ""
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:413
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr ""
+msgstr "KP_"
 
 #: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:416
 msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr ""
+msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:398
 #, fuzzy
@@ -894,7 +863,7 @@ msgstr "&Újra"
 #: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2954
 #: ../src/osx/textctrl_osx.cpp:663 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
-msgstr "&Újra"
+msgstr "Mé&gis"
 
 #: ../src/common/colourcmn.cpp:41
 #, c-format
@@ -3709,7 +3678,7 @@ msgstr "&Nem"
 #: ../src/common/stockitem.cpp:183 ../src/generic/fontdlgg.cpp:465
 #: ../src/generic/fontdlgg.cpp:472
 msgid "&OK"
-msgstr "&Ok"
+msgstr "&OK"
 
 #: ../src/common/stockitem.cpp:184 ../src/generic/dbgrptg.cpp:350
 msgid "&Open..."
@@ -3808,7 +3777,7 @@ msgstr "&Mentés másként..."
 #: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2961
 #: ../src/osx/textctrl_osx.cpp:670 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
-msgstr "Válassz ki &minden fájlt"
+msgstr "&Az összes kijelölése"
 
 #: ../src/common/stockitem.cpp:197 ../src/stc/stc_i18n.cpp:21
 #, fuzzy
@@ -4490,29 +4459,29 @@ msgstr "Jogosultságok"
 
 #. TRANSLATORS: %s is application name
 #: ../src/generic/aboutdlgg.cpp:162 ../src/msw/aboutdlg.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "About %s"
-msgstr "&Névjegy..."
+msgstr "A(z) %s névjegye"
 
 #: ../src/generic/aboutdlgg.cpp:197
 msgid "License"
-msgstr ""
+msgstr "Licenc"
 
 #: ../src/generic/aboutdlgg.cpp:200
 msgid "Developers"
-msgstr ""
+msgstr "Fejlesztők"
 
 #: ../src/generic/aboutdlgg.cpp:204
 msgid "Documentation writers"
-msgstr ""
+msgstr "A dokumentáció szerzői"
 
 #: ../src/generic/aboutdlgg.cpp:208
 msgid "Artists"
-msgstr ""
+msgstr "Grafikusok"
 
 #: ../src/generic/aboutdlgg.cpp:212
 msgid "Translators"
-msgstr ""
+msgstr "Fordítók"
 
 #: ../src/generic/animateg.cpp:125
 #, fuzzy
@@ -6750,33 +6719,29 @@ msgid "File type:"
 msgstr "Teletype"
 
 #: ../src/osx/cocoa/menu.mm:238 ../src/osx/iphone/menu.mm:192
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
-msgstr "&Ablak"
+msgstr "Ablak"
 
 #: ../src/osx/cocoa/menu.mm:255 ../src/osx/iphone/menu.mm:189
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Súgó"
 
 #: ../src/osx/cocoa/menu.mm:294
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
-msgstr "Mi&nimalizál"
+msgstr "Kis méret"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
-msgstr "&Nagyítás"
+msgstr "Nagyítás"
 
 #: ../src/osx/cocoa/menu.mm:305
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Összes előtérbe hozása"
 
 #: ../src/osx/core/sound.cpp:143
 #, fuzzy, c-format
@@ -6796,62 +6761,57 @@ msgid ""
 msgstr ""
 
 #: ../src/osx/menu_osx.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
-msgstr "&Névjegy..."
+msgstr "A(z) %s névjegye"
 
 #: ../src/osx/menu_osx.cpp:453
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
-msgstr "&Névjegy"
+msgstr "Névjegy..."
 
 #: ../src/osx/menu_osx.cpp:462
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
-msgstr "&Előválasztás"
+msgstr "Beállítások..."
 
 #: ../src/osx/menu_osx.cpp:466
 msgctxt "macOS menu item"
 msgid "Services"
-msgstr ""
+msgstr "Szolgáltatások"
 
 #: ../src/osx/menu_osx.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
-msgstr "Súgó: %s"
+msgstr "%s elrejtése"
 
 #: ../src/osx/menu_osx.cpp:476
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Kiválasztott"
+msgstr "Alkalmazás elrejtése"
 
 #: ../src/osx/menu_osx.cpp:480
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr ""
+msgstr "A többi elrejtése"
 
 #: ../src/osx/menu_osx.cpp:482
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Show All"
-msgstr "Mutatsd mindet"
+msgstr "Összes megjelenítése"
 
 #: ../src/osx/menu_osx.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
-msgstr "&Kilépés"
+msgstr "Kilépés a(z) %s alkalmazásból"
 
 #: ../src/osx/menu_osx.cpp:491
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Kiválasztott"
+msgstr "Kilépés az alkalmazásból"
 
 #: ../src/osx/webview_webkit.mm:444
 #, fuzzy
