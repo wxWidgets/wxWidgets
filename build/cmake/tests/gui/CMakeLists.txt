@@ -110,6 +110,7 @@ set(TEST_GUI_SRC
     misc/guifuncs.cpp
     misc/selstoretest.cpp
     misc/garbage.cpp
+    misc/oleautomationobject.cpp
     misc/safearrayconverttest.cpp
     misc/settings.cpp
     misc/textwrap.cpp
