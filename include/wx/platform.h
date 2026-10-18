@@ -483,7 +483,7 @@
 #        ifndef MAC_OS_VERSION_26_0
 #           define MAC_OS_VERSION_26_0 260000
 #        endif
-#        if __WXDARWIN_OSX__
+#        ifdef __WXDARWIN_OSX__
 #            if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #                ifndef NSAppKitVersionNumber10_10
 #                    define NSAppKitVersionNumber10_10 1343
