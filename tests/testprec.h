@@ -19,6 +19,10 @@ using std::make_unique;
 
 #include "catch2/catch.hpp"
 
+#if wxUSE_VARIANT
+    #include "wx/variant.h"
+#endif
+
 // Define conversions to strings for some common wxWidgets types.
 namespace Catch
 {
@@ -63,6 +67,17 @@ namespace Catch
             return s;
         }
     };
+
+#if wxUSE_VARIANT
+    template <>
+    struct StringMaker<wxVariant>
+    {
+        static std::string convert(const wxVariant& v)
+        {
+            return v.MakeString().ToStdString(wxConvUTF8);
+        }
+    };
+#endif // wxUSE_VARIANT
 }
 
 // Return the name of the test being currently executed or an empty string if
