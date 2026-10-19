@@ -808,6 +808,20 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
         else
             cell.state = NSControlStateValueOff;
 
+        // Transfer the window font to the cell string. Otherwise, the system
+        // small font takes effect. Get the attributed string, change the
+        // font, and reassign it while preserving styling and the dark/light
+        // mode text color.
+        NSMutableAttributedString* attrStr =
+            [[cell.attributedStringValue mutableCopy] autorelease];
+        if ( attrStr && attrStr.length > 0 )
+        {
+            NSRange fullRange = NSMakeRange(0, attrStr.length);
+            [attrStr addAttribute:NSFontAttributeName
+                value:win->GetFont().OSXGetNSFont() range:fullRange];
+            cell.attributedStringValue = attrStr;
+        }
+
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
