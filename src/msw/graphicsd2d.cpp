@@ -4060,6 +4060,17 @@ private:
     D2D1::Matrix3x2F m_inheritedTransform;
     D2D1::Matrix3x2F m_initTransform;
     D2D1::Matrix3x2F m_initTransformInv;
+
+    // The upper-left corner of the bounding rectangle passed to BindDC().
+    // The bounding rectangle passed to BindDC() defines the portion of the HDC
+    // to which the Direct2D render target is bound and determines how the render
+    // target's coordinates map to the underlying HDC. If the native HDC returned
+    // by GetNativeHDC() has been scrolled (i.e., its viewport or window origin
+    // has changed), this offset must be taken into account when drawing directly
+    // through the native HDC. Otherwise, drawing operations may be misplaced
+    // relative to those performed through Direct2D.
+    wxPoint m_clipOffset;
+
     // Clipping box
     bool m_isClipBoxValid;
     double m_clipX1, m_clipY1, m_clipX2, m_clipY2;
@@ -4875,6 +4886,8 @@ bool wxD2DContext::EnsureInitialized()
         return false;
 
     m_target->GetTransform(&m_initTransform);
+    m_clipOffset.x = wxRound(m_initTransform._31);
+    m_clipOffset.y = wxRound(m_initTransform._32);
     m_initTransform = m_initTransform * m_inheritedTransform;
     wxASSERT(m_initTransform.IsInvertible());
     m_initTransformInv = m_initTransform;
@@ -5086,12 +5099,30 @@ WXHDC wxD2DContext::GetNativeHDC()
     HDC hdc;
     HRESULT hr = m_gdiRenderTarget->GetDC(D2D1_DC_INITIALIZE_MODE_COPY, &hdc);
     wxCHECK_MSG(SUCCEEDED(hr), nullptr, wxString::Format("Can't get HDC from Direct2D context (hr=%x)", hr));
+
+    if ( m_clipOffset.x != 0 || m_clipOffset.y != 0 )
+    {
+        ::OffsetViewportOrgEx(hdc, m_clipOffset.x, m_clipOffset.y, nullptr);
+    }
+
     return hdc;
 };
 
-void wxD2DContext::ReleaseNativeHDC(WXHDC WXUNUSED(hdc))
+void wxD2DContext::ReleaseNativeHDC(WXHDC hdc)
 {
     wxCHECK_RET(m_gdiRenderTarget, "Can't release HDC for Direct2D context");
+
+#if 0
+    if ( m_clipOffset.x != 0 || m_clipOffset.y != 0 )
+    {
+        ::OffsetViewportOrgEx(hdc, -m_clipOffset.x, -m_clipOffset.y, nullptr);
+
+        m_clipOffset = wxPoint();
+    }
+#else
+    wxUnusedVar(hdc);
+#endif
+
     HRESULT hr = m_gdiRenderTarget->ReleaseDC(nullptr);
     wxCHECK_HRESULT_RET(hr);
 };
