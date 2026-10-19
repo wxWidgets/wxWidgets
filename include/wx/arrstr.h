@@ -76,8 +76,19 @@ public:
     wxArrayString(size_t sz, const char** a);
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
-    template<typename U>
+
+    // The template ctor is only enabled for the types wxString can be created
+    // from, so that the non-template one, converting each element of the list
+    // to wxString directly, is used for all the others. This is needed for the
+    // lists with elements of different types or with narrow string literals,
+    // which decay to pointers when deducing U and pointers can't be converted
+    // to wxString when wxALLOW_UTF8_LITERALS is defined.
+    wxArrayString(std::initializer_list<wxString> list) : wxBaseArray<wxString>(list) { }
+    template<typename U,
+             typename std::enable_if<std::is_constructible<wxString, const U&>::value,
+                                     int>::type = 0>
     wxArrayString(std::initializer_list<U> list) : wxBaseArray<wxString>(list) { }
+
     wxArrayString(const std::vector<wxString>& vec) : wxBaseArray<wxString>(vec) { }
     wxArrayString(std::vector<wxString>&& vec) : wxBaseArray<wxString>(std::move(vec)) { }
     template<typename U>
@@ -189,8 +200,11 @@ public:
   wxArrayString(size_t sz, const wxString* a);
     // copy ctor
   wxArrayString(const wxArrayString& array);
-    // list constructor
-  template<typename U>
+    // list constructors, see the comment in the other wxArrayString
+  wxArrayString(std::initializer_list<wxString> list) { assign(list.begin(), list.end()); }
+  template<typename U,
+           typename std::enable_if<std::is_constructible<wxString, const U&>::value,
+                                   int>::type = 0>
   wxArrayString(std::initializer_list<U> list) { assign(list.begin(), list.end()); }
     // ctor from a std::vector
   template<typename U>

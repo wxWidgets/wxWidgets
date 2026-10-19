@@ -171,6 +171,16 @@ TEST_CASE("wxALLOW_UTF8_LITERALS::Other", "[string][utf8]")
         CHECK( a.As<wxString>() == L"x" );
     }
 
+    SECTION("wxArrayString")
+    {
+        static constexpr char grusse[] = "Gr\u00fc\u00dfe";
+
+        const wxArrayString a{"x", grusse};
+        REQUIRE( a.size() == 2 );
+        CHECK( a[0] == "x" );
+        CHECK( a[1] == GRUSSE );
+    }
+
 #if wxUSE_FILECONFIG && wxUSE_STREAMS
     SECTION("wxConfig")
     {
