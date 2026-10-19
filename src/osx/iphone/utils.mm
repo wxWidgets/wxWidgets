@@ -38,9 +38,29 @@
 
 #if 1 // wxUSE_BASE
 
+
+
 // ----------------------------------------------------------------------------
 // Common Event Support
 // ----------------------------------------------------------------------------
+
+#if wxOSX_IPHONE_USE_UISCENE
+
+@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
+@end
+
+@implementation SceneDelegate
+
+@synthesize window = _window;
+
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    wxNonOwnedWindowIPhoneImpl::OSXSetUIScene( scene );
+    wxTheApp->OnInit();
+}
+
+@end
+
+#endif // wxOSX_IPHONE_USE_UISCENE
 
 @interface wxAppDelegate : UIResponder <UIApplicationDelegate> {
 }
@@ -80,6 +100,16 @@
     {
         wxTheApp->OSXOnBuildMenu((WX_NSObject) builder);
     }
+}
+#endif
+
+#if wxOSX_IPHONE_USE_UISCENE
+
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
+{
+    UISceneConfiguration *configuration = [[UISceneConfiguration alloc] initWithName:nil sessionRole:connectingSceneSession.role];
+    configuration.delegateClass = SceneDelegate.class;
+    return configuration;
 }
 #endif
 

@@ -217,7 +217,12 @@ void wxApp::OSXOnDidFinishLaunching()
 {
     // on cocoa we cannot do this, as it would arrive "AFTER" an OpenFiles event
 #if wxOSX_USE_IPHONE
+#if wxOSX_IPHONE_USE_UISCENE
+    // only call OnInit after the scene has been connected, otherwise no toplevel windows
+    // can be created properly
+#else
     wxTheApp->OnInit();
+#endif
 #endif
 }
 
