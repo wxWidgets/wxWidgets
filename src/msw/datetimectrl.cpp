@@ -48,6 +48,395 @@
 #ifndef DTM_GETIDEALSIZE
     #define DTM_GETIDEALSIZE 0x100f
 #endif
+namespace
+{
+// Pre-Win11 22H2 fallback: let stock control paint in light theme into a
+// buffered DIB and remap pixels to dark palette. "DTP" prefix used for helpers.
+// Gray levels and thresholds for DTPRemapPixels() and hot-state tuning.
+    namespace DTPDarkGray
+    {
+        // Inverts and maps stock luma: white face -> kWhiteMapsTo, black text/arrows -> kBlackMapsTo.
+        constexpr int kWhiteMapsTo = 40;
+        constexpr int kBlackMapsTo = 235;
+
+        // Detect hot/pressed blue states via pixel chroma (no mouse tracking needed).
+        constexpr int kHotChromaFull = 24;      // Chroma >= value means fully "hot"
+        constexpr int kHotBorderChroma = 128;   // >= value means saturated border; 1 to value is pale fill
+
+        // Blend hot pixels towards white by lift/255 after remapping.
+        constexpr int kHotFillLift = 50;
+        constexpr int kHotBorderLift = 0;
+    }
+
+    constexpr UINT_PTR kDTPChildSubclassId = 0x77780020ul;
+    constexpr DWORD_PTR kDTPMonthCal = 1;
+    void DTPRemapMonthCalPixels(HWND hwnd, HPAINTBUFFER hbp, int w, int h);
+    void DTPRemapPixels(HPAINTBUFFER hbp, int w, int h);
+    // Native dark theme for child controls supported since Windows 11 22H2.
+    bool DTPHasNativeDarkChildTheme()
+    {
+        static const bool s_hasNativeTheme = wxCheckOsVersion(10, 0, 22621);
+        return s_hasNativeTheme;
+    }
+
+    inline BYTE DTPLuma(const RGBQUAD& p)
+    {
+        return static_cast<BYTE>((p.rgbRed * 299 + p.rgbGreen * 587 + p.rgbBlue * 114) / 1000);
+    }
+
+    // max(R,G,B) - min(R,G,B): 0 for gray, high for colored hot-state pixels.
+    inline int DTPChroma(const RGBQUAD& p)
+    {
+        return wxMax(p.rgbRed, wxMax(p.rgbGreen, p.rgbBlue)) -
+            wxMin(p.rgbRed, wxMin(p.rgbGreen, p.rgbBlue));
+    }
+
+    inline BYTE DTPBlendToWhite(BYTE gray, int amount)
+    {
+        return static_cast<BYTE>(gray + (255 - gray) * amount / 255);
+    }
+
+    void DTPRemapPixels(HPAINTBUFFER hbp, int w, int h)
+    {
+        using namespace DTPDarkGray;
+
+        RGBQUAD* pPx = nullptr;
+        int rw = 0; // Row width in pixels, not bytes.
+        if (FAILED(::GetBufferedPaintBits(hbp, &pPx, &rw)) || !pPx)
+            return;
+
+        for (int y = 0; y < h; ++y)
+        {
+            RGBQUAD* row = pPx + static_cast<ptrdiff_t>(y) * rw;
+            for (int x = 0; x < w; ++x)
+            {
+                RGBQUAD& p = row[x];
+                const int chroma = DTPChroma(p); // Must calculate before overwrite
+
+                const int inv = 255 - DTPLuma(p);
+                BYTE gray = static_cast<BYTE>(
+                    kWhiteMapsTo + inv * (kBlackMapsTo - kWhiteMapsTo) / 255
+                    );
+
+                if (chroma > 0)
+                {
+                    const int weight = wxMin(chroma * 255 / kHotChromaFull, 255);
+                    const int lift = chroma >= kHotBorderChroma ? kHotBorderLift : kHotFillLift;
+                    gray = DTPBlendToWhite(gray, lift * weight / 255);
+                }
+
+                p.rgbRed = p.rgbGreen = p.rgbBlue = gray;
+                p.rgbReserved = 255;
+            }
+        }
+    }
+
+    void DTPPaintChild(HWND hwnd, bool isMonthCal)
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = ::BeginPaint(hwnd, &ps);
+
+        const RECT rc = wxGetClientRect(hwnd);
+        HDC hdcBuf = 0;
+        HPAINTBUFFER hbp = ::BeginBufferedPaint(hdc, &rc, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
+        if (hbp)
+        {
+            ::FillRect(hdcBuf, &rc, ::GetSysColorBrush(COLOR_BTNFACE));
+            ::DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT | PRF_ERASEBKGND);
+
+            const int w = rc.right - rc.left;
+            const int h = rc.bottom - rc.top;
+
+            if (isMonthCal)
+                DTPRemapMonthCalPixels(hwnd, hbp, w, h);
+            else
+                DTPRemapPixels(hbp, w, h);
+
+            ::EndBufferedPaint(hbp, TRUE);
+        }
+        else // Fallback to unfiltered stock look
+        {
+            ::DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdc), PRF_CLIENT | PRF_ERASEBKGND);
+        }
+
+        ::EndPaint(hwnd, &ps);
+    }
+
+    LRESULT CALLBACK DTPChildSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, UINT_PTR uId, DWORD_PTR dwRef)
+    {
+        switch (msg)
+        {
+        case WM_ERASEBKGND:
+            if (wxMSWDarkMode::IsActive())
+                return TRUE;
+            break;
+
+        case WM_PAINT:
+            if (wxMSWDarkMode::IsActive())
+            {
+                DTPPaintChild(hwnd, dwRef == kDTPMonthCal);
+                return 0;
+            }
+            break;
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, DTPChildSubclassProc, uId);
+            break;
+        }
+
+        return ::DefSubclassProc(hwnd, msg, wParam, lParam);
+    }
+
+    // Apply dark or light mode to a single child window.
+    BOOL CALLBACK DTPEnumChildProc(HWND hwnd, LPARAM WXUNUSED(lParam))
+    {
+        const wxString className = wxGetWindowClass(hwnd);
+        if (!className.IsSameAs(UPDOWN_CLASS, false) && !className.IsSameAs(WC_EDIT, false))
+            return TRUE;
+
+        if (!wxMSWDarkMode::IsActive())
+        {
+            ::RemoveWindowSubclass(hwnd, DTPChildSubclassProc, kDTPChildSubclassId);
+            wxMSWDarkMode::SetTheme(hwnd, nullptr, nullptr);
+        }
+        else if (DTPHasNativeDarkChildTheme())
+        {
+            wxMSWDarkMode::SetTheme(
+                hwnd,
+                wxMSWDarkMode::HasDarkTheme() ? L"DarkMode_DarkTheme" : L"DarkMode_Explorer",
+                nullptr
+            );
+        }
+        else // Keep stock light theme as painting source
+        {
+            ::SetWindowSubclass(hwnd, DTPChildSubclassProc, kDTPChildSubclassId, 0);
+        }
+
+        ::InvalidateRect(hwnd, nullptr, TRUE);
+        return TRUE;
+    }
+   // WinUI 3 (CalendarView, dark) look via full-RGB pixel remapping (retains accent blue, avoids text fringes).
+    namespace DTPWinUI
+    {
+        constexpr COLORREF kBody = RGB(0x23, 0x23, 0x23);     // Days and header background
+        constexpr COLORREF kBand = RGB(0x1f, 0x1f, 0x1f);     // Weekday names strip background
+        constexpr COLORREF kText = RGB(0xff, 0xff, 0xff);     // Standard text color
+        constexpr COLORREF kTrailing = RGB(0xcd, 0xcd, 0xcd); // Other months' days
+        constexpr COLORREF kAccent = RGB(0x40, 0xbd, 0xff);   // Selected day and today ring
+        constexpr COLORREF kOnAccent = RGB(0x00, 0x00, 0x00); // Text on accent
+    }
+
+    // Light gray levels for DateTime_SetMonthCalColor() to maximize anti-aliasing range.
+    namespace DTPMonthCalLight
+    {
+        constexpr int kMonthBk = 255;   // MCSC_BACKGROUND & MCSC_MONTHBK
+        constexpr int kText = 0;      // MCSC_TEXT
+        constexpr int kTrailing = 160;// MCSC_TRAILINGTEXT
+        constexpr int kTitleBk = 96;  // MCSC_TITLEBK (header, weekdays, selected day)
+        constexpr int kTitleText = 0; // MCSC_TITLETEXT
+        constexpr int kNavFace = 240; // COLOR_BTNFACE
+        constexpr int kNavGlyph = 0;  // COLOR_BTNTEXT
+    }
+
+    // Calendar region mapping: stock background/foreground levels to target colors.
+    struct DTPRegion
+    {
+        int stockBg, stockFg;
+        COLORREF bg, fg;
+        bool ring;       // Convert red "today" ring to custom accent color
+        bool dropDarker; // Map pixels darker than text to background
+    };
+
+    struct DTPCell
+    {
+        RECT rc;
+        bool selected;
+        WORD month;
+    };
+
+    inline int DTPRed(COLORREF c) { return c & 0xff; }
+    inline int DTPGreen(COLORREF c) { return (c >> 8) & 0xff; }
+    inline int DTPBlue(COLORREF c) { return (c >> 16) & 0xff; }
+
+    inline int DTPMix(int a, int b, int t256)
+    {
+        return (a * (256 - t256) + b * t256) / 256;
+    }
+
+    inline int DTPClamp256(int t)
+    {
+        return wxMax(0, wxMin(256, t));
+    }
+
+    bool DTPGetGridRect(HWND hwnd, DWORD part, RECT& rc)
+    {
+        MCGRIDINFO gi = {};
+        gi.cbSize = sizeof(gi);
+        gi.dwFlags = MCGIF_RECT;
+        gi.dwPart = part;
+        gi.iCalendar = 0;
+
+        if (!::SendMessage(hwnd, MCM_GETCALENDARGRIDINFO, 0, reinterpret_cast<LPARAM>(&gi)))
+            return false;
+
+        rc = gi.rc;
+        return true;
+    }
+
+    bool DTPGetCell(HWND hwnd, int row, int col, DTPCell& cell)
+    {
+        MCGRIDINFO gi = {};
+        gi.cbSize = sizeof(gi);
+        gi.dwFlags = MCGIF_RECT | MCGIF_DATE;
+        gi.dwPart = MCGIP_CALENDARCELL;
+        gi.iCalendar = 0;
+        gi.iRow = row;
+        gi.iCol = col;
+
+        if (!::SendMessage(hwnd, MCM_GETCALENDARGRIDINFO, 0, reinterpret_cast<LPARAM>(&gi)))
+            return false;
+
+        cell.rc = gi.rc;
+        cell.selected = gi.bSelected != FALSE;
+        cell.month = gi.stStart.wMonth;
+        return true;
+    }
+
+    void DTPSetMonthCalLightColours(HWND hwndDTP)
+    {
+        using namespace DTPMonthCalLight;
+        const auto gray = [](int g) { return RGB(g, g, g); };
+
+        DateTime_SetMonthCalColor(hwndDTP, MCSC_BACKGROUND, gray(kMonthBk));
+        DateTime_SetMonthCalColor(hwndDTP, MCSC_MONTHBK, gray(kMonthBk));
+        DateTime_SetMonthCalColor(hwndDTP, MCSC_TEXT, gray(kText));
+        DateTime_SetMonthCalColor(hwndDTP, MCSC_TRAILINGTEXT, gray(kTrailing));
+        DateTime_SetMonthCalColor(hwndDTP, MCSC_TITLEBK, gray(kTitleBk));
+        DateTime_SetMonthCalColor(hwndDTP, MCSC_TITLETEXT, gray(kTitleText));
+    }
+
+    void DTPMapRect(RGBQUAD* dst, const RGBQUAD* src, int rw, int w, int h, RECT rc, const DTPRegion& r)
+    {
+        rc.left = wxMax(rc.left, 0);
+        rc.top = wxMax(rc.top, 0);
+        rc.right = wxMin(rc.right, w);
+        rc.bottom = wxMin(rc.bottom, h);
+
+        const int denom = r.stockFg - r.stockBg;
+        if (!denom)
+            return;
+
+        for (int y = rc.top; y < rc.bottom; ++y)
+        {
+            const RGBQUAD* in = src + static_cast<ptrdiff_t>(y) * rw;
+            RGBQUAD* row = dst + static_cast<ptrdiff_t>(y) * rw;
+            for (int x = rc.left; x < rc.right; ++x)
+            {
+                const RGBQUAD& s = in[x];
+                RGBQUAD& p = row[x];
+
+                const int luma = DTPLuma(s);
+                int t = DTPClamp256((luma - r.stockBg) * 256 / denom);
+                if (r.dropDarker && luma < r.stockFg - 8)
+                    t = 0;
+
+                int red = DTPMix(DTPRed(r.bg), DTPRed(r.fg), t);
+                int green = DTPMix(DTPGreen(r.bg), DTPGreen(r.fg), t);
+                int blue = DTPMix(DTPBlue(r.bg), DTPBlue(r.fg), t);
+
+                if (r.ring)
+                {
+                    const int redness = s.rgbRed - wxMax(s.rgbGreen, s.rgbBlue);
+                    if (redness > 32)
+                    {
+                        const int wt = DTPClamp256(redness * 256 / 255);
+                        red = DTPMix(red, DTPRed(DTPWinUI::kAccent), wt);
+                        green = DTPMix(green, DTPGreen(DTPWinUI::kAccent), wt);
+                        blue = DTPMix(blue, DTPBlue(DTPWinUI::kAccent), wt);
+                    }
+                }
+
+                p.rgbRed = static_cast<BYTE>(red);
+                p.rgbGreen = static_cast<BYTE>(green);
+                p.rgbBlue = static_cast<BYTE>(blue);
+                p.rgbReserved = 255;
+            }
+        }
+    }
+
+    void DTPRemapMonthCalPixels(HWND hwnd, HPAINTBUFFER hbp, int w, int h)
+    {
+        namespace L = DTPMonthCalLight;
+        namespace C = DTPWinUI;
+
+        RECT rcHeader, rcPrev, rcNext;
+        DTPCell cells[6][7] = {};
+        bool ok = DTPGetGridRect(hwnd, MCGIP_CALENDARHEADER, rcHeader) &&
+            DTPGetGridRect(hwnd, MCGIP_PREV, rcPrev) &&
+            DTPGetGridRect(hwnd, MCGIP_NEXT, rcNext);
+        for (int row = 0; ok && row < 6; ++row)
+        {
+            for (int col = 0; ok && col < 7; ++col)
+                ok = DTPGetCell(hwnd, row, col, cells[row][col]);
+        }
+
+        if (!ok)
+        {
+            DTPRemapPixels(hbp, w, h);
+            return;
+        }
+
+        RGBQUAD* pPx = nullptr;
+        int rw = 0;
+        if (FAILED(::GetBufferedPaintBits(hbp, &pPx, &rw)) || !pPx)
+            return;
+
+        const std::vector<RGBQUAD> src(pPx, pPx + static_cast<size_t>(rw) * h);
+        const RGBQUAD* const pSrc = src.data();
+        const WORD month = cells[2][3].month;
+
+        const RECT rcAll = { 0, 0, w, h };
+        const DTPRegion body = { 255, L::kText, C::kBody, C::kText, false, false };
+        DTPMapRect(pPx, pSrc, rw, w, h, rcAll, body);
+
+        const DTPRegion header = { L::kTitleBk, L::kTitleText, C::kBody, C::kText, false, false };
+        DTPMapRect(pPx, pSrc, rw, w, h, rcHeader, header);
+
+        const DTPRegion flat = { 255, 0, C::kBody, C::kBody, false, false };
+        const DTPRegion glyph = { L::kNavFace, L::kNavGlyph, C::kBody, C::kText, false, false };
+        for (const RECT* rc : { &rcPrev, &rcNext })
+        {
+            DTPMapRect(pPx, pSrc, rw, w, h, *rc, flat);
+            RECT rcGlyph = *rc;
+            ::InflateRect(&rcGlyph, -3, -3);
+            DTPMapRect(pPx, pSrc, rw, w, h, rcGlyph, glyph);
+        }
+
+        const RECT rcNames = { rcHeader.left, rcHeader.bottom, rcHeader.right, cells[0][0].rc.top };
+        const DTPRegion names = { L::kMonthBk, L::kTitleBk, C::kBand, C::kText, false, true };
+        DTPMapRect(pPx, pSrc, rw, w, h, rcNames, names);
+
+        const DTPRegion selected = { L::kTitleBk, L::kTitleText, C::kAccent, C::kOnAccent, false, false };
+        const DTPRegion normal = { L::kMonthBk, L::kText, C::kBody, C::kText, true, false };
+        const DTPRegion trailing = { L::kMonthBk, L::kTrailing, C::kBody, C::kTrailing, true, false };
+
+        bool isRTL = ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL;
+        for (int row = 0; row < 6; ++row)
+        {
+            for (int col = 0; col < 7; ++col)
+            {
+                const DTPCell& cell = cells[row][col];
+                const RECT rc = isRTL
+                    ? RECT{ w - cell.rc.right, cell.rc.top, w - cell.rc.left, cell.rc.bottom }
+                : cell.rc;
+
+                DTPMapRect(pPx, pSrc, rw, w, h, rc,
+                    cell.selected ? selected :
+                    cell.month != month ? trailing : normal);
+            }
+        }
+    }
+} // namespace
 
 // ============================================================================
 // wxDateTimePickerCtrl implementation
@@ -372,30 +761,22 @@ wxDateTimePickerCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     }
     return wxDateTimePickerCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
+
 void wxDateTimePickerCtrl::MSWSetDarkOrLightMode()
 {
     wxDateTimePickerCtrlBase::MSWSetDarkOrLightMode();
-    wxMSWDarkMode::SetTheme(GetHwnd(), nullptr, L"DarkMode::FileExplorerBannerContainer");
-    if (wxMSWDarkMode::IsActive())
-        wxMSWDarkMode::AllowForWindow(GetHwnd(), nullptr, L"DarkMode::FileExplorerBannerContainer");
-    else
-        wxMSWDarkMode::AllowForWindow(GetHwnd());
-#ifdef _MSC_VER
-    auto darkModeCallback = [](HWND hwnd, LPARAM)->BOOL
-#else
-    auto darkModeCallback = [](HWND hwnd, LPARAM) -> BOOL CALLBACK
-#endif
-        {
-        wchar_t className[256];
-        GetClassName(hwnd, className, 256);
 
-        if (_wcsicmp(className, L"msctls_updown32") == 0 || _wcsicmp(className, L"EDIT") == 0)
-        {
-            wxMSWDarkMode::SetTheme(hwnd, wxMSWDarkMode::HasDarkTheme() ? L"DarkMode_DarkTheme" : L"DarkMode_Explorer", nullptr);
-        }
-        return TRUE;
-        };
-    EnumChildWindows(GetHwnd(), darkModeCallback, 0);
+    if (wxMSWDarkMode::IsActive())
+    {
+        wxMSWDarkMode::AllowForWindow(GetHwnd(), nullptr,
+            L"DarkMode::FileExplorerBannerContainer");
+    }
+    else
+    {
+        wxMSWDarkMode::AllowForWindow(GetHwnd());
+    }
+
+    ::EnumChildWindows(GetHwnd(), DTPEnumChildProc, 0);
 }
 
 bool
@@ -409,13 +790,41 @@ wxDateTimePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             HWND hwndMonthCal = (HWND)SendMessage(hdr->hwndFrom, DTM_GETMONTHCAL, 0, 0);
             if (hwndMonthCal)
             {
-                //TODO-MonthCal: need custome paint NavNext,NavPrev parts.
-                const wchar_t* themeName = wxMSWDarkMode::IsActive() ? L"DarkMode::FileExplorerBannerContainer" : nullptr;
-                wxMSWDarkMode::SetTheme(hwndMonthCal, nullptr, themeName);
-                wxUxThemeHandle theme(this, L"FileExplorerBannerContainer");
-                wxColour themeColor = theme.GetColour(0, TMT_FILLCOLOR);
-                COLORREF backColor = themeColor.IsOk() ? themeColor.GetPixel() : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel();
-                DateTime_SetMonthCalColor(hdr->hwndFrom, MCSC_BACKGROUND, backColor);
+               // Disable native uxtheme to prevent animation glitches during header clicks in dark mode custom painting.
+               const wchar_t* themeName = wxMSWDarkMode::IsActive() ? L"" : nullptr;
+               wxMSWDarkMode::SetTheme(hwndMonthCal, themeName, themeName);
+               DTPSetMonthCalLightColours(hdr->hwndFrom);
+               ::SetWindowSubclass(hwndMonthCal, DTPChildSubclassProc, kDTPChildSubclassId, kDTPMonthCal);
+               RECT rcIdeal = {};
+               ::SendMessage(hwndMonthCal, MCM_GETMINREQRECT, 0, (LPARAM)&rcIdeal);
+               // Expand width if the "Today" text string is wider than the grid.
+               DWORD dwMaxTodayWidth = (DWORD)::SendMessage(hwndMonthCal, MCM_GETMAXTODAYWIDTH, 0, 0);
+               if (dwMaxTodayWidth > (DWORD)rcIdeal.right)
+               {
+                   rcIdeal.right = dwMaxTodayWidth;
+               }
+                // Add slight padding around the calendar rectangle.
+                ::InflateRect(&rcIdeal, 3, 3);
+                 // Retrieve the host popup window, adjust for borders, and apply Win11 rounded corners.
+                HWND hwndPopup = ::GetParent(hwndMonthCal);
+                if (hwndPopup)
+                {
+                    WINDOWINFO wi = {};
+                    wi.cbSize = sizeof(WINDOWINFO);
+                    ::GetWindowInfo(hwndPopup, &wi);
+                    ::AdjustWindowRectEx(&rcIdeal, wi.dwStyle, FALSE, wi.dwExStyle);
+
+                    DWORD borderColor = wxMSWDarkMode::IsActive()
+                        ? DTPWinUI::kAccent
+                        : wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT).GetPixel();
+                    // Enable rounded corners on the popup window to align with modern Windows 11 design language.
+                    wxMSWImpl::EnableRoundCorners(hwndPopup, borderColor);
+                    ::SetWindowPos(hwndPopup, nullptr, 0, 0,
+                        rcIdeal.right - rcIdeal.left,
+                        rcIdeal.bottom - rcIdeal.top,
+                        SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+                }
+
             }
         }
         break;
