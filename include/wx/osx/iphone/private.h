@@ -222,11 +222,11 @@ public :
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
     virtual bool InitialShowEventSent() { return m_initialShowSent; }
-    
+
 #if wxOSX_IPHONE_USE_UISCENE
     static void OSXSetUIScene(void *scene);
 #endif
-                              
+
 protected :
 #if wxOSX_IPHONE_USE_UISCENE
     static void *              s_uiScene;
