@@ -1021,8 +1021,7 @@ public:
 private:
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxAny(const char*);  // Disabled
-    wxAny& operator=(const char *&value); // Disabled
-    wxAny& operator=(const char value[]); // Disabled
+    wxAny& operator=(const char *value); // Disabled
     wxAny& operator==(const char *value); // Disabled
 #endif
 
