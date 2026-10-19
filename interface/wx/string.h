@@ -103,6 +103,51 @@
     is compiled with `wxUSE_UTF8_LOCALE_ONLY` option set to 1, as all the
     strings are assumed to be in UTF-8 encoding then.
 
+    Because having to use wxASCII_STR() or wide string literals for all strings
+    in the source code may be inconvenient, since wxWidgets 3.3.5, it is also
+    possible to predefine `wxALLOW_UTF8_LITERALS` in addition to
+    `wxNO_IMPLICIT_WXSTRING_ENCODING` to allow implicitly converting narrow
+    string literals, which are assumed to be in UTF-8, to wxString, while
+    still disallowing implicit conversions from `char*` and `std::string`:
+    @code
+        s = "Grüße"; // OK with wxALLOW_UTF8_LITERALS and always works
+        s = wxString::Format("%d items", n); // OK as well
+
+        const char* p = "world";
+        // s = p; does not compile even with wxALLOW_UTF8_LITERALS
+
+        char buf[256];
+        // s = buf; does not compile either
+    @endcode
+
+    Note that it is impossible to distinguish string literals from other
+    constant `char` arrays in C++, so the latter, e.g. a `char` array field
+    accessed via a pointer to a `const` struct, are converted from UTF-8 too.
+    Non-constant arrays and pointers are not accepted, however.
+
+    String literals are supposed to always be valid UTF-8 and an assertion
+    failure is triggered if this is not the case, which can only happen if
+    they contain invalid UTF-8 sequences specified using hexadecimal escapes.
+
+    `wxALLOW_UTF8_LITERALS` should be defined consistently for all code in the
+    program because the meaning of code using non-ASCII narrow string literals
+    depends on it. Mixing files compiled with and without it can result in
+    the same template function, e.g. `std::find()` used to look for a string
+    literal in a container of wxString objects, being instantiated with
+    different meanings in them, and the linker may then use the version
+    interpreting the literal in the current locale encoding even in the code
+    which expects it to be interpreted as UTF-8 (formally, this is a violation
+    of the One Definition Rule and the behaviour of such program is
+    undefined). Note that this doesn't affect ASCII literals, as their meaning
+    is the same in both cases.
+
+    Also note that the compiler must use UTF-8 for the string literals, which
+    is the case by default with gcc and clang, but requires using `/utf-8` (or
+    `/execution-charset:utf-8`) option with MSVC: a compile-time error is
+    given if this is not the case. And narrow string literals still can't be
+    used as arguments corresponding to `%s` in the format strings, i.e. only
+    the format string itself can be a narrow literal.
+
 
     Similarly, wxString can be converted to:
         - ASCII string using wxString::ToAscii(). This is a potentially

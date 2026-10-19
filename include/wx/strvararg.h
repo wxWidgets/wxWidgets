@@ -134,6 +134,31 @@ wxGCC_WARNING_SUPPRESS(ctor-dtor-privacy)
 // wxFormatString
 // ----------------------------------------------------------------------------
 
+#ifdef wxALLOW_UTF8_LITERALS
+namespace wxPrivate
+{
+
+// Helper of wxFormatString ctor from string literal: never returns a null
+// buffer, even if the literal is not valid UTF-8 (which is not supposed to
+// happen and results in an assert failure), to ensure that its m_wchar is
+// always set.
+//
+// Note that this can't be a member of wxFormatString, as this class is
+// exported from the shared library which is never built with
+// wxALLOW_UTF8_LITERALS defined and so wouldn't contain this function, which
+// could result in link errors if the compiler decides not to inline it.
+inline wxScopedWCharBuffer FormatStringFromUTF8Literal(const char* str)
+{
+    wxScopedWCharBuffer buf = wxConvUTF8.cMB2WC(str);
+    wxCHECK_MSG( buf, wxScopedWCharBuffer::CreateNonOwned(L""),
+                 "string literal must be valid UTF-8" );
+
+    return buf;
+}
+
+} // namespace wxPrivate
+#endif // wxALLOW_UTF8_LITERALS
+
 // This class must be used for format string argument of the functions
 // defined using WX_DEFINE_VARARG_FUNC_* macros. It converts the string to
 // char* or wchar_t* for passing to implementation function efficiently (i.e.
@@ -148,6 +173,17 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxFormatString(const char *str)
         : m_char(wxScopedCharBuffer::CreateNonOwned(str)), m_str(nullptr), m_cstr(nullptr) {}
+#elif defined(wxALLOW_UTF8_LITERALS)
+    // String literals use UTF-8 and not the current locale encoding assumed
+    // for m_char, so convert them to wide strings immediately.
+    template <size_t N>
+    wxFormatString(const char (&str)[N])
+        : m_wchar(wxPrivate::FormatStringFromUTF8Literal(str)),
+          m_str(nullptr), m_cstr(nullptr) {}
+
+    // Non-const arrays are not literals, see the same ctor in wxString.
+    template <size_t N>
+    wxFormatString(char (&str)[N]) = delete;
 #endif
     wxFormatString(const wchar_t *str)
         : m_wchar(wxScopedWCharBuffer::CreateNonOwned(str)), m_str(nullptr), m_cstr(nullptr) {}

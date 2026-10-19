@@ -39,6 +39,7 @@
 
 #include "wx/beforestd.h"
 #include <string>
+#include <type_traits>
 #include <utility>
 
 // Check if C++17 <string_view> is available
@@ -102,6 +103,21 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
+#ifdef wxALLOW_UTF8_LITERALS
+
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+#error wxALLOW_UTF8_LITERALS can only be used with wxNO_IMPLICIT_WXSTRING_ENCODING
+#endif
+
+// Narrow string literals are interpreted as UTF-8, so check that they really
+// use it: this is especially important for MSVC which uses the current code
+// page unless /utf-8 or /execution-charset:utf-8 is specified.
+static_assert(sizeof("\u00E9") == 3,
+              "wxALLOW_UTF8_LITERALS requires UTF-8 execution character set, "
+              "use /utf-8 option when using MSVC");
+
+#endif // wxALLOW_UTF8_LITERALS
+
 #if !wxUSE_UNSAFE_WXSTRING_CONV
     #ifndef wxNO_UNSAFE_WXSTRING_CONV
         #define wxNO_UNSAFE_WXSTRING_CONV
@@ -119,6 +135,18 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 namespace wxPrivate
 {
     template <typename T> struct wxStringAsBufHelper;
+
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+    // This is used to enable deleted template overloads taking narrow string
+    // pointers, which must not be accepted when the encoding must be explicit,
+    // only for "char*" and "const char*". These overloads need to be templates
+    // to avoid being preferred to the overloads taking string literals when
+    // wxALLOW_UTF8_LITERALS is defined.
+    template <typename T>
+    using EnableIfCharPtr =
+        typename std::enable_if<std::is_same<T, const char*>::value ||
+                                std::is_same<T, char*>::value, int>::type;
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 }
 
 // All the symbols here only exist for compatibility in case they're referenced
@@ -392,12 +420,32 @@ public:
   wxString(int) = delete;
 
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+#ifdef wxALLOW_UTF8_LITERALS
+  // Narrow string literals are allowed and are assumed to be in UTF-8.
+  //
+  // Note that the other overloads taking const char* are still disabled and
+  // all the other functions use these ctors to convert literals to wxString.
+  template <size_t N>
+  wxString(const char (&psz)[N]) : wxString(FromUTF8Unchecked(psz)) {}
+
+  // But non-const arrays can't be literals and may contain strings in any
+  // encoding, so they still must not be implicitly converted to wxString.
+  template <size_t N>
+  wxString(char (&psz)[N]) = delete;
+
+#else // !wxALLOW_UTF8_LITERALS
   // These constructors are disabled because the encoding must be explicit
+  // but they can't be declared when constructing wxString from literals is
+  // allowed because they would be preferred to the template ctors above.
   explicit wxString(const char *psz) = delete;
   explicit wxString(const char *psz, size_t nLength) = delete;
+#endif // wxALLOW_UTF8_LITERALS/!wxALLOW_UTF8_LITERALS
+
+  // These constructors are never used for the literals, so they are always
+  // disabled when wxNO_IMPLICIT_WXSTRING_ENCODING is defined.
   explicit wxString(const unsigned char *psz) = delete;
   explicit wxString(const unsigned char *psz, size_t nLength) = delete;
-#endif
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 private:
   // buffer for holding temporary substring when using any of the methods

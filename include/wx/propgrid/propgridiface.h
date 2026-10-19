@@ -146,6 +146,16 @@ public:
         m_property = nullptr;
         m_isProperty = false;
     }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    wxPGPropArgCls( const char (&str)[N] )
+    {
+        m_name = wxString::FromUTF8Unchecked(str);
+        m_property = nullptr;
+        m_isProperty = false;
+    }
+    template <size_t N>
+    wxPGPropArgCls( char (&str)[N] ) = delete;
 #endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const wchar_t* str )
     {
@@ -1042,6 +1052,16 @@ public:
     {
         SetPropertyValueString( id, wxString(value) );
     }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    void SetPropertyValue( wxPGPropArg id, const char (&value)[N] )
+    {
+        SetPropertyValueString( id, wxString::FromUTF8Unchecked(value) );
+    }
+
+    // Prevent non-const arrays from being converted to bool.
+    template <size_t N>
+    void SetPropertyValue( wxPGPropArg id, char (&value)[N] ) = delete;
 #endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
 
     // Sets value (string) of a property.

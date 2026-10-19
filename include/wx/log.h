@@ -986,6 +986,12 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
         FormatString(const char *str) : wxString(str) {}
         FormatString(const wxScopedCharBuffer& str) : wxString(str) {}
+#elif defined(wxALLOW_UTF8_LITERALS)
+        template <size_t N>
+        FormatString(const char (&str)[N])
+            : wxString(FromUTF8Unchecked(str)) {}
+        template <size_t N>
+        FormatString(char (&str)[N]) = delete;
 #endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     };
 

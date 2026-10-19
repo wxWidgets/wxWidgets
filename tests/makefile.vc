@@ -94,6 +94,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_crt.obj \
 	$(OBJS)\test_vsnprintf.obj \
 	$(OBJS)\test_hexconv.obj \
+	$(OBJS)\test_utf8literals.obj \
 	$(OBJS)\test_datastreamtest.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_fileback.obj \
@@ -271,7 +272,8 @@ TEST_ALLHEADERS_OBJECTS =  \
 	$(OBJS)\test_allheaders_asserthelper.obj \
 	$(OBJS)\test_allheaders_test.obj \
 	$(OBJS)\test_allheaders_allheaders.obj \
-	$(OBJS)\test_allheaders_testableframe.obj
+	$(OBJS)\test_allheaders_testableframe.obj \
+	$(OBJS)\test_allheaders_allheaders_utf8.obj
 TEST_ALLHEADERS_RESOURCES =  \
 	$(OBJS)\test_allheaders_test.res
 
@@ -1013,6 +1015,9 @@ $(OBJS)\test_vsnprintf.obj: .\strings\vsnprintf.cpp
 $(OBJS)\test_hexconv.obj: .\strings\hexconv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\strings\hexconv.cpp
 
+$(OBJS)\test_utf8literals.obj: .\strings\utf8literals.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\strings\utf8literals.cpp
+
 $(OBJS)\test_datastreamtest.obj: .\streams\datastreamtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\streams\datastreamtest.cpp
 
@@ -1468,4 +1473,7 @@ $(OBJS)\test_allheaders_allheaders.obj: .\allheaders.cpp
 
 $(OBJS)\test_allheaders_testableframe.obj: .\testableframe.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) .\testableframe.cpp
+
+$(OBJS)\test_allheaders_allheaders_utf8.obj: .\allheaders_utf8.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) .\allheaders_utf8.cpp
 

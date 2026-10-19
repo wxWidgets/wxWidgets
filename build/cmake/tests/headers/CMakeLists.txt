@@ -11,10 +11,19 @@ set(TEST_SRC
     test.cpp
     testableframe.cpp
     allheaders.cpp
+    allheaders_utf8.cpp
 
     testprec.h
     testableframe.h
     allheaders.h
+    )
+
+# This file defines symbols affecting the wx headers before including them, so
+# it can't use precompiled headers.
+set_source_files_properties(${wxSOURCE_DIR}/tests/allheaders_utf8.cpp
+    PROPERTIES
+        SKIP_PRECOMPILE_HEADERS ON
+        COTIRE_EXCLUDED ON
     )
 
 wx_add_test(test_headers CONSOLE_GUI ${TEST_SRC})
