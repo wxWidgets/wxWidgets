@@ -476,6 +476,49 @@ TEST_CASE_METHOD(RichTextCtrlTestCase,
     CHECK(m_rich->GetCaretPosition() == endOfSingleCharacterLine);
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase,
+                 "RichTextCtrl::MoveUpDownThroughEmptyLines",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("Line one\n\nLine three\n\n\nLine six");
+
+    const auto currentLine = [this]()
+    {
+        long x = -1, y = -1;
+        REQUIRE(m_rich->PositionToXY(m_rich->GetInsertionPoint(), &x, &y));
+        return y;
+    };
+
+    m_rich->SetInsertionPoint(4);
+    REQUIRE(currentLine() == 0);
+
+    for ( long line = 1; line <= 5; line++ )
+    {
+        INFO("Moving down to line " << line);
+        REQUIRE(m_rich->MoveDown());
+        CHECK(currentLine() == line);
+    }
+
+    for ( long line = 4; line >= 0; line-- )
+    {
+        INFO("Moving up to line " << line);
+        REQUIRE(m_rich->MoveUp());
+        CHECK(currentLine() == line);
+    }
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase,
+                 "RichTextCtrl::MoveUpToEmptyFirstLine",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("\nLine two");
+
+    m_rich->SetInsertionPointEnd();
+    REQUIRE(m_rich->MoveUp());
+
+    CHECK(m_rich->GetInsertionPoint() == 0);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Selection",
                  "[richtextctrl]")
 {
