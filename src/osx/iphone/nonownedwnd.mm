@@ -369,11 +369,10 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     CGRect appframe = [[UIScreen mainScreen] applicationFrame];
-    appframe = frame;
     BOOL fullscreen = now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent;
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? frame : appframe ) ];
+    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? appframe : frame ) ];
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     wxUIContentViewController* controller = [[wxUIContentViewController alloc] initWithNibName:nil bundle:nil];
 
