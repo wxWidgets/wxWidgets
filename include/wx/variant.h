@@ -204,10 +204,12 @@ public:
     wxVariant(const wxString& val, const wxString& name = wxEmptyString);
     // these overloads are necessary to prevent the compiler from using bool
     // version instead of wxString one:
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxVariant(const char* val, const wxString& name = wxEmptyString);
+    wxVariant(const wxScopedCharBuffer& val, const wxString& name = wxEmptyString);
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     wxVariant(const wchar_t* val, const wxString& name = wxEmptyString);
     wxVariant(const wxCStrData& val, const wxString& name = wxEmptyString);
-    wxVariant(const wxScopedCharBuffer& val, const wxString& name = wxEmptyString);
     wxVariant(const wxScopedWCharBuffer& val, const wxString& name = wxEmptyString);
 
     bool operator== (const wxString& value) const;
@@ -222,7 +224,46 @@ public:
         { return operator!=(wxString(value)); }
     wxVariant& operator=(const char* value)
         { return *this = wxString(value); }
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+#else // wxNO_IMPLICIT_WXSTRING_ENCODING
+    // Narrow strings in unknown encoding can't be used, but we still need to
+    // prevent the bool overloads from being used for them, so delete these
+    // overloads explicitly. Note that they must be templates to avoid being
+    // preferred to the overloads taking string literals below.
+    template <typename T, wxPrivate::EnableIfCharPtr<T> = 0>
+    wxVariant(T, const wxString& = wxEmptyString) = delete;
+    template <typename T, wxPrivate::EnableIfCharPtr<T> = 0>
+    bool operator==(T) const = delete;
+    template <typename T, wxPrivate::EnableIfCharPtr<T> = 0>
+    bool operator!=(T) const = delete;
+    template <typename T, wxPrivate::EnableIfCharPtr<T> = 0>
+    wxVariant& operator=(T) = delete;
+
+    wxVariant(const wxScopedCharBuffer&, const wxString& = wxEmptyString) = delete;
+
+#ifdef wxALLOW_UTF8_LITERALS
+    template <size_t N>
+    wxVariant(const char (&val)[N], const wxString& name = wxEmptyString)
+        : wxVariant(wxString::FromUTF8Unchecked(val), name) {}
+    template <size_t N>
+    bool operator==(const char (&value)[N]) const
+        { return operator==(wxString::FromUTF8Unchecked(value)); }
+    template <size_t N>
+    bool operator!=(const char (&value)[N]) const
+        { return operator!=(wxString::FromUTF8Unchecked(value)); }
+    template <size_t N>
+    wxVariant& operator=(const char (&value)[N])
+        { return *this = wxString::FromUTF8Unchecked(value); }
+
+    template <size_t N>
+    wxVariant(char (&)[N], const wxString& = wxEmptyString) = delete;
+    template <size_t N>
+    bool operator==(char (&)[N]) const = delete;
+    template <size_t N>
+    bool operator!=(char (&)[N]) const = delete;
+    template <size_t N>
+    wxVariant& operator=(char (&)[N]) = delete;
+#endif // wxALLOW_UTF8_LITERALS
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING/wxNO_IMPLICIT_WXSTRING_ENCODING
     wxVariant& operator=(const wchar_t* value)
         { return *this = wxString(value); }
     wxVariant& operator=(const wxCStrData& value)

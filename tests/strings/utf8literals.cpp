@@ -35,6 +35,7 @@
 #include "wx/crt.h"
 #include "wx/fileconf.h"
 #include "wx/sstream.h"
+#include "wx/variant.h"
 
 #include <type_traits>
 
@@ -180,6 +181,22 @@ TEST_CASE("wxALLOW_UTF8_LITERALS::Other", "[string][utf8]")
         CHECK( a[0] == "x" );
         CHECK( a[1] == GRUSSE );
     }
+
+#if wxUSE_VARIANT
+    SECTION("wxVariant")
+    {
+        wxVariant v("Gr\u00fc\u00dfe");
+        CHECK( v.GetType() == "string" );
+        CHECK( v.GetString() == GRUSSE );
+        CHECK( (v == "Gr\u00fc\u00dfe") );
+        CHECK( (v != "Gr\u00fc\u00dfe!") );
+
+        v = true;
+        v = "d\u00e9faut";
+        CHECK( v.GetType() == "string" );
+        CHECK( v.GetString() == L"d\u00e9faut" );
+    }
+#endif // wxUSE_VARIANT
 
 #if wxUSE_FILECONFIG && wxUSE_STREAMS
     SECTION("wxConfig")
