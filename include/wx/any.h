@@ -1018,13 +1018,13 @@ public:
     }
 #endif
 
-private:
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
-    wxAny(const char*);  // Disabled
-    wxAny& operator=(const char *value); // Disabled
-    wxAny& operator==(const char *value); // Disabled
+    wxAny(const char*) = delete;
+    wxAny& operator=(const char *value) = delete;
+    bool operator==(const char *value) const = delete;
 #endif
 
+private:
     // Assignment functions
     void AssignAny(const wxAny& any)
     {
