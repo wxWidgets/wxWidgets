@@ -144,9 +144,15 @@
     Also note that the compiler must use UTF-8 for the string literals, which
     is the case by default with gcc and clang, but requires using `/utf-8` (or
     `/execution-charset:utf-8`) option with MSVC: a compile-time error is
-    given if this is not the case. And narrow string literals still can't be
-    used as arguments corresponding to `%s` in the format strings, i.e. only
-    the format string itself can be a narrow literal.
+    given if this is not the case.
+
+    Narrow string literals can also be used as arguments corresponding to `%s`
+    in the format strings passed to wxString::Format(), wxLogMessage() and the
+    other printf-like functions. To make this possible, these functions take
+    their arguments by reference rather than by value when
+    `wxALLOW_UTF8_LITERALS` is defined, which means that bit-fields and static
+    `const` data members without definition can't be passed to them directly
+    in this case, but have to be copied into a temporary variable first.
 
 
     Similarly, wxString can be converted to:

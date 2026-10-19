@@ -2559,7 +2559,7 @@ public:
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
   template <typename... Targs>
-  int Printf(const wxFormatString& format, Targs... args)
+  int Printf(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
   {
     format.Preprocess(args...);
 
@@ -2567,11 +2567,11 @@ public:
     #if !wxUSE_UTF8_LOCALE_ONLY
       if ( wxLocaleIsUtf8 )
     #endif
-        return DoPrintfUtf8(format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+        return DoPrintfUtf8(format, wxArgNormalizerUtf8<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // wxUSE_UNICODE_UTF8
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-      return DoPrintfWchar(format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+      return DoPrintfWchar(format, wxArgNormalizerWchar<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // !wxUSE_UTF8_LOCALE_ONLY
   }
 
@@ -2580,7 +2580,7 @@ public:
 
     // returns the string containing the result of Printf() to it
   template <typename... Targs>
-  static wxString Format(const wxFormatString& format, Targs... args)
+  static wxString Format(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
   {
       wxString s;
       s.Printf(format, args...);
@@ -2608,7 +2608,7 @@ public:
 
   // use Printf()
   template <typename... Targs>
-  int sprintf(const wxFormatString& format, Targs... args)
+  int sprintf(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
   {
       return Printf(format, args...);
   }

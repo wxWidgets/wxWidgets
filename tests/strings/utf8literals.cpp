@@ -32,6 +32,7 @@
 #ifdef wxALLOW_UTF8_LITERALS
 
 #include "wx/any.h"
+#include "wx/crt.h"
 #include "wx/fileconf.h"
 #include "wx/sstream.h"
 
@@ -140,6 +141,22 @@ TEST_CASE("wxALLOW_UTF8_LITERALS::Format", "[string][utf8]")
 
     // Format strings too.
     WX_ASSERT_FAILS_WITH_ASSERT( (void)wxString::Format("\xff %d", 1) );
+
+    // Literals and other const char arrays can be used as arguments too.
+    CHECK( wxString::Format("%s=%d", "x", 17) == "x=17" );
+    CHECK( wxString::Format("%s!", "Gr\u00fc\u00dfe") == s );
+
+    static constexpr char grusse[] = "Gr\u00fc\u00dfe";
+    s.Printf("%s %s", grusse, wxString(GRUSSE));
+    CHECK( s == wxString(GRUSSE) + " " + GRUSSE );
+
+    wchar_t buf[64];
+    wxSnprintf(buf, WXSIZEOF(buf), "<%s>", grusse);
+    UNSCOPED_INFO( "buf = " << wxString(buf) );
+    CHECK( (wxString(buf) == "<Gr\u00fc\u00dfe>") );
+
+    // And they must be valid UTF-8 too.
+    WX_ASSERT_FAILS_WITH_ASSERT( (void)wxString::Format("%s", "\xff") );
 }
 
 TEST_CASE("wxALLOW_UTF8_LITERALS::Other", "[string][utf8]")
