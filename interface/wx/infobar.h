@@ -163,6 +163,11 @@ public:
 
         This method hides the window and lays out the parent window to account
         for its disappearance (unlike a simple Hide()).
+
+        It is also called when any button in the info bar, including the
+        default "Close" one, is clicked and the corresponding event is not
+        handled, so it may be overridden in a derived class to perform some
+        additional actions when the bar is closed.
      */
     virtual void Dismiss();
 

@@ -508,7 +508,9 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
 
 void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 {
-    DoHide();
+    // Call the virtual function to allow overriding it in the derived classes
+    // and for consistency with the native wxGTK version.
+    Dismiss();
 }
 
 void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)

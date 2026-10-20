@@ -61,4 +61,50 @@ TEST_CASE("wxInfoBarGeneric::CloseButton", "[wxInfoBar][wxInfoBarGeneric]")
     CHECK(closeButton->IsShown());
 }
 
+namespace
+{
+
+class TestInfoBar : public wxInfoBarGeneric
+{
+public:
+    explicit TestInfoBar(wxWindow* parent) : wxInfoBarGeneric(parent) { }
+
+    virtual void Dismiss() override
+    {
+        ++m_dismissCount;
+
+        wxInfoBarGeneric::Dismiss();
+    }
+
+    int m_dismissCount = 0;
+};
+
+} // anonymous namespace
+
+TEST_CASE("wxInfoBarGeneric::Dismiss", "[wxInfoBar][wxInfoBarGeneric]")
+{
+    const auto info = make_unique<TestInfoBar>(wxTheApp->GetTopWindow());
+
+    // Clicking any button, including the default close one, must call the
+    // virtual Dismiss(), which may be overridden as done here.
+    wxWindow* const closeButton = info->FindWindow(wxID_CLOSE);
+    REQUIRE(closeButton);
+
+    wxCommandEvent event(wxEVT_BUTTON, wxID_CLOSE);
+    event.SetEventObject(closeButton);
+    closeButton->HandleWindowEvent(event);
+    CHECK(info->m_dismissCount == 1);
+
+    const int buttonId = wxID_HIGHEST + 1000;
+    info->AddButton(buttonId, "test");
+
+    wxWindow* const button = info->FindWindow(buttonId);
+    REQUIRE(button);
+
+    event.SetId(buttonId);
+    event.SetEventObject(button);
+    button->HandleWindowEvent(event);
+    CHECK(info->m_dismissCount == 2);
+}
+
 #endif // wxUSE_INFOBAR
