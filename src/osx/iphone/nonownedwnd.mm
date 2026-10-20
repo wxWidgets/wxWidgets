@@ -80,17 +80,6 @@ wxPoint2DDouble wxFromNSPointF( UIView* parent, const CGPoint& p )
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl);
 
-#if wxOSX_IPHONE_USE_UISCENE
-
-void * wxNonOwnedWindowIPhoneImpl::s_uiScene = nullptr;
-
-void wxNonOwnedWindowIPhoneImpl::OSXSetUIScene(void *scene)
-{
-    s_uiScene = scene;
-}
-
-#endif
-
 wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) :
     wxNonOwnedWindowImpl(nonownedwnd)
 {
@@ -147,11 +136,10 @@ long style, long /*extraStyle*/, const wxString& /*name*/ )
     CGRect r = CGRectMake( 0, 0, size.x, size.y) ;
 
 #if wxOSX_IPHONE_USE_UISCENE
-    if (s_uiScene)
-    {
-        [m_macWindow initWithWindowScene:(UIWindowScene*) s_uiScene];
-        [m_macWindow setFrame:r];
-    }
+    wxASSERT_MSG( wxTheApp->OSXGetCurrentUIScene(), "There must be a current UIWindowScene when initializing UIWindows" );
+
+    [m_macWindow initWithWindowScene:(UIWindowScene*) wxTheApp->OSXGetCurrentUIScene() ];
+    [m_macWindow setFrame:r];
 #else
     [m_macWindow initWithFrame:r ];
 #endif

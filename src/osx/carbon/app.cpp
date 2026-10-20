@@ -254,6 +254,41 @@ void wxApp::OSXOnBuildMenu(WX_NSObject builder)
 
 #endif
 
+#if wxOSX_USE_IPHONE
+
+#if wxOSX_IPHONE_USE_UISCENE
+
+WX_UIScene s_uiScene = nullptr;
+WX_UISceneSession s_uiSession = nullptr;
+WX_UISceneConnectionOptions s_uiOptions = nullptr;
+
+void wxApp::OSXSetCurrentUIScene(WX_UIScene scene, WX_UISceneSession session, WX_UISceneConnectionOptions options)
+{
+    s_uiScene = scene;
+    s_uiSession = session;
+    s_uiOptions = options;
+}
+
+WX_UIScene wxApp::OSXGetCurrentUIScene() const
+{
+    return s_uiScene;
+}
+
+WX_UISceneSession wxApp::OSXGetCurrentUISceneSession() const
+{
+    return s_uiSession;
+}
+
+WX_UISceneConnectionOptions wxApp::OSXGetCurrentUISceneConnectionOptions() const
+{
+    return s_uiOptions;
+}
+
+#endif
+
+
+#endif
+
 #if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
 
 extern "C" void

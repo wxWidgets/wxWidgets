@@ -54,7 +54,7 @@
 @synthesize window = _window;
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    wxNonOwnedWindowIPhoneImpl::OSXSetUIScene( scene );
+    wxTheApp->OSXSetCurrentUIScene(scene, session, connectionOptions);
     wxTheApp->OnInit();
 }
 
@@ -107,13 +107,20 @@
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
 {
+    return (UISceneConfiguration*) wxTheApp->OSXCreateConfigurationForSession(connectingSceneSession, options);
+}
+#endif
+
+@end
+
+#if wxOSX_IPHONE_USE_UISCENE
+WX_UISceneConfiguration wxApp::OSXCreateConfigurationForSession(WX_UISceneSession connectingSceneSession, WX_UISceneConnectionOptions options)
+{
     UISceneConfiguration *configuration = [[UISceneConfiguration alloc] initWithName:nil sessionRole:connectingSceneSession.role];
     configuration.delegateClass = SceneDelegate.class;
     return configuration;
 }
 #endif
-
-@end
 
 bool wxApp::CallOnInit()
 {
