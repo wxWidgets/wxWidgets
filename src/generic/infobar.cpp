@@ -38,6 +38,8 @@
 #include "wx/valgen.h"
 #include "wx/checkbox.h"
 
+#include "wx/private/bmpbuttn.h"
+
 #if wxUSE_ACCESSIBILITY
 
 class wxInfoBarGenericAccessible : public wxWindowAccessible
@@ -181,6 +183,18 @@ bool wxInfoBarGeneric::SetForegroundColour(const wxColor& colour)
 
     if ( m_checkbox )
         m_checkbox->SetForegroundColour(colour);
+
+    return true;
+}
+
+bool wxInfoBarGeneric::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxInfoBarBase::SetBackgroundColour(colour) )
+        return false;
+
+    // check that we're not called before Create()
+    if ( m_button )
+        UpdateCloseButtonBackground();
 
     return true;
 }
@@ -601,7 +615,12 @@ void wxInfoBarGeneric::UpdateColours()
         m_checkbox->SetForegroundColour(colFg);
     }
 
-    m_button->SetBackgroundColour(GetBackgroundColour());
+    UpdateCloseButtonBackground();
+}
+
+void wxInfoBarGeneric::UpdateCloseButtonBackground()
+{
+    wxPrivate::SetCloseButtonBackground(m_button, GetBackgroundColour());
 }
 
 void wxInfoBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)

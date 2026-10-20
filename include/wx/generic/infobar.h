@@ -104,6 +104,9 @@ public:
     // same thing with the colour: this affects the text and checkbox colour
     virtual bool SetForegroundColour(const wxColor& colour) override;
 
+    // background colour also needs to be applied to the close button
+    virtual bool SetBackgroundColour(const wxColour& colour) override;
+
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
 #endif // wxUSE_ACCESSIBILITY
@@ -147,6 +150,7 @@ private:
     BarPlacement GetBarPlacement() const;
 
     void UpdateColours();
+    void UpdateCloseButtonBackground();
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // different controls making up the bar
