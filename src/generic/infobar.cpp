@@ -90,19 +90,6 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-void wxInfoBarGeneric::Init()
-{
-    m_icon = nullptr;
-    m_text = nullptr;
-    m_button = nullptr;
-
-    m_showEffect =
-    m_hideEffect = wxSHOW_EFFECT_MAX;
-
-    // use default effect duration
-    m_effectDuration = 0;
-}
-
 bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
 {
     // calling Hide() before Create() ensures that we're created initially

@@ -31,11 +31,10 @@ class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxNavigationEnabled<wxInfoBarBa
 public:
     // the usual ctors and Create() but remember that info bar is created
     // hidden
-    wxInfoBarGeneric() { Init(); }
+    wxInfoBarGeneric() = default;
 
     wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0)
     {
-        Init();
         Create(parent, winid, style);
     }
 
@@ -122,9 +121,6 @@ protected:
     void UpdateParent();
 
 private:
-    // common part of all ctors
-    void Init();
-
     virtual bool UseNative() const { return false; }
 
     // handler for the close button
@@ -162,9 +158,9 @@ private:
     // the effects to use when showing/hiding and duration for them: by default
     // the effect is determined by the info bar automatically depending on its
     // position and the default duration is used
-    wxShowEffect m_showEffect,
-                 m_hideEffect;
-    int m_effectDuration;
+    wxShowEffect m_showEffect = wxSHOW_EFFECT_MAX,
+                 m_hideEffect = wxSHOW_EFFECT_MAX;
+    int m_effectDuration = 0;
 
     // when to show m_button
     ShowButton m_showCloseButton = ShowButton::Auto;
