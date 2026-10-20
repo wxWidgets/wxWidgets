@@ -18,9 +18,11 @@ set(TEST_SRC
     allheaders.h
     )
 
-# This file defines symbols affecting the wx headers before including them, so
-# it can't use precompiled headers.
-set_source_files_properties(${wxSOURCE_DIR}/tests/allheaders_utf8.cpp
+# These files define symbols affecting the wx headers before including them,
+# so they can't use precompiled headers.
+set_source_files_properties(
+    ${wxSOURCE_DIR}/tests/allheaders.cpp
+    ${wxSOURCE_DIR}/tests/allheaders_utf8.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
         COTIRE_EXCLUDED ON
