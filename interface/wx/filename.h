@@ -1406,6 +1406,25 @@ public:
     bool SetPermissions(int permissions);
 
     /**
+        Returns the account that owns this file or directory.
+
+        Note that the owner of a file created by an administrator under MSW
+        may be the "Administrators" group rather than an individual user.
+
+        The owner of the file may not have a name (e.g., if it was copied from
+        another system), but this is not an error. wxLocalAccount::IsOk()
+        returns @true and wxLocalAccount::GetId() can be used in this case.
+
+        @since 3.3.4
+
+        @return The owner account, which is not valid if it couldn't be
+                determined (for example, because the file doesn't exist).
+
+        @see wxLocalAccount
+    */
+    wxLocalAccount GetOwner() const;
+
+    /**
         Copies the attributes of the given file to this one.
 
         This function is useful when replacing an existing file by writing the
