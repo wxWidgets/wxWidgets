@@ -247,7 +247,8 @@ public:
     // to other InputAsXXX() methods
     wxString InputAsString() const;
 
-#if !wxUSE_UNICODE_WCHAR && !defined wxNO_IMPLICIT_WXSTRING_ENCODING
+    // Note that this is needed even with wxNO_IMPLICIT_WXSTRING_ENCODING.
+#if !wxUSE_UNICODE_WCHAR
     operator const char*() const
         { return const_cast<wxFormatString*>(this)->AsChar(); }
 private:
@@ -258,7 +259,7 @@ private:
     const char* InputAsChar();
     const char* AsChar();
     wxScopedCharBuffer m_convertedChar;
-#endif // !wxUSE_UNICODE_WCHAR && !defined wx_NO_IMPLICIT_WXSTRING_ENCODING
+#endif // !wxUSE_UNICODE_WCHAR
 
 #if !wxUSE_UTF8_LOCALE_ONLY
 public:
