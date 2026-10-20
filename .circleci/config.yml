@@ -14,6 +14,22 @@ jobs:
           method: blobless
 
       - run:
+          name: Skip if only MSW files changed
+          command: |
+            # Nothing to build or test here if the changes are limited to the
+            # Windows-only code. Be conservative: if anything goes wrong while
+            # determining the changed files, just continue with the build.
+            git fetch --quiet origin master || true
+            base=$(git merge-base origin/master HEAD 2>/dev/null) || exit 0
+            changed=$(git diff --name-only "$base" HEAD) || exit 0
+            if [ -n "$changed" ] && \
+                    ! echo "$changed" | grep -qvE '^(include/wx/msw|src/msw)/'; then
+              echo "Only MSW files changed, skipping the build:"
+              echo "$changed"
+              circleci-agent step halt
+            fi
+
+      - run:
           name: Install dependencies
           command: |
             # Do _not_ use the CPU count returned by build/tools/proc_count.sh
