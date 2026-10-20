@@ -110,9 +110,12 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     m_button = wxBitmapButton::NewCloseButton(this, wxID_CLOSE);
     m_button->SetToolTip(_("Hide this notification message."));
 
-    m_checkbox =
-        new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-            wxDefaultSize, 0, wxGenericValidator(&m_checked));
+    if ( HasFlag(wxINFOBAR_CHECKBOX) )
+    {
+        m_checkbox =
+            new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                wxDefaultSize, 0, wxGenericValidator(&m_checked));
+    }
 
     UpdateColours();
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxInfoBarGeneric::OnSysColourChanged, this);
@@ -131,12 +134,16 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     firstRowSizer->Add(m_text, wxSizerFlags{}.Proportion(1).Centre());
     firstRowSizer->AddSpacer(0); // This spacer only exists for compatibility.
 
+    // the second row is always present, even if it's empty, to keep the same
+    // layout structure in all cases
     wxBoxSizer* const secondRowSizer = new wxBoxSizer(wxHORIZONTAL);
-    secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
+    if ( m_checkbox )
+        secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
 
     defaultControlSizer->Add(firstRowSizer, wxSizerFlags{ 1 }.Expand());
     defaultControlSizer->Add(secondRowSizer);
-    defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
+    if ( m_checkbox )
+        defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
 
     sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
 
@@ -598,7 +605,9 @@ void wxInfoBarGeneric::UpdateColours()
     if ( !m_hasFgCol )
     {
         m_text->SetForegroundColour(colFg);
-        m_checkbox->SetForegroundColour(colFg);
+
+        if ( m_checkbox )
+            m_checkbox->SetForegroundColour(colFg);
     }
 
     UpdateCloseButtonBackground();

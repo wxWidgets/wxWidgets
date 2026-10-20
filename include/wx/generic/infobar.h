@@ -152,6 +152,8 @@ private:
     wxStaticBitmap *m_icon = nullptr;
     wxStaticText *m_text = nullptr;
     wxBitmapButton *m_button = nullptr;
+
+    // only created if wxINFOBAR_CHECKBOX style is used
     wxCheckBox *m_checkbox = nullptr;
 
     // the effects to use when showing/hiding and duration for them: by default
