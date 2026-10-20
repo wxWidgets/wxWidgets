@@ -38,6 +38,21 @@ TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar]")
 
     info->RemoveButton(buttonId);
     CHECK(info->GetButtonCount() == 0);
+
+    info->AddButton(buttonId, "first");
+    info->AddButton(buttonId + 1, "second");
+    info->AddButton(buttonId + 2, "third");
+    CHECK(info->GetButtonCount() == 3);
+
+    info->RemoveAllButtons();
+    CHECK(info->GetButtonCount() == 0);
+    CHECK(!info->HasButtonId(buttonId));
+    CHECK(!info->HasButtonId(buttonId + 1));
+    CHECK(!info->HasButtonId(buttonId + 2));
+
+    // Calling it when there are no buttons is harmless.
+    info->RemoveAllButtons();
+    CHECK(info->GetButtonCount() == 0);
 }
 
 TEST_CASE("wxInfoBarGeneric::CloseButton", "[wxInfoBar][wxInfoBarGeneric]")
@@ -58,6 +73,24 @@ TEST_CASE("wxInfoBarGeneric::CloseButton", "[wxInfoBar][wxInfoBarGeneric]")
 
     // And removing the last one must restore it.
     info->RemoveButton(buttonId);
+    CHECK(closeButton->IsShown());
+}
+
+TEST_CASE("wxInfoBarGeneric::RemoveAllButtons", "[wxInfoBar][wxInfoBarGeneric]")
+{
+    const auto info = make_unique<wxInfoBarGeneric>(wxTheApp->GetTopWindow());
+
+    wxWindow* const closeButton = info->FindWindow(wxID_CLOSE);
+    REQUIRE(closeButton);
+
+    const int buttonId = wxID_HIGHEST + 1000;
+    info->AddButton(buttonId, "first");
+    info->AddButton(buttonId + 1, "second");
+    CHECK(!closeButton->IsShown());
+
+    info->RemoveAllButtons();
+    CHECK(!info->FindWindow(buttonId));
+    CHECK(!info->FindWindow(buttonId + 1));
     CHECK(closeButton->IsShown());
 }
 

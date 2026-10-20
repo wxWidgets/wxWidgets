@@ -506,6 +506,12 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
     }
 }
 
+void wxInfoBarBase::RemoveAllButtons()
+{
+    for ( size_t n = GetButtonCount(); n > 0; --n )
+        RemoveButton(GetButtonId(n - 1));
+}
+
 void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 {
     // Call the virtual function to allow overriding it in the derived classes

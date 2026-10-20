@@ -182,6 +182,16 @@ public:
     void RemoveButton(wxWindowID btnid);
 
     /**
+        Remove all buttons previously added by AddButton().
+
+        After calling this function, the info bar shows the default "Close"
+        button again, just as it did before any buttons were added to it.
+
+        @since 3.3.5
+     */
+    void RemoveAllButtons();
+
+    /**
         Show a message in the bar.
 
         If the bar is currently hidden, it will be shown. Otherwise its message

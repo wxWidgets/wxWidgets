@@ -46,6 +46,9 @@ public:
     // remove a button previously added by AddButton()
     virtual void RemoveButton(wxWindowID btnid) = 0;
 
+    // remove all buttons added by AddButton(), restoring the default close one
+    void RemoveAllButtons();
+
     // get information about the currently shown buttons
     virtual size_t GetButtonCount() const = 0;
     virtual wxWindowID GetButtonId(size_t idx) const = 0;
