@@ -13,9 +13,9 @@
  */
 enum
 {
-    /// Include support for showing a customizable checkbox()
-    /// at the bottom of a wxInfoBar.
-    wxINFOBAR_CHECKBOX = 0x0080
+    /// Include support for showing a customizable checkbox
+    /// at the bottom of a wxInfoBar, see wxInfoBar::ShowCheckBox().
+    wxINFOBAR_CHECKBOX = 0x0010
 };
 
 /**
