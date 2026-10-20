@@ -2179,27 +2179,27 @@ public:
   // stream-like functions
       // insert an int into string
   wxString& operator<<(int i)
-    { return append(wxToStdString(i)); }
+    { return append(FromImpl(wxToStdString(i))); }
       // insert an unsigned int into string
   wxString& operator<<(unsigned int ui)
-    { return append(wxToStdString(ui)); }
+    { return append(FromImpl(wxToStdString(ui))); }
       // insert a long into string
   wxString& operator<<(long l)
-    { return append(wxToStdString(l)); }
+    { return append(FromImpl(wxToStdString(l))); }
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
-    { return append(wxToStdString(ul)); }
+    { return append(FromImpl(wxToStdString(ul))); }
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
-    { return append(wxToStdString(ll)); }
+    { return append(FromImpl(wxToStdString(ll))); }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
-    { return append(wxToStdString(ull)); }
+    { return append(FromImpl(wxToStdString(ull))); }
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a float into string
   wxString& operator<<(float f)
-    { return append(wxToStdString(f)); }
+    { return append(FromImpl(wxToStdString(f))); }
       // insert a double into string
       //
       // This doesn't use std::to_[w]string because this would use "%f" format
