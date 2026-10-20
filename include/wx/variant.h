@@ -216,6 +216,10 @@ public:
     // these overloads are necessary to prevent the compiler from using bool
     // version instead of wxString one:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    bool operator==(const char* value) const
+        { return operator==(wxString(value)); }
+    bool operator!=(const char* value) const
+        { return operator!=(wxString(value)); }
     wxVariant& operator=(const char* value)
         { return *this = wxString(value); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
