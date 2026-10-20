@@ -101,7 +101,7 @@ public:
     // (default font is a larger and bold version of the normal one)
     virtual bool SetFont(const wxFont& font) override;
 
-    // same thing with the colour: this affects the text colour
+    // same thing with the colour: this affects the text and checkbox colour
     virtual bool SetForegroundColour(const wxColor& colour) override;
 
 #if wxUSE_ACCESSIBILITY

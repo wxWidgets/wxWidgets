@@ -179,6 +179,9 @@ bool wxInfoBarGeneric::SetForegroundColour(const wxColor& colour)
     if ( m_text )
         m_text->SetForegroundColour(colour);
 
+    if ( m_checkbox )
+        m_checkbox->SetForegroundColour(colour);
+
     return true;
 }
 
@@ -593,10 +596,10 @@ void wxInfoBarGeneric::UpdateColours()
         m_backgroundColour = colBg;
 
     if ( !m_hasFgCol )
+    {
         m_text->SetForegroundColour(colFg);
-
-    m_checkbox->SetForegroundColour(
-        wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+        m_checkbox->SetForegroundColour(colFg);
+    }
 
     m_button->SetBackgroundColour(GetBackgroundColour());
 }
