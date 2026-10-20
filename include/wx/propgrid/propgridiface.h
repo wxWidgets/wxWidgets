@@ -1064,6 +1064,13 @@ public:
     void SetPropertyValue( wxPGPropArg id, char (&value)[N] ) = delete;
 #endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
 
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+    // Prevent narrow strings from being converted to bool: this needs to be a
+    // template to avoid being preferred to the overload taking literals.
+    template <typename T, wxPrivate::EnableIfCharPtr<T> = 0>
+    void SetPropertyValue( wxPGPropArg id, T value ) = delete;
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
     // Sets value (string) of a property.
     void SetPropertyValue( wxPGPropArg id, const wxString& value )
     {
