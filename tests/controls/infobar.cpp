@@ -179,6 +179,32 @@ TEST_CASE("wxInfoBarGeneric::ShowCloseButton", "[wxInfoBar][wxInfoBarGeneric]")
     }
 }
 
+TEST_CASE("wxInfoBarGeneric::Colours", "[wxInfoBar][wxInfoBarGeneric]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    const auto ref = make_unique<wxInfoBarGeneric>(parent);
+    const wxColour colBg = ref->GetBackgroundColour();
+
+    // Setting the foreground colour before creating the bar must not affect
+    // its special background colour.
+    auto info = make_unique<wxInfoBarGeneric>();
+    info->SetForegroundColour(*wxRED);
+    REQUIRE(info->Create(parent));
+    CHECK(info->GetBackgroundColour() == colBg);
+
+    // And it must not be lost when the system colours change either.
+    wxSysColourChangedEvent event;
+    info->HandleWindowEvent(event);
+    CHECK(info->GetBackgroundColour() == colBg);
+
+    // Same thing for the colour set after creating the bar.
+    info = make_unique<wxInfoBarGeneric>(parent);
+    info->SetForegroundColour(*wxRED);
+    info->HandleWindowEvent(event);
+    CHECK(info->GetBackgroundColour() == colBg);
+}
+
 namespace
 {
 

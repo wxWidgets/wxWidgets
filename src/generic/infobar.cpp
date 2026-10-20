@@ -562,9 +562,9 @@ void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
 
 void wxInfoBarGeneric::UpdateColours()
 {
-    // use special, easy to notice, colours
+    // use special, easy to notice, colours for those not set explicitly
     wxColour colBg, colFg;
-    if ( !m_hasBgCol && !m_hasFgCol )
+    if ( !m_hasBgCol || !m_hasFgCol )
     {
         // We want to use the native infobar colours for consistency with the
         // native implementation under GTK, but only do it for 3.24, as both
