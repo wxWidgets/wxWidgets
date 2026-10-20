@@ -21,8 +21,8 @@ public:
                     const wxPoint& pos = wxDefaultPosition);
 
     virtual int ShowModal() override;
-
-#if wxOSX_USE_COCOA
+    
+#if wxOSX_USE_COCOA_OR_IPHONE
     virtual void ShowWindowModal() override;
     virtual void ModalFinishedCallback(void* panel, int resultCode) override;
 #endif
