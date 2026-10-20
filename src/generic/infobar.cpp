@@ -501,7 +501,7 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
         // if the last item is the sizer containing the text (or the spacer
         // which used to precede the buttons), none are left so restore the
         // standard close button
-        sizer->Add(m_button, wxSizerFlags().Centre().DoubleBorder());
+        sizer->Add(m_button, wxSizerFlags().Centre().Border());
         m_button->Show();
     }
 }
