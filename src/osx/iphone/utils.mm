@@ -55,7 +55,7 @@
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
     wxTheApp->OSXSetCurrentUIScene(scene, session, connectionOptions);
-    wxTheApp->OnInit();
+    wxTheApp->OSXCallOnInitOnce();
 }
 
 @end

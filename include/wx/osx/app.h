@@ -171,6 +171,10 @@ public:
     WX_UIScene OSXGetCurrentUIScene() const;
     WX_UISceneSession OSXGetCurrentUISceneSession() const;
     WX_UISceneConnectionOptions OSXGetCurrentUISceneConnectionOptions() const;
+
+    // As on OnInit must be called only once but from a willConnectToSession callback use this method if you implement
+    // your own SceneDelegate
+    void OSXCallOnInitOnce();
 #endif
 #endif
 private:

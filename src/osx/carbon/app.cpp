@@ -284,6 +284,16 @@ WX_UISceneConnectionOptions wxApp::OSXGetCurrentUISceneConnectionOptions() const
     return s_uiOptions;
 }
 
+void wxApp::OSXCallOnInitOnce()
+{
+    static bool inited = false;
+    if ( !inited )
+    {
+        inited = true;
+        OnInit();
+    }
+}
+
 #endif
 
 
