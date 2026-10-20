@@ -1,1 +1,0 @@
-All (GUI): Fix regression with moving caret in wxRichTextCtrl in 3.3.4 (#27252).
