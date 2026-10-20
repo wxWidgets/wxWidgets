@@ -97,7 +97,6 @@ public:
     // -----------------------------
 
     // setting the font of this window sets it for the text control inside it
-    // (default font is a larger and bold version of the normal one)
     virtual bool SetFont(const wxFont& font) override;
 
     // same thing with the colour: this affects the text and checkbox colour
