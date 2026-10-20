@@ -39,7 +39,8 @@ public:
     virtual void Dismiss() = 0;
 
     // add an extra button to the bar, near the message (replacing the default
-    // close button which is only shown if no extra buttons are used)
+    // close button which, by default, is only shown if no extra buttons are
+    // used)
     virtual void AddButton(wxWindowID btnid,
                            const wxString& label = wxString()) = 0;
 
@@ -53,6 +54,17 @@ public:
     virtual size_t GetButtonCount() const = 0;
     virtual wxWindowID GetButtonId(size_t idx) const = 0;
     virtual bool HasButtonId(wxWindowID btnid) const = 0;
+
+    // possible values for ShowCloseButton() argument
+    enum class ShowButton
+    {
+        Auto,   // only if there are no other buttons (default)
+        Always, // always, after all the other buttons
+        Never   // never, even if there are no other buttons
+    };
+
+    // choose when the default close button is shown
+    virtual void ShowCloseButton(ShowButton show) = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);

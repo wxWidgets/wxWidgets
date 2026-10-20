@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
 #include "wx/infobar.h"
@@ -92,6 +93,90 @@ TEST_CASE("wxInfoBarGeneric::RemoveAllButtons", "[wxInfoBar][wxInfoBarGeneric]")
     CHECK(!info->FindWindow(buttonId));
     CHECK(!info->FindWindow(buttonId + 1));
     CHECK(closeButton->IsShown());
+}
+
+TEST_CASE("wxInfoBar::ShowCloseButton", "[wxInfoBar]")
+{
+    // This test uses the native version under GTK, so we can only check that
+    // the close button is never counted as one of the custom buttons.
+    const auto info = make_unique<wxInfoBar>(wxTheApp->GetTopWindow());
+
+    info->ShowCloseButton(wxInfoBar::ShowButton::Always);
+    CHECK(info->GetButtonCount() == 0);
+    CHECK(!info->HasButtonId(wxID_CLOSE));
+
+    const int buttonId = wxID_HIGHEST + 1000;
+    info->AddButton(buttonId, "test");
+    CHECK(info->GetButtonCount() == 1);
+    CHECK(info->GetButtonId(0) == buttonId);
+    CHECK(!info->HasButtonId(wxID_CLOSE));
+
+    info->ShowCloseButton(wxInfoBar::ShowButton::Never);
+    info->RemoveAllButtons();
+    CHECK(info->GetButtonCount() == 0);
+    CHECK(!info->HasButtonId(wxID_CLOSE));
+}
+
+TEST_CASE("wxInfoBarGeneric::ShowCloseButton", "[wxInfoBar][wxInfoBarGeneric]")
+{
+    const auto info = make_unique<wxInfoBarGeneric>(wxTheApp->GetTopWindow());
+
+    wxWindow* const closeButton = info->FindWindow(wxID_CLOSE);
+    REQUIRE(closeButton);
+
+    const auto isLastItem = [&info](wxWindow* win)
+    {
+        return info->GetSizer()->GetChildren().GetLast()->GetData()->GetWindow() == win;
+    };
+
+    const int buttonId = wxID_HIGHEST + 1000;
+
+    SECTION("Always")
+    {
+        info->ShowCloseButton(wxInfoBar::ShowButton::Always);
+        CHECK(closeButton->IsShown());
+
+        // The close button must remain shown and come after the new buttons.
+        info->AddButton(buttonId, "first");
+        CHECK(closeButton->IsShown());
+        CHECK(isLastItem(closeButton));
+
+        info->AddButton(buttonId + 1, "second");
+        CHECK(closeButton->IsShown());
+        CHECK(isLastItem(closeButton));
+
+        CHECK(info->GetButtonCount() == 2);
+        CHECK(info->GetButtonId(0) == buttonId);
+        CHECK(info->GetButtonId(1) == buttonId + 1);
+        CHECK(!info->HasButtonId(wxID_CLOSE));
+
+        info->RemoveAllButtons();
+        CHECK(closeButton->IsShown());
+
+        // Restoring the default behaviour hides the close button if there are
+        // any other buttons.
+        info->AddButton(buttonId, "test");
+        info->ShowCloseButton(wxInfoBar::ShowButton::Auto);
+        CHECK(!closeButton->IsShown());
+        CHECK(isLastItem(info->FindWindow(buttonId)));
+    }
+
+    SECTION("Never")
+    {
+        info->ShowCloseButton(wxInfoBar::ShowButton::Never);
+        CHECK(!closeButton->IsShown());
+
+        info->AddButton(buttonId, "test");
+        CHECK(!closeButton->IsShown());
+
+        // Removing the last custom button must not restore the close one.
+        info->RemoveButton(buttonId);
+        CHECK(!closeButton->IsShown());
+        CHECK(info->GetButtonCount() == 0);
+
+        info->ShowCloseButton(wxInfoBar::ShowButton::Auto);
+        CHECK(closeButton->IsShown());
+    }
 }
 
 namespace

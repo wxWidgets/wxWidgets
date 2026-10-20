@@ -30,10 +30,10 @@ enum
     higher chance to be noticed by the user but without being annoying.
 
     Info bar may show an icon (on the left), text message and, optionally,
-    buttons allowing the user to react to the information presented. Unless
-    a custom button was added to the info bar, it also has a close button at
-    the right allowing the user to dismiss it so it isn't necessary to provide
-    a button just to close it.
+    buttons allowing the user to react to the information presented. By
+    default, i.e. if ShowCloseButton() wasn't called, the info bar without any
+    custom buttons also has a close button at the right allowing the user to
+    dismiss it so it isn't necessary to provide a button just to close it.
 
     wxInfoBar calls its parent wxWindow::Layout() method and assumes that it
     will change the parent layout appropriately depending on whether the info
@@ -87,6 +87,28 @@ class wxInfoBar : public wxControl
 {
 public:
     /**
+        Possible values for ShowCloseButton() argument.
+
+        @since 3.3.5
+     */
+    enum class ShowButton
+    {
+        /// Show the close button only if no other buttons were added.
+        ///
+        /// This is the default.
+        Auto,
+
+        /// Always show the close button, after all the other buttons.
+        Always,
+
+        /// Never show the close button, even if there are no other buttons.
+        ///
+        /// The application should provide some other way to hide the info bar
+        /// in this case, e.g. by calling Dismiss() after a timer expiration.
+        Never
+    };
+
+    /**
         Default constructor.
 
         Use Create() for the objects created using this constructor.
@@ -130,7 +152,8 @@ public:
         (in LTR layout), with each successive button being added to the right
         of the previous one. If any buttons are added to the info bar using
         this method, the default "Close" button is not shown as it is assumed
-        that the extra buttons already allow the user to close it.
+        that the extra buttons already allow the user to close it, unless
+        ShowCloseButton() was called to change this.
 
         Clicking the button will generate a normal EVT_COMMAND_BUTTON_CLICKED
         event which can be handled as usual. The default handler in wxInfoBar
@@ -185,11 +208,39 @@ public:
         Remove all buttons previously added by AddButton().
 
         After calling this function, the info bar shows the default "Close"
-        button again, just as it did before any buttons were added to it.
+        button again, just as it did before any buttons were added to it
+        (unless ShowCloseButton() was called with ShowButton::Never).
 
         @since 3.3.5
      */
     void RemoveAllButtons();
+
+    /**
+        Choose when the default "Close" button is shown.
+
+        By default, this button is only shown if no other buttons were added
+        using AddButton(), as it's assumed that they allow the user to close
+        the info bar. Calling this function with ShowButton::Always allows to
+        show it in addition to the custom buttons (it is then always shown
+        after all of them) and ShowButton::Never allows to hide it even when
+        there are no other buttons.
+
+        Note that if the close button is never shown, the application must
+        provide some other way to hide the info bar, e.g. by calling Dismiss()
+        after some time, as the user would have no way to do it otherwise.
+
+        This function may be called at any moment, including when the info
+        bar is already shown, and its effect persists until it is called
+        again. The close button is never counted by GetButtonCount() nor
+        returned by GetButtonId() or found by HasButtonId(), whether it is
+        shown or not.
+
+        @param show
+            When the close button should be shown.
+
+        @since 3.3.5
+     */
+    void ShowCloseButton(ShowButton show);
 
     /**
         Show a message in the bar.

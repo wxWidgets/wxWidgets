@@ -50,9 +50,12 @@ public:
     // label for the text shown in the bar
     GtkWidget *m_label;
 
-    // the default close button, nullptr if not needed (m_buttons is not empty) or
-    // not created yet
+    // the default close button, nullptr if not needed (m_buttons is not empty
+    // or m_showClose is Never) or not created yet
     GtkWidget *m_close;
+
+    // when to show m_close
+    wxInfoBar::ShowButton m_showClose = wxInfoBar::ShowButton::Auto;
 
     // information about the buttons added using AddButton()
     struct Button
@@ -182,11 +185,8 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     }
 
     // if we don't have any buttons, create a standard close one to give the
-    // user at least some way to close the bar
-    if ( m_impl->m_buttons.empty() && !m_impl->m_close )
-    {
-        m_impl->m_close = GTKAddButton(wxID_CLOSE);
-    }
+    // user at least some way to close the bar (unless this was disabled)
+    GTKUpdateCloseButton();
 
     GtkMessageType type;
     if ( wxGTKImpl::ConvertMessageTypeFromWX(flags, &type) )
@@ -273,7 +273,8 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
     }
 
     // if we had created the default close button before, remove it now that we
-    // have some user-defined button
+    // have some user-defined button: even if it still needs to be shown, it
+    // must be recreated to come after the new button
     if ( m_impl->m_close )
     {
         gtk_widget_destroy(m_impl->m_close);
@@ -283,6 +284,53 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
     GtkWidget * const button = GTKAddButton(btnid, label);
     if ( button )
         m_impl->m_buttons.push_back(wxInfoBarGTKImpl::Button(button, btnid));
+
+    GTKUpdateCloseButton();
+}
+
+void wxInfoBar::GTKUpdateCloseButton()
+{
+    bool show = false;
+    switch ( m_impl->m_showClose )
+    {
+        case ShowButton::Auto:
+            show = m_impl->m_buttons.empty();
+            break;
+
+        case ShowButton::Always:
+            show = true;
+            break;
+
+        case ShowButton::Never:
+            break;
+    }
+
+    if ( show )
+    {
+        if ( !m_impl->m_close )
+            m_impl->m_close = GTKAddButton(wxID_CLOSE);
+    }
+    else if ( m_impl->m_close )
+    {
+        gtk_widget_destroy(m_impl->m_close);
+        m_impl->m_close = nullptr;
+
+        // see comment in GTKAddButton()
+        InvalidateBestSize();
+    }
+}
+
+void wxInfoBar::ShowCloseButton(ShowButton show)
+{
+    if ( !UseNative() )
+    {
+        wxInfoBarGeneric::ShowCloseButton(show);
+        return;
+    }
+
+    m_impl->m_showClose = show;
+
+    GTKUpdateCloseButton();
 }
 
 bool wxInfoBar::HasButtonId(wxWindowID btnid) const
@@ -324,6 +372,9 @@ void wxInfoBar::RemoveButton(wxWindowID btnid)
 
             // see comment in GTKAddButton()
             InvalidateBestSize();
+
+            // restore the default close button if it was the last one
+            GTKUpdateCloseButton();
 
             return;
         }

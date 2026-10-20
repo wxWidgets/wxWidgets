@@ -133,8 +133,9 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     // button at the very right
     //
     // NB: AddButton() and the other functions dealing with the buttons rely on
-    //     the buttons being the last items in the top level sizer and being
-    //     preceded by the sizer containing all the other controls
+    //     the buttons, including the close one if it's shown, being the last
+    //     items in the top level sizer and being preceded by the sizer
+    //     containing all the other controls
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     wxSizer * const defaultControlSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* const firstRowSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -150,9 +151,10 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
 
     sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
-    sizer->Add(m_button, wxSizerFlags{}.Centre().Border());
 
     SetSizer(sizer);
+
+    UpdateCloseButton();
 
     return true;
 }
@@ -338,13 +340,6 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
     wxSizer * const sizer = GetSizer();
     wxCHECK_RET( sizer, "must be created first" );
 
-    // user-added buttons replace the standard close button so remove it if we
-    // hadn't done it yet
-    if ( sizer->Detach(m_button) )
-    {
-        m_button->Hide();
-    }
-
     wxButton * const button = new wxButton(this, btnid, label);
 
 #ifdef __WXMAC__
@@ -353,8 +348,10 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 #endif // __WXMAC__
 
     sizer->Add(button, wxSizerFlags().Centre().DoubleBorder());
-    if ( IsShown() )
-        sizer->Layout();
+
+    // user-added buttons replace the standard close button by default and,
+    // even if it remains shown, it must come after them
+    UpdateCloseButton();
 }
 
 size_t wxInfoBarGeneric::GetButtonCount() const
@@ -378,9 +375,9 @@ size_t wxInfoBarGeneric::GetButtonCount() const
         if ( item->IsSpacer() || item->IsSizer() )
             break;
 
-        // if the standard button is shown, there must be no other ones
+        // the standard button is not counted
         if ( item->GetWindow() == m_button )
-            return 0;
+            continue;
 
         ++count;
     }
@@ -412,13 +409,11 @@ wxWindowID wxInfoBarGeneric::GetButtonId(size_t idx) const
 
         if ( foundSpacer )
         {
-            if ( !item->IsSpacer() && !item->IsSizer() )
+            if ( !item->IsSpacer() && !item->IsSizer() &&
+                    item->GetWindow() != m_button )
             {
                 if ( count == idx )
-                {
-                  if ( item->GetWindow() != m_button )
                     return item->GetWindow()->GetId();
-                }
 
                 ++count;
             }
@@ -454,8 +449,9 @@ bool wxInfoBarGeneric::HasButtonId(wxWindowID btnid) const
         if ( item->IsSpacer() || item->IsSizer() )
             return false;
 
-        // check if we found our button
-        if ( item->GetWindow()->GetId() == btnid )
+        // check if we found our button, ignoring the standard one
+        if ( item->GetWindow() != m_button &&
+                item->GetWindow()->GetId() == btnid )
             return true;
     }
 
@@ -486,24 +482,57 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
             return;
         }
 
-        // check if we found our button
-        if ( item->GetWindow()->GetId() == btnid )
+        // check if we found our button, the standard one can't be removed
+        if ( item->GetWindow() != m_button &&
+                item->GetWindow()->GetId() == btnid )
         {
             delete item->GetWindow();
             break;
         }
     }
 
-    // check if there are any custom buttons left
-    const wxSizerItem * const last = sizer->GetChildren().GetLast()->GetData();
-    if ( last->IsSpacer() || last->IsSizer() )
+    // restore the standard close button if it was the last custom one
+    UpdateCloseButton();
+}
+
+void wxInfoBarGeneric::ShowCloseButton(ShowButton show)
+{
+    wxCHECK_RET( GetSizer(), "must be created first" );
+
+    m_showCloseButton = show;
+
+    UpdateCloseButton();
+}
+
+void wxInfoBarGeneric::UpdateCloseButton()
+{
+    wxSizer * const sizer = GetSizer();
+
+    // detach the button in any case to add it back at the end below if needed
+    sizer->Detach(m_button);
+
+    bool show = false;
+    switch ( m_showCloseButton )
     {
-        // if the last item is the sizer containing the text (or the spacer
-        // which used to precede the buttons), none are left so restore the
-        // standard close button
-        sizer->Add(m_button, wxSizerFlags().Centre().Border());
-        m_button->Show();
+        case ShowButton::Auto:
+            show = GetButtonCount() == 0;
+            break;
+
+        case ShowButton::Always:
+            show = true;
+            break;
+
+        case ShowButton::Never:
+            break;
     }
+
+    if ( show )
+        sizer->Add(m_button, wxSizerFlags().Centre().Border());
+
+    m_button->Show(show);
+
+    if ( IsShown() )
+        sizer->Layout();
 }
 
 void wxInfoBarBase::RemoveAllButtons()

@@ -58,6 +58,8 @@ public:
     virtual wxWindowID GetButtonId(size_t idx) const override;
     virtual bool HasButtonId(wxWindowID btnid) const override;
 
+    virtual void ShowCloseButton(ShowButton show) override;
+
     // methods specific to this version
     // --------------------------------
 
@@ -125,6 +127,10 @@ private:
     // handler for the close button
     void OnButton(wxCommandEvent& event);
 
+    // show or hide the close button depending on m_showCloseButton and the
+    // presence of the other buttons, also ensuring that it comes after them
+    void UpdateCloseButton();
+
     // show/hide the bar
     void DoShow();
     void DoHide();
@@ -155,6 +161,9 @@ private:
     wxShowEffect m_showEffect,
                  m_hideEffect;
     int m_effectDuration;
+
+    // when to show m_button
+    ShowButton m_showCloseButton = ShowButton::Auto;
 
     bool m_checked = false;
 
