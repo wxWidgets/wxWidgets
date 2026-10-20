@@ -47,9 +47,9 @@ int wxMessageDialog::ShowModal()
     // as all native dialogs are never modal in the sense of code flow only for behavior
     // so we must run a local event loop until ModalFinishedCallback is called to imitate
     // the wx sense of modal
-    
+
     ShowWindowModal();
-    
+
     wxGUIEventLoop loop;
     while( !messageClosed )
     {
@@ -187,7 +187,7 @@ void wxMessageDialog::ShowWindowModal()
     }
     else
 */
-    
+
     wxNonOwnedWindow* parentWindow = nullptr;
 
     if (GetParent())
