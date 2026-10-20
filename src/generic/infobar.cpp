@@ -132,8 +132,9 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     // center the text inside the sizer with an icon to the left of it and a
     // button at the very right
     //
-    // NB: AddButton() relies on the button being the last control in the sizer
-    //     and being preceded by a spacer
+    // NB: AddButton() and the other functions dealing with the buttons rely on
+    //     the buttons being the last items in the top level sizer and being
+    //     preceded by the sizer containing all the other controls
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     wxSizer * const defaultControlSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* const firstRowSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -494,9 +495,11 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
     }
 
     // check if there are any custom buttons left
-    if ( sizer->GetChildren().GetLast()->GetData()->IsSpacer() )
+    const wxSizerItem * const last = sizer->GetChildren().GetLast()->GetData();
+    if ( last->IsSpacer() || last->IsSizer() )
     {
-        // if the last item is the spacer, none are left so restore the
+        // if the last item is the sizer containing the text (or the spacer
+        // which used to precede the buttons), none are left so restore the
         // standard close button
         sizer->Add(m_button, wxSizerFlags().Centre().DoubleBorder());
         m_button->Show();

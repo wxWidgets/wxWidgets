@@ -40,4 +40,25 @@ TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar]")
     CHECK(info->GetButtonCount() == 0);
 }
 
+TEST_CASE("wxInfoBarGeneric::CloseButton", "[wxInfoBar][wxInfoBarGeneric]")
+{
+    // We specifically use wxInfoBarGeneric because the native version wouldn't
+    // allow us to find the close button using FindWindow() and we can't write
+    // this test using it.
+    const auto info = make_unique<wxInfoBarGeneric>(wxTheApp->GetTopWindow());
+
+    wxWindow* const closeButton = info->FindWindow(wxID_CLOSE);
+    REQUIRE(closeButton);
+    CHECK(closeButton->IsShown());
+
+    // Adding a button replaces the close button.
+    const int buttonId = wxID_HIGHEST + 1000;
+    info->AddButton(buttonId, "test");
+    CHECK(!closeButton->IsShown());
+
+    // And removing the last one must restore it.
+    info->RemoveButton(buttonId);
+    CHECK(closeButton->IsShown());
+}
+
 #endif // wxUSE_INFOBAR
