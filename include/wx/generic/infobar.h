@@ -122,7 +122,7 @@ protected:
 private:
     virtual bool UseNative() const { return false; }
 
-    // handler for the close button
+    // handler for all buttons
     void OnButton(wxCommandEvent& event);
 
     // show or hide the close button depending on m_showCloseButton and the

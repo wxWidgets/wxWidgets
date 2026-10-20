@@ -83,7 +83,6 @@ public:
 
 wxBEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
-    EVT_BUTTON(wxID_CLOSE, wxInfoBarGeneric::OnButton)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
