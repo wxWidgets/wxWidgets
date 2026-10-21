@@ -2012,7 +2012,26 @@ public:
         if ( button == nullptr )
             return wxACC_FAIL;
 
-        *name = wxStripMenuCodes(button->label, wxStrip_Mnemonics);
+        // Use the tooltip's title for buttons without a label.
+        const wxString& label = button->label.empty()
+                                    ? button->tooltip_info.GetTitle()
+                                    : button->label;
+        *name = wxStripMenuCodes(label, wxStrip_Mnemonics);
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDescription(int childId, wxString* description) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetDescription(childId, description);
+
+        wxRibbonButtonBarButtonBase* button = GetButton(childId);
+        if ( button == nullptr )
+            return wxACC_FAIL;
+
+        *description = button->tooltip_info.GetDescription().empty()
+                           ? button->help_string
+                           : button->tooltip_info.GetDescription();
         return wxACC_OK;
     }
 

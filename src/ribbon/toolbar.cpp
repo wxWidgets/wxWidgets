@@ -1682,7 +1682,29 @@ public:
         if ( tool == nullptr )
             return wxACC_OK; // A separator has no name.
 
-        *name = wxStripMenuCodes(tool->help_string, wxStrip_Mnemonics);
+        // Tools have no label, so use the tooltip's title (if available).
+        const wxString& title = tool->tooltip_info.GetTitle();
+        *name = wxStripMenuCodes(title.empty() ? tool->help_string : title,
+                                 wxStrip_Mnemonics);
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDescription(int childId, wxString* description) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetDescription(childId, description);
+
+        wxRibbonToolBarToolBase* tool = GetTool(childId);
+        if ( tool == nullptr )
+            return wxACC_OK; // A separator has no description.
+
+        // The same text as shown in the tooltip, unless the help string is
+        // already used as the name.
+        const wxRibbonToolTipInfo& info = tool->tooltip_info;
+        if ( !info.GetDescription().empty() )
+            *description = info.GetDescription();
+        else if ( !info.GetTitle().empty() )
+            *description = tool->help_string;
         return wxACC_OK;
     }
 
