@@ -17,6 +17,7 @@
 #include "wx/ownerdrw.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/dc.h"
 #include "wx/msw/wrapcctl.h"            // for HIMAGELIST
 
@@ -71,7 +72,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
         ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &sizeRect);
 
         int flags = MSWGetTextType();
-        if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
+        if ( (stat & wxODDisabled) && !(stat & wxODSelected) && !wxMSWDarkMode::IsActive() )
             flags |= DSS_DISABLED;
 
         if ( (stat & wxODHidePrefix) )
