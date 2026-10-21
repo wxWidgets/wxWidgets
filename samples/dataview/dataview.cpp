@@ -1934,19 +1934,19 @@ void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))
         ctrl->AppendContainer(selected, "Container", 0 );
 }
 
-void MyFrame::OnTreeItemExpand(wxCommandEvent& event)
+void MyFrame::OnTreeItemExpand(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[Page_TreeStore];
     ctrl->Expand( m_cont );
 }
 
-void MyFrame::OnTreeItemCollapse(wxCommandEvent& event)
+void MyFrame::OnTreeItemCollapse(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[Page_TreeStore];
     ctrl->Collapse( m_cont );
 }
 
-void MyFrame::OnTreeItemIsExpanded(wxCommandEvent& event)
+void MyFrame::OnTreeItemIsExpanded(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[Page_TreeStore];
     if (ctrl->IsExpanded( m_cont) )
