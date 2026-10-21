@@ -607,6 +607,7 @@
 		F121830B3E0D396F893619A0 /* picture_psnr_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 1184910871EB3ECCA1E526E8 /* picture_psnr_enc.c */; };
 		2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 701B84EE7C043B539FF5195A /* textbuf.cpp */; };
 		EA02FA6D3B003F8F8A2963C6 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5011 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		8C52B1985BAA371FA22CCEBD /* combobox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 57C06D5DB5F733A4A235B206 /* combobox.mm */; };
 		894D43C8F224394FB3171F27 /* jcapimin.c in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDEEEC981133E8BA6A3998 /* jcapimin.c */; };
 		57AE7FCF768F3965BD39B47A /* m_span.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 727F25F832AD32D4B12D8E39 /* m_span.cpp */; };
@@ -2415,6 +2416,7 @@
 		AF1E3338E892336E924AF633 /* pickerbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBC22BAD63D3A1AB78F5F82 /* pickerbase.cpp */; };
 		ABCD15C4AB37396EA17B7B29 /* translation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AC666417602346EA583709E /* translation.cpp */; };
 		EA02FA6D3B003F8F8A2963C7 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5012 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		2D60F289103837EA8925E3F2 /* dcbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1EE17722EA937E88A7F0C01 /* dcbase.cpp */; };
 		AE5286C71D1130EAA368A1C6 /* radiobtncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 724927B0045F3CC0884878BB /* radiobtncmn.cpp */; };
 		1AB50C98FF473B33A3CA4D3A /* xh_cmdlinkbn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0B70966E9423F198C8CBE65 /* xh_cmdlinkbn.cpp */; };
@@ -2906,6 +2908,7 @@
 		371809DA4AD1382F8B53287A /* fontenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E1DBA275AD325DB759C180 /* fontenum.cpp */; };
 		9F70A89D00B03D4894AF7639 /* validate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01BA6D45FE4C381493EB4372 /* validate.cpp */; };
 		EA02FA6D3B003F8F8A2963C8 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5013 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		830A61EA04FD367C9EB6A759 /* fswatcher_fsevents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B83407D156C3CC3A66F05A4 /* fswatcher_fsevents.cpp */; };
 		A3A898DA3114311EB7F02229 /* sckstrm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D784A32C094730FEAA391A9B /* sckstrm.cpp */; };
 		64A716F87A5136F9A790EC5C /* webview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DA80913C0E33144A42BD30F /* webview.cpp */; };
@@ -5204,6 +5207,7 @@
 		305614D19CF23CB2B14A5B2E /* tif_flush.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_flush.c; path = ../../src/tiff/libtiff/tif_flush.c; sourceTree = SOURCE_ROOT; };
 		5D2F8259CC99380CB8217DEF /* tif_unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_unix.c; path = ../../src/tiff/libtiff/tif_unix.c; sourceTree = SOURCE_ROOT; };
 		BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbar.cpp; path = ../../src/ribbon/toolbar.cpp; sourceTree = SOURCE_ROOT; };
+		3328877FCF2A3623A36A5010 /* tooltip.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tooltip.cpp; path = ../../src/ribbon/tooltip.cpp; sourceTree = SOURCE_ROOT; };
 		95E2B80B2D7033808504DA8D /* utilsexc_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_cf.cpp; path = ../../src/osx/core/utilsexc_cf.cpp; sourceTree = SOURCE_ROOT; };
 		75B17C69CCA53EA9B892F80B /* palette.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = palette.c; path = ../../3rdparty/libwebp/src/utils/palette.c; sourceTree = SOURCE_ROOT; };
 		95CBA2C736623FFF8629E975 /* pcre2_xclass.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_xclass.c; path = ../../3rdparty/pcre/src/pcre2_xclass.c; sourceTree = SOURCE_ROOT; };
@@ -6838,6 +6842,7 @@
 				59ED0C057D8F388A89DC7177 /* page.cpp */,
 				00969CBE3B8F32C78C195619 /* panel.cpp */,
 				BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */,
+				3328877FCF2A3623A36A5010 /* tooltip.cpp */,
 				B6A37A02D28E30CD9B83E134 /* xh_ribbon.cpp */,
 			);
 			name = ribbon;
@@ -9529,6 +9534,7 @@
 				4BAFAE70A6B1313B96D86632 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB88 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C6 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5011 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDA /* xh_ribbon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10191,6 +10197,7 @@
 				4BAFAE70A6B1313B96D86631 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB86 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C7 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5012 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDB /* xh_ribbon.cpp in Sources */,
 				D54A162E557834A48F4646AA /* advprops.cpp in Sources */,
 				F501AB044AAC39DCB8C0B3E3 /* editors.cpp in Sources */,
@@ -11687,6 +11694,7 @@
 				4BAFAE70A6B1313B96D86630 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB87 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C8 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5013 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDC /* xh_ribbon.cpp in Sources */,
 				D54A162E557834A48F4646AB /* advprops.cpp in Sources */,
 				F501AB044AAC39DCB8C0B3E2 /* editors.cpp in Sources */,
