@@ -70,6 +70,12 @@ namespace
 
     constexpr UINT_PTR kDTPChildSubclassId = 0x77780020ul;
     constexpr DWORD_PTR kDTPMonthCal = 1;
+    static const wchar_t* const kHotProp = L"wxDTPHotDay";
+    inline int DTPRed(COLORREF c) { return c & 0xff; }
+    inline int DTPGreen(COLORREF c) { return (c >> 8) & 0xff; }
+    inline int DTPBlue(COLORREF c) { return (c >> 16) & 0xff; }
+
+
     void DTPRemapMonthCalPixels(HWND hwnd, HPAINTBUFFER hbp, int w, int h);
     void DTPRemapPixels(HPAINTBUFFER hbp, int w, int h);
     // Native dark theme for child controls supported since Windows 11 22H2.
@@ -94,6 +100,32 @@ namespace
     inline BYTE DTPBlendToWhite(BYTE gray, int amount)
     {
         return static_cast<BYTE>(gray + (255 - gray) * amount / 255);
+    }
+
+    void DTPDrawBorder(RGBQUAD* px, int rw, int w, int h, RECT rc,
+        COLORREF col, int thickness)
+    {
+        rc.left = wxMax(rc.left, 0);
+        rc.top = wxMax(rc.top, 0);
+        rc.right = wxMin(rc.right, w);
+        rc.bottom = wxMin(rc.bottom, h);
+
+        for (int y = rc.top; y < rc.bottom; ++y)
+        {
+            for (int x = rc.left; x < rc.right; ++x)
+            {
+                const bool edge = x < rc.left + thickness || x >= rc.right - thickness ||
+                    y < rc.top + thickness || y >= rc.bottom - thickness;
+                if (!edge)
+                    continue;
+
+                RGBQUAD& p = px[static_cast<ptrdiff_t>(y) * rw + x];
+                p.rgbRed = DTPRed(col);
+                p.rgbGreen = DTPGreen(col);
+                p.rgbBlue = DTPBlue(col);
+                p.rgbReserved = 255;
+            }
+        }
     }
 
     void DTPRemapPixels(HPAINTBUFFER hbp, int w, int h)
@@ -178,7 +210,37 @@ namespace
                 return 0;
             }
             break;
+        case WM_MOUSEMOVE:
+            if (dwRef == kDTPMonthCal && wxMSWDarkMode::IsActive())
+            {
+                TRACKMOUSEEVENT tme = { sizeof(tme), TME_LEAVE, hwnd, 0 };
+                ::TrackMouseEvent(&tme);
 
+                MCHITTESTINFO hti = {};
+                hti.cbSize = sizeof(hti);
+                hti.pt = { LOWORD(lParam), HIWORD(lParam) };
+                ::SendMessage(hwnd, MCM_HITTEST, 0, reinterpret_cast<LPARAM>(&hti));
+
+                // Identify the hovered day (0 if none) and repaint only on change.
+                LONG_PTR key = 0;
+                if ((hti.uHit & MCHT_CALENDARDATE) == MCHT_CALENDARDATE)
+                    key = hti.st.wYear * 10000 + hti.st.wMonth * 100 + hti.st.wDay;
+
+                if (reinterpret_cast<LONG_PTR>(::GetProp(hwnd, kHotProp)) != key)
+                {
+                    ::SetProp(hwnd, kHotProp, reinterpret_cast<HANDLE>(key));
+                    ::InvalidateRect(hwnd, nullptr, FALSE);
+                }
+            }
+            break;
+
+        case WM_MOUSELEAVE:
+            if (dwRef == kDTPMonthCal && wxMSWDarkMode::IsActive())
+            {
+                ::SetProp(hwnd, kHotProp, nullptr);
+                ::InvalidateRect(hwnd, nullptr, FALSE);
+            }
+            break;
         case WM_NCDESTROY:
             ::RemoveWindowSubclass(hwnd, DTPChildSubclassProc, uId);
             break;
@@ -198,6 +260,7 @@ namespace
         {
             ::RemoveWindowSubclass(hwnd, DTPChildSubclassProc, kDTPChildSubclassId);
             wxMSWDarkMode::SetTheme(hwnd, nullptr, nullptr);
+            SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>((HBRUSH)(COLOR_WINDOW + 1)));
         }
         else if (DTPHasNativeDarkChildTheme())
         {
@@ -206,6 +269,7 @@ namespace
                 wxMSWDarkMode::HasDarkTheme() ? L"DarkMode_DarkTheme" : L"DarkMode_Explorer",
                 nullptr
             );
+            SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(wxMSWDarkMode::GetBackgroundBrush()));
         }
         else // Keep stock light theme as painting source
         {
@@ -224,6 +288,8 @@ namespace
         constexpr COLORREF kTrailing = RGB(0xcd, 0xcd, 0xcd); // Other months' days
         constexpr COLORREF kAccent = RGB(0x40, 0xbd, 0xff);   // Selected day and today ring
         constexpr COLORREF kOnAccent = RGB(0x00, 0x00, 0x00); // Text on accent
+        constexpr COLORREF kborderAccent = RGB(0x20, 0x20, 0xFF);   // Selected day and today ring
+        constexpr COLORREF kHover = RGB(0x3a, 0x3a, 0x3a); // hot-tracked day
     }
 
     // Light gray levels for DateTime_SetMonthCalColor() to maximize anti-aliasing range.
@@ -245,18 +311,15 @@ namespace
         COLORREF bg, fg;
         bool ring;       // Convert red "today" ring to custom accent color
         bool dropDarker; // Map pixels darker than text to background
+        COLORREF ringColor;   // Colour the red "today" ring becomes.
     };
 
     struct DTPCell
     {
         RECT rc;
         bool selected;
-        WORD month;
+        WORD year, month, day;
     };
-
-    inline int DTPRed(COLORREF c) { return c & 0xff; }
-    inline int DTPGreen(COLORREF c) { return (c >> 8) & 0xff; }
-    inline int DTPBlue(COLORREF c) { return (c >> 16) & 0xff; }
 
     inline int DTPMix(int a, int b, int t256)
     {
@@ -298,7 +361,9 @@ namespace
 
         cell.rc = gi.rc;
         cell.selected = gi.bSelected != FALSE;
+        cell.year = gi.stStart.wYear;
         cell.month = gi.stStart.wMonth;
+        cell.day = gi.stStart.wDay;
         return true;
     }
 
@@ -396,14 +461,14 @@ namespace
         const WORD month = cells[2][3].month;
 
         const RECT rcAll = { 0, 0, w, h };
-        const DTPRegion body = { 255, L::kText, C::kBody, C::kText, false, false };
+        const DTPRegion body = { 255, L::kText, C::kBody, C::kText, false, false, 0 };
         DTPMapRect(pPx, pSrc, rw, w, h, rcAll, body);
 
-        const DTPRegion header = { L::kTitleBk, L::kTitleText, C::kBody, C::kText, false, false };
+        const DTPRegion header = { L::kTitleBk, L::kTitleText, C::kBody, C::kText, false, false, 0 };
         DTPMapRect(pPx, pSrc, rw, w, h, rcHeader, header);
 
-        const DTPRegion flat = { 255, 0, C::kBody, C::kBody, false, false };
-        const DTPRegion glyph = { L::kNavFace, L::kNavGlyph, C::kBody, C::kText, false, false };
+        const DTPRegion flat = { 255, 0, C::kBody, C::kBody, false, false, 0 };
+        const DTPRegion glyph = { L::kNavFace, L::kNavGlyph, C::kBody, C::kText, false, false, 0 };
         for (const RECT* rc : { &rcPrev, &rcNext })
         {
             DTPMapRect(pPx, pSrc, rw, w, h, *rc, flat);
@@ -413,26 +478,58 @@ namespace
         }
 
         const RECT rcNames = { rcHeader.left, rcHeader.bottom, rcHeader.right, cells[0][0].rc.top };
-        const DTPRegion names = { L::kMonthBk, L::kTitleBk, C::kBand, C::kText, false, true };
+        const DTPRegion names = { L::kMonthBk, L::kTitleBk, C::kBand, C::kText, false, true, 0 };
         DTPMapRect(pPx, pSrc, rw, w, h, rcNames, names);
 
-        const DTPRegion selected = { L::kTitleBk, L::kTitleText, C::kAccent, C::kOnAccent, false, false };
-        const DTPRegion normal = { L::kMonthBk, L::kText, C::kBody, C::kText, true, false };
-        const DTPRegion trailing = { L::kMonthBk, L::kTrailing, C::kBody, C::kTrailing, true, false };
-
+        const DTPRegion selected = { L::kTitleBk, L::kTitleText, C::kAccent, C::kOnAccent, false, false, 0 };
+        const DTPRegion normal = { L::kMonthBk, L::kText, C::kBody, C::kText, true, false, 0 };
+        const DTPRegion trailing = { L::kMonthBk, L::kTrailing, C::kBody, C::kTrailing, true, false, 0 };
+        const DTPRegion hot = { L::kMonthBk, L::kText,     C::kHover, C::kText,     true, false, C::kAccent };
+        const DTPRegion hotTrailing = { L::kMonthBk, L::kTrailing, C::kHover, C::kTrailing, true, false, C::kAccent };
         bool isRTL = ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL;
+        POINT ptCursor = {};
+        const bool haveCursor = ::GetCursorPos(&ptCursor) &&
+            ::ScreenToClient(hwnd, &ptCursor);
         for (int row = 0; row < 6; ++row)
         {
             for (int col = 0; col < 7; ++col)
             {
                 const DTPCell& cell = cells[row][col];
-                const RECT rc = isRTL
-                    ? RECT{ w - cell.rc.right, cell.rc.top, w - cell.rc.left, cell.rc.bottom }
+                const bool isHot = haveCursor && !cell.selected && ::PtInRect(&cell.rc, ptCursor);
+                const bool isTrailing = cell.month != month;
+
+                const RECT rc = isRTL ? RECT{ w - cell.rc.right, cell.rc.top,
+                                              w - cell.rc.left,  cell.rc.bottom }
                 : cell.rc;
 
                 DTPMapRect(pPx, pSrc, rw, w, h, rc,
-                    cell.selected ? selected :
-                    cell.month != month ? trailing : normal);
+                    cell.selected ? selected
+                    : isHot ? (isTrailing ? hotTrailing : hot)
+                    : isTrailing ? trailing
+                    : normal);
+                {
+                    SYSTEMTIME stToday = {};
+                    if (::SendMessage(hwnd, MCM_GETTODAY, 0, reinterpret_cast<LPARAM>(&stToday)))
+                    {
+                        if (cell.selected)
+                        {
+                            HDC hdc = GetBufferedPaintDC(hbp);
+                            DrawFocusRect(hdc, &cell.rc);
+                        }
+                        if (cell.year != stToday.wYear || cell.month != stToday.wMonth ||
+                            cell.day != stToday.wDay)
+                            continue;
+
+                        // Black on the accent fill, accent on the dark body.
+                        DTPDrawBorder(pPx, rw, w, h, rc,
+                            cell.selected ? C::kborderAccent : C::kAccent, 1);
+                        if (cell.selected)
+                        {
+                            HDC hdc = GetBufferedPaintDC(hbp);
+                            DrawFocusRect(hdc, &cell.rc);
+                        }
+                    }
+                }
             }
         }
     }
