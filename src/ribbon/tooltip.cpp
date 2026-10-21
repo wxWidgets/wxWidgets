@@ -392,11 +392,21 @@ bool wxRibbonToolTipHelper::IsShown() const
     return m_popup != nullptr && m_popup->IsShown();
 }
 
+bool wxRibbonToolTipHelper::IsMouseUnmovedSinceFocus() const
+{
+    return m_keyboard && wxGetMousePosition() == m_keyboardMousePos;
+}
+
 void wxRibbonToolTipHelper::ItemHovered(int id,
                                         const wxRect& rect,
                                         const wxRibbonToolTipInfo& info,
                                         const wxString& helpString)
 {
+    // Keep showing the focused item's tooltip (unless the mouse really moved).
+    if ( IsMouseUnmovedSinceFocus() )
+        return;
+    m_keyboard = false;
+
     const bool sameItem = m_hasItem && m_itemId == id;
     if ( !sameItem )
         m_suppressed = false;
@@ -450,6 +460,10 @@ void wxRibbonToolTipHelper::ItemHovered(int id,
 
 void wxRibbonToolTipHelper::ItemLeft()
 {
+    if ( IsMouseUnmovedSinceFocus() )
+        return;
+    m_keyboard = false;
+
     m_suppressed = false;
     m_hasItem = false;
     m_switchTimer.Stop();
@@ -458,6 +472,64 @@ void wxRibbonToolTipHelper::ItemLeft()
     // it, otherwise just cancel showing it.
     if ( !IsShown() )
         m_timer.Stop();
+}
+
+void wxRibbonToolTipHelper::ItemFocused(int id,
+                                        const wxRect& rect,
+                                        const wxRibbonToolTipInfo& info,
+                                        const wxString& helpString)
+{
+    m_keyboard = true;
+    m_keyboardMousePos = wxGetMousePosition();
+    m_suppressed = false;
+    m_hasItem = true;
+    m_itemId = id;
+    m_itemRect = rect;
+
+    if ( info.IsEmpty() && helpString.empty() )
+    {
+        Dismiss();
+        return;
+    }
+
+    if ( IsShown() && m_shownId == id )
+    {
+        m_shownRect = rect;
+        return;
+    }
+
+    m_info = info;
+    m_helpString = helpString;
+    m_switchTimer.Stop();
+
+    // Unlike with the mouse, there is no passing over the items, so switch
+    // the shown tooltip right away.
+    if ( IsShown() || (ms_shown != nullptr && ms_shown != this) )
+        ShowPopup();
+    else
+        m_timer.StartOnce(SHOW_DELAY_MS);
+}
+
+void wxRibbonToolTipHelper::FocusCleared()
+{
+    // The tooltip of the hovered item is not affected.
+    if ( !m_keyboard )
+        return;
+
+    m_keyboard = false;
+    m_hasItem = false;
+    if ( !IsShown() )
+    {
+        m_timer.Stop();
+        return;
+    }
+
+    // Hide it later, as the focus may be moving to another item.
+    CallAfter([this]()
+        {
+            if ( !m_keyboard && !m_hasItem )
+                Dismiss();
+        });
 }
 
 void wxRibbonToolTipHelper::Dismiss(bool suppress)
@@ -640,6 +712,10 @@ void wxRibbonToolTipHelper::OnTimer(wxTimerEvent& WXUNUSED(event))
         return;
     }
 
+    // The focused item's tooltip stays until the focus moves.
+    if ( m_keyboard )
+        return;
+
     const wxLongLong now = wxGetLocalTimeMillis();
     if ( IsMouseOverItemOrPopup() )
         m_lastInside = now;
@@ -705,7 +781,8 @@ void wxRibbonToolTipHelper::OnTopLevelCharHook(wxKeyEvent& event)
     // Any key, including Alt showing the KeyTips, hides the tooltip.
     event.Skip();
 
-    Dismiss(true);
+    if ( !m_keyboard )
+        Dismiss(true);
 }
 
 #endif // wxUSE_RIBBON
