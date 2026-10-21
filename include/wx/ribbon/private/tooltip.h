@@ -41,7 +41,8 @@ public:
     void ItemHovered(int id,
                      const wxRect& rect,
                      const wxRibbonToolTipInfo& info,
-                     const wxString& helpString);
+                     const wxString& helpString,
+                     bool disabled);
 
     // Must be called when the mouse is over no item, or leaves the owner.
     void ItemLeft();
@@ -63,6 +64,10 @@ public:
 
     // Hides the tooltip shown by any control, if any.
     static void DismissShown();
+
+    // Returns the tooltip for an item in the given state.
+    static wxRibbonToolTipInfo GetInfoForState(const wxRibbonToolTipInfo& info,
+                                               bool disabled);
 
     // Implementation only: called by the popup when its help link is clicked.
     void OnHelpLinkClicked();

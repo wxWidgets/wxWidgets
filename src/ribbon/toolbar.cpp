@@ -1406,9 +1406,11 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
     if ( new_hover != nullptr &&
             !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) )
     {
+        const bool disabled =
+            (new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) != 0;
         GetToolTipHelper()->ItemHovered(new_hover->id, new_hover_rect,
                                         new_hover->tooltip_info,
-                                        new_hover->help_string);
+                                        new_hover->help_string, disabled);
     }
     else if ( m_toolTip != nullptr )
     {
@@ -1700,7 +1702,11 @@ public:
 
         // The same text as shown in the tooltip, unless the help string is
         // already used as the name.
-        const wxRibbonToolTipInfo& info = tool->tooltip_info;
+        const bool disabled =
+            (tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) != 0;
+        const wxRibbonToolTipInfo info =
+            wxRibbonToolTipHelper::GetInfoForState(tool->tooltip_info,
+                                                   disabled);
         if ( !info.GetDescription().empty() )
             *description = info.GetDescription();
         else if ( !info.GetTitle().empty() )

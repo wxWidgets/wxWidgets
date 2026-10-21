@@ -747,6 +747,10 @@ MyFrame::MyFrame()
         bar->AddButton(ID_DISABLE,  "Disable", ribbon_large);
         bar->AddButton(ID_UI_ENABLE_UPDATED, "Enable UI updated", ribbon_large);
         bar->EnableButton(ID_DISABLED, false);
+        bar->SetButtonToolTip(ID_UI_ENABLE_UPDATED,
+            wxRibbonToolTipInfo("Enable UI updated")
+                .Description("Enabled by the UI update handler.")
+                .DisabledDescription("Click \"Enable\" to enable this button."));
         m_bEnabled = true;
 
         panel = new wxRibbonPanel(page, wxID_ANY, "Toggle", ribbon_small);

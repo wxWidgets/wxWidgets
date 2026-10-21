@@ -1528,7 +1528,8 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
                 }
                 break;
             }
-            else if (m_show_tooltips_for_disabled)
+            else if ( m_show_tooltips_for_disabled ||
+                      !instance.base->tooltip_info.GetDisabledDescription().empty() )
             {
                 tooltipButton = &instance;
             }
@@ -1542,8 +1543,11 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         wxRibbonButtonBarButtonBase* base = tooltipButton->base;
         wxRect btn_rect(m_layout_offset + tooltipButton->position,
                         base->sizes[tooltipButton->size].size);
+        const bool disabled =
+            (base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
         GetToolTipHelper()->ItemHovered(base->id, btn_rect,
-                                        base->tooltip_info, base->help_string);
+                                        base->tooltip_info, base->help_string,
+                                        disabled);
     }
     else if ( m_toolTip != nullptr )
     {
@@ -2029,9 +2033,13 @@ public:
         if ( button == nullptr )
             return wxACC_FAIL;
 
-        *description = button->tooltip_info.GetDescription().empty()
-                           ? button->help_string
-                           : button->tooltip_info.GetDescription();
+        const bool disabled =
+            (button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
+        const wxRibbonToolTipInfo info =
+            wxRibbonToolTipHelper::GetInfoForState(button->tooltip_info,
+                                                   disabled);
+        *description = info.GetDescription().empty() ? button->help_string
+                                                     : info.GetDescription();
         return wxACC_OK;
     }
 

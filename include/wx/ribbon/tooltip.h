@@ -35,6 +35,8 @@ public:
         { m_title = title; return *this; }
     wxRibbonToolTipInfo& Description(const wxString& description)
         { m_description = description; return *this; }
+    wxRibbonToolTipInfo& DisabledDescription(const wxString& description)
+        { m_disabledDescription = description; return *this; }
     wxRibbonToolTipInfo& Image(const wxBitmapBundle& image)
         { m_image = image; return *this; }
     wxRibbonToolTipInfo& HelpLink(bool show = true)
@@ -44,6 +46,8 @@ public:
 
     const wxString& GetTitle() const { return m_title; }
     const wxString& GetDescription() const { return m_description; }
+    const wxString& GetDisabledDescription() const
+        { return m_disabledDescription; }
     const wxBitmapBundle& GetImage() const { return m_image; }
     bool HasHelpLink() const { return m_showHelpLink; }
 
@@ -53,12 +57,14 @@ public:
     bool IsEmpty() const
     {
         return m_title.empty() && m_description.empty() &&
+               m_disabledDescription.empty() &&
                !m_image.IsOk() && !m_showHelpLink;
     }
 
 private:
     wxString m_title;
     wxString m_description;
+    wxString m_disabledDescription;
     wxBitmapBundle m_image;
     wxString m_helpLinkText;
     bool m_showHelpLink = false;
