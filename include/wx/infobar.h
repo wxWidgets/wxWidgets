@@ -16,6 +16,10 @@
 
 #include "wx/control.h"
 
+#include <memory>
+
+class wxInfoBarDismissTimer;
+
 // ----------------------------------------------------------------------------
 // wxInfoBar shows non-critical but important information to the user
 // ----------------------------------------------------------------------------
@@ -28,7 +32,8 @@ public:
     // explicitly shown when it is needed (this is done because it is supposed
     // to be shown only intermittently and hiding it after creating it from the
     // user code would result in flicker)
-    wxInfoBarBase() = default;
+    wxInfoBarBase();
+    virtual ~wxInfoBarBase();
 
 
     // show the info bar with the given message and optionally an icon
@@ -37,6 +42,21 @@ public:
 
     // hide the info bar
     virtual void Dismiss() = 0;
+
+#if wxUSE_TIMER
+    // special values for ShowMessageFor() timeout
+    enum
+    {
+        Timeout_Auto = -1,  // use the default timeout
+        Timeout_Never = 0   // don't hide the bar automatically
+    };
+
+    // show the info bar with the given message and hide it automatically
+    // after the given number of seconds
+    void ShowMessageFor(const wxString& msg,
+                        int timeoutInSeconds,
+                        int flags = wxICON_INFORMATION);
+#endif // wxUSE_TIMER
 
     // add an extra button to the bar, near the message (replacing the default
     // close button which, by default, is only shown if no extra buttons are
@@ -66,7 +86,22 @@ public:
     // choose when the default close button is shown
     virtual void ShowCloseButton(ShowButton show) = 0;
 
+#if wxUSE_TIMER
+protected:
+    // must be called by ShowMessage() and Dismiss() implementations in the
+    // derived classes to cancel hiding the bar if ShowMessageFor() was used
+    void StopDismissTimer();
+
 private:
+    // timer used by ShowMessageFor(), only created when it's called
+    std::unique_ptr<wxInfoBarDismissTimer> m_dismissTimer;
+#else // !wxUSE_TIMER
+protected:
+    void StopDismissTimer() { }
+
+private:
+#endif // wxUSE_TIMER/!wxUSE_TIMER
+
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);
 };
 

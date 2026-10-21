@@ -21,6 +21,8 @@
 
 #include "wx/infobar.h"
 
+#include "waitfor.h"
+
 #include <memory>
 
 TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar]")
@@ -250,5 +252,56 @@ TEST_CASE("wxInfoBarGeneric::Dismiss", "[wxInfoBar][wxInfoBarGeneric]")
     button->HandleWindowEvent(event);
     CHECK(info->m_dismissCount == 2);
 }
+
+#if wxUSE_TIMER
+
+// This test is not run by default because it takes a few seconds.
+TEST_CASE("wxInfoBar::ShowMessageFor", "[wxInfoBar][.]")
+{
+    const auto info = make_unique<wxInfoBar>(wxTheApp->GetTopWindow());
+
+    SECTION("Timeout")
+    {
+        info->ShowMessageFor("Hidden soon", 1);
+        CHECK(info->IsShown());
+
+        CHECK(WaitFor("info bar to be hidden",
+                      [&info]() { return !info->IsShown(); },
+                      2000));
+    }
+
+    SECTION("Cancel")
+    {
+        // Showing another message without timeout must cancel the timeout of
+        // the previous one.
+        info->ShowMessageFor("Hidden soon", 1);
+        info->ShowMessage("Not hidden");
+
+        YieldForAWhile(1500);
+        CHECK(info->IsShown());
+    }
+}
+
+// This test is not run by default because it takes a few seconds.
+TEST_CASE("wxInfoBarGeneric::ShowMessageFor", "[wxInfoBar][wxInfoBarGeneric][.]")
+{
+    const auto info = make_unique<TestInfoBar>(wxTheApp->GetTopWindow());
+
+    // Closing the bar before the timeout expires must cancel it.
+    info->ShowMessageFor("Closed before timeout", 1);
+    info->Dismiss();
+    CHECK(info->m_dismissCount == 1);
+
+    YieldForAWhile(1500);
+    CHECK(info->m_dismissCount == 1);
+
+    // And when it does expire, the virtual Dismiss() must be called.
+    info->ShowMessageFor("Hidden soon", 1);
+    CHECK(WaitFor("Dismiss() to be called",
+                  [&info]() { return info->m_dismissCount == 2; },
+                  2000));
+}
+
+#endif // wxUSE_TIMER
 
 #endif // wxUSE_INFOBAR

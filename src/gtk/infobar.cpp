@@ -184,6 +184,9 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
         return;
     }
 
+    // cancel the timeout of the previous message, if any
+    StopDismissTimer();
+
     // if we don't have any buttons, create a standard close one to give the
     // user at least some way to close the bar (unless this was disabled)
     GTKUpdateCloseButton();
@@ -211,6 +214,8 @@ void wxInfoBar::Dismiss()
         wxInfoBarGeneric::Dismiss();
         return;
     }
+
+    StopDismissTimer();
 
     Hide();
 

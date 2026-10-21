@@ -31,6 +31,7 @@
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
+    #include "wx/timer.h"
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
@@ -39,6 +40,11 @@
 #include "wx/checkbox.h"
 
 #include "wx/private/bmpbuttn.h"
+#include "wx/private/make_unique.h"
+
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif // __WXMSW__
 
 #if wxUSE_ACCESSIBILITY
 
@@ -294,6 +300,9 @@ void wxInfoBarGeneric::DoShow()
 
 void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
 {
+    // cancel the timeout of the previous message, if any
+    StopDismissTimer();
+
     // first update the controls
     const int icon = flags & wxICON_MASK;
     if ( !icon || (icon == wxICON_NONE) )
@@ -342,6 +351,8 @@ wxAccessible* wxInfoBarGeneric::CreateAccessible()
 
 void wxInfoBarGeneric::Dismiss()
 {
+    StopDismissTimer();
+
     DoHide();
 }
 
@@ -550,6 +561,98 @@ void wxInfoBarBase::RemoveAllButtons()
     for ( size_t n = GetButtonCount(); n > 0; --n )
         RemoveButton(GetButtonId(n - 1));
 }
+
+// ----------------------------------------------------------------------------
+// wxInfoBarBase timeout support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_TIMER
+
+class wxInfoBarDismissTimer : public wxTimer
+{
+public:
+    explicit wxInfoBarDismissTimer(wxInfoBarBase* infoBar)
+        : m_infoBar(infoBar)
+    {
+    }
+
+    // Don't use timer events to avoid interfering with any wxEVT_TIMER
+    // handlers in the classes deriving from wxInfoBar.
+    virtual void Notify() override
+    {
+        m_infoBar->Dismiss();
+    }
+
+private:
+    wxInfoBarBase* const m_infoBar;
+
+    wxDECLARE_NO_COPY_CLASS(wxInfoBarDismissTimer);
+};
+
+namespace
+{
+
+constexpr int MILLISECONDS_PER_SECOND = 1000;
+
+// Return the timeout to use for Timeout_Auto, in seconds.
+int GetDefaultTimeout()
+{
+#ifdef __WXMSW__
+    // Use the value of "Dismiss notifications after this amount of time"
+    // accessibility option if it's available.
+    ULONG duration = 0;
+    if ( ::SystemParametersInfo(SPI_GETMESSAGEDURATION, 0, &duration, 0) )
+    {
+        // Make sure the value is reasonable and won't result in an overflow
+        // when multiplied by MILLISECONDS_PER_SECOND below.
+        if ( duration > 0 && duration <= INT_MAX / MILLISECONDS_PER_SECOND )
+            return static_cast<int>(duration);
+    }
+#endif // __WXMSW__
+
+    // This is the default value of the option above under MSW and seems
+    // reasonable.
+    return 5;
+}
+
+} // anonymous namespace
+
+void
+wxInfoBarBase::ShowMessageFor(const wxString& msg, int timeout, int flags)
+{
+    // This stops the timer if it's running.
+    ShowMessage(msg, flags);
+
+    switch ( timeout )
+    {
+        case Timeout_Never:
+            return;
+
+        case Timeout_Auto:
+            timeout = GetDefaultTimeout();
+            break;
+    }
+
+    wxCHECK_RET( timeout > 0 && timeout <= INT_MAX / MILLISECONDS_PER_SECOND,
+                 wxString::Format("invalid info bar timeout %d", timeout) );
+
+    if ( !m_dismissTimer )
+        m_dismissTimer = std::make_unique<wxInfoBarDismissTimer>(this);
+
+    m_dismissTimer->StartOnce(timeout * MILLISECONDS_PER_SECOND);
+}
+
+void wxInfoBarBase::StopDismissTimer()
+{
+    if ( m_dismissTimer )
+        m_dismissTimer->Stop();
+}
+
+#endif // wxUSE_TIMER
+
+wxInfoBarBase::wxInfoBarBase() = default;
+
+wxInfoBarBase::~wxInfoBarBase() = default;
 
 void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 {

@@ -109,6 +109,32 @@ public:
     };
 
     /**
+        Special values for ShowMessageFor() timeout.
+
+        @since 3.3.5
+     */
+    enum
+    {
+        /**
+            Use the default timeout.
+
+            Under MSW, this is the value of the "Dismiss notifications after
+            this amount of time" accessibility option, which is 5 seconds by
+            default. Under the other platforms, 5 seconds are always used
+            currently.
+         */
+        Timeout_Auto = -1,
+
+        /**
+            Don't hide the info bar automatically.
+
+            Calling ShowMessageFor() with this value is the same as calling
+            ShowMessage().
+         */
+        Timeout_Never = 0
+    };
+
+    /**
         Default constructor.
 
         Use Create() for the objects created using this constructor.
@@ -259,8 +285,42 @@ public:
             GTK+ native implementation doesn't show icons at all but uses this
             parameter to select the appropriate background colour for the
             notification.
+
+        @see ShowMessageFor()
      */
     void ShowMessage(const wxString& msg, int flags = wxICON_INFORMATION);
+
+    /**
+        Show a message in the bar and hide it automatically after the given
+        timeout.
+
+        This function works like ShowMessage() but also calls Dismiss() once
+        the specified time elapses, unless the bar is closed or ShowMessage()
+        or ShowMessageFor() are called again before it happens. In the latter
+        case, the new message replaces the old one and its timeout, if any, is
+        used instead of the previous one.
+
+        Please note that showing messages for too short time may prevent some
+        users from reading them, especially if the info bar contains buttons,
+        so using `Timeout_Auto` is recommended unless there are good reasons
+        to use a specific timeout.
+
+        This function is not available if `wxUSE_TIMER` was set to 0 when
+        building the library.
+
+        @param msg
+            The text of the message.
+        @param timeoutInSeconds
+            The time, in seconds, after which the info bar is hidden, or one of
+            the special values `Timeout_Auto` or `Timeout_Never`.
+        @param flags
+            The same flags as for ShowMessage().
+
+        @since 3.3.5
+     */
+    void ShowMessageFor(const wxString& msg,
+                        int timeoutInSeconds,
+                        int flags = wxICON_INFORMATION);
 
     /**
         Returns the number of currently shown buttons.
