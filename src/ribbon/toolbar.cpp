@@ -521,6 +521,20 @@ void wxRibbonToolBar::DoFocusTool(wxRibbonToolBarToolBase* tool)
     m_focused_tool = tool;
     Refresh(false);
 
+    for ( size_t g = 0; g < m_groups.GetCount(); ++g )
+    {
+        const wxRibbonToolBarToolGroup* group = m_groups.Item(g);
+        if ( group->tools.Index(tool) != wxNOT_FOUND )
+        {
+            const wxRect tool_rect(group->position + tool->position,
+                                   tool->size);
+            GetToolTipHelper()->ItemFocused(tool->id, tool_rect,
+                                            tool->tooltip_info,
+                                            tool->help_string);
+            break;
+        }
+    }
+
 #if wxUSE_ACCESSIBILITY
     const int pos = GetToolPos(tool->id);
     if ( pos != wxNOT_FOUND )
@@ -537,6 +551,9 @@ void wxRibbonToolBar::ClearFocusedItem()
         m_focused_tool = nullptr;
         Refresh(false);
     }
+
+    if ( m_toolTip != nullptr )
+        m_toolTip->FocusCleared();
 }
 
 void wxRibbonToolBar::ActivateFocusedItem(bool dropdown)

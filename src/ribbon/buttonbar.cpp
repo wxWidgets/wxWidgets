@@ -1707,6 +1707,11 @@ bool wxRibbonButtonBar::DoFocusButtonFrom(int pos, int step)
         m_focused_button = base;
         Refresh(false);
 
+        const wxRect btn_rect(m_layout_offset + buttons[i].position,
+                              base->sizes[buttons[i].size].size);
+        GetToolTipHelper()->ItemFocused(base->id, btn_rect,
+                                        base->tooltip_info, base->help_string);
+
 #if wxUSE_ACCESSIBILITY
         // The focus moves inside this window, so there is no native focus
         // event. Tell the screen readers about it explicitly.
@@ -1771,6 +1776,9 @@ void wxRibbonButtonBar::ClearFocusedItem()
         m_focused_button = nullptr;
         Refresh(false);
     }
+
+    if ( m_toolTip != nullptr )
+        m_toolTip->FocusCleared();
 }
 
 void wxRibbonButtonBar::ActivateFocusedItem(bool dropdown)

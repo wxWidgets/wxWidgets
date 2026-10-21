@@ -46,6 +46,16 @@ public:
     // Must be called when the mouse is over no item, or leaves the owner.
     void ItemLeft();
 
+    // Must be called when an item gets the keyboard focus. Its tooltip is
+    // shown until the focus moves elsewhere, regardless of the mouse.
+    void ItemFocused(int id,
+                     const wxRect& rect,
+                     const wxRibbonToolTipInfo& info,
+                     const wxString& helpString);
+
+    // Must be called when the owner no longer has a focused item.
+    void FocusCleared();
+
     // Hides the tooltip immediately. If suppress is true, the tooltip won't
     // be shown again for the current item until the mouse leaves it. (This is
     // used when the item is clicked.)
@@ -59,6 +69,9 @@ public:
 
 private:
     bool IsShown() const;
+    // Returns true if the mouse hasn't moved since the tooltip was shown for
+    // the focused item.
+    bool IsMouseUnmovedSinceFocus() const;
     void ShowPopup();
     void PositionPopup();
     bool IsMouseOverPopup() const;
@@ -96,6 +109,11 @@ private:
 
     // Set after a click on the item, until the mouse leaves it.
     bool m_suppressed = false;
+
+    // Set if the item is the focused one rather than the hovered one, and
+    // the mouse position at the time.
+    bool m_keyboard = false;
+    wxPoint m_keyboardMousePos;
 
     // When the mouse was last over the item or the popup.
     wxLongLong m_lastInside;
