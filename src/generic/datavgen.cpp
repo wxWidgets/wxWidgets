@@ -908,6 +908,13 @@ public:
     bool IsExpanded( unsigned int row ) const;
     bool HasChildren( unsigned int row ) const;
 
+    // Return true if the item has a collapsed ancestor
+    bool HasCollapsedAncestor( const wxDataViewItem & item );
+
+    // Collapse the item which is not shown because it has a collapsed
+    // ancestor, so that it remains collapsed when it becomes visible again.
+    void CollapseHiddenItem( const wxDataViewItem & item );
+
 #if wxUSE_DRAG_AND_DROP
     enum DropHint
     {
@@ -4236,6 +4243,44 @@ wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
     return result;
 }
 
+
+bool wxDataViewMainWindow::HasCollapsedAncestor( const wxDataViewItem & item )
+{
+    if (!item.IsOk())
+        return false;
+
+    wxDataViewItem current = item;
+    while (current.IsOk())
+    {
+      current = GetModel()->GetParent( current );
+      if (!current.IsOk())
+          break;
+
+      const auto result = FindNode( current );
+      if (result.m_node == nullptr)
+          return false;
+      if (!result.m_node->IsOpen())
+          return true;
+    }
+
+    return false;
+}
+
+void wxDataViewMainWindow::CollapseHiddenItem( const wxDataViewItem & item )
+{
+    wxDataViewTreeNode* const node = FindNode( item ).m_node;
+    if ( node && node->IsOpen() )
+    {
+        // Note: don't send the events for the hidden item, for consistency
+        //       with the native GTK version and what we used to do.
+
+        node->ToggleOpen(this);
+
+        // Also note that there are no rows to update, as ToggleOpen() doesn't
+        // propagate the subtree count change beyond the collapsed ancestor.
+    }
+}
+
 void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item,
                                     wxDataViewColumn* &column )
 {
@@ -6569,6 +6614,14 @@ void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren 
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
+    if (m_clientArea->HasCollapsedAncestor(item))
+    {
+        // We need to change the item state so that it remains collapsed if its
+        // collapsed ancestor is expanded later.
+        m_clientArea->CollapseHiddenItem(item);
+        return;
+    }
+
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
         m_clientArea->Collapse(row);
@@ -6576,6 +6629,9 @@ void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
 {
+    if (m_clientArea->HasCollapsedAncestor(item))
+        return false;
+
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
         return m_clientArea->IsExpanded(row);

@@ -636,6 +636,19 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_child1) );
     m_dvc->ExpandChildren(m_root);
     CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Now collapse root while child1 is expanded
+    m_dvc->Collapse(m_root);
+    // also child should report not being expanded as its parent it collapsed
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+
+    // Collapsing the hidden child must work too, i.e. it must still be
+    // collapsed after its parent is expanded again.
+    m_dvc->Collapse(m_child1);
+    m_dvc->Expand(m_root);
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    CHECK( m_dvc->GetItemRect(m_grandchild) == wxRect() );
 }
 
 TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,
