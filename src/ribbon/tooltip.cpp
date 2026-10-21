@@ -387,6 +387,17 @@ wxRibbonToolTipHelper::~wxRibbonToolTipHelper()
         m_popup->Destroy();
 }
 
+wxRibbonToolTipInfo
+wxRibbonToolTipHelper::GetInfoForState(const wxRibbonToolTipInfo& info,
+                                       bool disabled)
+{
+    wxRibbonToolTipInfo result(info);
+    if ( disabled && !info.GetDisabledDescription().empty() )
+        result.Description(info.GetDisabledDescription());
+    result.DisabledDescription(wxString());
+    return result;
+}
+
 bool wxRibbonToolTipHelper::IsShown() const
 {
     return m_popup != nullptr && m_popup->IsShown();
@@ -399,8 +410,9 @@ bool wxRibbonToolTipHelper::IsMouseUnmovedSinceFocus() const
 
 void wxRibbonToolTipHelper::ItemHovered(int id,
                                         const wxRect& rect,
-                                        const wxRibbonToolTipInfo& info,
-                                        const wxString& helpString)
+                                        const wxRibbonToolTipInfo& itemInfo,
+                                        const wxString& helpString,
+                                        bool disabled)
 {
     // Keep showing the focused item's tooltip (unless the mouse really moved).
     if ( IsMouseUnmovedSinceFocus() )
@@ -418,6 +430,7 @@ void wxRibbonToolTipHelper::ItemHovered(int id,
     if ( m_suppressed )
         return;
 
+    const wxRibbonToolTipInfo info = GetInfoForState(itemInfo, disabled);
     if ( info.IsEmpty() && helpString.empty() )
     {
         // Nothing to show for this item.
@@ -476,7 +489,7 @@ void wxRibbonToolTipHelper::ItemLeft()
 
 void wxRibbonToolTipHelper::ItemFocused(int id,
                                         const wxRect& rect,
-                                        const wxRibbonToolTipInfo& info,
+                                        const wxRibbonToolTipInfo& itemInfo,
                                         const wxString& helpString)
 {
     m_keyboard = true;
@@ -486,6 +499,8 @@ void wxRibbonToolTipHelper::ItemFocused(int id,
     m_itemId = id;
     m_itemRect = rect;
 
+    // Disabled items can't be focused.
+    const wxRibbonToolTipInfo info = GetInfoForState(itemInfo, false);
     if ( info.IsEmpty() && helpString.empty() )
     {
         Dismiss();

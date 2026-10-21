@@ -50,6 +50,12 @@ public:
     */
     wxRibbonToolTipInfo& Description(const wxString& description);
 
+    /**
+        Sets the description shown instead when the item is disabled
+        (e.g., to explain why).
+    */
+    wxRibbonToolTipInfo& DisabledDescription(const wxString& description);
+
     /// Sets the image shown to the left of the description.
     wxRibbonToolTipInfo& Image(const wxBitmapBundle& image);
 
@@ -65,6 +71,7 @@ public:
 
     const wxString& GetTitle() const;
     const wxString& GetDescription() const;
+    const wxString& GetDisabledDescription() const;
     const wxBitmapBundle& GetImage() const;
     bool HasHelpLink() const;
 

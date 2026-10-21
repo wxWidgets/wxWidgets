@@ -245,7 +245,6 @@ protected:
     std::unordered_map<wxWindowID, wxString> m_keyTips;
     std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
 
-private:
     // Creates the helper on first use.
     wxRibbonToolTipHelper* GetToolTipHelper();
 
