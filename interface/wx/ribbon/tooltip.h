@@ -8,15 +8,15 @@
 /**
     @class wxRibbonToolTipInfo
 
-    Contents of the rich tooltip of a wxRibbonButtonBar button or
-    wxRibbonToolBar tool.
+    Contents of the rich tooltip of a wxRibbonButtonBar button,
+    wxRibbonToolBar tool, wxRibbonGallery item, or wxRibbonPanel extension
+    button.
 
     The tooltip is shown below the ribbon and stays open while the mouse is
     over the item or the tooltip. It shows a bold title, a description,
     an optional image to the left of the description and an optional help link.
-    Clicking the link sends
-    @c wxEVT_RIBBONBUTTONBAR_HELP_CLICKED or @c wxEVT_RIBBONTOOLBAR_HELP_CLICKED
-    with the ID of the item.
+    Clicking the link sends the control's help event (e.g.,
+    @c wxEVT_RIBBONBUTTONBAR_HELP_CLICKED).
 
     The setters return a reference to this object, so they can be chained:
     @code
@@ -30,7 +30,8 @@
     @library{wxribbon}
     @category{ribbon}
 
-    @see wxRibbonButtonBar::SetButtonToolTip(), wxRibbonToolBar::SetToolToolTip()
+    @see wxRibbonButtonBar::SetButtonToolTip(), wxRibbonToolBar::SetToolToolTip(),
+        wxRibbonGallery::SetItemToolTip(), wxRibbonPanel::SetExtButtonToolTip()
 
     @since 3.3.5
 */
