@@ -92,12 +92,18 @@ public:
         wxRibbonControl* current, bool forward);
 
 protected:
+    friend class wxRibbonToolTipHelper;
+
     wxRibbonArtProvider* m_art;
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
                                        wxSize relative_to) const;
+
+    // Called when the help link of the tooltip of the item with the given ID
+    // is clicked. Controls showing tooltips override it to send their event.
+    virtual void SendToolTipHelpEvent(int WXUNUSED(item_id)) { }
 
 private:
     void Init() { m_art = nullptr; }

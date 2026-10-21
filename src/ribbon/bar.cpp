@@ -21,6 +21,7 @@
 #include "wx/ribbon/gallery.h"
 #include "wx/ribbon/backstage.h"
 #include "wx/ribbon/private/backstage.h"
+#include "wx/ribbon/private/tooltip.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 #include "wx/app.h"
@@ -2469,6 +2470,9 @@ bool wxRibbonBar::ShowKeyTips()
 
     if ( !IsShownOnScreen() )
         return false;
+
+    // Don't leave a tooltip over the KeyTips.
+    wxRibbonToolTipHelper::DismissShown();
 
     DoBuildKeyTipTargets();
     if ( m_keyTipsTargets.empty() )

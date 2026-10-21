@@ -16,6 +16,7 @@
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
+#include "wx/ribbon/private/tooltip.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 #include "wx/imaglist.h"
@@ -29,6 +30,7 @@
 
 wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_CLICKED, wxRibbonButtonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, wxRibbonButtonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_HELP_CLICKED, wxRibbonButtonBarEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonButtonBarEvent, wxCommandEvent);
 wxIMPLEMENT_CLASS(wxRibbonButtonBar, wxRibbonControl);
@@ -140,6 +142,7 @@ public:
 
     wxString label;
     wxString help_string;
+    wxRibbonToolTipInfo tooltip_info;
     wxCoord text_min_width[3];
 
     // Indices into parent wxRibbonButtonBar's wxWithImages collections
@@ -232,6 +235,8 @@ wxRibbonButtonBar::wxRibbonButtonBar(wxWindow* parent,
 
 wxRibbonButtonBar::~wxRibbonButtonBar()
 {
+    delete m_toolTip;
+
     size_t count = m_buttons.GetCount();
     size_t i;
     for(i = 0; i < count; ++i)
@@ -548,6 +553,8 @@ bool wxRibbonButtonBar::Realize()
 {
     if(!m_layouts_valid)
     {
+        if ( m_toolTip != nullptr )
+            m_toolTip->Dismiss();
         MakeLayouts();
         m_layouts_valid = true;
     }
@@ -556,6 +563,8 @@ bool wxRibbonButtonBar::Realize()
 
 void wxRibbonButtonBar::ClearButtons()
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss();
     m_layouts_valid = false;
     size_t count = m_buttons.GetCount();
     size_t i;
@@ -582,6 +591,8 @@ bool wxRibbonButtonBar::DeleteButton(int button_id)
         wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
         if(button->id == button_id)
         {
+            if ( m_toolTip != nullptr )
+                m_toolTip->Dismiss();
             m_layouts_valid = false;
             m_buttons.RemoveAt(i);
             if (m_hovered_button && m_hovered_button->base == button)
@@ -634,6 +645,9 @@ void wxRibbonButtonBar::ActivateButton(wxRibbonButtonBarButtonBase* button, bool
     wxCHECK_RET(button, wxT("invalid button"));
     if ( button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED )
         return;
+
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss(true);
 
     wxEventType event_type = (dropdown || button->kind == wxRIBBON_BUTTON_DROPDOWN)
         ? wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED
@@ -1197,6 +1211,42 @@ bool wxRibbonButtonBar::GetShowToolTipsForDisabled() const
     return m_show_tooltips_for_disabled;
 }
 
+void wxRibbonButtonBar::SetButtonToolTip(int button_id,
+                                         const wxRibbonToolTipInfo& info)
+{
+    wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
+    wxCHECK_RET(base, "invalid button id");
+
+    base->tooltip_info = info;
+}
+
+wxRibbonToolTipInfo wxRibbonButtonBar::GetButtonToolTip(int button_id) const
+{
+    wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
+    wxCHECK_MSG(base, wxRibbonToolTipInfo(), "invalid button id");
+
+    return base->tooltip_info;
+}
+
+wxRibbonToolTipHelper* wxRibbonButtonBar::GetToolTipHelper()
+{
+    if ( m_toolTip == nullptr )
+        m_toolTip = new wxRibbonToolTipHelper(this);
+    return m_toolTip;
+}
+
+void wxRibbonButtonBar::SendToolTipHelpEvent(int button_id)
+{
+    wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
+    if ( base == nullptr )
+        return;
+
+    wxRibbonButtonBarEvent notification(wxEVT_RIBBONBUTTONBAR_HELP_CLICKED,
+                                        button_id, this, base);
+    notification.SetEventObject(this);
+    ProcessWindowEvent(notification);
+}
+
 wxSize wxRibbonButtonBar::GetMinSize() const
 {
     return m_layouts.Last()->overall_size;
@@ -1485,20 +1535,20 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         }
     }
 
-#if wxUSE_TOOLTIPS
-    if(tooltipButton == nullptr && GetToolTip())
+    const long dropdown_active = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+    if ( tooltipButton != nullptr &&
+            !(tooltipButton->base->state & dropdown_active) )
     {
-        UnsetToolTip();
+        wxRibbonButtonBarButtonBase* base = tooltipButton->base;
+        wxRect btn_rect(m_layout_offset + tooltipButton->position,
+                        base->sizes[tooltipButton->size].size);
+        GetToolTipHelper()->ItemHovered(base->id, btn_rect,
+                                        base->tooltip_info, base->help_string);
     }
-    if(tooltipButton)
+    else if ( m_toolTip != nullptr )
     {
-        if (tooltipButton != m_hovered_button &&
-                !(tooltipButton->size & wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE))
-            SetToolTip(tooltipButton->base->help_string);
+        m_toolTip->ItemLeft();
     }
-#else
-    wxUnusedVar(tooltipButton);
-#endif
 
     if(new_hovered != m_hovered_button || (m_hovered_button != nullptr &&
         new_hovered_state != m_hovered_button->base->state))
@@ -1548,6 +1598,8 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
 void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
 {
     DismissKeyTips();
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss(true);
 
     wxPoint cursor(evt.GetPosition());
     m_active_button = nullptr;
@@ -1573,7 +1625,6 @@ void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
                 else if(size.dropdown_region.Contains(cursor))
                 {
                     state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
-                    UnsetToolTip();
                 }
                 instance.base->state |= state;
                 Refresh(false);
@@ -1623,6 +1674,9 @@ void wxRibbonButtonBar::OnMouseEnter(wxMouseEvent& evt)
 
 void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->ItemLeft();
+
     bool repaint = false;
     if(m_hovered_button != nullptr)
     {

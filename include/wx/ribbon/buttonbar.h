@@ -15,6 +15,7 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/control.h"
+#include "wx/ribbon/tooltip.h"
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
 
@@ -24,6 +25,7 @@ class wxRibbonButtonBar;
 class wxRibbonButtonBarButtonBase;
 class wxRibbonButtonBarLayout;
 class wxRibbonButtonBarButtonInstance;
+class wxRibbonToolTipHelper;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonButtonBarLayout*, wxArrayRibbonButtonBarLayout, class WXDLLIMPEXP_RIBBON);
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonButtonBarButtonBase*, wxArrayRibbonButtonBarButtonBase, class WXDLLIMPEXP_RIBBON);
@@ -172,6 +174,10 @@ public:
     void SetShowToolTipsForDisabled(bool show);
     bool GetShowToolTipsForDisabled() const;
 
+    // Rich tooltips, used instead of the plain help string if set.
+    void SetButtonToolTip(int button_id, const wxRibbonToolTipInfo& info);
+    wxRibbonToolTipInfo GetButtonToolTip(int button_id) const;
+
     // Get bitmap for button (DPI-aware resolution)
     wxBitmap GetButtonBitmap(int imageIndex, bool large) const;
 
@@ -231,6 +237,7 @@ protected:
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxReadOnlyDC& dc);
     virtual void UpdateWindowUI(long flags) override;
+    virtual void SendToolTipHelpEvent(int button_id) override;
 
     bool DoFocusButtonFrom(int pos, int step);
     int DoGetFocusedButtonIndex() const;
@@ -255,7 +262,11 @@ protected:
     std::vector<wxBitmapBundle> m_bundlesSmallDisabled; // Disabled small icons
 
 private:
+    // Creates the helper on first use.
+    wxRibbonToolTipHelper* GetToolTipHelper();
+
     wxRibbonBar* m_ribbonBar = nullptr;
+    wxRibbonToolTipHelper* m_toolTip = nullptr;
     // The KeyTips are always stored in upper case, to allow case-insensitive
     // matching.
     std::unordered_map<wxWindowID, wxString> m_keyTips;
@@ -303,6 +314,7 @@ private:
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONBUTTONBAR_CLICKED, wxRibbonButtonBarEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, wxRibbonButtonBarEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONBUTTONBAR_HELP_CLICKED, wxRibbonButtonBarEvent);
 
 typedef void (wxEvtHandler::*wxRibbonButtonBarEventFunction)(wxRibbonButtonBarEvent&);
 
@@ -313,15 +325,19 @@ typedef void (wxEvtHandler::*wxRibbonButtonBarEventFunction)(wxRibbonButtonBarEv
     wx__DECLARE_EVT1(wxEVT_RIBBONBUTTONBAR_CLICKED, winid, wxRibbonButtonBarEventHandler(fn))
 #define EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, winid, wxRibbonButtonBarEventHandler(fn))
+#define EVT_RIBBONBUTTONBAR_HELP_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_RIBBONBUTTONBAR_HELP_CLICKED, winid, wxRibbonButtonBarEventHandler(fn))
 #else
 
 // wxpython/swig event work
 %constant wxEventType wxEVT_RIBBONBUTTONBAR_CLICKED;
 %constant wxEventType wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED;
+%constant wxEventType wxEVT_RIBBONBUTTONBAR_HELP_CLICKED;
 
 %pythoncode {
     EVT_RIBBONBUTTONBAR_CLICKED = wx.PyEventBinder( wxEVT_RIBBONBUTTONBAR_CLICKED, 1 )
     EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED = wx.PyEventBinder( wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, 1 )
+    EVT_RIBBONBUTTONBAR_HELP_CLICKED = wx.PyEventBinder( wxEVT_RIBBONBUTTONBAR_HELP_CLICKED, 1 )
 }
 #endif
 

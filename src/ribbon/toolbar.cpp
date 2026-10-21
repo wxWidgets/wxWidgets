@@ -15,6 +15,7 @@
 #include "wx/ribbon/toolbar.h"
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
+#include "wx/ribbon/private/tooltip.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 
@@ -31,6 +32,7 @@ class wxRibbonToolBarToolBase
 {
 public:
     wxString help_string;
+    wxRibbonToolTipInfo tooltip_info;
     wxBitmapBundle bitmap;
     wxBitmapBundle bitmap_disabled;
     wxRect dropdown;
@@ -57,6 +59,7 @@ public:
 
 wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_CLICKED, wxRibbonToolBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED, wxRibbonToolBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_HELP_CLICKED, wxRibbonToolBarEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonToolBarEvent, wxCommandEvent);
 wxIMPLEMENT_CLASS(wxRibbonToolBar, wxRibbonControl);
@@ -117,6 +120,8 @@ void wxRibbonToolBar::CommonInit(long WXUNUSED(style))
 
 wxRibbonToolBar::~wxRibbonToolBar()
 {
+    delete m_toolTip;
+
     size_t count = m_groups.GetCount();
     size_t i, t;
     for(i = 0; i < count; ++i)
@@ -324,6 +329,9 @@ wxRibbonToolBarToolGroup* wxRibbonToolBar::InsertGroup(size_t pos)
 
 void wxRibbonToolBar::ClearTools()
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss();
+
     size_t count = m_groups.GetCount();
     size_t i, t;
     for(i = 0; i < count; ++i)
@@ -362,6 +370,8 @@ bool wxRibbonToolBar::DeleteTool(int tool_id)
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             if(tool->id == tool_id)
             {
+                if ( m_toolTip != nullptr )
+                    m_toolTip->Dismiss();
                 group->tools.RemoveAt(t);
                 if ( tool == m_hover_tool )
                     m_hover_tool = nullptr;
@@ -412,6 +422,9 @@ void wxRibbonToolBar::ActivateTool(wxRibbonToolBarToolBase* tool, bool dropdown)
     wxCHECK_RET(tool, wxT("invalid tool"));
     if ( tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED )
         return;
+
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss(true);
 
     wxEventType evt_type = (dropdown || tool->kind == wxRIBBON_BUTTON_DROPDOWN)
         ? wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED
@@ -551,6 +564,8 @@ bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
         if(pos<tool_count)
         {
             // Remove tool
+            if ( m_toolTip != nullptr )
+                m_toolTip->Dismiss();
             wxRibbonToolBarToolBase* tool = group->tools.Item(pos);
             group->tools.RemoveAt(pos);
             if (tool == m_hover_tool )
@@ -811,6 +826,39 @@ void wxRibbonToolBar::SetToolHelpString(int tool_id, const wxString& helpString)
     wxRibbonToolBarToolBase* tool = FindById(tool_id);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
     tool->help_string = helpString;
+}
+
+void wxRibbonToolBar::SetToolToolTip(int tool_id,
+                                     const wxRibbonToolTipInfo& info)
+{
+    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxCHECK_RET(tool != nullptr, "Invalid tool id");
+    tool->tooltip_info = info;
+}
+
+wxRibbonToolTipInfo wxRibbonToolBar::GetToolToolTip(int tool_id) const
+{
+    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxCHECK_MSG(tool != nullptr, wxRibbonToolTipInfo(), "Invalid tool id");
+    return tool->tooltip_info;
+}
+
+wxRibbonToolTipHelper* wxRibbonToolBar::GetToolTipHelper()
+{
+    if ( m_toolTip == nullptr )
+        m_toolTip = new wxRibbonToolTipHelper(this);
+    return m_toolTip;
+}
+
+void wxRibbonToolBar::SendToolTipHelpEvent(int tool_id)
+{
+    if ( FindById(tool_id) == nullptr )
+        return;
+
+    wxRibbonToolBarEvent notification(wxEVT_RIBBONTOOLBAR_HELP_CLICKED,
+                                      tool_id, this);
+    notification.SetEventObject(this);
+    ProcessWindowEvent(notification);
 }
 
 void wxRibbonToolBar::SetToolNormalBitmap(int tool_id, const wxBitmapBundle &bitmap)
@@ -1309,6 +1357,7 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 {
     wxPoint pos(evt.GetPosition());
     wxRibbonToolBarToolBase *new_hover = nullptr;
+    wxRect new_hover_rect;
 
     size_t group_count = m_groups.GetCount();
     size_t g, t;
@@ -1328,6 +1377,8 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
                 {
                     pos -= tool->position;
                     new_hover = tool;
+                    new_hover_rect = wxRect(group->position + tool->position,
+                                            tool->size);
                     break;
                 }
             }
@@ -1335,18 +1386,17 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
         }
     }
 
-#if wxUSE_TOOLTIPS
-    if(new_hover)
+    if ( new_hover != nullptr &&
+            !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) )
     {
-        if (new_hover != m_hover_tool &&
-                !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE))
-            SetToolTip(new_hover->help_string);
+        GetToolTipHelper()->ItemHovered(new_hover->id, new_hover_rect,
+                                        new_hover->tooltip_info,
+                                        new_hover->help_string);
     }
-    else if(GetToolTip())
+    else if ( m_toolTip != nullptr )
     {
-        UnsetToolTip();
+        m_toolTip->ItemLeft();
     }
-#endif
 
     if(new_hover != m_hover_tool)
     {
@@ -1401,18 +1451,22 @@ void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
     DismissKeyTips();
 
     OnMouseMove(evt);
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss(true);
     if(m_hover_tool)
     {
         m_active_tool = m_hover_tool;
         m_active_tool->state |=
             (m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_HOVER_MASK) << 2;
-        UnsetToolTip();
         Refresh(false);
     }
 }
 
 void wxRibbonToolBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->ItemLeft();
+
     if(m_hover_tool)
     {
         m_hover_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_HOVER_MASK;
