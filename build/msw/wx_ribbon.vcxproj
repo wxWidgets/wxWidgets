@@ -847,6 +847,7 @@
     <ClCompile Include="..\..\src\ribbon\page.cpp" />
     <ClCompile Include="..\..\src\ribbon\panel.cpp" />
     <ClCompile Include="..\..\src\ribbon\toolbar.cpp" />
+    <ClCompile Include="..\..\src\ribbon\tooltip.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_ribbon.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -909,7 +910,9 @@
     <ClInclude Include="..\..\include\wx\ribbon\page.h" />
     <ClInclude Include="..\..\include\wx\ribbon\panel.h" />
     <ClInclude Include="..\..\include\wx\ribbon\private\backstage.h" />
+    <ClInclude Include="..\..\include\wx\ribbon\private\tooltip.h" />
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h" />
+    <ClInclude Include="..\..\include\wx\ribbon\tooltip.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

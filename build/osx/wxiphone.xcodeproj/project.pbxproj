@@ -1000,6 +1000,7 @@
 		7181709A030D3749AB355B74 /* xh_radbx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F43AF44465B335479752116D /* xh_radbx.cpp */; };
 		FD38B04026F930CC80BC9480 /* m_pre.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61658C3EABB4341AA38C691E /* m_pre.cpp */; };
 		EA02FA6D3B003F8F8A2963C6 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5011 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		5AB2182C858D366B8922020C /* tif_hash_set.c in Sources */ = {isa = PBXBuildFile; fileRef = 4590505ABC5F373793C4D664 /* tif_hash_set.c */; };
 		77BC918AF05C30E8A0BD27F8 /* tipdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B56A9BF7AE1E3F11A5848297 /* tipdlg.cpp */; };
 		FF50EC0EC5F23DF890C6E95F /* colour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D1F14339D1C331087650931 /* colour.cpp */; };
@@ -2021,6 +2022,7 @@
 		2ED0C0702D2734D9B08FC31D /* utils_base.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = utils_base.mm; path = ../../src/osx/cocoa/utils_base.mm; sourceTree = SOURCE_ROOT; };
 		BEC69FC5D7F73759A0670C4A /* textmeasurecmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textmeasurecmn.cpp; path = ../../src/common/textmeasurecmn.cpp; sourceTree = SOURCE_ROOT; };
 		BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbar.cpp; path = ../../src/ribbon/toolbar.cpp; sourceTree = SOURCE_ROOT; };
+		3328877FCF2A3623A36A5010 /* tooltip.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tooltip.cpp; path = ../../src/ribbon/tooltip.cpp; sourceTree = SOURCE_ROOT; };
 		F4B85051B7C835A8BF4E3EE1 /* xh_panel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_panel.cpp; path = ../../src/xrc/xh_panel.cpp; sourceTree = SOURCE_ROOT; };
 		F8AD617806563DE394C15922 /* LexFSharp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexFSharp.cxx; path = ../../src/stc/lexilla/lexers/LexFSharp.cxx; sourceTree = SOURCE_ROOT; };
 		2A1BD6BCA15430CA8A4869EF /* gridctrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridctrl.cpp; path = ../../src/generic/gridctrl.cpp; sourceTree = SOURCE_ROOT; };
@@ -3421,6 +3423,7 @@
 				59ED0C057D8F388A89DC7177 /* page.cpp */,
 				00969CBE3B8F32C78C195619 /* panel.cpp */,
 				BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */,
+				3328877FCF2A3623A36A5010 /* tooltip.cpp */,
 				B6A37A02D28E30CD9B83E134 /* xh_ribbon.cpp */,
 			);
 			name = ribbon;
@@ -4116,6 +4119,7 @@
 				4BAFAE70A6B1313B96D86630 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB86 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C6 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5011 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDA /* xh_ribbon.cpp in Sources */,
 				D54A162E557834A48F4646A9 /* advprops.cpp in Sources */,
 				F501AB044AAC39DCB8C0B3E1 /* editors.cpp in Sources */,
