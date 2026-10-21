@@ -739,8 +739,14 @@ bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
     // Make webkit message handler available under common name
     wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
             name, name);
+    // AddUserScript() injects the alias into every *future* document load.
     AddUserScript(js);
-    RunScript(js);
+    // Inject into the already-loaded document without blocking. RunScript()
+    // waits on evaluateJavaScript's completion via wxYield(); when this view
+    // is off-screen / backgrounded, macOS can throttle its WebContent process
+    // so that handler never fires and the main thread hangs (see #27259).
+    [m_webView evaluateJavaScript:wxCFStringRef(js).AsNSString()
+                completionHandler:nil];
     return true;
 }
 
