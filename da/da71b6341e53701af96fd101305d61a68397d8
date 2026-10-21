@@ -1,0 +1,1 @@
+All (GUI): Add wxInfoBar::ShowMessageFor() specifying a timeout.
