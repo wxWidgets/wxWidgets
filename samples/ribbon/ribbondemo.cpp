@@ -131,6 +131,8 @@ public:
     void OnPolygonDropdown(wxRibbonButtonBarEvent& evt);
     void OnButtonHelp(wxRibbonButtonBarEvent& evt);
     void OnToolHelp(wxRibbonToolBarEvent& evt);
+    void OnGalleryHelp(wxRibbonGalleryEvent& evt);
+    void OnPanelHelp(wxRibbonPanelEvent& evt);
     void OnSelectionExpandVButton(wxRibbonButtonBarEvent& evt);
     void OnSelectionExpandHButton(wxRibbonButtonBarEvent& evt);
     void OnSelectionContractButton(wxRibbonButtonBarEvent& evt);
@@ -255,6 +257,8 @@ EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleDropdown)
 EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_POLYGON, MyFrame::OnPolygonDropdown)
 EVT_RIBBONBUTTONBAR_HELP_CLICKED(wxID_ANY, MyFrame::OnButtonHelp)
 EVT_RIBBONTOOLBAR_HELP_CLICKED(wxID_ANY, MyFrame::OnToolHelp)
+EVT_RIBBONGALLERY_HELP_CLICKED(wxID_ANY, MyFrame::OnGalleryHelp)
+EVT_RIBBONPANEL_HELP_CLICKED(wxID_ANY, MyFrame::OnPanelHelp)
 EVT_RIBBONGALLERY_HOVER_CHANGED(ID_PRIMARY_COLOUR, MyFrame::OnHoveredColourChange)
 EVT_RIBBONGALLERY_HOVER_CHANGED(ID_SECONDARY_COLOUR, MyFrame::OnHoveredColourChange)
 EVT_RIBBONGALLERY_SELECTED(ID_PRIMARY_COLOUR, MyFrame::OnPrimaryColourSelect)
@@ -543,6 +547,10 @@ MyFrame::MyFrame()
                                             wxRIBBON_PANEL_NO_AUTO_MINIMISE |
                                             wxRIBBON_PANEL_EXT_BUTTON);
         toolbar_panel->SetExtButtonKeyTip("X");
+        toolbar_panel->SetExtButtonToolTip(
+            wxRibbonToolTipInfo("Toolbar Settings")
+                .Description("Show more options for the toolbar.")
+                .HelpLink());
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddToggleTool(wxID_JUSTIFY_LEFT,
             MakeSvgBundle(align_left_svg, wxSize(16, 16)), "Align left");
@@ -1103,6 +1111,10 @@ wxRibbonGallery* MyFrame::PopulateColoursPanel(wxWindow* panel,
     wxRibbonGalleryItem *def_item =
         AddColourToGallery(gallery, "Default", dc, &def);
     gallery->SetSelection(def_item);
+    gallery->SetItemToolTip(def_item,
+        wxRibbonToolTipInfo("Default")
+            .Description("Use the colour that the sample started with.")
+            .HelpLink());
     AddColourToGallery(gallery, "BLUE", dc);
     AddColourToGallery(gallery, "BLUE VIOLET", dc);
     AddColourToGallery(gallery, "BROWN", dc);
@@ -1340,6 +1352,19 @@ void MyFrame::OnButtonHelp(wxRibbonButtonBarEvent& evt)
 void MyFrame::OnToolHelp(wxRibbonToolBarEvent& evt)
 {
     AddText(wxString::Format("Help requested for tool %d", evt.GetId()));
+}
+
+void MyFrame::OnGalleryHelp(wxRibbonGalleryEvent& evt)
+{
+    wxString name;
+    GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
+    AddText(wxString::Format("Help requested for gallery item %s", name));
+}
+
+void MyFrame::OnPanelHelp(wxRibbonPanelEvent& evt)
+{
+    AddText(wxString::Format("Help requested for panel %s",
+                             evt.GetPanel()->GetLabel()));
 }
 
 void MyFrame::OnJustify(wxRibbonToolBarEvent& evt)

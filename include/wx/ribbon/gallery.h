@@ -15,9 +15,11 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/control.h"
+#include "wx/ribbon/tooltip.h"
 #include "wx/bmpbndl.h"
 
 class wxRibbonGalleryItem;
+class wxRibbonToolTipHelper;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonGalleryItem*, wxArrayRibbonGalleryItem, class WXDLLIMPEXP_RIBBON);
 
@@ -54,6 +56,9 @@ public:
     wxClientData* GetItemClientObject(const wxRibbonGalleryItem* item) const;
     void SetItemLabel(wxRibbonGalleryItem* item, const wxString& label);
     wxString GetItemLabel(const wxRibbonGalleryItem* item) const;
+
+    void SetItemToolTip(wxRibbonGalleryItem* item, const wxRibbonToolTipInfo& info);
+    wxRibbonToolTipInfo GetItemToolTip(const wxRibbonGalleryItem* item) const;
 
     void SetItemClientData(wxRibbonGalleryItem* item, void* data);
     void* GetItemClientData(const wxRibbonGalleryItem* item) const;
@@ -116,7 +121,12 @@ protected:
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
     int GetScrollLineSize() const;
 
+    virtual void SendToolTipHelpEvent(int item_index) override;
+
     void DoActivateItem(wxRibbonGalleryItem* item);
+    // Returns the item's rect in client coordinates, taking scrolling into
+    // account.
+    wxRect DoGetItemClientRect(const wxRibbonGalleryItem* item) const;
     bool DoFocusItemFrom(int pos, int step);
     int DoGetFocusedItemIndex() const;
     bool DoFocusExtensionButton();
@@ -155,6 +165,11 @@ protected:
 
     // Always stored in upper case, to allow case-insensitive matching.
     wxString m_keyTip;
+
+    // Creates the helper on first use.
+    wxRibbonToolTipHelper* GetToolTipHelper();
+
+    wxRibbonToolTipHelper* m_toolTip = nullptr;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonGallery);
@@ -202,6 +217,7 @@ private:
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONGALLERY_HELP_CLICKED, wxRibbonGalleryEvent);
 
 typedef void (wxEvtHandler::*wxRibbonGalleryEventFunction)(wxRibbonGalleryEvent&);
 
@@ -214,18 +230,22 @@ typedef void (wxEvtHandler::*wxRibbonGalleryEventFunction)(wxRibbonGalleryEvent&
     wx__DECLARE_EVT1(wxEVT_RIBBONGALLERY_SELECTED, winid, wxRibbonGalleryEventHandler(fn))
 #define EVT_RIBBONGALLERY_CLICKED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_RIBBONGALLERY_CLICKED, winid, wxRibbonGalleryEventHandler(fn))
+#define EVT_RIBBONGALLERY_HELP_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_RIBBONGALLERY_HELP_CLICKED, winid, wxRibbonGalleryEventHandler(fn))
 #else
 
 // wxpython/swig event work
 %constant wxEventType wxEVT_RIBBONGALLERY_HOVER_CHANGED;
 %constant wxEventType wxEVT_RIBBONGALLERY_SELECTED;
 %constant wxEventType wxEVT_RIBBONGALLERY_CLICKED;
+%constant wxEventType wxEVT_RIBBONGALLERY_HELP_CLICKED;
 
 
 %pythoncode {
     EVT_RIBBONGALLERY_HOVER_CHANGED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_HOVER_CHANGED, 1 )
     EVT_RIBBONGALLERY_SELECTED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_SELECTED, 1 )
     EVT_RIBBONGALLERY_CLICKED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_CLICKED, 1 )
+    EVT_RIBBONGALLERY_HELP_CLICKED = wx.PyEventBinder( wxEVT_RIBBONGALLERY_HELP_CLICKED, 1 )
 }
 #endif // SWIG
 

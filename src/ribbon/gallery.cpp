@@ -15,6 +15,7 @@
 #include "wx/ribbon/gallery.h"
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
+#include "wx/ribbon/private/tooltip.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 #include "wx/clntdata.h"
@@ -29,6 +30,7 @@
 wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_HELP_CLICKED, wxRibbonGalleryEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonGalleryEvent, wxCommandEvent);
 wxIMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl);
@@ -53,6 +55,9 @@ public:
     void SetLabel(const wxString& label) {m_label = label;}
     const wxString& GetLabel() const {return m_label;}
 
+    void SetToolTip(const wxRibbonToolTipInfo& info) {m_tooltip = info;}
+    const wxRibbonToolTipInfo& GetToolTip() const {return m_tooltip;}
+
     void SetClientObject(wxClientData *data) {m_client_data.SetClientObject(data);}
     wxClientData *GetClientObject() const {return m_client_data.GetClientObject();}
     void SetClientData(void *data) {m_client_data.SetClientData(data);}
@@ -61,6 +66,7 @@ public:
 protected:
     wxBitmapBundle m_bitmap;
     wxString m_label;
+    wxRibbonToolTipInfo m_tooltip;
     wxClientDataContainer m_client_data;
     wxRect m_position;
     int m_id = 0;
@@ -98,6 +104,7 @@ wxRibbonGallery::wxRibbonGallery(wxWindow* parent,
 wxRibbonGallery::~wxRibbonGallery()
 {
     Clear();
+    delete m_toolTip;
 }
 
 bool wxRibbonGallery::Create(wxWindow* parent,
@@ -163,6 +170,7 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
 
     wxRibbonGalleryItem *hovered_item = nullptr;
     wxRibbonGalleryItem *active_item = nullptr;
+    int hovered_index = wxNOT_FOUND;
     if(m_client_rect.Contains(pos))
     {
         if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
@@ -183,10 +191,26 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
                 if(m_mouse_active_rect == &item->GetPosition())
                     active_item = item;
                 hovered_item = item;
+                hovered_index = static_cast<int>(item_i);
                 break;
             }
         }
     }
+
+    if ( hovered_item != nullptr && !hovered_item->GetToolTip().IsEmpty() )
+    {
+        // Only the visible part of the item can be hovered.
+        const wxRect rect =
+            DoGetItemClientRect(hovered_item).Intersect(m_client_rect);
+        GetToolTipHelper()->ItemHovered(hovered_index, rect,
+                                        hovered_item->GetToolTip(),
+                                        wxString(), false);
+    }
+    else if ( m_toolTip != nullptr )
+    {
+        m_toolTip->ItemLeft();
+    }
+
     if(active_item != m_active_item)
     {
         m_active_item = active_item;
@@ -238,6 +262,9 @@ bool wxRibbonGallery::TestButtonHover(const wxRect& rect, wxPoint pos,
 
 void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->ItemLeft();
+
     m_hovered = false;
     m_active_item = nullptr;
     if(m_up_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
@@ -261,6 +288,8 @@ void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
 {
     DismissKeyTips();
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss(true);
 
     wxPoint pos = evt.GetPosition();
     m_mouse_active_rect = nullptr;
@@ -377,6 +406,54 @@ void wxRibbonGallery::DoActivateItem(wxRibbonGalleryItem* item)
     ProcessWindowEvent(notification);
 }
 
+wxRect wxRibbonGallery::DoGetItemClientRect(const wxRibbonGalleryItem* item) const
+{
+    wxRect rect{ item->GetPosition() };
+    if ( m_art != nullptr && (m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL) )
+        rect.SetLeft(rect.GetLeft() - m_scroll_amount);
+    else
+        rect.SetTop(rect.GetTop() - m_scroll_amount);
+    return rect;
+}
+
+void wxRibbonGallery::SetItemToolTip(wxRibbonGalleryItem* item,
+                                     const wxRibbonToolTipInfo& info)
+{
+    wxCHECK_RET( item, "invalid gallery item" );
+
+    item->SetToolTip(info);
+}
+
+wxRibbonToolTipInfo
+wxRibbonGallery::GetItemToolTip(const wxRibbonGalleryItem* item) const
+{
+    wxCHECK_MSG( item, wxRibbonToolTipInfo(), "invalid gallery item" );
+
+    return item->GetToolTip();
+}
+
+wxRibbonToolTipHelper* wxRibbonGallery::GetToolTipHelper()
+{
+    if ( m_toolTip == nullptr )
+        m_toolTip = new wxRibbonToolTipHelper(this);
+    return m_toolTip;
+}
+
+void wxRibbonGallery::SendToolTipHelpEvent(int item_index)
+{
+    if ( item_index < 0 )
+        return;
+
+    wxRibbonGalleryItem* item = GetItem(static_cast<unsigned>(item_index));
+    if ( item == nullptr )
+        return;
+
+    wxRibbonGalleryEvent notification(wxEVT_RIBBONGALLERY_HELP_CLICKED,
+                                      GetId(), this, item);
+    notification.SetEventObject(this);
+    ProcessWindowEvent(notification);
+}
+
 void wxRibbonGallery::DoActivateExtensionButton()
 {
     wxCommandEvent notification(wxEVT_BUTTON,
@@ -434,6 +511,19 @@ bool wxRibbonGallery::DoFocusItemFrom(int pos, int step)
             }
         }
 
+        if ( !item->GetToolTip().IsEmpty() )
+        {
+            // Only the visible part of the item is used, as when hovering it.
+            const wxRect rect =
+                DoGetItemClientRect(item).Intersect(m_client_rect);
+            GetToolTipHelper()->ItemFocused(i, rect, item->GetToolTip(),
+                wxString{});
+        }
+        else if ( m_toolTip != nullptr )
+        {
+            m_toolTip->FocusCleared();
+        }
+
         Refresh(false);
         return true;
     }
@@ -462,6 +552,8 @@ bool wxRibbonGallery::DoFocusExtensionButton()
 
     m_focused_item = nullptr;
     m_extension_focused = true;
+    if ( m_toolTip != nullptr )
+        m_toolTip->FocusCleared();
     // The art providers draw the button from its state, so show it as hovered.
     m_extension_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
     Refresh(false);
@@ -571,6 +663,9 @@ bool wxRibbonGallery::FocusItemInDirection(wxDirection direction)
 
 void wxRibbonGallery::ClearFocusedItem()
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->FocusCleared();
+
     if ( m_focused_item != nullptr || m_extension_focused )
     {
         m_focused_item = nullptr;
@@ -846,6 +941,10 @@ wxString wxRibbonGallery::GetItemLabel(const wxRibbonGalleryItem* item) const
 
 void wxRibbonGallery::Clear()
 {
+    // The tooltip refers to the items by their index.
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss();
+
     size_t item_count = m_items.Count();
     size_t item_i;
     for(item_i = 0; item_i < item_count; ++item_i)
@@ -1275,7 +1374,10 @@ public:
             wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
             wxCHECK(item, wxACC_FAIL);
 
-            const wxString label = gallery->GetItemLabel(item);
+            // Use the tooltip's title for items without a label.
+            const wxString label = item->GetLabel().empty()
+                                        ? item->GetToolTip().GetTitle()
+                                        : item->GetLabel();
             if ( label.empty() )
                 return wxACC_NOT_IMPLEMENTED;
 
@@ -1284,6 +1386,26 @@ public:
         }
 
         *name = _("More");
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDescription(int childId, wxString* description) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetDescription(childId, description);
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId < 0 || static_cast<unsigned>(childId) > gallery->GetCount() )
+            return wxACC_NOT_IMPLEMENTED;
+
+        wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
+        wxCHECK(item, wxACC_FAIL);
+
+        // The same text as shown in the tooltip.
+        *description = item->GetToolTip().GetDescription();
         return wxACC_OK;
     }
 
@@ -1303,7 +1425,7 @@ public:
             if ( !item->IsVisible() )
                 return wxACC_FAIL;
 
-            rect = GetOnScreenItemRect(gallery, item);
+            rect = gallery->DoGetItemClientRect(item);
         }
         else
             rect = gallery->m_extension_button_rect;
@@ -1366,18 +1488,6 @@ private:
     static bool HasExtensionButton(wxRibbonGallery* gallery)
     {
         return !gallery->m_extension_button_rect.IsEmpty();
-    }
-
-    static wxRect GetOnScreenItemRect(wxRibbonGallery* gallery, wxRibbonGalleryItem* item)
-    {
-        wxRect rect{ item->GetPosition() };
-        const bool vertical = gallery->m_art &&
-            (gallery->m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL);
-        if ( vertical )
-            rect.SetLeft(rect.GetLeft() - gallery->m_scroll_amount);
-        else
-            rect.SetTop(rect.GetTop() - gallery->m_scroll_amount);
-        return rect;
     }
 };
 

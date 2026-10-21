@@ -39,6 +39,10 @@ enum wxRibbonGalleryButtonState
         item in the event will be the new item being hovered, or @NULL if there
         is no longer an item being hovered. Note that the ID is that of the
         gallery, not of the item.
+    @event{EVT_RIBBONGALLERY_HELP_CLICKED(id, func)}
+        Triggered when the help link in an item's tooltip is clicked (see
+        SetItemToolTip()). The ID is that of the gallery, the item is
+        available from the event. This event is new since wxWidgets 3.3.5.
     @endEventTable
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_BUTTON(id, func)}
@@ -188,6 +192,22 @@ public:
         @since 3.3.4
     */
     wxString GetItemLabel(const wxRibbonGalleryItem* item) const;
+
+    /**
+        Sets the rich tooltip shown for a gallery item.
+
+        Items have no tooltip by default.
+
+        @since 3.3.5
+    */
+    void SetItemToolTip(wxRibbonGalleryItem* item, const wxRibbonToolTipInfo& info);
+
+    /**
+        Returns the rich tooltip set with SetItemToolTip().
+
+        @since 3.3.5
+    */
+    wxRibbonToolTipInfo GetItemToolTip(const wxRibbonGalleryItem* item) const;
 
     /**
         Set the client object associated with a gallery item.
@@ -360,4 +380,5 @@ public:
 wxEventType wxEVT_RIBBONGALLERY_HOVER_CHANGED;
 wxEventType wxEVT_RIBBONGALLERY_SELECTED;
 wxEventType wxEVT_RIBBONGALLERY_CLICKED;
+wxEventType wxEVT_RIBBONGALLERY_HELP_CLICKED;
 

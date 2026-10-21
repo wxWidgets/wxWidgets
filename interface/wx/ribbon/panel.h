@@ -53,6 +53,7 @@ public:
 };
 
 wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
+wxEventType wxEVT_RIBBONPANEL_HELP_CLICKED;
 
 
 /**
@@ -121,6 +122,10 @@ wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
     @beginEventEmissionTable{wxRibbonPanelEvent}
     @event{EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(id, func)}
         Triggered when the user activate the panel extension button.
+    @event{EVT_RIBBONPANEL_HELP_CLICKED(id, func)}
+        Triggered when the help link in the extension button's tooltip is
+        clicked (see SetExtButtonToolTip()). This event is new since
+        wxWidgets 3.3.5.
     @endEventTable
 
     @library{wxribbon}
@@ -327,6 +332,22 @@ public:
         @since 3.3.4
     */
     wxString GetExtButtonKeyTip() const;
+
+    /**
+        Sets the rich tooltip shown for this panel's extension button.
+
+        Only has an effect if the panel uses @c wxRIBBON_PANEL_EXT_BUTTON.
+
+        @since 3.3.5
+    */
+    void SetExtButtonToolTip(const wxRibbonToolTipInfo& info);
+
+    /**
+        Returns the tooltip set with SetExtButtonToolTip().
+
+        @since 3.3.5
+    */
+    const wxRibbonToolTipInfo& GetExtButtonToolTip() const;
 
     /**
         Assigns the KeyTip used to expand this panel while it is minimised.

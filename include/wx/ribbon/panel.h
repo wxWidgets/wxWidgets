@@ -16,6 +16,9 @@
 #include "wx/bmpbndl.h"
 #include "wx/weakref.h"
 #include "wx/ribbon/control.h"
+#include "wx/ribbon/tooltip.h"
+
+class wxRibbonToolTipHelper;
 
 enum wxRibbonPanelOption
 {
@@ -90,6 +93,10 @@ public:
     wxString GetExtButtonKeyTip() const { return m_extButtonKeyTip; }
     wxRect GetExtButtonRect() const { return m_ext_button_rect; }
 
+    // Rich tooltip of the extension button.
+    void SetExtButtonToolTip(const wxRibbonToolTipInfo& info) { m_extButtonToolTip = info; }
+    const wxRibbonToolTipInfo& GetExtButtonToolTip() const { return m_extButtonToolTip; }
+
     // Used when the panel is minimised.
     void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
     wxString GetKeyTip() const { return m_keyTip; }
@@ -138,6 +145,7 @@ protected:
     void OnChildKillFocus(wxFocusEvent& evt);
     void OnKeyDown(wxKeyEvent& evt);
     void DoActivateExtButton();
+    virtual void SendToolTipHelpEvent(int item_id) override;
     void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& evt);
 
@@ -172,6 +180,12 @@ protected:
     // matching.
     wxString m_extButtonKeyTip;
     wxString m_keyTip;
+
+    // Creates the helper on first use.
+    wxRibbonToolTipHelper* GetToolTipHelper();
+
+    wxRibbonToolTipInfo m_extButtonToolTip;
+    wxRibbonToolTipHelper* m_toolTip = nullptr;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonPanel);
@@ -209,6 +223,7 @@ private:
 #ifndef SWIG
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONPANEL_HELP_CLICKED, wxRibbonPanelEvent);
 
 typedef void (wxEvtHandler::*wxRibbonPanelEventFunction)(wxRibbonPanelEvent&);
 
@@ -217,13 +232,17 @@ typedef void (wxEvtHandler::*wxRibbonPanelEventFunction)(wxRibbonPanelEvent&);
 
 #define EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, winid, wxRibbonPanelEventHandler(fn))
+#define EVT_RIBBONPANEL_HELP_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_RIBBONPANEL_HELP_CLICKED, winid, wxRibbonPanelEventHandler(fn))
 #else
 
 // wxpython/swig event work
 %constant wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
+%constant wxEventType wxEVT_RIBBONPANEL_HELP_CLICKED;
 
 %pythoncode {
     EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED = wx.PyEventBinder( wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, 1 )
+    EVT_RIBBONPANEL_HELP_CLICKED = wx.PyEventBinder( wxEVT_RIBBONPANEL_HELP_CLICKED, 1 )
 }
 #endif
 
