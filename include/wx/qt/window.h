@@ -137,6 +137,8 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour) override;
     virtual bool SetForegroundColour(const wxColour& colour) override;
 
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+
     virtual void SetDoubleBuffered(bool on) override;
     virtual bool IsDoubleBuffered() const override;
 
