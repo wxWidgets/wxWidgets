@@ -28,11 +28,14 @@
 
 #include "wx/display.h"
 #include "wx/graphics.h"
-#include "wx/hyperlink.h"
 #include "wx/image.h"
 #include "wx/popupwin.h"
 #include "wx/time.h"
-#include "wx/generic/hyperlink.h"
+
+#if wxUSE_HYPERLINKCTRL
+    #include "wx/hyperlink.h"
+    #include "wx/generic/hyperlink.h"
+#endif
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
@@ -59,8 +62,10 @@ constexpr int SWITCH_DELAY_MS = 150;
 // The image is scaled down to fit in this box (in DIPs), but never up.
 constexpr int MAX_IMAGE_SIZE = 128;
 
+#if wxUSE_HYPERLINKCTRL
 // Size (in DIPs) of the help icon.
 constexpr int HELP_ICON_SIZE = 16;
+#endif
 
 // Width (in DIPs) at which the description wraps.
 constexpr int DESCRIPTION_WIDTH = 260;
@@ -106,15 +111,18 @@ public:
 
 private:
     void OnPaint(wxPaintEvent& event);
-    void OnHyperlink(wxHyperlinkEvent& event);
 
     // Returns the image scaled down to fit in MAX_IMAGE_SIZE.
     wxBitmapBundle GetScaledImage(const wxBitmapBundle& image) const;
+
+#if wxUSE_HYPERLINKCTRL
+    void OnHyperlink(wxHyperlinkEvent& event);
 
     // Returns the help icon: a question mark in a circle, drawn with our own
     // colors, as the stock icon may be hard to see on our background.
     wxBitmapBundle MakeHelpIcon(const wxColour& circleColour,
                                 const wxColour& markColour) const;
+#endif // wxUSE_HYPERLINKCTRL
 
     wxRibbonToolTipHelper* const m_helper;
     wxColour m_outlineColour;
@@ -132,8 +140,6 @@ void wxRibbonToolTipPopup::SetContent(const wxRibbonToolTipInfo& info,
     const bool dark = wxSystemSettings::GetAppearance().IsDark();
     const wxColour bgColour = dark ? *wxBLACK : *wxWHITE;
     const wxColour fgColour = dark ? *wxWHITE : *wxBLACK;
-    const wxColour linkColour = dark ? wxColour(138, 180, 248)
-                                     : wxColour(0, 51, 153);
     m_outlineColour = dark ? *wxWHITE : wxColour(64, 64, 64);
 
     SetBackgroundColour(bgColour);
@@ -188,8 +194,12 @@ void wxRibbonToolTipPopup::SetContent(const wxRibbonToolTipInfo& info,
                                          .Border(wxTOP, titleGap));
     }
 
+#if wxUSE_HYPERLINKCTRL
     if ( info.HasHelpLink() )
     {
+        const wxColour linkColour = dark ? wxColour(138, 180, 248)
+                                         : wxColour(0, 51, 153);
+
         // A plain window is used as the divider, instead of wxStaticLine, as
         // its colour can be set on all platforms.
         wxWindow* const divider = new wxWindow(this, wxID_ANY,
@@ -221,6 +231,7 @@ void wxRibbonToolTipPopup::SetContent(const wxRibbonToolTipInfo& info,
 
         contents->Add(row, wxSizerFlags().Border(wxTOP, gap));
     }
+#endif // wxUSE_HYPERLINKCTRL
 
     // Leave room for the outline drawn in OnPaint().
     wxBoxSizer* const outer = new wxBoxSizer(wxVERTICAL);
@@ -262,6 +273,8 @@ wxRibbonToolTipPopup::GetScaledImage(const wxBitmapBundle& image) const
     return wxBitmapBundle::FromBitmap(bitmap);
 }
 
+#if wxUSE_HYPERLINKCTRL
+
 wxBitmapBundle
 wxRibbonToolTipPopup::MakeHelpIcon(const wxColour& circleColour,
                                    const wxColour& markColour) const
@@ -298,18 +311,20 @@ wxRibbonToolTipPopup::MakeHelpIcon(const wxColour& circleColour,
     return wxBitmapBundle::FromBitmap(bitmap);
 }
 
+void wxRibbonToolTipPopup::OnHyperlink(wxHyperlinkEvent& WXUNUSED(event))
+{
+    // Don't skip the event, so that the URL is not opened.
+    m_helper->OnHelpLinkClicked();
+}
+
+#endif // wxUSE_HYPERLINKCTRL
+
 void wxRibbonToolTipPopup::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     dc.SetPen(wxPen(m_outlineColour, FromDIP(1)));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(GetClientRect());
-}
-
-void wxRibbonToolTipPopup::OnHyperlink(wxHyperlinkEvent& WXUNUSED(event))
-{
-    // Don't skip the event, so that the URL is not opened.
-    m_helper->OnHelpLinkClicked();
 }
 
 #ifdef __WXMSW__

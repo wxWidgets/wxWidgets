@@ -53,7 +53,11 @@ public:
     /// Sets the image shown to the left of the description.
     wxRibbonToolTipInfo& Image(const wxBitmapBundle& image);
 
-    /// Shows, or hides, the help link below a divider.
+    /**
+        Shows, or hides, the help link below a divider.
+
+        The link is not shown if @c wxUSE_HYPERLINKCTRL is 0.
+    */
     wxRibbonToolTipInfo& HelpLink(bool show = true);
 
     /// Sets the text of the help link, "Click here for more help" by default.
