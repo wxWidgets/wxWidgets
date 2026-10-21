@@ -182,4 +182,22 @@ void wxCaret::DoSize()
     }
 }
 
+void wxCaret::DoGetPosition(int* x, int* y) const
+{
+    POINT pt = { };
+    if ( m_hasCaret )
+    {
+        CALL_CARET_API(GetCaretPos, (&pt));
+    }
+    else
+    {
+        // Return the previous Move() position. wxRichTextCtrl seems to expect
+        // this.
+        pt.x = m_x;
+        pt.y = m_y;
+    }
+    if ( x ) *x = pt.x;
+    if ( y ) *y = pt.y;
+}
+
 #endif

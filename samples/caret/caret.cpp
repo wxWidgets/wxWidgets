@@ -496,9 +496,13 @@ void MyCanvas::OnChar( wxKeyEvent &event )
 
 void MyCanvas::OnScroll(wxScrollWinEvent &event)
 {
-    wxPoint pos = GetCaret()->GetPosition();
-    m_xCaret = (pos.x - m_xMargin) / m_widthChar;
-    m_yCaret = (pos.y - m_yMargin) / m_heightChar;
-    wxLogStatus("Caret is at (%d, %d)", m_xCaret, m_yCaret);
     event.Skip();
+    // Track the new caret position after the scrolling is finished.
+    CallAfter([this]()
+        {
+            wxPoint pos = GetCaret()->GetPosition();
+            m_xCaret = (pos.x - m_xMargin) / m_widthChar;
+            m_yCaret = (pos.y - m_yMargin) / m_heightChar;
+            wxLogStatus("Caret is at (%d, %d)", m_xCaret, m_yCaret);
+        });
 }
