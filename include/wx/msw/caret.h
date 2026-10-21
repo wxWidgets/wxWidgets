@@ -40,6 +40,7 @@ protected:
     virtual void DoShow() override;
     virtual void DoHide() override;
     virtual void DoSize() override;
+    virtual void DoGetPosition(int* x, int* y) const override;
 
     // helper function which creates the system caret
     bool MSWCreateCaret();
