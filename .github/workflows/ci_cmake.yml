@@ -251,7 +251,12 @@ jobs:
 
           httpbin_launch
 
-          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          # GUI tests are run separately below if they're enabled.
+          if [ "${{ matrix.test_gui }}" = 1 ]; then
+              ctest_args="-E test_gui"
+          fi
+
+          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 $ctest_args . || rc=$?
           if [ -n "$rc" ]; then
               httpbin_show_log
               exit $rc
