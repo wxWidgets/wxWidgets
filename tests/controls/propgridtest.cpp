@@ -1810,22 +1810,48 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     SECTION("WindowStyles")
     {
         // Recreate grid with all possible (single) flags
-        REQUIRE(wxPG_AUTO_SORT == 0x000000010);
-
-        for ( int i = 4; i < 16; i++ )
+        const int styles[] =
         {
-            int flag = 1 << i;
+            wxPG_AUTO_SORT,
+            wxPG_HIDE_CATEGORIES,
+            wxPG_BOLD_MODIFIED,
+            wxPG_SPLITTER_AUTO_CENTER,
+            wxPG_TOOLTIPS,
+            wxPG_HIDE_MARGIN,
+            wxPG_STATIC_SPLITTER,
+            wxPG_LIMITED_EDITING,
+            wxPG_TOOLBAR,
+            wxPG_DESCRIPTION,
+            wxPG_NO_INTERNAL_BORDER,
+        };
+
+        for ( int flag : styles )
+        {
             INFO(wxString::Format("Style: 0x%X", flag).c_str());
             ReplaceGrid(pgManager, flag, -1);
             pgManager->Update();
         }
         SUCCEED();
 
-        REQUIRE(wxPG_EX_INIT_NOCAT == 0x00001000);
-
-        for ( int i = 12; i < 27; i++ )
+        const int exStyles[] =
         {
-            int flag = 1 << i;
+            wxPG_EX_INIT_NOCAT,
+            wxPG_EX_NO_FLAT_TOOLBAR,
+            wxPG_EX_MODE_BUTTONS,
+            wxPG_EX_HELP_AS_TOOLTIPS,
+            wxPG_EX_NATIVE_DOUBLE_BUFFERING,
+            wxPG_EX_ALWAYS_ALLOW_FOCUS,
+            wxPG_EX_AUTO_UNSPECIFIED_VALUES,
+            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES,
+            wxPG_EX_HIDE_PAGE_BUTTONS,
+            wxPG_EX_MULTIPLE_SELECTION,
+            wxPG_EX_ENABLE_TLP_TRACKING,
+            wxPG_EX_NO_TOOLBAR_DIVIDER,
+            wxPG_EX_TOOLBAR_SEPARATOR,
+        };
+
+        for ( int flag : exStyles )
+        {
             INFO(wxString::Format("ExStyle: 0x%X", flag).c_str());
             ReplaceGrid(pgManager, -1, flag);
             pgManager->Update();
