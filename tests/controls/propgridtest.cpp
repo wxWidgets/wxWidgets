@@ -446,8 +446,6 @@ static wxPropertyGridManager* CreateGrid(int style, int extraStyle)
 
     pgManager->Refresh();
     pgManager->Update();
-    // Wait for update to be done
-    YieldForAWhile(100);
 
     return pgManager;
 }
