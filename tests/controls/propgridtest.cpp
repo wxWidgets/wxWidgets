@@ -681,7 +681,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 wxPGProperty* p = *it;
                 INFO(p->GetLabel().c_str());
                 pgManager->GetGrid()->SelectProperty(p, true);
-                ::wxMilliSleep(150);
                 wxTheApp->GetTopWindow()->Update();
             }
         }
@@ -1806,7 +1805,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             pgManager->SetColumnCount(i);
             pgManager->Refresh();
             pgManager->Update();
-            wxMilliSleep(500);
         }
         SUCCEED();
     }
@@ -1822,7 +1820,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             INFO(wxString::Format("Style: 0x%X", flag).c_str());
             ReplaceGrid(pgManager, flag, -1);
             pgManager->Update();
-            wxMilliSleep(500);
         }
         SUCCEED();
 
@@ -1834,7 +1831,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             INFO(wxString::Format("ExStyle: 0x%X", flag).c_str());
             ReplaceGrid(pgManager, -1, flag);
             pgManager->Update();
-            wxMilliSleep(500);
         }
         SUCCEED();
     }
