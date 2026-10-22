@@ -765,16 +765,20 @@ void wxHtmlContainerCell::Layout(int w)
 {
     wxHtmlCell::Layout(w);
 
-    if (m_LastLayout == w)
-        return;
-    m_LastLayout = w;
-
     // VS: Any attempt to layout with negative or zero width leads to hell,
     // but we can't ignore such attempts completely, since it sometimes
     // happen (e.g. when trying how small a table can be), so use at least one
     // pixel width, this will at least give us the correct height sometimes.
+    //
+    // Note that this must be done before checking m_LastLayout, as its
+    // initial value is -1 and so the check below would skip the layout of a
+    // never laid out cell if we were called with w == -1.
     if (w < 1)
         w = 1;
+
+    if (m_LastLayout == w)
+        return;
+    m_LastLayout = w;
 
     wxHtmlCell *nextCell;
     long xpos = 0, ypos = m_IndentTop;
