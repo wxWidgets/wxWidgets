@@ -1012,6 +1012,14 @@ public:
 
     /**
         Return the short form of the path (returns identity on non-Windows platforms).
+
+        Under Windows, this function returns an empty string if the full path
+        corresponding to this file name is an "extended length" path, see
+        IsMSWExtendedLengthPath(), which is in particular the case for any path
+        longer than 250 characters because such paths don't have any short form.
+
+        If the short path can't be determined for any other reason, e.g.
+        because the file doesn't exist, the full path is returned.
     */
     wxString GetShortPath() const;
 
