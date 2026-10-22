@@ -342,6 +342,12 @@ public:
                                        wxFFile *fileTemp);
 #endif // wxUSE_FFILE
 
+        // create a new directory with a unique name starting with the
+        // specified prefix and assign it to this object or return its full
+        // path (or empty string on error)
+    void AssignTempDirName(const wxString& prefix);
+    static wxString CreateTempDirName(const wxString& prefix);
+
     // directory creation and removal.
     bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0) const;
     static bool Mkdir(const wxString &dir, int perm = wxS_DIR_DEFAULT,

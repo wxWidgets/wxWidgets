@@ -90,6 +90,10 @@
 #include "wx/longlong.h"
 #include "wx/uri.h"
 
+#ifdef __WINDOWS__
+    #include <atomic>
+#endif
+
 #if defined(wxHAS_NATIVE_READLINK)
     #include "wx/vector.h"
 #endif
@@ -1242,6 +1246,65 @@ void wxInitTempFile(const wxString& strTemp, const wxString& strName)
 // ----------------------------------------------------------------------------
 // directory operations
 // ----------------------------------------------------------------------------
+
+void wxFileName::AssignTempDirName(const wxString& prefix)
+{
+    const wxString dir = CreateTempDirName(prefix);
+    if ( dir.empty() )
+        Clear();
+    else
+        AssignDir(dir);
+}
+
+/* static */
+wxString wxFileName::CreateTempDirName(const wxString& prefix)
+{
+    // Use the directory specified by the prefix, if any, as with temporary
+    // files, but keep the extension, if any, as part of the name, including
+    // the trailing dot, which is commonly used as separator in the prefixes.
+    const wxFileName fnPrefix(prefix);
+    wxString dir = fnPrefix.GetPath();
+    const wxString name = fnPrefix.GetFullName();
+
+    if ( dir.empty() )
+        dir = GetTempDir();
+
+    wxString path = dir;
+    if ( !wxEndsWithPathSeparator(path) )
+        path += wxFILE_SEP_PATH;
+    path += name;
+
+#ifdef __WINDOWS__
+    // There is no mkdtemp() under Windows, so we have to find a unique name
+    // ourselves. This is safe as CreateDirectory() fails if the directory
+    // already exists, so it's just a question of trying different names.
+    static std::atomic<unsigned> s_counter(0);
+
+    const wxString base = path;
+    for ( int attempt = 0; attempt < 1000; attempt++ )
+    {
+        path = wxString::Format("%s%lx-%x", base, wxGetProcessId(), s_counter++);
+        if ( ::CreateDirectory(path.t_str(), nullptr) )
+            return path;
+
+        if ( ::GetLastError() != ERROR_ALREADY_EXISTS )
+            break;
+    }
+#else // !__WINDOWS__
+    // mkdtemp() is a part of POSIX.1-2008 and is available everywhere, it
+    // creates the directory with the permissions for the owner only.
+    path += wxS("XXXXXX");
+
+    // We need to copy the path to the buffer which mkdtemp() can modify.
+    wxCharBuffer buf(path.fn_str());
+    if ( mkdtemp(buf.data()) )
+        return wxConvFile.cMB2WX(buf);
+#endif // __WINDOWS__/!__WINDOWS__
+
+    wxLogSysError(_("Failed to create a temporary directory in \"%s\""), dir);
+
+    return wxString();
+}
 
 // helper of GetTempDir(): check if the given directory exists and return it if
 // it does or an empty string otherwise
