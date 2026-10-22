@@ -268,7 +268,53 @@ jobs:
         working-directory: build_cmake\lib\vc_x64_dll
         run: |
           # Show the duration of each test to know which one hangs, if any.
-          ./test_gui.exe -d yes
+          ./test_gui.exe -d yes &
+          pid=$!
+
+          # The tests normally take ~2 minutes, so give them 10 to finish.
+          for i in $(seq 600); do
+              kill -0 $pid 2>/dev/null || break
+              sleep 1
+          done
+
+          if kill -0 $pid 2>/dev/null; then
+              echo "::error::test_gui seems to hang, collecting diagnostics."
+              winpid=$(cat /proc/$pid/winpid)
+
+              echo '--- Visible windows:'
+              powershell -NoProfile -Command 'Get-Process | Where-Object MainWindowTitle | Format-Table -AutoSize Id,Name,MainWindowTitle'
+
+              echo '--- Taking screenshot:'
+              powershell -NoProfile -Command '
+                Add-Type -AssemblyName System.Windows.Forms,System.Drawing
+                $r = [System.Windows.Forms.SystemInformation]::VirtualScreen
+                $bmp = New-Object System.Drawing.Bitmap $r.Width, $r.Height
+                $g = [System.Drawing.Graphics]::FromImage($bmp)
+                $g.CopyFromScreen($r.Location, [System.Drawing.Point]::Empty, $r.Size)
+                $bmp.Save("test_gui_hang.png")
+              ' || echo 'Failed to take screenshot.'
+
+              echo "--- Stacks of all threads of test_gui (PID $winpid):"
+              cdb="/c/Program Files (x86)/Windows Kits/10/Debuggers/x64/cdb.exe"
+              if [ -x "$cdb" ]; then
+                  "$cdb" -p $winpid -lines -c '.symfix+; .reload; ~*kn 60; qd' || echo 'cdb failed.'
+              else
+                  echo 'cdb not found, no stacks available.'
+              fi
+
+              kill $pid
+              exit 1
+          fi
+
+          wait $pid
+
+      - name: Upload test_gui hang screenshot
+        if: failure() && matrix.test_gui == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_gui-hang-${{ strategy.job-index }}
+          path: build_cmake/lib/vc_x64_dll/test_gui_hang.png
+          if-no-files-found: ignore
 
       - name: Testing installation
         if: matrix.skip_installation != true
