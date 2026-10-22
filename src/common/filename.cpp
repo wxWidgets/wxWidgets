@@ -2004,6 +2004,128 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
 }
 
 /* static */
+bool wxFileName::IsReservedName(const wxString& name, wxPathFormat format)
+{
+    // Only DOS-compatible systems have reserved names.
+    if ( GetFormat(format) != wxPATH_DOS )
+        return false;
+
+    // The extension doesn't matter, e.g. "nul.txt" still refers to the NUL
+    // device, and neither do the trailing spaces.
+    wxString base = name.BeforeFirst('.');
+    base.Trim();
+    base.MakeUpper();
+
+    if ( base == "CON" || base == "PRN" || base == "AUX" || base == "NUL" )
+        return true;
+
+    // COM and LPT followed by a digit are reserved too, and this includes the
+    // superscript digits 1, 2 and 3.
+    if ( base.length() == 4 && (base.StartsWith("COM") || base.StartsWith("LPT")) )
+    {
+        const wxUniChar ch = base[3];
+        return (ch >= '0' && ch <= '9') ||
+                ch == wxUniChar(0x00B9) ||
+                ch == wxUniChar(0x00B2) ||
+                ch == wxUniChar(0x00B3);
+    }
+
+    return false;
+}
+
+/* static */
+wxString wxFileName::MakeValidName(const wxString& name, wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // Path separators can't appear in a single path component, but they're
+    // not included in the forbidden characters for all formats. The exception
+    // is VMS, where the separator is '.' which is also used in file names.
+    wxString forbidden = GetForbiddenChars(format);
+    if ( format != wxPATH_VMS )
+        forbidden += GetPathSeparators(format);
+
+    wxString valid;
+    valid.reserve(name.length());
+    for ( wxUniChar ch : name )
+    {
+        if ( ch < 32 || forbidden.find(ch) != wxString::npos )
+            ch = '_';
+
+        valid += ch;
+    }
+
+    if ( valid == "." || valid == ".." )
+    {
+        // These special names refer to the current and parent directories and
+        // can't be used, so replace them with the same number of underscores,
+        // as for any other invalid characters.
+        valid.assign(valid.length(), '_');
+    }
+    else if ( format == wxPATH_DOS )
+    {
+        // Windows silently strips trailing spaces and dots from the names, so
+        // remove them ourselves to avoid surprises.
+        const size_t len = valid.length();
+        while ( !valid.empty() &&
+                    (valid.Last() == '.' || valid.Last() == ' ') )
+            valid.RemoveLast();
+
+        if ( valid.empty() )
+        {
+            // The name consisted only of dots and spaces, replace all of them
+            // instead of returning an empty name.
+            valid.assign(len, '_');
+        }
+        else if ( IsReservedName(valid, format) )
+        {
+            valid.Prepend("_");
+        }
+    }
+
+    // Empty name is never valid.
+    if ( valid.empty() )
+        valid = "_";
+
+    return valid;
+}
+
+/* static */
+wxString
+wxFileName::MakeSafeRelativePath(const wxString& path, wxPathFormat format)
+{
+    format = GetFormat(format);
+
+    // VMS paths use different syntax for the directories and the file name,
+    // so they can't be handled by just splitting them at separators.
+    wxCHECK_MSG( format != wxPATH_VMS, wxString(),
+                 wxS("VMS paths are not supported") );
+
+    wxString safe;
+
+    // Using wxTOKEN_STRTOK skips empty components, which also makes the path
+    // relative if it started with separator(s).
+    wxStringTokenizer tk(path, GetPathSeparators(format), wxTOKEN_STRTOK);
+    while ( tk.HasMoreTokens() )
+    {
+        const wxString component = tk.GetNextToken();
+        if ( component == "." )
+            continue;
+
+        // Don't try to interpret the parent directory references in any way,
+        // as such path may be an attempt to escape the target directory.
+        if ( component == ".." )
+            return wxString();
+
+        if ( !safe.empty() )
+            safe += GetPathSeparator(format);
+        safe += MakeValidName(component, format);
+    }
+
+    return safe;
+}
+
+/* static */
 wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
 {
     wxString sepVol;

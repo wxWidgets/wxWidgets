@@ -704,6 +704,125 @@ public:
     static wxString GetForbiddenChars(wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Returns @true if the given name can't be used as a file or directory
+        name even if it doesn't contain any forbidden characters.
+
+        Currently only the Windows device names are considered to be
+        reserved, so this function always returns @false for formats other
+        than ::wxPATH_DOS. For it, the reserved names are @c CON, @c PRN,
+        @c AUX, @c NUL and @c COM or @c LPT followed by a single digit
+        (including superscript 1, 2 or 3). The names are case-insensitive and
+        are reserved even when followed by an extension or trailing spaces,
+        e.g. @c "nul.txt" or @c "Com1 .log" are reserved too.
+
+        @param name
+            A single path component, i.e. file or directory name without any
+            path separators.
+        @param format
+            The path format to use.
+
+        @see MakeValidName()
+
+        @since 3.3.5
+    */
+    static bool IsReservedName(const wxString& name,
+                               wxPathFormat format = wxPATH_NATIVE);
+
+    /**
+        Returns a valid file or directory name based on the given string.
+
+        This function is useful for constructing file names from strings
+        coming from elsewhere, e.g. from the document title or a network
+        resource name. It replaces all the characters returned by
+        GetForbiddenChars(), the path separators and all control characters
+        with underscores. For ::wxPATH_DOS format, it also removes trailing
+        spaces and dots, which are silently removed by Windows, and prepends
+        an underscore to the reserved names (see IsReservedName()).
+
+        It never returns an empty string, nor "." or "..": the special names
+        "." and ".." are replaced with "_" and "__" respectively and, for
+        ::wxPATH_DOS, a name consisting only of dots and spaces is replaced
+        with the same number of underscores instead of being stripped
+        entirely. An empty string is replaced with "_".
+
+        Note that this function doesn't limit the length of the returned
+        name.
+
+        @param name
+            Any string to make a valid file or directory name from. Note that
+            any path separators in it are replaced, as it is supposed to
+            become a single path component.
+        @param format
+            The path format to use.
+
+        @see MakeSafeRelativePath()
+
+        @since 3.3.5
+    */
+    static wxString MakeValidName(const wxString& name,
+                                  wxPathFormat format = wxPATH_NATIVE);
+
+    /**
+        Returns a safe relative path based on the given string.
+
+        This function is useful for handling paths coming from untrusted
+        sources, e.g. the names of the entries in an archive or of the files
+        dropped from another application, which must be created inside some
+        target directory and never outside of it.
+
+        The path is split into components at the separators returned by
+        GetPathSeparators() and the result contains all of them, separated by
+        GetPathSeparator(), with the following exceptions:
+
+        - Empty components are ignored, so that the leading separators, which
+          would make the path absolute, are removed, as are the trailing and
+          duplicate ones.
+        - "." components are ignored too.
+        - If any component is "..", the path is rejected entirely and an empty
+          string is returned. Such components are not interpreted in any way,
+          as even when they don't escape the target directory, as in
+          "dir/../file", using them is suspicious.
+
+        All the other components are passed to MakeValidName(), so the result
+        contains only valid file and directory names. Note that this means that
+        a DOS path starting with a drive letter, e.g. `c:\dir\file`, is
+        transformed into `c_\dir\file`, which is a relative path too.
+
+        An empty string is also returned if the path doesn't contain any
+        components at all, e.g. if it is empty or consists only of separators.
+
+        Note that this function only works with the path strings and doesn't
+        check whether the path exists or whether any of its components are
+        symbolic links, which could still point outside of the target
+        directory if they were created there before.
+
+        Example of using this function for extracting a file:
+        @code
+        const wxString path = wxFileName::MakeSafeRelativePath(entryName);
+        if ( path.empty() )
+        {
+            wxLogWarning("Skipping entry with invalid name \"%s\".", entryName);
+            return;
+        }
+
+        wxFileName fn(targetDir + wxFILE_SEP_PATH + path);
+        ...
+        @endcode
+
+        @param path
+            Any string to make a safe relative path from.
+        @param format
+            The path format to use. ::wxPATH_VMS is not supported by this
+            function.
+        @return
+            A relative path or empty string if the path couldn't be made safe.
+
+        @since 3.3.5
+    */
+    static wxString MakeSafeRelativePath(const wxString& path,
+                                         wxPathFormat format = wxPATH_NATIVE);
+
+    /**
         Returns the canonical path format for this platform.
     */
     static wxPathFormat GetFormat(wxPathFormat format = wxPATH_NATIVE);
