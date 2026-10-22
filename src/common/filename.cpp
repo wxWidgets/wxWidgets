@@ -221,36 +221,6 @@ private:
 // private functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_DATETIME && defined(__WINDOWS__)
-
-// Convert between wxDateTime and FILETIME which is a 64-bit value representing
-// the number of 100-nanosecond intervals since January 1, 1601 UTC.
-//
-// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
-static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
-
-static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
-{
-    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
-    t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
-    t -= EPOCH_OFFSET_IN_MSEC;
-
-    *dt = wxDateTime(t);
-}
-
-static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
-{
-    // Undo the conversions above.
-    wxLongLong t(dt.GetValue());
-    t += EPOCH_OFFSET_IN_MSEC;
-    t *= 10000;
-
-    ft->dwHighDateTime = t.GetHi();
-    ft->dwLowDateTime = t.GetLo();
-}
-
-#endif // wxUSE_DATETIME && __WINDOWS__
-
 // return a string with the volume par
 static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
 {
@@ -3155,15 +3125,54 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
                           const wxDateTime *dtCreate) const
 {
+    wxCHECK_MSG( dtAccess || dtMod || dtCreate, false,
+                 "At least one of the times must be specified" );
+    wxCHECK_MSG( !dtAccess || dtAccess->IsValid(), false,
+                 "Access time must be valid if specified" );
+    wxCHECK_MSG( !dtMod || dtMod->IsValid(), false,
+                 "Modification time must be valid if specified" );
+    wxCHECK_MSG( !dtCreate || dtCreate->IsValid(), false,
+                 "Creation time must be valid if specified" );
+
 #if defined(__WINDOWS__)
     FILETIME ftAccess, ftCreate, ftWrite;
 
+    bool allTimesAreValid = true;
     if ( dtCreate )
-        ConvertWxToFileTime(&ftCreate, *dtCreate);
+    {
+        if ( !dtCreate->GetAsMSWFileTime(&ftCreate) )
+        {
+            wxLogError(_("Creation time %s is out of range."),
+                       dtCreate->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
     if ( dtAccess )
-        ConvertWxToFileTime(&ftAccess, *dtAccess);
+    {
+        if ( !dtAccess->GetAsMSWFileTime(&ftAccess) )
+        {
+            wxLogError(_("Access time %s is out of range."),
+                       dtAccess->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
     if ( dtMod )
-        ConvertWxToFileTime(&ftWrite, *dtMod);
+    {
+        if ( !dtMod->GetAsMSWFileTime(&ftWrite) )
+        {
+            wxLogError(_("Modification time %s is out of range."),
+                       dtMod->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
+    if ( !allTimesAreValid )
+    {
+        wxLogError(_("Failed to modify file times for '%s'"), GetFullPath());
+        return false;
+    }
 
     wxString path;
     int flags;
@@ -3198,11 +3207,46 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         return true;
     }
 
+    // GetTicks() returns -1 for the dates which can't be represented as
+    // time_t, i.e. those before 1970 or, if time_t is 32 bits, after 2038, and
+    // passing this value to utime() would silently set the wrong time.
+    time_t tAccess = 0,
+           tMod = 0;
+
+    bool allTimesAreValid = true;
+    if ( dtAccess )
+    {
+        tAccess = dtAccess->GetTicks();
+        if ( tAccess == (time_t)-1 )
+        {
+            wxLogError(_("Access time %s is out of range."),
+                       dtAccess->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
+    if ( dtMod )
+    {
+        tMod = dtMod->GetTicks();
+        if ( tMod == (time_t)-1 )
+        {
+            wxLogError(_("Modification time %s is out of range."),
+                       dtMod->FormatISOCombined(' '));
+            allTimesAreValid = false;
+        }
+    }
+
+    if ( !allTimesAreValid )
+    {
+        wxLogError(_("Failed to modify file times for '%s'"), GetFullPath());
+        return false;
+    }
+
     // if dtAccess or dtMod is not specified, use the other one (which must be
     // non null because of the test above) for both times
     utimbuf utm;
-    utm.actime = dtAccess ? dtAccess->GetTicks() : dtMod->GetTicks();
-    utm.modtime = dtMod ? dtMod->GetTicks() : dtAccess->GetTicks();
+    utm.actime = dtAccess ? tAccess : tMod;
+    utm.modtime = dtMod ? tMod : tAccess;
     if ( utime(GetFullPath().fn_str(), &utm) == 0 )
     {
         return true;
@@ -3279,11 +3323,11 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     if ( ok )
     {
         if ( dtCreate )
-            ConvertFileTimeToWx(dtCreate, ftCreate);
+            dtCreate->SetFromMSWFileTime(ftCreate);
         if ( dtAccess )
-            ConvertFileTimeToWx(dtAccess, ftAccess);
+            dtAccess->SetFromMSWFileTime(ftAccess);
         if ( dtMod )
-            ConvertFileTimeToWx(dtMod, ftWrite);
+            dtMod->SetFromMSWFileTime(ftWrite);
 
         return true;
     }

@@ -909,6 +909,29 @@ TEST_CASE("wxFileName::SetTimes", "[filename]")
 #endif // __WINDOWS__
 }
 
+TEST_CASE("wxFileName::SetTimesOutOfRange", "[filename]")
+{
+    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+    REQUIRE( fn.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
+
+    wxDateTime dtModOrig;
+    REQUIRE( fn.GetTimes(nullptr, &dtModOrig, nullptr) );
+
+    // This date can be represented neither as FILETIME, which starts in 1601,
+    // nor as time_t, which starts in 1970 for wxDateTime::GetTicks().
+    const wxDateTime dtModify(1, wxDateTime::Jan, 1500);
+    {
+        wxLogNull noLog;
+        CHECK( !fn.SetTimes(nullptr, &dtModify, nullptr) );
+    }
+
+    // Check that the file time wasn't changed.
+    wxDateTime dtMod;
+    REQUIRE( fn.GetTimes(nullptr, &dtMod, nullptr) );
+    CHECK( dtMod == dtModOrig );
+}
+
 TEST_CASE("wxFileName::Exists", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));

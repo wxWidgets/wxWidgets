@@ -427,7 +427,18 @@ public:
         @remarks MSW only
         @onlyfor{wxmsw}
     */
-    wxDateTime(const struct _SYSTEMTIME& st);
+    wxDateTime(const SYSTEMTIME& st);
+
+    /**
+        Same as SetFromMSWFileTime.
+
+        @param ft
+            Input, Windows FILETIME reference
+        @since 3.3.5
+        @remarks MSW only
+        @onlyfor{wxmsw}
+    */
+    wxDateTime(const FILETIME& ft);
 
 
     /**
@@ -573,7 +584,7 @@ public:
         @remarks MSW only
         @onlyfor{wxmsw}
     */
-    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
+    wxDateTime& SetFromMSWSysTime(const SYSTEMTIME& st);
 
     /**
         Returns the date and time in the Windows SYSTEMTIME format.
@@ -583,7 +594,44 @@ public:
         @remarks MSW only
         @onlyfor{wxmsw}
     */
-    void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
+    void GetAsMSWSysTime(SYSTEMTIME* st) const;
+
+    /**
+        Initialize using the Windows FILETIME structure.
+
+        Note that, unlike SYSTEMTIME, FILETIME is always in UTC, so no time
+        zone conversion is done by this function. It also has higher
+        precision than wxDateTime, so its sub-millisecond part is ignored.
+
+        If @a ft is not a valid FILETIME, i.e. has the highest bit set, the
+        object becomes invalid.
+
+        @param ft
+            Input, Windows FILETIME reference
+        @since 3.3.5
+        @remarks MSW only
+        @onlyfor{wxmsw}
+    */
+    wxDateTime& SetFromMSWFileTime(const FILETIME& ft);
+
+    /**
+        Returns the date and time in the Windows FILETIME format.
+
+        This object must be valid. Note that not all valid wxDateTime objects
+        can be represented as FILETIME: the dates before January 1, 1601 or
+        after (approximately) the year 30828 can't be and this function
+        returns @false for them.
+
+        @param ft
+            Output, pointer to Windows FILETIME, only modified if the function
+            returns @true.
+        @return @true if the date was converted or @false if it is out of
+            FILETIME range.
+        @since 3.3.5
+        @remarks MSW only
+        @onlyfor{wxmsw}
+    */
+    bool GetAsMSWFileTime(FILETIME* ft) const;
 
     /**
         Returns the century of this date.
