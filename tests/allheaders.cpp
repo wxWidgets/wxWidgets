@@ -380,6 +380,15 @@
 
 #include "allheaders.h"
 
+#include <type_traits>
+
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+// Check that the symbol defined above was really taken into account, which
+// wouldn't be the case if precompiled headers were used for this file.
+static_assert(!std::is_convertible<const char*, wxString>::value,
+              "char pointers shouldn't be convertible to wxString");
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
 // Check that using wx macros doesn't result in -Wsuggest-override or
 // equivalent warnings in classes using and not using "override".
 struct Base : wxEvtHandler

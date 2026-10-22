@@ -986,6 +986,12 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
         FormatString(const char *str) : wxString(str) {}
         FormatString(const wxScopedCharBuffer& str) : wxString(str) {}
+#elif defined(wxALLOW_UTF8_LITERALS)
+        template <size_t N>
+        FormatString(const char (&str)[N])
+            : wxString(FromUTF8Unchecked(str)) {}
+        template <size_t N>
+        FormatString(char (&str)[N]) = delete;
 #endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     };
 
@@ -994,7 +1000,7 @@ public:
     // notice that this function supposes that the caller already checked that
     // the level was enabled and does no checks itself
     template <typename... Targs>
-    void Log(const FormatString& format, Targs... args)
+    void Log(const FormatString& format, wxFORMAT_ARGS(Targs)... args)
     {
         DoCallOnLog(wxString::Format(format, args...));
     }
@@ -1013,7 +1019,7 @@ public:
     // passed to MaybeStore() and is required to support "overloaded" versions
     // of wxLogStatus() and wxLogSysError()
     template <typename... Targs>
-    void Log(long num, const FormatString& format, Targs... args)
+    void Log(long num, const FormatString& format, wxFORMAT_ARGS(Targs)... args)
     {
         Store(m_optKey, num);
 
@@ -1033,7 +1039,7 @@ public:
     // ugly but fine in practice as this overload is only used by wxLogStatus()
     // whose first argument is a wxFrame
     template <typename... Targs>
-    void Log(wxObject* ptr, const FormatString& format, Targs... args)
+    void Log(wxObject* ptr, const FormatString& format, wxFORMAT_ARGS(Targs)... args)
     {
         Store(m_optKey, wxPtrToUInt(ptr));
 
@@ -1052,7 +1058,7 @@ public:
     // as the macros don't have access to the level argument in this case, this
     // function does check that the level is enabled itself
     template <typename... Targs>
-    void LogAtLevel(wxLogLevel level, const wxString& format, Targs... args)
+    void LogAtLevel(wxLogLevel level, const wxString& format, wxFORMAT_ARGS(Targs)... args)
     {
         if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
             return;
@@ -1075,7 +1081,7 @@ public:
     // checked that the mask is enabled, so they don't need to check it again
     // and only store the mask which is used as part of the log message later
     template <typename... Targs>
-    void LogTrace(const wxString& mask, const wxString& format, Targs... args)
+    void LogTrace(const wxString& mask, const wxString& format, wxFORMAT_ARGS(Targs)... args)
     {
         Store(wxLOG_KEY_TRACE_MASK, mask);
 

@@ -205,7 +205,11 @@ public:
 
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
   // read other types, for which wxFromString is defined
-  template <typename T>
+  //
+  // note that the value can't be const, and excluding this case explicitly
+  // avoids ambiguity with Read() taking a string literal as default value
+  template <typename T,
+            typename std::enable_if<!std::is_const<T>::value, int>::type = 0>
   bool Read(const wxString& key, T* value) const
   {
       wxString s;
@@ -238,6 +242,10 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   wxString Read(const wxString& key, const char* defVal) const
     { return Read(key, wxString(defVal)); }
+#elif defined(wxALLOW_UTF8_LITERALS)
+  template <size_t N>
+  wxString Read(const wxString& key, const char (&defVal)[N]) const
+    { return Read(key, wxString::FromUTF8Unchecked(defVal)); }
 #endif
   wxString Read(const wxString& key, const wchar_t* defVal) const
     { return Read(key, wxString(defVal)); }
@@ -288,6 +296,12 @@ public:
     { return Write(key, wxString(value)); }
   bool Write(const wxString& key, const unsigned char *value)
     { return Write(key, wxString(value)); }
+#elif defined(wxALLOW_UTF8_LITERALS)
+  template <size_t N>
+  bool Write(const wxString& key, const char (&value)[N])
+    { return Write(key, wxString::FromUTF8Unchecked(value)); }
+  template <size_t N>
+  bool Write(const wxString& key, char (&value)[N]) = delete;
 #endif
   bool Write(const wxString& key, const wchar_t *value)
     { return Write(key, wxString(value)); }

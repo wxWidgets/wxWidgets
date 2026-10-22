@@ -490,6 +490,12 @@ TEST_CASE_METHOD(AnyTestCase, "wxAny::wxVariantConversions", "[any]")
     vList.Append(15);
     vList.Append("abc");
 
+    // Check that comparing with narrow strings works as expected and doesn't
+    // use operator==(bool), as it used to do.
+    CHECK( vString == "ABC" );
+    CHECK( vString != "XYZ" );
+    CHECK( vBool != "ABC" );
+
     // Convert to wxAnys, and then back to wxVariants
     wxVariant variant;
 
