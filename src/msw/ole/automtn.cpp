@@ -138,7 +138,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
         }
     }
 
-    const int namedArgCount = static_cast<int>(namedArgs.size());
+    const int namedArgCount = wxSsize(namedArgs);
 
     // GetIDsOfNames expects the member name as the first name, followed by
     // argument names (if any).
@@ -184,7 +184,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
         namedDispIds.push_back(dispIds[1 + i]);
     }
 
-    for (i = static_cast<int>(positionalArgs.size()) - 1; i >= 0; i--)
+    for (i = wxSsize(positionalArgs) - 1; i >= 0; i--)
         argOrder.push_back(positionalArgs[i]);
 
     // Convert the wxVariants to VARIANTARGs
