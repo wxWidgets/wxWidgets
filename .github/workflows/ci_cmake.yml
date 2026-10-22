@@ -267,7 +267,8 @@ jobs:
         timeout-minutes: 30
         working-directory: build_cmake\lib\vc_x64_dll
         run: |
-          ./test_gui.exe
+          # Show the duration of each test to know which one hangs, if any.
+          ./test_gui.exe -d yes
 
       - name: Testing installation
         if: matrix.skip_installation != true
