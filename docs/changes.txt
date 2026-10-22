@@ -173,6 +173,9 @@ Changes in behaviour not resulting in compilation errors
   wxEVT_LIST_ITEM_[UN]CHECKED events when the state really changed, for
   consistency with wxMSW.
 
+- Generic wxInfoBar now also calls its virtual Dismiss() when any buttons in it
+  are clicked, just as the native wxGTK version already did.
+
 - Panels and other control container windows without any children accepting
   focus from keyboard now don't accept focus themselves. If you need them to do
   it, call EnableFocusFromKeyboard() on them explicitly.
