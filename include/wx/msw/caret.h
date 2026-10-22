@@ -13,20 +13,17 @@
 class WXDLLIMPEXP_CORE wxCaret : public wxCaretBase
 {
 public:
-    wxCaret() { Init(); }
+    wxCaret() = default;
+
         // create the caret of given (in pixels) width and height and associate
         // with the given window
     wxCaret(wxWindow *window, int width, int height)
     {
-        Init();
-
         (void)Create(window, width, height);
     }
         // same as above
     wxCaret(wxWindowBase *window, const wxSize& size)
     {
-        Init();
-
         (void)Create(window, size);
     }
 
@@ -46,12 +43,7 @@ protected:
     bool MSWCreateCaret();
 
 private:
-    void Init()
-    {
-        m_hasCaret = false;
-    }
-
-    bool m_hasCaret;
+    bool m_hasCaret = false;
 
     wxDECLARE_NO_COPY_CLASS(wxCaret);
 };
