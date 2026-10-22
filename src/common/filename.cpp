@@ -2503,9 +2503,14 @@ wxString wxFileName::GetShortPath() const
                 sz
                ) != 0 )
         {
-            return pathOut;
+            path = pathOut;
         }
     }
+
+    // Extended length paths don't have short path form and it would be
+    // misleading to return extended paths from here, so return empty string.
+    if ( IsMSWExtendedLengthPath(path) )
+        return wxString();
 #endif // Windows
 
     return path;

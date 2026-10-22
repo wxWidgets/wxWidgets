@@ -671,6 +671,9 @@ TEST_CASE("wxFileName::ShortLongPath", "[filename]")
     // the first and subsequent runs, test for this
     CHECK( fn.GetLongPath() == fn.GetLongPath() );
     CHECK( fn.GetShortPath() == fn.GetShortPath() );
+
+    // Extended length paths don't have any short form.
+    CHECK( wxFileName(R"(\\?\C:\Windows\notepad.exe)").GetShortPath().empty() );
 }
 
 #endif // __WINDOWS__
@@ -1391,6 +1394,9 @@ TEST_CASE("wxFileName::LongPath", "[filename]")
     // Try accessing it too.
     CHECK( fn.FileExists() );
     CHECK( fn.GetSize() == 8 );
+
+    // There is no short form for such paths.
+    CHECK( fn.GetShortPath().empty() );
 }
 
 #endif // __WINDOWS__
