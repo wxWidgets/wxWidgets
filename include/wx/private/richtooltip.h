@@ -20,8 +20,7 @@ class wxRichToolTipImpl
 {
 public:
     // This is implemented in a platform-specific way.
-    static wxRichToolTipImpl* Create(const wxString& title,
-                                     const wxString& message);
+    static wxRichToolTipImpl* Create(const wxRichToolTipInfo& info);
 
     // These methods simply mirror the public wxRichToolTip ones.
     virtual void SetBackgroundColour(const wxColour& col,

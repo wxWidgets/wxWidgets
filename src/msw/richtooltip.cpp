@@ -64,12 +64,14 @@ struct EDITBALLOONTIP
 class wxRichToolTipMSWImpl : public wxRichToolTipGenericImpl
 {
 public:
-    wxRichToolTipMSWImpl(const wxString& title, const wxString& message) :
-        wxRichToolTipGenericImpl(title, message)
+    explicit wxRichToolTipMSWImpl(const wxRichToolTipInfo& info) :
+        wxRichToolTipGenericImpl(info)
     {
         // We can't use native tooltips in dark mode as they use light mode
-        // colours.
-        m_canUseNative = !wxMSWDarkMode::IsActive();
+        // colours. (They don't support images or links either.)
+        m_canUseNative = !wxMSWDarkMode::IsActive() &&
+                         !info.GetImage().IsOk() &&
+                         !info.HasHelpLink();
 
         m_ttiIcon = TTI_NONE;
     }
@@ -160,10 +162,13 @@ public:
             wxTextCtrl* const text = wxDynamicCast(win, wxTextCtrl);
             if ( text )
             {
+                const wxString&
+                    message = m_info.GetMessageFor(!text->IsEnabled());
+
                 EDITBALLOONTIP ebt;
                 ebt.cbStruct = sizeof(EDITBALLOONTIP);
-                ebt.pszTitle = m_title.wc_str();
-                ebt.pszText = m_message.wc_str();
+                ebt.pszTitle = m_info.GetTitle().wc_str();
+                ebt.pszText = message.wc_str();
                 ebt.ttiIcon = m_ttiIcon;
                 if ( Edit_ShowBalloonTip(GetHwndOf(text), &ebt) )
                     return;
@@ -187,14 +192,14 @@ private:
 
 /* static */
 wxRichToolTipImpl*
-wxRichToolTipImpl::Create(const wxString& title, const wxString& message)
+wxRichToolTipImpl::Create(const wxRichToolTipInfo& info)
 {
     // EM_SHOWBALLOONTIP is only implemented by comctl32.dll v6 so don't even
     // bother using the native implementation if we're not using themes.
     if ( wxUxThemeIsActive() )
-        return new wxRichToolTipMSWImpl(title, message);
+        return new wxRichToolTipMSWImpl(info);
 
-    return new wxRichToolTipGenericImpl(title, message);
+    return new wxRichToolTipGenericImpl(info);
 }
 
 #endif // wxUSE_RICHTOOLTIP

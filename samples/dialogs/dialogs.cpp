@@ -3002,6 +3002,12 @@ public:
                                     wxTE_MULTILINE);
         wxButton* btnShowText = new wxButton(this, wxID_ANY, "Show for &text");
         wxButton* btnShowBtn = new wxButton(this, wxID_ANY, "Show for &button");
+        wxButton* btnShowDisabled =
+            new wxButton(this, wxID_ANY, "Show for &disabled control");
+
+        // The tooltip of this control uses the disabled message, if any.
+        m_disabledCtrl = new wxButton(this, wxID_ANY, "Disabled button");
+        m_disabledCtrl->Disable();
 
         const wxString icons[] =
         {
@@ -3048,6 +3054,37 @@ public:
         m_timeouts->SetSelection(Timeout_Default);
         m_timeDelay = new wxCheckBox(this, wxID_ANY, "Delay show" );
 
+        // The contents which can only be set with wxRichToolTipInfo.
+        wxStaticBoxSizer* const sizerExtra =
+            new wxStaticBoxSizer(wxVERTICAL, this, "Extra contents");
+        wxWindow* const boxExtra = sizerExtra->GetStaticBox();
+
+        const wxString images[] =
+        {
+            "N&o image", "&Small image", "&Large image (scaled down)"
+        };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(images) == Image_Max, ImageMismatch );
+        m_images = new wxRadioBox(boxExtra, wxID_ANY, "I&mage:",
+                                  wxDefaultPosition, wxDefaultSize,
+                                  WXSIZEOF(images), images,
+                                  1, wxRA_SPECIFY_ROWS);
+
+        m_helpLink = new wxCheckBox(boxExtra, wxID_ANY, "Show &help link");
+        m_helpLinkText = new wxTextCtrl(boxExtra, wxID_ANY, wxString());
+        m_helpLinkText->SetHint("Default help link text");
+
+        m_disabledMessage =
+            new wxTextCtrl(boxExtra, wxID_ANY,
+                           "This message is shown when the control is disabled.");
+
+        sizerExtra->Add(m_images, wxSizerFlags().Expand().Border());
+        sizerExtra->Add(m_helpLink, wxSizerFlags().Border());
+        sizerExtra->Add(m_helpLinkText, wxSizerFlags().Expand().Border());
+        sizerExtra->Add(new wxStaticText(boxExtra, wxID_ANY,
+                                         "Disabled &message:"),
+                        wxSizerFlags().Border(wxLEFT | wxRIGHT | wxTOP));
+        sizerExtra->Add(m_disabledMessage, wxSizerFlags().Expand().Border());
+
         // Lay them out.
         m_textBody->SetMinSize(wxSize(300, 200));
 
@@ -3059,10 +3096,13 @@ public:
         sizer->Add(m_bgStyles, wxSizerFlags().Centre().Border());
         sizer->Add(m_timeouts, wxSizerFlags().Centre().Border());
         sizer->Add(m_timeDelay, wxSizerFlags().Centre().Border());
+        sizer->Add(sizerExtra, wxSizerFlags().Expand().Border());
         wxBoxSizer* const sizerBtns = new wxBoxSizer(wxHORIZONTAL);
         sizerBtns->Add(btnShowText, wxSizerFlags().Border(wxRIGHT));
-        sizerBtns->Add(btnShowBtn, wxSizerFlags().Border(wxLEFT));
+        sizerBtns->Add(btnShowBtn, wxSizerFlags().Border(wxLEFT | wxRIGHT));
+        sizerBtns->Add(btnShowDisabled, wxSizerFlags().Border(wxLEFT));
         sizer->Add(sizerBtns, wxSizerFlags().Centre().Border());
+        sizer->Add(m_disabledCtrl, wxSizerFlags().Centre().Border());
         sizer->Add(CreateStdDialogButtonSizer(wxOK),
                    wxSizerFlags().Expand().Border());
         SetSizerAndFit(sizer);
@@ -3071,6 +3111,12 @@ public:
         // And connect the event handlers.
         btnShowText->Bind(wxEVT_BUTTON, &RichTipDialog::OnShowTipForText, this);
         btnShowBtn->Bind(wxEVT_BUTTON, &RichTipDialog::OnShowTipForBtn, this);
+        btnShowDisabled->Bind(wxEVT_BUTTON,
+                              &RichTipDialog::OnShowTipForDisabled, this);
+
+        // The event is sent to the window the tooltip is shown for, and, as
+        // it's a command event, propagates up to the dialog.
+        Bind(wxEVT_RICHTOOLTIP_HELP_CLICKED, &RichTipDialog::OnHelpClicked, this);
     }
 
 private:
@@ -3100,6 +3146,14 @@ private:
         Timeout_Max
     };
 
+    enum
+    {
+        Image_None,
+        Image_Small,
+        Image_Large,
+        Image_Max
+    };
+
 
     void OnShowTipForText(wxCommandEvent& WXUNUSED(event))
     {
@@ -3111,9 +3165,48 @@ private:
         DoShowTip(FindWindow(wxID_OK));
     }
 
+    void OnShowTipForDisabled(wxCommandEvent& WXUNUSED(event))
+    {
+        DoShowTip(m_disabledCtrl);
+    }
+
+    void OnHelpClicked(wxCommandEvent& event)
+    {
+        wxWindow* const win = wxDynamicCast(event.GetEventObject(), wxWindow);
+        wxLogMessage("Help requested for \"%s\".",
+                     win != nullptr ? win->GetLabel() : wxString());
+    }
+
     void DoShowTip(wxWindow* win)
     {
-        wxRichToolTip tip(m_textTitle->GetValue(), m_textBody->GetValue());
+        wxBitmapBundle image;
+        switch ( m_images->GetSelection() )
+        {
+            case Image_None:
+                break;
+
+            case Image_Small:
+                image = wxArtProvider::GetBitmapBundle(wxART_INFORMATION,
+                                                       wxART_OTHER,
+                                                       wxSize(32, 32));
+                break;
+
+            case Image_Large:
+                image = wxArtProvider::GetBitmapBundle(wxART_INFORMATION,
+                                                       wxART_OTHER,
+                                                       wxSize(256, 256));
+                break;
+        }
+
+        // Without an image or a help link, the native MSW tooltip can still
+        // be used for the text control.
+        wxRichToolTip tip(wxRichToolTipInfo(m_textTitle->GetValue(),
+                                            m_textBody->GetValue())
+                            .DisabledMessage(m_disabledMessage->GetValue())
+                            .Image(image)
+                            .HelpLink(m_helpLink->IsChecked())
+                            .HelpLinkText(m_helpLinkText->GetValue()));
+
         const int iconSel = m_icons->GetSelection();
         if ( iconSel == Icon_Custom )
         {
@@ -3154,10 +3247,9 @@ private:
         switch ( m_timeouts->GetSelection() )
         {
             case Timeout_None:
-                // Don't call SetTimeout unnecessarily
-                // or msw will show generic impl
-                if ( delay )
-                    tip.SetTimeout(0, delay);
+                // Notice that this prevents the native MSW tooltip from
+                // being used.
+                tip.SetTimeout(0, delay);
                 break;
 
             case Timeout_Default:
@@ -3180,6 +3272,11 @@ private:
     wxRadioBox* m_bgStyles;
     wxRadioBox* m_timeouts;
     wxCheckBox* m_timeDelay;
+    wxRadioBox* m_images;
+    wxCheckBox* m_helpLink;
+    wxTextCtrl* m_helpLinkText;
+    wxTextCtrl* m_disabledMessage;
+    wxButton* m_disabledCtrl;
 };
 
 void MyFrame::OnRichTipDialog(wxCommandEvent& WXUNUSED(event))
