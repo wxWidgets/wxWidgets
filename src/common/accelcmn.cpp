@@ -194,6 +194,8 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
             // this is not something the end user should ever see.
             else if ( current.CmpNoCase("rawctrl") == 0 )
                 accelFlags |= wxACCEL_RAW_CTRL;
+            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "meta")) )
+                accelFlags |= wxACCEL_META;
             else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "num ")) )
             {
                 // This isn't really a modifier, but is part of the name of keys
@@ -400,6 +402,8 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
             text += wxS("RawCtrl+");
     }
 #endif
+    if ( flags & wxACCEL_META )
+        text += PossiblyLocalize(wxTRANSLATE_IN_CONTEXT("keyboard key", "Meta+"), localized);
 
     const int code = GetKeyCode();
 

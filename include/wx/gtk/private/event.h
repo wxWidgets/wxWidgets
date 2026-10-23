@@ -30,7 +30,7 @@
     // Because of this, it's better to not detect Meta key state at all than
     // to detect it incorrectly. Hence the following #define, which causes
     // m_metaDown to be always set to false.
-    #define GDK_META_MASK 0
+    #define GDK_META_MASK GDK_MOD4_MASK
 #endif
 
 namespace wxGTKImpl
