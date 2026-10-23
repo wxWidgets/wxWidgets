@@ -10,8 +10,40 @@
 #ifndef _WX_GENERIC_PRIVATE_RICHTOOLTIP_H_
 #define _WX_GENERIC_PRIVATE_RICHTOOLTIP_H_
 
+#include "wx/private/richtooltip.h"
+
 #include "wx/bmpbndl.h"
 #include "wx/colour.h"
+#include "wx/font.h"
+
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
+// ----------------------------------------------------------------------------
+// wxRichToolTipContents: creates the windows showing a tooltip contents.
+// ----------------------------------------------------------------------------
+
+// Also used by other controls showing rich tooltips in their own popups. The
+// parent must handle wxEVT_HYPERLINK from the help link without skipping it.
+class WXDLLIMPEXP_CORE wxRichToolTipContents
+{
+public:
+    wxBitmapBundle m_icon;
+    wxFont m_titleFont;
+
+    // Unset colors mean using the parent ones.
+    wxColour m_textColour,
+             m_backgroundColour;
+
+    // In DIPs, -1 to not wrap.
+    int m_wrapWidth = -1;
+
+    bool m_centreMessage = false;
+
+    wxSizer* Create(wxWindow* parent,
+                    const wxRichToolTipInfo& info,
+                    bool disabled) const;
+};
 
 // ----------------------------------------------------------------------------
 // wxRichToolTipGenericImpl: defines generic wxRichToolTip implementation.
@@ -20,9 +52,8 @@
 class wxRichToolTipGenericImpl : public wxRichToolTipImpl
 {
 public:
-    wxRichToolTipGenericImpl(const wxString& title, const wxString& message) :
-        m_title(title),
-        m_message(message)
+    explicit wxRichToolTipGenericImpl(const wxRichToolTipInfo& info) :
+        m_info(info)
     {
         m_tipKind = wxTipKind_Auto;
 
@@ -44,8 +75,7 @@ public:
     virtual void ShowFor(wxWindow* win, const wxRect* rect = nullptr) override;
 
 protected:
-    wxString m_title,
-             m_message;
+    const wxRichToolTipInfo m_info;
 
 private:
     wxBitmapBundle m_icon;

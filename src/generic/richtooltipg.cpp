@@ -23,6 +23,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/region.h"
@@ -34,19 +35,329 @@
     #include "wx/utils.h"
 #endif // WX_PRECOMP
 
-#include "wx/private/richtooltip.h"
 #include "wx/generic/private/richtooltip.h"
 
 #include "wx/artprov.h"
 #include "wx/custombgwin.h"
 #include "wx/display.h"
 #include "wx/graphics.h"
+#include "wx/image.h"
 #include "wx/popupwin.h"
 #include "wx/textwrapper.h"
+
+#if wxUSE_HYPERLINKCTRL
+    #include "wx/hyperlink.h"
+    #include "wx/generic/hyperlink.h"
+#endif
 
 #ifdef __WXMSW__
     #include "wx/msw/uxtheme.h"
 #endif
+
+#include <memory>
+#include <string.h>
+
+namespace
+{
+
+// The image is scaled down to fit in this box (in DIPs).
+constexpr int MAX_IMAGE_SIZE = 128;
+
+#if wxUSE_HYPERLINKCTRL
+// Size (in DIPs) of the help icon.
+constexpr int HELP_ICON_SIZE = 16;
+#endif
+
+// How often a tooltip with a help link checks if the mouse is still over it
+// once its timeout has expired.
+constexpr int HELP_LINK_POLL_MS = 250;
+
+#ifdef __WXMSW__
+// Returns true if the themed MSW tooltip colors can be used. They are the
+// light mode ones, so they can't be used in dark mode.
+bool UseThemedColours()
+{
+    return wxUxThemeIsActive() && !wxSystemSettings::GetAppearance().IsDark();
+}
+#endif // __WXMSW__
+
+void SetColours(wxWindow* win, const wxColour& fg, const wxColour& bg)
+{
+    if ( fg.IsOk() )
+        win->SetForegroundColour(fg);
+    if ( bg.IsOk() )
+        win->SetBackgroundColour(bg);
+}
+
+// Creates the static texts used for the lines of the message.
+class wxRichToolTipTextWrapper : public wxTextSizerWrapper
+{
+public:
+    wxRichToolTipTextWrapper(wxWindow* win,
+                             const wxColour& fg,
+                             const wxColour& bg)
+        : wxTextSizerWrapper(win),
+          m_fg(fg),
+          m_bg(bg)
+    {
+    }
+
+protected:
+    virtual wxWindow* OnCreateLine(const wxString& line) override
+    {
+        wxWindow* const win = wxTextSizerWrapper::OnCreateLine(line);
+        SetColours(win, m_fg, m_bg);
+        return win;
+    }
+
+private:
+    const wxColour m_fg,
+                   m_bg;
+};
+
+// Returns the image scaled down to fit in MAX_IMAGE_SIZE.
+wxBitmapBundle GetScaledImage(wxWindow* win, const wxBitmapBundle& image)
+{
+    wxSize size = image.GetDefaultSize();
+    if ( size.x <= 0 || size.y <= 0 )
+        return image;
+
+    if ( size.x > MAX_IMAGE_SIZE || size.y > MAX_IMAGE_SIZE )
+    {
+        const double scale = wxMin(double(MAX_IMAGE_SIZE) / size.x,
+                                   double(MAX_IMAGE_SIZE) / size.y);
+        size.x = wxMax(1, wxRound(size.x * scale));
+        size.y = wxMax(1, wxRound(size.y * scale));
+    }
+
+    // Get the bitmap at the physical size for the window's DPI, and tell it
+    // its scale factor.
+    const double scaleFactor = win->GetDPIScaleFactor();
+    wxBitmap bitmap = image.GetBitmap(wxSize(wxRound(size.x * scaleFactor),
+                                             wxRound(size.y * scaleFactor)));
+    if ( !bitmap.IsOk() )
+        return image;
+    bitmap.SetScaleFactor(scaleFactor);
+    return wxBitmapBundle::FromBitmap(bitmap);
+}
+
+#if wxUSE_HYPERLINKCTRL && wxUSE_GRAPHICS_CONTEXT
+
+// Returns the help icon: a question mark in a circle, drawn with our own
+// colors, as the stock icon may be hard to see on the background.
+wxBitmapBundle MakeHelpIcon(wxWindow* win,
+                            const wxColour& circleColour,
+                            const wxColour& markColour)
+{
+    const double scaleFactor = win->GetDPIScaleFactor();
+    const int size = wxRound(HELP_ICON_SIZE * scaleFactor);
+
+    wxImage image(size, size);
+    image.InitAlpha();
+    memset(image.GetAlpha(), 0, size * size);
+
+    {
+        std::unique_ptr<wxGraphicsContext>
+            gc(wxGraphicsContext::Create(image));
+        if ( gc == nullptr )
+            return wxBitmapBundle{};
+
+        gc->SetPen(*wxTRANSPARENT_PEN);
+        gc->SetBrush(circleColour);
+        gc->DrawEllipse(0, 0, size, size);
+
+        wxFont font = win->GetFont().Bold();
+        font.SetPixelSize(wxSize{ 0, wxRound(size * 0.8) });
+        gc->SetFont(font, markColour);
+
+        wxDouble width, height;
+        gc->GetTextExtent("?", &width, &height);
+        gc->DrawText("?", (size - width) / 2, (size - height) / 2);
+    }
+
+    wxBitmap bitmap{ image };
+    bitmap.SetScaleFactor(scaleFactor);
+    return wxBitmapBundle::FromBitmap(bitmap);
+}
+
+#endif // wxUSE_HYPERLINKCTRL && wxUSE_GRAPHICS_CONTEXT
+
+} // anonymous namespace
+
+// ----------------------------------------------------------------------------
+// wxRichToolTipContents
+// ----------------------------------------------------------------------------
+
+wxSizer* wxRichToolTipContents::Create(wxWindow* parent,
+                                       const wxRichToolTipInfo& info,
+                                       bool disabled) const
+{
+    wxBoxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
+
+    const wxString& title = info.GetTitle();
+    if ( !title.empty() || m_icon.IsOk() )
+    {
+        wxBoxSizer* const sizerTitle = new wxBoxSizer(wxHORIZONTAL);
+        if ( m_icon.IsOk() )
+        {
+            wxStaticBitmap* const icon =
+                new wxStaticBitmap(parent, wxID_ANY, m_icon);
+            SetColours(icon, wxColour(), m_backgroundColour);
+            sizerTitle->Add(icon, wxSizerFlags().Centre().Border(wxRIGHT));
+        }
+        //else: Simply don't show any icon.
+
+        wxStaticText* const labelTitle =
+            new wxStaticText(parent, wxID_ANY, wxString());
+        labelTitle->SetLabelText(title);
+        SetColours(labelTitle, m_textColour, m_backgroundColour);
+
+        wxFont titleFont(m_titleFont);
+        if ( !titleFont.IsOk() )
+        {
+            // Determine the appropriate title font for the current platform.
+            titleFont = labelTitle->GetFont();
+
+#ifdef __WXMSW__
+            // When using themes MSW tooltips use larger bluish version of the
+            // normal font.
+            if ( UseThemedColours() )
+            {
+                titleFont.MakeLarger();
+
+                if ( !m_textColour.IsOk() )
+                {
+                    wxUxThemeHandle theme(parent, L"TOOLTIP");
+                    wxColour c = theme.GetColour(TTP_BALLOONTITLE,
+                                                 TMT_TEXTCOLOR);
+                    if ( !c.IsOk() )
+                    {
+                        // Use the standard value of this colour as fallback.
+                        c.Set(0x00, 0x33, 0x99);
+                    }
+
+                    labelTitle->SetForegroundColour(c);
+                }
+            }
+            else
+#endif // __WXMSW__
+            {
+                // Everything else, including "classic" MSW look uses just the
+                // bold version of the base font.
+                titleFont.MakeBold();
+            }
+        }
+
+        labelTitle->SetFont(titleFont);
+        sizerTitle->Add(labelTitle, wxSizerFlags().Centre());
+
+        sizerTop->Add(sizerTitle);
+    }
+
+    const wxString& message = info.GetMessageFor(disabled);
+    const wxBitmapBundle& image = info.GetImage();
+    if ( !message.empty() || image.IsOk() )
+    {
+        wxBoxSizer* const sizerMessage = new wxBoxSizer(wxHORIZONTAL);
+        if ( image.IsOk() )
+        {
+            wxStaticBitmap* const bitmap =
+                new wxStaticBitmap(parent, wxID_ANY,
+                                   GetScaledImage(parent, image));
+            SetColours(bitmap, wxColour(), m_backgroundColour);
+            sizerMessage->Add(bitmap, wxSizerFlags().Top());
+        }
+#ifdef __WXMSW__
+        else if ( m_icon.IsOk() && UseThemedColours() )
+        {
+            // Themed tooltips under MSW align the text with the title, not
+            // with the icon.
+            sizerMessage->AddSpacer(m_icon.GetPreferredLogicalSizeFor(parent).x);
+        }
+#endif // __WXMSW__
+
+        if ( !message.empty() )
+        {
+            wxRichToolTipTextWrapper wrapper(parent,
+                                             m_textColour,
+                                             m_backgroundColour);
+            wxSizer* const sizerText =
+                wrapper.CreateSizer(message,
+                                    m_wrapWidth == -1
+                                        ? -1
+                                        : parent->FromDIP(m_wrapWidth));
+            wxSizerFlags flagsText = wxSizerFlags().Top();
+            if ( !sizerMessage->IsEmpty() )
+                flagsText.Border(wxLEFT);
+            sizerMessage->Add(sizerText, flagsText);
+        }
+
+        // Use a simple border between the elements, not a double one.
+        wxSizerFlags flags;
+        if ( !sizerTop->IsEmpty() )
+            flags.Border(wxTOP);
+        if ( m_centreMessage )
+            flags.Centre();
+        sizerTop->Add(sizerMessage, flags);
+    }
+
+#if wxUSE_HYPERLINKCTRL
+    if ( info.HasHelpLink() )
+    {
+        const wxColour linkColour =
+            wxSystemSettings::SelectLightDark(wxColour(0x00, 0x33, 0x99),
+                                              wxColour(0x8a, 0xb4, 0xf8));
+        const wxColour lineColour = m_textColour.IsOk()
+                                        ? m_textColour
+                                        : parent->GetForegroundColour();
+
+        // Use vanilla window as the divider (not wxStaticLine)
+        // so that we can manage its color.
+        wxWindow* const divider = new wxWindow(parent, wxID_ANY,
+                                               wxDefaultPosition,
+                                               wxSize(-1, parent->FromDIP(1)));
+        divider->SetBackgroundColour(lineColour);
+        sizerTop->Add(divider, wxSizerFlags().Expand().DoubleBorder(wxTOP));
+
+        wxBoxSizer* const sizerLink = new wxBoxSizer(wxHORIZONTAL);
+
+#if wxUSE_GRAPHICS_CONTEXT
+        const wxBitmapBundle helpIcon =
+            MakeHelpIcon(parent, linkColour,
+                         wxSystemSettings::SelectLightDark(*wxWHITE, *wxBLACK));
+#else
+        const wxBitmapBundle helpIcon =
+            wxArtProvider::GetBitmapBundle(wxART_HELP, wxART_MENU);
+#endif
+        if ( helpIcon.IsOk() )
+        {
+            wxStaticBitmap* const bitmap =
+                new wxStaticBitmap(parent, wxID_ANY, helpIcon);
+            SetColours(bitmap, wxColour(), m_backgroundColour);
+            sizerLink->Add(bitmap,
+                           wxSizerFlags().CentreVertical().Border(wxRIGHT));
+        }
+
+        // The URL isn't used (the parent handles the click), but it
+        // should not be empty.
+        wxGenericHyperlinkCtrl* const link =
+            new wxGenericHyperlinkCtrl(parent, wxID_ANY,
+                                       info.GetHelpLinkText(), "help",
+                                       wxDefaultPosition, wxDefaultSize,
+                                       wxHL_ALIGN_LEFT | wxNO_BORDER);
+        link->SetFont(link->GetFont().Bold());
+        link->SetNormalColour(linkColour);
+        link->SetHoverColour(linkColour);
+        link->SetVisitedColour(linkColour);
+        SetColours(link, wxColour(), m_backgroundColour);
+        sizerLink->Add(link, wxSizerFlags().CentreVertical());
+
+        sizerTop->Add(sizerLink, wxSizerFlags().Border(wxTOP));
+    }
+#endif // wxUSE_HYPERLINKCTRL
+
+    return sizerTop;
+}
 
 // ----------------------------------------------------------------------------
 // wxRichToolTipPopup: the popup window used by wxRichToolTip.
@@ -61,94 +372,34 @@ class wxRichToolTipPopup :
 {
 public:
     wxRichToolTipPopup(wxWindow* parent,
-                       const wxString& title,
-                       const wxString& message,
+                       const wxRichToolTipInfo& info,
                        const wxBitmapBundle& icon,
                        wxTipKind tipKind,
-                       const wxFont& titleFont_) :
+                       const wxFont& titleFont) :
         m_timer(this)
     {
         Create(parent, wxFRAME_SHAPED);
 
-        // Move to the display where it will be shown,
-        // so below calculations are based on the correct DPI.
         Move(GetTipPoint(), wxSIZE_ALLOW_MINUS_ONE);
 
-        wxBoxSizer* const sizerTitle = new wxBoxSizer(wxHORIZONTAL);
-        if ( icon.IsOk() )
-        {
-            sizerTitle->Add(new wxStaticBitmap(this, wxID_ANY, icon),
-                            wxSizerFlags().Centre().Border(wxRIGHT));
-        }
-        //else: Simply don't show any icon.
-
-        wxStaticText* const labelTitle = new wxStaticText(this, wxID_ANY, wxString());
-        labelTitle->SetLabelText(title);
-
-        wxFont titleFont(titleFont_);
-        if ( !titleFont.IsOk() )
-        {
-            // Determine the appropriate title font for the current platform.
-            titleFont = labelTitle->GetFont();
-
-#ifdef __WXMSW__
-            // When using themes MSW tooltips use larger bluish version of the
-            // normal font.
-            if ( wxUxThemeIsActive() )
-            {
-                titleFont.MakeLarger();
-
-                wxUxThemeHandle theme(parent, L"TOOLTIP");
-                wxColour c = theme.GetColour(TTP_BALLOONTITLE, TMT_TEXTCOLOR);
-                if ( !c.IsOk() )
-                {
-                    // Use the standard value of this colour as fallback.
-                    c.Set(0x00, 0x33, 0x99);
-                }
-
-                labelTitle->SetForegroundColour(c);
-            }
-            else
-#endif // __WXMSW__
-            {
-                // Everything else, including "classic" MSW look uses just the
-                // bold version of the base font.
-                titleFont.MakeBold();
-            }
-        }
-
-        labelTitle->SetFont(titleFont);
-        sizerTitle->Add(labelTitle, wxSizerFlags().Centre());
+        wxRichToolTipContents contents;
+        contents.m_icon = icon;
+        contents.m_titleFont = titleFont;
+        contents.m_centreMessage = true;
 
         wxBoxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
-        sizerTop->Add(sizerTitle,
-                        wxSizerFlags().DoubleBorder(wxLEFT|wxRIGHT|wxTOP));
-
-        // Use a spacer as we don't want to have a double border between the
-        // elements, just a simple one will do.
-        sizerTop->AddSpacer(wxSizerFlags::GetDefaultBorder());
-
-        wxTextSizerWrapper wrapper(this);
-        wxSizer* sizerText = wrapper.CreateSizer(message, -1 /* No wrapping */);
-
-#ifdef __WXMSW__
-        if ( icon.IsOk() && wxUxThemeIsActive() )
-        {
-            // Themed tooltips under MSW align the text with the title, not
-            // with the icon, so use a helper horizontal sizer in this case.
-            wxBoxSizer* const sizerTextIndent = new wxBoxSizer(wxHORIZONTAL);
-            sizerTextIndent->AddSpacer(icon.GetPreferredLogicalSizeFor(this).x);
-            sizerTextIndent->Add(sizerText,
-                                    wxSizerFlags().Border(wxLEFT).Centre());
-
-            sizerText = sizerTextIndent;
-        }
-#endif // __WXMSW__
-        sizerTop->Add(sizerText,
-                        wxSizerFlags().DoubleBorder(wxLEFT|wxRIGHT|wxBOTTOM)
-                                      .Centre());
+        sizerTop->Add(contents.Create(this, info, !parent->IsEnabled()),
+                      wxSizerFlags().DoubleBorder());
 
         SetSizer(sizerTop);
+
+#if wxUSE_HYPERLINKCTRL
+        m_hasHelpLink = info.HasHelpLink();
+        Bind(wxEVT_HYPERLINK, &wxRichToolTipPopup::OnHyperlink, this);
+#else
+        m_hasHelpLink = false;
+#endif
+        Bind(wxEVT_PAINT, &wxRichToolTipPopup::OnPaint, this);
 
         const int offsetY = SetTipShapeAndSize(tipKind, GetBestSize());
         if ( offsetY > 0 )
@@ -173,7 +424,7 @@ public:
         {
             // Determine the best colour(s) to use on our own.
 #ifdef __WXMSW__
-            if ( wxUxThemeIsActive() )
+            if ( UseThemedColours() )
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
 
@@ -542,6 +793,7 @@ private:
         }
 
         SetShape(path);
+        m_path = path;
 #else // !wxUSE_GRAPHICS_CONTEXT
         wxUnusedVar(tipKind);
 
@@ -558,11 +810,61 @@ private:
         return dy;
     }
 
+#if wxUSE_HYPERLINKCTRL
+    void OnHyperlink(wxHyperlinkEvent& WXUNUSED(event))
+    {
+        // Don't skip the event, so that the URL is not opened.
+        wxWindow* const win = GetParent();
+        wxCommandEvent* const
+            event = new wxCommandEvent(wxEVT_RICHTOOLTIP_HELP_CLICKED,
+                                       win->GetId());
+        event->SetEventObject(win);
+        wxQueueEvent(win->GetEventHandler(), event);
+
+        // Don't destroy ourselves while still inside the link event handler.
+        CallAfter(&wxRichToolTipPopup::DismissRichToolTip);
+    }
+#endif // wxUSE_HYPERLINKCTRL
+
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
+    {
+        wxPaintDC dc(this);
+
+        // Without an outline, the tooltip would be hard to see against
+        // the dark windows below it.
+        if ( !wxSystemSettings::GetAppearance().IsDark() )
+            return;
+
+        const wxColour outlineColour(0x80, 0x80, 0x80);
+#if wxUSE_GRAPHICS_CONTEXT
+        std::unique_ptr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+        if ( gc != nullptr )
+        {
+            // Half of the pen is outside of the window shape.
+            gc->SetPen(wxPen(outlineColour, FromDIP(2)));
+            gc->StrokePath(m_path);
+        }
+#else // !wxUSE_GRAPHICS_CONTEXT
+        dc.SetPen(outlineColour);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(GetClientRect());
+#endif // wxUSE_GRAPHICS_CONTEXT/!wxUSE_GRAPHICS_CONTEXT
+    }
+
     // Timer event handler hides the tooltip when the timeout expires.
     void OnTimer(wxTimerEvent& WXUNUSED(event))
     {
         if ( !m_delayShow )
         {
+            // Keep the tooltip with a link shown while the mouse is over it
+            // so that you can click on it.
+            if ( m_hasHelpLink &&
+                    GetScreenRect().Contains(wxGetMousePosition()) )
+            {
+                m_timer.Start(HELP_LINK_POLL_MS, true);
+                return;
+            }
+
             // Doing "Notify" here ensures that our OnDismiss() is called and so we
             // also Destroy() ourselves. We could use Dismiss() and call Destroy()
             // explicitly from here as well.
@@ -592,6 +894,14 @@ private:
 
     // If true, delay showing the tooltip.
     bool m_delayShow;
+
+    // If true, the tooltip shows a help link.
+    bool m_hasHelpLink;
+
+#if wxUSE_GRAPHICS_CONTEXT
+    // The shape of the window, used to draw its outline.
+    wxGraphicsPath m_path;
+#endif
 
     wxDECLARE_NO_COPY_CLASS(wxRichToolTipPopup);
 };
@@ -674,8 +984,7 @@ void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
     wxRichToolTipPopup* const popup = new wxRichToolTipPopup
                                           (
                                             win,
-                                            m_title,
-                                            m_message,
+                                            m_info,
                                             m_icon,
                                             m_tipKind,
                                             m_titleFont
@@ -694,9 +1003,9 @@ void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
 
 /* static */
 wxRichToolTipImpl*
-wxRichToolTipImpl::Create(const wxString& title, const wxString& message)
+wxRichToolTipImpl::Create(const wxRichToolTipInfo& info)
 {
-    return new wxRichToolTipGenericImpl(title, message);
+    return new wxRichToolTipGenericImpl(info);
 }
 
 #endif // !__WXMSW__
