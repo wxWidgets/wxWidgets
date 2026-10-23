@@ -1,0 +1,1 @@
+All (GUI): Fix regression in wxHTML tables layout in 3.3.4 (#27236).
