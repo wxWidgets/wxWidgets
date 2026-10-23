@@ -40,6 +40,11 @@ protected:
     int m_buttonId[4];
     int m_buttonCount;
 
+private:
+    // for the windowmodal callback driving the ShowModal loop
+    int m_clickedbutton;
+    bool m_messageClosed;
+    
     wxDECLARE_DYNAMIC_CLASS(wxMessageDialog);
 };
 

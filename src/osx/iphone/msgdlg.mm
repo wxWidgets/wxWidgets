@@ -34,15 +34,12 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 {
 }
 
-int clickedbutton;
-bool messageClosed;
-
 int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    messageClosed = false;
-    clickedbutton = 0;
+    m_messageClosed = false;
+    m_clickedbutton = 0;
 
     // as all native dialogs are never modal in the sense of code flow only for behavior
     // so we must run a local event loop until ModalFinishedCallback is called to imitate
@@ -51,11 +48,11 @@ int wxMessageDialog::ShowModal()
     ShowWindowModal();
 
     wxGUIEventLoop loop;
-    while( !messageClosed )
+    while( !m_messageClosed )
     {
         loop.Dispatch();
     }
-    return clickedbutton;
+    return m_clickedbutton;
 }
 
 
@@ -205,6 +202,6 @@ void wxMessageDialog::ShowWindowModal()
 
 void wxMessageDialog::ModalFinishedCallback(void*, int button)
 {
-    clickedbutton = button;
-    messageClosed = true;
+    m_clickedbutton = button;
+    m_messageClosed = true;
 }
