@@ -665,18 +665,24 @@ public:
     /**
         Sets the rich tooltip shown for the given button.
 
-        If @a info has no description, the button's help string is used.
+        If @a info has no message, the button's help string is used.
+        Clicking its help link sends @c wxEVT_RIBBONBUTTONBAR_HELP_CLICKED.
+
+        Setting a rich tooltip on any item makes its wxRibbonBar use rich
+        tooltips for all items; otherwise, native ones are used.
+
+        Only available if @c wxUSE_RICHTOOLTIP is 1.
 
         @since 3.3.5
     */
-    void SetButtonToolTip(int button_id, const wxRibbonToolTipInfo& info);
+    void SetButtonToolTip(int button_id, const wxRichToolTipInfo& info);
 
     /**
         Returns the rich tooltip set with SetButtonToolTip().
 
         @since 3.3.5
     */
-    wxRibbonToolTipInfo GetButtonToolTip(int button_id) const;
+    wxRichToolTipInfo GetButtonToolTip(int button_id) const;
 
     /**
         Assigns the KeyTip used to click the given button.

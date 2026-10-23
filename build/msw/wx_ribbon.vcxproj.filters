@@ -116,9 +116,6 @@
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\ribbon\tooltip.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

@@ -66,8 +66,10 @@ public:
     void SetLabel(const wxString& label) {m_label = label;}
     const wxString& GetLabel() const {return m_label;}
 
-    void SetToolTip(const wxRibbonToolTipInfo& info) {m_tooltip = info;}
-    const wxRibbonToolTipInfo& GetToolTip() const {return m_tooltip;}
+#if wxUSE_RICHTOOLTIP
+    void SetToolTip(const wxRichToolTipInfo& info) {m_tooltip = info;}
+    const wxRichToolTipInfo& GetToolTip() const {return m_tooltip;}
+#endif
 
     void SetClientObject(wxClientData *data) {m_client_data.SetClientObject(data);}
     wxClientData *GetClientObject() const {return m_client_data.GetClientObject();}
@@ -78,7 +80,9 @@ protected:
     wxBitmapBundle m_bitmap;
     wxBitmapBundle m_bitmap_disabled;
     wxString m_label;
-    wxRibbonToolTipInfo m_tooltip;
+#if wxUSE_RICHTOOLTIP
+    wxRichToolTipInfo m_tooltip;
+#endif
     wxClientDataContainer m_client_data;
     wxRect m_position;
     int m_id = 0;
@@ -209,6 +213,7 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
         }
     }
 
+#if wxUSE_RICHTOOLTIP
     if ( hovered_item != nullptr && !hovered_item->GetToolTip().IsEmpty() )
     {
         // Only the visible part of the item can be hovered.
@@ -222,6 +227,9 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
     {
         m_toolTip->ItemLeft();
     }
+#else
+    wxUnusedVar(hovered_index);
+#endif // wxUSE_RICHTOOLTIP
 
     if(active_item != m_active_item)
     {
@@ -443,18 +451,22 @@ wxRect wxRibbonGallery::DoGetItemClientRect(const wxRibbonGalleryItem* item) con
     return rect;
 }
 
+#if wxUSE_RICHTOOLTIP
+
 void wxRibbonGallery::SetItemToolTip(wxRibbonGalleryItem* item,
-                                     const wxRibbonToolTipInfo& info)
+                                     const wxRichToolTipInfo& info)
 {
     wxCHECK_RET( item, "invalid gallery item" );
 
     item->SetToolTip(info);
+    if ( !info.IsEmpty() )
+        EnableRichToolTips();
 }
 
-wxRibbonToolTipInfo
+wxRichToolTipInfo
 wxRibbonGallery::GetItemToolTip(const wxRibbonGalleryItem* item) const
 {
-    wxCHECK_MSG( item, wxRibbonToolTipInfo(), "invalid gallery item" );
+    wxCHECK_MSG(item, wxRichToolTipInfo{}, "invalid gallery item");
 
     return item->GetToolTip();
 }
@@ -465,6 +477,8 @@ wxRibbonToolTipHelper* wxRibbonGallery::GetToolTipHelper()
         m_toolTip = new wxRibbonToolTipHelper(this);
     return m_toolTip;
 }
+
+#endif // wxUSE_RICHTOOLTIP
 
 void wxRibbonGallery::SendToolTipHelpEvent(int item_index)
 {
@@ -538,6 +552,7 @@ bool wxRibbonGallery::DoFocusItemFrom(int pos, int step)
             }
         }
 
+#if wxUSE_RICHTOOLTIP
         if ( !item->GetToolTip().IsEmpty() )
         {
             // Only the visible part of the item is used, as when hovering it.
@@ -550,6 +565,7 @@ bool wxRibbonGallery::DoFocusItemFrom(int pos, int step)
         {
             m_toolTip->FocusCleared();
         }
+#endif // wxUSE_RICHTOOLTIP
 
         Refresh(false);
         return true;
@@ -1410,10 +1426,14 @@ public:
             wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
             wxCHECK(item, wxACC_FAIL);
 
+#if wxUSE_RICHTOOLTIP
             // Use the tooltip's title for items without a label.
             const wxString label = item->GetLabel().empty()
                                         ? item->GetToolTip().GetTitle()
                                         : item->GetLabel();
+#else
+            const wxString label = item->GetLabel();
+#endif
             if ( label.empty() )
                 return wxACC_NOT_IMPLEMENTED;
 
@@ -1425,6 +1445,7 @@ public:
         return wxACC_OK;
     }
 
+#if wxUSE_RICHTOOLTIP
     wxAccStatus GetDescription(int childId, wxString* description) override
     {
         if ( childId == wxACC_SELF )
@@ -1441,9 +1462,10 @@ public:
         wxCHECK(item, wxACC_FAIL);
 
         // The same text as shown in the tooltip.
-        *description = item->GetToolTip().GetDescription();
+        *description = item->GetToolTip().GetMessage();
         return wxACC_OK;
     }
+#endif // wxUSE_RICHTOOLTIP
 
     wxAccStatus GetLocation(wxRect& rect, int elementId) override
     {

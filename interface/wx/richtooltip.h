@@ -70,11 +70,12 @@ enum wxTipKind
     tip.ShowFor(button);
     @endcode
 
-    Clicking the help link sends @c wxEVT_RICHTOOLTIP_HELP_CLICKED to the
-    window the tooltip is shown for.
+    When shown by wxRichToolTip, clicking the help link sends
+    @c wxEVT_RICHTOOLTIP_HELP_CLICKED to the window the tooltip is shown for.
 
     This class is also used by other controls to describe the rich tooltips
-    of their items.
+    of their items. These controls send their own events when the help link
+    is clicked.
 
     @library{wxcore}
     @category{miscwnd}

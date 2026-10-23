@@ -196,18 +196,24 @@ public:
     /**
         Sets the rich tooltip shown for a gallery item.
 
-        Items have no tooltip by default.
+        Items have no tooltip by default. Clicking the help link sends
+        @c wxEVT_RIBBONGALLERY_HELP_CLICKED.
+
+        See wxRibbonButtonBar::SetButtonToolTip() for when rich tooltips are
+        used.
+
+        Only available if @c wxUSE_RICHTOOLTIP is 1.
 
         @since 3.3.5
     */
-    void SetItemToolTip(wxRibbonGalleryItem* item, const wxRibbonToolTipInfo& info);
+    void SetItemToolTip(wxRibbonGalleryItem* item, const wxRichToolTipInfo& info);
 
     /**
         Returns the rich tooltip set with SetItemToolTip().
 
         @since 3.3.5
     */
-    wxRibbonToolTipInfo GetItemToolTip(const wxRibbonGalleryItem* item) const;
+    wxRichToolTipInfo GetItemToolTip(const wxRibbonGalleryItem* item) const;
 
     /**
         Set the client object associated with a gallery item.

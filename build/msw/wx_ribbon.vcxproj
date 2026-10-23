@@ -912,7 +912,6 @@
     <ClInclude Include="..\..\include\wx\ribbon\private\backstage.h" />
     <ClInclude Include="..\..\include\wx\ribbon\private\tooltip.h" />
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\tooltip.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
