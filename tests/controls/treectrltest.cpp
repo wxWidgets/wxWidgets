@@ -132,6 +132,41 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemSingle", "[treectrl]")
     CHECK_FALSE( m_tree->IsSelected(m_child2) );
 }
 
+#ifdef __WXMSW__
+
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::UnselectSingle", "[treectrl]")
+{
+    CHECK_FALSE( m_tree->HasFlag(wxTR_MULTIPLE) );
+
+    m_tree->SelectItem(m_child1);
+
+    {
+        EventCounter changing(m_tree.get(), wxEVT_TREE_SEL_CHANGING);
+        EventCounter changed(m_tree.get(), wxEVT_TREE_SEL_CHANGED);
+
+        m_tree->Unselect();
+
+        CHECK_FALSE( m_tree->IsSelected(m_child1) );
+        CHECK( changing.GetCount() == 1 );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    m_tree->SelectItem(m_child2);
+
+    {
+        EventCounter changing(m_tree.get(), wxEVT_TREE_SEL_CHANGING);
+        EventCounter changed(m_tree.get(), wxEVT_TREE_SEL_CHANGED);
+
+        m_tree->UnselectAll();
+
+        CHECK_FALSE( m_tree->IsSelected(m_child2) );
+        CHECK( changing.GetCount() == 1 );
+        CHECK( changed.GetCount() == 1 );
+    }
+}
+
+#endif // __WXMSW__
+
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti", "[treectrl]")
 {
     // this test should be only ran in multi-selection control
