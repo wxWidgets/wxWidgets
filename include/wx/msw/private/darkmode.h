@@ -96,7 +96,7 @@ namespace wxMSWImpl
 
 // This function is not dark mode specific but reuses the code in darkmode.cpp,
 // so it's implemented there as well.
-void EnableRoundCorners(HWND hwnd);
+void EnableRoundCorners(HWND hwnd, DWORD borderColor = 0);
 
 // This function draws over the section where the scroll bars meet
 // to maintain a consistent theme
