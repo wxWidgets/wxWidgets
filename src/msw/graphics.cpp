@@ -1952,10 +1952,10 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc
     sx *= lsx;
     sy *= lsy;
     wxPoint org = dc.GetDeviceOrigin();
-    Matrix* m = new Matrix();
-    m->Translate(org.x / sx, org.y / sy);
+    Matrix m;
+    m.Translate(org.x / sx, org.y / sy);
 
-    Init(new Graphics(hdc), sz.x, sz.y, m);
+    Init(new Graphics(hdc), sz.x, sz.y, &m);
 }
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer,
