@@ -89,11 +89,25 @@ public:
     }
 };
 
+// Allows checking whether the context help mode is still active.
+class ContextHelpTester : public wxContextHelp
+{
+public:
+    explicit ContextHelpTester(wxWindow* win)
+        : wxContextHelp(win, false)
+    {
+    }
+
+    bool IsInHelp() const { return m_inHelp; }
+};
+
 class ContextHelpCaptureLostState : public wxEvtHandler
 {
 public:
-    explicit ContextHelpCaptureLostState(ContextHelpCaptureLostTester* win)
+    ContextHelpCaptureLostState(ContextHelpCaptureLostTester* win,
+                                const ContextHelpTester& contextHelp)
         : m_win(win),
+          m_contextHelp(contextHelp),
           m_captureLostTimer(this),
           m_fallbackTimer(this)
     {
@@ -129,6 +143,12 @@ private:
             return;
         }
 
+        // Under some ports (notably wxQt) the timer can fire before control
+        // returns from wxContextHelp::EventLoop() even if the context help
+        // mode had been already ended, so check for this.
+        if ( !m_contextHelp.IsInHelp() )
+            return;
+
         m_fallbackUsed = true;
 
         wxKeyEvent eventKey(wxEVT_KEY_DOWN);
@@ -137,6 +157,7 @@ private:
     }
 
     ContextHelpCaptureLostTester* const m_win;
+    const ContextHelpTester& m_contextHelp;
     wxTimer m_captureLostTimer;
     wxTimer m_fallbackTimer;
     bool m_done = false;
@@ -392,10 +413,10 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
         make_unique<ContextHelpCaptureLostTester>(wxTheApp->GetTopWindow());
     auto* const win = winPtr.get();
 
-    ContextHelpCaptureLostState state(win);
-    state.Start();
+    ContextHelpTester contextHelp(win);
 
-    wxContextHelp contextHelp(win, false);
+    ContextHelpCaptureLostState state(win, contextHelp);
+    state.Start();
 
     CHECK(contextHelp.BeginContextHelp(win));
 
