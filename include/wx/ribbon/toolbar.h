@@ -15,7 +15,7 @@
 
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/art.h"
-#include "wx/ribbon/tooltip.h"
+#include "wx/richtooltip.h"
 #include "wx/bmpbndl.h"
 
 #include <unordered_map>
@@ -159,9 +159,11 @@ public:
     virtual void SetToolHelpString(int tool_id, const wxString& helpString);
     virtual void SetToolNormalBitmap(int tool_id, const wxBitmapBundle &bitmap);
 
+#if wxUSE_RICHTOOLTIP
     // Rich tooltips, used instead of the plain help string if set.
-    void SetToolToolTip(int tool_id, const wxRibbonToolTipInfo& info);
-    wxRibbonToolTipInfo GetToolToolTip(int tool_id) const;
+    void SetToolToolTip(int tool_id, const wxRichToolTipInfo& info);
+    wxRichToolTipInfo GetToolToolTip(int tool_id) const;
+#endif // wxUSE_RICHTOOLTIP
 
     virtual bool IsSizingContinuous() const override;
 
@@ -243,8 +245,10 @@ protected:
     std::unordered_map<wxWindowID, wxString> m_keyTips;
     std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
 
+#if wxUSE_RICHTOOLTIP
     // Creates the helper on first use.
     wxRibbonToolTipHelper* GetToolTipHelper();
+#endif
 
     wxRibbonToolTipHelper* m_toolTip = nullptr;
 

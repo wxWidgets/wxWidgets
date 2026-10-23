@@ -10,9 +10,8 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_RIBBON
+#if wxUSE_RIBBON && wxUSE_RICHTOOLTIP
 
-#include "wx/ribbon/tooltip.h"
 #include "wx/ribbon/private/tooltip.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/control.h"
@@ -21,28 +20,21 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/sizer.h"
-    #include "wx/statbmp.h"
-    #include "wx/stattext.h"
     #include "wx/toplevel.h"
 #endif
 
 #include "wx/display.h"
-#include "wx/graphics.h"
-#include "wx/image.h"
 #include "wx/popupwin.h"
 #include "wx/time.h"
+#include "wx/generic/private/richtooltip.h"
 
 #if wxUSE_HYPERLINKCTRL
     #include "wx/hyperlink.h"
-    #include "wx/generic/hyperlink.h"
 #endif
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
 #endif
-
-#include <memory>
-#include <string.h>
 
 namespace
 {
@@ -59,29 +51,26 @@ constexpr int HIDE_DELAY_MS = 400;
 // would switch it to the items in the rows below.
 constexpr int SWITCH_DELAY_MS = 150;
 
-// The image is scaled down to fit in this box (in DIPs), but never up.
-constexpr int MAX_IMAGE_SIZE = 128;
+// Space (in DIPs) between the outline and the contents.
+constexpr int PADDING = 8;
 
-#if wxUSE_HYPERLINKCTRL
-// Size (in DIPs) of the help icon.
-constexpr int HELP_ICON_SIZE = 16;
-#endif
+// Width (in DIPs) at which the message wraps.
+constexpr int MESSAGE_WIDTH = 260;
+constexpr int MESSAGE_WIDTH_WITH_IMAGE = 220;
 
-// Width (in DIPs) at which the description wraps.
-constexpr int DESCRIPTION_WIDTH = 260;
-constexpr int DESCRIPTION_WIDTH_WITH_IMAGE = 220;
+// Returns true if the tooltip of an item in the given state shows anything.
+bool HasContents(const wxRichToolTipInfo& info,
+                 const wxString& helpString,
+                 bool disabled)
+{
+    return !info.GetTitle().empty() ||
+           !info.GetMessageFor(disabled).empty() ||
+           !helpString.empty() ||
+           info.GetImage().IsOk() ||
+           info.HasHelpLink();
+}
 
 } // anonymous namespace
-
-// ----------------------------------------------------------------------------
-// wxRibbonToolTipInfo
-// ----------------------------------------------------------------------------
-
-wxString wxRibbonToolTipInfo::GetHelpLinkText() const
-{
-    return m_helpLinkText.empty() ? _("Click here for more help")
-                                  : m_helpLinkText;
-}
 
 // ----------------------------------------------------------------------------
 // wxRibbonToolTipPopup: the window showing the tooltip contents
@@ -90,6 +79,10 @@ wxString wxRibbonToolTipInfo::GetHelpLinkText() const
 // The popup contains a hyperlink, so it needs wxPU_CONTAINS_CONTROLS, but it
 // must never become active, as this would take the focus from the window
 // under the ribbon. This is done in the same way as wxSTC calltips.
+//
+// Unlike wxRichToolTip's popup, this is not transient
+// (it's shown and hidden as the mouse moves over the ribbon).
+// Its contents are created by the same wxRichToolTipContents though.
 class wxRibbonToolTipPopup : public wxPopupWindow
 {
 public:
@@ -98,10 +91,14 @@ public:
           m_helper(helper)
     {
         Bind(wxEVT_PAINT, &wxRibbonToolTipPopup::OnPaint, this);
+#if wxUSE_HYPERLINKCTRL
+        Bind(wxEVT_HYPERLINK, &wxRibbonToolTipPopup::OnHyperlink, this);
+#endif
     }
 
-    void SetContent(const wxRibbonToolTipInfo& info,
-                    const wxString& helpString);
+    void SetContent(const wxRichToolTipInfo& info,
+                    const wxString& helpString,
+                    bool disabled);
 
 #ifdef __WXMSW__
     virtual bool Show(bool show = true) override;
@@ -112,17 +109,9 @@ public:
 private:
     void OnPaint(wxPaintEvent& event);
 
-    // Returns the image scaled down to fit in MAX_IMAGE_SIZE.
-    wxBitmapBundle GetScaledImage(const wxBitmapBundle& image) const;
-
 #if wxUSE_HYPERLINKCTRL
     void OnHyperlink(wxHyperlinkEvent& event);
-
-    // Returns the help icon: a question mark in a circle, drawn with our own
-    // colors, as the stock icon may be hard to see on our background.
-    wxBitmapBundle MakeHelpIcon(const wxColour& circleColour,
-                                const wxColour& markColour) const;
-#endif // wxUSE_HYPERLINKCTRL
+#endif
 
     wxRibbonToolTipHelper* const m_helper;
     wxColour m_outlineColour;
@@ -130,8 +119,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxRibbonToolTipPopup);
 };
 
-void wxRibbonToolTipPopup::SetContent(const wxRibbonToolTipInfo& info,
-                                      const wxString& helpString)
+void wxRibbonToolTipPopup::SetContent(const wxRichToolTipInfo& info,
+                                      const wxString& helpString,
+                                      bool disabled)
 {
     Freeze();
     DestroyChildren();
@@ -145,97 +135,21 @@ void wxRibbonToolTipPopup::SetContent(const wxRibbonToolTipInfo& info,
     SetBackgroundColour(bgColour);
     SetForegroundColour(fgColour);
 
-    const int padding = FromDIP(8);
-    const int gap = FromDIP(6);
+    wxRichToolTipInfo shown(info);
+    if ( shown.GetMessage().empty() )
+        shown.Message(helpString);
 
-    wxBoxSizer* const contents = new wxBoxSizer(wxVERTICAL);
-
-    const wxString& title = info.GetTitle();
-    if ( !title.empty() )
-    {
-        wxStaticText* const titleText = new wxStaticText(this, wxID_ANY, title);
-        titleText->SetFont(GetFont().Bold());
-        titleText->SetForegroundColour(fgColour);
-        titleText->SetBackgroundColour(bgColour);
-        contents->Add(titleText);
-    }
-
-    const wxString description = info.GetDescription().empty()
-                                    ? helpString
-                                    : info.GetDescription();
-    const wxBitmapBundle& image = info.GetImage();
-    if ( !description.empty() || image.IsOk() )
-    {
-        wxBoxSizer* const row = new wxBoxSizer(wxHORIZONTAL);
-        if ( image.IsOk() )
-        {
-            wxStaticBitmap* const bitmap =
-                new wxStaticBitmap(this, wxID_ANY, GetScaledImage(image));
-            bitmap->SetBackgroundColour(bgColour);
-            row->Add(bitmap, wxSizerFlags().Top());
-        }
-
-        if ( !description.empty() )
-        {
-            wxStaticText* const descText =
-                new wxStaticText(this, wxID_ANY, description);
-            descText->SetForegroundColour(fgColour);
-            descText->SetBackgroundColour(bgColour);
-            descText->Wrap(FromDIP(image.IsOk() ? DESCRIPTION_WIDTH_WITH_IMAGE
-                                                : DESCRIPTION_WIDTH));
-            const int imageGap = image.IsOk() ? gap : 0;
-            row->Add(descText, wxSizerFlags().Top().Border(wxLEFT, imageGap));
-        }
-
-        // Indent the description below the title.
-        const int indent = title.empty() || image.IsOk() ? 0 : gap;
-        const int titleGap = title.empty() ? 0 : gap;
-        contents->Add(row, wxSizerFlags().Border(wxLEFT, indent)
-                                         .Border(wxTOP, titleGap));
-    }
-
-#if wxUSE_HYPERLINKCTRL
-    if ( info.HasHelpLink() )
-    {
-        const wxColour linkColour = dark ? wxColour(138, 180, 248)
-                                         : wxColour(0, 51, 153);
-
-        // A plain window is used as the divider, instead of wxStaticLine, as
-        // its colour can be set on all platforms.
-        wxWindow* const divider = new wxWindow(this, wxID_ANY,
-                                               wxDefaultPosition,
-                                               wxSize(-1, FromDIP(1)));
-        divider->SetBackgroundColour(m_outlineColour);
-        contents->Add(divider, wxSizerFlags().Expand().Border(wxTOP, gap));
-
-        wxBoxSizer* const row = new wxBoxSizer(wxHORIZONTAL);
-        wxStaticBitmap* const helpIcon = new wxStaticBitmap(this, wxID_ANY,
-            MakeHelpIcon(linkColour, bgColour));
-        helpIcon->SetBackgroundColour(bgColour);
-        row->Add(helpIcon, wxSizerFlags().CentreVertical());
-
-        // The URL is never used, as the click is handled below, but it can't
-        // be empty.
-        wxGenericHyperlinkCtrl* const link =
-            new wxGenericHyperlinkCtrl(this, wxID_ANY,
-                                       info.GetHelpLinkText(), "help",
-                                       wxDefaultPosition, wxDefaultSize,
-                                       wxHL_ALIGN_LEFT | wxNO_BORDER);
-        link->SetFont(GetFont().Bold());
-        link->SetNormalColour(linkColour);
-        link->SetHoverColour(linkColour);
-        link->SetVisitedColour(linkColour);
-        link->SetBackgroundColour(bgColour);
-        link->Bind(wxEVT_HYPERLINK, &wxRibbonToolTipPopup::OnHyperlink, this);
-        row->Add(link, wxSizerFlags().CentreVertical().Border(wxLEFT, gap));
-
-        contents->Add(row, wxSizerFlags().Border(wxTOP, gap));
-    }
-#endif // wxUSE_HYPERLINKCTRL
+    wxRichToolTipContents contents;
+    contents.m_titleFont = GetFont().Bold();
+    contents.m_textColour = fgColour;
+    contents.m_backgroundColour = bgColour;
+    contents.m_wrapWidth = info.GetImage().IsOk() ? MESSAGE_WIDTH_WITH_IMAGE
+                                                  : MESSAGE_WIDTH;
 
     // Leave room for the outline drawn in OnPaint().
     wxBoxSizer* const outer = new wxBoxSizer(wxVERTICAL);
-    outer->Add(contents, wxSizerFlags().Border(wxALL, padding + FromDIP(1)));
+    outer->Add(contents.Create(this, shown, disabled),
+               wxSizerFlags().Border(wxALL, FromDIP(PADDING + 1)));
     SetSizerAndFit(outer);
 
     // Fit() only lays out the new children if the size changes, which it
@@ -246,70 +160,7 @@ void wxRibbonToolTipPopup::SetContent(const wxRibbonToolTipInfo& info,
     Refresh();
 }
 
-wxBitmapBundle
-wxRibbonToolTipPopup::GetScaledImage(const wxBitmapBundle& image) const
-{
-    wxSize size = image.GetDefaultSize();
-    if ( size.x <= 0 || size.y <= 0 )
-        return image;
-
-    if ( size.x > MAX_IMAGE_SIZE || size.y > MAX_IMAGE_SIZE )
-    {
-        const double scale = wxMin(double(MAX_IMAGE_SIZE) / size.x,
-                                   double(MAX_IMAGE_SIZE) / size.y);
-        size.x = wxMax(1, wxRound(size.x * scale));
-        size.y = wxMax(1, wxRound(size.y * scale));
-    }
-
-    // Get the bitmap at the physical size for this window's DPI, and tell it
-    // its scale factor, so that it is shown at the size in DIPs computed
-    // above.
-    const double scaleFactor = GetDPIScaleFactor();
-    wxBitmap bitmap = image.GetBitmap(wxSize(wxRound(size.x * scaleFactor),
-                                             wxRound(size.y * scaleFactor)));
-    if ( !bitmap.IsOk() )
-        return image;
-    bitmap.SetScaleFactor(scaleFactor);
-    return wxBitmapBundle::FromBitmap(bitmap);
-}
-
 #if wxUSE_HYPERLINKCTRL
-
-wxBitmapBundle
-wxRibbonToolTipPopup::MakeHelpIcon(const wxColour& circleColour,
-                                   const wxColour& markColour) const
-{
-    const double scaleFactor = GetDPIScaleFactor();
-    const int size = wxRound(HELP_ICON_SIZE * scaleFactor);
-
-    // Start with a fully transparent image.
-    wxImage image(size, size);
-    image.InitAlpha();
-    memset(image.GetAlpha(), 0, size * size);
-
-    {
-        std::unique_ptr<wxGraphicsContext>
-            gc(wxGraphicsContext::Create(image));
-        if ( gc == nullptr )
-            return wxBitmapBundle();
-
-        gc->SetPen(*wxTRANSPARENT_PEN);
-        gc->SetBrush(circleColour);
-        gc->DrawEllipse(0, 0, size, size);
-
-        wxFont font = GetFont().Bold();
-        font.SetPixelSize(wxSize{ 0, wxRound(size * 0.8) });
-        gc->SetFont(font, markColour);
-
-        wxDouble width, height;
-        gc->GetTextExtent("?", &width, &height);
-        gc->DrawText("?", (size - width) / 2, (size - height) / 2);
-    }
-
-    wxBitmap bitmap{ image };
-    bitmap.SetScaleFactor(scaleFactor);
-    return wxBitmapBundle::FromBitmap(bitmap);
-}
 
 void wxRibbonToolTipPopup::OnHyperlink(wxHyperlinkEvent& WXUNUSED(event))
 {
@@ -387,17 +238,6 @@ wxRibbonToolTipHelper::~wxRibbonToolTipHelper()
         m_popup->Destroy();
 }
 
-wxRibbonToolTipInfo
-wxRibbonToolTipHelper::GetInfoForState(const wxRibbonToolTipInfo& info,
-                                       bool disabled)
-{
-    wxRibbonToolTipInfo result(info);
-    if ( disabled && !info.GetDisabledDescription().empty() )
-        result.Description(info.GetDisabledDescription());
-    result.DisabledDescription(wxString());
-    return result;
-}
-
 bool wxRibbonToolTipHelper::IsShown() const
 {
     return m_popup != nullptr && m_popup->IsShown();
@@ -410,7 +250,7 @@ bool wxRibbonToolTipHelper::IsMouseUnmovedSinceFocus() const
 
 void wxRibbonToolTipHelper::ItemHovered(int id,
                                         const wxRect& rect,
-                                        const wxRibbonToolTipInfo& itemInfo,
+                                        const wxRichToolTipInfo& info,
                                         const wxString& helpString,
                                         bool disabled)
 {
@@ -430,8 +270,7 @@ void wxRibbonToolTipHelper::ItemHovered(int id,
     if ( m_suppressed )
         return;
 
-    const wxRibbonToolTipInfo info = GetInfoForState(itemInfo, disabled);
-    if ( info.IsEmpty() && helpString.empty() )
+    if ( !HasContents(info, helpString, disabled) )
     {
         // Nothing to show for this item.
         Dismiss();
@@ -457,6 +296,7 @@ void wxRibbonToolTipHelper::ItemHovered(int id,
 
     m_info = info;
     m_helpString = helpString;
+    m_disabled = disabled;
 
     if ( IsShown() || (ms_shown != nullptr && ms_shown != this) )
     {
@@ -489,7 +329,7 @@ void wxRibbonToolTipHelper::ItemLeft()
 
 void wxRibbonToolTipHelper::ItemFocused(int id,
                                         const wxRect& rect,
-                                        const wxRibbonToolTipInfo& itemInfo,
+                                        const wxRichToolTipInfo& info,
                                         const wxString& helpString)
 {
     m_keyboard = true;
@@ -500,8 +340,7 @@ void wxRibbonToolTipHelper::ItemFocused(int id,
     m_itemRect = rect;
 
     // Disabled items can't be focused.
-    const wxRibbonToolTipInfo info = GetInfoForState(itemInfo, false);
-    if ( info.IsEmpty() && helpString.empty() )
+    if ( !HasContents(info, helpString, false) )
     {
         Dismiss();
         return;
@@ -515,6 +354,7 @@ void wxRibbonToolTipHelper::ItemFocused(int id,
 
     m_info = info;
     m_helpString = helpString;
+    m_disabled = false;
     m_switchTimer.Stop();
 
     // Unlike with the mouse, there is no passing over the items, so switch
@@ -605,7 +445,7 @@ void wxRibbonToolTipHelper::ShowPopup()
     // uses that monitor's DPI if it's different from the one it was on.
     m_popup->Move(m_owner->ClientToScreen(m_shownRect.GetBottomLeft()));
 
-    m_popup->SetContent(m_info, m_helpString);
+    m_popup->SetContent(m_info, m_helpString, m_disabled);
     PositionPopup();
 
     if ( !m_popup->IsShown() )
@@ -800,4 +640,4 @@ void wxRibbonToolTipHelper::OnTopLevelCharHook(wxKeyEvent& event)
         Dismiss(true);
 }
 
-#endif // wxUSE_RIBBON
+#endif // wxUSE_RIBBON && wxUSE_RICHTOOLTIP

@@ -222,6 +222,7 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
         Refresh(false);
     }
 
+#if wxUSE_RICHTOOLTIP
     if ( ext_button_hovered && !IsMinimised() &&
             !m_extButtonToolTip.IsEmpty() )
     {
@@ -233,6 +234,16 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
     {
         m_toolTip->ItemLeft();
     }
+#endif // wxUSE_RICHTOOLTIP
+}
+
+#if wxUSE_RICHTOOLTIP
+
+void wxRibbonPanel::SetExtButtonToolTip(const wxRichToolTipInfo& info)
+{
+    m_extButtonToolTip = info;
+    if ( !info.IsEmpty() )
+        EnableRichToolTips();
 }
 
 wxRibbonToolTipHelper* wxRibbonPanel::GetToolTipHelper()
@@ -241,6 +252,8 @@ wxRibbonToolTipHelper* wxRibbonPanel::GetToolTipHelper()
         m_toolTip = new wxRibbonToolTipHelper(this);
     return m_toolTip;
 }
+
+#endif // wxUSE_RICHTOOLTIP
 
 void wxRibbonPanel::SendToolTipHelpEvent(int WXUNUSED(item_id))
 {
@@ -879,11 +892,13 @@ bool wxRibbonPanel::FocusFirstItem()
     m_item_focused = true;
     Refresh(false);
 
+#if wxUSE_RICHTOOLTIP
     if ( !IsMinimised() && !m_extButtonToolTip.IsEmpty() )
     {
         GetToolTipHelper()->ItemFocused(0, m_ext_button_rect,
                                         m_extButtonToolTip, wxString());
     }
+#endif // wxUSE_RICHTOOLTIP
 
 #if wxUSE_ACCESSIBILITY
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
@@ -1069,7 +1084,9 @@ bool wxRibbonPanel::ShowExpanded()
     m_expanded_panel->m_expanded_dummy = this;
     m_expanded_panel->m_extButtonKeyTip = m_extButtonKeyTip;
     m_expanded_panel->m_keyTip = m_keyTip;
+#if wxUSE_RICHTOOLTIP
     m_expanded_panel->m_extButtonToolTip = m_extButtonToolTip;
+#endif
 
     // Move all children to the new panel.
     // Conceptually it might be simpler to reparent this entire panel to the
@@ -1211,7 +1228,9 @@ bool wxRibbonPanel::HideExpanded()
     // Keep any keytips set while the panel was expanded.
     m_expanded_dummy->m_extButtonKeyTip = m_extButtonKeyTip;
     m_expanded_dummy->m_keyTip = m_keyTip;
+#if wxUSE_RICHTOOLTIP
     m_expanded_dummy->m_extButtonToolTip = m_extButtonToolTip;
+#endif
 
     // Move children back to original panel
     // NB: Children iterators not used as behaviour is not well defined
@@ -1469,6 +1488,7 @@ public:
         if ( childId >= 0 && childId <= static_cast<int>(panel->GetChildren().GetCount()) )
             return wxACC_NOT_IMPLEMENTED;
 
+#if wxUSE_RICHTOOLTIP
         // Use the tooltip's title, if any.
         const wxString& title = panel->GetExtButtonToolTip().GetTitle();
         if ( !title.empty() )
@@ -1476,6 +1496,7 @@ public:
             *name = title;
             return wxACC_OK;
         }
+#endif // wxUSE_RICHTOOLTIP
 
         const wxString label = panel->GetLabel();
         *name = label.empty() ? _("More options")
@@ -1483,6 +1504,7 @@ public:
         return wxACC_OK;
     }
 
+#if wxUSE_RICHTOOLTIP
     wxAccStatus GetDescription(int childId, wxString* description) override
     {
         if ( childId == wxACC_SELF )
@@ -1496,9 +1518,10 @@ public:
             return wxACC_NOT_IMPLEMENTED;
 
         // The same text as shown in the tooltip.
-        *description = panel->GetExtButtonToolTip().GetDescription();
+        *description = panel->GetExtButtonToolTip().GetMessage();
         return wxACC_OK;
     }
+#endif // wxUSE_RICHTOOLTIP
 
     wxAccStatus GetLocation(wxRect& rect, int elementId) override
     {

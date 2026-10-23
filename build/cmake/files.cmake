@@ -2832,7 +2832,6 @@ set(RIBBON_HDR
     wx/ribbon/private/backstage.h
     wx/ribbon/private/tooltip.h
     wx/ribbon/toolbar.h
-    wx/ribbon/tooltip.h
     wx/xrc/xh_ribbon.h
 )
 

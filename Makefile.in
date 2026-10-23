@@ -4050,7 +4050,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/ribbon/private/backstage.h \
 	wx/ribbon/private/tooltip.h \
 	wx/ribbon/toolbar.h \
-	wx/ribbon/tooltip.h \
 	wx/xrc/xh_ribbon.h \
 	wx/richtext/richtextbackgroundpage.h \
 	wx/richtext/richtextborderspage.h \

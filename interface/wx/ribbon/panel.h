@@ -337,17 +337,23 @@ public:
         Sets the rich tooltip shown for this panel's extension button.
 
         Only has an effect if the panel uses @c wxRIBBON_PANEL_EXT_BUTTON.
+        Clicking the help link sends @c wxEVT_RIBBONPANEL_HELP_CLICKED.
+
+        See wxRibbonButtonBar::SetButtonToolTip() for when rich tooltips are
+        used.
+
+        Only available if @c wxUSE_RICHTOOLTIP is 1.
 
         @since 3.3.5
     */
-    void SetExtButtonToolTip(const wxRibbonToolTipInfo& info);
+    void SetExtButtonToolTip(const wxRichToolTipInfo& info);
 
     /**
         Returns the tooltip set with SetExtButtonToolTip().
 
         @since 3.3.5
     */
-    const wxRibbonToolTipInfo& GetExtButtonToolTip() const;
+    const wxRichToolTipInfo& GetExtButtonToolTip() const;
 
     /**
         Assigns the KeyTip used to expand this panel while it is minimised.

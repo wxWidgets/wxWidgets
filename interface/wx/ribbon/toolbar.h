@@ -495,18 +495,24 @@ public:
     /**
         Sets the rich tooltip shown for the given tool.
 
-        If @a info has no description, the tool's help string is used.
+        If @a info has no message, the tool's help string is used.
+        Clicking its help link sends @c wxEVT_RIBBONTOOLBAR_HELP_CLICKED.
+
+        See wxRibbonButtonBar::SetButtonToolTip() for when rich tooltips are
+        used.
+
+        Only available if @c wxUSE_RICHTOOLTIP is 1.
 
         @since 3.3.5
     */
-    void SetToolToolTip(int tool_id, const wxRibbonToolTipInfo& info);
+    void SetToolToolTip(int tool_id, const wxRichToolTipInfo& info);
 
     /**
         Returns the rich tooltip set with SetToolToolTip().
 
         @since 3.3.5
     */
-    wxRibbonToolTipInfo GetToolToolTip(int tool_id) const;
+    wxRichToolTipInfo GetToolToolTip(int tool_id) const;
 
     /**
         Sets the bitmap to be used by the tool with the given ID.

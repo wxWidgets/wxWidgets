@@ -478,6 +478,7 @@ static const char colours_svg[] =
     "<circle cx='16' cy='18' r='6' fill='#4444FF' opacity='0.8'/>"
     "</svg>";
 
+#if wxUSE_RICHTOOLTIP
 // tooltip preview image
 // (portrait "page" with some shapes on it, shown in the Triangle button's tooltip)
 static const char shapes_preview_svg[] =
@@ -492,6 +493,7 @@ static const char shapes_preview_svg[] =
     "<rect x='56' y='88' width='24' height='24' rx='1' fill='#CC8844'"
     " stroke='#996633' stroke-width='1.5'/>"
     "</svg>";
+#endif // wxUSE_RICHTOOLTIP
 
 // Helper to create a bitmap bundle from embedded SVG data. When wxHAS_SVG is
 // available, the SVG is rasterized at any requested size for DPI-aware display.
@@ -547,10 +549,12 @@ MyFrame::MyFrame()
                                             wxRIBBON_PANEL_NO_AUTO_MINIMISE |
                                             wxRIBBON_PANEL_EXT_BUTTON);
         toolbar_panel->SetExtButtonKeyTip("X");
+#if wxUSE_RICHTOOLTIP
         toolbar_panel->SetExtButtonToolTip(
-            wxRibbonToolTipInfo("Toolbar Settings")
-                .Description("Show more options for the toolbar.")
+            wxRichToolTipInfo("Toolbar Settings")
+                .Message("Show more options for the toolbar.")
                 .HelpLink());
+#endif
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddToggleTool(wxID_JUSTIFY_LEFT,
             MakeSvgBundle(align_left_svg, wxSize(16, 16)), "Align left");
@@ -563,12 +567,14 @@ MyFrame::MyFrame()
         toolbar->AddTool(wxID_OPEN, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)), "Open something");
         toolbar->AddTool(wxID_SAVE, wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, wxSize(16, 15)), "Save something");
         toolbar->AddTool(wxID_SAVEAS, wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, wxSize(16, 15)), "Save something as ...");
+#if wxUSE_RICHTOOLTIP
         toolbar->SetToolToolTip(wxID_NEW,
-            wxRibbonToolTipInfo("New (Ctrl+N)")
-                .Description("Create a new document.\n\n"
-                             "Use the dropdown arrow to start from a template instead.")
+            wxRichToolTipInfo("New (Ctrl+N)")
+                .Message("Create a new document.\n\n"
+                         "Use the dropdown arrow to start from a template instead.")
                 .Image(wxArtProvider::GetBitmapBundle(wxART_NEW, wxART_OTHER,
                     wxSize{ 48, 48 })));
+#endif
         toolbar->SetKeyTip(wxID_OPEN, "O");
         toolbar->SetKeyTip(wxID_SAVE, "SV");
         toolbar->SetKeyTip(wxID_SAVEAS, "SA");
@@ -596,13 +602,15 @@ MyFrame::MyFrame()
         // "PO" reaches the dropdown arrow's menu, separate from "PT"'s main action.
         // Neither is a prefix of the other, unlike "P"/"PM" would be.
         toolbar->SetDropdownKeyTip(wxID_PRINT, "PO");
+#if wxUSE_RICHTOOLTIP
         // A rich tooltip with a help link, which sends
         // wxEVT_RIBBONTOOLBAR_HELP_CLICKED.
         toolbar->SetToolToolTip(wxID_PRINT,
-            wxRibbonToolTipInfo("Print (Ctrl+P)")
-                .Description("Print the current document.\n\n"
-                             "Use the dropdown arrow to choose more printing options.")
+            wxRichToolTipInfo("Print (Ctrl+P)")
+                .Message("Print the current document.\n\n"
+                         "Use the dropdown arrow to choose more printing options.")
                 .HelpLink());
+#endif
         toolbar->SetRows(2, 3);
 
         size_t tool_pos = toolbar->GetToolPos(wxID_PRINT);
@@ -654,15 +662,17 @@ MyFrame::MyFrame()
         shapes->SetDropdownKeyTip(ID_TRIANGLE, "SD");
         shapes->SetKeyTip(ID_SQUARE, "SQ");
         shapes->SetKeyTip(ID_POLYGON, "SP");
+#if wxUSE_RICHTOOLTIP
         shapes->SetButtonToolTip(ID_CROSS,
-            wxRibbonToolTipInfo("Cross")
-                .Description("Draw a cross on the page."));
+            wxRichToolTipInfo("Cross")
+                .Message("Draw a cross on the page."));
         shapes->SetButtonToolTip(ID_TRIANGLE,
-            wxRibbonToolTipInfo("Triangle")
-                .Description("Draw a triangle on the page.\n\n"
-                             "Use the dropdown arrow to choose the kind of triangle to draw.")
+            wxRichToolTipInfo("Triangle")
+                .Message("Draw a triangle on the page.\n\n"
+                         "Use the dropdown arrow to choose the kind of triangle to draw.")
                 .Image(MakeSvgBundle(shapes_preview_svg, wxSize(96, 128)))
                 .HelpLink());
+#endif
 
         wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, "Panel with Sizer",
                                                     wxBitmapBundle(), wxDefaultPosition, wxDefaultSize,
@@ -755,10 +765,12 @@ MyFrame::MyFrame()
         bar->AddButton(ID_DISABLE,  "Disable", ribbon_large);
         bar->AddButton(ID_UI_ENABLE_UPDATED, "Enable UI updated", ribbon_large);
         bar->EnableButton(ID_DISABLED, false);
+#if wxUSE_RICHTOOLTIP
         bar->SetButtonToolTip(ID_UI_ENABLE_UPDATED,
-            wxRibbonToolTipInfo("Enable UI updated")
-                .Description("Enabled by the UI update handler.")
-                .DisabledDescription("Click \"Enable\" to enable this button."));
+            wxRichToolTipInfo("Enable UI updated")
+                .Message("Enabled by the UI update handler.")
+                .DisabledMessage("Click \"Enable\" to enable this button."));
+#endif
         m_bEnabled = true;
 
         panel = new wxRibbonPanel(page, wxID_ANY, "Toggle", ribbon_small);
@@ -1111,10 +1123,12 @@ wxRibbonGallery* MyFrame::PopulateColoursPanel(wxWindow* panel,
     wxRibbonGalleryItem *def_item =
         AddColourToGallery(gallery, "Default", dc, &def);
     gallery->SetSelection(def_item);
+#if wxUSE_RICHTOOLTIP
     gallery->SetItemToolTip(def_item,
-        wxRibbonToolTipInfo("Default")
-            .Description("Use the colour that the sample started with.")
+        wxRichToolTipInfo("Default")
+            .Message("Use the colour that the sample started with.")
             .HelpLink());
+#endif
     AddColourToGallery(gallery, "BLUE", dc);
     AddColourToGallery(gallery, "BLUE VIOLET", dc);
     AddColourToGallery(gallery, "BROWN", dc);

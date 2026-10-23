@@ -140,9 +140,22 @@ public:
         return true;
     }
 
+    // Returns true if the button's tooltip has a message for when it is
+    // disabled.
+    bool HasDisabledToolTip() const
+    {
+#if wxUSE_RICHTOOLTIP
+        return !tooltip_info.GetDisabledMessage().empty();
+#else
+        return false;
+#endif
+    }
+
     wxString label;
     wxString help_string;
-    wxRibbonToolTipInfo tooltip_info;
+#if wxUSE_RICHTOOLTIP
+    wxRichToolTipInfo tooltip_info;
+#endif
     wxCoord text_min_width[3];
 
     // Indices into parent wxRibbonButtonBar's wxWithImages collections
@@ -1211,19 +1224,23 @@ bool wxRibbonButtonBar::GetShowToolTipsForDisabled() const
     return m_show_tooltips_for_disabled;
 }
 
+#if wxUSE_RICHTOOLTIP
+
 void wxRibbonButtonBar::SetButtonToolTip(int button_id,
-                                         const wxRibbonToolTipInfo& info)
+                                         const wxRichToolTipInfo& info)
 {
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     wxCHECK_RET(base, "invalid button id");
 
     base->tooltip_info = info;
+    if ( !info.IsEmpty() )
+        EnableRichToolTips();
 }
 
-wxRibbonToolTipInfo wxRibbonButtonBar::GetButtonToolTip(int button_id) const
+wxRichToolTipInfo wxRibbonButtonBar::GetButtonToolTip(int button_id) const
 {
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
-    wxCHECK_MSG(base, wxRibbonToolTipInfo(), "invalid button id");
+    wxCHECK_MSG(base, wxRichToolTipInfo(), "invalid button id");
 
     return base->tooltip_info;
 }
@@ -1234,6 +1251,8 @@ wxRibbonToolTipHelper* wxRibbonButtonBar::GetToolTipHelper()
         m_toolTip = new wxRibbonToolTipHelper(this);
     return m_toolTip;
 }
+
+#endif // wxUSE_RICHTOOLTIP
 
 void wxRibbonButtonBar::SendToolTipHelpEvent(int button_id)
 {
@@ -1529,7 +1548,7 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
                 break;
             }
             else if ( m_show_tooltips_for_disabled ||
-                      !instance.base->tooltip_info.GetDisabledDescription().empty() )
+                      instance.base->HasDisabledToolTip() )
             {
                 tooltipButton = &instance;
             }
@@ -1537,21 +1556,50 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
     }
 
     const long dropdown_active = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
-    if ( tooltipButton != nullptr &&
-            !(tooltipButton->base->state & dropdown_active) )
+#if wxUSE_RICHTOOLTIP
+    if ( UseRichToolTips() )
     {
-        wxRibbonButtonBarButtonBase* base = tooltipButton->base;
-        wxRect btn_rect(m_layout_offset + tooltipButton->position,
-                        base->sizes[tooltipButton->size].size);
-        const bool disabled =
-            (base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
-        GetToolTipHelper()->ItemHovered(base->id, btn_rect,
-                                        base->tooltip_info, base->help_string,
-                                        disabled);
+#if wxUSE_TOOLTIPS
+        // A native tooltip may have been set before switching to rich ones.
+        if ( GetToolTip() != nullptr )
+            UnsetToolTip();
+#endif // wxUSE_TOOLTIPS
+
+        if ( tooltipButton != nullptr &&
+                !(tooltipButton->base->state & dropdown_active) )
+        {
+            wxRibbonButtonBarButtonBase* base = tooltipButton->base;
+            wxRect btn_rect(m_layout_offset + tooltipButton->position,
+                            base->sizes[tooltipButton->size].size);
+            const bool disabled =
+                (base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
+            GetToolTipHelper()->ItemHovered(base->id, btn_rect,
+                                            base->tooltip_info,
+                                            base->help_string, disabled);
+        }
+        else if ( m_toolTip != nullptr )
+        {
+            m_toolTip->ItemLeft();
+        }
     }
-    else if ( m_toolTip != nullptr )
+    else
+#endif // wxUSE_RICHTOOLTIP
     {
-        m_toolTip->ItemLeft();
+#if wxUSE_TOOLTIPS
+        if ( tooltipButton == nullptr && GetToolTip() != nullptr )
+        {
+            UnsetToolTip();
+        }
+        if ( tooltipButton != nullptr )
+        {
+            if ( tooltipButton != m_hovered_button &&
+                    !(tooltipButton->base->state & dropdown_active) )
+                SetToolTip(tooltipButton->base->help_string);
+        }
+#else
+        wxUnusedVar(tooltipButton);
+        wxUnusedVar(dropdown_active);
+#endif // wxUSE_TOOLTIPS
     }
 
     if(new_hovered != m_hovered_button || (m_hovered_button != nullptr &&
@@ -1629,6 +1677,9 @@ void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
                 else if(size.dropdown_region.Contains(cursor))
                 {
                     state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+#if wxUSE_TOOLTIPS
+                    UnsetToolTip();
+#endif
                 }
                 instance.base->state |= state;
                 Refresh(false);
@@ -1711,10 +1762,17 @@ bool wxRibbonButtonBar::DoFocusButtonFrom(int pos, int step)
         m_focused_button = base;
         Refresh(false);
 
-        const wxRect btn_rect(m_layout_offset + buttons[i].position,
-                              base->sizes[buttons[i].size].size);
-        GetToolTipHelper()->ItemFocused(base->id, btn_rect,
-                                        base->tooltip_info, base->help_string);
+#if wxUSE_RICHTOOLTIP
+        // Native tooltips are only shown for the mouse.
+        if ( UseRichToolTips() )
+        {
+            const wxRect btn_rect(m_layout_offset + buttons[i].position,
+                                  base->sizes[buttons[i].size].size);
+            GetToolTipHelper()->ItemFocused(base->id, btn_rect,
+                                            base->tooltip_info,
+                                            base->help_string);
+        }
+#endif // wxUSE_RICHTOOLTIP
 
 #if wxUSE_ACCESSIBILITY
         // The focus moves inside this window, so there is no native focus
@@ -2016,10 +2074,14 @@ public:
         if ( button == nullptr )
             return wxACC_FAIL;
 
+#if wxUSE_RICHTOOLTIP
         // Use the tooltip's title for buttons without a label.
         const wxString& label = button->label.empty()
                                     ? button->tooltip_info.GetTitle()
                                     : button->label;
+#else
+        const wxString& label = button->label;
+#endif
         *name = wxStripMenuCodes(label, wxStrip_Mnemonics);
         return wxACC_OK;
     }
@@ -2033,13 +2095,15 @@ public:
         if ( button == nullptr )
             return wxACC_FAIL;
 
+#if wxUSE_RICHTOOLTIP
         const bool disabled =
             (button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
-        const wxRibbonToolTipInfo info =
-            wxRibbonToolTipHelper::GetInfoForState(button->tooltip_info,
-                                                   disabled);
-        *description = info.GetDescription().empty() ? button->help_string
-                                                     : info.GetDescription();
+        const wxString& message =
+            button->tooltip_info.GetMessageFor(disabled);
+        *description = message.empty() ? button->help_string : message;
+#else
+        *description = button->help_string;
+#endif
         return wxACC_OK;
     }
 

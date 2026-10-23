@@ -15,7 +15,7 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/control.h"
-#include "wx/ribbon/tooltip.h"
+#include "wx/richtooltip.h"
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
 
@@ -174,9 +174,11 @@ public:
     void SetShowToolTipsForDisabled(bool show);
     bool GetShowToolTipsForDisabled() const;
 
+#if wxUSE_RICHTOOLTIP
     // Rich tooltips, used instead of the plain help string if set.
-    void SetButtonToolTip(int button_id, const wxRibbonToolTipInfo& info);
-    wxRibbonToolTipInfo GetButtonToolTip(int button_id) const;
+    void SetButtonToolTip(int button_id, const wxRichToolTipInfo& info);
+    wxRichToolTipInfo GetButtonToolTip(int button_id) const;
+#endif // wxUSE_RICHTOOLTIP
 
     // Get bitmap for button (DPI-aware resolution)
     wxBitmap GetButtonBitmap(int imageIndex, bool large) const;
@@ -262,8 +264,10 @@ protected:
     std::vector<wxBitmapBundle> m_bundlesSmallDisabled; // Disabled small icons
 
 private:
+#if wxUSE_RICHTOOLTIP
     // Creates the helper on first use.
     wxRibbonToolTipHelper* GetToolTipHelper();
+#endif
 
     wxRibbonBar* m_ribbonBar = nullptr;
     wxRibbonToolTipHelper* m_toolTip = nullptr;

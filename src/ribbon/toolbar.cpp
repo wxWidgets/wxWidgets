@@ -32,7 +32,9 @@ class wxRibbonToolBarToolBase
 {
 public:
     wxString help_string;
-    wxRibbonToolTipInfo tooltip_info;
+#if wxUSE_RICHTOOLTIP
+    wxRichToolTipInfo tooltip_info;
+#endif
     wxBitmapBundle bitmap;
     wxBitmapBundle bitmap_disabled;
     wxRect dropdown;
@@ -521,19 +523,25 @@ void wxRibbonToolBar::DoFocusTool(wxRibbonToolBarToolBase* tool)
     m_focused_tool = tool;
     Refresh(false);
 
-    for ( size_t g = 0; g < m_groups.GetCount(); ++g )
+#if wxUSE_RICHTOOLTIP
+    // Native tooltips are only shown for the mouse.
+    if ( UseRichToolTips() )
     {
-        const wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        if ( group->tools.Index(tool) != wxNOT_FOUND )
+        for ( size_t g = 0; g < m_groups.GetCount(); ++g )
         {
-            const wxRect tool_rect(group->position + tool->position,
-                                   tool->size);
-            GetToolTipHelper()->ItemFocused(tool->id, tool_rect,
-                                            tool->tooltip_info,
-                                            tool->help_string);
-            break;
+            const wxRibbonToolBarToolGroup* group = m_groups.Item(g);
+            if ( group->tools.Index(tool) != wxNOT_FOUND )
+            {
+                const wxRect tool_rect(group->position + tool->position,
+                                       tool->size);
+                GetToolTipHelper()->ItemFocused(tool->id, tool_rect,
+                                                tool->tooltip_info,
+                                                tool->help_string);
+                break;
+            }
         }
     }
+#endif // wxUSE_RICHTOOLTIP
 
 #if wxUSE_ACCESSIBILITY
     const int pos = GetToolPos(tool->id);
@@ -845,18 +853,22 @@ void wxRibbonToolBar::SetToolHelpString(int tool_id, const wxString& helpString)
     tool->help_string = helpString;
 }
 
+#if wxUSE_RICHTOOLTIP
+
 void wxRibbonToolBar::SetToolToolTip(int tool_id,
-                                     const wxRibbonToolTipInfo& info)
+                                     const wxRichToolTipInfo& info)
 {
     wxRibbonToolBarToolBase* tool = FindById(tool_id);
     wxCHECK_RET(tool != nullptr, "Invalid tool id");
     tool->tooltip_info = info;
+    if ( !info.IsEmpty() )
+        EnableRichToolTips();
 }
 
-wxRibbonToolTipInfo wxRibbonToolBar::GetToolToolTip(int tool_id) const
+wxRichToolTipInfo wxRibbonToolBar::GetToolToolTip(int tool_id) const
 {
     wxRibbonToolBarToolBase* tool = FindById(tool_id);
-    wxCHECK_MSG(tool != nullptr, wxRibbonToolTipInfo(), "Invalid tool id");
+    wxCHECK_MSG(tool != nullptr, wxRichToolTipInfo(), "Invalid tool id");
     return tool->tooltip_info;
 }
 
@@ -866,6 +878,8 @@ wxRibbonToolTipHelper* wxRibbonToolBar::GetToolTipHelper()
         m_toolTip = new wxRibbonToolTipHelper(this);
     return m_toolTip;
 }
+
+#endif // wxUSE_RICHTOOLTIP
 
 void wxRibbonToolBar::SendToolTipHelpEvent(int tool_id)
 {
@@ -1403,18 +1417,44 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
         }
     }
 
-    if ( new_hover != nullptr &&
-            !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) )
+#if wxUSE_RICHTOOLTIP
+    if ( UseRichToolTips() )
     {
-        const bool disabled =
-            (new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) != 0;
-        GetToolTipHelper()->ItemHovered(new_hover->id, new_hover_rect,
-                                        new_hover->tooltip_info,
-                                        new_hover->help_string, disabled);
+#if wxUSE_TOOLTIPS
+        // A native tooltip may have been set before switching to rich ones.
+        if ( GetToolTip() != nullptr )
+            UnsetToolTip();
+#endif // wxUSE_TOOLTIPS
+
+        if ( new_hover != nullptr &&
+                !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) )
+        {
+            const bool disabled =
+                (new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) != 0;
+            GetToolTipHelper()->ItemHovered(new_hover->id, new_hover_rect,
+                                            new_hover->tooltip_info,
+                                            new_hover->help_string, disabled);
+        }
+        else if ( m_toolTip != nullptr )
+        {
+            m_toolTip->ItemLeft();
+        }
     }
-    else if ( m_toolTip != nullptr )
+    else
+#endif // wxUSE_RICHTOOLTIP
     {
-        m_toolTip->ItemLeft();
+#if wxUSE_TOOLTIPS
+        if ( new_hover != nullptr )
+        {
+            if ( new_hover != m_hover_tool &&
+                    !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) )
+                SetToolTip(new_hover->help_string);
+        }
+        else if ( GetToolTip() != nullptr )
+        {
+            UnsetToolTip();
+        }
+#endif // wxUSE_TOOLTIPS
     }
 
     if(new_hover != m_hover_tool)
@@ -1477,6 +1517,9 @@ void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
         m_active_tool = m_hover_tool;
         m_active_tool->state |=
             (m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_HOVER_MASK) << 2;
+#if wxUSE_TOOLTIPS
+        UnsetToolTip();
+#endif
         Refresh(false);
     }
 }
@@ -1684,8 +1727,12 @@ public:
         if ( tool == nullptr )
             return wxACC_OK; // A separator has no name.
 
+#if wxUSE_RICHTOOLTIP
         // Tools have no label, so use the tooltip's title (if available).
         const wxString& title = tool->tooltip_info.GetTitle();
+#else
+        const wxString title;
+#endif
         *name = wxStripMenuCodes(title.empty() ? tool->help_string : title,
                                  wxStrip_Mnemonics);
         return wxACC_OK;
@@ -1700,17 +1747,20 @@ public:
         if ( tool == nullptr )
             return wxACC_OK; // A separator has no description.
 
+#if wxUSE_RICHTOOLTIP
         // The same text as shown in the tooltip, unless the help string is
         // already used as the name.
         const bool disabled =
             (tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) != 0;
-        const wxRibbonToolTipInfo info =
-            wxRibbonToolTipHelper::GetInfoForState(tool->tooltip_info,
-                                                   disabled);
-        if ( !info.GetDescription().empty() )
-            *description = info.GetDescription();
-        else if ( !info.GetTitle().empty() )
+        const wxString& message = tool->tooltip_info.GetMessageFor(disabled);
+        if ( !message.empty() )
+            *description = message;
+        else if ( !tool->tooltip_info.GetTitle().empty() )
             *description = tool->help_string;
+#else
+        // The help string is already used as the name.
+        wxUnusedVar(description);
+#endif
         return wxACC_OK;
     }
 

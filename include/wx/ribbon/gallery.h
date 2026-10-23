@@ -15,7 +15,7 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/control.h"
-#include "wx/ribbon/tooltip.h"
+#include "wx/richtooltip.h"
 #include "wx/bmpbndl.h"
 
 class wxRibbonGalleryItem;
@@ -57,8 +57,10 @@ public:
     void SetItemLabel(wxRibbonGalleryItem* item, const wxString& label);
     wxString GetItemLabel(const wxRibbonGalleryItem* item) const;
 
-    void SetItemToolTip(wxRibbonGalleryItem* item, const wxRibbonToolTipInfo& info);
-    wxRibbonToolTipInfo GetItemToolTip(const wxRibbonGalleryItem* item) const;
+#if wxUSE_RICHTOOLTIP
+    void SetItemToolTip(wxRibbonGalleryItem* item, const wxRichToolTipInfo& info);
+    wxRichToolTipInfo GetItemToolTip(const wxRibbonGalleryItem* item) const;
+#endif // wxUSE_RICHTOOLTIP
 
     void SetItemClientData(wxRibbonGalleryItem* item, void* data);
     void* GetItemClientData(const wxRibbonGalleryItem* item) const;
@@ -166,8 +168,10 @@ protected:
     // Always stored in upper case, to allow case-insensitive matching.
     wxString m_keyTip;
 
+#if wxUSE_RICHTOOLTIP
     // Creates the helper on first use.
     wxRibbonToolTipHelper* GetToolTipHelper();
+#endif
 
     wxRibbonToolTipHelper* m_toolTip = nullptr;
 

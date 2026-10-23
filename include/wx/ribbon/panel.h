@@ -16,7 +16,7 @@
 #include "wx/bmpbndl.h"
 #include "wx/weakref.h"
 #include "wx/ribbon/control.h"
-#include "wx/ribbon/tooltip.h"
+#include "wx/richtooltip.h"
 
 class wxRibbonToolTipHelper;
 
@@ -93,9 +93,11 @@ public:
     wxString GetExtButtonKeyTip() const { return m_extButtonKeyTip; }
     wxRect GetExtButtonRect() const { return m_ext_button_rect; }
 
+#if wxUSE_RICHTOOLTIP
     // Rich tooltip of the extension button.
-    void SetExtButtonToolTip(const wxRibbonToolTipInfo& info) { m_extButtonToolTip = info; }
-    const wxRibbonToolTipInfo& GetExtButtonToolTip() const { return m_extButtonToolTip; }
+    void SetExtButtonToolTip(const wxRichToolTipInfo& info);
+    const wxRichToolTipInfo& GetExtButtonToolTip() const { return m_extButtonToolTip; }
+#endif // wxUSE_RICHTOOLTIP
 
     // Used when the panel is minimised.
     void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
@@ -181,10 +183,12 @@ protected:
     wxString m_extButtonKeyTip;
     wxString m_keyTip;
 
+#if wxUSE_RICHTOOLTIP
     // Creates the helper on first use.
     wxRibbonToolTipHelper* GetToolTipHelper();
 
-    wxRibbonToolTipInfo m_extButtonToolTip;
+    wxRichToolTipInfo m_extButtonToolTip;
+#endif // wxUSE_RICHTOOLTIP
     wxRibbonToolTipHelper* m_toolTip = nullptr;
 
 #ifndef SWIG

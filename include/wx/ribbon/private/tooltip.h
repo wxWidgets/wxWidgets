@@ -14,11 +14,13 @@
 
 #if wxUSE_RIBBON
 
+#if wxUSE_RICHTOOLTIP
+
 #include "wx/event.h"
 #include "wx/gdicmn.h"
 #include "wx/longlong.h"
 #include "wx/timer.h"
-#include "wx/ribbon/tooltip.h"
+#include "wx/richtooltip.h"
 
 class wxRibbonControl;
 class wxRibbonToolTipPopup;
@@ -40,7 +42,7 @@ public:
     // the owner's client coordinates.
     void ItemHovered(int id,
                      const wxRect& rect,
-                     const wxRibbonToolTipInfo& info,
+                     const wxRichToolTipInfo& info,
                      const wxString& helpString,
                      bool disabled);
 
@@ -51,7 +53,7 @@ public:
     // shown until the focus moves elsewhere, regardless of the mouse.
     void ItemFocused(int id,
                      const wxRect& rect,
-                     const wxRibbonToolTipInfo& info,
+                     const wxRichToolTipInfo& info,
                      const wxString& helpString);
 
     // Must be called when the owner no longer has a focused item.
@@ -64,10 +66,6 @@ public:
 
     // Hides the tooltip shown by any control, if any.
     static void DismissShown();
-
-    // Returns the tooltip for an item in the given state.
-    static wxRibbonToolTipInfo GetInfoForState(const wxRibbonToolTipInfo& info,
-                                               bool disabled);
 
     // Implementation only: called by the popup when its help link is clicked.
     void OnHelpLinkClicked();
@@ -105,8 +103,9 @@ private:
     bool m_hasItem = false;
     int m_itemId = 0;
     wxRect m_itemRect;
-    wxRibbonToolTipInfo m_info;
+    wxRichToolTipInfo m_info;
     wxString m_helpString;
+    bool m_disabled = false;
 
     // The item whose tooltip is shown, valid only if the popup is shown.
     int m_shownId = 0;
@@ -129,6 +128,21 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxRibbonToolTipHelper);
 };
+
+#else // !wxUSE_RICHTOOLTIP
+
+// Without rich tooltips, the helper is never created, but the controls still
+// check for it.
+class wxRibbonToolTipHelper
+{
+public:
+    void ItemLeft() { }
+    void FocusCleared() { }
+    void Dismiss(bool WXUNUSED(suppress) = false) { }
+    static void DismissShown() { }
+};
+
+#endif // wxUSE_RICHTOOLTIP/!wxUSE_RICHTOOLTIP
 
 #endif // wxUSE_RIBBON
 
