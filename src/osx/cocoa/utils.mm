@@ -498,23 +498,23 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
-        NSString* name = nil;
+        NSAppearance* newAppearance = nil;
         switch ( appearance )
         {
             case Appearance::System:
-                name = [[NSAppearance currentAppearance] name];
+                // Leave newAppearance as nil to set the system mode.
                 break;
 
             case Appearance::Light:
-                name = NSAppearanceNameAqua;
+                newAppearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
                 break;
 
             case Appearance::Dark:
-                name = NSAppearanceNameDarkAqua;
+                newAppearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
                 break;
         }
 
-        [NSApp setAppearance:[NSAppearance appearanceNamed:name]];
+        [NSApp setAppearance:newAppearance];
 
         return AppearanceResult::Ok;
     }
