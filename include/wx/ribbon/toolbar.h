@@ -15,6 +15,7 @@
 
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/art.h"
+#include "wx/richtooltip.h"
 #include "wx/bmpbndl.h"
 
 #include <unordered_map>
@@ -22,6 +23,7 @@
 
 class wxRibbonToolBarToolBase;
 class wxRibbonToolBarToolGroup;
+class wxRibbonToolTipHelper;
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonToolBarToolGroup*, wxArrayRibbonToolBarToolGroup, class WXDLLIMPEXP_RIBBON);
 
 enum wxRibbonToolBarToolState
@@ -157,6 +159,12 @@ public:
     virtual void SetToolHelpString(int tool_id, const wxString& helpString);
     virtual void SetToolNormalBitmap(int tool_id, const wxBitmapBundle &bitmap);
 
+#if wxUSE_RICHTOOLTIP
+    // Rich tooltips, used instead of the plain help string if set.
+    void SetToolToolTip(int tool_id, const wxRichToolTipInfo& info);
+    wxRichToolTipInfo GetToolToolTip(int tool_id) const;
+#endif // wxUSE_RICHTOOLTIP
+
     virtual bool IsSizingContinuous() const override;
 
     virtual void EnableTool(int tool_id, bool enable = true);
@@ -218,6 +226,7 @@ protected:
     void AppendGroup();
     wxRibbonToolBarToolGroup* InsertGroup(size_t pos);
     virtual void UpdateWindowUI(long flags) override;
+    virtual void SendToolTipHelpEvent(int tool_id) override;
 
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
 
@@ -235,6 +244,13 @@ protected:
     // matching.
     std::unordered_map<wxWindowID, wxString> m_keyTips;
     std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
+
+#if wxUSE_RICHTOOLTIP
+    // Creates the helper on first use.
+    wxRibbonToolTipHelper* GetToolTipHelper();
+#endif
+
+    wxRibbonToolTipHelper* m_toolTip = nullptr;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonToolBar);
@@ -274,6 +290,7 @@ private:
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONTOOLBAR_CLICKED, wxRibbonToolBarEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED, wxRibbonToolBarEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONTOOLBAR_HELP_CLICKED, wxRibbonToolBarEvent);
 
 typedef void (wxEvtHandler::*wxRibbonToolBarEventFunction)(wxRibbonToolBarEvent&);
 
@@ -284,15 +301,19 @@ typedef void (wxEvtHandler::*wxRibbonToolBarEventFunction)(wxRibbonToolBarEvent&
     wx__DECLARE_EVT1(wxEVT_RIBBONTOOLBAR_CLICKED, winid, wxRibbonToolBarEventHandler(fn))
 #define EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED, winid, wxRibbonToolBarEventHandler(fn))
+#define EVT_RIBBONTOOLBAR_HELP_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_RIBBONTOOLBAR_HELP_CLICKED, winid, wxRibbonToolBarEventHandler(fn))
 #else
 
 // wxpython/swig event work
 %constant wxEventType wxEVT_RIBBONTOOLBAR_CLICKED;
 %constant wxEventType wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;
+%constant wxEventType wxEVT_RIBBONTOOLBAR_HELP_CLICKED;
 
 %pythoncode {
     EVT_RIBBONTOOLBAR_CLICKED = wx.PyEventBinder( wxEVT_RIBBONTOOLBAR_CLICKED, 1 )
     EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED = wx.PyEventBinder( wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED, 1 )
+    EVT_RIBBONTOOLBAR_HELP_CLICKED = wx.PyEventBinder( wxEVT_RIBBONTOOLBAR_HELP_CLICKED, 1 )
 }
 #endif
 

@@ -1874,6 +1874,7 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_page.obj \
 	$(OBJS)\ribbondll_panel.obj \
 	$(OBJS)\ribbondll_toolbar.obj \
+	$(OBJS)\ribbondll_tooltip.obj \
 	$(OBJS)\ribbondll_xh_ribbon.obj
 RIBBONDLL_RESOURCES =  \
 	$(OBJS)\ribbondll_version.res
@@ -1905,6 +1906,7 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_page.obj \
 	$(OBJS)\ribbonlib_panel.obj \
 	$(OBJS)\ribbonlib_toolbar.obj \
+	$(OBJS)\ribbonlib_tooltip.obj \
 	$(OBJS)\ribbonlib_xh_ribbon.obj
 PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_564)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png \
@@ -2462,6 +2464,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_page.obj \
 	$(OBJS)\monodll_panel.obj \
 	$(OBJS)\monodll_ribbon_toolbar.obj \
+	$(OBJS)\monodll_ribbon_tooltip.obj \
 	$(OBJS)\monodll_xh_ribbon.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
 	$(OBJS)\monodll_richtextctrl.obj \
@@ -3336,6 +3339,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_page.obj \
 	$(OBJS)\monolib_panel.obj \
 	$(OBJS)\monolib_ribbon_toolbar.obj \
+	$(OBJS)\monolib_ribbon_tooltip.obj \
 	$(OBJS)\monolib_xh_ribbon.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
 	$(OBJS)\monolib_richtextctrl.obj \
@@ -9452,6 +9456,9 @@ $(OBJS)\monodll_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\monodll_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
+$(OBJS)\monodll_ribbon_tooltip.obj: ..\..\src\ribbon\tooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\tooltip.cpp
+
 $(OBJS)\monodll_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
 
@@ -12090,6 +12097,9 @@ $(OBJS)\monolib_panel.obj: ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\monolib_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
+
+$(OBJS)\monolib_ribbon_tooltip.obj: ..\..\src\ribbon\tooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\tooltip.cpp
 
 $(OBJS)\monolib_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
@@ -18790,6 +18800,9 @@ $(OBJS)\ribbondll_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\ribbondll_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
+$(OBJS)\ribbondll_tooltip.obj: ..\..\src\ribbon\tooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\tooltip.cpp
+
 $(OBJS)\ribbondll_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp
 
@@ -18834,6 +18847,9 @@ $(OBJS)\ribbonlib_panel.obj: ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\ribbonlib_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
+
+$(OBJS)\ribbonlib_tooltip.obj: ..\..\src\ribbon\tooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\tooltip.cpp
 
 $(OBJS)\ribbonlib_xh_ribbon.obj: ..\..\src\xrc\xh_ribbon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\xrc\xh_ribbon.cpp

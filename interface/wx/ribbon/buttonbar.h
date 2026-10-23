@@ -116,6 +116,10 @@ enum wxRibbonButtonBarButtonState
         clicked. wxRibbonButtonBarEvent::PopupMenu() should be called by the
         event handler if it wants to display a popup menu (which is what most
         dropdown buttons should be doing).
+    @event{EVT_RIBBONBUTTONBAR_HELP_CLICKED(id, func)}
+        Triggered when the help link in a button's tooltip is clicked (see
+        SetButtonToolTip()). The event ID is the ID of the button. This event
+        is new since wxWidgets 3.3.5.
     @endEventTable
 
     @library{wxribbon}
@@ -657,6 +661,28 @@ public:
         @since 2.9.5
     */
     bool GetShowToolTipsForDisabled() const;
+
+    /**
+        Sets the rich tooltip shown for the given button.
+
+        If @a info has no message, the button's help string is used.
+        Clicking its help link sends @c wxEVT_RIBBONBUTTONBAR_HELP_CLICKED.
+
+        Setting a rich tooltip on any item makes its wxRibbonBar use rich
+        tooltips for all items; otherwise, native ones are used.
+
+        Only available if @c wxUSE_RICHTOOLTIP is 1.
+
+        @since 3.3.5
+    */
+    void SetButtonToolTip(int button_id, const wxRichToolTipInfo& info);
+
+    /**
+        Returns the rich tooltip set with SetButtonToolTip().
+
+        @since 3.3.5
+    */
+    wxRichToolTipInfo GetButtonToolTip(int button_id) const;
 
     /**
         Assigns the KeyTip used to click the given button.

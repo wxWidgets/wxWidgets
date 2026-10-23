@@ -569,6 +569,7 @@
 		5303FA25D0773FAEB963D8E4 /* scrolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC2E24773D853A77B9FEFA4C /* scrolbar.mm */; };
 		46395873DB1C3B7FA81DE5F8 /* LexerBase.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 93EDB3A2B85E3275A6D27C56 /* LexerBase.cxx */; };
 		EA02FA6D3B003F8F8A2963C6 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5011 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		4CFB7E6E5BD53E2BB39BEF63 /* m_style.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EB95BCFA255323183A996C9 /* m_style.cpp */; };
 		DB9565CC4EAE3BCB9F490621 /* xmltok.c in Sources */ = {isa = PBXBuildFile; fileRef = 8685B8ED68F23DB0B770FD74 /* xmltok.c */; };
 		219304C9DDA33E9AADB515DC /* datetimectrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D049F49C75043592B7E318B3 /* datetimectrl_osx.cpp */; };
@@ -625,6 +626,7 @@
 		31BA6F1033293FF3AA9CBB6A /* vp8l_dec.c in Sources */ = {isa = PBXBuildFile; fileRef = 60937459A3013E159B895A3D /* vp8l_dec.c */; };
 		9058997222493A7A859A4D4C /* richtextxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C69E48C06BD23C178F650E42 /* richtextxml.cpp */; };
 		EA02FA6D3B003F8F8A2963C7 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5012 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		18A318847EAC37F2B915F081 /* jmemmgr.c in Sources */ = {isa = PBXBuildFile; fileRef = 14C2A7E01B4B3B168DB73B4F /* jmemmgr.c */; };
 		00E2F82590B33BDCA1F6D0C5 /* xh_htmllbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E7ADC9F00803853B1004529 /* xh_htmllbox.cpp */; };
 		F0B3F484C38C3BA0B9927CD9 /* docmdi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECC9F5C21ACB31A0B24AEE35 /* docmdi.cpp */; };
@@ -1133,6 +1135,7 @@
 		0A406D2D1ADA343891E3664E /* powercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */; };
 		C2D45B334BE03F6C941CA041 /* utilsexc_cf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E2B80B2D7033808504DA8D /* utilsexc_cf.cpp */; };
 		EA02FA6D3B003F8F8A2963C8 /* toolbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */; };
+		3328877FCF2A3623A36A5013 /* tooltip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5010 /* tooltip.cpp */; };
 		DC928C38CA8331F18FF00BCC /* tif_lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 3088384F07C63A5DB3581656 /* tif_lzma.c */; };
 		CFA91122523B31B9A07A3827 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = C45AFE6CC20F3ED7A55FC8FA /* pngmem.c */; };
 		61A2B54FD2E33C759CF5A5E8 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 358D0A3AC73F322EA732D020 /* pngrutil.c */; };
@@ -5082,6 +5085,7 @@
 		664736BDE465350C9C4750E9 /* jcmarker.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jcmarker.c; path = ../../src/jpeg/jcmarker.c; sourceTree = SOURCE_ROOT; };
 		68B81FBDA49D3C1991B6356A /* jdcolor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdcolor.c; path = ../../src/jpeg/jdcolor.c; sourceTree = SOURCE_ROOT; };
 		BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbar.cpp; path = ../../src/ribbon/toolbar.cpp; sourceTree = SOURCE_ROOT; };
+		3328877FCF2A3623A36A5010 /* tooltip.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tooltip.cpp; path = ../../src/ribbon/tooltip.cpp; sourceTree = SOURCE_ROOT; };
 		DB90ADAC10693B6F91E7D4E9 /* unichar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unichar.cpp; path = ../../src/common/unichar.cpp; sourceTree = SOURCE_ROOT; };
 		D1EE17722EA937E88A7F0C01 /* dcbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dcbase.cpp; path = ../../src/common/dcbase.cpp; sourceTree = SOURCE_ROOT; };
 		7FCA75FE592C3469AE351FBF /* winpars.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winpars.cpp; path = ../../src/html/winpars.cpp; sourceTree = SOURCE_ROOT; };
@@ -6885,6 +6889,7 @@
 				59ED0C057D8F388A89DC7177 /* page.cpp */,
 				00969CBE3B8F32C78C195619 /* panel.cpp */,
 				BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */,
+				3328877FCF2A3623A36A5010 /* tooltip.cpp */,
 				B6A37A02D28E30CD9B83E134 /* xh_ribbon.cpp */,
 			);
 			name = ribbon;
@@ -9524,6 +9529,7 @@
 				4BAFAE70A6B1313B96D86630 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB88 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C6 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5011 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDC /* xh_ribbon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10186,6 +10192,7 @@
 				4BAFAE70A6B1313B96D86631 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB86 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C8 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5013 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDB /* xh_ribbon.cpp in Sources */,
 				D54A162E557834A48F4646A9 /* advprops.cpp in Sources */,
 				F501AB044AAC39DCB8C0B3E2 /* editors.cpp in Sources */,
@@ -11680,6 +11687,7 @@
 				4BAFAE70A6B1313B96D86632 /* page.cpp in Sources */,
 				F0D892C2618130FEAD46BB87 /* panel.cpp in Sources */,
 				EA02FA6D3B003F8F8A2963C7 /* toolbar.cpp in Sources */,
+				3328877FCF2A3623A36A5012 /* tooltip.cpp in Sources */,
 				5A459FC1180130C5B705AEDA /* xh_ribbon.cpp in Sources */,
 				D54A162E557834A48F4646AB /* advprops.cpp in Sources */,
 				F501AB044AAC39DCB8C0B3E3 /* editors.cpp in Sources */,
