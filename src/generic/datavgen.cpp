@@ -908,6 +908,9 @@ public:
     bool IsExpanded( unsigned int row ) const;
     bool HasChildren( unsigned int row ) const;
 
+    // Return true if the item has a collapsed ancestor
+    bool HasCollapsedAncestor( const wxDataViewItem & item );
+
 #if wxUSE_DRAG_AND_DROP
     enum DropHint
     {
@@ -4236,6 +4239,24 @@ wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
     return result;
 }
 
+
+bool wxDataViewMainWindow::HasCollapsedAncestor( const wxDataViewItem & item )
+{
+    if (!item.IsOk())
+        return false;
+
+    wxDataViewItem current = item;
+    while (current.IsOk())
+    {
+      current = GetModel()->GetParent( current );
+      if (!current.IsOk()) break;
+      auto result = FindNode( current );
+      if (result.m_node == nullptr) return false;
+      if (!result.m_node->IsOpen()) return true;
+    }
+    return false;
+}
+
 void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item,
                                     wxDataViewColumn* &column )
 {
@@ -6569,6 +6590,9 @@ void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren 
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
+    if (m_clientArea->HasCollapsedAncestor(item))
+        return;
+
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
         m_clientArea->Collapse(row);
@@ -6576,6 +6600,9 @@ void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
 {
+    if (m_clientArea->HasCollapsedAncestor(item))
+        return false;
+
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
         return m_clientArea->IsExpanded(row);

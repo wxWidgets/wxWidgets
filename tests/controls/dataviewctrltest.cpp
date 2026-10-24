@@ -642,6 +642,11 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_child1) );
     m_dvc->ExpandChildren(m_root);
     CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Now collapse root while child1 is expanded
+    m_dvc->Collapse(m_root);
+    // also child should report not being expanded as its parent it collapsed
+    CHECK( !m_dvc->IsExpanded(m_child1) );
 }
 
 TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,
