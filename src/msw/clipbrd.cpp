@@ -490,6 +490,8 @@ bool wxClipboard::GetData( wxDataObject& data )
             }
             else
             {
+                data.MSWSetDataSource(pDataObject, formats[n]);
+
                 result = true;
             }
         }

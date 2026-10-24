@@ -51,6 +51,15 @@ public:
         return true;
     }
 
+    // this function is called after successfully receiving the data in the
+    // given format from the specified source, either during drag and drop or
+    // when pasting from the clipboard, and can be overridden to retrieve more
+    // data from the source later
+    virtual void MSWSetDataSource(IDataObject* WXUNUSED(source),
+                                  const wxDataFormat& WXUNUSED(format))
+    {
+    }
+
     // function to return symbolic name of clipboard format (for debug messages)
 #ifdef __WXDEBUG__
     static const wxChar *GetFormatName(wxDataFormat format);
