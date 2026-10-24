@@ -232,6 +232,7 @@ public:
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
+    void OnEnableRTF(wxCommandEvent& event);
 
     void OnBold(wxCommandEvent& event);
     void OnItalic(wxCommandEvent& event);
@@ -324,6 +325,8 @@ private:
     wxDECLARE_EVENT_TABLE();
 
     MyRichTextCtrl*         m_richTextCtrl;
+    // Keep the selected format even if the filename has a different extension.
+    int                    m_fileType = wxRICHTEXT_TYPE_ANY;
 };
 
 // ----------------------------------------------------------------------------
@@ -349,6 +352,7 @@ enum
     ID_FORMAT_CONTENT,
 
     ID_RELOAD,
+    ID_ENABLE_RTF,
 
     ID_INSERT_SYMBOL,
     ID_INSERT_URL,
@@ -411,6 +415,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_OPEN,  MyFrame::OnOpen)
     EVT_MENU(wxID_SAVE,  MyFrame::OnSave)
     EVT_MENU(wxID_SAVEAS,  MyFrame::OnSaveAs)
+    EVT_MENU(ID_ENABLE_RTF, MyFrame::OnEnableRTF)
 
     EVT_MENU(ID_FORMAT_BOLD,  MyFrame::OnBold)
     EVT_MENU(ID_FORMAT_ITALIC,  MyFrame::OnItalic)
@@ -775,6 +780,9 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     fileMenu->Append(wxID_OPEN, "&Open\tCtrl+O", "Open a file");
     fileMenu->Append(wxID_SAVE, "&Save\tCtrl+S", "Save a file");
     fileMenu->Append(wxID_SAVEAS, "&Save As...\tF12", "Save to a new file");
+    fileMenu->AppendCheckItem(ID_ENABLE_RTF, "Enable &RTF",
+                             "Include RTF when copying and in the Save As file types");
+    fileMenu->Check(ID_ENABLE_RTF, true);
     fileMenu->AppendSeparator();
     fileMenu->Append(ID_RELOAD, "&Reload Text\tF2", "Reload the initial text");
     fileMenu->AppendSeparator();
@@ -937,6 +945,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
     m_richTextCtrl->SetMargins(10, 10);
+
+    // RTF is off by default in wxRichTextCtrl, but enable it in the sample
+    // (the File menu item can turn it off again).
+    m_richTextCtrl->EnableRTF(true);
 
     m_richTextCtrl->SetStyleSheet(wxGetApp().GetStyleSheet());
 
@@ -1390,7 +1402,8 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
             int fileType = (filterIndex < (int) fileTypes.GetCount())
                            ? fileTypes[filterIndex]
                            : wxRICHTEXT_TYPE_TEXT;
-            m_richTextCtrl->LoadFile(path1, fileType);
+            if (m_richTextCtrl->LoadFile(path1, fileType))
+                m_fileType = fileType;
         }
     }
 }
@@ -1402,12 +1415,13 @@ void MyFrame::OnSave(wxCommandEvent& event)
         OnSaveAs(event);
         return;
     }
-    m_richTextCtrl->SaveFile();
+    m_richTextCtrl->SaveFile(wxEmptyString, m_fileType);
 }
 
 void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 {
-    wxString filter = wxRichTextBuffer::GetExtWildcard(false, true);
+    wxArrayInt fileTypes;
+    wxString filter = m_richTextCtrl->GetExtWildcard(false, true, &fileTypes);
     wxString path;
     wxString filename;
 
@@ -1418,6 +1432,10 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
         filter,
         wxFD_SAVE);
 
+    const int currentFilter = fileTypes.Index(m_fileType);
+    if (currentFilter != wxNOT_FOUND)
+        dialog.SetFilterIndex(currentFilter);
+
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString path1 = dialog.GetPath();
@@ -1427,13 +1445,23 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
             wxBusyCursor busy;
             wxStopWatch stopwatch;
 
-            m_richTextCtrl->SaveFile(path1);
+            const int filterIndex = dialog.GetFilterIndex();
+            const int fileType = filterIndex >= 0 && filterIndex < (int)fileTypes.GetCount()
+                               ? fileTypes[filterIndex] : wxRICHTEXT_TYPE_ANY;
+            if (!m_richTextCtrl->SaveFile(path1, fileType))
+                return;
+            m_fileType = fileType;
 
             long t = stopwatch.Time();
             wxLogDebug("Saving took %ldms", t);
             wxMessageBox(wxString::Format("Saving took %ldms", t));
         }
     }
+}
+
+void MyFrame::OnEnableRTF(wxCommandEvent& event)
+{
+    m_richTextCtrl->EnableRTF(event.IsChecked());
 }
 
 void MyFrame::OnBold(wxCommandEvent& WXUNUSED(event))
