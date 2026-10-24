@@ -383,12 +383,86 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
     return true;
 }
 
-#else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
+#elif defined(__WXMSW__)
 
 // NB: This branch, using native wxChar for the clipboard, is only used under
 //     Windows currently. It's just a coincidence, but Windows is also the only
 //     platform where we need to convert the text to the native EOL format, so
 //     wxTextBuffer::Translate() is only used here and not in the code above.
+
+size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
+{
+    const wxString textNative = wxTextBuffer::Translate(GetText());
+    if ( format == wxDF_TEXT )
+    {
+        const wxCharBuffer buffer(wxConvLocal.cWC2MB(textNative.wc_str()));
+
+        return buffer ? strlen(buffer) + 1 : 0;
+    }
+
+    return (textNative.length() + 1)*sizeof(wxChar);
+}
+
+bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
+{
+    if ( !buf )
+        return false;
+
+    const wxString textNative = wxTextBuffer::Translate(GetText());
+    if ( format == wxDF_TEXT )
+    {
+        const wxCharBuffer buffer(wxConvLocal.cWC2MB(textNative.wc_str()));
+        if ( !buffer )
+            return false;
+
+        memcpy(buf, buffer, strlen(buffer) + 1);
+
+        return true;
+    }
+
+    // NOTE: use wxTmemcpy() instead of wxStrncpy() to allow
+    //       retrieval of strings with embedded NULs
+    wxTmemcpy(static_cast<wxChar*>(buf),
+              textNative.t_str(),
+              textNative.length() + 1);
+
+    return true;
+}
+
+bool wxTextDataObject::SetData(const wxDataFormat& format,
+                               size_t len,
+                               const void *buf)
+{
+    // Some sanity checks to avoid problems below.
+    wxCHECK_MSG( len, false, "data can't be empty" );
+    wxCHECK_MSG( buf, false, "data can't be null" );
+
+    if ( format == wxDF_TEXT )
+    {
+        const char * const text = static_cast<const char*>(buf);
+        size_t size = len;
+        if ( text[size - 1] == '\0' )
+            size--;
+
+        SetText(wxTextBuffer::Translate(wxString(text, wxConvLocal, size),
+                                        wxTextFileType_Unix));
+
+        return true;
+    }
+
+    wxCHECK_MSG( !(len % sizeof(wxChar)), false, "wrong data size" );
+
+    // Input data is always NUL-terminated, but we don't want to make this NUL
+    // part of the string, so take everything up to but excluding it.
+    const size_t size = len/sizeof(wxChar) - 1;
+
+    const wxString text(static_cast<const wxChar*>(buf), size);
+    SetText(wxTextBuffer::Translate(text, wxTextFileType_Unix));
+
+    return true;
+}
+
+#else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ && !__WXMSW__
 
 size_t wxTextDataObject::GetDataSize() const
 {

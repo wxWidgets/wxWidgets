@@ -89,6 +89,42 @@ TEST_CASE("GUI::TextDataObject", "[guifuncs][clipboard]")
     CHECK( dobj2.GetText() == text );
 }
 
+#ifdef __WXMSW__
+TEST_CASE("GUI::TextDataObject::TextFormat", "[guifuncs][dataobj]")
+{
+    const wxString expected("Hello ANSI text!");
+    const wxCharBuffer text(expected.mb_str(wxConvLocal));
+    wxTextDataObject dobj;
+
+    CHECK( dobj.GetFormatCount(wxDataObject::Get) == 1 );
+    CHECK( dobj.GetFormatCount(wxDataObject::Set) == 2 );
+
+    wxDataFormat formats[2];
+    dobj.GetAllFormats(formats, wxDataObject::Get);
+    CHECK( formats[0] == wxDF_UNICODETEXT );
+
+    dobj.GetAllFormats(formats, wxDataObject::Set);
+    CHECK( formats[0] == wxDF_UNICODETEXT );
+    CHECK( formats[1] == wxDF_TEXT );
+
+    CHECK( dobj.IsSupported(wxDF_TEXT, wxDataObject::Set) );
+    CHECK_FALSE( dobj.IsSupported(wxDF_TEXT, wxDataObject::Get) );
+
+    REQUIRE( dobj.SetData(wxDF_TEXT, text.length() + 1, text) );
+    CHECK( dobj.GetText() == expected );
+}
+
+TEST_CASE("GUI::URLDataObject::TextFormat", "[guifuncs][dataobj]")
+{
+    const wxString expected("http://www.example.com/ansi-url");
+    const wxCharBuffer text(expected.mb_str(wxConvLocal));
+    wxURLDataObject dobj;
+
+    REQUIRE( dobj.SetData(wxDF_TEXT, text.length() + 1, text) );
+    CHECK( dobj.GetURL() == expected );
+}
+#endif // __WXMSW__
+
 TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
 {
     // this tests for buffer overflow, see #11102
