@@ -427,6 +427,8 @@ void wxHtmlWinParser::AddWord(wxHtmlWordCell *word)
 
     m_Container->InsertCell(word);
     word->SetPreviousWord(m_lastWordCell);
+    if ( m_lastWordCell && !word->m_allowLinebreak )
+        m_lastWordCell->AdjustWidthForKerning(*(GetDC()), word->m_Word);
     m_lastWordCell = word;
 }
 
