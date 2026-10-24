@@ -136,10 +136,6 @@ private:
 // lunasvg implementation
 // ============================================================================
 
-#if !wxCHECK_CXX_STD(201703L)
-    #error wxUSE_LUNASVG requires C++17 or later
-#endif
-
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
 // your source tree doesn't contain 3rdparty/lunasvg and you should initialize
@@ -424,11 +420,17 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
     // so it can be deleted after the ctor is called.
 
     wxBitmapBundleImplSVG* svgImpl = nullptr;
-#if wxUSE_NANOSVG
-    svgImpl = new wxBitmapBundleNanoSVG(data, sizeDef);
-#elif wxUSE_LUNASVG
-    svgImpl = new wxBitmapBundleLunaSVG(data, sizeDef);
+
+#if wxUSE_LUNASVG
+    if ( lunasvg_is_available() )
+        svgImpl = new wxBitmapBundleLunaSVG(data, sizeDef);
 #endif
+
+#if wxUSE_NANOSVG
+    if ( !svgImpl )
+        svgImpl = new wxBitmapBundleNanoSVG(data, sizeDef);
+#endif
+
     wxBitmapBundle result(svgImpl);
 
     if ( svgImpl && !svgImpl->IsOk() )

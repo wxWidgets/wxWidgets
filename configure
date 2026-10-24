@@ -4098,7 +4098,6 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
-DEFAULT_wxUSE_LUNASVG=no
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
@@ -15507,10 +15506,6 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
             as_fn_error $? "Using wxWebView Chromium backend requires C++14 or later." "$LINENO" 5
         fi
 
-        if test "$wxUSE_LUNASVG" = "yes"; then
-            as_fn_error $? "Using LunaSVG requires C++17 or later" "$LINENO" 5
-        fi
-
           ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -16505,10 +16500,6 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
         ;;
 
     14)
-        if test "$wxUSE_LUNASVG" = "yes"; then
-            as_fn_error $? "Using LunaSVG requires C++17 or later" "$LINENO" 5
-        fi
-
           ax_cxx_compile_alternatives="14 1y"    ax_cxx_compile_cxx14_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -46822,6 +46813,7 @@ echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
 echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 echo "                                       nanosvg            ${wxUSE_NANOSVG-none}"
+echo "                                       lunasvg            ${wxUSE_LUNASVG-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi

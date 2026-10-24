@@ -28,6 +28,7 @@
     <BuildDependency Project="wx_wxpng.vcxproj" />
     <BuildDependency Project="wx_wxtiff.vcxproj" />
     <BuildDependency Project="wx_wxwebp.vcxproj" />
+    <BuildDependency Project="wx_wxlunasvg.vcxproj" />
   </Project>
   <Project Path="wx_custom_build.vcxproj" Id="01f4ce10-2cfb-41a8-b41f-e54337868a1d" />
   <Project Path="wx_gl.vcxproj" Id="da8b15ef-6750-5928-bc0e-c748213cf9b2">
@@ -68,6 +69,7 @@
   <Project Path="wx_wxexpat.vcxproj" Id="a1a8355b-0988-528e-9cc2-b971d6266669" />
   <Project Path="wx_wxjpeg.vcxproj" Id="6053cc38-cdee-584c-8bc8-4b000d800fc7" />
   <Project Path="wx_wxlexilla.vcxproj" Id="812eddee-840f-4807-a732-8a0b81409f39" />
+  <Project Path="wx_wxlunasvg.vcxproj" Id="ad6c2cf6-4cc4-4315-94b0-978b38234fae" />
   <Project Path="wx_wxpng.vcxproj" Id="8acc122a-ca6a-5aa6-9c97-9cdd2e533db0" />
   <Project Path="wx_wxregex.vcxproj" Id="56a4b526-bb81-5d01-aaa9-16d23bbb169d">
     <BuildDependency Project="wx_custom_build.vcxproj" />
