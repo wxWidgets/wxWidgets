@@ -30,7 +30,14 @@
     // Because of this, it's better to not detect Meta key state at all than
     // to detect it incorrectly. Hence the following #define, which causes
     // m_metaDown to be always set to false.
-    #define GDK_META_MASK GDK_MOD4_MASK
+    #define GDK_META_MASK 0
+
+    // The current recommendation for legacy versions of GTK+ is to fallback
+    // to Mod4 when an explicit definition for Super is not available.
+    // This matches typical X11 mapping for this key.
+    #ifndef GDK_SUPER_MASK
+        #define GDK_SUPER_MASK GDK_MOD4_MASK
+    #endif
 #endif
 
 namespace wxGTKImpl
@@ -44,7 +51,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
-    event.m_metaDown = (gdk_event->state & GDK_META_MASK) != 0;
+    event.m_metaDown = (gdk_event->state & (GDK_META_MASK | GDK_SUPER_MASK)) != 0;
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK) != 0;
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK) != 0;
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK) != 0;
