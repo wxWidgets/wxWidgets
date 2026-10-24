@@ -49,6 +49,8 @@
 
 #include <windowsx.h>
 
+#include "wx/dcmemory.h"
+#include "wx/rawbmp.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/winundef.h"
@@ -400,6 +402,9 @@ wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
+#if wxUSE_RICHEDIT
+    EVT_PAINT(wxTextCtrl::OnPaint)
+#endif
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -3944,6 +3949,112 @@ bool wxRichEditModule::LoadInkEdit()
 }
 #endif // wxUSE_INKEDIT
 
+// Work around two problems with the rich edit control when disabled in dark
+// mode: the background is light and the text is not gray.
+void wxTextCtrl::OnPaint(wxPaintEvent& event)
+{
+    if ( !wxMSWDarkMode::IsActive() || !IsRich() || IsEnabled() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxSize size = GetClientSize();
+    if ( size.x <= 0 || size.y <= 0 )
+        return;
+
+    // Draw the control into a memory DC.
+    wxPaintDC dc(this);
+    wxBitmap bmp(size);
+    wxMemoryDC memDc(bmp);
+    memDc.SetLayoutDirection(GetLayoutDirection());
+    ::SendMessage(m_hWnd, WM_PRINTCLIENT, (WPARAM)memDc.GetHDC(), PRF_CLIENT);
+    memDc.SelectObject(wxNullBitmap);
+
+    {
+        // Traverse the pixels.
+        wxNativePixelData data(bmp);
+        wxCHECK_RET(data, wxT("Failed to gain raw access to bitmap data."));
+        wxNativePixelData::Iterator p(data);
+        const COLORREF bgLight = 0xf0f0f0;
+        const COLORREF bgDark =
+            wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel() & 0xffffff;
+        for ( int y = 0; y < data.GetHeight(); ++y )
+        {
+            // The light background occurs on the left and right of the text.
+            // The text already has the dark background.
+            // Row pass one: identify middle and right positions.
+            bool inLeft = true;
+            bool inRight = false;
+            int middle = 0;         // Position of text.
+            int right = INT_MAX;    // Position of right margin.
+            wxNativePixelData::Iterator rowStart = p;
+            for ( int x = 0; x < data.GetWidth(); ++x, ++p )
+            {
+                if ( RGB(p.Red(), p.Green(), p.Blue()) == bgLight )
+                {
+                    if ( inLeft )
+                        middle = x + 1;
+                    else if ( !inRight )
+                    {
+                        inRight = true;
+                        right = x;
+                    }
+                }
+                else
+                {
+                    if ( inLeft )
+                        inLeft = false;
+                    else
+                    {
+                        inRight = false;
+                        right = INT_MAX;
+                    }
+                }
+            }
+            // Row pass two: make the left and right areas dark, and make text
+            // in the middle gray.
+            p = rowStart;
+            for ( int x = 0; x < data.GetWidth(); ++x, ++p )
+            {
+                if ( x < middle || x >= right )
+                {
+                    // Margin area, make dark.
+                    p.Red()   = GetRValue(bgDark);
+                    p.Green() = GetGValue(bgDark);
+                    p.Blue()  = GetBValue(bgDark);
+                }
+                else if (RGB(p.Red(), p.Green(), p.Blue()) != bgDark )
+                {
+                    // Text area pixel does not match background. Make the
+                    // pixel grayscale and reduce the luminance linearly to
+                    // preserve anti-aliasing. First, compute a luminance
+                    // value 0-255. A weighted formula would result in primary
+                    // coloured text becoming so dim that it disappears. Use
+                    // the maximum of the three channels. For example, this
+                    // gives the same result for pure red as for pure white.
+                    auto lum = p.Red();
+                    if ( lum < p.Green() )
+                        lum = p.Green();
+                    if ( lum < p.Blue() )
+                        lum = p.Blue();
+                    // Dim the value to the gray range 0-127.
+                    lum /= 2;
+                    // Apply as grayscale.
+                    p.Red()   = lum;
+                    p.Green() = lum;
+                    p.Blue()  = lum;
+                }
+            }
+
+            p = rowStart;
+            p.OffsetY(data, 1);
+        }
+    }
+
+    memDc.SelectObject(bmp);
+    dc.Blit(0, 0, size.x, size.y, &memDc, 0, 0);
+}
 
 #endif // wxUSE_RICHEDIT
 
