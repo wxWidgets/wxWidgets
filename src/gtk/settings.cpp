@@ -762,7 +762,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
         wxFALLTHROUGH;
 #endif
-    case wxSYS_COLOUR_GRIDLINES:
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
@@ -868,6 +867,16 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_3DDKSHADOW:
         color.Set(0, 0, 0);
+        break;
+    case wxSYS_COLOUR_GRIDLINES:
+        {
+            const wxColour bg = GetColour(wxSYS_COLOUR_WINDOW);
+            const wxColour fg = GetColour(wxSYS_COLOUR_WINDOWTEXT);
+            const double fgShare = 0.25;
+            color.Set(wxColour::AlphaBlend(fg.Red(), bg.Red(), fgShare),
+                      wxColour::AlphaBlend(fg.Green(), bg.Green(), fgShare),
+                      wxColour::AlphaBlend(fg.Blue(), bg.Blue(), fgShare));
+        }
         break;
     default:
         wxFAIL_MSG("invalid system colour index");
