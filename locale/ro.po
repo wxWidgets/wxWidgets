@@ -14,7 +14,7 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.10\n"
 
 #: ../include/wx/defs.h:2609
 msgid "All files (*.*)|*.*"
@@ -79,9 +79,9 @@ msgid "Cannot initialize OLE"
 msgstr "Nu se poate inițializa OLE"
 
 #: ../include/wx/msw/private/fswatcher.h:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to finish cancelling the watch for '%s'"
-msgstr "Nu se poate seta monitor pentru '%s'"
+msgstr "Nu s-a putut finaliza anularea monitorizării pentru '%s'"
 
 #: ../include/wx/msw/private/fswatcher.h:149
 #, c-format
@@ -134,7 +134,7 @@ msgstr "&Celulă"
 
 #: ../include/wx/richtext/richtextbuffer.h:6067
 msgid "&Table"
-msgstr "&Tabela"
+msgstr "&Tabel"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
@@ -1242,9 +1242,9 @@ msgid "failed to flush the file '%s'"
 msgstr "transmitere eșuată către fișierul '%s'"
 
 #: ../src/common/ffile.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "failed to sync data of the file '%s'"
-msgstr "transmitere eșuată către fișierul '%s'"
+msgstr "nu s-au putut sincroniza datele fișierului '%s'"
 
 #: ../src/common/ffile.cpp:246
 #, c-format
@@ -1431,7 +1431,7 @@ msgstr "nu poate fi șters fișierul de configurare '%s' al utilizatorului"
 #: ../src/common/fileconf.cpp:1523
 #, c-format
 msgid "duplicate group '%s'"
-msgstr ""
+msgstr "grup duplicat '%s'"
 
 #: ../src/common/fileconf.cpp:2014
 #, c-format
@@ -1449,9 +1449,9 @@ msgid "trailing backslash ignored in '%s'"
 msgstr "caracter final \\ ignorat în '%s'"
 
 #: ../src/common/fileconf.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected \" at position %zu in '%s'."
-msgstr "caracter \" neașteptat la poziția %d în '%s'."
+msgstr "caracter \" neașteptat la poziția %zu în '%s'."
 
 #: ../src/common/filefn.cpp:403
 #, c-format
@@ -1488,9 +1488,9 @@ msgstr ""
 "există deja."
 
 #: ../src/common/filefn.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed to '%s'"
-msgstr "Fișierul '%s' nu a putut fi redenumit '%s'."
+msgstr "Fișierul '%s' nu a putut fi redenumit în '%s'"
 
 #: ../src/common/filefn.cpp:562
 #, c-format
@@ -1550,31 +1550,31 @@ msgstr "A eșuat deschiderea fișierului temporar."
 #: ../src/common/filename.cpp:1220
 #, c-format
 msgid "Error preserving all attributes of '%s'"
-msgstr ""
+msgstr "Eroare la păstrarea tuturor atributelor pentru '%s'"
 
 #: ../src/common/filename.cpp:1234
 msgid "Failed to set temporary file permissions"
 msgstr "A eșuat setarea permisiunilor pentru fișierul temporar"
 
 #: ../src/common/filename.cpp:2786 ../src/common/filename.cpp:2793
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get attributes of '%s'"
-msgstr "A eșuat executarea '%s'\n"
+msgstr "Nu s-au putut obține atributele pentru '%s'"
 
 #: ../src/common/filename.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set attributes of '%s'"
-msgstr "A eșuat inspectarea fișierului de blocaj '%s'"
+msgstr "Nu s-au putut seta atributele pentru '%s'"
 
 #: ../src/common/filename.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get mode of '%s'"
-msgstr "A eșuat înlăturarea fișierului de blocaj '%s'"
+msgstr "Nu s-a putut obține modul lui '%s'"
 
 #: ../src/common/filename.cpp:2862
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set mode of '%s'"
-msgstr "A eșuat înlăturarea fișierului de blocaj '%s'"
+msgstr "Nu s-a putut seta modul lui '%s'"
 
 #: ../src/common/filename.cpp:3031
 #, c-format
@@ -2379,6 +2379,7 @@ msgstr "Tabela de dispersie GIF nu a putut fi inițializată."
 #: ../src/common/imaggif.cpp:565
 msgid "Image palette has too many colours to save as GIF."
 msgstr ""
+"Paleta de imagini conține prea multe culori pentru a fi salvată ca GIF."
 
 #: ../src/common/imagiff.cpp:764
 msgid "IFF: error in IFF image format."
@@ -2517,9 +2518,8 @@ msgid "WebP: Decoding RGB image data failed."
 msgstr "WebP: A eșuat decodificarea conținutului RGB al imaginii."
 
 #: ../src/common/imagwebp.cpp:112 ../src/common/imagwebp.cpp:197
-#, fuzzy
 msgid "WebP: Error reading data."
-msgstr "WebP: Eroare la decodificarea animației."
+msgstr "WebP: Eroare la citirea datelor."
 
 #: ../src/common/imagwebp.cpp:130
 msgid "WebP: Failed to parse container data."
@@ -3902,7 +3902,7 @@ msgstr "suma de control eronată în blocul antet pentru tar"
 #: ../src/common/tarstrm.cpp:920
 #, c-format
 msgid "Extended tar header size %zu is greater than maximum allowed."
-msgstr ""
+msgstr "Dimensiunea %zu a antetului tar extins depășește maximul permis."
 
 #: ../src/common/tarstrm.cpp:983
 msgid "invalid data in extended tar header"
@@ -5356,9 +5356,9 @@ msgid "Page Setup"
 msgstr "Setări pagină"
 
 #: ../src/gtk/utilsgtk.cpp:347 ../src/osx/carbon/utilscocoa.mm:718
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' couldn't be moved to trash: %s"
-msgstr "Fișierul '%s' nu a putut fi șters"
+msgstr "'%s' nu a putut fi mutat în coșul de gunoi: %s"
 
 #: ../src/gtk/webview_webkit.cpp:936
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
@@ -6566,7 +6566,7 @@ msgstr "Executarea comenzii '%s' a eșuat"
 #: ../src/msw/utilswin.cpp:203
 #, c-format
 msgid "'%s' couldn't be moved to trash: error 0x%08x"
-msgstr ""
+msgstr "'%s' nu a putut fi mutat în coșul de gunoi: eroare 0x%08x"
 
 #: ../src/msw/volume.cpp:337
 msgid "Failed to load mpr.dll."
@@ -6591,6 +6591,7 @@ msgstr ""
 #: ../src/msw/webview_edge.cpp:1545
 msgid "PDF export requires a newer version of the WebView2 runtime."
 msgstr ""
+"Exportul PDF necesită o versiune mai nouă a mediului de execuție WebView2."
 
 #: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to find web view emulation level in the registry"
@@ -7177,127 +7178,118 @@ msgstr "Alege un fișier"
 msgid "&Tile"
 msgstr "&Titlu"
 
+# 'Backstage', untranslated is better for identifying the accessibility component.
 #: ../src/ribbon/backstage.cpp:110
-#, fuzzy
 msgid "Backstage"
-msgstr "Backspace"
+msgstr "Backstage"
 
 #: ../src/ribbon/backstage.cpp:176 ../src/ribbon/backstagecontrols.cpp:91
 #: ../src/ribbon/bar.cpp:179 ../src/ribbon/buttonbar.cpp:1980
 #: ../src/ribbon/gallery.cpp:1320 ../src/ribbon/panel.cpp:1460
 #: ../src/ribbon/toolbar.cpp:1641
-#, fuzzy
 msgid "Press"
-msgstr "Progres:"
+msgstr "Apasă"
 
 #: ../src/ribbon/backstagecontrols.cpp:844
-#, fuzzy
 msgid "Open"
-msgstr "Deschide..."
+msgstr "Deschide"
 
 #: ../src/ribbon/backstagecontrols.cpp:1469
-#, fuzzy
 msgid "Today"
-msgstr "astăzi"
+msgstr "Astăzi"
 
 #: ../src/ribbon/backstagecontrols.cpp:1471
-#, fuzzy
 msgid "Yesterday"
-msgstr "ieri"
+msgstr "Ieri"
 
 #: ../src/ribbon/backstagecontrols.cpp:1473
 msgid "This Week"
-msgstr ""
+msgstr "Săptămâna aceasta"
 
 #: ../src/ribbon/backstagecontrols.cpp:1475
-#, fuzzy
 msgid "Last Week"
-msgstr "Ultima pagină"
+msgstr "Săptămâna trecută"
 
 #: ../src/ribbon/backstagecontrols.cpp:1477
 msgid "Earlier This Month"
-msgstr ""
+msgstr "Mai devreme în această lună"
 
 #: ../src/ribbon/backstagecontrols.cpp:1480
 msgid "Older"
-msgstr ""
+msgstr "Mai vechi"
 
 #: ../src/ribbon/backstagecontrols.cpp:1520
-#, fuzzy
 msgid "Documents"
-msgstr "Documentul:"
+msgstr "Documente"
 
 #: ../src/ribbon/backstagecontrols.cpp:1522
-#, fuzzy
 msgid "Pictures"
-msgstr "&Imagine"
+msgstr "Imagini"
 
 #: ../src/ribbon/backstagecontrols.cpp:1523
 msgid "Videos"
-msgstr ""
+msgstr "Videoclipuri"
 
 #: ../src/ribbon/backstagecontrols.cpp:1524
 msgid "Music"
-msgstr ""
+msgstr "Muzică"
 
 #: ../src/ribbon/backstagecontrols.cpp:1525
-#, fuzzy
 msgid "Downloads"
-msgstr "Jos"
+msgstr "Descărcări"
 
 #: ../src/ribbon/backstagecontrols.cpp:1594
 msgid "Just now"
-msgstr ""
+msgstr "Chiar acum"
 
 #: ../src/ribbon/backstagecontrols.cpp:1602
 #, c-format
 msgid "%d minute ago"
 msgid_plural "%d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Acum %d minut"
+msgstr[1] "Acum %d minute"
+msgstr[2] "Acum %d de minute"
 
 #: ../src/ribbon/backstagecontrols.cpp:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Yesterday at %s"
-msgstr "ieri"
+msgstr "Ieri la %s"
 
 #: ../src/ribbon/backstagecontrols.cpp:1614
 #, c-format
 msgid "%s at %s"
-msgstr ""
+msgstr "%s la %s"
 
 #. TRANSLATORS: Month (abbreviated) and day of the month (e.g., "Mar 03").
 #: ../src/ribbon/backstagecontrols.cpp:1621
 #, c-format
 msgid "%b %d"
-msgstr ""
+msgstr "%b %d"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Minimize the Ribbon"
-msgstr ""
+msgstr "Restrânge Panglica"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Expand the Ribbon"
-msgstr ""
+msgstr "Extinde Panglica"
 
 #: ../src/ribbon/gallery.cpp:1286
 msgid "More"
-msgstr ""
+msgstr "Mai mult"
 
 #: ../src/ribbon/page.cpp:1354 ../src/ribbon/panel.cpp:1453
 msgid "Switch"
-msgstr ""
+msgstr "Schimbă"
 
 #: ../src/ribbon/panel.cpp:1421
-#, fuzzy
 msgid "More options"
-msgstr "Opțiuni imprimantă"
+msgstr "Mai multe opțiuni"
 
 #: ../src/ribbon/panel.cpp:1422
-#, fuzzy, c-format
+#, c-format
 msgid "More %s options"
-msgstr "Opțiuni imprimantă"
+msgstr "Mai multe opțiuni pentru %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -8101,7 +8093,7 @@ msgstr "Înlocuiește"
 
 #: ../src/richtext/richtextctrl.cpp:5663
 msgid "Rich Text Control"
-msgstr ""
+msgstr "Control de text formatat"
 
 #: ../src/richtext/richtextfontpage.cpp:146
 #: ../src/richtext/richtextsymboldlg.cpp:384
@@ -9310,7 +9302,7 @@ msgstr "Nu se pot obține evenimente din kqueue"
 #: ../src/unix/glegl.cpp:833
 #, c-format
 msgid "EGL version is %d.%d but version 1.4 or greater is required."
-msgstr ""
+msgstr "Versiunea EGL este %d.%d dar este necesară versiunea 1.4 sau mai mare."
 
 #: ../src/unix/mediactrl.cpp:968
 #, c-format
@@ -9441,9 +9433,9 @@ msgstr ""
 "detectată - programul trebuie repornit"
 
 #: ../src/unix/threadpsx.cpp:1348
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %zu"
-msgstr "A eșuat setarea nivelului de concurență la %lu"
+msgstr "Nu s-a putut seta nivelul de concurență la %zu"
 
 #: ../src/unix/threadpsx.cpp:1477
 #, c-format
@@ -9503,14 +9495,14 @@ msgstr "Nu se poate obține numele oficial al mașinii gazdă"
 #: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
-msgstr ""
+msgstr ", bazat pe %s (%s)"
 
 #. TRANSLATORS: %s is a Linux distribution parent name.
 #. TRANSLATORS: %s is an upstream codename.
 #: ../src/unix/utilsunx.cpp:1318 ../src/unix/utilsunx.cpp:1324
-#, fuzzy, c-format
+#, c-format
 msgid ", based on %s"
-msgstr "&Bazat pe:"
+msgstr ", bazat pe %s"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
