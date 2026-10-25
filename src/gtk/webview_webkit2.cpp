@@ -717,6 +717,15 @@ wxgtk_authorize_authenticated_peer_cb(GDBusAuthObserver *,
     return wxgtk_dbus_peer_is_authorized(credentials);
 }
 
+static gboolean
+wxgtk_extension_wait_timeout(void* data)
+{
+    *static_cast<bool*>(data) = true;
+
+    // return FALSE to remove this timeout
+    return FALSE;
+}
+
 } // extern "C"
 
 //-----------------------------------------------------------------------------
@@ -2159,11 +2168,47 @@ void wxWebViewWebKit::SetupWebExtensionServer()
 
 GDBusProxy *wxWebViewWebKit::GetExtensionProxy() const
 {
-    if (!m_extension)
+    if (m_extension)
+        return m_extension;
+
+    const wxString& dir = GetWebExtensionsDir();
+    if (dir.empty())
     {
         g_warning("Web extension not found in \"%s\", "
                   "some wxWebView functionality will be not available",
                   (const char*)GetStandardWebExtensionsDir().utf8_str());
+        return nullptr;
+    }
+
+    if (m_dbusServer && !m_alreadyWaitedForExtension)
+    {
+        // The extension connects to our D-Bus server asynchronously and this
+        // may not have happened yet if the web process has been launched only
+        // recently, so give it some time to do it.
+        m_alreadyWaitedForExtension = true;
+
+        // The timeout is chosen arbitrarily, but should be enough, knowing
+        // that typically the extension connects in ~120ms.
+        bool timedOut = false;
+        const guint timeoutId = g_timeout_add(2000,
+                                              wxgtk_extension_wait_timeout,
+                                              &timedOut);
+
+        GMainContext *main_context = g_main_context_get_thread_default();
+        while (!m_extension && !timedOut)
+        {
+            g_main_context_iteration(main_context, TRUE);
+        }
+
+        if (!timedOut)
+            g_source_remove(timeoutId);
+    }
+
+    if (!m_extension)
+    {
+        g_warning("Web extension loaded from \"%s\" is not connected, "
+                  "some wxWebView functionality will be not available",
+                  (const char*)dir.utf8_str());
     }
     return m_extension;
 }
