@@ -906,7 +906,13 @@ wxWebViewWebKit::wxWebViewWebKit(WebKitWebView* parentWebView, wxWebViewWebKit* 
 {
     m_web_view = (WebKitWebView*) webkit_web_view_new_with_related_view(parentWebView);
     m_dbusServer = nullptr;
-    m_extension = nullptr;
+
+    // Related views share the web process of the parent view, so the web
+    // extension running in it is already connected to the parent and won't
+    // connect to us: just reuse the parent connection.
+    m_extension = parentWebViewCtrl->m_extension
+                    ? G_DBUS_PROXY(g_object_ref(parentWebViewCtrl->m_extension))
+                    : nullptr;
 
     wxReadyToShowParams* params = new wxReadyToShowParams();
     params->childWebView = this;
@@ -931,8 +937,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    m_dbusServer = nullptr;
-    m_extension = nullptr;
     m_busy = false;
     m_guard = false;
     FindClear();
@@ -950,18 +954,22 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
         return false;
     }
 
-    SetupWebExtensionServer();
-    g_signal_connect(m_config.GetNativeConfiguration(),
-                     "initialize-web-extensions",
-                     G_CALLBACK(wxgtk_initialize_web_extensions),
-                     m_dbusServer);
-
     if (!isChildWebView)
+    {
+        // Child web views reuse the extension connection of their parent.
+        SetupWebExtensionServer();
+        g_signal_connect(m_config.GetNativeConfiguration(),
+                         "initialize-web-extensions",
+                         G_CALLBACK(wxgtk_initialize_web_extensions),
+                         m_dbusServer);
+
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new_with_context(WEBKIT_WEB_CONTEXT(m_config.GetNativeConfiguration())));
 #else
         m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 #endif
+    }
+
     GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
     g_object_ref(m_widget);
 
