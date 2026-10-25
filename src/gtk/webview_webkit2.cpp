@@ -602,21 +602,51 @@ static bool CheckDirectoryForWebExt(const wxString& dirname)
     return false;
 }
 
-static bool TrySetWebExtensionsDirectory(WebKitWebContext *context, const wxString& dir)
-{
-    if (dir.empty() || !CheckDirectoryForWebExt(dir))
-        return false;
-
-    webkit_web_context_set_web_extensions_directory(context, dir.utf8_str());
-    return true;
-}
-
 static wxString GetStandardWebExtensionsDir()
 {
     wxString dir = wxDynamicLibrary::GetPluginsDirectory();
     if ( !dir.empty() )
         dir += "/web-extensions";
     return dir;
+}
+
+// Look for the directory containing our web extension, return empty string if
+// it couldn't be found.
+static wxString FindWebExtensionsDir()
+{
+    // Try the location it is supposed to be normally installed in first.
+    const wxString& standardDir = GetStandardWebExtensionsDir();
+    if ( !standardDir.empty() && CheckDirectoryForWebExt(standardDir) )
+        return standardDir;
+
+    // These relative locations are used as fallbacks to allow running
+    // the tests and sample using wxWebView before installing it.
+    wxString exepath = wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPath();
+    if ( !exepath.empty() )
+    {
+        wxString const directories[] =
+        {
+            exepath + "/..",
+            exepath + "/../..",
+            exepath,
+        };
+
+        for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
+        {
+            if ( CheckDirectoryForWebExt(directories[n]) )
+                return directories[n];
+        }
+    }
+
+    return wxString();
+}
+
+// Return the directory containing the web extension, searching for it only
+// once, as the result can't change while the program is running.
+static const wxString& GetWebExtensionsDir()
+{
+    static const wxString s_dir = FindWebExtensionsDir();
+    return s_dir;
 }
 
 static void
@@ -626,29 +656,9 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     const char *address = g_dbus_server_get_client_address(dbusServer);
     wxGtkVariant user_data(g_variant_new("(s)", address));
 
-    // Try to setup extension loading from the location it is supposed to be
-    // normally installed in.
-    if ( !TrySetWebExtensionsDirectory(context, GetStandardWebExtensionsDir()) )
-    {
-        // These relative locations are used as fallbacks to allow running
-        // the tests and sample using wxWebView before installing it.
-        wxString exepath = wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPath();
-        if ( !exepath.empty() )
-        {
-            wxString const directories[] =
-            {
-                exepath + "/..",
-                exepath + "/../..",
-                exepath,
-            };
-
-            for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
-            {
-                if ( TrySetWebExtensionsDirectory(context, directories[n]) )
-                    break;
-            }
-        }
-    }
+    const wxString& dir = GetWebExtensionsDir();
+    if ( !dir.empty() )
+        webkit_web_context_set_web_extensions_directory(context, dir.utf8_str());
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
                                                                    user_data.Release());
