@@ -224,18 +224,18 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 // close
 bool wxFile::Close()
 {
+    bool rc = true;
     if ( IsOpened() ) {
         if ( CheckForError(wxClose(m_fd)) )
         {
             wxLogSysError(_("can't close file descriptor %d"), m_fd);
-            m_fd = fd_invalid;
-            return false;
+            rc = false;
         }
-        else
-            m_fd = fd_invalid;
+
+        m_fd = fd_invalid;
     }
 
-    return true;
+    return rc;
 }
 
 // ----------------------------------------------------------------------------
