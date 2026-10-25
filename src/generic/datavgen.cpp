@@ -4253,11 +4253,16 @@ bool wxDataViewMainWindow::HasCollapsedAncestor( const wxDataViewItem & item )
     while (current.IsOk())
     {
       current = GetModel()->GetParent( current );
-      if (!current.IsOk()) break;
-      auto result = FindNode( current );
-      if (result.m_node == nullptr) return false;
-      if (!result.m_node->IsOpen()) return true;
+      if (!current.IsOk())
+          break;
+
+      const auto result = FindNode( current );
+      if (result.m_node == nullptr)
+          return false;
+      if (!result.m_node->IsOpen())
+          return true;
     }
+
     return false;
 }
 
