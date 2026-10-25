@@ -94,6 +94,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_crt.obj \
 	$(OBJS)\test_vsnprintf.obj \
 	$(OBJS)\test_hexconv.obj \
+	$(OBJS)\test_utf8literals.obj \
 	$(OBJS)\test_datastreamtest.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_fileback.obj \
@@ -234,6 +235,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_guifuncs.obj \
 	$(OBJS)\test_gui_selstoretest.obj \
 	$(OBJS)\test_gui_garbage.obj \
+	$(OBJS)\test_gui_oleautomationobject.obj \
 	$(OBJS)\test_gui_safearrayconverttest.obj \
 	$(OBJS)\test_gui_settings.obj \
 	$(OBJS)\test_gui_textwrap.obj \
@@ -271,7 +273,8 @@ TEST_ALLHEADERS_OBJECTS =  \
 	$(OBJS)\test_allheaders_asserthelper.obj \
 	$(OBJS)\test_allheaders_test.obj \
 	$(OBJS)\test_allheaders_allheaders.obj \
-	$(OBJS)\test_allheaders_testableframe.obj
+	$(OBJS)\test_allheaders_testableframe.obj \
+	$(OBJS)\test_allheaders_allheaders_utf8.obj
 TEST_ALLHEADERS_RESOURCES =  \
 	$(OBJS)\test_allheaders_test.res
 
@@ -1013,6 +1016,9 @@ $(OBJS)\test_vsnprintf.obj: .\strings\vsnprintf.cpp
 $(OBJS)\test_hexconv.obj: .\strings\hexconv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\strings\hexconv.cpp
 
+$(OBJS)\test_utf8literals.obj: .\strings\utf8literals.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\strings\utf8literals.cpp
+
 $(OBJS)\test_datastreamtest.obj: .\streams\datastreamtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\streams\datastreamtest.cpp
 
@@ -1394,6 +1400,9 @@ $(OBJS)\test_gui_selstoretest.obj: .\misc\selstoretest.cpp
 $(OBJS)\test_gui_garbage.obj: .\misc\garbage.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\garbage.cpp
 
+$(OBJS)\test_gui_oleautomationobject.obj: .\misc\oleautomationobject.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\oleautomationobject.cpp
+
 $(OBJS)\test_gui_safearrayconverttest.obj: .\misc\safearrayconverttest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\safearrayconverttest.cpp
 
@@ -1468,4 +1477,7 @@ $(OBJS)\test_allheaders_allheaders.obj: .\allheaders.cpp
 
 $(OBJS)\test_allheaders_testableframe.obj: .\testableframe.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) .\testableframe.cpp
+
+$(OBJS)\test_allheaders_allheaders_utf8.obj: .\allheaders_utf8.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) .\allheaders_utf8.cpp
 

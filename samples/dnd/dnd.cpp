@@ -21,6 +21,8 @@
 #include "wx/colordlg.h"
 #include "wx/metafile.h"
 #include "wx/dirctrl.h"
+#include "wx/datetime.h"
+#include "wx/stream.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -50,16 +52,36 @@ private:
     wxListBox *m_pOwner;
 };
 
-class DnDFile : public wxFileDropTarget
+// This one accepts both the usual files and, if supported, virtual files, i.e.
+// files that don't exist on disk, such as files inside ZIP archives opened in
+// Windows Explorer or email attachments.
+class DnDFile : public wxDropTarget
 {
 public:
-    DnDFile(wxListBox *pOwner = nullptr) { m_pOwner = pOwner; }
+    DnDFile(wxListBox *pOwner);
 
-    virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames) override;
+    // Files can only be copied, as moving them would delete them from their
+    // original location (or archive).
+    virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                    wxDragResult WXUNUSED(def)) override
+        { return wxDragCopy; }
+
+    virtual wxDragResult OnData(wxCoord x, wxCoord y,
+                                wxDragResult def) override;
 
 private:
+    void OnDropFiles(const wxArrayString& filenames);
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+    void OnDropVirtualFiles();
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
+
     wxListBox *m_pOwner;
+
+    wxDataObjectComposite *m_composite;
+    wxFileDataObject *m_fileData;
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+    wxVirtualFileDataObject *m_virtualData;
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
 };
 
 // ----------------------------------------------------------------------------
@@ -1580,21 +1602,115 @@ bool DnDText::OnDropText(wxCoord, wxCoord, const wxString& text)
     return true;
 }
 
-bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
+DnDFile::DnDFile(wxListBox *pOwner)
+{
+    m_pOwner = pOwner;
+
+    m_composite = new wxDataObjectComposite;
+
+    // Physical files are preferred, if the source provides both.
+    m_fileData = new wxFileDataObject;
+    m_composite->Add(m_fileData, true);
+
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+    m_virtualData = new wxVirtualFileDataObject;
+    m_composite->Add(m_virtualData);
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
+
+    SetDataObject(m_composite);
+}
+
+wxDragResult DnDFile::OnData(wxCoord, wxCoord, wxDragResult)
+{
+    if ( !GetData() )
+        return wxDragNone;
+
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+    if ( m_composite->GetReceivedFormat() != m_fileData->GetFormat() )
+        OnDropVirtualFiles();
+    else
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
+        OnDropFiles(m_fileData->GetFilenames());
+
+    // Don't use the default action, it could be wxDragMove.
+    return wxDragCopy;
+}
+
+void DnDFile::OnDropFiles(const wxArrayString& filenames)
 {
     size_t nFiles = filenames.GetCount();
     wxString str;
     str.Printf( "%d files dropped", (int)nFiles);
 
-    if (m_pOwner != nullptr)
+    m_pOwner->Append(str);
+    for ( size_t n = 0; n < nFiles; n++ )
+        m_pOwner->Append(filenames[n]);
+}
+
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+
+void DnDFile::OnDropVirtualFiles()
+{
+    const size_t count = m_virtualData->GetCount();
+    m_pOwner->Append(wxString::Format("%zu virtual files dropped", count));
+
+    for ( size_t n = 0; n < count; n++ )
     {
-        m_pOwner->Append(str);
-        for ( size_t n = 0; n < nFiles; n++ )
-            m_pOwner->Append(filenames[n]);
+        const wxString name = m_virtualData->GetName(n);
+        if ( m_virtualData->IsDir(n) )
+        {
+            m_pOwner->Append(name + " (directory)");
+            continue;
+        }
+
+        // Read the file contents just to show how it can be done without
+        // saving the file to disk.
+        wxString info;
+        std::unique_ptr<wxInputStream> stream = m_virtualData->OpenStream(n);
+        if ( stream )
+        {
+            wxCountingOutputStream counter;
+            counter.Write(*stream);
+            info.Printf("%" wxFileOffsetFmtSpec "d bytes read",
+                        counter.GetLength());
+        }
+        else
+        {
+            info = "couldn't be read";
+        }
+
+        const wxFileOffset size = m_virtualData->GetSize(n);
+        if ( size != wxInvalidOffset )
+            info += wxString::Format(", size %" wxFileOffsetFmtSpec "d", size);
+
+        const wxDateTime mtime = m_virtualData->GetModificationTime(n);
+        if ( mtime.IsValid() )
+            info += ", modified " + mtime.FormatISOCombined(' ');
+
+        m_pOwner->Append(wxString::Format("%s (%s)", name, info));
     }
 
-    return true;
+    // This can happen if all items had invalid names and were ignored.
+    if ( !count )
+        return;
+
+    // Real programs would let the user choose where to save the files or use
+    // their contents directly, but here we just save them to a new temporary
+    // directory, which is removed when the data object is destroyed, i.e.
+    // when the program exits.
+    const std::vector<wxString> paths = m_virtualData->SaveAllToTempDir();
+    if ( paths.empty() )
+    {
+        wxLogError("Failed to save virtual files.");
+        return;
+    }
+
+    m_pOwner->Append("Saved to:");
+    for ( const auto& path : paths )
+        m_pOwner->Append(path);
 }
+
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
 
 // ----------------------------------------------------------------------------
 // DnDShapeDialog

@@ -587,114 +587,115 @@ public:
     wxUString& operator+=(const wxUniCharRef ch)
         { return append( ch ); }
 
+    friend wxUString operator+(const wxUString &s1, const wxUString &s2)
+        { wxUString ret( s1 ); ret.append( s2 ); return ret; }
+    friend wxUString operator+(const wxUString &s1, const char *s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxString &s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxCStrData *s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxChar16* s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxChar32 *s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxScopedCharBuffer &s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxScopedU16CharBuffer &s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, const wxScopedU32CharBuffer &s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, char s2)
+        { return s1 + wxUString(s2); }
+    friend wxUString operator+(const wxUString &s1, wxChar32 s2)
+        { wxUString ret( s1 ); ret.append( s2 ); return ret; }
+    friend wxUString operator+(const wxUString &s1, wxChar16 s2)
+        { wxUString ret( s1 ); ret.append( (wxChar32) s2 ); return ret; }
+    friend wxUString operator+(const wxUString &s1, wxUniChar s2)
+        { wxUString ret( s1 ); ret.append( (wxChar32) s2.GetValue() ); return ret; }
+    friend wxUString operator+(const wxUString &s1, wxUniCharRef s2)
+        { wxUString ret( s1 ); ret.append( (wxChar32) s2.GetValue() ); return ret; }
+
+    friend wxUString operator+(const char *s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxString &s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxCStrData *s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxChar16* s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxChar32 *s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxScopedCharBuffer &s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxScopedU16CharBuffer &s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(const wxScopedU32CharBuffer &s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(char s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(wxChar32 s1, const wxUString &s2 )
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(wxChar16 s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(wxUniChar s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+    friend wxUString operator+(wxUniCharRef s1, const wxUString &s2)
+        { return wxUString(s1) + s2; }
+
+
+    friend bool operator==(const wxUString& s1, const wxUString& s2)
+        { return s1.compare( s2 ) == 0; }
+    friend bool operator!=(const wxUString& s1, const wxUString& s2)
+        { return s1.compare( s2 ) != 0; }
+    friend bool operator< (const wxUString& s1, const wxUString& s2)
+        { return s1.compare( s2 ) < 0; }
+    friend bool operator> (const wxUString& s1, const wxUString& s2)
+        { return s1.compare( s2 ) > 0; }
+    friend bool operator<=(const wxUString& s1, const wxUString& s2)
+        { return s1.compare( s2 ) <= 0; }
+    friend bool operator>=(const wxUString& s1, const wxUString& s2)
+        { return s1.compare( s2 ) >= 0; }
+
+    #define wxUSTRING_COMP_OPERATORS( T )                       \
+    friend bool operator==(const wxUString& s1, T s2)           \
+        { return s1.compare( wxUString(s2) ) == 0; }            \
+    friend bool operator!=(const wxUString& s1, T s2)           \
+        { return s1.compare( wxUString(s2) ) != 0; }            \
+    friend bool operator< (const wxUString& s1, T s2)           \
+        { return s1.compare( wxUString(s2) ) < 0; }             \
+    friend bool operator> (const wxUString& s1, T s2)           \
+        { return s1.compare( wxUString(s2) ) > 0; }             \
+    friend bool operator<=(const wxUString& s1, T s2)           \
+        { return s1.compare( wxUString(s2) ) <= 0; }            \
+    friend bool operator>=(const wxUString& s1, T s2)           \
+        { return s1.compare( wxUString(s2) ) >= 0; }            \
+\
+    friend bool operator==(T s2, const wxUString& s1)           \
+        { return s1.compare( wxUString(s2) ) == 0; }            \
+    friend bool operator!=(T s2, const wxUString& s1)           \
+        { return s1.compare( wxUString(s2) ) != 0; }            \
+    friend bool operator< (T s2, const wxUString& s1)           \
+        { return s1.compare( wxUString(s2) ) > 0; }             \
+    friend bool operator> (T s2, const wxUString& s1)           \
+        { return s1.compare( wxUString(s2) ) < 0; }             \
+    friend bool operator<=(T s2, const wxUString& s1)           \
+        { return s1.compare( wxUString(s2) ) >= 0; }            \
+    friend bool operator>=(T s2, const wxUString& s1)           \
+        { return s1.compare( wxUString(s2) ) <= 0; }
+
+    wxUSTRING_COMP_OPERATORS( const wxString & )
+    wxUSTRING_COMP_OPERATORS( const char * )
+    wxUSTRING_COMP_OPERATORS( const wxChar16 * )
+    wxUSTRING_COMP_OPERATORS( const wxChar32 * )
+    wxUSTRING_COMP_OPERATORS( const wxScopedCharBuffer & )
+    wxUSTRING_COMP_OPERATORS( const wxScopedU16CharBuffer & )
+    wxUSTRING_COMP_OPERATORS( const wxScopedU32CharBuffer & )
+    wxUSTRING_COMP_OPERATORS( const wxCStrData * )
+
+    #undef wxUSTRING_COMP_OPERATORS
 };
 
 wxMSVC_WARNING_RESTORE(4275)
-
-inline wxUString operator+(const wxUString &s1, const wxUString &s2)
-    { wxUString ret( s1 ); ret.append( s2 ); return ret; }
-inline wxUString operator+(const wxUString &s1, const char *s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxString &s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxCStrData *s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxChar16* s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxChar32 *s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxScopedCharBuffer &s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxScopedU16CharBuffer &s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxScopedU32CharBuffer &s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, char s2)
-    { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, wxChar32 s2)
-    { wxUString ret( s1 ); ret.append( s2 ); return ret; }
-inline wxUString operator+(const wxUString &s1, wxChar16 s2)
-    { wxUString ret( s1 ); ret.append( (wxChar32) s2 ); return ret; }
-inline wxUString operator+(const wxUString &s1, wxUniChar s2)
-    { wxUString ret( s1 ); ret.append( (wxChar32) s2.GetValue() ); return ret; }
-inline wxUString operator+(const wxUString &s1, wxUniCharRef s2)
-    { wxUString ret( s1 ); ret.append( (wxChar32) s2.GetValue() ); return ret; }
-
-inline wxUString operator+(const char *s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxString &s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxCStrData *s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxChar16* s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxChar32 *s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxScopedCharBuffer &s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxScopedU16CharBuffer &s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxScopedU32CharBuffer &s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(char s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(wxChar32 s1, const wxUString &s2 )
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(wxChar16 s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(wxUniChar s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-inline wxUString operator+(wxUniCharRef s1, const wxUString &s2)
-    { return wxUString(s1) + s2; }
-
-
-inline bool operator==(const wxUString& s1, const wxUString& s2)
-    { return s1.compare( s2 ) == 0; }
-inline bool operator!=(const wxUString& s1, const wxUString& s2)
-    { return s1.compare( s2 ) != 0; }
-inline bool operator< (const wxUString& s1, const wxUString& s2)
-    { return s1.compare( s2 ) < 0; }
-inline bool operator> (const wxUString& s1, const wxUString& s2)
-    { return s1.compare( s2 ) > 0; }
-inline bool operator<=(const wxUString& s1, const wxUString& s2)
-    { return s1.compare( s2 ) <= 0; }
-inline bool operator>=(const wxUString& s1, const wxUString& s2)
-    { return s1.compare( s2 ) >= 0; }
-
-#define wxUSTRING_COMP_OPERATORS( T )                       \
-inline bool operator==(const wxUString& s1, T s2)           \
-    { return s1.compare( wxUString(s2) ) == 0; }            \
-inline bool operator!=(const wxUString& s1, T s2)           \
-    { return s1.compare( wxUString(s2) ) != 0; }            \
-inline bool operator< (const wxUString& s1, T s2)           \
-    { return s1.compare( wxUString(s2) ) < 0; }             \
-inline bool operator> (const wxUString& s1, T s2)           \
-    { return s1.compare( wxUString(s2) ) > 0; }             \
-inline bool operator<=(const wxUString& s1, T s2)           \
-    { return s1.compare( wxUString(s2) ) <= 0; }            \
-inline bool operator>=(const wxUString& s1, T s2)           \
-    { return s1.compare( wxUString(s2) ) >= 0; }            \
-\
-inline bool operator==(T s2, const wxUString& s1)           \
-    { return s1.compare( wxUString(s2) ) == 0; }            \
-inline bool operator!=(T s2, const wxUString& s1)           \
-    { return s1.compare( wxUString(s2) ) != 0; }            \
-inline bool operator< (T s2, const wxUString& s1)           \
-    { return s1.compare( wxUString(s2) ) > 0; }             \
-inline bool operator> (T s2, const wxUString& s1)           \
-    { return s1.compare( wxUString(s2) ) < 0; }             \
-inline bool operator<=(T s2, const wxUString& s1)           \
-    { return s1.compare( wxUString(s2) ) >= 0; }            \
-inline bool operator>=(T s2, const wxUString& s1)           \
-    { return s1.compare( wxUString(s2) ) <= 0; }
-
-wxUSTRING_COMP_OPERATORS( const wxString & )
-wxUSTRING_COMP_OPERATORS( const char * )
-wxUSTRING_COMP_OPERATORS( const wxChar16 * )
-wxUSTRING_COMP_OPERATORS( const wxChar32 * )
-wxUSTRING_COMP_OPERATORS( const wxScopedCharBuffer & )
-wxUSTRING_COMP_OPERATORS( const wxScopedU16CharBuffer & )
-wxUSTRING_COMP_OPERATORS( const wxScopedU32CharBuffer & )
-wxUSTRING_COMP_OPERATORS( const wxCStrData * )
 
 #endif // _WX_USTRING_H_

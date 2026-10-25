@@ -51,6 +51,8 @@ public:
     virtual wxWindowID GetButtonId(size_t idx) const override;
     virtual bool HasButtonId(wxWindowID btnid) const override;
 
+    virtual void ShowCloseButton(ShowButton show) override;
+
     // implementation only
     // -------------------
 
@@ -67,6 +69,9 @@ private:
     // add a button with the given id/label and return its widget
     GtkWidget *GTKAddButton(wxWindowID btnid,
                             const wxString& label = wxString());
+
+    // create or destroy the default close button if necessary
+    void GTKUpdateCloseButton();
 
 
     // only used when the native implementation is really being used

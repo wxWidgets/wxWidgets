@@ -275,14 +275,45 @@ bool wxSlider::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
                 {
                     // Draw a polygon that matches the shape of the thumb.
                     const RECT& rc = nmcd->rc;
-                    LONG y = ((rc.bottom - rc.top) / 4) * 3;
-                    POINT points[] = {
-                        { rc.left, rc.top },
-                        { rc.right - 1, rc.top },
-                        { rc.right - 1, y },
-                        { (rc.right + rc.left) / 2, rc.bottom - 2 },
-                        { rc.left, y }
-                    };
+                    // Half the width of the arrow point.
+                    auto mid = (HasFlag(wxSL_HORIZONTAL) ?
+                        rc.right - rc.left : rc.bottom - rc.top) / 2;
+                    POINT points[5];
+                    if ( HasFlag(wxSL_LEFT) )
+                    {
+                        points[0] = { rc.right, rc.top };
+                        points[1] = { rc.left + mid, rc.top };
+                        points[2] = { rc.left, rc.top + mid };
+                        points[3] = { rc.left + mid, rc.bottom - 1};
+                        points[4] = { rc.right, rc.bottom - 1 };
+                    }
+                    else if ( HasFlag(wxSL_RIGHT) )
+                    {
+                        auto right = rc.right - 2;
+                        points[0] = { rc.left, rc.top };
+                        points[1] = { right - mid, rc.top };
+                        points[2] = { right, rc.top + mid };
+                        points[3] = { right - mid, rc.bottom - 1 };
+                        points[4] = { rc.left, rc.bottom - 1 };
+                    }
+                    else if ( HasFlag(wxSL_TOP) )
+                    {
+                        points[0] = { rc.left, rc.bottom };
+                        points[1] = { rc.left, rc.top + mid };
+                        points[2] = { rc.left + mid, rc.top };
+                        points[3] = { rc.right - 1, rc.top + mid };
+                        points[4] = { rc.right - 1, rc.bottom };
+                    }
+                    else
+                    {
+                        wxASSERT(HasFlag(wxSL_BOTTOM));
+                        auto bottom = rc.bottom - 1 - FromDIP(1);
+                        points[0] = { rc.left, rc.top };
+                        points[1] = { rc.right - 1, rc.top };
+                        points[2] = { rc.right - 1, bottom - mid };
+                        points[3] = { rc.left + mid, bottom };
+                        points[4] = { rc.left, bottom - mid };
+                    }
                     // The observed colour of the thumb in light mode.
                     const COLORREF fg = 0xd77800;
                     AutoHBRUSH hBrush(fg);

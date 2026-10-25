@@ -820,6 +820,248 @@ public:
 };
 
 /**
+    @class wxVirtualFileDataObject
+
+    Data object for receiving "virtual" files, i.e.\ files which don't exist
+    on disk.
+
+    @note `wxHAS_VIRTUAL_FILE_DATA_OBJECT` is defined if this class is
+        available which is currently only the case for wxMSW.
+
+    Some programs, such as Windows Explorer when dragging files from inside a
+    ZIP archive, email clients when dragging attachments or web browsers when
+    dragging images, provide files without storing them on disk first. Such
+    files can't be received using wxFileDataObject, as they don't have any
+    paths, but can be received using this class, which allows to retrieve the
+    names and other information about all the dropped items as well as their
+    contents.
+
+    This data object is typically used together with wxFileDataObject in a
+    wxDataObjectComposite, with the latter being preferred, to accept both
+    the normal and virtual files, e.g.
+    @code
+    class MyDropTarget : public wxDropTarget
+    {
+    public:
+        MyDropTarget()
+        {
+            auto* const composite = new wxDataObjectComposite;
+            composite->Add(m_fileData = new wxFileDataObject, true); // preferred
+            composite->Add(m_virtualData = new wxVirtualFileDataObject);
+            SetDataObject(composite);
+        }
+
+        wxDragResult OnDragOver(wxCoord, wxCoord, wxDragResult) override
+        {
+            return wxDragCopy;
+        }
+
+        wxDragResult OnData(wxCoord, wxCoord, wxDragResult) override
+        {
+            if ( !GetData() )
+                return wxDragNone;
+
+            auto* const composite =
+                static_cast<wxDataObjectComposite*>(GetDataObject());
+
+            std::vector<wxString> files;
+            if ( composite->GetReceivedFormat() == wxDF_FILENAME )
+                files = m_fileData->GetFilenames().AsVector();
+            else
+                files = m_virtualData->SaveAll(GetDirectoryToSaveTo());
+
+            if ( files.empty() )
+                return wxDragNone;
+
+            ... use files ...
+
+            return wxDragCopy;
+        }
+
+    private:
+        // Non-owning pointers to the data objects, which are owned by the
+        // composite data object which is in turn owned by wxDropTarget.
+        wxFileDataObject* m_fileData;
+        wxVirtualFileDataObject* m_virtualData;
+    };
+    @endcode
+
+    Note that it is important to only ever return ::wxDragCopy from the drop
+    target accepting virtual files, as returning ::wxDragMove would result in
+    deleting them from their original location (e.g. the ZIP archive).
+
+    Also note that the contents of the items is retrieved from the data
+    source only when OpenStream() or one of the save functions is called, and
+    this must be done while handling the drop, i.e. from wxDropTarget::OnData(),
+    or immediately after calling wxClipboard::GetData(), as the source may not
+    provide it any longer later.
+
+    @onlyfor{wxmsw}
+
+    @library{wxcore}
+    @category{dnd}
+
+    @since 3.3.5
+
+    @see wxFileDataObject, wxDataObjectComposite
+*/
+class wxVirtualFileDataObject : public wxDataObjectSimple
+{
+public:
+    /**
+        Default constructor creates an empty object.
+    */
+    wxVirtualFileDataObject();
+
+    /**
+        Returns the number of items, including both files and directories.
+    */
+    size_t GetCount() const;
+
+    /**
+        Returns the name of the item, which is a relative path that may
+        include one or more directory components.
+
+        The name returned by this function is safe to use as a relative path:
+        it is obtained from the name provided by the drop source using
+        wxFileName::MakeSafeRelativePath(), so it never contains any ".."
+        components and any characters not allowed in file names are replaced
+        with underscores. The items whose names contain ".." are skipped
+        entirely and don't appear in this data object at all.
+
+        @param n Index of the item, must be less than GetCount().
+    */
+    wxString GetName(size_t n) const;
+
+    /**
+        Returns @true if the item is a directory.
+
+        Directories don't have any contents and are only used to indicate
+        that the files inside them should be created in a subdirectory.
+
+        @param n Index of the item, must be less than GetCount().
+    */
+    bool IsDir(size_t n) const;
+
+    /**
+        Returns the size of the item contents, if known.
+
+        @param n Index of the item, must be less than GetCount().
+        @return The size of the item or @c wxInvalidOffset if the data source
+            didn't provide it.
+    */
+    wxFileOffset GetSize(size_t n) const;
+
+    /**
+        Returns the last modification time of the item, if known.
+
+        @param n Index of the item, must be less than GetCount().
+        @return Valid wxDateTime if the data source provided it or invalid
+            one otherwise.
+    */
+    wxDateTime GetModificationTime(size_t n) const;
+
+    /**
+        Returns the stream which can be used to read the item contents.
+
+        If the application doesn't require a disk file, using this function is
+        simpler and more efficient than using SaveTo().
+
+        Note that it is not possible to read the directories contents, so this
+        function always returns @NULL for them. It may also return @NULL for
+        some items which are not stored as files in the data source, e.g.
+        email messages, which can still be saved to disk using SaveTo().
+
+        @param n Index of the item, must be less than GetCount().
+        @return Possibly null pointer to the stream, which can be read only
+            sequentially.
+    */
+    std::unique_ptr<wxInputStream> OpenStream(size_t n) const;
+
+    /**
+        Saves the item to the given path.
+
+        For directories, simply creates the directory with the given path.
+
+        For files, creates the directory containing the file if necessary and
+        writes the item contents to it, overwriting the existing file, if any.
+
+        If an error occurs, the file and all its parent directories created
+        by this function are removed. Note that this includes the file even if
+        it had existed before.
+
+        @param n Index of the item, must be less than GetCount().
+        @param path Full path of the file to create.
+        @return @true if the item was saved successfully or @false if an
+            error occurred (in which case it was already logged).
+    */
+    bool SaveTo(size_t n, const wxString& path) const;
+
+    /**
+        Saves all the items to the given directory.
+
+        This function calls SaveTo() for all items, using their names relative
+        to the given directory, which will be created if it doesn't exist yet.
+        Note that the existing files in this directory are overwritten, so it
+        is recommended to use a new empty directory.
+
+        If saving any of the items fails, all the files and directories which
+        had been created by this function before the error occurred are
+        removed, including the given directory itself if it didn't exist
+        before. The existing files and directories are left alone, except for
+        the file being saved when the error occurred, see SaveTo().
+
+        @param dir The directory to save the items to.
+        @return The full paths of the files and directories created directly
+            in the given directory, i.e. not including the files inside the
+            subdirectories, which can be used as if they were returned by
+            wxFileDataObject::GetFilenames(). If an error occurred (in which
+            case it was already logged) or if there are no items at all, the
+            returned vector is empty (GetCount() can be used to distinguish
+            between these two cases if necessary).
+    */
+    std::vector<wxString> SaveAll(const wxString& dir) const;
+
+    /**
+        Saves all the items to a new temporary directory.
+
+        This function creates a new directory with a unique name under
+        wxFileName::GetTempDir() using wxFileName::CreateTempDirName() and
+        calls SaveAll() for it.
+
+        The directory is remembered by this object and is removed, together
+        with all its contents, when this object is destroyed or when
+        DeleteAllTempFiles() is called. This means that the application must
+        keep this object alive for as long as it needs the saved files, which
+        is typically not a problem when using it with a drop target, as the
+        drop target keeps its data object until its window is destroyed. If
+        the files need to be kept longer than that, SaveAll() should be used
+        instead.
+
+        @return The same paths as returned by SaveAll(), i.e. empty vector if
+            an error occurred or if there are no items.
+    */
+    std::vector<wxString> SaveAllToTempDir();
+
+    /**
+        Removes all temporary directories created by SaveAllToTempDir().
+
+        This function is called automatically from the destructor, but may be
+        called earlier if the files saved by SaveAllToTempDir() are not needed
+        any more.
+
+        Note that no errors are logged by this function because there is little
+        that can be done about them in any case. The directories which couldn't
+        be removed are still remembered, so calling this function again later
+        will try to remove them again.
+
+        @return @true if all directories were removed or @false if some of
+            them couldn't be removed.
+    */
+    bool DeleteAllTempFiles();
+};
+
+/**
     @class wxHTMLDataObject
 
     wxHTMLDataObject is used for working with HTML-formatted text.

@@ -13,9 +13,9 @@
  */
 enum
 {
-    /// Include support for showing a customizable checkbox()
-    /// at the bottom of a wxInfoBar.
-    wxINFOBAR_CHECKBOX = 0x0080
+    /// Include support for showing a customizable checkbox
+    /// at the bottom of a wxInfoBar, see wxInfoBar::ShowCheckBox().
+    wxINFOBAR_CHECKBOX = 0x0010
 };
 
 /**
@@ -30,10 +30,10 @@ enum
     higher chance to be noticed by the user but without being annoying.
 
     Info bar may show an icon (on the left), text message and, optionally,
-    buttons allowing the user to react to the information presented. Unless
-    a custom button was added to the info bar, it also has a close button at
-    the right allowing the user to dismiss it so it isn't necessary to provide
-    a button just to close it.
+    buttons allowing the user to react to the information presented. By
+    default, i.e. if ShowCloseButton() wasn't called, the info bar without any
+    custom buttons also has a close button at the right allowing the user to
+    dismiss it so it isn't necessary to provide a button just to close it.
 
     wxInfoBar calls its parent wxWindow::Layout() method and assumes that it
     will change the parent layout appropriately depending on whether the info
@@ -87,6 +87,54 @@ class wxInfoBar : public wxControl
 {
 public:
     /**
+        Possible values for ShowCloseButton() argument.
+
+        @since 3.3.5
+     */
+    enum class ShowButton
+    {
+        /// Show the close button only if no other buttons were added.
+        ///
+        /// This is the default.
+        Auto,
+
+        /// Always show the close button, after all the other buttons.
+        Always,
+
+        /// Never show the close button, even if there are no other buttons.
+        ///
+        /// The application should provide some other way to hide the info bar
+        /// in this case, e.g. by calling Dismiss() after a timer expiration.
+        Never
+    };
+
+    /**
+        Special values for ShowMessageFor() timeout.
+
+        @since 3.3.5
+     */
+    enum
+    {
+        /**
+            Use the default timeout.
+
+            Under MSW, this is the value of the "Dismiss notifications after
+            this amount of time" accessibility option, which is 5 seconds by
+            default. Under the other platforms, 5 seconds are always used
+            currently.
+         */
+        Timeout_Auto = -1,
+
+        /**
+            Don't hide the info bar automatically.
+
+            Calling ShowMessageFor() with this value is the same as calling
+            ShowMessage().
+         */
+        Timeout_Never = 0
+    };
+
+    /**
         Default constructor.
 
         Use Create() for the objects created using this constructor.
@@ -130,7 +178,8 @@ public:
         (in LTR layout), with each successive button being added to the right
         of the previous one. If any buttons are added to the info bar using
         this method, the default "Close" button is not shown as it is assumed
-        that the extra buttons already allow the user to close it.
+        that the extra buttons already allow the user to close it, unless
+        ShowCloseButton() was called to change this.
 
         Clicking the button will generate a normal EVT_COMMAND_BUTTON_CLICKED
         event which can be handled as usual. The default handler in wxInfoBar
@@ -163,6 +212,11 @@ public:
 
         This method hides the window and lays out the parent window to account
         for its disappearance (unlike a simple Hide()).
+
+        It is also called when any button in the info bar, including the
+        default "Close" one, is clicked and the corresponding event is not
+        handled, so it may be overridden in a derived class to perform some
+        additional actions when the bar is closed.
      */
     virtual void Dismiss();
 
@@ -175,6 +229,44 @@ public:
             the last, i.e. most recently added, button with this id is removed.
      */
     void RemoveButton(wxWindowID btnid);
+
+    /**
+        Remove all buttons previously added by AddButton().
+
+        After calling this function, the info bar shows the default "Close"
+        button again, just as it did before any buttons were added to it
+        (unless ShowCloseButton() was called with ShowButton::Never).
+
+        @since 3.3.5
+     */
+    void RemoveAllButtons();
+
+    /**
+        Choose when the default "Close" button is shown.
+
+        By default, this button is only shown if no other buttons were added
+        using AddButton(), as it's assumed that they allow the user to close
+        the info bar. Calling this function with ShowButton::Always allows to
+        show it in addition to the custom buttons (it is then always shown
+        after all of them) and ShowButton::Never allows to hide it even when
+        there are no other buttons.
+
+        Note that if the close button is never shown, the application must
+        provide some other way to hide the info bar, e.g. by calling Dismiss()
+        after some time, as the user would have no way to do it otherwise.
+
+        This function may be called at any moment, including when the info
+        bar is already shown, and its effect persists until it is called
+        again. The close button is never counted by GetButtonCount() nor
+        returned by GetButtonId() or found by HasButtonId(), whether it is
+        shown or not.
+
+        @param show
+            When the close button should be shown.
+
+        @since 3.3.5
+     */
+    void ShowCloseButton(ShowButton show);
 
     /**
         Show a message in the bar.
@@ -193,8 +285,42 @@ public:
             GTK+ native implementation doesn't show icons at all but uses this
             parameter to select the appropriate background colour for the
             notification.
+
+        @see ShowMessageFor()
      */
     void ShowMessage(const wxString& msg, int flags = wxICON_INFORMATION);
+
+    /**
+        Show a message in the bar and hide it automatically after the given
+        timeout.
+
+        This function works like ShowMessage() but also calls Dismiss() once
+        the specified time elapses, unless the bar is closed or ShowMessage()
+        or ShowMessageFor() are called again before it happens. In the latter
+        case, the new message replaces the old one and its timeout, if any, is
+        used instead of the previous one.
+
+        Please note that showing messages for too short time may prevent some
+        users from reading them, especially if the info bar contains buttons,
+        so using `Timeout_Auto` is recommended unless there are good reasons
+        to use a specific timeout.
+
+        This function is not available if `wxUSE_TIMER` was set to 0 when
+        building the library.
+
+        @param msg
+            The text of the message.
+        @param timeoutInSeconds
+            The time, in seconds, after which the info bar is hidden, or one of
+            the special values `Timeout_Auto` or `Timeout_Never`.
+        @param flags
+            The same flags as for ShowMessage().
+
+        @since 3.3.5
+     */
+    void ShowMessageFor(const wxString& msg,
+                        int timeoutInSeconds,
+                        int flags = wxICON_INFORMATION);
 
     /**
         Returns the number of currently shown buttons.

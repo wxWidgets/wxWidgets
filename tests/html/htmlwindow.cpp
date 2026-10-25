@@ -94,6 +94,13 @@ static const char *TEST_MARKUP_TABLE_PADDING =
     "</table>"
     "</body></html>";
 
+static const char *TEST_MARKUP_TABLE_BORDER_NO_WIDTH =
+    "<html><body>"
+    "<table border=\"1\">"
+    "<tr><td id=\"first\">First</td><td id=\"second\">Second</td></tr>"
+    "</table>"
+    "</body></html>";
+
 #if wxUSE_WXHTML_HELP
 
 class CloseModalHelpDialogTimer : public wxTimer
@@ -337,6 +344,28 @@ TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::TableCellPadding", "[html][htm
 
     CHECK(textPos.x > 0);
     CHECK(textPos.y > 0);
+}
+
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::TableBorderNoWidth", "[html][htmlwindow]")
+{
+    // This used to result in collapsed columns and overlapping text, see #27236.
+    m_win->SetPage(TEST_MARKUP_TABLE_BORDER_NO_WIDTH);
+
+    wxHtmlCell * const root = m_win->GetInternalRepresentation();
+
+    wxHtmlCell * const first = FindCellById(root, "first");
+    REQUIRE(first);
+    wxHtmlCell * const second = FindCellById(root, "second");
+    REQUIRE(second);
+
+    wxHtmlCell * const firstText = FindFirstTerminal(first);
+    REQUIRE(firstText);
+    wxHtmlCell * const secondText = FindFirstTerminal(second);
+    REQUIRE(secondText);
+
+    CHECK(first->GetWidth() > firstText->GetWidth());
+    CHECK(secondText->GetAbsPos().x >
+            firstText->GetAbsPos().x + firstText->GetWidth());
 }
 
 #endif //wxUSE_HTML

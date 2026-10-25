@@ -342,6 +342,12 @@ public:
                                        wxFFile *fileTemp);
 #endif // wxUSE_FFILE
 
+        // create a new directory with a unique name starting with the
+        // specified prefix and assign it to this object or return its full
+        // path (or empty string on error)
+    void AssignTempDirName(const wxString& prefix);
+    static wxString CreateTempDirName(const wxString& prefix);
+
     // directory creation and removal.
     bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0) const;
     static bool Mkdir(const wxString &dir, int perm = wxS_DIR_DEFAULT,
@@ -474,6 +480,25 @@ public:
     // Returns the characters that aren't allowed in filenames
     // on the specified platform.
     static wxString GetForbiddenChars(wxPathFormat format = wxPATH_NATIVE);
+
+    // Returns true if the given name can't be used as a file or directory
+    // name on the specified platform even if it doesn't contain any forbidden
+    // characters, e.g. "NUL" or "com1.txt" under Windows.
+    static bool IsReservedName(const wxString& name,
+                               wxPathFormat format = wxPATH_NATIVE);
+
+    // Returns a valid file or directory name for the specified platform
+    // obtained by replacing all invalid characters in the given string and
+    // modifying it in other ways if necessary.
+    static wxString MakeValidName(const wxString& name,
+                                  wxPathFormat format = wxPATH_NATIVE);
+
+    // Returns a safe relative path, i.e. one which can't refer to anything
+    // outside of the directory it is relative to, with all its components
+    // made valid using MakeValidName(), or empty string if the path contains
+    // any parent directory references.
+    static wxString MakeSafeRelativePath(const wxString& path,
+                                         wxPathFormat format = wxPATH_NATIVE);
 
     // Information about path format
 

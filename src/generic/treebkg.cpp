@@ -600,7 +600,16 @@ void wxTreebook::OnTreeSelectionChange(wxTreeEvent& event)
     int newPos = DoInternalFindPageById(newId);
 
     if ( newPos != wxNOT_FOUND )
+    {
+        // Repaint the tree before changing the page: creating the new page
+        // may take a long time and, at least under MSW, hiding the old page
+        // erases the background of the tree items whose selection state has
+        // just changed, so they would remain blank until the new page is
+        // shown without this, see #25952.
+        m_bookctrl->Update();
+
         SetSelection( newPos );
+    }
 }
 
 void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)

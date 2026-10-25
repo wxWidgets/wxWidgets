@@ -550,6 +550,117 @@ TEST_CASE("wxFileName::Strip", "[filename]")
     CHECK( wxFileName::StripExtension("good.wav.wav") == "good.wav" );
 }
 
+TEST_CASE("wxFileName::IsReservedName", "[filename]")
+{
+    CHECK( wxFileName::IsReservedName("CON", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("nul", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("Aux.txt", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("prn.tar.gz", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("com1", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("LPT9.log", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("COM0", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName(wxString::FromUTF8("COM\xc2\xb9"),
+                                      wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("nul ", wxPATH_DOS) );
+    CHECK( wxFileName::IsReservedName("con .txt", wxPATH_DOS) );
+
+    CHECK( !wxFileName::IsReservedName("", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("console", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("nullptr.h", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("com", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("com10", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("lptx", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName(".nul", wxPATH_DOS) );
+    CHECK( !wxFileName::IsReservedName("_nul", wxPATH_DOS) );
+
+    // There are no reserved names in the other formats.
+    CHECK( !wxFileName::IsReservedName("nul", wxPATH_UNIX) );
+    CHECK( !wxFileName::IsReservedName("com1", wxPATH_MAC) );
+}
+
+TEST_CASE("wxFileName::MakeValidName", "[filename]")
+{
+    SECTION("DOS")
+    {
+        const wxPathFormat f = wxPATH_DOS;
+
+        CHECK( wxFileName::MakeValidName("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeValidName(" leading space", f) == " leading space" );
+        CHECK( wxFileName::MakeValidName("Re: hello?", f) == "Re_ hello_" );
+        CHECK( wxFileName::MakeValidName("a<b>c\"d|e*f", f) == "a_b_c_d_e_f" );
+        CHECK( wxFileName::MakeValidName("dir\\file/name", f) == "dir_file_name" );
+        CHECK( wxFileName::MakeValidName("tab\there", f) == "tab_here" );
+        CHECK( wxFileName::MakeValidName("trailing. . ", f) == "trailing" );
+        CHECK( wxFileName::MakeValidName("nul", f) == "_nul" );
+        CHECK( wxFileName::MakeValidName("COM1.txt", f) == "_COM1.txt" );
+        CHECK( wxFileName::MakeValidName("con.", f) == "_con" );
+        CHECK( wxFileName::MakeValidName("", f) == "_" );
+        CHECK( wxFileName::MakeValidName(".", f) == "_" );
+        CHECK( wxFileName::MakeValidName("..", f) == "__" );
+        CHECK( wxFileName::MakeValidName("...", f) == "___" );
+        CHECK( wxFileName::MakeValidName(". .", f) == "___" );
+        CHECK( wxFileName::MakeValidName("   ", f) == "___" );
+        CHECK( wxFileName::MakeValidName(".hidden", f) == ".hidden" );
+    }
+
+    SECTION("Unix")
+    {
+        const wxPathFormat f = wxPATH_UNIX;
+
+        CHECK( wxFileName::MakeValidName("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeValidName("dir/file", f) == "dir_file" );
+        CHECK( wxFileName::MakeValidName("back\\slash: ok", f) == "back\\slash: ok" );
+        CHECK( wxFileName::MakeValidName("what?*", f) == "what__" );
+        CHECK( wxFileName::MakeValidName(wxString("nul\0char", 8), f) == "nul_char" );
+        CHECK( wxFileName::MakeValidName("trailing. ", f) == "trailing. " );
+        CHECK( wxFileName::MakeValidName("nul", f) == "nul" );
+        CHECK( wxFileName::MakeValidName("", f) == "_" );
+        CHECK( wxFileName::MakeValidName(".", f) == "_" );
+        CHECK( wxFileName::MakeValidName("..", f) == "__" );
+        CHECK( wxFileName::MakeValidName("...", f) == "..." );
+    }
+}
+
+TEST_CASE("wxFileName::MakeSafeRelativePath", "[filename]")
+{
+    SECTION("DOS")
+    {
+        const wxPathFormat f = wxPATH_DOS;
+
+        CHECK( wxFileName::MakeSafeRelativePath("file.txt", f) == "file.txt" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\file", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/sub/file", f) == "dir\\sub\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\dir\\\\file\\", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath(".\\dir\\.\\file", f) == "dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("c:\\dir\\file", f) == "c_\\dir\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\\\server\\share\\file", f) == "server\\share\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\\\?\\c:\\file", f) == "_\\c_\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("nul\\aux.txt", f) == "_nul\\_aux.txt" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir.\\...\\file? ", f) == "dir\\___\\file_" );
+
+        CHECK( wxFileName::MakeSafeRelativePath("..\\evil.txt", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/../file", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\..", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("\\/.\\", f) == "" );
+    }
+
+    SECTION("Unix")
+    {
+        const wxPathFormat f = wxPATH_UNIX;
+
+        CHECK( wxFileName::MakeSafeRelativePath("dir/file", f) == "dir/file" );
+        CHECK( wxFileName::MakeSafeRelativePath("/etc/passwd", f) == "etc/passwd" );
+        CHECK( wxFileName::MakeSafeRelativePath("./dir//file/", f) == "dir/file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir\\..\\file", f) == "dir\\..\\file" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/.../file", f) == "dir/.../file" );
+
+        CHECK( wxFileName::MakeSafeRelativePath("../evil", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("dir/../../evil", f) == "" );
+        CHECK( wxFileName::MakeSafeRelativePath("/", f) == "" );
+    }
+}
+
 #ifdef __WINDOWS__
 
 TEST_CASE("wxFileName::ShortLongPath", "[filename]")
@@ -560,6 +671,9 @@ TEST_CASE("wxFileName::ShortLongPath", "[filename]")
     // the first and subsequent runs, test for this
     CHECK( fn.GetLongPath() == fn.GetLongPath() );
     CHECK( fn.GetShortPath() == fn.GetShortPath() );
+
+    // Extended length paths don't have any short form.
+    CHECK( wxFileName(R"(\\?\C:\Windows\notepad.exe)").GetShortPath().empty() );
 }
 
 #endif // __WINDOWS__
@@ -667,6 +781,96 @@ TEST_CASE("wxFileName::CreateTempFileName", "[filename]")
     }
 }
 
+TEST_CASE("wxFileName::CreateTempDirName", "[filename]")
+{
+    static const struct TestData
+    {
+        const char *prefix;
+        const char *expectedFolder;
+        bool shouldSucceed;
+    } testData[] =
+    {
+        { "", "$SYSTEM_TEMP", true },
+        { "foo", "$SYSTEM_TEMP", true },
+        { "foo.bar", "$SYSTEM_TEMP", true },
+        { "foo.", "$SYSTEM_TEMP", true },
+        { "../bar", "..", true },
+#ifdef __WINDOWS__
+        { "$USER_DOCS_DIR\\", "$USER_DOCS_DIR", true },
+        { "c:\\a\\directory\\which\\does\\not\\exist", "", false },
+#elif defined( __UNIX__ )
+        { "$USER_DOCS_DIR/", "$USER_DOCS_DIR", true },
+        { "/tmp/foo", "/tmp", true },
+        { "/tmp/a/directory/which/does/not/exist", "", false },
+#endif // __UNIX__
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        wxString prefix = testData[n].prefix;
+        prefix.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+
+        INFO("Prefix: " << prefix);
+
+        wxString path;
+        {
+            wxLogNull noLog;
+            path = wxFileName::CreateTempDirName(prefix);
+        }
+        CHECK( path.empty() == !testData[n].shouldSucceed );
+
+        if ( path.empty() )
+            continue;
+
+        INFO("Path: " << path);
+
+        const wxFileName fn(path);
+
+        wxString expected = testData[n].expectedFolder;
+        expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
+        expected.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+        CHECK( fn.GetPath() == expected );
+
+        wxString name = wxFileName(prefix).GetFullName();
+        CHECK( fn.GetFullName().StartsWith(name) );
+        CHECK( fn.GetFullName() != name );
+
+        CHECK( wxDirExists(path) );
+
+#ifdef __UNIX__
+        wxStructStat st;
+        REQUIRE( wxStat(path, &st) == 0 );
+        CHECK( (st.st_mode & 0777) == 0700 );
+#endif // __UNIX__
+
+        // Check that another directory with the same prefix is different.
+        const wxString path2 = wxFileName::CreateTempDirName(prefix);
+        CHECK( wxDirExists(path2) );
+        CHECK( path2 != path );
+
+        CHECK( wxFileName::Rmdir(path) );
+        CHECK( wxFileName::Rmdir(path2) );
+    }
+
+    wxFileName fn;
+    fn.AssignTempDirName("foo");
+    REQUIRE( fn.IsOk() );
+    CHECK( fn.IsDir() );
+    CHECK( fn.GetDirs().Last().StartsWith("foo") );
+    CHECK( fn.DirExists() );
+    CHECK( fn.Rmdir() );
+
+    {
+        wxLogNull noLog;
+#ifdef __WINDOWS__
+        fn.AssignTempDirName("c:\\a\\directory\\which\\does\\not\\exist");
+#else
+        fn.AssignTempDirName("/tmp/a/directory/which/does/not/exist");
+#endif
+    }
+    CHECK( !fn.IsOk() );
+}
+
 TEST_CASE("wxFileName::GetTimes", "[filename]")
 {
     wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
@@ -706,6 +910,29 @@ TEST_CASE("wxFileName::SetTimes", "[filename]")
 #ifdef __WINDOWS__
     CHECK( dtCreate2 == dtCreate );
 #endif // __WINDOWS__
+}
+
+TEST_CASE("wxFileName::SetTimesOutOfRange", "[filename]")
+{
+    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+    REQUIRE( fn.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
+
+    wxDateTime dtModOrig;
+    REQUIRE( fn.GetTimes(nullptr, &dtModOrig, nullptr) );
+
+    // This date can be represented neither as FILETIME, which starts in 1601,
+    // nor as time_t, which starts in 1970 for wxDateTime::GetTicks().
+    const wxDateTime dtModify(1, wxDateTime::Jan, 1500);
+    {
+        wxLogNull noLog;
+        CHECK( !fn.SetTimes(nullptr, &dtModify, nullptr) );
+    }
+
+    // Check that the file time wasn't changed.
+    wxDateTime dtMod;
+    REQUIRE( fn.GetTimes(nullptr, &dtMod, nullptr) );
+    CHECK( dtMod == dtModOrig );
 }
 
 TEST_CASE("wxFileName::Exists", "[filename]")
@@ -1167,6 +1394,9 @@ TEST_CASE("wxFileName::LongPath", "[filename]")
     // Try accessing it too.
     CHECK( fn.FileExists() );
     CHECK( fn.GetSize() == 8 );
+
+    // There is no short form for such paths.
+    CHECK( fn.GetShortPath().empty() );
 }
 
 #endif // __WINDOWS__

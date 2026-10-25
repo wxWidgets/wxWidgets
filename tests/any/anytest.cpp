@@ -17,18 +17,6 @@
 
 #include <math.h>
 
-namespace Catch
-{
-    template <>
-    struct StringMaker<wxVariant>
-    {
-        static std::string convert(const wxVariant& v)
-        {
-            return v.MakeString().ToStdString(wxConvUTF8);
-        }
-    };
-}
-
 // ----------------------------------------------------------------------------
 // test data and fixture
 // ----------------------------------------------------------------------------
@@ -489,6 +477,12 @@ TEST_CASE_METHOD(AnyTestCase, "wxAny::wxVariantConversions", "[any]")
     vList.NullList();
     vList.Append(15);
     vList.Append("abc");
+
+    // Check that comparing with narrow strings works as expected and doesn't
+    // use operator==(bool), as it used to do.
+    CHECK( vString == "ABC" );
+    CHECK( vString != "XYZ" );
+    CHECK( vBool != "ABC" );
 
     // Convert to wxAnys, and then back to wxVariants
     wxVariant variant;

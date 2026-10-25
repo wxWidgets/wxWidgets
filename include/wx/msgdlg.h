@@ -49,6 +49,14 @@ public:
             : m_label(label), m_stockId(wxID_NONE)
         {
         }
+#elif defined(wxALLOW_UTF8_LITERALS)
+        template <size_t N>
+        ButtonLabel(const char (&label)[N])
+            : m_label(wxString::FromUTF8Unchecked(label)), m_stockId(wxID_NONE)
+        {
+        }
+        template <size_t N>
+        ButtonLabel(char (&label)[N]) = delete;
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
         ButtonLabel(const wchar_t *label)

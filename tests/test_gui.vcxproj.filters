@@ -113,6 +113,9 @@
     <ClCompile Include="misc\guifuncs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="misc\oleautomationobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\headerctrltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

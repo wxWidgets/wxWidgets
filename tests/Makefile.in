@@ -120,6 +120,7 @@ TEST_OBJECTS =  \
 	test_crt.o \
 	test_vsnprintf.o \
 	test_hexconv.o \
+	test_utf8literals.o \
 	test_datastreamtest.o \
 	test_ffilestream.o \
 	test_fileback.o \
@@ -253,6 +254,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_guifuncs.o \
 	test_gui_selstoretest.o \
 	test_gui_garbage.o \
+	test_gui_oleautomationobject.o \
 	test_gui_safearrayconverttest.o \
 	test_gui_settings.o \
 	test_gui_textwrap.o \
@@ -283,7 +285,8 @@ TEST_ALLHEADERS_OBJECTS =  \
 	test_allheaders_asserthelper.o \
 	test_allheaders_test.o \
 	test_allheaders_allheaders.o \
-	test_allheaders_testableframe.o
+	test_allheaders_testableframe.o \
+	test_allheaders_allheaders_utf8.o
 TEST_ALLHEADERS_ODEP = \
 	$(_____pch_testprec_test_allheaders_testprec_h_gch___depname)
 
@@ -812,6 +815,9 @@ test_vsnprintf.o: $(srcdir)/strings/vsnprintf.cpp $(TEST_ODEP)
 test_hexconv.o: $(srcdir)/strings/hexconv.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/hexconv.cpp
 
+test_utf8literals.o: $(srcdir)/strings/utf8literals.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/utf8literals.cpp
+
 test_datastreamtest.o: $(srcdir)/streams/datastreamtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/datastreamtest.cpp
 
@@ -1190,6 +1196,9 @@ test_gui_selstoretest.o: $(srcdir)/misc/selstoretest.cpp $(TEST_GUI_ODEP)
 test_gui_garbage.o: $(srcdir)/misc/garbage.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/garbage.cpp
 
+test_gui_oleautomationobject.o: $(srcdir)/misc/oleautomationobject.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/oleautomationobject.cpp
+
 test_gui_safearrayconverttest.o: $(srcdir)/misc/safearrayconverttest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/safearrayconverttest.cpp
 
@@ -1261,6 +1270,9 @@ test_allheaders_allheaders.o: $(srcdir)/allheaders.cpp $(TEST_ALLHEADERS_ODEP)
 
 test_allheaders_testableframe.o: $(srcdir)/testableframe.cpp $(TEST_ALLHEADERS_ODEP)
 	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/testableframe.cpp
+
+test_allheaders_allheaders_utf8.o: $(srcdir)/allheaders_utf8.cpp $(TEST_ALLHEADERS_ODEP)
+	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/allheaders_utf8.cpp
 
 
 failtest: failtest_combobox failtest_evthandler failtest_msgid failtest_weakref failtest_allheaders

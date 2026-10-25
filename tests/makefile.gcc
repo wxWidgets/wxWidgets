@@ -92,6 +92,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_crt.o \
 	$(OBJS)\test_vsnprintf.o \
 	$(OBJS)\test_hexconv.o \
+	$(OBJS)\test_utf8literals.o \
 	$(OBJS)\test_datastreamtest.o \
 	$(OBJS)\test_ffilestream.o \
 	$(OBJS)\test_fileback.o \
@@ -227,6 +228,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_guifuncs.o \
 	$(OBJS)\test_gui_selstoretest.o \
 	$(OBJS)\test_gui_garbage.o \
+	$(OBJS)\test_gui_oleautomationobject.o \
 	$(OBJS)\test_gui_safearrayconverttest.o \
 	$(OBJS)\test_gui_settings.o \
 	$(OBJS)\test_gui_textwrap.o \
@@ -259,7 +261,8 @@ TEST_ALLHEADERS_OBJECTS =  \
 	$(OBJS)\test_allheaders_asserthelper.o \
 	$(OBJS)\test_allheaders_test.o \
 	$(OBJS)\test_allheaders_allheaders.o \
-	$(OBJS)\test_allheaders_testableframe.o
+	$(OBJS)\test_allheaders_testableframe.o \
+	$(OBJS)\test_allheaders_allheaders_utf8.o
 
 ### Conditionally set variables: ###
 
@@ -747,6 +750,9 @@ $(OBJS)\test_vsnprintf.o: ./strings/vsnprintf.cpp
 $(OBJS)\test_hexconv.o: ./strings/hexconv.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_utf8literals.o: ./strings/utf8literals.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_datastreamtest.o: ./streams/datastreamtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -1128,6 +1134,9 @@ $(OBJS)\test_gui_selstoretest.o: ./misc/selstoretest.cpp
 $(OBJS)\test_gui_garbage.o: ./misc/garbage.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_oleautomationobject.o: ./misc/oleautomationobject.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_safearrayconverttest.o: ./misc/safearrayconverttest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
@@ -1201,6 +1210,9 @@ $(OBJS)\test_allheaders_allheaders.o: ./allheaders.cpp
 	$(CXX) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_allheaders_testableframe.o: ./testableframe.cpp
+	$(CXX) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_allheaders_allheaders_utf8.o: ./allheaders_utf8.cpp
 	$(CXX) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean data data-image-sample data-images en_GB fr ja xart-dothraki
