@@ -356,7 +356,12 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     CGRect frame = [toplevelwindow bounds];
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+#if wxOSX_IPHONE_USE_UISCENE
+    UIWindowScene* scene = [toplevelwindow windowScene];
+    CGRect appframe = [[scene screen] bounds];
+#else
     CGRect appframe = [[UIScreen mainScreen] applicationFrame];
+#endif
     BOOL fullscreen = now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent;
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
