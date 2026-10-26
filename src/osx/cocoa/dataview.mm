@@ -2404,7 +2404,11 @@ wxRect wxCocoaDataViewControl::GetRectangle(const wxDataViewItem& item, const wx
 
 bool wxCocoaDataViewControl::IsExpanded(const wxDataViewItem& item) const
 {
-    return [m_OutlineView isItemExpanded:[m_DataSource getDataViewItemFromBuffer:item]];
+    // Items not in the buffer have never been shown and so can't be expanded,
+    // and we must check for this explicitly as isItemExpanded:nil returns YES
+    // because nil corresponds to the (always expanded) root item.
+    wxPointerObject* const nsItem = [m_DataSource getDataViewItemFromBuffer:item];
+    return nsItem && [m_OutlineView isItemExpanded:nsItem];
 }
 
 bool wxCocoaDataViewControl::Reload()
