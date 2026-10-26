@@ -274,6 +274,9 @@ bool wxSlider::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
                 if ( nmcd->dwItemSpec == TBCD_THUMB )
                 {
                     // Draw a polygon that matches the shape of the thumb.
+                    // These shapes were determined by looking at how the
+                    // system draws the pointer in light mode at 100% and 200%
+                    // scale.
                     const RECT& rc = nmcd->rc;
                     // Half the width of the arrow point.
                     auto mid = (HasFlag(wxSL_HORIZONTAL) ?
@@ -307,6 +310,11 @@ bool wxSlider::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
                     else
                     {
                         wxASSERT(HasFlag(wxSL_BOTTOM));
+                        // Unlike the other orientations, the pointer tip
+                        // location (at the bottom) depends on the DPI
+                        // scaling. The pointer bottom is above the bottom of
+                        // the rectangle by 2 physical pixels at 100% and 3
+                        // physical pixels at 200%.
                         auto bottom = rc.bottom - 1 - FromDIP(1);
                         points[0] = { rc.left, rc.top };
                         points[1] = { rc.right - 1, rc.top };
