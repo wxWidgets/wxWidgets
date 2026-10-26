@@ -78,7 +78,7 @@ public:
     */
     virtual wxRibbonToolBarToolBase* AddTool(
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
 
@@ -89,7 +89,7 @@ public:
     */
     virtual wxRibbonToolBarToolBase* AddDropdownTool(
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -99,7 +99,7 @@ public:
     */
     virtual wxRibbonToolBarToolBase* AddHybridTool(
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -111,7 +111,7 @@ public:
     */
     virtual wxRibbonToolBarToolBase* AddToggleTool(
         int tool_id,
-        const wxBitmap& bitmap,
+        const wxBitmapBundle& bitmap,
         const wxString& help_string);
 
     /**
@@ -140,8 +140,8 @@ public:
     */
     virtual wxRibbonToolBarToolBase* AddTool(
                 int tool_id,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 wxObject* clientData = nullptr);
@@ -166,7 +166,7 @@ public:
     virtual wxRibbonToolBarToolBase* InsertTool(
                 size_t pos,
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
 
@@ -182,7 +182,7 @@ public:
     virtual wxRibbonToolBarToolBase* InsertDropdownTool(
                 size_t pos,
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -196,7 +196,7 @@ public:
     virtual wxRibbonToolBarToolBase* InsertHybridTool(
                 size_t pos,
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -210,7 +210,7 @@ public:
     virtual wxRibbonToolBarToolBase* InsertToggleTool(
                 size_t pos,
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -245,8 +245,8 @@ public:
     virtual wxRibbonToolBarToolBase* InsertTool(
                 size_t pos,
                 int tool_id,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 wxObject* clientData = nullptr);

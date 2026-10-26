@@ -163,7 +163,7 @@ public:
     wxRibbonPanel(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxString& label = wxEmptyString,
-                  const wxBitmap& minimised_icon = wxNullBitmap,
+                  const wxBitmapBundle& minimised_icon = wxBitmapBundle(),
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxRIBBON_PANEL_DEFAULT_STYLE);
@@ -176,7 +176,7 @@ public:
     bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
-                const wxBitmap& icon = wxNullBitmap,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
