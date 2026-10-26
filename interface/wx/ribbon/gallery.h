@@ -122,7 +122,7 @@ public:
             ID number to associate with the item. Not currently used for
             anything important.
     */
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id);
 
     /**
         Add an item to the gallery with a label.
@@ -142,7 +142,7 @@ public:
 
         @since 3.3.4
     */
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, const wxString& label);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, const wxString& label);
 
     /**
         Add an item to the gallery (with simple client data).
@@ -155,7 +155,7 @@ public:
         @param clientData
             An opaque pointer to associate with the item.
     */
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, void* clientData);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, void* clientData);
 
     /**
         Add an item to the gallery (with complex client data)
@@ -171,7 +171,7 @@ public:
             client data is changed to something else, or when the item is
             destroyed.
     */
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, wxClientData* clientData);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, wxClientData* clientData);
 
     /**
         Set the label of a gallery item.
