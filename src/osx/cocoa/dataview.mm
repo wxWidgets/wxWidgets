@@ -34,6 +34,8 @@
 #include "wx/stopwatch.h"
 #include "wx/dcgraph.h"
 
+#include <vector>
+
 #if wxUSE_MARKUP
     #include "wx/osx/cocoa/private/markuptoattr.h"
 #endif // wxUSE_MARKUP
@@ -1735,6 +1737,9 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    if ( implementation->IsChangingHiddenItem() )
+        return YES;
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSING, dvc, wxDataViewItemFromItem(item));
@@ -1746,6 +1751,9 @@ outlineView:(NSOutlineView*)outlineView
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
     wxUnusedVar(outlineView);
+
+    if ( implementation->IsChangingHiddenItem() )
+        return YES;
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1819,6 +1827,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineViewItemDidCollapse:(NSNotification*)notification
 {
+    if ( implementation->IsChangingHiddenItem() )
+        return;
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     const wxDataViewItem item = wxDataViewItemFromItem(
@@ -1831,6 +1842,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineViewItemDidExpand:(NSNotification*)notification
 {
+    if ( implementation->IsChangingHiddenItem() )
+        return;
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     const wxDataViewItem item = wxDataViewItemFromItem(
@@ -2327,7 +2341,56 @@ bool wxCocoaDataViewControl::Add(const wxDataViewItem& parent, const wxDataViewI
 
 void wxCocoaDataViewControl::Collapse(const wxDataViewItem& item)
 {
-    [m_OutlineView collapseItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    wxPointerObject* const nsItem = [m_DataSource getDataViewItemFromBuffer:item];
+
+    // Items not in the buffer have never been shown and so can't be expanded.
+    if ( !nsItem )
+        return;
+
+    // NSOutlineView ignores collapseItem: for the items hidden because one of
+    // their ancestors is collapsed, but remembers their expanded state and
+    // restores it when the ancestor is expanded again. So the only way to
+    // collapse such items is to temporarily expand all their ancestors.
+    //
+    // Start by collecting all the ancestors, from the top level one down.
+    std::vector<wxPointerObject*> ancestors;
+    wxDataViewModel* const model = GetDataViewCtrl()->GetModel();
+    for ( wxDataViewItem parent = model->GetParent(item);
+          parent.IsOk();
+          parent = model->GetParent(parent) )
+    {
+        wxPointerObject* const nsParent = [m_DataSource getDataViewItemFromBuffer:parent];
+        if ( !nsParent )
+            return;
+
+        ancestors.insert(ancestors.begin(), nsParent);
+    }
+
+    // Note that we can only check whether the ancestor is expanded after
+    // expanding its own parent, as isItemExpanded: returns NO for the hidden
+    // items, even if they will be shown as expanded later.
+    std::vector<wxPointerObject*> expanded;
+    for ( wxPointerObject* const ancestor : ancestors )
+    {
+        if ( [m_OutlineView isItemExpanded:ancestor] )
+            continue;
+
+        // Don't send any events when collapsing a hidden item, for
+        // consistency with the generic and GTK versions.
+        m_changingHiddenItem = true;
+
+        [m_OutlineView expandItem:ancestor expandChildren:NO];
+        expanded.push_back(ancestor);
+    }
+
+    [m_OutlineView collapseItem:nsItem];
+
+    // Restore the original state, children expanded state is preserved by
+    // collapseItem: (which doesn't collapse the children by default).
+    for ( auto it = expanded.rbegin(); it != expanded.rend(); ++it )
+        [m_OutlineView collapseItem:*it];
+
+    m_changingHiddenItem = false;
 }
 
 void wxCocoaDataViewControl::EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn *columnPtr)
