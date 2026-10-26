@@ -247,9 +247,9 @@ public:
                 int button_id,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle(),
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -362,9 +362,9 @@ public:
                 int button_id,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle(),
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -512,9 +512,9 @@ public:
     virtual void SetButtonIcon(
                 int button_id,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxNullBitmap,
-                const wxBitmapBundle& bitmap_disabled = wxNullBitmap,
-                const wxBitmapBundle& bitmap_small_disabled = wxNullBitmap);
+                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle());
 
     /**
         Changes the label text of an existing button.
