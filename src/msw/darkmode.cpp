@@ -45,6 +45,7 @@
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/private/darkmode.h"
+#include <wx/msw/private/renderer.h>
 
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
@@ -818,7 +819,62 @@ HandleMenuMessage(WXLRESULT* result,
                 // correct colours in the dark mode, at least not when using
                 // the "Menu" theme.
                 ::FillRect(dis.hDC, &dis.rcItem, hbr ? hbr : GetMenuBrush());
+                wxUxThemeHandle menuTheme(w, L"MENU", L"DarkMode::MENU");
+                const UINT itemID = dis.itemID;
+                HWND hwndChild = (HWND)dis.itemData;
+                bool isMDIChildItem = (hwndChild && ::IsWindow(hwndChild) && (::GetWindowLongPtr(hwndChild, GWL_STYLE) & WS_CHILD));
 
+                if (itemID == SC_MINIMIZE || itemID == SC_CLOSE || itemID == SC_RESTORE)
+                {
+                    int part = -1;
+                    wchar_t glyphToDraw = L'\0';
+                    switch (itemID)
+                    {
+                    case SC_CLOSE:
+                        glyphToDraw = L'\uE8BB';
+                        part = MENU_SYSTEMCLOSE;
+                        break;
+                    case SC_MINIMIZE:
+                        glyphToDraw = L'\uE921';
+                        part = MENU_SYSTEMMINIMIZE;
+                        break;
+                    case SC_RESTORE:
+                        glyphToDraw = L'\uE923';
+                        part = MENU_SYSTEMRESTORE;
+                        break;
+                    }
+                    COLORREF textCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
+                    if (wxMSWDrawCaptionGlyph(dis.hDC, dis.rcItem, glyphToDraw, textCol))
+                        return true;
+
+                    menuTheme.DrawBackground(dis.hDC, dis.rcItem, part, partState, nullptr);
+                    return true;
+                }
+
+                else if (isMDIChildItem)
+                {
+                    HICON hIcon = (HICON)::SendMessage(hwndChild, WM_GETICON, ICON_SMALL2, 0);
+                    if (!hIcon)
+                        hIcon = (HICON)::SendMessage(hwndChild, WM_GETICON, ICON_SMALL, 0);
+                    if (!hIcon)
+                        hIcon = (HICON)::SendMessage(hwndChild, WM_GETICON, ICON_BIG, 0);
+                    if (!hIcon)
+                       hIcon = wxICON(wxICON_APPLICATION).GetHICON();
+                    // 2. Draw the icon
+                    if (hIcon) {
+                        int cxIcon = ::GetSystemMetrics(SM_CXSMICON);
+                        int cyIcon = ::GetSystemMetrics(SM_CYSMICON);
+                        RECT rcIcon = dis.rcItem;
+                        rcIcon.left += 2; // small padding
+                        rcIcon.right = rcIcon.left + cxIcon;
+                        rcIcon.top += (rcIcon.bottom - rcIcon.top - cyIcon) / 2;
+                        rcIcon.bottom = rcIcon.top + cyIcon;
+                        ::DrawIconEx(dis.hDC, rcIcon.left, rcIcon.top, hIcon, cxIcon, cyIcon, 0, nullptr, DI_NORMAL);
+                    }
+                }
+
+                else
+                {
                 // We have to specify the text colour explicitly as by default
                 // black would be used, making the menu label unreadable on the
                 // (almost) black background.
@@ -830,13 +886,13 @@ HandleMenuMessage(WXLRESULT* result,
                 if ( itemState & ODS_NOACCEL)
                     drawTextFlags |= DT_HIDEPREFIX;
 
-                wxUxThemeHandle menuTheme(w, L"Menu");
                 ::DrawThemeTextEx(menuTheme, dis.hDC, MENU_BARITEM, partState,
                                   buf, mii.cch, drawTextFlags, rcItem,
                                   &textOpts);
             }
             return true;
     }
+}
 
     return false;
 }
