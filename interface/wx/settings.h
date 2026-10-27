@@ -121,8 +121,9 @@ enum wxSystemColour
     /**
         Colour of separator lines in grid-like controls.
 
-        On macOS, this maps to `[NSColor gridLines]`, on other platforms
-        it is currently the same as ::wxSYS_COLOUR_BTNFACE.
+        On macOS, this maps to `[NSColor gridColor]`, in wxGTK 3 it is the
+        colour of the lines separating the column headers in `GtkTreeView` and
+        elsewhere it is currently the same as ::wxSYS_COLOUR_BTNFACE.
 
         @since 3.3.2
      */
