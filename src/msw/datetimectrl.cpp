@@ -68,6 +68,13 @@ namespace
         constexpr int kHotBorderLift = 0;
     }
 
+    struct DTPViewDims { int rows, cols; };
+
+    inline DTPViewDims DTPGetViewDims(DWORD view)
+    {
+        return view == MCMV_MONTH ? DTPViewDims{ 6, 7 } : DTPViewDims{ 3, 4 };
+    }
+
     constexpr UINT_PTR kDTPChildSubclassId = 0x77780020ul;
     constexpr DWORD_PTR kDTPMonthCal = 1;
     static const wchar_t* const kHotProp = L"wxDTPHotDay";
@@ -284,6 +291,7 @@ namespace
     {
         constexpr COLORREF kBody = RGB(0x23, 0x23, 0x23);     // Days and header background
         constexpr COLORREF kBand = RGB(0x1f, 0x1f, 0x1f);     // Weekday names strip background
+        constexpr COLORREF kTextBand = RGB(0x40, 0xbd, 0xff);     // Days and header text color
         constexpr COLORREF kText = RGB(0xff, 0xff, 0xff);     // Standard text color
         constexpr COLORREF kTrailing = RGB(0xcd, 0xcd, 0xcd); // Other months' days
         constexpr COLORREF kAccent = RGB(0x40, 0xbd, 0xff);   // Selected day and today ring
@@ -439,11 +447,12 @@ namespace
         bool ok = DTPGetGridRect(hwnd, MCGIP_CALENDARHEADER, rcHeader) &&
             DTPGetGridRect(hwnd, MCGIP_PREV, rcPrev) &&
             DTPGetGridRect(hwnd, MCGIP_NEXT, rcNext);
-        for (int row = 0; ok && row < 6; ++row)
-        {
-            for (int col = 0; ok && col < 7; ++col)
+        DWORD currentView = static_cast<DWORD>(::SendMessage(hwnd, MCM_GETCURRENTVIEW, 0, 0));
+        const DTPViewDims dims = DTPGetViewDims(currentView);
+
+        for (int row = 0; ok && row < dims.rows; ++row)
+            for (int col = 0; ok && col < dims.cols; ++col)
                 ok = DTPGetCell(hwnd, row, col, cells[row][col]);
-        }
 
         if (!ok)
         {
@@ -464,7 +473,7 @@ namespace
         const DTPRegion body = { 255, L::kText, C::kBody, C::kText, false, false, 0 };
         DTPMapRect(pPx, pSrc, rw, w, h, rcAll, body);
 
-        const DTPRegion header = { L::kTitleBk, L::kTitleText, C::kBody, C::kText, false, false, 0 };
+        const DTPRegion header = { L::kTitleBk, L::kTitleText, C::kBody, C::kTextBand, false, false, 0 };
         DTPMapRect(pPx, pSrc, rw, w, h, rcHeader, header);
 
         const DTPRegion flat = { 255, 0, C::kBody, C::kBody, false, false, 0 };
@@ -507,30 +516,49 @@ namespace
                     : isHot ? (isTrailing ? hotTrailing : hot)
                     : isTrailing ? trailing
                     : normal);
+                SYSTEMTIME stToday = {};
+                if (::SendMessage(hwnd, MCM_GETTODAY, 0, reinterpret_cast<LPARAM>(&stToday)))
                 {
-                    SYSTEMTIME stToday = {};
-                    if (::SendMessage(hwnd, MCM_GETTODAY, 0, reinterpret_cast<LPARAM>(&stToday)))
+                    if (cell.selected)
                     {
-                        if (cell.selected)
-                        {
-                            HDC hdc = GetBufferedPaintDC(hbp);
-                            DrawFocusRect(hdc, &cell.rc);
-                        }
-                        if (cell.year != stToday.wYear || cell.month != stToday.wMonth ||
-                            cell.day != stToday.wDay)
-                            continue;
+                        HDC hdc = GetBufferedPaintDC(hbp);
+                        DrawFocusRect(hdc, &cell.rc);
+                    }
+                    if (cell.year != stToday.wYear || cell.month != stToday.wMonth ||
+                        cell.day != stToday.wDay)
+                        continue;
 
-                        // Black on the accent fill, accent on the dark body.
-                        DTPDrawBorder(pPx, rw, w, h, rc,
-                            cell.selected ? C::kborderAccent : C::kAccent, 1);
-                        if (cell.selected)
-                        {
-                            HDC hdc = GetBufferedPaintDC(hbp);
-                            DrawFocusRect(hdc, &cell.rc);
-                        }
+                    DTPDrawBorder(pPx, rw, w, h, rc,
+                        cell.selected ? C::kborderAccent : C::kAccent, 1);
+                    if (cell.selected)
+                    {
+                        HDC hdc = GetBufferedPaintDC(hbp);
+                        RECT rcFocus = cell.rc;
+                        InflateRect(&rcFocus, -1, -1);
+                        DrawFocusRect(hdc, &rcFocus);
                     }
                 }
             }
+        }
+
+        RECT rcToday = {};
+        DTPGetGridRect(hwnd, MCGIP_FOOTER, rcToday);
+        if (rcToday.bottom > rcToday.top)
+        {
+            RECT rcBox = rcToday;
+            const int cellWidth = (rcHeader.right - rcHeader.left) / 7;
+            rcBox.right = rcBox.left + cellWidth + 2;
+
+            // RTL: mirror the box like you do for the day cells
+            if (isRTL)
+                rcBox = RECT{ w - rcBox.right, rcBox.top, w - rcBox.left, rcBox.bottom };
+
+            const bool footerHot = haveCursor && ::PtInRect(&rcBox, ptCursor);
+            const COLORREF footerBg = footerHot ? C::kHover : C::kBody;
+
+            // 2) remap the "Today" text over the chosen background
+            const DTPRegion footerText = { 255, L::kText, footerBg, C::kTextBand, false, false, 0 };
+            DTPMapRect(pPx, pSrc, rw, w, h, rcBox, footerText);
         }
     }
 } // namespace
