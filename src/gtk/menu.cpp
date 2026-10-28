@@ -1116,6 +1116,8 @@ wxString GtkAccel::GetGtkHotKey(const wxAcceleratorEntry *accel)
             hotkey += wxT("<control>");
         if ( flags & wxACCEL_SHIFT )
             hotkey += wxT("<shift>");
+        if ( flags & wxACCEL_META )
+            hotkey += wxT("<meta>");
 
         // Accelerator can be invalid for 2 different reasons from GTK point of
         // view: either the key just can't be used as an accelerator at all
