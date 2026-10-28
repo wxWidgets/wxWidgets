@@ -369,6 +369,7 @@ void wxRichTextCtrl::Init()
     m_selectionAnchorObject = nullptr;
     m_selectionState = wxRichTextCtrlSelectionState_Normal;
     m_editable = true;
+    m_enableRTF = false;
     m_useVirtualAttributes = false;
     m_verticalScrollbarEnabled = true;
     m_caretAtLineStart = false;
@@ -3082,6 +3083,11 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------
+wxString wxRichTextCtrl::GetExtWildcard(bool combine, bool save, wxArrayInt* types) const
+{
+    return wxRichTextBuffer::GetExtWildcard(combine, save, types, GetRTFEnabled());
+}
+
 #if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
 {

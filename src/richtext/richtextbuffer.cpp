@@ -28,11 +28,27 @@
 #include "wx/clipbrd.h"
 #include "wx/wfstream.h"
 #include "wx/mstream.h"
+#include "wx/image.h"
 #include "wx/sstream.h"
 #include "wx/textfile.h"
 #include "wx/hashmap.h"
 #include "wx/dynarray.h"
 #include "wx/math.h"
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    #include "wx/cmndata.h"
+    #include "wx/paper.h"
+#endif
+
+#include <algorithm>
+#include <cstdarg>
+#include <cstdio>
+#include <limits>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
@@ -8701,6 +8717,2966 @@ bool wxRichTextBuffer::BeginURL(const wxString& url, const wxString& characterSt
     return BeginStyle(attr);
 }
 
+namespace
+{
+
+// RTF uses twips for paragraph dimensions, while wxTextAttr uses tenths of a
+// millimetre.
+int wxRichTextTenthsMMToTwips(int value)
+{
+    return wxRound(value * 720.0 / 127.0);
+}
+
+int wxRichTextDimensionToTwips(const wxTextAttrDimension& dim,
+                               int reference = 0)
+{
+    if ( !dim.IsValid() )
+        return 0;
+
+    switch ( dim.GetUnits() )
+    {
+        case wxTEXT_ATTR_UNITS_PIXELS:
+            // RTF has no pixel unit. 96 dpi is also the convention used by
+            // Word when importing HTML/CSS pixel dimensions.
+            return wxRound(dim.GetValue() * 15.0);
+
+        case wxTEXT_ATTR_UNITS_PERCENTAGE:
+            return reference > 0 ? wxRound(reference * dim.GetValue() / 100.0) : 0;
+
+        case wxTEXT_ATTR_UNITS_POINTS:
+            return dim.GetValue() * 20;
+
+        case wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT:
+            return wxRound(dim.GetValue() / 5.0);
+
+        case wxTEXT_ATTR_UNITS_TENTHS_MM:
+        default:
+            return wxRichTextTenthsMMToTwips(dim.GetValue());
+    }
+}
+
+// Margins and padding of boxes, cells and images. wx doesn't support
+// percentages for them: wxRichTextObject::GetBoxRects() converts them without
+// a reference size, which only gives an assertion failure and one pixel.
+// Export a percentage as no space.
+int wxRichTextBoxSpacingToTwips(const wxTextAttrDimension& dim)
+{
+    return dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE ? 0
+                                                          : wxRichTextDimensionToTwips(dim);
+}
+
+// RTF output is always 7-bit ASCII: everything else is escaped. Accumulate
+// it as bytes, which avoids converting every fragment, and in particular the
+// hexadecimal image data, to wxString and back when saving or copying.
+class wxRichTextRTFOutput
+{
+public:
+    wxRichTextRTFOutput& operator+=(const char* text) { m_data += text; return *this; }
+    wxRichTextRTFOutput& operator+=(char ch) { m_data += ch; return *this; }
+    wxRichTextRTFOutput& operator+=(const std::string& text) { m_data += text; return *this; }
+    wxRichTextRTFOutput& operator+=(const wxString& text)
+    {
+        m_data += text.utf8_string();
+        return *this;
+    }
+
+    // Appends formatted ASCII text, without going through wxString.
+    void Printf(const char* format, ...) WX_ATTRIBUTE_PRINTF_2;
+
+    size_t length() const { return m_data.length(); }
+    std::string Mid(size_t pos, size_t len = std::string::npos) const
+    {
+        return m_data.substr(pos, len);
+    }
+    void Truncate(size_t len) { m_data.resize(len); }
+    void reserve(size_t len) { m_data.reserve(len); }
+    std::string& Data() { return m_data; }
+
+private:
+    std::string m_data;
+};
+
+void wxRichTextRTFOutput::Printf(const char* format, ...)
+{
+    // All RTF control words and numbers fit, use the heap only for longer
+    // strings, if any.
+    char buf[256];
+    va_list args;
+    va_start(args, format);
+    const int len = vsnprintf(buf, sizeof(buf), format, args);
+    va_end(args);
+    if ( len < 0 )
+        return;
+    if ( static_cast<size_t>(len) < sizeof(buf) )
+    {
+        m_data.append(buf, len);
+        return;
+    }
+
+    const size_t start = m_data.length();
+    m_data.resize(start + len + 1);
+    va_start(args, format);
+    vsnprintf(&m_data[start], len + 1, format, args);
+    va_end(args);
+    m_data.resize(start + len);
+}
+
+class wxRichTextRTFWriter
+{
+private:
+    // The exported objects are const, but these accessors aren't, although
+    // they don't modify them. Keep the public API unchanged and cast here.
+    static wxString GetBulletText(const wxRichTextParagraph& para)
+        { return const_cast<wxRichTextParagraph&>(para).GetBulletText(); }
+    static const wxRichTextImageBlock& GetImageBlock(const wxRichTextImage& image)
+        { return const_cast<wxRichTextImage&>(image).GetImageBlock(); }
+    static bool LoadImage(const wxRichTextImageBlock& block, wxImage& image)
+        { return const_cast<wxRichTextImageBlock&>(block).Load(image); }
+
+    // A field type's font is used only if it has a size. In wxQt, even
+    // wxNullFont is valid, a default font without one (its point size is -1).
+    static bool HasFontSize(const wxFont& font)
+    {
+        if ( !font.IsOk() )
+            return false;
+        return font.IsUsingSizeInPixels() ? font.GetPixelSize().y > 0
+                                          : font.GetFractionalPointSize() > 0;
+    }
+
+    // RTF supports nine list levels, while wx list styles define ten.
+    enum { MaxListLevels = 9 };
+    struct BulletItem
+    {
+        const wxRichTextParagraph* paragraph;
+        wxRichTextAttr attr;
+        wxString marker;
+        size_t length;
+    };
+    struct ListLevel
+    {
+        bool used = false;
+        wxRichTextAttr attr;
+        wxString marker;
+        size_t length = 0;
+        int startAt = 1;
+        std::string signature;
+    };
+    struct ListDefinition
+    {
+        wxString key;
+        // Up to the deepest used level only: most lists use one level, and a
+        // document can contain many lists.
+        std::vector<ListLevel> levels;
+        int counters[MaxListLevels] = {};
+        bool counted[MaxListLevels] = {};
+        int maxLevel = -1;
+    };
+    struct ListReference
+    {
+        int id;
+        int level;
+    };
+
+public:
+    wxRichTextRTFWriter(const wxRichTextBuffer& buffer, int flags)
+        : m_buffer(buffer), m_availableSize(9360, 12960),
+          m_containerSize(m_availableSize), m_inTextBox(false),
+          m_shapeFallbacks(!(flags & wxRICHTEXT_HANDLER_RTF_NO_SHAPE_FALLBACKS))
+    {
+    }
+
+    bool Write(std::string& rtf, const wxPageSetupDialogData* pageSetup)
+    {
+        CollectDocumentAttributes();
+        AssignLists();
+
+        // Avoid repeated reallocation for documents with large images, whose
+        // data is written as two hexadecimal digits per byte.
+        m_output.reserve(4096 + 2 * m_imageBytes + m_imageBytes / 16);
+        m_output += "{\\rtf1\\ansi\\ansicpg1252\\deff0\\uc1\n";
+        WriteFontTable();
+        WriteColourTable();
+        WriteStyleSheet();
+        WriteBulletLists();
+        if ( !WritePageSetup(pageSetup) )
+            return false;
+        // The page's text area corresponds to the buffer's content area. wx
+        // lays out the buffer in the window, or in the page when printing,
+        // and ignores any size of the buffer itself: so does the export. The
+        // buffer's margins lie outside the content, but are part of its
+        // outer size.
+        const auto& margins = m_buffer.GetAttributes().GetTextBoxAttr().GetMargins();
+        m_containerSize = wxSize(m_availableSize.x +
+            wxMax(0, wxRichTextBoxSpacingToTwips(margins.GetLeft())) +
+            wxMax(0, wxRichTextBoxSpacingToTwips(margins.GetRight())),
+            m_availableSize.y +
+            wxMax(0, wxRichTextBoxSpacingToTwips(margins.GetTop())) +
+            wxMax(0, wxRichTextBoxSpacingToTwips(margins.GetBottom())));
+
+        if ( !WriteLayoutBox(m_buffer, 0, false) )
+            return false;
+
+        m_output += "}";
+        rtf.swap(m_output.Data());
+        return true;
+    }
+
+private:
+    bool WritePageSetup(const wxPageSetupDialogData* pageSetup)
+    {
+        int width = 12240, height = 15840;
+        int left = 1440, right = 1440, top = 1440, bottom = 1440;
+        bool landscape = false;
+        if ( pageSetup )
+        {
+#if wxUSE_PRINTING_ARCHITECTURE
+            // Never use IsOk() or native print data: exporting does not
+            // require a printer, and must not change the caller's settings.
+            const auto toTwips = [](double mm, int& twips)
+            {
+                const double value = mm * 1440.0 / 25.4;
+                if ( mm < 0 || value > std::numeric_limits<int>::max() )
+                    return false;
+                twips = wxRound(value);
+                return true;
+            };
+            const auto unspecified = [](const wxSize& size)
+            {
+                return size == wxSize(0, 0) || size == wxDefaultSize;
+            };
+            wxSize size = pageSetup->GetPaperSize();
+            if ( unspecified(size) )
+                size = pageSetup->GetPrintData().GetPaperSize();
+            const wxPrintPaperType* const paper = wxThePrintPaperDatabase
+                ? wxThePrintPaperDatabase->FindPaperType(pageSetup->GetPaperId()) : nullptr;
+            double widthMM = 215.9, heightMM = 279.4;
+            if ( paper && (unspecified(size) || size == paper->GetSizeMM()) )
+            {
+                // GetPaperSize() truncates to whole millimetres, notably
+                // turning Letter's 215.9 x 279.4 mm into 215 x 279 mm.
+                widthMM = paper->GetWidth() / 10.0;
+                heightMM = paper->GetHeight() / 10.0;
+            }
+            else if ( !unspecified(size) )
+            {
+                widthMM = size.x;
+                heightMM = size.y;
+            }
+            const wxPrintOrientation orientation = pageSetup->GetPrintData().GetOrientation();
+            if ( orientation != wxPORTRAIT && orientation != wxLANDSCAPE )
+                return false;
+            landscape = orientation == wxLANDSCAPE;
+            if ( landscape )
+                std::swap(widthMM, heightMM);
+
+            const wxPoint tl = pageSetup->GetMarginTopLeft();
+            const wxPoint br = pageSetup->GetMarginBottomRight();
+            // Validate before rounding too: two margins totalling the paper
+            // width can otherwise appear to leave one twip of usable space.
+            if ( double(tl.x) + br.x >= widthMM || double(tl.y) + br.y >= heightMM ||
+                 !toTwips(widthMM, width) || !toTwips(heightMM, height) ||
+                 !toTwips(tl.x, left) || !toTwips(tl.y, top) ||
+                 !toTwips(br.x, right) || !toTwips(br.y, bottom) )
+                return false;
+#else
+            return false;
+#endif
+        }
+        // Subtract in stages rather than adding margins, which could overflow
+        // for invalid input. Always leave a positive layout reference size.
+        if ( width <= 0 || height <= 0 || left >= width || right >= width - left ||
+             top >= height || bottom >= height - top )
+            return false;
+        m_availableSize = wxSize(width - left - right, height - top - bottom);
+        // \viewkind4 is the normal view, as RichEdit writes it; Word still
+        // opens the document in its print layout.
+        // wx uses default tab stops every 10 mm, not every 0.5 inch as RTF.
+        // Like wx, don't balance single-byte and double-byte character widths:
+        // otherwise Word opens the document in a compatibility mode that
+        // widens consecutive spaces. Also like wx, which doesn't stretch any
+        // lines, don't stretch a justified line ending with a line break. Word
+        // sets both for its own documents, and also \noultrlspc, which isn't
+        // written: like wx, underline trailing spaces.
+        m_output.Printf("\\viewkind4\\deftab%d\\dntblnsbdb\\expshrtn\\paperw%d\\paperh%d",
+                        wxRichTextTenthsMMToTwips(100), width, height);
+        if ( landscape )
+            m_output += "\\landscape";
+        m_output.Printf("\\margl%d\\margr%d\\margt%d\\margb%d\n",
+                        left, right, top, bottom);
+        return true;
+    }
+
+    // Percentage widths are relative to referenceWidth if specified,
+    // otherwise to the available width, like percentage heights.
+    wxSize ResolveSize(const wxTextBoxAttr& attr, const wxSize& fallback,
+                       int referenceWidth = 0) const
+    {
+        wxSize size = fallback;
+        const wxTextAttrDimension* requested[] = { &attr.GetWidth(), &attr.GetHeight() };
+        const wxTextAttrDimension* minimum[] =
+            { &attr.GetMinSize().GetWidth(), &attr.GetMinSize().GetHeight() };
+        const wxTextAttrDimension* maximum[] =
+            { &attr.GetMaxSize().GetWidth(), &attr.GetMaxSize().GetHeight() };
+        for ( int axis = 0; axis < 2; ++axis )
+        {
+            const int reference = axis == 1 ? m_availableSize.y
+                : referenceWidth > 0 ? referenceWidth : m_availableSize.x;
+            int value = axis == 0 ? size.x : size.y;
+            if ( requested[axis]->IsValid() )
+                value = wxRichTextDimensionToTwips(*requested[axis], reference);
+            if ( minimum[axis]->IsValid() )
+                value = wxMax(value, wxRichTextDimensionToTwips(*minimum[axis], reference));
+            if ( maximum[axis]->IsValid() )
+                value = wxMin(value, wxRichTextDimensionToTwips(*maximum[axis], reference));
+            if ( axis == 0 )
+                size.x = wxMax(1, value);
+            else
+                size.y = wxMax(1, value);
+        }
+        return size;
+    }
+
+    wxSize ContentSize(const wxTextBoxAttr& attr, wxSize size) const
+    {
+        size.x -= wxRichTextBoxSpacingToTwips(attr.GetPadding().GetLeft()) +
+                  wxRichTextBoxSpacingToTwips(attr.GetPadding().GetRight());
+        size.y -= wxRichTextBoxSpacingToTwips(attr.GetPadding().GetTop()) +
+                  wxRichTextBoxSpacingToTwips(attr.GetPadding().GetBottom());
+        size.x = wxMax(1, size.x);
+        size.y = wxMax(1, size.y);
+        return size;
+    }
+
+    bool WriteSizedLayoutBox(const wxRichTextParagraphLayoutBox& box, int depth,
+                             bool inCell, const wxSize& size, bool inlineEnd = false)
+    {
+        const wxSize previous = m_availableSize;
+        const wxSize previousContainer = m_containerSize;
+        m_availableSize = ContentSize(box.GetAttributes().GetTextBoxAttr(), size);
+        m_containerSize = size;
+        const bool ok = WriteLayoutBox(box, depth, inCell, inlineEnd);
+        m_availableSize = previous;
+        m_containerSize = previousContainer;
+        return ok;
+    }
+
+    void CollectDocumentAttributes()
+    {
+        wxString defaultFace;
+        const wxRichTextAttr& basicStyle = m_buffer.GetBasicStyle();
+        if ( basicStyle.HasFontFaceName() )
+            defaultFace = basicStyle.GetFontFaceName();
+        if ( defaultFace.empty() && wxNORMAL_FONT->IsOk() )
+            defaultFace = wxNORMAL_FONT->GetFaceName();
+        if ( defaultFace.empty() )
+            defaultFace = "Arial";
+
+        AddFont(defaultFace);
+
+        CollectObjectAttributes(m_buffer);
+        CollectStyleSheet();
+    }
+
+    // Paragraph and character styles are exported as RTF styles so that
+    // readers keep their names. Their formatting is also written directly,
+    // as for other attributes, so the appearance doesn't depend on the
+    // reader resolving them. List styles are represented by RTF lists.
+    void CollectStyleSheet()
+    {
+        const wxRichTextStyleSheet* const sheet = m_buffer.GetStyleSheet();
+        if ( !sheet )
+            return;
+
+        // Style numbers are shared by paragraph and character styles. Leave
+        // 0 for the reader's default "Normal" style.
+        int number = 1;
+        for ( size_t n = 0; n < sheet->GetParagraphStyleCount(); ++n )
+        {
+            const wxRichTextParagraphStyleDefinition* const def = sheet->GetParagraphStyle(n);
+            if ( m_paragraphStyles.emplace(def->GetName(), number).second )
+            {
+                ++number;
+                CollectStyle(def->GetStyleMergedWithBase(sheet));
+            }
+        }
+        for ( size_t n = 0; n < sheet->GetCharacterStyleCount(); ++n )
+        {
+            const wxRichTextCharacterStyleDefinition* const def = sheet->GetCharacterStyle(n);
+            if ( m_characterStyles.emplace(def->GetName(), number).second )
+            {
+                ++number;
+                CollectStyle(def->GetStyleMergedWithBase(sheet));
+            }
+        }
+    }
+
+    static int FindStyle(const std::unordered_map<wxString, int, wxStringHash, wxStringEqual>& styles,
+                         const wxString& name)
+    {
+        const auto found = styles.find(name);
+        return found == styles.end() ? 0 : found->second;
+    }
+
+    void WriteStyleSheet()
+    {
+        const wxRichTextStyleSheet* const sheet = m_buffer.GetStyleSheet();
+        if ( !sheet || (m_paragraphStyles.empty() && m_characterStyles.empty()) )
+            return;
+
+        m_output += "{\\stylesheet";
+        for ( size_t n = 0; n < sheet->GetParagraphStyleCount(); ++n )
+        {
+            const wxRichTextParagraphStyleDefinition* const def = sheet->GetParagraphStyle(n);
+            const int number = FindStyle(m_paragraphStyles, def->GetName());
+            if ( IsStyleWritten(number) )
+                continue;
+            const wxRichTextAttr attr = def->GetStyleMergedWithBase(sheet);
+            m_output.Printf("{\\s%d", number);
+            WriteParagraphStyle(attr);
+            WriteCharacterStyle(attr, wxString(), true);
+            const int base = FindStyle(m_paragraphStyles, def->GetBaseStyle());
+            if ( base )
+                m_output.Printf("\\sbasedon%d", base);
+            const int next = FindStyle(m_paragraphStyles, def->GetNextStyle());
+            if ( next )
+                m_output.Printf("\\snext%d", next);
+            m_output += " ";
+            WriteEscapedText(def->GetName(), true);
+            m_output += ";}";
+        }
+        for ( size_t n = 0; n < sheet->GetCharacterStyleCount(); ++n )
+        {
+            const wxRichTextCharacterStyleDefinition* const def = sheet->GetCharacterStyle(n);
+            const int number = FindStyle(m_characterStyles, def->GetName());
+            if ( IsStyleWritten(number) )
+                continue;
+            m_output.Printf("{\\*\\cs%d\\additive", number);
+            WriteCharacterStyle(def->GetStyleMergedWithBase(sheet), wxString(), true);
+            const int base = FindStyle(m_characterStyles, def->GetBaseStyle());
+            if ( base )
+                m_output.Printf("\\sbasedon%d", base);
+            m_output += " ";
+            WriteEscapedText(def->GetName(), true);
+            m_output += ";}";
+        }
+        m_output += "}\n";
+    }
+
+    // Style names are unique within a style sheet, but don't rely on it: a
+    // duplicate definition would otherwise be written with the same number.
+    bool IsStyleWritten(int number)
+    {
+        return !m_writtenStyles.insert(number).second;
+    }
+
+    // Returns whether the combined attributes of the paragraph specify a
+    // face. This is remembered for the paragraph collected last, normally
+    // the one whose objects are being collected.
+    bool ParagraphHasFace(const wxRichTextParagraph& para)
+    {
+        if ( &para != m_faceParagraph )
+        {
+            const wxRichTextAttr attr = para.GetCombinedAttributes();
+            m_faceParagraph = &para;
+            m_paragraphHasFace = attr.HasFontFaceName() && !attr.GetFontFaceName().empty();
+        }
+        return m_paragraphHasFace;
+    }
+
+    void CollectObjectAttributes(const wxRichTextObject& object)
+    {
+        CollectStyle(object.GetAttributes());
+        if ( const auto para = wxDynamicCast(&object, wxRichTextParagraph) )
+        {
+            const wxRichTextAttr attr = para->GetCombinedAttributes();
+            AddFont(ResolveFontFace(attr));
+            m_faceParagraph = para;
+            m_paragraphHasFace = attr.HasFontFaceName() && !attr.GetFontFaceName().empty();
+            const int style = attr.GetBulletStyle();
+            if ( attr.HasBulletStyle() &&
+                 (style & (wxTEXT_ATTR_BULLET_STYLE_SYMBOL | wxTEXT_ATTR_BULLET_STYLE_STANDARD |
+                           wxTEXT_ATTR_BULLET_STYLE_BITMAP | wxTEXT_ATTR_BULLET_STYLE_ARABIC |
+                           wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER | wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER |
+                           wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER | wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER)) &&
+                 !(style & (wxTEXT_ATTR_BULLET_STYLE_CONTINUATION | wxTEXT_ATTR_BULLET_STYLE_OUTLINE)) )
+            {
+                wxString marker = GetBulletText(*para);
+                if ( marker.empty() )
+                    marker = GetStandardBullet(attr);
+                // RTF counts UTF-16 code units, not wxString characters (which
+                // can be UTF-32 or UTF-8). Supplementary characters occupy two
+                // units, and the leveltext length must fit in a single byte.
+                size_t length = 0;
+                for ( wxUniChar ch : marker )
+                    length += ch.GetValue() > 0xffff ? 2 : 1;
+                if ( length != 0 && length <= 255 )
+                    m_bulletItems.push_back({para, attr, marker, length});
+            }
+        }
+
+        if ( const auto image = wxDynamicCast(&object, wxRichTextImage) )
+            m_imageBytes += GetImageBlock(*image).GetDataSize();
+
+        // The face of an object in a paragraph is its own one, collected
+        // above, or that of the paragraph, collected with it. Only if neither
+        // specifies one, it depends on the other combined font attributes,
+        // e.g. the family: combining them is relatively expensive.
+        if ( const auto para = wxDynamicCast(object.GetParent(), wxRichTextParagraph) )
+        {
+            const wxRichTextAttr& own = object.GetAttributes();
+            if ( !(own.HasFontFaceName() && !own.GetFontFaceName().empty()) &&
+                 !ParagraphHasFace(*para) )
+                AddFont(ResolveFontFace(para->GetCombinedAttributes(own)));
+        }
+
+        const wxTextBoxAttr& box = object.GetAttributes().GetTextBoxAttr();
+        CollectBorders(box.GetBorder());
+        CollectBorders(box.GetOutline());
+        if ( box.GetShadow().HasColour() )
+            AddColour(box.GetShadow().GetColour());
+
+        if ( const wxRichTextField* const field =
+                 wxDynamicCast(&object, wxRichTextField) )
+        {
+            wxRichTextFieldType* const baseType =
+                wxRichTextBuffer::FindFieldType(field->GetFieldType());
+            wxRichTextFieldTypeStandard* const fieldType =
+                wxDynamicCast(baseType, wxRichTextFieldTypeStandard);
+            // Non-composite fields use their own attributes in WriteField().
+            AddFont(ResolveFontFace(field->GetAttributes()));
+            // Collect only what WriteField() writes for a text label: not the
+            // font of a bitmap or composite field, in particular, as the
+            // default font of a field type depends on the platform.
+            if ( fieldType && !fieldType->GetBitmap().IsOk() &&
+                 !baseType->IsTopLevel(const_cast<wxRichTextField*>(field)) )
+            {
+                if ( HasFontSize(fieldType->GetFont()) )
+                    AddFont(fieldType->GetFont().GetFaceName());
+                if ( fieldType->GetTextColour().IsOk() )
+                    AddColour(fieldType->GetTextColour());
+                if ( fieldType->GetBackgroundColour().IsOk() )
+                    AddColour(fieldType->GetBackgroundColour());
+            }
+        }
+
+        const wxRichTextCompositeObject* const composite =
+            wxDynamicCast(&object, wxRichTextCompositeObject);
+        if ( !composite )
+            return;
+
+        const wxRichTextObjectList& children = composite->GetChildren();
+        for ( wxRichTextObjectList::compatibility_iterator node = children.GetFirst();
+              node; node = node->GetNext() )
+        {
+            CollectObjectAttributes(*node->GetData());
+        }
+    }
+
+    void CollectBorders(const wxTextAttrBorders& borders)
+    {
+        const wxTextAttrBorder* const all[] =
+        {
+            &borders.GetLeft(), &borders.GetTop(),
+            &borders.GetRight(), &borders.GetBottom()
+        };
+        for ( const wxTextAttrBorder* border : all )
+        {
+            if ( border->HasColour() )
+                AddColour(border->GetColour());
+        }
+    }
+
+    void CollectStyle(const wxRichTextAttr& attr)
+    {
+        if ( attr.HasFontFaceName() && !attr.GetFontFaceName().empty() )
+            AddFont(attr.GetFontFaceName());
+        if ( !attr.GetBulletFont().empty() )
+            AddFont(attr.GetBulletFont());
+        if ( attr.HasTextColour() )
+            AddColour(attr.GetTextColour());
+        if ( attr.HasBackgroundColour() )
+            AddColour(attr.GetBackgroundColour());
+        if ( attr.HasFontUnderlined() && attr.GetUnderlineColour().IsOk() )
+            AddColour(attr.GetUnderlineColour());
+
+        CollectBorders(attr.GetTextBoxAttr().GetBorder());
+        CollectBorders(attr.GetTextBoxAttr().GetOutline());
+    }
+
+    int AddFont(const wxString& faceName)
+    {
+        const int existing = m_fonts.Index(faceName, false);
+        if ( existing != wxNOT_FOUND )
+            return existing;
+
+        m_fonts.Add(faceName);
+        return static_cast<int>(m_fonts.GetCount() - 1);
+    }
+
+    wxString ResolveFontFace(const wxRichTextAttr& attr)
+    {
+        if ( attr.HasFontFaceName() && !attr.GetFontFaceName().empty() )
+            return attr.GetFontFaceName();
+
+        // A box/cell with no face uses the native default font, not the
+        // outer buffer's basic font. Match rich text drawing, otherwise RTF
+        // readers substitute the document font (e.g. Times New Roman).
+        // The formatting dialog may show a blank face for this implicit font.
+        // Use a private cache so exporting does not change the source buffer.
+        return m_fontTable.FindFont(attr).GetFaceName();
+    }
+
+    int FindFont(const wxString& faceName) const
+    {
+        const int index = m_fonts.Index(faceName, false);
+        return index == wxNOT_FOUND ? 0 : index;
+    }
+
+    int AddColour(const wxColour& colour)
+    {
+        for ( size_t n = 0; n < m_colours.size(); ++n )
+        {
+            if ( m_colours[n] == colour )
+                return static_cast<int>(n + 1);
+        }
+
+        m_colours.push_back(colour);
+        return static_cast<int>(m_colours.size());
+    }
+
+    int FindColour(const wxColour& colour) const
+    {
+        for ( size_t n = 0; n < m_colours.size(); ++n )
+        {
+            if ( m_colours[n] == colour )
+                return static_cast<int>(n + 1);
+        }
+
+        return 0;
+    }
+
+    // Fonts are written without \fcharset, which would need the script of
+    // each font: readers use the document code page (\ansicpg1252), and all
+    // other characters are written as Unicode (\u).
+    void WriteFontTable()
+    {
+        m_output += "{\\fonttbl";
+        for ( size_t n = 0; n < m_fonts.GetCount(); ++n )
+        {
+            m_output.Printf("{\\f%lu\\fnil ", static_cast<unsigned long>(n));
+            WriteEscapedText(m_fonts[n], true);
+            m_output += ";}";
+        }
+        m_output += "}\n";
+    }
+
+    void WriteColourTable()
+    {
+        m_output += "{\\colortbl;";
+        for ( const wxColour& colour : m_colours )
+        {
+            m_output.Printf("\\red%d\\green%d\\blue%d;",
+                            colour.Red(), colour.Green(), colour.Blue());
+        }
+        m_output += "}\n";
+    }
+
+    // Returns the output of a writing function, without appending it.
+    template <typename F>
+    std::string Capture(F write)
+    {
+        std::string saved;
+        saved.swap(m_output.Data());
+        write();
+        std::string captured;
+        captured.swap(m_output.Data());
+        saved.swap(m_output.Data());
+        return captured;
+    }
+
+    // wx stores the number of each list paragraph explicitly, while RTF
+    // readers number list paragraphs automatically. Consecutive items of the
+    // same container share an RTF list, so that the reader renumbers them
+    // when the list is edited, as long as their stored numbers and formatting
+    // are what the reader would produce. Otherwise a new list is started,
+    // which preserves every stored number exactly.
+    void AssignLists()
+    {
+        const wxRichTextStyleSheet* const sheet = m_buffer.GetStyleSheet();
+        std::unordered_map<const wxRichTextObject*, size_t> current;
+        // Consecutive items usually have the same formatting, apart from their
+        // numbers: reuse the signature of the previous item then.
+        wxRichTextAttr signatureAttr;
+        wxString signatureMarker;
+        std::string signature;
+        for ( const BulletItem& item : m_bulletItems )
+        {
+            const bool numbered = GetListNumberFormat(item.attr) != 23;
+            const int number = numbered ? item.attr.GetBulletNumber() : 1;
+
+            // Only list styles define levels. Other list paragraphs (e.g.
+            // those created with wxRichTextCtrl::NumberList()) use level 0.
+            wxString key;
+            int level = 0;
+            if ( sheet && item.attr.HasListStyleName() )
+            {
+                const wxRichTextListStyleDefinition* const def =
+                    sheet->FindListStyle(item.attr.GetListStyleName());
+                if ( def )
+                {
+                    key = item.attr.GetListStyleName();
+                    level = FindListLevel(*def, item.attr.GetLeftIndent());
+                }
+            }
+            // The signature doesn't depend on the number, nor on the marker
+            // of a numbered item, which is generated from the level text.
+            wxRichTextAttr attr(item.attr);
+            attr.SetBulletNumber(0);
+            const wxString marker = numbered ? wxString() : item.marker;
+            if ( signature.empty() || !(attr == signatureAttr) || marker != signatureMarker )
+            {
+                signature = GetListLevelSignature(item);
+                signatureAttr = attr;
+                signatureMarker = marker;
+            }
+
+            const wxRichTextObject* const container = item.paragraph->GetParent();
+            const auto found = current.find(container);
+            bool reuse = found != current.end() && m_lists[found->second].key == key;
+            if ( reuse )
+            {
+                const ListDefinition& list = m_lists[found->second];
+                if ( static_cast<size_t>(level) < list.levels.size() &&
+                     list.levels[level].used )
+                {
+                    const ListLevel& existing = list.levels[level];
+                    const int expected = list.counted[level] ? list.counters[level] + 1
+                                                             : existing.startAt;
+                    reuse = existing.signature == signature &&
+                            (!numbered || number == expected);
+                }
+            }
+
+            size_t index;
+            if ( reuse )
+            {
+                index = found->second;
+            }
+            else
+            {
+                index = m_lists.size();
+                m_lists.push_back(ListDefinition());
+                m_lists.back().key = key;
+                current[container] = index;
+            }
+
+            ListDefinition& list = m_lists[index];
+            if ( list.levels.size() <= static_cast<size_t>(level) )
+                list.levels.resize(level + 1);
+            ListLevel& listLevel = list.levels[level];
+            if ( !listLevel.used )
+            {
+                listLevel.used = true;
+                listLevel.attr = item.attr;
+                listLevel.marker = item.marker;
+                listLevel.length = item.length;
+                listLevel.signature = signature;
+                listLevel.startAt = number;
+                list.maxLevel = wxMax(list.maxLevel, level);
+            }
+            // As in RTF readers, an item restarts the numbering of the levels
+            // below it.
+            list.counters[level] = number;
+            list.counted[level] = true;
+            for ( int deeper = level + 1; deeper < MaxListLevels; ++deeper )
+                list.counted[deeper] = false;
+
+            m_paragraphLists[item.paragraph] = ListReference{static_cast<int>(index + 1), level};
+        }
+    }
+
+    // wx doesn't store the list level of a paragraph, only its indent.
+    // Prefer the level with exactly this indent: FindLevelForIndent() also
+    // considers the levels a list style leaves undefined, with zero indent.
+    static int FindListLevel(const wxRichTextListStyleDefinition& def, int indent)
+    {
+        for ( int level = 0; level < 10; ++level )
+        {
+            const wxRichTextAttr* const attr = def.GetLevelAttributes(level);
+            if ( attr && attr->HasLeftIndent() && attr->GetLeftIndent() == indent )
+                return wxMin(level, MaxListLevels - 1);
+        }
+        return wxMax(0, wxMin(MaxListLevels - 1, def.FindLevelForIndent(indent)));
+    }
+
+    static int GetListNumberFormat(const wxRichTextAttr& attr)
+    {
+        const int style = attr.GetBulletStyle();
+        return style & wxTEXT_ATTR_BULLET_STYLE_ARABIC ? 0 :
+               style & wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER ? 1 :
+               style & wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER ? 2 :
+               style & wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER ? 3 :
+               style & wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER ? 4 : 23;
+    }
+
+    // Everything written for a list level, except its start number.
+    std::string GetListLevelSignature(const BulletItem& item)
+    {
+        ListLevel level;
+        level.used = true;
+        level.attr = item.attr;
+        level.marker = item.marker;
+        level.length = item.length;
+        return Capture([&]() { WriteListLevel(level, 0); });
+    }
+
+    void WriteListLevel(const ListLevel& listLevel, int level)
+    {
+        if ( !listLevel.used )
+        {
+            // RTF readers require all levels up to the deepest used one.
+            m_output += "{\\listlevel\\levelnfc23\\levelnfcn23\\leveljc0\\leveljcn0"
+                        "\\levelfollow0\\levelstartat1{\\leveltext\\'01\\u8226\\'95;}"
+                        "{\\levelnumbers;}}";
+            return;
+        }
+
+        const wxRichTextAttr& attr = listLevel.attr;
+        const int style = attr.GetBulletStyle();
+        const int align = style & wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT ? 2 :
+                          style & wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE ? 1 : 0;
+        const int format = GetListNumberFormat(attr);
+        const bool numbered = format != 23;
+        const wxString prefix =
+            numbered && (style & wxTEXT_ATTR_BULLET_STYLE_PARENTHESES) ? "(" : "";
+        const wxString suffix = !numbered ? "" :
+            style & (wxTEXT_ATTR_BULLET_STYLE_PARENTHESES |
+                     wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS) ? ")" :
+            style & wxTEXT_ATTR_BULLET_STYLE_PERIOD ? "." : "";
+        const size_t length = numbered ? prefix.length() + 1 + suffix.length()
+                                       : listLevel.length;
+        // Without a hanging indent, wx leaves the width of a space after the
+        // marker (\levelfollow1), otherwise the text starts at the indent.
+        // \levelnfcn and \leveljcn are the newer forms of \levelnfc and
+        // \leveljc, read by Word 2000 and later; write both, as Word does.
+        m_output.Printf(
+            "{\\listlevel\\levelnfc%d\\levelnfcn%d"
+            "\\leveljc%d\\leveljcn%d\\levelfollow%d\\levelstartat%d{\\leveltext\\'%02x",
+            format, format, align, align, attr.GetLeftSubIndent() == 0 ? 1 : 0,
+            listLevel.startAt, static_cast<unsigned int>(length));
+        if ( numbered )
+        {
+            // The placeholder character is the index of the level whose
+            // number it is replaced with.
+            WriteEscapedText(prefix, true);
+            m_output.Printf("\\'%02x", static_cast<unsigned int>(level));
+            WriteEscapedText(suffix, true);
+        }
+        else
+        {
+            WriteEscapedText(listLevel.marker, true);
+        }
+        m_output += ";}{\\levelnumbers";
+        if ( numbered )
+            m_output.Printf("\\'%02x",
+                static_cast<unsigned int>(prefix.length() + 1));
+        m_output += ";}";
+        WriteCharacterStyle(attr, attr.GetBulletFont());
+        if ( attr.HasLeftIndent() )
+        {
+            const int left = wxRichTextTenthsMMToTwips(
+                attr.GetLeftIndent() + attr.GetLeftSubIndent());
+            m_output.Printf("\\li%d\\fi%d", left, GetFirstLineIndent(attr, left));
+            // As in list paragraphs: Word applies the level's properties to
+            // items added later, so the tab after the marker must stop at the
+            // hanging indent there too.
+            if ( attr.GetLeftSubIndent() > 0 )
+                m_output.Printf("\\tx%d", left);
+        }
+        m_output += "}";
+    }
+
+    void WriteBulletLists()
+    {
+        if ( m_lists.empty() )
+            return;
+
+        // pntext without a list definition is discarded by Word and Writer.
+        // Use modern lists for both symbols and numbers: Writer loses Unicode
+        // glyphs in legacy pntxtb, and mixing legacy/modern lists can collide.
+        m_output += "{\\*\\listtable";
+        for ( size_t i = 0; i < m_lists.size(); ++i )
+        {
+            const ListDefinition& list = m_lists[i];
+            m_output.Printf("{\\list\\listtemplateid%lu", static_cast<unsigned long>(i + 1));
+            for ( int level = 0; level <= list.maxLevel; ++level )
+                WriteListLevel(list.levels[level], level);
+            m_output.Printf("\\listid%lu}", static_cast<unsigned long>(i + 1));
+        }
+        m_output += "}\n{\\*\\listoverridetable";
+        for ( size_t i = 0; i < m_lists.size(); ++i )
+            m_output.Printf(
+                "{\\listoverride\\listid%lu\\listoverridecount0\\ls%lu}",
+                static_cast<unsigned long>(i + 1), static_cast<unsigned long>(i + 1));
+        m_output += "}\n";
+    }
+
+    // With inlineEnd, the last paragraph is left open, so that the contents
+    // continue the enclosing paragraph, e.g. in an inline shape result.
+    bool WriteLayoutBox(const wxRichTextParagraphLayoutBox& box, int tableDepth,
+                        bool inTableCell, bool inlineEnd = false)
+    {
+        // A cell must always end with exactly one cell mark, otherwise the
+        // row structure is corrupted. Normally the last visible paragraph
+        // provides it, but a cell may contain only hidden objects, or end
+        // with a non-paragraph object.
+        bool cellTerminated = false;
+        const wxRichTextObjectList& children = box.GetChildren();
+        for ( wxRichTextObjectList::compatibility_iterator node = children.GetFirst();
+              node; node = node->GetNext() )
+        {
+            wxRichTextObject* const object = node->GetData();
+            if ( !object->IsShown() )
+                continue;
+
+            if ( wxRichTextParagraph* const para =
+                     wxDynamicCast(object, wxRichTextParagraph) )
+            {
+                auto next = node->GetNext();
+                while ( next && !next->GetData()->IsShown() )
+                    next = next->GetNext();
+                wxString terminator;
+                if ( inTableCell && !next )
+                {
+                    terminator = tableDepth > 1 ? "\\nestcell " : "\\cell ";
+                    cellTerminated = true;
+                }
+                else if ( next || !(inlineEnd || box.GetPartialParagraph()) )
+                    terminator = "\\par\n";
+
+                bool keepWithNext = false;
+                if ( next )
+                {
+                    keepWithNext = (next->GetData()->GetAttributes().GetFlags() &
+                                    wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE) != 0;
+                }
+                if ( !WriteParagraph(*para, tableDepth, terminator, keepWithNext) )
+                    return false;
+            }
+            else if ( wxRichTextTable* const table =
+                          wxDynamicCast(object, wxRichTextTable) )
+            {
+                if ( !WriteTable(*table, tableDepth + 1) )
+                    return false;
+            }
+            else if ( wxRichTextField* const field =
+                          wxDynamicCast(object, wxRichTextField) )
+            {
+                if ( !WriteField(*field, tableDepth) )
+                    return false;
+            }
+            else if ( wxRichTextBox* const textBox =
+                          wxDynamicCast(object, wxRichTextBox) )
+            {
+                const bool shape = !m_inTextBox;
+                if ( !WriteTextBox(*textBox, tableDepth) )
+                    return false;
+                if ( shape )
+                {
+                    auto next = node->GetNext();
+                    while ( next && !next->GetData()->IsShown() )
+                        next = next->GetNext();
+                    const bool endsCell = inTableCell && !next;
+                    WriteShapeAnchor(wxRichTextAttr(), tableDepth, endsCell);
+                    cellTerminated = cellTerminated || endsCell;
+                }
+            }
+            else
+            {
+                // Paragraph layout boxes only contain the object types above,
+                // unless the application adds its own top-level objects.
+                // Refuse a lossy export if they can't represent themselves,
+                // instead of silently omitting them.
+                wxString custom;
+                if ( !object->ExportRTF(custom) )
+                    return false;
+                m_output += custom;
+            }
+        }
+
+        if ( inTableCell && !cellTerminated )
+        {
+            BeginParagraph(wxRichTextAttr(), tableDepth);
+            m_output += tableDepth > 1 ? "\\nestcell}" : "\\cell}";
+        }
+
+        return true;
+    }
+
+    void BeginParagraph(const wxRichTextAttr& attr, int tableDepth,
+                        bool keepWithNext = false, bool scoped = true,
+                        const wxString* marker = nullptr)
+    {
+        m_output += scoped ? "{\\pard" : "\\pard";
+        // Write the table depth explicitly, also outside tables, so that a
+        // paragraph following a (nested) table isn't taken as part of it.
+        if ( tableDepth > 0 )
+            m_output.Printf("\\intbl\\itap%d", tableDepth);
+        else
+            m_output += "\\itap0";
+        if ( attr.HasParagraphStyleName() )
+        {
+            const int style = FindStyle(m_paragraphStyles, attr.GetParagraphStyleName());
+            if ( style )
+                m_output.Printf("\\s%d", style);
+        }
+        WriteParagraphStyle(attr, marker);
+        if ( keepWithNext )
+            m_output += "\\keepn";
+        m_output += " ";
+    }
+
+    // A shape is anchored to the following paragraph. Give a text box written
+    // as a block an anchor paragraph of its own, of minimal height: otherwise
+    // consecutive boxes share one and overlap in Word. At the end of a cell,
+    // the anchor provides its cell mark.
+    void WriteShapeAnchor(const wxRichTextAttr& attr, int tableDepth, bool endsCell)
+    {
+        BeginParagraph(attr, tableDepth);
+        m_output += "\\plain\\fs1\\sl-1\\slmult0";
+        m_output += !endsCell ? "\\par}" : tableDepth > 1 ? "\\nestcell}" : "\\cell}";
+    }
+
+    // Returns the table or text box that is the only visible content of the
+    // paragraph, apart from empty text, or null.
+    static wxRichTextObject* GetSoleBlock(const wxRichTextParagraph& para)
+    {
+        wxRichTextObject* block = nullptr;
+        for ( auto node = para.GetChildren().GetFirst(); node; node = node->GetNext() )
+        {
+            wxRichTextObject* const object = node->GetData();
+            if ( !object->IsShown() )
+                continue;
+            const wxRichTextPlainText* const text = wxDynamicCast(object, wxRichTextPlainText);
+            if ( text && text->GetText().empty() )
+                continue;
+            if ( block || !(wxDynamicCast(object, wxRichTextTable) ||
+                            wxDynamicCast(object, wxRichTextBox)) )
+                return nullptr;
+            block = object;
+        }
+        return block;
+    }
+
+    bool WriteParagraph(const wxRichTextParagraph& para, int tableDepth,
+                        const wxString& terminator, bool keepWithNext)
+    {
+        wxRichTextAttr attr = para.GetCombinedAttributes();
+        const bool scoped = !terminator.empty();
+        wxString bullet;
+        if ( attr.HasBulletStyle() &&
+             attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE &&
+             !(attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) )
+        {
+            bullet = GetBulletText(para);
+            if ( bullet.empty() )
+                bullet = GetStandardBullet(attr);
+        }
+        // wxRichTextCtrl::WriteTable() and WriteTextBox() store the object in
+        // a paragraph of its own. Write it as a block, like a table or text
+        // box in the container itself: empty paragraphs around it would add
+        // blank lines, which wx doesn't show.
+        if ( scoped && bullet.empty() && !attr.HasPageBreak() )
+        {
+            if ( wxRichTextObject* const block = GetSoleBlock(para) )
+            {
+                wxRichTextTable* const table = wxDynamicCast(block, wxRichTextTable);
+                const bool shape = !table && !m_inTextBox;
+                // RTF tables have no spacing of their own: keep the spacing
+                // of the wx paragraph around the table in paragraphs of
+                // minimal height, like the anchor of a text box.
+                wxRichTextAttr before, after;
+                if ( table && attr.GetParagraphSpacingBefore() > 0 )
+                {
+                    before.SetParagraphSpacingBefore(attr.GetParagraphSpacingBefore());
+                    WriteShapeAnchor(before, tableDepth, false);
+                }
+                if ( table && attr.GetParagraphSpacingAfter() > 0 )
+                    after.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter());
+                const bool ok = table ? WriteTable(*table, tableDepth + 1)
+                                      : WriteTextBox(*wxDynamicCast(block, wxRichTextBox),
+                                                     tableDepth);
+                if ( ok && shape )
+                {
+                    // The anchor keeps the spacing of the wx paragraph.
+                    WriteShapeAnchor(attr, tableDepth, terminator != "\\par\n");
+                }
+                else if ( ok && after.HasParagraphSpacingAfter() )
+                {
+                    // At the end of a cell, this paragraph provides its cell mark.
+                    WriteShapeAnchor(after, tableDepth, terminator != "\\par\n");
+                }
+                else if ( ok && terminator != "\\par\n" )
+                {
+                    // The last paragraph of a cell provides its cell mark.
+                    BeginParagraph(wxRichTextAttr(), tableDepth);
+                    m_output += tableDepth > 1 ? "\\nestcell}" : "\\cell}";
+                }
+                return ok;
+            }
+        }
+
+        BeginParagraph(attr, tableDepth, keepWithNext, scoped, &bullet);
+        bool suppressHyphenation = false;
+        for ( auto node = para.GetChildren().GetFirst(); node; node = node->GetNext() )
+        {
+            const wxRichTextAttr& childAttr = node->GetData()->GetAttributes();
+            if ( childAttr.HasTextEffects() &&
+                 (childAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION) )
+            {
+                // RTF supports suppression at paragraph granularity only.
+                m_output += "\\hyphpar0 ";
+                suppressHyphenation = true;
+                break;
+            }
+        }
+        bool hasContent = false;
+
+        if ( !bullet.empty() )
+        {
+            const auto found = m_paragraphLists.find(&para);
+            const int listId = found == m_paragraphLists.end() ? 0 : found->second.id;
+            // An explicit outline label has no list-level template.
+            // Keep it as visible text rather than an orphan pntext group.
+            m_output += listId ? "{\\listtext\\plain" : "{\\plain";
+            WriteCharacterStyle(attr, attr.GetBulletFont());
+            m_output += " ";
+            WriteEscapedText(bullet);
+            // As in the list level, see WriteListLevel().
+            m_output += attr.GetLeftSubIndent() == 0 ? " }" : "\\tab}";
+            if ( listId )
+                m_output.Printf("\\ls%d\\ilvl%d ", listId,
+                                found->second.level);
+            hasContent = true;
+        }
+
+        const wxRichTextObjectList& children = para.GetChildren();
+        for ( wxRichTextObjectList::compatibility_iterator node = children.GetFirst();
+              node; node = node->GetNext() )
+        {
+            wxRichTextObject& object = *node->GetData();
+            if ( !object.IsShown() )
+                continue;
+            wxRichTextTable* const table = wxDynamicCast(&object, wxRichTextTable);
+            wxRichTextBox* const textBox = wxDynamicCast(&object, wxRichTextBox);
+            if ( table || (textBox && m_inTextBox) )
+            {
+                // RTF tables occupy paragraphs, even when the wx object is
+                // stored inline. End the preceding text before starting a row.
+                if ( hasContent )
+                    m_output += "\\par";
+                else if ( attr.HasPageBreak() )
+                {
+                    // Word ignores a bare page control immediately before a
+                    // table. Give pagebb a minimal paragraph mark instead.
+                    m_output += "\\plain\\fs1\\sb0\\sa0\\sl1\\slmult0\\par";
+                }
+                if ( scoped )
+                    m_output += "}";
+                if ( !(table ? WriteTable(*table, tableDepth + 1)
+                             : WriteTextBox(*textBox, tableDepth)) )
+                    return false;
+                // This is a continuation of the same wx paragraph, not a
+                // second request to start a page after the inline table.
+                attr.SetPageBreak(false);
+                BeginParagraph(attr, tableDepth, keepWithNext, scoped, &bullet);
+                hasContent = false;
+                continue;
+            }
+            if ( !WriteObject(para, object, tableDepth) )
+                return false;
+            const wxRichTextPlainText* const text = wxDynamicCast(&object, wxRichTextPlainText);
+            hasContent = hasContent || !text || !text->GetText().empty();
+        }
+
+        // Without a paragraph mark, RichEdit uses the state after the final
+        // character group. Restore the paragraph properties there as well.
+        if ( !scoped )
+        {
+            BeginParagraph(attr, tableDepth, keepWithNext, false, &bullet);
+            if ( suppressHyphenation )
+                m_output += "\\hyphpar0 ";
+        }
+
+        // Paragraph and cell marks must remain inside the formatting group.
+        m_output += terminator;
+        if ( scoped )
+            m_output += "}";
+        return true;
+    }
+
+    // Returns the first-line indent (\fi) of a paragraph or list level with
+    // the given left indent (\li). Word aligns a right-aligned or centred
+    // marker on the start of the first line, wx in the space before the text:
+    // on its right, before the bullet margin, or centred in it. Start the first
+    // line there, the tab after the marker still ends at the hanging indent.
+    static int GetFirstLineIndent(const wxRichTextAttr& attr, int left)
+    {
+        const int subIndent = attr.GetLeftSubIndent();
+        const int style = attr.HasBulletStyle() ? attr.GetBulletStyle() : 0;
+        if ( subIndent > 0 && (style & wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT) )
+        {
+            const int margin = wxMin(subIndent, wxRichTextBuffer::GetBulletRightMargin());
+            return wxRichTextTenthsMMToTwips(attr.GetLeftIndent() + subIndent - margin) - left;
+        }
+        if ( subIndent > 0 && (style & wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE) )
+            return wxRound((attr.GetLeftIndent() + subIndent / 2.0) * 720.0 / 127.0) - left;
+        return wxRichTextTenthsMMToTwips(-subIndent);
+    }
+
+    wxString GetStandardBullet(const wxRichTextAttr& attr) const
+    {
+        if ( attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_BITMAP )
+            return wxString(wxUniChar(0x25a0));
+        if ( !(attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD) )
+            return wxString();
+
+        const wxString& name = attr.GetBulletName();
+        if ( name == "standard/circle-outline" )
+            return wxString(wxUniChar(0x25cb));
+        if ( name == "standard/square" )
+            return wxString(wxUniChar(0x25a0));
+        if ( name == "standard/diamond" )
+            return wxString(wxUniChar(0x25c6));
+        if ( name == "standard/triangle" )
+            return wxString(wxUniChar(0x25b6));
+        return wxString(wxUniChar(0x25cf));
+    }
+
+    // For a paragraph, marker is its list marker, empty if it has none. It is
+    // null for style and list definitions.
+    void WriteParagraphStyle(const wxRichTextAttr& attr, const wxString* marker = nullptr)
+    {
+        // A marker is followed by a tab ending at the hanging indent if there
+        // is one, otherwise wx leaves the width of a space after it.
+        const bool markerTab = marker && !marker->empty() && attr.GetLeftSubIndent() > 0;
+        // \rtlch only affects the formatting of individual characters: the
+        // paragraph direction, which also determines the meaning of left and
+        // right alignment and indents, needs a paragraph property.
+        if ( attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_RTL) )
+            m_output += "\\rtlpar";
+        if ( attr.HasAlignment() )
+        {
+            switch ( attr.GetAlignment() )
+            {
+                case wxTEXT_ALIGNMENT_CENTRE:
+                    m_output += "\\qc";
+                    break;
+                case wxTEXT_ALIGNMENT_RIGHT:
+                    m_output += "\\qr";
+                    break;
+                case wxTEXT_ALIGNMENT_JUSTIFIED:
+                    m_output += "\\qj";
+                    break;
+                default:
+                    m_output += "\\ql";
+                    break;
+            }
+        }
+
+        if ( attr.HasLeftIndent() )
+        {
+            const int left = wxRichTextTenthsMMToTwips(
+                attr.GetLeftIndent() + attr.GetLeftSubIndent());
+            int firstLine = GetFirstLineIndent(attr, left);
+            // wx starts the first line of any paragraph with a bullet style
+            // at the hanging indent, after the marker, even if there is no
+            // marker, e.g. in a continuation paragraph.
+            if ( marker && marker->empty() && attr.HasBulletStyle() &&
+                 attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE )
+                firstLine = 0;
+            m_output.Printf("\\li%d\\fi%d", left, firstLine);
+        }
+        if ( attr.HasRightIndent() )
+        {
+            m_output.Printf("\\ri%d",
+                wxRichTextTenthsMMToTwips(attr.GetRightIndent()));
+        }
+        if ( attr.HasParagraphSpacingBefore() )
+        {
+            m_output.Printf("\\sb%d",
+                wxRichTextTenthsMMToTwips(attr.GetParagraphSpacingBefore()));
+        }
+        if ( attr.HasParagraphSpacingAfter() )
+        {
+            m_output.Printf("\\sa%d",
+                wxRichTextTenthsMMToTwips(attr.GetParagraphSpacingAfter()));
+        }
+        if ( attr.HasLineSpacing() && attr.GetLineSpacing() > 0 )
+        {
+            m_output.Printf("\\sl%d\\slmult1",
+                            attr.GetLineSpacing() * 24);
+        }
+        std::vector<int> tabs;
+        if ( attr.HasTabs() )
+        {
+            for ( int tab : attr.GetTabs() )
+                tabs.push_back(wxRichTextTenthsMMToTwips(tab));
+        }
+        // The tab after a bullet must end at the hanging indent, where wx
+        // draws the text. Word uses the hanging indent as an implicit tab
+        // stop only if no other tab stop comes first: add it explicitly, as
+        // Word itself does for list paragraphs.
+        if ( markerTab && attr.HasLeftIndent() )
+        {
+            const int hanging = wxRichTextTenthsMMToTwips(
+                attr.GetLeftIndent() + attr.GetLeftSubIndent());
+            if ( std::find(tabs.begin(), tabs.end(), hanging) == tabs.end() )
+            {
+                tabs.push_back(hanging);
+                std::sort(tabs.begin(), tabs.end());
+            }
+        }
+        for ( int tab : tabs )
+            m_output.Printf("\\tx%d", tab);
+        if ( attr.HasPageBreak() )
+            m_output += "\\pagebb";
+        if ( attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER )
+            m_output += "\\keepn";
+        if ( attr.HasTextEffects() &&
+             (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION) )
+            m_output += "\\hyphpar0";
+        if ( attr.HasOutlineLevel() )
+        {
+            m_output.Printf("\\outlinelevel%d",
+                                          attr.GetOutlineLevel());
+        }
+
+        const wxTextBoxAttr& box = attr.GetTextBoxAttr();
+        WriteParagraphBorders(box.GetBorder());
+        if ( attr.HasBackgroundColour() )
+        {
+            m_output.Printf("\\cbpat%d",
+                            FindColour(attr.GetBackgroundColour()));
+        }
+    }
+
+    int BorderWidth(const wxTextAttrBorder& border) const
+    {
+        if ( !border.IsValid() ||
+             (border.HasStyle() && border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_NONE) )
+            return 0;
+        if ( border.GetWidth().GetValue() == wxTEXT_BOX_ATTR_BORDER_THIN )
+            return 10;
+        if ( border.GetWidth().GetValue() == wxTEXT_BOX_ATTR_BORDER_MEDIUM )
+            return 20;
+        if ( border.GetWidth().GetValue() == wxTEXT_BOX_ATTR_BORDER_THICK )
+            return 40;
+        return wxMax(0, wxRichTextDimensionToTwips(border.GetWidth()));
+    }
+
+    void WriteBorder(const wxTextAttrBorder& border, const wxString& edge,
+                     int spacing = -1)
+    {
+        if ( !border.IsValid() ||
+             (border.HasStyle() &&
+              border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_NONE) )
+        {
+            return;
+        }
+
+        m_output += edge;
+        switch ( border.HasStyle() ? border.GetStyle()
+                                   : wxTEXT_BOX_ATTR_BORDER_SOLID )
+        {
+            case wxTEXT_BOX_ATTR_BORDER_DOTTED: m_output += "\\brdrdot"; break;
+            case wxTEXT_BOX_ATTR_BORDER_DASHED: m_output += "\\brdrdash"; break;
+            case wxTEXT_BOX_ATTR_BORDER_DOUBLE: m_output += "\\brdrdb"; break;
+            case wxTEXT_BOX_ATTR_BORDER_INSET:  m_output += "\\brdrinset"; break;
+            case wxTEXT_BOX_ATTR_BORDER_OUTSET: m_output += "\\brdroutset"; break;
+            case wxTEXT_BOX_ATTR_BORDER_GROOVE: m_output += "\\brdrengrave"; break;
+            case wxTEXT_BOX_ATTR_BORDER_RIDGE:  m_output += "\\brdremboss"; break;
+            default:                            m_output += "\\brdrs"; break;
+        }
+
+        const int width = BorderWidth(border);
+        if ( width > 0 )
+            m_output.Printf("\\brdrw%d", width);
+        if ( border.HasColour() )
+            m_output.Printf("\\brdrcf%d",
+                            FindColour(border.GetColour()));
+        if ( spacing >= 0 )
+            m_output.Printf("\\brsp%d", spacing);
+    }
+
+    void WriteParagraphBorders(const wxTextAttrBorders& borders)
+    {
+        WriteBorder(borders.GetTop(), "\\brdrt");
+        WriteBorder(borders.GetLeft(), "\\brdrl");
+        WriteBorder(borders.GetBottom(), "\\brdrb");
+        WriteBorder(borders.GetRight(), "\\brdrr");
+    }
+
+    bool WriteObject(const wxRichTextParagraph& para, const wxRichTextObject& object,
+                     int tableDepth)
+    {
+        if ( !object.IsShown() )
+            return true;
+
+        const wxRichTextAttr attr = para.GetCombinedAttributes(object.GetAttributes());
+
+        if ( wxRichTextPlainText* const text =
+                 wxDynamicCast(&object, wxRichTextPlainText) )
+        {
+            WriteTextRun(text->GetText(), attr);
+            return true;
+        }
+
+        if ( wxRichTextImage* const image =
+                 wxDynamicCast(&object, wxRichTextImage) )
+        {
+            return WriteImage(*image, tableDepth);
+        }
+
+        if ( wxRichTextTable* const table =
+                 wxDynamicCast(&object, wxRichTextTable) )
+        {
+            return WriteTable(*table, tableDepth + 1);
+        }
+
+        if ( wxRichTextField* const field =
+                 wxDynamicCast(&object, wxRichTextField) )
+        {
+            return WriteField(*field, tableDepth);
+        }
+
+        if ( wxRichTextBox* const textBox =
+                 wxDynamicCast(&object, wxRichTextBox) )
+        {
+            return WriteTextBox(*textBox, tableDepth, true);
+        }
+
+        // Application-defined objects may provide their own representation.
+        wxString custom;
+        if ( object.ExportRTF(custom) )
+        {
+            m_output += custom;
+            return true;
+        }
+
+        // Otherwise preserve their textual representation, if any.
+        const wxString text = object.GetTextForRange(object.GetRange());
+        if ( !text.empty() )
+        {
+            WriteTextRun(text, attr);
+            return true;
+        }
+
+        return false;
+    }
+
+    void WriteTextRun(const wxString& text, const wxRichTextAttr& attr)
+    {
+        m_output += "{\\plain";
+        if ( attr.HasCharacterStyleName() )
+        {
+            const int style = FindStyle(m_characterStyles, attr.GetCharacterStyleName());
+            if ( style )
+                m_output.Printf("\\cs%d", style);
+        }
+        WriteCharacterStyle(attr);
+        m_output += " ";
+
+        if ( attr.HasURL() )
+        {
+            // Field instructions have their own escaping, applied before the
+            // RTF escaping: inside a quoted argument, backslashes and quotes
+            // are preceded by a backslash. A leading '#' refers to a bookmark
+            // in the same document, which Word expresses with the \l switch.
+            wxString url = attr.GetURL();
+            m_output += "{\\field{\\*\\fldinst HYPERLINK ";
+            if ( url.StartsWith("#", &url) )
+                m_output += "\\\\l ";
+            url.Replace("\\", "\\\\");
+            url.Replace("\"", "\\\"");
+            m_output += "\"";
+            WriteEscapedText(url);
+            m_output += "\"}{\\fldrslt ";
+            WriteEscapedText(text);
+            m_output += "}}";
+        }
+        else
+        {
+            WriteEscapedText(text);
+        }
+
+        m_output += "}";
+    }
+
+    // A style definition only specifies a font if the style itself does,
+    // while text always uses an explicit font, resolving the default one.
+    void WriteCharacterStyle(const wxRichTextAttr& attr,
+                             const wxString& fontOverride = wxString(),
+                             bool styleDefinition = false)
+    {
+        wxString faceName = fontOverride;
+        if ( faceName.empty() && (!styleDefinition || attr.HasFontFaceName()) )
+            faceName = ResolveFontFace(attr);
+
+        if ( !styleDefinition || !faceName.empty() )
+            m_output.Printf("\\f%d", FindFont(faceName));
+
+        // RTF font sizes must be positive: an attribute set from a font
+        // without a size may have none, so the size is inherited then.
+        if ( attr.HasFontPointSize() && attr.GetFontSize() > 0 )
+            m_output.Printf("\\fs%d", attr.GetFontSize() * 2);
+        else if ( attr.HasFontPixelSize() && attr.GetFontSize() > 0 )
+            m_output.Printf("\\fs%d",
+                            wxRound(attr.GetFontSize() * 1.5));
+
+        if ( attr.HasFontWeight() && attr.GetFontWeight() >= wxFONTWEIGHT_BOLD )
+            m_output += "\\b";
+        if ( attr.HasFontItalic() && attr.GetFontStyle() != wxFONTSTYLE_NORMAL )
+            m_output += "\\i";
+        if ( attr.HasFontUnderlined() && attr.GetFontUnderlined() )
+        {
+            switch ( attr.GetUnderlineType() )
+            {
+                case wxTEXT_ATTR_UNDERLINE_DOUBLE: m_output += "\\uldb"; break;
+                case wxTEXT_ATTR_UNDERLINE_SPECIAL: m_output += "\\ulwave"; break;
+                default: m_output += "\\ul"; break;
+            }
+            if ( attr.GetUnderlineColour().IsOk() )
+            {
+                m_output.Printf("\\ulc%d",
+                                FindColour(attr.GetUnderlineColour()));
+            }
+        }
+        if ( attr.HasFontStrikethrough() && attr.GetFontStrikethrough() )
+            m_output += "\\strike";
+        if ( attr.HasTextColour() )
+            m_output.Printf("\\cf%d", FindColour(attr.GetTextColour()));
+        if ( attr.HasBackgroundColour() )
+        {
+            // Use character shading rather than \highlight: Word supports
+            // only 16 fixed highlight colours, while shading accepts any
+            // colour from the table.
+            m_output.Printf("\\chshdng0\\chcbpat%d",
+                            FindColour(attr.GetBackgroundColour()));
+        }
+
+        if ( attr.HasTextEffects() )
+        {
+            const int effects = attr.GetTextEffects();
+            if ( effects & wxTEXT_ATTR_EFFECT_CAPITALS )
+                m_output += "\\caps";
+            if ( effects & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS )
+                m_output += "\\scaps";
+            if ( effects & wxTEXT_ATTR_EFFECT_STRIKETHROUGH )
+                m_output += "\\strike";
+            if ( effects & wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH )
+                m_output += "\\striked1";
+            if ( effects & wxTEXT_ATTR_EFFECT_SHADOW )
+                m_output += "\\shad";
+            if ( effects & wxTEXT_ATTR_EFFECT_EMBOSS )
+                m_output += "\\embo";
+            if ( effects & wxTEXT_ATTR_EFFECT_OUTLINE )
+                m_output += "\\outl";
+            if ( effects & wxTEXT_ATTR_EFFECT_ENGRAVE )
+                m_output += "\\impr";
+            if ( effects & wxTEXT_ATTR_EFFECT_SUPERSCRIPT )
+                m_output += "\\super";
+            else if ( effects & wxTEXT_ATTR_EFFECT_SUBSCRIPT )
+                m_output += "\\sub";
+            if ( effects & wxTEXT_ATTR_EFFECT_RTL )
+                m_output += "\\rtlch";
+        }
+    }
+
+    bool WriteField(const wxRichTextField& field, int tableDepth)
+    {
+        wxRichTextFieldType* const baseType =
+            wxRichTextBuffer::FindFieldType(field.GetFieldType());
+        wxRichTextFieldTypeStandard* const fieldType =
+            wxDynamicCast(baseType, wxRichTextFieldTypeStandard);
+
+        // Application field names are not Word field instructions. Export the
+        // current value and retain the name in an ignorable destination.
+        m_output += "{{\\*\\wxfield ";
+        WriteEscapedText(field.GetFieldType());
+        m_output += "}";
+
+        bool ok = true;
+        // IsTopLevel() is a virtual function of the field type taking a
+        // non-const pointer for historical reasons, but it doesn't modify it.
+        if ( baseType && baseType->IsTopLevel(const_cast<wxRichTextField*>(&field)) )
+        {
+            ok = WriteLayoutBox(field, tableDepth, false);
+        }
+        else if ( fieldType && !fieldType->GetBitmap().IsOk() )
+        {
+            wxRichTextAttr attr = field.GetAttributes();
+            const wxFont& font = fieldType->GetFont();
+            // Keep a pixel size as it is: by default, SetFont() converts it
+            // to points using the resolution of the screen.
+            if ( HasFontSize(font) )
+                attr.SetFont(font, wxTEXT_ATTR_FONT);
+            if ( fieldType->GetTextColour().IsOk() )
+                attr.SetTextColour(fieldType->GetTextColour());
+            if ( fieldType->GetBackgroundColour().IsOk() )
+                attr.SetBackgroundColour(fieldType->GetBackgroundColour());
+            WriteTextRun(fieldType->GetLabel().empty() ? wxString("??") :
+                         fieldType->GetLabel(), attr);
+        }
+        else if ( fieldType && fieldType->GetBitmap().IsOk() )
+        {
+            const wxBitmap& bitmap = fieldType->GetBitmap();
+            wxImage image = bitmap.ConvertToImage();
+            wxRichTextImageBlock png;
+            ok = image.IsOk() &&
+                 png.MakeImageBlockDefaultQuality(image, wxBITMAP_TYPE_PNG) &&
+                 WriteImageData(png.GetData(), png.GetDataSize(),
+                                "\\pngblip", image.GetSize(), wxTextBoxAttr(), 0,
+                                bitmap.GetDIPSize());
+        }
+        else
+        {
+            // Custom non-composite field types have no portable visual value
+            // unless their implementation exposes one as text.
+            const wxString text = field.GetTextForRange(field.GetRange());
+            if ( !text.empty() )
+                WriteTextRun(text, field.GetAttributes());
+            else
+                ok = false;
+        }
+
+        m_output += "}";
+        return ok;
+    }
+
+    void WriteShapeProperty(const char* name, long value)
+    {
+        m_output.Printf("{\\sp{\\sn %s}{\\sv %ld}}", name, value);
+    }
+
+    // Writes the geometry of a rectangle of the given size with corners of
+    // the given radius, all in twips. As for wxDC::DrawRoundedRectangle() on
+    // MSW, each radius is limited to half of its side. The adjustValue of
+    // Word's rounded rectangle (shape type 2) is a fraction of the shorter
+    // side of the final shape, so the radius would grow with a box fitted to
+    // its text, and its text rectangle is inset by the corners, unlike in wx.
+    // Instead, write a free-form path in the default coordinate space, 21600
+    // units in each direction, with the whole shape as text rectangle. The
+    // width is final, so the horizontal radius is a constant. Word computes
+    // the vertical one from the final height in EMUs with guide formulas.
+    // Writer ignores the guides and uses the radius for the given height.
+    void WriteRoundedRectangleGeometry(int width, int height, int radius)
+    {
+        // Guides are MS-ODRAW SG records, written as two 32-bit values: the
+        // formula with its flags and the first parameter, and the other two
+        // parameters. A flagged parameter refers to a shape value or to a
+        // previous guide (0x400 + its index) instead of being a constant.
+        enum
+        {
+            Sum = 0, Product = 1, Min = 4,
+            Ref1 = 0x2000, Ref2 = 0x4000, Ref3 = 0x8000,
+            Height = 0x143, EmuHeight = 0x4FD, HalfEmuHeight = 0x4FF, Guide = 0x400
+        };
+        const struct { int formula, p1, p2, p3; } guides[] =
+        {
+            // 0-1: the radius in EMUs (a constant is 16-bit), limited.
+            { Product, wxMin(radius, 32767), 635, 1 },
+            { Min | Ref1 | Ref2, Guide + 0, HalfEmuHeight, 0 },
+            // 2: the vertical radius in shape coordinates.
+            { Product | Ref1 | Ref2 | Ref3, Guide + 1, Height, EmuHeight },
+            // 3: the distance of Bezier control points from the edge,
+            // approximating a quarter ellipse: (1 - 0.5523) * radius.
+            { Product | Ref1, Guide + 2, 4477, 10000 },
+            // 4-5: the same distances from the bottom edge.
+            { Sum | Ref1 | Ref3, Height, 0, Guide + 2 },
+            { Sum | Ref1 | Ref3, Height, 0, Guide + 3 },
+        };
+        WriteShapeProperty("shapeType", 100);
+        m_output.Printf("{\\sp{\\sn pGuides}{\\sv 8;%d", static_cast<int>(WXSIZEOF(guides)));
+        for ( const auto& g : guides )
+            m_output.Printf(";(%d,%d)", g.formula | (g.p1 << 16), g.p2 | (g.p3 << 16));
+        m_output += "}}";
+
+        const int S = 21600;
+        const auto scale = [](int value, int size)
+            { return static_cast<int>(wxRound(value * 21600.0 / wxMax(1, size))); };
+        const auto control = [](int r) { return (r * 4477 + 5000) / 10000; };
+        const int rx = scale(wxMin(radius, width / 2), width), kx = control(rx);
+        const int ry = scale(wxMin(radius, height / 2), height), ky = control(ry);
+        // Word reads the first and the last value of a vertex, Writer the
+        // first two: give each its own y coordinate, a guide for Word.
+        // A coordinate of 0x80000000 + n is the value of guide n.
+        enum { Top, Bottom, RY, KY, BottomRY, BottomKY };
+        const struct { int x, y; } vertices[] =
+        {
+            { rx, Top },
+            { S - rx, Top }, { S - kx, Top }, { S, KY }, { S, RY },
+            { S, BottomRY }, { S, BottomKY }, { S - kx, Bottom }, { S - rx, Bottom },
+            { rx, Bottom }, { kx, Bottom }, { 0, BottomKY }, { 0, BottomRY },
+            { 0, RY }, { 0, KY }, { kx, Top }, { rx, Top },
+        };
+        // Word only reads vertices under this misspelt name.
+        m_output.Printf("{\\sp{\\sn pVerticies}{\\sv 8;%d", static_cast<int>(WXSIZEOF(vertices)));
+        for ( const auto& v : vertices )
+        {
+            if ( v.y == Top || v.y == Bottom )
+            {
+                m_output.Printf(";(%d,%d)", v.x, v.y == Top ? 0 : S);
+                continue;
+            }
+            const int writer[] = { ry, ky, S - ry, S - ky };
+            m_output.Printf(";(%d,%d,%lu)", v.x, writer[v.y - RY],
+                            0x80000000UL + 2 + (v.y - RY));
+        }
+        m_output += "}}";
+        // Move to the first vertex, then a line and a curve along each edge
+        // and corner, close the path and end it.
+        m_output += "{\\sp{\\sn pSegmentInfo}{\\sv 2;11;16384;1;8193;1;8193;1;8193;1;8193;24577;32768}}";
+        // The text rectangle, as Word writes it: the array header (one
+        // element of 16 bytes), then left, top, right and bottom (21600) as
+        // little-endian 32-bit values.
+        m_output += "{\\sp{\\sn pInscribe}{\\sv 16;1;010001001000"
+                    "00000000000000006054000060540000}}";
+    }
+
+    // An inline box is stored inside a paragraph, otherwise it is a child of
+    // a paragraph layout box (the buffer, a cell or another text box).
+    bool WriteTextBox(const wxRichTextBox& box, int tableDepth, bool inlineBox = false)
+    {
+        const wxTextBoxAttr& attr = box.GetAttributes().GetTextBoxAttr();
+        const auto& margins = attr.GetMargins();
+        const int marginLeft = wxRichTextBoxSpacingToTwips(margins.GetLeft());
+        const int marginRight = wxRichTextBoxSpacingToTwips(margins.GetRight());
+        const int marginTop = wxRichTextBoxSpacingToTwips(margins.GetTop());
+        const int marginBottom = wxRichTextBoxSpacingToTwips(margins.GetBottom());
+        // Screen layout caches depend on monitor DPI, zoom and viewport size.
+        // Never convert them into document dimensions. Use the containing
+        // page/cell width and let the RTF reader fit an unconstrained height
+        // to its text, starting with a small provisional frame (12 points).
+        // Word limits the text insets it allows for when fitting the shape
+        // to the provisional height, clipping the text otherwise: include the
+        // vertical padding, which becomes the insets.
+        const bool autoHeight = !attr.GetHeight().IsValid() &&
+            !attr.GetMinSize().GetHeight().IsValid() &&
+            !attr.GetMaxSize().GetHeight().IsValid();
+        const int provisionalHeight = 240 +
+            wxMax(0, wxRichTextBoxSpacingToTwips(attr.GetPadding().GetTop())) +
+            wxMax(0, wxRichTextBoxSpacingToTwips(attr.GetPadding().GetBottom()));
+        // wx resolves the percentage width of a box in a paragraph relative to
+        // the outer size of its container, but limits it to the space
+        // available. A floating box uses the available width.
+        const int floatMode = attr.GetFloatMode();
+        const bool floating = floatMode == wxTEXT_BOX_ATTR_FLOAT_LEFT ||
+                              floatMode == wxTEXT_BOX_ATTR_FLOAT_RIGHT;
+        wxSize outerSize = ResolveSize(attr, wxSize(m_availableSize.x,
+            autoHeight ? wxMax(1, marginTop + marginBottom + provisionalHeight)
+                       : m_availableSize.y),
+            floating ? 0 : m_containerSize.x);
+        outerSize.x = wxMin(outerSize.x, m_availableSize.x);
+        // Explicit dimensions describe the outer margin box, whereas RTF
+        // shape bounds describe the visible frame. Keep margins outside it.
+        const wxSize size(wxMax(1, outerSize.x - marginLeft - marginRight),
+                          wxMax(1, outerSize.y - marginTop - marginBottom));
+        // Word rejects a text-box shape nested inside another shape's shptxt
+        // story (often reporting "not enough memory or disk space"), although
+        // LibreOffice accepts it. Use an in-flow single-cell table for nested
+        // boxes, preserving their content, width, fill, borders and padding.
+        // Floating positioning and shape-only decoration cannot be preserved
+        // by this fallback. Keep it active through tables/composite fields too.
+        if ( m_inTextBox )
+            return WriteTextBoxAsTable(box, tableDepth + 1, size, marginLeft);
+
+        const int width = size.x;
+        const int height = size.y;
+        int left = wxRichTextDimensionToTwips(attr.GetLeft(), m_availableSize.x);
+        int top = wxRichTextDimensionToTwips(attr.GetTop(), m_availableSize.y);
+        if ( !attr.GetLeft().IsValid() && attr.GetRight().IsValid() )
+            left = m_availableSize.x - outerSize.x -
+                   wxRichTextDimensionToTwips(attr.GetRight(), m_availableSize.x);
+        if ( !attr.GetTop().IsValid() && attr.GetBottom().IsValid() )
+            top = m_availableSize.y - outerSize.y -
+                  wxRichTextDimensionToTwips(attr.GetBottom(), m_availableSize.y);
+
+        if ( floatMode == wxTEXT_BOX_ATTR_FLOAT_RIGHT )
+            left = m_availableSize.x - outerSize.x;
+        else if ( floatMode == wxTEXT_BOX_ATTR_FLOAT_LEFT )
+            left = 0;
+        left += marginLeft;
+        top += marginTop;
+
+        m_output.Printf(
+            "{\\shp{\\*\\shpinst\\shpleft%d\\shptop%d"
+            "\\shpright%d\\shpbottom%d\\shpbxcolumn\\shpbypara",
+            left, top, left + width, top + height);
+
+        if ( floatMode == wxTEXT_BOX_ATTR_FLOAT_LEFT )
+            m_output += "\\shpwr2\\shpwrk2";
+        else if ( floatMode == wxTEXT_BOX_ATTR_FLOAT_RIGHT )
+            m_output += "\\shpwr2\\shpwrk1";
+        else
+            m_output += "\\shpwr1";
+
+        // Shape type 202 is a plain rectangular text box. Rounded corners
+        // use a custom shape keeping the radius as the shape is fitted to its
+        // text. Readers without shape support ignore these properties.
+        // LibreOffice Writer ignores the guides of the path and so draws it
+        // wrongly.
+        const int cornerRadius = attr.HasCornerRadius()
+            ? wxRichTextDimensionToTwips(attr.GetCornerRadius()) : 0;
+        if ( cornerRadius > 0 )
+            WriteRoundedRectangleGeometry(width, height, cornerRadius);
+        else
+            WriteShapeProperty("shapeType", 202);
+        // Word treats fPseudoInline text boxes as non-wrapping floating
+        // shapes, not inline objects. Leave it off so top/bottom wrapping
+        // reserves space and following text/boxes do not overlap this box.
+        WriteShapeProperty("fPseudoInline", 0);
+        if ( autoHeight )
+            WriteShapeProperty("fFitShapeToText", 1);
+        if ( tableDepth > 0 )
+            WriteShapeProperty("fLayoutInCell", 1);
+
+        const auto& borders = attr.GetBorder();
+        const auto& border = borders.GetTop();
+        const int borderStyle = border.HasStyle() ? border.GetStyle() : wxTEXT_BOX_ATTR_BORDER_SOLID;
+        // A shape has one outline. Use a cell inside it for independently
+        // styled edges or relief borders; a single shape line cannot express
+        // these. Ordinary uniform borders can use the shape outline directly.
+        const bool tableBorder = !(border == borders.GetLeft() &&
+                                   border == borders.GetRight() && border == borders.GetBottom()) ||
+            (BorderWidth(border) > 0 && borderStyle != wxTEXT_BOX_ATTR_BORDER_SOLID &&
+             borderStyle != wxTEXT_BOX_ATTR_BORDER_DASHED &&
+             borderStyle != wxTEXT_BOX_ATTR_BORDER_DOTTED && borderStyle != wxTEXT_BOX_ATTR_BORDER_DOUBLE);
+        const int borderWidth = tableBorder ? 0 : BorderWidth(border);
+        WriteShapeProperty("fLine", borderWidth > 0 ? 1 : 0);
+        if ( borderWidth > 0 )
+        {
+            WriteShapeProperty("lineWidth", borderWidth * 635L);
+            if ( border.HasColour() )
+                WriteShapeProperty("lineColor", border.GetColourLong());
+            if ( borderStyle == wxTEXT_BOX_ATTR_BORDER_DOUBLE )
+                WriteShapeProperty("lineStyle", 1);
+            else if ( borderStyle == wxTEXT_BOX_ATTR_BORDER_DASHED )
+                WriteShapeProperty("lineDashing", 1);
+            else if ( borderStyle == wxTEXT_BOX_ATTR_BORDER_DOTTED )
+                WriteShapeProperty("lineDashing", 2);
+        }
+        // Writer's frame importer can reduce shape lineDashing to a solid
+        // border and ignore anchorText. Keep the native shape properties for
+        // readers (including Word) that support them rather than flattening
+        // editable text into a picture to reproduce these visual details.
+        const auto& padding = attr.GetPadding();
+        const wxTextAttrDimension* const insets[] =
+            { &padding.GetLeft(), &padding.GetTop(), &padding.GetRight(), &padding.GetBottom() };
+        const char* const names[] =
+            { "dxTextLeft", "dyTextTop", "dxTextRight", "dyTextBottom" };
+        for ( size_t i = 0; i < WXSIZEOF(insets); ++i )
+            WriteShapeProperty(names[i], tableBorder ? 0 :
+                635L * wxRichTextBoxSpacingToTwips(*insets[i]));
+        WriteShapeProperty("anchorText",
+            attr.GetVerticalAlignment() == wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_BOTTOM ? 2 :
+            attr.GetVerticalAlignment() == wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_CENTRE ? 1 : 0);
+        WriteShapeProperty("fFilled", box.GetAttributes().HasBackgroundColour() ? 1 : 0);
+        if ( box.GetAttributes().HasBackgroundColour() )
+        {
+            const wxColour colour = box.GetAttributes().GetBackgroundColour();
+            const unsigned long value = colour.Red() |
+                                      (colour.Green() << 8) |
+                                      (colour.Blue() << 16);
+            m_output.Printf(
+                "{\\sp{\\sn fillColor}{\\sv %lu}}", value);
+        }
+
+        const int wrapMargins[] = { marginLeft, marginTop, marginRight, marginBottom };
+        const char* const wrapNames[] =
+            { "dxWrapDistLeft", "dyWrapDistTop",
+              "dxWrapDistRight", "dyWrapDistBottom" };
+        for ( size_t i = 0; i < WXSIZEOF(wrapMargins); ++i )
+        {
+            // Word's default horizontal distance from wrapping text is
+            // 1/8 inch, while wx wraps text directly at the margins.
+            if ( wrapMargins[i] != 0 || (floating && i % 2 == 0) )
+                WriteShapeProperty(wrapNames[i], wrapMargins[i] * 635L);
+        }
+
+        m_output += "{\\shptxt ";
+        // A text box is a separate RTF story; its tables start at depth one.
+        m_inTextBox = true;
+        const size_t storyStart = m_output.length();
+        // Delimit a table-only story with minimal-height paragraphs. These
+        // also reset the table state before leaving the text-box story.
+        if ( tableBorder )
+            m_output += "{\\pard\\itap0\\plain\\fs1\\sl-1\\slmult0\\par}";
+        // The table fits inside the fixed frame, so that the bottom border is
+        // not clipped. Keep the full size as the reference for child
+        // dimensions.
+        const bool ok = tableBorder ? WriteTextBoxAsTable(box, 1, size, 0, true)
+                                   : WriteSizedLayoutBox(box, 0, false, size);
+        if ( tableBorder )
+            m_output += "{\\pard\\itap0\\plain\\fs1\\sl-1\\slmult0\\par}";
+        const size_t storyEnd = m_output.length();
+        m_output += "}}";
+
+        // Readers that don't support shapes, such as RichEdit-based ones,
+        // show the shape result instead: give them the box contents in the
+        // text flow. Readers supporting shapes ignore it.
+        bool fallbackOk = true;
+        if ( m_shapeFallbacks )
+        {
+            m_output += "{\\shprslt ";
+            if ( ok )
+            {
+                const bool decorated = box.GetAttributes().HasBackgroundColour() ||
+                    BorderWidth(borders.GetLeft()) > 0 || BorderWidth(borders.GetTop()) > 0 ||
+                    BorderWidth(borders.GetRight()) > 0 || BorderWidth(borders.GetBottom()) > 0;
+                if ( inlineBox && EndsWithTextParagraph(box) )
+                {
+                    // Continue the enclosing paragraph after the contents,
+                    // as it does after the shape.
+                    fallbackOk = WriteSizedLayoutBox(box, tableDepth, false, size, true);
+                }
+                else if ( decorated && !inlineBox )
+                {
+                    // A single-cell table keeps the borders, fill and padding.
+                    // It can't be used inside a paragraph.
+                    fallbackOk = WriteTextBoxAsTable(box, tableDepth + 1, size, marginLeft);
+                }
+                else if ( !tableBorder && tableDepth == 0 )
+                {
+                    // The story is the same as the in-flow contents.
+                    m_output += m_output.Mid(storyStart, storyEnd - storyStart);
+                }
+                else
+                {
+                    fallbackOk = WriteSizedLayoutBox(box, tableDepth, false, size);
+                }
+            }
+            m_output += "}";
+        }
+        m_inTextBox = false;
+        m_output += "}";
+        return ok && fallbackOk;
+    }
+
+    // Returns true if the last visible child of the box is a paragraph that
+    // can be left open: tables and nested text boxes (written as tables
+    // inside a text box) always end the paragraph before them.
+    static bool EndsWithTextParagraph(const wxRichTextParagraphLayoutBox& box)
+    {
+        const wxRichTextParagraph* para = nullptr;
+        for ( auto node = box.GetChildren().GetLast(); node; node = node->GetPrevious() )
+        {
+            if ( node->GetData()->IsShown() )
+            {
+                para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+                break;
+            }
+        }
+        if ( !para )
+            return false;
+        for ( auto node = para->GetChildren().GetFirst(); node; node = node->GetNext() )
+        {
+            const wxRichTextObject* const object = node->GetData();
+            if ( object->IsShown() &&
+                 (wxDynamicCast(object, wxRichTextTable) || wxDynamicCast(object, wxRichTextBox)) )
+                return false;
+        }
+        return true;
+    }
+
+    // Consecutive rows form a single table in RTF: separate a table from a
+    // preceding one at the same depth with a paragraph of minimal height.
+    void SeparateFromPreviousTable(int tableDepth)
+    {
+        const std::string& data = m_output.Data();
+        const std::string rowEnd = tableDepth > 1 ? "\\nestrow}}\n" : "\\row}\n";
+        if ( data.length() < rowEnd.length() ||
+             data.compare(data.length() - rowEnd.length(), rowEnd.length(), rowEnd) != 0 )
+            return;
+        if ( tableDepth > 1 )
+            m_output.Printf("{\\pard\\intbl\\itap%d\\plain\\fs1\\sl-1\\slmult0\\par}", tableDepth - 1);
+        else
+            m_output += "{\\pard\\itap0\\plain\\fs1\\sl-1\\slmult0\\par}";
+    }
+
+    // Writes the box as a table with a single cell. With inShape, the table
+    // is the whole story of a text-box shape, between two paragraphs of one
+    // twip, and must fit inside the shape's frame.
+    bool WriteTextBoxAsTable(const wxRichTextBox& box, int tableDepth, const wxSize& size,
+                             int left = 0, bool inShape = false)
+    {
+        SeparateFromPreviousTable(tableDepth);
+        m_output += "{";
+        const size_t definitionStart = m_output.length();
+        // As in WriteTable(), the padding is written as cell padding.
+        m_output.Printf("\\trowd\\trgaph0\\trleft%d", left);
+        const auto& attr = box.GetAttributes().GetTextBoxAttr();
+        // Do not turn an automatic fallback height into a full-page minimum.
+        const int boxHeight = attr.GetHeight().IsValid() ? size.y :
+            wxMin(size.y, wxRichTextDimensionToTwips(attr.GetMinSize().GetHeight(), m_availableSize.y));
+        // The row is the whole box: its bottom border is part of the box
+        // height too.
+        const int height = boxHeight <= 0 ? 0 :
+            GetWordRowHeight(boxHeight, {box.GetAttributes()}) -
+            BorderWidth(attr.GetBorder().GetBottom()) - (inShape ? 2 : 0);
+        if ( height > 0 )
+            m_output.Printf("\\trrh%d", height);
+        WriteCellStyle(box.GetAttributes());
+        m_output.Printf("\\clftsWidth3\\clwWidth%d\\cellx%d",
+                        size.x, left + size.x);
+        const std::string definition = m_output.Mid(definitionStart);
+        if ( tableDepth > 1 )
+        {
+            m_output.Truncate(definitionStart);
+            m_output.Printf("\\intbl\\itap%d", tableDepth);
+        }
+        m_output += "\n";
+
+        if ( box.GetChildren().empty() )
+        {
+            BeginParagraph(wxRichTextAttr(), tableDepth);
+            m_output += tableDepth > 1 ? "\\nestcell}" : "\\cell}";
+        }
+        else if ( !WriteSizedLayoutBox(box, tableDepth, true, size) )
+        {
+            return false;
+        }
+
+        if ( inShape )
+        {
+            // Do not let Word's default row-mark font/spacing enlarge the
+            // single-cell border wrapper beyond its containing shape.
+            m_output.Printf(
+                "\\pard\\intbl\\itap%d\\plain\\fs1\\sb0\\sa0\\sl-1\\slmult0", tableDepth);
+        }
+        if ( tableDepth > 1 )
+            m_output += "{\\*\\nesttableprops" + definition + "\\nestrow}";
+        else
+            m_output += "\\row";
+        m_output += "}\n";
+        return true;
+    }
+
+    bool BuildCellOwners(const wxRichTextTable& table, wxVector<int>& owners) const
+    {
+        const int rows = table.GetRowCount();
+        const int cols = table.GetColumnCount();
+        owners.assign(static_cast<size_t>(rows) * cols, -1);
+        for ( int row = 0; row < rows; ++row )
+        {
+            for ( int col = 0; col < cols; ++col )
+            {
+                const int index = row * cols + col;
+                if ( owners[index] != -1 )
+                    continue;
+                wxRichTextCell* const cell = table.GetCell(row, col);
+                if ( !cell )
+                    return false;
+                const int rowSpan = cell->GetRowSpan();
+                const int colSpan = cell->GetColSpan();
+                if ( rowSpan < 1 || rowSpan > rows - row ||
+                     colSpan < 1 || colSpan > cols - col )
+                    return false;
+                for ( int r = row; r < row + rowSpan; ++r )
+                {
+                    for ( int c = col; c < col + colSpan; ++c )
+                    {
+                        int& owner = owners[r * cols + c];
+                        if ( owner != -1 )
+                            return false;
+                        owner = index;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    // Orders borders by visibility: wider first, then non-solid styles.
+    int BorderRank(const wxTextAttrBorder& border) const
+    {
+        const int width = BorderWidth(border);
+        if ( !width )
+            return 0;
+        const int style = border.HasStyle() ? border.GetStyle() : wxTEXT_BOX_ATTR_BORDER_SOLID;
+        const int rank = style == wxTEXT_BOX_ATTR_BORDER_SOLID ? 1 :
+                         style == wxTEXT_BOX_ATTR_BORDER_DOTTED ? 2 :
+                         style == wxTEXT_BOX_ATTR_BORDER_DASHED ? 3 :
+                         style == wxTEXT_BOX_ATTR_BORDER_DOUBLE ? 4 : 5;
+        return width * 8 + rank;
+    }
+
+    // wx draws the border of each cell inside it, so the borders of adjacent
+    // cells both show. In RTF they share one edge, and readers choose one of
+    // two different borders, e.g. Word the solid border of the neighbours of
+    // a cell with a dashed border. Choose for them, consistently on both
+    // sides: the more visible border, which keeps a cell's distinct border.
+    wxRichTextAttr ResolveSharedBorders(const wxRichTextTable& table,
+                                        const wxVector<int>& owners, int row, int col) const
+    {
+        const int rows = table.GetRowCount();
+        const int cols = table.GetColumnCount();
+        const int owner = owners[row * cols + col];
+        wxRichTextAttr attr = table.GetCell(owner / cols, owner % cols)->GetAttributes();
+        wxTextAttrBorders& borders = attr.GetTextBoxAttr().GetBorder();
+        const auto resolve = [&](int r, int c, wxTextAttrBorder& own,
+                                 wxTextAttrBorder& (wxTextAttrBorders::*facing)())
+        {
+            if ( r < 0 || r >= rows || c < 0 || c >= cols )
+                return;
+            const int other = owners[r * cols + c];
+            const wxRichTextCell* const neighbour = table.GetCell(other / cols, other % cols);
+            if ( other == owner || !neighbour->IsShown() )
+                return;
+            wxTextAttrBorders neighbourBorders = neighbour->GetAttributes().GetTextBoxAttr().GetBorder();
+            const wxTextAttrBorder& border = (neighbourBorders.*facing)();
+            const int ownRank = BorderRank(own);
+            if ( ownRank && BorderRank(border) > ownRank )
+                own = border;
+        };
+        resolve(row, col - 1, borders.GetLeft(), &wxTextAttrBorders::GetRight);
+        resolve(row, col + 1, borders.GetRight(), &wxTextAttrBorders::GetLeft);
+        resolve(row - 1, col, borders.GetTop(), &wxTextAttrBorders::GetBottom);
+        resolve(row + 1, col, borders.GetBottom(), &wxTextAttrBorders::GetTop);
+        return attr;
+    }
+
+    // Returns the minimum row height (\trrh) for which Word shows a row of
+    // cells with these attributes with the given height. The height of a wx
+    // cell includes its padding and borders, while Word adds the largest top
+    // and the largest bottom padding of the cells in the row, and its top
+    // border, to the row height. The bottom border of the last row of a table
+    // is outside it.
+    int GetWordRowHeight(int height, const std::vector<wxRichTextAttr>& cells) const
+    {
+        int top = 0, bottom = 0, border = 0;
+        for ( const wxRichTextAttr& cell : cells )
+        {
+            const wxTextBoxAttr& box = cell.GetTextBoxAttr();
+            const wxTextAttrDimensions& padding = box.GetPadding();
+            top = wxMax(top, wxRichTextBoxSpacingToTwips(padding.GetTop()));
+            bottom = wxMax(bottom, wxRichTextBoxSpacingToTwips(padding.GetBottom()));
+            border = wxMax(border, BorderWidth(box.GetBorder().GetTop()));
+        }
+        return height - top - bottom - border;
+    }
+
+    void WriteCellStyle(const wxRichTextAttr& attr)
+    {
+        const wxTextBoxAttr& box = attr.GetTextBoxAttr();
+        WriteBorder(box.GetBorder().GetTop(), "\\clbrdrt");
+        WriteBorder(box.GetBorder().GetLeft(), "\\clbrdrl");
+        WriteBorder(box.GetBorder().GetBottom(), "\\clbrdrb");
+        WriteBorder(box.GetBorder().GetRight(), "\\clbrdrr");
+
+        if ( attr.HasBackgroundColour() )
+        {
+            m_output.Printf("\\clcbpat%d",
+                            FindColour(attr.GetBackgroundColour()));
+        }
+
+        if ( box.HasVerticalAlignment() )
+        {
+            switch ( box.GetVerticalAlignment() )
+            {
+                case wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_CENTRE:
+                    m_output += "\\clvertalc";
+                    break;
+                case wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_BOTTOM:
+                    m_output += "\\clvertalb";
+                    break;
+                default:
+                    m_output += "\\clvertalt";
+                    break;
+            }
+        }
+
+        const wxTextAttrDimensions& padding = box.GetPadding();
+        const wxTextAttrDimension* const dims[] =
+        {
+            &padding.GetLeft(), &padding.GetTop(),
+            &padding.GetRight(), &padding.GetBottom()
+        };
+        const char* const names[] =
+        {
+            // Word and Writer interpret clpadt as LEFT and clpadl as TOP,
+            // contrary to the RTF specification's descriptions. Use their
+            // actual mapping (including the associated clpadf unit flags).
+            "t", "l", "r", "b"
+        };
+        for ( size_t n = 0; n < WXSIZEOF(dims); ++n )
+        {
+            // A percentage is no space, as for wx.
+            if ( dims[n]->IsValid() && dims[n]->GetUnits() != wxTEXT_ATTR_UNITS_PERCENTAGE )
+            {
+                m_output.Printf("\\clpad%s%d\\clpadf%s3",
+                    names[n], wxRichTextBoxSpacingToTwips(*dims[n]), names[n]);
+            }
+        }
+
+        if ( box.HasWhitespaceMode() &&
+             box.GetWhitespaceMode() == wxTEXT_BOX_ATTR_WHITESPACE_NO_WRAP )
+        {
+            m_output += "\\clNoWrap";
+        }
+    }
+
+    bool WriteTable(const wxRichTextTable& table, int tableDepth)
+    {
+        const int rows = table.GetRowCount();
+        const int cols = table.GetColumnCount();
+        if ( rows <= 0 || cols <= 0 )
+            return true;
+
+        wxVector<int> owners;
+        if ( !BuildCellOwners(table, owners) )
+            return false;
+
+        SeparateFromPreviousTable(tableDepth);
+        const wxTextBoxAttr& tableAttr = table.GetAttributes().GetTextBoxAttr();
+        int tableWidth = wxRichTextDimensionToTwips(tableAttr.GetWidth(), m_availableSize.x);
+        if ( tableWidth <= 0 )
+            tableWidth = m_availableSize.x;
+        // Native table layout fits within its parent even when the requested
+        // table/column widths are larger. Keep margins outside the cell grid.
+        tableWidth = wxMin(tableWidth, m_availableSize.x);
+        tableWidth -= wxRichTextBoxSpacingToTwips(tableAttr.GetMargins().GetLeft()) +
+                      wxRichTextBoxSpacingToTwips(tableAttr.GetMargins().GetRight());
+        if ( tableWidth < cols )
+            return false;
+        wxVector<int> widths(cols, 0);
+        for ( int row = 0; row < rows; ++row )
+        {
+            for ( int col = 0; col < cols; ++col )
+            {
+                if ( owners[row * cols + col] != row * cols + col )
+                    continue;
+                wxRichTextCell* const cell = table.GetCell(row, col);
+                if ( cell->GetColSpan() == 1 )
+                {
+                    widths[col] = wxMax(widths[col], wxRichTextDimensionToTwips(
+                        cell->GetAttributes().GetTextBoxAttr().GetWidth(), tableWidth));
+                }
+            }
+        }
+        long long specifiedWidth = 0;
+        int unspecified = 0;
+        for ( int width : widths )
+        {
+            specifiedWidth += width;
+            if ( width == 0 )
+                ++unspecified;
+        }
+        for ( int& width : widths )
+        {
+            if ( width == 0 )
+                width = static_cast<int>(wxMax(1LL, (tableWidth - specifiedWidth) / unspecified));
+        }
+        // Spanning cells can impose an additional minimum on several columns.
+        for ( int row = 0; row < rows; ++row )
+        {
+            for ( int col = 0; col < cols; ++col )
+            {
+                if ( owners[row * cols + col] != row * cols + col )
+                    continue;
+                wxRichTextCell* const cell = table.GetCell(row, col);
+                const int span = cell->GetColSpan();
+                if ( span == 1 )
+                    continue;
+                long long current = 0;
+                for ( int c = col; c < col + span; ++c )
+                    current += widths[c];
+                const int requested = wxRichTextDimensionToTwips(
+                    cell->GetAttributes().GetTextBoxAttr().GetWidth(), tableWidth);
+                if ( requested > current )
+                {
+                    const int delta = static_cast<int>(requested - current);
+                    for ( int c = 0; c < span; ++c )
+                        widths[col + c] += delta / span + (c < delta % span ? 1 : 0);
+                }
+            }
+        }
+
+        // Do this after span constraints too: an oversized merged cell must
+        // not expand the grid beyond the containing page, box or table cell.
+        // As in native layout's last-resort shrink, share the space equally
+        // when fixed column widths cannot fit. Preserve fitting widths.
+        long long totalWidth = 0;
+        for ( int width : widths )
+            totalWidth += width;
+        if ( totalWidth > tableWidth )
+        {
+            std::fill(widths.begin(), widths.end(), tableWidth / cols);
+            widths.back() += tableWidth % cols;
+        }
+
+        for ( int row = 0; row < rows; ++row )
+        {
+            m_output += "{";
+            // Nested row definitions belong only in nesttableprops after
+            // the cell contents. A leading trowd overwrites the outer row
+            // in Word, promoting the nested table out of its parent cell.
+            const size_t definitionStart = m_output.length();
+            // itap is a paragraph property: emitting it here, before cellx,
+            // makes RichEdit start a row before its cells have been defined.
+            // No space between cells (\trgaph0): the padding of wx cells is
+            // written as cell padding instead.
+            m_output += "\\trowd\\trgaph0";
+            const int left = wxRichTextBoxSpacingToTwips(tableAttr.GetMargins().GetLeft());
+            m_output.Printf("\\trleft%d", left);
+            // The cells as they are written in this row, including the parts
+            // of cells spanning into it from other rows or columns.
+            std::vector<wxRichTextAttr> cells;
+            cells.reserve(cols);
+            for ( int col = 0; col < cols; ++col )
+                cells.push_back(ResolveSharedBorders(table, owners, row, col));
+            // wx table layout uses the largest specified height of the
+            // visible origin cells in this row, as a minimum (not a clip).
+            // Covered cells must not impose their own heights. Like the
+            // native layout, do not resolve percentage cell heights here.
+            int specifiedHeight = 0;
+            for ( int col = 0; col < cols; ++col )
+            {
+                if ( owners[row * cols + col] != row * cols + col )
+                    continue;
+                const wxRichTextCell* const cell = table.GetCell(row, col);
+                const auto& height = cell->GetAttributes().GetTextBoxAttr().GetHeight();
+                if ( cell->IsShown() && height.IsValid() &&
+                     height.GetUnits() != wxTEXT_ATTR_UNITS_PERCENTAGE )
+                    specifiedHeight = wxMax(specifiedHeight, wxRichTextDimensionToTwips(height));
+            }
+            const int rowHeight = specifiedHeight > 0 ? GetWordRowHeight(specifiedHeight, cells) : 0;
+            if ( rowHeight > 0 )
+                m_output.Printf("\\trrh%d", rowHeight);
+            int boundary = 0;
+            for ( int col = 0; col < cols; ++col )
+            {
+                const int owner = owners[row * cols + col];
+                const int originRow = owner / cols;
+                const int originCol = owner % cols;
+                wxRichTextCell* const cell = table.GetCell(originRow, originCol);
+                if ( cell->GetColSpan() > 1 )
+                    m_output += col == originCol ? "\\clmgf" : "\\clmrg";
+                if ( cell->GetRowSpan() > 1 )
+                    m_output += row == originRow ? "\\clvmgf" : "\\clvmrg";
+
+                WriteCellStyle(cells[col]);
+                boundary += widths[col];
+                m_output.Printf(
+                    "\\clftsWidth3\\clwWidth%d\\cellx%d",
+                    widths[col], left + boundary);
+            }
+            const std::string definition = m_output.Mid(definitionStart);
+            if ( tableDepth > 1 )
+            {
+                m_output.Truncate(definitionStart);
+                // Keep the nesting level active through nesttableprops too:
+                // each cell paragraph restores this row-level state on exit.
+                m_output.Printf("\\intbl\\itap%d", tableDepth);
+            }
+            m_output += "\n";
+
+            for ( int col = 0; col < cols; ++col )
+            {
+                const int index = row * cols + col;
+                wxRichTextCell* const cell = table.GetCell(row, col);
+                if ( owners[index] == index && cell->IsShown() &&
+                     !cell->GetChildren().empty() )
+                {
+                    int cellWidth = 0;
+                    for ( int c = col; c < col + cell->GetColSpan(); ++c )
+                        cellWidth += widths[c];
+                    wxSize size(cellWidth, m_availableSize.y);
+                    const auto& height = cell->GetAttributes().GetTextBoxAttr().GetHeight();
+                    if ( height.IsValid() )
+                        size.y = wxMax(1, wxRichTextDimensionToTwips(height, size.y));
+                    if ( !WriteSizedLayoutBox(*cell, tableDepth, true, size) )
+                        return false;
+                }
+                else
+                {
+                    m_output.Printf("{\\pard\\intbl\\itap%d ", tableDepth);
+                    m_output += tableDepth > 1 ? "\\nestcell}" : "\\cell}";
+                }
+            }
+
+            if ( tableDepth > 1 )
+                m_output += "{\\*\\nesttableprops" + definition + "\\nestrow}";
+            else
+                m_output += "\\row";
+            m_output += "}\n";
+        }
+
+        return true;
+    }
+
+    // Reads the dimensions from the PNG or JPEG header, without decoding
+    // the image. Returns false for other formats or unexpected data.
+    static bool GetEncodedImageSize(const unsigned char* data, size_t size,
+                                    wxBitmapType type, wxSize& pixelSize)
+    {
+        const auto read16 = [data](size_t pos)
+            { return (data[pos] << 8) | data[pos + 1]; };
+        if ( type == wxBITMAP_TYPE_PNG )
+        {
+            // Signature, then the IHDR chunk length, type, width and height.
+            static const unsigned char signature[] =
+                { 0x89, 'P', 'N', 'G', '\r', '\n', 0x1a, '\n' };
+            if ( size < 24 || memcmp(data, signature, sizeof(signature)) != 0 ||
+                 memcmp(data + 12, "IHDR", 4) != 0 || read16(16) || read16(20) )
+                return false;
+            pixelSize = wxSize(read16(18), read16(22));
+        }
+        else if ( type == wxBITMAP_TYPE_JPEG )
+        {
+            if ( size < 4 || data[0] != 0xff || data[1] != 0xd8 )
+                return false;
+            size_t pos = 2;
+            for ( ;; )
+            {
+                // Skip fill bytes before the marker.
+                while ( pos < size && data[pos] == 0xff )
+                    ++pos;
+                if ( pos + 3 > size || data[pos - 1] != 0xff )
+                    return false;
+                const unsigned char marker = data[pos++];
+                if ( marker == 0x01 || (marker >= 0xd0 && marker <= 0xd7) )
+                    continue; // Markers without a segment.
+                if ( marker == 0xd9 || marker == 0xda )
+                    return false; // No frame header before the image data.
+                const size_t length = read16(pos);
+                if ( length < 2 || pos + length > size )
+                    return false;
+                // Any start of frame, except DHT (c4), JPG (c8) and DAC (cc).
+                if ( marker >= 0xc0 && marker <= 0xcf &&
+                     marker != 0xc4 && marker != 0xc8 && marker != 0xcc )
+                {
+                    if ( length < 7 )
+                        return false;
+                    pixelSize = wxSize(read16(pos + 5), read16(pos + 3));
+                    break;
+                }
+                pos += length;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        return pixelSize.x > 0 && pixelSize.y > 0;
+    }
+
+    bool WriteImage(const wxRichTextImage& image, int tableDepth)
+    {
+        const wxRichTextImageBlock& block = GetImageBlock(image);
+        const unsigned char* data = block.GetData();
+        size_t size = block.GetDataSize();
+        if ( !data || !size )
+            return false;
+
+        // Use the image data itself, never the size cached by the layout:
+        // it may be stale, e.g. if the block was replaced, or a placeholder.
+        wxSize pixelSize;
+        wxImage source;
+        if ( !GetEncodedImageSize(data, size, block.GetImageType(), pixelSize) )
+        {
+            if ( !LoadImage(block, source) || !source.IsOk() )
+                return false;
+            pixelSize = source.GetSize();
+        }
+
+        wxString imageType;
+        if ( block.GetImageType() == wxBITMAP_TYPE_PNG )
+            imageType = "\\pngblip";
+        else if ( block.GetImageType() == wxBITMAP_TYPE_JPEG )
+            imageType = "\\jpegblip";
+        else
+        {
+            if ( !source.IsOk() && !LoadImage(block, source) )
+                return false;
+
+            wxRichTextImageBlock png;
+            if ( !png.MakeImageBlockDefaultQuality(source, wxBITMAP_TYPE_PNG) )
+                return false;
+
+            return WriteImageData(png.GetData(), png.GetDataSize(),
+                                  "\\pngblip", pixelSize,
+                                  image.GetAttributes().GetTextBoxAttr(), tableDepth);
+        }
+
+        return WriteImageData(data, size, imageType, pixelSize,
+                              image.GetAttributes().GetTextBoxAttr(), tableDepth);
+    }
+
+    bool WriteImageData(const unsigned char* data, size_t size,
+                        const wxString& imageType, const wxSize& pixelSize,
+                        const wxTextBoxAttr& box = wxTextBoxAttr(), int tableDepth = 0,
+                        const wxSize& dipSize = wxDefaultSize)
+    {
+        if ( !data || !size )
+            return false;
+
+        const int floatMode = box.GetFloatMode();
+        const bool floating = !m_inTextBox &&
+            (floatMode == wxTEXT_BOX_ATTR_FLOAT_LEFT ||
+             floatMode == wxTEXT_BOX_ATTR_FLOAT_RIGHT);
+        const auto& margins = box.GetMargins();
+        const int marginLeft = wxRichTextBoxSpacingToTwips(margins.GetLeft());
+        const int marginRight = wxRichTextBoxSpacingToTwips(margins.GetRight());
+        const int marginTop = wxRichTextBoxSpacingToTwips(margins.GetTop());
+        const int marginBottom = wxRichTextBoxSpacingToTwips(margins.GetBottom());
+        // Keep padding separate from margins: it belongs inside the outline.
+        const auto& padding = box.GetPadding();
+        const int paddingLeft = wxMax(0,
+            wxRichTextBoxSpacingToTwips(padding.GetLeft()));
+        const int paddingRight = wxMax(0,
+            wxRichTextBoxSpacingToTwips(padding.GetRight()));
+        const int paddingTop = wxMax(0,
+            wxRichTextBoxSpacingToTwips(padding.GetTop()));
+        const int paddingBottom = wxMax(0,
+            wxRichTextBoxSpacingToTwips(padding.GetBottom()));
+        // Reserve decoration before fitting the actual pixels, otherwise a
+        // picture as wide as its container overflows once spacing is added.
+        const int availableWidth = wxMax(1, m_availableSize.x -
+            wxMax(0, marginLeft) - wxMax(0, marginRight) - paddingLeft - paddingRight -
+            BorderWidth(box.GetBorder().GetLeft()) - BorderWidth(box.GetBorder().GetRight()));
+        // A pixel is 1/96 inch, as for wxTEXT_ATTR_UNITS_PIXELS. A bitmap
+        // with a scale factor, e.g. for a high DPI display, has more pixels
+        // than its size in DIPs: keep them, but use the DIP size.
+        const wxSize dips = dipSize.x > 0 && dipSize.y > 0 ? dipSize : pixelSize;
+        wxSize goal(dips.x * 15, dips.y * 15);
+        if ( goal.x > 0 && goal.y > 0 )
+        {
+            // Like wx image layout, explicit height takes precedence over
+            // width, but neither dimension may distort the source aspect.
+            // Apply all constraints to a single scale so a later aspect-ratio
+            // adjustment cannot undo a maximum on the opposite axis.
+            double scale = 1.0;
+            const int width = wxRichTextDimensionToTwips(box.GetWidth(), m_availableSize.x);
+            const int height = wxRichTextDimensionToTwips(box.GetHeight(), m_availableSize.y);
+            if ( width > 0 )
+                scale = double(width) / goal.x;
+            if ( height > 0 )
+                scale = double(height) / goal.y;
+            const auto& minimum = box.GetMinSize();
+            const auto& maximum = box.GetMaxSize();
+            const int minWidth = wxRichTextDimensionToTwips(minimum.GetWidth(), m_availableSize.x);
+            const int minHeight = wxRichTextDimensionToTwips(minimum.GetHeight(), m_availableSize.y);
+            const int maxWidth = wxRichTextDimensionToTwips(maximum.GetWidth(), m_availableSize.x);
+            const int maxHeight = wxRichTextDimensionToTwips(maximum.GetHeight(), m_availableSize.y);
+            if ( minWidth > 0 )
+                scale = wxMax(scale, double(minWidth) / goal.x);
+            if ( minHeight > 0 )
+                scale = wxMax(scale, double(minHeight) / goal.y);
+            if ( maxWidth > 0 )
+                scale = wxMin(scale, double(maxWidth) / goal.x);
+            if ( maxHeight > 0 )
+                scale = wxMin(scale, double(maxHeight) / goal.y);
+            scale = wxMin(scale, double(availableWidth) / goal.x);
+            goal = wxSize(wxMax(1, wxRound(goal.x * scale)), wxMax(1, wxRound(goal.y * scale)));
+        }
+        // A bare pict is always inline, regardless of the image's float
+        // attributes. Use a picture-frame shape enclosing the picture and
+        // its padding, anchored to its containing paragraph. Word
+        // cannot import shapes inside a text-box story, so retain an inline
+        // picture there (as for other unsupported nested floating objects).
+        if ( floating )
+        {
+            const bool right = floatMode == wxTEXT_BOX_ATTR_FLOAT_RIGHT;
+            const wxSize frame(goal.x + paddingLeft + paddingRight,
+                               goal.y + paddingTop + paddingBottom);
+            const int left = right ? m_availableSize.x - frame.x - marginRight : marginLeft;
+            const int top = wxRichTextDimensionToTwips(box.GetTop(), m_availableSize.y) + marginTop;
+            m_output.Printf(
+                "{\\shp{\\*\\shpinst\\shpleft%d\\shptop%d"
+                "\\shpright%d\\shpbottom%d\\shpbxcolumn\\shpbypara\\shpwr2\\shpwrk%d",
+                left, top, left + frame.x, top + frame.y, right ? 1 : 2);
+            WriteShapeProperty("shapeType", 75);
+            // Alignment, rather than only a fixed coordinate, keeps a right
+            // float at the containing column/cell edge after reflow in Word.
+            if ( (right ? marginRight : marginLeft) == 0 )
+                WriteShapeProperty("posh", right ? 3 : 1);
+            WriteShapeProperty("posrelh", 2);
+            WriteShapeProperty("posrelv", 2);
+            if ( tableDepth > 0 )
+                WriteShapeProperty("fLayoutInCell", 1);
+            const auto& border = box.GetBorder().GetTop();
+            const int borderWidth = BorderWidth(border);
+            WriteShapeProperty("fLine", borderWidth > 0 ? 1 : 0);
+            if ( borderWidth > 0 )
+            {
+                WriteShapeProperty("lineWidth", borderWidth * 635L);
+                if ( border.HasColour() )
+                    WriteShapeProperty("lineColor", border.GetColourLong());
+                if ( border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOUBLE )
+                    WriteShapeProperty("lineStyle", 1);
+                else if ( border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED )
+                    WriteShapeProperty("lineDashing", 1);
+                else if ( border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED )
+                    WriteShapeProperty("lineDashing", 2);
+            }
+            WriteShapeProperty("fFilled", 0);
+            WriteShapeProperty("dxWrapDistLeft", marginLeft * 635L);
+            WriteShapeProperty("dxWrapDistRight", marginRight * 635L);
+            if ( marginTop != 0 )
+                WriteShapeProperty("dyWrapDistTop", marginTop * 635L);
+            if ( marginBottom != 0 )
+                WriteShapeProperty("dyWrapDistBottom", marginBottom * 635L);
+            // Shape crop fractions use signed 16.16 values relative to the
+            // uncropped picture. Enlarging the frame by the same padding
+            // retains the pixel scale in Word, without rewriting the image.
+            // Writer currently ignores negative shape crop fractions and
+            // stretches the pixels to fill this frame instead.
+            const int pads[] = { paddingLeft, paddingRight, paddingTop, paddingBottom };
+            const char* const cropNames[] =
+                { "cropFromLeft", "cropFromRight",
+                  "cropFromTop", "cropFromBottom" };
+            for ( size_t i = 0; i < WXSIZEOF(pads); ++i )
+            {
+                if ( pads[i] > 0 )
+                {
+                    const double crop = -65536.0 * pads[i] / wxMax(1, i < 2 ? goal.x : goal.y);
+                    if ( crop < std::numeric_limits<int>::min() )
+                        return false;
+                    WriteShapeProperty(cropNames[i], wxRound(crop));
+                }
+            }
+            m_output += "{\\sp{\\sn pib}{\\sv ";
+        }
+
+        const size_t pictureStart = m_output.length();
+        m_output += "{\\pict" + imageType;
+        if ( pixelSize.x > 0 && pixelSize.y > 0 )
+        {
+            m_output.Printf("\\picw%d\\pich%d",
+                            pixelSize.x, pixelSize.y);
+        }
+        m_output.Printf("\\picwgoal%d\\pichgoal%d", goal.x, goal.y);
+        WriteParagraphBorders(box.GetBorder());
+        if ( !floating )
+        {
+            const auto& borders = box.GetBorder();
+            const auto& border = borders.GetTop();
+            const int borderWidth = BorderWidth(border);
+            const int style = border.HasStyle() ? border.GetStyle() : wxTEXT_BOX_ATTR_BORDER_SOLID;
+            // Writer drops the legacy pict border controls, but honours a
+            // uniform outline in picprop. Keep the per-edge controls too for
+            // Word and readers supporting independently styled picture edges.
+            if ( borderWidth > 0 &&
+                 (style == wxTEXT_BOX_ATTR_BORDER_SOLID || style == wxTEXT_BOX_ATTR_BORDER_DASHED ||
+                  style == wxTEXT_BOX_ATTR_BORDER_DOTTED || style == wxTEXT_BOX_ATTR_BORDER_DOUBLE) &&
+                 border == borders.GetLeft() &&
+                 border == borders.GetRight() && border == borders.GetBottom() )
+            {
+                m_output += "{\\*\\picprop";
+                WriteShapeProperty("fLine", 1);
+                WriteShapeProperty("lineWidth", borderWidth * 635L);
+                if ( border.HasColour() )
+                    WriteShapeProperty("lineColor", border.GetColourLong());
+                if ( border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOUBLE )
+                    WriteShapeProperty("lineStyle", 1);
+                else if ( border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED )
+                    WriteShapeProperty("lineDashing", 1);
+                else if ( border.GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED )
+                    WriteShapeProperty("lineDashing", 2);
+                m_output += "}";
+            }
+            // Negative cropping adds padding without resampling the image.
+            // Inline pictures have no shape wrap-distance properties.
+            // With a border, Word outlines the expanded picture (including
+            // this space), so combined inline margins/borders are approximate.
+            // Writer currently fits the negatively cropped result back into
+            // the original goal size,
+            // shrinking the pixels instead of enlarging the inline object.
+            // Negative margins request overlap, not cropping of actual pixels.
+            // They cannot be represented with this inline-spacing mechanism.
+            const int left = wxMax(0, marginLeft) + paddingLeft;
+            const int top = wxMax(0, marginTop) + paddingTop;
+            const int right = wxMax(0, marginRight) + paddingRight;
+            const int bottom = wxMax(0, marginBottom) + paddingBottom;
+            if ( left > 0 )
+                m_output.Printf("\\piccropl%d", -left);
+            if ( top > 0 )
+                m_output.Printf("\\piccropt%d", -top);
+            if ( right > 0 )
+                m_output.Printf("\\piccropr%d", -right);
+            if ( bottom > 0 )
+                m_output.Printf("\\piccropb%d", -bottom);
+        }
+        m_output += "\n";
+
+        static const char hex[] = "0123456789abcdef";
+        for ( size_t n = 0; n < size; ++n )
+        {
+            m_output += hex[data[n] >> 4];
+            m_output += hex[data[n] & 0x0f];
+            if ( (n + 1) % 32 == 0 )
+                m_output += "\n";
+        }
+        m_output += "}";
+        if ( floating )
+        {
+            // As for text boxes, readers without shape support show the
+            // shape result: an inline copy of the same picture.
+            const std::string picture =
+                m_shapeFallbacks ? m_output.Mid(pictureStart) : std::string();
+            m_output += "}}}";
+            if ( m_shapeFallbacks )
+            {
+                m_output += "{\\shprslt ";
+                m_output += picture;
+                m_output += "}";
+            }
+            m_output += "}";
+        }
+        return true;
+    }
+
+    void WriteEscapedText(const wxString& text, bool inFontTable = false)
+    {
+        for ( wxUniChar ch : text )
+        {
+            const unsigned int value = ch.GetValue();
+            switch ( value )
+            {
+                case '\\':
+                    m_output += "\\\\";
+                    break;
+                case '{':
+                    m_output += "\\{";
+                    break;
+                case '}':
+                    m_output += "\\}";
+                    break;
+                case '\t':
+                    m_output += "\\tab ";
+                    break;
+                case '\r':
+                    break;
+                case '\n':
+                    m_output += "\\line ";
+                    break;
+                // RTF has dedicated symbols for these characters, which are
+                // also understood by readers not supporting Unicode. Don't
+                // use them in destinations such as the font table.
+                case 0x00a0:
+                    m_output += inFontTable ? "\\u160\\'a0" : "\\~";
+                    break;
+                case 0x00ad:
+                    m_output += inFontTable ? "\\u173\\'ad" : "\\-";
+                    break;
+                case 0x2011:
+                    m_output += inFontTable ? "\\u8209?" : "\\_";
+                    break;
+                default:
+                    if ( value == static_cast<unsigned int>(wxRichTextLineBreakChar) )
+                    {
+                        m_output += "\\line ";
+                    }
+                    else if ( value >= 0x20 && value <= 0x7e &&
+                              !(inFontTable && value == ';') )
+                    {
+                        m_output += static_cast<char>(value);
+                    }
+                    else if ( value <= 0xffff )
+                    {
+                        WriteUnicodeCodeUnit(value);
+                    }
+                    else
+                    {
+                        const unsigned int codePoint = value - 0x10000;
+                        WriteUnicodeCodeUnit(0xd800 + (codePoint >> 10));
+                        WriteUnicodeCodeUnit(0xdc00 + (codePoint & 0x3ff));
+                    }
+                    break;
+            }
+        }
+    }
+
+    // Returns the Windows-1252 code of the character, matching the document
+    // \ansicpg1252, or 0 if it has none.
+    static unsigned char GetWindows1252Code(unsigned int value)
+    {
+        if ( value >= 0xa0 && value <= 0xff )
+            return static_cast<unsigned char>(value);
+
+        static const unsigned short codes[] =
+        {
+            0x20ac, 0, 0x201a, 0x0192, 0x201e, 0x2026, 0x2020, 0x2021,
+            0x02c6, 0x2030, 0x0160, 0x2039, 0x0152, 0, 0x017d, 0,
+            0, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2013, 0x2014,
+            0x02dc, 0x2122, 0x0161, 0x203a, 0x0153, 0, 0x017e, 0x0178
+        };
+        for ( size_t n = 0; n < WXSIZEOF(codes); ++n )
+        {
+            if ( codes[n] && codes[n] == value )
+                return static_cast<unsigned char>(0x80 + n);
+        }
+        return 0;
+    }
+
+    void WriteUnicodeCodeUnit(unsigned int value)
+    {
+        const int signedValue = value > 0x7fff
+                              ? static_cast<int>(value) - 0x10000
+                              : static_cast<int>(value);
+        // Readers not supporting \u show the following fallback character
+        // instead: use the same character from the document code page when
+        // it has one, instead of a question mark.
+        const unsigned char code = GetWindows1252Code(value);
+        if ( code )
+            m_output.Printf("\\u%d\\'%02x", signedValue,
+                            static_cast<unsigned int>(code));
+        else
+            m_output.Printf("\\u%d?", signedValue);
+    }
+
+    const wxRichTextBuffer& m_buffer;
+    wxRichTextFontTable m_fontTable;
+    wxArrayString m_fonts;
+    wxVector<wxColour> m_colours;
+    wxRichTextRTFOutput m_output;
+    wxSize m_availableSize;
+    // The outer size of the container whose content m_availableSize is: wx
+    // resolves percentages of a box in a paragraph relative to it.
+    wxSize m_containerSize;
+    bool m_inTextBox;
+    const bool m_shapeFallbacks;
+    size_t m_imageBytes = 0;
+    // See ParagraphHasFace().
+    const wxRichTextParagraph* m_faceParagraph = nullptr;
+    bool m_paragraphHasFace = false;
+
+    std::vector<BulletItem> m_bulletItems;
+    std::vector<ListDefinition> m_lists;
+    std::unordered_map<const wxRichTextParagraph*, ListReference> m_paragraphLists;
+    std::unordered_map<wxString, int, wxStringHash, wxStringEqual> m_paragraphStyles;
+    std::unordered_map<wxString, int, wxStringHash, wxStringEqual> m_characterStyles;
+    std::unordered_set<int> m_writtenStyles;
+};
+
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+// The name of the RTF clipboard format registered by applications on each
+// platform: the Windows registered format used by RichEdit and Word, the
+// macOS uniform type identifier, and the MIME type elsewhere.
+wxDataFormat wxRichTextGetRTFClipboardFormat()
+{
+#ifdef __WXMSW__
+    return wxDataFormat("Rich Text Format");
+#elif defined(__WXOSX__)
+    return wxDataFormat("public.rtf");
+#else
+    return wxDataFormat("text/rtf");
+#endif
+}
+#endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+
+// Returns the RTF as bytes, avoiding a conversion to wxString when it is
+// saved or copied anyhow. The flags are wxRICHTEXT_HANDLER_XXX values.
+bool wxRichTextGetRTF(const wxRichTextBuffer& buffer, std::string& rtf, int flags,
+                      const wxPageSetupDialogData* pageSetup = nullptr)
+{
+    wxRichTextRTFWriter writer(buffer, flags);
+    return writer.Write(rtf, pageSetup);
+}
+
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+
+// The Windows "Rich Text Format" clipboard format is a NUL-terminated string,
+// while the MIME/UTI formats used elsewhere carry the exact byte count.
+#ifdef __WXMSW__
+const size_t wxRichTextRTFClipboardTerminator = 1;
+#else
+const size_t wxRichTextRTFClipboardTerminator = 0;
+#endif
+
+// RTF clipboard data generated only when it is requested, so that copying,
+// e.g. a selection containing large images, doesn't pay for an RTF version
+// that may never be pasted.
+class wxRichTextRTFDataObject : public wxDataObjectSimple
+{
+public:
+    // Takes ownership of the buffer and of its style sheet, if any.
+    explicit wxRichTextRTFDataObject(wxRichTextBuffer* buffer)
+        : wxDataObjectSimple(wxRichTextGetRTFClipboardFormat()),
+          m_buffer(buffer),
+          m_rendered(false)
+    {
+    }
+
+    virtual ~wxRichTextRTFDataObject()
+    {
+        wxRichTextStyleSheet* const sheet = m_buffer ? m_buffer->GetStyleSheet() : nullptr;
+        m_buffer.reset();
+        delete sheet;
+    }
+
+    virtual size_t GetDataSize() const override
+    {
+        Render();
+        return m_data.length() + wxRichTextRTFClipboardTerminator;
+    }
+
+    virtual bool GetDataHere(void* buf) const override
+    {
+        Render();
+        // c_str() is always NUL-terminated, so this copies the terminator
+        // when it is needed.
+        memcpy(buf, m_data.c_str(), m_data.length() + wxRichTextRTFClipboardTerminator);
+        return true;
+    }
+
+    // Must provide overloads to avoid hiding them (and warnings about it).
+    virtual size_t GetDataSize(const wxDataFormat&) const override
+    {
+        return GetDataSize();
+    }
+
+    virtual bool GetDataHere(const wxDataFormat&, void* buf) const override
+    {
+        return GetDataHere(buf);
+    }
+
+private:
+    void Render() const
+    {
+        if ( m_rendered )
+            return;
+
+        // The format was already offered, so an export failure, e.g. due to
+        // an application-defined object without an RTF representation,
+        // results in empty data.
+        m_rendered = true;
+        if ( !wxRichTextGetRTF(*m_buffer, m_data, m_buffer->GetHandlerFlags()) )
+            m_data.clear();
+    }
+
+    std::unique_ptr<wxRichTextBuffer> m_buffer;
+    mutable std::string m_data;
+    mutable bool m_rendered;
+
+    wxDECLARE_NO_COPY_CLASS(wxRichTextRTFDataObject);
+};
+
+#endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+
+} // anonymous namespace
+
+bool wxRichTextBuffer::GetAsRTF(wxString& rtf, const wxPageSetupDialogData* pageSetup) const
+{
+    std::string data;
+    if ( !wxRichTextGetRTF(*this, data, GetHandlerFlags(), pageSetup) )
+        return false;
+
+    rtf = wxString::FromAscii(data.c_str(), data.length());
+    return true;
+}
+
 /// Adds a handler to the end
 void wxRichTextBuffer::AddHandler(wxRichTextFileHandler *handler)
 {
@@ -8790,6 +11766,8 @@ void wxRichTextBuffer::InitStandardHandlers()
 {
     if (!FindHandler(wxRICHTEXT_TYPE_TEXT))
         AddHandler(new wxRichTextPlainTextHandler);
+    if (!FindHandler(wxRICHTEXT_TYPE_RTF))
+        AddHandler(new wxRichTextRTFHandler);
 }
 
 void wxRichTextBuffer::CleanUpHandlers()
@@ -8808,6 +11786,12 @@ void wxRichTextBuffer::CleanUpHandlers()
 
 wxString wxRichTextBuffer::GetExtWildcard(bool combine, bool save, wxArrayInt* types)
 {
+    return GetExtWildcard(combine, save, types, true);
+}
+
+wxString wxRichTextBuffer::GetExtWildcard(bool combine, bool save, wxArrayInt* types,
+                                         bool includeRTF)
+{
     if (types)
         types->Clear();
 
@@ -8818,7 +11802,8 @@ wxString wxRichTextBuffer::GetExtWildcard(bool combine, bool save, wxArrayInt* t
     while (node)
     {
         wxRichTextFileHandler* handler = (wxRichTextFileHandler*) node->GetData();
-        if (handler->IsVisible() && ((save && handler->CanSave()) || (!save && handler->CanLoad())))
+        if (handler->IsVisible() && (includeRTF || handler->GetType() != wxRICHTEXT_TYPE_RTF) &&
+            ((save && handler->CanSave()) || (!save && handler->CanLoad())))
         {
             if (combine)
             {
@@ -8949,6 +11934,27 @@ bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
             container->CopyFragment(range, *richTextBuf);
 
             compositeObject->Add(new wxRichTextBufferDataObject(richTextBuf), true /* preferred */);
+        }
+
+        // Also provide the standard RTF clipboard format for interoperability
+        // with native rich text controls and other applications.
+        if ( !GetRichTextCtrl() || GetRichTextCtrl()->GetRTFEnabled() )
+        {
+            auto richTextBuf = new wxRichTextBuffer;
+            // CopyFragment() copies paragraphs, not the container's basic
+            // style. Preserve inherited formatting in this RTF-only buffer;
+            // leave the native clipboard fragment's existing behaviour intact.
+            richTextBuf->SetBasicStyle(container->GetBasicStyle());
+            richTextBuf->SetHandlerFlags(GetHandlerFlags());
+            container->CopyFragment(range, *richTextBuf);
+            // The RTF is generated later, when the control or its style
+            // sheet may not exist any longer: use a copy of the style sheet,
+            // which defines the exported style names and list levels.
+            if ( GetStyleSheet() )
+                richTextBuf->SetStyleSheet(new wxRichTextStyleSheet(*GetStyleSheet()));
+
+            compositeObject->Add(new wxRichTextRTFDataObject(richTextBuf),
+                                 false /* not preferred */);
         }
 
         if (wxTheClipboard->SetData(compositeObject))
@@ -13190,6 +16196,35 @@ bool wxRichTextPlainTextHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputSt
 
     stream.Write((const char*) buf, text.length());
     return true;
+}
+#endif // wxUSE_STREAMS
+
+/*!
+ * wxRichTextRTFHandler
+ * RTF output handler
+ */
+
+wxIMPLEMENT_CLASS(wxRichTextRTFHandler, wxRichTextFileHandler);
+
+#if wxUSE_STREAMS
+bool wxRichTextRTFHandler::DoLoadFile(wxRichTextBuffer *WXUNUSED(buffer),
+                                      wxInputStream& WXUNUSED(stream))
+{
+    return false;
+}
+
+bool wxRichTextRTFHandler::DoSaveFile(wxRichTextBuffer *buffer,
+                                      wxOutputStream& stream)
+{
+    if ( !stream.IsOk() )
+        return false;
+
+    std::string rtf;
+    if ( !wxRichTextGetRTF(*buffer, rtf, GetFlags()) )
+        return false;
+
+    stream.Write(rtf.data(), rtf.length());
+    return stream.IsOk();
 }
 #endif // wxUSE_STREAMS
 

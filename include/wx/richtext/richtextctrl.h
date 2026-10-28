@@ -612,6 +612,30 @@ public:
 #endif // wxUSE_FFILE && wxUSE_STREAMS
 
     /**
+        Enables or disables RTF clipboard export and inclusion of RTF in the
+        save filters returned by GetExtWildcard(). Disabled by default.
+
+        This setting belongs to this control only. Plain text and native rich
+        text clipboard formats are unaffected. Explicit SaveFile() and buffer
+        GetAsRTF() calls remain available regardless of this setting.
+        RTF export is experimental: its output may change in future versions.
+    */
+    void EnableRTF(bool enable) { m_enableRTF = enable; }
+
+    /** Returns whether RTF clipboard export and save filters are enabled. */
+    bool GetRTFEnabled() const { return m_enableRTF; }
+
+    /**
+        Returns file-dialog filters for this control, respecting EnableRTF().
+
+        Use this instead of wxRichTextBuffer::GetExtWildcard() when building
+        a file dialog for a control. Other arguments have the same meaning as
+        in that function. RTF is export-only and is never offered for loading.
+    */
+    wxString GetExtWildcard(bool combine = false, bool save = false,
+                            wxArrayInt* types = nullptr) const;
+
+    /**
         Sets flags that change the behaviour of loading or saving.
 
         See the documentation for each handler class to see what flags are
@@ -2355,6 +2379,9 @@ protected:
 
     /// Are we editable?
     bool                    m_editable;
+
+    /// Is RTF clipboard export and inclusion in save filters enabled?
+    bool                    m_enableRTF;
 
     /// Can we use virtual attributes and virtual text?
     bool                    m_useVirtualAttributes;
