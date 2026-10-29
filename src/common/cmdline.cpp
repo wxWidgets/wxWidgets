@@ -759,6 +759,11 @@ bool wxCmdLineParser::Found(const wxString& name, wxDateTime *value) const
 }
 #endif // wxUSE_DATETIME
 
+std::vector<wxString> wxCmdLineParser::GetParams() const
+{
+    return m_data->m_parameters;
+}
+
 size_t wxCmdLineParser::GetParamCount() const
 {
     return m_data->m_parameters.size();
