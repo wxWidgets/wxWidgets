@@ -1168,7 +1168,6 @@ bool wxRibbonPanel::HideExpanded()
     {
         wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_dummy);
-        child->Hide();
     }
 
     // Move sizer back
@@ -1179,8 +1178,22 @@ bool wxRibbonPanel::HideExpanded()
         m_expanded_dummy->SetSizer(sizer);
     }
 
+    // Realize the original panel while the children are still shown: the
+    // sizer ignores hidden items, so doing it after hiding them would store
+    // a tiny m_smallest_unminimised_size which would then be used as the size
+    // of the expanded panel the next time it is shown.
     m_expanded_dummy->m_expanded_panel = nullptr;
     m_expanded_dummy->Realize();
+
+    // The original panel is minimised, so its children must be hidden.
+    for ( wxWindowList::compatibility_iterator node =
+            m_expanded_dummy->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        node->GetData()->Hide();
+    }
+
     m_expanded_dummy->Refresh();
     wxWindow *parent = GetParent();
     Destroy();
