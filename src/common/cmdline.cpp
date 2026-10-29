@@ -193,7 +193,7 @@ struct wxCmdLineParserData
     wxArrayString m_arguments;  // == argv, argc == m_arguments.size()
     std::vector<wxCmdLineOption> m_options;   // all possible options and switches
     std::vector<wxCmdLineParam> m_paramDesc;  // description of all possible params
-    wxArrayString m_parameters; // all params found
+    std::vector<wxString> m_parameters; // all params found
     std::vector<wxCmdLineArgImpl> m_parsedArguments; // all options and parameters in parsing order
 
     // methods
