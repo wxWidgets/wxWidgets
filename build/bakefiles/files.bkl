@@ -3084,6 +3084,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/ribbon/panel.cpp
     src/ribbon/toolbar.cpp
     src/xrc/xh_ribbon.cpp
+    src/ribbon/art_msw_explorer.cpp
 </set>
 <set var="RIBBON_HDR" hints="files">
     wx/ribbon/art.h

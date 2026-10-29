@@ -1797,7 +1797,8 @@ int wxRibbonBar::FindShownPage(int from, int step) const
 
 bool wxRibbonBar::IsFlatArtProvider(const wxRibbonArtProvider* art)
 {
-    return dynamic_cast<const wxRibbonMSWFlatArtProvider*>(art) != nullptr;
+    return dynamic_cast<const wxRibbonMSWFlatArtProvider*>(art) != nullptr ||
+           dynamic_cast<const wxRibbonMSWExplorerArtProvider*>(art) != nullptr;
 }
 
 void wxRibbonBar::SetBackstagePage(wxRibbonPage* page)
