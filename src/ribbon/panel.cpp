@@ -32,7 +32,7 @@ class wxRibbonShadowFrame : public wxFrame
 {
 public:
     wxRibbonShadowFrame(wxWindow* parent,
-                        const wxString& WXUNUSED(title),
+                        const wxString& title,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxFRAME_NO_TASKBAR | wxBORDER_NONE)
