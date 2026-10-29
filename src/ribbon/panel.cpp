@@ -28,6 +28,41 @@
 #include "wx/msw/private.h"
 #endif
 
+class wxRibbonShadowFrame : public wxFrame
+{
+public:
+    wxRibbonShadowFrame(wxWindow* parent,
+                        const wxString& WXUNUSED(title),
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxFRAME_NO_TASKBAR | wxBORDER_NONE)
+        : wxFrame()
+    {
+#ifdef __WXMSW__
+        // Register a custom Win32 class with CS_DROPSHADOW
+        wxString cls = wxApp::GetRegisteredClassName(
+            _T("wxRibbonShadowFrameClass"),
+            -1,   
+            CS_DROPSHADOW, 
+            wxApp::RegClass_Default
+        );
+
+        CreateUsingMSWClass(
+            cls,
+            parent,
+            wxID_ANY,
+            pos,
+            size,
+            style,
+            "wxRibbonShadowFrame"
+        );
+#else
+        // En other platforms, use a normal frame
+        Create(parent, wxID_ANY, title, pos, size, style, "wxRibbonShadowFrame");
+#endif
+    }
+};
+
 wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent);
@@ -1009,7 +1044,7 @@ bool wxRibbonPanel::ShowExpanded()
         size, m_preferred_expand_direction).GetTopLeft();
 
     // Need a top-level frame to contain the expanded panel
-    wxFrame *container = new wxFrame(nullptr, wxID_ANY, GetLabel(),
+    wxFrame *container = new wxRibbonShadowFrame(GetParent(), GetLabel(),
         pos, size, wxFRAME_NO_TASKBAR | wxBORDER_NONE);
 
     m_expanded_panel = new wxRibbonPanel(container, wxID_ANY,
