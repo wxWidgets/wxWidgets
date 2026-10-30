@@ -27,6 +27,7 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include <atomic>
 #include <memory>
 
 #ifndef SA_RESTART
@@ -74,6 +75,19 @@ private:
     wxEventLoopSource* m_source;
 };
 
+// ----------------------------------------------------------------------------
+// Store signals caught by HandleSignal()
+// ----------------------------------------------------------------------------
+
+// Maximal signal number supported by SetSignalHandler(): this is enough for
+// all signals, including the real-time ones, under all the systems we know of.
+constexpr int MAX_SIGNAL = 128;
+
+// Flags set by HandleSignal(), which may run in any thread, and reset by
+// CheckSignal(), so they must be atomic (note that std::atomic<bool> is
+// lock-free everywhere, and so can be used from a signal handler).
+std::atomic<bool> gs_signalsCaught[MAX_SIGNAL + 1];
+
 } // anonymous namespace
 
 wxAppConsole::wxAppConsole()
@@ -98,12 +112,7 @@ bool wxAppConsole::Initialize(int& argc_, wxChar** argv_)
 #endif
 #endif // __DARWIN__
 
-    if ( !wxAppConsoleBase::Initialize(argc_, argv_) )
-        return false;
-
-    sigemptyset(&m_signalsCaught);
-
-    return true;
+    return wxAppConsoleBase::Initialize(argc_, argv_);
 }
 
 // The actual signal handler. It does as little as possible (because very few
@@ -115,8 +124,13 @@ void wxAppConsole::HandleSignal(int signal)
     if ( !app )
         return;
 
-    // Register the signal that is caught.
-    sigaddset(&(app->m_signalsCaught), signal);
+    // Register the signal that is caught: notice that we can't use sigset_t
+    // here because sigaddset() is not atomic and this function can run
+    // concurrently with CheckSignal() if it's called in another thread.
+    //
+    // Note that the check in SetSignalHandler() ensures that the index is
+    // valid.
+    gs_signalsCaught[signal] = true;
 
     // Wake up the application for handling the signal.
     //
@@ -130,9 +144,8 @@ void wxAppConsole::CheckSignal()
     for ( const auto& kv : m_signalHandlerHash )
     {
         int sig = kv.first;
-        if ( sigismember(&m_signalsCaught, sig) )
+        if ( gs_signalsCaught[sig].exchange(false) )
         {
-            sigdelset(&m_signalsCaught, sig);
             (kv.second)(sig);
         }
     }
@@ -170,6 +183,9 @@ extern "C"
 
 bool wxAppConsole::SetSignalHandler(int signal, SignalHandler handler)
 {
+    wxCHECK_MSG( signal > 0 && signal <= MAX_SIGNAL, false,
+                 "Unsupported signal number" );
+
     const bool install = (SignalHandler_t)handler != SIG_DFL &&
                          (SignalHandler_t)handler != SIG_IGN;
 
