@@ -66,6 +66,12 @@ public:
     virtual bool OnInit() override { return true; }
     virtual void OnExit() override
     {
+        if ( ms_autoCompleteHook )
+        {
+            ::UnhookWinEvent(ms_autoCompleteHook);
+            ms_autoCompleteHook = nullptr;
+        }
+
         ms_settings.reset();
 
         ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
@@ -96,11 +102,20 @@ public:
         return ms_pfnDwmSetWindowAttribute;
     }
 
+    // The hook used for auto-completion windows, if it was installed.
+    static bool HasAutoCompleteHook() { return ms_autoCompleteHook != nullptr; }
+    static void SetAutoCompleteHook(HWINEVENTHOOK hook)
+    {
+        ms_autoCompleteHook = hook;
+    }
+
 private:
     static wxDynamicLibrary ms_dllDWM;
     static DwmSetWindowAttribute_t ms_pfnDwmSetWindowAttribute;
 
     static std::unique_ptr<wxDarkModeSettings> ms_settings;
+
+    static HWINEVENTHOOK ms_autoCompleteHook;
 
     wxDECLARE_DYNAMIC_CLASS(wxDarkModeModule);
 };
@@ -109,6 +124,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxDarkModeModule, wxModule);
 
 wxDynamicLibrary wxDarkModeModule::ms_dllDWM;
 std::unique_ptr<wxDarkModeSettings> wxDarkModeModule::ms_settings;
+HWINEVENTHOOK wxDarkModeModule::ms_autoCompleteHook = nullptr;
 
 DwmSetWindowAttribute_t
 wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
@@ -157,6 +173,12 @@ bool gs_wasActiveOnStartupIsSet = false;
 
 // The return value for HasChanged().
 bool gs_hasChanged = false;
+
+// Set to true when EnableForAutoComplete() is called for the first time.
+bool gs_autoCompleteUsed = false;
+
+// Install the hook used for auto-completion windows if necessary.
+void InstallAutoCompleteHookIfNeeded();
 
 template <typename T>
 bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
@@ -326,6 +348,9 @@ bool wxApp::MSWEnableDarkMode(DarkMode flags, wxDarkModeSettings* settings)
     wxMSWImpl::RefreshImmersiveColorPolicyState();
 
     gs_appMode = mode;
+
+    // Auto-completion could have been used before dark mode was enabled.
+    InstallAutoCompleteHookIfNeeded();
 
     // Initialize gs_wasActiveOnStartup only one time and only before a window
     // is created. If we first reach here after a window was created, then
@@ -1222,6 +1247,215 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
     }
 }
 
+namespace
+{
+
+// Return the full text of the given list view item.
+wxString GetListViewItemText(HWND hwnd, WPARAM item)
+{
+    // There is no way to query the text length in advance, so retry with a
+    // bigger buffer if the text may have been truncated.
+    for ( int len = 256; ; len *= 2 )
+    {
+        wxWCharBuffer buf(len);
+
+        LVITEMW lvi{};
+        lvi.pszText = buf.data();
+        lvi.cchTextMax = len;
+
+        const int copied = static_cast<int>(
+            ::SendMessage(hwnd, LVM_GETITEMTEXTW, item, (LPARAM)&lvi)
+        );
+        if ( copied < len - 1 )
+            return wxString(lvi.pszText, copied);
+    }
+}
+
+// Subclass procedure for the auto-completion drop-down main window. This
+// draws the list view control items, needed because this list view control
+// is unresponsive to AllowForWindow(), LVM_SETTEXTBKCOLOR and
+// LVM_SETTEXTCOLOR.
+LRESULT CALLBACK AutoCompleteMainProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    if ( uMsg == WM_NOTIFY && wxMSWDarkMode::IsActive() )
+    {
+        LPNMHDR nmhdr = (NMHDR*)lParam;
+        if ( nmhdr->code == NM_CUSTOMDRAW )
+        {
+            NMLVCUSTOMDRAW* lvcd = (NMLVCUSTOMDRAW*)lParam;
+            if ( lvcd->nmcd.dwDrawStage == CDDS_PREPAINT )
+            {
+                return CDRF_NOTIFYITEMDRAW;
+            }
+            else if ( lvcd->nmcd.dwDrawStage == CDDS_ITEMPREPAINT )
+            {
+                // Figure background and text colours.
+                bool isSel = ListView_GetItemState(nmhdr->hwndFrom,
+                    lvcd->nmcd.dwItemSpec, LVIS_SELECTED) != 0;
+                auto bg = isSel ? wxSYS_COLOUR_HIGHLIGHT : wxSYS_COLOUR_WINDOW;
+                auto fg = isSel ? wxSYS_COLOUR_HIGHLIGHTTEXT :
+                    wxSYS_COLOUR_WINDOWTEXT;
+
+                // Erase background and call DrawText() because setting the
+                // NMLVCUSTOMDRAW clrText/clrTextBk members has no effect.
+                AutoHBRUSH hBrush(wxSystemSettings::GetColour(bg).GetPixel());
+                ::FillRect(lvcd->nmcd.hdc, &lvcd->nmcd.rc, hBrush);
+                const wxString itemText =
+                    GetListViewItemText(nmhdr->hwndFrom, lvcd->nmcd.dwItemSpec);
+                ::SetTextColor(lvcd->nmcd.hdc,
+                    wxSystemSettings::GetColour(fg).GetPixel());
+                ::SetBkMode(lvcd->nmcd.hdc, TRANSPARENT);
+                ::DrawTextW(lvcd->nmcd.hdc, itemText.wc_str(),
+                    static_cast<int>(itemText.length()), &lvcd->nmcd.rc,
+                    DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+
+                return CDRF_SKIPDEFAULT;
+            }
+        }
+    }
+    else if ( uMsg == WM_NCDESTROY )
+    {
+        ::RemoveWindowSubclass(hwnd, AutoCompleteMainProc, uIdSubclass);
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// Subclass procedure to paint the auto-completion gripper, needed because
+// this control does not respond to AllowForWindow().
+LRESULT CALLBACK AutoCompleteGripProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    if ( uMsg == WM_PAINT && wxMSWDarkMode::IsActive() )
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = ::BeginPaint(hwnd, &ps);
+        RECT rc;
+        ::GetClientRect(hwnd, &rc);
+
+        // Erase background.
+        auto bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel();
+        AutoHBRUSH hBrush(bg);
+        ::FillRect(hdc, &rc, hBrush);
+
+        // Draw the gripper.
+        auto dpi = wxGetWindowDPI(hwnd).y;
+        auto theme = wxUxThemeHandle::NewAtDPI(hwnd, L"SCROLLBAR", dpi);
+        if ( theme )
+        {
+            auto exStyle = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+            auto state = (exStyle & WS_EX_LAYOUTRTL) ? SZB_LEFTALIGN :
+                SZB_RIGHTALIGN;
+            ::DrawThemeBackground(theme, hdc, SBP_SIZEBOX, state, &rc, nullptr);
+        }
+
+        ::EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if ( uMsg == WM_NCDESTROY )
+    {
+        ::RemoveWindowSubclass(hwnd, AutoCompleteGripProc, uIdSubclass);
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// This event hook function detects auto-completion windows and enables dark
+// mode support.
+void CALLBACK AutoCompleteEventProc(
+    HWINEVENTHOOK WXUNUSED(hWinEventHook), DWORD WXUNUSED(event), HWND hwnd,
+    LONG idObject, LONG WXUNUSED(idChild), DWORD WXUNUSED(dwEventThread),
+    DWORD WXUNUSED(dwmsEventTime))
+{
+    // This function runs in light mode if we were previously in dark mode, to
+    // handle reverting from dark mode to light.
+    if ( !wxMSWDarkMode::IsActive() && !wxMSWDarkMode::HasChanged() )
+        return;
+
+    // Check for the auto-completion drop-down main window.
+    if ( idObject == OBJID_WINDOW && wxGetWindowClass(hwnd) ==
+        "Auto-Suggest Dropdown" )
+    {
+        // Subclass the main window: if this had been already done before,
+        // this call just updates the reference data, which is harmless.
+        ::SetWindowSubclass(hwnd, AutoCompleteMainProc, 1, 0);
+
+        // Find the list view.
+        HWND hList = ::FindWindowEx(hwnd, nullptr, WC_LISTVIEWW, nullptr);
+        if ( hList )
+        {
+            // Set the background colour at the bottom, where the gripper is.
+            auto bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+            ::SendMessage(hList, LVM_SETBKCOLOR, 0, bg.GetPixel());
+        }
+
+        // Find the scroll bar and gripper.
+        HWND hFind = nullptr;
+        for ( ;; )
+        {
+            hFind = ::FindWindowEx(hwnd, hFind, WC_SCROLLBARW, nullptr);
+            if ( hFind == nullptr )
+                break;
+
+            const LONG style = ::GetWindowLong(hFind, GWL_STYLE);
+            if ( style & (SBS_SIZEGRIP | SBS_SIZEBOX) )
+            {
+                // Subclass the gripper (again, harmless if already done).
+                ::SetWindowSubclass(hFind, AutoCompleteGripProc, 1, 0);
+            }
+            else
+            {
+                // Handle the scroll bar.
+                wxMSWDarkMode::AllowForWindow(hFind);
+            }
+        }
+    }
+}
+
+void InstallAutoCompleteHookIfNeeded()
+{
+    // Don't do anything if auto-completion is not used, dark mode can't be
+    // used at all or if the hook is already installed.
+    if ( !gs_autoCompleteUsed ||
+            gs_appMode == AppMode_Default ||
+                gs_appMode == AppMode_ForceLight ||
+                    wxDarkModeModule::HasAutoCompleteHook() )
+        return;
+
+    // Note that we install the hook even if dark mode is not currently active
+    // when using AppMode_AllowDark because it can become active later and the
+    // hook is also needed to switch from dark mode back to the light one.
+    //
+    // If MSWEnableDarkMode() is called later to switch from AppMode_ForceLight
+    // to another mode, it calls this function again to install the hook.
+    const auto hook = ::SetWinEventHook
+                        (
+                            EVENT_OBJECT_SHOW, EVENT_OBJECT_SHOW,
+                            nullptr,
+                            AutoCompleteEventProc,
+                            ::GetCurrentProcessId(),
+                            ::GetCurrentThreadId(),
+                            WINEVENT_OUTOFCONTEXT
+                        );
+    if ( !hook )
+    {
+        wxLogLastError("SetWinEventHook");
+        return;
+    }
+
+    wxDarkModeModule::SetAutoCompleteHook(hook);
+}
+
+} // anonymous namespace
+
+void wxMSWDarkMode::EnableForAutoComplete()
+{
+    gs_autoCompleteUsed = true;
+
+    InstallAutoCompleteHookIfNeeded();
+}
+
 #else // !wxUSE_DARK_MODE
 
 bool
@@ -1265,6 +1499,10 @@ bool HasChanged()
 }
 
 void ConfigureTLW(HWND WXUNUSED(hwnd))
+{
+}
+
+void EnableForAutoComplete()
 {
 }
 

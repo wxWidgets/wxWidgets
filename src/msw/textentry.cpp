@@ -33,6 +33,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
@@ -441,6 +442,8 @@ public:
         }
 
         m_win->Bind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+
+        wxMSWDarkMode::EnableForAutoComplete();
     }
 
     ~wxTextAutoCompleteData()
@@ -820,6 +823,10 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 
     // Set it to the special value indicating that we're using SHAutoComplete().
     m_autoCompleteData = wxDUMMY_SHAUTOCOMPLETE_DATA;
+
+    // This uses the same drop-down window as the strings completion, so it
+    // needs to be handled in dark mode too.
+    wxMSWDarkMode::EnableForAutoComplete();
 
     return true;
 }
