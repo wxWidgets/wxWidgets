@@ -37,6 +37,10 @@ public:
     // called only from the main thread.
     void WakeUpNoLock();
 
+    // Version of WakeUpNoLock() for signal handlers, which can run in any
+    // thread: doesn't use m_pipeIsEmpty and preserves errno.
+    void WakeUpFromSignal();
+
     // Same as WakeUp() but without locking.
 
     // Return the read end of the pipe.

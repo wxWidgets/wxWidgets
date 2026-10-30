@@ -51,7 +51,10 @@ wxWakeUpPipe::wxWakeUpPipe()
     }
 
 
-    if ( !m_pipe.MakeNonBlocking(wxPipe::Read) )
+    // Non-blocking writes: WakeUpFromSignal() doesn't check if the pipe is
+    // full, and if it is, a wake up is pending anyhow.
+    if ( !m_pipe.MakeNonBlocking(wxPipe::Read) ||
+            !m_pipe.MakeNonBlocking(wxPipe::Write) )
     {
         wxLogSysError(_("Failed to switch wake up pipe to non-blocking mode"));
         return;
@@ -84,6 +87,18 @@ void wxWakeUpPipe::WakeUpNoLock()
     }
 }
 
+void wxWakeUpPipe::WakeUpFromSignal()
+{
+    const int savedErrno = errno;
+
+    if ( write(m_pipe[wxPipe::Write], "s", 1) != 1 )
+    {
+        // The pipe is full, so we will be woken up anyhow.
+    }
+
+    errno = savedErrno;
+}
+
 void wxWakeUpPipe::OnReadWaiting()
 {
     // got wakeup from child thread, remove the data that provoked it from the
@@ -96,15 +111,14 @@ void wxWakeUpPipe::OnReadWaiting()
 
         if ( size > 0 )
         {
-            wxASSERT_MSG( size == 1, "Too many writes to wake-up pipe?" );
-
-            break;
+            // Read everything, there may be more than one byte if
+            // WakeUpFromSignal() was called several times.
+            continue;
         }
 
         if ( size == 0 || (size == -1 && errno == EAGAIN) )
         {
-            // No data available, not an error (but still surprising,
-            // spurious wakeup?)
+            // No (more) data available, not an error.
             break;
         }
 
