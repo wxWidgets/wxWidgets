@@ -19,6 +19,7 @@
 #include "wx/renderer.h"
 #include "wx/display.h"
 #include "wx/sizer.h"
+#include "wx/app.h"
 
 #ifndef WX_PRECOMP
 #include "wx/frame.h"
@@ -52,7 +53,7 @@ public:
         );
 
         CreateUsingMSWClass(
-            cls,
+            cls.c_str(),
             parent,
             wxID_ANY,
             pos,
