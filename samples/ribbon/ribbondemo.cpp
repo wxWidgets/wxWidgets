@@ -834,6 +834,12 @@ MyFrame::MyFrame()
     SetSizer(frameSizer);
 
     m_ribbon->SetBackstage(m_backstage, m_logwindow);
+
+    // Make the frame wide enough for the ribbon to show all its tabs fully.
+    const int ribbonWidth = m_ribbon->GetBestSize().x;
+    const wxSize clientSize = GetClientSize();
+    if ( clientSize.x < ribbonWidth )
+        SetClientSize(ribbonWidth, clientSize.y);
 }
 
 void MyFrame::CreateBackstage()
