@@ -324,6 +324,9 @@ private:
     // pasting the entire text on the clipboard.
     void AdjustMaxLengthBeforePaste();
 
+#if wxUSE_RICHEDIT
+    void MSWPaintDarkRichDisabled();
+#endif
 
     wxMenu* m_privateContextMenu;
 
