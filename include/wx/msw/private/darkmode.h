@@ -102,6 +102,11 @@ void EnableRoundCorners(HWND hwnd);
 // to maintain a consistent theme
 void PaintScrollBarCorner(wxWindow* w);
 
+// Event hook function for auto-completion dark mode support.
+void CALLBACK AutoCompleteEventProc(HWINEVENTHOOK hWinEventHook, DWORD event,
+    HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread,
+    DWORD dwmsEventTime);
+
 } // namespace wxMSWImpl
 
 #endif // _WX_MSW_PRIVATE_DARKMODE_H_

@@ -1220,6 +1220,150 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
     }
 }
 
+namespace
+{
+
+// Subclass procedure for the auto-completion drop-down main window. This
+// draws the list view control items, needed because this list view control
+// is unresponsive to AllowForWindow(), LVM_SETTEXTBKCOLOR and
+// LVM_SETTEXTCOLOR.
+LRESULT CALLBACK AutoCompleteMainProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    if ( uMsg == WM_NOTIFY && wxMSWDarkMode::IsActive() )
+    {
+        LPNMHDR nmhdr = (NMHDR*)lParam;
+        if ( nmhdr->code == NM_CUSTOMDRAW )
+        {
+            NMLVCUSTOMDRAW* lvcd = (NMLVCUSTOMDRAW*)lParam;
+            if ( lvcd->nmcd.dwDrawStage == CDDS_PREPAINT )
+            {
+                return CDRF_NOTIFYITEMDRAW;
+            }
+            else if ( lvcd->nmcd.dwDrawStage == CDDS_ITEMPREPAINT )
+            {
+                // Figure background and text colours.
+                bool isSel = ListView_GetItemState(nmhdr->hwndFrom,
+                    lvcd->nmcd.dwItemSpec, LVIS_SELECTED) != 0;
+                auto bg = isSel ? wxSYS_COLOUR_HIGHLIGHT : wxSYS_COLOUR_WINDOW;
+                auto fg = isSel ? wxSYS_COLOUR_HIGHLIGHTTEXT :
+                    wxSYS_COLOUR_WINDOWTEXT;
+
+                // Erase background and call DrawText() because setting the
+                // NMLVCUSTOMDRAW clrText/clrTextBk members has no effect.
+                AutoHBRUSH hBrush(wxSystemSettings::GetColour(bg).GetPixel());
+                ::FillRect(lvcd->nmcd.hdc, &lvcd->nmcd.rc, hBrush);
+                wchar_t itemText[256] = { };
+                ListView_GetItemText(nmhdr->hwndFrom, lvcd->nmcd.dwItemSpec,
+                    0, itemText, WXSIZEOF(itemText));
+                ::SetTextColor(lvcd->nmcd.hdc,
+                    wxSystemSettings::GetColour(fg).GetPixel());
+                ::DrawTextW(lvcd->nmcd.hdc, itemText, -1, &lvcd->nmcd.rc,
+                    DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+
+                return CDRF_SKIPDEFAULT;
+            }
+        }
+    }
+    else if ( uMsg == WM_NCDESTROY )
+        ::RemoveWindowSubclass(hwnd, AutoCompleteMainProc, uIdSubclass);
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// Subclass procedure to paint the auto-completion gripper, needed because
+// this control does not respond to AllowForWindow().
+LRESULT CALLBACK AutoCompleteGripProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    if ( uMsg == WM_PAINT && wxMSWDarkMode::IsActive() )
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = ::BeginPaint(hwnd, &ps);
+        RECT rc;
+        ::GetClientRect(hwnd, &rc);
+
+        // Erase background.
+        auto bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel();
+        AutoHBRUSH hBrush(bg);
+        ::FillRect(hdc, &rc, hBrush);
+
+        // Draw the gripper.
+        auto dpi = wxGetWindowDPI(hwnd).y;
+        auto theme = wxUxThemeHandle::NewAtDPI(hwnd, L"SCROLLBAR", dpi);
+        if ( theme )
+        {
+            auto exStyle = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+            auto state = (exStyle & WS_EX_LAYOUTRTL) ? SZB_LEFTALIGN :
+                SZB_RIGHTALIGN;
+            ::DrawThemeBackground(theme, hdc, SBP_SIZEBOX, state, &rc, nullptr);
+        }
+
+        ::EndPaint(hwnd, &ps);
+        return 0;
+    }
+    if ( uMsg == WM_NCDESTROY )
+        ::RemoveWindowSubclass(hwnd, AutoCompleteGripProc, uIdSubclass);
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+} // anonymous namespace
+
+// This event hook function detects auto-completion windows and enables dark
+// mode support.
+void CALLBACK wxMSWImpl::AutoCompleteEventProc(
+    HWINEVENTHOOK WXUNUSED(hWinEventHook), DWORD WXUNUSED(event), HWND hwnd,
+    LONG idObject, LONG WXUNUSED(idChild), DWORD WXUNUSED(dwEventThread),
+    DWORD WXUNUSED(dwmsEventTime))
+{
+    // This function runs in light mode if we were previously in dark mode, to
+    // handle reverting from dark mode to light.
+    if ( !wxMSWDarkMode::IsActive() && !wxMSWDarkMode::HasChanged() )
+        return;
+
+    // Check for the auto-completion drop-down main window.
+    if ( idObject == OBJID_WINDOW && wxGetWindowClass(hwnd) ==
+        "Auto-Suggest Dropdown" )
+    {
+        // Subclass the main window.
+        DWORD_PTR ref;
+        if ( !::GetWindowSubclass(hwnd, AutoCompleteMainProc, 1, &ref) )
+            ::SetWindowSubclass(hwnd, AutoCompleteMainProc, 1, 0);
+
+        // Find the list view.
+        HWND hList = ::FindWindowEx(hwnd, nullptr, WC_LISTVIEWW, nullptr);
+        if ( hList )
+        {
+            // Set the background colour at the bottom, where the gripper is.
+            auto bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+            ::SendMessage(hList, LVM_SETBKCOLOR, 0, bg.GetPixel());
+        }
+
+        // Find the scroll bar and gripper.
+        HWND hFind = nullptr;
+        for ( ;; )
+        {
+            hFind = ::FindWindowEx(hwnd, hFind, WC_SCROLLBARW, nullptr);
+            if ( hFind == nullptr )
+                break;
+
+            LONG style = GetWindowLong(hFind, GWL_STYLE);
+            if ( style & (SBS_SIZEGRIP | SBS_SIZEBOX) )
+            {
+                // Subclass the gripper.
+                if (!GetWindowSubclass(hFind, AutoCompleteGripProc, 1, &ref))
+                    SetWindowSubclass(hFind, AutoCompleteGripProc, 1, 0);
+            }
+            else
+            {
+                // Handle the scroll bar.
+                wxMSWDarkMode::AllowForWindow(hFind);
+            }
+        }
+    }
+}
+
 #else // !wxUSE_DARK_MODE
 
 bool
@@ -1332,6 +1476,13 @@ void DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
 } // namespace wxMSWDarkMode
 
 void wxMSWImpl::PaintScrollBarCorner(wxWindow* WXUNUSED(w))
+{
+}
+
+void CALLBACK wxMSWImpl::AutoCompleteEventProc(HWINEVENTHOOK WXUNUSED(hWinEventHook),
+    DWORD WXUNUSED(event), HWND WXUNUSED(hwnd), LONG WXUNUSED(idObject),
+    LONG WXUNUSED(idChild), DWORD WXUNUSED(dwEventThread),
+    DWORD WXUNUSED(dwmsEventTime))
 {
 }
 
