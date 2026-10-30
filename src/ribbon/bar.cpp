@@ -408,6 +408,10 @@ bool wxRibbonBar::Realize()
     int sep = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
     size_t numtabs = m_pages.GetCount();
     bool firstVisible = true;
+
+    // These totals would keep their old values below if no tab is shown.
+    m_tabs_total_width_ideal = 0;
+    m_tabs_total_width_minimum = 0;
     size_t i;
     for(i = 0; i < numtabs; ++i)
     {
@@ -448,6 +452,7 @@ bool wxRibbonBar::Realize()
 
     RecalculateMinSize();
     RecalculateTabSizes();
+    InvalidateBestSize();
     Refresh();
 
     return status;
@@ -759,6 +764,7 @@ void wxRibbonBar::SetTabCtrlMargins(int left, int right)
     m_tab_margin_right = right;
 
     RecalculateTabSizes();
+    InvalidateBestSize();
 }
 
 struct PageComparedBySmallWidthAsc
@@ -1638,6 +1644,17 @@ wxSize wxRibbonBar::DoGetBestSize() const
     {
         best.SetHeight(m_tab_height);
     }
+
+    // The bar must also be wide enough to show all the tabs at their ideal
+    // width, unless they are not shown at all.
+    if ( m_pages.GetCount() > 1 || (m_flags & wxRIBBON_BAR_ALWAYS_SHOW_TABS) )
+    {
+        const int tabs_width = m_tab_margin_left + m_tabs_total_width_ideal +
+                               m_tab_margin_right;
+        if ( best.GetWidth() < tabs_width )
+            best.SetWidth(tabs_width);
+    }
+
     return best;
 }
 
