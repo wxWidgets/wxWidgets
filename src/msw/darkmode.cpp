@@ -1337,7 +1337,7 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* WXUNUSED(w))
 
 #endif // wxUSE_DARK_MODE/!wxUSE_DARK_MODE
 
-void wxMSWImpl::EnableRoundCorners(HWND hwnd)
+void wxMSWImpl::EnableRoundCorners(HWND hwnd , DWORD borderColor)
 {
     const auto dwmSetWinAttr = wxDarkModeModule::GetDwmSetWindowAttribute();
     if ( !dwmSetWinAttr )
@@ -1374,6 +1374,6 @@ void wxMSWImpl::EnableRoundCorners(HWND hwnd)
     if ( !colBorder.IsOk() )
         colBorder = wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER);
 
-    DWORD color = static_cast<DWORD>(wxColourToRGB(colBorder));
+    DWORD color = borderColor > 0 ? borderColor :static_cast<DWORD>(wxColourToRGB(colBorder));
     dwmSetWinAttr(hwnd, DWMWA_BORDER_COLOR, &color, sizeof(color));
 }
