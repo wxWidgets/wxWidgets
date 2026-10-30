@@ -112,7 +112,7 @@ public:
     virtual wxRibbonToolBarToolBase* AddToggleTool(
         int tool_id,
         const wxBitmapBundle& bitmap,
-        const wxString& help_string);
+        const wxString& help_string = wxEmptyString);
 
     /**
         Add a tool to the tool bar.
@@ -472,7 +472,7 @@ public:
 
         @since 2.9.4
     */
-    virtual void SetToolDisabledBitmap(int tool_id, const wxBitmap &bitmap);
+    virtual void SetToolDisabledBitmap(int tool_id, const wxBitmapBundle &bitmap);
 
     /**
         Sets the help string shown in tooltip for the given tool.
@@ -498,7 +498,7 @@ public:
 
         @since 2.9.4
     */
-    virtual void SetToolNormalBitmap(int tool_id, const wxBitmap &bitmap);
+    virtual void SetToolNormalBitmap(int tool_id, const wxBitmapBundle &bitmap);
 
     /**
         Enable or disable a single tool on the bar.
