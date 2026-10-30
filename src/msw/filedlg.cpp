@@ -488,8 +488,15 @@ public:
         : wxFileDialogCustomize(this)
     {
         m_lastId =
-        m_lastAuxId =
         m_radioListId = 0;
+
+        // Note that we must not use (DWORD)-1 as an ID because it is
+        // interpreted as "no item" by IFileDialogCustomize, e.g. selecting
+        // the item with this ID in a combobox would result in
+        // GetSelectedControlItem() returning E_FAIL. As m_lastAuxId is always
+        // decremented before being used, initializing it with this value
+        // ensures that it's never used as an ID.
+        m_lastAuxId = static_cast<DWORD>(-1);
     }
 
     bool Initialize(IFileDialog* fileDialog)
@@ -665,7 +672,7 @@ private:
     DWORD m_lastId;
 
     // IDs used for any other controls, they're negative (which means they
-    // decrement from USHORT_MAX down).
+    // decrement from (DWORD)-2 down).
     //
     // Note that auxiliary IDs are sometimes used for the main control, at
     // native level, as with the radio buttons, that are represented by
