@@ -2815,6 +2815,7 @@ set(RIBBON_SRC
     src/ribbon/panel.cpp
     src/ribbon/toolbar.cpp
     src/xrc/xh_ribbon.cpp
+    src/ribbon/art_msw_explorer.cpp
 )
 
 set(RIBBON_HDR

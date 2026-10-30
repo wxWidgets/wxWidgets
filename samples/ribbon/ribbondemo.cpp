@@ -69,6 +69,7 @@ public:
         ID_AUI_PROVIDER,
         ID_MSW_PROVIDER,
         ID_MSW_FLAT_PROVIDER,
+        ID_MSW_EXPLORER_PROVIDER,
         ID_MAIN_TOOLBAR,
         ID_POSITION_TOP,
         ID_POSITION_TOP_ICONS,
@@ -140,6 +141,7 @@ public:
     void OnAUIProvider(wxRibbonButtonBarEvent& evt);
     void OnMSWProvider(wxRibbonButtonBarEvent& evt);
     void OnMSWFlatProvider(wxRibbonButtonBarEvent& evt);
+    void OnMSWExplorerProvider(wxRibbonButtonBarEvent& evt);
     void OnJustify(wxRibbonToolBarEvent& evt);
     void OnJustifyUpdateUI(wxUpdateUIEvent& evt);
     void OnNew(wxRibbonToolBarEvent& evt);
@@ -242,6 +244,7 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_DEFAULT_PROVIDER, MyFrame::OnDefaultProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_AUI_PROVIDER, MyFrame::OnAUIProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_PROVIDER, MyFrame::OnMSWProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_FLAT_PROVIDER, MyFrame::OnMSWFlatProvider)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_EXPLORER_PROVIDER, MyFrame::OnMSWExplorerProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_H, MyFrame::OnSelectionExpandHButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_V, MyFrame::OnSelectionExpandVButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_CONTRACT, MyFrame::OnSelectionContractButton)
@@ -434,6 +437,16 @@ static const char msw_flat_style_svg[] =
     "<rect x='5' y='24' width='22' height='2' fill='#BBB'/>"
     "</svg>";
 
+static const char msw_explorer_style_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='2' width='28' height='28' fill='#F5F6F7' stroke='#DADBDC' stroke-width='1'/>"
+    "<rect x='2' y='2' width='28' height='7' fill='#FFFFFF' stroke='#DADBDC' stroke-width='1'/>"
+    "<rect x='3' y='3' width='8' height='6' fill='#1979CA'/>"
+    "<rect x='5' y='13' width='9' height='13' fill='#CCE8FF' stroke='#99D1FF' stroke-width='1'/>"
+    "<rect x='18' y='13' width='9' height='4' fill='#E5F3FF'/>"
+    "<rect x='18' y='20' width='9' height='4' fill='#E5F3FF'/>"
+    "</svg>";
+
 // -- Miscellaneous icons ---------------------------------------------------
 
 static const char ribbon_svg[] =
@@ -500,6 +513,8 @@ MyFrame::MyFrame()
                                 | wxRIBBON_BAR_SHOW_TOGGLE_BUTTON
                                 | wxRIBBON_BAR_SHOW_HELP_BUTTON
                                 );
+
+    m_ribbon->SetTabCtrlMargins(0, 20);
 
     // Press F10 (the default trigger key) to try keyboard access mode.
     m_ribbon->SetToggleButtonKeyTip("Q");
@@ -676,10 +691,13 @@ MyFrame::MyFrame()
             MakeSvgBundle(msw_style_svg, wxSize(32, 32)));
         m_provider_bar->AddToggleButton(ID_MSW_FLAT_PROVIDER, "MSW Flat Provider",
             MakeSvgBundle(msw_flat_style_svg, wxSize(32, 32)));
+        m_provider_bar->AddToggleButton(ID_MSW_EXPLORER_PROVIDER, "MSW Explorer Provider",
+            MakeSvgBundle(msw_explorer_style_svg, wxSize(32, 32)));
         m_provider_bar->SetKeyTip(ID_DEFAULT_PROVIDER, "D");
         m_provider_bar->SetKeyTip(ID_AUI_PROVIDER, "I");
         m_provider_bar->SetKeyTip(ID_MSW_PROVIDER, "M");
         m_provider_bar->SetKeyTip(ID_MSW_FLAT_PROVIDER, "F");
+        m_provider_bar->SetKeyTip(ID_MSW_EXPLORER_PROVIDER, "E");
 
         m_provider_bar->ToggleButton(ID_DEFAULT_PROVIDER, true);
         wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
@@ -1563,6 +1581,12 @@ void MyFrame::OnMSWFlatProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
     SetArtProvider(ID_MSW_FLAT_PROVIDER, new wxRibbonMSWFlatArtProvider);
 }
 
+void MyFrame::OnMSWExplorerProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->DismissExpandedPanel();
+    SetArtProvider(ID_MSW_EXPLORER_PROVIDER, new wxRibbonMSWExplorerArtProvider);
+}
+
 void MyFrame::SetArtProvider(int button_id, wxRibbonArtProvider *prov)
 {
     m_ribbon->Freeze();
@@ -1583,6 +1607,8 @@ void MyFrame::SetArtProvider(int button_id, wxRibbonArtProvider *prov)
         button_id == ID_MSW_PROVIDER);
     m_provider_bar->ToggleButton(ID_MSW_FLAT_PROVIDER,
         button_id == ID_MSW_FLAT_PROVIDER);
+    m_provider_bar->ToggleButton(ID_MSW_EXPLORER_PROVIDER,
+        button_id == ID_MSW_EXPLORER_PROVIDER);
 
     m_ribbon->Realize();
     m_ribbon->Thaw();
