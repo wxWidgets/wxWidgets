@@ -145,7 +145,7 @@ public:
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
     // Files specified on the command line, if any.
-    wxVector<wxString> m_params;
+    std::vector<wxString> m_params;
 #endif // wxUSE_CMDLINE_PARSER
 
     virtual bool OnInit() override;
@@ -430,8 +430,7 @@ bool wxMediaPlayerApp::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( !wxApp::OnCmdLineParsed(parser) )
         return false;
 
-    for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
-        m_params.push_back(parser.GetParam(paramNr));
+    m_params = parser.GetParams();
 
     return true;
 }
