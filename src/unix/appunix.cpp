@@ -122,7 +122,7 @@ void wxAppConsole::HandleSignal(int signal)
     //
     // Notice that we must have a valid wake up pipe here as we only install
     // our signal handlers after allocating it.
-    app->m_signalWakeUpPipe->WakeUpFromSignal();
+    app->m_signalWakeUpPipe->WakeUp();
 }
 
 void wxAppConsole::CheckSignal()

@@ -62,7 +62,7 @@ wxConsoleEventLoop::wxConsoleEventLoop()
     m_wakeupSource = nullptr;
 
     // Create the pipe.
-    std::unique_ptr<wxWakeUpPipeMT> wakeupPipe(new wxWakeUpPipeMT);
+    std::unique_ptr<wxWakeUpPipe> wakeupPipe(new wxWakeUpPipe);
     const int pipeFD = wakeupPipe->GetReadFd();
     if ( pipeFD == wxPipe::INVALID_FD )
         return;
@@ -202,11 +202,7 @@ int wxConsoleEventLoop::DispatchTimeout(unsigned long timeout)
 
 void wxConsoleEventLoop::WakeUp()
 {
-#if wxUSE_THREADS
     m_wakeupPipe->WakeUp();
-#else
-    m_wakeupPipe->WakeUpNoLock();
-#endif
 }
 
 void wxConsoleEventLoop::OnNextIteration()

@@ -42,8 +42,6 @@
 
 wxWakeUpPipe::wxWakeUpPipe()
 {
-    m_pipeIsEmpty = true;
-
     if ( !m_pipe.Create() )
     {
         wxLogError(_("Failed to create wake up pipe used by event loop."));
@@ -51,7 +49,7 @@ wxWakeUpPipe::wxWakeUpPipe()
     }
 
 
-    // Non-blocking writes: WakeUpFromSignal() doesn't check if the pipe is
+    // Make writes non-blocking too: WakeUp() doesn't check if the pipe is
     // full, and if it is, a wake up is pending anyhow.
     if ( !m_pipe.MakeNonBlocking(wxPipe::Read) ||
             !m_pipe.MakeNonBlocking(wxPipe::Write) )
@@ -68,32 +66,17 @@ wxWakeUpPipe::wxWakeUpPipe()
 // wakeup handling
 // ----------------------------------------------------------------------------
 
-void wxWakeUpPipe::WakeUpNoLock()
+void wxWakeUpPipe::WakeUp()
 {
-    // No need to do anything if the pipe already contains something.
-    if ( !m_pipeIsEmpty )
-      return;
-
-    if ( write(m_pipe[wxPipe::Write], "s", 1) != 1 )
-    {
-        // don't use wxLog here, we can be in another thread and this could
-        // result in dead locks
-        perror("write(wake up pipe)");
-    }
-    else
-    {
-        // We just wrote to it, so it's not empty any more.
-        m_pipeIsEmpty = false;
-    }
-}
-
-void wxWakeUpPipe::WakeUpFromSignal()
-{
+    // This function can be called from a signal handler, so it must not change
+    // errno and can't do anything except calling async-signal-safe functions.
     const int savedErrno = errno;
 
     if ( write(m_pipe[wxPipe::Write], "s", 1) != 1 )
     {
-        // The pipe is full, so we will be woken up anyhow.
+        // Nothing to do here: if the pipe is full (EAGAIN), we will be woken
+        // up anyhow, and we can't report any other (unexpected) errors safely
+        // from here.
     }
 
     errno = savedErrno;
@@ -101,18 +84,17 @@ void wxWakeUpPipe::WakeUpFromSignal()
 
 void wxWakeUpPipe::OnReadWaiting()
 {
-    // got wakeup from child thread, remove the data that provoked it from the
-    // pipe
+    // got wakeup from another thread or a signal handler, remove all the data
+    // written to the pipe by (possibly several) calls to WakeUp() from it
 
-    char buf[4];
+    char buf[256];
     for ( ;; )
     {
         const int size = read(GetReadFd(), buf, WXSIZEOF(buf));
 
         if ( size > 0 )
         {
-            // Read everything, there may be more than one byte if
-            // WakeUpFromSignal() was called several times.
+            // Continue reading until the pipe becomes empty.
             continue;
         }
 
@@ -130,10 +112,6 @@ void wxWakeUpPipe::OnReadWaiting()
 
         wxLogSysError(_("Failed to read from wake-up pipe"));
 
-        return;
+        break;
     }
-
-    // The pipe is empty now, so future calls to WakeUp() would need to write
-    // to it again.
-    m_pipeIsEmpty = true;
 }
