@@ -41,8 +41,6 @@
 #include "wx/stattext.h"
 #include "widgets.h"
 
-#include "icons/spinbtn.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -221,7 +219,7 @@ IMPLEMENT_WIDGETS_PAGE(SpinBtnWidgetsPage, "Spin",
 
 SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, spinbtn_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_SpinButton)
 {
     m_chkVert = nullptr;
     m_chkArrowKeys = nullptr;

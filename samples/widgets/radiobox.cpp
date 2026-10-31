@@ -38,8 +38,6 @@
 
 #include "widgets.h"
 
-#include "icons/radiobox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -175,7 +173,7 @@ IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, "Radio",
 
 RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                                    wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, radio_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_RadioBox)
 {
     // init everything
     m_chkSpecifyRows = nullptr;

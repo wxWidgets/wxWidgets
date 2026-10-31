@@ -42,8 +42,6 @@
 
 #include "widgets.h"
 
-#include "icons/datepick.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -141,7 +139,7 @@ IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, "DatePicker",
 
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                      :WidgetsPage(book, imaglist, datepick_xpm)
+                      :WidgetsPage(book, imaglist, WidgetsIcon_DatePicker)
 {
 }
 

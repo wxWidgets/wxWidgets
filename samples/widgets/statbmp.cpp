@@ -40,14 +40,13 @@
 #include "wx/filepicker.h"
 
 #include "widgets.h"
-#include "icons/statbmp.xpm"
 
 
 class StatBmpWidgetsPage : public WidgetsPage
 {
 public:
     StatBmpWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : WidgetsPage(book, imaglist, statbmp_xpm) {}
+        : WidgetsPage(book, imaglist, WidgetsIcon_StaticBitmap) {}
 
     virtual void CreateContent() override;
     virtual wxWindow *GetWidget() const override { return m_statbmp; }

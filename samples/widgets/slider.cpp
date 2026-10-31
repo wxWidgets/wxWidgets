@@ -43,8 +43,6 @@
 
 #include "widgets.h"
 
-#include "icons/slider.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -252,7 +250,7 @@ IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, "Slider", FAMILY_CTRLS );
 
 SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, slider_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_Slider)
 {
     // init everything
     m_min = 0;

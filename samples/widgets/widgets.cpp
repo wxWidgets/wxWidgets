@@ -259,6 +259,9 @@ protected:
     // initialize the book: add all pages to it
     void InitBook();
 
+    // update the images when switching between light and dark appearance
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
     // return the currently selected page (never null)
     WidgetsPage *CurrentPage();
 
@@ -276,6 +279,9 @@ private:
 
     // the book containing the test pages
     WidgetsBookCtrl *m_book;
+
+    // the images used by the book(s)
+    wxVector<wxBitmapBundle> m_images;
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -647,8 +653,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
-    wxVector<wxBitmapBundle> imageList;
-    imageList.push_back(WidgetsPage::CreateBitmapBundle(sample_xpm));
+    m_images.push_back(WidgetsPage::CreateBitmapBundle(sample_xpm));
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *books[MAX_PAGES];
@@ -691,7 +696,7 @@ void WidgetsFrame::InitBook()
 #else
                                  books[cat]
 #endif
-                                 , imageList);
+                                 , m_images);
             pages[cat].push_back(page);
 
             labels[cat].Add(info->GetLabel());
@@ -716,7 +721,7 @@ void WidgetsFrame::InitBook()
 
     GetMenuBar()->Append(menuPages, "&Page");
 
-    m_book->SetImages(imageList);
+    m_book->SetImages(m_images);
 
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
@@ -724,7 +729,7 @@ void WidgetsFrame::InitBook()
         m_book->AddPage(nullptr,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
-        books[cat]->SetImages(imageList);
+        books[cat]->SetImages(m_images);
 #endif
 
         // now do add them
@@ -746,6 +751,7 @@ void WidgetsFrame::InitBook()
     }
 
     Bind(wxEVT_COMMAND_WIDGETS_PAGE_CHANGED, &WidgetsFrame::OnPageChanged, this);
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &WidgetsFrame::OnSysColourChanged, this);
 
     const bool pageSet = wxPersistentRegisterAndRestore(m_book);
 
@@ -770,6 +776,19 @@ void WidgetsFrame::InitBook()
         m_book->SetSelection(0);
     }
 #endif // USE_TREEBOOK
+}
+
+void WidgetsFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+
+    // The icon bundles return the bitmaps appropriate for the current
+    // appearance, so just set them again to update the image list(s).
+    m_book->SetImages(m_images);
+#if !USE_TREEBOOK
+    for ( size_t n = 0; n < m_book->GetPageCount(); n++ )
+        wxStaticCast(m_book->GetPage(n), WidgetsBookCtrl)->SetImages(m_images);
+#endif // !USE_TREEBOOK
 }
 
 WidgetsPage *WidgetsFrame::CurrentPage()
@@ -1437,12 +1456,12 @@ WidgetsPageInfo *WidgetsPage::ms_widgetPages = nullptr;
 
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          wxVector<wxBitmapBundle>& imaglist,
-                         const char *const icon[])
+                         WidgetsIcon icon)
            : wxScrolledWindow(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxCLIP_CHILDREN | wxTAB_TRAVERSAL)
 {
-    imaglist.push_back(CreateBitmapBundle(icon));
+    imaglist.push_back(CreateWidgetsIconBundle(icon));
 }
 
 wxBitmapBundle WidgetsPage::CreateBitmapBundle(const char* const icon[])

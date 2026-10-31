@@ -175,6 +175,7 @@ set(SAMPLE_WIDGETS_SRC
     gauge.cpp
     headerctrl.cpp
     hyperlnk.cpp
+    icons.cpp
     itemcontainer.cpp
     listbox.cpp
     native.cpp
@@ -191,6 +192,7 @@ set(SAMPLE_WIDGETS_SRC
     toggle.cpp
     widgets.cpp
     widgets.h
+    icons.h
     itemcontainer.h
     )
 if(APPLE)

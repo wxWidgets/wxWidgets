@@ -39,8 +39,6 @@
 
 #include "widgets.h"
 
-#include "icons/header.xpm"
-
 // ----------------------------------------------------------------------------
 // HeaderCtrlWidgetsPage
 // ----------------------------------------------------------------------------
@@ -51,7 +49,7 @@ class HeaderCtrlWidgetsPage : public WidgetsPage
 {
 public:
     HeaderCtrlWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : WidgetsPage(book, imaglist, header_xpm)
+        : WidgetsPage(book, imaglist, WidgetsIcon_Header)
     {
         m_header = nullptr;
         m_sizerHeader = nullptr;

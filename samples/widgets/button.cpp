@@ -41,8 +41,6 @@
 
 #include "widgets.h"
 
-#include "icons/button.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -206,7 +204,7 @@ IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, "Button", FAMILY_CTRLS );
 
 ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, button_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_Button)
 {
     // init everything
     m_chkBitmapOnly =

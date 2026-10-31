@@ -44,8 +44,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/listbox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -247,7 +245,7 @@ IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, "Listbox",
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, listbox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_ListBox)
 {
     // init everything
     m_radioSelMode = nullptr;

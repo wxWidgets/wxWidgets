@@ -39,7 +39,6 @@
 
 #include "itemcontainer.h"
 #include "widgets.h"
-#include "icons/combobox.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -237,7 +236,7 @@ IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, "Combobox",
 
 ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, combobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_ComboBox)
 {
     // init everything
     m_chkSort =

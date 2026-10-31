@@ -39,8 +39,6 @@
 
 #include "widgets.h"
 
-#include "icons/timepick.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -122,7 +120,7 @@ IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, "TimePicker",
 
 TimePickerWidgetsPage::TimePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                     : WidgetsPage(book, imaglist, timepick_xpm)
+                     : WidgetsPage(book, imaglist, WidgetsIcon_TimePicker)
 {
 }
 

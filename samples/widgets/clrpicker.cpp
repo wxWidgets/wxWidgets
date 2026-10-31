@@ -39,8 +39,6 @@
 #include "wx/clrpicker.h"
 #include "widgets.h"
 
-#include "icons/clrpicker.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -133,7 +131,7 @@ IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, "ColourPicker",
 
 ColourPickerWidgetsPage::ColourPickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, clrpicker_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_ColourPicker)
 {
 }
 

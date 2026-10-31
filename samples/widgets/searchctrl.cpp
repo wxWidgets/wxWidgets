@@ -40,8 +40,6 @@
 
 #include "widgets.h"
 
-#include "icons/text.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -138,7 +136,7 @@ IMPLEMENT_WIDGETS_PAGE(SearchCtrlWidgetsPage, "SearchCtrl",
 
 SearchCtrlWidgetsPage::SearchCtrlWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, text_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_Text)
 {
 }
 

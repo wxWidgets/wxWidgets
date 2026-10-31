@@ -34,9 +34,6 @@
 
 #include "widgets.h"
 
-// TODO change this
-#include "icons/dirctrl.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -147,7 +144,7 @@ IMPLEMENT_WIDGETS_PAGE( FileCtrlWidgetsPage, "FileCtrl",
 
 FileCtrlWidgetsPage::FileCtrlWidgetsPage( WidgetsBookCtrl *book,
         wxVector<wxBitmapBundle>& imaglist )
-        : WidgetsPage( book, imaglist, dirctrl_xpm )
+        : WidgetsPage( book, imaglist, WidgetsIcon_DirCtrl )
 {
 }
 

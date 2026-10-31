@@ -41,8 +41,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/choice.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -181,7 +179,7 @@ IMPLEMENT_WIDGETS_PAGE(ChoiceWidgetsPage, "Choice",
 
 ChoiceWidgetsPage::ChoiceWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, choice_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_Choice)
 {
     // init everything
 

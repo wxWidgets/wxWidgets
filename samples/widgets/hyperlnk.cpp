@@ -42,8 +42,6 @@
 
 #include "widgets.h"
 
-#include "icons/hyperlnk.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -152,7 +150,7 @@ IMPLEMENT_WIDGETS_PAGE(HyperlinkWidgetsPage, "Hyperlink",
 
 HyperlinkWidgetsPage::HyperlinkWidgetsPage(WidgetsBookCtrl *book,
                                            wxVector<wxBitmapBundle>& imaglist)
-                     :WidgetsPage(book, imaglist, hyperlnk_xpm)
+                     :WidgetsPage(book, imaglist, WidgetsIcon_Hyperlink)
 {
 }
 

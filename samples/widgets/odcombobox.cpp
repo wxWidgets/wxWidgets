@@ -44,8 +44,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/odcombobox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -302,7 +300,7 @@ IMPLEMENT_WIDGETS_PAGE(ODComboboxWidgetsPage, "OwnerDrawnCombobox",
 
 ODComboboxWidgetsPage::ODComboboxWidgetsPage(WidgetsBookCtrl *book,
                                              wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, odcombobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_ODComboBox)
 {
     // init everything
     m_chkSort =

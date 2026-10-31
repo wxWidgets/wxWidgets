@@ -51,8 +51,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/bmpcombobox.xpm"
-
 // Images loaded from file are reduced this width and height, if larger
 #define IMG_SIZE_TRUNC  256
 
@@ -248,7 +246,7 @@ IMPLEMENT_WIDGETS_PAGE(BitmapComboBoxWidgetsPage, "BitmapCombobox",
 
 BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
                                              wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, bmpcombobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_BmpComboBox)
 {
     // init everything
     m_chkSort =
