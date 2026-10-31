@@ -45,6 +45,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_gauge.o \
 	$(OBJS)\widgets_headerctrl.o \
 	$(OBJS)\widgets_hyperlnk.o \
+	$(OBJS)\widgets_icons.o \
 	$(OBJS)\widgets_itemcontainer.o \
 	$(OBJS)\widgets_listbox.o \
 	$(OBJS)\widgets_native.o \
@@ -301,6 +302,9 @@ $(OBJS)\widgets_headerctrl.o: ./headerctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_hyperlnk.o: ./hyperlnk.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_icons.o: ./icons.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_itemcontainer.o: ./itemcontainer.cpp

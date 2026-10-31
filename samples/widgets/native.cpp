@@ -41,8 +41,6 @@
 
 #include "widgets.h"
 
-#include "icons/native.xpm"
-
 // Helper to create a menu to be shown in our button.
 //
 // The menu is supposed to be initially empty, don't call this more than once
@@ -276,7 +274,7 @@ private:
 IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, "Native", NATIVE_CTRLS);
 
 NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-                 : WidgetsPage(book, imaglist, native_xpm)
+                 : WidgetsPage(book, imaglist, WidgetsIcon_Native)
 {
     m_nativeWindow = nullptr;
 }

@@ -34,8 +34,6 @@
 
 #include "widgets.h"
 
-#include "icons/activityindicator.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -56,7 +54,7 @@ class ActivityIndicatorWidgetsPage : public WidgetsPage
 {
 public:
     ActivityIndicatorWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : WidgetsPage(book, imaglist, activityindicator_xpm)
+        : WidgetsPage(book, imaglist, WidgetsIcon_ActivityIndicator)
     {
         m_indicator = nullptr;
         m_sizerIndicator = nullptr;

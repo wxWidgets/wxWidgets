@@ -40,8 +40,6 @@
 #include "wx/log.h"
 #include "wx/sizer.h"
 
-#include "icons/toggle.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -185,7 +183,7 @@ IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, "ToggleButton",
 
 ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                      :WidgetsPage(book, imaglist, toggle_xpm)
+                      :WidgetsPage(book, imaglist, WidgetsIcon_ToggleButton)
 {
     m_chkFit =
     m_chkDisable = nullptr;

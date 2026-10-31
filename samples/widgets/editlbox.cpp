@@ -43,8 +43,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/listbox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -116,7 +114,7 @@ IMPLEMENT_WIDGETS_PAGE(EditableListboxWidgetsPage, "EditableListbox", GENERIC_CT
 
 EditableListboxWidgetsPage::EditableListboxWidgetsPage(WidgetsBookCtrl *book,
                                                        wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, listbox_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_ListBox)
 {
 
 }

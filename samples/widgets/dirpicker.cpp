@@ -41,8 +41,6 @@
 #include "wx/filepicker.h"
 #include "widgets.h"
 
-#include "icons/dirpicker.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -137,7 +135,7 @@ IMPLEMENT_WIDGETS_PAGE(DirPickerWidgetsPage, "DirPicker",
 
 DirPickerWidgetsPage::DirPickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, dirpicker_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_DirPicker)
 {
 }
 

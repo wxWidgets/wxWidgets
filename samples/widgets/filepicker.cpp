@@ -41,8 +41,6 @@
 #include "wx/filepicker.h"
 #include "widgets.h"
 
-#include "icons/filepicker.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -154,7 +152,7 @@ IMPLEMENT_WIDGETS_PAGE(FilePickerWidgetsPage, "FilePicker",
 
 FilePickerWidgetsPage::FilePickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, filepicker_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_FilePicker)
 {
 }
 

@@ -39,8 +39,6 @@
 #include "wx/fontpicker.h"
 #include "widgets.h"
 
-#include "icons/fontpicker.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -128,7 +126,7 @@ IMPLEMENT_WIDGETS_PAGE(FontPickerWidgetsPage, "FontPicker",
 
 FontPickerWidgetsPage::FontPickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, fontpicker_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_FontPicker)
 {
 }
 

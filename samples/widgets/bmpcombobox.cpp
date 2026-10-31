@@ -41,7 +41,6 @@
 #include "wx/dcmemory.h"
 #include "wx/sizer.h"
 #include "wx/icon.h"
-#include "wx/dir.h"
 #include "wx/msgdlg.h"
 #include "wx/filename.h"
 #include "wx/image.h"
@@ -51,10 +50,12 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/bmpcombobox.xpm"
-
 // Images loaded from file are reduced this width and height, if larger
 #define IMG_SIZE_TRUNC  256
+
+// Width and height of the images created by the sample if the combobox
+// doesn't contain any images yet
+#define IMG_SIZE_DEFAULT  32
 
 
 // ----------------------------------------------------------------------------
@@ -248,7 +249,7 @@ IMPLEMENT_WIDGETS_PAGE(BitmapComboBoxWidgetsPage, "BitmapCombobox",
 
 BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
                                              wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, bmpcombobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_BmpComboBox)
 {
     // init everything
     m_chkSort =
@@ -665,75 +666,23 @@ void BitmapComboBoxWidgetsPage::RescaleImage(wxImage& image, int w, int h)
 
 void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImageList* images )
 {
-    wxFileName fn;
-    fn.AssignCwd();
-    fn.AppendDir("icons");
-
-    if ( !wxDir::Exists(fn.GetFullPath()) ||
-         !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
-    {
-        // Try ../../samples/widgets/icons
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.AppendDir("icons");
-        if ( !wxDir::Exists(fn.GetFullPath()) ||
-             !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
-        {
-            // Try ../../../samples/widgets/icons
-            fn.AssignCwd();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.AppendDir("samples");
-            fn.AppendDir("widgets");
-            fn.AppendDir("icons");
-            if ( !wxDir::Exists(fn.GetFullPath()) ||
-                 !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
-            {
-                wxLogWarning("Could not load widget icons.");
-                return;
-            }
-        }
-    }
-
-    unsigned int i;
-
     // Get size of existing images in list
     wxSize foundSize = m_combobox->GetBitmapSize();
     if ( !foundSize.IsFullySpecified() )
         foundSize = images->GetSize();
 
-    for ( i=0; i<strings->size(); i++ )
+    // Use the same icons as for the pages of the sample: they are rendered
+    // directly in the required size from SVG if it's supported, otherwise the
+    // XPM images are rescaled to it.
+    for ( int i = 0; i < WidgetsIcon_Max; i++ )
     {
-        fn.SetFullName((*strings)[i]);
-        wxString name = fn.GetName();
+        const WidgetsIcon icon = static_cast<WidgetsIcon>(i);
 
-        // Handle few exceptions
-        if ( name == "bmpbtn" )
-        {
-            strings->RemoveAt(i);
-            i--;
-        }
-        else
-        {
-#if wxUSE_IMAGE
-            wxASSERT(fn.FileExists());
-            wxImage image(fn.GetFullPath());
-            wxASSERT(image.IsOk());
-            RescaleImage(image, foundSize.x, foundSize.y);
-            wxBitmap bmp(image);
-            wxASSERT( bmp.IsOk() );
-#else
-            wxBitmap bmp;
-#endif
-            images->Add(bmp);
-            (*strings)[i] = name;
+        const wxBitmap bmp = CreateWidgetsIconBundle(icon).GetBitmap(foundSize);
+        wxASSERT( bmp.IsOk() );
 
-            // if the combobox is empty, use as bitmap size of the image list
-            // the size of the first valid image loaded
-            if (foundSize == wxDefaultSize)
-                foundSize = bmp.GetSize();
-        }
+        images->Add(bmp);
+        strings->Add(GetWidgetsIconName(icon));
     }
 }
 
@@ -744,8 +693,8 @@ void BitmapComboBoxWidgetsPage::OnButtonAddWidgetIcons(wxCommandEvent& WXUNUSED(
     wxSize sz = m_combobox->GetBitmapSize();
     if ( sz.x <= 0 )
     {
-        sz.x = 32;
-        sz.y = 32;
+        sz.x = IMG_SIZE_DEFAULT;
+        sz.y = IMG_SIZE_DEFAULT;
     }
 
     wxImageList images(sz.x, sz.y);
@@ -909,8 +858,17 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 
 wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
 {
-    const int w = 10,
-              h = 10;
+    // All images in the combobox must have the same size, so use the size of
+    // the existing ones, if any.
+    wxSize sz = m_combobox->GetBitmapSize();
+    if ( sz.x <= 0 )
+    {
+        sz.x = IMG_SIZE_DEFAULT;
+        sz.y = IMG_SIZE_DEFAULT;
+    }
+
+    const int w = sz.x,
+              h = sz.y;
 
     wxMemoryDC dc;
     wxBitmap bmp(w, h);
@@ -925,7 +883,7 @@ wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
 
     // Draw image content
     dc.SetBrush(wxBrush(colour));
-    dc.DrawCircle(h/2, h/2+1, h/2);
+    dc.DrawCircle(w/2, h/2, wxMin(w, h)/2);
 
     dc.SelectObject(wxNullBitmap);
 

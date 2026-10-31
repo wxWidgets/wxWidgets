@@ -39,7 +39,6 @@
 
 #include "widgets.h"
 #if wxUSE_GAUGE
-#include "icons/gauge.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -176,7 +175,7 @@ IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, "Gauge", FAMILY_CTRLS );
 
 GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
                                    wxVector<wxBitmapBundle>& imaglist)
-                 :WidgetsPage(book, imaglist, gauge_xpm)
+                 :WidgetsPage(book, imaglist, WidgetsIcon_Gauge)
 {
     // init everything
     m_range = 100;

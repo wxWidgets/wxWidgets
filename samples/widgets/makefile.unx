@@ -70,6 +70,7 @@ WIDGETS_OBJECTS =  \
 	widgets_gauge.o \
 	widgets_headerctrl.o \
 	widgets_hyperlnk.o \
+	widgets_icons.o \
 	widgets_itemcontainer.o \
 	widgets_listbox.o \
 	widgets_native.o \
@@ -170,6 +171,9 @@ widgets_headerctrl.o: ./headerctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_hyperlnk.o: ./hyperlnk.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+widgets_icons.o: ./icons.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_itemcontainer.o: ./itemcontainer.cpp

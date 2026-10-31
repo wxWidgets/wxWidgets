@@ -40,7 +40,6 @@
 #include "wx/wupdlock.h"
 
 #include "widgets.h"
-#include "icons/statbox.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -183,7 +182,7 @@ IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, "Static",
 
 StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, statbox_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_StaticBox)
 {
     // init everything
     m_chkVert =

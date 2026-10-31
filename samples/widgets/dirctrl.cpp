@@ -42,8 +42,6 @@
 
 #include "widgets.h"
 
-#include "icons/dirctrl.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -167,7 +165,7 @@ IMPLEMENT_WIDGETS_PAGE(DirCtrlWidgetsPage, "DirCtrl",
 
 DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                   :WidgetsPage(book, imaglist, dirctrl_xpm)
+                   :WidgetsPage(book, imaglist, WidgetsIcon_DirCtrl)
 {
     m_dirCtrl = nullptr;
 }

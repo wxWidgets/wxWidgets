@@ -37,8 +37,6 @@
 
 #include "widgets.h"
 
-#include "icons/checkbox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -156,7 +154,7 @@ IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, "CheckBox", FAMILY_CTRLS );
 
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, checkbox_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon_CheckBox)
 {
 }
 
