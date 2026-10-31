@@ -14,6 +14,7 @@
 
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/bar.h"
+#include "wx/ribbon/panel.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -116,6 +117,58 @@ wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
 
     return nullptr;
 }
+
+#if wxUSE_RICHTOOLTIP
+
+namespace
+{
+
+// Unlike GetAncestorRibbonBar(), also finds the bar of the controls in a
+// panel shown expanded, outside of the bar.
+wxRibbonBar* GetRibbonBarOf(wxWindow* win)
+{
+    for ( ; win != nullptr; win = win->GetParent() )
+    {
+        wxRibbonBar* const bar = wxDynamicCast(win, wxRibbonBar);
+        if ( bar != nullptr )
+            return bar;
+
+        wxRibbonPanel* const panel = wxDynamicCast(win, wxRibbonPanel);
+        if ( panel != nullptr && panel->GetExpandedDummy() != nullptr )
+            win = panel->GetExpandedDummy();
+    }
+
+    return nullptr;
+}
+
+} // anonymous namespace
+
+bool wxRibbonControl::ms_richToolTipsUsed = false;
+
+void wxRibbonControl::EnableRichToolTips()
+{
+    ms_richToolTipsUsed = true;
+
+    wxRibbonControl* const bar = GetRibbonBarOf(this);
+    if ( bar != nullptr )
+        bar->m_richToolTips = true;
+    else
+        m_richToolTips = true;
+}
+
+bool wxRibbonControl::UseRichToolTips()
+{
+    if ( !m_richToolTips && ms_richToolTipsUsed )
+    {
+        // A bar never stops using rich tooltips once set.
+        const wxRibbonControl* const bar = GetRibbonBarOf(this);
+        m_richToolTips = bar != nullptr && bar->m_richToolTips;
+    }
+
+    return m_richToolTips;
+}
+
+#endif // wxUSE_RICHTOOLTIP
 
 wxRibbonControl* wxRibbonControl::FocusFirstItemIn(
     const std::vector<wxRibbonControl*>& controls, bool forward)

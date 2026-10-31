@@ -92,12 +92,32 @@ public:
         wxRibbonControl* current, bool forward);
 
 protected:
+    friend class wxRibbonToolTipHelper;
+
     wxRibbonArtProvider* m_art;
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
                                        wxSize relative_to) const;
+
+    // Called when the help link of the tooltip of the item with the given ID
+    // is clicked. Controls showing tooltips override it to send their event.
+    virtual void SendToolTipHelpEvent(int WXUNUSED(item_id)) { }
+
+#if wxUSE_RICHTOOLTIP
+    // A ribbon bar keeps using the native tooltips until one of its controls
+    // is given a rich tooltip.
+    void EnableRichToolTips();
+    bool UseRichToolTips();
+
+    // Set on the bar, or on the control itself if it's not in a bar. Other
+    // controls set it once they find it set on their bar.
+    bool m_richToolTips = false;
+
+    // Set once any control uses rich tooltips.
+    static bool ms_richToolTipsUsed;
+#endif // wxUSE_RICHTOOLTIP
 
 private:
     void Init() { m_art = nullptr; }

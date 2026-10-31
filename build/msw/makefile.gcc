@@ -1683,6 +1683,7 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_page.o \
 	$(OBJS)\ribbondll_panel.o \
 	$(OBJS)\ribbondll_toolbar.o \
+	$(OBJS)\ribbondll_tooltip.o \
 	$(OBJS)\ribbondll_xh_ribbon.o
 RIBBONLIB_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\3rdparty\libwebp\src $(____INC_LUNASVG_FILENAMES) -I..\..\src\zlib \
@@ -1707,6 +1708,7 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_page.o \
 	$(OBJS)\ribbonlib_panel.o \
 	$(OBJS)\ribbonlib_toolbar.o \
+	$(OBJS)\ribbonlib_tooltip.o \
 	$(OBJS)\ribbonlib_xh_ribbon.o
 PROPGRIDDLL_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\3rdparty\libwebp\src $(____INC_LUNASVG_FILENAMES) \
@@ -2075,6 +2077,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_page.o \
 	$(OBJS)\monodll_panel.o \
 	$(OBJS)\monodll_ribbon_toolbar.o \
+	$(OBJS)\monodll_ribbon_tooltip.o \
 	$(OBJS)\monodll_xh_ribbon.o \
 	$(OBJS)\monodll_richtextbuffer.o \
 	$(OBJS)\monodll_richtextctrl.o \
@@ -2949,6 +2952,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_page.o \
 	$(OBJS)\monolib_panel.o \
 	$(OBJS)\monolib_ribbon_toolbar.o \
+	$(OBJS)\monolib_ribbon_tooltip.o \
 	$(OBJS)\monolib_xh_ribbon.o \
 	$(OBJS)\monolib_richtextbuffer.o \
 	$(OBJS)\monolib_richtextctrl.o \
@@ -8950,6 +8954,9 @@ $(OBJS)\monodll_panel.o: ../../src/ribbon/panel.cpp
 $(OBJS)\monodll_ribbon_toolbar.o: ../../src/ribbon/toolbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_ribbon_tooltip.o: ../../src/ribbon/tooltip.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_xh_ribbon.o: ../../src/xrc/xh_ribbon.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11587,6 +11594,9 @@ $(OBJS)\monolib_panel.o: ../../src/ribbon/panel.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_ribbon_toolbar.o: ../../src/ribbon/toolbar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_ribbon_tooltip.o: ../../src/ribbon/tooltip.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_ribbon.o: ../../src/xrc/xh_ribbon.cpp
@@ -18288,6 +18298,9 @@ $(OBJS)\ribbondll_panel.o: ../../src/ribbon/panel.cpp
 $(OBJS)\ribbondll_toolbar.o: ../../src/ribbon/toolbar.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\ribbondll_tooltip.o: ../../src/ribbon/tooltip.cpp
+	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\ribbondll_xh_ribbon.o: ../../src/xrc/xh_ribbon.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -18331,6 +18344,9 @@ $(OBJS)\ribbonlib_panel.o: ../../src/ribbon/panel.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_toolbar.o: ../../src/ribbon/toolbar.cpp
+	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\ribbonlib_tooltip.o: ../../src/ribbon/tooltip.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_xh_ribbon.o: ../../src/xrc/xh_ribbon.cpp

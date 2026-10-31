@@ -15,6 +15,7 @@
 #include "wx/ribbon/panel.h"
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
+#include "wx/ribbon/private/tooltip.h"
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
 #include "wx/display.h"
@@ -29,6 +30,7 @@
 #endif
 
 wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONPANEL_HELP_CLICKED, wxRibbonPanelEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent);
 
@@ -66,6 +68,8 @@ wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
 
 wxRibbonPanel::~wxRibbonPanel()
 {
+    delete m_toolTip;
+
     if(m_expanded_panel)
     {
         m_expanded_panel->m_expanded_dummy = nullptr;
@@ -217,6 +221,50 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
         m_ext_button_hovered = ext_button_hovered;
         Refresh(false);
     }
+
+#if wxUSE_RICHTOOLTIP
+    if ( ext_button_hovered && !IsMinimised() &&
+            !m_extButtonToolTip.IsEmpty() )
+    {
+        GetToolTipHelper()->ItemHovered(0, m_ext_button_rect,
+                                        m_extButtonToolTip, wxString(),
+                                        false);
+    }
+    else if ( m_toolTip != nullptr )
+    {
+        m_toolTip->ItemLeft();
+    }
+#endif // wxUSE_RICHTOOLTIP
+}
+
+#if wxUSE_RICHTOOLTIP
+
+void wxRibbonPanel::SetExtButtonToolTip(const wxRichToolTipInfo& info)
+{
+    m_extButtonToolTip = info;
+    if ( !info.IsEmpty() )
+        EnableRichToolTips();
+}
+
+wxRibbonToolTipHelper* wxRibbonPanel::GetToolTipHelper()
+{
+    if ( m_toolTip == nullptr )
+        m_toolTip = new wxRibbonToolTipHelper(this);
+    return m_toolTip;
+}
+
+#endif // wxUSE_RICHTOOLTIP
+
+void wxRibbonPanel::SendToolTipHelpEvent(int WXUNUSED(item_id))
+{
+    // An expanded panel is a temporary copy, so report the original one.
+    wxRibbonPanel* const panel = m_expanded_dummy != nullptr ? m_expanded_dummy
+                                                             : this;
+    wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_HELP_CLICKED,
+                                    panel->GetId());
+    notification.SetEventObject(panel);
+    notification.SetPanel(panel);
+    ProcessEvent(notification);
 }
 
 void wxRibbonPanel::AddChild(wxWindowBase *child)
@@ -799,6 +847,8 @@ bool wxRibbonPanel::Layout()
 void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
 {
     DismissKeyTips();
+    if ( m_toolTip != nullptr )
+        m_toolTip->Dismiss(true);
 
     if(IsMinimised())
     {
@@ -819,9 +869,13 @@ void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonPanel::DoActivateExtButton()
 {
-    wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, GetId());
-    notification.SetEventObject(this);
-    notification.SetPanel(this);
+    // An expanded panel is a temporary copy, so report the original one.
+    wxRibbonPanel* const panel = m_expanded_dummy != nullptr ? m_expanded_dummy
+                                                             : this;
+    wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED,
+                                    panel->GetId());
+    notification.SetEventObject(panel);
+    notification.SetPanel(panel);
     ProcessEvent(notification);
 }
 
@@ -837,6 +891,14 @@ bool wxRibbonPanel::FocusFirstItem()
 
     m_item_focused = true;
     Refresh(false);
+
+#if wxUSE_RICHTOOLTIP
+    if ( !IsMinimised() && !m_extButtonToolTip.IsEmpty() )
+    {
+        GetToolTipHelper()->ItemFocused(0, m_ext_button_rect,
+                                        m_extButtonToolTip, wxString());
+    }
+#endif // wxUSE_RICHTOOLTIP
 
 #if wxUSE_ACCESSIBILITY
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
@@ -854,6 +916,9 @@ bool wxRibbonPanel::FocusLastItem()
 
 void wxRibbonPanel::ClearFocusedItem()
 {
+    if ( m_toolTip != nullptr )
+        m_toolTip->FocusCleared();
+
     if ( m_item_focused )
     {
         m_item_focused = false;
@@ -1019,6 +1084,9 @@ bool wxRibbonPanel::ShowExpanded()
     m_expanded_panel->m_expanded_dummy = this;
     m_expanded_panel->m_extButtonKeyTip = m_extButtonKeyTip;
     m_expanded_panel->m_keyTip = m_keyTip;
+#if wxUSE_RICHTOOLTIP
+    m_expanded_panel->m_extButtonToolTip = m_extButtonToolTip;
+#endif
 
     // Move all children to the new panel.
     // Conceptually it might be simpler to reparent this entire panel to the
@@ -1160,6 +1228,9 @@ bool wxRibbonPanel::HideExpanded()
     // Keep any keytips set while the panel was expanded.
     m_expanded_dummy->m_extButtonKeyTip = m_extButtonKeyTip;
     m_expanded_dummy->m_keyTip = m_keyTip;
+#if wxUSE_RICHTOOLTIP
+    m_expanded_dummy->m_extButtonToolTip = m_extButtonToolTip;
+#endif
 
     // Move children back to original panel
     // NB: Children iterators not used as behaviour is not well defined
@@ -1417,11 +1488,40 @@ public:
         if ( childId >= 0 && childId <= static_cast<int>(panel->GetChildren().GetCount()) )
             return wxACC_NOT_IMPLEMENTED;
 
+#if wxUSE_RICHTOOLTIP
+        // Use the tooltip's title, if any.
+        const wxString& title = panel->GetExtButtonToolTip().GetTitle();
+        if ( !title.empty() )
+        {
+            *name = title;
+            return wxACC_OK;
+        }
+#endif // wxUSE_RICHTOOLTIP
+
         const wxString label = panel->GetLabel();
         *name = label.empty() ? _("More options")
                                : wxString::Format(_("More %s options"), label);
         return wxACC_OK;
     }
+
+#if wxUSE_RICHTOOLTIP
+    wxAccStatus GetDescription(int childId, wxString* description) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetDescription(childId, description);
+
+        wxRibbonPanel* panel = wxDynamicCast(GetWindow(), wxRibbonPanel);
+        if ( panel == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId >= 0 && childId <= static_cast<int>(panel->GetChildren().GetCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        // The same text as shown in the tooltip.
+        *description = panel->GetExtButtonToolTip().GetMessage();
+        return wxACC_OK;
+    }
+#endif // wxUSE_RICHTOOLTIP
 
     wxAccStatus GetLocation(wxRect& rect, int elementId) override
     {
