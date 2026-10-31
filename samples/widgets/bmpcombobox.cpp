@@ -41,7 +41,6 @@
 #include "wx/dcmemory.h"
 #include "wx/sizer.h"
 #include "wx/icon.h"
-#include "wx/dir.h"
 #include "wx/msgdlg.h"
 #include "wx/filename.h"
 #include "wx/image.h"
@@ -663,75 +662,23 @@ void BitmapComboBoxWidgetsPage::RescaleImage(wxImage& image, int w, int h)
 
 void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImageList* images )
 {
-    wxFileName fn;
-    fn.AssignCwd();
-    fn.AppendDir("icons");
-
-    if ( !wxDir::Exists(fn.GetFullPath()) ||
-         !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
-    {
-        // Try ../../samples/widgets/icons
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.AppendDir("icons");
-        if ( !wxDir::Exists(fn.GetFullPath()) ||
-             !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
-        {
-            // Try ../../../samples/widgets/icons
-            fn.AssignCwd();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.AppendDir("samples");
-            fn.AppendDir("widgets");
-            fn.AppendDir("icons");
-            if ( !wxDir::Exists(fn.GetFullPath()) ||
-                 !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
-            {
-                wxLogWarning("Could not load widget icons.");
-                return;
-            }
-        }
-    }
-
-    unsigned int i;
-
     // Get size of existing images in list
     wxSize foundSize = m_combobox->GetBitmapSize();
     if ( !foundSize.IsFullySpecified() )
         foundSize = images->GetSize();
 
-    for ( i=0; i<strings->size(); i++ )
+    // Use the same icons as for the pages of the sample: they are rendered
+    // directly in the required size from SVG if it's supported, otherwise the
+    // XPM images are rescaled to it.
+    for ( int i = 0; i < WidgetsIcon_Max; i++ )
     {
-        fn.SetFullName((*strings)[i]);
-        wxString name = fn.GetName();
+        const WidgetsIcon icon = static_cast<WidgetsIcon>(i);
 
-        // Handle few exceptions
-        if ( name == "bmpbtn" )
-        {
-            strings->RemoveAt(i);
-            i--;
-        }
-        else
-        {
-#if wxUSE_IMAGE
-            wxASSERT(fn.FileExists());
-            wxImage image(fn.GetFullPath());
-            wxASSERT(image.IsOk());
-            RescaleImage(image, foundSize.x, foundSize.y);
-            wxBitmap bmp(image);
-            wxASSERT( bmp.IsOk() );
-#else
-            wxBitmap bmp;
-#endif
-            images->Add(bmp);
-            (*strings)[i] = name;
+        const wxBitmap bmp = CreateWidgetsIconBundle(icon).GetBitmap(foundSize);
+        wxASSERT( bmp.IsOk() );
 
-            // if the combobox is empty, use as bitmap size of the image list
-            // the size of the first valid image loaded
-            if (foundSize == wxDefaultSize)
-                foundSize = bmp.GetSize();
-        }
+        images->Add(bmp);
+        strings->Add(GetWidgetsIconName(icon));
     }
 }
 

@@ -59,4 +59,7 @@ enum WidgetsIcon
 // If SVG support is not available, the bundle uses the XPM version of the icon.
 wxBitmapBundle CreateWidgetsIconBundle(WidgetsIcon icon);
 
+// Return the name of the icon, e.g. "Button" for WidgetsIcon_Button.
+const char* GetWidgetsIconName(WidgetsIcon icon);
+
 #endif // _WX_SAMPLE_WIDGETS_ICONS_H_

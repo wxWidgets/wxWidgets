@@ -856,3 +856,49 @@ wxBitmapBundle CreateWidgetsIconBundle(WidgetsIcon icon)
 }
 
 #endif // wxHAS_SVG/!wxHAS_SVG
+
+// ----------------------------------------------------------------------------
+// icon names
+// ----------------------------------------------------------------------------
+
+const char* GetWidgetsIconName(WidgetsIcon icon)
+{
+    static const char* const s_names[] =
+    {
+        "ActivityIndicator",
+        "BmpComboBox",
+        "Button",
+        "CheckBox",
+        "Choice",
+        "Choicebook",
+        "ColourPicker",
+        "ComboBox",
+        "DatePicker",
+        "DirCtrl",
+        "DirPicker",
+        "FilePicker",
+        "FontPicker",
+        "Gauge",
+        "Header",
+        "Hyperlink",
+        "Listbook",
+        "ListBox",
+        "Native",
+        "Notebook",
+        "ODComboBox",
+        "RadioBox",
+        "Slider",
+        "SpinButton",
+        "StaticBitmap",
+        "StaticBox",
+        "Text",
+        "TimePicker",
+        "ToggleButton",
+    };
+
+    static_assert(WXSIZEOF(s_names) == WidgetsIcon_Max, "icon names size mismatch");
+
+    wxCHECK_MSG( icon >= 0 && icon < WidgetsIcon_Max, "", "invalid icon" );
+
+    return s_names[icon];
+}
