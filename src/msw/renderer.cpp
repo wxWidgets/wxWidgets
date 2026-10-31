@@ -831,49 +831,58 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     lf.lfWeight = weight;
     lf.lfCharSet = DEFAULT_CHARSET;
     AutoHFONT hFont(lf);
-    HDC hdc = GetHdcOf(dc.GetTempHDC());
-    SelectInHDC sel(hdc, hFont);
-    // Check whether the font was found (not substituted).
-    wchar_t faceName[LF_FACESIZE];
-    ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
-    if ( wcscmp(faceName, iconFont) == 0 )
     {
-        // Check for dark mode using wxSystemSettings rather than
-        // wxMSWDarkMode to take into account high contrast modes.
-        const auto isDark = wxSystemSettings::GetAppearance().IsDark();
-        auto textCol = isDark ? 0xffffff : 0;
-        RECT r = ConvertToRECT(dc, rect);
-
-        // Handle states. The hot and pressed states look similar, handle them
-        // the same.
-        if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
+        // Keep the temporary HDC alive while drawing on it: for wxGCDC, the
+        // HDC is only valid until it's released, which happens when TempHDC
+        // is destroyed. But do release it before calling the functions below
+        // as they acquire it again.
+        wxDC::TempHDC tempHDC = dc.GetTempHDC();
+        HDC hdc = GetHdcOf(tempHDC);
+        SelectInHDC sel(hdc, hFont);
+        // Check whether the font was found (not substituted).
+        wchar_t faceName[LF_FACESIZE];
+        ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
+        if ( wcscmp(faceName, iconFont) == 0 )
         {
-            if ( button == wxTITLEBAR_BUTTON_CLOSE )
+            // Check for dark mode using wxSystemSettings rather than
+            // wxMSWDarkMode to take into account high contrast modes.
+            const auto isDark = wxSystemSettings::GetAppearance().IsDark();
+            auto textCol = isDark ? 0xffffff : 0;
+            RECT r = ConvertToRECT(dc, rect);
+
+            // Handle states. The hot and pressed states look similar, handle
+            // them the same.
+            if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
             {
-                // Fill background with the observed red colour.
-                // GetThemeColor() is no use, it fails.
-                AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
-                ::FillRect(hdc, &r, hBrush);
-                textCol = 0xffffff;
-            }
-            else
-            {
-                // Make the background slightly darker for light mode or
-                // slightly lighter for dark mode.
-                wxColor bg = dc.GetBackground().GetColour();
-                if ( bg.IsOk() )
+                if ( button == wxTITLEBAR_BUTTON_CLOSE )
                 {
-                    bg = bg.ChangeLightness(isDark ? 109 : 95);
-                    AutoHBRUSH hBrush(bg.GetPixel());
+                    // Fill background with the observed red colour.
+                    // GetThemeColor() is no use, it fails.
+                    AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
                     ::FillRect(hdc, &r, hBrush);
+                    textCol = 0xffffff;
+                }
+                else
+                {
+                    // Make the background slightly darker for light mode or
+                    // slightly lighter for dark mode.
+                    wxColor bg = dc.GetBackground().GetColour();
+                    if ( bg.IsOk() )
+                    {
+                        bg = bg.ChangeLightness(isDark ? 109 : 95);
+                        AutoHBRUSH hBrush(bg.GetPixel());
+                        ::FillRect(hdc, &r, hBrush);
+                    }
                 }
             }
-        }
 
-        // Draw the character.
-        ::SetTextColor(hdc, textCol);
-        ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-        return;
+            // Draw the character. Set the background mode explicitly as it's
+            // not necessarily transparent for the HDC returned by wxGCDC.
+            ::SetBkMode(hdc, TRANSPARENT);
+            ::SetTextColor(hdc, textCol);
+            ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            return;
+        }
     }
 
     wxUxThemeHandle hTheme(win, L"WINDOW");
@@ -1012,6 +1021,34 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
     }
 }
 
+namespace
+{
+
+// Helper acquiring a temporary HDC for the given wxDC and selecting the DC
+// font into it: this is necessary for wxGCDC, as the HDC returned for it
+// doesn't use the DC font by default.
+class TempHDCWithFont
+{
+public:
+    explicit TempHDCWithFont(wxDC& dc)
+        : m_tempHDC(dc.GetTempHDC())
+    {
+        const wxFont& font = dc.GetFont();
+        if ( font.IsOk() )
+            m_selFont.Init(GetHdcOf(m_tempHDC), GetHfontOf(font));
+    }
+
+    WXHDC GetHDC() const { return m_tempHDC.GetHDC(); }
+
+private:
+    wxDC::TempHDC m_tempHDC;
+    SelectInHDC m_selFont;
+
+    wxDECLARE_NO_COPY_CLASS(TempHDCWithFont);
+};
+
+} // anonymous namespace
+
 void wxRendererXP::DrawItemText(wxWindow* win,
                                 wxDC& dc,
                                 const wxString& text,
@@ -1108,7 +1145,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         something like {0, 0, LONG_MAX, LONG_MAX} ).
         */
         RECT rcExtent;
-        HRESULT hr = ::GetThemeTextExtent(hTheme, dc.GetHDC(),
+        HRESULT hr = ::GetThemeTextExtent(hTheme, GetHdcOf(TempHDCWithFont(dc)),
             LVP_LISTITEM, itemState, text.wchar_str(), -1,
             defTextFlags, nullptr, &rcExtent);
         if ( SUCCEEDED(hr) )
@@ -1200,8 +1237,9 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 break;
         }
 
-        ::DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
-                            drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
+        ::DrawThemeTextEx(hTheme, GetHdcOf(TempHDCWithFont(dc)),
+                          LVP_LISTITEM, itemState,
+                          drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
     }
     else
     {
