@@ -37,7 +37,8 @@ enum wxAcceleratorEntryFlags
 #else
     wxACCEL_RAW_CTRL= wxACCEL_CTRL,
 #endif
-    wxACCEL_CMD     = wxACCEL_CTRL
+    wxACCEL_CMD     = wxACCEL_CTRL,
+    wxACCEL_META    = 0x0010,
 };
 
 // ----------------------------------------------------------------------------
