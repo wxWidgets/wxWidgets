@@ -53,6 +53,10 @@
 // Images loaded from file are reduced this width and height, if larger
 #define IMG_SIZE_TRUNC  256
 
+// Width and height of the images created by the sample if the combobox
+// doesn't contain any images yet
+#define IMG_SIZE_DEFAULT  32
+
 
 // ----------------------------------------------------------------------------
 // constants
@@ -689,8 +693,8 @@ void BitmapComboBoxWidgetsPage::OnButtonAddWidgetIcons(wxCommandEvent& WXUNUSED(
     wxSize sz = m_combobox->GetBitmapSize();
     if ( sz.x <= 0 )
     {
-        sz.x = 32;
-        sz.y = 32;
+        sz.x = IMG_SIZE_DEFAULT;
+        sz.y = IMG_SIZE_DEFAULT;
     }
 
     wxImageList images(sz.x, sz.y);
@@ -854,8 +858,17 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 
 wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
 {
-    const int w = 10,
-              h = 10;
+    // All images in the combobox must have the same size, so use the size of
+    // the existing ones, if any.
+    wxSize sz = m_combobox->GetBitmapSize();
+    if ( sz.x <= 0 )
+    {
+        sz.x = IMG_SIZE_DEFAULT;
+        sz.y = IMG_SIZE_DEFAULT;
+    }
+
+    const int w = sz.x,
+              h = sz.y;
 
     wxMemoryDC dc;
     wxBitmap bmp(w, h);
@@ -870,7 +883,7 @@ wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
 
     // Draw image content
     dc.SetBrush(wxBrush(colour));
-    dc.DrawCircle(h/2, h/2+1, h/2);
+    dc.DrawCircle(w/2, h/2, wxMin(w, h)/2);
 
     dc.SelectObject(wxNullBitmap);
 
