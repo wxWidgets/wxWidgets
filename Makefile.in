@@ -2303,6 +2303,7 @@ RIBBONDLL_OBJECTS =  \
 	ribbondll_art_msw.o \
 	ribbondll_art_aui.o \
 	ribbondll_art_msw_flat.o \
+	ribbondll_art_msw_explorer.o \
 	ribbondll_backstage.o \
 	ribbondll_backstagecontrols.o \
 	ribbondll_bar.o \
@@ -2325,6 +2326,7 @@ RIBBONLIB_OBJECTS =  \
 	ribbonlib_art_msw.o \
 	ribbonlib_art_aui.o \
 	ribbonlib_art_msw_flat.o \
+	ribbonlib_art_msw_explorer.o \
 	ribbonlib_backstage.o \
 	ribbonlib_backstagecontrols.o \
 	ribbonlib_bar.o \
@@ -4364,6 +4366,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_art_msw.o \
 	monodll_art_aui.o \
 	monodll_art_msw_flat.o \
+	monodll_art_msw_explorer.o \
 	monodll_backstage.o \
 	monodll_backstagecontrols.o \
 	monodll_bar.o \
@@ -6157,6 +6160,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_art_msw.o \
 	monolib_art_aui.o \
 	monolib_art_msw_flat.o \
+	monolib_art_msw_explorer.o \
 	monolib_backstage.o \
 	monolib_backstagecontrols.o \
 	monolib_bar.o \
@@ -17025,6 +17029,9 @@ monodll_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(MONODLL_ODEP)
 monodll_art_msw_flat.o: $(srcdir)/src/ribbon/art_msw_flat.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_flat.cpp
 
+monodll_art_msw_explorer.o: $(srcdir)/src/ribbon/art_msw_explorer.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_explorer.cpp
+
 monodll_backstage.o: $(srcdir)/src/ribbon/backstage.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/backstage.cpp
 
@@ -21830,6 +21837,9 @@ monolib_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(MONOLIB_ODEP)
 
 monolib_art_msw_flat.o: $(srcdir)/src/ribbon/art_msw_flat.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_flat.cpp
+
+monolib_art_msw_explorer.o: $(srcdir)/src/ribbon/art_msw_explorer.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_explorer.cpp
 
 monolib_backstage.o: $(srcdir)/src/ribbon/backstage.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/backstage.cpp
@@ -34437,6 +34447,9 @@ ribbondll_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(RIBBONDLL_ODEP)
 ribbondll_art_msw_flat.o: $(srcdir)/src/ribbon/art_msw_flat.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_flat.cpp
 
+ribbondll_art_msw_explorer.o: $(srcdir)/src/ribbon/art_msw_explorer.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_explorer.cpp
+
 ribbondll_backstage.o: $(srcdir)/src/ribbon/backstage.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/backstage.cpp
 
@@ -34478,6 +34491,9 @@ ribbonlib_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(RIBBONLIB_ODEP)
 
 ribbonlib_art_msw_flat.o: $(srcdir)/src/ribbon/art_msw_flat.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_flat.cpp
+
+ribbonlib_art_msw_explorer.o: $(srcdir)/src/ribbon/art_msw_explorer.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_msw_explorer.cpp
 
 ribbonlib_backstage.o: $(srcdir)/src/ribbon/backstage.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/backstage.cpp

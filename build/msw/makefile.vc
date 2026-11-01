@@ -9431,6 +9431,7 @@ $(OBJS)\monodll_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 
 $(OBJS)\monodll_art_msw_explorer.obj: ..\..\src\ribbon\art_msw_explorer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\art_msw_explorer.cpp
+
 $(OBJS)\monodll_backstage.obj: ..\..\src\ribbon\backstage.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
 
@@ -12069,7 +12070,7 @@ $(OBJS)\monolib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\monolib_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
-	
+
 $(OBJS)\monolib_art_msw_explorer.obj: ..\..\src\ribbon\art_msw_explorer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_explorer.cpp
 
@@ -18771,7 +18772,7 @@ $(OBJS)\ribbondll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\ribbondll_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
-	
+
 $(OBJS)\ribbondll_art_msw_explorer.obj: ..\..\src\ribbon\art_msw_explorer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_msw_explorer.cpp
 
@@ -18819,7 +18820,7 @@ $(OBJS)\ribbonlib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\ribbonlib_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
-	
+
 $(OBJS)\ribbonlib_art_msw_explorer.obj: ..\..\src\ribbon\art_msw_explorer.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_explorer.cpp
 

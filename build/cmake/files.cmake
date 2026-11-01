@@ -2805,6 +2805,7 @@ set(RIBBON_SRC
     src/ribbon/art_msw.cpp
     src/ribbon/art_aui.cpp
     src/ribbon/art_msw_flat.cpp
+    src/ribbon/art_msw_explorer.cpp
     src/ribbon/backstage.cpp
     src/ribbon/backstagecontrols.cpp
     src/ribbon/bar.cpp
@@ -2815,7 +2816,6 @@ set(RIBBON_SRC
     src/ribbon/panel.cpp
     src/ribbon/toolbar.cpp
     src/xrc/xh_ribbon.cpp
-    src/ribbon/art_msw_explorer.cpp
 )
 
 set(RIBBON_HDR
