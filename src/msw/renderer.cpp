@@ -36,6 +36,7 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private/darkmode.h"
+#include "wx/msw/private/renderer.h"
 #include "wx/dynlib.h"
 
 // ----------------------------------------------------------------------------
@@ -785,7 +786,6 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
 {
     int part;
     wchar_t chr;    // Character in icon font
-    LONG weight = FW_NORMAL;
     switch ( button )
     {
         case wxTITLEBAR_BUTTON_CLOSE:
@@ -811,7 +811,6 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
         case wxTITLEBAR_BUTTON_HELP:
             part = WP_HELPBUTTON;
             chr = L'\xe897';
-            weight = FW_BOLD;
             break;
 
         default:
@@ -819,62 +818,33 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
             return;
     }
 
-    // If the icon font is available, use it to manually draw the button. Font
-    // "Segoe MDL2 Assets" appeared in Windows 10. Although this font has not
-    // been removed, Microsoft recommends "Segoe Fluent Icons" for Windows 11.
-    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
-    const wchar_t* iconFont = isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons";
-    LOGFONT lf = { };
-    wcscpy(lf.lfFaceName, iconFont);
-    // Font height to match Windows 7 proportions.
-    lf.lfHeight = -::MulDiv(rect.GetHeight(), 9, 16);
-    lf.lfWeight = weight;
-    lf.lfCharSet = DEFAULT_CHARSET;
-    AutoHFONT hFont(lf);
-    HDC hdc = GetHdcOf(dc.GetTempHDC());
-    SelectInHDC sel(hdc, hFont);
-    // Check whether the font was found (not substituted).
-    wchar_t faceName[LF_FACESIZE];
-    ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
-    if ( wcscmp(faceName, iconFont) == 0 )
-    {
-        // Check for dark mode using wxSystemSettings rather than
-        // wxMSWDarkMode to take into account high contrast modes.
-        const auto isDark = wxSystemSettings::GetAppearance().IsDark();
-        auto textCol = isDark ? 0xffffff : 0;
-        RECT r = ConvertToRECT(dc, rect);
+    RECT r = ConvertToRECT(dc, rect);
+    const auto isDark = wxSystemSettings::GetAppearance().IsDark();
 
-        // Handle states. The hot and pressed states look similar, handle them
-        // the same.
-        if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
+    if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED))
+    {
+        if (button == wxTITLEBAR_BUTTON_CLOSE)
         {
-            if ( button == wxTITLEBAR_BUTTON_CLOSE )
+            const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
+            AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
+            ::FillRect(GetHdcOf(dc.GetTempHDC()), &r, hBrush);
+            // textCol becomes white below
+        }
+        else
+        {
+            wxColor bg = dc.GetBackground().GetColour();
+            if (bg.IsOk())
             {
-                // Fill background with the observed red colour.
-                // GetThemeColor() is no use, it fails.
-                AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
-                ::FillRect(hdc, &r, hBrush);
-                textCol = 0xffffff;
-            }
-            else
-            {
-                // Make the background slightly darker for light mode or
-                // slightly lighter for dark mode.
-                wxColor bg = dc.GetBackground().GetColour();
-                if ( bg.IsOk() )
-                {
-                    bg = bg.ChangeLightness(isDark ? 109 : 95);
-                    AutoHBRUSH hBrush(bg.GetPixel());
-                    ::FillRect(hdc, &r, hBrush);
-                }
+                bg = bg.ChangeLightness(isDark ? 109 : 95);
+                AutoHBRUSH hBrush(bg.GetPixel());
+                ::FillRect(GetHdcOf(dc.GetTempHDC()), &r, hBrush);
             }
         }
-
-        // Draw the character.
-        ::SetTextColor(hdc, textCol);
-        ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-        return;
     }
+
+    const auto textCol = isDark ? 0xffffff : 0;
+    if (wxMSWDrawCaptionGlyph(GetHdcOf(dc.GetTempHDC()), r, chr, textCol))
+        return;
 
     wxUxThemeHandle hTheme(win, L"WINDOW");
     if ( !hTheme )
@@ -1367,4 +1337,67 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
     }
 
     m_rendererNative.DrawSplitterSash(win, dc, size, position, orient, flags);
+}
+
+
+bool wxMSWDrawCaptionGlyph(HDC hdc, const RECT& rc, wchar_t glyphChar, COLORREF textCol)
+{
+    if (glyphChar == L'\0')
+        return false;
+
+    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
+
+    // Prefer the version-appropriate font, then fall back to the other one,
+    // then a generic symbol font.
+    const wchar_t* fontCandidates[] =
+    {
+        isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons",
+        isWin10 ? L"Segoe Fluent Icons" : L"Segoe MDL2 Assets",
+        L"Segoe UI Symbol"
+    };
+
+    const int btnHeight = rc.bottom - rc.top;
+    const int fontHeight = -::MulDiv(btnHeight, 9, 16);
+    // Apply bold weight specifically for the Help button question mark glyph.
+    const LONG weight = (glyphChar == L'\xe897') ? FW_BOLD : FW_NORMAL;
+    for (const wchar_t* fontName : fontCandidates)
+    {
+        LOGFONTW lf = { };
+        wxStrlcpy(lf.lfFaceName, fontName, WXSIZEOF(lf.lfFaceName));
+        lf.lfHeight = fontHeight;
+        lf.lfWeight = weight;
+        lf.lfCharSet = DEFAULT_CHARSET;
+
+        HFONT hFont = ::CreateFontIndirectW(&lf);
+        if (!hFont)
+            continue;
+
+        HFONT hOldFont = static_cast<HFONT>(::SelectObject(hdc, hFont));
+
+        wchar_t faceName[LF_FACESIZE] = { };
+        ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
+
+        if (wxStrcmp(faceName, fontName) == 0)
+        {
+            const COLORREF oldTextCol = ::SetTextColor(hdc, textCol);
+            const int oldBkMode = ::SetBkMode(hdc, TRANSPARENT);
+
+            RECT rcCopy = rc;
+            ::DrawTextW(hdc, &glyphChar, 1, &rcCopy,
+                DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+            ::SetBkMode(hdc, oldBkMode);
+            ::SetTextColor(hdc, oldTextCol);
+
+            ::SelectObject(hdc, hOldFont);
+            ::DeleteObject(hFont);
+
+            return true;
+        }
+
+        ::SelectObject(hdc, hOldFont);
+        ::DeleteObject(hFont);
+    }
+
+    return false;
 }
