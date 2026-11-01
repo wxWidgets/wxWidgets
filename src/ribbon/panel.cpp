@@ -47,8 +47,8 @@ public:
         // Register a custom Win32 class with CS_DROPSHADOW
         wxString cls = wxApp::GetRegisteredClassName(
             _T("wxRibbonShadowFrameClass"),
-            -1,   
-            CS_DROPSHADOW, 
+            -1,
+            CS_DROPSHADOW,
             wxApp::RegClass_Default
         );
 
