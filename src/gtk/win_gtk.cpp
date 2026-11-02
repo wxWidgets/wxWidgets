@@ -1221,7 +1221,8 @@ void wxPizza::scroll(int dx, int dy)
 /* static */
 GtkStyleContext* wxPizza::get_border_style_context()
 {
-    return gtk_widget_get_style_context(wxGTKPrivate::GetEntryWidget());
+    // Native scrolled windows seem like the best match for a generic wxWindow.
+    return gtk_widget_get_style_context(wxGTKPrivate::GetScrolledWindowWidget());
 }
 #endif // __WXGTK3__
 
