@@ -405,6 +405,11 @@ bool wxRibbonBar::Realize()
     bool status = true;
 
     wxInfoDC dcTemp(this);
+
+    // Determine the tab area height first, as the pages are positioned below
+    // it before being realized.
+    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
+
     int sep = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
     size_t numtabs = m_pages.GetCount();
     bool firstVisible = true;
@@ -448,7 +453,6 @@ bool wxRibbonBar::Realize()
             m_tabs_total_width_minimum += sep + info.minimum_width;
         }
     }
-    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
 
     RecalculateMinSize();
     RecalculateTabSizes();
@@ -1299,13 +1303,6 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
     // the pages layout, but also the tab widths, the tab area height and the
     // minimal size of the bar, so recompute all of them.
     Realize();
-
-    // Reposition current page as the tab area height may have changed after
-    // it had been positioned by Realize().
-    if(m_current_page != wxNOT_FOUND)
-    {
-        RepositionPage(m_pages.Item(m_current_page).page);
-    }
 
     Refresh();
     event.Skip();

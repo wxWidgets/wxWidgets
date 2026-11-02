@@ -102,6 +102,8 @@ protected:
     int m_scroll_amount = 0;
     int m_scroll_amount_limit = 0;
     int m_size_in_major_axis_for_children = 0;
+    // Size of the page in the minor axis when the panels were last laid out.
+    int m_size_in_minor_axis_for_layout = -1;
     bool m_scroll_buttons_visible = false;
 
 #ifndef SWIG

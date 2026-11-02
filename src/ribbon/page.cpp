@@ -667,7 +667,24 @@ bool wxRibbonPage::Layout()
     }
     else
     {
-        PopulateSizeCalcArray(&wxWindow::GetSize);
+        const wxSize size = GetSize();
+        const int minor_axis_size = GetMajorAxis() == wxHORIZONTAL
+                                        ? size.GetHeight()
+                                        : size.GetWidth();
+        if ( minor_axis_size != m_size_in_minor_axis_for_layout )
+        {
+            // The panel sizes were chosen for a different size in the minor
+            // axis, e.g. when the page was realized before the ribbon bar got
+            // its final height, and the panels may have been reduced to sizes
+            // that are not needed any more (or are not small enough), so start
+            // from their minimal sizes again, as Realize() does.
+            m_collapse_stack.Clear();
+            PopulateSizeCalcArray(&wxWindow::GetMinSize);
+        }
+        else
+        {
+            PopulateSizeCalcArray(&wxWindow::GetSize);
+        }
         return DoActualLayout();
     }
 }
@@ -679,6 +696,9 @@ bool wxRibbonPage::DoActualLayout()
     int gap;
     int minor_axis_size;
     int available_space;
+    m_size_in_minor_axis_for_layout = major_axis == wxHORIZONTAL
+                                        ? GetSize().GetHeight()
+                                        : GetSize().GetWidth();
     if(major_axis == wxHORIZONTAL)
     {
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
