@@ -28,6 +28,14 @@
 #include "wx/msw/private.h"
 #endif
 
+#if defined(__WXMSW__) && wxUSE_POPUPWIN
+    // Under MSW use a popup window with a drop shadow for the expanded panel.
+    #define wxRIBBON_USE_POPUP_FOR_EXPANDED_PANEL 1
+    #include "wx/popupwin.h"
+#else
+    #define wxRIBBON_USE_POPUP_FOR_EXPANDED_PANEL 0
+#endif
+
 wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent);
@@ -1008,9 +1016,15 @@ bool wxRibbonPanel::ShowExpanded()
     wxPoint pos = GetExpandedPosition(wxRect(GetScreenPosition(), GetSize()),
         size, m_preferred_expand_direction).GetTopLeft();
 
-    // Need a top-level frame to contain the expanded panel
+    // Need a top-level window to contain the expanded panel
+#if wxRIBBON_USE_POPUP_FOR_EXPANDED_PANEL
+    wxPopupWindow *container = new wxPopupWindow(GetParent(),
+        wxBORDER_NONE | wxPU_CONTAINS_CONTROLS | wxPU_DROP_SHADOW);
+    container->SetSize(wxRect(pos, size));
+#else
     wxFrame *container = new wxFrame(nullptr, wxID_ANY, GetLabel(),
         pos, size, wxFRAME_NO_TASKBAR | wxBORDER_NONE);
+#endif
 
     m_expanded_panel = new wxRibbonPanel(container, wxID_ANY,
         GetLabel(), m_minimised_icon, wxPoint(0, 0), size, (m_flags /* & ~wxRIBBON_PANEL_FLEXIBLE */));
@@ -1168,7 +1182,6 @@ bool wxRibbonPanel::HideExpanded()
     {
         wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_dummy);
-        child->Hide();
     }
 
     // Move sizer back
@@ -1179,8 +1192,22 @@ bool wxRibbonPanel::HideExpanded()
         m_expanded_dummy->SetSizer(sizer);
     }
 
+    // Realize the original panel while the children are still shown: the
+    // sizer ignores hidden items, so doing it after hiding them would store
+    // a tiny m_smallest_unminimised_size which would then be used as the size
+    // of the expanded panel the next time it is shown.
     m_expanded_dummy->m_expanded_panel = nullptr;
     m_expanded_dummy->Realize();
+
+    // The original panel is minimised, so its children must be hidden.
+    for ( wxWindowList::compatibility_iterator node =
+            m_expanded_dummy->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        node->GetData()->Hide();
+    }
+
     m_expanded_dummy->Refresh();
     wxWindow *parent = GetParent();
     Destroy();

@@ -1187,3 +1187,62 @@ class wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider
 public:
     wxRibbonAUIArtProvider();
 };
+
+
+/**
+    Flags for customizing the appearance of wxRibbonMSWExplorerArtProvider.
+
+    These flags can be combined and passed to the art provider constructor.
+
+    @since 3.3.3
+*/
+enum wxRibbonExplorerStyle
+{
+    /// Show the page tab labels in upper case.
+    wxRIBBON_EXPLORER_UPPERCASE_TABS = 1 << 0,
+
+    /**
+        Fill the tab area background with the secondary colour of the scheme,
+        instead of using the window background colour.
+    */
+    wxRIBBON_EXPLORER_COLORED_TABS_BACKGROUND = 1 << 1,
+
+    /// Use the border colour to fill the hovered and pressed buttons.
+    wxRIBBON_EXPLORER_BORDERLESS_BUTTONS = 1 << 2,
+
+    /**
+        Don't draw the border of the hovered tabs, only use a different label
+        colour for them.
+    */
+    wxRIBBON_EXPLORER_BORDERLESS_HOVERED_TABS = 1 << 3
+};
+
+
+/**
+    @class wxRibbonMSWExplorerArtProvider
+
+    An art provider which draws a ribbon looking like the one used by Windows
+    Explorer, Paint or WordPad under Windows 10: flat colours, a light page
+    background and thin borders around the active tab.
+
+    Its default colour scheme is based on the system colours and is updated
+    when they change, see wxRibbonArtProvider::UpdateColoursFromSystem().
+
+    @since 3.3.3
+
+    @library{wxribbon}
+    @category{ribbon}
+
+    @see wxRibbonMSWFlatArtProvider, wxRibbonAUIArtProvider
+*/
+class wxRibbonMSWExplorerArtProvider : public wxRibbonAUIArtProvider
+{
+public:
+    /**
+        Constructor.
+
+        @param style
+            Combination of wxRibbonExplorerStyle flags, 0 by default.
+    */
+    wxRibbonMSWExplorerArtProvider(int style = 0);
+};

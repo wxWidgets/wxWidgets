@@ -22,6 +22,9 @@
 // default popup style.
 #define wxPU_CONTAINS_CONTROLS     0x0001
 
+// This flag can be used in MSW to give the popup a drop shadow.
+#define wxPU_DROP_SHADOW           0x0002
+
 
 #include "wx/nonownedwnd.h"
 

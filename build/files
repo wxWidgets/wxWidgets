@@ -2765,6 +2765,7 @@ RIBBON_SRC =
     src/ribbon/art_msw.cpp
     src/ribbon/art_aui.cpp
     src/ribbon/art_msw_flat.cpp
+    src/ribbon/art_msw_explorer.cpp
     src/ribbon/backstage.cpp
     src/ribbon/backstagecontrols.cpp
     src/ribbon/bar.cpp

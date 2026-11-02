@@ -199,6 +199,14 @@ enum wxRibbonGalleryButtonState
     wxRIBBON_GALLERY_BUTTON_DISABLED
 };
 
+enum wxRibbonExplorerStyle
+{
+    wxRIBBON_EXPLORER_UPPERCASE_TABS = 1 << 0,
+    wxRIBBON_EXPLORER_COLORED_TABS_BACKGROUND = 1 << 1,
+    wxRIBBON_EXPLORER_BORDERLESS_BUTTONS = 1 << 2,
+    wxRIBBON_EXPLORER_BORDERLESS_HOVERED_TABS = 1 << 3
+};
+
 class wxRibbonBar;
 class wxRibbonPage;
 class wxRibbonPanel;
@@ -665,7 +673,7 @@ protected:
     void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
         wxPen& secondary_colour);
     void RemovePanelPadding(wxRect* rect);
-    void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
+    virtual void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
     void DrawGalleryBackgroundCommon(wxDC& dc, wxRibbonGallery* wnd,
                         const wxRect& rect);
     // Picks the button bar label colour appropriate for the given
@@ -1062,6 +1070,10 @@ protected:
     void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd) override;
 
+    // Copies the colours specific to this provider, in addition to everything
+    // copied by wxRibbonMSWArtProvider::CloneTo().
+    void CloneTo(wxRibbonAUIArtProvider* copy) const;
+
     wxColour m_tab_ctrl_background_colour;
     wxColour m_tab_ctrl_background_gradient_colour;
     wxColour m_panel_label_background_colour;
@@ -1083,6 +1095,160 @@ protected:
     wxPen m_toolbar_hover_borden_pen;
 
     wxFont m_tab_active_label_font;
+};
+
+class WXDLLIMPEXP_RIBBON wxRibbonMSWExplorerArtProvider : public wxRibbonAUIArtProvider
+{
+public:
+    wxRibbonMSWExplorerArtProvider(int style = 0);
+    virtual ~wxRibbonMSWExplorerArtProvider();
+
+    wxNODISCARD wxRibbonArtProvider* Clone() const override;
+
+    void SetColourScheme(const wxColour& primary,
+                         const wxColour& secondary,
+                         const wxColour& tertiary) override;
+    void SetFont(int id, const wxFont& font) override;
+    void UpdateColoursFromSystem() override;
+
+    void DrawTabCtrlBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawTab(wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRibbonPageTabInfo& tab) override;
+
+    void DrawTabSeparator(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        double visibility) override;
+
+    void DrawPageBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    wxSize GetScrollButtonMinimumSize(
+                        wxReadOnlyDC& dc,
+                        wxWindow* wnd,
+                        long style) override;
+
+    void DrawScrollButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        long style) override;
+
+    void GetBarTabWidth(
+                        wxReadOnlyDC& dc,
+                        wxWindow* WXUNUSED(wnd),
+                        const wxString& label,
+                        const wxBitmap& bitmap,
+                        int* ideal,
+                        int* small_begin_need_separator,
+                        int* small_must_have_separator,
+                        int* minimum) override;
+
+    wxSize GetPanelSize(
+                        wxReadOnlyDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize client_size,
+                        wxPoint* client_offset) override;
+
+    wxSize GetPanelClientSize(
+                        wxReadOnlyDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize size,
+                        wxPoint* client_offset) override;
+
+    wxRect GetPanelExtButtonArea(wxReadOnlyDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect) override;
+
+    void DrawPanelBackground(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect) override;
+
+    void DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect) override;
+
+    void DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item) override;
+
+    void DrawMinimisedPanel(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxBitmap& bitmap) override;
+
+    void DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        wxRibbonButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small) override;
+
+    void DrawToolBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawToolGroupBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawTool(
+                wxDC& dc,
+                wxWindow* wnd,
+                const wxRect& rect,
+                const wxBitmap& bitmap,
+                wxRibbonButtonKind kind,
+                long state) override;
+
+    wxSize GetToolSize(
+                wxReadOnlyDC& dc,
+                wxWindow* wnd,
+                wxSize bitmap_size,
+                wxRibbonButtonKind kind,
+                bool is_first,
+                bool is_last,
+                wxRect* dropdown_region) override;
+
+protected:
+    // Colour scheme used by default, see UpdateColoursFromSystem().
+    static void GetDefaultExplorerColourScheme(wxColour& primary,
+                                               wxColour& secondary,
+                                               wxColour& tertiary);
+
+    void DrawPartialPanelBackground(wxDC& dc, wxWindow* wnd,
+        const wxRect& rect);
+    void DrawGalleryButton(wxDC& dc, wxRect rect,
+        wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd) override;
+
+    wxPen m_tab_hover_border_pen;
+    wxPen m_tab_active_border_pen;
+    wxPen m_button_bar_active_border_pen;
+    wxBrush m_minimised_panel_background_brush;
+    wxBrush m_gallery_button_background_brush;
+    int m_ribbon_style;
 };
 
 #if defined(__WXMSW__)

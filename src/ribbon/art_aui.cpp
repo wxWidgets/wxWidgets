@@ -67,6 +67,12 @@ wxRibbonArtProvider* wxRibbonAUIArtProvider::Clone() const
 {
     wxRibbonAUIArtProvider *copy = new wxRibbonAUIArtProvider();
     CloneTo(copy);
+    return copy;
+}
+
+void wxRibbonAUIArtProvider::CloneTo(wxRibbonAUIArtProvider* copy) const
+{
+    wxRibbonMSWArtProvider::CloneTo(copy);
 
     copy->m_tab_ctrl_background_colour = m_tab_ctrl_background_colour;
     copy->m_tab_ctrl_background_gradient_colour = m_tab_ctrl_background_gradient_colour;
@@ -93,7 +99,7 @@ wxRibbonArtProvider* wxRibbonAUIArtProvider::Clone() const
     copy->m_tool_hover_background_brush = m_tool_hover_background_brush;
     copy->m_tool_active_background_brush = m_tool_active_background_brush;
 
-    return copy;
+    copy->m_tab_active_label_font = m_tab_active_label_font;
 }
 
 void wxRibbonAUIArtProvider::SetFont(int id, const wxFont& font)
