@@ -1489,6 +1489,7 @@
 		80665EEAE8613DF8A93A7984 /* utilscmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4188821BBA833CCAA678B234 /* utilscmn.cpp */; };
 		51D133EC44F830588FEEAEC1 /* LexHaskell.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 10EADF7E7DC032CA8522C1F8 /* LexHaskell.cxx */; };
 		3328877FCF2A3623A36A5FD0 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DF7680A9F70389C944820EF /* art_msw_flat.cpp */; };
+		A1542A608EEBCBF7FD8B2DD0 /* art_msw_explorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2605B710FB8B8D91076163 /* art_msw_explorer.cpp */; };
 		3328877FCF2A3623A36A5005 /* backstagecontrols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5004 /* backstagecontrols.cpp */; };
 		3328877FCF2A3623A36A5001 /* backstage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5000 /* backstage.cpp */; };
 		4CB3626391CE34D4B1F71AA1 /* jdatasrc.c in Sources */ = {isa = PBXBuildFile; fileRef = DECAF5DD80383A2CA76EB383 /* jdatasrc.c */; };
@@ -2105,6 +2106,7 @@
 		25C5C1713C0B39AC8EB6A38E /* taskbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2A4D36DE66EC3EB09E883D6B /* taskbar.mm */; };
 		2480859662ED399799E120A7 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA819575B5136B09FA8FEB1 /* pen.cpp */; };
 		3328877FCF2A3623A36A5FD1 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DF7680A9F70389C944820EF /* art_msw_flat.cpp */; };
+		A1542A608EEBCBF7FD8B2DD1 /* art_msw_explorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2605B710FB8B8D91076163 /* art_msw_explorer.cpp */; };
 		3328877FCF2A3623A36A5006 /* backstagecontrols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5004 /* backstagecontrols.cpp */; };
 		3328877FCF2A3623A36A5002 /* backstage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5000 /* backstage.cpp */; };
 		7EF89F935314301381802FAD /* filectrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2334539088B036BEAB230D1C /* filectrlg.cpp */; };
@@ -3328,6 +3330,7 @@
 		D9DCBE799DB634C2A73FD6BE /* statboxcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D73954EB5397301F87881646 /* statboxcmn.cpp */; };
 		1CD4F67F48CF3A5FA477D870 /* datavcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95DEEF60B1E9358A8CCCC67E /* datavcmn.cpp */; };
 		3328877FCF2A3623A36A5FD2 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DF7680A9F70389C944820EF /* art_msw_flat.cpp */; };
+		A1542A608EEBCBF7FD8B2DD2 /* art_msw_explorer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2605B710FB8B8D91076163 /* art_msw_explorer.cpp */; };
 		3328877FCF2A3623A36A5007 /* backstagecontrols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5004 /* backstagecontrols.cpp */; };
 		3328877FCF2A3623A36A5003 /* backstage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3328877FCF2A3623A36A5000 /* backstage.cpp */; };
 		AD7EEB418C7930CB828EAF89 /* dynlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D272910EC35531E5B4D6E05B /* dynlib.cpp */; };
@@ -4742,6 +4745,7 @@
 		727F25F832AD32D4B12D8E39 /* m_span.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_span.cpp; path = ../../src/html/m_span.cpp; sourceTree = SOURCE_ROOT; };
 		3385D86FF9CA3A21A0F86A26 /* alpha_processing_sse41.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = alpha_processing_sse41.c; path = ../../3rdparty/libwebp/src/dsp/alpha_processing_sse41.c; sourceTree = SOURCE_ROOT; };
 		1DF7680A9F70389C944820EF /* art_msw_flat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_msw_flat.cpp; path = ../../src/ribbon/art_msw_flat.cpp; sourceTree = SOURCE_ROOT; };
+		FC2605B710FB8B8D91076163 /* art_msw_explorer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_msw_explorer.cpp; path = ../../src/ribbon/art_msw_explorer.cpp; sourceTree = SOURCE_ROOT; };
 		3328877FCF2A3623A36A5004 /* backstagecontrols.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = backstagecontrols.cpp; path = ../../src/ribbon/backstagecontrols.cpp; sourceTree = SOURCE_ROOT; };
 		3328877FCF2A3623A36A5000 /* backstage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = backstage.cpp; path = ../../src/ribbon/backstage.cpp; sourceTree = SOURCE_ROOT; };
 		31EFBD7D10003A5187348B35 /* tooltip.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = tooltip.mm; path = ../../src/osx/cocoa/tooltip.mm; sourceTree = SOURCE_ROOT; };
@@ -6876,6 +6880,7 @@
 				B540E18F9C91381CA175BABB /* art_msw.cpp */,
 				DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */,
 				1DF7680A9F70389C944820EF /* art_msw_flat.cpp */,
+				FC2605B710FB8B8D91076163 /* art_msw_explorer.cpp */,
 				3328877FCF2A3623A36A5004 /* backstagecontrols.cpp */,
 				3328877FCF2A3623A36A5000 /* backstage.cpp */,
 				9FDDE855D9F83E4891362EB4 /* bar.cpp */,
@@ -9515,6 +9520,7 @@
 				7DC4A542372437ECA0790F88 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130713 /* art_aui.cpp in Sources */,
 				3328877FCF2A3623A36A5FD0 /* art_msw_flat.cpp in Sources */,
+				A1542A608EEBCBF7FD8B2DD0 /* art_msw_explorer.cpp in Sources */,
 				3328877FCF2A3623A36A5005 /* backstagecontrols.cpp in Sources */,
 				3328877FCF2A3623A36A5001 /* backstage.cpp in Sources */,
 				056CA84179433AA48D55DA67 /* bar.cpp in Sources */,
@@ -10177,6 +10183,7 @@
 				7DC4A542372437ECA0790F89 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130712 /* art_aui.cpp in Sources */,
 				3328877FCF2A3623A36A5FD2 /* art_msw_flat.cpp in Sources */,
+				A1542A608EEBCBF7FD8B2DD2 /* art_msw_explorer.cpp in Sources */,
 				3328877FCF2A3623A36A5007 /* backstagecontrols.cpp in Sources */,
 				3328877FCF2A3623A36A5003 /* backstage.cpp in Sources */,
 				056CA84179433AA48D55DA66 /* bar.cpp in Sources */,
@@ -11671,6 +11678,7 @@
 				7DC4A542372437ECA0790F87 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130711 /* art_aui.cpp in Sources */,
 				3328877FCF2A3623A36A5FD1 /* art_msw_flat.cpp in Sources */,
+				A1542A608EEBCBF7FD8B2DD1 /* art_msw_explorer.cpp in Sources */,
 				3328877FCF2A3623A36A5006 /* backstagecontrols.cpp in Sources */,
 				3328877FCF2A3623A36A5002 /* backstage.cpp in Sources */,
 				056CA84179433AA48D55DA65 /* bar.cpp in Sources */,
