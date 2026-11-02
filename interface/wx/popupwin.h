@@ -6,6 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #define wxPU_CONTAINS_CONTROLS     0x0001
+#define wxPU_DROP_SHADOW           0x0002
 
 /**
     @class wxPopupWindow
@@ -24,6 +25,11 @@
         sometimes desirable. This style is currently only implemented in MSW
         and simply does nothing under the other platforms (it's new since
         wxWidgets 3.1.3).
+    @style{wxPU_DROP_SHADOW}
+        Show a drop shadow around the popup window. This style is currently
+        only implemented in MSW, where it only works when combined with
+        wxPU_CONTAINS_CONTROLS, and simply does nothing under the other
+        platforms (it's new since wxWidgets 3.3.5).
     @endStyleTable
 
     @library{wxcore}

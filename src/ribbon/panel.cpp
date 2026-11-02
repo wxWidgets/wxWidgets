@@ -19,7 +19,6 @@
 #include "wx/renderer.h"
 #include "wx/display.h"
 #include "wx/sizer.h"
-#include "wx/app.h"
 
 #ifndef WX_PRECOMP
 #include "wx/frame.h"
@@ -29,44 +28,13 @@
 #include "wx/msw/private.h"
 #endif
 
-class wxRibbonShadowFrame : public wxFrame
-{
-public:
-    wxRibbonShadowFrame(wxWindow* parent,
-#ifndef __WXMSW__
-                        const wxString& title,
+#if defined(__WXMSW__) && wxUSE_POPUPWIN
+    // Under MSW use a popup window with a drop shadow for the expanded panel.
+    #define wxRIBBON_USE_POPUP_FOR_EXPANDED_PANEL 1
+    #include "wx/popupwin.h"
 #else
-                        const wxString& WXUNUSED(title),
+    #define wxRIBBON_USE_POPUP_FOR_EXPANDED_PANEL 0
 #endif
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        long style = wxFRAME_NO_TASKBAR | wxBORDER_NONE)
-        : wxFrame()
-    {
-#ifdef __WXMSW__
-        // Register a custom Win32 class with CS_DROPSHADOW
-        wxString cls = wxApp::GetRegisteredClassName(
-            _T("wxRibbonShadowFrameClass"),
-            -1,
-            CS_DROPSHADOW,
-            wxApp::RegClass_Default
-        );
-
-        CreateUsingMSWClass(
-            cls.c_str(),
-            parent,
-            wxID_ANY,
-            pos,
-            size,
-            style,
-            "wxRibbonShadowFrame"
-        );
-#else
-        // En other platforms, use a normal frame
-        Create(parent, wxID_ANY, title, pos, size, style, "wxRibbonShadowFrame");
-#endif
-    }
-};
 
 wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
 
@@ -1048,9 +1016,15 @@ bool wxRibbonPanel::ShowExpanded()
     wxPoint pos = GetExpandedPosition(wxRect(GetScreenPosition(), GetSize()),
         size, m_preferred_expand_direction).GetTopLeft();
 
-    // Need a top-level frame to contain the expanded panel
-    wxFrame *container = new wxRibbonShadowFrame(GetParent(), GetLabel(),
+    // Need a top-level window to contain the expanded panel
+#if wxRIBBON_USE_POPUP_FOR_EXPANDED_PANEL
+    wxPopupWindow *container = new wxPopupWindow(GetParent(),
+        wxBORDER_NONE | wxPU_CONTAINS_CONTROLS | wxPU_DROP_SHADOW);
+    container->SetSize(wxRect(pos, size));
+#else
+    wxFrame *container = new wxFrame(nullptr, wxID_ANY, GetLabel(),
         pos, size, wxFRAME_NO_TASKBAR | wxBORDER_NONE);
+#endif
 
     m_expanded_panel = new wxRibbonPanel(container, wxID_ANY,
         GetLabel(), m_minimised_icon, wxPoint(0, 0), size, (m_flags /* & ~wxRIBBON_PANEL_FLEXIBLE */));

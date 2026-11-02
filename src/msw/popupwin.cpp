@@ -50,10 +50,27 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
 
     m_owner = wxGetTopLevelParent(parent);
 
+    // Use a custom window class with CS_DROPSHADOW if a shadow is requested.
+    // Note that the shadow is only shown for WS_POPUP windows, i.e. when
+    // wxPU_CONTAINS_CONTROLS is used too.
+    const wxChar* classname = nullptr;
+    if ( flags & wxPU_DROP_SHADOW )
+    {
+        classname = wxApp::GetRegisteredClassName
+                    (
+                        wxT("wxPopupWindowShadow"),
+                        COLOR_BTNFACE,
+                        CS_DROPSHADOW,
+                        (flags & wxFULL_REPAINT_ON_RESIZE)
+                            ? wxApp::RegClass_Default
+                            : wxApp::RegClass_ReturnNR
+                    );
+    }
+
     return wxPopupWindowBase::Create(parent) &&
-               wxWindow::Create(parent, wxID_ANY,
-                                wxDefaultPosition, wxDefaultSize,
-                                flags);
+               CreateUsingMSWClass(classname, parent, wxID_ANY,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   flags);
 }
 
 wxPopupWindow::~wxPopupWindow()
