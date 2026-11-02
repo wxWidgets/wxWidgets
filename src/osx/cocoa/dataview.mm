@@ -1332,9 +1332,16 @@ outlineView:(NSOutlineView*)outlineView
 //
 // other methods
 //
+// Width reserved on the left for the image: nothing when there is no image,
+// so that text-only items aren't pushed away from the outline expander.
+-(CGFloat) imagePartWidth
+{
+    return image != nil ? xImageShift+imageSize.width+spaceImageText : 0.0;
+}
+
 -(NSSize) cellImageSize
 {
-    return NSMakeSize(imageSize.width+xImageShift+spaceImageText,imageSize.height);
+    return NSMakeSize([self imagePartWidth],imageSize.height);
 }
 
 -(NSSize) cellSize
@@ -1342,9 +1349,9 @@ outlineView:(NSOutlineView*)outlineView
     NSSize cellSize([super cellSize]);
 
 
-    if (imageSize.height > cellSize.height)
+    if (image != nil && imageSize.height > cellSize.height)
         cellSize.height = imageSize.height;
-    cellSize.width += imageSize.width+xImageShift+spaceImageText;
+    cellSize.width += [self imagePartWidth];
 
     return cellSize;
 }
@@ -1368,15 +1375,15 @@ outlineView:(NSOutlineView*)outlineView
                 // if the cell's frame is smaller than its contents (at least
                 // in x-direction) make sure that the image is visible:
                 if (cellSpace <= 0)
-                    NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText,NSMinXEdge);
+                    NSDivideRect(cellFrame,imageFrame,textFrame,[self imagePartWidth],NSMinXEdge);
                 else // otherwise center the image and text in the cell's frame
-                    NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText+0.5*cellSpace,NSMinXEdge);
+                    NSDivideRect(cellFrame,imageFrame,textFrame,[self imagePartWidth]+0.5*cellSpace,NSMinXEdge);
             }
             break;
         case NSJustifiedTextAlignment:
         case NSLeftTextAlignment:
         case NSNaturalTextAlignment: // how to determine the natural writing direction? TODO
-            NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText,NSMinXEdge);
+            NSDivideRect(cellFrame,imageFrame,textFrame,[self imagePartWidth],NSMinXEdge);
             break;
         case NSRightTextAlignment:
             {
@@ -1385,9 +1392,9 @@ outlineView:(NSOutlineView*)outlineView
                 // if the cell's frame is smaller than its contents (at least
                 // in x-direction) make sure that the image is visible:
                 if (cellSpace <= 0)
-                    NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText,NSMinXEdge);
+                    NSDivideRect(cellFrame,imageFrame,textFrame,[self imagePartWidth],NSMinXEdge);
                 else // otherwise right align the image and text in the cell's frame
-                    NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText+cellSpace,NSMinXEdge);
+                    NSDivideRect(cellFrame,imageFrame,textFrame,[self imagePartWidth]+cellSpace,NSMinXEdge);
             }
             break;
         default:
