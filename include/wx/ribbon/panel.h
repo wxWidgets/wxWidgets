@@ -115,6 +115,7 @@ protected:
 #endif // wxUSE_ACCESSIBILITY
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize GetPanelSizerBestSize() const;
+    void OnEnabledStateChanged(bool enabled) override;
     wxSize  GetPanelSizerMinSize() const;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     wxSize GetMinNotMinimisedSize() const;

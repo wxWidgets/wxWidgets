@@ -242,16 +242,25 @@ public:
 
     /**
         Get the state of the scroll up button.
+
+        Since wxWidgets 3.3.5, this is always @c wxRIBBON_GALLERY_BUTTON_DISABLED
+        if the gallery is disabled.
     */
     wxRibbonGalleryButtonState GetUpButtonState() const;
 
     /**
         Get the state of the scroll down button.
+
+        Since wxWidgets 3.3.5, this is always @c wxRIBBON_GALLERY_BUTTON_DISABLED
+        if the gallery is disabled.
     */
     wxRibbonGalleryButtonState GetDownButtonState() const;
 
     /**
         Get the state of the "extension" button.
+
+        Since wxWidgets 3.3.5, this is always @c wxRIBBON_GALLERY_BUTTON_DISABLED
+        if the gallery is disabled.
     */
     wxRibbonGalleryButtonState GetExtensionButtonState() const;
 

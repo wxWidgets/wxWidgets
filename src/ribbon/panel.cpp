@@ -221,6 +221,19 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
     }
 }
 
+void wxRibbonPanel::OnEnabledStateChanged(bool enabled)
+{
+    // A disabled window doesn't get the mouse events, so it wouldn't stop
+    // looking hovered when the mouse leaves it.
+    if ( !enabled )
+    {
+        m_hovered = false;
+        m_ext_button_hovered = false;
+    }
+
+    wxRibbonControl::OnEnabledStateChanged(enabled);
+}
+
 void wxRibbonPanel::AddChild(wxWindowBase *child)
 {
     wxRibbonControl::AddChild(child);
@@ -337,7 +350,16 @@ void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
         if(IsMinimised())
         {
-            m_art->DrawMinimisedPanel(dc, this, GetSize(), m_minimised_icon_resized);
+            if ( IsEnabled() || !m_minimised_icon_resized.IsOk() )
+            {
+                m_art->DrawMinimisedPanel(dc, this, GetSize(), m_minimised_icon_resized);
+            }
+            else
+            {
+                wxBitmap icon(m_minimised_icon_resized);
+                wxBitmap::MakeDisabled(icon);
+                m_art->DrawMinimisedPanel(dc, this, GetSize(), icon);
+            }
         }
         else
         {
@@ -889,7 +911,8 @@ void wxRibbonPanel::AppendFocusableControls(std::vector<wxRibbonControl*>& contr
           node; node = node->GetNext() )
     {
         wxRibbonControl* control = wxDynamicCast(node->GetData(), wxRibbonControl);
-        if ( control != nullptr && control->IsShown() && control->HasFocusableItems() )
+        if ( control != nullptr && control->IsShown() && control->IsEnabled() &&
+             control->HasFocusableItems() )
             controls.push_back(control);
     }
 

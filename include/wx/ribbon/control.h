@@ -94,6 +94,12 @@ public:
 protected:
     wxRibbonArtProvider* m_art;
 
+    // Forgets the focused item, moving the keyboard focus of the ribbon bar
+    // back to its tab row if needed, if the control is disabled now and
+    // repaints it, as it looks different when disabled. Overrides must call
+    // the base class version.
+    virtual void OnEnabledStateChanged(bool enabled) override;
+
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,

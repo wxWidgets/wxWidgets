@@ -39,9 +39,20 @@ public:
     wxRibbonGalleryItem() = default;
 
     void SetId(int id) {m_id = id;}
-    void SetBitmap(const wxBitmapBundle& bitmap) {m_bitmap = bitmap;}
+    void SetBitmap(const wxBitmapBundle& bitmap)
+    {
+        m_bitmap = bitmap;
+        m_bitmap_disabled = wxBitmapBundle();
+    }
     const wxBitmapBundle& GetBitmapBundle() const {return m_bitmap;}
     wxBitmap GetBitmap(wxWindow* wnd) const {return m_bitmap.GetBitmapFor(wnd);}
+    wxBitmap GetDisabledBitmap(wxWindow* wnd)
+    {
+        // Created only when needed, it caches the bitmaps it makes.
+        if ( !m_bitmap_disabled.IsOk() )
+            m_bitmap_disabled = m_bitmap.MakeDisabled();
+        return m_bitmap_disabled.GetBitmapFor(wnd);
+    }
     void SetIsVisible(bool visible) {m_is_visible = visible;}
     void SetPosition(int x, int y, const wxSize& size)
     {
@@ -60,6 +71,7 @@ public:
 
 protected:
     wxBitmapBundle m_bitmap;
+    wxBitmapBundle m_bitmap_disabled;
     wxString m_label;
     wxClientDataContainer m_client_data;
     wxRect m_position;
@@ -237,6 +249,21 @@ bool wxRibbonGallery::TestButtonHover(const wxRect& rect, wxPoint pos,
 }
 
 void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
+{
+    ResetHoverState();
+}
+
+void wxRibbonGallery::OnEnabledStateChanged(bool enabled)
+{
+    // A disabled window doesn't get the mouse events, so it wouldn't stop
+    // looking hovered when the mouse leaves it.
+    if ( !enabled )
+        ResetHoverState();
+
+    wxRibbonControl::OnEnabledStateChanged(enabled);
+}
+
+void wxRibbonGallery::ResetHoverState()
 {
     m_hovered = false;
     m_active_item = nullptr;
@@ -741,7 +768,8 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
             offset_pos.SetLeft(offset_pos.GetLeft() - m_scroll_amount);
         m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
         // Resolve bitmap bundle for current DPI
-        wxBitmap bmp = item->GetBitmap(this);
+        wxBitmap bmp = IsEnabled() ? item->GetBitmap(this)
+                                   : item->GetDisabledBitmap(this);
         if (bmp.IsOk())
             dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
                 offset_pos.GetTop() + padding_top);
@@ -1169,17 +1197,17 @@ wxRibbonGalleryItem* wxRibbonGallery::GetActiveItem() const
 
 wxRibbonGalleryButtonState wxRibbonGallery::GetUpButtonState() const
 {
-    return m_up_button_state;
+    return IsEnabled() ? m_up_button_state : wxRIBBON_GALLERY_BUTTON_DISABLED;
 }
 
 wxRibbonGalleryButtonState wxRibbonGallery::GetDownButtonState() const
 {
-    return m_down_button_state;
+    return IsEnabled() ? m_down_button_state : wxRIBBON_GALLERY_BUTTON_DISABLED;
 }
 
 wxRibbonGalleryButtonState wxRibbonGallery::GetExtensionButtonState() const
 {
-    return m_extension_button_state;
+    return IsEnabled() ? m_extension_button_state : wxRIBBON_GALLERY_BUTTON_DISABLED;
 }
 
 #if wxUSE_ACCESSIBILITY
