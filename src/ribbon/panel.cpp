@@ -716,7 +716,33 @@ bool wxRibbonPanel::Realize()
     // Ask sizer if there is one present
     if(GetSizer())
     {
-        minimum_children_size = GetPanelSizerMinSize();
+        if ( m_minimised )
+        {
+            // The children are hidden when the panel is minimised, but the
+            // sizer ignores the hidden items, so show them temporarily to
+            // compute the real minimum size of the panel, as otherwise it
+            // would be (almost) zero and the panel would never be shown again.
+            //
+            // This also covers HideExpanded(), which calls Realize() after
+            // hiding the children. wxWidgets PR #27289 (commit bfbf8a3094)
+            // fixes that case alone, by realizing the panel before hiding them.
+            //
+            // Don't freeze the panel here: nothing is repainted between showing
+            // and hiding the children anyway, and doing it resulted in the
+            // native controls, such as wxComboBox, being drawn incorrectly the
+            // next time the panel was expanded.
+            for ( wxWindow* child : GetChildren() )
+                child->Show();
+
+            minimum_children_size = GetPanelSizerMinSize();
+
+            for ( wxWindow* child : GetChildren() )
+                child->Hide();
+        }
+        else
+        {
+            minimum_children_size = GetPanelSizerMinSize();
+        }
     }
     else if(GetChildren().GetCount() == 1)
     {
