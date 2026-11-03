@@ -107,7 +107,11 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 #endif
 
     m_browser->Create(wxTheApp->GetTopWindow(), wxID_ANY);
-    ENSURE_LOADED;
+
+    // The first load may need to start the browser engine processes, which
+    // can take much longer than the default timeout on slow machines. If its
+    // event arrived late, all the subsequent checks would be off by one.
+    REQUIRE( m_loaded->WaitEvent(10000) );
 
     SECTION("Title")
     {
