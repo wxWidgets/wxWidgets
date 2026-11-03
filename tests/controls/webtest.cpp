@@ -201,7 +201,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         ENSURE_LOADED;
 
         CHECK(m_browser->GetBackwardHistory().size() == 1);
-        CHECK(m_browser->GetForwardHistory().size() == 1);
+        REQUIRE(m_browser->GetForwardHistory().size() == 1);
 
         m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
         ENSURE_LOADED;
