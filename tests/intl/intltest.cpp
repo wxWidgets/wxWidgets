@@ -368,6 +368,80 @@ TEST_CASE("wxTranslations::CorruptCatalog", "[translations]")
     delete cat;
 }
 
+TEST_CASE("wxTranslations::CorruptCatalogTables", "[translations]")
+{
+    // Build a minimal valid MO catalog containing just the (empty) header
+    // entry and then corrupt the fields of the file header describing the
+    // string tables, none of which used to be validated: the entries of the
+    // tables were read from wherever the header pointed to, including outside
+    // of the catalog data.
+    //
+    // As above, the backing array has one extra byte for the trailing NUL.
+    const size_t moLen = 48;
+    unsigned char mo[moLen + 1];
+    memset(mo, 0, sizeof(mo));
+
+    auto put32 = [](unsigned char* p, wxUint32 v)
+    {
+        p[0] = (unsigned char)(v & 0xff);
+        p[1] = (unsigned char)((v >> 8) & 0xff);
+        p[2] = (unsigned char)((v >> 16) & 0xff);
+        p[3] = (unsigned char)((v >> 24) & 0xff);
+    };
+
+    put32(mo +  0, 0x950412de); // magic
+    put32(mo +  8, 1);          // number of strings
+    put32(mo + 12, 28);         // offset of original strings table
+    put32(mo + 16, 36);         // offset of translated strings table
+    // original strings table
+    put32(mo + 28, 0);  put32(mo + 32, 44); // ""
+    // translated strings table
+    put32(mo + 36, 0);  put32(mo + 40, 44); // ""
+
+    bool valid = false;
+
+    SECTION("Valid")
+    {
+        valid = true;
+    }
+
+    SECTION("Original table past the end")
+    {
+        put32(mo + 12, moLen);
+    }
+
+    SECTION("Translated table past the end")
+    {
+        put32(mo + 16, moLen);
+    }
+
+    SECTION("Original table offset overflow")
+    {
+        put32(mo + 12, 0xfffffffc);
+    }
+
+    SECTION("Too many strings")
+    {
+        put32(mo + 8, 0x10000000);
+    }
+
+    SECTION("No strings")
+    {
+        // The header entry must not be read if there are no entries at all.
+        put32(mo + 8, 0);
+        put32(mo + 12, moLen);
+        put32(mo + 16, moLen);
+
+        // Such a catalog is useless, but it's not invalid.
+        valid = true;
+    }
+
+    wxCharTypeBuffer<char> data(reinterpret_cast<const char*>(mo), moLen);
+    wxMsgCatalog* const cat = wxMsgCatalog::CreateFromData(data, "corrupt");
+    CHECK( (cat != nullptr) == valid );
+    delete cat;
+}
+
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
 {
     TranslationsTestCatalogs catalogs;
