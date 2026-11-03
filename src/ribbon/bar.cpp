@@ -2050,7 +2050,7 @@ std::vector<wxRibbonControl*> wxRibbonBar::GetFocusableControls() const
           node; node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if ( panel != nullptr && panel->IsShown() )
+        if ( panel != nullptr && panel->IsShown() && panel->IsEnabled() )
             panel->AppendFocusableControls(controls);
     }
     return controls;
@@ -2097,6 +2097,12 @@ void wxRibbonBar::FocusItemOf(wxRibbonControl* control)
         m_focusedControl = control;
         RefreshTabBar();
     }
+}
+
+void wxRibbonBar::ClearPageFocusIn(wxRibbonControl* control)
+{
+    if ( m_focusedControl.get() == control )
+        ClearPageFocus();
 }
 
 void wxRibbonBar::ClearPageFocus()
@@ -2564,7 +2570,8 @@ void wxRibbonBar::DoBuildKeyTipTargets()
               node; node = node->GetNext() )
         {
             wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-            if ( panel == nullptr || !panel->IsShown() )
+            // Nothing in a disabled panel can be activated.
+            if ( panel == nullptr || !panel->IsShown() || !panel->IsEnabled() )
                 continue;
 
             if ( panel->IsMinimised() )
@@ -2602,7 +2609,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                   pnode; pnode = pnode->GetNext() )
             {
                 wxWindow* child = pnode->GetData();
-                if ( !child->IsShown() )
+                if ( !child->IsShown() || !child->IsEnabled() )
                     continue;
 
                 wxRibbonButtonBar* bb = wxDynamicCast(child, wxRibbonButtonBar);

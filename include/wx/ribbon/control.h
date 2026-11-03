@@ -83,6 +83,13 @@ public:
     // Fires the focused item's action (or its dropdown, if there is one).
     virtual void ActivateFocusedItem(bool WXUNUSED(dropdown) = false) { }
 
+    // Implementation only: called when this control or one of its parents is
+    // enabled or disabled. The default implementation forgets the focused
+    // item, moving the keyboard focus of the ribbon bar back to its tab row
+    // if needed, if the control is disabled now and repaints it, as it looks
+    // different when disabled. Overrides must call the base class version.
+    virtual void OnEnabledStateChanged();
+
     // Move through 'controls' (the ones with focusable items).
     // Return the control reached, or null if there is nowhere to go.
     static wxRibbonControl* FocusFirstItemIn(
@@ -93,6 +100,10 @@ public:
 
 protected:
     wxRibbonArtProvider* m_art;
+
+    // Calls OnEnabledStateChanged() for this control and, in the ports which
+    // don't call DoEnable() for the children too, all ribbon controls inside.
+    virtual void DoEnable(bool enable) override;
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const;

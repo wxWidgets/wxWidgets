@@ -1258,6 +1258,9 @@ void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     m_art->DrawToolBarBackground(dc, this, GetSize());
 
+    // All tools are shown as disabled if the bar or one of its parents is.
+    const bool enabled = IsEnabled();
+
     size_t group_count = m_groups.GetCount();
     size_t g, t;
     for(g = 0; g < group_count; ++g)
@@ -1273,14 +1276,21 @@ void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                 wxRibbonToolBarToolBase* tool = group->tools.Item(t);
                 wxRect rect(group->position + tool->position, tool->size);
                 // Resolve bitmap bundle to actual bitmap for current DPI
+                long state{ tool->state };
+                if ( !enabled )
+                {
+                    state &= ~(wxRIBBON_TOOLBAR_TOOL_HOVER_MASK |
+                               wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK);
+                    state |= wxRIBBON_TOOLBAR_TOOL_DISABLED;
+                }
+
                 wxBitmap bmp;
-                if(tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
+                if(state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
                     bmp = tool->bitmap_disabled.GetBitmapFor(this);
                 else
                     bmp = tool->bitmap.GetBitmapFor(this);
 
                 // Show the tool with the keyboard focus as hovered, and mark it too.
-                long state{ tool->state };
                 const bool focused{ (tool == m_focused_tool) };
                 if ( focused )
                 {
@@ -1412,6 +1422,21 @@ void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
 }
 
 void wxRibbonToolBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
+{
+    ResetHoverState();
+}
+
+void wxRibbonToolBar::OnEnabledStateChanged()
+{
+    // A disabled window doesn't get the mouse events, so it wouldn't stop
+    // looking hovered when the mouse leaves it.
+    if ( !IsEnabled() )
+        ResetHoverState();
+
+    wxRibbonControl::OnEnabledStateChanged();
+}
+
+void wxRibbonToolBar::ResetHoverState()
 {
     if(m_hover_tool)
     {
