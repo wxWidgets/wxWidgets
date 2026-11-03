@@ -195,6 +195,7 @@ protected:
     wxRibbonButtonBar* m_provider_bar;
     wxRibbonGallery* m_primary_gallery;
     wxRibbonGallery* m_secondary_gallery;
+    wxRibbonPanel* m_toggle_panel; // ISSUE 5: disabled with "Disable"
     wxTextCtrl* m_logwindow;
     wxBackstage* m_backstage;
     wxToggleButton* m_togglePanels;
@@ -693,9 +694,11 @@ MyFrame::MyFrame()
             m_default_secondary, ID_SECONDARY_COLOUR);
         m_secondary_gallery->SetKeyTip("S");
     }
+    wxRibbonPage* ui_updated_page; // ISSUE 1: selected below
     {
         wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "UI Updated",
             ribbon_small);
+        ui_updated_page = page; // ISSUE 1
         m_ribbon->SetPageKeyTip(page, "U");
         wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Enable/Disable",
             ribbon_small);
@@ -708,6 +711,7 @@ MyFrame::MyFrame()
         m_bEnabled = true;
 
         panel = new wxRibbonPanel(page, wxID_ANY, "Toggle", ribbon_small);
+        m_toggle_panel = panel; // ISSUE 5
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
         bar->AddButton(ID_CHECK, "Toggle", ribbon_large);
         bar->AddToggleButton(ID_UI_CHECK_UPDATED, "Toggled UI updated", ribbon_large);
@@ -819,6 +823,11 @@ MyFrame::MyFrame()
     s->Add(m_togglePanels, wxSizerFlags().Border());
 
     m_panel->SetSizer(s);
+
+    // ISSUE 1: select a page narrower than the tabs and make the frame as wide
+    // as the best size of the ribbon, which should be enough to show all tabs.
+    m_ribbon->SetActivePage(ui_updated_page);
+    SetClientSize(m_ribbon->GetBestSize().x, GetClientSize().y);
 
     wxSizer* frameSizer = new wxBoxSizer{ wxVERTICAL };
     frameSizer->Add(m_panel, wxSizerFlags{ 1 }.Expand());
@@ -1186,11 +1195,19 @@ void MyFrame::OnChangeText2(wxRibbonButtonBarEvent& WXUNUSED(evt))
 void MyFrame::OnEnable(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_bEnabled = true;
+
+    // ISSUE 5: enable a whole panel and gallery too.
+    m_toggle_panel->Enable();
+    m_secondary_gallery->Enable();
 }
 
 void MyFrame::OnDisable(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_bEnabled = false;
+
+    // ISSUE 5: disable a whole panel and gallery too.
+    m_toggle_panel->Disable();
+    m_secondary_gallery->Disable();
 }
 
 void MyFrame::OnDisabled(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -1560,7 +1577,12 @@ void MyFrame::OnMSWProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 void MyFrame::OnMSWFlatProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_ribbon->DismissExpandedPanel();
-    SetArtProvider(ID_MSW_FLAT_PROVIDER, new wxRibbonMSWFlatArtProvider);
+    // ISSUE 4: make the ribbon taller with this provider, like some custom
+    // providers do, by using a bigger font for the button labels.
+    wxRibbonArtProvider* prov = new wxRibbonMSWFlatArtProvider;
+    prov->SetFont(wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
+        prov->GetFont(wxRIBBON_ART_BUTTON_BAR_LABEL_FONT).Scaled(1.5f));
+    SetArtProvider(ID_MSW_FLAT_PROVIDER, prov);
 }
 
 void MyFrame::SetArtProvider(int button_id, wxRibbonArtProvider *prov)
