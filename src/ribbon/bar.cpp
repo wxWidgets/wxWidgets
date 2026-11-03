@@ -1295,17 +1295,13 @@ void wxRibbonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
-    // Recalculate tab sizes for new DPI
-    RecalculateTabSizes();
+    // Everything computed by the art provider depends on the DPI: not only
+    // the pages layout, but also the tab widths, the tab area height and the
+    // minimal size of the bar, so recompute all of them.
+    Realize();
 
-    // Realize all pages to update their layouts
-    size_t page_count = m_pages.GetCount();
-    for(size_t i = 0; i < page_count; ++i)
-    {
-        m_pages.Item(i).page->Realize();
-    }
-
-    // Reposition current page
+    // Reposition current page as the tab area height may have changed after
+    // it had been positioned by Realize().
     if(m_current_page != wxNOT_FOUND)
     {
         RepositionPage(m_pages.Item(m_current_page).page);
