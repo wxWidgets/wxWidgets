@@ -1,0 +1,1 @@
+All: Fix wxIPC on big endian platforms (Scott Talbert, #27301).
