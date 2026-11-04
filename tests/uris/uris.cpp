@@ -273,6 +273,12 @@ TEST_CASE("URI::IPv6", "[uri][ipv6]")
     URI_ASSERT_IPV6_TESTBAD("[::ffff:1.2.3a.4]");
     URI_ASSERT_IPV6_TESTBAD("[::ffff:1.2.3.4:123]");
     URI_ASSERT_IPV6_TESTBAD("[g:0:0:0:0:0:0]");
+
+    URI_ASSERT_HOST_TEST("http://[v1.fe80::a+en1]/path", "v1.fe80::a+en1", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TEST("http://[VF.x]/path", "VF.x", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v.x]/path", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v1]/path", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v1.]/path", wxURI_IPVFUTURE);
 }
 
 TEST_CASE("URI::Host", "[uri]")

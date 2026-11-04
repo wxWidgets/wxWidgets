@@ -1066,7 +1066,9 @@ bool wxURI::ParseIPv6address(const char*& uri)
 bool wxURI::ParseIPvFuture(const char*& uri)
 {
     // IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
-    if (*++uri != 'v' || !IsHex(*++uri))
+    //
+    // Note that "v" is case-insensitive, as all literal strings in ABNF.
+    if ((*uri != 'v' && *uri != 'V') || !IsHex(*++uri))
         return false;
 
     while (IsHex(*++uri))
