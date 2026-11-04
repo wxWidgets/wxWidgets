@@ -812,6 +812,13 @@ void wxSplitterWindow::SizeWindows()
     }
 
     RedrawSash();
+
+#ifdef __WXGTK3__
+    // When we're nested inside another splitter, its sash joins ours, see
+    // DrawNestedSashJoint() in wxRendererGTK, so it needs to be redrawn too.
+    if ( auto* const parent = wxDynamicCast(GetParent(), wxSplitterWindow) )
+        parent->RedrawSash();
+#endif // __WXGTK3__
 }
 
 // Set pane for unsplit window

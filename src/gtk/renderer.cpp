@@ -38,6 +38,10 @@
     #endif
 #endif
 
+#if wxUSE_SPLITTER
+    #include "wx/splitter.h"
+#endif
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/value.h"
@@ -415,6 +419,111 @@ wxRendererGTK::DrawSplitterBorder(wxWindow * WXUNUSED(win),
     // nothing to do
 }
 
+#ifdef __WXGTK3__
+
+namespace
+{
+
+void
+RenderSash(const wxDC& dc,
+           wxGTKDrawable* drawable,
+           const GdkRectangle& rect,
+           bool isVert,
+           int flags)
+{
+    wxGtkStyleContext sc(dc.GetContentScaleFactor());
+    sc.AddWindow();
+    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+
+    // Note that the orientation of GtkPaned is the opposite of that of its
+    // separator, i.e. a horizontal GtkPaned has a vertical sash, and that it
+    // must be specified for the theme to draw the separator correctly.
+    sc.Add(GTK_TYPE_PANED, "paned", "pane-separator",
+           isVert ? GTK_STYLE_CLASS_HORIZONTAL : GTK_STYLE_CLASS_VERTICAL,
+           nullptr);
+
+    // Our sash is wider than the normal GTK one, which is typically just 1px
+    // wide, so use the style of GtkPaned with "wide-handle" property set.
+    if (gtk_check_version(3,20,0) == nullptr)
+        sc.Add(G_TYPE_NONE, "separator", "wide", nullptr);
+
+    gtk_style_context_set_state(sc,
+        flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
+    gtk_render_handle(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+}
+
+#if wxUSE_SPLITTER
+
+// The sash of a splitter used as a pane of another splitter and split in the
+// perpendicular direction ends at the edge of the sash of its parent, which
+// is drawn as a line separating them. The nested splitter can't draw over this
+// line, as it's outside of its window, so its parent does it instead by
+// drawing the nested sash over it, resulting in a T-shaped joint.
+//
+// Note that wxSplitterWindow::SizeWindows() refreshes the parent sash to
+// update this joint when the nested sash changes.
+void
+DrawNestedSashJoint(const wxDC& dc,
+                    wxGTKDrawable* drawable,
+                    wxWindow* pane,
+                    bool isVert,
+                    int edge)
+{
+    const auto* const nested = wxDynamicCast(pane, wxSplitterWindow);
+    if ( !nested || !nested->IsSplit() || nested->IsSashInvisible() )
+        return;
+
+    if ( nested->GetSashPosition() == 0 )
+        return;
+
+    if ( nested->GetSplitMode() != (isVert ? wxSPLIT_HORIZONTAL
+                                           : wxSPLIT_VERTICAL) )
+        return;
+
+    const int size = nested->GetSashSize();
+    const wxPoint panePos = nested->GetPosition();
+
+    GdkRectangle clip, rect;
+    if ( isVert )
+    {
+        clip.x = edge;
+        clip.y = panePos.y + nested->GetSashPosition();
+        clip.width = 1;
+        clip.height = size;
+
+        rect = clip;
+        rect.x -= size;
+        rect.width += 2*size;
+    }
+    else // horz
+    {
+        clip.x = panePos.x + nested->GetSashPosition();
+        clip.y = edge;
+        clip.width = size;
+        clip.height = 1;
+
+        rect = clip;
+        rect.y -= size;
+        rect.height += 2*size;
+    }
+
+    // Draw a bigger part of the sash than we actually need, as what the theme
+    // draws may depend on the rectangle size, but only let 1px of it through.
+    cairo_save(drawable);
+    cairo_rectangle(drawable, clip.x, clip.y, clip.width, clip.height);
+    cairo_clip(drawable);
+
+    RenderSash(dc, drawable, rect, !isVert, 0);
+
+    cairo_restore(drawable);
+}
+
+#endif // wxUSE_SPLITTER
+
+} // anonymous namespace
+
+#endif // __WXGTK3__
+
 void
 wxRendererGTK::DrawSplitterSash(wxWindow* win,
                                 wxDC& dc,
@@ -457,25 +566,17 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
     }
 
 #ifdef __WXGTK3__
-    wxGtkStyleContext sc(dc.GetContentScaleFactor());
-    sc.AddWindow();
-    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+    RenderSash(dc, drawable, rect, isVert, flags);
 
-    // Note that the orientation of GtkPaned is the opposite of that of its
-    // separator, i.e. a horizontal GtkPaned has a vertical sash, and that it
-    // must be specified for the theme to draw the separator correctly.
-    sc.Add(GTK_TYPE_PANED, "paned", "pane-separator",
-           isVert ? GTK_STYLE_CLASS_HORIZONTAL : GTK_STYLE_CLASS_VERTICAL,
-           nullptr);
-
-    // Our sash is wider than the normal GTK one, which is typically just 1px
-    // wide, so use the style of GtkPaned with "wide-handle" property set.
-    if (gtk_check_version(3,20,0) == nullptr)
-        sc.Add(G_TYPE_NONE, "separator", "wide", nullptr);
-
-    gtk_style_context_set_state(sc,
-        flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
-    gtk_render_handle(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+#if wxUSE_SPLITTER
+    if ( auto* const splitter = wxDynamicCast(win, wxSplitterWindow) )
+    {
+        DrawNestedSashJoint(dc, drawable, splitter->GetWindow1(), isVert,
+                            position);
+        DrawNestedSashJoint(dc, drawable, splitter->GetWindow2(), isVert,
+                            position + full_size - 1);
+    }
+#endif // wxUSE_SPLITTER
 #else
     int x_diff = 0;
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
