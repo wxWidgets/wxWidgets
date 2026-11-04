@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
-"PO-Revision-Date: 2025-08-01 19:17+0200\n"
+"PO-Revision-Date: 2026-11-03 23:09+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language: sl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
 "n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.8\n"
 
 # generic/filedlgg.cpp:825
 #: ../include/wx/defs.h:2609
@@ -114,9 +114,9 @@ msgstr "Inicializacija OLE ni možna"
 
 # common/ffile.cpp:182
 #: ../include/wx/msw/private/fswatcher.h:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to finish cancelling the watch for '%s'"
-msgstr "Datoteki »%s« ni mogoče določiti opazovanja."
+msgstr "Ni mogoče dokončati preklica opazovanja »%s«"
 
 # generic/dirdlgg.cpp:550
 #: ../include/wx/msw/private/fswatcher.h:149
@@ -1460,9 +1460,9 @@ msgstr "ne morem izprazniti datoteke '%s'"
 
 # common/ffile.cpp:182
 #: ../src/common/ffile.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "failed to sync data of the file '%s'"
-msgstr "ne morem izprazniti datoteke '%s'"
+msgstr "usklajevanje podatkov datoteke »%s« je spodletelo"
 
 #: ../src/common/ffile.cpp:246
 #, c-format
@@ -1695,7 +1695,7 @@ msgstr "ni mogoče uzbrisati uporabniške datoteke '%s'"
 #: ../src/common/fileconf.cpp:1523
 #, c-format
 msgid "duplicate group '%s'"
-msgstr ""
+msgstr "podvoji skupino »%s«"
 
 # common/fileconf.cpp:1437
 #: ../src/common/fileconf.cpp:2014
@@ -1716,9 +1716,9 @@ msgstr "leva poševnica na koncu v »%s« prezrta"
 
 # common/fileconf.cpp:1557
 #: ../src/common/fileconf.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected \" at position %zu in '%s'."
-msgstr "nepričakovan \" na poziciji %d v '%s'."
+msgstr "nepričakovan \" na položaju %zu v »%s«."
 
 # common/ffile.cpp:182
 #: ../src/common/filefn.cpp:403
@@ -1758,9 +1758,9 @@ msgstr ""
 
 # common/filefn.cpp:1086
 #: ../src/common/filefn.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed to '%s'"
-msgstr "Datoteke »%s« ni mogoče preimenovati v »%s«."
+msgstr "Datoteke »%s« ni mogoče preimenovati v »%s«"
 
 # common/filefn.cpp:1086
 #: ../src/common/filefn.cpp:562
@@ -1838,7 +1838,7 @@ msgstr "Začasne datoteke ni mogoče odpreti."
 #: ../src/common/filename.cpp:1220
 #, c-format
 msgid "Error preserving all attributes of '%s'"
-msgstr ""
+msgstr "Napaka pri ohranjanju vseh atributov »%s«"
 
 # common/ffile.cpp:182
 #: ../src/common/filename.cpp:1234
@@ -1847,15 +1847,15 @@ msgstr "Neuspešno nastavljanje pravic za trenutno datoteko"
 
 # common/ffile.cpp:182
 #: ../src/common/filename.cpp:2786 ../src/common/filename.cpp:2793
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get attributes of '%s'"
-msgstr "'%s' ni mogoče izvesti\n"
+msgstr "Ni mogoče pridobiti atributov datoteke »%s«"
 
 # common/ffile.cpp:182
 #: ../src/common/filename.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set attributes of '%s'"
-msgstr "Zaklenjene datoteke »%s« ni mogoče pregledati."
+msgstr "Ni mogoče nastaviti atributov datoteke »%s«"
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -1864,9 +1864,9 @@ msgstr "Zaklenjene datoteke »%s« ni mogoče pregledati."
 # common/file.cpp:552
 # common/file.cpp:562
 #: ../src/common/filename.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get mode of '%s'"
-msgstr "Zaklenjene datoteke »%s« ni mogoče odstraniti."
+msgstr "Pridobivanje načina »%s« je spodletelo"
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -1875,9 +1875,9 @@ msgstr "Zaklenjene datoteke »%s« ni mogoče odstraniti."
 # common/file.cpp:552
 # common/file.cpp:562
 #: ../src/common/filename.cpp:2862
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set mode of '%s'"
-msgstr "Zaklenjene datoteke »%s« ni mogoče odstraniti."
+msgstr "Nastavitev načina »%s« je spodletela"
 
 # common/ffile.cpp:182
 #: ../src/common/filename.cpp:3031
@@ -2753,7 +2753,7 @@ msgstr "Ni mogoče inicializirati zgoščene tabele GIF."
 
 #: ../src/common/imaggif.cpp:565
 msgid "Image palette has too many colours to save as GIF."
-msgstr ""
+msgstr "Paleta slike ima preveč barv, da bi sliko lahko shranili kot GIF."
 
 #: ../src/common/imagiff.cpp:764
 msgid "IFF: error in IFF image format."
@@ -2918,9 +2918,8 @@ msgstr "WebP: Dekodiranje slikovnih podatkov RGB ni uspelo."
 
 # generic/dirdlgg.cpp:552
 #: ../src/common/imagwebp.cpp:112 ../src/common/imagwebp.cpp:197
-#, fuzzy
 msgid "WebP: Error reading data."
-msgstr "WebP: Napaka pri dekodiranju animacije."
+msgstr "WebP: Napaka pri branju podatkov."
 
 # msw/clipbrd.cpp:300
 #: ../src/common/imagwebp.cpp:130
@@ -4479,7 +4478,7 @@ msgstr "napaka preverjanja preizkusne vsote pri branju bloka glave tar"
 #: ../src/common/tarstrm.cpp:920
 #, c-format
 msgid "Extended tar header size %zu is greater than maximum allowed."
-msgstr ""
+msgstr "Velikost glave %zu razširjenega tar-a je večja od največje dovoljene."
 
 #: ../src/common/tarstrm.cpp:983
 msgid "invalid data in extended tar header"
@@ -6164,9 +6163,9 @@ msgstr "Nastavitev strani"
 
 # common/filefn.cpp:1086
 #: ../src/gtk/utilsgtk.cpp:347 ../src/osx/carbon/utilscocoa.mm:718
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' couldn't be moved to trash: %s"
-msgstr "Datoteke »%s« ni mogoče odstraniti."
+msgstr "»%s« ni možno premakniti v koš: %s"
 
 #: ../src/gtk/webview_webkit.cpp:936
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
@@ -7628,7 +7627,7 @@ msgstr "Izvajanje ukaza »%s« ni uspelo."
 #: ../src/msw/utilswin.cpp:203
 #, c-format
 msgid "'%s' couldn't be moved to trash: error 0x%08x"
-msgstr ""
+msgstr "»%s« ni možno premakniti v koš: napaka 0x%08x"
 
 # generic/dirdlgg.cpp:550
 #: ../src/msw/volume.cpp:337
@@ -7654,7 +7653,7 @@ msgstr "Ta program je bil preveden brez podpore za nastavitev posrednika Edge."
 
 #: ../src/msw/webview_edge.cpp:1545
 msgid "PDF export requires a newer version of the WebView2 runtime."
-msgstr ""
+msgstr "Izvoz v PDF zahteva novejšo različico izvajalnega programa WebView2."
 
 #: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to find web view emulation level in the registry"
@@ -8288,133 +8287,123 @@ msgstr "&Tlakuj"
 
 # generic/helpwxht.cpp:157
 #: ../src/ribbon/backstage.cpp:110
-#, fuzzy
 msgid "Backstage"
-msgstr "Vračalka"
+msgstr "Zaodrje"
 
 #: ../src/ribbon/backstage.cpp:176 ../src/ribbon/backstagecontrols.cpp:91
 #: ../src/ribbon/bar.cpp:179 ../src/ribbon/buttonbar.cpp:1980
 #: ../src/ribbon/gallery.cpp:1320 ../src/ribbon/panel.cpp:1460
 #: ../src/ribbon/toolbar.cpp:1641
-#, fuzzy
 msgid "Press"
-msgstr "Napredek:"
+msgstr "Pritisni"
 
 # generic/logg.cpp:473
 # generic/logg.cpp:774
 #: ../src/ribbon/backstagecontrols.cpp:844
-#, fuzzy
 msgid "Open"
-msgstr "Odpri ..."
+msgstr "Odpri"
 
 #: ../src/ribbon/backstagecontrols.cpp:1469
-#, fuzzy
 msgid "Today"
-msgstr "danes"
+msgstr "Danes"
 
 #: ../src/ribbon/backstagecontrols.cpp:1471
-#, fuzzy
 msgid "Yesterday"
-msgstr "včeraj"
+msgstr "Včeraj"
 
 #: ../src/ribbon/backstagecontrols.cpp:1473
 msgid "This Week"
-msgstr ""
+msgstr "Ta teden"
 
 # html/helpfrm.cpp:515
 #: ../src/ribbon/backstagecontrols.cpp:1475
-#, fuzzy
 msgid "Last Week"
-msgstr "Zadnja stran"
+msgstr "Prejšnji teden"
 
 #: ../src/ribbon/backstagecontrols.cpp:1477
 msgid "Earlier This Month"
-msgstr ""
+msgstr "Prej ta mesec"
 
 #: ../src/ribbon/backstagecontrols.cpp:1480
 msgid "Older"
-msgstr ""
+msgstr "Starejše"
 
 #: ../src/ribbon/backstagecontrols.cpp:1520
-#, fuzzy
 msgid "Documents"
-msgstr "Dokument:"
+msgstr "Dokumenti"
 
 #: ../src/ribbon/backstagecontrols.cpp:1522
-#, fuzzy
 msgid "Pictures"
-msgstr "&Slika"
+msgstr "Slike"
 
 #: ../src/ribbon/backstagecontrols.cpp:1523
 msgid "Videos"
-msgstr ""
+msgstr "Videoposnetki"
 
 #: ../src/ribbon/backstagecontrols.cpp:1524
 msgid "Music"
-msgstr ""
+msgstr "Glasba"
 
 # html/htmlwin.cpp:216
 #: ../src/ribbon/backstagecontrols.cpp:1525
-#, fuzzy
 msgid "Downloads"
-msgstr "Dol"
+msgstr "Prejemi"
 
 #: ../src/ribbon/backstagecontrols.cpp:1594
 msgid "Just now"
-msgstr ""
+msgstr "Ravnokar"
 
 #: ../src/ribbon/backstagecontrols.cpp:1602
 #, c-format
 msgid "%d minute ago"
 msgid_plural "%d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Pred %d minutami"
+msgstr[1] "Pred %d minuto"
+msgstr[2] "Pred %d minutama"
+msgstr[3] "Pred %d minutami"
 
 #: ../src/ribbon/backstagecontrols.cpp:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Yesterday at %s"
-msgstr "včeraj"
+msgstr "Včeraj ob %s"
 
 #: ../src/ribbon/backstagecontrols.cpp:1614
 #, c-format
 msgid "%s at %s"
-msgstr ""
+msgstr "%s ob %s"
 
 #. TRANSLATORS: Month (abbreviated) and day of the month (e.g., "Mar 03").
 #: ../src/ribbon/backstagecontrols.cpp:1621
 #, c-format
 msgid "%b %d"
-msgstr ""
+msgstr "%b %d"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Minimize the Ribbon"
-msgstr ""
+msgstr "Pomanjšaj trak"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Expand the Ribbon"
-msgstr ""
+msgstr "Razširi trak"
 
 #: ../src/ribbon/gallery.cpp:1286
 msgid "More"
-msgstr ""
+msgstr "Dodatno"
 
 #: ../src/ribbon/page.cpp:1354 ../src/ribbon/panel.cpp:1453
 msgid "Switch"
-msgstr ""
+msgstr "Preklopi"
 
 # generic/prntdlgg.cpp:149
 #: ../src/ribbon/panel.cpp:1421
-#, fuzzy
 msgid "More options"
-msgstr "Možnosti tiskalnika"
+msgstr "Dodatne možnosti"
 
 # generic/prntdlgg.cpp:149
 #: ../src/ribbon/panel.cpp:1422
-#, fuzzy, c-format
+#, c-format
 msgid "More %s options"
-msgstr "Možnosti tiskalnika"
+msgstr "Dodatne možnosti %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -9239,7 +9228,7 @@ msgstr "Zamenjaj"
 
 #: ../src/richtext/richtextctrl.cpp:5663
 msgid "Rich Text Control"
-msgstr ""
+msgstr "Kontrolnik obogatenega besedila"
 
 # html/helpfrm.cpp:899
 #: ../src/richtext/richtextfontpage.cpp:146
@@ -10525,7 +10514,7 @@ msgstr "Ni mogoče pridobiti dogodkov iz kqueue"
 #: ../src/unix/glegl.cpp:833
 #, c-format
 msgid "EGL version is %d.%d but version 1.4 or greater is required."
-msgstr ""
+msgstr "Različica EGL je %d.%d, toda zahtevana je različica 1.4 ali novejša."
 
 #: ../src/unix/mediactrl.cpp:968
 #, c-format
@@ -10684,9 +10673,9 @@ msgstr ""
 
 # generic/dirdlgg.cpp:550
 #: ../src/unix/threadpsx.cpp:1348
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %zu"
-msgstr "Ravni sočasnosti niti ni bilo mogoče nastaviti na %lu."
+msgstr "Ravni sočasnosti niti ni bilo mogoče nastaviti na %zu"
 
 # generic/dirdlgg.cpp:550
 #: ../src/unix/threadpsx.cpp:1477
@@ -10746,14 +10735,14 @@ msgstr "Imena uradnega gostitelja ni mogoče dobiti"
 #: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
-msgstr ""
+msgstr ", temelji na %s (%s)"
 
 #. TRANSLATORS: %s is a Linux distribution parent name.
 #. TRANSLATORS: %s is an upstream codename.
 #: ../src/unix/utilsunx.cpp:1318 ../src/unix/utilsunx.cpp:1324
-#, fuzzy, c-format
+#, c-format
 msgid ", based on %s"
-msgstr "&Temelji na:"
+msgstr ", temelji na %s"
 
 # msw/statbr95.cpp:149
 #: ../src/unix/wakeuppipe.cpp:49
@@ -10824,21 +10813,3 @@ msgstr "Ni mogoče naložiti virov iz datoteke »%s«."
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Ustvarjanje %s »%s« ni uspelo."
-
-# common/ffile.cpp:182
-#, c-format
-#~ msgid "Unable to close the handle for '%s'"
-#~ msgstr "Datotečne ročice za »%s« ni mogoče zapreti."
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-# common/file.cpp:552
-# common/file.cpp:562
-#, c-format
-#~ msgid "can't remove file '%s'"
-#~ msgstr "ni mogoče odstraniti datoteke '%s'"
-
-#~ msgid "WebP: Allocating stream buffer failed."
-#~ msgstr "WebP: Dodeljevanje medpomnilnika toka ni uspelo."
