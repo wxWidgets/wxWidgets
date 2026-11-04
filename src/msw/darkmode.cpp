@@ -347,6 +347,8 @@ bool wxApp::MSWEnableDarkMode(DarkMode flags, wxDarkModeSettings* settings)
     wxWindow* topWindow = GetTopWindow();
     if ( topWindow != nullptr )
         ::SendMessage(topWindow->GetHWND(), WM_SYSCOLORCHANGE, 0, 0);
+    else // Otherwise just update dark mode status.
+        wxMSWDarkMode::NotifySysColorChange();
 
     return true;
 }
