@@ -544,6 +544,18 @@ TEST_CASE("URI::FileScheme", "[uri]")
     //file: variety
     URI_ASSERT_PATH_EQUAL( "file:e:/wxcode/script1.xml",
                     "e:/wxcode/script1.xml" );
+
+    // All of them must be rebuilt in their original form.
+    URI_ASSERT_EQUAL( "file://e:/wxcode/script1.xml",
+                      "file://e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:///e:/wxcode/script1.xml",
+                      "file:///e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:/e:/wxcode/script1.xml",
+                      "file:/e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:e:/wxcode/script1.xml",
+                      "file:e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file://server#fragment", "file://server#fragment" );
+    URI_ASSERT_EQUAL( "file:///tmp/a b", "file:///tmp/a%20b" );
 }
 
 #if TEST_URL

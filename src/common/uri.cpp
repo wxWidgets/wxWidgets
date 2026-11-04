@@ -33,6 +33,11 @@
 
 wxIMPLEMENT_CLASS(wxURI, wxObject);
 
+// Private flag used in m_fields in addition to wxURIFieldType values: it is set
+// for the file URIs containing "//" which is not followed by the server (this
+// uses a high bit to avoid clashes with any values added to the enum later).
+static constexpr unsigned wxURI_FILE_SLASHES = 0x8000;
+
 // ===========================================================================
 // wxURI implementation
 // ===========================================================================
@@ -244,6 +249,12 @@ wxString wxURI::DoBuildURI(wxString (*funcDecode)(const wxString&)) const
         if (HasPort())
             ret += ":" + m_port;
     }
+    else if ( m_fields & wxURI_FILE_SLASHES )
+    {
+        // Preserve the slashes not followed by the server in the file URIs,
+        // see ParseAuthority().
+        ret += "//";
+    }
 
     ret += funcDecode(m_path);
 
@@ -441,6 +452,11 @@ const char* wxURI::ParseAuthority(const char* uri)
             uri = uristart;
             m_server.erase();
             m_fields &= ~wxURI_SERVER;
+
+            // But remember that we had them to be able to rebuild the URI
+            // in its original form.
+            if ( leadswithdoubleslash )
+                m_fields |= wxURI_FILE_SLASHES;
         }
     }
     else if(leadswithdoubleslash)
