@@ -692,6 +692,13 @@ public:
 
     /**
         Returns the URL stored by this object, as a string.
+
+        Note that under wxGTK, if the data was received in "text/uri-list"
+        format, which allows specifying multiple URLs, the returned string
+        may contain several URLs separated by line breaks (normally CR LF,
+        but some applications use just LF). Comment lines are removed from
+        it since wxWidgets 3.3.5, but the URLs themselves are returned as is,
+        i.e. without decoding their percent-encoded characters.
     */
     wxString GetURL() const;
 

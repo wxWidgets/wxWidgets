@@ -117,7 +117,99 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
     wxURLDataObject dobj2;
     REQUIRE( wxTheClipboard->GetData(dobj2) );
     CHECK( dobj2.GetURL() == url );
+
+#ifdef __WXGTK__
+    // This corresponds to "text/uri-list" used by wxURLDataObject in wxGTK.
+    const wxDataFormat formatURIList(wxDF_FILENAME);
+
+    // The data must not include the trailing NUL.
+    wxURLDataObject dobjURL(url);
+    REQUIRE( dobjURL.GetDataSize(formatURIList) == strlen(url) );
+
+    // When getting the data, comments must be skipped, but all URIs kept and
+    // not decoded.
+    const std::string uri = "https://example.org/a%20b/%C3%BC?q=%25";
+
+    const auto setURIList = [&](const std::string& data)
+    {
+        INFO( "Data: \"" << data << "\"" );
+
+        REQUIRE( dobjURL.SetData(formatURIList, data.length(), data.c_str()) );
+        return dobjURL.GetURL();
+    };
+
+    CHECK( setURIList(uri) == uri );
+    CHECK( setURIList(uri + '\0') == uri );
+    CHECK( setURIList(uri + "\n") == uri );
+    CHECK( setURIList(uri + "\r\n") == uri );
+    CHECK( setURIList("# comment\r\n" + uri + "\r\n") == uri );
+    CHECK( setURIList("#\n" + uri + "\n# another one") == uri );
+    CHECK( setURIList(uri + "\r\n# comment\r\nhttps://other/\r\n") ==
+           uri + "\r\nhttps://other/" );
+    CHECK( setURIList("# only a comment\r\n") == "" );
+
+    // Characters not allowed in URIs must be encoded, but the existing escapes
+    // must be preserved (notice that wxURI uses lower case hex digits for the
+    // escapes it adds).
+    const auto getURIList = [&](const wxString& url)
+    {
+        INFO( "URL: \"" << url << "\"" );
+
+        dobjURL.SetURL(url);
+
+        std::string buf(dobjURL.GetDataSize(formatURIList), '\0');
+        REQUIRE( dobjURL.GetDataHere(formatURIList, &buf[0]) );
+        return buf;
+    };
+
+    const wxString iri = wxString::FromUTF8("https://example.org/a b/\xc3\xbc?q=%25");
+    const std::string uriEncoded = "https://example.org/a%20b/%c3%bc?q=%25";
+    CHECK( getURIList(iri) == uriEncoded );
+    CHECK( dobjURL.GetURL() == iri );
+    CHECK( getURIList(uri) == uri );
+
+    // Multiple URIs must be encoded separately and remain separated by the
+    // same line breaks.
+    CHECK( getURIList(iri + "\r\nhttps://other/x y") ==
+           uriEncoded + "\r\nhttps://other/x%20y" );
+    CHECK( getURIList(iri + "\nhttps://other/") == uriEncoded + "\nhttps://other/" );
+
+    // And the strings which can't be parsed as URIs must be kept unchanged.
+    CHECK( getURIList("http://host:abc/x y") == "http://host:abc/x y" );
+#endif // __WXGTK__
 }
+
+#ifdef __WXGTK__
+
+TEST_CASE("GUI::FileDataObject", "[guifuncs][clipboard]")
+{
+    wxFileDataObject* const dobj = new wxFileDataObject();
+    dobj->AddFile("/tmp/foo bar.txt");
+    dobj->AddFile("/tmp/baz.txt");
+
+    // The data must not include the trailing NUL.
+    const std::string
+        data("file:///tmp/foo%20bar.txt\r\nfile:///tmp/baz.txt\r\n");
+    REQUIRE( dobj->GetDataSize() == data.length() );
+
+    std::string buf(data.length(), '\0');
+    REQUIRE( dobj->GetDataHere(&buf[0]) );
+    CHECK( buf == data );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxFileDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+
+    const wxArrayString& files = dobj2.GetFilenames();
+    REQUIRE( files.size() == 2 );
+    CHECK( files[0] == "/tmp/foo bar.txt" );
+    CHECK( files[1] == "/tmp/baz.txt" );
+}
+
+#endif // __WXGTK__
 
 TEST_CASE("GUI::HTMLDataObject", "[guifuncs][clipboard]")
 {
