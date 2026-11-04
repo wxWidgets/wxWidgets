@@ -125,6 +125,28 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
     // The data must not include the trailing NUL.
     wxURLDataObject dobjURL(url);
     REQUIRE( dobjURL.GetDataSize(formatURIList) == strlen(url) );
+
+    // When getting the data, comments must be skipped, but all URIs kept and
+    // not decoded.
+    const std::string uri = "https://example.org/a%20b/%C3%BC?q=%25";
+
+    const auto setURIList = [&](const std::string& data)
+    {
+        INFO( "Data: \"" << data << "\"" );
+
+        REQUIRE( dobjURL.SetData(formatURIList, data.length(), data.c_str()) );
+        return dobjURL.GetURL();
+    };
+
+    CHECK( setURIList(uri) == uri );
+    CHECK( setURIList(uri + '\0') == uri );
+    CHECK( setURIList(uri + "\n") == uri );
+    CHECK( setURIList(uri + "\r\n") == uri );
+    CHECK( setURIList("# comment\r\n" + uri + "\r\n") == uri );
+    CHECK( setURIList("#\n" + uri + "\n# another one") == uri );
+    CHECK( setURIList(uri + "\r\n# comment\r\nhttps://other/\r\n") ==
+           uri + "\r\nhttps://other/" );
+    CHECK( setURIList("# only a comment\r\n") == "" );
 #endif // __WXGTK__
 }
 

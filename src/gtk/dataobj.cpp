@@ -483,17 +483,41 @@ public:
         if ( len > 0 && src[len - 1] == '\0' )
             len--;
 
+        // The data is a list of URIs, one per line, which may also contain
+        // comment lines starting with "#" (see RFC 2483), which we remove.
+        //
+        // Notice that we keep all the URIs, even if there is more than one of
+        // them, as the existing code could rely on getting all of them, and
+        // that we don't decode them, as percent-encoding is part of the URI
+        // and decoding it could change its meaning.
+        std::string data;
+        data.reserve(len);
+
+        for ( size_t pos = 0; pos < len; )
+        {
+            const void* const eol = memchr(src + pos, '\n', len - pos);
+            const size_t posNext = eol
+                                    ? static_cast<const char*>(eol) - src + 1
+                                    : len;
+
+            if ( src[pos] != '#' )
+                data.append(src + pos, posNext - pos);
+
+            pos = posNext;
+        }
+
         // The string might be "\r\n"-terminated but this is not necessarily
         // the case (e.g. when dragging an URL from Firefox, it isn't).
-        if ( len > 1 && src[len - 1] == '\n' )
+        len = data.length();
+        if ( len > 1 && data[len - 1] == '\n' )
         {
-            if ( len > 2 && src[len - 2] == '\r' )
+            if ( len > 2 && data[len - 2] == '\r' )
                 len--;
 
             len--;
         }
 
-        m_url = wxString::FromUTF8(src, len);
+        m_url = wxString::FromUTF8(data.c_str(), len);
 
         return true;
     }
