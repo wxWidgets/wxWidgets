@@ -131,7 +131,7 @@ IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, "ColourPicker",
 
 ColourPickerWidgetsPage::ColourPickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_ColourPicker)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::ColourPicker)
 {
 }
 

@@ -757,17 +757,18 @@ const struct
 
 wxBitmapBundle CreateWidgetsIconBundle(WidgetsIcon icon)
 {
-    static_assert(WXSIZEOF(gs_icons) == WidgetsIcon_Max, "icons table size mismatch");
+    static_assert(WXSIZEOF(gs_icons) == static_cast<size_t>(WidgetsIcon::Max),
+                  "icons table size mismatch");
 
-    wxCHECK_MSG( icon >= 0 && icon < WidgetsIcon_Max, wxBitmapBundle(),
-                 "invalid icon" );
+    const size_t n = static_cast<size_t>(icon);
+    wxCHECK_MSG( n < WXSIZEOF(gs_icons), wxBitmapBundle(), "invalid icon" );
 
     const wxSize size(16, 16);
 
     return wxBitmapBundle::FromImpl(new LightDarkBundleImpl
                                     (
-                                        wxBitmapBundle::FromSVG(gs_icons[icon].light, size),
-                                        wxBitmapBundle::FromSVG(gs_icons[icon].dark, size)
+                                        wxBitmapBundle::FromSVG(gs_icons[n].light, size),
+                                        wxBitmapBundle::FromSVG(gs_icons[n].dark, size)
                                     ));
 }
 
@@ -847,12 +848,13 @@ const char* const* const gs_icons[] =
 
 wxBitmapBundle CreateWidgetsIconBundle(WidgetsIcon icon)
 {
-    static_assert(WXSIZEOF(gs_icons) == WidgetsIcon_Max, "icons table size mismatch");
+    static_assert(WXSIZEOF(gs_icons) == static_cast<size_t>(WidgetsIcon::Max),
+                  "icons table size mismatch");
 
-    wxCHECK_MSG( icon >= 0 && icon < WidgetsIcon_Max, wxBitmapBundle(),
-                 "invalid icon" );
+    const size_t n = static_cast<size_t>(icon);
+    wxCHECK_MSG( n < WXSIZEOF(gs_icons), wxBitmapBundle(), "invalid icon" );
 
-    return WidgetsPage::CreateBitmapBundle(gs_icons[icon]);
+    return WidgetsPage::CreateBitmapBundle(gs_icons[n]);
 }
 
 #endif // wxHAS_SVG/!wxHAS_SVG
@@ -896,9 +898,11 @@ const char* GetWidgetsIconName(WidgetsIcon icon)
         "ToggleButton",
     };
 
-    static_assert(WXSIZEOF(s_names) == WidgetsIcon_Max, "icon names size mismatch");
+    static_assert(WXSIZEOF(s_names) == static_cast<size_t>(WidgetsIcon::Max),
+                  "icon names size mismatch");
 
-    wxCHECK_MSG( icon >= 0 && icon < WidgetsIcon_Max, "", "invalid icon" );
+    const size_t n = static_cast<size_t>(icon);
+    wxCHECK_MSG( n < WXSIZEOF(s_names), "", "invalid icon" );
 
-    return s_names[icon];
+    return s_names[n];
 }

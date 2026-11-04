@@ -281,7 +281,7 @@ private:
     WidgetsBookCtrl *m_book;
 
     // the images used by the book(s)
-    wxVector<wxBitmapBundle> m_images;
+    std::vector<wxBitmapBundle> m_images;
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();

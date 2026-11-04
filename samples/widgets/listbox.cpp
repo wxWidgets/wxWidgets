@@ -245,7 +245,7 @@ IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, "Listbox",
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_ListBox)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::ListBox)
 {
     // init everything
     m_radioSelMode = nullptr;

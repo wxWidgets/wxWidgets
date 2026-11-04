@@ -49,7 +49,7 @@ class HeaderCtrlWidgetsPage : public WidgetsPage
 {
 public:
     HeaderCtrlWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : WidgetsPage(book, imaglist, WidgetsIcon_Header)
+        : WidgetsPage(book, imaglist, WidgetsIcon::Header)
     {
         m_header = nullptr;
         m_sizerHeader = nullptr;

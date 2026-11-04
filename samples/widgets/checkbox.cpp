@@ -154,7 +154,7 @@ IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, "CheckBox", FAMILY_CTRLS );
 
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_CheckBox)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::CheckBox)
 {
 }
 

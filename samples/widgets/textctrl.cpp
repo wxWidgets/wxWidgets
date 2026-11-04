@@ -371,7 +371,7 @@ IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, "Text",
 // ----------------------------------------------------------------------------
 
 TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-               : WidgetsPage(book, imaglist, WidgetsIcon_Text)
+               : WidgetsPage(book, imaglist, WidgetsIcon::Text)
 {
     // init everything
 #ifdef __WXMSW__

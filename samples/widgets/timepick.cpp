@@ -120,7 +120,7 @@ IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, "TimePicker",
 
 TimePickerWidgetsPage::TimePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                     : WidgetsPage(book, imaglist, WidgetsIcon_TimePicker)
+                     : WidgetsPage(book, imaglist, WidgetsIcon::TimePicker)
 {
 }
 

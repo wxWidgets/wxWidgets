@@ -300,7 +300,7 @@ IMPLEMENT_WIDGETS_PAGE(ODComboboxWidgetsPage, "OwnerDrawnCombobox",
 
 ODComboboxWidgetsPage::ODComboboxWidgetsPage(WidgetsBookCtrl *book,
                                              wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_ODComboBox)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::ODComboBox)
 {
     // init everything
     m_chkSort =

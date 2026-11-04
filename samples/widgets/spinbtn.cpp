@@ -219,7 +219,7 @@ IMPLEMENT_WIDGETS_PAGE(SpinBtnWidgetsPage, "Spin",
 
 SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_SpinButton)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::SpinButton)
 {
     m_chkVert = nullptr;
     m_chkArrowKeys = nullptr;

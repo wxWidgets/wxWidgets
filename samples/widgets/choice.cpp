@@ -179,7 +179,7 @@ IMPLEMENT_WIDGETS_PAGE(ChoiceWidgetsPage, "Choice",
 
 ChoiceWidgetsPage::ChoiceWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_Choice)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::Choice)
 {
     // init everything
 

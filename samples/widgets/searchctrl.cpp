@@ -136,7 +136,7 @@ IMPLEMENT_WIDGETS_PAGE(SearchCtrlWidgetsPage, "SearchCtrl",
 
 SearchCtrlWidgetsPage::SearchCtrlWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_Text)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::Text)
 {
 }
 

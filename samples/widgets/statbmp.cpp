@@ -46,7 +46,7 @@ class StatBmpWidgetsPage : public WidgetsPage
 {
 public:
     StatBmpWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : WidgetsPage(book, imaglist, WidgetsIcon_StaticBitmap) {}
+        : WidgetsPage(book, imaglist, WidgetsIcon::StaticBitmap) {}
 
     virtual void CreateContent() override;
     virtual wxWindow *GetWidget() const override { return m_statbmp; }

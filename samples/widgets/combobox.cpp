@@ -236,7 +236,7 @@ IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, "Combobox",
 
 ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_ComboBox)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::ComboBox)
 {
     // init everything
     m_chkSort =

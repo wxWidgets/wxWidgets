@@ -250,7 +250,7 @@ IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, "Slider", FAMILY_CTRLS );
 
 SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_Slider)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::Slider)
 {
     // init everything
     m_min = 0;

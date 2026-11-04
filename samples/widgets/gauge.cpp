@@ -175,7 +175,7 @@ IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, "Gauge", FAMILY_CTRLS );
 
 GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
                                    wxVector<wxBitmapBundle>& imaglist)
-                 :WidgetsPage(book, imaglist, WidgetsIcon_Gauge)
+                 :WidgetsPage(book, imaglist, WidgetsIcon::Gauge)
 {
     // init everything
     m_range = 100;

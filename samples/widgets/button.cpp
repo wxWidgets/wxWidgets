@@ -204,7 +204,7 @@ IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, "Button", FAMILY_CTRLS );
 
 ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_Button)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::Button)
 {
     // init everything
     m_chkBitmapOnly =

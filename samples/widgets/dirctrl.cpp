@@ -165,7 +165,7 @@ IMPLEMENT_WIDGETS_PAGE(DirCtrlWidgetsPage, "DirCtrl",
 
 DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                   :WidgetsPage(book, imaglist, WidgetsIcon_DirCtrl)
+                   :WidgetsPage(book, imaglist, WidgetsIcon::DirCtrl)
 {
     m_dirCtrl = nullptr;
 }

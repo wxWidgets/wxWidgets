@@ -274,7 +274,7 @@ private:
 IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, "Native", NATIVE_CTRLS);
 
 NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-                 : WidgetsPage(book, imaglist, WidgetsIcon_Native)
+                 : WidgetsPage(book, imaglist, WidgetsIcon::Native)
 {
     m_nativeWindow = nullptr;
 }

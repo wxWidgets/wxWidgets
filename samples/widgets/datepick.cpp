@@ -139,7 +139,7 @@ IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, "DatePicker",
 
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                      :WidgetsPage(book, imaglist, WidgetsIcon_DatePicker)
+                      :WidgetsPage(book, imaglist, WidgetsIcon::DatePicker)
 {
 }
 

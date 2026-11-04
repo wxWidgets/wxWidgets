@@ -531,7 +531,7 @@ class NotebookWidgetsPage : public BookWidgetsPage
 {
 public:
     NotebookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : BookWidgetsPage(book, imaglist, WidgetsIcon_Notebook)
+        : BookWidgetsPage(book, imaglist, WidgetsIcon::Notebook)
     {
         RecreateBook();
     }
@@ -609,7 +609,7 @@ class ListbookWidgetsPage : public BookWidgetsPage
 {
 public:
     ListbookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : BookWidgetsPage(book, imaglist, WidgetsIcon_Listbook)
+        : BookWidgetsPage(book, imaglist, WidgetsIcon::Listbook)
     {
         RecreateBook();
     }
@@ -681,7 +681,7 @@ class ChoicebookWidgetsPage : public BookWidgetsPage
 {
 public:
     ChoicebookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : BookWidgetsPage(book, imaglist, WidgetsIcon_Choicebook)
+        : BookWidgetsPage(book, imaglist, WidgetsIcon::Choicebook)
     {
         RecreateBook();
     }

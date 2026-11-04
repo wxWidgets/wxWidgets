@@ -173,7 +173,7 @@ IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, "Radio",
 
 RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                                    wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_RadioBox)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::RadioBox)
 {
     // init everything
     m_chkSpecifyRows = nullptr;

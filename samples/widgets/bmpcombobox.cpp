@@ -249,7 +249,7 @@ IMPLEMENT_WIDGETS_PAGE(BitmapComboBoxWidgetsPage, "BitmapCombobox",
 
 BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
                                              wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon_BmpComboBox)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::BmpComboBox)
 {
     // init everything
     m_chkSort =
@@ -674,7 +674,7 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
     // Use the same icons as for the pages of the sample: they are rendered
     // directly in the required size from SVG if it's supported, otherwise the
     // XPM images are rescaled to it.
-    for ( int i = 0; i < WidgetsIcon_Max; i++ )
+    for ( int i = 0; i < static_cast<int>(WidgetsIcon::Max); i++ )
     {
         const WidgetsIcon icon = static_cast<WidgetsIcon>(i);
 

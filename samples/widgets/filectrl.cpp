@@ -144,7 +144,7 @@ IMPLEMENT_WIDGETS_PAGE( FileCtrlWidgetsPage, "FileCtrl",
 
 FileCtrlWidgetsPage::FileCtrlWidgetsPage( WidgetsBookCtrl *book,
         wxVector<wxBitmapBundle>& imaglist )
-        : WidgetsPage( book, imaglist, WidgetsIcon_DirCtrl )
+        : WidgetsPage( book, imaglist, WidgetsIcon::DirCtrl )
 {
 }
 

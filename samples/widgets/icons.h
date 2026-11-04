@@ -14,38 +14,38 @@
 #include "wx/bmpbndl.h"
 
 // All the icons used for the pages of the sample.
-enum WidgetsIcon
+enum class WidgetsIcon
 {
-    WidgetsIcon_ActivityIndicator,
-    WidgetsIcon_BmpComboBox,
-    WidgetsIcon_Button,
-    WidgetsIcon_CheckBox,
-    WidgetsIcon_Choice,
-    WidgetsIcon_Choicebook,
-    WidgetsIcon_ColourPicker,
-    WidgetsIcon_ComboBox,
-    WidgetsIcon_DatePicker,
-    WidgetsIcon_DirCtrl,
-    WidgetsIcon_DirPicker,
-    WidgetsIcon_FilePicker,
-    WidgetsIcon_FontPicker,
-    WidgetsIcon_Gauge,
-    WidgetsIcon_Header,
-    WidgetsIcon_Hyperlink,
-    WidgetsIcon_Listbook,
-    WidgetsIcon_ListBox,
-    WidgetsIcon_Native,
-    WidgetsIcon_Notebook,
-    WidgetsIcon_ODComboBox,
-    WidgetsIcon_RadioBox,
-    WidgetsIcon_Slider,
-    WidgetsIcon_SpinButton,
-    WidgetsIcon_StaticBitmap,
-    WidgetsIcon_StaticBox,
-    WidgetsIcon_Text,
-    WidgetsIcon_TimePicker,
-    WidgetsIcon_ToggleButton,
-    WidgetsIcon_Max
+    ActivityIndicator,
+    BmpComboBox,
+    Button,
+    CheckBox,
+    Choice,
+    Choicebook,
+    ColourPicker,
+    ComboBox,
+    DatePicker,
+    DirCtrl,
+    DirPicker,
+    FilePicker,
+    FontPicker,
+    Gauge,
+    Header,
+    Hyperlink,
+    Listbook,
+    ListBox,
+    Native,
+    Notebook,
+    ODComboBox,
+    RadioBox,
+    Slider,
+    SpinButton,
+    StaticBitmap,
+    StaticBox,
+    Text,
+    TimePicker,
+    ToggleButton,
+    Max
 };
 
 // Return the bundle for the given icon of the default size of 16x16.
@@ -59,7 +59,7 @@ enum WidgetsIcon
 // If SVG support is not available, the bundle uses the XPM version of the icon.
 wxBitmapBundle CreateWidgetsIconBundle(WidgetsIcon icon);
 
-// Return the name of the icon, e.g. "Button" for WidgetsIcon_Button.
+// Return the name of the icon, e.g. "Button" for WidgetsIcon::Button.
 const char* GetWidgetsIconName(WidgetsIcon icon);
 
 #endif // _WX_SAMPLE_WIDGETS_ICONS_H_

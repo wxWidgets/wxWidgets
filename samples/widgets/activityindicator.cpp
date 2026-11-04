@@ -54,7 +54,7 @@ class ActivityIndicatorWidgetsPage : public WidgetsPage
 {
 public:
     ActivityIndicatorWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-        : WidgetsPage(book, imaglist, WidgetsIcon_ActivityIndicator)
+        : WidgetsPage(book, imaglist, WidgetsIcon::ActivityIndicator)
     {
         m_indicator = nullptr;
         m_sizerIndicator = nullptr;

@@ -150,7 +150,7 @@ IMPLEMENT_WIDGETS_PAGE(HyperlinkWidgetsPage, "Hyperlink",
 
 HyperlinkWidgetsPage::HyperlinkWidgetsPage(WidgetsBookCtrl *book,
                                            wxVector<wxBitmapBundle>& imaglist)
-                     :WidgetsPage(book, imaglist, WidgetsIcon_Hyperlink)
+                     :WidgetsPage(book, imaglist, WidgetsIcon::Hyperlink)
 {
 }
 

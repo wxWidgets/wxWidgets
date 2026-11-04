@@ -182,7 +182,7 @@ IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, "Static",
 
 StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_StaticBox)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::StaticBox)
 {
     // init everything
     m_chkVert =

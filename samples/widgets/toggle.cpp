@@ -183,7 +183,7 @@ IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, "ToggleButton",
 
 ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                      :WidgetsPage(book, imaglist, WidgetsIcon_ToggleButton)
+                      :WidgetsPage(book, imaglist, WidgetsIcon::ToggleButton)
 {
     m_chkFit =
     m_chkDisable = nullptr;

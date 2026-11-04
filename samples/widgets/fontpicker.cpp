@@ -126,7 +126,7 @@ IMPLEMENT_WIDGETS_PAGE(FontPickerWidgetsPage, "FontPicker",
 
 FontPickerWidgetsPage::FontPickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_FontPicker)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::FontPicker)
 {
 }
 

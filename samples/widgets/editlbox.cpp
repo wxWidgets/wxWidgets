@@ -114,7 +114,7 @@ IMPLEMENT_WIDGETS_PAGE(EditableListboxWidgetsPage, "EditableListbox", GENERIC_CT
 
 EditableListboxWidgetsPage::EditableListboxWidgetsPage(WidgetsBookCtrl *book,
                                                        wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_ListBox)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::ListBox)
 {
 
 }

@@ -152,7 +152,7 @@ IMPLEMENT_WIDGETS_PAGE(FilePickerWidgetsPage, "FilePicker",
 
 FilePickerWidgetsPage::FilePickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, WidgetsIcon_FilePicker)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::FilePicker)
 {
 }
 
