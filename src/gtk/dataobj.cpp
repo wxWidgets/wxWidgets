@@ -462,14 +462,14 @@ public:
         //
         // Note that trailing NUL definitely must not be included, as it would
         // become part of the data for the other applications otherwise.
-        return m_url.utf8_str().length();
+        return GetURI().length();
     }
 
     virtual bool GetDataHere(void *buf) const override
     {
-        const wxScopedCharBuffer url = m_url.utf8_str();
+        const std::string uri = GetURI();
 
-        memcpy(buf, url.data(), url.length());
+        memcpy(buf, uri.data(), uri.length());
 
         return true;
     }
@@ -537,6 +537,44 @@ public:
     }
 
 private:
+    // Return the URL converted to a valid URI by percent-encoding all the
+    // characters not allowed in URIs, without changing the URIs which are
+    // already valid.
+    //
+    // If there are several URLs separated by line breaks, they are converted
+    // separately and the line breaks are kept as is.
+    std::string GetURI() const
+    {
+        wxString uris;
+
+        for ( size_t pos = 0;; )
+        {
+            const size_t posEOL = m_url.find('\n', pos);
+
+            size_t posEnd = posEOL == wxString::npos ? m_url.length() : posEOL;
+            if ( posEnd > pos && m_url[posEnd - 1] == '\r' )
+                posEnd--;
+
+            // Note that we must check that the URL could be parsed, as
+            // otherwise BuildURI() would lose its part after the parsing
+            // error, and just keep it unchanged in this case.
+            const wxString url = m_url.substr(pos, posEnd - pos);
+
+            wxURI uri;
+            uris += uri.Create(url) ? uri.BuildURI() : url;
+
+            if ( posEOL == wxString::npos )
+                break;
+
+            // Append the line break, possibly including "\r", too.
+            uris += m_url.substr(posEnd, posEOL + 1 - posEnd);
+
+            pos = posEOL + 1;
+        }
+
+        return uris.utf8_string();
+    }
+
     wxString m_url;
 };
 

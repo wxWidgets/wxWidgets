@@ -147,6 +147,35 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
     CHECK( setURIList(uri + "\r\n# comment\r\nhttps://other/\r\n") ==
            uri + "\r\nhttps://other/" );
     CHECK( setURIList("# only a comment\r\n") == "" );
+
+    // Characters not allowed in URIs must be encoded, but the existing escapes
+    // must be preserved (notice that wxURI uses lower case hex digits for the
+    // escapes it adds).
+    const auto getURIList = [&](const wxString& url)
+    {
+        INFO( "URL: \"" << url << "\"" );
+
+        dobjURL.SetURL(url);
+
+        std::string buf(dobjURL.GetDataSize(formatURIList), '\0');
+        REQUIRE( dobjURL.GetDataHere(formatURIList, &buf[0]) );
+        return buf;
+    };
+
+    const wxString iri = wxString::FromUTF8("https://example.org/a b/\xc3\xbc?q=%25");
+    const std::string uriEncoded = "https://example.org/a%20b/%c3%bc?q=%25";
+    CHECK( getURIList(iri) == uriEncoded );
+    CHECK( dobjURL.GetURL() == iri );
+    CHECK( getURIList(uri) == uri );
+
+    // Multiple URIs must be encoded separately and remain separated by the
+    // same line breaks.
+    CHECK( getURIList(iri + "\r\nhttps://other/x y") ==
+           uriEncoded + "\r\nhttps://other/x%20y" );
+    CHECK( getURIList(iri + "\nhttps://other/") == uriEncoded + "\nhttps://other/" );
+
+    // And the strings which can't be parsed as URIs must be kept unchanged.
+    CHECK( getURIList("http://host:abc/x y") == "http://host:abc/x y" );
 #endif // __WXGTK__
 }
 
