@@ -128,6 +128,38 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
 #endif // __WXGTK__
 }
 
+#ifdef __WXGTK__
+
+TEST_CASE("GUI::FileDataObject", "[guifuncs][clipboard]")
+{
+    wxFileDataObject* const dobj = new wxFileDataObject();
+    dobj->AddFile("/tmp/foo bar.txt");
+    dobj->AddFile("/tmp/baz.txt");
+
+    // The data must not include the trailing NUL.
+    const std::string
+        data("file:///tmp/foo%20bar.txt\r\nfile:///tmp/baz.txt\r\n");
+    REQUIRE( dobj->GetDataSize() == data.length() );
+
+    std::string buf(data.length(), '\0');
+    REQUIRE( dobj->GetDataHere(&buf[0]) );
+    CHECK( buf == data );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxFileDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+
+    const wxArrayString& files = dobj2.GetFilenames();
+    REQUIRE( files.size() == 2 );
+    CHECK( files[0] == "/tmp/foo bar.txt" );
+    CHECK( files[1] == "/tmp/baz.txt" );
+}
+
+#endif // __WXGTK__
+
 TEST_CASE("GUI::HTMLDataObject", "[guifuncs][clipboard]")
 {
     const wxString text("<h1>Hello clipboard!</h1>");

@@ -267,7 +267,6 @@ bool wxFileDataObject::GetDataHere(void *buf) const
             *(out++) = '\n';
         }
     }
-    *out = 0;
 
     return true;
 }
@@ -285,15 +284,16 @@ size_t wxFileDataObject::GetDataSize() const
         }
     }
 
-    return res + 1;
+    // Note that trailing NUL must not be included, as it would become part of
+    // the data for the other applications otherwise.
+    return res;
 }
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
     // we get data in the text/uri-list format, i.e. as a sequence of URIs
-    // (filenames prefixed by "file:") delimited by "\r\n". size includes
-    // the trailing zero (in theory, not for Nautilus in early GNOME
-    // versions).
+    // (filenames prefixed by "file:") delimited by "\r\n". size doesn't
+    // include the trailing NUL, but we don't need it as GTK always adds one
 
     m_filenames.Empty();
 
