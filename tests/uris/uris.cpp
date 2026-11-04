@@ -40,6 +40,7 @@
         INFO(DumpURI(u)); \
         CHECK(u.GetServer() == expectedhost); \
         CHECK(u.GetHostType() == expectedtype); \
+        CHECK(u.BuildURI() == uri); \
     wxSTATEMENT_MACRO_END
 
 #define URI_ASSERT_HOST_TESTBAD(uri, ne) \

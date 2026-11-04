@@ -223,10 +223,23 @@ wxString wxURI::DoBuildURI(wxString (*funcDecode)(const wxString&)) const
         if (HasUserInfo())
             ret += funcDecode(m_userinfo) + "@";
 
-        if (m_hostType == wxURI_REGNAME)
-            ret += funcDecode(m_server);
-        else
-            ret += m_server;
+        switch ( m_hostType )
+        {
+            case wxURI_REGNAME:
+                ret += funcDecode(m_server);
+                break;
+
+            case wxURI_IPV4ADDRESS:
+                ret += m_server;
+                break;
+
+            case wxURI_IPV6ADDRESS:
+            case wxURI_IPVFUTURE:
+                // IP literals must be enclosed in brackets, which are not
+                // stored in m_server.
+                ret += "[" + m_server + "]";
+                break;
+        }
 
         if (HasPort())
             ret += ":" + m_port;
