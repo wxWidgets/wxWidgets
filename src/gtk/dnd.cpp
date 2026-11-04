@@ -952,7 +952,9 @@ void wxDropSource::GTKConnectDragSignals()
         // at least allow DoDragDrop() to finish.
         g_signal_connect(m_widget, "button-press-event", G_CALLBACK(wx_gtk_mouse_event), this);
         g_signal_connect(m_widget, "button-release-event", G_CALLBACK(wx_gtk_mouse_event), this);
-        g_signal_connect(m_widget, "motion-notify-event", G_CALLBACK(wx_gtk_mouse_event), this);
+        // Catching motion events interrupts most drag'n'drop operations
+        // on my system Ubuntu 26.04.1 LTS
+        // g_signal_connect(m_widget, "motion-notify-event", G_CALLBACK(wx_gtk_mouse_event), this);
     }
 #endif
 }
