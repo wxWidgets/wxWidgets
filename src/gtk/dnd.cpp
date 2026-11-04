@@ -950,9 +950,10 @@ void wxDropSource::GTKConnectDragSignals()
         // Something can apparently go wrong under Wayland, and the
         // "drag-end" event never happens. This is a work-around to
         // at least allow DoDragDrop() to finish.
+        // Extraneous motion events have been seen at the start of the drag,
+        // so don't use motion events to end the drag.
         g_signal_connect(m_widget, "button-press-event", G_CALLBACK(wx_gtk_mouse_event), this);
         g_signal_connect(m_widget, "button-release-event", G_CALLBACK(wx_gtk_mouse_event), this);
-        g_signal_connect(m_widget, "motion-notify-event", G_CALLBACK(wx_gtk_mouse_event), this);
     }
 #endif
 }
