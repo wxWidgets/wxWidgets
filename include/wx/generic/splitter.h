@@ -284,6 +284,9 @@ protected:
     // redraw the splitter if its "hotness" changed if necessary
     void RedrawIfHotSensitive(bool isHot);
 
+    // Redraw the sash immediately if possible or schedule doing it otherwise.
+    void RedrawSash();
+
     // return the best size of the splitter equal to best sizes of its
     // subwindows
     virtual wxSize DoGetBestSize() const override;
