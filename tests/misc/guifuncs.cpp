@@ -117,6 +117,15 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
     wxURLDataObject dobj2;
     REQUIRE( wxTheClipboard->GetData(dobj2) );
     CHECK( dobj2.GetURL() == url );
+
+#ifdef __WXGTK__
+    // This corresponds to "text/uri-list" used by wxURLDataObject in wxGTK.
+    const wxDataFormat formatURIList(wxDF_FILENAME);
+
+    // The data must not include the trailing NUL.
+    wxURLDataObject dobjURL(url);
+    REQUIRE( dobjURL.GetDataSize(formatURIList) == strlen(url) );
+#endif // __WXGTK__
 }
 
 TEST_CASE("GUI::HTMLDataObject", "[guifuncs][clipboard]")

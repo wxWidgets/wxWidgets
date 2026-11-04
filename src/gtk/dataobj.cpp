@@ -459,14 +459,17 @@ public:
         // It is not totally clear whether we should include "\r\n" at the end
         // of the string if there is only one URL or not, but not doing it
         // doesn't seem to create any problems, so keep things simple.
-        return strlen(m_url.utf8_str()) + 1;
+        //
+        // Note that trailing NUL definitely must not be included, as it would
+        // become part of the data for the other applications otherwise.
+        return m_url.utf8_str().length();
     }
 
     virtual bool GetDataHere(void *buf) const override
     {
-        char* const dst = static_cast<char*>(buf);
+        const wxScopedCharBuffer url = m_url.utf8_str();
 
-        strcpy(dst, m_url.utf8_str());
+        memcpy(buf, url.data(), url.length());
 
         return true;
     }
@@ -475,11 +478,10 @@ public:
     {
         const char* const src = static_cast<const char*>(buf);
 
-        // Length here includes the trailing NUL, but we don't want to include
-        // it into the string contents.
-        wxCHECK_MSG( len != 0 && !src[len], false, "must have trailing NUL" );
-
-        len--;
+        // Length here normally doesn't include the trailing NUL, but it was
+        // included by wxGTK itself in the past, so ignore it if it's present.
+        if ( len > 0 && src[len - 1] == '\0' )
+            len--;
 
         // The string might be "\r\n"-terminated but this is not necessarily
         // the case (e.g. when dragging an URL from Firefox, it isn't).
