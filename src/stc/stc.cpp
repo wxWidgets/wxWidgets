@@ -6111,7 +6111,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLexerVersionInfo()
 {
-    return wxVersionInfo("Lexilla", 5, 5, 4, "Lexilla 5.5.4");
+    return wxVersionInfo("Lexilla", 5, 5, 5, "Lexilla 5.5.5");
 }
 
 

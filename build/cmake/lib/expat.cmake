@@ -55,6 +55,7 @@ if(wxUSE_EXPAT STREQUAL "builtin")
         src/expat/expat/lib/random_getentropy.c
         src/expat/expat/lib/random_getrandom.c
         src/expat/expat/lib/random_rand_s.c
+        src/expat/expat/lib/xcs.c
         src/expat/expat/lib/xmlparse.c
         src/expat/expat/lib/xmlrole.c
         src/expat/expat/lib/xmltok.c
