@@ -348,6 +348,7 @@ WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_random_getentropy.o \
 	$(OBJS)\wxexpat_random_getrandom.o \
 	$(OBJS)\wxexpat_random_rand_s.o \
+	$(OBJS)\wxexpat_xcs.o \
 	$(OBJS)\wxexpat_xmlparse.o \
 	$(OBJS)\wxexpat_xmlrole.o \
 	$(OBJS)\wxexpat_xmltok.o
@@ -7214,6 +7215,9 @@ $(OBJS)\wxexpat_random_getrandom.o: ../../src/expat/expat/lib/random_getrandom.c
 	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxexpat_random_rand_s.o: ../../src/expat/expat/lib/random_rand_s.c
+	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxexpat_xcs.o: ../../src/expat/expat/lib/xcs.c
 	$(CC) -c -o $@ $(WXEXPAT_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxexpat_xmlparse.o: ../../src/expat/expat/lib/xmlparse.c

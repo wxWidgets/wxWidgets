@@ -734,6 +734,7 @@
     <ClCompile Include="..\..\src\expat\expat\lib\random_getentropy.c" />
     <ClCompile Include="..\..\src\expat\expat\lib\random_getrandom.c" />
     <ClCompile Include="..\..\src\expat\expat\lib\random_rand_s.c" />
+    <ClCompile Include="..\..\src\expat\expat\lib\xcs.c" />
     <ClCompile Include="..\..\src\expat\expat\lib\xmlparse.c" />
     <ClCompile Include="..\..\src\expat\expat\lib\xmlrole.c" />
     <ClCompile Include="..\..\src\expat\expat\lib\xmltok.c" />
