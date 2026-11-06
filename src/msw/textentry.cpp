@@ -28,11 +28,13 @@
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
+#include "wx/module.h"
 #include "wx/textentry.h"
 #include "wx/textcompleter.h"
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
@@ -441,6 +443,15 @@ public:
         }
 
         m_win->Bind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+
+        if ( !ms_eventHook )
+        {
+            // Register the hook regardless of whether dark mode is active in
+            // order to handle switching modes.
+            ms_eventHook = SetWinEventHook(EVENT_OBJECT_SHOW, EVENT_OBJECT_SHOW,
+                nullptr, wxMSWImpl::AutoCompleteEventProc, GetCurrentProcessId(),
+                GetCurrentThreadId(), WINEVENT_OUTOFCONTEXT);
+        }
     }
 
     ~wxTextAutoCompleteData()
@@ -524,6 +535,9 @@ public:
         // then we'd need to call Enable(TRUE) to turn it on back again later.
         ChangeStrings(wxArrayString());
     }
+
+    // Event hook used for dark mode support.
+    static HWINEVENTHOOK ms_eventHook;
 
 private:
     // Must be called after changing the values to be returned by wxIEnumString
@@ -634,9 +648,10 @@ private:
     // Initially false, set to true after connecting OnTextChanged() handler.
     bool m_connectedCharEvent;
 
-
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
+
+HWINEVENTHOOK wxTextAutoCompleteData::ms_eventHook = nullptr;
 
 // Special pointer value which indicates that we're using SHAutoComplete().
 static wxTextAutoCompleteData* const wxDUMMY_SHAUTOCOMPLETE_DATA =
@@ -1042,5 +1057,24 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
                 wxWindow::MSWClickButtonIfPossible(
                     wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
 }
+
+class wxTextEntryModule: public wxModule
+{
+public:
+    bool OnInit() override
+    {
+        return true;
+    }
+
+    void OnExit() override
+    {
+        if ( wxTextAutoCompleteData::ms_eventHook )
+            UnhookWinEvent(wxTextAutoCompleteData::ms_eventHook);
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxTextEntryModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextEntryModule, wxModule);
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX
