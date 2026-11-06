@@ -74,6 +74,7 @@ WIDGETS_OBJECTS =  \
 	widgets_gauge.o \
 	widgets_headerctrl.o \
 	widgets_hyperlnk.o \
+	widgets_icons.o \
 	widgets_itemcontainer.o \
 	widgets_listbox.o \
 	$(__NATIVE_OBJCPP_SRC_OBJECTS) \
@@ -282,6 +283,9 @@ widgets_headerctrl.o: $(srcdir)/headerctrl.cpp
 
 widgets_hyperlnk.o: $(srcdir)/hyperlnk.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/hyperlnk.cpp
+
+widgets_icons.o: $(srcdir)/icons.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/icons.cpp
 
 widgets_itemcontainer.o: $(srcdir)/itemcontainer.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/itemcontainer.cpp

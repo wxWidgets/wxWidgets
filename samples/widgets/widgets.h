@@ -47,6 +47,8 @@ class WidgetsPageInfo;
 #include "wx/scrolwin.h"
 #include "wx/vector.h"
 
+#include "icons.h"
+
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
 enum
 {
@@ -122,7 +124,7 @@ class WidgetsPage : public wxScrolledWindow
 public:
     WidgetsPage(WidgetsBookCtrl *book,
                 wxVector<wxBitmapBundle>& imaglist,
-                const char *const icon[]);
+                WidgetsIcon icon);
 
     // return the control shown by this page
     virtual wxWindow *GetWidget() const = 0;

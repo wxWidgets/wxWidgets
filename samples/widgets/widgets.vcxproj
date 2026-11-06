@@ -456,6 +456,7 @@
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="headerctrl.cpp" />
     <ClCompile Include="hyperlnk.cpp" />
+    <ClCompile Include="icons.cpp" />
     <ClCompile Include="itemcontainer.cpp" />
     <ClCompile Include="listbox.cpp" />
     <ClCompile Include="native.cpp" />
