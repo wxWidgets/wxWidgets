@@ -641,8 +641,7 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     {
 #ifdef __WXGTK3__
         //TODO: wxBORDER_RAISED/wxBORDER_SUNKEN
-        GtkStyleContext*
-            sc = gtk_widget_get_style_context(wxGTKPrivate::GetEntryWidget());
+        GtkStyleContext* const sc = wxPizza::get_border_style_context();
 
         gtk_render_frame(sc, cr, x, y, w, h);
 #else // !__WXGTK3__
