@@ -1569,6 +1569,20 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
         }
         break;
 
+    case 0x00000bc0: // newstream in IMediaPlayer
+        // This event is sent when the media has been successfully opened.
+        //
+        // Notice that we can't rely on readystatechange for IMediaPlayer:
+        // for local files and HTTP streams it goes directly from loading to
+        // complete, skipping the interactive state, and it also changes to
+        // complete when opening the media fails, before reporting the error.
+        if(!m_bLoadEventSent)
+        {
+            m_bLoadEventSent = true;
+            m_amb->FinishLoad();
+        }
+        break;
+
     case 0xfffffd9f: // readystatechange in IActiveMovie2 and IMediaPlayer
         if(event.ParamCount() >= 1)
         {
@@ -1580,7 +1594,10 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             // size of the video (will error) - however on 4
             // it won't play on downloaded things until it is
             // completely downloaded so we use the lesser of two evils...
+            //
+            // IMediaPlayer uses newstream event instead, see above.
             else if(event[0].GetInteger() == 3 &&
+                !m_amb->GetMP() &&
                 !m_bLoadEventSent)
             {
                 m_bLoadEventSent = true;
