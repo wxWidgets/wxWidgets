@@ -536,7 +536,7 @@ if(wxUSE_GUI)
             set(OPENGL_INCLUDE_DIR "")
             set(OPENGL_LIBRARIES "-framework OpenGLES" "-framework QuartzCore" "-framework GLKit")
         else()
-            find_package(OpenGL)
+            find_package(OpenGL COMPONENTS OpenGL)
             set(OPENGL_LIBRARIES) # reset and only use the OpenGL:: targets
             if(OpenGL_FOUND)
                 foreach(gltarget OpenGL::GL OpenGL::OpenGL)
