@@ -816,12 +816,8 @@ void wxRibbonGallery::OnSysColourChanged(wxSysColourChangedEvent& event)
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id)
 {
     wxASSERT(bitmap.IsOk());
-    if(m_items.IsEmpty())
-    {
-        m_bitmap_size = bitmap.GetDefaultSize();
-        CalculateMinSize();
-    }
-    else
+    const bool first = m_items.IsEmpty();
+    if(!first)
     {
         wxASSERT(bitmap.GetDefaultSize() == m_bitmap_size);
     }
@@ -830,6 +826,12 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
     item->SetId(id);
     item->SetBitmap(bitmap);
     m_items.Add(item);
+
+    if(first)
+    {
+        m_bitmap_size = bitmap.GetDefaultSize();
+        CalculateMinSize();
+    }
     return item;
 }
 
@@ -912,7 +914,13 @@ void wxRibbonGallery::CalculateMinSize()
     }
     else
     {
-        m_bitmap_padded_size = m_bitmap_size;
+        // Use the size of the bitmaps drawn in this window, which is not the
+        // default size of the bitmap bundles at DPI scaling other than 100%,
+        // and not necessarily the default size scaled by the DPI scale
+        // factor, e.g. when the bundle contains a single bitmap.
+        m_bitmap_padded_size = m_items.IsEmpty()
+            ? FromDIP(m_bitmap_size)
+            : m_items.Item(0)->GetBitmapBundle().GetPreferredLogicalSizeFor(this);
         m_bitmap_padded_size.IncBy(
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE) +
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE),
