@@ -20,6 +20,8 @@
 
 #include "wx/string.h"
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
@@ -153,6 +155,28 @@ TEST_CASE("NonBMPCharPrintf", "[wxString][Printf][vararg]")
     // UTF-16 indexing the string gives a lone surrogate.
     if ( expected.length() == 1 )
         CHECK( wxString::Format("[%c]", expected[0]) == "[" + expected + "]" );
+}
+
+TEST_CASE("PositionalArgOverflow", "[wxString][Printf][vararg]")
+{
+    // A positional argument number is taken directly from the format string
+    // and so may be larger than the maximum number of arguments the format
+    // parser can handle (wxMAX_SVNPRINTF_ARGUMENTS). Such a value used to be
+    // used to index the parser's fixed-size internal arrays without any bounds
+    // check, writing past their end.
+    //
+    // Parse the format string through wxFormatString, which exercises the
+    // parser directly: we deliberately avoid wxString::Format() here as that
+    // would also pass the invalid format string on to the underlying printf(),
+    // whose handling of an out-of-range positional index is platform-specific.
+    wxFormatString fmt("%100$d");
+
+    // Validate() runs the parser in debug builds and must not overflow.
+    fmt.Validate(std::vector<int>{ wxFormatString::Arg_Int });
+
+    // The out-of-range specifier is simply dropped, so the first argument is
+    // reported as unused rather than being found.
+    CHECK( fmt.GetArgumentType(1) == wxFormatString::Arg_Unused );
 }
 
 TEST_CASE("SizetPrintf", "[wxString][Printf][vararg]")
