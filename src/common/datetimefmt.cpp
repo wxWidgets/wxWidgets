@@ -1366,9 +1366,9 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case wxT('r'):       // time as %I:%M:%S %p
                 {
-                    wxDateTime dt;
-                    if ( !dt.ParseFormat(wxString(input, end),
-                                         wxS("%I:%M:%S %p"), &input) )
+                    const wxDateTime
+                        dt = ParseFormatAt(input, end, wxS("%I:%M:%S %p"));
+                    if ( !dt.IsValid() )
                         return false;
 
                     haveHour = haveMin = haveSec = true;

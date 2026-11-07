@@ -815,6 +815,34 @@ TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
         CHECK( dt.GetDay() == 23 );
     }
 
+    SECTION("%r")
+    {
+        // The %r handler used to leave the parsing position dangling into a
+        // destroyed temporary string, so continuing to parse the rest of the
+        // format after it (here "%Y") read freed memory.
+        //
+        // Note that %r includes %p, so we need to use the AM/PM strings of the
+        // current locale and can't test it at all if it doesn't define them.
+        wxString am, pm;
+        wxDateTime::GetAmPmStrings(&am, &pm);
+        if ( am.empty() || pm.empty() )
+        {
+            WARN("Skipping %r test: no AM/PM strings in the current locale.");
+            return;
+        }
+
+        REQUIRE( dt.ParseFormat("01:02:03 " + pm + " 2020", "%r %Y") );
+        CHECK( dt.GetHour() == 13 );
+        CHECK( dt.GetMinute() == 2 );
+        CHECK( dt.GetSecond() == 3 );
+        CHECK( dt.GetYear() == 2020 );
+
+        REQUIRE( dt.ParseFormat("07:08:09 " + am, "%r") );
+        CHECK( dt.GetHour() == 7 );
+        CHECK( dt.GetMinute() == 8 );
+        CHECK( dt.GetSecond() == 9 );
+    }
+
     SECTION("%-")
     {
         REQUIRE( dt.ParseFormat("17.5.2024", "%-d.%-m.%Y") );
