@@ -291,8 +291,9 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
     // Iterate over all icons searching for the exact match or the closest icon
     // for FALLBACK_NEAREST_LARGER.
     wxIcon iconBest;
-    int bestDiff = 0;
-    bool bestIsLarger = false;
+    wxIcon iconBestSmaller;
+    int bestDiff = INT_MAX;
+    int bestDiffSmaller = INT_MAX;
     bool bestIsSystem = false;
 
     for ( const wxIcon& icon : M_ICONBUNDLEDATA->m_icons )
@@ -324,21 +325,30 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
             bool iconLarger = (sx >= sizeX) && (sy >= sizeY);
             int iconDiff = abs(sx - sizeX) + abs(sy - sizeY);
 
-            // Use current icon as candidate for the best icon, if either:
-            // - we have no candidate yet
-            // - we have no candidate larger than desired size and current icon is
-            // - current icon is closer to desired size than candidate
-            if ( !iconBest.IsOk() ||
-                    (!bestIsLarger && iconLarger) ||
-                        (iconLarger && (iconDiff < bestDiff)) )
+            // Keep track of the closest icon, both larger and smaller.
+            if ( iconLarger )
             {
-                iconBest = icon;
-                bestIsLarger = iconLarger;
-                bestDiff = iconDiff;
-                continue;
+                if ( bestDiff > iconDiff )
+                {
+                    iconBest = icon;
+                    bestDiff = iconDiff;
+                }
+            }
+            else
+            {
+                if ( bestDiffSmaller > iconDiff )
+                {
+                    iconBestSmaller = icon;
+                    bestDiffSmaller = iconDiff;
+                }
             }
         }
     }
+
+    // If there is no matching or larger icon, fall back to the closest
+    // smaller icon.
+    if ( !iconBest.IsOk() && (flags & FALLBACK_NEAREST_LARGER) )
+        iconBest = iconBestSmaller;
 
     return iconBest;
 }
