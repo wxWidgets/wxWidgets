@@ -185,6 +185,7 @@ public:
     bool FocusNextItem(bool forward) override;
     void ClearFocusedItem() override;
     void ActivateFocusedItem(bool dropdown = false) override;
+    void OnEnabledStateChanged() override;
 
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
@@ -202,6 +203,7 @@ protected:
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void ResetHoverState();
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);

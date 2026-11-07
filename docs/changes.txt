@@ -180,6 +180,11 @@ Changes in behaviour not resulting in compilation errors
   focus from keyboard now don't accept focus themselves. If you need them to do
   it, call EnableFocusFromKeyboard() on them explicitly.
 
+- wxRibbonGallery::GetUpButtonState(), GetDownButtonState() and
+  GetExtensionButtonState() now return wxRIBBON_GALLERY_BUTTON_DISABLED when
+  the gallery or one of its parents is disabled, so that the art providers
+  draw these buttons as disabled.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

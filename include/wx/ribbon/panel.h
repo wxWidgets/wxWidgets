@@ -100,6 +100,7 @@ public:
     bool FocusLastItem() override;
     void ClearFocusedItem() override;
     void ActivateFocusedItem(bool dropdown = false) override;
+    void OnEnabledStateChanged() override;
 
     // Implementation only: appends the controls of this panel which can be
     // navigated to with the keyboard, in navigation order.

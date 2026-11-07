@@ -105,6 +105,53 @@ bool wxRibbonControl::Realize()
     return true;
 }
 
+// wxWindowBase::NotifyWindowOnEnableChange() calls DoEnable() for all the
+// children only in the ports which don't manage their enabled state natively.
+#if !defined(__WXMSW__) && !defined(__WXOSX__)
+namespace
+{
+
+void NotifyChildrenEnabledStateChanged(wxWindow* win)
+{
+    for ( wxWindow* child : win->GetChildren() )
+    {
+        if ( child->IsTopLevel() )
+            continue;
+
+        if ( wxRibbonControl* control = wxDynamicCast(child, wxRibbonControl) )
+            control->OnEnabledStateChanged();
+
+        NotifyChildrenEnabledStateChanged(child);
+    }
+}
+
+} // anonymous namespace
+#endif // !__WXMSW__ && !__WXOSX__
+
+void wxRibbonControl::DoEnable(bool enable)
+{
+    wxControl::DoEnable(enable);
+
+    OnEnabledStateChanged();
+
+#if !defined(__WXMSW__) && !defined(__WXOSX__)
+    NotifyChildrenEnabledStateChanged(this);
+#endif
+}
+
+void wxRibbonControl::OnEnabledStateChanged()
+{
+    if ( !IsEnabled() )
+    {
+        ClearFocusedItem();
+
+        if ( wxRibbonBar* bar = GetAncestorRibbonBar() )
+            bar->ClearPageFocusIn(this);
+    }
+
+    Refresh(false);
+}
+
 wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
 {
     for ( wxWindow* win = GetParent(); win; win = win->GetParent() )

@@ -87,6 +87,7 @@ public:
     bool FocusItemInDirection(wxDirection direction) override;
     void ClearFocusedItem() override;
     void ActivateFocusedItem(bool dropdown = false) override;
+    void OnEnabledStateChanged() override;
 
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
@@ -107,6 +108,7 @@ protected:
     void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void ResetHoverState();
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
     void OnMouseDClick(wxMouseEvent& evt);
