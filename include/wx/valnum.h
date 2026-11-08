@@ -250,9 +250,12 @@ protected:
         LongestValueType value;
         if ( !BaseValidator::FromString(s, &value) )
         {
-            // We don't have any valid number at all, just arbitrarily decide
-            // to return the minimum value.
-            value = static_cast<LongestValueType>(m_min);
+            // We don't have any valid number at all, so use 0 if it's valid
+            // or, if it isn't, the limit of the range closest to it.
+            if ( this->IsInRange(0) )
+                value = 0;
+            else
+                value = static_cast<LongestValueType>(m_min > 0 ? m_min : m_max);
         }
         else if ( !this->IsInRange(value) )
         {

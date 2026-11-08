@@ -180,6 +180,8 @@ Changes in behaviour not resulting in compilation errors
   focus from keyboard now don't accept focus themselves. If you need them to do
   it, call EnableFocusFromKeyboard() on them explicitly.
 
+- Numeric validators now replace invalid input, including empty text, with 0
+  on focus loss if it is in their range instead of using the range minimum.
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
