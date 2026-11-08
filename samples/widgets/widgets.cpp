@@ -1214,7 +1214,7 @@ void WidgetsFrame::DoUseCustomAutoComplete(size_t minLength)
 
                 ~LogCompletions()
                 {
-                    wxLogMessage("Returning %lu possible completions for "
+                    wxLogMessage("Returning %zu possible completions for "
                                  "prefix \"%s\"",
                                  m_res.size(), m_prefix);
                 }
