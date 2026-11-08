@@ -448,6 +448,16 @@ public:
 
     ~wxTextAutoCompleteData()
     {
+        // This object can be deleted while the window still exists, e.g. when
+        // switching to file names completion, so ensure that our handlers are
+        // not called any longer.
+        m_win->Unbind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+        if ( m_connectedCharEvent )
+        {
+            m_win->Unbind(wxEVT_AFTER_CHAR,
+                          &wxTextAutoCompleteData::OnAfterChar, this);
+        }
+
         delete m_customCompleter;
         delete m_fixedCompleter;
 
@@ -492,7 +502,8 @@ public:
         {
             // We postpone connecting to this event until we really need to do
             // it (however we don't disconnect from it when we don't need it
-            // any more because we don't have wxUNBIND_OR_DISCONNECT_HACK...).
+            // any more, as OnAfterChar() doesn't do anything then anyhow, and
+            // only do it in our dtor).
             if ( !m_connectedCharEvent )
             {
                 m_connectedCharEvent = true;
