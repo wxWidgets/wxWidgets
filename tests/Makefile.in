@@ -178,6 +178,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_graphbitmap.o \
 	test_gui_graphmatrix.o \
 	test_gui_graphpath.o \
+	test_gui_iconbundle.o \
 	test_gui_imagelist.o \
 	test_gui_config.o \
 	test_gui_auitest.o \
@@ -967,6 +968,9 @@ test_gui_graphmatrix.o: $(srcdir)/graphics/graphmatrix.cpp $(TEST_GUI_ODEP)
 
 test_gui_graphpath.o: $(srcdir)/graphics/graphpath.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/graphpath.cpp
+
+test_gui_iconbundle.o: $(srcdir)/graphics/iconbundle.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/iconbundle.cpp
 
 test_gui_imagelist.o: $(srcdir)/graphics/imagelist.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/imagelist.cpp

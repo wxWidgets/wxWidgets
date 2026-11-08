@@ -30,6 +30,7 @@ set(TEST_GUI_SRC
     graphics/graphbitmap.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
+    graphics/iconbundle.cpp
     graphics/imagelist.cpp
     config/config.cpp
     controls/auitest.cpp

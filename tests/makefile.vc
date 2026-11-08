@@ -159,6 +159,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_graphbitmap.obj \
 	$(OBJS)\test_gui_graphmatrix.obj \
 	$(OBJS)\test_gui_graphpath.obj \
+	$(OBJS)\test_gui_iconbundle.obj \
 	$(OBJS)\test_gui_imagelist.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_auitest.obj \
@@ -1171,6 +1172,9 @@ $(OBJS)\test_gui_graphmatrix.obj: .\graphics\graphmatrix.cpp
 
 $(OBJS)\test_gui_graphpath.obj: .\graphics\graphpath.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\graphpath.cpp
+
+$(OBJS)\test_gui_iconbundle.obj: .\graphics\iconbundle.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\iconbundle.cpp
 
 $(OBJS)\test_gui_imagelist.obj: .\graphics\imagelist.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\imagelist.cpp
