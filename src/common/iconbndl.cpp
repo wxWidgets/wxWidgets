@@ -258,6 +258,11 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
 {
     wxASSERT( size == wxDefaultSize || (size.x >= 0 && size.y > 0) );
 
+    // Note that calling this function on an empty bundle is explicitly
+    // allowed and just returns an invalid icon.
+    if ( IsEmpty() )
+        return wxNullIcon;
+
     // We need the standard system icon size when using FALLBACK_SYSTEM.
     wxCoord sysX = 0,
             sysY = 0;
