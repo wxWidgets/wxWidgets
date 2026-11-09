@@ -155,6 +155,18 @@ TEST_CASE("NonBMPCharPrintf", "[wxString][Printf][vararg]")
         CHECK( wxString::Format("[%c]", expected[0]) == "[" + expected + "]" );
 }
 
+TEST_CASE("PositionalArgOverflow", "[wxString][Printf][vararg]")
+{
+    // A positional argument number is taken directly from the format string
+    // and so may be larger than the maximum number of arguments the format
+    // parser can handle (wxMAX_SVNPRINTF_ARGUMENTS). Such a value used to be
+    // used to index the parser's fixed-size internal arrays without any bounds
+    // check, writing past their end, while now it must be reported as an
+    // error. Note that the assert happens when validating the format string,
+    // so the invalid format is never passed on to the underlying printf().
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%100$d", 5) );
+}
+
 TEST_CASE("SizetPrintf", "[wxString][Printf][vararg]")
 {
     size_t  i =  1;
