@@ -853,35 +853,13 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
     }
     else // otherwise, truncate and add an ellipsis if possible
     {
-        // determine the base width
-        wxString ellipsis(wxT("..."));
-        wxCoord base_w;
-        dc->GetTextExtent(ellipsis, &base_w, &h);
-
-        // continue until we have enough space or only one character left
-        wxCoord w_c, h_c;
-        size_t len = text.length();
-        wxString drawntext = text.Left(len);
-        while (len > 1)
-        {
-            dc->GetTextExtent(drawntext.Last(), &w_c, &h_c);
-            drawntext.RemoveLast();
-            len--;
-            w -= w_c;
-            if (w + base_w <= width)
-                break;
-        }
-
-        // if still not enough space, remove ellipsis characters
-        while (ellipsis.length() > 0 && w + base_w > width)
-        {
-            ellipsis = ellipsis.Left(ellipsis.length() - 1);
-            dc->GetTextExtent(ellipsis, &base_w, &h);
-        }
-
-        // now draw the text
-        dc->DrawText(drawntext, x, y);
-        dc->DrawText(ellipsis, x + w, y);
+        // Measure the text as a whole: subtracting the widths of the removed
+        // characters, measured one at a time, doesn't give the width of the
+        // remaining text with proportional fonts, and resulted in the
+        // ellipsis being drawn over the end of the text.
+        dc->DrawText(wxControl::Ellipsize(text, *dc, wxELLIPSIZE_END, width,
+                                          wxELLIPSIZE_FLAGS_NONE),
+                     x, y);
     }
 }
 
