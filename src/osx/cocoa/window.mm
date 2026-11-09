@@ -1339,7 +1339,7 @@ static long wxOSXGetTextInputPosition(NSUInteger position)
 //                           wxNSView Bridging Code                         //
 // The vast majority of widgets, especially those that are custom-drawn and //
 // therefore require wxAccessible, are derived from a wxNSView. In such a   //
-// case, this code will be cause such objects to respond to NSAccessibility //
+// case, this code will cause such objects to respond to NSAccessibility    //
 // messages by checking for a wxAccessible on the wxWindowMac corresponding //
 // to the peer object of the NSView, query that wxAccessible for the value  //
 // that the NSAccessibility message is asking for, and return it. There is  //

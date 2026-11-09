@@ -404,7 +404,7 @@ public:
     // A plain text representation of the value currently rendered by this
     // cell, e.g. for use by screen readers. Declared unconditionally on
     // wxUSE_DATAVIEW_A11Y (see above) rather than plain wxUSE_ACCESSIBILITY,
-    // since wxOSX's native dataview implementation calls this directly on aq
+    // since wxOSX's native dataview implementation calls this directly on a
     // custom renderer with no wxAccessible involved at all -- it is not
     // reachable through wxDataViewRendererBase's own (still
     // wxUSE_ACCESSIBILITY-only) virtual of the same name there, just a
