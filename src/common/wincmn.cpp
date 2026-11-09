@@ -3361,7 +3361,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 
 void wxWindowBase::SetAccessibleName(const wxString& name)
 {
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY && defined(__WXMSW__)
     wxWindow* const self = static_cast<wxWindow*>(this);
 
     // Native controls don't have any accessible object by default, but we

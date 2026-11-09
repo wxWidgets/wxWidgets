@@ -165,7 +165,7 @@ public:
     // before a cell is rendered using this renderer
     virtual bool SetValue(const wxVariant& value) = 0;
     virtual bool GetValue(wxVariant& value) const = 0;
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY && defined(__WXMSW__) // macOS uses native a11y
     virtual wxString GetAccessibleDescription() const = 0;
 #endif // wxUSE_ACCESSIBILITY
 
@@ -404,7 +404,7 @@ public:
     // A plain text representation of the value currently rendered by this
     // cell, e.g. for use by screen readers. Declared unconditionally on
     // wxUSE_DATAVIEW_A11Y (see above) rather than plain wxUSE_ACCESSIBILITY,
-    // since wxOSX's native dataview implementation calls this directly on a
+    // since wxOSX's native dataview implementation calls this directly on aq
     // custom renderer with no wxAccessible involved at all -- it is not
     // reachable through wxDataViewRendererBase's own (still
     // wxUSE_ACCESSIBILITY-only) virtual of the same name there, just a
@@ -417,13 +417,11 @@ public:
     // override it if the renderer draws something a bare
     // wxVariant::MakeString() can't usefully describe (e.g. a progress bar).
     //
-    // `override` is only added where wxUSE_ACCESSIBILITY is genuinely 1: on
-    // wxOSX (wxUSE_DATAVIEW_A11Y but not wxUSE_ACCESSIBILITY), the base
-    // class's own virtual of this name isn't even compiled in, so there is
-    // nothing to override yet -Winconsistent-missing-override would still
-    // flag its absence there once wxUSE_ACCESSIBILITY is 1 elsewhere in the
-    // same build (that's the whole point of the split below).
-#if wxUSE_ACCESSIBILITY
+    // `override` is only added where wxUSE_ACCESSIBILITY is genuinely 1 and
+    // where the platform is MSW; on wxOSX, a native control with its own
+    // accessibility functionality is used, so no virtual exists to override;
+    // see lines 168-170.
+#if wxUSE_ACCESSIBILITY && defined(__WXMSW__)
     virtual wxString GetAccessibleDescription() const override;
 #else
     virtual wxString GetAccessibleDescription() const;
@@ -494,7 +492,7 @@ public:
     virtual wxSize GetSize() const override;
     virtual bool SetValue( const wxVariant &value ) override;
     virtual bool GetValue( wxVariant &value ) const override;
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY // No native control on macOS, so still need this
     virtual wxString GetAccessibleDescription() const override;
 #endif // wxUSE_ACCESSIBILITY
 
@@ -524,7 +522,7 @@ public:
     virtual wxSize GetSize() const override;
     virtual bool SetValue( const wxVariant &value ) override;
     virtual bool GetValue( wxVariant &value ) const override;
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY && defined(__WXMSW__) // macOS native control -> native a11y
     virtual wxString GetAccessibleDescription() const override;
 #endif // wxUSE_ACCESSIBILITY
 
@@ -581,7 +579,7 @@ public:
     virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant &value) override;
     virtual bool SetValue(const wxVariant &value) override;
     virtual bool GetValue(wxVariant& value) const override;
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY && defined(__WXMSW__) // macOS native control -> native a11y
     virtual wxString GetAccessibleDescription() const override;
 #endif // wxUSE_ACCESSIBILITY
     virtual bool Render( wxRect cell, wxDC *dc, int state ) override;
@@ -625,7 +623,7 @@ public:
     virtual bool SetValue(const wxVariant& value) override;
     virtual bool GetValue(wxVariant& value) const override;
 
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY && defined(__WXMSW__) // macOS native control -> native a11y
     virtual wxString GetAccessibleDescription() const override;
 #endif // wxUSE_ACCESSIBILITY
 
