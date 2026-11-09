@@ -2994,9 +2994,6 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
     if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
     {
-        if ( !colBack )
-            colBack = data->GetOriginalBackgroundColour();
-
         if ( colBack )
         {
             [(id)cell setDrawsBackground:true];
@@ -3004,7 +3001,13 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         }
         else
         {
+            // Restore the original appearance of the cell, which doesn't draw
+            // any background: drawing the saved original colour here put an
+            // opaque box behind the text of every cell without a colour of
+            // its own once any cell had been given one.
             [(id)cell setDrawsBackground:false];
+            if ( NSColor *colOrig = data->GetOriginalBackgroundColour() )
+                [(id)cell setBackgroundColor:colOrig];
         }
     }
 }
