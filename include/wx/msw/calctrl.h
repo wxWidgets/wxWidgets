@@ -62,6 +62,9 @@ protected:
     void MSWOnClick(wxMouseEvent& event);
     void MSWOnDoubleClick(wxMouseEvent& event);
 
+    virtual void MSWSetDarkOrLightMode() override;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+
 private:
     void Init();
 
