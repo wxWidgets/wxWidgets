@@ -302,11 +302,11 @@ void wxInfoBar::GTKUpdateCloseButton()
             show = m_impl->m_buttons.empty();
             break;
 
-        case ShowButton::Always:
+        case ShowButton::Yes:
             show = true;
             break;
 
-        case ShowButton::Never:
+        case ShowButton::No:
             break;
     }
 
