@@ -114,6 +114,120 @@ inline StringFormat* GetDrawTextStringFormat(DWORD layoutDir = 0)
     return gs_drawTextStringFormat;
 }
 
+// Create GDI+ bitmap from wxBitmap, taking into account its alpha channel
+// and/or mask, if any.
+//
+// The built-in conversions functions create non-premultiplied bitmaps, while
+// GDI+ needs them in the premultiplied format, therefore in the failing cases
+// we create a new bitmap using the non-premultiplied bytes as parameter, since
+// there is no real copying of the data going in, only references are stored:
+// this is why the bitmap returned in the "helper" output parameter, which is
+// set to non-null only in this case, has to be kept alive as long as the
+// returned bitmap is used.
+//
+// Both the returned bitmap and the helper one, if any, must be deleted by the
+// caller.
+Bitmap* CreateGDIPlusBitmap(const wxBitmap& bmp, Bitmap** helper)
+{
+    *helper = nullptr;
+
+    Bitmap* image = nullptr;
+    if ( bmp.GetMask() )
+    {
+        Bitmap* interim = new Bitmap((HBITMAP)bmp.GetHBITMAP(),
+#if wxUSE_PALETTE
+            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
+#else
+            nullptr
+#endif
+        );
+        size_t width = interim->GetWidth();
+        size_t height = interim->GetHeight();
+        Rect bounds(0, 0, width, height);
+        if ( bmp.HasAlpha() && GetPixelFormatSize(interim->GetPixelFormat()) == 32 )
+        {
+            BitmapData data;
+
+            *helper = interim;
+            interim->LockBits(&bounds, ImageLockModeRead, interim->GetPixelFormat(), &data);
+            image = new Bitmap(data.Width, data.Height, data.Stride, PixelFormat32bppPARGB, (BYTE*)data.Scan0);
+            interim->UnlockBits(&data);
+        }
+        else
+        {
+            image = interim->Clone(bounds, PixelFormat32bppPARGB);
+            delete interim;
+        }
+
+        // If there is a mask, set the alpha bytes in the target buffer to
+        // fully transparent or retain original value
+        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),nullptr);
+        wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
+
+        BitmapData dataMask ;
+        interimMask.LockBits(&bounds,ImageLockModeRead,
+            interimMask.GetPixelFormat(),&dataMask);
+
+        BitmapData imageData ;
+        image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
+
+        for ( size_t y = 0 ; y < height ; ++y)
+        {
+            BYTE maskPattern = 0;
+            BYTE maskByte = 0;
+            const BYTE* mask = reinterpret_cast<BYTE*>(dataMask.Scan0) + dataMask.Stride * y;
+            ARGB* dest = reinterpret_cast<ARGB*>(reinterpret_cast<BYTE*>(imageData.Scan0) + imageData.Stride * y);
+            for( size_t x = 0 ; x < width; ++x)
+            {
+                if ( x % 8 == 0)
+                {
+                    maskPattern = 0x80;
+                    maskByte = *mask++;
+                }
+                else
+                    maskPattern >>= 1;
+
+                if ( (maskByte & maskPattern) == 0 )
+                    *dest = 0x00000000;
+
+                dest++;
+            }
+        }
+
+        image->UnlockBits(&imageData);
+        interimMask.UnlockBits(&dataMask);
+    }
+    else
+    {
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
+#if wxUSE_PALETTE
+            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
+#else
+            nullptr
+#endif
+        );
+        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
+        {
+            size_t width = image->GetWidth();
+            size_t height = image->GetHeight();
+            Rect bounds(0,0,width,height);
+            static BitmapData data ;
+
+            *helper = image ;
+            image = nullptr ;
+            (*helper)->LockBits(&bounds, ImageLockModeRead,
+                (*helper)->GetPixelFormat(),&data);
+
+            image = new Bitmap(data.Width, data.Height, data.Stride,
+                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
+
+            (*helper)->UnlockBits(&data);
+        }
+    }
+
+    return image;
+}
+
 } // anonymous namespace
 
 //-----------------------------------------------------------------------------
@@ -1232,11 +1346,6 @@ wxGDIPlusFontData::~wxGDIPlusFontData()
     delete m_font;
 }
 
-// the built-in conversions functions create non-premultiplied bitmaps, while GDIPlus needs them in the
-// premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
-// bytes as parameter, since there is no real copying of the data going in, only references are stored
-// m_helper has to be kept alive as well
-
 //-----------------------------------------------------------------------------
 // wxGDIPlusBitmapData implementation
 //-----------------------------------------------------------------------------
@@ -1250,104 +1359,7 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* 
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
                         const wxBitmap &bmp) : wxGraphicsBitmapData( renderer )
 {
-    m_bitmap = nullptr;
-    m_helper = nullptr;
-
-    Bitmap* image = nullptr;
-    if ( bmp.GetMask() )
-    {
-        Bitmap* interim = new Bitmap((HBITMAP)bmp.GetHBITMAP(),
-#if wxUSE_PALETTE
-            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
-#else
-            nullptr
-#endif
-        );
-        size_t width = interim->GetWidth();
-        size_t height = interim->GetHeight();
-        Rect bounds(0, 0, width, height);
-        if ( bmp.HasAlpha() && GetPixelFormatSize(interim->GetPixelFormat()) == 32 )
-        {
-            BitmapData data;
-
-            m_helper = interim;
-            m_helper->LockBits(&bounds, ImageLockModeRead, m_helper->GetPixelFormat(), &data);
-            image = new Bitmap(data.Width, data.Height, data.Stride, PixelFormat32bppPARGB, (BYTE*)data.Scan0);
-            m_helper->UnlockBits(&data);
-        }
-        else
-        {
-            image = interim->Clone(bounds, PixelFormat32bppPARGB);
-            delete interim;
-        }
-
-        // If there is a mask, set the alpha bytes in the target buffer to
-        // fully transparent or retain original value
-        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),nullptr);
-        wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
-
-        BitmapData dataMask ;
-        interimMask.LockBits(&bounds,ImageLockModeRead,
-            interimMask.GetPixelFormat(),&dataMask);
-
-        BitmapData imageData ;
-        image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
-
-        for ( size_t y = 0 ; y < height ; ++y)
-        {
-            BYTE maskPattern = 0;
-            BYTE maskByte = 0;
-            const BYTE* mask = reinterpret_cast<BYTE*>(dataMask.Scan0) + dataMask.Stride * y;
-            ARGB* dest = reinterpret_cast<ARGB*>(reinterpret_cast<BYTE*>(imageData.Scan0) + imageData.Stride * y);
-            for( size_t x = 0 ; x < width; ++x)
-            {
-                if ( x % 8 == 0)
-                {
-                    maskPattern = 0x80;
-                    maskByte = *mask++;
-                }
-                else
-                    maskPattern >>= 1;
-
-                if ( (maskByte & maskPattern) == 0 )
-                    *dest = 0x00000000;
-
-                dest++;
-            }
-        }
-
-        image->UnlockBits(&imageData);
-        interimMask.UnlockBits(&dataMask);
-    }
-    else
-    {
-        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
-#if wxUSE_PALETTE
-            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
-#else
-            nullptr
-#endif
-        );
-        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
-        {
-            size_t width = image->GetWidth();
-            size_t height = image->GetHeight();
-            Rect bounds(0,0,width,height);
-            static BitmapData data ;
-
-            m_helper = image ;
-            image = nullptr ;
-            m_helper->LockBits(&bounds, ImageLockModeRead,
-                m_helper->GetPixelFormat(),&data);
-
-            image = new Bitmap(data.Width, data.Height, data.Stride,
-                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
-
-            m_helper->UnlockBits(&data);
-        }
-    }
-    if ( image )
-        m_bitmap = image;
+    m_bitmap = CreateGDIPlusBitmap(bmp, &m_helper);
 }
 
 #if wxUSE_IMAGE
