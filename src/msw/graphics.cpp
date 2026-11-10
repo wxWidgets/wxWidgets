@@ -1091,13 +1091,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
             wxBitmap bmp = info.GetStipple();
             if ( bmp.IsOk() )
             {
-                m_image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
-#if wxUSE_PALETTE
-                    (HPALETTE)bmp.GetPalette()->GetHPALETTE()
-#else
-                    nullptr
-#endif
-                );
+                m_image = CreateGDIPlusBitmap(bmp);
                 m_brush = new TextureBrush(m_image);
                 m_pen->SetBrush( m_brush );
             }
@@ -1228,13 +1222,7 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
         if ( bmp && bmp->IsOk() )
         {
             wxDELETE( m_image );
-            m_image = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
-#if wxUSE_PALETTE
-                (HPALETTE)bmp->GetPalette()->GetHPALETTE()
-#else
-                nullptr
-#endif
-            );
+            m_image = CreateGDIPlusBitmap(*bmp);
             m_brush = new TextureBrush(m_image);
         }
     }
