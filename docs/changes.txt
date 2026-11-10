@@ -180,6 +180,14 @@ Changes in behaviour not resulting in compilation errors
   focus from keyboard now don't accept focus themselves. If you need them to do
   it, call EnableFocusFromKeyboard() on them explicitly.
 
+- Numeric validators now replace invalid input, including empty text, with 0
+  on focus loss if it is in their range instead of using the range minimum.
+
+- wxGridCellNumberEditor now leaves the cell empty when the user clears it, if
+  the grid table stores its values as strings, instead of storing "0" in it,
+  for consistency with wxGridCellFloatEditor. Code parsing the values of such
+  cells should handle empty strings.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

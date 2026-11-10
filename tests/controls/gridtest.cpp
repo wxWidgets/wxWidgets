@@ -19,6 +19,7 @@
 
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
+#include "wx/numformatter.h"
 #include "wx/textctrl.h"
 #if wxUSE_COMBOBOX && defined(__WXOSX_COCOA__)
     #include "wx/combobox.h"
@@ -1817,6 +1818,98 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ChoiceEditorEnter", "[grid]")
     }) );
 }
 #endif // wxUSE_COMBOBOX
+
+TEST_CASE_METHOD(GridTestCase, "Grid::NumericEditorEmpty", "[grid]")
+{
+    // Column 0 uses wxGridCellFloatEditor and column 1 wxGridCellNumberEditor.
+    m_grid->SetColFormatFloat(0);
+    m_grid->SetColFormatNumber(1);
+
+    const int col = GENERATE(0, 1);
+    INFO("Column " << col);
+
+    EventCounter changed(m_grid, wxEVT_GRID_CELL_CHANGED);
+
+    // Edit the cell in the given column of the first row, replacing its
+    // contents with the given text, as if the user entered it, unless it is
+    // null, and return the cell value after the editor is closed.
+    const auto edit = [this](int column, const char* text) -> wxString
+    {
+        wxGridCellEditorPtr editor(m_grid->GetCellEditor(0, column));
+        REQUIRE( editor );
+
+        m_grid->SetGridCursor(0, column);
+        m_grid->EnableCellEditControl();
+
+        wxTextCtrl* const
+            textCtrl = wxDynamicCast(editor->GetWindow(), wxTextCtrl);
+        REQUIRE( textCtrl );
+
+        if ( text )
+        {
+            textCtrl->ChangeValue(text);
+            textCtrl->MarkDirty();
+        }
+
+        // Simulate focus moving elsewhere: this lets the validator normalize
+        // the value and closes the editor, just as it happens in practice.
+        wxFocusEvent event(wxEVT_KILL_FOCUS, textCtrl->GetId());
+        event.SetEventObject(textCtrl);
+        textCtrl->ProcessWindowEvent(event);
+
+        WaitFor("editor to close", [this]() {
+            return !m_grid->IsCellEditControlEnabled();
+        });
+        REQUIRE( !m_grid->IsCellEditControlEnabled() );
+
+        return m_grid->GetCellValue(0, column);
+    };
+
+    // Check that the value is a valid representation of 0: we can't compare
+    // it with a fixed string because the float editor formats it according
+    // to its precision.
+    const auto isZero = [](const wxString& s)
+    {
+        double d;
+        return wxNumberFormatter::FromString(s, &d) && wxIsSameDouble(d, 0.);
+    };
+
+    SECTION("Clearing a cell leaves it empty")
+    {
+        m_grid->SetCellValue(0, col, "17");
+
+        CHECK( edit(col, "") == "" );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    SECTION("Entering 0 in an empty cell stores 0")
+    {
+        CHECK( isZero(edit(col, "0")) );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    SECTION("Entering invalid value stores 0")
+    {
+        m_grid->SetCellValue(0, col, "17");
+
+        CHECK( isZero(edit(col, "-")) );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    SECTION("Not changing an empty cell keeps it empty")
+    {
+        CHECK( edit(col, nullptr) == "" );
+        CHECK( changed.GetCount() == 0 );
+    }
+
+    SECTION("Not changing a cell with 0 keeps it unchanged")
+    {
+        m_grid->SetCellValue(0, col, "0");
+
+        CHECK( edit(col, nullptr) == "0" );
+        CHECK( changed.GetCount() == 0 );
+    }
+}
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {

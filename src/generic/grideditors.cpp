@@ -691,7 +691,8 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
         wxGridCellTextEditor::Create(parent, id, evtHandler);
 
 #if wxUSE_VALIDATORS
-        Text()->SetValidator(wxIntegerValidator<int>());
+        Text()->SetValidator(
+            wxIntegerValidator<int>(nullptr, wxNUM_VAL_ALLOW_BLANK_AS_ZERO));
 #endif
     }
 }
@@ -726,6 +727,7 @@ void wxGridCellNumberEditor::SetSize(const wxRect& rectCell)
 void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
+    m_isEmpty = false;
     wxGridTableBase *table = grid->GetTable();
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
     {
@@ -735,7 +737,14 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     {
         m_value = 0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToLong(&m_value) && ! sValue.empty())
+        if ( sValue.empty() )
+        {
+            // Don't show "0" in the editor for an empty cell, as this would
+            // store 0 in it if the user accepts the edit without changing
+            // anything.
+            m_isEmpty = true;
+        }
+        else if ( !sValue.ToLong(&m_value) )
         {
             wxFAIL_MSG( wxT("this cell doesn't have numeric value") );
             return;
@@ -797,6 +806,7 @@ bool wxGridCellNumberEditor::EndEdit(int WXUNUSED(row),
     }
 
     m_value = value;
+    m_isEmpty = text.empty();
 
     if ( newval )
         *newval = text;
@@ -810,7 +820,7 @@ void wxGridCellNumberEditor::ApplyEdit(int row, int col, wxGrid* grid)
     if ( table->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER) )
         table->SetValueAsLong(row, col, m_value);
     else
-        table->SetValue(row, col, wxString::Format("%ld", m_value));
+        table->SetValue(row, col, GetString()); // empty if the cell was cleared
 }
 
 void wxGridCellNumberEditor::Reset()
@@ -939,13 +949,16 @@ void wxGridCellFloatEditor::Create(wxWindow* parent,
     wxGridCellTextEditor::Create(parent, id, evtHandler);
 
 #if wxUSE_VALIDATORS
-    Text()->SetValidator(wxFloatingPointValidator<double>(m_precision));
+    Text()->SetValidator(
+        wxFloatingPointValidator<double>(m_precision, nullptr,
+                                         wxNUM_VAL_ALLOW_BLANK_AS_ZERO));
 #endif
 }
 
 void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
+    m_isEmpty = false;
     wxGridTableBase * const table = grid->GetTable();
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
     {
@@ -956,13 +969,17 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
         m_value = 0.0;
 
         const wxString value = table->GetValue(row, col);
-        if ( !value.empty() )
+        if ( value.empty() )
         {
-            if ( !wxNumberFormatter::FromString(value, &m_value) )
-            {
-                wxFAIL_MSG( wxT("this cell doesn't have float value") );
-                return;
-            }
+            // Don't show "0" in the editor for an empty cell, as this would
+            // store 0 in it if the user accepts the edit without changing
+            // anything.
+            m_isEmpty = true;
+        }
+        else if ( !wxNumberFormatter::FromString(value, &m_value) )
+        {
+            wxFAIL_MSG( wxT("this cell doesn't have float value") );
+            return;
         }
     }
 
@@ -996,6 +1013,7 @@ bool wxGridCellFloatEditor::EndEdit(int WXUNUSED(row),
         return false;           // nothing changed
 
     m_value = value;
+    m_isEmpty = text.empty();
 
     if ( newval )
         *newval = text;
@@ -1116,6 +1134,9 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
 
 wxString wxGridCellFloatEditor::GetString()
 {
+    if ( m_isEmpty )
+        return wxString();
+
     if ( m_format.empty() )
     {
         if ( m_precision == -1 && m_width != -1)
