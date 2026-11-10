@@ -42,6 +42,8 @@
 #include "wx/dcgraph.h"
 #include "wx/rawbmp.h"
 
+#include "wx/private/make_unique.h"
+
 #include <float.h> // for FLT_MAX, FLT_MIN
 
 wxGCC_WARNING_SUPPRESS(double-promotion)
@@ -114,49 +116,91 @@ inline StringFormat* GetDrawTextStringFormat(DWORD layoutDir = 0)
     return gs_drawTextStringFormat;
 }
 
+// Create GDI+ bitmap from wxBitmap with alpha channel.
+//
+// Returns nullptr if the bitmap data couldn't be accessed, otherwise the
+// returned bitmap must be deleted by the caller.
+Bitmap* CreateGDIPlusBitmapWithAlpha(const wxBitmap& bmp)
+{
+    // wxAlphaPixelData needs a non-const bitmap, even though we don't modify
+    // it here, so use a (shallow) copy of it.
+    wxBitmap bmpCopy(bmp);
+    wxAlphaPixelData data(bmpCopy);
+    if ( !data )
+        return nullptr;
+
+    const int width = data.GetWidth();
+    const int height = data.GetHeight();
+
+    auto image = std::make_unique<Bitmap>(width, height, PixelFormat32bppPARGB);
+    if ( image->GetLastStatus() != Ok )
+        return nullptr;
+
+    Rect bounds(0, 0, width, height);
+    BitmapData imageData;
+    if ( image->LockBits(&bounds, ImageLockModeWrite,
+                         PixelFormat32bppPARGB, &imageData) != Ok )
+        return nullptr;
+
+    // wxBitmap pixel data uses premultiplied alpha under MSW, which is exactly
+    // what PixelFormat32bppPARGB uses too, so we can just copy it.
+    wxAlphaPixelData::Iterator p(data);
+    BYTE* const start = static_cast<BYTE*>(imageData.Scan0);
+    for ( int y = 0; y < height; ++y )
+    {
+        wxAlphaPixelData::Iterator rowStart = p;
+
+        ARGB* dest = reinterpret_cast<ARGB*>(start + imageData.Stride * y);
+        for ( int x = 0; x < width; ++x, ++p )
+        {
+            *dest++ = Color::MakeARGB(p.Alpha(), p.Red(), p.Green(), p.Blue());
+        }
+
+        p = rowStart;
+        p.OffsetY(data, 1);
+    }
+
+    image->UnlockBits(&imageData);
+
+    return image.release();
+}
+
 // Create GDI+ bitmap from wxBitmap, taking into account its alpha channel
 // and/or mask, if any.
 //
-// The built-in conversions functions create non-premultiplied bitmaps, while
-// GDI+ needs them in the premultiplied format, therefore in the failing cases
-// we create a new bitmap using the non-premultiplied bytes as parameter, since
-// there is no real copying of the data going in, only references are stored:
-// this is why the bitmap returned in the "helper" output parameter, which is
-// set to non-null only in this case, has to be kept alive as long as the
-// returned bitmap is used.
-//
-// Both the returned bitmap and the helper one, if any, must be deleted by the
-// caller.
-Bitmap* CreateGDIPlusBitmap(const wxBitmap& bmp, Bitmap** helper)
+// The returned bitmap must be deleted by the caller.
+Bitmap* CreateGDIPlusBitmap(const wxBitmap& bmp)
 {
-    *helper = nullptr;
-
     Bitmap* image = nullptr;
-    if ( bmp.GetMask() )
+
+    // Bitmap::FromHBITMAP() ignores the alpha channel, so we can't use it for
+    // bitmaps with alpha.
+    if ( bmp.HasAlpha() )
+        image = CreateGDIPlusBitmapWithAlpha(bmp);
+
+    if ( !image )
     {
-        Bitmap* interim = new Bitmap((HBITMAP)bmp.GetHBITMAP(),
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
             (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
             nullptr
 #endif
         );
-        size_t width = interim->GetWidth();
-        size_t height = interim->GetHeight();
-        Rect bounds(0, 0, width, height);
-        if ( bmp.HasAlpha() && GetPixelFormatSize(interim->GetPixelFormat()) == 32 )
-        {
-            BitmapData data;
+    }
 
-            *helper = interim;
-            interim->LockBits(&bounds, ImageLockModeRead, interim->GetPixelFormat(), &data);
-            image = new Bitmap(data.Width, data.Height, data.Stride, PixelFormat32bppPARGB, (BYTE*)data.Scan0);
-            interim->UnlockBits(&data);
-        }
-        else
+    if ( bmp.GetMask() )
+    {
+        size_t width = image->GetWidth();
+        size_t height = image->GetHeight();
+        Rect bounds(0, 0, width, height);
+
+        // We need to have an alpha channel to apply the mask to.
+        if ( image->GetPixelFormat() != PixelFormat32bppPARGB )
         {
-            image = interim->Clone(bounds, PixelFormat32bppPARGB);
-            delete interim;
+            Bitmap* const imageWithAlpha = image->Clone(bounds, PixelFormat32bppPARGB);
+            delete image;
+            image = imageWithAlpha;
         }
 
         // If there is a mask, set the alpha bytes in the target buffer to
@@ -196,33 +240,6 @@ Bitmap* CreateGDIPlusBitmap(const wxBitmap& bmp, Bitmap** helper)
 
         image->UnlockBits(&imageData);
         interimMask.UnlockBits(&dataMask);
-    }
-    else
-    {
-        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
-#if wxUSE_PALETTE
-            (HPALETTE)bmp.GetPalette()->GetHPALETTE()
-#else
-            nullptr
-#endif
-        );
-        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
-        {
-            size_t width = image->GetWidth();
-            size_t height = image->GetHeight();
-            Rect bounds(0,0,width,height);
-            static BitmapData data ;
-
-            *helper = image ;
-            image = nullptr ;
-            (*helper)->LockBits(&bounds, ImageLockModeRead,
-                (*helper)->GetPixelFormat(),&data);
-
-            image = new Bitmap(data.Width, data.Height, data.Stride,
-                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
-
-            (*helper)->UnlockBits(&data);
-        }
     }
 
     return image;
@@ -460,7 +477,6 @@ public:
 
 private :
     Bitmap* m_bitmap;
-    Bitmap* m_helper;
 };
 
 class wxGDIPlusFontData : public wxGraphicsObjectRefData
@@ -1353,20 +1369,18 @@ wxGDIPlusFontData::~wxGDIPlusFontData()
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* bitmap ) :
     wxGraphicsBitmapData( renderer ), m_bitmap( bitmap )
 {
-    m_helper = nullptr;
 }
 
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
                         const wxBitmap &bmp) : wxGraphicsBitmapData( renderer )
 {
-    m_bitmap = CreateGDIPlusBitmap(bmp, &m_helper);
+    m_bitmap = CreateGDIPlusBitmap(bmp);
 }
 
 #if wxUSE_IMAGE
 wxGDIPlusBitmapData::wxGDIPlusBitmapData(wxGraphicsRenderer* renderer, const wxImage& img)
     : wxGraphicsBitmapData(renderer)
 {
-    m_helper = nullptr;
     m_bitmap = new Bitmap(img.GetWidth(), img.GetHeight(), img.HasAlpha() || img.HasMask() ? PixelFormat32bppPARGB : PixelFormat32bppRGB);
 
     UINT w = m_bitmap->GetWidth();
@@ -1474,7 +1488,6 @@ wxImage wxGDIPlusBitmapData::ConvertToImage() const
 wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
 {
     delete m_bitmap;
-    delete m_helper;
 }
 
 //-----------------------------------------------------------------------------
