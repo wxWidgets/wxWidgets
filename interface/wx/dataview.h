@@ -330,6 +330,8 @@ public:
 
         This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
+
+        @a item must be valid: the invisible root item can't change.
     */
     bool ItemChanged(const wxDataViewItem& item);
 
@@ -350,6 +352,8 @@ public:
 
         This will eventually emit @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
+
+        All @a items must be valid, see ItemChanged().
     */
     bool ItemsChanged(const wxDataViewItemArray& items);
 
@@ -391,6 +395,8 @@ public:
 
         This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
+
+        @a item must be valid, see ItemChanged().
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 

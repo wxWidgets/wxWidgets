@@ -191,6 +191,15 @@ TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ItemCheck", "[treelistctrl
     m_treelist->UpdateItemParentStateRecursively(m_code_osx_cocoa);
     CHECK( m_treelist->GetCheckedState(m_code_osx) == wxCHK_UNCHECKED );
     CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_UNDETERMINED );
+
+    // Using the root item should work too and (un)check all items.
+    m_treelist->CheckItemRecursively(m_treelist->GetRootItem());
+    CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_CHECKED );
+    CHECK( m_treelist->GetCheckedState(m_code_osx_cocoa) == wxCHK_CHECKED );
+
+    m_treelist->CheckItemRecursively(m_treelist->GetRootItem(), wxCHK_UNCHECKED);
+    CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_UNCHECKED );
+    CHECK( m_treelist->GetCheckedState(m_code_osx_cocoa) == wxCHK_UNCHECKED );
 }
 
 TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::MultiSelectionClick",
