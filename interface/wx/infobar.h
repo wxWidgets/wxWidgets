@@ -99,13 +99,13 @@ public:
         Auto,
 
         /// Always show the close button, after all the other buttons.
-        Always,
+        Yes,
 
         /// Never show the close button, even if there are no other buttons.
         ///
         /// The application should provide some other way to hide the info bar
         /// in this case, e.g. by calling Dismiss() after a timer expiration.
-        Never
+        No
     };
 
     /**
@@ -235,7 +235,7 @@ public:
 
         After calling this function, the info bar shows the default "Close"
         button again, just as it did before any buttons were added to it
-        (unless ShowCloseButton() was called with ShowButton::Never).
+        (unless ShowCloseButton() was called with ShowButton::No).
 
         @since 3.3.5
      */
@@ -246,9 +246,9 @@ public:
 
         By default, this button is only shown if no other buttons were added
         using AddButton(), as it's assumed that they allow the user to close
-        the info bar. Calling this function with ShowButton::Always allows to
+        the info bar. Calling this function with ShowButton::Yes allows to
         show it in addition to the custom buttons (it is then always shown
-        after all of them) and ShowButton::Never allows to hide it even when
+        after all of them) and ShowButton::No allows to hide it even when
         there are no other buttons.
 
         Note that if the close button is never shown, the application must

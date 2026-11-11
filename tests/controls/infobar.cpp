@@ -103,7 +103,7 @@ TEST_CASE("wxInfoBar::ShowCloseButton", "[wxInfoBar]")
     // the close button is never counted as one of the custom buttons.
     const auto info = make_unique<wxInfoBar>(wxTheApp->GetTopWindow());
 
-    info->ShowCloseButton(wxInfoBar::ShowButton::Always);
+    info->ShowCloseButton(wxInfoBar::ShowButton::Yes);
     CHECK(info->GetButtonCount() == 0);
     CHECK(!info->HasButtonId(wxID_CLOSE));
 
@@ -113,7 +113,7 @@ TEST_CASE("wxInfoBar::ShowCloseButton", "[wxInfoBar]")
     CHECK(info->GetButtonId(0) == buttonId);
     CHECK(!info->HasButtonId(wxID_CLOSE));
 
-    info->ShowCloseButton(wxInfoBar::ShowButton::Never);
+    info->ShowCloseButton(wxInfoBar::ShowButton::No);
     info->RemoveAllButtons();
     CHECK(info->GetButtonCount() == 0);
     CHECK(!info->HasButtonId(wxID_CLOSE));
@@ -135,7 +135,7 @@ TEST_CASE("wxInfoBarGeneric::ShowCloseButton", "[wxInfoBar][wxInfoBarGeneric]")
 
     SECTION("Always")
     {
-        info->ShowCloseButton(wxInfoBar::ShowButton::Always);
+        info->ShowCloseButton(wxInfoBar::ShowButton::Yes);
         CHECK(closeButton->IsShown());
 
         // The close button must remain shown and come after the new buttons.
@@ -165,7 +165,7 @@ TEST_CASE("wxInfoBarGeneric::ShowCloseButton", "[wxInfoBar][wxInfoBarGeneric]")
 
     SECTION("Never")
     {
-        info->ShowCloseButton(wxInfoBar::ShowButton::Never);
+        info->ShowCloseButton(wxInfoBar::ShowButton::No);
         CHECK(!closeButton->IsShown());
 
         info->AddButton(buttonId, "test");

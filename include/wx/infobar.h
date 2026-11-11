@@ -79,8 +79,8 @@ public:
     enum class ShowButton
     {
         Auto,   // only if there are no other buttons (default)
-        Always, // always, after all the other buttons
-        Never   // never, even if there are no other buttons
+        Yes,    // always, after all the other buttons
+        No      // never, even if there are no other buttons
     };
 
     // choose when the default close button is shown

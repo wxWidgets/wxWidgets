@@ -539,11 +539,11 @@ void wxInfoBarGeneric::UpdateCloseButton()
             show = GetButtonCount() == 0;
             break;
 
-        case ShowButton::Always:
+        case ShowButton::Yes:
             show = true;
             break;
 
-        case ShowButton::Never:
+        case ShowButton::No:
             break;
     }
 

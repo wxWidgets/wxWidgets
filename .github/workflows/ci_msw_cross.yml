@@ -67,7 +67,7 @@ jobs:
     # Set up this job to run in a Debian Testing container because it has recent
     # versions of MinGW and Wine and is simpler to test with locally than the
     # bespoke container used by GitHub Actions by default.
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner || 'ubuntu-latest' }}
     container: debian:${{ matrix.debian_release }}-slim
     name: ${{ matrix.name }}
     strategy:
@@ -81,6 +81,11 @@ jobs:
             # Testing doesn't have 32 bit support any more.
             debian_release: stable
             triplet: i686-w64-mingw32
+            # Docker 29.4.2 used in ubuntu-26.04 image blocks socketcall(),
+            # which is used by 32-bit glibc for socket(), breaking wineserver,
+            # see https://github.com/moby/moby/issues/52506, so use the older
+            # image until it is updated to use Docker 29.4.3 or later.
+            runner: ubuntu-24.04
           - name: wxMSW/Univ
             debian_release: unstable
             configure_flags: --enable-universal --disable-compat32 --disable-debug --disable-optimise
