@@ -40,6 +40,7 @@
         INFO(DumpURI(u)); \
         CHECK(u.GetServer() == expectedhost); \
         CHECK(u.GetHostType() == expectedtype); \
+        CHECK(u.BuildURI() == uri); \
     wxSTATEMENT_MACRO_END
 
 #define URI_ASSERT_HOST_TESTBAD(uri, ne) \
@@ -272,6 +273,12 @@ TEST_CASE("URI::IPv6", "[uri][ipv6]")
     URI_ASSERT_IPV6_TESTBAD("[::ffff:1.2.3a.4]");
     URI_ASSERT_IPV6_TESTBAD("[::ffff:1.2.3.4:123]");
     URI_ASSERT_IPV6_TESTBAD("[g:0:0:0:0:0:0]");
+
+    URI_ASSERT_HOST_TEST("http://[v1.fe80::a+en1]/path", "v1.fe80::a+en1", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TEST("http://[VF.x]/path", "VF.x", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v.x]/path", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v1]/path", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v1.]/path", wxURI_IPVFUTURE);
 }
 
 TEST_CASE("URI::Host", "[uri]")
@@ -537,6 +544,18 @@ TEST_CASE("URI::FileScheme", "[uri]")
     //file: variety
     URI_ASSERT_PATH_EQUAL( "file:e:/wxcode/script1.xml",
                     "e:/wxcode/script1.xml" );
+
+    // All of them must be rebuilt in their original form.
+    URI_ASSERT_EQUAL( "file://e:/wxcode/script1.xml",
+                      "file://e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:///e:/wxcode/script1.xml",
+                      "file:///e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:/e:/wxcode/script1.xml",
+                      "file:/e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:e:/wxcode/script1.xml",
+                      "file:e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file://server#fragment", "file://server#fragment" );
+    URI_ASSERT_EQUAL( "file:///tmp/a b", "file:///tmp/a%20b" );
 }
 
 #if TEST_URL

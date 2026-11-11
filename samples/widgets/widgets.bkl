@@ -61,6 +61,7 @@ endif
             gauge.cpp
             headerctrl.cpp
             hyperlnk.cpp
+            icons.cpp
             itemcontainer.cpp
             listbox.cpp
             $(NATIVE_OBJCPP_SRC)
@@ -78,7 +79,7 @@ endif
             toggle.cpp
             widgets.cpp
         </sources>
-        <headers>widgets.h itemcontainer.h</headers>
+        <headers>widgets.h icons.h itemcontainer.h</headers>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>

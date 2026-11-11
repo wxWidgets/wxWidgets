@@ -602,8 +602,13 @@ wxChmInputStream::CreateHHPStream()
             i->Read(&len, 2);
             len = wxUINT16_SWAP_ON_BE( len ) ;
             // data
-            buf = malloc(len);
-            i->Read(buf, len);
+            // The records are not necessarily NUL-terminated in the file and
+            // the declared length may be larger than the bytes actually
+            // present, so allocate one extra byte and terminate the data at
+            // its real end to keep the strlen() below inside the buffer.
+            buf = malloc(len + 1);
+            const size_t dataLen = i->Read(buf, len).LastRead();
+            ((char *)buf)[dataLen] = '\0';
 
             switch (code)
             {

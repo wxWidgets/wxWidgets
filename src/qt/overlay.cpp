@@ -41,6 +41,12 @@ public:
         update();
     }
 
+    void ClearPicture()
+    {
+        m_pict = QPicture();
+        update();
+    }
+
 private:
 
     QPicture m_pict;
@@ -148,7 +154,14 @@ void wxOverlayImpl::Reset()
     if ( m_overlay )
     {
         if ( m_target )
-            m_overlay->hide();
+        {
+            // Don't hide the overlay window: this would result in repainting
+            // the part of the target window under it and, as Reset() can be
+            // called from the target window paint handler (as wxCaret does),
+            // this could result in an infinite loop. Just clear it instead,
+            // which only repaints the overlay itself.
+            m_overlay->ClearPicture();
+        }
         else
             wxDELETE(m_overlay);
     }

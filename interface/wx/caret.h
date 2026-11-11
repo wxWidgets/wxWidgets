@@ -110,7 +110,7 @@ public:
 
     ///@{
     /**
-        Move the caret to given position (in logical coordinates).
+        Move the caret to given position (in client coordinates).
     */
     void Move(int x, int y);
     void Move(const wxPoint& pt);

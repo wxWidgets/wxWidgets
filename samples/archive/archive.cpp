@@ -294,11 +294,39 @@ int ArchiveApp::DoExtract()
     {
         std::unique_ptr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
         wxPrintf("Extracting from: %s\n", m_archiveFileName);
-        for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
-             entry = archiveStream->GetNextEntry())
+        std::unique_ptr<wxArchiveEntry> entry;
+        for ( ;; )
         {
-            wxPrintf("Extracting: %s...\n", entry->GetName());
-            wxTempFileOutputStream outputFileStream(entry->GetName());
+            entry.reset(archiveStream->GetNextEntry());
+            if (!entry)
+                break;
+
+            const wxString& entryName = entry->GetName();
+
+            // Never use the entry name as path directly, as it comes from the
+            // archive and could refer to a file outside the current directory.
+            const wxString path = wxFileName::MakeSafeRelativePath(entryName);
+            if (path.empty())
+            {
+                wxLogWarning("Skipping entry with unsafe name \"%s\".", entryName);
+                continue;
+            }
+
+            if (entry->IsDir())
+            {
+                if (!wxFileName::Mkdir(path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL))
+                    return 1;
+                continue;
+            }
+
+            // Archives don't necessarily contain the entries for the parent
+            // directories of all the files, so create them if necessary.
+            const wxString dir = wxFileName(path).GetPath();
+            if (!dir.empty() && !wxFileName::Mkdir(dir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL))
+                return 1;
+
+            wxPrintf("Extracting: %s...\n", path);
+            wxTempFileOutputStream outputFileStream(path);
             if (!CopyStreamData(*archiveStream, outputFileStream, entry->GetSize()))
                 return 1;
             outputFileStream.Commit();

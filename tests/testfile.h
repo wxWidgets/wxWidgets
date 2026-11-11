@@ -13,9 +13,7 @@
 #include "wx/filefn.h"
 #include "wx/filename.h"
 #include "wx/log.h"
-#include "wx/utils.h"
 
-#include <atomic>
 #include <ostream>
 
 // define stream inserter for wxFileName to use it in Catch assertions
@@ -81,72 +79,26 @@ private:
 class TempDir
 {
 public:
-    static unsigned long ReserveNameId()
-    {
-        // Keep each TempDir construction on a distinct name sequence.
-        static std::atomic<unsigned long> s_nextId(0);
-        return s_nextId.fetch_add(1) + 1;
-    }
-
-    static wxString GetCandidateName(const wxString& prefix,
-                                     unsigned long nameId, unsigned int num)
-    {
-        wxString dir;
-        wxString name;
-        wxString ext;
-        wxFileName::SplitPath(prefix, &dir, &name, &ext);
-
-        if ( dir.empty() )
-            dir = wxFileName::GetTempDir();
-
-        if ( name.empty() )
-            name = wxT("wxtest");
-
-        if ( !ext.empty() )
-            name << "." << ext;
-
-        const wxString candidateName = wxString::Format(
-            "%s%lx-%lx-%03u", name, wxGetProcessId(), nameId, num);
-        return wxFileName(dir, candidateName).GetFullPath();
-    }
-
     explicit TempDir(const wxString& prefix = wxT("wxtest"))
-        : TempDir(prefix, ReserveNameId())
     {
-    }
+        // Capture the error message, if any, to show it in RequireOk(), as
+        // the errors are not shown by the test logger by default.
+        wxLogBuffer logBuf;
+        wxLog* const logOld = wxLog::SetActiveTarget(&logBuf);
 
-    TempDir(const wxString& prefix, unsigned long nameId)
-    {
-        // Make directory creation itself reserve the name.  Creating a temp
-        // file and replacing it with a directory opens a race after deletion.
-        static const unsigned int maxTries = 1000;
-        for ( unsigned int n = 0; n < maxTries; ++n )
+        m_name = wxFileName::CreateTempDirName(prefix);
+
+        if ( m_name.empty() )
         {
-            m_name = GetCandidateName(prefix, nameId, n);
-
-            unsigned long err;
-            {
-                wxLogNull noLog;
-                if ( wxMkdir(m_name) )
-                {
-                    m_error.clear();
-                    return;
-                }
-
-                // Capture the failure before Exists() below can change it.
-                err = wxSysErrorCode();
-            }
-
-            SetMkdirError(m_name, err);
-
-            if ( wxFileName::Exists(m_name) )
-                continue;
-
-            m_name.clear();
-            return;
+            m_error = logBuf.GetBuffer();
+            m_error.Trim();
         }
 
-        m_name.clear();
+        // Prevent the buffer contents from being shown when the old target is
+        // restored, as this flushes the current one.
+        logBuf.Clear();
+
+        wxLog::SetActiveTarget(logOld);
     }
 
     ~TempDir() { Remove(); }
@@ -186,13 +138,6 @@ public:
     void Dismiss() { m_name.clear(); }
 
 private:
-    void SetMkdirError(const wxString& path, unsigned long err)
-    {
-        m_error = wxString::Format("wxMkdir failed for \"%s\": %s",
-                                   path,
-                                   wxSysErrorMsgStr(err));
-    }
-
     wxString m_name;
     wxString m_error;
 

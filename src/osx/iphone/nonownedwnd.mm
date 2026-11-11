@@ -135,7 +135,14 @@ long style, long /*extraStyle*/, const wxString& /*name*/ )
         level = UIWindowLevelAlert;
     CGRect r = CGRectMake( 0, 0, size.x, size.y) ;
 
+#if wxOSX_IPHONE_USE_UISCENE
+    wxASSERT_MSG( wxTheApp->OSXGetCurrentUIScene(), "There must be a current UIWindowScene when initializing UIWindows" );
+
+    [m_macWindow initWithWindowScene:(UIWindowScene*) wxTheApp->OSXGetCurrentUIScene() ];
+    [m_macWindow setFrame:r];
+#else
     [m_macWindow initWithFrame:r ];
+#endif
     [m_macWindow setHidden:YES];
 
     [m_macWindow setWindowLevel:level];
@@ -349,11 +356,16 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     CGRect frame = [toplevelwindow bounds];
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+#if wxOSX_IPHONE_USE_UISCENE
+    UIWindowScene* scene = [toplevelwindow windowScene];
+    CGRect appframe = [[scene screen] bounds];
+#else
     CGRect appframe = [[UIScreen mainScreen] applicationFrame];
+#endif
     BOOL fullscreen = now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent;
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? frame : appframe ) ];
+    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? appframe : frame ) ];
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     wxUIContentViewController* controller = [[wxUIContentViewController alloc] initWithNibName:nil bundle:nil];
 

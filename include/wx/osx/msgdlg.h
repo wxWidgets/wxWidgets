@@ -22,7 +22,7 @@ public:
 
     virtual int ShowModal() override;
 
-#if wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA_OR_IPHONE
     virtual void ShowWindowModal() override;
     virtual void ModalFinishedCallback(void* panel, int resultCode) override;
 #endif
@@ -39,6 +39,11 @@ protected:
 
     int m_buttonId[4];
     int m_buttonCount;
+
+private:
+    // for the windowmodal callback driving the ShowModal loop
+    int m_clickedbutton;
+    bool m_messageClosed;
 
     wxDECLARE_DYNAMIC_CLASS(wxMessageDialog);
 };

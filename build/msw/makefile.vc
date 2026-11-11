@@ -32,7 +32,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	WX_FLAVOUR="$(WX_FLAVOUR)" WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" \
 	RUNTIME_LIBS="$(RUNTIME_LIBS)"
 WX_RELEASE_NODOT = 33
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)4
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)5
 COMPILER_PREFIX = vc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -375,6 +375,7 @@ WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_random_getentropy.obj \
 	$(OBJS)\wxexpat_random_getrandom.obj \
 	$(OBJS)\wxexpat_random_rand_s.obj \
+	$(OBJS)\wxexpat_xcs.obj \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
 	$(OBJS)\wxexpat_xmltok.obj
@@ -6835,7 +6836,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=3 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=4 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=5 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -7717,6 +7718,9 @@ $(OBJS)\wxexpat_random_getrandom.obj: ..\..\src\expat\expat\lib\random_getrandom
 
 $(OBJS)\wxexpat_random_rand_s.obj: ..\..\src\expat\expat\lib\random_rand_s.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_rand_s.c
+
+$(OBJS)\wxexpat_xcs.obj: ..\..\src\expat\expat\lib\xcs.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xcs.c
 
 $(OBJS)\wxexpat_xmlparse.obj: ..\..\src\expat\expat\lib\xmlparse.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xmlparse.c

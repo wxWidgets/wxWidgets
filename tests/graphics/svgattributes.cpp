@@ -44,4 +44,20 @@ TEST_CASE("wxSVGAttributes::Getters", "[svg][attributes]")
     CHECK( attr.GetAttribute("nonexistent").empty() );
 }
 
+TEST_CASE("wxSVGFileDC::TransparentBrushArcs", "[svg][dc]")
+{
+    wxSVGFileDC dc("", 100, 100);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    dc.DrawArc(90, 50, 50, 10, 50, 50);
+    dc.DrawEllipticArc(10, 10, 80, 40, 0, 90);
+
+    const wxString svg = dc.GetSVGDocument();
+
+    CHECK( svg.Contains("M90 50 A40.00 40.00 0 0 0 50 10") );
+    CHECK( !svg.Contains("L50 50 z") );
+    CHECK( svg.Contains("M90.00 30.00 A40.00 20.00 0 0 0 50.00 10.00") );
+    CHECK( !svg.Contains("L50.00 30.00 z") );
+}
+
 #endif // wxUSE_SVG

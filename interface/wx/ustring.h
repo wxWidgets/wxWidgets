@@ -237,48 +237,47 @@ public:
     */
     inline wxUString& operator+=(const wxUString& s);
 
-};
-
     /**
        Concatenation operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline wxUString operator+(const wxUString &s1, const wxUString &s2);
+    friend wxUString operator+(const wxUString &s1, const wxUString &s2);
 
     /**
        Equality operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline bool operator==(const wxUString& s1, const wxUString& s2);
+    friend bool operator==(const wxUString& s1, const wxUString& s2);
     /**
        Inequality operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline bool operator!=(const wxUString& s1, const wxUString& s2);
+    friend bool operator!=(const wxUString& s1, const wxUString& s2);
     /**
        Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline bool operator< (const wxUString& s1, const wxUString& s2);
+    friend bool operator< (const wxUString& s1, const wxUString& s2);
     /**
        Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline bool operator> (const wxUString& s1, const wxUString& s2);
+    friend bool operator> (const wxUString& s1, const wxUString& s2);
     /**
        Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline bool operator<=(const wxUString& s1, const wxUString& s2);
+    friend bool operator<=(const wxUString& s1, const wxUString& s2);
     /**
        Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-inline bool operator>=(const wxUString& s1, const wxUString& s2);
+    friend bool operator>=(const wxUString& s1, const wxUString& s2);
+};

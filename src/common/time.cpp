@@ -61,15 +61,19 @@ wxDECL_FOR_STRICT_MINGW32(void, tzset, (void));
     #include <values.h>
 #endif
 
+#ifdef __WINDOWS__
+    #include "wx/msw/private/filetime.h"
+#endif
+
 namespace
 {
 
 const int MILLISECONDS_PER_SECOND = 1000;
-#if !defined(__WINDOWS__)
 const int MICROSECONDS_PER_MILLISECOND = 1000;
-#ifdef HAVE_GETTIMEOFDAY
+#if defined(__WINDOWS__)
+const int FILETIME_100NS_PER_USEC = 10;
+#elif defined(HAVE_GETTIMEOFDAY)
 const int MICROSECONDS_PER_SECOND = 1000*1000;
-#endif
 #endif
 
 } // anonymous namespace
@@ -233,12 +237,7 @@ wxLongLong wxGetUTCTimeUSec()
     FILETIME ft;
     ::GetSystemTimeAsFileTime(&ft);
 
-    // FILETIME is in 100ns or 0.1us since 1601-01-01, transform to us since
-    // 1970-01-01.
-    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
-    t /= 10;
-    t -= wxLL(11644473600000000); // Unix - Windows epochs difference in us.
-    return t;
+    return wxMSWImpl::FileTimeToUnix100ns(ft) / FILETIME_100NS_PER_USEC;
 #else // non-MSW
 
 #ifdef HAVE_GETTIMEOFDAY
@@ -263,15 +262,7 @@ wxLongLong wxGetUTCTimeMillis()
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
 #if defined(__WINDOWS__)
-    FILETIME ft;
-    ::GetSystemTimeAsFileTime(&ft);
-
-    // FILETIME is expressed in 100ns (or 0.1us) units since 1601-01-01,
-    // transform them to ms since 1970-01-01.
-    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
-    t /= 10000;
-    t -= wxLL(11644473600000); // Unix - Windows epochs difference in ms.
-    return t;
+    return wxGetUTCTimeUSec() / MICROSECONDS_PER_MILLISECOND;
 #else // !__WINDOWS__
     wxLongLong val = MILLISECONDS_PER_SECOND;
 

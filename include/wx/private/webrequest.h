@@ -14,6 +14,7 @@
 
 #include "wx/private/refcountermt.h"
 
+#include <atomic>
 #include <memory>
 #include <unordered_map>
 
@@ -224,7 +225,7 @@ private:
     wxWebCredentials m_basicAuthCred;
 
     // Initially false, set to true after the first call to Cancel().
-    bool m_cancelled = false;
+    std::atomic<bool> m_cancelled{false};
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestImpl);
 };

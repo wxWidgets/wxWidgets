@@ -98,6 +98,7 @@
             strings/crt.cpp
             strings/vsnprintf.cpp
             strings/hexconv.cpp
+            strings/utf8literals.cpp
             streams/datastreamtest.cpp
             streams/ffilestream.cpp
             streams/fileback.cpp
@@ -173,6 +174,7 @@
             graphics/graphbitmap.cpp
             graphics/graphmatrix.cpp
             graphics/graphpath.cpp
+            graphics/iconbundle.cpp
             graphics/imagelist.cpp
             <!--
                 Duplicate this file here to compile a GUI test in it too.
@@ -259,6 +261,7 @@
             misc/guifuncs.cpp
             misc/selstoretest.cpp
             misc/garbage.cpp
+            misc/oleautomationobject.cpp
             misc/safearrayconverttest.cpp
             misc/settings.cpp
             misc/textwrap.cpp
@@ -319,6 +322,7 @@
             test.cpp
             allheaders.cpp
             testableframe.cpp
+            allheaders_utf8.cpp
         </sources>
         <!--
             Can't use <wx-lib> here as it doesn't work with conditionally

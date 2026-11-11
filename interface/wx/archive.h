@@ -206,6 +206,12 @@ public:
 
         If this is a directory entry, (i.e. if IsDir() is @true) then the
         returned string is the name with a trailing path separator.
+
+        Note that the name comes from the archive and so may contain
+        parent directory references (`..`) or characters which are invalid in
+        the file names. It must not be used as a path to write the entry
+        data to without validating it first, which can be done using
+        wxFileName::MakeSafeRelativePath(), see @ref overview_archive_extract.
     */
     virtual wxString GetName(wxPathFormat format = wxPATH_NATIVE) const = 0;
 

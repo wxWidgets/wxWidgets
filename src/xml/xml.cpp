@@ -41,6 +41,32 @@ wxIMPLEMENT_CLASS(wxXmlDocument, wxObject);
 // a private utility used by wxXML
 static bool wxIsWhiteOnly(const wxString& buf);
 
+// Expat 2.9.0 deprecated functions returning the current position as
+// XML_Size/XML_Index in favour of their versions with "64" suffix, so use the
+// latter if available, as using the former results in warnings.
+#if XML_MAJOR_VERSION > 2 || (XML_MAJOR_VERSION == 2 && XML_MINOR_VERSION >= 9)
+    #define wxXML_GET_CURRENT(what, parser) XML_GetCurrent##what##64(parser)
+#else
+    #define wxXML_GET_CURRENT(what, parser) XML_GetCurrent##what(parser)
+#endif
+
+static inline int wxXmlGetCurrentLine(XML_Parser parser)
+{
+    return static_cast<int>(wxXML_GET_CURRENT(LineNumber, parser));
+}
+
+static inline int wxXmlGetCurrentColumn(XML_Parser parser)
+{
+    return static_cast<int>(wxXML_GET_CURRENT(ColumnNumber, parser));
+}
+
+static inline wxFileOffset wxXmlGetCurrentOffset(XML_Parser parser)
+{
+    return wxXML_GET_CURRENT(ByteIndex, parser);
+}
+
+#undef wxXML_GET_CURRENT
+
 
 //-----------------------------------------------------------------------------
 //  wxXmlNode
@@ -641,7 +667,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE,
                                     wxString::FromUTF8Unchecked(name),
                                     wxEmptyString,
-                                    XML_GetCurrentLineNumber(ctx->parser));
+                                    wxXmlGetCurrentLine(ctx->parser));
     const char **a = atts;
 
     // add node attributes
@@ -691,7 +717,7 @@ static void TextHnd(void *userData, const char *s, int len)
         {
             wxXmlNode *textnode =
                 new wxXmlNode(wxXML_TEXT_NODE, wxS("text"), str,
-                              XML_GetCurrentLineNumber(ctx->parser));
+                              wxXmlGetCurrentLine(ctx->parser));
 
             ASSERT_LAST_CHILD_OK(ctx);
             ctx->node->InsertChildAfter(textnode, ctx->lastChild);
@@ -706,7 +732,7 @@ static void StartCdataHnd(void *userData)
 
     wxXmlNode *textnode =
         new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxS("cdata"), wxS(""),
-                      XML_GetCurrentLineNumber(ctx->parser));
+                      wxXmlGetCurrentLine(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
     ctx->node->InsertChildAfter(textnode, ctx->lastChild);
@@ -731,7 +757,7 @@ static void CommentHnd(void *userData, const char *data)
     wxXmlNode *commentnode =
         new wxXmlNode(wxXML_COMMENT_NODE,
                       wxS("comment"), wxString::FromUTF8Unchecked(data),
-                      XML_GetCurrentLineNumber(ctx->parser));
+                      wxXmlGetCurrentLine(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
     ctx->node->InsertChildAfter(commentnode, ctx->lastChild);
@@ -746,7 +772,7 @@ static void PIHnd(void *userData, const char *target, const char *data)
     wxXmlNode *pinode =
         new wxXmlNode(wxXML_PI_NODE, wxString::FromUTF8Unchecked(target),
                       wxString::FromUTF8Unchecked(data),
-                      XML_GetCurrentLineNumber(ctx->parser));
+                      wxXmlGetCurrentLine(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
     ctx->node->InsertChildAfter(pinode, ctx->lastChild);
@@ -856,9 +882,9 @@ bool wxXmlDocument::Load(wxInputStream& stream, int flags,
             if (err)
             {
                 err->message = XML_ErrorString(XML_GetErrorCode(parser));
-                err->line = (int)XML_GetCurrentLineNumber(parser);
-                err->column = (int)XML_GetCurrentColumnNumber(parser);
-                err->offset = XML_GetCurrentByteIndex(parser);
+                err->line = wxXmlGetCurrentLine(parser);
+                err->column = wxXmlGetCurrentColumn(parser);
+                err->offset = wxXmlGetCurrentOffset(parser);
             }
             else
             {
@@ -866,7 +892,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, int flags,
                                *wxConvCurrent);
                 wxLogError(_("XML parsing error: '%s' at line %d"),
                            error.c_str(),
-                           (int)XML_GetCurrentLineNumber(parser));
+                           wxXmlGetCurrentLine(parser));
             }
             ok = false;
             break;

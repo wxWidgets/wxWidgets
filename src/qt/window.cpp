@@ -51,6 +51,15 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+
+void wxQtChangeRoleColour(QPalette::ColorRole role,
+                          QWidget* widget,
+                          const wxColour& colour)
+{
+    QPalette palette = widget->palette();
+    palette.setColor(role, colour.GetQColor());
+    widget->setPalette(palette);
+}
 }
 
 extern wxSize wxQtGetBestSize(QWidget* qtWidget)
@@ -494,9 +503,17 @@ void wxWindowQt::PostCreation(bool generic)
 //    SetWindowStyleFlag( style );
 //
 
-    // Set the default color so Paint Event default handler clears the DC:
-    wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().window().color()));
-    wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().windowText().color()));
+    // Apply the colours set before the window creation, if any: note that we
+    // must not set them to the default colours here, as this would make them
+    // appear as if they were explicitly set, and GetDefaultAttributes() takes
+    // care of returning the default colours anyhow.
+    if ( QWidget* const widget = QtGetParentWidget() )
+    {
+        if ( m_backgroundColour.IsOk() )
+            wxQtChangeRoleColour(widget->backgroundRole(), widget, m_backgroundColour);
+        if ( m_foregroundColour.IsOk() )
+            wxQtChangeRoleColour(widget->foregroundRole(), widget, m_foregroundColour);
+    }
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
@@ -1402,30 +1419,15 @@ bool wxWindowQt::SetTransparent(wxByte alpha)
 }
 
 
-namespace
-{
-
-void wxQtChangeRoleColour(QPalette::ColorRole role,
-                          QWidget* widget,
-                          const wxColour& colour)
-{
-    QPalette palette = widget->palette();
-    palette.setColor(role, colour.GetQColor());
-    widget->setPalette(palette);
-}
-
-} // anonymous namespace
-
 bool wxWindowQt::SetBackgroundColour(const wxColour& colour)
 {
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
-    if ( colour.IsOk() )
-    {
-        QWidget *widget = QtGetParentWidget();
+    // Note that this function may be called before the window is created.
+    QWidget *widget = QtGetParentWidget();
+    if ( widget && colour.IsOk() )
         wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
-    }
 
     return true;
 }
@@ -1435,10 +1437,27 @@ bool wxWindowQt::SetForegroundColour(const wxColour& colour)
     if (!wxWindowBase::SetForegroundColour(colour))
         return false;
 
+    // Note that this function may be called before the window is created.
     QWidget *widget = QtGetParentWidget();
-    wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
+    if ( widget )
+        wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
 
     return true;
+}
+
+wxVisualAttributes wxWindowQt::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = wxWindowBase::GetDefaultAttributes();
+
+    // Use the colours of the native widget, if it already exists.
+    if ( const QWidget* const widget = GetHandle() )
+    {
+        const QPalette& palette = widget->palette();
+        attrs.colFg = wxColour(palette.windowText().color());
+        attrs.colBg = wxColour(palette.window().color());
+    }
+
+    return attrs;
 }
 
 void wxWindowQt::SetDoubleBuffered(bool on)
@@ -1541,7 +1560,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                             break;
                         }
                         // Ensure DC is cleared if handler didn't and Qt will not do it
-                        if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                        if ( !GetHandle()->autoFillBackground() )
                         {
                             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
                                        GetName(), GetBackgroundColour().GetAsString()

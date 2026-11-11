@@ -25,6 +25,7 @@
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
+#include "wx/aui/floatpane.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/serializer.h"
 
@@ -343,6 +344,39 @@ TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::SizerDragReleasesMouse", "[a
         frame->ReleaseMouse();
 
     CHECK( !stillCaptured );
+}
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::CloseMaximizedPane", "[aui]")
+{
+    wxWindow* const pane1 = new wxPanel(frame.get());
+    wxWindow* const pane2 = new wxPanel(frame.get());
+
+    REQUIRE( manager.AddPane(pane1, wxAuiPaneInfo().Name("pane1").CenterPane().
+                             Caption("Pane 1").MaximizeButton()) );
+    REQUIRE( manager.AddPane(pane2, wxAuiPaneInfo().Name("pane2").Right().
+                             Caption("Pane 2").MaximizeButton()) );
+    manager.Update();
+
+    wxAuiPaneInfo& paneInfo1 = manager.GetPane(pane1);
+    wxAuiPaneInfo& paneInfo2 = manager.GetPane(pane2);
+
+    manager.MaximizePane(paneInfo1);
+    manager.Update();
+
+    CHECK( paneInfo1.IsShown() );
+    CHECK( paneInfo1.IsMaximized() );
+    CHECK_FALSE( paneInfo2.IsShown() );
+
+    wxAuiManagerEvent event(wxEVT_AUI_PANE_BUTTON);
+    event.SetManager(&manager);
+    event.SetPane(&paneInfo1);
+    event.SetButton(wxAUI_BUTTON_CLOSE);
+    frame->ProcessWindowEvent(event);
+
+    CHECK_FALSE( paneInfo1.IsShown() );
+    CHECK_FALSE( paneInfo1.IsMaximized() );
+    CHECK( paneInfo2.IsShown() );
+    CHECK_FALSE( paneInfo2.IsMaximized() );
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
@@ -867,6 +901,48 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::ScrollButtonDClick", "[aui
     tabCtrl.LeftDClickButton();
 
     CHECK( tabCtrl.GetTabOffset() == 1 );
+}
+
+TEST_CASE("wxAuiFloatingFrame::SetPaneWindow", "[aui]")
+{
+    auto frame = make_unique<wxFrame>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                      "wxAuiFloatingFrame test");
+    wxAuiManager manager(frame.get());
+
+    wxPanel * const paneWindow = new wxPanel(frame.get());
+    const wxSize floatingSize(300, 250);
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.Name("pane").
+             Float().
+             FloatingSize(floatingSize).
+             MinSize(100, 100);
+
+    REQUIRE( manager.AddPane(paneWindow, paneInfo) );
+
+    wxAuiPaneInfo& pane = manager.GetPane(paneWindow);
+    std::unique_ptr<wxAuiFloatingFrame> const
+        floatingFrame{manager.CreateFloatingFrame(frame.get(), pane)};
+
+#ifndef __WXQT__
+    bool paneSizeChanged = false;
+    floatingFrame->Bind(wxEVT_SIZE,
+        [&](wxSizeEvent& event)
+        {
+            manager.GetPane(paneWindow).FloatingSize(10, 10);
+            paneSizeChanged = true;
+            event.Skip();
+        });
+#endif // !__WXQT__
+
+    floatingFrame->SetPaneWindow(pane);
+
+#ifndef __WXQT__
+    // wxQt defers resizeEvent() for this hidden top-level window,
+    // but the other ports send it synchronously from SetPaneWindow().
+    CHECK( paneSizeChanged );
+#endif // !__WXQT__
+    CHECK( floatingFrame->GetSize() == floatingSize );
 }
 
 TEST_CASE("wxAuiToolBar::Items", "[aui][toolbar]")

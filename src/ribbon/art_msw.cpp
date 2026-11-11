@@ -2694,8 +2694,6 @@ wxRibbonMSWArtProvider::DrawToggleButton(wxDC& dc,
                                          const wxRect& rect,
                                          wxRibbonDisplayMode mode)
 {
-    DrawPartialPageBackground(dc, wnd, rect, false);
-
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
@@ -2745,8 +2743,7 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
                                        wxRibbonBar* wnd,
                                        const wxRect& rect)
 {
-    DrawPartialPageBackground(dc, wnd, rect, false);
-
+    // The tab area background has already been drawn by the bar.
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 

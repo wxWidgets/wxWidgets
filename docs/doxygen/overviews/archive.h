@@ -83,6 +83,41 @@ while (entry.reset(zip.GetNextEntry()), entry.get() != nullptr)
 }
 @endcode
 
+When extracting the entries to disk, keep in mind that their names come from
+the archive and can't be trusted: a malicious archive could contain entries
+with names such as `../../.bashrc`, which would overwrite files outside of the
+target directory if the name were used as is. Use
+wxFileName::MakeSafeRelativePath() to get a path which is guaranteed to be
+inside the target directory, and skip the entries for which it returns an
+empty string:
+
+@code
+while (entry.reset(zip.GetNextEntry()), entry.get() != nullptr)
+{
+    const wxString path = wxFileName::MakeSafeRelativePath(entry->GetName());
+    if (path.empty())
+    {
+        wxLogWarning("Skipping entry with unsafe name \"%s\".", entry->GetName());
+        continue;
+    }
+
+    const wxString fullPath = targetDir + wxFILE_SEP_PATH + path;
+    if (entry->IsDir())
+    {
+        wxFileName::Mkdir(fullPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+        continue;
+    }
+
+    // Create the parent directories, as the archive doesn't necessarily
+    // contain the entries for them.
+    wxFileName fn(fullPath);
+    fn.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+    wxFFileOutputStream out(fn.GetFullPath());
+    out.Write(zip);
+}
+@endcode
+
 
 
 @section overview_archive_modify Modifying an Archive

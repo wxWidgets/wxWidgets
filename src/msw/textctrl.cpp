@@ -49,7 +49,10 @@
 
 #include <windowsx.h>
 
+#include "wx/dcmemory.h"
+#include "wx/rawbmp.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/custompaint.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/winundef.h"
 
@@ -2401,6 +2404,14 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
                              WXWPARAM wParam,
                              WXLPARAM lParam)
 {
+#if wxUSE_RICHEDIT
+    if ( nMsg == WM_PAINT && wxMSWDarkMode::IsActive() && IsRich() && !IsEnabled() )
+    {
+        MSWPaintDarkRichDisabled();
+        return true;
+    }
+#endif
+
     bool processed = wxTextCtrlBase::MSWHandleMessage(rc, nMsg, wParam, lParam);
 
     switch ( nMsg )
@@ -3944,6 +3955,70 @@ bool wxRichEditModule::LoadInkEdit()
 }
 #endif // wxUSE_INKEDIT
 
+// Work around two problems with the rich edit control when disabled in dark
+// mode: the background is light and the text is not gray.
+void wxTextCtrl::MSWPaintDarkRichDisabled()
+{
+    // Paint the control into a memory DC, specified by wParam.
+    auto paint = [this](HWND WXUNUSED(hwnd), WPARAM wParam)
+    {
+        MSWDefWindowProc(WM_PRINTCLIENT, wParam, PRF_CLIENT);
+    };
+
+    // Manipulate the pixels produced by paint().
+    auto postProcess = [](wxBitmap& bmp) -> wxBitmap&
+    {
+        wxNativePixelData data(bmp);
+        wxNativePixelData::Iterator p(data);
+        const COLORREF bgLight = ::GetSysColor(COLOR_3DFACE);
+        const COLORREF bgDark =
+            wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel() & 0xffffff;
+        for ( int y = 0; y < data.GetHeight(); ++y )
+        {
+            wxNativePixelData::Iterator rowStart = p;
+            for ( int x = 0; x < data.GetWidth(); ++x, ++p )
+            {
+                if ( RGB(p.Red(), p.Green(), p.Blue()) == bgLight )
+                {
+                    // Margin area, make dark. This pixel is conceivably
+                    // within anti-aliased text. However, that is unlikely
+                    // because ClearType does not use grayscale. In any case,
+                    // this makes little difference to the overall appearance.
+                    p.Red()   = GetRValue(bgDark);
+                    p.Green() = GetGValue(bgDark);
+                    p.Blue()  = GetBValue(bgDark);
+                }
+                else if ( RGB(p.Red(), p.Green(), p.Blue()) != bgDark )
+                {
+                    // Text area pixel does not match background. Make the
+                    // pixel grayscale and reduce the luminance linearly to
+                    // preserve anti-aliasing. First, compute a luminance
+                    // value 0-255. A weighted formula would result in primary
+                    // coloured text becoming so dim that it disappears. Use
+                    // the maximum of the three channels. For example, this
+                    // gives the same result for pure red as for pure white.
+                    auto lum = p.Red();
+                    if ( lum < p.Green() )
+                        lum = p.Green();
+                    if ( lum < p.Blue() )
+                        lum = p.Blue();
+                    // Dim the value to the gray range 0-127.
+                    lum /= 2;
+                    // Apply as grayscale.
+                    p.Red()   = lum;
+                    p.Green() = lum;
+                    p.Blue()  = lum;
+                }
+            }
+
+            p = rowStart;
+            p.OffsetY(data, 1);
+        }
+        return bmp;
+    };
+
+    wxMSWImpl::CustomPaint(m_hWnd, paint, postProcess);
+}
 
 #endif // wxUSE_RICHEDIT
 

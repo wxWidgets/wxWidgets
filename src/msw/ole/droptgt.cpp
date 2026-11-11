@@ -548,6 +548,8 @@ bool wxDropTarget::GetData()
 
         hr = dataObject->SetData(&fmtMemory, &stm, TRUE);
         if ( SUCCEEDED(hr) ) {
+            m_dataObject->MSWSetDataSource(m_pIDataSource, format);
+
             rc = true;
         }
         else {

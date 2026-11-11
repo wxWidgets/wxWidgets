@@ -30,6 +30,7 @@ set(TEST_GUI_SRC
     graphics/graphbitmap.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
+    graphics/iconbundle.cpp
     graphics/imagelist.cpp
     config/config.cpp
     controls/auitest.cpp
@@ -110,6 +111,7 @@ set(TEST_GUI_SRC
     misc/guifuncs.cpp
     misc/selstoretest.cpp
     misc/garbage.cpp
+    misc/oleautomationobject.cpp
     misc/safearrayconverttest.cpp
     misc/settings.cpp
     misc/textwrap.cpp

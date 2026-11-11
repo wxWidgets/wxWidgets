@@ -244,13 +244,19 @@ jobs:
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
+        timeout-minutes: 30
         working-directory: build_cmake
         run: |
           . ../build/tools/httpbin.sh
 
           httpbin_launch
 
-          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          # GUI tests are run separately below if they're enabled.
+          if [ "${{ matrix.test_gui }}" = 1 ]; then
+              ctest_args="-E test_gui"
+          fi
+
+          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 $ctest_args . || rc=$?
           if [ -n "$rc" ]; then
               httpbin_show_log
               exit $rc
@@ -258,9 +264,11 @@ jobs:
 
       - name: Testing GUI
         if: matrix.test_gui == '1'
+        timeout-minutes: 30
         working-directory: build_cmake\lib\vc_x64_dll
         run: |
-          ./test_gui.exe
+          # Show the duration of each test to know which one hangs, if any.
+          ./test_gui.exe -d yes
 
       - name: Testing installation
         if: matrix.skip_installation != true

@@ -72,12 +72,16 @@ public:
     bool IsVisible() const { return m_countVisible > 0; }
 
         // get the caret position
-    void GetPosition(int *x, int *y) const
+    void GetPosition(int* x, int* y) const
     {
-        if ( x ) *x = m_x;
-        if ( y ) *y = m_y;
+        DoGetPosition(x, y);
     }
-    wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
+    wxPoint GetPosition() const
+    {
+        wxPoint pt;
+        DoGetPosition(&pt.x, &pt.y);
+        return pt;
+    }
 
         // get the caret size
     void GetSize(int *width, int *height) const
@@ -102,7 +106,7 @@ public:
     // operations
     // ----------
 
-        // move the caret to given position (in logical coords)
+        // move the caret to given position (in client coords)
     void Move(int x, int y) { m_x = x; m_y = y; DoMove(); }
     void Move(const wxPoint& pt) { m_x = pt.x; m_y = pt.y; DoMove(); }
 
@@ -156,6 +160,12 @@ protected:
     virtual void DoHide() = 0;
     virtual void DoMove() = 0;
     virtual void DoSize() { }
+
+    virtual void DoGetPosition(int* x, int* y) const
+    {
+        if ( x ) *x = m_x;
+        if ( y ) *y = m_y;
+    }
 
     // the size of the caret
     int m_width, m_height;

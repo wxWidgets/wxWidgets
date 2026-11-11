@@ -420,6 +420,15 @@ more details.
         encoding in wxString class. Note that this option is incompatible with
         @c wxUSE_UTF8_LOCALE_ONLY, as all strings are implicitly assumed to use
         UTF-8 then. Support for this option appeared in wxWidgets 3.1.4.}
+@itemdef{wxALLOW_UTF8_LITERALS,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library together with
+        @c wxNO_IMPLICIT_WXSTRING_ENCODING to allow implicitly constructing
+        wxString from narrow string literals, which are assumed to be in UTF-8.
+        Note that the compiler must use UTF-8 for the literals, which requires
+        using @c /utf-8 option with MSVC, otherwise a compile-time error is
+        given. See wxString documentation for more details. Support for this
+        option appeared in wxWidgets 3.3.5.}
 @itemdef{wxNO_REQUIRE_LITERAL_MSGIDS,
         this symbol is not defined by wxWidgets itself, but can be defined by
         the applications using the library to allow variables as string arguments to

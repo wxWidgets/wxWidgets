@@ -41,6 +41,8 @@ enum wxNumValidatorStyle
         With this style a value of zero in the associated variable is
         translated to an empty string and an empty value of the control is
         translated to a value of zero.
+
+        See also wxNUM_VAL_ALLOW_BLANK_AS_ZERO, which only does the latter.
      */
     wxNUM_VAL_ZERO_AS_BLANK = 2,
 
@@ -77,6 +79,29 @@ enum wxNumValidatorStyle
         @since 3.3.1
      */
     wxNUM_VAL_SIGN_SPACE = 0x10,
+
+    /**
+        Allow the control to be left empty and treat it as zero.
+
+        By default, an empty control is not considered to contain a valid
+        value and, if the user clears it, it is replaced with a valid value,
+        which is zero if it is in the validator range, when it loses focus.
+        With this style, an empty control is left empty and is translated to
+        a value of zero in the associated variable, if there is one.
+
+        Unlike with wxNUM_VAL_ZERO_AS_BLANK, a value of zero is still shown
+        as "0" and not as an empty string, so the user can distinguish
+        between a value of zero and no value at all.
+
+        Note that if zero is not in the range of the validator, an empty
+        control is still left empty, but it is considered to be invalid and
+        TransferFromWindow() returns @false for it. Derived classes can
+        override TransferFromWindow() to handle an empty control specially,
+        e.g. to use some non-zero default value for it.
+
+        @since 3.3.5
+     */
+    wxNUM_VAL_ALLOW_BLANK_AS_ZERO = 0x20,
 
 };
 
@@ -169,8 +194,8 @@ public:
         This method is called to check the correctness of user input and fill
         the associated variable with the controls numeric value. It returns
         false if it is not a number in the configured range or if the control
-        contents is empty for a validator without wxNUM_VAL_ZERO_AS_BLANK
-        style.
+        contents is empty for a validator without either
+        wxNUM_VAL_ZERO_AS_BLANK or wxNUM_VAL_ALLOW_BLANK_AS_ZERO style.
 
         It does nothing if there is no associated variable.
      */
@@ -186,14 +211,16 @@ protected:
         This field can be useful for the derived classes overriding the base
         class TransferToWindow() and/or TransferFromWindow() methods, for
         example here is a class which treats the absent value as @c 1
-        (similarly to how using wxNUM_VAL_ZERO_AS_BLANK would treat it as @c 0):
+        (similarly to how using wxNUM_VAL_ALLOW_BLANK_AS_ZERO would treat it
+        as @c 0, and note that this style is still needed here to prevent the
+        validator from replacing an empty value with @c 0 on focus loss):
 
         @code
         class MyMultiplierValidator : public wxFloatingPointValidator<double>
         {
         public:
             explicit MyMultiplierValidator(double& value)
-                : wxFloatingPointValidator(&value)
+                : wxFloatingPointValidator(&value, wxNUM_VAL_ALLOW_BLANK_AS_ZERO)
             {
                 SetMin(0); // Multiplier is always positive.
             }

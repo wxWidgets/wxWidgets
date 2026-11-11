@@ -621,13 +621,7 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
 {
     CHECK( m_dvc->IsExpanded(m_root) );
     CHECK( !m_dvc->IsExpanded(m_child1) );
-    // No idea why, but the native NSOutlineView isItemExpanded: method returns
-    // true for this item for some reason.
-#ifdef __WXOSX__
-    WARN("Disabled under MacOS: IsExpanded() returns true for grand child");
-#else
     CHECK( !m_dvc->IsExpanded(m_grandchild) );
-#endif
     CHECK( !m_dvc->IsExpanded(m_child2) );
 
     m_dvc->Collapse(m_root);
@@ -642,6 +636,19 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_child1) );
     m_dvc->ExpandChildren(m_root);
     CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Now collapse root while child1 is expanded
+    m_dvc->Collapse(m_root);
+    // also child should report not being expanded as its parent it collapsed
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+
+    // Collapsing the hidden child must work too, i.e. it must still be
+    // collapsed after its parent is expanded again.
+    m_dvc->Collapse(m_child1);
+    m_dvc->Expand(m_root);
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    CHECK( m_dvc->GetItemRect(m_grandchild) == wxRect() );
 }
 
 TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,

@@ -56,14 +56,10 @@ public:
 
 private:
     // signal handler set up by SetSignalHandler() for all signals we handle,
-    // it just adds the signal to m_signalsCaught -- the real processing is
+    // it just remembers that the signal was caught -- the real processing is
     // done later, when CheckSignal() is called
     static void HandleSignal(int signal);
 
-
-    // signals for which HandleSignal() had been called (reset from
-    // CheckSignal())
-    sigset_t m_signalsCaught;
 
     // the signal handlers
     std::unordered_map<int, SignalHandler> m_signalHandlerHash;

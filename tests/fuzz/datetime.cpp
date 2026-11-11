@@ -9,19 +9,7 @@
 #include "wx/log.h"
 #include "wx/datetime.h"
 
-static void ignoreAssertHandler(const wxString&,
-                                int,
-                                const wxString&,
-                                const wxString&,
-                                const wxString&)
-{
-}
-
-extern "C" int LLVMFuzzerInitialize(int*, char***)
-{
-    wxSetAssertHandler(ignoreAssertHandler);
-    return 0;
-}
+#include "exitassert.cpp"
 
 // Formats exercising a spread of specifiers. These are fixed rather than taken
 // from the input because Format() and ParseFormat() treat an unknown specifier

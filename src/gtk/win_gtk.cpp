@@ -1217,6 +1217,15 @@ void wxPizza::scroll(int dx, int dy)
     }
 }
 
+#ifdef __WXGTK3__
+/* static */
+GtkStyleContext* wxPizza::get_border_style_context()
+{
+    // Native scrolled windows seem like the best match for a generic wxWindow.
+    return gtk_widget_get_style_context(wxGTKPrivate::GetScrolledWindowWidget());
+}
+#endif // __WXGTK3__
+
 void wxPizza::get_border(GtkBorder& border)
 {
 #ifndef __WXUNIVERSAL__
@@ -1225,11 +1234,7 @@ void wxPizza::get_border(GtkBorder& border)
     else if (m_windowStyle & (wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME))
     {
 #ifdef __WXGTK3__
-        GtkStyleContext* sc;
-        if (m_windowStyle & (wxHSCROLL | wxVSCROLL))
-            sc = gtk_widget_get_style_context(wxGTKPrivate::GetTreeWidget());
-        else
-            sc = gtk_widget_get_style_context(wxGTKPrivate::GetEntryWidget());
+        GtkStyleContext* const sc = get_border_style_context();
 
         gtk_style_context_set_state(sc, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);

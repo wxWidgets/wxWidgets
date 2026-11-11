@@ -160,7 +160,7 @@ protected:
     };
 
     void DrawTestLines( int x, int y, int width, wxDC &dc );
-    void DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc);
+    void DrawCrossHair(int x, int y, int width, int height, wxDC &dc);
     void DrawTestPoly(wxDC& dc);
     void DrawTestBrushes(wxDC& dc);
     void DrawText(wxDC& dc);
@@ -858,12 +858,12 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.DrawLine(dc.FromDIP(x + 200), dc.FromDIP(y + 110), dc.FromDIP(x + 250), dc.FromDIP(y + 110));
 }
 
-void MyCanvas::DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc)
+void MyCanvas::DrawCrossHair(int x, int y, int width, int height, wxDC &dc)
 {
     dc.DrawText("Cross hair", dc.FromDIP(x + 10), dc.FromDIP(y + 10));
-    dc.SetClippingRegion(dc.FromDIP(x), dc.FromDIP(y), dc.FromDIP(width), dc.FromDIP(heigth));
+    dc.SetClippingRegion(dc.FromDIP(x), dc.FromDIP(y), dc.FromDIP(width), dc.FromDIP(height));
     dc.SetPen(wxPen(*wxBLUE, 2));
-    dc.CrossHair(dc.FromDIP(x + width / 2), dc.FromDIP(y + heigth / 2));
+    dc.CrossHair(dc.FromDIP(x + width / 2), dc.FromDIP(y + height / 2));
     dc.DestroyClippingRegion();
 }
 

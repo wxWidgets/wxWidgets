@@ -250,7 +250,8 @@ int wxCheckBox::MSWGetButtonStyle() const
 void wxCheckBox::MSWOnButtonResetOwnerDrawn()
 {
     // ensure that controls state is consistent with internal state
-    DoSet3StateValue(m_state);
+    ::SendMessage(m_hWnd, BM_SETCHECK, (WPARAM)m_state, 0);
+    Refresh();
 }
 
 int wxCheckBox::MSWGetButtonCheckedFlag() const

@@ -675,7 +675,7 @@ public:
     const wxTaskBarJumpListCategories& GetCustomCategories() const;
 
     /**
-        Add an new custom category.
+        Add a new custom category.
 
         @param category
             A wxTaskBarJumpListCategory object. It will be owned by the

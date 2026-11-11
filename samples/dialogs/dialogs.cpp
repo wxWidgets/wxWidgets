@@ -985,7 +985,9 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))
 {
-    m_infoBarAdvanced->ShowMessage("Sorry, it didn't work out.", wxICON_WARNING);
+    m_infoBarAdvanced->ShowMessageFor("Sorry, it didn't work out.",
+                                      wxInfoBar::Timeout_Auto,
+                                      wxICON_WARNING);
 }
 
 void MyFrame::OnInfoBarRedo(wxCommandEvent& WXUNUSED(event))

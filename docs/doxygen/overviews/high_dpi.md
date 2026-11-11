@@ -33,7 +33,7 @@ The Problem with High DPI Displays
 ----------------------------------
 
 If high DPI displays were treated in the same way as normal ones, existing
-applications would look tiny of them. For example, a square window 500 pixels
+applications would look tiny on them. For example, a square window 500 pixels
 in size would take half of a standard 1920×1080 ("Full HD") display vertically,
 but only a quarter on a 3840×2160 ("4K UHD") display. To prevent this from
 happening, most platforms automatically scale the windows by the scaling
@@ -56,7 +56,7 @@ Pixel Values in wxWidgets           {#high_dpi_pixel_types}
 Logical and Device-Independent Pixels {#high_dpi_lp_and_dip}
 -------------------------------------
 
-Some systems like eg Apple's OSes automatically scale all the coordinates by
+Some systems (e.g., Apple's OSes) automatically scale all the coordinates by
 the DPI scaling factor, however not all systems supported by wxWidgets do it --
 notably, MSW does not. This means that **logical pixels**, in which all
 coordinates and sizes are expressed in wxWidgets API, do _not_ have the same
@@ -68,7 +68,7 @@ this difference from the application, wxWidgets provides **device-independent
 pixels**, abbreviated as "DIP", that are always of the same size on all
 displays and all platforms.
 
-Thus, the first thing do when preparing your application for high DPI support
+Thus, the first thing to do when preparing your application for high DPI support
 is to stop using raw pixel values, as they mean different things under
 different platforms when DPI scaling is used. Actually, using any pixel values
 is not recommended and replacing them with the values based on the text
@@ -88,7 +88,7 @@ myFrame->SetClientSize(myFrame->FromDIP(wxSize(400, 300)));
 although replacing it with something like
 ~~~{cpp}
 const wxSize sizeM = myFrame->GetTextExtent("M");
-myFrame->SetClientSize(100*sizeM.x, 40*sizeM.y));
+myFrame->SetClientSize(wxSize(100*sizeM.x, 40*sizeM.y));
 ~~~
 might be even better.
 
@@ -106,7 +106,7 @@ Physical pixels are never scaled, on any platform, and are used for the real
 bitmap sizes. They are also used for drawing operations on wxGLCanvas, which
 is _different_ from wxDC and wxGraphicsContext that use logical pixels.
 
-Under MSW physical pixels are same as logical ones, but when writing portable
+Under MSW, physical pixels are the same as logical ones, but when writing portable
 code you need to convert between logical and physical pixels. This can be done
 using convenience wxWindow::FromPhys() and wxWindow::ToPhys() functions
 similar to the DIP functions above or by directly multiplying or dividing by
@@ -190,10 +190,10 @@ In order to really benefit from the increased detail on High DPI devices you nee
 to provide the images or artwork your application uses in higher resolutions as
 well. Note that it is not recommended to just provide a high-resolution version
 and let the system scale that down on 1x displays. Apart from performance
-consideration also the quality might suffer, contours become more blurry, so
-for best results it is recommended to use the images that can be used without
-scaling at the common DPI values, i.e. at least 100% and 200% scaling. If you
-don't want providing several copies of all bitmaps, you can use a single
+considerations, the quality might suffer and contours become more blurry.
+For best results, it is recommended to use the images that can be used without
+scaling at the common DPI values (i.e., at least 100% and 200% scaling). If you
+don't want to provide several copies of all bitmaps, you can use a single
 vector image in [SVG format][] instead.
 
 [SVG format]: https://en.wikipedia.org/wiki/Scalable_Vector_Graphics
@@ -244,14 +244,14 @@ is provided, similar to wxBITMAP_PNG() macro for plain bitmaps.
 
 Independently of the way in which the bundle was created, it will provide the
 bitmap closest in size to the expected size at the current DPI, while trying
-to avoid having scale it. This means that at 175% DPI scaling, for example,
+to avoid having to scale it. This means that at 175% DPI scaling, for example,
 the high DPI (i.e. double-sized) bitmap will be used _without_ scaling rather
 than scaling it by 0.875, which almost certainly wouldn't look good. However
 if the current DPI scaling is 300%, the 2x bitmap will be scaled, if it's the
 closest one available, as using it without scaling would result in bitmaps too
 small to use. The cut-off for the decision whether to scale bitmap or use an
 existing one without scaling is the factor of 1.5: if the mismatch between the
-required and closest available size is equal or greater than 1.5, the bitmap
+required and closest available size is equal to or greater than 1.5, the bitmap
 will be scaled. Otherwise it will be used in its natural size.
 
 If this behaviour is inappropriate for your application, it is also possible

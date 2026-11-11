@@ -641,8 +641,7 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     {
 #ifdef __WXGTK3__
         //TODO: wxBORDER_RAISED/wxBORDER_SUNKEN
-        GtkStyleContext*
-            sc = gtk_widget_get_style_context(wxGTKPrivate::GetEntryWidget());
+        GtkStyleContext* const sc = wxPizza::get_border_style_context();
 
         gtk_render_frame(sc, cr, x, y, w, h);
 #else // !__WXGTK3__
@@ -1076,7 +1075,7 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
-    event.m_metaDown = (gdk_event->state & GDK_META_MASK) != 0;
+    event.m_metaDown = (gdk_event->state & (GDK_META_MASK | GDK_SUPER_MASK)) != 0;
 
     // At least with current Linux systems, MOD5 corresponds to AltGr key and
     // we represent it, for consistency with Windows, which really allows to
@@ -3131,7 +3130,7 @@ wxMouseState wxGetMouseState()
     ms.SetControlDown((mask & GDK_CONTROL_MASK) != 0);
     ms.SetShiftDown((mask & GDK_SHIFT_MASK) != 0);
     ms.SetAltDown((mask & GDK_MOD1_MASK) != 0);
-    ms.SetMetaDown((mask & GDK_META_MASK) != 0);
+    ms.SetMetaDown((mask & (GDK_META_MASK | GDK_SUPER_MASK)) != 0);
 
     return ms;
 }

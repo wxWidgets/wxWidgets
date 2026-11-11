@@ -39,6 +39,7 @@
 
 #include "wx/beforestd.h"
 #include <string>
+#include <type_traits>
 #include <utility>
 
 // Check if C++17 <string_view> is available
@@ -102,6 +103,21 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
+#ifdef wxALLOW_UTF8_LITERALS
+
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+#error wxALLOW_UTF8_LITERALS can only be used with wxNO_IMPLICIT_WXSTRING_ENCODING
+#endif
+
+// Narrow string literals are interpreted as UTF-8, so check that they really
+// use it: this is especially important for MSVC which uses the current code
+// page unless /utf-8 or /execution-charset:utf-8 is specified.
+static_assert(sizeof("\u00E9") == 3,
+              "wxALLOW_UTF8_LITERALS requires UTF-8 execution character set, "
+              "use /utf-8 option when using MSVC");
+
+#endif // wxALLOW_UTF8_LITERALS
+
 #if !wxUSE_UNSAFE_WXSTRING_CONV
     #ifndef wxNO_UNSAFE_WXSTRING_CONV
         #define wxNO_UNSAFE_WXSTRING_CONV
@@ -119,6 +135,18 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 namespace wxPrivate
 {
     template <typename T> struct wxStringAsBufHelper;
+
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+    // This is used to enable deleted template overloads taking narrow string
+    // pointers, which must not be accepted when the encoding must be explicit,
+    // only for "char*" and "const char*". These overloads need to be templates
+    // to avoid being preferred to the overloads taking string literals when
+    // wxALLOW_UTF8_LITERALS is defined.
+    template <typename T>
+    using EnableIfCharPtr =
+        typename std::enable_if<std::is_same<T, const char*>::value ||
+                                std::is_same<T, char*>::value, int>::type;
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 }
 
 // All the symbols here only exist for compatibility in case they're referenced
@@ -376,30 +404,50 @@ public:
   // an 'invalid' value for string index, moved to this place due to a CW bug
   static const size_t npos;
 
-private:
-  // if we hadn't made these operators private, it would be possible to
+  // if we didn't delete these operators, it would be possible to
   // compile "wxString s; s = 17;" without any warnings as 17 is implicitly
   // converted to char in C and we do have operator=(char)
   //
   // NB: we don't need other versions (short/long and unsigned) as attempt
   //     to assign another numeric type to wxString will now result in
   //     ambiguity between operator=(char) and operator=(int)
-  wxString& operator=(int);
+  wxString& operator=(int) = delete;
 
-  // these methods are not implemented - there is _no_ conversion from int to
+  // this is intentionally deleted - there is _no_ conversion from int to
   // string, you're doing something wrong if the compiler wants to call it!
   //
   // try `s << i' or `s.Printf(wxASCII_STR("%d"), i)' instead
-  wxString(int);
+  wxString(int) = delete;
 
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
-  // These constructors are disabled because the encoding must be explicit
-  explicit wxString(const char *psz);
-  explicit wxString(const char *psz, size_t nLength);
-  explicit wxString(const unsigned char *psz);
-  explicit wxString(const unsigned char *psz, size_t nLength);
-#endif
+#ifdef wxALLOW_UTF8_LITERALS
+  // Narrow string literals are allowed and are assumed to be in UTF-8.
+  //
+  // Note that the other overloads taking const char* are still disabled and
+  // all the other functions use these ctors to convert literals to wxString.
+  template <size_t N>
+  wxString(const char (&psz)[N]) : wxString(FromUTF8Unchecked(psz)) {}
 
+  // But non-const arrays can't be literals and may contain strings in any
+  // encoding, so they still must not be implicitly converted to wxString.
+  template <size_t N>
+  wxString(char (&psz)[N]) = delete;
+
+#else // !wxALLOW_UTF8_LITERALS
+  // These constructors are disabled because the encoding must be explicit
+  // but they can't be declared when constructing wxString from literals is
+  // allowed because they would be preferred to the template ctors above.
+  explicit wxString(const char *psz) = delete;
+  explicit wxString(const char *psz, size_t nLength) = delete;
+#endif // wxALLOW_UTF8_LITERALS/!wxALLOW_UTF8_LITERALS
+
+  // These constructors are never used for the literals, so they are always
+  // disabled when wxNO_IMPLICIT_WXSTRING_ENCODING is defined.
+  explicit wxString(const unsigned char *psz) = delete;
+  explicit wxString(const unsigned char *psz, size_t nLength) = delete;
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+private:
   // buffer for holding temporary substring when using any of the methods
   // that take (char*,size_t) or (wchar_t*,size_t) arguments:
   template<typename T>
@@ -2179,27 +2227,27 @@ public:
   // stream-like functions
       // insert an int into string
   wxString& operator<<(int i)
-    { return append(wxToStdString(i)); }
+    { return append(FromImpl(wxToStdString(i))); }
       // insert an unsigned int into string
   wxString& operator<<(unsigned int ui)
-    { return append(wxToStdString(ui)); }
+    { return append(FromImpl(wxToStdString(ui))); }
       // insert a long into string
   wxString& operator<<(long l)
-    { return append(wxToStdString(l)); }
+    { return append(FromImpl(wxToStdString(l))); }
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
-    { return append(wxToStdString(ul)); }
+    { return append(FromImpl(wxToStdString(ul))); }
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
-    { return append(wxToStdString(ll)); }
+    { return append(FromImpl(wxToStdString(ll))); }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
-    { return append(wxToStdString(ull)); }
+    { return append(FromImpl(wxToStdString(ull))); }
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a float into string
   wxString& operator<<(float f)
-    { return append(wxToStdString(f)); }
+    { return append(FromImpl(wxToStdString(f))); }
       // insert a double into string
       //
       // This doesn't use std::to_[w]string because this would use "%f" format
@@ -2511,7 +2559,7 @@ public:
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
   template <typename... Targs>
-  int Printf(const wxFormatString& format, Targs... args)
+  int Printf(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
   {
     format.Preprocess(args...);
 
@@ -2519,11 +2567,11 @@ public:
     #if !wxUSE_UTF8_LOCALE_ONLY
       if ( wxLocaleIsUtf8 )
     #endif
-        return DoPrintfUtf8(format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+        return DoPrintfUtf8(format, wxArgNormalizerUtf8<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // wxUSE_UNICODE_UTF8
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-      return DoPrintfWchar(format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+      return DoPrintfWchar(format, wxArgNormalizerWchar<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // !wxUSE_UTF8_LOCALE_ONLY
   }
 
@@ -2532,7 +2580,7 @@ public:
 
     // returns the string containing the result of Printf() to it
   template <typename... Targs>
-  static wxString Format(const wxFormatString& format, Targs... args)
+  static wxString Format(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
   {
       wxString s;
       s.Printf(format, args...);
@@ -2560,7 +2608,7 @@ public:
 
   // use Printf()
   template <typename... Targs>
-  int sprintf(const wxFormatString& format, Targs... args)
+  int sprintf(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
   {
       return Printf(format, args...);
   }

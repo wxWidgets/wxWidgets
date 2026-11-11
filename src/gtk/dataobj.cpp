@@ -267,7 +267,6 @@ bool wxFileDataObject::GetDataHere(void *buf) const
             *(out++) = '\n';
         }
     }
-    *out = 0;
 
     return true;
 }
@@ -285,15 +284,16 @@ size_t wxFileDataObject::GetDataSize() const
         }
     }
 
-    return res + 1;
+    // Note that trailing NUL must not be included, as it would become part of
+    // the data for the other applications otherwise.
+    return res;
 }
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
 {
     // we get data in the text/uri-list format, i.e. as a sequence of URIs
-    // (filenames prefixed by "file:") delimited by "\r\n". size includes
-    // the trailing zero (in theory, not for Nautilus in early GNOME
-    // versions).
+    // (filenames prefixed by "file:") delimited by "\r\n". size doesn't
+    // include the trailing NUL, but we don't need it as GTK always adds one
 
     m_filenames.Empty();
 
@@ -459,14 +459,17 @@ public:
         // It is not totally clear whether we should include "\r\n" at the end
         // of the string if there is only one URL or not, but not doing it
         // doesn't seem to create any problems, so keep things simple.
-        return strlen(m_url.utf8_str()) + 1;
+        //
+        // Note that trailing NUL definitely must not be included, as it would
+        // become part of the data for the other applications otherwise.
+        return GetURI().length();
     }
 
     virtual bool GetDataHere(void *buf) const override
     {
-        char* const dst = static_cast<char*>(buf);
+        const std::string uri = GetURI();
 
-        strcpy(dst, m_url.utf8_str());
+        memcpy(buf, uri.data(), uri.length());
 
         return true;
     }
@@ -475,23 +478,46 @@ public:
     {
         const char* const src = static_cast<const char*>(buf);
 
-        // Length here includes the trailing NUL, but we don't want to include
-        // it into the string contents.
-        wxCHECK_MSG( len != 0 && !src[len], false, "must have trailing NUL" );
+        // Length here normally doesn't include the trailing NUL, but it was
+        // included by wxGTK itself in the past, so ignore it if it's present.
+        if ( len > 0 && src[len - 1] == '\0' )
+            len--;
 
-        len--;
+        // The data is a list of URIs, one per line, which may also contain
+        // comment lines starting with "#" (see RFC 2483), which we remove.
+        //
+        // Notice that we keep all the URIs, even if there is more than one of
+        // them, as the existing code could rely on getting all of them, and
+        // that we don't decode them, as percent-encoding is part of the URI
+        // and decoding it could change its meaning.
+        std::string data;
+        data.reserve(len);
+
+        for ( size_t pos = 0; pos < len; )
+        {
+            const void* const eol = memchr(src + pos, '\n', len - pos);
+            const size_t posNext = eol
+                                    ? static_cast<const char*>(eol) - src + 1
+                                    : len;
+
+            if ( src[pos] != '#' )
+                data.append(src + pos, posNext - pos);
+
+            pos = posNext;
+        }
 
         // The string might be "\r\n"-terminated but this is not necessarily
         // the case (e.g. when dragging an URL from Firefox, it isn't).
-        if ( len > 1 && src[len - 1] == '\n' )
+        len = data.length();
+        if ( len > 1 && data[len - 1] == '\n' )
         {
-            if ( len > 2 && src[len - 2] == '\r' )
+            if ( len > 2 && data[len - 2] == '\r' )
                 len--;
 
             len--;
         }
 
-        m_url = wxString::FromUTF8(src, len);
+        m_url = wxString::FromUTF8(data.c_str(), len);
 
         return true;
     }
@@ -511,6 +537,44 @@ public:
     }
 
 private:
+    // Return the URL converted to a valid URI by percent-encoding all the
+    // characters not allowed in URIs, without changing the URIs which are
+    // already valid.
+    //
+    // If there are several URLs separated by line breaks, they are converted
+    // separately and the line breaks are kept as is.
+    std::string GetURI() const
+    {
+        wxString uris;
+
+        for ( size_t pos = 0;; )
+        {
+            const size_t posEOL = m_url.find('\n', pos);
+
+            size_t posEnd = posEOL == wxString::npos ? m_url.length() : posEOL;
+            if ( posEnd > pos && m_url[posEnd - 1] == '\r' )
+                posEnd--;
+
+            // Note that we must check that the URL could be parsed, as
+            // otherwise BuildURI() would lose its part after the parsing
+            // error, and just keep it unchanged in this case.
+            const wxString url = m_url.substr(pos, posEnd - pos);
+
+            wxURI uri;
+            uris += uri.Create(url) ? uri.BuildURI() : url;
+
+            if ( posEOL == wxString::npos )
+                break;
+
+            // Append the line break, possibly including "\r", too.
+            uris += m_url.substr(posEnd, posEOL + 1 - posEnd);
+
+            pos = posEOL + 1;
+        }
+
+        return uris.utf8_string();
+    }
+
     wxString m_url;
 };
 

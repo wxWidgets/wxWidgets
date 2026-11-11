@@ -80,6 +80,8 @@
 #ifdef __WINDOWS__
     #include <winnls.h>
     #include <locale.h>
+
+    #include "wx/msw/private/filetime.h"
 #endif
 
 #include "wx/datetime.h"
@@ -1260,16 +1262,30 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
                             wxDateTime_t second,
                             wxDateTime_t millisec)
 {
-    wxDATETIME_CHECK( hour < 24 &&
-                      second < 62 &&
-                      minute < 60 &&
-                      millisec < 1000,
-                      wxT("Invalid time in wxDateTime::Set()") );
+    wxDATETIME_CHECK
+    (
+        SetIfValid(day, month, year, hour, minute, second, millisec),
+        wxT("Invalid date/time in wxDateTime::Set()")
+    );
+
+    return *this;
+}
+
+bool wxDateTime::SetIfValid(wxDateTime_t day,
+                            Month        month,
+                            int          year,
+                            wxDateTime_t hour,
+                            wxDateTime_t minute,
+                            wxDateTime_t second,
+                            wxDateTime_t millisec)
+{
+    if ( hour >= 24 || second >= 61 || minute >= 60 || millisec >= 1000 )
+        return false;
 
     ReplaceDefaultYearMonthWithCurrent(&year, &month);
 
-    wxDATETIME_CHECK( (0 < day) && (day <= GetNumberOfDays(month, year)),
-                      wxT("Invalid date in wxDateTime::Set()") );
+    if ( day == 0 || day > GetNumberOfDays(month, year) )
+        return false;
 
     // Check if we can use the standard library implementation: this only works
     // for the dates representable by time_t, i.e. after the beginning of the
@@ -1307,8 +1323,6 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         // and finally adjust milliseconds
         if (IsValid())
             SetMillisecond(millisec);
-
-        return *this;
     }
     else
     {
@@ -1324,7 +1338,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         Add(wxTimeSpan(hour, minute, second + wxGetTimeZone(), millisec));
     }
 
-    return *this;
+    return true;
 }
 
 wxDateTime& wxDateTime::Set(double jdn)
@@ -2547,6 +2561,43 @@ void wxDateTime::GetAsMSWSysDate(SYSTEMTIME* st) const
     st->wMinute =
     st->wSecond =
     st->wMilliseconds = 0;
+}
+
+// Number of FILETIME 100ns intervals in one millisecond.
+static const int FILETIME_100NS_PER_MSEC = 10000;
+
+wxDateTime& wxDateTime::SetFromMSWFileTime(const FILETIME& ft)
+{
+    if ( !wxMSWImpl::IsValidFileTime(ft) )
+    {
+        *this = wxInvalidDateTime;
+        return *this;
+    }
+
+    m_time = wxMSWImpl::FileTimeToUnix100ns(ft) / FILETIME_100NS_PER_MSEC;
+
+    return *this;
+}
+
+bool wxDateTime::GetAsMSWFileTime(FILETIME* ft) const
+{
+    wxCHECK_MSG( IsValid(), false, wxS("invalid wxDateTime") );
+
+    // Check that the value can be represented as FILETIME before multiplying
+    // it to avoid overflow. Note that the explicit conversions are needed as
+    // wxLongLong comparison operators only exist for long, which is 32 bits
+    // under Windows.
+    using namespace wxMSWImpl;
+    const wxLongLong
+        minMSec(-FILETIME_UNIX_EPOCH_OFFSET / FILETIME_100NS_PER_MSEC),
+        maxMSec((FILETIME_MAX - FILETIME_UNIX_EPOCH_OFFSET) /
+                    FILETIME_100NS_PER_MSEC);
+    if ( m_time < minMSec || m_time > maxMSec )
+        return false;
+
+    *ft = Unix100nsToFileTime(m_time * FILETIME_100NS_PER_MSEC);
+
+    return true;
 }
 
 #endif // __WINDOWS__

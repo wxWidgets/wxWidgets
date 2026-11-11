@@ -341,7 +341,7 @@ public:
         the associated notifier's wxZipNotifier::OnEntryUpdated() method.
 
         Setting a notifier is not usually necessary. It is used to handle
-        certain cases when modifying an zip in a pipeline (i.e. between
+        certain cases when modifying a zip in a pipeline (i.e. between
         non-seekable streams).
 
         @see @ref overview_archive_noseek, wxZipNotifier

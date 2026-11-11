@@ -64,7 +64,7 @@ public:
 protected:
     virtual void *Entry() override
     {
-        wxSocketServer srv(LocalAddress(0), wxSOCKET_REUSEADDR);
+        wxSocketServer srv(LocalAddress(0));
         bool ok = srv.IsOk();
         CHECK( ok );
 

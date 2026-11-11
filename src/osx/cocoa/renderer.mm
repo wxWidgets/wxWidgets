@@ -116,6 +116,14 @@ public:
                                        const wxRect& rect,
                                        int flags = 0) override;
 
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) override;
+
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) override;
 
     virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) override;
@@ -280,6 +288,10 @@ private:
     NSComboBoxCell* m_nsComboBoxCell = nil;
     NSTableHeaderCell* m_nsTableHeaderCell = nil;
 #endif
+
+private:
+    // Get the colour for DrawItemSelectionRect().
+    static wxColour GetSelectionColour(int flags);
 };
 
 // ============================================================================
@@ -568,6 +580,29 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 }
 
 void
+wxRendererMac::DrawItemText(wxWindow* win,
+                                wxDC& dc,
+                                const wxString& text,
+                                const wxRect& rect,
+                                int align,
+                                int flags,
+                                wxEllipsizeMode ellipsizeMode)
+{
+    wxDCTextColourChanger colourChanger(dc);
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        // Choose the text colour for good contrast with the colour used by DrawItemSelectionRect().
+        wxColour bgCol = GetSelectionColour(flags);
+        wxColour textCol = bgCol.GetLuminance() < 0.5 ? *wxWHITE : *wxBLACK;
+        dc.SetTextForeground(textCol);
+        // Remove wxCONTROL_SELECTED to use the current foreground colour instead
+        // of wxSYS_COLOUR_HIGHLIGHTTEXT, which does not always have good contrast.
+        flags &= ~wxCONTROL_SELECTED;
+    }
+    wxRendererNative::GetGeneric().DrawItemText(win, dc, text, rect, align, flags, ellipsizeMode);
+}
+
+void
 wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
                                      wxDC& dc,
                                      const wxRect& rect,
@@ -576,8 +611,17 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
     if ( !(flags & wxCONTROL_SELECTED) )
         return;
 
-    wxColour col;
+    wxColour col = GetSelectionColour(flags);
+    wxBrush selBrush(col);
 
+    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+    wxDCBrushChanger setBrush(dc, selBrush);
+    dc.DrawRectangle(rect);
+}
+
+wxColour wxRendererMac::GetSelectionColour(int flags)
+{
+    wxColour col;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
     if (WX_IS_MACOS_AVAILABLE(10, 14))
     {
@@ -601,11 +645,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
             col = wxColour( 110, 110, 110 );
         }
     }
-    wxBrush selBrush( col );
-
-    wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
-    wxDCBrushChanger setBrush(dc, selBrush);
-    dc.DrawRectangle( rect );
+    return col;
 }
 
 

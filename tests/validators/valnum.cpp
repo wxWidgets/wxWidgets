@@ -255,6 +255,168 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::ZeroAsBlank", "[valnum]")
     CHECK( m_text->GetValue() == "" );
 }
 
+namespace
+{
+
+// Send the "kill focus" event to the given control, as if it lost focus.
+//
+// Don't rely on the real focus change here, as it may not work in the test
+// environment, just send the event that the validator handles.
+void SimulateFocusLoss(wxTextCtrl* text)
+{
+    wxFocusEvent event(wxEVT_KILL_FOCUS, text->GetId());
+    event.SetEventObject(text);
+    text->ProcessWindowEvent(event);
+}
+
+// Set the given value as if the user had entered it and return the value of
+// the control after it loses focus.
+wxString NormalizeOnFocusLoss(wxTextCtrl* text, const wxString& s)
+{
+    text->ChangeValue(s);
+    text->MarkDirty();
+
+    SimulateFocusLoss(text);
+
+    return text->GetValue();
+}
+
+} // anonymous namespace
+
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NormalizeInvalid", "[valnum]")
+{
+    // We need a locale with point as decimal separator.
+    wxLocale loc(wxLANGUAGE_ENGLISH_UK, wxLOCALE_DONT_LOAD_DEFAULT);
+
+    const auto normalize = [this](const wxString& s)
+    {
+        return NormalizeOnFocusLoss(m_text.get(), s);
+    };
+
+    SECTION("Integer with the default range")
+    {
+        m_text->SetValidator(wxIntegerValidator<int>());
+
+        CHECK( normalize("") == "0" );
+        CHECK( normalize("-") == "0" );
+        CHECK( normalize("17") == "17" );
+    }
+
+    SECTION("Unsigned integer with the default range")
+    {
+        m_text->SetValidator(wxIntegerValidator<unsigned>());
+
+        CHECK( normalize("") == "0" );
+    }
+
+    SECTION("Integer with positive range")
+    {
+        wxIntegerValidator<int> val;
+        val.SetRange(5, 10);
+        m_text->SetValidator(val);
+
+        CHECK( normalize("") == "5" );
+        CHECK( normalize("20") == "10" );
+    }
+
+    SECTION("Integer with negative range")
+    {
+        wxIntegerValidator<int> val;
+        val.SetRange(-10, -5);
+        m_text->SetValidator(val);
+
+        CHECK( normalize("") == "-5" );
+        CHECK( normalize("-") == "-5" );
+    }
+
+    SECTION("Integer with only the maximum set")
+    {
+        wxIntegerValidator<int> val;
+        val.SetMax(-3);
+        m_text->SetValidator(val);
+
+        CHECK( normalize("") == "-3" );
+    }
+
+    SECTION("Floating point with the default range")
+    {
+        m_text->SetValidator(wxFloatingPointValidator<double>(2));
+
+        CHECK( normalize("") == "0.00" );
+        CHECK( normalize("-") == "0.00" );
+        CHECK( normalize(".") == "0.00" );
+        CHECK( normalize("1.5") == "1.50" );
+    }
+
+    SECTION("Floating point with positive range")
+    {
+        wxFloatingPointValidator<double> val(1);
+        val.SetRange(0.5, 2.);
+        m_text->SetValidator(val);
+
+        CHECK( normalize("") == "0.5" );
+    }
+
+    SECTION("Unmodified empty control is left alone")
+    {
+        m_text->SetValidator(wxIntegerValidator<int>());
+        m_text->ChangeValue("");
+
+        SimulateFocusLoss(m_text.get());
+
+        CHECK( m_text->GetValue() == "" );
+    }
+}
+
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::AllowBlankAsZero", "[valnum]")
+{
+    const auto normalize = [this](const wxString& s)
+    {
+        return NormalizeOnFocusLoss(m_text.get(), s);
+    };
+
+    int value = 0;
+    wxIntegerValidator<int> val(&value, wxNUM_VAL_ALLOW_BLANK_AS_ZERO);
+
+    SECTION("Default range")
+    {
+        m_text->SetValidator(val);
+        wxValidator * const v = m_text->GetValidator();
+
+        // Unlike with wxNUM_VAL_ZERO_AS_BLANK, zero is still shown as "0".
+        CHECK( v->TransferToWindow() );
+        CHECK( m_text->GetValue() == "0" );
+
+        // Clearing the control leaves it empty and empty is transferred as 0.
+        CHECK( normalize("") == "" );
+        value = 17;
+        CHECK( v->TransferFromWindow() );
+        CHECK( value == 0 );
+
+        // Zero entered by the user is preserved too.
+        CHECK( normalize("0") == "0" );
+
+        // But invalid values are still normalized.
+        CHECK( normalize("-") == "0" );
+        CHECK( normalize("12") == "12" );
+    }
+
+    SECTION("Range not including zero")
+    {
+        val.SetRange(5, 10);
+        m_text->SetValidator(val);
+        wxValidator * const v = m_text->GetValidator();
+
+        // Empty value is still preserved, but is not valid.
+        CHECK( normalize("") == "" );
+        CHECK( !v->TransferFromWindow() );
+
+        // Other values are clamped to the range as usual.
+        CHECK( normalize("-") == "5" );
+        CHECK( normalize("0") == "5" );
+    }
+}
+
 TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")
 {
     // We need a locale with point as decimal separator.

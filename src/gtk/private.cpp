@@ -202,6 +202,26 @@ GtkWidget * GetRadioButtonWidget()
     return s_button;
 }
 
+GtkWidget *GetScrolledWindowWidget()
+{
+    static GtkWidget *s_scrolled = nullptr;
+
+    if ( !s_scrolled )
+    {
+        s_scrolled = gtk_scrolled_window_new(nullptr, nullptr);
+        g_object_add_weak_pointer(G_OBJECT(s_scrolled), (void**)&s_scrolled);
+
+        // Without a shadow, scrolled window doesn't have any border.
+        gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(s_scrolled),
+                                            GTK_SHADOW_IN);
+
+        gtk_container_add(GetContainer(), s_scrolled);
+        gtk_widget_realize(s_scrolled);
+    }
+
+    return s_scrolled;
+}
+
 GtkWidget* GetSplitterWidget(wxOrientation orient)
 {
     static GtkWidget* widgets[2];

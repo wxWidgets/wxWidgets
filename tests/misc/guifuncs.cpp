@@ -32,6 +32,19 @@
     #include "wx/msw/printdlg.h"
 #endif
 
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+    #include "wx/datetime.h"
+    #include "wx/file.h"
+    #include "wx/filename.h"
+    #include "wx/stream.h"
+
+    #include "wx/msw/wrapshl.h"
+
+    #include "testfile.h"
+
+    #include <vector>
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
+
 #include "asserthelper.h"
 #include "waitfor.h"
 
@@ -104,7 +117,99 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
     wxURLDataObject dobj2;
     REQUIRE( wxTheClipboard->GetData(dobj2) );
     CHECK( dobj2.GetURL() == url );
+
+#ifdef __WXGTK__
+    // This corresponds to "text/uri-list" used by wxURLDataObject in wxGTK.
+    const wxDataFormat formatURIList(wxDF_FILENAME);
+
+    // The data must not include the trailing NUL.
+    wxURLDataObject dobjURL(url);
+    REQUIRE( dobjURL.GetDataSize(formatURIList) == strlen(url) );
+
+    // When getting the data, comments must be skipped, but all URIs kept and
+    // not decoded.
+    const std::string uri = "https://example.org/a%20b/%C3%BC?q=%25";
+
+    const auto setURIList = [&](const std::string& data)
+    {
+        INFO( "Data: \"" << data << "\"" );
+
+        REQUIRE( dobjURL.SetData(formatURIList, data.length(), data.c_str()) );
+        return dobjURL.GetURL();
+    };
+
+    CHECK( setURIList(uri) == uri );
+    CHECK( setURIList(uri + '\0') == uri );
+    CHECK( setURIList(uri + "\n") == uri );
+    CHECK( setURIList(uri + "\r\n") == uri );
+    CHECK( setURIList("# comment\r\n" + uri + "\r\n") == uri );
+    CHECK( setURIList("#\n" + uri + "\n# another one") == uri );
+    CHECK( setURIList(uri + "\r\n# comment\r\nhttps://other/\r\n") ==
+           uri + "\r\nhttps://other/" );
+    CHECK( setURIList("# only a comment\r\n") == "" );
+
+    // Characters not allowed in URIs must be encoded, but the existing escapes
+    // must be preserved (notice that wxURI uses lower case hex digits for the
+    // escapes it adds).
+    const auto getURIList = [&](const wxString& url)
+    {
+        INFO( "URL: \"" << url << "\"" );
+
+        dobjURL.SetURL(url);
+
+        std::string buf(dobjURL.GetDataSize(formatURIList), '\0');
+        REQUIRE( dobjURL.GetDataHere(formatURIList, &buf[0]) );
+        return buf;
+    };
+
+    const wxString iri = wxString::FromUTF8("https://example.org/a b/\xc3\xbc?q=%25");
+    const std::string uriEncoded = "https://example.org/a%20b/%c3%bc?q=%25";
+    CHECK( getURIList(iri) == uriEncoded );
+    CHECK( dobjURL.GetURL() == iri );
+    CHECK( getURIList(uri) == uri );
+
+    // Multiple URIs must be encoded separately and remain separated by the
+    // same line breaks.
+    CHECK( getURIList(iri + "\r\nhttps://other/x y") ==
+           uriEncoded + "\r\nhttps://other/x%20y" );
+    CHECK( getURIList(iri + "\nhttps://other/") == uriEncoded + "\nhttps://other/" );
+
+    // And the strings which can't be parsed as URIs must be kept unchanged.
+    CHECK( getURIList("http://host:abc/x y") == "http://host:abc/x y" );
+#endif // __WXGTK__
 }
+
+#ifdef __WXGTK__
+
+TEST_CASE("GUI::FileDataObject", "[guifuncs][clipboard]")
+{
+    wxFileDataObject* const dobj = new wxFileDataObject();
+    dobj->AddFile("/tmp/foo bar.txt");
+    dobj->AddFile("/tmp/baz.txt");
+
+    // The data must not include the trailing NUL.
+    const std::string
+        data("file:///tmp/foo%20bar.txt\r\nfile:///tmp/baz.txt\r\n");
+    REQUIRE( dobj->GetDataSize() == data.length() );
+
+    std::string buf(data.length(), '\0');
+    REQUIRE( dobj->GetDataHere(&buf[0]) );
+    CHECK( buf == data );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxFileDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+
+    const wxArrayString& files = dobj2.GetFilenames();
+    REQUIRE( files.size() == 2 );
+    CHECK( files[0] == "/tmp/foo bar.txt" );
+    CHECK( files[1] == "/tmp/baz.txt" );
+}
+
+#endif // __WXGTK__
 
 TEST_CASE("GUI::HTMLDataObject", "[guifuncs][clipboard]")
 {
@@ -121,6 +226,192 @@ TEST_CASE("GUI::HTMLDataObject", "[guifuncs][clipboard]")
     REQUIRE( wxTheClipboard->GetData(dobj2) );
     CHECK( dobj2.GetHTML() == text );
 }
+
+#ifdef wxHAS_VIRTUAL_FILE_DATA_OBJECT
+
+TEST_CASE("GUI::VirtualFileDataObject", "[guifuncs][clipboard]")
+{
+    // Create the descriptor for a file, the directory containing it and an
+    // item with an invalid name, which should be ignored.
+    const size_t count = 3;
+    std::vector<char>
+        buf(sizeof(UINT) + count*sizeof(FILEDESCRIPTORW));
+    FILEGROUPDESCRIPTORW* const
+        fgd = reinterpret_cast<FILEGROUPDESCRIPTORW*>(buf.data());
+    fgd->cItems = count;
+
+    const char contents[] = "Hello, virtual world!";
+    const DWORD size = sizeof(contents) - 1;
+    const wxDateTime mtime(1, wxDateTime::Feb, 2020, 12, 34, 56, 789);
+
+    FILEDESCRIPTORW& file = fgd->fgd[0];
+    file.dwFlags = FD_FILESIZE | FD_WRITESTIME;
+    file.nFileSizeLow = size;
+    REQUIRE( mtime.GetAsMSWFileTime(&file.ftLastWriteTime) );
+    wxStrcpy(file.cFileName, L"dir\\file.txt");
+
+    FILEDESCRIPTORW& dir = fgd->fgd[1];
+    dir.dwFlags = FD_ATTRIBUTES;
+    dir.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
+    wxStrcpy(dir.cFileName, L"dir");
+
+    wxStrcpy(fgd->fgd[2].cFileName, L"..\\evil.txt");
+
+    // Note that wx data objects ignore the item index, so we can only provide
+    // the contents of the first item, but this is enough for testing.
+    wxDataObjectComposite* const source = new wxDataObjectComposite;
+
+    wxCustomDataObject* const descriptor =
+        new wxCustomDataObject(CFSTR_FILEDESCRIPTORW);
+    descriptor->SetData(buf.size(), buf.data());
+    source->Add(descriptor);
+
+    wxCustomDataObject* const fileContents =
+        new wxCustomDataObject(CFSTR_FILECONTENTS);
+    fileContents->SetData(size, contents);
+    source->Add(fileContents);
+
+    // Don't call Flush() here, as this would render the data on the clipboard
+    // without the item index and the file contents couldn't be retrieved.
+    wxClipboardLocker lockClip;
+    REQUIRE( wxTheClipboard->SetData(source) );
+
+    wxVirtualFileDataObject data;
+    REQUIRE( wxTheClipboard->GetData(data) );
+
+    REQUIRE( data.GetCount() == 2 );
+
+    CHECK( data.GetName(0) == "dir\\file.txt" );
+    CHECK( !data.IsDir(0) );
+    CHECK( data.GetSize(0) == size );
+    CHECK( data.GetModificationTime(0) == mtime );
+
+    CHECK( data.GetName(1) == "dir" );
+    CHECK( data.IsDir(1) );
+    CHECK( data.GetSize(1) == wxInvalidOffset );
+    CHECK( !data.GetModificationTime(1).IsValid() );
+
+    std::unique_ptr<wxInputStream> stream = data.OpenStream(0);
+    REQUIRE( stream );
+
+    char readBuf[256];
+    stream->Read(readBuf, sizeof(readBuf));
+    CHECK( std::string(readBuf, stream->LastRead()) == contents );
+
+    CHECK( !data.OpenStream(1) );
+
+    TempDir tempDir("wxvfdo");
+    tempDir.RequireOk();
+
+    const std::vector<wxString> paths = data.SaveAll(tempDir.GetName());
+    REQUIRE( paths.size() == 1 );
+    CHECK( paths[0] == tempDir.GetName() + "\\dir" );
+
+    const wxString savedFile = paths[0] + "\\file.txt";
+    wxFile f(savedFile);
+    REQUIRE( f.IsOpened() );
+
+    const ssize_t savedLen = f.Read(readBuf, sizeof(readBuf));
+    REQUIRE( savedLen >= 0 );
+    CHECK( std::string(readBuf, savedLen) == contents );
+
+    CHECK( wxFileName(savedFile).GetModificationTime() == mtime );
+    f.Close();
+
+    const std::vector<wxString> tempPaths = data.SaveAllToTempDir();
+    REQUIRE( tempPaths.size() == 1 );
+    CHECK( wxFileExists(tempPaths[0] + "\\file.txt") );
+
+    const wxString tempDir2 = wxFileName(tempPaths[0]).GetPath();
+    CHECK( tempDir2.StartsWith(wxFileName::GetTempDir()) );
+
+    // Check that another call creates a different directory.
+    const std::vector<wxString> tempPaths2 = data.SaveAllToTempDir();
+    REQUIRE( tempPaths2.size() == 1 );
+    CHECK( wxFileExists(tempPaths2[0] + "\\file.txt") );
+    CHECK( tempPaths2[0] != tempPaths[0] );
+
+    CHECK( data.DeleteAllTempFiles() );
+    CHECK( !wxDirExists(tempDir2) );
+    CHECK( !wxDirExists(wxFileName(tempPaths2[0]).GetPath()) );
+}
+
+TEST_CASE("GUI::VirtualFileDataObject::SaveError", "[guifuncs][clipboard]")
+{
+    // Create the descriptor for a directory and a file inside it, but don't
+    // provide the file contents, so that saving the directory succeeds but
+    // saving the file fails.
+    const size_t count = 2;
+    std::vector<char>
+        buf(sizeof(UINT) + count*sizeof(FILEDESCRIPTORW));
+    FILEGROUPDESCRIPTORW* const
+        fgd = reinterpret_cast<FILEGROUPDESCRIPTORW*>(buf.data());
+    fgd->cItems = count;
+
+    FILEDESCRIPTORW& dir = fgd->fgd[0];
+    dir.dwFlags = FD_ATTRIBUTES;
+    dir.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
+    wxStrcpy(dir.cFileName, L"dir");
+
+    wxStrcpy(fgd->fgd[1].cFileName, L"dir\\file.txt");
+
+    wxCustomDataObject* const descriptor =
+        new wxCustomDataObject(CFSTR_FILEDESCRIPTORW);
+    descriptor->SetData(buf.size(), buf.data());
+
+    wxClipboardLocker lockClip;
+    REQUIRE( wxTheClipboard->SetData(descriptor) );
+
+    wxVirtualFileDataObject data;
+    REQUIRE( wxTheClipboard->GetData(data) );
+    REQUIRE( data.GetCount() == 2 );
+
+    TempDir tempDir("wxvfdo");
+    tempDir.RequireOk();
+
+    const wxString base = tempDir.GetName() + "\\";
+
+    wxLogNull noLog;
+
+    SECTION("SaveTo")
+    {
+        // All the parent directories created by SaveTo() must be removed.
+        CHECK( !data.SaveTo(1, base + "new\\sub\\file.txt") );
+        CHECK( !wxDirExists(base + "new") );
+
+        // But the existing ones must be left alone.
+        REQUIRE( wxMkdir(base + "existing") );
+        CHECK( !data.SaveTo(1, base + "existing\\file.txt") );
+        CHECK( wxDirExists(base + "existing") );
+        CHECK( !wxFileExists(base + "existing\\file.txt") );
+    }
+
+    SECTION("SaveAll")
+    {
+        // The directory saved before the error occurred must be removed and
+        // so must be the target directory itself, as it didn't exist before.
+        CHECK( data.SaveAll(base + "new").empty() );
+        CHECK( !wxDirExists(base + "new") );
+
+        // But not the existing target directory.
+        CHECK( data.SaveAll(tempDir.GetName()).empty() );
+        CHECK( wxDirExists(tempDir.GetName()) );
+        CHECK( !wxDirExists(base + "dir") );
+
+        // Nor the existing subdirectory.
+        REQUIRE( wxMkdir(base + "dir") );
+        CHECK( data.SaveAll(tempDir.GetName()).empty() );
+        CHECK( wxDirExists(base + "dir") );
+        CHECK( !wxFileExists(base + "dir\\file.txt") );
+    }
+
+    SECTION("SaveAllToTempDir")
+    {
+        CHECK( data.SaveAllToTempDir().empty() );
+    }
+}
+
+#endif // wxHAS_VIRTUAL_FILE_DATA_OBJECT
 
 // This disabled by default test allows to check that we retrieve HTML data
 // from the system clipboard correctly.

@@ -6330,14 +6330,8 @@ void wxGrid::UpdateIME()
     {
         // Even if the current cell can be edited, its editor may not accept
         // any text at all, as is the case for the boolean editor, for
-        // example, and showing IME for it would be useless. Check for this by
-        // asking the editor whether it would start editing if a letter were
-        // typed.
-        wxKeyEvent event(wxEVT_CHAR);
-        event.m_keyCode = 'a';
-        event.m_uniChar = 'a';
-
-        enable = GetCurrentCellEditorPtr()->IsAcceptedKey(event);
+        // example, and showing IME for it would be useless. Check for this.
+        enable = GetCurrentCellEditorPtr()->AcceptsTextInput();
     }
 
     wxGridWindow* const allGridWindows[] =

@@ -364,6 +364,11 @@
     CLANG_TURN_ON(shorten-64-to-32)
 #endif // clang
 
+// Temporarily suppressing warnings about deprecated functions is broken in
+// gcc 4.8, so disable these warnings globally for it.
+#if CHECK_GCC_VERSION(4, 8) && !CHECK_GCC_VERSION(4, 9)
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 // UTF-8-only build is the only one in which we actually want to use implicit
 // encoding (UTF-8).
@@ -374,6 +379,15 @@
 #include "testprec.h"
 
 #include "allheaders.h"
+
+#include <type_traits>
+
+#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
+// Check that the symbol defined above was really taken into account, which
+// wouldn't be the case if precompiled headers were used for this file.
+static_assert(!std::is_convertible<const char*, wxString>::value,
+              "char pointers shouldn't be convertible to wxString");
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 // Check that using wx macros doesn't result in -Wsuggest-override or
 // equivalent warnings in classes using and not using "override".

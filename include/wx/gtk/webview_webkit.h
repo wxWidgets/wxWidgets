@@ -217,6 +217,10 @@ private:
     GDBusServer *m_dbusServer;
     GDBusProxy *m_extension;
 
+    // Set to true after waiting for the extension to connect for the first
+    // time, so that we don't wait for it again if it never does.
+    mutable bool m_alreadyWaitedForExtension = false;
+
     static wxSharedPtr<wxWebViewHistoryItem>
     CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem);
 #endif

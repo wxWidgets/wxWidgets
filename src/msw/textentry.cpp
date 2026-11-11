@@ -33,6 +33,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
@@ -441,10 +442,22 @@ public:
         }
 
         m_win->Bind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+
+        wxMSWDarkMode::EnableForAutoComplete();
     }
 
     ~wxTextAutoCompleteData()
     {
+        // This object can be deleted while the window still exists, e.g. when
+        // switching to file names completion, so ensure that our handlers are
+        // not called any longer.
+        m_win->Unbind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+        if ( m_connectedCharEvent )
+        {
+            m_win->Unbind(wxEVT_AFTER_CHAR,
+                          &wxTextAutoCompleteData::OnAfterChar, this);
+        }
+
         delete m_customCompleter;
         delete m_fixedCompleter;
 
@@ -489,7 +502,8 @@ public:
         {
             // We postpone connecting to this event until we really need to do
             // it (however we don't disconnect from it when we don't need it
-            // any more because we don't have wxUNBIND_OR_DISCONNECT_HACK...).
+            // any more, as OnAfterChar() doesn't do anything then anyhow, and
+            // only do it in our dtor).
             if ( !m_connectedCharEvent )
             {
                 m_connectedCharEvent = true;
@@ -820,6 +834,10 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 
     // Set it to the special value indicating that we're using SHAutoComplete().
     m_autoCompleteData = wxDUMMY_SHAUTOCOMPLETE_DATA;
+
+    // This uses the same drop-down window as the strings completion, so it
+    // needs to be handled in dark mode too.
+    wxMSWDarkMode::EnableForAutoComplete();
 
     return true;
 }

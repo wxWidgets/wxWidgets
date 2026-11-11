@@ -352,6 +352,12 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxListKey(const char *s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    wxListKey(const char (&s)[N]) : m_keyType(wxKEY_STRING)
+        { m_key.string = new wxString(wxString::FromUTF8Unchecked(s)); }
+    template <size_t N>
+    wxListKey(char (&s)[N]) = delete;
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     wxListKey(const wchar_t *s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }

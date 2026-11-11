@@ -25,6 +25,9 @@
     <ClCompile Include="..\..\src\expat\expat\lib\random_rand_s.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\expat\expat\lib\xcs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\expat\expat\lib\xmlparse.c">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -65,6 +65,9 @@
     <ClCompile Include="hyperlnk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="icons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="itemcontainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

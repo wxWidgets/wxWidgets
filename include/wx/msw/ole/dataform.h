@@ -28,6 +28,12 @@ public:
     wxDataFormat(const wxString& format) { SetId(format); }
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxDataFormat(const char *format) { SetId(format); }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    wxDataFormat(const char (&format)[N])
+        { SetId(wxString::FromUTF8Unchecked(format)); }
+    template <size_t N>
+    wxDataFormat(char (&format)[N]) = delete;
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     wxDataFormat(const wchar_t *format) { SetId(format); }
     wxDataFormat(const wxCStrData& format) { SetId(format); }

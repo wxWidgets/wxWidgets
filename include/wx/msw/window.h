@@ -12,7 +12,9 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
-#include "wx/settings.h"        // solely for wxSystemColour
+#if WXWIN_COMPATIBILITY_3_2
+#include "wx/settings.h"        // only for backward compatibility
+#endif // WXWIN_COMPATIBILITY_3_2
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 

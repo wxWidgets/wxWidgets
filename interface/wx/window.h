@@ -898,6 +898,29 @@ public:
     virtual int GetScrollThumb(int orientation) const;
 
     /**
+        Get the position at which the visible portion of the window starts.
+
+        Returns the logical position of the origin of the window: if it is
+        scrolled, this position will be strictly positive.
+
+        @param x
+            Receives the first visible horizontal position in pixels.
+            May be @NULL if not needed.
+        @param y
+            Receives the first visible vertical position in pixels.
+            May be @NULL if not needed.
+
+        @see wxScrolled
+
+        @since 3.3.5
+    */
+    void GetViewStartPixels(int* x, int* y) const;
+
+    /// @overload
+    wxPoint GetViewStartPixels() const;
+
+
+    /**
         Returns @true if this window can have a scroll bar in this orientation.
 
         @param orient

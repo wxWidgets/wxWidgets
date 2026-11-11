@@ -127,7 +127,8 @@ public:
         : wxGridCellTextEditor(other),
           m_min(other.m_min),
           m_max(other.m_max),
-          m_value(other.m_value)
+          m_value(other.m_value),
+          m_isEmpty(other.m_isEmpty)
     {
     }
 
@@ -144,6 +145,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
     virtual void StartingKey(wxKeyEvent& event) override;
 
     // parameters string format is "min,max"
@@ -170,15 +172,20 @@ protected:
 #endif
     }
 
-    // string representation of our value
+    // string representation of our value, empty if the cell is empty
     wxString GetString() const
-        { return wxString::Format(wxT("%ld"), m_value); }
+        { return m_isEmpty ? wxString() : wxString::Format(wxT("%ld"), m_value); }
 
 private:
     int m_min,
         m_max;
 
     long m_value;
+
+    // True if the value is empty, in which case m_value is just 0: this is
+    // set from the cell contents in BeginEdit() and updated in EndEdit(),
+    // just as m_value itself.
+    bool m_isEmpty = false;
 };
 
 
@@ -226,6 +233,7 @@ public:
           m_width(other.m_width),
           m_precision(other.m_precision),
           m_value(other.m_value),
+          m_isEmpty(other.m_isEmpty),
           m_style(other.m_style),
           m_format(other.m_format)
     {
@@ -242,6 +250,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
     virtual void StartingKey(wxKeyEvent& event) override;
 
     wxNODISCARD virtual wxGridCellEditor *Clone() const override
@@ -252,13 +261,18 @@ public:
     virtual void SetParameters(const wxString& params) override;
 
 protected:
-    // string representation of our value
+    // string representation of our value, empty if the cell is empty
     wxString GetString();
 
 private:
     int m_width,
         m_precision;
     double m_value;
+
+    // True if the value is empty, in which case m_value is just 0: this is
+    // set from the cell contents in BeginEdit() and updated in EndEdit(),
+    // just as m_value itself.
+    bool m_isEmpty = false;
 
     int m_style;
     wxString m_format;
@@ -303,6 +317,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
     virtual void StartingClick() override;
     virtual void StartingKey(wxKeyEvent& event) override;
 
@@ -380,6 +395,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return m_allowOthers; }
     virtual void StartingClick() override;
 
     // parameters string format is "item1[,item2[...,itemN]]"
@@ -481,6 +497,7 @@ public:
     virtual void ApplyEdit(int row, int col, wxGrid* grid) override;
 
     virtual void Reset() override;
+    virtual bool AcceptsTextInput() const override { return false; }
 
     wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellDateEditor(*this); }

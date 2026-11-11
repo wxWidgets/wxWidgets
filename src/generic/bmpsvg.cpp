@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/utils.h"                   // Only for wxMin()
+    #include "wx/module.h"
 #endif
 
 #include "wx/filename.h"
@@ -135,7 +136,7 @@ private:
 // lunasvg implementation
 // ============================================================================
 
-#if !wxCHECK_CXX_STD(17)
+#if !wxCHECK_CXX_STD(201703L)
     #error wxUSE_LUNASVG requires C++17 or later
 #endif
 
@@ -236,6 +237,17 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxBitmapBundleLunaSVG);
 };
+
+class wxLunaSVGFontCacheCleanupModule : public wxModule
+{
+    wxDECLARE_DYNAMIC_CLASS(wxLunaSVGFontCacheCleanupModule);
+public:
+    wxLunaSVGFontCacheCleanupModule() {}
+    bool OnInit() override { return true; }
+    void OnExit() override { lunasvg_destroy_font_cache(); }
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxLunaSVGFontCacheCleanupModule, wxModule);
 
 #endif // wxUSE_LUNASVG
 

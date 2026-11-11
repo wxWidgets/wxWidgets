@@ -131,6 +131,12 @@ protected:
     virtual void DoMove() override;
     virtual void DoSize() override;
 
+    virtual void DoGetPosition(int* x, int* y) const override
+    {
+        if ( x ) *x = m_x;
+        if ( y ) *y = m_y;
+    }
+
     // refresh the caret
     void Refresh();
 
@@ -2329,7 +2335,6 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     wxRichTextParagraphLayoutBox* container = GetFocusObject();
     int hitTestFlags = wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC;
 
-    bool lineIsEmpty = false;
     if (notInThisObject)
     {
         // If we know we're navigating out of the current object,
@@ -2350,11 +2355,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     {
         wxRichTextLine* lineObj = GetFocusObject()->GetLineForVisibleLineNumber(newLine);
         if (lineObj)
-        {
             pt.y = lineObj->GetAbsolutePosition().y + 2;
-            if (lineObj->GetRange().GetStart() == lineObj->GetRange().GetEnd())
-                lineIsEmpty = true;
-        }
         else
             return false;
     }
@@ -2399,15 +2400,6 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         }
 
         bool caretLineStart = true;
-
-        // If the line is empty, there is only one possible position for the caret,
-        // so force the 'before' state so FindCaretPositionForCharacterPosition doesn't
-        // just return the same position.
-        if (lineIsEmpty)
-        {
-            hitTest &= ~wxRICHTEXT_HITTEST_AFTER;
-            hitTest |= wxRICHTEXT_HITTEST_BEFORE;
-        }
         long caretPosition = FindCaretPositionForCharacterPosition(newPos, hitTest, container, caretLineStart);
         long newSelEnd = caretPosition;
         bool extendSel;
@@ -4491,7 +4483,7 @@ bool wxRichTextCtrl::DoesSelectionHaveTextEffectFlag(int flag)
         {
             if (IsDefaultStyleShowing())
                 wxRichTextApplyStyle(attr, GetDefaultStyleEx());
-            return (attr.GetTextEffectFlags() & flag) != 0;
+            return (attr.GetTextEffects() & flag) != 0;
         }
     }
     return false;

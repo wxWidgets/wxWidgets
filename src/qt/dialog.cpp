@@ -80,6 +80,14 @@ int wxDialog::ShowModal()
     // capture making it impossible to do anything in the modal dialog itself
     QtReleaseMouseAndNotify();
 
+    // Reset the return code to avoid it being interpreted as an indication that
+    // EndModal() was called from InitDialog() when Show() is called below.
+    // Otherwise, subsequent calls to ShowModal() on the same wxDialog object
+    // would fail to show the dialog again.
+    SetReturnCode(0);
+
+    GetDialogHandle()->setModal(true);
+
     Show(true);
 
     // EndModal may have been called from InitDialog handler (called from
@@ -87,10 +95,7 @@ int wxDialog::ShowModal()
 
     if ( IsShown() )
     {
-        QDialog* qDialog = GetDialogHandle();
-        qDialog->setModal(true);
-
-        bool ret = qDialog->exec();
+        bool ret = GetDialogHandle()->exec();
         if ( GetReturnCode() == 0 )
             return ret ? wxID_OK : wxID_CANCEL;
     }
@@ -116,7 +121,7 @@ bool wxDialog::IsModal() const
 {
     wxCHECK_MSG( GetDialogHandle() != nullptr, false, "Invalid dialog" );
 
-    return GetDialogHandle()->isModal();
+    return GetDialogHandle()->isModal() && GetDialogHandle()->isVisible();
 }
 
 bool wxDialog::Show(bool show)

@@ -963,15 +963,38 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
 
     // initialize
     m_numStrings  = Swap(pHeader->numStrings);
+
+    // The header gives the offsets of the two string tables and the number of
+    // entries in each of them, but all of these come from the untrusted file
+    // and were not checked at all, so a corrupt catalog could make us read the
+    // table entries (and, via StringAtOfs(), the strings they point at) from
+    // outside the catalog data. Verify that both tables are entirely contained
+    // in the data before using them, doing all the arithmetic in 64 bits so
+    // that neither the multiplication nor the addition involving the 32-bit
+    // header fields can overflow.
+    const wxULongLong_t ofsOrigTable = Swap(pHeader->ofsOrigTable);
+    const wxULongLong_t ofsTransTable = Swap(pHeader->ofsTransTable);
+    const wxULongLong_t tableSize =
+        static_cast<wxULongLong_t>(m_numStrings) * sizeof(wxMsgTableEntry);
+    if ( ofsOrigTable + tableSize > m_data.length() ||
+         ofsTransTable + tableSize > m_data.length() )
+    {
+        wxLogWarning(_("Invalid message catalog."));
+        return false;
+    }
+
     m_pOrigTable  = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
-                    Swap(pHeader->ofsOrigTable));
+                    ofsOrigTable);
     m_pTransTable = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
-                    Swap(pHeader->ofsTransTable));
+                    ofsTransTable);
 
     // now parse catalog's header and try to extract catalog charset and
-    // plural forms formula from it:
+    // plural forms formula from it, if we have at least one string: the header
+    // is stored as the (first) entry with an empty original string, so don't
+    // access it if the catalog is empty, as the table may then be empty too.
 
-    const char* headerData = StringAtOfs(m_pOrigTable, 0);
+    const char* headerData = m_numStrings ? StringAtOfs(m_pOrigTable, 0)
+                                          : nullptr;
     if ( headerData && headerData[0] == '\0' )
     {
         // Extract the charset:

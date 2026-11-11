@@ -1714,7 +1714,7 @@ void wxBackstageMRUList::Rebuild()
     const wxBitmapBundle defaultIcon =
         wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_LIST);
     bool isFirst{ true };
-    auto currentSection{ Section::Today };
+    auto currentSection = Section::Today;
     for ( const auto& entry : sorted )
     {
         const Section section = GetSection(entry.m_modified, now);

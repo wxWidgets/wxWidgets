@@ -1188,7 +1188,9 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
 
-    if ( HasFocus() )
+    // When using wxHW_NO_SELECTION, we don't want to draw the focus rectangle
+    // either as we're not supposed to be used interactively in this case.
+    if ( IsSelectionEnabled() && HasFocus() )
     {
         int xFocus, yFocus;
         CalcUnscrolledPosition(0, 0, &xFocus, &yFocus);
@@ -1327,7 +1329,11 @@ void wxHtmlWindow::OnFocusEvent(wxFocusEvent& event)
 {
     event.Skip();
 
-    Refresh(false);
+    if ( IsSelectionEnabled() )
+    {
+        // Refresh the entire window to show or hide focus border.
+        Refresh(false);
+    }
 
     // Redraw selection, because its background colour depends on
     // whether the window has keyboard focus or not.

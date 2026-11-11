@@ -851,6 +851,28 @@ struct wxPrintfConvSpecParser
                 // to adjust the index
                 spec->m_pos--;
 
+                // The positional argument number is taken directly from the
+                // format string and so may be larger than the maximum number
+                // of arguments we can handle. This is a bug in the format
+                // string, so report it, and stop parsing here as continuing
+                // would write past the end of the fixed-size pspec[] array
+                // (and make nargs exceed its bounds too) below.
+                if ( spec->m_pos >= wxMAX_SVNPRINTF_ARGUMENTS )
+                {
+                    wxFAIL_MSG
+                    (
+                        wxString::Format
+                        (wxASCII_STR(
+                            "Format string \"%s\" uses positional parameter "
+                            "%zu but wxVsnprintf() currently supports only "
+                            "%d arguments."),
+                            fmt, spec->m_pos + 1, wxMAX_SVNPRINTF_ARGUMENTS
+                        )
+                    );
+
+                    break;
+                }
+
                 // We could be reusing an already existing argument, only
                 // increment their number if it's really a new one.
                 if ( spec->m_pos >= nargs )

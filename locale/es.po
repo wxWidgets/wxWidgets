@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 20:23+0200\n"
+"POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2025-05-05 20:11-0400\n"
 "Last-Translator: Blake Madden\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: ../include/wx/defs.h:2582
+#: ../include/wx/defs.h:2609
 msgid "All files (*.*)|*.*"
 msgstr "Todos los archivos (*.*)|*.*"
 
-#: ../include/wx/defs.h:2585
+#: ../include/wx/defs.h:2612
 msgid "All files (*)|*"
 msgstr "Todos los archivos (*)|*"
 
@@ -35,14 +35,14 @@ msgid "Remaining time:"
 msgstr "Tiempo restante:"
 
 #. TRANSLATORS: HTML printout default title.
-#: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:273
-#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2161
+#: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:278
+#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2172
 msgid "Printout"
 msgstr "Impresión"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:291
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
 msgid "Printing"
 msgstr "Imprimiendo"
 
@@ -55,20 +55,20 @@ msgid "No"
 msgstr "No"
 
 #: ../include/wx/msgdlg.h:279 ../src/common/stockitem.cpp:183
-#: ../src/msw/msgdlg.cpp:430 ../src/msw/msgdlg.cpp:734
+#: ../src/msw/msgdlg.cpp:435 ../src/msw/msgdlg.cpp:766
 #: ../src/richtext/richtextstyledlg.cpp:292
 msgid "OK"
 msgstr "Aceptar"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:150
-#: ../src/msw/msgdlg.cpp:430 ../src/msw/progdlg.cpp:884
+#: ../src/msw/msgdlg.cpp:435 ../src/msw/progdlg.cpp:913
 #: ../src/richtext/richtextstyledlg.cpp:295
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:168
 #: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
-#: ../src/osx/button_osx.cpp:38
+#: ../src/osx/button_osx.cpp:38 ../src/ribbon/bar.cpp:148
 msgid "Help"
 msgstr "Ayuda"
 
@@ -76,37 +76,37 @@ msgstr "Ayuda"
 msgid "Cannot initialize OLE"
 msgstr "No se puede inicializar OLE"
 
-#: ../include/wx/msw/private/fswatcher.h:48
-#, c-format
-msgid "Unable to close the handle for '%s'"
-msgstr "No se pudo cerrar el manejador para '%s'"
+#: ../include/wx/msw/private/fswatcher.h:85
+#, fuzzy, c-format
+msgid "Unable to finish cancelling the watch for '%s'"
+msgstr "No se pudo activar la vista para '%s'"
 
-#: ../include/wx/msw/private/fswatcher.h:92
+#: ../include/wx/msw/private/fswatcher.h:149
 #, c-format
 msgid "Failed to open directory \"%s\" for monitoring."
 msgstr "Falló la apertura del directorio '%s' para su monitorización."
 
-#: ../include/wx/msw/private/fswatcher.h:125
+#: ../include/wx/msw/private/fswatcher.h:185
 msgid "Unable to close I/O completion port handle"
 msgstr "Error al cerrar el manejador del puerto de finalización de E/S"
 
-#: ../include/wx/msw/private/fswatcher.h:142
+#: ../include/wx/msw/private/fswatcher.h:203
 msgid "Unable to associate handle with I/O completion port"
 msgstr "No se pudo asociar manejador con el puerto de finalización de E/S"
 
-#: ../include/wx/msw/private/fswatcher.h:148
+#: ../include/wx/msw/private/fswatcher.h:209
 msgid "Unexpectedly new I/O completion port was created"
 msgstr "Se creó inesperadamente un puerto de finalización de E/S"
 
-#: ../include/wx/msw/private/fswatcher.h:213
+#: ../include/wx/msw/private/fswatcher.h:295
 msgid "Unable to post completion status"
 msgstr "No se pudo enviar el estado de finalización"
 
-#: ../include/wx/msw/private/fswatcher.h:262
+#: ../include/wx/msw/private/fswatcher.h:349
 msgid "Unable to dequeue completion packet"
 msgstr "No se pudo sacar de la cola el paquete de finalización"
 
-#: ../include/wx/msw/private/fswatcher.h:273
+#: ../include/wx/msw/private/fswatcher.h:360
 msgid "Unable to create I/O completion port"
 msgstr "No se pudo crear el puerto de finalización de E/S"
 
@@ -197,549 +197,549 @@ msgid "Close All"
 msgstr "Cerrar Todo"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
-#: ../src/qt/mdi.cpp:258
+#: ../src/qt/mdi.cpp:255
 msgid "&Next"
 msgstr "&Siguiente"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
-#: ../src/qt/mdi.cpp:259
+#: ../src/qt/mdi.cpp:256
 msgid "&Previous"
 msgstr "&Anterior"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
-#: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:462
+#: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:466
 msgid "&Window"
 msgstr "&Ventana"
 
-#: ../src/common/accelcmn.cpp:47
+#: ../src/common/accelcmn.cpp:48
 msgctxt "keyboard key"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ../src/common/accelcmn.cpp:48
+#: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Del"
 msgstr "Supr"
 
-#: ../src/common/accelcmn.cpp:49
+#: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Back"
 msgstr "Atrás"
 
-#: ../src/common/accelcmn.cpp:49
+#: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Backspace"
 msgstr "Retroceso"
 
-#: ../src/common/accelcmn.cpp:50
+#: ../src/common/accelcmn.cpp:51
 msgctxt "keyboard key"
 msgid "Insert"
 msgstr "Insertar"
 
-#: ../src/common/accelcmn.cpp:51
+#: ../src/common/accelcmn.cpp:52
 msgctxt "keyboard key"
 msgid "Ins"
 msgstr "Insertar"
 
-#: ../src/common/accelcmn.cpp:52
+#: ../src/common/accelcmn.cpp:53
 msgctxt "keyboard key"
 msgid "Enter"
 msgstr "Intro"
 
-#: ../src/common/accelcmn.cpp:53
+#: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "Return"
 msgstr "Regresar"
 
-#: ../src/common/accelcmn.cpp:54
+#: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "RePág"
 
-#: ../src/common/accelcmn.cpp:54
+#: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "Página arriba"
 
-#: ../src/common/accelcmn.cpp:55
+#: ../src/common/accelcmn.cpp:56
 msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "AvPág"
 
-#: ../src/common/accelcmn.cpp:55
+#: ../src/common/accelcmn.cpp:56
 msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "Página abajo"
 
-#: ../src/common/accelcmn.cpp:56
+#: ../src/common/accelcmn.cpp:57
 msgctxt "keyboard key"
 msgid "PgUp"
 msgstr "RePg"
 
-#: ../src/common/accelcmn.cpp:57
+#: ../src/common/accelcmn.cpp:58
 msgctxt "keyboard key"
 msgid "PgDn"
 msgstr "AvPg"
 
-#: ../src/common/accelcmn.cpp:58
+#: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Left"
 msgstr "Izquierda"
 
-#: ../src/common/accelcmn.cpp:59
+#: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
 msgid "Right"
 msgstr "Derecha"
 
-#: ../src/common/accelcmn.cpp:60
+#: ../src/common/accelcmn.cpp:61
 msgctxt "keyboard key"
 msgid "Up"
 msgstr "Arriba"
 
-#: ../src/common/accelcmn.cpp:61
+#: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
 msgid "Down"
 msgstr "Abajo"
 
-#: ../src/common/accelcmn.cpp:62
+#: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
 msgid "Home"
 msgstr "Inicio"
 
-#: ../src/common/accelcmn.cpp:63
+#: ../src/common/accelcmn.cpp:64
 msgctxt "keyboard key"
 msgid "End"
 msgstr "Fin"
 
-#: ../src/common/accelcmn.cpp:64
+#: ../src/common/accelcmn.cpp:65
 msgctxt "keyboard key"
 msgid "Space"
 msgstr "Espacio"
 
-#: ../src/common/accelcmn.cpp:65
+#: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
 msgid "Tab"
 msgstr "Tabulador"
 
-#: ../src/common/accelcmn.cpp:66
+#: ../src/common/accelcmn.cpp:67
 msgctxt "keyboard key"
 msgid "Esc"
 msgstr "Esc"
 
-#: ../src/common/accelcmn.cpp:67
+#: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../src/common/accelcmn.cpp:68
+#: ../src/common/accelcmn.cpp:69
 msgctxt "keyboard key"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/common/accelcmn.cpp:69
+#: ../src/common/accelcmn.cpp:70
 msgctxt "keyboard key"
 msgid "Clear"
 msgstr "Limpiar"
 
-#: ../src/common/accelcmn.cpp:70
+#: ../src/common/accelcmn.cpp:71
 msgctxt "keyboard key"
 msgid "Menu"
 msgstr "Menú"
 
-#: ../src/common/accelcmn.cpp:71
+#: ../src/common/accelcmn.cpp:72
 msgctxt "keyboard key"
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../src/common/accelcmn.cpp:72
+#: ../src/common/accelcmn.cpp:73
 msgctxt "keyboard key"
 msgid "Capital"
 msgstr "Mayúscula"
 
-#: ../src/common/accelcmn.cpp:73
+#: ../src/common/accelcmn.cpp:74
 msgctxt "keyboard key"
 msgid "Select"
 msgstr "Seleccione"
 
-#: ../src/common/accelcmn.cpp:74
+#: ../src/common/accelcmn.cpp:75
 msgctxt "keyboard key"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/common/accelcmn.cpp:75
+#: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Execute"
 msgstr "Ejecutar"
 
-#: ../src/common/accelcmn.cpp:76
+#: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
 msgid "Snapshot"
 msgstr "Instantánea"
 
-#: ../src/common/accelcmn.cpp:77
+#: ../src/common/accelcmn.cpp:78
 msgctxt "keyboard key"
 msgid "Help"
 msgstr "Ayuda"
 
-#: ../src/common/accelcmn.cpp:78
+#: ../src/common/accelcmn.cpp:79
 msgctxt "keyboard key"
 msgid "Add"
 msgstr "Añadir"
 
-#: ../src/common/accelcmn.cpp:79
+#: ../src/common/accelcmn.cpp:80
 msgctxt "keyboard key"
 msgid "Separator"
 msgstr "Separador"
 
-#: ../src/common/accelcmn.cpp:80
+#: ../src/common/accelcmn.cpp:81
 msgctxt "keyboard key"
 msgid "Subtract"
 msgstr "Sustraer"
 
-#: ../src/common/accelcmn.cpp:81
+#: ../src/common/accelcmn.cpp:82
 msgctxt "keyboard key"
 msgid "Decimal"
 msgstr "Decimal"
 
-#: ../src/common/accelcmn.cpp:82
+#: ../src/common/accelcmn.cpp:83
 msgctxt "keyboard key"
 msgid "Multiply"
 msgstr "Multiplicar"
 
-#: ../src/common/accelcmn.cpp:83
+#: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Divide"
 msgstr "Dividir"
 
-#: ../src/common/accelcmn.cpp:84
+#: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Num_lock"
 msgstr "Bloq_Num"
 
-#: ../src/common/accelcmn.cpp:84
+#: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Num Lock"
 msgstr "Num Bloq"
 
-#: ../src/common/accelcmn.cpp:85
+#: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "Bloq_despl"
 
-#: ../src/common/accelcmn.cpp:85
+#: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "Bloq Despl"
 
-#: ../src/common/accelcmn.cpp:86
+#: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "KP_Space"
 msgstr "KP_Space"
 
-#: ../src/common/accelcmn.cpp:86
+#: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "Num Space"
 msgstr "Num Espacio"
 
-#: ../src/common/accelcmn.cpp:87
+#: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "KP_Tab"
 msgstr "KP_Tab"
 
-#: ../src/common/accelcmn.cpp:87
+#: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "Num Tab"
 msgstr "Num Tab"
 
-#: ../src/common/accelcmn.cpp:88
+#: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
-#: ../src/common/accelcmn.cpp:88
+#: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "Num Enter"
 msgstr "Num Intro"
 
-#: ../src/common/accelcmn.cpp:89
+#: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "KP_Home"
 msgstr "KP_Home"
 
-#: ../src/common/accelcmn.cpp:89
+#: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "Num Home"
 msgstr "Num Inicio"
 
-#: ../src/common/accelcmn.cpp:90
+#: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "KP_Left"
 msgstr "KP_Left"
 
-#: ../src/common/accelcmn.cpp:90
+#: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "Num left"
 msgstr "Num Izquierda"
 
-#: ../src/common/accelcmn.cpp:91
+#: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "KP_Up"
 msgstr "KP_Up"
 
-#: ../src/common/accelcmn.cpp:91
+#: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "Num Up"
 msgstr "Num Arriba"
 
-#: ../src/common/accelcmn.cpp:92
+#: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "KP_Right"
 msgstr "KP_Right"
 
-#: ../src/common/accelcmn.cpp:92
+#: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "Num Right"
 msgstr "Num Derecha"
 
-#: ../src/common/accelcmn.cpp:93
+#: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "KP_Down"
 msgstr "KP_Down"
 
-#: ../src/common/accelcmn.cpp:93
+#: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "Num Down"
 msgstr "Num Abajo"
 
-#: ../src/common/accelcmn.cpp:94
+#: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "KP_PageUp"
 msgstr "KP_PageUp"
 
-#: ../src/common/accelcmn.cpp:94
+#: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "Num Page Up"
 msgstr "Num Re Pág"
 
-#: ../src/common/accelcmn.cpp:95
+#: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "KP_PageDown"
 msgstr "KP_PageDown"
 
-#: ../src/common/accelcmn.cpp:95
+#: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "Num Page Down"
 msgstr "Num Av Pág"
 
-#: ../src/common/accelcmn.cpp:96
+#: ../src/common/accelcmn.cpp:97
 msgctxt "keyboard key"
 msgid "KP_Prior"
 msgstr "KP_Prior"
 
-#: ../src/common/accelcmn.cpp:97
+#: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "KP_Next"
 msgstr "KP_Next"
 
-#: ../src/common/accelcmn.cpp:98
+#: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "KP_End"
 msgstr "KP_End"
 
-#: ../src/common/accelcmn.cpp:98
+#: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "Num End"
 msgstr "Num Fin"
 
-#: ../src/common/accelcmn.cpp:99
+#: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "KP_Begin"
 msgstr "KP_Begin"
 
-#: ../src/common/accelcmn.cpp:99
+#: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "Num Begin"
 msgstr "Num Inicio"
 
-#: ../src/common/accelcmn.cpp:100
+#: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
-#: ../src/common/accelcmn.cpp:100
+#: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "Num Insert"
 msgstr "Num Ins"
 
-#: ../src/common/accelcmn.cpp:101
+#: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "KP_Delete"
 msgstr "KP_Delete"
 
-#: ../src/common/accelcmn.cpp:101
+#: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "Num Delete"
 msgstr "Num Eliminar"
 
-#: ../src/common/accelcmn.cpp:102
+#: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "KP_Equal"
 msgstr "KP_Equal"
 
-#: ../src/common/accelcmn.cpp:102
+#: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "Num ="
 msgstr "Num ="
 
-#: ../src/common/accelcmn.cpp:103
+#: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "KP_Multiply"
 msgstr "KP_Multiply"
 
-#: ../src/common/accelcmn.cpp:103
+#: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "Num *"
 msgstr "Num *"
 
-#: ../src/common/accelcmn.cpp:104
+#: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "KP_Add"
 msgstr "KP_Add"
 
-#: ../src/common/accelcmn.cpp:104
+#: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "Num +"
 msgstr "Num +"
 
-#: ../src/common/accelcmn.cpp:105
+#: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "KP_Separator"
 msgstr "KP_Separator"
 
-#: ../src/common/accelcmn.cpp:105
+#: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "Num ,"
 msgstr "Num ,"
 
-#: ../src/common/accelcmn.cpp:106
+#: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "KP_Subtract"
 msgstr "KP_Subtract"
 
-#: ../src/common/accelcmn.cpp:106
+#: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "Num -"
 msgstr "Num -"
 
-#: ../src/common/accelcmn.cpp:107
+#: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "KP_Decimal"
 msgstr "KP_Decimal"
 
-#: ../src/common/accelcmn.cpp:107
+#: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "Num ."
 msgstr "Num ."
 
-#: ../src/common/accelcmn.cpp:108
+#: ../src/common/accelcmn.cpp:109
 msgctxt "keyboard key"
 msgid "KP_Divide"
 msgstr "KP_Divide"
 
-#: ../src/common/accelcmn.cpp:108
+#: ../src/common/accelcmn.cpp:109
 msgctxt "keyboard key"
 msgid "Num /"
 msgstr "Num /"
 
-#: ../src/common/accelcmn.cpp:109
+#: ../src/common/accelcmn.cpp:110
 msgctxt "keyboard key"
 msgid "Windows_Left"
 msgstr "Windows_Izquierda"
 
-#: ../src/common/accelcmn.cpp:110
+#: ../src/common/accelcmn.cpp:111
 msgctxt "keyboard key"
 msgid "Windows_Right"
 msgstr "Windows_Derecha"
 
-#: ../src/common/accelcmn.cpp:111
+#: ../src/common/accelcmn.cpp:112
 msgctxt "keyboard key"
 msgid "Windows_Menu"
 msgstr "Windows_Menú"
 
-#: ../src/common/accelcmn.cpp:112
+#: ../src/common/accelcmn.cpp:113
 msgctxt "keyboard key"
 msgid "Command"
 msgstr "Orden"
 
-#: ../src/common/accelcmn.cpp:186 ../src/common/accelcmn.cpp:359
+#: ../src/common/accelcmn.cpp:187 ../src/common/accelcmn.cpp:384
 msgctxt "keyboard key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:188 ../src/common/accelcmn.cpp:363
+#: ../src/common/accelcmn.cpp:189 ../src/common/accelcmn.cpp:388
 msgctxt "keyboard key"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../src/common/accelcmn.cpp:190 ../src/common/accelcmn.cpp:361
+#: ../src/common/accelcmn.cpp:191 ../src/common/accelcmn.cpp:386
 msgctxt "keyboard key"
 msgid "Shift"
 msgstr "Mayúsculas"
 
-#: ../src/common/accelcmn.cpp:196
+#: ../src/common/accelcmn.cpp:197
 msgctxt "keyboard key"
 msgid "num "
 msgstr "num "
 
-#: ../src/common/accelcmn.cpp:260 ../src/common/accelcmn.cpp:382
+#: ../src/common/accelcmn.cpp:261 ../src/common/accelcmn.cpp:407
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
-#: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:385
+#: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:410
 msgctxt "keyboard key"
 msgid "KP_F"
 msgstr "KP_F"
 
-#: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:388
+#: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:413
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:391
+#: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:416
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "ESPECIAL"
 
-#: ../src/common/accelcmn.cpp:373
+#: ../src/common/accelcmn.cpp:398
 #, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../src/common/appbase.cpp:786
+#: ../src/common/appbase.cpp:804
 msgid "show this help message"
 msgstr "mostrar este mensaje de ayuda"
 
-#: ../src/common/appbase.cpp:796
+#: ../src/common/appbase.cpp:814
 msgid "generate verbose log messages"
 msgstr "generar mensajes de log explicativos"
 
-#: ../src/common/appcmn.cpp:256
+#: ../src/common/appcmn.cpp:259
 msgid "specify the theme to use"
 msgstr "especifique el tema a usar"
 
-#: ../src/common/appcmn.cpp:270
+#: ../src/common/appcmn.cpp:273
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "especifique el modo de pantalla a usar (ej.: 640x480-16)"
 
-#: ../src/common/appcmn.cpp:292
+#: ../src/common/appcmn.cpp:295
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "No se admite el tema '%s'."
 
-#: ../src/common/appcmn.cpp:309
+#: ../src/common/appcmn.cpp:312
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Especificación de modo de pantalla no válida: '%s'."
@@ -840,7 +840,7 @@ msgid "Can't &Undo "
 msgstr "No se puede &deshacer "
 
 #: ../src/common/cmdproc.cpp:259 ../src/common/stockitem.cpp:208
-#: ../src/msw/textctrl.cpp:2880 ../src/osx/textctrl_osx.cpp:649
+#: ../src/msw/textctrl.cpp:2953 ../src/osx/textctrl_osx.cpp:662
 #: ../src/richtext/richtextctrl.cpp:327
 msgid "&Undo"
 msgstr "&Deshacer"
@@ -850,8 +850,8 @@ msgid "&Redo "
 msgstr "&Rehacer "
 
 #: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:288
-#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2881
-#: ../src/osx/textctrl_osx.cpp:650 ../src/richtext/richtextctrl.cpp:328
+#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2954
+#: ../src/osx/textctrl_osx.cpp:663 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
 msgstr "&Rehacer"
 
@@ -867,7 +867,7 @@ msgstr ""
 "Valor %ld no válido para una clave booleana «%s» en el archivo de "
 "configuración."
 
-#: ../src/common/config.cpp:526
+#: ../src/common/config.cpp:536
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
@@ -875,123 +875,133 @@ msgstr ""
 "Fallo en expansión de variable de entorno: falta '%c' en la posición %u en "
 "'%s'."
 
-#: ../src/common/config.cpp:576 ../src/msw/regconf.cpp:272
+#: ../src/common/config.cpp:586 ../src/msw/regconf.cpp:272
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' tiene '..' adicional, se ignora."
 
+#. TRANSLATORS: Name of Boolean true value
+#: ../src/common/datavcmn.cpp:1121 ../src/generic/datavgen.cpp:1178
+msgid "true"
+msgstr "verdadero"
+
+#. TRANSLATORS: Name of Boolean false value
+#: ../src/common/datavcmn.cpp:1123 ../src/generic/datavgen.cpp:1180
+msgid "false"
+msgstr "falso"
+
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2166 ../src/generic/datavgen.cpp:1430
+#: ../src/common/datavcmn.cpp:2195 ../src/generic/datavgen.cpp:1439
 msgid "checked"
 msgstr "activada"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2170 ../src/generic/datavgen.cpp:1432
+#: ../src/common/datavcmn.cpp:2199 ../src/generic/datavgen.cpp:1441
 msgid "unchecked"
 msgstr "desactivada"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2174
+#: ../src/common/datavcmn.cpp:2203
 msgid "undetermined"
 msgstr "sin determinar"
 
-#: ../src/common/datetimefmt.cpp:1875
+#: ../src/common/datetimefmt.cpp:1906
 msgid "today"
 msgstr "hoy"
 
-#: ../src/common/datetimefmt.cpp:1876
+#: ../src/common/datetimefmt.cpp:1907
 msgid "yesterday"
 msgstr "ayer"
 
-#: ../src/common/datetimefmt.cpp:1877
+#: ../src/common/datetimefmt.cpp:1908
 msgid "tomorrow"
 msgstr "mañana"
 
-#: ../src/common/datetimefmt.cpp:2071
+#: ../src/common/datetimefmt.cpp:2102
 msgid "first"
 msgstr "primero"
 
-#: ../src/common/datetimefmt.cpp:2072
+#: ../src/common/datetimefmt.cpp:2103
 msgid "second"
 msgstr "segundo"
 
-#: ../src/common/datetimefmt.cpp:2073
+#: ../src/common/datetimefmt.cpp:2104
 msgid "third"
 msgstr "tercero"
 
-#: ../src/common/datetimefmt.cpp:2074
+#: ../src/common/datetimefmt.cpp:2105
 msgid "fourth"
 msgstr "cuarto"
 
-#: ../src/common/datetimefmt.cpp:2075
+#: ../src/common/datetimefmt.cpp:2106
 msgid "fifth"
 msgstr "quinto"
 
-#: ../src/common/datetimefmt.cpp:2076
+#: ../src/common/datetimefmt.cpp:2107
 msgid "sixth"
 msgstr "sexto"
 
-#: ../src/common/datetimefmt.cpp:2077
+#: ../src/common/datetimefmt.cpp:2108
 msgid "seventh"
 msgstr "séptimo"
 
-#: ../src/common/datetimefmt.cpp:2078
+#: ../src/common/datetimefmt.cpp:2109
 msgid "eighth"
 msgstr "octavo"
 
-#: ../src/common/datetimefmt.cpp:2079
+#: ../src/common/datetimefmt.cpp:2110
 msgid "ninth"
 msgstr "noveno"
 
-#: ../src/common/datetimefmt.cpp:2080
+#: ../src/common/datetimefmt.cpp:2111
 msgid "tenth"
 msgstr "décimo"
 
-#: ../src/common/datetimefmt.cpp:2081
+#: ../src/common/datetimefmt.cpp:2112
 msgid "eleventh"
 msgstr "undécimo"
 
-#: ../src/common/datetimefmt.cpp:2082
+#: ../src/common/datetimefmt.cpp:2113
 msgid "twelfth"
 msgstr "duodécimo"
 
-#: ../src/common/datetimefmt.cpp:2083
+#: ../src/common/datetimefmt.cpp:2114
 msgid "thirteenth"
 msgstr "decimotercero"
 
-#: ../src/common/datetimefmt.cpp:2084
+#: ../src/common/datetimefmt.cpp:2115
 msgid "fourteenth"
 msgstr "decimocuarto"
 
-#: ../src/common/datetimefmt.cpp:2085
+#: ../src/common/datetimefmt.cpp:2116
 msgid "fifteenth"
 msgstr "decimoquinto"
 
-#: ../src/common/datetimefmt.cpp:2086
+#: ../src/common/datetimefmt.cpp:2117
 msgid "sixteenth"
 msgstr "decimosexto"
 
-#: ../src/common/datetimefmt.cpp:2087
+#: ../src/common/datetimefmt.cpp:2118
 msgid "seventeenth"
 msgstr "decimoséptimo"
 
-#: ../src/common/datetimefmt.cpp:2088
+#: ../src/common/datetimefmt.cpp:2119
 msgid "eighteenth"
 msgstr "decimoctavo"
 
-#: ../src/common/datetimefmt.cpp:2089
+#: ../src/common/datetimefmt.cpp:2120
 msgid "nineteenth"
 msgstr "decimonoveno"
 
-#: ../src/common/datetimefmt.cpp:2090
+#: ../src/common/datetimefmt.cpp:2121
 msgid "twentieth"
 msgstr "vigésimo"
 
-#: ../src/common/datetimefmt.cpp:2248
+#: ../src/common/datetimefmt.cpp:2279
 msgid "noon"
 msgstr "mediodía"
 
-#: ../src/common/datetimefmt.cpp:2249
+#: ../src/common/datetimefmt.cpp:2280
 msgid "midnight"
 msgstr "medianoche"
 
@@ -1111,27 +1121,27 @@ msgstr "Reintentar"
 msgid "Discard changes"
 msgstr "Descartar cambios"
 
-#: ../src/common/docview.cpp:679
+#: ../src/common/docview.cpp:693
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "No se pudo abrir el archivo «%s» para su escritura."
 
-#: ../src/common/docview.cpp:685
+#: ../src/common/docview.cpp:699
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Falló el guardado del documento en el archivo «%s»."
 
-#: ../src/common/docview.cpp:702
+#: ../src/common/docview.cpp:716
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "No se pudo abrir el archivo «%s» para su lectura."
 
-#: ../src/common/docview.cpp:714
+#: ../src/common/docview.cpp:728
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Falló la lectura del documento a partir del archivo «%s»."
 
-#: ../src/common/docview.cpp:1236
+#: ../src/common/docview.cpp:1250
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -1140,57 +1150,57 @@ msgstr ""
 "El archivo '%s' no existe y no puede abrirse.\n"
 "También ha sido eliminado de la lista de archivos recientes."
 
-#: ../src/common/docview.cpp:1296
+#: ../src/common/docview.cpp:1310
 msgid "Print preview creation failed."
 msgstr "Error al crear la previsualización de impresión."
 
-#: ../src/common/docview.cpp:1302
+#: ../src/common/docview.cpp:1316
 msgid "Print Preview"
 msgstr "Previsualización de la impresión"
 
-#: ../src/common/docview.cpp:1517
+#: ../src/common/docview.cpp:1528
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "No se pudo determinar el formato del archivo «%s»."
 
-#: ../src/common/docview.cpp:1643
+#: ../src/common/docview.cpp:1654
 #, c-format
 msgid "unnamed%d"
 msgstr "anónimo%d"
 
-#: ../src/common/docview.cpp:1660
+#: ../src/common/docview.cpp:1671
 msgid " - "
 msgstr " - "
 
-#: ../src/common/docview.cpp:1791 ../src/common/docview.cpp:1844
+#: ../src/common/docview.cpp:1802 ../src/common/docview.cpp:1855
 msgid "Open File"
 msgstr "Abrir archivo"
 
-#: ../src/common/docview.cpp:1807
+#: ../src/common/docview.cpp:1818
 msgid "File error"
 msgstr "Error de archivo"
 
-#: ../src/common/docview.cpp:1809
+#: ../src/common/docview.cpp:1820
 msgid "Sorry, could not open this file."
 msgstr "No pudo abrirse este archivo."
 
-#: ../src/common/docview.cpp:1843
+#: ../src/common/docview.cpp:1854
 msgid "Sorry, the format for this file is unknown."
 msgstr "Se desconoce el formato de este archivo."
 
-#: ../src/common/docview.cpp:1924
+#: ../src/common/docview.cpp:1935
 msgid "Select a document template"
 msgstr "Seleccionar una plantilla de documento"
 
-#: ../src/common/docview.cpp:1925
+#: ../src/common/docview.cpp:1936
 msgid "Templates"
 msgstr "Plantillas"
 
-#: ../src/common/docview.cpp:1998
+#: ../src/common/docview.cpp:2009
 msgid "Select a document view"
 msgstr "Seleccionar una vista de documento"
 
-#: ../src/common/docview.cpp:1999
+#: ../src/common/docview.cpp:2010
 msgid "Views"
 msgstr "Vistas"
 
@@ -1204,108 +1214,104 @@ msgstr "Falló la carga de la biblioteca compartida «%s»"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "No se pudo encontrar el símbolo «%s» en la biblioteca dinámica"
 
-#: ../src/common/ffile.cpp:56 ../src/common/file.cpp:215
+#: ../src/common/ffile.cpp:57 ../src/common/file.cpp:216
 #, c-format
 msgid "can't open file '%s'"
 msgstr "no se puede abrir el archivo '%s'"
 
-#: ../src/common/ffile.cpp:72
+#: ../src/common/ffile.cpp:73
 #, c-format
 msgid "can't close file '%s'"
 msgstr "no se puede cerrar el archivo '%s'"
 
-#: ../src/common/ffile.cpp:106 ../src/common/ffile.cpp:131
+#: ../src/common/ffile.cpp:107 ../src/common/ffile.cpp:132
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Error de lectura en el archivo '%s'"
 
-#: ../src/common/ffile.cpp:148
+#: ../src/common/ffile.cpp:149
 #, c-format
 msgid "Write error on file '%s'"
 msgstr "Error de escritura en el archivo '%s'"
 
-#: ../src/common/ffile.cpp:182
+#: ../src/common/ffile.cpp:183
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "no se pudo limpiar el archivo '%s'"
 
-#: ../src/common/ffile.cpp:222
+#: ../src/common/ffile.cpp:205
+#, fuzzy, c-format
+msgid "failed to sync data of the file '%s'"
+msgstr "no se pudo limpiar el archivo '%s'"
+
+#: ../src/common/ffile.cpp:246
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr ""
 "Error de búsqueda en el archivo «%s» (stdio no admite los archivos grandes)"
 
-#: ../src/common/ffile.cpp:232
+#: ../src/common/ffile.cpp:256
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Error de búsqueda en el archivo «%s»"
 
-#: ../src/common/ffile.cpp:248
+#: ../src/common/ffile.cpp:272
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "No se puede encontrar la posición actual en el archivo «%s»"
 
-#: ../src/common/ffile.cpp:349 ../src/common/file.cpp:569
-msgid "Failed to set temporary file permissions"
-msgstr "No se pudieron cambiar permisos del archivo temporal"
-
-#: ../src/common/ffile.cpp:371
-#, c-format
-msgid "can't remove file '%s'"
-msgstr "no se puede eliminar el archivo '%s'"
-
-#: ../src/common/ffile.cpp:376 ../src/common/file.cpp:591
+#: ../src/common/ffile.cpp:384 ../src/common/file.cpp:582
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "no se pueden hacer efectivos los cambios en archivo '%s'"
 
-#: ../src/common/ffile.cpp:388 ../src/common/file.cpp:603
+#: ../src/common/ffile.cpp:396 ../src/common/file.cpp:594
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "no se puede eliminar el archivo temporal '%s'"
 
-#: ../src/common/file.cpp:162
+#: ../src/common/file.cpp:163
 #, c-format
 msgid "can't create file '%s'"
 msgstr "no se puede crear el archivo '%s'"
 
-#: ../src/common/file.cpp:229
+#: ../src/common/file.cpp:230
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "no se puede cerrar el descriptor de archivo %d"
 
-#: ../src/common/file.cpp:332
+#: ../src/common/file.cpp:333
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "no se puede leer desde el descriptor de archivo %d"
 
-#: ../src/common/file.cpp:351
+#: ../src/common/file.cpp:352
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "no se puede escribir el descriptor de archivo %d"
 
-#: ../src/common/file.cpp:390
+#: ../src/common/file.cpp:391
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "no se puede vaciar el descriptor de archivo %d"
 
-#: ../src/common/file.cpp:432
+#: ../src/common/file.cpp:433
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "no se puede buscar en el descriptor de archivo %d"
 
-#: ../src/common/file.cpp:446
+#: ../src/common/file.cpp:447
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr ""
 "no se puede alcanzar posición de búsqueda en el descriptor de archivo %d"
 
-#: ../src/common/file.cpp:475
+#: ../src/common/file.cpp:476
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "no se puede obtener el tamaño del archivo con descriptor %d"
 
-#: ../src/common/file.cpp:505
+#: ../src/common/file.cpp:506
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr ""
@@ -1421,52 +1427,57 @@ msgstr "Error al guardar los datos de configuración del usuario."
 msgid "can't delete user configuration file '%s'"
 msgstr "no se puede eliminar el archivo de configuración de usuario '%s'"
 
-#: ../src/common/fileconf.cpp:2007
+#: ../src/common/fileconf.cpp:1523
+#, c-format
+msgid "duplicate group '%s'"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:2014
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "la entrada '%s' aparece más de una vez en el grupo '%s'"
 
-#: ../src/common/fileconf.cpp:2021
+#: ../src/common/fileconf.cpp:2028
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "intento de cambiar clave inmutable '%s', ignorado."
 
-#: ../src/common/fileconf.cpp:2118
+#: ../src/common/fileconf.cpp:2125
 #, c-format
 msgid "trailing backslash ignored in '%s'"
 msgstr "ignorada la barra inversa al final de '%s'."
 
-#: ../src/common/fileconf.cpp:2153
-#, c-format
-msgid "unexpected \" at position %d in '%s'."
+#: ../src/common/fileconf.cpp:2160
+#, fuzzy, c-format
+msgid "unexpected \" at position %zu in '%s'."
 msgstr "\" inesperada en la posición %d en '%s'."
 
-#: ../src/common/filefn.cpp:474
+#: ../src/common/filefn.cpp:403
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "No se pudo copiar el archivo '%s' a '%s'"
 
-#: ../src/common/filefn.cpp:487
+#: ../src/common/filefn.cpp:416
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Imposible obtener permisos para el archivo '%s'"
 
-#: ../src/common/filefn.cpp:501
+#: ../src/common/filefn.cpp:430
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Imposible sobrescribir el archivo «%s»"
 
-#: ../src/common/filefn.cpp:508
+#: ../src/common/filefn.cpp:437
 #, c-format
 msgid "Error copying the file '%s' to '%s'."
 msgstr "Falló la copia del archivo «%s» en «%s»."
 
-#: ../src/common/filefn.cpp:556
+#: ../src/common/filefn.cpp:485
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Imposible establecer los permisos del archivo «%s»"
 
-#: ../src/common/filefn.cpp:606
+#: ../src/common/filefn.cpp:510
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -1475,40 +1486,40 @@ msgstr ""
 "No se pudo renombrar el archivo '%s' a '%s' porque el archivo de destino ya "
 "existe."
 
-#: ../src/common/filefn.cpp:623
-#, c-format
-msgid "File '%s' couldn't be renamed '%s'"
+#: ../src/common/filefn.cpp:546
+#, fuzzy, c-format
+msgid "File '%s' couldn't be renamed to '%s'"
 msgstr "No se pudo cambiar el nombre del archivo «%s» como «%s»"
 
-#: ../src/common/filefn.cpp:639
+#: ../src/common/filefn.cpp:562
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "No se pudo quitar el archivo «%s»"
 
-#: ../src/common/filefn.cpp:666
+#: ../src/common/filefn.cpp:589
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "No se pudo crear el directorio «%s»"
 
-#: ../src/common/filefn.cpp:680
+#: ../src/common/filefn.cpp:603
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "No se pudo eliminar el directorio «%s»"
 
-#: ../src/common/filefn.cpp:714
+#: ../src/common/filefn.cpp:637
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "No se pueden enumerar los archivos «%s»"
 
-#: ../src/common/filefn.cpp:798
+#: ../src/common/filefn.cpp:721
 msgid "Failed to get the working directory"
 msgstr "Error al obtener el directorio de trabajo"
 
-#: ../src/common/filefn.cpp:843
+#: ../src/common/filefn.cpp:766
 msgid "Could not set current working directory"
 msgstr "No se pudo establecer la carpeta de trabajo actual"
 
-#: ../src/common/filefn.cpp:974
+#: ../src/common/filefn.cpp:897
 #, c-format
 msgid "Files (%s)"
 msgstr "Archivos (%s)"
@@ -1535,17 +1546,46 @@ msgstr "No se pudo crear un nombre temporal de archivo"
 msgid "Failed to open temporary file."
 msgstr "Falló la apertura del archivo temporal."
 
+#: ../src/common/filename.cpp:1220
+#, c-format
+msgid "Error preserving all attributes of '%s'"
+msgstr ""
+
+#: ../src/common/filename.cpp:1234
+msgid "Failed to set temporary file permissions"
+msgstr "No se pudieron cambiar permisos del archivo temporal"
+
+#: ../src/common/filename.cpp:2786 ../src/common/filename.cpp:2793
+#, fuzzy, c-format
+msgid "Failed to get attributes of '%s'"
+msgstr "Error al ejecutar '%s'\n"
+
+#: ../src/common/filename.cpp:2811
+#, fuzzy, c-format
+msgid "Failed to set attributes of '%s'"
+msgstr "Error al inspeccionar el archivo de bloqueo '%s'"
+
+#: ../src/common/filename.cpp:2856
+#, fuzzy, c-format
+msgid "Failed to get mode of '%s'"
+msgstr "No se pudo quitar el archivo de bloqueo '%s'"
+
 #: ../src/common/filename.cpp:2862
+#, fuzzy, c-format
+msgid "Failed to set mode of '%s'"
+msgstr "No se pudo quitar el archivo de bloqueo '%s'"
+
+#: ../src/common/filename.cpp:3031
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "No se pudo modificar la hora del archivo para '%s'"
 
-#: ../src/common/filename.cpp:2877
+#: ../src/common/filename.cpp:3046
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "No se pudo  retocar' el archivo '%s'"
 
-#: ../src/common/filename.cpp:2958
+#: ../src/common/filename.cpp:3127
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "No se pudo obtener horas del archivo para '%s'"
@@ -1575,465 +1615,465 @@ msgstr "Cargar el archivo %s"
 msgid "Save %s file"
 msgstr "Guardar el archivo %s"
 
-#: ../src/common/fmapbase.cpp:144
+#: ../src/common/fmapbase.cpp:140
 msgid "Western European (ISO-8859-1)"
 msgstr "Europa Occidental (ISO-8859-1)"
 
-#: ../src/common/fmapbase.cpp:145
+#: ../src/common/fmapbase.cpp:141
 msgid "Central European (ISO-8859-2)"
 msgstr "Europa Central (ISO-8859-2)"
 
-#: ../src/common/fmapbase.cpp:146
+#: ../src/common/fmapbase.cpp:142
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Esperanto (ISO-8859-3)"
 
-#: ../src/common/fmapbase.cpp:147
+#: ../src/common/fmapbase.cpp:143
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "Báltico (antiguo) (ISO-8859-4)"
 
-#: ../src/common/fmapbase.cpp:148
+#: ../src/common/fmapbase.cpp:144
 msgid "Cyrillic (ISO-8859-5)"
 msgstr "Cirílico (ISO-8859-5)"
 
-#: ../src/common/fmapbase.cpp:149
+#: ../src/common/fmapbase.cpp:145
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arábigo (ISO-8859-6)"
 
-#: ../src/common/fmapbase.cpp:150
+#: ../src/common/fmapbase.cpp:146
 msgid "Greek (ISO-8859-7)"
 msgstr "Griego (ISO-8859-7)"
 
-#: ../src/common/fmapbase.cpp:151
+#: ../src/common/fmapbase.cpp:147
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebreo (ISO-8859-8)"
 
-#: ../src/common/fmapbase.cpp:152
+#: ../src/common/fmapbase.cpp:148
 msgid "Turkish (ISO-8859-9)"
 msgstr "Turco (ISO-8859-9)"
 
-#: ../src/common/fmapbase.cpp:153
+#: ../src/common/fmapbase.cpp:149
 msgid "Nordic (ISO-8859-10)"
 msgstr "Nórdico (ISO-8859-10)"
 
-#: ../src/common/fmapbase.cpp:154
+#: ../src/common/fmapbase.cpp:150
 msgid "Thai (ISO-8859-11)"
 msgstr "Tailandés (ISO-8859-11)"
 
-#: ../src/common/fmapbase.cpp:155
+#: ../src/common/fmapbase.cpp:151
 msgid "Indian (ISO-8859-12)"
 msgstr "India (ISO-8859-12)"
 
-#: ../src/common/fmapbase.cpp:156
+#: ../src/common/fmapbase.cpp:152
 msgid "Baltic (ISO-8859-13)"
 msgstr "Báltico (ISO-8859-13)"
 
-#: ../src/common/fmapbase.cpp:157
+#: ../src/common/fmapbase.cpp:153
 msgid "Celtic (ISO-8859-14)"
 msgstr "Céltico (ISO-8859-14)"
 
-#: ../src/common/fmapbase.cpp:158
+#: ../src/common/fmapbase.cpp:154
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Europa Occidental con Euro (ISO-8859-15)"
 
-#: ../src/common/fmapbase.cpp:159
+#: ../src/common/fmapbase.cpp:155
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/common/fmapbase.cpp:160
+#: ../src/common/fmapbase.cpp:156
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/fmapbase.cpp:161
+#: ../src/common/fmapbase.cpp:157
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
 msgstr "Windows/DOS OEM Cirílico (CP 866)"
 
-#: ../src/common/fmapbase.cpp:162
+#: ../src/common/fmapbase.cpp:158
 msgid "Windows Thai (CP 874)"
 msgstr "Windows Tailandés (CP 874)"
 
-#: ../src/common/fmapbase.cpp:163
+#: ../src/common/fmapbase.cpp:159
 msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Windows Japonés (CP 932) o Shift-JIS"
 
-#: ../src/common/fmapbase.cpp:164
+#: ../src/common/fmapbase.cpp:160
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
 msgstr "Windows Chino simplificado (CP 936) or GB-2312"
 
-#: ../src/common/fmapbase.cpp:165
+#: ../src/common/fmapbase.cpp:161
 msgid "Windows Korean (CP 949)"
 msgstr "Windows Coreano (CP 949)"
 
-#: ../src/common/fmapbase.cpp:166
+#: ../src/common/fmapbase.cpp:162
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
 msgstr "Windows Chino tradicional (CP 950) o Big-5"
 
-#: ../src/common/fmapbase.cpp:167
+#: ../src/common/fmapbase.cpp:163
 msgid "Windows Central European (CP 1250)"
 msgstr "Windows Centro Europeo (CP 1250)"
 
-#: ../src/common/fmapbase.cpp:168
+#: ../src/common/fmapbase.cpp:164
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Cirílico (CP 1251)"
 
-#: ../src/common/fmapbase.cpp:169
+#: ../src/common/fmapbase.cpp:165
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows European Occidental (CP 1252)"
 
-#: ../src/common/fmapbase.cpp:170
+#: ../src/common/fmapbase.cpp:166
 msgid "Windows Greek (CP 1253)"
 msgstr "Windows Griego (CP 1253)"
 
-#: ../src/common/fmapbase.cpp:171
+#: ../src/common/fmapbase.cpp:167
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turco (CP 1254)"
 
-#: ../src/common/fmapbase.cpp:172
+#: ../src/common/fmapbase.cpp:168
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Hebreo (CP 1255)"
 
-#: ../src/common/fmapbase.cpp:173
+#: ../src/common/fmapbase.cpp:169
 msgid "Windows Arabic (CP 1256)"
 msgstr "Windows Árabe (CP 1256)"
 
-#: ../src/common/fmapbase.cpp:174
+#: ../src/common/fmapbase.cpp:170
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Báltico (CP 1257)"
 
-#: ../src/common/fmapbase.cpp:175
+#: ../src/common/fmapbase.cpp:171
 msgid "Windows Vietnamese (CP 1258)"
 msgstr "Windows Vietnamita (CP 1258)"
 
-#: ../src/common/fmapbase.cpp:176
+#: ../src/common/fmapbase.cpp:172
 msgid "Windows Johab (CP 1361)"
 msgstr "Windows Johab (CP 1361)"
 
-#: ../src/common/fmapbase.cpp:177
+#: ../src/common/fmapbase.cpp:173
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
-#: ../src/common/fmapbase.cpp:178
+#: ../src/common/fmapbase.cpp:174
 msgid "Unicode 7 bit (UTF-7)"
 msgstr "Unicode 7 bit (UTF-7)"
 
-#: ../src/common/fmapbase.cpp:179
+#: ../src/common/fmapbase.cpp:175
 msgid "Unicode 8 bit (UTF-8)"
 msgstr "Unicode 8 bit (UTF-8)"
 
-#: ../src/common/fmapbase.cpp:181 ../src/common/fmapbase.cpp:187
+#: ../src/common/fmapbase.cpp:177 ../src/common/fmapbase.cpp:183
 msgid "Unicode 16 bit (UTF-16)"
 msgstr "Unicode 16 bits (UTF-16)"
 
-#: ../src/common/fmapbase.cpp:182
+#: ../src/common/fmapbase.cpp:178
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
 msgstr "Unicode 16 bits Endian Pequeña (UTF-16LE)"
 
-#: ../src/common/fmapbase.cpp:183 ../src/common/fmapbase.cpp:189
+#: ../src/common/fmapbase.cpp:179 ../src/common/fmapbase.cpp:185
 msgid "Unicode 32 bit (UTF-32)"
 msgstr "Unicode 32 bits (UTF-32)"
 
-#: ../src/common/fmapbase.cpp:184
+#: ../src/common/fmapbase.cpp:180
 msgid "Unicode 32 bit Little Endian (UTF-32LE)"
 msgstr "Unicode 32 bits Endian Pequeña (UTF-32LE)"
 
-#: ../src/common/fmapbase.cpp:186
+#: ../src/common/fmapbase.cpp:182
 msgid "Unicode 16 bit Big Endian (UTF-16BE)"
 msgstr "Unicode 16 bits Endian Grande (UTF-16BE)"
 
-#: ../src/common/fmapbase.cpp:188
+#: ../src/common/fmapbase.cpp:184
 msgid "Unicode 32 bit Big Endian (UTF-32BE)"
 msgstr "Unicode 32 bits Endian Grande (UTF-32BE)"
 
-#: ../src/common/fmapbase.cpp:191
+#: ../src/common/fmapbase.cpp:187
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Página de códigos extendidad Unix para japonés (EUC-JP)"
 
-#: ../src/common/fmapbase.cpp:192
+#: ../src/common/fmapbase.cpp:188
 msgid "US-ASCII"
 msgstr "US-ASCII"
 
-#: ../src/common/fmapbase.cpp:193
+#: ../src/common/fmapbase.cpp:189
 msgid "ISO-2022-JP"
 msgstr "ISO-2022-JP"
 
-#: ../src/common/fmapbase.cpp:195
+#: ../src/common/fmapbase.cpp:191
 msgid "MacRoman"
 msgstr "MacRoman"
 
-#: ../src/common/fmapbase.cpp:196
+#: ../src/common/fmapbase.cpp:192
 msgid "MacJapanese"
 msgstr "MacJapanese"
 
-#: ../src/common/fmapbase.cpp:197
+#: ../src/common/fmapbase.cpp:193
 msgid "MacChineseTrad"
 msgstr "MacChineseTrad"
 
-#: ../src/common/fmapbase.cpp:198
+#: ../src/common/fmapbase.cpp:194
 msgid "MacKorean"
 msgstr "MacKorean"
 
-#: ../src/common/fmapbase.cpp:199
+#: ../src/common/fmapbase.cpp:195
 msgid "MacArabic"
 msgstr "MacArabic"
 
-#: ../src/common/fmapbase.cpp:200
+#: ../src/common/fmapbase.cpp:196
 msgid "MacHebrew"
 msgstr "MacHebrew"
 
-#: ../src/common/fmapbase.cpp:201
+#: ../src/common/fmapbase.cpp:197
 msgid "MacGreek"
 msgstr "MacGreek"
 
-#: ../src/common/fmapbase.cpp:202
+#: ../src/common/fmapbase.cpp:198
 msgid "MacCyrillic"
 msgstr "MacCyrillic"
 
-#: ../src/common/fmapbase.cpp:203
+#: ../src/common/fmapbase.cpp:199
 msgid "MacDevanagari"
 msgstr "MacDevanagari"
 
-#: ../src/common/fmapbase.cpp:204
+#: ../src/common/fmapbase.cpp:200
 msgid "MacGurmukhi"
 msgstr "MacGurmukhi"
 
-#: ../src/common/fmapbase.cpp:205
+#: ../src/common/fmapbase.cpp:201
 msgid "MacGujarati"
 msgstr "MacGujarati"
 
-#: ../src/common/fmapbase.cpp:206
+#: ../src/common/fmapbase.cpp:202
 msgid "MacOriya"
 msgstr "MacOriya"
 
-#: ../src/common/fmapbase.cpp:207
+#: ../src/common/fmapbase.cpp:203
 msgid "MacBengali"
 msgstr "MacBengali"
 
-#: ../src/common/fmapbase.cpp:208
+#: ../src/common/fmapbase.cpp:204
 msgid "MacTamil"
 msgstr "MacTamil"
 
-#: ../src/common/fmapbase.cpp:209
+#: ../src/common/fmapbase.cpp:205
 msgid "MacTelugu"
 msgstr "MacTelugu"
 
-#: ../src/common/fmapbase.cpp:210
+#: ../src/common/fmapbase.cpp:206
 msgid "MacKannada"
 msgstr "MacKannada"
 
-#: ../src/common/fmapbase.cpp:211
+#: ../src/common/fmapbase.cpp:207
 msgid "MacMalayalam"
 msgstr "MacMalayalam"
 
-#: ../src/common/fmapbase.cpp:212
+#: ../src/common/fmapbase.cpp:208
 msgid "MacSinhalese"
 msgstr "MacSinhalese"
 
-#: ../src/common/fmapbase.cpp:213
+#: ../src/common/fmapbase.cpp:209
 msgid "MacBurmese"
 msgstr "MacBurmese"
 
-#: ../src/common/fmapbase.cpp:214
+#: ../src/common/fmapbase.cpp:210
 msgid "MacKhmer"
 msgstr "MacKhmer"
 
-#: ../src/common/fmapbase.cpp:215
+#: ../src/common/fmapbase.cpp:211
 msgid "MacThai"
 msgstr "MacThai"
 
-#: ../src/common/fmapbase.cpp:216
+#: ../src/common/fmapbase.cpp:212
 msgid "MacLaotian"
 msgstr "MacLaotian"
 
-#: ../src/common/fmapbase.cpp:217
+#: ../src/common/fmapbase.cpp:213
 msgid "MacGeorgian"
 msgstr "MacGeorgian"
 
-#: ../src/common/fmapbase.cpp:218
+#: ../src/common/fmapbase.cpp:214
 msgid "MacArmenian"
 msgstr "MacArmenian"
 
-#: ../src/common/fmapbase.cpp:219
+#: ../src/common/fmapbase.cpp:215
 msgid "MacChineseSimp"
 msgstr "MacChineseSimp"
 
-#: ../src/common/fmapbase.cpp:220
+#: ../src/common/fmapbase.cpp:216
 msgid "MacTibetan"
 msgstr "MacTibetan"
 
-#: ../src/common/fmapbase.cpp:221
+#: ../src/common/fmapbase.cpp:217
 msgid "MacMongolian"
 msgstr "MacMongolian"
 
-#: ../src/common/fmapbase.cpp:222
+#: ../src/common/fmapbase.cpp:218
 msgid "MacEthiopic"
 msgstr "MacEthiopic"
 
-#: ../src/common/fmapbase.cpp:223
+#: ../src/common/fmapbase.cpp:219
 msgid "MacCentralEurRoman"
 msgstr "MacCentralEurRoman"
 
-#: ../src/common/fmapbase.cpp:224
+#: ../src/common/fmapbase.cpp:220
 msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
-#: ../src/common/fmapbase.cpp:225
+#: ../src/common/fmapbase.cpp:221
 msgid "MacExtArabic"
 msgstr "MacExtArabic"
 
-#: ../src/common/fmapbase.cpp:226
+#: ../src/common/fmapbase.cpp:222
 msgid "MacSymbol"
 msgstr "MacSymbol"
 
-#: ../src/common/fmapbase.cpp:227
+#: ../src/common/fmapbase.cpp:223
 msgid "MacDingbats"
 msgstr "MacDingbats"
 
-#: ../src/common/fmapbase.cpp:228
+#: ../src/common/fmapbase.cpp:224
 msgid "MacTurkish"
 msgstr "MacTurkish"
 
-#: ../src/common/fmapbase.cpp:229
+#: ../src/common/fmapbase.cpp:225
 msgid "MacCroatian"
 msgstr "MacCroatian"
 
-#: ../src/common/fmapbase.cpp:230
+#: ../src/common/fmapbase.cpp:226
 msgid "MacIcelandic"
 msgstr "MacIcelandic"
 
-#: ../src/common/fmapbase.cpp:231
+#: ../src/common/fmapbase.cpp:227
 msgid "MacRomanian"
 msgstr "MacRomanian"
 
-#: ../src/common/fmapbase.cpp:232
+#: ../src/common/fmapbase.cpp:228
 msgid "MacCeltic"
 msgstr "MacCeltic"
 
-#: ../src/common/fmapbase.cpp:233
+#: ../src/common/fmapbase.cpp:229
 msgid "MacGaelic"
 msgstr "MacGaelic"
 
-#: ../src/common/fmapbase.cpp:234
+#: ../src/common/fmapbase.cpp:230
 msgid "MacKeyboardGlyphs"
 msgstr "MacKeyboardGlyphs"
 
-#: ../src/common/fmapbase.cpp:791
+#: ../src/common/fmapbase.cpp:787
 msgid "Default encoding"
 msgstr "Codificación predeterminada"
 
-#: ../src/common/fmapbase.cpp:805
+#: ../src/common/fmapbase.cpp:801
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "Codificación desconocida (%d)"
 
-#: ../src/common/fmapbase.cpp:815 ../src/richtext/richtextstyles.cpp:776
+#: ../src/common/fmapbase.cpp:811 ../src/richtext/richtextstyles.cpp:776
 msgid "default"
 msgstr "predeterminado"
 
-#: ../src/common/fmapbase.cpp:829
+#: ../src/common/fmapbase.cpp:825
 #, c-format
 msgid "unknown-%d"
 msgstr "desconocido-%d"
 
-#: ../src/common/fontcmn.cpp:924 ../src/common/fontcmn.cpp:1130
+#: ../src/common/fontcmn.cpp:919 ../src/common/fontcmn.cpp:1125
 msgid "underlined"
 msgstr "subrayado"
 
-#: ../src/common/fontcmn.cpp:929
+#: ../src/common/fontcmn.cpp:924
 msgid " strikethrough"
 msgstr " tachado"
 
-#: ../src/common/fontcmn.cpp:942
+#: ../src/common/fontcmn.cpp:937
 msgid " thin"
 msgstr " fina"
 
-#: ../src/common/fontcmn.cpp:946
+#: ../src/common/fontcmn.cpp:941
 msgid " extra light"
 msgstr " extraligera"
 
-#: ../src/common/fontcmn.cpp:950
+#: ../src/common/fontcmn.cpp:945
 msgid " light"
 msgstr " ligera"
 
-#: ../src/common/fontcmn.cpp:954
+#: ../src/common/fontcmn.cpp:949
 msgid " medium"
 msgstr " media"
 
-#: ../src/common/fontcmn.cpp:958
+#: ../src/common/fontcmn.cpp:953
 msgid " semi bold"
 msgstr " negrita media"
 
-#: ../src/common/fontcmn.cpp:962
+#: ../src/common/fontcmn.cpp:957
 msgid " bold"
 msgstr " negrita"
 
-#: ../src/common/fontcmn.cpp:966
+#: ../src/common/fontcmn.cpp:961
 msgid " extra bold"
 msgstr " negrita extra"
 
-#: ../src/common/fontcmn.cpp:970
+#: ../src/common/fontcmn.cpp:965
 msgid " heavy"
 msgstr " pesada"
 
-#: ../src/common/fontcmn.cpp:974
+#: ../src/common/fontcmn.cpp:969
 msgid " extra heavy"
 msgstr " extrapesada"
 
-#: ../src/common/fontcmn.cpp:990
+#: ../src/common/fontcmn.cpp:985
 msgid " italic"
 msgstr " cursiva"
 
-#: ../src/common/fontcmn.cpp:1134
+#: ../src/common/fontcmn.cpp:1129
 msgid "strikethrough"
 msgstr "tachado"
 
-#: ../src/common/fontcmn.cpp:1143
+#: ../src/common/fontcmn.cpp:1138
 msgid "thin"
 msgstr "fina"
 
-#: ../src/common/fontcmn.cpp:1156
+#: ../src/common/fontcmn.cpp:1151
 msgid "extralight"
 msgstr "extraligera"
 
-#: ../src/common/fontcmn.cpp:1161
+#: ../src/common/fontcmn.cpp:1156
 msgid "light"
 msgstr "ligera"
 
-#: ../src/common/fontcmn.cpp:1169 ../src/richtext/richtextstyles.cpp:775
+#: ../src/common/fontcmn.cpp:1164 ../src/richtext/richtextstyles.cpp:775
 msgid "normal"
 msgstr "normal"
 
-#: ../src/common/fontcmn.cpp:1174
+#: ../src/common/fontcmn.cpp:1169
 msgid "medium"
 msgstr "media"
 
-#: ../src/common/fontcmn.cpp:1179 ../src/common/fontcmn.cpp:1199
+#: ../src/common/fontcmn.cpp:1174 ../src/common/fontcmn.cpp:1194
 msgid "semibold"
 msgstr "negrita media"
 
-#: ../src/common/fontcmn.cpp:1184
+#: ../src/common/fontcmn.cpp:1179
 msgid "bold"
 msgstr "negrita"
 
-#: ../src/common/fontcmn.cpp:1194
+#: ../src/common/fontcmn.cpp:1189
 msgid "extrabold"
 msgstr "negrita extra"
 
-#: ../src/common/fontcmn.cpp:1204
+#: ../src/common/fontcmn.cpp:1199
 msgid "heavy"
 msgstr "pesada"
 
-#: ../src/common/fontcmn.cpp:1212
+#: ../src/common/fontcmn.cpp:1207
 msgid "extraheavy"
 msgstr "extrapesada"
 
-#: ../src/common/fontcmn.cpp:1217
+#: ../src/common/fontcmn.cpp:1212
 msgid "italic"
 msgstr "cursiva"
 
-#: ../src/common/fontmap.cpp:195
+#: ../src/common/fontmap.cpp:190
 msgid ": unknown charset"
 msgstr ": conjunto de caracteres desconocido"
 
-#: ../src/common/fontmap.cpp:199
+#: ../src/common/fontmap.cpp:194
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2044,20 +2084,20 @@ msgstr ""
 "seleccionar otro conjunto para reemplazarlo o elegir\n"
 "[Cancelar] si no puede reemplazarse"
 
-#: ../src/common/fontmap.cpp:241
+#: ../src/common/fontmap.cpp:236
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Error al recordar la codificación para el conjunto de caracteres '%s'."
 
-#: ../src/common/fontmap.cpp:321
+#: ../src/common/fontmap.cpp:316
 msgid "can't load any font, aborting"
 msgstr "no se puede cargar ninguna fuente, abortando"
 
-#: ../src/common/fontmap.cpp:409
+#: ../src/common/fontmap.cpp:404
 msgid ": unknown encoding"
 msgstr ": codificación desconocida"
 
-#: ../src/common/fontmap.cpp:417
+#: ../src/common/fontmap.cpp:412
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
@@ -2069,7 +2109,7 @@ msgstr ""
 "pero existe una codificación alternativa, «%s».\n"
 "¿Le gustaría usar esta codificación (de otra forma deberá elegir otra)?"
 
-#: ../src/common/fontmap.cpp:422
+#: ../src/common/fontmap.cpp:417
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
@@ -2123,13 +2163,13 @@ msgstr "El servidor FTP no admite la orden PORT."
 msgid "The FTP server doesn't support passive mode."
 msgstr "El servidor FTP no admite el modo pasivo."
 
-#: ../src/common/gifdecod.cpp:822
+#: ../src/common/gifdecod.cpp:858
 #, c-format
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 "Tamaño de fotograma incorrecto en el GIF (%u, %d) para el fotograma #%u"
 
-#: ../src/common/glcmn.cpp:108
+#: ../src/common/glcmn.cpp:111
 msgid "Failed to allocate colour for OpenGL"
 msgstr "Fallo al reservar un color para OpenGL"
 
@@ -2193,56 +2233,56 @@ msgstr "BMP: no se pudieron escribir los datos."
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: no se pudo reservar memoria."
 
-#: ../src/common/imagbmp.cpp:1041
+#: ../src/common/imagbmp.cpp:1065
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "Cabecera DIB: Anchura de imagen > 32767 pixels por archivo."
 
-#: ../src/common/imagbmp.cpp:1049
+#: ../src/common/imagbmp.cpp:1073
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "Cabecera DIB: Altura de la imagen > 32767 pixels por archivo."
 
-#: ../src/common/imagbmp.cpp:1081
+#: ../src/common/imagbmp.cpp:1105
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "Cabecera DIB: Profundidad de color desconocida en archivo."
 
-#: ../src/common/imagbmp.cpp:1156
+#: ../src/common/imagbmp.cpp:1180
 msgid "DIB Header: Unknown encoding in file."
 msgstr "Cabecera DIB: Codificación desconocida en archivo."
 
-#: ../src/common/imagbmp.cpp:1165
+#: ../src/common/imagbmp.cpp:1189
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "Cabecera DIB: La codificación no coincide con la profundidad de bits."
 
-#: ../src/common/imagbmp.cpp:1180
+#: ../src/common/imagbmp.cpp:1204
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1273
+#: ../src/common/imagbmp.cpp:1297
 msgid "Error in reading image DIB."
 msgstr "Error al leer la imagen DIB."
 
-#: ../src/common/imagbmp.cpp:1294
+#: ../src/common/imagbmp.cpp:1318
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Error al leer máscara DIB."
 
-#: ../src/common/imagbmp.cpp:1353
+#: ../src/common/imagbmp.cpp:1377
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Imagen demasiado alta para un icono."
 
-#: ../src/common/imagbmp.cpp:1361
+#: ../src/common/imagbmp.cpp:1385
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Imagen demasiado ancha para un icono."
 
-#: ../src/common/imagbmp.cpp:1388 ../src/common/imagbmp.cpp:1488
-#: ../src/common/imagbmp.cpp:1503 ../src/common/imagbmp.cpp:1514
-#: ../src/common/imagbmp.cpp:1528 ../src/common/imagbmp.cpp:1576
-#: ../src/common/imagbmp.cpp:1591 ../src/common/imagbmp.cpp:1605
-#: ../src/common/imagbmp.cpp:1616
+#: ../src/common/imagbmp.cpp:1412 ../src/common/imagbmp.cpp:1512
+#: ../src/common/imagbmp.cpp:1527 ../src/common/imagbmp.cpp:1538
+#: ../src/common/imagbmp.cpp:1552 ../src/common/imagbmp.cpp:1600
+#: ../src/common/imagbmp.cpp:1615 ../src/common/imagbmp.cpp:1629
+#: ../src/common/imagbmp.cpp:1640
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: ¡Error al escribir el archivo de imagen!"
 
-#: ../src/common/imagbmp.cpp:1701
+#: ../src/common/imagbmp.cpp:1725
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Indice de icono no válido."
 
@@ -2337,67 +2377,71 @@ msgstr "GIF: el flujo de datos parece haberse truncado."
 msgid "Couldn't initialize GIF hash table."
 msgstr "No se pudo inicializar la tabla hash del GIF."
 
-#: ../src/common/imagiff.cpp:739
+#: ../src/common/imaggif.cpp:565
+msgid "Image palette has too many colours to save as GIF."
+msgstr ""
+
+#: ../src/common/imagiff.cpp:764
 msgid "IFF: error in IFF image format."
 msgstr "IFF: error en formato de imagen IFF."
 
-#: ../src/common/imagiff.cpp:742
+#: ../src/common/imagiff.cpp:767
 msgid "IFF: not enough memory."
 msgstr "IFF: memoria insuficiente."
 
-#: ../src/common/imagiff.cpp:745
+#: ../src/common/imagiff.cpp:770
 msgid "IFF: unknown error!!!"
 msgstr "IFF: ¡¡¡error desconocido!!!"
 
-#: ../src/common/imagiff.cpp:755
+#: ../src/common/imagiff.cpp:780
 msgid "IFF: data stream seems to be truncated."
 msgstr "IFF: el flujo de datos parece truncado."
 
-#: ../src/common/imagjpeg.cpp:258
+#: ../src/common/imagjpeg.cpp:254
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: no se pudo cargar: quizás el archivo está dañado."
 
-#: ../src/common/imagjpeg.cpp:437
+#: ../src/common/imagjpeg.cpp:433
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: No pudo guardarse imagen."
 
-#: ../src/common/imagpcx.cpp:439
+#: ../src/common/imagpcx.cpp:453
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: este no es un archivo PCX."
 
-#: ../src/common/imagpcx.cpp:453
+#: ../src/common/imagpcx.cpp:467
 msgid "PCX: image format unsupported"
 msgstr "PCX: formato de imagen no admitido"
 
-#: ../src/common/imagpcx.cpp:454 ../src/common/imagpcx.cpp:477
+#: ../src/common/imagpcx.cpp:468 ../src/common/imagpcx.cpp:491
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: no pudo reservarse memoria"
 
-#: ../src/common/imagpcx.cpp:455
+#: ../src/common/imagpcx.cpp:469
 msgid "PCX: version number too low"
 msgstr "PCX: número de versión demasiado antiguo"
 
-#: ../src/common/imagpcx.cpp:456 ../src/common/imagpcx.cpp:478
+#: ../src/common/imagpcx.cpp:470 ../src/common/imagpcx.cpp:492
 msgid "PCX: unknown error !!!"
 msgstr "PCX: ¡error desconocido!"
 
-#: ../src/common/imagpcx.cpp:476
+#: ../src/common/imagpcx.cpp:490
 msgid "PCX: invalid image"
 msgstr "PCX: imagen no válida"
 
-#: ../src/common/imagpng.cpp:385
+#: ../src/common/imagpng.cpp:421
 #, c-format
 msgid "Unknown PNG resolution unit %d"
 msgstr "Resolución de la unidad %d de PNG desconocida"
 
-#: ../src/common/imagpng.cpp:439
+#: ../src/common/imagpng.cpp:475
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr ""
 "No se pudo abrir la imagen PNG: el archivo está dañado o no hay memoria "
 "suficiente."
 
-#: ../src/common/imagpng.cpp:513 ../src/common/imagpng.cpp:524
-#: ../src/common/imagpng.cpp:534
+#: ../src/common/imagpng.cpp:549 ../src/common/imagpng.cpp:560
+#: ../src/common/imagpng.cpp:570
 msgid "Couldn't save PNG image."
 msgstr "No se pudo guardar la imagen PNG."
 
@@ -2473,25 +2517,26 @@ msgstr ""
 msgid "WebP: Decoding RGB image data failed."
 msgstr ""
 
-#: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
-msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+#: ../src/common/imagwebp.cpp:112 ../src/common/imagwebp.cpp:197
+#, fuzzy
+msgid "WebP: Error reading data."
+msgstr "Error al leer las opciones de configuración."
 
-#: ../src/common/imagwebp.cpp:131
+#: ../src/common/imagwebp.cpp:130
 #, fuzzy
 msgid "WebP: Failed to parse container data."
 msgstr "Error al colocar datos en el portapapeles."
 
-#: ../src/common/imagwebp.cpp:222
+#: ../src/common/imagwebp.cpp:218
 #, fuzzy
 msgid "WebP: Error decoding animation."
 msgstr "Error al leer las opciones de configuración."
 
-#: ../src/common/imagwebp.cpp:240
+#: ../src/common/imagwebp.cpp:236
 msgid "WebP: Error getting next animation frame."
 msgstr ""
 
-#: ../src/common/init.cpp:172
+#: ../src/common/init.cpp:165
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2499,7 +2544,7 @@ msgid ""
 msgstr ""
 "No se pudo convertir el argumento de consola %d en Unicode y se ignorará."
 
-#: ../src/common/init.cpp:344
+#: ../src/common/init.cpp:337
 msgid "Initialization failed in post init, aborting."
 msgstr "Falló la inicialización en la fase «post init»; se ha interrumpido."
 
@@ -2597,12 +2642,12 @@ msgstr "Error de compresión LZMA %s"
 msgid "LZMA compression error when flushing output: %s"
 msgstr "Error de compresión LZMA al vaciar la salida: %s"
 
-#: ../src/common/mimecmn.cpp:167
+#: ../src/common/mimecmn.cpp:169
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Llave abierta no emparejada en una entrada para tipo mime %s."
 
-#: ../src/common/module.cpp:76
+#: ../src/common/module.cpp:78
 #, c-format
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr "Se ha detectado una dependencia circular concerniente al módulo «%s»."
@@ -3101,112 +3146,113 @@ msgstr "General"
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: ../src/common/prntbase.cpp:245
+#: ../src/common/prntbase.cpp:263
 msgid "Generic PostScript"
 msgstr "PostScript genérico"
 
-#: ../src/common/prntbase.cpp:259
+#: ../src/common/prntbase.cpp:277
 msgid "Ready"
 msgstr "Listo"
 
-#: ../src/common/prntbase.cpp:331
+#: ../src/common/prntbase.cpp:349
 msgid "Printing Error"
 msgstr "Error de impresión"
 
-#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1597
+#: ../src/common/prntbase.cpp:431 ../src/common/prntbase.cpp:1620
 #: ../src/generic/prntdlgg.cpp:135 ../src/generic/prntdlgg.cpp:149
 #: ../src/gtk/print.cpp:628 ../src/gtk/print.cpp:646
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../src/common/prntbase.cpp:471 ../src/generic/prntdlgg.cpp:809
+#: ../src/common/prntbase.cpp:489 ../src/generic/prntdlgg.cpp:809
 msgid "Page setup"
 msgstr "Configurar página"
 
-#: ../src/common/prntbase.cpp:525
+#: ../src/common/prntbase.cpp:543
 msgid "Please wait while printing..."
 msgstr "Imprimiendo; espere un momento…"
 
-#: ../src/common/prntbase.cpp:529
+#: ../src/common/prntbase.cpp:547
 msgid "Document:"
 msgstr "Documento:"
 
-#: ../src/common/prntbase.cpp:532
+#: ../src/common/prntbase.cpp:550
 msgid "Progress:"
 msgstr "Progreso:"
 
-#: ../src/common/prntbase.cpp:533
+#: ../src/common/prntbase.cpp:551
 msgid "Preparing"
 msgstr "Preparando"
 
-#: ../src/common/prntbase.cpp:552
+#: ../src/common/prntbase.cpp:570
 #, c-format
 msgid "Printing page %d"
 msgstr "Imprimiendo página %d"
 
-#: ../src/common/prntbase.cpp:557
+#: ../src/common/prntbase.cpp:575
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "Imprimiendo página %d de %d"
 
-#: ../src/common/prntbase.cpp:560
+#: ../src/common/prntbase.cpp:578
 #, c-format
 msgid " (copy %d of %d)"
 msgstr " (copia %d de %d)"
 
-#: ../src/common/prntbase.cpp:1604
+#: ../src/common/prntbase.cpp:1627
 msgid "First page"
 msgstr "Primera página"
 
-#: ../src/common/prntbase.cpp:1609 ../src/html/helpwnd.cpp:659
+#: ../src/common/prntbase.cpp:1632 ../src/html/helpwnd.cpp:659
 msgid "Previous page"
 msgstr "Página anterior"
 
-#: ../src/common/prntbase.cpp:1623 ../src/html/helpwnd.cpp:660
+#: ../src/common/prntbase.cpp:1646 ../src/html/helpwnd.cpp:660
 msgid "Next page"
 msgstr "Página siguiente"
 
-#: ../src/common/prntbase.cpp:1628
+#: ../src/common/prntbase.cpp:1651
 msgid "Last page"
 msgstr "Última página"
 
-#: ../src/common/prntbase.cpp:1636 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1659 ../src/common/stockitem.cpp:215
 msgid "Zoom Out"
 msgstr "Alejar"
 
-#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:214
+#: ../src/common/prntbase.cpp:1673 ../src/common/stockitem.cpp:214
 msgid "Zoom In"
 msgstr "Acercar"
 
-#: ../src/common/prntbase.cpp:1656 ../src/common/stockitem.cpp:153
-#: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
+#: ../src/common/prntbase.cpp:1679 ../src/common/stockitem.cpp:153
+#: ../src/generic/logg.cpp:555 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "&Cerrar"
 
-#: ../src/common/prntbase.cpp:2085
+#: ../src/common/prntbase.cpp:2061
 msgid "Could not start document preview."
 msgstr "No se pudo iniciar la previsualización del documento."
 
-#: ../src/common/prntbase.cpp:2085 ../src/common/prntbase.cpp:2129
-#: ../src/common/prntbase.cpp:2137
+#: ../src/common/prntbase.cpp:2061 ../src/common/prntbase.cpp:2105
+#: ../src/common/prntbase.cpp:2113
 msgid "Print Preview Failure"
 msgstr "Error en previsualización de impresión"
 
-#: ../src/common/prntbase.cpp:2129 ../src/common/prntbase.cpp:2137
+#: ../src/common/prntbase.cpp:2105 ../src/common/prntbase.cpp:2113
 msgid "Sorry, not enough memory to create a preview."
 msgstr "No se pudo abrir este archivo."
 
-#: ../src/common/prntbase.cpp:2144
+#: ../src/common/prntbase.cpp:2120
 #, c-format
 msgid "Page %d of %d"
 msgstr "Página %d de %d"
 
-#: ../src/common/prntbase.cpp:2146
+#: ../src/common/prntbase.cpp:2122
 #, c-format
 msgid "Page %d"
 msgstr "Página %d"
 
-#: ../src/common/regex.cpp:382 ../src/html/chm.cpp:348
+#: ../src/common/regex.cpp:382 ../src/gtk/utilsgtk.cpp:348
+#: ../src/html/chm.cpp:348 ../src/osx/carbon/utilscocoa.mm:721
 msgid "unknown error"
 msgstr "error desconocido"
 
@@ -3246,15 +3292,15 @@ msgstr "Fallo al leer la contraseña para \"%s\": %s."
 msgid "Deleting password for \"%s\" failed: %s."
 msgstr "Fallo al borrar la contraseña para \"%s\": %s."
 
-#: ../src/common/selectdispatcher.cpp:254
+#: ../src/common/selectdispatcher.cpp:252
 msgid "Failed to monitor I/O channels"
 msgstr "Fallo al monitorizar los canales de E/S"
 
-#: ../src/common/sizer.cpp:3054 ../src/common/stockitem.cpp:195
+#: ../src/common/sizer.cpp:3228 ../src/common/stockitem.cpp:195
 msgid "Save"
 msgstr "Guardar"
 
-#: ../src/common/sizer.cpp:3056
+#: ../src/common/sizer.cpp:3230
 msgid "Don't Save"
 msgstr "No guardar"
 
@@ -3299,7 +3345,7 @@ msgstr "Atrás"
 msgid "&Bold"
 msgstr "&Negrita"
 
-#: ../src/common/stockitem.cpp:148 ../src/generic/fontdlgg.cpp:326
+#: ../src/common/stockitem.cpp:148 ../src/generic/fontdlgg.cpp:324
 #: ../src/richtext/richtextfontpage.cpp:354
 msgid "Bold"
 msgstr "Negrita"
@@ -3312,8 +3358,8 @@ msgstr "&Inferior"
 msgid "Bottom"
 msgstr "Inferior"
 
-#: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
-#: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
+#: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:460
+#: ../src/generic/fontdlgg.cpp:479 ../src/generic/wizard.cpp:415
 msgid "&Cancel"
 msgstr "&Cancelar"
 
@@ -3333,9 +3379,9 @@ msgstr "&Limpiar"
 msgid "Clear"
 msgstr "Limpiar"
 
-#: ../src/common/stockitem.cpp:153 ../src/generic/dbgrptg.cpp:93
+#: ../src/common/stockitem.cpp:153 ../src/generic/dbgrptg.cpp:95
 #: ../src/generic/progdlgg.cpp:778 ../src/html/helpdlg.cpp:86
-#: ../src/msw/progdlg.cpp:209 ../src/msw/progdlg.cpp:890
+#: ../src/msw/progdlg.cpp:224 ../src/msw/progdlg.cpp:919
 #: ../src/richtext/richtextstyledlg.cpp:272
 #: ../src/richtext/richtextsymboldlg.cpp:448
 msgid "Close"
@@ -3349,8 +3395,8 @@ msgstr "&Convertir"
 msgid "Convert"
 msgstr "Convertir"
 
-#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2884
-#: ../src/osx/textctrl_osx.cpp:653 ../src/richtext/richtextctrl.cpp:331
+#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2957
+#: ../src/osx/textctrl_osx.cpp:666 ../src/richtext/richtextctrl.cpp:331
 msgid "&Copy"
 msgstr "&Copiar"
 
@@ -3358,8 +3404,8 @@ msgstr "&Copiar"
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2883
-#: ../src/osx/textctrl_osx.cpp:652 ../src/richtext/richtextctrl.cpp:330
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2956
+#: ../src/osx/textctrl_osx.cpp:665 ../src/richtext/richtextctrl.cpp:330
 msgid "Cu&t"
 msgstr "Cor&tar"
 
@@ -3367,13 +3413,13 @@ msgstr "Cor&tar"
 msgid "Cut"
 msgstr "Cortar"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2886
-#: ../src/osx/textctrl_osx.cpp:655 ../src/richtext/richtextctrl.cpp:333
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&Eliminar"
 
-#: ../src/common/stockitem.cpp:157 ../src/richtext/richtextbuffer.cpp:8266
+#: ../src/common/stockitem.cpp:157 ../src/richtext/richtextbuffer.cpp:8316
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Eliminar"
@@ -3459,7 +3505,7 @@ msgid "Harddisk"
 msgstr "Disco duro"
 
 #: ../src/common/stockitem.cpp:168 ../src/generic/wizard.cpp:418
-#: ../src/osx/cocoa/menu.mm:225 ../src/richtext/richtextstyledlg.cpp:298
+#: ../src/osx/cocoa/menu.mm:221 ../src/richtext/richtextstyledlg.cpp:298
 #: ../src/richtext/richtextsymboldlg.cpp:451
 msgid "&Help"
 msgstr "Ay&uda"
@@ -3496,7 +3542,7 @@ msgstr "Información"
 msgid "&Italic"
 msgstr "Curs&iva"
 
-#: ../src/common/stockitem.cpp:173 ../src/generic/fontdlgg.cpp:322
+#: ../src/common/stockitem.cpp:173 ../src/generic/fontdlgg.cpp:320
 #: ../src/richtext/richtextfontpage.cpp:350
 msgid "Italic"
 msgstr "Cursiva"
@@ -3549,16 +3595,16 @@ msgstr "&Nuevo"
 msgid "New"
 msgstr "Nuevo"
 
-#: ../src/common/stockitem.cpp:182 ../src/msw/msgdlg.cpp:417
+#: ../src/common/stockitem.cpp:182 ../src/msw/msgdlg.cpp:422
 msgid "&No"
 msgstr "&No"
 
-#: ../src/common/stockitem.cpp:183 ../src/generic/fontdlgg.cpp:467
-#: ../src/generic/fontdlgg.cpp:474
+#: ../src/common/stockitem.cpp:183 ../src/generic/fontdlgg.cpp:465
+#: ../src/generic/fontdlgg.cpp:472
 msgid "&OK"
 msgstr "&Aceptar"
 
-#: ../src/common/stockitem.cpp:184 ../src/generic/dbgrptg.cpp:341
+#: ../src/common/stockitem.cpp:184 ../src/generic/dbgrptg.cpp:350
 msgid "&Open..."
 msgstr "A&brir…"
 
@@ -3566,12 +3612,12 @@ msgstr "A&brir…"
 msgid "Open..."
 msgstr "Abrir…"
 
-#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2885
-#: ../src/osx/textctrl_osx.cpp:654 ../src/richtext/richtextctrl.cpp:332
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2958
+#: ../src/osx/textctrl_osx.cpp:667 ../src/richtext/richtextctrl.cpp:332
 msgid "&Paste"
 msgstr "&Pegar"
 
-#: ../src/common/stockitem.cpp:185 ../src/richtext/richtextctrl.cpp:3484
+#: ../src/common/stockitem.cpp:185 ../src/richtext/richtextctrl.cpp:3565
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Pegar"
@@ -3580,7 +3626,7 @@ msgstr "Pegar"
 msgid "&Preferences"
 msgstr "&Preferencias"
 
-#: ../src/common/stockitem.cpp:186 ../src/osx/cocoa/preferences.mm:304
+#: ../src/common/stockitem.cpp:186 ../src/osx/cocoa/preferences.mm:335
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -3601,7 +3647,7 @@ msgid "Print..."
 msgstr "Imprimir..."
 
 #: ../src/common/stockitem.cpp:189 ../src/richtext/richtextctrl.cpp:337
-#: ../src/richtext/richtextctrl.cpp:5479
+#: ../src/richtext/richtextctrl.cpp:5560
 msgid "&Properties"
 msgstr "&Propiedades"
 
@@ -3633,7 +3679,7 @@ msgstr "Sustituir..."
 msgid "Revert to Saved"
 msgstr "Recuperar versión guardada"
 
-#: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:549
+#: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:551
 msgid "Save &As..."
 msgstr "G&uardar como…"
 
@@ -3641,8 +3687,8 @@ msgstr "G&uardar como…"
 msgid "Save As..."
 msgstr "Guardar como…"
 
-#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2888
-#: ../src/osx/textctrl_osx.cpp:657 ../src/richtext/richtextctrl.cpp:335
+#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2961
+#: ../src/osx/textctrl_osx.cpp:670 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
 msgstr "Seleccionar &todo"
 
@@ -3719,7 +3765,7 @@ msgstr "Arriba"
 msgid "Undelete"
 msgstr "Restaurar"
 
-#: ../src/common/stockitem.cpp:207 ../src/generic/fontdlgg.cpp:437
+#: ../src/common/stockitem.cpp:207 ../src/generic/fontdlgg.cpp:435
 msgid "&Underline"
 msgstr "Subrayar"
 
@@ -3747,7 +3793,7 @@ msgstr "&Arriba"
 msgid "Up"
 msgstr "Arriba"
 
-#: ../src/common/stockitem.cpp:211 ../src/msw/msgdlg.cpp:417
+#: ../src/common/stockitem.cpp:211 ../src/msw/msgdlg.cpp:422
 msgid "&Yes"
 msgstr "&Sí"
 
@@ -3845,33 +3891,38 @@ msgstr "Conversión a juego de caracteres '%s' no funciona."
 msgid "unknown"
 msgstr "desconocido"
 
-#: ../src/common/tarstrm.cpp:774
+#: ../src/common/tarstrm.cpp:777
 msgid "incomplete header block in tar"
 msgstr "bloque de cabecera incompleto en tar"
 
-#: ../src/common/tarstrm.cpp:798
+#: ../src/common/tarstrm.cpp:801
 msgid "checksum failure reading tar header block"
 msgstr "fallo de suma de comprobación leyendo bloque de cabecera de tar"
 
-#: ../src/common/tarstrm.cpp:971
+#: ../src/common/tarstrm.cpp:920
+#, c-format
+msgid "Extended tar header size %zu is greater than maximum allowed."
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:983
 msgid "invalid data in extended tar header"
 msgstr "datos no válidos en la cabecera de TAR extendida"
 
-#: ../src/common/tarstrm.cpp:981 ../src/common/tarstrm.cpp:1003
-#: ../src/common/tarstrm.cpp:1477 ../src/common/tarstrm.cpp:1499
+#: ../src/common/tarstrm.cpp:993 ../src/common/tarstrm.cpp:1015
+#: ../src/common/tarstrm.cpp:1490 ../src/common/tarstrm.cpp:1512
 msgid "tar entry not open"
 msgstr "elemento tar no abierto"
 
-#: ../src/common/tarstrm.cpp:1023
+#: ../src/common/tarstrm.cpp:1035
 msgid "unexpected end of file"
 msgstr "fin de archivo inesperado"
 
-#: ../src/common/tarstrm.cpp:1297
+#: ../src/common/tarstrm.cpp:1309
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s no se ajustó a la cabecera tar para la entrada '%s'"
 
-#: ../src/common/tarstrm.cpp:1359
+#: ../src/common/tarstrm.cpp:1371
 msgid "incorrect size given for tar entry"
 msgstr "tamaño incorrecto para elemento de TAR"
 
@@ -3880,7 +3931,7 @@ msgstr "tamaño incorrecto para elemento de TAR"
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' es probablemente un buffer binario."
 
-#: ../src/common/textcmn.cpp:1006 ../src/richtext/richtextctrl.cpp:3053
+#: ../src/common/textcmn.cpp:1017 ../src/richtext/richtextctrl.cpp:3114
 msgid "File couldn't be loaded."
 msgstr "No se pudo abrir el archivo."
 
@@ -3894,47 +3945,47 @@ msgstr "Falló la lectura del archivo de texto  '%s'."
 msgid "can't write buffer '%s' to disk."
 msgstr "no se puede guardar el buffer '%s' al disco."
 
-#: ../src/common/time.cpp:212
+#: ../src/common/time.cpp:220
 msgid "Failed to get the local system time"
 msgstr "Error al obtener el sistema horario local"
 
-#: ../src/common/time.cpp:279
+#: ../src/common/time.cpp:287
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay falló."
 
-#: ../src/common/translation.cpp:929
+#: ../src/common/translation.cpp:933
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' no es un catálogo de mensajes válido."
 
-#: ../src/common/translation.cpp:954
+#: ../src/common/translation.cpp:958
 msgid "Invalid message catalog."
 msgstr "Catálogo de mensajes no válido."
 
-#: ../src/common/translation.cpp:1013
+#: ../src/common/translation.cpp:1017
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "No se pudieron analizar las formas plurales: «%s»"
 
-#: ../src/common/translation.cpp:1723
+#: ../src/common/translation.cpp:1815
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "se usa el catálogo «%s» de «%s»."
 
-#: ../src/common/translation.cpp:1816
+#: ../src/common/translation.cpp:1906
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "El recurso '%s' no es un catálogo de mensajes válido."
 
-#: ../src/common/translation.cpp:1865
+#: ../src/common/translation.cpp:1955
 msgid "Couldn't enumerate translations"
 msgstr "No se pudieron enumerar las traducciones"
 
-#: ../src/common/utilscmn.cpp:1145
+#: ../src/common/utilscmn.cpp:1110
 msgid "No default application configured for HTML files."
 msgstr "No se ha configurado la aplicación predeterminada para archivos HTML."
 
-#: ../src/common/utilscmn.cpp:1190
+#: ../src/common/utilscmn.cpp:1155
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Falló la apertura del URL «%s» en el navegador predeterminado."
@@ -3962,67 +4013,67 @@ msgstr "'%s' no es una de las cadenas válidas"
 msgid "'%s' contains invalid character(s)"
 msgstr "'%s' contiene caracteres no permitidos"
 
-#: ../src/common/webrequest.cpp:139
+#: ../src/common/webrequest.cpp:141
 #, c-format
 msgid "Error: %s (%d)"
 msgstr "Error: %s (%d)"
 
-#: ../src/common/webrequest.cpp:655
+#: ../src/common/webrequest.cpp:687
 #, fuzzy, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
 msgstr "No hay espacio suficiente en el disco para la descarga."
 
-#: ../src/common/webrequest.cpp:669
+#: ../src/common/webrequest.cpp:701
 #, c-format
 msgid "Failed to create temporary file in %s"
 msgstr "No se pudo crear un archivo temporal en %s"
 
-#: ../src/common/webrequest_curl.cpp:1106
+#: ../src/common/webrequest_curl.cpp:1256
 msgid "libcurl could not be initialized"
 msgstr "no se pudo inicializar libcurl"
 
-#: ../src/common/webview.cpp:392
+#: ../src/common/webview.cpp:394
 msgid "RunScriptAsync not supported"
 msgstr "RunScriptAsync no soportado"
 
-#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1073
+#: ../src/common/webview.cpp:405 ../src/msw/webview_ie.cpp:1080
 #, c-format
 msgid "Error running JavaScript: %s"
 msgstr "Error ejecutando JavaScript: %s"
 
-#: ../src/common/webview_chromium.cpp:858
+#: ../src/common/webview_chromium.cpp:927
 #, c-format
 msgid "Failed to set proxy \"%s\": %s"
 msgstr "No se pudo establecer el proxy «%s»: %s"
 
-#: ../src/common/webview_chromium.cpp:989
+#: ../src/common/webview_chromium.cpp:1058
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
 
-#: ../src/common/webview_chromium.cpp:1108
+#: ../src/common/webview_chromium.cpp:1178
 msgid "Could not initialize Chromium"
 msgstr "No se pudo inicializar Chromium"
 
-#: ../src/common/webview_chromium.cpp:1616
+#: ../src/common/webview_chromium.cpp:1687
 msgid "Show DevTools"
 msgstr ""
 
-#: ../src/common/webview_chromium.cpp:1617
+#: ../src/common/webview_chromium.cpp:1688
 msgid "Close DevTools"
 msgstr "Cerrar DevTools"
 
-#: ../src/common/webview_chromium.cpp:1623
+#: ../src/common/webview_chromium.cpp:1694
 msgid "Inspect"
 msgstr ""
 
-#: ../src/common/wincmn.cpp:1628
+#: ../src/common/wincmn.cpp:1709
 msgid "This platform does not support background transparency."
 msgstr "Esta plataforma no admite transparencias de fondo."
 
-#: ../src/common/wincmn.cpp:2097
+#: ../src/common/wincmn.cpp:2216
 msgid "Could not transfer data to window"
 msgstr "No se pudieron transferir datos a la ventana"
 
@@ -4030,30 +4081,30 @@ msgstr "No se pudieron transferir datos a la ventana"
 msgid "Out of window IDs.  Recommend shutting down application."
 msgstr "Se agotaron los ids. de ventana. Se recomienda cerrar la aplicación."
 
-#: ../src/common/xpmdecod.cpp:678
+#: ../src/common/xpmdecod.cpp:689
 msgid "XPM: incorrect header format!"
 msgstr "XPM: ¡formato de cabecera incorrecto!"
 
-#: ../src/common/xpmdecod.cpp:703
+#: ../src/common/xpmdecod.cpp:714
 #, c-format
 msgid "XPM: incorrect colour description in line %d"
 msgstr "XPM: definición de color incorrecta en línea %d"
 
-#: ../src/common/xpmdecod.cpp:715 ../src/common/xpmdecod.cpp:724
+#: ../src/common/xpmdecod.cpp:726 ../src/common/xpmdecod.cpp:735
 #, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
 msgstr "XPM: ¡definición de color '%s' incorrecta en línea %d!"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../src/common/xpmdecod.cpp:765
 msgid "XPM: no colors left to use for mask!"
 msgstr "XPM: ¡no quedan colores para la máscara!"
 
-#: ../src/common/xpmdecod.cpp:781
+#: ../src/common/xpmdecod.cpp:793
 #, c-format
 msgid "XPM: truncated image data at line %d!"
 msgstr "XPM: ¡datos de imagen truncados en la línea %d!"
 
-#: ../src/common/xpmdecod.cpp:795
+#: ../src/common/xpmdecod.cpp:807
 msgid "XPM: Malformed pixel data!"
 msgstr "XPM: ¡Datos de píxel erróneos!"
 
@@ -4147,62 +4198,62 @@ msgstr "no se puede reinicializar el flujo de compresión de zlib"
 msgid "can't re-initialize zlib inflate stream"
 msgstr "no se puede reinicializar el flujo de descompresión de zlib"
 
-#: ../src/common/zipstrm.cpp:1023
+#: ../src/common/zipstrm.cpp:1023 ../src/common/zipstrm.cpp:1046
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
 "Ignorando regiatro de datgos extra mal formado, el archivo ZIP puede estar "
 "corrompido"
 
-#: ../src/common/zipstrm.cpp:1502
+#: ../src/common/zipstrm.cpp:1523
 msgid "assuming this is a multi-part zip concatenated"
 msgstr "suponemos que es un archivo zip multiparte concatenado"
 
-#: ../src/common/zipstrm.cpp:1664
+#: ../src/common/zipstrm.cpp:1685
 msgid "invalid zip file"
 msgstr "archivo ZIP no válido"
 
-#: ../src/common/zipstrm.cpp:1723
+#: ../src/common/zipstrm.cpp:1744
 msgid "can't find central directory in zip"
 msgstr "no se puede encontrar el directorio central del ZIP"
 
-#: ../src/common/zipstrm.cpp:1812
+#: ../src/common/zipstrm.cpp:1833
 msgid "error reading zip central directory"
 msgstr "error al leer el directorio central del ZIP"
 
-#: ../src/common/zipstrm.cpp:1916
+#: ../src/common/zipstrm.cpp:1937
 msgid "error reading zip local header"
 msgstr "error al leer la cabecera local del archivo zip"
 
-#: ../src/common/zipstrm.cpp:1964
+#: ../src/common/zipstrm.cpp:1985
 msgid "bad zipfile offset to entry"
 msgstr "desplazamiento erróneo al elemento del archivo zip"
 
-#: ../src/common/zipstrm.cpp:2031
+#: ../src/common/zipstrm.cpp:2052
 msgid "stored file length not in Zip header"
 msgstr "longitud del archivo almacenada no está en la cabecera del Zip"
 
-#: ../src/common/zipstrm.cpp:2045 ../src/common/zipstrm.cpp:2362
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
 msgid "unsupported Zip compression method"
 msgstr "no se admite el método de compresión ZIP"
 
-#: ../src/common/zipstrm.cpp:2126
+#: ../src/common/zipstrm.cpp:2147
 #, c-format
 msgid "reading zip stream (entry %s): bad length"
 msgstr "al leer flujo de zip (elemento %s): longitud errónea"
 
-#: ../src/common/zipstrm.cpp:2131
+#: ../src/common/zipstrm.cpp:2152
 #, c-format
 msgid "reading zip stream (entry %s): bad crc"
 msgstr "al leer flujo de zip (elemento %s): crc erróneo"
 
-#: ../src/common/zipstrm.cpp:2578
+#: ../src/common/zipstrm.cpp:2599
 #, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
 msgstr ""
 "error escribiendo la entrada zip '%s': el archivo es demasiado grande, "
 "necesita ZIP64"
 
-#: ../src/common/zipstrm.cpp:2585
+#: ../src/common/zipstrm.cpp:2606
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr "error al escribir el elemento de zip '%s': crc o longitud erróneos"
@@ -4274,49 +4325,49 @@ msgstr ""
 msgid "DirectFB error %d occurred."
 msgstr "Ha ocurrido un error DirectFB %d."
 
-#: ../src/generic/aboutdlgg.cpp:69
+#: ../src/generic/aboutdlgg.cpp:70
 msgid "Developed by "
 msgstr "Desarrollado por "
 
-#: ../src/generic/aboutdlgg.cpp:72
+#: ../src/generic/aboutdlgg.cpp:73
 msgid "Documentation by "
 msgstr "Documentación por "
 
-#: ../src/generic/aboutdlgg.cpp:75
+#: ../src/generic/aboutdlgg.cpp:76
 msgid "Graphics art by "
 msgstr "Arte gráfico por "
 
-#: ../src/generic/aboutdlgg.cpp:78
+#: ../src/generic/aboutdlgg.cpp:79
 msgid "Translations by "
 msgstr "Traducciones por "
 
-#: ../src/generic/aboutdlgg.cpp:133 ../src/osx/cocoa/aboutdlg.mm:83
+#: ../src/generic/aboutdlgg.cpp:149 ../src/osx/cocoa/aboutdlg.mm:83
 msgid "Version "
 msgstr "Versión "
 
 #. TRANSLATORS: %s is application name
-#: ../src/generic/aboutdlgg.cpp:146 ../src/msw/aboutdlg.cpp:60
+#: ../src/generic/aboutdlgg.cpp:162 ../src/msw/aboutdlg.cpp:60
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../src/generic/aboutdlgg.cpp:181
+#: ../src/generic/aboutdlgg.cpp:197
 msgid "License"
 msgstr "Licencia"
 
-#: ../src/generic/aboutdlgg.cpp:184
+#: ../src/generic/aboutdlgg.cpp:200
 msgid "Developers"
 msgstr "Desarrolladores"
 
-#: ../src/generic/aboutdlgg.cpp:188
+#: ../src/generic/aboutdlgg.cpp:204
 msgid "Documentation writers"
 msgstr "Redactores de documentación"
 
-#: ../src/generic/aboutdlgg.cpp:192
+#: ../src/generic/aboutdlgg.cpp:208
 msgid "Artists"
 msgstr "Artistas"
 
-#: ../src/generic/aboutdlgg.cpp:196
+#: ../src/generic/aboutdlgg.cpp:212
 msgid "Translators"
 msgstr "Traductores"
 
@@ -4333,6 +4384,16 @@ msgstr "No hay definido ningún manipulador de animación para tipo %ld."
 #, c-format
 msgid "Animation file is not of type %ld."
 msgstr "El archivo de animación no es del tipo %ld."
+
+#. TRANSLATORS: Action for manipulating a tree control
+#: ../src/generic/collheaderctrlg.cpp:91 ../src/generic/datavgen.cpp:7006
+msgid "Expand"
+msgstr "Expandir"
+
+#. TRANSLATORS: Action for manipulating a tree control
+#: ../src/generic/collheaderctrlg.cpp:91 ../src/generic/datavgen.cpp:7003
+msgid "Collapse"
+msgstr "Contraer"
 
 #: ../src/generic/colrdlgg.cpp:154 ../src/gtk/colordlg.cpp:47
 msgid "Choose colour"
@@ -4366,44 +4427,24 @@ msgstr "Usuario:"
 msgid "Password:"
 msgstr "Contraseña:"
 
-#. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1178
-msgid "true"
-msgstr "verdadero"
-
-#. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1180
-msgid "false"
-msgstr "falso"
-
-#: ../src/generic/datavgen.cpp:6897
+#: ../src/generic/datavgen.cpp:6913
 #, c-format
 msgid "Row %i"
 msgstr "Fila %i"
 
-#. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6987
-msgid "Collapse"
-msgstr "Contraer"
-
-#. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6990
-msgid "Expand"
-msgstr "Expandir"
-
 #. TRANSLATORS: Name of data view control and number of rows
-#: ../src/generic/datavgen.cpp:7011
+#: ../src/generic/datavgen.cpp:7027
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s (%d elementos)"
 
-#: ../src/generic/datavgen.cpp:7062
+#: ../src/generic/datavgen.cpp:7078
 #, c-format
 msgid "Column %u"
 msgstr "Columna %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/generic/datavgen.cpp:7147 ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:192
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
@@ -4414,7 +4455,7 @@ msgid "Left"
 msgstr "Izquierda"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7134 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/generic/datavgen.cpp:7150 ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
@@ -4430,34 +4471,34 @@ msgstr ""
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
-#: ../src/generic/dbgrptg.cpp:159
+#: ../src/generic/dbgrptg.cpp:161
 #, c-format
 msgid "Open file \"%s\""
 msgstr "Abrir archivo «%s»"
 
-#: ../src/generic/dbgrptg.cpp:170
+#: ../src/generic/dbgrptg.cpp:172
 #, c-format
 msgid "Enter command to open file \"%s\":"
 msgstr "Escriba la orden para abrir el archivo «%s»:"
 
-#: ../src/generic/dbgrptg.cpp:230
+#: ../src/generic/dbgrptg.cpp:232
 msgid "Executable files (*.exe)|*.exe|"
 msgstr "Archivos ejecutables (*.exe)|*.exe|"
 
-#: ../src/generic/dbgrptg.cpp:300
+#: ../src/generic/dbgrptg.cpp:302
 #, c-format
 msgid "Debug report \"%s\""
 msgstr "Informe de depuración «%s»"
 
-#: ../src/generic/dbgrptg.cpp:316
+#: ../src/generic/dbgrptg.cpp:318
 msgid "A debug report has been generated in the directory\n"
 msgstr "Se ha generado un informe de depuración en el directorio\n"
 
-#: ../src/generic/dbgrptg.cpp:317
+#: ../src/generic/dbgrptg.cpp:319
 msgid "The following debug report will be generated\n"
 msgstr "Se generará el siguiente informe de depuración\n"
 
-#: ../src/generic/dbgrptg.cpp:321
+#: ../src/generic/dbgrptg.cpp:323
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4467,7 +4508,7 @@ msgstr ""
 "archivos contiene información privada,\n"
 "por favor desmárquelos y serán eliminados del informe.\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:325
 msgid ""
 "If you wish to suppress this debug report completely, please choose the "
 "\"Cancel\" button,\n"
@@ -4479,23 +4520,23 @@ msgstr ""
 "pero sepa que ésto no ayuda a la mejora del programa, por tanto, si\n"
 "es posible, por favor, continue con la generación del informe.\n"
 
-#: ../src/generic/dbgrptg.cpp:325
+#: ../src/generic/dbgrptg.cpp:327
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Gracias. Sentimos las molestias.\n"
 
-#: ../src/generic/dbgrptg.cpp:333
+#: ../src/generic/dbgrptg.cpp:338
 msgid "&Debug report preview:"
 msgstr "&Vista previa del informe de depuración:"
 
-#: ../src/generic/dbgrptg.cpp:339
+#: ../src/generic/dbgrptg.cpp:348
 msgid "&View..."
 msgstr "&Ver…"
 
-#: ../src/generic/dbgrptg.cpp:359
+#: ../src/generic/dbgrptg.cpp:369
 msgid "&Notes:"
 msgstr "&Notas:"
 
-#: ../src/generic/dbgrptg.cpp:361
+#: ../src/generic/dbgrptg.cpp:372
 msgid ""
 "If you have any additional information pertaining to this bug\n"
 "report, please enter it here and it will be joined to it:"
@@ -4503,7 +4544,7 @@ msgstr ""
 "Si tiene alguna información adicional concerniente a este informe\n"
 "de error, por favor, introdúzcalo aquí y será adjuntado:"
 
-#: ../src/generic/dcpsg.cpp:1627
+#: ../src/generic/dcpsg.cpp:1660
 msgid "Cannot open file for PostScript printing!"
 msgstr "¡No se puede abrir el archivo para impresión PostScript!"
 
@@ -4515,21 +4556,22 @@ msgstr "Equipo"
 msgid "Sections"
 msgstr "Secciones"
 
-#: ../src/generic/dirctrlg.cpp:482
+#: ../src/generic/dirctrlg.cpp:505
 msgid "Home directory"
 msgstr "Directorio de usuario"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:484 ../src/propgrid/advprops.cpp:811
+#: ../src/generic/dirctrlg.cpp:507 ../src/propgrid/advprops.cpp:811
+#: ../src/ribbon/backstagecontrols.cpp:1521
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: ../src/generic/dirctrlg.cpp:528 ../src/generic/filectrlg.cpp:752
+#: ../src/generic/dirctrlg.cpp:551 ../src/generic/filectrlg.cpp:752
 msgid "Illegal directory name."
 msgstr "El nombre del directorio no está permitido."
 
-#: ../src/generic/dirctrlg.cpp:528 ../src/generic/dirctrlg.cpp:546
-#: ../src/generic/dirctrlg.cpp:557 ../src/generic/dirdlgg.cpp:317
+#: ../src/generic/dirctrlg.cpp:551 ../src/generic/dirctrlg.cpp:569
+#: ../src/generic/dirctrlg.cpp:580 ../src/generic/dirdlgg.cpp:318
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
 #: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
@@ -4537,11 +4579,11 @@ msgstr "El nombre del directorio no está permitido."
 msgid "Error"
 msgstr "Error"
 
-#: ../src/generic/dirctrlg.cpp:546 ../src/generic/filectrlg.cpp:766
+#: ../src/generic/dirctrlg.cpp:569 ../src/generic/filectrlg.cpp:766
 msgid "File name exists already."
 msgstr "Ya existe un archivo con el mismo nombre."
 
-#: ../src/generic/dirctrlg.cpp:557 ../src/generic/dirdlgg.cpp:317
+#: ../src/generic/dirctrlg.cpp:580 ../src/generic/dirdlgg.cpp:318
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:782
 msgid "Operation not permitted."
 msgstr "Operación no permitida."
@@ -4554,11 +4596,11 @@ msgstr "Crear directorio nuevo"
 msgid "Go to home directory"
 msgstr "Ir al directorio de usuario"
 
-#: ../src/generic/dirdlgg.cpp:143
+#: ../src/generic/dirdlgg.cpp:144
 msgid "Show &hidden directories"
 msgstr "Mostrar directorios &ocultos"
 
-#: ../src/generic/dirdlgg.cpp:196
+#: ../src/generic/dirdlgg.cpp:197
 #, c-format
 msgid ""
 "The directory '%s' does not exist\n"
@@ -4567,11 +4609,11 @@ msgstr ""
 "El directorio «%s» no existe.\n"
 "¿Quiere crearlo ahora?"
 
-#: ../src/generic/dirdlgg.cpp:198
+#: ../src/generic/dirdlgg.cpp:199
 msgid "Directory does not exist"
 msgstr "El directorio no existe"
 
-#: ../src/generic/dirdlgg.cpp:214
+#: ../src/generic/dirdlgg.cpp:215
 #, c-format
 msgid ""
 "Failed to create directory '%s'\n"
@@ -4580,19 +4622,19 @@ msgstr ""
 "Falló la creación del directorio «%s»\n"
 "(¿Tiene los permisos necesarios?)"
 
-#: ../src/generic/dirdlgg.cpp:216
+#: ../src/generic/dirdlgg.cpp:217
 msgid "Error creating directory"
 msgstr "Error al crear el directorio"
 
-#: ../src/generic/dirdlgg.cpp:281
+#: ../src/generic/dirdlgg.cpp:282
 msgid "You cannot add a new directory to this section."
 msgstr "No puede añadir un directorio nuevo a esta sección."
 
-#: ../src/generic/dirdlgg.cpp:282
+#: ../src/generic/dirdlgg.cpp:283
 msgid "Create directory"
 msgstr "Crear directorio"
 
-#: ../src/generic/dirdlgg.cpp:291 ../src/generic/dirdlgg.cpp:301
+#: ../src/generic/dirdlgg.cpp:292 ../src/generic/dirdlgg.cpp:302
 #: ../src/generic/filectrlg.cpp:614 ../src/generic/filectrlg.cpp:623
 msgid "NewName"
 msgstr "NewName"
@@ -4734,105 +4776,105 @@ msgstr "Elija un archivo existente."
 msgid "..."
 msgstr "…"
 
-#: ../src/generic/fontdlgg.cpp:76 ../src/richtext/richtextformatdlg.cpp:519
+#: ../src/generic/fontdlgg.cpp:74 ../src/richtext/richtextformatdlg.cpp:519
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:315
+#: ../src/generic/fontdlgg.cpp:313
 msgid "Roman"
 msgstr "Roman"
 
-#: ../src/generic/fontdlgg.cpp:316
+#: ../src/generic/fontdlgg.cpp:314
 msgid "Decorative"
 msgstr "Decorativo"
 
-#: ../src/generic/fontdlgg.cpp:317
+#: ../src/generic/fontdlgg.cpp:315
 msgid "Modern"
 msgstr "Moderna"
 
-#: ../src/generic/fontdlgg.cpp:318
+#: ../src/generic/fontdlgg.cpp:316
 msgid "Script"
 msgstr "Script"
 
-#: ../src/generic/fontdlgg.cpp:319
+#: ../src/generic/fontdlgg.cpp:317
 msgid "Swiss"
 msgstr "Swiss"
 
-#: ../src/generic/fontdlgg.cpp:320
+#: ../src/generic/fontdlgg.cpp:318
 msgid "Teletype"
 msgstr "Teletipo"
 
-#: ../src/generic/fontdlgg.cpp:321 ../src/generic/fontdlgg.cpp:324
+#: ../src/generic/fontdlgg.cpp:319 ../src/generic/fontdlgg.cpp:322
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:321
 msgid "Slant"
 msgstr "Cursiva"
 
-#: ../src/generic/fontdlgg.cpp:325
+#: ../src/generic/fontdlgg.cpp:323
 msgid "Light"
 msgstr "Ligera"
 
-#: ../src/generic/fontdlgg.cpp:363
+#: ../src/generic/fontdlgg.cpp:361
 msgid "&Font family:"
 msgstr "&Familia tipográfica:"
 
-#: ../src/generic/fontdlgg.cpp:367 ../src/generic/fontdlgg.cpp:369
+#: ../src/generic/fontdlgg.cpp:365 ../src/generic/fontdlgg.cpp:367
 msgid "The font family."
 msgstr "La familia tipográfica."
 
-#: ../src/generic/fontdlgg.cpp:374 ../src/richtext/richtextstylepage.cpp:105
+#: ../src/generic/fontdlgg.cpp:372 ../src/richtext/richtextstylepage.cpp:105
 msgid "&Style:"
 msgstr "E&stilo:"
 
-#: ../src/generic/fontdlgg.cpp:378 ../src/generic/fontdlgg.cpp:380
+#: ../src/generic/fontdlgg.cpp:376 ../src/generic/fontdlgg.cpp:378
 msgid "The font style."
 msgstr "El estilo del tipo de letra."
 
-#: ../src/generic/fontdlgg.cpp:385
+#: ../src/generic/fontdlgg.cpp:383
 msgid "&Weight:"
 msgstr "&Peso:"
 
-#: ../src/generic/fontdlgg.cpp:389 ../src/generic/fontdlgg.cpp:391
+#: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font weight."
 msgstr "El peso del tipo de letra."
 
-#: ../src/generic/fontdlgg.cpp:399
+#: ../src/generic/fontdlgg.cpp:397
 msgid "C&olour:"
 msgstr "C&olor:"
 
-#: ../src/generic/fontdlgg.cpp:407 ../src/generic/fontdlgg.cpp:409
+#: ../src/generic/fontdlgg.cpp:405 ../src/generic/fontdlgg.cpp:407
 msgid "The font colour."
 msgstr "El color del tipo de letra."
 
-#: ../src/generic/fontdlgg.cpp:415
+#: ../src/generic/fontdlgg.cpp:413
 msgid "&Point size:"
 msgstr "Tamaño de &punto:"
 
-#: ../src/generic/fontdlgg.cpp:420 ../src/generic/fontdlgg.cpp:422
-#: ../src/generic/fontdlgg.cpp:426 ../src/generic/fontdlgg.cpp:428
+#: ../src/generic/fontdlgg.cpp:418 ../src/generic/fontdlgg.cpp:420
+#: ../src/generic/fontdlgg.cpp:424 ../src/generic/fontdlgg.cpp:426
 msgid "The font point size."
 msgstr "El tamaño en puntos del tipo de letra."
 
-#: ../src/generic/fontdlgg.cpp:439 ../src/generic/fontdlgg.cpp:441
+#: ../src/generic/fontdlgg.cpp:437 ../src/generic/fontdlgg.cpp:439
 msgid "Whether the font is underlined."
 msgstr "Si la fuente está subrayada."
 
-#: ../src/generic/fontdlgg.cpp:448 ../src/html/helpwnd.cpp:1215
+#: ../src/generic/fontdlgg.cpp:446 ../src/html/helpwnd.cpp:1215
 msgid "Preview:"
 msgstr "Previsualización:"
 
-#: ../src/generic/fontdlgg.cpp:452 ../src/generic/fontdlgg.cpp:454
+#: ../src/generic/fontdlgg.cpp:450 ../src/generic/fontdlgg.cpp:452
 msgid "Shows the font preview."
 msgstr "Muestra la vista previa de la fuente."
 
-#: ../src/generic/fontdlgg.cpp:464 ../src/generic/fontdlgg.cpp:483
+#: ../src/generic/fontdlgg.cpp:462 ../src/generic/fontdlgg.cpp:481
 msgid "Click to cancel the font selection."
 msgstr "Pulse para cancelar la selección del tipo de letra."
 
-#: ../src/generic/fontdlgg.cpp:469 ../src/generic/fontdlgg.cpp:471
-#: ../src/generic/fontdlgg.cpp:476 ../src/generic/fontdlgg.cpp:478
+#: ../src/generic/fontdlgg.cpp:467 ../src/generic/fontdlgg.cpp:469
+#: ../src/generic/fontdlgg.cpp:474 ../src/generic/fontdlgg.cpp:476
 msgid "Click to confirm the font selection."
 msgstr "Pulse para confirmar la selección del tipo de letra."
 
@@ -4840,75 +4882,75 @@ msgstr "Pulse para confirmar la selección del tipo de letra."
 msgid "Choose font"
 msgstr "Elija un tipo de letra"
 
-#: ../src/generic/grid.cpp:6542
+#: ../src/generic/grid.cpp:6635
 msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
 
-#: ../src/generic/grid.cpp:12739
+#: ../src/generic/grid.cpp:12939
 msgid "Grid Corner"
 msgstr "Esquina de la cuadrícula"
 
-#: ../src/generic/grid.cpp:12741
+#: ../src/generic/grid.cpp:12941
 #, c-format
 msgid "Column %s Header"
 msgstr "Encabezado de Columna %s"
 
-#: ../src/generic/grid.cpp:12743
+#: ../src/generic/grid.cpp:12943
 #, c-format
 msgid "Row %s Header"
 msgstr ""
 
-#: ../src/generic/grid.cpp:12745
+#: ../src/generic/grid.cpp:12945
 #, c-format
 msgid "Column %s: %s"
 msgstr "Columna %s: %s"
 
-#: ../src/generic/grid.cpp:12749
+#: ../src/generic/grid.cpp:12949
 #, c-format
 msgid "Row %s: %s"
 msgstr "Fila %s: %s"
 
-#: ../src/generic/grid.cpp:12753
+#: ../src/generic/grid.cpp:12953
 #, c-format
 msgid "Row %s, Column %s: %s"
 msgstr ""
 
-#: ../src/generic/helpext.cpp:257
+#: ../src/generic/helpext.cpp:252
 #, c-format
 msgid "Help directory \"%s\" not found."
 msgstr "No se encontró el directorio de ayuda «%s»."
 
-#: ../src/generic/helpext.cpp:265
+#: ../src/generic/helpext.cpp:260
 #, c-format
 msgid "Help file \"%s\" not found."
 msgstr "No se encontró el archivo de ayuda «%s»."
 
-#: ../src/generic/helpext.cpp:284
+#: ../src/generic/helpext.cpp:279
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr ""
 "El renglón %lu del archivo de mapa «%s» tiene sintaxis no válida; se omite."
 
-#: ../src/generic/helpext.cpp:292
+#: ../src/generic/helpext.cpp:287
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "No se han encontrado asignaciones válidas en el archivo «%s»."
 
-#: ../src/generic/helpext.cpp:435
+#: ../src/generic/helpext.cpp:430
 msgid "No entries found."
 msgstr "No se han encontrado documentos."
 
-#: ../src/generic/helpext.cpp:444 ../src/generic/helpext.cpp:445
+#: ../src/generic/helpext.cpp:439 ../src/generic/helpext.cpp:440
 msgid "Help Index"
 msgstr "Contenido de la ayuda"
 
-#: ../src/generic/helpext.cpp:448
+#: ../src/generic/helpext.cpp:443
 msgid "Relevant entries:"
 msgstr "Entradas relevantes:"
 
-#: ../src/generic/helpext.cpp:449
+#: ../src/generic/helpext.cpp:444
 msgid "Entries found"
 msgstr "Entradas encontradas"
 
@@ -4916,7 +4958,7 @@ msgstr "Entradas encontradas"
 msgid "&Copy URL"
 msgstr "&Copiar URL"
 
-#: ../src/generic/infobar.cpp:119
+#: ../src/generic/infobar.cpp:123
 msgid "Hide this notification message."
 msgstr "Ocultar esta notificación."
 
@@ -4942,54 +4984,54 @@ msgstr "Información de %s"
 msgid "Application"
 msgstr "Aplicación"
 
-#: ../src/generic/logg.cpp:549
+#: ../src/generic/logg.cpp:551
 msgid "Save log contents to file"
 msgstr "Guardar los contenidos del log en un archivo"
 
-#: ../src/generic/logg.cpp:551
+#: ../src/generic/logg.cpp:553
 msgid "C&lear"
 msgstr "&Limpiar"
 
-#: ../src/generic/logg.cpp:551
+#: ../src/generic/logg.cpp:553
 msgid "Clear the log contents"
 msgstr "Eliminar el contenido del log"
 
-#: ../src/generic/logg.cpp:553
+#: ../src/generic/logg.cpp:555
 msgid "Close this window"
 msgstr "Cerrar esta ventana"
 
-#: ../src/generic/logg.cpp:554
+#: ../src/generic/logg.cpp:556
 msgid "&Log"
 msgstr "&Registro"
 
-#: ../src/generic/logg.cpp:610 ../src/generic/logg.cpp:992
+#: ../src/generic/logg.cpp:612 ../src/generic/logg.cpp:994
 msgid "Can't save log contents to file."
 msgstr "No se puede guardar el contenido del registro en un archivo."
 
-#: ../src/generic/logg.cpp:613
+#: ../src/generic/logg.cpp:615
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Registro guardado en el archivo «%s»."
 
-#: ../src/generic/logg.cpp:719
+#: ../src/generic/logg.cpp:721
 msgid "&Details"
 msgstr "&Detalles"
 
-#: ../src/generic/logg.cpp:972
+#: ../src/generic/logg.cpp:974
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "Error al copiar el contenido del diálogo al portapapeles."
 
-#: ../src/generic/logg.cpp:1022
+#: ../src/generic/logg.cpp:1024
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr ""
 "¿Quiere añadir el registro al archivo «%s»? (elegir [No] lo sobrescribirá)"
 
-#: ../src/generic/logg.cpp:1024
+#: ../src/generic/logg.cpp:1026
 msgid "Question"
 msgstr "Pregunta"
 
-#: ../src/generic/logg.cpp:1038
+#: ../src/generic/logg.cpp:1040
 msgid "invalid message box return value"
 msgstr "valor de retorno de bandeja de entrada no válido"
 
@@ -5007,7 +5049,7 @@ msgid "Printing..."
 msgstr "Imprimiendo..."
 
 #: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1076
-#: ../src/msw/printwin.cpp:235
+#: ../src/msw/printwin.cpp:235 ../src/qt/printqt.cpp:131
 msgid "Could not start printing."
 msgstr "No se pudo iniciar la impresión."
 
@@ -5142,7 +5184,7 @@ msgstr "&Saltar"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/generic/progdlgg.cpp:451 ../src/msw/progdlg.cpp:526
+#: ../src/generic/progdlgg.cpp:451 ../src/msw/progdlg.cpp:562
 msgid "Done."
 msgstr "Hecho."
 
@@ -5187,11 +5229,11 @@ msgstr "&Finalizar"
 msgid "< &Back"
 msgstr "< &Atrás"
 
-#: ../src/gtk/aboutdlg.cpp:204
+#: ../src/gtk/aboutdlg.cpp:246
 msgid "translator-credits"
 msgstr "Miguel Giménez, Andriy Byelikov https://github.com/andriybyelikov"
 
-#: ../src/gtk/app.cpp:517
+#: ../src/gtk/app.cpp:518
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
@@ -5201,11 +5243,12 @@ msgstr ""
 "problemas con la gestión de la entrada y parpadeos. Le recomendamos borrar "
 "el contenido de GTK_IM_MODULE o configurarlo como \"ibus\"."
 
-#: ../src/gtk/app.cpp:569
+#: ../src/gtk/app.cpp:567
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "No se pudo inicializar GTK+, ¿está DISPLAY configurada correctamente?"
 
-#: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
+#: ../src/gtk/filedlg.cpp:89 ../src/gtk/filedlg.cpp:456
+#: ../src/gtk/filepicker.cpp:254
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
 msgstr "Falló el cambio del directorio actual a «%s»"
@@ -5303,20 +5346,31 @@ msgstr "Error al imprimir: %s"
 msgid "Page Setup"
 msgstr "Configurar página"
 
-#: ../src/gtk/webview_webkit.cpp:932
+#: ../src/gtk/utilsgtk.cpp:347 ../src/osx/carbon/utilscocoa.mm:718
+#, fuzzy, c-format
+msgid "'%s' couldn't be moved to trash: %s"
+msgstr "No se pudo quitar el archivo «%s»"
+
+#: ../src/gtk/webview_webkit.cpp:936
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr "No se puede obtener la salida de un guión JavaScript usando WebKit v1"
 
-#: ../src/gtk/webview_webkit2.cpp:1098
+#: ../src/gtk/webview_webkit2.cpp:1122
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
 
-#: ../src/gtk/webview_webkit2.cpp:1104
+#: ../src/gtk/webview_webkit2.cpp:1128
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
 
-#: ../src/gtk/window.cpp:6289
+#. TRANSLATORS: Custom colour choice entry
+#: ../src/gtk/webview_webkit2.cpp:1484 ../src/propgrid/advprops.cpp:825
+#: ../src/propgrid/advprops.cpp:1532 ../src/propgrid/advprops.cpp:1576
+msgid "Custom"
+msgstr "Personalizado"
+
+#: ../src/gtk/window.cpp:6724
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -5324,14 +5378,14 @@ msgstr ""
 "El GTK+ instalado en esta máquina es demasiado antiguo para admitir la "
 "composición de pantallas; instale GTK+ 2.12 o posterior."
 
-#: ../src/gtk/window.cpp:6307
+#: ../src/gtk/window.cpp:6742
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
 "El sistema no admite la composición. Actívela en su gestor de ventanas."
 
-#: ../src/gtk/window.cpp:6318
+#: ../src/gtk/window.cpp:6753
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5398,21 +5452,21 @@ msgstr "error de descompresión"
 msgid "Could not locate file '%s'."
 msgstr "No se pudo encontrar el archivo '%s'."
 
-#: ../src/html/chm.cpp:711
+#: ../src/html/chm.cpp:709
 #, c-format
 msgid "Could not create temporary file '%s'"
 msgstr "No se pudo crear el archivo temporal '%s'"
 
-#: ../src/html/chm.cpp:718
+#: ../src/html/chm.cpp:716
 #, c-format
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Falló la extracción de «%s» en «%s»."
 
-#: ../src/html/chm.cpp:806 ../src/html/chm.cpp:863
+#: ../src/html/chm.cpp:804 ../src/html/chm.cpp:861
 msgid "CHM handler currently supports only local files!"
 msgstr "¡El manipulador de CHM actualmente admite únicamente archivos locales!"
 
-#: ../src/html/chm.cpp:827
+#: ../src/html/chm.cpp:825
 msgid "Link contained '//', converted to absolute link."
 msgstr "El enlace contiene «//»; se ha convertido en enlace absoluto."
 
@@ -5426,21 +5480,21 @@ msgstr "Ayuda: %s"
 msgid "Adding book %s"
 msgstr "Añadiendo libro %s"
 
-#: ../src/html/helpdata.cpp:295
+#: ../src/html/helpdata.cpp:297
 #, c-format
 msgid "Cannot open contents file: %s"
 msgstr "No se puede abrir el archivo de contenidos: %s"
 
-#: ../src/html/helpdata.cpp:309
+#: ../src/html/helpdata.cpp:311
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "No se puede abrir el archivo de índice: %s"
 
-#: ../src/html/helpdata.cpp:643
+#: ../src/html/helpdata.cpp:705
 msgid "noname"
 msgstr "anónimo"
 
-#: ../src/html/helpdata.cpp:652
+#: ../src/html/helpdata.cpp:714
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "No se puede abrir el libro de ayuda HTML: %s"
@@ -5651,34 +5705,34 @@ msgstr "%u de %u"
 msgid "Cannot open HTML document: %s"
 msgstr "No se puede abrir el documento HTML: %s"
 
-#: ../src/html/htmlwin.cpp:599
+#: ../src/html/htmlwin.cpp:597
 msgid "Connecting..."
 msgstr "Conectando…"
 
-#: ../src/html/htmlwin.cpp:616
+#: ../src/html/htmlwin.cpp:614
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Incapaz de abrir el docuemento HTML pedido: %s"
 
-#: ../src/html/htmlwin.cpp:630
+#: ../src/html/htmlwin.cpp:628
 msgid "Loading : "
 msgstr "Cargando: "
 
-#: ../src/html/htmlwin.cpp:673
+#: ../src/html/htmlwin.cpp:671
 msgid "Done"
 msgstr "Hecho"
 
-#: ../src/html/htmlwin.cpp:723
+#: ../src/html/htmlwin.cpp:721
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "El anclaje HTML %s no existe."
 
-#: ../src/html/htmlwin.cpp:1057
+#: ../src/html/htmlwin.cpp:1055
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Copiado en el portapapeles:\"%s\""
 
-#: ../src/html/htmprint.cpp:269
+#: ../src/html/htmprint.cpp:281
 msgid ""
 "This document doesn't fit on the page horizontally and will be truncated "
 "when it is printed."
@@ -5686,7 +5740,7 @@ msgstr ""
 "Este documento no cabe horizontalmente en la página y será truncado al "
 "imprimirlo."
 
-#: ../src/html/htmprint.cpp:285
+#: ../src/html/htmprint.cpp:297
 #, c-format
 msgid ""
 "The document \"%s\" doesn't fit on the page horizontally and will be "
@@ -5699,7 +5753,7 @@ msgstr ""
 "\n"
 "¿Quiere imprimirlo de todas formas?"
 
-#: ../src/html/htmprint.cpp:296
+#: ../src/html/htmprint.cpp:308
 msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
@@ -5707,17 +5761,17 @@ msgstr ""
 "Si es posible, intente cambiar los parámetros para hacer la impresión más "
 "estrecha."
 
-#: ../src/html/htmprint.cpp:445
+#: ../src/html/htmprint.cpp:457
 msgid ": file does not exist!"
 msgstr ": ¡el archivo no existe!"
 
 #. TRANSLATORS: %s may be a document title.
-#: ../src/html/htmprint.cpp:717
+#: ../src/html/htmprint.cpp:732
 #, fuzzy, c-format
 msgid "%s Preview"
 msgstr " Previsualización"
 
-#: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
+#: ../src/html/htmprint.cpp:770 ../src/richtext/richtextprint.cpp:618
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -5736,19 +5790,19 @@ msgstr "Error al cerrar el portapapeles."
 msgid "Failed to empty the clipboard."
 msgstr "Fallo al vaciar el portapapeles."
 
-#: ../src/msw/clipbrd.cpp:284
+#: ../src/msw/clipbrd.cpp:317
 msgid "Failed to put data on the clipboard"
 msgstr "Falló la transferencia de datos al portapapeles"
 
-#: ../src/msw/clipbrd.cpp:326
+#: ../src/msw/clipbrd.cpp:362
 msgid "Failed to get data from the clipboard"
 msgstr "Error al obtener datos del portapapeles"
 
-#: ../src/msw/clipbrd.cpp:363
+#: ../src/msw/clipbrd.cpp:399
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Falló la recuperación de los formatos admitidos del portapapeles"
 
-#: ../src/msw/colordlg.cpp:228
+#: ../src/msw/colordlg.cpp:229
 #, c-format
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "El diálogo de selección de color falló con error %0lx."
@@ -5994,12 +6048,12 @@ msgid "Failed to allocate %luKb of memory for bitmap data."
 msgstr ""
 "No se pudieron reservar %lu kb de memoria para los datos del mapa de bits."
 
-#: ../src/msw/dir.cpp:241
+#: ../src/msw/dir.cpp:233
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "No se pueden enumerar los archivos en el directorio «%s»"
 
-#: ../src/msw/dirdlg.cpp:368
+#: ../src/msw/dirdlg.cpp:371
 msgid "Couldn't obtain folder name"
 msgstr "No se pudo obtener el nombre la carpeta"
 
@@ -6018,7 +6072,7 @@ msgstr "No se pudo añadir una imagen a la lista de imágenes."
 msgid "Failed to load metafile from file \"%s\"."
 msgstr "No se pudo abrir el metaarchivo desde el archivo \"%s\"."
 
-#: ../src/msw/fdrepdlg.cpp:412
+#: ../src/msw/fdrepdlg.cpp:415
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr ""
@@ -6037,12 +6091,12 @@ msgstr "Advertencia de seguridad"
 msgid "File dialog failed with error code %0lx."
 msgstr "El diálogo de archivo falló con código de error %0lx."
 
-#: ../src/msw/font.cpp:1120
+#: ../src/msw/font.cpp:1122
 #, c-format
 msgid "Font file \"%s\" couldn't be loaded"
 msgstr "No se pudo cargar el archivo de fuente \"%s\""
 
-#: ../src/msw/fontdlg.cpp:220
+#: ../src/msw/fontdlg.cpp:214
 #, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "El diálogo común falló con error %0lx."
@@ -6059,36 +6113,36 @@ msgstr "No se pudo crear el hilo IOCP"
 msgid "Unable to start IOCP worker thread"
 msgstr "No se pudo iniciar el hilo IOCP"
 
-#: ../src/msw/fswatcher.cpp:140
+#: ../src/msw/fswatcher.cpp:151
 msgid "Monitoring individual files for changes is not supported currently."
 msgstr ""
 "Actualmente no se admite la monitorización de cambios en archivos "
 "individuales."
 
-#: ../src/msw/fswatcher.cpp:165
+#: ../src/msw/fswatcher.cpp:177
 #, c-format
 msgid "Unable to set up watch for '%s'"
 msgstr "No se pudo activar la vista para '%s'"
 
-#: ../src/msw/fswatcher.cpp:466
+#: ../src/msw/fswatcher.cpp:484
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "No se pueden monitorizar los cambios del directorio inexistente «%s»."
 
-#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:507
+#: ../src/msw/glcanvas.cpp:565 ../src/unix/glx11.cpp:517
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr "El controlador de OpenGL no admite OpenGL 3.0 o más reciente."
 
-#: ../src/msw/glcanvas.cpp:601 ../src/osx/glcanvas_osx.cpp:395
-#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:553
+#: ../src/msw/glcanvas.cpp:589 ../src/osx/glcanvas_osx.cpp:395
+#: ../src/unix/glegl.cpp:312 ../src/unix/glx11.cpp:563
 msgid "Couldn't create OpenGL context"
 msgstr "No se pudo crear el contexto OpenGL"
 
-#: ../src/msw/glcanvas.cpp:1294
+#: ../src/msw/glcanvas.cpp:1345
 msgid "Failed to initialize OpenGL"
 msgstr "Falló la inicialización de OpenGL"
 
-#: ../src/msw/graphicsd2d.cpp:607
+#: ../src/msw/graphicsd2d.cpp:599
 msgid "Could not register custom DirectWrite font loader."
 msgstr "No se pudo registrar el cargador modificado de fuentes DirectWrite."
 
@@ -6109,13 +6163,13 @@ msgstr "Fallo al inicializar la ayuda MS HTML."
 msgid "Can't delete the INI file '%s'"
 msgstr "No se puede elimininar el archivo INI «%s»"
 
-#: ../src/msw/listctrl.cpp:995
+#: ../src/msw/listctrl.cpp:1002
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr ""
 "No se pudo obtener información sobre el elemento de control de la lista %d."
 
-#: ../src/msw/mdi.cpp:170 ../src/qt/mdi.cpp:253
+#: ../src/msw/mdi.cpp:170 ../src/qt/mdi.cpp:250
 msgid "&Cascade"
 msgstr "&Cascada"
 
@@ -6131,11 +6185,11 @@ msgstr "Mosaico &vertical"
 msgid "&Arrange Icons"
 msgstr "&Organizar iconos"
 
-#: ../src/msw/mdi.cpp:621
+#: ../src/msw/mdi.cpp:618
 msgid "Failed to create MDI parent frame."
 msgstr "Falló la creación del panel MDI padre."
 
-#: ../src/msw/mimetype.cpp:234
+#: ../src/msw/mimetype.cpp:235
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
 msgstr "Falló la creación de la entrada del Registro para los archivos «%s»."
@@ -6230,7 +6284,7 @@ msgstr "No se pudo registrar el formato del portapapeles «%s»."
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "El formato %d del portapapeles no existe."
 
-#: ../src/msw/progdlg.cpp:1025
+#: ../src/msw/progdlg.cpp:1078
 msgid "Skip"
 msgstr "Saltar"
 
@@ -6394,7 +6448,7 @@ msgstr ""
 "Imposible crear control 'rich edit', se usará el control de texto simple. "
 "Por favor instale riched32.dll"
 
-#: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
+#: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:846
 msgid "Cannot start thread: error writing TLS."
 msgstr "No se puede iniciar el hilo de ejecución: error al escribir TLS."
 
@@ -6428,7 +6482,7 @@ msgstr "No se puede reanudar el hilo de ejecución %lx"
 msgid "Couldn't get the current thread pointer"
 msgstr "No se pudo obtener el puntero al hilo de ejecución actual"
 
-#: ../src/msw/thread.cpp:1333
+#: ../src/msw/thread.cpp:1336
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6436,7 +6490,7 @@ msgstr ""
 "Error en la inicialización del módulo de hilos de ejecución: imposible "
 "reservar índice en el almacen local de hilos"
 
-#: ../src/msw/thread.cpp:1345
+#: ../src/msw/thread.cpp:1348
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6448,33 +6502,33 @@ msgstr ""
 msgid "Couldn't create a timer"
 msgstr "No se pudo crear un temporizador"
 
-#: ../src/msw/utils.cpp:372
+#: ../src/msw/utils.cpp:375
 msgid "can't find user's HOME, using current directory."
 msgstr ""
 "no se encontró el directorio HOME del usuario; se usa el directorio actual."
 
-#: ../src/msw/utils.cpp:662
+#: ../src/msw/utils.cpp:665
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "No se pudo matar el proceso %d"
 
-#: ../src/msw/utils.cpp:986
+#: ../src/msw/utils.cpp:987
 #, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "Falló la carga del recurso «%s»."
 
-#: ../src/msw/utils.cpp:993
+#: ../src/msw/utils.cpp:994
 #, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "Falló el bloqueo del recurso «%s»."
 
 #. TRANSLATORS: MS Windows build number
-#: ../src/msw/utils.cpp:1209
+#: ../src/msw/utils.cpp:1252
 #, c-format
 msgid "build %lu"
 msgstr "compilación %lu"
 
-#: ../src/msw/utils.cpp:1218
+#: ../src/msw/utils.cpp:1261
 msgid ", 64-bit edition"
 msgstr ", edición de 64 bits"
 
@@ -6491,6 +6545,11 @@ msgstr "Error en la redirección de la entrada/salida del proceso hijo"
 msgid "Execution of command '%s' failed"
 msgstr "Falló la ejecución de la orden «%s»"
 
+#: ../src/msw/utilswin.cpp:203
+#, c-format
+msgid "'%s' couldn't be moved to trash: error 0x%08x"
+msgstr ""
+
 #: ../src/msw/volume.cpp:337
 msgid "Failed to load mpr.dll."
 msgstr "No se pudo cargar mpr.dll."
@@ -6500,65 +6559,69 @@ msgstr "No se pudo cargar mpr.dll."
 msgid "Cannot read typename from '%s'!"
 msgstr "¡No se puede leer el nombre del tipo desde '%s'!"
 
-#: ../src/msw/volume.cpp:615
+#: ../src/msw/volume.cpp:618
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "No se puede cargar el icono desde «%s»."
 
-#: ../src/msw/webview_edge.cpp:285
+#: ../src/msw/webview_edge.cpp:296
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1010
+#: ../src/msw/webview_edge.cpp:1545
+msgid "PDF export requires a newer version of the WebView2 runtime."
+msgstr ""
+
+#: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
 "No se pudo encontrar el nivel de emulación de la vista web en el registro"
 
-#: ../src/msw/webview_ie.cpp:1019
+#: ../src/msw/webview_ie.cpp:1026
 msgid "Failed to set web view to modern emulation level"
 msgstr "No se pudo cambiar el nivel moderno de emuilación web"
 
-#: ../src/msw/webview_ie.cpp:1027
+#: ../src/msw/webview_ie.cpp:1034
 msgid "Failed to reset web view to standard emulation level"
 msgstr "No se pudo restaurar el nivel estándar de emulación web"
 
-#: ../src/msw/webview_ie.cpp:1049
+#: ../src/msw/webview_ie.cpp:1056
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr "No se puede ejecutar un guión JavaScript sin un documento HTML válido"
 
-#: ../src/msw/webview_ie.cpp:1056
+#: ../src/msw/webview_ie.cpp:1063
 msgid "Can't get the JavaScript object"
 msgstr "No se puede obtener el objeto JavaScript"
 
-#: ../src/msw/webview_ie.cpp:1070
+#: ../src/msw/webview_ie.cpp:1077
 msgid "failed to evaluate"
 msgstr "fallo al evaluar"
 
-#: ../src/osx/cocoa/filedlg.mm:412
+#: ../src/osx/cocoa/filedlg.mm:344
 msgid "File type:"
 msgstr "Tipo de archivo:"
 
-#: ../src/osx/cocoa/menu.mm:242
+#: ../src/osx/cocoa/menu.mm:238 ../src/osx/iphone/menu.mm:192
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Ventana"
 
-#: ../src/osx/cocoa/menu.mm:259
+#: ../src/osx/cocoa/menu.mm:255 ../src/osx/iphone/menu.mm:189
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Ayuda"
 
-#: ../src/osx/cocoa/menu.mm:298
+#: ../src/osx/cocoa/menu.mm:294
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../src/osx/cocoa/menu.mm:303
+#: ../src/osx/cocoa/menu.mm:299
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Acercar"
 
-#: ../src/osx/cocoa/menu.mm:309
+#: ../src/osx/cocoa/menu.mm:305
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Traer todo al primer plano"
@@ -6582,55 +6645,55 @@ msgstr ""
 "No se puede usar el archivo de fuente \"%s\" porque no está en la carpeta de "
 "fuentes \"%s\"."
 
-#: ../src/osx/menu_osx.cpp:496
+#: ../src/osx/menu_osx.cpp:450
 #, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../src/osx/menu_osx.cpp:499
+#: ../src/osx/menu_osx.cpp:453
 msgctxt "macOS menu item"
 msgid "About..."
 msgstr "Acerca de…"
 
-#: ../src/osx/menu_osx.cpp:508
+#: ../src/osx/menu_osx.cpp:462
 msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "Preferencias..."
 
-#: ../src/osx/menu_osx.cpp:512
+#: ../src/osx/menu_osx.cpp:466
 msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Servicios"
 
-#: ../src/osx/menu_osx.cpp:519
+#: ../src/osx/menu_osx.cpp:473
 #, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "Ocultar %s"
 
-#: ../src/osx/menu_osx.cpp:522
+#: ../src/osx/menu_osx.cpp:476
 msgctxt "macOS menu item"
 msgid "Hide Application"
 msgstr "Ocultar aplicación"
 
-#: ../src/osx/menu_osx.cpp:526
+#: ../src/osx/menu_osx.cpp:480
 msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Ocultar otros"
 
-#: ../src/osx/menu_osx.cpp:528
+#: ../src/osx/menu_osx.cpp:482
 msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Mostrar todo"
 
-#: ../src/osx/menu_osx.cpp:534
+#: ../src/osx/menu_osx.cpp:488
 #, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "Salir de %s"
 
-#: ../src/osx/menu_osx.cpp:537
+#: ../src/osx/menu_osx.cpp:491
 msgctxt "macOS menu item"
 msgid "Quit Application"
 msgstr "Salir de la aplicación"
@@ -6639,7 +6702,7 @@ msgstr "Salir de la aplicación"
 msgid "Printing is not supported by the system web control"
 msgstr "El control web no soporta la impresión"
 
-#: ../src/osx/webview_webkit.mm:453
+#: ../src/osx/webview_webkit.mm:453 ../src/osx/webview_webkit.mm:529
 msgid "Print operation could not be initialized"
 msgstr "No se pudo inicializar la operación de impresión"
 
@@ -6787,12 +6850,6 @@ msgstr "WindowFrame"
 #: ../src/propgrid/advprops.cpp:824
 msgid "WindowText"
 msgstr "WindowText"
-
-#. TRANSLATORS: Custom colour choice entry
-#: ../src/propgrid/advprops.cpp:825 ../src/propgrid/advprops.cpp:1532
-#: ../src/propgrid/advprops.cpp:1576
-msgid "Custom"
-msgstr "Personalizado"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Black"
@@ -7027,31 +7084,31 @@ msgid "Alphabetic Mode"
 msgstr "Modo alfabético"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/propgrid/propgrid.cpp:230
+#: ../src/propgrid/propgrid.cpp:228
 msgid "False"
 msgstr "Falso"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/propgrid/propgrid.cpp:232
+#: ../src/propgrid/propgrid.cpp:230
 msgid "True"
 msgstr "Verdadero"
 
 #. TRANSLATORS: Text  displayed for unspecified value
-#: ../src/propgrid/propgrid.cpp:428
+#: ../src/propgrid/propgrid.cpp:417
 msgid "Unspecified"
 msgstr "No especificado"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3145 ../src/propgrid/propgrid.cpp:3282
+#: ../src/propgrid/propgrid.cpp:3141 ../src/propgrid/propgrid.cpp:3278
 msgid "Property Error"
 msgstr "Error de propiedad"
 
-#: ../src/propgrid/propgrid.cpp:3259
+#: ../src/propgrid/propgrid.cpp:3255
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 "Ha introducido un valor incorrecto. Pulse ESC para cancelar la edición."
 
-#: ../src/propgrid/propgrid.cpp:6608
+#: ../src/propgrid/propgrid.cpp:6609
 #, c-format
 msgid "Error in resource: %s"
 msgstr "Error en recurso: %s"
@@ -7098,9 +7155,130 @@ msgstr "Elija un directorio:"
 msgid "Choose a file"
 msgstr "Elija un archivo"
 
-#: ../src/qt/mdi.cpp:254
+#: ../src/qt/mdi.cpp:251
 msgid "&Tile"
 msgstr ""
+
+#: ../src/ribbon/backstage.cpp:110
+#, fuzzy
+msgid "Backstage"
+msgstr "Retroceso"
+
+#: ../src/ribbon/backstage.cpp:176 ../src/ribbon/backstagecontrols.cpp:91
+#: ../src/ribbon/bar.cpp:179 ../src/ribbon/buttonbar.cpp:1980
+#: ../src/ribbon/gallery.cpp:1320 ../src/ribbon/panel.cpp:1460
+#: ../src/ribbon/toolbar.cpp:1641
+#, fuzzy
+msgid "Press"
+msgstr "Progreso:"
+
+#: ../src/ribbon/backstagecontrols.cpp:844
+#, fuzzy
+msgid "Open"
+msgstr "Abrir…"
+
+#: ../src/ribbon/backstagecontrols.cpp:1469
+#, fuzzy
+msgid "Today"
+msgstr "hoy"
+
+#: ../src/ribbon/backstagecontrols.cpp:1471
+#, fuzzy
+msgid "Yesterday"
+msgstr "ayer"
+
+#: ../src/ribbon/backstagecontrols.cpp:1473
+msgid "This Week"
+msgstr ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1475
+#, fuzzy
+msgid "Last Week"
+msgstr "Última página"
+
+#: ../src/ribbon/backstagecontrols.cpp:1477
+msgid "Earlier This Month"
+msgstr ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1480
+msgid "Older"
+msgstr ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1520
+#, fuzzy
+msgid "Documents"
+msgstr "Documento:"
+
+#: ../src/ribbon/backstagecontrols.cpp:1522
+#, fuzzy
+msgid "Pictures"
+msgstr "&Imagen"
+
+#: ../src/ribbon/backstagecontrols.cpp:1523
+msgid "Videos"
+msgstr ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1524
+msgid "Music"
+msgstr ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1525
+#, fuzzy
+msgid "Downloads"
+msgstr "Abajo"
+
+#: ../src/ribbon/backstagecontrols.cpp:1594
+msgid "Just now"
+msgstr ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1602
+#, c-format
+msgid "%d minute ago"
+msgid_plural "%d minutes ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/ribbon/backstagecontrols.cpp:1609
+#, fuzzy, c-format
+msgid "Yesterday at %s"
+msgstr "ayer"
+
+#: ../src/ribbon/backstagecontrols.cpp:1614
+#, c-format
+msgid "%s at %s"
+msgstr ""
+
+#. TRANSLATORS: Month (abbreviated) and day of the month (e.g., "Mar 03").
+#: ../src/ribbon/backstagecontrols.cpp:1621
+#, c-format
+msgid "%b %d"
+msgstr ""
+
+#: ../src/ribbon/bar.cpp:147
+msgid "Minimize the Ribbon"
+msgstr ""
+
+#: ../src/ribbon/bar.cpp:147
+msgid "Expand the Ribbon"
+msgstr ""
+
+#: ../src/ribbon/gallery.cpp:1286
+msgid "More"
+msgstr ""
+
+#: ../src/ribbon/page.cpp:1354 ../src/ribbon/panel.cpp:1453
+msgid "Switch"
+msgstr ""
+
+#: ../src/ribbon/panel.cpp:1421
+#, fuzzy
+msgid "More options"
+msgstr "Opciones de impresión"
+
+#: ../src/ribbon/panel.cpp:1422
+#, fuzzy, c-format
+msgid "More %s options"
+msgstr "Opciones de impresión"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7566,117 +7744,117 @@ msgstr "Recuadro"
 msgid "Outset"
 msgstr "Comienzo"
 
-#: ../src/richtext/richtextbuffer.cpp:3518
+#: ../src/richtext/richtextbuffer.cpp:3527
 msgid "Change Style"
 msgstr "Cambiar estilo"
 
-#: ../src/richtext/richtextbuffer.cpp:3701
+#: ../src/richtext/richtextbuffer.cpp:3710
 msgid "Change Object Style"
 msgstr "Cambiar estilo de objeto"
 
-#: ../src/richtext/richtextbuffer.cpp:3974
-#: ../src/richtext/richtextbuffer.cpp:8174
+#: ../src/richtext/richtextbuffer.cpp:3983
+#: ../src/richtext/richtextbuffer.cpp:8224
 msgid "Change Properties"
 msgstr "Cambiar propiedades"
 
-#: ../src/richtext/richtextbuffer.cpp:4346
+#: ../src/richtext/richtextbuffer.cpp:4355
 msgid "Change List Style"
 msgstr "Cambiar estilo de lista"
 
-#: ../src/richtext/richtextbuffer.cpp:4519
+#: ../src/richtext/richtextbuffer.cpp:4528
 msgid "Renumber List"
 msgstr "Renumerar Lista"
 
-#: ../src/richtext/richtextbuffer.cpp:7867
-#: ../src/richtext/richtextbuffer.cpp:7897
-#: ../src/richtext/richtextbuffer.cpp:7939
+#: ../src/richtext/richtextbuffer.cpp:7917
+#: ../src/richtext/richtextbuffer.cpp:7947
+#: ../src/richtext/richtextbuffer.cpp:7989
 #: ../src/richtext/richtextctrl.cpp:1279 ../src/richtext/richtextctrl.cpp:1473
 msgid "Insert Text"
 msgstr "Insertar texto"
 
-#: ../src/richtext/richtextbuffer.cpp:8023
-#: ../src/richtext/richtextbuffer.cpp:8979
+#: ../src/richtext/richtextbuffer.cpp:8073
+#: ../src/richtext/richtextbuffer.cpp:9040
 msgid "Insert Image"
 msgstr "Insertar imagen"
 
-#: ../src/richtext/richtextbuffer.cpp:8070
+#: ../src/richtext/richtextbuffer.cpp:8120
 msgid "Insert Object"
 msgstr "Insertar objeto"
 
-#: ../src/richtext/richtextbuffer.cpp:8112
+#: ../src/richtext/richtextbuffer.cpp:8162
 msgid "Insert Field"
 msgstr "Insertar campo"
 
-#: ../src/richtext/richtextbuffer.cpp:8410
+#: ../src/richtext/richtextbuffer.cpp:8460
 msgid "Too many EndStyle calls!"
 msgstr "¡Demasiadas llamadas a EndStyle!"
 
-#: ../src/richtext/richtextbuffer.cpp:8785
+#: ../src/richtext/richtextbuffer.cpp:8835
 msgid "files"
 msgstr "archivos"
 
-#: ../src/richtext/richtextbuffer.cpp:9380
+#: ../src/richtext/richtextbuffer.cpp:9436
 msgid "standard/circle"
 msgstr "estándar/círculo"
 
-#: ../src/richtext/richtextbuffer.cpp:9381
+#: ../src/richtext/richtextbuffer.cpp:9437
 msgid "standard/circle-outline"
 msgstr "estándar/circunferencia"
 
-#: ../src/richtext/richtextbuffer.cpp:9382
+#: ../src/richtext/richtextbuffer.cpp:9438
 msgid "standard/square"
 msgstr "estándar/cuadrado"
 
-#: ../src/richtext/richtextbuffer.cpp:9383
+#: ../src/richtext/richtextbuffer.cpp:9439
 msgid "standard/diamond"
 msgstr "estándar/diamante"
 
-#: ../src/richtext/richtextbuffer.cpp:9384
+#: ../src/richtext/richtextbuffer.cpp:9440
 msgid "standard/triangle"
 msgstr "estándar/triángulo"
 
-#: ../src/richtext/richtextbuffer.cpp:9423
+#: ../src/richtext/richtextbuffer.cpp:9479
 msgid "Box Properties"
 msgstr "Propiedades de caja"
 
-#: ../src/richtext/richtextbuffer.cpp:10006
+#: ../src/richtext/richtextbuffer.cpp:10062
 msgid "Multiple Cell Properties"
 msgstr "Múltiples propiedades de celda"
 
-#: ../src/richtext/richtextbuffer.cpp:10008
+#: ../src/richtext/richtextbuffer.cpp:10064
 msgid "Cell Properties"
 msgstr "Propiedades de celda"
 
-#: ../src/richtext/richtextbuffer.cpp:11256
+#: ../src/richtext/richtextbuffer.cpp:11312
 msgid "Set Cell Style"
 msgstr "Cambiar estilo de celda"
 
-#: ../src/richtext/richtextbuffer.cpp:11330
+#: ../src/richtext/richtextbuffer.cpp:11386
 msgid "Delete Row"
 msgstr "Eliminar fila"
 
-#: ../src/richtext/richtextbuffer.cpp:11380
+#: ../src/richtext/richtextbuffer.cpp:11436
 msgid "Delete Column"
 msgstr "Eliminar columna"
 
-#: ../src/richtext/richtextbuffer.cpp:11431
+#: ../src/richtext/richtextbuffer.cpp:11487
 msgid "Add Row"
 msgstr "Añadir fila"
 
-#: ../src/richtext/richtextbuffer.cpp:11494
+#: ../src/richtext/richtextbuffer.cpp:11550
 msgid "Add Column"
 msgstr "Añadir columna"
 
-#: ../src/richtext/richtextbuffer.cpp:11537
+#: ../src/richtext/richtextbuffer.cpp:11593
 msgid "Table Properties"
 msgstr "Propiedades de tabla"
 
-#: ../src/richtext/richtextbuffer.cpp:12899
+#: ../src/richtext/richtextbuffer.cpp:12981
 msgid "Picture Properties"
 msgstr "Propiedades de la imagen"
 
-#: ../src/richtext/richtextbuffer.cpp:13169
-#: ../src/richtext/richtextbuffer.cpp:13279
+#: ../src/richtext/richtextbuffer.cpp:13251
+#: ../src/richtext/richtextbuffer.cpp:13361
 msgid "image"
 msgstr "imagen"
 
@@ -7894,13 +8072,17 @@ msgstr "Eliminar texto"
 msgid "Remove Bullet"
 msgstr "Eliminar marca"
 
-#: ../src/richtext/richtextctrl.cpp:3070
+#: ../src/richtext/richtextctrl.cpp:3131
 msgid "The text couldn't be saved."
 msgstr "El texto no pudo guardarse."
 
-#: ../src/richtext/richtextctrl.cpp:3644
+#: ../src/richtext/richtextctrl.cpp:3725
 msgid "Replace"
 msgstr "Sustituir"
+
+#: ../src/richtext/richtextctrl.cpp:5663
+msgid "Rich Text Control"
+msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:146
 #: ../src/richtext/richtextsymboldlg.cpp:384
@@ -8856,23 +9038,23 @@ msgstr "Estilo &siguiente:"
 msgid "The default style for the next paragraph."
 msgstr "El estilo predeterminado para el siguiente párrafo."
 
-#: ../src/richtext/richtextstyles.cpp:1057
+#: ../src/richtext/richtextstyles.cpp:1058
 msgid "All styles"
 msgstr "Todos los estilos"
 
-#: ../src/richtext/richtextstyles.cpp:1058
+#: ../src/richtext/richtextstyles.cpp:1059
 msgid "Paragraph styles"
 msgstr "Estilos de párrafo"
 
-#: ../src/richtext/richtextstyles.cpp:1059
+#: ../src/richtext/richtextstyles.cpp:1060
 msgid "Character styles"
 msgstr "Estilos de carácter"
 
-#: ../src/richtext/richtextstyles.cpp:1060
+#: ../src/richtext/richtextstyles.cpp:1061
 msgid "List styles"
 msgstr "Estilos de lista"
 
-#: ../src/richtext/richtextstyles.cpp:1061
+#: ../src/richtext/richtextstyles.cpp:1062
 msgid "Box styles"
 msgstr "Estilos de caja"
 
@@ -9002,7 +9184,7 @@ msgstr "Ma&ximizar"
 msgid "Alt+"
 msgstr "Alt+"
 
-#: ../src/unix/appunix.cpp:178
+#: ../src/unix/appunix.cpp:190
 msgid "Failed to install signal handler"
 msgstr "Error instalando el manejador de señal"
 
@@ -9018,32 +9200,32 @@ msgstr "Falló la descarga de la biblioteca compartida"
 msgid "Unknown dynamic library error"
 msgstr "Error desconocido de biblioteca dinámica"
 
-#: ../src/unix/epolldispatcher.cpp:84
+#: ../src/unix/epolldispatcher.cpp:85
 msgid "Failed to create epoll descriptor"
 msgstr "Falló la creación del descriptor epoll"
 
-#: ../src/unix/epolldispatcher.cpp:103
+#: ../src/unix/epolldispatcher.cpp:106
 msgid "Error closing epoll descriptor"
 msgstr "Error al cerrar el descriptor epoll"
 
-#: ../src/unix/epolldispatcher.cpp:116
+#: ../src/unix/epolldispatcher.cpp:165
 #, c-format
 msgid "Failed to add descriptor %d to epoll descriptor %d"
 msgstr "Fallo al añadir el descriptor %d al descriptor epoll %d"
 
-#: ../src/unix/epolldispatcher.cpp:136
+#: ../src/unix/epolldispatcher.cpp:189
 #, c-format
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "No se pudo modificar el descriptor %d en el descriptor epoll %d"
 
-#: ../src/unix/epolldispatcher.cpp:155
+#: ../src/unix/epolldispatcher.cpp:210
 #, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
 msgstr ""
 "Fallo durante la anulación del registro del descriptor %d del descriptor "
 "epoll %d"
 
-#: ../src/unix/epolldispatcher.cpp:213
+#: ../src/unix/epolldispatcher.cpp:274
 #, c-format
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "Falló la espera de E/S en el descriptor epoll %d"
@@ -9103,12 +9285,17 @@ msgstr "No se pudo eliminar la vista kqueue"
 msgid "Unable to get events from kqueue"
 msgstr "No se pudieron obtener sucesos de kqueue"
 
-#: ../src/unix/mediactrl.cpp:966
+#: ../src/unix/glegl.cpp:833
+#, c-format
+msgid "EGL version is %d.%d but version 1.4 or greater is required."
+msgstr ""
+
+#: ../src/unix/mediactrl.cpp:968
 #, c-format
 msgid "Media playback error: %s"
 msgstr "Error de reproducción del medio: %s"
 
-#: ../src/unix/mediactrl.cpp:1228
+#: ../src/unix/mediactrl.cpp:1230
 #, c-format
 msgid "Failed to prepare playing \"%s\"."
 msgstr "Falló la preparación de la reproducción de «%s»."
@@ -9203,28 +9390,28 @@ msgstr "El archivo de sonido «%s» está en un formato no admitido."
 msgid "Sound data are in unsupported format."
 msgstr "Los datos de sonido están en un formato no admitido."
 
-#: ../src/unix/sound_sdl.cpp:226
+#: ../src/unix/sound_sdl.cpp:279 ../src/unix/sound_sdl.cpp:308
 #, c-format
 msgid "Couldn't open audio: %s"
 msgstr "No se pudo abrir el audio: %s"
 
-#: ../src/unix/threadpsx.cpp:1033
+#: ../src/unix/threadpsx.cpp:1029
 msgid "Cannot retrieve thread scheduling policy."
 msgstr ""
 "No se puede recuperar la normativa de planificación de hilos de ejecución."
 
-#: ../src/unix/threadpsx.cpp:1058
+#: ../src/unix/threadpsx.cpp:1054
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr ""
 "No se puede obtener un intervalo de prioridades para la normativa de "
 "planificación %d."
 
-#: ../src/unix/threadpsx.cpp:1066
+#: ../src/unix/threadpsx.cpp:1062
 msgid "Thread priority setting is ignored."
 msgstr "La configuración de la prioridad del hilo de ejecución es ignorada."
 
-#: ../src/unix/threadpsx.cpp:1221
+#: ../src/unix/threadpsx.cpp:1217
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -9232,64 +9419,77 @@ msgstr ""
 "Error al sincronizar con un hilo de ejecución, pérdida potencial de memoría "
 "detectada - por favor reinicie el programa"
 
-#: ../src/unix/threadpsx.cpp:1352
-#, c-format
-msgid "Failed to set thread concurrency level to %lu"
+#: ../src/unix/threadpsx.cpp:1348
+#, fuzzy, c-format
+msgid "Failed to set thread concurrency level to %zu"
 msgstr ""
 "Error al establecer el nivel de concurrencia del hilo de ejecución a %lu"
 
-#: ../src/unix/threadpsx.cpp:1481
+#: ../src/unix/threadpsx.cpp:1477
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Error al establecer la prioridad del hilo de ejecución %d."
 
-#: ../src/unix/threadpsx.cpp:1666
+#: ../src/unix/threadpsx.cpp:1662
 msgid "Failed to terminate a thread."
 msgstr "Error al terminar un hilo de ejecución."
 
-#: ../src/unix/threadpsx.cpp:1893
+#: ../src/unix/threadpsx.cpp:1889
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "Error en la inicialización del módulo de hilos de ejecución: error al crear "
 "clave de hilo"
 
-#: ../src/unix/utilsunx.cpp:340
+#: ../src/unix/utilsunx.cpp:336
 msgid "Impossible to get child process input"
 msgstr "Imposible obtener la entrada del proceso hijo"
 
-#: ../src/unix/utilsunx.cpp:390
+#: ../src/unix/utilsunx.cpp:386
 msgid "Can't write to child process's stdin"
 msgstr "No se puede escribir en stdin del proceso hijo"
 
-#: ../src/unix/utilsunx.cpp:644
+#: ../src/unix/utilsunx.cpp:640
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Error al ejecutar '%s'\n"
 
-#: ../src/unix/utilsunx.cpp:678
+#: ../src/unix/utilsunx.cpp:674
 msgid "Fork failed"
 msgstr "Error en bifurcación de proceso (fork)"
 
-#: ../src/unix/utilsunx.cpp:701
+#: ../src/unix/utilsunx.cpp:697
 msgid "Failed to set process priority"
 msgstr "Error al establecer la prioridad del proceso"
 
-#: ../src/unix/utilsunx.cpp:712
+#: ../src/unix/utilsunx.cpp:708
 msgid "Failed to redirect child process input/output"
 msgstr "Error en la redirección de la entrada/salida del proceso hijo"
 
-#: ../src/unix/utilsunx.cpp:816
+#: ../src/unix/utilsunx.cpp:812
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 "Fallo al establecer una tubería no bloqueante, el progrma puede colgarse."
 
-#: ../src/unix/utilsunx.cpp:1023
+#: ../src/unix/utilsunx.cpp:1019
 msgid "Cannot get the hostname"
 msgstr "No se puede obtener el nombre de la máquina"
 
-#: ../src/unix/utilsunx.cpp:1059
+#: ../src/unix/utilsunx.cpp:1055
 msgid "Cannot get the official hostname"
 msgstr "No se puede obtener el nombre oficial de la máquina"
+
+#. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
+#: ../src/unix/utilsunx.cpp:1313
+#, c-format
+msgid ", based on %s (%s)"
+msgstr ""
+
+#. TRANSLATORS: %s is a Linux distribution parent name.
+#. TRANSLATORS: %s is an upstream codename.
+#: ../src/unix/utilsunx.cpp:1318 ../src/unix/utilsunx.cpp:1324
+#, fuzzy, c-format
+msgid ", based on %s"
+msgstr "&Basado en:"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
@@ -9323,7 +9523,7 @@ msgstr "No se pudo cerrar el display \"%s\""
 msgid "Failed to open display \"%s\"."
 msgstr "Falló la apertura de la pantalla «%s»."
 
-#: ../src/xml/xml.cpp:868
+#: ../src/xml/xml.cpp:867
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "Error de parseo de XML: '%s' en la línea %d"
@@ -9333,25 +9533,33 @@ msgstr "Error de parseo de XML: '%s' en la línea %d"
 msgid "Page %i"
 msgstr "Página %i"
 
-#: ../src/xrc/xmlres.cpp:448
+#: ../src/xrc/xmlres.cpp:449
 #, c-format
 msgid "Cannot load resources from '%s'."
 msgstr "No se pueden cargar recursos desde «%s»."
 
-#: ../src/xrc/xmlres.cpp:799
+#: ../src/xrc/xmlres.cpp:828
 #, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "No se puede cargar el archivo de recursos «%s»."
 
-#: ../src/xrc/xmlres.cpp:806
+#: ../src/xrc/xmlres.cpp:835
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "No se pueden cargar los recursos a partir del archivo «%s»."
 
-#: ../src/xrc/xmlres.cpp:2767
+#: ../src/xrc/xmlres.cpp:2796
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Falló la creación de %s «%s»."
+
+#, c-format
+#~ msgid "Unable to close the handle for '%s'"
+#~ msgstr "No se pudo cerrar el manejador para '%s'"
+
+#, c-format
+#~ msgid "can't remove file '%s'"
+#~ msgstr "no se puede eliminar el archivo '%s'"
 
 #, c-format
 #~ msgid "BMP: header has biClrUsed=%d when biBitCount=%d."

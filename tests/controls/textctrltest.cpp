@@ -1642,6 +1642,30 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     CHECK( updated.GetCount() == 1 );
 }
 
+TEST_CASE("wxTextCtrl::SetValueWhileFrozen", "[wxTextCtrl][freeze]")
+{
+    auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        "", wxDefaultPosition, wxDefaultSize,
+                                        wxTE_MULTILINE);
+
+    text->SetValue("line one\nline two");
+    text->SetInsertionPointEnd();
+
+    // Modifying the control while frozen used to result in a crash in wxGTK
+    // when the selection was changed after thawing, see #27324.
+    text->Freeze();
+    text->SetValue("abc");
+    text->Thaw();
+
+    text->SelectAll();
+
+    long from = -1,
+         to = -1;
+    text->GetSelection(&from, &to);
+    CHECK( from == 0 );
+    CHECK( to == 3 );
+}
+
 #ifdef __WXMSW__
 TEST_CASE("wxTextCtrl::EnableFocusFromKeyboard", "[wxTextCtrl][focus]")
 {

@@ -111,6 +111,14 @@ public:
         @code
         object.CallMethod("ActiveWorkbook.ActiveSheet.Protect", "MyPassword");
         @endcode
+
+        Arguments can also be passed by name, by giving the variant the name
+        of the parameter. Arguments without a name are passed by position and
+        must precede all the named ones. For example, this passes the second
+        argument as the @c Name parameter of @c FileSystemObject.BuildPath():
+        @code
+        object.CallMethod("BuildPath", "C:\\Dir", wxVariant("File.txt", "Name"));
+        @endcode
     */
     wxVariant CallMethod(const wxString& method, int noArgs,
                          wxVariant args[]) const;
@@ -208,6 +216,8 @@ public:
         application
         needing to call GetProperty several times using several temporary objects.
 
+        Arguments can be passed by name, as described in CallMethod().
+
         @see GetObject(), PutProperty()
     */
     wxVariant GetProperty(const wxString& property, int noArgs,
@@ -264,6 +274,11 @@ public:
         Note that @a property can contain dot-separated property names, to save the
         application
         needing to call GetProperty() several times using several temporary objects.
+
+        The last argument is the new property value, any preceding ones are
+        the property parameters, e.g. an index. The parameters can be passed
+        by name, as described in CallMethod(), but the name of the value
+        itself, if any, is ignored.
     */
     bool PutProperty(const wxString& property, int noArgs,
                      wxVariant args[]);

@@ -31,11 +31,10 @@ class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxNavigationEnabled<wxInfoBarBa
 public:
     // the usual ctors and Create() but remember that info bar is created
     // hidden
-    wxInfoBarGeneric() { Init(); }
+    wxInfoBarGeneric() = default;
 
     wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0)
     {
-        Init();
         Create(parent, winid, style);
     }
 
@@ -57,6 +56,8 @@ public:
     virtual size_t GetButtonCount() const override;
     virtual wxWindowID GetButtonId(size_t idx) const override;
     virtual bool HasButtonId(wxWindowID btnid) const override;
+
+    virtual void ShowCloseButton(ShowButton show) override;
 
     // methods specific to this version
     // --------------------------------
@@ -96,11 +97,13 @@ public:
     // -----------------------------
 
     // setting the font of this window sets it for the text control inside it
-    // (default font is a larger and bold version of the normal one)
     virtual bool SetFont(const wxFont& font) override;
 
-    // same thing with the colour: this affects the text colour
+    // same thing with the colour: this affects the text and checkbox colour
     virtual bool SetForegroundColour(const wxColor& colour) override;
+
+    // background colour also needs to be applied to the close button
+    virtual bool SetBackgroundColour(const wxColour& colour) override;
 
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
@@ -117,13 +120,14 @@ protected:
     void UpdateParent();
 
 private:
-    // common part of all ctors
-    void Init();
-
     virtual bool UseNative() const { return false; }
 
-    // handler for the close button
+    // handler for all buttons
     void OnButton(wxCommandEvent& event);
+
+    // show or hide the close button depending on m_showCloseButton and the
+    // presence of the other buttons, also ensuring that it comes after them
+    void UpdateCloseButton();
 
     // show/hide the bar
     void DoShow();
@@ -141,20 +145,26 @@ private:
     BarPlacement GetBarPlacement() const;
 
     void UpdateColours();
+    void UpdateCloseButtonBackground();
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // different controls making up the bar
     wxStaticBitmap *m_icon = nullptr;
     wxStaticText *m_text = nullptr;
     wxBitmapButton *m_button = nullptr;
+
+    // only created if wxINFOBAR_CHECKBOX style is used
     wxCheckBox *m_checkbox = nullptr;
 
     // the effects to use when showing/hiding and duration for them: by default
     // the effect is determined by the info bar automatically depending on its
     // position and the default duration is used
-    wxShowEffect m_showEffect,
-                 m_hideEffect;
-    int m_effectDuration;
+    wxShowEffect m_showEffect = wxSHOW_EFFECT_MAX,
+                 m_hideEffect = wxSHOW_EFFECT_MAX;
+    int m_effectDuration = 0;
+
+    // when to show m_button
+    ShowButton m_showCloseButton = ShowButton::Auto;
 
     bool m_checked = false;
 

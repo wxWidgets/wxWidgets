@@ -148,7 +148,7 @@ public:
     bool DeleteObject(T* object);
 
     /**
-        Removes element referred to be @a iter.
+        Removes element referred to by @a iter.
 
         Deletes the actual object if DeleteContents( @true ) was called previously.
     */
@@ -192,7 +192,7 @@ public:
                                            T* object);
 
     /**
-        Inserts @a object before the object referred to be @a iter.
+        Inserts @a object before the object referred to by @a iter.
     */
     wxList<T>::compatibility_iterator Insert(compatibility_iterator iter,
                                            T* object);

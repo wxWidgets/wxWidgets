@@ -471,6 +471,9 @@ public:
         return static_cast<wxDataViewCtrl*>(GetWXPeer());
     }
 
+    // No events must be sent when this returns true.
+    bool IsChangingHiddenItem() const { return m_changingHiddenItem; }
+
     // column related methods (inherited from wxDataViewWidgetImpl)
     virtual bool ClearColumns() override;
     virtual bool DeleteColumn(wxDataViewColumn* columnPtr) override;
@@ -559,6 +562,9 @@ private:
 
     // Width of expander in pixels, computed on demand.
     int m_expanderWidth;
+
+    // True while collapsing a hidden item, see Collapse().
+    bool m_changingHiddenItem = false;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_

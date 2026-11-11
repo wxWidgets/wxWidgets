@@ -193,7 +193,7 @@ public:
         This is only useful for compatibility with the existing code using
         wxImage.
 
-        If @a image is invalid, empty bundle is returned.
+        If @a image is invalid, an empty bundle is returned.
      */
     static wxBitmapBundle FromImage(const wxImage& image);
 

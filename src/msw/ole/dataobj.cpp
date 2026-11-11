@@ -33,6 +33,19 @@
 
 #include "wx/scopedarray.h"
 #include "wx/vector.h"
+
+#if wxUSE_OLE && wxUSE_STREAMS && wxUSE_DATETIME
+    #include "wx/datetime.h"
+    #include "wx/filename.h"
+    #include "wx/mstream.h"
+    #include "wx/scopeguard.h"
+    #include "wx/wfstream.h"
+
+    #include "wx/private/make_unique.h"
+
+    #include <algorithm>
+#endif // wxUSE_OLE && wxUSE_STREAMS && wxUSE_DATETIME
+
 #include "wx/msw/private.h"         // includes <windows.h>
 #include "wx/msw/dib.h"
 #include "wx/msw/wrapshl.h"
@@ -41,6 +54,7 @@
 #include <oleauto.h>
 
 #include "wx/msw/ole/oleutils.h"
+#include "wx/msw/private/comptr.h"
 #endif // wxUSE_OLE
 
 #ifndef CFSTR_SHELLURL
@@ -1423,6 +1437,656 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 
     return true;
 }
+
+#if wxUSE_OLE && wxUSE_STREAMS && wxUSE_DATETIME
+
+// ----------------------------------------------------------------------------
+// wxVirtualFileDataObject
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// The name in FILEDESCRIPTOR is not guaranteed to be NUL-terminated, so never
+// read beyond the end of the array.
+wxString GetDescriptorName(const FILEDESCRIPTORW& fd)
+{
+    const wchar_t* const end = std::find(fd.cFileName,
+                                         fd.cFileName + WXSIZEOF(fd.cFileName),
+                                         L'\0');
+    return wxString(fd.cFileName, end - fd.cFileName);
+}
+
+// RAII wrapper for STGMEDIUM.
+class StgMedium : public STGMEDIUM
+{
+public:
+    StgMedium()
+    {
+        wxZeroMemory(*this);
+    }
+
+    // Take ownership of the medium, leaving the other object empty.
+    StgMedium(StgMedium&& other)
+        : STGMEDIUM(other)
+    {
+        wxZeroMemory(static_cast<STGMEDIUM&>(other));
+    }
+
+    ~StgMedium()
+    {
+        if ( tymed != TYMED_NULL )
+            ::ReleaseStgMedium(this);
+    }
+
+    wxDECLARE_NO_COPY_CLASS(StgMedium);
+};
+
+// Get the contents of the item with the given index from the data source
+// using one of the given TYMED_XXX media.
+bool
+GetFileContents(IDataObject* source, int index, DWORD tymed, StgMedium& medium)
+{
+    static const CLIPFORMAT
+        s_cfFileContents = static_cast<CLIPFORMAT>(
+                ::RegisterClipboardFormat(CFSTR_FILECONTENTS)
+            );
+
+    FORMATETC fmt;
+    fmt.cfFormat = s_cfFileContents;
+    fmt.ptd = nullptr;
+    fmt.dwAspect = DVASPECT_CONTENT;
+    fmt.lindex = index;
+    fmt.tymed = tymed;
+
+    const HRESULT hr = source->GetData(&fmt, &medium);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxString::Format("IDataObject::GetData(FileContents, %d)",
+                                       index), hr);
+        return false;
+    }
+
+    return true;
+}
+
+// wxInputStream reading from IStream, possibly limited to the given size.
+class wxIStreamInputStream : public wxInputStream
+{
+public:
+    // Keeps its own reference to the stream.
+    wxIStreamInputStream(IStream* stream, wxFileOffset size)
+        : m_stream(stream),
+          m_size(size)
+    {
+    }
+
+    virtual wxFileOffset GetLength() const override
+    {
+        if ( m_size != wxInvalidOffset )
+            return m_size;
+
+        STATSTG stat;
+        if ( SUCCEEDED(m_stream->Stat(&stat, STATFLAG_NONAME)) )
+            return static_cast<wxFileOffset>(stat.cbSize.QuadPart);
+
+        return wxInvalidOffset;
+    }
+
+    virtual bool IsSeekable() const override { return false; }
+
+protected:
+    virtual size_t OnSysRead(void* buffer, size_t size) override
+    {
+        if ( m_size != wxInvalidOffset )
+        {
+            const wxFileOffset left = m_size - m_pos;
+            if ( left <= 0 )
+            {
+                m_lasterror = wxSTREAM_EOF;
+                return 0;
+            }
+
+            if ( static_cast<wxFileOffset>(size) > left )
+                size = static_cast<size_t>(left);
+        }
+
+        const ULONG toRead = size > ULONG_MAX ? ULONG_MAX
+                                              : static_cast<ULONG>(size);
+
+        ULONG read = 0;
+        const HRESULT hr = m_stream->Read(buffer, toRead, &read);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError("IStream::Read", hr);
+            m_lasterror = wxSTREAM_READ_ERROR;
+            return 0;
+        }
+
+        if ( !read )
+        {
+            m_lasterror = wxSTREAM_EOF;
+            return 0;
+        }
+
+        m_pos += read;
+
+        return read;
+    }
+
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
+
+private:
+    const wxCOMPtr<IStream> m_stream;
+    const wxFileOffset m_size;
+    wxFileOffset m_pos = 0;
+
+    wxDECLARE_NO_COPY_CLASS(wxIStreamInputStream);
+};
+
+// Owner of the medium containing a memory block, keeping it locked while it
+// exists.
+//
+// This is only used as the base class of wxHGlobalInputStream, to ensure that
+// it is initialized before wxMemoryInputStream which uses the locked memory.
+class HGlobalMedium
+{
+protected:
+    HGlobalMedium(StgMedium&& medium, wxFileOffset size)
+        : m_medium(std::move(medium))
+    {
+        m_lock.Init(m_medium.hGlobal);
+        if ( !m_lock )
+            return;
+
+        // The memory block may be bigger than the actual data, so prefer to
+        // use the size from the descriptor, if we have it.
+        m_len = m_lock.GetSize();
+        if ( size != wxInvalidOffset && size < m_len )
+            m_len = size;
+    }
+
+    // Note that the order of these fields matters: the memory must be
+    // unlocked before the medium is released.
+    StgMedium m_medium;
+    GlobalPtrLock m_lock;
+    wxFileOffset m_len = 0;
+};
+
+// wxInputStream reading from the memory block without copying it.
+class wxHGlobalInputStream : private HGlobalMedium,
+                             public wxMemoryInputStream
+{
+public:
+    // Takes ownership of the medium, which must use TYMED_HGLOBAL. Check if
+    // the stream IsOk() after creating it, as locking the memory may fail.
+    wxHGlobalInputStream(StgMedium&& medium, wxFileOffset size)
+        : HGlobalMedium(std::move(medium), size),
+          wxMemoryInputStream(m_lock.Get(), m_len)
+    {
+        if ( !m_lock )
+            m_lasterror = wxSTREAM_READ_ERROR;
+    }
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxHGlobalInputStream);
+};
+
+// Create a stream for reading the contents of the medium, which must be either
+// a stream or a memory block.
+//
+// The medium shouldn't be used after calling this function, as the returned
+// stream may take ownership of it.
+std::unique_ptr<wxInputStream>
+OpenMediumStream(StgMedium&& medium, wxFileOffset size)
+{
+    switch ( medium.tymed )
+    {
+        case TYMED_ISTREAM:
+            {
+                IStream* const stream = medium.pstm;
+
+                // Some sources return the stream positioned at its end, so
+                // try to rewind it, but this is not supposed to be necessary
+                // and so don't do anything if it fails.
+                LARGE_INTEGER zero;
+                zero.QuadPart = 0;
+                stream->Seek(zero, STREAM_SEEK_SET, nullptr);
+
+                return std::make_unique<wxIStreamInputStream>(stream, size);
+            }
+
+        case TYMED_HGLOBAL:
+            {
+                auto stream =
+                    std::make_unique<wxHGlobalInputStream>(std::move(medium),
+                                                           size);
+                if ( !stream->IsOk() )
+                    return nullptr;
+
+                return stream;
+            }
+
+        default:
+            wxLogDebug("Unexpected file contents medium %s",
+                       GetTymedName(medium.tymed));
+    }
+
+    return nullptr;
+}
+
+// Save the contents of the given storage to a compound file, which is removed
+// if an error occurs after creating it.
+bool SaveStorage(IStorage* storage, const wxString& path)
+{
+    wxCOMPtr<IStorage> file;
+    HRESULT hr = ::StgCreateDocfile(path.wc_str(),
+                                    STGM_CREATE |
+                                    STGM_READWRITE |
+                                    STGM_SHARE_EXCLUSIVE,
+                                    0,
+                                    &file);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("StgCreateDocfile", hr);
+        return false;
+    }
+
+    hr = storage->CopyTo(0, nullptr, nullptr, file);
+    if ( SUCCEEDED(hr) )
+    {
+        hr = file->Commit(STGC_DEFAULT);
+        if ( FAILED(hr) )
+            wxLogApiError("IStorage::Commit", hr);
+    }
+    else
+    {
+        wxLogApiError("IStorage::CopyTo", hr);
+    }
+
+    if ( FAILED(hr) )
+    {
+        // Close the file before removing it, as this can't be done while it's
+        // still open.
+        file.reset();
+        wxRemoveFile(path);
+        return false;
+    }
+
+    return true;
+}
+
+// Return the topmost path among the given one and its parent directories which
+// doesn't exist yet, i.e. the path which would need to be removed to undo
+// creating the given one, or empty string if it already exists.
+wxString GetTopNonExistingPath(const wxString& path)
+{
+    wxString top;
+    for ( wxString p = path; !p.empty() && !wxFileName::Exists(p); )
+    {
+        top = p;
+
+        const wxString parent = wxFileName(p).GetPath();
+        if ( parent == p )
+            break;
+
+        p = parent;
+    }
+
+    return top;
+}
+
+// Remove the given file or directory with all its contents, if it exists, do
+// nothing if the path is empty.
+void RemovePath(const wxString& path)
+{
+    if ( path.empty() )
+        return;
+
+    if ( wxDirExists(path) )
+        wxFileName::Rmdir(path, wxPATH_RMDIR_RECURSIVE);
+    else if ( wxFileExists(path) )
+        wxRemoveFile(path);
+}
+
+} // anonymous namespace
+
+wxVirtualFileDataObject::wxVirtualFileDataObject()
+    : wxDataObjectSimple(CFSTR_FILEDESCRIPTORW)
+{
+}
+
+wxVirtualFileDataObject::~wxVirtualFileDataObject()
+{
+    ReleaseSource();
+
+    DeleteAllTempFiles();
+}
+
+void wxVirtualFileDataObject::ReleaseSource()
+{
+    if ( m_source )
+    {
+        m_source->Release();
+        m_source = nullptr;
+    }
+}
+
+bool wxVirtualFileDataObject::SetData(size_t len, const void *buf)
+{
+    m_entries.clear();
+    ReleaseSource();
+
+    // The descriptors array follows the items count, see FILEGROUPDESCRIPTORW.
+    const size_t headerLen = sizeof(UINT);
+    if ( len < headerLen )
+        return false;
+
+    const auto* const fgd = static_cast<const FILEGROUPDESCRIPTORW*>(buf);
+    const size_t count = fgd->cItems;
+    if ( count > (len - headerLen) / sizeof(FILEDESCRIPTORW) )
+    {
+        wxLogDebug("Invalid file descriptor: %zu items don't fit in %zu bytes",
+                   count, len);
+        return false;
+    }
+
+    m_entries.reserve(count);
+    for ( size_t n = 0; n < count; n++ )
+    {
+        const FILEDESCRIPTORW& fd = fgd->fgd[n];
+
+        const wxString name = GetDescriptorName(fd);
+
+        Entry entry;
+        entry.name = wxFileName::MakeSafeRelativePath(name);
+        if ( entry.name.empty() )
+        {
+            wxLogDebug("Ignoring virtual file with invalid name \"%s\".",
+                       name);
+            continue;
+        }
+
+        entry.index = static_cast<int>(n);
+
+        if ( fd.dwFlags & FD_ATTRIBUTES )
+            entry.attrs = fd.dwFileAttributes;
+
+        if ( fd.dwFlags & FD_FILESIZE )
+        {
+            ULARGE_INTEGER size;
+            size.LowPart = fd.nFileSizeLow;
+            size.HighPart = fd.nFileSizeHigh;
+            entry.size = static_cast<wxFileOffset>(size.QuadPart);
+        }
+
+        if ( fd.dwFlags & FD_WRITESTIME )
+            entry.mtime.SetFromMSWFileTime(fd.ftLastWriteTime);
+
+        m_entries.push_back(entry);
+    }
+
+    return true;
+}
+
+void
+wxVirtualFileDataObject::MSWSetDataSource(IDataObject* source,
+                                          const wxDataFormat& WXUNUSED(format))
+{
+    ReleaseSource();
+
+    m_source = source;
+    if ( m_source )
+        m_source->AddRef();
+}
+
+wxString wxVirtualFileDataObject::GetName(size_t n) const
+{
+    wxCHECK_MSG( n < m_entries.size(), wxString(), "invalid index" );
+
+    return m_entries[n].name;
+}
+
+bool wxVirtualFileDataObject::Entry::IsDir() const
+{
+    return (attrs & FILE_ATTRIBUTE_DIRECTORY) != 0;
+}
+
+bool wxVirtualFileDataObject::IsDir(size_t n) const
+{
+    wxCHECK_MSG( n < m_entries.size(), false, "invalid index" );
+
+    return m_entries[n].IsDir();
+}
+
+wxFileOffset wxVirtualFileDataObject::GetSize(size_t n) const
+{
+    wxCHECK_MSG( n < m_entries.size(), wxInvalidOffset, "invalid index" );
+
+    return m_entries[n].size;
+}
+
+wxDateTime wxVirtualFileDataObject::GetModificationTime(size_t n) const
+{
+    wxCHECK_MSG( n < m_entries.size(), wxDateTime(), "invalid index" );
+
+    return m_entries[n].mtime;
+}
+
+std::unique_ptr<wxInputStream>
+wxVirtualFileDataObject::OpenStream(size_t n) const
+{
+    wxCHECK_MSG( n < m_entries.size(), nullptr, "invalid index" );
+
+    const Entry& entry = m_entries[n];
+    if ( entry.IsDir() )
+        return nullptr;
+
+    wxCHECK_MSG( m_source, nullptr, "no data source" );
+
+    // Structured storage can't be read as a stream, so don't ask for it: if
+    // the item is only available in this form, this fails and we return null,
+    // as documented.
+    StgMedium medium;
+    if ( !GetFileContents(m_source, entry.index,
+                          TYMED_ISTREAM | TYMED_HGLOBAL, medium) )
+        return nullptr;
+
+    return OpenMediumStream(std::move(medium), entry.size);
+}
+
+bool wxVirtualFileDataObject::SaveTo(size_t n, const wxString& path) const
+{
+    wxCHECK_MSG( n < m_entries.size(), false, "invalid index" );
+
+    return DoSaveTo(m_entries[n], path);
+}
+
+bool
+wxVirtualFileDataObject::DoSaveTo(const Entry& entry, const wxString& path) const
+{
+    // Don't leave anything behind if saving fails: remove the item itself and
+    // all its parent directories which didn't exist before, unless this guard
+    // is dismissed after saving the item successfully.
+    wxScopeGuard removeOnError = wxMakeGuard(RemovePath,
+                                             GetTopNonExistingPath(path));
+
+    if ( entry.IsDir() )
+    {
+        if ( !wxFileName::Mkdir(path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+            return false;
+
+        removeOnError.Dismiss();
+        return true;
+    }
+
+    wxCHECK_MSG( m_source, false, "no data source" );
+
+    const wxString dir = wxFileName(path).GetPath();
+    if ( !dir.empty() )
+    {
+        if ( !wxFileName::Mkdir(dir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+            return false;
+    }
+
+    StgMedium medium;
+    if ( !GetFileContents(m_source, entry.index,
+                          TYMED_ISTREAM | TYMED_HGLOBAL | TYMED_ISTORAGE,
+                          medium) )
+    {
+        wxLogError(_("Failed to retrieve the contents of \"%s\"."),
+                   entry.name);
+        return false;
+    }
+
+    if ( medium.tymed == TYMED_ISTORAGE )
+    {
+        if ( !SaveStorage(medium.pstg, path) )
+        {
+            // As above, SaveStorage() only logs debug messages.
+            wxLogError(_("Failed to save the contents of \"%s\" to \"%s\"."),
+                       entry.name, path);
+            return false;
+        }
+    }
+    else
+    {
+        const auto in = OpenMediumStream(std::move(medium), entry.size);
+        if ( !in )
+        {
+            wxLogError(_("Failed to retrieve the contents of \"%s\" as stream."),
+                       entry.name);
+            return false;
+        }
+
+        wxFileOutputStream out(path);
+        if ( !out.IsOk() )
+            return false;
+
+        out.Write(*in);
+
+        bool ok = out.IsOk();
+
+        if ( in->GetLastError() != wxSTREAM_EOF )
+        {
+            wxLogError(_("Failed to read the contents of \"%s\"."),
+                       entry.name);
+            ok = false;
+        }
+
+        // Close the file in any case, as it can't be removed while it's open.
+        if ( !out.Close() )
+            ok = false;
+
+        if ( !ok )
+        {
+            // The file contents is invalid, so remove it even if the file had
+            // existed before, as its previous contents is lost anyhow.
+            //
+            // Note that removeOnError might not do it if the file already
+            // existed before, so we need to do it explicitly here.
+            wxRemoveFile(path);
+            return false;
+        }
+    }
+
+    removeOnError.Dismiss();
+
+    if ( entry.mtime.IsValid() )
+        wxFileName(path).SetTimes(nullptr, &entry.mtime, nullptr);
+
+    return true;
+}
+
+std::vector<wxString>
+wxVirtualFileDataObject::SaveAll(const wxString& dir) const
+{
+    wxString base = dir;
+    if ( !base.empty() && !wxIsPathSeparator(base.Last()) )
+        base += wxFILE_SEP_PATH;
+
+    // All the paths which didn't exist before and were created by us, to
+    // remove them if saving any of the items fails.
+    std::vector<wxString> created;
+
+    std::vector<wxString> rootPaths;
+    for ( const auto& entry : m_entries )
+    {
+        const wxString& name = entry.name;
+        const wxString path = base + name;
+
+        const wxString newPath = GetTopNonExistingPath(path);
+        if ( !newPath.empty() )
+            created.push_back(newPath);
+
+        // Stop if saving any of the items fails as they may reference each
+        // other and so it may be wrong to save only some of them. If this is
+        // really needed, the application can call SaveTo() for each item
+        // separately and handle errors on its own
+        if ( !DoSaveTo(entry, path) )
+        {
+            for ( const auto& p : created )
+                RemovePath(p);
+
+            return {};
+        }
+
+        // Add this path to the list of top-level paths if it's not in a
+        // subdirectory of any of the previously added ones.
+        const wxString top = base + name.BeforeFirst(wxFILE_SEP_PATH);
+        bool underExisting = false;
+        for ( const auto& p : rootPaths )
+        {
+            if ( p.CmpNoCase(top) == 0 )
+            {
+                underExisting = true;
+                break;
+            }
+        }
+
+        if ( !underExisting )
+            rootPaths.push_back(top);
+    }
+
+    return rootPaths;
+}
+
+std::vector<wxString> wxVirtualFileDataObject::SaveAllToTempDir()
+{
+    if ( m_entries.empty() )
+        return {};
+
+    const wxString dir = wxFileName::CreateTempDirName("wxtemp-virtual-");
+    if ( dir.empty() )
+        return {};
+
+    // Remember it even if saving fails, as some files could have been saved.
+    m_tempDirs.push_back(dir);
+
+    return SaveAll(dir);
+}
+
+bool wxVirtualFileDataObject::DeleteAllTempFiles()
+{
+    // Don't log errors here, as they're expected to happen if some of the
+    // files are still opened in another program.
+    wxLogNull noLog;
+
+    // Keep the directories which couldn't be removed to allow trying to
+    // remove them again later.
+    std::vector<wxString> remaining;
+    for ( const auto& dir : m_tempDirs )
+    {
+        if ( wxDirExists(dir) && !wxFileName::Rmdir(dir, wxPATH_RMDIR_RECURSIVE) )
+            remaining.push_back(dir);
+    }
+
+    m_tempDirs.swap(remaining);
+
+    return m_tempDirs.empty();
+}
+
+#endif // wxUSE_OLE && wxUSE_STREAMS && wxUSE_DATETIME
 
 // ----------------------------------------------------------------------------
 // wxURLDataObject

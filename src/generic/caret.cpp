@@ -29,6 +29,7 @@
 
 #include "wx/caret.h"
 #include "wx/graphics.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // global variables for this module
@@ -124,6 +125,13 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
+    // Convert position from client to logical coordinates. We will convert
+    // back to client upon every use of the position so that a change in
+    // position due to scrolling is taken into account.
+    wxPoint viewStart = GetWindow()->GetViewStartPixels();
+    m_x += viewStart.x;
+    m_y += viewStart.y;
+
     if (m_overlay.IsNative())
     {
         m_overlay.Reset();
@@ -176,6 +184,15 @@ void wxCaret::DoSize()
     }
 }
 
+void wxCaret::DoGetPosition(int* x, int* y) const
+{
+    const wxPoint pt = LogicalToClient();
+    if ( x )
+        *x = pt.x;
+    if ( y )
+        *y = pt.y;
+}
+
 // ----------------------------------------------------------------------------
 // handling the focus
 // ----------------------------------------------------------------------------
@@ -220,16 +237,19 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
+    const wxPoint pt = LogicalToClient();
+
     wxClientDC dcWin(GetWindow());
-    GetWindow()->PrepareDC(dcWin);
 
     if (m_overlay.IsNative())
     {
-        wxDCOverlay dcOverlay(m_overlay, &dcWin, m_x, m_y, m_width, m_height);
         if (m_blinkedOut)
-            dcOverlay.Clear();
+            m_overlay.Reset();
         else
+        {
+            wxDCOverlay dcOverlay(m_overlay, &dcWin, pt.x, pt.y, m_width, m_height);
             DoDraw(&dcWin, GetWindow());
+        }
 
         return;
     }
@@ -250,10 +270,10 @@ void wxCaret::Refresh()
             wxMemoryDC dcMem(m_bmpUnderCaret);
             // save the part we're going to overdraw
             dcMem.Blit(0, 0, m_width, m_height,
-                       &dcWin, m_x, m_y);
+                       &dcWin, pt.x, pt.y);
 
-            m_xOld = m_x;
-            m_yOld = m_y;
+            m_xOld = pt.x;
+            m_yOld = pt.y;
         }
         //else: we already saved the image below the caret, don't do it any
         //      more
@@ -265,19 +285,27 @@ void wxCaret::Refresh()
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
 {
+    // Set caret colour black or white depending on background colour.
     wxPen pen(*wxBLACK_PEN);
     wxBrush brush(*wxBLACK_BRUSH);
-    if (win)
+    if ( win && win->UseBackgroundColour() )
     {
-        wxColour backgroundColour(win->GetBackgroundColour());
-        if (backgroundColour.Red() < 100 &&
-            backgroundColour.Green() < 100 &&
-            backgroundColour.Blue() < 100)
+        if ( win->GetBackgroundColour().GetLuminance() < 0.5 )
         {
+            // Custom background is dark, so use white.
             pen = *wxWHITE_PEN;
             brush = *wxWHITE_BRUSH;
         }
     }
+    else if ( wxSystemSettings::GetAppearance().IsDark() )
+    {
+        // Background is default colour and default is dark, so use white.
+        pen = *wxWHITE_PEN;
+        brush = *wxWHITE_BRUSH;
+    }
+
+    const wxPoint pt = LogicalToClient();
+
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsContext* gc = dc->GetGraphicsContext();
 #endif
@@ -298,7 +326,7 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
             // those of the solid rect. This is necessary to avoid drawing
             // outside the solid rect bounds when window content is scaled.
             gc->EnableOffset(false);
-            gc->DrawRectangle(m_x + 0.5, m_y + 0.5, m_width - 1, m_height - 1);
+            gc->DrawRectangle(pt.x + 0.5, pt.y + 0.5, m_width - 1, m_height - 1);
             return;
         }
 #endif
@@ -311,7 +339,13 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
         dc->SetLogicalFunction(wxINVERT);
     }
 
-    dc->DrawRectangle(m_x, m_y, m_width, m_height);
+    dc->DrawRectangle(pt.x, pt.y, m_width, m_height);
+}
+
+wxPoint wxCaret::LogicalToClient() const
+{
+    const wxPoint viewStart = GetWindow()->GetViewStartPixels();
+    return wxPoint(m_x - viewStart.x, m_y - viewStart.y);
 }
 
 #endif // wxUSE_CARET

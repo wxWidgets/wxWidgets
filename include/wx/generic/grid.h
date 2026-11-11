@@ -479,6 +479,10 @@ public:
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
 
+    // Return true if the editor accepts text input, i.e. if it makes sense to
+    // type text into it and so showing IME for it is warranted.
+    virtual bool AcceptsTextInput() const { return true; }
+
     // return true to allow the given key to start editing: the base class
     // version only checks that the event has no modifiers. The derived
     // classes are supposed to do "if ( base::IsAcceptedKey() && ... )" in
@@ -612,6 +616,8 @@ public:
         { wxFAIL; }
     virtual void Reset() override
         { wxFAIL; }
+    virtual bool AcceptsTextInput() const override
+        { return false; }
     virtual wxString GetValue() const override
         { wxFAIL; return wxString(); }
 };

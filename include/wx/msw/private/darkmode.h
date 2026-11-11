@@ -29,6 +29,10 @@ bool HasChanged();
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);
 
+// Must be called when using auto-completion in a text control to ensure that
+// its drop-down window uses dark mode when appropriate.
+void EnableForAutoComplete();
+
 // Helper function: call SetWindowTheme() and log a debug error if it fails.
 void SetTheme(HWND hwnd,
               const wchar_t* themeName,

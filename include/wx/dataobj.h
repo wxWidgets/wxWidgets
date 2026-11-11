@@ -287,6 +287,8 @@ public:
     virtual void* SetSizeInBuffer( void* buffer, size_t size,
                                    const wxDataFormat& format ) override;
     virtual size_t GetBufferOffset( const wxDataFormat& format ) override;
+    virtual void MSWSetDataSource(IDataObject* source,
+                                  const wxDataFormat& format) override;
 #endif
 
 private:
