@@ -475,8 +475,6 @@ void wxGLCanvasEGL::UpdateSubsurfacePosition()
 void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
 {
     int scale = gtk_widget_get_scale_factor(widget);
-    // Update the Wayland buffer scale in SwapBuffers(), once EGL has resized
-    // its buffer, instead of applying it to a buffer allocated at the old scale.
     wl_egl_window_resize(win->m_wlEGLWindow, win->m_canvas->m_width * scale,
                          win->m_canvas->m_height * scale, 0, 0);
 

@@ -28,9 +28,8 @@ int GetTestSetting(const char* name, int fallback)
 
 } // anonymous namespace
 
-// The external runner changes the output scale after the "initialised" line.
-// Keep this hidden and in its own executable: a Wayland protocol error exits
-// the entire process instead of producing a recoverable Catch assertion.
+// Run separately: a Wayland protocol error terminates the process.
+// The external runner changes scale after the "initialised" marker.
 TEST_CASE("wxGLCanvas::WaylandScaleChange", "[glcanvas][wayland][.]")
 {
     INFO("Run this test using tests/graphics/wayland/run.py");

@@ -5,8 +5,6 @@
 
 option(wxTEST_WAYLAND "Register the headless Wayland OpenGL regression test" OFF)
 
-# Use the standard Catch application, but isolate fatal Wayland errors from
-# test_gui. This target is built explicitly and has no default CTest entry.
 wx_add_test(test_glcanvas CONSOLE_GUI NO_CTEST
     test.cpp
     asserthelper.cpp
