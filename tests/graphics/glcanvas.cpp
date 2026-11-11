@@ -71,23 +71,34 @@ TEST_CASE("wxGLCanvas::WaylandScaleChange", "[glcanvas][wayland][.]")
                  wxVERSION_NUM_DOT_STRING, width, height,
                  canvas->GetContentScaleFactor());
 
-    REQUIRE( WaitFor("output scale change", [=]() {
-        return canvas->GetContentScaleFactor() == finalScale;
-    }, 5000) );
-    REQUIRE( canvas->GetClientSize() == wxSize(width, height) );
-    REQUIRE( canvas->SetCurrent(*context) );
-    glClear(GL_COLOR_BUFFER_BIT);
-    REQUIRE( WaitFor("first frame", [=]() { return canvas->SwapBuffers(); }, 5000) );
-
-    // Dispatch the compositor's response, then present another frame. Returning
-    // true from the first SwapBuffers() alone doesn't prove it was accepted.
-    REQUIRE( WaitFor("second frame", [&]() {
-        if ( !canvas->SetCurrent(*context) )
-            return false;
+    auto presentAtScale = [&](int scale) {
+        REQUIRE( WaitFor("output scale change", [=]() {
+            return canvas->GetContentScaleFactor() == scale;
+        }, 5000) );
+        REQUIRE( canvas->GetClientSize() == wxSize(width, height) );
+        REQUIRE( canvas->SetCurrent(*context) );
+        std::fprintf(stderr, "renderer=%s\n", glGetString(GL_RENDERER));
         glClear(GL_COLOR_BUFFER_BIT);
-        return canvas->SwapBuffers();
-    }, 5000) );
-    YieldForAWhile();
+        REQUIRE( WaitFor("first frame", [=]() { return canvas->SwapBuffers(); }, 5000) );
+
+        // Dispatch the compositor's response, then present another frame. Returning
+        // true from the first SwapBuffers() alone doesn't prove it was accepted.
+        REQUIRE( WaitFor("second frame", [&]() {
+            if ( !canvas->SetCurrent(*context) )
+                return false;
+            glClear(GL_COLOR_BUFFER_BIT);
+            return canvas->SwapBuffers();
+        }, 5000) );
+        YieldForAWhile();
+    };
+    presentAtScale(finalScale);
+    if ( GetTestSetting("WX_GL_TEST_ROUND_TRIP", 0) )
+    {
+        std::fprintf(stderr, "scale-ready=%d\n", initialScale);
+        presentAtScale(initialScale);
+        std::fprintf(stderr, "scale-ready=%d\n", finalScale);
+        presentAtScale(finalScale);
+    }
     std::fprintf(stderr, "completed canvas=%dx%d scale=%.2f\n",
                  canvas->GetClientSize().x, canvas->GetClientSize().y,
                  canvas->GetContentScaleFactor());

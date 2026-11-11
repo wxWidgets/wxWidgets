@@ -475,12 +475,12 @@ void wxGLCanvasEGL::UpdateSubsurfacePosition()
 void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
 {
     int scale = gtk_widget_get_scale_factor(widget);
+    // Update the Wayland buffer scale in SwapBuffers(), once EGL has resized
+    // its buffer, instead of applying it to a buffer allocated at the old scale.
     wl_egl_window_resize(win->m_wlEGLWindow, win->m_canvas->m_width * scale,
                          win->m_canvas->m_height * scale, 0, 0);
 
     win->UpdateSubsurfacePosition();
-
-    wl_surface_set_buffer_scale(win->m_wlSurface, scale);
 }
 
 extern "C"
@@ -977,12 +977,34 @@ bool wxGLCanvasEGL::SwapBuffers()
             wxLogTrace(TRACE_EGL, "Window %p is not not ready to draw yet", this);
             return false;
         }
+
+        // EGL may still present a back buffer allocated before the scale
+        // change. Keep its old Wayland scale until the surface dimensions
+        // match the new scale, otherwise the compositor can reject it.
+        const int scale = gtk_widget_get_scale_factor(m_canvas->m_widget);
+        EGLint width, height;
+        if ( eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width) &&
+             eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height) &&
+             width == m_canvas->m_width * scale &&
+             height == m_canvas->m_height * scale )
+        {
+            wl_surface_set_buffer_scale(m_wlSurface, scale);
+        }
     }
 #endif // GDK_WINDOWING_WAYLAND
 
     wxLogTrace(TRACE_EGL, "Swapping buffers for window %p", this);
 
-    return eglSwapBuffers(m_display, m_surface);
+    const bool swapped = eglSwapBuffers(m_display, m_surface);
+#ifdef GDK_WINDOWING_WAYLAND
+    if ( swapped && wxGTKImpl::IsWayland(window) )
+    {
+        // The next back buffer uses the size requested by wl_egl_window_resize().
+        wl_surface_set_buffer_scale(m_wlSurface,
+                                    gtk_widget_get_scale_factor(m_canvas->m_widget));
+    }
+#endif // GDK_WINDOWING_WAYLAND
+    return swapped;
 }
 
 wxGLCanvas::SwapInterval wxGLCanvasEGL::DoSetSwapInterval(int interval)

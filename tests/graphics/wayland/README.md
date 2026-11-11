@@ -41,7 +41,8 @@ The runner exits nonzero if any case fails. This differs from the original MRE
 runner, which treated an expected crash as a successful reproduction.
 
 The cases cover odd height, odd width, even dimensions, delayed OpenGL
-initialisation, stable scales, and a change to fractional scale. The failing
+initialisation, stable scales, fractional scale, scale decreases, and a round
+trip on the same window. The failing
 sequence allocates a buffer at scale 1, then presents it after GTK changes to
 scale 2. The runner waits for the `initialised` marker before changing scale.
 The Catch test waits for the new scale before swapping buffers.

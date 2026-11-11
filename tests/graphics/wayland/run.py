@@ -23,6 +23,9 @@ CASES = [
     ("stable-scale-2", 1012, 743, 2, 2, False),
     ("stable-scale-1", 1012, 743, 1, 1, False),
     ("fractional-scale", 1012, 743, 1, 1.25, False),
+    ("scale-down", 1012, 743, 2, 1, False),
+    ("scale-down-late-current", 1012, 743, 2, 1, True),
+    ("round-trip", 1012, 743, 1, 2, False),
 ]
 
 
@@ -83,7 +86,8 @@ def main():
         for key in ("DISPLAY", "WAYLAND_DISPLAY", "SWAYSOCK", "I3SOCK",
                     "GDK_SCALE", "GDK_DPI_SCALE", "GTK_THEME", "GDK_BACKEND",
                     "WX_TEST_DISABLE_GUI", "WX_GL_TEST_WIDTH", "WX_GL_TEST_HEIGHT",
-                    "WX_GL_TEST_INITIAL_SCALE", "WX_GL_TEST_FINAL_SCALE", "WX_GL_TEST_LATE_CURRENT"):
+                    "WX_GL_TEST_INITIAL_SCALE", "WX_GL_TEST_FINAL_SCALE", "WX_GL_TEST_LATE_CURRENT",
+                    "WX_GL_TEST_ROUND_TRIP"):
             env.pop(key, None)
         env.update(XDG_RUNTIME_DIR=runtime, WLR_BACKENDS="headless",
                    WLR_HEADLESS_OUTPUTS="1", WLR_RENDERER="gles2")
@@ -116,6 +120,7 @@ def main():
                             "WX_GL_TEST_INITIAL_SCALE": str(math.ceil(initial)),
                             "WX_GL_TEST_FINAL_SCALE": str(math.ceil(final)),
                             "WX_GL_TEST_LATE_CURRENT": "1" if late else "0",
+                            "WX_GL_TEST_ROUND_TRIP": "1" if name == "round-trip" else "0",
                         }
                         path = results_dir / f"{label}.log"
                         reason = ""
@@ -125,6 +130,10 @@ def main():
                             try:
                                 wait_for(lambda: "initialised " in path.read_text(), client)
                                 message(f"output HEADLESS-1 scale {final}")
+                                if name == "round-trip":
+                                    for scale in (initial, final):
+                                        wait_for(lambda: f"scale-ready={scale}" in path.read_text(), client)
+                                        message(f"output HEADLESS-1 scale {scale}")
                                 client.wait(timeout=15)
                             except (RuntimeError, TimeoutError, subprocess.TimeoutExpired) as error:
                                 reason = str(error)

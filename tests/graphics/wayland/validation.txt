@@ -1,29 +1,39 @@
 Verified 2026-11-11 on Arch Linux x86_64.
 wxWidgets 3.3.5 built from this checkout (upstream base 4086eaf69799).
-The Catch executable links the checkout libraries, not installed wxWidgets 3.2.12.
-GTK 3.24.52; Sway 1.12; wlroots 0.20.2; Mesa 26.2.6; AMD radeonsi.
+GTK 3.24.52; Sway 1.12; wlroots 0.20.2; Mesa 26.2.6.
+Hardware renderer: AMD radeonsi (Raphael/Mendocino).
+Software renderer: llvmpipe (LLVM 23.1.4, 256 bits).
 
-The regression remains present. The complete runner exits 1; CTest reports failure.
-Three repetitions: 9 failing regression cases and 12 passing controls.
-odd-height: 1012x743, scale 1 -> 2, failed in 3/3 runs
-odd-width: 1013x742, scale 1 -> 2, failed in 3/3 runs
-fractional-scale: 1012x743, scale 1 -> 1.25, failed in 3/3 runs
-even-size: 1012x742, scale 1 -> 2, passed in 3/3 runs
-late-current: 1012x743, scale 1 -> 2, passed in 3/3 runs
-stable-scale-2: 1012x743, scale 2 -> 2, passed in 3/3 runs
-stable-scale-1: 1012x743, scale 1 -> 1, passed in 3/3 runs
+Before the fix:
+The odd-height, odd-width and fractional-scale cases failed in all three runs.
+The four original controls passed. The runner exited 1 and CTest returned 8.
 
-Eight failed clients recorded the explicit buffer-scale protocol error.
-One fractional-scale client recorded Broken pipe instead; Sway recorded
-a client communication error. It also exited 1 without completing the test.
-Every passing control completed the Catch assertions and exited normally.
-A controls-only runner invocation exits 0.
+After the fix:
+Ten cases, repeated three times: all 30 passed and the runner exited 0.
+Cases include the original seven, scale-down, scale-down-late-current, and
+round-trip. The round trip changes the same window from 1 -> 2 -> 1 -> 2.
+All 72 recorded EGL buffer commits had the correct logical dimensions; each
+case finished at the expected Wayland buffer scale, not just the GTK scale.
+The optional CTest test passed (ten cases, 2.19 seconds).
+Four additional cases passed with llvmpipe: odd-height, late-current,
+scale-down-late-current, and round-trip.
 
-Without explicit Catch selection, test_glcanvas runs no tests and exits 0.
-The default CTest list excludes test_glcanvas_wayland.
-With wxTEST_WAYLAND=ON, CTest runs it and returns 8 for the regression failure.
-Existing wxWindow::SetSize and wxWindow::GetBestSize tests pass (5 assertions).
+Normal test selection still excludes the hidden Catch test and opt-in CTest
+entry. Existing wxWindow::SetSize and wxWindow::GetBestSize checks passed
+before the fix (5 assertions); the fix changes only the Wayland EGL path.
 
-Example failing client trace:
-initialised wxWidgets=3.3.5 canvas=1012x743 scale=1.00
-[14:58:25.644389] {Display Queue} wl_display#1.error(wl_surface#43, 2, "Buffer size (1012x743) is not divisible by scale (2)")
+PrusaSlicer end-to-end validation:
+PrusaSlicer 2.9.6 source checked out at b028299c770b8380ee81c921a2867d522f288123.
+Tested the installed PrusaSlicer 2.9.6-6 binary with private wxWidgets 3.2.12
+GL libraries built against the installed headers and configuration. The
+baseline and patched GL libraries differed only by the backported EGL fix.
+The other wxWidgets libraries continued to load from /usr/lib.
+Separate copies of the user's profile were used for the two launches.
+
+Baseline: exited 1 with the original Wayland buffer-scale protocol error.
+Patched: opened at 1507 x 1634 in native Wayland, using Adwaita:dark.
+The live process's mapped libraries confirmed that it loaded the patched GL
+library. The system packages and the user's original profile were untouched.
+This used a library override; PrusaSlicer itself was not rebuilt.
+
+Other graphics drivers and compositors have not been tested.
