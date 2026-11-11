@@ -224,6 +224,7 @@
 #include <wx/listbox.h>
 #include <wx/listctrl.h>
 #include <wx/list.h>
+#include <wx/localaccount.h>
 #include <wx/localedefs.h>
 #include <wx/log.h>
 #include <wx/longlong.h>
