@@ -320,7 +320,9 @@ enum wxAccSelectionFlags
     applications such as screen readers. This is the main way in which wxWidgets
     implements accessibility features.
 
-    At present, only Microsoft Active Accessibility is supported by this class.
+    At present, only Microsoft Active Accessibility is supported by this class,
+    with experimental support for MSAA-level accessibility features on macOS
+    via NSAccessibility.
 
     To use this class, derive from wxAccessible, implement appropriate
     functions, and associate an object of the class with a window using
