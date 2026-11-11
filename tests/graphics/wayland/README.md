@@ -72,7 +72,7 @@ requires Python and Sway only when the option is enabled. To specify compositor
 paths, set `wxTEST_SWAY_EXECUTABLE` and `wxTEST_SWAYMSG_EXECUTABLE` at configuration.
 CTest logs go under the build directory's `wayland-results` directory.
 
-See [validation.txt](validation.txt) for verified results. The original symptom
+The original symptom
 was PrusaSlicer failing at some tiled window sizes. The protocol error matches
 [wxWidgets #24662](https://github.com/wxWidgets/wxWidgets/issues/24662), but that
 does not establish that the underlying cause is identical.
