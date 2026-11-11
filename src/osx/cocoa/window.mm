@@ -56,7 +56,7 @@
     // to translate wxROLE_SYSTEM_COMBOBOX to NSAccessibilityComboBoxRole).
     // The second takes an NSView, translates it to the wxWidgets implement-
     // ation, gets the wxWindowMac peer object, and gets the result of
-    // GetOrCreateAccessible for that wxWindowMac peer object.
+    // GetAccessible for that wxWindowMac peer object.
     // (Honestly, we should maybe add these to the header file.)
     NSAccessibilityRole wxOSXAccessibilityRoleFromWx(wxAccRole role);
     wxAccessible *wxOSXGetAccessibleFromView(NSView* view);
