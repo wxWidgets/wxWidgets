@@ -12,11 +12,11 @@ plist
     dictionary
     {
         key "CFBundleIdentifier" value string kBundleIdentifier
-        
+
         key "CFBundleName" value string __OUTPUT_FILENAME__
         key "CFBundleGetInfoString" value string kBundleGetInfo
         key "CFBundleShortVersionString" value string kBundleShortVersion
-        
+
         key "CFBundlePackageType" value string __OUTPUT_TYPE__
         key "CFBundleSignature" value string __OUTPUT_CREATOR__
         key "CFBundleExecutable" value string __OUTPUT_FILENAME__
