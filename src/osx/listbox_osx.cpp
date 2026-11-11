@@ -377,7 +377,10 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
-        GetListPeer()->ListInsert(startpos+i);
+        // Use the item's own position, which is not the one it was appended at
+        // in a sorted listbox: the peer measures the item at this position to
+        // update the column width.
+        GetListPeer()->ListInsert(idx);
 
         OnItemInserted(idx);
     }
