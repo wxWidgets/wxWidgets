@@ -1,0 +1,29 @@
+Verified 2026-11-11 on Arch Linux x86_64.
+wxWidgets 3.3.5 built from this checkout (upstream base 4086eaf69799).
+The Catch executable links the checkout libraries, not installed wxWidgets 3.2.12.
+GTK 3.24.52; Sway 1.12; wlroots 0.20.2; Mesa 26.2.6; AMD radeonsi.
+
+The regression remains present. The complete runner exits 1; CTest reports failure.
+Three repetitions: 9 failing regression cases and 12 passing controls.
+odd-height: 1012x743, scale 1 -> 2, failed in 3/3 runs
+odd-width: 1013x742, scale 1 -> 2, failed in 3/3 runs
+fractional-scale: 1012x743, scale 1 -> 1.25, failed in 3/3 runs
+even-size: 1012x742, scale 1 -> 2, passed in 3/3 runs
+late-current: 1012x743, scale 1 -> 2, passed in 3/3 runs
+stable-scale-2: 1012x743, scale 2 -> 2, passed in 3/3 runs
+stable-scale-1: 1012x743, scale 1 -> 1, passed in 3/3 runs
+
+Eight failed clients recorded the explicit buffer-scale protocol error.
+One fractional-scale client recorded Broken pipe instead; Sway recorded
+a client communication error. It also exited 1 without completing the test.
+Every passing control completed the Catch assertions and exited normally.
+A controls-only runner invocation exits 0.
+
+Without explicit Catch selection, test_glcanvas runs no tests and exits 0.
+The default CTest list excludes test_glcanvas_wayland.
+With wxTEST_WAYLAND=ON, CTest runs it and returns 8 for the regression failure.
+Existing wxWindow::SetSize and wxWindow::GetBestSize tests pass (5 assertions).
+
+Example failing client trace:
+initialised wxWidgets=3.3.5 canvas=1012x743 scale=1.00
+[14:58:25.644389] {Display Queue} wl_display#1.error(wl_surface#43, 2, "Buffer size (1012x743) is not divisible by scale (2)")

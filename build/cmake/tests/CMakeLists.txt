@@ -9,6 +9,9 @@
 
 add_subdirectory(base)
 add_subdirectory(gui)
+if(wxBUILD_TESTS STREQUAL "ALL" AND WXGTK3 AND wxHAS_EGL AND wxHAVE_GDK_WAYLAND)
+    add_subdirectory(glcanvas)
+endif()
 add_subdirectory(headers)
 if(WIN32)
     add_subdirectory(win32)
