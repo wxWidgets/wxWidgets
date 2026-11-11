@@ -40632,7 +40632,10 @@ fi
 if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     $as_echo "#define wxUSE_ACCESSIBILITY 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+    if test "$USE_WIN32" = 1; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+    fi
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS accessbasic"
 fi
 
 if test "$wxUSE_ARTPROVIDER_STD" = "yes"; then

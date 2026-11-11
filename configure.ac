@@ -6932,7 +6932,12 @@ dnl ---------------------------------------------------------------------------
 dnl please keep the settings below in alphabetical order
 if test "$wxUSE_ACCESSIBILITY" = "yes"; then
     AC_DEFINE(wxUSE_ACCESSIBILITY)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+    dnl the access sample uses IAccessible directly, so it can only be built
+    dnl under wxMSW
+    if test "$USE_WIN32" = 1; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS access"
+    fi
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS accessbasic"
 fi
 
 if test "$wxUSE_ARTPROVIDER_STD" = "yes"; then
