@@ -50,10 +50,10 @@ WX_VERSION_MAJOR = $(shell echo $(WX_VERSION) | cut -c1,1)
 WX_VERSION_MINOR = $(shell echo $(WX_VERSION) | cut -c2,2)
 WX_CONFIG_FLAGS = $(WX_CONFIG_UNICODE_FLAG) $(WX_CONFIG_SHARED_FLAG) \
 	--toolkit=$(WX_PORT) --version=$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
-MINIMAL_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
-	$(CXXFLAGS)
-MINIMAL_OBJECTS =  \
-	minimal_minimal.o
+ACCESSBASIC_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
+	$(CPPFLAGS) $(CXXFLAGS)
+ACCESSBASIC_OBJECTS =  \
+	accessbasic_accessbasic.o
 
 ### Conditionally set variables: ###
 
@@ -73,7 +73,7 @@ endif
 
 ### Targets: ###
 
-all: test_for_selected_wxbuild minimal
+all: test_for_selected_wxbuild accessbasic
 
 install: 
 
@@ -82,16 +82,16 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f minimal
+	rm -f accessbasic
 
 test_for_selected_wxbuild: 
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
-minimal: $(MINIMAL_OBJECTS)
-	$(CXX) -o $@ $(MINIMAL_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+accessbasic: $(ACCESSBASIC_OBJECTS)
+	$(CXX) -o $@ $(ACCESSBASIC_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
-minimal_minimal.o: ./minimal.cpp
-	$(CXX) -c -o $@ $(MINIMAL_CXXFLAGS) $(CPPDEPS) $<
+accessbasic_accessbasic.o: ./accessbasic.cpp
+	$(CXX) -c -o $@ $(ACCESSBASIC_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

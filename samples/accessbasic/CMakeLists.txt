@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        samples/minimal/CMakeListst.txt
+# Name:        samples/accessbasic/CMakeLists.txt
 # Purpose:     Sample CMake file to show usage of cmake for wxWidgets users
 # Author:      Tobias Taschner
 # Created:     2016-10-23
@@ -9,7 +9,7 @@
 
 #
 # This file is just a sample to show using cmake from an application
-# If you want to build the minimal and other samples please use the
+# If you want to build this and other samples please use the
 # wxBUILD_SAMPLES option when using cmake on the library
 #
 

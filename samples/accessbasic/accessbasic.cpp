@@ -1,4 +1,12 @@
-// minimal_acc.cpp
+/////////////////////////////////////////////////////////////////////////////
+// Name:        accessbasic.cpp
+// Purpose:     Sample showing how to use wxAccessible
+// Author:      Joshua Lee Ockert
+// Created:     2026-11-09
+// Copyright:   (c) 2026 Joshua Lee Ockert
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #include <wx/wx.h>
 #include <wx/access.h>
 
@@ -16,7 +24,7 @@ public:
 
     wxAccStatus GetValue(int childId, wxString* value) override
     {
-        if ( childId != 0 || !value )   // 0 == the object itself
+        if ( childId != wxACC_SELF || !value )
             return wxACC_FAIL;
         *value = kTextAcc;
         return wxACC_OK;
@@ -24,7 +32,7 @@ public:
 
     wxAccStatus GetName(int childId, wxString* name) override
     {
-        if ( childId != 0 || !name )
+        if ( childId != wxACC_SELF || !name )
             return wxACC_FAIL;
         *name = kName;
         return wxACC_OK;
@@ -32,7 +40,7 @@ public:
 
     wxAccStatus GetRole(int childId, wxAccRole* role) override
     {
-        if ( childId != 0 || !role )
+        if ( childId != wxACC_SELF || !role )
             return wxACC_FAIL;
         *role = wxROLE_SYSTEM_STATICTEXT;
         return wxACC_OK;
@@ -40,7 +48,7 @@ public:
 
     wxAccStatus GetState(int childId, long* state) override
     {
-        if ( childId != 0 || !state )
+        if ( childId != wxACC_SELF || !state )
             return wxACC_FAIL;
         *state = wxACC_STATE_SYSTEM_READONLY;
         return wxACC_OK;
@@ -94,7 +102,7 @@ class MainFrame : public wxFrame
 {
 public:
     MainFrame()
-        : wxFrame(nullptr, wxID_ANY, "wxAccessible minimal",
+        : wxFrame(nullptr, wxID_ANY, "wxAccessible Minimal Example",
                   wxDefaultPosition, wxSize(480, 200))
     {
         wxMenu* fileMenu = new wxMenu;

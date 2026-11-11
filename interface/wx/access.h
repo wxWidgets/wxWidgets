@@ -344,12 +344,12 @@ enum wxAccSelectionFlags
     This class is compiled into wxWidgets only if the @c wxUSE_ACCESSIBILITY setup
     symbol is set to 1.
 
-    @onlyfor{wxmsw}
+    @onlyfor{wxmsw,wxosx}
 
     @library{wxcore}
     @category{misc}
 
-    @see @sample{access}
+    @see @sample{access}, @sample{accessbasic}
 */
 class wxAccessible : public wxObject
 {
