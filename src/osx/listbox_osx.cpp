@@ -377,7 +377,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
-        GetListPeer()->ListInsert(startpos+i);
+        GetListPeer()->ListInsert(idx);
 
         OnItemInserted(idx);
     }
