@@ -33,6 +33,6 @@ wx_lib_compile_definitions(wxstc PRIVATE ${SCINTILLA_DEFINITIONS} ${LEXILLA_DEFI
 wx_lib_link_libraries(wxstc PRIVATE wxscintilla wxlexilla)
 # Scintilla calls functions from wxstc (PlatWX.cpp).
 # When statically linking, list wxstc again after wxscintilla so the linker can find them.
-if(NOT wxBUILD_SHARED)
+if(TARGET wxstc AND NOT wxBUILD_SHARED)
     target_link_libraries(wxscintilla INTERFACE wxstc)
 endif()
