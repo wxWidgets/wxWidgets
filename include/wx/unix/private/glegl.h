@@ -100,6 +100,7 @@ private:
     //
     // This is defined only when using Wayland.
     void UpdateSubsurfacePosition();
+    void SetWLBufferScale(int scale);
 
     // Call eglCreatePlatformWindowSurface() when using EGL 1.5 or later,
     // otherwise try eglCreatePlatformWindowSurfaceEXT() if it's available and
@@ -134,6 +135,7 @@ private:
 
     unsigned long m_xwindow = 0;
     wl_surface *m_wlSurface = nullptr;
+    int m_wlBufferScale = 1;
     wl_region *m_wlRegion = nullptr;
     wl_subsurface *m_wlSubsurface = nullptr;
 

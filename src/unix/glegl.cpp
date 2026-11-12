@@ -469,6 +469,15 @@ void wxGLCanvasEGL::UpdateSubsurfacePosition()
     wl_subsurface_set_position(m_wlSubsurface, x, y);
 }
 
+void wxGLCanvasEGL::SetWLBufferScale(int scale)
+{
+    if ( scale != m_wlBufferScale )
+    {
+        wl_surface_set_buffer_scale(m_wlSurface, scale);
+        m_wlBufferScale = scale;
+    }
+}
+
 // Helper declared as friend in the header and so can access member variables.
 //
 // Used when size or scale factor changes
@@ -660,7 +669,7 @@ void wxGLCanvasEGL::OnRealized()
         m_wlRegion = wl_compositor_create_region(m_wlCompositor);
         wl_surface_set_input_region(m_wlSurface, m_wlRegion);
         int scale = gdk_window_get_scale_factor(window);
-        wl_surface_set_buffer_scale(m_wlSurface, scale);
+        SetWLBufferScale(scale);
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
                                              h * scale);
         m_surface = CallCreatePlatformWindowSurface(m_wlEGLWindow);
@@ -986,7 +995,7 @@ bool wxGLCanvasEGL::SwapBuffers()
              width == m_canvas->m_width * scale &&
              height == m_canvas->m_height * scale )
         {
-            wl_surface_set_buffer_scale(m_wlSurface, scale);
+            SetWLBufferScale(scale);
         }
     }
 #endif // GDK_WINDOWING_WAYLAND
@@ -997,9 +1006,9 @@ bool wxGLCanvasEGL::SwapBuffers()
 #ifdef GDK_WINDOWING_WAYLAND
     if ( swapped && wxGTKImpl::IsWayland(window) )
     {
-        // The next back buffer uses the size requested by wl_egl_window_resize().
-        wl_surface_set_buffer_scale(m_wlSurface,
-                                    gtk_widget_get_scale_factor(m_canvas->m_widget));
+        // This is pending state for the next commit; SwapBuffers() checks for
+        // any further scale change before presenting that buffer.
+        SetWLBufferScale(gtk_widget_get_scale_factor(m_canvas->m_widget));
     }
 #endif // GDK_WINDOWING_WAYLAND
     return swapped;
