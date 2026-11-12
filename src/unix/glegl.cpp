@@ -34,6 +34,12 @@
 #include "wx/gtk/private/backend.h"
 #ifdef GDK_WINDOWING_WAYLAND
 #include <wayland-egl.h>
+#ifdef wxHAVE_WAYLAND_VIEWPORTER
+wxGCC_WARNING_SUPPRESS(attributes)
+#include "wx/protocols/viewporter-client-protocol.h"
+#include "wx/protocols/viewporter-client-protocol.c"
+wxGCC_WARNING_RESTORE(attributes)
+#endif
 #endif
 
 #include <memory>
@@ -488,6 +494,13 @@ void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
                          win->m_canvas->m_height * scale, 0, 0);
 
     win->UpdateSubsurfacePosition();
+#ifdef wxHAVE_WAYLAND_VIEWPORTER
+    if ( win->m_wlViewport && win->m_canvas->m_width > 0 && win->m_canvas->m_height > 0 )
+    {
+        wp_viewport_set_destination(win->m_wlViewport,
+                                    win->m_canvas->m_width, win->m_canvas->m_height);
+    }
+#endif
 }
 
 extern "C"
@@ -505,6 +518,10 @@ static void wl_global (void *data,
         glc->m_wlCompositor = (struct wl_compositor *) wl_registry_bind (wl_registry, name, &wl_compositor_interface, 3);
     else if ( !strcmp (interface, "wl_subcompositor") )
         glc->m_wlSubcompositor = (struct wl_subcompositor *) wl_registry_bind (wl_registry, name, &wl_subcompositor_interface, 1);
+#ifdef wxHAVE_WAYLAND_VIEWPORTER
+    else if ( !strcmp(interface, "wp_viewporter") )
+        glc->m_wlViewporter = (struct wp_viewporter*) wl_registry_bind(wl_registry, name, &wp_viewporter_interface, 1);
+#endif
 }
 
 static void wl_global_remove (void *,
@@ -669,7 +686,19 @@ void wxGLCanvasEGL::OnRealized()
         m_wlRegion = wl_compositor_create_region(m_wlCompositor);
         wl_surface_set_input_region(m_wlSurface, m_wlRegion);
         int scale = gdk_window_get_scale_factor(window);
-        SetWLBufferScale(scale);
+#ifdef wxHAVE_WAYLAND_VIEWPORTER
+        if ( m_wlViewporter )
+        {
+            // Keep the logical size independent of EGL buffers allocated
+            // before a scale change.
+            m_wlViewport = wp_viewporter_get_viewport(m_wlViewporter, m_wlSurface);
+            wp_viewport_set_destination(m_wlViewport, w, h);
+        }
+        else
+#endif
+        {
+            SetWLBufferScale(scale);
+        }
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
                                              h * scale);
         m_surface = CallCreatePlatformWindowSurface(m_wlEGLWindow);
@@ -749,6 +778,10 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
 #ifdef GDK_WINDOWING_WAYLAND
     DestroyWaylandSubsurface();
     g_clear_pointer(&m_wlEGLWindow, wl_egl_window_destroy);
+#ifdef wxHAVE_WAYLAND_VIEWPORTER
+    g_clear_pointer(&m_wlViewport, wp_viewport_destroy);
+    g_clear_pointer(&m_wlViewporter, wp_viewporter_destroy);
+#endif
     g_clear_pointer(&m_wlSurface, wl_surface_destroy);
 #endif
 }
@@ -988,14 +1021,17 @@ bool wxGLCanvasEGL::SwapBuffers()
         // EGL may still present a back buffer allocated before the scale
         // change. Keep its old Wayland scale until the surface dimensions
         // match the new scale, otherwise the compositor can reject it.
-        const int scale = gtk_widget_get_scale_factor(m_canvas->m_widget);
-        EGLint width, height;
-        if ( eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width) &&
-             eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height) &&
-             width == m_canvas->m_width * scale &&
-             height == m_canvas->m_height * scale )
+        if ( !m_wlViewport )
         {
-            SetWLBufferScale(scale);
+            const int scale = gtk_widget_get_scale_factor(m_canvas->m_widget);
+            EGLint width, height;
+            if ( eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width) &&
+                 eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height) &&
+                 width == m_canvas->m_width * scale &&
+                 height == m_canvas->m_height * scale )
+            {
+                SetWLBufferScale(scale);
+            }
         }
     }
 #endif // GDK_WINDOWING_WAYLAND
@@ -1004,7 +1040,7 @@ bool wxGLCanvasEGL::SwapBuffers()
 
     const bool swapped = eglSwapBuffers(m_display, m_surface);
 #ifdef GDK_WINDOWING_WAYLAND
-    if ( swapped && wxGTKImpl::IsWayland(window) )
+    if ( swapped && wxGTKImpl::IsWayland(window) && !m_wlViewport )
     {
         // This is pending state for the next commit; SwapBuffers() checks for
         // any further scale change before presenting that buffer.

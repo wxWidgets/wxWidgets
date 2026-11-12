@@ -629,6 +629,9 @@
  */
 #undef wxHAVE_WAYLAND_CLIENT
 
+/* Use the Wayland viewporter protocol for EGL surface scaling. */
+#undef wxHAVE_WAYLAND_VIEWPORTER
+
 /*
     Use Wayland session-management protocol.
 

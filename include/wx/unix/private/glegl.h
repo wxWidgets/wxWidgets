@@ -22,6 +22,8 @@ struct wl_egl_window;
 struct wl_surface;
 struct wl_region;
 struct wl_subsurface;
+struct wp_viewporter;
+struct wp_viewport;
 
 // ----------------------------------------------------------------------------
 // wxGLContextEGL
@@ -94,6 +96,7 @@ public:
     wl_subcompositor *m_wlSubcompositor = nullptr;
     wl_callback *m_wlFrameCallbackHandler = nullptr;
     wl_egl_window *m_wlEGLWindow = nullptr;
+    wp_viewporter *m_wlViewporter = nullptr;
 
 private:
     // Set correct m_wlSubsurface position.
@@ -135,6 +138,7 @@ private:
 
     unsigned long m_xwindow = 0;
     wl_surface *m_wlSurface = nullptr;
+    wp_viewport *m_wlViewport = nullptr;
     int m_wlBufferScale = 1;
     wl_region *m_wlRegion = nullptr;
     wl_subsurface *m_wlSubsurface = nullptr;

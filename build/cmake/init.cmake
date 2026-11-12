@@ -504,6 +504,11 @@ if(wxUSE_GUI)
                         if(WAYLAND_PROTOCOLS_FOUND)
                             pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
 
+                            if(EXISTS "${WAYLAND_PROTOCOLS_DIR}/stable/viewporter/viewporter.xml")
+                                wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/viewporter viewporter)
+                                set(wxHAVE_WAYLAND_VIEWPORTER ON)
+                            endif()
+
                             wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
                             wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
                             wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-toplevel-drag-v1)

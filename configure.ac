@@ -3152,9 +3152,16 @@ installed, where VER is 2, 3 or 4.
                 fi
 
                 AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
+                if test -f "$WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml"; then
+                    AC_DEFINE(wxHAVE_WAYLAND_VIEWPORTER)
+                else
+                    WAYLAND_VIEWPORTER_SUPPORT=':'
+                fi
                 AC_CONFIG_COMMANDS([wayland-protocols],
                     [
                         mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
+                        $WAYLAND_VIEWPORTER_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.h
+                        $WAYLAND_VIEWPORTER_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.c
                         $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
                         $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.h
@@ -3167,6 +3174,7 @@ installed, where VER is 2, 3 or 4.
                     [
                         WAYLAND_SCANNER=$WAYLAND_SCANNER
                         WAYLAND_XDG_SUPPORT=$WAYLAND_XDG_SUPPORT
+                        WAYLAND_VIEWPORTER_SUPPORT=$WAYLAND_VIEWPORTER_SUPPORT
                         WAYLAND_PROTOCOLS_DIR=$WAYLAND_PROTOCOLS_DIR
                     ]
                 )

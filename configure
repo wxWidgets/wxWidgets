@@ -28467,6 +28467,12 @@ $as_echo "$as_me: WARNING: wayland-protocols package not found, Wayland-specific
 
                 $as_echo "#define wxHAVE_WAYLAND_CLIENT 1" >>confdefs.h
 
+                if test -f "$WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml"; then
+                    $as_echo "#define wxHAVE_WAYLAND_VIEWPORTER 1" >>confdefs.h
+
+                else
+                    WAYLAND_VIEWPORTER_SUPPORT=':'
+                fi
                 ac_config_commands="$ac_config_commands wayland-protocols"
 
             else
@@ -46144,6 +46150,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 
                         WAYLAND_SCANNER=$WAYLAND_SCANNER
                         WAYLAND_XDG_SUPPORT=$WAYLAND_XDG_SUPPORT
+                        WAYLAND_VIEWPORTER_SUPPORT=$WAYLAND_VIEWPORTER_SUPPORT
                         WAYLAND_PROTOCOLS_DIR=$WAYLAND_PROTOCOLS_DIR
 
 
@@ -46734,6 +46741,8 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
   case $ac_file$ac_mode in
     "wayland-protocols":C)
                         mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
+                        $WAYLAND_VIEWPORTER_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.h
+                        $WAYLAND_VIEWPORTER_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.c
                         $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
                         $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.h
