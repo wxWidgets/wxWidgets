@@ -294,4 +294,74 @@ TEST_CASE("SpinCtrlDouble::InitialDigits", "[spinctrldouble][initialdigits]")
     REQUIRE(GetInitialDigits(1e-22) == 20);
 }
 
+// Only the generic version handles the arrow keys and the wheel itself.
+#if !defined(wxHAS_NATIVE_SPINCTRLDOUBLE) && wxUSE_SPINBTN
+
+TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
+                 "SpinCtrlDouble::StepTypedText", "[spinctrl][spinctrldouble]")
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    m_spin->SetDigits(1);
+
+    EventCounter updated(m_spin.get(), wxEVT_SPINCTRLDOUBLE);
+
+    wxUIActionSimulator sim;
+
+    // Typing replaces the selected text, but the value of the control itself
+    // is only updated when it loses focus.
+    m_spin->SetFocus();
+    wxYield();
+    m_spin->SetSelection(-1, -1);
+
+    // Type an integer value because '.' can't be simulated under macOS.
+    SECTION("Up arrow")
+    {
+        sim.Text("20");
+        wxYield();
+
+        sim.Char(WXK_UP);
+        wxYield();
+
+        CHECK( m_spin->GetValue() == 21.0 );
+        CHECK( m_spin->GetTextValue() == "21.0" );
+    }
+
+    SECTION("Mouse wheel")
+    {
+        sim.Text("20");
+        wxYield();
+
+        // Rotate the wheel over the text part, not over the spin buttons.
+        sim.MouseMove(m_spin->ClientToScreen(
+                        wxPoint(10, m_spin->GetClientSize().y / 2)));
+        wxYield();
+
+        sim.MouseWheel(1);
+        wxYield();
+
+        CHECK( m_spin->GetValue() == 21.0 );
+        CHECK( m_spin->GetTextValue() == "21.0" );
+    }
+
+    SECTION("Up arrow at maximum")
+    {
+        // The step doesn't change the value, but the typed text does.
+        sim.Text("100");
+        wxYield();
+
+        sim.Char(WXK_UP);
+        wxYield();
+
+        CHECK( m_spin->GetValue() == 100.0 );
+    }
+
+    CHECK( updated.GetCount() == 1 );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+#endif // !wxHAS_NATIVE_SPINCTRLDOUBLE && wxUSE_SPINBTN
+
 #endif
