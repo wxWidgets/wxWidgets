@@ -3146,6 +3146,7 @@ installed, where VER is 2, 3 or 4.
                         -f "$WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml"; then
                     AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
                     AC_DEFINE(wxHAVE_WAYLAND_TOPLEVEL_DRAG)
+                    AC_DEFINE(wxHAVE_WAYLAND_VIEWPORTER)
                 else
                     AC_MSG_WARN([wayland-protocols package not found, Wayland-specific functionality will be disabled])
                     WAYLAND_XDG_SUPPORT=':'
@@ -3163,6 +3164,8 @@ installed, where VER is 2, 3 or 4.
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.c
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.h
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.c
+                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.h
+                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.c
                     ],
                     [
                         WAYLAND_SCANNER=$WAYLAND_SCANNER

@@ -28459,6 +28459,8 @@ $as_echo "$wx_cv_wayland_protocols_dir" >&6; }
 
                     $as_echo "#define wxHAVE_WAYLAND_TOPLEVEL_DRAG 1" >>confdefs.h
 
+                    $as_echo "#define wxHAVE_WAYLAND_VIEWPORTER 1" >>confdefs.h
+
                 else
                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wayland-protocols package not found, Wayland-specific functionality will be disabled" >&5
 $as_echo "$as_me: WARNING: wayland-protocols package not found, Wayland-specific functionality will be disabled" >&2;}
@@ -46742,6 +46744,8 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.c
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.h
                         $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/xdg-toplevel-drag-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-toplevel-drag-v1-client-protocol.c
+                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.h
+                        $WAYLAND_XDG_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/viewporter/viewporter.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/viewporter-client-protocol.c
                      ;;
     "rcdefs.h":C)
             mkdir -p $outdir &&

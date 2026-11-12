@@ -630,6 +630,9 @@
  */
 #cmakedefine wxHAVE_WAYLAND_CLIENT 1
 
+/* Use the Wayland viewporter protocol for EGL surface scaling. */
+#cmakedefine wxHAVE_WAYLAND_VIEWPORTER 1
+
 /*
     Use Wayland session-management protocol.
 
