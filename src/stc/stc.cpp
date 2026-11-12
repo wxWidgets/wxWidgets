@@ -5081,6 +5081,18 @@ void wxStyledTextCtrl::SetILexer(void* ilexer) {
          SendMsg(SCI_SETILEXER, 0, (sptr_t)ilexer);
 }
 
+// Retrieve bidirectional text display state.
+int wxStyledTextCtrl::GetBidirectional() const
+{
+    return SendMsg(SCI_GETBIDIRECTIONAL, 0, 0);
+}
+
+// Set bidirectional text display state.
+void wxStyledTextCtrl::SetBidirectional(int bidirectional)
+{
+    SendMsg(SCI_SETBIDIRECTIONAL, bidirectional, 0);
+}
+
 // Divide each styling byte into lexical class bits (default: 5) and indicator
 // bits (default: 3). If a lexer requires more than 32 lexical states, then this
 // is used to expand the possible states.

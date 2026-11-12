@@ -491,6 +491,18 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// IME (either inline or windowed mode) full composited string.
 #define wxSTC_CHARACTERSOURCE_IME_RESULT 2
 
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_DISABLED 0
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_L2R 1
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_R2L 2
+
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
 #define wxSTC_LEX_NULL 1
@@ -5833,6 +5845,12 @@ public:
 
     // Set the lexer from an ILexer*.
     void SetILexer(void* ilexer);
+
+    // Retrieve bidirectional text display state.
+    int GetBidirectional() const;
+
+    // Set bidirectional text display state.
+    void SetBidirectional(int bidirectional);
 
     // Divide each styling byte into lexical class bits (default: 5) and indicator
     // bits (default: 3). If a lexer requires more than 32 lexical states, then this
