@@ -1,0 +1,1 @@
+wxGTK: Fix crash on scale change in wxGLCanvas with Wayland (James McMahon, #27335).
