@@ -156,6 +156,18 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #undef COMBO_MARGIN
 #define COMBO_MARGIN                  FOCUS_RING
 
+#elif defined(__WXRETRO68__)
+
+// Classic Mac OS has a working wxPopupTransientWindow (it uses the mouse
+// capture, as in the other wxUniv ports), so keep wxUSE_POPUPWIN: the generic
+// fallback below would use a wxDialog for the popup, and as clicking a
+// window brings it to the front there, the click on a list item activated the
+// dialog, which deactivated the parent and hid the popup before the item
+// could be selected.
+#include "wx/nonownedwnd.h"
+#define wxCC_GENERIC_TLW_IS_NONOWNEDWINDOW
+#define wxComboCtrlGenericTLW   wxNonOwnedWindow
+
 #elif defined(__WXQT__)
 
 #include "wx/nonownedwnd.h"
