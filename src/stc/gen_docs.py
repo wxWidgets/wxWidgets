@@ -1050,7 +1050,15 @@ extendedDocs = {
         ('@remarks',
         'For the wxMSW port, the input can be either wxSTC_TECHNOLOGY_DEFAULT',
         'or wxSTC_TECHNOLOGY_DIRECTWRITE.  With other ports, this method has',
-        'no effect.',),
+        'no effect.',
+        '@remarks',
+        'With wxSTC_TECHNOLOGY_DIRECTWRITE, bidirectional text, e.g. Hebrew or',
+        'Arabic mixed with Latin text, can be edited after enabling it by sending',
+        'the provisional SCI_SETBIDIRECTIONAL (2709) message with SendMsg(), using',
+        'SC_BIDIRECTIONAL_L2R (1) or SC_BIDIRECTIONAL_R2L (2) as the base direction',
+        'or SC_BIDIRECTIONAL_DISABLED (0) to disable it. As these constants are',
+        'not defined by wxStyledTextCtrl, their values need to be used directly.',
+        'Switching back to wxSTC_TECHNOLOGY_DEFAULT disables it too.',),
 
     'GetFontQuality':
         ('The return value will be one of the',
