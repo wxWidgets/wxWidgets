@@ -70,6 +70,7 @@ public:
     virtual bool HasWindow() const override;
 
     virtual void* GetXVisualInfo() const override { return nullptr; }
+    virtual unsigned long GetXVisualID() const override;
 
     // implementation only from now on
     // -------------------------------

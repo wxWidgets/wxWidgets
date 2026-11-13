@@ -81,6 +81,10 @@ public:
 
     virtual void* GetXVisualInfo() const = 0;
 
+    // Return the ID of the X visual the window must use to be compatible with
+    // the chosen configuration, or 0 if not using X11 or it is unknown.
+    virtual unsigned long GetXVisualID() const = 0;
+
 protected:
     explicit wxGLCanvasUnixImpl(wxGLCanvasUnix* canvas)
         : m_canvas(canvas)
