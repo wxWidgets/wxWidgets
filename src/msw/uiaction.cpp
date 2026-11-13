@@ -44,6 +44,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
@@ -123,6 +124,18 @@ bool wxUIActionSimulatorMSWImpl::MouseUp(int button)
     POINT p;
     wxGetCursorPosMSW(&p);
     mouse_event(EventTypeForMouseButton(button, false), p.x, p.y, 0, 0);
+    return true;
+}
+
+bool wxUIActionSimulatorMSWImpl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    // Positive values mean rotating the wheel forward or to the right, which
+    // is the same convention as used by wx. Note that the negative values are
+    // passed as DWORD, but this is how this API works.
+    const DWORD flags = axis == wxMOUSE_WHEEL_HORIZONTAL ? MOUSEEVENTF_HWHEEL
+                                                         : MOUSEEVENTF_WHEEL;
+    mouse_event(flags, 0, 0, static_cast<DWORD>(rotation*WHEEL_DELTA), 0);
+
     return true;
 }
 

@@ -123,6 +123,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseDragDrop(long x1, long y1, long x2, long y2,
@@ -202,6 +203,34 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
         return false;
 
     CGEventSetType(event, type);
+    CGEventPost(tap, event);
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
+
+    return true;
+}
+
+bool wxUIActionSimulatorOSXImpl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    // For the vertical wheel, positive values mean scrolling up, as in wx,
+    // but for the horizontal one they mean scrolling left, unlike in wx.
+    int32_t dy = 0,
+            dx = 0;
+    if ( axis == wxMOUSE_WHEEL_HORIZONTAL )
+        dx = -rotation;
+    else
+        dy = rotation;
+
+    wxCFRef<CGEventRef> event(
+            CGEventCreateScrollWheelEvent(nullptr, kCGScrollEventUnitLine,
+                                          2, dy, dx));
+
+    if ( !event )
+        return false;
+
     CGEventPost(tap, event);
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
