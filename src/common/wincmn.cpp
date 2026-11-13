@@ -1268,14 +1268,62 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
 #endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 }
 
+namespace
+{
+
+bool IsEnabledInsideTLW(const wxWindowBase* win)
+{
+    // Deliberately ignore the state of the TLW itself: it is disabled when
+    // showing a modal dialog, but this shouldn't change the appearance of its
+    // children.
+    while ( !win->IsTopLevel() )
+    {
+        if ( !win->IsThisEnabled() )
+            return false;
+
+        win = win->GetParent();
+        if ( !win )
+            break;
+    }
+
+    return true;
+}
+
+} // anonymous namespace
+
+void wxWindowBase::NotifyEnabledStateChanged(bool enabled)
+{
+    wxASSERT_MSG( !IsTopLevel(), "Should never be called for a TLW" );
+
+    OnEnabledStateChanged(enabled);
+
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        // The children which are disabled themselves are not affected.
+        wxWindowBase * const child = node->GetData();
+        if ( !child->IsTopLevel() && child->IsThisEnabled() )
+            child->NotifyEnabledStateChanged(enabled);
+    }
+}
+
 bool wxWindowBase::Enable(bool enable)
 {
     if ( enable == IsThisEnabled() )
         return false;
 
+    const bool wasEnabled = IsEnabledInsideTLW(this);
+
     m_isEnabled = enable;
 
     NotifyWindowOnEnableChange(enable);
+
+    // Notify about the state change only after updating the native state of
+    // all the windows and only if it really changed, i.e. not if one of the
+    // parents is disabled anyhow.
+    if ( IsEnabledInsideTLW(this) != wasEnabled )
+        NotifyEnabledStateChanged(!wasEnabled);
 
     return true;
 }
@@ -1420,6 +1468,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     }
 
     const bool oldEnabledState = IsEnabled();
+    const bool wasEnabledInsideTLW = IsEnabledInsideTLW(this);
 
     // unlink this window from the existing parent.
     if ( oldParent )
@@ -1448,6 +1497,9 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     {
         NotifyWindowOnEnableChange(newEnabledState);
     }
+
+    if ( IsEnabledInsideTLW(this) != wasEnabledInsideTLW )
+        NotifyEnabledStateChanged(!wasEnabledInsideTLW);
 
     return true;
 }
