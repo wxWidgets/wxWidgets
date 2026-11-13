@@ -5949,14 +5949,14 @@ void WarpPointer(GdkWindow* window, int x, int y)
     // pointer, so just use the first one which has a pointer to warp.
     for ( const auto& seat : WLGlobals.seats )
     {
-        if ( seat.pointer && seat.lastEnterSerial )
+        if ( seat->pointer && seat->lastEnterSerial )
         {
             wp_pointer_warp_v1_warp_pointer(WLGlobals.pointer_warp.get(),
                 gdk_wayland_window_get_wl_surface(window),
-                seat.pointer.get(),
+                seat->pointer.get(),
                 wl_fixed_from_int(x),
                 wl_fixed_from_int(y),
-                seat.lastEnterSerial
+                seat->lastEnterSerial
             );
         }
     }

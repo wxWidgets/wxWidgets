@@ -104,9 +104,11 @@ public:
     // name, even though this is not used for anything currently).
     Seat(wl_seat* seat_, uint32_t id_);
 
-    // As Seat is not copyable, make it movable to allow storing it in vector.
-    Seat(Seat&& other) = default;
-    Seat& operator=(Seat&& other) = default;
+    // Seat is neither copyable nor movable: its address is registered as the
+    // user data of the Wayland listeners of the seat and its pointer, so it
+    // must not change during the object lifetime.
+    Seat(const Seat&) = delete;
+    Seat& operator=(const Seat&) = delete;
 
     ~Seat() = default;
 
@@ -169,7 +171,10 @@ struct Globals
     //
     // Of course, the choice of container doesn't matter much in the by far the
     // most typical case when we have just one of them.
-    std::vector<Seat> seats;
+    //
+    // Seats are stored by pointer because their addresses are used as listener
+    // data and must stay stable when other seats are added or removed.
+    std::vector<std::unique_ptr<Seat>> seats;
 
     // Optional pointer to the global pointer warp protocol object.
     wl_unique_ptr<wp_pointer_warp_v1> pointer_warp;
