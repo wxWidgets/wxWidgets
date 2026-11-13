@@ -323,7 +323,7 @@ registry_handle_global_remove(void* WXUNUSED(data),
           it != WLGlobals.seats.end();
           ++it )
     {
-        if ( it->id == name )
+        if ( (*it)->id == name )
         {
             WLGlobals.seats.erase(it);
             return;
@@ -389,7 +389,7 @@ void Globals::Init()
             wl_registry_bind(registry.get(), name, &wl_seat_interface, SEAT_VERSION)
         );
 
-        WLGlobals.seats.emplace_back(seat, name);
+        WLGlobals.seats.push_back(std::make_unique<Seat>(seat, name));
     }
 }
 
@@ -1021,11 +1021,11 @@ wxTLWDragSession::Create(wxWindow* origin,
     // seen a button press event, to be able to start the drag.
     for ( auto& seat : WLGlobals.seats )
     {
-        if ( !seat.lastButtonSerial )
+        if ( !seat->lastButtonSerial )
             continue;
 
         auto session = std::make_unique<TLWDragSession>(std::move(handler));
-        if ( !session->Start(seat, originTLW, target, targetTLW) )
+        if ( !session->Start(*seat, originTLW, target, targetTLW) )
             return nullptr;
 
 #if wxCHECK_GCC_VERSION(4, 8) && !wxCHECK_GCC_VERSION(5, 0)
