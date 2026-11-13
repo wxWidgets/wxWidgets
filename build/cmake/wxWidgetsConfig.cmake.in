@@ -196,8 +196,10 @@ if(@wxUSE_LIBSDL3@)
     find_dependency(SDL3)
 endif()
 
-# make sure Threads targets are available
-find_dependency(Threads)
+if(@wxUSE_THREADS@)
+    # make sure Threads targets are available
+    find_dependency(Threads)
+endif()
 
 # if no components are specified in find_package, check all of them
 if(NOT @PROJECT_NAME@_FIND_COMPONENTS)

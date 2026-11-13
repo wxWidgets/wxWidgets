@@ -38,6 +38,20 @@ if(wxUSE_EXPAT STREQUAL "builtin")
         include(${wxEXPAT_DIR}/ConfigureChecks.cmake)
     endif()
 
+    if(RETRO68)
+        # newlib provides arc4random() and getentropy(), so the checks above
+        # succeed, but the Retro68 runtime getentropy() always fails with
+        # ENOSYS and newlib arc4random() then kills the application with
+        # raise(SIGKILL), i.e. it silently quits as soon as an XML parser is
+        # created. There are no other entropy sources under classic Mac OS,
+        # so use Expat fallback based on the time and process ID.
+        foreach(var HAVE_ARC4RANDOM HAVE_ARC4RANDOM_BUF HAVE_GETENTROPY
+                    HAVE_GETRANDOM HAVE_SYSCALL_GETRANDOM)
+            set(${var} 0)
+        endforeach()
+        set(wxEXPAT_POOR_ENTROPY ON)
+    endif()
+
     # Also define some options normally set by Expat's CMakeLists.txt.
     set(XML_DTD 1)
     set(XML_GE 1)
@@ -63,6 +77,9 @@ if(wxUSE_EXPAT STREQUAL "builtin")
 
     target_include_directories(wxexpat PRIVATE ${wxBINARY_DIR}/libs/expat)
     target_compile_definitions(wxexpat PRIVATE HAVE_EXPAT_CONFIG_H)
+    if(wxEXPAT_POOR_ENTROPY)
+        target_compile_definitions(wxexpat PRIVATE XML_POOR_ENTROPY)
+    endif()
 
     set(EXPAT_LIBRARIES wxexpat)
     set(EXPAT_INCLUDE_DIRS ${wxEXPAT_DIR}/lib)

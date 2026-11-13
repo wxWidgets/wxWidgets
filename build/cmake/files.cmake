@@ -1930,6 +1930,8 @@ set(RETRO68_LOWLEVEL_SRC
 set(RETRO68_LOWLEVEL_HDR
     wx/generic/caret.h
     wx/generic/colour.h
+    wx/generic/colrdlgg.h
+    wx/generic/icon.h
     wx/generic/mask.h
     wx/generic/paletteg.h
     wx/generic/region.h
