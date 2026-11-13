@@ -87,7 +87,7 @@ jobs:
             # image until it is updated to use Docker 29.4.3 or later.
             runner: ubuntu-24.04
           - name: wxMSW/Univ
-            debian_release: unstable
+            debian_release: stable
             configure_flags: --enable-universal --disable-compat32 --disable-debug --disable-optimise
             minimal: true
     env:
