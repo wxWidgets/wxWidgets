@@ -28,6 +28,12 @@
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/backend.h"
 
+#ifdef GDK_WINDOWING_X11
+    #include <gdk/gdkx.h>
+    #include <X11/Xatom.h>  // XA_WINDOW
+    #include "wx/unix/private/x11ptr.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -121,6 +127,73 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
 }
 }
 
+#if defined(__WXGTK3__) && !defined(__WXGTK4__)
+#ifdef GDK_WINDOWING_X11
+static bool IsXWaylandSatellite(GdkWindow* window)
+{
+    // Don't use gdk_x11_screen_get_window_manager_name(): it only accepts
+    // _NET_WM_NAME of type UTF8_STRING, while xwayland-satellite sets it
+    // as STRING.
+    GdkDisplay* display = gdk_window_get_display(window);
+    Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
+    GdkWindow* root = gdk_screen_get_root_window(gdk_window_get_screen(window));
+
+    // XGetWindowProperty() returns the item size in bits: 32 for window IDs, 8 for name characters.
+    Atom type;
+    int format;
+    gulong nitems, bytes_after;
+    wxX11Ptr<guchar> wmCheckData;
+    if (XGetWindowProperty(xdisplay, GDK_WINDOW_XID(root),
+            gdk_x11_get_xatom_by_name_for_display(display,
+                "_NET_SUPPORTING_WM_CHECK"),
+            0, 1, false, XA_WINDOW,
+            &type, &format, &nitems, &bytes_after,
+            wmCheckData.Out()) != Success ||
+        !wmCheckData || type != XA_WINDOW || format != 32 || nitems != 1)
+    {
+        return false;
+    }
+
+    const Window wmCheck = *(const Window*)wmCheckData.get();
+    if (wmCheck == None)
+        return false;
+
+    static const char satelliteName[] = "xwayland-satellite";
+    wxX11Ptr<guchar> nameData;
+    gdk_x11_display_error_trap_push(display);
+    const Status status = XGetWindowProperty(xdisplay, wmCheck,
+            gdk_x11_get_xatom_by_name_for_display(display, "_NET_WM_NAME"),
+            0, sizeof(satelliteName), false, AnyPropertyType,
+            &type, &format, &nitems, &bytes_after, nameData.Out());
+    gdk_x11_display_error_trap_pop_ignored(display);
+
+    return status == Success && nameData && format == 8 &&
+        bytes_after == 0 &&
+        nitems == sizeof(satelliteName) - 1 &&
+        memcmp(nameData.get(), satelliteName, nitems) == 0;
+}
+#endif // GDK_WINDOWING_X11
+
+// Use WM-driven dragging on Wayland and xwayland-satellite, which ignores
+// client-requested position changes. Keep manual dragging for other X11 WMs
+// to preserve AUI docking.
+static bool ShouldWMMoveWindow(GdkWindow* window)
+{
+    if (wxGTKImpl::IsWayland(window))
+        return true;
+
+#ifdef GDK_WINDOWING_X11
+    if (wxGTKImpl::IsX11(window))
+    {
+        static const bool isSatellite = IsXWaylandSatellite(window);
+        return isSatellite;
+    }
+#endif // GDK_WINDOWING_X11
+
+    return false;
+}
+#endif
+
 //-----------------------------------------------------------------------------
 // "button_press_event" of m_mainWidget
 //-----------------------------------------------------------------------------
@@ -167,7 +240,7 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 
 #ifdef __WXGTK3__
 #ifndef __WXGTK4__
-    if (wxGTKImpl::IsWayland(gdk_event->window))
+    if (ShouldWMMoveWindow(gdk_event->window))
 #endif
     {
         gtk_window_begin_move_drag(GTK_WINDOW(win->m_widget),
