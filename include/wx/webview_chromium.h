@@ -253,6 +253,9 @@ public:
 
     wxString GetMessageName() const;
 
+    wxNODISCARD virtual wxEvent* Clone() const override
+        { return new wxWebViewChromiumEvent(*this); }
+
 private:
     CefFrame* const m_frame = nullptr;
     CefProcessMessage* const m_message = nullptr;
