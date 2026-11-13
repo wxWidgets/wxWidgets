@@ -24,6 +24,7 @@ public:
     virtual bool MouseMove(long x, long y) = 0;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) = 0;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) = 0;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) = 0;
 
     // Higher level mouse methods which have default implementation in the base
     // class but can be overridden if necessary.

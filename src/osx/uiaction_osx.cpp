@@ -123,6 +123,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseDragDrop(long x1, long y1, long x2, long y2,
@@ -203,6 +204,38 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
 
     CGEventSetType(event, type);
     CGEventPost(tap, event);
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
+
+    return true;
+}
+
+bool wxUIActionSimulatorOSXImpl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    if ( rotation == 0 )
+        return true;
+
+    // Scrolling up is positive in both wx and macOS, but scrolling right is
+    // positive in wx and negative in macOS, see the handling of NSScrollWheel
+    // in src/osx/cocoa/window.mm.
+    const int lines = axis == wxMOUSE_WHEEL_HORIZONTAL ? -rotation : rotation;
+
+    // Use a single event for all notches, AppKit coalesces them anyway.
+    wxCFRef<CGEventRef> event(
+        axis == wxMOUSE_WHEEL_HORIZONTAL
+            ? CGEventCreateScrollWheelEvent(nullptr, kCGScrollEventUnitLine,
+                                            2, 0, lines)
+            : CGEventCreateScrollWheelEvent(nullptr, kCGScrollEventUnitLine,
+                                            1, lines));
+
+    if ( !event )
+        return false;
+
+    CGEventPost(tap, event);
+
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);

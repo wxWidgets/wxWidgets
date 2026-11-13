@@ -44,6 +44,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
@@ -123,6 +124,20 @@ bool wxUIActionSimulatorMSWImpl::MouseUp(int button)
     POINT p;
     wxGetCursorPosMSW(&p);
     mouse_event(EventTypeForMouseButton(button, false), p.x, p.y, 0, 0);
+    return true;
+}
+
+bool wxUIActionSimulatorMSWImpl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    // Both MSW and wx use positive values for scrolling up or to the right.
+    const DWORD flags = axis == wxMOUSE_WHEEL_HORIZONTAL ? MOUSEEVENTF_HWHEEL
+                                                         : MOUSEEVENTF_WHEEL;
+    const int delta = rotation > 0 ? WHEEL_DELTA : -WHEEL_DELTA;
+
+    // Generate a separate event for each notch, as a real wheel would do.
+    for ( int n = 0; n < abs(rotation); n++ )
+        mouse_event(flags, 0, 0, static_cast<DWORD>(delta), 0);
+
     return true;
 }
 

@@ -48,6 +48,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool MouseClick(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
@@ -172,6 +173,34 @@ static bool SimulateMouseButton( MouseAction mouseAction,
     return true;
 }
 
+static bool SimulateMouseWheel( QPoint angleDelta, QPoint mousePosition,
+                                Qt::KeyboardModifiers modifiers )
+{
+    QWidget *widget = QApplication::widgetAt( mousePosition );
+
+    if ( !widget )
+        return false;
+
+    const QPoint pos = widget->mapFromGlobal(mousePosition);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    QWheelEvent event( pos, mousePosition, QPoint(), angleDelta,
+                       NoButton, modifiers, NoScrollPhase, false );
+#else
+    QWheelEvent event( pos, mousePosition, QPoint(), angleDelta,
+                       angleDelta.y() != 0 ? angleDelta.y() : angleDelta.x(),
+                       angleDelta.y() != 0 ? Vertical : Horizontal,
+                       NoButton, modifiers );
+#endif
+
+    // Mark the event as spontaneous, as QTest does for the mouse events, so
+    // that QApplication propagates it to the parent widgets like a real one.
+    QSpontaneKeyEvent::setSpontaneous( &event );
+    qApp->notify( widget, &event );
+
+    return true;
+}
+
 static bool SimulateKeyboardKey( KeyAction keyAction, Key key, int modifiers )
 {
     QWidget *widget = QApplication::focusWidget();
@@ -221,6 +250,29 @@ bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
     m_mousePosition = QPoint(x, y);
 
     return SimulateMouseButton( QTest::MouseMove, NoButton, m_mousePosition );
+}
+
+bool wxUIActionSimulatorQtImpl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    // Qt uses the opposite sign convention for the horizontal axis, with
+    // positive values meaning scrolling left.
+    QPoint angleDelta;
+    if ( axis == wxMOUSE_WHEEL_HORIZONTAL )
+        angleDelta.setX(rotation > 0 ? -QWheelEvent::DefaultDeltasPerStep
+                                     : QWheelEvent::DefaultDeltasPerStep);
+    else
+        angleDelta.setY(rotation > 0 ? QWheelEvent::DefaultDeltasPerStep
+                                     : -QWheelEvent::DefaultDeltasPerStep);
+
+    // Generate a separate event for each notch, as a real wheel would do.
+    for ( int n = 0; n < abs(rotation); n++ )
+    {
+        if ( !SimulateMouseWheel( angleDelta, m_mousePosition,
+                                  ConvertToQtModifiers( m_modifiers ) ) )
+            return false;
+    }
+
+    return true;
 }
 
 bool wxUIActionSimulatorQtImpl::MouseClick(int button)

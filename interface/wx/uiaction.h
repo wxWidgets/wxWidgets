@@ -108,6 +108,32 @@ public:
                        int button = wxMOUSE_BTN_LEFT);
 
     /**
+        Rotate the mouse wheel.
+
+        The wheel events are generated at the current mouse position, so
+        MouseMove() needs to be called first to move the mouse over the window
+        which should receive them.
+
+        @param rotation
+            Number of wheel notches to rotate the wheel by. Positive values
+            rotate the vertical wheel up, i.e. away from the user, and the
+            horizontal one to the right, and the generated events then have a
+            positive wxMouseEvent::GetWheelRotation(). Depending on the
+            platform, either one event is generated for each notch or several
+            notches are combined into a single event, but the values of
+            wxMouseEvent::GetWheelRotation() in all the generated events always
+            add up to @a rotation times wxMouseEvent::GetWheelDelta(), whose
+            value also depends on the platform.
+
+        @param axis
+            The wheel to rotate, vertical by default.
+
+        @since 3.3.5
+    */
+    bool MouseWheel(int rotation,
+                    wxMouseWheelAxis axis = wxMOUSE_WHEEL_VERTICAL);
+
+    /**
         Press a key.
 
         If you are using modifiers then it needs to be paired with an identical

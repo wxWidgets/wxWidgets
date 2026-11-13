@@ -47,6 +47,8 @@
     #include <oleacc.h>
 #endif // __WXMSW__ && wxUSE_ACCESSIBILITY
 
+#include <vector>
+
 
 class WindowTestCase
 {
@@ -325,6 +327,89 @@ TEST_CASE_METHOD(WindowTestCase, "Window::KeyEvent", "[window]")
     CHECK( keydown.GetCount() == 5 );
     CHECK( keyup.GetCount() == 5 );
     CHECK( keychar.GetCount() == 4 );
+#endif
+}
+
+TEST_CASE_METHOD(WindowTestCase, "Window::MouseWheel", "[window]")
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    std::vector<wxMouseEvent> events;
+    m_window->Bind(wxEVT_MOUSEWHEEL,
+                   [&events](wxMouseEvent& event) { events.push_back(event); });
+
+    m_window->SetSize(100, 100);
+
+    // Depending on the platform, the wheel events are sent either to the
+    // window under the mouse or to the focused one, so make it both.
+    m_window->SetFocus();
+
+    wxUIActionSimulator sim;
+    sim.MouseMove(m_window->ClientToScreen(wxPoint(50, 50)));
+    YieldForAWhile();
+
+    SECTION("Up")
+    {
+        sim.MouseWheel(1);
+        wxYield();
+
+        REQUIRE( events.size() == 1 );
+        CHECK( events[0].GetWheelAxis() == wxMOUSE_WHEEL_VERTICAL );
+        CHECK( events[0].GetWheelRotation() > 0 );
+    }
+
+    SECTION("Down")
+    {
+        sim.MouseWheel(-1);
+        wxYield();
+
+        REQUIRE( events.size() == 1 );
+        CHECK( events[0].GetWheelAxis() == wxMOUSE_WHEEL_VERTICAL );
+        CHECK( events[0].GetWheelRotation() < 0 );
+    }
+
+    SECTION("Right")
+    {
+        sim.MouseWheel(1, wxMOUSE_WHEEL_HORIZONTAL);
+        wxYield();
+
+        REQUIRE( events.size() == 1 );
+        CHECK( events[0].GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL );
+        CHECK( events[0].GetWheelRotation() > 0 );
+    }
+
+    SECTION("Left")
+    {
+        sim.MouseWheel(-1, wxMOUSE_WHEEL_HORIZONTAL);
+        wxYield();
+
+        REQUIRE( events.size() == 1 );
+        CHECK( events[0].GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL );
+        CHECK( events[0].GetWheelRotation() < 0 );
+    }
+
+    SECTION("Several notches")
+    {
+        sim.MouseWheel(2);
+        wxYield();
+
+        // The notches may be combined into fewer events, but the total
+        // rotation must still correspond to both of them.
+        REQUIRE( !events.empty() );
+
+        int rotation = 0;
+        for ( const auto& event : events )
+        {
+            CHECK( event.GetWheelAxis() == wxMOUSE_WHEEL_VERTICAL );
+            CHECK( event.GetWheelRotation() > 0 );
+
+            rotation += event.GetWheelRotation();
+        }
+
+        CHECK( rotation == 2 * events[0].GetWheelDelta() );
+    }
 #endif
 }
 

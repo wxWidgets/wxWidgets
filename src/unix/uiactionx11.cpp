@@ -133,6 +133,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
@@ -463,6 +464,29 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
 bool wxUIActionSimulatorX11Impl::MouseUp(int button)
 {
     return SendButtonEvent(button, false);
+}
+
+bool wxUIActionSimulatorX11Impl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    if ( !m_display )
+        return false;
+
+    // X11 reports the wheel as presses of the buttons 4 and 5 for scrolling
+    // up and down and 6 and 7 for scrolling left and right.
+    int xbutton;
+    if ( axis == wxMOUSE_WHEEL_HORIZONTAL )
+        xbutton = rotation > 0 ? 7 : 6;
+    else
+        xbutton = rotation > 0 ? 4 : 5;
+
+    // Generate a separate event for each notch, as a real wheel would do.
+    for ( int n = 0; n < abs(rotation); n++ )
+    {
+        if ( !DoX11Button(xbutton, true) || !DoX11Button(xbutton, false) )
+            return false;
+    }
+
+    return true;
 }
 
 bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
