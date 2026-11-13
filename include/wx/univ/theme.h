@@ -178,6 +178,10 @@ struct WXDLLIMPEXP_CORE wxThemeInfo
     // use mono theme for DirectFB port because it cannot correctly
     // render either win32 or gtk themes yet:
     #define wxUNIV_DEFAULT_THEME mono
+#elif defined(__WXRETRO68__) && wxUSE_THEME_WIN32
+    // win32 theme is the closest to the classic Mac OS appearance among the
+    // existing themes, as it uses 3D look with grey background.
+    #define wxUNIV_DEFAULT_THEME win32
 #endif
 
 // if no theme was picked, get any theme compiled in (sorted by

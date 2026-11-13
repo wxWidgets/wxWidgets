@@ -2221,6 +2221,9 @@ private:
 #elif defined(__WXDFB__)
     #define wxWindowNative wxWindowDFB
     #include "wx/dfb/window.h"
+#elif defined(__WXRETRO68__)
+    #define wxWindowNative wxWindowRetro68
+    #include "wx/retro68/window.h"
 #elif defined(__WXMAC__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowMac

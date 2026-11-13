@@ -2911,6 +2911,110 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_wxwin( const char* name )
 #endif // wxUSE_FONTMAP
 
 // ============================================================================
+// wxMBConv_MacRoman: Mac OS Roman encoding used by classic Mac OS
+// ============================================================================
+
+#ifdef __RETRO68__
+
+// This is the default encoding for both the file names and the text under
+// classic Mac OS with the Roman script system, so we need to always be able to
+// convert to and from it, even without wxUSE_FONTMAP and without any external
+// libraries (such as Text Encoding Converter, which is not always available).
+class wxMBConv_MacRoman : public wxMBConv
+{
+public:
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const override
+    {
+        if ( srcLen == wxNO_LEN )
+            srcLen = strlen(src) + 1;
+
+        if ( dst )
+        {
+            if ( dstLen < srcLen )
+                return wxCONV_FAILED;
+
+            for ( size_t n = 0; n < srcLen; n++ )
+            {
+                const unsigned char ch = static_cast<unsigned char>(src[n]);
+                dst[n] = ch < 0x80 ? static_cast<wchar_t>(ch)
+                                   : static_cast<wchar_t>(ms_table[ch - 0x80]);
+            }
+        }
+
+        return srcLen;
+    }
+
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override
+    {
+        if ( srcLen == wxNO_LEN )
+            srcLen = wxWcslen(src) + 1;
+
+        if ( dst && dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        for ( size_t n = 0; n < srcLen; n++ )
+        {
+            const wxUint32 wc = static_cast<wxUint32>(src[n]);
+
+            char ch;
+            if ( wc < 0x80 )
+            {
+                ch = static_cast<char>(wc);
+            }
+            else
+            {
+                int i;
+                for ( i = 0; i < 0x80; i++ )
+                {
+                    if ( ms_table[i] == wc )
+                        break;
+                }
+
+                if ( i == 0x80 )
+                    return wxCONV_FAILED;
+
+                ch = static_cast<char>(i + 0x80);
+            }
+
+            if ( dst )
+                dst[n] = ch;
+        }
+
+        return srcLen;
+    }
+
+    virtual wxMBConv *Clone() const override { return new wxMBConv_MacRoman; }
+
+private:
+    // Unicode code points for the characters 0x80..0xFF of Mac OS Roman.
+    static const wxUint16 ms_table[0x80];
+};
+
+const wxUint16 wxMBConv_MacRoman::ms_table[0x80] =
+{
+    0x00C4, 0x00C5, 0x00C7, 0x00C9, 0x00D1, 0x00D6, 0x00DC, 0x00E1,
+    0x00E0, 0x00E2, 0x00E4, 0x00E3, 0x00E5, 0x00E7, 0x00E9, 0x00E8,
+    0x00EA, 0x00EB, 0x00ED, 0x00EC, 0x00EE, 0x00EF, 0x00F1, 0x00F3,
+    0x00F2, 0x00F4, 0x00F6, 0x00F5, 0x00FA, 0x00F9, 0x00FB, 0x00FC,
+    0x2020, 0x00B0, 0x00A2, 0x00A3, 0x00A7, 0x2022, 0x00B6, 0x00DF,
+    0x00AE, 0x00A9, 0x2122, 0x00B4, 0x00A8, 0x2260, 0x00C6, 0x00D8,
+    0x221E, 0x00B1, 0x2264, 0x2265, 0x00A5, 0x00B5, 0x2202, 0x2211,
+    0x220F, 0x03C0, 0x222B, 0x00AA, 0x00BA, 0x03A9, 0x00E6, 0x00F8,
+    0x00BF, 0x00A1, 0x00AC, 0x221A, 0x0192, 0x2248, 0x2206, 0x00AB,
+    0x00BB, 0x2026, 0x00A0, 0x00C0, 0x00C3, 0x00D5, 0x0152, 0x0153,
+    0x2013, 0x2014, 0x201C, 0x201D, 0x2018, 0x2019, 0x00F7, 0x25CA,
+    0x00FF, 0x0178, 0x2044, 0x20AC, 0x2039, 0x203A, 0xFB01, 0xFB02,
+    0x2021, 0x00B7, 0x201A, 0x201E, 0x2030, 0x00C2, 0x00CA, 0x00C1,
+    0x00CB, 0x00C8, 0x00CD, 0x00CE, 0x00CF, 0x00CC, 0x00D3, 0x00D4,
+    0xF8FF, 0x00D2, 0x00DA, 0x00DB, 0x00D9, 0x0131, 0x02C6, 0x02DC,
+    0x00AF, 0x02D8, 0x02D9, 0x02DA, 0x00B8, 0x02DD, 0x02DB, 0x02C7
+};
+
+#endif // __RETRO68__
+
+// ============================================================================
 // wxCSConv implementation
 // ============================================================================
 
@@ -3203,6 +3307,11 @@ wxMBConv *wxCSConv::DoCreate() const
 
     switch ( enc )
     {
+#ifdef __RETRO68__
+        case wxFONTENCODING_MACROMAN:
+             return new wxMBConv_MacRoman;
+#endif // __RETRO68__
+
         case wxFONTENCODING_UTF7:
              return new wxMBConvUTF7;
 
@@ -3410,6 +3519,10 @@ wxWhateverWorksConv::FromWChar(char *dst, size_t dstLen,
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_win32, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
 #elif 0 // defined(__WXOSX__)
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_cf, wxConvLibc,  (wxFONTENCODING_UTF8));
+#elif defined(__RETRO68__)
+    // newlib only supports ASCII and UTF-8 in its mbstowcs(), but the system
+    // encoding is Mac OS Roman, so use our own conversion instead.
+    WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_MacRoman, wxConvLibc, ;);
 #else
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConvLibc, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
 #endif
@@ -3441,6 +3554,9 @@ wxMBConv* wxGetFileNameConvPtr()
     static wxMBConvD_cf wxConvMacUTF8DObj(wxFONTENCODING_UTF8);
 
     return &wxConvMacUTF8DObj;
+#elif defined(__RETRO68__)
+    // HFS file names always use the system script, i.e. Mac OS Roman.
+    return wxGet_wxConvLibcPtr();
 #else // !__DARWIN__
     return wxGet_wxConvWhateverWorksPtr();
 #endif // __DARWIN__/!__DARWIN__

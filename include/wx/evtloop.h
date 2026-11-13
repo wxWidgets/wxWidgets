@@ -227,7 +227,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
-#if defined(__WINDOWS__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__DARWIN__))
+#if defined(__WINDOWS__) || defined(__WXDFB__) || defined(__RETRO68__) || \
+    (defined(__UNIX__) && !defined(__DARWIN__))
 
 #define wxHAS_EVENTLOOP_MANUAL
 
@@ -300,6 +301,8 @@ private:
     #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
+#elif defined(__WXRETRO68__)
+    #include "wx/retro68/evtloop.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/evtloop.h"
 #elif defined(__WXQT__)

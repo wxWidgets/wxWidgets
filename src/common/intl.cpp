@@ -539,6 +539,8 @@ wxString wxLocale::GetSystemEncodingName()
     encname = wxCFStringRef::AsString(
         CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
     );
+#elif defined(__RETRO68__)
+    encname = wxS("macintosh");
 #elif defined(__UNIX_LIKE__)
 
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
@@ -626,6 +628,9 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     CFStringEncoding encoding = 0;
     encoding = CFStringGetSystemEncoding();
     return wxMacGetFontEncFromSystemEnc(encoding);
+#elif defined(__RETRO68__)
+    // We don't support other script systems under classic Mac OS yet.
+    return wxFONTENCODING_MACROMAN;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
     const wxString encname = GetSystemEncodingName();
     if (!encname.empty())

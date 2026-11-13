@@ -54,6 +54,7 @@
          !defined(__WXOSX_IPHONE__)   && \
          !defined(__X__)       && \
          !defined(__WXDFB__)   && \
+         !defined(__WXRETRO68__) && \
          !defined(__WXX11__)   && \
          !defined(__WXQT__)    && \
           wxUSE_GUI
@@ -3047,6 +3048,12 @@ typedef struct _PangoFontDescription PangoFontDescription;
    something arbitrary */
 typedef const void* WXWidget;
 #endif /*  DFB */
+
+#ifdef __WXRETRO68__
+/* Classic Mac OS doesn't have native child windows neither, so, as in wxDFB,
+   use the wxWindow pointer itself as the handle. */
+typedef const void* WXWidget;
+#endif /*  __WXRETRO68__ */
 
 #ifdef __WXQT__
 #include "wx/qt/defs.h"

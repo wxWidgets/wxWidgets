@@ -30,6 +30,12 @@ elseif(APPLE)
     set(wxDEFAULT_TOOLKIT osx_cocoa)
     set(wxTOOLKIT_OPTIONS osx_cocoa gtk2 gtk3 gtk4 qt)
     set(wxPLATFORM OSX)
+elseif(CMAKE_SYSTEM_NAME MATCHES "^Retro(68|PPC|Carbon)$")
+    # Classic Mac OS using Retro68 toolchain, see build/cmake/retro68.cmake
+    include(build/cmake/retro68.cmake)
+    set(wxDEFAULT_TOOLKIT retro68)
+    set(wxTOOLKIT_OPTIONS retro68)
+    set(wxPLATFORM RETRO68)
 elseif(UNIX)
     set(wxDEFAULT_TOOLKIT gtk3)
     set(wxTOOLKIT_OPTIONS gtk2 gtk3 gtk4 qt)
@@ -42,6 +48,21 @@ wx_option(wxBUILD_TOOLKIT "Toolkit used by wxWidgets" ${wxDEFAULT_TOOLKIT}
     STRINGS ${wxTOOLKIT_OPTIONS})
 # TODO: set to univ for universal build
 set(wxBUILD_WIDGETSET "")
+if(wxBUILD_TOOLKIT STREQUAL "retro68")
+    # The classic Mac OS port is always built on top of wxUniversal.
+    set(wxBUILD_WIDGETSET "univ")
+    set(WXUNIVERSAL ON)
+endif()
+
+if(WXUNIVERSAL)
+    # Include all the themes in wxUniversal builds, the default one is chosen
+    # by the port itself.
+    set(wxUSE_ALL_THEMES ON)
+    set(wxUSE_THEME_GTK ON)
+    set(wxUSE_THEME_METAL ON)
+    set(wxUSE_THEME_MONO ON)
+    set(wxUSE_THEME_WIN32 ON)
+endif()
 
 # Create shortcut variable for easy toolkit tests
 string(TOUPPER ${wxBUILD_TOOLKIT} wxBUILD_TOOLKIT_UPPER)
@@ -55,6 +76,9 @@ elseif(wxBUILD_TOOLKIT MATCHES "qt")
 endif()
 
 set(wxTOOLKIT_DEFINITIONS __WX${wxBUILD_TOOLKIT_UPPER}__)
+if(WXUNIVERSAL)
+    list(APPEND wxTOOLKIT_DEFINITIONS __WXUNIVERSAL__)
+endif()
 
 if(NOT wxUSE_GUI)
     set(wxBUILD_TOOLKIT "base")

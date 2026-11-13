@@ -36,6 +36,8 @@ const wxTextFileType wxTextBuffer::typeDefault =
   wxTextFileType_Dos;
 #elif defined(__UNIX__)
   wxTextFileType_Unix;
+#elif defined(__MAC__)
+  wxTextFileType_Mac;
 #else
   wxTextFileType_None;
   #error  "wxTextBuffer: unsupported platform."

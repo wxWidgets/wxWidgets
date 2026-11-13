@@ -194,6 +194,11 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+#elif defined(__WXRETRO68__)
+    // We always use 32bpp GWorlds with the pixels stored in ARGB format.
+    typedef wxPixelFormat<unsigned char, 32, 1, 2, 3, 0> wxNativePixelFormat;
+
+    #define wxPIXEL_FORMAT_ALPHA 0
 #elif defined(__WXQT__)
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
 

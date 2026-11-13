@@ -303,6 +303,15 @@ Changes in behaviour which may result in build errors
   function (but most code should still compile and work without any changes).
 
 
+3.3.5: (released ????-??-??)
+----------------------------
+
+All (GUI):
+
+- Add new wxRetro68 port for classic Mac OS (System 7 to Mac OS 9) on 68K and
+  PowerPC using Retro68 cross-compiler, see docs/retro68/install.md.
+
+
 3.3.4: (released 2026-10-10)
 ----------------------------
 

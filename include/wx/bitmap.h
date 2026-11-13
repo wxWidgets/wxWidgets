@@ -62,6 +62,7 @@ protected:
 };
 
 #if defined(__WXDFB__) || \
+    defined(__WXRETRO68__) || \
     defined(__WXMAC__) || \
     defined(__WXGTK__) || \
     defined(__WXX11__) || \
@@ -330,6 +331,9 @@ protected:
 #elif defined(__WXDFB__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/dfb/bitmap.h"
+#elif defined(__WXRETRO68__)
+    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
+    #include "wx/retro68/bitmap.h"
 #elif defined(__WXMAC__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_PICT_RESOURCE
     #include "wx/osx/bitmap.h"
@@ -358,7 +362,7 @@ ConvertToDisabled(unsigned char brightness) const
 #endif // wxUSE_IMAGE
 
 // we must include generic mask.h after wxBitmap definition
-#if defined(__WXDFB__)
+#if defined(__WXDFB__) || defined(__WXRETRO68__)
     #define wxUSE_GENERIC_MASK 1
 #else
     #define wxUSE_GENERIC_MASK 0

@@ -11,7 +11,8 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_FILEDLG
+// wxRetro68 uses its own native file dialog.
+#if wxUSE_FILEDLG && !defined(__WXRETRO68__)
 
 // NOTE : it probably also supports MAC, untested
 #if !defined(__UNIX__) && !defined(__WIN32__)

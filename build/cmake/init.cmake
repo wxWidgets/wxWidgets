@@ -124,9 +124,13 @@ elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}
     endif()
 
     if(wxBUILD_STRIPPED_RELEASE)
-        set(LD_STRIPPING_FLAG " -s")
-        wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
-        wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
+        # Retro68 linker wrapper (Elf2Mac) doesn't support stripping, and
+        # there are no debug symbols in the final executables anyhow.
+        if(NOT RETRO68)
+            set(LD_STRIPPING_FLAG " -s")
+            wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
+            wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
+        endif()
     else()
         set(COMPILER_DBGSYM_FLAG " -g")
         wx_string_append(CMAKE_CXX_FLAGS_RELEASE "${COMPILER_DBGSYM_FLAG}")

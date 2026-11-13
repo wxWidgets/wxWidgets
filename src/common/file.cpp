@@ -42,7 +42,7 @@
 #define   NOCRYPT
 #define   NOMCX
 
-#elif (defined(__UNIX__) || defined(__GNUWIN32__))
+#elif (defined(__UNIX__) || defined(__GNUWIN32__) || defined(__RETRO68__))
     #include  <unistd.h>
     #include  <time.h>
     #include  <sys/stat.h>
@@ -83,7 +83,7 @@
 
 // there is no distinction between text and binary files under Unix, so define
 // O_BINARY as 0 if the system headers don't do it already
-#if defined(__UNIX__) && !defined(O_BINARY)
+#if (defined(__UNIX__) || defined(__RETRO68__)) && !defined(O_BINARY)
     #define   O_BINARY    (0)
 #endif  //__UNIX__
 

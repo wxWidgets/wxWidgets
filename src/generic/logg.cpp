@@ -74,7 +74,7 @@
 
 // this function is a wrapper around strftime(3)
 // allows to exclude the usage of wxDateTime
-static wxString TimeStamp(const wxString& format, time_t t)
+static wxString wxLogFormatTimeStamp(const wxString& format, time_t t)
 {
     wxChar buf[4096];
     struct tm tm;
@@ -888,7 +888,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
         m_listctrl->InsertItem(n, msg, image);
 
         if (hasTimeStamp)
-            m_listctrl->SetItem(n, 1, TimeStamp(fmt, (time_t)m_times[n]));
+            m_listctrl->SetItem(n, 1, wxLogFormatTimeStamp(fmt, (time_t)m_times[n]));
     }
 
     // let the columns size themselves
@@ -952,7 +952,7 @@ wxString wxLogDialog::GetLogMessages() const
     text.reserve(count*m_messages[0].length());
     for ( size_t n = 0; n < count; n++ )
     {
-        text << TimeStamp(fmt, (time_t)m_times[n])
+        text << wxLogFormatTimeStamp(fmt, (time_t)m_times[n])
              << ": "
              << m_messages[n]
              << wxTextFile::GetEOL();

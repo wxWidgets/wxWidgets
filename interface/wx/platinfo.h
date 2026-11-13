@@ -69,7 +69,8 @@ enum wxPortId
     wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
     wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       //!< wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_QT       = 1 << 10       //!< wxQT, using Qt 5+
+    wxPORT_QT       = 1 << 10,      //!< wxQT, using Qt 5+
+    wxPORT_RETRO68  = 1 << 11       //!< wxRetro68, classic Mac OS using wxUniversal (@since 3.3.5)
 };
 
 

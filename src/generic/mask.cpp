@@ -48,6 +48,12 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
     if ( !image.IsOk() )
         return false;
 
+    // ConvertToMono() returns white pixels where the colour matches, but the
+    // masked area must be black and the unmasked one white, so invert it.
+    unsigned char* data = image.GetData();
+    for ( size_t n = 3*size_t(image.GetWidth())*image.GetHeight(); n; --n, ++data )
+        *data = 255 - *data;
+
     m_bitmap = wxBitmap(image, 1);
 
     return m_bitmap.IsOk();

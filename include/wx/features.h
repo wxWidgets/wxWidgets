@@ -51,8 +51,10 @@
 #define wxHAS_REGEX_ADVANCED
 
 /* Pango-based ports and wxDFB use UTF-8 for text and font encodings
- * internally and so their fonts can handle any encodings: */
-#if wxUSE_PANGO || defined(__WXDFB__)
+ * internally and so their fonts can handle any encodings. wxRetro68 doesn't,
+ * but it always converts the text to the system encoding before drawing it,
+ * so it doesn't need any font encoding support neither: */
+#if wxUSE_PANGO || defined(__WXDFB__) || defined(__WXRETRO68__)
     #define wxHAS_UTF8_FONTS
 #endif
 
@@ -73,7 +75,7 @@
 
 /* Direct access to bitmap data is not implemented in all ports yet */
 #if defined(__WXGTK__) || defined(__WXMAC__) || defined(__WXDFB__) || \
-        defined(__WXMSW__) || defined(__WXQT__)
+        defined(__WXMSW__) || defined(__WXQT__) || defined(__WXRETRO68__)
 
     /*
        HP aCC for PA-RISC can't deal with templates in wx/rawbmp.h.

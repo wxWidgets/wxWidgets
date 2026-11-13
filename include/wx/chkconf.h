@@ -1271,6 +1271,8 @@
 #  include "wx/x11/chkconf.h"
 #elif defined(__WXANDROID__)
 #  include "wx/android/chkconf.h"
+#elif defined(__RETRO68__)
+#  include "wx/retro68/chkconf.h"
 #endif
 
 /* Note that __WXGTK__ may be defined under Windows and Mac if we're using
@@ -1754,7 +1756,8 @@
 
 /* generic file dialog depends on (generic) file control */
 #if wxUSE_FILEDLG && !wxUSE_FILECTRL && \
-        (defined(__WXUNIVERSAL__) || defined(__WXGTK__))
+        ((defined(__WXUNIVERSAL__) && !defined(__WXRETRO68__)) || \
+            defined(__WXGTK__))
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "Generic wxFileDialog requires wxFileCtrl"
 #   else

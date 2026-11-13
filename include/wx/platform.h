@@ -203,6 +203,27 @@
 
 
 /*
+    Classic Mac OS (System 7 to Mac OS 9) built with the Retro68 GCC
+    toolchain, either for 68K or for PowerPC (classic or Carbon). Note that
+    this is not a Unix-like system, even if newlib provides a subset of POSIX
+    functions, so we deliberately don't define __UNIX__ for it.
+ */
+#if defined(macintosh) && defined(__GNUC__) && !defined(__APPLE__) && \
+    !defined(__MACH__)
+#   ifndef __RETRO68__
+#       define __RETRO68__ 1
+#   endif
+#   ifndef __MACOS_CLASSIC__
+#       define __MACOS_CLASSIC__ 1
+#   endif
+    /* This old symbol is still used by wx/filefn.h to select ':' as path
+       separator. */
+#   ifndef __MAC__
+#       define __MAC__ 1
+#   endif
+#endif
+
+/*
    OS: then test for generic Unix defines, then for particular flavours and
        finally for Unix-like systems
        Mac OS X matches this case (__MACH__), prior Mac OS do not.
@@ -286,6 +307,34 @@
     /* so define it if it hadn't been done by configure yet */
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG) && !defined(__WIN64__)
 #        define wxSIZE_T_IS_UINT
+#    endif
+/*
+   OS: Classic Mac OS (Retro68)
+ */
+#elif defined(__RETRO68__)
+
+    /* size_t is "unsigned long" for both 68K and PowerPC Retro68 compilers. */
+#    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+#        define wxSIZE_T_IS_ULONG
+#    endif
+
+    /* Both 68K and PowerPC Macs are big endian. */
+#    ifndef WORDS_BIGENDIAN
+#        define WORDS_BIGENDIAN 1
+#    endif
+
+    /*
+        Retro68 <string.h> includes <strings.h> in C++ mode, which resolves
+        to the Toolbox <Strings.h> (and hence the entire Multiverse.h) on
+        case-insensitive file systems. Include it now to ensure that this
+        happens before any wx code and get rid of the 68K-only GetDateTime()
+        macro which conflicts with the methods with the same name in wx.
+     */
+#    ifdef __cplusplus
+#        include <string.h>
+#        ifdef GetDateTime
+#            undef GetDateTime
+#        endif
 #    endif
 #else
 #   error "Unknown platform."

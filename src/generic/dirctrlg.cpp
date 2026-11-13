@@ -155,6 +155,23 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     paths.Add(wxT("/"));
     names.Add(wxT("/"));
     icon_ids.Add(wxFileIconsTable::computer);
+#elif defined(__RETRO68__)
+    // Enumerate all the mounted volumes.
+    for ( short index = 1; ; index++ )
+    {
+        Str255 name;
+        HParamBlockRec pb;
+        memset(&pb, 0, sizeof(pb));
+        pb.volumeParam.ioNamePtr = name;
+        pb.volumeParam.ioVolIndex = index;
+        if ( PBHGetVInfoSync(&pb) != noErr )
+            break;
+
+        const wxString volName((const char*)name + 1, wxConvFile, name[0]);
+        paths.Add(volName + wxFILE_SEP_PATH);
+        names.Add(volName);
+        icon_ids.Add(wxFileIconsTable::drive);
+    }
 #else
     #error "Unsupported platform in wxGenericDirCtrl!"
 #endif

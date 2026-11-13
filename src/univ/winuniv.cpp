@@ -93,6 +93,8 @@ public:
     wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMac);
 #elif defined(__WXDFB__)
     wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowDFB);
+#elif defined(__WXRETRO68__)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowRetro68);
 #elif defined(__WXX11__)
     wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowX11);
 #endif

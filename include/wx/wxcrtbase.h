@@ -390,7 +390,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
                                   stdio.h
    ------------------------------------------------------------------------- */
 
-#if defined(__UNIX__) || defined(__WXMAC__)
+#if defined(__UNIX__) || defined(__WXMAC__) || defined(__RETRO68__)
     #define wxMBFILES 1
 #else
     #define wxMBFILES 0
@@ -399,7 +399,15 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 
 /* these functions are only needed in the form used for filenames (i.e. char*
    on Unix, wchar_t* on Windows), so we don't need to use A/W suffix: */
-#if wxMBFILES /* ANSI filenames */
+#if defined(__RETRO68__) && defined(__cplusplus)
+    /* Retro68 remove() and rename() always fail, use our replacements. */
+    #include "wx/retro68/crt.h"
+
+    #define wxCRT_Fopen   fopen
+    #define wxCRT_Freopen freopen
+    #define wxCRT_Remove  wxRetro68Remove
+    #define wxCRT_Rename  wxRetro68Rename
+#elif wxMBFILES /* ANSI filenames */
 
     #define wxCRT_Fopen   fopen
     #define wxCRT_Freopen freopen

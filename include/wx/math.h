@@ -86,6 +86,12 @@
 
 inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
 
+#if defined(__RETRO68__) && !defined(_GLIBCXX_USE_C99_MATH_FUNCS)
+    // libstdc++ used by Retro68 is built without C99 math functions in std
+    // namespace, but they are still available in the global one.
+    namespace std { using ::lround; }
+#endif
+
 inline int wxRound(double x)
 {
     wxASSERT_MSG(x > double(INT_MIN) - 0.5 && x < double(INT_MAX) + 0.5,

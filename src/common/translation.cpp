@@ -45,6 +45,7 @@
 #include "wx/stdpaths.h"
 #include "wx/version.h"
 #include "wx/uilocale.h"
+#include "wx/tls.h"
 
 #ifdef __WINDOWS__
     #include "wx/dynlib.h"
@@ -1571,7 +1572,7 @@ const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-    thread_local UntranslatedStrings wxPerThreadStrings;
+    static wxTHREAD_SPECIFIC_DECL UntranslatedStrings wxPerThreadStrings;
     return *wxPerThreadStrings.insert(str).first;
 }
 

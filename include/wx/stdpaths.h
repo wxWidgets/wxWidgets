@@ -226,6 +226,9 @@ protected:
     #elif defined(__DARWIN__)
         #include "wx/osx/core/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
+    #elif defined(__RETRO68__)
+        #include "wx/retro68/stdpaths.h"
+        #define wxHAS_NATIVE_STDPATHS
     #elif defined(__UNIX__)
         #include "wx/unix/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS

@@ -57,6 +57,13 @@ elseif(WXQT)
     endif()
 elseif(WXX11)
     wx_append_sources(CORE_SRC X11_LOWLEVEL)
+elseif(WXRETRO68)
+    wx_append_sources(CORE_SRC RETRO68_LOWLEVEL)
+endif()
+
+if(WXUNIVERSAL)
+    wx_append_sources(CORE_SRC UNIV)
+    wx_append_sources(CORE_SRC UNIV_THEMES)
 endif()
 
 wx_add_library(wxcore ${CORE_SRC})

@@ -217,6 +217,10 @@ protected:
     #include "wx/x11/region.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/region.h"
+#elif defined(__WXRETRO68__)
+    #define wxRegionGeneric wxRegion
+    #define wxRegionIteratorGeneric wxRegionIterator
+    #include "wx/generic/region.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/region.h"
 #elif defined(__WXQT__)

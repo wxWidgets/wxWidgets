@@ -445,6 +445,9 @@ private:
 #elif defined(__WXDFB__)
     #include "wx/dfb/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowDFB
+#elif defined(__WXRETRO68__)
+    #include "wx/retro68/toplevel.h"
+    #define wxTopLevelWindowNative wxTopLevelWindowRetro68
 #elif defined(__WXMAC__)
     #include "wx/osx/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMac

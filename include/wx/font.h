@@ -621,6 +621,8 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     #include "wx/x11/font.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/font.h"
+#elif defined(__WXRETRO68__)
+    #include "wx/retro68/font.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/font.h"
 #elif defined(__WXQT__)

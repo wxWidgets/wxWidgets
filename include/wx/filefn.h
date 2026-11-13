@@ -20,6 +20,9 @@
 #if defined(__UNIX__)
     #include <unistd.h>
     #include <dirent.h>
+#elif defined(__RETRO68__)
+    #include <unistd.h>
+    #include "wx/retro68/crt.h"
 #endif
 
 #if defined(__WINDOWS__)
@@ -296,6 +299,29 @@ enum wxPosixPermissions
     // private defines, undefine so that nobody gets tempted to use
     #undef wxHAS_HUGE_FILES
     #undef wxHAS_HUGE_STDIO_FILES
+#elif defined(__RETRO68__)
+    // Retro68 newlib-based runtime implements only a subset of POSIX file
+    // functions using the File Manager, the rest is implemented by wx itself
+    // in src/retro68/utilsbase.cpp.
+    typedef off_t wxFileOffset;
+    #define wxFileOffsetFmtSpec wxT("")
+
+    #define   wxClose      close
+    #define   wxRead       ::read
+    #define   wxWrite      ::write
+    #define   wxLseek      lseek
+    #define   wxSeek       lseek
+    #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
+    #define   wxEof        wxRetro68Eof
+
+    #define   wxStructStat struct stat
+
+    #define   wxCRT_Open       open
+    #define   wxCRT_Stat       wxRetro68Stat
+    #define   wxCRT_MkDir      wxRetro68MkDir
+    #define   wxCRT_RmDir      wxRetro68RmDir
+    #define   wxCRT_Access     wxRetro68Access
+    #define   wxCRT_Chmod      wxRetro68Chmod
 #else // Unix or Windows using unknown compiler, assume POSIX supported
     typedef off_t wxFileOffset;
     #ifdef HAVE_LARGEFILE_SUPPORT

@@ -807,6 +807,8 @@ protected:
     #include "wx/msw/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
+#elif defined(__WXRETRO68__)
+    #include "wx/retro68/app.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/app.h"
 #elif defined(__WXX11__)

@@ -47,6 +47,24 @@ set(BASE_UNIX_HDR
     wx/unix/mimetype.h
 )
 
+set(BASE_RETRO68_SRC
+    src/unix/timerunx.cpp
+    src/retro68/dir.cpp
+    src/retro68/filefn.cpp
+    src/retro68/stdpaths.cpp
+    src/retro68/uilocale.cpp
+    src/retro68/utilsbase.cpp
+)
+
+set(BASE_RETRO68_HDR
+    wx/retro68/apptrait.h
+    wx/retro68/chkconf.h
+    wx/retro68/crt.h
+    wx/retro68/private.h
+    wx/retro68/stdpaths.h
+    wx/unix/private/timer.h
+)
+
 set(BASE_WIN32_SRC
     src/msw/basemsw.cpp
     src/msw/crashrpt.cpp
@@ -1877,6 +1895,62 @@ set(MSW_RSC
     wx/msw/question.ico
     wx/msw/removble.ico
     wx/msw/std.ico
+)
+
+set(RETRO68_LOWLEVEL_SRC
+    src/generic/caret.cpp
+    src/generic/colour.cpp
+    src/generic/mask.cpp
+    src/generic/paletteg.cpp
+    src/generic/regiong.cpp
+    src/generic/textmeasure.cpp
+    src/retro68/app.cpp
+    src/retro68/bitmap.cpp
+    src/retro68/brush.cpp
+    src/retro68/cursor.cpp
+    src/retro68/dc.cpp
+    src/retro68/dcclient.cpp
+    src/retro68/dcmemory.cpp
+    src/retro68/dcscreen.cpp
+    src/retro68/dirdlg.cpp
+    src/retro68/evtloop.cpp
+    src/retro68/filedlg.cpp
+    src/retro68/font.cpp
+    src/retro68/fontenum.cpp
+    src/retro68/menu.cpp
+    src/retro68/nonownedwnd.cpp
+    src/retro68/pen.cpp
+    src/retro68/popupwin.cpp
+    src/retro68/settings.cpp
+    src/retro68/toplevel.cpp
+    src/retro68/utilsgui.cpp
+    src/retro68/window.cpp
+)
+
+set(RETRO68_LOWLEVEL_HDR
+    wx/generic/caret.h
+    wx/generic/colour.h
+    wx/generic/mask.h
+    wx/generic/paletteg.h
+    wx/generic/region.h
+    wx/retro68/app.h
+    wx/retro68/bitmap.h
+    wx/retro68/brush.h
+    wx/retro68/cursor.h
+    wx/retro68/dc.h
+    wx/retro68/dcclient.h
+    wx/retro68/dcmemory.h
+    wx/retro68/dcscreen.h
+    wx/retro68/dirdlg.h
+    wx/retro68/evtloop.h
+    wx/retro68/filedlg.h
+    wx/retro68/font.h
+    wx/retro68/nonownedwnd.h
+    wx/retro68/pen.h
+    wx/retro68/popupwin.h
+    wx/retro68/toplevel.h
+    wx/retro68/window.h
+    wx/retro68/private/qd.h
 )
 
 set(DFB_LOWLEVEL_SRC

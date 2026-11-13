@@ -120,6 +120,16 @@
 #include <utime.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#define wxCRT_Utime utime
+#endif
+
+#ifdef __RETRO68__
+#include <utime.h>
+#include "wx/retro68/private.h"
+
+// Retro68 runtime doesn't provide utime(), so use our own version.
+#define wxCRT_Utime wxRetro68Utime
 #endif
 
 #ifndef S_ISREG
@@ -285,7 +295,9 @@ static bool IsUNCPath(const wxString& path)
 // the appropriate file with an extra twist that it also works when there is no
 // wxFileName object at all, as is the case in static methods.
 
-#if defined(__UNIX_LIKE__) || defined(__WXMAC__)
+// Notice that Retro68 doesn't have real lstat(), but wxCRT_Lstat() is the
+// same as wxCRT_Stat() there, so it's fine to use it.
+#if defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__RETRO68__)
     #define wxHAVE_LSTAT
 #endif
 
@@ -1309,6 +1321,8 @@ wxString wxFileName::GetTempDir()
         {
             wxLogLastError(wxT("GetTempPath"));
         }
+#elif defined(__RETRO68__)
+        dir = wxMacFindFolder(kTemporaryFolderType);
 #endif // systems with native way
     }
 
@@ -1335,7 +1349,11 @@ wxString wxFileName::GetTempDir()
         dir = CheckIfDirExists("/tmp");
         if ( dir.empty() )
 #endif // __UNIX_LIKE__
+#ifdef __MAC__
+            dir = ":";
+#else
             dir = ".";
+#endif
     }
 
     return dir;
@@ -2622,6 +2640,8 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
         format = wxPATH_DOS;
 #elif defined(__VMS)
         format = wxPATH_VMS;
+#elif defined(__MAC__)
+        format = wxPATH_MAC;
 #else
         format = wxPATH_UNIX;
 #endif
@@ -3008,7 +3028,7 @@ bool wxFileName::CopyAttributesFrom(const wxFileName& source) const
 #endif // wxUSE_DATETIME
 
     return ok;
-#elif defined(__UNIX_LIKE__)
+#elif defined(__UNIX_LIKE__) || defined(__RETRO68__)
     // Under Unix we copy just the file mode: we can't set creation time.
     wxStructStat st;
     if ( wxStat(pathSrc, &st) != 0 )
@@ -3203,7 +3223,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
             return true;
         }
     }
-#elif defined(__UNIX_LIKE__)
+#elif defined(__UNIX_LIKE__) || defined(__RETRO68__)
     wxUnusedVar(dtCreate);
 
     if ( !dtAccess && !dtMod )
@@ -3252,7 +3272,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
     utimbuf utm;
     utm.actime = dtAccess ? tAccess : tMod;
     utm.modtime = dtMod ? tMod : tAccess;
-    if ( utime(GetFullPath().fn_str(), &utm) == 0 )
+    if ( wxCRT_Utime(GetFullPath().fn_str(), &utm) == 0 )
     {
         return true;
     }
@@ -3270,9 +3290,9 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
 
 bool wxFileName::Touch() const
 {
-#if defined(__UNIX_LIKE__)
+#if defined(__UNIX_LIKE__) || defined(__RETRO68__)
     // under Unix touching file is simple: just pass nullptr to utime()
-    if ( utime(GetFullPath().fn_str(), nullptr) == 0 )
+    if ( wxCRT_Utime(GetFullPath().fn_str(), nullptr) == 0 )
     {
         return true;
     }

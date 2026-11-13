@@ -107,7 +107,10 @@ protected:
 
 
 // Universal and non-port related switches with need for generic implementation
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXRETRO68__)
+    #include "wx/generic/dirdlgg.h"
+    #include "wx/retro68/dirdlg.h"
+#elif defined(__WXUNIVERSAL__)
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__) && !wxUSE_OLE

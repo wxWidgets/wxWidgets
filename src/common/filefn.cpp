@@ -480,7 +480,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     }
 #endif // wxMac
 
-    if ( chmod(file2.fn_str(), fbuf.st_mode) != 0 )
+    if ( wxChmod(file2, fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
@@ -550,7 +550,8 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) \
- || defined(__GNUWIN32__)
+ || defined(__GNUWIN32__) \
+ || defined(__RETRO68__)
     int res = wxRemove(file);
 #elif defined(__WXMAC__)
     int res = unlink(file.fn_str());
@@ -566,7 +567,9 @@ bool wxRemoveFile(const wxString& file)
 
 bool wxMkdir(const wxString& dir, int perm)
 {
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#if defined(__RETRO68__)
+    if ( wxMkDir(dir, perm) != 0 )
+#elif defined(__WXMAC__) && !defined(__UNIX__)
     if ( mkdir(dir.fn_str(), 0) != 0 )
 
     // assume mkdir() has 2 args on all platforms
@@ -708,6 +711,8 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     {
     #if defined(_MSC_VER) || defined(__MINGW32__)
         ok = _getcwd(cbuf, sz) != nullptr;
+    #elif defined(__RETRO68__)
+        ok = wxRetro68GetCwd(cbuf, sz) != nullptr;
     #else // !Win32/VC++ !Mac
         ok = getcwd(cbuf, sz) != nullptr;
     #endif // platform
@@ -756,7 +761,9 @@ wxString wxGetCwd()
 bool wxSetWorkingDirectory(const wxString& d)
 {
     bool success = false;
-#if defined(__UNIX__) || defined(__WXMAC__)
+#if defined(__RETRO68__)
+    success = (wxRetro68ChDir(d.fn_str()) == 0);
+#elif defined(__UNIX__) || defined(__WXMAC__)
     success = (chdir(d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
     success = (SetCurrentDirectory(d.t_str()) != 0);
@@ -934,7 +941,7 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 
 bool wxIsWritable(const wxString &path)
 {
-#if defined( __UNIX__ )
+#if defined( __UNIX__ ) || defined(__RETRO68__)
     // access() will take in count also symbolic links
     return wxAccess(path.c_str(), W_OK) == 0;
 #elif defined( __WINDOWS__ )
@@ -948,7 +955,7 @@ bool wxIsWritable(const wxString &path)
 
 bool wxIsReadable(const wxString &path)
 {
-#if defined( __UNIX__ )
+#if defined( __UNIX__ ) || defined(__RETRO68__)
     // access() will take in count also symbolic links
     return wxAccess(path.c_str(), R_OK) == 0;
 #elif defined( __WINDOWS__ )
@@ -962,7 +969,7 @@ bool wxIsReadable(const wxString &path)
 
 bool wxIsExecutable(const wxString &path)
 {
-#if defined( __UNIX__ )
+#if defined( __UNIX__ ) || defined(__RETRO68__)
     // access() will take in count also symbolic links
     return wxAccess(path.c_str(), X_OK) == 0;
 #elif defined( __WINDOWS__ )

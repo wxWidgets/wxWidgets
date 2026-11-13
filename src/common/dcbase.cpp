@@ -73,6 +73,12 @@
     #include "wx/dfb/dcscreen.h"
 #endif
 
+#ifdef __WXRETRO68__
+    #include "wx/retro68/dcclient.h"
+    #include "wx/retro68/dcmemory.h"
+    #include "wx/retro68/dcscreen.h"
+#endif
+
 #ifdef __WXQT__
     #include "wx/qt/dcclient.h"
     #include "wx/qt/dcmemory.h"

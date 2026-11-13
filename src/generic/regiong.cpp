@@ -27,6 +27,12 @@ typedef struct Box
     wxCoord x1, x2, y1, y2;
 } Box, BOX, BoxRec, *BoxPtr;
 
+// Classic Mac OS Toolbox headers (always included by Retro68 standard headers)
+// define their own Region type, so use a different name for ours there.
+#ifdef __RETRO68__
+    #define Region wxGenericRegionPtr
+#endif
+
 typedef struct REGION *Region;
 
 struct REGION

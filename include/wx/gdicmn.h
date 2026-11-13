@@ -210,7 +210,7 @@ enum wxEllipsizeMode
 #ifdef wxHAS_IMAGES_IN_RESOURCES
     // Load from a resource
     #define wxICON(X) wxIcon(wxT(#X))
-#elif defined(__WXDFB__)
+#elif defined(__WXDFB__) || defined(__WXRETRO68__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( X##_xpm )
 #elif defined(__WXGTK__)

@@ -58,4 +58,9 @@ if(wxUSE_REGEX STREQUAL "builtin")
     set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/3rdparty/pcre/src/wx)
     target_compile_definitions(wxregex PRIVATE __WX__ HAVE_CONFIG_H)
     target_include_directories(wxregex PRIVATE ${wxSETUP_HEADER_PATH} ${wxSOURCE_DIR}/include ${REGEX_INCLUDE_DIRS})
+    if(RETRO68)
+        # PCRE2 mixes int32_t and int pointers, which are compatible in
+        # practice but are different types with Retro68 where int32_t is long.
+        target_compile_options(wxregex PRIVATE -Wno-error=incompatible-pointer-types)
+    endif()
 endif()

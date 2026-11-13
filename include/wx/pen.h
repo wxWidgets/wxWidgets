@@ -106,6 +106,8 @@ public:
     #include "wx/gtk/pen.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/pen.h"
+#elif defined(__WXRETRO68__)
+    #include "wx/retro68/pen.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/pen.h"
 #elif defined(__WXQT__)

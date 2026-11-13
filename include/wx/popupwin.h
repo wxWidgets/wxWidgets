@@ -67,6 +67,8 @@ public:
     #include "wx/x11/popupwin.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/popupwin.h"
+#elif defined(__WXRETRO68__)
+    #include "wx/retro68/popupwin.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/popupwin.h"
 #elif defined(__WXQT__)
