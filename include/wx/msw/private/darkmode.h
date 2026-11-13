@@ -93,6 +93,12 @@ bool HasDarkTheme();
 // false as there is no native support for doing this in this case.
 void DrawGauge(wxDC& dc, const wxRect& rect, int value, int max, int flags);
 
+// Draw a check box.
+void DrawCheckBox(HDC hdc, const RECT& rect, int flags);
+
+// Draw a radio button.
+void DrawRadioButton(HDC hdc, const RECT& rect, int flags);
+
 } // namespace wxMSWDarkMode
 
 namespace wxMSWImpl

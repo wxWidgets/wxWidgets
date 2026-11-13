@@ -697,6 +697,25 @@ wxRendererXP::DoDrawXPButton(int kind,
                              const wxRect& rect,
                              int flags)
 {
+    // Check for dark mode and OS is older than Windows 11 22H2, which is when
+    // dark mode support for check boxes and radio buttons appeared.
+    if ( wxMSWDarkMode::IsActive() && !wxCheckOsVersion(10, 0, 22621) )
+    {
+        HDC hdc = GetHdcOf(dc.GetTempHDC());
+        RECT rc;
+        wxCopyRectToRECT(rect, rc);
+        if ( kind == BP_CHECKBOX )
+        {
+            wxMSWDarkMode::DrawCheckBox(hdc, rc, flags);
+            return true;
+        }
+        if ( kind == BP_RADIOBUTTON )
+        {
+            wxMSWDarkMode::DrawRadioButton(hdc, rc, flags);
+            return true;
+        }
+    }
+
     wxUxThemeHandle hTheme(win, L"BUTTON", L"DarkMode_Explorer::Button");
     if ( !hTheme )
         return false;
