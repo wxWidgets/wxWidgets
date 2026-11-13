@@ -1,14 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
+# Corsican translation file for wxWidgets.
+#
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022-2025.
+#
+# Corsican translation created by Patriccollu di Santa Maria è Sichè in April 2022.
+#
+# Translators:
+# * Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
-"PO-Revision-Date: 2025-05-19 16:47+0200\n"
+"PO-Revision-Date: 2026-11-13 15:43+0100\n"
 "Last-Translator: Patriccollu di Santa Maria è Sichè <https://github.com/"
 "Patriccollu/Lingua_Corsa-Infurmatica/#readme>\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
@@ -17,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.10\n"
 
 #: ../include/wx/defs.h:2609
 msgid "All files (*.*)|*.*"
@@ -82,14 +87,14 @@ msgid "Cannot initialize OLE"
 msgstr "Ùn si pò inizià OLE"
 
 #: ../include/wx/msw/private/fswatcher.h:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to finish cancelling the watch for '%s'"
-msgstr "Impussibule di mette in piazza a surveglianza di « %s »"
+msgstr "Impussibule di compie l’abbandonu di a surveglianza di « %s »"
 
 #: ../include/wx/msw/private/fswatcher.h:149
 #, c-format
 msgid "Failed to open directory \"%s\" for monitoring."
-msgstr "Fiascu à l’apertura di u cartulare « %s » per a surveglianza."
+msgstr "Impussibule d’apre u cartulare « %s » per a surveglianza."
 
 #: ../include/wx/msw/private/fswatcher.h:185
 msgid "Unable to close I/O completion port handle"
@@ -151,15 +156,15 @@ msgstr "Simbuli"
 
 #: ../include/wx/unix/pipe.h:46
 msgid "Pipe creation failed"
-msgstr "Fiascu di a creazione di u cundottu"
+msgstr "Impussibule di creà u cundottu"
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
-msgstr "Fiascu di l’enumerazione di i modi video"
+msgstr "Impussibule d’enumerà i modi video"
 
 #: ../include/wx/unix/private/displayx11.h:89
 msgid "Failed to change video mode"
-msgstr "Fiascu di cambiamentu di modu video"
+msgstr "Impussibule di cambià u modu video"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
@@ -880,8 +885,8 @@ msgstr ""
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Fiascu di l’espansione di e variabile d’ambiente : « %c » assente à a "
-"pusizione %u in « %s »."
+"Impussibule di fà l’espansione di e variabile d’ambiente : « %c » hè assente "
+"à a pusizione %u in « %s »."
 
 #: ../src/common/config.cpp:586 ../src/msw/regconf.cpp:272
 #, c-format
@@ -1016,7 +1021,7 @@ msgstr "mezanotte"
 #: ../src/common/debugrpt.cpp:209
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "Fiascu per creà u cartulare « %s »"
+msgstr "Impussibule di creà u cartulare « %s »"
 
 #: ../src/common/debugrpt.cpp:210
 msgid "Debug report couldn't be created."
@@ -1025,12 +1030,12 @@ msgstr "Ùn si pò creà u raportu di spannatura."
 #: ../src/common/debugrpt.cpp:227
 #, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "Fiascu per caccià u schedariu « %s » di raportu di spannatura"
+msgstr "Impussibule di caccià u schedariu « %s » di raportu di spannatura"
 
 #: ../src/common/debugrpt.cpp:239
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "Fiascu per nettà u cartulare « %s » di raporti di spannatura"
+msgstr "Impussibule di nettà u cartulare « %s » di i raporti di spannatura"
 
 #: ../src/common/debugrpt.cpp:514
 msgid "process context description"
@@ -1049,8 +1054,8 @@ msgstr "Ùn si pò ingenerà u raportu di spannatura."
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
-"Fiascu di u trattamentu di u raportu di spannatura, lasciendu i schedarii in "
-"u cartulare « %s »."
+"Impussibule di trattà u raportu di spannatura, i schedarii stanu in u "
+"cartulare « %s »."
 
 #: ../src/common/debugrpt.cpp:573
 msgid "A debug report has been generated. It can be found in"
@@ -1058,7 +1063,9 @@ msgstr "Un raportu di spannatura hè statu creatu. Si pò truvallu in"
 
 #: ../src/common/debugrpt.cpp:576
 msgid "And includes the following files:\n"
-msgstr "È inchjude quelli schedarii :\n"
+msgstr ""
+"È include quelli schedarii :\n"
+"\n"
 
 #: ../src/common/debugrpt.cpp:586
 msgid ""
@@ -1071,12 +1078,12 @@ msgstr ""
 #: ../src/common/debugrpt.cpp:729
 msgid "Failed to execute curl, please install it in PATH."
 msgstr ""
-"Fiascu di l’esecuzione di curl, ci vole à installalu in a variabile PATH."
+"Fiascu à l’esecuzione di curl, ci vole à installallu in a variabile PATH."
 
 #: ../src/common/debugrpt.cpp:742
 #, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr "Fiascu di l’inviu di u raportu di spannatura (codice di sbagliu %d)."
+msgstr "Impussibule di mandà u raportu di spannatura (codice di sbagliu %d)."
 
 #: ../src/common/docview.cpp:366
 msgid "Save As"
@@ -1120,7 +1127,7 @@ msgstr "U ducumentu deve esse chjosu."
 #: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr "Fiascu à l’arregistramentu di %s ; vulete pruvà torna ?"
+msgstr "Fiascu à l’arregistramentu di %s ; vulete pruvà torna ?"
 
 #: ../src/common/docview.cpp:577
 msgid "Retry"
@@ -1138,7 +1145,7 @@ msgstr "U schedariu « %s » ùn pò micca esse apertu in scrittura."
 #: ../src/common/docview.cpp:699
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
-msgstr "Fiascu à l’arregistramentu di u ducumentu in u schedariu « %s »."
+msgstr "Impussibule d’arregistrà u ducumentu in u schedariu « %s »."
 
 #: ../src/common/docview.cpp:716
 #, c-format
@@ -1148,7 +1155,7 @@ msgstr "U schedariu « %s » ùn pò micca esse apertu in lettura."
 #: ../src/common/docview.cpp:728
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
-msgstr "Fiascu di lettura di u ducumentu in u schedariu « %s »."
+msgstr "Impussibule di leghje u ducumentu in u schedariu « %s »."
 
 #: ../src/common/docview.cpp:1250
 #, c-format
@@ -1161,7 +1168,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1310
 msgid "Print preview creation failed."
-msgstr "Fiascu di a creazione di a fighjulata nanzu a stampa."
+msgstr "Impussibule di creà a fighjulata nanzu a stampa."
 
 #: ../src/common/docview.cpp:1316
 msgid "Print Preview"
@@ -1216,7 +1223,7 @@ msgstr "Viste"
 #: ../src/common/dynlib.cpp:81
 #, c-format
 msgid "Failed to load shared library '%s'"
-msgstr "Fiascu di caricamentu di a bibliuteca sparta « %s »"
+msgstr "Impussibule di caricà a bibliuteca sparta « %s »"
 
 #: ../src/common/dynlib.cpp:105
 #, c-format
@@ -1249,9 +1256,9 @@ msgid "failed to flush the file '%s'"
 msgstr "impussibule di sfurzà a scrittura nant’à u discu di u schedariu « %s »"
 
 #: ../src/common/ffile.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "failed to sync data of the file '%s'"
-msgstr "impussibule di sfurzà a scrittura nant’à u discu di u schedariu « %s »"
+msgstr "impussibule di sincrunizà i dati di u schedariu « %s »"
 
 #: ../src/common/ffile.cpp:246
 #, c-format
@@ -1347,15 +1354,15 @@ msgstr " per via di quellu sbagliu :\n"
 
 #: ../src/common/fileconf.cpp:412
 msgid "failed to rename the existing file"
-msgstr "fiascu per rinuminà u schedariu esistente"
+msgstr "impussibule di rinuminà u schedariu esistente"
 
 #: ../src/common/fileconf.cpp:421
 msgid "failed to create the new file directory"
-msgstr "fiascu per creà u cartulare di schedariu novu"
+msgstr "impussibule di creà u cartulare di schedariu novu"
 
 #: ../src/common/fileconf.cpp:428
 msgid "failed to move the file to the new location"
-msgstr "fiascu per dispiazzà u schedariu versu u locu novu"
+msgstr "impussibule di dispiazzà u schedariu versu u locu novu"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1380,7 +1387,7 @@ msgstr "Sbagliu durante a lettura di l’ozzioni di cunfigurazione."
 
 #: ../src/common/fileconf.cpp:593
 msgid "Failed to read config options."
-msgstr "Fiascu à a lettura di l’ozzioni di cunfigurazione."
+msgstr "Impussibule di leghje l’ozzioni di cunfigurazione."
 
 #: ../src/common/fileconf.cpp:700
 #, c-format
@@ -1431,7 +1438,8 @@ msgstr "ùn si pò scrive nant’à u schedariu di cunfigurazione di l’utiliza
 
 #: ../src/common/fileconf.cpp:1178
 msgid "Failed to update user configuration file."
-msgstr "Fiascu per mudificà u schedariu di cunfigurazione di l’utilizatore."
+msgstr ""
+"Impussibule di mudificà u schedariu di cunfigurazione di l’utilizatore."
 
 #: ../src/common/fileconf.cpp:1201
 msgid "Error saving user configuration data."
@@ -1446,7 +1454,7 @@ msgstr "ùn si pò squassà u schedariu di cunfigurazione di l’utilizatore «�
 #: ../src/common/fileconf.cpp:1523
 #, c-format
 msgid "duplicate group '%s'"
-msgstr ""
+msgstr "doppiatura di u gruppu « %s »"
 
 #: ../src/common/fileconf.cpp:2014
 #, c-format
@@ -1464,14 +1472,14 @@ msgid "trailing backslash ignored in '%s'"
 msgstr "barra sbieca « \\ » di fine ignurata in « %s »"
 
 #: ../src/common/fileconf.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected \" at position %zu in '%s'."
-msgstr "simbulu « \" » imprevistu à a pusizione %d in « %s »."
+msgstr "simbulu « \" » \" imprevistu à a pusizione %zu in « %s »."
 
 #: ../src/common/filefn.cpp:403
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "Fiascu di a copia di u schedariu « %s » versu « %s »."
+msgstr "Impussibule di cupià u schedariu « %s » versu « %s »."
 
 #: ../src/common/filefn.cpp:416
 #, c-format
@@ -1499,11 +1507,11 @@ msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
 "exists."
 msgstr ""
-"Fiascu di a rinuminazione di u schedariu da « %s » à « %s » perchè u "
-"schedariu di destinazione esiste dighjà."
+"Impussibule di rinuminà u schedariu da « %s » à « %s » perchè u schedariu di "
+"destinazione esiste dighjà."
 
 #: ../src/common/filefn.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed to '%s'"
 msgstr "U schedariu « %s » ùn pò micca esse rinuminatu « %s »"
 
@@ -1529,7 +1537,7 @@ msgstr "Ùn si pò micca enumerà i schedarii « %s »"
 
 #: ../src/common/filefn.cpp:721
 msgid "Failed to get the working directory"
-msgstr "Fiascu per ottene u cartulare di travagliu"
+msgstr "Impussibule d’ottene u cartulare di travagliu"
 
 #: ../src/common/filefn.cpp:766
 msgid "Could not set current working directory"
@@ -1543,68 +1551,68 @@ msgstr "Schedarii (%s)"
 #: ../src/common/filename.cpp:182
 #, c-format
 msgid "Failed to open '%s' for reading"
-msgstr "Fiascu per apre « %s » in lettura"
+msgstr "Impussibule d’apre « %s » in lettura"
 
 #: ../src/common/filename.cpp:187
 #, c-format
 msgid "Failed to open '%s' for writing"
-msgstr "Fiascu per apre « %s » in scrittura"
+msgstr "Impussibule d’apre « %s » in scrittura"
 
 #: ../src/common/filename.cpp:199
 msgid "Failed to close file handle"
-msgstr "Fiascu per chjode u ghjestiunariu di schedariu"
+msgstr "Impussibule di chjode u ghjestiunariu di schedariu"
 
 #: ../src/common/filename.cpp:1046
 msgid "Failed to create a temporary file name"
-msgstr "Fiascu per creà un nome di schedariu timpurariu"
+msgstr "Impussibule di creà un nome di schedariu timpurariu"
 
 #: ../src/common/filename.cpp:1081
 msgid "Failed to open temporary file."
-msgstr "Fiascu per apre un schedariu timpurariu."
+msgstr "Impussibule d’apre un schedariu timpurariu."
 
 #: ../src/common/filename.cpp:1220
 #, c-format
 msgid "Error preserving all attributes of '%s'"
-msgstr ""
+msgstr "Sbagliu per cunservà tutti l’attributi di « %s »"
 
 #: ../src/common/filename.cpp:1234
 msgid "Failed to set temporary file permissions"
-msgstr "Fiascu di definizione di i permessi di schedariu timpurariu"
+msgstr "Impussibule di definisce i diritti d’accessu di u schedariu timpurariu"
 
 #: ../src/common/filename.cpp:2786 ../src/common/filename.cpp:2793
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get attributes of '%s'"
-msgstr "Fiascu di l’esecuzione di « %s »\n"
+msgstr "Impussibule d’ottene l’attributi di « %s »"
 
 #: ../src/common/filename.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set attributes of '%s'"
-msgstr "Fiascu durante l’spezzione di u schedariu di marchjone « %s »"
+msgstr "Impussibule di definisce l’attributi di « %s »"
 
 #: ../src/common/filename.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get mode of '%s'"
-msgstr "Fiascu durante a cacciatura di u schedariu di marchjone « %s »."
+msgstr "Impussibule d’ottene u modu di « %s »"
 
 #: ../src/common/filename.cpp:2862
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set mode of '%s'"
-msgstr "Fiascu durante a cacciatura di u schedariu di marchjone « %s »."
+msgstr "Impussibule di definisce u modu di « %s »"
 
 #: ../src/common/filename.cpp:3031
 #, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "Fiascu per mudificà a data o l’ora per « %s »"
+msgstr "Impussibule di mudificà a data o l’ora di schedariu per « %s »"
 
 #: ../src/common/filename.cpp:3046
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "Fiascu per tuccà u schedariu « %s »"
+msgstr "Impussibule di tuccà u schedariu « %s »"
 
 #: ../src/common/filename.cpp:3127
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "Fiascu per ricuperà a data o l’ora per « %s »"
+msgstr "Impussibule di ricuperà a data o l’ora di schedariu per « %s »"
 
 #: ../src/common/filepickercmn.cpp:39 ../src/common/filepickercmn.cpp:40
 msgid "Browse"
@@ -2105,7 +2113,7 @@ msgstr ""
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr ""
-"Fiascu per arricurdassi di a cudificazione per u gruppu di caratteri « %s »."
+"Impussibule d’arricurdassi a cudificazione per u gruppu di caratteri « %s »."
 
 #: ../src/common/fontmap.cpp:316
 msgid "can't load any font, aborting"
@@ -2153,7 +2161,7 @@ msgstr ""
 #: ../src/common/fs_mem.cpp:262
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
-msgstr "Fiascu per piazzà a fiura « %s » in a memoria VFS !"
+msgstr "Impussibule di piazzà a fiura « %s » in a memoria VFS !"
 
 #: ../src/common/ftp.cpp:197
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
@@ -2164,7 +2172,7 @@ msgstr ""
 #: ../src/common/ftp.cpp:399
 #, c-format
 msgid "Failed to set FTP transfer mode to %s."
-msgstr "Fiascu per definisce u modu di trasferimentu FTP à %s."
+msgstr "Impussibule di definisce u modu di trasferimentu FTP à %s."
 
 #: ../src/common/ftp.cpp:400 ../src/richtext/richtextsymboldlg.cpp:432
 msgid "ASCII"
@@ -2189,7 +2197,7 @@ msgstr "Dimensione di fiura GIF incurretta (%u, %d) per a fiura #%u"
 
 #: ../src/common/glcmn.cpp:111
 msgid "Failed to allocate colour for OpenGL"
-msgstr "Fiascu per attribuisce u culore per OpenGL"
+msgstr "Impussibule d’attribuisce u culore per OpenGL"
 
 #: ../src/common/headerctrlcmn.cpp:57
 msgid "Please select the columns to show and define their order:"
@@ -2206,22 +2214,22 @@ msgstr "&Persunalizà…"
 #: ../src/common/hyperlnkcmn.cpp:132
 #, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
-msgstr "Fiascu per apre l’indirizzu web « %s » in u navigatore predefinitu"
+msgstr "Impussibule d’apre l’indirizzu web « %s » in u navigatore predefinitu"
 
 #: ../src/common/iconbndl.cpp:195
 #, c-format
 msgid "Failed to load image %%d from file '%s'."
-msgstr "Fiascu per caricà a fiura %%d per u schedariu « %s »."
+msgstr "Impussibule di caricà a fiura %%d per u schedariu « %s »."
 
 #: ../src/common/iconbndl.cpp:203
 #, c-format
 msgid "Failed to load image %d from stream."
-msgstr "Fiascu per caricà a fiura %d da u flussu."
+msgstr "Impussibule di caricà a fiura %d da u flussu."
 
 #: ../src/common/iconbndl.cpp:221
 #, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "Fiascu per caricà l’icone da a risorsa « %s »."
+msgstr "Impussibule di caricà l’icone da a risorsa « %s »."
 
 #: ../src/common/imagbmp.cpp:97
 msgid "BMP: Couldn't save invalid image."
@@ -2319,17 +2327,17 @@ msgstr "Alcunu culore inimpiegatu in a fiura in corsu di mascarassi."
 #: ../src/common/image.cpp:2641
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "Fiascu per caricà a fiura bitmap « %s » da e risorse."
+msgstr "Impussibule di caricà a fiura bitmap « %s » da e risorse."
 
 #: ../src/common/image.cpp:2650
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "Fiascu per caricà l’icona « %s » da e risorse."
+msgstr "Impussibule di caricà l’icona « %s » da e risorse."
 
 #: ../src/common/image.cpp:2728 ../src/common/image.cpp:2747
 #, c-format
 msgid "Failed to load image from file \"%s\"."
-msgstr "Fiascu per caricà a fiura da u schedariu « %s »."
+msgstr "Impussibule di caricà a fiura da u schedariu « %s »."
 
 #: ../src/common/image.cpp:2761
 #, c-format
@@ -2381,7 +2389,7 @@ msgstr "A fiura ùn hè micca di tipu %s."
 #: ../src/common/image.cpp:3509
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
-msgstr "Fiascu per cuntrollà u furmatu di u schedariu di fiura « %s »."
+msgstr "Impussibule di cuntrollà u furmatu di u schedariu di fiura « %s »."
 
 #: ../src/common/imaggif.cpp:124
 msgid "GIF: error in GIF image format."
@@ -2402,6 +2410,7 @@ msgstr "Impussibule d’inizià a tavula di tazzeghju GIF."
 #: ../src/common/imaggif.cpp:565
 msgid "Image palette has too many colours to save as GIF."
 msgstr ""
+"A tavuletta di a fiura hà troppu culori per esse arregistrata cum’è GIF."
 
 #: ../src/common/imagiff.cpp:764
 msgid "IFF: error in IFF image format."
@@ -2525,28 +2534,27 @@ msgstr "TIFF : Sbagliu à a squassatura di i dati."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr "WebP : Dati inaccettevule (fiascu per ottene i funzioni)."
+msgstr "WebP : Dati inaccettevule (impussibule d’ottene i funzioni)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr "WebP : Fiascu per attribuisce memoria à a fiura."
+msgstr "WebP : Impussibule d’attribuisce memoria à a fiura."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr "WebP : Fiascu per discudificà i dati di fiura RGBA."
+msgstr "WebP : Impussibule di discudificà i dati di fiura RGBA."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr "WebP : Fiascu per discudificà i dati di fiura RGB."
+msgstr "WebP : Impussibule di discudificà i dati di fiura RGB."
 
 #: ../src/common/imagwebp.cpp:112 ../src/common/imagwebp.cpp:197
-#, fuzzy
 msgid "WebP: Error reading data."
-msgstr "WebP : Sbagliu per discudificà l’animazione."
+msgstr "WebP : Sbagliu à a lettura di i dati."
 
 #: ../src/common/imagwebp.cpp:130
 msgid "WebP: Failed to parse container data."
-msgstr "WebP : Fiascu per analizà i dati di u cuntenidore."
+msgstr "WebP : Impussibule d’analizà i dati di u cuntenidore."
 
 #: ../src/common/imagwebp.cpp:218
 msgid "WebP: Error decoding animation."
@@ -2609,12 +2617,12 @@ msgstr " (sbagliu %ld : %s)"
 
 #: ../src/common/lzmastream.cpp:121
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "Fiascu per attribuisce memoria per a scumpressione LZMA."
+msgstr "Impussibule d’attribuisce memoria per a scumpressione LZMA."
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr "Fiascu à l’iniziu di a scumpressione LZMA : sbagliu imprevistu %u."
+msgstr "Impussibule d’inizià a scumpressione LZMA : sbagliu imprevistu %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
@@ -2639,12 +2647,12 @@ msgstr "Sbagliu di scumpressione LZMA : %s"
 
 #: ../src/common/lzmastream.cpp:231
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "Fiascu per attribuisce memoria per a cumpressione LZMA."
+msgstr "Impussibule d’attribuisce memoria per a cumpressione LZMA."
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr "Fiascu à l’iniziu di a cumpressione LZMA : sbagliu imprevistu %u."
+msgstr "Impussibule d’inizià a cumpressione LZMA : sbagliu imprevistu %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2683,7 +2691,7 @@ msgstr "A dipendenza « %s » di u modulu « %s » ùn esiste micca."
 #: ../src/common/module.cpp:137
 #, c-format
 msgid "Module \"%s\" initialization failed"
-msgstr "Fiascu à l’iniziu di u modulu « %s »"
+msgstr "Impussibule d’inizià u modulu « %s »"
 
 #: ../src/common/msgout.cpp:96
 msgid "Message"
@@ -3317,7 +3325,7 @@ msgstr "Squassatura di a parolla d’intesa per « %s » fiascata : %s."
 
 #: ../src/common/selectdispatcher.cpp:252
 msgid "Failed to monitor I/O channels"
-msgstr "Fiascu per cuntrollà i canali I/O"
+msgstr "Impussibule di cuntrollà i canali I/O"
 
 #: ../src/common/sizer.cpp:3228 ../src/common/stockitem.cpp:195
 msgid "Save"
@@ -3929,6 +3937,8 @@ msgstr ""
 #, c-format
 msgid "Extended tar header size %zu is greater than maximum allowed."
 msgstr ""
+"A dimensione %zu di l’intestatura tar estesa hè superiore à u massimu "
+"permessu."
 
 #: ../src/common/tarstrm.cpp:983
 msgid "invalid data in extended tar header"
@@ -3964,7 +3974,7 @@ msgstr "Ùn si pò micca caricà u schedariu."
 #: ../src/common/textfile.cpp:95
 #, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "Fiascu per leghje u schedariu di testu « %s »."
+msgstr "Impussibule di leghje u schedariu di testu « %s »."
 
 #: ../src/common/textfile.cpp:160
 #, c-format
@@ -3973,7 +3983,7 @@ msgstr "impussibule di scrive u stampone « %s » nant’à u discu."
 
 #: ../src/common/time.cpp:220
 msgid "Failed to get the local system time"
-msgstr "Fiascu per ottene l’ora lucale di u sistema"
+msgstr "Impussibule d’ottene l’ora lucale di u sistema"
 
 #: ../src/common/time.cpp:287
 msgid "wxGetTimeOfDay failed."
@@ -3991,7 +4001,7 @@ msgstr "Catalogu inaccettevule di messaghji."
 #: ../src/common/translation.cpp:1017
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
-msgstr "Fiascu di l’analisa di e forme plurale : « %s »"
+msgstr "Impussibule d’analizà e forme plurale : « %s »"
 
 #: ../src/common/translation.cpp:1815
 #, c-format
@@ -4014,7 +4024,7 @@ msgstr "Nisuna appiecazione predefinita hè cunfigurata per i schedarii HTML."
 #: ../src/common/utilscmn.cpp:1155
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
-msgstr "Fiascu per apre l’indirizzu web « %s » in u navigatore predefinitu."
+msgstr "Impussibule d’apre l’indirizzu web « %s » in u navigatore predefinitu."
 
 #: ../src/common/valtext.cpp:144
 msgid "Validation conflict"
@@ -4073,7 +4083,7 @@ msgstr "Sbagliu à l’esecuzione di JavaScript : %s"
 #: ../src/common/webview_chromium.cpp:927
 #, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Fiascu per definisce u proxy « %s » : %s"
+msgstr "Impussibule di definisce u proxy « %s » : %s"
 
 #: ../src/common/webview_chromium.cpp:1058
 msgid ""
@@ -4333,11 +4343,11 @@ msgstr "Nisunu ghjestiunariu di fiura bitmap definitu per u tipu %d."
 
 #: ../src/dfb/evtloop.cpp:99
 msgid "Failed to read event from DirectFB pipe"
-msgstr "Fiascu per leghje l’evenimentu da u cundottu DirectFB"
+msgstr "Impussibule di leghje l’evenimentu da u cundottu DirectFB"
 
 #: ../src/dfb/evtloop.cpp:171
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
-msgstr "Fiascu per passà u cundottu DirectFB à u modu senza blucchime"
+msgstr "Impussibule di passà u cundottu DirectFB à u modu senza blucchime"
 
 #: ../src/dfb/fontmgr.cpp:171
 #, c-format
@@ -4656,7 +4666,7 @@ msgid ""
 "Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
 msgstr ""
-"Fiascu per creà u cartulare « %s »\n"
+"Impussibule di creà u cartulare « %s »\n"
 "(Avete i permessi richiesti ?)"
 
 #: ../src/generic/dirdlgg.cpp:217
@@ -5060,7 +5070,7 @@ msgstr "&Detaglii"
 
 #: ../src/generic/logg.cpp:974
 msgid "Failed to copy dialog contents to the clipboard."
-msgstr "Fiascu per cupià u cuntenutu di u dialogu in u preme’papei."
+msgstr "Impussibule di cupià u cuntenutu di u dialogu in u preme’papei."
 
 #: ../src/generic/logg.cpp:1024
 #, c-format
@@ -5273,7 +5283,7 @@ msgstr "< &Precedente"
 
 #: ../src/gtk/aboutdlg.cpp:246
 msgid "translator-credits"
-msgstr "Ringraziamenti à i traduttori"
+msgstr "ringraziamenti à i traduttori"
 
 #: ../src/gtk/app.cpp:518
 msgid ""
@@ -5293,7 +5303,7 @@ msgstr "Impussibule d’inizià GTK+ ; DISPLAY seria definitu currettamente ?"
 #: ../src/gtk/filepicker.cpp:254
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Fiascu di cambiamentu di u cartulare attuale versu « %s »"
+msgstr "Impussibule di cambià u cartulare attuale versu « %s »"
 
 #: ../src/gtk/font.cpp:548
 msgid ""
@@ -5355,7 +5365,8 @@ msgstr "Zitellu MDI"
 #, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
 msgstr ""
-"Fiascu per apre a cunnessione D-Bus per u ghjestiunariu di cunnessione : %s"
+"Impussibule d’apre a cunnessione D-Bus per u ghjestiunariu di cunnessione : "
+"%s"
 
 #: ../src/gtk/power.cpp:214
 msgid "wxWidgets application"
@@ -5372,7 +5383,7 @@ msgstr "Nettata prima d’interrompe"
 #: ../src/gtk/power.cpp:259
 #, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Fiascu per impedisce a veghja : %s"
+msgstr "Impussibule d’impedisce a veghja : %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
@@ -5392,9 +5403,9 @@ msgid "Page Setup"
 msgstr "Parametri di a pagina"
 
 #: ../src/gtk/utilsgtk.cpp:347 ../src/osx/carbon/utilscocoa.mm:718
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' couldn't be moved to trash: %s"
-msgstr "U schedariu « %s » ùn pò micca esse cacciatura"
+msgstr "Ùn si pò micca dispiazzà « %s » in a curbella : %s"
 
 #: ../src/gtk/webview_webkit.cpp:936
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
@@ -5449,7 +5460,7 @@ msgstr ""
 #: ../src/html/chm.cpp:138
 #, c-format
 msgid "Failed to open CHM archive '%s'."
-msgstr "Fiascu à l’apertura di l’archiviu CHM « %s »."
+msgstr "Impussibule d’apre l’archiviu CHM « %s »."
 
 #: ../src/html/chm.cpp:270
 #, c-format
@@ -5834,27 +5845,27 @@ msgstr ""
 
 #: ../src/msw/clipbrd.cpp:80
 msgid "Failed to open the clipboard."
-msgstr "Fiascu à l’apertura di u preme’papei."
+msgstr "Impussibule d’apre u preme’papei."
 
 #: ../src/msw/clipbrd.cpp:101
 msgid "Failed to close the clipboard."
-msgstr "Fiascu à a chjusura di u preme’papei."
+msgstr "Impussibule di chjode u preme’papei."
 
 #: ../src/msw/clipbrd.cpp:113
 msgid "Failed to empty the clipboard."
-msgstr "Fiascu à a viutatura di u preme’papei."
+msgstr "Impussibule di viutà u preme’papei."
 
 #: ../src/msw/clipbrd.cpp:317
 msgid "Failed to put data on the clipboard"
-msgstr "Fiascu à l’aghjuntu di dati in u preme’papei"
+msgstr "Impussibule di scrivi i dati in u preme’papei"
 
 #: ../src/msw/clipbrd.cpp:362
 msgid "Failed to get data from the clipboard"
-msgstr "Fiascu per ottene i dati da u preme’papei"
+msgstr "Impussibule d’ottene i dati da u preme’papei"
 
 #: ../src/msw/clipbrd.cpp:399
 msgid "Failed to retrieve the supported clipboard formats"
-msgstr "Fiascu per ritruvà i furmati accettati di preme’papei"
+msgstr "Impussibule di ritruvà i furmati accettati di preme’papei"
 
 #: ../src/msw/colordlg.cpp:229
 #, c-format
@@ -5863,24 +5874,24 @@ msgstr "Fiascu di u dialogu di selezzione di culore cù u sbagliu %0lx."
 
 #: ../src/msw/cursor.cpp:141
 msgid "Failed to create cursor."
-msgstr "Fiascu à a creazione di u cursore."
+msgstr "Impussibule di creà u cursore."
 
 #: ../src/msw/dde.cpp:279
 #, c-format
 msgid "Failed to register DDE server '%s'"
-msgstr "Fiascu à l’arregistramentu di u servitore DDE « %s »"
+msgstr "Impussibule d’arregistrà u servitore DDE « %s »"
 
 #: ../src/msw/dde.cpp:300
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "Fiascu à u disarregistramentu di u servitore DDE « %s »"
+msgstr "Impussibule di disarregistrà u servitore DDE « %s »"
 
 #: ../src/msw/dde.cpp:428
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr ""
-"Fiascu à a creazione di a cunnessione à u servitore « %s » nant’à u "
-"sughjettu « %s »"
+"Impussibule di creà a cunnessione à u servitore « %s » nant’à u sughjettu "
+"« %s »"
 
 #: ../src/msw/dde.cpp:655
 msgid "DDE poke request failed"
@@ -5888,19 +5899,19 @@ msgstr "Fiascu di a richiesta DDE « poke »"
 
 #: ../src/msw/dde.cpp:674
 msgid "Failed to establish an advise loop with DDE server"
-msgstr "Fiascu per stabilisce un « advise loop » cù u servitore DDE"
+msgstr "Impussibule di stabilisce un « advise loop » cù u servitore DDE"
 
 #: ../src/msw/dde.cpp:693
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "Fiascu per compie un « advise loop » cù u servitore DDE"
+msgstr "Impussibule di compie un « advise loop » cù u servitore DDE"
 
 #: ../src/msw/dde.cpp:768
 msgid "Failed to send DDE advise notification"
-msgstr "Fiascu à l’inviu d’una nutificazione d’« advise » DDE"
+msgstr "Impussibule di mandà una nutificazione d’« advise » DDE"
 
 #: ../src/msw/dde.cpp:1085
 msgid "Failed to create DDE string"
-msgstr "Fiascu à a creazione di a catena DDE"
+msgstr "Impussibule di creà a catena DDE"
 
 #: ../src/msw/dde.cpp:1131
 msgid "no DDE error."
@@ -6042,7 +6053,7 @@ msgstr ""
 
 #: ../src/msw/dialup.cpp:437
 msgid "Failed to retrieve text of RAS error message"
-msgstr "Fiascu per ritruvà u testu di u messaghju di sbagliu RAS"
+msgstr "Impussibule di ritruvà u testu di u messaghju di sbagliu RAS"
 
 #: ../src/msw/dialup.cpp:440
 #, c-format
@@ -6072,7 +6083,7 @@ msgstr "Ùn si pò micca ottene i nomi di i FAI : %s"
 
 #: ../src/msw/dialup.cpp:712
 msgid "Failed to connect: no ISP to dial."
-msgstr "Fiascu di a cunnessione : nisunu numeru di FAI à chjamà."
+msgstr "Cunnessione impussibule : nisunu numeru di FAI à chjamà."
 
 #: ../src/msw/dialup.cpp:732
 msgid "Choose ISP to dial"
@@ -6085,7 +6096,7 @@ msgstr "Sciglite à chì FAI vulete cunnettevi"
 #: ../src/msw/dialup.cpp:766
 msgid "Failed to connect: missing username/password."
 msgstr ""
-"Fiascu di a cunnessione : nome d’utilizatore è/o parolla d’intesa assente."
+"Cunnessione impussibule : nome d’utilizatore è/o parolla d’intesa assente."
 
 #: ../src/msw/dialup.cpp:796
 msgid "Cannot find the location of address book file"
@@ -6138,14 +6149,13 @@ msgstr "Ùn si pò micca aghjunghje una fiura à a lista di e fiure."
 #: ../src/msw/enhmeta.cpp:94
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "Fiascu per caricà u metaschedariu da u schedariu « %s »."
+msgstr "Impussibule di caricà u metaschedariu da u schedariu « %s »."
 
 #: ../src/msw/fdrepdlg.cpp:415
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr ""
-"Fiascu à a creazione di u dialogu classicu circà/rimpiazzà (codice di "
-"sbagliu %d)"
+"Impussibule di creà u dialogu classicu circà/rimpiazzà (codice di sbagliu %d)"
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
@@ -6212,7 +6222,7 @@ msgstr "Ùn si pò micca creà u cuntestu OpenGL"
 
 #: ../src/msw/glcanvas.cpp:1345
 msgid "Failed to initialize OpenGL"
-msgstr "Fiascu à l’iniziu d’OpenGL"
+msgstr "Impussibule d’inizià d’OpenGL"
 
 #: ../src/msw/graphicsd2d.cpp:599
 msgid "Could not register custom DirectWrite font loader."
@@ -6229,7 +6239,7 @@ msgstr ""
 
 #: ../src/msw/helpchm.cpp:55
 msgid "Failed to initialize MS HTML Help."
-msgstr "Fiascu à l’iniziu di l’aiutu MS HTML."
+msgstr "Impussibule d’inizià MS HTML Help."
 
 #: ../src/msw/iniconf.cpp:458
 #, c-format
@@ -6396,7 +6406,7 @@ msgstr "U valore di registru « %s » esiste dighjà."
 #: ../src/msw/registry.cpp:520
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
-msgstr "Fiascu di a rinuminazione di u valore di registru da « %s » à « %s »."
+msgstr "Impussibule di rinuminà u valore di registru da « %s » à « %s »."
 
 #: ../src/msw/registry.cpp:575
 #, c-format
@@ -6417,23 +6427,23 @@ msgstr "A chjave di registru « %s » esiste dighjà."
 #: ../src/msw/registry.cpp:625
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
-msgstr "Fiascu di a rinuminazione di a chjave di registru da « %s » à « %s »."
+msgstr "Impussibule di rinuminà a chjave di registru da « %s » à « %s »."
 
 #: ../src/msw/registry.cpp:670
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "Fiascu di a copia di a sottuchjave di registru da « %s » à « %s »."
+msgstr "Impussibule di cupià a sottuchjave di registru da « %s » à « %s »."
 
 #: ../src/msw/registry.cpp:683
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "Fiascu di a copia di u valore di registru « %s »"
+msgstr "Impussibule di cupià u valore di registru « %s »"
 
 #: ../src/msw/registry.cpp:692
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr ""
-"Fiascu di a copia di u cuntenutu di a chjave di registru da « %s » à « %s »."
+"Impussibule di cupià u cuntenutu di a chjave di registru da « %s » à « %s »."
 
 #: ../src/msw/registry.cpp:718
 #, c-format
@@ -6589,17 +6599,17 @@ msgstr ""
 #: ../src/msw/utils.cpp:665
 #, c-format
 msgid "Failed to kill process %d"
-msgstr "Fiascu per tumbà u trattamentu %d"
+msgstr "Impussibule di tumbà u trattamentu %d"
 
 #: ../src/msw/utils.cpp:987
 #, c-format
 msgid "Failed to load resource \"%s\"."
-msgstr "Fiascu per caricà a risorsa « %s »."
+msgstr "Impussibule di caricà a risorsa « %s »."
 
 #: ../src/msw/utils.cpp:994
 #, c-format
 msgid "Failed to lock resource \"%s\"."
-msgstr "Fiascu per ammarchjunà a risorsa « %s »."
+msgstr "Impussibule d’ammarchjunà a risorsa « %s »."
 
 #. TRANSLATORS: MS Windows build number
 #: ../src/msw/utils.cpp:1252
@@ -6613,12 +6623,11 @@ msgstr ", edizione 64-bit"
 
 #: ../src/msw/utilsexc.cpp:224
 msgid "Failed to create an anonymous pipe"
-msgstr "Fiascu à a creazione d’un cundottu anonimu"
+msgstr "Impussibule di creà un cundottu anonimu"
 
 #: ../src/msw/utilsexc.cpp:697
 msgid "Failed to redirect the child process IO"
-msgstr ""
-"Fiascu di a ridirezzione di l’entrate è di l’esciute di u trattamentu zitellu"
+msgstr "Impussibule di ridirege l’entrate è l’esciute di u trattamentu zitellu"
 
 #: ../src/msw/utilsexc.cpp:870
 #, c-format
@@ -6628,11 +6637,11 @@ msgstr "Fiascu di l’esecuzione di a cumanda « %s »"
 #: ../src/msw/utilswin.cpp:203
 #, c-format
 msgid "'%s' couldn't be moved to trash: error 0x%08x"
-msgstr ""
+msgstr "Ùn si pò micca dispiazzà « %s » in a curbella : sbagliu 0x%08x"
 
 #: ../src/msw/volume.cpp:337
 msgid "Failed to load mpr.dll."
-msgstr "Fiascu di u caricamentu di mpr.dll."
+msgstr "Impussibule di caricà mpr.dll."
 
 #: ../src/msw/volume.cpp:506
 #, c-format
@@ -6653,21 +6662,24 @@ msgstr ""
 #: ../src/msw/webview_edge.cpp:1545
 msgid "PDF export requires a newer version of the WebView2 runtime."
 msgstr ""
+"L’espurtazione di PDF richiede una versione più recente di l’ambiente "
+"d’esecuzione WebView2."
 
 #: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
-"Fiascu per truvà un livellu di simulazione di vista di u web in u registru"
+"Impussibule di truvà un livellu di simulazione di vista di u web in u "
+"registru"
 
 #: ../src/msw/webview_ie.cpp:1026
 msgid "Failed to set web view to modern emulation level"
 msgstr ""
-"Fiascu per definisce a vista di u web à u livellu di simulazione mudernu"
+"Impussibule di definisce a vista di u web à u livellu di simulazione mudernu"
 
 #: ../src/msw/webview_ie.cpp:1034
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
-"Fiascu per reinizià a vista di u web à u livellu di simulazione classicu"
+"Impussibule di reinizià a vista di u web à u livellu di simulazione classicu"
 
 #: ../src/msw/webview_ie.cpp:1056
 msgid "Can't run JavaScript script without a valid HTML document"
@@ -6715,7 +6727,7 @@ msgstr "Tuttu mette di fronte"
 #: ../src/osx/core/sound.cpp:143
 #, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Fiascu per caricà u sonu da « %s » (sbagliu %d)."
+msgstr "Impussibule di caricà u sonu da « %s » (sbagliu %d)."
 
 #: ../src/osx/fontutil.cpp:80
 #, c-format
@@ -7247,125 +7259,115 @@ msgid "&Tile"
 msgstr "&Musaica"
 
 #: ../src/ribbon/backstage.cpp:110
-#, fuzzy
 msgid "Backstage"
-msgstr "Ritornu in daretu"
+msgstr "Daretu scena"
 
 #: ../src/ribbon/backstage.cpp:176 ../src/ribbon/backstagecontrols.cpp:91
 #: ../src/ribbon/bar.cpp:179 ../src/ribbon/buttonbar.cpp:1980
 #: ../src/ribbon/gallery.cpp:1320 ../src/ribbon/panel.cpp:1460
 #: ../src/ribbon/toolbar.cpp:1641
-#, fuzzy
 msgid "Press"
-msgstr "Prugressione :"
+msgstr "Appughjà"
 
 #: ../src/ribbon/backstagecontrols.cpp:844
-#, fuzzy
 msgid "Open"
-msgstr "Apre..."
+msgstr "Apre"
 
 #: ../src/ribbon/backstagecontrols.cpp:1469
-#, fuzzy
 msgid "Today"
-msgstr "oghje"
+msgstr "Oghje"
 
 #: ../src/ribbon/backstagecontrols.cpp:1471
-#, fuzzy
 msgid "Yesterday"
-msgstr "eri"
+msgstr "Eri"
 
 #: ../src/ribbon/backstagecontrols.cpp:1473
 msgid "This Week"
-msgstr ""
+msgstr "Sta settimana"
 
 #: ../src/ribbon/backstagecontrols.cpp:1475
-#, fuzzy
 msgid "Last Week"
-msgstr "Ultima pagina"
+msgstr "A settimana scorsa"
 
 #: ../src/ribbon/backstagecontrols.cpp:1477
 msgid "Earlier This Month"
-msgstr ""
+msgstr "Più prestu ’ssu mese"
 
 #: ../src/ribbon/backstagecontrols.cpp:1480
 msgid "Older"
-msgstr ""
+msgstr "Più vechju"
 
 #: ../src/ribbon/backstagecontrols.cpp:1520
-#, fuzzy
 msgid "Documents"
-msgstr "Ducumentu :"
+msgstr "Ducumenti"
 
 #: ../src/ribbon/backstagecontrols.cpp:1522
-#, fuzzy
 msgid "Pictures"
-msgstr "&Fiura"
+msgstr "Fiure"
 
 #: ../src/ribbon/backstagecontrols.cpp:1523
 msgid "Videos"
-msgstr ""
+msgstr "Filmetti"
 
 #: ../src/ribbon/backstagecontrols.cpp:1524
 msgid "Music"
-msgstr ""
+msgstr "Musica"
 
 #: ../src/ribbon/backstagecontrols.cpp:1525
-#, fuzzy
 msgid "Downloads"
-msgstr "Ghjò"
+msgstr "Scaricamenti"
 
 #: ../src/ribbon/backstagecontrols.cpp:1594
 msgid "Just now"
-msgstr ""
+msgstr "Avà"
 
 #: ../src/ribbon/backstagecontrols.cpp:1602
 #, c-format
 msgid "%d minute ago"
 msgid_plural "%d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d minutu fà"
+msgstr[1] "%d minuti fà"
 
 #: ../src/ribbon/backstagecontrols.cpp:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Yesterday at %s"
-msgstr "eri"
+msgstr "Eri à %s"
 
 #: ../src/ribbon/backstagecontrols.cpp:1614
 #, c-format
 msgid "%s at %s"
-msgstr ""
+msgstr "%s à %s"
 
 #. TRANSLATORS: Month (abbreviated) and day of the month (e.g., "Mar 03").
 #: ../src/ribbon/backstagecontrols.cpp:1621
 #, c-format
 msgid "%b %d"
-msgstr ""
+msgstr "%b %d"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Minimize the Ribbon"
-msgstr ""
+msgstr "Inchjuculì u frisgettu"
 
 #: ../src/ribbon/bar.cpp:147
 msgid "Expand the Ribbon"
-msgstr ""
+msgstr "Sviluppà u frisgettu"
 
 #: ../src/ribbon/gallery.cpp:1286
 msgid "More"
-msgstr ""
+msgstr "Più"
 
 #: ../src/ribbon/page.cpp:1354 ../src/ribbon/panel.cpp:1453
 msgid "Switch"
-msgstr ""
+msgstr "Cumutà"
 
 #: ../src/ribbon/panel.cpp:1421
-#, fuzzy
 msgid "More options"
-msgstr "Ozzioni di a stampetta"
+msgstr "Ozzioni addiziunale"
 
 #: ../src/ribbon/panel.cpp:1422
-#, fuzzy, c-format
+#, c-format
 msgid "More %s options"
-msgstr "Ozzioni di a stampetta"
+msgstr "Ozzioni addiziunale di %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -8169,7 +8171,7 @@ msgstr "Rimpiazzà"
 
 #: ../src/richtext/richtextctrl.cpp:5663
 msgid "Rich Text Control"
-msgstr ""
+msgstr "Cuntrollu di testu riccu"
 
 #: ../src/richtext/richtextfontpage.cpp:146
 #: ../src/richtext/richtextsymboldlg.cpp:384
@@ -9230,7 +9232,7 @@ msgstr "Cliccu per squassà tutte e pusizioni di tabulazione selezziunate."
 #: ../src/univ/theme.cpp:110
 msgid "Failed to initialize GUI: no built-in themes found."
 msgstr ""
-"Fiascu à l’iniziu di l’interfaccia grafica : ùn si pò truvà alcunu tema "
+"Impussibule d’inizià l’interfaccia grafica : ùn si pò truvà alcunu tema "
 "integratu."
 
 #: ../src/univ/themes/gtk.cpp:521
@@ -9275,7 +9277,7 @@ msgstr "Alt+"
 
 #: ../src/unix/appunix.cpp:190
 msgid "Failed to install signal handler"
-msgstr "Fiascu durante l’installazione di u ghjestiunariu di signale"
+msgstr "Impussibule d’installà u ghjestiunariu di signale"
 
 #: ../src/unix/dialup.cpp:351
 msgid "Already dialling ISP."
@@ -9283,7 +9285,7 @@ msgstr "Chjamata dighjà en corsu di u FAI."
 
 #: ../src/unix/dlunix.cpp:93
 msgid "Failed to unload shared library"
-msgstr "Fiascu durante u scaricamentu di a biblioteca scumparta"
+msgstr "Impussibule di scaricà a biblioteca scumparta"
 
 #: ../src/unix/dlunix.cpp:121
 msgid "Unknown dynamic library error"
@@ -9291,7 +9293,7 @@ msgstr "Sbagliu scunnisciutu di a biblioteca dinamica"
 
 #: ../src/unix/epolldispatcher.cpp:85
 msgid "Failed to create epoll descriptor"
-msgstr "Fiascu durante a creazione di u discrittore « epoll »"
+msgstr "Impussibule di creà u discrittore « epoll »"
 
 #: ../src/unix/epolldispatcher.cpp:106
 msgid "Error closing epoll descriptor"
@@ -9300,22 +9302,18 @@ msgstr "Sbagliu durante a chjusura di u discrittore « epoll »"
 #: ../src/unix/epolldispatcher.cpp:165
 #, c-format
 msgid "Failed to add descriptor %d to epoll descriptor %d"
-msgstr ""
-"Fiascu durante l’aghjuntu di u discrittore %d à u discrittore « epoll » %d"
+msgstr "Impussibule d’aghjunghje u discrittore %d à u discrittore « epoll » %d"
 
 #: ../src/unix/epolldispatcher.cpp:189
 #, c-format
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
-msgstr ""
-"Fiascu durante a mudificazione di u discrittore %d in u discrittore "
-"« epoll » %d"
+msgstr "Impussibule di mudificà u discrittore %d in u discrittore « epoll » %d"
 
 #: ../src/unix/epolldispatcher.cpp:210
 #, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
 msgstr ""
-"Fiascu durante u disarregistramentu di u discrittore %d da u discrittore "
-"« epoll » %d"
+"Impussibule di disarregistrà u discrittore %d in u discrittore « epoll » %d"
 
 #: ../src/unix/epolldispatcher.cpp:274
 #, c-format
@@ -9385,6 +9383,7 @@ msgstr "Impussibule d’ottene l’evenimenti da « kqueue »"
 #, c-format
 msgid "EGL version is %d.%d but version 1.4 or greater is required."
 msgstr ""
+"A versione d’EGL hè %d.%d ma a versione 1.4 o più recente hè richiesta."
 
 #: ../src/unix/mediactrl.cpp:968
 #, c-format
@@ -9394,29 +9393,29 @@ msgstr "Sbagliu di ripruduzzione medià : %s"
 #: ../src/unix/mediactrl.cpp:1230
 #, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Fiascu durante l’approntu di a ripruduzzione di « %s »."
+msgstr "Impussibule d’appruntà a lettura di « %s »."
 
 #: ../src/unix/snglinst.cpp:164
 #, c-format
 msgid "Failed to write to lock file '%s'"
-msgstr "Fiascu durante a scrittura nant’à u schedariu di marchjone « %s »"
+msgstr "Impussibule di scrive in u schedariu di marchjone « %s »"
 
 #: ../src/unix/snglinst.cpp:177
 #, c-format
 msgid "Failed to set permissions on lock file '%s'"
 msgstr ""
-"Fiascu durante a definizione di i permessi nant’à u schedariu di marchjone "
+"Impussibule di definisce i diritti d’accessu nant’à u schedariu di marchjone "
 "« %s »"
 
 #: ../src/unix/snglinst.cpp:194
 #, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "Fiascu per ammarchjunà u schedariu di marchjone « %s »"
+msgstr "Impussibule d’ammarchjunà u schedariu di marchjone « %s »"
 
 #: ../src/unix/snglinst.cpp:237
 #, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "Fiascu durante l’spezzione di u schedariu di marchjone « %s »"
+msgstr "Impussibule d’ispettà u schedariu di marchjone « %s »"
 
 #: ../src/unix/snglinst.cpp:242
 #, c-format
@@ -9430,19 +9429,18 @@ msgstr "I permessi di u schedariu di marchjone « %s » sò incurretti."
 
 #: ../src/unix/snglinst.cpp:265
 msgid "Failed to access lock file."
-msgstr "Fiascu durante l’accessu à u schedariu di marchjone."
+msgstr "Impussibule d’accede à u schedariu di marchjone."
 
 #: ../src/unix/snglinst.cpp:274
 msgid "Failed to read PID from lock file."
 msgstr ""
-"Fiascu durante a lettura di u numeru di trattamentu (PID) da u schedariu di "
+"Impussibule di leghje u numeru di trattamentu (PID) in u schedariu di "
 "marchjone."
 
 #: ../src/unix/snglinst.cpp:284
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr ""
-"Fiascu durante a cacciatura di u schedariu di marchjone « %s » scadutu."
+msgstr "Impussibule di caccià u schedariu di marchjone « %s » scadutu."
 
 #: ../src/unix/snglinst.cpp:297
 #, c-format
@@ -9457,17 +9455,17 @@ msgstr "U schedariu di marchjone « %s » hè inaccettevule."
 #: ../src/unix/snglinst.cpp:324
 #, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "Fiascu durante a cacciatura di u schedariu di marchjone « %s »."
+msgstr "Impussibule di caccià u schedariu di marchjone « %s »."
 
 #: ../src/unix/snglinst.cpp:330
 #, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "Fiascu durante a spalancata di u schedariu di marchjone « %s »."
+msgstr "Impussibule di spalancà u schedariu di marchjone « %s »."
 
 #: ../src/unix/snglinst.cpp:336
 #, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "Fiascu durante a chjusura di u schedariu di marchjone « %s »."
+msgstr "Impussibule di chjode u schedariu di marchjone « %s »."
 
 #: ../src/unix/sound.cpp:77
 msgid "No sound"
@@ -9517,29 +9515,30 @@ msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
 msgstr ""
-"Fiascu per ghjunghje un filu d’esecuzione, avventata d’una sfughjime di "
+"Impussibule di ghjunghje un filu d’esecuzione, avventata d’una sfughjime di "
 "memoria pussibule ; ci vole à rilancià u prugramma"
 
 #: ../src/unix/threadpsx.cpp:1348
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %zu"
 msgstr ""
-"Fiascu per definisce u livellu di cuncumitanza di u filu d’esecuzione à %lu"
+"Impussibule di definisce à %zu u livellu di cuncumitanza di u filu "
+"d’esecuzione"
 
 #: ../src/unix/threadpsx.cpp:1477
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "Fiascu per definisce a priurità %d di u filu d’esecuzione."
+msgstr "Impussibule di definisce a priurità %d di u filu d’esecuzione."
 
 #: ../src/unix/threadpsx.cpp:1662
 msgid "Failed to terminate a thread."
-msgstr "Fiascu di a piantata di u u filu d’esecuzione."
+msgstr "Impussibule di piantà u filu d’esecuzione."
 
 #: ../src/unix/threadpsx.cpp:1889
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
-"Fiascu à l’iniziu di u modulu di u filu d’esecuzione : fiascu à a creazione "
-"di a chjave di u filu d’esecuzione"
+"Impussibule d’inizià u modulu di u filu d’esecuzione : impussibule di creà a "
+"chjave di u filu d’esecuzione"
 
 #: ../src/unix/utilsunx.cpp:336
 msgid "Impossible to get child process input"
@@ -9552,7 +9551,7 @@ msgstr "Ùn si pò micca scrive in u « stdin » di u trattamentu zitellu"
 #: ../src/unix/utilsunx.cpp:640
 #, c-format
 msgid "Failed to execute '%s'\n"
-msgstr "Fiascu di l’esecuzione di « %s »\n"
+msgstr "Fiascu à l’esecuzione di « %s »\n"
 
 #: ../src/unix/utilsunx.cpp:674
 msgid "Fork failed"
@@ -9560,12 +9559,11 @@ msgstr "Fiascu di u « fork »"
 
 #: ../src/unix/utilsunx.cpp:697
 msgid "Failed to set process priority"
-msgstr "Fiascu per definisce a priurità di u trattamentu"
+msgstr "Impussibule di definisce a priurità di u trattamentu"
 
 #: ../src/unix/utilsunx.cpp:708
 msgid "Failed to redirect child process input/output"
-msgstr ""
-"Fiascu di a ridirezzione di l’entrate è di l’esciute di u trattamentu zitellu"
+msgstr "Impussibule di ridirege l’entrate è l’esciute di u trattamentu zitellu"
 
 #: ../src/unix/utilsunx.cpp:812
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -9585,28 +9583,27 @@ msgstr "Ùn si pò micca ottene u nome d’ospite ufficiale"
 #: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
-msgstr ""
+msgstr ", basata nant’à %s (%s)"
 
 #. TRANSLATORS: %s is a Linux distribution parent name.
 #. TRANSLATORS: %s is an upstream codename.
 #: ../src/unix/utilsunx.cpp:1318 ../src/unix/utilsunx.cpp:1324
-#, fuzzy, c-format
+#, c-format
 msgid ", based on %s"
-msgstr "&Appughjatu nant’à :"
+msgstr ", basata nant’à %s"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
 msgstr ""
-"Fiascu di a creazione d’un cundottu di svegliata impiegatu da l’« event "
-"loop »."
+"Impussibule di creà un cundottu di svegliata impiegatu da l’« event loop »."
 
 #: ../src/unix/wakeuppipe.cpp:56
 msgid "Failed to switch wake up pipe to non-blocking mode"
-msgstr "Fiascu per passà u cundottu di svegliata à u modu senza blucchime"
+msgstr "Impussibule di passà u cundottu di svegliata à u modu senza blucchime"
 
 #: ../src/unix/wakeuppipe.cpp:117
 msgid "Failed to read from wake-up pipe"
-msgstr "Fiascu per leghje in u cundottu di svegliata"
+msgstr "Impussibule di leghje in u cundottu di svegliata"
 
 #: ../src/x11/app.cpp:124
 #, c-format
@@ -9620,12 +9617,12 @@ msgstr "wxWidgets ùn pò micca apre un affissera. Abbandonu."
 #: ../src/x11/utils.cpp:169
 #, c-format
 msgid "Failed to close the display \"%s\""
-msgstr "Fiascu durante a chjusura di l’affissera « %s »."
+msgstr "Impussibule di chjode l’affissera « %s »."
 
 #: ../src/x11/utils.cpp:188
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "Fiascu durante l’apertura di l’affissera « %s »."
+msgstr "Impussibule d’apre l’affissera « %s »."
 
 #: ../src/xml/xml.cpp:867
 #, c-format
