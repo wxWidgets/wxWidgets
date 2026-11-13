@@ -18,6 +18,10 @@
 
 WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromBundle(const  wxBitmapBundle& bundle);
 wxBitmapBundle WXDLLIMPEXP_CORE wxOSXMakeBundleFromImage(WXImage image);
+// Create a bitmap bundle backed by a named SF symbol that regenerates the
+// underlying NSImage at any requested size. Returns an invalid bundle if the
+// name does not resolve to an SF symbol or if SF symbols are unavailable.
+wxBitmapBundle WXDLLIMPEXP_CORE wxOSXMakeBundleForSystemSymbol(const wxString& name, const wxSize& defaultSize);
 WXImage WXDLLIMPEXP_CORE wxOSXImageFromBitmap(const wxBitmap& bmp);
 #if wxOSX_USE_COCOA
 void WXDLLIMPEXP_CORE wxOSXAddBitmapToImage(WXImage image, const wxBitmap& bmp);
