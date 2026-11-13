@@ -389,7 +389,12 @@ int wxComboBox::FindString(const wxString& s, bool bCase) const
 
 void wxComboBox::SetSelection(int n)
 {
-    wxCHECK_RET( (n == wxNOT_FOUND || IsValid(n)), wxT("invalid index in wxComboBox::Select") );
+    // Native ports (MSW CB_SETCURSEL, GTK, Qt, OSX) silently treat an
+    // out-of-range index as "no selection" and applications rely on this
+    // (e.g. selecting by an enum value in a list that may be shorter, or
+    // index 0 of a still-empty choice), so do the same instead of asserting.
+    if ( n != wxNOT_FOUND && !IsValid(n) )
+        n = wxNOT_FOUND;
 
     GetLBox()->SetSelection(n);
 
