@@ -709,7 +709,20 @@ if(wxUSE_GUI)
         set(wxUSE_GSTREAMER_PLAYER OFF)
     endif()
 
-    if(wxUSE_SOUND AND wxUSE_LIBSDL AND UNIX AND NOT APPLE)
+    if(wxUSE_SOUND AND wxUSE_LIBSDL AND RETRO68)
+        # Only SDL 3 has a classic Mac OS port, look for it in the toolchain
+        # sysroot only, to avoid picking up the host version.
+        find_package(SDL3 CONFIG QUIET
+            PATHS "${CMAKE_SYSTEM_PREFIX_PATH}"
+            NO_DEFAULT_PATH)
+        if(SDL3_FOUND)
+            message(STATUS "Found SDL3 for Retro68: ${SDL3_DIR} (found version ${SDL3_VERSION})")
+            set(wxUSE_LIBSDL3 ON)
+        else()
+            message(WARNING "SDL3 not found in Retro68 sysroot, wxSound won't produce any sound")
+            wx_option_force_value(wxUSE_LIBSDL OFF)
+        endif()
+    elseif(wxUSE_SOUND AND wxUSE_LIBSDL AND UNIX AND NOT APPLE)
         set(SDL3_DIR_OLD "${SDL3_DIR}")
         find_package(SDL3 QUIET CONFIG)
         if(SDL3_FOUND)

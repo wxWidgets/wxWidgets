@@ -29,6 +29,7 @@
 #include "wx/unix/private/timer.h"
 
 #include "wx/retro68/private/qd.h"
+#include "wx/retro68/private/bgtask.h"
 #include "wx/retro68/dc.h"
 
 #define TRACE_EVENTS "events"
@@ -525,6 +526,28 @@ void wxMacHandleEvent(EventRecord& ev)
 }
 
 // ===========================================================================
+// background task
+// ===========================================================================
+
+namespace
+{
+
+wxRetro68BackgroundTask gs_backgroundTask = nullptr;
+
+} // anonymous namespace
+
+void wxRetro68SetBackgroundTask(wxRetro68BackgroundTask task)
+{
+    gs_backgroundTask = task;
+}
+
+void wxRetro68RunBackgroundTask()
+{
+    if ( gs_backgroundTask )
+        gs_backgroundTask();
+}
+
+// ===========================================================================
 // wxGUIEventLoop implementation
 // ===========================================================================
 
@@ -574,12 +597,15 @@ bool wxGUIEventLoop::DoDispatchTimeout(long timeout)
 
     for ( ;; )
     {
+        wxRetro68RunBackgroundTask();
+
         // Process the expired timers first.
         if ( wxTimerScheduler::Get().NotifyExpired() )
             return true;
 
-        // Compute how long can we sleep.
-        long sleepTicks = 60;
+        // Compute how long can we sleep: not long at all if we need to run
+        // the background task regularly.
+        long sleepTicks = gs_backgroundTask ? 1 : 60;
 
         wxUsecClock_t remaining;
         if ( wxTimerScheduler::Get().GetNext(&remaining) )
@@ -644,6 +670,8 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     if ( eventsToProcess & wxEVT_CATEGORY_USER_INPUT )
         mask = everyEvent;
 
+    wxRetro68RunBackgroundTask();
+
     EventRecord ev;
     while ( WaitNextEvent(mask, &ev, 0, nullptr) )
     {
@@ -651,6 +679,7 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
             break;
 
         wxMacHandleEvent(ev);
+        wxRetro68RunBackgroundTask();
     }
 
     if ( eventsToProcess & wxEVT_CATEGORY_TIMER )

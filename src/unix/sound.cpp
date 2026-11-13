@@ -14,9 +14,11 @@
 #if wxUSE_SOUND
 
 #include <stdio.h>
+#ifdef __UNIX__
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#endif
 
 #ifdef HAVE_SYS_SOUNDCARD_H
 #include <sys/soundcard.h>

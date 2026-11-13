@@ -105,7 +105,9 @@ wx_retro68_default(wxUSE_ON_FATAL_EXCEPTION OFF)
 wx_retro68_default(wxUSE_DEBUGREPORT OFF)
 wx_retro68_default(wxUSE_CONSOLE_EVENTLOOP OFF)
 wx_retro68_default(wxUSE_XLOCALE OFF)
-wx_retro68_default(wxUSE_SOUND OFF)
+# wxSound is implemented using SDL 3 (Sound Manager backend).
+wx_retro68_default(wxUSE_SOUND ON)
+wx_retro68_default(wxUSE_LIBSDL ON)
 wx_retro68_default(wxUSE_SPELLCHECK OFF)
 wx_retro68_default(wxUSE_VISIBILITY OFF)
 

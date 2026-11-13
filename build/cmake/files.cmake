@@ -1952,6 +1952,7 @@ set(RETRO68_LOWLEVEL_HDR
     wx/retro68/popupwin.h
     wx/retro68/toplevel.h
     wx/retro68/window.h
+    wx/retro68/private/bgtask.h
     wx/retro68/private/qd.h
 )
 
@@ -2830,6 +2831,14 @@ set(OPENGL_QT_HDR
 
 set(UNIX_SOUND_SDL_SRC
     src/unix/sound_sdl.cpp
+)
+
+set(RETRO68_SOUND_SRC
+    src/unix/sound.cpp
+)
+
+set(RETRO68_SOUND_HDR
+    wx/unix/sound.h
 )
 
 set(AUI_CMN_SRC

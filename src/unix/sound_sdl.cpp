@@ -43,6 +43,71 @@
 #include "wx/thread.h"
 #include "wx/sound.h"
 
+#ifdef __RETRO68__
+    #include "wx/retro68/private/bgtask.h"
+
+    #if !WX_SDL_USE_STREAM_API
+        #error "Only SDL 3 is supported under classic Mac OS"
+    #endif
+#endif
+
+namespace
+{
+
+#ifdef __RETRO68__
+
+// There are no threads under classic Mac OS, so SDL Sound Manager backend
+// can't mix the audio in the background on its own and needs to be given a
+// chance to do it from the main thread. SDL does it whenever SDL_Delay() is
+// called, and doing it with zero delay just feeds the audio device without
+// waiting.
+void wxSDLPumpAudio()
+{
+    SDL_DelayNS(0);
+}
+
+void wxSDLStartPumping()
+{
+    wxRetro68SetBackgroundTask(wxSDLPumpAudio);
+
+    // Fill the buffers immediately to start playing as soon as possible.
+    wxSDLPumpAudio();
+}
+
+void wxSDLStopPumping()
+{
+    wxRetro68SetBackgroundTask(nullptr);
+}
+
+void wxSDLWaitWhilePlaying()
+{
+    SDL_Delay(10);
+}
+
+#else // !__RETRO68__
+
+void wxSDLStartPumping() { }
+void wxSDLStopPumping() { }
+
+void wxSDLWaitWhilePlaying()
+{
+#if wxUSE_THREADS
+    // give the playback thread a chance to add event to pending
+    // events queue, release GUI lock temporarily:
+    if (wxThread::IsMain())
+        wxMutexGuiLeave();
+#endif
+    wxMilliSleep(10);
+#if wxUSE_THREADS
+    if (wxThread::IsMain())
+        wxMutexGuiEnter();
+#endif
+}
+
+#endif // __RETRO68__/!__RETRO68__
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxSoundBackendSDL, for Unix with libSDL
 // ----------------------------------------------------------------------------
@@ -159,6 +224,14 @@ bool wxSoundBackendSDL::IsAvailable() const
     if ((SDL_WasInit(SDL_INIT_AUDIO) & SDL_INIT_AUDIO) != SDL_INIT_AUDIO)
     {
         SDL_SetHint(SDL_HINT_NO_SIGNAL_HANDLERS, "1");
+#ifdef __RETRO68__
+        // The audio is only mixed when the event loop gets control, so use
+        // bigger buffers than the default ones (512 frames for 22kHz) to
+        // avoid gaps in the sound when handling an event takes a long time
+        // on a slow machine. This still keeps the latency below 0.1s.
+        SDL_SetHintWithPriority(SDL_HINT_AUDIO_DEVICE_SAMPLE_FRAMES, "1024",
+                                SDL_HINT_DEFAULT);
+#endif
 #if SDL_MAJOR_VERSION >= 3
         // SDL3: SDL_Init returns bool, and SDL_INIT_NOPARACHUTE is gone.
         if (!SDL_Init(SDL_INIT_AUDIO))
@@ -379,6 +452,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
 #if WX_SDL_USE_STREAM_API
     SDL_UnlockAudioStream(m_stream);
     SDL_ResumeAudioStreamDevice(m_stream);
+    wxSDLStartPumping();
 #else
     SDL_UnlockAudio();
     SDL_PauseAudio(0);
@@ -390,17 +464,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
         wxLogTrace(wxT("sound"), wxT("waiting for sample to finish"));
         while (m_playing && m_data == data)
         {
-#if wxUSE_THREADS
-            // give the playback thread a chance to add event to pending
-            // events queue, release GUI lock temporarily:
-            if (wxThread::IsMain())
-                wxMutexGuiLeave();
-#endif
-            wxMilliSleep(10);
-#if wxUSE_THREADS
-            if (wxThread::IsMain())
-                wxMutexGuiEnter();
-#endif
+            wxSDLWaitWhilePlaying();
         }
         wxLogTrace(wxT("sound"), wxT("sample finished"));
     }
@@ -410,6 +474,9 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
 
 void wxSoundBackendSDL::Stop()
 {
+    // Note that the data already queued will still be played, if any.
+    wxSDLStopPumping();
+
 #if WX_SDL_USE_STREAM_API
     if (m_stream)
     {

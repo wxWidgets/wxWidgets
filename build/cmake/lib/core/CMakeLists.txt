@@ -59,6 +59,14 @@ elseif(WXX11)
     wx_append_sources(CORE_SRC X11_LOWLEVEL)
 elseif(WXRETRO68)
     wx_append_sources(CORE_SRC RETRO68_LOWLEVEL)
+    if(wxUSE_SOUND)
+        # The generic part of wxSound (WAV parsing, backend selection) is
+        # shared with Unix, the actual playback is done by SDL.
+        wx_append_sources(CORE_SRC RETRO68_SOUND)
+        if(wxUSE_LIBSDL)
+            wx_append_sources(CORE_SRC UNIX_SOUND_SDL)
+        endif()
+    endif()
 endif()
 
 if(WXUNIVERSAL)

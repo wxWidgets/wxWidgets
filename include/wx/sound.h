@@ -57,7 +57,7 @@ protected:
     #include "wx/msw/sound.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/sound.h"
-#elif defined(__UNIX__)
+#elif defined(__UNIX__) || defined(__RETRO68__)
     #include "wx/unix/sound.h"
 #endif
 

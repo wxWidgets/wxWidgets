@@ -169,6 +169,10 @@ if(UNIX)
 
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL for audio on Unix")
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
+elseif(RETRO68)
+    # SDL 3 has a classic Mac OS port using the Sound Manager.
+    wx_option(wxUSE_LIBSDL "use SDL 3 for audio")
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL 3 for audio")
 endif()
 
 # ---------------------------------------------------------------------------
