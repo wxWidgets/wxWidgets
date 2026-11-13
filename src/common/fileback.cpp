@@ -91,7 +91,12 @@ wxBackingFileImpl::~wxBackingFileImpl()
     delete [] m_buf;
 
     if (!m_filename.empty())
+    {
+        // Close the file before removing it, as not all systems (e.g. classic
+        // Mac OS) allow removing the files which are still open.
+        m_file.Close();
         wxRemoveFile(m_filename);
+    }
 }
 
 wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,

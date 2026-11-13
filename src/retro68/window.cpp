@@ -444,9 +444,26 @@ wxRect wxWindowRetro68::GetUncoveredRect() const
     return r;
 }
 
+// Return the screen position of the origin of the coordinates used by
+// DoScreenToClient() and DoClientToScreen().
+//
+// For the top level windows, wxTopLevelWindowBase versions of these functions
+// already account for the client area origin (i.e. the space taken by the
+// menu bar, tool bar etc) themselves, so we must not do it here too, or it
+// would be applied twice, resulting in wrong coordinates and, notably, in all
+// the mouse clicks being dispatched to a wrong window.
+wxPoint wxWindowRetro68::GetScreenOriginForConversion() const
+{
+    wxPoint o = GetScreenPosOfClientOrigin();
+    if ( IsTopLevel() )
+        o -= GetClientAreaOrigin();
+
+    return o;
+}
+
 void wxWindowRetro68::DoScreenToClient(int *x, int *y) const
 {
-    const wxPoint o = GetScreenPosOfClientOrigin();
+    const wxPoint o = GetScreenOriginForConversion();
 
     if (x) *x -= o.x;
     if (y) *y -= o.y;
@@ -454,7 +471,7 @@ void wxWindowRetro68::DoScreenToClient(int *x, int *y) const
 
 void wxWindowRetro68::DoClientToScreen(int *x, int *y) const
 {
-    const wxPoint o = GetScreenPosOfClientOrigin();
+    const wxPoint o = GetScreenOriginForConversion();
 
     if (x) *x += o.x;
     if (y) *y += o.y;

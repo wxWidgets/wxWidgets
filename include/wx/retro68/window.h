@@ -118,6 +118,10 @@ protected:
                                  const wxFont *theFont = nullptr) const override;
     virtual void DoClientToScreen(int *x, int *y) const override;
     virtual void DoScreenToClient(int *x, int *y) const override;
+
+    // Return the screen position of the origin of the coordinates used by
+    // DoScreenToClient() and DoClientToScreen().
+    wxPoint GetScreenOriginForConversion() const;
     virtual void DoGetPosition(int *x, int *y) const override;
     virtual void DoGetSize(int *width, int *height) const override;
     virtual void DoGetClientSize(int *width, int *height) const override;

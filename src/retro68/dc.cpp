@@ -1186,8 +1186,18 @@ void wxRetro68DCImpl::DrawBitmapPart(const wxBitmap& bmp,
     unsigned char* const pixDst = bmpDst.LockPixels(&rowBytesDst);
 
     {
-        // Read the current destination contents. Note that the clipping
-        // region of the GWorld is wide open, so we can just copy into it.
+        // Read the current destination contents. Notice that CopyBits()
+        // always clips to the clipping and visible regions of the current
+        // port, so we must make the GWorld, whose regions are wide open,
+        // current while doing it: if our port remained current, its regions,
+        // which use different coordinates, would clip away most or all of
+        // the destination rectangle, leaving the buffer uninitialized and
+        // resulting in black rectangles drawn instead of masked bitmaps.
+        wxMacPortSaver saver;
+        SetGWorld(gwDst, nullptr);
+        PenNormal();
+        SetCopyBitsColours();
+
         CopyBits(wxMacGetPortBitMap(m_port),
                  wxMacGetPortBitMap(reinterpret_cast<GrafPtr>(gwDst)),
                  &dst, &rectTmp, srcCopy, nullptr);

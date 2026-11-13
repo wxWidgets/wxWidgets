@@ -1,0 +1,27 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/locale/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/base/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/net/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/core/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/adv/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/aui/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/gl/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/html/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/media/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/propgrid/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/qa/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/ribbon/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/richtext/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/stc/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/webview/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/webview_chromium/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/xrc/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/libs/xml/cmake_install.cmake",
+		"/Users/andyvand/Downloads/wxWidgets/build-m68k/utils/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -73,10 +73,16 @@ bool wxTopLevelWindowRetro68::Create(wxWindow *parent,
     if ( pos.y < wxMacGetMenuBarHeight() )
         pos.y = wxMacGetMenuBarHeight();
 
+    // This must be done before creating the window as wxWindowBase uses the
+    // presence in this list to check if the window is a top level one and,
+    // if it is not, sets the minimal window size to its initial size, which
+    // would prevent the window from ever being made smaller than that.
+    // Notice that wxTopLevelWindowBase dtor removes the window from the list
+    // if creating it fails.
+    wxTopLevelWindows.Append(this);
+
     if ( !wxNonOwnedWindow::Create(parent, id, pos, size, style, name) )
         return false;
-
-    wxTopLevelWindows.Append(this);
 
     SetTitle(title);
 

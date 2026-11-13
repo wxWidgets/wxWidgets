@@ -230,14 +230,18 @@ GrafPtr wxNonOwnedWindow::GetPort() const
 // window geometry
 // ----------------------------------------------------------------------------
 
-wxRect wxNonOwnedWindow::GetDecorationsSize() const
+namespace
 {
-    // Return the rectangle with x/y and width/height fields containing the
-    // left/top and right/bottom decorations sizes respectively.
+
+// Return the decorations size computed from the window regions or an empty
+// rectangle if the regions are not valid, which is the case for the hidden
+// windows, as the Window Manager doesn't compute the regions for them.
+wxRect GetDecorationsFromRegions(WindowRef win)
+{
     wxRect deco;
 
-    const Rect content = wxMacGetWindowContentRect(m_macWindow);
-    const Rect structure = wxMacGetWindowStructureRect(m_macWindow);
+    const Rect content = wxMacGetWindowContentRect(win);
+    const Rect structure = wxMacGetWindowStructureRect(win);
     if ( !EmptyRect(&structure) &&
             structure.top <= content.top && structure.left <= content.left &&
                 structure.bottom >= content.bottom &&
@@ -249,9 +253,116 @@ wxRect wxNonOwnedWindow::GetDecorationsSize() const
         deco.height = structure.bottom - content.bottom;
     }
 
+    return deco;
+}
+
+#if !TARGET_API_MAC_CARBON
+
+// Decorations sizes for the given window definition procedure IDs. They
+// depend on the WDEF used (and hence on the system version and the
+// appearance), so they can't be hard-coded and are determined dynamically.
+struct DecorationsInfo
+{
+    short procID;
+    wxRect deco;
+};
+
+std::vector<DecorationsInfo> gs_decorations;
+
+const wxRect* FindDecorations(short procID)
+{
+    for ( const DecorationsInfo& info : gs_decorations )
+    {
+        if ( info.procID == procID )
+            return &info.deco;
+    }
+
+    return nullptr;
+}
+
+void RememberDecorations(short procID, const wxRect& deco)
+{
+    for ( DecorationsInfo& info : gs_decorations )
+    {
+        if ( info.procID == procID )
+        {
+            info.deco = deco;
+            return;
+        }
+    }
+
+    gs_decorations.push_back({procID, deco});
+}
+
+// Determine the decorations size by creating a temporary window of the given
+// kind far outside of the screen and making it visible, without changing the
+// windows order or activating it, as this is the only way to make the Window
+// Manager compute its regions.
+wxRect ProbeDecorations(short procID)
+{
+    const Rect bounds = { -20000, -20000, -19900, -19800 };
+    const unsigned char title[2] = { 1, ' ' };
+
+    wxMacPortSaver saver;
+
+    WindowRef win;
+    if ( wxMacHasColorQD() )
+    {
+        SetGDevice(GetMainDevice());
+        win = NewCWindow(nullptr, &bounds, title, false, procID,
+                         nullptr /* behind all */, true, 0);
+    }
+    else
+    {
+        win = NewWindow(nullptr, &bounds, title, false, procID,
+                        nullptr /* behind all */, true, 0);
+    }
+
+    if ( !win )
+        return wxRect();
+
+    ShowHide(win, true);
+    const wxRect deco = GetDecorationsFromRegions(win);
+    DisposeWindow(win);
+
+    wxRetro68DCImpl::InvalidateCachedPortState();
+
+    return deco;
+}
+
+#endif // !TARGET_API_MAC_CARBON
+
+} // anonymous namespace
+
+wxRect wxNonOwnedWindow::GetDecorationsSize() const
+{
+    // Return the rectangle with x/y and width/height fields containing the
+    // left/top and right/bottom decorations sizes respectively.
+    wxRect deco = GetDecorationsFromRegions(m_macWindow);
+
+#if !TARGET_API_MAC_CARBON
+    const short procID = GetWindowProcID();
+    if ( deco != wxRect() )
+    {
+        // Remember them for the hidden windows of the same kind.
+        if ( !FindDecorations(procID) )
+            RememberDecorations(procID, deco);
+    }
+    else if ( const wxRect* const known = FindDecorations(procID) )
+    {
+        deco = *known;
+    }
+    else
+    {
+        deco = ProbeDecorations(procID);
+        if ( deco != wxRect() || !(GetWindowStyleFlag() & wxCAPTION) )
+            RememberDecorations(procID, deco);
+    }
+#endif // !TARGET_API_MAC_CARBON
+
     if ( deco.y == 0 && (GetWindowStyleFlag() & wxCAPTION) )
     {
-        // The structure region is not computed yet, use the values for the
+        // We couldn't determine the decorations, use the values for the
         // standard System 7 document window: 1 pixel frame, 18 pixel title
         // bar and 1 pixel shadow.
         deco.x = 1;
@@ -362,7 +473,10 @@ void wxNonOwnedWindow::HandleUserResize()
 {
     wxRetro68DCImpl::InvalidateCachedPortState();
 
-    DoRefreshRect(wxRect(GetClientSize()));
+    // Refresh the entire content area, see the comment in DoRefreshRect().
+    int w, h;
+    wxNonOwnedWindow::DoGetClientSize(&w, &h);
+    DoRefreshRect(wxRect(0, 0, w, h));
 
     wxSizeEvent event(GetSize(), GetId());
     event.SetEventObject(this);
@@ -443,8 +557,16 @@ void wxNonOwnedWindow::SetNativeTitle(const wxString& title)
 
 void wxNonOwnedWindow::DoRefreshRect(const wxRect& rect)
 {
+    // Notice that we must use the size of the entire native content area
+    // here and not GetClientSize(), which excludes the menu bar, the status
+    // bar and other decorations drawn by wxUniv inside the native window:
+    // they need to be refreshed too and the rectangle uses the coordinates
+    // relative to the content area origin and not the client area one.
+    int w, h;
+    wxNonOwnedWindow::DoGetClientSize(&w, &h);
+
     wxRect r(rect);
-    r.Intersect(wxRect(GetClientSize()));
+    r.Intersect(wxRect(0, 0, w, h));
     if ( r.IsEmpty() )
         return;
 
