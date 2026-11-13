@@ -24,6 +24,8 @@
 #include "wx/frame.h"
 #endif
 
+#include "wx/private/sizer.h"
+
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
@@ -716,7 +718,20 @@ bool wxRibbonPanel::Realize()
     // Ask sizer if there is one present
     if(GetSizer())
     {
-        minimum_children_size = GetPanelSizerMinSize();
+        if ( m_minimised )
+        {
+            // The children are hidden when the panel is minimised, but the
+            // sizer ignores the hidden items, so make it take them into account
+            // to compute the real minimum size of the panel, as otherwise it
+            // would be (almost) zero and the panel would never be shown again.
+            wxSizerPretendAllItemsAreShown pretendAllShown(GetSizer());
+
+            minimum_children_size = GetPanelSizerMinSize();
+        }
+        else
+        {
+            minimum_children_size = GetPanelSizerMinSize();
+        }
     }
     else if(GetChildren().GetCount() == 1)
     {
