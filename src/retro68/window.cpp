@@ -398,7 +398,10 @@ void wxWindowRetro68::DoGetPosition(int *x, int *y) const
 
 wxPoint wxWindowRetro68::GetScreenPosOfClientOrigin() const
 {
-    wxCHECK_MSG( m_parent, wxPoint(), "non-TLW window without parent?" );
+    // Not created yet (e.g. asked for its DPI from its constructor, as
+    // wxToolBar::Init() does): it is nowhere on screen.
+    if ( !m_parent )
+        return m_rect.GetPosition() + GetClientAreaOrigin();
 
     return m_parent->GetScreenPosOfClientOrigin() +
             m_rect.GetPosition() +
@@ -671,8 +674,11 @@ void wxWindowRetro68::DoRefreshWindow()
 
 void wxWindowRetro68::DoRefreshRect(const wxRect& rect)
 {
+    // A window without a parent has not been created yet (XRC hides the
+    // hidden controls before creating them), so it has nothing on screen.
     wxWindow *parent = GetParent();
-    wxCHECK_RET( parent, "no parent" );
+    if ( !parent )
+        return;
 
     // don't overlap outside of the window (NB: 'rect' is in window coords):
     wxRect r(rect);

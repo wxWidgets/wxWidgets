@@ -193,7 +193,9 @@ endif()
 if(@wxUSE_LIBSDL3@)
     # make sure SDL3 targets are available:
     # The link interface of target "wx::wxcore" contains: SDL3::SDL3(-shared)
-    find_dependency(SDL3)
+    # Prefer the SDL3 wx was built with, which is especially important when
+    # cross-compiling (e.g. for Retro68) to avoid using the host SDL3.
+    find_dependency(SDL3 CONFIG HINTS "@SDL3_DIR@")
 endif()
 
 if(@wxUSE_THREADS@)

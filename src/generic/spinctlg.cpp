@@ -318,6 +318,11 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
 {
     wxControl::DoMoveWindow(x, y, width, height);
 
+    // A port whose wxWindow::Create() sets the initial size (wxRetro68) gets
+    // here from wxControl::Create(), before the subcontrols exist.
+    if ( !m_textCtrl || !m_spinButton )
+        return;
+
     // position the subcontrols inside the client area
 
     // Use GetBestSize instead of GetSize to get the size of the spin control.

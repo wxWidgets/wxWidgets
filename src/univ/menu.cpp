@@ -466,13 +466,26 @@ void wxPopupMenuWindow::Dismiss()
 {
     if ( HasOpenSubmenu() )
     {
+        // The open submenu belongs to the current item; should it not, look
+        // for it. Either way go on: returning early here would leave this
+        // window's event handlers pushed, and the next Popup() would find
+        // them still in use.
+        wxPopupMenuWindow *win = nullptr;
         wxMenuItem *item = GetCurrentItem();
-        wxCHECK_RET( item && item->IsSubMenu(), wxT("where is our open submenu?") );
+        if ( item && item->IsSubMenu() )
+            win = item->GetSubMenu()->m_popupMenu;
 
-        wxPopupMenuWindow *win = item->GetSubMenu()->m_popupMenu;
-        wxCHECK_RET( win, wxT("opened submenu is not opened?") );
+        for ( wxMenuItemIter node = m_menu->GetMenuItems().GetFirst();
+              node && !(win && win->IsShown());
+              node = node->GetNext() )
+        {
+            wxMenuItem *other = node->GetData();
+            if ( other->IsSubMenu() )
+                win = other->GetSubMenu()->m_popupMenu;
+        }
 
-        win->Dismiss();
+        if ( win && win->IsShown() )
+            win->Dismiss();
         OnSubmenuDismiss( false );
     }
 
@@ -850,31 +863,15 @@ void wxPopupMenuWindow::OnMouseLeave(wxMouseEvent& event)
     // and calling ChangeCurrent() would then assert, so don't do it
     if ( IsShown() )
     {
-        // we shouldn't change the current them if our submenu is opened and
-        // mouse moved there, in this case the submenu is responsable for
-        // handling it
-        bool resetCurrent;
-        if ( HasOpenSubmenu() )
-        {
-            wxMenuItem *item = GetCurrentItem();
-            wxCHECK_RET( CanOpen(item), wxT("where is our open submenu?") );
-
-            wxPopupMenuWindow *win = item->GetSubMenu()->m_popupMenu;
-            wxCHECK_RET( win, wxT("submenu is opened but not shown?") );
-
-            // only handle this event if the mouse is not inside the submenu
-            wxPoint pt = ClientToScreen(event.GetPosition());
-            resetCurrent =
-                win->HitTest(win->ScreenToClient(pt)) == wxHT_WINDOW_OUTSIDE;
-        }
-        else
+        // While a submenu is open its item stays the current one, wherever the
+        // mouse goes: the submenu is only closed when another item becomes
+        // current or the menu is dismissed (and native menus keep its item
+        // highlighted meanwhile). Resetting the current item when the mouse
+        // left for somewhere other than the submenu left the submenu open
+        // with no current item, and Dismiss() could then not find it.
+        if ( !HasOpenSubmenu() )
         {
             // this menu is the last opened
-            resetCurrent = true;
-        }
-
-        if ( resetCurrent )
-        {
             ChangeCurrent(wxMenuItemIter());
         }
     }

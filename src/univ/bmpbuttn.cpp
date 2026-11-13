@@ -90,7 +90,9 @@ bool wxBitmapButton::ChangeBitmap(const wxBitmap& bmp)
         return false;
 
     m_bitmap = bitmap;
-    SetInitialSize(bitmap.GetSize());
+    // The label may be null for a moment: wxGenericColourButton sets it to
+    // wxNullBitmap before setting it to the bitmap of the new colour.
+    SetInitialSize(bitmap.IsOk() ? bitmap.GetSize() : wxDefaultSize);
 
     return true;
 }
