@@ -1631,15 +1631,31 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QPoint qPt = event->position().toPoint();
-    wxMouseWheelAxis wheelAxis = event->angleDelta().y() > 0
-                               ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
-    int wheelRotation = wheelAxis == wxMOUSE_WHEEL_VERTICAL
-                      ? (event->angleDelta().y() / 8) : (event->angleDelta().x() / 8);
+
+    // Note that angleDelta() uses the same units as wxMouseEvent, i.e. 1/8 of
+    // degree, so we don't need to scale it, but positive horizontal values
+    // mean scrolling to the left in Qt, while they mean scrolling to the right
+    // in wx, so we do need to negate them.
+    const QPoint angleDelta = event->angleDelta();
+    wxMouseWheelAxis wheelAxis;
+    int wheelRotation;
+    if ( angleDelta.y() != 0 || angleDelta.x() == 0 )
+    {
+        wheelAxis = wxMOUSE_WHEEL_VERTICAL;
+        wheelRotation = angleDelta.y();
+    }
+    else
+    {
+        wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+        wheelRotation = -angleDelta.x();
+    }
 #else
     QPoint qPt = event->pos();
     wxMouseWheelAxis wheelAxis = event->orientation() == Qt::Vertical
                                ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
     int wheelRotation = event->delta();
+    if ( wheelAxis == wxMOUSE_WHEEL_HORIZONTAL )
+        wheelRotation = -wheelRotation;
 #endif
     e.m_synthesized = event->source() != Qt::MouseEventSource::MouseEventNotSynthesized;
     e.SetPosition( wxQtConvertPoint( qPt ) );
