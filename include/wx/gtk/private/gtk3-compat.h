@@ -50,6 +50,22 @@ static inline void wx_gtk_widget_set_margin_end(GtkWidget* widget, gint margin)
 
 inline GdkDevice* wx_get_gdk_device_from_display(GdkDisplay* display)
 {
+#if GTK_CHECK_VERSION(3,20,0)
+    // With several seats, the legacy client pointer is not necessarily the
+    // pointer of the default seat: under Wayland it is the pointer of the most
+    // recently added seat, which may be idle and always report (0,0).
+    if ( gtk_check_version(3,20,0) == nullptr )
+    {
+        GdkSeat* seat = gdk_display_get_default_seat(display);
+        if ( seat )
+        {
+            GdkDevice* const device = gdk_seat_get_pointer(seat);
+            if ( device )
+                return device;
+        }
+    }
+#endif // GTK+ 3.20
+
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     return gdk_device_manager_get_client_pointer(manager);
 }
