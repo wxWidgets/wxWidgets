@@ -16,6 +16,7 @@
 #endif // WX_PRECOMP
 
 #include "testableframe.h"
+#include "wx/platinfo.h"
 #include "wx/uiaction.h"
 #include "wx/spinctrl.h"
 
@@ -331,6 +332,14 @@ TEST_CASE_METHOD(SpinCtrlDoubleTestCase,
 
     SECTION("Mouse wheel")
     {
+        // Wine edit control handles the wheel events itself and doesn't
+        // forward them to its parent, so the spin control never gets them.
+        if ( wxIsRunningUnderWine() )
+        {
+            WARN("Skipping test known to fail under Wine.");
+            return;
+        }
+
         sim.Text("20");
         wxYield();
 
