@@ -1585,11 +1585,30 @@ void wxMenuItem::SetItemLabel(const wxString& text)
 {
     if ( text != m_text )
     {
+#if wxUSE_ACCEL
+        // The accelerator is part of the label, so the menu accel table must
+        // be kept in sync with it: otherwise the old accel would remain active
+        // and removing the item later would try to remove the new accel,
+        // which was never added, from the table. Only do this if the item is
+        // already in the menu, as it may also be created with a parent menu
+        // but not appended to it yet.
+        wxMenu * const menu = m_parentMenu &&
+                              m_parentMenu->GetMenuItems().Find(this)
+                                ? m_parentMenu : nullptr;
+        if ( menu )
+            menu->RemoveAccelFor(this);
+#endif // wxUSE_ACCEL
+
         // first call the base class version to change m_text
         // (and also check if we don't have a stock menu item)
         wxMenuItemBase::SetItemLabel(text);
 
         UpdateAccelInfo();
+
+#if wxUSE_ACCEL
+        if ( menu )
+            menu->AddAccelFor(this);
+#endif // wxUSE_ACCEL
 
         NotifyMenu();
     }

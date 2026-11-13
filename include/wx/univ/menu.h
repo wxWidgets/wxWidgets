@@ -127,6 +127,10 @@ private:
 
     // it calls out OnDismiss()
     friend class wxPopupMenuWindow;
+
+    // it updates our accel table when its label (and so its accel) changes
+    friend class wxMenuItem;
+
     wxDECLARE_DYNAMIC_CLASS(wxMenu);
 };
 
