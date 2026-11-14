@@ -645,7 +645,23 @@ wxSocketBase *wxFTP::GetPassivePort()
         return nullptr;
     }
 
-    wxUint16 port = (wxUint16)(a[0] << 8 | a[1]);
+    // All values must be bytes, check this even for the address ones which we
+    // don't use, as getting anything else indicates a broken server.
+    for ( int n : a )
+    {
+        if ( n < 0 || n > 255 )
+        {
+            m_lastError = wxPROTO_PROTERR;
+            return nullptr;
+        }
+    }
+
+    const wxUint16 port = (wxUint16)(a[0] << 8 | a[1]);
+    if ( !port )
+    {
+        m_lastError = wxPROTO_PROTERR;
+        return nullptr;
+    }
 
     // Only use the port from the reply and ignore the address in it: trusting
     // it would allow the server to make us connect to an arbitrary host, so

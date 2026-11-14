@@ -174,6 +174,27 @@ public:
         return addr.Service();
     }
 
+    unsigned short GetDataPort() const
+    {
+        wxIPV4address addr;
+        m_data->GetLocal(addr);
+        return addr.Service();
+    }
+
+    // Return the port of the data connection as "p1,p2" string as used in
+    // PASV reply.
+    wxString GetDataPortBytes() const
+    {
+        const unsigned short port = GetDataPort();
+        return wxString::Format("%d,%d", port >> 8, port & 0xff);
+    }
+
+    // Set the contents of the parentheses in the reply to PASV command.
+    //
+    // By default, an address which can't be connected to, but a correct port,
+    // is used. This must be called before calling Run().
+    void SetPASVReply(const wxString& reply) { m_pasvReply = reply; }
+
     virtual void* Entry() override
     {
         std::unique_ptr<wxSocketBase> ctrl(m_ctrl->Accept(true));
@@ -181,10 +202,6 @@ public:
             return nullptr;
 
         ctrl->SetTimeout(TIMEOUT);
-
-        wxIPV4address dataAddr;
-        m_data->GetLocal(dataAddr);
-        const unsigned short dataPort = dataAddr.Service();
 
         Send(*ctrl, "220 ready");
 
@@ -203,10 +220,11 @@ public:
             }
             else if ( cmd.StartsWith("PASV") )
             {
-                // Advertise an address which can't be connected to.
-                Send(*ctrl, wxString::Format("227 Entering Passive Mode "
-                                             "(255,255,255,255,%d,%d)",
-                                             dataPort >> 8, dataPort & 0xff));
+                wxString reply = m_pasvReply;
+                if ( reply.empty() )
+                    reply = "255,255,255,255," + GetDataPortBytes();
+
+                Send(*ctrl, "227 Entering Passive Mode (" + reply + ")");
             }
             else if ( cmd.StartsWith("NLST") )
             {
@@ -261,6 +279,8 @@ private:
 
     std::unique_ptr<wxSocketServer> m_ctrl,
                                     m_data;
+
+    wxString m_pasvReply;
 };
 
 } // anonymous namespace
@@ -280,6 +300,68 @@ TEST_CASE("FTP::PASVAddress", "[net]")
         wxArrayString files;
         CHECK( ftp.GetFilesList(files) );
         CHECK( wxJoin(files, ',') == "file.txt" );
+    }
+
+    CHECK( server.Wait() == nullptr );
+}
+
+TEST_CASE("FTP::PASVInvalid", "[net]")
+{
+    wxSocketInitializer socketInit;
+
+    FakePASVServer server;
+    REQUIRE( server.IsOk() );
+
+    // Note that invalid port values below are chosen so that they would still
+    // result in the correct port if they were truncated to 16 bits, to check
+    // that they're really rejected and not just fail to connect.
+    const wxString port = server.GetDataPortBytes();
+    const int p1 = server.GetDataPort() >> 8,
+              p2 = server.GetDataPort() & 0xff;
+
+    SECTION("Too few values")
+    {
+        server.SetPASVReply("127,0,0,1,1");
+    }
+
+    SECTION("Not a number")
+    {
+        server.SetPASVReply("127,0,0,1,x,1");
+    }
+
+    SECTION("Address out of range")
+    {
+        server.SetPASVReply("127,0,0,256," + port);
+    }
+
+    SECTION("Negative address")
+    {
+        server.SetPASVReply("127,0,-1,1," + port);
+    }
+
+    SECTION("Port out of range")
+    {
+        server.SetPASVReply(wxString::Format("127,0,0,1,%d,%d", p1 + 256, p2));
+    }
+
+    SECTION("Negative port")
+    {
+        server.SetPASVReply(wxString::Format("127,0,0,1,%d,%d", p1 - 256, p2));
+    }
+
+    SECTION("Zero port")
+    {
+        server.SetPASVReply("127,0,0,1,0,0");
+    }
+
+    REQUIRE( server.Run() == wxTHREAD_NO_ERROR );
+
+    {
+        wxFTP ftp;
+        REQUIRE( ftp.Connect("127.0.0.1", server.GetPort()) );
+
+        wxArrayString files;
+        CHECK_FALSE( ftp.GetFilesList(files) );
     }
 
     CHECK( server.Wait() == nullptr );
