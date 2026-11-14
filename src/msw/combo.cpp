@@ -117,9 +117,6 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
 
-    if ( wxMSWDarkMode::IsActive() )
-        MSWSetDarkOrLightMode();
-
     // SetInitialSize should be called last
     SetInitialSize(size);
 
