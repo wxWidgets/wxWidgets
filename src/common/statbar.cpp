@@ -326,6 +326,14 @@ void wxStatusBarBase::OnSize(wxSizeEvent& event)
 
 void wxStatusBarBase::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    event.Skip();
+
+    // If all fields have the same width, there are no explicitly set widths
+    // to adjust: the pane widths are all 0 in this case and passing them to
+    // SetStatusWidths() would make all fields fixed with 0 width.
+    if ( m_bSameWidthForAllPanes )
+        return;
+
     // Adjust fixed field widths to the new DPI.
     std::vector<int> widths;
     const int n = GetFieldsCount();
@@ -344,7 +352,6 @@ void wxStatusBarBase::OnDPIChanged(wxDPIChangedEvent& event)
         }
     }
     SetStatusWidths(n, widths.data());
-    event.Skip();
 }
 
 #endif // wxUSE_STATUSBAR
