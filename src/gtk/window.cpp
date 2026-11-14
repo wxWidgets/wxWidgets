@@ -3103,15 +3103,7 @@ wxMouseState wxGetMouseState()
     GdkWindow* window = wxGetTopLevelGDK();
     GdkDisplay* display = gdk_window_get_display(window);
 #ifdef __WXGTK3__
-#ifdef __WXGTK4__
-    GdkSeat* seat = gdk_display_get_default_seat(display);
-    GdkDevice* device = gdk_seat_get_pointer(seat);
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    wxGCC_WARNING_RESTORE()
-#endif
+    GdkDevice* device = wx_get_gdk_device_from_display(display);
     gdk_device_get_position(device, nullptr, &x, &y);
     gdk_device_get_state(device, window, nullptr, &mask);
 #else
@@ -7439,15 +7431,7 @@ void wxGetMousePosition(int* x, int* y)
 {
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
 #ifdef __WXGTK3__
-#ifdef __WXGTK4__
-    GdkSeat* seat = gdk_display_get_default_seat(display);
-    GdkDevice* device = gdk_seat_get_pointer(seat);
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    wxGCC_WARNING_RESTORE()
-#endif
+    GdkDevice* device = wx_get_gdk_device_from_display(display);
     gdk_device_get_position(device, nullptr, x, y);
 #else
     gdk_display_get_pointer(display, nullptr, x, y, nullptr);
