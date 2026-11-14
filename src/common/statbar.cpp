@@ -340,9 +340,7 @@ void wxStatusBarBase::OnDPIChanged(wxDPIChangedEvent& event)
         else
         {
             // Scale the fixed width to the new DPI.
-            float newDPI = event.GetNewDPI().x;
-            float oldDPI = event.GetOldDPI().x;
-            widths.push_back(width * newDPI / oldDPI);
+            widths.push_back(event.ScaleX(width));
         }
     }
     SetStatusWidths(n, widths.data());
