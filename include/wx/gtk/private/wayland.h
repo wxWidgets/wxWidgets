@@ -123,7 +123,6 @@ public:
     const wl_unique_ptr<wl_seat> seat;
     const uint32_t id;
 
-    int capabilities = 0;
     wxString name;
 
     // This one can change as pointer can be added/removed dynamically by
