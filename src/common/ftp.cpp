@@ -634,20 +634,28 @@ wxSocketBase *wxFTP::GetPassivePort()
         return nullptr;
     }
 
-    // get the port number and address
+    // get the port number and address (note that we ignore the address and use
+    // the one we are connected to instead)
     int a[6];
     wxString straddr(m_lastResult, addrStart + 1, addrEnd - (addrStart + 1));
-    wxSscanf(straddr, wxT("%d,%d,%d,%d,%d,%d"),
-             &a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
+    if ( wxSscanf(straddr, wxT("%d,%d,%d,%d,%d,%d"),
+                  &a[2],&a[3],&a[4],&a[5],&a[0],&a[1]) != 6 )
+    {
+        m_lastError = wxPROTO_PROTERR;
+        return nullptr;
+    }
 
-    wxUint32 hostaddr = (wxUint16)a[2] << 24 |
-                        (wxUint16)a[3] << 16 |
-                        (wxUint16)a[4] << 8 |
-                        a[5];
     wxUint16 port = (wxUint16)(a[0] << 8 | a[1]);
 
+    // Only use the port from the reply and ignore the address in it: trusting
+    // it would allow the server to make us connect to an arbitrary host, so
+    // always connect to the same server we use for the control connection.
     wxIPV4address addr;
-    addr.Hostname(hostaddr);
+    if ( !GetPeer(addr) )
+    {
+        m_lastError = wxPROTO_NETERR;
+        return nullptr;
+    }
     addr.Service(port);
 
     // If we're used from a worker thread or can't dispatch events even though

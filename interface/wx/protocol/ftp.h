@@ -178,6 +178,12 @@ public:
         This is the default as it works with practically all firewalls.
         If the server doesn't support passive mode, you may call this function
         with @false as argument to use an active connection.
+
+        Note that since wxWidgets 3.3.5 the address returned by the server in
+        response to the PASV command is ignored and the client always connects
+        to the same host as the control connection, which avoids security
+        problems due to allowing the server to control where the client
+        connects to.
     */
     void SetPassive(bool pasv);
 
