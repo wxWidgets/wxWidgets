@@ -1,0 +1,1 @@
+wxGTK: Fix crash when using multiple Wayland seats (LordMelkor, #27346).
