@@ -328,6 +328,85 @@ TEST_CASE_METHOD(WindowTestCase, "Window::KeyEvent", "[window]")
 #endif
 }
 
+TEST_CASE_METHOD(WindowTestCase, "Window::MouseWheel", "[window]")
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    struct WheelInfo
+    {
+        wxMouseWheelAxis axis;
+        int rotation;
+    };
+    std::vector<WheelInfo> wheels;
+
+    m_window->Bind(wxEVT_MOUSEWHEEL, [&wheels](wxMouseEvent& event)
+        {
+            wheels.push_back({event.GetWheelAxis(), event.GetWheelRotation()});
+        });
+
+    wxUIActionSimulator sim;
+
+    // Before Windows 10, wheel events were sent to the focused window rather
+    // than the one under the mouse, so make sure our window has focus.
+    m_window->SetFocus();
+
+    const wxRect rect = m_window->GetScreenRect();
+    sim.MouseMove(rect.GetPosition() + rect.GetSize() / 2);
+    wxYield();
+
+    int rotation = 0;
+    wxMouseWheelAxis axis = wxMOUSE_WHEEL_VERTICAL;
+
+    SECTION("Up")
+    {
+        rotation = 1;
+    }
+
+    SECTION("Down")
+    {
+        rotation = -2;
+    }
+
+    SECTION("Right")
+    {
+        rotation = 1;
+        axis = wxMOUSE_WHEEL_HORIZONTAL;
+    }
+
+    SECTION("Left")
+    {
+        rotation = -2;
+        axis = wxMOUSE_WHEEL_HORIZONTAL;
+    }
+
+    REQUIRE( sim.MouseWheel(rotation, axis) );
+
+    WaitFor("mouse wheel event", [&wheels]() { return !wheels.empty(); });
+
+    // We may get more than one event for a multi-notch rotation, so wait a bit
+    // more to let all of them arrive.
+    YieldForAWhile();
+
+    REQUIRE( !wheels.empty() );
+
+    // Don't check the exact rotation value as it depends on the platform and
+    // possibly the user settings, but its sign must be correct.
+    int total = 0;
+    for ( const auto& wheel : wheels )
+    {
+        CHECK( wheel.axis == axis );
+        total += wheel.rotation;
+    }
+
+    if ( rotation > 0 )
+        CHECK( total > 0 );
+    else
+        CHECK( total < 0 );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 TEST_CASE_METHOD(WindowTestCase, "Window::FocusEvent", "[window]")
 {
 #ifndef __WXOSX__

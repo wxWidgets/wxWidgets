@@ -133,6 +133,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
@@ -463,6 +464,33 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
 bool wxUIActionSimulatorX11Impl::MouseUp(int button)
 {
     return SendButtonEvent(button, false);
+}
+
+bool wxUIActionSimulatorX11Impl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    if ( !m_display )
+        return false;
+
+    bool upOrRight = true;
+    if ( rotation < 0 )
+    {
+        rotation = -rotation;
+        upOrRight = false;
+    }
+
+    // X11 represents the wheel as buttons 4 and 5 (up and down) and 6 and 7
+    // (left and right).
+    constexpr int buttons[2][2] = { { 5, 4 }, { 6, 7 } };
+
+    const int xbutton = buttons[axis == wxMOUSE_WHEEL_HORIZONTAL][upOrRight];
+
+    while ( rotation-- )
+    {
+        if ( !DoX11Button(xbutton, true) || !DoX11Button(xbutton, false) )
+            return false;
+    }
+
+    return true;
 }
 
 bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)

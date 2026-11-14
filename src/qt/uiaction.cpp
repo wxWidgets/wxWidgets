@@ -21,6 +21,7 @@
 #define QT_WIDGETS_LIB
 #endif
 
+#include <QtGui/QWheelEvent>
 #include <QtTest/QtTestGui>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
@@ -48,6 +49,7 @@ public:
     virtual bool MouseMove(long x, long y) override;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseWheel(int rotation, wxMouseWheelAxis axis) override;
 
     virtual bool MouseClick(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
@@ -221,6 +223,39 @@ bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
     m_mousePosition = QPoint(x, y);
 
     return SimulateMouseButton( QTest::MouseMove, NoButton, m_mousePosition );
+}
+
+bool wxUIActionSimulatorQtImpl::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    QWidget *widget = QApplication::widgetAt( m_mousePosition );
+
+    if ( !widget )
+        return false;
+
+    // Qt uses 1/8 of degree units and one wheel notch is 15 degrees. Also
+    // note that positive horizontal values mean scrolling to the left in Qt,
+    // unlike in wx.
+    int delta = rotation * 120;
+    const bool isHorz = axis == wxMOUSE_WHEEL_HORIZONTAL;
+    if ( isHorz )
+        delta = -delta;
+
+    const QPointF pos = widget->mapFromGlobal(m_mousePosition);
+    const QPointF globalPos(m_mousePosition);
+    const Qt::KeyboardModifiers modifiers = ConvertToQtModifiers(m_modifiers);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+    QWheelEvent event(pos, globalPos, QPoint(),
+                      isHorz ? QPoint(delta, 0) : QPoint(0, delta),
+                      Qt::NoButton, modifiers, Qt::NoScrollPhase, false);
+#else
+    QWheelEvent event(pos, globalPos, delta, Qt::NoButton, modifiers,
+                      isHorz ? Qt::Horizontal : Qt::Vertical);
+#endif
+
+    QApplication::sendEvent(widget, &event);
+
+    return true;
 }
 
 bool wxUIActionSimulatorQtImpl::MouseClick(int button)
