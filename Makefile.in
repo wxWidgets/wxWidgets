@@ -5445,6 +5445,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_toolbar.o \
 	monodll_cocoa_tooltip.o \
 	monodll_cocoa_window.o \
+	monodll_cocoa_access.o \
 	monodll_cocoa_settings.o \
 	monodll_cocoa_overlay.o \
 	monodll_cocoa_aboutdlg.o \
@@ -7238,6 +7239,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_toolbar.o \
 	monolib_cocoa_tooltip.o \
 	monolib_cocoa_window.o \
+	monolib_cocoa_access.o \
 	monolib_cocoa_settings.o \
 	monolib_cocoa_overlay.o \
 	monolib_cocoa_aboutdlg.o \
@@ -9175,6 +9177,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_toolbar.o \
 	coredll_cocoa_tooltip.o \
 	coredll_cocoa_window.o \
+	coredll_cocoa_access.o \
 	coredll_cocoa_settings.o \
 	coredll_cocoa_overlay.o \
 	coredll_cocoa_aboutdlg.o \
@@ -10691,6 +10694,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_toolbar.o \
 	corelib_cocoa_tooltip.o \
 	corelib_cocoa_window.o \
+	corelib_cocoa_access.o \
 	corelib_cocoa_settings.o \
 	corelib_cocoa_overlay.o \
 	corelib_cocoa_aboutdlg.o \
@@ -16093,6 +16097,9 @@ monodll_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONODLL_ODEP)
 monodll_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
+monodll_cocoa_access.o: $(srcdir)/src/osx/cocoa/access.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/access.mm
+
 monodll_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
 
@@ -20898,6 +20905,9 @@ monolib_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONOLIB_ODEP)
 
 monolib_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
+
+monolib_cocoa_access.o: $(srcdir)/src/osx/cocoa/access.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/access.mm
 
 monolib_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
@@ -26371,6 +26381,9 @@ coredll_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(COREDLL_ODEP)
 coredll_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
+coredll_cocoa_access.o: $(srcdir)/src/osx/cocoa/access.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/access.mm
+
 coredll_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
 
@@ -30132,6 +30145,9 @@ corelib_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(CORELIB_ODEP)
 
 corelib_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
+
+corelib_cocoa_access.o: $(srcdir)/src/osx/cocoa/access.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/access.mm
 
 corelib_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm

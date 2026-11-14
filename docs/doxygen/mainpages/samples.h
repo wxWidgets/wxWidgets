@@ -93,11 +93,21 @@ contained in wxWidgets occur in at least one of the samples.
 @section page_samples_access Accessibility Sample
 
 This sample shows how you can use the wxAccessible classes in a
-simple GUI program.
+simple GUI program. This sample only works on Windows, as it uses
+Windows IAccessible COM objects directly.
 
 @buildwith{wxUSE_ACCESSIBILITY}
 
 @sampledir{access}
+
+@section page_samples_accessbasic Accessible Window Sample
+
+This sample shows how to make a custom drawn window accessible by
+associating a wxAccessible object with it.
+
+@buildwith{wxUSE_ACCESSIBILITY}
+
+@sampledir{accessbasic}
 
 @section page_samples_animate Animation Sample
 

@@ -2045,6 +2045,7 @@ set(OSX_SHARED_HDR
     # wxWebKit headers
     # other shared headers
     wx/osx/accel.h
+    wx/osx/access.h
     wx/osx/anybutton.h
     wx/osx/app.h
     wx/osx/bitmap.h
@@ -2173,6 +2174,7 @@ set(OSX_COCOA_SRC
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
+    src/osx/cocoa/access.mm
     src/osx/core/hidjoystick.cpp
     src/osx/sound_osx.cpp
     src/osx/cocoa/datetimectrl.mm

@@ -1,9 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/cocoa/window.mm
-// Purpose:     widgets (non tlw) for cocoa
+// Purpose:     widgets (non tlw) for cocoa (with experimental macOS a11y)
 // Author:      Stefan Csomor
 // Created:     2008-06-20
-// Copyright:   (c) Stefan Csomor
+// Modified:    2026-11-06
+// Copyright:   (c) Stefan Csomor, Joshua Lee Ockert
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -42,6 +43,23 @@
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
+#endif
+
+#if wxUSE_ACCESSIBILITY
+    // Still gating this behind the wxUSE_ACCESSIBILITY compile-time option.
+    // Ideally this option should eventually become the default, as on
+    // Windows. However, we're not even close to that yet.
+    #include "wx/access.h"
+
+    // In-file forward declarations of functions provided in the newly-added
+    // macOS-specific src/osx/cocoa/access.mm.  First, a mapping helper (e.g.,
+    // to translate wxROLE_SYSTEM_COMBOBOX to NSAccessibilityComboBoxRole).
+    // The second takes an NSView, translates it to the wxWidgets implement-
+    // ation, gets the wxWindowMac peer object, and gets the result of
+    // GetAccessible for that wxWindowMac peer object.
+    // (Honestly, we should maybe add these to the header file.)
+    NSAccessibilityRole wxOSXAccessibilityRoleFromWx(wxAccRole role);
+    wxAccessible *wxOSXGetAccessibleFromView(NSView* view);
 #endif
 
 #include <objc/objc-runtime.h>
@@ -199,6 +217,11 @@ void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint;
 
 @end
+
+#if wxUSE_ACCESSIBILITY
+@interface wxNSView(wxAccessible) <NSAccessibility>
+@end
+#endif
 
 @interface NSView(PossibleMethods)
 - (void)setTitle:(NSString *)aString;
@@ -1311,6 +1334,182 @@ static long wxOSXGetTextInputPosition(NSUInteger position)
 
 @end // wxNSView(TextInput)
 
+#if wxUSE_ACCESSIBILITY
+//////////////////////////////////////////////////////////////////////////////
+//                           wxNSView Bridging Code                         //
+// The vast majority of widgets, especially those that are custom-drawn and //
+// therefore require wxAccessible, are derived from a wxNSView. In such a   //
+// case, this code will cause such objects to respond to NSAccessibility    //
+// messages by checking for a wxAccessible on the wxWindowMac corresponding //
+// to the peer object of the NSView, query that wxAccessible for the value  //
+// that the NSAccessibility message is asking for, and return it. There is  //
+// no need for a separate object, as in Windows with the COM architecture.  //
+// However, this relies on the assumption that the object to which we want  //
+// to add wxAccessible-mediated accessibility is derived from wxNSView. In  //
+// other cases, we will need to do something similar for the other class.   //
+// All of the code below should be relatively self-explanatory.             //
+//////////////////////////////////////////////////////////////////////////////
+@implementation wxNSView(wxAccessible)
+
+- (BOOL)isAccessibilityElement
+{
+    if (wxOSXGetAccessibleFromView(self))
+        return YES;
+    return [super isAccessibilityElement];
+}
+
+- (NSRect)accessibilityFrame
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxRect rect;
+        if (acc->GetLocation(rect, wxACC_SELF) == wxACC_OK)
+            return wxToNSRect(nil, rect);
+    }
+    return [super accessibilityFrame];
+}
+
+- (id)accessibilityParent
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxAccessible *parent = nullptr;
+        if (acc->GetParent(&parent) == wxACC_OK && parent && parent->GetWindow())
+        {
+            NSView *parentView = parent->GetWindow()->GetHandle();
+            if (parentView)
+                return NSAccessibilityUnignoredAncestor(parentView);
+        }
+    }
+    return [super accessibilityParent];
+}
+
+- (NSString *)accessibilityLabel
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxString name;
+        if (acc->GetName(wxACC_SELF, &name) == wxACC_OK)
+            return wxNSStringWithWxString(name);
+    }
+    return [super accessibilityLabel];
+}
+
+- (NSAccessibilityRole)accessibilityRole
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxAccRole role = wxROLE_NONE;
+        if (acc->GetRole(wxACC_SELF, &role) == wxACC_OK)
+        {
+            NSAccessibilityRole nsrole = wxOSXAccessibilityRoleFromWx(role);
+            if (nsrole)
+                return nsrole;
+        }
+    }
+    return [super accessibilityRole];
+}
+
+- (id)accessibilityValue
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxString value;
+        if (acc->GetValue(wxACC_SELF, &value) == wxACC_OK)
+            return wxNSStringWithWxString(value);
+    }
+    return [super accessibilityValue];
+}
+
+- (NSString *)accessibilityHelp
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxString text;
+        if (acc->GetHelpText(wxACC_SELF, &text) == wxACC_OK)
+            return wxNSStringWithWxString(text);
+        if (acc->GetDescription(wxACC_SELF, &text) == wxACC_OK)
+            return wxNSStringWithWxString(text);
+    }
+    return [super accessibilityHelp];
+}
+
+- (BOOL)isAccessibilityFocused
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        long state = 0;
+        if (acc->GetState(wxACC_SELF, &state) == wxACC_OK)
+            return (state & wxACC_STATE_SYSTEM_FOCUSED) ? YES : NO;
+    }
+    return [super isAccessibilityFocused];
+}
+
+- (BOOL)isAccessibilityEnabled
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        long state = 0;
+        if (acc->GetState(wxACC_SELF, &state) == wxACC_OK)
+            return (state & wxACC_STATE_SYSTEM_UNAVAILABLE) ? NO : YES;
+    }
+    return [super isAccessibilityEnabled];
+}
+
+- (BOOL)isAccessibilitySelected
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        long state = 0;
+        if (acc->GetState(wxACC_SELF, &state) == wxACC_OK)
+            return (state & wxACC_STATE_SYSTEM_SELECTED) ? YES : NO;
+    }
+    return [super isAccessibilitySelected];
+}
+
+- (BOOL)accessibilityPerformPress
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        wxAccStatus st = acc->DoDefaultAction(wxACC_SELF);
+        if (st == wxACC_OK)
+            return YES;
+        if (st != wxACC_NOT_IMPLEMENTED && st != wxACC_NOT_SUPPORTED)
+            return NO;
+    }
+    return [super accessibilityPerformPress];
+}
+
+- (id)accessibilityHitTest:(NSPoint)point
+{
+    wxAccessible *acc = wxOSXGetAccessibleFromView(self);
+    if (acc)
+    {
+        int childId = wxACC_SELF;
+        wxAccessible *childObject = nullptr;
+        if (acc->HitTest(wxFromNSPoint(nil, point), &childId, &childObject) == wxACC_OK)
+        {
+            if (childObject && childObject->GetWindow() && childObject->GetWindow()->GetHandle())
+                return childObject->GetWindow()->GetHandle();
+            if (childId == wxACC_SELF)
+                return self;
+        }
+    }
+    return [super accessibilityHitTest:point];
+}
+
+@end
+#endif // wxUSE_ACCESSIBILITY
 
 //
 // event handlers
