@@ -433,6 +433,7 @@ MyFrame::MyFrame()
     topSizer->Add(new wxCalendarCtrl(panel, wxID_ANY),
                   wxSizerFlags().Center().Border());
 
+#if wxUSE_GRID
     // another control using locale-specific number and date format
     wxGrid* const grid = new wxGrid(panel, wxID_ANY,
                                     wxDefaultPosition, wxDefaultSize,
@@ -449,6 +450,7 @@ MyFrame::MyFrame()
     grid->SetCellValue(0, 1, "Today");
 
     topSizer->Add(grid, wxSizerFlags().Center().Border());
+#endif // wxUSE_GRID
 
     // show the difference (in decimal and thousand separator, hence use a
     // floating point number > 1000) between wxString::Format() and
