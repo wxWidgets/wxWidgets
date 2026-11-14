@@ -990,7 +990,7 @@ bool wxRibbonToolBar::Realize()
         return false;
 
     // Calculate the size of each group and the position/size of each tool
-    wxMemoryDC temp_dc;
+    wxInfoDC temp_dc(this);
     size_t group_count = m_groups.GetCount();
     size_t g, t;
     for(g = 0; g < group_count; ++g)

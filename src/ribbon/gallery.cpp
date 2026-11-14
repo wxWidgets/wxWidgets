@@ -927,7 +927,7 @@ void wxRibbonGallery::CalculateMinSize()
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE) +
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE));
 
-        wxMemoryDC dc;
+        wxInfoDC dc(this);
         SetMinSize(m_art->GetGallerySize(dc, this, m_bitmap_padded_size));
 
         // The best size is displaying several items
@@ -948,7 +948,7 @@ bool wxRibbonGallery::Layout()
     if(m_art == nullptr)
         return false;
 
-    wxMemoryDC dc;
+    wxInfoDC dc(this);
     wxPoint origin;
     wxSize client_size = m_art->GetGalleryClientSize(dc, this, GetSize(),
         &origin, &m_scroll_up_button_rect, &m_scroll_down_button_rect,
@@ -1031,7 +1031,7 @@ wxSize wxRibbonGallery::DoGetNextSmallerSize(wxOrientation direction,
     if(m_art == nullptr)
         return relative_to;
 
-    wxMemoryDC dc;
+    wxInfoDC dc(const_cast<wxRibbonGallery*>(this));
 
     wxSize client = m_art->GetGalleryClientSize(dc, this, relative_to, nullptr,
         nullptr, nullptr, nullptr);
@@ -1083,7 +1083,7 @@ wxSize wxRibbonGallery::DoGetNextLargerSize(wxOrientation direction,
     if(m_art == nullptr)
         return relative_to;
 
-    wxMemoryDC dc;
+    wxInfoDC dc(const_cast<wxRibbonGallery*>(this));
 
     wxSize client = m_art->GetGalleryClientSize(dc, this, relative_to, nullptr,
         nullptr, nullptr, nullptr);
