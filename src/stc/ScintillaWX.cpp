@@ -828,6 +828,10 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
                             return 0;
                         }
                     }
+                    else {
+                        // Only the DirectWrite surface implements Layout()
+                        bidirectional = EditModel::Bidirectional::bidiDisabled;
+                    }
 
                     technology = static_cast<int>(wParam);
                     if ( m_surfaceData ) {
@@ -840,6 +844,18 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
                     InvalidateStyleRedraw();
                 }
             }
+            return 0;
+
+        case SCI_SETBIDIRECTIONAL:
+            if (technology == SC_TECHNOLOGY_DEFAULT) {
+                bidirectional = EditModel::Bidirectional::bidiDisabled;
+            }
+            else if (wParam <= SC_BIDIRECTIONAL_R2L) {
+                bidirectional = static_cast<EditModel::Bidirectional>(wParam);
+            }
+            // Invalidate all cached information including layout.
+            DropGraphics(true);
+            InvalidateStyleRedraw();
             return 0;
 #endif
 

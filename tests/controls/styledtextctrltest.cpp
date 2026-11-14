@@ -17,6 +17,7 @@
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
+#include "wx/platinfo.h"
 #include "wx/stc/stc.h"
 #include "wx/uiaction.h"
 
@@ -169,6 +170,49 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
 }
 
 #endif // !defined(__WXOSX_COCOA__)
+
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
+
+TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
+{
+    const std::unique_ptr<wxStyledTextCtrl>
+        stc(new wxStyledTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY));
+
+    // Bidirectional mode is only available with DirectWrite.
+    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
+    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_DISABLED );
+
+    stc->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+    if ( stc->GetTechnology() != wxSTC_TECHNOLOGY_DIRECTWRITE )
+    {
+        WARN("Skipping test as DirectWrite is not available.");
+        return;
+    }
+
+    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
+    REQUIRE( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_L2R );
+
+    // DirectWrite hit testing doesn't work under Wine, which returns the
+    // same position for all characters.
+    if ( wxIsRunningUnderWine() )
+    {
+        WARN("Skipping checking bidirectional layout under Wine.");
+    }
+    else
+    {
+        // "ab" followed by Hebrew letters alef, bet and gimel at positions
+        // 2, 4 and 6: the latter are displayed from right to left, so the
+        // caret positions before each of them go leftwards.
+        stc->SetText(wxString::FromUTF8("ab\xd7\x90\xd7\x91\xd7\x92"));
+        CHECK( stc->PointFromPosition(4).x < stc->PointFromPosition(2).x );
+        CHECK( stc->PointFromPosition(6).x < stc->PointFromPosition(4).x );
+    }
+
+    stc->SetTechnology(wxSTC_TECHNOLOGY_DEFAULT);
+    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_DISABLED );
+}
+
+#endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
 
 #ifdef wxHAS_TEXT_INPUT_CLIENT
 
