@@ -74,7 +74,7 @@ wx_add_sample(image image.cpp canvas.cpp canvas.h RES image.rc
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)
 endforeach()
-wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} PLIST Info.plist.in DEPENDS wxUSE_INTL)
+wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} PLIST Info.plist.in DEPENDS wxUSE_GRID wxUSE_INTL)
 # IPC samples
 set(wxSAMPLE_FOLDER ipc)
 wx_add_sample(ipc client.cpp client.h connection.h ipcsetup.h NAME ipcclient LIBRARIES wxnet DEPENDS wxUSE_IPC wxUSE_SOCKETS)
