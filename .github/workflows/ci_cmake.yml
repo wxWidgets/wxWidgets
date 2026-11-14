@@ -147,9 +147,9 @@ jobs:
         if: matrix.cmake_generator == 'MinGW Makefiles'
         uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw64
+          msystem: clang64
           update: true
-          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+          install: mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-toolchain
 
       - name: Set up Homebrew
         if: ${{ runner.os == 'macOS' && matrix.cmake_build_toolkit == 'gtk3' }}
