@@ -36,7 +36,9 @@ public:
 protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const override;
-
+    virtual void MSWSetDarkOrLightMode() override;
+    virtual WXLRESULT
+    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
     // Helper for the derived classes Create(): creates a native control with
     // the specified attributes.
     bool MSWCreateDateTimePicker(wxWindow *parent,
