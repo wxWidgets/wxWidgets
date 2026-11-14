@@ -686,6 +686,9 @@ protected:
                         wxRibbonPanel* wnd,
                         const wxRect& rect,
                         wxRect* preview_rect);
+    // Returns the normal panel extension button bitmap, disabled if the
+    // panel is disabled.
+    wxBitmap GetPanelExtButtonBitmap(wxRibbonPanel* wnd) const;
     void CloneTo(wxRibbonMSWArtProvider* copy) const;
 
     wxBitmap m_cached_tab_separator;

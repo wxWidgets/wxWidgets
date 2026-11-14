@@ -24,6 +24,8 @@
 #include "wx/frame.h"
 #endif
 
+#include "wx/private/sizer.h"
+
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
@@ -219,6 +221,19 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
     }
 }
 
+void wxRibbonPanel::OnEnabledStateChanged(bool enabled)
+{
+    // A disabled window doesn't get the mouse events, so it wouldn't stop
+    // looking hovered when the mouse leaves it.
+    if ( !enabled )
+    {
+        m_hovered = false;
+        m_ext_button_hovered = false;
+    }
+
+    wxRibbonControl::OnEnabledStateChanged(enabled);
+}
+
 void wxRibbonPanel::AddChild(wxWindowBase *child)
 {
     wxRibbonControl::AddChild(child);
@@ -335,7 +350,16 @@ void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
         if(IsMinimised())
         {
-            m_art->DrawMinimisedPanel(dc, this, GetSize(), m_minimised_icon_resized);
+            if ( IsEnabled() || !m_minimised_icon_resized.IsOk() )
+            {
+                m_art->DrawMinimisedPanel(dc, this, GetSize(), m_minimised_icon_resized);
+            }
+            else
+            {
+                wxBitmap icon(m_minimised_icon_resized);
+                wxBitmap::MakeDisabled(icon);
+                m_art->DrawMinimisedPanel(dc, this, GetSize(), icon);
+            }
         }
         else
         {
@@ -716,7 +740,20 @@ bool wxRibbonPanel::Realize()
     // Ask sizer if there is one present
     if(GetSizer())
     {
-        minimum_children_size = GetPanelSizerMinSize();
+        if ( m_minimised )
+        {
+            // The children are hidden when the panel is minimised, but the
+            // sizer ignores the hidden items, so make it take them into account
+            // to compute the real minimum size of the panel, as otherwise it
+            // would be (almost) zero and the panel would never be shown again.
+            wxSizerPretendAllItemsAreShown pretendAllShown(GetSizer());
+
+            minimum_children_size = GetPanelSizerMinSize();
+        }
+        else
+        {
+            minimum_children_size = GetPanelSizerMinSize();
+        }
     }
     else if(GetChildren().GetCount() == 1)
     {
@@ -874,7 +911,8 @@ void wxRibbonPanel::AppendFocusableControls(std::vector<wxRibbonControl*>& contr
           node; node = node->GetNext() )
     {
         wxRibbonControl* control = wxDynamicCast(node->GetData(), wxRibbonControl);
-        if ( control != nullptr && control->IsShown() && control->HasFocusableItems() )
+        if ( control != nullptr && control->IsShown() && control->IsEnabled() &&
+             control->HasFocusableItems() )
             controls.push_back(control);
     }
 

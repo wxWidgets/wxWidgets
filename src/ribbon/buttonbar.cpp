@@ -1072,6 +1072,9 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     const wxSize scaledLarge = m_bitmap_size_large * scale;
     const wxSize scaledSmall = m_bitmap_size_small * scale;
 
+    // All buttons are shown as disabled if the bar or one of its parents is.
+    const bool enabled = IsEnabled();
+
     for ( auto& button : layout->buttons )
     {
         wxRibbonButtonBarButtonBase* base = button.base;
@@ -1079,7 +1082,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
         wxBitmap bitmap, bitmap_small;
 
-        bool disabled = (base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
+        bool disabled = !enabled || (base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
 
         if(base->imageIndexLarge >= 0)
         {
@@ -1105,6 +1108,12 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
         // Show the item with the keyboard focus as hovered, and mark it too.
         long state = base->state | button.size;
+        if ( !enabled )
+        {
+            state &= ~(wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK |
+                       wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK);
+            state |= wxRIBBON_BUTTONBAR_BUTTON_DISABLED;
+        }
         const bool focused = (base == m_focused_button);
         if ( focused )
         {
@@ -1622,6 +1631,21 @@ void wxRibbonButtonBar::OnMouseEnter(wxMouseEvent& evt)
 }
 
 void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
+{
+    ResetHoverState();
+}
+
+void wxRibbonButtonBar::OnEnabledStateChanged(bool enabled)
+{
+    // A disabled window doesn't get the mouse events, so it wouldn't stop
+    // looking hovered when the mouse leaves it.
+    if ( !enabled )
+        ResetHoverState();
+
+    wxRibbonControl::OnEnabledStateChanged(enabled);
+}
+
+void wxRibbonButtonBar::ResetHoverState()
 {
     bool repaint = false;
     if(m_hovered_button != nullptr)

@@ -197,11 +197,13 @@ protected:
 #endif // wxUSE_ACCESSIBILITY
     virtual wxSize DoGetBestSize() const override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    void OnEnabledStateChanged(bool enabled) override;
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void ResetHoverState();
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);

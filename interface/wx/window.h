@@ -4703,6 +4703,45 @@ protected:
     virtual int DoGetBestClientWidth(int height) const;
 
     /**
+        Called when the window becomes enabled or disabled.
+
+        This function is called when Enable() changes the state of the window,
+        i.e. unless one of its parents is disabled anyhow, for the window itself
+        and for all its children which are not disabled themselves, as their
+        state changes too. It is also called for the window and its children
+        when Reparent() moves it to a parent with a different state.
+
+        In all these cases it is called after updating the state of the native
+        windows.
+
+        Note that the state of the top level windows is completely ignored by
+        this function, as they are disabled while a modal dialog is shown, but
+        this shouldn't affect the appearance of their children. I.e. this
+        function is never called for the top level windows themselves, enabling
+        or disabling them doesn't result in calling it for their children, and
+        it is called for the children of a disabled top level window when their
+        state changes, even though their IsEnabled() returns @false both before
+        and after the change. Use the @a enabled parameter rather than
+        IsEnabled() to find out the new state of the window.
+
+        Override this function to update the appearance or internal state of a
+        custom window when it becomes enabled or disabled. This is especially
+        useful as Enable() is only called for the window being enabled or
+        disabled and not for its children. The default implementation does
+        nothing.
+
+        Notice that this function may be called even before the window is
+        created, if Enable() is called before Create().
+
+        @param enabled
+            @true if this window and all its parents, except possibly the top
+            level one, are currently enabled, @false otherwise.
+
+        @since 3.3.5
+     */
+    virtual void OnEnabledStateChanged(bool enabled);
+
+    /**
         Generate wxWindowDestroyEvent for this window.
 
         This is called by the window itself when it is being destroyed and

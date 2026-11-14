@@ -823,6 +823,107 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Enable", "[window]")
     CHECK(child->IsThisEnabled());
 }
 
+namespace
+{
+
+// Window recording the calls to OnEnabledStateChanged() as a string of "+"
+// (enabled) and "-" (disabled) characters.
+class EnabledStateTrackingWindow : public wxWindow
+{
+public:
+    explicit EnabledStateTrackingWindow(wxWindow* parent)
+        : wxWindow(parent, wxID_ANY)
+    {
+    }
+
+    // Return the calls made since the last call to this function.
+    wxString GetCalls()
+    {
+        wxString calls;
+        calls.swap(m_calls);
+        return calls;
+    }
+
+protected:
+    void OnEnabledStateChanged(bool enabled) override
+    {
+        m_calls += enabled ? '+' : '-';
+    }
+
+private:
+    wxString m_calls;
+};
+
+} // anonymous namespace
+
+TEST_CASE_METHOD(WindowTestCase, "Window::OnEnabledStateChanged", "[window]")
+{
+    auto* const parent = new EnabledStateTrackingWindow(m_window);
+    auto* const child = new EnabledStateTrackingWindow(parent);
+
+    m_window->Disable();
+    CHECK( parent->GetCalls() == "-" );
+    CHECK( child->GetCalls() == "-" );
+
+    // Disabling a window inside an already disabled one doesn't change its
+    // state, and neither does enabling its parent back.
+    parent->Disable();
+    CHECK( parent->GetCalls() == "" );
+    CHECK( child->GetCalls() == "" );
+
+    m_window->Enable();
+    CHECK( parent->GetCalls() == "" );
+    CHECK( child->GetCalls() == "" );
+
+    parent->Enable();
+    CHECK( parent->GetCalls() == "+" );
+    CHECK( child->GetCalls() == "+" );
+
+    // A disabled child is not affected by its parent state.
+    child->Disable();
+    CHECK( child->GetCalls() == "-" );
+
+    parent->Disable();
+    parent->Enable();
+    CHECK( parent->GetCalls() == "-+" );
+    CHECK( child->GetCalls() == "" );
+
+    child->Enable();
+    CHECK( child->GetCalls() == "+" );
+
+    SECTION("Reparent")
+    {
+        wxWindow* const other = new wxWindow(m_window->GetParent(), wxID_ANY);
+        other->Disable();
+
+        parent->Reparent(other);
+        CHECK( parent->GetCalls() == "-" );
+        CHECK( child->GetCalls() == "-" );
+
+        parent->Reparent(m_window);
+        CHECK( parent->GetCalls() == "+" );
+        CHECK( child->GetCalls() == "+" );
+    }
+
+    SECTION("TLW")
+    {
+        // The state of the TLW itself is ignored.
+        wxWindow* const tlw = wxGetTopLevelParent(m_window);
+        tlw->Disable();
+        CHECK( parent->GetCalls() == "" );
+        CHECK( child->GetCalls() == "" );
+
+        parent->Disable();
+        parent->Enable();
+        CHECK( parent->GetCalls() == "-+" );
+        CHECK( child->GetCalls() == "-+" );
+
+        tlw->Enable();
+        CHECK( parent->GetCalls() == "" );
+        CHECK( child->GetCalls() == "" );
+    }
+}
+
 TEST_CASE_METHOD(WindowTestCase, "Window::FindWindowBy", "[window]")
 {
     m_window->SetId(wxID_HIGHEST + 1);

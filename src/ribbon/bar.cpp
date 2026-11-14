@@ -405,9 +405,18 @@ bool wxRibbonBar::Realize()
     bool status = true;
 
     wxInfoDC dcTemp(this);
+
+    // Determine the tab area height first, as the pages are positioned below
+    // it before being realized.
+    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
+
     int sep = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
     size_t numtabs = m_pages.GetCount();
     bool firstVisible = true;
+
+    // These totals would keep their old values below if no tab is shown.
+    m_tabs_total_width_ideal = 0;
+    m_tabs_total_width_minimum = 0;
     size_t i;
     for(i = 0; i < numtabs; ++i)
     {
@@ -444,10 +453,10 @@ bool wxRibbonBar::Realize()
             m_tabs_total_width_minimum += sep + info.minimum_width;
         }
     }
-    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
 
     RecalculateMinSize();
     RecalculateTabSizes();
+    InvalidateBestSize();
     Refresh();
 
     return status;
@@ -759,6 +768,7 @@ void wxRibbonBar::SetTabCtrlMargins(int left, int right)
     m_tab_margin_right = right;
 
     RecalculateTabSizes();
+    InvalidateBestSize();
 }
 
 struct PageComparedBySmallWidthAsc
@@ -1289,21 +1299,10 @@ void wxRibbonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
-    // Recalculate tab sizes for new DPI
-    RecalculateTabSizes();
-
-    // Realize all pages to update their layouts
-    size_t page_count = m_pages.GetCount();
-    for(size_t i = 0; i < page_count; ++i)
-    {
-        m_pages.Item(i).page->Realize();
-    }
-
-    // Reposition current page
-    if(m_current_page != wxNOT_FOUND)
-    {
-        RepositionPage(m_pages.Item(m_current_page).page);
-    }
+    // Everything computed by the art provider depends on the DPI: not only
+    // the pages layout, but also the tab widths, the tab area height and the
+    // minimal size of the bar, so recompute all of them.
+    Realize();
 
     Refresh();
     event.Skip();
@@ -1638,6 +1637,17 @@ wxSize wxRibbonBar::DoGetBestSize() const
     {
         best.SetHeight(m_tab_height);
     }
+
+    // The bar must also be wide enough to show all the tabs at their ideal
+    // width, unless they are not shown at all.
+    if ( m_pages.GetCount() > 1 || (m_flags & wxRIBBON_BAR_ALWAYS_SHOW_TABS) )
+    {
+        const int tabs_width = m_tab_margin_left + m_tabs_total_width_ideal +
+                               m_tab_margin_right;
+        if ( best.GetWidth() < tabs_width )
+            best.SetWidth(tabs_width);
+    }
+
     return best;
 }
 
@@ -2040,7 +2050,7 @@ std::vector<wxRibbonControl*> wxRibbonBar::GetFocusableControls() const
           node; node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if ( panel != nullptr && panel->IsShown() )
+        if ( panel != nullptr && panel->IsShown() && panel->IsEnabled() )
             panel->AppendFocusableControls(controls);
     }
     return controls;
@@ -2087,6 +2097,12 @@ void wxRibbonBar::FocusItemOf(wxRibbonControl* control)
         m_focusedControl = control;
         RefreshTabBar();
     }
+}
+
+void wxRibbonBar::ClearPageFocusIn(wxRibbonControl* control)
+{
+    if ( m_focusedControl.get() == control )
+        ClearPageFocus();
 }
 
 void wxRibbonBar::ClearPageFocus()
@@ -2554,7 +2570,8 @@ void wxRibbonBar::DoBuildKeyTipTargets()
               node; node = node->GetNext() )
         {
             wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-            if ( panel == nullptr || !panel->IsShown() )
+            // Nothing in a disabled panel can be activated.
+            if ( panel == nullptr || !panel->IsShown() || !panel->IsEnabled() )
                 continue;
 
             if ( panel->IsMinimised() )
@@ -2592,7 +2609,7 @@ void wxRibbonBar::DoBuildKeyTipTargets()
                   pnode; pnode = pnode->GetNext() )
             {
                 wxWindow* child = pnode->GetData();
-                if ( !child->IsShown() )
+                if ( !child->IsShown() || !child->IsEnabled() )
                     continue;
 
                 wxRibbonButtonBar* bb = wxDynamicCast(child, wxRibbonButtonBar);
