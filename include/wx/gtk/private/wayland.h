@@ -119,10 +119,9 @@ public:
     wl_data_device* GetDataDevice();
 
 
-    // Most members are const after they're first set, but can't be really
-    // const because we need to be able to move Seat objects.
-    wl_unique_ptr<wl_seat> seat;
-    uint32_t id;
+    // The seat itself and its ID never change.
+    const wl_unique_ptr<wl_seat> seat;
+    const uint32_t id;
 
     int capabilities = 0;
     wxString name;
