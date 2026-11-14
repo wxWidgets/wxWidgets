@@ -491,6 +491,28 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// IME (either inline or windowed mode) full composited string.
 #define wxSTC_CHARACTERSOURCE_IME_RESULT 2
 
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_DISABLED 0
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_L2R 1
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_R2L 2
+
+/// Retrieve bidirectional text display state.
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_GETBIDIRECTIONAL 2708
+
+/// Set bidirectional text display state.
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_SETBIDIRECTIONAL 2709
+
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
 #define wxSTC_LEX_NULL 1

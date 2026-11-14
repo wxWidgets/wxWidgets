@@ -178,15 +178,9 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
     const std::unique_ptr<wxStyledTextCtrl>
         stc(new wxStyledTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY));
 
-    // These provisional messages have no wrappers in wxStyledTextCtrl.
-    const int SCI_GETBIDIRECTIONAL = 2708;
-    const int SCI_SETBIDIRECTIONAL = 2709;
-    const int SC_BIDIRECTIONAL_DISABLED = 0;
-    const int SC_BIDIRECTIONAL_L2R = 1;
-
     // Bidirectional mode is only available with DirectWrite.
-    stc->SendMsg(SCI_SETBIDIRECTIONAL, SC_BIDIRECTIONAL_L2R);
-    CHECK( stc->SendMsg(SCI_GETBIDIRECTIONAL) == SC_BIDIRECTIONAL_DISABLED );
+    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
+    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_DISABLED );
 
     stc->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
     if ( stc->GetTechnology() != wxSTC_TECHNOLOGY_DIRECTWRITE )
@@ -195,8 +189,8 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
         return;
     }
 
-    stc->SendMsg(SCI_SETBIDIRECTIONAL, SC_BIDIRECTIONAL_L2R);
-    REQUIRE( stc->SendMsg(SCI_GETBIDIRECTIONAL) == SC_BIDIRECTIONAL_L2R );
+    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
+    REQUIRE( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_L2R );
 
     // DirectWrite hit testing doesn't work under Wine, which returns the
     // same position for all characters.
@@ -215,7 +209,7 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
     }
 
     stc->SetTechnology(wxSTC_TECHNOLOGY_DEFAULT);
-    CHECK( stc->SendMsg(SCI_GETBIDIRECTIONAL) == SC_BIDIRECTIONAL_DISABLED );
+    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_DISABLED );
 }
 
 #endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
