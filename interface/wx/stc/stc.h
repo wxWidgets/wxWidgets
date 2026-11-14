@@ -447,6 +447,28 @@
 /// IME (either inline or windowed mode) full composited string.
 #define wxSTC_CHARACTERSOURCE_IME_RESULT 2
 
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_DISABLED 0
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_L2R 1
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_R2L 2
+
+/// Retrieve bidirectional text display state.
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_GETBIDIRECTIONAL 2708
+
+/// Set bidirectional text display state.
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_SETBIDIRECTIONAL 2709
+
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
 #define wxSTC_LEX_NULL 1
@@ -3432,6 +3454,23 @@
     Please see wxStyledTextEvent for the documentation of all event types you
     can use with wxStyledTextCtrl.
 
+    @section stc_bidi Bidirectional text
+
+    Under MSW, right-to-left text, such as Hebrew or Arabic, possibly mixed
+    with left-to-right text, can be edited after enabling Scintilla
+    bidirectional mode, which is only available with DirectWrite:
+    @code
+    stc->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
+    @endcode
+    This mode is disabled again when switching back to
+    wxSTC_TECHNOLOGY_DEFAULT and the message is ignored by the other ports.
+    Note that the selection should not use its own text colour in this mode,
+    i.e. SetSelForeground(false, wxColour()) should be called, as otherwise
+    the selected text in right-to-left runs is not drawn correctly.
+
+    @since 3.3.5
+
 
     @section stc_index Index of the member groups
 
@@ -5909,14 +5948,6 @@ public:
         For the wxMSW port, the input can be either wxSTC_TECHNOLOGY_DEFAULT
         or wxSTC_TECHNOLOGY_DIRECTWRITE.  With other ports, this method has
         no effect.
-        @remarks
-        With wxSTC_TECHNOLOGY_DIRECTWRITE, bidirectional text, e.g. Hebrew or
-        Arabic mixed with Latin text, can be edited after enabling it by sending
-        the provisional SCI_SETBIDIRECTIONAL (2709) message with SendMsg(), using
-        SC_BIDIRECTIONAL_L2R (1) or SC_BIDIRECTIONAL_R2L (2) as the base direction
-        or SC_BIDIRECTIONAL_DISABLED (0) to disable it. As these constants are
-        not defined by wxStyledTextCtrl, their values need to be used directly.
-        Switching back to wxSTC_TECHNOLOGY_DEFAULT disables it too.
     */
     void SetTechnology(int technology);
 

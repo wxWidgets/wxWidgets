@@ -74,6 +74,17 @@ FUNC_FOR_CMD = 1
 # Should methods and values be generated for the provisional Scintilla items?
 GENERATE_PROVISIONAL_ITEMS = 0
 
+# wxSTC values are generated for these provisional Scintilla values and
+# messages even if GENERATE_PROVISIONAL_ITEMS is 0, so that they can be used
+# with SendMsg() without generating any methods for them.
+provisionalValuesToGenerate = set([
+    'SC_BIDIRECTIONAL_DISABLED',
+    'SC_BIDIRECTIONAL_L2R',
+    'SC_BIDIRECTIONAL_R2L',
+    'SCI_GETBIDIRECTIONAL',
+    'SCI_SETBIDIRECTIONAL',
+])
+
 # No wxSTC value will be generated for the following Scintilla values.
 notMappedSciValues = set([
     'SC_TECHNOLOGY_DIRECTWRITERETAIN',
@@ -1303,6 +1314,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
             curDocStrings = []
 
         elif op == 'fun ' or op == 'set ' or op == 'get ':
+            parseMsgVal(line[4:], values, curDocStrings, icat)
             parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ', msgcodes, icat)
             curDocStrings = []
 
@@ -1616,7 +1628,7 @@ def parseVal(line, values, docs, icat):
         docs.append('@deprecated')
 
     if icat=='Provisional':
-        if GENERATE_PROVISIONAL_ITEMS:
+        if GENERATE_PROVISIONAL_ITEMS or name in provisionalValuesToGenerate:
             docs.append('This item is a provisional value and is subject '
                         'to change')
             docs.append('in future versions of wxStyledTextCtrl.')
@@ -1641,6 +1653,15 @@ funregex = re.compile(r'\s*([a-zA-Z0-9_]+)'  # <ws>return type
                       r'([0-9]+)'             # number
                       r'\(([ a-zA-Z0-9_]*),'  # (param,
                       r'([ a-zA-Z0-9_]*),*\)')  # param)
+
+def parseMsgVal(line, values, docs, icat):
+    # Generate a value for the message itself if it's one of the provisional
+    # ones for which only the values are generated.
+    mo = funregex.match(line)
+    if mo is not None and icat == 'Provisional':
+        name = 'SCI_' + mo.group(2).upper()
+        if name in provisionalValuesToGenerate:
+            parseVal('%s=%s' % (name, mo.group(3)), values, list(docs), icat)
 
 def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
     def parseParam(param):
