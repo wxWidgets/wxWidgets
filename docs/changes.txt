@@ -188,6 +188,11 @@ Changes in behaviour not resulting in compilation errors
   for consistency with wxGridCellFloatEditor. Code parsing the values of such
   cells should handle empty strings.
 
+- wxRibbonGallery::GetUpButtonState(), GetDownButtonState() and
+  GetExtensionButtonState() now return wxRIBBON_GALLERY_BUTTON_DISABLED when
+  the gallery or one of its parents is disabled, so that the art providers
+  draw these buttons as disabled.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

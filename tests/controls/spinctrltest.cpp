@@ -402,4 +402,70 @@ TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::Increment", "[spinctrl]")
 #endif
 }
 
+// Only the generic version handles the arrow keys and the wheel itself.
+#if !defined(wxHAS_NATIVE_SPINCTRL) && wxUSE_SPINBTN
+
+TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::StepTypedText", "[spinctrl]")
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    EventCounter updated(m_spin.get(), wxEVT_SPINCTRL);
+
+    wxUIActionSimulator sim;
+
+    // Typing replaces the selected text, but the value of the control itself
+    // is only updated when it loses focus.
+    m_spin->SetFocus();
+    wxYield();
+    m_spin->SetSelection(-1, -1);
+
+    SECTION("Up arrow")
+    {
+        sim.Text("20");
+        wxYield();
+
+        sim.Char(WXK_UP);
+        wxYield();
+
+        CHECK( m_spin->GetValue() == 21 );
+        CHECK( m_spin->GetTextValue() == "21" );
+    }
+
+    SECTION("Mouse wheel")
+    {
+        sim.Text("20");
+        wxYield();
+
+        // Rotate the wheel over the text part, not over the spin buttons.
+        sim.MouseMove(m_spin->ClientToScreen(
+                        wxPoint(10, m_spin->GetClientSize().y / 2)));
+        wxYield();
+
+        sim.MouseWheel(1);
+        wxYield();
+
+        CHECK( m_spin->GetValue() == 21 );
+        CHECK( m_spin->GetTextValue() == "21" );
+    }
+
+    SECTION("Up arrow at maximum")
+    {
+        // The step doesn't change the value, but the typed text does.
+        sim.Text("100");
+        wxYield();
+
+        sim.Char(WXK_UP);
+        wxYield();
+
+        CHECK( m_spin->GetValue() == 100 );
+    }
+
+    CHECK( updated.GetCount() == 1 );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+#endif // !wxHAS_NATIVE_SPINCTRL && wxUSE_SPINBTN
+
 #endif

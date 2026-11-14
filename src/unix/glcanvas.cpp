@@ -313,6 +313,11 @@ void* wxGLCanvasUnix::GetXVisualInfo() const
     return m_impl->GetXVisualInfo();
 }
 
+unsigned long wxGLCanvasUnix::GetXVisualID() const
+{
+    return m_impl->GetXVisualID();
+}
+
 void wxGLCanvasUnix::CallOnRealized()
 {
     m_impl->OnRealized();

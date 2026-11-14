@@ -638,6 +638,21 @@ wxGLCanvasEGL::DoCallCreatePlatformWindowSurface(wxUIntPtr windowID,
     }
 }
 
+unsigned long wxGLCanvasEGL::GetXVisualID() const
+{
+    if ( !m_config )
+        return 0;
+
+    // The X window must be created with the visual of the EGLConfig, otherwise
+    // some drivers (e.g. NVIDIA) refuse to create the surface for it.
+    EGLint visualID = 0;
+    if ( !eglGetConfigAttrib(GetDisplay(), m_config,
+                             EGL_NATIVE_VISUAL_ID, &visualID) )
+        return 0;
+
+    return static_cast<unsigned long>(visualID);
+}
+
 void wxGLCanvasEGL::OnRealized()
 {
     m_display = GetDisplay();

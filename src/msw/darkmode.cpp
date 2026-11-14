@@ -893,7 +893,8 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             ::FillRect(hdc, &rcClient, hBgBrush);
 
             // Get foreground colour
-            auto fgIdx = ::IsWindowEnabled(hwnd) ? wxSYS_COLOUR_BTNTEXT : wxSYS_COLOUR_GRAYTEXT;
+            bool isEnabled = ::IsWindowEnabled(hwnd);
+            auto fgIdx = isEnabled ? wxSYS_COLOUR_BTNTEXT : wxSYS_COLOUR_GRAYTEXT;
             auto fgCol = wxSystemSettings::GetColour(fgIdx).GetPixel();
 
             // Get the box size
@@ -906,28 +907,25 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
                 ::CloseThemeData(hTheme);
             }
 
-            // Draw the box.
+            // Draw the check box.
             RECT rcBox = { };
             rcBox.top = (rcClient.bottom - boxSize.cy) / 2;
             rcBox.right = boxSize.cx;
             rcBox.bottom = rcBox.top + boxSize.cy;
-            AutoHBRUSH hFgBrush(fgCol);
-            ::FrameRect(hdc, &rcBox, hFgBrush);
+            int flags = 0;
+            if ( !isEnabled )
+                flags = wxCONTROL_DISABLED;
+            if ( ::SendMessage(hwnd, BM_GETCHECK, 0, 0) == BST_CHECKED )
+                flags |= wxCONTROL_CHECKED;
+            DrawCheckBox(hdc, rcBox, flags);
 
             // Set the font.
             HFONT hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
             HFONT hOldFont = (HFONT)::SelectObject(hdc, hFont);
 
-            // Draw check mark, if checked.
+            // Draw the text.
             ::SetBkMode(hdc, TRANSPARENT);
             ::SetTextColor(hdc, fgCol);
-            if ( ::SendMessage(hwnd, BM_GETCHECK, 0, 0) == BST_CHECKED )
-            {
-                // Draw a Unicode check mark character.
-                ::DrawTextW(hdc, L"\x2714", -1, &rcBox, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-            }
-
-            // Draw the text.
             const auto text = L" " + wxGetWindowText(hwnd);
             RECT textRect = rcClient;
             textRect.left = boxSize.cx;
@@ -1166,6 +1164,125 @@ void DrawGauge(wxDC& dc, const wxRect& rect, int value, int max, int flags)
                             barFilled, paintRect.GetHeight());
         }
     }
+}
+
+namespace
+{
+
+// Figure colours for check boxes and radio buttons from control flags. The
+// RGB colour values match the appearance of the first version of Windows to
+// support these controls in dark mode, Windows 11 22H2.
+void CheckboxRadioColour(int flags, COLORREF& fill, COLORREF& edge)
+{
+    fill = 0x242424;
+    edge = 0x4a4a4a;
+    if ( flags & (wxCONTROL_CHECKED | wxCONTROL_UNDETERMINED) )
+    {
+        if ( flags & wxCONTROL_DISABLED )
+            fill = edge;
+        else if ( flags & wxCONTROL_CURRENT )
+            fill = edge = 0xe9bd5b;
+        else
+            fill = edge = 0xffcd60;
+    }
+    else if ( flags & wxCONTROL_DISABLED )
+    {
+        fill = 0x282828;
+    }
+    else
+    {
+        edge = 0xaaaaaa;
+        if ( flags & wxCONTROL_CURRENT )
+            fill = 0x313131;
+    }
+}
+
+} // anonymous namespace
+
+void DrawCheckBox(HDC hdc, const RECT& rect, int flags)
+{
+    COLORREF fill;
+    COLORREF edge;
+    CheckboxRadioColour(flags, fill, edge);
+
+    // Draw the box, a rounded rectangle.
+    AutoHBRUSH hBrush(fill);
+    AutoHPEN hPen(edge);
+    SelectInHDC selBrush(hdc, hBrush);
+    SelectInHDC selPen(hdc, hPen);
+    auto rectSize = rect.bottom - rect.top;
+    // Corner radius is 4 at 100% display scale.
+    auto r = ::MulDiv(rectSize, 4, 13);
+    ::RoundRect(hdc, rect.left, rect.top, rect.right, rect.bottom, r, r);
+
+    // Draw a glyph in the box, if requested.
+    if ( flags & (wxCONTROL_CHECKED | wxCONTROL_UNDETERMINED) )
+    {
+        // Create font "Segoe MDL2 Assets", which exists on all Windows
+        // versions this code is needed for.
+        LOGFONT lf = { };
+        wcscpy(lf.lfFaceName, L"Segoe MDL2 Assets");
+        // Set font height to a proportion of the rectangle to match the
+        // native control.
+        lf.lfHeight = -::MulDiv(rectSize, 8, 10);  // 80%
+        lf.lfWeight = FW_NORMAL;
+        lf.lfCharSet = DEFAULT_CHARSET;
+        AutoHFONT hFont(lf);
+        SelectInHDC selFont(hdc, hFont);
+
+        // Figure the glyph character and colour.
+        wchar_t glyph = (flags & wxCONTROL_CHECKED) ?
+            L'\uE73E' :  // CheckMark
+            L'\uE9AE';   // DashKey
+        COLORREF colour = (flags & wxCONTROL_DISABLED) ? 0x9e9e9e : 0;
+
+        // Draw the glyph character.
+        auto oldMode = ::SetBkMode(hdc, TRANSPARENT);
+        auto oldCol = ::SetTextColor(hdc, colour);
+        ::DrawTextW(hdc, &glyph, 1, const_cast<RECT*>(&rect),
+            DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+        ::SetBkMode(hdc, oldMode);
+        ::SetTextColor(hdc, oldCol);
+    }
+}
+
+void DrawRadioButton(HDC hdc, const RECT& rect, int flags)
+{
+    COLORREF fill;
+    COLORREF edge;
+    CheckboxRadioColour(flags & ~wxCONTROL_UNDETERMINED, fill, edge);
+
+    // Create font "Segoe MDL2 Assets", which exists on all Windows
+    // versions this code is needed for.
+    LOGFONT lf = { };
+    wcscpy(lf.lfFaceName, L"Segoe MDL2 Assets");
+    // Font height is rectangle height, negated.
+    lf.lfHeight = rect.top - rect.bottom;
+    lf.lfWeight = FW_NORMAL;
+    lf.lfCharSet = DEFAULT_CHARSET;
+    AutoHFONT hFont(lf);
+    SelectInHDC selFont(hdc, hFont);
+
+    // Draw a filled circle glyph, then either a bullet or ring glyph.
+    auto oldMode = ::SetBkMode(hdc, TRANSPARENT);
+    auto oldCol = ::SetTextColor(hdc, fill);
+    // Draw FullCircleMask.
+    const UINT center = DT_CENTER | DT_VCENTER | DT_SINGLELINE;
+    ::DrawTextW(hdc, L"\uE91F", 1, const_cast<RECT*>(&rect), center);
+    if ( flags & wxCONTROL_CHECKED )
+    {
+        // Draw RadioBullet.
+        ::SetTextColor(hdc, 0);
+        ::DrawTextW(hdc, L"\uE915", 1, const_cast<RECT*>(&rect), center);
+    }
+    else
+    {
+        // Draw CircleRing.
+        ::SetTextColor(hdc, edge);
+        ::DrawTextW(hdc, L"\uEA3A", 1, const_cast<RECT*>(&rect), center);
+    }
+    ::SetBkMode(hdc, oldMode);
+    ::SetTextColor(hdc, oldCol);
 }
 
 } // namespace wxMSWDarkMode

@@ -97,6 +97,7 @@ protected:
     friend class wxRibbonGalleryAccessible;
 #endif // wxUSE_ACCESSIBILITY
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    void OnEnabledStateChanged(bool enabled) override;
     void DoNotifySelectionChanged();
     void CommonInit(long style);
     void CalculateMinSize();
@@ -107,6 +108,7 @@ protected:
     void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void ResetHoverState();
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
     void OnMouseDClick(wxMouseEvent& evt);

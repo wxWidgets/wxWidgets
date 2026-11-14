@@ -787,6 +787,8 @@ void wxRibbonAUIArtProvider::DrawPanelBackground(
     {
         dc.SetTextForeground(m_panel_label_colour);
     }
+    if ( !wnd->IsEnabled() )
+        dc.SetTextForeground(m_button_bar_label_disabled_colour);
     dc.GradientFillLinear(label_rect,
 #ifdef __WXOSX__
         label_bg_grad_colour, label_bg_colour, wxSOUTH);
@@ -813,7 +815,7 @@ void wxRibbonAUIArtProvider::DrawPanelBackground(
 
     if(wnd->HasExtButton())
     {
-        if(wnd->IsExtButtonHovered())
+        if(wnd->IsEnabled() && wnd->IsExtButtonHovered())
         {
             dc.SetPen(m_panel_hover_button_border_pen);
             dc.SetBrush(m_panel_hover_button_background_brush);
@@ -821,7 +823,7 @@ void wxRibbonAUIArtProvider::DrawPanelBackground(
             dc.DrawBitmap(m_panel_extension_bundle[1].GetBitmapFor(wnd), label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
         }
         else
-            dc.DrawBitmap(m_panel_extension_bundle[0].GetBitmapFor(wnd), label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
+            dc.DrawBitmap(GetPanelExtButtonBitmap(wnd), label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
     }
 }
 

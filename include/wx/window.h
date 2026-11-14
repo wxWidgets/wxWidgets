@@ -1890,6 +1890,10 @@ protected:
     // widgets state are necessary
     virtual void DoEnable(bool WXUNUSED(enable)) { }
 
+    // can be overridden to be notified when this window becomes enabled or
+    // disabled, possibly implicitly, i.e. because one of its parents did
+    virtual void OnEnabledStateChanged(bool WXUNUSED(enabled)) { }
+
     // this method should be implemented to really enable or disable input
     // method for this window, it's only called if the state changes
     virtual void DoEnableInputMethod(bool WXUNUSED(enable)) { }
@@ -2152,6 +2156,10 @@ private:
     // enabled/disabled status changed because a parent window had been
     // enabled/disabled
     void NotifyWindowOnEnableChange(bool enabled);
+
+    // call OnEnabledStateChanged() for this window and all its children which
+    // are affected by the change of its state
+    void NotifyEnabledStateChanged(bool enabled);
 
 #if wxUSE_MENUS
     // temporary event handlers used by GetPopupMenuSelectionFromUser()

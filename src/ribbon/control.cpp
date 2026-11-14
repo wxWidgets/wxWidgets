@@ -105,6 +105,21 @@ bool wxRibbonControl::Realize()
     return true;
 }
 
+void wxRibbonControl::OnEnabledStateChanged(bool enabled)
+{
+    wxControl::OnEnabledStateChanged(enabled);
+
+    if ( !enabled )
+    {
+        ClearFocusedItem();
+
+        if ( wxRibbonBar* bar = GetAncestorRibbonBar() )
+            bar->ClearPageFocusIn(this);
+    }
+
+    Refresh(false);
+}
+
 wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
 {
     for ( wxWindow* win = GetParent(); win; win = win->GetParent() )

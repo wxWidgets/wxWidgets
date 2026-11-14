@@ -230,6 +230,10 @@ public:
     // the focus on the first item of 'control'.
     void FocusItemOf(wxRibbonControl* control);
 
+    // Implementation only: give the keyboard focus back to the tab row if
+    // it is on an item of 'control', e.g. because the control was disabled.
+    void ClearPageFocusIn(wxRibbonControl* control);
+
     // Make the bar a tab stop so that it can be reached with the keyboard.
     bool AcceptsFocus() const override { return IsShown() && IsEnabled(); }
 

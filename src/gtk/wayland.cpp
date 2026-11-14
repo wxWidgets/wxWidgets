@@ -237,10 +237,8 @@ constexpr uint32_t SEAT_VERSION = 5;
 constexpr uint32_t DATA_DEVICE_MANAGER_VERSION = 3;
 #endif // wxHAVE_WAYLAND_TOPLEVEL_DRAG
 
-using SeatIds = std::vector<uint32_t>;
-
 void
-registry_handle_global(void* data,
+registry_handle_global(void* WXUNUSED(data),
                        wl_registry* registry,
                        uint32_t name,
                        const char* interface,
@@ -256,7 +254,11 @@ registry_handle_global(void* data,
             return;
         }
 
-        static_cast<SeatIds*>(data)->push_back(name);
+        auto const seat = static_cast<wl_seat*>(
+            wl_registry_bind(registry, name, &wl_seat_interface, SEAT_VERSION)
+        );
+
+        WLGlobals.seats.push_back(std::make_unique<Seat>(seat, name));
     }
 
     if ( strcmp(interface, wp_pointer_warp_v1_interface.name) == 0 )
@@ -323,7 +325,7 @@ registry_handle_global_remove(void* WXUNUSED(data),
           it != WLGlobals.seats.end();
           ++it )
     {
-        if ( it->id == name )
+        if ( (*it)->id == name )
         {
             WLGlobals.seats.erase(it);
             return;
@@ -353,10 +355,9 @@ void Globals::Init()
     // receiving the events about the globals being added and removed later.
     registry.reset(wl_display_get_registry(displayWL));
 
-    // And get all of the current globals, storing the seat IDs in the provided
-    // vector and pointer warp protocol directly in this global object itself.
-    SeatIds seatIds;
-    wl_registry_add_listener(registry.get(), &registry_listener, &seatIds);
+    // And get all of the current globals, storing them directly in this global
+    // object itself.
+    wl_registry_add_listener(registry.get(), &registry_listener, nullptr);
     wl_display_roundtrip(displayWL);
 
     // Check if any of the protocols we may use are supported and, if none of
@@ -377,19 +378,9 @@ void Globals::Init()
 
     if ( !useAnyProtocol )
     {
+        // We don't need to keep any seats if we don't use any of the protocols.
+        seats.clear();
         registry.reset();
-        return;
-    }
-
-    // Otherwise initialize all seats, as we need to listen to "enter" and
-    // "button" events on the pointer(s) associated with the seat(s).
-    for ( auto name : seatIds )
-    {
-        auto const seat = static_cast<wl_seat*>(
-            wl_registry_bind(registry.get(), name, &wl_seat_interface, SEAT_VERSION)
-        );
-
-        WLGlobals.seats.emplace_back(seat, name);
     }
 }
 
@@ -1021,11 +1012,11 @@ wxTLWDragSession::Create(wxWindow* origin,
     // seen a button press event, to be able to start the drag.
     for ( auto& seat : WLGlobals.seats )
     {
-        if ( !seat.lastButtonSerial )
+        if ( !seat->lastButtonSerial )
             continue;
 
         auto session = std::make_unique<TLWDragSession>(std::move(handler));
-        if ( !session->Start(seat, originTLW, target, targetTLW) )
+        if ( !session->Start(*seat, originTLW, target, targetTLW) )
             return nullptr;
 
 #if wxCHECK_GCC_VERSION(4, 8) && !wxCHECK_GCC_VERSION(5, 0)

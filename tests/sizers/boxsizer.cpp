@@ -21,6 +21,8 @@
 
 #include "asserthelper.h"
 
+#include "wx/private/sizer.h"
+
 #include <memory>
 
 // ----------------------------------------------------------------------------
@@ -477,6 +479,43 @@ TEST_CASE_METHOD(BoxSizerTestCase, "Sizer::DetachItem", "[sizer]")
     CHECK( item == detached );
 
     delete detached;
+}
+
+TEST_CASE_METHOD(BoxSizerTestCase, "Sizer::PretendAllItemsAreShown", "[sizer]")
+{
+    auto* const child1 = new wxWindow(m_win.get(), wxID_ANY);
+    child1->SetMinSize(wxSize(10, 10));
+    auto* const child2 = new wxWindow(m_win.get(), wxID_ANY);
+    child2->SetMinSize(wxSize(20, 20));
+    auto* const child3 = new wxWindow(m_win.get(), wxID_ANY);
+    child3->SetMinSize(wxSize(30, 30));
+    auto* const child4 = new wxWindow(m_win.get(), wxID_ANY);
+    child4->SetMinSize(wxSize(40, 40));
+
+    m_sizer->Add(child1);
+    m_sizer->Add(child2);
+
+    // Check that nested sizers are handled too.
+    auto* const subsizer = new wxBoxSizer(wxHORIZONTAL);
+    subsizer->Add(child3);
+    m_sizer->Add(subsizer);
+
+    // And that the items already reserving space continue to do it.
+    m_sizer->Add(child4, wxSizerFlags().ReserveSpaceEvenIfHidden());
+
+    child2->Hide();
+    child3->Hide();
+    child4->Hide();
+
+    CHECK( m_sizer->CalcMin() == wxSize(50, 40) );
+
+    {
+        wxSizerPretendAllItemsAreShown pretend(m_sizer);
+        CHECK( m_sizer->CalcMin() == wxSize(100, 40) );
+    }
+
+    CHECK( m_sizer->CalcMin() == wxSize(50, 40) );
+    CHECK( m_sizer->GetItem(child4)->GetFlag() & wxRESERVE_SPACE_EVEN_IF_HIDDEN );
 }
 
 TEST_CASE("Sizer::CombineFlags", "[sizer]")

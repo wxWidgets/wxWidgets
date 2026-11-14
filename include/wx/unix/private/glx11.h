@@ -56,6 +56,8 @@ public:
     virtual bool HasWindow() const override;
 
     virtual void* GetXVisualInfo() const override { return m_vi; }
+    virtual unsigned long GetXVisualID() const override
+        { return m_vi ? m_vi->visualid : 0; }
 
     GLXFBConfig *GetGLXFBConfig() const { return m_fbc; }
 
