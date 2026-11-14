@@ -465,6 +465,11 @@ protected:
     // style.
     void GTKCreateScrolledWindowWith(GtkWidget* view);
 
+    // Called from Create() after creating m_wxwindow but before adding it to
+    // the parent, i.e. before it can be realized. Can be overridden to set
+    // properties that must be set before realization, such as the visual.
+    virtual void GTKOnWidgetCreated() { }
+
     virtual void DoMoveInTabOrder(wxWindow *win, WindowOrder move) override;
     virtual bool DoNavigateIn(int flags) override;
 

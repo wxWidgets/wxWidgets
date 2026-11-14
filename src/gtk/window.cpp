@@ -3312,6 +3312,9 @@ bool wxWindowGTK::Create( wxWindow *parent,
             G_CALLBACK(parent_set), this);
     }
 #endif
+
+    GTKOnWidgetCreated();
+
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
         m_widget = m_wxwindow;
     else

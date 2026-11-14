@@ -14,9 +14,12 @@
 
 #include "wx/glcanvas.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/backend.h"
-#include "wx/unix/private/glcanvas.h"
 
 #ifdef __WXGTK3__
 extern "C" {
@@ -38,45 +41,6 @@ static gboolean draw(GtkWidget* widget, cairo_t* cr, wxGLCanvas* win)
 }
 }
 #endif // __WXGTK3__
-
-#ifdef GDK_WINDOWING_X11
-//-----------------------------------------------------------------------------
-// emission hook for "parent-set"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gboolean
-parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void* data)
-{
-    wxGLCanvas* win = (wxGLCanvas*)data;
-    if (g_value_peek_pointer(&param_values[0]) == win->m_wxwindow)
-    {
-        // Both GLX and EGL need the X window to use the visual of the chosen
-        // GLXFBConfig or EGLConfig, so set it before the window is realized.
-        const unsigned long visualID = win->GetXVisualID();
-        GdkVisual* visual = gtk_widget_get_visual(win->m_wxwindow);
-        if (visualID && GDK_VISUAL_XVISUAL(visual)->visualid != visualID)
-        {
-            GdkScreen* screen = gtk_widget_get_screen(win->m_wxwindow);
-            visual = gdk_x11_screen_lookup_visual(screen, visualID);
-            if (visual)
-            {
-#ifdef __WXGTK3__
-                gtk_widget_set_visual(win->m_wxwindow, visual);
-#else
-                GdkColormap* colormap = gdk_colormap_new(visual, false);
-                gtk_widget_set_colormap(win->m_wxwindow, colormap);
-                g_object_unref(colormap);
-#endif
-            }
-        }
-        // remove hook
-        return false;
-    }
-    return true;
-}
-}
-#endif // GDK_WINDOWING_X11
 
 //---------------------------------------------------------------------------
 // wxGlCanvas
@@ -186,20 +150,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !InitVisual(dispAttrs) )
         return false;
 
-#ifdef GDK_WINDOWING_X11
-    // watch for the "parent-set" signal on m_wxwindow so we can set the visual
-    // before m_wxwindow is realized (which will occur before
-    // wxWindow::Create() returns if parent is already visible)
-#ifdef __WXGTK3__
-    if ( wxGTKImpl::IsX11(gdk_display_get_default()) )
-#endif
-    {
-        unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
-        g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, nullptr);
-    }
-#endif // GDK_WINDOWING_X11
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return false;
 
-    wxWindow::Create( parent, id, pos, size, style, name );
 #ifdef __WXGTK3__
     g_signal_connect(m_wxwindow, "draw", G_CALLBACK(draw), this);
 #endif
@@ -240,6 +193,48 @@ void wxGLCanvas::GTKHandleUnrealized()
     CallOnUnrealized();
 
     wxGLCanvasUnix::GTKHandleUnrealized();
+}
+
+void wxGLCanvas::GTKOnWidgetCreated()
+{
+#ifdef GDK_WINDOWING_X11
+    // m_wxwindow doesn't have a parent yet, so use our parent widget to find
+    // the display and screen it is going to be on.
+    GtkWidget* const parentWidget = m_parent->m_widget;
+
+#ifdef __WXGTK3__
+    if ( !wxGTKImpl::IsX11(gtk_widget_get_display(parentWidget)) )
+        return;
+#endif
+
+    // Both GLX and EGL need the X window to use the visual of the chosen
+    // GLXFBConfig or EGLConfig, so set it now, before m_wxwindow is realized,
+    // which happens when it is added to the parent if the parent is already
+    // realized.
+    //
+    // Note that we always set it explicitly, even if it's the same as the
+    // default one, as otherwise m_wxwindow would inherit the visual of its
+    // parent, which may be different.
+    const unsigned long visualID = GetXVisualID();
+    if ( !visualID )
+        return;
+
+    GdkScreen* const screen = gtk_widget_get_screen(parentWidget);
+    GdkVisual* const visual = gdk_x11_screen_lookup_visual(screen, visualID);
+    if ( !visual )
+    {
+        wxLogDebug("Configured X visual %#lx not found", visualID);
+        return;
+    }
+
+#ifdef __WXGTK3__
+    gtk_widget_set_visual(m_wxwindow, visual);
+#else
+    GdkColormap* colormap = gdk_colormap_new(visual, false);
+    gtk_widget_set_colormap(m_wxwindow, colormap);
+    g_object_unref(colormap);
+#endif
+#endif // GDK_WINDOWING_X11
 }
 
 #endif // wxUSE_GLCANVAS
