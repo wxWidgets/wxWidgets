@@ -2500,14 +2500,19 @@ bool wxCocoaDataViewControl::Update(const wxDataViewColumn *columnPtr)
 
 bool wxCocoaDataViewControl::Update(const wxDataViewItem& WXUNUSED(parent), const wxDataViewItem& item)
 {
-    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    // Items not in the buffer have never been shown, so there is nothing to
+    // reload for them, and we must check for this explicitly as reloadItem:nil
+    // reloads the entire control because nil corresponds to the root item.
+    wxPointerObject* const nsItem = [m_DataSource getDataViewItemFromBuffer:item];
+    if ( nsItem )
+        [m_OutlineView reloadItem:nsItem];
     return true;
 }
 
-bool wxCocoaDataViewControl::Update(const wxDataViewItem& WXUNUSED(parent), const wxDataViewItemArray& items)
+bool wxCocoaDataViewControl::Update(const wxDataViewItem& parent, const wxDataViewItemArray& items)
 {
     for (size_t i=0; i<items.GetCount(); ++i)
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:items[i]]];
+        Update(parent, items[i]);
     return true;
 }
 
