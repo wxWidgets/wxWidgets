@@ -3014,6 +3014,15 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
+    // The cells of a disabled control must be shown as disabled too, as in the
+    // generic implementation: this function is called with the state of the
+    // item in the model before showing each cell, so without this check they
+    // would look enabled.
+    const wxDataViewColumn* const column = GetOwner();
+    const wxDataViewCtrl* const dvc = column ? column->GetOwner() : nullptr;
+    if ( dvc && !dvc->IsEnabled() )
+        enabled = false;
+
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
