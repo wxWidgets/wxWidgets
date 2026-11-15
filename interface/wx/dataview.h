@@ -3976,16 +3976,6 @@ public:
     void SetColumn(int col);
 
     /**
-        For @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK only.
-    */
-    void SetDataViewColumn(wxDataViewColumn* col);
-
-    /**
-        Sets the dataview model associated with this event.
-    */
-    void SetModel(wxDataViewModel* model);
-
-    /**
         Sets the value associated with this event.
     */
     void SetValue(const wxVariant& value);
@@ -4083,7 +4073,6 @@ public:
      */
     wxDataViewItem GetItem() const;
 
-    void SetItem( const wxDataViewItem &item );
     void SetPosition( int x, int y );
     void SetCache(int from, int to);
     wxDataObject *GetDataObject() const;
