@@ -23,7 +23,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxBB_DEFAULT_STYLE,
-                       const wxString& name = wxButtonBoxNameStr)
+                       const wxString& name = wxASCII_STR(wxButtonBoxNameStr))
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -32,7 +32,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxBB_DEFAULT_STYLE,
-                const wxString& name = wxButtonBoxNameStr);
+                const wxString& name = wxASCII_STR(wxButtonBoxNameStr));
 
     virtual size_t GetCount() const override { return m_segments.size(); }
     virtual void Insert(size_t pos, const wxString& label,
