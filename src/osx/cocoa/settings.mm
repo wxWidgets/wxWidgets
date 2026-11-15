@@ -85,6 +85,16 @@ bool wxSystemAppearance::IsDark() const
 // colours
 // ----------------------------------------------------------------------------
 
+wxColour wxOSXGetSeparatorColour()
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+        return wxColour([NSColor separatorColor]);
+#endif
+
+    return wxColour([NSColor gridColor]);
+}
+
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
     wxOSXEffectiveAppearanceSetter helper;

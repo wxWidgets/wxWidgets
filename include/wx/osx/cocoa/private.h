@@ -50,6 +50,10 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromNSCursor(const WXHCURSOR cursor);
+
+// Returns the colour to use for the separators and the borders: this is
+// NSColor.separatorColor if available.
+wxColour WXDLLIMPEXP_CORE wxOSXGetSeparatorColour();
 void wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
                              long style,
                              wxWindowID winid,
