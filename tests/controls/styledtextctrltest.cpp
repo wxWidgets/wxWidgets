@@ -192,6 +192,10 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
     stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
     REQUIRE( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_L2R );
 
+    // The right-to-left base direction is not implemented.
+    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_R2L);
+    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_L2R );
+
     // DirectWrite hit testing doesn't work under Wine, which returns the
     // same position for all characters.
     if ( wxIsRunningUnderWine() )

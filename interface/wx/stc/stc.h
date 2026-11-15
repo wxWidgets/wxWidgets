@@ -3465,9 +3465,13 @@
     @endcode
     This mode is disabled again when switching back to
     wxSTC_TECHNOLOGY_DEFAULT and the message is ignored by the other ports.
+    Only the left-to-right base direction is supported: wxSTC_BIDIRECTIONAL_R2L
+    is refused, i.e. wxSTC_GETBIDIRECTIONAL doesn't return it afterwards.
     Note that the selection should not use its own text colour in this mode,
-    i.e. SetSelForeground(false, wxColour()) should be called, as otherwise
-    the selected text in right-to-left runs is not drawn correctly.
+    i.e. SetSelForeground(false, wxColour()) should be called, and should be
+    translucent, i.e. SetSelAlpha() should be called with a value less than
+    wxSTC_ALPHA_NOALPHA, as otherwise the selected text in right-to-left runs
+    is not drawn correctly.
 
     @since 3.3.5
 

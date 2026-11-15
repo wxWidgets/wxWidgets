@@ -850,7 +850,9 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             if (technology == SC_TECHNOLOGY_DEFAULT) {
                 bidirectional = EditModel::Bidirectional::bidiDisabled;
             }
-            else if (wParam <= SC_BIDIRECTIONAL_R2L) {
+            // The right-to-left base direction is not implemented, so refuse
+            // it instead of reporting it as set.
+            else if (wParam <= SC_BIDIRECTIONAL_L2R) {
                 bidirectional = static_cast<EditModel::Bidirectional>(wParam);
             }
             // Invalidate all cached information including layout.
