@@ -3474,6 +3474,35 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_CORE)
 
 wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
 
+// Cell used by wxDataViewCheckIconTextRenderer: unlike in a plain NSButtonCell,
+// which tracks the mouse in its title as well as in its image, only clicking
+// on the checkbox itself toggles it, while clicking on the text selects the
+// item, as in the generic implementation.
+@interface wxCheckIconTextCell : NSButtonCell
+{
+}
+
+@end
+
+@implementation wxCheckIconTextCell
+
+-(NSUInteger) hitTestForEvent:(NSEvent*)event inRect:(NSRect)cellFrame ofView:(NSView*)controlView
+{
+    // Consider that the clicks a few points away from the checkbox are still
+    // meant for it.
+    const CGFloat margin = 3;
+
+    const NSRect boxRect = [self imageRectForBounds:cellFrame];
+    const NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
+
+    if ( point.x >= NSMinX(boxRect) - margin && point.x <= NSMaxX(boxRect) + margin )
+        return [super hitTestForEvent:event inRect:cellFrame ofView:controlView];
+
+    return NSCellHitContentArea;
+}
+
+@end
+
 wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
     (
         wxDataViewCellMode mode,
@@ -3485,7 +3514,7 @@ wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
 
     NSButtonCell* cell;
 
-    cell = [[NSButtonCell alloc] init];
+    cell = [[wxCheckIconTextCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(GetAlignment())];
     [cell setButtonType: NSSwitchButton];
     [cell setImagePosition:NSImageLeft];
