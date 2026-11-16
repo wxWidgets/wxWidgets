@@ -30,6 +30,7 @@
 
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
+    #include <X11/Xatom.h>  // XA_WINDOW
 #endif
 
 //-----------------------------------------------------------------------------
@@ -126,8 +127,9 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
 }
 
 #if defined(__WXGTK3__) && !defined(__WXGTK4__)
-// Let the window manager handle dragging on Wayland and on X11 when
-// _NET_MOVERESIZE_WINDOW is unsupported (e.g. with xwayland-satellite).
+// Use WM-driven dragging on Wayland and xwayland-satellite, which ignores
+// client-requested position changes. Keep manual dragging for other X11 WMs
+// to preserve AUI docking.
 static bool ShouldWMMoveWindow(GdkWindow* window)
 {
     if (wxGTKImpl::IsWayland(window))
@@ -136,10 +138,48 @@ static bool ShouldWMMoveWindow(GdkWindow* window)
 #ifdef GDK_WINDOWING_X11
     if (wxGTKImpl::IsX11(window))
     {
-        GdkAtom atom =
-            gdk_atom_intern_static_string("_NET_MOVERESIZE_WINDOW");
-        return !gdk_x11_screen_supports_net_wm_hint(
-                    gdk_window_get_screen(window), atom);
+        // Don't use gdk_x11_screen_get_window_manager_name(): it only accepts
+        // _NET_WM_NAME of type UTF8_STRING, while xwayland-satellite sets it
+        // as STRING.
+        GdkDisplay* display = gdk_window_get_display(window);
+        Display* xdisplay = GDK_DISPLAY_XDISPLAY(display);
+        GdkWindow* root = gdk_screen_get_root_window(gdk_window_get_screen(window));
+
+        Atom type;
+        int format;
+        gulong nitems, bytes_after;
+        guchar* data = nullptr;
+        Window wmCheck = None;
+        if (XGetWindowProperty(xdisplay, GDK_WINDOW_XID(root),
+                gdk_x11_get_xatom_by_name_for_display(display,
+                    "_NET_SUPPORTING_WM_CHECK"),
+                0, 1, false, XA_WINDOW,
+                &type, &format, &nitems, &bytes_after, &data) == Success &&
+            data && type == XA_WINDOW && format == 32 && nitems == 1)
+        {
+            wmCheck = *(Window*)data;
+        }
+        if (data)
+            XFree(data);
+
+        if (wmCheck == None)
+            return false;
+
+        static const char satelliteName[] = "xwayland-satellite";
+        data = nullptr;
+        gdk_x11_display_error_trap_push(display);
+        const Status status = XGetWindowProperty(xdisplay, wmCheck,
+                gdk_x11_get_xatom_by_name_for_display(display, "_NET_WM_NAME"),
+                0, sizeof(satelliteName), false, AnyPropertyType,
+                &type, &format, &nitems, &bytes_after, &data);
+        gdk_x11_display_error_trap_pop_ignored(display);
+        const bool isSatellite = status == Success && data && format == 8 &&
+            bytes_after == 0 &&
+            nitems == sizeof(satelliteName) - 1 &&
+            memcmp(data, satelliteName, nitems) == 0;
+        if (data)
+            XFree(data);
+        return isSatellite;
     }
 #endif // GDK_WINDOWING_X11
 
