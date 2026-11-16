@@ -149,7 +149,7 @@ jobs:
         with:
           msystem: clang64
           update: true
-          install: mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-toolchain
+          install: mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-make mingw-w64-clang-x86_64-toolchain
 
       - name: Set up Homebrew
         if: ${{ runner.os == 'macOS' && matrix.cmake_build_toolkit == 'gtk3' }}
