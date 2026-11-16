@@ -19,6 +19,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/xml/xml.h"
+#include "wx/mstream.h"
 #include "wx/sstream.h"
 
 #include <stdarg.h>
@@ -232,6 +233,28 @@ TEST_CASE("Xml::PI", "[xml]")
     CHECK( n );
 
     CHECK( n->GetContent() == "index=\"no\" follow=\"no\"" );
+}
+
+TEST_CASE("Xml::UndefinedByte", "[xml]")
+{
+    // 0xA4 is the currency sign in ISO-8859-3, but 0xA5 is not assigned to
+    // any character in this encoding, so the second document is invalid.
+    const char xmlOK[] =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-3\"?>\n"
+        "<root>\xA4</root>\n";
+    const char xmlBad[] =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-3\"?>\n"
+        "<root>\xA5</root>\n";
+
+    wxXmlDocument doc;
+
+    wxMemoryInputStream misOK(xmlOK, strlen(xmlOK));
+    REQUIRE( doc.Load(misOK) );
+    CHECK( doc.GetRoot()->GetNodeContent() == wxString(wxUniChar(0xA4)) );
+
+    wxMemoryInputStream misBad(xmlBad, strlen(xmlBad));
+    wxLogNull noLog;
+    CHECK( !doc.Load(misBad) );
 }
 
 TEST_CASE("Xml::Escaping", "[xml]")
