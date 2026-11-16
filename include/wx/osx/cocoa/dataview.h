@@ -548,6 +548,9 @@ private:
     void InitOutlineView(long style);
     int GetDefaultRowHeight() const;
 
+    // Reload the children of the given item after some were added or removed.
+    void ReloadChildren(const wxDataViewItem& parent);
+
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;

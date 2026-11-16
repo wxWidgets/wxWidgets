@@ -2370,21 +2370,32 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 //
 // item related methods (inherited from wxDataViewWidgetImpl)
 //
+void wxCocoaDataViewControl::ReloadChildren(const wxDataViewItem& parent)
+{
+    if ( !parent.IsOk() )
+    {
+        [m_OutlineView reloadData];
+        return;
+    }
+
+    // A parent not in the buffer has never been shown, so neither it nor its
+    // children need to be reloaded, and we must check for this explicitly as
+    // reloadItem:nil reloads the entire control because nil corresponds to
+    // the root item, just as in Update() below.
+    wxPointerObject* const nsParent = [m_DataSource getDataViewItemFromBuffer:parent];
+    if ( nsParent )
+        [m_OutlineView reloadItem:nsParent reloadChildren:YES];
+}
+
 bool wxCocoaDataViewControl::Add(const wxDataViewItem& parent, const wxDataViewItem& WXUNUSED(item))
 {
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
+    ReloadChildren(parent);
     return true;
 }
 
 bool wxCocoaDataViewControl::Add(const wxDataViewItem& parent, const wxDataViewItemArray& WXUNUSED(items))
 {
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
+    ReloadChildren(parent);
     return true;
 }
 
@@ -2533,10 +2544,7 @@ bool wxCocoaDataViewControl::Reload()
 
 bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent)
 {
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
+    ReloadChildren(parent);
     return true;
 }
 
