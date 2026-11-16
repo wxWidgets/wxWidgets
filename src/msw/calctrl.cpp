@@ -552,55 +552,69 @@ WXLRESULT wxCalendarCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM l
             {
                 MSWDefWindowProc(WM_PAINT, wParam, 0);
             };
-        // Redraw the header.
-        auto postProcess = [this](const wxBitmap& bmpIn)
-            {
-                wxBitmap bmpOut(bmpIn);
-                bmpOut.SetScaleFactor(GetDPIScaleFactor());
-                wxMemoryDC dc(bmpOut);
-                dc.SetLayoutDirection(GetLayoutDirection());
-
-                // Erase the header to dark background instead of the
-                // MCSC_TITLEBK colour, which is gray.
-                WinStruct<MCGRIDINFO> info;
-                info.dwPart = MCGIP_CALENDARHEADER;
-                info.dwFlags = MCGIF_NAME | MCGIF_RECT;
-                wchar_t textHead[128] = { };
-                info.pszName = textHead;
-                info.cchName = WXSIZEOF(textHead);
-                ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
-                COLORREF bg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_BACKGROUND, 0);
-                dc.SetBrush(wxBrush(wxColour(bg)));
-                dc.SetPen(*wxTRANSPARENT_PEN);
-                wxRect rcHead = wxRectFromRECT(info.rc);
-                dc.DrawRectangle(rcHead);
-
-                // Redraw header text.
-                COLORREF fg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TITLETEXT, 0);
-                dc.SetTextForeground(wxColour(fg));
-                int center = wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL;
-                dc.DrawLabel(textHead, rcHead, center);
-
-                // Draw the left button.
-                info.dwFlags = MCGIF_RECT;
-                info.dwPart = MCGIP_PREV;
-                ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
-                // Draw a left-pointing triangle.
-                dc.DrawLabel(L"\u25C0", wxRectFromRECT(info.rc), center);
-
-                // Draw the right button.
-                info.dwPart = MCGIP_NEXT;
-                ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
-                // Draw a right-pointing triangle.
-                dc.DrawLabel(L"\u25B6", wxRectFromRECT(info.rc), center);
-
-                return bmpOut;
-            };
+        auto postProcess = [this](const wxBitmap& bmpIn) {
+            return MSWPaintDarkMode(bmpIn);
+        };
         wxMSWImpl::CustomPaint(m_hWnd, defPaint, postProcess);
         return 0;
     }
 
     return wxCalendarCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+wxBitmap wxCalendarCtrl::MSWPaintDarkMode(const wxBitmap& bmpIn) const
+{
+    wxBitmap bmpOut(bmpIn);
+    bmpOut.SetScaleFactor(GetDPIScaleFactor());
+    wxMemoryDC dc(bmpOut);
+    dc.SetFont(GetFont());
+    dc.SetLayoutDirection(GetLayoutDirection());
+
+    // Erase the headers to dark background instead of the MCSC_TITLEBK colour.
+    WinStruct<MCGRIDINFO> info;
+    info.dwPart = MCGIP_CALENDARHEADER;
+    info.dwFlags = MCGIF_NAME | MCGIF_RECT;
+    wchar_t text[128] = { };
+    info.pszName = text;
+    info.cchName = WXSIZEOF(text);
+    wxString textPrevious;
+
+    int nCal = ::SendMessage(m_hWnd, MCM_GETCALENDARCOUNT, 0, 0);
+    for ( info.iCalendar = 0; info.iCalendar < nCal; info.iCalendar++ )
+    {
+        ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+        COLORREF bg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_BACKGROUND, 0);
+        dc.SetBrush(wxBrush(wxColour(bg)));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        wxRect rcHead = wxRectFromRECT(info.rc);
+        dc.DrawRectangle(rcHead);
+
+        // If the heading text does not change, this calendar is past the end
+        // of the date range.
+        if ( textPrevious == text )
+            continue;
+        textPrevious = text;
+
+        // Redraw header text.
+        COLORREF fg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TITLETEXT, 0);
+        dc.SetTextForeground(wxColour(fg));
+        dc.DrawLabel(text, rcHead, wxALIGN_CENTER);
+    }
+
+    // Draw the left button.
+    info.dwFlags = MCGIF_RECT;
+    info.dwPart = MCGIP_PREV;
+    ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+    // Draw a left-pointing triangle.
+    dc.DrawLabel(L"\u25C0", wxRectFromRECT(info.rc), wxALIGN_CENTER);
+
+    // Draw the right button.
+    info.dwPart = MCGIP_NEXT;
+    ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+    // Draw a right-pointing triangle.
+    dc.DrawLabel(L"\u25B6", wxRectFromRECT(info.rc), wxALIGN_CENTER);
+
+    return bmpOut;
 }
 
 #endif // wxUSE_CALENDARCTRL

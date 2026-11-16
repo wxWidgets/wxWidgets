@@ -81,6 +81,7 @@ private:
     // redisplay holidays
     virtual void RefreshHolidays() override { UpdateMarks(); }
 
+    wxBitmap MSWPaintDarkMode(const wxBitmap& bmpIn) const;
 
     // current date, we need to store it instead of simply retrieving it from
     // the control as needed in order to be able to generate the correct events
