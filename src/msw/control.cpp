@@ -42,6 +42,10 @@
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
+#if wxUSE_ACCESSIBILITY
+    #include "wx/access.h"
+#endif // wxUSE_ACCESSIBILITY
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -428,6 +432,14 @@ void wxMSWOwnerDrawnButtonBase::MSWSetCheck(int state)
     // Owner drawn buttons don't react to BM_SETCHECK, so we need to redraw
     // them ourselves to show the new state.
     m_win->Refresh();
+
+#if wxUSE_ACCESSIBILITY
+    // Native buttons also notify the accessibility clients, such as screen
+    // readers, about the state change when they get BM_SETCHECK, so we need
+    // to do it ourselves too.
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, m_win,
+                              wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
