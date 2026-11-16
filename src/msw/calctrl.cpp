@@ -548,10 +548,26 @@ WXLRESULT wxCalendarCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM l
     if ( nMsg == WM_PAINT && wxMSWDarkMode::IsActive() )
     {
         // Paint the control into a memory DC, specified by wParam.
-        auto defPaint = [this](HWND WXUNUSED(hwnd), WPARAM wParam)
+        auto defPaint = [this](HWND WXUNUSED(hwnd), WPARAM wParam) {
+            // For the decade and century views, make the text colour
+            // consistent. In these views, the native control uses the
+            // gray MCSC_TRAILINGTEXT colour in odd places. This is not
+            // noticeable in light mode but it looks weird in dark mode.
+            auto view = ::SendMessage(m_hWnd, MCM_GETCURRENTVIEW, 0, 0);
+            if ( view == MCMV_DECADE || view == MCMV_CENTURY )
             {
+                // Save MCSC_TRAILINGTEXT, then set it to MCSC_TEXT (white).
+                auto tt = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TRAILINGTEXT, 0);
+                auto fg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TEXT, 0);
+                ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TRAILINGTEXT, fg);
+                // Paint.
+                 MSWDefWindowProc(WM_PAINT, wParam, 0);
+                // Restore MCSC_TRAILINGTEXT.
+                ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TRAILINGTEXT, tt);
+            }
+            else
                 MSWDefWindowProc(WM_PAINT, wParam, 0);
-            };
+        };
         auto postProcess = [this](const wxBitmap& bmpIn) {
             return MSWPaintDarkMode(bmpIn);
         };
