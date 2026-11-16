@@ -834,7 +834,10 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
             // invalid/undefined byte in the encoding:
             info->map[i+1] = -1;
         }
-        info->map[i+1] = (int)wcBuf[0];
+        else
+        {
+            info->map[i+1] = (int)wcBuf[0];
+        }
     }
 
     info->data = nullptr;
