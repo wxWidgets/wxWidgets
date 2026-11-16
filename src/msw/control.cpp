@@ -417,6 +417,19 @@ bool wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn() const
         (::GetWindowLong(GetHwndOf(m_win), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
 }
 
+void wxMSWOwnerDrawnButtonBase::MSWSetCheck(int state)
+{
+    if ( !MSWIsOwnerDrawn() )
+    {
+        ::SendMessage(GetHwndOf(m_win), BM_SETCHECK, state, 0);
+        return;
+    }
+
+    // Owner drawn buttons don't react to BM_SETCHECK, so we need to redraw
+    // them ourselves to show the new state.
+    m_win->Refresh();
+}
+
 void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
 {
     wxMSWWinStyleUpdater updateStyle(GetHwndOf(m_win));
