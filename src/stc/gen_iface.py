@@ -74,15 +74,17 @@ FUNC_FOR_CMD = 1
 # Should methods and values be generated for the provisional Scintilla items?
 GENERATE_PROVISIONAL_ITEMS = 0
 
-# wxSTC values are generated for these provisional Scintilla values and
-# messages even if GENERATE_PROVISIONAL_ITEMS is 0, so that they can be used
-# with SendMsg() without generating any methods for them.
+# wxSTC values and methods are generated for these provisional Scintilla
+# values and methods even if GENERATE_PROVISIONAL_ITEMS is 0.
 provisionalValuesToGenerate = set([
     'SC_BIDIRECTIONAL_DISABLED',
     'SC_BIDIRECTIONAL_L2R',
     'SC_BIDIRECTIONAL_R2L',
-    'SCI_GETBIDIRECTIONAL',
-    'SCI_SETBIDIRECTIONAL',
+])
+
+provisionalMethodsToGenerate = set([
+    'GetBidirectional',
+    'SetBidirectional',
 ])
 
 # No wxSTC value will be generated for the following Scintilla values.
@@ -102,6 +104,7 @@ retTypeMap = {
     'Alpha': 'int',
     'AnnotationVisible': 'int',
     'AutomaticFold': 'int',
+    'Bidirectional': 'int',
     'CaretPolicy': 'int',
     'CaretSticky': 'int',
     'CaretStyle': 'int',
@@ -1314,7 +1317,6 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
             curDocStrings = []
 
         elif op == 'fun ' or op == 'set ' or op == 'get ':
-            parseMsgVal(line[4:], values, curDocStrings, icat)
             parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ', msgcodes, icat)
             curDocStrings = []
 
@@ -1441,7 +1443,8 @@ def processMethods(methods):
         retType = retTypeMap.get(retType, retType)
         params = makeParamString(param1, param2)
 
-        if icat=='Provisional' and not GENERATE_PROVISIONAL_ITEMS:
+        if icat=='Provisional' and not GENERATE_PROVISIONAL_ITEMS \
+                and interfName not in provisionalMethodsToGenerate:
             continue
 
         name, theDef, theImp = checkMethodOverride(interfName, number)
@@ -1488,7 +1491,7 @@ def processMethods(methods):
             if docsLong != 0:
                 intrflines.append('')
                 for y in docsLong:
-                    intrflines.append('        ' + y)
+                    intrflines.append(('        ' + y).rstrip())
             intrflines.append('    */')
         else:
             print('warning: ' + name + ' is undocumented.')
@@ -1653,15 +1656,6 @@ funregex = re.compile(r'\s*([a-zA-Z0-9_]+)'  # <ws>return type
                       r'([0-9]+)'             # number
                       r'\(([ a-zA-Z0-9_]*),'  # (param,
                       r'([ a-zA-Z0-9_]*),*\)')  # param)
-
-def parseMsgVal(line, values, docs, icat):
-    # Generate a value for the message itself if it's one of the provisional
-    # ones for which only the values are generated.
-    mo = funregex.match(line)
-    if mo is not None and icat == 'Provisional':
-        name = 'SCI_' + mo.group(2).upper()
-        if name in provisionalValuesToGenerate:
-            parseVal('%s=%s' % (name, mo.group(3)), values, list(docs), icat)
 
 def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
     def parseParam(param):

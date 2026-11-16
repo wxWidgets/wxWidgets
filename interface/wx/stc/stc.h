@@ -459,16 +459,6 @@
 /// in future versions of wxStyledTextCtrl.
 #define wxSTC_BIDIRECTIONAL_R2L 2
 
-/// Retrieve bidirectional text display state.
-/// This item is a provisional value and is subject to change
-/// in future versions of wxStyledTextCtrl.
-#define wxSTC_GETBIDIRECTIONAL 2708
-
-/// Set bidirectional text display state.
-/// This item is a provisional value and is subject to change
-/// in future versions of wxStyledTextCtrl.
-#define wxSTC_SETBIDIRECTIONAL 2709
-
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
 #define wxSTC_LEX_NULL 1
@@ -3461,12 +3451,13 @@
     bidirectional mode, which is only available with DirectWrite:
     @code
     stc->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
-    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
+    stc->SetBidirectional(wxSTC_BIDIRECTIONAL_L2R);
     @endcode
     This mode is disabled again when switching back to
-    wxSTC_TECHNOLOGY_DEFAULT and the message is ignored by the other ports.
-    Only the left-to-right base direction is supported: wxSTC_BIDIRECTIONAL_R2L
-    is refused, i.e. wxSTC_GETBIDIRECTIONAL doesn't return it afterwards.
+    wxSTC_TECHNOLOGY_DEFAULT and SetBidirectional() does nothing in the other
+    ports. Only the left-to-right base direction is supported:
+    wxSTC_BIDIRECTIONAL_R2L is refused, i.e. GetBidirectional() doesn't return
+    it afterwards.
     Note that the selection should not use its own text colour in this mode,
     i.e. SetSelForeground(false, wxColour()) should be called, and should be
     translucent, i.e. SetSelAlpha() should be called with a value less than
@@ -6035,6 +6026,32 @@ public:
         Set the lexer from an ILexer*.
     */
     void SetILexer(void* ilexer);
+
+    /**
+        Retrieve bidirectional text display state.
+
+        The return value will be one of the
+        @link wxStyledTextCtrl::wxSTC_BIDIRECTIONAL_DISABLED wxSTC_BIDIRECTIONAL_* @endlink constants.
+
+        This method is provisional and is subject to change in future versions of wxStyledTextCtrl.
+        @since 3.3.5
+    */
+    int GetBidirectional() const;
+
+    /**
+        Set bidirectional text display state.
+
+        The input should be one of the
+        @link wxStyledTextCtrl::wxSTC_BIDIRECTIONAL_DISABLED wxSTC_BIDIRECTIONAL_* @endlink constants.
+        @remarks
+        This method only has any effect with the wxMSW port and when
+        technology has been set to wxSTC_TECHNOLOGY_DIRECTWRITE. Only
+        wxSTC_BIDIRECTIONAL_L2R is currently supported, see @ref stc_bidi.
+
+        This method is provisional and is subject to change in future versions of wxStyledTextCtrl.
+        @since 3.3.5
+    */
+    void SetBidirectional(int bidirectional);
 
     /**
         Is drawing done in two phases with backgrounds drawn before foregrounds?

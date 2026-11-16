@@ -179,8 +179,8 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
         stc(new wxStyledTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY));
 
     // Bidirectional mode is only available with DirectWrite.
-    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
-    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_DISABLED );
+    stc->SetBidirectional(wxSTC_BIDIRECTIONAL_L2R);
+    CHECK( stc->GetBidirectional() == wxSTC_BIDIRECTIONAL_DISABLED );
 
     stc->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
     if ( stc->GetTechnology() != wxSTC_TECHNOLOGY_DIRECTWRITE )
@@ -189,12 +189,12 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
         return;
     }
 
-    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_L2R);
-    REQUIRE( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_L2R );
+    stc->SetBidirectional(wxSTC_BIDIRECTIONAL_L2R);
+    REQUIRE( stc->GetBidirectional() == wxSTC_BIDIRECTIONAL_L2R );
 
     // The right-to-left base direction is not implemented.
-    stc->SendMsg(wxSTC_SETBIDIRECTIONAL, wxSTC_BIDIRECTIONAL_R2L);
-    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_L2R );
+    stc->SetBidirectional(wxSTC_BIDIRECTIONAL_R2L);
+    CHECK( stc->GetBidirectional() == wxSTC_BIDIRECTIONAL_L2R );
 
     // DirectWrite hit testing doesn't work under Wine, which returns the
     // same position for all characters.
@@ -213,7 +213,7 @@ TEST_CASE("wxStyledTextCtrl::Bidirectional", "[wxStyledTextCtrl][rtl]")
     }
 
     stc->SetTechnology(wxSTC_TECHNOLOGY_DEFAULT);
-    CHECK( stc->SendMsg(wxSTC_GETBIDIRECTIONAL) == wxSTC_BIDIRECTIONAL_DISABLED );
+    CHECK( stc->GetBidirectional() == wxSTC_BIDIRECTIONAL_DISABLED );
 }
 
 #endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
