@@ -17,6 +17,8 @@
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
+#include "wx/richtext/richtextxml.h"
+#include "wx/mstream.h"
 #include "wx/uiaction.h"
 
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
@@ -1132,6 +1134,42 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Table", "[richtextctrl]")
 
     m_rich->Clear();
     m_rich->SetFocusObject(nullptr);
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TableXMLMissingCells",
+                 "[richtextctrl]")
+{
+    // This table claims to have 2*2 cells but contains only one of them.
+    static const char xml[] =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<richtext version=\"1.0.0.0\" xmlns=\"http://www.wxwidgets.org\">"
+        "<paragraphlayout>"
+        "<paragraph>"
+        "<table rows=\"2\" cols=\"2\">"
+        "<cell><paragraphlayout><paragraph><text>x</text></paragraph>"
+        "</paragraphlayout></cell>"
+        "</table>"
+        "</paragraph>"
+        "</paragraphlayout>"
+        "</richtext>";
+
+    wxMemoryInputStream mis(xml, sizeof(xml) - 1);
+    wxRichTextXMLHandler handler;
+    REQUIRE( handler.LoadFile(&m_rich->GetBuffer(), mis) );
+
+    wxRichTextParagraph* const
+        para = wxDynamicCast(m_rich->GetBuffer().GetChild(0), wxRichTextParagraph);
+    REQUIRE( para );
+    wxRichTextTable* const
+        table = wxDynamicCast(para->GetChild(0), wxRichTextTable);
+    REQUIRE( table );
+
+    // The inconsistent table must have been discarded instead of being left
+    // with missing cells that would be accessed when laying it out.
+    CHECK( table->GetRowCount() == 0 );
+    CHECK( table->GetColumnCount() == 0 );
+
+    m_rich->LayoutContent();
 }
 
 #endif //wxUSE_RICHTEXT
