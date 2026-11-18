@@ -180,6 +180,7 @@ or directory, font or colour, ...) directly from the window containing them.
 @li wxFilePickerCtrl: A control which allows the user to choose a file
 @li wxFontPickerCtrl: A control which allows the user to choose a font
 @li wxDatePickerCtrl: Small date picker control
+@li wxTimePickerCtrl: Small time picker control
 
 
 
@@ -384,7 +385,7 @@ Related Overviews: @ref overview_events
 @li wxCommandEvent: An event from a variety of standard controls
 @li wxContextMenuEvent: An event generated when the user issues a context menu
     command
-@li wxDateEvent: Used with wxDatePickerCtrl
+@li wxDateEvent: Used with wxDatePickerCtrl and wxTimePickerCtrl
 @li wxDialUpEvent: Event send by wxDialUpManager
 @li wxDropFilesEvent: A drop files event
 @li wxEraseEvent: An erase background event
