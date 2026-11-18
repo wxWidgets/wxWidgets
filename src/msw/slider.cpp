@@ -307,9 +307,8 @@ bool wxSlider::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
                         points[3] = { rc.right - 1, rc.top + mid };
                         points[4] = { rc.right - 1, rc.bottom };
                     }
-                    else
+                    else // wxSL_BOTTOM is assumed, but not guaranteed to be set
                     {
-                        wxASSERT(HasFlag(wxSL_BOTTOM));
                         // Unlike the other orientations, the pointer tip
                         // location (at the bottom) depends on the DPI
                         // scaling. The pointer bottom is above the bottom of
