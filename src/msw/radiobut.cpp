@@ -85,13 +85,15 @@ bool wxRadioButton::Create(wxWindow *parent,
 
 void wxRadioButton::SetValue(bool value)
 {
-    m_isChecked = value;
-
-    if ( !IsOwnerDrawn() )
-        ::SendMessage(GetHwnd(), BM_SETCHECK,
-                      value ? BST_CHECKED : BST_UNCHECKED, 0);
-    else // owner drawn buttons don't react to this message
-        Refresh();
+    // Note that this function is called for all the other buttons in the
+    // group when one of them is checked, even if they're already unchecked,
+    // so don't do anything if the state doesn't change to avoid refreshing
+    // them needlessly if they are owner drawn.
+    if ( value != m_isChecked )
+    {
+        m_isChecked = value;
+        MSWSetCheck(value ? BST_CHECKED : BST_UNCHECKED);
+    }
 
     if ( !value || HasFlag(wxRB_SINGLE) )
         return;
