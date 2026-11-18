@@ -1738,9 +1738,9 @@ wxString wxString::FromCDouble(double val, int precision)
     if ( res.ec != std::errc{} )
         return {};
 
-    *res.ptr = '\0';
-
-    return wxString::FromAscii(buf);
+    // Note that res.ptr may be equal to end if the buffer was entirely used,
+    // so don't try to NUL-terminate the result.
+    return wxString::FromAscii(buf, res.ptr - start);
 }
 
 #elif wxUSE_XLOCALE
