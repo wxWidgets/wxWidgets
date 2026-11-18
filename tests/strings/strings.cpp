@@ -958,6 +958,9 @@ TEST_CASE("StringFromDouble", "[wxString]")
         CHECK( wxString::FromCDouble(td.value, td.prec) == td.str );
     }
 
+    // This result is exactly 64 characters long, check that it still works.
+    CHECK( wxString::FromCDouble(1, 62) == "1." + wxString(62, '0') );
+
     if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
         return;
 
