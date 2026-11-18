@@ -44,5 +44,5 @@
 	branch = wx
 [submodule "3rdparty/lunasvg"]
 	path = 3rdparty/lunasvg
-	url = https://github.com/wxWidgets/lunasvg.git
-	branch = wx
+	url = https://github.com/MaartenBent/lunasvg.git
+	branch = wx-lunasvg-cpp11-build

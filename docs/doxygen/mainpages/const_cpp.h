@@ -310,6 +310,7 @@ corresponding library. The following symbols are honoured:
     - wxNO_TIFF_LIB
     - wxNO_WEBP_LIB
     - wxNO_ZLIB_LIB
+    - wxNO_LUNASVG_LIB
 
 Notice that the base library is always included and the core is always included
 for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
