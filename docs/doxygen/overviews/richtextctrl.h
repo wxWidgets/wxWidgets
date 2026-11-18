@@ -16,11 +16,12 @@ handle different character styles, paragraph formatting, and images. It's aimed
 at editing 'natural' language text - if you need an editor that supports code
 editing, wxStyledTextCtrl is a better choice.
 
-Despite its name, it cannot currently read or write RTF (rich text format)
-files. Instead, it uses its own XML format, and can also read and write plain
-text. In future we expect to provide RTF or OpenDocument file capabilities.
-Custom file formats can be supported by creating additional file handlers and
-registering them with the control.
+Despite its name, its native rich text format is XML rather than RTF (Rich
+Text Format). It can write RTF files and copy RTF to the clipboard, but cannot
+currently read RTF. RTF export is experimental: its output may change in future
+versions. It can also read and write plain text. Custom file formats
+can be supported by creating additional file handlers and registering them
+with the control.
 
 wxRichTextCtrl is largely compatible with the wxTextCtrl API, but extends it
 where necessary. The control can be used where the native rich text
@@ -486,7 +487,7 @@ with them will be appreciated.
 @li Conversion from HTML, and a rewrite of the HTML output handler that includes CSS,
 tables, text boxes, and floating images, in addition to a simplified-HTML mode for wxHTML compatibility
 @li Open Office input and output
-@li RTF input and output
+@li RTF input
 @li A ruler control
 @li Standard editing toolbars
 @li Bitmap bullets

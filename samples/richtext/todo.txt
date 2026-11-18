@@ -75,7 +75,7 @@ FEATURES:
 
 - XML I/O (a prototype implementation done, maybe the syntax/verbosity could be improved)
 - HTML (I)/O and clipboard support
-- RTF (I)/O and clipboard support
+- RTF input (output and clipboard copy are supported)
 - OpenOffice.org I/O
 - C++ output, i.e. generate set of buffer commands from a buffer
   so that the data can be included in an app, possibly with translation.
