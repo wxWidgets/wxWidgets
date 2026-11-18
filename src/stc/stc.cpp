@@ -48,9 +48,13 @@
 #endif
 
 #include "wx/dcbuffer.h"
+#include "wx/private/textinput.h"
 
 #define INCLUDE_DEPRECATED_FEATURES
 #include "Scintilla.h"
+#include "ILexer.h"
+#include "Lexilla.h"
+#include "LexillaAccess.h"
 
 //----------------------------------------------------------------------
 
@@ -133,10 +137,6 @@ wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE, wxStyledTextEvent );
-
-
-wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
-wxEND_EVENT_TABLE()
 
 
 wxIMPLEMENT_CLASS(wxStyledTextCtrl, wxControl);
@@ -492,12 +492,6 @@ int wxStyledTextCtrl::GetIMEInteraction() const
 
 // Choose to display the IME in a window or inline.
 void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction) {
-#ifdef wxHAS_TEXT_INPUT_CLIENT
-    // Roll the composition back first, while the pre-edit state is still
-    // fully consistent with the current mode.
-    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
-        m_swx->CancelComposition();
-#endif
     SendMsg(SCI_SETIMEINTERACTION, imeInteraction);
     wxUpdateTextInputClient(this);
 }
@@ -5434,6 +5428,60 @@ wxSize wxStyledTextCtrl::DoGetBestSize() const
     return FromDIP(wxSize(200,100));
 }
 
+wxIntPtr wxStyledTextCtrl::SendMsg(int msg, wxUIntPtr wParam, wxIntPtr lParam) const
+{
+    switch (msg)
+    {
+        case SCI_SETLEXER:
+        {
+            int lexLanguage = static_cast<int>(wParam);
+            const char* name = LexerNameFromID(lexLanguage);
+            ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+            const_cast<wxStyledTextCtrl*>(this)->SetILexer(pLexer);
+            return 0;
+        }
+
+        case SCI_SETLEXERLANGUAGE:
+        {
+            const char* name = reinterpret_cast<const char*>(lParam);
+            ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+            const_cast<wxStyledTextCtrl*>(this)->SetILexer(pLexer);
+            return 0;
+        }
+
+        case SCI_LOADLEXERLIBRARY:
+        {
+            const char* name = reinterpret_cast<const char*>(lParam);
+            Lexilla::Load(name);
+            return 0;
+        }
+
+        default:
+            break;
+    }
+
+    SciFnDirect fn = reinterpret_cast<SciFnDirect>(m_sciFn);
+    return fn ? fn(m_sciPtr, msg, wParam, lParam) : 0;
+}
+
+void wxStyledTextCtrl::SetDefaultAttributes()
+{
+    // Use colours appropriate for the current system colour theme.
+    auto attr = wxTextCtrl::GetClassDefaultAttributes();
+    StyleSetForeground(wxSTC_STYLE_DEFAULT, attr.colFg);
+    StyleSetBackground(wxSTC_STYLE_DEFAULT, attr.colBg);
+    SetCaretForeground(attr.colFg);
+
+    // We also need to set this one because its foreground is hardcoded as
+    // black in Scintilla sources.
+    StyleSetForeground(wxSTC_STYLE_LINENUMBER, attr.colFg);
+
+    // And foreground for this one is hardcoded as white.
+    StyleSetForeground(wxSTC_STYLE_CALLTIP, attr.colFg);
+
+    SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+    SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+}
 
 //----------------------------------------------------------------------
 // Turn notifications from Scintilla into events

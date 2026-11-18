@@ -10,7 +10,9 @@
 include(../../source_groups.cmake)
 set(SCINTILLA_SRC_DIR src/stc/scintilla)
 
-wx_add_builtin_library(wxscintilla
+set(SCINTILLA_DEFINES)
+
+set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/include/ILexer.h
     ${SCINTILLA_SRC_DIR}/include/ILoader.h
     ${SCINTILLA_SRC_DIR}/include/Platform.h
@@ -84,15 +86,34 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/ViewStyle.h
     ${SCINTILLA_SRC_DIR}/src/XPM.cxx
     ${SCINTILLA_SRC_DIR}/src/XPM.h
-    ${SCINTILLA_SRC_DIR}/gtk/Converter.h
-    ${SCINTILLA_SRC_DIR}/gtk/PlatGTK.cxx
-    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.cxx
-    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.h
-    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.cxx
-    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.h
-    ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.c
-    ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.h
 )
+if(WXMSW)
+    set(SCINTILLA_SOURCES
+        ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/win32/HanjaDic.cxx
+        ${SCINTILLA_SRC_DIR}/win32/HanjaDic.h
+        ${SCINTILLA_SRC_DIR}/win32/PlatWin.cxx
+        ${SCINTILLA_SRC_DIR}/win32/PlatWin.h
+        ${SCINTILLA_SRC_DIR}/win32/ScintillaDLL.cxx
+        ${SCINTILLA_SRC_DIR}/win32/ScintillaWin.cxx
+        ${SCINTILLA_SRC_DIR}/win32/ScintillaWin.h
+    )
+elseif(WXGTK)
+    set(SCINTILLA_DEFINES GTK)
+    set(SCINTILLA_SOURCES
+        ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/gtk/Converter.h
+        ${SCINTILLA_SRC_DIR}/gtk/PlatGTK.cxx
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.cxx
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.h
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.cxx
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.h
+        ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.c
+        ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.h
+    )
+endif()
+
+wx_add_builtin_library(wxscintilla ${SCINTILLA_SOURCES})
 
 target_include_directories(wxscintilla PRIVATE
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/include
@@ -101,8 +122,12 @@ target_include_directories(wxscintilla PRIVATE
 )
 
 target_compile_definitions(wxscintilla PRIVATE
-    GTK
+    ${SCINTILLA_DEFINES}
 )
+
+if(WIN32)
+    target_link_libraries(wxscintilla PRIVATE imm32)
+endif()
 
 wx_target_enable_precomp(wxscintilla
     "${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/include/Scintilla.h"

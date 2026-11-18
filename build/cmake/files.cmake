@@ -2913,6 +2913,13 @@ set(STC_CMN_HDR
     wx/stc/minimap.h
 )
 
+set(STC_MSW_SRC
+    src/stc/stc_msw.cpp
+)
+
+set(STC_MSW_HDR
+)
+
 set(STC_GTK_SRC
     src/stc/stc_gtk.cpp
 )

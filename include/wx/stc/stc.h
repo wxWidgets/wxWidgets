@@ -3549,7 +3549,10 @@ public:
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id=wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
-                     const wxString& name = wxASCII_STR(wxSTCNameStr));
+                     const wxString& name = wxASCII_STR(wxSTCNameStr))
+    {
+        Create(parent, id, pos, size, style, name);
+    }
     wxStyledTextCtrl() { }
     ~wxStyledTextCtrl();
 
@@ -6271,25 +6274,32 @@ protected:
 
     virtual wxSize DoGetBestSize() const override;
 
+    void SetDefaultAttributes();
+
+#ifdef __WXMSW__
+    bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) override;
+    bool MSWCommand(WXUINT param, WXWORD id) override;
+    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+#endif
+
 public:
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
 private:
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxStyledTextCtrl);
 
 protected:
 
-    wxStopWatch         m_stopWatch;
-    wxScrollBar*        m_vScrollBar;
-    wxScrollBar*        m_hScrollBar;
+    wxScrollBar*        m_vScrollBar = nullptr;
+    wxScrollBar*        m_hScrollBar = nullptr;
 
-    bool                m_lastKeyDownConsumed;
+    bool                m_lastKeyDownConsumed = false;
 
 private:
-    wxBitmap m_buffer;
+    void*               m_sciFn = nullptr;
+    intptr_t            m_sciPtr = 0;
 
     wxStyledTextCtrl*   m_mirrorCtrl = nullptr;
     int                 m_foldFlags = 0;
