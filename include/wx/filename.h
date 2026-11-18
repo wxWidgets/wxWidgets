@@ -16,6 +16,7 @@
 #include "wx/intl.h"
 #include "wx/longlong.h"
 #include "wx/file.h"
+#include "wx/localaccount.h"
 
 #if wxUSE_FILE
 class WXDLLIMPEXP_FWD_BASE wxFile;
@@ -265,6 +266,10 @@ public:
         // set the file permissions to a combination of wxPosixPermissions enum
         // values
     bool SetPermissions(int permissions);
+
+        // return the account owning the file or directory, the returned object
+        // is not ok if the owner couldn't be determined
+    wxLocalAccount GetOwner() const;
 
         // copy the supported attributes of the given file to this one
     bool CopyAttributesFrom(const wxFileName& source) const;

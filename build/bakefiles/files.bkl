@@ -740,6 +740,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/uilocale.h
     wx/fs_data.h
     wx/stdformat.h
+    wx/localaccount.h
 </set>
 
 
