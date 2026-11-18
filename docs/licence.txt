@@ -2,7 +2,7 @@
                 ======================================
 
   Copyright (c) 1998-2005 Julian Smart, Robert Roebling et al
-
+   Angelo L Ranille
   Everyone is permitted to copy and distribute verbatim copies
   of this licence document, but changing it is not allowed.
 
