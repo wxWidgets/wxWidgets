@@ -684,6 +684,12 @@ bool wxThumbBarButton::UpdateParentTaskBarButton()
 /* static */
 wxTaskBarButton* wxTaskBarButton::New(wxWindow* parent)
 {
+    // Check that we have a taskbar at all. This is almost always the case, but
+    // in the situations when it isn't, such as when the application is running
+    // on a non-default desktop, this avoids a cryptic error message below.
+    if ( !::FindWindow(wxT("Shell_TrayWnd"), nullptr) )
+        return nullptr;
+
     wxITaskbarList3* taskbarList = nullptr;
 
     HRESULT hr = CoCreateInstance
