@@ -1271,6 +1271,7 @@ wxIMMFunctions::wxIMMFunctions()
         return
 
     wxINIT_IMM_FUNC(AssociateContextEx);
+    wxINIT_IMM_FUNC(DisableIME);
     wxINIT_IMM_FUNC(GetContext);
     wxINIT_IMM_FUNC(GetOpenStatus);
     wxINIT_IMM_FUNC(ReleaseContext);

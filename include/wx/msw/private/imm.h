@@ -27,6 +27,7 @@ public:
     bool IsOk() const { return m_ok; }
 
     typedef BOOL (WINAPI *ImmAssociateContextEx_t)(HWND, HIMC, DWORD);
+    typedef BOOL (WINAPI *ImmDisableIME_t)(DWORD);
     typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
     typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
     typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
@@ -35,6 +36,7 @@ public:
     typedef BOOL (WINAPI *ImmSetCandidateWindow_t)(HIMC, LPCANDIDATEFORM);
 
     ImmAssociateContextEx_t AssociateContextEx = nullptr;
+    ImmDisableIME_t DisableIME = nullptr;
     ImmGetContext_t GetContext = nullptr;
     ImmGetOpenStatus_t GetOpenStatus = nullptr;
     ImmReleaseContext_t ReleaseContext = nullptr;

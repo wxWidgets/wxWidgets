@@ -87,6 +87,18 @@
         using it, i.e. this has the same effect as calling
         wxApp::MSWEnableDarkMode(). If set to 2, use dark mode unconditionally,
         as if this function were called with wxApp::DarkMode_Always argument.
+    @flag{msw.disable-ime}
+        If set to 1, disable the input method editor (IME) for all threads of
+        the application. This option is only taken into account during the
+        application initialization, so it must be set either before it, e.g.
+        in the application class constructor, or, more typically, via the
+        environment variable @c wx_msw_disable_ime. Disabling the IME can be
+        useful when running the application on a desktop without text input
+        services, such as a desktop created by @c CreateDesktop() for running
+        GUI tests without showing their windows, as IME is not available then
+        and its activation fails but not before a timeout expires -- setting
+        this option allows to avoid waiting for it. This option has been added
+        in wxWidgets 3.3.5.
     @flag{msw.native-dialogs-pmdpi}
         Some native win32 dialogs (like the font and colour pickers) are not
         per-monitor DPI aware, and wxWidgets will forcefully show them as
