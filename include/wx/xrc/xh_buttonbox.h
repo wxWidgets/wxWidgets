@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_buttonbox.h
 // Purpose:     XML resource handler for wxButtonBox
-// Author:      Wlodzimierz ABX Skiba, LLM supported
+// Author:      Wlodzimierz ABX Skiba, Assisted-by: Claude Sonnet 5.5
 // Created:     2026-11-14
 // Copyright:   (c) 2026 Wlodzimierz ABX Skiba
 // Licence:     wxWindows licence
