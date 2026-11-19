@@ -1,0 +1,1 @@
+wxAll: Disallow escaping wxLocalFSHandler::Chroot() with ".." (Javid Khan, #27385).
