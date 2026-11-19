@@ -111,6 +111,22 @@ elseif(WXGTK)
         ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.c
         ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.h
     )
+elseif(WXOSX_COCOA)
+    set(SCINTILLA_SOURCES
+        ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/cocoa/InfoBar.h
+        ${SCINTILLA_SRC_DIR}/cocoa/InfoBar.mm
+        ${SCINTILLA_SRC_DIR}/cocoa/InfoBarCommunicator.h
+        ${SCINTILLA_SRC_DIR}/cocoa/PlatCocoa.h
+        ${SCINTILLA_SRC_DIR}/cocoa/PlatCocoa.mm
+        ${SCINTILLA_SRC_DIR}/cocoa/QuartzTextLayout.h
+        ${SCINTILLA_SRC_DIR}/cocoa/QuartzTextStyle.h
+        ${SCINTILLA_SRC_DIR}/cocoa/QuartzTextStyleAttribute.h
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaCocoa.h
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaCocoa.mm
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaView.h
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaView.mm
+    )
 endif()
 
 wx_add_builtin_library(wxscintilla ${SCINTILLA_SOURCES})

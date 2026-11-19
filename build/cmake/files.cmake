@@ -2928,7 +2928,7 @@ set(STC_GTK_HDR
 )
 
 set(STC_OSX_COCOA_SRC
-    src/stc/PlatWXcocoa.mm
+    src/stc/stc_osx.mm
 )
 
 set(STC_OSX_COCOA_HDR
