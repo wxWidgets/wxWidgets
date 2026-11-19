@@ -255,6 +255,27 @@ wxString wxFileSystemHandler::FindNext()
 
 wxString wxLocalFSHandler::ms_root;
 
+// Return false if the path, relative to the root set by Chroot(), uses ".."
+// to refer to something outside of this root.
+static bool IsInsideRoot(const wxFileName& fn)
+{
+    int depth = 0;
+    for ( const wxString& dir : fn.GetDirs() )
+    {
+        if ( dir == wxS("..") )
+        {
+            if ( --depth < 0 )
+                return false;
+        }
+        else if ( dir != wxS(".") )
+        {
+            depth++;
+        }
+    }
+
+    return depth > 0 || fn.GetFullName() != wxS("..");
+}
+
 bool wxLocalFSHandler::CanOpen(const wxString& location)
 {
     return GetProtocol(location) == wxT("file");
@@ -265,6 +286,9 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     // location has Unix path separators
     wxString right = GetRightLocation(location);
     wxFileName fn = wxFileName::URLToFileName(right);
+    if ( !ms_root.empty() && !IsInsideRoot(fn) )
+        return nullptr;
+
     wxString fullpath = ms_root + fn.GetFullPath();
 
     if (!wxFileExists(fullpath))
@@ -295,6 +319,9 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
     wxFileName fn = wxFileName::URLToFileName(GetRightLocation(spec));
+    if ( !ms_root.empty() && !IsInsideRoot(fn) )
+        return wxString();
+
     const wxString found = wxFindFirstFile(ms_root + fn.GetFullPath(), flags);
     if ( found.empty() )
         return found;
