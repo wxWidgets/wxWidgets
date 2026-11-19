@@ -20,6 +20,7 @@
 #include "wx/private/localeset.h"
 
 #include <errno.h>
+#include <float.h>
 
 // ----------------------------------------------------------------------------
 // tests
@@ -960,6 +961,24 @@ TEST_CASE("StringFromDouble", "[wxString]")
 
     // This result is exactly 64 characters long, check that it still works.
     CHECK( wxString::FromCDouble(1, 62) == "1." + wxString(62, '0') );
+
+    // Using bigger buffer size still works too (but exercises a different code
+    // path internally).
+    CHECK( wxString::FromCDouble(1, 63) == "1." + wxString(63, '0') );
+    CHECK( wxString::FromCDouble(1, 64) == "1." + wxString(64, '0') );
+    CHECK( wxString::FromCDouble(1, 5000) == "1." + wxString(5000, '0') );
+
+    // Big numbers don't fit into a small buffer even with low precision.
+    // Note that the expected values are the exact decimal representations of
+    // the closest doubles to the given numbers.
+    CHECK( wxString::FromCDouble(1e70, 0) ==
+           "10000000000000000725314363815292351261583744096465219555182101554790400" );
+    CHECK( wxString::FromCDouble(-DBL_MAX, 2) ==
+           "-179769313486231570814527423731704356798070567525844996598917476803"
+           "157260780028538760589558632766878171540458953514382464234321326889"
+           "464182768467546703537516986049910576551282076245490090389328944075"
+           "868508455133942304583236903222948165808559332123348274797826204144"
+           "723168738177180919299881250404026184124858368.00" );
 
     if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
         return;

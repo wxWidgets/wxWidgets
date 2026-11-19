@@ -1592,6 +1592,8 @@ bool wxString::ToDouble(double *pVal) const
     #include <charconv>
 #endif
 
+#include <limits>
+
 // Now check if the functions we need are present in it (normally they ought
 // to if the compiler claims to support C++17, but it doesn't hurt to check).
 #ifdef __cpp_lib_to_chars
@@ -1719,7 +1721,9 @@ wxString wxString::FromCDouble(double val, int precision)
 {
     wxCHECK_MSG( precision >= -1, wxString(), "Invalid negative precision" );
 
-    // 64 digits is more than enough for any double.
+    // This buffer is big enough for any double in the general format and for
+    // the vast majority of the numbers in practice in the fixed one too, but
+    // not for big numbers or high precision values, see below.
     char buf[64];
     const auto start = buf;
     const auto end = buf + sizeof(buf);
@@ -1735,12 +1739,29 @@ wxString wxString::FromCDouble(double val, int precision)
     else
         res = std::to_chars(start, end, val, std::chars_format::fixed, precision);
 
+    if ( res.ec == std::errc{} )
+    {
+        // Note that res.ptr may be equal to the end of the buffer if it was
+        // entirely used, so don't try to NUL-terminate the result.
+        return wxString::FromAscii(buf, res.ptr - start);
+    }
+
+    if ( res.ec != std::errc::value_too_large || precision == -1 )
+        return {};
+
+    // The number may have up to max_exponent10 + 1 digits and we also need
+    // space for the sign, the decimal point and the requested number of
+    // decimal digits, so allocate a buffer big enough for all of this.
+    wxCharBuffer buf2(std::numeric_limits<double>::max_exponent10 + 3 +
+                      static_cast<size_t>(precision));
+    const auto start2 = buf2.data();
+    const auto end2 = start2 + buf2.length();
+
+    res = std::to_chars(start2, end2, val, std::chars_format::fixed, precision);
     if ( res.ec != std::errc{} )
         return {};
 
-    // Note that res.ptr may be equal to end if the buffer was entirely used,
-    // so don't try to NUL-terminate the result.
-    return wxString::FromAscii(buf, res.ptr - start);
+    return wxString::FromAscii(start2, res.ptr - start2);
 }
 
 #elif wxUSE_XLOCALE
