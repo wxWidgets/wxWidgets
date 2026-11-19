@@ -232,6 +232,14 @@ char wxFTP::SendCommand(const wxString& command)
         return 0;
     }
 
+    // Line terminators inside the command would allow sending other commands
+    // to the server, e.g. via "%0D%0A" in the path of an ftp:// URL.
+    if ( command.find_first_of(wxS("\r\n")) != wxString::npos )
+    {
+        m_lastError = wxPROTO_INVVAL;
+        return 0;
+    }
+
     wxString tmp_str = command + wxT("\r\n");
     const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
     if ( Write(static_cast<const char *>(tmp_buf), strlen(tmp_buf)).Error())
