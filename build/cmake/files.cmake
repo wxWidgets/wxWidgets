@@ -2901,8 +2901,6 @@ set(RICHTEXT_HDR
 
 set(STC_CMN_SRC
     src/stc/stc.cpp
-    src/stc/PlatWX.cpp
-    src/stc/ScintillaWX.cpp
     src/xrc/xh_styledtextctrl.cpp
     src/stc/minimap.cpp
 )
