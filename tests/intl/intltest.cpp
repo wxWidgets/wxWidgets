@@ -442,6 +442,75 @@ TEST_CASE("wxTranslations::CorruptCatalogTables", "[translations]")
     delete cat;
 }
 
+TEST_CASE("wxTranslations::CorruptCatalogUnterminated", "[translations]")
+{
+    // Build a minimal MO catalog containing just the header entry, whose
+    // translation is stored in the very last bytes of the data. Every string
+    // in a catalog must be followed by a NUL which is not counted in its
+    // length, but StringAtOfs() used to only check that the string itself was
+    // inside the data and the code using the returned pointers as C strings
+    // (strstr() and strchr() in LoadData(), wxString ctor in FillHash()) read
+    // past the end of the buffer when this NUL was missing.
+    //
+    // Use a heap buffer of exactly the right size with a non-owning wrapper
+    // for the data to catch such reads when running under ASan.
+    const char* const charset = "Content-Type: text/plain; charset=UTF-8";
+    const size_t csetLen = strlen(charset);
+    const size_t ofsCharset = 45;
+    const size_t moLen = ofsCharset + csetLen + 1;
+    std::unique_ptr<unsigned char[]> mo(new unsigned char[moLen]);
+    memset(mo.get(), 0, moLen);
+
+    auto put32 = [](unsigned char* p, wxUint32 v)
+    {
+        p[0] = (unsigned char)(v & 0xff);
+        p[1] = (unsigned char)((v >> 8) & 0xff);
+        p[2] = (unsigned char)((v >> 16) & 0xff);
+        p[3] = (unsigned char)((v >> 24) & 0xff);
+    };
+
+    put32(mo.get() +  0, 0x950412de); // magic
+    put32(mo.get() +  8, 1);          // number of strings
+    put32(mo.get() + 12, 28);         // offset of original strings table
+    put32(mo.get() + 16, 36);         // offset of translated strings table
+    // original strings table
+    put32(mo.get() + 28, 0);        put32(mo.get() + 32, 44); // ""
+    // translated strings table
+    put32(mo.get() + 36, csetLen);  put32(mo.get() + 40, ofsCharset);
+    memcpy(mo.get() + ofsCharset, charset, csetLen);
+
+    bool valid = false;
+
+    SECTION("Valid")
+    {
+        valid = true;
+    }
+
+    SECTION("Unterminated header")
+    {
+        // Make the translation of the header occupy the last byte too, so
+        // that there is no NUL after it inside the data.
+        put32(mo.get() + 36, csetLen + 1);
+        mo[moLen - 1] = 'X';
+    }
+
+    SECTION("Empty string at the end")
+    {
+        // An empty string at the very end of the data isn't valid either, as
+        // it still needs its terminating NUL.
+        put32(mo.get() + 32, moLen);
+    }
+
+    wxMsgCatalog* const cat = wxMsgCatalog::CreateFromData(
+        wxCharBuffer::CreateNonOwned(
+            reinterpret_cast<const char*>(mo.get()), moLen
+        ),
+        "corrupt"
+    );
+    CHECK( (cat != nullptr) == valid );
+    delete cat;
+}
+
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
 {
     TranslationsTestCatalogs catalogs;
