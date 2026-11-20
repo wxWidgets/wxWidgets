@@ -23,6 +23,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
+    #include "wx/intl.h"
 #endif // WX_PRECOMP
 
 #include "wx/private/richtooltip.h"
@@ -31,9 +32,22 @@
 // implementation
 // ============================================================================
 
+wxDEFINE_EVENT(wxEVT_RICHTOOLTIP_HELP_CLICKED, wxCommandEvent);
+
+wxString wxRichToolTipInfo::GetHelpLinkText() const
+{
+    return m_helpLinkText.empty() ? _("Click here for more help")
+                                  : m_helpLinkText;
+}
+
 wxRichToolTip::wxRichToolTip(const wxString& title,
                              const wxString& message) :
-    m_impl(wxRichToolTipImpl::Create(title, message))
+    m_impl(wxRichToolTipImpl::Create(wxRichToolTipInfo(title, message)))
+{
+}
+
+wxRichToolTip::wxRichToolTip(const wxRichToolTipInfo& info) :
+    m_impl(wxRichToolTipImpl::Create(info))
 {
 }
 
