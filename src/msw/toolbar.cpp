@@ -140,131 +140,108 @@ namespace
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
-// private classes
+// wxToolBarTool
 // ----------------------------------------------------------------------------
 
-class wxToolBarTool : public wxToolBarToolBase
+wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
+                             int id,
+                             const wxString& label,
+                             const wxBitmapBundle& bmpNormal,
+                             const wxBitmapBundle& bmpDisabled,
+                             wxItemKind kind,
+                             wxObject *clientData,
+                             const wxString& shortHelp,
+                             const wxString& longHelp)
+    : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                        clientData, shortHelp, longHelp)
 {
-public:
-    wxToolBarTool(wxToolBar *tbar,
-                  int id,
-                  const wxString& label,
-                  const wxBitmapBundle& bmpNormal,
-                  const wxBitmapBundle& bmpDisabled,
-                  wxItemKind kind,
-                  wxObject *clientData,
-                  const wxString& shortHelp,
-                  const wxString& longHelp)
-        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
-                            clientData, shortHelp, longHelp)
+    m_staticText = nullptr;
+    m_toBeDeleted  = false;
+}
+
+wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
+                             wxControl *control,
+                             const wxString& label)
+    : wxToolBarToolBase(tbar, control, label)
+{
+    if ( IsControl() && !m_label.empty() )
+    {
+        // Create a control to render the control's label.
+        m_staticText = new wxStaticText(m_tbar, wxID_ANY, m_label);
+    }
+    else // no label
     {
         m_staticText = nullptr;
-        m_toBeDeleted  = false;
     }
 
-    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
-        : wxToolBarToolBase(tbar, control, label)
+    m_toBeDeleted  = false;
+}
+
+wxToolBarTool::~wxToolBarTool()
+{
+    delete m_staticText;
+}
+
+void wxToolBarTool::SetLabel(const wxString& label)
+{
+    wxASSERT_MSG( IsControl() || IsButton(),
+       wxS("Label can be set for control or button tool only") );
+
+    if ( label == m_label )
+        return;
+
+    wxToolBarToolBase::SetLabel(label);
+
+    if ( IsControl() )
     {
-        if ( IsControl() && !m_label.empty() )
+        if ( m_staticText )
         {
-            // Create a control to render the control's label.
-            m_staticText = new wxStaticText(m_tbar, wxID_ANY, m_label);
-        }
-        else // no label
-        {
-            m_staticText = nullptr;
-        }
-
-        m_toBeDeleted  = false;
-    }
-
-    virtual ~wxToolBarTool()
-    {
-        delete m_staticText;
-    }
-
-    virtual void SetLabel(const wxString& label) override
-    {
-        wxASSERT_MSG( IsControl() || IsButton(),
-           wxS("Label can be set for control or button tool only") );
-
-        if ( label == m_label )
-            return;
-
-        wxToolBarToolBase::SetLabel(label);
-
-        if ( IsControl() )
-        {
-            if ( m_staticText )
+            if ( !label.empty() )
             {
-                if ( !label.empty() )
-                {
-                    m_staticText->SetLabel(label);
-                }
-                else
-                {
-                    delete m_staticText;
-                    m_staticText = nullptr;
-                }
+                m_staticText->SetLabel(label);
             }
             else
             {
-                if ( !label.empty() )
-                {
-                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label);
-                }
+                delete m_staticText;
+                m_staticText = nullptr;
             }
         }
-
-        // Because new label can have different length than the old one
-        // so updating button's label with TB_SETBUTTONINFO would require
-        // also manual re-positioning items in the control tools located
-        // to the right in the toolbar and recalculation of stretchable
-        // spacers so it is easier just to recreate the toolbar with
-        // Realize(). Performance penalty should be negligible.
-        m_tbar->Realize();
-    }
-
-    wxStaticText* GetStaticText()
-    {
-        wxASSERT_MSG( IsControl(),
-                      wxT("only makes sense for embedded control tools") );
-
-        return m_staticText;
-    }
-
-    // we need ids for the spacers which we want to modify later on, this
-    // function will allocate a valid/unique id for a spacer if not done yet
-    void AllocSpacerId()
-    {
-        if ( m_id == wxID_SEPARATOR )
-            m_id = wxWindow::NewControlId();
-    }
-
-    // this method is used for controls only and offsets the control by the
-    // given amount (in pixels) in horizontal direction
-    void MoveBy(int offset)
-    {
-        wxControl * const control = GetControl();
-
-        control->Move(control->GetPosition().x + offset, wxDefaultCoord);
-
-        if ( m_staticText )
+        else
         {
-            m_staticText->Move(m_staticText->GetPosition().x + offset,
-                               wxDefaultCoord);
+            if ( !label.empty() )
+            {
+                m_staticText = new wxStaticText(m_tbar, wxID_ANY, label);
+            }
         }
     }
 
-    void ToBeDeleted(bool toBeDeleted = true) { m_toBeDeleted = toBeDeleted; }
-    bool IsToBeDeleted() const { return m_toBeDeleted; }
+    // Because new label can have different length than the old one
+    // so updating button's label with TB_SETBUTTONINFO would require
+    // also manual re-positioning items in the control tools located
+    // to the right in the toolbar and recalculation of stretchable
+    // spacers so it is easier just to recreate the toolbar with
+    // Realize(). Performance penalty should be negligible.
+    m_tbar->Realize();
+}
 
-private:
-    wxStaticText *m_staticText;
-    bool m_toBeDeleted;
+void wxToolBarTool::AllocSpacerId()
+{
+    if ( m_id == wxID_SEPARATOR )
+        m_id = wxWindow::NewControlId();
+}
 
-    wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
-};
+void wxToolBarTool::MoveBy(int offset)
+{
+    wxControl * const control = GetControl();
+
+    control->Move(control->GetPosition().x + offset, wxDefaultCoord);
+
+    if ( m_staticText )
+    {
+        m_staticText->Move(m_staticText->GetPosition().x + offset,
+                           wxDefaultCoord);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // helper functions
