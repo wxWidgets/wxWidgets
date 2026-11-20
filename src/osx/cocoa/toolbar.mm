@@ -42,7 +42,19 @@ wxEND_EVENT_TABLE()
 // private classes
 // ----------------------------------------------------------------------------
 
-class wxToolBarTool;
+static void ToolAction(wxToolBarTool* tool)
+{
+    wxToolBar *tbar = (wxToolBar*) tool->GetToolBar();
+    if (tool->CanBeToggled())
+    {
+        bool    shouldToggle;
+
+        shouldToggle = !tool->IsToggled();
+        tbar->ToggleTool( tool->GetId(), shouldToggle );
+    }
+
+    tbar->OnLeftClick( tool->GetId(), tool->IsToggled() );
+}
 
 @interface wxNSToolBarButton : NSButton
 {
@@ -70,236 +82,118 @@ class wxToolBarTool;
 // wxControl code. For embedded controls on a non-native toolbar this ref count is less
 // so we can only test against a range, not a specific value of the refcount.
 
-class wxToolBarTool : public wxToolBarToolBase
+void wxToolBarTool::ClearControl()
 {
-public:
-    wxToolBarTool(
-        wxToolBar *tbar,
-        int id,
-        const wxString& label,
-        const wxBitmapBundle& bmpNormal,
-        const wxBitmapBundle& bmpDisabled,
-        wxItemKind kind,
-        wxObject *clientData,
-        const wxString& shortHelp,
-        const wxString& longHelp );
-
-    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
-        : wxToolBarToolBase(tbar, control, label)
+    if ( m_controlHandle )
     {
-        Init();
-        if (control != nullptr)
-            SetControlHandle( (WXWidget) control->GetHandle() );
-    }
-
-    virtual ~wxToolBarTool()
-    {
-        ClearControl();
-    }
-
-    WXWidget GetControlHandle()
-    {
-        return (WXWidget) m_controlHandle;
-    }
-
-    void SetControlHandle( WXWidget handle )
-    {
-        m_controlHandle = handle;
-    }
-
-    void SetPosition( const wxPoint& position );
-
-    void ClearControl()
-    {
-        if ( m_controlHandle )
+        if ( !IsControl() )
         {
-            if ( !IsControl() )
-            {
-                [m_controlHandle removeFromSuperview];
-                [m_controlHandle release];
-            }
-            else
-            {
-                // the embedded control is not under the responsibility of the tool, it gets disposed of in the
-                // proper wxControl destructor
-            }
-            m_controlHandle = nullptr ;
-        }
-
-#if wxOSX_USE_NATIVE_TOOLBAR
-        if ( m_toolbarItem )
-        {
-            [m_toolbarItem release];
-            m_toolbarItem = nullptr;
-        }
-#endif // wxOSX_USE_NATIVE_TOOLBAR
-    }
-
-    wxSize GetSize() const
-    {
-        wxSize curSize;
-
-        if ( IsControl() )
-        {
-            curSize = GetControl()->GetSize();
-        }
-        else if ( IsButton() )
-        {
-            // curSize = GetToolBar()->GetToolSize();
-            NSRect best = [(wxNSToolBarButton*)m_controlHandle frame];
-            curSize = wxSize(best.size.width, best.size.height);
+            [m_controlHandle removeFromSuperview];
+            [m_controlHandle release];
         }
         else
         {
-            // separator size
-            curSize = GetToolBar()->GetToolSize();
-            if ( GetToolBar()->IsVertical() )
-                curSize.y /= 4;
-            else
-                curSize.x /= 4;
+            // the embedded control is not under the responsibility of the tool, it gets disposed of in the
+            // proper wxControl destructor
         }
-
-        return curSize;
-    }
-
-    wxPoint GetPosition() const
-    {
-        return wxPoint( m_x, m_y );
-    }
-
-    bool Enable( bool enable ) override;
-
-    void UpdateImages();
-
-    void UpdateToggleImage( bool toggle );
-
-    void UpdateLabel()
-    {
-        wxToolBar *tbar = (wxToolBar*) GetToolBar();
-        int style = (tbar ? tbar->GetWindowStyleFlag() : 0);
-
-        // strip mnemonics from the label for compatibility with the usual
-        // labels in wxStaticText sense
-        wxCFStringRef l(wxStripMenuCodes(m_label));
-        wxCFStringRef sh( GetShortHelp() );
-#if wxOSX_USE_NATIVE_TOOLBAR
-       if ( m_toolbarItem )
-        {
-            [m_toolbarItem setLabel:l.AsNSString()];
-
-            [m_toolbarItem setToolTip:sh.AsNSString()];
-        }
-#endif
-        if ( IsButton() )
-        {
-            NSButton* const btn = (NSButton*)m_controlHandle;
-
-            [btn setTitle:l.AsNSString()];
-
-            if ( style & wxTB_NOICONS )
-                [btn setImagePosition:NSNoImage];
-            else if ( style & wxTB_TEXT )
-                [btn setImagePosition:NSImageAbove];
-            else
-                [btn setImagePosition:NSImageOnly];
-
-            if ( (style & (wxTB_NOICONS | wxTB_TEXT)) != 0 )
-            {
-                [btn sizeToFit];
-            }
-            else if (tbar)
-            {
-                wxSize toolsize = tbar->GetToolSize();
-                NSRect frame = [m_controlHandle frame];
-                frame.size.width = toolsize.x;
-                frame.size.height = toolsize.y + 2;
-                [btn setFrame:frame];
-            }
-        }
-
-        if ( m_controlHandle )
-        {
-            [m_controlHandle setToolTip:sh.AsNSString()];
-        }
-    }
-
-    void Action()
-    {
-        wxToolBar *tbar = (wxToolBar*) GetToolBar();
-        if (CanBeToggled())
-        {
-            bool    shouldToggle;
-
-            shouldToggle = !IsToggled();
-            tbar->ToggleTool( GetId(), shouldToggle );
-        }
-
-        tbar->OnLeftClick( GetId(), IsToggled() );
+        m_controlHandle = nullptr ;
     }
 
 #if wxOSX_USE_NATIVE_TOOLBAR
-    void SetToolbarItemRef( NSToolbarItem* ref )
+    if ( m_toolbarItem )
     {
-        if ( m_toolbarItem )
-            [m_toolbarItem release];
-
-        m_toolbarItem = ref;
-    }
-
-    NSToolbarItem* GetToolbarItemRef() const
-    {
-        return m_toolbarItem;
-    }
-
-    void SetIndex( CFIndex idx )
-    {
-        m_index = idx;
-    }
-
-    CFIndex GetIndex() const
-    {
-        return m_index;
-    }
-
-    virtual void SetLabel(const wxString& label) override
-    {
-        wxToolBarToolBase::SetLabel(label);
-        UpdateLabel();
-    }
-
-    virtual bool SetShortHelp(const wxString& help) override
-    {
-        if ( !wxToolBarToolBase::SetShortHelp(help) )
-            return false;
-
-        UpdateLabel();
-
-        return true;
+        [m_toolbarItem release];
+        m_toolbarItem = nullptr;
     }
 #endif // wxOSX_USE_NATIVE_TOOLBAR
+}
 
-private:
-    void Init()
+wxSize wxToolBarTool::GetSize() const
+{
+    wxSize curSize;
+
+    if ( IsControl() )
     {
-        m_controlHandle = nullptr;
-
-#if wxOSX_USE_NATIVE_TOOLBAR
-        m_toolbarItem = nullptr;
-        m_index = -1;
-#endif
+        curSize = GetControl()->GetSize();
+    }
+    else if ( IsButton() )
+    {
+        // curSize = GetToolBar()->GetToolSize();
+        NSRect best = [(wxNSToolBarButton*)m_controlHandle frame];
+        curSize = wxSize(best.size.width, best.size.height);
+    }
+    else
+    {
+        // separator size
+        curSize = GetToolBar()->GetToolSize();
+        if ( GetToolBar()->IsVertical() )
+            curSize.y /= 4;
+        else
+            curSize.x /= 4;
     }
 
-    WXWidget m_controlHandle;
-    wxCoord     m_x;
-    wxCoord     m_y;
-    wxBitmap    m_alternateBitmap;
+    return curSize;
+}
+
+void wxToolBarTool::UpdateLabel()
+{
+    wxToolBar *tbar = (wxToolBar*) GetToolBar();
+    int style = (tbar ? tbar->GetWindowStyleFlag() : 0);
+
+    // strip mnemonics from the label for compatibility with the usual
+    // labels in wxStaticText sense
+    wxCFStringRef l(wxStripMenuCodes(m_label));
+    wxCFStringRef sh( GetShortHelp() );
+#if wxOSX_USE_NATIVE_TOOLBAR
+   if ( m_toolbarItem )
+    {
+        [m_toolbarItem setLabel:l.AsNSString()];
+
+        [m_toolbarItem setToolTip:sh.AsNSString()];
+    }
+#endif
+    if ( IsButton() )
+    {
+        NSButton* const btn = (NSButton*)m_controlHandle;
+
+        [btn setTitle:l.AsNSString()];
+
+        if ( style & wxTB_NOICONS )
+            [btn setImagePosition:NSNoImage];
+        else if ( style & wxTB_TEXT )
+            [btn setImagePosition:NSImageAbove];
+        else
+            [btn setImagePosition:NSImageOnly];
+
+        if ( (style & (wxTB_NOICONS | wxTB_TEXT)) != 0 )
+        {
+            [btn sizeToFit];
+        }
+        else if (tbar)
+        {
+            wxSize toolsize = tbar->GetToolSize();
+            NSRect frame = [m_controlHandle frame];
+            frame.size.width = toolsize.x;
+            frame.size.height = toolsize.y + 2;
+            [btn setFrame:frame];
+        }
+    }
+
+    if ( m_controlHandle )
+    {
+        [m_controlHandle setToolTip:sh.AsNSString()];
+    }
+}
 
 #if wxOSX_USE_NATIVE_TOOLBAR
-    NSToolbarItem* m_toolbarItem;
-    // position in its toolbar, -1 means not inserted
-    CFIndex m_index;
-#endif
-};
+void wxToolBarTool::SetToolbarItemRef( WX_NSToolbarItem ref )
+{
+    if ( m_toolbarItem )
+        [m_toolbarItem release];
+
+    m_toolbarItem = ref;
+}
+#endif // wxOSX_USE_NATIVE_TOOLBAR
 
 #if wxOSX_USE_NATIVE_TOOLBAR
 
@@ -368,7 +262,7 @@ private:
     wxUnusedVar(sender);
     if ( impl )
     {
-        impl->Action();
+        ToolAction(impl);
     }
 }
 
@@ -496,7 +390,7 @@ private:
     wxUnusedVar(sender);
     if ( impl )
     {
-        impl->Action();
+        ToolAction(impl);
     }
 }
 

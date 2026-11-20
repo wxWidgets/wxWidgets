@@ -35,8 +35,6 @@ wxEND_EVENT_TABLE()
 // private classes
 // ----------------------------------------------------------------------------
 
-class wxToolBarTool;
-
 @interface wxUIToolbar : UIToolbar
 {
     NSMutableArray* mutableBarItems;
@@ -52,59 +50,22 @@ class wxToolBarTool;
 
 @end
 
-
-class wxToolBarTool : public wxToolBarToolBase
-{
-public:
-    wxToolBarTool(
-                  wxToolBar *tbar,
-                  int id,
-                  const wxString& label,
-                  const wxBitmapBundle& bmpNormal,
-                  const wxBitmapBundle& bmpDisabled,
-                  wxItemKind kind,
-                  wxObject *clientData,
-                  const wxString& shortHelp,
-                  const wxString& longHelp );
-
-    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label);
-
-    virtual ~wxToolBarTool();
-
-    void Action()
-    {
-        wxToolBar *tbar = (wxToolBar*) GetToolBar();
-        if (CanBeToggled())
-        {
-            bool    shouldToggle;
-
-            shouldToggle = !IsToggled();
-            tbar->ToggleTool( GetId(), shouldToggle );
-        }
-
-        tbar->OnLeftClick( GetId(), IsToggled() );
-    }
-
-    void MakeStretchable() override;
-
-    UIBarButtonItem* GetUIBarButtonItem() const {return m_toolbarItem;}
-private:
-
-    void Init()
-    {
-        m_toolbarItem = nullptr;
-        m_index = -1;
-    }
-
-    void RemoveAssociation();
-
-    UIBarButtonItem* m_toolbarItem;
-    // position in its toolbar, -1 means not inserted
-    CFIndex m_index;
-};
-
 WX_DECLARE_HASH_MAP(WX_NSObject, wxToolBarTool*, wxPointerHash, wxPointerEqual, ToolBarToolMap);
 static ToolBarToolMap wxToolBarToolList;
+
+static void ToolAction(wxToolBarTool* tool)
+{
+    wxToolBar *tbar = (wxToolBar*) tool->GetToolBar();
+    if (tool->CanBeToggled())
+    {
+        bool    shouldToggle;
+
+        shouldToggle = !tool->IsToggled();
+        tbar->ToggleTool( tool->GetId(), shouldToggle );
+    }
+
+    tbar->OnLeftClick( tool->GetId(), tool->IsToggled() );
+}
 
 wxToolBarTool::wxToolBarTool(
                              wxToolBar *tbar,
@@ -437,7 +398,7 @@ void wxToolBar::SetWindowStyleFlag( long style )
     ToolBarToolMap::iterator node = wxToolBarToolList.find(sender);
 
     if ( node != wxToolBarToolList.end() )
-        node->second->Action();
+        ToolAction(node->second);
 }
 
 - (void)insertTool:(UIBarButtonItem*) item atIndex:(size_t) pos
