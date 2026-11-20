@@ -19,6 +19,10 @@ class wxButtonBoxImpl
 public:
     virtual ~wxButtonBoxImpl() { }
 
+    // Note that the item functions have names different from the ones of
+    // wxWidgetImpl, which wxButtonBoxCocoaImpl also derives from, in order not
+    // to hide its virtual functions.
+
     virtual void SetMode(long style) = 0;
     virtual size_t GetCount() const = 0;
     virtual void Insert(size_t pos, const wxString& label,
@@ -28,15 +32,15 @@ public:
     virtual bool IsSelected(size_t n) const = 0;
     virtual void SetSelected(size_t n, bool selected) = 0;
     virtual void ClearSelection() = 0;
-    virtual void SetLabel(size_t n, const wxString& label) = 0;
-    virtual wxString GetLabel(size_t n) const = 0;
-    virtual void SetBitmap(size_t n, const wxBitmapBundle& bitmap) = 0;
-    virtual void SetWidth(size_t n, int width) = 0;
-    virtual int  GetWidth(size_t n) const = 0;
-    virtual void Enable(size_t n, bool enable) = 0;
-    virtual bool IsEnabled(size_t n) const = 0;
-    virtual void SetToolTip(size_t n, const wxString& tip) = 0;
-    virtual wxString GetToolTip(size_t n) const = 0;
+    virtual void SetItemLabel(size_t n, const wxString& label) = 0;
+    virtual wxString GetItemLabel(size_t n) const = 0;
+    virtual void SetItemBitmap(size_t n, const wxBitmapBundle& bitmap) = 0;
+    virtual void SetItemWidth(size_t n, int width) = 0;
+    virtual int  GetItemWidth(size_t n) const = 0;
+    virtual void EnableItem(size_t n, bool enable) = 0;
+    virtual bool IsItemEnabled(size_t n) const = 0;
+    virtual void SetItemToolTip(size_t n, const wxString& tip) = 0;
+    virtual wxString GetItemToolTip(size_t n) const = 0;
 };
 
 class WXDLLIMPEXP_CORE wxButtonBox : public wxButtonBoxBase
