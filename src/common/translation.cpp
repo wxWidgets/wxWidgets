@@ -872,9 +872,12 @@ private:
     {
         const wxMsgTableEntry * const ent = pTable + n;
 
-        // this check could fail for a corrupt message catalog
-        wxULongLong_t ofsString = Swap(ent->ofsString);
-        if ( ofsString + Swap(ent->nLen) > m_data.length())
+        // These checks could fail for a corrupt message catalog: the string
+        // must be inside the data and must be followed by a NUL, which is not
+        // counted in its length, as the callers use it as a C string.
+        const wxULongLong_t ofsString = Swap(ent->ofsString);
+        const wxULongLong_t ofsEnd = ofsString + Swap(ent->nLen);
+        if ( ofsEnd >= m_data.length() || m_data.data()[ofsEnd] != '\0' )
         {
             return nullptr;
         }
@@ -997,8 +1000,14 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
                                           : nullptr;
     if ( headerData && headerData[0] == '\0' )
     {
-        // Extract the charset:
         const char * const header = StringAtOfs(m_pTransTable, 0);
+        if ( !header )
+        {
+            wxLogWarning(_("Invalid message catalog."));
+            return false;
+        }
+
+        // Extract the charset:
         const char *
             cset = strstr(header, "Content-Type: text/plain; charset=");
         if ( cset )
