@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/buttonbox.h
 // Purpose:     interface of wxButtonBox
-// Author:      Wlodzimierz ABX Skiba, LLM supported
+// Author:      Wlodzimierz ABX Skiba, Assisted-by: Claude Sonnet 5.5
 // Created:     2026-11-14
 // Copyright:   (c) 2026 Wlodzimierz ABX Skiba
 // Licence:     wxWindows licence
@@ -310,6 +310,11 @@ public:
         Passing an empty string removes the tooltip. Note that this is
         different from wxWindow::SetToolTip(), which sets the tooltip of the
         entire control.
+
+        @note Under macOS segment tooltips are only supported when running
+            under macOS 10.13 or later, this function does nothing (and
+            GetItemToolTip() returns an empty string) under the earlier
+            versions.
     */
     void SetItemToolTip(size_t n, const wxString& tip);
 
