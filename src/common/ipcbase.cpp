@@ -82,11 +82,9 @@ wxString wxConnectionBase::GetTextFromData(const void* data,
         //       for inter-platform IPC
         case wxIPC_UNICODETEXT:
             wxASSERT_MSG( !(size % sizeof(wchar_t)), "invalid buffer size" );
+            size /= sizeof(wchar_t);
             if ( size )
-            {
-                size /= sizeof(wchar_t);
                 size--;
-            }
 
             s = wxString(static_cast<const wchar_t *>(data), size);
             break;
