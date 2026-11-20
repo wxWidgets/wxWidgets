@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/cocoa/buttonbox.mm
 // Purpose:     wxButtonBox implemented with NSSegmentedControl
-// Author:      Wlodzimierz ABX Skiba, LLM supported
+// Author:      Wlodzimierz ABX Skiba, Assisted-by: Claude Sonnet 5.5
 // Created:     12.11.26
 // Copyright:   (c) 2026 Wlodzimierz ABX Skiba
 // Licence:     wxWindows Licence
@@ -13,6 +13,7 @@
 
 #include "wx/buttonbox.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxButtonBox, wxControl);
 
@@ -73,8 +74,8 @@ public:
             CopySegment(i - 1, i);
 
         ResetSegment(pos);
-        SetLabel(pos, label);
-        SetBitmap(pos, bitmap);
+        SetItemLabel(pos, label);
+        SetItemBitmap(pos, bitmap);
     }
 
     void Delete(size_t pos) override
@@ -99,18 +100,18 @@ public:
             [Seg() setSelected:NO forSegment:i];
     }
 
-    void SetLabel(size_t n, const wxString& label) override
+    void SetItemLabel(size_t n, const wxString& label) override
     {
         [Seg() setLabel:wxCFStringRef(label).AsNSString() forSegment:(NSInteger)n];
     }
 
-    wxString GetLabel(size_t n) const override
+    wxString GetItemLabel(size_t n) const override
     {
         NSString* s = [Seg() labelForSegment:(NSInteger)n];
         return s ? wxCFStringRef::AsString((CFStringRef)s) : wxString();
     }
 
-    void SetBitmap(size_t n, const wxBitmapBundle& bitmap) override
+    void SetItemBitmap(size_t n, const wxBitmapBundle& bitmap) override
     {
         NSImage* img = nil;
         if ( bitmap.IsOk() )
@@ -118,31 +119,47 @@ public:
         [Seg() setImage:img forSegment:(NSInteger)n];
     }
 
-    void SetWidth(size_t n, int width) override
-        { [Seg() setWidth:(width > 0 ? width : 0) forSegment:(NSInteger)n]; }
+    void SetItemWidth(size_t n, int width) override
+    {
+        [Seg() setWidth:(width > 0 ? width : 0) forSegment:(NSInteger)n];
+    }
 
-    int GetWidth(size_t n) const override
+    int GetItemWidth(size_t n) const override
     {
         CGFloat w = [Seg() widthForSegment:(NSInteger)n];
         return w > 0 ? (int)w : wxDefaultCoord;
     }
 
-    void Enable(size_t n, bool enable) override
-        { [Seg() setEnabled:enable forSegment:(NSInteger)n]; }
-
-    bool IsEnabled(size_t n) const override
-        { return [Seg() isEnabledForSegment:(NSInteger)n]; }
-
-    void SetToolTip(size_t n, const wxString& tip) override
+    void EnableItem(size_t n, bool enable) override
     {
-        [Seg() setToolTip:(tip.empty() ? nil : wxCFStringRef(tip).AsNSString())
-               forSegment:(NSInteger)n];
+        [Seg() setEnabled:enable forSegment:(NSInteger)n];
     }
 
-    wxString GetToolTip(size_t n) const override
+    bool IsItemEnabled(size_t n) const override
     {
-        NSString* s = [Seg() toolTipForSegment:(NSInteger)n];
-        return s ? wxCFStringRef::AsString((CFStringRef)s) : wxString();
+        return [Seg() isEnabledForSegment:(NSInteger)n];
+    }
+
+    // Per-segment tooltips are only supported by macOS 10.13 and later.
+    void SetItemToolTip(size_t n, const wxString& tip) override
+    {
+        if ( WX_IS_MACOS_AVAILABLE(10, 13) )
+        {
+            [Seg() setToolTip:(tip.empty() ? nil : wxCFStringRef(tip).AsNSString())
+                   forSegment:(NSInteger)n];
+        }
+    }
+
+    wxString GetItemToolTip(size_t n) const override
+    {
+        if ( WX_IS_MACOS_AVAILABLE(10, 13) )
+        {
+            NSString* s = [Seg() toolTipForSegment:(NSInteger)n];
+            if ( s )
+                return wxCFStringRef::AsString((CFStringRef)s);
+        }
+
+        return wxString();
     }
 
 private:
@@ -153,7 +170,8 @@ private:
         [Seg() setImage:nil forSegment:i];
         [Seg() setWidth:0 forSegment:i];
         [Seg() setEnabled:YES forSegment:i];
-        [Seg() setToolTip:nil forSegment:i];
+        if ( WX_IS_MACOS_AVAILABLE(10, 13) )
+            [Seg() setToolTip:nil forSegment:i];
         [Seg() setSelected:NO forSegment:i];
     }
 
@@ -164,7 +182,8 @@ private:
         [s setImage:[s imageForSegment:from] forSegment:to];
         [s setWidth:[s widthForSegment:from] forSegment:to];
         [s setEnabled:[s isEnabledForSegment:from] forSegment:to];
-        [s setToolTip:[s toolTipForSegment:from] forSegment:to];
+        if ( WX_IS_MACOS_AVAILABLE(10, 13) )
+            [s setToolTip:[s toolTipForSegment:from] forSegment:to];
         [s setSelected:[s isSelectedForSegment:from] forSegment:to];
     }
 };
@@ -267,21 +286,21 @@ void wxButtonBox::SetSelected(size_t n, bool selected)
 void wxButtonBox::SetItemLabel(size_t n, const wxString& label)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->SetLabel(n, label);
+    Impl()->SetItemLabel(n, label);
     InvalidateBestSize();
 }
 
 wxString wxButtonBox::GetItemLabel(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), wxString(), "invalid segment index" );
-    return Impl()->GetLabel(n);
+    return Impl()->GetItemLabel(n);
 }
 
 void wxButtonBox::SetItemBitmap(size_t n, const wxBitmapBundle& bitmap)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
     m_bitmaps[n] = bitmap;
-    Impl()->SetBitmap(n, bitmap);
+    Impl()->SetItemBitmap(n, bitmap);
     InvalidateBestSize();
 }
 
@@ -294,38 +313,38 @@ wxBitmapBundle wxButtonBox::GetItemBitmap(size_t n) const
 void wxButtonBox::SetItemWidth(size_t n, int width)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->SetWidth(n, width);
+    Impl()->SetItemWidth(n, width);
     InvalidateBestSize();
 }
 
 int wxButtonBox::GetItemWidth(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), wxDefaultCoord, "invalid segment index" );
-    return Impl()->GetWidth(n);
+    return Impl()->GetItemWidth(n);
 }
 
 void wxButtonBox::EnableItem(size_t n, bool enable)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->Enable(n, enable);
+    Impl()->EnableItem(n, enable);
 }
 
 bool wxButtonBox::IsItemEnabled(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), false, "invalid segment index" );
-    return Impl()->IsEnabled(n);
+    return Impl()->IsItemEnabled(n);
 }
 
 void wxButtonBox::SetItemToolTip(size_t n, const wxString& tip)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->SetToolTip(n, tip);
+    Impl()->SetItemToolTip(n, tip);
 }
 
 wxString wxButtonBox::GetItemToolTip(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), wxString(), "invalid segment index" );
-    return Impl()->GetToolTip(n);
+    return Impl()->GetItemToolTip(n);
 }
 
 // For all three tracking modes NSSegmentedControl's selectedSegment is the
