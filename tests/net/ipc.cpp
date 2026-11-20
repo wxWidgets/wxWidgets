@@ -1046,4 +1046,23 @@ TEST_CASE_METHOD(IPCFixture,
     CHECK( worker.m_error.empty() );
 }
 
+// GetTextFromData() is called on the data received from the peer, so it must
+// not read beyond the given size even if it is too small for the format.
+TEST_CASE("IPC::GetTextFromData", "[net][ipc]")
+{
+    const wchar_t text[] = L"abc";
+
+    CHECK( wxConnectionBase::GetTextFromData(text, sizeof(text),
+                                             wxIPC_UNICODETEXT) == "abc" );
+
+    // Size which is not a multiple of sizeof(wchar_t) is invalid but still
+    // shouldn't make us read past the end of the buffer.
+    for ( size_t size = 1; size < sizeof(wchar_t); size++ )
+    {
+        INFO( "size=" << size );
+        CHECK( wxConnectionBase::GetTextFromData(text, size,
+                                                 wxIPC_UNICODETEXT).empty() );
+    }
+}
+
 #endif // wxUSE_THREADS
