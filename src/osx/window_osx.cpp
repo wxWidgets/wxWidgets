@@ -1660,25 +1660,20 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
 
-        if ( GetPeer()->NeedsFrame() )
+        if ( GetPeer()->NeedsFrame() &&
+                HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_DOUBLE | wxBORDER_SIMPLE) )
         {
-            HIThemeFrameDrawInfo info ;
-            memset( &info, 0 , sizeof(info) ) ;
-
-            info.version = 0 ;
-            info.kind = 0 ;
-            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-
-            if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
-            {
-                info.kind = kHIThemeFrameTextFieldSquare ;
-                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
-            }
-            else if ( HasFlag(wxSIMPLE_BORDER) )
-            {
-                info.kind = kHIThemeFrameListBox ;
-                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
-            }
+            // Draw a line one point wide in the separator colour, which is
+            // similar to the border drawn by AppKit around a scroll view.
+            //
+            // HIThemeDrawFrame(), which was used here before, doesn't
+            // support dark mode and drew a white frame in it.
+            CGContextSaveGState( cgContext ) ;
+            CGContextSetStrokeColorWithColor( cgContext ,
+                wxOSXGetSeparatorColour().GetCGColor() ) ;
+            CGContextStrokeRectWithWidth( cgContext ,
+                CGRectInset( cgrect , 0.5 , 0.5 ) , 1.0 ) ;
+            CGContextRestoreGState( cgContext ) ;
         }
     }
 #endif // wxOSX_USE_COCOA_OR_CARBON
