@@ -282,6 +282,38 @@ TEST_CASE("Tar::ExtendedHeaderNumber", "[tar]")
     CHECK( entry->GetUserId() == 419 );
 }
 
+TEST_CASE("Tar::ExtendedHeaderRecords", "[tar]")
+{
+    // Names and link targets that don't fit in the ustar header fields are
+    // stored as records of a pax extended header, check that several such
+    // records for the same entry are all preserved.
+    const wxString name = wxString('n', 150) + "/" + wxString('m', 300);
+    const wxString link = wxString('l', 200);
+    const wxString user = wxString('u', 50);
+
+    wxMemoryOutputStream mos;
+    {
+        wxTarOutputStream tar(mos);
+
+        wxTarEntry* entry = new wxTarEntry(name);
+        entry->SetTypeFlag(wxTAR_SYMTYPE);
+        entry->SetLinkName(link);
+        entry->SetUserName(user);
+        REQUIRE( tar.PutNextEntry(entry) );
+
+        REQUIRE( tar.Close() );
+    }
+
+    wxMemoryInputStream mis(mos);
+    wxTarInputStream tar(mis);
+
+    std::unique_ptr<wxTarEntry> entry(tar.GetNextEntry());
+    REQUIRE( entry );
+    CHECK( entry->GetName(wxPATH_UNIX) == name );
+    CHECK( entry->GetLinkName() == link );
+    CHECK( entry->GetUserName() == user );
+}
+
 // This can be used to test loading an arbitrary tar file by setting the
 // environment variable WX_TEST_TAR_PATH to point to it.
 TEST_CASE("Tar::LoadFile", "[.]")
