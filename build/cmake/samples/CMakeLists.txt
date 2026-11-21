@@ -7,7 +7,10 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY)
+# The access sample uses IAccessible directly, so it can only be built under
+# MSW; accessbasic works on all ports that can use wxUSE_ACCESSIBILITY.
+wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY WIN32)
+wx_add_sample(accessbasic accessbasic.cpp DEPENDS wxUSE_ACCESSIBILITY)
 wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif throbber_2x.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)

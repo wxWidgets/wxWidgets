@@ -750,6 +750,18 @@
       <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
       <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
     </Project>
+    <Project Path="accessbasic/accessbasic.vcxproj" Id="8c91b652-78f2-421b-8372-e42139718768">
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+    </Project>
     <Project Path="artprov/artprov.vcxproj" Id="0d08f3c2-0466-4a78-a8c6-047b13c38f38">
       <BuildDependency Project="../build/msw/wx_base.vcxproj" />
       <BuildDependency Project="../build/msw/wx_core.vcxproj" />

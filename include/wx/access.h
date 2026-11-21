@@ -368,6 +368,8 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/access.h"
+#elif defined (__WXOSX_COCOA__)
+    #include "wx/osx/access.h"
 #endif
 
 #endif // wxUSE_ACCESSIBILITY

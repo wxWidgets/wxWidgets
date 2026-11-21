@@ -2179,6 +2179,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxWebKit headers -->
     <!-- other shared headers -->
     wx/osx/accel.h
+    wx/osx/access.h
     wx/osx/anybutton.h
     wx/osx/app.h
     wx/osx/bitmap.h
@@ -2309,6 +2310,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
+    src/osx/cocoa/access.mm
     src/osx/cocoa/settings.mm
     src/osx/cocoa/overlay.mm
     src/osx/cocoa/aboutdlg.mm
