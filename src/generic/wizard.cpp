@@ -648,6 +648,13 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     m_page->Show();
     m_page->SetFocus();
 
+#ifdef __WXMSW__
+    // Leaving focus on a page without focusable children breaks button
+    // mnemonics such as Alt-N and Alt-C under MSW.
+    if ( wxWindow::FindFocus() == m_page )
+        m_btnNext->SetFocus();
+#endif // __WXMSW__
+
     if ( !m_usingSizer )
         m_sizerBmpAndPage->Layout();
 
