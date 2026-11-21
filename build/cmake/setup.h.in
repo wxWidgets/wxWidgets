@@ -333,6 +333,7 @@
 #cmakedefine01 wxUSE_ANIMATIONCTRL
 #cmakedefine01 wxUSE_BANNERWINDOW
 #cmakedefine01 wxUSE_BUTTON
+#cmakedefine01 wxUSE_BUTTONBOX
 #cmakedefine01 wxUSE_BMPBUTTON
 #cmakedefine01 wxUSE_CALENDARCTRL
 #cmakedefine01 wxUSE_CHECKBOX

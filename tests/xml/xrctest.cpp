@@ -19,6 +19,7 @@
 
 #if wxUSE_XRC
 
+#include "wx/buttonbox.h"
 #include "wx/fs_inet.h"
 #include "wx/imagxpm.h"
 #include "wx/xml/xml.h"
@@ -333,6 +334,119 @@ TEST_CASE("XRC::Features", "[xrc]")
     CHECK( xrc.LoadFrame(nullptr, "swallow") );
     CHECK( xrc.LoadFrame(nullptr, "dodo") );
 }
+
+#if wxUSE_BUTTONBOX
+
+TEST_CASE("XRC::ButtonBox", "[xrc][buttonbox]")
+{
+    wxXmlResource::Get()->InitAllHandlers();
+
+    LoadXrcFrom(R"(<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="buttonbox_dialog">
+    <title>wxButtonBox</title>
+    <object class="wxButtonBox" name="single">
+      <object class="segment">
+        <label>Left</label>
+        <selected>1</selected>
+      </object>
+      <object class="segment">
+        <label>Center</label>
+        <tooltip>Center the text</tooltip>
+      </object>
+      <object class="segment">
+        <bitmap stock_id="wxART_GO_FORWARD"/>
+        <width>70</width>
+        <enabled>0</enabled>
+      </object>
+    </object>
+    <object class="wxButtonBox" name="any">
+      <style>wxBB_SELECT_ANY</style>
+      <object class="segment">
+        <label>Bold</label>
+        <selected>1</selected>
+      </object>
+      <object class="segment">
+        <label>Italic</label>
+        <selected>1</selected>
+      </object>
+      <object class="segment">
+        <label>Underline</label>
+      </object>
+    </object>
+    <object class="wxButtonBox" name="momentary">
+      <style>wxBB_MOMENTARY</style>
+      <object class="segment">
+        <label>Cut</label>
+        <selected>1</selected>
+      </object>
+      <object class="segment">
+        <label>Copy</label>
+      </object>
+    </object>
+  </object>
+</resource>
+    )");
+
+    wxDialog dlg;
+    REQUIRE( wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "buttonbox_dialog") );
+
+    SECTION("Select one")
+    {
+        wxButtonBox* const box = XRCCTRL(dlg, "single", wxButtonBox);
+        REQUIRE( box );
+
+        REQUIRE( box->GetCount() == 3 );
+
+        CHECK( box->GetItemLabel(0) == "Left" );
+        CHECK( box->GetItemLabel(1) == "Center" );
+        CHECK( box->GetItemLabel(2).empty() );
+        CHECK( box->GetItemBitmap(2).IsOk() );
+
+        CHECK( box->GetItemToolTip(1) == "Center the text" );
+        CHECK( box->GetItemToolTip(0).empty() );
+
+        CHECK( box->GetItemWidth(2) == 70 );
+
+        CHECK( box->IsItemEnabled(0) );
+        CHECK( box->IsItemEnabled(1) );
+        CHECK( !box->IsItemEnabled(2) );
+
+        CHECK( box->GetSelection() == 0 );
+        CHECK( box->IsSelected(0) );
+        CHECK( !box->IsSelected(1) );
+        CHECK( !box->IsSelected(2) );
+    }
+
+    SECTION("Select any")
+    {
+        wxButtonBox* const box = XRCCTRL(dlg, "any", wxButtonBox);
+        REQUIRE( box );
+
+        CHECK( box->HasFlag(wxBB_SELECT_ANY) );
+        REQUIRE( box->GetCount() == 3 );
+
+        CHECK( box->IsSelected(0) );
+        CHECK( box->IsSelected(1) );
+        CHECK( !box->IsSelected(2) );
+    }
+
+    SECTION("Momentary")
+    {
+        wxButtonBox* const box = XRCCTRL(dlg, "momentary", wxButtonBox);
+        REQUIRE( box );
+
+        CHECK( box->HasFlag(wxBB_MOMENTARY) );
+        REQUIRE( box->GetCount() == 2 );
+
+        // Momentary segments never stay selected, so "selected" is ignored.
+        CHECK( box->GetSelection() == wxNOT_FOUND );
+        CHECK( !box->IsSelected(0) );
+        CHECK( !box->IsSelected(1) );
+    }
+}
+
+#endif // wxUSE_BUTTONBOX
 
 TEST_CASE("XRC::EnvVarInPath", "[xrc]")
 {

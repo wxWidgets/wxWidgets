@@ -21,6 +21,15 @@
     #define wxUSE_OWNER_DRAWN 0
 #endif /* wxUSE_OWNER_DRAWN */
 
+#if wxUSE_BUTTONBOX
+    /*
+        The generic wxButtonBox is implemented using wxBitmapToggleButton which
+        is not available in wxUniversal, so disable the control there.
+    */
+    #undef wxUSE_BUTTONBOX
+    #define wxUSE_BUTTONBOX 0
+#endif /* wxUSE_BUTTONBOX */
+
 #if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"

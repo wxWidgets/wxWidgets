@@ -971,6 +971,53 @@ Example:
 @endTable
 
 
+@subsubsection xrc_wxbuttonbox wxButtonBox
+
+@since 3.3.5
+
+The only supported style flags are @c wxBB_SELECT_ONE (default),
+@c wxBB_SELECT_ANY and @c wxBB_MOMENTARY, in addition to the common window
+styles. The control has no properties of its own, but can contain any number
+of @c segment pseudo-class objects, which define its segments in the order in
+which they appear:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    Label of the segment (default: empty, which is useful for bitmap-only segments).}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap of the segment (default: none).}
+@row3col{tooltip, @ref overview_xrcformat_type_text,
+    Tooltip to use for the segment (default: none).}
+@row3col{width, integer,
+    Width of the segment in pixels, automatic if not specified.}
+@row3col{enabled, @ref overview_xrcformat_type_bool,
+    Is the segment initially enabled (default: 1)?}
+@row3col{selected, @ref overview_xrcformat_type_bool,
+    Is the segment initially selected (default: 0)? Has no effect for
+    @c wxBB_MOMENTARY.}
+@endTable
+
+Example:
+@code
+<object class="wxButtonBox" name="alignment">
+    <style>wxBB_SELECT_ONE</style>
+    <object class="segment">
+        <label>Left</label>
+        <selected>1</selected>
+    </object>
+    <object class="segment">
+        <label>Center</label>
+        <tooltip>Center the text</tooltip>
+    </object>
+    <object class="segment">
+        <bitmap stock_id="wxART_GO_FORWARD"/>
+        <width>40</width>
+    </object>
+</object>
+@endcode
+
+
 @subsubsection xrc_wxcalendarctrl wxCalendarCtrl
 
 No additional properties.

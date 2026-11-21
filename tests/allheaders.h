@@ -57,6 +57,7 @@
 #include <wx/busycursor.h>
 #include <wx/busyinfo.h>
 #include <wx/button.h>
+#include <wx/buttonbox.h>
 #include <wx/calctrl.h>
 #include <wx/caret.h>
 #include <wx/chartype.h>

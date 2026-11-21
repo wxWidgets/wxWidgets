@@ -53,6 +53,9 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxStdDialogButtonSizerXmlHandler);
     AddHandler(new wxButtonXmlHandler);
 #endif
+#if wxUSE_BUTTONBOX
+    AddHandler(new wxButtonBoxXmlHandler);
+#endif
 #if wxUSE_CALENDARCTRL
     AddHandler(new wxCalendarCtrlXmlHandler);
 #endif

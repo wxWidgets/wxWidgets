@@ -161,6 +161,7 @@ set(SAMPLE_WIDGETS_SRC
     activityindicator.cpp
     bmpcombobox.cpp
     button.cpp
+    buttonbox.cpp
     checkbox.cpp
     choice.cpp
     clrpicker.cpp

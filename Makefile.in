@@ -2173,7 +2173,8 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlres.o \
 	xrcdll_xmlrsall.o \
-	xrcdll_xh_bookctrlbase.o
+	xrcdll_xh_bookctrlbase.o \
+	xrcdll_xh_buttonbox.o
 XRCDLL_ODEP =  $(_____pch_wxprec_xrcdll_wx_wxprec_h_gch___depname)
 XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_WEBP_p) $(__INC_LUNASVG_p) \
@@ -2251,7 +2252,8 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_wizrd.o \
 	xrclib_xmlres.o \
 	xrclib_xmlrsall.o \
-	xrclib_xh_bookctrlbase.o
+	xrclib_xh_bookctrlbase.o \
+	xrclib_xh_buttonbox.o
 XRCLIB_ODEP =  $(_____pch_wxprec_xrclib_wx_wxprec_h_gch___depname)
 AUIDLL_CXXFLAGS = $(__auidll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_WEBP_p) $(__INC_LUNASVG_p) \
@@ -3363,6 +3365,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/osx/hyperlink.h \
+	wx/osx/buttonbox.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
 	wx/generic/region.h \
@@ -3466,6 +3469,7 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/osx/hyperlink.h \
+	wx/osx/buttonbox.h \
 	wx/osx/iphone/private.h \
 	wx/generic/region.h \
 	wx/osx/sound.h
@@ -3917,6 +3921,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/imagwebp.h \
 	wx/webpdecoder.h \
 	wx/persist/checkbox.h \
+	wx/generic/buttonbox.h \
+	wx/buttonbox.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \
@@ -4013,6 +4019,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_wizrd.h \
 	wx/xrc/xmlres.h \
 	wx/xrc/xh_bookctrlbase.h \
+	wx/xrc/xh_buttonbox.h \
 	wx/aui/framemanager.h \
 	wx/aui/dockart.h \
 	wx/aui/floatpane.h \
@@ -4342,6 +4349,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xmlres.o \
 	monodll_xmlrsall.o \
 	monodll_xh_bookctrlbase.o \
+	monodll_xh_buttonbox.o \
 	monodll_framemanager.o \
 	monodll_dockart.o \
 	monodll_floatpane.o \
@@ -4600,7 +4608,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_powercmn.o \
 	monodll_curbndl.o \
 	monodll_webpdecoder.o \
-	monodll_imagwebp.o
+	monodll_imagwebp.o \
+	monodll_generic_buttonbox.o \
+	monodll_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4869,7 +4879,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_powercmn.o \
 	monodll_curbndl.o \
 	monodll_webpdecoder.o \
-	monodll_imagwebp.o
+	monodll_imagwebp.o \
+	monodll_generic_buttonbox.o \
+	monodll_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
@@ -5466,7 +5478,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_core_display.o \
 	monodll_cocoa_renderer.o \
 	monodll_cocoa_power.o \
-	monodll_cocoa_hyperlink.o
+	monodll_cocoa_hyperlink.o \
+	monodll_cocoa_buttonbox.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_COMMON_SRC_OBJECTS) \
@@ -6135,6 +6148,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xmlres.o \
 	monolib_xmlrsall.o \
 	monolib_xh_bookctrlbase.o \
+	monolib_xh_buttonbox.o \
 	monolib_framemanager.o \
 	monolib_dockart.o \
 	monolib_floatpane.o \
@@ -6393,7 +6407,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_powercmn.o \
 	monolib_curbndl.o \
 	monolib_webpdecoder.o \
-	monolib_imagwebp.o
+	monolib_imagwebp.o \
+	monolib_generic_buttonbox.o \
+	monolib_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6662,7 +6678,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_powercmn.o \
 	monolib_curbndl.o \
 	monolib_webpdecoder.o \
-	monolib_imagwebp.o
+	monolib_imagwebp.o \
+	monolib_generic_buttonbox.o \
+	monolib_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
@@ -7259,7 +7277,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_core_display.o \
 	monolib_cocoa_renderer.o \
 	monolib_cocoa_power.o \
-	monolib_cocoa_hyperlink.o
+	monolib_cocoa_hyperlink.o \
+	monolib_cocoa_buttonbox.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_0) \
@@ -8330,7 +8349,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_powercmn.o \
 	coredll_curbndl.o \
 	coredll_webpdecoder.o \
-	coredll_imagwebp.o
+	coredll_imagwebp.o \
+	coredll_generic_buttonbox.o \
+	coredll_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -8599,7 +8620,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_powercmn.o \
 	coredll_curbndl.o \
 	coredll_webpdecoder.o \
-	coredll_imagwebp.o
+	coredll_imagwebp.o \
+	coredll_generic_buttonbox.o \
+	coredll_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
@@ -9196,7 +9219,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_core_display.o \
 	coredll_cocoa_renderer.o \
 	coredll_cocoa_power.o \
-	coredll_cocoa_hyperlink.o
+	coredll_cocoa_hyperlink.o \
+	coredll_cocoa_buttonbox.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_8) \
@@ -9846,7 +9870,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_powercmn.o \
 	corelib_curbndl.o \
 	corelib_webpdecoder.o \
-	corelib_imagwebp.o
+	corelib_imagwebp.o \
+	corelib_generic_buttonbox.o \
+	corelib_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -10115,7 +10141,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_powercmn.o \
 	corelib_curbndl.o \
 	corelib_webpdecoder.o \
-	corelib_imagwebp.o
+	corelib_imagwebp.o \
+	corelib_generic_buttonbox.o \
+	corelib_buttonboxcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
@@ -10712,7 +10740,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_core_display.o \
 	corelib_cocoa_renderer.o \
 	corelib_cocoa_power.o \
-	corelib_cocoa_hyperlink.o
+	corelib_cocoa_hyperlink.o \
+	corelib_cocoa_buttonbox.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_9) \
@@ -16150,6 +16179,9 @@ monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
 monodll_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
 
+monodll_cocoa_buttonbox.o: $(srcdir)/src/osx/cocoa/buttonbox.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/buttonbox.mm
+
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -16953,6 +16985,9 @@ monodll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(MONODLL_ODEP)
 
 monodll_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
+
+monodll_xh_buttonbox.o: $(srcdir)/src/xrc/xh_buttonbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_buttonbox.cpp
 
 monodll_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
@@ -20155,6 +20190,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
+@COND_USE_GUI_1@monodll_generic_buttonbox.o: $(srcdir)/src/generic/buttonbox.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/buttonbox.cpp
+
+@COND_USE_GUI_1@monodll_buttonboxcmn.o: $(srcdir)/src/common/buttonboxcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/buttonboxcmn.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -20955,6 +20996,9 @@ monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
 
 monolib_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
+
+monolib_cocoa_buttonbox.o: $(srcdir)/src/osx/cocoa/buttonbox.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/buttonbox.mm
 
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -21759,6 +21803,9 @@ monolib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(MONOLIB_ODEP)
 
 monolib_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
+
+monolib_xh_buttonbox.o: $(srcdir)/src/xrc/xh_buttonbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_buttonbox.cpp
 
 monolib_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
@@ -24961,6 +25008,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
+@COND_USE_GUI_1@monolib_generic_buttonbox.o: $(srcdir)/src/generic/buttonbox.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/buttonbox.cpp
+
+@COND_USE_GUI_1@monolib_buttonboxcmn.o: $(srcdir)/src/common/buttonboxcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/buttonboxcmn.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -26427,6 +26480,9 @@ coredll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 
 coredll_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
+
+coredll_cocoa_buttonbox.o: $(srcdir)/src/osx/cocoa/buttonbox.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/buttonbox.mm
 
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -29824,6 +29880,12 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
+@COND_USE_GUI_1@coredll_generic_buttonbox.o: $(srcdir)/src/generic/buttonbox.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/buttonbox.cpp
+
+@COND_USE_GUI_1@coredll_buttonboxcmn.o: $(srcdir)/src/common/buttonboxcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/buttonboxcmn.cpp
+
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -30189,6 +30251,9 @@ corelib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 
 corelib_cocoa_hyperlink.o: $(srcdir)/src/osx/cocoa/hyperlink.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/hyperlink.mm
+
+corelib_cocoa_buttonbox.o: $(srcdir)/src/osx/cocoa/buttonbox.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/buttonbox.mm
 
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -33586,6 +33651,12 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
+@COND_USE_GUI_1@corelib_generic_buttonbox.o: $(srcdir)/src/generic/buttonbox.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/buttonbox.cpp
+
+@COND_USE_GUI_1@corelib_buttonboxcmn.o: $(srcdir)/src/common/buttonboxcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/buttonboxcmn.cpp
+
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_WEBP_p_53) $(__INC_LUNASVG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_ADV
 
@@ -34141,6 +34212,9 @@ xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 xrcdll_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
 
+xrcdll_xh_buttonbox.o: $(srcdir)/src/xrc/xh_buttonbox.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_buttonbox.cpp
+
 xrclib_xh_activityindicator.o: $(srcdir)/src/xrc/xh_activityindicator.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_activityindicator.cpp
 
@@ -34350,6 +34424,9 @@ xrclib_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_bookctrlbase.o: $(srcdir)/src/xrc/xh_bookctrlbase.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_bookctrlbase.cpp
+
+xrclib_xh_buttonbox.o: $(srcdir)/src/xrc/xh_buttonbox.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_buttonbox.cpp
 
 auidll_version_rc.o: $(srcdir)/src/msw/version.rc $(AUIDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_WEBP_p_53) $(__INC_LUNASVG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_AUI

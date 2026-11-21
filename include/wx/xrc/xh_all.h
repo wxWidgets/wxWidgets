@@ -20,6 +20,7 @@
 #include "wx/xrc/xh_bmpbt.h"
 #include "wx/xrc/xh_bmpcbox.h"
 #include "wx/xrc/xh_bttn.h"
+#include "wx/xrc/xh_buttonbox.h"
 #include "wx/xrc/xh_cald.h"
 #include "wx/xrc/xh_chckb.h"
 #include "wx/xrc/xh_chckl.h"

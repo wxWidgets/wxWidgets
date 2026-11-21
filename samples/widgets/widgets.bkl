@@ -47,6 +47,7 @@ endif
             activityindicator.cpp
             bmpcombobox.cpp
             button.cpp
+            buttonbox.cpp
             checkbox.cpp
             choice.cpp
             clrpicker.cpp

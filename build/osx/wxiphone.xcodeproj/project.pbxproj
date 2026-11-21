@@ -24,6 +24,7 @@
 		AB6677BE66733F91B8F773CA /* pcre2_compile_class.c in Sources */ = {isa = PBXBuildFile; fileRef = 820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */; };
 		EBF2D44758003221A22202BC /* colourcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D61240ABD70328BA5789663 /* colourcmn.cpp */; };
 		CB078622E90F33BE9D131131 /* buttonbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5612DBC4125B379DA2B28824 /* buttonbar.cpp */; };
+		5EDA8604B64930C287670FA5 /* buttonbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ADAD3F0228E32578030773B /* buttonbox.cpp */; };
 		052331773CF6362C9A6CF38E /* utils_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EED7C691150139EFA35E8EBD /* utils_osx.cpp */; };
 		70F898F8B129380BBECAC559 /* richtexthtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7969963AA93537FCA4F54DA7 /* richtexthtml.cpp */; };
 		893BDA491EDE3A0E91FADE40 /* nonownedwnd.mm in Sources */ = {isa = PBXBuildFile; fileRef = AECB45CEAC093CE4AB4B7E45 /* nonownedwnd.mm */; };
@@ -38,6 +39,7 @@
 		6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4F4F5211933057824B5621 /* button_osx.cpp */; };
 		692FCCABFB963696AFC1E122 /* gdiobj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 377056CEB1FC3EEB8526E7A6 /* gdiobj.cpp */; };
 		C3A63D7091913CD39094AE0B /* btncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A7A3B499503ECABC6A838F /* btncmn.cpp */; };
+		3CDDBBC46E193637955619F2 /* buttonboxcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8371111E6193170AEE88EBD /* buttonboxcmn.cpp */; };
 		DDC71B80D562303690FDBE4C /* appcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F01DDE448E4C3983ACCE67FD /* appcmn.cpp */; };
 		215958201947310B88BBEDB3 /* statbmp.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD6B26B5A6A733A89EF5AB9C /* statbmp.mm */; };
 		D9DCBE799DB634C2A73FD6BD /* statboxcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D73954EB5397301F87881646 /* statboxcmn.cpp */; };
@@ -573,6 +575,7 @@
 		10B5C2A72C713A678458CD9D /* pcre2_ord2utf.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BFEBC5061693DA0B52BC4AC /* pcre2_ord2utf.c */; };
 		97BAFEAD53E238B6881178DD /* evtloopcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 640783FBACA43206B782C77B /* evtloopcmn.cpp */; };
 		D5C304182151365FA9FF8A3D /* xh_bttn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0785AD527D033586A7DCE8B8 /* xh_bttn.cpp */; };
+		7EC4E9D3C542330D81FE3DD0 /* xh_buttonbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 121F2742FFA53C6F9945D08D /* xh_buttonbox.cpp */; };
 		02BB539E2AD63C078DA776B0 /* uiaction_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6359B01A7B35F6B710ACF8 /* uiaction_osx.cpp */; };
 		A4344D562F7E3B858B2C6A74 /* xcs.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BD4AFED75AE359FBF06F901 /* xcs.c */; };
 		62F1DC80D631335B892610A8 /* splitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C125FA3837C631A9BE0ED5E7 /* splitter.cpp */; };
@@ -1268,6 +1271,7 @@
 		9EF09C7CC5413CC6A5E7B21B /* LexCPP.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCPP.cxx; path = ../../src/stc/lexilla/lexers/LexCPP.cxx; sourceTree = SOURCE_ROOT; };
 		5DBE56B153AA3AC8A4BBE77C /* cairo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cairo.cpp; path = ../../src/common/cairo.cpp; sourceTree = SOURCE_ROOT; };
 		84A7A3B499503ECABC6A838F /* btncmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = btncmn.cpp; path = ../../src/common/btncmn.cpp; sourceTree = SOURCE_ROOT; };
+		E8371111E6193170AEE88EBD /* buttonboxcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = buttonboxcmn.cpp; path = ../../src/common/buttonboxcmn.cpp; sourceTree = SOURCE_ROOT; };
 		B38F3D4DC6D139BA93401F7A /* wakeuppipe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wakeuppipe.cpp; path = ../../src/unix/wakeuppipe.cpp; sourceTree = SOURCE_ROOT; };
 		09F8B0818C3A3248A26EE05D /* choicbkg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choicbkg.cpp; path = ../../src/generic/choicbkg.cpp; sourceTree = SOURCE_ROOT; };
 		42D858482208345E89CFB917 /* picture_rescale_enc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = picture_rescale_enc.c; path = ../../3rdparty/libwebp/src/enc/picture_rescale_enc.c; sourceTree = SOURCE_ROOT; };
@@ -1394,6 +1398,7 @@
 		41AE72D4E8FF307F86A02F5F /* LexIndent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexIndent.cxx; path = ../../src/stc/lexilla/lexers/LexIndent.cxx; sourceTree = SOURCE_ROOT; };
 		64668D98AEF938A480A1078E /* near_lossless_enc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = near_lossless_enc.c; path = ../../3rdparty/libwebp/src/enc/near_lossless_enc.c; sourceTree = SOURCE_ROOT; };
 		0785AD527D033586A7DCE8B8 /* xh_bttn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_bttn.cpp; path = ../../src/xrc/xh_bttn.cpp; sourceTree = SOURCE_ROOT; };
+		121F2742FFA53C6F9945D08D /* xh_buttonbox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_buttonbox.cpp; path = ../../src/xrc/xh_buttonbox.cpp; sourceTree = SOURCE_ROOT; };
 		8685B8ED68F23DB0B770FD74 /* xmltok.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmltok.c; path = ../../src/expat/expat/lib/xmltok.c; sourceTree = SOURCE_ROOT; };
 		88C2B895570936A3B4FAF3CF /* xh_richtext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_richtext.cpp; path = ../../src/xrc/xh_richtext.cpp; sourceTree = SOURCE_ROOT; };
 		274A156457C63EC5801029C2 /* CaseConvert.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CaseConvert.cxx; path = ../../src/stc/scintilla/src/CaseConvert.cxx; sourceTree = SOURCE_ROOT; };
@@ -1528,6 +1533,7 @@
 		5152B34D06E9343FBFAB3510 /* pcre2_substring.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_substring.c; path = ../../3rdparty/pcre/src/pcre2_substring.c; sourceTree = SOURCE_ROOT; };
 		9988CBB0772A3539970162FA /* arttango.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arttango.cpp; path = ../../src/common/arttango.cpp; sourceTree = SOURCE_ROOT; };
 		5612DBC4125B379DA2B28824 /* buttonbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = buttonbar.cpp; path = ../../src/ribbon/buttonbar.cpp; sourceTree = SOURCE_ROOT; };
+		5ADAD3F0228E32578030773B /* buttonbox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = buttonbox.cpp; path = ../../src/generic/buttonbox.cpp; sourceTree = SOURCE_ROOT; };
 		FEFE1B83470D38D38D0E76B0 /* LexMMIXAL.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMMIXAL.cxx; path = ../../src/stc/lexilla/lexers/LexMMIXAL.cxx; sourceTree = SOURCE_ROOT; };
 		242BF97B558634A79322052C /* prntbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prntbase.cpp; path = ../../src/common/prntbase.cpp; sourceTree = SOURCE_ROOT; };
 		5C85865D28DC31649440A921 /* imagxpm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagxpm.cpp; path = ../../src/common/imagxpm.cpp; sourceTree = SOURCE_ROOT; };
@@ -2503,6 +2509,7 @@
 				8826A683573F35EA9789612C /* xh_bmpcbox.cpp */,
 				11AE4D94B791344AB6BF6397 /* xh_bmpbt.cpp */,
 				0785AD527D033586A7DCE8B8 /* xh_bttn.cpp */,
+				121F2742FFA53C6F9945D08D /* xh_buttonbox.cpp */,
 				093B5233861B3F9B8C85762B /* xh_cald.cpp */,
 				BB7DBBD53BA837D2B01CE2B6 /* xh_chckb.cpp */,
 				EA3F8832890138E9AB6E65D8 /* xh_chckl.cpp */,
@@ -3093,6 +3100,7 @@
 				772AD4682A3E38538511D341 /* bmpbtncmn.cpp */,
 				00BC2298BC7A33B7A68584FE /* bookctrl.cpp */,
 				84A7A3B499503ECABC6A838F /* btncmn.cpp */,
+				E8371111E6193170AEE88EBD /* buttonboxcmn.cpp */,
 				5DBE56B153AA3AC8A4BBE77C /* cairo.cpp */,
 				4FC2F076657431458896115A /* checkboxcmn.cpp */,
 				83A94241BCB13767AFEC5946 /* checklstcmn.cpp */,
@@ -3212,6 +3220,7 @@
 				580AFC66F3003582B43043B1 /* animateg.cpp */,
 				2F94CF171F4532B89FECF475 /* busyinfo.cpp */,
 				5612DBC4125B379DA2B28825 /* buttonbar.cpp */,
+				5ADAD3F0228E32578030773B /* buttonbox.cpp */,
 				CF23AF3EFC5731B2A5BCF4A3 /* choicdgg.cpp */,
 				09F8B0818C3A3248A26EE05D /* choicbkg.cpp */,
 				92F377099B8B37F18C26716B /* collheaderctrlg.cpp */,
@@ -3773,6 +3782,7 @@
 				3ACCC2EB8E973C11835EB597 /* bmpbtncmn.cpp in Sources */,
 				A5775D87FD713CBB930A783E /* bookctrl.cpp in Sources */,
 				C3A63D7091913CD39094AE0B /* btncmn.cpp in Sources */,
+				3CDDBBC46E193637955619F2 /* buttonboxcmn.cpp in Sources */,
 				FBA19C939E1E33EDB05043FE /* cairo.cpp in Sources */,
 				427E6AF88CF73D799206E37D /* checkboxcmn.cpp in Sources */,
 				37749AC3468836FC857BD0D5 /* checklstcmn.cpp in Sources */,
@@ -3892,6 +3902,7 @@
 				46F341B46F80376B962759F5 /* animateg.cpp in Sources */,
 				F5806029B1BA3924A8FDDBC1 /* busyinfo.cpp in Sources */,
 				CB078622E90F33BE9D131132 /* buttonbar.cpp in Sources */,
+				5EDA8604B64930C287670FA5 /* buttonbox.cpp in Sources */,
 				03035C5CE4BC3288A5A18424 /* choicdgg.cpp in Sources */,
 				9CA687845B3F30CCA44A89D0 /* choicbkg.cpp in Sources */,
 				4442EA28B0B3373B9A2D0862 /* collheaderctrlg.cpp in Sources */,
@@ -4027,6 +4038,7 @@
 				8966F77CC97B3ED780C8F137 /* xh_bmpcbox.cpp in Sources */,
 				84B3625464F732C3A79E1314 /* xh_bmpbt.cpp in Sources */,
 				D5C304182151365FA9FF8A3D /* xh_bttn.cpp in Sources */,
+				7EC4E9D3C542330D81FE3DD0 /* xh_buttonbox.cpp in Sources */,
 				FE9A662A1F9B34D099C45C1D /* xh_cald.cpp in Sources */,
 				6138BCBC8E4438FA91E0EF9F /* xh_chckb.cpp in Sources */,
 				5F2C2A46781739D897CF293D /* xh_chckl.cpp in Sources */,

@@ -101,6 +101,7 @@
 #undef wxUSE_RADIOBTN
 #undef wxUSE_RADIOBOX
 #undef wxUSE_TOGGLEBTN
+#undef wxUSE_BUTTONBOX
 
 
 #define wxUSE_STATUSBAR 0
@@ -112,6 +113,8 @@
 #define wxUSE_RADIOBTN 0
 #define wxUSE_RADIOBOX 0
 #define wxUSE_TOGGLEBTN 0
+/* wxButtonBox is implemented using wxToggleButton on non-Cocoa ports. */
+#define wxUSE_BUTTONBOX 0
 
 #undef wxUSE_RICHTEXT
 #define wxUSE_RICHTEXT 0

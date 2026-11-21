@@ -921,6 +921,8 @@ set(GUI_CMN_SRC
     src/generic/bmpsvg.cpp
     src/common/powercmn.cpp
     src/common/curbndl.cpp
+    src/generic/buttonbox.cpp
+    src/common/buttonboxcmn.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1220,6 +1222,8 @@ set(GUI_CMN_HDR
     wx/webpdecoder.h
     wx/imagwebp.h
     wx/persist/checkbox.h
+    wx/buttonbox.h
+    wx/generic/buttonbox.h
 )
 
 set(UNIX_SRC
@@ -2132,6 +2136,7 @@ set(OSX_SHARED_HDR
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/osx/hyperlink.h
+    wx/osx/buttonbox.h
 )
 
 set(OSX_COCOA_SRC
@@ -2193,6 +2198,7 @@ set(OSX_COCOA_SRC
     src/osx/cocoa/renderer.mm
     src/osx/cocoa/power.mm
     src/osx/cocoa/hyperlink.mm
+    src/osx/cocoa/buttonbox.mm
 )
 
 set(OSX_COCOA_HDR
@@ -2602,6 +2608,7 @@ set(XRC_SRC
     src/xrc/xmlrsall.cpp
     src/xrc/xh_dataview.cpp
     src/xrc/xh_bookctrlbase.cpp
+    src/xrc/xh_buttonbox.cpp
 )
 
 set(XRC_HDR
@@ -2675,6 +2682,7 @@ set(XRC_HDR
     wx/xrc/xmlres.h
     wx/xrc/xh_dataview.h
     wx/xrc/xh_bookctrlbase.h
+    wx/xrc/xh_buttonbox.h
 )
 
 set(XML_SRC

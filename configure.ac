@@ -847,6 +847,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_BANNERWINDOW=no
     DEFAULT_wxUSE_BMPBUTTON=no
     DEFAULT_wxUSE_BUTTON=no
+    DEFAULT_wxUSE_BUTTONBOX=no
     DEFAULT_wxUSE_CALCTRL=no
     DEFAULT_wxUSE_CARET=no
     DEFAULT_wxUSE_CHECKBOX=no
@@ -919,6 +920,7 @@ WX_ARG_FEATURE(arttango,    [  --enable-arttango       use Tango icons in wxArtP
 WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_FEATURE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
 WX_ARG_FEATURE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
+WX_ARG_FEATURE(buttonbox,   [  --enable-buttonbox      use wxButtonBox class], wxUSE_BUTTONBOX)
 WX_ARG_FEATURE(calendar,    [  --enable-calendar       use wxCalendarCtrl class], wxUSE_CALCTRL)
 WX_ARG_FEATURE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
 WX_ARG_FEATURE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
@@ -6535,6 +6537,11 @@ fi
 
 if test "$wxUSE_BUTTON" = "yes"; then
   AC_DEFINE(wxUSE_BUTTON)
+  USES_CONTROLS=1
+fi
+
+if test "$wxUSE_BUTTONBOX" = "yes"; then
+  AC_DEFINE(wxUSE_BUTTONBOX)
   USES_CONTROLS=1
 fi
 

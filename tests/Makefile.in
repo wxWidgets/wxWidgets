@@ -185,6 +185,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_bitmapcomboboxtest.o \
 	test_gui_bitmaptogglebuttontest.o \
 	test_gui_bookctrlbasetest.o \
+	test_gui_buttonboxtest.o \
 	test_gui_buttontest.o \
 	test_gui_checkboxtest.o \
 	test_gui_checklistboxtest.o \
@@ -989,6 +990,9 @@ test_gui_bitmaptogglebuttontest.o: $(srcdir)/controls/bitmaptogglebuttontest.cpp
 
 test_gui_bookctrlbasetest.o: $(srcdir)/controls/bookctrlbasetest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/bookctrlbasetest.cpp
+
+test_gui_buttonboxtest.o: $(srcdir)/controls/buttonboxtest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/buttonboxtest.cpp
 
 test_gui_buttontest.o: $(srcdir)/controls/buttontest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/buttontest.cpp

@@ -60,6 +60,7 @@ WIDGETS_OBJECTS =  \
 	widgets_activityindicator.o \
 	widgets_bmpcombobox.o \
 	widgets_button.o \
+	widgets_buttonbox.o \
 	widgets_checkbox.o \
 	widgets_choice.o \
 	widgets_clrpicker.o \
@@ -241,6 +242,9 @@ widgets_bmpcombobox.o: $(srcdir)/bmpcombobox.cpp
 
 widgets_button.o: $(srcdir)/button.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/button.cpp
+
+widgets_buttonbox.o: $(srcdir)/buttonbox.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/buttonbox.cpp
 
 widgets_checkbox.o: $(srcdir)/checkbox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/checkbox.cpp

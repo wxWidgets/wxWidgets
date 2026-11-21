@@ -100,6 +100,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxBitmapComboBox: A combobox with bitmaps next to text items
 @li wxBitmapToggleButton: A toggle button with bitmaps.
 @li wxButton: Push button control, displaying text
+@li wxButtonBox: A row of segments, a.k.a. segmented control
 @li wxCalendarCtrl: Control showing an entire calendar month
 @li wxCheckBox: Checkbox control
 @li wxCheckListBox: A listbox with a checkbox to the left of each item
