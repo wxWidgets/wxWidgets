@@ -25,6 +25,7 @@
 #endif
 
 #include "private.h"
+#include "compositeretirement.h"
 #ifdef WXWINUI_TEST_SUPPORT
 #include "host-cursor-test-access.h"
 #include "host-content-test-access.h"
@@ -37,6 +38,7 @@
 #include "hostprofile.h"
 #include "hostresize.h"
 #include "hostgeometry.h"
+#include "scrollbarprojection.h"
 #include "hostvisual.h"
 #include "hostuia.h"
 #include "visualcoordinates.h"
@@ -1401,7 +1403,21 @@ bool wxWinUISlot::SetContent(
     wxWinUITopLevelHost::OperationGuard hostOperation(host);
     OperationGuard slotOperation(this);
 
-    if ( !host || !m_carrier )
+    if ( !host || (!m_carrier && !m_directRoot) || m_compositeRetiring ||
+         host->m_compositeMigrationInProgress )
+        return false;
+
+    // An extension witnesses this exact parent publication, not a future
+    // replacement. Retire it through Close(), even when no children remain.
+    if ( m_compositeContentExtension &&
+         (element != m_content || semanticTarget != m_semanticTarget) )
+        return false;
+
+    // Direct collection roots have stable identity. Their descendants may
+    // mutate normally, but replacing the root must retire this slot first.
+    if ( m_directRoot &&
+         (element != m_content || semanticTarget != m_semanticTarget ||
+          !host->IsCompositeMountCurrent(*this)) )
         return false;
 
     // The pair is one model generation. A semantic target is meaningful only
@@ -1469,6 +1485,12 @@ bool wxWinUISlot::SetContent(
         NudgeDirty();
         return true;
     }
+
+    // A composite publication owns the mounts of its child slots. Rebuilding
+    // it requires detaching those children first; never strand a live logical
+    // child in the old visual graph or quietly remount it on the root Canvas.
+    if ( host->HasCompositeChildren(*this) )
+        return false;
 
     // Content swaps are mechanically transactional, phase by phase: the old
     // element and the per-content caches survive until the new element is
@@ -3374,11 +3396,34 @@ void wxWinUITopLevelHost::Shutdown()
             m_hostLifetime->Invalidate();
 
         ShutdownNativeResize();
+        if ( m_scrollbarProjection )
+            m_scrollbarProjection->Shutdown();
 
         try
         {
             m_shutdownPhysicalDisconnectGates.reserve(
                 m_slots.size() + m_deferredDisconnectSlots.size());
+            const auto takeOwnGate = [](wxWinUISlot *slot)
+            {
+                if ( slot && slot->m_compositeDisconnectGate )
+                {
+                    // The terminal ledger owns the entire source/root graph
+                    // and collects every child's own gate independently. It
+                    // replaces the live parent's physical-receipt fan-in;
+                    // deleting wrappers below must not fabricate receipts.
+                    slot->m_disconnectGate =
+                        slot->m_compositeDisconnectGate
+                            ->TakeParentGateForGraphRetirement();
+                    slot->m_compositeDisconnectGate.reset();
+#ifdef WXWINUI_TEST_SUPPORT
+                    if ( slot->m_disconnectPending && !slot->m_disconnectGate )
+                    {
+                        gs_pendingPhysicalDisconnectGates.fetch_sub(
+                            1, std::memory_order_relaxed);
+                    }
+#endif
+                }
+            };
             const auto sealGate = [&](const std::shared_ptr<
                                           wxWinUIPhysicalDisconnectGate>& gate)
             {
@@ -3396,11 +3441,13 @@ void wxWinUITopLevelHost::Shutdown()
             };
             for ( const auto& entry : m_slots )
             {
+                takeOwnGate(entry.second);
                 if ( entry.second )
                     sealGate(entry.second->m_disconnectGate);
             }
             for ( wxWinUISlot *slot : m_deferredDisconnectSlots )
             {
+                takeOwnGate(slot);
                 if ( slot )
                     sealGate(slot->m_disconnectGate);
             }
@@ -3412,8 +3459,63 @@ void wxWinUITopLevelHost::Shutdown()
 
         if ( m_focusMigration )
         {
-            // Every gate is sealed before this callback-bearing rollback.
-            AbortFocusMigration(m_focusMigration, true);
+            const auto migration = m_focusMigration;
+            wxWinUITopLevelHost * const destination = migration->destinationHost
+                ? migration->destinationHost->GetHost() : nullptr;
+            wxWindow * const window = migration->window.get();
+            // A composite transfer keeps the SAME slot identity. Once it is
+            // published in B, destroying A cannot retire B's focused child.
+            // Hand the still-pending arbiter to B before releasing A. Ordinary
+            // migrations have distinct source/destination slots and retain
+            // their existing shutdown rollback policy.
+            if ( m_compositeMigrationInProgress && destination &&
+                 destination != this &&
+                 destination->m_compositeMigrationInProgress &&
+                 migration->logicalFocusWasActive && !migration->committed &&
+                 migration->sourceHost == m_hostLifetime &&
+                 migration->sourceSlot == migration->destinationSlot &&
+                 migration->destinationSlot && window &&
+                 migration->destinationSlot->GetHost() == destination &&
+                 migration->destinationSlot->GetWindow() == window &&
+                 destination->FindSlot(window) &&
+                 destination->FindSlot(window)->m_lifetime ==
+                     migration->destinationSlot &&
+                 destination->m_focusMigration == migration &&
+                 m_focusOwner == window &&
+                 m_focusIntentGeneration == migration->sourceFocusIntentGeneration )
+            {
+                migration->sourceHost = destination->m_hostLifetime;
+                migration->sourceFocusIntentGeneration =
+                    destination->m_focusIntentGeneration;
+                destination->m_focusOwner = window;
+                m_focusOwner = nullptr;
+                m_focusMigration.reset();
+
+                // The shell has moved to B but USER32 may still consider A
+                // active. Destroying A would then clear the parked native
+                // focus before the migration's outer continuation runs.
+                // Complete the same ticket on B now, while its exact native
+                // authority is still live; never reacquire focus after an
+                // application/native redirection has already won.
+                if ( HasFocusMigrationNativeAuthority(migration, destination) )
+                {
+                    if ( ++destination->m_focusIntentGeneration == 0 )
+                        ++destination->m_focusIntentGeneration;
+                    const auto continuationGeneration =
+                        destination->m_focusIntentGeneration;
+                    destination->ClearDeferredFocusRequest();
+                    migration->sourceFocusIntentGeneration =
+                        continuationGeneration;
+                    destination->FocusSlotImpl(
+                        window, FocusOrigin::MigrationContinuation,
+                        migration->previous.get(), continuationGeneration, true);
+                }
+            }
+            else
+            {
+                // Every gate is sealed before this callback-bearing rollback.
+                AbortFocusMigration(migration, true);
+            }
         }
 
         // Relinquish a test-only extended title bar only after every gate is
@@ -3635,7 +3737,7 @@ void wxWinUITopLevelHost::Shutdown()
         if ( !slot )
             continue;
         const auto& gate = slot->m_disconnectGate;
-        if ( slot->m_operationDepth == 0 &&
+        if ( !slot->m_compositeRetiring && slot->m_operationDepth == 0 &&
              (!gate || gate->IsSatisfied()) )
         {
             if ( !CompleteDeferredSlotDisconnect(*slot) )
@@ -3686,11 +3788,14 @@ void wxWinUITopLevelHost::Shutdown()
             addGate(gate);
         for ( wxWinUISlot *slot : m_deferredDisconnectSlots )
         {
-            // After the synchronous drain above, every remaining retired slot
-            // must have a genuinely unsatisfied causal gate. A callback-only
-            // slot cannot remain once the host operation depth reached zero.
-            if ( !slot || !slot->m_disconnectGate ||
-                 slot->m_disconnectGate->IsSatisfied() )
+            // A composite parent stays attached until Source.Close even if
+            // its own popup gate is empty: an independently retained child
+            // may still need the complete visual ancestry. All other slots
+            // must have genuinely unsatisfied causal gates after this drain.
+            if ( !slot ||
+                 (!slot->m_compositeRetiring &&
+                  (!slot->m_disconnectGate ||
+                   slot->m_disconnectGate->IsSatisfied())) )
             {
                 std::terminate();
             }
@@ -3764,10 +3869,8 @@ void wxWinUITopLevelHost::Shutdown()
             }
         }
     }
-    else if ( !m_deferredDisconnectSlots.empty() )
-    {
-        std::terminate();
-    }
+    // With no popup gates, deferred composite parents need only the ordinary
+    // Source.Close boundary below, exactly like the still-live shutdown slots.
 
     // TakeFocusRequested is a host callback too.  Revoke it in phase 1,
     // before Close(), just like the root-router callbacks.
@@ -3935,6 +4038,7 @@ void wxWinUITopLevelHost::Shutdown()
     // only duplicate projections and inert caches. The source plus this
     // complete graph remain strongly owned by terminalRetirement until the
     // last exact gate completion or the terminal XAML deferral.
+    m_compositeSlots.clear();
     for ( wxWinUISlot *slot : m_shutdownSlots )
     {
         gs_slotGrids.erase(slot);
@@ -3971,6 +4075,7 @@ void wxWinUITopLevelHost::Shutdown()
     else
         m_root = nullptr;
     gs_rootCanvases.erase(this);
+    m_scrollbarProjection.reset();
     m_hostLifetime.reset();
 
     // Registration can complete reentrantly when shutdown is already
@@ -4299,6 +4404,236 @@ wxWinUITopLevelHost::RegisterSlot(
 }
 
 wxWinUISlot *
+wxWinUITopLevelHost::RegisterSlotInParent(
+    wxWindow *window,
+    const winrt::Microsoft::UI::Xaml::UIElement& element,
+    const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+    wxWindow *compositeOwner,
+    const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount,
+    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
+{
+    if ( !compositeOwner || !contentMount )
+        return nullptr;
+    return RegisterSlotInternal(window, element, semanticTarget, nullptr,
+                                false, false, wxString(), gate,
+                                compositeOwner, contentMount);
+}
+
+wxWinUISlot *
+wxWinUITopLevelHost::RegisterSlotInParentDirect(
+    wxWindow *window,
+    const winrt::Microsoft::UI::Xaml::Controls::Control& element,
+    const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+    wxWindow *compositeOwner,
+    const std::shared_ptr<wxWinUIDirectCompositeMount>& mount,
+    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
+{
+    if ( !element || !compositeOwner || !mount || !mount->owner.get() ||
+         !mount->insert || !mount->contains || !mount->remove )
+        return nullptr;
+    return RegisterSlotInternal(window, element, semanticTarget, nullptr,
+                                false, false, wxString(), gate,
+                                compositeOwner, nullptr, mount);
+}
+
+bool wxWinUITopLevelHost::HasCompositeChildren(const wxWinUISlot& parent) const
+{
+    for ( const auto child : m_compositeSlots )
+        if ( child->m_compositeOwner.lock() == parent.m_lifetime )
+            return true;
+    return false;
+}
+
+bool wxWinUITopLevelHost::SetSlotCompositeContentExtension(
+    wxWindow *window,
+    const std::shared_ptr<wxWinUICompositeContentExtension>& extension)
+{
+    OperationGuard hostOperation(this);
+    wxWinUISlot * const slot = FindSlot(window);
+    wxWinUISlot::OperationGuard slotOperation(slot);
+    if ( !slot || !extension || !extension->isCurrent ||
+         m_shuttingDown || m_compositeMigrationInProgress ||
+         slot->m_deletePending || slot->m_poisoned ||
+         slot->m_compositeRetiring || slot->m_contentTransactionInProgress ||
+         slot->m_compositeContentExtensionValidating || !slot->m_content ||
+         (slot->m_compositeContentExtension &&
+          slot->m_compositeContentExtension != extension) )
+        return false;
+
+    const auto state = slot->m_lifetime;
+    const auto content = slot->m_content;
+    const auto generation = slot->m_contentGeneration;
+    const auto previous = slot->m_compositeContentExtension;
+    const auto current = [&]()
+    {
+        return state && state->GetHost() == this &&
+               state->GetWindow() == window && FindSlot(window) == slot &&
+               !m_shuttingDown && !m_compositeMigrationInProgress &&
+               !slot->m_deletePending && !slot->m_poisoned &&
+               !slot->m_compositeRetiring &&
+               !slot->m_contentTransactionInProgress &&
+               slot->m_content == content &&
+               slot->m_contentGeneration == generation &&
+               slot->m_compositeContentExtension == previous;
+    };
+    try
+    {
+        const auto root = extension->root.get();
+        if ( !root || !current() ||
+             (previous &&
+              (slot->m_compositeContentExtensionRoot.get() != root ||
+               slot->m_compositeContentExtensionGeneration != generation)) )
+            return false;
+
+        slot->m_compositeContentExtensionValidating = true;
+        const auto finish = wxMakeGuard([slot]()
+        {
+            slot->m_compositeContentExtensionValidating = false;
+        });
+        // The witness may cross an arbitrary native callback. OperationGuard
+        // keeps allocations alive, but only this exact publication can win.
+        // Initial registration can precede template materialization. It
+        // grants no authority until IsCompositeParentMountCurrent witnesses
+        // a current template; repeating a publication explicitly rechecks it.
+        if ( (previous && !extension->isCurrent()) || !current() ||
+             extension->root.get() != root || !current() )
+            return false;
+
+        slot->m_compositeContentExtension = extension;
+        slot->m_compositeContentExtensionRoot = extension->root;
+        slot->m_compositeContentExtensionGeneration = generation;
+        return true;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("validate composite content extension", e);
+    }
+    catch ( ... )
+    {
+        // A failed ownership witness is a local refusal, not a lost physical
+        // popup receipt: do not poison unrelated control publication.
+    }
+    return false;
+}
+
+bool wxWinUITopLevelHost::IsCompositeParentMountCurrent(
+    const wxWinUISlot& parent,
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& mount) const
+{
+    OperationGuard hostOperation(const_cast<wxWinUITopLevelHost *>(this));
+    auto& mutableParent = const_cast<wxWinUISlot&>(parent);
+    wxWinUISlot::OperationGuard parentOperation(&mutableParent);
+    const auto state = parent.m_lifetime;
+    const auto content = parent.m_content;
+    const auto generation = parent.m_contentGeneration;
+    const auto extension = parent.m_compositeContentExtension;
+    const auto current = [&]()
+    {
+        wxWindow * const window = state ? state->GetWindow() : nullptr;
+        return window && state->GetHost() == this &&
+               FindSlot(window) == &parent && !m_shuttingDown &&
+               !parent.m_deletePending && !parent.m_poisoned &&
+               !parent.m_compositeRetiring &&
+               !parent.m_contentTransactionInProgress &&
+               parent.m_content == content &&
+               parent.m_contentGeneration == generation &&
+               parent.m_compositeContentExtension == extension;
+    };
+    if ( !mount || !content || !current() )
+        return false;
+    try
+    {
+        const bool ordinary = wxWinUISemanticPairIsValid(content, mount);
+        if ( !current() )
+            return false;
+        if ( ordinary )
+            return true;
+        if ( !extension || !extension->isCurrent ||
+             parent.m_compositeContentExtensionGeneration != generation ||
+             parent.m_compositeContentExtensionValidating )
+            return false;
+
+        const auto root = parent.m_compositeContentExtensionRoot.get();
+        if ( !root || extension->root.get() != root || !current() )
+            return false;
+        mutableParent.m_compositeContentExtensionValidating = true;
+        const auto finish = wxMakeGuard([&mutableParent]()
+        {
+            mutableParent.m_compositeContentExtensionValidating = false;
+        });
+        if ( !extension->isCurrent() || !current() ||
+             extension->root.get() != root || !current() )
+            return false;
+        const bool contained = wxWinUISemanticPairIsValid(root, mount);
+        return contained && current() && extension->isCurrent() && current() &&
+               extension->root.get() == root && current();
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+    catch ( ... )
+    {
+    }
+    return false;
+}
+
+bool wxWinUITopLevelHost::IsCompositeMountCurrent(const wxWinUISlot& slot) const
+{
+    if ( !slot.m_isCompositeChild )
+        return true;
+    OperationGuard hostOperation(const_cast<wxWinUITopLevelHost *>(this));
+    wxWinUISlot::OperationGuard slotOperation(const_cast<wxWinUISlot *>(&slot));
+    const auto childState = slot.m_lifetime;
+    const auto childGeneration = slot.m_contentGeneration;
+    const auto state = slot.m_compositeOwner.lock();
+    wxWindow * const window = state ? state->GetWindow() : nullptr;
+    const wxWinUISlot * const parent = window ? FindSlot(window) : nullptr;
+    wxWinUISlot::OperationGuard parentOperation(const_cast<wxWinUISlot *>(parent));
+    if ( !parent || !state || state->GetHost() != this ||
+         parent->m_lifetime != state || parent->m_compositeRetiring ||
+         parent->m_contentTransactionInProgress ||
+         parent->m_contentGeneration != slot.m_compositeOwnerGeneration )
+        return false;
+    const auto generation = slot.m_compositeOwnerGeneration;
+    const auto current = [&]()
+    {
+        wxWindow * const childWindow = childState ? childState->GetWindow() : nullptr;
+        return childWindow && childState->GetHost() == this &&
+               FindSlot(childWindow) == &slot && !slot.m_deletePending &&
+               !slot.m_poisoned && slot.m_contentGeneration == childGeneration &&
+               slot.m_compositeOwner.lock() == state &&
+               slot.m_compositeOwnerGeneration == generation &&
+               state->GetHost() == this && state->GetWindow() == window &&
+               FindSlot(window) == parent && !parent->m_compositeRetiring &&
+               !parent->m_contentTransactionInProgress &&
+               parent->m_contentGeneration == generation && !m_shuttingDown;
+    };
+    try
+    {
+        if ( slot.m_directMount )
+        {
+            const auto mount = slot.m_directMount;
+            const auto root = slot.m_directRoot;
+            const auto owner = mount->owner.get();
+            if ( !owner || !root || !mount->contains(root) || !current() )
+                return false;
+            // Both collection callbacks and an extension witness can retire
+            // either participant. Revalidate the child after parent admission.
+            return IsCompositeParentMountCurrent(*parent, owner) && current() &&
+                   mount->contains(root) && current();
+        }
+        const auto mount = slot.m_compositeMount.get();
+        return mount && mount.Content() == slot.m_container &&
+               current() && IsCompositeParentMountCurrent(*parent, mount) &&
+               current() && mount.Content() == slot.m_container && current();
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return false;
+    }
+}
+
+wxWinUISlot *
 wxWinUITopLevelHost::RegisterSlotInternal(
     wxWindow *window,
     const winrt::Microsoft::UI::Xaml::UIElement& element,
@@ -4308,13 +4643,85 @@ wxWinUITopLevelHost::RegisterSlotInternal(
     bool preserveAutomationNameRelinquishment,
     const wxString& lastDesiredAutomationName,
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>&
-        physicalDisconnectGate)
+        physicalDisconnectGate,
+    wxWindow *compositeOwner,
+    const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount,
+    const std::shared_ptr<wxWinUIDirectCompositeMount>& directMount)
 {
     OperationGuard hostOperation(this);
 
     if ( !window || !m_root || m_shuttingDown ||
+         m_compositeMigrationInProgress ||
          !wxWinUISemanticPairIsValid(element, semanticTarget) )
         return nullptr;
+
+    wxWinUISlot * const compositeParent = compositeOwner
+        ? FindSlot(compositeOwner) : nullptr;
+    wxWinUISlot::OperationGuard parentOperation(compositeParent);
+    const auto parentState = compositeParent ? compositeParent->m_lifetime : nullptr;
+    const auto parentGeneration = compositeParent
+        ? compositeParent->m_contentGeneration : 0;
+    const wxWeakRef<wxWindow> registeringWindow(window);
+    const auto parentPublicationIsCurrent = [&]()
+    {
+        return registeringWindow.get() == window && !window->IsBeingDeleted() &&
+               compositeParent && parentState &&
+               parentState->GetHost() == this &&
+               parentState->GetWindow() == compositeOwner &&
+               FindSlot(compositeOwner) == compositeParent &&
+               compositeParent->m_contentGeneration == parentGeneration &&
+               !compositeParent->m_compositeRetiring &&
+               !compositeParent->m_contentTransactionInProgress &&
+               compositeOwner != window && compositeOwner->IsDescendant(window);
+    };
+    const auto parentIsCurrent = [&]()
+    {
+        if ( !compositeOwner )
+            return true;
+        if ( (!contentMount && !directMount) || !parentPublicationIsCurrent() )
+            return false;
+        const auto mountOwner = directMount ? directMount->owner.get()
+            : contentMount.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
+        return mountOwner &&
+            IsCompositeParentMountCurrent(*compositeParent, mountOwner) &&
+            parentPublicationIsCurrent();
+    };
+    try
+    {
+        if ( !parentIsCurrent() )
+            return nullptr;
+        if ( compositeOwner )
+        {
+            wxWinUISlot * const existing = FindSlot(window);
+            if ( directMount )
+            {
+                if ( !element.try_as<winrt::Microsoft::UI::Xaml::Controls::Control>() ||
+                     !directMount->insert || !directMount->contains ||
+                     !directMount->remove ||
+                     (existing && (!existing->m_directRoot ||
+                        existing->m_directMount != directMount ||
+                        existing->m_compositeOwner.lock() != parentState ||
+                        existing->m_content != element ||
+                        existing->m_semanticTarget != semanticTarget)) )
+                    return nullptr;
+            }
+            else
+            {
+                const auto occupant = contentMount.Content();
+                if ( (occupant && (!existing || occupant != existing->m_container)) ||
+                     (existing && (!existing->m_isCompositeChild ||
+                        existing->m_directRoot ||
+                        existing->m_compositeOwner.lock() != parentState ||
+                        existing->m_compositeMount.get() != contentMount)) )
+                    return nullptr;
+            }
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("validate composite slot mount", e);
+        return nullptr;
+    }
 
     wxWinUITopLevelHost * const authoritative = FindSlotOwner(window);
     if ( authoritative && authoritative != this &&
@@ -4357,6 +4764,8 @@ wxWinUITopLevelHost::RegisterSlotInternal(
     {
         wxWinUISlot * const existing = it->second;
         wxWinUISlot::OperationGuard existingOperation(existing);
+        if ( existing->m_compositeRetiring )
+            return nullptr;
 
         // A poisoned slot (its carrier went unreadable, its lifetime
         // invalidated) can never work again: dispose of it and fall through
@@ -4365,11 +4774,16 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         if ( existing->m_poisoned ||
                 (existing->m_lifetime && !existing->m_lifetime->IsValid()) )
         {
+            const bool wasComposite = existing->m_isCompositeChild;
             UnregisterSlot(window);
+            if ( wasComposite )
+                return nullptr;
             // fall through to fresh creation below
         }
         else
         {
+            if ( !IsCompositeMountCurrent(*existing) )
+                return nullptr;
             // A control host may install its popup gate before its very first
             // content publication. Preserve that ordering on replacement too:
             // SetContent() can synchronously fire Loaded/application code.
@@ -4401,7 +4815,10 @@ wxWinUITopLevelHost::RegisterSlotInternal(
                 // null because the requested element was not installed.
                 if ( existing->m_poisoned )
                 {
+                    const bool wasComposite = existing->m_isCompositeChild;
                     UnregisterSlot(window);
+                    if ( wasComposite )
+                        return nullptr;
                     if ( wxWinUISlot * const replacement =
                              RegisterSlot(
                                  window,
@@ -4508,7 +4925,7 @@ wxWinUITopLevelHost::RegisterSlotInternal(
                 accessibilityFactoryResolved,
                 preserveAutomationNameRelinquishment,
                 lastDesiredAutomationName,
-                physicalDisconnectGate);
+                physicalDisconnectGate, compositeOwner, contentMount, directMount);
         }
 
         wxWinUITopLevelHost * const ownerAfterFactory =
@@ -4530,6 +4947,15 @@ wxWinUITopLevelHost::RegisterSlotInternal(
     slot->m_hwnd = window->GetHWND();
     slot->m_hasWxAccessible = initialHasWxAccessible;
     slot->m_lifetime = std::make_shared<wxWinUISlotLifetime>(window, this);
+    if ( compositeOwner )
+    {
+        slot->m_isCompositeChild = true;
+        slot->m_compositeOwner = parentState;
+        slot->m_compositeOwnerGeneration = parentGeneration;
+        if ( contentMount )
+            slot->m_compositeMount = winrt::make_weak(contentMount);
+        slot->m_directMount = directMount;
+    }
     unsigned long long requestedContentGeneration = 0;
     bool requestedContentGenerationCaptured = false;
     bool requestedContentSuperseded = false;
@@ -4539,6 +4965,14 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         const auto current = m_slots.find(window);
         if ( current != m_slots.end() && current->second == slot )
         {
+            // A publication callback may already have mounted native child
+            // peers. Roll back through their causal fan-in rather than
+            // tearing a parent carrier away from still-running children.
+            if ( slot->m_directMount || HasCompositeChildren(*slot) )
+            {
+                UnregisterSlot(window);
+                return;
+            }
             UnbindSlotWindow(*slot);
             m_dirty.erase(window);
             m_slots.erase(current);
@@ -4588,6 +5022,9 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         if ( !slotIdentityIsCurrent() )
             return false;
 
+        if ( !parentIsCurrent() )
+            return false;
+
         // Append(), Loaded and every observer registration above may run
         // arbitrary application code. The slot must never survive one of
         // those boundaries with UIA authority pointing outside its visual
@@ -4625,35 +5062,45 @@ wxWinUITopLevelHost::RegisterSlotInternal(
 
     try
     {
-        auto gridImpl = winrt::make_self<wxWinUISlotGrid>();
-        gs_slotGrids[slot] = gridImpl;
-        slot->m_container =
-            gridImpl.as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
-
-        // The host-owned state carrier between the container and the
-        // content (see wxWinUISlot::m_carrier): not a tab stop, hidden
-        // from the UIA content tree (it must not add a narration level),
-        // and stretching its content -- the ContentControl defaults are
-        // Left/Top, which would leave a size-less element hugging the slot
-        // corner instead of filling it.
-        slot->m_carrier = winrt::Microsoft::UI::Xaml::Controls::ContentControl();
-        slot->m_carrier.IsTabStop(false);
-        slot->m_carrier.HorizontalContentAlignment(
-            winrt::Microsoft::UI::Xaml::HorizontalAlignment::Stretch);
-        slot->m_carrier.VerticalContentAlignment(
-            winrt::Microsoft::UI::Xaml::VerticalAlignment::Stretch);
-        winrt::Microsoft::UI::Xaml::Automation::AutomationProperties::
-            SetAccessibilityView(
-                slot->m_carrier,
-                winrt::Microsoft::UI::Xaml::Automation::Peers::
-                    AccessibilityView::Raw);
-        slot->m_container.Children().Append(slot->m_carrier);
-
-        if ( element )
+        if ( directMount )
         {
-            slot->m_carrier.Content(element);
+            slot->m_directRoot =
+                element.as<winrt::Microsoft::UI::Xaml::Controls::Control>();
             slot->m_content = element;
             slot->m_semanticTarget = semanticTarget;
+        }
+        else
+        {
+            auto gridImpl = winrt::make_self<wxWinUISlotGrid>();
+            gs_slotGrids[slot] = gridImpl;
+            slot->m_container =
+                gridImpl.as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
+
+            // The host-owned state carrier between the container and the
+            // content (see wxWinUISlot::m_carrier): not a tab stop, hidden
+            // from the UIA content tree (it must not add a narration level),
+            // and stretching its content -- the ContentControl defaults are
+            // Left/Top, which would leave a size-less element hugging the slot
+            // corner instead of filling it.
+            slot->m_carrier = winrt::Microsoft::UI::Xaml::Controls::ContentControl();
+            slot->m_carrier.IsTabStop(false);
+            slot->m_carrier.HorizontalContentAlignment(
+                winrt::Microsoft::UI::Xaml::HorizontalAlignment::Stretch);
+            slot->m_carrier.VerticalContentAlignment(
+                winrt::Microsoft::UI::Xaml::VerticalAlignment::Stretch);
+            winrt::Microsoft::UI::Xaml::Automation::AutomationProperties::
+                SetAccessibilityView(
+                    slot->m_carrier,
+                    winrt::Microsoft::UI::Xaml::Automation::Peers::
+                        AccessibilityView::Raw);
+            slot->m_container.Children().Append(slot->m_carrier);
+
+            if ( element )
+            {
+                slot->m_carrier.Content(element);
+                slot->m_content = element;
+                slot->m_semanticTarget = semanticTarget;
+            }
         }
         if ( preserveAutomationNameRelinquishment && element )
         {
@@ -4669,13 +5116,14 @@ wxWinUITopLevelHost::RegisterSlotInternal(
 
         // Until the first sync runs the container must not cover the island
         // origin, where it would eat input meant for whatever lives there.
-        slot->m_container.Visibility(
-            winrt::Microsoft::UI::Xaml::Visibility::Collapsed);
+        if ( !directMount )
+            slot->m_container.Visibility(
+                winrt::Microsoft::UI::Xaml::Visibility::Collapsed);
 
         // Slot positions are physical (already mirrored by wx for RTL), so
         // the root Canvas stays LTR; only the hosted element's own content
         // mirrors, per window.
-        if ( window->GetLayoutDirection() == wxLayout_RightToLeft )
+        if ( !directMount && window->GetLayoutDirection() == wxLayout_RightToLeft )
         {
             slot->m_container.FlowDirection(
                 winrt::Microsoft::UI::Xaml::FlowDirection::RightToLeft);
@@ -4689,6 +5137,8 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         // final callback.
         slot->m_routedHandlers.reserve(10);
         m_slots.emplace(window, slot);
+        if ( slot->m_isCompositeChild )
+            m_compositeSlots.insert(slot);
         gs_slotOwners[window] = this;
 
         // A focus migration is published before Append(): Loaded, focus and
@@ -4804,7 +5254,53 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         // Attach only after the slot is discoverable and its destroy handler
         // is bound: Append() can synchronously raise Loaded, and application
         // code is allowed to destroy/reparent the wx window from that event.
-        m_root.Children().Append(slot->m_container);
+        if ( compositeOwner )
+        {
+            if ( directMount )
+            {
+                if ( !directMount->contains(element) &&
+                     (!observeRequestedContent() ||
+                      !directMount->insert(element)) )
+                    return abandonInvalidFreshSlot();
+                if ( !observeRequestedContent() )
+                    return abandonInvalidFreshSlot();
+            }
+            else
+            {
+                if ( contentMount.Content() )
+                    winrt::throw_hresult(E_INVALIDARG);
+                contentMount.Content(slot->m_container);
+            }
+            if ( !IsCompositeMountCurrent(*slot) )
+                return abandonInvalidFreshSlot();
+            const auto state = slot->m_lifetime;
+            slot->m_compositeLayoutUpdatedToken = slot->GetPresentationRoot().LayoutUpdated(
+                [state](const winrt::Windows::Foundation::IInspectable&,
+                        const winrt::Windows::Foundation::IInspectable&)
+                {
+                    wxWinUITopLevelHost * const host = state->GetHost();
+                    wxWindow * const window = state->GetWindow();
+                    wxWinUISlot * const current = host && window
+                        ? host->FindSlot(window) : nullptr;
+                    if ( !current || current->m_lifetime != state )
+                        return;
+                    OperationGuard hostOperation(host);
+                    wxWinUISlot::OperationGuard slotOperation(current);
+                    const auto container = current->GetPresentationRoot();
+                    wxRect rect;
+                    if ( !host->GetCompositeSlotRect(container, rect) ||
+                         state->GetHost() != host || !state->GetWindow() )
+                        return;
+                    wxWinUISlot * const after = host->FindSlot(state->GetWindow());
+                    if ( after && after->m_lifetime == state &&
+                         after->m_rectPx != rect )
+                        host->MarkDirty(state->GetWindow());
+                });
+        }
+        else
+        {
+            m_root.Children().Append(slot->m_container);
+        }
 
         // Test the same arbitrary-callback boundary deterministically. The
         // hook is consumed before invocation so a nested migration cannot
@@ -4879,7 +5375,8 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
         slot.m_lifetime->Invalidate();
     slot.RetireExposedAccessibilityShellProvider(true);
 
-    if ( !slot.m_container )
+    const auto presentation = slot.GetPresentationRoot();
+    if ( !presentation )
         return;
 
     // 2. Revoke every handler so the container stops referencing the
@@ -4888,7 +5385,7 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
     {
         try
         {
-            slot.m_container.RemoveHandler(handler.first, handler.second);
+            presentation.RemoveHandler(handler.first, handler.second);
 #ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerRevokes;
 #endif
@@ -4903,7 +5400,7 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
     {
         try
         {
-            slot.m_container.GotFocus(slot.m_gotFocusToken);
+            presentation.GotFocus(slot.m_gotFocusToken);
 #ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerRevokes;
 #endif
@@ -4916,7 +5413,7 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
     {
         try
         {
-            slot.m_container.LostFocus(slot.m_lostFocusToken);
+            presentation.LostFocus(slot.m_lostFocusToken);
 #ifdef WXWINUI_TEST_SUPPORT
             ++gs_slotHandlerRevokes;
 #endif
@@ -4927,10 +5424,17 @@ void wxWinUITopLevelHost::RevokeSlotCallbacks(wxWinUISlot& slot)
     }
     slot.m_gotFocusToken = {};
     slot.m_lostFocusToken = {};
+    if ( slot.m_compositeLayoutUpdatedToken )
+    {
+        try { presentation.LayoutUpdated(slot.m_compositeLayoutUpdatedToken); }
+        catch ( const winrt::hresult_error& ) {}
+        slot.m_compositeLayoutUpdatedToken = {};
+    }
 }
 
 void wxWinUITopLevelHost::DisconnectSlot(wxWinUISlot& slot)
 {
+    bool physicallyDisconnected = true;
     const bool ownedActiveCursor =
         m_activeCursorSurface == ActiveCursorSurface::Slot &&
         m_activeCursorSlot.lock() == slot.m_lifetime;
@@ -4959,7 +5463,32 @@ void wxWinUITopLevelHost::DisconnectSlot(wxWinUISlot& slot)
     slot.RestoreToolTip();
     slot.RestoreAccessibilityView();
 
-    if ( slot.m_container )
+    if ( slot.m_directRoot )
+    {
+        // Do not clear the peer's own content: it belongs to the adapter.
+        // Removing this exact collection item is the physical disconnect.
+        const auto root = slot.m_directRoot;
+        const auto mount = slot.m_directMount;
+        try
+        {
+            if ( !mount ||
+                 (mount->contains(root) && !mount->remove(root)) ||
+                 mount->contains(root) )
+                physicallyDisconnected = false;
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            physicallyDisconnected = false;
+            wxWinUILogException("direct composite slot removal", e);
+        }
+        catch ( ... )
+        {
+            physicallyDisconnected = false;
+        }
+        slot.m_content = nullptr;
+        slot.m_semanticTarget = nullptr;
+    }
+    else if ( slot.m_container )
     {
         // 3. Detach the hosted element (it belongs to the control, not to
         //    the slot) ...
@@ -4969,14 +5498,30 @@ void wxWinUITopLevelHost::DisconnectSlot(wxWinUISlot& slot)
                 slot.m_carrier.Content(nullptr);
             slot.m_container.Children().Clear();
         }
-        catch ( const winrt::hresult_error& )
+        catch ( const winrt::hresult_error& e )
         {
+            physicallyDisconnected = false;
+            wxWinUILogException("slot content removal", e);
         }
         slot.m_content = nullptr;
         slot.m_semanticTarget = nullptr;
 
         // 4. ... and drop the container from the shared tree.
-        if ( m_root )
+        if ( slot.m_isCompositeChild )
+        {
+            try
+            {
+                if ( const auto mount = slot.m_compositeMount.get();
+                     mount && mount.Content() == slot.m_container )
+                    mount.Content(nullptr);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                physicallyDisconnected = false;
+                wxWinUILogException("composite slot removal", e);
+            }
+        }
+        else if ( m_root )
         {
             try
             {
@@ -4986,6 +5531,7 @@ void wxWinUITopLevelHost::DisconnectSlot(wxWinUISlot& slot)
             }
             catch ( const winrt::hresult_error& e )
             {
+                physicallyDisconnected = false;
                 wxWinUILogException("slot removal", e);
             }
         }
@@ -4997,6 +5543,16 @@ void wxWinUITopLevelHost::DisconnectSlot(wxWinUISlot& slot)
     // generation has just been retired.
     if ( ownedActiveCursor && !m_shuttingDown )
         RefreshPointerCursorAtLastPoint();
+
+    // Keep physical membership visible across every callback above: closing
+    // the parent from Unloaded must still account for this child's carrier.
+    m_compositeSlots.erase(&slot);
+    const auto parentRetirement = slot.m_compositeRetirement.lock();
+    const auto receipt = slot.m_compositeRetirementReceipt;
+    slot.m_compositeRetirement.reset();
+    slot.m_compositeRetirementReceipt = 0;
+    if ( parentRetirement && physicallyDisconnected )
+        parentRetirement->ChildDisconnected(receipt);
 }
 
 void wxWinUITopLevelHost::SetSlotPhysicalDisconnectGate(
@@ -5005,7 +5561,7 @@ void wxWinUITopLevelHost::SetSlotPhysicalDisconnectGate(
 {
     OperationGuard hostOperation(this);
     wxWinUISlot * const slot = FindSlot(window);
-    if ( !slot || slot->m_disconnectPending )
+    if ( !slot || slot->m_disconnectPending || slot->m_compositeRetiring )
         return;
     slot->m_disconnectGate = gate;
 }
@@ -5026,17 +5582,78 @@ void wxWinUITopLevelHost::UnregisterSlot(
             return;
     }
 
-    const auto it = m_slots.find(window);
+    auto it = m_slots.find(window);
     if ( it == m_slots.end() )
         return;
 
     wxWinUISlot * const slot = it->second;
-    const std::shared_ptr<wxWinUIPhysicalDisconnectGate> gate =
+    if ( slot->m_compositeRetiring )
+        return;
+    const bool alreadyInOperation = slot->m_operationDepth != 0;
+    wxWinUISlot::OperationGuard slotOperation(slot);
+    std::shared_ptr<wxWinUIPhysicalDisconnectGate> gate =
         requestedGate ? requestedGate : slot->m_disconnectGate;
+
+    if ( HasCompositeChildren(*slot) )
+    {
+        // A direct child's receipt includes its own descendants. Record the
+        // whole fan-in before the first child Close can reenter application
+        // code, including children already removed from the logical table.
+        const auto retirement = wxWinUICompositeSlotRetirementGate::Make(
+            gate, m_root.DispatcherQueue());
+        if ( !retirement )
+            std::terminate();
+        std::vector<std::pair<wxWinUISlot *,
+                              std::shared_ptr<wxWinUISlotLifetime>>> children;
+        try
+        {
+            for ( wxWinUISlot *child : m_compositeSlots )
+            {
+                if ( child->m_compositeOwner.lock() != slot->m_lifetime )
+                    continue;
+                const auto receipt = retirement->AddChild();
+                if ( !receipt )
+                    std::terminate();
+                children.emplace_back(child, child->m_lifetime);
+                child->m_compositeRetirement = retirement;
+                child->m_compositeRetirementReceipt = receipt;
+            }
+        }
+        catch ( ... )
+        {
+            // No child has been removed yet. Never continue after dropping
+            // an unrecorded physical ownership debt.
+            std::terminate();
+        }
+        gate = retirement;
+        slot->m_disconnectGate = gate;
+        slot->m_compositeDisconnectGate = retirement;
+        slot->m_compositeRetiring = true;
+        for ( const auto& child : children )
+        {
+            if ( m_shuttingDown )
+                return;
+            // A previous child's callback may already have disconnected this
+            // sibling. The lifetime identity also rejects address reuse.
+            if ( m_compositeSlots.count(child.first) &&
+                 child.first->m_lifetime == child.second )
+            {
+                wxWindow * const childWindow = child.second->GetWindow();
+                if ( childWindow && FindSlot(childWindow) == child.first )
+                    UnregisterSlot(childWindow);
+            }
+        }
+        if ( m_shuttingDown )
+            return;
+        it = m_slots.find(window);
+        if ( it == m_slots.end() || it->second != slot )
+            return;
+    }
+
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate> deferredGate =
         gate && !gate->IsSatisfied() ? gate : nullptr;
     const bool mustDeferPhysicalDisconnect =
-        slot->m_operationDepth != 0 || deferredGate;
+        alreadyInOperation || deferredGate;
 
     if ( mustDeferPhysicalDisconnect )
     {
@@ -5091,8 +5708,6 @@ void wxWinUITopLevelHost::UnregisterSlot(
         slot->m_disconnectGate.reset();
         slot->m_disconnectRetirementId = 0;
     }
-    wxWinUISlot::OperationGuard slotOperation(slot);
-
     UnbindSlotWindow(*slot);
     m_dirty.erase(window);
     m_slots.erase(it);
@@ -5316,14 +5931,26 @@ void wxWinUITopLevelHost::FlushDeferredSlotDisconnects()
     if ( m_shuttingDown || m_deferredDisconnectSlots.empty() )
         return;
 
-    std::vector<wxWinUISlot *> pending;
-    pending.swap(m_deferredDisconnectSlots);
-    for ( wxWinUISlot *slot : pending )
+    // Keep the authoritative collection visible during callback-rich physical
+    // removal: a reentrant parent Close or whole-host Shutdown must find every
+    // remaining child and its gate. Only the exact current item leaves it.
+    std::vector<std::pair<wxWinUISlot *,
+                          std::shared_ptr<wxWinUISlotLifetime>>> pending;
+    for ( wxWinUISlot *slot : m_deferredDisconnectSlots )
+        if ( slot )
+            pending.emplace_back(slot, slot->m_lifetime);
+    for ( const auto& entry : pending )
     {
-        if ( !slot || !slot->m_disconnectPending ||
-             slot->m_deferredDisconnectHost != this )
+        if ( m_shuttingDown )
+            break;
+        const auto found = std::find(m_deferredDisconnectSlots.begin(),
+                                     m_deferredDisconnectSlots.end(),
+                                     entry.first);
+        if ( found == m_deferredDisconnectSlots.end() ||
+             (*found)->m_lifetime != entry.second )
             continue;
-
+        wxWinUISlot * const slot = *found;
+        m_deferredDisconnectSlots.erase(found);
         if ( !CompleteDeferredSlotDisconnect(*slot) &&
              slot->m_disconnectPending &&
              slot->m_deferredDisconnectHost == this )
@@ -5458,7 +6085,7 @@ unsigned long long wxWinUITopLevelHost::PrepareFocusReparent(
             return 0;
         }
 
-        const auto container = slot->m_container;
+        const auto container = slot->GetPresentationRoot();
         const auto xamlRoot = host->GetXamlRoot();
         const bool logicalFocusWasActive =
             wxWinUIFocusIsInside(container, xamlRoot);
@@ -5495,7 +6122,7 @@ unsigned long long wxWinUITopLevelHost::PrepareFocusReparent(
                  nativeAuthorityGeneration ||
              !slot || slot->m_lifetime != slotState ||
              slot->m_contentGeneration != contentGeneration ||
-             slot->m_container != container ||
+             slot->GetPresentationRoot() != container ||
              slotState->GetHost() != host ||
              slotState->GetWindow() != window ||
              window->GetHWND() != shell ||
@@ -5579,7 +6206,7 @@ unsigned long long wxWinUITopLevelHost::PrepareFocusReparent(
             host->m_focusIntentGeneration == focusIntent &&
             slot && slot->m_lifetime == slotState &&
             slot->m_contentGeneration == contentGeneration &&
-            slot->m_container == container &&
+            slot->GetPresentationRoot() == container &&
             slotState->GetHost() == host &&
             slotState->GetWindow() == window &&
             window->GetHWND() == shell &&
@@ -5628,13 +6255,487 @@ unsigned long long wxWinUITopLevelHost::PrepareFocusReparent(
     return 0;
 }
 
+bool wxWinUITopLevelHost::CanMigrateCompositeSubtreeNow(
+    wxWindow *subtreeRoot) const
+{
+    if ( !subtreeRoot || m_shuttingDown || m_compositeMigrationInProgress )
+        return false;
+    const auto includes = [subtreeRoot](wxWindow *window)
+    {
+        return window && (window == subtreeRoot ||
+                          subtreeRoot->IsDescendant(window));
+    };
+    for ( const auto& entry : m_slots )
+    {
+        const wxWinUISlot& slot = *entry.second;
+        if ( !includes(entry.first) )
+            continue;
+        if ( slot.m_deletePending || slot.m_poisoned ||
+             slot.m_disconnectPending || slot.m_compositeRetiring ||
+             slot.m_contentTransactionInProgress ||
+             slot.m_compositeContentExtensionValidating ||
+             slot.m_inputState.HasAnyActivePress() ||
+             (slot.m_disconnectGate &&
+              (!slot.m_disconnectGate->IsSatisfied() ||
+               slot.m_disconnectGate->IsDegraded())) )
+            return false;
+        if ( slot.m_isCompositeChild )
+        {
+            const auto parent = slot.m_compositeOwner.lock();
+            if ( !parent || parent->GetHost() != this ||
+                 !includes(parent->GetWindow()) )
+                return false;
+        }
+    }
+    // A logically removed child still owns its mount until its physical
+    // receipt arrives. Never carry that debt to another XamlRoot.
+    for ( const auto child : m_compositeSlots )
+    {
+        const auto parent = child->m_compositeOwner.lock();
+        if ( parent && includes(parent->GetWindow()) &&
+             (!child->m_lifetime ||
+              !includes(child->m_lifetime->GetWindow()) ||
+              child->m_disconnectPending || child->m_deletePending ||
+              FindSlot(child->m_lifetime->GetWindow()) != child) )
+            return false;
+    }
+    return !m_nativeResize;
+}
+
+bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
+{
+    OperationGuard sourceOperation(this);
+    if ( !CanMigrateCompositeSubtreeNow(subtreeRoot) )
+        return false;
+
+    const wxWeakRef<wxWindow> subtree(subtreeRoot);
+    const auto sourceState = m_hostLifetime;
+    wxWinUITopLevelHost * const target = ForWindow(subtreeRoot, true);
+    if ( !target || m_shuttingDown || !subtree.get() )
+        return false;
+    if ( target == this )
+        return true;
+    OperationGuard targetOperation(target);
+    if ( target->m_shuttingDown || !target->m_root ||
+         target->m_compositeMigrationInProgress ||
+         !CanMigrateCompositeSubtreeNow(subtree.get()) )
+        return false;
+    const auto targetState = target->m_hostLifetime;
+    const auto sourceRoot = m_root;
+    const auto targetRoot = target->m_root;
+
+    struct Entry
+    {
+        wxWinUISlot *slot;
+        std::shared_ptr<wxWinUISlotLifetime> state;
+        wxWeakRef<wxWindow> parent;
+        WXHWND hwnd;
+        unsigned long long hwndGeneration;
+        unsigned long long contentGeneration;
+        unsigned sourceIndex = 0;
+        bool detached = false;
+        bool attached = false;
+        std::unique_ptr<wxWinUISlot::OperationGuard> operation;
+    };
+    std::vector<Entry> entries;
+    for ( const auto& entry : m_slots )
+    {
+        wxWindow * const window = entry.first;
+        if ( window != subtreeRoot && !subtreeRoot->IsDescendant(window) )
+            continue;
+        wxWinUISlot * const slot = entry.second;
+        if ( target->FindSlot(window) )
+            return false;
+        entries.push_back({slot, slot->m_lifetime, window->GetParent(),
+                           window->GetHWND(),
+                           wxWinUIMSWGetHwndGeneration(window, window->GetHWND()),
+                           slot->m_contentGeneration, 0, false, false,
+                           std::make_unique<wxWinUISlot::OperationGuard>(slot)});
+    }
+    if ( entries.empty() )
+        return true;
+
+    bool transferred = false;
+    const auto current = [&](wxWinUITopLevelHost *owner)
+    {
+        wxWindow * const root = subtree.get();
+        if ( !root || root->IsBeingDeleted() ||
+             (owner == this &&
+              (!sourceState || sourceState->GetHost() != this || m_shuttingDown)) ||
+             !targetState || targetState->GetHost() != target ||
+             target->m_shuttingDown ||
+             wxGetTopLevelParent(root) != target->m_tlw )
+            return false;
+        for ( const auto& entry : entries )
+        {
+            wxWindow * const window = entry.state->GetWindow();
+            if ( !window || entry.state->GetHost() != owner ||
+                 owner->FindSlot(window) != entry.slot ||
+                 entry.slot->m_deletePending || window->IsBeingDeleted() ||
+                 entry.slot->m_contentGeneration != entry.contentGeneration ||
+                 window->GetParent() != entry.parent.get() ||
+                 window->GetHWND() != entry.hwnd ||
+                 wxWinUIMSWGetHwndGeneration(window, entry.hwnd) !=
+                     entry.hwndGeneration ||
+                 wxGetTopLevelParent(window) != target->m_tlw )
+                return false;
+        }
+        return true;
+    };
+    // Validate mounts before locking content sync. This invokes application
+    // collection adapters, so each result is followed by a cohort identity
+    // check; no child is detached by the transport.
+    for ( auto& entry : entries )
+    {
+        if ( !IsCompositeMountCurrent(*entry.slot) || !current(this) )
+            return false;
+        if ( !entry.slot->m_isCompositeChild &&
+             (!entry.slot->m_container ||
+              !sourceRoot.Children().IndexOf(entry.slot->m_container,
+                                             entry.sourceIndex)) )
+            return false;
+    }
+    if ( !current(this) || !CanMigrateCompositeSubtreeNow(subtree.get()) )
+        return false;
+
+    // Keep the original focus ticket: it names the focused descendant, not
+    // necessarily the root wx window passed to Reparent(). The MSW boundary
+    // has already parked that descendant's focus before SetParent.
+    std::shared_ptr<FocusMigration> focusMigration;
+    for ( const auto& entry : entries )
+    {
+        const auto pending = ms_focusMigrations.find(entry.state->GetWindow());
+        if ( pending != ms_focusMigrations.end() && pending->second &&
+             !pending->second->committed &&
+             pending->second->sourceHost == sourceState &&
+             pending->second->sourceSlot == entry.state &&
+             m_focusMigration == pending->second )
+            focusMigration = pending->second;
+    }
+    if ( target->m_focusMigration &&
+         target->m_focusMigration != focusMigration &&
+         !target->m_focusMigration->committed )
+        return false;
+
+    m_compositeMigrationInProgress = true;
+    target->m_compositeMigrationInProgress = true;
+    for ( const auto& entry : entries )
+    {
+        entry.slot->m_contentTransactionInProgress = true;
+        if ( ++entry.slot->m_contentTransactionEpoch == 0 )
+            ++entry.slot->m_contentTransactionEpoch;
+    }
+    bool unlocked = false;
+    const auto unlock = [&]()
+    {
+        if ( unlocked )
+            return;
+        unlocked = true;
+        m_compositeMigrationInProgress = false;
+        target->m_compositeMigrationInProgress = false;
+        for ( const auto& entry : entries )
+        {
+            wxWinUISlot& slot = *entry.slot;
+            slot.m_contentTransactionInProgress = false;
+            // Content identity did not change. Loaded callbacks raised while
+            // the root was moving still concern this exact generation.
+            if ( slot.m_contentLoadedDuringTransaction )
+                slot.m_contentLoaded = true;
+            slot.m_contentLoadedDuringTransaction = false;
+            slot.m_contentLoadedTransactionEpoch = 0;
+            slot.m_contentLoadedTransactionGeneration = 0;
+            if ( ++slot.m_contentTransactionEpoch == 0 )
+                ++slot.m_contentTransactionEpoch;
+        }
+    };
+    wxScopeGuard unlockGuard = wxMakeGuard(unlock);
+    wxUnusedVar(unlockGuard);
+
+    // Node extraction moves the already allocated registry entries. There
+    // must be no WinRT/user boundary between maps and lifetime publication.
+    const auto transferRegistry = [&](wxWinUITopLevelHost *from,
+                                      wxWinUITopLevelHost *to)
+    {
+        for ( const auto& entry : entries )
+        {
+            wxWindow * const window = entry.state->GetWindow();
+            if ( !window || entry.state->GetHost() != from ||
+                 from->FindSlot(window) != entry.slot )
+                continue; // destruction owns a retired identity
+            from->UnbindSlotWindow(*entry.slot);
+            from->ForgetSlotPointerOwners(entry.state);
+            from->m_dirty.erase(window);
+            to->m_slots.insert(from->m_slots.extract(window));
+            if ( entry.slot->m_isCompositeChild )
+                to->m_compositeSlots.insert(
+                    from->m_compositeSlots.extract(entry.slot));
+            gs_slotOwners.find(window)->second = to;
+            entry.state->RebindHost(to);
+        }
+        for ( const auto& entry : entries )
+        {
+            if ( entry.state->GetHost() == to &&
+                 entry.state->GetWindow() &&
+                 to->FindSlot(entry.state->GetWindow()) == entry.slot )
+                to->BindSlotWindow(*entry.slot);
+        }
+    };
+    const auto destinationHasAuthoritativeRetirement = [&]()
+    {
+        if ( !targetState || targetState->GetHost() != target ||
+             target->m_shuttingDown )
+            return false;
+        bool retired = false;
+        for ( const auto& entry : entries )
+        {
+            wxWindow * const window = entry.state->GetWindow();
+            if ( window && entry.state->GetHost() == target &&
+                 target->FindSlot(window) == entry.slot &&
+                 !entry.slot->m_deletePending &&
+                 entry.slot->m_contentGeneration == entry.contentGeneration &&
+                 window->GetParent() == entry.parent.get() &&
+                 window->GetHWND() == entry.hwnd &&
+                 wxWinUIMSWGetHwndGeneration(window, entry.hwnd) ==
+                     entry.hwndGeneration &&
+                 wxGetTopLevelParent(window) == target->m_tlw )
+                continue;
+            if ( !entry.state->IsValid() && entry.slot->m_deletePending &&
+                 entry.slot->m_disconnectPending &&
+                 entry.slot->m_deferredDisconnectHost == target )
+            {
+                retired = true;
+                continue;
+            }
+            return false;
+        }
+        return retired;
+    };
+    const auto restore = [&]()
+    {
+        // Only independent Canvas roots cross XamlRoot. Direct Items and
+        // ContentControl child mounts stay intact even during rollback.
+        for ( auto& entry : entries )
+        {
+            if ( !entry.attached || entry.slot->m_isCompositeChild ||
+                 entry.state->GetHost() != target ||
+                 !entry.state->GetWindow() || entry.slot->m_deletePending ||
+                 target->FindSlot(entry.state->GetWindow()) != entry.slot )
+                continue;
+            uint32_t index = 0;
+            if ( targetRoot.Children().IndexOf(entry.slot->m_container, index) )
+                targetRoot.Children().RemoveAt(index);
+            entry.attached = false;
+        }
+        if ( transferred && sourceState->GetHost() == this && !m_shuttingDown )
+        {
+            transferRegistry(target, this);
+            transferred = false;
+        }
+        if ( focusMigration && !focusMigration->committed )
+        {
+            if ( target->m_focusMigration == focusMigration )
+                target->m_focusMigration.reset();
+            focusMigration->destinationHost = sourceState;
+            focusMigration->destinationSlot = focusMigration->sourceSlot;
+            focusMigration->destinationContentGeneration =
+                focusMigration->sourceContentGeneration;
+        }
+        // Restore original sibling order, not pointer-map order.
+        std::sort(entries.begin(), entries.end(),
+                  [](const Entry& a, const Entry& b)
+                  { return a.sourceIndex < b.sourceIndex; });
+        for ( auto& entry : entries )
+        {
+            if ( !entry.detached || entry.slot->m_isCompositeChild ||
+                 entry.state->GetHost() != this ||
+                 !entry.state->GetWindow() || m_shuttingDown )
+                continue;
+            uint32_t index = 0;
+            if ( !sourceRoot.Children().IndexOf(entry.slot->m_container, index) )
+                sourceRoot.Children().InsertAt(
+                    std::min(entry.sourceIndex, sourceRoot.Children().Size()),
+                    entry.slot->m_container);
+            entry.detached = false;
+        }
+    };
+
+    bool succeeded = false;
+    try
+    {
+        for ( auto& entry : entries )
+        {
+            if ( entry.slot->m_isCompositeChild )
+                continue;
+            uint32_t index = 0;
+            if ( !sourceRoot.Children().IndexOf(entry.slot->m_container, index) )
+                winrt::throw_hresult(E_UNEXPECTED);
+            entry.detached = true;
+            sourceRoot.Children().RemoveAt(index);
+            if ( !current(this) )
+                winrt::throw_hresult(E_ABORT);
+        }
+        if ( focusMigration )
+        {
+            focusMigration->destinationHost = targetState;
+            focusMigration->destinationSlot = focusMigration->sourceSlot;
+            focusMigration->destinationContentGeneration =
+                focusMigration->sourceContentGeneration;
+            target->m_focusMigration = focusMigration;
+        }
+        transferred = true;
+        transferRegistry(this, target);
+        if ( !current(target) )
+            winrt::throw_hresult(E_ABORT);
+        for ( auto& entry : entries )
+        {
+            if ( entry.slot->m_isCompositeChild )
+                continue;
+            // Set before Append: a synchronous callback can throw after the
+            // collection has already accepted this element.
+            entry.attached = true;
+            targetRoot.Children().Append(entry.slot->m_container);
+#ifdef WXWINUI_TEST_SUPPORT
+            auto attachedHook = std::move(gs_testSlotAttachedHook);
+            if ( attachedHook )
+                attachedHook(entry.state->GetWindow());
+#endif
+            if ( !current(target) &&
+                 !destinationHasAuthoritativeRetirement() )
+                winrt::throw_hresult(E_ABORT);
+        }
+        succeeded = true;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("composite subtree migration", e);
+    }
+    catch ( ... )
+    {
+        // This boundary reports failure to wxWindowMSW::Reparent(), which
+        // owns the matching wx/USER32 rollback. Rethrowing here would bypass
+        // that half of the transaction. Retired destination graphs need the
+        // same causal settlement as an HRESULT failure, not an early detach.
+        wxLogWarning("wxWinUI: composite subtree migration callback raised "
+                     "a C++ exception; settling the reparent transaction");
+    }
+    if ( !succeeded )
+    {
+        if ( transferred )
+        {
+            if ( destinationHasAuthoritativeRetirement() ||
+                 ((!sourceState || sourceState->GetHost() != this) &&
+                  current(target)) )
+            {
+                // B's retirement may already own a popup debt, or A may no
+                // longer exist. Finish ALL independent roots before accepting
+                // the newer topology. A Close from the first root's Loaded
+                // must not strand later roots, including a logically retired
+                // parent whose physical graph still awaits a child receipt.
+                try
+                {
+                    for ( auto& entry : entries )
+                    {
+                        if ( entry.slot->m_isCompositeChild )
+                            continue;
+                        uint32_t index = 0;
+                        if ( !targetRoot.Children().IndexOf(
+                                 entry.slot->m_container, index) )
+                        {
+                            entry.attached = true;
+                            targetRoot.Children().Append(entry.slot->m_container);
+                        }
+                        if ( !current(target) &&
+                             !destinationHasAuthoritativeRetirement() )
+                            winrt::throw_hresult(E_ABORT);
+                    }
+                    succeeded = true;
+                }
+                catch ( ... )
+                {
+                    // No rollback can relocate B's outstanding physical debt
+                    // or recreate a destroyed source host. A native failure
+                    // of this terminal publication is not partial success.
+                    wxLogError("wxWinUI: failed to finish the authoritative "
+                               "destination composite graph");
+                    std::terminate();
+                }
+            }
+        }
+    }
+    if ( !succeeded )
+    {
+        try { restore(); }
+        catch ( ... )
+        {
+            // Keeping a graph with no authoritative native owner is not a
+            // recoverable partial success.
+            std::terminate();
+        }
+    }
+    unlock();
+    InvalidateStructure();
+    target->InvalidateStructure();
+    MarkAllDirty();
+    target->MarkAllDirty();
+
+    if ( succeeded && focusMigration && !focusMigration->committed )
+    {
+        wxWindow * const focused = focusMigration->window.get();
+        if ( focused && target->FindSlot(focused) &&
+             HasFocusMigrationNativeAuthority(focusMigration, target) )
+        {
+            const WXHWND authority = reinterpret_cast<WXHWND>(::GetFocus());
+            focusMigration->transportNativeAuthority = authority;
+            focusMigration->transportNativeAuthorityGeneration =
+                wxWinUIMSWGetNativeHwndGeneration(authority);
+            focusMigration->preparedNativeReparentBoundaryActive = false;
+            focusMigration->preparedReparentId = 0;
+            unsigned long long continuationGeneration = 0;
+            if ( focusMigration->sourceHost == targetState )
+            {
+                // Source shutdown handed this exact arbiter to B. Reserve
+                // its new intent before the same-host continuation commits.
+                if ( ++target->m_focusIntentGeneration == 0 )
+                    ++target->m_focusIntentGeneration;
+                target->ClearDeferredFocusRequest();
+                continuationGeneration = target->m_focusIntentGeneration;
+                focusMigration->sourceFocusIntentGeneration =
+                    continuationGeneration;
+            }
+            target->FocusSlotImpl(focused, FocusOrigin::MigrationContinuation,
+                                 focusMigration->previous.get(),
+                                 continuationGeneration, true);
+        }
+        else
+            AbortFocusMigration(focusMigration, true);
+    }
+    return succeeded;
+}
+
 bool wxWinUITopLevelHost::MigrateSlotToCurrentTLW(wxWindow *window)
 {
     OperationGuard hostOperation(this);
 
+    if ( m_compositeMigrationInProgress )
+        return false;
+
     wxWinUISlot * const oldSlot = FindSlot(window);
     if ( !oldSlot )
         return false;
+    if ( oldSlot->m_isCompositeChild || oldSlot->m_compositeContentExtension ||
+         HasCompositeChildren(*oldSlot) )
+    {
+        wxWinUISlot *root = oldSlot;
+        while ( root->m_isCompositeChild )
+        {
+            const auto parent = root->m_compositeOwner.lock();
+            root = parent && parent->GetHost() == this
+                ? FindSlot(parent->GetWindow()) : nullptr;
+            if ( !root )
+                return false;
+        }
+        return MigrateCompositeSubtree(root->m_window);
+    }
     wxWinUISlot::OperationGuard oldSlotOperation(oldSlot);
     const std::shared_ptr<wxWinUISlotLifetime> oldState =
         oldSlot->m_lifetime;
@@ -5937,7 +7038,7 @@ bool wxWinUITopLevelHost::MigrateSlotToCurrentTLW(wxWindow *window)
         logicalFocusWasActive =
             logicalFocusWasCandidate &&
             wxWinUIFocusIsInside(
-                oldSlot->m_container, GetXamlRoot());
+                oldSlot->GetPresentationRoot(), GetXamlRoot());
         deferredFocusWasPending =
             m_deferredFocusRequest.target == oldState &&
             m_deferredFocusRequest.intentGeneration ==
@@ -6083,7 +7184,7 @@ bool wxWinUITopLevelHost::MigrateSlotToCurrentTLW(wxWindow *window)
                 const bool sourceStillFocused =
                     HasNativeFocusAuthority() &&
                     wxWinUIFocusIsInside(
-                        oldSlot->m_container, GetXamlRoot());
+                        oldSlot->GetPresentationRoot(), GetXamlRoot());
                 AbortFocusMigration(
                     focusMigration, !sourceStillFocused);
                 return FindSlotOwner(window) == target;
@@ -6748,12 +7849,27 @@ bool wxWinUITopLevelHost::MigrateSlotToCurrentTLW(wxWindow *window)
     return true;
 }
 
-void wxWinUITopLevelHost::HandleReparent(wxWindow *subtreeRoot)
+bool wxWinUITopLevelHost::HandleReparent(wxWindow *subtreeRoot)
 {
     OperationGuard operation(this);
 
     if ( !subtreeRoot || m_shuttingDown )
-        return;
+        return true;
+    if ( m_compositeMigrationInProgress )
+        return false;
+
+    if ( wxGetTopLevelParent(subtreeRoot) != m_tlw )
+    {
+        for ( const auto& entry : m_slots )
+        {
+            if ( (entry.first == subtreeRoot ||
+                  subtreeRoot->IsDescendant(entry.first)) &&
+                 (entry.second->m_isCompositeChild ||
+                  entry.second->m_compositeContentExtension ||
+                  HasCompositeChildren(*entry.second)) )
+                return MigrateCompositeSubtree(subtreeRoot);
+        }
+    }
 
     // Reparenting a native container moves all of its slotted descendants.
     // Snapshot first because a cross-TLW migration mutates m_slots.
@@ -6790,6 +7906,8 @@ void wxWinUITopLevelHost::HandleReparent(wxWindow *subtreeRoot)
         InvalidateStructure();
         MarkDirty(window);
     }
+    // Ordinary slots retain their historical deferred retry contract.
+    return true;
 }
 
 
@@ -7823,8 +8941,8 @@ void wxWinUITopLevelHost::ApplyXamlPointerCursor(
             for ( const auto& item : m_slots )
             {
                 wxWinUISlot * const slot = item.second;
-                if ( slot && slot->m_container &&
-                     node == slot->m_container )
+                if ( slot && slot->GetPresentationRoot() &&
+                     node == slot->GetPresentationRoot() )
                 {
                     if ( ApplySlotPointerCursor(
                              slot->m_lifetime, emitSetCursorEvent,
@@ -7953,8 +9071,8 @@ bool wxWinUITopLevelHost::RefreshPointerCursorAtLastPoint(
                 for ( const auto& item : m_slots )
                 {
                     wxWinUISlot * const slot = item.second;
-                    if ( slot && slot->m_container &&
-                         node == slot->m_container )
+                    if ( slot && slot->GetPresentationRoot() &&
+                         node == slot->GetPresentationRoot() )
                     {
                         const bool applied = ApplySlotPointerCursor(
                             slot->m_lifetime, emitSetCursorEvent, epoch, true);
@@ -8258,7 +9376,7 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
             wxWinUIMaybeInjectHandlerFault();
 #endif // WXWINUI_TEST_SUPPORT
             const auto boxed = winrt::box_value(std::move(handler));
-            slot.m_container.AddHandler(routedEvent, boxed,
+            slot.GetPresentationRoot().AddHandler(routedEvent, boxed,
                                         true /* handledEventsToo */);
             slot.m_routedHandlers.emplace_back(routedEvent, boxed);
 #ifdef WXWINUI_TEST_SUPPORT
@@ -8273,9 +9391,17 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
         {
             wxWinUITopLevelHost * const host = state->GetHost();
             const auto container =
-                sender.try_as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
+                sender.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
             if ( !host || !container )
                 return;
+
+            if ( !host->m_compositeSlots.empty() )
+            {
+                const auto source = e.OriginalSource().try_as<DependencyObject>();
+                const wxWinUISlot * const owner = host->FindSlotForVisual(source);
+                if ( owner && owner->m_lifetime != state )
+                    return;
+            }
 
             host->OnSlotPointer(state, container, e, kind);
         };
@@ -8374,7 +9500,7 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
                         : nullptr;
                 if ( !callbackHost || !callbackWindow || !callbackSlot ||
                      callbackSlot->m_lifetime != state ||
-                     callbackSlot->m_container != sender )
+                     callbackSlot->GetPresentationRoot() != sender )
                 {
                     e.TryCancel();
                     return;
@@ -8382,6 +9508,10 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
 
                 OperationGuard hostOperation(callbackHost);
                 wxWinUISlot::OperationGuard slotOperation(callbackSlot);
+                const wxWinUISlot * const visualOwner =
+                    callbackHost->FindSlotForVisual(e.NewFocusedElement());
+                if ( visualOwner && visualOwner != callbackSlot )
+                    return;
                 const auto getCurrentWindow = [&]() -> wxWindow *
                 {
                     wxWinUITopLevelHost * const host = state->GetHost();
@@ -8390,7 +9520,7 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
                         host && window ? host->FindSlot(window) : nullptr;
                     return slot &&
                                    slot->m_lifetime == state &&
-                                   slot->m_container == sender
+                                   slot->GetPresentationRoot() == sender
                                ? window
                                : nullptr;
                 };
@@ -8446,7 +9576,7 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
                 if ( !allowed )
                     e.TryCancel();
             }));
-        slot.m_container.AddHandler(UIElement::GettingFocusEvent(), boxed,
+        slot.GetPresentationRoot().AddHandler(UIElement::GettingFocusEvent(), boxed,
                                     true /* handledEventsToo */);
         slot.m_routedHandlers.emplace_back(UIElement::GettingFocusEvent(),
                                            boxed);
@@ -8461,15 +9591,19 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
 #ifdef WXWINUI_TEST_SUPPORT
     wxWinUIMaybeInjectHandlerFault();
 #endif // WXWINUI_TEST_SUPPORT
-    slot.m_gotFocusToken = slot.m_container.GotFocus(
-        [state](IInspectable const& sender, RoutedEventArgs const&)
+    slot.m_gotFocusToken = slot.GetPresentationRoot().GotFocus(
+        [state](IInspectable const& sender, RoutedEventArgs const& e)
         {
             wxWinUITopLevelHost * const host = state->GetHost();
             if ( !host )
                 return;
 
             const auto container = sender.
-                try_as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
+                try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
+            const wxWinUISlot * const owner = host->FindSlotForVisual(
+                e.OriginalSource().try_as<DependencyObject>());
+            if ( owner && owner->m_lifetime != state )
+                return;
             host->OnXamlSlotGotFocus(state, container);
         });
 #ifdef WXWINUI_TEST_SUPPORT
@@ -8479,15 +9613,19 @@ void wxWinUITopLevelHost::BindSlotEvents(wxWinUISlot& slot)
 #ifdef WXWINUI_TEST_SUPPORT
     wxWinUIMaybeInjectHandlerFault();
 #endif // WXWINUI_TEST_SUPPORT
-    slot.m_lostFocusToken = slot.m_container.LostFocus(
-        [state](IInspectable const& sender, RoutedEventArgs const&)
+    slot.m_lostFocusToken = slot.GetPresentationRoot().LostFocus(
+        [state](IInspectable const& sender, RoutedEventArgs const& e)
         {
             wxWinUITopLevelHost * const host = state->GetHost();
             if ( !host )
                 return;
 
             const auto container = sender.
-                try_as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
+                try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
+            const wxWinUISlot * const owner = host->FindSlotForVisual(
+                e.OriginalSource().try_as<DependencyObject>());
+            if ( owner && owner->m_lifetime != state )
+                return;
             host->OnXamlSlotLostFocus(state, container);
         });
 #ifdef WXWINUI_TEST_SUPPORT
@@ -9218,7 +10356,7 @@ wxWinUITLWHostNotifyCaptureMutation(wxWindow *window)
 }
 
 
-WXDLLIMPEXP_CORE void wxWinUITLWHostNotifyReparent(wxWindow *window,
+WXDLLIMPEXP_CORE bool wxWinUITLWHostNotifyReparent(wxWindow *window,
                                                    wxWindow *oldTLW)
 {
 #if wxUSE_RICHTOOLTIP
@@ -9227,7 +10365,7 @@ WXDLLIMPEXP_CORE void wxWinUITLWHostNotifyReparent(wxWindow *window,
     // safe if closing a tip destroys windows reentrantly.
     wxWinUINotifyTeachingTipReparent(window);
 #endif
-    wxWinUITopLevelHost::HandleReparentAcrossHosts(window, oldTLW);
+    return wxWinUITopLevelHost::HandleReparentAcrossHosts(window, oldTLW);
 }
 
 WXDLLIMPEXP_CORE bool
@@ -9381,11 +10519,11 @@ void wxWinUITopLevelHost::UpdateFileAcceptanceForAll()
 }
 #endif
 
-void wxWinUITopLevelHost::HandleReparentAcrossHosts(wxWindow *subtreeRoot,
+bool wxWinUITopLevelHost::HandleReparentAcrossHosts(wxWindow *subtreeRoot,
                                                     wxWindow *oldTLW)
 {
     if ( !subtreeRoot )
-        return;
+        return true;
 
     wxWeakRef<wxWindow> subtree(subtreeRoot);
 
@@ -9412,14 +10550,18 @@ void wxWinUITopLevelHost::HandleReparentAcrossHosts(wxWindow *subtreeRoot,
     {
         wxWindow * const liveSubtree = subtree.get();
         if ( !liveSubtree || liveSubtree->IsBeingDeleted() )
-            return;
+            return true;
 
         if ( state )
         {
             if ( wxWinUITopLevelHost * const host = state->GetHost() )
-                host->HandleReparent(liveSubtree);
+            {
+                if ( !host->HandleReparent(liveSubtree) )
+                    return false;
+            }
         }
     }
+    return true;
 }
 
 bool wxWinUITopLevelHost::CanReparentSubtreeNow(wxWindow *subtreeRoot)
@@ -9451,6 +10593,11 @@ bool wxWinUITopLevelHost::CanReparentSubtreeNow(wxWindow *subtreeRoot)
                 }
 
                 const auto& gate = slot->m_disconnectGate;
+                if ( (slot->m_isCompositeChild ||
+                      slot->m_compositeContentExtension ||
+                      host->HasCompositeChildren(*slot)) &&
+                     !host->CanMigrateCompositeSubtreeNow(subtreeRoot) )
+                    return false;
                 if ( gate &&
                      (!gate->IsSatisfied() || gate->IsDegraded()) )
                 {
@@ -10166,8 +11313,8 @@ wxWinUITopLevelHost::ResolveDropSurface(const POINT& screen, wxWindow **seed)
                 for ( const auto& entry : m_slots )
                 {
                     wxWinUISlot* const slot = entry.second;
-                    if ( slot && slot->m_container &&
-                         current == slot->m_container )
+                    if ( slot && slot->GetPresentationRoot() &&
+                         current == slot->GetPresentationRoot() )
                     {
                         wxWindow* const window = slot->m_window;
                         if ( !window || window->IsBeingDeleted() ||
@@ -10402,7 +11549,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
     struct SlotSnapshot final
     {
         std::shared_ptr<wxWinUISlotLifetime> lifetime;
-        winrt::Microsoft::UI::Xaml::Controls::Grid container{ nullptr };
+        winrt::Microsoft::UI::Xaml::FrameworkElement container{ nullptr };
     };
 
     std::vector<SlotSnapshot> slotSnapshots;
@@ -10410,10 +11557,10 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
     for ( const auto& entry : m_slots )
     {
         wxWinUISlot * const slot = entry.second;
-        if ( slot && slot->m_lifetime && slot->m_container )
+        if ( slot && slot->m_lifetime && slot->GetPresentationRoot() )
         {
             slotSnapshots.push_back(
-                { slot->m_lifetime, slot->m_container });
+                { slot->m_lifetime, slot->GetPresentationRoot() });
         }
     }
 
@@ -10429,7 +11576,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
             if ( !window || !slot ||
                  snapshot.lifetime->GetHost() != this ||
                  slot->m_lifetime != snapshot.lifetime ||
-                 slot->m_container != snapshot.container ||
+                 slot->GetPresentationRoot() != snapshot.container ||
                  window->IsBeingDeleted() ||
                  !slot->m_visible ||
                  !slot->m_visibleRectPx.Contains(clientPoint) )

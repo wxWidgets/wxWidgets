@@ -1,6 +1,6 @@
 # Plan 111: Keep support documentation and feature evidence synchronized
 
-- Status: TODO
+- Status: IN PROGRESS — selected native-family rows reconciled; exhaustive manifest/generator and evidence checks still open
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -17,7 +17,24 @@ The user explicitly requested planning AND implementation. This is not permissio
 
 Run git diff --stat c5cf4677b9..HEAD -- <in-scope paths> and git status --short first. Reconcile relevant intervening changes instead of overwriting them. Read each target before editing.
 
-The published matrix/body still list rich TextCtrl styles, wxCB_SIMPLE, slider ticks/thumb length, date spin and calendar week numbers as absent even though code exists. Historical 50/927 counts are not current-head qualification.
+The published matrix/body historically listed rich TextCtrl styles, wxCB_SIMPLE,
+slider ticks/thumb length, date spin and calendar week numbers as absent even
+though code exists. Historical 50/927 counts are not current-head qualification.
+On 2026-10-04, the matrix's AUI, ListCtrl/filesystem and PropertyGrid rows were
+reconciled with their native projections and explicit open qualifications.
+DatePicker SPIN/dropdown and Calendar week-column/hit-test absence claims were
+also corrected against the source. The reproduced calendar convergence failure
+is corrected and passes the complete local date/calendar/layout selection in
+plan108 build87 (2,547 assertions / 51 cases); rapid physical scrolling and
+exhaustive parity remain unqualified. Other rows and PR prose
+still require feature-level reconciliation; this is not an exhaustive audit.
+
+The same pass removes stale no-implementation claims for RichEditBox formatting,
+the real persistent SIMPLE ComboBox topology and Slider ticks/selection/Thumb
+length. This is source-level reconciliation, not a new runtime/physical PASS:
+the matrix retains Experimental and the partial-format/template/popup caveats.
+Source anchors are `wxTextCtrl::SetStyle/GetStyle/SetDefaultStyle`,
+`wxComboBox::CreateSimplePeer`, and `wxSlider::SetTick/SetSelection/SetThumbLength`.
 
 ## Scope
 

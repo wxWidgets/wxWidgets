@@ -207,6 +207,11 @@ namespace wxGridPrivate { class DateParseParams; }
 // renderer for the cells containing dates only, without time component
 class WXDLLIMPEXP_ADV wxGridCellDateRenderer : public wxGridCellStringRenderer
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The native presentation reads the authoritative renderer parameters;
+    // table callbacks remain guarded by its model/lifetime transaction.
+    friend class wxWinUIGridProjection;
+#endif
 public:
     explicit wxGridCellDateRenderer(const wxString& outformat = wxString());
 
@@ -281,6 +286,9 @@ protected:
 // as the renderer for strings, except that it can implement GetMaxBestSize().
 class WXDLLIMPEXP_ADV wxGridCellChoiceRenderer : public wxGridCellStringRenderer
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIGridProjection;
+#endif
 public:
     explicit wxGridCellChoiceRenderer(const wxString& choices = wxString());
 

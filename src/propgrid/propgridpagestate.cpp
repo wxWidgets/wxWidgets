@@ -27,6 +27,9 @@
 #include "wx/propgrid/propgridpagestate.h"
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/private.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "propgridwinui.h"
+#endif
 #include "wx/private/windowlifetime.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
@@ -263,6 +266,12 @@ void wxPropertyGridPageState::InitNonCatMode()
 
 void wxPropertyGridPageState::DoClear()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_pPropGrid ? m_pPropGrid->m_winUIProjection : nullptr;
+    if ( projection ) projection->BeginRemoval(nullptr);
+    const auto nativeRemoval = wxMakeGuard([projection]()
+    { if ( projection ) projection->EndRemoval(); });
+#endif
     if ( m_pPropGrid && IsDisplayed() )
     {
         m_pPropGrid->ClearSelection(false);
@@ -2121,6 +2130,12 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     wxASSERT( item->GetParentState() == this );
 
     wxPropertyGrid* pg = GetGrid();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = pg ? pg->m_winUIProjection : nullptr;
+    if ( projection ) projection->BeginRemoval(item);
+    const auto nativeRemoval = wxMakeGuard([projection]()
+    { if ( projection ) projection->EndRemoval(); });
+#endif
 
     // Hover is a non-owning pointer. Clear it before any deferred deletion so
     // mouse-drag transactions and tooltip code cannot carry a property that

@@ -71,19 +71,19 @@ acquise.
 | `wxCheckBox` | WinUI `CheckBox` | Experimental | état/events couverts ; campagne physique |
 | `wxRadioButton`/`wxRadioBox` | WinUI natif/composite | Experimental | modèle et apparence couverts ; focus/RTL physique |
 | `wxCommandLinkButton` | composite WinUI | Generic/MSW fallback | pas de qualification publique complète |
-| `wxTextCtrl` | WinUI `TextBox`/`PasswordBox` | Experimental | suite publique encore rouge sur les cas d’injection ; limites rich text |
+| `wxTextCtrl` | WinUI `TextBox`/`PasswordBox`/`RichEditBox` selon les styles | Experimental | SetStyle/GetStyle/default style utilisent le document natif riche ; attributs non représentables signalés, parité exhaustive et entrée physique encore à qualifier |
 | `wxSearchCtrl` | WinUI `AutoSuggestBox` | Experimental | suite ciblée verte ; IME/UIA/menu physique |
 | `wxChoice` | WinUI `ComboBox` readonly | Experimental | modèle interne vert ; suite publique/entrée à fermer |
-| `wxComboBox` | WinUI `ComboBox` editable | Experimental | `wxCB_SIMPLE` non représenté distinctement |
+| `wxComboBox` | WinUI `ComboBox` editable ; `wxCB_SIMPLE` = TextBox et ListBox persistante | Experimental | topologie SIMPLE distincte et géométrie wx conservée ; crash du popup custom signalé par l'utilisateur non reproduit, entrée physique et parité exhaustive ouvertes |
 | `wxBitmapComboBox` | WinUI `ComboBox` + contenu bitmap | Experimental | modèle interne vert ; suite publique à fermer |
 | `wxListBox`/`wxCheckListBox` | WinUI `ListView`/`CheckBox` | Experimental | modèle stable vert ; réalisation XAML et entrée physique |
 | `wxGauge` | WinUI `ProgressBar` | Experimental | modèle interne vert ; apparence globale |
-| `wxSlider` | WinUI `Slider` | Experimental | API de ticks/labels partielles |
+| `wxSlider` | WinUI `Slider` avec projections ticks/labels/plage et dimension du Thumb natif | Experimental | SetTick/SetSelection/SetThumbLength implémentés ; variantes de templates, entrée physique et parité exhaustive à qualifier |
 | `wxScrollBar` | WinUI `ScrollBar` | Experimental | séquences internes vertes ; entrée physique |
 | `wxSpinButton`/`wxSpinCtrl`/double | RepeatButtons/`NumberBox` | Experimental | modèle interne vert ; clavier/locale physique |
-| `wxDatePickerCtrl` | WinUI `DatePicker` | Experimental | `wxDP_SPIN` utilise le dropdown |
+| `wxDatePickerCtrl` | WinUI `CalendarDatePicker` dropdown ou champs `NumberBox` SPIN, calendrier/ère et format locale conservés | Experimental | plan 108 : contrats date/locale/plage/valeur nulle automatisés ; gestes physiques et qualification exhaustive ouverts |
 | `wxTimePickerCtrl` | `TimePicker` transactionnel masqué + champs `NumberBox` H/M/S ordonnés selon la locale | Experimental | précision seconde, 12/24 h et ordre locale automatisés ; clavier, UIA et retrait physique du popup de période ouverts |
-| `wxCalendarCtrl` | WinUI `CalendarView` | Experimental | numéros de semaine non supportés |
+| `wxCalendarCtrl` | WinUI `CalendarView` avec colonne de semaines XAML | Experimental | hit-test semaines implémenté ; coalescence native corrigée, groupe date/calendrier/layout statique lot87 : 2547 assertions / 51 cas ; navigation physique rapide et parité exhaustive ouvertes |
 
 `wxLB_OWNERDRAW` et la famille d’extensions wxMSW
 `GetItem()`/`CreateLboxItem()`/`GetItemIndex()`/`GetItemRect()`/
@@ -107,8 +107,8 @@ sample n’active pas ses branches de personnalisation wxMSW sous
 | `wxChoicebook`/`wxListbook`/`wxTreebook` | composites | Supported Beta | suites dédiées vertes, dépendances natives conservées |
 | `wxToolbook` | generic + toolbar | Experimental | dépend de la gate physique toolbar |
 | `wxTreeCtrl` | WinUI `TreeView` | Supported Alpha | `wxTR_LINES_AT_ROOT`, `wxTR_ROW_LINES`, `wxTR_FULL_ROW_HIGHLIGHT` et `wxTR_TWIST_BUTTONS` non supportés |
-| `wxAuiNotebook` | custom/generic | Excluded | plan 014 |
-| `wxTreeListCtrl` | DataView generic | Generic/MSW fallback | plan 012 |
+| `wxAuiNotebook` | En-têtes WinUI `TabView`, pages et docking wx conservés | Experimental | plan 108 : gate `wx_winui_aui_native`, sélection/fermeture avec veto, géométrie, défilement, réordre et retrait réentrant ; multiline/art custom, gestes physiques et parité complète restent ouverts |
+| `wxTreeListCtrl` | DataView XAML natif si `wxUSE_NATIVE_DATAVIEWCTRL=ON` | Experimental | plan 108 : cases natives/UIA et modèles ; parité et interactions physiques ouvertes |
 
 ## Menus, chrome et dialogues
 
@@ -133,14 +133,19 @@ sample n’active pas ses branches de personnalisation wxMSW sous
 
 | Famille | Backend réel | Classe V0 | Suite prévue |
 |---|---|---|---|
-| Header/ListCtrl/ListView/virtual | generic GDI | Generic/MSW fallback | plan 012 |
-| DataView/List/Tree, TreeList | generic GDI | Generic/MSW fallback | plan 012 |
-| Grid, VListBox, HtmlListBox | generic/custom | Generic/MSW fallback | plan 012 |
-| ComboCtrl/OwnerDrawnCombo, Rearrange, EditableList | generic composites | Generic/MSW fallback | plan 012 |
+| ListCtrl/ListView/virtual | Modèle wx ; vrais conteneurs `ListViewItem`/`GridViewItem`, lignes report et sous-cellules XAML retenues, viewport borné | Experimental | plan 108 : gate `wx_winui_listctrl_native`, quatre vues et RTL, SelectionItem avec sélection wx hors viewport, objets/images conservés, colonnes, cases, événements/édition/lifetime ; Grid/Table/GridItem/TableItem, cellules virtuelles et focus/Tab/Invoke des en-têtes ; Value report via édition wx native et Selection globale avec notification UIAutomationCore MTA : lot95 statique 5739 assertions / 83 cas ; réordonnancement interactif, gestes physiques et clients UIA externes hors processus ouverts |
+| HeaderCtrl autonome | Modèle wx existant ; en-têtes Button/TextBlock/Image/FontIcon et marqueurs de réordonnancement XAML | Experimental | plan 108 : gate `wx_winui_headerctrl_native`, géométrie/ordre/scroll LTR-RTL, Invoke et retrait des providers, gestes wx/veto avec marqueurs natifs ; gestes physiques, accessibilité resize/reorder et clients UIA externes ouverts |
+| DataView/List/Tree, TreeList | XAML `ListView`/`ItemsStackPanel`, cellules et éditeurs text/choice/index/spin/date natifs ; rendu applicatif custom conservé | Experimental | plan 108 : gate `wx_winui_dataview_native`, en-têtes Thumb/UIA Transform, providers Grid/Table/Value/RangeValue et cellules virtualisées ; actualisation ciblée des valeurs, géométrie conservant les cellules et mise à jour locale des branches ; parité complète des éditeurs, gestes physiques, réordonnancement, D&D, sélection UIA cellulaire et clients UIA externes ouverts ; fallback generic si natif désactivé |
+| Grid | Modèle/transactions wxGrid existants ; cellules standard dont choice/enum/date/datetime, cases et en-têtes XAML réalisés selon le viewport ; custom Draw via image | Experimental | plan 108 : gate `wx_winui_grid_native`, axes/frozen/Update/veto/Mica et UIA Grid/Table/GridItem/TableItem automatisés ; identité des cellules virtualisées, headers et retrait réentrant testés ; noms UIA bruts du modèle ; Value/Selection, noms formatés, API/renderers restants, gestes physiques et clients UIA externes ouverts ; sans RTTI, compatibilité Draw pour toutes les cellules |
+| Scrollbars de fenêtres gérées par wx | Vrais `ScrollBar` XAML, template WinUI sans recoloration, indicateurs souris/tactile et masquage système ; modèle HWND conservé et création différée du host pour un contenu GDI seul | Experimental | gate `wx_winui_window_scrollbar_native` ; mises à jour sans invalidation du client ; fallback MSW pour régions HWND explicites, barres internes de contrôles natifs ou échec de création du host ; rendu/interaction physiques, DPI/HDR et clients UIA externes à qualifier |
+| VListBox, HtmlListBox | generic/custom | Generic/MSW fallback | plan 012 |
+| EditableList | Composite wx avec ListCtrl XAML, boutons natifs et éditeur wxTextCtrl natif | Experimental | plan 108 : commandes UIA, insertion/édition et destruction réentrante automatisées ; interaction physique et parité complète ouvertes |
+| ComboCtrl/OwnerDrawnCombo, Rearrange | generic composites | Generic/MSW fallback | plan 012 |
 | `wxCollapsiblePane` | generic composite | Excluded | layout/focus/pages mixtes non qualifiés |
-| `wxGenericDirCtrl`/`wxFileCtrl` | generic filesystem composite | Excluded | arbres/listes, D&D et dialogues non qualifiés |
-| PropertyGrid, filesystem composites | generic/custom | Excluded | plan 012 avant promotion |
-| AUI, Ribbon, RichText, STC, HTML | generic/custom | Excluded | plan 014 |
+| `wxGenericDirCtrl`/`wxFileCtrl` | Composite filesystem wx, TreeView et ListView/GridView XAML natifs | Experimental | plan 108 : gate `wx_winui_file_browsers_native`, filtres/valeurs/sélection/reconstruction et retrait ; D&D, shells, performances sur grands dossiers et interactions physiques non qualifiés |
+| PropertyGrid | Noms/valeurs/catégories XAML et aperçus permanents TextBox/ComboBox/CheckBox/NumberBox/date ; modèle et éditeurs wx conservés ; custom wxPGCellRenderer via image | Experimental | plan 108 : gate `wx_winui_propgrid_native`, sélection/veto/retrait, géométrie et focus ; SPIN natif et format wx exact, lot86c statique 2807 assertions / 37 cas ; images avancées OnCustomPaint, variantes restantes, UIA complet, shared/install et gestes physiques ouverts |
+| Ribbon | generic par défaut ; conteneurs/commandes WinUI avec Toolkit expérimental opt-in | Experimental (Toolkit) / Excluded (generic) | plan 108 : gates natifs, axes horizontal/vertical et défilement automatisés ; reste de la matrice API, bibliothèques partagées, installation et qualification physique ouverts |
+| AUI hors en-têtes Notebook natifs, RichText, STC, HTML | generic/custom | Excluded | plan 014 ; en-têtes AuiNotebook expérimentaux décrits séparément ci-dessus |
 | WebView, Media, GLCanvas, ActiveX | HWND/COM/swapchain | Excluded | spikes du plan 015 |
 | wxDC/GDI+/D2D/printing | MSW conservé | Generic/MSW fallback | backend de dessin, pas un pair XAML |
 | Taskbar/notifications/splash/tip | MSW/generic | Excluded | plan 013 |
@@ -151,18 +156,24 @@ implicite sous le bridge.
 
 ## Limites API publiées
 
-- `wxTextCtrl` ne fournit pas de rich text réel pour `wxTE_RICH/RICH2`.
-  `SetStyle()`/`GetStyle()` ne sont pas implémentés, et le style passé à
-  `SetDefaultStyle()` n’est pas appliqué au peer.
-- `wxComboBox` conserve `wxCB_SIMPLE` dans les flags mais ne possède pas de
-  rendu simple distinct.
+- `wxTextCtrl` utilise `RichEditBox` pour le texte riche ; `SetStyle()`,
+  `GetStyle()` et `SetDefaultStyle()` accèdent au document natif. Cela ne
+  garantit pas la représentation de tous les attributs wxTextAttr ; les
+  affectations partiellement supportées renvoient false.
+- `wxComboBox` possède une topologie `wxCB_SIMPLE` distincte (TextBox et
+  ListBox persistante) ; elle n'est pas un dropdown gardé invisible. La
+  validation physique du popup custom signalé dans Showcase reste ouverte.
 - `wxListBox`/`wxCheckListBox` ne supportent pas `wxLB_OWNERDRAW`,
   `GetItem()` ni l’apparence personnalisée par item.
-- `wxSlider::SetTick()` et `SetThumbLength()` sont des no-op ; labels,
-  sélection de plage et taille de thumb ne sont pas supportés.
-- `wxDatePickerCtrl` représente `wxDP_SPIN` par le sélecteur dropdown.
-- `wxCalendarCtrl` n’expose ni colonne de semaines ni
-  `wxCAL_HITTEST_WEEK`.
+- `wxSlider` implémente les ticks, labels, sélection de plage et taille du
+  Thumb ; la résolution et la validation des templates natifs restent un
+  contrat de compatibilité, pas une garantie pour tout template arbitraire.
+- `wxDatePickerCtrl` distingue maintenant les champs `NumberBox` de
+  `wxDP_SPIN` du `CalendarDatePicker` dropdown ; la qualification physique
+  reste ouverte.
+- `wxCalendarCtrl` expose la colonne de semaines et `wxCAL_HITTEST_WEEK`,
+  avec reprise après layout natif incomplet ; la suite locale date/calendrier
+  passe au lot87, sans qualification physique ni promesse de parité globale.
 - `wxNotebook` implémente `wxNB_TOP` avec le `TabView` natif et
   `wxNB_BOTTOM`/`wxNB_LEFT`/`wxNB_RIGHT`, `wxNB_MULTILINE` et
   `wxNB_NOPAGETHEME` avec une surface étendue dans le même slot. Seul

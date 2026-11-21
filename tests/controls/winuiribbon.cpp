@@ -2948,6 +2948,9 @@ TEST_CASE("WinUIRibbon::GalleryOverflowPublicScrolling",
     // necessarily exercises the public scroll model.
     gallery->SetSize(minimum);
     REQUIRE(gallery->Realize());
+    INFO("Gallery wx size: " << gallery->GetSize()
+         << "; native slot mounted: "
+         << (wxWinUITopLevelHost::FindSlotOwner(gallery) != nullptr));
     CHECK(gallery->GetUpButtonState() ==
           wxRIBBON_GALLERY_BUTTON_DISABLED);
     CHECK_FALSE(gallery->ScrollLines(-1));
@@ -3417,9 +3420,13 @@ TEST_CASE("WinUIRibbon::NativeButtonBarLayoutPublicationTransaction",
     const auto rootBeforeResize = GetNativeButtonBarRoot(bar);
     state->requestedSize = bar->GetSize() + wxSize(137, 21);
     state->resizeNextInstall = true;
-    // A synchronous native Content callback changes client geometry after
-    // candidate measurement. The bounded repair must use that newest size.
-    (void)bar->Realize();
+    // A real model change starts the next publication. Realize() alone may
+    // retain an already-current composite projection and its UIA providers.
+    // The synchronous native Content callback changes client geometry after
+    // candidate measurement; bounded repair must use that newest size.
+    const int resizedWidth = bar->FromDIP(420);
+    bar->SetButtonTextMinWidth(
+        ID_RIBBON_BUTTON_NORMAL, resizedWidth, resizedWidth);
     REQUIRE(state->resizedInsideTransaction);
     CHECK_FALSE(state->resizeNextInstall);
     DrainDispatch();

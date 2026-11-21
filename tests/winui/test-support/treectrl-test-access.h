@@ -40,6 +40,10 @@ class WXDLLIMPEXP_CORE wxWinUITreeCtrlTestAccess final
         size_t peerUpdateCount = 0;
         size_t fullRefreshCount = 0;
         size_t modelGrowthCount = 0;
+        size_t bitmapConversionCount = 0;
+        size_t cacheHitCount = 0;
+        size_t imageCacheEntryCount = 0;
+        size_t imageCacheBytes = 0;
     };
 
     struct MeasuredItemParts
@@ -105,7 +109,8 @@ class WXDLLIMPEXP_CORE wxWinUITreeCtrlTestAccess final
     static wxString GetPeerItemText(const wxTreeCtrl &control,
                                     const wxTreeItemId &item);
     static std::uintptr_t GetPeerItemImageIdentity(const wxTreeCtrl &control,
-                                                   const wxTreeItemId &item);
+                                                   const wxTreeItemId &item,
+                                                   bool stateImage = false);
     static bool RefreshForScale(wxTreeCtrl &control, double scale);
     static bool GetPeerItemImageProjection(const wxTreeCtrl &control,
                                            const wxTreeItemId &item,

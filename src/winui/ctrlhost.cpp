@@ -51,6 +51,7 @@
 #include "wx/evtloop.h"
 #include "wx/module.h"
 #include "wx/settings.h"
+#include "wx/sysopt.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/panel.h"
 #include "wx/dialog.h"
@@ -177,10 +178,20 @@ wxWinUIResolveShellThemePolicy(wxWinUIAppTheme appTheme,
 
 wxWinUIShellThemePolicy wxWinUIGetShellThemePolicy()
 {
-    return wxWinUIResolveShellThemePolicy(
+    wxWinUIShellThemePolicy policy = wxWinUIResolveShellThemePolicy(
         gs_winuiAppTheme,
         wxWinUISystemUsesDarkMode(),
         wxWinUIIsHighContrastActive());
+#if wxUSE_SYSTEM_OPTIONS
+    // Some applications mix XAML with GDI surfaces whose alpha contract is
+    // incompatible with a frame extended over the whole client. Allow a solid
+    // client without changing the app theme, native peers or desktop settings.
+    // ApplyWindowBackdrop() owns the ordered retirement of transparent markers
+    // and DWM material; callers must not retract just the extended frame.
+    policy.allowBackdrop = policy.allowBackdrop &&
+        !wxSystemOptions::IsFalse("winui.backdrop");
+#endif
+    return policy;
 }
 
 // Applications paint the surfaces they own themselves using the colours
@@ -2535,6 +2546,47 @@ bool wxWinUIControlHost::SetContent(
     const winrt::Microsoft::UI::Xaml::UIElement& element,
     const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget)
 {
+    return SetContentImpl(element, semanticTarget, nullptr, nullptr);
+}
+
+bool wxWinUIControlHost::SetContentInParent(
+    const winrt::Microsoft::UI::Xaml::UIElement& element,
+    const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+    wxWindow *compositeOwner,
+    const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount)
+{
+    if ( !compositeOwner || !contentMount )
+        return false;
+    return SetContentImpl(element, semanticTarget, compositeOwner, contentMount);
+}
+
+bool wxWinUIControlHost::SetContentInParentDirect(
+    const winrt::Microsoft::UI::Xaml::Controls::Control& element,
+    const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+    wxWindow *compositeOwner,
+    const std::shared_ptr<wxWinUIDirectCompositeMount>& mount)
+{
+    if ( !element || !compositeOwner || !mount )
+        return false;
+    return SetContentImpl(element, semanticTarget, compositeOwner, nullptr, mount);
+}
+
+bool wxWinUIControlHost::SetCompositeContentExtension(
+    const std::shared_ptr<wxWinUICompositeContentExtension>& extension)
+{
+    // This never creates a slot or changes its physical retirement gate.
+    wxWinUITopLevelHost * const host = m_window
+        ? wxWinUITopLevelHost::FindSlotOwner(m_window) : nullptr;
+    return host && host->SetSlotCompositeContentExtension(m_window, extension);
+}
+
+bool wxWinUIControlHost::SetContentImpl(
+    const winrt::Microsoft::UI::Xaml::UIElement& element,
+    const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+    wxWindow *compositeOwner,
+    const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount,
+    const std::shared_ptr<wxWinUIDirectCompositeMount>& directMount)
+{
     if ( !m_window || wxWinUIIsPhysicalDisconnectPublicationPoisoned() )
         return false;
 
@@ -2592,11 +2644,17 @@ bool wxWinUIControlHost::SetContent(
         }
     }
 
-    if ( !host->RegisterSlot(
-             m_window,
-             element,
-             semanticTarget,
-             m_physicalDisconnectGate) )
+    wxWinUISlot * const published = directMount
+        ? host->RegisterSlotInParentDirect(
+            m_window, element.as<winrt::Microsoft::UI::Xaml::Controls::Control>(),
+            semanticTarget, compositeOwner, directMount, m_physicalDisconnectGate)
+        : compositeOwner
+        ? host->RegisterSlotInParent(m_window, element, semanticTarget,
+                                    compositeOwner, contentMount,
+                                    m_physicalDisconnectGate)
+        : host->RegisterSlot(m_window, element, semanticTarget,
+                             m_physicalDisconnectGate);
+    if ( !published )
     {
         // Failed OR superseded swap. In the ordinary failure case the slot
         // still shows the old content; in the reentrant case a nested call
@@ -2808,6 +2866,24 @@ bool wxWinUIWindowUsesBackdrop(const wxWindow *win)
     }
 
     return false;
+}
+
+bool wxWinUIShouldUseOpaquePaintBuffer(const wxWindow *win)
+{
+    if ( !win || win->GetBackgroundStyle() != wxBG_STYLE_PAINT ||
+         !wxWinUIWindowUsesBackdrop(win) ||
+         wxWinUITopLevelHost::FindSlotOwner(win) )
+    {
+        return false;
+    }
+
+#if wxUSE_SPLITTER
+    // The splitter renderer deliberately leaves the Mica surface visible in
+    // its sash. It is a shell surface, not an opaque GDI content control.
+    if ( win->IsKindOf(CLASSINFO(wxSplitterWindow)) )
+        return false;
+#endif
+    return true;
 }
 
 void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor)
@@ -3216,7 +3292,7 @@ void wxWinUIControlHost::ForceRender()
     // arbitrary application callbacks and destroy this wx control (and this
     // wxWinUIControlHost), so nothing below may dereference `this`.
     const wxWeakRef<wxWindow> alive(m_window);
-    const auto container = slot->GetContainer();
+    const auto container = slot->GetPresentationRoot();
     try
     {
         // A newly replaced content tree can otherwise be measured against
@@ -3231,7 +3307,7 @@ void wxWinUIControlHost::ForceRender()
                 : nullptr;
         wxWinUISlot * const current =
             currentHost ? currentHost->FindSlot(liveWindow) : nullptr;
-        if ( !current || current->GetContainer() != container )
+        if ( !current || current->GetPresentationRoot() != container )
             return;
         container.InvalidateMeasure();
         container.InvalidateArrange();
@@ -3731,6 +3807,153 @@ static void wxWinUIApplyWindowBackdropPass(wxWindow *tlw)
     }
 }
 
+namespace
+{
+
+// The island's GDI backing surface is above the classic HWNDs. Erasing it
+// can overwrite pixels those HWNDs already painted without invalidating their
+// update regions. Keep paint-owned pixels out of the erase clip, then repair
+// only the classic clients actually erased. Never repaint synchronously from
+// inside WM_ERASEBKGND.
+struct wxWinUIIslandEraseInvalidation
+{
+    HWND island;
+    HWND root;
+    HDC dc;
+    RECT erasedScreen;
+    bool preserveOpaque;
+    bool failed = false;
+
+    static bool HasExplicitRegion(HWND hwnd)
+    {
+        RECT region;
+        // An absent HWND region returns ERROR. Any explicit region, even a
+        // rectangular one, stays on the erase-and-repair path: its origin is
+        // the window, not the client, and a bounding box cannot prove opacity.
+        return ::GetWindowRgnBox(hwnd, &region) != ERROR;
+    }
+
+    static bool ClientScreenRect(HWND hwnd, RECT& rect)
+    {
+        if ( !::GetClientRect(hwnd, &rect) )
+            return false;
+        ::MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT *>(&rect), 2);
+        if ( rect.left > rect.right ) std::swap(rect.left, rect.right);
+        if ( rect.top > rect.bottom ) std::swap(rect.top, rect.bottom);
+        return !::IsRectEmpty(&rect);
+    }
+
+    static BOOL CALLBACK Visit(HWND hwnd, LPARAM parameter)
+    {
+        auto& state =
+            *reinterpret_cast<wxWinUIIslandEraseInvalidation *>(parameter);
+        if ( hwnd == state.island || ::IsChild(state.island, hwnd) ||
+             !::IsWindowVisible(hwnd) )
+        {
+            return TRUE;
+        }
+
+        wxWindow * const window = wxFindWinFromHandle((WXHWND)hwnd);
+        if ( !window || window->IsBeingDeleted() ||
+             window->GetHWND() != (WXHWND)hwnd ||
+             wxWinUITopLevelHost::FindSlotOwner(window) )
+        {
+            // EnumChildWindows still visits native descendants of a XAML
+            // slot owner (for example a notebook's classic page contents).
+            return TRUE;
+        }
+
+        if ( state.preserveOpaque &&
+             (!wxWinUIShouldUseOpaquePaintBuffer(window) ||
+              HasExplicitRegion(hwnd)) )
+        {
+            return TRUE;
+        }
+
+        RECT visible;
+        RECT affected;
+        if ( !ClientScreenRect(hwnd, visible) ||
+             !::IntersectRect(&affected, &visible, &state.erasedScreen) )
+        {
+            return TRUE;
+        }
+
+        // A child's HWND can extend outside a scrolled/hidden viewport.
+        // Limit the repair to the part visible through all parent clients.
+        for ( HWND ancestor = ::GetParent(hwnd); ancestor;
+              ancestor = ::GetParent(ancestor) )
+        {
+            if ( state.preserveOpaque && HasExplicitRegion(ancestor) )
+                return TRUE;
+            RECT client;
+            RECT clipped;
+            if ( !ClientScreenRect(ancestor, client) ||
+                 !::IntersectRect(&clipped, &affected, &client) )
+            {
+                return TRUE;
+            }
+            affected = clipped;
+            if ( ancestor == state.root )
+                break;
+        }
+
+        RECT islandRect = affected;
+        ::MapWindowPoints(nullptr, state.island,
+                          reinterpret_cast<POINT *>(&islandRect), 2);
+        if ( !::RectVisible(state.dc, &islandRect) )
+            return TRUE;
+
+        if ( state.preserveOpaque )
+        {
+            if ( ::ExcludeClipRect(state.dc, islandRect.left, islandRect.top,
+                                   islandRect.right, islandRect.bottom) == ERROR )
+            {
+                state.failed = true;
+                return FALSE;
+            }
+            return TRUE;
+        }
+
+        ::MapWindowPoints(nullptr, hwnd,
+                          reinterpret_cast<POINT *>(&affected), 2);
+        ::InvalidateRect(hwnd, &affected, FALSE);
+        return TRUE;
+    }
+};
+
+bool wxWinUIVisitClassicsForIslandErase(HWND island, HDC dc,
+                                      const RECT& client, bool preserveOpaque)
+{
+    RECT clip;
+    const int type = ::GetClipBox(dc, &clip);
+    if ( type == ERROR )
+        return false;
+    if ( type == NULLREGION )
+        return true;
+    RECT erased;
+    if ( !::IntersectRect(&erased, &client, &clip) )
+        return true;
+
+    // WM_ERASEBKGND uses client coordinates. Mapping both RECT corners in
+    // one call preserves USER32's mirrored-client convention under RTL.
+    ::MapWindowPoints(island, nullptr,
+                      reinterpret_cast<POINT *>(&erased), 2);
+    const HWND root = ::GetAncestor(island, GA_ROOT);
+    if ( !root )
+        return false;
+
+    // For a complex clip this rectangle is a bounded over-approximation;
+    // RectVisible additionally rejects clients wholly inside clip holes.
+    // No entire-tree Refresh, erase request, synchronous paint, or retry is
+    // scheduled: ordinary WM_PAINT consumes the affected native regions.
+    wxWinUIIslandEraseInvalidation state{island, root, dc, erased, preserveOpaque};
+    ::EnumChildWindows(root, wxWinUIIslandEraseInvalidation::Visit,
+                       reinterpret_cast<LPARAM>(&state));
+    return !state.failed;
+}
+
+} // namespace
+
 bool wxWinUIEraseIslandBackground(HWND island, HDC hdc)
 {
     if ( !island || !hdc )
@@ -3748,26 +3971,54 @@ bool wxWinUIEraseIslandBackground(HWND island, HDC hdc)
     // Under a DWM material the wx windows fill black and let Windows
     // substitute the material for it: the island must do exactly the same or
     // its (transparent) content shows the uninitialized redirection surface.
-    if ( tlwHwnd && ::GetPropW(tlwHwnd, wxWinUIBackdropTransparentProp) )
+    const bool backdrop =
+        tlwHwnd && ::GetPropW(tlwHwnd, wxWinUIBackdropTransparentProp);
+    HBRUSH brush;
+    if ( backdrop )
     {
-        ::FillRect(hdc, &rc, (HBRUSH)::GetStockObject(BLACK_BRUSH));
-        return true;
+        brush = (HBRUSH)::GetStockObject(BLACK_BRUSH);
     }
-
-    wxWindow * const tlw =
-        tlwHwnd ? wxFindWinFromHandle((WXHWND)tlwHwnd) : nullptr;
-    wxColour colour = tlw ? tlw->GetBackgroundColour() : wxColour();
-    if ( !colour.IsOk() )
-        colour = wxWinUIBackgroundColour(wxWinUIGetShellThemePolicy());
-
-    const HBRUSH brush = ::CreateSolidBrush(
-        RGB(colour.Red(), colour.Green(), colour.Blue()));
+    else
+    {
+        wxWindow * const tlw =
+            tlwHwnd ? wxFindWinFromHandle((WXHWND)tlwHwnd) : nullptr;
+        wxColour colour = tlw ? tlw->GetBackgroundColour() : wxColour();
+        if ( !colour.IsOk() )
+            colour = wxWinUIBackgroundColour(wxWinUIGetShellThemePolicy());
+        brush = ::CreateSolidBrush(
+            RGB(colour.Red(), colour.Green(), colour.Blue()));
+    }
     if ( !brush )
         return false;
 
-    ::FillRect(hdc, &rc, brush);
-    ::DeleteObject(brush);
-    return true;
+    // Recompute exclusions from current visible geometry on every erase.
+    // Hidden or moved clients therefore cannot shield their former pixels.
+    // Without a restorable DC, retain the existing erase-and-repair path.
+    int savedDC = ::SaveDC(hdc);
+    if ( savedDC &&
+         !wxWinUIVisitClassicsForIslandErase(island, hdc, rc, true) )
+    {
+        const bool restored = ::RestoreDC(hdc, savedDC) != 0;
+        savedDC = 0;
+        if ( !restored )
+        {
+            if ( !backdrop )
+                ::DeleteObject(brush);
+            return false;
+        }
+    }
+
+    RECT effectiveClip;
+    const bool erased = ::GetClipBox(hdc, &effectiveClip) == NULLREGION ||
+                        ::FillRect(hdc, &rc, brush) != 0;
+    if ( erased )
+        wxWinUIVisitClassicsForIslandErase(island, hdc, rc, false);
+    // Repair observes the reduced clip above; restoring it first would
+    // unnecessarily invalidate paint-owned pixels which were never erased.
+    const bool restored = !savedDC || ::RestoreDC(hdc, savedDC) != 0;
+    if ( !backdrop )
+        ::DeleteObject(brush);
+    return erased && restored;
 }
 
 void wxWinUIApplyWindowBackdrop(wxWindow *tlw)

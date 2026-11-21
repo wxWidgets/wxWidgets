@@ -297,7 +297,7 @@ private:
 };
 
 // include the real wxDataViewRenderer declaration for the native ports
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     // in the generic implementation there is no real wxDataViewRenderer, all
     // renderers are custom so it's the same as wxDataViewCustomRenderer and
     // wxDataViewCustomRendererBase derives from wxDataViewRendererBase directly
@@ -458,7 +458,7 @@ private:
 
 // include the declaration of all the other renderers to get the real
 // wxDataViewCustomRenderer from which we need to inherit below
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     // because of the different renderer classes hierarchy in the generic
     // version, as explained above, we can include the header defining
     // wxDataViewRenderer only here and not before wxDataViewCustomRendererBase
@@ -501,11 +501,13 @@ public:
 private:
     long    m_data;
     long    m_min,m_max;
+    friend class wxWinUIDataViewImpl;
+    wxDECLARE_CLASS(wxDataViewSpinRenderer);
 };
 
 #endif // wxUSE_SPINCTRL
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
 
 // ----------------------------------------------------------------------------
 // wxDataViewChoiceRenderer
@@ -534,6 +536,7 @@ public:
 private:
     wxArrayString m_choices;
     wxString      m_data;
+    wxDECLARE_CLASS(wxDataViewChoiceRenderer);
 };
 
 // ----------------------------------------------------------------------------
@@ -555,12 +558,15 @@ public:
 #if wxUSE_ACCESSIBILITY
     virtual wxString GetAccessibleDescription() const override;
 #endif // wxUSE_ACCESSIBILITY
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceByIndexRenderer);
 };
 
 
 #endif // generic version
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL) || defined(__WXGTK__)
 
 // ----------------------------------------------------------------------------
 // wxDataViewDateRenderer
@@ -591,6 +597,7 @@ private:
     wxString FormatDate() const;
 
     wxDateTime    m_date;
+    wxDECLARE_CLASS(wxDataViewDateRenderer);
 };
 #else // !wxUSE_DATEPICKCTRL
 typedef wxDataViewTextRenderer wxDataViewDateRenderer;

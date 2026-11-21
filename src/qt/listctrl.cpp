@@ -473,7 +473,12 @@ public:
                 QItemSelectionModel *selection = m_view->selectionModel();
                 const QItemSelectionModel::SelectionFlag flag =
                     info.m_state & wxLIST_STATE_SELECTED
-                        ? QItemSelectionModel::Select
+                        // Selecting through QItemSelectionModel bypasses the
+                        // view's SingleSelection policy. Replace the previous
+                        // selection explicitly, including its notifications.
+                        ? (m_view->selectionMode() == QAbstractItemView::SingleSelection
+                            ? QItemSelectionModel::ClearAndSelect
+                            : QItemSelectionModel::Select)
                         : QItemSelectionModel::Deselect;
                 selection->select(modelIndex,  flag|QItemSelectionModel::Rows);
                 if ( !self )

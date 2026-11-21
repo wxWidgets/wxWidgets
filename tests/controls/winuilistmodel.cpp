@@ -24,6 +24,7 @@
 #include <winrt/base.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <vector>
 
@@ -606,12 +607,13 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
                   wxFRAME_NO_TASKBAR | wxFRAME_TOOL_WINDOW);
     wxListBox list(&frame, wxID_ANY, wxPoint(10, 10),
                    wxSize(300, 200));
+    frame.SetClientSize(frame.FromDIP(wxSize(360, 260)));
+    list.SetSize(list.FromDIP(wxSize(300, 200)));
     list.Append("zero");
     list.Append("one");
     list.Append("two");
 
     const double scale = list.GetDPIScaleFactor();
-    const int expectedItemHeightPixels = list.GetCharHeight() + 2;
     double itemHeightDips = 0.0;
     double itemMinHeightDips = -1.0;
     double itemActualHeightDips = 0.0;
@@ -619,9 +621,8 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
         list, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr, &itemHeightDips, &itemMinHeightDips,
         &itemActualHeightDips));
-    CHECK(itemHeightDips ==
-          Approx(expectedItemHeightPixels / scale).margin(0.01));
-    CHECK(itemMinHeightDips == Approx(0.0));
+    // Native rows must be content-sized, not forced to the MSW font metric.
+    CHECK(std::isnan(itemHeightDips));
 
     frame.ShowWithoutActivating();
     REQUIRE(WaitFor("WinUI ListBox first item layout", [&]()
@@ -637,7 +638,7 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
 
     wxRect firstRect;
     wxRect thirdRect;
-    REQUIRE(WaitFor("WinUI ListBox compact item metrics", [&]()
+    REQUIRE(WaitFor("WinUI ListBox native item metrics", [&]()
     {
         frame.Update();
         return list.GetItemRect(0, firstRect) &&
@@ -652,7 +653,6 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
             list.GetDPI().x,
             list.GetDPI().y,
             list.GetCharHeight(),
-            expectedItemHeightPixels,
             itemHeightDips,
             itemMinHeightDips,
             itemActualHeightDips,
@@ -664,14 +664,15 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
             thirdRect.y,
             thirdRect.width,
             thirdRect.height);
-    CHECK(firstRect.height == Approx(expectedItemHeightPixels).margin(1));
-    CHECK(thirdRect.height == Approx(expectedItemHeightPixels).margin(1));
-    CHECK(itemActualHeightDips == Approx(itemHeightDips).margin(0.01));
-    CHECK(thirdRect.GetBottom() < 190);
+    CHECK(itemActualHeightDips >= 32.0);
+    CHECK(firstRect.height == Approx(itemActualHeightDips * scale).margin(1));
+    CHECK(thirdRect.height == Approx(firstRect.height).margin(1));
+    CHECK(thirdRect.GetBottom() < list.GetClientSize().y - 1);
     // This is the same physical wx client point used by the public
     // ListBoxTestCase. ClientPointToElement performs the physical-to-DIP
     // conversion; callers must not pre-convert it with FromDIP().
-    CHECK(list.HitTest(wxPoint(290, 190)) == wxNOT_FOUND);
+    CHECK(list.HitTest(wxPoint(list.GetClientSize().x - 2,
+                               list.GetClientSize().y - 1)) == wxNOT_FOUND);
     CHECK(list.HitTest(wxPoint(-1, -1)) == wxNOT_FOUND);
 
     for ( int n = 3; n < 100; ++n )

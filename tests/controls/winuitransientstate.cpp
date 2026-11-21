@@ -14,16 +14,23 @@
 #include "wx/frame.h"
 #include "wx/button.h"
 #include "wx/dialog.h"
+#include "wx/dcbuffer.h"
+#include "wx/splitter.h"
 #include "wx/settings.h"
+#if wxUSE_SYSTEM_OPTIONS
+#include "wx/sysopt.h"
+#endif
 #include "wx/weakref.h"
 #include "wx/winui/private/appearance.h"
 #include "appearance-test-access.h"
 #include "wx/winui/private/shelltheme.h"
 #include "shell-theme-test-access.h"
+#include "opaque-paint-test-access.h"
 #include "wx/winui/private/transient.h"
 #include "owner-backdrop-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/winui.h"
+#include <uxtheme.h>
 
 #include <cstdint>
 #include <functional>
@@ -545,6 +552,39 @@ struct HighContrastSeamGuard
     }
 };
 
+#if wxUSE_SYSTEM_OPTIONS
+struct BackdropOptionGuard
+{
+    explicit BackdropOptionGuard(const wxString& value)
+        : previous(wxSystemOptions::GetOption("winui.backdrop"))
+    {
+        wxSystemOptions::SetOption("winui.backdrop", value);
+    }
+
+    ~BackdropOptionGuard()
+    {
+        // Empty restores an unset option too: HasOption() uses the string,
+        // not the mere existence of a cached entry in wxSystemOptions.
+        wxSystemOptions::SetOption("winui.backdrop", previous);
+    }
+
+    wxString previous;
+};
+
+struct ScopedAppTheme
+{
+    explicit ScopedAppTheme(wxWinUIAppTheme theme)
+        : previous(wxWinUIGetAppTheme())
+    {
+        wxWinUISetAppTheme(theme);
+    }
+
+    ~ScopedAppTheme() { wxWinUISetAppTheme(previous); }
+
+    wxWinUIAppTheme previous;
+};
+#endif
+
 wxWinUITransientRect TestRect(long left = 10,
                                long top = 20,
                                long width = 100,
@@ -1054,6 +1094,175 @@ TEST_CASE("WinUITransient::ShellThemePolicyMatrix",
     CHECK_FALSE(policy.dark);
     CHECK_FALSE(policy.allowBackdrop);
 }
+
+#if wxUSE_SYSTEM_OPTIONS
+TEST_CASE("WinUITransient::BackdropOptionPreservesThemeAndColours",
+          "[WinUITransient][shell-theme][backdrop-option]")
+{
+    BackdropOptionGuard option("0");
+    wxFrame frame(nullptr, wxID_ANY, "shell-backdrop-option");
+    wxButton child(&frame, wxID_ANY, "native child");
+    REQUIRE(frame.GetHWND());
+    REQUIRE(child.GetHWND());
+    const WXHWND root = frame.GetHWND();
+    const WXHWND nativeChild = child.GetHWND();
+    const wxColour applicationBackground(17, 31, 47);
+    const wxColour childBackground(91, 47, 23);
+    REQUIRE(frame.SetBackgroundColour(applicationBackground));
+    REQUIRE(child.SetBackgroundColour(childBackground));
+
+    FakeBackdropModel backdropModel;
+    backdropModel.windows[root] = { true, 1, TestRect(), false };
+    BackdropSeamGuard backdropGuard(backdropModel);
+    FakeShellThemeModel model;
+    model.backdropResult = true;
+    ShellThemeSeamGuard nativeGuard(model);
+    HighContrastSeamGuard highContrast(
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
+    ScopedAppTheme theme(wxWinUIAppTheme::Dark);
+    model.immersiveDarkCalls.clear();
+    model.backdropCalls.clear();
+    model.extendFrameCalls.clear();
+    model.markerCalls.clear();
+    model.controlThemeCalls.clear();
+
+    wxWinUIApplyWindowBackdrop(&frame);
+
+    REQUIRE(model.immersiveDarkCalls.size() == 1);
+    CHECK(model.immersiveDarkCalls.back() == std::make_pair(root, true));
+    REQUIRE(model.backdropCalls.size() == 1);
+    CHECK(model.backdropCalls.back() == std::make_pair(root, false));
+    REQUIRE(model.extendFrameCalls.size() == 1);
+    CHECK(model.extendFrameCalls.back() == std::make_pair(root, false));
+    REQUIRE(model.markerCalls.size() == 2);
+    CHECK_FALSE(model.backdropActive[root]);
+    CHECK_FALSE(model.frameExtended[root]);
+    CHECK_FALSE(model.markerActive[root]);
+    CHECK_FALSE(model.markerActive[nativeChild]);
+    REQUIRE(model.controlThemeCalls.size() == 2);
+    CHECK(model.controlThemeState[root].dark);
+    CHECK(model.controlThemeState[nativeChild].dark);
+    CHECK_FALSE(model.controlThemeState[root].highContrast);
+    CHECK_FALSE(model.controlThemeState[nativeChild].highContrast);
+    CHECK(frame.GetBackgroundColour() == applicationBackground);
+    CHECK(frame.InheritsBackgroundColour());
+    CHECK(child.GetBackgroundColour() == childBackground);
+    CHECK(child.InheritsBackgroundColour());
+    CHECK(backdropModel.setSizeCalls == 0);
+    CHECK(backdropModel.posted.empty());
+
+    wxSystemOptions::SetOption("winui.backdrop", 1);
+    wxWinUIApplyWindowBackdrop(&frame);
+    REQUIRE(model.backdropActive[root]);
+    REQUIRE(model.frameExtended[root]);
+    REQUIRE(model.markerActive[root]);
+    REQUIRE(model.markerActive[nativeChild]);
+
+    // Observe the existing prepare/commit ordering at the native DWM write,
+    // not just the eventual state. No real window is resized by priming.
+    bool checkedCleanupOrder = false;
+    model.reenterSetBackdropHwnd = root;
+    model.reenterSetBackdrop = [&]()
+    {
+        checkedCleanupOrder = true;
+        CHECK_FALSE(model.markerActive[root]);
+        CHECK_FALSE(model.markerActive[nativeChild]);
+    };
+    wxSystemOptions::SetOption("winui.backdrop", 0);
+    wxWinUIApplyWindowBackdrop(&frame);
+    CHECK(checkedCleanupOrder);
+    CHECK_FALSE(model.backdropActive[root]);
+    CHECK_FALSE(model.frameExtended[root]);
+    CHECK_FALSE(model.markerActive[root]);
+    CHECK_FALSE(model.markerActive[nativeChild]);
+    CHECK(model.controlThemeState[root].dark);
+    CHECK(model.controlThemeState[nativeChild].dark);
+    CHECK(frame.GetBackgroundColour() == applicationBackground);
+    CHECK(child.GetBackgroundColour() == childBackground);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
+    const auto sizeCallsAfterDisable = backdropModel.setSizeCalls;
+    backdropModel.RunAll();
+    CHECK(backdropModel.setSizeCalls == sizeCallsAfterDisable);
+
+    // Enabling the material option cannot override the accessibility policy.
+    wxSystemOptions::SetOption("winui.backdrop", 1);
+    highContrast.Set(wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
+    wxWinUIApplyWindowBackdrop(&frame);
+    CHECK_FALSE(model.backdropActive[root]);
+    CHECK_FALSE(model.frameExtended[root]);
+    CHECK_FALSE(model.markerActive[root]);
+    CHECK_FALSE(model.markerActive[nativeChild]);
+    CHECK_FALSE(model.controlThemeState[root].dark);
+    CHECK(model.controlThemeState[root].highContrast);
+    CHECK(model.controlThemeState[nativeChild].highContrast);
+    CHECK(frame.GetBackgroundColour() == applicationBackground);
+    CHECK(child.GetBackgroundColour() == childBackground);
+
+    // The unset/default policy is unchanged: normal Dark mode permits Mica.
+    wxSystemOptions::SetOption("winui.backdrop", wxEmptyString);
+    highContrast.Set(wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
+    wxWinUIApplyWindowBackdrop(&frame);
+    CHECK(model.backdropActive[root]);
+    CHECK(model.frameExtended[root]);
+    CHECK(model.controlThemeState[root].dark);
+    wxSystemOptions::SetOption("winui.backdrop", 0);
+    wxWinUIApplyWindowBackdrop(&frame);
+}
+
+TEST_CASE("WinUITransient::BackdropOptionCleanupFailureRetainsMaterial",
+          "[WinUITransient][shell-theme][backdrop-option][failure]")
+{
+    BackdropOptionGuard option("0");
+    wxFrame frame(nullptr, wxID_ANY, "shell-backdrop-option-cleanup");
+    wxButton child(&frame, wxID_ANY, "native child");
+    REQUIRE(frame.GetHWND());
+    REQUIRE(child.GetHWND());
+    const WXHWND root = frame.GetHWND();
+    const WXHWND nativeChild = child.GetHWND();
+    FakeBackdropModel backdropModel;
+    backdropModel.windows[root] = { true, 1, TestRect(), false };
+    BackdropSeamGuard backdropGuard(backdropModel);
+    FakeShellThemeModel model;
+    model.backdropResult = true;
+    ShellThemeSeamGuard nativeGuard(model);
+    HighContrastSeamGuard highContrast(
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
+    ScopedAppTheme theme(wxWinUIAppTheme::Dark);
+    wxSystemOptions::SetOption("winui.backdrop", 1);
+    wxWinUIApplyWindowBackdrop(&frame);
+    REQUIRE(model.backdropActive[root]);
+    REQUIRE(model.frameExtended[root]);
+    REQUIRE(model.markerActive[root]);
+    REQUIRE(model.markerActive[nativeChild]);
+
+    model.backdropCalls.clear();
+    model.extendFrameCalls.clear();
+    model.markerCalls.clear();
+    model.rejectMarkerDisableHwnd = root;
+    wxSystemOptions::SetOption("winui.backdrop", 0);
+    wxWinUIApplyWindowBackdrop(&frame);
+    CHECK(model.backdropCalls.empty());
+    CHECK(model.extendFrameCalls.empty());
+    REQUIRE(model.markerCalls.size() == 2);
+    CHECK(model.markerCalls[0] == std::make_pair(root, false));
+    CHECK(model.markerCalls[1] == std::make_pair(nativeChild, false));
+    CHECK(model.backdropActive[root]);
+    CHECK(model.frameExtended[root]);
+    CHECK(model.markerActive[root]);
+    CHECK_FALSE(model.markerActive[nativeChild]);
+    CHECK(model.controlThemeState[root].dark);
+    CHECK_FALSE(model.controlThemeState[root].highContrast);
+
+    model.rejectMarkerDisableHwnd = nullptr;
+    wxWinUIApplyWindowBackdrop(&frame);
+    CHECK_FALSE(model.backdropActive[root]);
+    CHECK_FALSE(model.frameExtended[root]);
+    CHECK_FALSE(model.markerActive[root]);
+    CHECK_FALSE(model.markerActive[nativeChild]);
+    CHECK_FALSE(wxWinUIOwnerBackdropTestAccess::GetBackdropSnapshot(root).inFlight);
+    backdropModel.RunAll();
+}
+#endif // wxUSE_SYSTEM_OPTIONS
 
 TEST_CASE("WinUITransient::ShellThemeHotMessages",
           "[WinUITransient][shell-theme][winui-009]")
@@ -1649,6 +1858,272 @@ TEST_CASE("WinUITransient::AppThemeNotifiesClassicChildren",
     wxWinUISetAppTheme(previousTheme);
     CHECK(frameNotifications == 2);
     CHECK(childNotifications == 2);
+}
+
+TEST_CASE("WinUITransient::OpaqueGdiPaintPreservesMicaAndBlackPixels",
+          "[WinUITransient][opaque-gdi]")
+{
+    const bool rtl = GENERATE(false, true);
+    const bool partial = GENERATE(false, true);
+    CAPTURE(rtl, partial);
+    wxFrame frame(nullptr, wxID_ANY, "opaque GDI on Mica", wxDefaultPosition,
+                  wxSize(240, 160));
+    wxWindow canvas(&frame, wxID_ANY, wxPoint(10, 10), wxSize(100, 80));
+    canvas.SetBackgroundStyle(wxBG_STYLE_PAINT);
+    if ( rtl )
+        canvas.SetLayoutDirection(wxLayout_RightToLeft);
+    wxButton native(&frame, wxID_ANY, "native", wxPoint(120, 10));
+    native.SetBackgroundStyle(wxBG_STYLE_PAINT);
+    const HWND hwnd = reinterpret_cast<HWND>(canvas.GetHWND());
+    REQUIRE(::SetPropW(hwnd, L"wxWinUIBackdropTransparent",
+                       reinterpret_cast<HANDLE>(1)));
+    REQUIRE(::SetPropW(reinterpret_cast<HWND>(native.GetHWND()),
+                       L"wxWinUIBackdropTransparent",
+                       reinterpret_cast<HANDLE>(1)));
+    REQUIRE(wxWinUIShouldUseOpaquePaintBuffer(&canvas));
+    CHECK_FALSE(wxWinUIShouldUseOpaquePaintBuffer(&native));
+
+#if wxUSE_SPLITTER
+    wxSplitterWindow splitter(&frame, wxID_ANY);
+    REQUIRE(::SetPropW(reinterpret_cast<HWND>(splitter.GetHWND()),
+                       L"wxWinUIBackdropTransparent",
+                       reinterpret_cast<HANDLE>(1)));
+    CHECK_FALSE(wxWinUIShouldUseOpaquePaintBuffer(&splitter));
+    splitter.Hide();
+#endif
+
+    struct Observation
+    {
+        WXHWND target = nullptr;
+        int count = 0;
+        bool validDib = false;
+        bool rtl = false;
+        RGBQUAD black{};
+        RGBQUAD red{};
+        wxRect bounds;
+        wxRect targetBounds;
+    } observation;
+    observation.target = canvas.GetHWND();
+    observation.rtl = rtl;
+    const auto observer = [](WXHWND window, WXHDC, void *bufferArg,
+                             const wxRect& bounds, void *context)
+    {
+        auto& state = *static_cast<Observation *>(context);
+        if ( window != state.target )
+            return;
+        ++state.count;
+        state.bounds = bounds;
+        const auto buffer = reinterpret_cast<HPAINTBUFFER>(bufferArg);
+        RGBQUAD *bits = nullptr;
+        int stride = 0;
+        RECT target{};
+        if ( FAILED(::GetBufferedPaintBits(buffer, &bits, &stride)) || !bits ||
+             FAILED(::GetBufferedPaintTargetRect(buffer, &target)) )
+        {
+            return;
+        }
+        state.targetBounds = wxRect(target.left, target.top,
+                                    target.right - target.left,
+                                    target.bottom - target.top);
+        if ( state.rtl )
+            target = {100 - target.right, target.top,
+                      100 - target.left, target.bottom};
+        POINT points[] = { {state.rtl ? 93 : 6, 7}, {state.rtl ? 81 : 18, 7} };
+        RGBQUAD pixels[2]{};
+        for ( unsigned i = 0; i != 2; ++i )
+        {
+            const LONG x = points[i].x - target.left;
+            const LONG y = points[i].y - target.top;
+            if ( x < 0 || x >= target.right - target.left ||
+                 y < 0 || y >= target.bottom - target.top )
+            {
+                return;
+            }
+            pixels[i] = bits[y * stride + x];
+        }
+        state.black = pixels[0];
+        state.red = pixels[1];
+        state.validDib = true;
+    };
+    struct ObserverGuard
+    {
+        ~ObserverGuard() { wxWinUIOpaquePaintTestAccess::SetObserver(nullptr, nullptr); }
+    } observerGuard;
+    wxWinUIOpaquePaintTestAccess::SetObserver(observer, &observation);
+
+    bool draw = false;
+    bool buffered = false;
+    bool cacheReused = false;
+    bool measureNative = false;
+    bool nativeBoundsValid = false;
+    unsigned int nativePaintCount = 0;
+    RECT nativeBounds{};
+    RECT nativeUpdateRect{};
+    RECT nativeClip{};
+    RECT nativeLogicalBounds{};
+    POINT nativeDevicePoints[2]{};
+    POINT nativeOrigin{};
+    int nativeClipType = ERROR;
+    canvas.Bind(wxEVT_PAINT, [&](wxPaintEvent&)
+    {
+        if ( measureNative )
+            ::GetUpdateRect(hwnd, &nativeUpdateRect, FALSE);
+        wxPaintDC first(&canvas);
+        wxPaintDC second(&canvas);
+        cacheReused = first.GetHDC() == second.GetHDC();
+        if ( !draw )
+            return;
+        const HDC paintDC = reinterpret_cast<HDC>(first.GetHDC());
+        if ( measureNative )
+        {
+            ++nativePaintCount;
+            nativeClipType = ::GetClipBox(paintDC, &nativeClip);
+            nativeOrigin = {};
+            ::LPtoDP(paintDC, &nativeOrigin, 1);
+            nativeBoundsValid =
+                ::SetBoundsRect(paintDC, nullptr, DCB_ENABLE | DCB_RESET) != 0;
+        }
+        const auto paint = [partial](wxDC& dc)
+        {
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.SetBrush(*wxBLACK_BRUSH);
+            if ( partial )
+                dc.DrawRectangle(4, 5, 12, 12);
+            else
+                dc.DrawRectangle(0, 0, 100, 80);
+            dc.SetBrush(*wxRED_BRUSH);
+            dc.DrawRectangle(16, 5, 12, 12);
+        };
+        if ( buffered )
+        {
+            wxBufferedPaintDC buffer(&canvas);
+            paint(buffer);
+        }
+        else
+        {
+            paint(first);
+        }
+        if ( measureNative && nativeBoundsValid )
+        {
+            // The buffered DC has now published through its usual wxMSW path.
+            // Measure that path independently of the opaque-paint observer,
+            // including its existing RTL bitmap coordinate rounding.
+            ::GdiFlush();
+            nativeLogicalBounds = {};
+            const UINT flags = ::GetBoundsRect(paintDC, &nativeLogicalBounds, 0);
+            POINT points[] = {{nativeLogicalBounds.left, nativeLogicalBounds.top},
+                              {nativeLogicalBounds.right, nativeLogicalBounds.bottom}};
+            nativeBoundsValid = (flags & DCB_SET) == DCB_SET &&
+                                ::LPtoDP(paintDC, points, 2);
+            if ( nativeBoundsValid )
+            {
+                nativeDevicePoints[0] = points[0];
+                nativeDevicePoints[1] = points[1];
+                nativeBounds = {wxMin(points[0].x, points[1].x),
+                                wxMin(points[0].y, points[1].y),
+                                wxMax(points[0].x, points[1].x),
+                                wxMax(points[0].y, points[1].y)};
+            }
+        }
+    });
+    frame.Show();
+    wxYield();
+
+    const RECT invalid = partial ? RECT{4, 5, 28, 17} : RECT{0, 0, 100, 80};
+    const RECT physicalInvalid = rtl
+        ? RECT{100 - invalid.right, invalid.top, 100 - invalid.left, invalid.bottom}
+        : invalid;
+    for ( const bool useBuffer : {false, true} )
+    {
+        CAPTURE(useBuffer);
+        buffered = useBuffer;
+        draw = true;
+        // The backdrop policy follows native ancestors. Suspend both markers
+        // so this baseline uses an ordinary BeginPaint HDC, not our buffer.
+        // Restore them even if a baseline assertion aborts the test.
+        struct BackdropMarkersGuard
+        {
+            BackdropMarkersGuard(HWND childHwnd, HWND parentHwnd)
+                : child(childHwnd), parent(parentHwnd),
+                  childMarker(::RemovePropW(childHwnd, L"wxWinUIBackdropTransparent")),
+                  parentMarker(::RemovePropW(parentHwnd, L"wxWinUIBackdropTransparent"))
+            {
+            }
+            ~BackdropMarkersGuard()
+            {
+                if ( parentMarker )
+                    ::SetPropW(parent, L"wxWinUIBackdropTransparent", parentMarker);
+                if ( childMarker )
+                    ::SetPropW(child, L"wxWinUIBackdropTransparent", childMarker);
+            }
+            HWND child;
+            HWND parent;
+            HANDLE childMarker;
+            HANDLE parentMarker;
+        };
+        observation.count = 0;
+        nativePaintCount = 0;
+        nativeBoundsValid = false;
+        measureNative = true;
+        {
+            BackdropMarkersGuard markers(
+                hwnd, reinterpret_cast<HWND>(frame.GetHWND()));
+            REQUIRE_FALSE(wxWinUIShouldUseOpaquePaintBuffer(&canvas));
+            REQUIRE(::RedrawWindow(hwnd, &invalid, nullptr,
+                                   RDW_INVALIDATE | RDW_UPDATENOW));
+            CHECK(cacheReused);
+            CHECK(observation.count == 0);
+            REQUIRE(nativePaintCount == 1);
+            REQUIRE(nativeBoundsValid);
+        }
+        measureNative = false;
+        REQUIRE(wxWinUIShouldUseOpaquePaintBuffer(&canvas));
+        CAPTURE(nativeUpdateRect.left, nativeUpdateRect.top,
+                nativeUpdateRect.right, nativeUpdateRect.bottom);
+        CAPTURE(nativeClipType, nativeClip.left, nativeClip.top,
+                nativeClip.right, nativeClip.bottom);
+        CAPTURE(nativeOrigin.x, nativeOrigin.y,
+                nativeLogicalBounds.left, nativeLogicalBounds.top,
+                nativeLogicalBounds.right, nativeLogicalBounds.bottom);
+        CAPTURE(nativeDevicePoints[0].x, nativeDevicePoints[0].y,
+                nativeDevicePoints[1].x, nativeDevicePoints[1].y,
+                nativeBounds.left, nativeBounds.top,
+                nativeBounds.right, nativeBounds.bottom);
+        RECT clippedNative{};
+        REQUIRE(::IntersectRect(&clippedNative, &nativeBounds, &physicalInvalid));
+        const wxRect nativePaintBounds(clippedNative.left, clippedNative.top,
+                                       clippedNative.right - clippedNative.left,
+                                       clippedNative.bottom - clippedNative.top);
+        CAPTURE(nativePaintBounds);
+        if ( !rtl || !useBuffer )
+            CHECK(nativePaintBounds ==
+                  (partial ? wxRect(rtl ? 72 : 4, 5, 24, 12)
+                           : wxRect(0, 0, 100, 80)));
+        observation.count = 0;
+        observation.validDib = false;
+        REQUIRE(::RedrawWindow(hwnd, &invalid, nullptr,
+                               RDW_INVALIDATE | RDW_UPDATENOW));
+        CAPTURE(observation.targetBounds, observation.bounds);
+        CHECK(cacheReused);
+        REQUIRE(observation.count == 1);
+        REQUIRE(observation.validDib);
+        CHECK(observation.black.rgbRed == 0);
+        CHECK(observation.black.rgbGreen == 0);
+        CHECK(observation.black.rgbBlue == 0);
+        CHECK(observation.black.rgbReserved == 255);
+        CHECK(observation.red.rgbRed == 255);
+        CHECK(observation.red.rgbGreen == 0);
+        CHECK(observation.red.rgbBlue == 0);
+        CHECK(observation.red.rgbReserved == 255);
+        CHECK(observation.bounds == nativePaintBounds);
+    }
+    draw = false;
+    observation.count = 0;
+    REQUIRE(::RedrawWindow(hwnd, &invalid, nullptr,
+                           RDW_INVALIDATE | RDW_UPDATENOW));
+    CHECK(observation.count == 0);
+    // Buffering must not remove the material marker or change the app policy.
+    CHECK(wxWinUIWindowUsesBackdrop(&canvas));
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3

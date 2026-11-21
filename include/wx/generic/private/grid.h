@@ -367,6 +367,11 @@ public:
 
     virtual bool IsFrozen() const { return false; }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true,
+                 const wxRect* rect = nullptr) override;
+#endif
+
 protected:
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
 
@@ -382,6 +387,9 @@ public:
     wxGridRowLabelWindow(wxGrid *parent)
       : wxGridSubwindow(parent)
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
     }
 
 private:
@@ -412,6 +420,9 @@ public:
     wxGridColLabelWindow(wxGrid *parent)
         : wxGridSubwindow(parent)
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
     }
 
 private:
@@ -442,6 +453,9 @@ public:
     wxGridCornerLabelWindow(wxGrid *parent)
         : wxGridSubwindow(parent)
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
     }
 
 private:
@@ -1378,6 +1392,13 @@ TryGetValueAsDate(wxDateTime& result,
                   const DateParseParams& params,
                   const wxGrid& grid,
                   int row, int col);
+
+// Pure parsing part shared by the generic renderer and native presentations
+// which must guard model callbacks before using their returned string value.
+bool
+TryParseDate(wxDateTime& result,
+             const DateParseParams& params,
+             const wxString& text);
 
 #endif // wxUSE_DATETIME
 

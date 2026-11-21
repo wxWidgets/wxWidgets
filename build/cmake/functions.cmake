@@ -1195,7 +1195,13 @@ function(wx_add name group)
     # only and never initialize XAML.
     if(NOT APP_DLL AND NOT APP_PLUGIN AND NOT APP_CONSOLE AND
             COMMAND wx_winui3_deploy_runtime)
-        wx_winui3_deploy_runtime(${target_name})
+        # GUI targets share an output directory. The experimental Ribbon tree
+        # must therefore use one merged PRI writer even for non-Ribbon samples.
+        if(wxWINUI3_EXPERIMENTAL_RIBBON_TOOLKIT)
+            wx_winui3_deploy_toolkit_runtime(${target_name})
+        else()
+            wx_winui3_deploy_runtime(${target_name})
+        endif()
     endif()
 
     if(group STREQUAL Tests AND NOT APP_NO_CTEST)

@@ -43,53 +43,24 @@ public:
     bool OnMeasureItem(size_t *width, size_t *height) override
     {
         // Renderer metrics and FromDIP() both change when the list moves to
-        // another monitor. Keep the text margin in the same pixel space as
-        // the checkbox drawn below.
+        // another monitor. Keep the public owner-draw item metrics in the
+        // same pixel space as the control.
         UpdateMetrics();
         return wxListBoxItemBase<wxCheckListBox>::OnMeasureItem(
             width, height);
     }
 
-    bool OnDrawItem(wxDC& dc,
-                    const wxRect& rect,
-                    wxODAction action,
-                    wxODStatus status) override
+    bool OnDrawItem(wxDC& WXUNUSED(dc),
+                    const wxRect& WXUNUSED(rect),
+                    wxODAction WXUNUSED(action),
+                    wxODStatus WXUNUSED(status)) override
     {
-        UpdateMetrics();
-        if ( !wxOwnerDrawn::OnDrawItem(
-                 dc, rect, action, status) )
-        {
-            return false;
-        }
-
-        wxCheckListBox * const parent = GetParent();
-        const int index = GetIndex();
-        const wxSize check =
-            wxRendererNative::Get().GetCheckBoxSize(parent);
-        const int gap = parent->FromDIP(1);
-        const bool rightToLeft =
-            dc.GetLayoutDirection() == wxLayout_RightToLeft;
-
-        // The checkbox moves to the logical leading edge in RTL, but the
-        // glyph itself must retain its normal orientation, as MSW does with
-        // LAYOUT_BITMAPORIENTATIONPRESERVED.
-        if ( rightToLeft )
-            dc.SetLayoutDirection(wxLayout_LeftToRight);
-        const int x = rightToLeft
-            ? rect.GetRight() - gap - check.x + 1
-            : rect.x + gap;
-        const int y = rect.y + (rect.height - check.y) / 2;
-
-        int flags = wxCONTROL_FLAT;
-        if ( index >= 0 && parent->IsChecked(index) )
-            flags |= wxCONTROL_CHECKED;
-        if ( status & wxODDisabled )
-            flags |= wxCONTROL_DISABLED;
-        wxRendererNative::Get().DrawCheckBox(
-            parent, dc, wxRect(wxPoint(x, y), check), flags);
-        if ( rightToLeft )
-            dc.SetLayoutDirection(wxLayout_RightToLeft);
-        return true;
+        // This private, final default item has no application drawing to
+        // project. Declining the bitmap keeps the actual WinUI CheckBox and
+        // its text visible, rather than replacing both with a GDI snapshot
+        // and making the native peer transparent. Applications overriding
+        // CreateLboxItem() still supply their own OnDrawItem() normally.
+        return false;
     }
 
 private:
@@ -160,9 +131,9 @@ void wxCheckListBox::WinUIOnItemToggled(wxWinUIItemModel::Id id,
 
     m_itemModel.At(index).checked = check;
 
-    // The visible checkbox is part of the retained owner-draw bitmap. Redraw
-    // it before publishing the event, while the transparent native CheckBox
-    // continues to provide pointer, keyboard and UIA Toggle semantics.
+    // Update the retained native checkbox, or the application's owner-draw
+    // bitmap, before publishing the event. Both paths preserve the same
+    // native CheckBox identity and pointer, keyboard and UIA semantics.
     if ( !WinUIUpdatePeerItemById(id) )
         return;
 

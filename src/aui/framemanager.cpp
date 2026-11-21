@@ -31,6 +31,10 @@
 #include "wx/weakref.h"
 #include "wx/wupdlock.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/settings.h"
@@ -4680,6 +4684,19 @@ void wxAuiManager::Repaint(wxDC* dc)
     // make a client dc
     if (!dc)
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( wxWinUIShouldUseOpaquePaintBuffer(m_frame) )
+        {
+            // Direct ClientDC drawing bypasses the opaque paint transaction
+            // required over Mica. OnPaint owns both clear and render; do not
+            // erase the existing surface before publishing its replacement.
+            wxWeakRef<wxWindow> window(m_frame);
+            window->Refresh(false);
+            if ( window )
+                window->Update();
+            return;
+        }
+#endif
         if ( !wxClientDC::CanBeUsedForDrawing(m_frame) )
         {
             // We can't use wxClientDC in these ports.

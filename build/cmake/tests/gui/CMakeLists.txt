@@ -43,6 +43,7 @@ set(TEST_GUI_SRC
     controls/comboboxtest.cpp
     controls/dataviewctrltest.cpp
     controls/datepickerctrltest.cpp
+    controls/editlboxtest.cpp
     controls/filesystemctrltest.cpp
     controls/frametest.cpp
     controls/gaugetest.cpp
@@ -66,8 +67,17 @@ set(TEST_GUI_SRC
     controls/winuihtml.cpp
     controls/winuirichtext.cpp
     controls/winuiaui.cpp
+    controls/winuiauitabview.cpp
     controls/winuistc.cpp
     controls/winuiribbon.cpp
+    controls/winuixamlmetadata.cpp
+    controls/winuicompositefocus.cpp
+    controls/winuicompositegeometry.cpp
+    controls/winuicompositedirect.cpp
+    controls/winuicompositepopup.cpp
+    controls/winuiflyoutretirement.cpp
+    controls/winuibridgepaint.cpp
+    controls/winuicompositeretirement.cpp
     controls/winuiinputrouter.cpp
     controls/winuirootinput.cpp
     controls/winuiinputstate.cpp
@@ -75,8 +85,26 @@ set(TEST_GUI_SRC
     controls/winuiappearance.cpp
     controls/winuichromefeedback.cpp
     controls/winuitoolbar.cpp
+    controls/winuitoolbook.cpp
+    controls/winuifilebrowsers.cpp
+    controls/winuiradioboxtest.cpp
+    controls/winuishowcaselayout.cpp
+    controls/winuitreetheme.cpp
     controls/winuicombomodel.cpp
     controls/winuiitemmodel.cpp
+    controls/winuidataview.cpp
+    controls/winuidataviewcolumns.cpp
+    controls/winuidatavieweditors.cpp
+    controls/winuidataviewlist.cpp
+    controls/winuigrid.cpp
+    controls/winuigridautomation.cpp
+    controls/winuilistctrl.cpp
+    controls/winuiheaderctrl.cpp
+    controls/winuipropgrid.cpp
+    controls/winuipropgrideditors.cpp
+    controls/winuipropgridpreview.cpp
+    controls/winuiwindowscrollbar.cpp
+    controls/winuiwindowscrollbarindicator.cpp
     controls/winuilistmodel.cpp
     controls/winuirangedate.cpp
     controls/winuirangeevents.cpp
@@ -281,10 +309,23 @@ if(NOT APPLE)
     set(APP_TYPE CONSOLE_GUI)
 endif()
 
+if(wxWINUI3_EXPERIMENTAL_RIBBON_TOOLKIT)
+    list(APPEND TEST_GUI_SRC
+        controls/winuiribbontoolkit.cpp
+        controls/winuiribbontoolbar.cpp
+        controls/winuiribbongallery.cpp
+        controls/winuiribbonflyout.cpp
+        controls/winuiribbonexpansion.cpp)
+endif()
+
 wx_add_test(test_gui ${APP_TYPE} ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     RES_BUNDLE ${TEST_GUI_RES_BUNDLE}
     )
+if(TARGET test_gui AND wxWINUI3_EXPERIMENTAL_RIBBON_TOOLKIT)
+    wx_winui3_configure_toolkit_target(test_gui)
+    target_compile_definitions(test_gui PRIVATE WXWINUI_RIBBON_TOOLKIT=1)
+endif()
 if(TARGET test_gui AND TARGET wx_winui_test_support)
     target_link_libraries(test_gui PRIVATE wx_winui_test_support)
 endif()
@@ -314,8 +355,55 @@ if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
             "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
     set_tests_properties(wx_winui_supported_beta PROPERTIES
         LABELS "winui-supported-beta"
+        ENVIRONMENT "WX_UI_TESTS=0"
         RUN_SERIAL TRUE
         TIMEOUT 300)
+    foreach(contract IN ITEMS component-metadata opaque-gdi composite flyout-retirement input-native range-date-native)
+        string(REPLACE "-" "_" contract_name "${contract}")
+        if(contract STREQUAL "component-metadata")
+            set(contract_filter "[winui-component-metadata]~[.]~[physical]")
+        elseif(contract STREQUAL "composite")
+            set(contract_filter "[winui-composite]~[.]~[physical],[winui-composite-retirement]~[.]~[physical]")
+        elseif(contract STREQUAL "flyout-retirement")
+            set(contract_filter "[winui-flyout-retirement]~[.]~[physical],[winui-popup-topology]~[.]~[physical],[winui-popup-extension]~[.]~[physical],[autocomplete]~[.]~[physical]")
+        elseif(contract STREQUAL "input-native")
+            set(contract_filter "[winui-root-input]~[.]~[physical],[winui-native-resize]~[.]~[physical],[winui-dialog-contract]~[.]~[physical],[winui-radiobox]~[.]~[physical],[winui-combo-custom-popup]~[.]~[physical]")
+        elseif(contract STREQUAL "range-date-native")
+            set(contract_filter "[winui-range-date]~[.]~[physical],[winui-showcase-layout]~[.]~[physical]")
+        else()
+            set(contract_filter "[opaque-gdi]~[.]~[physical]")
+        endif()
+        add_test(NAME wx_winui_${contract_name}
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "${contract_filter}"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_${contract_name} PROPERTIES
+            LABELS "winui-${contract}"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endforeach()
+    if(wxUSE_DATAVIEWCTRL)
+        add_test(NAME wx_winui_dataview_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-dataview]~[.]~[physical],[winui-dataview-list]~[.]~[physical],[wxDataViewCtrl]~[.]~[physical],[treelistctrl]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_dataview_native PROPERTIES
+            LABELS "winui-native-dataview"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
     if(wxUSE_RIBBON)
         add_test(NAME wx_winui_ribbon_native
             COMMAND
@@ -323,11 +411,171 @@ if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
                 --timeout-ms=240000
                 --
                 $<TARGET_FILE:test_gui>
-                "[winui-ribbon][native-buttonbar]"
+                "[winui-ribbon][native-buttonbar]~[.]~[physical]"
             WORKING_DIRECTORY
                 "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
         set_tests_properties(wx_winui_ribbon_native PROPERTIES
             LABELS "winui-native-ribbon"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+        if(wxWINUI3_EXPERIMENTAL_RIBBON_TOOLKIT)
+            add_test(NAME wx_winui_ribbon_toolkit
+                COMMAND
+                    $<TARGET_FILE:wx_winui_desktop_test_runner>
+                    --timeout-ms=240000
+                    --
+                    $<TARGET_FILE:test_gui>
+                    "[winui-ribbon-toolkit]~[.]~[physical]"
+                WORKING_DIRECTORY
+                    "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+            set_tests_properties(wx_winui_ribbon_toolkit PROPERTIES
+                LABELS "winui-experimental-ribbon-toolkit"
+                ENVIRONMENT "WX_UI_TESTS=0"
+                RUN_SERIAL TRUE
+                TIMEOUT 300)
+        endif()
+    endif()
+    if(wxUSE_BUTTON)
+        add_test(NAME wx_winui_window_scrollbar_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-window-scrollbar]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_window_scrollbar_native PROPERTIES
+            LABELS "winui-native-window-scrollbar"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
+    if(wxUSE_HEADERCTRL)
+        add_test(NAME wx_winui_headerctrl_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-headerctrl]~[.]~[physical],[headerctrl]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_headerctrl_native PROPERTIES
+            LABELS "winui-native-headerctrl"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
+    if(wxUSE_AUI)
+        add_test(NAME wx_winui_aui_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-aui-native]~[.]~[physical],[WinUIAUI]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_aui_native PROPERTIES
+            LABELS "winui-native-aui"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
+    if(wxUSE_TOOLBOOK)
+        add_test(NAME wx_winui_toolbook_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=120000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-toolbook]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_toolbook_native PROPERTIES
+            LABELS "winui-native-toolbook"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 150)
+    endif()
+    if(wxUSE_FILECTRL AND (wxUSE_FILEDLG OR wxUSE_DIRDLG) AND wxUSE_TREECTRL AND wxUSE_LISTCTRL)
+        add_test(NAME wx_winui_file_browsers_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=120000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-file-browsers]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_file_browsers_native PROPERTIES
+            LABELS "winui-native-file-browsers"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 150)
+    endif()
+    if(wxUSE_TREECTRL)
+        add_test(NAME wx_winui_tree_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-treemodel]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_tree_native PROPERTIES
+            LABELS "winui-native-tree"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
+    if(wxUSE_LISTCTRL)
+        add_test(NAME wx_winui_listctrl_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-listctrl]~[.]~[physical],[listctrl]~[.]~[physical],[editablelist]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_listctrl_native PROPERTIES
+            LABELS "winui-native-listctrl"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
+    if(wxUSE_PROPGRID)
+        add_test(NAME wx_winui_propgrid_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-propgrid]~[.]~[physical],[propgrid]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_propgrid_native PROPERTIES
+            LABELS "winui-native-propgrid"
+            ENVIRONMENT "WX_UI_TESTS=0"
+            RUN_SERIAL TRUE
+            TIMEOUT 300)
+    endif()
+    if(wxUSE_GRID)
+        add_test(NAME wx_winui_grid_native
+            COMMAND
+                $<TARGET_FILE:wx_winui_desktop_test_runner>
+                --timeout-ms=240000
+                --
+                $<TARGET_FILE:test_gui>
+                "[winui-grid]~[.]~[physical]"
+            WORKING_DIRECTORY
+                "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        set_tests_properties(wx_winui_grid_native PROPERTIES
+            LABELS "winui-native-grid"
             ENVIRONMENT "WX_UI_TESTS=0"
             RUN_SERIAL TRUE
             TIMEOUT 300)
@@ -341,6 +589,29 @@ if(WXWINUI AND wxUSE_WINUI3 AND MSVC)
     wx_list_add_prefix(TEST_GUI_BIGOBJ_SRC
         "${wxSOURCE_DIR}/tests/"
         controls/winuihostlifecycle.cpp
+        controls/winuicompositefocus.cpp
+        controls/winuicompositegeometry.cpp
+        controls/winuicompositedirect.cpp
+        controls/winuicompositepopup.cpp
+        controls/winuiflyoutretirement.cpp
+        controls/winuidatavieweditors.cpp
+        controls/winuidataviewcolumns.cpp
+        controls/winuigrid.cpp
+        controls/winuigridautomation.cpp
+        controls/winuilistctrl.cpp
+        controls/winuiheaderctrl.cpp
+        controls/winuipropgrid.cpp
+        controls/winuipropgrideditors.cpp
+        controls/winuipropgridpreview.cpp
+        controls/winuitoolbook.cpp
+        controls/winuifilebrowsers.cpp
+        controls/winuiradioboxtest.cpp
+        controls/winuishowcaselayout.cpp
+        controls/winuitreetheme.cpp
+        controls/winuiwindowscrollbar.cpp
+        controls/winuiwindowscrollbarindicator.cpp
+        controls/winuibridgepaint.cpp
+        controls/winuicompositeretirement.cpp
         controls/winuiadvancedharness.cpp
         controls/winuinativewindow.cpp
         controls/winuimdi.cpp
@@ -350,8 +621,14 @@ if(WXWINUI AND wxUSE_WINUI3 AND MSVC)
         controls/winuihtml.cpp
         controls/winuirichtext.cpp
         controls/winuiaui.cpp
+        controls/winuiauitabview.cpp
         controls/winuistc.cpp
         controls/winuiribbon.cpp
+        controls/winuiribbontoolkit.cpp
+        controls/winuiribbontoolbar.cpp
+        controls/winuiribbongallery.cpp
+        controls/winuiribbonflyout.cpp
+        controls/winuiribbonexpansion.cpp
         controls/winuiaccessibility.cpp
         controls/winuiolebroker.cpp
         controls/winuirootinput.cpp

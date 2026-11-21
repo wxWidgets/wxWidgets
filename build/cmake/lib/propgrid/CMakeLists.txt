@@ -14,6 +14,11 @@ endif()
 
 wx_append_sources(PROPGRID_FILES PROPGRID)
 
+if(WXWINUI AND wxUSE_WINUI3)
+    list(APPEND PROPGRID_FILES
+        "${wxSOURCE_DIR}/src/propgrid/propgridwinui.cpp")
+endif()
+
 if(wxBUILD_TESTS STREQUAL "ALL")
     # Compile deterministic PropertyGrid seams only into in-tree tests.
     # Apply the properties to both the component and monolithic directories.
@@ -36,3 +41,9 @@ if(wxBUILD_TESTS STREQUAL "ALL")
 endif()
 
 wx_add_library(wxpropgrid ${PROPGRID_FILES})
+
+if(WXWINUI AND wxUSE_WINUI3)
+    # The projection belongs to PropertyGrid, not wxcore: retain the existing
+    # component dependency direction and share the pinned C++/WinRT headers.
+    wx_winui3_configure_target(wxpropgrid)
+endif()

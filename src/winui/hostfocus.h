@@ -15,7 +15,7 @@
 // No cached focus or owner state. The host's existing migration/intent records
 // remain authoritative, and callers revalidate after this WinRT boundary.
 bool wxWinUIFocusIsInside(
-    const winrt::Microsoft::UI::Xaml::Controls::Grid& container,
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
     const winrt::Microsoft::UI::Xaml::XamlRoot& root);
 
 #endif // _WX_WINUI_HOSTFOCUS_H_

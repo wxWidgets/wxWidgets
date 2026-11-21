@@ -31,6 +31,9 @@ public:
         std::uint64_t peerMutationDeferrals = 0;
         std::uint64_t boundedPendingRetries = 0;
         std::uint64_t invalidTicketDeferrals = 0;
+        std::uint64_t nativeTopologyDeferrals = 0;
+        std::uint64_t nativeTopologyEchoes = 0;
+        std::uint64_t nativeTopologyResumptions = 0;
         std::uint64_t navigationGeneration = 0;
         std::uint64_t navigationResolveFailures = 0;
         std::uint64_t navigationRetryExhaustions = 0;
@@ -51,6 +54,7 @@ public:
         bool navigationBound = false;
         bool dayLayoutValidationPending = false;
         bool dayLayoutValidationScheduled = false;
+        bool waitingForNativeTopology = false;
     };
 
     enum class DayLayoutValidationFailure : unsigned

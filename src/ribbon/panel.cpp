@@ -19,6 +19,10 @@
 #include "wx/display.h"
 #include "wx/sizer.h"
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    #include "ribboncontainerswinui.h"
+#endif
+
 #ifndef WX_PRECOMP
 #include "wx/frame.h"
 #endif
@@ -60,10 +64,18 @@ wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
     : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(label, minimised_icon, style);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxCHECK_RET(wxRibbonContainerWinUI::Create(this),
+                "Failed to create native Toolkit Ribbon panel");
+#endif
 }
 
 wxRibbonPanel::~wxRibbonPanel()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxRibbonContainerWinUI::Close(this);
+#endif
+
     if(m_expanded_panel)
     {
         m_expanded_panel->m_expanded_dummy = nullptr;
@@ -86,8 +98,40 @@ bool wxRibbonPanel::Create(wxWindow* parent,
 
     CommonInit(label, icon, style);
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    return wxRibbonContainerWinUI::Create(this);
+#else
     return true;
+#endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+bool wxRibbonPanel::Enable(bool enable)
+{
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    const wxWeakRef<wxRibbonPanel> alive(this);
+#endif
+    const bool changed = wxRibbonControl::Enable(enable);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( changed && alive && !alive->IsBeingDeleted() )
+        wxRibbonContainerWinUI::Sync(alive.get());
+#endif
+    return changed;
+}
+
+bool wxRibbonPanel::Show(bool show)
+{
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    const wxWeakRef<wxRibbonPanel> alive(this);
+#endif
+    const bool changed = wxRibbonControl::Show(show);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( changed && alive && !alive->IsBeingDeleted() )
+        wxRibbonContainerWinUI::Sync(alive.get());
+#endif
+    return changed;
+}
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 void wxRibbonPanel::SetArtProvider(wxRibbonArtProvider* art)
 {
@@ -139,6 +183,10 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmapBundle& icon
 
 bool wxRibbonPanel::IsMinimised() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+        return wxRibbonContainerWinUI::IsMinimised(this);
+#endif
     return m_minimised;
 }
 
@@ -149,6 +197,10 @@ bool wxRibbonPanel::IsHovered() const
 
 bool wxRibbonPanel::IsExtButtonHovered() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::IsExtensionHovered(this);
+#endif
     return m_ext_button_hovered;
 }
 
@@ -235,6 +287,10 @@ void wxRibbonPanel::RemoveChild(wxWindowBase *child)
     child->Unbind(wxEVT_LEAVE_WINDOW, &wxRibbonPanel::OnMouseLeaveChild, this);
 
     wxRibbonControl::RemoveChild(child);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 bool wxRibbonPanel::HasExtButton()const
@@ -248,6 +304,15 @@ bool wxRibbonPanel::HasExtButton()const
 
 void wxRibbonPanel::OnSize(wxSizeEvent& evt)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        evt.Skip();
+        wxRibbonContainerWinUI::Sync(this);
+        return;
+    }
+#endif
+
     if(GetAutoLayout())
         Layout();
 
@@ -269,6 +334,16 @@ void wxRibbonPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        // The native group owns its presentation state. A shell resize must
+        // not run the generic minimisation policy and hide its child controls.
+        wxRibbonControl::DoSetSize(x, y, width, height, sizeFlags);
+        return;
+    }
+#endif
+
     // At least on MSW, changing the size of a window will cause GetSize() to
     // report the new size, but a size event may not be handled immediately.
     // If this minimised check was performed in the OnSize handler, then
@@ -327,6 +402,14 @@ void wxRibbonPanel::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
     wxAutoBufferedPaintDC dc(this);
 
     if(m_art != nullptr)
@@ -656,6 +739,11 @@ wxSize wxRibbonPanel::GetPanelSizerBestSize() const
 
 wxSize wxRibbonPanel::DoGetBestSize() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::BestSize(const_cast<wxRibbonPanel*>(this));
+#endif
+
     // Ask sizer if present
     if( GetSizer())
     {
@@ -675,6 +763,11 @@ wxSize wxRibbonPanel::DoGetBestSize() const
 
 bool wxRibbonPanel::Realize()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Realize(this);
+#endif
+
     bool status = true;
 
     for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
@@ -752,6 +845,11 @@ bool wxRibbonPanel::Realize()
 
 bool wxRibbonPanel::Layout()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Layout(this);
+#endif
+
     if(IsMinimised())
     {
         // Children are all invisible when minimised
@@ -815,6 +913,10 @@ wxRibbonPanel* wxRibbonPanel::GetExpandedPanel()
 
 bool wxRibbonPanel::ShowExpanded()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+        return wxRibbonContainerWinUI::ShowExpanded(this);
+#endif
     if(!IsMinimised())
     {
         return false;
@@ -917,6 +1019,13 @@ static bool IsAncestorOf(wxWindow *ancestor, wxWindow *window)
 
 void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+    {
+        evt.Skip();
+        return;
+    }
+#endif
     if(m_expanded_dummy)
     {
         wxWindow *receiver = evt.GetWindow();
@@ -935,6 +1044,13 @@ void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
 
 void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+    {
+        evt.Skip();
+        return;
+    }
+#endif
     if(m_child_with_focus == nullptr)
         return; // Should never happen, but a check can't hurt
 
@@ -965,6 +1081,10 @@ void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
 
 bool wxRibbonPanel::HideExpanded()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+        return wxRibbonContainerWinUI::HideExpanded(this);
+#endif
     if(m_expanded_dummy == nullptr)
     {
         if(m_expanded_panel)
@@ -1120,6 +1240,13 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
 
 void wxRibbonPanel::HideIfExpanded()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this) && m_expanded_dummy)
+    {
+        m_expanded_dummy->HideIfExpanded();
+        return;
+    }
+#endif
     wxRibbonPage* const containingPage = wxDynamicCast(m_parent, wxRibbonPage);
     if (containingPage)
         containingPage->HideIfExpanded();

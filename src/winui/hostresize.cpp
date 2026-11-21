@@ -56,7 +56,190 @@ wxWinUINativeResizeSnapshot& NativeResizeSnapshotFor(
 #endif // WXWINUI_TEST_SUPPORT
 std::set<wxWinUITopLevelHost *> gs_deferredNativeResizeWakes;
 
+struct NativeSizingAdmission;
+thread_local NativeSizingAdmission* gs_nativeSizingAdmission = nullptr;
+UINT gs_nativeSizingMotionMessage = 0;
+
+// This is only an admission scope around the real USER32 call, not a second
+// resize state machine. The request's identities/entered state remain the
+// authority; nesting restores the previous scope without keeping any wx
+// object alive beyond its existing OperationGuard.
+struct NativeSizingAdmission final
+{
+    NativeSizingAdmission(HWND window,
+                          const std::shared_ptr<wxWinUIHostLifetime>& owner,
+                          std::uint64_t requestTicket,
+                          const wxWinUIPointerSample& press,
+                          std::function<bool()> validate)
+        : target(window), lifetime(owner), ticket(requestTicket), latest(press),
+          current(std::move(validate)), previous(gs_nativeSizingAdmission)
+    { gs_nativeSizingAdmission = this; }
+    ~NativeSizingAdmission() { gs_nativeSizingAdmission = previous; }
+
+    HWND target;
+    std::shared_ptr<wxWinUIHostLifetime> lifetime;
+    std::uint64_t ticket;
+    wxWinUIPointerSample latest;
+    std::function<bool()> current;
+    NativeSizingAdmission* previous;
+    bool logged = false;
+    bool motionPosted = false;
+    bool motionDelivered = false;
+    bool releaseAccepted = false;
+    bool releasePending = false;
+    POINT deliveredPoint{};
+};
+
 } // anonymous namespace
+
+void wxWinUIQueueNativeSizingMove(
+    const std::shared_ptr<wxWinUIHostLifetime>& lifetime,
+    const wxWinUIPointerSample& sample)
+{
+    auto* const scope = gs_nativeSizingAdmission;
+    if ( !scope || scope->lifetime != lifetime || !gs_nativeSizingMotionMessage ||
+         scope->releaseAccepted ||
+         ::GetCapture() != scope->target || !scope->current() ||
+         sample.kind != wxWinUIInputKind::Move ||
+         sample.device != wxWinUIInputDevice::Mouse || !sample.isPrimary ||
+         sample.isCompatibilityMouse || !(sample.buttonMask & MK_LBUTTON) ||
+         sample.pointerId != scope->latest.pointerId ||
+         sample.timestamp < scope->latest.timestamp )
+        return;
+
+    // The request remains the sole sizing authority. This stack-bound
+    // transport keeps only the most recent observed delta, with one queued
+    // notification regardless of how many routed moves arrive together.
+    scope->latest = sample;
+    if ( scope->motionPosted ||
+         (scope->motionDelivered && scope->deliveredPoint.x == sample.screenX &&
+          scope->deliveredPoint.y == sample.screenY) )
+        return;
+    scope->motionPosted = ::PostMessageW(scope->target, gs_nativeSizingMotionMessage,
+        static_cast<WPARAM>(scope->ticket & 0xffffffffu),
+        static_cast<LPARAM>(scope->ticket >> 32)) != FALSE;
+    if ( !scope->motionPosted )
+        wxWinUIInputLog("grip resize #%llu motion post failed", scope->ticket);
+}
+
+namespace
+{
+bool QueueNativeSizingRelease(const std::shared_ptr<wxWinUIHostLifetime>& lifetime,
+                             const wxWinUIPointerSample& sample)
+{
+    auto* const scope = gs_nativeSizingAdmission;
+    if ( !scope || scope->lifetime != lifetime || !gs_nativeSizingMotionMessage ||
+         ::GetCapture() != scope->target || !scope->current() ||
+         sample.device != wxWinUIInputDevice::Mouse || !sample.isPrimary ||
+         sample.isCompatibilityMouse || (sample.buttonMask & MK_LBUTTON) ||
+         sample.pointerId != scope->latest.pointerId )
+        return false;
+    // A repeated/stale routed release must neither end a newer sample nor
+    // turn the already accepted commit into WM_CANCELMODE on the bubble.
+    if ( scope->releaseAccepted || sample.timestamp < scope->latest.timestamp )
+        return true;
+    scope->releaseAccepted = true;
+    scope->releasePending = true;
+    scope->latest = sample;
+    // Retire an undelivered motion at the release boundary. USER32 commits
+    // the geometry it has actually tracked, without applying a late move
+    // after the physical contact ended.
+    if ( !scope->motionPosted )
+        scope->motionPosted = ::PostMessageW(scope->target, gs_nativeSizingMotionMessage,
+            static_cast<WPARAM>(scope->ticket & 0xffffffffu),
+            static_cast<LPARAM>(scope->ticket >> 32)) != FALSE;
+    if ( !scope->motionPosted )
+    {
+        scope->releaseAccepted = false;
+        scope->releasePending = false;
+        return false;
+    }
+    wxWinUIInputLog("grip resize #%llu release queued for commit", scope->ticket);
+    return true;
+}
+}
+
+bool wxWinUIMessageBelongsToNativeSizing(MSG& message)
+{
+    auto* const scope = gs_nativeSizingAdmission;
+    if ( gs_nativeSizingMotionMessage && message.message == gs_nativeSizingMotionMessage )
+    {
+        const std::uint64_t ticket = static_cast<std::uint32_t>(message.wParam) |
+            (static_cast<std::uint64_t>(static_cast<std::uint32_t>(message.lParam)) << 32);
+        // A packet left behind by release, capture loss, destruction or a
+        // different request never becomes a mouse message in the outer pump.
+        message.message = WM_NULL;
+        message.wParam = 0;
+        message.lParam = 0;
+        if ( !scope || message.hwnd != scope->target || ticket != scope->ticket ||
+             !scope->motionPosted )
+            return true;
+        scope->motionPosted = false;
+        if ( ::GetCapture() != scope->target || !scope->current() )
+            return true;
+        const auto& sample = scope->latest;
+        const POINT screen{sample.screenX, sample.screenY};
+        if ( !scope->releasePending && scope->motionDelivered && scope->deliveredPoint.x == screen.x &&
+             scope->deliveredPoint.y == screen.y )
+            return true;
+        POINT client = screen;
+        ::SetLastError(ERROR_SUCCESS);
+        if ( (!::MapWindowPoints(HWND_DESKTOP, scope->target, &client, 1) &&
+              ::GetLastError() != ERROR_SUCCESS) ||
+             client.x < (std::numeric_limits<short>::min)() ||
+             client.x > (std::numeric_limits<short>::max)() ||
+             client.y < (std::numeric_limits<short>::min)() ||
+             client.y > (std::numeric_limits<short>::max)() )
+            return true;
+        const bool release = scope->releasePending;
+        scope->releasePending = false;
+        message.message = release ? WM_LBUTTONUP : WM_MOUSEMOVE;
+        message.wParam = sample.modifiers | sample.buttonMask;
+        message.lParam = MAKELPARAM(static_cast<short>(client.x), static_cast<short>(client.y));
+        // Preserve the observed XAML position in the queued message. This
+        // does not alter GetCursorPos/GetMessagePos's physical queue state.
+        message.pt = screen;
+        message.time = static_cast<DWORD>(sample.timestamp);
+        if ( !release )
+        {
+            scope->motionDelivered = true;
+            scope->deliveredPoint = screen;
+        }
+    }
+    if ( !scope || message.hwnd != scope->target ||
+         ::GetCapture() != scope->target || !scope->current() ) return false;
+
+    bool tracking = false;
+    switch ( message.message )
+    {
+        case WM_MOUSEMOVE:
+        case WM_NCMOUSEMOVE:
+            scope->motionDelivered = true;
+            scope->deliveredPoint = message.pt;
+            tracking = true;
+            break;
+        case WM_LBUTTONUP:
+        case WM_NCLBUTTONUP:
+        case WM_CANCELMODE:
+            tracking = true;
+            break;
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+            tracking = message.wParam == VK_ESCAPE || message.wParam == VK_RETURN ||
+                       message.wParam == VK_LEFT || message.wParam == VK_RIGHT ||
+                       message.wParam == VK_UP || message.wParam == VK_DOWN;
+            break;
+        default:
+            break;
+    }
+    if ( tracking && !scope->logged )
+    {
+        scope->logged = true;
+        wxWinUIInputLog("grip USER32 tracking retained msg=0x%04x target=%p",
+                       message.message, static_cast<void*>(scope->target));
+    }
+    return tracking;
+}
 
 UINT wxWinUINativeResizeMessage()
 {
@@ -230,6 +413,8 @@ bool wxWinUITopLevelHost::RequestNativeResize(
     }
 
     request->accepted = true;
+    wxWinUIInputLog("grip resize #%llu accepted pointer=%u time=%llu ht=%d",
+                    request->ticket, sample.pointerId, sample.timestamp, hitTest);
 #ifdef WXWINUI_TEST_SUPPORT
     auto& snapshot = NativeResizeSnapshotFor(m_hostLifetime);
     snapshot.phase = wxWinUINativeResizePhase::Pending;
@@ -330,17 +515,47 @@ void wxWinUITopLevelHost::CancelNativeResize(
         case wxWinUIInputKind::Release:
             if ( sample.button != wxWinUIInputButton::Left )
                 return;
+            // Release commits an entered USER32 sizing loop. WM_CANCELMODE
+            // is reserved for interruptions and rolls its geometry back.
+            // Before native entry, the old cancellation behavior remains.
+            if ( QueueNativeSizingRelease(m_hostLifetime, sample) )
+                return;
             break;
         case wxWinUIInputKind::CaptureLost:
+        {
             // Losing island capture is expected both during our release and
             // when USER32 takes over. Other native capture changes cancel.
             if ( request->preparing ||
                  (request->dispatching && ::GetCapture() ==
                     reinterpret_cast<HWND>(request->target.GetLeafHwnd())) )
                 return;
+
+            // XAML can transfer native capture between the bridge and its
+            // InputSite after PointerPressed, before our queued wake. The
+            // old HWND receives WM_CAPTURECHANGED, but the island still owns
+            // this gesture. Apply the same island boundary as at acceptance:
+            // do not mistake this internal transfer for loss to another UI.
+            // A null/outside owner still cancels, as do Cancel and Release;
+            // the wake retains all identity and physical-contact checks.
+            const HWND capture = ::GetCapture();
+            if ( !request->dispatching && capture &&
+                 (capture == m_bridge || capture == m_inner ||
+                  (m_bridge && ::IsChild(m_bridge, capture))) )
+            {
+                wxWinUIInputLog("grip resize #%llu island capture transfer",
+                                request->ticket);
+                return;
+            }
             break;
+        }
         case wxWinUIInputKind::Leave:
-            if ( request->dispatching || request->preparing )
+            // Dragging the corner outward can cross the island boundary
+            // before the queued native handoff runs. Leaving is not releasing
+            // this accepted gesture while the exact pointer is still down.
+            // The wake independently rechecks physical contact and all target,
+            // generation and capture ownership before entering USER32 sizing.
+            if ( request->dispatching || request->preparing ||
+                 (sample.buttonMask & MK_LBUTTON) )
                 return;
             break;
         case wxWinUIInputKind::Cancel:
@@ -349,6 +564,9 @@ void wxWinUITopLevelHost::CancelNativeResize(
             return;
     }
 
+    wxWinUIInputLog("grip resize #%llu cancelled kind=%d preparing=%d dispatching=%d",
+                    request->ticket, static_cast<int>(sample.kind),
+                    request->preparing, request->dispatching);
     request->cancelled = true;
     if ( request->dispatching )
     {
@@ -397,8 +615,13 @@ void wxWinUITopLevelHost::DispatchNativeResize(std::uint64_t ticket)
 
     try
     {
-        if ( !contactActive() || !ValidateNativeResize(request) )
+        const bool contactAtWake = contactActive();
+        if ( !contactAtWake || !ValidateNativeResize(request) )
+        {
+            wxWinUIInputLog("grip resize #%llu wake rejected contact=%d",
+                            request->ticket, contactAtWake);
             return;
+        }
 
         request->preparing = true;
         const auto prepared = wxMakeGuard([request]()
@@ -495,6 +718,23 @@ void wxWinUITopLevelHost::DispatchNativeResize(std::uint64_t ticket)
         wxWinUIInputLog("grip resize #%llu dispatch ht=%d point=(%d,%d)",
                         request->ticket, request->hitTest,
                         request->sample.screenX, request->sample.screenY);
+        const auto lifetime = m_hostLifetime;
+        if ( !gs_nativeSizingMotionMessage )
+            gs_nativeSizingMotionMessage = ::RegisterWindowMessageW(L"wxWidgets.WinUI.NativeResizeMotion");
+        if ( !gs_nativeSizingMotionMessage )
+            return;
+        const NativeSizingAdmission nativeTracking(hwnd, lifetime, request->ticket,
+            request->sample, [this, lifetime, request]()
+        {
+            // No callback-bearing peer query from WH_GETMESSAGE. The strong
+            // request and invalidatable host/native identities suffice here;
+            // the physical contact check above is unchanged.
+            return lifetime && lifetime->GetHost() == this && !m_shuttingDown &&
+                   m_nativeResize == request && request->dispatching &&
+                   request->entered && !request->exited && !request->cancelled &&
+                   request->inputSiteGeneration == m_inputSiteGeneration &&
+                   request->target.IsValid();
+        });
         ::SendMessageW(hwnd, WM_NCLBUTTONDOWN, request->hitTest,
                        MAKELPARAM(request->sample.screenX,
                                   request->sample.screenY));

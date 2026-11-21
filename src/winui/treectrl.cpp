@@ -28,6 +28,7 @@
 #include "wx/winui/private/tlwhost.h"
 
 #include "wx/log.h"
+#include "wx/image.h"
 #include "wx/msw/private/keyboard.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
@@ -38,6 +39,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <list>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -309,6 +311,118 @@ private:
     std::vector<std::unique_ptr<wxWinUITreeItem>> m_roots;
 };
 
+// Cache only the resolved pixels, never an image-list index or a bundle. An
+// application can replace list images or return different pixels from a custom
+// bundle without changing either object's identity. All model/bundle reads and
+// their reentrancy checks still precede this cache.
+class wxWinUITreeImageCache final
+{
+public:
+    static constexpr size_t MaxEntries = 64;
+    static constexpr size_t MaxBytes = 4 * 1024 * 1024;
+
+    struct Key
+    {
+        wxSize size;
+        std::uint64_t hash = 14695981039346656037ULL;
+        std::vector<unsigned char> pixels;
+
+        size_t Cost() const
+        {
+            // Retained RGBA key plus the native bitmap's BGRA pixel buffer.
+            return pixels.size() * 2;
+        }
+    };
+
+    static Key MakeKey(const wxBitmap& bitmap)
+    {
+        Key key;
+        const int width = bitmap.GetWidth();
+        const int height = bitmap.GetHeight();
+        if ( width <= 0 || height <= 0 ||
+             static_cast<size_t>(width) >
+                 MaxBytes / 8 / static_cast<size_t>(height) )
+        {
+            // Large images still use the normal conversion path, but cannot
+            // crowd out the small, shared folder/state images this cache serves.
+            return key;
+        }
+
+        wxImage image = bitmap.ConvertToImage();
+        if ( !image.IsOk() )
+            return key;
+        if ( !image.HasAlpha() && image.HasMask() )
+            image.InitAlpha();
+
+        key.size = image.GetSize();
+        const size_t count = static_cast<size_t>(width) * height;
+        key.pixels.resize(count * 4);
+        const unsigned char* const rgb = image.GetData();
+        const unsigned char* const alpha = image.GetAlpha();
+        for ( size_t i = 0; i < count; ++i )
+        {
+            for ( size_t channel = 0; channel < 4; ++channel )
+            {
+                const unsigned char value = channel == 3
+                    ? (alpha ? alpha[i] : 255)
+                    : rgb[i * 3 + channel];
+                key.pixels[i * 4 + channel] = value;
+                key.hash = (key.hash ^ value) * 1099511628211ULL;
+            }
+        }
+        return key;
+    }
+
+    MUXMI::WriteableBitmap Find(const Key& key)
+    {
+        if ( key.pixels.empty() )
+            return nullptr;
+        for ( auto it = m_entries.begin(); it != m_entries.end(); ++it )
+        {
+            if ( it->key.hash == key.hash && it->key.size == key.size &&
+                 it->key.pixels == key.pixels )
+            {
+                const auto source = it->source;
+                m_entries.splice(m_entries.end(), m_entries, it);
+                return source;
+            }
+        }
+        return nullptr;
+    }
+
+    void Remember(Key key, const MUXMI::WriteableBitmap& source)
+    {
+        if ( key.pixels.empty() || !source )
+            return;
+        const size_t cost = key.Cost();
+        while ( m_entries.size() >= MaxEntries || m_bytes + cost > MaxBytes )
+        {
+            m_bytes -= m_entries.front().key.Cost();
+            m_entries.pop_front();
+        }
+        m_entries.push_back({std::move(key), source});
+        m_bytes += cost;
+    }
+
+    void Clear()
+    {
+        m_entries.clear();
+        m_bytes = 0;
+    }
+
+    size_t GetCount() const { return m_entries.size(); }
+    size_t GetBytes() const { return m_bytes; }
+
+private:
+    struct Entry
+    {
+        Key key;
+        MUXMI::WriteableBitmap source;
+    };
+    std::list<Entry> m_entries;
+    size_t m_bytes = 0;
+};
+
 class wxWinUITreeCtrlImpl
 {
 public:
@@ -572,6 +686,7 @@ public:
 #endif
         projectionItemIds.clear();
         stateImageBundles.clear();
+        imageCache.Clear();
         projectionAllRequested = false;
         projectionInProgress = false;
         projectionReplayScheduled = false;
@@ -645,11 +760,13 @@ public:
     std::unordered_map<wxWinUITreeItemHandle *, wxWinUITreeItem *> liveItems;
     std::unordered_set<std::uint64_t> selectedIds;
     wxVector<wxBitmapBundle> stateImageBundles;
+    wxWinUITreeImageCache imageCache;
 
     std::uint64_t nextItemId = 1;
     std::uint64_t selectionId = 0;
     std::uint64_t focusedId = 0;
     std::uint64_t rejectedSelectionId = 0;
+    std::uint64_t nativeSelectionTicket = 0;
     std::uint64_t editItemId = 0;
     std::uint64_t editSession = 0;
     std::uint64_t clickEditCandidateId = 0;
@@ -682,6 +799,8 @@ public:
     size_t peerUpdateCount = 0;
     size_t fullRefreshCount = 0;
     size_t modelGrowthCount = 0;
+    size_t bitmapConversionCount = 0;
+    size_t cacheHitCount = 0;
 #endif
 
 #ifdef WXWINUI_TEST_SUPPORT
@@ -733,6 +852,28 @@ wxWinUIFindTreeViewList(const MUX::DependencyObject& root)
     }
 
     return nullptr;
+}
+
+static void wxWinUISyncTreeItemForeground(
+    const MUXC::TreeViewItem& container,
+    const WFC::IPropertySet& content)
+{
+    // A binding to a missing Content[Foreground] on the TextBlock leaves a
+    // local foreground at the binding fallback instead of inheriting the
+    // native item's theme/state brush. Only explicit wx colours belong in a
+    // local value. Clear it on recycling or when an explicit colour is removed.
+    const auto foreground = content && content.HasKey(L"Foreground")
+        ? content.Lookup(L"Foreground").try_as<MUXM::Brush>()
+        : nullptr;
+    if ( foreground )
+    {
+        if ( container.Foreground() != foreground )
+            container.Foreground(foreground);
+    }
+    else
+    {
+        container.ClearValue(MUXC::Control::ForegroundProperty());
+    }
 }
 
 static bool wxWinUISyncRealizedTreeItem(
@@ -789,6 +930,11 @@ static bool wxWinUISyncRealizedTreeItem(
                     CollapsedGlyphVisibilityProperty(),
                 collapsed);
         }
+        // Keep the label's foreground inherited: the stock item template
+        // owns theme/selection/disabled colours, while wx item colours remain
+        // explicit overrides. No wx/impl access follows this observable write.
+        wxWinUISyncTreeItemForeground(
+            container, node.Content().try_as<WFC::IPropertySet>());
         return true;
     }
     catch ( const winrt::hresult_error& e )
@@ -1744,7 +1890,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
                         <TextBlock x:Name="wxTreeLabel"
                                    VerticalAlignment="Center"
                                    Text="{Binding Content[Text]}"
-                                   Foreground="{Binding Content[Foreground]}"
                                    FontFamily="{Binding Content[FontFamily]}"
                                    FontSize="{Binding Content[FontSize]}"
                                    FontStyle="{Binding Content[FontStyle]}"
@@ -1786,17 +1931,75 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         m_winui->selectionChangedToken = m_winui->treeView.SelectionChanged(
             [weakCallbackState, callbackGeneration](
                 MUXC::TreeView const&,
-                MUXC::TreeViewSelectionChangedEventArgs const&)
+                MUXC::TreeViewSelectionChangedEventArgs const& args)
             {
                 const auto state = weakCallbackState.lock();
-                if ( !state || state->IsPeerMutationInProgress() )
+                wxTreeCtrl * const owner =
+                    state ? state->GetOwner(callbackGeneration) : nullptr;
+                if ( !owner || !owner->m_winui )
                     return;
 
-                if ( wxTreeCtrl * const owner =
-                         state->GetOwner(callbackGeneration) )
+                // A subsequent native change, including a wx projection,
+                // supersedes any pending removal-only notification.
+                const std::uint64_t ticket =
+                    ++owner->m_winui->nativeSelectionTicket;
+                if ( state->IsPeerMutationInProgress() )
+                    return;
+
+                if ( !owner->HasFlag(wxTR_MULTIPLE) &&
+                     args.AddedItems().Size() == 0 &&
+                     args.RemovedItems().Size() != 0 )
                 {
-                    owner->OnPeerSelectionChanged();
+                    // TreeView's single-selection UIA Select clears the old
+                    // node before appending the new one. Unlike multi-select,
+                    // WinUI does not batch these two SelectionChanged events.
+                    // Keep the old wx selection until the native stack ends:
+                    // an append publishes old->new directly, while a genuine
+                    // removal still reaches the usual changing/veto contract.
+                    const std::uint64_t operation = state->CurrentOperation();
+                    const auto finishRemoval =
+                        [weakCallbackState, callbackGeneration, ticket, operation]()
+                        {
+                            const auto liveState = weakCallbackState.lock();
+                            wxTreeCtrl * const live = liveState
+                                ? liveState->GetOwner(callbackGeneration)
+                                : nullptr;
+                            if ( live && live->m_winui &&
+                                 live->m_winui->nativeSelectionTicket == ticket )
+                            {
+                                // A model mutation may itself pump the queue
+                                // before its peer write. Never apply the old
+                                // removal over this newer authoritative writer.
+                                if ( !liveState->IsCurrentOperation(operation) ||
+                                     liveState->IsPeerMutationInProgress() )
+                                {
+                                    live->SchedulePeerSelectionCorrection();
+                                    return;
+                                }
+                                live->OnPeerSelectionChanged();
+                            }
+                        };
+                    try
+                    {
+                        const auto dispatcher =
+                            owner->m_winui->treeView.DispatcherQueue();
+                        if ( dispatcher && dispatcher.TryEnqueue(finishRemoval) )
+                            return;
+                    }
+                    catch ( const winrt::hresult_error& e )
+                    {
+                        wxWinUILogException(
+                            "WinUI TreeView deferred deselection", e);
+                    }
+                    if ( wxTheApp )
+                    {
+                        wxTheApp->CallAfter(finishRemoval);
+                        return;
+                    }
                 }
+
+                if ( state->GetOwner(callbackGeneration) == owner )
+                    owner->OnPeerSelectionChanged();
             });
 
         m_winui->gotFocusToken = m_winui->treeView.GotFocus(
@@ -2938,6 +3141,10 @@ wxWinUITreeCtrlTestAccess::GetModelStats(const wxTreeCtrl &control)
         stats.peerUpdateCount = self->m_winui->peerUpdateCount;
         stats.fullRefreshCount = self->m_winui->fullRefreshCount;
         stats.modelGrowthCount = self->m_winui->modelGrowthCount;
+        stats.bitmapConversionCount = self->m_winui->bitmapConversionCount;
+        stats.cacheHitCount = self->m_winui->cacheHitCount;
+        stats.imageCacheEntryCount = self->m_winui->imageCache.GetCount();
+        stats.imageCacheBytes = self->m_winui->imageCache.GetBytes();
     }
     return stats;
 }
@@ -2953,6 +3160,8 @@ void wxWinUITreeCtrlTestAccess::ResetModelStats(wxTreeCtrl &control)
         self->m_winui->peerUpdateCount = 0;
         self->m_winui->fullRefreshCount = 0;
         self->m_winui->modelGrowthCount = 0;
+        self->m_winui->bitmapConversionCount = 0;
+        self->m_winui->cacheHitCount = 0;
     }
 }
 #endif // WXWINUI_TEST_SUPPORT
@@ -6212,7 +6421,8 @@ wxString wxWinUITreeCtrlTestAccess::GetPeerItemText(const wxTreeCtrl &control,
 #ifdef WXWINUI_TEST_SUPPORT
 std::uintptr_t
 wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(const wxTreeCtrl &control,
-                                                    const wxTreeItemId &item)
+                                                    const wxTreeItemId &item,
+                                                    bool stateImage)
 {
     const wxTreeCtrl *const self = &control;
     wxWinUITreeItem *const treeItem = self->GetItem(item);
@@ -6221,9 +6431,10 @@ wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(const wxTreeCtrl &control,
 
     try
     {
-        return treeItem->content.HasKey(L"Image")
+        const wchar_t* const key = stateImage ? L"StateImage" : L"Image";
+        return treeItem->content.HasKey(key)
             ? wxWinUIInspectableIdentity(
-                  treeItem->content.Lookup(L"Image"))
+                  treeItem->content.Lookup(key))
             : 0;
     }
     catch ( const winrt::hresult_error& )
@@ -8493,6 +8704,36 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
                 return checkCurrent();
             };
 
+        const auto resolveSource =
+            [&](const wxBitmap& resolvedBitmap,
+                MUXMI::WriteableBitmap* source) -> PeerProjectionResult
+            {
+                auto key = wxWinUITreeImageCache::MakeKey(resolvedBitmap);
+                PeerProjectionResult current = checkCurrent();
+                if ( current != PeerProjectionResult::Done )
+                    return current;
+                *source = impl->imageCache.Find(key);
+                if ( *source )
+                {
+#ifdef WXWINUI_TEST_SUPPORT
+                    ++impl->cacheHitCount;
+#endif
+                    return checkCurrent();
+                }
+
+#ifdef WXWINUI_TEST_SUPPORT
+                ++impl->bitmapConversionCount;
+#endif
+                *source = wxWinUIWriteableBitmapFromBitmap(resolvedBitmap);
+                current = checkCurrent();
+                if ( current != PeerProjectionResult::Done )
+                    return current;
+                // Conversion may drain native callbacks. Never retain or
+                // publish a result for a model revision that lost authority.
+                impl->imageCache.Remember(std::move(key), *source);
+                return checkCurrent();
+            };
+
         PeerProjectionResult result = insertProperty(
             L"Text", winrt::box_value(wxWinUIToHString(text)));
         if ( result != PeerProjectionResult::Done )
@@ -8509,8 +8750,8 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
         bool hasImage = false;
         if ( bitmap.IsOk() )
         {
-            const auto source = wxWinUIWriteableBitmapFromBitmap(bitmap);
-            result = checkCurrent();
+            MUXMI::WriteableBitmap source{nullptr};
+            result = resolveSource(bitmap, &source);
             if ( result != PeerProjectionResult::Done )
                 return result;
             if ( source )
@@ -8567,8 +8808,8 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
         bool hasStateImage = false;
         if ( bitmap.IsOk() )
         {
-            const auto source = wxWinUIWriteableBitmapFromBitmap(bitmap);
-            result = checkCurrent();
+            MUXMI::WriteableBitmap source{nullptr};
+            result = resolveSource(bitmap, &source);
             if ( result != PeerProjectionResult::Done )
                 return result;
             if ( source )
@@ -8657,6 +8898,22 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
         }
         if ( result != PeerProjectionResult::Done )
             return result;
+
+        // PropertySet updates keep the same item/label identities. Apply a
+        // changed override to an already-realized native container too; newly
+        // realized/recycled ones are handled by ContainerContentChanging.
+        const auto container = impl->treeView.ContainerFromNode(node)
+            .try_as<MUXC::TreeViewItem>();
+        result = checkCurrent();
+        if ( result != PeerProjectionResult::Done )
+            return result;
+        if ( container )
+        {
+            wxWinUISyncTreeItemForeground(container, content);
+            result = checkCurrent();
+            if ( result != PeerProjectionResult::Done )
+                return result;
+        }
 
         if ( font.IsOk() )
         {

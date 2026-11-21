@@ -36,9 +36,9 @@
     #include "wx/access.h"
 #endif // wxUSE_ACCESSIBILITY
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     #include "waitfor.h"
-#endif // __WXGTK__
+#endif // asynchronous native layout
 
 #include "testableframe.h"
 #include "asserthelper.h"
@@ -1040,10 +1040,10 @@ protected:
         m_dvc->Refresh();
         m_dvc->Update();
 
-#ifdef __WXGTK__
-        // Unfortunately it's not enough to call wxYield() once, so wait up to
-        // 0.5 sec.
-        WaitFor("wxDataViewCtrl upder", [this, item, existence]() {
+#if defined(__WXGTK__) || defined(wxHAS_WINUI_DATAVIEWCTRL)
+        // Native GTK and XAML item realization is asynchronous: repainting the
+        // wx window does not complete the native layout. Wait up to 0.5 sec.
+        WaitFor("wxDataViewCtrl native item layout", [this, item, existence]() {
             const bool isItemRectEmpty = m_dvc->GetItemRect(item).IsEmpty();
             switch ( existence )
             {
@@ -1060,10 +1060,10 @@ protected:
 
             return false;
         });
-#else // !__WXGTK__
+#else
         wxUnusedVar(item);
         wxUnusedVar(existence);
-#endif // __WXGTK__
+#endif // asynchronous native layout
     }
 
     // The dataview control.
@@ -1435,10 +1435,15 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
                  "wxDVC::GetItemRect",
                  "[wxDataViewCtrl][item]")
 {
-#ifdef __WXGTK__
+#ifdef wxHAS_WINUI_DATAVIEWCTRL
+    REQUIRE(WaitFor("WinUI data view initial row layout", [this]() {
+        return !m_dvc->GetItemRect(m_child1).IsEmpty() &&
+               !m_dvc->GetItemRect(m_child2).IsEmpty();
+    }));
+#elif defined(__WXGTK__)
     // We need to let the native control have some events to lay itself out.
     wxYield();
-#endif // __WXGTK__
+#endif // native initial layout
 
     const wxRect rect1 = m_dvc->GetItemRect(m_child1);
     const wxRect rect2 = m_dvc->GetItemRect(m_child2);
@@ -1473,12 +1478,18 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     // This should scroll the window to bring this item into view.
     m_dvc->EnsureVisible(last);
 
-#ifdef __WXGTK__
+#ifdef wxHAS_WINUI_DATAVIEWCTRL
+    REQUIRE(WaitFor("WinUI data view scrolled row layout", [this]() {
+        const auto top = m_dvc->GetTopItem();
+        return top.IsOk() && top != m_root &&
+               !m_dvc->GetItemRect(top).IsEmpty();
+    }));
+#elif defined(__WXGTK__)
     // Wait for the list control to be relaid out.
     WaitFor("wxDataViewCtrl layout", [this]() {
         return m_dvc->GetTopItem() != m_root;
     });
-#endif // __WXGTK__
+#endif // native scroll layout
 
     // Check that this was indeed the case.
     const wxDataViewItem top = m_dvc->GetTopItem();

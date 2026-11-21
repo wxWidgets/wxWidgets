@@ -19,8 +19,20 @@
 #include "wx/choice.h"
 #include "choice-test-access.h"
 #include "combo-popup-test-access.h"
+#if wxUSE_CHECKLISTBOX
+    #include "wx/checklst.h"
+    #include "listbox-test-access.h"
+    #include "wx/winui/private/tlwhost.h"
+    #if wxUSE_REARRANGECTRL
+        #include "wx/rearrangectrl.h"
+    #endif
+#endif
 #if wxUSE_COMBOBOX
     #include "wx/combobox.h"
+    #include "wx/sizer.h"
+    #if wxUSE_STATBOX
+        #include "wx/statbox.h"
+    #endif
     #include "combobox-test-access.h"
     #include "wx/filefn.h"
     #include "wx/filename.h"
@@ -32,6 +44,7 @@
     #include "wx/winui/private/textpeer.h"
     #include "text-peer-test-access.h"
     #include "wx/winui/private/tlwhost.h"
+    #include "wx/winui/private/tlwhostmsw.h"
 #include "physical-disconnect-test-access.h"
     #include "host-observation-test-access.h"
     #include "host-content-test-access.h"
@@ -762,6 +775,9 @@ TEST_CASE("wxWinUI item controls support default construction",
 
 #if wxUSE_COMBOBOX
     wxComboBox combo;
+    REQUIRE_FALSE(combo.GetHandle());
+    REQUIRE_FALSE(combo.GetParent());
+    REQUIRE_FALSE(wxWinUIComboBoxTestAccess::GetNativePeer(combo).get());
     long from = -1;
     long to = -1;
     combo.GetSelection(&from, &to);
@@ -771,6 +787,14 @@ TEST_CASE("wxWinUI item controls support default construction",
     CHECK(combo.GetInsertionPoint() == 0);
     CHECK(from == 0);
     CHECK(to == 0);
+    from = to = -1;
+    combo.GetSelection(nullptr, &to);
+    combo.GetSelection(&from, nullptr);
+    combo.GetSelection(nullptr, nullptr);
+    CHECK(from == 0);
+    CHECK(to == 0);
+    CHECK_FALSE(combo.GetHandle());
+    CHECK_FALSE(wxWinUIComboBoxTestAccess::GetNativePeer(combo).get());
     CHECK(combo.IsEditable());
     CHECK(combo.GetHint().empty());
     REQUIRE(combo.Create(parent, wxID_ANY));
@@ -778,6 +802,10 @@ TEST_CASE("wxWinUI item controls support default construction",
     CHECK(combo.IsTextEmpty());
     CHECK(combo.GetSelection() == wxNOT_FOUND);
     CHECK(combo.GetInsertionPoint() == 0);
+    from = to = -1;
+    combo.GetSelection(&from, &to);
+    CHECK(from == 0);
+    CHECK(to == 0);
     CHECK(combo.IsEditable());
     combo.ChangeValue("combo");
     CHECK(combo.GetValue() == "combo");
@@ -1518,6 +1546,7 @@ TEST_CASE("wxWinUI ComboBox selection events retain the wxMSW snapshot",
           "[winui-itemmodel][winui-combo][events][reentrant][parity]")
 {
     const long style = GENERATE(0, wxCB_SIMPLE);
+    CAPTURE(style);
     wxFrame frame(nullptr, wxID_ANY, "combo event snapshots");
     wxPanel panel(&frame);
     const wxString items[] = { "zero", "one", "two" };
@@ -1552,7 +1581,8 @@ TEST_CASE("wxWinUI ComboBox selection events retain the wxMSW snapshot",
             textData = event.GetClientData();
         });
         REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 1));
-        REQUIRE(WaitFor("ComboBox selection snapshot projection drain", [&]()
+        const bool projectionDrained =
+            WaitFor("ComboBox selection snapshot projection drain", [&]()
         {
             if ( style == wxCB_SIMPLE )
             {
@@ -1565,8 +1595,29 @@ TEST_CASE("wxWinUI ComboBox selection events retain the wxMSW snapshot",
             return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot) &&
                    !(snapshot.phase &
                      wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingText);
-        }));
+        });
         INFO(wxWinUIComboDiagnostics(combo));
+        const auto projectedCombo =
+            wxWinUIComboBoxTestAccess::GetNativePeer(combo).get();
+        MUXC::TextBox projectedEditor{ nullptr };
+        if ( projectedCombo )
+        {
+            std::vector<MUX::DependencyObject> nodes{ projectedCombo };
+            for ( std::size_t n = 0; n != nodes.size() && n < 512; ++n )
+            {
+                if ( const auto edit = nodes[n].try_as<MUXC::TextBox>() )
+                    projectedEditor = edit;
+                const int count = MUXM::VisualTreeHelper::GetChildrenCount(nodes[n]);
+                for ( int child = 0; child < count; ++child )
+                    nodes.push_back(MUXM::VisualTreeHelper::GetChild(nodes[n], child));
+            }
+        }
+        INFO("snapshot native text: outer='" <<
+             (projectedCombo ? wxString(projectedCombo.Text().c_str()) : wxString()) <<
+             "' editor='" <<
+             (projectedEditor ? wxString(projectedEditor.Text().c_str()) : wxString()) <<
+             "' selection=" << (projectedCombo ? projectedCombo.SelectedIndex() : -1));
+        REQUIRE(projectionDrained);
         CHECK(textEventCount == 1);
         CHECK(textValue == "one");
         CHECK(textData == &oneData);
@@ -1861,6 +1912,9 @@ TEST_CASE("wxWinUI ComboBox constrains autocomplete as user input",
           "[winui-itemmodel][winui-combo][autocomplete][maxlength][parity]")
 {
     const long style = GENERATE(0, wxCB_SIMPLE);
+    const bool poisonBeforeConstruction =
+        wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned();
+    CAPTURE(style, poisonBeforeConstruction);
     wxFrame frame(nullptr, wxID_ANY, "combo completion length");
     wxComboBox combo(&frame, wxID_ANY, wxString(), wxDefaultPosition,
                      style == wxCB_SIMPLE ? wxSize(220, 150)
@@ -1875,15 +1929,48 @@ TEST_CASE("wxWinUI ComboBox constrains autocomplete as user input",
     // a user must have before they can type the prefix; wxCB_SIMPLE doesn't
     // otherwise have the template-realization pump used by the normal peer.
     combo.SetFocus();
-    REQUIRE(WaitFor("max-length autocomplete editor focus", [&combo]()
+    const bool editorFocused = WaitFor("max-length autocomplete editor focus", [&combo]()
     {
         return wxWinUIComboHasExactEditorFocus(combo);
-    }));
+    });
+    const bool poisonAfterWait =
+        wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned();
+    // Passive diagnostics distinguish an absent/poisoned peer from a live
+    // editor whose logical, HWND or XAML focus authority did not settle.
+    bool snapshotCaptured = false;
+    std::ostringstream focusDiagnostic;
+    const auto recordFocus = [&](const auto& snapshot)
+    {
+        focusDiagnostic << "captured=" << snapshotCaptured
+            << " state=" << snapshot.state << " phase=" << snapshot.phase
+            << " edit=" << snapshot.editIdentity
+            << " root=" << snapshot.xamlRootIdentity
+            << " focus=" << snapshot.logicalFocus << "/"
+            << snapshot.nativeFocusInHost << "/" << snapshot.editFocused;
+    };
+    if ( style == wxCB_SIMPLE )
+    {
+        wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot snapshot;
+        snapshotCaptured = wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(
+            &combo, &snapshot);
+        recordFocus(snapshot);
+    }
+    else
+    {
+        wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
+        snapshotCaptured = wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(
+            &combo, &snapshot);
+        recordFocus(snapshot);
+    }
+    INFO("autocomplete focus: " << focusDiagnostic.str()
+         << " poisonAfterWait=" << poisonAfterWait);
+    REQUIRE(editorFocused);
     combo.SetMaxLength(4);
     REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "al"));
     wxArrayString values;
     values.Add("alphabet");
     REQUIRE(combo.AutoComplete(values));
+    REQUIRE_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     REQUIRE(WaitFor("max-length autocomplete flyout", [&]()
     {
         return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 1;
@@ -1891,6 +1978,7 @@ TEST_CASE("wxWinUI ComboBox constrains autocomplete as user input",
     EventCounter textEvents(&combo, wxEVT_TEXT);
     EventCounter maxLengthEvents(&combo, wxEVT_TEXT_MAXLEN);
     REQUIRE(wxWinUIComboBoxTestAccess::InvokeAutoCompleteSuggestion(&combo, 0));
+    REQUIRE_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     CHECK(combo.GetValue() == "alph");
     CHECK(textEvents.GetCount() == 1);
     CHECK(maxLengthEvents.GetCount() == 1);
@@ -2135,6 +2223,12 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
 TEST_CASE("wxWinUI ComboBox physical clipboard shortcut round trip",
           "[.][winui-itemmodel][winui-combo][physical][clipboard]")
 {
+    if ( !EnableUITests() )
+    {
+        WARN("Physical ComboBox clipboard test requires WX_UI_TESTS=1");
+        return;
+    }
+
     // Hidden/manual by design: wxUIActionSimulator uses SendInput and this
     // test intentionally exercises the process clipboard on an isolated
     // desktop. The RAII snapshot restores every original OLE format.
@@ -2217,6 +2311,7 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     wxPanel destinationPanel(&destination);
     const wxString items[] = { "zero", "one", "two" };
     const long style = GENERATE(0, wxCB_SIMPLE);
+    CAPTURE(style);
     wxComboBox previousFocus(&sourcePanel, wxID_ANY, wxString(),
                               wxPoint(10, 10), wxSize(120, 30),
                               0, nullptr, wxCB_READONLY);
@@ -2393,26 +2488,109 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
         return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0;
     }));
 
-    combo.SetFocus();
-    REQUIRE(WaitFor("ComboBox completion refocus", [&combo]()
+    if ( style != wxCB_SIMPLE )
     {
-        return wxWindow::FindFocus() == &combo && ::GetFocus();
-    }));
+        const auto nativeCombo =
+            wxWinUIComboBoxTestAccess::GetNativePeer(combo).get();
+        REQUIRE(nativeCombo);
+        bool nativeGotFocus = false;
+        const auto focusRevoker = nativeCombo.GotFocus(winrt::auto_revoke,
+            [&](const auto&, const MUX::RoutedEventArgs& args)
+            {
+                if ( args.OriginalSource().try_as<MUXC::TextBox>() )
+                    nativeGotFocus = true;
+            });
+        wxUnusedVar(focusRevoker);
+        combo.SetFocus();
+        // FocusManager changes before WinUI's asynchronous OnGotFocus,
+        // which selects the editor text. A simulated completed edit must
+        // follow that real native event, just as subsequent keyboard input
+        // does; merely observing the new focus owner races its SelectAll.
+        REQUIRE(WaitFor("ComboBox native completion refocus", [&]()
+        {
+            return nativeGotFocus && wxWinUIComboHasExactEditorFocus(combo);
+        }));
+    }
+    else
+    {
+        combo.SetFocus();
+        REQUIRE(WaitFor("ComboBox completion refocus", [&combo]()
+        {
+            return wxWinUIComboHasExactEditorFocus(combo);
+        }));
+    }
     // Refocus alone is not a text edit. Change the real peer document so the
     // completer is refreshed by the production TextProperty path.
     REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "g"));
-    REQUIRE(WaitFor("ComboBox refocused completion flyout", [&combo]()
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot afterRefocusedEdit;
+    const bool capturedRefocusedEdit = style != wxCB_SIMPLE &&
+        wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(
+            &combo, &afterRefocusedEdit);
+    const bool refocusedCompletionOpen =
+        WaitFor("ComboBox refocused completion flyout", [&combo]()
     {
         return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
-    }));
+    });
+    INFO(wxWinUIComboDiagnostics(combo));
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot afterRefocusedWait;
+    const bool capturedRefocusedWait = style != wxCB_SIMPLE &&
+        wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(
+            &combo, &afterRefocusedWait);
+    INFO("refocused native range: immediate=" << capturedRefocusedEdit <<
+         "/" << afterRefocusedEdit.peerSelectionStart << "+" <<
+         afterRefocusedEdit.peerSelectionLength <<
+         " final=" << capturedRefocusedWait << "/" <<
+         afterRefocusedWait.peerSelectionStart << "+" <<
+         afterRefocusedWait.peerSelectionLength);
+    INFO("refocused completion: value='" << combo.GetValue() <<
+         "' suggestions=" <<
+         wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) <<
+         " exactEditorFocus=" << wxWinUIComboHasExactEditorFocus(combo) <<
+         " logicalFocus=" << (wxWindow::FindFocus() == &combo) <<
+         " nativeFocus=" << ::GetFocus() <<
+         " canReparent=" << wxWinUITLWHostCanReparentSubtreeNow(&combo));
+    REQUIRE(refocusedCompletionOpen);
 
-    // Keep the same real TextBox and completer across a top-level host move;
+    // An active popup still belongs to its old XamlRoot. Reparent must refuse
+    // without mutation until Escape and the exact popup's causal tail retire
+    // that physical debt.
+    wxWindow * const oldParent = combo.GetParent();
+    const HWND comboHwnd = reinterpret_cast<HWND>(combo.GetHWND());
+    const HWND oldNativeParent = ::GetParent(comboHwnd);
+    REQUIRE(oldParent == &sourcePanel);
+    REQUIRE_FALSE(combo.Reparent(&destinationPanel));
+    CHECK(combo.GetParent() == oldParent);
+    CHECK(reinterpret_cast<HWND>(combo.GetHWND()) == comboHwnd);
+    CHECK(::GetParent(comboHwnd) == oldNativeParent);
+    REQUIRE_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
+    const wxString beforeReparentClose = combo.GetValue();
+    REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_ESCAPE));
+    const bool completionRetiredBeforeReparent =
+        WaitFor("ComboBox completion retires before reparent", [&combo]()
+    {
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0 &&
+               wxWinUITLWHostCanReparentSubtreeNow(&combo);
+    });
+    INFO("completion retirement before reparent: suggestions=" <<
+         wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) <<
+         " canReparent=" << wxWinUITLWHostCanReparentSubtreeNow(&combo) <<
+         " exactEditorFocus=" << wxWinUIComboHasExactEditorFocus(combo) <<
+         " logicalFocus=" << (wxWindow::FindFocus() == &combo) <<
+         " nativeFocus=" << ::GetFocus() <<
+         " poisoned=" <<
+         wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
+    INFO(wxWinUIComboDiagnostics(combo));
+    REQUIRE(completionRetiredBeforeReparent);
+    CHECK(combo.GetValue() == beforeReparentClose);
+    REQUIRE_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
+
+    // Keep the same real TextBox and completer across the now-safe host move;
     // the next edit must anchor a newly-created flyout in the new XamlRoot.
     REQUIRE(combo.Reparent(&destinationPanel));
     combo.SetFocus();
     REQUIRE(WaitFor("reparented ComboBox completion focus", [&combo]()
     {
-        return wxWindow::FindFocus() == &combo && ::GetFocus();
+        return wxWinUIComboHasExactEditorFocus(combo);
     }));
     REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "ga"));
     REQUIRE(WaitFor("reparented ComboBox completion flyout", [&combo]()
@@ -2491,6 +2669,81 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
         }
     }
     CHECK(foundDirectory);
+}
+
+TEST_CASE("wxWinUI ComboBox Escape cancels completion waiting for popup retirement",
+          "[winui-itemmodel][winui-combo][autocomplete][popup]")
+{
+    const long style = GENERATE(0, wxCB_SIMPLE);
+    CAPTURE(style);
+    wxFrame frame(nullptr, wxID_ANY, "completion replacement cancellation");
+    wxPanel panel(&frame);
+    wxComboBox combo(&panel, wxID_ANY, wxString(), wxPoint(10, 10),
+                     wxSize(220, style == wxCB_SIMPLE ? 150 : 30),
+                     0, nullptr, style);
+    frame.SetClientSize(wxSize(300, 240));
+    panel.SetSize(frame.GetClientSize());
+    frame.Show();
+    if ( style != wxCB_SIMPLE ) RequireWinUIComboTemplate(combo);
+    combo.SetFocus();
+    REQUIRE(WaitFor("replacement completion editor focus", [&]()
+    {
+        return wxWinUIComboHasExactEditorFocus(combo);
+    }));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "al"));
+    wxArrayString initial;
+    initial.Add("alpha");
+    initial.Add("alpine");
+    REQUIRE(combo.AutoComplete(initial));
+    REQUIRE(WaitFor("initial replacement completion popup", [&]()
+    {
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
+    }));
+
+    wxArrayString replacement;
+    replacement.Add("alto");
+    replacement.Add("algebra");
+    replacement.Add("beta");
+    REQUIRE(combo.AutoComplete(replacement));
+    // No dispatcher turn between replacement and Escape: the old logical
+    // flyout is gone, while its exact native close still owns the replay.
+    REQUIRE(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0);
+    REQUIRE_FALSE(wxWinUITLWHostCanReparentSubtreeNow(&combo));
+    {
+        const wxWinUIKeyboardModifiers modifiers{};
+        const wxWinUIScopedKeyboardModifiers scopedModifiers(modifiers);
+        REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_ESCAPE));
+    }
+    const bool replacementCancelled = WaitFor("Escape retires without replaying completion", [&]()
+    {
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0 &&
+               wxWinUITLWHostCanReparentSubtreeNow(&combo);
+    });
+    INFO("cancel replacement suggestions=" <<
+         wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) <<
+         " canReparent=" << wxWinUITLWHostCanReparentSubtreeNow(&combo) <<
+         " exactFocus=" << wxWinUIComboHasExactEditorFocus(combo));
+    INFO(wxWinUIComboDiagnostics(combo));
+    REQUIRE(replacementCancelled);
+    YieldForAWhile();
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0);
+    CHECK(combo.GetValue() == "al");
+    REQUIRE_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
+
+    // Cancellation is not a permanent disable: a subsequent genuine edit
+    // must use the new completer and open a fresh native popup.
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "b"));
+    REQUIRE(WaitFor("new edit opens replacement completion", [&]()
+    {
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 1;
+    }));
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestion(&combo, 0) == "beta");
+    REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_ESCAPE));
+    REQUIRE(WaitFor("replacement completion final close", [&]()
+    {
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0 &&
+               wxWinUITLWHostCanReparentSubtreeNow(&combo);
+    }));
 }
 
 TEST_CASE("wxWinUI ComboBox completer callbacks may destroy their owner",
@@ -3210,5 +3463,315 @@ TEST_CASE("wxWinUI BitmapCombo keeps bitmap identity through sorting",
 }
 
 #endif // wxUSE_BITMAPCOMBOBOX
+
+#if wxUSE_CHECKLISTBOX
+
+TEST_CASE("wxWinUI default check lists render native labels",
+          "[winui-itemmodel][winui-listmodel][checklistbox][native-labels]")
+{
+    namespace X = winrt::Microsoft::UI::Xaml;
+    namespace C = winrt::Microsoft::UI::Xaml::Controls;
+    namespace M = winrt::Microsoft::UI::Xaml::Media;
+
+    const bool rtl = GENERATE(false, true);
+#if wxUSE_REARRANGECTRL
+    const bool rearrange = GENERATE(false, true);
+#else
+    const bool rearrange = false;
+#endif
+    CAPTURE(rtl, rearrange);
+    wxFrame frame(nullptr, wxID_ANY, "native check list labels",
+                  wxPoint(80, 80), wxSize(440, 240));
+    wxPanel panel(&frame);
+    wxArrayString labels;
+    labels.Add("First & visible label");
+    labels.Add("Second native label");
+    wxCheckListBox* list = nullptr;
+#if wxUSE_REARRANGECTRL
+    if ( rearrange )
+    {
+        wxArrayInt order;
+        order.Add(0);
+        order.Add(~1);
+        list = new wxRearrangeList(&panel, wxID_ANY, wxPoint(10, 10),
+                                   wxSize(360, 160), order, labels);
+    }
+    else
+#endif
+    {
+        list = new wxCheckListBox(&panel, wxID_ANY, wxPoint(10, 10),
+                                  wxSize(360, 160), labels);
+        list->Check(0);
+    }
+    list->SetLayoutDirection(rtl ? wxLayout_RightToLeft
+                                 : wxLayout_LeftToRight);
+    int events = 0;
+    list->Bind(wxEVT_CHECKLISTBOX, [&](wxCommandEvent& event)
+    {
+        ++events;
+        CHECK(event.GetEventObject() == list);
+        CHECK(event.GetInt() == 0);
+        CHECK(event.GetString() == list->GetString(0));
+        event.Skip();
+    });
+    frame.ShowWithoutActivating();
+
+    wxWinUITopLevelHost* host = wxWinUITopLevelHost::FindSlotOwner(list);
+    REQUIRE(host);
+    wxWinUISlot* slot = host->FindSlot(list);
+    REQUIRE(slot);
+    const auto nativeList = slot->GetContent().try_as<C::ListView>();
+    REQUIRE(nativeList);
+    REQUIRE(nativeList.Items().Size() == 2);
+    const auto item = nativeList.Items().GetAt(0).try_as<C::ListViewItem>();
+    REQUIRE(item);
+    const auto grid = item.Content().try_as<C::Grid>();
+    REQUIRE(grid);
+    C::CheckBox check{ nullptr };
+    unsigned images = 0;
+    for ( const auto& child : grid.Children() )
+    {
+        if ( child.try_as<C::Image>() )
+            ++images;
+        if ( const auto candidate = child.try_as<C::CheckBox>() )
+            check = candidate;
+    }
+    REQUIRE(check);
+    CHECK(images == 0);
+    CHECK(check.Opacity() == Approx(1.0));
+    CHECK(check.Visibility() == X::Visibility::Visible);
+    CHECK(winrt::unbox_value_or<winrt::hstring>(check.Content(), L"") ==
+          winrt::hstring(labels[0].wc_str()));
+    REQUIRE(check.IsChecked());
+    CHECK(check.IsChecked().Value());
+
+    C::TextBlock text{ nullptr };
+    REQUIRE(WaitFor("native check list label materialized", [&]()
+    {
+        std::vector<X::DependencyObject> nodes{ check };
+        for ( std::size_t n = 0; n != nodes.size() && n < 512; ++n )
+        {
+            if ( const auto block = nodes[n].try_as<C::TextBlock>() )
+            {
+                if ( block.Text() == winrt::hstring(labels[0].wc_str()) &&
+                     block.IsLoaded() && block.ActualWidth() > 0.0 &&
+                     block.ActualHeight() > 0.0 )
+                {
+                    text = block;
+                    return true;
+                }
+            }
+            const int count = M::VisualTreeHelper::GetChildrenCount(nodes[n]);
+            for ( int child = 0; child < count; ++child )
+                nodes.push_back(M::VisualTreeHelper::GetChild(nodes[n], child));
+        }
+        return false;
+    }));
+    CHECK(check.IsLoaded());
+    CHECK(check.FlowDirection() == (rtl ? X::FlowDirection::RightToLeft
+                                        : X::FlowDirection::LeftToRight));
+    CHECK(text.Opacity() == Approx(1.0));
+    CHECK(text.Visibility() == X::Visibility::Visible);
+    CAPTURE(item.ActualHeight(), check.ActualHeight(), text.ActualHeight());
+    CHECK(std::isnan(item.Height()));
+    CHECK(item.ActualHeight() >= 32.0);
+    CHECK(text.ActualHeight() <= item.ActualHeight());
+    const auto checkBounds = check.TransformToVisual(item).TransformBounds(
+        { 0, 0, static_cast<float>(check.ActualWidth()),
+          static_cast<float>(check.ActualHeight()) });
+    CHECK(checkBounds.Y >= 0.0f);
+    CHECK(checkBounds.Y + checkBounds.Height <= item.ActualHeight());
+    const auto second = nativeList.Items().GetAt(1).as<C::ListViewItem>();
+    REQUIRE(WaitFor("native list rows do not overlap", [&]()
+    {
+        return second.ActualHeight() >= 32.0 &&
+            second.TransformToVisual(item).TransformPoint({ 0, 0 }).Y >=
+                item.ActualHeight();
+    }));
+
+    list->Check(0, false);
+    list->SetString(0, "Renamed native label");
+    CHECK(events == 0);
+    CHECK_FALSE(check.IsChecked().Value());
+    CHECK(winrt::unbox_value_or<winrt::hstring>(check.Content(), L"") ==
+          L"Renamed native label");
+    CHECK(item.Content().try_as<C::Grid>() == grid);
+    REQUIRE(wxWinUIListBoxTestAccess::TogglePeerViaAutomation(*list, 0));
+    CHECK(events == 1);
+    CHECK(list->IsChecked(0));
+    CHECK(check.IsChecked().Value());
+#if wxUSE_REARRANGECTRL
+    if ( rearrange )
+        CHECK(static_cast<wxRearrangeList*>(list)->GetCurrentOrder()[0] == 0);
+#endif
+
+    const double normalHeight = item.ActualHeight();
+    wxFont largeFont = list->GetFont();
+    largeFont.SetPointSize(28);
+    REQUIRE(list->SetFont(largeFont));
+    REQUIRE(WaitFor("native check rows grow with their content", [&]()
+    {
+        return item.ActualHeight() > normalHeight &&
+            second.TransformToVisual(item).TransformPoint({ 0, 0 }).Y >=
+                item.ActualHeight();
+    }));
+    CHECK(item.Content().try_as<C::Grid>() == grid);
+    const auto largeCheckBounds = check.TransformToVisual(item).TransformBounds(
+        { 0, 0, static_cast<float>(check.ActualWidth()),
+          static_cast<float>(check.ActualHeight()) });
+    CHECK(largeCheckBounds.Y >= 0.0f);
+    CHECK(largeCheckBounds.Y + largeCheckBounds.Height <= item.ActualHeight());
+}
+
+#endif // wxUSE_CHECKLISTBOX
+
+#if wxUSE_COMBOBOX && wxUSE_STATBOX
+
+TEST_CASE("wxWinUI editable ComboBox shows its initial value in a hidden group",
+          "[winui-itemmodel][winui-combo][native-labels][initial-value]")
+{
+    const bool initiallyHidden = GENERATE(false, true);
+    CAPTURE(initiallyHidden);
+    wxFrame frame(nullptr, wxID_ANY, "editable combo initial presentation",
+                  wxPoint(80, 80), wxSize(540, 260));
+    wxPanel page(&frame);
+    if ( initiallyHidden )
+        page.Hide();
+    auto* const layout = new wxBoxSizer(wxVERTICAL);
+    auto* const group = new wxStaticBoxSizer(wxVERTICAL, &page,
+                                            "Choices and combo controls");
+    auto* const cells = new wxGridSizer(0, 2, 8, 8);
+    const wxString items[] = { "First", "Second", "Third", "Fourth" };
+    auto* const choice = new wxChoice(group->GetStaticBox(), wxID_ANY,
+        wxDefaultPosition, wxDefaultSize, WXSIZEOF(items), items);
+    choice->SetSelection(1);
+    auto* const combo = new wxComboBox(group->GetStaticBox(), wxID_ANY,
+        "Editable value", wxDefaultPosition, wxDefaultSize,
+        WXSIZEOF(items), items);
+    cells->Add(choice, 0, wxEXPAND);
+    cells->Add(combo, 0, wxEXPAND);
+    group->Add(cells, 0, wxEXPAND | wxALL, 8);
+    layout->Add(group, 0, wxEXPAND | wxALL, 8);
+    page.SetSizer(layout);
+    EventCounter textEvents(combo, wxEVT_TEXT);
+    EventCounter selectionEvents(combo, wxEVT_COMBOBOX);
+    CHECK(combo->GetValue() == "Editable value");
+    frame.ShowWithoutActivating();
+    page.Show();
+    frame.Layout();
+    page.Layout();
+
+    const auto peer = wxWinUIComboBoxTestAccess::GetNativePeer(*combo).get();
+    REQUIRE(peer);
+    CHECK(combo->IsEditable());
+    CHECK(peer.IsEditable());
+    MUXC::TextBox editor{ nullptr };
+    MUXC::TextBlock faceplate{ nullptr };
+    wxString nativeTextBlocks;
+    const auto findVisibleValue = [&]()
+    {
+        faceplate = nullptr;
+        nativeTextBlocks.clear();
+        std::vector<MUX::DependencyObject> nodes{ peer };
+        for ( std::size_t n = 0; n != nodes.size() && n < 512; ++n )
+        {
+            if ( const auto candidate = nodes[n].try_as<MUXC::TextBox>() )
+            {
+                editor = candidate;
+            }
+            if ( const auto text = nodes[n].try_as<MUXC::TextBlock>() )
+            {
+                nativeTextBlocks += wxString::Format(
+                    "[%s: '%s', %.0fx%.0f, loaded=%d, visible=%d] ",
+                    wxString(text.Name().c_str()),
+                    wxString(text.Text().c_str()),
+                    text.ActualWidth(), text.ActualHeight(),
+                    text.IsLoaded(),
+                    text.Visibility() == MUX::Visibility::Visible);
+                if ( text.Text() == L"Editable value" && text.IsLoaded() &&
+                     text.ActualWidth() > 0.0 && text.ActualHeight() > 0.0 &&
+                     text.Visibility() == MUX::Visibility::Visible )
+                {
+                    faceplate = text;
+                }
+            }
+            const int count = MUXM::VisualTreeHelper::GetChildrenCount(nodes[n]);
+            for ( int child = 0; child < count; ++child )
+                nodes.push_back(MUXM::VisualTreeHelper::GetChild(nodes[n], child));
+        }
+        // WinUI deliberately keeps EditableText at 0x0 for UIA while
+        // unfocused. Its native ContentPresenter/TextBlock is the visible
+        // value; a model-only or hidden-editor-only value is not sufficient.
+        return faceplate && editor && editor.IsLoaded() &&
+               editor.Text() == L"Editable value";
+    };
+    const bool ready = WaitFor("initial editable ComboBox native text",
+                               findVisibleValue);
+    INFO(wxWinUIComboDiagnostics(*combo));
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(combo, &snapshot));
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot diagnostic;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(combo, &diagnostic));
+    INFO("template state=" << snapshot.state << " phase=" << snapshot.phase <<
+         " editGeneration=" << snapshot.editGeneration <<
+         " queued=" << diagnostic.comboLayoutResolveRequests <<
+         " runs=" << diagnostic.comboLayoutResolveRuns <<
+         " forced=" << diagnostic.comboLayoutRealizations);
+    CAPTURE(combo->GetValue(), combo->GetSize().x, combo->GetSize().y,
+            peer.ActualWidth(), peer.ActualHeight(), peer.IsLoaded(),
+            peer.IsEditable());
+    INFO("editor found=" << static_cast<bool>(editor) <<
+         " text=" << (editor ? wxString(editor.Text().c_str()) : wxString()) <<
+         " width=" << (editor ? editor.ActualWidth() : 0.0) <<
+         " height=" << (editor ? editor.ActualHeight() : 0.0) <<
+         " opacity=" << (editor ? editor.Opacity() : 0.0) <<
+         " loaded=" << (editor && editor.IsLoaded()) <<
+         " visible=" << (editor &&
+             editor.Visibility() == MUX::Visibility::Visible));
+    INFO("native faceplate found=" << static_cast<bool>(faceplate));
+    INFO("native TextBlocks: " << nativeTextBlocks);
+    REQUIRE(ready);
+    CHECK(peer.ActualWidth() ==
+          Approx(combo->GetClientSize().x / combo->GetDPIScaleFactor()).margin(1));
+    CHECK(peer.IsEditable());
+    CHECK(peer.Opacity() == Approx(1.0));
+    CHECK(editor.Opacity() == Approx(1.0));
+    CHECK(combo->GetValue() == "Editable value");
+    CHECK(combo->GetSelection() == wxNOT_FOUND);
+    CHECK(textEvents.GetCount() == 0);
+    CHECK(selectionEvents.GetCount() == 0);
+
+    // A page switch must not erase a custom value which has no selected
+    // item. Observe the real template again without realizing it from a test
+    // accessor, assigning Text or forcing a native measure/layout pass.
+    page.Hide();
+    wxYield();
+    page.Show();
+    page.Layout();
+    REQUIRE(WaitFor("editable ComboBox native text after page show",
+                    findVisibleValue));
+    CHECK(combo->GetValue() == "Editable value");
+    CHECK(textEvents.GetCount() == 0);
+    CHECK(selectionEvents.GetCount() == 0);
+
+    // Focus must activate WinUI's own editor (not a substitute TextBox),
+    // give it real geometry and keep the same authoritative document.
+    frame.Show();
+    combo->SetFocus();
+    REQUIRE(WaitFor("editable ComboBox focused native editor", [&]()
+    {
+        return editor && editor.IsLoaded() && editor.ActualWidth() > 0.0 &&
+               editor.ActualHeight() > 0.0 &&
+               editor.Visibility() == MUX::Visibility::Visible &&
+               editor.Text() == L"Editable value" &&
+               MUXI::FocusManager::GetFocusedElement(peer.XamlRoot()) == editor &&
+               wxWindow::FindFocus() == combo;
+    }));
+    CHECK(combo->GetValue() == "Editable value");
+    CHECK(textEvents.GetCount() == 0);
+    CHECK(selectionEvents.GetCount() == 0);
+}
+
+#endif // wxUSE_COMBOBOX && wxUSE_STATBOX
 
 #endif // __WXWINUI__ && wxUSE_WINUI3

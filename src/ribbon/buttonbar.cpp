@@ -31,6 +31,10 @@
     #include <functional>
     #include <limits>
     #include <utility>
+    #include "ribboncommandwinui.h"
+    #if defined(WXWINUI_RIBBON_TOOLKIT)
+        #include "ribboncontainerswinui.h"
+    #endif
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;

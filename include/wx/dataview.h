@@ -34,7 +34,10 @@ class wxItemAttr;
 class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 
 #if wxUSE_NATIVE_DATAVIEWCTRL && !defined(__WXUNIVERSAL__)
-    #if defined(__WXGTK__) || defined(__WXOSX__)
+    #if defined(__WXWINUI__) && wxUSE_WINUI3
+        #define wxHAS_WINUI_DATAVIEWCTRL
+        #define wxHAS_NATIVE_DATAVIEWCTRL
+    #elif defined(__WXGTK__) || defined(__WXOSX__)
         #define wxHAS_NATIVE_DATAVIEWCTRL
     #endif
 #endif
@@ -1073,6 +1076,8 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     #include "wx/generic/dataview.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/dataview.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataview.h"
 #elif defined(__WXMAC__)

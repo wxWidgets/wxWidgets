@@ -34,6 +34,9 @@
 #include "wx/private/windowlifetime.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "auibookwinui.h"
+#endif
 
 #include "wx/dcbuffer.h" // just for wxALWAYS_NATIVE_DOUBLE_BUFFER
 
@@ -860,6 +863,8 @@ struct wxAuiNotebookEndDragOverride
 
 thread_local const wxAuiNotebookEndDragOverride*
     gs_auiNotebookEndDragOverride = nullptr;
+thread_local const wxAuiNotebookEndDragOverride*
+    gs_auiNotebookDragMotionOverride = nullptr;
 #endif
 
 class wxAuiNotebookTopologyTransaction final
@@ -2830,6 +2835,15 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
 // Is the tab visible?
 bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* dc, wxWindow* wnd)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( auto* const tabs = wxDynamicCast(wnd, wxAuiTabCtrl);
+         tabs && static_cast<wxAuiTabContainer*>(tabs) == this )
+    {
+        const auto projection = tabs->m_winui;
+        if ( projection && projection->IsActive() )
+            return projection->IsTabVisible(tabPage);
+    }
+#endif
     if (!dc || !dc->IsOk())
         return false;
 
@@ -3015,6 +3029,18 @@ void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
 {
     if ( !win || wxWindowIsUnavailableForCallbacks(win) )
         return;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( auto* const tabs = wxDynamicCast(win, wxAuiTabCtrl);
+         tabs && static_cast<wxAuiTabContainer*>(tabs) == this )
+    {
+        const auto projection = tabs->m_winui;
+        if ( projection && projection->IsActive() )
+        {
+            projection->ShowTab(tabPage);
+            return;
+        }
+    }
+#endif
 
     const wxWeakRef<wxWindow> weakWindow(win);
     wxAuiTabArt* const art = m_art;
@@ -3265,6 +3291,9 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id)
                         wxT("wxAuiTabCtrl"))
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InitWinUIProjection();
+#endif
 }
 
 wxAuiTabCtrl::wxAuiTabCtrl() = default;
@@ -3282,10 +3311,53 @@ bool wxAuiTabCtrl::Create(wxAuiNotebook* parent, wxWindowID id)
     }
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InitWinUIProjection();
+#endif
     return true;
 }
 
-wxAuiTabCtrl::~wxAuiTabCtrl() = default;
+wxAuiTabCtrl::~wxAuiTabCtrl()
+{
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winui ) m_winui->Close();
+#endif
+}
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxAuiTabCtrl::InitWinUIProjection()
+{
+    m_winui = wxAuiTabCtrlWinUI::Create(this,
+        [](wxAuiTabCtrl* owner, wxWindow* page, int command)
+        {
+            const int index = page ? owner->GetIdxFromWindow(page) : wxNOT_FOUND;
+            if ( command == 0 )
+            {
+                if ( index != wxNOT_FOUND )
+                    wxAuiTabEventSource::TabClicked(owner, index);
+            }
+            else if ( index != wxNOT_FOUND || command == wxAUI_BUTTON_WINDOWLIST )
+            {
+                owner->OnButton(index, command);
+            }
+        });
+}
+
+void wxAuiTabCtrl::Refresh(bool eraseBackground, const wxRect* rect)
+{
+    const auto projection = m_winui;
+    if ( projection ) projection->Invalidate();
+    wxControl::Refresh(eraseBackground, rect);
+}
+
+void wxAuiTabCtrl::Update()
+{
+    const wxWeakRef<wxAuiTabCtrl> weakThis(this);
+    const auto projection = m_winui;
+    if ( projection ) projection->Update();
+    if ( weakThis.get() == this ) wxControl::Update();
+}
+#endif
 
 // Our parent is always wxAuiNotebook, by construction, so the cast is safe.
 wxAuiNotebook* wxAuiTabCtrl::GetBook() const
@@ -3321,6 +3393,14 @@ void wxAuiTabCtrl::DoShowTab(int idx)
         return;
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winui;
+    if ( projection && projection->IsActive() )
+    {
+        projection->ShowTab(idx);
+        return;
+    }
+#endif
     MakeTabVisible(idx, this);
 }
 
@@ -3493,6 +3573,17 @@ wxRect wxAuiTabCtrl::GetHintScreenRect() const
 
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winui;
+    if ( projection && projection->IsActive() )
+    {
+        // Validate HWND damage only. Publishing XAML here can invoke user
+        // callbacks which destroy this HWND inside USER32's paint dispatch.
+        // Refresh's coalesced work and Update's pre-paint phase own publication.
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
     wxAutoBufferedPaintDC dc(this);
 
     if (GetPageCount() > 0)
@@ -3524,14 +3615,43 @@ void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
 
 void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const wxWeakRef<wxAuiTabCtrl> weakThis(this);
+#endif
     wxSize s = evt.GetSize();
     wxRect r(0, 0, s.GetWidth(), s.GetHeight());
     if ( r != wxAuiTabContainer::m_rect )
         SetRect(r);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( weakThis.get() == this && !wxWindowIsUnavailableForCallbacks(this) && m_winui )
+        m_winui->Invalidate();
+#endif
 }
 
 void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winui;
+    if ( projection && projection->IsActive() )
+    {
+        const wxWeakRef<wxAuiTabCtrl> weakThis(this);
+        projection->SynchronizeGeometry();
+        if ( weakThis.get() != this || wxWindowIsUnavailableForCallbacks(this) ) return;
+        // Native TabView handles selection and its close button. Keep AUI's
+        // own drag identity, but do not steal capture on an ordinary click.
+        DoEndDragging();
+        const wxPoint pos = evt.GetPosition();
+        if ( !ButtonHitTest(pos) )
+        {
+            if ( const auto tab = TabHitTest(pos) )
+            {
+                m_clickPt = pos;
+                m_clickTab = tab.window;
+            }
+        }
+        return;
+    }
+#endif
     CaptureMouse();
 
     // Reset any previous values first.
@@ -3591,6 +3711,13 @@ void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 
 void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winui && m_winui->IsActive() && !m_isDragging )
+    {
+        DoEndDragging();
+        return;
+    }
+#endif
     if (GetCapture() == this)
         ReleaseMouse();
 
@@ -3750,6 +3877,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         abs(pos.y - m_clickPt.y) > drag_y_threshold)
     {
         const int idx = GetIdxFromWindow(m_clickTab);
+        if ( idx == wxNOT_FOUND ) return;
         if ( idx != wxNOT_FOUND )
         {
             switch ( GetPage(idx).kind )
@@ -3764,9 +3892,18 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
             }
         }
 
+        const wxWeakRef<wxAuiTabCtrl> weakThis(this);
+        const wxWeakRef<wxWindow> weakPage(m_clickTab);
         wxAuiTabEventSource::TabBeginDrag(this, idx);
+        if ( weakThis.get() != this || wxWindowIsUnavailableForCallbacks(this) ||
+             !weakPage || m_clickTab != weakPage.get() ||
+             GetIdxFromWindow(weakPage.get()) != idx ) return;
 
         m_isDragging = true;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( m_winui && m_winui->IsActive() && !HasCapture() )
+            CaptureMouse();
+#endif
     }
 }
 
@@ -4513,6 +4650,13 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 // code called by all constructors
 void wxAuiNotebook::InitNotebook(long style)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The manager clears its entire update region before painting dock art.
+    // Keep that background in the same opaque paint transaction over Mica,
+    // instead of exposing an independent backdrop erase between refreshes.
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
+
     SetName(wxT("wxAuiNotebook"));
     m_curPage = wxNOT_FOUND;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
@@ -5370,12 +5514,24 @@ int wxAuiNotebook::CalculateTabCtrlHeight()
     // find out new best tab height
     wxAuiTabArt* art = m_tabs.GetArtProvider();
 
-    return wxAuiInvokeTabArt(
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const int nativeHeight = wxAuiTabCtrlWinUI::MinimumHeight(m_tabs, this);
+#endif
+
+    const int height = wxAuiInvokeTabArt(
         art, [this](wxAuiTabArt* const leasedArt)
         {
             return leasedArt->GetBestTabCtrlSize(
                 this, m_tabs.GetPages(), m_requestedBmpSize);
         });
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A stock TabView tab is 40 DIPs plus its template's strip spacing.
+    // Preserve explicit SetTabCtrlHeight(), but never clip default native tabs
+    // to the smaller GDI text-only measurement.
+    return wxMax(height, nativeHeight);
+#else
+    return height;
+#endif
 }
 
 
@@ -6522,6 +6678,9 @@ bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
 
     tabInfo.pageInfo->tooltip = text;
     wxAuiBumpTabContainerRevision(tabInfo.tabCtrl);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    tabInfo.tabCtrl->Refresh();
+#endif
 
     // NB: we don't update the tooltip if it is already being displayed, it
     //     typically never happens, no need to code that
@@ -8295,10 +8454,32 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiTabCtrl* src_tabs, int src_idx)
     if ( !hasOriginalTopology() )
         return;
 
-    wxPoint screen_pt = ::wxGetMousePosition();
+    wxPoint screen_pt;
+    wxAuiTabCtrl* dest_tabs = nullptr;
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
+    if ( const auto* const input = gs_auiNotebookDragMotionOverride )
+    {
+        if ( input->book != this || input->bookLifetime.get() != this ||
+             input->sourceTabs != src_tabs || input->sourceTabsLifetime.get() != src_tabs ||
+             !input->destinationTabs ||
+             input->destinationTabsLifetime.get() != input->destinationTabs ||
+             wxWindowIsUnavailableForCallbacks(input->destinationTabs) ||
+             input->destinationParentLifetime.get() != input->destinationParent ||
+             input->destinationTabs->GetParent() != input->destinationParent ||
+             input->destinationIndex < 0 ||
+             size_t(input->destinationIndex) >= input->destinationTabs->GetPageCount() ) return;
+        dest_tabs = input->destinationTabs;
+        const wxRect rect = dest_tabs->GetPages()[size_t(input->destinationIndex)].rect;
+        if ( rect.IsEmpty() ) return;
+        screen_pt = dest_tabs->ClientToScreen(rect.GetPosition() + rect.GetSize() / 2);
+    }
+    else
+#endif
+    {
+        screen_pt = ::wxGetMousePosition();
+        dest_tabs = GetTabCtrlFromPoint(ScreenToClient(screen_pt));
+    }
     wxPoint client_pt = ScreenToClient(screen_pt);
-
-    wxAuiTabCtrl* const dest_tabs = GetTabCtrlFromPoint(client_pt);
 
     if (dest_tabs == src_tabs)
     {
@@ -8553,6 +8734,21 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiTabCtrl* src_tabs, int src_idx)
     m_mgr.UpdateHint(hintRect);
 }
 #ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
+void wxAuiNotebookTestAccess::DragMotion(wxAuiNotebook* const book,
+                                       wxAuiTabCtrl* const source,
+                                       int sourceIndex,
+                                       wxAuiTabCtrl* const destination,
+                                       int destinationIndex)
+{
+    wxCHECK_RET(book && source && destination, "null AUI drag-motion target");
+    wxCHECK_RET(!gs_auiNotebookDragMotionOverride, "nested AUI drag-motion override");
+    const wxAuiNotebookEndDragOverride input =
+        {book, source, destination, destinationIndex, false};
+    gs_auiNotebookDragMotionOverride = &input;
+    const auto reset = wxMakeGuard([] { gs_auiNotebookDragMotionOverride = nullptr; });
+    book->OnTabDragMotion(source, sourceIndex);
+}
+
 void wxAuiNotebookTestAccess::EndDrag(wxAuiNotebook* const book,
                                       wxAuiTabCtrl* const srcTabs,
                                       const int srcIndex,
@@ -10232,6 +10428,9 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
+            const wxWeakRef<wxAuiNotebook> weakThis(this);
+            const wxWeakRef<wxAuiTabCtrl> weakTabs(tabs);
+            const wxWeakRef<wxWindow> weakPage(close_wnd);
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
@@ -10241,7 +10440,12 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
             e.SetOldSelection(selection);
             e.SetEventObject(this);
             ProcessWindowEvent(e);
-            if (!e.IsAllowed())
+            if ( weakThis.get() != this || wxWindowIsUnavailableForCallbacks(this) ||
+                 weakTabs.get() != tabs || wxWindowIsUnavailableForCallbacks(tabs) ||
+                 weakPage.get() != close_wnd ||
+                 wxWindowIsUnavailableForCallbacks(close_wnd) ||
+                 close_wnd->GetParent() != this ||
+                 tabs->GetIdxFromWindow(close_wnd) == wxNOT_FOUND || !e.IsAllowed() )
                 return;
 
 
@@ -10256,8 +10460,11 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
                 wxCHECK_RET( main_idx != wxNOT_FOUND, wxT("no page to delete?") );
 
-                DeletePage(main_idx);
+                if ( !DeletePage(main_idx) ) return;
             }
+
+            if ( weakThis.get() != this || wxWindowIsUnavailableForCallbacks(this) )
+                return;
 
             // notify owner that the tab has been closed
             wxAuiNotebookEvent e2(wxEVT_AUINOTEBOOK_PAGE_CLOSED, m_windowId);

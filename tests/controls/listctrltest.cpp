@@ -27,6 +27,13 @@
 #include "listbasetest.h"
 #include "testableframe.h"
 #include "wx/uiaction.h"
+#if wxUSE_TEXTCTRL
+#include "wx/textctrl.h"
+#endif
+#include <algorithm>
+#include <functional>
+#include <memory>
+#include <utility>
 
 // ----------------------------------------------------------------------------
 // test class
@@ -487,5 +494,225 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnClick", "[listctrl]")
     m_list->ClearAll();
 }
 #endif // wxUSE_UIACTIONSIMULATOR
+
+#ifdef _WX_GENERIC_LISTCTRL_H_
+namespace
+{
+class GenericOrderList final : public wxGenericListCtrl
+{
+public:
+    explicit GenericOrderList(bool virtualList)
+        : wxGenericListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxSize(600, 240),
+                            wxLC_REPORT | (virtualList ? wxLC_VIRTUAL : 0))
+    {
+    }
+
+    static wxString Value(long row, long column)
+    {
+        return wxString::Format("row %ld column %ld", row, column);
+    }
+
+protected:
+    wxString OnGetItemText(long row, long column) const override
+    {
+        return Value(row, column);
+    }
+};
+}
+
+TEST_CASE("GenericListCtrl::ColumnOrderPreservesModelAndHitGeometry",
+          "[listctrl][generic-listctrl][column-order]")
+{
+    const bool virtualList = GENERATE(false, true);
+    CAPTURE(virtualList);
+    // Exercise the generic model selected by wx/listctrl.h. Native wxMSW and
+    // wxQt don't build this class; their public API is tested above.
+    auto list = std::make_unique<GenericOrderList>(virtualList);
+    const int widths[] = {130, 150, 170};
+    for ( int column = 0; column < 3; ++column )
+        REQUIRE(list->InsertColumn(column, wxString::Format("Column %d", column),
+                                   wxLIST_FORMAT_LEFT, widths[column]) == column);
+    if ( virtualList )
+    {
+        list->SetItemCount(20);
+    }
+    else
+    {
+        for ( long row = 0; row < 20; ++row )
+        {
+            REQUIRE(list->InsertItem(row, GenericOrderList::Value(row, 0)) == row);
+            for ( int column = 1; column < 3; ++column )
+                REQUIRE(list->SetItem(row, column, GenericOrderList::Value(row, column)));
+        }
+    }
+
+    int permutation[] = {0, 1, 2};
+    do
+    {
+        wxArrayInt order;
+        for ( const int column : permutation ) order.Add(column);
+        REQUIRE(list->SetColumnsOrder(order));
+        REQUIRE(list->GetColumnsOrder() == order);
+        list->Update();
+        int previousRight = -1;
+        for ( int position = 0; position < 3; ++position )
+        {
+            const int column = permutation[position];
+            CAPTURE(position, column);
+            CHECK(list->GetColumnOrder(column) == position);
+            CHECK(list->GetColumnIndexFromOrder(position) == column);
+            CHECK(list->GetItemText(0, column) == GenericOrderList::Value(0, column));
+            CHECK(list->GetColumnWidth(column) == widths[column]);
+            wxRect bounds;
+            REQUIRE(list->GetSubItemRect(0, column, bounds));
+            CHECK(bounds.x > previousRight);
+            previousRight = bounds.GetRight();
+            int flags = 0;
+            long hitColumn = -1;
+            const wxPoint point(bounds.x + bounds.width / 2,
+                                bounds.y + bounds.height / 2);
+            CHECK(list->HitTest(point, flags, &hitColumn) == 0);
+            CHECK(hitColumn == column);
+        }
+    }
+    while ( std::next_permutation(std::begin(permutation), std::end(permutation)) );
+}
+#if wxUSE_TEXTCTRL
+namespace
+{
+class GenericLabelList final : public wxGenericListCtrl
+{
+public:
+    explicit GenericLabelList(bool virtualList = false)
+        : wxGenericListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxSize(400, 200),
+                            wxLC_REPORT | wxLC_EDIT_LABELS |
+                            (virtualList ? wxLC_VIRTUAL : 0))
+    {
+        InsertColumn(0, "Label", wxLIST_FORMAT_LEFT, 240);
+        if ( virtualList ) SetItemCount(2);
+        else
+        {
+            InsertItem(0, "Original");
+            InsertItem(1, "Survivor");
+        }
+    }
+
+    int getter = 0;
+    mutable std::function<void()> onRead;
+
+private:
+    void Read(int which) const
+    {
+        if ( getter == which && onRead )
+        {
+            // Copy the callback out before it can destroy this object.
+            const auto callback = std::move(onRead);
+            callback();
+        }
+    }
+    wxString OnGetItemText(long, long) const override
+    { Read(0); return "Virtual label"; }
+    int OnGetItemColumnImage(long, long) const override
+    { Read(1); return -1; }
+    wxItemAttr* OnGetItemAttr(long) const override
+    { Read(2); return nullptr; }
+};
+}
+
+TEST_CASE("GenericListCtrl::EndEditLabelReportsEditorNotVetoAndAllowsAppend",
+          "[listctrl][generic-listctrl][label-edit-contract]")
+{
+    const bool veto = GENERATE(false, true);
+    auto list = std::make_unique<GenericLabelList>();
+    unsigned begins = 0, ends = 0;
+    list->Bind(wxEVT_LIST_BEGIN_LABEL_EDIT, [&](wxListEvent& event)
+    {
+        ++begins;
+        CHECK(event.GetText() == "Original");
+        CHECK(list->GetEditControl());
+    });
+    list->Bind(wxEVT_LIST_END_LABEL_EDIT, [&](wxListEvent& event)
+    {
+        ++ends;
+        CHECK_FALSE(event.IsEditCancelled());
+        CHECK(event.GetIndex() == 0);
+        CHECK(event.GetText() == "Candidate");
+        CHECK(list->GetItemText(0) == "Original");
+        // EditableListBox appends its next empty row here. A new later row
+        // changes topology without invalidating the edited item's identity.
+        REQUIRE(list->InsertItem(2, "Appended during END") == 2);
+        if ( veto ) event.Veto();
+    });
+    auto* const editor = list->EditLabel(0);
+    REQUIRE(editor);
+    editor->ChangeValue("Candidate");
+    // Public EndEditLabel returns whether an editor existed, including when
+    // END vetoed. The private UIA adapter separately observes acceptance.
+    CHECK(list->EndEditLabel(false));
+    CHECK_FALSE(list->EndEditLabel(false));
+    CHECK_FALSE(list->GetEditControl());
+    CHECK(begins == 1u);
+    CHECK(ends == 1u);
+    CHECK(list->GetItemText(0) == (veto ? "Original" : "Candidate"));
+    CHECK(list->GetItemText(1) == "Survivor");
+    CHECK(list->GetItemText(2) == "Appended during END");
+}
+
+TEST_CASE("GenericListCtrl::LabelEditRejectsRetiredItemDuringEvents",
+          "[listctrl][generic-listctrl][label-edit-contract]")
+{
+    const bool atBegin = GENERATE(false, true);
+    const bool destroy = GENERATE(false, true);
+    auto list = std::make_unique<GenericLabelList>();
+    unsigned callbacks = 0;
+    list->Bind(atBegin ? wxEVT_LIST_BEGIN_LABEL_EDIT : wxEVT_LIST_END_LABEL_EDIT,
+        [&](wxListEvent&)
+        {
+            ++callbacks;
+            if ( destroy ) list.reset();
+            else REQUIRE(list->DeleteItem(0));
+            // Consume this event: no dispatch continuation on a deleted handler.
+        });
+    auto* const editor = list->EditLabel(0);
+    if ( atBegin ) CHECK_FALSE(editor);
+    else
+    {
+        REQUIRE(editor);
+        editor->ChangeValue("Must not overwrite the successor");
+        CHECK(list->EndEditLabel(false));
+    }
+    CHECK(callbacks == 1u);
+    if ( !destroy )
+    {
+        CHECK_FALSE(list->GetEditControl());
+        CHECK(list->GetItemCount() == 1);
+        CHECK(list->GetItemText(0) == "Survivor");
+    }
+}
+
+TEST_CASE("GenericListCtrl::LabelEditRevalidatesEachVirtualGetter",
+          "[listctrl][generic-listctrl][label-edit-contract]")
+{
+    const int getter = GENERATE(0, 1, 2);
+    const bool destroy = GENERATE(false, true);
+    auto list = std::make_unique<GenericLabelList>(true);
+    list->getter = getter;
+    unsigned callbacks = 0, begins = 0;
+    list->Bind(wxEVT_LIST_BEGIN_LABEL_EDIT, [&](wxListEvent&) { ++begins; });
+    list->onRead = [&]
+    {
+        ++callbacks;
+        if ( destroy ) list.reset();
+        else list->SetItemCount(0);
+    };
+    CHECK_FALSE(list->EditLabel(0));
+    CHECK(callbacks == 1u);
+    CHECK(begins == 0u);
+    if ( !destroy ) CHECK_FALSE(list->GetEditControl());
+}
+#endif // wxUSE_TEXTCTRL
+#endif // generic list implementation
 
 #endif // wxUSE_LISTCTRL

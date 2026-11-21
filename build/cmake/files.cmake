@@ -1840,6 +1840,7 @@ set(MSW_HDR
     wx/winui/clrpicker.h
     wx/winui/colordlg.h
     wx/winui/datectrl.h
+    wx/winui/dataview.h
     wx/winui/combobox.h
     wx/winui/gauge.h
     wx/winui/hyperlink.h

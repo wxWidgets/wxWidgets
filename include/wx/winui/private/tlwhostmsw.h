@@ -18,6 +18,25 @@
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
+// GDI surfaces which own their background must publish opaque pixels over the
+// DWM material. Native XAML slots and deliberately transparent shell surfaces
+// must not acquire an opaque paint buffer merely to validate WM_PAINT.
+WXDLLIMPEXP_CORE bool
+wxWinUIShouldUseOpaquePaintBuffer(const wxWindow *window);
+
+// Non-client scrollbar presentation keeps USER32's geometry/range model.
+// A non-null region is caller-owned and excludes only bands already presented
+// by a ready WinUI peer. Null means use the unchanged native paint path.
+WXDLLIMPEXP_CORE bool wxWinUIWindowScrollbarsProjected(WXHWND hwnd, int orient = 0);
+WXDLLIMPEXP_CORE void wxWinUIWindowScrollbarModelChanged(
+    wxWindow *window, int orient, bool nativePaint);
+// Complete a range/page write after USER32 has possibly painted the track
+// directly. Does not initialize a host, dispatch events or repaint the client.
+WXDLLIMPEXP_CORE void wxWinUIWindowScrollbarModelCommitted(
+    wxWindow *window, int orient);
+WXDLLIMPEXP_CORE WXHANDLE wxWinUIWindowScrollbarPaintRegion(
+    wxWindow *window, WXHANDLE updateRegion);
+
 // The few functions src/msw code calls into the shared island host
 // (src/winui/tlwhost.cpp), declared here so those translation units don't
 // have to pull the C++/WinRT projection in.
@@ -299,7 +318,10 @@ wxWinUITLWHostHandleShellGetObject(wxWindow *window,
 
 // A successful native reparent must migrate the slots synchronously.  The old
 // TLW can be destroyed before the next CallAfter-based geometry flush.
-WXDLLIMPEXP_CORE void wxWinUITLWHostNotifyReparent(wxWindow *window,
+// False means a composite-cohort transaction kept/restored its source graph:
+// the caller must roll back its exact native/logical reparent. Ordinary slot
+// transfers retain their existing recoverable deferred-retry contract.
+WXDLLIMPEXP_CORE bool wxWinUITLWHostNotifyReparent(wxWindow *window,
                                                    wxWindow *oldTLW);
 
 // A cross-TLW move cannot detach a carrier while one of its exact popup

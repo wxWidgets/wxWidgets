@@ -17,6 +17,11 @@
 #include "wx/ribbon/art.h"
 #include "wx/bmpbndl.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonToolBarWinUI;
+#endif
+
 class wxRibbonToolBarToolBase;
 class wxRibbonToolBarToolGroup;
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonToolBarToolGroup*, wxArrayRibbonToolBarToolGroup, class WXDLLIMPEXP_RIBBON);
@@ -161,6 +166,11 @@ public:
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const override;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxSize GetMinSize() const override;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
+#endif
+
 protected:
     friend class wxRibbonToolBarEvent;
     virtual wxSize DoGetBestSize() const override;
@@ -195,6 +205,15 @@ protected:
     wxSize* m_sizes = nullptr;
     int m_nrows_min = 0;
     int m_nrows_max = 0;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+private:
+    friend class wxRibbonToolBarWinUI;
+    bool InitializeWinUI();
+    void SyncWinUI();
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    std::shared_ptr<wxRibbonToolBarWinUI> m_winui;
+#endif
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonToolBar);

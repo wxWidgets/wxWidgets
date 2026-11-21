@@ -11,6 +11,7 @@
 #endif
 
 #include "wx/statusbr.h"
+#include <cstdint>
 
 struct wxWinUIAppearanceSnapshot;
 
@@ -51,7 +52,9 @@ public:
                                bool isMouse,
                                bool isPrimary,
                                bool isLeftButtonPressed,
-                               const wxPoint& screenPoint);
+                               const wxPoint& screenPoint,
+                               std::uint32_t pointerId = 0,
+                               std::uint64_t timestamp = 0);
     static void SetTopLevelMaximized(wxStatusBar& bar, bool maximized);
     static bool GetFieldState(const wxStatusBar& bar,
                              int field,

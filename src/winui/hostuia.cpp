@@ -1239,7 +1239,7 @@ bool wxWinUISlot::ShouldPreserveAutomationNameRelinquishment() const
                wxWinUIStyleAuthorsAutomationName(
                    m_semanticTarget,
                    implicitStyleNeedsInspection,
-                   m_container.Resources());
+                   GetPresentationRoot().Resources());
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -2255,7 +2255,7 @@ bool wxWinUITopLevelHost::SyncSlotAutomationProperties(
                     (hasApplicationAuthoredXaml &&
                      !previousUIANameRelinquished &&
                      (previousUIANameOwned || !uiaLabel.empty())),
-                    slot.GetContainer().Resources());
+                    slot.GetPresentationRoot().Resources());
             observation.hasLabeledBy =
                 AutomationProperties::GetLabeledBy(
                     semanticTarget) != nullptr;

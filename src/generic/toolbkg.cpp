@@ -482,7 +482,17 @@ int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
 
         if ( tool )
         {
-            pagePos = tbar->GetToolPos(tool->GetId());
+            // IDs need not be unique among pages. The toolbar has already
+            // resolved the exact native tool, so keep this positional identity
+            // instead of finding the first tool which happens to share its ID.
+            for ( size_t pos = 0; pos < tbar->GetToolsCount(); ++pos )
+            {
+                if ( tbar->GetToolByPos(pos) == tool )
+                {
+                    pagePos = static_cast<int>(pos);
+                    break;
+                }
+            }
             if ( flags )
                 *flags = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL;
         }
@@ -1009,6 +1019,22 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
 {
     // find page for the tool
     int page = ToolIdToPage(event.GetId());
+    if ( event.GetEventObject() == GetToolBar() )
+    {
+        // The native radio controller has selected its exact tool before
+        // emitting the command. Page IDs may be duplicated, so retain that
+        // positional selection rather than always choosing the first ID.
+        const wxToolBarBase* const controller = GetToolBar();
+        for ( size_t pos = 0; pos < controller->GetToolsCount(); ++pos )
+        {
+            const wxToolBarToolBase* const tool = controller->GetToolByPos(pos);
+            if ( tool && tool->GetId() == event.GetId() && tool->IsToggled() )
+            {
+                page = static_cast<int>(pos);
+                break;
+            }
+        }
+    }
     if (page == wxNOT_FOUND)
     {
         // we may have gotten an event from something other than our tool, e.g.

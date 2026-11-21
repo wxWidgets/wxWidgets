@@ -58,6 +58,10 @@
 #include "wx/generic/grideditors.h"
 #include "wx/generic/private/grid.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "../winui/gridprojection.h"
+#endif
+
 const char wxGridNameStr[] = "grid";
 
 // Required for wxIs... functions
@@ -115,6 +119,40 @@ GridMutationState& GetGridMutationState(const wxGrid* grid)
 {
     return gs_gridMutationStates[grid];
 }
+
+// An editor callback may delete the grid, replace its table or move to another
+// cell. A retained editor alone doesn't keep any of these identities alive.
+class GridEditSnapshot
+{
+public:
+    explicit GridEditSnapshot(const wxGrid* grid, bool checkCursor = true)
+        : m_grid(const_cast<wxGrid*>(grid)), m_table(grid->GetTable()),
+          m_row(grid->GetGridCursorRow()), m_col(grid->GetGridCursorCol()),
+          m_rows(GetGridMutationState(grid).rowIdentityRevision),
+          m_cols(GetGridMutationState(grid).columnIdentityRevision),
+          m_checkCursor(checkCursor)
+    {
+    }
+
+    bool IsCurrent() const
+    {
+        if ( !m_grid || m_grid->IsBeingDeleted() || m_grid->GetTable() != m_table )
+            return false;
+        const auto it = gs_gridMutationStates.find(m_grid.get());
+        return it != gs_gridMutationStates.end() &&
+               it->second.rowIdentityRevision == m_rows &&
+               it->second.columnIdentityRevision == m_cols &&
+               (!m_checkCursor || (m_grid->GetGridCursorRow() == m_row &&
+                                    m_grid->GetGridCursorCol() == m_col));
+    }
+
+private:
+    wxWeakRef<wxGrid> m_grid;
+    wxGridTableBase* m_table;
+    int m_row, m_col;
+    unsigned long long m_rows, m_cols;
+    bool m_checkCursor;
+};
 
 void UnregisterGridMutationState(const wxGrid* grid)
 {
@@ -1063,7 +1101,15 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(const wxGrid* grid, int row, int col
         if ( grid )
         {
             // GetDefaultEditorForCell() will do IncRef() for us
+            const GridEditSnapshot snapshot(grid, false);
             editor = grid->GetDefaultEditorForCell(row, col);
+            if ( !snapshot.IsCurrent() )
+            {
+                if ( editor ) editor->DecRef();
+                // In particular, don't follow m_defGridAttr after GetTypeName
+                // has destroyed the grid which owned this default attribute.
+                return nullptr;
+            }
         }
 
         if ( editor == nullptr )
@@ -2419,6 +2465,15 @@ void wxGridSubwindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event
     m_owner->CancelMouseCapture();
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxGridSubwindow::Refresh(bool eraseBackground, const wxRect* rect)
+{
+    if ( m_owner->m_winUIProjection )
+        m_owner->m_winUIProjection->Invalidate();
+    wxWindow::Refresh(eraseBackground, rect);
+}
+#endif
+
 wxBEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridRowLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridRowLabelWindow::OnMouseWheel )
@@ -2428,6 +2483,20 @@ wxEND_EVENT_TABLE()
 void wxGridRowLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_owner->m_winUIProjection &&
+            m_owner->m_winUIProjection->OwnsWindow(this) )
+        return;
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Own the entire update region, including the space beyond the last row.
+    // Clear before applying the scroll origin so background and labels are
+    // published together by the opaque GDI paint buffer over the backdrop.
+    dc.SetBackground(wxBrush(m_owner->GetLabelBackgroundColour()));
+    dc.Clear();
+#endif
 
     // NO - don't do this because it will set both the x and y origin
     // coords to match the parent scrolled window and we just want to
@@ -2472,6 +2541,19 @@ wxEND_EVENT_TABLE()
 void wxGridColLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_owner->m_winUIProjection &&
+            m_owner->m_winUIProjection->OwnsWindow(this) )
+        return;
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The empty grid and the space after its columns still own a background.
+    // Paint it before the empty-grid return and the horizontal scroll origin.
+    dc.SetBackground(wxBrush(m_owner->GetLabelBackgroundColour()));
+    dc.Clear();
+#endif
 
     // NO - don't do this because it will set both the x and y origin
     // coords to match the parent scrolled window and we just want to
@@ -2522,6 +2604,18 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_owner->m_winUIProjection &&
+            m_owner->m_winUIProjection->OwnsWindow(this) )
+        return;
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Header renderers may only draw a border and text, not the background.
+    dc.SetBackground(wxBrush(m_owner->GetLabelBackgroundColour()));
+    dc.Clear();
+#endif
+
     m_owner->DrawCornerLabel(dc);
 }
 
@@ -2551,6 +2645,14 @@ wxEND_EVENT_TABLE()
 
 void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_owner->m_winUIProjection &&
+            m_owner->m_winUIProjection->OwnsWindow(this) )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
     wxAutoBufferedPaintDC dc( this );
     m_owner->PrepareDCFor( dc, this );
     wxRegion reg = GetUpdateRegion();
@@ -2939,6 +3041,11 @@ void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
 
     m_rowLabelWin->ScrollWindow( 0, dy, rect );
     m_colLabelWin->ScrollWindow( dx, 0, rect );
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->SyncViewport();
+#endif
 }
 
 void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
@@ -3034,11 +3141,30 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
     SetInitialSize(size);
     CalcDimensions();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const wxWeakRef<wxWindow> weakThis(this);
+    auto projection = wxWinUIGridProjection::Create(this);
+    if ( weakThis.get() != this )
+    {
+        if ( projection )
+            projection->Close();
+        return false;
+    }
+    m_winUIProjection = std::move(projection);
+#endif
+
     return true;
 }
 
 wxGrid::~wxGrid()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+    {
+        m_winUIProjection->Close();
+        m_winUIProjection.reset();
+    }
+#endif
     if ( m_winCapture )
         m_winCapture->ReleaseMouse();
 
@@ -3046,6 +3172,12 @@ wxGrid::~wxGrid()
     // otherwise we crash later when the editor tries to do something with the
     // half destroyed grid
     HideCellEditControl();
+    // An editing callback can delete us while its caller still retains the
+    // editor. Releasing our reference alone would then leave its pushed event
+    // handler on the child being destroyed below, and a dangling m_control in
+    // the retained editor. Destroy() detaches both before child destruction.
+    if ( const wxGridCellEditorPtr editor = m_activeCellEditor )
+        editor->Destroy();
     m_activeCellEditor.reset(nullptr);
 
     // Must do this or ~wxScrollHelper will pop the wrong event handler
@@ -3104,6 +3236,24 @@ unsigned long long wxGrid::GetRowMutationRevision() const
 {
     return GetGridMutationState(this).rowsRevision;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+bool wxGrid::CanUpdateWinUIProjection() const
+{
+    const auto& state = GetGridMutationState(this);
+    return !GetBatchCount() && !state.tableSwapActive &&
+           !state.tableAttachActive && !state.redimensionActive &&
+           !state.nativeHeaderSyncActive;
+}
+
+void wxGrid::InvalidateWinUIProjection()
+{
+    // Do not call this from ClearAttrCache(): reading an uncached cell also
+    // clears the cache and must never start a read/invalidate cycle.
+    if ( m_winUIProjection )
+        m_winUIProjection->Invalidate();
+}
+#endif
 
 //
 // ----- internal init and update functions
@@ -3237,7 +3387,13 @@ wxGrid::SetTable(wxGridTableBase *table,
     wxScopeGuard finishTableSwap = wxMakeGuard([this, weakThis]()
     {
         if ( weakThis.get() == this )
+        {
             GetGridMutationState(this).tableSwapActive = false;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( m_winUIProjection )
+                m_winUIProjection->Invalidate();
+#endif
+        }
     });
     wxUnusedVar(finishTableSwap);
 
@@ -3822,6 +3978,11 @@ void wxGrid::CalcWindowSizes()
 
     if ( m_gridWin && m_gridWin->IsShown() )
         m_gridWin->SetSize( m_rowLabelWidth + fgw, m_colLabelHeight + fgh, gw, gh );
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->SyncViewport();
+#endif
 }
 
 // this is called when the grid table sends a message
@@ -3854,6 +4015,10 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             GridMutationState& current = GetGridMutationState(this);
             current.redimensionActive = false;
             current.pendingTableMessages.clear();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( m_winUIProjection )
+                m_winUIProjection->Invalidate();
+#endif
         }
     });
     wxUnusedVar(finishTransaction);
@@ -6484,6 +6649,11 @@ void wxGrid::InitializeFrozenWindows()
         delete m_frozenCornerGridWin;
         m_frozenCornerGridWin = nullptr;
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->SyncViewport();
+#endif
 }
 
 bool wxGrid::FreezeTo(int row, int col)
@@ -6759,6 +6929,10 @@ wxGrid::SendEvent(wxEventType type, int row, int col, const wxString& s)
 
 void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->Invalidate();
+#endif
     // Don't do anything if between Begin/EndBatch...
     // EndBatch() will do all this on the last nested one anyway.
     if ( ShouldRefresh() )
@@ -6777,6 +6951,23 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
         // Refresh(true, &rect);
     }
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxGrid::Update()
+{
+    const wxWeakRef<wxGrid> weakThis(this);
+    wxScrolledCanvas::Update();
+    if ( !weakThis )
+        return;
+
+    // Update() promises to present pending changes before returning. The native
+    // cells do not pass through the GDI paint handlers, so flush their pending
+    // publication too. Keep the projection alive across model callbacks.
+    const auto projection = m_winUIProjection;
+    if ( projection )
+        projection->Update();
+}
+#endif
 
 void wxGrid::RefreshBlock(const wxGridCellCoords& topLeft,
                           const wxGridCellCoords& bottomRight)
@@ -6926,6 +7117,10 @@ void wxGrid::RefreshRect(wxRect* rect)
 
 void wxGrid::RefreshArea(int areas)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->Invalidate();
+#endif
     if ( areas == wxGA_All )
     {
         // Normally if we want to refresh the entire grid we call
@@ -6969,11 +7164,14 @@ void wxGrid::RefreshArea(int areas)
 
 void wxGrid::OnSize(wxSizeEvent& event)
 {
+    wxWeakRef<wxGrid> weakThis(this);
     if (m_targetWindow != this) // check whether initialisation has been done
     {
         // reposition our children windows
         CalcWindowSizes();
+        if ( !weakThis || IsBeingDeleted() ) return;
         RepositionCellEditControlIfNecessary();
+        if ( !weakThis || IsBeingDeleted() ) return;
         InvalidateOverlaySelection();
         event.Skip();
     }
@@ -7485,6 +7683,7 @@ void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
 
 bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
+    const GridEditSnapshot snapshot(this);
     switch ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) )
     {
         case Event_Vetoed:
@@ -7502,6 +7701,7 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     if ( m_currentCellCoords != wxGridNoCellCoords )
     {
         DisableCellEditControl();
+        if ( !snapshot.IsCurrent() ) return false;
 
         // Ensure the old highlighted row/col labels are refreshed
         RefreshBlock(m_currentCellCoords);
@@ -7521,8 +7721,11 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     int objectId = numCols*row + coords.GetCol() + 1;
     if ( m_rowLabelWidth )
         objectId++;
+    wxWeakRef<wxGrid> weakThis(this);
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTIONWITHIN, this, wxOBJID_CLIENT, wxACC_SELF);
+    if ( !weakThis ) return false;
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, objectId);
+    if ( !weakThis ) return false;
 #endif // wxUSE_ACCESSIBILITY
 
     return true;
@@ -8312,6 +8515,10 @@ void wxGrid::DrawOverlaySelection(wxDC& paintDC, wxGridWindow *gridWindow, const
 
 void wxGrid::InvalidateOverlaySelection()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->Invalidate();
+#endif
     if ( UsesOverlaySelection() && IsSelection() )
     {
         m_selection->InvalidateSelectionShape();
@@ -8775,16 +8982,22 @@ void wxGrid::DoEnable(bool enable)
 
 void wxGrid::EnableEditing( bool edit )
 {
+    wxWeakRef<wxGrid> weakThis(this);
     if ( edit != m_editable )
     {
         if (!edit)
             EnableCellEditControl(edit);
+        if ( !weakThis || IsBeingDeleted() ) return;
         m_editable = edit;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
 void wxGrid::EnableCellEditControl( bool enable )
 {
+    const GridEditSnapshot snapshot(this);
     if (! m_editable)
         return;
 
@@ -8793,7 +9006,9 @@ void wxGrid::EnableCellEditControl( bool enable )
         if ( enable )
         {
             // this should be checked by the caller!
-            wxCHECK_RET( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
+            const bool canEnable = CanEnableCellControl();
+            if ( !snapshot.IsCurrent() ) return;
+            wxCHECK_RET( canEnable, wxT("can't enable editing for this cell!") );
 
             DoEnableCellEditControl(wxGridActivationSource::FromProgram());
         }
@@ -8806,6 +9021,7 @@ void wxGrid::EnableCellEditControl( bool enable )
 
 bool wxGrid::DoEnableCellEditControl(const wxGridActivationSource& actSource)
 {
+    const GridEditSnapshot snapshot(this);
     switch ( SendEvent(wxEVT_GRID_EDITOR_SHOWN) )
     {
         case Event_Vetoed:
@@ -8820,8 +9036,21 @@ bool wxGrid::DoEnableCellEditControl(const wxGridActivationSource& actSource)
             break;
     }
 
-    if ( !DoShowCellEditControl(actSource) )
+    if ( !snapshot.IsCurrent() )
+        return false;
+
+    const bool shown = DoShowCellEditControl(actSource);
+    if ( !snapshot.IsCurrent() )
+        return false;
+    if ( !shown )
     {
+        if ( m_activeCellEditor &&
+             (!m_activeCellEditor->GetWindow() ||
+               m_activeCellEditor->GetWindow()->IsBeingDeleted()) )
+        {
+            m_cellEditCtrlEnabled = false;
+            m_activeCellEditor.reset(nullptr);
+        }
         // We have to send the HIDDEN event matching the SHOWN one above as the
         // user code may reasonably expect always getting them in pairs, so do
         // it even if the editor hadn't really been shown at all.
@@ -8835,8 +9064,11 @@ bool wxGrid::DoEnableCellEditControl(const wxGridActivationSource& actSource)
 
 void wxGrid::DoDisableCellEditControl()
 {
+    const GridEditSnapshot snapshot(this);
+    const wxGridCellEditorPtr editor = m_activeCellEditor;
     SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
-
+    if ( !snapshot.IsCurrent() || m_activeCellEditor != editor )
+        return;
     DoAcceptCellEditControl();
 }
 
@@ -8887,22 +9119,32 @@ void wxGrid::ShowCellEditControl()
 
 void wxGrid::RepositionCellEditControlIfNecessary()
 {
-    if ( !IsCellEditControlShown() )
+    const GridEditSnapshot initial(this);
+    if ( !IsCellEditControlShown() || !initial.IsCurrent() )
         return;
 
-    wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
-    wxWindow * const editorWindow = editor->GetWindow();
+    // The cell's configured editor may already have been replaced while its
+    // previous editor is still being used for the active edit transaction.
+    const wxGridCellEditorPtr editor = m_activeCellEditor;
+    if ( !editor ) return;
+    wxWeakRef<wxWindow> editorWindow(editor->GetWindow());
+    if ( !editorWindow || editorWindow->IsBeingDeleted() ) return;
 
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
     wxRect rect = CellToRect(m_currentCellCoords);
+    if ( !initial.IsCurrent() || m_activeCellEditor != editor ) return;
 
     wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
+    if ( !initial.IsCurrent() || m_activeCellEditor != editor ) return;
     wxGridWindow *gridWindow = CellToGridWindow(row, col);
+    wxWeakRef<wxWindow> pane(gridWindow);
 
     // if this is part of a multicell, find owner (topleft)
     int cell_rows, cell_cols;
-    if ( GetCellSize( row, col, &cell_rows, &cell_cols ) == CellSpan_Inside )
+    const CellSpan span = GetCellSize(row, col, &cell_rows, &cell_cols);
+    if ( !initial.IsCurrent() || m_activeCellEditor != editor ) return;
+    if ( span == CellSpan_Inside )
     {
         row += cell_rows;
         col += cell_cols;
@@ -8910,9 +9152,20 @@ void wxGrid::RepositionCellEditControlIfNecessary()
         m_currentCellCoords.SetCol( col );
     }
 
+    const GridEditSnapshot snapshot(this);
+    const auto current = [&]()
+    {
+        return snapshot.IsCurrent() && m_activeCellEditor == editor &&
+               m_cellEditCtrlEnabled && editorWindow &&
+               !editorWindow->IsBeingDeleted() &&
+               editor->GetWindow() == editorWindow.get() &&
+               pane && !pane->IsBeingDeleted();
+    };
+    if ( !current() ) return;
     const wxRect rectOld = editorWindow->GetRect();
 
     PositionCellEditControl(editor.get(), attr.get(), gridWindow, row, col, rect);
+    if ( !current() ) return;
 
     wxRect rectRefresh = rectOld;
     rectRefresh.Union(editorWindow->GetRect());
@@ -8926,6 +9179,14 @@ void wxGrid::PositionCellEditControl(wxGridCellEditor* editor,
                                      int col,
                                      wxRect rect)
 {
+    const GridEditSnapshot snapshot(this);
+    wxWeakRef<wxWindow> editorWindow(editor->GetWindow());
+    wxWeakRef<wxWindow> pane(gridWindow);
+    const auto current = [&]()
+    {
+        return snapshot.IsCurrent() && pane && editorWindow &&
+               !editorWindow->IsBeingDeleted() && editor->GetWindow() == editorWindow.get();
+    };
     rect.Offset(-GetGridWindowOffset(gridWindow));
 
     // convert to scrolled coords
@@ -8941,6 +9202,7 @@ void wxGrid::PositionCellEditControl(wxGridCellEditor* editor,
     // resize editor to overflow into righthand cells if allowed
     int maxWidth = rect.width;
     wxString value = GetCellValue(row, col);
+    if ( !current() ) return;
     if ( !value.empty() && attr->GetOverflow() )
     {
         int y;
@@ -8953,14 +9215,18 @@ void wxGrid::PositionCellEditControl(wxGridCellEditor* editor,
     {
         int cell_rows, cell_cols;
         GetCellSize( row, col, &cell_rows, &cell_cols );
+        if ( !current() ) return;
         // may have changed earlier
         for ( int i = col + cell_cols; i < m_numCols; i++ )
         {
             int c_rows, c_cols;
             GetCellSize( row, i, &c_rows, &c_cols );
+            if ( !current() ) return;
 
             // looks weird going over a multicell
-            if ( m_table->IsEmptyCell( row, i ) &&
+            const bool empty = m_table->IsEmptyCell(row, i);
+            if ( !current() ) return;
+            if ( empty &&
                     (rect.width < maxWidth) && (c_rows == 1) )
             {
                 rect.width += GetColWidth( i );
@@ -8973,6 +9239,7 @@ void wxGrid::PositionCellEditControl(wxGridCellEditor* editor,
     editor->SetCellAttr( attr );
     editor->SetSize( rect );
     editor->SetCellAttr(nullptr);
+    if ( !current() ) return;
 
     // Note that the actual rectangle used by the editor could be
     // different from the one we proposed.
@@ -9001,15 +9268,20 @@ void wxGrid::PositionCellEditControl(wxGridCellEditor* editor,
 
 bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
 {
+    const GridEditSnapshot initial(this);
     wxRect rect = CellToRect( m_currentCellCoords );
+    if ( !initial.IsCurrent() ) return false;
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
 
     wxGridCellAttrPtr attr = GetCellAttrPtr(row, col);
+    if ( !initial.IsCurrent() ) return false;
     wxGridCellEditorPtr editor = attr->GetEditorPtr(this, row, col);
+    if ( !initial.IsCurrent() || !editor ) return false;
 
     const wxGridActivationResult&
         res = editor->TryActivate(row, col, this, actSource);
+    if ( !initial.IsCurrent() ) return false;
     switch ( res.GetAction() )
     {
         case wxGridActivationResult::Change:
@@ -9024,9 +9296,12 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
 
                 case Event_Unhandled:
                 case Event_Handled:
-                    const wxString& oldval = GetCellValue(m_currentCellCoords);
+                    if ( !initial.IsCurrent() ) return false;
+                    const wxString oldval = GetCellValue(m_currentCellCoords);
+                    if ( !initial.IsCurrent() ) return false;
 
                     editor->DoActivate(row, col, this);
+                    if ( !initial.IsCurrent() ) return false;
 
                     // Show the new cell value.
                     RefreshBlock(m_currentCellCoords);
@@ -9058,7 +9333,9 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
 
     // if this is part of a multicell, find owner (topleft)
     int cell_rows, cell_cols;
-    if ( GetCellSize( row, col, &cell_rows, &cell_cols ) == CellSpan_Inside )
+    const CellSpan span = GetCellSize(row, col, &cell_rows, &cell_cols);
+    if ( !initial.IsCurrent() || m_activeCellEditor != editor ) return false;
+    if ( span == CellSpan_Inside )
     {
         row += cell_rows;
         col += cell_cols;
@@ -9066,10 +9343,17 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
         m_currentCellCoords.SetCol( col );
     }
 
+    const GridEditSnapshot snapshot(this);
+    const auto current = [&]()
+    {
+        return snapshot.IsCurrent() && m_activeCellEditor == editor && m_cellEditCtrlEnabled;
+    };
+
     if ( !editor->IsCreated() )
     {
         editor->Create(gridWindow, wxID_ANY,
                        new wxGridCellEditorEvtHandler(this, editor.get()));
+        if ( !current() ) return false;
 
         // Ensure the editor window has wxWANTS_CHARS flag, so that it
         // gets Tab, Enter and Esc keys, which need to be processed
@@ -9079,6 +9363,7 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
         {
             editorWindow->SetWindowStyle(editorWindow->GetWindowStyle()
                                             | wxWANTS_CHARS);
+            if ( !current() ) return false;
         }
 
         wxGridEditorCreatedEvent evt(GetId(),
@@ -9088,25 +9373,37 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
                                      col,
                                      editorWindow);
         ProcessWindowEvent(evt);
+        if ( !current() ) return false;
     }
     else if ( editor->GetWindow() &&
               editor->GetWindow()->GetParent() != gridWindow )
     {
         editor->GetWindow()->Reparent(gridWindow);
+        if ( !current() ) return false;
     }
 
+    wxWeakRef<wxWindow> editorWindow(editor->GetWindow());
+    const auto windowCurrent = [&]()
+    {
+        return current() && editorWindow && !editorWindow->IsBeingDeleted() &&
+               editor->GetWindow() == editorWindow.get();
+    };
+    if ( !windowCurrent() ) return false;
+
     PositionCellEditControl(editor.get(), attr.get(), gridWindow, row, col, rect);
+    if ( !windowCurrent() ) return false;
 
     editor->Show( true, attr.get() );
+    if ( !windowCurrent() ) return false;
 
     // recalc dimensions in case we need to
     // expand the scrolled window to account for editor
     CalcDimensions();
+    if ( !windowCurrent() ) return false;
 
     editor->BeginEdit(row, col, this);
     editor->SetCellAttr(nullptr);
-
-    return true;
+    return windowCurrent();
 }
 
 void wxGrid::HideCellEditControl()
@@ -9119,13 +9416,23 @@ void wxGrid::HideCellEditControl()
 
 void wxGrid::DoHideCellEditControl()
 {
+    const GridEditSnapshot snapshot(this);
     wxGridCellEditorPtr editor = GetActiveCellEditorPtr();
+    wxWeakRef<wxWindow> editorWindow(editor->GetWindow());
+    const auto current = [&]()
+    {
+        return snapshot.IsCurrent() && m_activeCellEditor == editor && editorWindow &&
+               !editorWindow->IsBeingDeleted() && editor->GetWindow() == editorWindow.get();
+    };
+    if ( !current() ) return;
     const bool editorHadFocus = editor->GetWindow()->IsDescendant(FindFocus());
 
     if ( editor->GetWindow()->GetParent() != m_gridWin )
         editor->GetWindow()->Reparent(m_gridWin);
+    if ( !current() ) return;
 
     editor->Show( false );
+    if ( !current() ) return;
 
     wxGridWindow *gridWindow = CellToGridWindow(m_currentCellCoords);
     // return the focus to the grid itself if the editor had it
@@ -9135,9 +9442,11 @@ void wxGrid::DoHideCellEditControl()
     // editor precisely because we lost focus
     if ( editorHadFocus )
         gridWindow->SetFocus();
+    if ( !current() ) return;
 
     // refresh whole row to the right
     wxRect rect( CellToRect(m_currentCellCoords) );
+    if ( !current() ) return;
     rect.Offset( -GetGridWindowOffset(gridWindow) );
     CalcGridWindowScrolledPosition(rect.x, rect.y, &rect.x, &rect.y, gridWindow);
     rect.width = gridWindow->GetClientSize().GetWidth() - rect.x;
@@ -9174,15 +9483,19 @@ void wxGrid::AcceptCellEditControlIfShown()
 
 void wxGrid::DoAcceptCellEditControl()
 {
+    const GridEditSnapshot snapshot(this);
+    const wxGridCellEditorPtr editor = m_activeCellEditor;
+    if ( !editor ) return;
     // Reset it first to avoid any problems with recursion via
     // DisableCellEditControl() if it's called from the user-defined event
     // handlers.
     m_cellEditCtrlEnabled = false;
 
     DoHideCellEditControl();
-
+    if ( !snapshot.IsCurrent() || m_activeCellEditor != editor ) return;
     DoSaveEditControlValue();
-    m_activeCellEditor.reset(nullptr);
+    if ( snapshot.IsCurrent() && m_activeCellEditor == editor )
+        m_activeCellEditor.reset(nullptr);
 }
 
 void wxGrid::SaveEditControlValue()
@@ -9195,15 +9508,25 @@ void wxGrid::SaveEditControlValue()
 
 void wxGrid::DoSaveEditControlValue()
 {
+    const GridEditSnapshot snapshot(this);
+    const GridEditSnapshot cellIdentity(this, false);
+    const wxGridCellEditorPtr editor = m_activeCellEditor;
+    if ( !editor || !editor->GetWindow() ) return;
+    wxWeakRef<wxWindow> editorWindow(editor->GetWindow());
+    const auto current = [&]()
+    {
+        return snapshot.IsCurrent() && m_activeCellEditor == editor && editorWindow &&
+               !editorWindow->IsBeingDeleted() && editor->GetWindow() == editorWindow.get();
+    };
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
 
     wxString oldval = GetCellValue(m_currentCellCoords);
-
-    wxGridCellEditorPtr editor = GetActiveCellEditorPtr();
+    if ( !current() ) return;
 
     wxString newval;
-    if ( !editor->EndEdit(row, col, this, oldval, &newval) )
+    const bool changed = editor->EndEdit(row, col, this, oldval, &newval);
+    if ( !current() || !changed )
         return;
 
     switch ( SendEvent(wxEVT_GRID_CELL_CHANGING, newval) )
@@ -9214,13 +9537,16 @@ void wxGrid::DoSaveEditControlValue()
 
         case Event_Unhandled:
         case Event_Handled:
+            if ( !current() ) return;
             editor->ApplyEdit(row, col, this);
+            if ( !current() ) return;
 
             // for compatibility reasons dating back to wx 2.8 when this event
             // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
             // didn't exist we allow vetoing this one too
             if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
             {
+                if ( !cellIdentity.IsCurrent() ) return;
                 // Event has been vetoed, set the data back.
                 //
                 // Note that we must use row and col here, which are sure to
@@ -10679,27 +11005,42 @@ void wxGrid::SetDefaultCellBackgroundColour( const wxColour& col )
     m_gridWin->SetBackgroundColour(col);
 #endif
     m_hasUserCellBg = true;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 void wxGrid::SetDefaultCellTextColour( const wxColour& col )
 {
     m_defaultCellAttr->SetTextColour(col);
     m_hasUserCellFg = true;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 void wxGrid::SetDefaultCellAlignment( int horiz, int vert )
 {
     m_defaultCellAttr->SetAlignment(horiz, vert);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 void wxGrid::SetDefaultCellFitMode(wxGridFitMode fitMode)
 {
     m_defaultCellAttr->SetFitMode(fitMode);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 void wxGrid::SetDefaultCellFont( const wxFont& font )
 {
     m_defaultCellAttr->SetFont(font);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 // For editors and renderers the type registry takes precedence over the
@@ -10881,6 +11222,9 @@ void wxGrid::RefreshAttr(int row, int col)
 {
     if ( m_attrCache.row == row && m_attrCache.col == col )
         ClearAttrCache();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 
@@ -10923,6 +11267,9 @@ bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
 
 wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 {
+    const GridEditSnapshot snapshot(this, false);
+    m_defaultCellAttr->IncRef();
+    const wxGridCellAttrPtr defaultAttr(m_defaultCellAttr);
     wxGridCellAttr *attr = nullptr;
     // Additional test to avoid looking at the cache e.g. for
     // wxNoCellCoords, as this will confuse memory management.
@@ -10932,17 +11279,18 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
         {
             attr = m_table ? m_table->GetAttr(row, col, wxGridCellAttr::Any)
                            : nullptr;
-            CacheAttr(row, col, attr);
+            if ( snapshot.IsCurrent() )
+                CacheAttr(row, col, attr);
         }
     }
 
     if (attr)
     {
-        attr->SetDefAttr(m_defaultCellAttr);
+        attr->SetDefAttr(defaultAttr.get());
     }
     else
     {
-        attr = m_defaultCellAttr;
+        attr = defaultAttr.get();
         attr->IncRef();
     }
 
@@ -11029,6 +11377,9 @@ void wxGrid::SetAttr(int row, int col, wxGridCellAttr *attr)
     {
         m_table->SetAttr(attr, row, col);
         ClearAttrCache();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
     else
     {
@@ -11042,6 +11393,9 @@ void wxGrid::SetRowAttr(int row, wxGridCellAttr *attr)
     {
         m_table->SetRowAttr(attr, row);
         ClearAttrCache();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
     else
     {
@@ -11055,6 +11409,9 @@ void wxGrid::SetColAttr(int col, wxGridCellAttr *attr)
     {
         m_table->SetColAttr(attr, col);
         ClearAttrCache();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
     else
     {
@@ -11067,6 +11424,9 @@ void wxGrid::SetCellBackgroundColour( int row, int col, const wxColour& colour )
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetBackgroundColour(colour);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11075,6 +11435,9 @@ void wxGrid::SetCellTextColour( int row, int col, const wxColour& colour )
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetTextColour(colour);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11083,6 +11446,9 @@ void wxGrid::SetCellFont( int row, int col, const wxFont& font )
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetFont(font);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11091,6 +11457,9 @@ void wxGrid::SetCellAlignment( int row, int col, int horiz, int vert )
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetAlignment(horiz, vert);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11099,6 +11468,9 @@ void wxGrid::SetCellFitMode( int row, int col, wxGridFitMode fitMode )
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetFitMode(fitMode);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11153,6 +11525,9 @@ void wxGrid::SetCellSize( int row, int col, int num_rows, int num_cols )
                 }
             }
         }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11161,6 +11536,9 @@ void wxGrid::SetCellRenderer(int row, int col, wxGridCellRenderer *renderer)
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetRenderer(renderer);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11169,6 +11547,9 @@ void wxGrid::SetCellEditor(int row, int col, wxGridCellEditor* editor)
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetEditor(editor);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11177,6 +11558,9 @@ void wxGrid::SetReadOnly(int row, int col, bool isReadOnly)
     if ( CanHaveAttributes() )
     {
         GetOrCreateCellAttrPtr(row, col)->SetReadOnly(isReadOnly);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
     }
 }
 
@@ -11189,6 +11573,9 @@ void wxGrid::RegisterDataType(const wxString& typeName,
                               wxGridCellEditor* editor)
 {
     m_typeRegistry->RegisterDataType(typeName, renderer, editor);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InvalidateWinUIProjection();
+#endif
 }
 
 
@@ -11197,7 +11584,9 @@ wxGridCellEditor * wxGrid::GetDefaultEditorForCell(int row, int col) const
     if ( !m_table )
         return nullptr;
 
+    const GridEditSnapshot snapshot(this, false);
     wxString typeName = m_table->GetTypeName(row, col);
+    if ( !snapshot.IsCurrent() ) return nullptr;
     return GetDefaultEditorForType(typeName);
 }
 
@@ -12450,6 +12839,9 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
     if ( m_table )
     {
         m_table->SetValue( row, col, s );
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
         if ( ShouldRefresh() )
         {
             wxRect rect( CellToRect( row, col ) );

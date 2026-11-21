@@ -316,6 +316,22 @@ void wxWinUIApplyFont(const MUXC::TextBlock& text, const wxFont& font)
         MUXC::TextBlock::FontSizeProperty(),
         MUXC::TextBlock::FontWeightProperty(),
         MUXC::TextBlock::FontStyleProperty());
+
+    if ( !text )
+        return;
+    if ( !font.IsOk() )
+    {
+        text.ClearValue(MUXC::TextBlock::TextDecorationsProperty());
+        return;
+    }
+
+    using Decorations = winrt::Windows::UI::Text::TextDecorations;
+    auto decorations = Decorations::None;
+    if ( font.GetUnderlined() )
+        decorations |= Decorations::Underline;
+    if ( font.GetStrikethrough() )
+        decorations |= Decorations::Strikethrough;
+    text.TextDecorations(decorations);
 }
 
 void wxWinUIApplyForeground(const MUXC::Control& control,

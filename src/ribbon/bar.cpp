@@ -18,6 +18,10 @@
 #include "wx/app.h"
 #include "wx/vector.h"
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    #include "ribboncontainerswinui.h"
+#endif
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -102,6 +106,10 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     {
         SetActivePage((size_t)0);
     }
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 bool wxRibbonBar::DismissExpandedPanel()
@@ -126,6 +134,16 @@ void wxRibbonBar::ShowPanels(wxRibbonDisplayMode mode)
             break;
     }
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        m_ribbon_state = mode;
+        InvalidateBestSize();
+        wxRibbonContainerWinUI::Sync(this);
+        return;
+    }
+#endif
+
     SetMinSize(wxSize(GetSize().GetWidth(), DoGetBestSize().GetHeight()));
     Realise();
     GetParent()->Layout();
@@ -144,6 +162,10 @@ void wxRibbonBar::SetWindowStyleFlag(long style)
     m_flags = style;
     if(m_art)
         m_art->SetFlags(style);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 long wxRibbonBar::GetWindowStyleFlag() const
@@ -153,6 +175,11 @@ long wxRibbonBar::GetWindowStyleFlag() const
 
 bool wxRibbonBar::Realize()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Realize(this);
+#endif
+
     bool status = true;
 
     wxInfoDC dcTemp(this);
@@ -345,6 +372,10 @@ void wxRibbonBar::ShowPage(size_t page, bool show)
     if(page >= m_pages.GetCount())
         return;
     m_pages.Item(page).shown = show;
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 bool wxRibbonBar::IsPageHighlighted(size_t page) const
@@ -359,6 +390,10 @@ void wxRibbonBar::AddPageHighlight(size_t page, bool highlight)
     if(page >= m_pages.GetCount())
         return;
     m_pages.Item(page).highlight = highlight;
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 void wxRibbonBar::DeletePage(size_t n)
@@ -402,6 +437,10 @@ void wxRibbonBar::DeletePage(size_t n)
         {
             m_current_hovered_page--;
         }
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+        if ( wxRibbonContainerWinUI::Native(this) )
+            wxRibbonContainerWinUI::Sync(this);
+#endif
     }
 }
 
@@ -425,6 +464,10 @@ void wxRibbonBar::ClearPages()
     m_current_page = wxNOT_FOUND;
     m_current_hovered_page = wxNOT_FOUND;
     Refresh();
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 bool wxRibbonBar::SetActivePage(size_t page)
@@ -447,6 +490,17 @@ bool wxRibbonBar::SetActivePage(size_t page)
     m_current_page = (int)page;
     m_pages.Item(page).active = true;
     m_pages.Item(page).shown = true;
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        // Programmatic selection remains silent: only the native user-input
+        // adapter emits PAGE_CHANGING/PAGE_CHANGED.
+        m_pages.Item(page).page->Show();
+        Refresh();
+        wxRibbonContainerWinUI::Sync(this);
+        return true;
+    }
+#endif
     {
         wxRibbonPage* wnd = m_pages.Item(page).page;
         RepositionPage(wnd);
@@ -495,6 +549,14 @@ void wxRibbonBar::SetTabCtrlMargins(int left, int right)
 {
     m_tab_margin_left = left;
     m_tab_margin_right = right;
+
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxRibbonContainerWinUI::SetTabMargins(this, left, right);
+        return;
+    }
+#endif
 
     RecalculateTabSizes();
 }
@@ -744,10 +806,19 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
     : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(style);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxCHECK_RET(wxRibbonContainerWinUI::Create(this),
+                "Failed to create native Toolkit Ribbon bar");
+    wxRibbonContainerWinUI::SetTabMargins(this, m_tab_margin_left, m_tab_margin_right);
+#endif
 }
 
 wxRibbonBar::~wxRibbonBar()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxRibbonContainerWinUI::Close(this);
+#endif
+
     SetArtProvider(nullptr);
 
     for ( auto* list : m_image_lists )
@@ -767,7 +838,13 @@ bool wxRibbonBar::Create(wxWindow* parent,
 
     CommonInit(style);
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( !wxRibbonContainerWinUI::Create(this) ) return false;
+    wxRibbonContainerWinUI::SetTabMargins(this, m_tab_margin_left, m_tab_margin_right);
     return true;
+#else
+    return true;
+#endif
 }
 
 void wxRibbonBar::CommonInit(long style)
@@ -833,6 +910,14 @@ void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 
 void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
     wxAutoBufferedPaintDC dc(this);
 
     if(GetUpdateRegion().Contains(0, 0, GetClientSize().GetWidth(), m_tab_height) == wxOutRegion)
@@ -946,6 +1031,15 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 
 void wxRibbonBar::OnSize(wxSizeEvent& evt)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        evt.Skip();
+        wxRibbonContainerWinUI::Sync(this);
+        return;
+    }
+#endif
+
     RecalculateTabSizes();
     if(m_current_page != wxNOT_FOUND)
     {
@@ -958,6 +1052,15 @@ void wxRibbonBar::OnSize(wxSizeEvent& evt)
 
 void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        event.Skip();
+        wxRibbonContainerWinUI::Sync(this);
+        return;
+    }
+#endif
+
     // Recalculate tab sizes for new DPI
     RecalculateTabSizes();
 
@@ -987,6 +1090,11 @@ void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return;
+#endif
+
     int w, h;
     GetSize(&w, &h);
     page->SetSizeWithScrollButtonAdjustment(0, m_tab_height, w, h - m_tab_height);
@@ -1273,6 +1381,11 @@ void wxRibbonBar::RecalculateMinSize()
 
 wxSize wxRibbonBar::DoGetBestSize() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::BestSize(const_cast<wxRibbonBar*>(this));
+#endif
+
     wxSize best(0, 0);
     if(m_current_page != wxNOT_FOUND)
     {
@@ -1326,6 +1439,15 @@ void wxRibbonBar::HideIfExpanded()
 
 void wxRibbonBar::OnKillFocus(wxFocusEvent& WXUNUSED(evt))
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        // Losing the tab slot to one of our command slots is not leaving the
+        // Ribbon. The adapter also observes later exits from these children.
+        wxRibbonContainerWinUI::NotifyFocusChange(this);
+        return;
+    }
+#endif
     HideIfExpanded();
 }
 

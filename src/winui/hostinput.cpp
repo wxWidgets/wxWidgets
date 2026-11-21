@@ -59,6 +59,91 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWinUISyntheticMouseDispatch);
 };
 
+// USER32/Microsoft.UI.Input can synchronously turn a forwarded mouse message
+// back into the same XAML pointer event (notably WM_NCMOUSEMOVE on a dialog
+// border). This is an echo of the dispatch in progress, not another physical
+// input transition. Keep an allocation-free stack, as a native handler may
+// also run a modal loop admitting genuinely new input before SendMessage
+// returns. A depth-only guard would incorrectly discard that new input.
+class wxWinUIForwardedPointerDispatch
+{
+public:
+    wxWinUIForwardedPointerDispatch(
+        const std::shared_ptr<wxWinUIHostLifetime>& hostState,
+        const wxWinUIInputAction& action, unsigned long long epoch)
+        : m_hostState(hostState), m_action(action), m_epoch(epoch),
+          m_previous(ms_current)
+    {
+        ms_current = this;
+    }
+
+    ~wxWinUIForwardedPointerDispatch()
+    {
+        ms_current = m_previous;
+    }
+
+    static bool IsEcho(
+        const std::shared_ptr<wxWinUIHostLifetime>& hostState,
+        const wxWinUIPointerSample& sample, unsigned long long epoch)
+    {
+        for ( auto dispatch = ms_current; dispatch;
+              dispatch = dispatch->m_previous )
+        {
+            const auto& action = dispatch->m_action;
+            // A double click is derived by the wx state machine from the
+            // second XAML Press, so normalize it back for packet identity.
+            const auto kind = action.kind == wxWinUIInputKind::DoubleClick
+                ? wxWinUIInputKind::Press : action.kind;
+            if ( dispatch->m_hostState == hostState &&
+                 dispatch->m_epoch == epoch &&
+                 action.device == sample.device &&
+                 action.pointerId == sample.pointerId &&
+                 kind == sample.kind && action.button == sample.button &&
+                 // Microsoft.UI.Input may reconstruct the Move timestamp
+                 // while reflecting WM_NCMOUSEMOVE. An unchanged Move has
+                 // no new semantic information during this send; buttons
+                 // and wheel packets, by contrast, retain exact timestamps.
+                 (kind == wxWinUIInputKind::Move ||
+                  action.timestamp == sample.timestamp) &&
+                 action.screenX == sample.screenX &&
+                 action.screenY == sample.screenY &&
+                 action.modifiers == sample.modifiers &&
+                 action.buttonMask == sample.buttonMask &&
+                 action.wheelDelta == sample.wheelDelta &&
+                 action.horizontalWheel == sample.horizontalWheel )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+private:
+    static thread_local const wxWinUIForwardedPointerDispatch *ms_current;
+    // The lifetime token, not the host address, excludes a replacement host
+    // allocated at the same address during an application callback.
+    const std::shared_ptr<wxWinUIHostLifetime> m_hostState;
+    const wxWinUIInputAction m_action;
+    // A genuinely new nested transition invalidates the old qualification.
+    // In particular, A -> B -> A inside a modal handler must deliver the
+    // return to A instead of confusing it with the first dispatch's echo.
+    const unsigned long long m_epoch;
+    const wxWinUIForwardedPointerDispatch * const m_previous;
+    wxDECLARE_NO_COPY_CLASS(wxWinUIForwardedPointerDispatch);
+};
+
+thread_local const wxWinUIForwardedPointerDispatch *
+    wxWinUIForwardedPointerDispatch::ms_current = nullptr;
+
+void wxWinUISendForwardedPointerMessage(
+    const std::shared_ptr<wxWinUIHostLifetime>& hostState,
+    const wxWinUIInputAction& action, unsigned long long epoch,
+    HWND target, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    const wxWinUIForwardedPointerDispatch dispatch(hostState, action, epoch);
+    ::SendMessage(target, message, wParam, lParam);
+}
+
 bool wxWinUIStartsSystemModalLoop(LRESULT hitTest)
 {
     switch ( hitTest )
@@ -1066,13 +1151,16 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
             const wxWinUIProfileScope profileSend(
                 wxWinUIProfilePhase::Send);
             const wxWinUISyntheticMouseDispatch syntheticDispatch;
-            ::SendMessage(target, WM_MOUSEMOVE, keys, lpClient);
+            wxWinUISendForwardedPointerMessage(
+                hostState, action, expectedEpoch,
+                target, WM_MOUSEMOVE, keys, lpClient);
             LetPointerTargetPaint(target);
         }
         else
         {
-            ::SendMessage(target, WM_NCMOUSEMOVE,
-                          static_cast<WPARAM>(action.zone), lpScreen);
+            wxWinUISendForwardedPointerMessage(
+                hostState, action, expectedEpoch, target, WM_NCMOUSEMOVE,
+                static_cast<WPARAM>(action.zone), lpScreen);
         }
         return !m_shuttingDown &&
                m_inputTransitionEpoch == expectedEpoch;
@@ -1082,8 +1170,8 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
     {
         if ( action.wheelDelta )
         {
-            ::SendMessage(
-                target,
+            wxWinUISendForwardedPointerMessage(
+                hostState, action, expectedEpoch, target,
                 action.horizontalWheel ? WM_MOUSEHWHEEL : WM_MOUSEWHEEL,
                 MAKEWPARAM(keys,
                     static_cast<WORD>(
@@ -1253,11 +1341,15 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
     if ( action.area == wxWinUIInputArea::Client )
     {
         const wxWinUISyntheticMouseDispatch syntheticDispatch;
-        ::SendMessage(target, message, buttonParams, lpClient);
+        wxWinUISendForwardedPointerMessage(
+            hostState, action, expectedEpoch,
+            target, message, buttonParams, lpClient);
     }
     else
     {
-        ::SendMessage(target, message, buttonParams, lpScreen);
+        wxWinUISendForwardedPointerMessage(
+            hostState, action, expectedEpoch,
+            target, message, buttonParams, lpScreen);
     }
     if ( m_shuttingDown )
         return false;
@@ -2253,7 +2345,10 @@ void wxWinUITopLevelHost::DispatchPendingNativeInput()
         MarkNativeHoverDispatchStarted(pending.action);
         nativeDispatchStarted = true;
 
-        ::SendMessage(target, pending.message, hitAndButton, screen);
+        wxWinUISendForwardedPointerMessage(
+            hostState, pending.action, m_inputTransitionEpoch,
+            target, pending.message,
+            hitAndButton, screen);
 
         if ( m_shuttingDown )
             return;
@@ -2750,7 +2845,7 @@ void wxWinUITopLevelHost::PostIslandCancelMode(
 
 void wxWinUITopLevelHost::OnSlotPointer(
     const std::shared_ptr<wxWinUISlotLifetime>& state,
-    const winrt::Microsoft::UI::Xaml::Controls::Grid& container,
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
     const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args,
     wxWinUIInputKind kind)
 {
@@ -2766,7 +2861,7 @@ void wxWinUITopLevelHost::OnSlotPointer(
     wxWindow * const window = state->GetWindow();
     wxWinUISlot * const slot = window ? FindSlot(window) : nullptr;
     if ( !window || !slot || slot->m_lifetime != state ||
-         !container || container != slot->m_container )
+         !container || container != slot->GetPresentationRoot() )
     {
         return;
     }
@@ -2965,6 +3060,17 @@ void wxWinUITopLevelHost::OnSlotPointer(
     if ( (sample.device != wxWinUIInputDevice::Mouse &&
           !sample.isPrimary) ||
          sample.isCompatibilityMouse )
+    {
+        return;
+    }
+
+    // The grip accepts its press before it bubbles through this slot's
+    // handledEventsToo observer. The host resize transaction already owns
+    // this pointer: routing it again would advance the InputSite generation
+    // and create a competing slot press, invalidating the deferred resize.
+    // The root still observes release/interruption and cancels the resize.
+    if ( m_nativeResize && sample.device == m_nativeResize->sample.device &&
+         sample.pointerId == m_nativeResize->sample.pointerId )
     {
         return;
     }
@@ -3506,6 +3612,14 @@ bool wxWinUITopLevelHost::RouteSlotPointerSample(
         return false;
     }
 
+    // Match the routed OnSlotPointer path: an accepted native-resize
+    // pointer must not acquire a second owner through slot dispatch.
+    if ( m_nativeResize && sample.device == m_nativeResize->sample.device &&
+         sample.pointerId == m_nativeResize->sample.pointerId )
+    {
+        return true;
+    }
+
     if ( sample.kind == wxWinUIInputKind::Press &&
          HasSlotPointerOwner(sample) )
     {
@@ -3756,15 +3870,7 @@ void wxWinUITopLevelHost::OnRootPointer(
     OperationGuard operation(this);
     if ( m_shuttingDown || !m_tlw )
         return;
-    const auto retryIslandReset = wxMakeGuard(
-        [this]()
-        {
-            RetryDeferredIslandCancelMode();
-        });
-
-    if ( ++m_inputTransitionEpoch == 0 )
-        ++m_inputTransitionEpoch;
-    const unsigned long long eventEpoch = m_inputTransitionEpoch;
+    const unsigned long long entryEpoch = m_inputTransitionEpoch;
     const std::shared_ptr<wxWinUIHostLifetime> hostState = m_hostLifetime;
 
     try
@@ -3787,13 +3893,6 @@ void wxWinUITopLevelHost::OnRootPointer(
         }
         const bool sourceAlreadyHandled =
             args.Handled() || sourceOwnedByXaml;
-        if ( sourceOwnedByXaml && message == WM_MOUSEMOVE )
-        {
-            const wxWinUIProfileScope profileObserve(
-                wxWinUIProfilePhase::Cursor);
-            ObserveXamlPointerCursor();
-        }
-
         WORD modifiers = 0;
         WORD buttonMask = 0;
         if ( ::GetKeyState(VK_SHIFT) & 0x8000 )
@@ -3884,6 +3983,35 @@ void wxWinUITopLevelHost::OnRootPointer(
             buttonMask &= ~wxWinUIGetWParamButtonMask(sample.button);
         sample.buttonMask = buttonMask;
 
+        if ( !hostState || hostState->GetHost() != this ||
+             m_shuttingDown || m_inputTransitionEpoch != entryEpoch )
+        {
+            return;
+        }
+        // Do not supersede the original route or touch its capture/hover
+        // state for a synchronous reflection of the packet it is delivering.
+        if ( wxWinUIForwardedPointerDispatch::IsEcho(
+                hostState, sample, entryEpoch) )
+        {
+            args.Handled(true);
+            return;
+        }
+
+        if ( ++m_inputTransitionEpoch == 0 )
+            ++m_inputTransitionEpoch;
+        const unsigned long long eventEpoch = m_inputTransitionEpoch;
+        const auto retryIslandReset = wxMakeGuard(
+            [this]()
+            {
+                RetryDeferredIslandCancelMode();
+            });
+        if ( sourceOwnedByXaml && message == WM_MOUSEMOVE )
+        {
+            const wxWinUIProfileScope profileObserve(
+                wxWinUIProfilePhase::Cursor);
+            ObserveXamlPointerCursor();
+        }
+
         const wxWinUIRootPointerOutcome outcome =
             RouteRootPointerSampleAtEpoch(
                 sample, sourceAlreadyHandled, eventEpoch);
@@ -3927,6 +4055,15 @@ wxWinUIRootPointerOutcome wxWinUIHostInputTestAccess::RouteRootPointerSample(
     if ( self->m_shuttingDown || !self->m_tlw )
         return outcome;
 
+    if ( wxWinUIForwardedPointerDispatch::IsEcho(
+            self->m_hostLifetime, sample, self->m_inputTransitionEpoch) )
+    {
+        outcome.status = wxWinUIRootPointerStatus::Completed;
+        outcome.disposition = wxWinUIInputDisposition::Routed;
+        outcome.cancelSource = true;
+        return outcome;
+    }
+
     const auto retryIslandReset = wxMakeGuard(
         [self]()
         {
@@ -3959,6 +4096,8 @@ wxWinUITopLevelHost::RouteRootPointerSampleAtEpoch(
               sample.timestamp == resize->sample.timestamp) ||
              sample.kind == wxWinUIInputKind::Move )
         {
+            if ( sample.kind == wxWinUIInputKind::Move )
+                wxWinUIQueueNativeSizingMove(m_hostLifetime, sample);
             outcome.status = wxWinUIRootPointerStatus::Completed;
             outcome.disposition = wxWinUIInputDisposition::Routed;
             outcome.cancelSource = true;

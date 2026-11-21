@@ -1677,6 +1677,15 @@ if(NOT wxBUILD_TESTS STREQUAL "OFF")
             -DSAFE_ROOT=${wxBINARY_DIR}/winui/selftest
             -DWORK_DIR=${wxBINARY_DIR}/winui/selftest/package-set
             -P "${wxSOURCE_DIR}/tests/winui/selftest/package-set.cmake")
+    add_test(NAME wx_winui_selftest_toolkit_runtime
+        COMMAND "${CMAKE_COMMAND}"
+            -DWINUI_CMAKE=${wxSOURCE_DIR}/build/cmake/winui.cmake
+            -DTOOLKIT_RUNTIME_CMAKE=${wxSOURCE_DIR}/build/cmake/winui-toolkit-runtime.cmake
+            -DSAFE_ROOT=${wxBINARY_DIR}/winui/selftest
+            -DWORK_DIR=${wxBINARY_DIR}/winui/selftest/toolkit-runtime
+            -P "${wxSOURCE_DIR}/tests/winui/selftest/toolkit-runtime.cmake")
+    set_tests_properties(wx_winui_selftest_toolkit_runtime
+        PROPERTIES TIMEOUT 75)
     add_test(NAME wx_winui_selftest_cppwinrt_cache
         COMMAND "${CMAKE_COMMAND}"
             -DWINUI_CMAKE=${wxSOURCE_DIR}/build/cmake/winui.cmake

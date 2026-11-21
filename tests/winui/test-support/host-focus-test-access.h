@@ -15,6 +15,7 @@ public:
     static void TakeFocusRequested(
         wxWinUITopLevelHost& host,
         bool previous);
+    static wxWindow *FindFocusedSlot(const wxWinUITopLevelHost& host);
 };
 #endif // wxUSE_WINUI3
 #endif // WX_WINUI_HOST_FOCUS_TEST_ACCESS_H

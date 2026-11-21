@@ -29,6 +29,24 @@
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    #include "wx/checkbox.h"
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_COMBOBOX
+    #include "wx/combobox.h"
+    #include "wx/winui/private/tlwhost.h"
+    #include <winrt/Microsoft.UI.Xaml.Controls.h>
+    #include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
+    #include <winrt/Microsoft.UI.Xaml.Media.h>
+    #define wxPG_USE_WINUI_CHOICES 1
+    #ifndef wxNO_RTTI
+        #include <typeinfo>
+    #endif
+#else
+    #define wxPG_USE_WINUI_CHOICES 0
+#endif
+
 #if wxPG_USE_RENDERER_NATIVE
     #include "wx/renderer.h"
 #endif
@@ -245,6 +263,9 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     // Get old editor appearance
     wxTextCtrl* tc = wxDynamicCast(ctrl, wxTextCtrl);
     wxComboCtrl* cb = nullptr;
+#if wxPG_USE_WINUI_CHOICES
+    wxComboBox* const nativeCombo = wxDynamicCast(ctrl, wxComboBox);
+#endif
     if ( !tc )
     {
         cb = wxDynamicCast(ctrl, wxComboCtrl);
@@ -277,7 +298,11 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     if ( !transactionIsValid() )
         return;
 
-    if ( tc || cb )
+    if ( tc || cb
+#if wxPG_USE_WINUI_CHOICES
+         || nativeCombo
+#endif
+       )
     {
         wxString tcText;
         bool changeText = false;
@@ -313,6 +338,14 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
                 if ( !transactionIsValid() )
                     return;
             }
+#if wxPG_USE_WINUI_CHOICES
+            else if ( nativeCombo )
+            {
+                pg->SetupTextCtrlValue(tcText);
+                nativeCombo->ChangeValue(tcText);
+                if ( !transactionIsValid() ) return;
+            }
+#endif
             else
             {
                 cb->SetText(tcText);
@@ -655,6 +688,138 @@ wxPGTextCtrlEditor::~wxPGTextCtrlEditor()
 
 
 WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(Choice,wxPGChoiceEditor,wxPGEditor)
+
+#if wxPG_USE_WINUI_CHOICES
+namespace
+{
+// Only built-in textual/boolean properties opt into the native choice path.
+// Arbitrary derived properties can override image measurement/painting even
+// without setting CustomImage: retain their owner-draw contract, including
+// builds where exact C++ type identity is unavailable.
+bool CanUseNativePropertyChoices(const wxPGProperty* property,
+                                 const wxPGChoices& choices)
+{
+#ifndef wxNO_RTTI
+    if ( typeid(*property) != typeid(wxEnumProperty) &&
+         typeid(*property) != typeid(wxEditEnumProperty) &&
+         typeid(*property) != typeid(wxBoolProperty) ) return false;
+    if ( property->HasFlag(wxPGFlags::CustomImage) ||
+         property->GetDisplayedCommonValueCount() ) return false;
+    // The public const accessor returns the inherited/default cell without
+    // creating a per-property cell, and also preserves a default-cell image.
+    const wxPGCell& valueCell = property->GetCell(1);
+    if ( !valueCell.IsInvalid() && valueCell.GetBitmap().IsOk() ) return false;
+    if ( choices.IsOk() )
+        for ( unsigned i = 0; i < choices.GetCount(); ++i )
+        {
+            const auto& entry = choices.Item(i);
+            if ( entry.GetBitmap().IsOk() || entry.GetFont().IsOk() ||
+                 entry.GetFgCol().IsOk() || entry.GetBgCol().IsOk() ) return false;
+        }
+    return true;
+#else
+    wxUnusedVar(property);
+    wxUnusedVar(choices);
+    return false;
+#endif
+}
+
+// The default boolean Choice editor has an additional wx contract: clicks in
+// its text area cycle on double-click instead of opening the list. Keep the
+// real wxComboBox/WinUI peer, including keyboard/UIA selection, and implement
+// only that small input policy here. Flags' private bool children use it too.
+class wxPGNativeBoolChoice final : public wxComboBox
+{
+public:
+    wxPGNativeBoolChoice(wxPropertyGrid* grid, wxPGProperty* property)
+        : m_grid(grid), m_property(property)
+    {
+        Bind(wxEVT_LEFT_DOWN, &wxPGNativeBoolChoice::OnMouse, this);
+        Bind(wxEVT_LEFT_UP, &wxPGNativeBoolChoice::OnMouse, this);
+        Bind(wxEVT_LEFT_DCLICK, &wxPGNativeBoolChoice::OnMouse, this);
+        Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent& event)
+        {
+            m_lastUp = wxGetLocalTimeMillis();
+            m_down = false;
+            event.Skip();
+        });
+    }
+
+private:
+    bool IsClosedTextPoint(const wxPoint& point) const
+    {
+        namespace X = winrt::Microsoft::UI::Xaml;
+        namespace C = X::Controls;
+        const double scale = GetDPIScaleFactor();
+        auto* const host = wxWinUITopLevelHost::FindSlotOwner(this);
+        auto* const slot = host ? host->FindSlot(this) : nullptr;
+        const auto combo = slot ? slot->GetSemanticTarget().try_as<C::ComboBox>() : nullptr;
+        if ( !combo || combo.IsDropDownOpen() || !combo.IsLoaded() ) return false;
+        const auto control = combo.try_as<C::IControlProtected>();
+        const auto presenter = control ? control.GetTemplateChild(L"ContentPresenter")
+                                          .try_as<C::ContentPresenter>() : nullptr;
+        if ( !presenter || !presenter.IsLoaded() ) return false;
+        const auto parent = X::Media::VisualTreeHelper::GetParent(presenter)
+                                .try_as<X::UIElement>();
+        if ( !parent ) return false;
+        // The actual template layout slot covers the text column, including
+        // its padding, but excludes the arrow column. No guessed arrow width
+        // or second RTL mirror: XAML supplies the transformed native bounds.
+        const auto bounds = parent.TransformToVisual(combo).TransformBounds(
+            C::Primitives::LayoutInformation::GetLayoutSlot(presenter));
+        const double x = point.x / scale, y = point.y / scale;
+        return x >= bounds.X && y >= bounds.Y &&
+               x < bounds.X + bounds.Width && y < bounds.Y + bounds.Height;
+    }
+
+    void OnMouse(wxMouseEvent& event)
+    {
+        wxPGDeferredEditorCallbackEpoch epoch;
+        auto* const grid = wxDynamicCast(m_grid.get(), wxPropertyGrid);
+        const wxPGEditorCallbackTransaction transaction(grid, m_property, this);
+        if ( !transaction.IsValid() || grid->GetEditorControl() != this ||
+             !IsEnabled() || !IsShownOnScreen() ||
+             !m_property->HasFlag(wxPGPropertyFlags_UseDCC) )
+        { event.Skip(); return; }
+        bool textPoint = false;
+        try { textPoint = IsClosedTextPoint(event.GetPosition()); }
+        catch ( const winrt::hresult_error& ) { }
+        if ( !transaction.IsValid() ) return;
+        if ( !textPoint )
+        { m_down = false; event.Skip(); return; }
+
+        // Like wxPGDoubleClickProcessor, convert the second release instead
+        // of trusting a double-click DOWN whose first click created this
+        // editor. The native arrow and open popup keep their own behavior.
+        if ( event.LeftDown() )
+        { m_down = true; return; }
+        if ( event.LeftDClick() )
+        { m_down = true; return; }
+        if ( !event.LeftUp() ) { event.Skip(); return; }
+        const wxMilliClock_t now = wxGetLocalTimeMillis();
+        const bool cycle = m_down && m_lastUp != 0 &&
+                           now - m_lastUp < DOUBLE_CLICK_CONVERSION_TRESHOLD;
+        m_down = false;
+        m_lastUp = cycle ? 0 : now;
+        if ( !cycle || GetCount() < 2 ) return;
+        const int oldSelection = GetSelection();
+        const int count = static_cast<int>(GetCount());
+        const int next = oldSelection == wxNOT_FOUND ? 0 :
+            (oldSelection + (event.ShiftDown() ? count - 1 : 1)) % count;
+        SetSelection(next);
+        if ( !transaction.IsValid() || grid->GetEditorControl() != this ) return;
+        // This is the normal ComboBox notification path: PG alone converts,
+        // validates/vetoes and commits. Never write the property directly.
+        SendSelectionEvent();
+    }
+
+    wxWindowRef m_grid;
+    wxPGProperty* const m_property;
+    wxMilliClock_t m_lastUp = 0;
+    bool m_down = false;
+};
+}
+#endif
 
 
 // This is a special enhanced double-click processor class.
@@ -1330,6 +1495,41 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     if ( !gridTransactionIsValid() )
         return nullptr;
 
+#if wxPG_USE_WINUI_CHOICES
+    if ( CanUseNativePropertyChoices(property, choices) )
+    {
+        // Use the existing wxComboBox port: selection/text notifications,
+        // editable template lifetime and popup physical retirement retain
+        // their normal wx/WinUI authority, rather than a second popup model.
+        wxComboBox* cb = wxDynamicCast(property, wxBoolProperty)
+                      ? new wxPGNativeBoolChoice(propGrid, property) : new wxComboBox();
+        const wxWeakRef<wxWindow> weakCombo(cb);
+        cb->Hide();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+             !gridTransactionIsValid() ) return weakCombo.get();
+        const bool created = cb->Create(ctrlParent, wxID_ANY, wxString(), po, si,
+                                        labels, extraStyle | wxBORDER_NONE | wxTE_PROCESS_ENTER);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ) return nullptr;
+        if ( !created )
+            return wxPGResolveFailedEditorCreation(cb, weakCombo, gridTransactionIsValid());
+        const auto current = [&]()
+        { return wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) && gridTransactionIsValid(); };
+        if ( !current() ) return weakCombo.get();
+        cb->SetHint(property->GetHintText());
+        if ( !current() ) return weakCombo.get();
+        cb->SetSelection(index >= 0 && index < static_cast<int>(labels.size()) ? index : wxNOT_FOUND);
+        if ( !current() ) return weakCombo.get();
+        if ( !(extraStyle & wxCB_READONLY) )
+        {
+            propGrid->SetupTextCtrlValue(defString);
+            cb->ChangeValue(defString);
+            if ( !current() ) return weakCombo.get();
+        }
+        cb->Show();
+        return weakCombo.get();
+    }
+#endif
+
     wxPGComboBox* cb = new wxPGComboBox();
     const wxWeakRef<wxWindow> weakCombo(cb);
 #ifdef __WXMSW__
@@ -1436,6 +1636,17 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 
 void wxPGChoiceEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    {
+        wxPGDeferredEditorCallbackEpoch epoch;
+        const wxPGEditorCallbackTransaction transaction(property->GetGrid(), property, native);
+        if ( !transaction.IsValid() ) return;
+        const int index = property->GetChoiceSelection();
+        if ( transaction.IsValid() ) native->SetSelection(index);
+        return;
+    }
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1461,6 +1672,10 @@ wxPGWindowList wxPGChoiceEditor::CreateControls( wxPropertyGrid* propGrid, wxPGP
 
 int wxPGChoiceEditor::InsertItem( wxWindow* ctrl, const wxString& label, int index ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+        return native->Insert(label, index < 0 ? native->GetCount() : static_cast<unsigned>(index));
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_MSG(cb, wxNOT_FOUND, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1473,6 +1688,10 @@ int wxPGChoiceEditor::InsertItem( wxWindow* ctrl, const wxString& label, int ind
 
 void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    { native->Delete(index); return; }
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1481,6 +1700,10 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 
 void wxPGChoiceEditor::SetItems(wxWindow* ctrl, const wxArrayString& labels) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    { native->Set(labels); return; }
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1490,6 +1713,16 @@ void wxPGChoiceEditor::SetItems(wxWindow* ctrl, const wxArrayString& labels) con
 bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property,
     wxWindow* ctrl, wxEvent& event ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    {
+        // Native standard choices have no common/custom-rendered entries.
+        // The shared PropertyGrid transaction still performs IntToValue,
+        // validation, CHANGING/veto and CHANGED: never commit in this handler.
+        return native == propGrid->GetEditorControl() &&
+               event.GetEventType() == wxEVT_COMBOBOX;
+    }
+#endif
     if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         wxPGComboBox* cb = (wxPGComboBox*)ctrl;
@@ -1528,6 +1761,23 @@ bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property
 
 bool wxPGChoiceEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* ctrl ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    {
+        wxPGDeferredEditorCallbackEpoch epoch;
+        const wxPGEditorCallbackTransaction transaction(property->GetGrid(), property, native);
+        if ( !transaction.IsValid() ) return false;
+        const int index = native->GetSelection();
+        const int oldIndex = property->GetChoiceSelection();
+        if ( !transaction.IsValid() ) return false;
+        if ( index == oldIndex && !property->IsValueUnspecified() ) return false;
+#if WXWIN_COMPATIBILITY_3_2
+        return property->IntToValueWithCheck(variant, index, wxPGPropValFormatFlags::PropertySpecific);
+#else
+        return property->IntToValue(variant, index, wxPGPropValFormatFlags::PropertySpecific);
+#endif
+    }
+#endif
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
 
     int index = cb->GetSelection();
@@ -1553,6 +1803,14 @@ void wxPGChoiceEditor::SetControlStringValue( wxPGProperty* property,
                                               wxWindow* ctrl,
                                               const wxString& txt ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    {
+        property->GetGrid()->SetupTextCtrlValue(txt);
+        native->ChangeValue(txt);
+        return;
+    }
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1563,6 +1821,10 @@ void wxPGChoiceEditor::SetControlStringValue( wxPGProperty* property,
 
 void wxPGChoiceEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), wxWindow* ctrl, int value ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    { native->SetSelection(value); return; }
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1573,6 +1835,10 @@ void wxPGChoiceEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), wxW
 void wxPGChoiceEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property),
                                               wxWindow* ctrl ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    { if ( native->HasFlag(wxCB_READONLY) ) native->SetSelection(wxNOT_FOUND); return; }
+#endif
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
@@ -1605,6 +1871,28 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(ComboBox,
 
 void wxPGComboBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    {
+        wxPGDeferredEditorCallbackEpoch epoch;
+        wxPropertyGrid* const pg = property->GetGrid();
+        const wxPGEditorCallbackTransaction transaction(pg, property, native);
+        if ( !transaction.IsValid() ) return;
+        const int index = property->GetChoiceSelection();
+        if ( !transaction.IsValid() ) return;
+#if WXWIN_COMPATIBILITY_3_2
+        const wxString text = property->GetValueAsStringWithCheck(wxPGPropValFormatFlags::EditableValue);
+#else
+        const wxString text = property->GetValueAsString(wxPGPropValFormatFlags::EditableValue);
+#endif
+        if ( !transaction.IsValid() ) return;
+        native->SetSelection(index);
+        if ( !transaction.IsValid() ) return;
+        pg->SetupTextCtrlValue(text);
+        native->ChangeValue(text);
+        return;
+    }
+#endif
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
@@ -1653,6 +1941,9 @@ bool wxPGComboBoxEditor::OnEvent( wxPropertyGrid* propGrid,
 {
     wxWindow* textCtrl = nullptr;
 
+#if wxPG_USE_WINUI_CHOICES
+    if ( wxDynamicCast(ctrl, wxComboBox) ) textCtrl = ctrl;
+#endif
     if ( ctrl )
     {
         if ( auto cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox) )
@@ -1668,8 +1959,13 @@ bool wxPGComboBoxEditor::OnEvent( wxPropertyGrid* propGrid,
 
 bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* ctrl ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    const auto native = wxDynamicCast(ctrl, wxComboBox);
+    wxString textVal = native ? native->GetValue() : ((wxOwnerDrawnComboBox*)ctrl)->GetValue();
+#else
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
     wxString textVal = cb->GetValue();
+#endif
 
     if ( property->UsesAutoUnspecified() && textVal.empty() )
     {
@@ -1696,6 +1992,25 @@ bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
 void wxPGComboBoxEditor::OnFocus( wxPGProperty* property,
                                   wxWindow* ctrl ) const
 {
+#if wxPG_USE_WINUI_CHOICES
+    if ( auto native = wxDynamicCast(ctrl, wxComboBox) )
+    {
+        wxPGDeferredEditorCallbackEpoch epoch;
+        wxPropertyGrid* const pg = property->GetGrid();
+        const wxPGEditorCallbackTransaction transaction(pg, property, native);
+        if ( !transaction.IsValid() ) return;
+#if WXWIN_COMPATIBILITY_3_2
+        const wxString text = property->GetValueAsStringWithCheck(wxPGPropValFormatFlags::EditableValue);
+#else
+        const wxString text = property->GetValueAsString(wxPGPropValFormatFlags::EditableValue);
+#endif
+        if ( !transaction.IsValid() ) return;
+        pg->SetupTextCtrlValue(text);
+        native->ChangeValue(text);
+        if ( transaction.IsValid() ) native->SelectAll();
+        return;
+    }
+#endif
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
     wxPGTextCtrlEditor_OnFocus(property, cb->GetTextCtrl());
 }
@@ -2173,9 +2488,23 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
     wxSize sz = size;
     sz.x = propGrid->GetFontHeight() + (wxPG_XBEFOREWIDGET*2) + 4;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    // Use the actual WinUI CheckBox, including its native focus/keyboard and
+    // automation behaviour. The third state is display-only: a user action
+    // must resolve an unspecified property to a concrete boolean value.
+    wxCheckBox* cb = new wxCheckBox();
+    const wxWeakRef<wxWindow> weakCheckBox(cb);
+    sz.x = wxMax(sz.x, propGrid->FromDIP(32));
+    sz.y = wxMax(sz.y, propGrid->FromDIP(32));
+    const bool created = cb->Create(propGrid->GetPanel(), wxID_ANY,
+                                    wxString(), pt, sz,
+                                    wxCHK_3STATE | wxBORDER_NONE |
+                                    wxWANTS_CHARS);
+#else
     wxSimpleCheckBox* cb = new wxSimpleCheckBox();
     const wxWeakRef<wxWindow> weakCheckBox(cb);
     const bool created = cb->Create(propGrid, property, wxID_ANY, pt, sz);
+#endif
     if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) )
         return nullptr;
     if ( !created )
@@ -2186,7 +2515,65 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
     if ( !gridTransactionIsValid() )
         return weakCheckBox.get();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    cb->SetFont(propGrid->GetFont());
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
+         !gridTransactionIsValid() )
+        return weakCheckBox.get();
+
+    const wxSize nativeSize = cb->GetBestSize();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
+         !gridTransactionIsValid() )
+        return weakCheckBox.get();
+
+    cb->SetSize(wxMax(sz.x, nativeSize.x), wxMax(sz.y, nativeSize.y));
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
+         !gridTransactionIsValid() )
+        return weakCheckBox.get();
+
+    // The click which selected the property predates its editor. Replay only
+    // that activation, through the same wxEVT_CHECKBOX forwarding path as a
+    // native click. An editor superseded before delivery must remain inert.
+    cb->Bind(wxEVT_CB_LEFT_CLICK_ACTIVATE,
+        [weakCheckBox, weakGrid, propGrid, property, state]
+        (wxCommandEvent& activation)
+        {
+            wxCheckBox* const checkBox =
+                wxDynamicCast(weakCheckBox.get(), wxCheckBox);
+            const auto isCurrent = [&]()
+            {
+                return checkBox &&
+                       wxWeakWindowIsAvailableForCallbacks(weakCheckBox,
+                                                           checkBox) &&
+                       wxWeakWindowIsAvailableForCallbacks(weakGrid,
+                                                           propGrid) &&
+                       propGrid->GetState() == state &&
+                       propGrid->GetSelection() == property &&
+                       propGrid->GetEditorControl() == checkBox &&
+                       !propGrid->IsPropertyPendingRemoval(property);
+            };
+            if ( !isCurrent() ||
+                 !wxRect(checkBox->GetClientSize()).Contains(
+                     wxPoint(activation.GetInt(), activation.GetExtraLong())) )
+                return;
+
+            const wxCheckBoxState next =
+                checkBox->Get3StateValue() == wxCHK_CHECKED
+                    ? wxCHK_UNCHECKED : wxCHK_CHECKED;
+            checkBox->Set3StateValue(next);
+            if ( !isCurrent() )
+                return;
+
+            wxCommandEvent command(wxEVT_CHECKBOX, checkBox->GetId());
+            command.SetEventObject(checkBox);
+            command.SetInt(next);
+            // The PropertyGrid event forwarder owns validation and commit.
+            // Dispatch can destroy both editor and grid; nothing follows it.
+            checkBox->HandleWindowEvent(command);
+        });
+#else
     cb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+#endif
     if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
          !gridTransactionIsValid() )
         return weakCheckBox.get();
@@ -2243,8 +2630,13 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
 void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
                                         wxWindow* ctrl ) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    wxCheckBox* cb = wxDynamicCast(ctrl, wxCheckBox);
+    wxCHECK_RET(cb, "Only wxCheckBox editor can be updated");
+#else
     wxSimpleCheckBox* cb = wxDynamicCast(ctrl, wxSimpleCheckBox);
     wxCHECK_RET(cb, "Only wxSimpleCheckBox editor can be updated");
+#endif
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     wxPropertyGrid* const propGrid = property->GetGrid();
@@ -2267,6 +2659,12 @@ void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
         state = wxSimpleCheckBoxStates::Unspecified;
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    cb->Set3StateValue(state == wxSimpleCheckBoxStates::Unspecified
+                          ? wxCHK_UNDETERMINED
+                          : state == wxSimpleCheckBoxStates::Checked
+                              ? wxCHK_CHECKED : wxCHK_UNCHECKED);
+#else
     cb->m_state = state;
     if ( !transaction.IsValid() )
         return;
@@ -2276,11 +2674,21 @@ void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
         return;
 
     cb->Refresh();
+#endif
 }
 
-bool wxPGCheckBoxEditor::OnEvent( wxPropertyGrid* WXUNUSED(propGrid), wxPGProperty* WXUNUSED(property),
-    wxWindow* WXUNUSED(ctrl), wxEvent& event ) const
+bool wxPGCheckBoxEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* WXUNUSED(property),
+    wxWindow* ctrl, wxEvent& event ) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    // A native provider can outlive a logically retired editor until the
+    // deferred editor destruction runs. Never apply its event to a successor.
+    if ( !ctrl || propGrid->GetEditorControl() != ctrl )
+        return false;
+#else
+    wxUnusedVar(propGrid);
+    wxUnusedVar(ctrl);
+#endif
     if ( event.GetEventType() == wxEVT_CHECKBOX )
     {
         return true;
@@ -2291,11 +2699,26 @@ bool wxPGCheckBoxEditor::OnEvent( wxPropertyGrid* WXUNUSED(propGrid), wxPGProper
 
 bool wxPGCheckBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* ctrl ) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    wxCheckBox* cb = wxDynamicCast(ctrl, wxCheckBox);
+    wxCHECK_MSG(cb, false, "Only wxCheckBox editor value can be read");
+    const int index = cb->Get3StateValue() == wxCHK_CHECKED ? 1 : 0;
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxPGEditorCallbackTransaction transaction(property->GetGrid(),
+                                                     property, cb);
+    if ( !transaction.IsValid() )
+        return false;
+    const int selection = property->GetChoiceSelection();
+    if ( !transaction.IsValid() )
+        return false;
+#else
     wxSimpleCheckBox* cb = (wxSimpleCheckBox*)ctrl;
 
     int index = !!(cb->m_state & wxSimpleCheckBoxStates::Checked) ? 1 : 0;
+    const int selection = property->GetChoiceSelection();
+#endif
 
-    if ( index != property->GetChoiceSelection() ||
+    if ( index != selection ||
          // Changing unspecified always causes event (returning
          // true here should be enough to trigger it).
          property->IsValueUnspecified()
@@ -2314,15 +2737,27 @@ bool wxPGCheckBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
 
 void wxPGCheckBoxEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), wxWindow* ctrl, int value ) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    wxCheckBox* cb = wxDynamicCast(ctrl, wxCheckBox);
+    wxCHECK_RET(cb, "Only wxCheckBox editor can be updated");
+    cb->Set3StateValue(value == 0 ? wxCHK_UNCHECKED : wxCHK_CHECKED);
+#else
     ((wxSimpleCheckBox*)ctrl)->m_state = value == 0 ? wxSimpleCheckBoxStates::Unchecked : wxSimpleCheckBoxStates::Checked;
     ctrl->Refresh();
+#endif
 }
 
 
 void wxPGCheckBoxEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* ctrl ) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_CHECKBOX
+    wxCheckBox* cb = wxDynamicCast(ctrl, wxCheckBox);
+    wxCHECK_RET(cb, "Only wxCheckBox editor can be updated");
+    cb->Set3StateValue(wxCHK_UNDETERMINED);
+#else
     ((wxSimpleCheckBox*)ctrl)->m_state = wxSimpleCheckBoxStates::Unspecified;
     ctrl->Refresh();
+#endif
 }
 
 
@@ -2558,6 +2993,16 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
                                         unsigned int WXUNUSED(forColumn),
                                         const wxPoint& offset )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // XAML editors already include their native text padding. The legacy
+    // MSW text baseline adjustment shrinks a 32 DIP row below the template's
+    // minimum height and clips its bottom edge. Use the authoritative row
+    // allocation as-is; do not apply HWND edit margins to the XAML peer.
+    wxRect finalPos = ctrl->GetRect();
+    finalPos.height = m_lineHeight;
+    finalPos.Offset(offset);
+    ctrl->SetSize(finalPos);
+#else
     // Center the control vertically
     wxRect finalPos = ctrl->GetRect();
     int y_adj = (m_lineHeight - finalPos.height)/2 + wxPG_TEXTCTRLYADJUST;
@@ -2584,6 +3029,7 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
     finalPos.Offset(offset);
 
     ctrl->SetSize(finalPos);
+#endif
 }
 
 // -----------------------------------------------------------------------

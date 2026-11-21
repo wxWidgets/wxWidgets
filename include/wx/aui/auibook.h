@@ -26,6 +26,10 @@
 #include "wx/compositebookctrl.h"
 
 #include <vector>
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxAuiTabCtrlWinUI;
+#endif
 
 class wxAuiBookSerializer;
 class wxAuiBookDeserializer;
@@ -312,6 +316,9 @@ protected:
     // art-provider callback can observe it.
     friend class wxAuiNotebook;
     friend class wxAuiTabCtrl;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxAuiTabCtrlWinUI;
+#endif
 
     // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
@@ -361,6 +368,11 @@ public:
     bool Create(wxAuiNotebook* parent, wxWindowID id);
 
     ~wxAuiTabCtrl();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+    void Update() override;
+#endif
 
     bool IsDragging() const { return m_isDragging; }
 
@@ -457,6 +469,12 @@ private:
     }
 
     void OnButton(int tabIdx, int button);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxAuiTabContainer;
+    void InitWinUIProjection();
+    std::shared_ptr<wxAuiTabCtrlWinUI> m_winui;
+#endif
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiTabCtrl);

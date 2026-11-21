@@ -33,6 +33,14 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/paint.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "wx/winui/private/tlwhostmsw.h"
+#include <uxtheme.h>
+#ifdef WXWINUI_TEST_SUPPORT
+#include "opaque-paint-test-access.h"
+#endif
+#endif
+
 #include <unordered_map>
 
 // ----------------------------------------------------------------------------
@@ -56,13 +64,32 @@ public:
     WXHDC GetHDC() const { return (WXHDC)m_hdc; }
 
 protected:
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    HDC m_hdc;
+#else
     const HDC m_hdc;
+#endif
 
     wxDECLARE_NO_COPY_CLASS(wxPaintDCInfo);
 };
 
 namespace
 {
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+// UxTheme's buffered-paint cache belongs to the calling thread, not the app.
+// Acquire it lazily, without a process-global UI-thread assumption.
+struct wxWinUIBufferedPaintThread
+{
+    wxWinUIBufferedPaintThread() : ready(SUCCEEDED(::BufferedPaintInit())) {}
+    ~wxWinUIBufferedPaintThread() { if ( ready ) ::BufferedPaintUnInit(); }
+    const bool ready;
+};
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIOpaquePaintTestAccess::Observer gs_opaquePaintObserver = nullptr;
+void* gs_opaquePaintObserverContext = nullptr;
+#endif
+#endif
 
 // This subclass contains information for the HDCs we create ourselves, i.e.
 // those for which we call BeginPaint() -- and hence need to call EndPaint().
@@ -73,10 +100,17 @@ public:
         : wxPaintDCInfo(::BeginPaint(GetHwndOf(win), GetPaintStructPtr(m_ps))),
           m_hwnd(GetHwndOf(win))
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( m_hdc && wxWinUIShouldUseOpaquePaintBuffer(win) )
+            BeginOpaqueBuffer();
+#endif
     }
 
     virtual ~wxPaintDCInfoOur()
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        EndOpaqueBuffer();
+#endif
         ::EndPaint(m_hwnd, &m_ps);
     }
 
@@ -91,6 +125,166 @@ private:
 
     const HWND m_hwnd;
     PAINTSTRUCT m_ps;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void BeginOpaqueBuffer()
+    {
+        RECT clip;
+        const int clipType = ::GetClipBox(m_hdc, &clip);
+        if ( clipType == ERROR || clipType == NULLREGION ||
+             ::IsRectEmpty(&m_ps.rcPaint) )
+            return;
+
+        static thread_local wxWinUIBufferedPaintThread thread;
+        if ( !thread.ready ) return;
+
+        const DWORD layout = ::GetLayout(m_hdc);
+        POINT targetOrigin{};
+        if ( layout == GDI_ERROR || !::LPtoDP(m_hdc, &targetOrigin, 1) )
+            return;
+        m_physicalPaint = m_ps.rcPaint;
+        if ( layout & LAYOUT_RTL )
+        {
+            // BeginPaint's update rectangle follows the mirrored window's
+            // client coordinates. Buffer pixels still run left to right.
+            m_physicalPaint.left = targetOrigin.x + 1 - m_ps.rcPaint.right;
+            m_physicalPaint.right = targetOrigin.x + 1 - m_ps.rcPaint.left;
+        }
+        BP_PAINTPARAMS params{};
+        params.cbSize = sizeof(params);
+        params.dwFlags = BPPF_ERASE;
+        params.pBlendFunction = &m_blend;
+        HDC bufferDC = nullptr;
+        HPAINTBUFFER buffer = ::BeginBufferedPaint(
+            m_hdc, &m_ps.rcPaint, BPBF_TOPDOWNDIB, &params, &bufferDC);
+        if ( !buffer || !bufferDC )
+        {
+            if ( buffer ) ::EndBufferedPaint(buffer, FALSE);
+            return;
+        }
+
+        // Seed and transport pixels in physical coordinates. The cached bitmap
+        // can be larger than this update, so mirroring must not use its width.
+        const RECT& rect = m_ps.rcPaint;
+        if ( !::BitBlt(bufferDC, rect.left, rect.top,
+                       rect.right - rect.left, rect.bottom - rect.top,
+                       m_hdc, rect.left, rect.top, SRCCOPY) ||
+             FAILED(::BufferedPaintSetAlpha(buffer, nullptr, 0)) )
+        {
+            ::EndBufferedPaint(buffer, FALSE);
+            return;
+        }
+
+        const int transportState = ::SaveDC(bufferDC);
+        POINT bufferOrigin{};
+        if ( !transportState || ::SetLayout(bufferDC, layout) == GDI_ERROR ||
+             !::LPtoDP(bufferDC, &bufferOrigin, 1) ||
+             !::OffsetViewportOrgEx(bufferDC,
+                 (layout & LAYOUT_RTL ? -1 : 1) *
+                    (targetOrigin.x - m_physicalPaint.left - bufferOrigin.x),
+                 targetOrigin.y - m_physicalPaint.top - bufferOrigin.y, nullptr) )
+        {
+            ::EndBufferedPaint(buffer, FALSE);
+            return;
+        }
+
+        // The copied pixels seed handlers that only repaint part of their
+        // update region, but must not make an otherwise empty paint opaque.
+        if ( !::SetBoundsRect(bufferDC, nullptr, DCB_ENABLE | DCB_RESET) )
+        {
+            ::EndBufferedPaint(buffer, FALSE);
+            return;
+        }
+        m_buffer = buffer;
+        m_transportState = transportState;
+        m_hdc = bufferDC;
+    }
+
+    void EndOpaqueBuffer()
+    {
+        if ( !m_buffer ) return;
+
+        // GDI batches writes to DIBs. Finish them before UxTheme reads/modifies
+        // alpha bytes, otherwise a later batch can zero alpha again.
+        ::GdiFlush();
+        RECT drawn{};
+        const UINT bounds = ::GetBoundsRect(m_hdc, &drawn, 0);
+        bool update = (bounds & DCB_SET) == DCB_SET;
+        POINT points[2] = {{drawn.left, drawn.top}, {drawn.right, drawn.bottom}};
+        // Bounds are in the final wxDC logical coordinates and may be inverted
+        // for RTL. UxTheme consumes physical target coordinates, so normalize
+        // only after converting to buffer pixels (whose origin is rcPaint).
+        if ( update && !::LPtoDP(m_hdc, points, 2) ) update = false;
+        if ( !::RestoreDC(m_hdc, m_transportState) ) update = false;
+        if ( update )
+        {
+            drawn = {m_physicalPaint.left + wxMin(points[0].x, points[1].x),
+                     m_physicalPaint.top + wxMin(points[0].y, points[1].y),
+                     m_physicalPaint.left + wxMax(points[0].x, points[1].x),
+                     m_physicalPaint.top + wxMax(points[0].y, points[1].y)};
+            RECT clipped;
+            update = ::IntersectRect(&clipped, &drawn, &m_physicalPaint) != FALSE;
+            if ( update )
+            {
+                // AlphaBlend expects premultiplied pixels. Work in physical
+                // bitmap coordinates: UxTheme's rectangle-based alpha helpers
+                // inherit the target's RTL mapping, unlike these top-down bits.
+                // Clear unused pixels to RGBA zero and preserve all painted RGB,
+                // including black, while making the painted bounds opaque.
+                const RECT& target = m_physicalPaint;
+                RGBQUAD* bits = nullptr;
+                int stride = 0;
+                const bool prepared =
+                    SUCCEEDED(::GetBufferedPaintBits(m_buffer, &bits, &stride)) &&
+                    bits && stride >= target.right - target.left;
+                if ( prepared )
+                {
+                    for ( LONG y = 0; y < target.bottom - target.top; ++y )
+                    {
+                        RGBQUAD* row = bits + static_cast<size_t>(y) * stride;
+                        for ( LONG x = 0; x < target.right - target.left; ++x )
+                        {
+                            if ( x >= clipped.left - target.left &&
+                                 x < clipped.right - target.left &&
+                                 y >= clipped.top - target.top &&
+                                 y < clipped.bottom - target.top )
+                                row[x].rgbReserved = 255;
+                            else
+                                row[x] = {};
+                        }
+                    }
+                }
+                else
+                {
+                    // Preserve the pre-existing direct GDI result if the
+                    // compositor-specific alpha operation is unavailable.
+                    ::BitBlt(m_ps.hdc, clipped.left, clipped.top,
+                             clipped.right - clipped.left, clipped.bottom - clipped.top,
+                             m_hdc, clipped.left, clipped.top, SRCCOPY);
+                    update = false;
+                }
+#ifdef WXWINUI_TEST_SUPPORT
+                if ( prepared && gs_opaquePaintObserver )
+                {
+                    gs_opaquePaintObserver(
+                        (WXHWND)m_hwnd, (WXHDC)m_hdc, m_buffer,
+                        wxRect(clipped.left, clipped.top,
+                               clipped.right - clipped.left, clipped.bottom - clipped.top),
+                        gs_opaquePaintObserverContext);
+                }
+#endif
+            }
+        }
+        // Source alpha remains zero outside the actual drawing bounds. An
+        // early-returning paint handler therefore leaves its target intact.
+        ::EndBufferedPaint(m_buffer, update ? TRUE : FALSE);
+    }
+
+    HPAINTBUFFER m_buffer = nullptr;
+    int m_transportState = 0;
+    RECT m_physicalPaint{};
+    BLENDFUNCTION m_blend{AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
+#endif
 
     wxDECLARE_NO_COPY_CLASS(wxPaintDCInfoOur);
 };
@@ -111,6 +305,14 @@ using PaintDCInfos = std::unordered_map<wxWindow*, wxPaintDCInfo*>;
 PaintDCInfos gs_PaintDCInfos;
 
 } // anonymous namespace
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+void wxWinUIOpaquePaintTestAccess::SetObserver(Observer observer, void* context)
+{
+    gs_opaquePaintObserver = observer;
+    gs_opaquePaintObserverContext = context;
+}
+#endif
 
 // ===========================================================================
 // implementation

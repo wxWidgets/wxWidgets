@@ -24,6 +24,22 @@ class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
 class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridManager;
 class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPageState;
 
+// Bit values for wxPropertyGrid::m_coloursCustomized. Native presenters must
+// distinguish application-authored colours from the generic system palette.
+enum wxPGCustomColour
+{
+    CustomColour_None           = 0x0000,
+    CustomColour_Margin         = 0x0001,
+    CustomColour_CaptionBg      = 0x0002,
+    CustomColour_CaptionText    = 0x0004,
+    CustomColour_CellBg         = 0x0008,
+    CustomColour_CellText       = 0x0010,
+    CustomColour_SelectionBg    = 0x0020,
+    CustomColour_SelectionText  = 0x0040,
+    CustomColour_Line           = 0x0080,
+    CustomColour_DisabledText   = 0x0100
+};
+
 // Callback/gesture state added while hardening PropertyGrid must not alter the
 // long-standing public class layouts. These implementation-only sidecars are
 // keyed by the wrapper address but also retain its weak identity: reset in the

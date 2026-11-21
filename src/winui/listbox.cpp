@@ -64,9 +64,8 @@ namespace WF = winrt::Windows::Foundation;
 namespace
 {
 
-// The native MSW owner-drawn ListBox adds one physical pixel above and below
-// the control font. Non-owner-drawn HWND list boxes derive the same compact
-// line metric from their font instead of imposing a DPI-independent minimum.
+// Application owner-drawn rows retain the MSW fixed bitmap contract: one
+// physical pixel above and below the font. Native rows use WinUI templates.
 constexpr int wxWinUIListBoxExtraSpacePixels = 1;
 
 // Different projected interfaces for the same WinRT object can have distinct
@@ -2324,10 +2323,10 @@ int wxListBox::GetCountPerPage() const
                 if ( !std::isfinite(lineHeight) || lineHeight <= 0.0 )
                     continue;
 
-                // ListBox is LBS_OWNERDRAWFIXED on wxMSW, and the WinUI
-                // projection likewise assigns one explicit height to every
-                // retained container. Any realized row is therefore the
-                // authoritative line-height sample, including under
+                // Use the realized WinUI row, not the compact HWND list-box
+                // font metric. Native rows keep their theme/content height;
+                // custom owner-drawn rows retain their fixed height. This is
+                // the authoritative line-height sample, including under
                 // virtualization after SetFirstItem()/EnsureVisible().
                 return static_cast<int>(viewportHeight / lineHeight);
             }
@@ -3004,6 +3003,9 @@ wxSize wxListBox::DoGetBestSize() const
     const wxSize chrome =
         FromDIP(wxSize(WinUIIsCheckable() ? 64 : 40, 12));
     const wxSize minimum = FromDIP(wxSize(140, 90));
+    // Native item containers need the WinUI theme's interaction height and
+    // room for the text. A font-only MSW metric clips native check boxes.
+    itemHeight = wxMax(itemHeight + FromDIP(8), FromDIP(40));
     const int visibleItems =
         wxMin(wxMax(static_cast<int>(m_itemModel.GetCount()), 3), 10);
     return wxSize(
@@ -3818,11 +3820,7 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
         const auto entryPeerIdentity = wxWinUIListObjectIdentity(item);
         const double initialScale = wxWinUIListScale(this);
         double itemHeightDips = wxMax(
-            1.0,
-            static_cast<double>(wxMax(
-                1,
-                GetCharHeight() +
-                    2 * wxWinUIListBoxExtraSpacePixels)) / initialScale);
+            32.0, static_cast<double>(GetCharHeight()) / initialScale + 8.0);
 
 #if wxUSE_OWNER_DRAWN
         wxBitmap ownerDrawBitmap;
@@ -4020,13 +4018,24 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
         bool pendingFocusDirectContent = false;
         std::optional<wxWinUIPeerMutationGuard> peerMutationGuard;
         peerMutationGuard.emplace(m_updatingPeer);
-        // A ListViewItem theme supplies a roughly 32-DIP MinHeight, which is
-        // 64 physical pixels on a 2x XamlRoot and is unrelated to the compact
-        // LB_GETITEMHEIGHT contract. Override both dimensions on every peer
-        // refresh: create/insert, SetFont(), owner measurement and DPI changes
-        // all converge through this single guarded projection point.
-        item.MinHeight(0.0);
-        item.Height(itemHeightDips);
+        // Native rows use the actual WinUI template's minimum and content
+        // measurement. Do not force the compact MSW font-height contract onto
+        // native CheckBox/ListViewItem templates. Only an application-supplied
+        // owner-drawn bitmap has a fixed-size presentation contract.
+#if wxUSE_OWNER_DRAWN
+        if ( hasOwnerDrawProjection && ownerDrawBitmap.IsOk() )
+        {
+            item.MinHeight(0.0);
+            item.Height(itemHeightDips);
+        }
+        else
+#endif
+        {
+            item.ClearValue(MUX::FrameworkElement::MinHeightProperty());
+            item.ClearValue(MUX::FrameworkElement::HeightProperty());
+            itemHeightDips = wxMax(
+                32.0, static_cast<double>(GetCharHeight()) / initialScale + 8.0);
+        }
         item.VerticalContentAlignment(MUX::VerticalAlignment::Center);
         MUXA::AutomationProperties::SetName(
             item, wxWinUIToHString(m_itemModel.At(n).text));

@@ -20,6 +20,7 @@ class WXDLLIMPEXP_CORE wxWinUIHostGeometryTestAccess final
 {
 public:
     static unsigned GetFlushRunCount();
+    static unsigned GetBridgeRegionChangeCount();
     static unsigned GetFlushCallbackAttemptCount();
     static void ResetImpossibleZOrderCount();
 

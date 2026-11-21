@@ -104,13 +104,18 @@ if(WXMSW)
             src/winui/clrpicker.cpp
             src/winui/colordlg.cpp
             src/winui/datectrl.cpp
+            src/winui/dataview.cpp
             src/winui/dlgpresenter.cpp
             src/winui/choice.cpp
+            src/winui/popupretirement.cpp
             src/winui/combobox.cpp
             src/winui/gauge.cpp
+            src/winui/gridprojection.cpp
+            src/winui/headerprojection.cpp
             src/winui/hyperlink.cpp
             src/winui/infobar.cpp
             src/winui/listbox.cpp
+            src/winui/listprojection.cpp
             src/winui/menubar.cpp
             src/winui/msgdlg.cpp
             src/winui/notebook.cpp
@@ -119,6 +124,7 @@ if(WXMSW)
             src/winui/renderer.cpp
             src/winui/richtooltip.cpp
             src/winui/scrolbar.cpp
+            src/winui/scrollbarprojection.cpp
             src/winui/slider.cpp
             src/winui/spinbutt.cpp
             src/winui/spinctrl.cpp
@@ -218,6 +224,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/generic/splash.cpp"
             "${wxSOURCE_DIR}/src/generic/progdlgg.cpp"
             "${wxSOURCE_DIR}/src/msw/dcprint.cpp"
+            "${wxSOURCE_DIR}/src/msw/dcclient.cpp"
             "${wxSOURCE_DIR}/src/msw/evtloop.cpp"
             "${wxSOURCE_DIR}/src/msw/dirdlg.cpp"
             "${wxSOURCE_DIR}/src/msw/msgdlg.cpp"
@@ -246,6 +253,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/listbox.cpp"
             "${wxSOURCE_DIR}/src/winui/treectrl.cpp"
             "${wxSOURCE_DIR}/src/winui/choice.cpp"
+            "${wxSOURCE_DIR}/src/winui/popupretirement.cpp"
             "${wxSOURCE_DIR}/src/winui/combobox.cpp"
             "${wxSOURCE_DIR}/src/winui/datectrl.cpp"
             "${wxSOURCE_DIR}/src/winui/timectrl.cpp"

@@ -407,15 +407,130 @@ WinUI-backed controls coexist on the same top-level client plane:
   their usual foundation. The host contains explicit adapters for z-order,
   focus and mixed Tab traversal; physical parity with wxMSW remains
   Experimental until the corresponding V0 qualification rows are complete;
-- windows that draw themselves with wx (`wxDC`) — the generic
-  `wxDataViewCtrl`, `wxGrid`, custom `EVT_PAINT` windows, `wxBannerWindow` —
+- windows that draw themselves with wx (`wxDC`) — custom
+  `EVT_PAINT` windows, `wxBannerWindow`, or the explicitly selected generic
+  DataView fallback —
   paint natively under the island band. The island-first root router forwards
-  native messages when its XAML hit test finds no peer, and native scrollbar
-  bands are cut out of the island region for their tracking loops. The
+  native messages when its XAML hit test finds no peer. wx-managed window
+  scrollbars use native XAML ScrollBar peers over the authoritative HWND scroll
+  model, with deferred host creation for otherwise GDI-only scrolling windows.
+  Their unmodified WinUI template has transparent ordinary backing and native
+  hover expansion, with activity-driven mouse/touch indicators and the system
+  auto-hide preference. Position updates do not invalidate the scrolling client.
+  Unprojected scrollbar
+  bands remain cut out of the island region for their tracking loops. The
   deterministic routes are implemented, but real pointer/capture, scrolling
   and mixed-Z behaviour remain Experimental pending the physical campaign;
 - a WinUI-backed control is simply one that registered a slot; nothing in
   the host requires *all* the controls of a window to be WinUI-backed.
+
+The native DataView backend (`wxUSE_NATIVE_DATAVIEWCTRL=ON`) now uses a
+virtualized XAML `ListView` with native text, image, checkbox and progress
+cells. Text, choice/index, integer and date editing use native `TextBox`,
+`ComboBox`, `NumberBox` and `CalendarDatePicker` controls. Retained native
+column headers expose resize through a `Thumb` and a UIA Transform provider.
+`wxDataViewListCtrl` and `wxTreeListCtrl` use
+that same backend. Native UIA peers expose Grid/Table and
+GridItem/TableItem, including virtualized off-screen cells and retained
+column headers. Editable text/choice/index/date cells expose UIA Value and
+integer cells also expose RangeValue through the same validation/veto path
+as native editing. Selection and focus retain cell visuals; an unsorted
+single-value notification refreshes only its cell, without traversing the
+whole model. Column/viewport geometry updates retain native cells and active
+editors; expanding or collapsing a branch updates its row range instead of
+resetting the full ListView source. Custom wxDC renderers still redraw when
+their drawing size changes, and automatic column sizing may remeasure values.
+This remains experimental: full renderer/editing parity,
+all column gestures, drag/drop, cell-specific selection accessibility
+and qualification with external UIA clients are still open.
+
+`wxGrid` has a separate, viewport-bounded WinUI presentation over its existing
+table, selection and editing authority. Standard text/number/float/wrapped-text,
+choice/enum/date/datetime
+cells and headers are native XAML controls; boolean cells are native CheckBox
+controls. Custom cell renderers preserve their explicit wxDC drawing contract
+through images, as do all cell renderers in builds without C++ RTTI. Printing
+still uses wxDC. Frozen panes, both scroll axes and synchronous Update() have
+automated coverage. Native Grid/Table and GridItem/TableItem providers retain
+logical identity across viewport realization, connect merged/frozen cells to
+their headers, and reject retired model references. UIA names currently use
+raw model values; Value/Selection, formatted names, external UIA clients and
+complete renderer/interaction parity remain open. The window scrollbar projection
+also presents wxGrid's existing scroll model when a WinUI host is available;
+it does not replace that model.
+
+`wxPropertyGrid` now has an experimental viewport-bounded native presentation:
+standard property names/values and category expanders use XAML controls.
+Unselected values retain native TextBox, ComboBox, CheckBox, NumberBox and date
+previews instead of appearing only while edited. SPIN date previews preserve
+the wx date format, locale and nullable-value contract. The existing wx
+property/page, selection, validation and
+editor lifetime rules remain authoritative. Native cells survive geometry-only
+changes; retired property/page providers cannot activate replacements. Custom
+`wxPGCellRenderer` drawing preserves its wxDC contract per visible cell. This is
+not complete PropertyGrid parity: advanced default-renderer `OnCustomPaint`
+images, remaining editor/rendering variants, complete accessibility semantics,
+external clients and physical interaction still require implementation or
+qualification. The local static gate is `wx_winui_propgrid_native`; the accepted
+shared demo has not been replaced by this experimental work.
+
+`wxListCtrl`/`wxListView` now project the existing generic model into native
+XAML cells, images, checkboxes and headers in report, list and icon modes.
+The virtual report viewport is bounded; unchanged cells and image sources
+are retained. `wxEditableListBox` composes these cells with native buttons
+and the real wxTextCtrl editor. Showcase enables both controls again.
+Programmatic column reordering now preserves logical indices while moving the
+native headers, cells, hit-test regions and active label editor. The generic
+implementation provides the same public order API; this does not add interactive
+drag-to-reorder input. Invalid permutations leave the current order unchanged.
+Report rows are native ListViewItems with retained cells. Grid/Table and
+GridItem/TableItem accessibility providers keep logical identity across native
+realization, including virtual off-screen cells and column reordering. Native
+Button header peers preserve focus, Tab navigation and Invoke; retiring a
+list or its schema invalidates the corresponding retained providers.
+Report cells expose Value; writable label cells use the real native editor
+and the wx BEGIN/END edit, veto and virtual-model callback contract. Committing
+a virtual label refreshes its realized row without rebuilding the list.
+Report Selection enumerates the wx selection model, including off-screen
+virtual rows, without reading labels or realizing their XAML containers.
+Retained row peers keep SelectionContainer identity across viewport changes.
+Coalesced selection notifications update realized selection and UIA without
+rebuilding rows; a UIAutomationCore MTA client test observes the event.
+The native gate covers selection, commands, editing and destructive callbacks;
+it does not establish complete ListCtrl API/selection accessibility parity,
+all physical gestures or DPI/HDR qualification.
+
+Standalone `wxHeaderCtrl` also has a native XAML presentation over its existing
+wx column model: retained Button headers, TextBlock/Image/FontIcon content and
+native reorder markers. Widths, hidden columns, display order and horizontal
+scrolling remain authoritative in wx; the existing capture and veto/event
+semantics handle resizing and reordering. Native Invoke dispatches the logical
+column's wx click event, without implicitly sorting application data. Visible
+peers are clipped to the viewport, and retired providers cannot act on replacement
+columns. Mutable bitmap bundles are re-read on refresh rather than cached by
+object identity. This remains experimental: physical pointer/keyboard and
+external UIA qualification, including resize/reorder accessibility patterns,
+are not established by the native semantic tests.
+
+TreeCtrl shares identical resolved icon pixels between its native nodes using a
+per-control cache bounded to 64 entries and 4 MiB of cached pixel storage.
+Image-list and custom bundle reads are still performed and revision checked:
+replacement images, alpha and DPI changes must not return a stale cached icon.
+The cache bound is not a limit on images retained by live nodes or total control
+memory. The `wx_winui_tree_native` gate covers the model/projection contracts;
+it does not establish full tree style, accessibility or physical-input parity.
+
+Native ListBox and CheckListBox rows retain their WinUI template's automatic
+height (including larger fonts); only explicitly owner-drawn item bitmaps use
+the application's compact row-height contract. Showcase no longer constrains
+its four native list rows to the old compact 120/130-DIP example heights.
+
+The optional experimental Toolkit Ribbon build also uses actual WinUI
+containers. Horizontal/vertical page layout, native scrolling and orientation
+changes after popup retirement have automated coverage; shared-library/install
+and physical interaction qualification remain open. The default generic
+Ribbon path is not a native port. Current scopes and test evidence are in
+[the component implementation plan](../../plans/pr26890-audit-20260830/108-component-contracts.md).
 
 The cross-cutting maturity table in the
 [V0 component matrix](../../plans/winui3-v0/component-matrix.md) is part of

@@ -61,6 +61,11 @@ public:
     bool ShowExpanded();
     bool HideExpanded();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    bool Enable(bool enable = true) override;
+    bool Show(bool show = true) override;
+#endif
+
     void SetArtProvider(wxRibbonArtProvider* art) override;
 
     virtual bool Realize() override;
@@ -85,6 +90,10 @@ public:
     void HideIfExpanded();
 
 protected:
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxRibbonContainerWinUI;
+#endif
+
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize GetPanelSizerBestSize() const;
     wxSize  GetPanelSizerMinSize() const;

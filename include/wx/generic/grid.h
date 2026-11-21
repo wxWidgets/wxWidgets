@@ -118,6 +118,10 @@ class WXDLLIMPEXP_FWD_CORE wxDatePickerCtrl;
 using wxGridFixedIndicesSet = std::unordered_set<int>;
 
 class wxGridOperations;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxWinUIGridProjection;
+#endif
 class wxGridRowOperations;
 class wxGridColumnOperations;
 class wxGridDirectionOperations;
@@ -1781,6 +1785,9 @@ public:
     int      GetBatchCount() const { return m_batchCount; }
 
     virtual void Refresh(bool eraseb = true, const wxRect* rect = nullptr) override;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Update() override;
+#endif
 
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are
@@ -2424,8 +2431,20 @@ public:
     wxColour GetSelectionBackground() const;
     wxColour GetSelectionForeground() const;
 
-    void SetSelectionBackground(const wxColour& c) { m_selectionBackground = c; }
-    void SetSelectionForeground(const wxColour& c) { m_selectionForeground = c; }
+    void SetSelectionBackground(const wxColour& c)
+    {
+        m_selectionBackground = c;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
+    }
+    void SetSelectionForeground(const wxColour& c)
+    {
+        m_selectionForeground = c;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
+    }
 
 
     // Methods for a registry for mapping data types to Renderers/Editors
@@ -2904,6 +2923,11 @@ protected:
     friend class wxGridHeaderColumn;
     friend class wxGridHeaderCtrl;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIGridProjection;
+    friend class wxGridSubwindow;
+#endif
+
 #if wxUSE_ACCESSIBILITY
     friend class wxGridAccessible;
     friend class wxGridCellAccessible;
@@ -2913,6 +2937,14 @@ private:
     // This is called from both Create() and OnDPIChanged() to (re)initialize
     // the values in pixels, which depend on the current DPI.
     void InitPixelFields();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Native visuals project the existing table, geometry and selection;
+    // their implementation and lifetime machinery stay out of the public API.
+    std::shared_ptr<wxWinUIGridProjection> m_winUIProjection;
+    bool CanUpdateWinUIProjection() const;
+    void InvalidateWinUIProjection();
+#endif
 
     // Event handler for DPI change event recomputes pixel values and relays
     // out the grid.

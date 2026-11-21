@@ -1407,7 +1407,29 @@ void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
         info.fMask |= SIF_DISABLENOSCROLL;
     }
 
-    ::SetScrollInfo(hWnd, WXOrientToSB(orient), &info, refresh);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A projected track is painted by WinUI. Updating USER32's authoritative
+    // value must not also draw its opaque non-client scrollbar underneath.
+    const wxWeakRef<wxWindow> alive(this);
+    const auto hwndGeneration = wxWinUIMSWGetHwndGeneration(this, hWnd);
+    const bool nativeRefresh = refresh && !wxWinUIWindowScrollbarsProjected(hWnd, orient);
+    // The themed USER32 scrollbar can still draw directly for SIF_POS even
+    // with fRedraw=FALSE. Finish this native mutation with the same bounded
+    // backing cleanup used by range/page updates, before exposing its return.
+    wxWinUIWindowScrollbarModelChanged(
+        static_cast<wxWindow*>(this), orient, true);
+#else
+    const bool nativeRefresh = refresh;
+#endif
+    ::SetScrollInfo(hWnd, WXOrientToSB(orient), &info, nativeRefresh);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( alive.get() != this || IsBeingDeleted() || GetHwnd() != hWnd ||
+         !hwndGeneration ||
+         wxWinUIMSWGetHwndGeneration(this, hWnd) != hwndGeneration )
+        return;
+    wxWinUIWindowScrollbarModelCommitted(static_cast<wxWindow*>(this), orient);
+    wxWinUITLWHostNotifyNativeLayout(static_cast<wxWindow*>(this), false);
+#endif
 }
 
 // New function that will replace some of the above.
@@ -1458,6 +1480,18 @@ void wxWindowMSW::SetScrollbar(int orient,
     if ( !hwnd )
         return;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Mark only windows whose scrollbar model uses the public wx API. Native
+    // controls' internal USER32 scrollbars retain their original semantics.
+    ::SetPropW(hwnd, L"wxWinUI.ManagedWindowScrollbars", reinterpret_cast<HANDLE>(1));
+    const bool nativeRefresh = refresh && !wxWinUIWindowScrollbarsProjected(hwnd, orient);
+    // Range/page changes and EnableScrollBar may draw USER32's non-client
+    // surface even when SetScrollInfo itself is asked not to repaint.
+    wxWinUIWindowScrollbarModelChanged(static_cast<wxWindow*>(this), orient, true);
+#else
+    const bool nativeRefresh = refresh;
+#endif
+
     WinStruct<SCROLLINFO> info;
     if ( range != -1 )
     {
@@ -1484,13 +1518,14 @@ void wxWindowMSW::SetScrollbar(int orient,
         info.fMask |= SIF_DISABLENOSCROLL;
     }
 
-    ::SetScrollInfo(hwnd, WXOrientToSB(orient), &info, refresh);
+    ::SetScrollInfo(hwnd, WXOrientToSB(orient), &info, nativeRefresh);
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     // Scrollbar presence/extent is part of the shared bridge HRGN. There is
     // no dependable wx geometry event for SetScrollInfo(), so nudge an
-    // existing host explicitly (the lookup is projection-free and never
-    // creates one).
+    // existing host explicitly. The model notification above may separately
+    // queue weak bootstrap work, but this lookup never creates one on the
+    // native scrollbar setter's stack.
     //
     // This is deliberately unconditional: comparing the SCROLLINFO before and
     // after only sees the range, page and position, and a call which changes
@@ -1498,6 +1533,11 @@ void wxWindowMSW::SetScrollbar(int orient,
     // the region through which the island is visible at all.
     wxWinUITLWHostNotifyNativeLayout(
         static_cast<wxWindow *>(this), false);
+
+    // Enabling/disabling a USER32 track may draw directly despite the
+    // SetScrollInfo redraw flag. Do not leave those pixels below a transparent
+    // XAML track until the queued geometry flush; finish its NC backing now.
+    wxWinUIWindowScrollbarModelCommitted(static_cast<wxWindow*>(this), orient);
 #endif
 }
 
@@ -3029,9 +3069,37 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
     // The old island otherwise discovers this only from its next deferred
     // geometry flush.  The old TLW is allowed to die before that callback, so
     // migrate this window and all slotted descendants now.
-    wxWinUITLWHostNotifyReparent(this, oldTLWIdentity.get());
+    const wxWeakRef<wxWindow> migrationDestinationTLW(
+        wxGetTopLevelParent(this));
+    const bool hostMigrationSucceeded =
+        wxWinUITLWHostNotifyReparent(this, oldTLWIdentity.get());
     if ( !reparentIdentityIsCurrent() )
         return true;
+    if ( !hostMigrationSucceeded )
+    {
+        // A composite tree cannot remain split across XamlRoots. Its host
+        // transaction restores the native visual graph before returning
+        // false; now restore only this exact USER32/wx transaction as well.
+        // An application callback which reparented again is authoritative.
+        if ( GetParent() != requestedParent ||
+             ::GetParent(hWndChild) != hWndParent )
+        {
+            reconcileLogicalParentToNative();
+            return true;
+        }
+
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        if ( rollbackNativeAndLogicalParent() )
+        {
+            // Another independent slot/cohort may have migrated before the
+            // failing one. Reconcile it with the restored wx topology too,
+            // while the exact original/destination lifetimes are still weak.
+            (void)wxWinUITLWHostNotifyReparent(
+                this, migrationDestinationTLW.get());
+        }
+        return false;
+    }
 #if wxUSE_DRAG_AND_DROP && wxUSE_OLE
     wxWinUITLWHostNotifyOleDropTopology(this);
     if ( !reparentIdentityIsCurrent() )
@@ -5638,14 +5706,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 {
                     // Fill the client with black so that, combined with the
                     // DWM system backdrop and a frame extended over the whole
-                    // client area, Windows substitutes the Mica material for
-                    // the black pixels.  This is the technique used by Win32
-                    // Mica tools (e.g. MicaForEveryone) and, unlike simply
-                    // skipping the erase, renders reliably on both HDR and SDR
-                    // monitors.
+                    // client area, the zero-alpha background reveals the
+                    // material. Respect the same background ownership as
+                    // HandleEraseBkgnd(): a paint-owned/transparent surface
+                    // must not lose its RGB/alpha to a standalone erase after
+                    // its paint handler has completed (e.g. during resize).
                     HDC hdc = (HDC)wParam;
                     RECT rcBackdrop;
-                    if ( hdc && ::GetClientRect(GetHwnd(), &rcBackdrop) )
+                    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT &&
+                         GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT &&
+                         hdc && ::GetClientRect(GetHwnd(), &rcBackdrop) )
                         ::FillRect(hdc, &rcBackdrop,
                                    (HBRUSH)::GetStockObject(BLACK_BRUSH));
                     processed = true;
@@ -5909,8 +5979,57 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-#if wxUSE_POPUPWIN
+#if wxUSE_POPUPWIN || (defined(__WXWINUI__) && wxUSE_WINUI3)
         case WM_NCACTIVATE:
+        {
+#if wxUSE_POPUPWIN
+            const bool retainPopupActivation = !wParam &&
+                wxCurrentPopupWindow &&
+                wxCurrentPopupWindow->MSWGetOwner() == this;
+#else
+            const bool retainPopupActivation = false;
+#endif
+            const WXWPARAM activation = retainPopupActivation ? TRUE : wParam;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( !::IsIconic(GetHwnd()) &&
+                 wxWinUIWindowScrollbarsProjected(GetHwnd()) )
+            {
+                const wxWeakRef<wxWindow> alive(this);
+                const WXHWND hwnd = GetHWND();
+                const auto generation = wxWinUIMSWGetHwndGeneration(this, hwnd);
+                // DefWindowProc(WM_NCACTIVATE) draws USER32 scrollbars directly,
+                // without passing through WM_NCPAINT. Preserve its activation
+                // state/result but suppress that drawing with the documented
+                // -1 lParam. Some themed USER32 versions still draw the
+                // scrollbar even with -1, so close that native drawing
+                // transaction synchronously below, before returning.
+                rc.result = MSWDefWindowProc(message, activation, -1);
+                processed = true;
+                if ( alive.get() == this &&
+                     !IsBeingDeleted() && GetHWND() == hwnd && generation &&
+                     wxWinUIMSWGetHwndGeneration(this, hwnd) == generation )
+                {
+                    if ( lParam == -1 )
+                    {
+                        // The caller suppressed NC repaint. Clean only the
+                        // already projected bands; do not synthesize a paint
+                        // message or redraw any other frame/client pixels.
+                        AutoHRGN filtered = static_cast<HRGN>(
+                            wxWinUIWindowScrollbarPaintRegion(
+                                static_cast<wxWindow*>(this),
+                                reinterpret_cast<WXHANDLE>(1)));
+                        wxUnusedVar(filtered);
+                    }
+                    else
+                    {
+                        // No client invalidation or style mutation. The normal
+                        // NC handler paints any unprojected border/track.
+                        MSWWindowProc(WM_NCPAINT, 1, 0);
+                    }
+                }
+                break;
+            }
+#endif
             // When we're losing activation to our own popup window, we want to
             // retain the "active" appearance of the title bar, as dropping
             // down a combobox popup shouldn't deactivate the window containing
@@ -5918,14 +6037,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // draw the window as active seems to be the only way of achieving
             // this (thanks to Barmak Shemirani for suggesting it at
             // https://stackoverflow.com/a/52808753/15275).
-            if ( !wParam &&
-                    wxCurrentPopupWindow &&
-                        wxCurrentPopupWindow->MSWGetOwner() == this )
+            if ( retainPopupActivation )
             {
-                rc.result = MSWDefWindowProc(message, TRUE, lParam);
+                rc.result = MSWDefWindowProc(message, activation, lParam);
                 processed = true;
             }
             break;
+        }
 #endif
 
         // If we want the default themed border then we need to draw it ourselves
@@ -5960,6 +6078,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_NCPAINT:
             {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                const auto paintNativeFrame = [&](WXWPARAM region)
+                {
+                    AutoHRGN filtered = static_cast<HRGN>(wxWinUIWindowScrollbarPaintRegion(
+                        static_cast<wxWindow*>(this), reinterpret_cast<WXHANDLE>(region)));
+                    return MSWDefWindowProc(message,
+                        filtered ? reinterpret_cast<WXWPARAM>(static_cast<HRGN>(filtered)) : region,
+                        lParam);
+                };
+#endif
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
                 wxBorder rawBorder = GetBorder();
@@ -6003,7 +6131,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     const auto thickness = MSWGetBorderThickness();
                     ::InflateRect(&rcClip, -thickness, -thickness);
                     AutoHRGN cliprgn = ::CreateRectRgnIndirect(&rcClip);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                    rc.result = paintNativeFrame((WXWPARAM)(HRGN)cliprgn);
+#else
                     rc.result = MSWDefWindowProc(message, (WXWPARAM)(HRGN)cliprgn, lParam);
+#endif
                     processed = true;
 
                     wxWindowDC dc((wxWindow *)this);
@@ -6042,14 +6174,28 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         // MSWDefWindowProc() may have been already called above.
                         if ( !processed )
                         {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                            rc.result = paintNativeFrame(wParam);
+#else
                             rc.result = MSWDefWindowProc(message, wParam, lParam);
+#endif
                             processed = true;
                         }
 
-                        wxMSWImpl::PaintScrollBarCorner(this);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                        if ( !wxWinUIWindowScrollbarsProjected(GetHwnd(), wxBOTH) )
+#endif
+                            wxMSWImpl::PaintScrollBarCorner(this);
                     }
                 }
 #endif // !__WXUNIVERSAL__
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                if ( !processed && wxWinUIWindowScrollbarsProjected(GetHwnd()) )
+                {
+                    rc.result = paintNativeFrame(wParam);
+                    processed = true;
+                }
+#endif
             }
             break;
 
@@ -6110,6 +6256,24 @@ void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
 
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // USER32 can draw a scrollbar while changing window geometry, without a
+    // WM_NCPAINT boundary. Keep the already-published paint owner through this
+    // transaction, even though its XAML geometry is updated asynchronously.
+    // The final cleanup below re-reads the live native bands, not old screen
+    // rectangles which may have become client content after a move/resize.
+    const bool scrollbarGeometryChange =
+        (message == WM_SIZE || message == WM_MOVE ||
+         message == WM_WINDOWPOSCHANGED) &&
+        !::IsIconic(GetHwnd()) &&
+        wxWinUIWindowScrollbarsProjected(GetHwnd());
+    const wxWeakRef<wxWindow> scrollbarOwner(
+        scrollbarGeometryChange ? static_cast<wxWindow*>(this) : nullptr);
+    const WXHWND scrollbarHwnd = scrollbarGeometryChange ? GetHWND() : nullptr;
+    const auto scrollbarGeneration = scrollbarGeometryChange
+        ? wxWinUIMSWGetHwndGeneration(this, scrollbarHwnd) : 0;
+#endif
+
     WXLRESULT result;
     if ( !MSWHandleMessage(&result, message, wParam, lParam) )
     {
@@ -6119,6 +6283,20 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #endif // wxDEBUG_LEVEL >= 2
         result = MSWDefWindowProc(message, wParam, lParam);
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( scrollbarGeometryChange && scrollbarOwner.get() == this &&
+         !IsBeingDeleted() && GetHWND() == scrollbarHwnd && scrollbarGeneration &&
+         wxWinUIMSWGetHwndGeneration(this, scrollbarHwnd) == scrollbarGeneration )
+    {
+        // No client invalidation, forced layout, style change or synthetic
+        // frame paint. Retirement/reparenting/hidden bands fail closed in the
+        // projection helper, which validates the committed HWND incarnation.
+        AutoHRGN filtered = static_cast<HRGN>(wxWinUIWindowScrollbarPaintRegion(
+            static_cast<wxWindow*>(this), reinterpret_cast<WXHANDLE>(1)));
+        wxUnusedVar(filtered);
+    }
+#endif
 
     return result;
 }

@@ -17,6 +17,11 @@
 #include "wx/control.h"
 #include "wx/dynarray.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonContainerWinUI;
+#endif
+
 class wxRibbonBar;
 class wxRibbonArtProvider;
 
@@ -61,6 +66,13 @@ public:
 
 protected:
     wxRibbonArtProvider* m_art;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Keep the public class layout independent of the private experimental
+    // build option. The native implementation and its WinRT types stay private.
+    std::shared_ptr<wxRibbonContainerWinUI> m_winuiContainer;
+    friend class wxRibbonContainerWinUI;
+#endif
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const;

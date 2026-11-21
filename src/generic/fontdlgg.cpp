@@ -35,6 +35,10 @@
 #include "wx/fontdlg.h"
 #include "wx/generic/fontdlgg.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/weakref.h"
+#endif
+
 #if USE_SPINCTRL_FOR_POINT_SIZE
 #include "wx/spinctrl.h"
 #endif
@@ -42,6 +46,72 @@
 //-----------------------------------------------------------------------------
 // helper class - wxFontPreviewer
 //-----------------------------------------------------------------------------
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// Keep the preview in the same native text/composition path as the other
+// controls. GDI text on a backdrop surface can have zero alpha (notably on
+// HDR displays); repainting that text cannot repair its composition contract.
+class WXDLLEXPORT wxFontPreviewer : public wxWindow
+{
+public:
+    wxFontPreviewer(wxWindow* parent, const wxSize& sz = wxDefaultSize)
+        : wxWindow(parent, wxID_ANY, wxDefaultPosition, sz, wxBORDER_SIMPLE)
+    {
+        m_text = new wxStaticText(this, wxID_ANY, _("ABCDEFGabcdefg12345"),
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxST_NO_AUTORESIZE);
+        Bind(wxEVT_SIZE, &wxFontPreviewer::OnSize, this);
+        LayoutText();
+    }
+
+    bool SetFont(const wxFont& font) override
+    {
+        const wxWeakRef<wxWindow> alive(this);
+        const bool changed = wxWindow::SetFont(font);
+        if ( !alive )
+            return changed;
+        m_text->SetFont(font);
+        if ( alive )
+            LayoutText();
+        return changed;
+    }
+
+    bool SetForegroundColour(const wxColour& colour) override
+    {
+        const wxWeakRef<wxWindow> alive(this);
+        const bool changed = wxWindow::SetForegroundColour(colour);
+        if ( alive )
+            m_text->SetForegroundColour(colour);
+        return changed;
+    }
+
+private:
+    void LayoutText()
+    {
+        const wxWeakRef<wxWindow> alive(this);
+        const wxWeakRef<wxStaticText> text(m_text);
+        const wxSize size = GetClientSize();
+        const int margin = FromDIP(10);
+        const int height = text->GetBestSize().y;
+        if ( !alive || !text )
+            return;
+        // The sample is clipped by the preview viewport, not fitted by growing
+        // the dialog to the width/height of a potentially very large font.
+        text->SetSize(margin, (size.y - height) / 2,
+                      wxMax(0, size.x - 2 * margin), height);
+    }
+
+    void OnSize(wxSizeEvent& event)
+    {
+        LayoutText();
+        event.Skip();
+    }
+
+    wxStaticText* m_text = nullptr;
+};
+
+#else // classic preview
 
 class WXDLLEXPORT wxFontPreviewer : public wxWindow
 {
@@ -78,6 +148,8 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.DestroyClippingRegion();
     }
 }
+
+#endif // native/classic preview
 
 //-----------------------------------------------------------------------------
 // helper functions

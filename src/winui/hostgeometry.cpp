@@ -17,6 +17,7 @@
     #include "host-geometry-test-access.h"
 #endif // WXWINUI_TEST_SUPPORT
 #include "hostgeometry.h"
+#include "scrollbarprojection.h"
 #include "hostnative.h"
 #include "hostprofile.h"
 #include "hostvisual.h"
@@ -59,6 +60,7 @@ unsigned gs_flushRuns = 0;
 unsigned gs_flushCallbackAttempts = 0;
 unsigned gs_impossibleZOrderOverlaps = 0;
 #ifdef WXWINUI_TEST_SUPPORT
+unsigned gs_bridgeRegionChanges = 0;
 std::function<void (wxWindow *)> gs_testSlotSyncedHook;
 std::function<void ()> gs_testZOrderSetHook;
 #endif // WXWINUI_TEST_SUPPORT
@@ -106,6 +108,11 @@ unsigned wxWinUITopLevelHost::GetFlushScheduleCount()
 unsigned wxWinUIHostGeometryTestAccess::GetFlushRunCount()
 {
     return gs_flushRuns;
+}
+
+unsigned wxWinUIHostGeometryTestAccess::GetBridgeRegionChangeCount()
+{
+    return gs_bridgeRegionChanges;
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -803,6 +810,31 @@ wxWinUISlot *wxWinUITopLevelHost::ResolveSlotSync(
     return current;
 }
 
+bool wxWinUITopLevelHost::GetCompositeSlotRect(
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
+    wxRect& rect) const
+{
+    if ( !container || !m_root )
+        return false;
+    try
+    {
+        const auto bounds = container.TransformToVisual(m_root).TransformBounds(
+            winrt::Windows::Foundation::Rect{0, 0,
+                float(container.ActualWidth()), float(container.ActualHeight())});
+        const double scale = GetScale();
+        const int left = wxRound(bounds.X * scale);
+        const int top = wxRound(bounds.Y * scale);
+        rect = wxRect(left, top,
+            wxRound((bounds.X + bounds.Width) * scale) - left,
+            wxRound((bounds.Y + bounds.Height) * scale) - top);
+        return true;
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return false;
+    }
+}
+
 void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
 {
     wxWinUISlot::OperationGuard slotOperation(&slot);
@@ -821,6 +853,9 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     // would keep a nested wxYield() draining this same slot forever, preventing
     // the suspended content transaction from reaching that finish boundary.
     if ( slot.m_contentTransactionInProgress )
+        return;
+
+    if ( !IsCompositeMountCurrent(slot) )
         return;
 
     if ( slot.m_contentLoadedObserverPending )
@@ -922,14 +957,17 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     const std::shared_ptr<wxWinUISlotLifetime> state = slot.m_lifetime;
     wxWindow * const w = state ? state->GetWindow() : nullptr;
     const HWND hwnd = GetHwndOf(w);
-    if ( !hwnd || !slot.m_container )
+    if ( !hwnd || !slot.GetPresentationRoot() )
         return;
 
     const WXHWND wxHwnd = w->GetHWND();
-    const auto container = slot.m_container;
-    const auto carrier = slot.m_carrier;
+    const auto container = slot.GetPresentationRoot();
+    const bool direct = slot.m_directRoot != nullptr;
+    const auto carrier = direct ? slot.m_directRoot
+        : slot.m_carrier.try_as<winrt::Microsoft::UI::Xaml::Controls::Control>();
     const auto content = slot.m_content;
     const auto semanticTarget = slot.m_semanticTarget;
+    const bool composite = slot.m_isCompositeChild;
     const unsigned long long contentGeneration = slot.m_contentGeneration;
     const wxWinUIClipRectDIP clipRectDIP = slot.m_clipRectDIP;
     const bool hasClipRect = slot.m_hasClipRect;
@@ -1005,7 +1043,12 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     // (the Window-presentation dialog shell hosts its whole content this
     // way): its slot simply covers the client area.
     wxRect rect;
-    if ( w == m_tlw )
+    if ( composite )
+    {
+        if ( !GetCompositeSlotRect(container, rect) )
+            return;
+    }
+    else if ( w == m_tlw )
     {
         RECT rc;
         ::GetClientRect(hwndTLW, &rc);
@@ -1037,7 +1080,7 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
                            localLimit.height);
         vis.Intersect(limit);
     }
-    if ( w != m_tlw )
+    if ( w != m_tlw && !composite )
     {
         const RECT rcCS = GetClientScreenRect();
         for ( wxWindow *p = w->GetParent();
@@ -1073,7 +1116,7 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     const bool tlwVisible =
         hwndTLW && ::IsWindowVisible(hwndTLW) && !::IsIconic(hwndTLW);
     const bool effectiveVisible =
-        tlwVisible && w->IsShownOnScreen() && !vis.IsEmpty();
+        tlwVisible && w->IsShownOnScreen() && (composite || !vis.IsEmpty());
     const bool enabled = w->IsEnabled();
 
 #if wxUSE_TOOLTIPS
@@ -1213,10 +1256,13 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
         using namespace winrt::Microsoft::UI::Xaml;
         using winrt::Microsoft::UI::Xaml::Controls::Canvas;
 
-        Canvas::SetLeft(container, rect.x / scale);
-        Canvas::SetTop(container, rect.y / scale);
-        container.Width(rect.width / scale);
-        container.Height(rect.height / scale);
+        if ( !composite )
+        {
+            Canvas::SetLeft(container, rect.x / scale);
+            Canvas::SetTop(container, rect.y / scale);
+            container.Width(rect.width / scale);
+            container.Height(rect.height / scale);
+        }
         if ( !getCurrentSlot() )
             return;
 
@@ -1226,7 +1272,8 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
         if ( container.FlowDirection() != direction )
             container.FlowDirection(direction);
 
-        if ( vis == rect || vis.IsEmpty() )
+        if ( vis == rect ||
+             (vis.IsEmpty() && !(composite && hasClipRect)) )
         {
             container.Clip(nullptr);
         }
@@ -1645,8 +1692,8 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
             if ( !effectiveCursorResolved ||
                  wxWinUIGetCursorPolicyGeneration() !=
                     resolvedCursorPolicyGeneration ||
-                 !slotGrid ||
-                 !slotGrid->SetWindowCursor(effectiveInputCursor) )
+                 (!direct && (!slotGrid ||
+                   !slotGrid->SetWindowCursor(effectiveInputCursor))) )
             {
                 return;
             }
@@ -1735,7 +1782,7 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
     struct SlotOrderSnapshot
     {
         std::shared_ptr<wxWinUISlotLifetime> state;
-        winrt::Microsoft::UI::Xaml::Controls::Grid container{ nullptr };
+        winrt::Microsoft::UI::Xaml::FrameworkElement container{ nullptr };
         HWND hwnd = nullptr;
         unsigned long long hwndGeneration = 0;
         RECT visibleRectScreen = {};
@@ -1756,7 +1803,7 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
         const HWND hwnd = static_cast<HWND>(wxHwnd);
         const unsigned long long generation =
             hwnd ? wxWinUIMSWGetHwndGeneration(window, wxHwnd) : 0;
-        if ( !slot || !slot->m_container || !state ||
+        if ( !slot || !slot->GetPresentationRoot() || !state ||
              state->GetHost() != this || !hwnd || !generation )
         {
             continue;
@@ -1764,7 +1811,7 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
 
         SlotOrderSnapshot snapshot;
         snapshot.state = state;
-        snapshot.container = slot->m_container;
+        snapshot.container = slot->GetPresentationRoot();
         snapshot.hwnd = hwnd;
         snapshot.hwndGeneration = generation;
         snapshot.visible =
@@ -2135,7 +2182,7 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
         if ( !window || !current ||
              snapshot.state->GetHost() != this ||
              current->m_lifetime != snapshot.state ||
-             current->m_container != snapshot.container ||
+             current->GetPresentationRoot() != snapshot.container ||
              static_cast<HWND>(window->GetHWND()) != snapshot.hwnd ||
              wxWinUIMSWGetHwndGeneration(
                  window, window->GetHWND()) != snapshot.hwndGeneration )
@@ -2145,8 +2192,9 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
 
         try
         {
-            winrt::Microsoft::UI::Xaml::Controls::Canvas::SetZIndex(
-                snapshot.container, desiredZ);
+            if ( !current->m_isCompositeChild )
+                winrt::Microsoft::UI::Xaml::Controls::Canvas::SetZIndex(
+                    snapshot.container, desiredZ);
         }
         catch ( const winrt::hresult_error& e )
         {
@@ -2253,8 +2301,16 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
     // corner, so they are mirrored only when building the native region
     // below; the physical signature remains stable and intelligible.
     const RECT rcCS = GetClientScreenRect();
+    if ( !m_scrollbarProjection && m_root )
+        m_scrollbarProjection = wxWinUIScrollBarProjection::Create(m_tlw, m_root, hostState);
+    if ( m_scrollbarProjection )
+        m_scrollbarProjection->Sync(rcCS, GetScale());
+    if ( !hostState || hostState->GetHost() != this || m_shuttingDown )
+        return;
     const auto addBarCut = [&](HWND hwnd, LONG objId)
     {
+        if ( m_scrollbarProjection && m_scrollbarProjection->Covers(hwnd, objId) )
+            return;
         SCROLLBARINFO sbi = { sizeof(SCROLLBARINFO) };
         if ( !::GetScrollBarInfo(hwnd, objId, &sbi) )
             return;
@@ -2291,11 +2347,26 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
          cuts.size() == m_regionCuts.size() &&
              memcmp(cuts.data(), m_regionCuts.data(),
                     cuts.size() * sizeof(RECT)) == 0 )
+    {
+        if ( m_scrollbarProjection ) m_scrollbarProjection->CommitRegion();
         return;
+    }
 
-    wxWinUIOwnedRegion region(
+    // No cut-outs means the bridge uses its natural window bounds. An
+    // explicit full-client region becomes stale on every resize and forces
+    // USER32 to invalidate the whole composition surface again. Remove that
+    // region once; future size changes need no SetWindowRgn at all.
+    const bool unshaped = cuts.size() == 1;
+    if ( unshaped && m_regionValid && m_regionCuts.size() == 1 )
+    {
+        m_regionCuts = std::move(cuts);
+        m_regionRTL = rtl;
+        if ( m_scrollbarProjection ) m_scrollbarProjection->CommitRegion();
+        return;
+    }
+    wxWinUIOwnedRegion region(unshaped ? nullptr :
         ::CreateRectRgn(0, 0, rcClient.right, rcClient.bottom));
-    if ( !region )
+    if ( !unshaped && !region )
     {
         if ( !m_regionFailureLogged )
         {
@@ -2360,6 +2431,9 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
     // USER32 took ownership at the successful return, even if one of the
     // synchronous window-position callbacks destroyed or replaced the host.
     region.Release();
+#ifdef WXWINUI_TEST_SUPPORT
+    ++gs_bridgeRegionChanges;
+#endif
 
     if ( !hostState || hostState->GetHost() != this ||
          m_shuttingDown || m_bridge != bridge || !::IsWindow(bridge) )
@@ -2382,6 +2456,7 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
     m_regionRTL = rtl;
     m_regionValid = true;
     m_regionFailureLogged = false;
+    if ( m_scrollbarProjection ) m_scrollbarProjection->CommitRegion();
 }
 
 // Physical screen rect of the TLW client area, normalized left<right even

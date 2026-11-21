@@ -47,6 +47,21 @@ public:
 
     bool Initialize() { return m_host.Initialize(m_owner.get()); }
 
+    bool Attach(const MUX::UIElement& root)
+    {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+        wxRibbonControl* parent = nullptr;
+        MUXC::ContentControl mount{nullptr};
+        const auto status = wxRibbonContainerWinUI::CommandMount(
+            Owner(), parent, mount);
+        if ( status == wxRibbonContainerWinUI::MountStatus::Ready )
+            return m_host.SetContentInParent(root, root, parent, mount);
+        if ( status != wxRibbonContainerWinUI::MountStatus::Ordinary )
+            return false;
+#endif
+        return m_host.SetContent(root);
+    }
+
     void Close()
     {
         m_owner = nullptr;
@@ -104,38 +119,21 @@ public:
     {
         auto peer = std::make_shared<Peer>();
         peer->key = item.key;
-        peer->root = MUXC::Grid();
-        peer->root.Background(MUX::Media::SolidColorBrush(
-            winrt::Windows::UI::Colors::Transparent()));
-        const bool split = item.kind == wxRIBBON_BUTTON_HYBRID ||
-                           item.kind == wxRIBBON_BUTTON_DROPDOWN;
-        MUXC::ColumnDefinition primaryColumn;
-        primaryColumn.Width(MUX::GridLengthHelper::Auto());
-        peer->root.ColumnDefinitions().Append(primaryColumn);
-
-        MUXC::IconElement icon{nullptr};
-        if ( item.bitmap.IsOk() )
-        {
-            MUXC::ImageIcon image;
-            image.Source(wxWinUIWriteableBitmapFromBitmap(item.bitmap));
-            image.Width(size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 32.0 : 16.0);
-            image.Height(size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 32.0 : 16.0);
-            icon = image;
-        }
         const auto labelPosition = size == wxRIBBON_BUTTONBAR_BUTTON_SMALL
             ? MUXC::CommandBarLabelPosition::Collapsed
             : MUXC::CommandBarLabelPosition::Default;
-        MUXC::Control primary{nullptr};
+        const auto visual = wxRibbonWinUIBuildCommand({
+            item.kind, item.label, item.bitmap, !item.disabled, item.checked,
+            size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 32.0 : 16.0,
+            size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 68.0 :
+                size == wxRIBBON_BUTTONBAR_BUTTON_MEDIUM ? 48.0 : 32.0,
+            static_cast<double>(std::max(32, item.textMinWidth)), labelPosition});
+        peer->root = visual.root;
         const std::weak_ptr<wxRibbonButtonBarWinUI> weak = shared_from_this();
         const std::uint64_t key = item.key;
         if ( item.kind == wxRIBBON_BUTTON_TOGGLE )
         {
-            MUXC::AppBarToggleButton button;
-            button.Label(wxWinUIToHString(item.label));
-            button.LabelPosition(labelPosition);
-            button.Icon(icon);
-            button.IsChecked(item.checked);
-            primary = button;
+            const auto button = visual.primary.as<MUXC::AppBarToggleButton>();
             if ( generation )
             {
                 const auto checked = button.Checked(
@@ -152,11 +150,7 @@ public:
         }
         else
         {
-            MUXC::AppBarButton button;
-            button.Label(wxWinUIToHString(item.label));
-            button.LabelPosition(labelPosition);
-            button.Icon(icon);
-            primary = button;
+            const auto button = visual.primary.as<MUXC::AppBarButton>();
             if ( generation )
             {
                 const bool dropdown = item.kind == wxRIBBON_BUTTON_DROPDOWN;
@@ -167,31 +161,9 @@ public:
                 peer->revoke.push_back([button, click]() { button.Click(click); });
             }
         }
-        primary.IsEnabled(!item.disabled);
-        primary.MinWidth(std::max(32, item.textMinWidth));
-        primary.Width(std::numeric_limits<double>::quiet_NaN());
-        primary.Height(size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 68.0 :
-                       size == wxRIBBON_BUTTONBAR_BUTTON_MEDIUM ? 48.0 : 32.0);
-        MUXA::AutomationProperties::SetName(primary, wxWinUIToHString(item.label));
-        peer->root.Children().Append(primary);
-        if ( split )
+        if ( visual.arrow )
         {
-            MUXC::ColumnDefinition arrowColumn;
-            arrowColumn.Width(MUX::GridLengthHelper::Auto());
-            peer->root.ColumnDefinitions().Append(arrowColumn);
-            MUXC::Button arrow;
-            MUXC::FontIcon chevron;
-            chevron.Glyph(L"\uE70D");
-            chevron.FontSize(12);
-            arrow.Content(chevron);
-            arrow.Width(24.0);
-            arrow.Padding({0, 0, 0, 0});
-            arrow.VerticalAlignment(MUX::VerticalAlignment::Stretch);
-            arrow.IsEnabled(!item.disabled);
-            MUXA::AutomationProperties::SetName(
-                arrow, wxWinUIToHString(item.label + " menu"));
-            MUXC::Grid::SetColumn(arrow, 1);
-            peer->root.Children().Append(arrow);
+            const auto arrow = visual.arrow;
             if ( generation )
             {
                 const auto click = arrow.Click(
@@ -241,7 +213,7 @@ public:
                 return;
             wxRibbonButtonBar* owner = Owner();
             auto* button = Find(key);
-            if ( !owner || !owner->IsEnabled() || !button ||
+            if ( !owner || !owner->IsEnabled() || !owner->IsShownOnScreen() || !button ||
                  (button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) )
                 return;
             if ( checked >= 0 )
@@ -351,6 +323,55 @@ public:
         wxRibbonButtonBar* owner = Owner();
         if ( !owner )
             return false;
+        bool nativeComposite = false;
+        bool pendingMount = false;
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+        wxRibbonControl* compositeOwner = nullptr;
+        MUXC::ContentControl contentMount{nullptr};
+        const auto mountStatus = wxRibbonContainerWinUI::CommandMount(
+            owner, compositeOwner, contentMount);
+        pendingMount = mountStatus == wxRibbonContainerWinUI::MountStatus::Pending;
+        if ( pendingMount && m_host.GetContent() )
+            return false; // Never replace an already hosted generation off-tree.
+        if ( mountStatus == wxRibbonContainerWinUI::MountStatus::Failed )
+            return false;
+        nativeComposite = pendingMount ||
+            mountStatus == wxRibbonContainerWinUI::MountStatus::Ready;
+        if ( !pendingMount && nativeComposite && m_root &&
+             owner->m_layouts_valid && m_publishedRevision == m_revision &&
+             m_host.GetContent() == m_root )
+        {
+            // Loaded is raised again when the complete Ribbon tree moves to
+            // another XamlRoot. Its container asks children to Realize so an
+            // initially staged command can publish, but an already-published
+            // current model must retain its command peers and UIA providers.
+            // Toolkit owns arrangement: a different wx shell allocation does
+            // not require a new command projection here.
+            auto* const host = wxWinUITopLevelHost::FindSlotOwner(owner);
+            const auto* const slot = host ? host->FindSlot(owner) : nullptr;
+            const auto presentation = slot
+                ? slot->GetPresentationRoot() : MUX::FrameworkElement{nullptr};
+            const auto root = m_root;
+            const auto revision = m_revision;
+            try
+            {
+                if ( presentation && slot->GetContent() == root &&
+                     contentMount.Content() == presentation &&
+                     Owner() == owner && m_root == root &&
+                     m_publishedRevision == revision && m_revision == revision )
+                {
+                    m_observedClientSize = owner->GetClientSize();
+                    m_publishedClientSize = m_observedClientSize;
+                    return true;
+                }
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException("ribbon command mount validation", e);
+                return false;
+            }
+        }
+#endif
         m_observedClientSize = owner->GetClientSize();
         m_building = true;
         struct Guard
@@ -382,6 +403,7 @@ public:
         };
         std::vector<Sizes> sizes;
         const auto previousRoot = m_root;
+        const auto previousHostedRoot = m_host.GetContent();
         const auto previousGeneration = m_generation;
         const auto previousRevision = m_publishedRevision;
         const auto previousBest = m_best;
@@ -437,9 +459,9 @@ public:
             {
                 try
                 {
-                    if ( previousRoot )
+                    if ( previousHostedRoot )
                     {
-                        if ( !m_host.SetContent(previousRoot) )
+                        if ( !Attach(previousHostedRoot) )
                         {
                             wxLogWarning("Could not restore the previous native ribbon peer");
                             Close();
@@ -518,13 +540,21 @@ public:
             owner->m_layouts_valid = false;
             owner->MakeLayouts();
             owner->m_layouts_valid = true;
-            const wxSize available = owner->GetClientSize();
+            wxSize available = owner->GetClientSize();
             size_t selected = owner->m_layouts.size() - 1;
             for ( size_t i = 0; i < owner->m_layouts.size(); ++i )
             {
                 const wxSize size = owner->m_layouts[i]->overall_size;
                 if ( size.x <= available.x && size.y <= available.y )
                     { selected = i; break; }
+            }
+            if ( nativeComposite )
+            {
+                // The Toolkit measures and collapses the group. A stale wx
+                // shell size must not choose the smallest command projection
+                // or introduce canvas padding inside the native group.
+                selected = 0;
+                available = owner->m_layouts[0]->overall_size;
             }
             owner->m_current_layout = static_cast<int>(selected);
             const auto* layout = owner->m_layouts[selected];
@@ -547,6 +577,12 @@ public:
             restoreLayouts();
             staging = false;
             candidate = MUXC::Canvas();
+            if ( nativeComposite )
+            {
+                const wxSize nativeSize = owner->ToDIP(layoutSize);
+                candidate.Width(nativeSize.x);
+                candidate.Height(nativeSize.y);
+            }
             candidate.FlowDirection(owner->GetLayoutDirection() == wxLayout_RightToLeft
                 ? MUX::FlowDirection::RightToLeft : MUX::FlowDirection::LeftToRight);
             for ( const auto& placement : placements )
@@ -567,8 +603,12 @@ public:
                 peers.push_back(std::move(peer));
             }
             if ( !current() ) return false;
-            attachmentAttempted = true;
-            const bool attached = m_host.SetContent(candidate);
+            // Realize() is valid before the parent window is shown. Build and
+            // publish the measured command model now, but do not manufacture a
+            // top-level slot while Group.Content is still awaiting its native
+            // template. Group.Loaded performs a fresh, current-model rebuild.
+            attachmentAttempted = !pendingMount;
+            const bool attached = pendingMount || Attach(candidate);
             if ( !current() || !attached )
                 return false;
             owner = Owner();
@@ -584,13 +624,13 @@ public:
             m_publishedRevision = revision;
             m_best = best;
             m_minimum = minimum;
-            m_publishedClientSize = available;
+            m_publishedClientSize = nativeComposite ? owner->GetClientSize() : available;
             provisional = true;
             Owner()->InvalidateBestSize();
             m_host.ForceRender();
             if ( !current() ) return false;
             committed = true;
-            if ( m_publishedClientSize != Owner()->GetClientSize() )
+            if ( !nativeComposite && m_publishedClientSize != Owner()->GetClientSize() )
                 ScheduleRepair();
             return true;
         }

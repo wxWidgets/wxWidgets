@@ -18,6 +18,34 @@
 #include "wx/dcbuffer.h"
 #include "wx/clntdata.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "../winui/private.h"
+    #include "wx/winui/private/tlwhost.h"
+    #include "wx/app.h"
+    #include "wx/scopeguard.h"
+    #include "wx/weakref.h"
+    #include <winrt/Microsoft.UI.Xaml.Automation.h>
+    #include <winrt/Microsoft.UI.Xaml.Markup.h>
+    #include <algorithm>
+    #include <array>
+    #include <atomic>
+    #include <cmath>
+    #include <functional>
+    #include <limits>
+    #include <utility>
+    #if defined(WXWINUI_RIBBON_TOOLKIT)
+        #include "ribboncontainerswinui.h"
+    #endif
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = MUX::Controls;
+namespace MUXA = MUX::Automation;
+namespace WF = winrt::Windows::Foundation;
+namespace
+{
+std::atomic<std::uint64_t> gs_ribbonGalleryKey{0};
+}
+#endif
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -36,6 +64,10 @@ class wxRibbonGalleryItem
 {
 public:
     wxRibbonGalleryItem() = default;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const std::uint64_t key = ++gs_ribbonGalleryKey;
+    int GetId() const { return m_id; }
+#endif
 
     void SetId(int id) {m_id = id;}
     void SetBitmap(const wxBitmapBundle& bitmap) {m_bitmap = bitmap;}
@@ -49,18 +81,83 @@ public:
     bool IsVisible() const {return m_is_visible;}
     const wxRect& GetPosition() const {return m_position;}
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void SetClientObject(wxClientData *data)
+    {
+        wxCHECK_RET(m_dataType != wxClientData_Void, "Cannot mix object and void client data");
+        m_dataType = wxClientData_Object;
+        if ( m_owned.get() == data ) return;
+        // Publish before invoking the outgoing user destructor. It may clear
+        // the gallery and delete this item, so nothing follows the deletion.
+        std::unique_ptr<wxClientData> retired = std::move(m_owned);
+        m_owned.reset(data);
+    }
+    wxClientData* GetClientObject() const
+    {
+        wxCHECK_MSG(m_dataType != wxClientData_Void, nullptr, "Item has void client data");
+        return m_owned.get();
+    }
+    void SetClientData(void* data)
+    {
+        wxCHECK_RET(m_dataType != wxClientData_Object, "Cannot mix object and void client data");
+        m_dataType = wxClientData_Void;
+        m_untyped = data;
+    }
+    void* GetClientData() const
+    {
+        wxCHECK_MSG(m_dataType != wxClientData_Object, nullptr, "Item has object client data");
+        return m_untyped;
+    }
+#else
     void SetClientObject(wxClientData *data) {m_client_data.SetClientObject(data);}
     wxClientData *GetClientObject() const {return m_client_data.GetClientObject();}
     void SetClientData(void *data) {m_client_data.SetClientData(data);}
     void *GetClientData() const {return m_client_data.GetClientData();}
+#endif
 
 protected:
     wxBitmapBundle m_bitmap;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    std::unique_ptr<wxClientData> m_owned;
+    void* m_untyped = nullptr;
+    wxClientDataType m_dataType = wxClientData_None;
+#else
     wxClientDataContainer m_client_data;
+#endif
     wxRect m_position;
     int m_id = 0;
     bool m_is_visible = false;
 };
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "gallerywinui.h"
+
+bool wxRibbonGallery::InitializeWinUI()
+{
+    if ( m_winui ) return true;
+    m_winui = std::make_shared<wxRibbonGalleryWinUI>(this);
+    if ( m_winui->Initialize() ) return true;
+    m_winui.reset();
+    return false;
+}
+
+bool wxRibbonGallery::MSWOnEffectiveLayoutDirectionChanged()
+{
+    if ( auto peer = m_winui ) { peer->Changed(); return true; }
+    return false;
+}
+
+void wxRibbonGallery::SetArtProvider(wxRibbonArtProvider* art)
+{
+    wxRibbonControl::SetArtProvider(art);
+    if ( auto peer = m_winui ) peer->Changed();
+}
+
+wxSize wxRibbonGallery::GetMinSize() const
+{
+    return m_winui ? m_winui->Minimum() : wxRibbonControl::GetMinSize();
+}
+#endif
 
 wxBEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
     EVT_ENTER_WINDOW(wxRibbonGallery::OnMouseEnter)
@@ -88,10 +185,16 @@ wxRibbonGallery::wxRibbonGallery(wxWindow* parent,
     : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(style);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    InitializeWinUI();
+#endif
 }
 
 wxRibbonGallery::~wxRibbonGallery()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( auto peer = std::move(m_winui) ) peer->Close();
+#endif
     Clear();
 }
 
@@ -107,7 +210,11 @@ bool wxRibbonGallery::Create(wxWindow* parent,
     }
 
     CommonInit(style);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return InitializeWinUI();
+#else
     return true;
+#endif
 }
 
 void wxRibbonGallery::CommonInit(long WXUNUSED(style))
@@ -135,6 +242,9 @@ void wxRibbonGallery::CommonInit(long WXUNUSED(style))
 
 void wxRibbonGallery::OnMouseEnter(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    evt.Skip();
+#else
     m_hovered = true;
     if(m_mouse_active_rect != nullptr && !evt.LeftIsDown())
     {
@@ -142,10 +252,14 @@ void wxRibbonGallery::OnMouseEnter(wxMouseEvent& evt)
         m_active_item = nullptr;
     }
     Refresh(false);
+#endif
 }
 
 void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    evt.Skip();
+#else
     bool refresh = false;
     wxPoint pos = evt.GetPosition();
 
@@ -201,6 +315,7 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
 
     if(refresh)
         Refresh(false);
+#endif
 }
 
 bool wxRibbonGallery::TestButtonHover(const wxRect& rect, wxPoint pos,
@@ -233,6 +348,7 @@ bool wxRibbonGallery::TestButtonHover(const wxRect& rect, wxPoint pos,
 
 void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
+#if !defined(__WXWINUI__) || !wxUSE_WINUI3
     m_hovered = false;
     m_active_item = nullptr;
     if(m_up_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
@@ -251,10 +367,14 @@ void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
         ProcessWindowEvent(notification);
     }
     Refresh(false);
+#endif
 }
 
 void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    evt.Skip();
+#else
     wxPoint pos = evt.GetPosition();
     m_mouse_active_rect = nullptr;
     if(m_client_rect.Contains(pos))
@@ -306,10 +426,14 @@ void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
     }
     if(m_mouse_active_rect != nullptr)
         Refresh(false);
+#endif
 }
 
 void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    evt.Skip();
+#else
     if(m_mouse_active_rect != nullptr)
     {
         wxPoint pos = evt.GetPosition();
@@ -365,6 +489,7 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
         m_active_item = nullptr;
         Refresh(false);
     }
+#endif
 }
 
 void wxRibbonGallery::OnMouseDClick(wxMouseEvent& evt)
@@ -379,30 +504,51 @@ void wxRibbonGallery::OnMouseDClick(wxMouseEvent& evt)
 void wxRibbonGallery::SetItemClientObject(wxRibbonGalleryItem* itm,
                                           wxClientData* data)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    wxCHECK_RET(peer && peer->Key(itm), "Invalid gallery item");
+#endif
     itm->SetClientObject(data);
 }
 
 wxClientData* wxRibbonGallery::GetItemClientObject(const wxRibbonGalleryItem* itm) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    wxCHECK_MSG(peer && peer->Key(itm), nullptr, "Invalid gallery item");
+#endif
     return itm->GetClientObject();
 }
 
 void wxRibbonGallery::SetItemClientData(wxRibbonGalleryItem* itm, void* data)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    wxCHECK_RET(peer && peer->Key(itm), "Invalid gallery item");
+#endif
     itm->SetClientData(data);
 }
 
 void* wxRibbonGallery::GetItemClientData(const wxRibbonGalleryItem* itm) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    wxCHECK_MSG(peer && peer->Key(itm), nullptr, "Invalid gallery item");
+#endif
     return itm->GetClientData();
 }
 
 bool wxRibbonGallery::ScrollLines(int lines)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer && peer->Scroll(static_cast<double>(lines) * peer->LineSize());
+#else
     if(m_scroll_limit == 0 || m_art == nullptr)
         return false;
 
     return ScrollPixels(lines * GetScrollLineSize());
+#endif
 }
 
 int wxRibbonGallery::GetScrollLineSize() const
@@ -419,6 +565,10 @@ int wxRibbonGallery::GetScrollLineSize() const
 
 bool wxRibbonGallery::ScrollPixels(int pixels)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer && peer->Scroll(pixels);
+#else
     if(m_scroll_limit == 0 || m_art == nullptr)
         return false;
 
@@ -457,10 +607,14 @@ bool wxRibbonGallery::ScrollPixels(int pixels)
         }
     }
     return false;
+#endif
 }
 
 void wxRibbonGallery::EnsureVisible(const wxRibbonGalleryItem* item)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( const auto peer = m_winui ) peer->EnsureVisible(peer->Key(item));
+#else
     if(item == nullptr || !item->IsVisible() || IsEmpty() || m_art == nullptr )
         return;
 
@@ -478,11 +632,16 @@ void wxRibbonGallery::EnsureVisible(const wxRibbonGalleryItem* item)
         int delta = y - base_y - m_scroll_amount;
         ScrollLines(delta / m_bitmap_padded_size.GetHeight());
     }
+#endif
 }
 
 bool wxRibbonGallery::IsHovered() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui && m_winui->IsHovered();
+#else
     return m_hovered;
+#endif
 }
 
 void wxRibbonGallery::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -492,6 +651,11 @@ void wxRibbonGallery::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The native slot owns presentation. Validate the compatibility HWND
+    // without drawing the legacy gallery over its WinUI subtree.
+    wxPaintDC dc(this);
+#else
     wxAutoBufferedPaintDC dc(this);
     if(m_art == nullptr)
         return;
@@ -527,16 +691,25 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
             dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
                 offset_pos.GetTop() + padding_top);
     }
+#endif
 }
 
 void wxRibbonGallery::OnSize(wxSizeEvent& WXUNUSED(evt))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( auto peer = m_winui ) peer->Resized();
+#else
     Layout();
+#endif
 }
 
 void wxRibbonGallery::OnDPIChanged(wxDPIChangedEvent& event)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( auto peer = m_winui ) peer->Changed();
+#else
     Realize();
+#endif
     event.Skip();
 }
 
@@ -550,6 +723,10 @@ void wxRibbonGallery::OnSysColourChanged(wxSysColourChangedEvent& event)
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id)
 {
     wxASSERT(bitmap.IsOk());
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer ? peer->Append(bitmap, id, nullptr, nullptr, false) : nullptr;
+#else
     if(m_items.IsEmpty())
     {
         m_bitmap_size = bitmap.GetDefaultSize();
@@ -565,26 +742,53 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
     item->SetBitmap(bitmap);
     m_items.Add(item);
     return item;
+#endif
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
                                              void* clientData)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxASSERT(bitmap.IsOk());
+    const auto peer = m_winui;
+    return peer ? peer->Append(bitmap, id, clientData, nullptr, false, true) : nullptr;
+#else
     wxRibbonGalleryItem *item = Append(bitmap, id);
     item->SetClientData(clientData);
     return item;
+#endif
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
                                              wxClientData* clientData)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxASSERT(bitmap.IsOk());
+    const auto peer = m_winui;
+    return peer ? peer->Append(bitmap, id, nullptr, clientData, true) : nullptr;
+#else
     wxRibbonGalleryItem *item = Append(bitmap, id);
     item->SetClientObject(clientData);
     return item;
+#endif
 }
 
 void wxRibbonGallery::Clear()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( const auto peer = m_winui )
+    {
+        peer->Clear();
+        return;
+    }
+    // Destruction has already retired the adapter. Detach the entire batch
+    // before running user client-data destructors, which can call Clear again.
+    wxArrayRibbonGalleryItem retired;
+    retired.swap(m_items);
+    m_selected_item = m_hovered_item = m_active_item = nullptr;
+    m_mouse_active_rect = nullptr;
+    for ( auto* item : retired ) delete item;
+#else
     size_t item_count = m_items.Count();
     size_t item_i;
     for(item_i = 0; item_i < item_count; ++item_i)
@@ -606,6 +810,7 @@ void wxRibbonGallery::Clear()
     {
         m_mouse_active_rect = nullptr;
     }
+#endif
 }
 
 bool wxRibbonGallery::IsSizingContinuous() const
@@ -640,12 +845,21 @@ void wxRibbonGallery::CalculateMinSize()
 
 bool wxRibbonGallery::Realize()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer && peer->Rebuild();
+#else
     CalculateMinSize();
     return Layout();
+#endif
 }
 
 bool wxRibbonGallery::Layout()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer && peer->Rebuild();
+#else
     if(m_art == nullptr)
         return false;
 
@@ -719,16 +933,24 @@ bool wxRibbonGallery::Layout()
         m_up_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
 
     return true;
+#endif
 }
 
 wxSize wxRibbonGallery::DoGetBestSize() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui ? m_winui->Best() : wxSize(20, 20);
+#else
     return m_best_size;
+#endif
 }
 
 wxSize wxRibbonGallery::DoGetNextSmallerSize(wxOrientation direction,
                                         wxSize relative_to) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui ? m_winui->NextSize(direction, relative_to, false) : relative_to;
+#else
     if(m_art == nullptr)
         return relative_to;
 
@@ -776,11 +998,15 @@ wxSize wxRibbonGallery::DoGetNextSmallerSize(wxOrientation direction,
     }
 
     return size;
+#endif
 }
 
 wxSize wxRibbonGallery::DoGetNextLargerSize(wxOrientation direction,
                                        wxSize relative_to) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui ? m_winui->NextSize(direction, relative_to, true) : relative_to;
+#else
     if(m_art == nullptr)
         return relative_to;
 
@@ -833,6 +1059,7 @@ wxSize wxRibbonGallery::DoGetNextLargerSize(wxOrientation direction,
     }
 
     return size;
+#endif
 }
 
 bool wxRibbonGallery::IsEmpty() const
@@ -854,41 +1081,76 @@ wxRibbonGalleryItem* wxRibbonGallery::GetItem(unsigned int n)
 
 void wxRibbonGallery::SetSelection(wxRibbonGalleryItem* item)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    if ( !peer ) return;
+    const auto key = peer->Key(item);
+    wxCHECK_RET(!item || key, "Invalid gallery item");
+    peer->Select(key, false);
+#else
     if(item != m_selected_item)
     {
         m_selected_item = item;
         Refresh(false);
     }
+#endif
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::GetSelection() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui ? m_winui->Selection() : nullptr;
+#else
     return m_selected_item;
+#endif
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::GetHoveredItem() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui ? m_winui->Hovered() : nullptr;
+#else
     return m_hovered_item;
+#endif
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::GetActiveItem() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return m_winui ? m_winui->Active() : nullptr;
+#else
     return m_active_item;
+#endif
 }
 
 wxRibbonGalleryButtonState wxRibbonGallery::GetUpButtonState() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer ? peer->ButtonState(0) : wxRIBBON_GALLERY_BUTTON_DISABLED;
+#else
     return m_up_button_state;
+#endif
 }
 
 wxRibbonGalleryButtonState wxRibbonGallery::GetDownButtonState() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer ? peer->ButtonState(1) : wxRIBBON_GALLERY_BUTTON_DISABLED;
+#else
     return m_down_button_state;
+#endif
 }
 
 wxRibbonGalleryButtonState wxRibbonGallery::GetExtensionButtonState() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto peer = m_winui;
+    return peer ? peer->ButtonState(2) : wxRIBBON_GALLERY_BUTTON_DISABLED;
+#else
     return m_extension_button_state;
+#endif
 }
 
 #endif // wxUSE_RIBBON

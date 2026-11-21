@@ -17,6 +17,7 @@
 #include "wx/dcmemory.h"
 #include "wx/frame.h"
 #include "wx/imaglist.h"
+#include "wx/image.h"
 #include "wx/log.h"
 #include "wx/textctrl.h"
 #include "wx/treectrl.h"
@@ -56,9 +57,9 @@ wxPoint RectCentre(const wxRect& rect)
         rect.y + wxMax(0, rect.height / 2));
 }
 
-wxBitmap MakeTreeBitmap(const wxColour& colour)
+wxBitmap MakeTreeBitmap(const wxColour& colour, int size = 16)
 {
-    wxBitmap bitmap(16, 16);
+    wxBitmap bitmap(size, size);
     wxMemoryDC dc(bitmap);
     dc.SetBackground(wxBrush(colour));
     dc.Clear();
@@ -263,6 +264,56 @@ wxBitmapBundle MakeCallbackTreeBundle(
             MakeTreeBitmap(*wxBLUE), point, std::move(callback),
             bitmapCalls));
 }
+
+struct MutableTreeBitmapState
+{
+    wxBitmap bitmap = MakeTreeBitmap(*wxRED);
+    wxSize defaultSize{16, 16};
+    wxSize preferredSize{16, 16};
+    unsigned defaultCalls = 0;
+    unsigned preferredCalls = 0;
+    unsigned bitmapCalls = 0;
+    std::function<void ()> callback;
+};
+
+class MutableTreeBitmapBundleImpl final : public wxBitmapBundleImpl
+{
+public:
+    explicit MutableTreeBitmapBundleImpl(
+        std::shared_ptr<MutableTreeBitmapState> state)
+        : m_state(std::move(state))
+    {
+    }
+
+    wxSize GetDefaultSize() const override
+    {
+        ++m_state->defaultCalls;
+        return m_state->defaultSize;
+    }
+
+    wxSize GetPreferredBitmapSizeAtScale(double) const override
+    {
+        ++m_state->preferredCalls;
+        return m_state->preferredSize;
+    }
+
+    wxBitmap GetBitmap(const wxSize&) override
+    {
+        ++m_state->bitmapCalls;
+        const wxBitmap bitmap = m_state->bitmap;
+        if ( m_state->callback )
+        {
+            auto callback = std::move(m_state->callback);
+            callback();
+        }
+        // Deliberately return the pre-callback pixels. A superseded projection
+        // must discard these even if they already exist in the image cache.
+        return bitmap;
+    }
+
+private:
+    std::shared_ptr<MutableTreeBitmapState> m_state;
+};
 
 class InvalidTreeBitmapBundleImpl final : public wxBitmapBundleImpl
 {
@@ -1083,16 +1134,15 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         REQUIRE(tree.GetSelection() == leaf);
         CHECK(expanding == 1);
         REQUIRE(callbackImage != 0);
-        // The callback-time projection is created while the original source
-        // is still retained by the PropertySet, so these identities cannot
-        // alias even if the COM allocator later recycles an old address.
-        CHECK(callbackImage != collapsedImage);
+        // The callback-time projection still resolves the collapsed pixels.
+        // Reprojection must not allocate another native source for them.
+        CHECK(callbackImage == collapsedImage);
         const std::uintptr_t expandedImage =
             wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
         REQUIRE(expandedImage != 0);
-        // The post-commit source is allocated before replacing the still-live
-        // callback source. This proves that expansion caused a second
-        // projection without relying on a historical, freed COM address.
+        // The committed expanded image has different pixels; the retained
+        // collapsed source cannot be reused. The exact projection count below
+        // independently proves the callback and post-commit passes still ran.
         CHECK(expandedImage != callbackImage);
         CHECK(tree.IsExpanded(root));
         CHECK(tree.GetItemImage(root, wxTreeItemIcon_Expanded) == 1);
@@ -2478,6 +2528,204 @@ TEST_CASE("wxWinUI TreeCtrl invalid bundle sizes remove the image",
     CHECK(tree.GetItemText(root) == "invalid");
     CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, root) == "invalid");
     CHECK(generation != 0);
+}
+
+TEST_CASE("wxWinUI TreeCtrl shares resolved normal and state image pixels",
+          "[treectrl][winui-treemodel][projection][images][image-cache]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    wxImageList images(16, 16, true);
+    wxImageList states(16, 16, true);
+    REQUIRE(images.Add(MakeTreeBitmap(*wxRED)) == 0);
+    REQUIRE(states.Add(MakeTreeBitmap(*wxRED)) == 0);
+    wxTreeCtrl tree(parent, wxID_ANY, wxDefaultPosition, wxSize(300, 180));
+    tree.SetImageList(&images);
+    tree.SetStateImageList(&states);
+    tree.Freeze();
+    const wxTreeItemId root = tree.AddRoot("root");
+    std::vector<wxTreeItemId> items;
+    for ( int i = 0; i < 64; ++i )
+    {
+        const auto item = tree.AppendItem(root, wxString::Format("item %d", i), 0);
+        tree.SetItemState(item, 0);
+        items.push_back(item);
+    }
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
+    tree.Thaw();
+    const auto initial = wxWinUITreeCtrlTestAccess::GetModelStats(tree);
+    CHECK(initial.bitmapConversionCount == 1);
+    CHECK(initial.cacheHitCount >= 127);
+    CHECK(initial.imageCacheEntryCount == 1);
+    const auto shared = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(
+        tree, items.front());
+    REQUIRE(shared != 0);
+    for ( const auto& item : items )
+    {
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, item) == shared);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, item, true) == shared);
+    }
+
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
+    tree.SetItemText(items.front(), "renamed");
+    tree.SelectItem(items.front());
+    CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, items.front()) == shared);
+
+    // A mutable image list is still read on every requested projection. Its
+    // identity and image index do not constitute a cache key.
+    REQUIRE(images.Replace(0, MakeTreeBitmap(*wxBLUE)));
+    tree.SetItemText(items.front(), "new normal pixels");
+    const auto blue = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, items.front());
+    REQUIRE(blue != 0);
+    CHECK(blue != shared);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, items.front(), true) == shared);
+    REQUIRE(states.Replace(0, MakeTreeBitmap(*wxGREEN)));
+    tree.SetItemText(items.front(), "new state pixels");
+    const auto green = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, items.front(), true);
+    REQUIRE(green != 0);
+    CHECK(green != shared);
+    CHECK(green != blue);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, items.front()) == blue);
+    CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 2);
+}
+
+TEST_CASE("wxWinUI TreeCtrl cached pixels retain custom bundle authority",
+          "[treectrl][winui-treemodel][projection][images][image-cache][reentrancy]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    auto state = std::make_shared<MutableTreeBitmapState>();
+    wxTreeCtrl tree(parent, wxID_ANY, wxDefaultPosition, wxSize(300, 180));
+    tree.SetImages({wxBitmapBundle::FromImpl(new MutableTreeBitmapBundleImpl(state))});
+    const auto root = tree.AddRoot("root", 0);
+    const auto red = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
+    REQUIRE(red != 0);
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
+    const auto defaultCalls = state->defaultCalls;
+    const auto preferredCalls = state->preferredCalls;
+    const auto bitmapCalls = state->bitmapCalls;
+    tree.SetItemText(root, "unchanged pixels");
+    CHECK(state->defaultCalls > defaultCalls);
+    CHECK(state->preferredCalls > preferredCalls);
+    CHECK(state->bitmapCalls > bitmapCalls);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root) == red);
+    CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 0);
+
+    // Pixel sharing must not cache a bundle's DIP dimensions.
+    state->defaultSize = wxSize(8, 8);
+    tree.SetItemText(root, "same raster different DIP size");
+    wxSize pixels, statePixels, dips, stateDips;
+    std::uint64_t generation = 0;
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+        tree, root, &pixels, &statePixels, &generation, &dips, &stateDips));
+    CHECK(pixels == wxSize(16, 16));
+    CHECK(dips == wxSize(8, 8));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root) == red);
+
+    state->callback = [&]()
+    {
+        state->bitmap = MakeTreeBitmap(*wxBLUE);
+        tree.SetItemText(root, "latest callback");
+    };
+    tree.SetItemText(root, "superseded request");
+    CHECK(tree.GetItemText(root) == "latest callback");
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, root) == "latest callback");
+    const auto blue = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
+    REQUIRE(blue != 0);
+    CHECK(blue != red);
+    CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 1);
+
+    // Same RGB but a different alpha plane is a different native source.
+    wxImage translucent(16, 16);
+    translucent.SetRGB(wxRect(0, 0, 16, 16), 0, 0, 255);
+    translucent.InitAlpha();
+    for ( int y = 0; y < 16; ++y )
+        for ( int x = 0; x < 16; ++x )
+            translucent.SetAlpha(x, y, 80);
+    state->bitmap = wxBitmap(translucent);
+    tree.SetItemText(root, "translucent blue");
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root) != blue);
+    CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 2);
+}
+
+TEST_CASE("wxWinUI TreeCtrl cached images do not bypass destructive bundle callbacks",
+          "[treectrl][winui-treemodel][projection][images][image-cache][lifetime]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const auto baseline = wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
+    auto state = std::make_shared<MutableTreeBitmapState>();
+    auto tree = std::make_unique<wxTreeCtrl>(
+        parent, wxID_ANY, wxDefaultPosition, wxSize(300, 180));
+    tree->SetImages({wxBitmapBundle::FromImpl(new MutableTreeBitmapBundleImpl(state))});
+    const auto root = tree->AddRoot("root", 0);
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetModelStats(*tree).imageCacheEntryCount == 1);
+    const auto calls = state->bitmapCalls;
+    wxWeakRef<wxTreeCtrl> lifetime(tree.get());
+    state->callback = [&]() { tree.reset(); };
+    tree->SetItemText(root, "still resolves the bundle");
+    CHECK(state->bitmapCalls == calls + 1);
+    CHECK(lifetime.get() == nullptr);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
+}
+
+TEST_CASE("wxWinUI TreeCtrl image cache is bounded and DPI aware",
+          "[treectrl][winui-treemodel][projection][images][image-cache][dpi]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    wxTreeCtrl tree(parent, wxID_ANY, wxDefaultPosition, wxSize(300, 180));
+    const auto root = tree.AddRoot("root", 0);
+
+    SECTION("different DPI rasters have distinct sources and can be reused")
+    {
+        tree.SetImages({MakeTreeDPIBundle(wxSize(16, 16), *wxBLUE)});
+        REQUIRE(wxWinUITreeCtrlTestAccess::RefreshForScale(tree, 1.0));
+        const auto one = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
+        REQUIRE(one != 0);
+        REQUIRE(wxWinUITreeCtrlTestAccess::RefreshForScale(tree, 2.0));
+        const auto two = wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
+        REQUIRE(two != 0);
+        CHECK(two != one);
+        wxSize pixels, states, dips, stateDips;
+        std::uint64_t generation = 0;
+        REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+            tree, root, &pixels, &states, &generation, &dips, &stateDips));
+        CHECK(pixels == wxSize(32, 32));
+        CHECK(dips == wxSize(16, 16));
+        wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
+        REQUIRE(wxWinUITreeCtrlTestAccess::RefreshForScale(tree, 1.0));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root) == one);
+        CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 0);
+    }
+
+    SECTION("entry and pixel budgets bound unique images")
+    {
+        const int size = GENERATE(16, 256);
+        const int count = size == 16 ? 80 : 12;
+        auto state = std::make_shared<MutableTreeBitmapState>();
+        state->defaultSize = state->preferredSize = wxSize(size, size);
+        state->bitmap = MakeTreeBitmap(wxColour(0, 20, 40), size);
+        tree.SetImages({wxBitmapBundle::FromImpl(new MutableTreeBitmapBundleImpl(state))});
+        for ( int i = 1; i < count; ++i )
+        {
+            state->bitmap = MakeTreeBitmap(wxColour(i, 20, 40), size);
+            tree.SetItemText(root, wxString::Format("pixels %d", i));
+            const auto stats = wxWinUITreeCtrlTestAccess::GetModelStats(tree);
+            CHECK(stats.imageCacheEntryCount <= 64);
+            CHECK(stats.imageCacheBytes <= 4u * 1024u * 1024u);
+        }
+        const auto stats = wxWinUITreeCtrlTestAccess::GetModelStats(tree);
+        CHECK(stats.imageCacheEntryCount == (size == 16 ? 64 : 8));
+        wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
+        state->bitmap = MakeTreeBitmap(wxColour(0, 20, 40), size);
+        tree.SetItemText(root, "evicted pixels");
+        CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).bitmapConversionCount == 1);
+        wxWinUITreeCtrlTestAccess::ClosePeer(tree);
+        CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).imageCacheEntryCount == 0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(tree).imageCacheBytes == 0);
+    }
 }
 
 TEST_CASE("wxWinUI TreeCtrl coalesces projection until outer Thaw",

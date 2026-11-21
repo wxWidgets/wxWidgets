@@ -978,7 +978,7 @@ wxTreeListCtrl::DoInsertColumn(const wxString& title,
     // topology or destroy this composite control. Choose the insertion
     // position only after it has completed.
     const wxWeakRef<wxTreeListCtrl> weakThis(this);
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     if ( !m_view->PrepareForColumnMutation() )
         return wxNOT_FOUND;
     if ( weakThis.get() != this )
@@ -1054,7 +1054,7 @@ bool wxTreeListCtrl::DeleteColumn(unsigned col)
 {
     wxCHECK_MSG( m_view, false, "Must Create() first" );
 
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     const wxWeakRef<wxTreeListCtrl> weakThis(this);
     wxDataViewCtrl* const view = m_view;
     const wxWeakRef<wxDataViewCtrl> weakView(view);
@@ -1072,7 +1072,7 @@ bool wxTreeListCtrl::DeleteColumn(unsigned col)
     wxCHECK_MSG( col < count, false, "Invalid column index" );
 
     wxDataViewColumn* const removed = m_view->GetColumn(col);
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     wxDataViewColumn* promoted = nullptr;
     wxDataViewColumn* replacement = nullptr;
     if ( col == 0 && count > 1 )
@@ -1090,7 +1090,7 @@ bool wxTreeListCtrl::DeleteColumn(unsigned col)
     }
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
 
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxHAS_WINUI_DATAVIEWCTRL)
     m_model->IncRef();
     wxObjectDataPtr<wxTreeListModel> model(m_model);
     const wxVector<wxString> removedValues = model->SaveColumn(col);

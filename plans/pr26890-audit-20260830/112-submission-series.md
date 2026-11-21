@@ -51,6 +51,31 @@ feature removal or independent-boundary replay is claimed. Mapping the rest of
 the PR, proving alternative patch ordering in disposable worktrees and agreeing
 on any public split remain required before this plan can be marked DONE.
 
+## Native component boundaries, 2026-10-04
+
+These are dependency boundaries in the current dirty integration tree, **not**
+independently applicable patches or approved new PRs. No history is rewritten.
+The complete static evidence and failed experiments remain in plan108; local
+runtime success does not replace shared/install, remote or physical acceptance.
+
+| Order | Review unit and principal sources | Dependencies and verification |
+| --- | --- | --- |
+| 1 | Toolkit deployment/metadata: `build/cmake/winui-toolkit-runtime.cmake`, `src/winui/xamlmetadata.h`, `src/ribbon/ribbontoolkitruntime.*` | Existing pinned AppSDK/runtime and host; activation/deployment/header contracts and Toolkit native gate; licensing and installation stay explicit |
+| 2 | Shared projection lifetime: `src/winui/compositeretirement.h`, `src/winui/popupretirement.cpp`, composite/focus/geometry changes | Existing107 host invariants; composite, popup and flyout retirement gates; must precede their component users |
+| 3 | List/report/filesystem projection: `src/winui/listprojection.*`, generic ListCtrl/EditList adapters and FileCtrl tests | Unit2 plus native host; ListCtrl and filesystem gates, four modes/virtual rows/retirement; Grid/Table provider addition still in progress |
+| 4 | Native DataView/Grid and PropertyGrid: `src/winui/dataview*`, `gridprojection.*`, `gridautomation.h`, `src/propgrid/propgridwinui.*` | Unit2, headers and retained wx models; separate DataView/Grid/PG gates; keep custom renderer, event-veto and API/ABI changes with their tests, not with pure extraction commits |
+| 5 | AUI TabView headers: `src/aui/auibookwinui.*`, AUI adapter changes and `winuiauitabview.cpp` | Native host plus retained wx docking model; AUI14-case gate and MSW/Qt builds; multiline/custom-art and physical drag remain open |
+| 6 | Ribbon containers/commands: `src/ribbon/ribboncontainerswinui.*`, toolbar/gallery/buttonbar/flyout adapters | Units1-2; Toolkit and command-specific gates; responsive layout, expansion and retirement must travel with their adapter |
+| 7 | Date presentation and calendar lifecycle: `src/winui/datepresentation.h`, DatePicker/PG date consumers, CalendarView changes | Unit4 for PG consumer; separate helper extraction from calendar behavioural correction; full range/date/layout suite currently exposes a coalescing failure, so this unit is not yet frozen |
+
+CI registration and the corresponding tests belong with each unit, not in a
+late catch-all commit. Sample changes follow the components they exercise.
+The working-tree build uses actual source-private headers; new files must be
+included in any eventual source commit, not merely present in a developer's
+build directory. Generated binaries and external evidence logs are not product
+source. Independent patch replay and a full base-to-final-tree comparison remain
+unperformed, so this table does not close plan112.
+
 ## Steps
 
 1. Map stable dependencies into proposed submissions: toolkit/build; runtime; minimal host; input/focus/move-size; UIA/tooltip/appearance/OLE; basic controls; text/items; range/date/calendar; books/tree; chrome/dialogs.

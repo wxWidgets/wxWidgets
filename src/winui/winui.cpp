@@ -14,11 +14,14 @@
 #if wxUSE_WINUI3
 
 #include "private.h"
+#include "xamlmetadata.h"
 #ifdef WXWINUI_TEST_SUPPORT
     #include "runtime-test-access.h"
     #include "keyboard-test-access.h"
 #endif
 #include "keyboard.h"
+#include "hostnative.h"
+#include "scrollbarprojection.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #ifndef WX_PRECOMP
@@ -84,6 +87,8 @@ winrt::Microsoft::UI::Dispatching::DispatcherQueueController
 winrt::Microsoft::UI::Xaml::Hosting::WindowsXamlManager
     gs_winuiXamlManager{ nullptr };
 winrt::Microsoft::UI::Xaml::Application gs_winuiApplication{ nullptr };
+void* gs_winuiMetadataApplicationIdentity = nullptr;
+std::weak_ptr<wxWinUIXamlMetadataRegistry> gs_winuiMetadataRegistry;
 winrt::event_token gs_winuiXamlShutdownRetirementToken{};
 bool gs_winuiXamlShutdownRetirementHookInstalled = false;
 #ifdef WXWINUI_TEST_SUPPORT
@@ -687,7 +692,16 @@ struct wxWinUIApplication :
         winrt::Microsoft::UI::Xaml::Markup::IXamlMetadataProvider
     >
 {
-    wxWinUIApplication() = default;
+    wxWinUIApplication()
+        : m_metadata(std::make_shared<wxWinUIXamlMetadataRegistry>(
+            winrt::Microsoft::UI::Xaml::XamlTypeInfo::XamlControlsXamlMetaDataProvider()))
+    {
+    }
+
+    std::shared_ptr<wxWinUIXamlMetadataRegistry> GetMetadataRegistry() const
+    {
+        return m_metadata;
+    }
 
     void OnLaunched(
         winrt::Microsoft::UI::Xaml::LaunchActivatedEventArgs const&)
@@ -697,24 +711,23 @@ struct wxWinUIApplication :
     winrt::Microsoft::UI::Xaml::Markup::IXamlType GetXamlType(
         winrt::Windows::UI::Xaml::Interop::TypeName const& type)
     {
-        return m_provider.GetXamlType(type);
+        return m_metadata->GetXamlType(type);
     }
 
     winrt::Microsoft::UI::Xaml::Markup::IXamlType GetXamlType(
         winrt::hstring const& fullName)
     {
-        return m_provider.GetXamlType(fullName);
+        return m_metadata->GetXamlType(fullName);
     }
 
     winrt::com_array<winrt::Microsoft::UI::Xaml::Markup::XmlnsDefinition>
     GetXmlnsDefinitions()
     {
-        return m_provider.GetXmlnsDefinitions();
+        return m_metadata->GetXmlnsDefinitions();
     }
 
 private:
-    winrt::Microsoft::UI::Xaml::XamlTypeInfo::XamlControlsXamlMetaDataProvider
-        m_provider;
+    std::shared_ptr<wxWinUIXamlMetadataRegistry> m_metadata;
 };
 
 void wxWinUILogHresult(const char *what, HRESULT hr)
@@ -940,7 +953,11 @@ public:
         // Application::Current() is itself a XAML root. Release it only after
         // all peer graphs, while the same deferral still keeps the queue live.
         if ( releaseApplication )
+        {
+            gs_winuiMetadataRegistry.reset();
+            gs_winuiMetadataApplicationIdentity = nullptr;
             gs_winuiApplication = nullptr;
+        }
         CompleteAllEntries();
 
         m_xamlCompletionActive = false;
@@ -2179,8 +2196,10 @@ bool wxWinUIEnsureApplication()
         if ( gs_winuiApplication )
             return true;
 
-        gs_winuiApplication =
-            winrt::make<wxWinUIApplication>();
+        const auto application = winrt::make_self<wxWinUIApplication>();
+        gs_winuiApplication = application.as<Application>();
+        gs_winuiMetadataApplicationIdentity = winrt::get_abi(gs_winuiApplication);
+        gs_winuiMetadataRegistry = application->GetMetadataRegistry();
         return static_cast<bool>(gs_winuiApplication);
     }
     catch ( const winrt::hresult_error& e )
@@ -2384,6 +2403,14 @@ bool wxWinUIProcessMessageWithCallback(
     void *xamlContext)
 {
     if ( !msg )
+        return false;
+
+    // In an entered native resize loop, USER32 must consume its exact
+    // captured target's motion/release/cancel packets. Passing them through
+    // XAML first can mark them handled and the WH_GETMESSAGE hook then turns
+    // them into WM_NULL: the loop enters, but never receives a sizing delta.
+    // All other HWNDs and presentation messages keep the normal XAML pump.
+    if ( wxWinUIMessageBelongsToNativeSizing(*msg) )
         return false;
 
     if ( wxWinUIIsKeyboardMessage(msg) )
@@ -3250,8 +3277,39 @@ void wxWinUI3Uninitialize()
         wxWinUIRuntimeState::Idle, std::memory_order_release);
 }
 
+bool wxWinUIRegisterXamlMetadataProviders(
+    const wxWinUIXamlMetadataRegistry::Providers& providers) noexcept
+{
+    if ( gs_winuiRuntimeState.load(std::memory_order_acquire) !=
+             wxWinUIRuntimeState::Running ||
+         gs_winuiOwnerThreadId.load(std::memory_order_acquire) !=
+             ::GetCurrentThreadId() )
+        return false;
+
+    try
+    {
+        const auto registry = gs_winuiMetadataRegistry.lock();
+        if ( !gs_winuiApplication || !registry ||
+             winrt::get_abi(gs_winuiApplication) != gs_winuiMetadataApplicationIdentity )
+            return false;
+        return registry->Register(providers);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUIBootstrapLogException("WinUI component metadata registration", e);
+    }
+    catch ( ... )
+    {
+        wxLogWarning("WinUI component metadata registration failed");
+    }
+    return false;
+}
+
 bool wxWinUI3PreProcessMessage(WXMSG *msg)
 {
+    if ( msg && gs_winuiRuntimeState.load(std::memory_order_acquire) ==
+                    wxWinUIRuntimeState::Running )
+        wxWinUIWindowScrollbarsObserveMessage(*reinterpret_cast<MSG*>(msg));
     // This is the event-loop fallback for a missing hook. Runtime loading is
     // safe here (unlike from wxWinUIGetMsgHookProc), but a quarantined runtime
     // must never be called after its XAML manager has begun closing.

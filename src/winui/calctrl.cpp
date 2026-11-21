@@ -652,7 +652,9 @@ public:
         PeerMutation,
         Reentrant,
         InvalidTicket,
-        QueueFailure
+        QueueFailure,
+        NativeViewport,
+        NativeTopology
     };
     enum class NavigationRefreshFailure : unsigned
     {
@@ -721,6 +723,142 @@ public:
 
     using WeekDayLayoutSignature =
         std::vector<WeekDayLayoutInput>;
+
+    struct MonthViewportBinding
+    {
+        MUXC::ScrollViewer peer{ nullptr };
+        winrt::event_token changingToken{}, changedToken{}, unloadedToken{};
+        bool changing = false;
+
+        ~MonthViewportBinding()
+        {
+            // Delegates only hold a weak binding and never a wx owner.
+            try { if ( changingToken.value ) peer.ViewChanging(changingToken); }
+            catch ( const winrt::hresult_error& ) { }
+            try { if ( changedToken.value ) peer.ViewChanged(changedToken); }
+            catch ( const winrt::hresult_error& ) { }
+            try { if ( unloadedToken.value ) peer.Unloaded(unloadedToken); }
+            catch ( const winrt::hresult_error& ) { }
+        }
+    };
+
+    bool IsNativeViewportChanging() const
+    {
+        return monthViewport && monthViewport->changing;
+    }
+
+    void BindMonthViewport(wxCalendarCtrl *owner)
+    {
+        const HitTestTicket ticket = CaptureHitTestTicket();
+        if ( GetCurrentOwner(ticket) != owner )
+            return;
+        if ( monthViewport && IsElementAttachedToCalendar(ticket, monthViewport->peer) )
+            return;
+        if ( GetCurrentOwner(ticket) != owner )
+            return;
+
+        // Bind the real template viewport, not an auxiliary ScrollViewer.
+        // Custom templates without this part keep the existing bounded
+        // validation/failure path. Discovery never realizes extra day peers.
+        MUXC::ScrollViewer viewport{ nullptr };
+        std::vector<MUX::DependencyObject> pending{ticket.calendar};
+        unsigned visited = 0;
+        while ( !pending.empty() && visited++ != 2048 )
+        {
+            const auto current = pending.back();
+            pending.pop_back();
+            const auto candidate = current.try_as<MUXC::ScrollViewer>();
+            if ( GetCurrentOwner(ticket) != owner )
+                return;
+            if ( candidate && candidate.Name() == L"MonthViewScrollViewer" )
+            {
+                viewport = candidate;
+                break;
+            }
+            if ( GetCurrentOwner(ticket) != owner )
+                return;
+            const int count = MUXM::VisualTreeHelper::GetChildrenCount(current);
+            if ( GetCurrentOwner(ticket) != owner || count < 0 ||
+                 pending.size() + static_cast<unsigned>(count) > 2048 )
+                return;
+            for ( int n = 0; n != count; ++n )
+            {
+                const auto child = MUXM::VisualTreeHelper::GetChild(current, n);
+                if ( GetCurrentOwner(ticket) != owner )
+                    return;
+                pending.push_back(child);
+            }
+        }
+        if ( GetCurrentOwner(ticket) != owner )
+            return;
+        monthViewport.reset();
+        if ( !viewport )
+            return;
+
+        const auto binding = std::make_shared<MonthViewportBinding>();
+        binding->peer = viewport;
+        const std::weak_ptr<MonthViewportBinding> weak = binding;
+        const auto state = ticket.callbackState;
+        const auto generation = ticket.callbackGeneration;
+        const auto onViewport = [state, generation, weak](bool changing)
+        {
+            const auto current = weak.lock();
+            wxCalendarCtrl *live = state->GetOwner(generation);
+            if ( !current || !live || !live->m_winui ||
+                 live->m_winui->callbackState != state ||
+                 live->m_winui->monthViewport != current )
+                return;
+            auto * const impl = live->m_winui.get();
+            current->changing = changing;
+            if ( changing )
+            {
+                // Native animation can span many dispatcher callbacks with
+                // two partial months. This is not a failed stable layout.
+                impl->weekDayLayoutValidationPending = true;
+                return;
+            }
+            try
+            {
+                if ( impl->weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology )
+                {
+                    impl->RefreshWeekNumbersFromLayout(live);
+                    return;
+                }
+                if ( impl->refreshWeeksPending && impl->weekRefreshPendingCause ==
+                        WeekRefreshPendingCause::NativeViewport )
+                {
+                    impl->ScheduleWeekRefresh(live);
+                    live = state->GetOwner(generation);
+                    if ( !live || !live->m_winui || live->m_winui.get() != impl ||
+                         live->m_winui->monthViewport != current )
+                        return;
+                }
+                if ( impl->weekDayLayoutValidationPending )
+                    impl->QueueWeekDayLayoutValidation(live);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException("WinUI CalendarView viewport completion", e);
+            }
+        };
+        binding->changingToken = viewport.ViewChanging(
+            [onViewport](const auto&, const MUXC::ScrollViewerViewChangingEventArgs&)
+            { onViewport(true); });
+        binding->changedToken = viewport.ViewChanged(
+            [onViewport](const auto&, const MUXC::ScrollViewerViewChangedEventArgs& args)
+            { onViewport(args.IsIntermediate()); });
+        binding->unloadedToken = viewport.Unloaded(
+            [weak](const auto&, const auto&)
+            {
+                if ( const auto current = weak.lock() ) current->changing = false;
+                // A replaced/closed template cannot complete an old scroll.
+                // Its next actual Loaded/LayoutUpdated owns validation.
+            });
+        if ( GetCurrentOwner(ticket) == owner &&
+             IsElementAttachedToCalendar(ticket, viewport) &&
+             GetCurrentOwner(ticket) == owner )
+            monthViewport = binding;
+    }
 
     ~wxWinUICalendarImpl()
     {
@@ -1712,15 +1850,9 @@ public:
         unsigned columnCount = 0;
     };
 
-    static bool ResolveActiveMonthPage(
-        const HitTestTicket& ticket,
-        const PublicHitSnapshot& snapshot,
-        ActiveMonthPage *page)
+    static std::vector<MonthTopologyInput> MakeMonthTopologyInputs(
+        const PublicHitSnapshot& snapshot)
     {
-        if ( !page )
-            return false;
-        *page = {};
-
         std::vector<MonthTopologyInput> inputs;
         inputs.reserve(snapshot.days.size());
         for ( std::size_t n = 0; n != snapshot.days.size(); ++n )
@@ -1741,6 +1873,36 @@ public:
                         winrt::get_abi(day.item)),
                     day.authoritative});
         }
+        return inputs;
+    }
+
+    static bool SameMonthTopologyInputs(const std::vector<MonthTopologyInput>& lhs,
+                                        const std::vector<MonthTopologyInput>& rhs)
+    {
+        if ( lhs.size() != rhs.size() ) return false;
+        for ( std::size_t n = 0; n != lhs.size(); ++n )
+        {
+            const auto& a = lhs[n];
+            const auto& b = rhs[n];
+            if ( !(a.month == b.month) || a.calendarDay != b.calendarDay ||
+                 a.daysInMonth != b.daysInMonth || a.dateKey != b.dateKey ||
+                 a.identity != b.identity || a.authoritative != b.authoritative ||
+                 std::abs(a.x - b.x) > 0.25 || std::abs(a.y - b.y) > 0.25 ||
+                 std::abs(a.width - b.width) > 0.25 || std::abs(a.height - b.height) > 0.25 )
+                return false;
+        }
+        return true;
+    }
+
+    static bool ResolveActiveMonthPage(
+        const HitTestTicket& ticket,
+        const PublicHitSnapshot& snapshot,
+        ActiveMonthPage *page)
+    {
+        if ( !page )
+            return false;
+        *page = {};
+        const auto inputs = MakeMonthTopologyInputs(snapshot);
 
         TruncatedMonthAuthority truncated;
         const TruncatedMonthAuthority *truncatedPtr =
@@ -2899,6 +3061,7 @@ public:
             callbackState->Invalidate();
 
         RevokeNavigationButtons();
+        monthViewport.reset();
 
         if ( cal && layoutUpdatedToken.value )
         {
@@ -3000,6 +3163,7 @@ public:
         refreshWeeksPending = false;
         weekRefreshPendingCause = WeekRefreshPendingCause::None;
         weekRefreshScheduled = false;
+        pendingNativeTopology.clear();
         projectedWeekLayoutInputsValid = false;
         projectedWeekDayLayoutValid = false;
         projectedWeekDayLayout.clear();
@@ -3769,6 +3933,7 @@ public:
         refreshWeeksPending = false;
         weekRefreshPendingCause = WeekRefreshPendingCause::None;
         weekRefreshWaitingForMutationEnd = false;
+        pendingNativeTopology.clear();
         weekMutationProbeScheduled = false;
         if ( ++weekMutationProbeGeneration == 0 )
             ++weekMutationProbeGeneration;
@@ -3790,7 +3955,7 @@ public:
             return;
         }
 
-        if ( weekRefreshScheduled )
+        if ( weekRefreshScheduled || weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology )
             return;
 
         MUX::XamlRoot scheduledRoot{ nullptr };
@@ -3900,6 +4065,12 @@ public:
                         return;
                     }
 
+                    // An already queued wave can outlive the layout which
+                    // entered native-topology waiting. Only a real changed
+                    // day layout may resume that work, not this old callback.
+                    if ( weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology )
+                        return;
+
                     if ( ++weekRefreshRunCount == 0 )
                         ++weekRefreshRunCount;
                     const std::uint64_t consumedRevision =
@@ -3973,7 +4144,14 @@ public:
                     }
                     else if ( refreshWeeksPending )
                     {
-                        if ( weekRefreshPendingCause ==
+                        if ( weekRefreshPendingCause == WeekRefreshPendingCause::NativeViewport ||
+                             weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology )
+                        {
+                            // ViewChanged(final)/LayoutUpdated owns the next attempt. An
+                            // animation is not an error retry or a reason to
+                            // self-queue work on every dispatcher iteration.
+                        }
+                        else if ( weekRefreshPendingCause ==
                                  WeekRefreshPendingCause::PeerMutation )
                         {
                             weekRefreshWaitingForMutationEnd = true;
@@ -4455,6 +4633,8 @@ public:
                         false;
                     if ( !implementation->weekDayLayoutValidationPending )
                         return;
+                    if ( implementation->IsNativeViewportChanging() )
+                        return;
 
                     const std::uint64_t requestRevision =
                         implementation->weekRefreshRequestRevision;
@@ -4548,6 +4728,8 @@ public:
                              validationGeneration ||
                          !liveImpl->weekDayLayoutValidationPending ||
                          liveImpl->weekDayLayoutValidationScheduled ||
+                         liveImpl->weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology ||
+                         liveImpl->IsNativeViewportChanging() ||
                          liveImpl->refreshWeeksInProgress ||
                          liveImpl->weekRefreshScheduled ||
                          liveImpl->weekRefreshWaitingForMutationEnd ||
@@ -4601,6 +4783,23 @@ public:
         // phantom refresh wave.
         if ( refreshWeeksInProgress )
             return;
+
+        const auto viewportState = callbackState;
+        const auto viewportGeneration = viewportState ? viewportState->Generation() : 0;
+        BindMonthViewport(owner);
+        // Template discovery and subscription cross WinRT boundaries.
+        if ( !viewportState || viewportState->GetOwner(viewportGeneration) != owner ||
+             !owner || !owner->m_winui || owner->m_winui.get() != this ||
+             owner->m_winui->callbackState != viewportState )
+            return;
+        if ( IsNativeViewportChanging() )
+            return;
+
+        if ( weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology )
+        {
+            ResumeNativeWeekTopology(owner);
+            return;
+        }
 
         if ( weekRefreshWaitingForMutationEnd )
         {
@@ -4684,6 +4883,44 @@ public:
         RefreshWeekNumbers(owner);
     }
 
+    void ResumeNativeWeekTopology(wxCalendarCtrl *owner)
+    {
+        const HitTestTicket ticket = CaptureHitTestTicket();
+        if ( GetCurrentOwner(ticket) != owner ) return;
+        const auto request = weekRefreshRequestRevision;
+        const auto retry = weekRefreshRetryGeneration;
+        const auto current = [&]()
+        {
+            return GetCurrentOwner(ticket) == owner &&
+                   weekRefreshPendingCause == WeekRefreshPendingCause::NativeTopology &&
+                   weekRefreshRequestRevision == request && weekRefreshRetryGeneration == retry;
+        };
+        PublicHitSnapshot snapshot;
+        if ( !CapturePublicHitSnapshot(ticket, &snapshot) || !current() )
+            return;
+        auto inputs = MakeMonthTopologyInputs(snapshot);
+        if ( SameMonthTopologyInputs(inputs, pendingNativeTopology) )
+        {
+            // Overlay/layout echoes do not make an incomplete native month
+            // more complete. Retain no day peers and queue no retry here.
+            ++weekNativeTopologyEchoCount;
+            return;
+        }
+        pendingNativeTopology = std::move(inputs);
+        ActiveMonthPage activePage;
+        if ( !ResolveActiveMonthPage(ticket, snapshot, &activePage) ||
+             !current() )
+            return;
+        pendingNativeTopology.clear();
+        refreshWeeksPending = false;
+        weekRefreshPendingCause = WeekRefreshPendingCause::None;
+        weekDayLayoutValidationPending = false;
+        ++weekNativeTopologyResumeCount;
+        // The request and its error budget still belong to the original
+        // model/layout change. Native completion is not a fresh request.
+        ScheduleWeekRefresh(owner);
+    }
+
     void RefreshWeekNumbersImpl(wxCalendarCtrl *owner)
     {
         const auto state = callbackState;
@@ -4762,6 +4999,13 @@ public:
             return;
         }
 
+        if ( IsNativeViewportChanging() )
+        {
+            refreshWeeksPending = true;
+            weekRefreshPendingCause = WeekRefreshPendingCause::NativeViewport;
+            return;
+        }
+
         if ( refreshWeeksInProgress )
         {
             refreshWeeksPending = true;
@@ -4798,6 +5042,22 @@ public:
                         weekRefreshPendingCause =
                             WeekRefreshPendingCause::InvalidTicket;
                         ++weekInvalidTicketDeferralCount;
+                        wxLogTrace("winui-cal-layout",
+                            "week-refresh owner=%p reason=snapshot-revoked "
+                            "run=%llu request=%llu completed=%llu layout=%llu "
+                            "ticketDaysRevision=%llu currentDaysRevision=%llu "
+                            "ticketDays=%zu snapshotDays=%zu viewportBound=%d "
+                            "viewportChanging=%d retriesRemaining=%u",
+                            static_cast<void*>(owner),
+                            static_cast<unsigned long long>(weekRefreshRunCount),
+                            static_cast<unsigned long long>(weekRefreshRequestRevision),
+                            static_cast<unsigned long long>(weekRefreshCompletedRevision),
+                            static_cast<unsigned long long>(layoutRevision),
+                            static_cast<unsigned long long>(ticket.realizedDaysRevision),
+                            static_cast<unsigned long long>(realizedDaysRevision),
+                            ticket.realizedDays.size(), snapshot.days.size(),
+                            !!monthViewport, IsNativeViewportChanging(),
+                            weekRefreshRetriesRemaining);
                     }
                     return;
                 }
@@ -4827,16 +5087,39 @@ public:
             else
             {
                 ActiveMonthPage activePage;
+                const auto topologyRequest = weekRefreshRequestRevision;
+                const auto topologyRetry = weekRefreshRetryGeneration;
                 if ( !ResolveActiveMonthPage(
                          ticket, snapshot, &activePage) )
                 {
                     if ( !GetCurrentOwner(ticket) )
                         return;
                     refreshWeeksInProgress = false;
+                    if ( weekRefreshRequestRevision != topologyRequest ||
+                         weekRefreshRetryGeneration != topologyRetry )
+                        return;
                     refreshWeeksPending = true;
                     weekRefreshPendingCause =
-                        WeekRefreshPendingCause::InvalidTicket;
-                    ++weekInvalidTicketDeferralCount;
+                        WeekRefreshPendingCause::NativeTopology;
+                    pendingNativeTopology = MakeMonthTopologyInputs(snapshot);
+                    weekDayLayoutValidationPending = false;
+                    ++weekNativeTopologyDeferralCount;
+                    wxLogTrace("winui-cal-layout",
+                        "week-refresh owner=%p reason=month-topology-unresolved "
+                        "run=%llu request=%llu completed=%llu layout=%llu "
+                        "ticketDaysRevision=%llu currentDaysRevision=%llu "
+                        "ticketDays=%zu snapshotDays=%zu viewportBound=%d "
+                        "viewportChanging=%d retriesRemaining=%u",
+                        static_cast<void*>(owner),
+                        static_cast<unsigned long long>(weekRefreshRunCount),
+                        static_cast<unsigned long long>(weekRefreshRequestRevision),
+                        static_cast<unsigned long long>(weekRefreshCompletedRevision),
+                        static_cast<unsigned long long>(layoutRevision),
+                        static_cast<unsigned long long>(ticket.realizedDaysRevision),
+                        static_cast<unsigned long long>(realizedDaysRevision),
+                        ticket.realizedDays.size(), snapshot.days.size(),
+                        !!monthViewport, IsNativeViewportChanging(),
+                        weekRefreshRetriesRemaining);
                     return;
                 }
 
@@ -5302,6 +5585,7 @@ public:
     MUXC::ColumnDefinition weekColumn{ nullptr };
     WGNF::DecimalFormatter weekNumberFormatter{ nullptr };
     MUXC::CalendarView cal{ nullptr };
+    std::shared_ptr<MonthViewportBinding> monthViewport;
     winrt::event_token selectionToken{};
     winrt::event_token doubleTappedToken{};
     winrt::event_token dayItemChangingToken{};
@@ -5366,6 +5650,10 @@ public:
     std::uint64_t weekPeerMutationDeferralCount = 0;
     std::uint64_t boundedWeekPendingRetryCount = 0;
     std::uint64_t weekInvalidTicketDeferralCount = 0;
+    std::uint64_t weekNativeTopologyDeferralCount = 0;
+    std::uint64_t weekNativeTopologyEchoCount = 0;
+    std::uint64_t weekNativeTopologyResumeCount = 0;
+    std::vector<MonthTopologyInput> pendingNativeTopology;
     std::uint64_t dayItemIdentityChangeCount = 0;
     std::uint64_t dayItemRepeatNotificationCount = 0;
     std::uint64_t weekLayoutEchoAbsorptionCount = 0;
@@ -7901,6 +8189,11 @@ bool wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
         impl->boundedWeekPendingRetryCount;
     recovery->invalidTicketDeferrals =
         impl->weekInvalidTicketDeferralCount;
+    recovery->nativeTopologyDeferrals = impl->weekNativeTopologyDeferralCount;
+    recovery->nativeTopologyEchoes = impl->weekNativeTopologyEchoCount;
+    recovery->nativeTopologyResumptions = impl->weekNativeTopologyResumeCount;
+    recovery->waitingForNativeTopology =
+        impl->weekRefreshPendingCause == wxWinUICalendarImpl::WeekRefreshPendingCause::NativeTopology;
     recovery->navigationGeneration =
         impl->navigationButtonGeneration;
     recovery->navigationResolveFailures =

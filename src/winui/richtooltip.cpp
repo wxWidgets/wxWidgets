@@ -1799,7 +1799,7 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
         wxWinUISlot * const slot = tlwHost->FindSlot(targetWindow);
         if ( !rect && slot )
         {
-            target = slot->GetContainer();
+            target = slot->GetPresentationRoot();
         }
         else
         {

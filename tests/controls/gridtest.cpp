@@ -20,6 +20,7 @@
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
 #include "wx/weakref.h"
+#include "wx/textctrl.h"
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
@@ -39,6 +40,7 @@
 #include "waitfor.h"
 
 #include <memory>
+#include <functional>
 
 // To disable tests which work locally, but not when run on GitHub CI.
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -749,6 +751,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellEditResize", "[grid]")
 TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     EventCounter lclick(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
     EventCounter ldclick(m_grid, wxEVT_GRID_CELL_LEFT_DCLICK);
     EventCounter rclick(m_grid, wxEVT_GRID_CELL_RIGHT_CLICK);
@@ -807,6 +812,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
 TEST_CASE_METHOD(GridTestCase, "Grid::ReorderedColumnsCellClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     EventCounter click(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
 
     wxUIActionSimulator sim;
@@ -838,6 +846,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ReorderedColumnsCellClick", "[grid]")
 TEST_CASE_METHOD(GridTestCase, "Grid::CellSelect", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     EventCounter cell(m_grid, wxEVT_GRID_SELECT_CELL);
 
     wxUIActionSimulator sim;
@@ -2442,6 +2453,114 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ChangeEditorWhileEditing", "[grid]")
 
     CHECK(!m_grid->IsCellEditControlShown());
 }
+
+#if wxUSE_TEXTCTRL
+TEST_CASE_METHOD(GridTestCase, "Grid::ChangedVetoRestoresOriginalCellAfterCursorMove",
+                 "[grid][grid-edit-reentrant]")
+{
+    m_grid->SetCellValue(1, 1, "original");
+    m_grid->SetGridCursor(1, 1);
+    wxTextCtrl* control = nullptr;
+    m_grid->Bind(wxEVT_GRID_EDITOR_CREATED, [&](wxGridEditorCreatedEvent& event)
+        { control = wxDynamicCast(event.GetWindow(), wxTextCtrl); event.Skip(); });
+    unsigned changed = 0;
+    m_grid->Bind(wxEVT_GRID_CELL_CHANGED, [&](wxGridEvent& event)
+    {
+        ++changed;
+        CHECK(event.GetRow() == 1); CHECK(event.GetCol() == 1);
+        m_grid->SetGridCursor(2, 0);
+        event.Veto();
+    });
+    m_grid->EnableCellEditControl();
+    REQUIRE(control);
+    control->ChangeValue("rejected");
+    m_grid->DisableCellEditControl();
+    CHECK(changed == 1);
+    CHECK(m_grid->GetCellValue(1, 1) == "original");
+    CHECK(m_grid->GetGridCursorRow() == 2);
+    CHECK(m_grid->GetGridCursorCol() == 0);
+    CHECK_FALSE(m_grid->IsCellEditControlEnabled());
+}
+
+TEST_CASE("Grid::EditorCallbacksMayDestroyTheGrid", "[grid][grid-edit-reentrant]")
+{
+    const int boundary = GENERATE(0, 1, 2, 3, 4);
+    CAPTURE(boundary);
+    std::unique_ptr<wxGrid> grid(new wxGrid(wxTheApp->GetTopWindow(), wxID_ANY));
+    REQUIRE(grid->CreateGrid(3, 3));
+    grid->SetSize(400, 200);
+    grid->SetGridCursor(1, 1);
+    wxWeakRef<wxGrid> weak(grid.get());
+    wxTextCtrl* control = nullptr;
+    unsigned callbacks = 0;
+    const auto destroy = [&] { ++callbacks; grid.reset(); };
+    grid->Bind(wxEVT_GRID_EDITOR_CREATED, [&](wxGridEditorCreatedEvent& event)
+    {
+        if ( boundary == 1 ) destroy();
+        else { control = wxDynamicCast(event.GetWindow(), wxTextCtrl); event.Skip(); }
+    });
+    if ( boundary == 0 ) grid->Bind(wxEVT_GRID_EDITOR_SHOWN, [&](wxGridEvent&) { destroy(); });
+    if ( boundary == 2 ) grid->Bind(wxEVT_GRID_EDITOR_HIDDEN, [&](wxGridEvent&) { destroy(); });
+    if ( boundary == 3 ) grid->Bind(wxEVT_GRID_CELL_CHANGING, [&](wxGridEvent&) { destroy(); });
+    if ( boundary == 4 ) grid->Bind(wxEVT_GRID_CELL_CHANGED, [&](wxGridEvent&) { destroy(); });
+    grid->EnableCellEditControl();
+    if ( boundary >= 2 )
+    {
+        REQUIRE(grid);
+        REQUIRE(control);
+        control->ChangeValue("new value");
+        grid->DisableCellEditControl();
+    }
+    CHECK(callbacks == 1);
+    CHECK_FALSE(weak);
+}
+
+TEST_CASE("Grid::EditorRepositionStopsAfterDestructiveSetSize",
+          "[grid][grid-edit-reentrant]")
+{
+    const bool destroyGrid = GENERATE(false, true);
+    CAPTURE(destroyGrid);
+    class RepositionEditor final : public wxGridCellTextEditor
+    {
+    public:
+        void SetSize(const wxRect& rect) override
+        {
+            const auto callback = std::move(onSize);
+            onSize = nullptr;
+            if ( callback ) callback();
+            else wxGridCellTextEditor::SetSize(rect);
+        }
+        wxGridCellEditor* Clone() const override { return new RepositionEditor; }
+        std::function<void()> onSize;
+    };
+    std::unique_ptr<wxGrid> grid(new wxGrid(wxTheApp->GetTopWindow(), wxID_ANY));
+    REQUIRE(grid->CreateGrid(3, 3));
+    grid->SetSize(400, 200);
+    grid->SetGridCursor(1, 1);
+    auto* const editor = new RepositionEditor;
+    grid->SetCellEditor(1, 1, editor);
+    const wxGridCellEditorPtr retained(grid->GetCellEditor(1, 1));
+    grid->EnableCellEditControl();
+    REQUIRE(grid->IsCellEditControlShown());
+    wxWeakRef<wxGrid> weak(grid.get());
+    unsigned callbacks = 0;
+    editor->onSize = [&]
+    {
+        ++callbacks;
+        if ( destroyGrid ) grid.reset();
+        else editor->Destroy();
+    };
+    // Route the actual size notification through wxGrid::OnSize. No private
+    // call or physical input replaces its editor positioning transaction.
+    wxSizeEvent resize(grid->GetSize(), grid->GetId());
+    resize.SetEventObject(grid.get());
+    grid->GetEventHandler()->ProcessEvent(resize);
+    CHECK(callbacks == 1);
+    CHECK_FALSE(editor->GetWindow());
+    if ( destroyGrid ) CHECK_FALSE(weak);
+    else REQUIRE(weak);
+}
+#endif
 
 TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 {

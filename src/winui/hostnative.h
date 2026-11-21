@@ -17,6 +17,7 @@
 
 class wxWinUIHostLifetime;
 enum class wxWinUIInputDevice;
+struct wxWinUIPointerSample;
 
 // One shared context protocol for the bridge and native resize observer.
 // The host TU owns the counter and failed-removal retirement implementation.
@@ -45,5 +46,16 @@ bool wxWinUIIsPointerContactActive(wxWinUIInputDevice device,
 // Read-only GUI-thread query. The global operation counter and its scheduling
 // tail remain owned by tlwhost.cpp; the resize module never copies the depth.
 bool wxWinUIIsGlobalOperationActive();
+
+// A synchronous USER32 sizing loop owns its tracking packets, not XAML's
+// ContentPreTranslateMessage. The resize module admits only the exact live
+// target/capture while its stack-scoped native handoff is entered.
+bool wxWinUIMessageBelongsToNativeSizing(MSG& message);
+
+// Transport an observed XAML move to the already-entered USER32 sizing loop.
+// This does not initiate sizing, mutate geometry, or inject physical input.
+void wxWinUIQueueNativeSizingMove(
+    const std::shared_ptr<wxWinUIHostLifetime>& lifetime,
+    const wxWinUIPointerSample& sample);
 
 #endif // _WX_WINUI_HOSTNATIVE_H_

@@ -16,12 +16,17 @@
 #include "../../src/winui/hostresize.h"
 
 #include "wx/app.h"
+#include "wx/dcclient.h"
+#include "wx/evtloop.h"
 #include "wx/frame.h"
 #include "wx/log.h"
 #include "wx/msw/private.h"
+#include "wx/scopeguard.h"
 #include "wx/winui/private/appearance.h"
 #include "appearance-test-access.h"
 #include "host-resize-test-access.h"
+#include "host-input-test-access.h"
+#include "keyboard-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "tooltip-policy-test-access.h"
 #include "host-content-test-access.h"
@@ -43,13 +48,18 @@
 
 #include <winrt/Microsoft.UI.Input.h>
 #include <winrt/Microsoft.UI.Xaml.h>
+#include <winrt/Microsoft.UI.Xaml.Controls.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
+#include <functional>
 #include <memory>
 #include <type_traits>
+#include <vector>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUI = winrt::Microsoft::UI::Input;
 
 namespace
@@ -125,6 +135,37 @@ private:
 
 #if wxUSE_STATUSBAR
 
+template <typename Predicate>
+bool WaitForStatusBarDispatch(Predicate predicate)
+{
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    if ( !loop || !wxTheApp )
+        return false;
+    wxStopWatch elapsed;
+    while ( elapsed.Time() < 500 )
+    {
+        wxTheApp->ProcessPendingEvents();
+        if ( predicate() )
+            return true;
+        if ( wxEventLoopBase::GetActive() != loop ||
+             loop->DispatchTimeout(5) == 0 )
+            return false;
+    }
+    return predicate();
+}
+
+wxPoint StatusBarResizeTestPosition()
+{
+    wchar_t desktop[128]{};
+    DWORD needed = 0;
+    if ( ::GetUserObjectInformationW(
+             ::GetThreadDesktop(::GetCurrentThreadId()),
+             UOI_NAME, desktop, sizeof(desktop), &needed) &&
+         wxString(desktop).StartsWith("wxWinUITest-") )
+        return wxPoint(80, 80);
+    return wxPoint(-30000, -30000);
+}
+
 // Only the physical-contact observation is substituted. USER32 receives the
 // production non-client request and owns the real sizing loop. These tests run
 // on the isolated desktop, never inject input, and cancel their own loop as
@@ -153,6 +194,8 @@ public:
 class NativeResizeFrame final : public wxFrame
 {
 public:
+    static constexpr UINT RoutedInputMessage = WM_APP + 73;
+
     NativeResizeFrame()
         : wxFrame(nullptr, wxID_ANY, "native grip transaction",
                   wxDefaultPosition, wxSize(420, 240))
@@ -190,10 +233,26 @@ public:
                 enteredPhaseObserved =
                     wxWinUIHostResizeTestAccess::GetSnapshot(this, &snapshot) &&
                     snapshot.phase == wxWinUINativeResizePhase::Entered;
-                cancelPosted = ::PostMessageW(
-                    GetHwndOf(this), WM_CANCELMODE, 0, 0) != FALSE;
+                // A test can route MOVE/UP while USER32 is really tracking,
+                // instead of ending every case immediately at native entry.
+                // This message addresses only our own private-desktop HWND;
+                // it never injects mouse/keyboard input into the desktop.
+                if ( routeWhileSizing )
+                    routedInputPosted = ::PostMessageW(
+                        GetHwndOf(this), RoutedInputMessage, 0, 0) != FALSE;
+                else
+                    cancelPosted = ::PostMessageW(
+                        GetHwndOf(this), WM_CANCELMODE, 0, 0) != FALSE;
                 break;
             }
+
+            case RoutedInputMessage:
+                if ( routeWhileSizing )
+                {
+                    auto route = std::move(routeWhileSizing);
+                    route();
+                }
+                return 0;
 
             case WM_EXITSIZEMOVE:
             {
@@ -204,6 +263,16 @@ public:
                     snapshot.phase == wxWinUINativeResizePhase::Idle;
                 break;
             }
+
+            case WM_SIZING:
+                ++nativeSizing;
+                lastSizingRect = *reinterpret_cast<const RECT*>(lParam);
+                if ( observeSizing ) observeSizing();
+                break;
+
+            case WM_CANCELMODE:
+                ++nativeCancels;
+                break;
 
             case WM_TIMER:
                 if ( m_watchdog && wParam == m_watchdog )
@@ -229,9 +298,15 @@ public:
     bool watchdogFired = false;
     bool enteredPhaseObserved = false;
     bool idlePhaseObserved = false;
+    bool routedInputPosted = false;
+    std::function<void ()> routeWhileSizing;
+    std::function<void ()> observeSizing;
     unsigned nativeDowns = 0;
     unsigned nativeEntries = 0;
     unsigned nativeExits = 0;
+    unsigned nativeSizing = 0;
+    unsigned nativeCancels = 0;
+    RECT lastSizingRect{};
     int lastHitTest = HTNOWHERE;
 
 private:
@@ -255,6 +330,69 @@ public:
 private:
     HWND m_hwnd;
 };
+
+// Observe what USER32 receives after the production WH_GETMESSAGE hook.
+// The test supplies no replacement translator and never changes the packet.
+class NativeSizingMessageObserver final
+{
+public:
+    explicit NativeSizingMessageObserver(HWND target)
+        : m_target(target), m_previous(s_current)
+    {
+        s_current = this;
+        m_hook = ::SetWindowsHookExW(WH_GETMESSAGE, Hook, nullptr, ::GetCurrentThreadId());
+    }
+    ~NativeSizingMessageObserver()
+    {
+        if ( m_hook ) CHECK(::UnhookWindowsHookEx(m_hook));
+        s_current = m_previous;
+    }
+    bool IsOk() const { return m_hook != nullptr; }
+    std::vector<MSG> moves;
+    unsigned releases = 0;
+
+private:
+    static LRESULT CALLBACK Hook(int code, WPARAM removal, LPARAM opaque)
+    {
+        const auto result = ::CallNextHookEx(nullptr, code, removal, opaque);
+        auto* const observer = s_current;
+        if ( observer && code >= 0 && removal == PM_REMOVE )
+        {
+            const auto& msg = *reinterpret_cast<const MSG*>(opaque);
+            if ( msg.hwnd == observer->m_target && ::GetCapture() == observer->m_target )
+            {
+                if ( msg.message == WM_MOUSEMOVE && (msg.wParam & MK_LBUTTON) )
+                    observer->moves.push_back(msg);
+                else if ( msg.message == WM_LBUTTONUP )
+                    ++observer->releases;
+            }
+        }
+        return result;
+    }
+    static thread_local NativeSizingMessageObserver* s_current;
+    HWND m_target;
+    HHOOK m_hook = nullptr;
+    NativeSizingMessageObserver* m_previous;
+};
+thread_local NativeSizingMessageObserver* NativeSizingMessageObserver::s_current = nullptr;
+
+HWND FindResizeInputSite(HWND bridge)
+{
+    HWND inputSite = nullptr;
+    ::EnumChildWindows(bridge,
+        [](HWND child, LPARAM opaque) -> BOOL
+        {
+            wchar_t name[64]{};
+            if ( ::GetClassNameW(child, name, WXSIZEOF(name)) &&
+                 ::lstrcmpW(name, L"InputSiteWindowClass") == 0 )
+            {
+                *reinterpret_cast<HWND *>(opaque) = child;
+                return FALSE;
+            }
+            return TRUE;
+        }, reinterpret_cast<LPARAM>(&inputSite));
+    return inputSite;
+}
 
 struct StatusBarTextReentryContext
 {
@@ -504,6 +642,127 @@ TEST_CASE("wxWinUI native resize progress records entry and exit at most once",
 
 #if wxUSE_STATUSBAR
 
+TEST_CASE("wxWinUI StatusBar resize retains native fields and active grip",
+          "[winui-chrome-feedback][statusbar][winui-statusbar-resize]")
+{
+    const bool rtl = GENERATE(false, true);
+    const long ellipsis = GENERATE(wxSTB_ELLIPSIZE_START,
+                                  wxSTB_ELLIPSIZE_MIDDLE,
+                                  wxSTB_ELLIPSIZE_END);
+    CAPTURE(rtl, ellipsis);
+    wxFrame frame(nullptr, wxID_ANY, "retained status-bar resize",
+                  StatusBarResizeTestPosition(), wxSize(900, 240));
+    frame.SetLayoutDirection(rtl ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+    wxStatusBar * const status = frame.CreateStatusBar(
+        3, wxSTB_SIZEGRIP | wxSTB_SHOW_TIPS | ellipsis);
+    REQUIRE(status);
+    status->SetLayoutDirection(rtl ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+    const int widths[] = {status->FromDIP(90), -1, status->FromDIP(70)};
+    status->SetStatusWidths(3, widths);
+    status->SetStatusText("Ready", 0);
+    const wxString full = "A long status message that must track available width";
+    status->SetStatusText(full, 1);
+    status->SetStatusText("Last", 2);
+    frame.ShowWithoutActivating();
+    auto * const host = wxWinUITopLevelHost::FindSlotOwner(status);
+    REQUIRE(host);
+    auto * const slot = host->FindSlot(status);
+    REQUIRE(slot);
+    REQUIRE(WaitForStatusBarDispatch([&]()
+    {
+        const auto peer = slot->GetContent().try_as<MUX::FrameworkElement>();
+        return peer && peer.IsLoaded() && peer.ActualWidth() > 0;
+    }));
+    const auto root = slot->GetContent().as<MUXC::Grid>();
+    const auto content = root.Children().GetAt(0).as<MUXC::ContentControl>();
+    const auto overlay = content.Content().as<MUXC::Grid>();
+    REQUIRE(overlay.Children().Size() == 2);
+    const auto grid = overlay.Children().GetAt(0).as<MUXC::Grid>();
+    const auto grip = overlay.Children().GetAt(1).as<MUXC::Grid>();
+    REQUIRE(grid.Children().Size() == 3);
+    std::array<MUXC::Grid, 3> cells{nullptr, nullptr, nullptr};
+    std::array<MUXC::TextBlock, 3> texts{nullptr, nullptr, nullptr};
+    for ( size_t i = 0; i < cells.size(); ++i )
+    {
+        cells[i] = grid.Children().GetAt(static_cast<uint32_t>(i)).as<MUXC::Grid>();
+        for ( const auto child : cells[i].Children() )
+        {
+            if ( const auto text = child.try_as<MUXC::TextBlock>() )
+                texts[i] = text;
+        }
+        REQUIRE(texts[i]);
+    }
+    REQUIRE(WaitForStatusBarDispatch([&]()
+    {
+        return grip.IsLoaded() && texts[1].IsLoaded() &&
+               cells[1].ActualWidth() > 0;
+    }));
+    auto unloads = std::make_shared<unsigned>(0);
+    const auto observeUnload = [unloads](const auto&, const auto&) { ++*unloads; };
+    const auto rootUnloaded = root.Unloaded(winrt::auto_revoke, observeUnload);
+    const auto gripUnloaded = grip.Unloaded(winrt::auto_revoke, observeUnload);
+    const auto firstUnloaded = texts[0].Unloaded(winrt::auto_revoke, observeUnload);
+    const auto middleUnloaded = texts[1].Unloaded(winrt::auto_revoke, observeUnload);
+    const auto lastUnloaded = texts[2].Unloaded(winrt::auto_revoke, observeUnload);
+
+    for ( int step = 0; step < 24; ++step )
+    {
+        const bool narrow = step % 2 == 0;
+        CAPTURE(step, narrow);
+        frame.SetClientSize(frame.FromDIP(wxSize(
+            (narrow ? 260 : 1100) + step, 200 + step)));
+        REQUIRE(WaitForStatusBarDispatch([&]()
+        {
+            const double expected =
+                status->GetClientSize().x / status->GetDPIScaleFactor();
+            return std::abs(root.ActualWidth() - expected) <= 1.0 &&
+                   texts[1].IsLoaded();
+        }));
+        CHECK(slot->GetContent() == root);
+        CHECK(content.Content() == overlay);
+        CHECK(overlay.Children().GetAt(0) == grid);
+        CHECK(overlay.Children().GetAt(1) == grip);
+        CHECK(*unloads == 0);
+        for ( size_t i = 0; i < cells.size(); ++i )
+        {
+            CHECK(grid.Children().GetAt(static_cast<uint32_t>(i)) == cells[i]);
+            MUXC::TextBlock currentText{nullptr};
+            unsigned textCount = 0;
+            for ( const auto child : cells[i].Children() )
+            {
+                if ( const auto text = child.try_as<MUXC::TextBlock>() )
+                {
+                    currentText = text;
+                    ++textCount;
+                }
+            }
+            CHECK(textCount == 1);
+            CHECK(currentText == texts[i]);
+            wxRect rect;
+            REQUIRE(status->GetFieldRect(static_cast<int>(i), rect));
+            CHECK(std::abs(cells[i].ActualWidth() -
+                (rect.width + 2 * status->GetBorderX()) /
+                    status->GetDPIScaleFactor()) <= 1.0);
+        }
+        wxString rendered;
+        bool tip = false;
+        REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(
+            *status, 1, &rendered, nullptr, nullptr, &tip,
+            nullptr, nullptr, nullptr));
+        CHECK(status->GetField(1).IsEllipsized() == narrow);
+#if wxUSE_TOOLTIPS
+        CHECK(tip == narrow);
+#endif
+        CHECK((rendered != full) ==
+              (narrow && ellipsis != wxSTB_ELLIPSIZE_END));
+        wxWinUIStatusBarSizeGripSnapshot gripState;
+        REQUIRE(wxWinUIStatusBarTestAccess::GetSizeGripState(*status, &gripState));
+        CHECK(gripState.nativeHitTest == (rtl ? HTBOTTOMLEFT : HTBOTTOMRIGHT));
+        CHECK(gripState.reservesFieldSpace);
+    }
+    CHECK(*unloads == 0);
+}
+
 TEST_CASE("wxWinUI StatusBar keeps pixel geometry and XAML DIPs distinct",
           "[winui-chrome-feedback][statusbar][geometry]")
 {
@@ -740,6 +999,728 @@ TEST_CASE("wxWinUI grip request enters and exits the real native sizing loop onc
     CHECK(::GetCapture() == nullptr);
     YieldForAWhile(20);
     CHECK(frame.nativeEntries == 1);
+}
+
+TEST_CASE("wxWinUI grip native sizing packets bypass only the XAML get-message translator",
+          "[winui-native-resize][winui-native-resize-pump][statusbar][input]")
+{
+    const bool rtl = GENERATE(false, true);
+    CAPTURE(rtl);
+    NativeResizeFrame frame;
+    frame.SetPosition(StatusBarResizeTestPosition());
+    auto* const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    status->SetLayoutDirection(rtl ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+    NativeResizeContactOverride contact;
+    frame.Show();
+    REQUIRE(WaitFor("native sizing pump grip ready", [&]
+    { return wxWinUIStatusBarTestAccess::HasSizeGrip(*status); }));
+    auto* const host = wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+    REQUIRE(host->GetBridgeHwnd());
+    REQUIRE(frame.ArmWatchdog());
+    REQUIRE(::GetCapture() == nullptr);
+    unsigned translated = 0, probes = 0;
+    const auto translator = [](WXMSG*, void* context)
+    { ++*static_cast<unsigned*>(context); return true; };
+    const auto probe = [&](HWND destination, UINT id, WPARAM keys, bool expectedNative)
+    {
+        MSG message{};
+        message.hwnd = destination;
+        message.message = id;
+        message.wParam = keys;
+        message.lParam = MAKELPARAM(47, 29);
+        message.pt = { 470, 290 };
+        const auto before = translated;
+        const bool consumed = wxWinUIKeyboardTestAccess::ProcessGetMessageHook(
+            HC_ACTION, PM_REMOVE, reinterpret_cast<WXMSG*>(&message),
+            wxWinUIKeyboardModifiers(), translator, &translated);
+        CAPTURE(id, expectedNative);
+        CHECK(consumed == !expectedNative);
+        CHECK(translated == before + (expectedNative ? 0 : 1));
+        CHECK(message.message == (expectedNative ? id : WM_NULL));
+        if ( expectedNative )
+        {
+            CHECK(message.wParam == keys);
+            CHECK(message.lParam == MAKELPARAM(47, 29));
+            CHECK(message.pt.x == 470);
+            CHECK(message.pt.y == 290);
+        }
+        ++probes;
+    };
+    probe(GetHwndOf(&frame), WM_MOUSEMOVE, MK_LBUTTON, false);
+    bool ranInsideNativeLoop = false;
+    frame.routeWhileSizing = [&]
+    {
+        // This callback is dispatched by USER32's actual sizing loop, after
+        // WM_ENTERSIZEMOVE and native capture acquisition. Only the existing
+        // translator seam is substituted; no mouse motion or HWND is faked.
+        // Always queue our own loop cancellation before checking assertions.
+        frame.cancelPosted = ::PostMessageW(GetHwndOf(&frame), WM_CANCELMODE, 0, 0) != FALSE;
+        ranInsideNativeLoop = true;
+        CHECK(frame.nativeEntries == 1);
+        CHECK(::GetCapture() == GetHwndOf(&frame));
+        probe(GetHwndOf(&frame), WM_MOUSEMOVE, MK_LBUTTON, true);
+        probe(GetHwndOf(&frame), WM_NCMOUSEMOVE, HTBOTTOMRIGHT, true);
+        probe(GetHwndOf(&frame), WM_LBUTTONUP, 0, true);
+        probe(GetHwndOf(&frame), WM_NCLBUTTONUP, HTBOTTOMRIGHT, true);
+        probe(GetHwndOf(&frame), WM_KEYDOWN, VK_ESCAPE, true);
+        probe(GetHwndOf(&frame), WM_KEYUP, VK_RIGHT, true);
+        probe(GetHwndOf(&frame), WM_CANCELMODE, 0, true);
+        // Foreign HWNDs and the presentation pump keep their ordinary
+        // translation path; this is not a global suspension of XAML.
+        probe(host->GetBridgeHwnd(), WM_MOUSEMOVE, MK_LBUTTON, false);
+        probe(GetHwndOf(&frame), WM_TIMER, 0x1234, false);
+        probe(GetHwndOf(&frame), WM_MOUSEWHEEL, 0, false);
+    };
+    const auto point = rtl
+        ? status->GetScreenRect().GetBottomLeft() + status->FromDIP(wxPoint(8, -8))
+        : status->GetScreenRect().GetBottomRight() - status->FromDIP(wxPoint(8, 8));
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(*status, true, true, true, point));
+    // Merely scheduling a resize must not steal any island messages.
+    probe(GetHwndOf(&frame), WM_MOUSEMOVE, MK_LBUTTON, false);
+    wxWinUINativeResizeSnapshot finished;
+    REQUIRE(WaitFor("native resize get-message ownership", [&]
+    {
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
+               finished.phase == wxWinUINativeResizePhase::Idle;
+    }, 3000));
+    REQUIRE(ranInsideNativeLoop);
+    CHECK(finished.entered == 1);
+    CHECK(finished.exited == 1);
+    CHECK_FALSE(frame.watchdogFired);
+    CHECK(frame.cancelPosted);
+    CHECK(::GetCapture() == nullptr);
+    // The scope expires with SendMessage, even though the HWND is still live.
+    probe(GetHwndOf(&frame), WM_MOUSEMOVE, MK_LBUTTON, false);
+    CHECK(probes == 13);
+}
+
+TEST_CASE("wxWinUI grip routes coalesced native movement and commits on release",
+          "[winui-native-resize][winui-native-resize-motion][statusbar][input]")
+{
+    const bool rtl = GENERATE(false, true);
+    CAPTURE(rtl);
+    NativeResizeFrame frame;
+    frame.SetPosition(StatusBarResizeTestPosition());
+    auto* const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    status->SetLayoutDirection(rtl ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+    NativeResizeContactOverride contact;
+    frame.Show();
+    REQUIRE(WaitFor("native sizing motion grip ready", [&]
+    { return wxWinUIStatusBarTestAccess::HasSizeGrip(*status); }));
+    auto* const host = wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+    REQUIRE(frame.ArmWatchdog());
+    REQUIRE(::GetCapture() == nullptr);
+    NativeSizingMessageObserver messages(GetHwndOf(&frame));
+    REQUIRE(messages.IsOk());
+    const auto point = rtl
+        ? status->GetScreenRect().GetBottomLeft() + status->FromDIP(wxPoint(8, -8))
+        : status->GetScreenRect().GetBottomRight() - status->FromDIP(wxPoint(8, 8));
+    wxWinUIPointerSample sample;
+    sample.pointerId = 77;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = point.x;
+    sample.screenY = point.y;
+    sample.buttonMask = MK_LBUTTON;
+    bool movementRouted = false, checkedBeforeRelease = false, releaseRouted = false;
+    size_t messagesAtMove = 0;
+    frame.routeWhileSizing = [&]
+    {
+        CHECK(frame.nativeEntries == 1);
+        CHECK(::GetCapture() == GetHwndOf(&frame));
+        messagesAtMove = messages.moves.size();
+        sample.kind = wxWinUIInputKind::Move;
+        sample.screenX += rtl ? -64 : 64;
+        sample.screenY += 48;
+        ++sample.timestamp;
+        movementRouted = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+            *host, sample, true).cancelSource;
+        sample.screenX += rtl ? -32 : 32;
+        sample.screenY += 24;
+        ++sample.timestamp;
+        CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true).cancelSource);
+        CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true).cancelSource);
+        auto late = sample;
+        --late.timestamp;
+        late.screenX += rtl ? -1000 : 1000;
+        late.screenY += 1000;
+        CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, late, true).cancelSource);
+
+        // Queue a second native-loop turn after the routed move. Observe
+        // the actual packet delivered after the production hook, before UP.
+        // USER32's physical cursor/queue state is deliberately untouched:
+        // the earlier 68/69 WM_SIZING oracle was red on a private desktop
+        // while the human candidate69 drag proved real live tracking. The
+        // physical geometry contract remains a separate human qualification.
+        frame.routeWhileSizing = [&]
+        {
+            checkedBeforeRelease = true;
+            CHECK(contact.down);
+            CHECK(messages.moves.size() == messagesAtMove + 1);
+            if ( messages.moves.size() > messagesAtMove )
+            {
+                const auto& delivered = messages.moves.back();
+                CHECK(delivered.pt.x == sample.screenX);
+                CHECK(delivered.pt.y == sample.screenY);
+                CHECK(delivered.time == static_cast<DWORD>(sample.timestamp));
+                CHECK(delivered.wParam == MK_LBUTTON);
+            }
+            sample.kind = wxWinUIInputKind::Release;
+            sample.button = wxWinUIInputButton::Left;
+            sample.buttonMask = 0;
+            ++sample.timestamp;
+            contact.down = false;
+            releaseRouted = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *host, sample, true).cancelSource;
+            // The same routed UP can bubble more than once. It commits only
+            // once, and a late MOVE cannot replace the pending release.
+            CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true).cancelSource);
+            auto afterRelease = sample;
+            afterRelease.kind = wxWinUIInputKind::Move;
+            afterRelease.button = wxWinUIInputButton::None;
+            afterRelease.buttonMask = MK_LBUTTON;
+            ++afterRelease.timestamp;
+            afterRelease.screenX += 400;
+            CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, afterRelease, true).cancelSource);
+        };
+        CHECK(::PostMessageW(GetHwndOf(&frame), NativeResizeFrame::RoutedInputMessage, 0, 0));
+    };
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(*status, true, true, true,
+        point, sample.pointerId, sample.timestamp));
+    wxWinUINativeResizeSnapshot finished;
+    REQUIRE(WaitFor("routed motion native sizing completion", [&]
+    {
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
+               finished.phase == wxWinUINativeResizePhase::Idle;
+    }, 3000));
+    CHECK(movementRouted);
+    CHECK(checkedBeforeRelease);
+    CHECK(releaseRouted);
+    CHECK(finished.entered == 1);
+    CHECK(finished.exited == 1);
+    CHECK(finished.cancelled == 0);
+    CHECK(messages.releases == 1);
+    CHECK(frame.nativeCancels == 0);
+    CHECK(messages.moves.size() == messagesAtMove + 1);
+    CHECK_FALSE(frame.watchdogFired);
+    CHECK(::GetCapture() == nullptr);
+}
+
+TEST_CASE("wxWinUI grip queued movement expires on release or foreign capture",
+          "[winui-native-resize][winui-native-resize-motion][statusbar][input]")
+{
+    const bool loseCapture = GENERATE(false, true);
+    CAPTURE(loseCapture);
+    NativeResizeFrame frame;
+    frame.SetPosition(StatusBarResizeTestPosition());
+    auto* const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    wxWindow foreign(&frame, wxID_ANY);
+    NativeResizeContactOverride contact;
+    frame.Show();
+    REQUIRE(WaitFor("native sizing cancelled motion grip ready", [&]
+    { return wxWinUIStatusBarTestAccess::HasSizeGrip(*status); }));
+    auto* const host = wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+    REQUIRE(frame.ArmWatchdog());
+    REQUIRE(::GetCapture() == nullptr);
+    NativeSizingMessageObserver messages(GetHwndOf(&frame));
+    REQUIRE(messages.IsOk());
+    const auto point = status->GetScreenRect().GetBottomRight() - status->FromDIP(wxPoint(8, 8));
+    wxWinUIPointerSample sample;
+    sample.pointerId = 78;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = point.x;
+    sample.screenY = point.y;
+    sample.buttonMask = MK_LBUTTON;
+    bool routed = false, checkedAfterInvalidation = false;
+    unsigned sizingBefore = 0;
+    const wxRect initialRect = frame.GetScreenRect();
+    wxRect rectangleAtSizing;
+    unsigned releasesAtSizing = 0;
+    size_t movesAtSizing = 0;
+    DWORD messagePositionAtSizing = 0;
+    frame.observeSizing = [&]
+    {
+        rectangleAtSizing = wxRect(frame.lastSizingRect.left, frame.lastSizingRect.top,
+            frame.lastSizingRect.right - frame.lastSizingRect.left,
+            frame.lastSizingRect.bottom - frame.lastSizingRect.top);
+        releasesAtSizing = messages.releases;
+        movesAtSizing = messages.moves.size();
+        messagePositionAtSizing = ::GetMessagePos();
+    };
+    const auto clearSizingObserver = wxMakeGuard([&] { frame.observeSizing = {}; });
+    std::unique_ptr<NativeResizeForeignCapture> foreignCapture;
+    frame.routeWhileSizing = [&]
+    {
+        CHECK(::GetCapture() == GetHwndOf(&frame));
+        sizingBefore = frame.nativeSizing;
+        sample.kind = wxWinUIInputKind::Move;
+        sample.screenX += 80;
+        sample.screenY += 60;
+        ++sample.timestamp;
+        routed = wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true).cancelSource;
+        if ( loseCapture )
+            foreignCapture = std::make_unique<NativeResizeForeignCapture>(GetHwndOf(&foreign));
+        else
+        {
+            sample.kind = wxWinUIInputKind::Release;
+            sample.button = wxWinUIInputButton::Left;
+            sample.buttonMask = 0;
+            ++sample.timestamp;
+            contact.down = false;
+            CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true).cancelSource);
+        }
+        frame.routeWhileSizing = [&]
+        {
+            checkedAfterInvalidation = true;
+            CAPTURE(initialRect, rectangleAtSizing, releasesAtSizing, movesAtSizing,
+                    messagePositionAtSizing, frame.GetScreenRect());
+            CHECK(frame.nativeSizing == sizingBefore);
+            if ( loseCapture )
+            {
+                sample.kind = wxWinUIInputKind::Release;
+                sample.button = wxWinUIInputButton::Left;
+                sample.buttonMask = 0;
+                ++sample.timestamp;
+                contact.down = false;
+                wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+                foreignCapture.reset();
+                ::PostMessageW(GetHwndOf(&frame), WM_CANCELMODE, 0, 0);
+            }
+        };
+        CHECK(::PostMessageW(GetHwndOf(&frame), NativeResizeFrame::RoutedInputMessage, 0, 0));
+    };
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(*status, true, true, true,
+        point, sample.pointerId, sample.timestamp));
+    wxWinUINativeResizeSnapshot finished;
+    REQUIRE(WaitFor("invalidated motion native sizing completion", [&]
+    {
+        return checkedAfterInvalidation &&
+               wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
+               finished.phase == wxWinUINativeResizePhase::Idle;
+    }, 3000));
+    CHECK(routed);
+    CAPTURE(initialRect, rectangleAtSizing, releasesAtSizing, movesAtSizing,
+            messagePositionAtSizing, frame.GetScreenRect());
+    CHECK(frame.nativeSizing == sizingBefore);
+    CHECK(finished.entered == 1);
+    CHECK(finished.exited == 1);
+    CHECK(messages.moves.empty());
+    CHECK(messages.releases == (loseCapture ? 0u : 1u));
+    if ( !loseCapture )
+    {
+        CHECK(finished.cancelled == 0);
+        CHECK(frame.nativeCancels == 0);
+    }
+    CHECK_FALSE(frame.watchdogFired);
+    CHECK(::GetCapture() == nullptr);
+}
+
+TEST_CASE("wxWinUI grip keeps native ownership while input bubbles through its slot",
+          "[winui-native-resize][winui-v0-supported][statusbar][input]")
+{
+    NativeResizeFrame frame;
+    wxStatusBar * const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    NativeResizeContactOverride contact;
+    const bool rightToLeft = GENERATE(false, true);
+    if ( rightToLeft )
+        status->SetLayoutDirection(wxLayout_RightToLeft);
+    frame.Show();
+    YieldForAWhile(30);
+    REQUIRE(wxWinUIStatusBarTestAccess::HasSizeGrip(*status));
+    REQUIRE(frame.ArmWatchdog());
+    REQUIRE(::GetCapture() == nullptr);
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+
+    unsigned downs = 0, moves = 0, ups = 0;
+    status->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent&) { ++downs; });
+    status->Bind(wxEVT_MOTION, [&](wxMouseEvent&) { ++moves; });
+    status->Bind(wxEVT_LEFT_UP, [&](wxMouseEvent&) { ++ups; });
+    const wxPoint point = rightToLeft
+        ? status->GetScreenRect().GetBottomLeft() + status->FromDIP(wxPoint(8, -8))
+        : status->GetScreenRect().GetBottomRight() - status->FromDIP(wxPoint(8, 8));
+    frame.invoking = true;
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point));
+    const auto generation = wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
+
+    // The real grip's accepted PointerPressed then bubbles through the
+    // statusbar slot (handledEventsToo) before reaching the root. Exercise
+    // that existing slot route: invoking only the grip misses this handoff.
+    wxWinUIPointerSample sample;
+    sample.kind = wxWinUIInputKind::Press;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = MK_LBUTTON;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = point.x;
+    sample.screenY = point.y;
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+    sample.kind = wxWinUIInputKind::Move;
+    sample.button = wxWinUIInputButton::None;
+    ++sample.timestamp;
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+    CHECK(wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host) == generation);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
+    CHECK(downs == 0);
+    CHECK(moves == 0);
+    CHECK(frame.nativeDowns == 0);
+    frame.invoking = false;
+
+    wxWinUINativeResizeSnapshot finished;
+    SECTION("the accepted request still enters the native sizing loop once")
+    {
+        REQUIRE(WaitFor("bubbled grip native sizing completion", [&]()
+        {
+            return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
+                   finished.phase == wxWinUINativeResizePhase::Idle;
+        }, 3000));
+        CHECK(finished.entered == 1);
+        CHECK(finished.exited == 1);
+        CHECK(frame.nativeDowns == 1);
+        CHECK(frame.nativeEntries == 1);
+        CHECK(frame.nativeExits == 1);
+        CHECK(frame.lastHitTest == (rightToLeft ? HTBOTTOMLEFT : HTBOTTOMRIGHT));
+        CHECK(frame.cancelPosted);
+    }
+    SECTION("release bubbling cancels before deferred native entry")
+    {
+        sample.kind = wxWinUIInputKind::Release;
+        sample.button = wxWinUIInputButton::Left;
+        sample.buttonMask = 0;
+        ++sample.timestamp;
+        REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+        const auto routed = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+            *host, sample, true);
+        CHECK(routed.cancelSource);
+        REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished));
+        CHECK(finished.phase == wxWinUINativeResizePhase::Idle);
+        CHECK(finished.cancelled == 1);
+        CHECK(finished.entered == 0);
+        YieldForAWhile(20);
+        CHECK(frame.nativeDowns == 0);
+    }
+    CHECK(finished.scheduled == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
+    CHECK(ups == 0);
+    CHECK_FALSE(frame.downBeforeUnwind);
+    CHECK_FALSE(frame.watchdogFired);
+    CHECK(::GetCapture() == nullptr);
+}
+
+TEST_CASE("wxWinUI grip survives same-island capture transfer and routed release",
+          "[winui-native-resize][winui-native-resize-capture][statusbar][input]")
+{
+    NativeResizeFrame frame;
+    wxStatusBar * const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    NativeResizeContactOverride contact;
+    const bool rightToLeft = GENERATE(false, true);
+    const bool captureToBridge = GENERATE(false, true);
+    if ( rightToLeft )
+        status->SetLayoutDirection(wxLayout_RightToLeft);
+    frame.Show();
+    YieldForAWhile(30);
+    REQUIRE(frame.ArmWatchdog());
+    REQUIRE(::GetCapture() == nullptr);
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+    const HWND bridge = host->GetBridgeHwnd();
+    const HWND inputSite = FindResizeInputSite(bridge);
+    REQUIRE(inputSite);
+    REQUIRE(::IsChild(bridge, inputSite));
+    const HWND firstCapture = captureToBridge ? inputSite : bridge;
+    const HWND secondCapture = captureToBridge ? bridge : inputSite;
+    NativeResizeForeignCapture firstCaptureGuard(firstCapture);
+    REQUIRE(::GetCapture() == firstCapture);
+
+    unsigned downs = 0, moves = 0, ups = 0;
+    status->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent&) { ++downs; });
+    status->Bind(wxEVT_MOTION, [&](wxMouseEvent&) { ++moves; });
+    status->Bind(wxEVT_LEFT_UP, [&](wxMouseEvent&) { ++ups; });
+    const wxPoint point = rightToLeft
+        ? status->GetScreenRect().GetBottomLeft() + status->FromDIP(wxPoint(8, -8))
+        : status->GetScreenRect().GetBottomRight() - status->FromDIP(wxPoint(8, 8));
+    wxWinUIPointerSample sample;
+    sample.kind = wxWinUIInputKind::Press;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = MK_LBUTTON;
+    sample.pointerId = 71;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = point.x;
+    sample.screenY = point.y;
+    frame.invoking = true;
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point, sample.pointerId, sample.timestamp));
+    const auto generation = wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+    CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *host, sample, true).cancelSource);
+
+    // SetCapture delivers the real WM_CAPTURECHANGED to the old island
+    // HWND, through its production subclass. This is not a direct call of
+    // CancelNativeResize and does not substitute capture validation.
+    NativeResizeForeignCapture secondCaptureGuard(secondCapture);
+    REQUIRE(::GetCapture() == secondCapture);
+    wxWinUINativeResizeSnapshot pending;
+    REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &pending));
+    REQUIRE(pending.phase == wxWinUINativeResizePhase::Pending);
+    CHECK(pending.scheduled == 1);
+    CHECK(pending.cancelled == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host) == generation);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
+
+    sample.kind = wxWinUIInputKind::Move;
+    sample.button = wxWinUIInputButton::None;
+    ++sample.timestamp;
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+    CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *host, sample, true).cancelSource);
+    CHECK(frame.nativeDowns == 0);
+    frame.invoking = false;
+
+    bool callbackRan = false, entered = false, nativeCapture = false;
+    bool moveAtSlot = false, moveAtRoot = false;
+    bool releaseAtSlot = false, releaseAtRoot = false;
+    frame.routeWhileSizing = [&]()
+    {
+        callbackRan = true;
+        wxWinUINativeResizeSnapshot active;
+        entered = wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &active) &&
+                  active.phase == wxWinUINativeResizePhase::Entered;
+        nativeCapture = ::GetCapture() == GetHwndOf(&frame);
+        ++sample.timestamp;
+        ++sample.screenX;
+        ++sample.screenY;
+        moveAtSlot = wxWinUIHostInputTestAccess::RouteSlotPointer(
+            *host, status, sample);
+        moveAtRoot = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+            *host, sample, true).cancelSource;
+        sample.kind = wxWinUIInputKind::Release;
+        sample.button = wxWinUIInputButton::Left;
+        sample.buttonMask = 0;
+        ++sample.timestamp;
+        contact.down = false;
+        releaseAtSlot = wxWinUIHostInputTestAccess::RouteSlotPointer(
+            *host, status, sample);
+        releaseAtRoot = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+            *host, sample, true).cancelSource;
+    };
+
+    wxWinUINativeResizeSnapshot finished;
+    REQUIRE(WaitFor("capture transfer and routed native resize completion", [&]()
+    {
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
+               finished.phase == wxWinUINativeResizePhase::Idle;
+    }, 3000));
+    CHECK(callbackRan);
+    CHECK(entered);
+    CHECK(nativeCapture);
+    CHECK(moveAtSlot);
+    CHECK(moveAtRoot);
+    CHECK(releaseAtSlot);
+    CHECK(releaseAtRoot);
+    CHECK(frame.routedInputPosted);
+    CHECK(finished.ticket == pending.ticket);
+    CHECK(finished.entered == 1);
+    CHECK(finished.exited == 1);
+    CHECK(frame.nativeDowns == 1);
+    CHECK(frame.nativeEntries == 1);
+    CHECK(frame.nativeExits == 1);
+    CHECK(frame.lastHitTest == (rightToLeft ? HTBOTTOMLEFT : HTBOTTOMRIGHT));
+    CHECK_FALSE(frame.downBeforeUnwind);
+    CHECK_FALSE(frame.watchdogFired);
+    CHECK(downs == 0);
+    CHECK(moves == 0);
+    CHECK(ups == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
+    CHECK(::GetCapture() == nullptr);
+    YieldForAWhile(20);
+    CHECK(frame.nativeDowns == 1);
+}
+
+TEST_CASE("wxWinUI grip capture handoff does not hide real pending interruptions",
+          "[winui-native-resize][winui-native-resize-capture][statusbar][input]")
+{
+    NativeResizeFrame frame;
+    wxStatusBar * const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    wxWindow foreign(&frame, wxID_ANY);
+    NativeResizeContactOverride contact;
+    frame.Show();
+    YieldForAWhile(30);
+    REQUIRE(::GetCapture() == nullptr);
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+    const HWND bridge = host->GetBridgeHwnd();
+    const HWND inputSite = FindResizeInputSite(bridge);
+    REQUIRE(inputSite);
+    NativeResizeForeignCapture bridgeCapture(bridge);
+    REQUIRE(::GetCapture() == bridge);
+    const wxPoint point = status->GetScreenRect().GetBottomRight() -
+        status->FromDIP(wxPoint(8, 8));
+    wxWinUIPointerSample sample;
+    sample.kind = wxWinUIInputKind::Press;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = MK_LBUTTON;
+    sample.pointerId = 83;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = point.x;
+    sample.screenY = point.y;
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point, sample.pointerId, sample.timestamp));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+    CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *host, sample, true).cancelSource);
+    NativeResizeForeignCapture inputCapture(inputSite);
+    REQUIRE(::GetCapture() == inputSite);
+    wxWinUINativeResizeSnapshot state;
+    REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &state));
+    REQUIRE(state.phase == wxWinUINativeResizePhase::Pending);
+
+    std::unique_ptr<NativeResizeForeignCapture> foreignCapture;
+    bool deferredContactCheck = false;
+    SECTION("capture is really released")
+    {
+        REQUIRE(::ReleaseCapture());
+        CHECK(::GetCapture() == nullptr);
+    }
+    SECTION("capture moves outside the island")
+    {
+        foreignCapture = std::make_unique<NativeResizeForeignCapture>(
+            GetHwndOf(&foreign));
+        REQUIRE(::GetCapture() == GetHwndOf(&foreign));
+    }
+    SECTION("the island receives WM_CANCELMODE")
+    {
+        ::SendMessageW(inputSite, WM_CANCELMODE, 0, 0);
+    }
+    SECTION("the exact pointer releases before the wake")
+    {
+        sample.kind = wxWinUIInputKind::Release;
+        sample.buttonMask = 0;
+        ++sample.timestamp;
+        contact.down = false;
+        REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+        CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(
+            *host, sample, true).cancelSource);
+    }
+    SECTION("physical contact ends without a routed release")
+    {
+        contact.down = false;
+        deferredContactCheck = true;
+    }
+    REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &state));
+    CHECK(state.phase == (deferredContactCheck
+        ? wxWinUINativeResizePhase::Pending : wxWinUINativeResizePhase::Idle));
+    REQUIRE(WaitFor("pending resize cancellation after an internal handoff", [&]()
+    {
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &state) &&
+               state.phase == wxWinUINativeResizePhase::Idle;
+    }));
+    CHECK(state.scheduled == 1);
+    CHECK(state.cancelled == 1);
+    CHECK(state.entered == 0);
+    CHECK(state.exited == 0);
+    CHECK(frame.nativeDowns == 0);
+    CHECK(frame.nativeEntries == 0);
+    CHECK(frame.nativeExits == 0);
+    if ( foreignCapture )
+        CHECK(::GetCapture() == GetHwndOf(&foreign));
+}
+
+TEST_CASE("wxWinUI grip keeps a held drag when it leaves before the native wake",
+          "[winui-native-resize][winui-native-resize-leave][statusbar][input]")
+{
+    const bool rightToLeft = GENERATE(false, true);
+    // Keep both terminal paths: an observed release at the boundary, and a
+    // release outside the island after the final routed sample was still down.
+    const int release = GENERATE(0, 1, 2);
+    CAPTURE(rightToLeft, release);
+    NativeResizeFrame frame;
+    wxStatusBar* const status = frame.CreateStatusBar();
+    REQUIRE(status);
+    NativeResizeContactOverride contact;
+    if ( rightToLeft ) status->SetLayoutDirection(wxLayout_RightToLeft);
+    frame.Show();
+    YieldForAWhile(30);
+    REQUIRE(frame.ArmWatchdog());
+    REQUIRE(::GetCapture() == nullptr);
+    auto* const host = wxWinUITopLevelHost::ForWindow(&frame, false);
+    REQUIRE(host);
+    const wxPoint point = rightToLeft
+        ? status->GetScreenRect().GetBottomLeft() + status->FromDIP(wxPoint(8, -8))
+        : status->GetScreenRect().GetBottomRight() - status->FromDIP(wxPoint(8, 8));
+    wxWinUIPointerSample sample;
+    sample.kind = wxWinUIInputKind::Press;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = MK_LBUTTON;
+    sample.pointerId = 89;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = point.x;
+    sample.screenY = point.y;
+    frame.invoking = true;
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point, sample.pointerId, sample.timestamp));
+    const auto generation = wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, status, sample));
+    CHECK(wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *host, sample, true).cancelSource);
+
+    // Route the same boundary path used by XAML PointerExited, before pumping
+    // the posted resize request. No physical cursor or button is modified.
+    ++sample.timestamp;
+    sample.screenX = rightToLeft ? frame.GetScreenRect().GetLeft() - 20
+                                 : frame.GetScreenRect().GetRight() + 20;
+    sample.screenY = frame.GetScreenRect().GetBottom() + 20;
+    if ( release == 1 )
+    {
+        sample.buttonMask = 0;
+        contact.down = false;
+    }
+    REQUIRE(wxWinUIHostInputTestAccess::RouteRootPointerBoundary(*host, false, sample));
+    wxWinUINativeResizeSnapshot pending;
+    REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &pending));
+    CHECK(pending.scheduled == 1);
+    CHECK(pending.phase == (release == 1 ? wxWinUINativeResizePhase::Idle
+                                        : wxWinUINativeResizePhase::Pending));
+    CHECK(wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host) == generation);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
+    CHECK(frame.nativeDowns == 0);
+    if ( release == 2 ) contact.down = false;
+    frame.invoking = false;
+
+    wxWinUINativeResizeSnapshot finished;
+    REQUIRE(WaitFor("held resize crossing the root boundary", [&]
+    {
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
+               finished.phase == wxWinUINativeResizePhase::Idle;
+    }, 3000));
+    const unsigned expectedEntries = release == 0 ? 1 : 0;
+    CHECK(finished.entered == expectedEntries);
+    CHECK(finished.exited == expectedEntries);
+    CHECK(frame.nativeDowns == expectedEntries);
+    CHECK(frame.nativeEntries == expectedEntries);
+    CHECK(frame.nativeExits == expectedEntries);
+    if ( release == 0 )
+    {
+        CHECK(frame.lastHitTest == (rightToLeft ? HTBOTTOMLEFT : HTBOTTOMRIGHT));
+        CHECK(frame.enteredPhaseObserved);
+        CHECK(frame.idlePhaseObserved);
+        CHECK(frame.cancelPosted);
+    }
+    else CHECK(finished.cancelled == 1);
+    CHECK_FALSE(frame.downBeforeUnwind);
+    CHECK_FALSE(frame.watchdogFired);
+    CHECK(::GetCapture() == nullptr);
 }
 
 TEST_CASE("wxWinUI grip cancels stale requests before native dispatch",

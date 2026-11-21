@@ -29,6 +29,10 @@
 #include "wx/renderer.h"
 #include "wx/weakref.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "../winui/headerprojection.h"
+#endif
+
 #include <cstdint>
 #include <limits>
 #include <unordered_map>
@@ -154,13 +158,50 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     // we paint the entire window area in our OnPaint()
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const wxWeakRef<wxWindow> weakThis(this);
+    auto projection = wxWinUIHeaderProjection::Create(this);
+    if ( !weakThis || !projection )
+        return false;
+    m_winUIProjection = std::move(projection);
+#endif
+
     return true;
 }
 
 wxHeaderCtrl::~wxHeaderCtrl()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection ) m_winUIProjection->Close();
+    m_winUIProjection.reset();
+#endif
     UnregisterHeader(this);
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxHeaderCtrl::Refresh(bool eraseBackground, const wxRect* rect)
+{
+    if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+    wxHeaderCtrlBase::Refresh(eraseBackground, rect);
+}
+
+void wxHeaderCtrl::Update()
+{
+    const auto projection = m_winUIProjection;
+    const wxWeakRef<wxWindow> weakThis(this);
+    if ( projection ) projection->Update();
+    if ( weakThis ) wxHeaderCtrlBase::Update();
+}
+
+bool wxHeaderCtrl::SetFont(const wxFont& font)
+{
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool changed = wxHeaderCtrlBase::SetFont(font);
+    if ( weakThis && changed && m_winUIProjection )
+        m_winUIProjection->Invalidate();
+    return changed;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl columns manipulation
@@ -176,6 +217,9 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
 
     m_numColumns = count;
     BumpHeaderRevision(this);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection ) m_winUIProjection->Invalidate(true);
+#endif
 
     // don't leave the column index invalid, this would cause a crash later if
     // it is used from OnMouse()
@@ -227,7 +271,12 @@ void wxHeaderCtrl::DoScrollHorz(int dx)
         SubtractOffset(m_scrollOffset, scrollOffsetOld);
 
     // don't call our own version which calls this function!
-    wxControl::ScrollWindow(dxEffective, 0);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->Invalidate();
+    else
+#endif
+        wxControl::ScrollWindow(dxEffective, 0);
 
     if ( cancelled != COL_NONE )
         NotifyDraggingCancelled(cancelled);
@@ -401,6 +450,13 @@ bool wxHeaderCtrl::IsReordering() const
 
 void wxHeaderCtrl::ClearMarkers()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection && m_winUIProjection->IsPublished() )
+    {
+        m_winUIProjection->ClearMarkers();
+        return;
+    }
+#endif
     wxOverlayDC dc(m_overlay, this);
     dc.Clear();
 }
@@ -549,6 +605,16 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 
 void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection && m_winUIProjection->IsPublished() )
+    {
+        const wxRect ghost(SubtractOffset(xPhysical, m_dragOffset), 0,
+            GetEffectiveColumnWidth(GetColumn(m_colBeingReordered)), GetClientSize().y);
+        const unsigned int col = FindColumnClosestToPoint(xPhysical);
+        m_winUIProjection->ShowMarkers(ghost, col == COL_NONE ? -1 : GetColEnd(col));
+        return;
+    }
+#endif
     wxOverlayDC dc(m_overlay, this);
     dc.Clear();
 
@@ -737,6 +803,13 @@ wxEND_EVENT_TABLE()
 
 void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection && m_winUIProjection->IsPublished() )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
     int w, h;
     GetClientSize(&w, &h);
 

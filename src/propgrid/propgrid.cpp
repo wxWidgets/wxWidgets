@@ -49,6 +49,13 @@
 #include "wx/propgrid/editors.h"
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/private.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "propgridwinui.h"
+    #include "wx/winui/winui.h"
+    #if wxUSE_COMBOBOX
+        #include "wx/combobox.h"
+    #endif
+#endif
 
 #ifdef WXPROPGRID_TEST_SUPPORT
     #include "property-grid-test-access.h"
@@ -1681,21 +1688,6 @@ DetachPropertyGridEditorForwarders(
     wxPropertyGrid* grid,
     std::vector<wxEvtHandler*>& forwarders);
 
-// Bit values for wxPropertyGrid::m_coloursCustomized.
-enum CustomColour
-{
-    CustomColour_None           = 0x0000,
-    CustomColour_Margin         = 0x0001,
-    CustomColour_CaptionBg      = 0x0002,
-    CustomColour_CaptionText    = 0x0004,
-    CustomColour_CellBg         = 0x0008,
-    CustomColour_CellText       = 0x0010,
-    CustomColour_SelectionBg    = 0x0020,
-    CustomColour_SelectionText  = 0x0040,
-    CustomColour_Line           = 0x0080,
-    CustomColour_DisabledText   = 0x0100
-};
-
 } // anonymous namespace
 
 // -----------------------------------------------------------------------
@@ -2028,7 +2020,13 @@ bool wxPropertyGrid::Create( wxWindow *parent,
 
     if (!(style&wxBORDER_MASK))
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // Native cells provide the Fluent chrome. Do not put a second,
+        // classic HWND frame underneath the XAML surface by default.
+        style |= wxBORDER_NONE;
+#else
         style |= wxBORDER_THEME;
+#endif
     }
 
     style |= wxVSCROLL;
@@ -2047,6 +2045,10 @@ bool wxPropertyGrid::Create( wxWindow *parent,
     m_windowStyle |= (style & wxPG_WINDOW_STYLE_MASK);
 
     Init2();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winUIProjection = wxPGWinUIProjection::Create(this);
+#endif
 
     return true;
 }
@@ -2349,6 +2351,9 @@ void wxPropertyGrid::Init2()
 
 wxPropertyGrid::~wxPropertyGrid()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection ) m_winUIProjection->Close();
+#endif
     DisconnectPropertyGridEditorForwarders(this);
     SendDestroyEvent();
 
@@ -3748,6 +3753,12 @@ bool wxPropertyGrid::Reparent( wxWindowBase *newParent )
 
 void wxPropertyGrid::ScrollWindow(int dx, int dy, const wxRect* rect)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winUIProjection;
+    if ( projection ) projection->BeginGeometry();
+    const auto nativeGeometry = wxMakeGuard([projection]()
+    { if ( projection ) projection->EndGeometry(); });
+#endif
     const wxWeakRef<wxWindow> weakThis(this);
     wxControl::ScrollWindow(dx, dy, rect);
     if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
@@ -3829,6 +3840,11 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     GetTextExtent(wxS("jG"), &x, &y, nullptr, nullptr, &m_captionFont);
 
     m_lineHeight = m_fontHeight+(2*m_spacingy)+1;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Native TextBox/CheckBox editors and Fluent hit targets share the same
+    // authoritative row geometry, rather than overflowing a classic 16px row.
+    m_lineHeight = wxMax(m_lineHeight, FromDIP(32));
+#endif
 
     // button spacing
     m_buttonSpacingY = (m_lineHeight - m_iconHeight) / 2;
@@ -4667,6 +4683,27 @@ wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
 
 void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winUIProjection;
+    if ( projection && projection->IsPublished() )
+    {
+        wxPaintDC validate(this);
+        // The XAML cells are transparent: validating without clearing leaves
+        // old GDI rows/dividers on the redirected HWND backing below them.
+        // PaintDC retains the exact update clip and excludes child editors.
+        // Black is the existing backdrop colour-key protocol, not an opaque
+        // replacement for Mica; without a backdrop use this grid's surface.
+        validate.SetBackground(wxBrush(wxWinUIWindowUsesBackdrop(this)
+            ? wxColour(0, 0, 0) : GetBackgroundColour()));
+        validate.Clear();
+        // Native setters may synchronously invoke application callbacks which
+        // delete the grid. Do not publish XAML while USER32's paint dispatcher
+        // still owes this window its non-client paint and EndPaint processing.
+        // Refresh() has already queued the projection; Update() publishes it
+        // before entering USER32, with a window/page transaction guard.
+        return;
+    }
+#endif
     const wxWeakRef<wxWindow> weakThis(this);
     // wxBufferedPaintDC cannot be used here: its destructor queries the
     // associated wxWindow while blitting, but a renderer is application code
@@ -5490,7 +5527,9 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
         // Keep its invalidation queued instead of recursively painting with
         // the same native drawing context (notably Qt's per-window QPainter).
         if ( !wxPGGetPropertyGridTransientState(this).drawingDepth )
+        {
             Update();
+        }
     }
 }
 
@@ -5639,6 +5678,29 @@ void wxPropertyGrid::DrawItemAndChildren( wxPGProperty* p )
 
 // -----------------------------------------------------------------------
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxPropertyGrid::Update()
+{
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGridPageState* const state = m_pState;
+    const auto projection = m_winUIProjection;
+    if ( projection && projection->IsPublished() )
+    {
+        // Keep Refresh()/Update() synchronous for native cells and custom wxDC
+        // renderers alike, but publish before WM_PAINT. A native setter can
+        // synchronously retire the page or destroy this window, so USER32 must
+        // not begin painting until the same owner/page is revalidated.
+        projection->Update();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             m_pState != state )
+        {
+            return;
+        }
+    }
+    wxWindow::Update();
+}
+#endif
+
 void wxPropertyGrid::Refresh( bool WXUNUSED(eraseBackground),
                               const wxRect *rect )
 {
@@ -5650,6 +5712,9 @@ void wxPropertyGrid::Refresh( bool WXUNUSED(eraseBackground),
     if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) || m_pState != state )
         return;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection ) m_winUIProjection->Invalidate(rect);
+#endif
     wxWindow::Refresh(false, rect);
     if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) || m_pState != state )
         return;
@@ -5804,6 +5869,15 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
 
     oldState->m_selection = oldSelection;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Revoke exact old-page providers before manager code may reclaim it.
+    if ( m_winUIProjection )
+    {
+        m_winUIProjection->BeginRemoval(nullptr);
+        m_winUIProjection->EndRemoval();
+    }
+#endif
+
     bool orig_mode = oldState->IsInNonCatMode();
     bool new_state_mode = pNewState->IsInNonCatMode();
 
@@ -5928,6 +6002,12 @@ void wxPropertyGrid::DoSetSplitter( int newxpos,
                                     int splitterIndex,
                                     wxPGSplitterPositionFlags flags )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winUIProjection;
+    if ( projection ) projection->BeginGeometry();
+    const auto nativeGeometry = wxMakeGuard([projection]()
+    { if ( projection ) projection->EndGeometry(); });
+#endif
     if ( newxpos < FromDIP(wxPG_DRAG_MARGIN) )
         return;
 
@@ -9294,6 +9374,12 @@ void wxPropertyGrid::ReallocDoubleBufferIfNeeded()
 
 void wxPropertyGrid::OnResize( wxSizeEvent& event )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto projection = m_winUIProjection;
+    if ( projection ) projection->BeginGeometry();
+    const auto nativeGeometry = wxMakeGuard([projection]()
+    { if ( projection ) projection->EndGeometry(); });
+#endif
     if ( !(m_iFlags & wxPG_FL_INITIALIZED) )
         return;
 
@@ -10834,6 +10920,7 @@ bool wxPropertyGrid::OnMouseCommon( wxMouseEvent& event, int* px, int* py )
 
     // Hide popup on clicks
     if ( event.GetEventType() != wxEVT_MOTION )
+    {
         if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
         {
             ((wxOwnerDrawnComboBox*)wnd)->HidePopup();
@@ -10841,6 +10928,16 @@ bool wxPropertyGrid::OnMouseCommon( wxMouseEvent& event, int* px, int* py )
                 return false;
             wnd = GetEditorControl();
         }
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_COMBOBOX
+        else if ( auto* combo = wxDynamicCast(wnd, wxComboBox) )
+        {
+            combo->Dismiss();
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return false;
+            wnd = GetEditorControl();
+        }
+#endif
+    }
 
     wxRect r;
     if ( wnd )

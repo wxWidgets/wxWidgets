@@ -130,9 +130,9 @@ public:
 // This composes the ComboBox template popup with transient surfaces such as
 // its autocomplete MenuFlyout without turning either one's queue turn into a
 // proof for the other.
-std::shared_ptr<wxWinUIPhysicalDisconnectGate>
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIPhysicalDisconnectGate>
 wxWinUICreateCompositePhysicalDisconnectGate();
-bool wxWinUIAddCompositePhysicalDisconnectGate(
+WXDLLIMPEXP_CORE bool wxWinUIAddCompositePhysicalDisconnectGate(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& composite,
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& child,
     bool reusable = false) noexcept;
@@ -145,6 +145,29 @@ WXDLLIMPEXP_CORE void
 wxWinUINotePhysicalDisconnectGateDegraded() noexcept;
 WXDLLIMPEXP_CORE bool
 wxWinUIIsPhysicalDisconnectPublicationPoisoned() noexcept;
+
+// A direct native composite collection keeps the concrete child type intact.
+// Callbacks capture only native/weak state, never raw wx owners. insert/remove
+// act on the exact element identity and contains verifies the committed mount.
+// The host owns insertion and physical removal, including deferred retirement.
+struct wxWinUIDirectCompositeMount
+{
+    winrt::weak_ref<winrt::Microsoft::UI::Xaml::FrameworkElement> owner;
+    std::function<bool(const winrt::Microsoft::UI::Xaml::UIElement&)> insert;
+    std::function<bool(const winrt::Microsoft::UI::Xaml::UIElement&)> contains;
+    std::function<bool(const winrt::Microsoft::UI::Xaml::UIElement&)> remove;
+};
+
+// A template can present its still-owned content outside its visual subtree
+// (for example, in its exact Flyout). The adapter witnesses that ownership,
+// including current template/part identities; sharing a XamlRoot is not proof.
+// Keep these fields immutable after publication. Callbacks must not capture
+// raw wx owners, and the adapter supplies any popup retirement gate separately.
+struct wxWinUICompositeContentExtension
+{
+    winrt::weak_ref<winrt::Microsoft::UI::Xaml::FrameworkElement> root;
+    std::function<bool()> isCurrent;
+};
 
 // Shared production peer host for core controls and optional libraries such as
 // wxribbon. This source-private header is not part of the installed API.
@@ -166,6 +189,27 @@ public:
     bool SetContent(
         const winrt::Microsoft::UI::Xaml::UIElement& visualRoot,
         const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget);
+    // Publish into a native composite's content mount, retaining this child's
+    // logical slot, state carrier, input identity and accessibility authority.
+    bool SetContentInParent(
+        const winrt::Microsoft::UI::Xaml::UIElement& visualRoot,
+        const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+        wxWindow *compositeOwner,
+        const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount);
+    // The adapter owns this Control's enabled/visibility state. Its identity
+    // remains fixed until Close(): replacement is rejected before mutation.
+    bool SetContentInParentDirect(
+        const winrt::Microsoft::UI::Xaml::Controls::Control& visualRoot,
+        const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+        wxWindow *compositeOwner,
+        const std::shared_ptr<wxWinUIDirectCompositeMount>& mount);
+    // Only a published peer can admit one exact extended content subtree.
+    // Its identity and the parent's content remain fixed until Close().
+    // Initial registration may be dormant until its template is ready: every
+    // use still checks isCurrent(). Repeating the same extension revalidates
+    // it; refusal changes nothing.
+    bool SetCompositeContentExtension(
+        const std::shared_ptr<wxWinUICompositeContentExtension>& extension);
     void ClearContent();
 
     // Apply an element theme to the hosted content, if it is a FrameworkElement.
@@ -238,6 +282,12 @@ private:
 
     void OnContentLoaded();
     void RevokeLoadedHook();
+    bool SetContentImpl(
+        const winrt::Microsoft::UI::Xaml::UIElement& visualRoot,
+        const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+        wxWindow *compositeOwner,
+        const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount,
+        const std::shared_ptr<wxWinUIDirectCompositeMount>& directMount = {});
 
     wxWindow *m_window = nullptr;
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
@@ -317,40 +367,63 @@ private:
 
 class wxWinUIComboPopupRetirementState;
 class wxWinUIFlyoutPopupRetirementState;
+class wxWinUICalendarPopupRetirementState;
 
-std::shared_ptr<wxWinUIFlyoutPopupRetirementState>
+// A CalendarDatePicker editor owns the exact template AttachedFlyout. Arm
+// before publication; native Opening establishes the same popup/focus debt as
+// ComboBox, including a close requested before Opened has been delivered.
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUICalendarPopupRetirementState>
+wxWinUICreateCalendarPopupRetirementState(
+    const winrt::Microsoft::UI::Xaml::Controls::CalendarDatePicker& picker);
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIPhysicalDisconnectGate>
+wxWinUIGetCalendarPopupRetirementGate(
+    const std::shared_ptr<wxWinUICalendarPopupRetirementState>& state) noexcept;
+WXDLLIMPEXP_CORE void wxWinUIRequestCalendarPopupClose(
+    const std::shared_ptr<wxWinUICalendarPopupRetirementState>& state) noexcept;
+
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIFlyoutPopupRetirementState>
 wxWinUICreateFlyoutPopupRetirementState(
-    const winrt::Microsoft::UI::Xaml::Controls::MenuFlyout& flyout,
+    const winrt::Microsoft::UI::Xaml::Controls::Primitives::FlyoutBase& flyout,
     const winrt::Microsoft::UI::Xaml::XamlRoot& xamlRoot,
     const winrt::Microsoft::UI::Xaml::DependencyObject& exactItem) noexcept;
-std::shared_ptr<wxWinUIPhysicalDisconnectGate>
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIPhysicalDisconnectGate>
 wxWinUIGetFlyoutPopupRetirementGate(
     const std::shared_ptr<wxWinUIFlyoutPopupRetirementState>& state) noexcept;
-void wxWinUIResolveFlyoutPopupAfterShow(
+WXDLLIMPEXP_CORE void wxWinUIResolveFlyoutPopupAfterShow(
     const std::shared_ptr<wxWinUIFlyoutPopupRetirementState>& state) noexcept;
-void wxWinUIFailFlyoutPopupShow(
+WXDLLIMPEXP_CORE void wxWinUIFailFlyoutPopupShow(
     const std::shared_ptr<wxWinUIFlyoutPopupRetirementState>& state) noexcept;
-bool wxWinUISetFlyoutPopupRetirementObserver(
+WXDLLIMPEXP_CORE bool wxWinUISetFlyoutPopupRetirementObserver(
     const std::shared_ptr<wxWinUIFlyoutPopupRetirementState>& state,
     std::function<void ()> observer) noexcept;
-bool wxWinUIIsComboPopupRetirementSatisfied(
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIComboPopupRetirementState>
+wxWinUICreateComboPopupRetirementState(
+    const winrt::Microsoft::UI::Xaml::Controls::ComboBox& combo);
+WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIPhysicalDisconnectGate>
+wxWinUIGetComboPopupRetirementGate(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-bool wxWinUIIsComboPopupRetirementSealed(
+WXDLLIMPEXP_CORE void wxWinUIRequestComboPopupClose(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-bool wxWinUIArmComboPopupRetirementCompletion(
+WXDLLIMPEXP_CORE void wxWinUIObserveComboPopupClosed(
+    const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
+WXDLLIMPEXP_CORE bool wxWinUIIsComboPopupRetirementSatisfied(
+    const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
+WXDLLIMPEXP_CORE bool wxWinUIIsComboPopupRetirementSealed(
+    const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
+WXDLLIMPEXP_CORE bool wxWinUIArmComboPopupRetirementCompletion(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state,
     std::function<void ()> completion) noexcept;
-bool wxWinUIObserveComboPopupOpened(
+WXDLLIMPEXP_CORE bool wxWinUIObserveComboPopupOpened(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-bool wxWinUIResolveComboPopupAfterOpen(
+WXDLLIMPEXP_CORE bool wxWinUIResolveComboPopupAfterOpen(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-bool wxWinUIPrepareComboPopupOpen(
+WXDLLIMPEXP_CORE bool wxWinUIPrepareComboPopupOpen(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-void wxWinUICancelPreparedComboPopupOpen(
+WXDLLIMPEXP_CORE void wxWinUICancelPreparedComboPopupOpen(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-bool wxWinUIFinishPreparedComboPopupOpen(
+WXDLLIMPEXP_CORE bool wxWinUIFinishPreparedComboPopupOpen(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
-void wxWinUIAbortPreparedComboPopupOpen(
+WXDLLIMPEXP_CORE void wxWinUIAbortPreparedComboPopupOpen(
     const std::shared_ptr<wxWinUIComboPopupRetirementState>& state) noexcept;
 
 // ----------------------------------------------------------------------------

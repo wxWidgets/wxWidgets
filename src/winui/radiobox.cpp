@@ -911,6 +911,13 @@ bool wxRadioBox::IsItemShown(unsigned int n) const
 
 bool wxRadioBox::CanBeFocused() const
 {
+    // A parent (notably wxStaticBox) can query focus eligibility while
+    // wxControl::Create() is still constructing the HWND. The choices already
+    // exist then, but their state arrays and native peers do not. Do not expose
+    // a focus target until the first content generation is committed.
+    if ( !m_winui || !m_winui->root )
+        return false;
+
     if ( !wxControl::CanBeFocused() )
         return false;
 
@@ -1784,7 +1791,9 @@ bool wxRadioBox::RebuildItems()
             }
 
             candidate.background = MUXC::Border();
-            candidate.background.IsHitTestVisible(false);
+            // This border owns the complete interactive subtree, not just a
+            // decorative sibling. Disabling its hit test also disables every
+            // RadioButton below it, even though UIA Select still works.
             wxWinUIApplyBackground(candidate.background, background);
             MUXA::AutomationProperties::SetAccessibilityView(
                 candidate.background, MUXAP::AccessibilityView::Raw);

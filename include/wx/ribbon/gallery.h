@@ -17,6 +17,11 @@
 #include "wx/ribbon/control.h"
 #include "wx/bmpbndl.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonGalleryWinUI;
+#endif
+
 class wxRibbonGalleryItem;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonGalleryItem*, wxArrayRibbonGalleryItem, class WXDLLIMPEXP_RIBBON);
@@ -71,6 +76,11 @@ public:
     bool ScrollPixels(int pixels);
     void EnsureVisible(const wxRibbonGalleryItem* item);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxSize GetMinSize() const override;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
+#endif
+
 protected:
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     void CommonInit(long style);
@@ -117,6 +127,14 @@ protected:
     wxRibbonGalleryButtonState m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     wxRibbonGalleryButtonState m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     bool m_hovered = false;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+private:
+    friend class wxRibbonGalleryWinUI;
+    bool InitializeWinUI();
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    std::shared_ptr<wxRibbonGalleryWinUI> m_winui;
+#endif
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonGallery);

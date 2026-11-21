@@ -31,6 +31,12 @@
 #include "wx/timer.h"
 #include "wx/treectrl.h"
 #include "wx/vector.h"
+#include "scrolledpage.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_SYSTEM_OPTIONS
+    #include "wx/sysopt.h"
+    #include "wx/winui/winui.h"
+#endif
 
 #if wxUSE_ACTIVITYINDICATOR
     #include "wx/activityindicator.h"
@@ -147,8 +153,10 @@
 #if wxUSE_RIBBON
     #include "wx/ribbon/bar.h"
     #include "wx/ribbon/buttonbar.h"
+    #include "wx/ribbon/gallery.h"
     #include "wx/ribbon/page.h"
     #include "wx/ribbon/panel.h"
+    #include "wx/ribbon/toolbar.h"
 #endif
 #if wxUSE_RICHTEXT
     #include "wx/richtext/richtextctrl.h"
@@ -210,6 +218,50 @@
 namespace
 {
 
+#if wxUSE_COMBOCTRL
+// Unlike wxComboBox, wxComboCtrl has no built-in item popup. Install an actual
+// wxComboPopup before exposing its drop-down button to the user.
+class ShowcaseComboPopup final : public wxPanel, public wxComboPopup
+{
+public:
+    bool Create(wxWindow* parent) override
+    {
+        if ( !wxPanel::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                             wxTAB_TRAVERSAL | wxBORDER_NONE) )
+            return false;
+
+        auto* const choices = new wxBoxSizer(wxVERTICAL);
+        for ( const wxString& value : { wxString("First"), wxString("Second"),
+                                      wxString("Third"), wxString("Fourth") } )
+        {
+            auto* const button = new wxButton(this, wxID_ANY, value);
+            choices->Add(button, 0, wxEXPAND | wxALL, FromDIP(2));
+            button->Bind(wxEVT_BUTTON, [this, value](wxCommandEvent&)
+            {
+                m_value = value;
+                // Dismiss commits GetStringValue() to the combo. Its public
+                // callbacks may delete us, so it must be the last operation.
+                Dismiss();
+            });
+        }
+        SetSizer(choices);
+        return true;
+    }
+
+    wxWindow* GetControl() override { return this; }
+    void SetStringValue(const wxString& value) override { m_value = value; }
+    wxString GetStringValue() const override { return m_value; }
+    wxSize GetAdjustedSize(int minWidth, int WXUNUSED(prefHeight), int maxHeight) override
+    {
+        const wxSize best = GetSizer()->GetMinSize();
+        return wxSize(wxMax(minWidth, best.x), wxMin(maxHeight, best.y));
+    }
+
+private:
+    wxString m_value;
+};
+#endif
+
 enum
 {
     ID_ShowMessage = wxID_HIGHEST + 1,
@@ -220,6 +272,9 @@ enum
     ID_ShowFindDialog,
     ID_ShowWizard,
     ID_ToggleEnabled,
+    ID_ToggleBackdrop,
+    ID_RibbonToggle,
+    ID_RibbonZoom,
     ID_Timer
 };
 
@@ -390,8 +445,7 @@ ShowcaseFrame::~ShowcaseFrame()
 
 wxScrolledWindow* ShowcaseFrame::CreateScrolledPage(const wxString& intro)
 {
-    wxScrolledWindow* page = new wxScrolledWindow(m_book, wxID_ANY);
-    page->SetScrollRate(0, FromDIP(12));
+    auto* const page = new ShowcaseScrolledPage(m_book);
 
     wxBoxSizer* top = new wxBoxSizer(wxVERTICAL);
     page->SetSizer(top);
@@ -442,6 +496,8 @@ wxStaticText* ShowcaseFrame::AddWrappedText(wxWindow* parent,
 void ShowcaseFrame::AddPage(wxWindow* page, const wxString& title)
 {
     m_book->AddPage(page, title);
+    // Every page comes from CreateScrolledPage(); its sizer is now complete.
+    static_cast<ShowcaseScrolledPage*>(page)->FinalizeContent();
 }
 
 void ShowcaseFrame::CreateMenus()
@@ -457,6 +513,11 @@ void ShowcaseFrame::CreateMenus()
     wxMenu* viewMenu = new wxMenu;
     viewMenu->AppendCheckItem(ID_ToggleEnabled, "Enable sample controls\tCtrl+E")->Check(true);
     viewMenu->Append(wxID_REFRESH, "Refresh status");
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_SYSTEM_OPTIONS
+    viewMenu->AppendCheckItem(ID_ToggleBackdrop, "Request Mica backdrop",
+        "Compare mixed WinUI/GDI rendering with a solid client background")
+        ->Check(!wxSystemOptions::IsFalse("winui.backdrop"));
+#endif
 
     wxMenu* dialogMenu = new wxMenu;
     dialogMenu->Append(ID_ShowMessage, "Message box...");
@@ -532,6 +593,21 @@ void ShowcaseFrame::BindFrameCommands()
 #endif
         Log("Controls enabled: " + BoolText(m_childrenEnabled));
     }, ID_ToggleEnabled);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_SYSTEM_OPTIONS
+    Bind(wxEVT_MENU, [this](wxCommandEvent& event)
+    {
+        const bool requested = event.IsChecked();
+        wxSystemOptions::SetOption("winui.backdrop", requested ? 1 : 0);
+        wxWinUIApplyWindowBackdrop(this);
+        const bool active = wxWinUIWindowUsesBackdrop(this);
+        SetTitle(active ? "wxWidgets Component Showcase - Mica"
+                        : "wxWidgets Component Showcase - solid background");
+        Log("Mica requested: " + BoolText(requested) +
+            "; active: " + BoolText(active) +
+            ". Desktop HDR settings unchanged.");
+    }, ID_ToggleBackdrop);
+#endif
 
     Bind(wxEVT_MENU, [this](wxCommandEvent&)
     {
@@ -845,8 +921,10 @@ wxWindow* ShowcaseFrame::CreateChoicesAndListsPage()
     choiceGrid->Add(combo, 0, wxEXPAND);
 #endif
 #if wxUSE_COMBOCTRL
-    wxComboCtrl* comboCtrl = new wxComboCtrl(choices->GetStaticBox(), wxID_ANY, "wxComboCtrl");
-    comboCtrl->SetToolTip("Base wxComboCtrl without a custom popup");
+    wxComboCtrl* comboCtrl = new wxComboCtrl(choices->GetStaticBox(), wxID_ANY);
+    comboCtrl->SetPopupControl(new ShowcaseComboPopup());
+    comboCtrl->SetValue("First");
+    comboCtrl->SetToolTip("wxComboCtrl with a custom popup of choice buttons");
     choiceGrid->Add(comboCtrl, 0, wxEXPAND);
 #endif
 #if wxUSE_ODCOMBOBOX
@@ -872,13 +950,13 @@ wxWindow* ShowcaseFrame::CreateChoicesAndListsPage()
 
 #if wxUSE_LISTBOX
     wxListBox* list = new wxListBox(lists->GetStaticBox(), wxID_ANY,
-        wxDefaultPosition, FromDIP(wxSize(-1, 120)), WXSIZEOF(items), items);
+        wxDefaultPosition, wxDefaultSize, WXSIZEOF(items), items);
     list->SetSelection(0);
     listGrid->Add(list, 1, wxEXPAND);
 #endif
 #if wxUSE_CHECKLISTBOX
     wxCheckListBox* checklist = new wxCheckListBox(lists->GetStaticBox(), wxID_ANY,
-        wxDefaultPosition, FromDIP(wxSize(-1, 120)), WXSIZEOF(items), items);
+        wxDefaultPosition, wxDefaultSize, WXSIZEOF(items), items);
     checklist->Check(0);
     checklist->Check(2);
     listGrid->Add(checklist, 1, wxEXPAND);
@@ -895,10 +973,10 @@ wxWindow* ShowcaseFrame::CreateChoicesAndListsPage()
     order.Add(-2);
     order.Add(3);
     wxRearrangeCtrl* rearrange = new wxRearrangeCtrl(lists->GetStaticBox(), wxID_ANY,
-        wxDefaultPosition, FromDIP(wxSize(-1, 130)), order, rearrangeItems);
+        wxDefaultPosition, wxDefaultSize, order, rearrangeItems);
     listGrid->Add(rearrange, 1, wxEXPAND);
 #endif
-#if wxUSE_EDITABLELISTBOX && !defined(__WXWINUI__)
+#if wxUSE_EDITABLELISTBOX
     wxEditableListBox* editable = new wxEditableListBox(lists->GetStaticBox(), wxID_ANY,
         "wxEditableListBox", wxDefaultPosition, FromDIP(wxSize(-1, 130)),
         wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE);
@@ -908,12 +986,6 @@ wxWindow* ShowcaseFrame::CreateChoicesAndListsPage()
     editItems.Add("CMakeLists.txt");
     editable->SetStrings(editItems);
     listGrid->Add(editable, 1, wxEXPAND);
-#elif wxUSE_EDITABLELISTBOX
-    wxStaticText* editableSkipped = new wxStaticText(lists->GetStaticBox(), wxID_ANY,
-        "wxEditableListBox: skipped on wxWinUI for now. Its generic implementation "
-        "currently asserts while casting the internal list control to wxGenericListCtrl.");
-    editableSkipped->Wrap(FromDIP(360));
-    listGrid->Add(editableSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
 
     return page;
@@ -972,7 +1044,7 @@ wxWindow* ShowcaseFrame::CreateContainerPage()
     treebook->AddSubPage(new wxPanel(treebook), "Child");
     bookGrid->Add(treebook, 1, wxEXPAND);
 #endif
-#if wxUSE_TOOLBOOK && !defined(__WXWINUI__)
+#if wxUSE_TOOLBOOK
     wxToolbook* toolbook = new wxToolbook(books->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 130)));
     wxImageList* imgs = new wxImageList(16, 16);
@@ -982,12 +1054,6 @@ wxWindow* ShowcaseFrame::CreateContainerPage()
     toolbook->AddPage(new wxPanel(toolbook), "Tool A", true, 0);
     toolbook->AddPage(new wxPanel(toolbook), "Tool B", false, 1);
     bookGrid->Add(toolbook, 1, wxEXPAND);
-#elif wxUSE_TOOLBOOK
-    wxStaticText* toolbookSkipped = new wxStaticText(books->GetStaticBox(), wxID_ANY,
-        "wxToolbook: skipped on wxWinUI for now. Its generic implementation "
-        "uses an internal wxToolBar path that logs TB_GETITEMRECT failures during startup.");
-    toolbookSkipped->Wrap(FromDIP(360));
-    bookGrid->Add(toolbookSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
 #if wxUSE_BOOKCTRL
     wxSimplebook* simple = new wxSimplebook(books->GetStaticBox(), wxID_ANY,
@@ -1007,7 +1073,9 @@ wxWindow* ShowcaseFrame::CreateContainerPage()
 
 #if wxUSE_COLLPANE
     wxStaticBoxSizer* coll = AddGroup(page, top, "wxCollapsiblePane");
-    wxCollapsiblePane* pane = new wxCollapsiblePane(coll->GetStaticBox(), wxID_ANY, "Expandable details");
+    wxCollapsiblePane* pane = new wxCollapsiblePane(coll->GetStaticBox(), wxID_ANY,
+        "Expandable details", wxDefaultPosition, wxDefaultSize,
+        wxCP_DEFAULT_STYLE | wxCP_NO_TLW_RESIZE);
     wxWindow* inner = pane->GetPane();
     wxBoxSizer* innerSizer = new wxBoxSizer(wxVERTICAL);
     inner->SetSizer(innerSizer);
@@ -1064,28 +1132,16 @@ wxWindow* ShowcaseFrame::CreatePickerPage()
     wxStaticBoxSizer* fileCtrls = AddGroup(page, top, "File and directory browser controls");
     wxGridSizer* browserGrid = new wxGridSizer(0, 2, FromDIP(8), FromDIP(8));
     fileCtrls->Add(browserGrid, 1, wxEXPAND | wxALL, FromDIP(8));
-#if wxUSE_FILECTRL && !defined(__WXWINUI__)
+#if wxUSE_FILECTRL
     wxFileCtrl* fileCtrl = new wxFileCtrl(fileCtrls->GetStaticBox(), wxID_ANY,
         wxEmptyString, wxEmptyString, "*.*", wxFC_OPEN,
         wxDefaultPosition, FromDIP(wxSize(-1, 180)));
     browserGrid->Add(fileCtrl, 1, wxEXPAND);
-#elif wxUSE_FILECTRL
-    wxStaticText* fileCtrlSkipped = new wxStaticText(fileCtrls->GetStaticBox(), wxID_ANY,
-        "wxFileCtrl: skipped on wxWinUI for now. The generic file browser uses "
-        "wxGenericListCtrl internally and currently asserts on resize.");
-    fileCtrlSkipped->Wrap(FromDIP(360));
-    browserGrid->Add(fileCtrlSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
-#if (wxUSE_FILEDLG || wxUSE_DIRDLG) && !defined(__WXWINUI__)
+#if wxUSE_FILEDLG || wxUSE_DIRDLG
     wxGenericDirCtrl* dirCtrl = new wxGenericDirCtrl(fileCtrls->GetStaticBox(), wxID_ANY,
         wxEmptyString, wxDefaultPosition, FromDIP(wxSize(-1, 180)));
     browserGrid->Add(dirCtrl, 1, wxEXPAND);
-#elif wxUSE_FILEDLG || wxUSE_DIRDLG
-    wxStaticText* dirCtrlSkipped = new wxStaticText(fileCtrls->GetStaticBox(), wxID_ANY,
-        "wxGenericDirCtrl: skipped on wxWinUI for now to keep this startup "
-        "showcase usable while generic browser controls are being ported.");
-    dirCtrlSkipped->Wrap(FromDIP(360));
-    browserGrid->Add(dirCtrlSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
 
     return page;
@@ -1094,14 +1150,14 @@ wxWindow* ShowcaseFrame::CreatePickerPage()
 wxWindow* ShowcaseFrame::CreateDataPage()
 {
     wxScrolledWindow* page = CreateScrolledPage(
-        "Data controls include report/list/tree/header/grid/property views and the generic data view controls.");
+        "Data controls include report/list/tree/header/grid/property views and data view controls.");
     wxBoxSizer* top = wxDynamicCast(page->GetSizer(), wxBoxSizer);
 
-    wxStaticBoxSizer* classic = AddGroup(page, top, "Classic native/generic data controls");
+    wxStaticBoxSizer* classic = AddGroup(page, top, "List, tree and header controls");
     wxGridSizer* classicGrid = new wxGridSizer(0, 2, FromDIP(8), FromDIP(8));
     classic->Add(classicGrid, 1, wxEXPAND | wxALL, FromDIP(8));
 
-#if wxUSE_LISTCTRL && !defined(__WXWINUI__)
+#if wxUSE_LISTCTRL
     wxListCtrl* list = new wxListCtrl(classic->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 150)), wxLC_REPORT | wxLC_SINGLE_SEL);
     list->AppendColumn("Control");
@@ -1113,12 +1169,6 @@ wxWindow* ShowcaseFrame::CreateDataPage()
     list->InsertItem(2, "wxDataViewListCtrl");
     list->SetItem(2, 1, "optional");
     classicGrid->Add(list, 1, wxEXPAND);
-#elif wxUSE_LISTCTRL
-    wxStaticText* listSkipped = new wxStaticText(classic->GetStaticBox(), wxID_ANY,
-        "wxListCtrl: skipped on wxWinUI for now. The current generic path asserts "
-        "in wxGenericListCtrl::OnSize() while casting the list implementation.");
-    listSkipped->Wrap(FromDIP(360));
-    classicGrid->Add(listSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
 
 #if wxUSE_TREECTRL
@@ -1137,15 +1187,27 @@ wxWindow* ShowcaseFrame::CreateDataPage()
     wxHeaderCtrlSimple* header = new wxHeaderCtrlSimple(classic->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 40)));
     wxHeaderColumnSimple col1("Name", FromDIP(150), wxALIGN_LEFT,
-        wxCOL_RESIZABLE | wxCOL_SORTABLE);
+        wxCOL_RESIZABLE | wxCOL_SORTABLE | wxCOL_REORDERABLE);
     col1.SetBitmap(GetArt(header, wxART_INFORMATION, 16));
     header->AppendColumn(col1);
     header->AppendColumn(wxHeaderColumnSimple("Value", FromDIP(120), wxALIGN_RIGHT,
-        wxCOL_RESIZABLE | wxCOL_SORTABLE));
-    classicGrid->Add(header, 0, wxEXPAND);
+        wxCOL_RESIZABLE | wxCOL_SORTABLE | wxCOL_REORDERABLE));
+    header->Bind(wxEVT_HEADER_CLICK,
+        [this, header, sortedColumn = -1, ascending = true](wxHeaderCtrlEvent& event) mutable
+        {
+            const int column = event.GetColumn();
+            ascending = column == sortedColumn ? !ascending : true;
+            sortedColumn = column;
+            header->ShowSortIndicator(column, ascending);
+            Log(wxString::Format("Header column %d: %s indicator", column,
+                                ascending ? "ascending" : "descending"));
+        });
+    // A header is one row, not another 150-DIP cell of the list/tree grid.
+    classic->Add(header, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(8));
 #endif
 
-#if wxUSE_DATAVIEWCTRL && !defined(__WXWINUI__)
+#if wxUSE_DATAVIEWCTRL && \
+    (!defined(__WXWINUI__) || defined(wxHAS_WINUI_DATAVIEWCTRL))
     wxStaticBoxSizer* dataViewGroup = AddGroup(page, top, "wxDataViewListCtrl");
     wxDataViewListCtrl* data = new wxDataViewListCtrl(dataViewGroup->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 170)));
@@ -1170,7 +1232,8 @@ wxWindow* ShowcaseFrame::CreateDataPage()
     dataViewGroup->Add(dataSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
 
-#if wxUSE_TREELISTCTRL && !defined(__WXWINUI__)
+#if wxUSE_TREELISTCTRL && \
+    (!defined(__WXWINUI__) || defined(wxHAS_WINUI_DATAVIEWCTRL))
     wxStaticBoxSizer* treeListGroup = AddGroup(page, top, "wxTreeListCtrl");
     wxTreeListCtrl* treeList = new wxTreeListCtrl(treeListGroup->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 170)),
@@ -1217,12 +1280,14 @@ wxWindow* ShowcaseFrame::CreateDataPage()
 #if wxUSE_PROPGRID
     wxStaticBoxSizer* propGroup = AddGroup(page, top, "wxPropertyGrid");
     wxPropertyGrid* pg = new wxPropertyGrid(propGroup->GetStaticBox(), wxID_ANY,
-        wxDefaultPosition, FromDIP(wxSize(-1, 210)),
+        wxDefaultPosition, FromDIP(wxSize(-1, 240)),
         wxPG_SPLITTER_AUTO_CENTER | wxPG_BOLD_MODIFIED);
     pg->Append(new wxPropertyCategory("Appearance"));
     pg->Append(new wxStringProperty("Label", wxPG_LABEL, "Showcase"));
     pg->Append(new wxIntProperty("Margin", wxPG_LABEL, 8));
-    pg->Append(new wxBoolProperty("Enabled", wxPG_LABEL, true));
+    wxPGProperty* enabledProperty = pg->Append(
+        new wxBoolProperty("Enabled", wxPG_LABEL, true));
+    pg->SetPropertyAttribute(enabledProperty, wxPG_BOOL_USE_CHECKBOX, true);
     pg->Append(new wxColourProperty("Accent", wxPG_LABEL, *wxBLUE));
     propGroup->Add(pg, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
@@ -1253,11 +1318,70 @@ wxWindow* ShowcaseFrame::CreateAdvancedPage()
         wxDefaultPosition, wxDefaultSize,
         wxRIBBON_BAR_DEFAULT_STYLE | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS);
     wxRibbonPage* home = new wxRibbonPage(ribbon, wxID_ANY, "Home", GetArt(ribbon, wxART_GO_HOME, 16));
-    wxRibbonPanel* actions = new wxRibbonPanel(home, wxID_ANY, "Actions");
+    wxRibbonPanel* actions = new wxRibbonPanel(home, wxID_ANY, "Actions",
+        GetArt(ribbon, wxART_FILE_OPEN, 16), wxDefaultPosition, wxDefaultSize,
+        wxRIBBON_PANEL_EXT_BUTTON);
+    actions->Bind(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED,
+        [this](wxRibbonPanelEvent& event)
+        {
+            Log(wxString::Format("Ribbon panel extension: %s",
+                                event.GetPanel()->GetLabel()));
+        });
     wxRibbonButtonBar* bar = new wxRibbonButtonBar(actions);
     bar->AddButton(wxID_NEW, "New", GetArt(bar, wxART_NEW, 32));
     bar->AddButton(wxID_OPEN, "Open", GetArt(bar, wxART_FILE_OPEN, 32));
     bar->AddHybridButton(wxID_SAVE, "Save", GetArt(bar, wxART_FILE_SAVE, 32));
+    wxRibbonPanel* toolsPanel = new wxRibbonPanel(home, wxID_ANY, "Tools");
+    wxRibbonToolBar* tools = new wxRibbonToolBar(toolsPanel);
+    tools->AddTool(wxID_CUT, GetArt(tools, wxART_CUT), "Cut");
+    tools->AddTool(wxID_COPY, GetArt(tools, wxART_COPY), "Copy");
+    tools->AddDropdownTool(wxID_PASTE, GetArt(tools, wxART_PASTE), "Paste options");
+    tools->AddSeparator();
+    tools->AddToggleTool(ID_RibbonToggle, GetArt(tools, wxART_TICK_MARK),
+                         "Toggle selection");
+    tools->AddHybridTool(ID_RibbonZoom, GetArt(tools, wxART_FIND), "Zoom");
+    tools->SetRows(1, 2);
+    tools->Bind(wxEVT_RIBBONTOOLBAR_CLICKED,
+        [this](wxRibbonToolBarEvent& event)
+        {
+            Log(wxString::Format("Ribbon tool %d, checked=%d",
+                                event.GetId(), event.IsChecked()));
+        });
+    tools->Bind(wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED,
+        [this](wxRibbonToolBarEvent& event)
+        {
+            Log(wxString::Format("Ribbon tool dropdown %d", event.GetId()));
+            wxMenu menu;
+            menu.Append(wxID_ANY, "First option");
+            menu.Append(wxID_ANY, "Second option");
+            event.PopupMenu(&menu);
+        });
+    wxRibbonPanel* galleryPanel = new wxRibbonPanel(home, wxID_ANY, "Gallery");
+    wxRibbonGallery* gallery = new wxRibbonGallery(galleryPanel);
+    const wxArtID galleryArt[] = {
+        wxART_NEW, wxART_FILE_OPEN, wxART_FILE_SAVE, wxART_CUT,
+        wxART_COPY, wxART_PASTE, wxART_DELETE, wxART_FIND,
+        wxART_GO_HOME, wxART_INFORMATION, wxART_WARNING, wxART_QUESTION
+    };
+    int galleryItemId = wxID_HIGHEST + 100;
+    for ( const auto& art : galleryArt )
+        gallery->Append(GetArt(gallery, art, 32), galleryItemId++);
+    gallery->SetSelection(gallery->GetItem(0));
+    gallery->Bind(wxEVT_RIBBONGALLERY_SELECTED,
+        [this](wxRibbonGalleryEvent& event)
+        {
+            wxRibbonGallery* source = event.GetGallery();
+            for ( unsigned int i = 0; i < source->GetCount(); ++i )
+                if ( source->GetItem(i) == event.GetGalleryItem() )
+                {
+                    Log(wxString::Format("Ribbon gallery selection %u", i + 1));
+                    break;
+                }
+        });
+    gallery->Bind(wxEVT_RIBBONGALLERY_CLICKED,
+        [this](wxRibbonGalleryEvent&) { Log("Ribbon gallery item clicked"); });
+    gallery->Bind(wxEVT_BUTTON,
+        [this](wxCommandEvent&) { Log("Ribbon gallery extension requested"); });
     ribbon->Realize();
     ribbonGroup->Add(ribbon, 0, wxEXPAND | wxALL, FromDIP(8));
 #endif

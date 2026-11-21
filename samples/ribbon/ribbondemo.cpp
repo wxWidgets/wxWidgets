@@ -168,11 +168,11 @@ protected:
     void SetArtProvider(int button_id, wxRibbonArtProvider* prov);
     void SetBarStyle(long style);
 
-    wxRibbonBar* m_ribbon;
+    wxRibbonBar* m_ribbon = nullptr;
     wxRibbonButtonBar* m_provider_bar;
     wxRibbonGallery* m_primary_gallery;
     wxRibbonGallery* m_secondary_gallery;
-    wxTextCtrl* m_logwindow;
+    wxTextCtrl* m_logwindow = nullptr;
     wxToggleButton* m_togglePanels;
 
     wxColourData m_colour_data;
@@ -1429,6 +1429,14 @@ void MyFrame::OnRibbonBarHelpClicked(wxRibbonBarEvent& WXUNUSED(evt))
 
 void MyFrame::OnDPIChanged(wxDPIChangedEvent& evt)
 {
+    // Native child creation can deliver frame notifications before the
+    // constructor has finished creating the sample's controls.
+    if ( !m_ribbon || !m_logwindow )
+    {
+        evt.Skip();
+        return;
+    }
+
     const wxSize oldDPI = evt.GetOldDPI();
     const wxSize newDPI = evt.GetNewDPI();
 
@@ -1445,10 +1453,15 @@ void MyFrame::OnDPIChanged(wxDPIChangedEvent& evt)
 // This shows how to hide ribbon dynamically if there is not enough space.
 void MyFrame::OnSizeEvent(wxSizeEvent& evt)
 {
-    if ( evt.GetSize().GetWidth() < 200 )
-        m_ribbon->Hide();
-    else
-        m_ribbon->Show();
+    // In particular, creating the first XAML island can resize its host while
+    // new wxRibbonBar() is still running, before m_ribbon has been assigned.
+    if ( m_ribbon )
+    {
+        if ( evt.GetSize().GetWidth() < 200 )
+            m_ribbon->Hide();
+        else
+            m_ribbon->Show();
+    }
 
     evt.Skip();
 }

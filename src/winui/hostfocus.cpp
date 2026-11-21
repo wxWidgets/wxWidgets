@@ -51,7 +51,7 @@ static wxWindow *wxWinUIResolveCurrentNativeFocusWindow()
 // dispatch generation late, after the focus was already moved elsewhere,
 // and must not overwrite the ownership the newer move established.
 bool wxWinUIFocusIsInside(
-    const winrt::Microsoft::UI::Xaml::Controls::Grid& container,
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
     const winrt::Microsoft::UI::Xaml::XamlRoot& root)
 {
     namespace MUX = winrt::Microsoft::UI::Xaml;
@@ -580,7 +580,7 @@ bool wxWinUITopLevelHost::CommitFocusMigration(
         return false;
     }
 
-    const auto destinationContainer = destinationSlot->m_container;
+    const auto destinationContainer = destinationSlot->GetPresentationRoot();
     const auto xamlRoot = GetXamlRoot();
     if ( !wxWinUIFocusIsInside(destinationContainer, xamlRoot) )
         return false;
@@ -605,7 +605,7 @@ bool wxWinUITopLevelHost::CommitFocusMigration(
          !window || destination->GetWindow() != window ||
          !destinationSlot ||
          destinationSlot->m_lifetime != destination ||
-         destinationSlot->m_container != destinationContainer ||
+         destinationSlot->GetPresentationRoot() != destinationContainer ||
          destinationSlot->m_contentGeneration !=
              migration->destinationContentGeneration ||
          window->GetHWND() != migration->hwnd ||
@@ -635,7 +635,7 @@ bool wxWinUITopLevelHost::CommitFocusMigration(
          destination->GetWindow() != window ||
          FindSlot(window) != destinationSlot ||
          destinationSlot->m_lifetime != destination ||
-         destinationSlot->m_container != destinationContainer ||
+         destinationSlot->GetPresentationRoot() != destinationContainer ||
          destinationSlot->m_contentGeneration !=
              migration->destinationContentGeneration ||
          pendingAfterGuard == ms_focusMigrations.end() ||
@@ -658,6 +658,10 @@ bool wxWinUITopLevelHost::CommitFocusMigration(
         if ( destination != migration->sourceSlot )
             return false;
 
+        if ( wxWinUIInputLogEnabled() )
+            wxWinUIInputLog("FocusMigration commit same host=%p window=%p",
+                            this, window);
+
         migration->committedSuccessfully = true;
         migration->committed = true;
         m_focusMigration.reset();
@@ -672,6 +676,9 @@ bool wxWinUITopLevelHost::CommitFocusMigration(
     }
 
     // Commit both logical publications before any cleanup can re-enter focus.
+    if ( wxWinUIInputLogEnabled() )
+        wxWinUIInputLog("FocusMigration commit source=%p target=%p window=%p",
+                        source, this, window);
     migration->committedSuccessfully = true;
     migration->committed = true;
     source->m_focusOwner = nullptr;
@@ -702,12 +709,13 @@ void wxWinUITopLevelHost::AbortFocusMigration(
     {
         wxWinUIInputLog(
             "FocusMigration abort dispatch=%d replacement=%p "
-            "shellLoss=%d focus=%p shell=%p",
+            "shellLoss=%d focus=%p shell=%p window=%p token=%llu",
             dispatchLogicalLoss,
             replacement,
             migration->shellLogicalLossDelivered,
             static_cast<void *>(::GetFocus()),
-            static_cast<void *>(static_cast<HWND>(migration->hwnd)));
+            static_cast<void *>(static_cast<HWND>(migration->hwnd)),
+            migration->window.get(), migration->preparedReparentId);
     }
 
     wxWinUITopLevelHost * const source =
@@ -1379,8 +1387,10 @@ void wxWinUITopLevelHost::FocusSlotImpl(wxWindow *window,
     const bool inIsland = HasNativeFocusAuthority();
     if ( wxWinUIInputLogEnabled() )
     {
-        wxWinUIInputLog("FocusSlot '%s' focusNow=%p inIsland=%d",
+        wxWinUIInputLog("FocusSlot '%s' window=%p origin=%d host=%p "
+                        "owner=%p focusNow=%p inIsland=%d",
                         label.utf8_str().data(),
+                        window, static_cast<int>(origin), this, m_focusOwner,
                         static_cast<void *>(focusNow), inIsland);
     }
     if ( (!allowDeferredRetry ||
@@ -1416,7 +1426,7 @@ void wxWinUITopLevelHost::FocusSlotImpl(wxWindow *window,
     // Strong XAML references are safe across the following layout/focus
     // boundaries; the invalidatable slot lifetime remains the authority for
     // every wx access.
-    const auto container = live->m_container;
+    const auto container = live->GetPresentationRoot();
     const auto content = live->m_content;
     const auto preferred = live->m_preferredFocus.get();
 
@@ -1831,17 +1841,91 @@ void wxWinUITopLevelHost::InvalidateFocusIntent(
     ClearDeferredFocusRequest();
 }
 
+wxWinUISlot *wxWinUITopLevelHost::FindSlotForVisual(
+    const winrt::Microsoft::UI::Xaml::DependencyObject& element) const
+{
+    namespace MUX = winrt::Microsoft::UI::Xaml;
+
+    OperationGuard operation(const_cast<wxWinUITopLevelHost *>(this));
+    const auto hostState = m_hostLifetime;
+    const unsigned long long structureGeneration = m_structureGeneration;
+    const auto isCurrent = [&]()
+    {
+        return hostState && hostState->GetHost() == this &&
+               !m_shuttingDown &&
+               m_structureGeneration == structureGeneration;
+    };
+
+    try
+    {
+        auto node = element;
+        while ( node )
+        {
+            // Composite peers nest live slot containers. Walk outwards from
+            // the originating element so the nearest logical owner wins, not
+            // whichever ancestor happens to be first in the pointer-keyed map.
+            const auto container = node.try_as<MUX::FrameworkElement>();
+            if ( !isCurrent() )
+                return nullptr;
+
+            if ( container )
+            {
+                // No XAML calls while iterating: a reentrant tree change must
+                // not leave us holding an iterator or slot across that call.
+                for ( const auto& entry : m_slots )
+                {
+                    wxWinUISlot * const slot = entry.second;
+                    if ( slot && slot->GetPresentationRoot() == container &&
+                         slot->m_lifetime &&
+                         slot->m_lifetime->GetHost() == this &&
+                         slot->m_lifetime->GetWindow() == entry.first )
+                    {
+                        return slot;
+                    }
+                }
+            }
+
+            node = MUX::Media::VisualTreeHelper::GetParent(node);
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+
+    return nullptr;
+}
+
 wxWindow *wxWinUITopLevelHost::FindFocusedSlot() const
 {
-    const auto root = GetXamlRoot();
-    for ( const auto& entry : m_slots )
+    namespace MUX = winrt::Microsoft::UI::Xaml;
+
+    OperationGuard operation(const_cast<wxWinUITopLevelHost *>(this));
+    const auto hostState = m_hostLifetime;
+    const unsigned long long structureGeneration = m_structureGeneration;
+    const auto isCurrent = [&]()
     {
-        const wxWinUISlot * const slot = entry.second;
-        if ( slot && slot->m_container &&
-             wxWinUIFocusIsInside(slot->m_container, root) )
-        {
-            return entry.first;
-        }
+        return hostState && hostState->GetHost() == this &&
+               !m_shuttingDown &&
+               m_structureGeneration == structureGeneration;
+    };
+
+    try
+    {
+        const auto root = GetXamlRoot();
+        if ( !isCurrent() || !root )
+            return nullptr;
+
+        const auto focused = MUX::Input::FocusManager::GetFocusedElement(root)
+                                 .try_as<MUX::DependencyObject>();
+        if ( !isCurrent() )
+            return nullptr;
+
+        const wxWinUISlot * const slot = FindSlotForVisual(focused);
+        if ( slot )
+            return slot->m_lifetime->GetWindow();
+    }
+    catch ( const winrt::hresult_error& )
+    {
     }
 
     return nullptr;
@@ -1871,6 +1955,10 @@ void wxWinUITopLevelHost::TransitionFocus(wxWindow *newOwner,
     if ( oldOwner == newOwner )
         return;
 
+    if ( wxWinUIInputLogEnabled() )
+        wxWinUIInputLog("TransitionFocus host=%p old=%p new=%p delivered=%d",
+                        this, oldOwner, newOwner, wxSetAlreadyDelivered);
+
     const unsigned long long intentGeneration = m_focusIntentGeneration;
     const std::shared_ptr<wxWinUISlotLifetime> newLifetime =
         newOwner && FindSlot(newOwner)
@@ -1899,7 +1987,7 @@ void wxWinUITopLevelHost::TransitionFocus(wxWindow *newOwner,
         wxWinUISlot * const slot = current ? FindSlot(current) : nullptr;
         return slot && slot->m_lifetime == newLifetime &&
                slot->m_contentGeneration == newContentGeneration &&
-               wxWinUIFocusIsInside(slot->m_container, GetXamlRoot());
+               wxWinUIFocusIsInside(slot->GetPresentationRoot(), GetXamlRoot());
     };
 
     // Publish the truthful logical destination before application callbacks:
@@ -1977,7 +2065,7 @@ void wxWinUITopLevelHost::TransitionFocus(wxWindow *newOwner,
 
 void wxWinUITopLevelHost::OnXamlSlotGotFocus(
     const std::shared_ptr<wxWinUISlotLifetime>& state,
-    const winrt::Microsoft::UI::Xaml::Controls::Grid& container)
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& container)
 {
     wxWindow *window = state ? state->GetWindow() : nullptr;
     wxWinUISlot *slot = window ? FindSlot(window) : nullptr;
@@ -1991,11 +2079,22 @@ void wxWinUITopLevelHost::OnXamlSlotGotFocus(
     wxWinUISlot::OperationGuard slotOperation(slot);
 
     // GotFocus bubbles once per inner element and stale notifications can
-    // arrive after a newer transition. Only the currently focused subtree
-    // is authoritative. Win32 focus must still belong to the bridge/InputSite:
-    // FocusManager can lag behind a reentrant native redirection.
+    // arrive after a newer transition. A composite ancestor can also receive
+    // a restoration event naming its own ContentControl as OriginalSource
+    // while FocusManager still names the nested leaf. Only the nearest slot
+    // owning that actual focused element may publish logical wx focus.
+    // Win32 focus must still belong to the bridge/InputSite: FocusManager can
+    // lag behind a reentrant native redirection.
     if ( !HasNativeFocusAuthority() ||
-         !wxWinUIFocusIsInside(container, GetXamlRoot()) )
+         !wxWinUIFocusIsInside(container, GetXamlRoot()) ||
+         FindFocusedSlot() != window )
+        return;
+
+    // The native tree reads above can re-enter application code. The slot
+    // operation keeps the allocation alive, not its logical publication.
+    if ( state->GetHost() != this || state->GetWindow() != window ||
+         FindSlot(window) != slot || slot->m_lifetime != state ||
+         !HasNativeFocusAuthority() )
         return;
 
     m_nativeFocusDepartureSource.reset();
@@ -2098,7 +2197,7 @@ void wxWinUITopLevelHost::OnXamlSlotGotFocus(
 
 void wxWinUITopLevelHost::OnXamlSlotLostFocus(
     const std::shared_ptr<wxWinUISlotLifetime>& state,
-    const winrt::Microsoft::UI::Xaml::Controls::Grid& container)
+    const winrt::Microsoft::UI::Xaml::FrameworkElement& container)
 {
     wxWindow * const window = state ? state->GetWindow() : nullptr;
     wxWinUISlot * const slot = window ? FindSlot(window) : nullptr;
@@ -2288,6 +2387,12 @@ void wxWinUIHostFocusTestAccess::TakeFocusRequested(
 {
     wxWinUITopLevelHost * const self = &host;
     self->OnTakeFocusRequested(previous);
+}
+
+wxWindow *wxWinUIHostFocusTestAccess::FindFocusedSlot(
+    const wxWinUITopLevelHost& host)
+{
+    return host.FindFocusedSlot();
 }
 #endif // WXWINUI_TEST_SUPPORT
 

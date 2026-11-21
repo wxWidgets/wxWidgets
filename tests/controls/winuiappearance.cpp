@@ -3636,4 +3636,26 @@ TEST_CASE("wxWinUI static appearance peers survive repeated teardown",
 #endif // wxUSE_STATTEXT && wxUSE_STATBOX
 #endif // wxUSE_STATBMP
 
+TEST_CASE("wxWinUI native text font decorations follow and release font authority",
+          "[winui-appearance][winui-font-preview]")
+{
+    using Decorations = winrt::Windows::UI::Text::TextDecorations;
+    MUXC::TextBlock text;
+    wxFont font = MakeTestFont();
+    font.SetUnderlined(true);
+    font.SetStrikethrough(true);
+    wxWinUIApplyFont(text, font);
+    CHECK(text.TextDecorations() ==
+          (Decorations::Underline | Decorations::Strikethrough));
+    font.SetUnderlined(false);
+    wxWinUIApplyFont(text, font);
+    CHECK(text.TextDecorations() == Decorations::Strikethrough);
+    font.SetStrikethrough(false);
+    wxWinUIApplyFont(text, font);
+    CHECK(text.TextDecorations() == Decorations::None);
+    wxWinUIApplyFont(text, wxNullFont);
+    CHECK(text.ReadLocalValue(MUXC::TextBlock::TextDecorationsProperty()) ==
+          MUX::DependencyProperty::UnsetValue());
+}
+
 #endif // __WXWINUI__ && wxUSE_WINUI3

@@ -894,6 +894,8 @@ struct wxWinUIToolPeer
     MUXC::StackPanel radioContent{ nullptr };
     MUXC::TextBlock radioLabel{ nullptr };
     winrt::event_token primaryClickToken{};
+    winrt::event_token radioCheckedToken{};
+    std::uint64_t radioActivationRevision = 0;
     winrt::event_token dropdownClickToken{};
     winrt::event_token pointerEnteredToken{};
     winrt::event_token pointerExitedToken{};
@@ -928,6 +930,20 @@ void wxWinUIRevokeToolPeer(wxWinUIToolPeer& peer)
         }
     }
     peer.primaryClickToken = {};
+
+    if ( peer.primaryButton && peer.radioCheckedToken.value )
+    {
+        try
+        {
+            if ( const auto radio = peer.primaryButton.try_as<MUXC::RadioButton>() )
+                radio.Checked(peer.radioCheckedToken);
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI toolbar Checked removal", e);
+        }
+    }
+    peer.radioCheckedToken = {};
 
     if ( peer.dropdownButton && peer.dropdownClickToken.value )
     {
@@ -2336,6 +2352,10 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
     if ( !peer || !peer->primaryButton )
         return;
 
+    ++peer->radioActivationRevision;
+    // IsChecked changes performed by the wx model are silent. In particular,
+    // restoring the previous radio after a veto must not reenter its command.
+    const wxWinUIToolBarPeerMutationGuard mutationGuard(m_winui->callbackState);
     try
     {
         if ( const auto button =
@@ -3293,8 +3313,56 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
                         {
                             return;
                         }
+                        if ( wxWinUIToolPeer* const current =
+                                 owner->m_winui->FindPeerByKey(peerKey) )
+                        {
+                            // A physical activation raises Checked before
+                            // Click. Its normal Click path owns this command.
+                            ++current->radioActivationRevision;
+                        }
                         owner->OnToolClicked(peerKey, generation);
                     });
+
+                if ( const auto radio =
+                         peer.primaryButton.try_as<MUXC::RadioButton>() )
+                {
+                    // UIA SelectionItem.Select raises Checked without Click.
+                    // Defer only this fallback so the synchronous Click, when
+                    // present, can invalidate it (including a vetoed click).
+                    peer.radioCheckedToken = radio.Checked(
+                        [callbackState, generation, peerKey](
+                            const WF::IInspectable&,
+                            const MUX::RoutedEventArgs&)
+                        {
+                            wxToolBar* const owner = callbackState->GetOwner(generation);
+                            if ( !owner || !owner->m_winui )
+                                return;
+                            wxWinUIToolPeer* const current =
+                                owner->m_winui->FindPeerByKey(peerKey);
+                            if ( !current || !current->tool ||
+                                 current->tool->IsToggled() )
+                                return;
+                            const std::uint64_t revision =
+                                ++current->radioActivationRevision;
+                            owner->CallAfter([callbackState, generation, peerKey, revision]()
+                            {
+                                wxToolBar* const live = callbackState->GetOwner(generation);
+                                if ( !live || !live->m_winui )
+                                    return;
+                                wxWinUIToolPeer* const selected =
+                                    live->m_winui->FindPeerByKey(peerKey);
+                                if ( !selected || !selected->tool ||
+                                     selected->radioActivationRevision != revision ||
+                                     selected->tool->IsToggled() )
+                                    return;
+                                const auto native =
+                                    selected->primaryButton.try_as<MUXC::RadioButton>();
+                                const auto checked = native ? native.IsChecked() : nullptr;
+                                if ( checked && checked.Value() )
+                                    live->OnToolClicked(peerKey, generation);
+                            });
+                        });
+                }
 
                 if ( tool->GetKind() == wxITEM_DROPDOWN )
                 {

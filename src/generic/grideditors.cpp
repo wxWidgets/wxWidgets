@@ -15,6 +15,7 @@
 #if wxUSE_GRID
 
 #include "wx/grid.h"
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -269,7 +270,13 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
 {
     wxASSERT_MSG(m_control, wxT("The wxGridCellEditor must be created first!"));
 
+    wxWeakRef<wxWindow> control(m_control);
+    const auto current = [&]()
+    {
+        return control && !control->IsBeingDeleted() && m_control == control.get();
+    };
     m_control->Show(show);
+    if ( !current() ) return;
 
     if ( show )
     {
@@ -278,9 +285,11 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
         {
             m_colFgOld = m_control->GetForegroundColour();
             m_control->SetForegroundColour(attr->GetTextColour());
+            if ( !current() ) return;
 
             m_colBgOld = m_control->GetBackgroundColour();
             m_control->SetBackgroundColour(attr->GetBackgroundColour());
+            if ( !current() ) return;
 
             m_fontOld = m_control->GetFont();
             m_control->SetFont(attr->GetFont());
@@ -295,12 +304,14 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
         if ( m_colFgOld.IsOk() )
         {
             m_control->SetForegroundColour(m_colFgOld);
+            if ( !current() ) return;
             m_colFgOld = wxNullColour;
         }
 
         if ( m_colBgOld.IsOk() )
         {
             m_control->SetBackgroundColour(m_colBgOld);
+            if ( !current() ) return;
             m_colBgOld = wxNullColour;
         }
 
@@ -500,16 +511,31 @@ void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     wxASSERT_MSG(m_control, wxT("The wxGridCellEditor must be created first!"));
 
-    m_value = grid->GetTable()->GetValue(row, col);
+    wxWeakRef<wxGrid> owner(grid);
+    wxWeakRef<wxWindow> control(m_control);
+    wxGridTableBase* const table = grid->GetTable();
+    const wxString value = table->GetValue(row, col);
+    if ( !owner || owner->IsBeingDeleted() || owner->GetTable() != table ||
+         !control || control->IsBeingDeleted() || m_control != control.get() ||
+         owner->GetGridCursorRow() != row || owner->GetGridCursorCol() != col ) return;
+    m_value = value;
 
     DoBeginEdit(m_value);
 }
 
 void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
 {
+    wxWeakRef<wxWindow> control(m_control);
+    const auto current = [&]()
+    {
+        return control && !control->IsBeingDeleted() && m_control == control.get();
+    };
     Text()->SetValue(startValue);
+    if ( !current() ) return;
     Text()->SetInsertionPointEnd();
+    if ( !current() ) return;
     Text()->SelectAll();
+    if ( !current() ) return;
     Text()->SetFocus();
 }
 
@@ -728,14 +754,26 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
     wxGridTableBase *table = grid->GetTable();
-    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+    wxWeakRef<wxGrid> owner(grid);
+    wxWeakRef<wxWindow> control(m_control);
+    const auto current = [&]()
+    {
+        return owner && !owner->IsBeingDeleted() && owner->GetTable() == table &&
+               control && !control->IsBeingDeleted() && m_control == control.get() &&
+               owner->GetGridCursorRow() == row && owner->GetGridCursorCol() == col;
+    };
+    const bool typed = table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER);
+    if ( !current() ) return;
+    if ( typed )
     {
         m_value = table->GetValueAsLong(row, col);
+        if ( !current() ) return;
     }
     else
     {
         m_value = 0;
         wxString sValue = table->GetValue(row, col);
+        if ( !current() ) return;
         if (! sValue.ToLong(&m_value) && ! sValue.empty())
         {
             wxFAIL_MSG( wxT("this cell doesn't have numeric value") );
@@ -747,9 +785,11 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     if ( HasRange() )
     {
         Spin()->SetValue((int)m_value);
+        if ( !current() ) return;
         // Select all the text for convenience of editing and for compatibility
         // with the plain text editor.
         Spin()->SetSelection(-1, -1);
+        if ( !current() ) return;
         Spin()->SetFocus();
     }
     else
@@ -948,15 +988,27 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
     wxGridTableBase * const table = grid->GetTable();
-    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
+    wxWeakRef<wxGrid> owner(grid);
+    wxWeakRef<wxWindow> control(m_control);
+    const auto current = [&]()
+    {
+        return owner && !owner->IsBeingDeleted() && owner->GetTable() == table &&
+               control && !control->IsBeingDeleted() && m_control == control.get() &&
+               owner->GetGridCursorRow() == row && owner->GetGridCursorCol() == col;
+    };
+    const bool typed = table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT);
+    if ( !current() ) return;
+    if ( typed )
     {
         m_value = table->GetValueAsDouble(row, col);
+        if ( !current() ) return;
     }
     else
     {
         m_value = 0.0;
 
         const wxString value = table->GetValue(row, col);
+        if ( !current() ) return;
         if ( !value.empty() )
         {
             if ( !wxNumberFormatter::FromString(value, &m_value) )

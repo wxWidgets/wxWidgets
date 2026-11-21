@@ -64,6 +64,8 @@
 
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
+#include <winrt/Microsoft.UI.Xaml.Documents.h>
+#include <winrt/Windows.UI.Text.h>
 
 #include <atomic>
 #include <climits>
@@ -1518,6 +1520,112 @@ TEST_CASE("WinUIDialogContracts::GenericDialogsRefitAfterLoaded",
 #endif // wxUSE_FONTDLG && wxUSE_FINDREPLDLG
 
 #if wxUSE_FONTDLG
+TEST_CASE("WinUIDialogContracts::FontPreviewUsesNativeTextWithBackdrop",
+          "[winui-dialog-contract][winui-font-dialog][winui-font-preview]")
+{
+    const bool effects = GENERATE(false, true);
+    const bool rtl = GENERATE(false, true);
+    CAPTURE(effects, rtl);
+    wxFrame owner(nullptr, wxID_ANY, "native font preview owner",
+                  wxDefaultPosition, wxSize(440, 300));
+    owner.ShowWithoutActivating();
+    wxFontData data;
+    data.SetInitialFont(wxFont(24, wxFONTFAMILY_ROMAN, wxFONTSTYLE_ITALIC,
+                               wxFONTWEIGHT_BOLD, true));
+    data.SetColour(*wxRED);
+    data.EnableEffects(effects);
+    wxFontDialog dialog(&owner, data);
+    dialog.SetLayoutDirection(rtl ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+    dialog.ShowWithoutActivating();
+    const HWND hwnd = GetHwndOf(&dialog);
+    REQUIRE(::SetPropW(hwnd, L"wxWinUIBackdropTransparent",
+                       reinterpret_cast<HANDLE>(1)));
+
+    std::vector<wxStaticText*> labels;
+    CollectChildControls(&dialog, labels);
+    wxStaticText* sample = nullptr;
+    for ( wxStaticText* label : labels )
+        if ( label->GetLabel() == _("ABCDEFGabcdefg12345") )
+            sample = label;
+    // This is the actual dialog child, not a separate test rendering of it.
+    REQUIRE(sample);
+    MUXC::TextBlock text{nullptr};
+    REQUIRE(WaitFor("native font preview Loaded", [&]()
+    {
+        const auto* host = wxWinUITopLevelHost::FindSlotOwner(sample);
+        const auto* slot = host ? host->FindSlot(sample) : nullptr;
+        const auto border = slot ? slot->GetContent().try_as<MUXC::Border>()
+                                 : nullptr;
+        text = border ? border.Child().try_as<MUXC::TextBlock>() : nullptr;
+        return text && text.IsLoaded() && text.ActualWidth() > 0 &&
+               text.ActualHeight() > 0;
+    }));
+    const auto originalText = text;
+    REQUIRE(text.Inlines().Size() == 1);
+    const auto run = text.Inlines().GetAt(0).as<MUX::Documents::Run>();
+    CHECK(wxString(run.Text().c_str()) == sample->GetLabel());
+    CHECK(text.FontSize() == Approx(32.0));
+    CHECK(text.FontWeight().Weight == 700);
+    CHECK(text.FontStyle() == winrt::Windows::UI::Text::FontStyle::Italic);
+    CHECK(text.TextDecorations() ==
+          winrt::Windows::UI::Text::TextDecorations::Underline);
+    auto brush = text.Foreground().try_as<MUXM::SolidColorBrush>();
+    REQUIRE(brush);
+    CHECK(brush.Color().A == 255);
+    CHECK(brush.Color().R == 255);
+    CHECK(brush.Color().G == 0);
+    CHECK(brush.Color().B == 0);
+
+    auto* size = wxDynamicCast(dialog.FindWindow(wxID_FONT_SIZE), wxChoice);
+    auto* style = wxDynamicCast(dialog.FindWindow(wxID_FONT_STYLE), wxChoice);
+    auto* weight = wxDynamicCast(dialog.FindWindow(wxID_FONT_WEIGHT), wxChoice);
+    REQUIRE(size);
+    REQUIRE(style);
+    REQUIRE(weight);
+    REQUIRE(size->SetStringSelection("33"));
+    style->SetSelection(0);
+    weight->SetSelection(0);
+    if ( effects )
+    {
+        auto* underline = wxDynamicCast(dialog.FindWindow(wxID_FONT_UNDERLINE), wxCheckBox);
+        auto* colour = wxDynamicCast(dialog.FindWindow(wxID_FONT_COLOUR), wxChoice);
+        REQUIRE(underline);
+        REQUIRE(colour);
+        underline->SetValue(false);
+        REQUIRE(colour->SetStringSelection("BLUE"));
+    }
+    wxCommandEvent changed(wxEVT_CHOICE, wxID_FONT_SIZE);
+    changed.SetEventObject(size);
+    REQUIRE(dialog.ProcessWindowEvent(changed));
+    CHECK(text.FontSize() == Approx(44.0));
+    CHECK(text.FontWeight().Weight == 400);
+    CHECK(text.FontStyle() == winrt::Windows::UI::Text::FontStyle::Normal);
+    CHECK(text.TextDecorations() == (effects
+        ? winrt::Windows::UI::Text::TextDecorations::None
+        : winrt::Windows::UI::Text::TextDecorations::Underline));
+    brush = text.Foreground().as<MUXM::SolidColorBrush>();
+    CHECK(brush.Color().A == 255);
+    CHECK(brush.Color().R == (effects ? 0 : 255));
+    CHECK(brush.Color().B == (effects ? 255 : 0));
+    // Live preview changes must not commit the dialog's public result.
+    CHECK(dialog.GetFontData().GetColour() == *wxRED);
+    CHECK_FALSE(dialog.GetFontData().GetChosenFont().IsOk());
+
+    const wxSize before = dialog.GetClientSize();
+    dialog.SetClientSize(before + wxSize(70, 30));
+    dialog.Move(dialog.GetPosition() + wxPoint(10, 15));
+    REQUIRE(WaitFor("font preview remains arranged after move/size", [&]()
+    {
+        return text.IsLoaded() && text.ActualWidth() > 0 && text.ActualHeight() > 0;
+    }));
+    CHECK(text == originalText);
+    CHECK(sample->GetParent()->GetClientSize().x >= sample->GetSize().x);
+    CHECK(::GetPropW(hwnd, L"wxWinUIBackdropTransparent") != nullptr);
+    CHECK(wxWinUIWindowUsesBackdrop(sample));
+    dialog.Hide();
+    owner.Hide();
+}
+
 TEST_CASE("WinUIDialogContracts::FontDialogTransactionalContract",
           "[winui-dialog-contract][winui-standard-dialog]"
           "[winui-font-dialog]")

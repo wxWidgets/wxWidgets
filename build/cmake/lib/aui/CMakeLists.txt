@@ -24,6 +24,11 @@ elseif(WXGTK2)
     wx_append_sources(AUI_FILES AUI_GTK)
 endif()
 
+if(WXWINUI AND wxUSE_WINUI3)
+    list(APPEND AUI_FILES
+        "${wxSOURCE_DIR}/src/aui/auibookwinui.cpp")
+endif()
+
 if(wxBUILD_TESTS STREQUAL "ALL")
     # Compile the deterministic notebook seam only into in-tree test builds.
     # Source properties must be visible here and to the parent monolithic
@@ -43,3 +48,9 @@ if(wxBUILD_TESTS STREQUAL "ALL")
 endif()
 
 wx_add_library(wxaui ${AUI_FILES})
+
+if(WXWINUI AND wxUSE_WINUI3)
+    # Native tab headers belong to AUI; page ownership and docking remain in
+    # wxAuiNotebook. Use the same pinned projection as the other components.
+    wx_winui3_configure_target(wxaui)
+endif()

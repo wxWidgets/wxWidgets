@@ -421,6 +421,23 @@ jobs:
             --output-junit "$buildDir\winui-ribbon-native.xml" `
             --output-log "$buildDir\winui-ribbon-native.log"
 
+      - name: Run wxWinUI native DataView contracts
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_dataview_native$' --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-dataview-native.xml" `
+            --output-log "$buildDir\winui-dataview-native.log"
+
+      - name: Run wxWinUI composition, grid, scrollbar and component metadata contracts
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_(opaque_gdi|component_metadata|composite|grid_native|headerctrl_native|input_native|listctrl_native|propgrid_native|tree_native|aui_native|toolbook_native|file_browsers_native|range_date_native|window_scrollbar_native|selftest_toolkit_runtime)$' `
+            --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-component-contracts.xml" `
+            --output-log "$buildDir\winui-component-contracts.log"
+
       - name: Upload wxWinUI test results
         if: always()
         uses: actions/upload-artifact@v4

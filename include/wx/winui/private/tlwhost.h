@@ -64,6 +64,7 @@
 
 class wxWinUITopLevelHost;
 class wxWinUIVisualCoordinates;
+class wxWinUIScrollBarProjection;
 class wxWinUIDropBroker;
 class wxWinUIDropBrokerState;
 class wxWinUIToolTipPropertyState;
@@ -71,6 +72,9 @@ class wxWinUIAutomationNameStylePropertyState;
 struct wxWinUISlotSyncTransaction;
 class wxWinUIContentLoadedState;
 class wxWinUIPhysicalDisconnectGate;
+class wxWinUICompositeSlotRetirementGate;
+struct wxWinUIDirectCompositeMount;
+struct wxWinUICompositeContentExtension;
 struct IRawElementProviderSimple;
 
 struct wxWinUIClipRectDIP
@@ -167,6 +171,11 @@ public:
     }
 
 private:
+    friend class wxWinUITopLevelHost;
+    // A closed composite graph moves without replacing its native peers or
+    // callback identities. Only the host transaction may retarget this route.
+    void RebindHost(wxWinUITopLevelHost *host) { m_host = host; }
+
     wxWindow *m_window;
     wxWinUITopLevelHost *m_host;
 
@@ -189,6 +198,15 @@ public:
 
     winrt::Microsoft::UI::Xaml::Controls::Grid GetContainer() const
         { return m_container; }
+
+    winrt::Microsoft::UI::Xaml::FrameworkElement GetPresentationRoot() const
+    {
+        return m_directRoot
+            ? m_directRoot.as<winrt::Microsoft::UI::Xaml::FrameworkElement>()
+            : (m_container
+                ? m_container.as<winrt::Microsoft::UI::Xaml::FrameworkElement>()
+                : nullptr);
+    }
 
     // The visual root is the object physically attached to the carrier and
     // therefore owns layout, clipping, tooltip, Loaded and focus traversal.
@@ -318,6 +336,31 @@ private:
     WXHWND m_hwnd = nullptr;
 
     winrt::Microsoft::UI::Xaml::Controls::Grid m_container{ nullptr };
+    // Adapter-owned direct roots are not wrapped or remounted on the Canvas.
+    winrt::Microsoft::UI::Xaml::Controls::Control m_directRoot{ nullptr };
+    std::shared_ptr<wxWinUIDirectCompositeMount> m_directMount;
+
+    // A native composite arranges its child slot instead of the root Canvas.
+    // The mount is borrowed from one exact parent publication; never keep a
+    // replaced parent subtree alive or silently fall back to Canvas placement.
+    bool m_isCompositeChild = false;
+    std::weak_ptr<wxWinUISlotLifetime> m_compositeOwner;
+    unsigned long long m_compositeOwnerGeneration = 0;
+    winrt::weak_ref<winrt::Microsoft::UI::Xaml::Controls::ContentControl>
+        m_compositeMount;
+    winrt::event_token m_compositeLayoutUpdatedToken{};
+    bool m_compositeRetiring = false;
+    std::shared_ptr<wxWinUICompositeSlotRetirementGate> m_compositeDisconnectGate;
+    std::weak_ptr<wxWinUICompositeSlotRetirementGate> m_compositeRetirement;
+    std::uint64_t m_compositeRetirementReceipt = 0;
+
+    // One adapter-witnessed content extension of this exact publication.
+    // Children retain their original composite owner and mount identities.
+    std::shared_ptr<wxWinUICompositeContentExtension> m_compositeContentExtension;
+    winrt::weak_ref<winrt::Microsoft::UI::Xaml::FrameworkElement>
+        m_compositeContentExtensionRoot;
+    unsigned long long m_compositeContentExtensionGeneration = 0;
+    bool m_compositeContentExtensionValidating = false;
 
     // The state carrier between the container and the content: a host-owned
     // ContentControl whose IsEnabled mirrors the wx effective enabled state.
@@ -828,9 +871,26 @@ public:
     void UnregisterSlot(
         wxWindow *window,
         const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate = {});
+    wxWinUISlot *RegisterSlotInParent(
+        wxWindow *window,
+        const winrt::Microsoft::UI::Xaml::UIElement& visualRoot,
+        const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+        wxWindow *compositeOwner,
+        const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount,
+        const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate = {});
+    wxWinUISlot *RegisterSlotInParentDirect(
+        wxWindow *window,
+        const winrt::Microsoft::UI::Xaml::Controls::Control& visualRoot,
+        const winrt::Microsoft::UI::Xaml::UIElement& semanticTarget,
+        wxWindow *compositeOwner,
+        const std::shared_ptr<wxWinUIDirectCompositeMount>& mount,
+        const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate = {});
     void SetSlotPhysicalDisconnectGate(
         wxWindow *window,
         const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate);
+    bool SetSlotCompositeContentExtension(
+        wxWindow *window,
+        const std::shared_ptr<wxWinUICompositeContentExtension>& extension);
 
     wxWinUISlot *FindSlot(const wxWindow *window) const;
 
@@ -857,9 +917,9 @@ public:
     // Reconcile every slotted window in this reparented subtree immediately.
     // This is called by the MSW Reparent() shim: relying only on the next
     // coalesced flush loses the slot if the old TLW is destroyed first.
-    void HandleReparent(wxWindow *subtreeRoot);
+    bool HandleReparent(wxWindow *subtreeRoot);
     static bool CanReparentSubtreeNow(wxWindow *subtreeRoot);
-    static void HandleReparentAcrossHosts(wxWindow *subtreeRoot,
+    static bool HandleReparentAcrossHosts(wxWindow *subtreeRoot,
                                           wxWindow *oldTLW);
     // Preserve the one logical XAML focus owner before USER32 reparents its
     // invisible shell. SetParent() and lazy creation of the destination
@@ -1192,6 +1252,8 @@ private:
                                         bool hasWxAccessible);
     bool RecomputeZOrder(unsigned long long expectedGeneration);
     bool MigrateSlotToCurrentTLW(wxWindow *window);
+    bool MigrateCompositeSubtree(wxWindow *subtreeRoot);
+    bool CanMigrateCompositeSubtreeNow(wxWindow *subtreeRoot) const;
     wxWinUISlot *RegisterSlotInternal(
         wxWindow *window,
         const winrt::Microsoft::UI::Xaml::UIElement& element,
@@ -1201,7 +1263,18 @@ private:
         bool preserveAutomationNameRelinquishment,
         const wxString& lastDesiredAutomationName,
         const std::shared_ptr<wxWinUIPhysicalDisconnectGate>&
-            physicalDisconnectGate);
+            physicalDisconnectGate,
+        wxWindow *compositeOwner = nullptr,
+        const winrt::Microsoft::UI::Xaml::Controls::ContentControl& contentMount = nullptr,
+        const std::shared_ptr<wxWinUIDirectCompositeMount>& directMount = {});
+    bool IsCompositeMountCurrent(const wxWinUISlot& slot) const;
+    bool IsCompositeParentMountCurrent(
+        const wxWinUISlot& parent,
+        const winrt::Microsoft::UI::Xaml::FrameworkElement& mount) const;
+    bool HasCompositeChildren(const wxWinUISlot& parent) const;
+    bool GetCompositeSlotRect(
+        const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
+        wxRect& rect) const;
 
     // Input synthesis: XAML pointer/focus events on a slot container are
     // re-sent as the wx events the application expects on the slot's window.
@@ -1357,7 +1430,7 @@ private:
     void AdvanceInputSiteGeneration();
     void OnSlotPointer(
         const std::shared_ptr<wxWinUISlotLifetime>& state,
-        const winrt::Microsoft::UI::Xaml::Controls::Grid& container,
+        const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
         const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args,
         wxWinUIInputKind kind);
     bool MapRootPointerPointForSlot(
@@ -1502,6 +1575,8 @@ private:
     void RetryDeferredFocusAfterFlush();
     FocusRequest *FindFocusRequest(wxWindow *target);
     wxWindow *FindFocusedSlot() const;
+    wxWinUISlot *FindSlotForVisual(
+        const winrt::Microsoft::UI::Xaml::DependencyObject& visual) const;
     bool HasNativeFocusAuthority() const;
     void InvalidateFocusIntent(unsigned long long expectedGeneration = 0);
     void TransitionFocus(wxWindow *newOwner,
@@ -1510,10 +1585,10 @@ private:
                          wxWindow *lossDestination = nullptr);
     void OnXamlSlotGotFocus(
         const std::shared_ptr<wxWinUISlotLifetime>& state,
-        const winrt::Microsoft::UI::Xaml::Controls::Grid& container);
+        const winrt::Microsoft::UI::Xaml::FrameworkElement& container);
     void OnXamlSlotLostFocus(
         const std::shared_ptr<wxWinUISlotLifetime>& state,
-        const winrt::Microsoft::UI::Xaml::Controls::Grid& container);
+        const winrt::Microsoft::UI::Xaml::FrameworkElement& container);
 
     void BindSlotWindow(wxWinUISlot& slot);
     void UnbindSlotWindow(wxWinUISlot& slot);
@@ -1552,6 +1627,7 @@ private:
 
     winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource m_source{ nullptr };
     winrt::Microsoft::UI::Xaml::Controls::Canvas m_root{ nullptr };
+    std::shared_ptr<wxWinUIScrollBarProjection> m_scrollbarProjection;
     winrt::Microsoft::UI::Input::InputPointerSource
         m_inputPointerSource{ nullptr };
     winrt::Microsoft::UI::Input::InputCursor
@@ -1588,6 +1664,12 @@ private:
     bool m_bridgePinFailureLogged = false;
 
     std::map<wxWindow *, wxWinUISlot *> m_slots;
+    // Physical membership survives logical removal and deferred-vector drains.
+    // A reentrant parent Close must still see every attached child carrier.
+    std::set<wxWinUISlot *> m_compositeSlots;
+    // Serializes the physical root move and registry publication. Nested
+    // registration/reparent is rejected, while destruction remains legal.
+    bool m_compositeMigrationInProgress = false;
     std::vector<wxWinUISlot *> m_deferredDisconnectSlots;
     bool m_deferredDisconnectScheduled = false;
 

@@ -606,10 +606,11 @@ public:
         corresponds to the value of the element number @a pos in the array
         returned by GetColumnsOrder().
 
-        @note This function makes sense for report view only and currently is only
-        implemented in the wxMSW port. Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses
-        of this function so that they will start working under the other platforms when
-        support for the column reordering is added there.
+        @note This function makes sense for report view only. It is implemented
+        in the native wxMSW and generic list controls, including wxWinUI.
+        Use @c wxHAS_LISTCTRL_COLUMN_ORDER to guard uses of this function on
+        other implementations. Support for this programmatic API does not imply
+        that the control supports interactive column reordering by dragging.
 
         @see GetColumnOrder()
     */

@@ -5009,6 +5009,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
             richEditBox.MaxLength(0);
             richEditBox.ClipboardCopyFormat(
                 MUXC::RichEditClipboardFormat::PlainText);
+            richEditBox.DisabledFormattingAccelerators(
+                MUXC::DisabledFormattingAccelerators::All);
             MUXI::InputScope passwordScope;
             passwordScope.Names().Append(
                 MUXI::InputScopeName(
@@ -5231,6 +5233,13 @@ bool wxTextCtrl::Create(wxWindow *parent,
             richEditBox.ClipboardCopyFormat(
                 rich ? MUXC::RichEditClipboardFormat::AllFormats
                      : MUXC::RichEditClipboardFormat::PlainText);
+            // A TOM-backed plain editor must not expose rich formatting in
+            // either keyboard shortcuts or the native selection flyout.
+            // TextCommandBarFlyout honours this native policy while retaining
+            // its normal cut/copy/paste commands.
+            richEditBox.DisabledFormattingAccelerators(
+                rich ? MUXC::DisabledFormattingAccelerators::None
+                     : MUXC::DisabledFormattingAccelerators::All);
             m_winui->richEditBox = richEditBox;
 
             const std::shared_ptr<wxWinUITextCallbackState> callbackState =
@@ -8078,6 +8087,12 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
         else if ( richEditBox )
         {
             richEditBox.TextAlignment(alignment);
+            if ( !getLiveOwner() )
+                return;
+            richEditBox.DisabledFormattingAccelerators(
+                !(style & wxTE_PASSWORD) && (style & (wxTE_RICH | wxTE_RICH2))
+                    ? MUXC::DisabledFormattingAccelerators::None
+                    : MUXC::DisabledFormattingAccelerators::All);
             if ( !getLiveOwner() )
                 return;
             richEditBox.TextWrapping(

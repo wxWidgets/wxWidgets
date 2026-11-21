@@ -24,6 +24,19 @@
 #include "wx/event.h"
 #include "choice-test-access.h"
 #include "wx/frame.h"
+#if wxUSE_COMBOCTRL && wxUSE_POPUPWIN && wxUSE_BUTTON
+    #include "wx/button.h"
+    #include "wx/combo.h"
+    #include "wx/panel.h"
+    #include "wx/sizer.h"
+    #if wxUSE_STATBOX
+        #include "wx/statbox.h"
+    #endif
+    #include "wx/winui/private/tlwhost.h"
+    #include "host-input-test-access.h"
+    #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
+    #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
+#endif
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 #if wxUSE_TOOLTIPS
@@ -33,6 +46,7 @@
 #include "text-peer-test-access.h"
 
 #include "../../src/winui/private.h"
+#include <memory>
 #include <sstream>
 #include <vector>
 
@@ -321,6 +335,9 @@ TEST_CASE("wxWinUI ComboBox LayoutUpdated realization is deferred",
 
     wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot settledPeer;
     wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot settledDiagnostic;
+    // An initial template generation may already have superseded a queued
+    // ticket before this scenario starts. Account only for this scenario's
+    // requests/runs; the phase and replay checks still require it to drain.
     const bool settled = WaitFor(
         "WinUI ComboBox deferred template resolution", [&]()
         {
@@ -337,12 +354,24 @@ TEST_CASE("wxWinUI ComboBox LayoutUpdated realization is deferred",
                        wxWinUIComboBoxTestAccess::WinUITemplatePhase_PeerMutation |
                        wxWinUIComboBoxTestAccess::WinUITemplatePhase_QueuedResolve)) &&
                     !settledDiagnostic.templateReplayPending &&
-                    settledDiagnostic.comboLayoutResolveRuns ==
-                        settledDiagnostic.comboLayoutResolveRequests &&
+                    settledDiagnostic.comboLayoutResolveRuns -
+                        beforeDiagnostic.comboLayoutResolveRuns ==
+                        settledDiagnostic.comboLayoutResolveRequests -
+                        beforeDiagnostic.comboLayoutResolveRequests &&
                     settledDiagnostic.comboLayoutResolveRuns >
                         beforeDiagnostic.comboLayoutResolveRuns;
          }, 1000);
     INFO(wxWinUIComboDiagnostics(combo));
+    INFO("deferred resolution baseline: requests=" <<
+         beforeDiagnostic.comboLayoutResolveRequests <<
+         " runs=" << beforeDiagnostic.comboLayoutResolveRuns <<
+         " generation=" << beforePeer.editGeneration <<
+         " state=" << beforePeer.state << " phase=" << beforePeer.phase);
+    INFO("deferred resolution final: requests=" <<
+         settledDiagnostic.comboLayoutResolveRequests <<
+         " runs=" << settledDiagnostic.comboLayoutResolveRuns <<
+         " generation=" << settledPeer.editGeneration <<
+         " state=" << settledPeer.state << " phase=" << settledPeer.phase);
     REQUIRE(settled);
     CHECK(settledDiagnostic.templateTransitions ==
           beforeDiagnostic.templateTransitions + 1);
@@ -1234,5 +1263,204 @@ TEST_CASE("wxWinUI ComboBox selection survives reentrant item deletion",
     CHECK(textEvents == 1);
     CHECK(textClientData == nullptr);
 }
+
+#if wxUSE_COMBOCTRL && wxUSE_POPUPWIN && wxUSE_BUTTON
+namespace
+{
+// The same custom popup used by Showcase, including native child controls in
+// its own transient top-level XAML island (not a ComboBox's built-in popup).
+class NativeButtonsComboPopup final : public wxPanel, public wxComboPopup
+{
+public:
+    bool Create(wxWindow* parent) override
+    {
+        if ( !wxPanel::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                             wxTAB_TRAVERSAL | wxBORDER_NONE) ) return false;
+        auto* const choices = new wxBoxSizer(wxVERTICAL);
+        for ( const wxString& value : {wxString("First"), wxString("Second"),
+                                      wxString("Third"), wxString("Fourth")} )
+        {
+            auto* const button = new wxButton(this, wxID_ANY, value);
+            buttons.push_back(button);
+            choices->Add(button, 0, wxEXPAND | wxALL, FromDIP(2));
+            button->Bind(wxEVT_BUTTON, [this, value](wxCommandEvent&)
+            {
+                m_value = value;
+                Dismiss();
+            });
+        }
+        SetSizer(choices);
+        return true;
+    }
+    wxWindow* GetControl() override { return this; }
+    void SetStringValue(const wxString& value) override { m_value = value; }
+    wxString GetStringValue() const override { return m_value; }
+    wxSize GetAdjustedSize(int minWidth, int, int maxHeight) override
+    {
+        const wxSize best = GetSizer()->GetMinSize();
+        return wxSize(wxMax(minWidth, best.x), wxMin(maxHeight, best.y));
+    }
+    std::vector<wxButton*> buttons;
+private:
+    wxString m_value;
+};
+
+class RoutedPopupCombo final : public wxComboCtrl
+{
+public:
+    explicit RoutedPopupCombo(wxWindow* parent) : wxComboCtrl(parent, wxID_ANY) {}
+    wxPoint DropButtonCentre() const
+    { return m_btnArea.GetPosition() + wxPoint(m_btnArea.width / 2, m_btnArea.height / 2); }
+};
+
+winrt::Microsoft::UI::Xaml::Controls::Button PopupButtonPeer(wxButton* button)
+{
+    auto* const host = wxWinUITopLevelHost::FindSlotOwner(button);
+    const auto* const slot = host ? host->FindSlot(button) : nullptr;
+    return slot ? slot->GetSemanticTarget().try_as<winrt::Microsoft::UI::Xaml::Controls::Button>() : nullptr;
+}
+}
+
+TEST_CASE("wxWinUI ComboCtrl custom popup native buttons open commit and reopen",
+          "[winui-itemmodel][winui-combo][winui-combo-custom-popup]")
+{
+    namespace C = winrt::Microsoft::UI::Xaml::Controls;
+    namespace A = winrt::Microsoft::UI::Xaml::Automation;
+#if wxUSE_STATBOX
+    const bool nested = GENERATE(false, true);
+#else
+    const bool nested = false;
+#endif
+    CAPTURE(nested);
+    const int inputPath = GENERATE(0, 1, 2);
+    CAPTURE(inputPath);
+    wxPoint position(-30000, -30000);
+    wchar_t desktop[256]{};
+    DWORD needed = 0;
+    if ( ::GetUserObjectInformationW(::GetThreadDesktop(::GetCurrentThreadId()),
+            UOI_NAME, desktop, sizeof(desktop), &needed) &&
+         wxString(desktop).StartsWith("wxWinUITest-") ) position = wxPoint(80, 80);
+    unsigned drops = 0, closes = 0;
+    auto frame = std::make_unique<wxFrame>(nullptr, wxID_ANY, "Custom ComboCtrl popup",
+                                         position, wxSize(640, 460));
+    auto* const panel = new wxPanel(frame.get());
+    auto* const outer = new wxBoxSizer(wxVERTICAL);
+    wxWindow* parent = panel;
+    wxSizer* controls = outer;
+#if wxUSE_STATBOX
+    if ( nested )
+    {
+        auto* const group = new wxStaticBoxSizer(wxVERTICAL, panel, "Choices and combo controls");
+        outer->Add(group, 0, wxEXPAND | wxALL, panel->FromDIP(8));
+        parent = group->GetStaticBox();
+        controls = group;
+    }
+#endif
+    auto* const combo = new RoutedPopupCombo(parent);
+    auto* const popup = new NativeButtonsComboPopup;
+    combo->SetPopupControl(popup);
+    combo->SetValue("First");
+    controls->Add(combo, 0, wxEXPAND | wxALL, panel->FromDIP(8));
+    panel->SetSizer(outer);
+    auto* const frameSizer = new wxBoxSizer(wxVERTICAL);
+    frameSizer->Add(panel, 1, wxEXPAND);
+    frame->SetSizer(frameSizer);
+    frame->Layout();
+    frame->ShowWithoutActivating();
+    combo->Bind(wxEVT_COMBOBOX_DROPDOWN, [&](wxCommandEvent& event) { ++drops; event.Skip(); });
+    combo->Bind(wxEVT_COMBOBOX_CLOSEUP, [&](wxCommandEvent& event) { ++closes; event.Skip(); });
+    REQUIRE(combo->GetPopupWindow());
+    REQUIRE(combo->GetPopupControl() == popup);
+    REQUIRE(popup->buttons.size() == 4);
+    REQUIRE(WaitFor("generic combo text island ready", [&]()
+    {
+        auto* const host = wxWinUITopLevelHost::FindSlotOwner(combo->GetTextCtrl());
+        const auto* const slot = host ? host->FindSlot(combo->GetTextCtrl()) : nullptr;
+        const auto element = slot ? slot->GetContent().try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() : nullptr;
+        return element && element.IsLoaded() && element.ActualWidth() > 0;
+    }, 1000));
+
+    // Cover the wx event table, real HWND message dispatch, and the host's
+    // XAML-to-native root route. None uses SendInput or moves the user's mouse.
+    const wxPoint arrow = combo->DropButtonCentre();
+    if ( inputPath == 0 )
+    {
+        wxMouseEvent press(wxEVT_LEFT_DOWN);
+        press.SetEventObject(combo);
+        press.SetPosition(arrow);
+        press.SetLeftDown(true);
+        combo->ProcessWindowEvent(press);
+        wxMouseEvent release(wxEVT_LEFT_UP);
+        release.SetEventObject(combo);
+        release.SetPosition(arrow);
+        combo->ProcessWindowEvent(release);
+    }
+    else if ( inputPath == 1 )
+    {
+        const auto hwnd = static_cast<HWND>(combo->GetHandle());
+        const LPARAM point = MAKELPARAM(arrow.x, arrow.y);
+        ::SendMessageW(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, point);
+        ::SendMessageW(hwnd, WM_LBUTTONUP, 0, point);
+    }
+    else
+    {
+        auto* const host = wxWinUITopLevelHost::ForWindow(combo, false);
+        REQUIRE(host);
+        const wxPoint screen = combo->ClientToScreen(arrow);
+        wxWinUIPointerSample sample;
+        sample.device = wxWinUIInputDevice::Mouse;
+        sample.kind = wxWinUIInputKind::Press;
+        sample.pointerId = 1;
+        sample.isPrimary = true;
+        sample.screenX = screen.x;
+        sample.screenY = screen.y;
+        sample.timestamp = ::GetTickCount64();
+        sample.button = wxWinUIInputButton::Left;
+        sample.buttonMask = MK_LBUTTON;
+        const auto down = wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample);
+        CHECK(down.preparedActionCount > 0);
+        sample.kind = wxWinUIInputKind::Release;
+        sample.buttonMask = 0;
+        ++sample.timestamp;
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample);
+    }
+    std::vector<C::Button> peers;
+    REQUIRE(WaitFor("custom popup's real native buttons", [&]()
+    {
+        peers.clear();
+        if ( !combo->IsPopupShown() || !popup->IsShownOnScreen() ) return false;
+        for ( auto* button : popup->buttons )
+        {
+            const auto peer = PopupButtonPeer(button);
+            if ( !peer || !peer.IsLoaded() || peer.ActualWidth() <= 0 || peer.ActualHeight() <= 0 ) return false;
+            peers.push_back(peer);
+        }
+        return peers.size() == 4;
+    }, 1000));
+    CHECK(drops == 1);
+    REQUIRE(wxWinUITopLevelHost::FindSlotOwner(popup->buttons[0]));
+    CHECK(wxWinUITopLevelHost::FindSlotOwner(popup->buttons[0]) !=
+          wxWinUITopLevelHost::FindSlotOwner(combo->GetTextCtrl()));
+    const auto native = A::Peers::FrameworkElementAutomationPeer::CreatePeerForElement(peers[2]);
+    REQUIRE(native);
+    const auto invoke = native.GetPattern(A::Peers::PatternInterface::Invoke).try_as<A::Provider::IInvokeProvider>();
+    REQUIRE(invoke);
+    invoke.Invoke();
+    REQUIRE(WaitFor("custom popup commits and dismisses", [&]()
+        { return !combo->IsPopupShown() && combo->GetValue() == "Third"; }, 1000));
+    CHECK(closes == 1);
+    combo->Popup();
+    REQUIRE(WaitFor("custom popup reopens with retained native children", [&]()
+        { return combo->IsPopupShown() && peers[2].IsLoaded() && peers[2].IsEnabled(); }, 1000));
+    CHECK(PopupButtonPeer(popup->buttons[2]) == peers[2]);
+    CHECK(drops == 2);
+    combo->Dismiss();
+    CHECK_FALSE(combo->IsPopupShown());
+    CHECK(closes == 2);
+    frame.reset();
+    wxTheApp->ProcessPendingEvents();
+    wxTheApp->ProcessIdle();
+}
+#endif // custom ComboCtrl popup
 
 #endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_COMBOBOX

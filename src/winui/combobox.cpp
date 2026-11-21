@@ -631,9 +631,11 @@ void wxComboBox::ReconcilePendingTextValueAtPeerEdge()
                 wxWinUIFromHString(impl->editBox.Text()));
         if ( peerValue == impl->pendingTextValue )
         {
-            // LayoutUpdated is the concrete end of the exact editor's
-            // projection transaction. Unlike a posted callback, it cannot run
-            // ahead of a later SelectedIndex -> Text layout pass.
+            // LayoutUpdated is the concrete end of this native projection
+            // transaction. An unfocused ComboBox keeps its editor at 0x0, so
+            // the visible outer control also supplies this boundary. Unlike a
+            // posted callback, it cannot run ahead of a later SelectedIndex
+            // -> Text layout pass.
             ClearPendingTextValue();
         }
     }
@@ -1516,6 +1518,24 @@ bool wxComboBox::AttachEditPeerHandlers()
                     return;
                 }
 
+                // Replacing suggestions first retires the old popup, then
+                // replays completion after its physical close. Escape must
+                // cancel that queued request too: during this interval the
+                // logical flyout is null, but a replacement is still pending.
+                if ( key == winrt::Windows::System::VirtualKey::Escape &&
+                     (owner->m_winui->autoCompleteFlyout ||
+                      owner->m_winui->autoCompleteReplayPending) &&
+                     !modifiers.shiftDown && !modifiers.controlDown &&
+                     !modifiers.leftAltDown && !modifiers.rightAltDown )
+                {
+#ifdef WXWINUI_TEST_SUPPORT
+                    ++owner->m_winui->diagnosticKeyPreviewHandled;
+#endif
+                    args.Handled(true);
+                    owner->DismissAutoComplete();
+                    return;
+                }
+
                 if ( !owner->m_winui->autoCompleteFlyout )
                     return;
 
@@ -1594,14 +1614,6 @@ bool wxComboBox::AttachEditPeerHandlers()
                             args.Handled(true);
                             owner->AcceptAutoCompleteSelection();
                         }
-                        return;
-
-                    case winrt::Windows::System::VirtualKey::Escape:
-#ifdef WXWINUI_TEST_SUPPORT
-                        ++owner->m_winui->diagnosticKeyPreviewHandled;
-#endif
-                        args.Handled(true);
-                        owner->DismissAutoComplete();
                         return;
 
                     default:
@@ -1943,13 +1955,22 @@ bool wxComboBox::CreateSimplePeer()
                     return;
                 }
 
+                const long previousStart = owner->m_selectionStart;
+                const long previousEnd = owner->m_selectionEnd;
+                const long previousInsertion = owner->m_insertionPoint;
                 if ( !owner->ReadTextSelectionFromPeer() )
                     return;
                 owner = textState->GetOwner<wxComboBox>();
                 if ( owner && owner->m_winui &&
                      owner->m_winui->textCallbackState == textState &&
-                     owner->m_winui->editGeneration == editGeneration )
+                     owner->m_winui->editGeneration == editGeneration &&
+                     (owner->m_selectionStart != previousStart ||
+                      owner->m_selectionEnd != previousEnd ||
+                      owner->m_insertionPoint != previousInsertion) )
                 {
+                    // Closing a flyout can repeat SelectionChanged while
+                    // restoring focus without changing the accepted range.
+                    // Such a notification must not undo an Escape dismissal.
                     owner->RefreshAutoComplete();
                 }
                 owner = textState->GetOwner<wxComboBox>();
@@ -2394,6 +2415,11 @@ bool wxComboBox::Create(wxWindow *parent,
             // root notification can then invalidate the outgoing editor before
             // changing this property dismantles the child template.
             editableRoot.RequestedTheme(wxWinUIGetCurrentElementTheme());
+            // The host sizes this layout root, not its semantic ComboBox.
+            // ComboBox's default Left alignment otherwise reduces the real
+            // edit surface to its desired width after an ordinary wx sizer
+            // pass, even though the wx control owns a wider client area.
+            combo.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
             editableRoot.Children().Append(combo);
             m_winui->editableRoot = editableRoot;
         }
@@ -2932,6 +2958,24 @@ void wxComboBox::SetSelection(int n)
     else if ( HasFlag(wxCB_READONLY) )
     {
         DoSetValue(wxString(), SetValue_NoEvent);
+    }
+
+    if ( self && m_winui && m_winui->comboBox &&
+         m_winui->hasPendingTextValue )
+    {
+        // A reentrant selection can leave both native Text properties already
+        // equal to the accepted value. No further property change then asks
+        // WinUI for layout, but the projection ticket still needs its real
+        // post-mutation layout boundary. Schedule it without synchronously
+        // measuring or arranging inside the native selection callback.
+        try
+        {
+            m_winui->comboBox.InvalidateMeasure();
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI ComboBox selection layout", e);
+        }
     }
 }
 
@@ -4422,6 +4466,15 @@ void wxComboBox::ApplyTextToPeer()
         return;
 
     wxWinUIChoiceImpl * const impl = m_winui.get();
+    // The editable ComboBox creates its visible faceplate only while applying
+    // the template. Publishing Text before that point updates the property,
+    // but not the later faceplate; equal-value replay cannot repair it. Keep
+    // the wx document authoritative until ResolveEditPart installs this
+    // generation's real editor, then let its binding and the Loaded replay
+    // publish the value into the complete native template.
+    if ( m_editable && impl->comboBox && !impl->editBox )
+        return;
+
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     choiceState->BeginPeerMutation();
@@ -4792,6 +4845,12 @@ bool wxComboBox::ApplyTextSelectionToPeer()
 bool wxComboBox::ReadTextSelectionFromPeer()
 {
     if ( HasFlag(wxCB_READONLY) )
+        return true;
+
+    // A default-constructed control has an authoritative initial text range,
+    // but no native editor to observe yet. Do not treat a missing peer after
+    // Create() (or during destruction) as this uncreated state.
+    if ( !m_winui && !GetHandle() && !GetParent() && !IsBeingDeleted() )
         return true;
 
     // Do this before ResolveEditPart(): resolving may force the template to
@@ -6831,10 +6890,23 @@ void wxComboBox::OnPeerLayoutUpdated()
     });
     wxUnusedVar(callbackGuard);
 
+    // WinUI's unfocused editable ComboBox presents its value in the outer
+    // faceplate and deliberately keeps EditableText at 0x0. A selected-item
+    // projection can therefore finish without a further editor layout edge.
+    // Observe the same completed native layout here, retaining the exact
+    // document/generation checks used by the editor delegate.
+    ReconcilePendingTextValueAtPeerEdge();
+    wxComboBox * const owner = textState->GetOwner<wxComboBox>();
+    if ( !owner || !owner->m_winui || owner->m_winui.get() != impl ||
+         owner->m_winui->textCallbackState != textState )
+    {
+        return;
+    }
+
     // Strictly passive: this path performs only identity/theme reads and a
     // coalesced enqueue. ApplyTemplate/Measure/Arrange/UpdateLayout and theme
     // replay are forbidden until the Low-priority continuation runs.
-    QueueEditPartResolutionAtLayoutEdge();
+    owner->QueueEditPartResolutionAtLayoutEdge();
 }
 
 void wxComboBox::ResolveEditPartOnce(bool updateLayout)
@@ -7252,6 +7324,9 @@ void wxComboBox::ResolveEditPartOnce(bool updateLayout)
 
                             try
                             {
+                                const long previousStart = owner->m_selectionStart;
+                                const long previousEnd = owner->m_selectionEnd;
+                                const long previousInsertion = owner->m_insertionPoint;
                                 const MUXC::TextBox editBox =
                                     sender.as<MUXC::TextBox>();
                                 owner->m_selectionStart =
@@ -7262,7 +7337,12 @@ void wxComboBox::ResolveEditPartOnce(bool updateLayout)
                                 owner->m_insertionPoint =
                                     owner->m_selectionStart;
                                 owner->ClampTextState();
-                                owner->RefreshAutoComplete();
+                                if ( owner->m_selectionStart != previousStart ||
+                                     owner->m_selectionEnd != previousEnd ||
+                                     owner->m_insertionPoint != previousInsertion )
+                                {
+                                    owner->RefreshAutoComplete();
+                                }
                             }
                             catch ( const winrt::hresult_error& )
                             {

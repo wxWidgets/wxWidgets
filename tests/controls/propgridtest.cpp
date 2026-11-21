@@ -28,6 +28,9 @@
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/advprops.h"
 #include "wx/odcombo.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_COMBOBOX
+#include "wx/combobox.h"
+#endif
 #include "wx/weakref.h"
 
 #include "property-grid-test-access.h"
@@ -6386,6 +6389,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
     SECTION("Boolean_choice_teardown_unlinks_owned_handler_once")
     {
+        const bool ownerDrawContract = GENERATE(false, true);
+        CAPTURE(ownerDrawContract);
+        unsigned destroyed = 0;
         ReentrantPropertyGrid* const pg =
             new ReentrantPropertyGrid(wxTheApp->GetTopWindow(),
                                       wxID_ANY,
@@ -6396,16 +6402,46 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                                           wxPG_LABEL,
                                           true));
         REQUIRE( property );
+        if ( ownerDrawContract )
+            property->SetValueImage(wxBitmap(12, 12));
         REQUIRE( pg->SelectProperty(property, true) );
         wxWindow* const editor = pg->GetEditorControl();
         REQUIRE( editor );
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_COMBOBOX && !defined(wxNO_RTTI)
+        if ( !ownerDrawContract )
+        {
+            REQUIRE( wxDynamicCast(editor, wxComboBox) );
+            REQUIRE_FALSE( wxDynamicCast(editor, wxOwnerDrawnComboBox) );
+        }
+        else
+#endif
         REQUIRE( wxDynamicCast(editor, wxOwnerDrawnComboBox) );
         const wxWeakRef<wxWindow> weakEditor(editor);
+        std::vector<wxWeakRef<wxEvtHandler>> handlers;
+        for ( wxEvtHandler* handler = editor->GetEventHandler();
+              handler && handler != editor; handler = handler->GetNextHandler() )
+        {
+            handlers.emplace_back(handler);
+        }
+        // Both paths own the PG forwarder. The owner-drawn boolean also owns
+        // its pushed double-click processor; it must not leak or double-free
+        // when the generic grid teardown unlinks the active handler chain.
+        REQUIRE_FALSE( handlers.empty() );
+        if ( wxDynamicCast(editor, wxOwnerDrawnComboBox) )
+            CHECK( handlers.size() >= 2 );
+        editor->Bind(wxEVT_DESTROY, [editor, &destroyed](wxWindowDestroyEvent& event)
+        {
+            if ( event.GetEventObject() == editor ) ++destroyed;
+            event.Skip();
+        });
 
         REQUIRE( pg->ClearSelection() );
         wxTheApp->ProcessIdle();
         CHECK_FALSE( weakEditor );
+        CHECK( destroyed == 1 );
+        for ( const auto& handler : handlers ) CHECK_FALSE( handler );
         delete pg;
+        CHECK( destroyed == 1 );
     }
 
     SECTION("Label_close_epoch_protects_active_editor_stack")
@@ -6511,6 +6547,14 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                                           choices,
                                           1));
         REQUIRE( property );
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // This section specifically qualifies the owner-drawn editor's HWND
+        // text child and external popup parking. Keep that explicit contract
+        // after ordinary text choices move to native XAML editors, which have
+        // separate resize/destruction coverage in winuipropgrideditors.cpp.
+        property->SetValueImage(wxArtProvider::GetBitmap(wxART_INFORMATION,
+                                                       wxART_OTHER, wxSize(16, 16)));
+#endif
         pg->SetPropertyEditor(property, wxPGEditor_ComboBox);
         REQUIRE( pg->SelectProperty(property, true) );
         wxWindow* const editor = pg->GetEditorControl();

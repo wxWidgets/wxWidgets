@@ -316,6 +316,9 @@ private:
 
 class wxListHeaderWindow : public wxWindow
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIListProjection;
+#endif
 protected:
     wxListMainWindow  *m_owner;
     const wxCursor    *m_currentCursor;
@@ -347,12 +350,21 @@ public:
                  const wxString &name = wxT("wxlistctrlcolumntitles") );
 
     virtual ~wxListHeaderWindow();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+#endif
 
-    // We never need focus as we don't have any keyboard interface.
+    // The WinUI projection has real focusable header Buttons. The generic
+    // painted header has no keyboard interface and remains non-focusable.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    bool AcceptsFocus() const override;
+#else
     virtual bool AcceptsFocus() const override { return false; }
+#endif
 
     void DrawCurrent();
     void AdjustDC( wxDC& dc );
+    void OnColumnOrderChanged();
 
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
@@ -429,9 +441,11 @@ public:
     // NB: text must be a valid object but not Create()d yet
     wxListTextCtrlWrapper(wxListMainWindow *owner,
                           wxTextCtrl *text,
-                          size_t itemEdit);
+                          size_t itemEdit, const wxString& value);
+    bool CreateControl(const wxRect& labelRect);
 
     wxTextCtrl *GetText() const { return m_text; }
+    void UpdatePosition();
 
     // Check if the given key event should stop editing and return true if it
     // does or false otherwise.
@@ -447,7 +461,11 @@ public:
         End_Destroy     // the entire control is being destroyed.
     };
 
-    void EndEdit(EndReason reason);
+    // Private result used by automation; public EndEditLabel still reports
+    // whether an editor existed, including when acceptance was vetoed.
+    bool EndEdit(EndReason reason);
+    void InvalidateFrom(size_t first) { if ( m_itemEdited >= first ) m_itemValid = false; }
+    bool IsItemValid() const { return m_itemValid; }
 
 protected:
     void OnChar( wxKeyEvent &event );
@@ -463,6 +481,9 @@ private:
     wxString            m_startValue;
     size_t              m_itemEdited;
     bool                m_aboutToFinish;
+    bool                m_finished;
+    bool                m_handlerInstalled = false;
+    bool                m_itemValid = true;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -473,6 +494,9 @@ private:
 
 class wxListMainWindow : public wxWindow
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIListProjection;
+#endif
 public:
     wxListMainWindow();
     wxListMainWindow( wxWindow *parent,
@@ -481,6 +505,10 @@ public:
                       const wxSize& size );
 
     virtual ~wxListMainWindow();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+    void ScrollWindow(int dx, int dy, const wxRect* rect = nullptr) override;
+#endif
 
     // called by the main control when its mode changes
     void SetReportView(bool inReportView);
@@ -592,11 +620,17 @@ public:
 
     void ResetTextControl(wxTextCtrl *text)
     {
-        delete text;
+        // A destroy handler can delete the owner or start another edit. Drop
+        // the old logical editor before entering this callback boundary.
         m_textctrlWrapper = nullptr;
+        delete text;
     }
 
     void OnRenameTimer();
+    bool GetLabelEditItem(size_t item, wxListItem& info) const;
+    bool GetLabelEditRect(size_t item, const wxListItem& info, wxRect& rect) const;
+    void InvalidateLabelEditFrom(size_t first)
+        { if ( m_textctrlWrapper ) m_textctrlWrapper->InvalidateFrom(first); }
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
     void OnRenameCancelled(size_t itemEdit);
 
@@ -636,6 +670,11 @@ public:
     void GetColumn( int col, wxListItem &item ) const;
     int GetColumnWidth( int col ) const;
     int GetColumnCount() const { return m_columns.size(); }
+    int GetColumnOrder(int col) const;
+    int GetColumnIndexFromOrder(int order) const;
+    const wxArrayInt& GetColumnsOrder() const { return m_columnsOrder; }
+    bool SetColumnsOrder(const wxArrayInt& orders);
+    int GetColumnStart(int col) const;
 
     // returns the sum of the heights of all columns
     int GetHeaderWidth() const;
@@ -788,6 +827,9 @@ protected:
 
     // the list of column objects
     std::vector<wxListHeaderData> m_columns;
+    // Visual positions map to logical column indices. Item values, widths,
+    // and event payloads always continue to use the logical indices.
+    wxArrayInt m_columnsOrder;
 
     // currently focused item or -1
     size_t               m_current;
@@ -915,9 +957,12 @@ private:
     // without generating unnecessary wxEVT_LIST_ITEM_{DE}SELECTED events.
     void ExtendSelection(size_t oldCurrent, size_t newCurrent);
 
-    // delete all items but don't refresh: called from dtor
+    // Delete all items without refreshing. Ordinary destruction preserves the
+    // documented notification, but must not send a second one if destruction
+    // was requested from the deletion notification already in progress.
     // Return false if an event handler destroyed this window.
-    bool DoDeleteAllItems();
+    bool DoDeleteAllItems(bool notify = true);
+    bool m_deleteAllNotificationActive = false;
 
     // Compute the minimal width needed to fully display the column header.
     int ComputeMinHeaderWidth(const wxListHeaderData* header) const;

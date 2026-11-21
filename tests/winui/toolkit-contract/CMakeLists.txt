@@ -9,7 +9,7 @@ find_package(wxWidgets CONFIG REQUIRED COMPONENTS core)
 # Deliberately compile separate translation units, without wxprec.h or a source
 # tree include path. This is an installed-header contract, not a GUI test.
 add_library(wx_toolkit_contract OBJECT
-    dispatch.cpp radiobox.cpp spinctrl.cpp spinbutt.cpp)
+    dispatch.cpp dataview.cpp radiobox.cpp spinctrl.cpp spinbutt.cpp)
 target_link_libraries(wx_toolkit_contract PRIVATE wx::core)
 target_compile_features(wx_toolkit_contract PRIVATE cxx_std_17)
 target_compile_definitions(wx_toolkit_contract PRIVATE

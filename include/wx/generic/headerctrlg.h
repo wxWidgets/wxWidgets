@@ -14,6 +14,11 @@
 #include "wx/vector.h"
 #include "wx/overlay.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include <memory>
+class wxWinUIHeaderProjection;
+#endif
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl
 // ----------------------------------------------------------------------------
@@ -46,6 +51,12 @@ public:
                 const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
 
     virtual ~wxHeaderCtrl();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+    void Update() override;
+    bool SetFont(const wxFont& font) override;
+#endif
 
 protected:
     virtual wxSize DoGetBestSize() const override;
@@ -187,6 +198,11 @@ private:
     wxArrayInt m_colIndices;
 
     bool m_wasSeparatorDClick;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIHeaderProjection;
+    std::shared_ptr<wxWinUIHeaderProjection> m_winUIProjection;
+#endif
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);

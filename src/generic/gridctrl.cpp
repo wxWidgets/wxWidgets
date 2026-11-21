@@ -136,6 +136,14 @@ wxGridPrivate::TryGetValueAsDate(wxDateTime& result,
 
     const wxString text = table->GetValue(row, col);
 
+    return TryParseDate(result, params, text);
+}
+
+bool
+wxGridPrivate::TryParseDate(wxDateTime& result,
+                            const DateParseParams& params,
+                            const wxString& text)
+{
     wxString::const_iterator end;
 
     if ( result.ParseFormat(text, params.format, &end) && end == text.end() )

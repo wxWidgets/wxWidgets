@@ -23,11 +23,13 @@
 #include "wx/datectrl.h"
 #include "wx/dateevt.h"
 #include "wx/event.h"
+#include "wx/evtloop.h"
 #include "wx/gauge.h"
 #include "wx/panel.h"
 #include "wx/settings.h"
 #include "wx/timectrl.h"
 #include "wx/uiaction.h"
+#include "wx/weakref.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
@@ -1718,6 +1720,14 @@ TEST_CASE("wxWinUI TimePicker language reaches every real field formatter",
 TEST_CASE("wxWinUI composite physical keyboard navigation",
           "[winui-range-date][timepicker][.][physical]")
 {
+    // An explicit Catch tag selects hidden cases too. Do not let a broad
+    // range/date filter inject input without a separate manual opt-in.
+    wxString physicalOptIn;
+    if ( !wxGetEnv("WX_UI_TESTS", &physicalOptIn) || physicalOptIn != "1" )
+    {
+        WARN("Physical composite keyboard test requires explicit WX_UI_TESTS=1");
+        return;
+    }
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
 
@@ -3686,6 +3696,9 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
         calendar, &forwardDiagnostic));
     const unsigned long long afterForwardRunCount =
         wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
+    CHECK(forwardDiagnostic.boundedPendingRetries == beforeNavigationDiagnostic.boundedPendingRetries);
+    CHECK(forwardDiagnostic.invalidTicketDeferrals == beforeNavigationDiagnostic.invalidTicketDeferrals);
+    CHECK(forwardDiagnostic.automaticRetriesRemaining == beforeNavigationDiagnostic.automaticRetriesRemaining);
     INFO("forward navigation: runs=" << beforeNavigation << "->"
          << afterForwardRunCount
          << " request=" << beforeNavigationDiagnostic.requestRevision
@@ -3722,6 +3735,8 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     wxWinUICalendarTestAccess::WeekRefreshRecovery reverseDiagnostic;
     REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
         calendar, &reverseDiagnostic));
+    CHECK(reverseDiagnostic.boundedPendingRetries == beforeNavigationDiagnostic.boundedPendingRetries);
+    CHECK(reverseDiagnostic.invalidTicketDeferrals == beforeNavigationDiagnostic.invalidTicketDeferrals);
     INFO("reverse navigation: runs=" << afterForwardRunCount << "->"
          << wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar)
          << " request=" << forwardDiagnostic.requestRevision << "->"
@@ -3737,6 +3752,114 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     // per day item or per mark/holiday write.
     CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) <=
           beforeNavigation + 6);
+}
+
+TEST_CASE("wxWinUI Calendar incomplete native month waits for changed layout",
+          "[winui-range-date][calendar][week-numbers][coalescing][native-topology]")
+{
+    const bool destroyWaiting = GENERATE(false, true);
+    CAPTURE(destroyWaiting);
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    const wxDateTime initial(15, wxDateTime::May, 2024);
+    auto calendar = std::make_unique<wxCalendarCtrl>(
+        parent, wxID_ANY, initial, wxDefaultPosition, wxDefaultSize,
+        wxCAL_MONDAY_FIRST | wxCAL_SHOW_SURROUNDING_WEEKS | wxCAL_SHOW_WEEK_NUMBERS);
+    std::vector<MUXC::CalendarView> peers;
+    wxWinUICollectDateElements(wxWinUIGetHostedDateElement(calendar.get()), &peers);
+    REQUIRE(peers.size() == 1);
+    const auto peer = peers.front();
+    wxWinUICalendarTestAccess::LayoutTicket stable;
+    wxWinUICalendarNavigationButtons buttons;
+    REQUIRE(wxWinUIWaitForStableCalendarLayout(calendar.get(), peer,
+        "native topology initial stable month", &stable, &buttons));
+    wxWinUICalendarTestAccess::WeekRefreshRecovery before;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &before));
+
+    // Make the real realized month temporarily incomplete, without revoking
+    // a source ticket or injecting a failed read. Restore the very same native
+    // day afterward: only that layout change should resume the projection.
+    std::vector<MUXC::CalendarViewDayItem> days, hidden;
+    wxWinUICollectDateElements(peer, &days);
+    WG::Calendar civil;
+    civil.ChangeCalendarSystem(WG::CalendarIdentifiers::Gregorian());
+    for ( const auto& day : days )
+    {
+        civil.SetDateTime(day.Date());
+        if ( day.IsLoaded() && day.Visibility() == MUX::Visibility::Visible &&
+             civil.Year() == 2024 && civil.Month() == 5 && civil.Day() == 15 )
+            hidden.push_back(day);
+    }
+    REQUIRE_FALSE(hidden.empty());
+    for ( const auto& day : hidden ) day.Visibility(MUX::Visibility::Collapsed);
+    peer.UpdateLayout();
+    REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(*calendar));
+    wxWinUICalendarTestAccess::WeekRefreshRecovery waiting;
+    REQUIRE(WaitFor("incomplete native month becomes layout-pending", [&]()
+    {
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &waiting) &&
+               waiting.waitingForNativeTopology && !waiting.scheduled;
+    }, 1000));
+    CHECK(waiting.nativeTopologyDeferrals > before.nativeTopologyDeferrals);
+    CHECK(waiting.boundedPendingRetries == before.boundedPendingRetries);
+    CHECK(waiting.invalidTicketDeferrals == before.invalidTicketDeferrals);
+    CHECK(waiting.automaticRetriesRemaining == before.automaticRetriesRemaining);
+    CHECK_FALSE(waiting.degraded);
+    CHECK(waiting.completedRevision != waiting.requestRevision);
+    const auto waitingRuns = wxWinUICalendarTestAccess::GetWeekRefreshRunCount(*calendar);
+    for ( unsigned echo = 0; echo != 6; ++echo )
+    {
+        peer.InvalidateArrange();
+        peer.UpdateLayout();
+        REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(peer,
+            "unchanged native topology echo", MUXD::DispatcherQueuePriority::Low));
+        wxWinUICalendarTestAccess::WeekRefreshRecovery unchanged;
+        REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &unchanged));
+        CHECK(unchanged.waitingForNativeTopology);
+        CHECK_FALSE(unchanged.scheduled);
+        CHECK_FALSE(unchanged.degraded);
+        CHECK(unchanged.generation == waiting.generation);
+        CHECK(unchanged.requestRevision == waiting.requestRevision);
+        CHECK(unchanged.automaticRetriesRemaining == waiting.automaticRetriesRemaining);
+        CHECK(unchanged.boundedPendingRetries == waiting.boundedPendingRetries);
+        CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(*calendar) == waitingRuns);
+    }
+    wxWinUICalendarTestAccess::WeekRefreshRecovery echoed;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &echoed));
+    CHECK(echoed.nativeTopologyEchoes > waiting.nativeTopologyEchoes);
+    if ( destroyWaiting )
+    {
+        const wxWeakRef<wxCalendarCtrl> weak(calendar.get());
+        calendar.reset();
+        for ( const auto& day : hidden ) day.Visibility(MUX::Visibility::Visible);
+        peer.UpdateLayout();
+        REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(peer,
+            "retired incomplete native month", MUXD::DispatcherQueuePriority::Low));
+        CHECK_FALSE(weak);
+        return;
+    }
+
+    for ( const auto& day : hidden ) day.Visibility(MUX::Visibility::Visible);
+    peer.UpdateLayout();
+    REQUIRE(wxWinUIWaitForStableCalendarLayout(calendar.get(), peer,
+        "restored native month completes original request", &stable, &buttons));
+    wxWinUICalendarTestAccess::WeekRefreshRecovery after;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &after));
+    CHECK_FALSE(after.waitingForNativeTopology);
+    CHECK_FALSE(after.degraded);
+    CHECK(after.nativeTopologyResumptions == waiting.nativeTopologyResumptions + 1);
+    CHECK(after.generation == waiting.generation);
+    CHECK(after.requestRevision == waiting.requestRevision);
+    CHECK(after.completedRevision == after.requestRevision);
+    CHECK(after.boundedPendingRetries == before.boundedPendingRetries);
+    CHECK(after.automaticRetriesRemaining == before.automaticRetriesRemaining);
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(*calendar) == waitingRuns + 1);
+    CHECK(calendar->GetDate() == initial);
+    wxDateTime weekStart;
+    int weekNumber = 0;
+    REQUIRE(wxWinUICalendarTestAccess::ReadProjectedWeekNumber(*calendar, initial, &weekStart, &weekNumber));
+    CHECK(weekStart == wxDateTime(13, wxDateTime::May, 2024));
+    CHECK(weekNumber == 20);
 }
 
 TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
@@ -3899,6 +4022,141 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
     CHECK_FALSE(
         wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             sixColumns, &result));
+}
+
+TEST_CASE("wxWinUI Calendar animated native scrolling does not exhaust layout recovery",
+          "[winui-range-date][calendar][week-numbers][native-scroll][recovery]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+    auto calendar = std::make_unique<wxCalendarCtrl>(
+        parent, wxID_ANY, wxDateTime(15, wxDateTime::May, 2024),
+        wxDefaultPosition, wxDefaultSize,
+        wxCAL_MONDAY_FIRST | wxCAL_SHOW_SURROUNDING_WEEKS | wxCAL_SHOW_WEEK_NUMBERS);
+    std::vector<MUXC::CalendarView> peers;
+    wxWinUICollectDateElements(wxWinUIGetHostedDateElement(calendar.get()), &peers);
+    REQUIRE(peers.size() == 1);
+    const auto peer = peers.front();
+    wxWinUICalendarTestAccess::LayoutTicket ticket;
+    wxWinUICalendarNavigationButtons buttons;
+    REQUIRE(wxWinUIWaitForStableCalendarLayout(calendar.get(), peer,
+        "native calendar scroll initial layout", &ticket, &buttons));
+
+    std::vector<MUXC::ScrollViewer> viewers;
+    wxWinUICollectDateElements(peer, &viewers);
+    MUXC::ScrollViewer viewport{ nullptr };
+    for ( const auto& candidate : viewers )
+        if ( candidate.Name() == L"MonthViewScrollViewer" ) viewport = candidate;
+    REQUIRE(viewport);
+    REQUIRE(viewport.IsLoaded());
+    REQUIRE(viewport.ViewportHeight() > 0);
+    const double initialOffset = viewport.VerticalOffset();
+    const double distance = viewport.ViewportHeight();
+    REQUIRE(initialOffset + distance * 4 < viewport.ScrollableHeight());
+
+    wxWinUICalendarTestAccess::WeekRefreshRecovery before;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &before));
+    REQUIRE_FALSE(before.degraded);
+
+    struct Observations
+    {
+        unsigned intermediate = 0, final = 0;
+        std::vector<wxWinUICalendarTestAccess::WeekRefreshRecovery> recovery;
+    };
+    const auto observed = std::make_shared<Observations>();
+    const wxWeakRef<wxCalendarCtrl> weak(calendar.get());
+    struct Subscription
+    {
+        MUXC::ScrollViewer viewport;
+        winrt::event_token token{};
+        ~Subscription()
+        {
+            try { if ( token.value ) viewport.ViewChanged(token); }
+            catch ( const winrt::hresult_error& ) { }
+        }
+    } subscription{viewport};
+    subscription.token = viewport.ViewChanged(
+        [weak, observed](const auto&, const MUXC::ScrollViewerViewChangedEventArgs& args)
+        {
+            if ( args.IsIntermediate() ) ++observed->intermediate;
+            else ++observed->final;
+            if ( weak )
+            {
+                wxWinUICalendarTestAccess::WeekRefreshRecovery state;
+                if ( wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*weak, &state) )
+                    observed->recovery.push_back(state);
+            }
+        });
+
+    // Real animated scrolling needs the native dispatcher, not repeated
+    // UpdateLayout() calls which could force each intermediate page to settle.
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    REQUIRE(loop);
+    const auto waitNative = [loop](const char *description, const std::function<bool()>& ready)
+    {
+        wxStopWatch watch;
+        while ( watch.Time() < 3000 )
+        {
+            if ( ready() ) return true;
+            wxTheApp->ProcessPendingEvents();
+            loop->DispatchTimeout(5);
+            loop->ProcessIdle();
+        }
+        WARN("Timed out waiting for " << description);
+        return ready();
+    };
+    REQUIRE(viewport.ChangeView(nullptr, initialOffset + distance * 2, nullptr, false));
+    REQUIRE(waitNative("first intermediate native calendar scroll", [&]()
+        { return observed->intermediate != 0; }));
+    const unsigned firstIntermediate = observed->intermediate;
+    REQUIRE(viewport.ChangeView(nullptr, initialOffset + distance * 4, nullptr, false));
+    REQUIRE(waitNative("retargeted intermediate native calendar scroll", [&]()
+        { return observed->intermediate > firstIntermediate; }));
+    const unsigned finalsBeforeReturn = observed->final;
+    REQUIRE(viewport.ChangeView(nullptr, initialOffset, nullptr, false));
+    REQUIRE(waitNative("native calendar viewport final event", [&]()
+    {
+        return observed->final > finalsBeforeReturn &&
+               std::abs(viewport.VerticalOffset() - initialOffset) < 0.5;
+    }));
+    REQUIRE(waitNative("native calendar stable projection after animation", [&]()
+        { return wxWinUICalendarTestAccess::GetStableLayoutTicket(*calendar, &ticket); }));
+
+    wxWinUICalendarTestAccess::WeekRefreshRecovery after;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &after));
+    INFO("native intermediate=" << observed->intermediate << " final=" << observed->final
+         << " retries=" << before.automaticRetriesRemaining << "->" << after.automaticRetriesRemaining
+         << " failures=" << before.dayLayoutFailureRecoveries << "->" << after.dayLayoutFailureRecoveries);
+    CHECK_FALSE(after.degraded);
+    CHECK(after.dayLayoutFailureRecoveries == before.dayLayoutFailureRecoveries);
+    CHECK(after.boundedPendingRetries == before.boundedPendingRetries);
+    CHECK(after.automaticRetriesRemaining == before.automaticRetriesRemaining);
+    for ( const auto& state : observed->recovery )
+    {
+        CHECK_FALSE(state.degraded);
+        CHECK(state.dayLayoutFailureRecoveries == before.dayLayoutFailureRecoveries);
+        CHECK(state.boundedPendingRetries == before.boundedPendingRetries);
+    }
+    CHECK(calendar->GetDate() == wxDateTime(15, wxDateTime::May, 2024));
+    wxDateTime weekStart;
+    int weekNumber = 0;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekNumber(*calendar,
+        calendar->GetDate(), &weekStart, &weekNumber));
+    CHECK(weekNumber == calendar->GetDate().GetWeekOfYear(wxDateTime::Monday_First));
+
+    // The native viewport and its completion callback may outlive wx. Closing
+    // during an intermediate frame must retire the binding, not resume a
+    // pending projection against a destroyed model on the next native tick.
+    const unsigned beforeDestruction = observed->intermediate;
+    REQUIRE(viewport.ChangeView(nullptr, initialOffset + distance * 3, nullptr, false));
+    REQUIRE(waitNative("native calendar animation before destruction", [&]()
+        { return observed->intermediate > beforeDestruction; }));
+    calendar.reset();
+    CHECK_FALSE(weak);
+    REQUIRE(waitNative("retired native calendar viewport", [&]()
+        { return !viewport.IsLoaded(); }));
+    REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(peer,
+        "retired calendar animation callback barrier", MUXD::DispatcherQueuePriority::Low));
 }
 
 TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",

@@ -22,6 +22,17 @@
 #include "wx/sizer.h"
 #include "wx/listctrl.h"
 #include "wx/artprov.h"
+#include "wx/weakref.h"
+
+namespace
+{
+bool IsEditableListCurrent(const wxWeakRef<wxEditableListBox>& owner,
+                           const wxWeakRef<wxListCtrl>& list)
+{
+    return owner && list && !owner->IsBeingDeleted() && !list->IsBeingDeleted() &&
+           owner->GetListCtrl() == list.get() && list->GetParent() == owner.get();
+}
+}
 
 // ============================================================================
 // implementation
@@ -188,14 +199,24 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
 void wxEditableListBox::SetStrings(const wxArrayString& strings)
 {
-    m_listCtrl->DeleteAllItems();
+    const wxWeakRef<wxEditableListBox> owner(this);
+    const wxWeakRef<wxListCtrl> list(m_listCtrl);
+    if ( !IsEditableListCurrent(owner, list) || !list->DeleteAllItems() ||
+         !IsEditableListCurrent(owner, list) )
+        return;
     size_t i;
 
     for (i = 0; i < strings.GetCount(); i++)
-        m_listCtrl->InsertItem(i, strings[i]);
+    {
+        const long inserted = list->InsertItem(i, strings[i]);
+        if ( !IsEditableListCurrent(owner, list) || inserted == -1 )
+            return;
+    }
 
-    m_listCtrl->InsertItem(strings.GetCount(), wxEmptyString);
-    m_listCtrl->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    const long inserted = list->InsertItem(strings.GetCount(), wxEmptyString);
+    if ( !IsEditableListCurrent(owner, list) || inserted == -1 )
+        return;
+    list->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void wxEditableListBox::GetStrings(wxArrayString& strings) const
@@ -223,9 +244,17 @@ void wxEditableListBox::OnItemSelected(wxListEvent& event)
 
 void wxEditableListBox::OnNewItem(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->SetItemState(m_listCtrl->GetItemCount()-1,
-                             wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-    m_listCtrl->EditLabel(m_selection);
+    const wxWeakRef<wxEditableListBox> owner(this);
+    const wxWeakRef<wxListCtrl> list(m_listCtrl);
+    if ( !IsEditableListCurrent(owner, list) || list->GetItemCount() == 0 )
+        return;
+    list->SetItemState(list->GetItemCount()-1,
+                       wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    // Selection handlers may destroy either the composite or its list.
+    if ( !IsEditableListCurrent(owner, list) ||
+         m_selection < 0 || m_selection >= list->GetItemCount() )
+        return;
+    list->EditLabel(m_selection);
 }
 
 void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
@@ -233,24 +262,36 @@ void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
     if ( event.GetIndex() == m_listCtrl->GetItemCount()-1 &&
          !event.GetText().empty() )
     {
+        const wxWeakRef<wxEditableListBox> owner(this);
+        const wxWeakRef<wxListCtrl> list(m_listCtrl);
         // The user edited last (empty) line, i.e. added new entry. We have to
         // add new empty line here so that adding one more line is still
         // possible:
-        m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), wxEmptyString);
+        const long inserted = list->InsertItem(list->GetItemCount(), wxEmptyString);
+        if ( !IsEditableListCurrent(owner, list) || inserted == -1 )
+            return;
 
         // Simulate a wxEVT_LIST_ITEM_SELECTED event for the new item,
         // so that the buttons are enabled/disabled properly
-        wxListEvent selectionEvent(wxEVT_LIST_ITEM_SELECTED, m_listCtrl->GetId());
+        wxListEvent selectionEvent(wxEVT_LIST_ITEM_SELECTED, list->GetId());
+        selectionEvent.SetEventObject(list.get());
         selectionEvent.m_itemIndex = event.GetIndex();
-        m_listCtrl->GetEventHandler()->ProcessEvent(selectionEvent);
+        list->GetEventHandler()->ProcessEvent(selectionEvent);
     }
 }
 
 void wxEditableListBox::OnDelItem(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteItem(m_selection);
-    m_listCtrl->SetItemState(m_selection,
-                             wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    const wxWeakRef<wxEditableListBox> owner(this);
+    const wxWeakRef<wxListCtrl> list(m_listCtrl);
+    if ( !IsEditableListCurrent(owner, list) || m_selection < 0 ||
+         m_selection >= list->GetItemCount()-1 )
+        return;
+    if ( !list->DeleteItem(m_selection) || !IsEditableListCurrent(owner, list) ||
+         m_selection < 0 || list->GetItemCount() == 0 )
+        return;
+    list->SetItemState(wxMin(m_selection, list->GetItemCount()-1),
+                       wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void wxEditableListBox::OnEditItem(wxCommandEvent& WXUNUSED(event))

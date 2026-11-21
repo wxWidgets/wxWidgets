@@ -392,6 +392,7 @@ public:
         columnUnits.clear();
         fieldStyles.clear();
         fieldBorderElementCounts.clear();
+        fieldModels.clear();
         root = nullptr;
         automationRoot = nullptr;
         overlay = nullptr;
@@ -421,8 +422,12 @@ public:
     std::vector<int> columnUnits;
     std::vector<int> fieldStyles;
     std::vector<int> fieldBorderElementCounts;
+    std::vector<wxWinUIStatusBarFieldModel> fieldModels;
     bool usesThemeBorders = false;
     bool hasSizeGrip = false;
+    long projectedStyle = 0;
+    double projectedScale = 1.0;
+    bool projectedRightToLeft = false;
 #ifdef WXWINUI_TEST_SUPPORT
     int topLevelMaximizedForTesting = -1;
 #endif
@@ -431,6 +436,7 @@ public:
     unsigned long long rebuildGeneration = 0;
     unsigned long long peerGeneration = 0;
     unsigned long long publishedRevision = 0;
+    unsigned long long sizeOnlyRevision = 0;
 #ifdef WXWINUI_TEST_SUPPORT
     wxWinUIStatusBarReentryPointForTesting nextReentryPoint =
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded;
@@ -843,6 +849,7 @@ bool wxStatusBar::RebuildContent()
             iterationOwner->m_bSameWidthForAllPanes;
         const bool showTips =
             iterationOwner->HasFlag(wxSTB_SHOW_TIPS);
+        const long windowStyle = iterationOwner->GetWindowStyleFlag();
         const bool hasFont = iterationOwner->m_hasFont;
         const bool hasForeground = iterationOwner->m_hasFgCol;
         const bool hasBackground = iterationOwner->m_hasBgCol;
@@ -1024,6 +1031,95 @@ bool wxStatusBar::RebuildContent()
 
         try
         {
+            // A size event does not change the field topology or appearance.
+            // The native Grid already stretches its Star columns: rebuilding
+            // its entire subtree here would unload every field and the active
+            // resize grip for each mouse movement. Only the clipping-dependent
+            // text and tooltip state need to be updated in place.
+            //
+            // Use this path only for a single size mutation of the published
+            // model. An interrupted/failed transaction, DPI/style mutation or
+            // changed grip reservation still takes the full transaction below.
+            if ( impl->sizeOnlyRevision == modelRevision &&
+                 impl->publishedRevision + 1 == modelRevision &&
+                 impl->automationRoot && impl->grid &&
+                 impl->projectedStyle == windowStyle &&
+                 impl->projectedScale == scale &&
+                 impl->projectedRightToLeft == rightToLeft &&
+                 impl->hasSizeGrip == projectSizeGrip &&
+                 impl->fields.size() == fieldModels.size() &&
+                 impl->fieldModels.size() == fieldModels.size() )
+            {
+                const auto fields = impl->fields;
+                const auto previousModels = impl->fieldModels;
+                bool stale = false;
+                for ( size_t i = 0; i < fields.size(); ++i )
+                {
+                    const auto& field = fieldModels[i];
+                    const auto& previous = previousModels[i];
+                    if ( field.renderedText != previous.renderedText )
+                    {
+                        fields[i].Text(wxWinUIToHString(field.renderedText));
+                        if ( !validateSnapshotOwner() )
+                        {
+                            stale = true;
+                            break;
+                        }
+                    }
+                    if ( field.trimming != previous.trimming )
+                    {
+                        fields[i].TextTrimming(
+                            static_cast<MUX::TextTrimming>(field.trimming));
+                        if ( !validateSnapshotOwner() )
+                        {
+                            stale = true;
+                            break;
+                        }
+                    }
+#if wxUSE_TOOLTIPS
+                    if ( showTips &&
+                         field.ellipsized != previous.ellipsized )
+                    {
+                        wxStatusBar * const owner = validateSnapshotOwner();
+                        if ( !owner )
+                        {
+                            stale = true;
+                            break;
+                        }
+                        if ( field.ellipsized )
+                        {
+                            if ( !wxWinUISetToolTip(
+                                     fields[i], field.fullText, owner) )
+                                return false;
+                        }
+                        else
+                        {
+                            // Retire only wx's managed tooltip, preserving an
+                            // application replacement on this retained peer.
+                            if ( !wxWinUIForgetManagedToolTip(fields[i]) )
+                                return false;
+                        }
+                        if ( !validateSnapshotOwner() )
+                        {
+                            stale = true;
+                            break;
+                        }
+                    }
+#endif
+                }
+                if ( stale || callbackState->ConsumeRebuildRequest() )
+                {
+                    if ( !resolveCandidateOwner() )
+                        return false;
+                    continue;
+                }
+                impl->fieldModels = std::move(fieldModels);
+                impl->publishedRevision = modelRevision;
+                callbackState->CancelDeferredRebuild();
+                callbackState->ClearRebuildBudgetWarning();
+                return true;
+            }
+
             MUXC::ContentControl root;
             root.IsTabStop(false);
             root.HorizontalContentAlignment(MUX::HorizontalAlignment::Stretch);
@@ -1617,9 +1713,13 @@ bool wxStatusBar::RebuildContent()
                 std::move(impl->fieldStyles);
             std::vector<int> oldFieldBorderElementCounts =
                 std::move(impl->fieldBorderElementCounts);
+            auto oldFieldModels = std::move(impl->fieldModels);
             const bool oldUsesThemeBorders =
                 impl->usesThemeBorders;
             const bool oldHasSizeGrip = impl->hasSizeGrip;
+            const long oldProjectedStyle = impl->projectedStyle;
+            const double oldProjectedScale = impl->projectedScale;
+            const bool oldProjectedRightToLeft = impl->projectedRightToLeft;
             const unsigned long long oldPeerGeneration =
                 impl->peerGeneration;
             const unsigned long long oldPublishedRevision =
@@ -1638,9 +1738,13 @@ bool wxStatusBar::RebuildContent()
             impl->fieldStyles = std::move(fieldStyles);
             impl->fieldBorderElementCounts =
                 std::move(fieldBorderElementCounts);
+            impl->fieldModels = std::move(fieldModels);
             impl->usesThemeBorders =
                 hasThemeBorder && themeBordersComplete;
             impl->hasSizeGrip = hasSizeGrip;
+            impl->projectedStyle = windowStyle;
+            impl->projectedScale = scale;
+            impl->projectedRightToLeft = rightToLeft;
             impl->peerGeneration = generation;
             impl->publishedRevision = modelRevision;
 
@@ -1674,8 +1778,12 @@ bool wxStatusBar::RebuildContent()
                 impl->fieldStyles = std::move(oldFieldStyles);
                 impl->fieldBorderElementCounts =
                     std::move(oldFieldBorderElementCounts);
+                impl->fieldModels = std::move(oldFieldModels);
                 impl->usesThemeBorders = oldUsesThemeBorders;
                 impl->hasSizeGrip = oldHasSizeGrip;
+                impl->projectedStyle = oldProjectedStyle;
+                impl->projectedScale = oldProjectedScale;
+                impl->projectedRightToLeft = oldProjectedRightToLeft;
                 impl->peerGeneration = oldPeerGeneration;
                 impl->publishedRevision = oldPublishedRevision;
                 oldToolTips.Release();
@@ -2112,6 +2220,7 @@ void wxStatusBar::OnSize(wxSizeEvent& event)
          liveOwner->m_winui->callbackState == callbackState &&
          callbackState->ModelRevision() == modelRevision )
     {
+        impl->sizeOnlyRevision = modelRevision;
         liveOwner->RebuildContent();
     }
 }
@@ -2286,7 +2395,9 @@ bool wxWinUIStatusBarTestAccess::InvokeSizeGrip(
     bool isMouse,
     bool isPrimary,
     bool isLeftButtonPressed,
-    const wxPoint& screenPoint)
+    const wxPoint& screenPoint,
+    std::uint32_t pointerId,
+    std::uint64_t timestamp)
 {
     if ( !bar.m_winui || !bar.m_winui->hasSizeGrip ||
          !bar.m_winui->sizeGripAction ||
@@ -2299,7 +2410,8 @@ bool wxWinUIStatusBarTestAccess::InvokeSizeGrip(
         bar.m_winui->sizeGripAction;
     const POINT point{ screenPoint.x, screenPoint.y };
     return action->invoke(
-        isMouse, isPrimary, isLeftButtonPressed, point, 0, ::GetTickCount64());
+        isMouse, isPrimary, isLeftButtonPressed, point, pointerId,
+        timestamp ? timestamp : ::GetTickCount64());
 }
 
 void wxWinUIStatusBarTestAccess::SetTopLevelMaximized(

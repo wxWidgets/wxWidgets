@@ -22,11 +22,11 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | LOCAL COMPLETE / REMOTE PENDING; SHIPPING TEST SURFACE REMOVED |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | LOCAL COMPLETE / REMOTE PENDING; PHYSICAL WORK RETAINED IN 109/110 |
-| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: FOCUS/CHECKLIST/TOOLBAR ROWS/NATIVE RIBBON COMMANDS LOCAL PASS; FLUENT FAMILY MATRIX OPEN |
+| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: NATIVE DATAVIEW/LIST/TREELIST FOUNDATION AND TOOLKIT RIBBON LOCAL PASS; FULL API/FLUENT MATRIX OPEN |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
-| [111](111-capability-manifest.md) | Keep support documentation and feature evidence synchronized | TODO |
-| [112](112-submission-series.md) | Prepare reviewable submission boundaries without rewriting the integration branch | INITIAL 107 COMMIT MAP; FULL PR SERIES/REPLAY PENDING |
+| [111](111-capability-manifest.md) | Keep support documentation and feature evidence synchronized | SELECTED NATIVE ROWS RECONCILED; EXHAUSTIVE MANIFEST/GENERATOR OPEN |
+| [112](112-submission-series.md) | Prepare reviewable submission boundaries without rewriting the integration branch | 107 COMMIT MAP AND 108 NATIVE DEPENDENCY BOUNDARIES; FULL SERIES/REPLAY PENDING |
 
 Execute one implementation lot at a time. A remote build may run while the next independent lot is prepared, but its predecessor remains pending until the result is known. No repetitive whole-repository re-audit between lots. Each defect receives one focused verification; new failures expand the same lot rather than starting an unrelated initiative.
 
@@ -66,6 +66,52 @@ plans 108–112.
 
 ## Component worklist (plan 108, tracked at feature granularity in 111)
 
+2026-10-04 17:12 local checkpoint: DataView column/viewport resizing retains
+native cells and the active editor; branch expansion/collapse updates its row
+range without replacing unaffected rows. The DataView gate passes **2071
+assertions / 62 cases**, and the combined runtime/component gates pass **7/7**.
+Standalone HeaderCtrl also has a native XAML presentation with **321609/18**
+passing assertions/cases (mostly the existing order stress test); MSW/Qt header
+compatibility checks pass. All six static demos were rebuilt at 17:12 in the
+existing build directory. The accepted shared Showcase/core hashes are unchanged.
+These are deterministic layout/lifetime results, not physical frame-rate or
+complete-port qualification. PropertyGrid remains generic and is the next
+native data-component migration, not a completed family. Detailed evidence and
+limitations are recorded in 108.
+
+Follow-up on the same date: native PropertyGrid names/values/expanders and the
+boolean checkbox editor are now implemented as an experimental foundation.
+Runtime60 passes its seven native cases and the portable property contract
+(1225 assertions / 2 cases); advanced renderer/editor and full UIA/physical
+parity remain open. Matching WER dumps identified the dialog pointer-echo loop,
+Ribbon sample initialization and bare ComboCtrl sample faults. Fixes, regression
+results, pending resize/scrollbar qualification and exact rebuilt sample
+provenance are recorded in 108. This is not a full-port readiness claim.
+
+2026-10-04 user-visible priority correction: the human accepted the shared
+Showcase built at 00:53 with Mica retained. Further backdrop/refresh experiments
+are parked; that candidate is preserved. Current priorities are the real grip
+resize path, missing native choice/list labels, delivery of the experimental
+Toolkit Ribbon containers, and a genuine native data-control implementation.
+Generic DataView/Grid/PropertyGrid drawing with rounded borders or accent
+colours is **not a WinUI port**, regardless of model/API test results. Existing
+Showcase skip messages are unresolved work, not completed families. Standalone
+TableView demos likewise do not qualify the wxDataView/wxGrid adapters. The
+native work must preserve the wx model/notifications, trees, columns/cells,
+selection, editing and accessibility contracts rather than merely restyle GDI.
+
+2026-10-04 native implementation delivery: static Showcase, DataView, Ribbon,
+Minimal, Grid and Widgets were rebuilt with `/warnaserror`. DataView now has
+an actual virtualized XAML row/cell backend, native text editing and TreeList
+checkboxes; Toolkit Ribbon has native containers and page scrolling. The
+combined native/portable suite passes 2573 assertions / 62 cases, resize
+contracts pass 310 / 6, and the dedicated DataView CTest gate passes. Seven
+Ribbon/composition/runtime-metadata gates pass on the same production code.
+The shared human-tested Showcase/core remain unchanged. Grid/PropertyGrid,
+the remaining DataView editors/API and full Ribbon portability are still
+open; no complete port or production-ready claim is made. Exact logs and
+binary identities are recorded in 108.
+
 2026-10-03 checkpoint: explicit focus now survives native TLW activation while
 application redirection remains authoritative; compact CheckListBox peers fit
 their rows and the Tree fixture establishes real control focus. Shared/static
@@ -91,6 +137,36 @@ remote execution pending. Ribbon Bar/Page/Panel/ToolBar/Gallery presentation,
 full custom-art compatibility, physical qualification and the rest of the
 family matrix remain open; ButtonBar integration is not whole-Ribbon parity.
 
+2026-10-04 local checkpoint: the experimental static Toolkit Ribbon now has
+native containers, toolbar/gallery adapters, public panel expansion, wxSizer
+geometry over stable native mounts, bar help/display buttons, and page/panel
+images with independent page-label/icon flags, inline/popup panel extension
+launchers, independent expanded-proxy enabled/shown state and temporary native
+tab expansion/focus boundaries. The current seven bounded gates pass **7/7**,
+including **4458 assertions / 51 Toolkit Ribbon cases**; the focused new/old
+display, popup, proxy and image cases pass 1191 / 12. This supersedes an interim
+6/7 checkpoint: a duplicate test-tree traversal and the private tab adapter's
+incorrect XAML runtime class identity were corrected, with the original
+500 ms readiness bound and required native Loaded/visibility checks retained.
+Exact qualified-run evidence, limitations and binary hashes are in 108.
+At the earlier checkpoint the proxy-state case passed 151 / 1; extension cases passed 220 / 3; image/reentrant-page
+cases passed 114 / 3 and the earlier focused expansion/sizer selection passed
+955 / 13. Exact proxy-state build1 evidence and binary hashes are in 108.
+wxMSW wxribbon still builds. Arbitrary HWND/GDI popup children, custom template
+migration, the remaining control/API matrix and physical qualification are not
+complete. The shared human Mica candidate is unchanged; the static Showcase was
+rebuilt without disabling Mica. This does not close plans 108-112.
+
+2026-10-04 follow-up to the four visual/interaction reports: native list rows
+retain their template height, wx-managed window scrollbars project to real
+transparent-track XAML peers, same-island capture transfers no longer cancel
+a queued grip resize, and DataView keeps unchanged cell visuals mounted.
+The focused build33 run passes **751 assertions / 11 cases** and the broad
+run **12231 / 247** on a private desktop. DataView Value/RangeValue and the
+standard Grid choice/enum/date/datetime renderers are also implemented.
+Physical grip behavior and HDR/scrollbar appearance still need human
+acceptance; this checkpoint does not declare the global port complete.
+
 - Foundations: runtime, host, control host/XamlHost, slots, geometry, z-order/clip/scroll, pointer/capture, keyboard/focus/cursors, tooltip, UIA, OLE, modal/transients, theme/Mica/renderer.
 - Buttons/selection: Button, BitmapButton, Toggle/BitmapToggle, CheckBox, RadioButton, RadioBox, generic CommandLink.
 - Text/items: TextCtrl plain/rich/password/RTF/coordinates/IME/autocomplete, Search, Choice, Combo simple/editable/readonly, BitmapCombo, ListBox owner-draw/extent, CheckList virtualization/focus.
@@ -99,6 +175,18 @@ family matrix remain open; ButtonBar integration is not whole-Ribbon parity.
 - Books/tree: Notebook top/side/bottom/overflow/drag; Simple/Choice/List/Tree/Toolbook; TreeCtrl styles/edit/multiselection/DnD; TreeList and AuiNotebook distinct fallbacks.
 - Chrome/dialogs: MenuBar/Menu/submenu OPEN/CLOSE/keyboard, ToolBar rows/wrapping/overflow/controls, StatusBar/grip, ToolTip timing, RichToolTip fallback, native titlebar; Message/Text/Password/Colour dialogs and Overlay; Font/Find/File/Dir/RichMessage/Progress/Busy/pickers/Wizard/property/preferences fallbacks.
 - Generic/advanced/platform: Panel/scrolled/splitter/header/list/DataView/Grid/VList/HtmlList; ComboCtrl/owner-drawn/editable/rearrange/collapsible/filesystem/property grids; RichText/STC/HTML/WebView/Media/GL/ActiveX; AUI/Ribbon/MDI/NativeWindow; Popup/MiniFrame; DC/GDI+/Direct2D/printing; taskbar/notification/splash/tip; installed/deployed consumer profiles.
+
+2026-10-04 16:26 local checkpoint: generic/native ListCtrl programmatic column
+order now moves real cell/header/editor geometry while retaining logical indices
+and native identities. TreeCtrl shares resolved icon pixels in a bounded private
+cache without skipping mutable image/bundle callbacks. The WinUI gates pass
+**10/10**, and the final ListCtrl gate with the additional portable regression
+passes **2260 assertions / 63 cases**. A discovered wxQt single-selection bug
+is corrected; MSW and Qt compatibility groups pass **59 cases each**. All six
+static demos were rebuilt in the existing directory; the accepted shared binaries
+are unchanged. End-to-end directory rebuilding remains expensive, and neither
+physical visual acceptance nor global parity is inferred. Exact logs, limitations
+and hashes are recorded in 108.
 
 ## Findings qualified or not accepted literally
 

@@ -24,6 +24,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include <memory>
+class wxPGWinUIProjection;
+#endif
 
 #ifndef SWIG
 extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
@@ -568,6 +572,9 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxSystemThemedControl<wxScrol
     friend class wxPropertyGridEditorEventForwarder;
     friend class wxPGHeaderCtrl;
     friend class wxPGDefaultRenderer;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxPGWinUIProjection;
+#endif
     friend class wxPGPropertyCallbackGuard;
 
     wxDECLARE_DYNAMIC_CLASS(wxPropertyGrid);
@@ -1415,6 +1422,9 @@ public:
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) nullptr ) override;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    virtual void Update() override;
+#endif
     virtual bool SetFont( const wxFont& font ) override;
     virtual void SetExtraStyle( long exStyle ) override;
     virtual bool Reparent( wxWindowBase *newParent ) override;
@@ -1883,6 +1893,10 @@ protected:
 private:
 
     bool ButtonTriggerKeyTest(wxPGKeyboardAction action, wxKeyEvent& event);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    std::shared_ptr<wxPGWinUIProjection> m_winUIProjection;
+#endif
 
     void ReallocDoubleBufferIfNeeded();
 

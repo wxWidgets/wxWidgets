@@ -15,6 +15,12 @@
 class WXDLLIMPEXP_AUI wxAuiNotebookTestAccess final
 {
 public:
+    static void DragMotion(wxAuiNotebook* book,
+                           wxAuiTabCtrl* source,
+                           int sourceIndex,
+                           wxAuiTabCtrl* destination,
+                           int destinationIndex);
+
     static void EndDrag(wxAuiNotebook* book,
                         wxAuiTabCtrl* source,
                         int sourceIndex,
