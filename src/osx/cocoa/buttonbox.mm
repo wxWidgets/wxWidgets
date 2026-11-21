@@ -51,7 +51,10 @@ public:
     wxButtonBoxCocoaImpl(wxWindowMac* peer, wxNSSegmentedControl* v)
         : wxWidgetCocoaImpl(peer, v) { }
 
-    NSSegmentedControl* Seg() const { return (NSSegmentedControl*)GetWXWidget(); }
+    NSSegmentedControl* GetSegmentedControl() const
+    {
+        return (NSSegmentedControl*)GetWXWidget();
+    }
 
     void SetMode(long style) override
     {
@@ -60,16 +63,19 @@ public:
             mode = NSSegmentSwitchTrackingSelectAny;
         else if ( style & wxBB_MOMENTARY )
             mode = NSSegmentSwitchTrackingMomentary;
-        [Seg() setTrackingMode:mode];
+        [GetSegmentedControl() setTrackingMode:mode];
     }
 
-    size_t GetCount() const override { return (size_t)[Seg() segmentCount]; }
+    size_t GetCount() const override
+    {
+        return (size_t)[GetSegmentedControl() segmentCount];
+    }
 
     void Insert(size_t pos, const wxString& label,
                 const wxBitmapBundle& bitmap) override
     {
-        const NSInteger n = [Seg() segmentCount];
-        [Seg() setSegmentCount:n + 1];
+        const NSInteger n = [GetSegmentedControl() segmentCount];
+        [GetSegmentedControl() setSegmentCount:n + 1];
         for ( NSInteger i = n; i > (NSInteger)pos; --i )
             CopySegment(i - 1, i);
 
@@ -80,34 +86,41 @@ public:
 
     void Delete(size_t pos) override
     {
-        const NSInteger n = [Seg() segmentCount];
+        const NSInteger n = [GetSegmentedControl() segmentCount];
         for ( NSInteger i = (NSInteger)pos; i < n - 1; ++i )
             CopySegment(i + 1, i);
-        [Seg() setSegmentCount:n - 1];
+        [GetSegmentedControl() setSegmentCount:n - 1];
     }
 
-    int GetSelection() const override { return (int)[Seg() selectedSegment]; }
+    int GetSelection() const override
+    {
+        return (int)[GetSegmentedControl() selectedSegment];
+    }
 
     bool IsSelected(size_t n) const override
-        { return [Seg() isSelectedForSegment:(NSInteger)n]; }
+    {
+        return [GetSegmentedControl() isSelectedForSegment:(NSInteger)n];
+    }
 
     void SetSelected(size_t n, bool selected) override
-        { [Seg() setSelected:selected forSegment:(NSInteger)n]; }
+    {
+        [GetSegmentedControl() setSelected:selected forSegment:(NSInteger)n];
+    }
 
     void ClearSelection() override
     {
-        for ( NSInteger i = 0; i < [Seg() segmentCount]; ++i )
-            [Seg() setSelected:NO forSegment:i];
+        for ( NSInteger i = 0; i < [GetSegmentedControl() segmentCount]; ++i )
+            [GetSegmentedControl() setSelected:NO forSegment:i];
     }
 
     void SetItemLabel(size_t n, const wxString& label) override
     {
-        [Seg() setLabel:wxCFStringRef(label).AsNSString() forSegment:(NSInteger)n];
+        [GetSegmentedControl() setLabel:wxCFStringRef(label).AsNSString() forSegment:(NSInteger)n];
     }
 
     wxString GetItemLabel(size_t n) const override
     {
-        NSString* s = [Seg() labelForSegment:(NSInteger)n];
+        NSString* s = [GetSegmentedControl() labelForSegment:(NSInteger)n];
         return s ? wxCFStringRef::AsString((CFStringRef)s) : wxString();
     }
 
@@ -116,28 +129,28 @@ public:
         NSImage* img = nil;
         if ( bitmap.IsOk() )
             img = bitmap.GetBitmapFor(GetWXPeer()).GetNSImage();
-        [Seg() setImage:img forSegment:(NSInteger)n];
+        [GetSegmentedControl() setImage:img forSegment:(NSInteger)n];
     }
 
     void SetItemWidth(size_t n, int width) override
     {
-        [Seg() setWidth:(width > 0 ? width : 0) forSegment:(NSInteger)n];
+        [GetSegmentedControl() setWidth:(width > 0 ? width : 0) forSegment:(NSInteger)n];
     }
 
     int GetItemWidth(size_t n) const override
     {
-        CGFloat w = [Seg() widthForSegment:(NSInteger)n];
+        CGFloat w = [GetSegmentedControl() widthForSegment:(NSInteger)n];
         return w > 0 ? (int)w : wxDefaultCoord;
     }
 
     void EnableItem(size_t n, bool enable) override
     {
-        [Seg() setEnabled:enable forSegment:(NSInteger)n];
+        [GetSegmentedControl() setEnabled:enable forSegment:(NSInteger)n];
     }
 
     bool IsItemEnabled(size_t n) const override
     {
-        return [Seg() isEnabledForSegment:(NSInteger)n];
+        return [GetSegmentedControl() isEnabledForSegment:(NSInteger)n];
     }
 
     // Per-segment tooltips are only supported by macOS 10.13 and later.
@@ -145,8 +158,8 @@ public:
     {
         if ( WX_IS_MACOS_AVAILABLE(10, 13) )
         {
-            [Seg() setToolTip:(tip.empty() ? nil : wxCFStringRef(tip).AsNSString())
-                   forSegment:(NSInteger)n];
+            [GetSegmentedControl() setToolTip:(tip.empty() ? nil : wxCFStringRef(tip).AsNSString())
+                                   forSegment:(NSInteger)n];
         }
     }
 
@@ -154,7 +167,7 @@ public:
     {
         if ( WX_IS_MACOS_AVAILABLE(10, 13) )
         {
-            NSString* s = [Seg() toolTipForSegment:(NSInteger)n];
+            NSString* s = [GetSegmentedControl() toolTipForSegment:(NSInteger)n];
             if ( s )
                 return wxCFStringRef::AsString((CFStringRef)s);
         }
@@ -166,18 +179,18 @@ private:
     void ResetSegment(size_t n)
     {
         NSInteger i = (NSInteger)n;
-        [Seg() setLabel:@"" forSegment:i];
-        [Seg() setImage:nil forSegment:i];
-        [Seg() setWidth:0 forSegment:i];
-        [Seg() setEnabled:YES forSegment:i];
+        [GetSegmentedControl() setLabel:@"" forSegment:i];
+        [GetSegmentedControl() setImage:nil forSegment:i];
+        [GetSegmentedControl() setWidth:0 forSegment:i];
+        [GetSegmentedControl() setEnabled:YES forSegment:i];
         if ( WX_IS_MACOS_AVAILABLE(10, 13) )
-            [Seg() setToolTip:nil forSegment:i];
-        [Seg() setSelected:NO forSegment:i];
+            [GetSegmentedControl() setToolTip:nil forSegment:i];
+        [GetSegmentedControl() setSelected:NO forSegment:i];
     }
 
     void CopySegment(NSInteger from, NSInteger to)
     {
-        NSSegmentedControl* s = Seg();
+        NSSegmentedControl* s = GetSegmentedControl();
         [s setLabel:[s labelForSegment:from] ?: @"" forSegment:to];
         [s setImage:[s imageForSegment:from] forSegment:to];
         [s setWidth:[s widthForSegment:from] forSegment:to];
