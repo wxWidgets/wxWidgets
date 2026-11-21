@@ -491,7 +491,7 @@ void wxStyledTextCtrlMiniMap::OnMapPaint(wxPaintEvent& event)
     // Normally we shouldn't call the base class event handler directly
     // like this, but here we really want to draw the text before
     // calling our DrawVisibleZone().
-    wxStyledTextCtrl::OnPaint(event);
+    // wxStyledTextCtrl::OnPaint(event); // FIXME
 
     // While dragging the visible zone is shown in an overlay.
     if ( !IsDragging() )

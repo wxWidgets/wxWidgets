@@ -2901,8 +2901,6 @@ set(RICHTEXT_HDR
 
 set(STC_CMN_SRC
     src/stc/stc.cpp
-    src/stc/PlatWX.cpp
-    src/stc/ScintillaWX.cpp
     src/xrc/xh_styledtextctrl.cpp
     src/stc/minimap.cpp
 )
@@ -2913,8 +2911,22 @@ set(STC_CMN_HDR
     wx/stc/minimap.h
 )
 
+set(STC_MSW_SRC
+    src/stc/stc_msw.cpp
+)
+
+set(STC_MSW_HDR
+)
+
+set(STC_GTK_SRC
+    src/stc/stc_gtk.cpp
+)
+
+set(STC_GTK_HDR
+)
+
 set(STC_OSX_COCOA_SRC
-    src/stc/PlatWXcocoa.mm
+    src/stc/stc_osx.mm
 )
 
 set(STC_OSX_COCOA_HDR
