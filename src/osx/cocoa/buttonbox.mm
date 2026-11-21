@@ -223,19 +223,22 @@ bool wxButtonBox::Create(wxWindow* parent, wxWindowID id,
     return true;
 }
 
-wxButtonBoxImpl* wxButtonBox::Impl() const
+wxButtonBoxImpl* wxButtonBox::GetButtonBoxPeer() const
 {
     return dynamic_cast<wxButtonBoxImpl*>(GetPeer());
 }
 
-size_t wxButtonBox::GetCount() const { return Impl()->GetCount(); }
+size_t wxButtonBox::GetCount() const
+{
+    return GetButtonBoxPeer()->GetCount();
+}
 
 void wxButtonBox::Insert(size_t pos, const wxString& label,
                          const wxBitmapBundle& bitmap)
 {
     wxCHECK_RET( pos <= GetCount(), "invalid segment position" );
     m_bitmaps.insert(m_bitmaps.begin() + pos, bitmap);
-    Impl()->Insert(pos, label, bitmap);
+    GetButtonBoxPeer()->Insert(pos, label, bitmap);
     InvalidateBestSize();
 }
 
@@ -243,7 +246,7 @@ void wxButtonBox::Delete(size_t pos)
 {
     wxCHECK_RET( pos < GetCount(), "invalid segment index" );
     m_bitmaps.erase(m_bitmaps.begin() + pos);
-    Impl()->Delete(pos);
+    GetButtonBoxPeer()->Delete(pos);
     InvalidateBestSize();
 }
 
@@ -255,7 +258,7 @@ void wxButtonBox::Clear()
 
 int wxButtonBox::GetSelection() const
 {
-    return HasFlag(wxBB_MOMENTARY) ? wxNOT_FOUND : Impl()->GetSelection();
+    return HasFlag(wxBB_MOMENTARY) ? wxNOT_FOUND : GetButtonBoxPeer()->GetSelection();
 }
 
 void wxButtonBox::SetSelection(int n)
@@ -264,7 +267,7 @@ void wxButtonBox::SetSelection(int n)
         return;
 
     if ( n == wxNOT_FOUND )
-        Impl()->ClearSelection();
+        GetButtonBoxPeer()->ClearSelection();
     else
         SetSelected((size_t)n, true);
 }
@@ -272,7 +275,7 @@ void wxButtonBox::SetSelection(int n)
 bool wxButtonBox::IsSelected(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), false, "invalid segment index" );
-    return Impl()->IsSelected(n);
+    return GetButtonBoxPeer()->IsSelected(n);
 }
 
 void wxButtonBox::SetSelected(size_t n, bool selected)
@@ -280,27 +283,27 @@ void wxButtonBox::SetSelected(size_t n, bool selected)
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
     if ( HasFlag(wxBB_MOMENTARY) )
         return;
-    Impl()->SetSelected(n, selected);
+    GetButtonBoxPeer()->SetSelected(n, selected);
 }
 
 void wxButtonBox::SetItemLabel(size_t n, const wxString& label)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->SetItemLabel(n, label);
+    GetButtonBoxPeer()->SetItemLabel(n, label);
     InvalidateBestSize();
 }
 
 wxString wxButtonBox::GetItemLabel(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), wxString(), "invalid segment index" );
-    return Impl()->GetItemLabel(n);
+    return GetButtonBoxPeer()->GetItemLabel(n);
 }
 
 void wxButtonBox::SetItemBitmap(size_t n, const wxBitmapBundle& bitmap)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
     m_bitmaps[n] = bitmap;
-    Impl()->SetItemBitmap(n, bitmap);
+    GetButtonBoxPeer()->SetItemBitmap(n, bitmap);
     InvalidateBestSize();
 }
 
@@ -313,50 +316,52 @@ wxBitmapBundle wxButtonBox::GetItemBitmap(size_t n) const
 void wxButtonBox::SetItemWidth(size_t n, int width)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->SetItemWidth(n, width);
+    GetButtonBoxPeer()->SetItemWidth(n, width);
     InvalidateBestSize();
 }
 
 int wxButtonBox::GetItemWidth(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), wxDefaultCoord, "invalid segment index" );
-    return Impl()->GetItemWidth(n);
+    return GetButtonBoxPeer()->GetItemWidth(n);
 }
 
 void wxButtonBox::EnableItem(size_t n, bool enable)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->EnableItem(n, enable);
+    GetButtonBoxPeer()->EnableItem(n, enable);
 }
 
 bool wxButtonBox::IsItemEnabled(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), false, "invalid segment index" );
-    return Impl()->IsItemEnabled(n);
+    return GetButtonBoxPeer()->IsItemEnabled(n);
 }
 
 void wxButtonBox::SetItemToolTip(size_t n, const wxString& tip)
 {
     wxCHECK_RET( n < GetCount(), "invalid segment index" );
-    Impl()->SetItemToolTip(n, tip);
+    GetButtonBoxPeer()->SetItemToolTip(n, tip);
 }
 
 wxString wxButtonBox::GetItemToolTip(size_t n) const
 {
     wxCHECK_MSG( n < GetCount(), wxString(), "invalid segment index" );
-    return Impl()->GetItemToolTip(n);
+    return GetButtonBoxPeer()->GetItemToolTip(n);
 }
 
 // For all three tracking modes NSSegmentedControl's selectedSegment is the
 // segment that was just clicked, which is what the event reports.
 bool wxButtonBox::OSXHandleClicked(double /* timestampsec */)
 {
-    const int n = Impl()->GetSelection();
+    wxButtonBoxImpl* const peer = GetButtonBoxPeer();
+
+    const int n = peer->GetSelection();
     if ( n < 0 )
         return false;
 
     const bool selected = HasFlag(wxBB_MOMENTARY) ? true
-                                                  : Impl()->IsSelected((size_t)n);
+                                                  : peer->IsSelected((size_t)n);
     SendButtonBoxEvent(n, selected);
     return true;
 }
