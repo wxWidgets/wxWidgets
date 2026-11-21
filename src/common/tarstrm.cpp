@@ -1449,9 +1449,11 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
                 snprintf(buf, sizeof(buf), "%lu", ++length);
         }
 
-        // reallocate m_extendedHdr if it's not big enough
-        if (m_extendedSize < length) {
-            size_t rounded = RoundUpSize(length);
+        // reallocate m_extendedHdr if it's not big enough to hold the
+        // records already added, the new one and the terminating NUL
+        const size_t used = m_extendedHdr ? strlen(m_extendedHdr) : 0;
+        if (m_extendedSize < used + length + 1) {
+            size_t rounded = RoundUpSize(used + length + 1);
             m_extendedSize <<= 1;
             if (rounded > m_extendedSize)
                 m_extendedSize = rounded;
