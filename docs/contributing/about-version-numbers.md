@@ -16,6 +16,8 @@ instructions there.
 Here is the list of files that need to be updated:
 
 - build/bakefiles/version.bkl {C:R:A}          [NOT UPDATED AUTOMATICALLY]
+- build/msw/wx_setup.props                     [NOT UPDATED AUTOMATICALLY]
+- build/tools/msvs/getversion.bat              [NOT UPDATED AUTOMATICALLY]
 - configure.ac
 - build/osx/wxvers.xcconfig
 - docs/changes.txt

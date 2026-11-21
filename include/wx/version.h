@@ -26,10 +26,10 @@
 
 /*  NB: this file is parsed by automatic tools so don't change its format! */
 #define wxMAJOR_VERSION      3
-#define wxMINOR_VERSION      3
-#define wxRELEASE_NUMBER     5
+#define wxMINOR_VERSION      4
+#define wxRELEASE_NUMBER     0
 #define wxSUBRELEASE_NUMBER  0
-#define wxVERSION_STRING   wxT("wxWidgets 3.3.5")
+#define wxVERSION_STRING   wxT("wxWidgets 3.4.0")
 
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */
