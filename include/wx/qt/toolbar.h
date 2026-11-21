@@ -92,13 +92,11 @@ public:
         : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
                             clientData, shortHelpString, longHelpString)
     {
-        m_qtToolButton = nullptr;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
         : wxToolBarToolBase(tbar, control, label)
     {
-        m_qtToolButton = nullptr;
     }
 
     virtual void SetLabel( const wxString &label ) override;
@@ -109,7 +107,7 @@ private:
     void ClearToolTip();
     void SetToolTip();
 
-    wxQtToolButton* m_qtToolButton;
+    wxQtToolButton* m_qtToolButton = nullptr;
 
     friend class wxToolBar;
 };

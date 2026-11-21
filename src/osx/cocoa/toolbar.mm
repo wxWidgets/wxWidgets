@@ -541,7 +541,6 @@ wxToolBarTool::wxToolBarTool(
         tbar, id, label, bmpNormal, bmpDisabled, kind,
         clientData, shortHelp, longHelp )
 {
-    Init();
 }
 
 #pragma mark -

@@ -254,8 +254,8 @@ private:
     void ToBeDeleted(bool toBeDeleted = true) { m_toBeDeleted = toBeDeleted; }
     bool IsToBeDeleted() const { return m_toBeDeleted; }
 
-    wxStaticText *m_staticText;
-    bool m_toBeDeleted;
+    wxStaticText *m_staticText = nullptr;
+    bool m_toBeDeleted = false;
 
     friend class wxToolBar;
 

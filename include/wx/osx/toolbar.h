@@ -157,7 +157,6 @@ public:
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
         : wxToolBarToolBase(tbar, control, label)
     {
-        Init();
         if (control != nullptr)
             SetControlHandle( (WXWidget) control->GetHandle() );
     }
@@ -193,16 +192,6 @@ public:
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
 private:
-    void Init()
-    {
-        m_controlHandle = nullptr;
-
-#if wxOSX_USE_NATIVE_TOOLBAR
-        m_toolbarItem = nullptr;
-        m_index = -1;
-#endif
-    }
-
     WXWidget GetControlHandle()
     {
         return (WXWidget) m_controlHandle;
@@ -244,15 +233,15 @@ private:
     }
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
-    WXWidget m_controlHandle;
+    WXWidget m_controlHandle = nullptr;
     wxCoord     m_x;
     wxCoord     m_y;
     wxBitmap    m_alternateBitmap;
 
 #if wxOSX_USE_NATIVE_TOOLBAR
-    WX_NSToolbarItem m_toolbarItem;
+    WX_NSToolbarItem m_toolbarItem = nullptr;
     // position in its toolbar, -1 means not inserted
-    long m_index;
+    long m_index = -1;
 #endif
 
     friend class wxToolBar;

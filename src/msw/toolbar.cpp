@@ -155,8 +155,6 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
                         clientData, shortHelp, longHelp)
 {
-    m_staticText = nullptr;
-    m_toBeDeleted  = false;
 }
 
 wxToolBarTool::wxToolBarTool(wxToolBar *tbar,

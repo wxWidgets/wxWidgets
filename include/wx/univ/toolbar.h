@@ -148,33 +148,11 @@ public:
         : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
                             clientData, shortHelp, longHelp)
     {
-        // no position yet
-        m_x =
-        m_y = wxDefaultCoord;
-        m_width =
-        m_height = 0;
-
-        // not pressed yet
-        m_isInverted = false;
-
-        // mouse not here yet
-        m_underMouse = false;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
         : wxToolBarToolBase(tbar, control, label)
     {
-        // no position yet
-        m_x =
-        m_y = wxDefaultCoord;
-        m_width =
-        m_height = 0;
-
-        // not pressed yet
-        m_isInverted = false;
-
-        // mouse not here yet
-        m_underMouse = false;
     }
 
 private:
@@ -194,16 +172,16 @@ private:
     bool IsUnderMouse() { return m_underMouse; }
 
     // the tool position (for controls)
-    wxCoord m_x;
-    wxCoord m_y;
-    wxCoord m_width;
-    wxCoord m_height;
+    wxCoord m_x = wxDefaultCoord;
+    wxCoord m_y = wxDefaultCoord;
+    wxCoord m_width = 0;
+    wxCoord m_height = 0;
 
     // true if the tool is pressed
-    bool m_isInverted;
+    bool m_isInverted = false;
 
     // true if the tool is under the mouse
-    bool m_underMouse;
+    bool m_underMouse = false;
 
     friend class wxToolBar;
 };

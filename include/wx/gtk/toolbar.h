@@ -118,13 +118,11 @@ public:
         : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
                             clientData, shortHelpString, longHelpString)
     {
-        m_item = nullptr;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
         : wxToolBarToolBase(tbar, control, label)
     {
-        m_item = nullptr;
     }
 
     virtual void SetLabel(const wxString& label) override;
@@ -133,7 +131,7 @@ private:
     void SetImage();
     void CreateDropDown();
 
-    GtkToolItem* m_item;
+    GtkToolItem* m_item = nullptr;
 
     friend class wxToolBar;
 };
