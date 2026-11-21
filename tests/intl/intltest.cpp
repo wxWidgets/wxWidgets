@@ -363,9 +363,9 @@ TEST_CASE("wxTranslations::CorruptCatalog", "[translations]")
     mo[63] = 'A'; // unterminated string at the very end of the buffer
 
     wxCharTypeBuffer<char> data(reinterpret_cast<const char*>(mo), moLen);
-    wxMsgCatalog* const cat = wxMsgCatalog::CreateFromData(data, "corrupt");
-    CHECK( cat == nullptr );
-    delete cat;
+    std::unique_ptr<wxMsgCatalog>
+        cat(wxMsgCatalog::CreateFromData(data, "corrupt"));
+    CHECK_FALSE( cat );
 }
 
 TEST_CASE("wxTranslations::CorruptCatalogTables", "[translations]")
@@ -437,9 +437,12 @@ TEST_CASE("wxTranslations::CorruptCatalogTables", "[translations]")
     }
 
     wxCharTypeBuffer<char> data(reinterpret_cast<const char*>(mo), moLen);
-    wxMsgCatalog* const cat = wxMsgCatalog::CreateFromData(data, "corrupt");
-    CHECK( (cat != nullptr) == valid );
-    delete cat;
+    std::unique_ptr<wxMsgCatalog>
+        cat(wxMsgCatalog::CreateFromData(data, "corrupt"));
+    if ( valid )
+        CHECK( cat );
+    else
+        CHECK_FALSE( cat );
 }
 
 TEST_CASE("wxTranslations::CorruptCatalogUnterminated", "[translations]")
@@ -501,14 +504,16 @@ TEST_CASE("wxTranslations::CorruptCatalogUnterminated", "[translations]")
         put32(mo.get() + 32, moLen);
     }
 
-    wxMsgCatalog* const cat = wxMsgCatalog::CreateFromData(
+    std::unique_ptr<wxMsgCatalog> cat(wxMsgCatalog::CreateFromData(
         wxCharBuffer::CreateNonOwned(
             reinterpret_cast<const char*>(mo.get()), moLen
         ),
         "corrupt"
-    );
-    CHECK( (cat != nullptr) == valid );
-    delete cat;
+    ));
+    if ( valid )
+        CHECK( cat );
+    else
+        CHECK_FALSE( cat );
 }
 
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
