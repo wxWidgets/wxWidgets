@@ -88,7 +88,7 @@ public:
     virtual bool OSXHandleClicked(double timestampsec) override;
 
 private:
-    wxButtonBoxImpl* Impl() const;
+    wxButtonBoxImpl* GetButtonBoxPeer() const;
 
     // NSSegmentedControl cannot hand back NSImage as wxBitmapBundle
     std::vector<wxBitmapBundle> m_bitmaps;
