@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/buttonboxcmn.cpp
 // Purpose:     wxButtonBox common code
-// Author:      Wlodzimierz ABX Skiba, LLM supported
+// Author:      Wlodzimierz ABX Skiba, Assisted-by: Claude Sonnet 5.5
 // Created:     12.11.26
 // Copyright:   (c) 2026 Wlodzimierz ABX Skiba
 // Licence:     wxWindows Licence
