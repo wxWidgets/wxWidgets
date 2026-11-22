@@ -12,36 +12,7 @@
 
 #include <vector>
 
-// Mixin interface implemented by the Cocoa peer (see src/osx/cocoa/buttonbox.mm).
-// Could be moved to wx/osx/private/ once the control is merged.
-class wxButtonBoxImpl
-{
-public:
-    virtual ~wxButtonBoxImpl() { }
-
-    // Note that the item functions have names different from the ones of
-    // wxWidgetImpl, which wxButtonBoxCocoaImpl also derives from, in order not
-    // to hide its virtual functions.
-
-    virtual void SetMode(long style) = 0;
-    virtual size_t GetCount() const = 0;
-    virtual void Insert(size_t pos, const wxString& label,
-                        const wxBitmapBundle& bitmap) = 0;
-    virtual void Delete(size_t pos) = 0;
-    virtual int  GetSelection() const = 0;          // -1 if none
-    virtual bool IsSelected(size_t n) const = 0;
-    virtual void SetSelected(size_t n, bool selected) = 0;
-    virtual void ClearSelection() = 0;
-    virtual void SetItemLabel(size_t n, const wxString& label) = 0;
-    virtual wxString GetItemLabel(size_t n) const = 0;
-    virtual void SetItemBitmap(size_t n, const wxBitmapBundle& bitmap) = 0;
-    virtual void SetItemWidth(size_t n, int width) = 0;
-    virtual int  GetItemWidth(size_t n) const = 0;
-    virtual void EnableItem(size_t n, bool enable) = 0;
-    virtual bool IsItemEnabled(size_t n) const = 0;
-    virtual void SetItemToolTip(size_t n, const wxString& tip) = 0;
-    virtual wxString GetItemToolTip(size_t n) const = 0;
-};
+class wxButtonBoxImpl;
 
 class WXDLLIMPEXP_CORE wxButtonBox : public wxButtonBoxBase
 {
