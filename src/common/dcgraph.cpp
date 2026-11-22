@@ -1228,9 +1228,22 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     m_graphicContext->SetCompositionMode(wxCOMPOSITION_OVER);
 
     if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
-        m_graphicContext->DrawText( str, x ,y);
+    {
+        m_graphicContext->DrawText(str, x, y);
+    }
     else
-        m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush(m_textBackgroundColour) );
+    {
+        // Match the rounded DC extents, not the fractional graphics extents.
+        const wxSize size = GetOwner()->GetTextExtent(str);
+        const wxGraphicsBrush formerBrush = m_graphicContext->GetBrush();
+        const wxGraphicsPen formerPen = m_graphicContext->GetPen();
+        m_graphicContext->SetBrush(m_graphicContext->CreateBrush(m_textBackgroundColour));
+        m_graphicContext->SetPen(wxNullGraphicsPen);
+        m_graphicContext->DrawRectangle(x, y, size.x, size.y);
+        m_graphicContext->DrawText(str, x, y);
+        m_graphicContext->SetBrush(formerBrush);
+        m_graphicContext->SetPen(formerPen);
+    }
 
     m_graphicContext->SetCompositionMode(curMode);
 
