@@ -1106,6 +1106,9 @@
 		9FD99E06F6613A1A958FAF6C /* jdmainct.c in Sources */ = {isa = PBXBuildFile; fileRef = B2D390E5D5BF32D4AAA1E15A /* jdmainct.c */; };
 		0E024D145DDD38ACAE68F464 /* toplevel_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C8A7034343354841F7D8B /* toplevel_osx.cpp */; };
 		6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4F4F5211933057824B5621 /* button_osx.cpp */; };
+		10D31D73C113307BA9D96CAC /* buttonbox_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */; };
+		10D31D73C113307BA9D96CAD /* buttonbox_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */; };
+		10D31D73C113307BA9D96CAE /* buttonbox_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */; };
 		91EA325FCE3A3A6A8D1D21A5 /* srchctrl_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C80A0223B993BCB80D1C0A0 /* srchctrl_osx.cpp */; };
 		6944AC98F6F83E3D983DABD4 /* tif_getimage.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D82E7D38BB43BB886E2BFA0 /* tif_getimage.c */; };
 		2822AB845D973F0F84C7395C /* upsampling_sse41.c in Sources */ = {isa = PBXBuildFile; fileRef = 81B87998E35A35FFBFAF2673 /* upsampling_sse41.c */; };
@@ -5740,6 +5743,7 @@
 		8F633793051F371F94C27530 /* LexVB.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexVB.cxx; path = ../../src/stc/lexilla/lexers/LexVB.cxx; sourceTree = SOURCE_ROOT; };
 		35007225BB683683AA7C5E48 /* glcanvas.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = glcanvas.mm; path = ../../src/osx/cocoa/glcanvas.mm; sourceTree = SOURCE_ROOT; };
 		CF4F4F5211933057824B5621 /* button_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button_osx.cpp; path = ../../src/osx/button_osx.cpp; sourceTree = SOURCE_ROOT; };
+		975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = buttonbox_osx.cpp; path = ../../src/osx/buttonbox_osx.cpp; sourceTree = SOURCE_ROOT; };
 		1895085EBEAE3A708FDD527A /* pcre2_chartables.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_chartables.c; path = ../../3rdparty/pcre/src/pcre2_chartables.c; sourceTree = SOURCE_ROOT; };
 		24BD2EF635673E819B8406CB /* LexRust.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRust.cxx; path = ../../src/stc/lexilla/lexers/LexRust.cxx; sourceTree = SOURCE_ROOT; };
 		6B0AFC22860A325BAD3848F7 /* cost.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = cost.c; path = ../../3rdparty/libwebp/src/dsp/cost.c; sourceTree = SOURCE_ROOT; };
@@ -6483,6 +6487,7 @@
 				C62CD918A09D3FE5B1BF2D17 /* anybutton_osx.cpp */,
 				38EF5FC5934C34D599FD6074 /* bmpbuttn_osx.cpp */,
 				CF4F4F5211933057824B5621 /* button_osx.cpp */,
+				975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */,
 				998C092CB83639CFA3DC63B1 /* checkbox_osx.cpp */,
 				9860CD56245B3E7FBD0E7846 /* checklst_osx.cpp */,
 				59D075A3E96F3187B58F6D03 /* choice_osx.cpp */,
@@ -9037,6 +9042,7 @@
 				E82CB89681FF3747B6A94429 /* anybutton_osx.cpp in Sources */,
 				49FE0228D8FD3F7AB64A4434 /* bmpbuttn_osx.cpp in Sources */,
 				6AC347D2DCC730149A0A83D9 /* button_osx.cpp in Sources */,
+				10D31D73C113307BA9D96CAC /* buttonbox_osx.cpp in Sources */,
 				0E92CEF677AA32C9A8CDA0A9 /* checkbox_osx.cpp in Sources */,
 				07412469921A3E488A2F9BA7 /* checklst_osx.cpp in Sources */,
 				4666CDC48BA9301EA283C001 /* choice_osx.cpp in Sources */,
@@ -9738,6 +9744,7 @@
 				E82CB89681FF3747B6A94428 /* anybutton_osx.cpp in Sources */,
 				49FE0228D8FD3F7AB64A4433 /* bmpbuttn_osx.cpp in Sources */,
 				6AC347D2DCC730149A0A83DA /* button_osx.cpp in Sources */,
+				10D31D73C113307BA9D96CAD /* buttonbox_osx.cpp in Sources */,
 				0E92CEF677AA32C9A8CDA0A8 /* checkbox_osx.cpp in Sources */,
 				07412469921A3E488A2F9BA6 /* checklst_osx.cpp in Sources */,
 				4666CDC48BA9301EA283BFFF /* choice_osx.cpp in Sources */,
@@ -11238,6 +11245,7 @@
 				E82CB89681FF3747B6A94427 /* anybutton_osx.cpp in Sources */,
 				49FE0228D8FD3F7AB64A4432 /* bmpbuttn_osx.cpp in Sources */,
 				6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */,
+				10D31D73C113307BA9D96CAE /* buttonbox_osx.cpp in Sources */,
 				0E92CEF677AA32C9A8CDA0A7 /* checkbox_osx.cpp in Sources */,
 				07412469921A3E488A2F9BA8 /* checklst_osx.cpp in Sources */,
 				4666CDC48BA9301EA283C000 /* choice_osx.cpp in Sources */,
