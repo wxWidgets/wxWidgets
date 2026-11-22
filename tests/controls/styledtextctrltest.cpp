@@ -30,6 +30,40 @@
 
 #include "testwindow.h"
 
+TEST_CASE("wxStyledTextCtrl::GetCurLine", "[wxStyledTextCtrl]")
+{
+    const std::unique_ptr<wxStyledTextCtrl>
+        stc(new wxStyledTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY));
+
+    int pos = -1;
+    CHECK( stc->GetCurLine(&pos) == "" );
+    CHECK( pos == 0 );
+
+    pos = -1;
+    CHECK( stc->GetCurLineRaw(&pos).length() == 0 );
+    CHECK( pos == 0 );
+
+    stc->SetText("First\nLast");
+
+    stc->GotoPos(2);
+    CHECK( stc->GetCurLine(&pos) == "First\n" );
+    CHECK( pos == 2 );
+
+    pos = -1;
+    CHECK( std::string(stc->GetCurLineRaw(&pos)) == "First\n" );
+    CHECK( pos == 2 );
+
+    // The last line doesn't end with EOL, so check that the last character of
+    // its text is not lost.
+    stc->GotoPos(9);
+    CHECK( stc->GetCurLine(&pos) == "Last" );
+    CHECK( pos == 3 );
+
+    pos = -1;
+    CHECK( std::string(stc->GetCurLineRaw(&pos)) == "Last" );
+    CHECK( pos == 3 );
+}
+
 #if defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
 
 class StcPopupWindowsTestCase
