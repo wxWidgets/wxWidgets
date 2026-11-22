@@ -2175,6 +2175,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/textmeasure.cpp
     src/osx/statbmp_osx.cpp
     src/generic/imaglist.cpp
+    src/osx/buttonbox_osx.cpp
 </if>
 </set>
 
