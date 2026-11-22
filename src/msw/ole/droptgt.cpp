@@ -453,6 +453,8 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDropTarget, wxObject);
+
 wxDropTarget::wxDropTarget(wxDataObject *dataObj)
             : wxDropTargetBase(dataObj),
               m_dropTargetHelper(nullptr)

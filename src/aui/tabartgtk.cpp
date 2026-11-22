@@ -43,6 +43,8 @@ static int s_CloseIconSize = 16; // default size
 
 }
 
+wxIMPLEMENT_CLASS(wxAuiGtkTabArt, wxAuiGenericTabArt);
+
 wxAuiGtkTabArt::wxAuiGtkTabArt()
 
 {

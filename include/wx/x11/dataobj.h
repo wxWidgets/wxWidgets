@@ -23,6 +23,9 @@ public:
 #endif
 
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
+
+private:
+    wxDECLARE_CLASS(wxDataObject);
 };
 
 #endif //_WX_X11_DATAOBJ_H_

@@ -26,6 +26,8 @@
 // wxDropTarget
 //----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDropTarget, wxObject);
+
 wxDragResult wxDropTarget::OnDragOver(
     wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
     wxDragResult def )
@@ -108,6 +110,8 @@ bool wxDropTarget::GetData()
 
 //-----------------------------------------------------------------------------
 // drag request
+
+wxIMPLEMENT_CLASS(wxDropSource, wxObject);
 
 wxDropSource::~wxDropSource()
 {

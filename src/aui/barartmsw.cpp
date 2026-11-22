@@ -24,6 +24,8 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 
+wxIMPLEMENT_CLASS(wxAuiMSWToolBarArt, wxAuiGenericToolBarArt);
+
 wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 {
     if ( wxUxThemeIsActive() )

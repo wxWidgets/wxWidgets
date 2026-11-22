@@ -126,6 +126,8 @@ private:
 
 } // anonymous namespace
 
+wxIMPLEMENT_CLASS(wxDropTarget, wxObject);
+
 class wxDropTarget::Impl : public QObject
 {
 public:
@@ -343,6 +345,8 @@ void wxDropTarget::Disconnect()
 }
 
 //###########################################################################
+
+wxIMPLEMENT_CLASS(wxDropSource, wxObject);
 
 wxDropSource::wxDropSource(wxWindow *win,
               const wxCursorBundle& copy,

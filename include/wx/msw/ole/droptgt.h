@@ -81,6 +81,9 @@ private:
     wxIDropTargetHelper *m_dropTargetHelper; // the drop target helper
 
     wxDECLARE_NO_COPY_CLASS(wxDropTarget);
+
+private:
+    wxDECLARE_CLASS(wxDropTarget);
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

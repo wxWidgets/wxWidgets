@@ -6938,6 +6938,9 @@ protected:
     wxDataFormat            m_formatRichTextBuffer;     // our custom format
     wxRichTextBuffer*       m_richTextBuffer;           // our data
     static const wxChar*    ms_richTextBufferFormatId;  // our format id
+
+private:
+    wxDECLARE_CLASS(wxRichTextBufferDataObject);
 };
 
 #endif

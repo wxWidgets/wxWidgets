@@ -230,7 +230,7 @@ const wxDataFormat wxFormatInvalid;
          wxTextDataObject, wxBitmapDataObject, wxCustomDataObject,
          wxDropTarget, wxDropSource, wxTextDropTarget, wxFileDropTarget
 */
-class wxDataObject
+class wxDataObject : public wxObject
 {
 public:
     enum Direction

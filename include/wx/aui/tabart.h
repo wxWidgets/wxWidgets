@@ -41,7 +41,7 @@ class wxReadOnlyDC;
 
 // tab art class
 
-class WXDLLIMPEXP_AUI wxAuiTabArt
+class WXDLLIMPEXP_AUI wxAuiTabArt : public wxObject
 {
 public:
 
@@ -164,6 +164,9 @@ public:
     // Provide opportunity for subclasses to recalculate colours
     virtual void UpdateColoursFromSystem() {}
     virtual void UpdateDpi() {}
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxAuiTabArt);
 };
 
 
@@ -284,6 +287,9 @@ private:
                      const wxRect& rect,
                      const wxBitmap& bmp,
                      int buttonState);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxAuiTabArtBase);
 };
 
 // This tab art provider draws flat tabs with a thin border.
@@ -338,6 +344,9 @@ private:
 
     struct Data;
     Data* const m_data;
+
+private:
+    wxDECLARE_CLASS(wxAuiFlatTabArt);
 };
 
 
@@ -394,6 +403,9 @@ private:
     virtual wxColour
     GetButtonColour(wxAuiButtonId button,
                     wxAuiPaneButtonState state) const override;
+
+private:
+    wxDECLARE_CLASS(wxAuiGenericTabArt);
 };
 
 
@@ -456,6 +468,9 @@ private:
                      const wxRect& rect,
                      const wxBitmap& bmp,
                      int buttonState) override;
+
+private:
+    wxDECLARE_CLASS(wxAuiSimpleTabArt);
 };
 
 #ifndef __WXUNIVERSAL__

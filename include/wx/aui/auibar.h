@@ -249,7 +249,7 @@ using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
 
 // tab art class
 
-class WXDLLIMPEXP_AUI wxAuiToolBarArt
+class WXDLLIMPEXP_AUI wxAuiToolBarArt : public wxObject
 {
 public:
 
@@ -350,6 +350,8 @@ public:
     // Provide opportunity for subclasses to recalculate colours
     virtual void UpdateColoursFromSystem() {}
 
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxAuiToolBarArt);
 };
 
 
@@ -463,6 +465,9 @@ protected:
 
 private:
     wxAuiTextDirection m_textDirection = wxAuiTextDirection::LeftToRight;
+
+private:
+    wxDECLARE_CLASS(wxAuiGenericToolBarArt);
 };
 
 

@@ -39,6 +39,17 @@ WXDLLEXPORT const wxDataFormat& wxFormatInvalid = dataFormatInvalid;
 // wxDataObjectBase
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataObjectSimple, wxDataObject);
+wxIMPLEMENT_CLASS(wxDataObjectComposite, wxDataObject);
+wxIMPLEMENT_CLASS(wxHTMLDataObject, wxDataObjectSimple);
+wxIMPLEMENT_CLASS(wxTextDataObject, wxDataObjectSimple);
+wxIMPLEMENT_CLASS(wxCustomDataObject, wxDataObjectSimple);
+wxIMPLEMENT_CLASS(wxImageDataObject, wxCustomDataObject);
+
+#if !defined(__WXMSW__) && !defined(__WXGTK__)
+wxIMPLEMENT_CLASS(wxURLDataObject, wxTextDataObject);
+#endif
+
 wxDataObjectBase::~wxDataObjectBase()
 {
 }
@@ -772,6 +783,8 @@ wxImage wxImageDataObject::GetImage() const
 //     internal compiler error with VC++ 5.0 (hey, even gcc compiles this!),
 //     so use SetDataObject() instead
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxTextDropTarget, wxDropTarget);
+
 wxTextDropTarget::wxTextDropTarget()
 {
     SetDataObject(new wxTextDataObject);
@@ -789,6 +802,8 @@ wxDragResult wxTextDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
 // ----------------------------------------------------------------------------
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxFileDropTarget, wxDropTarget);
 
 wxFileDropTarget::wxFileDropTarget()
 {

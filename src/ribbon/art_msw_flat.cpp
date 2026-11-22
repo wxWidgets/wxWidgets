@@ -27,6 +27,8 @@
 #include "wx/msw/private.h"
 #endif
 
+wxIMPLEMENT_CLASS(wxRibbonMSWFlatArtProvider, wxRibbonMSWArtProvider);
+
 wxRibbonMSWFlatArtProvider::wxRibbonMSWFlatArtProvider()
     : wxRibbonMSWArtProvider()
 {

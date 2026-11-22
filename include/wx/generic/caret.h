@@ -84,6 +84,9 @@ private:
     wxCaretTimer  m_timer;
     bool          m_blinkedOut,     // true => caret hidden right now
                   m_hasFocus;       // true => our window has focus
+
+private:
+    wxDECLARE_CLASS(wxCaret);
 };
 
 #endif // _WX_CARET_H_

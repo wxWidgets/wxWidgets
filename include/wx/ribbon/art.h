@@ -207,7 +207,7 @@ class wxRibbonGalleryItem;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 
-class WXDLLIMPEXP_RIBBON wxRibbonArtProvider
+class WXDLLIMPEXP_RIBBON wxRibbonArtProvider : public wxObject
 {
 public:
     wxRibbonArtProvider();
@@ -430,6 +430,9 @@ public:
     virtual wxRect GetBarToggleButtonArea(const wxRect& rect)= 0;
 
     virtual wxRect GetRibbonHelpButtonArea(const wxRect& rect) = 0;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxRibbonArtProvider);
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -822,6 +825,9 @@ protected:
     int m_gallery_bitmap_padding_bottom_size;
     int m_toggle_button_offset;
     int m_help_button_offset;
+
+private:
+    wxDECLARE_CLASS(wxRibbonMSWArtProvider);
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWFlatArtProvider : public wxRibbonMSWArtProvider
@@ -924,6 +930,9 @@ protected:
         wxPen& secondary_colour);
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect,
         double visibility);
+
+private:
+    wxDECLARE_CLASS(wxRibbonMSWFlatArtProvider);
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider
@@ -1086,6 +1095,9 @@ protected:
     wxPen m_toolbar_hover_borden_pen;
 
     wxFont m_tab_active_label_font;
+
+private:
+    wxDECLARE_CLASS(wxRibbonAUIArtProvider);
 };
 
 #if defined(__WXMSW__)

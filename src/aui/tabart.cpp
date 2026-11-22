@@ -120,6 +120,12 @@ static const unsigned char unpin_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 #endif // wxHAS_SVG/!wxHAS_SVG
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxAuiTabArt, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxAuiTabArtBase, wxAuiTabArt);
+wxIMPLEMENT_CLASS(wxAuiFlatTabArt, wxAuiTabArtBase);
+wxIMPLEMENT_CLASS(wxAuiGenericTabArt, wxAuiTabArtBase);
+wxIMPLEMENT_CLASS(wxAuiSimpleTabArt, wxAuiTabArtBase);
+
 // wxAuiTabArt implementation
 
 int wxAuiTabArt::GetButtonRect(

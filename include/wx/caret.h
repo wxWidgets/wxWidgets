@@ -26,7 +26,7 @@
 // appear. It can be either a solid block or a custom bitmap (TODO)
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxCaretBase
+class WXDLLIMPEXP_CORE wxCaretBase : public wxObject
 {
 public:
     // ctors
@@ -189,6 +189,9 @@ private:
     }
 
     wxDECLARE_NO_COPY_CLASS(wxCaretBase);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxCaretBase);
 };
 
 // ---------------------------------------------------------------------------

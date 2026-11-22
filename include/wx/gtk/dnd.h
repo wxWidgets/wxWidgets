@@ -56,6 +56,9 @@ public:
     void GTKSetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
     void GTKSetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
     void GTKSetDragTime(unsigned time) { m_dragTime = time; }
+
+private:
+    wxDECLARE_CLASS(wxDropTarget);
 };
 
 //-------------------------------------------------------------------------
@@ -115,6 +118,8 @@ private:
     void GTKConnectDragSignals();
     void GTKDisconnectDragSignals();
 
+private:
+    wxDECLARE_CLASS(wxDropSource);
 };
 
 #endif // _WX_GTK_DND_H_

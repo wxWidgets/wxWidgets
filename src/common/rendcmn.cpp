@@ -123,6 +123,9 @@ private:
 // wxRendererNative implementation
 // ============================================================================
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxRendererNative, wxObject);
+wxIMPLEMENT_CLASS(wxDelegateRendererNative, wxRendererNative);
+
 wxRendererNative::~wxRendererNative()
 {
     // empty but necessary

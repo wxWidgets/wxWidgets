@@ -81,6 +81,9 @@ private:
     IDataObject *m_pIDataObject; // pointer to the COM interface
 
     wxDECLARE_NO_COPY_CLASS(wxDataObject);
+
+private:
+    wxDECLARE_CLASS(wxDataObject);
 };
 
 #endif  //_WX_MSW_OLE_DATAOBJ_H

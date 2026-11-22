@@ -39,6 +39,9 @@
 // implementation
 // ============================================================================
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxRenderer, wxDelegateRendererNative);
+wxIMPLEMENT_CLASS(wxDelegateRenderer, wxRenderer);
+
 wxRenderer::~wxRenderer()
 {
 }

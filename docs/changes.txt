@@ -311,6 +311,15 @@ Changes in behaviour which may result in build errors
   to add an explicit call to wxUniChar::GetValue() to some code using this
   function (but most code should still compile and work without any changes).
 
+- wxAuiDockArt, wxAuiTabArt, wxAuiToolBarArt, wxCaret, wxDataObject,
+  wxDropSource, wxDropTarget, wxRendererNative and wxRibbonArtProvider now
+  derive from wxObject. If your class derives from any of them and from
+  wxObject (or a class deriving from it, such as wxEvtHandler), it will now
+  have wxObject as an ambiguous base class, which can result in compilation
+  errors in the code using it. In this case, please remove wxObject from the
+  list of the base classes or derive from a helper object instead of deriving
+  from wxEvtHandler.
+
 
 3.3.4: (released 2026-10-10)
 ----------------------------

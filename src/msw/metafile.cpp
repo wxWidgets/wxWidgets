@@ -448,6 +448,8 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 // wxMetafileDataObject
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxMetafileDataObject, wxDataObjectSimple);
+
 size_t wxMetafileDataObject::GetDataSize() const
 {
     return sizeof(METAFILEPICT);

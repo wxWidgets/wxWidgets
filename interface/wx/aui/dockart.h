@@ -195,7 +195,7 @@ enum wxAuiButtonId
 
     @see wxAuiManager, wxAuiPaneInfo
 */
-class wxAuiDockArt
+class wxAuiDockArt : public wxObject
 {
 public:
     /**

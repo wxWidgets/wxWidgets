@@ -312,6 +312,9 @@ wxMetaFile *wxMetafileDCImpl::Close()
 }
 
 #if wxUSE_DATAOBJ
+
+wxIMPLEMENT_CLASS(wxMetafileDataObject, wxDataObjectSimple);
+
 size_t wxMetafileDataObject::GetDataSize() const
 {
     CFIndex length = 0;

@@ -50,6 +50,9 @@ private:
     void /* BITMAPINFO */ *m_data;
 
     wxDECLARE_NO_COPY_CLASS(wxBitmapDataObject);
+
+private:
+    wxDECLARE_CLASS(wxBitmapDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -111,6 +114,9 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxFileDataObject);
+
+private:
+    wxDECLARE_CLASS(wxFileDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -208,6 +214,9 @@ private:
     std::vector<wxString> m_tempDirs;
 
     wxDECLARE_NO_COPY_CLASS(wxVirtualFileDataObject);
+
+private:
+    wxDECLARE_CLASS(wxVirtualFileDataObject);
 };
 
 #endif // wxUSE_OLE && wxUSE_STREAMS && wxUSE_DATETIME
@@ -238,6 +247,9 @@ private:
     wxDataObjectSimple *m_dataObjectLast;
 
     wxDECLARE_NO_COPY_CLASS(wxURLDataObject);
+
+private:
+    wxDECLARE_CLASS(wxURLDataObject);
 };
 
 #endif // _WX_MSW_OLE_DATAOBJ2_H

@@ -967,6 +967,8 @@ STDMETHODIMP wxIDataObject::EnumDAdvise(IEnumSTATDATA **WXUNUSED(ppenumAdvise))
 // wxDataObject
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataObject, wxObject);
+
 wxDataObject::wxDataObject()
 {
     m_pIDataObject = new wxIDataObject(this);
@@ -1098,6 +1100,8 @@ void RemoveAlphaIfNecessary(wxBitmap& bmp)
 }
 
 } // anonymous namespace
+
+wxIMPLEMENT_CLASS(wxBitmapDataObject, wxDataObjectSimple);
 
 size_t wxBitmapDataObject::GetDataSize() const
 {
@@ -1325,6 +1329,8 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 // ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxFileDataObject, wxDataObjectSimple);
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size),
                                const void *pData)
@@ -1751,6 +1757,8 @@ void RemovePath(const wxString& path)
 
 } // anonymous namespace
 
+wxIMPLEMENT_CLASS(wxVirtualFileDataObject, wxDataObjectSimple);
+
 wxVirtualFileDataObject::wxVirtualFileDataObject()
     : wxDataObjectSimple(CFSTR_FILEDESCRIPTORW)
 {
@@ -2127,6 +2135,8 @@ public:
 };
 
 
+
+wxIMPLEMENT_CLASS(wxURLDataObject, wxDataObjectComposite);
 
 wxURLDataObject::wxURLDataObject(const wxString& url)
 {

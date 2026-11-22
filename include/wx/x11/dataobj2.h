@@ -56,6 +56,9 @@ protected:
     void       *m_pngData;
 
     void DoConvertToPng();
+
+private:
+    wxDECLARE_CLASS(wxBitmapDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -86,6 +89,9 @@ public:
     {
         return SetData(len, buf);
     }
+
+private:
+    wxDECLARE_CLASS(wxFileDataObject);
 };
 
 #endif // _WX_X11_DATAOBJ2_H_
