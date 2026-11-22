@@ -9,7 +9,10 @@
 
 #include "testprec.h"
 
+#include <map>
 #include <memory>
+#include <utility>
+#include <vector>
 
 #if wxUSE_STC
 
@@ -711,6 +714,106 @@ TEST_CASE_METHOD(StcTextInputTestCase,
 #endif // wxHAS_TEXT_INPUT_CLIENT
 
 #endif // defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
+
+// Check PositionToXY() and XYToPosition() using the expected coordinates of all
+// positions, including the one after the last character.
+static void CheckPositionsAndXY(const wxStyledTextCtrl& stc,
+                                const std::vector<std::pair<long, long>>& coords)
+{
+    const long last = stc.GetLastPosition();
+    REQUIRE( last == static_cast<long>(coords.size()) - 1 );
+
+    // The first of the positions with the given coordinates is returned if
+    // there is more than one of them.
+    std::map<std::pair<long, long>, long> positions;
+    long maxX = 0;
+    for ( long pos = 0; pos <= last; ++pos )
+    {
+        INFO("pos=" << pos);
+
+        long x = -1, y = -1;
+        CHECK( stc.PositionToXY(pos, &x, &y) );
+        CHECK( x == coords[pos].first );
+        CHECK( y == coords[pos].second );
+
+        positions.emplace(coords[pos], pos);
+        maxX = wxMax(maxX, coords[pos].first);
+    }
+
+    CHECK_FALSE( stc.PositionToXY(-1, nullptr, nullptr) );
+    CHECK_FALSE( stc.PositionToXY(last + 1, nullptr, nullptr) );
+
+    const long numLines = stc.GetNumberOfLines();
+    for ( long y = -1; y <= numLines; ++y )
+    {
+        for ( long x = -1; x <= maxX + 2; ++x )
+        {
+            INFO("x=" << x << ", y=" << y);
+
+            const auto it = positions.find({x, y});
+            CHECK( stc.XYToPosition(x, y) ==
+                        (it == positions.end() ? -1 : it->second) );
+        }
+    }
+}
+
+TEST_CASE("wxStyledTextCtrl::PositionToXY", "[wxStyledTextCtrl]")
+{
+    const std::unique_ptr<wxStyledTextCtrl>
+        stc(new wxStyledTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY));
+
+    SECTION("Empty")
+    {
+        CheckPositionsAndXY(*stc, { {0, 0} });
+    }
+
+    SECTION("One line")
+    {
+        stc->SetText("1234");
+        CheckPositionsAndXY(*stc, { {0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0} });
+    }
+
+    SECTION("Few lines")
+    {
+        stc->SetText("123\nab\nX");
+        CheckPositionsAndXY(*stc,
+            { {0, 0}, {1, 0}, {2, 0}, {3, 0},
+              {0, 1}, {1, 1}, {2, 1},
+              {0, 2}, {1, 2} });
+    }
+
+    SECTION("Empty lines")
+    {
+        stc->SetText("\n\n\n");
+        CheckPositionsAndXY(*stc, { {0, 0}, {0, 1}, {0, 2}, {0, 3} });
+    }
+
+    SECTION("Mixed lines")
+    {
+        stc->SetText("123\na\n\nX\n\n");
+        CheckPositionsAndXY(*stc,
+            { {0, 0}, {1, 0}, {2, 0}, {3, 0},
+              {0, 1}, {1, 1},
+              {0, 2},
+              {0, 3}, {1, 3},
+              {0, 4},
+              {0, 5} });
+    }
+
+    // As in wxTextCtrl, positions before both characters of the line end have
+    // the same coordinates.
+    SECTION("CR LF")
+    {
+        stc->SetText("123\r\na\r\n\r\nX\r\n\r\n");
+        CheckPositionsAndXY(*stc,
+            { {0, 0}, {1, 0}, {2, 0}, {3, 0}, {3, 0},
+              {0, 1}, {1, 1}, {1, 1},
+              {0, 2}, {0, 2},
+              {0, 3}, {1, 3}, {1, 3},
+              {0, 4}, {0, 4},
+              {0, 5} });
+    }
+}
 
 #endif // wxUSE_STC
 

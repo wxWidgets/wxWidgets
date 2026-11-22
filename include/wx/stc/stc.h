@@ -6206,29 +6206,26 @@ public:
 
     virtual long XYToPosition(long x, long y) const override
     {
-        long pos = PositionFromLine((int)y);
-        if ( pos == -1 )
+        if ( x < 0 || y < 0 || y >= GetNumberOfLines() )
             return -1;
 
-        if ( x >= LineLength((int)y) )
+        const long pos = PositionFromLine((int)y);
+        if ( x > GetLineEndPosition((int)y) - pos )
             return -1;
 
-        pos += x;
-        return pos;
+        return pos + x;
     }
 
     virtual bool PositionToXY(long pos, long *x, long *y) const override
     {
-        int l = LineFromPosition((int)pos);
-        if ( l == -1 )
+        if ( pos < 0 || pos > GetLastPosition() )
             return false;
 
-        long lx = pos - PositionFromLine(l);
-        if ( lx >= LineLength(l) )
-            return false;
+        const int l = LineFromPosition((int)pos);
 
+        // The position between CR and LF is the same as the one before them.
         if ( x )
-            *x = lx;
+            *x = wxMin((int)pos, GetLineEndPosition(l)) - PositionFromLine(l);
 
         if ( y )
             *y = l;
