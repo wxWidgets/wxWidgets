@@ -986,6 +986,9 @@ protected:
     wxDouble m_width,
              m_height;
 
+    // wxGCDCImpl saves and restores m_brush and m_pen when drawing opaque text.
+    friend class wxGCDCImpl;
+
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;
     wxGraphicsFont m_font;
