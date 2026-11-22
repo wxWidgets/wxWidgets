@@ -499,6 +499,9 @@
     <ClInclude Include="..\..\include\wx\except.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\extradata.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\features.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

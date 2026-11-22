@@ -43,6 +43,7 @@
 
 #include "wx/thread.h"
 
+#include "wx/private/extradata.h"
 #include "wx/private/safecall.h"
 
 #if wxUSE_BASE
@@ -359,6 +360,44 @@ wxEventFunctor::~wxEventFunctor()
 }
 
 // ----------------------------------------------------------------------------
+// wxWithExtraData
+// ----------------------------------------------------------------------------
+
+wxWithExtraData::wxWithExtraData(const wxWithExtraData& other)
+    : m_extraData(other.m_extraData ? new wxExtraDataStorage(*other.m_extraData)
+                                    : nullptr)
+{
+}
+
+wxWithExtraData& wxWithExtraData::operator=(const wxWithExtraData& other)
+{
+    if ( &other != this )
+    {
+        wxExtraDataStorage* const
+            extraData = other.m_extraData ? new wxExtraDataStorage(*other.m_extraData)
+                                          : nullptr;
+
+        delete m_extraData;
+        m_extraData = extraData;
+    }
+
+    return *this;
+}
+
+wxWithExtraData::~wxWithExtraData()
+{
+    delete m_extraData;
+}
+
+wxExtraDataStorage& wxWithExtraData::WXGetExtraDataStorage()
+{
+    if ( !m_extraData )
+        m_extraData = new wxExtraDataStorage();
+
+    return *m_extraData;
+}
+
+// ----------------------------------------------------------------------------
 // wxEvent
 // ----------------------------------------------------------------------------
 
@@ -388,6 +427,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType)
 
 wxEvent::wxEvent(const wxEvent& src)
     : wxObject(src)
+    , wxWithExtraData(src)
     , m_eventObject(src.m_eventObject)
     , m_eventType(src.m_eventType)
     , m_timeStamp(src.m_timeStamp)
@@ -406,6 +446,8 @@ wxEvent::wxEvent(const wxEvent& src)
 wxEvent& wxEvent::operator=(const wxEvent& src)
 {
     wxObject::operator=(src);
+
+    wxWithExtraData::operator=(src);
 
     m_eventObject = src.m_eventObject;
     m_eventType = src.m_eventType;
