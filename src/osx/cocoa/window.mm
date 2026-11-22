@@ -948,6 +948,26 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
 }
 
+// Object storing the handler set by wxPrivate::SetAccessiblePressHandler()
+// associated with the view.
+@interface wxOSXAccessiblePressHandler : NSObject
+{
+@public
+    wxPrivate::AccessiblePressHandler m_handler;
+}
+@end
+
+@implementation wxOSXAccessiblePressHandler
+@end
+
+// The key of wxOSXAccessiblePressHandler associated with the view.
+static const char* const wxOSXAccessibilityPressKey = "wxOSXAXPress";
+
+static wxOSXAccessiblePressHandler* wxOSXGetAccessiblePressHandler(NSView* view)
+{
+    return objc_getAssociatedObject(view, wxOSXAccessibilityPressKey);
+}
+
 @implementation wxNSView
 
 + (void)initialize
@@ -987,6 +1007,37 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
         return nil;
 
     return [super hitTest:aPoint];
+}
+
+- (BOOL) isAccessibilityEnabled
+{
+    // Generic windows don't have any native enabled state, so use ours, as
+    // otherwise the disabled windows would be reported as enabled.
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( viewimpl && viewimpl->GetWXPeer() )
+        return viewimpl->GetWXPeer()->IsEnabled();
+
+    return [super isAccessibilityEnabled];
+}
+
+- (BOOL) accessibilityPerformPress
+{
+    wxOSXAccessiblePressHandler* const handler = wxOSXGetAccessiblePressHandler(self);
+    if ( !handler )
+        return NO;
+
+    handler->m_handler();
+    return YES;
+}
+
+- (BOOL) isAccessibilitySelectorAllowed:(SEL)selector
+{
+    // Don't advertise the press action for the views which don't handle it,
+    // which is the case for the vast majority of them.
+    if ( selector == @selector(accessibilityPerformPress) )
+        return wxOSXGetAccessiblePressHandler(self) != nil;
+
+    return [super isAccessibilitySelectorAllowed:selector];
 }
 
 - (void) viewWillMoveToWindow:(NSWindow *)newWindow
@@ -4897,6 +4948,61 @@ wxPrivate::SetAccessibleCurrentRow(wxWindow* win, long row)
                                     NSAccessibilitySelectedRowsChangedNotification);
     NSAccessibilityPostNotification(
         focused, NSAccessibilityFocusedUIElementChangedNotification);
+}
+
+void
+wxPrivate::SetAccessibleDisclosure(wxWindow* win,
+                                   const wxString& label,
+                                   bool expanded)
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    const bool wasDisclosure =
+        [[view accessibilityRole] isEqualToString:NSAccessibilityDisclosureTriangleRole];
+    if ( !wasDisclosure )
+    {
+        [view setAccessibilityElement:YES];
+        [view setAccessibilityRole:NSAccessibilityDisclosureTriangleRole];
+    }
+
+    if ( label != wxCFStringRef::AsString([view accessibilityLabel]) )
+        [view setAccessibilityLabel:wxCFStringRef(label).AsNSString()];
+
+    // Disclosure triangles use 1 for the expanded state and 0 otherwise.
+    NSNumber* const value = @(expanded ? 1 : 0);
+    if ( ![value isEqual:[view accessibilityValue]] )
+    {
+        [view setAccessibilityValue:value];
+
+        // Don't notify about the initial state, only about its changes.
+        if ( wasDisclosure )
+        {
+            NSAccessibilityPostNotification(view,
+                                            NSAccessibilityValueChangedNotification);
+        }
+    }
+}
+
+void
+wxPrivate::SetAccessiblePressHandler(wxWindow* win,
+                                     const AccessiblePressHandler& handler)
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    wxOSXAccessiblePressHandler* obj = nil;
+    if ( handler )
+    {
+        obj = [[wxOSXAccessiblePressHandler alloc] init];
+        obj->m_handler = handler;
+    }
+
+    objc_setAssociatedObject(view, wxOSXAccessibilityPressKey, obj,
+                             OBJC_ASSOCIATION_RETAIN);
+    [obj release];
 }
 
 void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)

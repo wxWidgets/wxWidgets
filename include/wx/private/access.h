@@ -13,6 +13,7 @@
 #include "wx/gdicmn.h"
 #include "wx/string.h"
 
+#include <functional>
 #include <vector>
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -119,6 +120,47 @@ SetAccessibleCurrentRow(wxWindow* WXUNUSED(win), long WXUNUSED(row))
 }
 
 #endif // wxOSX || wxGTK3
+
+using AccessiblePressHandler = std::function<void()>;
+
+// The functions below are currently implemented for wxOSX only and, as the
+// ones above, do nothing elsewhere.
+//
+// SetAccessibleDisclosure() lets the accessibility clients see this window as
+// a disclosure button, i.e. a button expanding or collapsing some other part
+// of the UI, with the given label and state. Just as the functions above, it
+// does nothing if nothing has changed, so it can be called whenever either
+// the label or the state might have changed, and it notifies the
+// accessibility clients when the state changes.
+//
+// SetAccessiblePressHandler() sets the function called when the user
+// activates the window using the accessibility client, e.g. with VO+Space
+// under macOS. Passing an empty function removes the previously set handler.
+// It only works for the generic windows, not the native controls.
+#ifdef __WXOSX_COCOA__
+
+WXDLLIMPEXP_CORE void
+SetAccessibleDisclosure(wxWindow* win, const wxString& label, bool expanded);
+
+WXDLLIMPEXP_CORE void
+SetAccessiblePressHandler(wxWindow* win, const AccessiblePressHandler& handler);
+
+#else // !wxOSX
+
+inline void
+SetAccessibleDisclosure(wxWindow* WXUNUSED(win),
+                        const wxString& WXUNUSED(label),
+                        bool WXUNUSED(expanded))
+{
+}
+
+inline void
+SetAccessiblePressHandler(wxWindow* WXUNUSED(win),
+                          const AccessiblePressHandler& WXUNUSED(handler))
+{
+}
+
+#endif // wxOSX/!wxOSX
 
 } // namespace wxPrivate
 
