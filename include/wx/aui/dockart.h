@@ -23,6 +23,7 @@
 #include "wx/bmpbndl.h"
 #include "wx/colour.h"
 #include "wx/font.h"
+#include "wx/extradata.h"
 
 class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 
@@ -30,7 +31,8 @@ class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 // functionality to the wxAui dock manager.  This allows the dock
 // manager to have pluggable look-and-feels
 
-class WXDLLIMPEXP_AUI wxAuiDockArt : public wxObject
+class WXDLLIMPEXP_AUI wxAuiDockArt : public wxObject,
+                                     public wxWithExtraData
 {
 public:
 

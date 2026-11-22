@@ -20,6 +20,7 @@
 #include "wx/string.h"
 #include "wx/bitmap.h"
 #include "wx/arrstr.h"
+#include "wx/extradata.h"
 
 #include <memory>
 #include <vector>
@@ -110,7 +111,8 @@ extern WXDLLIMPEXP_CORE const wxDataFormat& wxFormatInvalid;
 // to be supported by SetData() or GetDataHere().
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataObjectBase : public wxObject
+class WXDLLIMPEXP_CORE wxDataObjectBase : public wxObject,
+                                          public wxWithExtraData
 {
 public:
     enum Direction

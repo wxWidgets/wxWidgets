@@ -26,6 +26,7 @@
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/bmpbndl.h"
+#include "wx/extradata.h"
 
 #include "wx/aui/framemanager.h" // wxAuiPaneButtonState and wxAuiButtonId
 
@@ -41,7 +42,8 @@ class wxReadOnlyDC;
 
 // tab art class
 
-class WXDLLIMPEXP_AUI wxAuiTabArt : public wxObject
+class WXDLLIMPEXP_AUI wxAuiTabArt : public wxObject,
+                                    public wxWithExtraData
 {
 public:
 

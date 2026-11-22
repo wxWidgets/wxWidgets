@@ -19,6 +19,7 @@
 #include "wx/custombgwin.h"
 #include "wx/sizer.h"
 #include "wx/pen.h"
+#include "wx/extradata.h"
 
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
 class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
@@ -249,7 +250,8 @@ using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
 
 // tab art class
 
-class WXDLLIMPEXP_AUI wxAuiToolBarArt : public wxObject
+class WXDLLIMPEXP_AUI wxAuiToolBarArt : public wxObject,
+                                        public wxWithExtraData
 {
 public:
 

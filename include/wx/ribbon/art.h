@@ -20,6 +20,7 @@
 #include "wx/pen.h"
 #include "wx/bitmap.h"
 #include "wx/bmpbndl.h"
+#include "wx/extradata.h"
 #include "wx/ribbon/bar.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
@@ -207,7 +208,8 @@ class wxRibbonGalleryItem;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 
-class WXDLLIMPEXP_RIBBON wxRibbonArtProvider : public wxObject
+class WXDLLIMPEXP_RIBBON wxRibbonArtProvider : public wxObject,
+                                               public wxWithExtraData
 {
 public:
     wxRibbonArtProvider();
