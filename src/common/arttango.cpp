@@ -29,6 +29,7 @@
 #include "wx/artprov.h"
 
 #include "wx/mstream.h"
+#include "wx/zstream.h"
 
 // ----------------------------------------------------------------------------
 // image data
@@ -218,7 +219,11 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
             else
                 sizeDef = wxSize(24, 24);
         }
-        return wxBitmapBundle::FromSVG(entry.data, entry.len, sizeDef);
+        // The data is compressed to reduce the size of the library, see
+        // misc/scripts/bin2c.py, so decompress it before using it.
+        wxMemoryInputStream compressed(entry.data, entry.len);
+        wxZlibInputStream svg(compressed, wxZLIB_ZLIB);
+        return wxBitmapBundle::FromSVG(svg, sizeDef);
     }
 
 #else // !wxHAS_SVG

@@ -1765,9 +1765,9 @@
 
 /* common dependencies */
 #if wxUSE_ARTPROVIDER_TANGO
-#   if !(wxUSE_STREAMS && wxUSE_IMAGE && wxUSE_LIBPNG)
+#   if !(wxUSE_STREAMS && wxUSE_IMAGE && wxUSE_LIBPNG && wxUSE_ZLIB)
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "Tango art provider requires wxImage with streams and PNG support"
+#           error "Tango art provider requires wxImage with streams, PNG and zlib support"
 #       else
 #           undef wxUSE_ARTPROVIDER_TANGO
 #           define wxUSE_ARTPROVIDER_TANGO 0
