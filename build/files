@@ -1976,6 +1976,7 @@ OSX_COMMON_SRC =
     src/osx/anybutton_osx.cpp
     src/osx/bmpbuttn_osx.cpp
     src/osx/button_osx.cpp
+    src/osx/buttonbox_osx.cpp
     src/osx/checkbox_osx.cpp
     src/osx/checklst_osx.cpp
     src/osx/choice_osx.cpp
