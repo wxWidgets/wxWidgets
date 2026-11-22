@@ -2043,6 +2043,7 @@ set(OSX_COMMON_SRC
     #TODO: </if>
     src/osx/statbmp_osx.cpp
     src/generic/imaglist.cpp
+    src/osx/buttonbox_osx.cpp
 )
 
 set(OSX_SHARED_HDR
