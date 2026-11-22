@@ -12421,7 +12421,8 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS =  \
 	monodll_generic_statusbr.o \
 	monodll_generic_textmeasure.o \
 	monodll_statbmp_osx.o \
-	monodll_generic_imaglist.o
+	monodll_generic_imaglist.o \
+	monodll_buttonbox_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
@@ -12553,7 +12554,8 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0 =  \
 	monolib_generic_statusbr.o \
 	monolib_generic_textmeasure.o \
 	monolib_statbmp_osx.o \
-	monolib_generic_imaglist.o
+	monolib_generic_imaglist.o \
+	monolib_buttonbox_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_0 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 	monolib_generic_caret.o \
@@ -12684,7 +12686,8 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8 =  \
 	coredll_generic_statusbr.o \
 	coredll_generic_textmeasure.o \
 	coredll_statbmp_osx.o \
-	coredll_generic_imaglist.o
+	coredll_generic_imaglist.o \
+	coredll_buttonbox_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_8 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	coredll_generic_caret.o \
