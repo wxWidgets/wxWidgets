@@ -19,9 +19,9 @@ jobs:
             # Nothing to build or test here if the changes are limited to the
             # Windows-only code. Be conservative: if anything goes wrong while
             # determining the changed files, just continue with the build.
-            git fetch --quiet origin master || true
-            base=$(git merge-base origin/master HEAD 2>/dev/null) || exit 0
-            # Nothing to compare with when building master itself.
+            git fetch --quiet origin 3.4 || true
+            base=$(git merge-base origin/3.4 HEAD 2>/dev/null) || exit 0
+            # Nothing to compare with when building the branch itself.
             [ "$base" = "$(git rev-parse HEAD)" ] && exit 0
             if git diff --quiet "$base" HEAD -- ':!include/wx/msw' ':!src/msw'; then
               echo "Only MSW files changed, skipping the build:"

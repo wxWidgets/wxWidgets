@@ -3,7 +3,7 @@ name: Mac Xcode builds
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ 3.4 ]
     paths-ignore:
     - '.circleci/**'
     - '.github/ISSUE_TEMPLATE/**'
@@ -32,7 +32,7 @@ on:
     - 'CMakeLists.txt'
     - 'wxwidgets.props'
   pull_request:
-    branches: [ master ]
+    branches: [ 3.4 ]
     paths-ignore:
     - '.circleci/**'
     - '.github/ISSUE_TEMPLATE/**'

@@ -4,7 +4,7 @@ name: MSW builds
 on:
   push:
     branches:
-      - master
+      - 3.4
     paths-ignore:
       - '.circleci/**'
       - '.github/ISSUE_TEMPLATE/**'
@@ -26,7 +26,7 @@ on:
       - '*.yml'
   pull_request:
     branches:
-      - master
+      - 3.4
     paths-ignore:
       - '.circleci/**'
       - '.github/ISSUE_TEMPLATE/**'
