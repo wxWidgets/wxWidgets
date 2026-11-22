@@ -37,6 +37,7 @@ wxDEFINE_EVENT( wxEVT_TASKBAR_LEFT_DCLICK, wxTaskBarIconEvent );
 wxDEFINE_EVENT( wxEVT_TASKBAR_RIGHT_DCLICK, wxTaskBarIconEvent );
 wxDEFINE_EVENT( wxEVT_TASKBAR_BALLOON_TIMEOUT, wxTaskBarIconEvent );
 wxDEFINE_EVENT( wxEVT_TASKBAR_BALLOON_CLICK, wxTaskBarIconEvent );
+wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIconEvent, wxEvent);
 
 
 wxBEGIN_EVENT_TABLE(wxTaskBarIconBase, wxEvtHandler)

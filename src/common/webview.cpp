@@ -46,6 +46,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "wxWebVi
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxWebView, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEvent, wxCommandEvent);
+wxIMPLEMENT_ABSTRACT_CLASS(wxWebViewFactory, wxObject);
 
 wxDEFINE_EVENT( wxEVT_WEBVIEW_CREATED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NAVIGATING, wxWebViewEvent );

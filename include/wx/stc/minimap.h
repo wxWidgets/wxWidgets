@@ -214,6 +214,9 @@ private:
 
 
     wxDECLARE_NO_COPY_CLASS(wxStyledTextCtrlMiniMap);
+
+private:
+    wxDECLARE_CLASS(wxStyledTextCtrlMiniMap);
 };
 
 #endif // wxUSE_STC

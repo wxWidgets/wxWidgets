@@ -289,6 +289,8 @@ wxWindow* wxRichTextFormattingDialog::FindPage(wxClassInfo* info) const
  * Factory for formatting dialog
  */
 
+wxIMPLEMENT_CLASS(wxRichTextFormattingDialogFactory, wxObject);
+
 /// Create all pages, under the dialog's book control, also calling AddPage
 bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormattingDialog* dialog)
 {

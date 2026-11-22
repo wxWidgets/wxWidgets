@@ -106,6 +106,8 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int* /*GLAttrs*/,
     return @"dummy";
 }
 
+wxIMPLEMENT_CLASS(wxGLContext, wxObject);
+
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_glContext )

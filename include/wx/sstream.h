@@ -47,6 +47,9 @@ private:
     size_t m_pos;
 
     wxDECLARE_NO_COPY_CLASS(wxStringInputStream);
+
+private:
+    wxDECLARE_CLASS(wxStringInputStream);
 };
 
 // ----------------------------------------------------------------------------
@@ -92,6 +95,9 @@ private:
     wxMemoryBuffer m_unconv;
 
     wxDECLARE_NO_COPY_CLASS(wxStringOutputStream);
+
+private:
+    wxDECLARE_CLASS(wxStringOutputStream);
 };
 
 #endif // wxUSE_STREAMS

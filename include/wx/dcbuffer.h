@@ -235,6 +235,9 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxAutoBufferedPaintDC);
+
+private:
+    wxDECLARE_CLASS(wxAutoBufferedPaintDC);
 };
 
 

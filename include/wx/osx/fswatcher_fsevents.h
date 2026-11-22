@@ -80,6 +80,8 @@ private:
     struct PrivateData;
     PrivateData *m_pImpl;
 
+private:
+    wxDECLARE_CLASS(wxFsEventsFileSystemWatcher);
 };
 
 #endif /* wxUSE_FSWATCHER */

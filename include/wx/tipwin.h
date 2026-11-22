@@ -122,6 +122,9 @@ private:
     friend class wxTipWindowView;
 
     wxDECLARE_NO_COPY_CLASS(wxTipWindow);
+
+private:
+    wxDECLARE_CLASS(wxTipWindow);
 };
 
 #endif // wxUSE_TIPWINDOW

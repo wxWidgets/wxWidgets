@@ -38,6 +38,8 @@ wxBEGIN_EVENT_TABLE(wxBannerWindow, wxWindow)
     EVT_PAINT(wxBannerWindow::OnPaint)
 wxEND_EVENT_TABLE()
 
+wxIMPLEMENT_CLASS(wxBannerWindow, wxWindow);
+
 void wxBannerWindow::Init()
 {
     m_direction = wxLEFT;

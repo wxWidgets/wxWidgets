@@ -42,6 +42,9 @@ private:
     class wxSoundData *m_data;
 
     wxDECLARE_NO_COPY_CLASS(wxSound);
+
+private:
+    wxDECLARE_CLASS(wxSound);
 };
 
 #endif // wxUSE_SOUND

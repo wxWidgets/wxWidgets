@@ -33,6 +33,8 @@
 // wxNativeWindow
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxNativeWindow, wxWindow);
+
 bool
 wxNativeWindow::Create(wxWindow* parent,
                        wxWindowID winid,

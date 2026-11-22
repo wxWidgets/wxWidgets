@@ -92,6 +92,9 @@ protected:
 
 private:
     wxSoundData *m_data;
+
+private:
+    wxDECLARE_CLASS(wxSound);
 };
 
 

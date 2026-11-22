@@ -69,6 +69,9 @@ protected:
 
 private:
     void Init();
+
+private:
+    wxDECLARE_CLASS(wxLZMAInputStream);
 };
 
 // ----------------------------------------------------------------------------
@@ -115,6 +118,9 @@ private:
     // Run LZMA_FINISH (if argument is true) or LZMA_FULL_FLUSH, return true on
     // success or false on error.
     bool DoFlush(bool finish);
+
+private:
+    wxDECLARE_CLASS(wxLZMAOutputStream);
 };
 
 // ----------------------------------------------------------------------------

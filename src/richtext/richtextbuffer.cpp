@@ -9219,6 +9219,9 @@ void wxRichTextBuffer::SetDimensionScale(double dimScale)
     m_dimensionScale = dimScale;
 }
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxRichTextRenderer, wxObject);
+wxIMPLEMENT_CLASS(wxRichTextStdRenderer, wxRichTextRenderer);
+
 bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& bulletAttr, const wxRect& rect)
 {
     if (bulletAttr.GetTextColour().IsOk())
@@ -11748,6 +11751,8 @@ void wxRichTextModuleInit()
  *
  */
 
+wxIMPLEMENT_CLASS(wxRichTextCommand, wxCommand);
+
 wxRichTextCommand::wxRichTextCommand(const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
                                      wxRichTextParagraphLayoutBox* container, wxRichTextCtrl* ctrl, bool ignoreFirstTime): wxCommand(true, name)
 {
@@ -11817,6 +11822,8 @@ void wxRichTextCommand::ClearActions()
  * Individual action
  *
  */
+
+wxIMPLEMENT_CLASS(wxRichTextAction, wxObject);
 
 wxRichTextAction::wxRichTextAction(wxRichTextCommand* cmd, const wxString& name, wxRichTextCommandId id,
                                    wxRichTextBuffer* buffer, wxRichTextParagraphLayoutBox* container,
@@ -13196,6 +13203,8 @@ bool wxRichTextPlainTextHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputSt
 /*
  * Stores information about an image, in binary in-memory form
  */
+
+wxIMPLEMENT_CLASS(wxRichTextImageBlock, wxObject);
 
 wxRichTextImageBlock::wxRichTextImageBlock()
 {

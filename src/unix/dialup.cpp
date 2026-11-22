@@ -42,6 +42,7 @@
 
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
 wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
+wxIMPLEMENT_DYNAMIC_CLASS(wxDialUpEvent, wxEvent);
 
 // ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a

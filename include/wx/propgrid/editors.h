@@ -492,6 +492,9 @@ protected:
     std::vector<wxWindow*> m_buttons;
     wxSize          m_fullEditorSize;
     int             m_buttonsWidth;
+
+private:
+    wxDECLARE_CLASS(wxPGMultiButton);
 };
 
 // -----------------------------------------------------------------------

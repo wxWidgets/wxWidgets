@@ -161,7 +161,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIALUP_DISCONNECTED, wxDialUpE
 class WXDLLIMPEXP_CORE wxDialUpEvent : public wxEvent
 {
 public:
-    wxDialUpEvent(bool isConnected, bool isOwnEvent) : wxEvent(isOwnEvent)
+    wxDialUpEvent(bool isConnected = false, bool isOwnEvent = false)
+        : wxEvent(isOwnEvent)
     {
         SetEventType(isConnected ? wxEVT_DIALUP_CONNECTED
                                  : wxEVT_DIALUP_DISCONNECTED);
@@ -181,6 +182,9 @@ public:
 
 private:
     wxDECLARE_NO_ASSIGN_DEF_COPY(wxDialUpEvent);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxDialUpEvent);
 };
 
 // the type of dialup event handler function

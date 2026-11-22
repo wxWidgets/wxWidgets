@@ -54,6 +54,9 @@ private:
     WXGLContext m_glContext;
 
     wxDECLARE_NO_COPY_CLASS(wxGLContext);
+
+private:
+    wxDECLARE_CLASS(wxGLContext);
 };
 
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase

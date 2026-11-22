@@ -402,6 +402,8 @@ bool wxSoundSyncOnlyAdaptor::IsPlaying() const
 // wxSound
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxSound, wxObject);
+
 wxSoundBackend *wxSound::ms_backend = nullptr;
 
 // FIXME - temporary, until we have plugins architecture

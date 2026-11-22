@@ -53,6 +53,8 @@ ShowException(const wxString& member,
 
 // wxAutomationObject
 
+wxIMPLEMENT_CLASS(wxAutomationObject, wxObject);
+
 wxAutomationObject::wxAutomationObject(WXIDISPATCH* dispatchPtr)
 {
     m_dispatchPtr = dispatchPtr;

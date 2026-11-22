@@ -27,6 +27,9 @@ public:
 
     virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE);
     virtual wxEllipsizeMode GetEllipsizeMode() const;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxDataViewRenderer);
 };
 
 #endif // _WX_QT_DVRENDERER_H_

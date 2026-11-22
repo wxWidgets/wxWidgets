@@ -206,6 +206,9 @@ private:
     static size_t sm_maxExtendedHeaderSize;
 
     wxDECLARE_NO_COPY_CLASS(wxTarInputStream);
+
+private:
+    wxDECLARE_CLASS(wxTarInputStream);
 };
 
 
@@ -289,6 +292,9 @@ private:
     bool m_endrecWritten;
 
     wxDECLARE_NO_COPY_CLASS(wxTarOutputStream);
+
+private:
+    wxDECLARE_CLASS(wxTarOutputStream);
 };
 
 

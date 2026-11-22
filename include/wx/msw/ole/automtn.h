@@ -128,6 +128,9 @@ private:
     long   m_convertVariantFlags;
 
     wxDECLARE_NO_COPY_CLASS(wxAutomationObject);
+
+private:
+    wxDECLARE_CLASS(wxAutomationObject);
 };
 
 #endif // wxUSE_OLE_AUTOMATION

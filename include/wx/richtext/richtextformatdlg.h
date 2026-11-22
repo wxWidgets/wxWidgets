@@ -112,6 +112,9 @@ public:
 
     /// Create the main dialog buttons
     virtual bool CreateButtons(wxRichTextFormattingDialog* dialog);
+
+private:
+    wxDECLARE_CLASS(wxRichTextFormattingDialogFactory);
 };
 
 /*!

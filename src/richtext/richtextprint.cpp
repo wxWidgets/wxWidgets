@@ -32,6 +32,8 @@
  * wxRichTextPrintout
  */
 
+wxIMPLEMENT_CLASS(wxRichTextPrintout, wxPrintout);
+
 wxRichTextPrintout::wxRichTextPrintout(const wxString& title) : wxPrintout(title)
 {
     m_numPages = wxRICHTEXT_PRINT_MAX_PAGES;
@@ -445,6 +447,8 @@ bool wxRichTextPrintout::SubstituteKeywords(wxString& str, const wxString& title
 /*!
  * wxRichTextPrinting
  */
+
+wxIMPLEMENT_CLASS(wxRichTextPrinting, wxObject);
 
 wxRichTextPrinting::wxRichTextPrinting(const wxString& name, wxWindow *parentWindow)
     : m_title(name)

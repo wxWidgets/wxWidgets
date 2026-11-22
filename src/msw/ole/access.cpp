@@ -1779,6 +1779,8 @@ IAccessible* wxIAccessible::GetChildAccessible(int id)
 // wxAccessible implementation
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxAccessible, wxObject);
+
 // ctors
 
 // common part of all ctors

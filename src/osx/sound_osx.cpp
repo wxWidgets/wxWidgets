@@ -46,6 +46,8 @@ void wxSoundData::Stop()
     DoStop();
 }
 
+wxIMPLEMENT_CLASS(wxSound, wxObject);
+
 wxSound::wxSound()
 {
     Init();

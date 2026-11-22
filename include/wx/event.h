@@ -4414,6 +4414,9 @@ protected:
     wxWindow *m_window;
 
     wxDECLARE_NO_COPY_CLASS(wxEventBlocker);
+
+private:
+    wxDECLARE_CLASS(wxEventBlocker);
 };
 
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);

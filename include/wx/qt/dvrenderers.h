@@ -25,6 +25,9 @@ public:
     bool GetValue( wxVariant &value ) const;
 
     void SetAlignment( int align );
+
+private:
+    wxDECLARE_CLASS(wxDataViewTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -44,6 +47,9 @@ public:
     bool GetValue( wxVariant &value ) const;
 
     bool IsCompatibleVariantType(const wxString& variantType) const;
+
+private:
+    wxDECLARE_CLASS(wxDataViewBitmapRenderer);
 };
 
 // ---------------------------------------------------------
@@ -61,6 +67,9 @@ public:
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
+
+private:
+    wxDECLARE_CLASS(wxDataViewToggleRenderer);
 };
 
 // ---------------------------------------------------------
@@ -98,6 +107,9 @@ public:
 
     // Create DC on request
     virtual wxDC *GetDC();
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxDataViewCustomRenderer);
 };
 
 // ---------------------------------------------------------
@@ -120,6 +132,9 @@ public:
 
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
+
+private:
+    wxDECLARE_CLASS(wxDataViewProgressRenderer);
 };
 
 // ---------------------------------------------------------
@@ -145,6 +160,9 @@ public:
     virtual bool HasEditorCtrl() const { return true; }
     virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+
+private:
+    wxDECLARE_CLASS(wxDataViewIconTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -168,6 +186,8 @@ public:
     virtual bool Activate( wxRect cell,
                            wxDataViewModel *model, const wxDataViewItem &item, unsigned int col );
 
+private:
+    wxDECLARE_CLASS(wxDataViewDateRenderer);
 };
 
 // -------------------------------------
@@ -186,6 +206,9 @@ public:
     virtual bool GetValue( wxVariant &value ) const;
 
     void SetAlignment( int align );
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceRenderer);
 };
 
 #endif // _WX_QT_DVRENDERERS_H_

@@ -44,6 +44,9 @@ private:
     void Init(const wxString& message, const wxWebCredentials& cred);
 
     wxDECLARE_NO_COPY_CLASS(wxGenericCredentialEntryDialog);
+
+private:
+    wxDECLARE_CLASS(wxGenericCredentialEntryDialog);
 };
 
 // Add this typedef as long as the generic version is the only one available

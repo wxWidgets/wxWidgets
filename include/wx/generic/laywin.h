@@ -222,6 +222,9 @@ public:
 
     // mainWindow is sized to whatever's left over.
     bool LayoutWindow(wxWindow* frame, wxWindow* mainWindow = nullptr);
+
+private:
+    wxDECLARE_CLASS(wxLayoutAlgorithm);
 };
 
 #endif

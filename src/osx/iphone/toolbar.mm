@@ -67,6 +67,8 @@ static void ToolAction(wxToolBarTool* tool)
     tbar->OnLeftClick( tool->GetId(), tool->IsToggled() );
 }
 
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
 wxToolBarTool::wxToolBarTool(
                              wxToolBar *tbar,
                              int id,

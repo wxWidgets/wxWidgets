@@ -142,6 +142,8 @@ int wxDataViewColumn::GetFlags() const
 //##############################################################################
 
 
+wxIMPLEMENT_CLASS(wxDataViewCtrl, wxDataViewCtrlBase);
+
 wxDataViewCtrl::wxDataViewCtrl( wxWindow *parent, wxWindowID id,
        const wxPoint& pos,
        const wxSize& size, long style,

@@ -111,6 +111,9 @@ protected:
 
 private:
     wxMBConv& m_conv;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxArchiveInputStream);
 };
 
 
@@ -155,6 +158,9 @@ protected:
 
 private:
     wxMBConv& m_conv;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxArchiveOutputStream);
 };
 
 

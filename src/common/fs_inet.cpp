@@ -75,6 +75,8 @@ static wxString StripProtocolAnchor(const wxString& location)
 }
 
 
+wxIMPLEMENT_CLASS(wxInternetFSHandler, wxFileSystemHandler);
+
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
 #if wxUSE_URL

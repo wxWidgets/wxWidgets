@@ -245,6 +245,9 @@ private:
 #endif
 
     friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #elif defined(__WXOSX_IPHONE__)
@@ -287,6 +290,9 @@ private:
     long m_index;
 
     friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif // __WXOSX_COCOA__/__WXOSX_IPHONE__

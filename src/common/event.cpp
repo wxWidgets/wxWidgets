@@ -2100,6 +2100,8 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
 // wxEventBlocker
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxEventBlocker, wxEvtHandler);
+
 wxEventBlocker::wxEventBlocker(wxWindow *win, wxEventType type)
 {
     wxCHECK_RET(win, wxT("Null window given to wxEventBlocker"));

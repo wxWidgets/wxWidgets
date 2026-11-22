@@ -3290,6 +3290,8 @@ wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewRenderer);
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataViewChoiceByIndexRenderer, wxDataViewChoiceRenderer);
+
 wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer(const wxArrayString& choices,
                                                                  wxDataViewCellMode mode,
                                                                  int alignment)

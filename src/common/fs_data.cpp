@@ -76,6 +76,8 @@ int GetMetadata(const wxString& location, wxString& mediatype, bool& isBase64)
 // wxDataSchemeFSHandler
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataSchemeFSHandler, wxFileSystemHandler);
+
 bool wxDataSchemeFSHandler::CanOpen(const wxString& location)
 {
     return GetProtocol(location).IsSameAs("data", false);

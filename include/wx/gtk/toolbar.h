@@ -134,6 +134,9 @@ private:
     GtkToolItem* m_item = nullptr;
 
     friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif

@@ -269,6 +269,8 @@ GetFileNameFromNode(const wxXmlNode *node, const wxXmlResourceDataRecords& files
 } // anonymous namespace
 
 
+wxIMPLEMENT_CLASS(wxXmlResource, wxObject);
+
 wxXmlResource *wxXmlResource::ms_instance = nullptr;
 
 /*static*/ wxXmlResource *wxXmlResource::Get()

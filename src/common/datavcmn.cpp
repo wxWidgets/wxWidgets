@@ -1872,6 +1872,8 @@ void wxDataViewEvent::InitData(wxDataObjectComposite* obj, wxDataFormat format)
 // wxDataViewSpinRenderer
 // -------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataViewSpinRenderer, wxDataViewCustomRenderer);
+
 wxDataViewSpinRenderer::wxDataViewSpinRenderer( int min, int max, wxDataViewCellMode mode, int alignment ) :
    wxDataViewCustomRenderer(wxT("long"), mode, alignment )
 {
@@ -1951,6 +1953,8 @@ wxString wxDataViewSpinRenderer::GetAccessibleDescription() const
 
 #if defined(wxHAS_GENERIC_DATAVIEWCTRL)
 
+wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewCustomRenderer);
+
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices, wxDataViewCellMode mode, int alignment ) :
    wxDataViewCustomRenderer(wxT("string"), mode, alignment )
 {
@@ -2025,6 +2029,8 @@ wxString wxDataViewChoiceRenderer::GetAccessibleDescription() const
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataViewChoiceByIndexRenderer, wxDataViewChoiceRenderer);
+
 wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
                                   wxDataViewCellMode mode, int alignment ) :
       wxDataViewChoiceRenderer( choices, mode, alignment )
@@ -2085,6 +2091,8 @@ wxString wxDataViewChoiceByIndexRenderer::GetAccessibleDescription() const
 // ---------------------------------------------------------
 
 #if (defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)) && wxUSE_DATEPICKCTRL
+
+wxIMPLEMENT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer);
 
 wxDataViewDateRenderer::wxDataViewDateRenderer(const wxString& varianttype,
                                               wxDataViewCellMode mode, int align)

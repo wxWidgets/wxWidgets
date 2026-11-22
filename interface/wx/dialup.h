@@ -197,7 +197,7 @@ public:
     /**
         Constructor is only used by wxDialUpManager.
     */
-    wxDialUpEvent(bool isConnected, bool isOwnEvent);
+    wxDialUpEvent(bool isConnected = false, bool isOwnEvent = false);
 
     /**
         Is this a @c CONNECTED or @c DISCONNECTED event? In other words, does

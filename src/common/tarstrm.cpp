@@ -622,6 +622,8 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
+wxIMPLEMENT_CLASS(wxTarInputStream, wxArchiveInputStream);
+
 // Default cap of 10 MiB; can be changed with SetMaxExtendedHeaderSize().
 size_t wxTarInputStream::sm_maxExtendedHeaderSize = 10 * 1024 * 1024;
 
@@ -1043,6 +1045,8 @@ size_t wxTarInputStream::OnSysRead(void *buffer, size_t size)
 
 /////////////////////////////////////////////////////////////////////////////
 // Output stream
+
+wxIMPLEMENT_CLASS(wxTarOutputStream, wxArchiveOutputStream);
 
 wxTarOutputStream::wxTarOutputStream(wxOutputStream& stream,
                                      wxTarFormat format /*=wxTAR_PAX*/,

@@ -33,6 +33,9 @@ protected:
         { return wxInvalidOffset; }
 
     wxDECLARE_NO_COPY_CLASS(wxSocketOutputStream);
+
+private:
+    wxDECLARE_CLASS(wxSocketOutputStream);
 };
 
 class WXDLLIMPEXP_NET wxSocketInputStream : public wxInputStream
@@ -54,6 +57,9 @@ protected:
         { return wxInvalidOffset; }
 
     wxDECLARE_NO_COPY_CLASS(wxSocketInputStream);
+
+private:
+    wxDECLARE_CLASS(wxSocketInputStream);
 };
 
 class WXDLLIMPEXP_NET wxSocketStream : public wxSocketInputStream,

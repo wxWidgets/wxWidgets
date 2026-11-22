@@ -32,6 +32,8 @@
 // wxOverlay
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxOverlayDC, wxClientDC);
+
 wxOverlay::~wxOverlay()
 {
     delete m_impl;

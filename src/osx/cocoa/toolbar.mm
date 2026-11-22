@@ -71,6 +71,8 @@ static void ToolAction(wxToolBarTool* tool)
 
 // We have a dual implementation for each tool, WXWidget and NSToolbarItem*
 
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
 // when embedding native controls in the native toolbar we must make sure the
 // control does not get deleted behind our backs, so the retain count gets increased
 // (after creation it is 1), first be the creation of the custom NSToolbarItem wrapper

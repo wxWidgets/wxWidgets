@@ -41,6 +41,8 @@ wxEND_EVENT_TABLE()
 // wxMouseEventsManager implementation
 // ============================================================================
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxMouseEventsManager, wxEvtHandler);
+
 void wxMouseEventsManager::Init()
 {
     m_win = nullptr;

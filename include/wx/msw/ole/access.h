@@ -65,6 +65,9 @@ private:
     wxString        m_nameOverride;     // the name set by SetNameOverride()
 
     wxDECLARE_NO_COPY_CLASS(wxAccessible);
+
+private:
+    wxDECLARE_CLASS(wxAccessible);
 };
 
 #endif  //wxUSE_ACCESSIBILITY

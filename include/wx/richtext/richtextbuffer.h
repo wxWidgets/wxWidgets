@@ -4935,6 +4935,9 @@ protected:
     unsigned char*      m_data;
     size_t              m_dataSize;
     wxBitmapType        m_imageType;
+
+private:
+    wxDECLARE_CLASS(wxRichTextImageBlock);
 };
 
 /**
@@ -6389,6 +6392,9 @@ protected:
 
     wxList  m_actions;
     bool    m_freeze;
+
+private:
+    wxDECLARE_CLASS(wxRichTextCommand);
 };
 
 /**
@@ -6597,6 +6603,9 @@ protected:
 
     // The command identifier
     wxRichTextCommandId             m_cmdId;
+
+private:
+    wxDECLARE_CLASS(wxRichTextAction);
 };
 
 /*!
@@ -6989,6 +6998,9 @@ public:
         Measure the bullet.
     */
     virtual bool MeasureBullet(wxRichTextParagraph* paragraph, wxReadOnlyDC& dc, const wxRichTextAttr& attr, wxSize& sz) = 0;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxRichTextRenderer);
 };
 
 /**
@@ -7027,6 +7039,9 @@ public:
 
     // Set a font which may depend on text effects.
     static void SetFontForBullet(wxRichTextBuffer& buffer, wxReadOnlyDC& dc, const wxRichTextAttr& attr);
+
+private:
+    wxDECLARE_CLASS(wxRichTextStdRenderer);
 };
 
 /*!

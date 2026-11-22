@@ -156,6 +156,8 @@ void wxAboutDialogInfo::SetVersion(const wxString& version,
 // wxGenericAboutDialog
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxGenericAboutDialog, wxDialog);
+
 bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* parent)
 {
     if ( !wxDialog::Create(parent, wxID_ANY, wxString::Format(// TRANSLATORS: %s is application name

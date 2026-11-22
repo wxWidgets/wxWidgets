@@ -27,6 +27,9 @@ public:
 
 protected:
     bool Init();
+
+private:
+    wxDECLARE_CLASS(wxKqueueFileSystemWatcher);
 };
 
 #endif

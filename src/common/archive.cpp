@@ -16,6 +16,8 @@
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxArchiveEntry, wxObject);
 wxIMPLEMENT_ABSTRACT_CLASS(wxArchiveClassFactory, wxFilterClassFactoryBase);
+wxIMPLEMENT_ABSTRACT_CLASS(wxArchiveInputStream, wxFilterInputStream);
+wxIMPLEMENT_ABSTRACT_CLASS(wxArchiveOutputStream, wxFilterOutputStream);
 
 
 /////////////////////////////////////////////////////////////////////////////

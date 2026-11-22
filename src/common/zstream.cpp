@@ -126,6 +126,8 @@ wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
 // wxZlibInputStream
 //////////////////////
 
+wxIMPLEMENT_CLASS(wxZlibInputStream, wxFilterInputStream);
+
 wxZlibInputStream::wxZlibInputStream(wxInputStream& stream, int flags)
   : wxFilterInputStream(stream)
 {
@@ -277,6 +279,8 @@ bool wxZlibInputStream::SetDictionary(const wxMemoryBuffer &buf)
 //////////////////////
 // wxZlibOutputStream
 //////////////////////
+
+wxIMPLEMENT_CLASS(wxZlibOutputStream, wxFilterOutputStream);
 
 wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream,
                                        int level,

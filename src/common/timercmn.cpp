@@ -45,6 +45,8 @@ wxDEFINE_EVENT(wxEVT_TIMER, wxTimerEvent);
 // wxTimerBase implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxTimer, wxEvtHandler);
+
 wxTimer::~wxTimer()
 {
     Stop();

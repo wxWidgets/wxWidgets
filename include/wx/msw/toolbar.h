@@ -260,6 +260,9 @@ private:
     friend class wxToolBar;
 
     wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif // wxUSE_TOOLBAR

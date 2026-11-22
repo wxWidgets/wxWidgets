@@ -117,6 +117,9 @@ protected:
     wxTimerImpl *m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxTimer);
+
+private:
+    wxDECLARE_CLASS(wxTimer);
 };
 
 // ----------------------------------------------------------------------------

@@ -25,6 +25,8 @@
 // wxSocketOutputStream
 // ---------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxSocketOutputStream, wxOutputStream);
+
 wxSocketOutputStream::wxSocketOutputStream(wxSocketBase& s)
   : m_o_socket(&s)
 {
@@ -47,6 +49,8 @@ size_t wxSocketOutputStream::OnSysWrite(const void *buffer, size_t size)
 // ---------------------------------------------------------------------------
 // wxSocketInputStream
 // ---------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxSocketInputStream, wxInputStream);
 
 wxSocketInputStream::wxSocketInputStream(wxSocketBase& s)
  : m_i_socket(&s)

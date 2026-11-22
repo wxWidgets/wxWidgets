@@ -29,6 +29,9 @@ public:
 
 protected:
     bool Init();
+
+private:
+    wxDECLARE_CLASS(wxInotifyFileSystemWatcher);
 };
 
 #endif
