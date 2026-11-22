@@ -19,6 +19,10 @@
     #include "wx/crt.h"
 #endif
 
+#include "wx/private/extensionhook.h"
+
+#include <functional>
+#include <map>
 #include <string.h>
 
 // we must disable optimizations for VC.NET because otherwise its too eager
@@ -86,6 +90,94 @@ bool wxObject::IsKindOf(const wxClassInfo *info) const
 {
     const wxClassInfo *thisInfo = GetClassInfo();
     return (thisInfo) ? thisInfo->IsKindOf(info) : false ;
+}
+
+// ----------------------------------------------------------------------------
+// Extension hooks
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Key of the map containing all registered handlers.
+struct wxExtensionHookKey
+{
+    wxExtensionHookKey(const wxClassInfo* classInfo_, int id_)
+        : classInfo(classInfo_),
+          id(id_)
+    {
+    }
+
+    bool operator<(const wxExtensionHookKey& other) const
+    {
+        if ( classInfo != other.classInfo )
+            return std::less<const wxClassInfo*>()(classInfo, other.classInfo);
+
+        return id < other.id;
+    }
+
+    const wxClassInfo* classInfo;
+    int id;
+};
+
+using wxExtensionHookMap = std::map<wxExtensionHookKey, wxExtensionHookHandler>;
+
+// Use a function-level static to ensure that the map is initialized before
+// being used by the registrars, which are static objects themselves and could
+// be initialized before any static objects in this file.
+wxExtensionHookMap& GetExtensionHookMap()
+{
+    static wxExtensionHookMap s_map;
+    return s_map;
+}
+
+// Try calling the handler for the given class or its base classes.
+bool
+CallExtensionHookForClass(const wxClassInfo* classInfo,
+                          wxObject* obj,
+                          int id,
+                          void* data)
+{
+    if ( !classInfo )
+        return false;
+
+    const wxExtensionHookMap& map = GetExtensionHookMap();
+    const auto it = map.find(wxExtensionHookKey(classInfo, id));
+    if ( it != map.end() && (*it->second)(obj, data) )
+        return true;
+
+    return CallExtensionHookForClass(classInfo->GetBaseClass1(), obj, id, data) ||
+           CallExtensionHookForClass(classInfo->GetBaseClass2(), obj, id, data);
+}
+
+} // anonymous namespace
+
+wxExtensionHookRegistrar::wxExtensionHookRegistrar(const wxClassInfo* classInfo,
+                                                   wxExtensionHookId id,
+                                                   wxExtensionHookHandler handler)
+    : m_classInfo(classInfo),
+      m_id(id)
+{
+    if ( !GetExtensionHookMap().emplace(wxExtensionHookKey(classInfo, id),
+                                        handler).second )
+    {
+        wxFAIL_MSG( "Extension hook handler is already registered" );
+    }
+}
+
+wxExtensionHookRegistrar::~wxExtensionHookRegistrar()
+{
+    GetExtensionHookMap().erase(wxExtensionHookKey(m_classInfo, m_id));
+}
+
+bool wxObject::WXExtensionHook(int id, void* data)
+{
+    // Don't bother walking the class hierarchy if there are no hooks at all,
+    // as is commonly the case.
+    if ( GetExtensionHookMap().empty() )
+        return false;
+
+    return CallExtensionHookForClass(GetClassInfo(), this, id, data);
 }
 
 // ----------------------------------------------------------------------------
