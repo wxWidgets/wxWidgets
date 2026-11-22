@@ -37,6 +37,7 @@
 		DA71FBB9EFB2350ABB3CEC80 /* stdpaths.mm in Sources */ = {isa = PBXBuildFile; fileRef = 190409DF8A3C3D9580FBB8AA /* stdpaths.mm */; };
 		EE972E8DC73F310B9B4C949C /* webrequest_curl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5279968877003A8BB8279765 /* webrequest_curl.cpp */; };
 		6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4F4F5211933057824B5621 /* button_osx.cpp */; };
+		10D31D73C113307BA9D96CAC /* buttonbox_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */; };
 		692FCCABFB963696AFC1E122 /* gdiobj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 377056CEB1FC3EEB8526E7A6 /* gdiobj.cpp */; };
 		C3A63D7091913CD39094AE0B /* btncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84A7A3B499503ECABC6A838F /* btncmn.cpp */; };
 		3CDDBBC46E193637955619F2 /* buttonboxcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8371111E6193170AEE88EBD /* buttonboxcmn.cpp */; };
@@ -1205,6 +1206,7 @@
 		B61D36546E97371FAC5D4565 /* LexStata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexStata.cxx; path = ../../src/stc/lexilla/lexers/LexStata.cxx; sourceTree = SOURCE_ROOT; };
 		3FB6D34C3029357EB64AECAA /* scrlwing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrlwing.cpp; path = ../../src/generic/scrlwing.cpp; sourceTree = SOURCE_ROOT; };
 		CF4F4F5211933057824B5621 /* button_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button_osx.cpp; path = ../../src/osx/button_osx.cpp; sourceTree = SOURCE_ROOT; };
+		975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = buttonbox_osx.cpp; path = ../../src/osx/buttonbox_osx.cpp; sourceTree = SOURCE_ROOT; };
 		5219A792C6A736F193D4A82F /* ContractionState.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ContractionState.cxx; path = ../../src/stc/scintilla/src/ContractionState.cxx; sourceTree = SOURCE_ROOT; };
 		E8BD1489D95E3FD78B200B1B /* commandlinkbuttong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = commandlinkbuttong.cpp; path = ../../src/generic/commandlinkbuttong.cpp; sourceTree = SOURCE_ROOT; };
 		C9A305CEC03B3085B159B617 /* fs_mem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fs_mem.cpp; path = ../../src/common/fs_mem.cpp; sourceTree = SOURCE_ROOT; };
@@ -3000,6 +3002,7 @@
 				C62CD918A09D3FE5B1BF2D17 /* anybutton_osx.cpp */,
 				38EF5FC5934C34D599FD6074 /* bmpbuttn_osx.cpp */,
 				CF4F4F5211933057824B5621 /* button_osx.cpp */,
+				975C81F06D403C59AD65A39B /* buttonbox_osx.cpp */,
 				998C092CB83639CFA3DC63B1 /* checkbox_osx.cpp */,
 				9860CD56245B3E7FBD0E7846 /* checklst_osx.cpp */,
 				59D075A3E96F3187B58F6D03 /* choice_osx.cpp */,
@@ -3682,6 +3685,7 @@
 				E82CB89681FF3747B6A94427 /* anybutton_osx.cpp in Sources */,
 				49FE0228D8FD3F7AB64A4432 /* bmpbuttn_osx.cpp in Sources */,
 				6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */,
+				10D31D73C113307BA9D96CAC /* buttonbox_osx.cpp in Sources */,
 				0E92CEF677AA32C9A8CDA0A7 /* checkbox_osx.cpp in Sources */,
 				07412469921A3E488A2F9BA6 /* checklst_osx.cpp in Sources */,
 				4666CDC48BA9301EA283BFFF /* choice_osx.cpp in Sources */,
