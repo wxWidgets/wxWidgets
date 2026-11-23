@@ -26,10 +26,6 @@
 #endif
 
 #include "wx/fontdlg.h"
-#include "wx/dcgraph.h"
-#include "wx/dcmemory.h"
-#include "wx/graphics.h"
-#include "wx/image.h"
 #include "wx/splitter.h"
 #include "wx/sstream.h"
 #include "wx/html/htmlwin.h"
@@ -80,62 +76,6 @@
 #include "wx/richtext/richtextstyledlg.h"
 #include "wx/richtext/richtextprint.h"
 #include "wx/richtext/richtextimagedlg.h"
-
-#if wxUSE_GRAPHICS_CONTEXT
-static void WriteOpaqueTextBitmapExample(wxRichTextCtrl& r)
-{
-    const int fontSize = 30;
-    wxBitmap runsBitmap(170, 65);
-    wxCHECK_RET( runsBitmap.IsOk(), "Could not create adjacent-runs bitmap" );
-    int boundaries[2];
-    int sampleY = 0;
-    {
-        wxMemoryDC memory(runsBitmap);
-        memory.SetBackground(*wxBLACK_BRUSH);
-        memory.Clear();
-        wxGCDC dc(memory);
-        const wxFont font(wxFontInfo(fontSize).Family(wxFONTFAMILY_MODERN));
-        dc.SetFont(font);
-        dc.SetBackgroundMode(wxSOLID);
-        dc.SetTextBackground(*wxWHITE);
-
-        const wxString runs[] = { "B", "I", "TMAP" };
-        const wxColour colours[] = { *wxRED, wxColour(0, 128, 0), *wxBLACK };
-        int runX = 5;
-        for ( int i = 0; i < 3; ++i )
-        {
-            const wxSize runExtent = dc.GetTextExtent(runs[i]);
-            wxCHECK_RET( runExtent.x > 0 && runExtent.y > 1 &&
-                         runX + runExtent.x < runsBitmap.GetWidth() &&
-                         5 + runExtent.y < runsBitmap.GetHeight(),
-                         "Unexpected adjacent-runs extent" );
-            dc.SetTextForeground(colours[i]);
-            dc.DrawText(runs[i], runX, 5);
-            runX += runExtent.x;
-            if ( i < 2 )
-                boundaries[i] = runX;
-            sampleY = 5 + runExtent.y / 2;
-        }
-    }
-
-    const wxImage runsImage = runsBitmap.ConvertToImage();
-    wxCHECK_RET( runsImage.IsOk(), "Could not convert adjacent-runs bitmap" );
-    r.WriteText(wxString::Format("Adjacent wxGCDC runs at %d pt: red B, green I, black TMAP on white.\n",
-                                fontSize));
-    for ( int i = 0; i < 2; ++i )
-    {
-        const int edgeX = boundaries[i] - 1;
-        r.WriteText(wxString::Format("Before boundary %d, pixel (%d, %d): RGB(%u, %u, %u).\n",
-                                    i + 1, edgeX, sampleY,
-                                    static_cast<unsigned>(runsImage.GetRed(edgeX, sampleY)),
-                                    static_cast<unsigned>(runsImage.GetGreen(edgeX, sampleY)),
-                                    static_cast<unsigned>(runsImage.GetBlue(edgeX, sampleY))));
-    }
-    r.WriteText("Expected: a continuous white background with no seams after B or I: ");
-    wxCHECK_RET( r.WriteImage(runsImage, wxBITMAP_TYPE_PNG), "Could not insert adjacent-runs bitmap" );
-    r.Newline();
-}
-#endif // wxUSE_GRAPHICS_CONTEXT
 
 // A custom field type
 class wxRichTextFieldTypePropertiesTest: public wxRichTextFieldTypeStandard
@@ -1066,10 +1006,6 @@ void MyFrame::WriteInitialText()
 
     r.EndAlignment();
 
-#if wxUSE_GRAPHICS_CONTEXT
-    WriteOpaqueTextBitmapExample(r);
-#endif
-
 #if 0
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
     r.WriteText(wxString("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side."));
@@ -1106,26 +1042,6 @@ void MyFrame::WriteInitialText()
     r.BeginStyle(backgroundColourAttr);
     r.WriteText(" And this blue on green bit.");
     r.EndStyle();
-
-    r.WriteText(" Adjacent highlighted runs: ");
-    r.BeginFontSize(28);
-    wxRichTextAttr optionAttr;
-    optionAttr.SetBackgroundColour(*wxYELLOW);
-    optionAttr.SetTextColour(*wxRED);
-    r.BeginStyle(optionAttr);
-    r.WriteText("G");
-    r.EndStyle();
-
-    optionAttr.SetTextColour(wxColour(0, 128, 0));
-    r.BeginStyle(optionAttr);
-    r.WriteText("H");
-    r.EndStyle();
-
-    optionAttr.SetTextColour(*wxBLACK);
-    r.BeginStyle(optionAttr);
-    r.WriteText("ANA");
-    r.EndStyle();
-    r.EndFontSize();
 
     r.WriteText(" Naturally you can make things ");
     r.BeginBold();
