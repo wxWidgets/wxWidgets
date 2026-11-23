@@ -844,6 +844,11 @@ public:
     virtual void SetBrush(const wxGraphicsBrush& brush);
 
     /**
+        Returns the current brush used for filling paths.
+    */
+    const wxGraphicsBrush& GetBrush() const;
+
+    /**
         Creates a native pen from a wxPen.
 
         Prefer to use the overload taking wxGraphicsPenInfo unless you already
@@ -868,6 +873,11 @@ public:
         Sets the pen used for stroking.
     */
     virtual void SetPen(const wxGraphicsPen& pen);
+
+    /**
+        Returns the current pen used for stroking.
+    */
+    const wxGraphicsPen& GetPen() const;
 
     /** @}
     */

@@ -841,10 +841,14 @@ public:
     // sets the pen
     virtual void SetPen( const wxGraphicsPen& pen );
 
+    const wxGraphicsPen& GetPen() const { return m_pen; }
+
     void SetPen( const wxPen& pen );
 
     // sets the brush for filling
     virtual void SetBrush( const wxGraphicsBrush& brush );
+
+    const wxGraphicsBrush& GetBrush() const { return m_brush; }
 
     void SetBrush( const wxBrush& brush );
 
@@ -985,9 +989,6 @@ protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,
              m_height;
-
-    // wxGCDCImpl saves and restores m_brush and m_pen when drawing opaque text.
-    friend class wxGCDCImpl;
 
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;

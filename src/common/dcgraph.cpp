@@ -1235,8 +1235,8 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     {
         // Match the rounded DC extents, not the fractional graphics extents.
         const wxSize size = GetOwner()->GetTextExtent(str);
-        const wxGraphicsBrush formerBrush = m_graphicContext->m_brush;
-        const wxGraphicsPen formerPen = m_graphicContext->m_pen;
+        const wxGraphicsBrush formerBrush = m_graphicContext->GetBrush();
+        const wxGraphicsPen formerPen = m_graphicContext->GetPen();
         m_graphicContext->SetBrush(m_graphicContext->CreateBrush(m_textBackgroundColour));
         m_graphicContext->SetPen(wxNullGraphicsPen);
         m_graphicContext->DrawRectangle(x, y, size.x, size.y);
