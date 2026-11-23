@@ -58,7 +58,7 @@ else()
     )
 
     install(
-        FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
+        FILES "${wxCONFIG_INSTALL_FILE}"
         DESTINATION "${library_dir}/wx/config"
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ
