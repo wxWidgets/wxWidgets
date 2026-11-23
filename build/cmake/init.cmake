@@ -864,8 +864,10 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_CAIRO AND NOT WXGTK)
-        find_package(Cairo)
-        if(NOT CAIRO_FOUND)
+        # Cairo is loaded dynamically, so only its headers are needed and it
+        # doesn't matter if the library itself is found or not.
+        find_package(Cairo QUIET)
+        if(NOT CAIRO_INCLUDE_DIRS)
             message(WARNING "Cairo not found, Cairo renderer won't be available")
             wx_option_force_value(wxUSE_CAIRO OFF)
         endif()
