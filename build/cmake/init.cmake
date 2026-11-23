@@ -142,6 +142,31 @@ elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}
         wx_string_append(CMAKE_EXE_LINKER_FLAGS "${STATIC_LINKER_FLAGS}")
         wx_string_append(CMAKE_SHARED_LINKER_FLAGS "${STATIC_LINKER_FLAGS}")
     endif()
+
+    if(wxBUILD_SHARED AND wxBUILD_ELF_SYMVER)
+        wx_get_flavour(lib_flavour "_")
+        string(TOUPPER "WXU${lib_flavour}_${wxMAJOR_VERSION}.${wxMINOR_VERSION}" WX_VERSION_TAG)
+        set(wxVERSION_SCRIPT "${wxBINARY_DIR}/version-script")
+        configure_file("${wxSOURCE_DIR}/version-script.in" "${wxVERSION_SCRIPT}" @ONLY)
+
+        include(CheckCXXSourceCompiles)
+        set(CMAKE_REQUIRED_LIBRARIES "-Wl,--version-script,${wxVERSION_SCRIPT}")
+        check_cxx_source_compiles("int main() { return 0; }" wxHAVE_LD_VERSION_SCRIPT)
+        if(wxHAVE_LD_VERSION_SCRIPT)
+            set(LDFLAGS_VERSIONING " ${CMAKE_REQUIRED_LIBRARIES}")
+
+            # The same version script is used for all libraries, so the
+            # symbols listed in it are not all defined in each of them.
+            list(APPEND CMAKE_REQUIRED_LIBRARIES "-Wl,--undefined-version")
+            check_cxx_source_compiles("int main() { return 0; }" wxHAVE_LD_UNDEFINED_VERSION)
+            if(wxHAVE_LD_UNDEFINED_VERSION)
+                wx_string_append(LDFLAGS_VERSIONING " -Wl,--undefined-version")
+            endif()
+
+            wx_string_append(CMAKE_SHARED_LINKER_FLAGS "${LDFLAGS_VERSIONING}")
+        endif()
+        unset(CMAKE_REQUIRED_LIBRARIES)
+    endif()
 endif()
 
 if(NOT wxBUILD_COMPATIBILITY STREQUAL "NONE")

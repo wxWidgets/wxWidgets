@@ -63,6 +63,11 @@ if(UNIX)
     mark_as_advanced(wxBUILD_LARGEFILE_SUPPORT)
 endif()
 
+if(UNIX AND NOT APPLE AND NOT CYGWIN)
+    wx_option(wxBUILD_ELF_SYMVER "use ELF symbols versioning if supported")
+    mark_as_advanced(wxBUILD_ELF_SYMVER)
+endif()
+
 if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
