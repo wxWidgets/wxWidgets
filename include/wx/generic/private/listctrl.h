@@ -717,7 +717,13 @@ public:
 
     // change the current (== focused) item, send a notification event
     void ChangeCurrent(size_t current);
-    void ResetCurrent() { ChangeCurrent((size_t)-1); }
+    void ResetCurrent()
+    {
+        ChangeCurrent((size_t)-1);
+
+        // The anchor doesn't make sense without the current item either.
+        m_anchor = (size_t)-1;
+    }
     bool HasCurrent() const { return m_current != (size_t)-1; }
 
     // send out a wxListEvent

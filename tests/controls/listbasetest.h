@@ -36,6 +36,20 @@ protected:
     void HitTest();
     void Sort();
 
+    // Tests of selection behaviour, see wxLIST_SELECTION_TESTS below.
+    void ShiftArrowAfterFocus();
+    void ShiftArrowAfterDelete();
+
+    // Helpers for the tests.
+
+    // Add the given number of items to the control, which may be virtual.
+    void FillList(int count);
+
+    bool IsSelected(long item) const
+    {
+        return GetList()->GetItemState(item, wxLIST_STATE_SELECTED) != 0;
+    }
+
     wxDECLARE_NO_COPY_CLASS(ListBaseTestCase);
 };
 
@@ -70,5 +84,14 @@ protected:
     wxLIST_TEST_CASE(ClassName, TagName, ImageList) \
     wxLIST_TEST_CASE(ClassName, TagName, HitTest) \
     wxLIST_TEST_CASE(ClassName, TagName, Sort)
+
+// Define test cases checking the selection behaviour, which can be used with
+// both virtual and non-virtual controls.
+//
+// The generic implementation is supposed to behave in the same way as the
+// native ones, so these tests are used for all of them.
+#define wxLIST_SELECTION_TESTS(ClassName, TagName) \
+    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterFocus) \
+    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterDelete)
 
 #endif

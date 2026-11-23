@@ -668,4 +668,120 @@ void ListBaseTestCase::Sort()
     CHECK( list->GetItemText(1) == "Item 0" );
 }
 
+void ListBaseTestCase::FillList(int count)
+{
+    wxListCtrl* const list = GetList();
+
+    if ( !list->GetColumnCount() )
+        list->InsertColumn(0, "Header");
+
+    if ( list->IsVirtual() )
+    {
+        list->SetItemCount(count);
+        return;
+    }
+    else
+    {
+        for ( int i = 0; i < count; ++i )
+            list->InsertItem(i, wxString::Format("Item %d", i));
+    }
+}
+
+void ListBaseTestCase::ShiftArrowAfterFocus()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Set the current item programmatically, without setting the anchor, and
+    // check that extending the selection uses it as anchor.
+    list->SetItemState(5, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    sim.Char(WXK_UP, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(4) );
+    CHECK( IsSelected(5) );
+
+    // Check that the anchor doesn't survive deleting all items.
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    list->DeleteAllItems();
+    FillList(10);
+    list->SetItemState(2, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(2) );
+    CHECK( IsSelected(3) );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+void ListBaseTestCase::ShiftArrowAfterDelete()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make the last item current and the selection anchor.
+    list->SetItemState(8, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(9) );
+
+    // Delete the anchor item: this used to leave the anchor pointing beyond
+    // the end of the control.
+    list->DeleteItem(9);
+
+    sim.Char(WXK_UP, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(7) );
+    CHECK( IsSelected(8) );
+
+    // Items can't be inserted into virtual controls.
+    if ( list->IsVirtual() )
+        return;
+
+    // Under wxQt the anchor is not adjusted when inserting items, but moves to
+    // the current item instead, so don't run this part of the test there.
+#ifndef __WXQT__
+    // Inserting an item before the anchor must shift it too.
+    list->InsertItem(0, "New item");
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    // The anchor is now item 9 (previously 8), so only it remains selected.
+    CHECK( list->GetSelectedItemCount() == 1 );
+    CHECK( IsSelected(9) );
+#endif // !__WXQT__
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 #endif //wxUSE_LISTCTRL
