@@ -2932,11 +2932,13 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
 // keyboard handling
 // ----------------------------------------------------------------------------
 
-// Helper function which handles items selection correctly and efficiently. and
-// simply, mimic the wxMSW behaviour. And The benefit of this function is that it
-// ensures that wxEVT_LIST_ITEM_{DE}SELECTED events are only generated for items
-// freshly (de)selected (i.e. items that have really changed state). Useful for
-// multi-selection mode when selecting using mouse or arrows with Shift key down.
+// Helper function used for extending the selection to the given item in
+// multi-selection mode, when selecting using mouse or arrows with Shift key
+// down: it makes the selection consist of exactly the items between the anchor
+// and the new current item (inclusive), as in wxMSW.
+//
+// Notice that it ensures that wxEVT_LIST_ITEM_{DE}SELECTED events are only
+// generated for the items that really changed their state.
 void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
 {
     // If there is no anchor yet, e.g. because the current item was set
@@ -2949,68 +2951,30 @@ void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
     RefreshLine(oldCurrent);
     RefreshLine(newCurrent);
 
-    // Given a selection [anchor, old], to change/extend it to new (i.e. the
-    // selection becomes [anchor, new]) we discriminate three possible cases:
-    //
-    // Case 1) new < old <= anchor || anchor <= old < new
-    // i.e. oldCurrent between anchor and newCurrent, in which case we:
-    // - Highlight everything between anchor and newCurrent (inclusive).
-    //
-    // Case 2) old < new <= anchor || anchor <= new < old
-    // i.e. newCurrent between anchor and oldCurrent, in which case we:
-    // - Unhighlight everything between oldCurrent and newCurrent (exclusive).
-    //
-    // Case 3) old < anchor < new || new < anchor < old
-    // i.e. anchor between oldCurrent and newCurrent, in which case we
-    // - Highlight everything between anchor and newCurrent (inclusive).
-    // - Unhighlight everything between anchor (exclusive) and oldCurrent.
+    size_t lineFrom = m_anchor,
+           lineTo = newCurrent;
+    if ( lineFrom > lineTo )
+        wxSwap(lineFrom, lineTo);
 
-    size_t lineFrom, lineTo;
+    // Note that we can't assume that the currently selected items are those
+    // between the anchor and the old current item, as the current item could
+    // have been changed without changing the selection, e.g. using Ctrl-arrows
+    // or Ctrl-click, so deselect all the items outside of the new selection.
+    const int selCountOld = GetSelectedItemCount();
 
-    if ( (newCurrent < oldCurrent && oldCurrent <= m_anchor) ||
-         (newCurrent > oldCurrent && oldCurrent >= m_anchor) )
-    {
-        lineFrom = m_anchor;
-        lineTo   = newCurrent;
+    if ( lineFrom > 0 )
+        HighlightLines(0, lineFrom - 1, false);
 
-        HighlightLines(lineFrom, lineTo);
-    }
-    else if ( (oldCurrent < newCurrent && newCurrent <= m_anchor) ||
-              (oldCurrent > newCurrent && newCurrent >= m_anchor) )
-    {
-        lineFrom = oldCurrent;
-        lineTo   = newCurrent;
+    const size_t count = GetItemCount();
+    if ( lineTo < count - 1 )
+        HighlightLines(lineTo + 1, count - 1, false);
 
-        // Exclude newCurrent from being deselected
-        (lineTo < lineFrom) ? ++lineTo : --lineTo;
+    // For virtual listctrl (in multi-selection mode), wxMSW sends only
+    // a notification to indicate that something has been deselected.
+    if ( IsVirtual() && GetSelectedItemCount() != selCountOld )
+        SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
 
-        HighlightLines(lineFrom, lineTo, false);
-
-        // For virtual listctrl (in multi-selection mode), wxMSW sends only
-        // a notification to indicate that something has been deselected.
-        if ( IsVirtual() )
-            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
-    }
-    else if ( (oldCurrent < m_anchor && m_anchor < newCurrent) ||
-              (newCurrent < m_anchor && m_anchor < oldCurrent) )
-    {
-        lineFrom = m_anchor;
-        lineTo   = oldCurrent;
-
-        // Exclude anchor from being deselected
-        (lineTo < lineFrom) ? --lineFrom : ++lineFrom;
-
-        HighlightLines(lineFrom, lineTo, false);
-
-        // See above.
-        if ( IsVirtual() )
-            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
-
-        lineFrom = m_anchor;
-        lineTo   = newCurrent;
-
-        HighlightLines(lineFrom, lineTo);
-    }
+    HighlightLines(lineFrom, lineTo);
 }
 
 void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)

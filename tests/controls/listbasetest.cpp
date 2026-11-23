@@ -784,4 +784,83 @@ void ListBaseTestCase::ShiftArrowAfterDelete()
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
+void ListBaseTestCase::ShiftArrowAfterCtrl()
+{
+    // This test relies on Ctrl-arrows moving the current item without changing
+    // the anchor, as in wxMSW, but under wxQt they move the anchor too, so it
+    // can't be used there.
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXQT__)
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make item 2 current, selected and the anchor.
+    list->SetItemState(1, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(2) );
+
+    // Move the current item without changing the selection.
+    for ( int i = 0; i < 3; ++i )
+        sim.Char(WXK_DOWN, wxMOD_CONTROL);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+
+    // Extending the selection now must select all the items from the anchor
+    // to the new current item, even though the old current item wasn't
+    // selected.
+    sim.Char(WXK_UP, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 3 );
+    CHECK( IsSelected(2) );
+    CHECK( IsSelected(3) );
+    CHECK( IsSelected(4) );
+
+    // Select an item outside of the current selection without changing the
+    // anchor.
+    for ( int i = 0; i < 4; ++i )
+        sim.Char(WXK_UP, wxMOD_CONTROL);
+    sim.Char(WXK_SPACE);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 4 );
+    REQUIRE( IsSelected(0) );
+
+    for ( int i = 0; i < 3; ++i )
+        sim.Char(WXK_DOWN, wxMOD_CONTROL);
+    wxYield();
+
+    EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
+    EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);
+
+    // Extending the selection must deselect the item outside of the range.
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 3 );
+    CHECK( !IsSelected(0) );
+    CHECK( IsSelected(2) );
+    CHECK( IsSelected(3) );
+    CHECK( IsSelected(4) );
+
+    // No items were selected and a single one was deselected. Note that
+    // virtual controls send a single notification for all deselected items,
+    // but as only one item was deselected, the count is the same for them.
+    CHECK( selected.GetCount() == 0 );
+    CHECK( deselected.GetCount() == 1 );
+#endif // wxUSE_UIACTIONSIMULATOR && !__WXQT__
+}
+
 #endif //wxUSE_LISTCTRL

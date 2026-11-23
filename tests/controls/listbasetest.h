@@ -39,6 +39,7 @@ protected:
     // Tests of selection behaviour, see wxLIST_SELECTION_TESTS below.
     void ShiftArrowAfterFocus();
     void ShiftArrowAfterDelete();
+    void ShiftArrowAfterCtrl();
 
     // Helpers for the tests.
 
@@ -92,6 +93,7 @@ protected:
 // native ones, so these tests are used for all of them.
 #define wxLIST_SELECTION_TESTS(ClassName, TagName) \
     wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterFocus) \
-    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterDelete)
+    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterDelete) \
+    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterCtrl)
 
 #endif
