@@ -2815,7 +2815,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                     // Highlight m_current only if there is no previous selection.
                     HighlightLine(m_current);
                 }
-                else if ( oldCurrent != current && m_anchor != (size_t)-1 )
+                else if ( oldCurrent != current )
                 {
                     ExtendSelection(oldCurrent, current);
                 }
@@ -2939,6 +2939,12 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
 // multi-selection mode when selecting using mouse or arrows with Shift key down.
 void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
 {
+    // If there is no anchor yet, e.g. because the current item was set
+    // programmatically and not by the user, use the old current item as
+    // anchor, as this is what the user would expect.
+    if ( m_anchor == (size_t)-1 )
+        m_anchor = oldCurrent;
+
     // Refresh the old/new focus to remove/add it
     RefreshLine(oldCurrent);
     RefreshLine(newCurrent);
@@ -4391,6 +4397,16 @@ void wxListMainWindow::DeleteItem( long lindex )
             m_current--;
     }
 
+    // Also adjust the anchor, but just reset it if it's being deleted, as it
+    // doesn't make sense to keep the anchor at some other item.
+    if ( m_anchor != (size_t)-1 )
+    {
+        if ( m_anchor == index )
+            m_anchor = (size_t)-1;
+        else if ( m_anchor > index )
+            m_anchor--;
+    }
+
     if ( InReportView() )
     {
         //  mark the Column Max Width cache as dirty if the items in the line
@@ -4713,6 +4729,10 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     // up by one
     if ( HasCurrent() && m_current >= id )
         m_current++;
+
+    // And the same for the anchor.
+    if ( m_anchor != (size_t)-1 && m_anchor >= id )
+        m_anchor++;
 
     SendNotify(id, wxEVT_LIST_INSERT_ITEM);
 

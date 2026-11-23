@@ -20,6 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/listctrl.h"
+#include "listbasetest.h"
 #include "testableframe.h"
 #include "wx/uiaction.h"
 
@@ -29,10 +30,12 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class VirtListCtrlTestCase
+class VirtListCtrlTestCase : public ListBaseTestCase
 {
 public:
     VirtListCtrlTestCase();
+
+    virtual wxListCtrl *GetList() const override { return m_list.get(); }
 
 protected:
     std::unique_ptr<wxListCtrl> m_list;
@@ -129,5 +132,7 @@ TEST_CASE_METHOD(VirtListCtrlTestCase, "VirtListCtrl::DeselectedEvent", "[listct
     CHECK(deselected.GetCount() == 1);
 #endif
 }
+
+wxLIST_SELECTION_TESTS(VirtListCtrl, "[listctrl][virtual]")
 
 #endif // wxUSE_LISTCTRL
