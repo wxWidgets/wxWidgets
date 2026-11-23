@@ -33,7 +33,7 @@
 struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
 {
     wxString facename;          // may be empty meaning "any"
-    wxFontEncoding encoding;    // so that we know what this struct represents
+    wxFontEncoding encoding = wxFONTENCODING_SYSTEM; // so that we know what this struct represents
 
 #if defined(__WXMSW__) || \
     defined(__WXMAC__) || \
