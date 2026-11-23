@@ -1867,8 +1867,6 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
 {
     m_isOk = true;
     m_previewPrintout = printout;
-    if (m_previewPrintout)
-        m_previewPrintout->SetPreview(static_cast<wxPrintPreview *>(this));
 
     m_printPrintout = printoutForPrinting;
 
@@ -2215,6 +2213,12 @@ wxPrintPreview::wxPrintPreview(wxPrintout *printout,
 {
     m_pimpl = wxPrintFactory::GetFactory()->
         CreatePrintPreview( printout, printoutForPrinting, data );
+
+    // The printout's preview is this object, which only exists as a
+    // wxPrintPreview once its base class constructor has returned, and not
+    // the implementation object, which isn't a wxPrintPreview at all.
+    if ( printout )
+        printout->SetPreview(this);
 }
 
 wxPrintPreview::wxPrintPreview(wxPrintout *printout,
@@ -2224,6 +2228,12 @@ wxPrintPreview::wxPrintPreview(wxPrintout *printout,
 {
     m_pimpl = wxPrintFactory::GetFactory()->
         CreatePrintPreview( printout, printoutForPrinting, data );
+
+    // The printout's preview is this object, which only exists as a
+    // wxPrintPreview once its base class constructor has returned, and not
+    // the implementation object, which isn't a wxPrintPreview at all.
+    if ( printout )
+        printout->SetPreview(this);
 }
 
 wxPrintPreview::~wxPrintPreview()
