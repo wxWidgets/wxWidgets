@@ -99,6 +99,9 @@ void DrawCheckBox(HDC hdc, const RECT& rect, int flags);
 // Draw a radio button.
 void DrawRadioButton(HDC hdc, const RECT& rect, int flags);
 
+// Draw a spin button.
+void DrawSpinButton(HWND hwnd, WXWNDPROC wndProc);
+
 } // namespace wxMSWDarkMode
 
 namespace wxMSWImpl

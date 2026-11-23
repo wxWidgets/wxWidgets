@@ -1285,6 +1285,83 @@ void DrawRadioButton(HDC hdc, const RECT& rect, int flags)
     ::SetTextColor(hdc, oldCol);
 }
 
+void DrawSpinButton(HWND hwnd, WXWNDPROC wndProc)
+{
+    if ( wndProc == nullptr )
+        wndProc = ::DefSubclassProc;
+
+    // Paint into a memory DC.
+    PAINTSTRUCT ps;
+    HDC hdc = ::BeginPaint(hwnd, &ps);
+    const RECT rc = wxGetClientRect(hwnd);
+    HDC hdcMem = nullptr;
+    HPAINTBUFFER hbp = ::BeginBufferedPaint(hdc, &rc, BPBF_TOPDOWNDIB,
+        nullptr, &hdcMem);
+    if ( hbp )
+    {
+        // Prior to Windows 11 22H2 (build 22621), the updown control draws
+        // light mode so we invert the colours to make it dark.
+        bool shouldInvert = !wxCheckOsVersion(10, 0, 22621);
+
+        if ( shouldInvert )
+        {
+            // The background is black. Make it white so that after we invert,
+            // the area not painted by the the control is once again black.
+            AutoHBRUSH bBrush(0xffffff);
+            ::FillRect(hdcMem, &rc, bBrush);
+        }
+
+        // Paint into memory DC.
+        wndProc(hwnd, WM_PRINTCLIENT, (WPARAM)hdcMem, PRF_CLIENT);
+
+        // Invert the pixels, if needed.
+        RGBQUAD* data = nullptr;
+        int cxRow = 0;
+        if ( shouldInvert && SUCCEEDED(::GetBufferedPaintBits(hbp, &data, &cxRow)) )
+        {
+            auto* end = data + cxRow * (rc.bottom - rc.top);
+            while ( data < end )
+            {
+                // This uses a slightly different formula than the one in
+                // InvertBitmapPixel() because the one there results in the
+                // lines being too bright.
+                auto rgb = wxImage::RGBValue(data->rgbRed, data->rgbGreen,
+                    data->rgbBlue);
+                auto hsv = wxImage::RGBtoHSV(rgb);
+                hsv.value = 1.0 - hsv.value;
+                rgb = wxImage::HSVtoRGB(hsv);
+                data->rgbRed = rgb.red;
+                data->rgbGreen = rgb.green;
+                data->rgbBlue = rgb.blue;
+                data++;
+            }
+        }
+
+        // When using a buddy control, the spin button tries to mimic being a
+        // part of it by adding an extra border, not used for standalone
+        // controls. This doesn't work very well even in light mode in modern
+        // Windows (it was apparently done for the classic 3D appearance and
+        // never updated since then), but looks completely horrible in dark
+        // mode, so we must get rid of this border by overdrawing it.
+        if ( ::SendMessage(hwnd, UDM_GETBUDDY, 0, 0) )
+        {
+            auto col = wxMSWDarkMode::GetBorderPen().GetColour();
+            AutoHPEN hPen(col.GetPixel());
+            SelectInHDC selPen(hdcMem, hPen);
+            ::MoveToEx(hdcMem, rc.left, rc.top, nullptr);
+            ::LineTo(hdcMem, rc.right - 1, rc.top);
+            ::LineTo(hdcMem, rc.right - 1, rc.bottom - 1);
+            ::LineTo(hdcMem, rc.left - 1, rc.bottom - 1);
+        }
+
+        ::EndBufferedPaint(hbp, true);
+    }
+    else
+        wndProc(hwnd, WM_PRINTCLIENT, (WPARAM)hdc, PRF_CLIENT);
+
+    ::EndPaint(hwnd, &ps);
+}
+
 } // namespace wxMSWDarkMode
 
 // Return true if the window should have a gripper in the scroll bar corner.
@@ -1683,6 +1760,10 @@ bool HasDarkTheme()
 
 void DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
     int WXUNUSED(value), int WXUNUSED(max), int WXUNUSED(flags))
+{
+}
+
+void DrawSpinButton(HWND WXUNUSED(hwnd), WXWNDPROC WXUNUSED(wndProc))
 {
 }
 
