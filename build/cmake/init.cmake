@@ -196,6 +196,13 @@ elseif(CMAKE_VS_PLATFORM_NAME)
     if(NOT CMAKE_VS_PLATFORM_NAME STREQUAL "Win32")
         string(TOLOWER ${CMAKE_VS_PLATFORM_NAME} wxPLATFORM_ARCH)
     endif()
+elseif(MSVC AND CMAKE_CXX_COMPILER_ARCHITECTURE_ID)
+    # Generators other than Visual Studio don't set the platform, so use the
+    # architecture targeted by the compiler, e.g. ARM64 when using Ninja in
+    # an ARM64 developer command prompt.
+    if(NOT CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "X86")
+        string(TOLOWER ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID} wxPLATFORM_ARCH)
+    endif()
 else()
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(wxPLATFORM_ARCH "x64")
