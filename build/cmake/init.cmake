@@ -102,7 +102,9 @@ if(MSVC)
     endif()
 
     if(NOT wxBUILD_STRIPPED_RELEASE)
-        set(MSVC_PDB_FLAG " /DEBUG")
+        # /DEBUG turns off these optimizations by default, but they are still
+        # wanted in release builds, as in the makefiles.
+        set(MSVC_PDB_FLAG " /DEBUG /OPT:REF /OPT:ICF")
     endif()
     wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
     wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
