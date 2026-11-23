@@ -1867,8 +1867,6 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
 {
     m_isOk = true;
     m_previewPrintout = printout;
-    if (m_previewPrintout)
-        m_previewPrintout->SetPreview(static_cast<wxPrintPreview *>(this));
 
     m_printPrintout = printoutForPrinting;
 
@@ -2215,6 +2213,9 @@ wxPrintPreview::wxPrintPreview(wxPrintout *printout,
 {
     m_pimpl = wxPrintFactory::GetFactory()->
         CreatePrintPreview( printout, printoutForPrinting, data );
+
+    if ( printout )
+        printout->SetPreview(this);
 }
 
 wxPrintPreview::wxPrintPreview(wxPrintout *printout,
@@ -2224,6 +2225,9 @@ wxPrintPreview::wxPrintPreview(wxPrintout *printout,
 {
     m_pimpl = wxPrintFactory::GetFactory()->
         CreatePrintPreview( printout, printoutForPrinting, data );
+
+    if ( printout )
+        printout->SetPreview(this);
 }
 
 wxPrintPreview::~wxPrintPreview()
