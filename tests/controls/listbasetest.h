@@ -40,6 +40,7 @@ protected:
     void ShiftArrowAfterFocus();
     void ShiftArrowAfterDelete();
     void ShiftArrowAfterCtrl();
+    void ShiftArrowAfterFocusChange();
 
     // Helpers for the tests.
 
@@ -94,6 +95,7 @@ protected:
 #define wxLIST_SELECTION_TESTS(ClassName, TagName) \
     wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterFocus) \
     wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterDelete) \
-    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterCtrl)
+    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterCtrl) \
+    wxLIST_TEST_CASE(ClassName, TagName, ShiftArrowAfterFocusChange)
 
 #endif

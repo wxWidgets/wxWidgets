@@ -3702,6 +3702,12 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
             {
                 ChangeCurrent(item);
 
+                // Also make it the anchor for extending the selection: it
+                // wouldn't make sense to keep using the old one, which may
+                // be far from the new current item and might not be even
+                // visible any more.
+                m_anchor = item;
+
                 if ( oldCurrent != (size_t)-1 )
                 {
                     if ( IsSingleSel() )

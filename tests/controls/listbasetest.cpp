@@ -863,4 +863,56 @@ void ListBaseTestCase::ShiftArrowAfterCtrl()
 #endif // wxUSE_UIACTIONSIMULATOR && !__WXQT__
 }
 
+void ListBaseTestCase::ShiftArrowAfterFocusChange()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make item 2 current, selected and the anchor.
+    list->SetItemState(1, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(2) );
+
+    // Change the current item programmatically: this must make it the new
+    // anchor, i.e. extending the selection must start from it and not from
+    // the previous anchor.
+    list->SetItemState(6, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(6) );
+    CHECK( IsSelected(7) );
+
+    // Moving the current item using Ctrl-arrows after changing it
+    // programmatically must not change the anchor (but under wxQt Ctrl-arrows
+    // do change it, see ShiftArrowAfterCtrl(), so skip this part there).
+#ifndef __WXQT__
+    list->SetItemState(3, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN, wxMOD_CONTROL);
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 3 );
+    CHECK( IsSelected(3) );
+    CHECK( IsSelected(4) );
+    CHECK( IsSelected(5) );
+#endif // !__WXQT__
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 #endif //wxUSE_LISTCTRL
