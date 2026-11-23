@@ -841,10 +841,14 @@ public:
     // sets the pen
     virtual void SetPen( const wxGraphicsPen& pen );
 
+    const wxGraphicsPen& GetPen() const { return m_pen; }
+
     void SetPen( const wxPen& pen );
 
     // sets the brush for filling
     virtual void SetBrush( const wxGraphicsBrush& brush );
+
+    const wxGraphicsBrush& GetBrush() const { return m_brush; }
 
     void SetBrush( const wxBrush& brush );
 
