@@ -189,6 +189,10 @@ public:
         return wxString::Format("%d,%d", port >> 8, port & 0xff);
     }
 
+    // Return all the commands received by the server, must be only called
+    // after the thread terminated.
+    const wxArrayString& GetCommands() const { return m_commands; }
+
     // Set the contents of the parentheses in the reply to PASV command.
     //
     // By default, an address which can't be connected to, but a correct port,
@@ -208,6 +212,9 @@ public:
         for ( ;; )
         {
             const wxString cmd = ReadLine(*ctrl);
+            if ( !cmd.empty() )
+                m_commands.push_back(cmd);
+
             if ( cmd.empty() || cmd.StartsWith("QUIT") )
             {
                 Send(*ctrl, "221 bye");
@@ -281,6 +288,8 @@ private:
                                     m_data;
 
     wxString m_pasvReply;
+
+    wxArrayString m_commands;
 };
 
 } // anonymous namespace
@@ -365,6 +374,46 @@ TEST_CASE("FTP::PASVInvalid", "[net]")
     }
 
     CHECK( server.Wait() == nullptr );
+}
+
+TEST_CASE("FTP::CommandInjection", "[net]")
+{
+    wxSocketInitializer socketInit;
+
+    FakePASVServer server;
+    REQUIRE( server.IsOk() );
+    REQUIRE( server.Run() == wxTHREAD_NO_ERROR );
+
+    {
+        wxFTP ftp;
+        REQUIRE( ftp.Connect("127.0.0.1", server.GetPort()) );
+
+        // CR or LF in the arguments must not result in sending more than one
+        // command to the server, including when they come from the escaped
+        // path passed to GetInputStream(), as is done by wxURL.
+        SECTION("CRLF")
+        {
+            CHECK_FALSE( ftp.RmFile("foo\r\nDELE bar") );
+        }
+
+        SECTION("LF")
+        {
+            CHECK_FALSE( ftp.ChDir("foo\nDELE bar") );
+        }
+
+        SECTION("Escaped")
+        {
+            std::unique_ptr<wxInputStream> in(ftp.GetInputStream("foo%0D%0ADELE%20bar"));
+            CHECK( !in );
+        }
+    }
+
+    CHECK( server.Wait() == nullptr );
+
+    const wxArrayString& commands = server.GetCommands();
+    INFO( "Commands received: " << wxJoin(commands, ',') );
+    CHECK( commands.Index("DELE bar") == wxNOT_FOUND );
+    CHECK( commands.Index("DELE foo") == wxNOT_FOUND );
 }
 
 #endif // wxUSE_THREADS

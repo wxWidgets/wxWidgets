@@ -1959,6 +1959,14 @@ void DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
 {
 }
 
+void DrawCheckBox(HDC WXUNUSED(hdc), const RECT& WXUNUSED(rect), int WXUNUSED(flags))
+{
+}
+
+void DrawRadioButton(HDC WXUNUSED(hdc), const RECT& WXUNUSED(rect), int WXUNUSED(flags))
+{
+}
+
 void DrawSpinButton(HWND WXUNUSED(hwnd), WXWNDPROC WXUNUSED(wndProc))
 {
 }
