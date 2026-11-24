@@ -830,16 +830,12 @@ void ListBaseTestCase::ShiftArrowAfterCtrl()
 
     // Select an item outside of the current selection without changing the
     // anchor.
-    for ( int i = 0; i < 4; ++i )
-        sim.Char(WXK_UP, wxMOD_CONTROL);
-    sim.Char(WXK_SPACE);
-    wxYield();
+    list->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 
     REQUIRE( list->GetSelectedItemCount() == 4 );
     REQUIRE( IsSelected(0) );
 
-    for ( int i = 0; i < 3; ++i )
-        sim.Char(WXK_DOWN, wxMOD_CONTROL);
+    sim.Char(WXK_UP, wxMOD_CONTROL);
     wxYield();
 
     EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
@@ -912,6 +908,58 @@ void ListBaseTestCase::ShiftArrowAfterFocusChange()
     CHECK( IsSelected(4) );
     CHECK( IsSelected(5) );
 #endif // !__WXQT__
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+void ListBaseTestCase::ShiftArrowAfterRightClick()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make item 2 current, selected and the anchor.
+    list->SetItemState(1, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(2) );
+
+    // Right clicking an unselected item selects only it and makes it the
+    // anchor.
+    //
+    // Make sure the item is visible first, it might not be when using high
+    // DPI, as the control size is fixed.
+    list->EnsureVisible(5);
+    wxYield();
+
+    wxRect rect;
+    REQUIRE( list->GetItemRect(5, rect) );
+
+    sim.MouseMove(list->ClientToScreen(rect.GetPosition()) + wxPoint(10, 10));
+    wxYield();
+
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(5) );
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(5) );
+    CHECK( IsSelected(6) );
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
