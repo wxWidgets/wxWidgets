@@ -294,6 +294,7 @@ public:
     virtual size_t GetBufferOffset( const wxDataFormat& format ) override;
     virtual void MSWSetDataSource(IDataObject* source,
                                   const wxDataFormat& format) override;
+    virtual void MSWReleaseDataSource() override;
 #endif
 
 private:

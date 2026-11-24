@@ -1766,12 +1766,12 @@ wxVirtualFileDataObject::wxVirtualFileDataObject()
 
 wxVirtualFileDataObject::~wxVirtualFileDataObject()
 {
-    ReleaseSource();
+    MSWReleaseDataSource();
 
     DeleteAllTempFiles();
 }
 
-void wxVirtualFileDataObject::ReleaseSource()
+void wxVirtualFileDataObject::MSWReleaseDataSource()
 {
     if ( m_source )
     {
@@ -1783,7 +1783,7 @@ void wxVirtualFileDataObject::ReleaseSource()
 bool wxVirtualFileDataObject::SetData(size_t len, const void *buf)
 {
     m_entries.clear();
-    ReleaseSource();
+    MSWReleaseDataSource();
 
     // The descriptors array follows the items count, see FILEGROUPDESCRIPTORW.
     const size_t headerLen = sizeof(UINT);
@@ -1841,7 +1841,7 @@ void
 wxVirtualFileDataObject::MSWSetDataSource(IDataObject* source,
                                           const wxDataFormat& WXUNUSED(format))
 {
-    ReleaseSource();
+    MSWReleaseDataSource();
 
     m_source = source;
     if ( m_source )

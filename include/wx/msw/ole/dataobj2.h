@@ -186,6 +186,7 @@ public:
         { return SetData(len, buf); }
     virtual void MSWSetDataSource(IDataObject* source,
                                   const wxDataFormat& format) override;
+    virtual void MSWReleaseDataSource() override;
 
 private:
     struct Entry
@@ -198,9 +199,6 @@ private:
 
         bool IsDir() const;
     };
-
-    // Release the data source, if we have it.
-    void ReleaseSource();
 
     // Common part of SaveTo() and SaveAll(), returns false on error.
     bool DoSaveTo(const Entry& entry, const wxString& path) const;

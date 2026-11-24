@@ -901,7 +901,11 @@ public:
     source only when OpenStream() or one of the save functions is called, and
     this must be done while handling the drop, i.e. from wxDropTarget::OnData(),
     or immediately after calling wxClipboard::GetData(), as the source may not
-    provide it any longer later.
+    provide it any longer later. When using drag and drop, the data source is
+    released by wxDropTarget when the drop operation ends, but when pasting
+    from the clipboard, this object keeps a reference to the data source until
+    it is destroyed or receives new data, so it shouldn't be kept around longer
+    than necessary.
 
     @onlyfor{wxmsw}
 

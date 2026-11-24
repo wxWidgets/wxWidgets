@@ -169,6 +169,12 @@ void wxDataObjectComposite::MSWSetDataSource(IDataObject* source,
     dataObj->MSWSetDataSource(source, format);
 }
 
+void wxDataObjectComposite::MSWReleaseDataSource()
+{
+    for ( const auto& dataObj : m_dataObjects )
+        dataObj->MSWReleaseDataSource();
+}
+
 #endif
 
 size_t wxDataObjectComposite::GetFormatCount(Direction dir) const
