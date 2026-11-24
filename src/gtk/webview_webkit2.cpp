@@ -410,6 +410,57 @@ wxgtk_webview_webkit_script_message_received(WebKitUserContentManager *WXUNUSED(
     webKitCtrl->HandleWindowEvent(event);
 }
 
+#if WEBKIT_CHECK_VERSION(2, 20, 0)
+
+static void
+wxgtk_webview_webkit_web_process_terminated(WebKitWebView *WXUNUSED(web_view),
+                                            WebKitWebProcessTerminationReason reason,
+                                            wxWebViewWebKit *webKitCtrl)
+{
+    // The page won't finish loading if it was being loaded.
+    webKitCtrl->m_busy = false;
+
+    wxString explanation;
+    switch ( reason )
+    {
+        case WEBKIT_WEB_PROCESS_CRASHED:
+            explanation = _("The web content process crashed.");
+            break;
+
+        case WEBKIT_WEB_PROCESS_EXCEEDED_MEMORY_LIMIT:
+            explanation = _("The web content process was terminated because "
+                            "it used too much memory.");
+            break;
+
+#if WEBKIT_CHECK_VERSION(2, 34, 0)
+        case WEBKIT_WEB_PROCESS_TERMINATED_BY_API:
+            explanation = _("The web content process was terminated.");
+            break;
+#endif // WebKit 2.34+
+    }
+
+    if ( explanation.empty() )
+        explanation = _("The web content process exited unexpectedly.");
+
+    webKitCtrl->NotifyWebViewFailed(explanation);
+}
+
+#else // WebKit < 2.20
+
+static gboolean
+wxgtk_webview_webkit_web_process_crashed(WebKitWebView *WXUNUSED(web_view),
+                                         wxWebViewWebKit *webKitCtrl)
+{
+    webKitCtrl->m_busy = false;
+
+    webKitCtrl->NotifyWebViewFailed(_("The web content process crashed."));
+
+    // Don't prevent the default handling from taking place.
+    return FALSE;
+}
+
+#endif // WebKit 2.20+/older
+
 static void wxgtk_webview_webkit_close (WebKitWebView *WXUNUSED(web_view),
                                         wxWebViewWebKit *webKitCtrl)
 {
@@ -1000,6 +1051,16 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect(m_web_view, "close",
                      G_CALLBACK(wxgtk_webview_webkit_close), this);
+
+#if WEBKIT_CHECK_VERSION(2, 20, 0)
+    g_signal_connect(m_web_view, "web-process-terminated",
+                     G_CALLBACK(wxgtk_webview_webkit_web_process_terminated),
+                     this);
+#else
+    g_signal_connect(m_web_view, "web-process-crashed",
+                     G_CALLBACK(wxgtk_webview_webkit_web_process_crashed),
+                     this);
+#endif
 
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
     g_signal_connect(findctrl, "counted-matches",

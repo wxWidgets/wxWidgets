@@ -1032,6 +1032,14 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     }
 }
 
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView
+{
+    // WebKit doesn't tell us why the process terminated, so we can only
+    // use the generic explanation here.
+    if (webKitWindow)
+        webKitWindow->NotifyWebViewFailed(_("The web content process exited unexpectedly."));
+}
+
 wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 {
     *out = wxWEBVIEW_NAV_ERR_OTHER;
