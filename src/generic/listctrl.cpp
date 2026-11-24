@@ -2731,14 +2731,6 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             m_lastOnSame = false;
         }
 
-        if ( GetSelectedItemCount() == 1 || event.CmdDown() )
-        {
-            // In multiple selection mode, the anchor is set to the first selected
-            // item or can be changed to m_current if Ctrl key is down, as is the
-            // case under wxMSW.
-            m_anchor = m_current;
-        }
-
         m_lineSelectSingleOnUp = (size_t)-1;
     }
     else
@@ -2761,6 +2753,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             size_t oldCurrent = m_current;
             ChangeCurrent(current);
             HighlightOnly(m_current, oldCurrent);
+
+            // This item is now the only selected one, so it's also the anchor.
+            m_anchor = m_current;
         }
 
         SendNotify( current, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
@@ -2787,15 +2782,27 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             {
                 CheckItem(current, !IsItemChecked(current));
             }
-            else if (IsSingleSel() || !IsHighlighted(current))
+            else
             {
-                ChangeCurrent(current);
-                HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
-            }
-            else // multi sel & current is highlighted & no mod keys
-            {
-                m_lineSelectSingleOnUp = current;
-                ChangeCurrent(current); // change focus
+                if (IsSingleSel() || !IsHighlighted(current))
+                {
+                    ChangeCurrent(current);
+                    HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
+                }
+                else // multi sel & current is highlighted & no mod keys
+                {
+                    // Don't change the selection immediately to allow dragging
+                    // all the selected items, it will be changed when the
+                    // mouse button is released.
+                    m_lineSelectSingleOnUp = current;
+                    ChangeCurrent(current); // change focus
+                }
+
+                // In any case, the clicked item becomes the new anchor. Note
+                // that we do it here and not when the mouse button is released
+                // because we may not get the button up event at all if the
+                // items are dragged.
+                m_anchor = m_current;
             }
         }
         else // multi sel & either ctrl or shift is down
@@ -2805,6 +2812,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                 ChangeCurrent(current);
 
                 ReverseHighlight(m_current);
+
+                // Ctrl-click changes the anchor, as in wxMSW.
+                m_anchor = m_current;
             }
             else if (event.ShiftDown())
             {
@@ -2814,6 +2824,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                 {
                     // Highlight m_current only if there is no previous selection.
                     HighlightLine(m_current);
+
+                    // And use it as the anchor for extending the selection.
+                    m_anchor = m_current;
                 }
                 else if ( oldCurrent != current )
                 {
@@ -3208,6 +3221,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
             }
             else // multiple selection
             {
+                // Note that, as in wxMSW, this doesn't change the anchor.
                 ReverseHighlight(m_current);
             }
             break;
