@@ -203,7 +203,7 @@ private:
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
-    wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
+    explicit wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
 
     wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
@@ -213,7 +213,7 @@ public:
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
-    wxCaretSuspend(wxWindow *win)
+    explicit wxCaretSuspend(wxWindow *win)
     {
         m_caret = win->GetCaret();
         m_show = false;
