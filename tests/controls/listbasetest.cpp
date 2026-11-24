@@ -634,6 +634,72 @@ void ListBaseTestCase::HitTest()
 #endif // __WXMSW__
 }
 
+void ListBaseTestCase::HitTestItemRect()
+{
+    wxListCtrl* const list = GetList();
+    list->SetWindowStyle(wxLC_REPORT);
+
+    list->InsertColumn(0, "Column 0");
+    for ( int i = 0; i < 3; ++i )
+        list->InsertItem(i, wxString::Format("Item %d", i));
+
+    // Ensure that the control is laid out, so that the header has its final
+    // size and position.
+    list->SendSizeEvent();
+    wxYield();
+
+    // Points inside the item rectangle, which is in the control coordinates,
+    // must correspond to this item, even if the control has a header.
+    wxRect rect;
+    REQUIRE( list->GetItemRect(1, rect) );
+
+    int flags = 0;
+    CHECK( list->HitTest(rect.GetTopLeft() + wxPoint(5, 1), flags) == 1 );
+    CHECK( list->HitTest(rect.GetBottomLeft() + wxPoint(5, -1), flags) == 1 );
+
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    // Positions of the mouse events and of the mouse pointer converted to the
+    // control coordinates must be consistent with HitTest() too.
+    wxPoint posEvent = wxDefaultPosition;
+    long itemEvent = -2;
+    list->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
+        {
+            posEvent = event.GetPosition();
+
+            int flagsEvent = 0;
+            itemEvent = list->HitTest(posEvent, flagsEvent);
+
+            event.Skip();
+        });
+
+    const wxPoint posClick = rect.GetTopLeft() + wxPoint(5, rect.height / 2);
+
+    auto posMouse = list->ClientToScreen(posClick);
+
+    wxUIActionSimulator sim;
+    sim.MouseMove(posMouse);
+    wxYield();
+
+    // Under wxQt, wxUIActionSimulator doesn't seem to actually move the mouse
+    // pointer, it just uses the position passed to MouseMove() for generating
+    // the mouse events, so we can't use the actual mouse position there.
+#ifndef __WXQT__
+    posMouse = wxGetMousePosition();
+#endif
+
+    CHECK( list->HitTest(list->ScreenToClient(posMouse), flags) == 1 );
+
+    sim.MouseClick();
+    wxYield();
+
+    CHECK( posEvent == posClick );
+    CHECK( itemEvent == 1 );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 namespace
 {
     //From the sample but fixed so it actually inverts

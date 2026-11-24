@@ -149,9 +149,7 @@ bool wxGenericListCtrl::IsVisible(long item) const
     bool visible = clientRect.Intersects( itemRect );
     if ( visible && m_headerWin )
     {
-        wxRect headerRect = m_headerWin->GetClientRect();
-        // take into account the +1 added in GetSubItemRect()
-        headerRect.height++;
+        const wxRect headerRect = m_headerWin->GetClientRect();
         visible = itemRect.GetBottom() > headerRect.GetBottom();
     }
     return visible;
@@ -2362,6 +2360,16 @@ void wxListMainWindow::OnChildFocus(wxChildFocusEvent& WXUNUSED(event))
     // dismissed.  See ticket #9563.
 }
 
+wxPoint wxListMainWindow::GetPositionInListCtrl() const
+{
+    // Don't use GetPosition() as it is only correct after the parent window
+    // is laid out, while this function can be called before this happens, e.g.
+    // by GetItemRect() called immediately after creating the control. We know
+    // that this window is just below the header, if any, so use its height.
+    const wxListHeaderWindow* const header = GetListCtrl()->m_headerWin;
+    return wxPoint(0, header ? header->GetSize().y : 0);
+}
+
 void wxListMainWindow::SendNotify( size_t line,
                                    wxEventType command,
                                    const wxPoint& point )
@@ -2381,7 +2389,7 @@ void wxListMainWindow::SendNotify( size_t line,
         // this one for compatibility with MSW and common sense: the
         // user code doesn't know anything at all about this window,
         // so why should it get positions relative to it?
-        le.m_pointDrag = GetPosition() + point;
+        le.m_pointDrag = GetPositionInListCtrl() + point;
     }
 
     // provide information about the (first column of the) item in the event if
@@ -2551,10 +2559,12 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         event.Skip();
     }
 
-    // Pretend that the event happened in wxListCtrl itself.
+    // Pretend that the event happened in wxListCtrl itself, which means that
+    // its position must be in wxListCtrl coordinates too.
     wxMouseEvent me(event);
     me.SetEventObject( GetParent() );
     me.SetId(GetParent()->GetId());
+    me.SetPosition(GetPositionInListCtrl() + event.GetPosition());
     if ( GetParent()->GetEventHandler()->ProcessEvent( me ))
         return;
 
@@ -5404,8 +5414,9 @@ bool wxGenericListCtrl::GetSubItemRect(long item,
     if ( !m_mainWin->GetSubItemRect( item, subItem, rect, code ) )
         return false;
 
-    if ( m_mainWin->HasHeader() )
-        rect.y += m_headerWin->GetSize().y + 1;
+    // Convert from the main window coordinates to our own ones, i.e. take
+    // into account the header, if any.
+    rect.Offset(m_mainWin->GetPositionInListCtrl());
 
     return true;
 }
@@ -5413,6 +5424,10 @@ bool wxGenericListCtrl::GetSubItemRect(long item,
 bool wxGenericListCtrl::GetItemPosition( long item, wxPoint& pos ) const
 {
     m_mainWin->GetItemPosition( item, pos );
+
+    // As in GetSubItemRect(), return the position in our coordinates.
+    pos += m_mainWin->GetPositionInListCtrl();
+
     return true;
 }
 
@@ -5606,11 +5621,18 @@ long wxGenericListCtrl::FindItem( long start, wxUIntPtr data )
 long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
                            int WXUNUSED(direction))
 {
-    return m_mainWin->FindItem( pt );
+    // As in HitTest(), the point is in our coordinates.
+    return m_mainWin->FindItem( pt - m_mainWin->GetPositionInListCtrl() );
 }
 
-long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *col) const
+long wxGenericListCtrl::HitTest(const wxPoint& pointOrig, int& flags, long *col) const
 {
+    // The point is in our coordinates, as for all the other functions taking
+    // or returning positions, such as GetItemRect(), and for consistency with
+    // wxMSW, but the main window uses its own coordinates, which are offset
+    // by the header height, if any.
+    const wxPoint point = pointOrig - m_mainWin->GetPositionInListCtrl();
+
     if ( col )
     {
         *col = -1;

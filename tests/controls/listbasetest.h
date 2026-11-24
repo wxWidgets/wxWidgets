@@ -34,6 +34,7 @@ protected:
     void EditLabel();
     void ImageList();
     void HitTest();
+    void HitTestItemRect();
     void Sort();
 
     wxDECLARE_NO_COPY_CLASS(ListBaseTestCase);
@@ -69,6 +70,7 @@ protected:
     wxLIST_TEST_CASE(ClassName, TagName, EditLabel) \
     wxLIST_TEST_CASE(ClassName, TagName, ImageList) \
     wxLIST_TEST_CASE(ClassName, TagName, HitTest) \
+    wxLIST_TEST_CASE(ClassName, TagName, HitTestItemRect) \
     wxLIST_TEST_CASE(ClassName, TagName, Sort)
 
 #endif

@@ -750,6 +750,10 @@ public:
         return wxStaticCast(GetParent(), wxGenericListCtrl);
     }
 
+    // Return the position of this window in wxListCtrl coordinates, which are
+    // the ones used in the public API, i.e. take into account the header.
+    wxPoint GetPositionInListCtrl() const;
+
     // get the height of all lines (assuming they all do have the same height)
     wxCoord GetLineHeight() const;
 
