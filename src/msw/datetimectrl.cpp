@@ -331,7 +331,7 @@ void wxDateTimePickerCtrl::MSWSetDarkOrLightMode()
     }
 }
 
-LRESULT CALLBACK wxDateTimePickerCtrl::SpinButtonProc(HWND hwnd, UINT uMsg,
+WXLRESULT CALLBACK wxDateTimePickerCtrl::SpinButtonProc(HWND hwnd, UINT uMsg,
     WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
     DWORD_PTR WXUNUSED(dwRefData))
 {

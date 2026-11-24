@@ -66,7 +66,7 @@ private:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
     // Subclass procedure for drop-down calendar in dark mode.
-    static LRESULT CALLBACK CalendarDarkProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    static WXLRESULT CALLBACK CalendarDarkProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
     // The mouse cell position within the drop-down calendar, for dark mode

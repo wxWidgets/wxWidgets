@@ -351,7 +351,7 @@ bool wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam,
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
 
-LRESULT CALLBACK wxDatePickerCtrl::CalendarDarkProc(HWND hwnd, UINT uMsg,
+WXLRESULT CALLBACK wxDatePickerCtrl::CalendarDarkProc(HWND hwnd, UINT uMsg,
     WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
 {
     switch ( uMsg )

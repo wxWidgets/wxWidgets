@@ -78,7 +78,7 @@ private:
     void MSWUpdateFormatIfNeeded(bool valid);
 
     // Spin button subclass procedure, for dark mode.
-    static LRESULT CALLBACK SpinButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    static WXLRESULT CALLBACK SpinButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
     // shown when there is no valid value (so only used with wxDP_ALLOWNONE),
