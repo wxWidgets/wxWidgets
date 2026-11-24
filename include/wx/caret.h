@@ -138,6 +138,9 @@ public:
     virtual void OnSetFocus() { }
     virtual void OnKillFocus() { }
 
+    // See wxCaretSuspend below
+    virtual bool NeedsSuspend() const { return true; }
+
 protected:
     // these functions may be overridden in the derived classes, but they
     // should call the base class version first
@@ -197,19 +200,6 @@ private:
 // avoid overdrawing the caret
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAS_CARET_USING_OVERLAYS
-
-// we don't need to hide the caret if it's rendered using overlays
-class WXDLLIMPEXP_CORE wxCaretSuspend
-{
-public:
-    explicit wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
-
-    wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
-};
-
-#else // !wxHAS_CARET_USING_OVERLAYS
-
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
@@ -217,6 +207,13 @@ public:
     {
         m_caret = win->GetCaret();
         m_show = false;
+
+        if ( !m_caret->NeedsSuspend() )
+        {
+            // we don't need to hide the caret if it's rendered using overlays
+            return;
+        }
+
         if ( m_caret && m_caret->IsVisible() )
         {
             m_caret->Hide();
@@ -236,8 +233,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
-
-#endif // wxHAS_CARET_USING_OVERLAYS/!wxHAS_CARET_USING_OVERLAYS
 
 #endif // wxUSE_CARET
 
