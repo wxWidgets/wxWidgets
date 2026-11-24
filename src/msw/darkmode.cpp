@@ -1408,8 +1408,7 @@ void CalendarMouseEvent(HWND hwnd, WXUINT msg, LPARAM lParam, int* mousePos)
     }
 }
 
-void CalendarPaint(HWND hwnd, WXWNDPROC wndProc, int* mousePos,
-    unsigned dayState)
+void CalendarPaint(HWND hwnd, WXWNDPROC wndProc, int* mousePos, unsigned dayState)
 {
     if ( wndProc == nullptr )
         wndProc = ::DefSubclassProc;
@@ -1961,6 +1960,18 @@ void DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
 }
 
 void DrawSpinButton(HWND WXUNUSED(hwnd), WXWNDPROC WXUNUSED(wndProc))
+{
+}
+
+void CalendarSetColour(HWND WXUNUSED(hwnd))
+{
+}
+
+void CalendarMouseEvent(HWND WXUNUSED(hwnd), WXUINT WXUNUSED(msg), LPARAM WXUNUSED(lParam), int* WXUNUSED(mousePos))
+{
+}
+
+void CalendarPaint(HWND WXUNUSED(hwnd), WXWNDPROC WXUNUSED(wndProc), int* WXUNUSED(mousePos), unsigned WXUNUSED(dayState))
 {
 }
 
