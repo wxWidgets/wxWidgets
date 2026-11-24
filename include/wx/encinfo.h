@@ -33,19 +33,12 @@
 struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
 {
     wxString facename;          // may be empty meaning "any"
-    wxFontEncoding encoding;    // so that we know what this struct represents
+    wxFontEncoding encoding = wxFONTENCODING_SYSTEM;
 
 #if defined(__WXMSW__) || \
     defined(__WXMAC__) || \
     defined(__WXQT__)
-
-    wxNativeEncodingInfo()
-        : facename()
-        , encoding(wxFONTENCODING_SYSTEM)
-        , charset(0) /* ANSI_CHARSET */
-    { }
-
-    int      charset;
+    int charset = 0 /* ANSI_CHARSET */;
 #elif defined(wxHAS_UTF8_FONTS)
     // ports using UTF-8 for text don't need encoding information for fonts
 #else
