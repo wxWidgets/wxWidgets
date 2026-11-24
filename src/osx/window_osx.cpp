@@ -64,6 +64,7 @@
 #include "wx/graphics.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11
@@ -1641,6 +1642,26 @@ void  wxWindowMac::MacPaintGrowBox()
 #endif
 }
 
+#if wxOSX_USE_COCOA_OR_CARBON
+// Since 10.14 the border is drawn as AppKit draws its own: one point wide for
+// wxBORDER_SIMPLE and two, for the groove, for the other border styles. Before
+// 10.14 this returns 0 and the theme frames are drawn, as large as the theme
+// says.
+static int wxOSXGetBorderLineWidth(const wxWindowMac* win)
+{
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        if ( win->HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_DOUBLE) )
+            return 2;
+
+        if ( win->HasFlag(wxBORDER_SIMPLE) )
+            return 1;
+    }
+
+    return 0;
+}
+#endif // wxOSX_USE_COCOA_OR_CARBON
+
 void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(rightOrigin) )
 {
     if ( IsTopLevel() )
@@ -1654,26 +1675,65 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
 
 #if wxOSX_USE_COCOA_OR_CARBON
     {
-        CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
-            th+2 ) ;
-
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
 
-        if ( GetPeer()->NeedsFrame() &&
-                HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_DOUBLE | wxBORDER_SIMPLE) )
+        const int lineWidth = GetPeer()->NeedsFrame() ? wxOSXGetBorderLineWidth(this) : 0 ;
+        if ( lineWidth > 0 )
         {
-            // Draw a line one point wide in the separator colour, which is
-            // similar to the border drawn by AppKit around a scroll view.
+            // Draw the borders AppKit draws itself, in colours that follow the
+            // appearance: a line in the separator colour, as around a scroll
+            // view with NSBezelBorder, or a shadow line with a highlight line
+            // inside it, as NSGrooveBorder.
             //
-            // HIThemeDrawFrame(), which was used here before, doesn't
-            // support dark mode and drew a white frame in it.
+            // HIThemeDrawFrame(), which is still used before 10.14, doesn't
+            // support dark mode and draws a white frame in it.
+            const CGRect frame = CGRectInset( CGRectMake( tx , ty , tw , th ) ,
+                -lineWidth , -lineWidth ) ;
+
             CGContextSaveGState( cgContext ) ;
-            CGContextSetStrokeColorWithColor( cgContext ,
-                wxOSXGetSeparatorColour().GetCGColor() ) ;
-            CGContextStrokeRectWithWidth( cgContext ,
-                CGRectInset( cgrect , 0.5 , 0.5 ) , 1.0 ) ;
+            if ( lineWidth == 1 )
+            {
+                CGContextSetStrokeColorWithColor( cgContext ,
+                    wxOSXGetSeparatorColour().GetCGColor() ) ;
+                CGContextStrokeRectWithWidth( cgContext ,
+                    CGRectInset( frame , 0.5 , 0.5 ) , 1.0 ) ;
+            }
+            else
+            {
+                CGContextSetStrokeColorWithColor( cgContext ,
+                    wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW).GetCGColor() ) ;
+                CGContextStrokeRectWithWidth( cgContext ,
+                    CGRectInset( frame , 0.5 , 0.5 ) , 1.0 ) ;
+                CGContextSetStrokeColorWithColor( cgContext ,
+                    wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT).GetCGColor() ) ;
+                CGContextStrokeRectWithWidth( cgContext ,
+                    CGRectInset( frame , 1.5 , 1.5 ) , 1.0 ) ;
+            }
             CGContextRestoreGState( cgContext ) ;
+        }
+        else if ( GetPeer()->NeedsFrame() )
+        {
+            CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
+                th+2 ) ;
+
+            HIThemeFrameDrawInfo info ;
+            memset( &info, 0 , sizeof(info) ) ;
+
+            info.version = 0 ;
+            info.kind = 0 ;
+            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+
+            if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+            {
+                info.kind = kHIThemeFrameTextFieldSquare ;
+                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+            }
+            else if ( HasFlag(wxSIMPLE_BORDER) )
+            {
+                info.kind = kHIThemeFrameListBox ;
+                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+            }
         }
     }
 #endif // wxOSX_USE_COCOA_OR_CARBON
@@ -2326,6 +2386,13 @@ long wxWindowMac::MacGetWXBorderSize() const
 
     if ( GetPeer() && GetPeer()->NeedsFrame() )
     {
+#if wxOSX_USE_COCOA_OR_CARBON
+        // Keep the layout in sync with what MacPaintBorders() draws.
+        const int lineWidth = wxOSXGetBorderLineWidth(this) ;
+        if ( lineWidth > 0 )
+            return lineWidth ;
+#endif
+
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
         {
 #if wxOSX_USE_COCOA_OR_CARBON
