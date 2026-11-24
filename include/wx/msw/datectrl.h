@@ -65,10 +65,6 @@ private:
     wxDateTime MSWGetControlValue() const;
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
-    // Subclass procedure for drop-down calendar in dark mode.
-    static WXLRESULT CALLBACK CalendarDarkProc(HWND hwnd, UINT uMsg, WPARAM wParam,
-        LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
-
     // The mouse cell position within the drop-down calendar, for dark mode
     // painting. If the mouse is not inside the body, value is -1.  See usage
     // for encoding.

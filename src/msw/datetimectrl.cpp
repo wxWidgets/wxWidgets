@@ -312,6 +312,27 @@ void wxDateTimePickerCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) co
     support.themeId = L"FileExplorerBannerContainer";
 }
 
+
+// Spin button subclass procedure, for dark mode.
+static LRESULT CALLBACK SpinButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch ( uMsg )
+    {
+        case WM_PAINT:
+        {
+            wxMSWDarkMode::DrawSpinButton(hwnd, ::DefSubclassProc);
+            return 0;
+        }
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, SpinButtonProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
 void wxDateTimePickerCtrl::MSWSetDarkOrLightMode()
 {
     wxDateTimePickerCtrlBase::MSWSetDarkOrLightMode();
@@ -329,26 +350,6 @@ void wxDateTimePickerCtrl::MSWSetDarkOrLightMode()
             m_isSpinSubclassed = true;
         }
     }
-}
-
-WXLRESULT CALLBACK wxDateTimePickerCtrl::SpinButtonProc(HWND hwnd, UINT uMsg,
-    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
-    DWORD_PTR WXUNUSED(dwRefData))
-{
-    switch ( uMsg )
-    {
-        case WM_PAINT:
-        {
-            wxMSWDarkMode::DrawSpinButton(hwnd, ::DefSubclassProc);
-            return 0;
-        }
-
-        case WM_NCDESTROY:
-            ::RemoveWindowSubclass(hwnd, SpinButtonProc, uIdSubclass);
-            break;
-    }
-
-    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
 #endif // wxNEEDS_DATETIMEPICKCTRL

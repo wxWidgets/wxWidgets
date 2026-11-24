@@ -311,6 +311,30 @@ WXLRESULT wxDatePickerCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM
     return wxDatePickerCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
+// Subclass procedure for drop-down calendar in dark mode.
+static LRESULT CALLBACK CalendarDarkProc(HWND hwnd, UINT uMsg,
+    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+    DWORD_PTR dwRefData)
+{
+    switch ( uMsg )
+    {
+        case WM_PAINT:
+            wxMSWDarkMode::CalendarPaint(hwnd, ::DefSubclassProc, (int*)dwRefData, 0);
+            return 0;
+
+        case WM_MOUSELEAVE:
+        case WM_MOUSEMOVE:
+            wxMSWDarkMode::CalendarMouseEvent(hwnd, uMsg, lParam, (int*)dwRefData);
+            break;
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, CalendarDarkProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
 bool wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam,
     WXLPARAM* result)
 {
@@ -349,28 +373,6 @@ bool wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam,
     }
 
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
-}
-
-WXLRESULT CALLBACK wxDatePickerCtrl::CalendarDarkProc(HWND hwnd, UINT uMsg,
-    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
-{
-    switch ( uMsg )
-    {
-        case WM_PAINT:
-            wxMSWDarkMode::CalendarPaint(hwnd, ::DefSubclassProc, (int*)dwRefData, 0);
-            return 0;
-
-        case WM_MOUSELEAVE:
-        case WM_MOUSEMOVE:
-            wxMSWDarkMode::CalendarMouseEvent(hwnd, uMsg, lParam, (int*)dwRefData);
-            break;
-
-        case WM_NCDESTROY:
-            ::RemoveWindowSubclass(hwnd, CalendarDarkProc, uIdSubclass);
-            break;
-    }
-
-    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
 #endif // wxUSE_DATEPICKCTRL

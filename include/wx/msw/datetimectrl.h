@@ -77,10 +77,6 @@ private:
     // validity, i.e. avoiding useless work if nothing needs to be done.
     void MSWUpdateFormatIfNeeded(bool valid);
 
-    // Spin button subclass procedure, for dark mode.
-    static WXLRESULT CALLBACK SpinButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam,
-        LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
-
     // shown when there is no valid value (so only used with wxDP_ALLOWNONE),
     // always non-empty if SetNullText() was called, see the comments there
     wxString m_nullText;
