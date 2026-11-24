@@ -102,6 +102,15 @@ void DrawRadioButton(HDC hdc, const RECT& rect, int flags);
 // Draw a spin button.
 void DrawSpinButton(HWND hwnd, WXWNDPROC wndProc);
 
+// Set calendar colours with MCM_SETCOLOR.
+void CalendarSetColour(HWND hwnd);
+
+// Handle calendar control WM_MOUSEMOVE and WM_MOUSELEAVE messages.
+void CalendarMouseEvent(HWND hwnd, WXUINT msg, LPARAM lParam, int* mousePos);
+
+// Draw a calendar control.
+void CalendarPaint(HWND hwnd, WXWNDPROC wndProc, int* mousePos, unsigned dayState);
+
 } // namespace wxMSWDarkMode
 
 namespace wxMSWImpl

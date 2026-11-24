@@ -45,6 +45,7 @@
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/private/darkmode.h"
+#include <windowsx.h>
 
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
@@ -1360,6 +1361,202 @@ void DrawSpinButton(HWND hwnd, WXWNDPROC wndProc)
         wndProc(hwnd, WM_PRINTCLIENT, (WPARAM)hdc, PRF_CLIENT);
 
     ::EndPaint(hwnd, &ps);
+}
+
+void CalendarSetColour(HWND hwnd)
+{
+    auto bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel();
+    ::SendMessage(hwnd, MCM_SETCOLOR, MCSC_BACKGROUND, bg);
+    ::SendMessage(hwnd, MCM_SETCOLOR, MCSC_MONTHBK, bg);
+    auto fg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
+    ::SendMessage(hwnd, MCM_SETCOLOR, MCSC_TEXT, fg);
+    ::SendMessage(hwnd, MCM_SETCOLOR, MCSC_TITLETEXT, fg);
+    auto grayText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT).GetPixel();
+    ::SendMessage(hwnd, MCM_SETCOLOR, MCSC_TRAILINGTEXT, grayText);
+    // MCSC_TITLEBK specifies both a background and text colour: the text for
+    // the days of the week, the text for the week numbers, the background of
+    // the header and the background of the selected cell. We redraw those
+    // background areas ourselves.
+    ::SendMessage(hwnd, MCM_SETCOLOR, MCSC_TITLEBK, fg);
+}
+
+void CalendarMouseEvent(HWND hwnd, WXUINT msg, LPARAM lParam, int* mousePos)
+{
+    bool inBody = false;
+    if ( msg == WM_MOUSEMOVE )
+    {
+        WinStruct<MCHITTESTINFO> ht;
+        ht.pt.x = GET_X_LPARAM(lParam);
+        ht.pt.y = GET_Y_LPARAM(lParam);
+        ::SendMessage(hwnd, MCM_HITTEST, 0, (LPARAM)&ht);
+        if ( ht.uHit == MCHT_CALENDARDATE )
+        {
+            // The mouse is over the body. If it changed cells, repaint.
+            int pos = (ht.iOffset << 8) | (ht.iCol << 4) | ht.iRow;
+            if ( pos != *mousePos )
+                ::InvalidateRect(hwnd, nullptr, false);
+            *mousePos = pos;
+            inBody = true;
+        }
+    }
+    if ( !inBody )
+    {
+        // The mouse is outside the body. If previously inside, repaint.
+        if ( *mousePos != -1 )
+            ::InvalidateRect(hwnd, nullptr, false);
+        *mousePos = -1;
+    }
+}
+
+void CalendarPaint(HWND hwnd, WXWNDPROC wndProc, int* mousePos,
+    unsigned dayState)
+{
+    if ( wndProc == nullptr )
+        wndProc = ::DefSubclassProc;
+
+    // Paint into a memory DC.
+    PAINTSTRUCT ps;
+    HDC hdc = ::BeginPaint(hwnd, &ps);
+    const RECT rcClient = wxGetClientRect(hwnd);
+    HDC hdcMem = nullptr;
+    HPAINTBUFFER hbp = ::BeginBufferedPaint(hdc, &rcClient,
+        BPBF_COMPATIBLEBITMAP, nullptr, &hdcMem);
+    if ( !hbp )
+    {
+        wndProc(hwnd, WM_PRINTCLIENT, (WPARAM)hdc, PRF_CLIENT);
+        ::EndPaint(hwnd, &ps);
+        return;
+    }
+
+    // Draw the control into the memory DC.
+    wndProc(hwnd, WM_PRINTCLIENT, (WPARAM)hdcMem, PRF_CLIENT);
+
+    // Set up normal and bold fonts.
+    HFONT hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
+    SelectInHDC selectFont(hdcMem, hFont);
+    LOGFONTW lf;
+    ::GetObject(hFont, sizeof(lf), &lf);
+    lf.lfWeight = FW_BOLD;
+    AutoHFONT hFontBold(lf);
+
+    // Initialize MCGRIDINFO with text buffer.
+    WinStruct<MCGRIDINFO> info;
+    wchar_t text[128] = { };
+    info.pszName = text;
+    info.cchName = WXSIZEOF(text);
+    wchar_t textPrevious[WXSIZEOF(text)] = { };
+
+    // Loop over each calendar.
+    int nCal = ::SendMessage(hwnd, MCM_GETCALENDARCOUNT, 0, 0);
+    for ( info.iCalendar = 0; info.iCalendar < nCal; info.iCalendar++ )
+    {
+        // Erase the header to dark background instead of the MCSC_TITLEBK
+        // colour, which is white.
+        info.dwPart = MCGIP_CALENDARHEADER;
+        info.dwFlags = MCGIF_NAME | MCGIF_RECT;
+        ::SendMessage(hwnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+        COLORREF bg = ::SendMessage(hwnd, MCM_GETCOLOR, MCSC_BACKGROUND, 0);
+        AutoHBRUSH hBrush(bg);
+        ::FillRect(hdcMem, &info.rc, hBrush);
+
+        // If the heading text does not change, this calendar is past the end
+        // of the date range.
+        if ( wcscmp(textPrevious, text) == 0 )
+            continue;
+        wcscpy(textPrevious, text);
+
+        // Redraw header text.
+        ::SetBkMode(hdcMem, TRANSPARENT);
+        COLORREF fg = ::SendMessage(hwnd, MCM_GETCOLOR, MCSC_TITLETEXT, 0);
+        ::SetTextColor(hdcMem, fg);
+        ::DrawText(hdcMem, text, -1, &info.rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+        // The rest of this loop redraws the selected cell and the hot cell.
+
+        // Iterate over all the cells.
+        info.dwPart = MCGIP_CALENDARCELL;
+        info.dwFlags = MCGIF_DATE | MCGIF_NAME | MCGIF_RECT;
+        auto dpi = wxGetWindowDPI(hwnd).y;
+        auto theme = wxUxThemeHandle::NewAtDPI(nullptr,
+            L"DarkMode_ItemsView::ListView", dpi);
+        bool isMonthView = ::SendMessage(hwnd, MCM_GETCURRENTVIEW, 0, 0) == MCMV_MONTH;
+        int nCol = isMonthView ? 7 : 4;
+        int nRow = isMonthView ? 6 : 3;
+        for ( info.iRow = 0; info.iRow < nRow; info.iRow++ )
+        {
+            for ( info.iCol = 0; info.iCol < nCol; info.iCol++ )
+            {
+                // Get cell info.
+                text[0] = L'\0';
+                ::SendMessage(hwnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+
+                // If the cell is empty, skip it. It is outside the date range.
+                if ( text[0] == L'\0' )
+                    continue;
+
+                int state = 0;
+                int pos = (info.iCalendar << 8) | (info.iCol << 4) | info.iRow;
+                if ( pos == *mousePos )
+                    state = LISS_HOT;
+                if ( info.bSelected )
+                    state = LISS_SELECTED;
+
+                // If the cell is either hot or selected, redraw the
+                // background and text.
+                if ( state )
+                {
+                    // Draw background and focus rectangle.
+                    theme.DrawBackground(hdcMem, info.rc, LVP_LISTITEM, state);
+
+                    // Draw cell text.
+                    RECT rcText = info.rc;
+                    if ( isMonthView )
+                    {
+                        // Set bold font depending on day state.
+                        bool isBold = false;
+                        if ( nCal == 1 )
+                        {
+                            auto bit = 1 << (info.stStart.wDay - 1);
+                            isBold = (dayState & bit) != 0;
+                        }
+                        ::SelectObject(hdcMem, isBold ? hFontBold : hFont);
+
+                        // Position the text within the cell like the native
+                        // control.
+                        ::InflateRect(&rcText, -1, -1);
+                        rcText.right -= ::MulDiv(6, dpi, 96);
+                        ::DrawText(hdcMem, text, -1, &rcText,
+                            DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+                    }
+                    else
+                        ::DrawText(hdcMem, text, -1, &rcText,
+                            DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                }
+            }
+        }
+    }
+
+    wchar_t prev = L'\u25C0';  // BLACK LEFT-POINTING TRIANGLE
+    wchar_t next = L'\u25B6';  // BLACK RIGHT-POINTING TRIANGLE
+    if ( ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL )
+        std::swap(prev, next);
+
+    // Draw the previous button.
+    info.dwFlags = MCGIF_RECT;
+    info.dwPart = MCGIP_PREV;
+    ::SendMessage(hwnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+    // Draw a left-pointing triangle.
+    ::DrawText(hdcMem, &prev, 1, &info.rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+    // Draw the next button.
+    info.dwPart = MCGIP_NEXT;
+    ::SendMessage(hwnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+    // Draw a right-pointing triangle.
+    ::DrawText(hdcMem, &next, 1, &info.rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+    ::EndBufferedPaint(hbp, true);
+    ::EndPaint(hwnd, &ps);
+
 }
 
 } // namespace wxMSWDarkMode

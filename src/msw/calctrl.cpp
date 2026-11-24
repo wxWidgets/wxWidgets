@@ -125,8 +125,6 @@ wxCalendarCtrl::Create(wxWindow *parent,
 
     Bind(wxEVT_LEFT_DOWN, &wxCalendarCtrl::MSWOnClick, this);
     Bind(wxEVT_LEFT_DCLICK, &wxCalendarCtrl::MSWOnDoubleClick, this);
-    Bind(wxEVT_MOTION, &wxCalendarCtrl::OnMouseMove, this);
-    Bind(wxEVT_LEAVE_WINDOW , &wxCalendarCtrl::OnMouseLeave, this);
 
     return true;
 }
@@ -512,232 +510,38 @@ void wxCalendarCtrl::MSWOnClick(wxMouseEvent& event)
     event.Skip();
 }
 
-void wxCalendarCtrl::OnMouseMove(wxMouseEvent& event)
+void wxCalendarCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        // Get mouse position as cell column and row.
-        WinStruct<MCHITTESTINFO> ht;
-        ht.pt.x = event.GetPosition().x;
-        ht.pt.y = event.GetPosition().y;
-        ::SendMessage(m_hWnd, MCM_HITTEST, 0, (LPARAM)&ht);
-        if ( ht.uHit == MCHT_CALENDARDATE )
-        {
-            // The mouse is over the body. If it changed cells, repaint.
-            if ( ht.iOffset != m_msCal || ht.iCol != m_msCol || ht.iRow != m_msRow )
-                Refresh(false);
-            m_msCal = ht.iOffset;
-            m_msCol = ht.iCol;
-            m_msRow = ht.iRow;
-        }
-        else
-        {
-            // The mouse is outside the body. If previously inside, repaint.
-            if ( m_msCal != -1 )
-                Refresh(false);
-            m_msCal = -1;
-        }
-    }
-    event.Skip();
-}
-
-void wxCalendarCtrl::OnMouseLeave(wxMouseEvent& event)
-{
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        // If the mouse was previously inside the body, repaint.
-        if ( m_msCal != -1 )
-            Refresh(false);
-        m_msCal = -1;
-    }
-    event.Skip();
+    // Disable visual themes so that MCM_SETCOLOR takes effect.
+    support.themeName = L"";
+    support.themeId = L"";
 }
 
 void wxCalendarCtrl::MSWSetDarkOrLightMode()
 {
     wxCalendarCtrlBase::MSWSetDarkOrLightMode();
-
-    auto bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel();
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        // Disable visual themes so that MCM_SETCOLOR takes effect.
-        ::SetWindowTheme(m_hWnd, L"", L"");
-        auto fg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel();
-        ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_MONTHBK, bg);
-        ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TEXT, fg);
-        ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TITLETEXT, fg);
-        auto grayText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT).GetPixel();
-        ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TRAILINGTEXT, grayText);
-        // Unfortunately, MCSC_TITLEBK specifies both a background and text
-        // colour. It controls the text for the days of the week, the week
-        // numbers, the background of the header and the background of the
-        // selected cell. We redraw those background areas ourselves.
-        ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TITLEBK, fg);
-    }
-    // The MCSC_BACKGROUND setting takes affect both with and without visual
-    // themes.
-    ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_BACKGROUND, bg);
+    wxMSWDarkMode::CalendarSetColour(m_hWnd);
 }
 
 WXLRESULT wxCalendarCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // In dark mode, redraw the header to make the background dark and to
-    // improve the appearance of the buttons. The control draws light-mode
-    // buttons.
-    if ( nMsg == WM_PAINT && wxMSWDarkMode::IsActive() )
+    if ( wxMSWDarkMode::IsActive() )
     {
-        // Paint the control into a memory DC, specified by wParam.
-        auto defPaint = [this](HWND WXUNUSED(hwnd), WPARAM wParam) {
-            // For the decade and century views, make the text colour
-            // consistent. In these views, the native control uses the
-            // gray MCSC_TRAILINGTEXT colour in odd places. This is not
-            // noticeable in light mode but it looks weird in dark mode.
-            auto view = ::SendMessage(m_hWnd, MCM_GETCURRENTVIEW, 0, 0);
-            if ( view == MCMV_DECADE || view == MCMV_CENTURY )
-            {
-                // Save MCSC_TRAILINGTEXT, then set it to MCSC_TEXT (white).
-                auto tt = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TRAILINGTEXT, 0);
-                auto fg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TEXT, 0);
-                ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TRAILINGTEXT, fg);
-                // Paint.
-                 MSWDefWindowProc(WM_PAINT, wParam, 0);
-                // Restore MCSC_TRAILINGTEXT.
-                ::SendMessage(m_hWnd, MCM_SETCOLOR, MCSC_TRAILINGTEXT, tt);
-            }
-            else
-                MSWDefWindowProc(WM_PAINT, wParam, 0);
-        };
-        auto postProcess = [this](const wxBitmap& bmpIn) {
-            return MSWPaintDarkMode(bmpIn);
-        };
-        wxMSWImpl::CustomPaint(m_hWnd, defPaint, postProcess);
-        return 0;
-    }
-
-    return wxCalendarCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
-}
-
-wxBitmap wxCalendarCtrl::MSWPaintDarkMode(const wxBitmap& bmpIn)
-{
-    wxBitmap bmpOut(bmpIn);
-    bmpOut.SetScaleFactor(GetDPIScaleFactor());
-    wxMemoryDC dc(bmpOut);
-    dc.SetFont(GetFont());
-    dc.SetLayoutDirection(GetLayoutDirection());
-
-    // Initialize MCGRIDINFO with text buffer.
-    WinStruct<MCGRIDINFO> info;
-    wchar_t text[128] = { };
-    info.pszName = text;
-    info.cchName = WXSIZEOF(text);
-    wxString textPrevious;
-
-    // Loop over each calendar.
-    int nCal = ::SendMessage(m_hWnd, MCM_GETCALENDARCOUNT, 0, 0);
-    for ( info.iCalendar = 0; info.iCalendar < nCal; info.iCalendar++ )
-    {
-        // Erase the header to dark background instead of the MCSC_TITLEBK
-        // colour, which is white.
-        info.dwPart = MCGIP_CALENDARHEADER;
-        info.dwFlags = MCGIF_NAME | MCGIF_RECT;
-        ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
-        COLORREF bg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_BACKGROUND, 0);
-        dc.SetBrush(wxBrush(wxColour(bg)));
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        wxRect rcHead = wxRectFromRECT(info.rc);
-        dc.DrawRectangle(rcHead);
-
-        // If the heading text does not change, this calendar is past the end
-        // of the date range.
-        if ( textPrevious == text )
-            continue;
-        textPrevious = text;
-
-        // Redraw header text.
-        COLORREF fg = ::SendMessage(m_hWnd, MCM_GETCOLOR, MCSC_TITLETEXT, 0);
-        dc.SetTextForeground(wxColour(fg));
-        dc.DrawLabel(text, rcHead, wxALIGN_CENTER);
-
-        // The rest of this loop redraws the selected cell and the hot cell.
-
-        // Iterate over all the cells.
-        info.dwPart = MCGIP_CALENDARCELL;
-        info.dwFlags = MCGIF_DATE | MCGIF_NAME | MCGIF_RECT;
-        bool isMonthView = ::SendMessage(m_hWnd, MCM_GETCURRENTVIEW, 0, 0) ==
-            MCMV_MONTH;
-        int nCol = isMonthView ? 7 : 4;
-        int nRow = isMonthView ? 6 : 3;
-        for ( info.iRow = 0; info.iRow < nRow; info.iRow++ )
+        switch ( nMsg )
         {
-            for ( info.iCol = 0; info.iCol < nCol; info.iCol++ )
-            {
-                // Get cell info.
-                text[0] = L'\0';
-                ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
+            case WM_PAINT:
+                wxMSWDarkMode::CalendarPaint(m_hWnd, m_oldWndProc,
+                    &m_mousePos, m_marks | m_holidays);
+                return 0;
 
-                // If the cell is empty, skip it. It is outside the date range.
-                if ( text[0] == L'\0' )
-                    continue;
-
-                bool isHot = (info.iCalendar == m_msCal &&
-                    info.iCol == m_msCol && info.iRow == m_msRow);
-                int flags = isHot ? wxCONTROL_CURRENT : 0;
-                if ( info.bSelected )
-                    flags = wxCONTROL_SELECTED | wxCONTROL_FOCUSED;
-
-                // If the cell is either hot or selected, redraw the
-                // background and text.
-                if ( flags )
-                {
-                    // Draw background and focus rectangle.
-                    const wxRect rect = wxRectFromRECT(info.rc);
-                    wxRendererNative::Get().DrawItemSelectionRect(this, dc,
-                        rect, flags);
-
-                    // Draw cell text.
-                    if ( isMonthView )
-                    {
-                        // Set bold font if text is "marked" or is a holiday.
-                        bool isBold = false;
-                        if ( nCal == 1 )
-                        {
-                            auto bit = 1 << (info.stStart.wDay - 1);
-                            isBold = ((m_marks | m_holidays) & bit) != 0;
-                        }
-                        if ( isBold )
-                            dc.SetFont(GetFont().Bold());
-
-                        // Position the text within the cell like the native control.
-                        auto rectText = rect;
-                        rectText.Deflate(1);
-                        rectText.width -= FromDIP(6);
-                        dc.DrawLabel(text, rectText, wxALIGN_RIGHT);
-
-                        // Restore font.
-                        if ( isBold )
-                            dc.SetFont(GetFont());
-                    }
-                    else
-                        dc.DrawLabel(text, rect, wxALIGN_CENTER);
-                }
-            }
+            case WM_MOUSELEAVE:
+            case WM_MOUSEMOVE:
+                wxMSWDarkMode::CalendarMouseEvent(m_hWnd, nMsg, lParam, &m_mousePos);
+                break;
         }
     }
 
-    // Draw the left button.
-    info.dwFlags = MCGIF_RECT;
-    info.dwPart = MCGIP_PREV;
-    ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
-    // Draw a left-pointing triangle.
-    dc.DrawLabel(L"\u25C0", wxRectFromRECT(info.rc), wxALIGN_CENTER);
-
-    // Draw the right button.
-    info.dwPart = MCGIP_NEXT;
-    ::SendMessage(m_hWnd, MCM_GETCALENDARGRIDINFO, 0, (LPARAM)&info);
-    // Draw a right-pointing triangle.
-    dc.DrawLabel(L"\u25B6", wxRectFromRECT(info.rc), wxALIGN_CENTER);
-
-    return bmpOut;
+    return wxCalendarCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // wxUSE_CALENDARCTRL
