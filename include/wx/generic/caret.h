@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxCaret;
 class WXDLLIMPEXP_CORE wxCaretTimer : public wxTimer
 {
 public:
-    wxCaretTimer(wxCaret *caret);
+    explicit wxCaretTimer(wxCaret *caret);
     virtual void Notify() override;
 
 private:
