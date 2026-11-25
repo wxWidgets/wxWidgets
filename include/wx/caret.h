@@ -73,7 +73,7 @@ public:
         // is the caret currently shown?
     bool IsVisible() const { return m_countVisible > 0; }
 
-        // get the caret position
+        // get the caret position (in client coordinates)
     void GetPosition(int* x, int* y) const
     {
         DoGetPosition(x, y);
