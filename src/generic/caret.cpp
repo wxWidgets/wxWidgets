@@ -250,6 +250,11 @@ void wxCaret::Refresh()
             m_overlay.Reset();
         else
         {
+            // Do not draw if the window is not on screen: this is useless and
+            // would result in the first caret drawn not being erased.
+            if ( !GetWindow()->IsShownOnScreen() )
+                return;
+
             // Figure the part of the caret rectangle within the client area.
             // This avoids drawing the caret outside the client area.
             wxRect cr(pt.x, pt.y, m_width, m_height);
