@@ -48,6 +48,8 @@
 #include  <stdlib.h>
 #include  <ctype.h>
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -1500,10 +1502,26 @@ wxFileConfigGroup::~wxFileConfigGroup()
   for ( n = 0; n < nCount; n++ )
     delete m_aEntries[n];
 
-  // subgroups
-  nCount = m_aSubgroups.GetCount();
-  for ( n = 0; n < nCount; n++ )
-    delete m_aSubgroups[n];
+  // subgroups: delete them iteratively rather than recursively as groups can
+  // be nested arbitrarily deeply (e.g. by a malformed file) and recursing
+  // could overflow the stack
+  std::vector<wxFileConfigGroup*>
+      toDelete(m_aSubgroups.begin(), m_aSubgroups.end());
+  m_aSubgroups.clear();
+
+  while ( !toDelete.empty() )
+  {
+    wxFileConfigGroup* const group = toDelete.back();
+    toDelete.pop_back();
+
+    // Detach the subgroups first so that the group dtor doesn't recurse into
+    // them, they will be deleted by the subsequent loop iterations instead.
+    auto& subgroups = group->m_aSubgroups;
+    toDelete.insert(toDelete.end(), subgroups.begin(), subgroups.end());
+    subgroups.clear();
+
+    delete group;
+  }
 }
 
 // ----------------------------------------------------------------------------
