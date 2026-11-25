@@ -1047,11 +1047,10 @@ void wxGenericTreeCtrl::InitVisualAttributes()
     {
 #ifdef __WXOSX_COCOA__
         // Use the native outline view background, which no colour matches
-        // in the dark appearance.
-        wxOSXSetNativeContentBackground(this, true);
-#else
-        SetOwnBackgroundColour(attr.colBg);
+        // in the dark appearance, where there is one.
+        if ( !wxOSXSetNativeContentBackground(this, true) )
 #endif
+        SetOwnBackgroundColour(attr.colBg);
         m_hasExplicitBgCol = false;
     }
 

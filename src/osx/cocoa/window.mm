@@ -3509,6 +3509,7 @@ void wxWidgetCocoaImpl::Raise()
     [superview sortSubviewsUsingFunction: CocoaRaiseWindowCompareFunction
                                  context: &compareContext];
 
+    PlaceContentBackground();
 }
 
 /* Causes Cocoa to lower the target view to the bottom of the Z-Order by telling the sort function that
@@ -3536,6 +3537,8 @@ void wxWidgetCocoaImpl::Lower()
 
     [superview sortSubviewsUsingFunction: CocoaLowerWindowCompareFunction
                                  context: &compareContext];
+
+    PlaceContentBackground();
 }
 
 void wxWidgetCocoaImpl::ScrollRect( const wxRect *WXUNUSED(rect), int WXUNUSED(dx), int WXUNUSED(dy) )
@@ -3871,12 +3874,7 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
 
     wxASSERT_MSG( container != nullptr , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
-    if ( m_osxContentBackground )
-    {
-        [container addSubview:m_osxContentBackground
-                   positioned:NSWindowBelow
-                   relativeTo:m_osxView];
-    }
+    PlaceContentBackground();
 
     // User panes will be frozen elsewhere
     if( m_wxPeer->IsFrozen() && !IsUserPane() )
@@ -4987,17 +4985,17 @@ void wxWidgetCocoaImpl::AdjustClippingView(wxScrollBar* horizontal, wxScrollBar*
     }
 }
 
-void wxWidgetCocoaImpl::UseNativeContentBackground(bool use)
+bool wxWidgetCocoaImpl::UseNativeContentBackground(bool use)
 {
     if ( m_osxView == nil || use == (m_osxContentBackground != nil) )
-        return;
+        return m_osxContentBackground != nil;
 
     if ( !use )
     {
         [m_osxContentBackground removeFromSuperview];
         [m_osxContentBackground release];
         m_osxContentBackground = nil;
-        return;
+        return false;
     }
 
     if ( WX_IS_MACOS_AVAILABLE(10, 14) )
@@ -5012,24 +5010,34 @@ void wxWidgetCocoaImpl::UseNativeContentBackground(bool use)
         background.state = NSVisualEffectStateFollowsWindowActiveState;
         background.hidden = [m_osxView isHidden];
         m_osxContentBackground = background;
+        PlaceContentBackground();
+        return true;
+    }
 
-        if ( NSView* superview = [m_osxView superview] )
-        {
-            [superview addSubview:background
-                       positioned:NSWindowBelow
-                       relativeTo:m_osxView];
-        }
+    return false;
+}
+
+void wxWidgetCocoaImpl::PlaceContentBackground()
+{
+    // This also moves it back there when m_osxView is raised or lowered.
+    NSView* const superview = [m_osxView superview];
+    if ( m_osxContentBackground && superview )
+    {
+        [superview addSubview:m_osxContentBackground
+                   positioned:NSWindowBelow
+                   relativeTo:m_osxView];
     }
 }
 
-void wxOSXSetNativeContentBackground(wxWindow* window, bool use)
+bool wxOSXSetNativeContentBackground(wxWindow* window, bool use)
 {
     wxWidgetCocoaImpl* const
         impl = dynamic_cast<wxWidgetCocoaImpl*>(window->GetPeer());
-    if ( impl )
-        impl->UseNativeContentBackground(use);
+    const bool used = impl && impl->UseNativeContentBackground(use);
 
     window->Refresh();
+
+    return used;
 }
 
 void wxWidgetCocoaImpl::UseClippingView()

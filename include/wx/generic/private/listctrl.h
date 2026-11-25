@@ -481,6 +481,15 @@ public:
 
     virtual ~wxListMainWindow();
 
+#ifdef __WXOSX_COCOA__
+    // Under macOS this window may have no background colour of its own, to
+    // show the native background, but its colours are still the list ones.
+    virtual wxVisualAttributes GetDefaultAttributes() const override
+    {
+        return wxGenericListCtrl::GetClassDefaultAttributes(GetWindowVariant());
+    }
+#endif // __WXOSX_COCOA__
+
     // called by the main control when its mode changes
     void SetReportView(bool inReportView);
 

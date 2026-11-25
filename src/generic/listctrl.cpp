@@ -1589,11 +1589,10 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     SetOwnForegroundColour( attr.colFg );
 #ifdef __WXOSX_COCOA__
     // Use the native table background, which no colour matches in the dark
-    // appearance, unless a colour is set later.
-    wxOSXSetNativeContentBackground(this, true);
-#else
-    SetOwnBackgroundColour( attr.colBg );
+    // appearance, where there is one, unless a colour is set later.
+    if ( !wxOSXSetNativeContentBackground(this, true) )
 #endif
+    SetOwnBackgroundColour( attr.colBg );
     if (!m_hasFont)
         SetOwnFont( attr.font );
 }
