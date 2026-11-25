@@ -58,7 +58,7 @@ public:
 
     ///@{
     /**
-        Get the caret position (in pixels).
+        Get the caret position (in client coordinates).
 
         @beginWxPerlOnly
         In wxPerl there are two methods instead of a single overloaded
