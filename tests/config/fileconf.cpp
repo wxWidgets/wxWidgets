@@ -671,8 +671,9 @@ baz=2
 // This test is disabled by default as it takes a long time to run.
 TEST_CASE("wxFileConfig::DeeplyNestedGroups", "[.][time-consuming]")
 {
-    // Destroying a config with very deeply nested groups used to overflow the
-    // stack because the groups were destroyed recursively.
+    // Destroying a config with very deeply nested groups, or deleting such
+    // groups, used to overflow the stack because the groups were processed
+    // recursively.
     static const int NESTING_LEVEL = 1000000;
 
     wxString contents;
@@ -692,6 +693,17 @@ TEST_CASE("wxFileConfig::DeeplyNestedGroups", "[.][time-consuming]")
     // deep path, just check that the file has been parsed and can be destroyed.
     std::unique_ptr<wxFileConfig> fc(new wxFileConfig(sis));
     CHECK( fc->GetNumberOfGroups() == 1 );
+
+    SECTION("Destroy")
+    {
+        // Nothing to do, just destroy the config below.
+    }
+
+    SECTION("Delete")
+    {
+        CHECK( fc->DeleteGroup("a") );
+        CHECK( fc->GetNumberOfGroups() == 0 );
+    }
 
     CHECK_NOTHROW( fc.reset() );
 }
