@@ -250,7 +250,14 @@ void wxCaret::Refresh()
             m_overlay.Reset();
         else
         {
-            wxDCOverlay dcOverlay(m_overlay, &dcWin, pt.x, pt.y, m_width, m_height);
+            // Figure the part of the caret rectangle within the client area.
+            // This avoids drawing the caret outside the client area.
+            wxRect cr(pt.x, pt.y, m_width, m_height);
+            cr.Intersect(GetWindow()->GetClientSize());
+            if ( cr.IsEmpty() )
+                return;
+
+            wxDCOverlay dcOverlay(m_overlay, &dcWin, cr.x, cr.y, cr.width, cr.height);
             DoDraw(&dcWin, GetWindow());
         }
 
