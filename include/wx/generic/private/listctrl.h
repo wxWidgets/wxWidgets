@@ -21,6 +21,8 @@
 
 #include <memory>
 
+constexpr size_t wxNO_ITEM = static_cast<size_t>(-1);
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -506,7 +508,7 @@ public:
 
     // Make sure that _line_ is the only item highlighted in the control.
     // _oldLine_ is the old focused item.
-    void HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
+    void HighlightOnly( size_t line, size_t oldLine = wxNO_ITEM );
 
     // In multiple selection mode, instead of sending one notification per item
     // (which is too slow if a lot of items are selected) we send only one notification
@@ -717,8 +719,14 @@ public:
 
     // change the current (== focused) item, send a notification event
     void ChangeCurrent(size_t current);
-    void ResetCurrent() { ChangeCurrent((size_t)-1); }
-    bool HasCurrent() const { return m_current != (size_t)-1; }
+    void ResetCurrent()
+    {
+        ChangeCurrent(wxNO_ITEM);
+
+        // The anchor doesn't make sense without the current item either.
+        m_anchor = wxNO_ITEM;
+    }
+    bool HasCurrent() const { return m_current != wxNO_ITEM; }
 
     // send out a wxListEvent
     void SendNotify( size_t line,
@@ -886,7 +894,7 @@ protected:
     void GetVisibleLinesRange(size_t *from, size_t *to);
 
     // force us to recalculate the range of visible lines
-    void ResetVisibleLinesRange() { m_lineFrom = (size_t)-1; }
+    void ResetVisibleLinesRange() { m_lineFrom = wxNO_ITEM; }
 
     // find the first item starting with the given prefix after the given item
     size_t PrefixFindItem(size_t item, const wxString& prefix) const;
