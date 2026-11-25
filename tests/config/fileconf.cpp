@@ -668,6 +668,33 @@ baz=2
 )", "duplicate group 'foo'");
 }
 
+TEST_CASE("wxFileConfig::DeeplyNestedGroups", "[fileconfig][config]")
+{
+    // Destroying a config with very deeply nested groups used to overflow the
+    // stack because the groups were destroyed recursively.
+    static const int NESTING_LEVEL = 1000000;
+
+    wxString contents;
+    contents.reserve(2*NESTING_LEVEL + 8);
+    contents += '[';
+    for ( int n = 0; n < NESTING_LEVEL; n++ )
+    {
+        if ( n )
+            contents += '/';
+        contents += 'a';
+    }
+    contents += "]\nkey=value\n";
+
+    wxStringInputStream sis(contents);
+
+    // Don't use wxFileConfig::Read() as it would be very slow with such a
+    // deep path, just check that the file has been parsed and can be destroyed.
+    std::unique_ptr<wxFileConfig> fc(new wxFileConfig(sis));
+    CHECK( fc->GetNumberOfGroups() == 1 );
+
+    CHECK_NOTHROW( fc.reset() );
+}
+
 // This test is disabled by default as it requires the environment variable
 // below to be defined to point to a XML file to load.
 TEST_CASE("wxFileConfig::Load", "[.]")
