@@ -131,12 +131,6 @@ protected:
     virtual void DoMove() override;
     virtual void DoSize() override;
 
-    virtual void DoGetPosition(int* x, int* y) const override
-    {
-        if ( x ) *x = m_x;
-        if ( y ) *y = m_y;
-    }
-
     // refresh the caret
     void Refresh();
 
