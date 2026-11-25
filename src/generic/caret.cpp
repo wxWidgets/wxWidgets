@@ -240,6 +240,11 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
+    // Do not draw the caret if the window is not on screen. This avoids a
+    // problem on wxOSX where the first caret drawn is not erased.
+    if ( !m_blinkedOut && !GetWindow()->IsShownOnScreen() )
+        return;
+
     const wxPoint pt = LogicalToClient();
 
     wxClientDC dcWin(GetWindow());
@@ -250,7 +255,14 @@ void wxCaret::Refresh()
             m_overlay.Reset();
         else
         {
-            wxDCOverlay dcOverlay(m_overlay, &dcWin, pt.x, pt.y, m_width, m_height);
+            // Figure the part of the caret rectangle within the client area.
+            // This avoids drawing the caret outside the client area.
+            wxRect cr(pt.x, pt.y, m_width, m_height);
+            cr.Intersect(GetWindow()->GetClientSize());
+            if ( cr.IsEmpty() )
+                return;
+
+            wxDCOverlay dcOverlay(m_overlay, &dcWin, cr.x, cr.y, cr.width, cr.height);
             DoDraw(&dcWin, GetWindow());
         }
 
