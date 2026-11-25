@@ -53,9 +53,21 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas() { }
     MyCanvas( wxWindow *parent );
-    ~MyCanvas();
 
-    wxChar& CharAt(int x, int y) { return *(m_text + x + m_xChars * y); }
+    // Get a reference to the char at the screen coordinates.
+    wxChar& CharAt(int x, int y)
+    {
+        // Convert screen to logical coordinates.
+        auto viewStart = GetViewStart();
+        auto i = viewStart.x + x;
+        auto j = viewStart.y + y;
+        // Convert to memory index.
+        size_t k = i + m_xChars * j;
+        // Grow the vector if needed.
+        if ( k >= m_text.size() )
+            m_text.resize(k * 2);
+        return m_text[k];
+    }
 
     // operations
     void SetFontSize(int fontSize);
@@ -100,7 +112,7 @@ private:
     int      m_xChars, m_yChars;
 
     // the text
-    wxChar  *m_text;
+    std::vector<wxChar> m_text;
 
     wxDECLARE_DYNAMIC_CLASS(MyCanvas);
     wxDECLARE_EVENT_TABLE();
@@ -305,8 +317,6 @@ MyCanvas::MyCanvas( wxWindow *parent )
                             wxDefaultPosition, wxDefaultSize,
                             wxSUNKEN_BORDER )
 {
-    m_text = nullptr;
-
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
     SetFontSize(12);
@@ -317,11 +327,6 @@ MyCanvas::MyCanvas( wxWindow *parent )
     m_xMargin = m_yMargin = 5;
 
     CreateCaret();
-}
-
-MyCanvas::~MyCanvas()
-{
-    free(m_text);
 }
 
 void MyCanvas::CreateCaret()
@@ -379,16 +384,15 @@ void MyCanvas::ChangeSize()
     wxSize size = GetClientSize();
     m_xChars = (size.x - 2*m_xMargin) / m_widthChar;
     m_yChars = (size.y - 2*m_yMargin) / m_heightChar;
-    if ( !m_xChars )
-        m_xChars = 1;
-    if ( !m_yChars )
-        m_yChars = 1;
+    // Add some extra columns and rows for scrolling.
+    m_xChars += 10;
+    m_yChars += 10;
 
-    free(m_text);
-    m_text = (wxChar *)calloc(m_xChars * m_yChars, sizeof(wxChar));
+    m_text.assign(m_xChars * m_yChars, 0);
+    Refresh(false);
 
     // Make the client area scrollable.
-    SetScrollbars(m_widthChar, m_heightChar, m_xChars + 10, m_yChars + 10);
+    SetScrollbars(m_widthChar, m_heightChar, m_xChars, m_yChars);
 
 #if wxUSE_STATUSBAR
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
@@ -410,7 +414,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxCaretSuspend cs(this);
     wxPaintDC dc( this );
-    PrepareDC( dc );
     dc.Clear();
 
     dc.SetFont( m_font );
@@ -499,6 +502,8 @@ void MyCanvas::OnScroll(wxScrollWinEvent &event)
     // Track the new caret position after the scrolling is finished.
     CallAfter([this]()
         {
+            // Redraw the whole window due to characters scrolling into the margin.
+            Refresh(false);
             wxPoint pos = GetCaret()->GetPosition();
             m_xCaret = (pos.x - m_xMargin) / m_widthChar;
             m_yCaret = (pos.y - m_yMargin) / m_heightChar;
