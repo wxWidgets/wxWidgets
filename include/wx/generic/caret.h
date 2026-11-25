@@ -49,7 +49,7 @@ public:
     virtual void OnKillFocus() override;
 
     // we don't need to hide the caret if it's rendered using overlays
-    virtual bool NeedsSuspend() const { return !m_overlay.IsNative(); }
+    virtual bool NeedsSuspend() const override { return !m_overlay.IsNative(); }
 
     // called by wxCaretTimer
     void OnTimer();
