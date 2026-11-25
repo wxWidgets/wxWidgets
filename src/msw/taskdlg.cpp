@@ -599,11 +599,12 @@ void TDPaintGlyphs(HDC hdc, TDPageState& s, HWND hwnd)
     }
 }
 
-void TDPaintText(HDC hdc, const TDPageState& s)
+void TDPaintText(HDC hdc, const TDPageState& s, HWND hwnd)
 {
     if ( !s.hTD )
         return;
 
+    auto dpi = wxGetWindowDPI(hwnd);
     const bool native = TDHasNativeDarkTheme();
 
     for ( const auto& el : s.elements )
@@ -644,9 +645,9 @@ void TDPaintText(HDC hdc, const TDPageState& s)
                 s.hTD.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, hdc).x;
 
             MARGINS vm = {};
-            s.hTD.GetMargins(vm, TDLG_VERIFICATIONTEXT, TMT_CONTENTMARGINS, 0, hdc);
-            rcText.left += width + vm.cxLeftWidth - 2;
-            rcText.top += 1;
+            s.hTD.GetMargins(vm, TDLG_EXPANDOTEXT, TMT_CONTENTMARGINS, 0, hdc);
+            rcText.left += width + ::MulDiv(vm.cxLeftWidth + 8, dpi.x, 96);
+            rcText.top += ::MulDiv(vm.cyTopHeight, dpi.y, 96);
 
             part = TDLG_EXPANDOTEXT;
             brBg = s.brSecondary;
@@ -660,8 +661,8 @@ void TDPaintText(HDC hdc, const TDPageState& s)
 
             MARGINS tm = {};
             s.hTD.GetMargins(tm, TDLG_VERIFICATIONTEXT, TMT_CONTENTMARGINS, 0, hdc);
-            rcText.left = el.rect.left + width + tm.cxLeftWidth + 3;
-            rcText.top += 5;
+            rcText.left += width + ::MulDiv(tm.cxLeftWidth + 4, dpi.x, 96);
+            rcText.top += ::MulDiv(tm.cyTopHeight + 5, dpi.y, 96);
 
             part = TDLG_VERIFICATIONTEXT;
             brBg = s.brSecondary;
@@ -720,7 +721,7 @@ void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 
     TDPaintIcons(hdcBuf, s);
     TDPaintGlyphs(hdcBuf, s, hwnd);
-    TDPaintText(hdcBuf, s);
+    TDPaintText(hdcBuf, s, hwnd);
 
     ::EndBufferedPaint(hbp, TRUE);
 }
