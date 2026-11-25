@@ -70,14 +70,10 @@ public:
         // get the caret position
     void GetPosition(int* x, int* y) const
     {
-        DoGetPosition(x, y);
+        if ( x ) *x = m_x;
+        if ( y ) *y = m_y;
     }
-    wxPoint GetPosition() const
-    {
-        wxPoint pt;
-        DoGetPosition(&pt.x, &pt.y);
-        return pt;
-    }
+    wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
 
         // get the caret size
     void GetSize(int *width, int *height) const
@@ -159,12 +155,6 @@ protected:
     virtual void DoHide() = 0;
     virtual void DoMove() = 0;
     virtual void DoSize() { }
-
-    virtual void DoGetPosition(int* x, int* y) const
-    {
-        if ( x ) *x = m_x;
-        if ( y ) *y = m_y;
-    }
 
     // the size of the caret
     int m_width = 0,
