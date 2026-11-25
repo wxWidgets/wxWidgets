@@ -1127,6 +1127,11 @@ public:
     {
     }
 
+    ~wxNSObjRef()
+    {
+        wxMacCocoaRelease(m_ptr);
+    }
+
     wxNSObjRef& operator=( const wxNSObjRef& otherRef )
     {
         if (this != &otherRef)
