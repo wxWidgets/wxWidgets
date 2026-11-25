@@ -1518,7 +1518,7 @@ void wxListMainWindow::Init()
     m_selCount =
     m_countVirt = 0;
     m_lineFrom =
-    m_lineTo = (size_t)-1;
+    m_lineTo = wxNO_ITEM;
     m_linesPerPage = 0;
 
     m_headerWidth =
@@ -1544,7 +1544,7 @@ void wxListMainWindow::Init()
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked =
-    m_anchor  = (size_t)-1;
+    m_anchor  = wxNO_ITEM;
 
     m_hasCheckBoxes = false;
     m_extendRulesAndAlternateColour = false;
@@ -2309,7 +2309,7 @@ void wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
         return; // Nothing changed.
     }
 
-    if ( oldLine != (size_t)-1 )
+    if ( oldLine != wxNO_ITEM )
     {
         IsHighlighted(oldLine) ? ReverseHighlight(oldLine)
                                : RefreshLine(oldLine); // refresh the old focus to remove it
@@ -2346,7 +2346,7 @@ void wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
 
         // If we didn't send the event for individual items above, send it for all of them now.
         if ( sendEvent == SendEvent_None )
-            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+            SendNotify(wxNO_ITEM, wxEVT_LIST_ITEM_DESELECTED);
     }
 
     // _line_ should be the only selected item.
@@ -2386,7 +2386,7 @@ void wxListMainWindow::SendNotify( size_t line,
 
     // provide information about the (first column of the) item in the event if
     // we have a valid item and any columns at all
-    if ( line != (size_t)-1 && listctrl->GetColumnCount() )
+    if ( line != wxNO_ITEM && listctrl->GetColumnCount() )
     {
         GetLine(line)->GetItem( 0, le.m_item );
     }
@@ -2569,7 +2569,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     {
         if (event.RightDown())
         {
-            SendNotify( (size_t)-1, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
+            SendNotify( wxNO_ITEM, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
 
             wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
                                       GetParent()->GetId(),
@@ -2708,7 +2708,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if (event.LeftUp())
     {
-        if (m_lineSelectSingleOnUp != (size_t)-1)
+        if (m_lineSelectSingleOnUp != wxNO_ITEM)
         {
             // select single line
             HighlightOnly(m_lineSelectSingleOnUp);
@@ -2731,7 +2731,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             m_lastOnSame = false;
         }
 
-        m_lineSelectSingleOnUp = (size_t)-1;
+        m_lineSelectSingleOnUp = wxNO_ITEM;
     }
     else
     {
@@ -2739,7 +2739,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         // from and to ourself, the up event is swallowed by the
         // DnD code. So on next non-up event (which means here and
         // now) m_lineSelectSingleOnUp should be reset.
-        m_lineSelectSingleOnUp = (size_t)-1;
+        m_lineSelectSingleOnUp = wxNO_ITEM;
     }
     if (event.RightDown())
     {
@@ -2787,7 +2787,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
                 if (IsSingleSel() || !IsHighlighted(current))
                 {
                     ChangeCurrent(current);
-                    HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
+                    HighlightOnly(m_current, oldWasSelected ? oldCurrent : wxNO_ITEM);
                 }
                 else // multi sel & current is highlighted & no mod keys
                 {
@@ -2820,7 +2820,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             {
                 ChangeCurrent(current);
 
-                if ( oldCurrent == (size_t)-1 )
+                if ( oldCurrent == wxNO_ITEM )
                 {
                     // Highlight m_current only if there is no previous selection.
                     HighlightLine(m_current);
@@ -2840,7 +2840,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
         }
 
-        if (m_current != oldCurrent && oldCurrent != (size_t)-1)
+        if (m_current != oldCurrent && oldCurrent != wxNO_ITEM)
             RefreshLine( oldCurrent );
 
         // Set the flag telling us whether the next click on this item should
@@ -2858,7 +2858,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
 void wxListMainWindow::MoveToItem(size_t item)
 {
-    if ( item == (size_t)-1 )
+    if ( item == wxNO_ITEM )
         return;
 
     wxRect rect = GetLineRect(item);
@@ -2924,7 +2924,7 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
     size_t top, bottom;
     GetVisibleLinesRange(&top, &bottom);
 
-    if ( bottom == (size_t)-1 )
+    if ( bottom == wxNO_ITEM )
         return 0;
 
     ResetVisibleLinesRange();
@@ -2957,7 +2957,7 @@ void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
     // If there is no anchor yet, e.g. because the current item was set
     // programmatically and not by the user, use the old current item as
     // anchor, as this is what the user would expect.
-    if ( m_anchor == (size_t)-1 )
+    if ( m_anchor == wxNO_ITEM )
         m_anchor = oldCurrent;
 
     // Refresh the old/new focus to remove/add it
@@ -2985,7 +2985,7 @@ void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
     // For virtual listctrl (in multi-selection mode), wxMSW sends only
     // a notification to indicate that something has been deselected.
     if ( IsVirtual() && GetSelectedItemCount() != selCountOld )
-        SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+        SendNotify(wxNO_ITEM, wxEVT_LIST_ITEM_DESELECTED);
 
     HighlightLines(lineFrom, lineTo);
 }
@@ -3042,10 +3042,10 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
 
     // send a list event
     wxListEvent le( wxEVT_LIST_KEY_DOWN, parent->GetId() );
-    const size_t current = ShouldSendEventForCurrent() ? m_current : (size_t)-1;
+    const size_t current = ShouldSendEventForCurrent() ? m_current : wxNO_ITEM;
     le.m_item.m_itemId =
     le.m_itemIndex = current;
-    if ( current != (size_t)-1 )
+    if ( current != wxNO_ITEM )
         GetLine(current)->GetItem( 0, le.m_item );
     le.m_code = event.GetKeyCode();
     le.SetEventObject( parent );
@@ -3263,7 +3263,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 {
                     const wxString newPrefix(m_findPrefix + ch);
                     item = PrefixFindItem(m_current, newPrefix);
-                    if ( item != (size_t)-1 )
+                    if ( item != wxNO_ITEM )
                         m_findPrefix = newPrefix;
                 }
 
@@ -3280,7 +3280,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 m_findTimer->StartOnce(wxListFindTimer::DELAY);
 
                 // restart timer even when there's no match so bell get's reset
-                if ( item != (size_t)-1 )
+                if ( item != wxNO_ITEM )
                 {
                     // Select the found item and go to it.
                     HighlightAll(false);
@@ -3722,7 +3722,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
                 // visible any more.
                 m_anchor = item;
 
-                if ( oldCurrent != (size_t)-1 )
+                if ( oldCurrent != wxNO_ITEM )
                 {
                     if ( IsSingleSel() )
                     {
@@ -3770,7 +3770,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
                 {
                     ChangeCurrent(item);
 
-                    if ( oldCurrent != (size_t)-1 )
+                    if ( oldCurrent != wxNO_ITEM )
                     {
                         HighlightLine( oldCurrent, false );
                         RefreshLine( oldCurrent );
@@ -3846,7 +3846,7 @@ void wxListMainWindow::SetItemCount(long count)
         ChangeCurrent(count - 1);
 
     // And do the same thing for the multiple selection anchor.
-    if ( m_anchor != (size_t)-1 && m_anchor >= (size_t)count )
+    if ( m_anchor != wxNO_ITEM && m_anchor >= (size_t)count )
         m_anchor = count - 1;
 
     m_selStore.SetItemCount(count);
@@ -4383,10 +4383,10 @@ void wxListMainWindow::DeleteItem( long lindex )
 
     // Also adjust the anchor, but just reset it if it's being deleted, as it
     // doesn't make sense to keep the anchor at some other item.
-    if ( m_anchor != (size_t)-1 )
+    if ( m_anchor != wxNO_ITEM )
     {
         if ( m_anchor == index )
-            m_anchor = (size_t)-1;
+            m_anchor = wxNO_ITEM;
         else if ( m_anchor > index )
             m_anchor--;
     }
@@ -4438,7 +4438,7 @@ void wxListMainWindow::DeleteItem( long lindex )
     // with many items, the vertical scroll position may change so that the new
     // last item is not visible any longer, which is very annoying from the
     // user point of view. Ensure that whatever happens, this item is visible.
-    if ( count > 1 && m_current != (size_t)-1 )
+    if ( count > 1 && m_current != wxNO_ITEM )
         EnsureVisible(m_current);
 }
 
@@ -4715,7 +4715,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         m_current++;
 
     // And the same for the anchor.
-    if ( m_anchor != (size_t)-1 && m_anchor >= id )
+    if ( m_anchor != wxNO_ITEM && m_anchor >= id )
         m_anchor++;
 
     SendNotify(id, wxEVT_LIST_INSERT_ITEM);
@@ -4873,7 +4873,7 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 {
     wxASSERT_MSG( InReportView(), wxT("this is for report mode only") );
 
-    if ( m_lineFrom == (size_t)-1 )
+    if ( m_lineFrom == wxNO_ITEM )
     {
         size_t count = GetItemCount();
         if ( count )
@@ -4893,7 +4893,7 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         else // empty control
         {
             m_lineFrom = 0;
-            m_lineTo = (size_t)-1;
+            m_lineTo = wxNO_ITEM;
         }
     }
 
@@ -4912,7 +4912,7 @@ wxListMainWindow::PrefixFindItem(size_t idParent,
                                  const wxString& prefixOrig) const
 {
     // if no items then just return
-    if ( idParent == (size_t)-1 )
+    if ( idParent == wxNO_ITEM )
         return idParent;
 
     // match is case insensitive as this is more convenient to the user: having
@@ -4949,13 +4949,13 @@ wxListMainWindow::PrefixFindItem(size_t idParent,
         {
             itemid += 1;
         }
-        // If we haven't found the item, id will be (size_t)-1, as per
+        // If we haven't found the item, id will be wxNO_ITEM, as per
         // documentation
         if ( !( itemid < (size_t)GetItemCount() ) ||
              ( ( itemid == idParent ) &&
                !GetLine(itemid)->GetText(0).Lower().StartsWith(prefix) ) )
         {
-            itemid = (size_t)-1;
+            itemid = wxNO_ITEM;
         }
     }
 
