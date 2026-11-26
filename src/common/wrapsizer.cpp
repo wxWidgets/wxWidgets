@@ -352,10 +352,8 @@ void wxWrapSizer::CalcMinFromMinor(int totMinor)
         {
             sz = item->CalcMin();
             totMajor += SizeInMajorDir(sz);
-            if ( SizeInMinorDir(sz)>maxMinor )
-                maxMinor = SizeInMinorDir(sz);
-            if ( SizeInMajorDir(sz)>maxMinor )
-                maxMajor = SizeInMajorDir(sz);
+            maxMinor = wxMax( maxMinor, SizeInMinorDir(sz) );
+            maxMajor = wxMax( maxMajor, SizeInMajorDir(sz) );
             itemCount++;
         }
         node = node->GetNext();
