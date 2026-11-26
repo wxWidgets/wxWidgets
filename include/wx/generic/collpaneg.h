@@ -61,6 +61,8 @@ public:
     virtual wxString GetLabel() const override;
 
     virtual bool Layout() override;
+    virtual wxSize GetMinSizeFromKnownDirection(int direction, int size,
+                                                int availableOtherDir) override;
 
 
     // for the generic collapsible pane only:

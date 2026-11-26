@@ -81,16 +81,8 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 }
 
 // ----------------------------------------------------------------------------
-// initialization and destruction
+// destruction
 // ----------------------------------------------------------------------------
-
-void wxCaret::InitGeneric()
-{
-    m_hasFocus = true;
-    m_blinkedOut = true;
-    m_xOld =
-    m_yOld = -1;
-}
 
 wxCaret::~wxCaret()
 {
@@ -250,7 +242,19 @@ void wxCaret::Refresh()
             m_overlay.Reset();
         else
         {
-            wxDCOverlay dcOverlay(m_overlay, &dcWin, pt.x, pt.y, m_width, m_height);
+            // Do not draw if the window is not on screen: this is useless and
+            // would result in the first caret drawn not being erased.
+            if ( !GetWindow()->IsShownOnScreen() )
+                return;
+
+            // Figure the part of the caret rectangle within the client area.
+            // This avoids drawing the caret outside the client area.
+            wxRect cr(pt.x, pt.y, m_width, m_height);
+            cr.Intersect(GetWindow()->GetClientSize());
+            if ( cr.IsEmpty() )
+                return;
+
+            wxDCOverlay dcOverlay(m_overlay, &dcWin, cr.x, cr.y, cr.width, cr.height);
             DoDraw(&dcWin, GetWindow());
         }
 

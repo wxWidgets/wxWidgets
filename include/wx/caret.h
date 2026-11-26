@@ -34,20 +34,16 @@ public:
     // ctors
     // -----
         // default - use Create
-    wxCaretBase() { Init(); }
+    wxCaretBase() = default;
         // create the caret of given (in pixels) width and height and associate
         // with the given window
     wxCaretBase(wxWindowBase *window, int width, int height)
     {
-        Init();
-
         (void)Create(window, width, height);
     }
         // same as above
     wxCaretBase(wxWindowBase *window, const wxSize& size)
     {
-        Init();
-
         (void)Create(window, size);
     }
 
@@ -73,7 +69,7 @@ public:
         // is the caret currently shown?
     bool IsVisible() const { return m_countVisible > 0; }
 
-        // get the caret position
+        // get the caret position (in client coordinates)
     void GetPosition(int* x, int* y) const
     {
         DoGetPosition(x, y);
@@ -144,6 +140,9 @@ public:
     virtual void OnSetFocus() { }
     virtual void OnKillFocus() { }
 
+    // See wxCaretSuspend below
+    virtual bool NeedsSuspend() const { return true; }
+
 protected:
     // these functions may be overridden in the derived classes, but they
     // should call the base class version first
@@ -170,26 +169,20 @@ protected:
     }
 
     // the size of the caret
-    int m_width, m_height;
+    int m_width = 0,
+        m_height = 0;
 
     // the position of the caret
-    int m_x, m_y;
+    int m_x = 0,
+        m_y = 0;
 
     // the window we're associated with
-    wxWindowBase *m_window;
+    wxWindowBase *m_window = nullptr;
 
     // visibility count: the caret is visible only if it's positive
-    int m_countVisible;
+    int m_countVisible = 0;
 
 private:
-    void Init()
-    {
-        m_window = nullptr;
-        m_x = m_y = 0;
-        m_width = m_height = 0;
-        m_countVisible = 0;
-    }
-
     wxDECLARE_NO_COPY_CLASS(wxCaretBase);
 
 private:
@@ -212,27 +205,24 @@ private:
 // avoid overdrawing the caret
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAS_CARET_USING_OVERLAYS
-
-// we don't need to hide the caret if it's rendered using overlays
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
-    wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
-
-    wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
-};
-
-#else // !wxHAS_CARET_USING_OVERLAYS
-
-class WXDLLIMPEXP_CORE wxCaretSuspend
-{
-public:
-    wxCaretSuspend(wxWindow *win)
+    explicit wxCaretSuspend(wxWindow *win)
     {
         m_caret = win->GetCaret();
         m_show = false;
-        if ( m_caret && m_caret->IsVisible() )
+
+        if ( m_caret == nullptr )
+            return;
+
+        if ( !m_caret->NeedsSuspend() )
+        {
+            // we don't need to hide the caret if it's rendered using overlays
+            return;
+        }
+
+        if ( m_caret->IsVisible() )
         {
             m_caret->Hide();
             m_show = true;
@@ -251,8 +241,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
-
-#endif // wxHAS_CARET_USING_OVERLAYS/!wxHAS_CARET_USING_OVERLAYS
 
 #endif // wxUSE_CARET
 

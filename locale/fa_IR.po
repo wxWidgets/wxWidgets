@@ -2,7 +2,7 @@
 # Copyright (C) 2020 wxWidgets dev team
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.3\n"
+"Project-Id-Version: wxWidgets 3.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2020-07-17 12:42+0430\n"

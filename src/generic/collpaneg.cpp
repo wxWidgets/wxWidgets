@@ -201,6 +201,47 @@ wxString wxGenericCollapsiblePane::GetLabel() const
     return m_pButton->GetLabel();
 }
 
+wxSize wxGenericCollapsiblePane::GetMinSizeFromKnownDirection(int direction, int size,
+                                                              int availableOtherDir)
+{
+    wxSizer* const sizer = m_pPane ? m_pPane->GetSizer() : nullptr;
+
+    // the pane always gets our full width, so only this direction helps
+    if ( !IsExpanded() || !sizer || direction != wxHORIZONTAL || size <= 0 )
+        return wxDefaultSize;
+
+    // subtract the pane's own border, if any
+    const wxSize decor = m_pPane->GetSize() - m_pPane->GetClientSize();
+    wxSize paneMin = sizer->CalcMinSizeFromKnownDirection(direction,
+                                                          size - decor.x,
+                                                          availableOtherDir);
+    if ( paneMin == wxDefaultSize )
+        return wxDefaultSize;
+
+    // get the pane window size, taking into account its min size, as
+    // m_pPane->GetBestSize() used by DoGetBestClientSize() would do
+    paneMin += decor;
+    paneMin.IncTo(m_pPane->GetMinSize());
+
+    // same calculation as in DoGetBestClientSize(), but with the pane size
+    // for this width instead of the one from the last layout
+    wxSize best = m_sz->GetMinSize();
+    best.x = wxMax(best.x, paneMin.x);
+    best.y += GetBorder() + paneMin.y;
+
+    // and then the same as in GetBestSize()
+    best += GetWindowBorderSize();
+    best.IncTo(GetMinSize());
+    best.DecToIfSpecified(GetMaxSize());
+
+    // Cache the best size for this width, as otherwise the sizers calling
+    // CalcMin() after InformFirstDirection(), as wxBoxSizer does, would reset
+    // the min size we return to the best size from the previous layout.
+    CacheBestSize(best);
+
+    return GetEffectiveMinSize();
+}
+
 bool wxGenericCollapsiblePane::Layout()
 {
     if (!m_pButton || !m_pPane || !m_sz)

@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxCaret;
 class WXDLLIMPEXP_CORE wxCaretTimer : public wxTimer
 {
 public:
-    wxCaretTimer(wxCaret *caret);
+    explicit wxCaretTimer(wxCaret *caret);
     virtual void Notify() override;
 
 private:
@@ -32,12 +32,12 @@ public:
     // ctors
     // -----
         // default - use Create()
-    wxCaret() : m_timer(this) { InitGeneric(); }
+    wxCaret() : m_timer(this) { }
         // creates a block caret associated with the given window
     wxCaret(wxWindowBase *window, int width, int height)
-        : wxCaretBase(window, width, height), m_timer(this) { InitGeneric(); }
+        : wxCaretBase(window, width, height), m_timer(this) { }
     wxCaret(wxWindowBase *window, const wxSize& size)
-        : wxCaretBase(window, size), m_timer(this) { InitGeneric(); }
+        : wxCaretBase(window, size), m_timer(this) { }
 
     virtual ~wxCaret();
 
@@ -47,6 +47,9 @@ public:
     // called by wxWindow (not using the event tables)
     virtual void OnSetFocus() override;
     virtual void OnKillFocus() override;
+
+    // we don't need to hide the caret if it's rendered using overlays
+    virtual bool NeedsSuspend() const override { return !m_overlay.IsNative(); }
 
     // called by wxCaretTimer
     void OnTimer();
@@ -68,9 +71,6 @@ protected:
     void DoDraw(wxDC *dc, wxWindow* win);
 
 private:
-    // GTK specific initialization
-    void InitGeneric();
-
     // Convert the current position to client coordinates.
     wxPoint LogicalToClient() const;
 
@@ -79,11 +79,11 @@ private:
     // the bitmap holding the part of window hidden by the caret when it was
     // at (m_xOld, m_yOld)
     wxBitmap      m_bmpUnderCaret;
-    int           m_xOld,
-                  m_yOld;
+    int           m_xOld = -1,
+                  m_yOld = -1;
     wxCaretTimer  m_timer;
-    bool          m_blinkedOut,     // true => caret hidden right now
-                  m_hasFocus;       // true => our window has focus
+    bool          m_blinkedOut = true,     // true => caret hidden right now
+                  m_hasFocus = true;       // true => our window has focus
 
 private:
     wxDECLARE_CLASS(wxCaret);

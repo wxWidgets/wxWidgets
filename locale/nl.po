@@ -6,7 +6,7 @@
 # Thomas De Rocker, 2013-2014, G. van Melle 2009-2015
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.3\n"
+"Project-Id-Version: wxWidgets 3.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2022-02-28 20:39+0100\n"

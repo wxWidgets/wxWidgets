@@ -16,6 +16,7 @@
 #include "wx/log.h"
 #include "wx/wrapsizer.h"
 #include "wx/artprov.h"
+#include "wx/collpane.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -93,6 +94,35 @@ WrapSizerFrame::WrapSizerFrame()
 
     // Root sizer, vertical
     wxSizer * const sizerRoot = new wxBoxSizer(wxVERTICAL);
+
+    // CollapsiblePane with a wxWrapSizer in it
+    // seven search criteria that wrap in narrow windows
+    wxCollapsiblePane* pane = new wxCollapsiblePane(m_panel, wxID_ANY, "Search criteria");
+    pane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, [this](wxCollapsiblePaneEvent&)
+    {
+        // Layout this parent panel
+        m_panel->Layout();
+    });
+
+    sizerRoot->Add( pane, wxSizerFlags().Expand() );
+    wxWindow* area = pane->GetPane();
+    auto* criteria = new wxWrapSizer(wxHORIZONTAL);
+
+    for (int i = 0; i < 7; i++ )
+    {
+        auto* box = new wxBoxSizer(wxVERTICAL);
+        box->Add(new wxStaticText(area, wxID_ANY, "Category"));
+        wxArrayString choices;
+        choices.Add("any");
+        choices.Add("first choice");
+        choices.Add("second choice");
+        auto* choice = new wxChoice(area, wxID_ANY, wxDefaultPosition,
+                                    area->FromDIP(wxSize(150, -1)), choices);
+        choice->SetSelection(0);
+        box->Add(choice, wxSizerFlags().Border(wxTOP, 2));
+        criteria->Add(box, wxSizerFlags().Border(wxRIGHT | wxBOTTOM, 12));
+    }
+    area->SetSizer(criteria);
 
     // Some toolbars in a wrap sizer
     wxSizer * const sizerTop = new wxWrapSizer( wxHORIZONTAL );
