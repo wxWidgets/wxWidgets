@@ -238,6 +238,29 @@ void wxCollapsiblePane::OnSize(wxSizeEvent &ev)
     m_pPane->Layout();
 }
 
+wxSize wxCollapsiblePane::GetMinSizeFromKnownDirection(int direction, int size,
+                                                       int availableOtherDir)
+{
+    wxSizer* const sizer = m_pPane ? m_pPane->GetSizer() : nullptr;
+
+    // OnSize() gives the pane our full width, so only this direction helps
+    if ( !IsExpanded() || !sizer || direction != wxHORIZONTAL || size <= 0 )
+        return wxDefaultSize;
+
+    const wxSize paneMin = sizer->CalcMinSizeFromKnownDirection(direction, size,
+                                                                availableOtherDir);
+    if ( paneMin == wxDefaultSize )
+        return wxDefaultSize;
+
+    // the same calculation as in DoGetBestSize(), but with the pane size for
+    // this width instead of the one from the last layout
+    wxSize sz = m_szCollapsed;
+    sz.x = wxMax(sz.x, paneMin.x);
+    sz.y += gtk_expander_get_spacing(GTK_EXPANDER(m_widget)) + paneMin.y;
+
+    sz.IncTo(GetMinSize());
+    return sz;
+}
 
 GdkWindow *wxCollapsiblePane::GTKGetWindow(wxArrayGdkWindows& windows) const
 {

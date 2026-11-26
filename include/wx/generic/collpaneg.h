@@ -70,6 +70,8 @@ public:
     // implementation only, don't use
     void OnStateChange(const wxSize& sizeNew);
 
+    virtual wxSize GetMinSizeFromKnownDirection(int direction, int size,
+                                                int availableOtherDir) override;
 protected:
     // overridden methods
     virtual wxSize DoGetBestClientSize() const override;

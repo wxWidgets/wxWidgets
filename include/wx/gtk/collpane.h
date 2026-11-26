@@ -49,6 +49,9 @@ public:
     virtual wxWindow *GetPane() const override { return m_pPane; }
     virtual wxString GetLabel() const override { return m_strLabel; }
 
+    virtual wxSize GetMinSizeFromKnownDirection(int direction, int size,
+                                                int availableOtherDir) override;
+                                                
 protected:
     virtual wxSize DoGetBestSize() const override;
 
