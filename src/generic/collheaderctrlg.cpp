@@ -26,6 +26,7 @@
 #endif // !WX_PRECOMP
 
 #include "wx/renderer.h"
+#include "wx/private/access.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
@@ -38,6 +39,22 @@ const char wxCollapsibleHeaderCtrlNameStr[] = "collapsibleHeader";
 
 wxDEFINE_EVENT(wxEVT_COLLAPSIBLEHEADER_CHANGED, wxCommandEvent);
 wxIMPLEMENT_CLASS(wxCollapsibleHeaderCtrl, wxControl);
+
+namespace
+{
+
+// Let the screen readers know about the label and the state of the header in
+// the ports where we can't use wxAccessible.
+//
+// This must be called whenever either the label or the state changes.
+void UpdateAccessibleState(wxGenericCollapsibleHeaderCtrl* header)
+{
+    wxPrivate::SetAccessibleDisclosure(header,
+                                       header->GetLabelText(),
+                                       !header->IsCollapsed());
+}
+
+} // anonymous namespace
 
 #if wxUSE_ACCESSIBILITY
 
@@ -150,6 +167,12 @@ bool wxGenericCollapsibleHeaderCtrl::Create(wxWindow *parent,
     Bind(wxEVT_SET_FOCUS, &wxGenericCollapsibleHeaderCtrl::OnFocus, this);
     Bind(wxEVT_KILL_FOCUS, &wxGenericCollapsibleHeaderCtrl::OnFocus, this);
 
+    UpdateAccessibleState(this);
+    wxPrivate::SetAccessiblePressHandler(this, [this]()
+        {
+            DoSetCollapsed(!m_collapsed);
+        });
+
     return true;
 }
 
@@ -184,6 +207,8 @@ void wxGenericCollapsibleHeaderCtrl::SetCollapsed(bool collapsed)
 {
     m_collapsed = collapsed;
     Refresh();
+
+    UpdateAccessibleState(this);
 
 #if wxUSE_ACCESSIBILITY
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this,
@@ -261,6 +286,10 @@ void wxGenericCollapsibleHeaderCtrl::OnLeftDown(wxMouseEvent& event)
 void wxGenericCollapsibleHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
+
+    // The label may have changed since the last time we were drawn and,
+    // unlike the state, we don't have any other way of knowing about it.
+    UpdateAccessibleState(this);
 
     wxRect rect(wxPoint(0, 0), GetClientSize());
 
