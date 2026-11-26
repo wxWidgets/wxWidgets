@@ -3113,6 +3113,8 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
             [m_osxView removeFromSuperview];
     }
 
+    UseNativeContentBackground(false);
+
     wxCocoaGestures::EraseForObject(this);
 
     [m_osxView release];
@@ -3174,6 +3176,7 @@ bool wxWidgetCocoaImpl::IsVisible() const
 void wxWidgetCocoaImpl::SetVisibility( bool visible )
 {
     [m_osxView setHidden:(visible ? NO:YES)];
+    [m_osxContentBackground setHidden:(visible ? NO:YES)];
 
     // trigger redraw upon shown for layer-backed views
     if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
@@ -3506,6 +3509,7 @@ void wxWidgetCocoaImpl::Raise()
     [superview sortSubviewsUsingFunction: CocoaRaiseWindowCompareFunction
                                  context: &compareContext];
 
+    PlaceContentBackground();
 }
 
 /* Causes Cocoa to lower the target view to the bottom of the Z-Order by telling the sort function that
@@ -3533,6 +3537,8 @@ void wxWidgetCocoaImpl::Lower()
 
     [superview sortSubviewsUsingFunction: CocoaLowerWindowCompareFunction
                                  context: &compareContext];
+
+    PlaceContentBackground();
 }
 
 void wxWidgetCocoaImpl::ScrollRect( const wxRect *WXUNUSED(rect), int WXUNUSED(dx), int WXUNUSED(dy) )
@@ -3569,6 +3575,7 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     [[m_osxView superview] setNeedsDisplayInRect:[m_osxView frame]];
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
+    [m_osxContentBackground setFrame:r];
     [[m_osxView superview] setNeedsDisplayInRect:r];
 }
 
@@ -3853,6 +3860,7 @@ void wxWidgetCocoaImpl::RemoveFromParent()
         SetDrawingEnabled(true);
 
     [m_osxView removeFromSuperview];
+    [m_osxContentBackground removeFromSuperview];
 }
 
 void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
@@ -3866,6 +3874,7 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
 
     wxASSERT_MSG( container != nullptr , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
+    PlaceContentBackground();
 
     // User panes will be frozen elsewhere
     if( m_wxPeer->IsFrozen() && !IsUserPane() )
@@ -4974,6 +4983,61 @@ void wxWidgetCocoaImpl::AdjustClippingView(wxScrollBar* horizontal, wxScrollBar*
         }
         m_osxClipView.frame = bounds;
     }
+}
+
+bool wxWidgetCocoaImpl::UseNativeContentBackground(bool use)
+{
+    if ( m_osxView == nil || use == (m_osxContentBackground != nil) )
+        return m_osxContentBackground != nil;
+
+    if ( !use )
+    {
+        [m_osxContentBackground removeFromSuperview];
+        [m_osxContentBackground release];
+        m_osxContentBackground = nil;
+        return false;
+    }
+
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        // This is what an NSScrollView draws behind a table: the content
+        // background material, tinted with the desktop picture in the dark
+        // appearance, and only while the window is active, as a table is.
+        NSVisualEffectView* background =
+            [[NSVisualEffectView alloc] initWithFrame:[m_osxView frame]];
+        background.material = NSVisualEffectMaterialContentBackground;
+        background.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+        background.state = NSVisualEffectStateFollowsWindowActiveState;
+        background.hidden = [m_osxView isHidden];
+        m_osxContentBackground = background;
+        PlaceContentBackground();
+        return true;
+    }
+
+    return false;
+}
+
+void wxWidgetCocoaImpl::PlaceContentBackground()
+{
+    // This also moves it back there when m_osxView is raised or lowered.
+    NSView* const superview = [m_osxView superview];
+    if ( m_osxContentBackground && superview )
+    {
+        [superview addSubview:m_osxContentBackground
+                   positioned:NSWindowBelow
+                   relativeTo:m_osxView];
+    }
+}
+
+bool wxOSXSetNativeContentBackground(wxWindow* window, bool use)
+{
+    wxWidgetCocoaImpl* const
+        impl = dynamic_cast<wxWidgetCocoaImpl*>(window->GetPeer());
+    const bool used = impl && impl->UseNativeContentBackground(use);
+
+    window->Refresh();
+
+    return used;
 }
 
 void wxWidgetCocoaImpl::UseClippingView()

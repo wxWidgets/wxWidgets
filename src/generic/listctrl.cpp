@@ -1585,6 +1585,11 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
     wxVisualAttributes attr = wxGenericListCtrl::GetClassDefaultAttributes();
     SetOwnForegroundColour( attr.colFg );
+#ifdef __WXOSX_COCOA__
+    // Use the native table background, which no colour matches in the dark
+    // appearance, where there is one, unless a colour is set later.
+    if ( !wxOSXSetNativeContentBackground(this, true) )
+#endif
     SetOwnBackgroundColour( attr.colBg );
     if (!m_hasFont)
         SetOwnFont( attr.font );
@@ -5776,6 +5781,11 @@ bool wxGenericListCtrl::SetBackgroundColour( const wxColour &colour )
     if (m_mainWin)
     {
         m_mainWin->SetBackgroundColour( colour );
+#ifdef __WXOSX_COCOA__
+        // An explicitly set colour replaces the native background, and
+        // resetting it brings the native background back.
+        wxOSXSetNativeContentBackground(m_mainWin, !colour.IsOk());
+#endif
         m_mainWin->m_dirty = true;
     }
 

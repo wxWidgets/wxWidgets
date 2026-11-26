@@ -1045,6 +1045,11 @@ void wxGenericTreeCtrl::InitVisualAttributes()
 
     if ( !m_hasExplicitBgCol )
     {
+#ifdef __WXOSX_COCOA__
+        // Use the native outline view background, which no colour matches
+        // in the dark appearance, where there is one.
+        if ( !wxOSXSetNativeContentBackground(this, true) )
+#endif
         SetOwnBackgroundColour(attr.colBg);
         m_hasExplicitBgCol = false;
     }
@@ -2633,6 +2638,11 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         wxRect rect( x, item->GetY()+offset, w, total_h-offset);
         if (!item->IsSelected())
         {
+#ifdef __WXOSX_COCOA__
+            // Don't paint over the native background unless the item or the
+            // tree has a background colour of its own.
+            if ( hasBgColour || UseBgCol() )
+#endif
             dc.DrawRectangle(rect);
         }
         else
@@ -4144,6 +4154,11 @@ bool wxGenericTreeCtrl::SetBackgroundColour(const wxColour& colour)
         return false;
 
     m_hasExplicitBgCol = true;
+#ifdef __WXOSX_COCOA__
+    // An explicitly set colour replaces the native background, and resetting
+    // it brings the native background back.
+    wxOSXSetNativeContentBackground(this, !colour.IsOk());
+#endif
 
     Refresh();
 

@@ -251,9 +251,15 @@ public :
 
     virtual void                ApplyScrollViewBorderType() override;
 
+    // Put the background of a native table behind the view, or take it away,
+    // and return whether it is there: see wxOSXSetNativeContentBackground().
+    bool                        UseNativeContentBackground(bool use);
+
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;
+    // The visual effect view kept just behind m_osxView, if any.
+    WXWidget m_osxContentBackground = nullptr;
 
     // begins processing of native key down event, storing the native event for later wx event generation
     void BeginNativeKeyDownEvent( NSEvent* event );
@@ -269,6 +275,9 @@ protected:
     void SetKeyDownSent();
     // was the wx event for the current native key down event sent
     bool WasKeyDownSent() const;
+
+    // puts m_osxContentBackground, if any, just behind m_osxView
+    void PlaceContentBackground();
 
 
     // Return the view to apply the font/colour to.
@@ -302,6 +311,15 @@ protected:
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
+
+// Draw the background of a native table or outline view behind a window drawn
+// by wxWidgets itself, such as the generic list and tree controls, so that they
+// look like the native ones: in the dark appearance AppKit tints this
+// background with the desktop picture, which no colour can match. The window
+// must not have a background colour of its own, as it would be drawn over it.
+// Returns true if the native background is used, which it never is before
+// 10.14, so that the caller can set a colour instead.
+bool WXDLLIMPEXP_CORE wxOSXSetNativeContentBackground(wxWindow* window, bool use);
 
 DECLARE_WXCOCOA_OBJC_CLASS( wxNSWindow );
 
