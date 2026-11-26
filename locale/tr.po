@@ -49,7 +49,7 @@ msgstr "Çıktı"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 msgid "Printing"
 msgstr "Yazdırılıyor"
 
@@ -1285,7 +1285,7 @@ msgstr "'%s' dosyası oluşturulamadı"
 msgid "can't close file descriptor %d"
 msgstr "%d dosya tanımlayıcısı kapatılamadı"
 
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "%d dosya tanımlayıcısından okunamadı"
@@ -1422,7 +1422,7 @@ msgstr "Kullanıcı ayarları dosyası kaydedilemedi."
 msgid "Error saving user configuration data."
 msgstr "Kullanıcı ayarları kaydedilirken sorun çıktı."
 
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "kullanıcı yapılandırma dosyası '%s' silinemedi"
@@ -1575,7 +1575,7 @@ msgstr "'%s' kilit dosyası silinemedi"
 msgid "Failed to set mode of '%s'"
 msgstr "'%s' kilit dosyası silinemedi"
 
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "'%s' için dosya zamanları değiştirilemedi"
@@ -2220,7 +2220,7 @@ msgstr "BMP: Dosya (Bitmap) başlık bilgisi yazılamadı."
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Dosya (BitmapInfo) başlık bilgisi yazılamadı."
 
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: RGB renk haritası yazılamadı."
 
@@ -2341,7 +2341,7 @@ msgstr "Görsel veri biçimi bilinmiyor."
 msgid "This is not a %s."
 msgstr "Bu bir %s değil."
 
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "%s türünün görüntü işleyicisi tanımlanmamış."
@@ -2785,8 +2785,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 Zarf, 114 x 229 mm"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4 Zarf, 250 x 353 mm"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "B4 Zarf, 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2821,8 +2821,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "Alman Legal Fanfold, 8 1/2 x 13 inç"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO) 250 x 353 mm"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "B4 (ISO) 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2877,8 +2877,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "SuperB/SuperB/A3 305 x 487 mm"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
+msgstr "SuperB/SuperB/A3.405 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3288,7 +3288,7 @@ msgstr "Giriş/çıkış kanalları izlenemedi"
 msgid "Save"
 msgstr "Kaydet"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "Kaydedilmesin"
 
@@ -3402,7 +3402,7 @@ msgid "Cut"
 msgstr "Kes"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&Sil"
@@ -3875,7 +3875,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "'%s' karakter kümesine dönüşüm çalışmıyor."
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "bilinmiyor"
 
@@ -4117,7 +4117,7 @@ msgstr "'Create Parameter' %s bildirilen RTTI parametreleri içinde bulunamadı"
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "Olay kaynağı nesne sınıfı geçersiz (Non-wxEvtHandler)"
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "Tür enum - long çevrimini desteklemelidir"
@@ -4223,7 +4223,7 @@ msgstr "kayıt için zip dosyası konumu hatalı"
 msgid "stored file length not in Zip header"
 msgstr "kayıtlı dosya uzunluğu Zip başlığında yok"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "zip sıkıştırma yöntemi desteklenmiyor"
 
@@ -4269,7 +4269,7 @@ msgstr "%d zlib sorunu"
 msgid "Can't read from inflate stream: %s"
 msgstr "Ayıklama akışı okunamadı: %s"
 
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "Zlib sıkıştırma akışı başlatılamadı."
 
@@ -4392,7 +4392,7 @@ msgstr "Kırmızı:"
 msgid "Green:"
 msgstr "Yeşil:"
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr "Mavi:"
 
@@ -4484,7 +4484,7 @@ msgstr "Klasörde bir hata ayıklama raporu oluşturuldu\n"
 msgid "The following debug report will be generated\n"
 msgstr "Şu hata ayıklama raporu oluşturulacak\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4765,7 +4765,7 @@ msgstr "..."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "Roman"
 
@@ -4797,7 +4797,7 @@ msgstr "Normal"
 msgid "Slant"
 msgstr "Eğik"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "İnce"
 
@@ -4817,7 +4817,7 @@ msgstr "&Stil:"
 msgid "The font style."
 msgstr "Font stili."
 
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "&Kalınlık:"
 
@@ -5937,7 +5937,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "Bilinmeyen DDE hatası %08x"
 
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6016,7 +6016,7 @@ msgstr "Kapatılamadı - etkin çevirmeli bağlantı yok."
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Çevirmeli bağlantı sonlandırılamadı: %s"
 
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "Bit eşlemi görüntüsü \"%s\" dosyasına kaydedilemedi."
@@ -7304,7 +7304,7 @@ msgstr "Yatay kayma."
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7337,14 +7337,14 @@ msgstr "Yatay kayma."
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7513,7 +7513,7 @@ msgstr "Gölge matlığı."
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8036,7 +8036,7 @@ msgstr "Metni sil"
 msgid "Remove Bullet"
 msgstr "Madde imini kaldır"
 
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "Metin kaydedilemedi."
 
@@ -8182,7 +8182,7 @@ msgid "Suppress hyphe&nation"
 msgstr "Heceleme e&ngellensin"
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr "Hecelemeyi engellemek için işaretleyin."
 
@@ -8207,7 +8207,7 @@ msgid "(none)"
 msgstr "(hiçbiri)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr "Normal"
 
@@ -8256,7 +8256,7 @@ msgstr "So&l"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "Metni sola hizalar."
@@ -8305,7 +8305,7 @@ msgstr "&Belirsiz"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr "Geçerli hizalama ayarları kullanılır."
 
@@ -8322,7 +8322,7 @@ msgid "The left indent."
 msgstr "Sol girinti."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr "Sol (i&lk satır):"
 
@@ -8617,7 +8617,7 @@ msgid "Vertical alignment."
 msgstr "Dikey hizalama."
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "&Width:"
 msgstr "&Genişlik:"
 
@@ -8627,7 +8627,7 @@ msgid "Enable the width value."
 msgstr "Genişlik değeri kullanılsın."
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "The object width."
 msgstr "Nesne genişliği."
 
@@ -8662,7 +8662,7 @@ msgstr "Nesne yüksekliği birimleri."
 msgid "Min width:"
 msgstr "En az genişlik:"
 
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "En az genişlik değeri kullanılır."
@@ -9435,7 +9435,7 @@ msgid "Cannot get the official hostname"
 msgstr "Resmi sunucu adı alınamadı"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

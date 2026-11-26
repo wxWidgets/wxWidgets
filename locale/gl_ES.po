@@ -3,7 +3,7 @@
 # Nuria Andión <nandiez@gmail.com>, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.3\n"
+"Project-Id-Version: wxWidgets 3.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2013-11-01 21:34+0100\n"
@@ -45,7 +45,7 @@ msgstr "Saída de impresión"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 msgid "Printing"
 msgstr "Imprimindo"
 
@@ -1321,7 +1321,7 @@ msgstr "non se puido crear o ficheiro '%s'"
 msgid "can't close file descriptor %d"
 msgstr "non se pode pechar descritor de ficheiro %d"
 
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "non é posíbel ler dende o descritor de ficheiro %d"
@@ -1460,7 +1460,7 @@ msgstr "Erro ao actualizar o ficheiro de configuración de usuario."
 msgid "Error saving user configuration data."
 msgstr "Erro ao gardar os datos de configuración do usuario."
 
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "non se puido eliminar o ficheiro de configuración de usuario '%s'"
@@ -1613,7 +1613,7 @@ msgstr "Erro ao eliminar o ficheiro de bloqueo '%s'"
 msgid "Failed to set mode of '%s'"
 msgstr "Erro ao eliminar o ficheiro de bloqueo '%s'"
 
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Erro ao modificar o ficheiro de tempos para '%s'"
@@ -2265,7 +2265,7 @@ msgstr "BMP: Non se puido escribir a cabeceira (Bitmap) do arquito."
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Non se puido escribir a cabeceira (BitmapInfo) do ficheiro."
 
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: No se puido escribir o mapa de cor RGB."
 
@@ -2389,7 +2389,7 @@ msgstr "Formato de datos de imaxe descoñecido."
 msgid "This is not a %s."
 msgstr "Isto non é un %s."
 
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Non se definiu ningún manexador para o tipo %s."
@@ -2844,8 +2844,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "Sobre C65, 114 x 229 mm"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "Sobre B4, 250 x 353 mm"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "Sobre B4, 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2880,8 +2880,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "FanFold alemán legal, 8 1/2 x 13 polgadas"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO) 250 x 353 mm"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "B4 (ISO) 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2936,8 +2936,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "SuperB/SuperB/A3 305 x 487 mm"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
+msgstr "SuperB/SuperB/A3.405 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3349,7 +3349,7 @@ msgstr "Non se puido monitorizar as canles I/O"
 msgid "Save"
 msgstr "Gardar"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "Non gardar"
 
@@ -3466,7 +3466,7 @@ msgid "Cut"
 msgstr "Cortar"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&Eliminar"
@@ -3947,7 +3947,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "Non funciona a conversión ao xogo de caracteres '%s'."
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "descoñecido"
 
@@ -4190,7 +4190,7 @@ msgstr ""
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "Clase de obxecto inaceptábel como orixe do evento (non-wxEvtHandler)"
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "O tipo debe ter un conversor enum - long"
@@ -4294,7 +4294,7 @@ msgstr "desprazamento incorrecto de ficheiro zip á entrada"
 msgid "stored file length not in Zip header"
 msgstr "a lonxitude do ficheiro almacenado non está na cabeceira de zip"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "método de compresión Zip non compatíbel"
 
@@ -4341,7 +4341,7 @@ msgstr "erro de zlib %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "Non se pode ler dende o fluxo de descompresión: %s"
 
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "Non se pode inicar o fluxo de compresión de zlib."
 
@@ -4467,7 +4467,7 @@ msgstr ""
 msgid "Green:"
 msgstr "Mac grego"
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr ""
 
@@ -4560,7 +4560,7 @@ msgstr "Xerouse un informe de depuración no cartafol\n"
 msgid "The following debug report will be generated\n"
 msgstr "*** Xerouse un informe de depuración\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4843,7 +4843,7 @@ msgstr "..."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "Redonda"
 
@@ -4875,7 +4875,7 @@ msgstr "Normal"
 msgid "Slant"
 msgstr "Inclinación"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "Clara"
 
@@ -4895,7 +4895,7 @@ msgstr "&Estilo:"
 msgid "The font style."
 msgstr "Estilo do tipo de letra."
 
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "&Grosor:"
 
@@ -6011,7 +6011,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "Erro DDE descoñecido %08x"
 
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6091,7 +6091,7 @@ msgstr "Non se pode colgar - non hai conexión telefónica."
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Non se puido terminar a conexión telefónica: %s"
 
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "Erro ao gardar a imaxe de mapa de bits no ficheiro \"%s\"."
@@ -7421,7 +7421,7 @@ msgstr "Mosaico &horizontal"
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7454,14 +7454,14 @@ msgstr "Mosaico &horizontal"
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7639,7 +7639,7 @@ msgstr ""
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8164,7 +8164,7 @@ msgstr "Eliminar texto"
 msgid "Remove Bullet"
 msgstr "Eliminar viñeta"
 
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "Non se puido gardar o texto."
 
@@ -8311,7 +8311,7 @@ msgid "Suppress hyphe&nation"
 msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr ""
 
@@ -8336,7 +8336,7 @@ msgid "(none)"
 msgstr "(ningún)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr "Regular"
 
@@ -8385,7 +8385,7 @@ msgstr "&Esquerda"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "Aliñar o texto á esquerda."
@@ -8434,7 +8434,7 @@ msgstr "&Indeterminado"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr "Usar a configuración de aliñamento actual."
 
@@ -8451,7 +8451,7 @@ msgid "The left indent."
 msgstr "A sangría esquerda."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr "Esquerda (&primeira liña):"
 
@@ -8746,7 +8746,7 @@ msgid "Vertical alignment."
 msgstr "Aliñamento vertical."
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "&Width:"
 msgstr "&Anchura:"
 
@@ -8756,7 +8756,7 @@ msgid "Enable the width value."
 msgstr "Activar valor de anchura."
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "The object width."
 msgstr "O ancho do obxecto."
 
@@ -8791,7 +8791,7 @@ msgstr "Unidades para a altura do obxecto."
 msgid "Min width:"
 msgstr "Ancho mínimo:"
 
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "Activar o ancho mínimo."
@@ -9575,7 +9575,7 @@ msgid "Cannot get the official hostname"
 msgstr "Non se puido obter o nome oficial da máquina"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

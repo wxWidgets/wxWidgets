@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.3\n"
+"Project-Id-Version: wxWidgets 3.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2026-10-17 18:01+0200\n"
@@ -43,7 +43,7 @@ msgstr "Nyomtatás"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 #, fuzzy
 msgid "Printing"
 msgstr "Nyomtatás"
@@ -1296,7 +1296,7 @@ msgstr "nem tudom létrehozni a(z) '%s' fájl-t"
 msgid "can't close file descriptor %d"
 msgstr "nem tudom lezárni a(z) %d fájl leírót"
 
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "nem tudok olvasni a(z) %d leíróval megadott fájból"
@@ -1438,7 +1438,7 @@ msgstr "Nem tudom frissíteni a felhasználó konfigurációs fájlját."
 msgid "Error saving user configuration data."
 msgstr "Hiba a felhasználói konfigurációs beállítások elmentésekor."
 
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "nem tudom törölni a(z) '%s' felhasználói konfigurációs fájlt"
@@ -1592,7 +1592,7 @@ msgstr "Nem tudom eltávolítani a(z) '%s' lakat fájlt."
 msgid "Failed to set mode of '%s'"
 msgstr "Nem tudom eltávolítani a(z) '%s' lakat fájlt."
 
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Nem sikerült módosítani a(z) időket '%s'-re."
@@ -2261,7 +2261,7 @@ msgstr "BMP: Nem tudtam kiírni a fájl (bittérkép) fejet."
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Nem tudtam kiírni a fájl (bittérkép info) fejet."
 
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: Nem tudtam kiírni az RGB színtérképet."
 
@@ -2385,7 +2385,7 @@ msgstr "adatformátum hiba"
 msgid "This is not a %s."
 msgstr "PCX: ez nem PCX fájl."
 
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "%s  típusú képhez nincs kezelő meghatározva."
@@ -2840,8 +2840,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 Boríték, 114 x 229 mm"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4 Boríték, 250 x 353 mm"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "B4 Boríték, 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2876,8 +2876,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "Német bírósági leporelló, 8 1/2 x 13 hüvelyk"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO) 250 x 353 mm"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "B4 (ISO) 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2932,8 +2932,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "SuperB/SuperB/A3 305 x 487 mm"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
+msgstr "SuperB/SuperB/A3.405 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3351,7 +3351,7 @@ msgstr ""
 msgid "Save"
 msgstr "Mentés"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "Ne mentsd el"
 
@@ -3475,7 +3475,7 @@ msgid "Cut"
 msgstr "&Kivágás"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&Törlés"
@@ -3997,7 +3997,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "A  '%s' jelkészletté alakítás nem működik."
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "ismeretlen"
 
@@ -4242,7 +4242,7 @@ msgstr "Nem találtam"
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "Hibás objektum osztály (Nem-wxEvtHandler) szerepel esemény forrásként"
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "A típust enum-ról long-ra kell alakítani"
@@ -4347,7 +4347,7 @@ msgstr "hibás zip-fájl offset"
 msgid "stored file length not in Zip header"
 msgstr "a Zip fejrészben nincs meg a tárolt fájl hossza"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "nem támogatott Zip tömörítési módszer"
 
@@ -4393,7 +4393,7 @@ msgstr "zlib hiba %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "Nem tudok olvasni a(z) %s tömörített folyamból"
 
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "Nem tudom elindítani a zlib folyam tömörítését."
 
@@ -4520,7 +4520,7 @@ msgstr ""
 msgid "Green:"
 msgstr ""
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr ""
 
@@ -4615,7 +4615,7 @@ msgstr "A hibakeresésről a jelentés ebben a könyvtárban van\n"
 msgid "The following debug report will be generated\n"
 msgstr "*** Elkészült a hibakeresésről a jelentés\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4902,7 +4902,7 @@ msgstr ".."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "Roman"
 
@@ -4934,7 +4934,7 @@ msgstr "Normál"
 msgid "Slant"
 msgstr "Ferde"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "Vékony"
 
@@ -4954,7 +4954,7 @@ msgstr "&Stílus:"
 msgid "The font style."
 msgstr "A betűkészlet stílusa."
 
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "Hang&súly:"
 
@@ -6065,7 +6065,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "Ismeretlen DDE hiba %08x"
 
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6149,7 +6149,7 @@ msgstr "Nem tudom letenni - nincs aktív telefonkapcsolat."
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Nem tudtam befejezni a(z) %s telefon kapcsolatot."
 
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "Nem tudtam elmenteni a bittérképet a(z)  '%s' fájlba."
@@ -7483,7 +7483,7 @@ msgstr "Csempék &Vízszintesen"
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7516,14 +7516,14 @@ msgstr "Csempék &Vízszintesen"
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7698,7 +7698,7 @@ msgstr ""
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8250,7 +8250,7 @@ msgstr "Bejegyzés törlése"
 msgid "Remove Bullet"
 msgstr "Töröld"
 
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "A szöveget nem tudom elmenteni."
 
@@ -8417,7 +8417,7 @@ msgid "Suppress hyphe&nation"
 msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr ""
 
@@ -8443,7 +8443,7 @@ msgid "(none)"
 msgstr "névtelen"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr ""
 
@@ -8496,7 +8496,7 @@ msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr ""
@@ -8550,7 +8550,7 @@ msgstr "Alá&húzás"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr ""
 
@@ -8568,7 +8568,7 @@ msgid "The left indent."
 msgstr "A betűkészlet hangsúlya."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr ""
 
@@ -8882,7 +8882,7 @@ msgid "Vertical alignment."
 msgstr "Nem tudom elindítani a nyomtatást."
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #, fuzzy
 msgid "&Width:"
 msgstr "Hang&súly:"
@@ -8893,7 +8893,7 @@ msgid "Enable the width value."
 msgstr ""
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #, fuzzy
 msgid "The object width."
 msgstr "A betűkészlet hangsúlya."
@@ -8931,7 +8931,7 @@ msgstr ""
 msgid "Min width:"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 #, fuzzy
 msgid "Enable the minimum width value."
@@ -9775,7 +9775,7 @@ msgid "Cannot get the official hostname"
 msgstr "Nem ismerem a gazdagép hivatalos nevét"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

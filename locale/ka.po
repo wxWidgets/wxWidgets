@@ -46,7 +46,7 @@ msgstr "გამობეჭდვა"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 msgid "Printing"
 msgstr "დაბეჭდვა"
 
@@ -1281,7 +1281,7 @@ msgstr "ფაილის შექმნა შეუძლებელია:
 msgid "can't close file descriptor %d"
 msgstr "ფაილის დესკრიპტორის დახურვის შეცდომა: %d"
 
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "ფაილის დესკრიპტორიდან წაკითხვის შეცდომა: %d"
@@ -1419,7 +1419,7 @@ msgstr "მომხმარებლის კონფიგურაცი�
 msgid "Error saving user configuration data."
 msgstr "მომხმარებლის კონფიგურაციის ფაილის შენახვის შეცდომა."
 
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "მომხმარებლის კონფიგურაციის ფაილის წაშლი შეცდომა: %s"
@@ -1572,7 +1572,7 @@ msgstr "ბლოკის ფაილის წაშლის შეცდო
 msgid "Failed to set mode of '%s'"
 msgstr "ბლოკის ფაილის წაშლის შეცდომა: %s."
 
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "ფაილის დროების ჩასწორების შეცდომა %s-სთვის"
@@ -2217,7 +2217,7 @@ msgstr "BMP: ფაილის (ბიტური რუკის) თავ�
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: ფაილის (BitmapInfo) თავსართის ჩაწერის შეცდომა."
 
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: RGB ფერების რუკის ჩაწერის შეცდომა."
 
@@ -2340,7 +2340,7 @@ msgstr "გამოსახულების ფაილის უცნო�
 msgid "This is not a %s."
 msgstr "ეს %s არაა."
 
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "გამოსახულების დამმუშავებელი ტიპისთვის %s აღწერილი არაა."
@@ -2788,8 +2788,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 კონვერტი, 114 x 229 მმ"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4 კონვერტი, 250 x 353 მმ"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "B4 კონვერტი, 250 x 3.4 მმ"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2824,8 +2824,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "გერმანიის იურიდიული Fanfold, 8 1/2 x 13 დუიმი"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO) 250 x 353 მმ"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "B4 (ISO) 250 x 3.4 მმ"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2880,8 +2880,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "სუპერA/SuperA / A4 227 x 356 მმ"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "SuperB/SuperB / A3 305 x 487 მმ"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
+msgstr "SuperB/SuperB / A3.405 x 487 მმ"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3291,7 +3291,7 @@ msgstr "I/O არხების მონიტორინგის შეც
 msgid "Save"
 msgstr "შენახვა"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "არ შეინახო"
 
@@ -3405,7 +3405,7 @@ msgid "Cut"
 msgstr "ამოჭრა"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&წაშლა"
@@ -3878,7 +3878,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "კოდირებაზე (%s) გადაყვანა არ მუშაობს."
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "უცნობი"
 
@@ -4121,7 +4121,7 @@ msgstr "RTTI-ის აღწერილ პარამეტრებში �
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "მოვლენის წყაროდ მითითებული ობიექტის კლასი (Non-wxEvtHandler) არასწორია"
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "ტიპს enum-long გარდაქმნა უნდა ჰქონდეს"
@@ -4229,7 +4229,7 @@ msgstr "zip ფაილის არასწორი წანაცვლე
 msgid "stored file length not in Zip header"
 msgstr "დამახსოვრებული ფაილის სიგრძე Zip თავსართში არაა"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "zip შეკუმშვის მხარდაუჭერელი მეთოდი"
 
@@ -4275,7 +4275,7 @@ msgstr "zlib -ის შეცდომა %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "შეკუმშვის ნაკადიდან წაკითხვის შეცდომა: %s"
 
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "Zlib-ის გაშლის ნაკადის ინიციალიზაციის შეცდომა."
 
@@ -4398,7 +4398,7 @@ msgstr "წითელი:"
 msgid "Green:"
 msgstr "მწვანე:"
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr "ლურჯი:"
 
@@ -4491,7 +4491,7 @@ msgstr "გამართვის ანგარიში გენერი�
 msgid "The following debug report will be generated\n"
 msgstr "გენერირებული იქნება შემდეგი გამართვის ანგარიში\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4767,7 +4767,7 @@ msgstr "..."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "რომანული"
 
@@ -4799,7 +4799,7 @@ msgstr "ნორმალური"
 msgid "Slant"
 msgstr "დაცერება"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "ღია"
 
@@ -4819,7 +4819,7 @@ msgstr "&სტილი:"
 msgid "The font style."
 msgstr "ფონტის სტილი."
 
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "&წონა:"
 
@@ -5900,7 +5900,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "DDE-ის უცნობი შეცდომა %08x"
 
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -5975,7 +5975,7 @@ msgstr "გათიშვა შეუძლებელია. ტელეფ
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "სატელეფონო კავშირის გაუქმების შეცდომა: %s"
 
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "ბიტური რუკის გამოსახულების ფაილში (%s) შენახვის შეცდომა."
@@ -7253,7 +7253,7 @@ msgstr "ჰორიზონტალური წანაცვლება."
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7286,14 +7286,14 @@ msgstr "ჰორიზონტალური წანაცვლება."
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7462,7 +7462,7 @@ msgstr "ჩრდილის გაუმჭვირვალობა."
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -7985,7 +7985,7 @@ msgstr "ტექსტის წაშლა"
 msgid "Remove Bullet"
 msgstr "მარკერის მოცილება"
 
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "ტექსტის შენახვა შეუძლებელია."
 
@@ -8131,7 +8131,7 @@ msgid "Suppress hyphe&nation"
 msgstr "&გადატანების აკრძალვა"
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr "ჩართეთ გადატანების ასაკრძალად."
 
@@ -8156,7 +8156,7 @@ msgid "(none)"
 msgstr "(არაფერი)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr "ჩვეულებრივი"
 
@@ -8205,7 +8205,7 @@ msgstr "მარ&ცხნივ"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "ტექსტის მარცხნივ-სწორება."
@@ -8254,7 +8254,7 @@ msgstr "&გაურკვეველი"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr "სწორების მიმდინარე პარამეტრის ჩვენება."
 
@@ -8271,7 +8271,7 @@ msgid "The left indent."
 msgstr "მარცხნივ შეწევა."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr "მარცხნივ (&პირველი ხაზი):"
 
@@ -8566,7 +8566,7 @@ msgid "Vertical alignment."
 msgstr "ვერტიკალური სწორება."
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "&Width:"
 msgstr "&სიგანე:"
 
@@ -8576,7 +8576,7 @@ msgid "Enable the width value."
 msgstr "სიგანის მნიშვნელობის ჩართვა."
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "The object width."
 msgstr "ობიექტის სიგანე."
 
@@ -8611,7 +8611,7 @@ msgstr "ობიექტის სიმაღლის ერთეული.
 msgid "Min width:"
 msgstr "მინ. სიგანე:"
 
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "მინიმალური სიგანის მნიშვნელობის ჩართვა."
@@ -9381,7 +9381,7 @@ msgid "Cannot get the official hostname"
 msgstr "ჰოსტის ოფიციალური სახელის მიღების შეცდომა"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

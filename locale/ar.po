@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets Arabic Translation 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
-"PO-Revision-Date: 2025-05-08 23:30+0300\n"
+"PO-Revision-Date: 2025-05-08 23.40+0300\n"
 "Last-Translator: Amar <al_janabi7@yahoo.com>\n"
 "Language-Team: arabictranslationteam@googlegroups.com\n"
 "Language: ar\n"
@@ -50,7 +50,7 @@ msgstr "المطبوعات"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 msgid "Printing"
 msgstr "يطبع"
 
@@ -1282,7 +1282,7 @@ msgstr "تعذّر إنشاء الملف '%s'"
 msgid "can't close file descriptor %d"
 msgstr "تعذّر إغلاق واصف الملف %d"
 
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "تعذّرت القراءة من واصف الملف %d"
@@ -1415,7 +1415,7 @@ msgstr "أخفق تحديث ملف تكوين المستخدم."
 msgid "Error saving user configuration data."
 msgstr "خطأ عند حفظ بيانات تكوين المستخدم."
 
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "تعذّر حذف ملف تكوين المستخدم '%s'"
@@ -1566,7 +1566,7 @@ msgstr "أخفقت إزالة ملف الإيصاد ’%s‘."
 msgid "Failed to set mode of '%s'"
 msgstr "أخفقت إزالة ملف الإيصاد ’%s‘."
 
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "أخفق تعديل أوقات الملف لـ '%s'"
@@ -2209,7 +2209,7 @@ msgstr "BMP: لا يمكن كتابة الملف (Bitmap) رأس."
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: لا يمكن كتابة الملف (BitmapInfo) رأس."
 
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: لا يمكن كتابة خريطة لون RGB."
 
@@ -2330,7 +2330,7 @@ msgstr "نسَق بيانات الصورة مجهول."
 msgid "This is not a %s."
 msgstr "هذا ليس %s."
 
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "لم يُعرَّف متولي صورة للنوع %s."
@@ -2784,8 +2784,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "مغلف سي65، 114 × 229 مم"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "مغلف بي4، 250 × 353 مم"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "مغلف بي4، 250 × 3.4 مم"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2820,8 +2820,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "مطوية ألمانية قانونية، 1/2 8 × 13 بوصة"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "بي4 (آيزو) 250 × 353 مم"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "بي4 (آيزو) 250 × 3.4 مم"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2876,8 +2876,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "أي فائق\\أي فائق\\أي4 227 × 356 مم"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "بي فائق\\بي فائق\\أي3 305 × 487 مم"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
+msgstr "بي فائق\\بي فائق\\أي3.405 × 487 مم"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3287,7 +3287,7 @@ msgstr "أخفق مراقبة قنوات الادخال\\الإخراج I/O"
 msgid "Save"
 msgstr "احفظ"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "لا تحفظ"
 
@@ -3401,7 +3401,7 @@ msgid "Cut"
 msgstr "قص"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "ا&حذف"
@@ -3874,7 +3874,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "التحويل إلى طقم المحارف '%s' لا يعمل."
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "مجهول"
 
@@ -4115,7 +4115,7 @@ msgstr "متغير وسيط الإنشاء %s غير موجود في متغير�
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "فئة كائن باطلة (Non-wxEvtHandler) كمصدر حدث"
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "يجب أن يكون للنوع تحويل ’تعداد - طويل‘"
@@ -4219,7 +4219,7 @@ msgstr "حيود ملف مضغوط zip رديء للمُدخَلة"
 msgid "stored file length not in Zip header"
 msgstr "طول الملف المخزون ليس في ترويسة Zip"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "طريقة ضغط zip غير مدعومة"
 
@@ -4265,7 +4265,7 @@ msgstr "خطأ zlib‏ %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "تتعذّر القراءة من الدفق التضخمي: %s"
 
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "يتعذّر تجهيز دفق zlib التضاؤلي."
 
@@ -4388,7 +4388,7 @@ msgstr "أحمر:"
 msgid "Green:"
 msgstr "أخضر:"
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr "أزرق:"
 
@@ -4479,7 +4479,7 @@ msgstr "وُلّد تقرير إزالة علل في الدليل\n"
 msgid "The following debug report will be generated\n"
 msgstr "سيُولَّد تقرير إزالة العلل التالي\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4764,7 +4764,7 @@ msgstr "..."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "روماني"
 
@@ -4796,7 +4796,7 @@ msgstr "اعتيادي"
 msgid "Slant"
 msgstr "مائل"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "فاتح"
 
@@ -4816,7 +4816,7 @@ msgstr "&طراز:"
 msgid "The font style."
 msgstr "طراز الخط."
 
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "&وزن:"
 
@@ -5931,7 +5931,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "خطأ DDE مجهول %08x"
 
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6010,7 +6010,7 @@ msgstr "تعذّر تعليق الاتصال - لا يوجد اتصال هاتف
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "أخفق إنهاء الاتصال الهاتفي: %s"
 
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "أخفق حفظ صورة bitmap إلى ملف \"%s\"."
@@ -7300,7 +7300,7 @@ msgstr "الحيود الأفقي."
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7333,14 +7333,14 @@ msgstr "الحيود الأفقي."
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7509,7 +7509,7 @@ msgstr "عتامة الظل."
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8032,7 +8032,7 @@ msgstr "احذف النص"
 msgid "Remove Bullet"
 msgstr "أزِل النقطية"
 
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "تعذّر حفظ النص."
 
@@ -8178,7 +8178,7 @@ msgid "Suppress hyphe&nation"
 msgstr "اكبح الو&اصلات"
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr "أشّر لتكبح الواصلات."
 
@@ -8203,7 +8203,7 @@ msgid "(none)"
 msgstr "(لاشئ)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr "اعتيادي"
 
@@ -8252,7 +8252,7 @@ msgstr "ي&سار"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "حاذِ النص يساراً."
@@ -8301,7 +8301,7 @@ msgstr "&غير محدد"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr "استخدم إعدادات المحاذاة الحالية."
 
@@ -8318,7 +8318,7 @@ msgid "The left indent."
 msgstr "الإزاحة اليسرى."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr "يسار (أو&ل سطر):"
 
@@ -8613,7 +8613,7 @@ msgid "Vertical alignment."
 msgstr "المحاذاة العمودية."
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "&Width:"
 msgstr "العُ&رض:"
 
@@ -8623,7 +8623,7 @@ msgid "Enable the width value."
 msgstr "فعّل قيمة العُرض."
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "The object width."
 msgstr "عُرض الكائن."
 
@@ -8658,7 +8658,7 @@ msgstr "وحدات لارتفاع الكائن."
 msgid "Min width:"
 msgstr "العُرض الأدنى:"
 
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "فعّل قيمة العُرض الأدنى."
@@ -9428,7 +9428,7 @@ msgid "Cannot get the official hostname"
 msgstr "تعذّر جلب اسم المضيف الرسمي"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

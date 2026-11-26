@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.3\n"
+"Project-Id-Version: wxWidgets 3.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2024-05-15 23:51+0900\n"
@@ -41,7 +41,7 @@ msgstr "印刷出力"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 msgid "Printing"
 msgstr "印刷"
 
@@ -1278,7 +1278,7 @@ msgstr "ファイル '%s' を作成できません"
 msgid "can't close file descriptor %d"
 msgstr "記述子 %d のファイルを閉じることができません"
 
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "記述子 %d のファイルから読み取ることができません"
@@ -1414,7 +1414,7 @@ msgstr "ユーザー設定ファイルを更新できませんでした。"
 msgid "Error saving user configuration data."
 msgstr "ユーザー設定データの保存中にエラーが発生しました。"
 
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "ユーザー設定ファイル '%s' を削除できません"
@@ -1567,7 +1567,7 @@ msgstr "ロックファイル '%s' を削除できませんでした。"
 msgid "Failed to set mode of '%s'"
 msgstr "ロックファイル '%s' を削除できませんでした。"
 
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "'%s' のファイル時刻を変更できませんでした"
@@ -2212,7 +2212,7 @@ msgstr "BMP: ファイル (Bitmap) ヘッダの書き出しに失敗しました
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: ファイル (BitmapInfo) ヘッダの書き出しに失敗しました。"
 
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: RGB色索引を書き出せませんでした。"
 
@@ -2333,7 +2333,7 @@ msgstr "不明な画像データ形式です。"
 msgid "This is not a %s."
 msgstr "これは %s ではありません。"
 
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "形式 %s の画像ハンドラーが定義されていません。"
@@ -2778,8 +2778,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 封筒, 114×229mm"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4 封筒, 250 x 353 mm"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "B4 封筒, 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2814,8 +2814,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "ドイツリーガル折りたたみ連続紙, 8 1/2 x 13インチ"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO) 250 x 353 mm"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "B4 (ISO) 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2870,8 +2870,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "SuperB/SuperB/A3 305 x 487 mm"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
+msgstr "SuperB/SuperB/A3.405 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3283,7 +3283,7 @@ msgstr "I/O チャネルの監視に失敗しました"
 msgid "Save"
 msgstr "保存"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "保存しない"
 
@@ -3397,7 +3397,7 @@ msgid "Cut"
 msgstr "切り取り"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "削除(&D)"
@@ -3870,7 +3870,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "文字集合 '%s' への変換が機能していません。"
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "未知"
 
@@ -4115,7 +4115,7 @@ msgstr "宣言された RTTI 変数の中には Create で指定されたもの�
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "wxEvtHandler ではないオブジェクトクラスがイベントソースになっています"
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "型は列挙からlongへの変換が可能でなくてはなりません"
@@ -4221,7 +4221,7 @@ msgstr "項目へのzipfileオフセットが不適当です"
 msgid "stored file length not in Zip header"
 msgstr "Zipヘッダーにファイルの長さが記されていません"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "この Zip 圧縮法には未対応です"
 
@@ -4269,7 +4269,7 @@ msgstr "zlib エラー %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "inflateストリームから読み取ることができません: %s"
 
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "zlib の deflate ストリームを初期化できません。"
 
@@ -4393,7 +4393,7 @@ msgstr "赤:"
 msgid "Green:"
 msgstr "緑:"
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr "青:"
 
@@ -4485,7 +4485,7 @@ msgstr "デバッグレポートが次のディレクトリに作成されまし
 msgid "The following debug report will be generated\n"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4766,7 +4766,7 @@ msgstr ""
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "Roman"
 
@@ -4798,7 +4798,7 @@ msgstr "通常"
 msgid "Slant"
 msgstr "斜体"
 
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "軽量"
 
@@ -4818,7 +4818,7 @@ msgstr "スタイル(&S):"
 msgid "The font style."
 msgstr "フォントのスタイルを指定できます。"
 
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "ウエイト(&W):"
 
@@ -5930,7 +5930,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "想定外のDDE エラー 0x%08x"
 
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6009,7 +6009,7 @@ msgstr "接続を切るよう指示されましたが、有効なダイヤルア
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "ダイヤルアップ接続を終了できませんでした: %s"
 
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "ファイル \"%s\" にビットマップイメージを保存できませんでした。"
@@ -7336,7 +7336,7 @@ msgstr "横に並べる(&H)"
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7369,14 +7369,14 @@ msgstr "横に並べる(&H)"
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7552,7 +7552,7 @@ msgstr ""
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8098,7 +8098,7 @@ msgstr "テキストの削除"
 msgid "Remove Bullet"
 msgstr "削除"
 
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "テキストが保存できませんでした。"
 
@@ -8249,7 +8249,7 @@ msgid "Suppress hyphe&nation"
 msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr ""
 
@@ -8274,7 +8274,7 @@ msgid "(none)"
 msgstr "(なし)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr "通常"
 
@@ -8325,7 +8325,7 @@ msgstr "左 (&L)"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "テキストを左寄せにします。"
@@ -8374,7 +8374,7 @@ msgstr "指定しない (&I)"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr "現在の整列設定を用います。"
 
@@ -8391,7 +8391,7 @@ msgid "The left indent."
 msgstr "左側の字下げを指定できます。"
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr "左-一行目 (&F):"
 
@@ -8702,7 +8702,7 @@ msgid "Vertical alignment."
 msgstr "整列方法を設定できませんでした。"
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #, fuzzy
 msgid "&Width:"
 msgstr "ウエイト (&W):"
@@ -8713,7 +8713,7 @@ msgid "Enable the width value."
 msgstr ""
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #, fuzzy
 msgid "The object width."
 msgstr "フォントのウエイトを指定できます。"
@@ -8751,7 +8751,7 @@ msgstr ""
 msgid "Min width:"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 #, fuzzy
 msgid "Enable the minimum width value."
@@ -9558,7 +9558,7 @@ msgid "Cannot get the official hostname"
 msgstr "公的なホスト名を取得できません"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

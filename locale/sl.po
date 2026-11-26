@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.3\n"
+"Project-Id-Version: wxWidgets 3.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-16 17:44+0200\n"
 "PO-Revision-Date: 2026-11-03 23:09+0100\n"
@@ -49,7 +49,7 @@ msgstr "Izpis"
 # common/prntbase.cpp:148
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
 msgid "Printing"
 msgstr "Tiskanje poteka"
 
@@ -1113,7 +1113,7 @@ msgid "ninth"
 msgstr "deveti"
 
 # generic/helpwxht.cpp:159
-# html/helpfrm.cpp:303
+# html/helpfrm.cpp:3.4
 # html/helpfrm.cpp:312
 #: ../src/common/datetimefmt.cpp:2111
 msgid "tenth"
@@ -1524,7 +1524,7 @@ msgid "can't close file descriptor %d"
 msgstr "ni mogoče zapreti datotečnega deskriptorja %d"
 
 # common/file.cpp:285
-#: ../src/common/file.cpp:333
+#: ../src/common/file.cpp:3.4
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "ni mogoče brati iz deskriptorja %d"
@@ -1547,7 +1547,7 @@ msgstr "ni mogoče izprazniti deskriptorja %d"
 msgid "can't seek on file descriptor %d"
 msgstr "ni mogoče iskati na datotečnem deskriptorju %d"
 
-# common/file.cpp:373
+# common/file.cpp:3.4
 #: ../src/common/file.cpp:447
 #, c-format
 msgid "can't get seek position on file descriptor %d"
@@ -1687,7 +1687,7 @@ msgstr "Napaka pri shranjevanju podatkov nastavitev uporabnika."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # common/fileconf.cpp:920
-#: ../src/common/fileconf.cpp:1313
+#: ../src/common/fileconf.cpp:13.4
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "ni mogoče uzbrisati uporabniške datoteke '%s'"
@@ -1880,7 +1880,7 @@ msgid "Failed to set mode of '%s'"
 msgstr "Nastavitev načina »%s« je spodletela"
 
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:3031
+#: ../src/common/filename.cpp:3.41
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Sprememba datotečnih časov za »%s« ni uspela."
@@ -2575,7 +2575,7 @@ msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: datotečne glave (BitmapInfo) ni mogoče zapisati."
 
 # common/imagbmp.cpp:154
-#: ../src/common/imagbmp.cpp:353
+#: ../src/common/imagbmp.cpp:3.4
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: barvnega zemljevida RGB ni mogoče shraniti."
 
@@ -2715,7 +2715,7 @@ msgstr "To ni %s."
 
 # common/image.cpp:784
 # common/image.cpp:816
-#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Za vrsto %s ni določen noben upravljalec slik."
@@ -3215,8 +3215,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "kuverta C65, 114 x 229 mm"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 353 mm"
-msgstr "kuverta B4, 250 x 353 mm"
+msgid "B4 Envelope, 250 x 3.4 mm"
+msgstr "kuverta B4, 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -3252,8 +3252,8 @@ msgstr "German Legal Fanfold, 8 1/2 x 13 pal."
 
 # generic/dcpsg.cpp:2547
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO), 250 x 353 mm"
+msgid "B4 (ISO) 250 x 3.4 mm"
+msgstr "B4 (ISO), 250 x 3.4 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -3309,7 +3309,7 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4, 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3 305 x 487 mm"
+msgid "SuperB/SuperB/A3.405 x 487 mm"
 msgstr "SuperB/SuperB/A3, 305 x 487 mm"
 
 #: ../src/common/paper.cpp:127
@@ -3755,7 +3755,7 @@ msgstr "V/I kanalov ni bilo mogoče nadzirati"
 msgid "Save"
 msgstr "Shrani"
 
-#: ../src/common/sizer.cpp:3230
+#: ../src/common/sizer.cpp:3.40
 msgid "Don't Save"
 msgstr "Ne shrani"
 
@@ -3868,14 +3868,14 @@ msgid "Close"
 msgstr "Zapri "
 
 # generic/helpwxht.cpp:159
-# html/helpfrm.cpp:303
+# html/helpfrm.cpp:3.4
 # html/helpfrm.cpp:312
 #: ../src/common/stockitem.cpp:154
 msgid "&Convert"
 msgstr "&Pretvori"
 
 # generic/helpwxht.cpp:159
-# html/helpfrm.cpp:303
+# html/helpfrm.cpp:3.4
 # html/helpfrm.cpp:312
 #: ../src/common/stockitem.cpp:154
 msgid "Convert"
@@ -3900,7 +3900,7 @@ msgid "Cut"
 msgstr "Izreži"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&Izbriši"
@@ -4463,7 +4463,7 @@ msgstr "Pretvorba v nabor znakov »%s« ne deluje."
 
 # generic/progdlgg.cpp:241
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
 msgid "unknown"
 msgstr "nepoznan"
 
@@ -4549,7 +4549,7 @@ msgstr "»%s« ni veljaven katalog sporočil."
 msgid "Invalid message catalog."
 msgstr "Neveljaven katalog sporočil."
 
-# html/helpdata.cpp:353
+# html/helpdata.cpp:3.4
 #: ../src/common/translation.cpp:1017
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
@@ -4739,7 +4739,7 @@ msgstr ""
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "Neveljavni razred predmetov (ne wxEvtHandler) kot izvor dogodka."
 
-#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "Tip mora imeti pretvorbo enum - long"
@@ -4856,7 +4856,7 @@ msgstr "slab odmik zipfile od vnosa"
 msgid "stored file length not in Zip header"
 msgstr "dolžine shranjene datoteke ni v glavi Zip"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
 msgid "unsupported Zip compression method"
 msgstr "nepodprta metoda stiskanja Zip"
 
@@ -4906,7 +4906,7 @@ msgid "Can't read from inflate stream: %s"
 msgstr "Branje iz napihovalnega toka ni možno: %s"
 
 # html/helpfrm.cpp:1174
-#: ../src/common/zstream.cpp:343
+#: ../src/common/zstream.cpp:3.4
 msgid "Can't initialize zlib deflate stream."
 msgstr "Ni mogoče inicializirati upadalnega toka zlib."
 
@@ -5035,7 +5035,7 @@ msgstr "Rdeča:"
 msgid "Green:"
 msgstr "Zelena:"
 
-#: ../src/generic/colrdlgg.cpp:363
+#: ../src/generic/colrdlgg.cpp:3.4
 msgid "Blue:"
 msgstr "Modra:"
 
@@ -5132,7 +5132,7 @@ msgstr "Poročilo o razhroščevanju je bilo ustvarjeno v mapi\n"
 msgid "The following debug report will be generated\n"
 msgstr "Izdelano bo naslednje poročilo o napakah za razhroščevanje\n"
 
-#: ../src/generic/dbgrptg.cpp:323
+#: ../src/generic/dbgrptg.cpp:3.4
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -5480,7 +5480,7 @@ msgid "ABCDEFGabcdefg12345"
 msgstr "Ščinkavec želi 12345 češenj."
 
 # generic/fontdlgg.cpp:206
-#: ../src/generic/fontdlgg.cpp:313
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Roman"
 msgstr "serifna"
 
@@ -5521,7 +5521,7 @@ msgid "Slant"
 msgstr "Levo kurzivno"
 
 # generic/fontdlgg.cpp:216
-#: ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "Light"
 msgstr "Svetlo"
 
@@ -5543,7 +5543,7 @@ msgid "The font style."
 msgstr "Slog pisave."
 
 # generic/fontdlgg.cpp:216
-#: ../src/generic/fontdlgg.cpp:383
+#: ../src/generic/fontdlgg.cpp:3.4
 msgid "&Weight:"
 msgstr "&Debelina:"
 
@@ -5969,7 +5969,7 @@ msgstr "Pres&koči"
 msgid "Unknown"
 msgstr "neznan"
 
-# generic/progdlgg.cpp:313
+# generic/progdlgg.cpp:3.4
 #: ../src/generic/progdlgg.cpp:451 ../src/msw/progdlg.cpp:562
 msgid "Done."
 msgstr "Končano."
@@ -6322,7 +6322,7 @@ msgstr "Pomoč: %s"
 msgid "Adding book %s"
 msgstr "Dodajanje knjige %s"
 
-# html/helpdata.cpp:353
+# html/helpdata.cpp:3.4
 #: ../src/html/helpdata.cpp:297
 #, c-format
 msgid "Cannot open contents file: %s"
@@ -6368,7 +6368,7 @@ msgid "Remove current page from bookmarks"
 msgstr "Odstrani trenutno stran iz zaznamkov"
 
 # generic/helpwxht.cpp:159
-# html/helpfrm.cpp:303
+# html/helpfrm.cpp:3.4
 # html/helpfrm.cpp:312
 #: ../src/html/helpwnd.cpp:470
 msgid "Contents"
@@ -6896,7 +6896,7 @@ msgid "Unknown DDE error %08x"
 msgstr "Neznana napaka DDE %08x"
 
 # msw/dialup.cpp:354
-#: ../src/msw/dialup.cpp:343
+#: ../src/msw/dialup.cpp:3.4
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6993,7 +6993,7 @@ msgid "Failed to terminate the dialup connection: %s"
 msgstr "Prekinitev klicne povezave ni uspela: %s"
 
 # common/ffile.cpp:182
-#: ../src/msw/dib.cpp:313
+#: ../src/msw/dib.cpp:3.4
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "Neuspešno shranjevanje bitne slike v datoteko \"%s\"."
@@ -7634,7 +7634,7 @@ msgstr "»%s« ni možno premakniti v koš: napaka 0x%08x"
 msgid "Failed to load mpr.dll."
 msgstr "Nalaganje mpr.dll ni uspelo."
 
-# html/helpdata.cpp:353
+# html/helpdata.cpp:3.4
 #: ../src/msw/volume.cpp:506
 #, c-format
 msgid "Cannot read typename from '%s'!"
@@ -8466,7 +8466,7 @@ msgstr "Vodoravni odmik."
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:3.4
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -8499,14 +8499,14 @@ msgstr "Vodoravni odmik."
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:313
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:3.4
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -8677,7 +8677,7 @@ msgstr "Prekrivnost sence."
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -9218,7 +9218,7 @@ msgid "Remove Bullet"
 msgstr "Odstrani oznako"
 
 # common/textcmn.cpp:121
-#: ../src/richtext/richtextctrl.cpp:3131
+#: ../src/richtext/richtextctrl.cpp:3.41
 msgid "The text couldn't be saved."
 msgstr "Besedila ni mogoče shraniti."
 
@@ -9372,7 +9372,7 @@ msgid "Suppress hyphe&nation"
 msgstr "Preskoči deljenje &besed"
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Check to suppress hyphenation."
 msgstr "Potrdite za preprečitev deljenja besed."
 
@@ -9398,7 +9398,7 @@ msgid "(none)"
 msgstr "(brez)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:353
+#: ../src/richtext/richtextfontpage.cpp:3.4
 msgid "Regular"
 msgstr "Navadno"
 
@@ -9449,7 +9449,7 @@ msgstr "&Levo"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "Levo poravnano besedilo."
@@ -9506,7 +9506,7 @@ msgstr "&Nedoločeno"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:363
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Use the current alignment setting."
 msgstr "Uporabi trenutno nastavitev poravnave."
 
@@ -9523,7 +9523,7 @@ msgid "The left indent."
 msgstr "Levi zamik."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:393
+#: ../src/richtext/richtextliststylepage.cpp:3.4
 msgid "Left (&first line):"
 msgstr "Levo (&prva vrstica):"
 
@@ -9834,7 +9834,7 @@ msgstr "Navpična poravnava."
 
 # generic/fontdlgg.cpp:216
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:323
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "&Width:"
 msgstr "&Širina:"
 
@@ -9844,7 +9844,7 @@ msgid "Enable the width value."
 msgstr "Omogoči vrednost širine."
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:333
+#: ../src/richtext/richtextsizepage.cpp:3.4
 msgid "The object width."
 msgstr "Širina predmeta."
 
@@ -9882,7 +9882,7 @@ msgstr "Najm. širina:"
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:3.4
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "Omogoči vrednost najmanjše širine."
@@ -10732,7 +10732,7 @@ msgid "Cannot get the official hostname"
 msgstr "Imena uradnega gostitelja ni mogoče dobiti"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:1313
+#: ../src/unix/utilsunx.cpp:13.4
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ", temelji na %s (%s)"
