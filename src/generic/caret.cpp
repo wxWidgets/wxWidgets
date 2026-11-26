@@ -81,16 +81,8 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 }
 
 // ----------------------------------------------------------------------------
-// initialization and destruction
+// destruction
 // ----------------------------------------------------------------------------
-
-void wxCaret::InitGeneric()
-{
-    m_hasFocus = true;
-    m_blinkedOut = true;
-    m_xOld =
-    m_yOld = -1;
-}
 
 wxCaret::~wxCaret()
 {

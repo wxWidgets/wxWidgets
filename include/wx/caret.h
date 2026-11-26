@@ -34,20 +34,16 @@ public:
     // ctors
     // -----
         // default - use Create
-    wxCaretBase() { Init(); }
+    wxCaretBase() = default;
         // create the caret of given (in pixels) width and height and associate
         // with the given window
     wxCaretBase(wxWindowBase *window, int width, int height)
     {
-        Init();
-
         (void)Create(window, width, height);
     }
         // same as above
     wxCaretBase(wxWindowBase *window, const wxSize& size)
     {
-        Init();
-
         (void)Create(window, size);
     }
 
@@ -170,26 +166,20 @@ protected:
     }
 
     // the size of the caret
-    int m_width, m_height;
+    int m_width = 0,
+        m_height = 0;
 
     // the position of the caret
-    int m_x, m_y;
+    int m_x = 0,
+        m_y = 0;
 
     // the window we're associated with
-    wxWindowBase *m_window;
+    wxWindowBase *m_window = nullptr;
 
     // visibility count: the caret is visible only if it's positive
-    int m_countVisible;
+    int m_countVisible = 0;
 
 private:
-    void Init()
-    {
-        m_window = nullptr;
-        m_x = m_y = 0;
-        m_width = m_height = 0;
-        m_countVisible = 0;
-    }
-
     wxDECLARE_NO_COPY_CLASS(wxCaretBase);
 
 private:
@@ -218,7 +208,7 @@ private:
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
-    wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
+    explicit wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
 
     wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
@@ -228,7 +218,7 @@ public:
 class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
-    wxCaretSuspend(wxWindow *win)
+    explicit wxCaretSuspend(wxWindow *win)
     {
         m_caret = win->GetCaret();
         m_show = false;
