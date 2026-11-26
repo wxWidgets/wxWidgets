@@ -1464,7 +1464,7 @@
 
 // Set to 1 for SVG rasterizing support using LunaSVG (minimum C++ 17 required)
 // Setting to 1 will override wxUSE_NANOSVG
-#define wxUSE_LUNASVG       0
+#define wxUSE_LUNASVG       1
 
 // Set to 1 for TGA format support (loading only)
 #define wxUSE_TGA           1

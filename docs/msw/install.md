@@ -503,7 +503,7 @@ MSVC, you also need to:
   wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxwebpd.lib wxzlibd.lib
   wxregexud.lib wxexpatd.lib` for a debug build of an application using the
   core library of wxWidgets 3.4 only (all wxWidgets applications use the base
-  library).
+  library). If LunaSVG is enabled, also include `wxlunasvgd.lib`.
 * When using classes from non-core libraries, e.g. `wxPropertyGrid`, also link
   with the corresponding library, as indicated in the class documentation, i.e.
   `wxmsw34ud_propgrid.lib` in this case.
