@@ -195,6 +195,22 @@ WXImage wxOSXGetSystemImage(const wxString& name)
 
 wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxSize& size)
 {
+#if wxOSX_USE_COCOA
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    // SF symbols need to be wrapped in a dedicated bundle implementation so
+    // they can be regenerated at any requested size and retain their
+    // template flag for light/dark mode tinting. Only attempt this on
+    // macOS 11+ where the SF symbol API is actually available; older
+    // systems fall through to the legacy named-image path below.
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        wxBitmapBundle symbolBundle = wxOSXMakeBundleForSystemSymbol(name, size);
+        if ( symbolBundle.IsOk() )
+            return symbolBundle;
+    }
+#endif
+#endif
+
     WXImage nsimage = wxOSXGetSystemImage(name);
     if ( nsimage )
     {
