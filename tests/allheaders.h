@@ -139,6 +139,7 @@
 #include <wx/evtloop.h>
 #include <wx/evtloopsrc.h>
 #include <wx/except.h>
+#include <wx/extradata.h>
 #include <wx/fdrepdlg.h>
 #include <wx/ffile.h>
 #include <wx/fileconf.h>

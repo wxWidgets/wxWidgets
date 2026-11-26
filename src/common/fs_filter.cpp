@@ -22,6 +22,8 @@
 // wxFilterFSHandler
 //----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxFilterFSHandler, wxFileSystemHandler);
+
 bool wxFilterFSHandler::CanOpen(const wxString& location)
 {
     return wxFilterClassFactory::Find(GetProtocol(location)) != nullptr;

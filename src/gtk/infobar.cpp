@@ -100,6 +100,8 @@ static void wxgtk_infobar_close(GtkInfoBar * WXUNUSED(infobar),
 // wxInfoBar implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxInfoBar, wxControl);
+
 bool wxInfoBar::UseNative() const
 {
     // Native GtkInfoBar widget is only available in GTK+ 2.18 and later.

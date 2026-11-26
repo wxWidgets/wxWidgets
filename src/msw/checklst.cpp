@@ -176,6 +176,15 @@ public:
 
     virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
     virtual wxAccStatus GetState(int childId, long* state) override;
+
+private:
+    // Check if the given child ID corresponds to an existing item, note that
+    // child IDs are 1-based.
+    static bool IsValidChild(wxCheckListBox* checkListBox, int childId)
+    {
+        return childId > 0 &&
+                static_cast<unsigned int>(childId) <= checkListBox->GetCount();
+    }
 };
 
 wxCheckListBoxAccessible::wxCheckListBoxAccessible(wxCheckListBox* win)
@@ -188,7 +197,19 @@ wxAccStatus wxCheckListBoxAccessible::GetRole(int childId, wxAccRole* role)
     wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
     wxCHECK(checkListBox, wxACC_FAIL);
 
-    *role = childId == wxACC_SELF ? wxROLE_SYSTEM_LIST : wxROLE_SYSTEM_CHECKBUTTON;
+    if ( childId == wxACC_SELF )
+    {
+        *role = wxROLE_SYSTEM_LIST;
+        return wxACC_OK;
+    }
+
+    // The native control may refer to a non-existent item, e.g. it reports
+    // the focus on the first item when it gets focus even if it is empty, so
+    // don't pretend that such items exist.
+    if ( !IsValidChild(checkListBox, childId) )
+        return wxACC_INVALID_ARG;
+
+    *role = wxROLE_SYSTEM_CHECKBUTTON;
     return wxACC_OK;
 }
 
@@ -202,6 +223,9 @@ wxAccStatus wxCheckListBoxAccessible::GetState(int childId, long* state)
         // Fall back to Windows default
         return wxACC_NOT_IMPLEMENTED;
     }
+
+    if ( !IsValidChild(checkListBox, childId) )
+        return wxACC_INVALID_ARG;
 
     long st = 0;
     if ( !checkListBox->IsEnabled() )

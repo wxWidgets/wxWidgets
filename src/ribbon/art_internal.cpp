@@ -25,6 +25,8 @@
 #include "wx/msw/private.h"
 #endif
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxRibbonArtProvider, wxObject);
+
 wxRibbonArtProvider::wxRibbonArtProvider() {}
 wxRibbonArtProvider::~wxRibbonArtProvider() {}
 

@@ -545,6 +545,7 @@ BASE_CMN_HDR =
     wx/evtloop.h
     wx/evtloopsrc.h
     wx/except.h
+    wx/extradata.h
     wx/features.h
     wx/flags.h
     wx/ffile.h

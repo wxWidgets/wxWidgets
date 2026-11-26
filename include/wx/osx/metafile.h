@@ -162,6 +162,9 @@ public:
         { return SetData(len, buf); }
 protected:
   wxMetafile   m_metafile;
+
+private:
+    wxDECLARE_CLASS(wxMetafileDataObject);
 };
 #endif
 

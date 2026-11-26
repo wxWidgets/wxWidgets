@@ -299,6 +299,9 @@ private:
     wxFSFile* m_file;
 
     wxDECLARE_NO_COPY_CLASS(wxFSInputStream);
+
+private:
+    wxDECLARE_CLASS(wxFSInputStream);
 };
 
 #endif

@@ -143,6 +143,8 @@ namespace
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
 wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
                              int id,
                              const wxString& label,

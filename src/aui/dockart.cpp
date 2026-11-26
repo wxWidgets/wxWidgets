@@ -50,6 +50,9 @@
 #include "wx/private/aui.h"
 #include "wx/private/colour.h"
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxAuiDockArt, wxObject);
+wxIMPLEMENT_CLASS(wxAuiDefaultDockArt, wxAuiDockArt);
+
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
     int amount = 120;

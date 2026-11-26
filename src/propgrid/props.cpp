@@ -132,6 +132,8 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 #if wxUSE_VALIDATORS
 
+wxIMPLEMENT_CLASS(wxNumericPropertyValidator, wxTextValidator);
+
 wxNumericPropertyValidator::
     wxNumericPropertyValidator( NumericType numericType, int base )
     : wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST)

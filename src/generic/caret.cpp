@@ -35,6 +35,9 @@
 // global variables for this module
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxCaretBase, wxObject);
+wxIMPLEMENT_CLASS(wxCaret, wxCaretBase);
+
 // the blink time (common to all carets for MSW compatibility)
 static int gs_blinkTime = 500;  // in milliseconds
 

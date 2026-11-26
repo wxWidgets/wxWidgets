@@ -47,6 +47,8 @@ const unsigned COL_NONE = (unsigned)-1;
 // wxHeaderCtrl creation
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxHeaderCtrl, wxControl);
+
 void wxHeaderCtrl::Init()
 {
     m_numColumns = 0;

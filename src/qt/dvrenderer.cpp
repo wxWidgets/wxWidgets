@@ -14,6 +14,8 @@
 
 #ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase);
+
 wxDataViewRenderer::wxDataViewRenderer( const wxString &variantType,
                     wxDataViewCellMode mode,
                     int align)

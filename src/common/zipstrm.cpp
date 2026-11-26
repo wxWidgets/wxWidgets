@@ -1586,6 +1586,8 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
+wxIMPLEMENT_CLASS(wxZipInputStream, wxArchiveInputStream);
+
 // constructor
 //
 wxZipInputStream::wxZipInputStream(wxInputStream& stream,
@@ -2164,6 +2166,8 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
 
 /////////////////////////////////////////////////////////////////////////////
 // Output stream
+
+wxIMPLEMENT_CLASS(wxZipOutputStream, wxArchiveOutputStream);
 
 wxZipOutputStream::wxZipOutputStream(wxOutputStream& stream,
                                      int level      /*=-1*/,

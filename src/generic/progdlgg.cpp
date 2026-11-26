@@ -62,6 +62,7 @@ wxEND_EVENT_TABLE()
 // wxGenericProgressDialog implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxGenericProgressDialog, wxDialog);
 wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog);
 
 // ----------------------------------------------------------------------------

@@ -180,6 +180,9 @@ public:
 
 protected:
     wxMetafile m_metafile;
+
+private:
+    wxDECLARE_CLASS(wxMetafileDataObject);
 };
 
 #endif // wxUSE_DATAOBJ

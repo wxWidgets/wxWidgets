@@ -588,6 +588,9 @@ protected:
     wxStreamBuffer *m_i_streambuf;
 
     wxDECLARE_NO_COPY_CLASS(wxBufferedInputStream);
+
+private:
+    wxDECLARE_CLASS(wxBufferedInputStream);
 };
 
 // ----------------------------------------------------------------------------
@@ -635,6 +638,9 @@ protected:
     wxStreamBuffer *m_o_streambuf;
 
     wxDECLARE_NO_COPY_CLASS(wxBufferedOutputStream);
+
+private:
+    wxDECLARE_CLASS(wxBufferedOutputStream);
 };
 
 // ---------------------------------------------------------------------------
@@ -682,6 +688,9 @@ protected:
     void InitParentStream(wxInputStream* stream);
 
     wxDECLARE_NO_COPY_CLASS(wxWrapperInputStream);
+
+private:
+    wxDECLARE_CLASS(wxWrapperInputStream);
 };
 
 // ----------------------------------------------------------------------------

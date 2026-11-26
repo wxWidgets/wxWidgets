@@ -52,7 +52,7 @@ WXDLLIMPEXP_CORE bool wxIsDragResultOk(wxDragResult res);
 // to initiate a drag-and-drop operation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDropSourceBase
+class WXDLLIMPEXP_CORE wxDropSourceBase : public wxObject
 {
 public:
     wxDropSourceBase(const wxCursorBundle& cursorCopy = {},
@@ -127,7 +127,7 @@ protected:
 // OnData() is called)
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDropTargetBase
+class WXDLLIMPEXP_CORE wxDropTargetBase : public wxObject
 {
 public:
     // ctor takes a pointer to heap-allocated wxDataObject which will be owned
@@ -238,6 +238,9 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTextDropTarget);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxTextDropTarget);
 };
 
 // A drop target which accepts files (dragged from File Manager or Explorer)
@@ -254,6 +257,9 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxFileDropTarget);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxFileDropTarget);
 };
 
 #endif // wxUSE_DRAG_AND_DROP

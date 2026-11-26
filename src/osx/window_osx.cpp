@@ -64,6 +64,7 @@
 #include "wx/graphics.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11
@@ -1641,6 +1642,22 @@ void  wxWindowMac::MacPaintGrowBox()
 #endif
 }
 
+#if wxOSX_USE_COCOA_OR_CARBON
+// The width of the border drawn since 10.14, as AppKit draws its own: one
+// point for wxBORDER_SIMPLE and two, for the groove, for the other border
+// styles.
+static int wxOSXGetBorderLineWidth(const wxWindowMac* win)
+{
+    if ( win->HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_DOUBLE) )
+        return 2;
+
+    if ( win->HasFlag(wxBORDER_SIMPLE) )
+        return 1;
+
+    return 0;
+}
+#endif // wxOSX_USE_COCOA_OR_CARBON
+
 void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(rightOrigin) )
 {
     if ( IsTopLevel() )
@@ -1654,30 +1671,69 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
 
 #if wxOSX_USE_COCOA_OR_CARBON
     {
-        CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
-            th+2 ) ;
-
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
 
         if ( GetPeer()->NeedsFrame() )
         {
-            HIThemeFrameDrawInfo info ;
-            memset( &info, 0 , sizeof(info) ) ;
-
-            info.version = 0 ;
-            info.kind = 0 ;
-            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-
-            if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+            if ( WX_IS_MACOS_AVAILABLE(10, 14) )
             {
-                info.kind = kHIThemeFrameTextFieldSquare ;
-                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                // Draw the borders AppKit draws itself, in colours that follow
+                // the appearance: a line in the separator colour, as around a
+                // scroll view with NSBezelBorder, or a groove, as
+                // NSGrooveBorder: a shadow with a highlight inside it at the
+                // top and left and outside it at the bottom and right (the
+                // context is flipped).
+                //
+                // HIThemeDrawFrame() doesn't support dark mode and draws a
+                // white frame in it.
+                const int lineWidth = wxOSXGetBorderLineWidth(this) ;
+                const CGRect frame = CGRectInset( CGRectMake( tx , ty , tw , th ) ,
+                    -lineWidth , -lineWidth ) ;
+
+                CGContextSaveGState( cgContext ) ;
+                if ( lineWidth == 1 )
+                {
+                    CGContextSetStrokeColorWithColor( cgContext ,
+                        wxOSXGetSeparatorColour().GetCGColor() ) ;
+                    CGContextStrokeRectWithWidth( cgContext ,
+                        CGRectInset( frame , 0.5 , 0.5 ) , 1.0 ) ;
+                }
+                else if ( lineWidth == 2 )
+                {
+                    CGContextSetStrokeColorWithColor( cgContext ,
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW).GetCGColor() ) ;
+                    CGContextStrokeRectWithWidth( cgContext ,
+                        CGRectInset( frame , 1.0 , 1.0 ) , 2.0 ) ;
+                    CGContextSetStrokeColorWithColor( cgContext ,
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT).GetCGColor() ) ;
+                    CGContextStrokeRectWithWidth( cgContext ,
+                        CGRectOffset( CGRectInset( frame , 1.0 , 1.0 ) , 0.5 , 0.5 ) , 1.0 ) ;
+                }
+                CGContextRestoreGState( cgContext ) ;
             }
-            else if ( HasFlag(wxSIMPLE_BORDER) )
+            else
             {
-                info.kind = kHIThemeFrameListBox ;
-                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
+                    th+2 ) ;
+
+                HIThemeFrameDrawInfo info ;
+                memset( &info, 0 , sizeof(info) ) ;
+
+                info.version = 0 ;
+                info.kind = 0 ;
+                info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+
+                if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+                {
+                    info.kind = kHIThemeFrameTextFieldSquare ;
+                    HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                }
+                else if ( HasFlag(wxSIMPLE_BORDER) )
+                {
+                    info.kind = kHIThemeFrameListBox ;
+                    HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                }
             }
         }
     }
@@ -2331,6 +2387,12 @@ long wxWindowMac::MacGetWXBorderSize() const
 
     if ( GetPeer() && GetPeer()->NeedsFrame() )
     {
+#if wxOSX_USE_COCOA_OR_CARBON
+        // Since 10.14 MacPaintBorders() draws a line or a groove this wide.
+        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+            return wxOSXGetBorderLineWidth(this) ;
+#endif
+
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
         {
 #if wxOSX_USE_COCOA_OR_CARBON

@@ -1015,6 +1015,8 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // wxHeaderCtrl construction/destruction
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxHeaderCtrl, wxControl);
+
 void wxHeaderCtrl::Init()
 {
     m_nativeControl = nullptr;

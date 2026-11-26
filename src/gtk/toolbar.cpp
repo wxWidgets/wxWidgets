@@ -246,6 +246,8 @@ void wxToolBar::AddChildGTK(wxWindowGTK* child)
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
 void wxToolBarTool::SetImage()
 {
     const wxBitmap& bitmap = GetNormalBitmap();

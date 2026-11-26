@@ -105,6 +105,8 @@ wxLZMAData::~wxLZMAData()
 // wxLZMAInputStream: decompression
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxLZMAInputStream, wxFilterInputStream);
+
 void wxLZMAInputStream::Init()
 {
     // We don't specify any memory usage limit nor any flags, not even
@@ -209,6 +211,8 @@ size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
 // ----------------------------------------------------------------------------
 // wxLZMAOutputStream: compression
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxLZMAOutputStream, wxFilterOutputStream);
 
 void wxLZMAOutputStream::Init(int level)
 {

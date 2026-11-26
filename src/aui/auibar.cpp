@@ -51,6 +51,8 @@ wxDEFINE_EVENT( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEvent );
 
 wxIMPLEMENT_CLASS(wxAuiToolBar, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiToolBarEvent, wxEvent);
+wxIMPLEMENT_ABSTRACT_CLASS(wxAuiToolBarArt, wxObject);
+wxIMPLEMENT_CLASS(wxAuiGenericToolBarArt, wxAuiToolBarArt);
 
 
 // missing wxITEM_* items

@@ -84,6 +84,9 @@ public:
 private:
     bool m_themed;
     wxSize m_buttonSize;
+
+private:
+    wxDECLARE_CLASS(wxAuiMSWToolBarArt);
 };
 
 #endif // wxUSE_AUI

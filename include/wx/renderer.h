@@ -174,7 +174,7 @@ struct WXDLLIMPEXP_CORE wxRendererVersion
 // wxRendererNative: abstracts drawing methods needed by the native controls
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRendererNative
+class WXDLLIMPEXP_CORE wxRendererNative : public wxObject
 {
 public:
     // drawing functions
@@ -422,6 +422,9 @@ public:
 
     // virtual dtor for any base class
     virtual ~wxRendererNative();
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxRendererNative);
 };
 
 // ----------------------------------------------------------------------------
@@ -601,6 +604,9 @@ protected:
     wxRendererNative& m_rendererNative;
 
     wxDECLARE_NO_COPY_CLASS(wxDelegateRendererNative);
+
+private:
+    wxDECLARE_CLASS(wxDelegateRendererNative);
 };
 
 // ----------------------------------------------------------------------------

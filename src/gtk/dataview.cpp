@@ -2992,6 +2992,8 @@ wxSize wxDataViewProgressRenderer::GetSize() const
 // wxDataViewChoiceRenderer
 // -------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewCustomRenderer);
+
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices,
                             wxDataViewCellMode mode, int alignment  ) :
     wxDataViewCustomRenderer( "string", mode, alignment, true )
@@ -3077,6 +3079,8 @@ void wxDataViewChoiceRenderer::GtkUpdateAlignment()
 // ----------------------------------------------------------------------------
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxDataViewChoiceByIndexRenderer, wxDataViewChoiceRenderer);
 
 wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
                               wxDataViewCellMode mode, int alignment ) :

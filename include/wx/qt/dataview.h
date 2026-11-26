@@ -136,6 +136,9 @@ protected:
 private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
+
+private:
+    wxDECLARE_CLASS(wxDataViewCtrl);
 };
 
 #endif // _WX_QT_DATAVIEW_H_

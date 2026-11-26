@@ -38,6 +38,9 @@ public:
 private:
     wxString m_text;
     wxWindow* m_window;         // main window we're associated with
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxToolTip);
 };
 
 #endif // _WX_QT_TOOLTIP_H_

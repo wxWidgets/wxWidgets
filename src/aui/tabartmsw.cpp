@@ -23,6 +23,8 @@
 #include "wx/msw/private/darkmode.h"
 #include "wx/renderer.h"
 
+wxIMPLEMENT_CLASS(wxAuiMSWTabArt, wxAuiGenericTabArt);
+
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {
     m_closeBtnSize = wxDefaultSize;

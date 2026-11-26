@@ -101,7 +101,8 @@ private:
 class WXDLLIMPEXP_CORE wxTaskBarIconEvent : public wxEvent
 {
 public:
-    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
+    wxTaskBarIconEvent(wxEventType evtType = wxEVT_NULL,
+                       wxTaskBarIcon *tbIcon = nullptr)
         : wxEvent(wxID_ANY, evtType)
     {
         SetEventObject(tbIcon);
@@ -111,6 +112,9 @@ public:
 
 private:
     wxDECLARE_NO_ASSIGN_DEF_COPY(wxTaskBarIconEvent);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxTaskBarIconEvent);
 };
 
 typedef void (wxEvtHandler::*wxTaskBarIconEventFunction)(wxTaskBarIconEvent&);

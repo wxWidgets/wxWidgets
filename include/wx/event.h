@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/dynarray.h"
+#include "wx/extradata.h"
 #include "wx/thread.h"
 #include "wx/tracker.h"
 #include "wx/typeinfo.h"
@@ -982,7 +983,7 @@ enum wxEventCategory
  *
  */
 
-class WXDLLIMPEXP_BASE wxEvent : public wxObject
+class WXDLLIMPEXP_BASE wxEvent : public wxObject, public wxWithExtraData
 {
 public:
     wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL );
@@ -3837,6 +3838,7 @@ protected:
 
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
                                     , public wxTrackable
+                                    , public wxWithExtraData
 {
 public:
     wxEvtHandler();
@@ -4412,6 +4414,9 @@ protected:
     wxWindow *m_window;
 
     wxDECLARE_NO_COPY_CLASS(wxEventBlocker);
+
+private:
+    wxDECLARE_CLASS(wxEventBlocker);
 };
 
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);

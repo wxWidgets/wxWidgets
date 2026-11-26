@@ -99,6 +99,8 @@ static CharsetItem* BuildReverseTable(const wxUint16 *tbl)
 
 
 
+wxIMPLEMENT_CLASS(wxEncodingConverter, wxObject);
+
 wxEncodingConverter::wxEncodingConverter()
 {
     m_Table = nullptr;

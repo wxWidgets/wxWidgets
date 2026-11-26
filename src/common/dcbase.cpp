@@ -24,6 +24,7 @@
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
 #include "wx/dcprint.h"
+#include "wx/dcmirror.h"
 #include "wx/prntbase.h"
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
@@ -1074,7 +1075,9 @@ void wxDCImpl::DoGetFontMetrics(int *height,
 // wxDC
 //-----------------------------------------------------------------------------
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxReadOnlyDC, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxDC, wxReadOnlyDC);
+wxIMPLEMENT_CLASS(wxMirrorDC, wxDC);
 
 void wxDC::CopyAttributes(const wxDC& dc)
 {

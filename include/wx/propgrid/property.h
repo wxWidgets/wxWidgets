@@ -277,6 +277,9 @@ private:
         { return new wxPGCellData(); }
 
     wxNODISCARD virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
+
+private:
+    wxDECLARE_CLASS(wxPGCell);
 };
 
 // -----------------------------------------------------------------------
@@ -698,6 +701,9 @@ public:
 
 protected:
     int m_value;
+
+private:
+    wxDECLARE_CLASS(wxPGChoiceEntry);
 };
 
 

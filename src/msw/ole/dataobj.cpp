@@ -967,6 +967,8 @@ STDMETHODIMP wxIDataObject::EnumDAdvise(IEnumSTATDATA **WXUNUSED(ppenumAdvise))
 // wxDataObject
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataObject, wxObject);
+
 wxDataObject::wxDataObject()
 {
     m_pIDataObject = new wxIDataObject(this);
@@ -1098,6 +1100,8 @@ void RemoveAlphaIfNecessary(wxBitmap& bmp)
 }
 
 } // anonymous namespace
+
+wxIMPLEMENT_CLASS(wxBitmapDataObject, wxDataObjectSimple);
 
 size_t wxBitmapDataObject::GetDataSize() const
 {
@@ -1325,6 +1329,8 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 // ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxFileDataObject, wxDataObjectSimple);
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size),
                                const void *pData)
@@ -1751,6 +1757,8 @@ void RemovePath(const wxString& path)
 
 } // anonymous namespace
 
+wxIMPLEMENT_CLASS(wxVirtualFileDataObject, wxDataObjectSimple);
+
 wxVirtualFileDataObject::wxVirtualFileDataObject()
     : wxDataObjectSimple(CFSTR_FILEDESCRIPTORW)
 {
@@ -1758,12 +1766,12 @@ wxVirtualFileDataObject::wxVirtualFileDataObject()
 
 wxVirtualFileDataObject::~wxVirtualFileDataObject()
 {
-    ReleaseSource();
+    MSWReleaseDataSource();
 
     DeleteAllTempFiles();
 }
 
-void wxVirtualFileDataObject::ReleaseSource()
+void wxVirtualFileDataObject::MSWReleaseDataSource()
 {
     if ( m_source )
     {
@@ -1775,7 +1783,7 @@ void wxVirtualFileDataObject::ReleaseSource()
 bool wxVirtualFileDataObject::SetData(size_t len, const void *buf)
 {
     m_entries.clear();
-    ReleaseSource();
+    MSWReleaseDataSource();
 
     // The descriptors array follows the items count, see FILEGROUPDESCRIPTORW.
     const size_t headerLen = sizeof(UINT);
@@ -1833,7 +1841,7 @@ void
 wxVirtualFileDataObject::MSWSetDataSource(IDataObject* source,
                                           const wxDataFormat& WXUNUSED(format))
 {
-    ReleaseSource();
+    MSWReleaseDataSource();
 
     m_source = source;
     if ( m_source )
@@ -2127,6 +2135,8 @@ public:
 };
 
 
+
+wxIMPLEMENT_CLASS(wxURLDataObject, wxDataObjectComposite);
 
 wxURLDataObject::wxURLDataObject(const wxString& url)
 {

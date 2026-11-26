@@ -209,6 +209,9 @@ public:
         return wxVersionInfo();
     }
     virtual wxWebViewConfiguration CreateConfiguration() = 0;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxWebViewFactory);
 };
 
 using wxStringWebViewFactoryMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewFactory>>;

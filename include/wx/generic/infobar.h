@@ -174,6 +174,9 @@ private:
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);
+
+private:
+    wxDECLARE_CLASS(wxInfoBarGeneric);
 };
 
 #endif // _WX_GENERIC_INFOBAR_H_

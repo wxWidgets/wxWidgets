@@ -32,6 +32,8 @@
 // construction/destruction
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxStringInputStream, wxInputStream);
+
 wxStringInputStream::wxStringInputStream(const wxString& s)
     : m_str(s), m_buf(s.utf8_str())
 {
@@ -115,6 +117,8 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 // ============================================================================
 // wxStringOutputStream implementation
 // ============================================================================
+
+wxIMPLEMENT_CLASS(wxStringOutputStream, wxOutputStream);
 
 wxStringOutputStream::wxStringOutputStream(wxString *pString, wxMBConv& conv)
     : m_conv(conv)

@@ -23,7 +23,7 @@
     @library{wxcore}
     @category{misc}
 */
-class wxCaret
+class wxCaret : public wxObject
 {
 public:
     /**

@@ -805,6 +805,8 @@ wxEND_EVENT_TABLE()
 // Creation
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxTreeListCtrl, wxWindow);
+
 void wxTreeListCtrl::Init()
 {
     m_view = nullptr;

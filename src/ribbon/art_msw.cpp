@@ -28,6 +28,8 @@
 
 #include "wx/private/colour.h"
 
+wxIMPLEMENT_CLASS(wxRibbonMSWArtProvider, wxRibbonArtProvider);
+
 static const char* const gallery_up_xpm[] = {
   "5 5 2 1",
   "  c None",

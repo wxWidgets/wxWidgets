@@ -159,6 +159,9 @@ public:
     /**
         Send the specified @a command to the FTP server and return the first
         character of the return code.
+
+        The command must not contain any CR or LF characters, if it does,
+        nothing is sent and 0 is returned.
     */
     char SendCommand(const wxString& command);
 

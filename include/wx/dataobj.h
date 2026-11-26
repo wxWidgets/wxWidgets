@@ -20,6 +20,7 @@
 #include "wx/string.h"
 #include "wx/bitmap.h"
 #include "wx/arrstr.h"
+#include "wx/extradata.h"
 
 #include <memory>
 #include <vector>
@@ -110,7 +111,8 @@ extern WXDLLIMPEXP_CORE const wxDataFormat& wxFormatInvalid;
 // to be supported by SetData() or GetDataHere().
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDataObjectBase
+class WXDLLIMPEXP_CORE wxDataObjectBase : public wxObject,
+                                          public wxWithExtraData
 {
 public:
     enum Direction
@@ -237,6 +239,9 @@ private:
     wxDataFormat m_format;
 
     wxDECLARE_NO_COPY_CLASS(wxDataObjectSimple);
+
+private:
+    wxDECLARE_CLASS(wxDataObjectSimple);
 };
 
 // ----------------------------------------------------------------------------
@@ -289,6 +294,7 @@ public:
     virtual size_t GetBufferOffset( const wxDataFormat& format ) override;
     virtual void MSWSetDataSource(IDataObject* source,
                                   const wxDataFormat& format) override;
+    virtual void MSWReleaseDataSource() override;
 #endif
 
 private:
@@ -302,6 +308,9 @@ private:
     wxDataFormat m_receivedFormat;
 
     wxDECLARE_NO_COPY_CLASS(wxDataObjectComposite);
+
+private:
+    wxDECLARE_CLASS(wxDataObjectComposite);
 };
 
 // ============================================================================
@@ -359,6 +368,9 @@ public:
 
 private:
     wxString m_html;
+
+private:
+    wxDECLARE_CLASS(wxHTMLDataObject);
 };
 
 class WXDLLIMPEXP_CORE wxTextDataObject : public wxDataObjectSimple
@@ -428,6 +440,9 @@ private:
     wxString m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
+
+private:
+    wxDECLARE_CLASS(wxTextDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -536,6 +551,9 @@ private:
     void  *m_data;
 
     wxDECLARE_NO_COPY_CLASS(wxCustomDataObject);
+
+private:
+    wxDECLARE_CLASS(wxCustomDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -552,6 +570,9 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxImageDataObject);
+
+private:
+    wxDECLARE_CLASS(wxImageDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -585,6 +606,9 @@ private:
 
         wxString GetURL() const { return GetText(); }
         void SetURL(const wxString& url) { SetText(url); }
+
+    private:
+        wxDECLARE_CLASS(wxURLDataObject);
     };
 #endif
 

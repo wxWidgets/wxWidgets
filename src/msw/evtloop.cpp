@@ -395,7 +395,20 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
         {
             // remove the message from the queue to ensure that we don't loop
             // forever here in any case
-            ::GetMessage(&msg, nullptr, 0, 0);
+            //
+            // Notice that we must remove exactly the message we've examined
+            // and not just the first one in the queue, as another message may
+            // have been posted since then and would come before it if it has
+            // higher priority, e.g. a posted message before an input one, and
+            // it could be a message which must be processed immediately, see
+            // the comment above.
+            if ( !::PeekMessage(&msg, msg.hwnd ? msg.hwnd : (HWND)-1,
+                                msg.message, msg.message, PM_REMOVE) )
+            {
+                // This is not supposed to happen, but if it does, we must not
+                // examine the same message again.
+                break;
+            }
 
             // and perhaps save it for processing later
             if ( processLater )
@@ -409,6 +422,12 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     DWORD id = GetCurrentThreadId();
     for ( const auto& m : msgsToProcess )
     {
-        PostThreadMessage(id, m.message, m.wParam, m.lParam);
+        // We must use the same window as for the original message: posting the
+        // messages sent to a window as thread messages would prevent them from
+        // ever being delivered to it.
+        if ( m.hwnd )
+            ::PostMessage(m.hwnd, m.message, m.wParam, m.lParam);
+        else
+            ::PostThreadMessage(id, m.message, m.wParam, m.lParam);
     }
 }

@@ -23,6 +23,8 @@
 
 #include "wx/busyinfo.h"
 
+wxIMPLEMENT_CLASS(wxBusyInfo, wxObject);
+
 void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 {
     m_InfoFrame = new wxFrame(flags.m_parent, wxID_ANY, wxString(),

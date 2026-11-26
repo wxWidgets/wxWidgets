@@ -50,6 +50,7 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "CURL";
 
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebRequestEvent, wxEvent);
 
 #ifdef __WXDEBUG__
 static const wxStringCharType* wxNO_IMPL_MSG

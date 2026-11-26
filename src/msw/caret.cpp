@@ -40,6 +40,9 @@
             wxLogLastError(wxT(#api)); \
         }
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxCaretBase, wxObject);
+wxIMPLEMENT_CLASS(wxCaret, wxCaretBase);
+
 // ===========================================================================
 // implementation
 // ===========================================================================

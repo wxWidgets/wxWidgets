@@ -291,6 +291,9 @@ private:
     friend class wxSVGFileDCImpl;
 
     wxDECLARE_NO_COPY_CLASS(wxSVGGraphicsContext);
+
+private:
+    wxDECLARE_CLASS(wxSVGGraphicsContext);
 };
 
 #endif // wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT

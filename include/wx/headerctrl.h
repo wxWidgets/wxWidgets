@@ -383,6 +383,9 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrlSimple);
     wxDECLARE_EVENT_TABLE();
+
+private:
+    wxDECLARE_CLASS(wxHeaderCtrlSimple);
 };
 
 // ----------------------------------------------------------------------------

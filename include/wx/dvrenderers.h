@@ -501,6 +501,9 @@ public:
 private:
     long    m_data;
     long    m_min,m_max;
+
+private:
+    wxDECLARE_CLASS(wxDataViewSpinRenderer);
 };
 
 #endif // wxUSE_SPINCTRL
@@ -534,6 +537,9 @@ public:
 private:
     wxArrayString m_choices;
     wxString      m_data;
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceRenderer);
 };
 
 // ----------------------------------------------------------------------------
@@ -555,6 +561,9 @@ public:
 #if wxUSE_ACCESSIBILITY
     virtual wxString GetAccessibleDescription() const override;
 #endif // wxUSE_ACCESSIBILITY
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceByIndexRenderer);
 };
 
 
@@ -591,6 +600,9 @@ private:
     wxString FormatDate() const;
 
     wxDateTime    m_date;
+
+private:
+    wxDECLARE_CLASS(wxDataViewDateRenderer);
 };
 #else // !wxUSE_DATEPICKCTRL
 typedef wxDataViewTextRenderer wxDataViewDateRenderer;

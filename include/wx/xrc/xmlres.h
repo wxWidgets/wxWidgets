@@ -433,6 +433,9 @@ private:
 
     // singleton instance:
     static wxXmlResource *ms_instance;
+
+private:
+    wxDECLARE_CLASS(wxXmlResource);
 };
 
 

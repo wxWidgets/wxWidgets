@@ -20,13 +20,15 @@
 
 #include "wx/gdicmn.h"  // for wxPoint, wxSize
 #include "wx/window.h"
+#include "wx/extradata.h"
 
 // ----------------------------------------------------------------------------
 // A caret is a blinking cursor showing the position where the typed text will
 // appear. It can be either a solid block or a custom bitmap (TODO)
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxCaretBase
+class WXDLLIMPEXP_CORE wxCaretBase : public wxObject,
+                                     public wxWithExtraData
 {
 public:
     // ctors
@@ -189,6 +191,9 @@ private:
     }
 
     wxDECLARE_NO_COPY_CLASS(wxCaretBase);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxCaretBase);
 };
 
 // ---------------------------------------------------------------------------

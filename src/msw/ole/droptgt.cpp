@@ -340,7 +340,10 @@ STDMETHODIMP wxIDropTarget::DragLeave()
         // remove the UI feedback
         m_pTarget->OnLeave();
 
-        // release the held object
+        // release the held object and ensure that the target doesn't use it
+        // any more either, as GetData() could have been called from OnEnter()
+        // or OnDragOver()
+        m_pTarget->MSWSetDataSource(nullptr);
         m_pIDataObject.reset();
 
         // update drag image
@@ -403,12 +406,18 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                 // release the held object
                 m_pIDataObject.reset();
 
-                // update drag image
+                // update drag image: notice that this still uses the data
+                // source, so it must be done before resetting it below
                 m_pTarget->MSWUpdateDragImageOnData
                            (
                                 m_pt.x, m_pt.y,
                                 ConvertDragEffectToResult(m_dwEffect)
                            );
+
+                // release any references to the data source kept by the
+                // target data object too: this is important to let the drop
+                // source know that we're done with it
+                m_pTarget->MSWSetDataSource(nullptr);
             }
         private:
             wxCOMPtr<IDataObject>& m_pIDataObject;
@@ -452,6 +461,8 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 // ----------------------------------------------------------------------------
 // ctor/dtor
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxDropTarget, wxObject);
 
 wxDropTarget::wxDropTarget(wxDataObject *dataObj)
             : wxDropTargetBase(dataObj),
@@ -571,6 +582,11 @@ bool wxDropTarget::GetData()
 void wxDropTarget::MSWSetDataSource(IDataObject *pIDataSource)
 {
     m_pIDataSource = pIDataSource;
+
+    // when the drag and drop operation ends, the data object must stop using
+    // the data source too
+    if ( !pIDataSource && m_dataObject )
+        m_dataObject->MSWReleaseDataSource();
 }
 
 // determine if we accept data of this type

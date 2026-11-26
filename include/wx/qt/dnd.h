@@ -34,6 +34,9 @@ public:
 private:
     class Impl;
     Impl* m_pImpl;
+
+private:
+    wxDECLARE_CLASS(wxDropTarget);
 };
 
 class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
@@ -54,5 +57,8 @@ public:
 
 private:
     wxWindow* m_parentWindow;
+
+private:
+    wxDECLARE_CLASS(wxDropSource);
 };
 #endif // _WX_QT_DND_H_

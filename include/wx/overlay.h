@@ -88,7 +88,7 @@ private:
 };
 
 // Convenient class combining wxClientDC with wxDCOverlay.
-class wxOverlayDC : public wxClientDC
+class WXDLLIMPEXP_CORE wxOverlayDC : public wxClientDC
 {
 public:
     wxOverlayDC(wxOverlay& overlay, wxWindow* win)
@@ -112,6 +112,9 @@ private:
     wxDCOverlay m_dcOverlay;
 
     wxDECLARE_NO_COPY_CLASS(wxOverlayDC);
+
+private:
+    wxDECLARE_CLASS(wxOverlayDC);
 };
 
 #endif // _WX_OVERLAY_H_

@@ -19,6 +19,7 @@
 #include "wx/custombgwin.h"
 #include "wx/sizer.h"
 #include "wx/pen.h"
+#include "wx/extradata.h"
 
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
 class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
@@ -249,7 +250,8 @@ using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
 
 // tab art class
 
-class WXDLLIMPEXP_AUI wxAuiToolBarArt
+class WXDLLIMPEXP_AUI wxAuiToolBarArt : public wxObject,
+                                        public wxWithExtraData
 {
 public:
 
@@ -350,6 +352,8 @@ public:
     // Provide opportunity for subclasses to recalculate colours
     virtual void UpdateColoursFromSystem() {}
 
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxAuiToolBarArt);
 };
 
 
@@ -463,6 +467,9 @@ protected:
 
 private:
     wxAuiTextDirection m_textDirection = wxAuiTextDirection::LeftToRight;
+
+private:
+    wxDECLARE_CLASS(wxAuiGenericToolBarArt);
 };
 
 

@@ -96,6 +96,8 @@ wxEND_EVENT_TABLE()
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxTipWindow, wxPopupTransientWindow);
+
 wxTipWindow::Ref::~Ref()
 {
     if (m_ptr)

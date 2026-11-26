@@ -217,7 +217,7 @@ enum wxRibbonButtonKind
 
     @see wxRibbonBar
 */
-class wxRibbonArtProvider
+class wxRibbonArtProvider : public wxObject
 {
 public:
     /**

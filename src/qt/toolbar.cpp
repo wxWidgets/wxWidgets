@@ -75,6 +75,8 @@ void wxQtToolButton::enterEvent( wxQtEnterEvent *WXUNUSED(event) )
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);
 
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
 void wxToolBarTool::SetLabel( const wxString &label )
 {
     wxToolBarToolBase::SetLabel( label );

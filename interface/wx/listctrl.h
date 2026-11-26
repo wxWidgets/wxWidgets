@@ -899,6 +899,13 @@ public:
         in @a flags. Returns index of the item or @c wxNOT_FOUND if no item is at
         the specified point.
 
+        The @a point is in the control client coordinates, i.e. the same ones
+        as used by GetItemRect() and by the mouse events generated for this
+        control. Notice that in the generic version of this control, which is
+        used under all platforms except MSW and Qt, these coordinates didn't
+        take into account the header height in report view in wxWidgets
+        versions before 3.4.0, so the point had to be offset by it.
+
         @a flags will be a combination of the following flags:
         - wxLIST_HITTEST_ABOVE: Above the control's client area.
         - wxLIST_HITTEST_BELOW: Below the control's client area.

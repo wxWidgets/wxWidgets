@@ -50,6 +50,9 @@ public:
     virtual wxSize GetTabSize(wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) override;
+
+private:
+    wxDECLARE_CLASS(wxAuiGtkTabArt);
 };
 
 #endif  // wxUSE_AUI

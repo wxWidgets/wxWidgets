@@ -31,6 +31,8 @@
 
 #include "wx/private/colour.h"
 
+wxIMPLEMENT_CLASS(wxRibbonAUIArtProvider, wxRibbonMSWArtProvider);
+
 wxRibbonAUIArtProvider::wxRibbonAUIArtProvider()
     : wxRibbonMSWArtProvider(false)
 {

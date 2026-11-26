@@ -654,6 +654,7 @@ set(BASE_CMN_HDR
     wx/uilocale.h
     wx/fs_data.h
     wx/stdformat.h
+    wx/extradata.h
 )
 
 set(NET_UNIX_SRC

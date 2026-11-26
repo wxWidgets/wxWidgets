@@ -95,6 +95,8 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxInfoBarGeneric, wxControl);
+
 bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
 {
     // calling Hide() before Create() ensures that we're created initially

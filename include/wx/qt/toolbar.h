@@ -110,6 +110,9 @@ private:
     wxQtToolButton* m_qtToolButton = nullptr;
 
     friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif // _WX_QT_TOOLBAR_H_

@@ -78,6 +78,9 @@ private:
     class wxInfoBarGTKImpl *m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxInfoBar);
+
+private:
+    wxDECLARE_CLASS(wxInfoBar);
 };
 
 #endif // _WX_GTK_INFOBAR_H_

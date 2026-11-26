@@ -99,6 +99,9 @@ public:
 private:
 
     wxDECLARE_NO_COPY_CLASS(wxCollapsibleHeaderCtrl);
+
+private:
+    wxDECLARE_CLASS(wxCollapsibleHeaderCtrl);
 };
 
 #endif // wxUSE_COLLPANE

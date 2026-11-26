@@ -60,6 +60,13 @@ public:
     {
     }
 
+    // this one is called when the data source passed to MSWSetDataSource()
+    // must not be used any longer, e.g. at the end of the drag and drop
+    // operation, and must release it if it kept a reference to it
+    virtual void MSWReleaseDataSource()
+    {
+    }
+
     // function to return symbolic name of clipboard format (for debug messages)
 #ifdef __WXDEBUG__
     static const wxChar *GetFormatName(wxDataFormat format);
@@ -81,6 +88,9 @@ private:
     IDataObject *m_pIDataObject; // pointer to the COM interface
 
     wxDECLARE_NO_COPY_CLASS(wxDataObject);
+
+private:
+    wxDECLARE_CLASS(wxDataObject);
 };
 
 #endif  //_WX_MSW_OLE_DATAOBJ_H

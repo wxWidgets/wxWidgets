@@ -448,6 +448,9 @@ private:
     friend class wxTreeListModel;
 
     wxDECLARE_NO_COPY_CLASS(wxTreeListCtrl);
+
+private:
+    wxDECLARE_CLASS(wxTreeListCtrl);
 };
 
 // ----------------------------------------------------------------------------

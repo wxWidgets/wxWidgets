@@ -77,6 +77,9 @@ private:
     friend class wxMSWHeaderCtrl;
 
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxHeaderCtrl);
 };
 
 #endif // _WX_MSW_HEADERCTRL_H_

@@ -559,7 +559,7 @@ class wxAuiToolBarItemArray : public std::vector<wxAuiToolBarItem>
     @library{wxaui}
     @category{aui}
 */
-class wxAuiToolBarArt
+class wxAuiToolBarArt : public wxObject
 {
 public:
     wxAuiToolBarArt();

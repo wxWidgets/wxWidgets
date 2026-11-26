@@ -28,6 +28,7 @@
 wxDEFINE_EVENT( wxEVT_NOTIFICATION_MESSAGE_CLICK, wxCommandEvent );
 wxDEFINE_EVENT( wxEVT_NOTIFICATION_MESSAGE_DISMISSED, wxCommandEvent );
 wxDEFINE_EVENT( wxEVT_NOTIFICATION_MESSAGE_ACTION, wxCommandEvent );
+wxIMPLEMENT_CLASS(wxNotificationMessage, wxEvtHandler);
 
 // ----------------------------------------------------------------------------
 // wxNotificationMessageBase

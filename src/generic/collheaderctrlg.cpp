@@ -37,6 +37,7 @@
 const char wxCollapsibleHeaderCtrlNameStr[] = "collapsibleHeader";
 
 wxDEFINE_EVENT(wxEVT_COLLAPSIBLEHEADER_CHANGED, wxCommandEvent);
+wxIMPLEMENT_CLASS(wxCollapsibleHeaderCtrl, wxControl);
 
 #if wxUSE_ACCESSIBILITY
 

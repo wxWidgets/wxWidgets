@@ -993,6 +993,9 @@ protected:
     }
 
     wxDCImpl *m_pimpl;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxReadOnlyDC);
 };
 
 // Full device context class, providing functions for drawing on the device in

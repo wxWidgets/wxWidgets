@@ -216,6 +216,8 @@ bool wxDataFormat::operator==(const wxDataFormat& other) const
 // wxDataObject
 //-------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataObject, wxObject);
+
 wxDataObject::wxDataObject()
 {
 }
@@ -250,6 +252,8 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
 // ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxFileDataObject, wxDataObjectSimple);
 
 bool wxFileDataObject::GetDataHere(void *buf) const
 {
@@ -351,6 +355,8 @@ void wxFileDataObject::AddFile( const wxString &filename )
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxBitmapDataObject, wxDataObjectSimple);
 
 wxBitmapDataObject::wxBitmapDataObject()
 {
@@ -577,6 +583,8 @@ private:
 
     wxString m_url;
 };
+
+wxIMPLEMENT_CLASS(wxURLDataObject, wxDataObjectComposite);
 
 wxURLDataObject::wxURLDataObject(const wxString& url) :
     m_dobjURIList(new wxTextURIListDataObject(url)),

@@ -34,6 +34,9 @@ public:
     // adds all the native formats (in descending order of preference) this data object supports
     virtual void AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir ) const;
 #endif
+
+private:
+    wxDECLARE_CLASS(wxDataObject);
 };
 
 #endif // _WX_MAC_DATAOBJ_H_

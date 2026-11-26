@@ -391,6 +391,8 @@ wxPGCellData::wxPGCellData()
 // wxPGCell
 // -----------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxPGCell, wxObject);
+
 wxPGCell::wxPGCell( const wxString& text,
                     const wxBitmapBundle& bitmap,
                     const wxColour& fgCol,
@@ -480,6 +482,8 @@ void wxPGCell::SetEmptyData()
 // -----------------------------------------------------------------------
 // wxPGChoiceEntry
 // -----------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxPGChoiceEntry, wxPGCell);
 
 wxPGChoiceEntry::wxPGChoiceEntry()
     : wxPGCell()

@@ -77,6 +77,9 @@ private:
     wxCursor m_feedbackCursor;
 
     wxDECLARE_NO_COPY_CLASS(wxDropSource);
+
+private:
+    wxDECLARE_CLASS(wxDropSource);
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

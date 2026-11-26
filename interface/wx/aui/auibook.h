@@ -1078,7 +1078,7 @@ class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
     @library{wxaui}
     @category{aui}
 */
-class wxAuiTabArt
+class wxAuiTabArt : public wxObject
 {
 public:
     /**

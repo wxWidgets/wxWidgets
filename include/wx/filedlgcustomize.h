@@ -58,6 +58,9 @@ protected:
     wxFileDialogCustomControlImpl* const m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogCustomControl);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogCustomControl);
 };
 
 // A class representing a custom button.
@@ -74,6 +77,9 @@ private:
     wxFileDialogButtonImpl* GetImpl() const;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogButton);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogButton);
 };
 
 // A class representing a custom checkbox.
@@ -93,6 +99,9 @@ private:
     wxFileDialogCheckBoxImpl* GetImpl() const;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogCheckBox);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogCheckBox);
 };
 
 #if wxUSE_RADIOBTN
@@ -113,6 +122,9 @@ private:
     wxFileDialogRadioButtonImpl* GetImpl() const;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogRadioButton);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogRadioButton);
 };
 #endif // wxUSE_RADIOBTN
 
@@ -133,6 +145,9 @@ private:
     wxFileDialogChoiceImpl* GetImpl() const;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogChoice);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogChoice);
 };
 
 // A class representing a custom text control.
@@ -149,6 +164,9 @@ private:
     wxFileDialogTextCtrlImpl* GetImpl() const;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogTextCtrl);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogTextCtrl);
 };
 
 // A class representing a custom static text.
@@ -164,6 +182,9 @@ private:
     wxFileDialogStaticTextImpl* GetImpl() const;
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogStaticText);
+
+private:
+    wxDECLARE_CLASS(wxFileDialogStaticText);
 };
 
 // ----------------------------------------------------------------------------

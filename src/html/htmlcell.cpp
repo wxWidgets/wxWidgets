@@ -77,6 +77,7 @@ GetSelectedTextBgColour(const wxColour& WXUNUSED(clr))
 //-----------------------------------------------------------------------------
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlCell, wxObject);
+wxIMPLEMENT_CLASS(wxHtmlLinkInfo, wxObject);
 
 wxHtmlCell::~wxHtmlCell()
 {
@@ -599,6 +600,8 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
 
     return GetAllAsText();
 }
+
+wxIMPLEMENT_CLASS(wxHtmlWordWithTabsCell, wxHtmlWordCell);
 
 wxString wxHtmlWordWithTabsCell::GetAllAsText() const
 {

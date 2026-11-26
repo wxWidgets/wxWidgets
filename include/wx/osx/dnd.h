@@ -64,6 +64,9 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
     void SetCurrentDragSource( wxOSXDataSource* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
   protected :
     wxOSXDataSource* m_currentDragPasteboard ;
+
+private:
+    wxDECLARE_CLASS(wxDropTarget);
 };
 
 //-------------------------------------------------------------------------
@@ -103,6 +106,9 @@ public:
 
     wxWindow        *m_window;
     void* m_currentDragPasteboard ;
+
+private:
+    wxDECLARE_CLASS(wxDropSource);
 };
 
 #endif // wxUSE_DRAG_AND_DROP

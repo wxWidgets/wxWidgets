@@ -33,6 +33,9 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxFilterFSHandler);
+
+private:
+    wxDECLARE_CLASS(wxFilterFSHandler);
 };
 
 #endif // wxUSE_FILESYSTEM

@@ -15,6 +15,10 @@
 
 #include "wx/event.h"
 
+#include "wx/private/extradata.h"
+
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test events and their handlers
 // ----------------------------------------------------------------------------
@@ -510,9 +514,137 @@ TEST_CASE("Event::UnbindFromHandler", "[event][bind][unbind]")
     handler.ProcessEvent(e);
 }
 
+// ----------------------------------------------------------------------------
+// extra data tests
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Number of currently existing extra data objects.
+int gs_extraDataCount = 0;
+
+class TestExtraData : public wxExtraData
+{
+public:
+    TestExtraData() { ++gs_extraDataCount; }
+    ~TestExtraData() override { --gs_extraDataCount; }
+
+    int m_value = 0;
+};
+
+class TestCloneableExtraData
+    : public wxCloneableExtraData<TestCloneableExtraData>
+{
+public:
+    TestCloneableExtraData() { ++gs_extraDataCount; }
+    TestCloneableExtraData(const TestCloneableExtraData& other)
+        : wxCloneableExtraData<TestCloneableExtraData>(other),
+          m_value(other.m_value)
+    {
+        ++gs_extraDataCount;
+    }
+    ~TestCloneableExtraData() override { --gs_extraDataCount; }
+
+    int m_value = 0;
+};
+
+// Unlike MyEvent, this one really copies the event in its Clone().
+class CopyableEvent : public wxEvent
+{
+public:
+    CopyableEvent() : wxEvent(0, MyEventType) { }
+
+    virtual wxEvent *Clone() const override { return new CopyableEvent(*this); }
+};
+
+} // anonymous namespace
+
+TEST_CASE("Event::ExtraData", "[event][extradata]")
+{
+    {
+        CopyableEvent event;
+        CHECK( !event.WXGetExtraDataStorageIfExists() );
+
+        wxGetExtraData<TestExtraData>(&event)->m_value = 17;
+        wxGetExtraData<TestCloneableExtraData>(&event)->m_value = 42;
+        CHECK( gs_extraDataCount == 2 );
+
+        // Only cloneable data is copied when the event is copied.
+        std::unique_ptr<wxEvent> clone(event.Clone());
+        CHECK( !wxGetExtraDataIfExists<TestExtraData>(clone.get()) );
+
+        auto* const data =
+            wxGetExtraDataIfExists<TestCloneableExtraData>(clone.get());
+        REQUIRE( data );
+        CHECK( data->m_value == 42 );
+        CHECK( gs_extraDataCount == 3 );
+
+        // And the copy is independent from the original.
+        data->m_value = 99;
+        CHECK( wxGetExtraData<TestCloneableExtraData>(&event)->m_value == 42 );
+
+        // Assigning events copies the data too, replacing the existing one.
+        CopyableEvent event2;
+        wxGetExtraData<TestExtraData>(&event2)->m_value = 1;
+        CHECK( gs_extraDataCount == 4 );
+
+        event2 = event;
+        CHECK( !wxGetExtraDataIfExists<TestExtraData>(&event2) );
+        CHECK( wxGetExtraData<TestCloneableExtraData>(&event2)->m_value == 42 );
+        CHECK( gs_extraDataCount == 4 );
+
+        // Events without any extra data can be copied too, of course.
+        CopyableEvent event3;
+        event2 = event3;
+        CHECK( !event2.WXGetExtraDataStorageIfExists() );
+        CHECK( gs_extraDataCount == 3 );
+    }
+
+    CHECK( gs_extraDataCount == 0 );
+}
+
 // This is a compilation-time-only test: just check that a class inheriting
 // from wxEvtHandler non-publicly can use Bind() with its method, this used to
 // result in compilation errors.
+TEST_CASE("wxWithExtraData::Copy", "[extradata]")
+{
+    struct WithExtraData : wxWithExtraData
+    {
+    };
+
+    {
+        WithExtraData obj;
+        wxGetExtraData<TestExtraData>(&obj)->m_value = 17;
+        wxGetExtraData<TestCloneableExtraData>(&obj)->m_value = 42;
+        CHECK( gs_extraDataCount == 2 );
+
+        // Copying only copies the cloneable data.
+        WithExtraData copy(obj);
+        CHECK( !wxGetExtraDataIfExists<TestExtraData>(&copy) );
+        CHECK( wxGetExtraData<TestCloneableExtraData>(&copy)->m_value == 42 );
+        CHECK( gs_extraDataCount == 3 );
+
+        // Assigning replaces the existing data.
+        WithExtraData other;
+        wxGetExtraData<TestExtraData>(&other)->m_value = 1;
+        CHECK( gs_extraDataCount == 4 );
+
+        other = obj;
+        CHECK( !wxGetExtraDataIfExists<TestExtraData>(&other) );
+        CHECK( wxGetExtraData<TestCloneableExtraData>(&other)->m_value == 42 );
+        CHECK( gs_extraDataCount == 4 );
+
+        // Self-assignment doesn't change anything.
+        WithExtraData& self = other;
+        other = self;
+        CHECK( wxGetExtraData<TestCloneableExtraData>(&other)->m_value == 42 );
+        CHECK( gs_extraDataCount == 4 );
+    }
+
+    CHECK( gs_extraDataCount == 0 );
+}
+
 class HandlerNonPublic : protected wxEvtHandler
 {
 public:

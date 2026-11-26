@@ -65,6 +65,7 @@ ListCtrlTestCase::~ListCtrlTestCase()
 }
 
 wxLIST_BASE_TESTS(ListCtrl, "[listctrl]")
+wxLIST_SELECTION_TESTS(ListCtrl, "[listctrl]")
 
 // Note that wxLIST_BASE_TESTS() already defines "ListCtrl::EditLabel" test.
 TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::CallEditLabel", "[listctrl]")

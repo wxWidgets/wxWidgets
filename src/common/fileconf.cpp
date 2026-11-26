@@ -48,6 +48,8 @@
 #include  <stdlib.h>
 #include  <ctype.h>
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -1500,10 +1502,26 @@ wxFileConfigGroup::~wxFileConfigGroup()
   for ( n = 0; n < nCount; n++ )
     delete m_aEntries[n];
 
-  // subgroups
-  nCount = m_aSubgroups.GetCount();
-  for ( n = 0; n < nCount; n++ )
-    delete m_aSubgroups[n];
+  // subgroups: delete them iteratively rather than recursively as groups can
+  // be nested arbitrarily deeply (e.g. by a malformed file) and recursing
+  // could overflow the stack
+  std::vector<wxFileConfigGroup*>
+      toDelete(m_aSubgroups.begin(), m_aSubgroups.end());
+  m_aSubgroups.clear();
+
+  while ( !toDelete.empty() )
+  {
+    wxFileConfigGroup* const group = toDelete.back();
+    toDelete.pop_back();
+
+    // Detach the subgroups first so that the group dtor doesn't recurse into
+    // them, they will be deleted by the subsequent loop iterations instead.
+    auto& subgroups = group->m_aSubgroups;
+    toDelete.insert(toDelete.end(), subgroups.begin(), subgroups.end());
+    subgroups.clear();
+
+    delete group;
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -1581,6 +1599,24 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
                         wxT("    checking parent '%s'"),
                         pParent->Name() );
 
+            // GetLastGroupLine() call below calls GetLastEntryLine() which, in
+            // turn, calls this function, for the parent if it has neither
+            // subgroups nor entries. This would result in unbounded recursion,
+            // so don't let it happen and pre-create the lines for all the
+            // ancestors of this group which don't have them yet.
+            std::vector<wxFileConfigGroup*> ancestors;
+            for ( auto group = pParent;
+                  !group->m_pLine && group->m_pParent &&
+                    !group->m_pLastGroup &&
+                      !group->m_pLastEntry;
+                  group = group->m_pParent )
+            {
+                ancestors.push_back(group);
+            }
+
+            for ( auto it = ancestors.rbegin(); it != ancestors.rend(); ++it )
+                (*it)->GetGroupLine();
+
             wxString    strFullName;
 
             // add 1 to the name because we don't want to start with '/'
@@ -1604,18 +1640,21 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
 wxFileConfigLineList *wxFileConfigGroup::GetLastGroupLine()
 {
     // if we have any subgroups, our last line is the last line of the last
-    // subgroup
-    if ( m_pLastGroup )
+    // subgroup, find it without using potentially unbound recursion
+    wxFileConfigGroup *group = this;
+    while ( group->m_pLastGroup )
+        group = group->m_pLastGroup;
+
+    // this group has no subgroups, so its last line is the line of its last
+    // entry (if any) or its group line itself
+    wxFileConfigLineList *pLine = group->GetLastEntryLine();
+
+    if ( group != this )
     {
-        wxFileConfigLineList *pLine = m_pLastGroup->GetLastGroupLine();
-
         wxASSERT_MSG( pLine, wxT("last group must have non-null associated line") );
-
-        return pLine;
     }
 
-    // no subgroups, so the last line is the line of thelast entry (if any)
-    return GetLastEntryLine();
+    return pLine;
 }
 
 // return the last line belonging to the entries of this group (after which
@@ -1662,19 +1701,28 @@ void wxFileConfigGroup::SetLastEntry(wxFileConfigEntry *pEntry)
 
 void wxFileConfigGroup::UpdateGroupAndSubgroupsLines()
 {
-    // update the line of this group
-    wxFileConfigLineList *line = GetGroupLine();
-    wxCHECK_RET( line, wxT("a non root group must have a corresponding line!") );
-
-    // +1: skip the leading '/'
-    line->SetText(wxString::Format(wxT("[%s]"), GetFullName().c_str() + 1));
-
-
-    // also update all subgroups as they have this groups name in their lines
-    const size_t nCount = m_aSubgroups.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
+    // update the line of this group and all its subgroups, as they have this
+    // group name in their lines too, in depth-first order but without using
+    // potentially unbounded recursion
+    std::vector<wxFileConfigGroup*> groups{this};
+    while ( !groups.empty() )
     {
-        m_aSubgroups[n]->UpdateGroupAndSubgroupsLines();
+        wxFileConfigGroup* const group = groups.back();
+        groups.pop_back();
+
+        wxFileConfigLineList *line = group->GetGroupLine();
+        if ( !line )
+        {
+            wxFAIL_MSG( wxT("a non root group must have a corresponding line!") );
+            continue;
+        }
+
+        // +1: skip the leading '/'
+        line->SetText(wxString::Format(wxT("[%s]"), group->GetFullName().c_str() + 1));
+
+        // add the subgroups in reverse order to process them in their order
+        const ArrayGroups& subgroups = group->m_aSubgroups;
+        groups.insert(groups.end(), subgroups.rbegin(), subgroups.rend());
     }
 }
 
@@ -1699,9 +1747,10 @@ void wxFileConfigGroup::Rename(const wxString& newName)
 
 wxString wxFileConfigGroup::GetFullName() const
 {
+    // Don't use recursion here as groups can be nested arbitrarily deeply.
     wxString fullname;
-    if ( Parent() )
-        fullname = Parent()->GetFullName() + wxCONFIG_PATH_SEPARATOR + Name();
+    for ( auto group = this; group->Parent(); group = group->Parent() )
+        fullname = wxCONFIG_PATH_SEPARATOR + group->Name() + fullname;
 
     return fullname;
 }
@@ -1857,15 +1906,33 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
         }
     }
 
-    // ...and subgroups of this subgroup
+    // ...and the lines of all subgroups of this subgroup and their entries,
+    // without using recursion, as groups can be nested arbitrarily deeply (the
+    // subgroup objects themselves are deleted by pGroup dtor below)
     nCount = pGroup->m_aSubgroups.GetCount();
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 wxT("Removing %lu subgroups"), (unsigned long)nCount );
 
-    for ( size_t nGroup = 0; nGroup < nCount; nGroup++ )
+    std::vector<wxFileConfigGroup*>
+        subgroups(pGroup->m_aSubgroups.begin(), pGroup->m_aSubgroups.end());
+    while ( !subgroups.empty() )
     {
-        pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
+        wxFileConfigGroup* const subgroup = subgroups.back();
+        subgroups.pop_back();
+
+        for ( auto* entry : subgroup->m_aEntries )
+        {
+            if ( wxFileConfigLineList* const line = entry->GetLine() )
+                m_pConfig->LineListRemove(line);
+        }
+
+        if ( subgroup->m_pLine )
+            m_pConfig->LineListRemove(subgroup->m_pLine);
+
+        subgroups.insert(subgroups.end(),
+                         subgroup->m_aSubgroups.begin(),
+                         subgroup->m_aSubgroups.end());
     }
 
     // and then finally the group itself

@@ -1032,6 +1032,8 @@ void wxSVGGraphicsRenderer::GetVersion(int* major, int* minor, int* micro) const
 // wxSVGGraphicsContext
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxSVGGraphicsContext, wxGraphicsContext);
+
 wxSVGGraphicsContext::wxSVGGraphicsContext(wxSVGFileDCImpl* impl)
     : wxGraphicsContext(wxSVGGraphicsRenderer::Get()),
       m_impl(impl),
