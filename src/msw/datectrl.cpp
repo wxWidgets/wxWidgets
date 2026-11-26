@@ -35,7 +35,9 @@
 #include "wx/uilocale.h"
 #include "wx/msw/private/uilocale.h"
 #include "wx/msw/private/custompaint.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/renderer.h"
+#include <uxtheme.h>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 
@@ -236,33 +238,36 @@ bool wxDatePickerCtrl::MSWOnDateTimeChange(const NMDATETIMECHANGE& dtch)
 
 WXLRESULT wxDatePickerCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // With wxDP_ALLOWNONE and high DPI, the control draws the check box
-    // stretched too big. In this case, redraw the check box at the proper
-    // size.
-    if ( nMsg == WM_PAINT && HasFlag(wxDP_ALLOWNONE) && GetDPIScaleFactor() > 1.0 )
+    // Custom painting for high DPI and dark mode.
+    if ( nMsg == WM_PAINT && (GetDPIScaleFactor() > 1.0 || wxMSWDarkMode::IsActive()) )
     {
         // Paint the control into a memory DC, specified by wParam.
-        auto defPaint = [this](HWND WXUNUSED(hwnd), WPARAM wParam)
-            {
-                MSWDefWindowProc(WM_PAINT, wParam, 0);
-            };
-        // Redraw the checkbox at the proper size.
-        auto postProcess = [this](const wxBitmap& bmpIn)
-            {
-                wxBitmap bmpOut(bmpIn);
-                wxMemoryDC dc(bmpOut);
-                dc.SetLayoutDirection(GetLayoutDirection());
+        auto defPaint = [this](HWND WXUNUSED(hwnd), WPARAM wParam) {
+            MSWDefWindowProc(WM_PAINT, wParam, 0);
+        };
+        auto postProcess = [this](const wxBitmap& bmpIn) {
+            wxBitmap bmpOut(bmpIn);
+            wxMemoryDC dc(bmpOut);
+            dc.SetLayoutDirection(GetLayoutDirection());
+            WinStruct<DATETIMEPICKERINFO> info;
+            ::SendMessage(m_hWnd, DTM_GETDATETIMEPICKERINFO, 0, (LPARAM)&info);
 
+            // Draw the checkbox (for both light mode and dark). In light
+            // mode, the check box is stretched too big. In dark mode, the
+            // check box is missing.
+            if ( HasFlag(wxDP_ALLOWNONE) )
+            {
                 // Get the old check box rectangle.
-                WinStruct<DATETIMEPICKERINFO> info;
-                ::SendMessage(m_hWnd, DTM_GETDATETIMEPICKERINFO, 0, (LPARAM)&info);
                 wxRect rcOld = wxRectFromRECT(info.rcCheck);
                 // Check if the rectangle is valid. Apparently, painting
-                // occurs before the layout is finshed.
+                // occurs before the layout is finished.
                 if ( rcOld.width > 0 )
                 {
-                    // Erase the old check box.
-                    auto bg = wxRGBToColour(::GetSysColor(COLOR_WINDOW));
+                    // Erase the old check box. Use the existing background
+                    // colour by sampling a pixel to the right of the old
+                    // check box rectangle.
+                    wxColour bg;
+                    dc.GetPixel(rcOld.x + rcOld.width + 1, rcOld.y, &bg);
                     dc.SetBrush(wxBrush(bg));
                     dc.SetPen(*wxTRANSPARENT_PEN);
                     dc.DrawRectangle(rcOld);
@@ -274,19 +279,100 @@ WXLRESULT wxDatePickerCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM
                     // Draw the new check box. The native control always draws
                     // the check box in the hot state.
                     int flags = wxCONTROL_CURRENT;
-                    if ( MSWGetControlValue().IsValid() )
+                    if ( info.stateCheck & STATE_SYSTEM_CHECKED )
                         flags |= wxCONTROL_CHECKED;
                     if ( !IsEnabled() )
                         flags |= wxCONTROL_DISABLED;
                     wxRendererNative::Get().DrawCheckBox(this, dc, rcNew, flags);
                 }
-                return bmpOut;
-            };
+            }
+
+            // Draw the drop-down button, for dark mode.
+            if ( wxMSWDarkMode::IsActive() && HasFlag(wxDP_DROPDOWN) )
+            {
+                // Draw the button using font icons.
+                auto facename = (wxGetWinVersion() == wxWinVersion_10) ?
+                    "Segoe MDL2 Assets" : "Segoe Fluent Icons";
+                wxRect rect = wxRectFromRECT(info.rcButton);
+                wxFont font(wxFontInfo(rect.GetHeight() / 3).FaceName(facename));
+                dc.SetFont(font);
+                auto fg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+                dc.SetTextForeground(fg);
+                // Draw 'Calendar' and 'BLACK DOWN-POINTING TRIANGLE'
+                dc.DrawLabel(L"\uE787 \u25BC", rect, wxALIGN_CENTER);
+            }
+
+            return bmpOut;
+        };
         wxMSWImpl::CustomPaint(m_hWnd, defPaint, postProcess);
         return 0;
     }
 
     return wxDatePickerCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+// Subclass procedure for drop-down calendar in dark mode.
+static LRESULT CALLBACK CalendarDarkProc(HWND hwnd, UINT uMsg,
+    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+    DWORD_PTR dwRefData)
+{
+    switch ( uMsg )
+    {
+        case WM_PAINT:
+            wxMSWDarkMode::CalendarPaint(hwnd, ::DefSubclassProc, (int*)dwRefData, 0);
+            return 0;
+
+        case WM_MOUSELEAVE:
+        case WM_MOUSEMOVE:
+            wxMSWDarkMode::CalendarMouseEvent(hwnd, uMsg, lParam, (int*)dwRefData);
+            break;
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, CalendarDarkProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+bool wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam,
+    WXLPARAM* result)
+{
+    NMHDR* hdr = (NMHDR*)lParam;
+    switch ( hdr->code )
+    {
+        case DTN_DROPDOWN:
+            if ( wxMSWDarkMode::IsActive() )
+            {
+                // Set dark mode on the calendar control, which is created
+                // upon every drop-down.
+                HWND hwndCal = (HWND)::SendMessage(hdr->hwndFrom,
+                    DTM_GETMONTHCAL, 0, 0);
+                if ( !hwndCal )
+                    break;
+
+                // Disable visual themes so that MCM_SETCOLOR takes effect.
+                ::SetWindowTheme(hwndCal, L"", L"");
+                wxMSWDarkMode::CalendarSetColour(hwndCal);
+
+                // Disabling visual themes changes the calendar size. Resize
+                // the parent to fit.
+                RECT rcCal = { };
+                ::SendMessage(hwndCal, MCM_GETMINREQRECT, 0, (LPARAM)&rcCal);
+                // Parent size is calendar size plus an observed fixed margin.
+                auto w = rcCal.right - rcCal.left + 10;
+                auto h = rcCal.bottom - rcCal.top + 10;
+                ::SetWindowPos(::GetParent(hwndCal), nullptr, 0, 0, w, h,
+                    SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+                // Subclass the control to handle painting and mouse tracking.
+                ::SetWindowSubclass(hwndCal, CalendarDarkProc, 1,
+                    (DWORD_PTR)&m_mousePos);
+            }
+            break;
+    }
+
+    return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
 
 #endif // wxUSE_DATEPICKCTRL

@@ -59,6 +59,8 @@ public:
     virtual void SetIncrement(int value) override;
     virtual int  GetIncrement() const override;
 
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+
 protected:
    virtual wxSize DoGetBestSize() const override;
 
@@ -66,8 +68,6 @@ protected:
    virtual void NormalizeValue();
 
 private:
-    void OnPaint(wxPaintEvent& event);
-
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinButton);
 };
 

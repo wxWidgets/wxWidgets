@@ -177,100 +177,15 @@ wxSize wxSpinButton::DoGetBestSize() const
 // painting
 // ----------------------------------------------------------------------------
 
-void wxSpinButton::OnPaint(wxPaintEvent& event)
+WXLRESULT wxSpinButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( wxMSWDarkMode::IsActive() )
+    if ( nMsg == WM_PAINT && wxMSWDarkMode::IsActive() )
     {
-        // Have the updown control draw itself, then modify the result with a
-        // border and possibly inverted colours.
-
-        const RECT rc = wxGetClientRect(GetHwnd());
-        const wxSize size{rc.right - rc.left, rc.bottom - rc.top};
-
-        if ( size.IsEmpty() )
-            return;
-
-        wxBitmap bmp(size);
-        {
-            wxMemoryDC mdc(bmp);
-
-            ::CallWindowProc(m_oldWndProc,
-                             GetHwnd(), WM_PAINT, (WPARAM)GetHdcOf(mdc), 0);
-        }
-
-#if wxUSE_IMAGE
-        // When using a buddy control, the spin button tries to mimic being a
-        // part of it by adding an extra border, not used for standalone
-        // controls. This doesn't work very well even in light mode in modern
-        // Windows (it was apparently done for the classic 3D appearance and
-        // never updated since then), but looks completely horrible in dark
-        // mode, so we must get rid of this border by overdrawing it.
-        const bool drawBorder = ::SendMessage(GetHwnd(), UDM_GETBUDDY, 0, 0);
-        wxImage::RGBValue border;
-        if ( drawBorder )
-        {
-            const auto col = wxMSWDarkMode::GetBorderPen().GetColour();
-            border.red = col.GetRed();
-            border.green = col.GetGreen();
-            border.blue = col.GetBlue();
-        }
-
-        wxImage image = bmp.ConvertToImage();
-
-        // Prior to Windows 11 22H2 (build 22621), the updown control always
-        // draws in light mode, so invert the colours to make it dark.
-        const bool shouldInvert = !wxCheckOsVersion(10, 0, 22621);
-
-        const int width = image.GetWidth();
-        const int height = image.GetHeight();
-        unsigned char *data = image.GetData();
-        unsigned char *alpha = image.GetAlpha();
-        for ( int y = 0; y < height; ++y )
-        {
-            for ( int x = 0; x < width; ++x )
-            {
-                wxImage::RGBValue rgb(data[0], data[1], data[2]);
-
-                if ( drawBorder &&
-                        (y == 0 || y == height - 1 || x == width - 1) )
-                {
-                    rgb = border;
-                    if ( alpha )
-                        *alpha = wxALPHA_OPAQUE;
-                }
-                else if ( shouldInvert )
-                {
-                    // This uses a slightly different formula than the one in
-                    // InvertBitmapPixel() because the one there results in the
-                    // lines being too bright.
-                    auto hsv = wxImage::RGBtoHSV(rgb);
-                    hsv.value = 1.0 - hsv.value;
-                    rgb = wxImage::HSVtoRGB(hsv);
-                }
-
-                data[0] = rgb.red;
-                data[1] = rgb.green;
-                data[2] = rgb.blue;
-                data += 3;
-
-                if ( alpha )
-                    alpha++;
-            }
-        }
-
-        bmp = wxBitmap(image);
-#endif // wxUSE_IMAGE
-
-        wxBufferedPaintDC dc(this);
-        // Clear the background, otherwise alpha transparency in the bitmap
-        // appears white.
-        dc.Clear();
-        dc.DrawBitmap(bmp, 0, 0);
+        wxMSWDarkMode::DrawSpinButton(m_hWnd, m_oldWndProc);
+        return 0;
     }
-    else
-    {
-        event.Skip();
-    }
+
+    return wxSpinButtonBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------

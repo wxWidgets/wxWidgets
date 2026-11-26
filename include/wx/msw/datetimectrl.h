@@ -63,6 +63,8 @@ protected:
     // changes, return true if the event was handled.
     virtual bool MSWOnDateTimeChange(const tagNMDATETIMECHANGE& dtch) = 0;
 
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWSetDarkOrLightMode() override;
 
     // the date currently shown by the control, may be invalid
     wxDateTime m_date;
@@ -75,10 +77,12 @@ private:
     // validity, i.e. avoiding useless work if nothing needs to be done.
     void MSWUpdateFormatIfNeeded(bool valid);
 
-
     // shown when there is no valid value (so only used with wxDP_ALLOWNONE),
     // always non-empty if SetNullText() was called, see the comments there
     wxString m_nullText;
+
+    // True if the spin button has been subclassed, for dark mode.
+    bool m_isSpinSubclassed = false;
 };
 
 #endif // _WX_MSW_DATETIMECTRL_H_

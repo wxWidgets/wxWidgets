@@ -62,6 +62,7 @@ protected:
     void MSWOnClick(wxMouseEvent& event);
     void MSWOnDoubleClick(wxMouseEvent& event);
 
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
     virtual void MSWSetDarkOrLightMode() override;
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
@@ -81,10 +82,6 @@ private:
     // redisplay holidays
     virtual void RefreshHolidays() override { UpdateMarks(); }
 
-    wxBitmap MSWPaintDarkMode(const wxBitmap& bmpIn);
-    void OnMouseMove(wxMouseEvent& event);
-    void OnMouseLeave(wxMouseEvent& event);
-
     // current date, we need to store it instead of simply retrieving it from
     // the control as needed in order to be able to generate the correct events
     // from MSWOnNotify()
@@ -96,11 +93,9 @@ private:
     // the same but indicating whether a day is a holiday or not
     wxUint32 m_holidays;
 
-    // The mouse cell position within the body, for dark mode painting. If the
-    // mouse is not inside the body, m_msCal is -1.
-    int m_msCal = -1;
-    int m_msCol;
-    int m_msRow;
+    // The mouse cell position within the calendar, for dark mode painting.
+    // See usage for encoding format.
+    int m_mousePos = -1;
 
     wxDECLARE_DYNAMIC_CLASS(wxCalendarCtrl);
     wxDECLARE_NO_COPY_CLASS(wxCalendarCtrl);

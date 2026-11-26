@@ -32,6 +32,7 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/datecontrols.h"
 #include "wx/msw/private/uilocale.h"
 
@@ -301,6 +302,54 @@ wxDateTimePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     }
 
     return wxDateTimePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
+}
+
+void wxDateTimePickerCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // This theme makes the background dark and the text light. The check box
+    // and drop-down button are missing and have to be custom drawn.
+    support.themeName = L"DarkMode";
+    support.themeId = L"FileExplorerBannerContainer";
+}
+
+
+// Spin button subclass procedure, for dark mode.
+static LRESULT CALLBACK SpinButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch ( uMsg )
+    {
+        case WM_PAINT:
+        {
+            wxMSWDarkMode::DrawSpinButton(hwnd, ::DefSubclassProc);
+            return 0;
+        }
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, SpinButtonProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+void wxDateTimePickerCtrl::MSWSetDarkOrLightMode()
+{
+    wxDateTimePickerCtrlBase::MSWSetDarkOrLightMode();
+
+    // Handle the spin button.
+    WinStruct<DATETIMEPICKERINFO> info;
+    ::SendMessage(m_hWnd, DTM_GETDATETIMEPICKERINFO, 0, (LPARAM)&info);
+    if ( info.hwndUD )
+    {
+        wxMSWDarkMode::AllowForWindow(info.hwndUD);
+        // Subclass for custom painting.
+        if ( !m_isSpinSubclassed )
+        {
+            ::SetWindowSubclass(info.hwndUD, SpinButtonProc, 1, 0);
+            m_isSpinSubclassed = true;
+        }
+    }
 }
 
 #endif // wxNEEDS_DATETIMEPICKCTRL
