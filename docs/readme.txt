@@ -1,4 +1,4 @@
-wxWidgets 3.3.5 Release Notes
+wxWidgets 3.9.0 Release Notes
 =============================
 
 Welcome to the latest release of wxWidgets, a free and open source
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.3.5/
+* https://docs.wxwidgets.org/3.9.0/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,43 +25,25 @@ download from:
 
 or, for a more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.3.5/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.9.0/
 
-Please see https://docs.wxwidgets.org/3.3.5/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.9.0/overview_install.html for full
 installation instructions.
 
 
 
-Changes since 3.3.3
--------------------
+Changes since 3.4
+-----------------
 
-This release contains about 900 commits from 52 unique contributors done since
-3.3.3. The amount of changes is too big to list them all here, but most of them
-fall into the following categories:
-
-- Numerous bug fixes and improvements for wxMSW dark mode.
-- Better Wayland support in wxGTK, notably implementing wxAUI panes dragging
-  and restoring top level windows positions (when the required protocols are
-  available). wxTaskBarIcon also works under Wayland now (with AppIndicator).
-- Improved accessibility support on all platforms, including wxOSX and wxGTK.
-- Improved handling of IME under all platforms.
-- Several major new features added to wxRibbon.
-- Some long standing bugs in (TCP-based) wxIPC and wxSocket have been fixed.
-- Accelerator key handling has been made more flexible and consistent.
+TODO
 
 Please see the change log for the more complete list:
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.5/docs/changes.txt
-
-and also see
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.12/docs/changes.txt
-
-as all the changes in 3.2.12 release are also included in this one.
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.9.0/docs/changes.txt
 
 
-Note that in spite of all these changes, wxWidgets 3.3.5 is almost fully
-compatible with wxWidgets 3.2 and updating the existing applications to
+Note that in spite of all these changes, wxWidgets 3.9.0 is almost fully
+compatible with wxWidgets 3.4 and updating the existing applications to
 use it shouldn't require much effort. However please make sure to read the
 "INCOMPATIBLE CHANGES" section of the change log above when upgrading to be
 aware of the breaking changes in it.
