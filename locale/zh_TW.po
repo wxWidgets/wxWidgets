@@ -50,7 +50,7 @@ msgstr "列印"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
 msgid "Printing"
 msgstr "列印"
 
@@ -1284,7 +1284,7 @@ msgstr "無法創建檔案 '%s'"
 msgid "can't close file descriptor %d"
 msgstr "無法關閉檔案描述符 %d"
 
-#: ../src/common/file.cpp:3.4
+#: ../src/common/file.cpp:333
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "無法讀取檔案描述符 %d"
@@ -1420,7 +1420,7 @@ msgstr "無法更新使用者組態檔案。"
 msgid "Error saving user configuration data."
 msgstr "儲存使用者組態資料錯誤。"
 
-#: ../src/common/fileconf.cpp:13.4
+#: ../src/common/fileconf.cpp:1313
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "無法刪除使用者組態檔案 '%s'"
@@ -1571,7 +1571,7 @@ msgstr "無法移除鎖定檔案 '%s'"
 msgid "Failed to set mode of '%s'"
 msgstr "無法移除鎖定檔案 '%s'"
 
-#: ../src/common/filename.cpp:3.41
+#: ../src/common/filename.cpp:3031
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "無法在 '%s' 修改檔案時間"
@@ -2213,7 +2213,7 @@ msgstr "BMP: 無法寫入檔案表頭 (Bitmap)。"
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: 無法寫入檔案表頭 (BitmapInfo)。"
 
-#: ../src/common/imagbmp.cpp:3.4
+#: ../src/common/imagbmp.cpp:353
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: 無法寫入 RGB 顏色對應表。"
 
@@ -2334,7 +2334,7 @@ msgstr "未知的影像資料格式。"
 msgid "This is not a %s."
 msgstr "這不是 %s。"
 
-#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "沒有定義 %s 類型的影像處理常式。"
@@ -2780,8 +2780,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 信封, 114 x 229 公釐"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 3.4 mm"
-msgstr "B4 信封，250 x 3.4 公釐"
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr "B4 信封，250 x 353 公釐"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2816,8 +2816,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "德國法定複寫簿, 8 1/2 x 13 in"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 3.4 mm"
-msgstr "B4 (ISO) 250 x 3.4 公釐"
+msgid "B4 (ISO) 250 x 353 mm"
+msgstr "B4 (ISO) 250 x 353 公釐"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2872,8 +2872,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4 227 x 356 公釐"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3.405 x 487 mm"
-msgstr "SuperB/SuperB/A3.405 x 487 公釐"
+msgid "SuperB/SuperB/A3 305 x 487 mm"
+msgstr "SuperB/SuperB/A3 305 x 487 公釐"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3283,7 +3283,7 @@ msgstr "無法監控輸入輸出通道"
 msgid "Save"
 msgstr "儲存"
 
-#: ../src/common/sizer.cpp:3.40
+#: ../src/common/sizer.cpp:3230
 msgid "Don't Save"
 msgstr "不儲存"
 
@@ -3397,7 +3397,7 @@ msgid "Cut"
 msgstr "剪下"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "刪除(&D)"
@@ -3870,7 +3870,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "無法轉換到 '%s' 字集。"
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
 msgid "unknown"
 msgstr "未知"
 
@@ -4110,7 +4110,7 @@ msgstr "宣告的 RTTI 參數中找不到創建的參數 %s"
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "作為事件來源的物件類別 (非-wxEvtHandler) 不合規範"
 
-#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "必須進行 enum - long 的類型轉換"
@@ -4214,7 +4214,7 @@ msgstr "損壞的 zip 檔案移動至項目"
 msgid "stored file length not in Zip header"
 msgstr "儲存的檔案長度不在 Zip 表頭中"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
 msgid "unsupported Zip compression method"
 msgstr "不支援的 Zip 壓縮方法"
 
@@ -4260,7 +4260,7 @@ msgstr "zlib 錯誤碼 %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "無法讀取解壓資料流：%s"
 
-#: ../src/common/zstream.cpp:3.4
+#: ../src/common/zstream.cpp:343
 msgid "Can't initialize zlib deflate stream."
 msgstr "無法初始化 zlib 壓縮資料流。"
 
@@ -4383,7 +4383,7 @@ msgstr "紅色："
 msgid "Green:"
 msgstr "綠色："
 
-#: ../src/generic/colrdlgg.cpp:3.4
+#: ../src/generic/colrdlgg.cpp:363
 msgid "Blue:"
 msgstr "藍色："
 
@@ -4475,7 +4475,7 @@ msgstr "產生了一份偵錯報告, 位於目錄\n"
 msgid "The following debug report will be generated\n"
 msgstr "即將產出下列的偵錯報告\n"
 
-#: ../src/generic/dbgrptg.cpp:3.4
+#: ../src/generic/dbgrptg.cpp:323
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4754,7 +4754,7 @@ msgstr "..."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:3.4
+#: ../src/generic/fontdlgg.cpp:313
 msgid "Roman"
 msgstr "羅馬"
 
@@ -4786,7 +4786,7 @@ msgstr "正常"
 msgid "Slant"
 msgstr "傾斜"
 
-#: ../src/generic/fontdlgg.cpp:3.4
+#: ../src/generic/fontdlgg.cpp:323
 msgid "Light"
 msgstr "細體"
 
@@ -4806,7 +4806,7 @@ msgstr "樣式(&S)："
 msgid "The font style."
 msgstr "字型樣式。"
 
-#: ../src/generic/fontdlgg.cpp:3.4
+#: ../src/generic/fontdlgg.cpp:383
 msgid "&Weight:"
 msgstr "粗細(&W)："
 
@@ -5914,7 +5914,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "未知的動態資料交換 (DDE) 錯誤 %08x"
 
-#: ../src/msw/dialup.cpp:3.4
+#: ../src/msw/dialup.cpp:343
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -5991,7 +5991,7 @@ msgstr "無法掛斷—沒有可用的撥號連線。"
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "無法終止撥號連線：%s"
 
-#: ../src/msw/dib.cpp:3.4
+#: ../src/msw/dib.cpp:313
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "無法將點陣圖影像儲存至 '%s' 檔案。"
@@ -7278,7 +7278,7 @@ msgstr "水平偏移值。"
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:3.4
+#: ../src/richtext/richtextborderspage.cpp:323
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7311,14 +7311,14 @@ msgstr "水平偏移值。"
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:3.4
+#: ../src/richtext/richtextmarginspage.cpp:313
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:3.4
+#: ../src/richtext/richtextmarginspage.cpp:363
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7487,7 +7487,7 @@ msgstr "陰影混濁度。"
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8010,7 +8010,7 @@ msgstr "刪除文字"
 msgid "Remove Bullet"
 msgstr "移除項目符號"
 
-#: ../src/richtext/richtextctrl.cpp:3.41
+#: ../src/richtext/richtextctrl.cpp:3131
 msgid "The text couldn't be saved."
 msgstr "無法儲存文字。"
 
@@ -8156,7 +8156,7 @@ msgid "Suppress hyphe&nation"
 msgstr "抑制將同一英文字分行顯示(&n)"
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:3.4
+#: ../src/richtext/richtextfontpage.cpp:323
 msgid "Check to suppress hyphenation."
 msgstr "勾選後可抑制將同一英文字分行顯示。"
 
@@ -8181,7 +8181,7 @@ msgid "(none)"
 msgstr "(無)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:3.4
+#: ../src/richtext/richtextfontpage.cpp:353
 msgid "Regular"
 msgstr "正規"
 
@@ -8230,7 +8230,7 @@ msgstr "左側(&L)"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:3.4
+#: ../src/richtext/richtextliststylepage.cpp:333
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "文字向左對齊。"
@@ -8279,7 +8279,7 @@ msgstr "尚未確定&I)"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:3.4
+#: ../src/richtext/richtextliststylepage.cpp:363
 msgid "Use the current alignment setting."
 msgstr "使用目前的對齊設定。"
 
@@ -8296,7 +8296,7 @@ msgid "The left indent."
 msgstr "左側縮排。"
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:3.4
+#: ../src/richtext/richtextliststylepage.cpp:393
 msgid "Left (&first line):"
 msgstr "左(第一列)(&F):"
 
@@ -8591,7 +8591,7 @@ msgid "Vertical alignment."
 msgstr "垂直對齊。"
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:323
 msgid "&Width:"
 msgstr "寬度(&W)："
 
@@ -8601,7 +8601,7 @@ msgid "Enable the width value."
 msgstr "啟用寬度值。"
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:333
 msgid "The object width."
 msgstr "物件寬度。"
 
@@ -8636,7 +8636,7 @@ msgstr "物件高度單位。"
 msgid "Min width:"
 msgstr "最小寬度："
 
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:383
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "啟用最小寬度值。"
@@ -9406,7 +9406,7 @@ msgid "Cannot get the official hostname"
 msgstr "無法取得正式的主機名稱"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:13.4
+#: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""

@@ -43,7 +43,7 @@ msgstr "छापिएका पानाहरू"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:3.4
+#: ../src/common/prntbase.cpp:540 ../src/html/htmprint.cpp:303
 msgid "Printing"
 msgstr "छाप्ने काम हुँदैछ ।"
 
@@ -1279,7 +1279,7 @@ msgstr "फाइल '%s' सिर्जना गर्न सकिँदै�
 msgid "can't close file descriptor %d"
 msgstr "फाइल ब्याख्याकार %d बन्द गर्न सकिँदैन ।"
 
-#: ../src/common/file.cpp:3.4
+#: ../src/common/file.cpp:333
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "फाइल ब्याख्याकार %d बाट पढ्न सकिँदैन ।"
@@ -1416,7 +1416,7 @@ msgstr "उपभोक्ता अभियोजन फाइल अद्य
 msgid "Error saving user configuration data."
 msgstr "उपभोक्ताको अभियोजन तथ्याङ्क बचतमा गल्ती भयो ।"
 
-#: ../src/common/fileconf.cpp:13.4
+#: ../src/common/fileconf.cpp:1313
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "उपभोक्ताको अभियोजन फाइल '%s' मेटाउन सकिँदैन ।"
@@ -1567,7 +1567,7 @@ msgstr "चाबी फाइल '%s' हटाउन सकिएन ।"
 msgid "Failed to set mode of '%s'"
 msgstr "चाबी फाइल '%s' हटाउन सकिएन ।"
 
-#: ../src/common/filename.cpp:3.41
+#: ../src/common/filename.cpp:3031
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "'%s' फाइलको समय फेर बदल गर्न सकिएन ।"
@@ -2216,7 +2216,7 @@ msgstr "BMP: फाइल (Bitmap) को शीर्षक लेख्न स
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: फाइल (Bitmap जानकारी) शीर्षक लेख्न सकिएन ।"
 
-#: ../src/common/imagbmp.cpp:3.4
+#: ../src/common/imagbmp.cpp:353
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: RGB रङ्गिन नक्सा लेख्न सकेन"
 
@@ -2337,7 +2337,7 @@ msgstr "अज्ञात तस्विर तथ्याङ्क बनो
 msgid "This is not a %s."
 msgstr "यो %s होइन ।"
 
-#: ../src/common/image.cpp:3.42 ../src/common/image.cpp:3080
+#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "तोकिएको %s किसिमका लागि तस्विर चालक छैन ।"
@@ -2788,8 +2788,8 @@ msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 खाम, 114 x 229 मिमी"
 
 #: ../src/common/paper.cpp:102
-msgid "B4 Envelope, 250 x 3.4 mm"
-msgstr "B4 खाम, 250 x 3.4 मिमी"
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr "B4 खाम, 250 x 353 मिमी"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
@@ -2824,8 +2824,8 @@ msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "जर्मनी Legal Fanfold, 8 1/2 x 13इन्च"
 
 #: ../src/common/paper.cpp:112
-msgid "B4 (ISO) 250 x 3.4 mm"
-msgstr "B4 (ISO) 250 x 3.4 मिमी"
+msgid "B4 (ISO) 250 x 353 mm"
+msgstr "B4 (ISO) 250 x 353 मिमी"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
@@ -2880,8 +2880,8 @@ msgid "SuperA/SuperA/A4 227 x 356 mm"
 msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
-msgid "SuperB/SuperB/A3.405 x 487 mm"
-msgstr "SuperB/SuperB/A3.405 x 487 mm"
+msgid "SuperB/SuperB/A3 305 x 487 mm"
+msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
@@ -3291,7 +3291,7 @@ msgstr "लगानी/प्रतिफल मार्ग अनुगमन
 msgid "Save"
 msgstr "बचत गर"
 
-#: ../src/common/sizer.cpp:3.40
+#: ../src/common/sizer.cpp:3230
 msgid "Don't Save"
 msgstr "बचत नगर"
 
@@ -3408,7 +3408,7 @@ msgid "Cut"
 msgstr "काट"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2959
-#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:3.4
+#: ../src/osx/textctrl_osx.cpp:668 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
 msgstr "&मेटाइ देउ"
@@ -3889,7 +3889,7 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "वर्ण समूह '%s' मा परिवर्तन हुन सक्दैन"
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
-#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:3.4
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
 msgid "unknown"
 msgstr "अज्ञात"
 
@@ -4130,7 +4130,7 @@ msgstr "%s मापकहरूको सिर्जना घोषित RTT
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "घटना श्रोतको रूपमा अवैध वस्तु वर्ग (Non-wxEvtHandler) "
 
-#: ../src/common/xtistrm.cpp:3.4 ../src/common/xtixml.cpp:345
+#: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "Type must have enum - long conversion"
@@ -4234,7 +4234,7 @@ msgstr "प्रविष्टिका लागि गलत zip फाइ�
 msgid "stored file length not in Zip header"
 msgstr "फाइलको लम्बाइ Zip header भन्दा अन्तै भण्डार गर"
 
-#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:23.4
+#: ../src/common/zipstrm.cpp:2066 ../src/common/zipstrm.cpp:2383
 msgid "unsupported Zip compression method"
 msgstr "असमर्थित Zip दबाब विधि "
 
@@ -4280,7 +4280,7 @@ msgstr "zlib गल्ती %d"
 msgid "Can't read from inflate stream: %s"
 msgstr "inflate stream: %s बाट पढ्न सकिँदैन ।"
 
-#: ../src/common/zstream.cpp:3.4
+#: ../src/common/zstream.cpp:343
 msgid "Can't initialize zlib deflate stream."
 msgstr "zlib deflate stream लाइ सुरु गर् सकिँदैन ।"
 
@@ -4404,7 +4404,7 @@ msgstr ""
 msgid "Green:"
 msgstr "हरियो"
 
-#: ../src/generic/colrdlgg.cpp:3.4
+#: ../src/generic/colrdlgg.cpp:363
 #, fuzzy
 msgid "Blue:"
 msgstr "नीलो"
@@ -4497,7 +4497,7 @@ msgstr "खानतलासी प्रतिवेदन गर्राम�
 msgid "The following debug report will be generated\n"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:3.4
+#: ../src/generic/dbgrptg.cpp:323
 msgid ""
 "The report contains the files listed below. If any of these files contain "
 "private information,\n"
@@ -4779,7 +4779,7 @@ msgstr ".."
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/fontdlgg.cpp:3.4
+#: ../src/generic/fontdlgg.cpp:313
 msgid "Roman"
 msgstr "रोमन"
 
@@ -4811,7 +4811,7 @@ msgstr "साधारण"
 msgid "Slant"
 msgstr "छड्के"
 
-#: ../src/generic/fontdlgg.cpp:3.4
+#: ../src/generic/fontdlgg.cpp:323
 msgid "Light"
 msgstr "हलुको"
 
@@ -4831,7 +4831,7 @@ msgstr "&शैली:"
 msgid "The font style."
 msgstr "वरणाकृतिको शैली"
 
-#: ../src/generic/fontdlgg.cpp:3.4
+#: ../src/generic/fontdlgg.cpp:383
 msgid "&Weight:"
 msgstr "&भार:"
 
@@ -5939,7 +5939,7 @@ msgstr ""
 msgid "Unknown DDE error %08x"
 msgstr "अज्ञात DDE गल्ती %08x"
 
-#: ../src/msw/dialup.cpp:3.4
+#: ../src/msw/dialup.cpp:343
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -6018,7 +6018,7 @@ msgstr "सक्रिय डायल जडान पाउन सकिँ�
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "डायलअप जडान %s बन्द गर्न सकिएन ।"
 
-#: ../src/msw/dib.cpp:3.4
+#: ../src/msw/dib.cpp:313
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "फाइल \"%s\" मा bitmap तस्विर बचत गर्न सकिएन ।"
@@ -7347,7 +7347,7 @@ msgstr "&तेर्सो पारेर राख"
 #: ../src/richtext/richtextborderspage.cpp:289
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:320
-#: ../src/richtext/richtextborderspage.cpp:3.4
+#: ../src/richtext/richtextborderspage.cpp:323
 #: ../src/richtext/richtextborderspage.cpp:324
 #: ../src/richtext/richtextborderspage.cpp:354
 #: ../src/richtext/richtextborderspage.cpp:357
@@ -7380,14 +7380,14 @@ msgstr "&तेर्सो पारेर राख"
 #: ../src/richtext/richtextmarginspage.cpp:272
 #: ../src/richtext/richtextmarginspage.cpp:274
 #: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:3.4
+#: ../src/richtext/richtextmarginspage.cpp:313
 #: ../src/richtext/richtextmarginspage.cpp:315
 #: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:338
 #: ../src/richtext/richtextmarginspage.cpp:340
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:361
-#: ../src/richtext/richtextmarginspage.cpp:3.4
+#: ../src/richtext/richtextmarginspage.cpp:363
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:386
 #: ../src/richtext/richtextmarginspage.cpp:388
@@ -7565,7 +7565,7 @@ msgstr ""
 #. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:400
 #: ../src/richtext/richtextsizepage.cpp:427
 #: ../src/richtext/richtextsizepage.cpp:454
@@ -8088,7 +8088,7 @@ msgstr "पाठ मेटाइ देउ "
 msgid "Remove Bullet"
 msgstr "गोली चिन्ह हटाउ"
 
-#: ../src/richtext/richtextctrl.cpp:3.41
+#: ../src/richtext/richtextctrl.cpp:3131
 msgid "The text couldn't be saved."
 msgstr "पाठलाई बचत गर्न सकेन"
 
@@ -8234,7 +8234,7 @@ msgid "Suppress hyphe&nation"
 msgstr "हाइपरनेशनलाई &दबाउ"
 
 #: ../src/richtext/richtextfontpage.cpp:321
-#: ../src/richtext/richtextfontpage.cpp:3.4
+#: ../src/richtext/richtextfontpage.cpp:323
 msgid "Check to suppress hyphenation."
 msgstr "हाइफरनेसन दबाउन टिक लगाउनु होला ।."
 
@@ -8259,7 +8259,7 @@ msgid "(none)"
 msgstr "(कुनै पनि होइन)"
 
 #: ../src/richtext/richtextfontpage.cpp:349
-#: ../src/richtext/richtextfontpage.cpp:3.4
+#: ../src/richtext/richtextfontpage.cpp:353
 msgid "Regular"
 msgstr "नियमित"
 
@@ -8308,7 +8308,7 @@ msgstr "&देब्रे"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:3.4
+#: ../src/richtext/richtextliststylepage.cpp:333
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "देब्रे-पङ्क्ति पाठ"
@@ -8357,7 +8357,7 @@ msgstr "&निकाल्न नसकिने"
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
-#: ../src/richtext/richtextliststylepage.cpp:3.4
+#: ../src/richtext/richtextliststylepage.cpp:363
 msgid "Use the current alignment setting."
 msgstr "चालू पङ्क्ति बद्ध अनुकूलताको प्रयोग गर"
 
@@ -8374,7 +8374,7 @@ msgid "The left indent."
 msgstr "देब्रे indent"
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:3.4
+#: ../src/richtext/richtextliststylepage.cpp:393
 msgid "Left (&first line):"
 msgstr "देब्रे (&प्रथम line):"
 
@@ -8669,7 +8669,7 @@ msgid "Vertical alignment."
 msgstr "ठाडो पङ्‌क्तिबद्धता"
 
 #: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:323
 msgid "&Width:"
 msgstr "&छोडाइ:"
 
@@ -8679,7 +8679,7 @@ msgid "Enable the width value."
 msgstr "छोडाइ मान लाई योग्य बनाउ"
 
 #: ../src/richtext/richtextsizepage.cpp:331
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:333
 msgid "The object width."
 msgstr "वस्तुको छोडाइ"
 
@@ -8714,7 +8714,7 @@ msgstr "वस्तु उचाइको एकाइ"
 msgid "Min width:"
 msgstr "न्यून छोडाइ:"
 
-#: ../src/richtext/richtextsizepage.cpp:3.4
+#: ../src/richtext/richtextsizepage.cpp:383
 #: ../src/richtext/richtextsizepage.cpp:385
 msgid "Enable the minimum width value."
 msgstr "न्यूनतम छोडाइ मान लाई योग्य बनाउ"
@@ -9485,7 +9485,7 @@ msgid "Cannot get the official hostname"
 msgstr "अतिरिक्त सत्कार कर्ताको नाम पाउन सकिँदैन ।"
 
 #. TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename.
-#: ../src/unix/utilsunx.cpp:13.4
+#: ../src/unix/utilsunx.cpp:1313
 #, c-format
 msgid ", based on %s (%s)"
 msgstr ""
