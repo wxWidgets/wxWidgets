@@ -25,9 +25,8 @@ Here is the list of files that need to be updated:
 - docs/doxygen/Doxyfile (PROJECT_NUMBER and DOCSET_FEEDNAME)
 - docs/doxygen/mainpages/manual.h (just date)  [NOT UPDATED AUTOMATICALLY]
 - include/wx/version.h
-- include/wx/osx/config_xcode.h
 - samples/minimal/Info_cocoa.plist
-- samples/minimal/CMakeListst.txt [major/minor only]
+- samples/minimal/CMakeLists.txt [major/minor only]
 
 Do not forget to rebake everything after updating version.bkl!
 
