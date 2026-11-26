@@ -261,6 +261,8 @@ protected:
     wxGenericTreeItem   *m_oldSelection;
     wxGenericTreeItem   *m_underMouse; // for visual effects
 
+    bool                 m_isLastMouseEventLeftDown;// for event Item_Left_Click
+
     enum { NoEffect, BorderEffect, AboveEffect, BelowEffect } m_dndEffect;
     wxGenericTreeItem   *m_dndEffectItem;
 
