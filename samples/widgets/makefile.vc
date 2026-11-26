@@ -33,6 +33,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_activityindicator.obj \
 	$(OBJS)\widgets_bmpcombobox.obj \
 	$(OBJS)\widgets_button.obj \
+	$(OBJS)\widgets_buttonbox.obj \
 	$(OBJS)\widgets_checkbox.obj \
 	$(OBJS)\widgets_choice.obj \
 	$(OBJS)\widgets_clrpicker.obj \
@@ -487,6 +488,9 @@ $(OBJS)\widgets_bmpcombobox.obj: .\bmpcombobox.cpp
 
 $(OBJS)\widgets_button.obj: .\button.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) .\button.cpp
+
+$(OBJS)\widgets_buttonbox.obj: .\buttonbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) .\buttonbox.cpp
 
 $(OBJS)\widgets_checkbox.obj: .\checkbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) .\checkbox.cpp

@@ -743,6 +743,7 @@ GUI_CMN_SRC =
     src/common/bmpcboxcmn.cpp
     src/common/bookctrl.cpp
     src/common/btncmn.cpp
+    src/common/buttonboxcmn.cpp
     src/common/cairo.cpp
     src/common/calctrlcmn.cpp
     src/common/checkboxcmn.cpp
@@ -876,6 +877,7 @@ GUI_CMN_SRC =
     src/generic/bmpsvg.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
+    src/generic/buttonbox.cpp
     src/generic/calctrlg.cpp
     src/generic/choicbkg.cpp
     src/generic/choicdgg.cpp
@@ -961,6 +963,7 @@ GUI_CMN_HDR =
     wx/busycursor.h
     wx/busyinfo.h
     wx/button.h
+    wx/buttonbox.h
     wx/calctrl.h
     wx/caret.h
     wx/checkbox.h
@@ -1039,6 +1042,7 @@ GUI_CMN_HDR =
     wx/generic/bmpcbox.h
     wx/generic/busyinfo.h
     wx/generic/buttonbar.h
+    wx/generic/buttonbox.h
     wx/generic/calctrlg.h
     wx/generic/choicdgg.h
     wx/generic/collheaderctrl.h
@@ -1973,6 +1977,7 @@ OSX_COMMON_SRC =
     src/osx/anybutton_osx.cpp
     src/osx/bmpbuttn_osx.cpp
     src/osx/button_osx.cpp
+    src/osx/buttonbox_osx.cpp
     src/osx/checkbox_osx.cpp
     src/osx/checklst_osx.cpp
     src/osx/choice_osx.cpp
@@ -2051,6 +2056,7 @@ OSX_SHARED_HDR =
     wx/osx/bmpbuttn.h
     wx/osx/brush.h
     wx/osx/button.h
+    wx/osx/buttonbox.h
     wx/osx/checkbox.h
     wx/osx/checklst.h
     wx/osx/choice.h
@@ -2143,6 +2149,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/anybutton.mm
     src/osx/cocoa/appprogress.mm
     src/osx/cocoa/button.mm
+    src/osx/cocoa/buttonbox.mm
     src/osx/cocoa/checkbox.mm
     src/osx/cocoa/choice.mm
     src/osx/cocoa/colour.mm
@@ -2513,6 +2520,7 @@ XRC_SRC =
     src/xrc/xh_bmpbt.cpp
     src/xrc/xh_bookctrlbase.cpp
     src/xrc/xh_bttn.cpp
+    src/xrc/xh_buttonbox.cpp
     src/xrc/xh_cald.cpp
     src/xrc/xh_chckb.cpp
     src/xrc/xh_chckl.cpp
@@ -2585,6 +2593,7 @@ XRC_HDR =
     wx/xrc/xh_bmpcbox.h
     wx/xrc/xh_bookctrlbase.h
     wx/xrc/xh_bttn.h
+    wx/xrc/xh_buttonbox.h
     wx/xrc/xh_cald.h
     wx/xrc/xh_chckb.h
     wx/xrc/xh_chckl.h

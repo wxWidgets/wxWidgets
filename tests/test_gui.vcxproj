@@ -917,6 +917,7 @@
     <ClCompile Include="controls\bitmapcomboboxtest.cpp" />
     <ClCompile Include="controls\bitmaptogglebuttontest.cpp" />
     <ClCompile Include="controls\bookctrlbasetest.cpp" />
+    <ClCompile Include="controls\buttonboxtest.cpp" />
     <ClCompile Include="controls\buttontest.cpp" />
     <ClCompile Include="controls\checkboxtest.cpp" />
     <ClCompile Include="controls\checklistboxtest.cpp" />

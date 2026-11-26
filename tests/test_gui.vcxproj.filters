@@ -44,6 +44,9 @@
     <ClCompile Include="sizers\gridsizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controls\buttonboxtest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\buttontest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

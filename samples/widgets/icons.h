@@ -19,6 +19,7 @@ enum class WidgetsIcon
     ActivityIndicator,
     BmpComboBox,
     Button,
+    ButtonBox,
     CheckBox,
     Choice,
     Choicebook,

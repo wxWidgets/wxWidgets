@@ -66,6 +66,7 @@ library:
 @itemdef{wxUSE_BMPBUTTON, Use wxBitmapButton class.}
 @itemdef{wxUSE_BUSYINFO, Use wxBusyInfo class.}
 @itemdef{wxUSE_BUTTON, Use wxButton class.}
+@itemdef{wxUSE_BUTTONBOX, Use wxButtonBox class.}
 @itemdef{wxUSE_CALENDARCTRL, Use wxCalendarCtrl class.}
 @itemdef{wxUSE_CARET, Use wxCaret class.}
 @itemdef{wxUSE_CHECKBOX, Use wxCheckBox class.}

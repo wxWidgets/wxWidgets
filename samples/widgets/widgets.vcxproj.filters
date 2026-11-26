@@ -23,6 +23,9 @@
     <ClCompile Include="button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="buttonbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="checkbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

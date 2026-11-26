@@ -241,6 +241,67 @@
                     </object>
                 </object>
                 <object class="choicebookpage">
+                    <label>wxButtonBox</label>
+                    <object class="wxPanel" name="buttonbox">
+                        <object class="wxFlexGridSizer">
+                            <cols>2</cols>
+                            <rows>0</rows>
+                            <vgap>0</vgap>
+                            <hgap>0</hgap>
+                            <growablecols>0,1</growablecols>
+                            <growablerows>0,1</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>wxButtonBox:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxButtonBox" name="controls_buttonbox">
+                                    <object class="segment">
+                                        <label>Left</label>
+                                        <selected>1</selected>
+                                    </object>
+                                    <object class="segment">
+                                        <label>Center</label>
+                                        <tooltip>Center the text</tooltip>
+                                    </object>
+                                    <object class="segment">
+                                        <label>Right</label>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>select any style:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxButtonBox" name="controls_buttonbox_any">
+                                    <style>wxBB_SELECT_ANY</style>
+                                    <object class="segment">
+                                        <label>Bold</label>
+                                        <selected>1</selected>
+                                    </object>
+                                    <object class="segment">
+                                        <label>Italic</label>
+                                    </object>
+                                    <object class="segment">
+                                        <label>Underline</label>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="choicebookpage">
                     <label>wxCalendarControl</label>
                     <object class="wxPanel" name="calendar">
                         <object class="wxFlexGridSizer">

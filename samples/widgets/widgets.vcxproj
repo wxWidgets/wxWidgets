@@ -442,6 +442,7 @@
     <ClCompile Include="activityindicator.cpp" />
     <ClCompile Include="bmpcombobox.cpp" />
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="buttonbox.cpp" />
     <ClCompile Include="checkbox.cpp" />
     <ClCompile Include="choice.cpp" />
     <ClCompile Include="clrpicker.cpp" />

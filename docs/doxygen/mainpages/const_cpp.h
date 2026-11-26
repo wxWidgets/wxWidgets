@@ -209,6 +209,9 @@ Currently the following symbols exist:
     This constant is available since wxWidgets 3.3.3}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
 @itemdef{wxHAS_NATIVE_ANIMATIONCTRL, Defined if native wxAnimationCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
+@itemdef{wxHAS_NATIVE_BUTTONBOX, Defined in @c wx/buttonbox.h if wxButtonBox
+    is implemented natively and is not just another name for
+    wxGenericButtonBox. Currently only defined in wxOSX/Cocoa.}
 @itemdef{wxHAS_NATIVE_DATAVIEWCTRL, Defined if native wxDataViewCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
 @itemdef{wxHAS_NATIVE_WINDOW, Defined if wxNativeWindow class is available.}
 @itemdef{wxHAS_NOEXCEPT, This symbol exists only for compatibility and is always defined now.}

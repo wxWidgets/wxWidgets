@@ -1021,6 +1021,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/curbndl.cpp
     src/common/webpdecoder.cpp
     src/common/imagwebp.cpp
+    src/generic/buttonbox.cpp
+    src/common/buttonboxcmn.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1320,6 +1322,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/imagwebp.h
     wx/webpdecoder.h
     wx/persist/checkbox.h
+    wx/generic/buttonbox.h
+    wx/buttonbox.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2172,6 +2176,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/textmeasure.cpp
     src/osx/statbmp_osx.cpp
     src/generic/imaglist.cpp
+    src/osx/buttonbox_osx.cpp
 </if>
 </set>
 
@@ -2267,6 +2272,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/osx/hyperlink.h
+    wx/osx/buttonbox.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2332,6 +2338,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/renderer.mm
     src/osx/cocoa/power.mm
     src/osx/cocoa/hyperlink.mm
+    src/osx/cocoa/buttonbox.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/evtloop.h
@@ -2801,6 +2808,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
     src/xrc/xh_bookctrlbase.cpp
+    src/xrc/xh_buttonbox.cpp
 </set>
 <set var="XRC_HDR" hints="files">
     wx/xrc/xh_activityindicator.h
@@ -2873,6 +2881,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
     wx/xrc/xh_bookctrlbase.h
+    wx/xrc/xh_buttonbox.h
 </set>
 
 

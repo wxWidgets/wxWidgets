@@ -470,6 +470,14 @@ public :
                                     long style,
                                     long extraStyle) ;
 
+    static wxWidgetImplType*    CreateButtonBox( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    long style,
+                                    long extraStyle) ;
+
     static wxWidgetImplType*    CreateDisclosureTriangle( wxWindowMac* wxpeer,
                                     wxWindowMac* parent,
                                     wxWindowID id,

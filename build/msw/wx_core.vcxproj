@@ -1707,6 +1707,8 @@
     <ClCompile Include="..\..\src\common\imagwebp.cpp" />
     <ClCompile Include="..\..\src\common\webpdecoder.cpp" />
     <ClCompile Include="..\..\src\msw\taskdlg.cpp" />
+    <ClCompile Include="..\..\src\generic\buttonbox.cpp" />
+    <ClCompile Include="..\..\src\common\buttonboxcmn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -2174,6 +2176,8 @@
     <ClInclude Include="..\..\include\wx\imagwebp.h" />
     <ClInclude Include="..\..\include\wx\msw\mfc.h" />
     <ClInclude Include="..\..\include\wx\persist\checkbox.h" />
+    <ClInclude Include="..\..\include\wx\generic\buttonbox.h" />
+    <ClInclude Include="..\..\include\wx\buttonbox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

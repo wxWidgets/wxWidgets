@@ -75,6 +75,9 @@
     <ClCompile Include="..\..\src\common\btncmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\buttonboxcmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\cairo.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -493,6 +496,9 @@
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\buttonbar.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\buttonbox.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\calctrlg.cpp">
@@ -1171,6 +1177,9 @@
     <ClInclude Include="..\..\include\wx\button.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\buttonbox.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\calctrl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1406,6 +1415,9 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\buttonbar.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\buttonbox.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\calctrlg.h">

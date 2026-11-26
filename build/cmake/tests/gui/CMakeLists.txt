@@ -37,6 +37,7 @@ set(TEST_GUI_SRC
     controls/bitmapcomboboxtest.cpp
     controls/bitmaptogglebuttontest.cpp
     controls/bookctrlbasetest.cpp
+    controls/buttonboxtest.cpp
     controls/buttontest.cpp
     controls/checkboxtest.cpp
     controls/checklistboxtest.cpp

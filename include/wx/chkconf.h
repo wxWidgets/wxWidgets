@@ -486,6 +486,14 @@
 #   endif
 #endif /* !defined(wxUSE_BUTTON) */
 
+#ifndef wxUSE_BUTTONBOX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_BUTTONBOX must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_BUTTONBOX 0
+#   endif
+#endif /* !defined(wxUSE_BUTTONBOX) */
+
 #ifndef wxUSE_CAIRO
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_CAIRO must be defined, please read comment near the top of this file."
@@ -1586,6 +1594,19 @@
 #        endif
 #    endif
 #endif /* wxUSE_BMPBUTTON */
+
+/* wxButtonBox is native in wxOSX/Cocoa, all the other ports use the generic
+   version which is built from wxToggleButtons */
+#if wxUSE_BUTTONBOX && !defined(__WXOSX_COCOA__)
+#    if !wxUSE_TOGGLEBTN
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_BUTTONBOX requires wxUSE_TOGGLEBTN"
+#        else
+#            undef wxUSE_TOGGLEBTN
+#            define wxUSE_TOGGLEBTN 1
+#        endif
+#    endif
+#endif /* wxUSE_BUTTONBOX */
 
 #if wxUSE_COMMANDLINKBUTTON
 #    if !wxUSE_BUTTON
