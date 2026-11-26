@@ -14,7 +14,6 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/access/LexillaAccess.cxx
     ${LEXILLA_SRC_DIR}/access/LexillaAccess.h
     ${LEXILLA_SRC_DIR}/include/Lexilla.h
-    ${LEXILLA_SRC_DIR}/include/LexillaCompat.h
     ${LEXILLA_SRC_DIR}/include/SciLexer.h
     ${LEXILLA_SRC_DIR}/lexers/LexA68k.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexAPDL.cxx
@@ -150,10 +149,10 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexlib/InList.h
     ${LEXILLA_SRC_DIR}/lexlib/LexAccessor.cxx
     ${LEXILLA_SRC_DIR}/lexlib/LexAccessor.h
-    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterCategory.cxx
-    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterCategory.h
-    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterSet.cxx
-    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterSet.h
+    ${LEXILLA_SRC_DIR}/lexlib/CharacterCategory.cxx
+    ${LEXILLA_SRC_DIR}/lexlib/CharacterCategory.h
+    ${LEXILLA_SRC_DIR}/lexlib/CharacterSet.cxx
+    ${LEXILLA_SRC_DIR}/lexlib/CharacterSet.h
     ${LEXILLA_SRC_DIR}/lexlib/LexerBase.cxx
     ${LEXILLA_SRC_DIR}/lexlib/LexerBase.h
     ${LEXILLA_SRC_DIR}/lexlib/LexerModule.cxx

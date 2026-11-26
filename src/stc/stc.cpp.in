@@ -38,19 +38,18 @@
 #endif // WX_PRECOMP
 
 #include "wx/tokenzr.h"
-#include "wx/mstream.h"
-#include "wx/vlbox.h"
-#include "wx/stack.h"
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
     #include "wx/file.h"
 #endif
-
-#include "wx/dcbuffer.h"
+#include "wx/private/textinput.h"
 
 #define INCLUDE_DEPRECATED_FEATURES
 #include "Scintilla.h"
+#include "ILexer.h"
+#include "Lexilla.h"
+#include "LexillaAccess.h"
 
 //----------------------------------------------------------------------
 
@@ -64,7 +63,8 @@ const char wxSTCNameStr[] = "stcwindow";
 
 
 static long wxColourAsLong(const wxColour& co) {
-    return (((long)co.Blue()  << 16) |
+    return (((long)co.Alpha() << 24) |
+            ((long)co.Blue()  << 16) |
             ((long)co.Green() <<  8) |
             ((long)co.Red()));
 }
@@ -73,10 +73,10 @@ static wxColour wxColourFromLong(long c) {
     wxColour clr;
     clr.Set((unsigned char)(c & 0xff),
             (unsigned char)((c >> 8) & 0xff),
-            (unsigned char)((c >> 16) & 0xff));
+            (unsigned char)((c >> 16) & 0xff),
+            (unsigned char)((c >> 24) & 0xff));
     return clr;
 }
-
 
 static wxColour wxColourFromSpec(const wxString& spec) {
     // spec should be a colour name or "#RRGGBB"
@@ -135,10 +135,6 @@ wxDEFINE_EVENT( wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE, wxStyledTextEvent );
 
 
-wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
-wxEND_EVENT_TABLE()
-
-
 wxIMPLEMENT_CLASS(wxStyledTextCtrl, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent);
 
@@ -171,6 +167,32 @@ void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
 //}}}
 //----------------------------------------------------------------------
 
+
+// Set the lexing language of the document.
+void wxStyledTextCtrl::SetLexer(int lexer)
+{
+    wxWARNING_SUPPRESS_DEPRECATED()
+    const char* name = LexerNameFromID(lexer);
+    wxWARNING_RESTORE_DEPRECATED()
+
+    ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+    const_cast<wxStyledTextCtrl*>(this)->SetILexer(pLexer);
+}
+
+// Set the lexing language of the document based on string name.
+void wxStyledTextCtrl::SetLexerLanguage(const wxString& language)
+{
+    const char* name = language.utf8_str();
+    ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+    const_cast<wxStyledTextCtrl*>(this)->SetILexer(pLexer);
+}
+
+// Load a lexer library (dll / so).
+void wxStyledTextCtrl::LoadLexerLibrary(const wxString& path)
+{
+    const char* name = path.utf8_str();
+    Lexilla::Load(name);
+}
 
 // Returns the line number of the line with the caret.
 int wxStyledTextCtrl::GetCurrentLine() {
@@ -437,15 +459,56 @@ void wxStyledTextCtrl::AnnotationClearLine(int line) {
     SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)nullptr);
 }
 
-void wxStyledTextCtrl::MarkerDefineBitmap(int, const wxBitmap&) {
-    // FIXME stub
+inline std::vector<unsigned char> GetRGBA(const wxBitmap& bmp)
+{
+    // Build an RGBA buffer from bmp.
+    wxImage img = bmp.ConvertToImage();
+    const size_t totalPixels = (size_t)img.GetWidth() * (size_t)img.GetHeight();
+    std::vector<unsigned char> rgba(totalPixels * 4);
+    size_t curRGBALoc = 0, curDataLoc = 0, curAlphaLoc = 0;
+
+    if (img.HasMask()) {
+        for (int y = 0; y < bmp.GetHeight(); ++y) {
+            for (int x = 0; x < bmp.GetWidth(); ++x) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.IsTransparent(x, y)
+                    ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE;
+            }
+        }
+    }
+    else if (img.HasAlpha()) {
+        for (int i = 0; i < totalPixels; ++i) {
+            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+            rgba[curRGBALoc++] = img.GetAlpha()[curAlphaLoc++];
+        }
+    }
+    else {
+        for (int i = 0; i < totalPixels; ++i) {
+            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+            rgba[curRGBALoc++] = wxALPHA_OPAQUE;
+        }
+    }
+
+    return rgba;
 }
 
-void wxStyledTextCtrl::RegisterImage(int, const wxBitmap&) {
-    // FIXME stub
+void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
+{
+    auto rgba = GetRGBA(bmp);
+    MarkerDefineRGBAImage(markerNumber, rgba.data());
 }
 
-
+void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
+{
+    auto rgba = GetRGBA(bmp);
+    RegisterRGBAImage(type, rgba.data());
+}
 
 
 void wxStyledTextCtrl::AddTextRaw(const char* text, int length)
@@ -608,6 +671,30 @@ wxSize wxStyledTextCtrl::DoGetBestSize() const
     return FromDIP(wxSize(200,100));
 }
 
+wxIntPtr wxStyledTextCtrl::SendMsg(int msg, wxUIntPtr wParam, wxIntPtr lParam) const
+{
+    SciFnDirect fn = reinterpret_cast<SciFnDirect>(m_sciFn);
+    return fn ? fn(m_sciPtr, msg, wParam, lParam) : 0;
+}
+
+void wxStyledTextCtrl::SetDefaultAttributes()
+{
+    // Use colours appropriate for the current system colour theme.
+    auto attr = wxTextCtrl::GetClassDefaultAttributes();
+    StyleSetForeground(wxSTC_STYLE_DEFAULT, attr.colFg);
+    StyleSetBackground(wxSTC_STYLE_DEFAULT, attr.colBg);
+    SetCaretForeground(attr.colFg);
+
+    // We also need to set this one because its foreground is hardcoded as
+    // black in Scintilla sources.
+    StyleSetForeground(wxSTC_STYLE_LINENUMBER, attr.colFg);
+
+    // And foreground for this one is hardcoded as white.
+    StyleSetForeground(wxSTC_STYLE_CALLTIP, attr.colFg);
+
+    SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+    SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+}
 
 //----------------------------------------------------------------------
 // Turn notifications from Scintilla into events

@@ -15,9 +15,12 @@ set(SCINTILLA_DEFINES)
 set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/include/ILexer.h
     ${SCINTILLA_SRC_DIR}/include/ILoader.h
-    ${SCINTILLA_SRC_DIR}/include/Platform.h
     ${SCINTILLA_SRC_DIR}/include/Sci_Position.h
     ${SCINTILLA_SRC_DIR}/include/Scintilla.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaCall.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaMessages.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaStructures.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaTypes.h
     ${SCINTILLA_SRC_DIR}/include/ScintillaWidget.h
     ${SCINTILLA_SRC_DIR}/src/AutoComplete.cxx
     ${SCINTILLA_SRC_DIR}/src/AutoComplete.h
@@ -29,16 +32,19 @@ set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/src/CaseFolder.h
     ${SCINTILLA_SRC_DIR}/src/CellBuffer.cxx
     ${SCINTILLA_SRC_DIR}/src/CellBuffer.h
+    ${SCINTILLA_SRC_DIR}/src/ChangeHistory.cxx
+    ${SCINTILLA_SRC_DIR}/src/ChangeHistory.h
+    ${SCINTILLA_SRC_DIR}/src/CharacterCategoryMap.cxx
+    ${SCINTILLA_SRC_DIR}/src/CharacterCategoryMap.h
+    ${SCINTILLA_SRC_DIR}/src/CharacterType.cxx
+    ${SCINTILLA_SRC_DIR}/src/CharacterType.h
     ${SCINTILLA_SRC_DIR}/src/CharClassify.cxx
     ${SCINTILLA_SRC_DIR}/src/CharClassify.h
-    ${SCINTILLA_SRC_DIR}/src/CharacterCategory.cxx
-    ${SCINTILLA_SRC_DIR}/src/CharacterCategory.h
-    ${SCINTILLA_SRC_DIR}/src/CharacterSet.cxx
-    ${SCINTILLA_SRC_DIR}/src/CharacterSet.h
     ${SCINTILLA_SRC_DIR}/src/ContractionState.cxx
     ${SCINTILLA_SRC_DIR}/src/ContractionState.h
     ${SCINTILLA_SRC_DIR}/src/DBCS.cxx
     ${SCINTILLA_SRC_DIR}/src/DBCS.h
+    ${SCINTILLA_SRC_DIR}/src/Debugging.h
     ${SCINTILLA_SRC_DIR}/src/Decoration.cxx
     ${SCINTILLA_SRC_DIR}/src/Decoration.h
     ${SCINTILLA_SRC_DIR}/src/Document.cxx
@@ -50,10 +56,10 @@ set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/src/Editor.cxx
     ${SCINTILLA_SRC_DIR}/src/Editor.h
     ${SCINTILLA_SRC_DIR}/src/ElapsedPeriod.h
-    ${SCINTILLA_SRC_DIR}/src/FontQuality.h
+    ${SCINTILLA_SRC_DIR}/src/Geometry.cxx
+    ${SCINTILLA_SRC_DIR}/src/Geometry.h
     ${SCINTILLA_SRC_DIR}/src/Indicator.cxx
     ${SCINTILLA_SRC_DIR}/src/Indicator.h
-    ${SCINTILLA_SRC_DIR}/src/IntegerRectangle.h
     ${SCINTILLA_SRC_DIR}/src/KeyMap.cxx
     ${SCINTILLA_SRC_DIR}/src/KeyMap.h
     ${SCINTILLA_SRC_DIR}/src/LineMarker.cxx
@@ -63,6 +69,7 @@ set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/src/Partitioning.h
     ${SCINTILLA_SRC_DIR}/src/PerLine.cxx
     ${SCINTILLA_SRC_DIR}/src/PerLine.h
+    ${SCINTILLA_SRC_DIR}/src/Platform.h
     ${SCINTILLA_SRC_DIR}/src/Position.h
     ${SCINTILLA_SRC_DIR}/src/PositionCache.cxx
     ${SCINTILLA_SRC_DIR}/src/PositionCache.h
@@ -70,6 +77,7 @@ set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/src/RESearch.h
     ${SCINTILLA_SRC_DIR}/src/RunStyles.cxx
     ${SCINTILLA_SRC_DIR}/src/RunStyles.h
+    ${SCINTILLA_SRC_DIR}/src/RunThreads.h
     ${SCINTILLA_SRC_DIR}/src/ScintillaBase.cxx
     ${SCINTILLA_SRC_DIR}/src/ScintillaBase.h
     ${SCINTILLA_SRC_DIR}/src/Selection.cxx
@@ -78,6 +86,8 @@ set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/src/SplitVector.h
     ${SCINTILLA_SRC_DIR}/src/Style.cxx
     ${SCINTILLA_SRC_DIR}/src/Style.h
+    ${SCINTILLA_SRC_DIR}/src/UndoHistory.cxx
+    ${SCINTILLA_SRC_DIR}/src/UndoHistory.h
     ${SCINTILLA_SRC_DIR}/src/UniConversion.cxx
     ${SCINTILLA_SRC_DIR}/src/UniConversion.h
     ${SCINTILLA_SRC_DIR}/src/UniqueString.cxx
@@ -92,11 +102,18 @@ if(WXMSW)
         ${SCINTILLA_SOURCES}
         ${SCINTILLA_SRC_DIR}/win32/HanjaDic.cxx
         ${SCINTILLA_SRC_DIR}/win32/HanjaDic.h
+        ${SCINTILLA_SRC_DIR}/win32/ListBox.cxx
+        ${SCINTILLA_SRC_DIR}/win32/ListBox.h
         ${SCINTILLA_SRC_DIR}/win32/PlatWin.cxx
         ${SCINTILLA_SRC_DIR}/win32/PlatWin.h
         ${SCINTILLA_SRC_DIR}/win32/ScintillaDLL.cxx
         ${SCINTILLA_SRC_DIR}/win32/ScintillaWin.cxx
         ${SCINTILLA_SRC_DIR}/win32/ScintillaWin.h
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceD2D.cxx
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceD2D.h
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceGDI.cxx
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceGDI.h
+        ${SCINTILLA_SRC_DIR}/win32/WinTypes.h
     )
 elseif(WXGTK)
     set(SCINTILLA_DEFINES GTK)
@@ -110,10 +127,12 @@ elseif(WXGTK)
         ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.h
         ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.c
         ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.h
+        ${SCINTILLA_SRC_DIR}/gtk/Wrappers.h
     )
 elseif(WXOSX_COCOA)
     set(SCINTILLA_SOURCES
         ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/cocoa/DictionaryForCF.h
         ${SCINTILLA_SRC_DIR}/cocoa/InfoBar.h
         ${SCINTILLA_SRC_DIR}/cocoa/InfoBar.mm
         ${SCINTILLA_SRC_DIR}/cocoa/InfoBarCommunicator.h
