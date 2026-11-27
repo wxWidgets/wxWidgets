@@ -22,6 +22,10 @@
         clicked. wxRibbonToolBarEvent::PopupMenu() should be called by the
         event handler if it wants to display a popup menu (which is what most
         dropdown tools should be doing).
+    @event{EVT_RIBBONTOOLBAR_HELP_CLICKED(id, func)}
+        Triggered when the help link in a tool's tooltip is clicked (see
+        SetToolToolTip()). The event ID is the ID of the tool. This event is
+        new since wxWidgets 3.3.5.
     @endEventTable
 
     @library{wxribbon}
@@ -487,6 +491,28 @@ public:
         @since 2.9.4
     */
     virtual void SetToolHelpString(int tool_id, const wxString& helpString);
+
+    /**
+        Sets the rich tooltip shown for the given tool.
+
+        If @a info has no message, the tool's help string is used.
+        Clicking its help link sends @c wxEVT_RIBBONTOOLBAR_HELP_CLICKED.
+
+        See wxRibbonButtonBar::SetButtonToolTip() for when rich tooltips are
+        used.
+
+        Only available if @c wxUSE_RICHTOOLTIP is 1.
+
+        @since 3.3.5
+    */
+    void SetToolToolTip(int tool_id, const wxRichToolTipInfo& info);
+
+    /**
+        Returns the rich tooltip set with SetToolToolTip().
+
+        @since 3.3.5
+    */
+    wxRichToolTipInfo GetToolToolTip(int tool_id) const;
 
     /**
         Sets the bitmap to be used by the tool with the given ID.

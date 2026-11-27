@@ -2815,6 +2815,7 @@ set(RIBBON_SRC
     src/ribbon/page.cpp
     src/ribbon/panel.cpp
     src/ribbon/toolbar.cpp
+    src/ribbon/tooltip.cpp
     src/xrc/xh_ribbon.cpp
 )
 
@@ -2830,6 +2831,7 @@ set(RIBBON_HDR
     wx/ribbon/page.h
     wx/ribbon/panel.h
     wx/ribbon/private/backstage.h
+    wx/ribbon/private/tooltip.h
     wx/ribbon/toolbar.h
     wx/xrc/xh_ribbon.h
 )

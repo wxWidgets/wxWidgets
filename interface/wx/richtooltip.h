@@ -50,6 +50,95 @@ enum wxTipKind
      */
     wxTipKind_Auto
 };
+
+/**
+    @class wxRichToolTipInfo
+
+    Contents of a rich tooltip:
+
+    - a title
+    - a message
+    - an optional image shown to the left of the message
+    - an optional help link below a divider.
+
+    The setters return a reference to this object, so they can be chained:
+    @code
+    wxRichToolTip tip(wxRichToolTipInfo("Table")
+                        .Message("Insert a table into the document.")
+                        .Image(tableBundle)
+                        .HelpLink());
+    tip.ShowFor(button);
+    @endcode
+
+    When shown by wxRichToolTip, clicking the help link sends
+    @c wxEVT_RICHTOOLTIP_HELP_CLICKED to the window the tooltip is shown for.
+
+    This class is also used by other controls to describe the rich tooltips
+    of their items. These controls send their own events when the help link
+    is clicked.
+
+    @library{wxcore}
+    @category{miscwnd}
+
+    @since 3.3.5
+*/
+class wxRichToolTipInfo
+{
+public:
+    /// Creates the tooltip contents with the given title and message.
+    explicit wxRichToolTipInfo(const wxString& title = wxString(),
+                               const wxString& message = wxString());
+
+    /// Sets the title.
+    wxRichToolTipInfo& Title(const wxString& title);
+
+    /// Sets the message, which may contain several lines.
+    wxRichToolTipInfo& Message(const wxString& message);
+
+    /**
+        Sets the message shown instead when the window or item is disabled
+        (e.g., to explain why).
+    */
+    wxRichToolTipInfo& DisabledMessage(const wxString& message);
+
+    /**
+        Sets the image shown to the left of the message.
+
+        It is scaled down to fit in 128 x 128 DIPs, maintaining its aspect ratio.
+    */
+    wxRichToolTipInfo& Image(const wxBitmapBundle& image);
+
+    /**
+        Shows (or hides) the help link below a divider.
+
+        The link is not shown if @c wxUSE_HYPERLINKCTRL is 0.
+    */
+    wxRichToolTipInfo& HelpLink(bool show = true);
+
+    /// Sets the text of the help link ("Click here for more help" by default).
+    wxRichToolTipInfo& HelpLinkText(const wxString& text);
+
+    const wxString& GetTitle() const;
+    const wxString& GetMessage() const;
+    const wxString& GetDisabledMessage() const;
+    const wxBitmapBundle& GetImage() const;
+    bool HasHelpLink() const;
+
+    /// Returns the help link text, or the default text if none was set.
+    wxString GetHelpLinkText() const;
+
+    /**
+        Returns the disabled message if @a disabled is @true and it is not
+        empty, or the message otherwise.
+    */
+    const wxString& GetMessageFor(bool disabled) const;
+
+    /// Returns true if nothing was set.
+    bool IsEmpty() const;
+};
+
+wxEventType wxEVT_RICHTOOLTIP_HELP_CLICKED;
+
 /**
     Allows showing a tool tip with more customizations than wxToolTip.
 
@@ -84,6 +173,13 @@ enum wxTipKind
     The images below show some examples of rich tooltips on different
     platforms, with various customizations applied.
 
+    @beginEventEmissionTable{wxCommandEvent}
+    @event{EVT_RICHTOOLTIP_HELP_CLICKED(id, func)}
+        Sent to the window the tooltip is shown for when the help link of the
+        tooltip (see wxRichToolTipInfo::HelpLink()) is clicked. The ID is the
+        one of that window. This event is new since wxWidgets 3.3.5.
+    @endEventTable
+
     @library{wxcore}
     @category{miscwnd}
     @appearance{richtooltip}
@@ -102,6 +198,18 @@ public:
         Additional attributes can be set later.
      */
     wxRichToolTip(const wxString& title, const wxString& message);
+
+    /**
+        Constructor taking all the contents of the tooltip.
+
+        Using an image or a help link prevents the native MSW version from
+        being used. The disabled message is used if the window the tooltip is
+        shown for is disabled. A tooltip with a help link stays shown while
+        the mouse is over it, even once its timeout has expired.
+
+        @since 3.3.5
+     */
+    explicit wxRichToolTip(const wxRichToolTipInfo& info);
 
     /**
         Set the background colour.

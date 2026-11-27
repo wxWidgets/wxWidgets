@@ -14,9 +14,10 @@
 
 #if wxUSE_RICHTOOLTIP
 
+#include "wx/bmpbndl.h"
 #include "wx/colour.h"
+#include "wx/event.h"
 
-class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
 class WXDLLIMPEXP_FWD_CORE wxFont;
 class WXDLLIMPEXP_FWD_CORE wxRect;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -48,6 +49,77 @@ enum wxTipKind
 };
 
 // ----------------------------------------------------------------------------
+// wxRichToolTipInfo: the contents of a rich tooltip.
+// ----------------------------------------------------------------------------
+
+// All the setters return a reference to this object, so that they can be
+// chained:
+//
+//  wxRichToolTipInfo("Table", "Insert a table.").Image(bundle).HelpLink()
+class WXDLLIMPEXP_ADV wxRichToolTipInfo
+{
+public:
+    explicit wxRichToolTipInfo(const wxString& title = wxString(),
+                               const wxString& message = wxString())
+        : m_title(title),
+          m_message(message)
+    {
+    }
+
+    wxRichToolTipInfo& Title(const wxString& title)
+        { m_title = title; return *this; }
+    wxRichToolTipInfo& Message(const wxString& message)
+        { m_message = message; return *this; }
+    wxRichToolTipInfo& DisabledMessage(const wxString& message)
+        { m_disabledMessage = message; return *this; }
+    wxRichToolTipInfo& Image(const wxBitmapBundle& image)
+        { m_image = image; return *this; }
+    wxRichToolTipInfo& HelpLink(bool show = true)
+        { m_showHelpLink = show; return *this; }
+    wxRichToolTipInfo& HelpLinkText(const wxString& text)
+        { m_helpLinkText = text; return *this; }
+
+    const wxString& GetTitle() const { return m_title; }
+    const wxString& GetMessage() const { return m_message; }
+    const wxString& GetDisabledMessage() const { return m_disabledMessage; }
+    const wxBitmapBundle& GetImage() const { return m_image; }
+    bool HasHelpLink() const { return m_showHelpLink; }
+
+    // Returns the default text if no custom text was set.
+    wxString GetHelpLinkText() const;
+
+    // Returns the message to show for a window or item in the given state.
+    const wxString& GetMessageFor(bool disabled) const
+    {
+        return disabled && !m_disabledMessage.empty() ? m_disabledMessage
+                                                      : m_message;
+    }
+
+    bool IsEmpty() const
+    {
+        return m_title.empty() && m_message.empty() &&
+               m_disabledMessage.empty() &&
+               !m_image.IsOk() && !m_showHelpLink;
+    }
+
+private:
+    wxString m_title;
+    wxString m_message;
+    wxString m_disabledMessage;
+    wxBitmapBundle m_image;
+    wxString m_helpLinkText;
+    bool m_showHelpLink = false;
+};
+
+// Sent to the window the tooltip is shown for when its help link is clicked.
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_RICHTOOLTIP_HELP_CLICKED,
+                         wxCommandEvent);
+
+#define EVT_RICHTOOLTIP_HELP_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_RICHTOOLTIP_HELP_CLICKED, winid, \
+                     wxCommandEventHandler(fn))
+
+// ----------------------------------------------------------------------------
 // wxRichToolTip: a customizable but not necessarily native tooltip.
 // ----------------------------------------------------------------------------
 
@@ -58,6 +130,9 @@ public:
     // Ctor must specify the tooltip title and main message, additional
     // attributes can be set later.
     wxRichToolTip(const wxString& title, const wxString& message);
+
+    // Ctor taking all the contents of the tooltip.
+    explicit wxRichToolTip(const wxRichToolTipInfo& info);
 
     // Set the background colour: if two colours are specified, the background
     // is drawn using a gradient from top to bottom, otherwise a single solid
