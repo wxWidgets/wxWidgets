@@ -30,6 +30,7 @@
 #include "wx/textentry.h"
 #include "wx/textcompleter.h"
 #include "wx/clipbrd.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // wxTextEntryHintData
@@ -112,7 +113,8 @@ private:
         if (!m_colFg.IsOk())
         {
             m_colFg = m_win->GetForegroundColour();
-            m_win->SetForegroundColour(*wxLIGHT_GREY);
+            m_win->SetForegroundColour(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
         }
 
         m_entry->DoSetValue(m_hint, wxTextEntryBase::SetValue_NoEvent);
