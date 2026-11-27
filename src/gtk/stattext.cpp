@@ -22,6 +22,7 @@
 #endif // wxUSE_MARKUP
 
 #include "wx/gtk/private.h"
+#include "wx/fontutil.h"
 
 //-----------------------------------------------------------------------------
 // wxStaticText
@@ -138,12 +139,22 @@ bool wxStaticText::Create(wxWindow *parent,
     gtk_widget_set_size_request(m_widget, m_width, m_height);
 #endif
 
+    // the cached wrapped sizes are only valid for the current DPI (and the
+    // font size in pixels that comes with it)
+    Bind(wxEVT_DPI_CHANGED, [this](wxDPIChangedEvent& event)
+    {
+        GTKResetWrapCache();
+        InvalidateBestSize();
+        event.Skip();
+    });
     return true;
 }
 
 void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 {
     wxCHECK_RET( m_widget != nullptr, wxT("invalid static text") );
+
+    GTKResetWrapCache();
 
     (this->*setter)(GTK_LABEL(m_widget), label);
 
@@ -182,6 +193,8 @@ bool wxStaticText::SetFont( const wxFont &font )
 
     if ( !wxControl::SetFont(font) )
         return false;
+
+    GTKResetWrapCache();
 
     if ( !IsShownOnScreen() )
     {
@@ -236,10 +249,100 @@ bool wxStaticText::SetFont( const wxFont &font )
     return true;
 }
 
+// Size of the label wrapped at the given width, cached for two widths.
+wxSize wxStaticText::GTKGetWrappedSize(int width) const
+{
+    for ( const WrapCacheEntry& e : m_wrapCache )
+    {
+        if ( e.width == width )
+            return e.size;
+    }
+
+    wxSize sz = GTKGetTextSize(width);
+    sz.x = wxMin(sz.x + 1, width);   // +1 as in DoGetBestSize()
+    m_wrapCache[m_wrapCacheNext] = { width, sz };
+    m_wrapCacheNext = 1 - m_wrapCacheNext;
+    return sz;
+}
+
+wxSize wxStaticText::GetMinSizeFromKnownDirection(int direction, int size,
+                                                  int WXUNUSED(availableOtherDir))
+{
+    if ( !HasFlag(wxST_WRAP) || direction != wxHORIZONTAL || size <= 0 )
+        return wxDefaultSize;
+
+    // GtkLabel wraps by itself (see gtk_label_set_line_wrap() in Create()),
+    // so only measure, without changing the label or invalidating anything
+    return GTKGetWrappedSize(size);
+}
+
+// Returns the size of the label with its text laid out in the given width
+// (in pixels, including padding), or unwrapped if width is -1. Measures a
+// copy of the Pango layout, so the label itself doesn't change and GTK
+// doesn't queue a resize of the whole window.
+wxSize wxStaticText::GTKGetTextSize(int width) const
+{
+    GtkLabel* const label = GTK_LABEL(m_widget);
+
+    int extraX = 0, extraY = 0;
+#ifdef __WXGTK3__
+    // CSS padding only exists since GTK 3
+    GtkStyleContext* const sc = gtk_widget_get_style_context(m_widget);
+    GtkBorder padding;
+    gtk_style_context_get_padding(sc, gtk_style_context_get_state(sc), &padding);
+    extraX += padding.left + padding.right;
+    extraY += padding.top + padding.bottom;
+#endif
+
+    int xpad = 0, ypad = 0;
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+    gtk_misc_get_padding(GTK_MISC(m_widget), &xpad, &ypad);
+    wxGCC_WARNING_RESTORE()
+    extraX += 2*xpad;
+    extraY += 2*ypad;
+
+    PangoLayout* const layout = pango_layout_copy(gtk_label_get_layout(label));
+
+    // the label's own layout may still use the previous font, as GTK updates
+    // its style only later (see m_computeOurOwnBestSize), so use ours (keep
+    // the font itself alive, GetFont() may return a temporary)
+    const wxFont font = GetFont();
+    const wxNativeFontInfo* const info = font.IsOk() ? font.GetNativeFontInfo() : nullptr;
+    if ( info && info->description )
+        pango_layout_set_font_description(layout, info->description);
+
+    pango_layout_set_ellipsize(layout, PANGO_ELLIPSIZE_NONE);
+    pango_layout_set_width(layout, width < 0 ? -1
+                                             : wxMax(1, width - extraX) * PANGO_SCALE);
+    int w, h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref(layout);
+
+    return wxSize(w + extraX, h + extraY);
+}
+
+void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    wxStaticTextBase::DoSetSize(x, y, width, height, sizeFlags);
+
+    // with wxST_WRAP our best size depends on our width
+    if ( HasFlag(wxST_WRAP) && m_width != m_wrapWidth )
+    {
+        m_wrapWidth = m_width;
+        InvalidateBestSize();
+    }
+}
+
 wxSize wxStaticText::DoGetBestSize() const
 {
     // Do not return any arbitrary default value...
     wxASSERT_MSG( m_widget, wxT("wxStaticText::DoGetBestSize called before creation") );
+
+    // when wrapping, the best size is the one for our current width (as
+    // with the common code, which changes the label): otherwise the unwrapped
+    // width of a long paragraph would become the min width of its parent
+    if ( HasFlag(wxST_WRAP) && m_wrapWidth > 1 )
+        return GTKGetWrappedSize(m_wrapWidth);
 
     wxSize size;
     if ( m_computeOurOwnBestSize )
@@ -266,14 +369,11 @@ wxSize wxStaticText::DoGetBestSize() const
     }
     else
     {
-        // GetBestSize is supposed to return unwrapped size but calling
-        // gtk_label_set_line_wrap() from here is a bad idea as it queues another
-        // size request by calling gtk_widget_queue_resize() and we end up in
-        // infinite loop sometimes (notably when the control is in a toolbar)
-        // With GTK3 however, there is no simple alternative, and the sizing loop
-        // no longer seems to occur.
+        // GetBestSize is supposed to return unwrapped size
 #ifdef __WXGTK3__
-        gtk_label_set_line_wrap(GTK_LABEL(m_widget), false);
+        // Create a copy if the Pango layout to prevent
+        // queuing of a resize in every call
+        size = GTKGetTextSize(-1);
 #else
         GTK_LABEL(m_widget)->wrap = FALSE;
 
@@ -284,11 +384,9 @@ wxSize wxStaticText::DoGetBestSize() const
         // implicitly for GTK+ 2, see the code dealing with alignment in the ctor.
         const PangoEllipsizeMode ellipsizeMode = gtk_label_get_ellipsize(GTK_LABEL(m_widget));
         gtk_label_set_ellipsize(GTK_LABEL(m_widget), PANGO_ELLIPSIZE_NONE);
-#endif
+
         size = wxStaticTextBase::DoGetBestSize();
-#ifdef __WXGTK3__
-        gtk_label_set_line_wrap(GTK_LABEL(m_widget), true);
-#else
+
         gtk_label_set_ellipsize(GTK_LABEL(m_widget), ellipsizeMode);
         GTK_LABEL(m_widget)->wrap = TRUE; // restore old value
 #endif
