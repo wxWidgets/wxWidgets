@@ -134,7 +134,7 @@ public:
     virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override { return new wxWebViewWebKit(config); }
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
-                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,

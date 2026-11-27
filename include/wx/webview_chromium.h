@@ -34,11 +34,11 @@ public:
 
     wxWebViewChromium(wxWindow* parent,
            wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
+           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxWebViewNameStr)
+           const wxString& name = wxASCII_STR(wxWebViewNameStr))
    {
        Init();
 
@@ -53,11 +53,11 @@ public:
 
     bool Create(wxWindow* parent,
            wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
+           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxWebViewNameStr) override;
+           const wxString& name = wxASCII_STR(wxWebViewNameStr)) override;
 
     virtual void LoadURL(const wxString& url) override;
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) override;
@@ -123,8 +123,8 @@ public:
     virtual void SelectAll() override;
     virtual bool HasSelection() const override { return false; }
     virtual void DeleteSelection() override;
-    virtual wxString GetSelectedText() const override { return ""; }
-    virtual wxString GetSelectedSource() const override { return ""; }
+    virtual wxString GetSelectedText() const override { return wxString(); }
+    virtual wxString GetSelectedSource() const override { return wxString(); }
     virtual void ClearSelection() override;
 
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;

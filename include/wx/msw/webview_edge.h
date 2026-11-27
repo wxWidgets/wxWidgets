@@ -30,21 +30,21 @@ public:
 
     wxWebViewEdge(wxWindow* parent,
         wxWindowID id,
-        const wxString& url = wxWebViewDefaultURLStr,
+        const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxWebViewNameStr);
+        const wxString& name = wxASCII_STR(wxWebViewNameStr));
 
     ~wxWebViewEdge();
 
     bool Create(wxWindow* parent,
         wxWindowID id,
-        const wxString& url = wxWebViewDefaultURLStr,
+        const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxWebViewNameStr) override;
+        const wxString& name = wxASCII_STR(wxWebViewNameStr)) override;
 
     virtual void LoadURL(const wxString& url) override;
     virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) override;
@@ -152,11 +152,11 @@ public:
     virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override;
     virtual wxWebView* Create(wxWindow* parent,
         wxWindowID id,
-        const wxString& url = wxWebViewDefaultURLStr,
+        const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxWebViewNameStr) override
+        const wxString& name = wxASCII_STR(wxWebViewNameStr)) override
     {
         return new wxWebViewEdge(parent, id, url, pos, size, style, name);
     }
