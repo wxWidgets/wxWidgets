@@ -1506,7 +1506,9 @@
 #if wxUSE_GUI
 
 #if wxUSE_ACCESSIBILITY && !defined(__WXMSW__)
-#   ifdef wxABORT_ON_CONFIG_ERROR
+#   if   defined(__WXOSX_COCOA__)
+#       warning "wxUSE_ACCESSIBILITY is experimental on macOS"
+#   elif defined(wxABORT_ON_CONFIG_ERROR)
 #       error "wxUSE_ACCESSIBILITY is currently only supported under wxMSW"
 #   else
 #       undef wxUSE_ACCESSIBILITY
