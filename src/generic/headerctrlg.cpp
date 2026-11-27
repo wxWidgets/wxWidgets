@@ -31,6 +31,7 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 #include "../winui/headerprojection.h"
+#include "wx/winui/private/tlwhostmsw.h"
 #endif
 
 #include <cstdint>
@@ -139,6 +140,9 @@ void wxHeaderCtrl::Init()
     m_dragOffset = 0;
     m_scrollOffset = 0;
     m_wasSeparatorDClick = false;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winUIPressed = COL_NONE;
+#endif
 
     RegisterHeader(this);
 }
@@ -150,6 +154,16 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // On its own, a header is the header row of a table of WinUI, in the
+    // frame of a control, which XAML draws around the window: Win32 keeps no
+    // border, the buttons of the columns fill the window and are where the
+    // control itself finds its columns. The controls which have a header
+    // inside them ask for no border.
+    const bool framed = (style & wxBORDER_MASK) != wxBORDER_NONE;
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+#endif
+
     if ( !wxHeaderCtrlBase::Create(parent, id, pos, size,
                                    style, wxDefaultValidator, name) )
         return false;
@@ -159,6 +173,9 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( framed )
+        wxWinUIRequestWindowFrame(this);
+
     const wxWeakRef<wxWindow> weakThis(this);
     auto projection = wxWinUIHeaderProjection::Create(this);
     if ( !weakThis || !projection )
@@ -240,8 +257,17 @@ unsigned int wxHeaderCtrl::DoGetCount() const
 
 void wxHeaderCtrl::DoUpdate(unsigned int idx)
 {
-    const unsigned int cancelled = AbortDraggingForColumnMutation();
-    BumpHeaderRevision(this);
+    // A program which gets wxEVT_HEADER_RESIZING gives the column its new
+    // width and calls UpdateColumn(), as wxGrid and wxPropertyGridManager
+    // do: this is the resizing itself, not a change of the columns which
+    // would end it. Ending it here stopped the drag at the first move of
+    // the mouse.
+    unsigned int cancelled = COL_NONE;
+    if ( !IsResizing() )
+    {
+        cancelled = AbortDraggingForColumnMutation();
+        BumpHeaderRevision(this);
+    }
 
     InvalidateBestSize();
 
@@ -469,6 +495,20 @@ void wxHeaderCtrl::EndDragging()
         ClearMarkers();
         m_overlay.Reset();
     }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    else if ( IsResizing() && m_winUIProjection &&
+              m_winUIProjection->IsPublished() )
+    {
+        // The line of the edge, see StartOrContinueResizing().
+        m_winUIProjection->ClearMarkers();
+    }
+
+    if ( m_winUIPressed != COL_NONE )
+    {
+        m_winUIPressed = COL_NONE;
+        if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+    }
+#endif
 
     // don't use the special dragging cursor any more
     SetCursor(wxNullCursor);
@@ -537,6 +577,9 @@ int wxHeaderCtrl::ConstrainByMinWidth(unsigned int col, int& xPhysical)
 
 void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const bool continuing = IsResizing();
+#endif
     wxHeaderCtrlEvent event(IsResizing() ? wxEVT_HEADER_RESIZING
                                          : wxEVT_HEADER_BEGIN_RESIZE,
                             GetId());
@@ -578,6 +621,18 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
         //else: we had already done the above when we started
 
     }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A program which gives the column its width only when the button is
+    // released shows nothing while the edge is dragged: a line follows the
+    // pointer then, as the one of the header of Win32 does. With the width
+    // given at each move the edge of the column itself is what follows.
+    if ( continuing && IsResizing() && m_winUIProjection &&
+         m_winUIProjection->IsPublished() && col < GetColumnCount() )
+    {
+        m_winUIProjection->ShowResizeLine(
+            GetColEnd(col) == xPhysical ? -1 : xPhysical);
+    }
+#endif
     InvalidateBestSize();
     RefreshColsAfter(col);
 }
@@ -611,7 +666,8 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
         const wxRect ghost(SubtractOffset(xPhysical, m_dragOffset), 0,
             GetEffectiveColumnWidth(GetColumn(m_colBeingReordered)), GetClientSize().y);
         const unsigned int col = FindColumnClosestToPoint(xPhysical);
-        m_winUIProjection->ShowMarkers(ghost, col == COL_NONE ? -1 : GetColEnd(col));
+        m_winUIProjection->ShowMarkers(
+            ghost, col == COL_NONE ? -1 : GetColEnd(col), m_colBeingReordered);
         return;
     }
 #endif
@@ -933,6 +989,32 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     // account for the control displacement
     const int xPhysical = mevent.GetX();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The button of a column is not held down any more.
+    if ( m_winUIPressed != COL_NONE &&
+         (mevent.LeftUp() || (mevent.Leaving() && !IsDragging())) )
+    {
+        m_winUIPressed = COL_NONE;
+        if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+    }
+
+    // A column or its edge is dragged with the left button held. A move
+    // with no button held means the button was released and this window was
+    // not told: the mouse comes through XAML, not from USER32 which would
+    // never keep the release of a button from the window which has the
+    // capture. End the drag where the pointer is instead of following it
+    // until the next click.
+    if ( IsDragging() && mevent.GetEventType() == wxEVT_MOTION &&
+         !mevent.LeftIsDown() )
+    {
+        if ( IsResizing() )
+            EndResizing(xPhysical);
+        else
+            EndReordering(xPhysical);
+        return;
+    }
+#endif
+
     // first deal with the [continuation of any] dragging operations in
     // progress
     if ( IsResizing() )
@@ -1000,9 +1082,18 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
             wxASSERT_MSG( !IsResizing(), "reentering column resize mode?" );
             StartOrContinueResizing(col, xPhysical);
         }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( !onSeparator )
+        {
+            // The button of the column shows that it is held down.
+            m_winUIPressed = col;
+            if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+        }
+#endif
         // on column itself - both header and column must have the appropriate
         // flags to allow dragging the column
-        else if ( HasFlag(wxHD_ALLOW_REORDER) && GetColumn(col).IsReorderable() )
+        if ( !onSeparator &&
+             HasFlag(wxHD_ALLOW_REORDER) && GetColumn(col).IsReorderable() )
         {
 
             // start dragging the column

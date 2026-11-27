@@ -76,7 +76,8 @@ public:
     wxWinUIControlHost host;
     std::shared_ptr<wxWinUIGaugeCallbackState> callbackState;
     MUXC::ProgressBar progressBar{ nullptr };
-    MUXC::Grid panel{ nullptr };
+    // A Canvas: it does not cut what it holds to its own size.
+    MUXC::Canvas panel{ nullptr };
     winrt::event_token sizeChangedToken{};
 };
 
@@ -132,23 +133,43 @@ bool wxGauge::Create(wxWindow *parent,
     {
         m_winui->progressBar = MUXC::ProgressBar();
         m_winui->progressBar.Minimum(0);
+
+        // The template of a ProgressBar makes its indicator as high as the
+        // MinHeight of the control. The host takes the minimum sizes of the
+        // style away from the control it shows, which has to fit the window
+        // of wx, unless they are local values: without this one the
+        // indicator was no pixel high, and the bar invisible.
+        double thickness = 3;
+        try
+        {
+            const auto resource =
+                MUX::Application::Current().Resources().TryLookup(
+                    winrt::box_value(L"ProgressBarMinHeight"));
+            if ( resource )
+                thickness = winrt::unbox_value<double>(resource);
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+        m_winui->progressBar.MinHeight(thickness);
+
         ApplyToPeer();
 
         if ( HasFlag(wxGA_VERTICAL) )
         {
             // ProgressBar is horizontal-only: rotate it a quarter turn around
             // its centre and keep its width equal to the host height so the
-            // rotated bar spans the control (filling bottom to top).
+            // rotated bar spans the control (filling bottom to top). It is
+            // laid in a Canvas: a Grid as narrow as the window cut the bar,
+            // which is as long as the window is high before it is turned,
+            // to its own width, and only a tick of it was left.
             winrt::Microsoft::UI::Xaml::Media::RotateTransform rotate;
             rotate.Angle(-90.0);
             m_winui->progressBar.RenderTransform(rotate);
             m_winui->progressBar.RenderTransformOrigin({ 0.5f, 0.5f });
-            m_winui->progressBar.HorizontalAlignment(
-                MUX::HorizontalAlignment::Center);
-            m_winui->progressBar.VerticalAlignment(
-                MUX::VerticalAlignment::Center);
+            m_winui->progressBar.Height(thickness);
 
-            m_winui->panel = MUXC::Grid();
+            m_winui->panel = MUXC::Canvas();
             m_winui->panel.Children().Append(m_winui->progressBar);
             m_winui->sizeChangedToken = m_winui->panel.SizeChanged(
                 [callbackState, callbackGeneration](
@@ -164,8 +185,16 @@ bool wxGauge::Create(wxWindow *parent,
                         return;
                     }
 
-                    owner->m_winui->progressBar.Width(
-                        event.NewSize().Height);
+                    // As long as the window is high, and placed so that
+                    // its middle is the middle of the window: it turns
+                    // around it.
+                    const auto bar = owner->m_winui->progressBar;
+                    const double length = event.NewSize().Height;
+                    const double across = bar.Height();
+                    bar.Width(length);
+                    MUXC::Canvas::SetLeft(
+                        bar, (event.NewSize().Width - length) / 2);
+                    MUXC::Canvas::SetTop(bar, (length - across) / 2);
                 });
             MUX::Automation::AutomationProperties::SetAccessibilityView(
                 createImpl->panel,

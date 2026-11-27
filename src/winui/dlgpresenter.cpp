@@ -172,8 +172,11 @@ public:
              std::function<void ()> cancel)
     {
         wxWindow * const tlw = owner ? wxGetTopLevelParent(owner) : nullptr;
-        if ( !tlw || wxWinUITLWHostIsDestroyScheduled(tlw) )
+        if ( !tlw || tlw->IsBeingDeleted() ||
+             wxWinUITLWHostIsDestroyScheduled(tlw) )
+        {
             return {};
+        }
 
         const std::uintptr_t ownerKey =
             reinterpret_cast<std::uintptr_t>(tlw);
@@ -463,6 +466,15 @@ public:
 
         if ( ownerIt == m_owners.end() )
         {
+            // The destroy event of a window which is already being deleted
+            // has been sent, or is being dispatched: an observer created now
+            // would never see it and the tombstone would stay for ever (this
+            // happens when Destroy() is called on a dialog whose owner is
+            // being deleted). Nothing can be registered for such a window any
+            // more, see Register().
+            if ( tlw->IsBeingDeleted() )
+                return;
+
             auto inserted = m_owners.emplace(ownerKey, OwnerTransients());
             ownerIt = inserted.first;
             OwnerTransients& owner = ownerIt->second;
@@ -1216,15 +1228,24 @@ private:
 
     bool IsCurrent(std::uint64_t generation) const
     {
+        // Only the dialog's own state counts. Its owner being closed or
+        // queued for destruction must not make the dialog deaf to its own
+        // buttons: its modal loop could then never be ended.
         wxDialog * const dialog = GetDialog();
         return m_active && m_generation == generation && dialog &&
-               !wxWindowIsUnavailableForCallbacks(dialog);
+               !wxWindowItselfIsUnavailableForCallbacks(dialog);
     }
 
     void DismissNow(std::uint64_t generation, int id)
     {
         if ( !IsCurrent(generation) )
+        {
+            // Nothing was dismissed: a later request must be able to try
+            // again instead of finding the latch set for ever.
+            if ( m_active && m_generation == generation )
+                m_dismissQueued = false;
             return;
+        }
 
         wxDialog * const dialog = GetDialog();
         if ( !dialog )
@@ -1336,7 +1357,9 @@ wxSize wxWinUIDialogPresenter::GetWindowClientSize(const wxSize& contentSize,
                                                   size_t buttonCount)
 {
     wxSize client = contentSize;
-    client.y += wxWINUI_BUTTON_HEIGHT + wxWINUI_DIALOG_MARGIN;
+    // Under the content: the line of the two tones, then the buttons with
+    // the margin of the dialog above them as around the rest.
+    client.y += wxWINUI_BUTTON_HEIGHT + 2 * wxWINUI_DIALOG_MARGIN + 1;
     client.x = wxMax(client.x, static_cast<int>(buttonCount) *
                         (wxWINUI_BUTTON_MIN_WIDTH + wxWINUI_BUTTON_SPACING));
     client.x += 2 * wxWINUI_DIALOG_MARGIN;
@@ -1423,6 +1446,8 @@ int wxWinUIDialogPresenter::ShowAsWindow()
     int result = wxID_CANCEL;
     MUXC::Border surface{ nullptr };
     MUXC::Grid root{ nullptr };
+    // The lighter layer the content of the dialog is on.
+    MUXC::Border top{ nullptr };
     auto callbackState =
         std::make_shared<wxWinUIDialogWindowCallbackState>(
             window, m_onAccept, m_canDismissExternally);
@@ -1497,6 +1522,16 @@ int wxWinUIDialogPresenter::ShowAsWindow()
             }
             try
             {
+                // The content goes back to its owner, which may show it
+                // again.
+                if ( top )
+                    top.Child(nullptr);
+            }
+            catch ( const winrt::hresult_error& )
+            {
+            }
+            try
+            {
                 if ( root )
                     root.Children().Clear();
             }
@@ -1530,9 +1565,6 @@ int wxWinUIDialogPresenter::ShowAsWindow()
         surface.RequestedTheme(theme);
         root = MUXC::Grid();
         root.RequestedTheme(theme);
-        root.Padding(MUX::ThicknessHelper::FromUniformLength(
-            wxWINUI_DIALOG_MARGIN));
-        root.RowSpacing(wxWINUI_DIALOG_MARGIN);
 
         MUXC::RowDefinition bodyRow;
         bodyRow.Height(MUX::GridLengthHelper::FromValueAndType(
@@ -1603,16 +1635,29 @@ int wxWinUIDialogPresenter::ShowAsWindow()
                 }
             });
 
+        // The two tones of a ContentDialog: the content on its lighter
+        // layer, with a line under it, and the buttons on the ground of the
+        // dialog; each inset by the standard dialog margin.
+        top = MUX::Markup::XamlReader::Load(
+            L"<Border"
+            L" xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'"
+            L" BorderThickness='0,0,0,1'"
+            L" Background='{ThemeResource LayerFillColorAltBrush}'"
+            L" BorderBrush='{ThemeResource CardStrokeColorDefaultBrush}'/>")
+                .as<MUXC::Border>();
+        top.Padding(MUX::ThicknessHelper::FromUniformLength(
+            wxWINUI_DIALOG_MARGIN));
+        MUXC::Grid::SetRow(top, 0);
         if ( m_content )
-        {
-            MUXC::Grid::SetRow(m_content.as<MUX::FrameworkElement>(), 0);
-            root.Children().Append(m_content);
-        }
+            top.Child(m_content);
+        root.Children().Append(top);
 
         MUXC::StackPanel buttons;
         buttons.Orientation(MUXC::Orientation::Horizontal);
         buttons.Spacing(wxWINUI_BUTTON_SPACING);
         buttons.HorizontalAlignment(MUX::HorizontalAlignment::Right);
+        buttons.Margin(MUX::ThicknessHelper::FromUniformLength(
+            wxWINUI_DIALOG_MARGIN));
         MUXC::Grid::SetRow(buttons, 1);
 
         for ( const Button& definition : m_buttons )
@@ -1643,6 +1688,10 @@ int wxWinUIDialogPresenter::ShowAsWindow()
         {
             return result;
         }
+
+        // The title bar in the tone of the content under it, as the title
+        // of a ContentDialog is on the same ground as its content.
+        wxWinUISetDialogCaptionTone(window, true);
 
         // Only a private shell needs initial sizing here. Public dialogs were
         // sized at Create(), and later application geometry is authoritative.
@@ -1979,6 +2028,73 @@ private:
 
 } // anonymous namespace
 
+namespace
+{
+
+// The top-level windows a ContentDialog is open over.
+std::vector<const wxWindow *> gs_overlayOwners;
+
+// For the time a ContentDialog is open over a window: the window is known
+// to have one, and the island has the focus of Windows. The keys go to the
+// window which has that focus: left on a window of wx beside the island,
+// they would not reach the dialog shown over it, and Tab would go on moving
+// among the controls behind. The window which had the focus gets it back.
+class wxWinUIOverlayFocusScope
+{
+public:
+    wxWinUIOverlayFocusScope(const wxWindow *tlw, HWND island)
+        : m_tlw(tlw),
+          m_island(island),
+          m_previous(::GetFocus())
+    {
+        gs_overlayOwners.push_back(tlw);
+
+        if ( island && m_previous != island &&
+             !::IsChild(island, m_previous) )
+        {
+            ::SetFocus(island);
+        }
+        else
+        {
+            // Already in the island: XAML gives its own focus back.
+            m_previous = nullptr;
+        }
+    }
+
+    ~wxWinUIOverlayFocusScope()
+    {
+        const auto it = std::find(
+            gs_overlayOwners.begin(), gs_overlayOwners.end(), m_tlw);
+        if ( it != gs_overlayOwners.end() )
+            gs_overlayOwners.erase(it);
+
+        // Not if something else took the focus meanwhile.
+        if ( m_previous && ::IsWindow(m_previous) )
+        {
+            const HWND now = ::GetFocus();
+            if ( now == m_island || ::IsChild(m_island, now) )
+                ::SetFocus(m_previous);
+        }
+    }
+
+    wxWinUIOverlayFocusScope(const wxWinUIOverlayFocusScope&) = delete;
+    wxWinUIOverlayFocusScope& operator=(
+        const wxWinUIOverlayFocusScope&) = delete;
+
+private:
+    const wxWindow * const m_tlw;
+    const HWND m_island;
+    HWND m_previous;
+};
+
+} // anonymous namespace
+
+bool wxWinUIHasDialogOverlay(const wxWindow *tlw)
+{
+    return std::find(gs_overlayOwners.begin(), gs_overlayOwners.end(), tlw) !=
+                gs_overlayOwners.end();
+}
+
 int wxWinUIDialogPresenter::ShowAsOverlay()
 {
     if ( !LifetimeOwnerIsAlive() )
@@ -2289,6 +2405,9 @@ int wxWinUIDialogPresenter::ShowAsOverlay()
             if ( LifetimeOwnerIsAlive() &&
                     state->IsActive() )
             {
+                wxWinUIOverlayFocusScope overlayFocus(
+                    tlw, host->GetBridgeHwnd());
+
                 operation = dialog.ShowAsync();
                 operation.Completed(
                     [weakState](

@@ -12,6 +12,7 @@
 #if wxUSE_SLIDER
 
 #include "wx/slider.h"
+#include "wx/winui/private/themecolours.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
     #include "slider-test-access.h"
@@ -430,6 +431,31 @@ double wxWinUIGetSliderRasterScale(const MUXC::Slider& slider,
         : 1.0;
 }
 
+// The brush of a colour of the theme, the same object each time: what was
+// given it follows when the theme changes.
+MUXM::Brush wxWinUISliderThemeBrush(MUXM::SolidColorBrush& kept,
+                                    wxWinUIThemeColour which)
+{
+    const wxColour colour = wxWinUIGetThemeColour(which);
+    if ( !colour.IsOk() )
+        return nullptr;
+
+    const winrt::Windows::UI::Color value{
+        colour.Alpha(), colour.Red(), colour.Green(), colour.Blue() };
+    if ( !kept )
+        kept = MUXM::SolidColorBrush(value);
+    else if ( kept.Color() != value )
+        kept.Color(value);
+    return kept;
+}
+
+// The range of wxSL_SELRANGE has no counterpart in the Slider of WinUI. It
+// is a band around the track, seen through, which the track and its filled
+// part show over: in the colour and at the size of the filled part, as it
+// was, it could not be told from it.
+constexpr double wxWinUISliderSelectionThickness = 8.0;
+constexpr double wxWinUISliderSelectionOpacity = 0.4;
+
 MUXC::Border wxWinUICreateSliderSelectionBorder(
     const wxString& resourceKey,
     const winrt::Windows::UI::Color& fallback,
@@ -446,6 +472,7 @@ MUXC::Border wxWinUICreateSliderSelectionBorder(
 
     border.IsHitTestVisible(false);
     border.Visibility(MUX::Visibility::Collapsed);
+    border.CornerRadius({ 3.0, 3.0, 3.0, 3.0 });
     return border;
 }
 
@@ -818,6 +845,10 @@ public:
     MUXC::Canvas decorationCanvas{ nullptr };
     MUXC::Canvas tickCanvas{ nullptr };
     MUXC::Border selectionNormal{ nullptr };
+    // The brushes of the labels and of the tick marks, see
+    // wxWinUISliderThemeBrush().
+    MUXM::SolidColorBrush labelBrush{ nullptr };
+    MUXM::SolidColorBrush tickBrush{ nullptr };
     MUXC::Border selectionDisabled{ nullptr };
     MUXC::Border selectionHighContrast{ nullptr };
     MUXC::Border selectionHighContrastDisabled{ nullptr };
@@ -2009,8 +2040,34 @@ void wxSlider::UpdateVisualState()
             foreground = m_winui->fallbackForeground;
         }
 
+        // The Foreground of a Slider is the accent colour of the filled part
+        // of its track. The labels are text and the tick marks are those of
+        // the TickBar of WinUI (ControlStrongFillColorDefault): in the
+        // accent colour they read as links and as parts of the value. A
+        // colour the program set is kept for all of them.
+        MUXM::Brush labelBrush = foreground;
+        MUXM::Brush tickBrush = foreground;
+        double tickOpacity = 0.72;
+        if ( !UseForegroundColour() && !highContrast )
+        {
+            const MUXM::Brush text = wxWinUISliderThemeBrush(
+                m_winui->labelBrush,
+                enabled ? wxWinUIThemeColour::TextPrimary
+                        : wxWinUIThemeColour::TextDisabled);
+            const MUXM::Brush marks = wxWinUISliderThemeBrush(
+                m_winui->tickBrush,
+                enabled ? wxWinUIThemeColour::ControlStrongStroke
+                        : wxWinUIThemeColour::TextDisabled);
+            if ( text && marks )
+            {
+                labelBrush = text;
+                tickBrush = marks;
+                tickOpacity = 1.0;
+            }
+        }
+
         const auto updateLabel =
-            [fontSize, foreground, flow](const MUXC::TextBlock& label,
+            [fontSize, labelBrush, flow](const MUXC::TextBlock& label,
                                          int value,
                                          bool show)
             {
@@ -2028,9 +2085,9 @@ void wxSlider::UpdateVisualState()
                     measureNeeded = true;
                 }
                 if ( !wxWinUISameSliderObject(
-                         label.Foreground(), foreground) )
+                         label.Foreground(), labelBrush) )
                 {
-                    label.Foreground(foreground);
+                    label.Foreground(labelBrush);
                 }
                 if ( label.FlowDirection() != flow )
                 {
@@ -2072,8 +2129,10 @@ void wxSlider::UpdateVisualState()
             HasFlag(wxSL_SELRANGE) && m_selStart != m_selEnd;
         for ( const MUXC::Border& selection : selectionVisuals )
         {
-            if ( std::abs(selection.Opacity() - 1.0) >= 0.001 )
-                selection.Opacity(1.0);
+            const double selectionOpacity =
+                highContrast ? 1.0 : wxWinUISliderSelectionOpacity;
+            if ( std::abs(selection.Opacity() - selectionOpacity) >= 0.001 )
+                selection.Opacity(selectionOpacity);
             const MUX::Visibility visibility =
                 showSelection &&
                         wxWinUISameSliderObject(selection, activeSelection)
@@ -2356,17 +2415,21 @@ void wxSlider::UpdateVisualState()
             {
                 if ( vertical )
                 {
-                    selection.Width(4.0);
+                    selection.Width(wxWinUISliderSelectionThickness);
                     selection.Height(extent);
-                    MUXC::Canvas::SetLeft(selection, axisCross - 2.0);
+                    MUXC::Canvas::SetLeft(
+                        selection,
+                        axisCross - wxWinUISliderSelectionThickness / 2.0);
                     MUXC::Canvas::SetTop(selection, low);
                 }
                 else
                 {
                     selection.Width(extent);
-                    selection.Height(4.0);
+                    selection.Height(wxWinUISliderSelectionThickness);
                     MUXC::Canvas::SetLeft(selection, low);
-                    MUXC::Canvas::SetTop(selection, axisCross - 2.0);
+                    MUXC::Canvas::SetTop(
+                        selection,
+                        axisCross - wxWinUISliderSelectionThickness / 2.0);
                 }
             }
         }
@@ -2424,14 +2487,15 @@ void wxSlider::UpdateVisualState()
         m_winui->tickCanvas.Children().Clear();
         const double crisp = 1.0 / scale;
         const auto appendTick =
-            [this, foreground](double left, double top,
-                               double markWidth, double markHeight)
+            [this, tickBrush, tickOpacity](double left, double top,
+                                           double markWidth,
+                                           double markHeight)
             {
                 MUXC::Border mark;
                 mark.Width(markWidth);
                 mark.Height(markHeight);
-                mark.Background(foreground);
-                mark.Opacity(0.72);
+                mark.Background(tickBrush);
+                mark.Opacity(tickOpacity);
                 mark.IsHitTestVisible(false);
                 wxWinUIMarkSliderDecorationRaw(mark);
                 MUXC::Canvas::SetLeft(mark, left);

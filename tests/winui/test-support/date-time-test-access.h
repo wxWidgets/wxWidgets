@@ -32,20 +32,16 @@ public:
         wxDateTime *maximum);
     static wxString GetPeerDateFormat(const wxDatePickerCtrl& control);
     static bool UsesDropdown(const wxDatePickerCtrl& control);
+    // Without wxDP_DROPDOWN: the DatePicker of WinUI is what the control
+    // shows, the year, the month and the day it shows in its calendar, and
+    // the format of its year.
+    static bool UsesNativePicker(const wxDatePickerCtrl& control);
     static bool GetSpinFields(
         const wxDatePickerCtrl& control,
         int *year,
         int *month,
         int *day);
-    static bool SetSpinPart(
-        wxDatePickerCtrl& control,
-        unsigned part, int value);
-    static bool GetSpinPart(
-        const wxDatePickerCtrl& control,
-        unsigned part,
-        int *value,
-        bool *blank);
-    static wxString GetSpinYearText(const wxDatePickerCtrl& control);
+    static wxString GetPeerYearFormat(const wxDatePickerCtrl& control);
     static wxString GetLocaleDatePattern(const wxDatePickerCtrl& control);
     static wxString GetPeerNullText(const wxDatePickerCtrl& control);
     static wxString SetLanguage(const wxString& language);
@@ -56,29 +52,16 @@ public:
 class WXDLLIMPEXP_CORE wxWinUITimePickerTestAccess final
 {
 public:
-    using HourLoadedHook =
-        void (*)(wxTimePickerCtrl *, void *);
-
+    // Changes the time as the user does, in the TimePicker and in the
+    // field of the seconds.
     static bool SetPeerTime(
         wxTimePickerCtrl& control,
         const wxDateTime& dt);
     static bool GetPeerTime(
         const wxTimePickerCtrl& control,
         wxDateTime *value);
-    static wxString GetLocaleTimePattern(const wxTimePickerCtrl& control);
-    static bool GetTimeFieldOrder(
-        const wxTimePickerCtrl& control,
-        int *hour,
-        int *minute,
-        int *second,
-        int *period);
-    static bool GetHourSpinBinding(
-        const wxTimePickerCtrl& control,
-        std::uintptr_t *incrementIdentity,
-        std::uintptr_t *decrementIdentity,
-        std::uint64_t *generation = nullptr);
-    static void SetHourLoadedHook(HourLoadedHook hook,
-        void *data = nullptr);
+    // The TimePicker of WinUI is what the control shows.
+    static bool UsesNativePicker(const wxTimePickerCtrl& control);
     static wxString SetLanguage(const wxString& language);
 };
 #endif

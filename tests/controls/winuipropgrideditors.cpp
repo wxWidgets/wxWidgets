@@ -381,7 +381,7 @@ TEST_CASE("WinUIPropertyGridEditors::NativeResizeCallbackCanDestroyGridWithOpenP
     CHECK_FALSE(native.IsDropDownOpen());
 }
 
-TEST_CASE("WinUIPropertyGridEditors::TextUsesFullNativeRowWithoutFormattingCommands",
+TEST_CASE("WinUIPropertyGridEditors::TextIsNativeFieldInsideRowWithoutFormattingCommands",
           "[winui-propgrid][native-propgrid][native-pg-editors][native-pg-text-layout]")
 {
     const bool rtl = GENERATE(false, true);
@@ -406,13 +406,23 @@ TEST_CASE("WinUIPropertyGridEditors::TextUsesFullNativeRowWithoutFormattingComma
         // The native text selection flyout still owns clipboard commands;
         // plain editors suppress formatting, not the entire native flyout.
         CHECK(peer.SelectionFlyout());
-        CHECK(text->GetSize().y == fixture.grid->GetRowHeight());
-        CHECK(peer.ActualHeight() == Approx(fixture.grid->GetRowHeight() / fixture.grid->GetDPIScaleFactor()));
+        // A field of the standard height in the middle of a higher row, as
+        // the editor of a cell of a WinUI table.
+        const auto insideRow = [&]()
+        {
+            const int rowHeight = fixture.grid->GetRowHeight();
+            const wxRect rect = text->GetRect();
+            CHECK(rect.height == fixture.grid->FromDIP(32));
+            CHECK(rowHeight == fixture.grid->FromDIP(40));
+            CHECK(rect.y % rowHeight == (rowHeight - rect.height) / 2);
+        };
+        insideRow();
+        CHECK(peer.ActualHeight() == Approx(32));
         const auto before = peer;
         fixture.frame->SetClientSize(680, 360);
         fixture.frame->Layout();
         REQUIRE(WaitEditor([&] { return NativeEditor<C::RichEditBox>(text) == before; }));
-        CHECK(text->GetSize().y == fixture.grid->GetRowHeight());
+        insideRow();
         CHECK(fixture.grid->GetEditorControl() == text);
     }
 }

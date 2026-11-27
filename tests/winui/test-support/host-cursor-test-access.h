@@ -41,6 +41,12 @@ public:
     SimulateXamlCursorSelection(
         wxWinUITopLevelHost& host,
         const winrt::Microsoft::UI::Input::InputCursor& cursor);
+    // Writes the Cursor property and nothing else, as XAML does when it
+    // picks the cursor of the element under the pointer.
+    static bool
+    OverwriteIslandCursor(
+        wxWinUITopLevelHost& host,
+        const winrt::Microsoft::UI::Input::InputCursor& cursor);
     static WXHCURSOR
     GetIslandCursorHandle(
         const wxWinUITopLevelHost& host);

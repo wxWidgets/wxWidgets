@@ -164,7 +164,7 @@ public:
         peer->root = visual.root;
         const std::weak_ptr<wxRibbonToolBarWinUI> weak = shared_from_this();
         const auto key = item.key;
-        if ( auto toggle = visual.primary.try_as<MUXC::AppBarToggleButton>() )
+        if ( auto toggle = visual.primary.try_as<MUXC::Primitives::ToggleButton>() )
         {
             const auto checked = toggle.Checked([weak, key, generation](const auto&, const auto&)
                 { if ( auto self = weak.lock() ) self->Activate(key, generation, false, 1); });
@@ -173,7 +173,13 @@ public:
             peer->revoke.push_back([toggle, checked, unchecked]()
                 { toggle.Checked(checked); toggle.Unchecked(unchecked); });
         }
-        else if ( auto button = visual.primary.try_as<MUXC::AppBarButton>() )
+        else if ( auto split = visual.split )
+        {
+            const auto click = split.Click([weak, key, generation](const auto&, const auto&)
+                { if ( auto self = weak.lock() ) self->Activate(key, generation, false, -1); });
+            peer->revoke.push_back([split, click]() { split.Click(click); });
+        }
+        else if ( auto button = visual.primary.try_as<MUXC::Primitives::ButtonBase>() )
         {
             const bool dropdown = item.kind == wxRIBBON_BUTTON_DROPDOWN;
             const auto click = button.Click([weak, key, generation, dropdown](const auto&, const auto&)

@@ -444,7 +444,7 @@ bool wxActivityIndicator::ApplyWinUIModel()
             callbackState->QuarantineApply();
             if ( callbackState->MarkApplyBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI ProgressRing model kept changing during "
                     "projection; quarantining this request until the next "
                     "external model mutation.");
@@ -468,7 +468,7 @@ bool wxActivityIndicator::ApplyWinUIModel()
             // event loop. Do it before making the replay ticket consumable.
             if ( callbackState->MarkApplyBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI ProgressRing model kept changing during "
                     "projection; using its one bounded asynchronous replay.");
             }

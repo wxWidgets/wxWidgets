@@ -31,6 +31,7 @@
 #include "wx/stack.h"
 
 #include "wx/msw/private.h"
+#include "wx/settings.h"
 #include "wx/msw/private/paint.h"
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -41,7 +42,10 @@
 #endif
 #endif
 
+#include <algorithm>
+#include <cmath>
 #include <unordered_map>
+#include <vector>
 
 // ----------------------------------------------------------------------------
 // local data structures
@@ -89,6 +93,30 @@ struct wxWinUIBufferedPaintThread
 wxWinUIOpaquePaintTestAccess::Observer gs_opaquePaintObserver = nullptr;
 void* gs_opaquePaintObserverContext = nullptr;
 #endif
+
+// The buffers of the windows being painted over the material right now (see
+// wxWinUIShouldUsePaintedPixelsBuffer()): a handful at most, nested paints
+// being rare.
+thread_local std::vector<HDC> gs_paintedPixelsDCs;
+
+double wxWinUIRelativeLuminance(COLORREF colour)
+{
+    const auto channel = [](int value)
+    {
+        const double c = value / 255.0;
+        return c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * channel(GetRValue(colour)) +
+           0.7152 * channel(GetGValue(colour)) +
+           0.0722 * channel(GetBValue(colour));
+}
+
+double wxWinUIContrast(COLORREF a, COLORREF b)
+{
+    const double la = wxWinUIRelativeLuminance(a);
+    const double lb = wxWinUIRelativeLuminance(b);
+    return (wxMax(la, lb) + 0.05) / (wxMin(la, lb) + 0.05);
+}
 #endif
 
 // This subclass contains information for the HDCs we create ourselves, i.e.
@@ -101,15 +129,42 @@ public:
           m_hwnd(GetHwndOf(win))
     {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-        if ( m_hdc && wxWinUIShouldUseOpaquePaintBuffer(win) )
-            BeginOpaqueBuffer();
+        if ( m_hdc )
+        {
+            // What the window paints goes to its surface, shown by XAML,
+            // when it can have one; to its HWND through a buffer otherwise.
+            const HDC surfaceDC = (HDC)wxWinUIPaintSurfaceBegin(
+                win, m_ps.rcPaint.left, m_ps.rcPaint.top,
+                m_ps.rcPaint.right, m_ps.rcPaint.bottom);
+            if ( surfaceDC )
+            {
+                m_surfaceWindow = win;
+                m_hdc = surfaceDC;
+                gs_paintedPixelsDCs.push_back(surfaceDC);
+            }
+            else if ( wxWinUIShouldUseOpaquePaintBuffer(win) )
+                BeginOpaqueBuffer();
+            else if ( wxWinUIShouldUsePaintedPixelsBuffer(win) )
+                BeginOpaqueBuffer(true);
+        }
 #endif
     }
 
     virtual ~wxPaintDCInfoOur()
     {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-        EndOpaqueBuffer();
+        if ( m_surfaceWindow )
+        {
+            gs_paintedPixelsDCs.erase(
+                std::remove(gs_paintedPixelsDCs.begin(),
+                            gs_paintedPixelsDCs.end(), m_hdc),
+                gs_paintedPixelsDCs.end());
+            wxWinUIPaintSurfaceEnd(m_surfaceWindow);
+        }
+        else
+        {
+            EndOpaqueBuffer();
+        }
 #endif
         ::EndPaint(m_hwnd, &m_ps);
     }
@@ -127,7 +182,11 @@ private:
     PAINTSTRUCT m_ps;
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-    void BeginOpaqueBuffer()
+    // With paintedPixelsOnly, only the pixels GDI writes become opaque and
+    // the rest of the update stays transparent (see
+    // wxWinUIShouldUsePaintedPixelsBuffer()); otherwise the whole painted
+    // bounds do.
+    void BeginOpaqueBuffer(bool paintedPixelsOnly = false)
     {
         RECT clip;
         const int clipType = ::GetClipBox(m_hdc, &clip);
@@ -169,7 +228,10 @@ private:
         if ( !::BitBlt(bufferDC, rect.left, rect.top,
                        rect.right - rect.left, rect.bottom - rect.top,
                        m_hdc, rect.left, rect.top, SRCCOPY) ||
-             FAILED(::BufferedPaintSetAlpha(buffer, nullptr, 0)) )
+             // GDI zeroes the alpha byte of every pixel it writes: starting
+             // from 255 tells the written pixels from the untouched ones.
+             FAILED(::BufferedPaintSetAlpha(buffer, nullptr,
+                                            paintedPixelsOnly ? 255 : 0)) )
         {
             ::EndBufferedPaint(buffer, FALSE);
             return;
@@ -197,12 +259,69 @@ private:
         }
         m_buffer = buffer;
         m_transportState = transportState;
+        m_paintedPixelsOnly = paintedPixelsOnly;
         m_hdc = bufferDC;
+        if ( paintedPixelsOnly )
+            gs_paintedPixelsDCs.push_back(bufferDC);
+    }
+
+    // The update is transparent wherever nothing was drawn over the erased
+    // (black, the transparency key) background, and opaque everywhere else:
+    // on the pixels GDI wrote, black ones included, and on a background
+    // erased in another colour.
+    void EndPaintedPixelsBuffer()
+    {
+        gs_paintedPixelsDCs.erase(
+            std::remove(gs_paintedPixelsDCs.begin(),
+                        gs_paintedPixelsDCs.end(), m_hdc),
+            gs_paintedPixelsDCs.end());
+        ::GdiFlush();
+        ::RestoreDC(m_hdc, m_transportState);
+
+        const RECT& target = m_physicalPaint;
+        RGBQUAD* bits = nullptr;
+        int stride = 0;
+        if ( FAILED(::GetBufferedPaintBits(m_buffer, &bits, &stride)) ||
+             !bits || stride < target.right - target.left )
+        {
+            // Keep what was drawn, as plain GDI pixels.
+            const RECT& rect = m_ps.rcPaint;
+            ::BitBlt(m_ps.hdc, rect.left, rect.top,
+                     rect.right - rect.left, rect.bottom - rect.top,
+                     m_hdc, rect.left, rect.top, SRCCOPY);
+            ::EndBufferedPaint(m_buffer, FALSE);
+            return;
+        }
+
+        for ( LONG y = 0; y < target.bottom - target.top; ++y )
+        {
+            RGBQUAD* row = bits + static_cast<size_t>(y) * stride;
+            for ( LONG x = 0; x < target.right - target.left; ++x )
+            {
+                RGBQUAD& pixel = row[x];
+                if ( pixel.rgbReserved == 255 && !pixel.rgbRed &&
+                     !pixel.rgbGreen && !pixel.rgbBlue )
+                {
+                    pixel = {};
+                }
+                else
+                {
+                    pixel.rgbReserved = 255;
+                }
+            }
+        }
+        ::EndBufferedPaint(m_buffer, TRUE);
     }
 
     void EndOpaqueBuffer()
     {
         if ( !m_buffer ) return;
+
+        if ( m_paintedPixelsOnly )
+        {
+            EndPaintedPixelsBuffer();
+            return;
+        }
 
         // GDI batches writes to DIBs. Finish them before UxTheme reads/modifies
         // alpha bytes, otherwise a later batch can zero alpha again.
@@ -280,7 +399,9 @@ private:
         ::EndBufferedPaint(m_buffer, update ? TRUE : FALSE);
     }
 
+    wxWindow *m_surfaceWindow = nullptr;
     HPAINTBUFFER m_buffer = nullptr;
+    bool m_paintedPixelsOnly = false;
     int m_transportState = 0;
     RECT m_physicalPaint{};
     BLENDFUNCTION m_blend{AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
@@ -288,6 +409,68 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxPaintDCInfoOur);
 };
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+} // anonymous namespace
+
+bool wxWinUIAdaptTextColourOverBackdrop(WXHDC hdc_, int x, int y,
+                                        WXCOLORREF *colour)
+{
+    const HDC hdc = (HDC)hdc_;
+    if ( !colour ||
+         std::find(gs_paintedPixelsDCs.begin(), gs_paintedPixelsDCs.end(),
+                   hdc) == gs_paintedPixelsDCs.end() )
+    {
+        return false;
+    }
+
+    // What the text will lie on: its own opaque background, what the handler
+    // has already painted there, or, where nothing was painted over the
+    // erased (black) background, the material itself.
+    COLORREF behind;
+    if ( ::GetBkMode(hdc) == OPAQUE )
+    {
+        behind = ::GetBkColor(hdc);
+    }
+    else
+    {
+        behind = ::GetPixel(hdc, x + 1, y + 1);
+        if ( behind == CLR_INVALID || behind == RGB(0, 0, 0) )
+        {
+            behind = wxSystemSettings::GetAppearance().IsDark()
+                ? RGB(32, 32, 32) : RGB(243, 243, 243);
+        }
+    }
+
+    const COLORREF text = ::GetTextColor(hdc);
+    if ( text == CLR_INVALID || wxWinUIContrast(text, behind) >= 3.0 )
+        return false;
+
+    // Keep the hue and the saturation, mirror the lightness: black becomes
+    // white, a dark blue a light blue. In HSL the lightness is the mean of
+    // the largest and the smallest channel, so mirroring it about one half
+    // moves every channel by 255 - (largest + smallest).
+    const int red = GetRValue(text);
+    const int green = GetGValue(text);
+    const int blue = GetBValue(text);
+    const int shift = 255 - (wxMax(red, wxMax(green, blue)) +
+                             wxMin(red, wxMin(green, blue)));
+    COLORREF mirrored = RGB(wxMin(255, wxMax(0, red + shift)),
+                            wxMin(255, wxMax(0, green + shift)),
+                            wxMin(255, wxMax(0, blue + shift)));
+    if ( wxWinUIContrast(mirrored, behind) < 3.0 )
+    {
+        mirrored = wxWinUIRelativeLuminance(behind) < 0.5
+            ? RGB(255, 255, 255) : RGB(27, 27, 27);
+    }
+
+    *colour = mirrored;
+    return true;
+}
+
+namespace
+{
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 // The global map containing HDC to use for the given window. The entries in
 // this map only exist during WM_PAINT processing and are destroyed when it is
@@ -378,6 +561,14 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
 
     InitWindow(window);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A window which paints through a surface is also drawn on through it
+    // outside WM_PAINT: its HWND shows nothing.
+    m_hDC = wxWinUIPaintSurfaceBeginDirect(window);
+    if ( m_hDC )
+        gs_paintedPixelsDCs.push_back((HDC)m_hDC);
+    else
+#endif
     m_hDC = (WXHDC)::GetDC(GetHwndOf(window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -410,6 +601,20 @@ void wxClientDCImpl::InitDC()
 
 wxClientDCImpl::~wxClientDCImpl()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The DC of a surface belongs to it: give it back as it was, and leave
+    // nothing for the base class to release.
+    if ( m_hDC && m_window && wxWinUIPaintSurfaceOwnsDC(m_window, m_hDC) )
+    {
+        SelectOldObjects(m_hDC);
+        gs_paintedPixelsDCs.erase(
+            std::remove(gs_paintedPixelsDCs.begin(),
+                        gs_paintedPixelsDCs.end(), (HDC)m_hDC),
+            gs_paintedPixelsDCs.end());
+        wxWinUIPaintSurfaceEnd(m_window);
+        m_hDC = nullptr;
+    }
+#endif
 }
 
 void wxClientDCImpl::DoGetSize(int *width, int *height) const

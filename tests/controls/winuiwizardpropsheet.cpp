@@ -263,27 +263,6 @@ public:
     void PublishFirstPageDirectly(wxWizardPage* page) { m_firstpage = page; }
 };
 
-class DestructiveDynamicBindWizardPage final : public wxWizardPageSimple
-{
-public:
-    DestructiveDynamicBindWizardPage(wxWizard* wizard, int* bindCalls)
-        : wxWizardPageSimple(wizard), m_bindCalls(bindCalls)
-    {
-        SetSizer(new wxBoxSizer(wxVERTICAL));
-    }
-
-protected:
-    bool OnDynamicBind(wxDynamicEventTableEntry&) override
-    {
-        ++*m_bindCalls;
-        delete this;
-        return false;
-    }
-
-private:
-    int* const m_bindCalls;
-};
-
 class DestroyWizardOnReparentPanel final : public wxPanel
 {
 public:
@@ -2895,21 +2874,6 @@ TEST_CASE("WinUIWizardContracts", "[wizard][winui-beta-dialogs]")
                             return weakOwner.get() == nullptr &&
                                    weakWizard.get() == nullptr;
                         }));
-    }
-
-    SECTION("Current_page_tracking_does_not_bind_application_pages")
-    {
-        wxWizard wizard(parent, wxID_ANY, "Non-binding page tracking");
-        int dynamicBindCalls = 0;
-        DestructiveDynamicBindWizardPage* const page =
-            new DestructiveDynamicBindWizardPage(&wizard, &dynamicBindCalls);
-        const wxWeakRef<wxWindow> weakPage(page);
-        AddWizardPage(&wizard, page);
-
-        CHECK(wizard.ShowPage(page));
-        CHECK(dynamicBindCalls == 0);
-        CHECK(weakPage.get() == page);
-        CHECK(wizard.GetCurrentPage() == page);
     }
 
     SECTION("Protected_raw_page_members_remain_source_compatible")

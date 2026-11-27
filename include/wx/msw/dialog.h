@@ -81,11 +81,18 @@ public:
     void WinUIEndExternalModalLifetime();
     bool MSWTranslateMessage(WXMSG* msg) override;
     bool MSWProcessMessage(WXMSG* msg) override;
+    // A dialog shown over its owner has its title above its client area.
+    wxPoint GetClientAreaOrigin() const override;
 #endif
 
 protected:
     // common part of all ctors
     void Init();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void DoGetClientSize(int *width, int *height) const override;
+    void DoSetClientSize(int width, int height) override;
+#endif
 
 private:
     // these functions deal with the gripper window shown in the corner of

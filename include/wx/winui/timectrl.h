@@ -10,7 +10,6 @@
 #ifndef _WX_WINUI_TIMECTRL_H_
 #define _WX_WINUI_TIMECTRL_H_
 
-#include <cstdint>
 #include <memory>
 
 class wxWinUITimePickerImpl;
@@ -40,23 +39,12 @@ public:
 
     void SetValue(const wxDateTime& dt) override;
     wxDateTime GetValue() const override;
-    void SetMinSize(const wxSize& minSize) override;
 
 protected:
     wxSize DoGetBestSize() const override;
-    void DoSetSize(int x, int y, int width, int height,
-                   int sizeFlags) override;
 
-    bool ApplyInitialSizeTransaction(const wxSize& size,
-                                     std::uint64_t expectedRevision);
-    void OnLayoutLoaded();
-    bool ApplyToPeer();
-    bool ApplyValueToPeer(const wxDateTime& value);
-    bool OnPeerHourChanged(double oldValue,
-                           double newValue,
-                           int stepDirection);
-    bool OnPeerTimeChanged();
-    void ResolveHourSpinButtons(bool updateLayout = false);
+    void ApplyToPeer();
+    void OnPeerTimeChanged();
 
     std::unique_ptr<wxWinUITimePickerImpl> m_winui;
     wxDateTime m_value;

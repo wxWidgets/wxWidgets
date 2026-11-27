@@ -36,7 +36,7 @@ namespace
 
 void wxWinUILogException(const char *what, const winrt::hresult_error& e)
 {
-    wxLogWarning("%s failed with HRESULT 0x%08lx: %s",
+    wxLogDebug("%s failed with HRESULT 0x%08lx: %s",
                  what,
                  static_cast<unsigned long>(e.code()),
                  wxString(e.message().c_str()));

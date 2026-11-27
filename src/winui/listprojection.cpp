@@ -23,6 +23,7 @@
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
 #include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
+#include <winrt/Microsoft.UI.Xaml.Media.Animation.h>
 #include <algorithm>
 #include <map>
 #include <set>
@@ -155,6 +156,10 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
         wxRect rect;
         wxString text;
         wxBitmap bitmap;
+        // Where the bitmap comes from: the same image of the same list is
+        // not fetched nor compared again while the list is only scrolled.
+        const wxWithImages *imageList = nullptr;
+        int image = -1;
         wxColour foreground, background;
         wxFont font;
         int alignment = wxLIST_FORMAT_LEFT;
@@ -194,6 +199,12 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
         C::Grid root{nullptr};
         C::Canvas canvas{nullptr};
         C::ListViewBase selector{nullptr};
+        // The lines of the table in report mode, between the rows and what
+        // is laid over them; in the header, the rest of its band after the
+        // last column and the line under it.
+        C::Canvas lines{nullptr};
+        std::vector<C::Border> rowLines, columnLines;
+        C::Border headerBand{nullptr};
         long mode = 0;
         wxColour background;
         std::map<Key, std::shared_ptr<Peer>> peers;
@@ -205,6 +216,9 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
     std::uint64_t revision = 0;
     unsigned suppress = 0;
     bool dirty = true, scheduled = false, synchronizing = false, closed = false;
+    // Whether what the list shows may have changed since it was published,
+    // or only where it shows it (it was scrolled).
+    bool contentDirty = true;
     bool automationWriting = false;
     bool automationSelecting = false;
     std::vector<long> automationSelection;
@@ -238,7 +252,11 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
         for ( const auto& row : rows )
         {
             if ( !IdentityCurrent(identity) || !Current(pane, row) ) return;
-            const bool selected = identity.main->IsHighlighted(row->key.first);
+            // (Nothing of its selection for the row being edited: see the
+            // capture of the rows.)
+            const bool selected =
+                identity.main->IsHighlighted(row->key.first) &&
+                row->key.first != identity.main->GetEditedItem();
             const auto item = row->control.as<P::SelectorItem>();
             if ( item.IsSelected() != selected ) item.IsSelected(selected);
             if ( !IdentityCurrent(identity) || !Current(pane, row) ) return;
@@ -292,10 +310,11 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
     {
         if ( !IdentityCurrent(s) || s.revision != revision ) throw InvalidListSnapshot{};
     }
-    void Invalidate()
+    void Invalidate(bool content = true)
     {
         if ( closed || !owner ) return;
         dirty = true;
+        if ( content ) contentDirty = true;
         ++revision;
         if ( scheduled || synchronizing ) return;
         scheduled = true;
@@ -499,6 +518,15 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                     LR"(<ItemsPanelTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><Canvas /></ItemsPanelTemplate>)")
                     .as<C::ItemsPanelTemplate>());
                 selector.Padding({0, 0, 0, 0});
+                // The items published are the ones in view: each scroll step
+                // removes some and adds others. With the transitions of the
+                // default style, the ones removed stay where they were while
+                // they fade out and the new ones come in late, over them.
+                selector.ItemContainerTransitions(
+                    X::Media::Animation::TransitionCollection());
+                // The selected item has the bar of a WinUI list at its
+                // start: the text of the items begins 12 further, see the
+                // padding of the cells, so the bar does not cover it.
                 selector.BorderThickness({0, 0, 0, 0});
                 selector.IsTabStop(false);
                 selector.HorizontalContentAlignment(X::HorizontalAlignment::Stretch);
@@ -510,6 +538,13 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                 C::ScrollViewer::SetHorizontalScrollBarVisibility(selector, C::ScrollBarVisibility::Disabled);
                 C::ScrollViewer::SetVerticalScrollBarVisibility(selector, C::ScrollBarVisibility::Disabled);
                 X::Automation::AutomationProperties::SetAutomationId(selector, L"wxList.NativeItems");
+                // A Selector which is not in the tree yet forgets what was
+                // selected in it: the page a wxListbook selects when it is
+                // created was never marked. Published again once it is.
+                selector.Loaded([weak](const auto&, const auto&)
+                {
+                    if ( const auto self = weak.lock() ) self->Invalidate();
+                });
                 selector.SelectionChanged([weak, weakPane](const auto&, const C::SelectionChangedEventArgs& args)
                 {
                     const auto self = weak.lock();
@@ -517,6 +552,12 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                     if ( self && current ) self->SelectNativeItems(current, args);
                 });
                 pane->root.Children().Append(selector);
+                if ( pane->mode == wxLC_REPORT )
+                {
+                    pane->lines = C::Canvas();
+                    pane->lines.IsHitTestVisible(false);
+                    pane->root.Children().Append(pane->lines);
+                }
             }
             pane->root.Children().Append(pane->canvas);
             ObserveInput(pane);
@@ -533,6 +574,21 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                     }
                 event.Skip();
             });
+            // Inside the frame of the control, whose corners are rounded:
+            // the header is its top, the rows are its bottom. What is at a
+            // corner is rounded itself, XAML does not clip to the frame.
+            const double corner = owner->GetBorder() != wxBORDER_NONE ? 3 : 0;
+            if ( pane->header )
+            {
+                pane->headerBand = wxWinUICreateTableHeaderBand(corner);
+                if ( pane->headerBand ) pane->canvas.Children().Append(pane->headerBand);
+                pane->root.CornerRadius({corner, corner, 0, 0});
+            }
+            else
+            {
+                const double top = wanted[1] ? 0 : corner;
+                pane->root.CornerRadius({top, top, corner, corner});
+            }
             const bool published = pane->host.SetContent(pane->root);
             Check(s);
             if ( !published ) { pane->host.Close(); Check(s); continue; }
@@ -583,7 +639,8 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
         return rows;
     }
 
-    std::vector<Cell> ReadPane(const std::shared_ptr<Pane>& pane, const Snapshot& s)
+    std::vector<Cell> ReadPane(const std::shared_ptr<Pane>& pane, const Snapshot& s,
+                               bool moveOnly)
     {
         std::vector<Cell> cells;
         auto* main = s.main;
@@ -607,7 +664,9 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                 cell.text = header.GetText();
                 if ( owner->m_headerWin->m_sortCol == col )
                     cell.text += owner->m_headerWin->m_sortAsc ? wxString::FromUTF8(" \xe2\x86\x91") : wxString::FromUTF8(" \xe2\x86\x93");
-                cell.font = font; cell.foreground = foreground;
+                cell.font = font;
+                // Left to the style of a header unless the program chose one.
+                cell.foreground = main->UseForegroundColour() ? foreground : wxColour();
                 cell.background = background; cell.alignment = header.GetFormat();
                 if ( main->m_small_images && header.GetImage() >= 0 && header.GetImage() < main->m_small_images->GetImageCount() )
                     cell.bitmap = main->m_small_images->GetImageBitmapFor(main, header.GetImage());
@@ -632,7 +691,11 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
             const int columns = main->InReportView() ? s.columns : 1;
             const wxRect line = main->GetLineRect(row);
             int x = line.x + origin.x;
-            const bool selected = main->IsHighlighted(row);
+            // The row whose label is being edited shows its editor and
+            // nothing of its selection: the bar of the selected row was
+            // seen through the field.
+            const bool selected = main->IsHighlighted(row) &&
+                static_cast<long>(row) != main->GetEditedItem();
             const bool current = main->m_current == row;
             const size_t rowIndex = cells.size();
             if ( main->InReportView() )
@@ -681,6 +744,7 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                     // Do not retain the generic dummy line across callbacks:
                     // applications may replace/delete this list from OnGet*.
                     cell.text = owner->OnGetItemText(static_cast<long>(row), col); Check(s);
+                    if ( col == 0 && static_cast<long>(row) == main->GetEditedItem() ) cell.text.clear();
                     image = owner->OnGetItemColumnImage(static_cast<long>(row), col); Check(s);
                     attr = owner->OnGetItemAttr(static_cast<long>(row)); Check(s);
                 }
@@ -693,6 +757,8 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                     {
                         const auto& item = lineData.m_items[col];
                         cell.text = item.GetText(); image = item.GetImage();
+                        // Its editor is shown in its place.
+                        if ( col == 0 && static_cast<long>(row) == main->GetEditedItem() ) cell.text.clear();
                     }
                     if ( !lineData.m_items.empty() ) attr = lineData.GetAttr();
                 }
@@ -708,7 +774,28 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                 }
                 const auto* images = main->HasFlag(wxLC_ICON) ? main->m_normal_images : main->m_small_images;
                 if ( images && image >= 0 && image < images->GetImageCount() )
-                    cell.bitmap = images->GetImageBitmapFor(main, image);
+                {
+                    cell.imageList = images;
+                    cell.image = image;
+                    // Scrolling a list of files asked for the icon of each
+                    // file it shows at each step, a new bitmap each time,
+                    // which was then compared with the one shown pixel by
+                    // pixel: the wheel lagged. The cell which is shown
+                    // already keeps its bitmap while the list only moves.
+                    const auto known = moveOnly ? pane->peers.find(cell.key)
+                                                : pane->peers.end();
+                    if ( known != pane->peers.end() &&
+                         known->second->painted.imageList == images &&
+                         known->second->painted.image == image &&
+                         known->second->painted.bitmap.IsOk() )
+                    {
+                        cell.bitmap = known->second->painted.bitmap;
+                    }
+                    else
+                    {
+                        cell.bitmap = images->GetImageBitmapFor(main, image);
+                    }
+                }
                 Check(s);
                 if ( main->InReportView() && !cell.text.empty() )
                 {
@@ -880,7 +967,11 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
             }
         }
         peer->control.MinWidth(0); peer->control.MinHeight(0);
-        peer->control.Padding(cell.kind == Kind::Row ? X::Thickness{0, 0, 0, 0} : X::Thickness{4, 2, 4, 2});
+        peer->control.Padding(cell.kind == Kind::Row ? X::Thickness{0, 0, 0, 0}
+            : cell.kind == Kind::Header || pane->mode == wxLC_REPORT
+                ? X::Thickness{12, 0, 12, 0}
+            : pane->mode == wxLC_LIST ? X::Thickness{12, 2, 4, 2}
+                                      : X::Thickness{4, 2, 4, 2});
         peer->control.HorizontalContentAlignment(X::HorizontalAlignment::Stretch);
         peer->control.VerticalContentAlignment(cell.kind == Kind::Row
             ? X::VerticalAlignment::Stretch : X::VerticalAlignment::Center);
@@ -904,8 +995,8 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
         {
             // The overlay contains only optional checkboxes. An opaque Canvas
             // above the selector would obscure its native item presenters.
-            if ( pane->selector ) pane->root.Background(wxWinUICreateColourBrush(background));
-            else pane->canvas.Background(wxWinUICreateColourBrush(background));
+            // On the root, which has the rounded corners of the control.
+            pane->root.Background(wxWinUICreateColourBrush(background));
             pane->background = background;
         }
         Check(s);
@@ -956,7 +1047,7 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
             if ( added || peer->painted.background != cell.background ||
                  peer->painted.customBackground != cell.customBackground )
             {
-                if ( pane->selector && !cell.customBackground )
+                if ( (pane->selector || cell.kind == Kind::Header) && !cell.customBackground )
                     peer->control.ClearValue(C::Control::BackgroundProperty());
                 else peer->control.Background(wxWinUICreateColourBrush(cell.background));
             }
@@ -971,7 +1062,11 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
             else if ( cell.kind != Kind::Row )
             {
                 if ( added || peer->painted.text != cell.text ) peer->text.Text(wxWinUIToHString(cell.text));
-                if ( added || peer->painted.font != cell.font ) wxWinUIApplyFont(peer->text, cell.font);
+                if ( added || peer->painted.font != cell.font )
+                {
+                    if ( cell.kind == Kind::Header ) wxWinUIApplyTableHeaderFont(peer->text, cell.font);
+                    else wxWinUIApplyFont(peer->text, cell.font);
+                }
                 if ( added || peer->painted.foreground != cell.foreground ) wxWinUIApplyForeground(peer->text, cell.foreground);
                 if ( peer->content && (added || peer->painted.vertical != cell.vertical) )
                     peer->content.Orientation(cell.vertical ? C::Orientation::Vertical : C::Orientation::Horizontal);
@@ -1045,6 +1140,97 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
             }
             if ( cell.current ) pane->host.SetPreferredFocus(peer->control);
         }
+        // A report list which has no header is a list of names (the pages
+        // of a wxListbook), not a table: it has lines only if the program
+        // asked for rules.
+        PublishTableLines(pane, cells, scale,
+                          !(s.style & wxLC_NO_HEADER) ||
+                          (s.style & (wxLC_HRULES | wxLC_VRULES)) != 0);
+    }
+
+    // The lines of a table of WinUI, of which WinUI.TableView is the model
+    // for this port: one under each row, across the pane, and one after each
+    // column; in the header, its band goes on after the last column. Nothing
+    // of wx is called here.
+    void PublishTableLines(const std::shared_ptr<Pane>& pane,
+                           const std::vector<Cell>& cells, double scale,
+                           bool table)
+    {
+        if ( pane->mode != wxLC_REPORT || !pane->window ) return;
+        if ( !table )
+        {
+            for ( const auto& border : pane->rowLines )
+                border.Visibility(X::Visibility::Collapsed);
+            for ( const auto& border : pane->columnLines )
+                border.Visibility(X::Visibility::Collapsed);
+            return;
+        }
+        const wxSize client = pane->window->GetClientSize();
+        const double width = client.x / scale, height = client.y / scale;
+        const auto line = []
+        {
+            C::Border border = wxWinUICreateThemeBrushBorder(
+                "ControlStrokeColorDefaultBrush", wxWinUIThemeBrushProperty::Background);
+            if ( border ) border.IsHitTestVisible(false);
+            return border;
+        };
+        if ( pane->header )
+        {
+            // The band of the header row, across the pane, under the buttons
+            // of the columns.
+            if ( pane->headerBand )
+            {
+                pane->headerBand.Width(width);
+                pane->headerBand.Height(height);
+            }
+            return;
+        }
+        if ( !pane->lines ) return;
+        std::vector<double> rows;
+        std::set<int> columns;
+        double bottom = 0;
+        for ( const auto& cell : cells )
+        {
+            if ( cell.kind == Kind::Row )
+            {
+                // A Canvas does not clip: no line under a row which goes on
+                // below the pane.
+                const double y = (cell.rect.y + cell.rect.height) / scale;
+                bottom = std::max(bottom, std::min(y, height));
+                if ( y <= height ) rows.push_back(y);
+            }
+            else if ( cell.kind == Kind::Cell )
+                columns.insert(cell.rect.x + cell.rect.width);
+        }
+        const auto place = [&](std::vector<C::Border>& lines, size_t count)
+        {
+            while ( lines.size() < count )
+            {
+                const C::Border border = line();
+                if ( !border ) return false;
+                pane->lines.Children().Append(border);
+                lines.push_back(border);
+            }
+            for ( size_t n = 0; n != lines.size(); ++n )
+                lines[n].Visibility(n < count ? X::Visibility::Visible : X::Visibility::Collapsed);
+            return true;
+        };
+        if ( !place(pane->rowLines, rows.size()) || !place(pane->columnLines, columns.size()) ) return;
+        for ( size_t n = 0; n != rows.size(); ++n )
+        {
+            const C::Border& border = pane->rowLines[n];
+            border.Width(width); border.Height(1);
+            C::Canvas::SetLeft(border, 0);
+            C::Canvas::SetTop(border, rows[n] - 1);
+        }
+        size_t n = 0;
+        for ( const int x : columns )
+        {
+            const C::Border& border = pane->columnLines[n++];
+            border.Width(1); border.Height(bottom);
+            C::Canvas::SetLeft(border, x / scale - 1);
+            C::Canvas::SetTop(border, 0);
+        }
     }
     void Synchronize()
     {
@@ -1062,11 +1248,14 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
                     if ( closed || !owner || owner->IsBeingDeleted() ) return;
                     dirty = false;
                 }
+                const bool moveOnly = !contentDirty;
+                contentDirty = false;
                 const auto s = Capture();
                 UpdatePanes(s);
                 const auto currentPanes = panes;
                 std::vector<std::vector<Cell>> presentations;
-                for ( const auto& pane : currentPanes ) presentations.push_back(ReadPane(pane, s));
+                for ( const auto& pane : currentPanes )
+                    presentations.push_back(ReadPane(pane, s, moveOnly));
                 Check(s);
                 ++suppress;
                 const auto restore = wxMakeGuard([this]() { --suppress; });
@@ -1089,6 +1278,7 @@ struct wxWinUIListProjection::Impl : std::enable_shared_from_this<Impl>
             {
                 if ( closed || !owner ) return;
                 dirty = true;
+                contentDirty = true;
             }
             catch ( const winrt::hresult_error& error )
             {
@@ -1431,6 +1621,7 @@ A::AutomationPeer wxWinUIListProjection::Impl::AutomationCell(Key key)
     if ( key.first == -1 )
     {
         const C::Button button = winrt::make<U::HeaderElement>(binding);
+        wxWinUIApplyTableHeaderStyle(button);
         automationHeaders[key.second] = button;
         peer = A::FrameworkElementAutomationPeer::CreatePeerForElement(button);
     }
@@ -1646,7 +1837,7 @@ std::shared_ptr<wxWinUIListProjection> wxWinUIListProjection::Create(wxGenericLi
     return projection;
 }
 void wxWinUIListProjection::Invalidate() { m_impl->Invalidate(); }
-void wxWinUIListProjection::SyncViewport() { m_impl->Invalidate(); }
+void wxWinUIListProjection::SyncViewport() { m_impl->Invalidate(false); }
 void wxWinUIListProjection::NotifySelectionChanged() { m_impl->NotifySelectionChanged(); }
 void wxWinUIListProjection::Update() { const auto impl = m_impl; impl->Synchronize(); }
 void wxWinUIListProjection::Close() { m_impl->Close(); }

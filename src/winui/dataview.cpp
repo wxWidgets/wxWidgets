@@ -27,6 +27,7 @@
 #include <winrt/Windows.Globalization.NumberFormatting.h>
 #include <algorithm>
 #include <cmath>
+#include <map>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -35,6 +36,16 @@ namespace X = winrt::Microsoft::UI::Xaml;
 namespace C = winrt::Microsoft::UI::Xaml::Controls;
 namespace F = winrt::Windows::Foundation;
 namespace U = wxWinUIDataViewAutomation;
+
+// The chevron of a WinUI TreeView, from the font of its icons.
+static void SetExpanderGlyph(
+    const winrt::Microsoft::UI::Xaml::Controls::Button& toggle, bool opened)
+{
+    winrt::Microsoft::UI::Xaml::Controls::FontIcon icon;
+    icon.Glyph(opened ? L"\uE70D" : L"\uE76C");
+    icon.FontSize(12);
+    toggle.Content(icon);
+}
 
 namespace
 {
@@ -153,6 +164,8 @@ public:
     C::ListView list{nullptr};
     C::Canvas header{nullptr};
     C::ScrollViewer headerScroll{nullptr};
+    // False when the program asked for no border: no frame around the table.
+    bool framed = true;
     std::unique_ptr<wxWinUIDataViewHeader::InsertionMarker> columnInsertionMarker;
     wxDataViewColumn* columnInsertionOwner = nullptr;
     C::ScrollViewer scroll{nullptr};
@@ -224,7 +237,8 @@ public:
     wxVariant editingValue;
     wxDataViewRendererBase* nativeEditRenderer = nullptr;
     wxPrivate::DataViewEditGeneration editGeneration = 0;
-    double rowHeight = 32;
+    // The least height of a row of a list of WinUI, as in WinUI.TableView.
+    double rowHeight = 40;
 
     double Scale() const
     {
@@ -304,18 +318,27 @@ public:
         host.SetPhysicalDisconnectGate(editorGate);
         root = C::Grid();
         C::RowDefinition heading, body;
-        heading.Height({owner->HasFlag(wxDV_NO_HEADER) ? 0.0 : 36.0, X::GridUnitType::Pixel});
+        heading.Height({owner->HasFlag(wxDV_NO_HEADER) ? 0.0 : 32.0, X::GridUnitType::Pixel});
         body.Height({1, X::GridUnitType::Star});
         root.RowDefinitions().Append(heading);
         root.RowDefinitions().Append(body);
         header = C::Canvas();
-        header.Height(36);
+        header.Height(32);
         headerScroll = C::ScrollViewer();
         headerScroll.HorizontalScrollBarVisibility(C::ScrollBarVisibility::Hidden);
         headerScroll.VerticalScrollBarVisibility(C::ScrollBarVisibility::Disabled);
         headerScroll.VerticalScrollMode(C::ScrollMode::Disabled);
         headerScroll.Content(header);
+        // The band of the header row, under the buttons of the columns, with
+        // the corners of the frame.
+        // The header stays the first child of the root, as what looks for
+        // it expects: the band is put under it by its Z index.
         root.Children().Append(headerScroll);
+        if ( C::Border band = wxWinUICreateTableHeaderBand(framed ? 4 : 0) )
+        {
+            C::Canvas::SetZIndex(band, -1);
+            root.Children().Append(band);
+        }
         list = winrt::make<U::GridElement>(CreateAutomationBinding());
         list.IsItemClickEnabled(false);
         list.SelectionMode(owner->HasFlag(wxDV_MULTIPLE)
@@ -325,7 +348,7 @@ public:
             LR"(<ItemsPanelTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><ItemsStackPanel Orientation="Vertical" /></ItemsPanelTemplate>)")
                 .as<C::ItemsPanelTemplate>());
         list.ItemTemplate(X::Markup::XamlReader::Load(
-            LR"(<DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><Canvas Height="32" /></DataTemplate>)")
+            LR"(<DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><Canvas Height="40" /></DataTemplate>)")
                 .as<X::DataTemplate>());
         list.ItemContainerStyle(X::Markup::XamlReader::Load(
             LR"(<Style xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="ListViewItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="0"/><Setter Property="MinHeight" Value="0"/></Style>)")
@@ -341,6 +364,20 @@ public:
         editorOverlay = C::Canvas();
         C::Grid::SetRow(editorOverlay, 1);
         root.Children().Append(editorOverlay);
+        // The frame of a table of WinUI: the stroke of a control, with its
+        // corners, over the edge of the header and of the rows.
+        if ( framed )
+        {
+            if ( C::Border frame = wxWinUICreateThemeBrushBorder(
+                    "ControlStrokeColorDefaultBrush", wxWinUIThemeBrushProperty::BorderBrush) )
+            {
+                frame.IsHitTestVisible(false);
+                frame.BorderThickness({1, 1, 1, 1});
+                frame.CornerRadius({4, 4, 4, 4});
+                C::Grid::SetRowSpan(frame, 2);
+                root.Children().Append(frame);
+            }
+        }
         wxWinUIApplyFont(list, owner->GetFont());
         const std::weak_ptr<wxWinUIDataViewImpl> weak = shared_from_this();
         selectionToken = list.SelectionChanged([weak](const auto&, const auto&)
@@ -1789,7 +1826,7 @@ void wxWinUIDataViewImpl::BuildHeader()
             if ( !Alive(stamp) ) return;
             peer->moveGrip.Visibility(col->IsReorderable() ? X::Visibility::Visible : X::Visibility::Collapsed);
             if ( !Alive(stamp) ) return;
-            peer->button.Padding({col->IsReorderable() ? 26.0 : 8.0, 0, 8, 0});
+            peer->button.Padding({12, 0, 12, 0});
             if ( !Alive(stamp) ) return;
             if ( peer->binding->moving && (peer->binding->moveVersion != stamp || !col->IsReorderable()) )
                 peer->moveThumb.CancelDrag();
@@ -1808,7 +1845,7 @@ void wxWinUIDataViewImpl::BuildHeader()
             if ( !Alive(stamp) ) return;
             X::Automation::AutomationProperties::SetName(peer->grid, wxWinUIToHString(accessibleTitle));
             if ( !Alive(stamp) ) return;
-            wxWinUIApplyFont(peer->button, owner->GetFont());
+            wxWinUIApplyTableHeaderFont(peer->button, owner->GetFont());
             if ( !Alive(stamp) ) return;
             C::Canvas::SetLeft(peer->grid, left);
             if ( !Alive(stamp) ) return;
@@ -1885,7 +1922,7 @@ void wxWinUIDataViewImpl::Realize(const C::ListViewItem& container, ItemKey key)
                     if ( !Alive(stamp) ) return;
                     if ( const auto content = saved.content.get() )
                     {
-                        const double available = std::max(0.0, width - saved.indent - 12);
+                        const double available = std::max(0.0, width - saved.indent - 25);
                         if ( content.MaxWidth() != available ) content.MaxWidth(available);
                         if ( !Alive(stamp) ) return;
                     }
@@ -1893,9 +1930,7 @@ void wxWinUIDataViewImpl::Realize(const C::ListViewItem& container, ItemKey key)
                     {
                         const bool opened = expanded.count(key) != 0;
                         if ( saved.expanded != opened )
-                            toggle.Content(winrt::box_value(opened ? L"\u25be" : L"\u25b8"));
-                        if ( !Alive(stamp) ) return;
-                        if ( toggle.Height() != rowHeight - 4 ) toggle.Height(rowHeight - 4);
+                            SetExpanderGlyph(toggle, opened);
                         if ( !Alive(stamp) ) return;
                         automationCells[key][col].expanded = opened;
                     }
@@ -1950,8 +1985,13 @@ void wxWinUIDataViewImpl::Realize(const C::ListViewItem& container, ItemKey key)
         };
         cell.Width(width);
         cell.Height(rowHeight);
-        C::Border border;
-        border.Padding({6, 2, 6, 2});
+        // The lines of a table, for what is one: a list, or a tree whose
+        // program asked for rules.
+        const bool table = model.model && model.model->IsListModel();
+        C::Border border = wxWinUICreateTableCellBorder(
+            table || owner->HasFlag(wxDV_VERT_RULES),
+            table || owner->HasFlag(wxDV_HORIZ_RULES));
+        border.Padding({12, 0, 12, 0});
         if ( attr.HasBackgroundColour() && !wxWinUIIsHighContrastActive() )
             border.Background(wxWinUICreateColourBrush(attr.GetBackgroundColour()));
         C::Grid content;
@@ -2150,11 +2190,13 @@ void wxWinUIDataViewImpl::Realize(const C::ListViewItem& container, ItemKey key)
             if ( row.container )
             {
                 C::Button toggle;
-                toggle.Content(winrt::box_value(expanded.count(key) ? L"\u25be" : L"\u25b8"));
+                wxWinUIApplySubtleButtonStyle(toggle);
+                SetExpanderGlyph(toggle, expanded.count(key) != 0);
                 toggle.Width(24);
-                toggle.Height(rowHeight - 4);
+                toggle.Height(24);
                 toggle.Padding({0, 0, 0, 0});
                 toggle.HorizontalAlignment(X::HorizontalAlignment::Left);
+                toggle.VerticalAlignment(X::VerticalAlignment::Center);
                 toggle.Margin({indent - 24, 0, 0, 0});
                 toggle.Click([resolvePresentation, key](const auto&, const auto&)
                 {
@@ -2170,7 +2212,9 @@ void wxWinUIDataViewImpl::Realize(const C::ListViewItem& container, ItemKey key)
         if ( visual )
         {
             visual.Margin({indent, 0, 0, 0});
-            visual.MaxWidth(std::max(0.0, width - indent - 12));
+            // Between the paddings of the cell, 12 on each side, and before
+            // the line at its end: wider, the cell is wider than its column.
+            visual.MaxWidth(std::max(0.0, width - indent - 25));
             visual.Opacity(enabled ? 1.0 : 0.45);
             content.Children().Append(visual);
         }
@@ -2187,7 +2231,20 @@ void wxWinUIDataViewImpl::Realize(const C::ListViewItem& container, ItemKey key)
             if ( !self || !hasValue ) return;
             if ( col->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE )
                 self->BeginEdit(key, col);
-            else self->Send(wxEVT_DATAVIEW_ITEM_ACTIVATED, key, col);
+            else
+            {
+                // The activation handler may open a modal dialog: it runs
+                // once this callback has returned.
+                wxWinUIPostNotification([resolvePresentation, key, col]()
+                {
+                    auto live = resolvePresentation();
+                    if ( live && live->owner &&
+                         live->owner->GetColumnIndex(col) != wxNOT_FOUND )
+                    {
+                        live->Send(wxEVT_DATAVIEW_ITEM_ACTIVATED, key, col);
+                    }
+                });
+            }
         });
         C::Canvas::SetLeft(cell, left);
         cells.push_back(cell);
@@ -2764,10 +2821,45 @@ void wxDataViewColumn::SetWidth(int width)
     m_width = width;
     if ( m_owner ) m_owner->OnColumnWidthChange(m_owner->GetColumnIndex(this));
 }
+// A column left at a default width (80 pixels, 30 for a check box, whatever
+// the scale of the screen) is given what its title needs: "Enabled" in 30
+// pixels showed "Enabl". The width a program chose is not touched.
+static int wxWinUIDataViewDefaultWidth(const wxDataViewColumn *column,
+                                       wxDataViewCtrl *owner, int requested)
+{
+    const bool toggle = requested == wxDVC_TOGGLE_DEFAULT_WIDTH;
+    if ( requested >= 0 && requested != wxDVC_DEFAULT_WIDTH && !toggle )
+        return requested;
+
+    int width = owner ? owner->FromDIP(toggle ? wxDVC_TOGGLE_DEFAULT_WIDTH
+                                              : wxDVC_DEFAULT_WIDTH)
+                      : requested < 0 ? wxDVC_DEFAULT_WIDTH : requested;
+    if ( !owner )
+        return width;
+
+    // The title is measured once for each text: this is asked at every
+    // layout.
+    struct Measured { wxString title; int width; };
+    static std::map<const wxDataViewColumn *, Measured> s_measured;
+    const wxString title = column->GetTitle();
+    Measured& measured = s_measured[column];
+    if ( measured.title != title || !measured.width )
+    {
+        measured.title = title;
+        const wxSize text = title.empty()
+            ? wxSize() : wxWinUIMeasureText(owner, title, owner->GetFont());
+        // The padding of a header cell and the room of its sort arrow.
+        measured.width = text.x > 0 ? text.x + owner->FromDIP(12 + 8 + 12) : 0;
+    }
+
+    return std::max(width, measured.width);
+}
+
 int wxDataViewColumn::GetWidth() const
 {
     const int minimum = m_minWidth;
-    int width = std::max(minimum, m_width < 0 ? wxDVC_DEFAULT_WIDTH : m_width);
+    int width = std::max(minimum,
+                         wxWinUIDataViewDefaultWidth(this, m_owner, m_width));
     const auto state = m_owner ? m_owner->m_winui : nullptr;
     const auto stamp = state ? state->generation : 0;
     if ( m_width == wxCOL_WIDTH_AUTOSIZE && m_owner )
@@ -2852,6 +2944,8 @@ bool wxDataViewCtrl::Create(wxWindow* parent, wxWindowID id,
                            const wxPoint& pos, const wxSize& size, long style,
                            const wxValidator& validator, const wxString& name)
 {
+    // The frame is drawn by XAML, inside the window: Win32 keeps no border.
+    m_winui->framed = (style & wxBORDER_MASK) != wxBORDER_NONE;
     if ( !wxControl::Create(parent, id, pos, size,
             (style & ~wxBORDER_MASK) | wxBORDER_NONE, validator, name) ) return false;
     try { return m_winui->Create(); }
@@ -3312,7 +3406,7 @@ void wxDataViewCtrl::SetFocus()
         state->host.SetPreferredFocus(state->list);
         state->host.SynchronizeForFocus();
         if ( !state->owner ) return;
-        state->list.Focus(X::FocusState::Programmatic);
+        state->list.Focus(wxWinUIProgrammaticFocusState());
         if ( state->owner ) state->RefreshVisuals();
     }
 }
@@ -3336,6 +3430,15 @@ bool wxDataViewCtrl::TryGetBestColumnWidth(int index, unsigned int* width) const
     const auto rowSnapshot = state->rows;
     auto renderer = col->GetRenderer();
     const auto modelColumn = col->GetModelColumn();
+    // The expander column of a tree also holds each row's indentation and its
+    // expander button (the same amounts the row presentation uses).
+    const bool tree = model.model && !model.model->IsListModel() &&
+        (col == GetExpanderColumn() || (!GetExpanderColumn() && col == GetColumn(0)));
+    const int indentStep = std::max(16, GetIndent());
+    // The renderer measures the check box of classic Windows, 13 wide; the
+    // one shown is the CheckBox of WinUI, 20 and a gap of 8.
+    const int checkExtra =
+        dynamic_cast<wxDataViewCheckIconTextRenderer *>(renderer) ? FromDIP(16) : 0;
     if ( model.model )
         for ( const auto& row : rowSnapshot )
         {
@@ -3345,7 +3448,9 @@ bool wxDataViewCtrl::TryGetBestColumnWidth(int index, unsigned int* width) const
             {
                 const auto size = renderer->GetSize();
                 if ( !state->Alive(stamp) ) return false;
-                best = std::max(best, size.x + FromDIP(16));
+                const int indent = tree
+                    ? static_cast<int>(row.depth) * indentStep + FromDIP(24) : 0;
+                best = std::max(best, size.x + FromDIP(24) + checkExtra + indent);
             }
         }
     *width = static_cast<unsigned>(std::max(best, col->GetMinWidth()));

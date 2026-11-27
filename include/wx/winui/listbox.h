@@ -109,6 +109,10 @@ protected:
     void* DoGetItemClientData(unsigned int n) const override;
 
     wxSize DoGetBestSize() const override;
+
+    // The list of XAML scrolls what it shows: the window has no bar of its
+    // own, see the definition.
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
     void DoSetSize(int x, int y, int width, int height,
                    int sizeFlags = wxSIZE_AUTO) override;
     void DoSetClientSize(int width, int height) override;

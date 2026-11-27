@@ -30,6 +30,7 @@
 #include "private.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/appearance.h"
+#include "wx/winui/private/listitemfont.h"
 #include "wx/winui/private/tlwhost.h"
 
 #if wxUSE_OWNER_DRAWN
@@ -358,6 +359,8 @@ double wxWinUIListScale(const wxListBox *owner)
     return scale;
 }
 
+bool wxWinUIResetListHorizontalExtent(const MUXC::ListView& listView);
+
 void wxWinUIApplyListHorizontalExtent(
     const MUXC::ListView& listView,
     const MUXC::ListViewItem& item,
@@ -377,6 +380,21 @@ void wxWinUIApplyListHorizontalExtent(
         scroll.HorizontalContentAlignment(
             MUX::HorizontalAlignment::Left);
         const double viewport = scroll.ViewportWidth();
+        if ( std::isfinite(viewport) && viewport > 0.0 &&
+             contentWidthDips <= viewport )
+        {
+            // What the list holds fits in what it shows: nothing to scroll
+            // sideways. The row keeps the width the list gives it and no
+            // width of its own: set to that of the viewport, it was wider
+            // than it by its margins, and the list had a horizontal bar
+            // which moved it by those few pixels.
+            item.ClearValue(MUX::FrameworkElement::WidthProperty());
+            item.MinWidth(0);
+            item.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
+            item.HorizontalContentAlignment(MUX::HorizontalAlignment::Left);
+            (void)wxWinUIResetListHorizontalExtent(listView);
+            return;
+        }
         if ( std::isfinite(viewport) && viewport > 0.0 )
             width = wxMax(width, viewport);
 
@@ -921,8 +939,75 @@ wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
     Create(parent, id, pos, size, choices, style, validator, name);
 }
 
+// ----------------------------------------------------------------------------
+// a typeface of its own for each item, see wx/winui/private/listitemfont.h
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+std::unordered_map<const wxListBox *, wxWinUIListItemFontProvider>&
+wxWinUIListItemFontProviders()
+{
+    static std::unordered_map<const wxListBox *,
+                              wxWinUIListItemFontProvider> s_providers;
+    return s_providers;
+}
+
+// The text of an item is drawn by the presenter of its container, which
+// takes the font of the container: nothing else to build.
+void wxWinUIApplyListItemFont(const wxListBox *list, unsigned int n,
+                              const MUXC::ListViewItem& item)
+{
+    const auto& providers = wxWinUIListItemFontProviders();
+    const auto it = providers.find(list);
+    if ( it == providers.end() )
+        return;
+
+    // The compact rows of WinUI, and the same for every typeface: some have
+    // lines much higher than others.
+    item.MinHeight(32.0);
+    item.Height(32.0);
+
+    wxWinUIListItemFont font;
+    if ( it->second(n, font) && !font.family.empty() )
+    {
+        item.FontFamily(MUXM::FontFamily(wxWinUIToHString(font.family)));
+
+        winrt::Windows::UI::Text::FontWeight weight{};
+        weight.Weight = static_cast<std::uint16_t>(font.weight);
+        item.FontWeight(weight);
+
+        item.FontStyle(font.italic
+                        ? winrt::Windows::UI::Text::FontStyle::Italic
+                        : winrt::Windows::UI::Text::FontStyle::Normal);
+        item.FontStretch(
+            static_cast<winrt::Windows::UI::Text::FontStretch>(font.stretch));
+    }
+    else
+    {
+        item.ClearValue(MUXC::Control::FontFamilyProperty());
+        item.ClearValue(MUXC::Control::FontWeightProperty());
+        item.ClearValue(MUXC::Control::FontStyleProperty());
+        item.ClearValue(MUXC::Control::FontStretchProperty());
+    }
+}
+
+} // anonymous namespace
+
+void wxWinUISetListItemFontProvider(wxListBox *list,
+                                    wxWinUIListItemFontProvider provider)
+{
+    if ( provider )
+        wxWinUIListItemFontProviders()[list] = std::move(provider);
+    else
+        wxWinUIListItemFontProviders().erase(list);
+}
+
 wxListBox::~wxListBox()
 {
+    wxWinUIListItemFontProviders().erase(this);
+
     Unbind(wxEVT_DPI_CHANGED, &wxListBox::OnDPIChanged, this);
 
     // Peer callbacks must be gone before Clear() destroys client objects.
@@ -1173,8 +1258,17 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                     if ( !itemId )
                         return;
 
-                    // SendEvent() can delete owner. Nothing follows it.
-                    owner->WinUISendDoubleClick(itemId);
+                    // The handler may open a modal dialog or delete the
+                    // list: it runs once this callback has returned.
+                    wxWinUIPostNotification([callbackState, itemId]()
+                    {
+                        wxListBox * const live = callbackState->GetOwner();
+                        if ( live && live->m_winui &&
+                             live->m_winui->callbackState == callbackState )
+                        {
+                            live->WinUISendDoubleClick(itemId);
+                        }
+                    });
                 }
                 catch ( const winrt::hresult_error& e )
                 {
@@ -2063,6 +2157,18 @@ bool wxListBox::WinUIResetHorizontalExtent()
     implementation->horizontalResetPending = !reset;
     implementation->horizontalPresentationPending = !reset;
     return reset;
+}
+
+WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // wxLB_HSCROLL is wxHSCROLL, which gives a window of Win32 the style
+    // WS_HSCROLL. The LISTBOX of Win32 shows that bar only when a line is
+    // wider than the list. Here the window is not the list: it kept a
+    // horizontal bar of its own under the ListView, always there, which had
+    // nothing to scroll. The ListView has the bars: see
+    // WinUIApplyScrollPolicy().
+    return wxListBoxBase::MSWGetStyle(style, exstyle) &
+                ~static_cast<WXDWORD>(WS_HSCROLL | WS_VSCROLL);
 }
 
 void wxListBox::WinUIApplyScrollPolicy()
@@ -2969,7 +3075,20 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     owner->WinUISyncOldSelections();
     owner->InvalidateBestSize();
     if ( owner->HasFlag(wxLB_HSCROLL) )
-        owner->SetHorizontalExtent();
+    {
+        // Only what was added can make the list wider. All the items were
+        // measured again here after each addition: adding a thousand items
+        // one by one measured a million texts, and the program stopped
+        // answering for the time that took.
+        for ( unsigned int i = 0; i < items.GetCount(); ++i )
+        {
+            wxListBox * const current = getCurrentOwner();
+            if ( !current )
+                return wxNOT_FOUND;
+            if ( !items[i].empty() )
+                current->SetHorizontalExtent(items[i]);
+        }
+    }
     return last;
 }
 
@@ -4312,11 +4431,14 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
                 }
             }
 
+            // As wide as its box and its label, no more: a click there
+            // changes the check, a click anywhere else in the row selects
+            // the item.
             checkBox.Opacity(1.0);
             checkBox.ClearValue(MUX::FrameworkElement::WidthProperty());
             checkBox.ClearValue(MUX::FrameworkElement::HeightProperty());
             checkBox.HorizontalAlignment(
-                MUX::HorizontalAlignment::Stretch);
+                MUX::HorizontalAlignment::Left);
             item.ClearValue(MUXC::Control::PaddingProperty());
             content = grid;
         }
@@ -4365,6 +4487,12 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
                 MUXC::Canvas::SetLeft(
                     block,
                     tabLayout.runOffsets[runIndex] / scale);
+                // In the middle of the height of the row: a Canvas puts
+                // what it holds at its top, and the text was above the
+                // middle of its row.
+                MUXC::Canvas::SetTop(
+                    block,
+                    wxMax(0.0, (itemHeightDips - GetCharHeight() / scale) / 2));
                 canvas.Children().Append(block);
             }
             content = canvas;
@@ -4395,6 +4523,11 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
                         pendingFocusDirectContent = true;
                     }
                 }
+                // As wide as its box and its label, no more: a click
+                // there changes the check, a click anywhere else in the row
+                // selects the item.
+                checkBox.HorizontalAlignment(
+                    MUX::HorizontalAlignment::Left);
                 content = checkBox.as<
                     winrt::Windows::Foundation::IInspectable>();
             }
@@ -4402,6 +4535,7 @@ void wxListBox::WinUIUpdatePeerItem(unsigned int n)
             {
                 content = winrt::box_value(
                     wxWinUIToHString(m_itemModel.At(n).text));
+                wxWinUIApplyListItemFont(this, n, item);
             }
         }
 
@@ -5009,7 +5143,7 @@ bool wxWinUIListBoxTestAccess::FocusPeerItem(wxListBox &control, unsigned int n)
         if ( !item )
             return false;
 
-        const bool focused = item.Focus(MUX::FocusState::Programmatic);
+        const bool focused = item.Focus(wxWinUIProgrammaticFocusState());
         wxListBox *const owner = callbackState->GetOwner();
         return focused && owner && owner == self && owner->m_winui &&
                owner->m_winui.get() == implementation &&

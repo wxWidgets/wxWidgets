@@ -25,6 +25,10 @@
 
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/private.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/themecolours.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
 #include "wx/private/windowlifetime.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
@@ -2162,6 +2166,30 @@ void wxPropertyGridManager::RepaintDescBoxDecorations( wxDC& dc,
                                                        int newWidth,
                                                        int newHeight )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The frame of a control of WinUI, as the grid above has one: its
+    // stroke, with rounded corners, around what is behind. Nothing shows the
+    // sash between the two but the pointer.
+    const wxColour ground = GetBackgroundColour();
+    if ( !wxWinUIPaintSurfaceClearRect(dc.GetHDC(), 0, newSplitterY,
+                                       newWidth, newHeight - newSplitterY) )
+    {
+        dc.SetBrush(ground);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRectangle(0, newSplitterY, newWidth, newHeight - newSplitterY);
+    }
+
+    const int top = newSplitterY + m_splitterHeight;
+    if ( newHeight - top > FromDIP(8) )
+    {
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.SetPen(wxPen(wxWinUIBlendOver(
+            wxWinUIGetThemeColour(wxWinUIThemeColour::ControlStroke), ground)));
+        dc.DrawRoundedRectangle(0, top, newWidth, newHeight - top, FromDIP(4));
+    }
+    return;
+#endif
+
     // Draw background
     wxColour bgcol = GetBackgroundColour();
     dc.SetBrush(bgcol);
@@ -2183,11 +2211,19 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
 {
     const wxWeakRef<wxWindow> weakThis(this);
     int use_hei = wxMax(1, new_height - 1);
-    int use_width = wxMax(1, new_width - 6);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The text of a WinUI card starts 12 from its edge.
+    const int textX = FromDIP(12);
+    const int textTop = FromDIP(8);
+#else
+    const int textX = 3;
+    const int textTop = 5;
+#endif
+    int use_width = wxMax(1, new_width - 2*textX);
 
     // Fix help control positions.
-    int cap_y = new_splittery+m_splitterHeight+5;
-    m_pTxtHelpCaption->SetSize(3, cap_y, use_width, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
+    int cap_y = new_splittery+m_splitterHeight+textTop;
+    m_pTxtHelpCaption->SetSize(textX, cap_y, use_width, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
     if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
         return;
     int cap_hei = m_pTxtHelpCaption->GetSize().GetHeight();
@@ -2221,7 +2257,7 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
         }
         else
         {
-            m_pTxtHelpContent->SetSize(3,cnt_y,use_width,cnt_hei);
+            m_pTxtHelpContent->SetSize(textX,cnt_y,use_width,cnt_hei);
             if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
                 return;
             m_pTxtHelpContent->Show( true );
@@ -2587,7 +2623,7 @@ void wxPropertyGridManager::RecreateControls()
     {
         if ( !m_pHeaderCtrl )
         {
-            m_pHeaderCtrl = new wxPGHeaderCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
+            m_pHeaderCtrl = new wxPGHeaderCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
         }
         else
         {

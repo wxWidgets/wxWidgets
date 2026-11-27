@@ -17,6 +17,9 @@
 #include "wx/scrolwin.h"
 #include "wx/recguard.h"
 #include "wx/time.h" // needed for wxMilliClock_t
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "wx/timer.h"
+#endif
 #include "wx/systhemectrl.h"
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
@@ -1896,6 +1899,18 @@ private:
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     std::shared_ptr<wxPGWinUIProjection> m_winUIProjection;
+
+    // The grid scrolls by the pixel, as the lists of WinUI do: a notch of
+    // the wheel glides to where it sends, a touch pad is followed as it
+    // comes.
+    void WinUIOnWheel(wxMouseEvent& event);
+    void WinUIScrollBy(int pixels, bool animate);
+    void WinUIScrollStep();
+    void WinUIStopScrolling();
+
+    wxTimer m_winuiScrollTimer;
+    int m_winuiScrollTarget = -1;
+    int m_winuiWheelRest = 0;
 #endif
 
     void ReallocDoubleBufferIfNeeded();

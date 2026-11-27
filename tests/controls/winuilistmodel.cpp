@@ -1954,4 +1954,73 @@ TEST_CASE("wxWinUI CheckListBox toggle callback is destruction-safe",
 
 #endif // wxUSE_CHECKLISTBOX
 
+TEST_CASE("wxWinUI ListBox has no horizontal bar for what fits",
+          "[winui-listbox][winui-listbox-hscroll]")
+{
+    // The list of the widgets sample: wxLB_HSCROLL, wide enough for what it
+    // holds. It must scroll sideways only when a line is wider than it.
+    // Sized in DIPs: the longest line must fit at any display scale.
+    wxFrame frame(nullptr, wxID_ANY, "ListBox horizontal bar",
+                  wxPoint(60, 60), wxDefaultSize);
+    frame.SetSize(frame.FromDIP(wxSize(640, 700)));
+    wxListBox list(&frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                   0, nullptr, wxLB_HSCROLL);
+    wxBoxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(&list, 1, wxEXPAND);
+    frame.SetSizer(sizer);
+    frame.Layout();
+    frame.ShowWithoutActivating();
+
+    const auto measure = [&](const char* when)
+    {
+        wxWinUIListBoxTestAccess::ScrollMetrics metrics;
+        double scrollable = -1.0;
+        int horizontal = -1;
+        for ( int n = 0; n != 30; ++n )
+        {
+            frame.Update();
+            wxTheApp->ProcessPendingEvents();
+            wxYield();
+            wxMilliSleep(10);
+        }
+        REQUIRE(wxWinUIListBoxTestAccess::GetScrollPresentation(
+            list, &horizontal, nullptr, &scrollable, &metrics));
+        INFO(when << ": visibility=" << horizontal
+             << " scrollable=" << scrollable
+             << " extent=" << metrics.scrollExtentWidth
+             << " viewport=" << metrics.scrollViewportWidth
+             << " presenterExtent=" << metrics.contentPresenterExtentWidth
+             << " content=" << metrics.contentActualWidth
+             << "/" << metrics.contentDesiredWidth
+             << " panel=" << metrics.panelActualWidth
+             << "/" << metrics.panelDesiredWidth
+             << " item=" << metrics.itemActualWidth
+             << "/" << metrics.itemDesiredWidth
+             << " explicit=" << metrics.itemExplicitWidth
+             << " sizesToParent="
+             << metrics.contentPresenterSizesContentToTemplatedParent
+             << " control=" << wxWinUIListBoxTestAccess::GetControlWidthDIPs(list));
+        // Nor a bar of Win32 on the window itself, under the list of XAML:
+        // wxLB_HSCROLL is wxHSCROLL, which gave it WS_HSCROLL.
+        CHECK((::GetWindowLongPtr(reinterpret_cast<HWND>(list.GetHWND()),
+                                  GWL_STYLE) &
+               (WS_HSCROLL | WS_VSCROLL)) == 0);
+        CHECK(list.GetClientSize().y == list.GetSize().y);
+        return scrollable;
+    };
+
+    CHECK(measure("empty") == 0.0);
+
+    list.Append("First");
+    list.Append("another one");
+    list.Append("and the last (very very very very very very very very very very long) one");
+    CHECK(measure("several") == 0.0);
+
+    wxArrayString many;
+    for ( int n = 0; n != 1000; ++n )
+        many.push_back(wxString::Format("item #%d", n));
+    list.Append(many);
+    CHECK(measure("many") == 0.0);
+}
+
 #endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_LISTBOX

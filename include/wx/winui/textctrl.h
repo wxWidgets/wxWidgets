@@ -135,6 +135,11 @@ public:
         return wxTextCtrlBase::HitTest(pt, col, row);
     }
 
+    // The scrollbars of a text control are those of its TextBox of XAML,
+    // which knows its text: its window has none of its own, which the host
+    // would show as well and which would scroll nothing.
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
+
 protected:
     void DoEnable(bool enable) override;
     void DoSetValue(const wxString& value, int flags = 0) override;

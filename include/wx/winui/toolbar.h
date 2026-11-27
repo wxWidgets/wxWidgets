@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/winui/toolbar.h
-// Purpose:     wxToolBar for wxWinUI (WinUI CommandBar)
+// Purpose:     wxToolBar for wxWinUI, made of a WinUI CommandBar
 // Author:      wxWidgets development team
 // Created:     2026-07-20
 // Copyright:   (c) wxWidgets development team
@@ -12,14 +12,29 @@
 
 #if wxUSE_TOOLBAR
 
-#include <cstddef>
 #include <memory>
 
 class wxWinUIToolBarImpl;
-class wxWinUIToolBarTool;
 class wxDPIChangedEvent;
-class wxToolBar;
 
+// wx keeps what it has always had: the list of the tools, their state, the
+// events. XAML does the rest with the control made for it: a CommandBar lays
+// the tools out, shows their states and moves those which do not fit into
+// its "..." menu.
+//
+// - a tool is an AppBarButton, a tool which can be checked an
+//   AppBarToggleButton, a separator an AppBarSeparator;
+// - a tool with a menu (wxITEM_DROPDOWN) is followed by a small button with
+//   a chevron, which sends wxEVT_TOOL_DROPDOWN;
+// - a control (AddControl) keeps its own window, laid over a place the bar
+//   reserves for it;
+// - labels (wxTB_TEXT) are beside the icons, as in the command bars of
+//   Windows 11: a CommandBar only shows labels under the icons while it is
+//   open;
+// - the tools after the first stretchable space are at the end of the bar;
+// - a vertical bar (wxTB_LEFT, wxTB_RIGHT) is a column of the same buttons:
+//   a CommandBar is horizontal only;
+// - there are no rows (SetRows): what does not fit is in the "..." menu.
 class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
@@ -42,30 +57,22 @@ public:
 
     bool Realize() override;
 
-    wxToolBarToolBase *RemoveTool(int toolid) override;
-    bool DeleteToolByPos(size_t pos) override;
-    bool DeleteTool(int toolid) override;
-    void ClearTools() override;
+    void SetWindowStyleFlag(long style) override;
 
     void SetToolShortHelp(int toolid,
                           const wxString& helpString) override;
-    void SetToolLongHelp(int toolid,
-                         const wxString& helpString) override;
     void SetToolNormalBitmap(int toolid,
                              const wxBitmapBundle& bitmap) override;
     void SetToolDisabledBitmap(int toolid,
                                const wxBitmapBundle& bitmap) override;
     void SetToolBitmapSize(const wxSize& size) override;
-    void SetMargins(int x, int y) override;
-    void SetToolPacking(int packing) override;
-    void SetToolSeparation(int separation) override;
-    void SetRows(int rows) override;
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const override;
 
     bool CanApplyThemeBorder() const override { return false; }
 
 protected:
     bool MSWOnEffectiveLayoutDirectionChanged() override;
+
     wxToolBarToolBase *CreateTool(int toolid,
                                   const wxString& label,
                                   const wxBitmapBundle& bmpNormal,
@@ -76,9 +83,11 @@ protected:
                                   const wxString& longHelp) override;
     wxToolBarToolBase *CreateTool(wxControl *control,
                                   const wxString& label) override;
-    void DoSetToolNormalBitmapByPos(
-        size_t pos,
-        const wxBitmapBundle& bitmap) override;
+
+    // wxToolbook names the tool of a page by its position: two pages may
+    // have the same identifier.
+    void DoSetToolNormalBitmapByPos(size_t pos,
+                                    const wxBitmapBundle& bitmap) override;
 
     bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
     bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
@@ -86,55 +95,36 @@ protected:
     void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;
     void DoToggleTool(wxToolBarToolBase *tool, bool toggle) override;
     void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
-    void DoSetToolBitmapSize(const wxSize& size) override;
     void DoEnable(bool enable) override;
 
     wxSize DoGetBestSize() const override;
 
 private:
-    // wxToolBarToolBase::SetLabel() is virtual and wxToolbook calls it on the
-    // exact controller item. Keep the retained label and the XAML generation
-    // transactional instead of waiting for an unrelated later rebuild.
-    void DoSetToolLabel(wxToolBarToolBase *tool,
-                        const wxString& label);
-    void SetToolNormalBitmapForTool(
-        wxToolBarToolBase *tool,
-        const wxBitmapBundle& bitmap);
-    bool ApplyToolLabel(unsigned long long peerKey);
+    friend class wxWinUIToolBarImpl;
+    friend class wxWinUIToolBarTool;
+    friend class wxWinUIToolBarTestAccess;
 
-    // Build a detached candidate, provisionally publish it for synchronous
-    // Loaded callbacks, then either commit it or restore the exact previous
-    // generation. `excluded` lets the WinUI deletion overrides publish the
-    // peer snapshot before atomically erasing the exact common-model node;
-    // `inserted` is the converse required by DoInsertTool(), and `excludeAll`
-    // is the single empty candidate used by all-or-nothing ClearTools().
-    bool RebuildPeer(wxToolBarToolBase *excluded = nullptr,
-                     size_t insertPos = static_cast<size_t>(-1),
-                     wxToolBarToolBase *inserted = nullptr,
-                     double requestedScale = 0.0,
-                     bool excludeAll = false);
+    // Makes the XAML elements again from the list of the tools: now, or
+    // once the code which is changing the list has finished.
+    void Rebuild();
+    void ScheduleRebuild();
 
-    void OnToolClicked(unsigned long long peerKey,
-                       unsigned long long generation);
-    void OnDropdownClicked(unsigned long long peerKey,
-                           unsigned long long generation);
-    void OnToolHovered(unsigned long long peerKey,
-                       unsigned long long generation,
-                       bool entered);
-    void OnToolRightClicked(unsigned long long peerKey,
-                            unsigned long long generation,
-                            const wxPoint& point);
-    void ConvergeToolShortHelpUpdates();
-    void ConvergeToolEnabledUpdates();
-    void SyncControlTools(unsigned long long generation);
-    bool UpdateOverflow(double availableExtent,
-                        unsigned long long generation);
+    // What the user did.
+    void WinUIOnClick(wxToolBarToolBase *tool, bool checked);
+    void WinUIOnDropdown(wxToolBarToolBase *tool);
+
+    // The label of a tool changed (wxToolBarToolBase::SetLabel()).
+    void WinUIUpdateLabel(wxToolBarToolBase *tool);
+
+    void WinUISetNormalBitmap(wxToolBarToolBase *tool,
+                              const wxBitmapBundle& bitmap);
+
+    // Puts the windows of the control tools over the places kept for them.
+    void WinUIPlaceControls();
+
     void OnDPIChanged(wxDPIChangedEvent& event);
 
     std::unique_ptr<wxWinUIToolBarImpl> m_winui;
-
-    friend class wxWinUIToolBarTool;
-    friend class wxWinUIToolBarTestAccess;
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
     wxDECLARE_NO_COPY_CLASS(wxToolBar);

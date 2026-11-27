@@ -22,6 +22,7 @@
 #include "wx/textctrl.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/winui.h"
 #include <winrt/Microsoft.UI.Text.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -826,7 +827,9 @@ TEST_CASE("WinUIPropertyGrid::NativeThemeRowsRetainCellsAndSelectionIndicator",
     CAPTURE(rtl);
     PropertyFixture fixture(rtl);
     auto* const grid = fixture.grid;
+    // No border in Win32: the frame of the table is drawn by XAML.
     CHECK((grid->GetWindowStyleFlag() & wxBORDER_MASK) == wxBORDER_NONE);
+    CHECK(grid->GetClientSize() == grid->GetSize());
     grid->Append(new wxPropertyCategory("Appearance", "appearance"));
     auto* const property = grid->Append(new wxStringProperty("Label", "theme", "Native value"));
     fixture.Show();
@@ -845,8 +848,14 @@ TEST_CASE("WinUIPropertyGrid::NativeThemeRowsRetainCellsAndSelectionIndicator",
     CHECK(cell.ReadLocalValue(C::Control::BackgroundProperty()) == unset);
     CHECK(category.ReadLocalValue(C::Control::BackgroundProperty()) == unset);
     CHECK(text.ReadLocalValue(C::TextBlock::ForegroundProperty()) == unset);
+    // The cell of a table of WinUI: the line of the table under it and,
+    // after the name of the property, at its right; the fill of the row is
+    // rounded where the row starts.
     CHECK(cell.CornerRadius().TopLeft > 0);
+    CHECK(cell.CornerRadius().TopRight == 0);
     CHECK(cell.BorderThickness().Left == 0);
+    CHECK(cell.BorderThickness().Bottom == 1);
+    CHECK(cell.BorderThickness().Right == 1);
     CHECK(indicator.Visibility() == X::Visibility::Collapsed);
     const auto ordinaryStyle = cell.Style();
     REQUIRE(grid->SelectProperty(property));
@@ -965,11 +974,20 @@ TEST_CASE("WinUIPropertyGrid::ExplicitPaletteOverridesNativeThemeWithoutRemount"
     CHECK(PropertyCell(grid, "customPalette", 0) == customCell);
     CHECK(PropertyText(cell, "Label") == text);
 
-    // Explicit wx border requests remain authoritative; only the old
-    // implicit themed HWND border is removed by the native default.
+    // A border asked for gives the frame of a control, which XAML draws
+    // around the window: Win32 keeps none, so that the rows XAML shows and
+    // the editors, placed in the client area, are at the same place. Asking
+    // for no border gives no frame.
     wxPropertyGrid bordered(fixture.frame.get(), wxID_ANY, wxDefaultPosition,
                             wxSize(100, 50), wxBORDER_SIMPLE);
-    CHECK((bordered.GetWindowStyleFlag() & wxBORDER_MASK) == wxBORDER_SIMPLE);
+    CHECK((bordered.GetWindowStyleFlag() & wxBORDER_MASK) == wxBORDER_NONE);
+    CHECK(bordered.GetClientSize() == bordered.GetSize());
+    CHECK(wxWinUIWindowHasRequestedFrame(&bordered));
+    CHECK(wxWinUIWindowHasRequestedFrame(grid));
+
+    wxPropertyGrid plain(fixture.frame.get(), wxID_ANY, wxDefaultPosition,
+                         wxSize(100, 50), wxBORDER_NONE);
+    CHECK_FALSE(wxWinUIWindowHasRequestedFrame(&plain));
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_PROPGRID

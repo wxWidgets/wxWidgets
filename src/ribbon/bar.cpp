@@ -22,6 +22,14 @@
     #include "ribboncontainerswinui.h"
 #endif
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+    #include "wx/weakref.h"
+    #include "ribbonchromewinui.h"
+    #include "ribboncommandwinui.h"
+    #include <winrt/Microsoft.UI.Input.h>
+#endif
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -148,6 +156,14 @@ void wxRibbonBar::ShowPanels(wxRibbonDisplayMode mode)
     Realise();
     GetParent()->Layout();
 
+    // See RepositionPage(): nothing above gives the bar of a ribbon whose
+    // groups are stacked another size, which is what folds the others.
+    if ( (m_flags & wxRIBBON_BAR_FLOW_VERTICAL) &&
+         m_current_page != wxNOT_FOUND )
+    {
+        RepositionPage(m_pages.Item(m_current_page).page);
+    }
+
     m_ribbon_state = mode;
 }
 
@@ -222,10 +238,24 @@ bool wxRibbonBar::Realize()
             m_tabs_total_width_minimum += sep + info.minimum_width;
         }
     }
+    const int tabHeightBefore = m_tab_height;
     m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
 
     RecalculateMinSize();
     RecalculateTabSizes();
+
+    // The page lies under the tabs: it follows them when their height
+    // changes without the bar changing size -- another art provider with
+    // other metrics, tabs shown or hidden. It used to keep its place until
+    // the next resize of the bar.
+    // (While pages are being removed the current one may not be among those
+    // left yet.)
+    if ( m_tab_height != tabHeightBefore && m_current_page != wxNOT_FOUND &&
+         static_cast<size_t>(m_current_page) < m_pages.GetCount() )
+    {
+        RepositionPage(m_pages.Item(m_current_page).page);
+    }
+
     Refresh();
 
     return status;
@@ -813,10 +843,381 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 #endif
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// ----------------------------------------------------------------------------
+// tabs shown by a SelectorBar
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// One of the small buttons after the tabs: a subtle button holding a glyph
+// of the icon font of Windows.
+winrt::Microsoft::UI::Xaml::Controls::Button
+wxRibbonBarMakeButton(const wchar_t *glyph, const wxString& name)
+{
+    namespace X = winrt::Microsoft::UI::Xaml;
+
+    const auto button =
+        wxRibbonWinUICommandDetail::LoadSubtle(L"Button", L"Button")
+            .as<X::Controls::Button>();
+    X::Controls::FontIcon icon;
+    icon.Glyph(glyph);
+    icon.FontSize(12);
+    button.Content(icon);
+    button.Width(32);
+    button.Height(32);
+    button.Padding(X::ThicknessHelper::FromUniformLength(0));
+    X::Automation::AutomationProperties::SetName(
+        button, wxWinUIToHString(name));
+    return button;
+}
+
+} // anonymous namespace
+
+void wxRibbonBar::WinUIChooseTab(size_t index)
+{
+    if ( index >= m_pages.GetCount() )
+        return;
+
+    // What a click on a tab does, see OnMouseLeftDown().
+    wxRibbonPageTabInfo * const tab = &m_pages.Item(index);
+    const bool current =
+        m_current_page >= 0 && static_cast<size_t>(m_current_page) == index;
+    if ( m_ribbon_state == wxRIBBON_BAR_MINIMIZED )
+        ShowPanels(wxRIBBON_BAR_EXPANDED);
+    else if ( current && m_ribbon_state == wxRIBBON_BAR_EXPANDED )
+        HidePanels();
+
+    if ( !current )
+    {
+        wxRibbonBarEvent query(wxEVT_RIBBONBAR_PAGE_CHANGING, GetId(), tab->page);
+        query.SetEventObject(this);
+        ProcessWindowEvent(query);
+        if ( query.IsAllowed() )
+        {
+            SetActivePage(query.GetPage());
+
+            wxRibbonBarEvent notification(wxEVT_RIBBONBAR_PAGE_CHANGED, GetId(),
+                                          m_pages.Item(m_current_page).page);
+            notification.SetEventObject(this);
+            ProcessWindowEvent(notification);
+        }
+    }
+
+    // The selector goes back to the page which is shown if the change was
+    // refused.
+    WinUISyncTabs();
+}
+
+void wxRibbonBar::WinUIToggle()
+{
+    // A ribbon which is folded and shown for a moment shows a pin there:
+    // it is kept unfolded, not folded again.
+    if ( m_ribbon_state == wxRIBBON_BAR_EXPANDED )
+        ShowPanels(wxRIBBON_BAR_PINNED);
+    else
+        ShowPanels(ArePanelsShown() ? wxRIBBON_BAR_MINIMIZED : wxRIBBON_BAR_PINNED);
+    wxRibbonBarEvent event(wxEVT_RIBBONBAR_TOGGLED, GetId());
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
+    WinUISyncTabs();
+}
+
+void wxRibbonBar::WinUIHelp()
+{
+    wxRibbonBarEvent event(wxEVT_RIBBONBAR_HELP_CLICK, GetId());
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
+}
+
+void wxRibbonBar::WinUISyncTabs()
+{
+    if ( !m_winuiChrome )
+        return;
+
+    namespace X = winrt::Microsoft::UI::Xaml;
+    namespace C = X::Controls;
+
+    wxRibbonChromeWinUI& chrome = *m_winuiChrome;
+    if ( chrome.syncing )
+        return;
+    chrome.syncing = true;
+    struct Done
+    {
+        wxRibbonChromeWinUI& chrome;
+        ~Done() { chrome.syncing = false; }
+    } done{ chrome };
+
+    try
+    {
+        const auto strip = chrome.Find<C::Grid>(L"Strip");
+        const auto tabs = chrome.Find<C::SelectorBar>(L"Tabs");
+        const auto buttons = chrome.Find<C::StackPanel>(L"Buttons");
+        if ( !strip || !tabs || !buttons )
+            return;
+
+        // The room the layout of the bar keeps for the tabs: none when they
+        // are not shown at all.
+        const int height = m_tab_height > 2 ? ToDIP(m_tab_height) : 0;
+        if ( height != chrome.extent )
+        {
+            chrome.extent = height;
+            strip.Visibility(height ? X::Visibility::Visible
+                                    : X::Visibility::Collapsed);
+            if ( height )
+                strip.Height(height);
+        }
+
+        // The tabs and the buttons are made again when what they are
+        // changes, which is rare; choosing a tab is not such a change.
+        wxString signature = wxString::Format("%ld", m_flags);
+        for ( size_t n = 0; n < m_pages.GetCount(); ++n )
+        {
+            const wxRibbonPageTabInfo& info = m_pages.Item(n);
+            signature << '\x1f' << (info.shown ? '1' : '0')
+                      << (info.page ? info.page->GetLabel() : wxString());
+        }
+        if ( signature != chrome.label )
+        {
+            chrome.label = signature;
+            chrome.state = -1;
+
+            const wxWeakRef<wxRibbonBar> weak(this);
+
+            // A click on the tab which is already chosen changes no
+            // selection, and still means something to a ribbon which is
+            // folded: it is told apart from the click which has just
+            // chosen the tab by the time between the two.
+            const auto tapped = [weak](size_t n)
+            {
+                wxRibbonBar * const bar = weak.get();
+                if ( !bar || !bar->m_winuiChrome ||
+                     bar->m_winuiChrome->syncing ||
+                     ::GetTickCount64() - bar->m_winuiChrome->chosen < 400 )
+                {
+                    return;
+                }
+                if ( bar->m_current_page >= 0 &&
+                     static_cast<size_t>(bar->m_current_page) == n )
+                {
+                    bar->WinUIChooseTab(n);
+                }
+            };
+            // A selection is shown only if the item had its template when
+            // it was made: it is made again when the item is loaded.
+            const auto loaded = [weak](size_t n)
+            {
+                wxRibbonBar * const bar = weak.get();
+                if ( bar && bar->m_winuiChrome && bar->m_current_page >= 0 &&
+                     static_cast<size_t>(bar->m_current_page) == n )
+                {
+                    bar->m_winuiChrome->state = -1;
+                    bar->WinUISyncTabs();
+                }
+            };
+
+            // The tabs are those of a SelectorBar, or of a TabView if the
+            // application asked for one (wxRIBBON_BAR_TAB_VIEW).
+            const bool asTabView = (m_flags & wxRIBBON_BAR_TAB_VIEW) != 0;
+            C::TabView tabView{ nullptr };
+            for ( const auto& child : strip.Children() )
+            {
+                if ( (tabView = child.try_as<C::TabView>()) )
+                    break;
+            }
+            if ( asTabView && !tabView )
+            {
+                tabView = C::TabView();
+                tabView.IsAddTabButtonVisible(false);
+                tabView.CanDragTabs(false);
+                tabView.CanReorderTabs(false);
+                tabView.TabWidthMode(C::TabViewWidthMode::SizeToContent);
+                tabView.VerticalAlignment(X::VerticalAlignment::Bottom);
+                tabView.SelectionChanged([weak](const auto& sender, const auto&)
+                {
+                    wxRibbonBar * const bar = weak.get();
+                    const auto view = sender.try_as<C::TabView>();
+                    if ( !bar || !view || !bar->m_winuiChrome ||
+                         bar->m_winuiChrome->syncing ||
+                         view.SelectedIndex() < 0 )
+                    {
+                        return;
+                    }
+                    bar->m_winuiChrome->chosen = ::GetTickCount64();
+                    bar->WinUIChooseTab(static_cast<size_t>(view.SelectedIndex()));
+                });
+                strip.Children().Append(tabView);
+            }
+            if ( tabView )
+            {
+                tabView.TabItems().Clear();
+                tabView.Visibility(asTabView ? X::Visibility::Visible
+                                             : X::Visibility::Collapsed);
+            }
+            if ( const auto scroll = chrome.Find<C::ScrollViewer>(L"TabScroll") )
+            {
+                scroll.Visibility(asTabView ? X::Visibility::Collapsed
+                                            : X::Visibility::Visible);
+            }
+
+            tabs.Items().Clear();
+            for ( size_t n = 0; n < m_pages.GetCount(); ++n )
+            {
+                const wxRibbonPageTabInfo& info = m_pages.Item(n);
+
+                wxString label;
+                wxBitmap icon;
+                if ( info.page )
+                {
+                    if ( m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS )
+                        label = info.page->GetLabel();
+                    if ( m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS )
+                        icon = info.page->GetIcon();
+                }
+
+                X::FrameworkElement element{ nullptr };
+                if ( asTabView )
+                {
+                    C::TabViewItem item;
+                    item.Header(winrt::box_value(wxWinUIToHString(label)));
+                    item.IsClosable(false);
+                    if ( icon.IsOk() )
+                    {
+                        C::ImageIconSource source;
+                        source.ImageSource(wxWinUIWriteableBitmapFromBitmap(icon));
+                        item.IconSource(source);
+                    }
+                    tabView.TabItems().Append(item);
+                    element = item;
+                }
+                else
+                {
+                    C::SelectorBarItem item;
+                    item.Text(wxWinUIToHString(label));
+                    if ( icon.IsOk() )
+                    {
+                        C::ImageIcon image;
+                        image.Source(wxWinUIWriteableBitmapFromBitmap(icon));
+                        item.Icon(image);
+                    }
+                    tabs.Items().Append(item);
+                    element = item;
+                }
+
+                if ( info.page )
+                {
+                    X::Automation::AutomationProperties::SetName(
+                        element, wxWinUIToHString(info.page->GetLabel()));
+                }
+                if ( !info.shown )
+                    element.Visibility(X::Visibility::Collapsed);
+                element.Tapped([tapped, n](const auto&, const auto&) { tapped(n); });
+                element.Loaded([loaded, n](const auto&, const auto&) { loaded(n); });
+            }
+
+            buttons.Children().Clear();
+            if ( m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON )
+            {
+                const auto toggle =
+                    wxRibbonBarMakeButton(L"\uE70E", _("Show or hide the ribbon"));
+                toggle.Name(L"Toggle");
+                toggle.Click([weak](const auto&, const auto&)
+                {
+                    if ( wxRibbonBar * const bar = weak.get() )
+                        bar->WinUIToggle();
+                });
+                buttons.Children().Append(toggle);
+            }
+            if ( m_flags & wxRIBBON_BAR_SHOW_HELP_BUTTON )
+            {
+                const auto help = wxRibbonBarMakeButton(L"\uE897", _("Help"));
+                help.Click([weak](const auto&, const auto&)
+                {
+                    if ( wxRibbonBar * const bar = weak.get() )
+                        bar->WinUIHelp();
+                });
+                buttons.Children().Append(help);
+            }
+        }
+
+        const int state = (m_current_page + 1) * 4 + static_cast<int>(m_ribbon_state);
+        if ( state != chrome.state )
+        {
+            chrome.state = state;
+
+            C::TabView shownTabView{ nullptr };
+            if ( m_flags & wxRIBBON_BAR_TAB_VIEW )
+            {
+                for ( const auto& child : strip.Children() )
+                {
+                    if ( (shownTabView = child.try_as<C::TabView>()) )
+                        break;
+                }
+            }
+            if ( shownTabView )
+            {
+                if ( m_current_page >= 0 &&
+                     static_cast<uint32_t>(m_current_page) <
+                        shownTabView.TabItems().Size() )
+                {
+                    shownTabView.SelectedIndex(m_current_page);
+                }
+            }
+            else if ( m_current_page >= 0 &&
+                 static_cast<uint32_t>(m_current_page) < tabs.Items().Size() )
+            {
+                // The selector shows the mark of its selection only if the
+                // item had its template when it was selected: one which was
+                // selected too early is selected again when it is loaded,
+                // see where the items are made.
+                const auto item = tabs.Items().GetAt(m_current_page);
+                if ( tabs.SelectedItem() == item && item.IsLoaded() )
+                    tabs.SelectedItem(nullptr);
+                tabs.SelectedItem(item);
+
+                // Among more tabs than fit, the chosen one is in view.
+                if ( item.IsLoaded() )
+                    item.StartBringIntoView();
+            }
+            else
+            {
+                tabs.SelectedItem(nullptr);
+            }
+
+            // Fold the ribbon, unfold it, or keep it unfolded.
+            for ( const auto& child : buttons.Children() )
+            {
+                const auto toggle = child.try_as<C::Button>();
+                if ( !toggle || toggle.Name() != L"Toggle" )
+                    continue;
+
+                if ( const auto icon = toggle.Content().try_as<C::FontIcon>() )
+                {
+                    icon.Glyph(m_ribbon_state == wxRIBBON_BAR_MINIMIZED ? L"\uE70D"
+                             : m_ribbon_state == wxRIBBON_BAR_EXPANDED ? L"\uE718"
+                             : L"\uE70E");
+                }
+            }
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("ribbon tabs", e);
+    }
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 wxRibbonBar::~wxRibbonBar()
 {
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     wxRibbonContainerWinUI::Close(this);
+#endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+        m_winuiChrome->Close();
 #endif
 
     SetArtProvider(nullptr);
@@ -865,6 +1266,74 @@ void wxRibbonBar::CommonInit(long style)
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    // The tabs are a SelectorBar, XAML content of this window; if that
+    // cannot be, the art provider draws them.
+    if ( !m_winuiChrome && GetHandle() )
+    {
+        auto chrome = std::make_shared<wxRibbonChromeWinUI>();
+        if ( chrome->Create(this, wxRibbonBarChromeMarkup()) )
+        {
+            m_winuiChrome = chrome;
+
+            if ( const auto tabs =
+                    chrome->Find<winrt::Microsoft::UI::Xaml::Controls::SelectorBar>(L"Tabs") )
+            {
+                const wxWeakRef<wxRibbonBar> weak(this);
+
+                // More tabs than fit can be scrolled, with the wheel too.
+                if ( const auto scroll =
+                        chrome->Find<winrt::Microsoft::UI::Xaml::Controls::ScrollViewer>(L"TabScroll") )
+                {
+                    scroll.PointerWheelChanged([scroll](const auto&, const auto& args)
+                    {
+                        if ( scroll.ScrollableWidth() <= 0 )
+                            return;
+
+                        const int delta = args.GetCurrentPoint(scroll)
+                                              .Properties().MouseWheelDelta();
+                        scroll.ChangeView(scroll.HorizontalOffset() - delta,
+                                          nullptr, nullptr);
+                        args.Handled(true);
+                    });
+                }
+
+                // A selection made before the selector has its template is
+                // not shown: it is made again once it is loaded.
+                tabs.Loaded([weak](const auto&, const auto&)
+                {
+                    wxRibbonBar * const bar = weak.get();
+                    if ( bar && bar->m_winuiChrome )
+                    {
+                        bar->m_winuiChrome->state = -1;
+                        bar->WinUISyncTabs();
+                    }
+                });
+
+                tabs.SelectionChanged([weak](const auto& sender, const auto&)
+                {
+                    wxRibbonBar * const bar = weak.get();
+                    if ( !bar || !bar->m_winuiChrome ||
+                         bar->m_winuiChrome->syncing )
+                    {
+                        return;
+                    }
+
+                    uint32_t index = 0;
+                    const auto selected = sender.SelectedItem();
+                    if ( !selected ||
+                         !sender.Items().IndexOf(selected, index) )
+                    {
+                        return;
+                    }
+                    bar->m_winuiChrome->chosen = ::GetTickCount64();
+                    bar->WinUIChooseTab(index);
+                });
+            }
+        }
+    }
+#endif
 }
 
 wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
@@ -918,13 +1387,41 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     }
 #endif
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+    {
+        // Every change of the tabs leads here, as it used to redraw them.
+        wxPaintDC dc(this);
+        WinUISyncTabs();
+        return;
+    }
+
+    // What is painted goes to the surface of the window, which XAML shows
+    // with its transparency: no buffer in between, which would make every
+    // pixel of the window opaque. The tabs lie on the material of the
+    // window, so what was painted where they are painted again goes first.
+    wxPaintDC dc(this);
+#else
     wxAutoBufferedPaintDC dc(this);
+#endif
 
     if(GetUpdateRegion().Contains(0, 0, GetClientSize().GetWidth(), m_tab_height) == wxOutRegion)
     {
         // Nothing to do in the tab area, and the page area is handled by the active page
         return;
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    {
+        wxRect repainted = GetUpdateRegion().GetBox();
+        repainted.Intersect(wxRect(0, 0, GetClientSize().GetWidth(), m_tab_height));
+        if ( !repainted.IsEmpty() )
+        {
+            wxWinUIPaintSurfaceClearRect(dc.GetHDC(), repainted.x, repainted.y,
+                                         repainted.width, repainted.height);
+        }
+    }
+#endif
 
     DoEraseBackground(dc);
 
@@ -1097,11 +1594,26 @@ void wxRibbonBar::RepositionPage(wxRibbonPage *page)
 
     int w, h;
     GetSize(&w, &h);
+
+    // Folding a ribbon is giving its bar no more height than its tabs. A
+    // ribbon whose groups are stacked along an edge of the window is as high
+    // as the window whatever its own best size: its page is folded here.
+    if ( !m_arePanelsShown && (m_flags & wxRIBBON_BAR_FLOW_VERTICAL) )
+        h = m_tab_height;
+
     page->SetSizeWithScrollButtonAdjustment(0, m_tab_height, w, h - m_tab_height);
 }
 
 wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The tabs which are shown are those of the SelectorBar, which takes
+    // the pointer itself; the rectangles wxRibbon works out for tabs it
+    // would draw are not where they are.
+    if ( m_winuiChrome )
+        return nullptr;
+#endif
+
     wxRect tabs_rect(m_tab_margin_left, 0, GetClientSize().GetWidth() - m_tab_margin_left - m_tab_margin_right, m_tab_height);
     if(m_tab_scroll_buttons_shown)
     {
@@ -1136,6 +1648,19 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
 
 void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The tabs and the buttons of the bar are XAML controls, which take the
+    // pointer themselves; the same press is also reported to this window,
+    // where nothing of wxRibbon's own is drawn any more. Acting on it --
+    // taking the focus, above all -- would take the press away from the
+    // control it was meant for.
+    if ( m_winuiChrome )
+    {
+        evt.Skip();
+        return;
+    }
+#endif
+
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
     if ( tab )
@@ -1322,6 +1847,19 @@ void wxRibbonBar::OnMouseRightUp(wxMouseEvent& evt)
 
 void wxRibbonBar::OnMouseDoubleClick(wxMouseEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The tabs and the buttons of the bar are XAML controls, which take the
+    // pointer themselves; the same press is also reported to this window,
+    // where nothing of wxRibbon's own is drawn any more. Acting on it --
+    // taking the focus, above all -- would take the press away from the
+    // control it was meant for.
+    if ( m_winuiChrome )
+    {
+        evt.Skip();
+        return;
+    }
+#endif
+
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
     if ( tab && tab == &m_pages.Item(m_current_page) )

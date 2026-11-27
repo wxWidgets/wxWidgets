@@ -225,9 +225,15 @@ bool ListHasNativeOrder(wxListCtrl* list, const wxArrayInt& order, bool rtl)
         wxListItem info;
         info.SetMask(wxLIST_MASK_TEXT);
         wxRect publicRect;
+        // A label being edited is shown by its editor, in place of the text
+        // of its cell (these lists only ever edit their first item).
+        const wxString shown =
+            column == 0 && list->GetEditControl()
+                ? wxString()
+                : list->GetItemText(0, column);
         if ( !list->GetColumn(column, info) ||
              ListCellText(header) != info.GetText() ||
-             ListCellText(cell) != list->GetItemText(0, column) ||
+             ListCellText(cell) != shown ||
              !list->GetSubItemRect(0, column, publicRect, wxLIST_RECT_BOUNDS) ) return false;
         const wxPoint centre = list->ScreenToClient(
             wxPoint(cellRect.x + cellRect.width / 2,

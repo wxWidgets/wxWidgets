@@ -299,6 +299,11 @@ private:
     // always wxNOT_FOUND for single selection listboxes
     int m_anchor;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // the item under the pointer, which a WinUI list shows
+    int m_hoverItem = wxNOT_FOUND;
+#endif
+
     // the object managing our selected items if not nullptr
     wxSelectionStore *m_selStore;
 

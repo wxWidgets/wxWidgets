@@ -20,6 +20,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include <memory>
     class wxRibbonContainerWinUI;
+    class wxRibbonChromeWinUI;
 #endif
 
 class wxRibbonBar;
@@ -72,6 +73,11 @@ protected:
     // build option. The native implementation and its WinRT types stay private.
     std::shared_ptr<wxRibbonContainerWinUI> m_winuiContainer;
     friend class wxRibbonContainerWinUI;
+
+    // What a page or a group shows by itself, as XAML content of its window
+    // (src/ribbon/ribbonchromewinui.h); null if it is drawn by the art
+    // provider instead.
+    std::shared_ptr<wxRibbonChromeWinUI> m_winuiChrome;
 #endif
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,

@@ -334,19 +334,32 @@ void wxFileData::MakeItem( wxListItem &item )
 {
     item.m_text = m_fileName;
     item.ClearAttributes();
+#if !defined(__WXWINUI__)
+    // Pure red and blue are unreadable on a dark background.
     if (IsExe())
-        item.SetTextColour(*wxRED);
+    {
+        item.SetTextColour(wxSystemSettings::SelectLightDark(
+            *wxRED, wxColour(0xff, 0x8a, 0x80)));
+    }
     if (IsDir())
-        item.SetTextColour(*wxBLUE);
+    {
+        item.SetTextColour(wxSystemSettings::SelectLightDark(
+            *wxBLUE, wxColour(0x82, 0xb1, 0xff)));
+    }
+#endif
+    // In wxWinUI all the names are in the text colour of the theme: a list
+    // of files of Windows 11 tells its items by their icons.
 
     item.m_image = m_image;
 
+#if !defined(__WXWINUI__)
     if (IsLink())
     {
         wxColour dg = wxTheColourDatabase->Find( wxT("MEDIUM GREY") );
         if ( dg.IsOk() )
             item.SetTextColour(dg);
     }
+#endif
     item.m_data = wxPtrToUInt(this);
 }
 
@@ -418,15 +431,28 @@ void wxFileListCtrl::ChangeToReportMode()
     wxString txt = dt.FormatDate() + wxT("22") + dt.Format(wxT("%I:%M:%S %p"));
     GetTextExtent(txt, &w, nullptr);
 
+#if defined(__WXWINUI__)
+    // The columns of a table of WinUI: room for the padding of the cells,
+    // and a name column wide enough for the names of files.
+    const int pad = FromDIP(24);
+    InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 2*w );
+    InsertColumn( 1, _("Size"), wxLIST_FORMAT_RIGHT, w/2 + pad );
+    InsertColumn( 2, _("Type"), wxLIST_FORMAT_LEFT, w/2 + pad );
+    InsertColumn( 3, _("Modified"), wxLIST_FORMAT_LEFT, w + pad );
+#else
     InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, w );
     InsertColumn( 1, _("Size"), wxLIST_FORMAT_RIGHT, w/2 );
     InsertColumn( 2, _("Type"), wxLIST_FORMAT_LEFT, w/2 );
     InsertColumn( 3, _("Modified"), wxLIST_FORMAT_LEFT, w );
+#endif
 #if defined(__UNIX__)
     GetTextExtent(wxT("Permissions 2"), &w, nullptr);
     InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, w );
 #elif defined(__WIN32__)
     GetTextExtent(wxT("Attributes 2"), &w, nullptr);
+#if defined(__WXWINUI__)
+    w += pad;
+#endif
     InsertColumn( 4, _("Attributes"), wxLIST_FORMAT_LEFT, w );
 #endif
 

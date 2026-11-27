@@ -39,6 +39,21 @@ namespace
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = MUX::Controls;
 
+// Is the element in the tree under this canvas? A slot container is a child
+// of the canvas standing for the parent of its window, which is the root
+// canvas itself only for the children of the TLW.
+bool IsInTreeOf(const MUXC::Canvas& root, const MUX::DependencyObject& element)
+{
+    for ( MUX::DependencyObject node = element;
+          node;
+          node = MUX::Media::VisualTreeHelper::GetParent(node) )
+    {
+        if ( node == root )
+            return true;
+    }
+    return false;
+}
+
 void DrainDirectComposite(int rounds = 20)
 {
     for ( int i = 0; i < rounds; ++i )
@@ -878,8 +893,7 @@ TEST_CASE("HostComposite::ReparentCloseRetiresOnlyFromPublishedDestination",
     REQUIRE(sourceHost->FindSlot(extraWindow));
     const auto extraSourceRoot =
         sourceHost->FindSlot(extraWindow)->GetPresentationRoot();
-    uint32_t extraIndex = 0;
-    REQUIRE(sourceCanvas.Children().IndexOf(extraSourceRoot, extraIndex));
+    REQUIRE(IsInTreeOf(sourceCanvas, extraSourceRoot));
     const auto parentContainer = fixture.slots[0]->GetContainer();
     const auto leafContainer = fixture.slots[2]->GetContainer();
     REQUIRE(parentContainer.Children().Size() == 1);
@@ -919,13 +933,10 @@ TEST_CASE("HostComposite::ReparentCloseRetiresOnlyFromPublishedDestination",
                 return;
             destinationCanvas = host->Root();
             const auto attachedRoot = slot->GetPresentationRoot();
-            uint32_t index = 0;
             // The one-shot hook can see either independent root first.
             // Validate the root actually attached, not allocator key order.
             attachedAtDestination = attachedRoot &&
-                destinationCanvas.Children().IndexOf(attachedRoot, index) &&
-                MUX::Media::VisualTreeHelper::GetParent(attachedRoot) ==
-                    destinationCanvas;
+                IsInTreeOf(destinationCanvas, attachedRoot);
             if ( !attachedAtDestination )
                 return;
             gateOpened = wxWinUIPhysicalDisconnectTestAccess::SetGateState(
@@ -970,10 +981,8 @@ TEST_CASE("HostComposite::ReparentCloseRetiresOnlyFromPublishedDestination",
     CHECK(extraHost.GetContent() == extraContent);
     CHECK(extraWindow->GetParent() == fixture.windows[0]);
     CHECK(sourceHost->FindSlot(extraWindow) == nullptr);
-    CHECK_FALSE(sourceCanvas.Children().IndexOf(extraSourceRoot, extraIndex));
-    CHECK(destinationCanvas.Children().IndexOf(extraDestinationRoot, extraIndex));
-    CHECK(MUX::Media::VisualTreeHelper::GetParent(extraDestinationRoot) ==
-          destinationCanvas);
+    CHECK_FALSE(IsInTreeOf(sourceCanvas, extraSourceRoot));
+    CHECK(IsInTreeOf(destinationCanvas, extraDestinationRoot));
     for ( size_t i = 0; i < fixture.windows.size(); ++i )
     {
         CHECK(wxWinUITopLevelHost::FindSlotOwner(fixture.windows[i]) == nullptr);
@@ -1022,9 +1031,7 @@ TEST_CASE("HostComposite::ReparentCloseRetiresOnlyFromPublishedDestination",
     REQUIRE(destinationHost->FindSlot(extraWindow));
     CHECK(destinationHost->FindSlot(extraWindow)->GetPresentationRoot() ==
           extraDestinationRoot);
-    CHECK(destinationCanvas.Children().IndexOf(extraDestinationRoot, extraIndex));
-    CHECK(MUX::Media::VisualTreeHelper::GetParent(extraDestinationRoot) ==
-          destinationCanvas);
+    CHECK(IsInTreeOf(destinationCanvas, extraDestinationRoot));
 }
 
 #endif // defined(__WXWINUI__) && wxUSE_WINUI3

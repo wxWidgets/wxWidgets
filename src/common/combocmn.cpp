@@ -19,6 +19,11 @@
 
 
 #include "wx/combo.h"
+#include "wx/renderer.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+    #include "wx/winui/private/themecolours.h"
+#endif
 #include "wx/display.h"
 
 #ifdef __WXMSW__
@@ -922,6 +927,13 @@ wxComboCtrlBase::CreateTextCtrl(int style)
         m_text = new wxComboCtrlTextCtrl();
         m_mainWindow = m_text;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The field has no ground of its own: what this control paints
+        // behind it must be painted there too, which is only done under a
+        // child which says it is transparent.
+        m_text->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+#endif
+
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
                        style);
@@ -935,6 +947,16 @@ wxComboCtrlBase::CreateTextCtrl(int style)
 
         m_text->Bind(wxEVT_SET_FOCUS, &wxComboCtrlBase::OnTextFocus, this);
         m_text->Bind(wxEVT_KILL_FOCUS, &wxComboCtrlBase::OnTextFocus, this);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The line of the focus is drawn by this control, under its field.
+        const auto repaint = [this](wxFocusEvent& event)
+        {
+            event.Skip();
+            Refresh();
+        };
+        m_text->Bind(wxEVT_SET_FOCUS, repaint);
+        m_text->Bind(wxEVT_KILL_FOCUS, repaint);
+#endif
 
         m_text->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnTextKey, this);
         m_text->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnTextKey, this);
@@ -1141,8 +1163,15 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         {
             // No special custom paint area - we can use 0 left margin
             // with wxTextCtrl.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // The text of a WinUI field starts 10 from its edge: the field
+            // has no frame of its own here, but keeps that margin.
+            m_text->SetMargins(FromDIP(9));
+            textCtrlXAdjust = 0;
+#else
             if ( m_text->SetMargins(0) )
                 textCtrlXAdjust = 0;
+#endif
             x = m_tcArea.x + m_marginLeft + textCtrlXAdjust;
         }
         else
@@ -1153,6 +1182,18 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
             x = m_tcArea.x + m_widthCustomPaint +
                 m_marginLeft + textCtrlXAdjust;
         }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The field has no frame of its own, and nothing above its line of
+        // text: it starts where the line of a TextBox or of a ComboBox of
+        // the same height does, 6 under the top (their frame and their
+        // padding), and goes down to the bottom. Squeezed between the edges
+        // its text was four pixels higher than in the ComboBox beside.
+        wxUnusedVar(textCtrlYAdjust);
+        const int top = FromDIP(6);
+        m_text->SetSize(x, top, m_tcArea.width - m_tcArea.x - x, sz.y - top);
+        return;
+#endif
 
         // Centre textctrl vertically
         int tcSizeY = m_text->GetBestSize().y;
@@ -1239,6 +1280,12 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     else
         fhei = 22;
 #endif // only for wxComboBox on MSW or GTK
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The height of a WinUI ComboBox: one pixel more made a row of controls
+    // higher than the ComboBox beside.
+    fhei = FromDIP(32);
+#endif
 
     // Need to force height to accommodate bitmap?
     int btnSizeY = m_btnSize.y;
@@ -1405,6 +1452,22 @@ bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 // prepare combo box background on area in a way typical on platform
 void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The face of the control is painted by its OnPaintEvent() and is not
+    // filled with the highlight colour when it has the focus; a selected
+    // item of its list is the one of a WinUI list, a subtle fill with a bar
+    // in the accent colour. In both the text keeps its colour.
+    if ( flags & wxCONTROL_ISSUBMENU )
+    {
+        wxRendererNative::Get().DrawItemSelectionRect(
+            const_cast<wxComboCtrlBase *>(this), dc, rect,
+            wxCONTROL_SELECTED | wxCONTROL_FOCUSED);
+    }
+
+    dc.SetTextForeground(wxSystemSettings::GetColour(
+        IsThisEnabled() ? wxSYS_COLOUR_WINDOWTEXT : wxSYS_COLOUR_GRAYTEXT));
+    return;
+#else
     wxSize sz = GetClientSize();
     bool isEnabled;
     bool doDrawFocusRect; // also selected
@@ -1517,6 +1580,7 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
     wxRect clipRect(rect.x,rect.y,
                     (selRect.x+selRect.width)-rect.x,rect.height);
     dc.SetClippingRegion(clipRect);
+#endif // WinUI/!WinUI
 }
 #else
 // Save the library size a bit for platforms that re-implement this.
@@ -1949,6 +2013,14 @@ void wxComboCtrlBase::CreatePopup()
     {
         m_winPopup = new wxComboPopupWindow( this, wxNO_BORDER );
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The corners (and with them the thin border) of a WinUI flyout,
+        // and its ground: the list inside has room above and under it.
+        wxWinUIRoundWindowCorners(m_winPopup);
+        m_winPopup->SetBackgroundColour(
+            wxWinUIGetThemeColour(wxWinUIThemeColour::FlyoutFill));
+#endif
+
         m_winPopup->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnPopupKey, this);
         m_winPopup->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnPopupKey, this);
         m_winPopup->Bind(wxEVT_KEY_UP, &wxComboCtrlBase::OnPopupKey, this);
@@ -2159,7 +2231,12 @@ void wxComboCtrlBase::ShowPopup()
     int heightPopup = m_heightPopup;
     if (heightPopup <= 0)
         // estimated height for a row containig text
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The items of the list of a WinUI ComboBox.
+        heightPopup = DEFAULT_POPUP_ITEMS * FromDIP(36);
+#else
         heightPopup = DEFAULT_POPUP_ITEMS * (GetCharHeight() + FromDIP(4));
+#endif
 
     wxSize adjustedSize = m_popupInterface->GetAdjustedSize(widthPopup,
                                                             heightPopup,
@@ -2174,6 +2251,14 @@ void wxComboCtrlBase::ShowPopup()
     //
 
     wxSize szp = popup->GetSize();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The list of a WinUI ComboBox has 4 above its first item and under its
+    // last one, inside the flyout.
+    const int popupPad = FromDIP(4);
+    popup->Move(0, popupPad);
+    szp.y += 2 * popupPad;
+#endif
 
     int popupX;
     int popupY = scrPos.y + ctrlSz.y;

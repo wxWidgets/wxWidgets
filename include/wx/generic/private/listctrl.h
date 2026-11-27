@@ -445,6 +445,7 @@ public:
     bool CreateControl(const wxRect& labelRect);
 
     wxTextCtrl *GetText() const { return m_text; }
+    size_t GetItemEdited() const { return m_itemEdited; }
     void UpdatePosition();
 
     // Check if the given key event should stop editing and return true if it
@@ -618,11 +619,23 @@ public:
         return m_textctrlWrapper ? m_textctrlWrapper->GetText() : nullptr;
     }
 
+    // The item whose label is being edited in place, or -1.
+    long GetEditedItem() const
+    {
+        return m_textctrlWrapper
+            ? static_cast<long>(m_textctrlWrapper->GetItemEdited())
+            : -1;
+    }
+
     void ResetTextControl(wxTextCtrl *text)
     {
         // A destroy handler can delete the owner or start another edit. Drop
         // the old logical editor before entering this callback boundary.
         m_textctrlWrapper = nullptr;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The label of the item is shown again, whether it changed or not.
+        Refresh();
+#endif
         delete text;
     }
 
@@ -977,6 +990,29 @@ private:
 
     // the total header width or 0 if not calculated yet
     wxCoord m_headerWidth;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+public:
+    // In report view the list scrolls by pixels, as a list of WinUI does,
+    // and not line by line: the unit of its vertical bar is one pixel. The
+    // keyboard still goes from an item to the next one.
+    //
+    // Scrolls by that many lines: at once, or in a few steps of a timer.
+    void WinUIScrollByLines(int lines, bool animate);
+    // What a turn of the wheel does, in report view.
+    void WinUIOnWheel(wxMouseEvent& event);
+
+private:
+    void WinUIScrollBy(int pixels, bool animate);
+    void WinUIScrollStep();
+    void WinUIStopScrolling();
+
+    // what of the turns of the wheel has not made a pixel yet
+    int m_winuiWheelRest = 0;
+    // where the scroll under way is going, -1 if there is none
+    int m_winuiScrollTarget = -1;
+    wxTimer m_winuiScrollTimer;
+#endif
 
     // the first and last lines being shown on screen right now (inclusive),
     // both may be -1 if they must be calculated so never access them directly:

@@ -44,6 +44,7 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 #include "../winui/listprojection.h"
+#include "wx/winui/private/themecolours.h"
 #endif
 
 #ifdef __WXMAC__
@@ -510,6 +511,10 @@ void wxListLineData::CalculateSize( wxReadOnlyDC *dc, int spacing )
             measureLabel(s);
             lw += EXTRA_WIDTH;
             lh += EXTRA_HEIGHT;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // The room of the selection bar of a WinUI list before the text.
+            lw += m_owner->FromDIP(8);
+#endif
 
             m_gi->m_rectLabel.width = lw;
             m_gi->m_rectLabel.height = lh;
@@ -1448,14 +1453,36 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
 
 }
 
+// Where the editor of a label goes, from the rectangle of the label.
+static wxRect wxListEditorRect(const wxWindow *win, const wxRect& rectLabel)
+{
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The editor of a cell of a table of WinUI, as in a property grid: a
+    // field of the standard height (32) in the middle of its row, which is
+    // higher (40), a little inside the cell; its text is then where the
+    // text of the cell was. The classic edit control is made to overflow
+    // the label instead.
+    const int height = wxMin(rectLabel.height, win->FromDIP(32));
+    const int inset = win->FromDIP(2);
+    return wxRect(rectLabel.x + inset,
+                  rectLabel.y + (rectLabel.height - height) / 2,
+                  wxMax(0, rectLabel.width - 2 * inset),
+                  height);
+#else
+    wxUnusedVar(win);
+    return wxRect(rectLabel.x - 4, rectLabel.y - 4,
+                  rectLabel.width + 11, rectLabel.height + 8);
+#endif
+}
+
 bool wxListTextCtrlWrapper::CreateControl(const wxRect& rectLabel)
 {
     const wxWeakRef<wxListTextCtrlWrapper> weakThis(this);
     const wxWeakRef<wxListMainWindow> weakOwner(m_owner);
     const wxWeakRef<wxTextCtrl> weakText(m_text);
+    const wxRect rectEditor = wxListEditorRect(m_owner, rectLabel);
     const bool created = m_text->Create(m_owner, wxID_ANY, m_startValue,
-                   wxPoint(rectLabel.x-4,rectLabel.y-4),
-                   wxSize(rectLabel.width+11,rectLabel.height+8));
+                   rectEditor.GetPosition(), rectEditor.GetSize());
     if ( !created || !weakThis || !weakOwner || !weakText || m_finished || !m_itemValid )
         return false;
     m_text->PushEventHandler(this);
@@ -1478,8 +1505,9 @@ void wxListTextCtrlWrapper::UpdatePosition()
         return;
     // SetSize may invoke application code: there is no access to the wrapper
     // or owner after this call, and an in-progress edit keeps its value/focus.
-    m_text->SetSize(rectLabel.x - 4, rectLabel.y - 4,
-                    rectLabel.width + 11, rectLabel.height + 8);
+    const wxRect rectEditor = wxListEditorRect(m_owner, rectLabel);
+    m_text->SetSize(rectEditor.x, rectEditor.y,
+                    rectEditor.width, rectEditor.height);
 }
 
 bool wxListTextCtrlWrapper::EndEdit(EndReason reason)
@@ -1744,7 +1772,137 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     SetOwnBackgroundColour( attr.colBg );
     if (!m_hasFont)
         SetOwnFont( attr.font );
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winuiScrollTimer.Bind(wxEVT_TIMER, [this](wxTimerEvent&)
+    {
+        WinUIScrollStep();
+    });
+#endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+void wxListMainWindow::WinUIStopScrolling()
+{
+    m_winuiScrollTarget = -1;
+    m_winuiScrollTimer.Stop();
+}
+
+void wxListMainWindow::WinUIScrollByLines(int lines, bool animate)
+{
+    WinUIScrollBy(lines * GetLineHeight(), animate);
+}
+
+void wxListMainWindow::WinUIScrollBy(int pixels, bool animate)
+{
+    if ( !InReportView() || !pixels )
+        return;
+
+    int viewStartY = 0;
+    GetListCtrl()->GetViewStart(nullptr, &viewStartY);
+    const int entire =
+        static_cast<int>(GetItemCount()) * GetLineHeight() + LINE_SPACING;
+    const int last = wxMax(0, entire - GetClientSize().y);
+
+    // From where the scroll under way is going, for the turns of a wheel
+    // to add up.
+    const int from = m_winuiScrollTarget >= 0 ? m_winuiScrollTarget
+                                               : viewStartY;
+    const int target = wxClip(from + pixels, 0, last);
+    if ( !animate )
+    {
+        WinUIStopScrolling();
+        if ( target != viewStartY )
+            GetListCtrl()->Scroll(-1, target);
+        return;
+    }
+
+    m_winuiScrollTarget = target;
+    if ( !m_winuiScrollTimer.IsRunning() )
+        m_winuiScrollTimer.Start(10);
+    WinUIScrollStep();
+}
+
+void wxListMainWindow::WinUIScrollStep()
+{
+    if ( m_winuiScrollTarget < 0 || !InReportView() )
+    {
+        WinUIStopScrolling();
+        return;
+    }
+
+    int viewStartY = 0;
+    GetListCtrl()->GetViewStart(nullptr, &viewStartY);
+    const int left = m_winuiScrollTarget - viewStartY;
+    if ( !left )
+    {
+        WinUIStopScrolling();
+        return;
+    }
+
+    // A third of what is left at each step: quick at first, then slower.
+    int step = left / 3;
+    if ( !step )
+        step = left > 0 ? 1 : -1;
+
+    const wxWeakRef<wxWindow> alive(this);
+    GetListCtrl()->Scroll(-1, viewStartY + step);
+    if ( !alive )
+        return;
+
+    // Nowhere further to go: the list got shorter meanwhile.
+    int now = 0;
+    GetListCtrl()->GetViewStart(nullptr, &now);
+    if ( now == viewStartY )
+        WinUIStopScrolling();
+}
+
+void wxListMainWindow::WinUIOnWheel(wxMouseEvent& event)
+{
+    const int delta = event.GetWheelDelta();
+    if ( !delta )
+        return;
+
+    if ( !InReportView() )
+    {
+        // A list of names in columns (wxLC_LIST, the list of a wxFileCtrl)
+        // has only a horizontal bar: the wheel moves it, as it does in the
+        // list view of the Explorer, where it had no effect at all.
+        m_winuiWheelRest += event.GetWheelRotation() *
+                            wxMax(1, event.GetLinesPerAction()) *
+                            GetLineHeight();
+        const int units = m_winuiWheelRest / (delta * SCROLL_UNIT_X);
+        m_winuiWheelRest -= units * delta * SCROLL_UNIT_X;
+        if ( units )
+        {
+            int viewStartX = 0;
+            GetListCtrl()->GetViewStart(&viewStartX, nullptr);
+            GetListCtrl()->Scroll(wxMax(0, viewStartX - units), -1);
+        }
+        return;
+    }
+
+    const int lines = event.IsPageScroll()
+        ? wxMax(1, GetCountPerPage())
+        : wxMax(1, event.GetLinesPerAction());
+
+    // A notch of a wheel is that many lines. A touch pad sends small parts
+    // of a notch, many times: each moves the list by the pixels it is worth,
+    // and what is less than a pixel is kept for the next one.
+    m_winuiWheelRest += event.GetWheelRotation() * lines * GetLineHeight();
+    const int pixels = m_winuiWheelRest / delta;
+    m_winuiWheelRest -= pixels * delta;
+    if ( !pixels )
+        return;
+
+    // The notches of a wheel are far apart: the list glides to where each
+    // sends it. What a touch pad sends is followed as it comes.
+    const bool notch = abs(event.GetWheelRotation()) >= delta;
+    WinUIScrollBy(-pixels, notch);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 wxListMainWindow::~wxListMainWindow()
 {
@@ -1846,7 +2004,9 @@ wxCoord wxListMainWindow::GetLineHeight() const
         y += EXTRA_HEIGHT;
         self->m_lineHeight = y + LINE_SPACING;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-        self->m_lineHeight = wxMax(self->m_lineHeight, FromDIP(32));
+        // The rows of a WinUI table.
+        self->m_lineHeight = wxMax(self->m_lineHeight,
+                                   FromDIP(wxWINUI_TABLE_ROW_HEIGHT));
 #endif
     }
 
@@ -2590,6 +2750,13 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     if ( !wrapper->CreateControl(labelRect) || !current() )
     { discard(); return nullptr; }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The label gives way to its editor, which lets what is behind it show
+    // through: the native row is shown without its text for as long as the
+    // edit lasts.
+    RefreshLine(itemEdit);
+#endif
+
     GetParent()->GetEventHandler()->ProcessEvent(le);
     if ( !current() || !le.IsAllowed() )
     { discard(); return nullptr; }
@@ -2643,7 +2810,12 @@ bool wxListMainWindow::GetLabelEditRect(size_t item, const wxListItem& info, wxR
     if ( InReportView() )
     {
         if ( GetColumnCount() == 0 ) return false;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // From the edge of the cell, see wxListEditorRect().
+        int offset = 0;
+#else
         int offset = ICON_OFFSET_X;
+#endif
         if ( HasCheckBoxes() )
         {
             const auto size = wxRendererNative::Get().GetCheckBoxSize(const_cast<wxListMainWindow*>(this));
@@ -3063,7 +3235,14 @@ void wxListMainWindow::MoveToItem(size_t item)
     int viewStartY;
     GetListCtrl()->GetViewStart(&viewStartX, &viewStartY);
     const int view_x = SCROLL_UNIT_X * viewStartX;
-    const int view_y = hLine * viewStartY;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The vertical bar counts pixels in report view.
+    const int unitY = InReportView() ? 1 : hLine;
+    WinUIStopScrolling();
+#else
+    const int unitY = hLine;
+#endif
+    const int view_y = unitY * viewStartY;
 
     if ( InReportView() )
     {
@@ -3072,9 +3251,13 @@ void wxListMainWindow::MoveToItem(size_t item)
         ResetVisibleLinesRange();
 
         if (rect.y < view_y)
-            GetListCtrl()->Scroll( -1, rect.y / hLine );
+            GetListCtrl()->Scroll( -1, rect.y / unitY );
         if (rect.y + rect.height + 5 > view_y + client_h)
-            GetListCtrl()->Scroll( -1, (rect.y + rect.height - client_h + hLine) / hLine );
+        {
+            GetListCtrl()->Scroll( -1,
+                (rect.y + rect.height - client_h + (unitY == 1 ? 5 : hLine))
+                    / unitY );
+        }
 
         // Scroll() can synchronously recalculate this cache before publishing
         // its new wxScrollHelper position. Invalidate it after the operation
@@ -3116,9 +3299,17 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
 
     ResetVisibleLinesRange();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The vertical bar counts pixels.
+    WinUIStopScrolling();
+    int viewStartY = 0;
+    GetListCtrl()->GetViewStart(nullptr, &viewStartY);
+    GetListCtrl()->Scroll(-1, wxMax(0, viewStartY + dy));
+#else
     int hLine = GetLineHeight();
 
     GetListCtrl()->Scroll(-1, top + dy / hLine);
+#endif
 
     // See the comment in MoveToItem() for why this happens after Scroll().
     ResetVisibleLinesRange();
@@ -3752,6 +3943,11 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         }
 
         width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The cells of a table of WinUI keep 12 before and after their text.
+        width += wxMax(0, FromDIP(2*wxWINUI_TABLE_CELL_PADDING + 2) -
+                              AUTOSIZE_COL_MARGIN);
+#endif
 
         if ( col == 0 && HasCheckBoxes() )
         {
@@ -4465,12 +4661,23 @@ void wxListMainWindow::RecalculatePositions()
         int viewStartX;
         int viewStartY;
         GetListCtrl()->GetViewStart(&viewStartX, &viewStartY);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // One pixel for a step of the vertical bar: the list scrolls as
+        // smoothly as a list of WinUI does.
+        GetListCtrl()->SetScrollbars( SCROLL_UNIT_X, 1,
+                       GetHeaderWidth() / SCROLL_UNIT_X,
+                       entireHeight,
+                       viewStartX,
+                       viewStartY,
+                       true );
+#else
         GetListCtrl()->SetScrollbars( SCROLL_UNIT_X, lineHeight,
                        GetHeaderWidth() / SCROLL_UNIT_X,
                        (entireHeight + lineHeight - 1) / lineHeight,
                        viewStartX,
                        viewStartY,
                        true );
+#endif
     }
     else // !report
     {
@@ -5146,6 +5353,16 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
         wxListHeaderData column( item );
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
             column.SetWidth(ComputeMinHeaderWidth(&column));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // A column given no width has the default one, 80 pixels whatever
+        // the scale of the screen: at 150% a title of seven letters was cut.
+        // The same width in DIPs, and never less than its title needs.
+        else if ( !(item.m_mask & wxLIST_MASK_WIDTH) || item.m_width < 0 )
+        {
+            column.SetWidth(wxMax(FromDIP(wxLIST_DEFAULT_COL_WIDTH),
+                                  ComputeMinHeaderWidth(&column)));
+        }
+#endif
 
         wxColWidthInfo colWidthInfo(0, IsVirtual());
 
@@ -5381,7 +5598,13 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         {
             int viewStartY;
             GetListCtrl()->GetViewStart(nullptr, &viewStartY);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // The bar counts pixels: the first line may show in part.
+            const int lineHeightNow = wxMax(1, GetLineHeight());
+            m_lineFrom = viewStartY / lineHeightNow;
+#else
             m_lineFrom = viewStartY;
+#endif
 
             // this may happen if SetScrollbars() hadn't been called yet
             if ( m_lineFrom >= count )
@@ -5389,7 +5612,11 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 
             // we redraw one extra line but this is needed to make the redrawing
             // logic work when there is a fractional number of lines on screen
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            m_lineTo = (viewStartY + GetClientSize().y) / lineHeightNow;
+#else
             m_lineTo = m_lineFrom + m_linesPerPage;
+#endif
             if ( m_lineTo >= count )
                 m_lineTo = count - 1;
         }
@@ -5564,6 +5791,26 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     SetTargetWindow( m_mainWin );
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // In report view the wheel moves the list by pixels: see
+    // wxListMainWindow::WinUIOnWheel(). The scrolling of the base class,
+    // which is given what is not handled here, waits for a whole notch and
+    // moves by lines; the list gives its wheel events to this window first.
+    Bind(wxEVT_MOUSEWHEEL, [this](wxMouseEvent& event)
+    {
+        if ( m_mainWin && (InReportView() || HasFlag(wxLC_LIST)) &&
+             event.GetWheelAxis() == wxMOUSE_WHEEL_VERTICAL &&
+             !event.ControlDown() )
+        {
+            m_mainWin->WinUIOnWheel(event);
+        }
+        else
+        {
+            event.Skip();
+        }
+    });
+#endif
+
     // We use the cursor keys for moving the selection, not scrolling, so call
     // this method to ensure wxScrollHelperEvtHandler doesn't catch all
     // keyboard events forwarded to us from wxListMainWindow.
@@ -5638,6 +5885,22 @@ void wxGenericListCtrl::OnScroll(wxScrollWinEvent& event)
         m_headerWin->Refresh();
         m_headerWin->Update();
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // An arrow of the vertical bar moves the list by a line, not by the
+    // pixel which is the unit of the bar in report view.
+    if ( event.GetOrientation() == wxVERTICAL && InReportView() )
+    {
+        const wxEventType type = event.GetEventType();
+        if ( type == wxEVT_SCROLLWIN_LINEUP ||
+             type == wxEVT_SCROLLWIN_LINEDOWN )
+        {
+            m_mainWin->WinUIScrollByLines(
+                type == wxEVT_SCROLLWIN_LINEUP ? -1 : 1, true);
+            return;
+        }
+    }
+#endif
 
     // Let the window be scrolled as usual by the default handler.
     event.Skip();
@@ -6370,6 +6633,20 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
 {
     // The base class version can compute the best size in report view only.
     wxSize sizeBest = wxListCtrlBase::DoGetBestClientSize();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Without a header the base class gives an arbitrary width (50
+    // characters): a wxListbook then gave 400 pixels to the list of its
+    // pages, which the native list of wxMSW makes as wide as their names.
+    // Such a list is as wide as its columns.
+    if ( InReportView() && HasFlag(wxLC_NO_HEADER) && GetColumnCount() > 0 )
+    {
+        int width = 0;
+        for ( int col = 0; col < GetColumnCount(); ++col )
+            width += GetColumnWidth(col);
+        sizeBest.x = width;
+    }
+#endif
 
     if ( !InReportView() )
     {

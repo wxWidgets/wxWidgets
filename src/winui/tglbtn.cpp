@@ -93,7 +93,7 @@ void wxWinUIToggleRunVisualNoexcept(F&& operation) noexcept
     {
         try
         {
-            wxLogWarning(
+            wxLogDebug(
                 "wxWinUI: ToggleButton visual synchronization failed: %s",
                 wxString::FromUTF8(e.what()));
         }
@@ -105,7 +105,7 @@ void wxWinUIToggleRunVisualNoexcept(F&& operation) noexcept
     {
         try
         {
-            wxLogWarning(
+            wxLogDebug(
                 "wxWinUI: ToggleButton visual synchronization failed with "
                 "an unknown exception.");
         }

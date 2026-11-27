@@ -52,6 +52,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "propgridwinui.h"
     #include "wx/winui/winui.h"
+    #include "wx/winui/private/tlwhostmsw.h"
     #if wxUSE_COMBOBOX
         #include "wx/combobox.h"
     #endif
@@ -118,7 +119,12 @@
 #define wxPG_DEFAULT_VSPACING           2 // This matches .NET propertygrid's value,
                                           // but causes normal combobox to spill out under MSW
 #define wxPG_DEFAULT_CURSOR             wxNullCursor
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+// By the pixel, see WinUIOnWheel().
+#define wxPG_PIXELS_PER_UNIT            1
+#else
 #define wxPG_PIXELS_PER_UNIT            m_lineHeight
+#endif
 
 //#define wxPG_TOOLTIP_DELAY              1000
 
@@ -2018,16 +2024,20 @@ bool wxPropertyGrid::Create( wxWindow *parent,
                              const wxString& name )
 {
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The grid has the frame of a table of WinUI unless the program asked
+    // for no border. XAML draws it around the window, which keeps no border
+    // in Win32: the rows XAML shows fill the window, while the editors are
+    // children placed in its client area. With a border of 2 pixels the
+    // editors were 2 pixels lower than the middle of their rows.
+    const bool framed = (style & wxBORDER_MASK) != wxBORDER_NONE;
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+#else
     if (!(style&wxBORDER_MASK))
     {
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-        // Native cells provide the Fluent chrome. Do not put a second,
-        // classic HWND frame underneath the XAML surface by default.
-        style |= wxBORDER_NONE;
-#else
         style |= wxBORDER_THEME;
-#endif
     }
+#endif
 
     style |= wxVSCROLL;
 
@@ -2047,6 +2057,9 @@ bool wxPropertyGrid::Create( wxWindow *parent,
     Init2();
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( framed )
+        wxWinUIRequestWindowFrame(this);
+
     m_winUIProjection = wxPGWinUIProjection::Create(this);
 #endif
 
@@ -2263,9 +2276,123 @@ void wxPropertyGrid::Init1()
 //
 // Initialize after parent etc. set
 //
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+void wxPropertyGrid::WinUIStopScrolling()
+{
+    m_winuiScrollTarget = -1;
+    m_winuiScrollTimer.Stop();
+}
+
+void wxPropertyGrid::WinUIScrollBy(int pixels, bool animate)
+{
+    if ( !pixels )
+        return;
+
+    int viewStartX = 0, viewStartY = 0;
+    GetViewStart(&viewStartX, &viewStartY);
+    const int last =
+        wxMax(0, GetVirtualSize().y - GetClientSize().y);
+
+    // From where the scroll under way is going, for the turns of a wheel
+    // to add up.
+    const int from = m_winuiScrollTarget >= 0 ? m_winuiScrollTarget
+                                               : viewStartY;
+    const int target = wxClip(from + pixels, 0, last);
+    if ( !animate )
+    {
+        WinUIStopScrolling();
+        if ( target != viewStartY )
+        {
+            m_iFlags |= wxPG_FL_SCROLLED;
+            Scroll(viewStartX, target);
+        }
+        return;
+    }
+
+    m_winuiScrollTarget = target;
+    if ( !m_winuiScrollTimer.IsRunning() )
+        m_winuiScrollTimer.Start(10);
+    WinUIScrollStep();
+}
+
+void wxPropertyGrid::WinUIScrollStep()
+{
+    if ( m_winuiScrollTarget < 0 )
+    {
+        WinUIStopScrolling();
+        return;
+    }
+
+    int viewStartX = 0, viewStartY = 0;
+    GetViewStart(&viewStartX, &viewStartY);
+    const int left = m_winuiScrollTarget - viewStartY;
+    if ( !left )
+    {
+        WinUIStopScrolling();
+        return;
+    }
+
+    // A third of what is left at each step: quick at first, then slower.
+    int step = left / 3;
+    if ( !step )
+        step = left > 0 ? 1 : -1;
+
+    const wxWeakRef<wxWindow> alive(this);
+    m_iFlags |= wxPG_FL_SCROLLED;
+    Scroll(viewStartX, viewStartY + step);
+    if ( !alive )
+        return;
+
+    // Nowhere further to go: the grid got shorter meanwhile.
+    int now = 0;
+    GetViewStart(nullptr, &now);
+    if ( now == viewStartY )
+        WinUIStopScrolling();
+}
+
+void wxPropertyGrid::WinUIOnWheel(wxMouseEvent& event)
+{
+    const int delta = event.GetWheelDelta();
+    if ( !delta || event.GetWheelAxis() != wxMOUSE_WHEEL_VERTICAL ||
+         event.ControlDown() || m_lineHeight <= 0 )
+    {
+        event.Skip();
+        return;
+    }
+
+    const int lines = event.IsPageScroll()
+        ? wxMax(1, GetClientSize().y / m_lineHeight)
+        : wxMax(1, event.GetLinesPerAction());
+
+    // A notch of a wheel is that many rows. A touch pad sends small parts
+    // of a notch, many times: each moves the grid by the pixels it is worth,
+    // and what is less than a pixel is kept for the next one.
+    m_winuiWheelRest += event.GetWheelRotation() * lines * m_lineHeight;
+    const int pixels = m_winuiWheelRest / delta;
+    m_winuiWheelRest -= pixels * delta;
+    if ( !pixels )
+        return;
+
+    const bool notch = abs(event.GetWheelRotation()) >= delta;
+    WinUIScrollBy(-pixels, notch);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 void wxPropertyGrid::Init2()
 {
     wxASSERT( !(m_iFlags & wxPG_FL_INITIALIZED ) );
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Before the scrolling of the base class, which moves by the unit: a
+    // pixel here.
+    Bind(wxEVT_MOUSEWHEEL, &wxPropertyGrid::WinUIOnWheel, this);
+    m_winuiScrollTimer.Bind(wxEVT_TIMER, [this](wxTimerEvent&)
+    {
+        WinUIScrollStep();
+    });
+#endif
 
 #ifdef __WXMAC__
    // Smaller controls on Mac
@@ -2352,6 +2479,7 @@ void wxPropertyGrid::Init2()
 wxPropertyGrid::~wxPropertyGrid()
 {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winuiScrollTimer.Stop();
     if ( m_winUIProjection ) m_winUIProjection->Close();
 #endif
     DisconnectPropertyGridEditorForwarders(this);
@@ -3832,6 +3960,17 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     if ( m_spacingy < wxPG_YSPACING_MIN )
         m_spacingy = wxPG_YSPACING_MIN;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // As the rows of a tree of WinUI: the expander is a button of 24 with 4
+    // before and after it, and what is under an item starts 16 further.
+    // The arrow is then 20 before the text, as in a TreeView, and clear of
+    // the mark of the selected row.
+    m_iconWidth =
+    m_iconHeight = FromDIP(24);
+    m_gutterWidth = FromDIP(4);
+    m_subgroup_extramargin = FromDIP(16);
+#endif
+
     m_marginWidth = 0;
     if ( !(m_windowStyle & wxPG_HIDE_MARGIN) )
         m_marginWidth = m_gutterWidth*2 + m_iconWidth;
@@ -3841,9 +3980,11 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 
     m_lineHeight = m_fontHeight+(2*m_spacingy)+1;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-    // Native TextBox/CheckBox editors and Fluent hit targets share the same
-    // authoritative row geometry, rather than overflowing a classic 16px row.
-    m_lineHeight = wxMax(m_lineHeight, FromDIP(32));
+    // The height of the rows of a table of WinUI (ListViewItemMinHeight):
+    // the editor of a value is a control of the standard height, 32, and
+    // needs room above and under it, as in WinUI.TableView. In a row of 32
+    // it touched the lines of the table.
+    m_lineHeight = wxMax(m_lineHeight, FromDIP(40));
 #endif
 
     // button spacing
@@ -7749,12 +7890,40 @@ bool wxPropertyGrid::TryGetEditorWidgetRect( wxPGProperty* p,
         splitterX += (p->GetDepth() - 1) * m_subgroup_extramargin;
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The editor of a cell of a table of WinUI: a control of the standard
+    // height in the middle of its row, which is higher, a little inside the
+    // cell. The cell shows the value at the same place while it is not
+    // being edited (see wxPGWinUIProjection).
+    const int height = wxMin(m_lineHeight, FromDIP(wxPG_WINUI_EDITOR_HEIGHT));
+    const int end = FromDIP(wxPG_WINUI_VALUE_INSET);
+    int start = end;
+    if ( column == 0 )
+    {
+        // The name of a property starts 4 after the margin: so does the
+        // text of the field which edits it.
+        start = FromDIP(4 - (wxPG_WINUI_TEXT_INSET - wxPG_WINUI_VALUE_INSET));
+    }
+    else if ( imageOffset )
+    {
+        // After the picture of the value, which stays.
+        start += FromDIP(wxPG_WINUI_SWATCH_START + wxPG_WINUI_SWATCH_SIDE);
+    }
+
+    *rect = wxRect(
+        splitterX+start-vx,
+        itemy-vy+(m_lineHeight-height)/2,
+        colEnd-splitterX-start-end-1,
+        height
+    );
+#else
     *rect = wxRect(
         splitterX+imageOffset+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1-vx,
         itemy-vy,
         colEnd-splitterX-wxPG_XBEFOREWIDGET-wxPG_CONTROL_MARGIN-imageOffset-1,
         m_lineHeight-1
     );
+#endif
     return true;
 }
 
@@ -11881,6 +12050,25 @@ void wxPropertyGrid::OnChildFocusEvent( wxChildFocusEvent& event )
 void wxPropertyGrid::OnScrollEvent( wxScrollWinEvent &event )
 {
     m_iFlags |= wxPG_FL_SCROLLED;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( event.GetOrientation() == wxVERTICAL )
+    {
+        // The arrows of the bar move by a row, not by the unit, which is a
+        // pixel. Anything else moves the grid at once, wherever a turn of
+        // the wheel was taking it.
+        const wxEventType type = event.GetEventType();
+        if ( type == wxEVT_SCROLLWIN_LINEUP ||
+             type == wxEVT_SCROLLWIN_LINEDOWN )
+        {
+            WinUIScrollBy(type == wxEVT_SCROLLWIN_LINEUP ? -m_lineHeight
+                                                         : m_lineHeight,
+                          true);
+            return;
+        }
+        WinUIStopScrolling();
+    }
+#endif
 
     event.Skip();
 }

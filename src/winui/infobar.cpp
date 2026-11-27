@@ -1077,7 +1077,7 @@ void wxInfoBar::RebuildContent(bool externalMutation)
             callbackState->QuarantineProjection();
             if ( callbackState->MarkProjectionBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI InfoBar content kept changing during projection; "
                     "quarantining this request until the next external "
                     "mutation.");
@@ -1109,7 +1109,7 @@ void wxInfoBar::RebuildContent(bool externalMutation)
             // current projection guard is still active.
             if ( callbackState->MarkProjectionBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI InfoBar content kept changing during projection; "
                     "using its one bounded asynchronous replay.");
             }
@@ -1209,6 +1209,12 @@ void wxInfoBar::RebuildContent(bool externalMutation)
             }
 
             MUX::UIElement contentElement{ nullptr };
+            // A single button is the action button of the InfoBar: WinUI
+            // puts it on the line of the message, and under it only when the
+            // two do not fit. Several buttons have no such place: they make
+            // a row in the content, under the message.
+            MUXC::Button actionButton{ nullptr };
+            const bool inlineAction = buttons.size() == 1;
             if ( hasButtons || hasCheckBox )
             {
                 // InfoBar.Content renders under the message: stack the row of
@@ -1225,6 +1231,8 @@ void wxInfoBar::RebuildContent(bool externalMutation)
                     buttonsPanel.Orientation(
                         MUXC::Orientation::Horizontal);
                     buttonsPanel.Spacing(8);
+                    buttonsPanel.HorizontalAlignment(
+                        MUX::HorizontalAlignment::Right);
 
                     for ( const ButtonInfo& info : buttons )
                     {
@@ -1240,18 +1248,38 @@ void wxInfoBar::RebuildContent(bool externalMutation)
                                     IInspectable&,
                                 const MUX::RoutedEventArgs&)
                             {
-                                wxInfoBar * const current =
-                                    callbackState->GetContentOwner(
-                                        generation);
-                                if ( current )
-                                    current->OnButtonClick(btnid);
+                                // The handler may open a modal dialog:
+                                // it runs once this callback has returned.
+                                wxWinUIPostNotification(
+                                    [callbackState, generation, btnid]()
+                                    {
+                                        wxInfoBar * const current =
+                                            callbackState->GetContentOwner(
+                                                generation);
+                                        if ( current )
+                                            current->OnButtonClick(btnid);
+                                    });
                             });
-                        buttonsPanel.Children().Append(button);
+                        if ( inlineAction )
+                        {
+                            // At the end of the bar, where the buttons of
+                            // the bar of wxMSW are: the InfoBar gives its
+                            // action button all the room left after the
+                            // message.
+                            button.HorizontalAlignment(
+                                MUX::HorizontalAlignment::Right);
+                            actionButton = button;
+                        }
+                        else
+                        {
+                            buttonsPanel.Children().Append(button);
+                        }
                         candidateButtonHandlers.push_back(
                             { btnid, button, clickToken });
                     }
 
-                    content.Children().Append(buttonsPanel);
+                    if ( !inlineAction )
+                        content.Children().Append(buttonsPanel);
                 }
 
                 if ( hasCheckBox )
@@ -1285,7 +1313,8 @@ void wxInfoBar::RebuildContent(bool externalMutation)
                     candidateCheckBox = checkBox;
                 }
 
-                contentElement = content;
+                if ( content.Children().Size() )
+                    contentElement = content;
             }
 
 #ifdef WXWINUI_TEST_SUPPORT
@@ -1297,6 +1326,7 @@ void wxInfoBar::RebuildContent(bool externalMutation)
             impl->nextContentWriteContextForTesting = nullptr;
 #endif
 
+            bar.ActionButton(actionButton);
             bar.Content(contentElement);
 #ifdef WXWINUI_TEST_SUPPORT
             if ( hook )
@@ -1453,8 +1483,11 @@ bool wxWinUIInfoBarTestAccess::ClickButton(wxInfoBar& info, wxWindowID btnid)
             winrt::Microsoft::UI::Xaml::Automation::Peers::
                 ButtonAutomationPeer peer(handler.button);
             peer.Invoke();
-            // Do not touch info after Invoke(): the wx handler is allowed to
-            // have destroyed the InfoBar while the native callback unwound.
+            // The click is queued, not sent from the XAML callback: deliver
+            // it before returning, as the callers expect its effect. Do not
+            // touch info afterwards: the wx handler is allowed to have
+            // destroyed the InfoBar.
+            wxWinUIFlushNotifications();
             wxUnusedVar(callbackState);
             return true;
         }

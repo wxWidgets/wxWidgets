@@ -22,6 +22,7 @@
 
 #include "private.h"
 #include "wx/winui/private/tlwhost.h"
+#include "hostnative.h"
 
 #include <winrt/Microsoft.UI.Dispatching.h>
 #include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
@@ -617,10 +618,12 @@ void wxWinUIDispatchCalendarSelectionEvents(
 WU::Color wxWinUICalendarMarkColour(
     const MUXC::CalendarView& calendar)
 {
+    // The accent fill of today's cell: unlike its text colour, which is
+    // black in the dark theme, it stands out on the calendar in both themes.
     try
     {
         if ( const auto brush =
-                 calendar.TodayForeground()
+                 calendar.TodayBackground()
                      .try_as<MUXM::SolidColorBrush>() )
         {
             return brush.Color();
@@ -747,6 +750,76 @@ public:
         return monthViewport && monthViewport->changing;
     }
 
+    // Writes what the row of the names of the days holds to the log
+    // (WX_WINUI_INPUT_LOG): its size, and the text, the size and the colour
+    // of each name.
+    static void TraceWeekDays(const MUXC::CalendarView& calendar,
+                              const MUXC::ScrollViewer& viewport,
+                              const char *when)
+    {
+        if ( !wxWinUIInputLogEnabled() || !calendar || !viewport )
+            return;
+
+        try
+        {
+            const auto settings = calendar.TemplateSettings();
+            wxWinUIInputLog(
+                "calendar WEEKDAYS %s theme=%d language='%ls' format='%ls' "
+                "first=%d settings='%ls|%ls|%ls|%ls|%ls|%ls|%ls'",
+                when,
+                static_cast<int>(calendar.ActualTheme()),
+                calendar.Language().c_str(),
+                calendar.DayOfWeekFormat().c_str(),
+                static_cast<int>(calendar.FirstDayOfWeek()),
+                settings.WeekDay1().c_str(), settings.WeekDay2().c_str(),
+                settings.WeekDay3().c_str(), settings.WeekDay4().c_str(),
+                settings.WeekDay5().c_str(), settings.WeekDay6().c_str(),
+                settings.WeekDay7().c_str());
+            const auto month = MUXM::VisualTreeHelper::GetParent(viewport);
+            const int parts = month
+                ? MUXM::VisualTreeHelper::GetChildrenCount(month) : 0;
+            for ( int n = 0; n < parts; ++n )
+            {
+                const auto row = MUXM::VisualTreeHelper::GetChild(
+                    month, n).try_as<MUXC::Panel>();
+                if ( !row || row.Name() != L"WeekDayNames" )
+                    continue;
+                wxWinUIInputLog(
+                    "calendar WEEKDAYS row %.0fx%.0f opacity=%g visible=%d "
+                    "children=%u",
+                    row.ActualWidth(), row.ActualHeight(), row.Opacity(),
+                    row.Visibility() == MUX::Visibility::Visible ? 1 : 0,
+                    row.Children().Size());
+                for ( const auto& child : row.Children() )
+                {
+                    const auto text = child.try_as<MUXC::TextBlock>();
+                    if ( !text )
+                        continue;
+                    unsigned long colour = 0;
+                    if ( const auto brush = text.Foreground()
+                            .try_as<MUXM::SolidColorBrush>() )
+                    {
+                        const auto c = brush.Color();
+                        colour = (static_cast<unsigned long>(c.A) << 24) |
+                                 (c.R << 16) | (c.G << 8) | c.B;
+                    }
+                    wxWinUIInputLog(
+                        "calendar WEEKDAYS   '%ls' %.0fx%.0f font=%g "
+                        "fg=%08lX opacity=%g visible=%d",
+                        text.Text().c_str(), text.ActualWidth(),
+                        text.ActualHeight(), text.FontSize(), colour,
+                        text.Opacity(),
+                        text.Visibility() == MUX::Visibility::Visible
+                            ? 1 : 0);
+                }
+            }
+        }
+        catch ( const winrt::hresult_error& )
+        {
+            wxWinUIInputLog("calendar WEEKDAYS could not be read");
+        }
+    }
+
     void BindMonthViewport(wxCalendarCtrl *owner)
     {
         const HitTestTicket ticket = CaptureHitTestTicket();
@@ -795,6 +868,38 @@ public:
         if ( !viewport )
             return;
 
+        // What that row holds goes in the log (WX_WINUI_INPUT_LOG): on some
+        // machines the names of the days do not show.
+        TraceWeekDays(ticket.calendar, viewport, "bound");
+
+        // The stock template gives the row of the names of the days the
+        // background of the control a second time. That background is
+        // translucent: over the one the control already has, the row is a
+        // darker band, almost black over Mica, under which the weeks seem
+        // cut while they scroll. The viewport of the weeks does not go
+        // under that row: it has nothing to hide.
+        try
+        {
+            if ( const auto monthView = MUXM::VisualTreeHelper::GetParent(viewport) )
+            {
+                const int count =
+                    MUXM::VisualTreeHelper::GetChildrenCount(monthView);
+                for ( int n = 0; n < count; ++n )
+                {
+                    const auto names = MUXM::VisualTreeHelper::GetChild(
+                        monthView, n).try_as<MUXC::Panel>();
+                    if ( names && names.Name() == L"WeekDayNames" )
+                        names.Background(nullptr);
+                }
+            }
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI CalendarView weekday row", e);
+        }
+        if ( GetCurrentOwner(ticket) != owner )
+            return;
+
         const auto binding = std::make_shared<MonthViewportBinding>();
         binding->peer = viewport;
         const std::weak_ptr<MonthViewportBinding> weak = binding;
@@ -840,6 +945,8 @@ public:
             {
                 wxWinUILogException("WinUI CalendarView viewport completion", e);
             }
+            // Once the weeks have stopped: the layout is the one seen.
+            TraceWeekDays(impl->cal, current->peer, "scrolled");
         };
         binding->changingToken = viewport.ViewChanging(
             [onViewport](const auto&, const MUXC::ScrollViewerViewChangingEventArgs&)
@@ -3360,11 +3467,21 @@ public:
 
         std::vector<WU::Color> applied;
         auto colours = winrt::single_threaded_vector<WU::Color>();
-        // wxMSW represents both explicit marks and locale holidays through
-        // the same native DAYSTATE emphasis. Keep that observable parity in
-        // CalendarView while retaining separate model bitsets.
-        if ( IsMarked(owner, peerDate) ||
-             IsHoliday(owner, peerDate) )
+        // A day marked by the program gets a density bar, and so does a
+        // holiday, as wxMSW emphasises both alike. Saturdays and Sundays are
+        // the exception: with the default style each of them is a holiday,
+        // and a bar under every week-end day reads as a rendering defect,
+        // not as information.
+        bool emphasised = IsMarked(owner, peerDate);
+        if ( !emphasised && IsHoliday(owner, peerDate) )
+        {
+            const wxDateTime civil = wxWinUIFromDateTime(peerDate);
+            const wxDateTime::WeekDay weekDay = civil.IsValid()
+                ? civil.GetWeekDay() : wxDateTime::Inv_WeekDay;
+            emphasised = weekDay != wxDateTime::Sat &&
+                         weekDay != wxDateTime::Sun;
+        }
+        if ( emphasised )
         {
             const WU::Color colour =
                 wxWinUICalendarMarkColour(calendar);
@@ -3662,7 +3779,7 @@ public:
 
         refreshMarksPending = false;
         refreshMarksInProgress = false;
-        wxLogWarning(
+        wxLogDebug(
             "WinUI CalendarView mark refresh did not converge; "
             "deferring further work to the next theme/model change.");
     }
@@ -3902,7 +4019,7 @@ public:
 
         refreshHolidaysInProgress = false;
         refreshHolidaysPending = true;
-        wxLogWarning(
+        wxLogDebug(
             "WinUI CalendarView holiday refresh did not converge; "
             "deferring further work to the next model change.");
     }
@@ -4566,7 +4683,7 @@ public:
 
         weekDayLayoutValidationPending = false;
         weekRefreshDegraded = true;
-        wxLogWarning(
+        wxLogDebug(
             "WinUI CalendarView day-layout validation failed to converge; "
             "deferring further work to the next model change.");
     }
@@ -4695,7 +4812,7 @@ public:
                     }
                     catch ( ... )
                     {
-                        wxLogWarning(
+                        wxLogDebug(
                             "Unknown exception in WinUI CalendarView "
                             "day-layout validation.");
                         owner = state->GetOwner(generation);
@@ -4754,7 +4871,7 @@ public:
         }
         catch ( ... )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "Unknown exception while queueing WinUI CalendarView "
                 "day-layout validation.");
         }
@@ -5369,7 +5486,7 @@ public:
         refreshWeeksPending = false;
         weekRefreshPendingCause = WeekRefreshPendingCause::None;
         refreshWeeksInProgress = false;
-        wxLogWarning(
+        wxLogDebug(
             "WinUI CalendarView week-number layout did not converge; "
             "deferring further work to the next layout edge.");
     }
@@ -5557,7 +5674,19 @@ public:
         if ( !GetCurrentOwner(ticket) )
             return false;
 
-        if ( !ResolveDayAtPoint(ticket, point, nullptr) )
+        // The realized days include the weeks scrolled out of the month
+        // view, which lie under the weekday names and the header: only the
+        // visible part of a day, as published for HitTest(), is a day here.
+        PublicHitSnapshot snapshot;
+        if ( !CapturePublicHitSnapshot(ticket, &snapshot) )
+            return false;
+        const bool onDay = std::any_of(
+            snapshot.days.begin(), snapshot.days.end(),
+            [&point](const DayHitGeometry& day)
+            {
+                return ContainsPoint(day.bounds, point);
+            });
+        if ( !onDay )
             return false;
 
         wxCalendarCtrl * const owner = GetCurrentOwner(ticket);
@@ -5619,6 +5748,7 @@ public:
     bool weekRefreshScheduled = false;
     bool projectedWeekLayoutInputsValid = false;
     bool projectedWeekDayLayoutValid = false;
+    int weekdayNameRepairs = 0;
     bool weekDayLayoutValidationPending = false;
     bool weekDayLayoutValidationScheduled = false;
     bool navigationRefreshScheduled = false;
@@ -5782,6 +5912,56 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id,
                 std::vector<winrt::hstring>{language});
             m_winui->cal.CalendarIdentifier(
                 localeCalendar.GetCalendarSystem());
+        }
+        // The stock template pads each weekday name by 12 DIPs on both
+        // sides, which leaves 18 for the name in a calendar of the default
+        // width: "ma" or "me" then wraps onto two lines.
+        m_winui->cal.Resources().Insert(
+            winrt::box_value(L"CalendarViewWeekDayPadding"),
+            winrt::box_value(MUX::Thickness{2, 12, 2, 12}));
+        // The names of the days in the form the control picks by itself
+        // (two letters), but asked for explicitly: left to itself it works
+        // them out from the width of its days, finds none when it is created
+        // in a page which is not shown, and does not try again when the
+        // page is: the row of the names then stayed empty.
+        m_winui->cal.DayOfWeekFormat(L"{dayofweek.abbreviated(2)}");
+        {
+            // And asked for again once the control has a size, if it still
+            // has none: the names are only worked out when the format
+            // changes while the days are laid out.
+            const auto weakCalendar = winrt::make_weak(m_winui->cal);
+            m_winui->cal.SizeChanged(
+                [weakCalendar](const WF::IInspectable&,
+                               const MUX::SizeChangedEventArgs&)
+                {
+                    const auto calendar = weakCalendar.get();
+                    if ( !calendar )
+                        return;
+                    const auto queue = calendar.DispatcherQueue();
+                    if ( !queue )
+                        return;
+                    queue.TryEnqueue([weakCalendar]()
+                    {
+                        try
+                        {
+                            const auto live = weakCalendar.get();
+                            if ( !live ||
+                                 !live.TemplateSettings().WeekDay1().empty() )
+                            {
+                                return;
+                            }
+                            live.DayOfWeekFormat(
+                                L"{dayofweek.abbreviated(3)}");
+                            live.DayOfWeekFormat(
+                                L"{dayofweek.abbreviated(2)}");
+                        }
+                        catch ( const winrt::hresult_error& e )
+                        {
+                            wxWinUILogException(
+                                "WinUI CalendarView weekday names", e);
+                        }
+                    });
+                });
         }
         m_winui->cal.SelectionMode(
             MUXC::CalendarViewSelectionMode::Single);
@@ -6007,6 +6187,70 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id,
                              callbackState->IsPeerMutationInProgress() )
                         {
                             return;
+                        }
+
+                        // CalendarView publishes its weekday names only
+                        // when it measures a change of its date source, and
+                        // only if its month panel already exists then. Here
+                        // the first measure comes before that panel, so the
+                        // row of names stays empty for good. Changing the
+                        // first day of the week and restoring it makes the
+                        // control publish them, once the panel is there.
+                        if ( owner->m_winui->weekdayNameRepairs < 3 )
+                        {
+                            try
+                            {
+                                const MUXC::CalendarView calendar =
+                                    owner->m_winui->cal;
+                                if ( calendar.TemplateSettings()
+                                        .WeekDay1().empty() )
+                                {
+                                    ++owner->m_winui->weekdayNameRepairs;
+                                    const wxWinUICalendarPeerMutationGuard
+                                        mutation(callbackState);
+                                    // The property does not report the
+                                    // regional first day which the control
+                                    // uses while it is unset, so the day
+                                    // to end on is worked out here: the
+                                    // style's, else the user's region's.
+                                    WG::DayOfWeek first =
+                                        WG::DayOfWeek::Monday;
+                                    DWORD regional = 0;   // 0 is Monday
+                                    if ( owner->HasFlag(wxCAL_SUNDAY_FIRST) )
+                                    {
+                                        first = WG::DayOfWeek::Sunday;
+                                    }
+                                    else if (
+                                        !owner->HasFlag(wxCAL_MONDAY_FIRST) &&
+                                        ::GetLocaleInfoEx(
+                                            LOCALE_NAME_USER_DEFAULT,
+                                            LOCALE_IFIRSTDAYOFWEEK |
+                                                LOCALE_RETURN_NUMBER,
+                                            reinterpret_cast<LPWSTR>(&regional),
+                                            sizeof(regional) / sizeof(wchar_t)) )
+                                    {
+                                        first = static_cast<WG::DayOfWeek>(
+                                            (regional + 1) % 7);
+                                    }
+                                    calendar.FirstDayOfWeek(
+                                        first == WG::DayOfWeek::Sunday
+                                            ? WG::DayOfWeek::Monday
+                                            : WG::DayOfWeek::Sunday);
+                                    calendar.FirstDayOfWeek(first);
+                                }
+                            }
+                            catch ( const winrt::hresult_error& e )
+                            {
+                                wxWinUILogException(
+                                    "WinUI CalendarView weekday names", e);
+                            }
+                            owner = callbackState->GetOwner(generation);
+                            if ( !owner || !owner->m_winui ||
+                                 owner->m_winui->callbackState !=
+                                     callbackState )
+                            {
+                                return;
+                            }
                         }
 
                         try
@@ -7587,7 +7831,7 @@ bool wxWinUICalendarTestAccess::GetAppliedDensityColour(
     return true;
 }
 
-bool wxWinUICalendarTestAccess::SetTodayForeground(
+bool wxWinUICalendarTestAccess::SetTodayBackground(
     wxCalendarCtrl& control,
     const wxColour& colour)
 {
@@ -7603,7 +7847,7 @@ bool wxWinUICalendarTestAccess::SetTodayForeground(
     const MUXC::CalendarView calendar = control.m_winui->cal;
     try
     {
-        calendar.TodayForeground(wxWinUIBrush(
+        calendar.TodayBackground(wxWinUIBrush(
             colour.Red(), colour.Green(),
             colour.Blue(), colour.Alpha()));
     }
@@ -7636,8 +7880,8 @@ bool wxWinUICalendarTestAccess::UseSystemMarkColourFallback(wxCalendarCtrl& cont
     try
     {
         // A non-solid authored brush exercises the same production fallback
-        // used when a theme does not resolve TodayForeground to one colour.
-        calendar.TodayForeground(MUXM::LinearGradientBrush());
+        // used when a theme does not resolve TodayBackground to one colour.
+        calendar.TodayBackground(MUXM::LinearGradientBrush());
     }
     catch ( const winrt::hresult_error& e )
     {

@@ -967,7 +967,7 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPreviewHasRealCalendarFieldsAndStableGeome
     for ( const auto& number : {day, month, year} )
     {
         CheckPresentationOnly(number);
-        CHECK(number.SpinButtonPlacementMode() == C::NumberBoxSpinButtonPlacementMode::Inline);
+        CHECK(number.SpinButtonPlacementMode() == C::NumberBoxSpinButtonPlacementMode::Compact);
         REQUIRE(FindPreviewPart<C::TextBox>(number));
         CHECK(number.ActualHeight() >= 32);
         const auto bounds = PreviewScreenRect(grid, number);
@@ -1050,7 +1050,7 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPreviewPreservesExactFormatsAndEditorState
         return SpinTextIs(formatted, property->GetValueAsString());
     }));
     CheckPresentationOnly(formatted);
-    CHECK(formatted.SpinButtonPlacementMode() == C::NumberBoxSpinButtonPlacementMode::Inline);
+    CHECK(formatted.SpinButtonPlacementMode() == C::NumberBoxSpinButtonPlacementMode::Compact);
     CHECK(wxString(formatted.Text().c_str()).Contains("03:14"));
     CHECK_FALSE(PreviewVisible(DateSpinPart(root, "date", "Day")));
     CHECK_FALSE(Preview<C::Control>(grid, "noeditor"));

@@ -13,9 +13,13 @@
 #include "wx/weakref.h"
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
 #include "private.h"
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
+#include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.Media.h>
+#include <winrt/Microsoft.UI.Text.h>
+#include <winrt/Windows.Foundation.Numerics.h>
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
@@ -79,6 +83,9 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         bool customForeground;
         double scale;
         int scroll;
+        // The column under the pointer and the one whose button is held
+        // down, which the control knows: see States().
+        unsigned hover, pressed;
     };
     struct Column
     {
@@ -111,6 +118,8 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         wxColour foreground;
         bool customForeground = false;
         double scale = 0;
+        // The visual state the button was last given, see ApplyState().
+        const wchar_t* state = nullptr;
     };
 
     explicit Impl(wxHeaderCtrl* header) : owner(header) {}
@@ -120,6 +129,8 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
     C::Canvas canvas{nullptr};
     X::Media::RectangleGeometry rootClip{nullptr};
     C::Border ghost{nullptr}, marker{nullptr};
+    // The column which is dragged, whose button is dimmed where it was.
+    unsigned dragged = static_cast<unsigned>(-1);
     std::map<unsigned, std::shared_ptr<Peer>> peers;
     std::uint64_t revision = 0, topology = 0, publishedRevision = 0;
     std::uint64_t inputSerial = 0;
@@ -136,7 +147,23 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
     {
         return {revision, topology, owner->GetColumnCount(), owner->m_colIndices,
                 owner->GetClientSize(), owner->GetFont(), owner->GetForegroundColour(),
-                owner->UseForegroundColour(), owner->GetDPIScaleFactor(), owner->m_scrollOffset};
+                owner->UseForegroundColour(), owner->GetDPIScaleFactor(), owner->m_scrollOffset,
+                owner->m_hover, owner->m_winUIPressed};
+    }
+
+    // The buttons of the columns are the ones of XAML but the pointer does
+    // not reach them: the control gets the mouse, which it needs whole to
+    // drag a column or its edge, and says which button is under the pointer
+    // or held down. A button which took the pointer for itself when it was
+    // pressed kept it from the control which was dragging.
+    static void ApplyState(const Peer& peer)
+    {
+        if ( !peer.state || !peer.button ) return;
+        try
+        {
+            X::VisualStateManager::GoToState(peer.button, peer.state, true);
+        }
+        catch ( const winrt::hresult_error& ) { }
     }
     bool IsPublished() const
     {
@@ -206,6 +233,13 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         root.Clip(rootClip);
         canvas.Background(wxWinUICreateColourBrush(wxColour(0, 0, 0, 0)));
         A::AutomationProperties::SetAutomationId(root, L"wxHeader.NativeRoot");
+        // The band of the header row of a table of WinUI, under the buttons
+        // of the columns. On its own in a frame, its corners are those of
+        // the frame.
+        const double corner =
+            wxWinUIWindowHasRequestedFrame(owner.get()) ? 3 : 0;
+        if ( C::Border band = wxWinUICreateTableHeaderBand(corner, corner) )
+            root.Children().Append(band);
         root.Children().Append(canvas);
         ObserveInput();
         const std::weak_ptr<Impl> weak = shared_from_this();
@@ -296,7 +330,9 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         auto peer = std::make_shared<Peer>();
         peer->index = col.index;
         peer->button = C::Button();
+        wxWinUIApplyTableHeaderStyle(peer->button);
         peer->button.IsTabStop(false); // public header excludes keyboard traversal
+        peer->button.IsHitTestVisible(false); // see ApplyState()
         peer->button.MinWidth(0); peer->button.MinHeight(0);
         peer->button.Padding({0, 0, 0, 0});
         peer->button.HorizontalContentAlignment(X::HorizontalAlignment::Left);
@@ -304,7 +340,7 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         peer->clip = X::Media::RectangleGeometry();
         peer->button.Clip(peer->clip);
         peer->content = C::Grid();
-        peer->content.Padding({6, 0, 6, 0});
+        peer->content.Padding({12, 0, 8, 0});
         for ( unsigned n = 0; n != 3; ++n )
         {
             C::ColumnDefinition definition;
@@ -339,6 +375,11 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         {
             if ( auto self = weak.lock() )
                 if ( auto current = weakPeer.lock() ) self->Activate(current);
+        });
+        // A state asked before the button has its template is not taken.
+        peer->button.Loaded([weakPeer](const auto&, const auto&)
+        {
+            if ( auto current = weakPeer.lock() ) ApplyState(*current);
         });
         return peer;
     }
@@ -390,7 +431,7 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
             }
             if ( added || peer->font != s.font || peer->scale != s.scale )
             {
-                wxWinUIApplyFont(peer->text, s.font); Check(s);
+                wxWinUIApplyTableHeaderFont(peer->text, s.font); Check(s);
             }
             if ( s.customForeground && (added || !peer->customForeground || peer->foreground != s.foreground) )
             {
@@ -430,6 +471,19 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
             {
                 peer->sort.Glyph(col.ascending ? L"\xE70E" : L"\xE70D"); Check(s);
                 peer->sort.Visibility(col.sorted ? X::Visibility::Visible : X::Visibility::Collapsed); Check(s);
+            }
+            const wchar_t* const state =
+                col.index == s.pressed ? L"Pressed"
+                    : col.index == s.hover ? L"PointerOver" : L"Normal";
+            if ( peer->state != state )
+            {
+                peer->state = state;
+                ApplyState(*peer); Check(s);
+            }
+            const double opacity = col.index == dragged ? 0.4 : 1.0;
+            if ( peer->button.Opacity() != opacity )
+            {
+                peer->button.Opacity(opacity); Check(s);
             }
             peer->painted = col;
             peer->font = s.font; peer->scale = s.scale;
@@ -474,8 +528,126 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         }
     }
 
+    C::Border MakeGhost()
+    {
+        // The header of the column which is dragged, lifted over the others
+        // and seen through: what the header of Win32 and the tables of
+        // WinUI show of a column which is moved.
+        try
+        {
+            return X::Markup::XamlReader::Load(
+                L"<Border xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'"
+                L" IsHitTestVisible='False' CornerRadius='4' BorderThickness='1' Opacity='0.85'"
+                L" Background='{ThemeResource ControlSolidFillColorDefaultBrush}'"
+                L" BorderBrush='{ThemeResource ControlElevationBorderBrush}'>"
+                L"<Border.Shadow><ThemeShadow/></Border.Shadow>"
+                L"<Grid Padding='11,0,7,0'><Grid.ColumnDefinitions>"
+                L"<ColumnDefinition Width='Auto'/><ColumnDefinition Width='*'/>"
+                L"<ColumnDefinition Width='Auto'/></Grid.ColumnDefinitions>"
+                L"<Image VerticalAlignment='Center' Margin='0,0,4,0' Visibility='Collapsed'/>"
+                L"<TextBlock Grid.Column='1' VerticalAlignment='Center'"
+                L" TextTrimming='CharacterEllipsis'/>"
+                L"<FontIcon Grid.Column='2' FontFamily='Segoe Fluent Icons' FontSize='12'"
+                L" Margin='4,0,0,0' Visibility='Collapsed'/>"
+                L"</Grid></Border>").as<C::Border>();
+        }
+        catch ( const winrt::hresult_error& error )
+        {
+            wxWinUILogException("header native reorder ghost", error);
+        }
+        C::Border plain = wxWinUICreateThemeBrushBorder(
+            "SubtleFillColorTertiaryBrush", wxWinUIThemeBrushProperty::Background);
+        if ( !plain ) plain = C::Border();
+        plain.IsHitTestVisible(false);
+        plain.CornerRadius({4, 4, 4, 4});
+        return plain;
+    }
+
+    void FillGhost(const Snapshot& s, unsigned column)
+    {
+        const auto found = peers.find(column);
+        const auto grid = ghost.Child().try_as<C::Grid>();
+        if ( found == peers.end() || !grid || grid.Children().Size() != 3 ) return;
+        const Column& col = found->second->painted;
+        const auto image = grid.Children().GetAt(0).as<C::Image>();
+        const auto text = grid.Children().GetAt(1).as<C::TextBlock>();
+        const auto sort = grid.Children().GetAt(2).as<C::FontIcon>();
+        text.Text(wxWinUIToHString(col.title));
+        wxWinUIApplyTableHeaderFont(text, s.font);
+        text.FontWeight(winrt::Microsoft::UI::Text::FontWeights::SemiBold());
+        text.TextAlignment(col.alignment == wxALIGN_RIGHT ? X::TextAlignment::Right :
+            col.alignment == wxALIGN_CENTER ? X::TextAlignment::Center : X::TextAlignment::Left);
+        if ( col.bitmap.IsOk() )
+        {
+            image.Source(wxWinUIWriteableBitmapFromBitmap(col.bitmap));
+            image.Width(col.bitmapLogicalSize.x / s.scale);
+            image.Height(col.bitmapLogicalSize.y / s.scale);
+            image.Visibility(X::Visibility::Visible);
+        }
+        if ( col.sorted )
+        {
+            sort.Glyph(col.ascending ? L"\xE70E" : L"\xE70D");
+            sort.Visibility(X::Visibility::Visible);
+        }
+    }
+
+    void EnsureMarker(const Snapshot& s)
+    {
+        if ( marker ) return;
+        // A thin line in the accent colour, as the drop indicator of the
+        // DataGrid of the toolkit.
+        marker = wxWinUICreateThemeBrushBorder(
+            "AccentFillColorDefaultBrush", wxWinUIThemeBrushProperty::Background);
+        if ( !marker ) marker = C::Border();
+        marker.IsHitTestVisible(false);
+        marker.CornerRadius({1, 1, 1, 1});
+        A::AutomationProperties::SetAutomationId(marker, L"wxHeader.ReorderMarker");
+        C::Canvas::SetZIndex(marker, 2);
+        canvas.Children().Append(marker); Check(s);
+    }
+
+    void PlaceMarker(const Snapshot& s, int x)
+    {
+        marker.Visibility(X::Visibility::Visible); Check(s);
+        marker.Width(2); Check(s);
+        marker.Height(std::max(0, s.viewport.y) / s.scale); Check(s);
+        C::Canvas::SetLeft(marker, x / s.scale - 1); Check(s);
+    }
+
+    void ShowResizeLine(int x)
+    {
+        if ( !IsPublished() ) return;
+        const auto s = Capture();
+        try
+        {
+            if ( x < 0 )
+            {
+                if ( marker ) marker.Visibility(X::Visibility::Collapsed);
+                return;
+            }
+            EnsureMarker(s);
+            PlaceMarker(s, x);
+        }
+        catch ( const InvalidHeaderSnapshot& ) { }
+        catch ( const winrt::hresult_error& error )
+        {
+            wxWinUILogException("header native resize line", error);
+        }
+    }
+
     void ClearMarkers()
     {
+        if ( dragged != static_cast<unsigned>(-1) )
+        {
+            // The button of the column which was dragged shows whole again.
+            const auto found = peers.find(dragged);
+            dragged = static_cast<unsigned>(-1);
+            if ( found != peers.end() && Alive() )
+            {
+                try { found->second->button.Opacity(1.0); }
+                catch ( const winrt::hresult_error& ) { }
+            }
+        }
         const auto previousGhost = ghost;
         const auto previousMarker = marker;
         ghost = nullptr; marker = nullptr;
@@ -498,40 +670,40 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         });
     }
 
-    void ShowMarkers(const wxRect& rect, int insertionX)
+    void ShowMarkers(const wxRect& rect, int insertionX, unsigned column)
     {
         if ( !IsPublished() ) return;
         const auto s = Capture();
-        const wxRect clipped = VisibleHeaderRect(rect.x, rect.width, s.viewport);
+        // The whole column follows the pointer, cut by the window when it
+        // leaves it; never wider than the window, see VisibleHeaderRect().
+        const int width = std::max(0, std::min(rect.width, s.viewport.x));
+        const int left = std::max(-width, std::min(rect.x, s.viewport.x));
         try
         {
             if ( !ghost )
             {
-                ghost = C::Border();
-                ghost.IsHitTestVisible(false);
-                ghost.BorderThickness({1, 1, 1, 1});
-                ghost.BorderBrush(wxWinUICreateColourBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
+                ghost = MakeGhost();
                 A::AutomationProperties::SetAutomationId(ghost, L"wxHeader.ReorderGhost");
                 C::Canvas::SetZIndex(ghost, 1);
+                // What lifts it over the header, for its shadow.
+                ghost.Translation(winrt::Windows::Foundation::Numerics::float3{0, 0, 16});
+                FillGhost(s, column); Check(s);
                 canvas.Children().Append(ghost); Check(s);
+
+                dragged = column;
+                const auto found = peers.find(column);
+                if ( found != peers.end() )
+                {
+                    found->second->button.Opacity(0.4); Check(s);
+                }
             }
-            ghost.Width(clipped.width / s.scale); Check(s);
-            ghost.Height(clipped.height / s.scale); Check(s);
-            C::Canvas::SetLeft(ghost, clipped.x / s.scale); Check(s);
+            ghost.Width(width / s.scale); Check(s);
+            ghost.Height(std::max(0, s.viewport.y) / s.scale); Check(s);
+            C::Canvas::SetLeft(ghost, left / s.scale); Check(s);
             if ( insertionX >= 0 )
             {
-                if ( !marker )
-                {
-                    marker = C::Border();
-                    marker.IsHitTestVisible(false);
-                    marker.Background(wxWinUICreateColourBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
-                    A::AutomationProperties::SetAutomationId(marker, L"wxHeader.ReorderMarker");
-                    C::Canvas::SetZIndex(marker, 2);
-                    canvas.Children().Append(marker); Check(s);
-                }
-                marker.Width(4); Check(s);
-                marker.Height(std::max(0, s.viewport.y) / s.scale); Check(s);
-                C::Canvas::SetLeft(marker, insertionX / s.scale - 2); Check(s);
+                EnsureMarker(s);
+                PlaceMarker(s, insertionX);
             }
         }
         catch ( const InvalidHeaderSnapshot& ) { }
@@ -549,6 +721,7 @@ struct wxWinUIHeaderProjection::Impl : std::enable_shared_from_this<Impl>
         host.Close();
         owner = nullptr;
         ghost = nullptr; marker = nullptr;
+        dragged = static_cast<unsigned>(-1);
     }
 };
 
@@ -572,10 +745,15 @@ void wxWinUIHeaderProjection::Invalidate(bool topologyChanged) { m_impl->Invalid
 void wxWinUIHeaderProjection::Update() { const auto impl = m_impl; impl->Synchronize(); }
 void wxWinUIHeaderProjection::Close() { m_impl->Close(); }
 bool wxWinUIHeaderProjection::IsPublished() const { return m_impl->IsPublished(); }
-void wxWinUIHeaderProjection::ShowMarkers(const wxRect& ghost, int insertionX)
+void wxWinUIHeaderProjection::ShowMarkers(const wxRect& ghost, int insertionX, unsigned column)
 {
     const auto impl = m_impl;
-    impl->ShowMarkers(ghost, insertionX);
+    impl->ShowMarkers(ghost, insertionX, column);
+}
+void wxWinUIHeaderProjection::ShowResizeLine(int x)
+{
+    const auto impl = m_impl;
+    impl->ShowResizeLine(x);
 }
 void wxWinUIHeaderProjection::ClearMarkers() { const auto impl = m_impl; impl->ClearMarkers(); }
 #endif

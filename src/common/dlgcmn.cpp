@@ -44,6 +44,10 @@
 
 #include "wx/display.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 #include <memory>
 #include <cstdint>
 #include <unordered_map>
@@ -665,6 +669,10 @@ wxEND_EVENT_TABLE()
 wxDialogLayoutAdapter* wxDialogBase::sm_layoutAdapter = nullptr;
 bool wxDialogBase::sm_layoutAdaptation = false;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxWinUIUpdateDialogTones(wxDialogBase *dialog);
+#endif
+
 wxDialogBase::wxDialogBase()
 {
     m_returnCode = 0;
@@ -678,7 +686,316 @@ wxDialogBase::wxDialogBase()
     // dialog controls from reaching the parent frame which is usually
     // undesirable and can lead to unexpected and hard to find bugs
     SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The two tones of a dialog of WinUI follow its layout: see
+    // wxWinUIUpdateDialogTones() below.
+    Bind(wxEVT_SIZE, [this](wxSizeEvent& event)
+    {
+        event.Skip();
+        // The ground follows the size at once: a dialog which runs its own
+        // loop (a progress dialog, which grows with its message) does not
+        // dispatch what is posted to it, and its ground stopped short of
+        // its bottom. The place of the line needs the sizer laid out, which
+        // the handlers after this one do: it is set again then.
+        if ( GetSizer() && GetAutoLayout() )
+            Layout();
+        wxWinUIUpdateDialogTones(this);
+        CallAfter([this]() { wxWinUIUpdateDialogTones(this); });
+    });
+    Bind(wxEVT_SHOW, [this](wxShowEvent& event)
+    {
+        event.Skip();
+        if ( event.IsShown() )
+            CallAfter([this]() { wxWinUIUpdateDialogTones(this); });
+    });
+    // The colour of the title bar is not a brush of the theme: it is
+    // computed again when the theme changes.
+    Bind(wxEVT_SYS_COLOUR_CHANGED, [this](wxSysColourChangedEvent& event)
+    {
+        event.Skip();
+        CallAfter([this]() { wxWinUIUpdateDialogTones(this); });
+    });
+#endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+namespace
+{
+
+// The sizer of the standard buttons of a dialog, if it is in this item of a
+// sizer.
+wxSizer *wxWinUIFindStdButtons(wxSizerItem *item)
+{
+    wxSizer * const sizer = item ? item->GetSizer() : nullptr;
+    if ( !sizer )
+        return nullptr;
+
+    if ( wxDynamicCast(sizer, wxStdDialogButtonSizer) )
+        return sizer;
+
+    for ( wxSizerItem *child : sizer->GetChildren() )
+    {
+        if ( wxSizer * const found = wxWinUIFindStdButtons(child) )
+            return found;
+    }
+    return nullptr;
+}
+
+// The rectangle around the windows a sizer shows, in the coordinates of the
+// dialog; empty if it shows none. Not the rectangle of the sizer, which may
+// be higher than the buttons it holds.
+wxRect wxWinUISizerWindowsRect(wxSizer *sizer)
+{
+    wxRect all;
+    for ( wxSizerItem *child : sizer->GetChildren() )
+    {
+        if ( !child->IsShown() )
+            continue;
+
+        if ( wxWindow * const window = child->GetWindow() )
+            all.Union(window->GetRect());
+        else if ( child->GetSizer() )
+            all.Union(wxWinUISizerWindowsRect(child->GetSizer()));
+    }
+    return all;
+}
+
+// The room above and under the buttons of a dialog, as a ContentDialog has
+// it around its own: the same in all dialogs, in a window or over their
+// owner.
+const int wxWINUI_DIALOG_COMMAND_MARGIN = 24;
+
+// The spacers which give that room are items of the sizer of the dialog,
+// known by these identifiers.
+enum
+{
+    wxWINUI_DIALOG_ABOVE_COMMANDS = -31873,
+    wxWINUI_DIALOG_UNDER_COMMANDS = -31874
+};
+
+// Whether all the windows a sizer shows are buttons, and there is one.
+bool wxWinUISizerHoldsOnlyButtons(wxSizer *sizer, bool *any)
+{
+    for ( wxSizerItem *child : sizer->GetChildren() )
+    {
+        if ( !child->IsShown() )
+            continue;
+
+        if ( wxWindow * const window = child->GetWindow() )
+        {
+            if ( !wxDynamicCast(window, wxButton) )
+                return false;
+            *any = true;
+        }
+        else if ( child->GetSizer() &&
+                  !wxWinUISizerHoldsOnlyButtons(child->GetSizer(), any) )
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// The commands of a dialog laid out the usual way: a vertical sizer whose
+// last item holds the standard buttons (CreateButtonSizer(),
+// CreateStdDialogButtonSizer()...), or nothing but buttons (the row of a
+// wxWizard). That vertical sizer may be the last item of another one.
+struct wxWinUIDialogCommands
+{
+    wxBoxSizer *top = nullptr;      // the vertical sizer the row is in
+    wxSizerItem *row = nullptr;     // the last item the dialog put there
+    wxSizerItem *previous = nullptr;// the one before it
+    wxSizer *buttons = nullptr;     // the buttons, if the row holds them
+    wxSizerItem *above = nullptr;   // our spacers
+    wxSizerItem *under = nullptr;
+};
+
+wxWinUIDialogCommands wxWinUIFindDialogCommands(wxDialogBase *dialog)
+{
+    wxWinUIDialogCommands found;
+    wxBoxSizer *top = wxDynamicCast(dialog->GetSizer(), wxBoxSizer);
+    for ( int depth = 0; top && depth < 4; ++depth )
+    {
+        if ( top->GetOrientation() != wxVERTICAL )
+            break;
+
+        found = wxWinUIDialogCommands();
+        found.top = top;
+        for ( wxSizerItem *item : top->GetChildren() )
+        {
+            if ( item->GetId() == wxWINUI_DIALOG_ABOVE_COMMANDS )
+            {
+                found.above = item;
+            }
+            else if ( item->GetId() == wxWINUI_DIALOG_UNDER_COMMANDS )
+            {
+                found.under = item;
+            }
+            else if ( item->IsShown() )
+            {
+                found.previous = found.row;
+                found.row = item;
+            }
+        }
+
+        found.buttons = wxWinUIFindStdButtons(found.row);
+        wxSizer * const inner = found.row ? found.row->GetSizer() : nullptr;
+        if ( found.buttons || !inner )
+            break;
+
+        bool any = false;
+        if ( wxWinUISizerHoldsOnlyButtons(inner, &any) && any )
+        {
+            found.buttons = inner;
+            break;
+        }
+
+        // The content and the commands of the dialog may be in a sizer of
+        // their own, which is all the dialog holds.
+        top = wxDynamicCast(inner, wxBoxSizer);
+    }
+
+    if ( !found.top || found.top->GetOrientation() != wxVERTICAL )
+        return wxWinUIDialogCommands();
+    return found;
+}
+
+} // anonymous namespace
+
+// Gives the buttons of a dialog the same room above them, under the line of
+// its two tones, and under them, down to the bottom of the dialog: 24, as
+// around the buttons of a ContentDialog. The borders the dialog gave its row
+// of buttons are kept, and what they leave short of that is added by two
+// spacers, one before the row and one after it; the dialog is made higher
+// by as much. Called each time a dialog is about to be shown.
+void wxWinUINormalizeDialogCommands(wxWindow *window)
+{
+    wxDialogBase * const dialog = wxDynamicCast(window, wxDialogBase);
+    if ( !dialog || dialog->IsBeingDeleted() )
+        return;
+
+    wxWinUIDialogCommands commands = wxWinUIFindDialogCommands(dialog);
+    if ( !commands.top )
+        return;
+
+    // What an earlier pass added is taken back: the row may not be the same
+    // one, nor where it was.
+    int before = 0;
+    for ( wxSizerItem * const spacer : { commands.above, commands.under } )
+    {
+        if ( spacer )
+        {
+            before += spacer->GetMinSize().y;
+            commands.top->Remove(commands.top->GetChildren().IndexOf(spacer));
+        }
+    }
+    commands.above =
+    commands.under = nullptr;
+
+    int added = 0;
+    if ( commands.buttons )
+    {
+        dialog->Layout();
+
+        const wxRect buttons = wxWinUISizerWindowsRect(commands.buttons);
+        if ( !buttons.IsEmpty() )
+        {
+            const int margin = dialog->FromDIP(wxWINUI_DIALOG_COMMAND_MARGIN);
+            // From where the row starts, its border included, to the
+            // buttons; and from the buttons to the bottom of the dialog.
+            const int roomAbove = buttons.y - commands.row->GetPosition().y;
+            const int roomUnder = dialog->GetClientSize().y -
+                                  (buttons.GetBottom() + 1);
+            // The content does not touch the line either: 12 under it,
+            // less what its own item leaves there.
+            const int underContent =
+                commands.previous && (commands.previous->GetFlag() & wxBOTTOM)
+                    ? commands.previous->GetBorder() : 0;
+            const int pad = wxMax(0, dialog->FromDIP(12) - underContent);
+            const int above = wxMax(0, margin + pad - roomAbove);
+            const int under = wxMax(0, margin - roomUnder);
+
+            const int index = commands.top->GetChildren().IndexOf(commands.row);
+            commands.top->Insert(index, 0, above)
+                ->SetId(wxWINUI_DIALOG_ABOVE_COMMANDS);
+            commands.top->Add(0, under)->SetId(wxWINUI_DIALOG_UNDER_COMMANDS);
+            added = above + under;
+        }
+    }
+
+    if ( const int delta = added - before )
+    {
+        wxSize least = dialog->GetMinSize();
+        if ( least.y > 0 )
+        {
+            least.y += delta;
+            dialog->SetMinSize(least);
+        }
+        wxSize most = dialog->GetMaxSize();
+        if ( most.y > 0 )
+        {
+            most.y += delta;
+            dialog->SetMaxSize(most);
+        }
+
+        const wxSize client = dialog->GetClientSize();
+        dialog->SetClientSize(client.x, client.y + delta);
+    }
+
+    dialog->Layout();
+}
+
+// A dialog of WinUI (ContentDialog) has two tones: its content on a lighter
+// layer, its commands under a line on the ground of the window. A wxDialog
+// laid out the usual way gets the same: what is above the room of its row
+// of buttons is the content.
+void wxWinUIUpdateDialogTones(wxDialogBase *dialog)
+{
+    if ( !dialog || dialog->IsBeingDeleted() )
+        return;
+
+    int height = 0;
+    const wxWinUIDialogCommands commands = wxWinUIFindDialogCommands(dialog);
+    if ( commands.buttons )
+    {
+        const wxRect buttons = wxWinUISizerWindowsRect(commands.buttons);
+        if ( buttons.IsEmpty() )
+        {
+            // The row of the buttons is there without a button (a progress
+            // dialog which cannot be cancelled): no commands, all of the
+            // dialog is content, as a ContentDialog without buttons is. A
+            // little more than the client area, for the line under the
+            // content to be out of it.
+            height = dialog->GetClientSize().y + dialog->FromDIP(2);
+        }
+        else
+        {
+            // The line is 24 above the buttons: see
+            // wxWinUINormalizeDialogCommands(), which made room for that.
+            const wxSizerItem * const first =
+                commands.above ? commands.above : commands.row;
+            height = wxMax(
+                first->GetPosition().y,
+                buttons.y - dialog->FromDIP(wxWINUI_DIALOG_COMMAND_MARGIN));
+        }
+    }
+
+    // A dialog shown over its owner has the band of its title above its
+    // client area, and the ground of a ContentDialog whatever it holds: all
+    // of it is content when it has no row of buttons.
+    if ( const int band = dialog->GetClientAreaOrigin().y )
+    {
+        height = height > 0 && height <= dialog->GetClientSize().y
+            ? height + band
+            : dialog->GetSize().y + dialog->FromDIP(2);
+    }
+
+    wxWinUISetDialogContentTone(dialog, height);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 wxWindow *
 wxDialogBase::CheckIfCanBeUsedAsParent(wxWindowMode modality,
@@ -799,7 +1116,14 @@ wxSizer *wxDialogBase::CreateSeparatedSizer(wxSizer *sizer)
 {
     // Mac Human Interface Guidelines recommend not to use static lines as
     // grouping elements
-#if wxUSE_STATLINE && !defined(__WXMAC__)
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The commands of a dialog of WinUI are under the line of its two tones
+    // (see wxWinUIUpdateDialogTones()): no other line, which some dialogs
+    // had and others had not, but the room for that one, with as much above
+    // it as under it.
+    // The room of the commands is given when the dialog is shown, the same
+    // for all dialogs: see wxWinUINormalizeDialogCommands().
+#elif wxUSE_STATLINE && !defined(__WXMAC__)
     wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
     topsizer->Add(new wxStaticLine(this),
                    wxSizerFlags().Expand().DoubleBorder(wxBOTTOM));

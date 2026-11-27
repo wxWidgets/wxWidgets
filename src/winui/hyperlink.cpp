@@ -470,10 +470,13 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         impl->button = MUXC::HyperlinkButton();
         // A wxHyperlinkCtrl can be wider than its label. Keep the native
         // HyperlinkButton itself content-sized so XAML pointer, hover,
-        // context-menu and UIA invoke semantics all share the same label-only
-        // interactive area as wxGenericHyperlinkCtrl.
-        impl->button.Padding(
-            MUX::ThicknessHelper::FromUniformLength(0));
+        // context-menu and UIA invoke semantics all share the same
+        // interactive area as wxGenericHyperlinkCtrl. It keeps the padding
+        // of its style (11,5,11,6): without any, the fill it shows under
+        // the pointer and its focus rectangle were stuck to the letters,
+        // and its size, first computed with that padding (see
+        // DoGetBestSize()), changed once it was measured, which moved what
+        // was laid out after it a moment after the page was shown.
         impl->button.MinWidth(0);
         impl->button.MinHeight(0);
         impl->button.VerticalAlignment(
@@ -492,11 +495,16 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
                 winrt::Windows::Foundation::IInspectable const&,
                 MUX::RoutedEventArgs const&)
             {
-                if ( wxHyperlinkCtrl * const owner =
-                         callbackState->GetOwner(generation) )
+                // The handler may open a modal dialog: it runs once this
+                // callback has returned.
+                wxWinUIPostNotification([callbackState, generation]()
                 {
-                    owner->HandleClick();
-                }
+                    if ( wxHyperlinkCtrl * const owner =
+                             callbackState->GetOwner(generation) )
+                    {
+                        owner->HandleClick();
+                    }
+                });
             });
 
         impl->pointerEnteredToken = impl->button.PointerEntered(
@@ -736,9 +744,13 @@ wxSize wxHyperlinkCtrl::DoGetBestSize() const
     if ( text.empty() )
         return wxControl::DoGetBestSize();
 
+    // The padding of a HyperlinkButton, as it is measured once loaded.
     wxSize best = GetTextExtent(text);
     best.x += FromDIP(22);
-    best.y += FromDIP(12);
+    // 32 high, as it measures once loaded: a line of XAML is a little
+    // higher than the one of GDI, and the two pixels of difference moved
+    // what is under the link a moment after the page was shown.
+    best.y = wxMax(best.y + FromDIP(11), FromDIP(32));
     return best;
 }
 
@@ -783,7 +795,7 @@ bool wxHyperlinkCtrl::UpdateWinUIContent()
             callbackState->QuarantineApply();
             if ( callbackState->MarkApplyBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI HyperlinkButton model kept changing during "
                     "projection; quarantining this request until the next "
                     "external model mutation.");
@@ -807,7 +819,7 @@ bool wxHyperlinkCtrl::UpdateWinUIContent()
             // event loop. Do it before making the replay ticket consumable.
             if ( callbackState->MarkApplyBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI HyperlinkButton model kept changing during "
                     "projection; using its one bounded asynchronous replay.");
             }
@@ -1069,7 +1081,7 @@ void wxHyperlinkCtrl::HandleClick()
 
     if ( !wxLaunchDefaultBrowser(url) )
     {
-        wxLogWarning(
+        wxLogDebug(
             _("Failed to open URL \"%s\" in the default browser"), url);
     }
 }
@@ -1135,7 +1147,10 @@ bool wxWinUIHyperlinkTestAccess::Invoke(
         winrt::Microsoft::UI::Xaml::Automation::Peers::
             HyperlinkButtonAutomationPeer peer(button);
         peer.Invoke();
-        // Invoke() may synchronously destroy this. Do not inspect members.
+        // The click is queued, not sent from the XAML callback: deliver it
+        // before returning, as the callers expect its effect. Its handler
+        // may destroy this control: do not inspect members afterwards.
+        wxWinUIFlushNotifications();
         return true;
     }
     catch ( const winrt::hresult_error& e )

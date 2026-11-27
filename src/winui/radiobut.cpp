@@ -428,20 +428,18 @@ void wxRadioButton::DoEnable(bool enable)
 
 wxSize wxRadioButton::DoGetBestSize() const
 {
-    // Measure the actual WinUI radio button (glyph + label + padding).
-    if ( m_winui )
-    {
-        const wxSize size = m_winui->host.MeasureContent();
-        if ( size != wxDefaultSize )
-            return size;
-    }
-
-    // Not realised yet: fall back to a guess big enough for the label, which
-    // will be corrected once the content is loaded.
-    wxSize best = wxWindow::FromDIP(wxSize(32, 32), const_cast<wxRadioButton *>(this));
+    // The stock RadioButton template: a 20 DIP glyph, 8 DIPs before the
+    // label, 32 DIPs high. See wxCheckBox::DoGetBestClientSize() for why the
+    // RadioButton itself is not measured.
+    wxSize best = FromDIP(wxSize(20, 32));
     const wxString text = wxControl::GetLabelText(GetLabel());
     if ( !text.empty() )
-        best.x += GetTextExtent(text).x;
+    {
+        const wxSize label =
+            wxWinUIMeasureText(this, text, m_hasFont ? GetFont() : wxFont());
+        best.x += FromDIP(8 + 4) + label.x;
+        best.y = wxMax(best.y, label.y + FromDIP(11));
+    }
 
     return best;
 }

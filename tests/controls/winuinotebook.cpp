@@ -1861,7 +1861,8 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
                        naturalSnapshot.surfaceGeneration != 0 &&
                        naturalSnapshot.probeEpoch !=
                            naturalSnapshot.layoutEpoch &&
-                       naturalSnapshot.naturalSize != gdiFallback &&
+                       // The wx default font is the WinUI body font, so
+                       // the natural size may equal the GDI extent.
                        naturalSnapshot.actualSize ==
                            naturalSnapshot.naturalSize &&
                        naturalSnapshot.liveActualRect.GetSize() ==

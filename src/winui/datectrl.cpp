@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/winui/datectrl.cpp
-// Purpose:     wxWinUI wxDatePickerCtrl implementation (CalendarDatePicker)
+// Purpose:     wxWinUI wxDatePickerCtrl implementation (DatePicker,
+//              CalendarDatePicker)
 // Author:      wxWidgets development team
 // Created:     2026-06-01
 // Copyright:   (c) wxWidgets development team
@@ -23,6 +24,7 @@
 
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Input.h>
+#include <winrt/Microsoft.UI.Xaml.Media.h>
 #include <winrt/Windows.Globalization.h>
 #include <winrt/Windows.Globalization.DateTimeFormatting.h>
 #include <winrt/Windows.Globalization.NumberFormatting.h>
@@ -32,6 +34,7 @@ namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUXI = winrt::Microsoft::UI::Xaml::Input;
+namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 namespace WF = winrt::Windows::Foundation;
 namespace WG = winrt::Windows::Globalization;
 namespace WGDT = winrt::Windows::Globalization::DateTimeFormatting;
@@ -164,198 +167,45 @@ bool wxWinUIReadPeerDate(
 }
 
 
-enum class wxWinUIDatePartsState
+// The control has two faces. With wxDP_DROPDOWN it is the CalendarDatePicker
+// of WinUI, a field which opens a calendar. Without it (wxDP_SPIN, and the
+// default) it is the DatePicker of WinUI: the day, the month and the year in
+// the order of the user, each with its list when the control is pressed.
+
+// Sizes, in DIPs. A DatePicker is 296 wide at least in its style: too much
+// beside the controls of a wx layout, which was made for the narrow control
+// of Win32. It takes the room it is given up to the 456 of its style.
+enum
 {
-    Invalid,
-    Partial,
-    Complete
+    wxWINUI_DATE_MIN = 232,
+    wxWINUI_DATE_MAX = 456,
+    wxWINUI_DATE_CLEAR = 60,
+    wxWINUI_DATE_GAP = 8,
+    wxWINUI_DATE_HEIGHT = 32
 };
 
-wxWinUIDatePartsState wxWinUIReadDateParts(
-    const MUXC::ComboBox& era,
-    const MUXC::NumberBox& year,
-    const MUXC::NumberBox& month,
-    const MUXC::NumberBox& day,
-    int firstEra,
-    const winrt::hstring& calendarIdentifier,
-    bool allowNone,
-    const wxDateTime& minimum,
-    const wxDateTime& maximum,
-    wxDateTime *result)
+// The button of a DatePicker, which is what is seen of it.
+MUXC::Button wxWinUIFindDateButton(const MUX::DependencyObject& root)
 {
-    if ( !year || !month || !day || !result )
-        return wxWinUIDatePartsState::Invalid;
+    if ( !root )
+        return nullptr;
 
-    const double yearValue = year.Value();
-    const double monthValue = month.Value();
-    const double dayValue = day.Value();
-    const bool yearBlank = !std::isfinite(yearValue);
-    const bool monthBlank = !std::isfinite(monthValue);
-    const bool dayBlank = !std::isfinite(dayValue);
-    const bool eraBlank = era && era.SelectedIndex() < 0;
-    if ( yearBlank || monthBlank || dayBlank || eraBlank )
+    if ( const MUXC::Button button = root.try_as<MUXC::Button>() )
     {
-        if ( allowNone && yearBlank && monthBlank && dayBlank &&
-             (!era || eraBlank) )
+        if ( button.Name() == L"FlyoutButton" )
+            return button;
+    }
+
+    const int count = MUXM::VisualTreeHelper::GetChildrenCount(root);
+    for ( int n = 0; n != count; ++n )
+    {
+        if ( const MUXC::Button button = wxWinUIFindDateButton(
+                 MUXM::VisualTreeHelper::GetChild(root, n)) )
         {
-            *result = wxDefaultDateTime;
-            return wxWinUIDatePartsState::Complete;
+            return button;
         }
-        return allowNone
-                   ? wxWinUIDatePartsState::Partial
-                   : wxWinUIDatePartsState::Invalid;
     }
-
-    int selectedYear = 0;
-    int selectedMonth = 0;
-    int selectedDay = 0;
-    if ( !wxWinUIReadIntegralPart(year, &selectedYear) ||
-         !wxWinUIReadIntegralPart(month, &selectedMonth) ||
-         !wxWinUIReadIntegralPart(day, &selectedDay) ||
-         selectedYear < 1 || selectedMonth < 1 || selectedMonth > 13 )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    if ( !minimum.IsValid() || !maximum.IsValid() ||
-         minimum > maximum )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    WF::DateTime peerMinimum{};
-    WF::DateTime peerMaximum{};
-    if ( !wxWinUIToDateTime(minimum, &peerMinimum) ||
-         !wxWinUIToDateTime(maximum, &peerMaximum) )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    wxWinUICalendarDateParts minimumParts;
-    wxWinUICalendarDateParts maximumParts;
-    if ( !wxWinUIReadCalendarDateParts(
-             calendarIdentifier, peerMinimum, &minimumParts) ||
-         !wxWinUIReadCalendarDateParts(
-             calendarIdentifier, peerMaximum, &maximumParts) )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    const int selectedEra = era
-        ? firstEra + era.SelectedIndex()
-        : minimumParts.era;
-    if ( selectedEra < minimumParts.era ||
-         selectedEra > maximumParts.era ||
-         (!era && minimumParts.era != maximumParts.era) )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    WF::DateTime anchor{};
-    if ( !wxWinUIFindCalendarEraAnchor(
-             calendarIdentifier, selectedEra,
-             peerMinimum, peerMaximum, &anchor) )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    WF::DateTime eraEnd{};
-    if ( !wxWinUIFindCalendarEraEnd(
-             calendarIdentifier, selectedEra,
-             peerMinimum, peerMaximum, &eraEnd) )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    wxWinUICalendarDateParts eraMinimumParts;
-    wxWinUICalendarDateParts eraMaximumParts;
-    if ( !wxWinUIReadCalendarDateParts(
-             calendarIdentifier, anchor, &eraMinimumParts) ||
-         !wxWinUIReadCalendarDateParts(
-             calendarIdentifier, eraEnd, &eraMaximumParts) ||
-         selectedYear < eraMinimumParts.year ||
-         selectedYear > eraMaximumParts.year ||
-         (selectedYear == eraMinimumParts.year &&
-          selectedMonth < eraMinimumParts.month) ||
-         (selectedYear == eraMaximumParts.year &&
-          selectedMonth > eraMaximumParts.month) )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-
-    wxDateTime value;
-    try
-    {
-        WG::Calendar calendar;
-        calendar.ChangeCalendarSystem(calendarIdentifier);
-        calendar.SetDateTime(anchor);
-        calendar.AddYears(selectedYear - calendar.Year());
-        if ( calendar.Era() != selectedEra ||
-             calendar.Year() != selectedYear )
-        {
-            // An era may end before the anniversary of its first day (for
-            // example Showa 64). Anchor from its end for that partial final
-            // year instead.
-            calendar.SetDateTime(eraEnd);
-            calendar.AddYears(selectedYear - calendar.Year());
-            if ( calendar.Era() != selectedEra ||
-                 calendar.Year() != selectedYear )
-            {
-                return wxWinUIDatePartsState::Invalid;
-            }
-        }
-
-        int firstMonth = calendar.FirstMonthInThisYear();
-        int lastMonth = calendar.LastMonthInThisYear();
-        if ( selectedYear == eraMinimumParts.year )
-            firstMonth = wxMax(firstMonth, eraMinimumParts.month);
-        if ( selectedYear == eraMaximumParts.year )
-            lastMonth = wxMin(lastMonth, eraMaximumParts.month);
-        if ( selectedMonth < firstMonth || selectedMonth > lastMonth )
-            return wxWinUIDatePartsState::Invalid;
-        calendar.AddMonths(selectedMonth - calendar.Month());
-        if ( calendar.Era() != selectedEra ||
-             calendar.Year() != selectedYear ||
-             calendar.Month() != selectedMonth )
-        {
-            return wxWinUIDatePartsState::Invalid;
-        }
-
-        int firstDay = calendar.FirstDayInThisMonth();
-        int lastDay = calendar.LastDayInThisMonth();
-        if ( selectedYear == eraMinimumParts.year &&
-             selectedMonth == eraMinimumParts.month )
-        {
-            firstDay = wxMax(firstDay, eraMinimumParts.day);
-        }
-        if ( selectedYear == eraMaximumParts.year &&
-             selectedMonth == eraMaximumParts.month )
-        {
-            lastDay = wxMin(lastDay, eraMaximumParts.day);
-        }
-        selectedDay = wxClip(selectedDay, firstDay, lastDay);
-        calendar.Day(selectedDay);
-        if ( calendar.Era() != selectedEra ||
-             calendar.Year() != selectedYear ||
-             calendar.Month() != selectedMonth ||
-             calendar.Day() != selectedDay )
-        {
-            return wxWinUIDatePartsState::Invalid;
-        }
-        value = wxWinUIFromDateTime(calendar.GetDateTime());
-    }
-    catch ( const winrt::hresult_error& )
-    {
-        return wxWinUIDatePartsState::Invalid;
-    }
-    if ( !value.IsValid() )
-        return wxWinUIDatePartsState::Invalid;
-    if ( minimum.IsValid() && value < minimum )
-        value = minimum;
-    if ( maximum.IsValid() && value > maximum )
-        value = maximum;
-    *result = value;
-    return wxWinUIDatePartsState::Complete;
+    return nullptr;
 }
 
 } // namespace
@@ -387,44 +237,23 @@ public:
         }
         dateChangedToken = {};
 
-        const auto revokePart =
-            [](const MUXC::NumberBox& part,
-               winrt::event_token& token,
-               const char *operation)
-            {
-                if ( part && token.value )
-                {
-                    try
-                    {
-                        part.ValueChanged(token);
-                    }
-                    catch ( const winrt::hresult_error& e )
-                    {
-                        wxWinUILogException(operation, e);
-                    }
-                }
-                token = {};
-            };
-        revokePart(day, dayChangedToken,
-                   "WinUI DatePicker day ValueChanged removal");
-        revokePart(month, monthChangedToken,
-                   "WinUI DatePicker month ValueChanged removal");
-        revokePart(year, yearChangedToken,
-                   "WinUI DatePicker year ValueChanged removal");
-
-        if ( era && eraChangedToken.value )
+        if ( native )
         {
             try
             {
-                era.SelectionChanged(eraChangedToken);
+                if ( nativeChangedToken.value )
+                    native.SelectedDateChanged(nativeChangedToken);
+                if ( nativeLoadedToken.value )
+                    native.Loaded(nativeLoadedToken);
             }
             catch ( const winrt::hresult_error& e )
             {
                 wxWinUILogException(
-                    "WinUI DatePicker era SelectionChanged removal", e);
+                    "WinUI DatePicker callback removal", e);
             }
         }
-        eraChangedToken = {};
+        nativeChangedToken = {};
+        nativeLoadedToken = {};
 
         if ( clear && clearToken.value )
         {
@@ -476,12 +305,8 @@ public:
         host.Close();
         layoutRoot = nullptr;
         spinRoot = nullptr;
-        nullPlaceholder = nullptr;
-        era = nullptr;
         clear = nullptr;
-        day = nullptr;
-        month = nullptr;
-        year = nullptr;
+        native = nullptr;
         picker = nullptr;
         callbackState.reset();
         defaultsCaptured = false;
@@ -495,21 +320,19 @@ public:
 
     wxWinUIControlHost host;
     std::shared_ptr<wxWinUIDateCallbackState> callbackState;
+    // Holds the date and its range in the two styles; shown with
+    // wxDP_DROPDOWN only.
     MUXC::CalendarDatePicker picker{ nullptr };
+    // Without wxDP_DROPDOWN: the DatePicker, with the button which empties
+    // it beside it when the control may have no date (wxDP_ALLOWNONE).
     MUXC::Grid spinRoot{ nullptr };
-    MUXC::TextBlock nullPlaceholder{ nullptr };
-    MUXC::ComboBox era{ nullptr };
-    MUXC::NumberBox day{ nullptr };
-    MUXC::NumberBox month{ nullptr };
-    MUXC::NumberBox year{ nullptr };
+    MUXC::DatePicker native{ nullptr };
     MUXC::Button clear{ nullptr };
     MUX::FrameworkElement layoutRoot{ nullptr };
     MUX::XamlRoot layoutXamlRoot{ nullptr };
     winrt::event_token dateChangedToken{};
-    winrt::event_token dayChangedToken{};
-    winrt::event_token monthChangedToken{};
-    winrt::event_token yearChangedToken{};
-    winrt::event_token eraChangedToken{};
+    winrt::event_token nativeChangedToken{};
+    winrt::event_token nativeLoadedToken{};
     winrt::event_token clearToken{};
     winrt::event_token layoutLoadedToken{};
     std::vector<MUXC::Control> focusParts;
@@ -518,9 +341,11 @@ public:
     WF::DateTime defaultMaximum{};
     WF::DateTime civilMinimum{};
     WF::DateTime civilMaximum{};
+    // The years of the lists of a DatePicker which was given none: a hundred
+    // before today and a hundred after.
+    WF::DateTime nativeDefaultMinimum{};
+    WF::DateTime nativeDefaultMaximum{};
     winrt::hstring calendarIdentifier;
-    int firstEra = 0;
-    int lastEra = 0;
     wxString localePattern;
     wxString nullText;
     bool defaultsCaptured = false;
@@ -821,85 +646,59 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
         if ( m_winui->spinStyle )
         {
-            m_winui->day = wxWinUICreateDatePart(
-                1, 31, 64, 1, language);
-            m_winui->month = wxWinUICreateDatePart(
-                1, 13, 64, 1, language);
-            m_winui->year = wxWinUICreateDatePart(
-                1, 9999, 88,
-                (style & wxDP_SHOWCENTURY) ? 4 : 2,
-                language);
+            const MUXC::DatePicker native;
+            if ( !language.empty() )
+                native.Language(language);
+            native.CalendarIdentifier(m_winui->calendarIdentifier);
+            native.YearFormat((style & wxDP_SHOWCENTURY)
+                                  ? L"{year.full}"
+                                  : L"{year.abbreviated}");
+            native.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
+            native.VerticalAlignment(MUX::VerticalAlignment::Center);
+            // The style of a DatePicker makes it 30 high, among the
+            // controls of a form, which are 32: two more above its text,
+            // which is then on the line of the text of a field.
+            native.Resources().Insert(
+                winrt::box_value(L"DatePickerHostPadding"),
+                winrt::box_value(MUX::Thickness{0, 5, 0, 6}));
+            native.Resources().Insert(
+                winrt::box_value(L"DatePickerHostMonthPadding"),
+                winrt::box_value(MUX::Thickness{9, 5, 0, 6}));
             MUXA::AutomationProperties::SetName(
-                m_winui->day, wxWinUIToHString(_("Day")));
-            MUXA::AutomationProperties::SetName(
-                m_winui->month, wxWinUIToHString(_("Month")));
-            MUXA::AutomationProperties::SetName(
-                m_winui->year, wxWinUIToHString(_("Year")));
-            WG::Calendar eraCalendar = language.empty()
-                ? WG::Calendar()
-                : WG::Calendar(
-                      std::vector<winrt::hstring>{language});
-            eraCalendar.ChangeCalendarSystem(
-                m_winui->calendarIdentifier);
-            m_winui->firstEra = eraCalendar.FirstEra();
-            m_winui->lastEra = eraCalendar.LastEra();
-            if ( !(style & wxDP_SHOWCENTURY) )
-            {
-                m_winui->year.NumberFormatter(
-                    winrt::make<wxWinUITwoDigitYearFormatter>(
-                        wxWinUIResolveTwoDigitYearMaximum(
-                            m_winui->calendarIdentifier,
-                            language,
-                            m_winui->firstEra,
-                            m_winui->lastEra,
-                            m_winui->civilMinimum,
-                            m_winui->civilMaximum),
-                        language));
-            }
-            const bool patternHasEra =
-                m_winui->localePattern.Find("{era.") != wxNOT_FOUND;
-            if ( patternHasEra ||
-                 m_winui->firstEra != m_winui->lastEra )
-            {
-                m_winui->era = MUXC::ComboBox();
-                if ( !language.empty() )
-                    m_winui->era.Language(language);
-                m_winui->era.MinWidth(72);
-                MUXA::AutomationProperties::SetName(
-                    m_winui->era, wxWinUIToHString(_("Era")));
-                for ( int eraValue = m_winui->firstEra;
-                      eraValue <= m_winui->lastEra;
-                      ++eraValue )
-                {
-                    winrt::hstring label;
-                    WF::DateTime anchor{};
-                    if ( wxWinUIFindCalendarEraAnchor(
-                             m_winui->calendarIdentifier,
-                             eraValue,
-                             m_winui->civilMinimum,
-                             m_winui->civilMaximum,
-                             &anchor) )
-                    {
-                        eraCalendar.SetDateTime(anchor);
-                        label = eraCalendar.EraAsString();
-                    }
-                    if ( label.empty() )
-                    {
-                        label = wxWinUIToHString(
-                            wxString::Format("%d", eraValue));
-                    }
-                    m_winui->era.Items().Append(
-                        winrt::box_value(label));
-                }
-            }
+                native, wxWinUIToHString(_("Date")));
+            m_winui->native = native;
+            m_winui->nativeDefaultMinimum = native.MinYear();
+            m_winui->nativeDefaultMaximum = native.MaxYear();
+
             m_winui->spinRoot = MUXC::Grid();
             if ( !language.empty() )
                 m_winui->spinRoot.Language(language);
+            MUXC::ColumnDefinition nativeColumn;
+            nativeColumn.Width(MUX::GridLengthHelper::FromValueAndType(
+                1, MUX::GridUnitType::Star));
+            nativeColumn.MaxWidth(wxWINUI_DATE_MAX);
+            m_winui->spinRoot.ColumnDefinitions().Append(nativeColumn);
+            m_winui->spinRoot.Children().Append(native);
+            m_winui->focusParts.push_back(native.as<MUXC::Control>());
 
-            const auto spinChanged =
+            // The least width of the button of a DatePicker is a fixed
+            // resource of its template: it is set on the button itself,
+            // once there is one.
+            m_winui->nativeLoadedToken = native.Loaded(
+                [](WF::IInspectable const& sender,
+                   MUX::RoutedEventArgs const&)
+                {
+                    if ( const MUXC::Button button = wxWinUIFindDateButton(
+                             sender.try_as<MUX::DependencyObject>()) )
+                    {
+                        button.MinWidth(wxWINUI_DATE_MIN);
+                    }
+                });
+
+            m_winui->nativeChangedToken = native.SelectedDateChanged(
                 [callbackState, generation](
-                    MUXC::NumberBox const&,
-                    MUXC::NumberBoxValueChangedEventArgs const&)
+                    MUXC::DatePicker const&,
+                    MUXC::DatePickerSelectedValueChangedEventArgs const&)
                 {
                     wxDatePickerCtrl * const owner =
                         callbackState->GetOwner(generation);
@@ -911,134 +710,26 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
                     }
 
                     owner->OnPeerDateChanged();
-                };
-            m_winui->dayChangedToken =
-                m_winui->day.ValueChanged(spinChanged);
-            m_winui->monthChangedToken =
-                m_winui->month.ValueChanged(spinChanged);
-            m_winui->yearChangedToken =
-                m_winui->year.ValueChanged(spinChanged);
-            if ( m_winui->era )
-            {
-                m_winui->eraChangedToken =
-                    m_winui->era.SelectionChanged(
-                        [callbackState, generation](
-                            WF::IInspectable const&,
-                            MUXC::SelectionChangedEventArgs const&)
-                        {
-                            wxDatePickerCtrl * const owner =
-                                callbackState->GetOwner(generation);
-                            if ( !owner || !owner->m_winui ||
-                                 owner->m_winui->callbackState !=
-                                     callbackState ||
-                                 callbackState->IsPeerMutationInProgress() )
-                            {
-                                return;
-                            }
-                            owner->OnPeerDateChanged();
-                        });
-            }
-
-            // Reuse the same complete resolved pattern for the inline peer.
-            // The fields remain independent NumberBoxes, which gives
-            // wxDP_SPIN actual keyboard, pointer, touch and UIA increment /
-            // decrement behaviour.
-            auto layout =
-                wxWinUIParseDatePattern(m_winui->localePattern);
-            if ( m_winui->era &&
-                 std::find_if(
-                     layout.begin(), layout.end(),
-                     [](const wxWinUIDateLayoutToken& token)
-                     {
-                         return token.kind ==
-                             wxWinUIDateLayoutKind::Era;
-                     }) == layout.end() )
-            {
-                layout.insert(
-                    layout.begin(),
-                    {wxWinUIDateLayoutKind::Literal, " "});
-                layout.insert(
-                    layout.begin(),
-                    {wxWinUIDateLayoutKind::Era, wxString()});
-            }
-            int column = 0;
-            for ( const wxWinUIDateLayoutToken& token : layout )
-            {
-                MUXC::ColumnDefinition tokenColumn;
-                tokenColumn.Width(MUX::GridLengthHelper::Auto());
-                m_winui->spinRoot.ColumnDefinitions().Append(tokenColumn);
-
-                if ( token.kind == wxWinUIDateLayoutKind::Literal )
-                {
-                    MUXC::TextBlock literal;
-                    literal.Text(wxWinUIToHString(token.text));
-                    literal.Margin(MUX::Thickness{2, 0, 2, 0});
-                    literal.VerticalAlignment(
-                        MUX::VerticalAlignment::Center);
-                    MUXC::Grid::SetColumn(literal, column);
-                    m_winui->spinRoot.Children().Append(literal);
-                }
-                else
-                {
-                    if ( token.kind == wxWinUIDateLayoutKind::Era )
-                    {
-                        if ( m_winui->era )
-                        {
-                            m_winui->era.Margin(
-                                MUX::Thickness{2, 0, 2, 0});
-                            MUXC::Grid::SetColumn(
-                                m_winui->era, column);
-                            m_winui->spinRoot.Children().Append(
-                                m_winui->era);
-                            m_winui->focusParts.push_back(
-                                m_winui->era.as<MUXC::Control>());
-                        }
-                        ++column;
-                        continue;
-                    }
-
-                    MUXC::NumberBox part{ nullptr };
-                    switch ( token.kind )
-                    {
-                        case wxWinUIDateLayoutKind::Day:
-                            part = m_winui->day;
-                            break;
-                        case wxWinUIDateLayoutKind::Month:
-                            part = m_winui->month;
-                            break;
-                        case wxWinUIDateLayoutKind::Year:
-                            part = m_winui->year;
-                            break;
-                        case wxWinUIDateLayoutKind::Era:
-                            break;
-                        case wxWinUIDateLayoutKind::Literal:
-                            break;
-                    }
-                    if ( part )
-                    {
-                        MUXC::Grid::SetColumn(part, column);
-                        m_winui->spinRoot.Children().Append(part);
-                        m_winui->focusParts.push_back(
-                            part.as<MUXC::Control>());
-                    }
-                }
-                ++column;
-            }
+                });
 
             if ( style & wxDP_ALLOWNONE )
             {
-                const int valueColumnCount = column;
+                // A DatePicker without a date shows the names of its parts
+                // and has nothing to take a date away: a button beside it.
                 MUXC::ColumnDefinition clearColumn;
                 clearColumn.Width(MUX::GridLengthHelper::Auto());
                 m_winui->spinRoot.ColumnDefinitions().Append(clearColumn);
+                m_winui->spinRoot.ColumnSpacing(wxWINUI_DATE_GAP);
                 m_winui->clear = MUXC::Button();
                 m_winui->clear.Content(
                     winrt::box_value(wxWinUIToHString(_("Clear"))));
                 MUXA::AutomationProperties::SetName(
                     m_winui->clear, wxWinUIToHString(_("Clear")));
-                m_winui->clear.Margin(MUX::Thickness{4, 0, 0, 0});
-                m_winui->clear.MinWidth(52);
-                MUXC::Grid::SetColumn(m_winui->clear, column);
+                m_winui->clear.MinWidth(
+                    wxWINUI_DATE_CLEAR - wxWINUI_DATE_GAP);
+                m_winui->clear.VerticalAlignment(
+                    MUX::VerticalAlignment::Center);
+                MUXC::Grid::SetColumn(m_winui->clear, 1);
                 m_winui->clearToken = m_winui->clear.Click(
                     [callbackState, generation](
                         WF::IInspectable const&,
@@ -1058,25 +749,6 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
                 m_winui->spinRoot.Children().Append(m_winui->clear);
                 m_winui->focusParts.push_back(
                     m_winui->clear.as<MUXC::Control>());
-
-                m_winui->nullPlaceholder = MUXC::TextBlock();
-                m_winui->nullPlaceholder.Text(
-                    wxWinUIToHString(m_winui->nullText));
-                m_winui->nullPlaceholder.Margin(
-                    MUX::Thickness{8, 0, 4, 0});
-                m_winui->nullPlaceholder.VerticalAlignment(
-                    MUX::VerticalAlignment::Center);
-                m_winui->nullPlaceholder.IsHitTestVisible(false);
-                m_winui->nullPlaceholder.Visibility(
-                    m_value.IsValid()
-                        ? MUX::Visibility::Collapsed
-                        : MUX::Visibility::Visible);
-                MUXC::Grid::SetColumn(m_winui->nullPlaceholder, 0);
-                MUXC::Grid::SetColumnSpan(
-                    m_winui->nullPlaceholder,
-                    wxMax(1, valueColumnCount));
-                m_winui->spinRoot.Children().Append(
-                    m_winui->nullPlaceholder);
             }
 
             for ( const MUXC::Control& part : m_winui->focusParts )
@@ -1176,7 +848,7 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
         const MUXC::Grid spinRoot = owner->m_winui->spinRoot;
         const MUXC::Control spinFocus =
             owner->m_winui->focusParts.empty()
-                ? owner->m_winui->day.as<MUXC::Control>()
+                ? MUXC::Control{ nullptr }
                 : owner->m_winui->focusParts.front();
         const bool spinStyle = owner->m_winui->spinStyle;
         const MUX::UIElement content =
@@ -1385,9 +1057,9 @@ void wxDatePickerCtrl::SetNullText(const wxString& text)
     try
     {
         m_winui->nullText = text;
+        // The CalendarDatePicker shows it. A DatePicker without a date
+        // shows the names of its parts, and no other text.
         m_winui->picker.PlaceholderText(wxWinUIToHString(text));
-        if ( m_winui->nullPlaceholder )
-            m_winui->nullPlaceholder.Text(wxWinUIToHString(text));
         InvalidateBestSize();
     }
     catch ( const winrt::hresult_error& e )
@@ -1399,16 +1071,42 @@ void wxDatePickerCtrl::SetNullText(const wxString& text)
 
 wxSize wxDatePickerCtrl::DoGetBestSize() const
 {
-    wxSize size(m_winui && m_winui->spinStyle
-                    ? 232 + (HasFlag(wxDP_ALLOWNONE) ? 56 : 0)
-                    : 200,
-                32);
+    if ( m_winui && m_winui->spinStyle )
+    {
+        // Not what the DatePicker measures: its least width is set once it
+        // has its template, and the size the layout of the program is made
+        // with must not depend on when it is asked.
+        // (Its height is measured: a line of text is not a whole number of
+        // pixels at every scale of the screen.)
+        int height = wxWINUI_DATE_HEIGHT;
+        if ( m_winui->spinRoot )
+        {
+            try
+            {
+                const float infinity = std::numeric_limits<float>::infinity();
+                m_winui->spinRoot.Measure(WF::Size{infinity, infinity});
+                const float desired = m_winui->spinRoot.DesiredSize().Height;
+                if ( std::isfinite(desired) )
+                {
+                    height = wxMax(height,
+                                   static_cast<int>(std::ceil(desired)));
+                }
+            }
+            catch ( const winrt::hresult_error& )
+            {
+            }
+        }
+
+        return wxWindow::FromDIP(
+            wxSize(wxWINUI_DATE_MIN +
+                        (HasFlag(wxDP_ALLOWNONE) ? wxWINUI_DATE_CLEAR : 0),
+                   height),
+            const_cast<wxDatePickerCtrl*>(this));
+    }
+
+    wxSize size(200, 32);
     const MUX::FrameworkElement root =
-        m_winui
-            ? (m_winui->spinStyle
-                   ? m_winui->spinRoot.as<MUX::FrameworkElement>()
-                   : m_winui->picker.as<MUX::FrameworkElement>())
-            : nullptr;
+        m_winui ? m_winui->picker.as<MUX::FrameworkElement>() : nullptr;
     if ( root )
     {
         try
@@ -1497,23 +1195,49 @@ bool wxDatePickerCtrl::ApplyStateToPeer(const wxDateTime& value,
     const std::uint64_t generation = state->Generation();
     const std::uint64_t revision = state->StateRevision();
     const MUXC::CalendarDatePicker picker = m_winui->picker;
-    const bool spinStyle = m_winui->spinStyle;
-    const MUXC::NumberBox yearPart = m_winui->year;
-    const MUXC::NumberBox monthPart = m_winui->month;
-    const MUXC::NumberBox dayPart = m_winui->day;
-    const MUXC::ComboBox eraPart = m_winui->era;
-    const MUXC::TextBlock nullPlaceholder =
-        m_winui->nullPlaceholder;
-    const int firstEra = m_winui->firstEra;
-    const winrt::hstring calendarIdentifier =
-        m_winui->calendarIdentifier;
+    const MUXC::DatePicker native = m_winui->native;
+
+    // The lists of a DatePicker go from one year to another: those of the
+    // range of the program or, without one, the hundred years before and
+    // after today of the control (all the years the calendar has would make
+    // lists of thousands of lines, filled each time the date changes), and
+    // always the year of the value. The days of the range are seen to when
+    // the user has chosen, in OnPeerDateChanged().
+    WF::DateTime nativeMinimum = minimum.IsValid()
+        ? peerMinimum : m_winui->nativeDefaultMinimum;
+    WF::DateTime nativeMaximum = maximum.IsValid()
+        ? peerMaximum : m_winui->nativeDefaultMaximum;
+    if ( peerValue )
+    {
+        const WF::DateTime date = peerValue.Value();
+        if ( date < nativeMinimum )
+            nativeMinimum = date;
+        if ( date > nativeMaximum )
+            nativeMaximum = date;
+    }
+    const auto applyNativeBounds =
+        [&native](const WF::DateTime& first, const WF::DateTime& last)
+        {
+            // Never a first year after the last one on the way.
+            if ( first > native.MaxYear() )
+            {
+                native.MaxYear(last);
+                native.MinYear(first);
+            }
+            else
+            {
+                native.MinYear(first);
+                native.MaxYear(last);
+            }
+        };
     wxWinUIDatePeerMutationGuard guard(state);
 
     WF::DateTime previousMinimum{};
     WF::DateTime previousMaximum{};
     WF::IReference<WF::DateTime> previousValue{ nullptr };
-    wxWinUIDatePartsSnapshot previousParts;
-    MUX::Visibility previousNullVisibility = MUX::Visibility::Collapsed;
+    WF::DateTime previousNativeMinimum{};
+    WF::DateTime previousNativeMaximum{};
+    WF::IReference<WF::DateTime> previousNativeValue{ nullptr };
     bool snapshotCaptured = false;
     bool applied = false;
     try
@@ -1521,16 +1245,12 @@ bool wxDatePickerCtrl::ApplyStateToPeer(const wxDateTime& value,
         previousMinimum = picker.MinDate();
         previousMaximum = picker.MaxDate();
         previousValue = picker.Date();
-        if ( spinStyle &&
-             !wxWinUICaptureDateParts(
-                 eraPart,
-                 yearPart, monthPart, dayPart,
-                 &previousParts) )
+        if ( native )
         {
-            return false;
+            previousNativeMinimum = native.MinYear();
+            previousNativeMaximum = native.MaxYear();
+            previousNativeValue = native.SelectedDate();
         }
-        if ( nullPlaceholder )
-            previousNullVisibility = nullPlaceholder.Visibility();
         snapshotCaptured = true;
 
         wxWinUIApplyDateBounds(picker, peerMinimum, peerMaximum);
@@ -1540,21 +1260,17 @@ bool wxDatePickerCtrl::ApplyStateToPeer(const wxDateTime& value,
         const bool pickerApplied =
             wxWinUIReadPeerDate(actualValue, &actualCivil) &&
             wxWinUISameCivilDate(actualCivil, value);
-        const bool partsApplied =
-            !spinStyle ||
-            wxWinUIApplyDateParts(
-                eraPart,
-                yearPart, monthPart, dayPart,
-                firstEra, calendarIdentifier,
-                value, effectiveMinimum, effectiveMaximum);
-        if ( nullPlaceholder )
+        bool nativeApplied = true;
+        if ( native )
         {
-            nullPlaceholder.Visibility(
-                value.IsValid()
-                    ? MUX::Visibility::Collapsed
-                    : MUX::Visibility::Visible);
+            applyNativeBounds(nativeMinimum, nativeMaximum);
+            native.SelectedDate(peerValue);
+            wxDateTime nativeCivil;
+            nativeApplied =
+                wxWinUIReadPeerDate(native.SelectedDate(), &nativeCivil) &&
+                wxWinUISameCivilDate(nativeCivil, value);
         }
-        applied = pickerApplied && partsApplied;
+        applied = pickerApplied && nativeApplied;
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -1573,16 +1289,11 @@ bool wxDatePickerCtrl::ApplyStateToPeer(const wxDateTime& value,
                 wxWinUIApplyDateBounds(
                     picker, previousMinimum, previousMaximum);
                 picker.Date(previousValue);
-                if ( spinStyle )
+                if ( native )
                 {
-                    wxWinUIRestoreDateParts(
-                        eraPart,
-                        yearPart, monthPart, dayPart, previousParts);
-                }
-                if ( nullPlaceholder )
-                {
-                    nullPlaceholder.Visibility(
-                        previousNullVisibility);
+                    applyNativeBounds(
+                        previousNativeMinimum, previousNativeMaximum);
+                    native.SelectedDate(previousNativeValue);
                 }
             }
             catch ( const winrt::hresult_error& e )
@@ -1631,36 +1342,29 @@ void wxDatePickerCtrl::OnPeerDateChanged()
     {
         if ( spinStyle )
         {
-            const wxDateTime effectiveMinimum =
-                m_rangeMin.IsValid()
-                    ? m_rangeMin
-                    : wxWinUIFromDateTime(m_winui->civilMinimum);
-            const wxDateTime effectiveMaximum =
-                m_rangeMax.IsValid()
-                    ? m_rangeMax
-                    : wxWinUIFromDateTime(m_winui->civilMaximum);
-            const wxWinUIDatePartsState readState =
-                wxWinUIReadDateParts(
-                    m_winui->era,
-                    m_winui->year, m_winui->month, m_winui->day,
-                    m_winui->firstEra,
-                    m_winui->calendarIdentifier,
-                    HasFlag(wxDP_ALLOWNONE),
-                    effectiveMinimum, effectiveMaximum, &value);
-            if ( readState == wxWinUIDatePartsState::Partial )
+            if ( const auto ref = m_winui->native.SelectedDate() )
             {
-                // A nullable spin peer must allow the user to rebuild a date
-                // one component at a time after clearing it. Preserve every
-                // finite component and wait until the triplet is complete.
-                if ( m_winui->nullPlaceholder )
+                value = wxWinUIFromDateTime(ref.Value());
+                if ( !value.IsValid() )
                 {
-                    m_winui->nullPlaceholder.Visibility(
-                        MUX::Visibility::Collapsed);
+                    ApplyToPeer();
+                    return;
                 }
-                return;
+                // The lists of a DatePicker are limited by years only: a
+                // day chosen before the first one of the range, or after
+                // its last one, becomes that one.
+                if ( m_rangeMin.IsValid() && value < m_rangeMin )
+                    value = m_rangeMin;
+                if ( m_rangeMax.IsValid() && value > m_rangeMax )
+                    value = m_rangeMax;
             }
-            if ( readState == wxWinUIDatePartsState::Invalid )
+            else if ( HasFlag(wxDP_ALLOWNONE) )
             {
+                value = wxDefaultDateTime;
+            }
+            else
+            {
+                // No date where one is required: the last one comes back.
                 ApplyToPeer();
                 return;
             }
@@ -1837,26 +1541,8 @@ bool wxWinUIDatePickerTestAccess::GetPeerState(
         {
             if ( control.m_winui->spinStyle )
             {
-                const wxDateTime effectiveMinimum =
-                    control.m_rangeMin.IsValid()
-                        ? control.m_rangeMin
-                        : wxWinUIFromDateTime(
-                              control.m_winui->civilMinimum);
-                const wxDateTime effectiveMaximum =
-                    control.m_rangeMax.IsValid()
-                        ? control.m_rangeMax
-                        : wxWinUIFromDateTime(
-                              control.m_winui->civilMaximum);
-                if ( wxWinUIReadDateParts(
-                         control.m_winui->era,
-                         control.m_winui->year, control.m_winui->month,
-                         control.m_winui->day,
-                         control.m_winui->firstEra,
-                         control.m_winui->calendarIdentifier,
-                         control.HasFlag(wxDP_ALLOWNONE),
-                         effectiveMinimum, effectiveMaximum,
-                         value) !=
-                     wxWinUIDatePartsState::Complete )
+                if ( !wxWinUIReadPeerDate(
+                         control.m_winui->native.SelectedDate(), value) )
                 {
                     return false;
                 }
@@ -1940,104 +1626,49 @@ bool wxWinUIDatePickerTestAccess::GetSpinFields(
     if ( !control.m_winui || !control.m_winui->spinStyle )
         return false;
 
-    int actualYear = 0;
-    int actualMonth = 0;
-    int actualDay = 0;
-    if ( !wxWinUIReadIntegralPart(control.m_winui->year, &actualYear) ||
-         !wxWinUIReadIntegralPart(control.m_winui->month, &actualMonth) ||
-         !wxWinUIReadIntegralPart(control.m_winui->day, &actualDay) )
+    // What the DatePicker shows: the parts of its date in its calendar.
+    wxWinUICalendarDateParts parts;
+    try
+    {
+        const auto date = control.m_winui->native.SelectedDate();
+        if ( !date ||
+             !wxWinUIReadCalendarDateParts(
+                 control.m_winui->native.CalendarIdentifier(),
+                 date.Value(), &parts) )
+        {
+            return false;
+        }
+    }
+    catch ( const winrt::hresult_error& )
     {
         return false;
     }
 
     if ( year )
-        *year = actualYear;
+        *year = parts.year;
     if ( month )
-        *month = actualMonth;
+        *month = parts.month;
     if ( day )
-        *day = actualDay;
+        *day = parts.day;
     return true;
 }
 
-bool wxWinUIDatePickerTestAccess::SetSpinPart(
-    wxDatePickerCtrl& control,
-    unsigned part, int value)
+bool wxWinUIDatePickerTestAccess::UsesNativePicker(
+    const wxDatePickerCtrl& control)
 {
-    if ( !control.m_winui || !control.m_winui->spinStyle ||
-         !control.m_winui->callbackState || part >= 3 )
-    {
-        return false;
-    }
-
-    const auto parts = wxWinUIDateParts(
-        control.m_winui->year, control.m_winui->month, control.m_winui->day);
-    const MUXC::NumberBox peerPart = parts[part];
-    const auto state = control.m_winui->callbackState;
-    const std::uint64_t generation = state->Generation();
-    try
-    {
-        {
-            wxWinUIDatePeerMutationGuard guard(state);
-            peerPart.Value(value);
-        }
-
-        wxDatePickerCtrl * const owner = state->GetOwner(generation);
-        if ( !owner || !owner->m_winui ||
-             owner->m_winui->callbackState != state ||
-             !owner->m_winui->spinStyle )
-        {
-            return false;
-        }
-        owner->OnPeerDateChanged();
-        return true;
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException(
-            "WinUI DatePicker test spin-part mutation", e);
-        return false;
-    }
+    return control.m_winui && control.m_winui->spinStyle &&
+           control.m_winui->native;
 }
 
-bool wxWinUIDatePickerTestAccess::GetSpinPart(
-    const wxDatePickerCtrl& control,
-    unsigned part, int *value, bool *blank)
+wxString wxWinUIDatePickerTestAccess::GetPeerYearFormat(
+    const wxDatePickerCtrl& control)
 {
-    if ( !control.m_winui || !control.m_winui->spinStyle || part >= 3 )
-        return false;
-
-    try
-    {
-        const auto parts = wxWinUIDateParts(
-            control.m_winui->year, control.m_winui->month, control.m_winui->day);
-        const double peerValue = parts[part].Value();
-        const bool isBlank = !std::isfinite(peerValue);
-        if ( blank )
-            *blank = isBlank;
-        if ( value )
-        {
-            *value = isBlank
-                         ? 0
-                         : static_cast<int>(std::lround(peerValue));
-        }
-        return true;
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException(
-            "WinUI DatePicker test spin-part query", e);
-        return false;
-    }
-}
-
-wxString wxWinUIDatePickerTestAccess::GetSpinYearText(const wxDatePickerCtrl& control)
-{
-    if ( !control.m_winui || !control.m_winui->spinStyle || !control.m_winui->year )
+    if ( !control.m_winui || !control.m_winui->native )
         return wxString();
 
     try
     {
-        return wxWinUIFromHString(control.m_winui->year.Text());
+        return wxWinUIFromHString(control.m_winui->native.YearFormat());
     }
     catch ( const winrt::hresult_error& )
     {
@@ -2057,15 +1688,8 @@ wxString wxWinUIDatePickerTestAccess::GetPeerNullText(const wxDatePickerCtrl& co
 
     try
     {
-        const wxString pickerText =
-            wxWinUIFromHString(control.m_winui->picker.PlaceholderText());
-        if ( control.m_winui->nullPlaceholder &&
-             wxWinUIFromHString(control.m_winui->nullPlaceholder.Text()) !=
-                 pickerText )
-        {
-            return wxString();
-        }
-        return pickerText;
+        return wxWinUIFromHString(
+            control.m_winui->picker.PlaceholderText());
     }
     catch ( const winrt::hresult_error& )
     {

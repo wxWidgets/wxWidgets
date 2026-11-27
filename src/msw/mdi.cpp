@@ -21,7 +21,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_MDI && !defined(__WXUNIVERSAL__)
+#if wxUSE_MDI && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
 
 #include "wx/mdi.h"
 

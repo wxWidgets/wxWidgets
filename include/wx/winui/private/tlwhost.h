@@ -242,9 +242,10 @@ public:
     bool TryGetCarrierContent(
         winrt::Microsoft::UI::Xaml::UIElement& content) const;
 
-    // Last synced geometry, in physical pixels relative to the TLW client
-    // area (i.e. the area the island covers).
-    const wxRect& GetRectInTLW() const { return m_rectPx; }
+    // Geometry in physical pixels relative to the TLW client area (i.e. the
+    // area the island covers), brought up to date first if a window moved
+    // since it was last computed.
+    const wxRect& GetRectInTLW() const;
 
     bool IsContentLoaded() const
         { return m_contentLoaded; }
@@ -471,9 +472,31 @@ private:
     // with the slot.
     winrt::weak_ref<winrt::Microsoft::UI::Xaml::UIElement> m_preferredFocus;
 
-    wxRect m_rectPx;
-    wxRect m_visibleRectPx;
-    bool m_visible = false;
+    // Where the slot is in the TLW client area, what its ancestors leave
+    // visible of it, and whether it is shown at all. The XAML tree does not
+    // need them -- it is nested like the windows are, see WindowNode -- but
+    // hit testing does. They are a cache: read them through
+    // wxWinUITopLevelHost::RefreshSlotRects(), which recomputes them when a
+    // window moved since m_rectsGeneration.
+    mutable wxRect m_rectPx;
+    mutable wxRect m_visibleRectPx;
+    mutable bool m_visible = false;
+    mutable unsigned long long m_rectsGeneration = 0;
+
+    // The canvas the container is a child of: the one standing for the wx
+    // parent of the window, see wxWinUITopLevelHost::WindowNode. Null for a
+    // slot arranged by its parent's own XAML (m_isCompositeChild).
+    winrt::Microsoft::UI::Xaml::Controls::Canvas m_mountCanvas{ nullptr };
+
+    // What the last full sync wrote to the container: its rectangle relative
+    // to that canvas, the scale it was converted with, its visibility and
+    // its layout direction. A window which only moves or resizes is then
+    // repositioned at once, without the full sync, see SyncSlotPlacement().
+    wxRect m_placementPx;
+    double m_placementScale = 0;
+    bool m_placementVisible = false;
+    bool m_placementRTL = false;
+    bool m_placementValid = false;
 
     // Set when the carrier became UNREADABLE (TryGetCarrierContent failed):
     // the slot's XAML state can no longer be determined, its lifetime is
@@ -1015,6 +1038,65 @@ public:
     // the window is not an ancestor (nor the owner) of any slot, so the
     // caller can fall back to a full pass.
     bool MarkSlotsUnderAncestor(wxWindow *ancestor);
+
+    // ----- nested tree -----
+
+    // Brings m_rectPx, m_visibleRectPx and m_visible of the slot up to date.
+    void RefreshSlotRects(const wxWinUISlot& slot) const;
+    // True for the root canvas and for the canvases standing for windows:
+    // the structure of the tree, as opposed to anything shown in it.
+    bool IsStructuralElement(
+        const winrt::Microsoft::UI::Xaml::DependencyObject& element) const;
+    // Number of children of the root canvas which belong to that structure
+    // or to a slot. Any other child is content put there directly.
+    unsigned GetRootMountCount() const { return m_rootMounts; }
+    // The child of the root canvas this slot is in, or is.
+    winrt::Microsoft::UI::Xaml::UIElement
+    GetRootBranch(const wxWinUISlot& slot) const;
+
+    // A part of a window which XAML shows in its place: an element put in
+    // the canvas standing for the window and positioned by the caller, in
+    // DIPs from the client origin. It moves, is clipped and is hidden with
+    // the window. The window keeps its canvas for as long as it has a part;
+    // a part goes when its window is destroyed, or when a null element is
+    // set.
+    enum class WindowPartKind
+    {
+        // Drawn below everything the children show, and taking no input
+        // (IsHitTestVisible="False"): the pointer goes through to the window.
+        // What the window paints itself, then the sash of a splitter over it.
+        PaintSurface,
+        SplitterSash,
+        // The caret of a window which paints through a surface, over what
+        // it painted.
+        Caret,
+        // The border of a window (wxBORDER_SIMPLE, SUNKEN, THEME...). It
+        // lies around the client area of the window, which is what its own
+        // canvas stands for and may clip to: this one part is put in the
+        // canvas of the parent of the window. See SetWindowFrame().
+        Frame,
+        // Controls of their own, above the children.
+        HorizontalScrollBar,
+        VerticalScrollBar,
+        // A tone of the ground of the window, under everything else, what
+        // it paints included: the content area of a dialog.
+        Ground,
+        // The veil over all a top-level window shows, while a dialog is
+        // shown over it. It takes no input.
+        Smoke
+    };
+    void SetWindowPart(
+        wxWindow *window,
+        WindowPartKind kind,
+        const winrt::Microsoft::UI::Xaml::UIElement& element);
+    winrt::Microsoft::UI::Xaml::UIElement
+    GetWindowPart(wxWindow *window, WindowPartKind kind) const;
+    // Shows the border of a window around this rectangle of the screen, in
+    // pixels; no border if null. The HWND of a window which paints through
+    // a surface shows nothing, and its non-client band no more than the
+    // rest: the line is one of XAML, in the brush controls have theirs in.
+    void SetWindowFrame(wxWindow *window, const wxRect *screenRect);
+
     // Lets the window under the pointer paint what the routed move
     // invalidated; see the implementation.
     void LetPointerTargetPaint(WXHWND target);
@@ -1304,15 +1386,102 @@ private:
         const wxWinUIPointerSample& sample,
         bool sourceAlreadyHandled,
         unsigned long long eventEpoch);
+
+    // Step 3: what the pointer does is not delivered to wx from inside the
+    // XAML event any more. It waits here for the message loop, like a posted
+    // mouse message: a handler which opens a dialog, or runs a loop of its
+    // own, no longer does so inside a XAML delegate. This holds for a window
+    // which is not shown by XAML, for the window of a XAML control (its
+    // slot) and for what the root makes of an event XAML owns; they wait in
+    // one queue, in their order. One move at most waits at a time for each.
+    // WX_WINUI_INPUT_QUEUE=1 keeps this to the windows which are not shown
+    // by XAML, =0 delivers everything at once.
+    struct QueuedPointer
+    {
+        enum class Kind
+        {
+            Native,     // over a window which is not shown by XAML
+            Xaml,       // what XAML owns: the root only takes note of it
+            Slot        // for the window of a XAML control
+        };
+
+        Kind kind = Kind::Native;
+        wxWinUIPointerSample sample;
+
+        // Slot: the control the sample is for. Xaml: the control under the
+        // pointer, which is asked for its cursor, if any.
+        std::shared_ptr<wxWinUISlotLifetime> slot;
+
+        // Slot only.
+        wxWinUIRouteObservation observation;
+        bool wheelUsedByPeer = false;
+
+        // Xaml only: the event came from an element, not from the root.
+        bool ownedByXaml = false;
+    };
+
+    bool PushQueuedPointer(QueuedPointer&& entry);
+    bool QueueRootPointerSample(const wxWinUIPointerSample& sample);
+    bool QueueXamlPointerSample(
+        const wxWinUIPointerSample& sample,
+        const std::shared_ptr<wxWinUISlotLifetime>& cursorSlot,
+        bool ownedByXaml);
+    bool QueueSlotPointerSample(
+        const std::shared_ptr<wxWinUISlotLifetime>& state,
+        const wxWinUIPointerSample& sample,
+        const wxWinUIRouteObservation& observation,
+        bool wheelUsedByPeer);
+    void DrainRootPointerQueue();
+    void DropQueuedRootPointerMoves();
+
+    // What OnSlotPointer() does of a sample once it is read from the XAML
+    // event: now, or from the queue.
+    void ProcessSlotPointerSample(
+        const std::shared_ptr<wxWinUISlotLifetime>& state,
+        const wxWinUIPointerSample& sample,
+        const wxWinUIRouteObservation& observation,
+        bool wheelUsedByPeer);
+    static bool RootPointerQueueMessage(wxWindowMSW *window,
+                                        WXUINT message,
+                                        WXWPARAM wParam,
+                                        WXLPARAM lParam);
+    // What USER32 made of the last right button sent to a control, see
+    // SendSlotMouseEvent() and OnRootContextRequested().
+    const wxWindow *m_slotContextMenuWindow = nullptr;
+    bool m_slotContextMenuProcessed = false;
+    unsigned long long m_slotContextMenuTick = 0;
+    std::deque<QueuedPointer> m_rootPointerQueue;
+    bool m_rootPointerDrainPosted = false;
+    // Deliveries from the queue which have not returned yet.
+    unsigned m_rootPointerDelivering = 0;
     enum class XamlHitResolution
     {
         Miss,
         Hit,
         Unavailable
     };
+    // windowUnder, if not null, is given the window whose canvas is the
+    // topmost one under the point (the top-level window for the root), or
+    // null if content was hit first or no canvas was.
     XamlHitResolution PointOverXamlContent(
         const wxPoint& ptClientPx,
-        const winrt::Windows::Foundation::Point *exactRootDips = nullptr);
+        const winrt::Windows::Foundation::Point *exactRootDips = nullptr,
+        wxWindow **windowUnder = nullptr);
+
+    // See wxWinUIInputNodesEnabled(). The windows given a canvas for the
+    // pointer alone, each holding one reference to it.
+    std::set<wxWindow *> m_inputNodes;
+    void EnsureInputNodes(wxWindow *window);
+    void ForgetStrayInputNodes();
+    wxWindow *FindInputNodeWindow(
+        const winrt::Microsoft::UI::Xaml::UIElement& element) const;
+    // The last disagreement written, not to write it at every move.
+    const wxWindow *m_inputCompareNative = nullptr;
+    const wxWindow *m_inputCompareXaml = nullptr;
+    // The last window found by the walk through the windows because no
+    // canvas named one: written once to the input log, to know what is
+    // still missing before that walk can go.
+    const wxWindow *m_inputWalkLogged = nullptr;
 
     // Mirror the native target's cursor onto the island root while hovering
     // non-XAML areas (the island otherwise paints its own arrow everywhere);
@@ -1330,7 +1499,18 @@ private:
         const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args,
         bool emitSetCursorEvent,
         unsigned long long expectedEpoch);
+    // The same in two steps, for an event dealt with after it has returned:
+    // the control the event came from is found while the event is there,
+    // its cursor is asked for later.
+    std::shared_ptr<wxWinUISlotLifetime> FindXamlPointerCursorSlot(
+        const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args)
+        const;
+    void ApplyXamlPointerCursorForSlot(
+        const std::shared_ptr<wxWinUISlotLifetime>& cursorSlot,
+        bool emitSetCursorEvent,
+        unsigned long long expectedEpoch);
     void ObserveXamlPointerCursor();
+    void ReassertIslandPointerCursor();
     bool RelinquishIslandPointerCursor();
     bool SetIslandPointerCursor(
         const winrt::Microsoft::UI::Input::InputCursor& cursor,
@@ -1439,6 +1619,10 @@ private:
         double yDIP,
         POINT *screen,
         bool *inside) const;
+    // The gesture which asks for a context menu, made over a control shown
+    // by XAML and not taken by it: its window gets wxEVT_CONTEXT_MENU.
+    void OnRootContextRequested(
+        const winrt::Microsoft::UI::Xaml::Input::ContextRequestedEventArgs& args);
     bool SendSlotMouseEvent(
         const std::shared_ptr<wxWinUISlotLifetime>& state,
         const wxWinUIInputAction& action);
@@ -1595,12 +1779,92 @@ private:
     void BindSlotAncestors(wxWinUISlot& slot);
     void UnbindSlotAncestors(wxWinUISlot& slot);
 
-    // Reference-counted geometry tracking on the ancestors of the slotted
-    // windows: any ancestor move/size/show marks the whole host dirty.
+    // The XAML tree is nested like the windows are. Every window with a
+    // slot somewhere below it has a node: a canvas standing for its client
+    // area, child of the canvas of its own parent (the root canvas stands
+    // for the TLW). A slot container is a child of the canvas of its
+    // window's parent. Positions are thus relative to the parent, clipping
+    // and visibility are inherited from it, and moving a window moves
+    // everything below it by writing one position.
+    //
+    // A canvas clips to the client area of its window like the window does,
+    // from the first time something in it does not fit.
+    //
+    // A window which is a slot and has slots below it gets both: its
+    // container, and its node just above it in the same canvas. The node is
+    // never put inside the container, whose content would then pass its
+    // layout direction and its routed events on to the children.
+    struct WindowNode
+    {
+        // Number of slots below the window.
+        int refs = 0;
+        winrt::Microsoft::UI::Xaml::Controls::Canvas canvas{ nullptr };
+        // The canvas it is a child of.
+        winrt::Microsoft::UI::Xaml::Controls::Canvas mountCanvas{ nullptr };
+        winrt::Microsoft::UI::Xaml::Media::RectangleGeometry clip{ nullptr };
+        // Last values written: client rectangle relative to the parent's
+        // client origin, in physical pixels, the scale and the visibility.
+        wxRect rectPx;
+        double scale = 0;
+        bool shown = false;
+        bool synced = false;
+        // The clip is only applied once a child does not fit the client
+        // area, see NoteChildPlacement().
+        bool clipped = false;
+    };
+
     void AddAncestorRef(wxWindow *ancestor);
     void ReleaseAncestorRef(wxWindow *ancestor);
     void OnAncestorGeometry(wxEvent& event);
     void OnAncestorDestroy(wxWindowDestroyEvent& event);
+
+    // The canvas the children of this window go to.
+    winrt::Microsoft::UI::Xaml::Controls::Canvas
+    GetChildrenCanvas(wxWindow *parent) const;
+    // Screen position of the client origin of the window, which is what the
+    // positions written to that canvas are relative to.
+    wxPoint GetChildrenOriginOnScreen(wxWindow *parent) const;
+    void MountNode(wxWindow *window, WindowNode& node);
+    void UnmountNode(WindowNode& node);
+    void PruneRetiredCanvases(
+        winrt::Microsoft::UI::Xaml::Controls::Canvas canvas);
+    void MountSlotContainer(wxWinUISlot& slot);
+    bool UnmountSlotContainer(wxWinUISlot& slot);
+    // Moves an element of this tree to another canvas of it, giving the
+    // keyboard focus back to what had it inside.
+    void MoveToCanvas(
+        const winrt::Microsoft::UI::Xaml::UIElement& element,
+        const winrt::Microsoft::UI::Xaml::Controls::Canvas& from,
+        const winrt::Microsoft::UI::Xaml::Controls::Canvas& to);
+
+    // Geometry of one window, written as soon as Win32 reports it.
+    void ApplyWindowGeometry(wxWindow *window, bool zOrderMayHaveChanged);
+    bool SyncNode(wxWindow *window);
+    void SyncAllNodes();
+    // Tells the canvas of this window where one of its children was put,
+    // in physical pixels relative to it.
+    void NoteChildPlacement(wxWindow *parent, const wxRect& placement);
+    bool AnyChildOverflows(wxWindow *parent, const wxSize& size) const;
+    // Repositions the container of a slot whose window only moved or
+    // resized. Returns false when the slot needs the full sync instead.
+    bool SyncSlotPlacement(wxWinUISlot& slot);
+    // The rectangles of a slot placed on a canvas, from the windows.
+    struct SlotRects
+    {
+        // In the TLW client area.
+        wxRect rect;
+        // The same with the position relative to the parent canvas.
+        wxRect placement;
+        // What the slot's own clip leaves of rect...
+        wxRect ownVisible;
+        // ... and what the ancestors then leave of that.
+        wxRect visible;
+    };
+    bool ComputeSlotRects(wxWindow *window,
+                          bool hasClipRect,
+                          const wxWinUIClipRectDIP& clipRectDIP,
+                          SlotRects& rects) const;
+    bool IsTLWVisible() const;
 
     // Before initialization commits, m_tlw is an identity/registry key only:
     // every dereference is resolved afresh through m_tlwLifetime and checked
@@ -1633,6 +1897,10 @@ private:
     winrt::Microsoft::UI::Input::InputCursor
         m_lastIslandPointerCursor{ nullptr };
     WXHCURSOR m_lastIslandPointerHandle = nullptr;
+    // The object last given to the island, which is never null: what XAML
+    // may have replaced since is found by comparing with it.
+    winrt::Microsoft::UI::Input::InputCursor
+        m_islandPointerCursorSet{ nullptr };
     bool m_islandPointerCursorApplied = false;
     bool m_inputPointerSourceAuthoritative = false;
     bool m_rootPointerCursorAuthoritative = false;
@@ -1673,8 +1941,45 @@ private:
     std::vector<wxWinUISlot *> m_deferredDisconnectSlots;
     bool m_deferredDisconnectScheduled = false;
 
-    // Ancestors currently listened on, with their reference count.
-    std::map<wxWindow *, int> m_ancestorRefs;
+    // Ancestors of the slotted windows: listened on, and standing in the
+    // XAML tree as one canvas each.
+    std::map<wxWindow *, WindowNode> m_nodes;
+
+    struct WindowPart
+    {
+        winrt::Microsoft::UI::Xaml::UIElement element{ nullptr };
+        winrt::Microsoft::UI::Xaml::Controls::Canvas canvas{ nullptr };
+        // The window and its ancestors, each holding a reference on its
+        // canvas for this part.
+        std::vector<wxWindow *> chain;
+    };
+    static bool IsInteractivePart(WindowPartKind kind)
+    {
+        return kind != WindowPartKind::PaintSurface &&
+               kind != WindowPartKind::SplitterSash &&
+               kind != WindowPartKind::Caret &&
+               kind != WindowPartKind::Frame &&
+               kind != WindowPartKind::Ground &&
+               kind != WindowPartKind::Smoke;
+    }
+    std::vector<wxWindow *> GetNodeChain(wxWindow *window) const;
+    void RemoveWindowPart(wxWindow *window,
+                          WindowPartKind kind,
+                          bool windowIsAlive);
+    std::map<std::pair<wxWindow *, WindowPartKind>, WindowPart> m_parts;
+    // Parts which are controls: a point over one is over XAML content.
+    unsigned m_interactiveParts = 0;
+    // One more look at the cursor of the island is queued, see FlushSync().
+    bool m_cursorRecheckScheduled = false;
+    // Canvases of windows which are gone, kept in the tree for as long as
+    // something is left in them, see UnmountNode().
+    std::vector<winrt::Microsoft::UI::Xaml::Controls::Canvas>
+        m_retiredCanvases;
+    unsigned m_rootMounts = 0;
+    // The sibling order of the windows may differ from the one applied.
+    bool m_zOrderDirty = true;
+    // Visibility of the TLW the slots were last synced with.
+    bool m_tlwVisibleSynced = false;
 
     std::set<wxWindow *> m_dirty;
     bool m_allDirty = false;
@@ -1869,6 +2174,14 @@ private:
     // the grip's typed peer validation separate from native geometric hits.
     std::shared_ptr<NativeResizeRequest> m_nativeResize;
     bool m_nativeResizeWakePosted = false;
+
+    // A gesture which started on XAML content (a scrollbar or slider thumb,
+    // a list being dragged...) belongs to XAML until every button is up. The
+    // root router has no native window to route it to: it neither routes the
+    // moves of that pointer nor reacts to it leaving the island, both of
+    // which could cancel the capture the control relies on.
+    bool m_xamlGestureActive = false;
+    std::uint32_t m_xamlGesturePointerId = 0;
     PendingNativeDispatch m_inFlightNativeInput;
     unsigned long long m_nextNativeInputSequence = 0;
     unsigned long long m_nativeInputCancellationGeneration = 0;

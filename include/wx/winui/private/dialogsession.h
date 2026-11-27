@@ -170,6 +170,11 @@ private:
 WXDLLIMPEXP_CORE void
 wxWinUICancelTransientSessions(wxWindow *ownerOrTLW);
 
+// Whether a dialog is shown over this top-level window, as a ContentDialog in
+// its island: the keys are then for the dialog, and Tab moves among its
+// controls and not among those of the window behind it.
+WXDLLIMPEXP_CORE bool wxWinUIHasDialogOverlay(const wxWindow *tlw);
+
 // Mark the owning TLW as logically destroyed before its physical wxWindow
 // teardown can run. All current generations are invalidated immediately and
 // new registrations are rejected, while the destroy observer is deliberately

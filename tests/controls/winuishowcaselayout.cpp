@@ -177,8 +177,6 @@ TEST_CASE("Showcase collapsible content updates only the containing page extent"
     const wxSize collapsedExtent = fixture.page->GetVirtualSize();
     const wxRect frameRect = fixture.frame->GetRect();
     const wxSize pageSize = fixture.page->GetSize();
-    auto* const header = wxWindow::FindWindowByName(wxCollapsibleHeaderCtrlNameStr, pane);
-    REQUIRE(header);
     int changes = 0;
     fixture.page->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED, [&](wxCollapsiblePaneEvent& event)
     {
@@ -187,10 +185,10 @@ TEST_CASE("Showcase collapsible content updates only the containing page extent"
         event.Skip();
     });
 
-    // Send a native character to the real generic header on the private
-    // desktop. This runs OnChar->Collapse->CHANGED without physical input or
-    // fabricating the notification after manually changing the pane state.
-    ::SendMessageW(static_cast<HWND>(header->GetHandle()), WM_CHAR, VK_SPACE, 1);
+    // The pane is shown by a WinUI Expander: take the way of its Expanding
+    // notification, which is where a click on its header ends, without
+    // physical input.
+    pane->WinUIUserToggled(true);
     REQUIRE(pane->IsExpanded());
     REQUIRE(WaitShowcaseLayout([&] { return fixture.HasNativeScrollRange(); }));
     CHECK(changes == 1);
@@ -202,7 +200,7 @@ TEST_CASE("Showcase collapsible content updates only the containing page extent"
     CHECK(fixture.page->CalcUnscrolledPosition(footer->GetPosition()).y +
           footer->GetSize().y <= fixture.page->GetVirtualSize().y);
 
-    ::SendMessageW(static_cast<HWND>(header->GetHandle()), WM_CHAR, VK_SPACE, 1);
+    pane->WinUIUserToggled(false);
     REQUIRE(pane->IsCollapsed());
     const bool collapsedLayout = WaitShowcaseLayout([&]
     {

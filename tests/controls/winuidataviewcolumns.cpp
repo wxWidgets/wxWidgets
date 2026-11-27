@@ -282,31 +282,25 @@ TEST_CASE("WinUI DataView native move gesture previews a real marker before comm
     {
         return marker.grid.IsLoaded() &&
                marker.grid.Visibility() == X::Visibility::Visible &&
-               marker.grid.ActualWidth() == 9 && marker.grid.ActualHeight() == 36;
+               marker.grid.ActualWidth() == 2 && marker.grid.ActualHeight() == 32;
     }));
     CHECK_FALSE(marker.grid.IsHitTestVisible());
     CHECK(X::Automation::AutomationProperties::GetAccessibilityView(marker.grid) == A::AccessibilityView::Raw);
-    REQUIRE(marker.grid.Children().Size() == 3);
+    // A thin line in the accent colour, as the drop indicator of a WinUI
+    // table: one element, no caps.
+    REQUIRE(marker.grid.Children().Size() == 1);
     const auto stem = marker.grid.Children().GetAt(0).as<C::Border>();
-    const auto capTop = marker.grid.Children().GetAt(1).as<C::Border>();
-    const auto capBottom = marker.grid.Children().GetAt(2).as<C::Border>();
-    CHECK(stem.ActualWidth() == 3);
-    CHECK(stem.ActualHeight() == 36);
-    CHECK(capTop.ActualWidth() == 9);
-    CHECK(capTop.ActualHeight() == 3);
-    CHECK(capBottom.ActualWidth() == 9);
-    CHECK(capBottom.ActualHeight() == 3);
+    CHECK(stem.ActualWidth() == 2);
+    CHECK(stem.ActualHeight() == 32);
     REQUIRE(stem.Background());
-    REQUIRE(capTop.Background());
-    REQUIRE(capBottom.Background());
     // Compare in the island's coordinate system, not the RTL DataView root's
     // own logical coordinates (which undo that root's visual mirroring).
     const auto markerCentre = [&]
     {
-        return marker.grid.TransformToVisual(nullptr).TransformPoint({4.5f, 18.0f});
+        return marker.grid.TransformToVisual(nullptr).TransformPoint({1.0f, 16.0f});
     };
     const auto centreBefore = markerCentre();
-    const auto expectedBefore = canvas.TransformToVisual(nullptr).TransformPoint({300.0f, 18.0f});
+    const auto expectedBefore = canvas.TransformToVisual(nullptr).TransformPoint({300.0f, 16.0f});
     CHECK(centreBefore.X == Approx(expectedBefore.X).margin(0.5));
     CHECK(centreBefore.Y == Approx(expectedBefore.Y).margin(0.5));
 
@@ -314,7 +308,7 @@ TEST_CASE("WinUI DataView native move gesture previews a real marker before comm
     REQUIRE(WaitFor("insertion marker tracks the next native boundary", [&]
     {
         const auto actual = markerCentre();
-        const auto expected = canvas.TransformToVisual(nullptr).TransformPoint({360.0f, 18.0f});
+        const auto expected = canvas.TransformToVisual(nullptr).TransformPoint({360.0f, 16.0f});
         return std::abs(actual.X - expected.X) < 0.5;
     }));
     CHECK((rtl ? markerCentre().X < centreBefore.X : markerCentre().X > centreBefore.X));

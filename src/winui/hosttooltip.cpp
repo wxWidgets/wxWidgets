@@ -732,7 +732,7 @@ void wxWinUITopLevelHost::SynchronizeSlotToolTipPolicy(wxWinUISlot& slot)
                 if ( result ==
                         wxWinUIToolTipSuppressionResult::BudgetExhausted )
                 {
-                    wxLogWarning(
+                    wxLogDebug(
                         "wxWinUI: synchronous slot tooltip suppression "
                         "replacement budget exhausted");
                     if ( wxWinUISlot * const current = getCurrentSlot() )

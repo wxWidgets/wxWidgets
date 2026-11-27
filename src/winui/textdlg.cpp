@@ -33,6 +33,10 @@
 #include "wx/stockitem.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogcontracts.h"
+#include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
+
+#include <cmath>
 
 #include <algorithm>
 #include <memory>
@@ -44,9 +48,24 @@ namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace
 {
 
-wxSize wxWinUITextEntryBodySize(long style)
+// What the dialog shows, in DIPs: its message, which wraps at the width of
+// the field, and under it the field. No more: the buttons are under their
+// line right after it.
+wxSize wxWinUITextEntryBodySize(long style, const wxString& message,
+                                const wxWindow *window)
 {
-    return wxSize(360, (style & wxTE_MULTILINE) ? 220 : 90);
+    const int width = 360;
+    int lines = 0;
+    for ( const wxString& line : wxSplit(message, '\n', '\0') )
+    {
+        const int extent =
+            window ? window->ToDIP(window->GetTextExtent(line).x) : 0;
+        lines += wxMax(1, (extent + width - 1) / width);
+    }
+    lines = wxMax(1, lines);
+
+    return wxSize(width,
+                  lines * 20 + 8 + ((style & wxTE_MULTILINE) ? 140 : 32));
 }
 
 } // anonymous namespace
@@ -271,7 +290,8 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     {
         const wxSize naturalSize = FromDIP(
             wxWinUIDialogPresenter::GetWindowClientSize(
-                wxWinUITextEntryBodySize(style), (style & wxCANCEL) ? 2 : 1));
+                wxWinUITextEntryBodySize(style, message, this),
+                (style & wxCANCEL) ? 2 : 1));
         wxSize clientSize = GetClientSize();
         if ( sz.x == wxDefaultCoord )
             clientSize.x = naturalSize.x;
@@ -382,7 +402,8 @@ int wxTextEntryDialog::ShowModal()
         content.Children().Append(errorText);
 
         presenter.SetContent(content);
-        presenter.SetContentSize(wxWinUITextEntryBodySize(m_dialogStyle));
+        presenter.SetContentSize(
+            wxWinUITextEntryBodySize(m_dialogStyle, m_message, this));
 
         bool accepted = false;
         wxString acceptedValue;
@@ -455,6 +476,120 @@ int wxTextEntryDialog::ShowModal()
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("TextEntryDialog presenter", e);
+    }
+
+    return wxID_CANCEL;
+}
+
+namespace
+{
+
+// What the dialog of numbers shows, in DIPs: as the dialog of text, with
+// the header of the field when there is a prompt.
+wxSize wxWinUINumberEntryBodySize(const wxString& message,
+                                  const wxString& prompt,
+                                  const wxWindow *window)
+{
+    wxSize body = wxWinUITextEntryBodySize(0, message, window);
+    if ( !prompt.empty() )
+        body.y += 28;
+    return body;
+}
+
+} // anonymous namespace
+
+wxSize wxWinUIGetNumberEntryClientSize(const wxWindow *dialog,
+                                       const wxString& message,
+                                       const wxString& prompt)
+{
+    return wxWinUIDialogPresenter::GetWindowClientSize(
+        wxWinUINumberEntryBodySize(message, prompt, dialog), 2);
+}
+
+int wxWinUIShowNumberEntry(wxDialog *dialog,
+                           const wxString& message,
+                           const wxString& prompt,
+                           long *value,
+                           long min, long max)
+{
+    wxCHECK_MSG( dialog && value, wxID_CANCEL, "no dialog or no value" );
+
+    if ( !wxWinUI3Initialize() )
+        return wxID_CANCEL;
+
+    try
+    {
+        using namespace winrt::Microsoft::UI::Xaml;
+        using namespace winrt::Microsoft::UI::Xaml::Controls;
+
+        wxWinUIDialogPresenter presenter;
+        if ( !presenter.CreateForDialog(dialog) )
+            return wxID_CANCEL;
+
+        StackPanel content;
+        content.Spacing(8);
+
+        TextBlock text;
+        wxWinUISetDialogText(text, message);
+        content.Children().Append(text);
+
+        NumberBox number;
+        if ( !prompt.empty() )
+            number.Header(winrt::box_value(wxWinUIToHString(prompt)));
+        number.Minimum(static_cast<double>(min));
+        number.Maximum(static_cast<double>(max));
+        number.Value(static_cast<double>(*value));
+        number.SmallChange(1);
+        number.LargeChange(10);
+        number.AcceptsExpression(false);
+        number.SpinButtonPlacementMode(
+            NumberBoxSpinButtonPlacementMode::Inline);
+        number.MinWidth(320);
+        content.Children().Append(number);
+
+        presenter.SetContent(content);
+        presenter.SetContentSize(
+            wxWinUINumberEntryBodySize(message, prompt, dialog));
+
+        long accepted = *value;
+        presenter.SetAcceptHandler(
+            [number, &accepted, min, max](int id) -> bool
+            {
+                if ( id != wxID_OK )
+                    return true;
+
+                // An empty field is not a number: the dialog stays.
+                const double entered = number.Value();
+                if ( !std::isfinite(entered) )
+                    return false;
+
+                const long rounded = std::lround(entered);
+                if ( rounded < min || rounded > max )
+                    return false;
+
+                accepted = rounded;
+                return true;
+            });
+
+        presenter.AddButton(wxID_OK,
+                            wxGetStockLabel(wxID_OK, wxSTOCK_FOR_BUTTON), true);
+        presenter.AddButton(wxID_CANCEL,
+                            wxGetStockLabel(wxID_CANCEL, wxSTOCK_FOR_BUTTON));
+
+        // The program may destroy the dialog while it is shown: its value
+        // is written only if it is still there.
+        const wxWeakRef<wxDialog> weakDialog(dialog);
+        const int result = presenter.ShowModal();
+        if ( !weakDialog || weakDialog->IsBeingDeleted() )
+            return wxID_CANCEL;
+
+        if ( result == wxID_OK )
+            *value = accepted;
+        return result == wxID_OK ? wxID_OK : wxID_CANCEL;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("NumberEntryDialog presenter", e);
     }
 
     return wxID_CANCEL;

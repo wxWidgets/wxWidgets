@@ -60,6 +60,7 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "../winui/gridprojection.h"
+    #include "wx/winui/private/themecolours.h"
 #endif
 
 const char wxGridNameStr[] = "grid";
@@ -3133,6 +3134,12 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
                           const wxPoint& pos, const wxSize& size,
                           long style, const wxString& name)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A table of WinUI has the frame of a control unless the program asked
+    // for none or for another one.
+    if ( !(style & wxBORDER_MASK) )
+        style |= wxBORDER_THEME;
+#endif
     if (!wxScrolledCanvas::Create(parent, id, pos, size,
                                   style | wxWANTS_CHARS, name))
         return false;
@@ -3272,7 +3279,12 @@ void wxGrid::Create()
     m_defaultCellAttr->SetDefAttr(m_defaultCellAttr);
     m_defaultCellAttr->SetKind(wxGridCellAttr::Default);
     m_defaultCellAttr->SetFont(GetFont());
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // In the middle of its row, as the text of the rows of WinUI.
+    m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_CENTRE);
+#else
     m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
+#endif
     m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
     m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
     m_defaultCellAttr->SetFitMode(wxGridFitMode::Overflow());
@@ -3305,6 +3317,11 @@ void wxGrid::InitPixelFields()
     m_defaultRowHeight = m_gridWin->GetCharHeight();
 #if defined(__WXGTK__) || defined(__WXQT__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
+#elif defined(__WXWINUI__) && wxUSE_WINUI3
+    // The row of a table of WinUI: the least height of the items of its
+    // lists, as in WinUI.TableView.
+    m_defaultRowHeight = wxMax(m_defaultRowHeight + 4,
+                               FromDIP(wxWINUI_TABLE_ROW_HEIGHT));
 #else
     m_defaultRowHeight += 4;
 #endif
@@ -3692,7 +3709,12 @@ void wxGrid::Init()
     m_attrCache.attr = nullptr;
 
     m_labelFont = GetFont();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The headers of a table of WinUI are in semi-bold, over a subtle fill.
+    m_labelFont.SetWeight( wxFONTWEIGHT_SEMIBOLD );
+#else
     m_labelFont.SetWeight( wxFONTWEIGHT_BOLD );
+#endif
 
     m_rowLabelHorizAlign = wxALIGN_CENTRE;
     m_rowLabelVertAlign  = wxALIGN_CENTRE;
@@ -7274,7 +7296,14 @@ void wxGrid::UpdateColours()
 
     if ( !m_hasUserLabelBg )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The labels of a table of WinUI: a subtle fill over the ground of
+        // its cells.
+        auto btnFace = wxWinUIGetTableHeaderColour(
+            wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+#else
         auto btnFace = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+#endif
         m_labelBackgroundColour = btnFace;
         m_cornerLabelWin->SetBackgroundColour(btnFace);
         m_rowLabelWin->SetBackgroundColour(btnFace);
@@ -10817,6 +10846,10 @@ void wxGrid::SetCornerLabelValue( const wxString& s )
 
 wxColour wxGrid::GetGridLineColour() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( !m_gridLineColour.IsOk() )
+        return wxWinUIGetGridLineColour(GetDefaultCellBackgroundColour());
+#endif
     return m_gridLineColour.IsOk() ? m_gridLineColour :
         wxSystemSettings::GetColour(wxSYS_COLOUR_GRIDLINES);
 }
@@ -10834,6 +10867,14 @@ void wxGrid::SetGridLineColour( const wxColour& colour )
 
 wxColour wxGrid::GetCellHighlightColour() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The current cell has the frame of what has the focus in WinUI, as in
+    // WinUI.TableView: white in the dark theme, black in the light one.
+    if ( !m_cellHighlightColour.IsOk() )
+        return wxWinUIBlendOver(
+            wxWinUIGetThemeColour(wxWinUIThemeColour::FocusStroke),
+            GetDefaultCellBackgroundColour());
+#endif
     return m_cellHighlightColour.IsOk() ? m_cellHighlightColour :
         wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
 }
@@ -10927,12 +10968,23 @@ void wxGrid::SetGridFrozenBorderPenWidth(int width)
 
 wxColour wxGrid::GetSelectionBackground() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Selected cells have the subtle fill of what is selected in WinUI and
+    // keep the colour of their text: not the highlight colour behind white
+    // text.
+    if ( !m_selectionBackground.IsOk() )
+        return wxWinUIGetTableHeaderColour(GetDefaultCellBackgroundColour());
+#endif
     return m_selectionBackground.IsOk() ? m_selectionBackground :
         wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 }
 
 wxColour wxGrid::GetSelectionForeground() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( !m_selectionForeground.IsOk() )
+        return GetDefaultCellTextColour();
+#endif
     return m_selectionForeground.IsOk() ? m_selectionForeground :
         wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 }

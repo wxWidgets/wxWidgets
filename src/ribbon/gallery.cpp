@@ -26,6 +26,7 @@
     #include "wx/weakref.h"
     #include <winrt/Microsoft.UI.Xaml.Automation.h>
     #include <winrt/Microsoft.UI.Xaml.Markup.h>
+    #include <winrt/Microsoft.UI.Xaml.Media.Animation.h>
     #include <algorithm>
     #include <array>
     #include <atomic>
@@ -130,6 +131,7 @@ protected:
 };
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "ribboncommandwinui.h"
 #include "gallerywinui.h"
 
 bool wxRibbonGallery::InitializeWinUI()
@@ -150,7 +152,11 @@ bool wxRibbonGallery::MSWOnEffectiveLayoutDirectionChanged()
 void wxRibbonGallery::SetArtProvider(wxRibbonArtProvider* art)
 {
     wxRibbonControl::SetArtProvider(art);
-    if ( auto peer = m_winui ) peer->Changed();
+    if ( auto peer = m_winui )
+    {
+        peer->ArtChanged(m_art &&
+                         (m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL));
+    }
 }
 
 wxSize wxRibbonGallery::GetMinSize() const

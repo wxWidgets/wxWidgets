@@ -70,6 +70,11 @@ WXDLLIMPEXP_CORE bool wxWinUIIsHostWindow(wxWindow *win);
 class WXDLLIMPEXP_FWD_CORE wxCursor;
 WXDLLIMPEXP_CORE void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor);
 
+// The sash of a wxSplitterWindow is drawn by XAML, from the renderer. A
+// splitter which stops having one (unsplit, or sash made invisible) draws
+// nothing and says so here.
+WXDLLIMPEXP_CORE void wxWinUIHideSplitterSash(wxWindow *splitter);
+
 // Notify the shared islands after application-wide cursor policy changes
 // (busy cursor nesting or wxSetCursor()). This is intentionally projection
 // free so the ordinary MSW cursor implementation can call it.
@@ -123,6 +128,19 @@ WXDLLIMPEXP_CORE void wxWinUIPrimeBackdrop(WXHWND hwnd);
 // drawing a background of its own -- a tool bar art provider, a custom
 // panel -- has to ask this before filling.
 WXDLLIMPEXP_CORE bool wxWinUIWindowUsesBackdrop(const wxWindow *win);
+
+// A top-level window which has no title bar is square in Windows 11 unless
+// it asks otherwise: this gives it the corners of a WinUI flyout (8), or
+// those of a menu or of a tool tip (4) when "tight" is true.
+WXDLLIMPEXP_CORE void wxWinUIRoundWindowCorners(const wxWindow *win,
+                                                bool tight = false);
+
+// Gives the title bar of a top-level window the tone of the content of a
+// WinUI dialog (see wxWinUISetDialogContentTone()), so that the title and
+// the content are on one ground as in a ContentDialog, or gives it back the
+// colour of the system. Ignored before Windows 11.
+WXDLLIMPEXP_CORE void wxWinUISetDialogCaptionTone(const wxWindow *win,
+                                                  bool on);
 
 // Build (or rebuild) a WinUI MenuBar hosted across the top of a frame from the
 // given wxMenuBar, replacing the native HMENU.  Pass the previously returned

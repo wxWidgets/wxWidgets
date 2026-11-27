@@ -666,13 +666,13 @@ public:
             // ordinary C++ boundaries, not WinRT boundaries. In particular,
             // never let an exception after self was published retain the
             // state, XAML delegates and target binding forever.
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI TeachingTip startup failed: %s",
                 wxString::FromUTF8(e.what()));
         }
         catch ( ... )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI TeachingTip startup failed with an unknown "
                 "exception.");
         }
@@ -894,7 +894,7 @@ private:
             // reference alive. This rare failure leaks only until target
             // destruction, whose still-valid handler releases the state; it
             // must never degrade into a dangling wx event sink.
-            wxLogWarning("Failed to revoke WinUI TeachingTip target binding.");
+            wxLogDebug("Failed to revoke WinUI TeachingTip target binding.");
         }
 
         return detached;
@@ -1038,14 +1038,14 @@ private:
         catch ( const std::exception& e )
         {
             Close(true);
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI TeachingTip open failed: %s",
                 wxString::FromUTF8(e.what()));
         }
         catch ( ... )
         {
             Close(true);
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI TeachingTip open failed with an unknown exception.");
         }
 
@@ -1065,7 +1065,7 @@ private:
 #ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
 #endif // WXWINUI_TEST_SUPPORT
-                wxLogWarning(
+                wxLogDebug(
                     "Delayed WinUI TeachingTip presentation failed.");
             }
             else if ( result == wxWinUITeachingTipShowResult::Cancelled )
@@ -1236,13 +1236,13 @@ public:
         }
         catch ( const std::exception& e )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI managed rich-tooltip fallback failed: %s",
                 wxString::FromUTF8(e.what()));
         }
         catch ( ... )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI managed rich-tooltip fallback failed with an "
                 "unknown exception.");
         }
@@ -1550,7 +1550,7 @@ public:
 #ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
 #endif // WXWINUI_TEST_SUPPORT
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI rich-tooltip beta fallback could not be "
                     "registered and was destroyed.");
             }
@@ -1573,7 +1573,7 @@ public:
 #ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
 #endif // WXWINUI_TEST_SUPPORT
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI rich-tooltip generic fallback could not be "
                     "registered and was destroyed.");
             }
@@ -1592,7 +1592,7 @@ public:
 #ifdef WXWINUI_TEST_SUPPORT
                 ++gs_teachingTipDiagnostics.operationalFailures;
 #endif // WXWINUI_TEST_SUPPORT
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI rich-tooltip unsupported fallback could not be "
                     "registered and was destroyed.");
             }
@@ -1602,7 +1602,7 @@ public:
 #ifdef WXWINUI_TEST_SUPPORT
             ++gs_teachingTipDiagnostics.operationalFailures;
 #endif // WXWINUI_TEST_SUPPORT
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI TeachingTip presentation failed; the generic "
                 "fallback was not used because the native presentation "
                 "may already have performed observable work.");
@@ -1658,13 +1658,13 @@ private:
         }
         catch ( const std::exception& e )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI rich-tooltip generic fallback failed: %s",
                 wxString::FromUTF8(e.what()));
         }
         catch ( ... )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI rich-tooltip generic fallback failed with an "
                 "unknown exception.");
         }
@@ -1895,13 +1895,13 @@ wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win,
     }
     catch ( const std::exception& e )
     {
-        wxLogWarning(
+        wxLogDebug(
             "WinUI TeachingTip failed: %s",
             wxString::FromUTF8(e.what()));
     }
     catch ( ... )
     {
-        wxLogWarning(
+        wxLogDebug(
             "WinUI TeachingTip failed with an unknown exception.");
     }
 

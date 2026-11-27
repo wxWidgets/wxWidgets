@@ -75,6 +75,41 @@ wxWinUIApplyFont(
     const winrt::Microsoft::UI::Xaml::Controls::TextBlock& text,
     const wxFont& font);
 
+// The font of the header of a table: the one given, in semi-bold when the
+// program left it at its normal weight, as the headers of the tables of
+// WinUI are.
+WXDLLIMPEXP_CORE void
+wxWinUIApplyTableHeaderFont(
+    const winrt::Microsoft::UI::Xaml::Controls::Control& control,
+    const wxFont& font);
+
+WXDLLIMPEXP_CORE void
+wxWinUIApplyTableHeaderFont(
+    const winrt::Microsoft::UI::Xaml::Controls::TextBlock& text,
+    const wxFont& font);
+
+// The band of the header row of a table of WinUI: a subtle fill with the
+// line of the table under it, whose corners are rounded where the header is
+// at a corner of the frame of its control (XAML does not clip what is inside
+// a frame to its rounded corners: as in WinUI.TableView, what is at a corner
+// is rounded itself). The buttons of the columns are laid over it.
+WXDLLIMPEXP_CORE winrt::Microsoft::UI::Xaml::Controls::Border
+wxWinUICreateTableHeaderBand(double topRadius, double bottomRadius = 0);
+
+// A control which shows the value of the cell of a table while it is not
+// being edited (a TextBox, a ComboBox, a NumberBox, a CalendarDatePicker): no
+// ground and no frame of its own, so that the value reads as the text of
+// the cell, as in the tables of WinUI, where the editor only shows for the
+// cell being edited.
+WXDLLIMPEXP_CORE void
+wxWinUIApplyTableCellValueStyle(
+    const winrt::Microsoft::UI::Xaml::Controls::Control& control);
+
+// A Border which draws the lines of a table at its right and under it
+// (either may be left out), in the brush of the theme.
+WXDLLIMPEXP_CORE winrt::Microsoft::UI::Xaml::Controls::Border
+wxWinUICreateTableCellBorder(bool rightLine, bool bottomLine);
+
 WXDLLIMPEXP_CORE void
 wxWinUIApplyForeground(
     const winrt::Microsoft::UI::Xaml::Controls::Control& control,
@@ -139,5 +174,58 @@ winrt::Microsoft::UI::Xaml::Controls::Border
 wxWinUICreateThemeBrushBorder(
     const wxString& resourceKey,
     wxWinUIThemeBrushProperty property);
+
+// Gives a button the look of the cell of a table: flat, no corner, no
+// border of its own but the ones it is given, and nothing changing under
+// the pointer unless asked (the labels of the rows and columns of a grid).
+// Its ground, its border and its text are the ones set on it.
+WXDLLIMPEXP_CORE void
+wxWinUIApplyTableCellStyle(
+    const winrt::Microsoft::UI::Xaml::Controls::Button& button,
+    bool hover);
+
+// A ListBox with the look of the lists of WinUI. The ListBox of XAML is the
+// control of older Windows: a selected item is a full block in the accent
+// colour with white text. This one has the items of ListView: a subtle fill
+// with rounded corners under the pointer and for the selected item, a short
+// bar in the accent colour at its start, the text in its own colour, and a
+// thin rounded frame. It is the list of a simple combo box (wxCB_SIMPLE).
+WXDLLIMPEXP_CORE winrt::Microsoft::UI::Xaml::Controls::ListBox
+wxWinUICreateStyledListBox();
+
+// Takes the ground and the border of a TextBox or of a RichEditBox away, in
+// all its states: a wxTextCtrl created without a border (wxBORDER_NONE),
+// which is the text field inside another control, a combo box or the cell
+// of a table being edited, which draws the frame around it.
+WXDLLIMPEXP_CORE void
+wxWinUIApplyChromelessTextBoxStyle(
+    const winrt::Microsoft::UI::Xaml::Controls::Control& textBox);
+
+// The tab of a notebook whose tabs are not at the top. TabView only has its
+// strip above its content, so these tabs are TabViewItems on their own,
+// whose default template shows nothing once selected: this gives them the
+// look of the items of a WinUI navigation list, a subtle fill under the
+// pointer and for the selected one, with a bar in the accent colour on the
+// side away from the pages (side: 0 left, 1 right, 2 bottom).
+WXDLLIMPEXP_CORE void
+wxWinUIApplySideTabStyle(
+    const winrt::Microsoft::UI::Xaml::Controls::TabViewItem& item, int side);
+
+// Gives a button the look of the quiet buttons of WinUI (the chevron of a
+// tree, the arrows of a pager): no ground and no border until the pointer
+// is over it, then a subtle fill with rounded corners.
+WXDLLIMPEXP_CORE void
+wxWinUIApplySubtleButtonStyle(
+    const winrt::Microsoft::UI::Xaml::Controls::Button& button);
+
+// Gives a button the look of the cell of a table header, the one of the
+// lists of Windows 11 and of the DataGrid of the toolkit: flat, its text in
+// the colour of second rank, a subtle fill under the pointer, a hairline
+// under it and at its right. The headers of wxListCtrl, wxDataViewCtrl and
+// wxHeaderCtrl are made of such buttons. The colours stay those of the
+// theme when it changes.
+WXDLLIMPEXP_CORE void
+wxWinUIApplyTableHeaderStyle(
+    const winrt::Microsoft::UI::Xaml::Controls::Button& button);
 
 #endif // _WX_WINUI_PRIVATE_APPEARANCE_H_

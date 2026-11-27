@@ -15,6 +15,7 @@
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "hostfocus.h"
+#include "private.h"
 #ifdef WXWINUI_TEST_SUPPORT
 #include "host-focus-test-access.h"
 #endif
@@ -34,6 +35,51 @@
 std::map<wxWindow *,
          std::shared_ptr<wxWinUITopLevelHost::FocusMigration>>
     wxWinUITopLevelHost::ms_focusMigrations;
+
+// XAML draws the keyboard focus rectangle for a focus change made by the
+// program unless its last input came from a pointer. Before any input at all
+// it draws it too, so every window would open with a rectangle around its
+// first control. Windows keeps focus cues hidden until the keyboard is used:
+// until the first key press, set focus the way a pointer would.
+static bool gs_keyboardInputSeen = false;
+
+WXDLLIMPEXP_CORE void wxWinUINoteKeyboardInput()
+{
+    gs_keyboardInputSeen = true;
+}
+
+winrt::Microsoft::UI::Xaml::FocusState wxWinUIProgrammaticFocusState()
+{
+    return gs_keyboardInputSeen
+        ? winrt::Microsoft::UI::Xaml::FocusState::Programmatic
+        : winrt::Microsoft::UI::Xaml::FocusState::Pointer;
+}
+
+winrt::Microsoft::UI::Xaml::FocusState wxWinUIProgrammaticFocusState(
+    const winrt::Microsoft::UI::Xaml::Controls::Control& target)
+{
+    namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
+    // The pointer state is not only a matter of focus rectangle: focused
+    // that way, an editable ComboBox does not hand focus on to its editor.
+    // Text entry controls show no focus rectangle anyway, so they always get
+    // the ordinary programmatic state.
+    if ( target )
+    {
+        const auto combo = target.try_as<MUXC::ComboBox>();
+        if ( (combo && combo.IsEditable()) ||
+             target.try_as<MUXC::TextBox>() ||
+             target.try_as<MUXC::PasswordBox>() ||
+             target.try_as<MUXC::RichEditBox>() ||
+             target.try_as<MUXC::AutoSuggestBox>() ||
+             target.try_as<MUXC::NumberBox>() )
+        {
+            return winrt::Microsoft::UI::Xaml::FocusState::Programmatic;
+        }
+    }
+
+    return wxWinUIProgrammaticFocusState();
+}
 
 static wxWindow *wxWinUIResolveCurrentNativeFocusWindow()
 {
@@ -1691,7 +1737,7 @@ void wxWinUITopLevelHost::FocusSlotImpl(wxWindow *window,
                     control.IsEnabled() &&
                     control.Visibility() == MUX::Visibility::Visible &&
                     control.IsTabStop() &&
-                    control.Focus(MUX::FocusState::Programmatic);
+                    control.Focus(wxWinUIProgrammaticFocusState(control));
             }
             if ( !getLiveSlot() )
                 return;
@@ -1702,7 +1748,7 @@ void wxWinUITopLevelHost::FocusSlotImpl(wxWindow *window,
             const auto control =
                 content.try_as<MUX::Controls::Control>();
             if ( control )
-                focused = control.Focus(MUX::FocusState::Programmatic);
+                focused = control.Focus(wxWinUIProgrammaticFocusState(control));
             if ( !getLiveSlot() )
                 return;
         }
@@ -1715,7 +1761,8 @@ void wxWinUITopLevelHost::FocusSlotImpl(wxWindow *window,
                 FindFirstFocusableElement(container);
             if ( const auto firstControl =
                     first.try_as<MUX::Controls::Control>() )
-                focused = firstControl.Focus(MUX::FocusState::Programmatic);
+                focused = firstControl.Focus(
+                    wxWinUIProgrammaticFocusState(firstControl));
             if ( !getLiveSlot() )
                 return;
         }

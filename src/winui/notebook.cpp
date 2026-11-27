@@ -1175,6 +1175,10 @@ public:
     wxWinUIControlHost host;
     std::shared_ptr<wxWinUINotebookCallbackState> callbackState;
     MUXC::TabView tabView{ nullptr };
+
+    // See wxNotebook::WinUISetCloseHandler().
+    std::function<void (size_t)> closeHandler;
+
     MUXC::Canvas extendedRoot{ nullptr };
     MUXC::Canvas extendedTabCanvas{ nullptr };
     MUXC::Border extendedPageChrome{ nullptr };
@@ -1356,6 +1360,52 @@ bool wxNotebook::Create(wxWindow *parent,
         createImpl->tabView.IsAddTabButtonVisible(false);
         createImpl->tabView.CanReorderTabs(false);
         createImpl->tabView.CanDragTabs(false);
+
+        // The close button of a tab, which only the notebooks given a close
+        // handler show. What closing does is the business of the handler,
+        // called later: it destroys the tab this event comes from.
+        const std::weak_ptr<wxWinUINotebookCallbackState>
+            weakCloseState(callbackState);
+        createImpl->tabView.TabCloseRequested(
+            [weakCloseState, callbackGeneration](
+                MUXC::TabView const&,
+                MUXC::TabViewTabCloseRequestedEventArgs const& args)
+            {
+                const auto state = weakCloseState.lock();
+                wxNotebook * const owner =
+                    state ? state->GetOwner(callbackGeneration) : nullptr;
+                if ( !owner || !owner->m_winui ||
+                     !owner->m_winui->closeHandler )
+                {
+                    return;
+                }
+
+                const MUXC::TabViewItem tab = args.Tab();
+                const auto& items = owner->m_winui->items;
+                for ( size_t page = 0; page < items.size(); ++page )
+                {
+                    if ( items[page] != tab )
+                        continue;
+
+                    const wxWeakRef<wxNotebook> weakOwner(owner);
+                    owner->CallAfter([weakOwner, page]()
+                    {
+                        wxNotebook * const book = weakOwner.get();
+                        if ( !book || !book->m_winui ||
+                             page >= book->GetPageCount() )
+                        {
+                            return;
+                        }
+
+                        // A copy: the handler may replace itself.
+                        const std::function<void (size_t)>
+                            handler = book->m_winui->closeHandler;
+                        if ( handler )
+                            handler(page);
+                    });
+                    break;
+                }
+            });
         createImpl->tabView.TabWidthMode(
             HasFlag(wxNB_FIXEDWIDTH)
                 ? MUXC::TabViewWidthMode::Equal
@@ -2369,7 +2419,7 @@ bool wxNotebook::InsertPage(size_t nPage,
         header.Children().Append(label);
 
         item.Header(header);
-        item.IsClosable(false);
+        item.IsClosable(static_cast<bool>(impl->closeHandler));
         MUXA::AutomationProperties::SetName(
             item, wxWinUIToHString(strText));
     }
@@ -2417,7 +2467,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     }
     catch ( const std::exception& )
     {
-        wxLogError("Unable to stage wxWinUI notebook page insertion");
+        wxLogDebug("Unable to stage wxWinUI notebook page insertion");
         return false;
     }
 
@@ -2480,7 +2530,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     {
         if ( !impl->RestorePeerItems(owner->m_selection) )
         {
-            wxLogError(
+            wxLogDebug(
                 "Unable to roll back injected WinUI notebook insertion");
         }
         return false;
@@ -2578,7 +2628,7 @@ bool wxNotebook::InsertPage(size_t nPage,
         impl->BumpModelRevision();
         if ( !impl->RestorePeerItems(selectionToRestore) )
         {
-            wxLogError(
+            wxLogDebug(
                 "Unable to restore WinUI notebook after page destruction");
         }
         return true;
@@ -2773,7 +2823,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t nPage)
     }
     catch ( const std::exception& )
     {
-        wxLogError("Unable to stage wxWinUI notebook page removal");
+        wxLogDebug("Unable to stage wxWinUI notebook page removal");
         return nullptr;
     }
 
@@ -2826,7 +2876,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t nPage)
     {
         if ( !impl->RestorePeerItems(owner->m_selection) )
         {
-            wxLogError(
+            wxLogDebug(
                 "Unable to roll back injected WinUI notebook removal");
         }
         return nullptr;
@@ -3320,6 +3370,28 @@ void wxNotebook::UpdateSelectedPage(size_t newsel)
     {
         if ( wxWindow *page = owner->m_pages[newsel] )
             page->SetFocus();
+    }
+}
+
+void wxNotebook::WinUISetCloseHandler(std::function<void (size_t)> handler)
+{
+    if ( !m_winui )
+        return;
+
+    m_winui->closeHandler = std::move(handler);
+
+    const bool closable = static_cast<bool>(m_winui->closeHandler);
+    try
+    {
+        for ( const MUXC::TabViewItem& item : m_winui->items )
+        {
+            if ( item )
+                item.IsClosable(closable);
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TabView close buttons", e);
     }
 }
 
@@ -3998,7 +4070,7 @@ bool wxNotebook::SyncPeerProjection()
     {
         initialImpl->projectionWarningIssued = true;
         initialImpl->projectionRequested = false;
-        wxLogWarning(
+        wxLogDebug(
             "wxWinUI notebook peer projection did not converge after "
             "bounded retries; it will resume on the next model change");
     }
@@ -4386,6 +4458,11 @@ bool wxNotebook::EnsureExtendedPeerSurface()
             wxWinUINotebookSurfacePeer peer;
             peer.logicalItem = impl->items[page];
             peer.item = MUXC::TabViewItem();
+            // On its own, out of any TabView: see the function.
+            wxWinUIApplySideTabStyle(
+                peer.item,
+                owner->HasFlag(wxNB_LEFT) ? 0
+                    : owner->HasFlag(wxNB_RIGHT) ? 1 : 2);
             peer.item.IsClosable(false);
             peer.item.IsTabStop(
                 static_cast<int>(page) == owner->m_selection);
@@ -6798,7 +6875,7 @@ wxNotebook *wxNotebook::RealizeTabGeometryForQuery() const
     }
     catch ( const std::exception& )
     {
-        wxLogError("Unable to stage wxWinUI notebook tab geometry");
+        wxLogDebug("Unable to stage wxWinUI notebook tab geometry");
         return nullptr;
     }
 
@@ -9025,6 +9102,12 @@ void wxNotebook::DoSize()
         if ( std::find(owner->m_pages.begin(),
                        owner->m_pages.end(),
                        page) == owner->m_pages.end() )
+            continue;
+
+        // A hidden page is given its size when it is selected: laying all
+        // of them out at each step of a resize is most of what a resize
+        // costs, see wxBookCtrlBase::DoSize().
+        if ( !page->IsShown() )
             continue;
 
         // No owner/model access after SetSize(): the next iteration resolves

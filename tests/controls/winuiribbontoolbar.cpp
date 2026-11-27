@@ -279,11 +279,13 @@ TEST_CASE("RibbonToolBarNative::CompositePeersRealizeAndMigration",
     REQUIRE(root);
     const auto normal = fixture.Command(L"Tool normal");
     const auto toggle = fixture.Command(L"Tool toggle");
-    REQUIRE(normal.try_as<MUXC::AppBarButton>());
-    REQUIRE(toggle.try_as<MUXC::AppBarToggleButton>());
-    REQUIRE(fixture.Command(L"Tool dropdown").try_as<MUXC::AppBarButton>());
-    REQUIRE(fixture.Command(L"Tool hybrid").try_as<MUXC::AppBarButton>());
-    REQUIRE(fixture.Command(L"Tool dropdown menu").try_as<MUXC::Button>());
+    // Each kind of tool is the WinUI control made for it; one which only
+    // opens a menu has no arrow of its own.
+    REQUIRE(normal.try_as<MUXC::Button>());
+    REQUIRE(toggle.try_as<MUXC::Primitives::ToggleButton>());
+    REQUIRE(fixture.Command(L"Tool dropdown").try_as<MUXC::DropDownButton>());
+    REQUIRE(fixture.Command(L"Tool hybrid").try_as<MUXC::SplitButton>());
+    REQUIRE_FALSE(fixture.Command(L"Tool dropdown menu"));
     REQUIRE(fixture.Command(L"Tool hybrid menu").try_as<MUXC::Button>());
     const auto checkComposition = [&]()
     {
@@ -353,7 +355,7 @@ TEST_CASE("RibbonToolBarNative::KindsEventsAndPopupActiveTool",
     };
     invoke(L"Tool normal", 1, NormalId, wxEVT_RIBBONTOOLBAR_CLICKED);
     invoke(L"Tool dropdown", 2, DropdownId, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED);
-    invoke(L"Tool dropdown menu", 3, DropdownId, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED);
+    invoke(L"Tool dropdown", 3, DropdownId, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED);
     invoke(L"Tool hybrid", 4, HybridId, wxEVT_RIBBONTOOLBAR_CLICKED);
     invoke(L"Tool hybrid menu", 5, HybridId, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED);
     const auto toggle = ToolbarPattern<Providers::IToggleProvider>(
@@ -388,7 +390,7 @@ TEST_CASE("RibbonToolBarNative::KindsEventsAndPopupActiveTool",
             popup->activeAfter = bar->GetActiveTool();
             event.Skip();
         }, DropdownId);
-    invoke(L"Tool dropdown menu", 8, DropdownId, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED);
+    invoke(L"Tool dropdown", 8, DropdownId, wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED);
     CHECK(popup->returned);
     CHECK(tools->popupCalls == 1);
     CHECK(tools->popupAnchor == popup->expectedAnchor);

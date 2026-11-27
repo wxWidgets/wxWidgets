@@ -14,6 +14,7 @@
 #if wxUSE_WINUI3
 
 #include "private.h"
+#include "hostnative.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
 #include "control-host-test-access.h"
@@ -23,8 +24,10 @@
 #endif // WXWINUI_TEST_SUPPORT
 
 #include "wx/winui/private/appearance.h"
+#include "wx/winui/private/themecolours.h"
 #include "keyboard.h"
 #include "wx/winui/private/dialogcontracts.h"
+#include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/shelltheme.h"
 #ifdef WXWINUI_TEST_SUPPORT
 #include "shell-theme-test-access.h"
@@ -68,14 +71,18 @@
 #include <dwmapi.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Microsoft.UI.Input.h>
+#include <winrt/Microsoft.UI.Dispatching.h>
+#include <winrt/Microsoft.UI.Xaml.Media.h>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <functional>
 #include <limits>
 #include <cstdarg>
 #include <clocale>
 #include <cstring>
+#include <deque>
 #include <map>
 #include <memory>
 #include <set>
@@ -789,7 +796,7 @@ void wxWinUIShellThemeWindowDestroyed(WXHWND hwndArg)
 
 void wxWinUILogException(const char *what, const winrt::hresult_error& e)
 {
-    wxLogWarning("%s failed with HRESULT 0x%08lx: %s",
+    wxLogDebug("%s failed with HRESULT 0x%08lx: %s",
                  what,
                  static_cast<unsigned long>(e.code()),
                  wxString(e.message().c_str()));
@@ -1955,7 +1962,7 @@ wxWinUIToolTipPolicyEntryResult wxWinUIReconcileManagedToolTipPolicy(
              wxWinUIToolTipMaxPersistentFailures )
         {
             current->policyQuarantined = true;
-            wxLogWarning(
+            wxLogDebug(
                 "wxWinUI: quarantining a tooltip policy entry after %u "
                 "consecutive failures",
                 current->policyFailureCount);
@@ -2019,7 +2026,7 @@ void wxWinUIScheduleToolTipPolicyReplay()
          wxWinUIToolTipMaxDeferredReplays )
     {
         gs_winuiToolTipPolicyTransactionQuarantined = true;
-        wxLogWarning(
+        wxLogDebug(
             "wxWinUI: quarantining a global tooltip policy transaction "
             "after %u deferred replays",
             gs_winuiToolTipDeferredReplayCount);
@@ -2165,7 +2172,7 @@ bool wxWinUISetToolTipsEnabled(bool enabled)
                      wxWinUIToolTipMaxPersistentFailures )
                 {
                     gs_winuiToolTipHostSyncQuarantined = true;
-                    wxLogWarning(
+                    wxLogDebug(
                         "wxWinUI: quarantining global tooltip host "
                         "synchronization after %u consecutive failures",
                         gs_winuiToolTipHostSyncFailureCount);
@@ -2411,8 +2418,13 @@ std::atomic<bool> gs_physicalDisconnectPublicationPoisoned{false};
 
 void wxWinUINotePhysicalDisconnectGateDegraded() noexcept
 {
-    gs_physicalDisconnectPublicationPoisoned.store(
-        true, std::memory_order_release);
+    // A gate which could not prove that its popup retired stays degraded,
+    // and its own slot is then never physically disconnected: that is the
+    // whole consequence. It used to condemn the process as well, after which
+    // no control could be created and no drop-down opened for the rest of
+    // the run, and closing a window while one of its drop-downs was open
+    // was enough to get there. The process-wide flag is now only set by the
+    // test seam below, for the tests of the refusal paths.
 }
 
 bool wxWinUIIsPhysicalDisconnectPublicationPoisoned() noexcept
@@ -2435,7 +2447,8 @@ void wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison() noexcept
 
 void wxWinUIPhysicalDisconnectTestAccess::PoisonPublication() noexcept
 {
-    wxWinUINotePhysicalDisconnectGateDegraded();
+    gs_physicalDisconnectPublicationPoisoned.store(
+        true, std::memory_order_release);
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -2534,6 +2547,55 @@ void wxWinUIControlHost::Close(
     m_content = nullptr;
     m_physicalDisconnectGate.reset();
     m_window = nullptr;
+}
+
+namespace
+{
+
+// Notifications waiting for the XAML callback which queued them to return.
+// GUI thread only, like the XAML callbacks themselves.
+std::deque<std::function<void()>> gs_notifications;
+bool gs_notificationFlushQueued = false;
+
+void wxWinUIQueueNotificationFlush()
+{
+    if ( gs_notificationFlushQueued || !wxTheApp )
+        return;
+
+    gs_notificationFlushQueued = true;
+    wxTheApp->CallAfter([]()
+    {
+        gs_notificationFlushQueued = false;
+        wxWinUIFlushNotifications();
+    });
+}
+
+} // anonymous namespace
+
+void wxWinUIPostNotification(std::function<void()> notification)
+{
+    if ( !notification )
+        return;
+
+    gs_notifications.push_back(std::move(notification));
+    wxWinUIQueueNotificationFlush();
+}
+
+void wxWinUIFlushNotifications()
+{
+    while ( !gs_notifications.empty() )
+    {
+        std::function<void()> notification =
+            std::move(gs_notifications.front());
+        gs_notifications.pop_front();
+
+        // The handler may run a modal loop, or throw: whatever is still
+        // queued then runs from that loop, or from the next one.
+        if ( !gs_notifications.empty() )
+            wxWinUIQueueNotificationFlush();
+
+        notification();
+    }
 }
 
 bool wxWinUIControlHost::SetContent(
@@ -2641,6 +2703,68 @@ bool wxWinUIControlHost::SetContentImpl(
             }
             wxWinUILogException("FrameworkElement::Loaded registration", e);
             return false;
+        }
+    }
+
+    // The peer of a wx window fills that window, no more and no less. Several
+    // stock styles (Button, ToggleButton, CheckBox, ComboBox, the pickers)
+    // default to Left/Center or Left/Top instead, which leaves the control at
+    // its natural size in a corner of a larger window: a dialog button
+    // narrower than the wx default width, and not where its sizer put it.
+    // They also carry minimum sizes (64 DIPs wide for a TextBox, 120 for a
+    // CheckBox) which make the control overflow a smaller wx window, where it
+    // is cut off on the right or at the bottom. An alignment or a minimum
+    // chosen by the control's own port is a local value and is kept; a
+    // hyperlink keeps its natural size so that only its text reacts to the
+    // pointer.
+    if ( !directMount )
+    {
+        const auto framework = element.try_as<MUX::FrameworkElement>();
+        if ( framework && !element.try_as<MUX::Controls::HyperlinkButton>() )
+        {
+            try
+            {
+                const auto unset = MUX::DependencyProperty::UnsetValue();
+                if ( framework.ReadLocalValue(
+                        MUX::FrameworkElement::HorizontalAlignmentProperty()) == unset )
+                {
+                    framework.HorizontalAlignment(
+                        MUX::HorizontalAlignment::Stretch);
+                }
+                if ( framework.ReadLocalValue(
+                        MUX::FrameworkElement::VerticalAlignmentProperty()) == unset )
+                {
+                    framework.VerticalAlignment(
+                        MUX::VerticalAlignment::Stretch);
+                }
+                if ( framework.ReadLocalValue(
+                        MUX::FrameworkElement::MinWidthProperty()) == unset )
+                {
+                    framework.MinWidth(0.0);
+                }
+                if ( framework.ReadLocalValue(
+                        MUX::FrameworkElement::MinHeightProperty()) == unset )
+                {
+                    framework.MinHeight(0.0);
+                }
+                // The RichEditBox template does not bind its border to these
+                // properties: it reads the theme minimum (64 x 32 DIPs)
+                // directly, so the override has to be a resource of its own.
+                if ( element.try_as<MUXC::RichEditBox>() )
+                {
+                    const auto resources = framework.Resources();
+                    resources.Insert(
+                        winrt::box_value(L"TextControlThemeMinWidth"),
+                        winrt::box_value(0.0));
+                    resources.Insert(
+                        winrt::box_value(L"TextControlThemeMinHeight"),
+                        winrt::box_value(0.0));
+                }
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException("slot content alignment", e);
+            }
         }
     }
 
@@ -2845,6 +2969,464 @@ void wxWinUIControlHost::ApplyWxCursor(const wxCursor& cursor)
     wxUnusedVar(cursor);
 }
 
+void wxWinUIRoundWindowCorners(const wxWindow *win, bool tight)
+{
+    const HWND hwnd = win ? reinterpret_cast<HWND>(win->GetHandle()) : nullptr;
+    if ( !hwnd )
+        return;
+
+    // Ignored before Windows 11, where all windows are square.
+    const DWM_WINDOW_CORNER_PREFERENCE preference =
+        tight ? DWMWCP_ROUNDSMALL : DWMWCP_ROUND;
+    ::DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE,
+                            &preference, sizeof(preference));
+}
+
+namespace
+{
+
+struct wxWinUIDialogCard
+{
+    wxWindow *dialog = nullptr;
+    HWND hwnd = nullptr;
+    wxWeakRef<wxWindow> owner;
+    LONG_PTR style = 0;         // what the window had
+    LONG_PTR exStyle = 0;
+    wxSize frame;               // what its frame added to its client area
+    wxWinUIDialogCardInsets insets; // what is around its client area now
+    bool smoke = false;         // the owner is veiled
+    bool shifted = false;       // its children were moved down by hand
+};
+
+std::vector<wxWinUIDialogCard> gs_dialogCards;
+
+wxWinUIDialogCard *wxWinUIFindDialogCard(const wxWindow *dialog)
+{
+    for ( wxWinUIDialogCard& card : gs_dialogCards )
+    {
+        if ( card.dialog == dialog )
+            return &card;
+    }
+    return nullptr;
+}
+
+void wxWinUICentreDialogCard(const wxWinUIDialogCard& card)
+{
+    wxWindow * const owner = card.owner.get();
+    const HWND ownerHwnd =
+        owner ? reinterpret_cast<HWND>(owner->GetHandle()) : nullptr;
+    if ( !ownerHwnd || !::IsWindow(card.hwnd) )
+        return;
+
+    RECT client = {};
+    ::GetClientRect(ownerHwnd, &client);
+    POINT origin = { 0, 0 };
+    ::ClientToScreen(ownerHwnd, &origin);
+    RECT window = {};
+    ::GetWindowRect(card.hwnd, &window);
+    ::SetWindowPos(card.hwnd, nullptr,
+                   origin.x + (client.right - (window.right - window.left)) / 2,
+                   origin.y + (client.bottom - (window.bottom - window.top)) / 2,
+                   0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+}
+
+void wxWinUIFollowDialogCardOwner(wxWindow *owner)
+{
+    bool smoke = false;
+    for ( const wxWinUIDialogCard& card : gs_dialogCards )
+    {
+        if ( card.owner.get() == owner )
+        {
+            wxWinUICentreDialogCard(card);
+            smoke = smoke || card.smoke;
+        }
+    }
+    if ( smoke )
+        wxWinUISetWindowSmoke(owner, true);
+}
+
+void wxWinUIDialogCardOwnerMoved(wxMoveEvent& event)
+{
+    event.Skip();
+    wxWinUIFollowDialogCardOwner(
+        wxDynamicCast(event.GetEventObject(), wxWindow));
+}
+
+void wxWinUIDialogCardOwnerSized(wxSizeEvent& event)
+{
+    event.Skip();
+    wxWinUIFollowDialogCardOwner(
+        wxDynamicCast(event.GetEventObject(), wxWindow));
+}
+
+// The least and the greatest sizes of a window count its frame.
+void wxWinUIShiftDialogCardHints(wxWindow *dialog, const wxSize& delta)
+{
+    wxSize least = dialog->GetMinSize();
+    wxSize most = dialog->GetMaxSize();
+    if ( least.x > 0 )
+        least.x = wxMax(1, least.x + delta.x);
+    if ( least.y > 0 )
+        least.y = wxMax(1, least.y + delta.y);
+    if ( most.x > 0 )
+        most.x = wxMax(1, most.x + delta.x);
+    if ( most.y > 0 )
+        most.y = wxMax(1, most.y + delta.y);
+    dialog->SetMinSize(least);
+    dialog->SetMaxSize(most);
+}
+
+// The rectangle around what a window shows of its children, in its own
+// coordinates. A plain panel counts for what it holds: dialogs often put
+// their content in one, which fills them.
+wxRect wxWinUIGetShownContentRect(const wxWindow *parent)
+{
+    wxRect all;
+    for ( const wxWindow * const child : parent->GetChildren() )
+    {
+        if ( child->IsTopLevel() || !child->IsShown() )
+            continue;
+
+        wxRect rect = child->GetRect();
+        if ( rect.IsEmpty() )
+            continue;
+
+        if ( child->GetClassInfo() == wxCLASSINFO(wxPanel) &&
+             !child->GetChildren().empty() )
+        {
+            wxRect inner = wxWinUIGetShownContentRect(child);
+            if ( !inner.IsEmpty() )
+            {
+                inner.Offset(rect.GetPosition());
+                rect = inner;
+            }
+        }
+        all.Union(rect);
+    }
+    return all;
+}
+
+void wxWinUIShiftDialogCardChildren(wxWindow *dialog, const wxPoint& by)
+{
+    for ( wxWindow * const child : dialog->GetChildren() )
+    {
+        if ( child->IsTopLevel() )
+            continue;
+        child->Move(child->GetPosition() + by);
+    }
+}
+
+} // anonymous namespace
+
+bool wxWinUIBeginDialogCard(wxWindow *dialog)
+{
+    if ( !dialog ||
+         wxWinUIGetDialogPresentation() != wxWinUIDialogPresentation::Overlay )
+    {
+        return false;
+    }
+    if ( wxWinUIFindDialogCard(dialog) )
+        return true;
+
+    const HWND hwnd = reinterpret_cast<HWND>(dialog->GetHandle());
+    wxWindow * const parent = dialog->GetParent();
+    wxWindow * const owner = parent ? wxGetTopLevelParent(parent) : nullptr;
+    const HWND ownerHwnd =
+        owner ? reinterpret_cast<HWND>(owner->GetHandle()) : nullptr;
+    if ( !hwnd || !ownerHwnd || owner == dialog || !owner->IsShown() ||
+         ::IsIconic(ownerHwnd) ||
+         !wxWinUITopLevelHost::ForWindow(owner, false) )
+    {
+        return false;
+    }
+
+    // Only a dialog which keeps its owner from being used meanwhile: the
+    // owner of a modal dialog is disabled by now, as the one of a progress
+    // dialog is. A dialog which leaves its owner in use (to find and
+    // replace, which goes on while the document is edited) stays a window:
+    // a card over a window which still answers is not a dialog of WinUI.
+    if ( owner->IsEnabled() )
+        return false;
+
+    wxWinUIDialogCard card;
+    card.dialog = dialog;
+    card.hwnd = hwnd;
+    card.owner = owner;
+    card.style = ::GetWindowLongPtr(hwnd, GWL_STYLE);
+    card.exStyle = ::GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+    wxSize client = dialog->GetClientSize();
+    card.frame = dialog->GetSize() - client;
+    // What a ContentDialog has around its content: 24 at its sides and
+    // under it, and above it its title (24, then a line of 28) and 12. The
+    // dialogs of wx have margins of their own, which differ from one to the
+    // other: what is added is what each one is short of, measured from what
+    // it shows.
+    const int margin = dialog->FromDIP(24);
+    const wxRect content = wxWinUIGetShownContentRect(dialog);
+    if ( content.IsEmpty() )
+    {
+        card.insets.top = dialog->FromDIP(52);
+        card.insets.left =
+        card.insets.right =
+        card.insets.bottom = margin;
+    }
+    else
+    {
+        card.insets.left = wxMax(0, margin - content.x);
+        card.insets.right =
+            wxMax(0, margin - (client.x - content.GetRight() - 1));
+        card.insets.bottom =
+            wxMax(0, margin - (client.y - content.GetBottom() - 1));
+        card.insets.top = wxMax(dialog->FromDIP(40),
+                                dialog->FromDIP(52 + 12) - content.y);
+    }
+
+    // Wide enough for its title, which is in larger letters than in a
+    // title bar and would be cut.
+    wxFont titleFont = dialog->GetFont();
+    titleFont.SetPixelSize(wxSize(0, dialog->FromDIP(20)));
+    titleFont.SetWeight(wxFONTWEIGHT_SEMIBOLD);
+    int titleWidth = 0;
+    dialog->GetTextExtent(dialog->GetLabel(), &titleWidth, nullptr,
+                          nullptr, nullptr, &titleFont);
+    client.x = wxMax(client.x,
+                     titleWidth + dialog->FromDIP(2 * 24 + 4) -
+                        card.insets.left - card.insets.right);
+    // The veil of a ContentDialog over the owner.
+    card.smoke = true;
+    card.shifted = dialog->GetSizer() == nullptr;
+    gs_dialogCards.push_back(card);
+
+    const wxSize around(card.insets.left + card.insets.right,
+                        card.insets.top + card.insets.bottom);
+    wxWinUIShiftDialogCardHints(dialog, around - card.frame);
+
+    ::SetWindowLongPtr(hwnd, GWL_STYLE,
+        (card.style & ~(WS_CAPTION | WS_THICKFRAME | WS_SYSMENU |
+                        WS_MINIMIZEBOX | WS_MAXIMIZEBOX)) | WS_POPUP);
+    ::SetWindowLongPtr(hwnd, GWL_EXSTYLE,
+        card.exStyle & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE |
+                         WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+    ::SetWindowPos(hwnd, nullptr, 0, 0,
+                   client.x + around.x, client.y + around.y,
+                   SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE |
+                   SWP_FRAMECHANGED);
+    wxWinUIRoundWindowCorners(dialog);
+
+    if ( card.shifted )
+    {
+        wxWinUIShiftDialogCardChildren(
+            dialog, wxPoint(card.insets.left, card.insets.top));
+    }
+    else
+    {
+        dialog->Layout();
+    }
+
+    wxWinUICentreDialogCard(card);
+    owner->Bind(wxEVT_MOVE, &wxWinUIDialogCardOwnerMoved);
+    owner->Bind(wxEVT_SIZE, &wxWinUIDialogCardOwnerSized);
+    if ( card.smoke )
+        wxWinUISetWindowSmoke(owner, true);
+    return true;
+}
+
+void wxWinUIEndDialogCard(wxWindow *dialog)
+{
+    const wxWinUIDialogCard * const found = wxWinUIFindDialogCard(dialog);
+    if ( !found )
+        return;
+
+    const wxWinUIDialogCard card = *found;
+    const wxSize client = dialog->GetClientSize();
+    gs_dialogCards.erase(gs_dialogCards.begin() + (found - &gs_dialogCards[0]));
+
+    if ( wxWindow * const owner = card.owner.get() )
+    {
+        owner->Unbind(wxEVT_MOVE, &wxWinUIDialogCardOwnerMoved);
+        owner->Unbind(wxEVT_SIZE, &wxWinUIDialogCardOwnerSized);
+
+        bool smoke = false;
+        for ( const wxWinUIDialogCard& other : gs_dialogCards )
+            smoke = smoke || (other.owner.get() == owner && other.smoke);
+        if ( card.smoke && !smoke )
+            wxWinUISetWindowSmoke(owner, false);
+    }
+
+    // The window as it was, for it to be shown in its own window another
+    // time.
+    if ( ::IsWindow(card.hwnd) &&
+         reinterpret_cast<HWND>(dialog->GetHandle()) == card.hwnd )
+    {
+        ::SetWindowLongPtr(card.hwnd, GWL_STYLE, card.style & ~WS_VISIBLE);
+        ::SetWindowLongPtr(card.hwnd, GWL_EXSTYLE, card.exStyle);
+        ::SetWindowPos(card.hwnd, nullptr, 0, 0,
+                       client.x + card.frame.x, client.y + card.frame.y,
+                       SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE |
+                       SWP_FRAMECHANGED);
+        wxWinUIShiftDialogCardHints(
+            dialog,
+            card.frame - wxSize(card.insets.left + card.insets.right,
+                                card.insets.top + card.insets.bottom));
+        if ( card.shifted )
+        {
+            wxWinUIShiftDialogCardChildren(
+                dialog, wxPoint(-card.insets.left, -card.insets.top));
+        }
+        else if ( !dialog->IsBeingDeleted() )
+        {
+            dialog->Layout();
+        }
+    }
+}
+
+wxWinUIDialogCardInsets wxWinUIGetDialogCardInsets(const wxWindow *dialog)
+{
+    if ( gs_dialogCards.empty() )
+        return {};
+
+    const wxWinUIDialogCard * const card = wxWinUIFindDialogCard(dialog);
+    return card ? card->insets : wxWinUIDialogCardInsets();
+}
+
+bool wxWinUIDialogCardKeepsOwnerActive(const wxWindow *owner)
+{
+    for ( const wxWinUIDialogCard& card : gs_dialogCards )
+    {
+        if ( card.owner.get() == owner )
+            return true;
+    }
+    return false;
+}
+
+namespace
+{
+
+void wxWinUIUncloakWindow(HWND hwnd)
+{
+    if ( hwnd && ::IsWindow(hwnd) )
+    {
+        BOOL cloak = FALSE;
+        ::DwmSetWindowAttribute(hwnd, DWMWA_CLOAK, &cloak, sizeof(cloak));
+    }
+}
+
+} // anonymous namespace
+
+void wxWinUIBeginShowWithContent(wxWindow *tlw)
+{
+    namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
+
+    const HWND hwnd = tlw ? reinterpret_cast<HWND>(tlw->GetHandle()) : nullptr;
+    wxWinUITopLevelHost * const host =
+        hwnd ? wxWinUITopLevelHost::ForWindow(tlw, false) : nullptr;
+    if ( !host )
+        return;
+
+    try
+    {
+        // What was queued for the island, then its first layout, with the
+        // templates of its controls: now, not once the window is shown.
+        host->FlushSync();
+        const auto root = host->Root();
+        if ( !root )
+            return;
+        root.UpdateLayout();
+        if ( wxWinUIInputLogEnabled() )
+            wxWinUIInputLog("tlw CONTENT READY before show hwnd=%p", hwnd);
+
+        BOOL cloak = TRUE;
+        if ( FAILED(::DwmSetWindowAttribute(hwnd, DWMWA_CLOAK,
+                                            &cloak, sizeof(cloak))) )
+        {
+            return;
+        }
+
+        struct Pending
+        {
+            HWND hwnd = nullptr;
+            int frames = 0;
+            bool done = false;
+            winrt::event_token rendered{};
+            winrt::Microsoft::UI::Dispatching::DispatcherQueueTimer
+                timer{ nullptr };
+        };
+        const auto pending = std::make_shared<Pending>();
+        pending->hwnd = hwnd;
+        const auto reveal = [pending](const char *why)
+        {
+            if ( pending->done )
+                return;
+            pending->done = true;
+            if ( pending->rendered.value )
+                MUXM::CompositionTarget::Rendered(pending->rendered);
+            if ( pending->timer )
+                pending->timer.Stop();
+            wxWinUIUncloakWindow(pending->hwnd);
+            if ( wxWinUIInputLogEnabled() )
+            {
+                wxWinUIInputLog("tlw REVEAL hwnd=%p after %s frames=%d",
+                                pending->hwnd, why, pending->frames);
+            }
+        };
+
+        // The second frame the island draws from now on has the window in
+        // it: the first one may have been under way.
+        pending->rendered = MUXM::CompositionTarget::Rendered(
+            [pending, reveal](winrt::Windows::Foundation::IInspectable const&,
+                              MUXM::RenderedEventArgs const&)
+            {
+                if ( ++pending->frames >= 2 )
+                    reveal("frame");
+            });
+
+        // Never left hidden.
+        pending->timer = root.DispatcherQueue().CreateTimer();
+        pending->timer.Interval(std::chrono::milliseconds(150));
+        pending->timer.IsRepeating(false);
+        pending->timer.Tick(
+            [reveal](winrt::Microsoft::UI::Dispatching::DispatcherQueueTimer
+                        const&,
+                     winrt::Windows::Foundation::IInspectable const&)
+            {
+                reveal("time");
+            });
+        pending->timer.Start();
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI show with content", e);
+        wxWinUIUncloakWindow(hwnd);
+    }
+}
+
+void wxWinUIEndShowWithContent(wxWindow *tlw)
+{
+    wxWinUIUncloakWindow(
+        tlw ? reinterpret_cast<HWND>(tlw->GetHandle()) : nullptr);
+}
+
+void wxWinUISetDialogCaptionTone(const wxWindow *win, bool on)
+{
+    const HWND hwnd = win ? reinterpret_cast<HWND>(win->GetHandle()) : nullptr;
+    if ( !hwnd )
+        return;
+
+    // DWMWA_CAPTION_COLOR (35), from Windows 11; 0xFFFFFFFF asks for the
+    // default of the system.
+    COLORREF colour = 0xFFFFFFFF;
+    if ( on )
+    {
+        // What the content of a ContentDialog is on: the layer over the
+        // base colour of a window.
+        const wxColour tone = wxWinUIBlendOver(
+            wxWinUIGetThemeColour(wxWinUIThemeColour::LayerAlt),
+            wxWinUIGetThemeColour(wxWinUIThemeColour::BaseFill));
+        colour = RGB(tone.Red(), tone.Green(), tone.Blue());
+    }
+    ::DwmSetWindowAttribute(hwnd, 35, &colour, sizeof(colour));
+}
+
 bool wxWinUIWindowUsesBackdrop(const wxWindow *win)
 {
     if ( !win )
@@ -2884,6 +3466,13 @@ bool wxWinUIShouldUseOpaquePaintBuffer(const wxWindow *win)
         return false;
 #endif
     return true;
+}
+
+bool wxWinUIShouldUsePaintedPixelsBuffer(const wxWindow *win)
+{
+    return win && win->GetBackgroundStyle() != wxBG_STYLE_PAINT &&
+           wxWinUIWindowUsesBackdrop(win) &&
+           !wxWinUITopLevelHost::FindSlotOwner(win);
 }
 
 void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor)
@@ -3536,6 +4125,11 @@ bool wxWinUI3ProcessTabNavigationWithModifiers(WXMSG *msg,
     if ( !host )
         return false;   // no island in this TLW: default wx processing
 
+    // A dialog is shown over this window: Tab moves among its controls,
+    // which XAML sees to, and not among those of the window behind it.
+    if ( wxWinUIHasDialogOverlay(host->GetTLW()) )
+        return false;
+
     const HWND hwndCurrent = static_cast<HWND>(current->GetHWND());
     const HWND hwndTLW = static_cast<HWND>(host->GetTLW()->GetHWND());
     if ( !hwndCurrent || !hwndTLW )
@@ -3661,7 +4255,7 @@ static void wxWinUIApplyWindowBackdropPass(wxWindow *tlw)
             if ( presentation ==
                  wxWinUIShellPresentationResult::MarkerRejected )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "wxWinUI: failed to clear one or more native backdrop "
                     "markers; DWM/frame rollback was skipped");
                 if ( !wxWinUIShellApplyEpochIsCurrent(root, epoch) )
@@ -3787,7 +4381,7 @@ static void wxWinUIApplyWindowBackdropPass(wxWindow *tlw)
     if ( presentation ==
          wxWinUIShellPresentationResult::MarkerRejected )
     {
-        wxLogWarning(
+        wxLogDebug(
             "wxWinUI: failed to clear one or more native backdrop "
             "markers after a partial update; DWM material remains enabled");
     }
@@ -3991,11 +4585,22 @@ bool wxWinUIEraseIslandBackground(HWND island, HDC hdc)
     if ( !brush )
         return false;
 
+    // With paint surfaces the windows of a frame which shows a material
+    // paint nothing on their HWND, which they erase to the same black as
+    // this: there is nothing to keep off nor to repair, and walking every
+    // window of the frame for it, each time one of them moves, was a tenth
+    // of what a resize costs. Only the few which still paint theirs are
+    // minded. Without a material the windows do erase their HWND with
+    // their own background, and nothing changes.
+    const bool classics =
+        !wxWinUIPaintSurfacesEnabled() || !backdrop ||
+        wxWinUIPaintSurfaceHasHwndPainters((WXHWND)tlwHwnd);
+
     // Recompute exclusions from current visible geometry on every erase.
     // Hidden or moved clients therefore cannot shield their former pixels.
     // Without a restorable DC, retain the existing erase-and-repair path.
     int savedDC = ::SaveDC(hdc);
-    if ( savedDC &&
+    if ( classics && savedDC &&
          !wxWinUIVisitClassicsForIslandErase(island, hdc, rc, true) )
     {
         const bool restored = ::RestoreDC(hdc, savedDC) != 0;
@@ -4011,7 +4616,7 @@ bool wxWinUIEraseIslandBackground(HWND island, HDC hdc)
     RECT effectiveClip;
     const bool erased = ::GetClipBox(hdc, &effectiveClip) == NULLREGION ||
                         ::FillRect(hdc, &rc, brush) != 0;
-    if ( erased )
+    if ( erased && classics )
         wxWinUIVisitClassicsForIslandErase(island, hdc, rc, false);
     // Repair observes the reduced clip above; restoring it first would
     // unnecessarily invalidate paint-owned pixels which were never erased.
@@ -4111,7 +4716,7 @@ void wxWinUIApplyWindowBackdrop(wxWindow *tlw)
 
     if ( budgetExhausted )
     {
-        wxLogWarning(
+        wxLogDebug(
             "wxWinUI: shell theme re-entrancy did not converge after "
             "eight passes; waiting for the next system/theme notification");
     }

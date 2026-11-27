@@ -1031,8 +1031,15 @@ wxRichTextStyleListCtrl::wxRichTextStyleListCtrl(wxWindow* parent, wxWindowID id
 bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // One frame, around the list: not one more around the list and the
+    // choice under it.
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_NONE;
+#else
     if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
         style |= wxBORDER_THEME;
+#endif
 
     wxControl::Create(parent, id, pos, size, style);
 
@@ -1047,6 +1054,9 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
         listBoxStyle = wxBORDER_THEME;
     else
         listBoxStyle = wxBORDER_NONE;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    listBoxStyle = wxBORDER_THEME;
+#endif
 
     m_styleListBox = new wxRichTextStyleListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, listBoxStyle);
 

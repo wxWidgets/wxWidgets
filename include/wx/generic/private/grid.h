@@ -148,7 +148,8 @@ public:
                        wxDefaultPosition,
                        wxDefaultSize,
                        (owner->CanHideColumns() ? wxHD_ALLOW_HIDE : 0) |
-                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
+                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0) |
+                       wxBORDER_NONE)
     {
         m_inResizing = 0;
     }

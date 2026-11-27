@@ -376,15 +376,18 @@ bool wxStaticBox::UpdateWinUIContent()
         MUXC::Grid layout;
         root.Child(layout);
 
+        // The same outline as wxRadioBox, which is a box of this kind too:
+        // the card stroke used here before is nearly invisible on a dark
+        // backdrop, and two kinds of boxes side by side did not match.
         const auto makeThemedBorder =
             [](wxWinUIThemeBrushProperty property)
             {
                 auto border = wxWinUICreateThemeBrushBorder(
-                    "CardStrokeColorDefaultBrush", property);
+                    "ControlStrokeColorDefaultBrush", property);
                 if ( !border )
                 {
                     border = wxWinUICreateThemeBrushBorder(
-                        "ControlStrokeColorDefaultBrush", property);
+                        "CardStrokeColorDefaultBrush", property);
                 }
                 return border;
             };
@@ -396,6 +399,7 @@ bool wxStaticBox::UpdateWinUIContent()
         const bool hasTitle =
             owner->m_labelWin || !stringLabel.empty();
         constexpr double titleLineDIP = 8.0;
+        constexpr double cornerDIP = 8.0;
 
         MUXC::Border frame = makeThemedBorder(
             wxWinUIThemeBrushProperty::BorderBrush);
@@ -403,6 +407,10 @@ bool wxStaticBox::UpdateWinUIContent()
         if ( !frame )
             frame = MUXC::Border();
 
+        // With a title, this border has no top edge: the title row below
+        // draws it, in pieces, and the two corners which end it. A border
+        // without a top edge cannot round its top corners itself, they
+        // would thin out to nothing; so it starts below them.
         MUX::Thickness borderThickness{};
         borderThickness.Left = 1.0;
         borderThickness.Top = hasTitle ? 0.0 : 1.0;
@@ -410,31 +418,32 @@ bool wxStaticBox::UpdateWinUIContent()
         borderThickness.Bottom = 1.0;
         frame.BorderThickness(borderThickness);
         MUX::CornerRadius radius{};
-        radius.TopLeft = 8.0;
-        radius.TopRight = 8.0;
-        radius.BottomRight = 8.0;
-        radius.BottomLeft = 8.0;
+        radius.TopLeft = hasTitle ? 0.0 : cornerDIP;
+        radius.TopRight = hasTitle ? 0.0 : cornerDIP;
+        radius.BottomRight = cornerDIP;
+        radius.BottomLeft = cornerDIP;
         frame.CornerRadius(radius);
 
+        const double frameTopDIP = hasTitle ? titleLineDIP : 0.0;
         MUX::Thickness frameMargin{};
-        frameMargin.Top = hasTitle ? titleLineDIP : 0.0;
+        frameMargin.Top = hasTitle ? frameTopDIP + cornerDIP : 0.0;
         frame.Margin(frameMargin);
-        const double frameTopDIP = frameMargin.Top;
         layout.Children().Append(frame);
 
         MUXC::TextBlock title{ nullptr };
         double titleGapDIP = 0.0;
         if ( hasTitle )
         {
-            // Draw the top edge as two independent theme-coloured segments.
-            // This creates a genuine gap for the title and eliminates the old
-            // opaque light/dark mask, so Mica, custom backgrounds and high
-            // contrast all remain visible through the group header.
+            // The top edge, from left to right: the rounded corner, the
+            // title, a line, the other rounded corner. The title starts
+            // where the first corner ends, with nothing between them: a
+            // genuine gap, through which Mica, a custom background or a
+            // high contrast colour stays visible.
             MUXC::Grid titleRow;
             titleRow.VerticalAlignment(MUX::VerticalAlignment::Top);
 
             MUXC::ColumnDefinition leftColumn;
-            leftColumn.Width(MUX::GridLengthHelper::FromPixels(8.0));
+            leftColumn.Width(MUX::GridLengthHelper::FromPixels(cornerDIP));
             titleRow.ColumnDefinitions().Append(leftColumn);
 
             MUXC::ColumnDefinition titleColumn;
@@ -467,6 +476,40 @@ bool wxStaticBox::UpdateWinUIContent()
                 1.0, MUX::GridUnitType::Star));
             titleRow.ColumnDefinitions().Append(rightColumn);
 
+            MUXC::ColumnDefinition rightCornerColumn;
+            rightCornerColumn.Width(
+                MUX::GridLengthHelper::FromPixels(cornerDIP));
+            titleRow.ColumnDefinitions().Append(rightCornerColumn);
+
+            const auto makeCorner = [&](bool leading)
+            {
+                MUXC::Border corner = makeThemedBorder(
+                    wxWinUIThemeBrushProperty::BorderBrush);
+                if ( !corner )
+                    corner = MUXC::Border();
+                MUX::Thickness thickness{};
+                thickness.Top = 1.0;
+                MUX::CornerRadius cornerRadius{};
+                if ( leading )
+                {
+                    thickness.Left = 1.0;
+                    cornerRadius.TopLeft = cornerDIP;
+                }
+                else
+                {
+                    thickness.Right = 1.0;
+                    cornerRadius.TopRight = cornerDIP;
+                }
+                corner.BorderThickness(thickness);
+                corner.CornerRadius(cornerRadius);
+                corner.Height(cornerDIP);
+                corner.VerticalAlignment(MUX::VerticalAlignment::Top);
+                MUX::Thickness margin{};
+                margin.Top = titleLineDIP;
+                corner.Margin(margin);
+                return corner;
+            };
+
             const auto makeLine = [&]()
             {
                 MUXC::Border line = makeThemedBorder(
@@ -481,9 +524,9 @@ bool wxStaticBox::UpdateWinUIContent()
                 return line;
             };
 
-            MUXC::Border leftLine = makeLine();
-            MUXC::Grid::SetColumn(leftLine, 0);
-            titleRow.Children().Append(leftLine);
+            MUXC::Border leftCorner = makeCorner(true);
+            MUXC::Grid::SetColumn(leftCorner, 0);
+            titleRow.Children().Append(leftCorner);
 
             if ( !owner->m_labelWin )
             {
@@ -510,6 +553,10 @@ bool wxStaticBox::UpdateWinUIContent()
             MUXC::Border rightLine = makeLine();
             MUXC::Grid::SetColumn(rightLine, 2);
             titleRow.Children().Append(rightLine);
+
+            MUXC::Border rightCorner = makeCorner(false);
+            MUXC::Grid::SetColumn(rightCorner, 3);
+            titleRow.Children().Append(rightCorner);
             layout.Children().Append(titleRow);
         }
 

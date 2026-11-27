@@ -26,6 +26,7 @@
 
 #include "private.h"
 #include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
 
 #include "wx/log.h"
 #include "wx/image.h"
@@ -908,28 +909,27 @@ static bool wxWinUISyncRealizedTreeItem(
         settings.SetValue(
             MUXC::TreeViewItemTemplateSettings::IndentationProperty(),
             winrt::box_value(thickness));
-        if ( impl->showButtons )
+        // WinUI itself stores these two settings as local values (when it
+        // prepares the container and each time the node expands or
+        // collapses) and their default is Collapsed, so clearing them does
+        // not restore the stock behaviour: it hides both glyphs and narrows
+        // the chevron column by the glyph width. Always write the value the
+        // stock code would have written for a tree with buttons.
+        const bool expanded = node.IsExpanded();
+        const auto glyphVisibility = [impl](bool shown)
         {
-            settings.ClearValue(
-                MUXC::TreeViewItemTemplateSettings::
-                    ExpandedGlyphVisibilityProperty());
-            settings.ClearValue(
-                MUXC::TreeViewItemTemplateSettings::
-                    CollapsedGlyphVisibilityProperty());
-        }
-        else
-        {
-            const auto collapsed =
-                winrt::box_value(MUX::Visibility::Collapsed);
-            settings.SetValue(
-                MUXC::TreeViewItemTemplateSettings::
-                    ExpandedGlyphVisibilityProperty(),
-                collapsed);
-            settings.SetValue(
-                MUXC::TreeViewItemTemplateSettings::
-                    CollapsedGlyphVisibilityProperty(),
-                collapsed);
-        }
+            return winrt::box_value(impl->showButtons && shown
+                ? MUX::Visibility::Visible
+                : MUX::Visibility::Collapsed);
+        };
+        settings.SetValue(
+            MUXC::TreeViewItemTemplateSettings::
+                ExpandedGlyphVisibilityProperty(),
+            glyphVisibility(expanded));
+        settings.SetValue(
+            MUXC::TreeViewItemTemplateSettings::
+                CollapsedGlyphVisibilityProperty(),
+            glyphVisibility(!expanded));
         // Keep the label's foreground inherited: the stock item template
         // owns theme/selection/disabled colours, while wx item colours remain
         // explicit overrides. No wx/impl access follows this observable write.
@@ -1811,10 +1811,17 @@ bool wxTreeCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
+    // The tree of wxMSW has a border by default: here it is the frame of a
+    // control, which XAML draws around the window unless the program asked
+    // for no border. Win32 keeps none: the TreeView fills the window.
+    const bool framed = (style & wxBORDER_MASK) != wxBORDER_NONE;
     style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
+
+    if ( framed )
+        wxWinUIRequestWindowFrame(this);
 
     m_winui.reset(new wxWinUITreeCtrlImpl);
     // SetStateImages() is valid before two-step Create(). Keep the public
@@ -2365,7 +2372,23 @@ bool wxTreeCtrl::Create(wxWindow *parent,
                                 std::lround(clientPosition.X)),
                             static_cast<int>(
                                 std::lround(clientPosition.Y)));
-                        owner->OnPeerDoubleTapped(point);
+                        // The activation handler may open a modal dialog or
+                        // delete the tree: it runs once this callback has
+                        // returned.
+                        wxWinUIPostNotification(
+                            [weakCallbackState, callbackGeneration, point]()
+                            {
+                                const auto liveState =
+                                    weakCallbackState.lock();
+                                wxTreeCtrl * const live = liveState
+                                    ? liveState->GetOwner(callbackGeneration)
+                                    : nullptr;
+                                if ( live && live->m_winui &&
+                                     live->m_winui->callbackState == liveState )
+                                {
+                                    live->OnPeerDoubleTapped(point);
+                                }
+                            });
                     }
                     catch ( const winrt::hresult_error& e )
                     {
@@ -2769,7 +2792,7 @@ bool wxWinUITreeCtrlTestAccess::FocusPeerItem(wxTreeCtrl &control,
         // A false return is not necessarily failure: XAML can retain only
         // logical focus or decide no physical focus transition was needed.
         // The authoritative postcondition is FocusManager's current element.
-        (void)container.Focus(MUX::FocusState::Programmatic);
+        (void)container.Focus(wxWinUIProgrammaticFocusState());
 
         owner = state->GetOwner(generation);
         if ( owner != self || !owner->m_winui )
@@ -3583,6 +3606,7 @@ wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
 
 void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     wxWinUITreeCtrlImpl * const impl = m_winui.get();
@@ -3601,6 +3625,7 @@ void wxTreeCtrl::SetItemImage(const wxTreeItemId& item,
                               int image,
                               wxTreeItemIcon which)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     treeItem->images[which] = image;
@@ -3649,6 +3674,7 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
 
 void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     treeItem->bold = bold;
@@ -3700,6 +3726,7 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item, const wxColou
 
 void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     treeItem->font = font;
@@ -3834,7 +3861,7 @@ void wxTreeCtrl::ClearFocusedItem()
     try
     {
         if ( m_winui->treeView )
-            m_winui->treeView.Focus(MUX::FocusState::Programmatic);
+            m_winui->treeView.Focus(wxWinUIProgrammaticFocusState());
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -3876,7 +3903,7 @@ void wxTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
         // UIElement::Focus() returning false doesn't imply that logical focus
         // failed. Resolve the actual focused element below instead of treating
         // the bool as the transaction's commit result.
-        (void)container.Focus(MUX::FocusState::Programmatic);
+        (void)container.Focus(wxWinUIProgrammaticFocusState());
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -4241,6 +4268,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     const std::shared_ptr<wxWinUITreeCallbackState> lifetimeState =
@@ -4563,6 +4591,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     const std::shared_ptr<wxWinUITreeCallbackState> lifetimeState =
@@ -4795,6 +4824,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
+    InvalidateBestSize();
     if ( !m_winui || !m_winui->root )
         return;
     const std::shared_ptr<wxWinUITreeCallbackState> state =
@@ -5032,6 +5062,7 @@ void wxTreeCtrl::DeleteAllItems()
 
 void wxTreeCtrl::Expand(const wxTreeItemId& item)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || treeItem != m_winui->root.get(),
@@ -5043,6 +5074,7 @@ void wxTreeCtrl::Expand(const wxTreeItemId& item)
 
 void wxTreeCtrl::Collapse(const wxTreeItemId& item)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || treeItem != m_winui->root.get(),
@@ -5054,6 +5086,7 @@ void wxTreeCtrl::Collapse(const wxTreeItemId& item)
 
 void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
 {
+    InvalidateBestSize();
     if ( !m_winui )
         return;
     const std::shared_ptr<wxWinUITreeCallbackState> state =
@@ -5067,6 +5100,7 @@ void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
 
 void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 {
+    InvalidateBestSize();
     if ( IsExpanded(item) )
         Collapse(item);
     else
@@ -6612,6 +6646,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
                                       int selImage,
                                       wxTreeItemData *data)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *parentItem = GetItem(parent);
     wxCHECK_MSG( parentItem, wxTreeItemId(), wxT("invalid tree parent") );
     wxCHECK_MSG( !parentItem->deleting,
@@ -6880,6 +6915,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
                                        int selImage,
                                        wxTreeItemData *data)
 {
+    InvalidateBestSize();
     wxWinUITreeItem *parentItem = GetItem(parent);
     wxWinUITreeItem *previousItem = GetItem(idPrevious);
     wxCHECK_MSG( parentItem, wxTreeItemId(), wxT("invalid tree parent") );
@@ -7257,7 +7293,67 @@ wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
 
 wxSize wxTreeCtrl::DoGetBestSize() const
 {
-    return FromDIP(wxSize(180, 240));
+    const wxSize empty = FromDIP(wxSize(180, 240));
+    if ( !m_winui || !m_winui->root )
+        return empty;
+
+    // As in wxMSW, the best size shows every item which is currently
+    // expanded: the right edge of the widest label and one row per item.
+    // The metrics are those of the stock TreeViewItem template, as used when
+    // the items are projected (see the item content margin there).
+    const bool showButtons = HasFlag(wxTR_HAS_BUTTONS);
+    const int labelStart =
+        showButtons && HasExpandableItem() ? 40 : 12;   // DIPs
+    const int indent = static_cast<int>(m_indent);      // DIPs
+    const int imageWidth = HasImages()
+        ? ToDIP(GetImageLogicalSize(this)).x + 8 : 0;   // DIPs, with its gap
+
+    int rows = 0;
+    int right = 0;                                      // pixels
+    std::vector<std::pair<const wxWinUITreeItem *, int>> pending;
+    if ( HasFlag(wxTR_HIDE_ROOT) )
+    {
+        const auto& top = m_winui->root->children;
+        for ( auto it = top.rbegin(); it != top.rend(); ++it )
+            pending.emplace_back(it->get(), 0);
+    }
+    else
+    {
+        pending.emplace_back(m_winui->root.get(), 0);
+    }
+    while ( !pending.empty() )
+    {
+        const wxWinUITreeItem * const item = pending.back().first;
+        const int depth = pending.back().second;
+        pending.pop_back();
+
+        ++rows;
+        wxFont font = item->font.IsOk() ? item->font : GetFont();
+        if ( item->bold )
+            font.MakeBold();
+        int textWidth = 0;
+        GetTextExtent(item->text, &textWidth, nullptr, nullptr, nullptr, &font);
+        const bool hasImage = imageWidth && wxWinUIEffectiveTreeItemImage(
+            item, item->selected, item->expanded) != NO_IMAGE;
+        right = wxMax(right,
+            FromDIP(labelStart + depth * indent + (hasImage ? imageWidth : 0)) +
+                textWidth);
+
+        if ( item->expanded )
+        {
+            for ( auto it = item->children.rbegin();
+                  it != item->children.rend(); ++it )
+            {
+                pending.emplace_back(it->get(), depth + 1);
+            }
+        }
+    }
+    if ( !rows )
+        return empty;
+
+    // 4 DIPs around each item, 12 after its label, and room for the
+    // overlaid scroll bar.
+    return wxSize(right + FromDIP(4 + 12 + 4 + 16), rows * FromDIP(32) + FromDIP(8));
 }
 
 void wxTreeCtrl::OnImagesChanged()
@@ -8309,7 +8405,7 @@ void wxTreeCtrl::SchedulePeerSelectionCorrection(bool newRequest)
     if ( m_winui->peerCorrectionAttempts >= MaxDeferredAttempts )
     {
         m_winui->peerCorrectionQuarantined = true;
-        wxLogWarning(
+        wxLogDebug(
             "wxWinUI tree peer selection did not converge after bounded "
             "retries; the next selection request will re-arm it");
         return;
@@ -8851,12 +8947,18 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
         if ( result != PeerProjectionResult::Done )
             return result;
 
+        // The stock chevron column is 14 + 12 + 14 DIPs wide with its glyph
+        // and 28 without (see wxWinUISyncRealizedTreeItem()). When the
+        // gutter is reclaimed the label starts 12 DIPs from the item edge,
+        // as in a ListView, which keeps it clear of the selection indicator.
+        const double reclaimedGutter =
+            reclaimExpanderGutter ? (showButtons ? -28 : -16) : 0;
         result = insertProperty(
             L"ContentMargin",
             winrt::box_value(MUX::ThicknessHelper::FromLengths(
-                !rightToLeft && reclaimExpanderGutter ? -28 : 0,
+                rightToLeft ? 0 : reclaimedGutter,
                 0,
-                rightToLeft && reclaimExpanderGutter ? -28 : 0,
+                rightToLeft ? reclaimedGutter : 0,
                 0)));
         if ( result != PeerProjectionResult::Done )
             return result;
@@ -9175,7 +9277,7 @@ wxTreeCtrl::SyncPeerProjection()
     else if ( !impl->projectionWarningIssued )
     {
         impl->projectionWarningIssued = true;
-        wxLogWarning(
+        wxLogDebug(
             "wxWinUI tree peer projection did not converge after "
             "bounded retries; it will resume on the next model change");
     }
@@ -9845,6 +9947,7 @@ bool wxTreeCtrl::SendRightClickEvents(wxWinUITreeItem *item,
 
 void wxTreeCtrl::OnPeerNodeExpanded(wxWinUITreeItem *item)
 {
+    InvalidateBestSize();
     if ( !item || item->expanded )
         return;
 
@@ -9857,6 +9960,7 @@ void wxTreeCtrl::OnPeerNodeExpanded(wxWinUITreeItem *item)
 
 void wxTreeCtrl::OnPeerNodeCollapsed(wxWinUITreeItem *item)
 {
+    InvalidateBestSize();
     if ( !item || !item->expanded )
         return;
 

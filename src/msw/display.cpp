@@ -28,6 +28,10 @@
 #include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 namespace
 {
 
@@ -349,6 +353,11 @@ wxSize wxDisplayMSW::CallGetDpiForMonitor(int type) const
 
 wxSize wxDisplayMSW::GetPPI() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( const int forcedDPI = wxWinUIGetForcedDPI() )
+        return wxSize(forcedDPI, forcedDPI);
+#endif
+
     wxSize ppi = CallGetDpiForMonitor(MDT_EFFECTIVE_DPI);
     if ( ppi.IsEmpty() && IsPrimary() )
         ppi = wxDisplayImplSingleMSW().GetPPI();

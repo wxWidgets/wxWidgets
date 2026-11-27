@@ -1076,39 +1076,22 @@ wxSize wxRadioBox::DoGetBestSize() const
     // the WinUI glyph + spacing + margins, then lay out the grid and frame.
     // WinUI radio buttons are wider than a hand-rolled estimate, which otherwise
     // caused the last column to be clipped.
+    // Each item is a stock RadioButton: a 20 DIP glyph, 8 DIPs before the
+    // label, 32 DIPs high, plus the margins given to it when it is built
+    // (2 + 12 across, 2 + 2 down). Measuring the buttons themselves is only
+    // right once their template has been applied, some time after creation,
+    // and the box would first be laid out with cropped labels.
+    const wxFont font = m_hasFont ? GetFont() : wxFont();
     int itemW = 0;
-    int itemH = FromDIP(30);
-
-    if ( m_winui && !m_winui->buttons.empty() )
+    int itemH = FromDIP(32 + 4);
+    for ( unsigned int i = 0; i < m_strings.GetCount(); ++i )
     {
-        const float inf = std::numeric_limits<float>::infinity();
-        for ( auto& button : m_winui->buttons )
-        {
-            try
-            {
-                button.Measure({ inf, inf });
-                const auto d = button.DesiredSize();   // includes the margins
-                // DesiredSize is in DIPs, the rest of this function works in
-                // physical pixels.
-                const wxSize item = FromDIP(
-                    wxSize(static_cast<int>(std::ceil(d.Width)),
-                           static_cast<int>(std::ceil(d.Height))));
-                itemW = wxMax(itemW, item.x);
-                itemH = wxMax(itemH, item.y);
-            }
-            catch ( const winrt::hresult_error& )
-            {
-            }
-        }
+        const wxSize label = wxWinUIMeasureText(
+            this, wxControl::GetLabelText(m_strings[i]), font);
+        itemW = wxMax(itemW, label.x);
+        itemH = wxMax(itemH, label.y + FromDIP(11 + 4));
     }
-
-    if ( itemW <= 0 )   // measuring failed: fall back to a generous estimate
-    {
-        int maxText = 0;
-        for ( unsigned int i = 0; i < m_strings.GetCount(); ++i )
-            maxText = wxMax(maxText, GetTextExtent(m_strings[i]).x);
-        itemW = maxText + FromDIP(60);
-    }
+    itemW += FromDIP(20 + 8 + 4 + 2 + 12);
 
     const int cols = wxMax(1, GetColumnCount());
     const int rows = wxMax(1, GetRowCount());
@@ -1407,7 +1390,7 @@ bool wxRadioBox::RebuildItems()
             callbackState->QuarantineApply();
             if ( callbackState->MarkApplyBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI RadioBox model kept changing during projection; "
                     "quarantining this request until the next external model "
                     "mutation.");
@@ -1436,7 +1419,7 @@ bool wxRadioBox::RebuildItems()
             // while this apply guard is still active.
             if ( callbackState->MarkApplyBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "WinUI RadioBox model kept changing during projection; "
                     "using its one bounded asynchronous replay.");
             }
@@ -1605,6 +1588,9 @@ bool wxRadioBox::RebuildItems()
                 wxWinUIApplyFont(button, font);
                 wxWinUIApplyForeground(button, foreground);
                 button.GroupName(groupName);
+                // The stock style reserves 120 DIPs, far more than a short
+                // label needs.
+                button.MinWidth(0.0);
                 if ( i < static_cast<int>(itemEnabled.size()) )
                 {
                     button.IsEnabled(

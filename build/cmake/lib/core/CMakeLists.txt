@@ -79,9 +79,11 @@ if(WXMSW)
             src/generic/fdrepdlg.cpp
             src/generic/fontdlgg.cpp
             src/generic/listctrl.cpp
+            src/generic/mdig.cpp
             src/winui/winui.cpp
             src/winui/appearance.cpp
             src/winui/ctrlhost.cpp
+            src/winui/paintsurface.cpp
             src/winui/dropbroker.cpp
             src/winui/inputrouter.cpp
             src/winui/inputstate.cpp
@@ -102,10 +104,12 @@ if(WXMSW)
             src/winui/checkbox.cpp
             src/winui/checklst.cpp
             src/winui/clrpicker.cpp
+            src/winui/collpane.cpp
             src/winui/colordlg.cpp
             src/winui/datectrl.cpp
             src/winui/dataview.cpp
             src/winui/dlgpresenter.cpp
+            src/winui/fontdlg.cpp
             src/winui/choice.cpp
             src/winui/popupretirement.cpp
             src/winui/combobox.cpp
@@ -204,6 +208,9 @@ endif()
 wx_add_library(wxcore ${CORE_SRC})
 if(WXWINUI AND wxUSE_WINUI3)
     wx_winui3_configure_target(wxcore)
+
+    # The font dialog reads the fonts and their styles from DirectWrite.
+    wx_lib_link_libraries(wxcore PRIVATE dwrite)
 
     if(wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
         # This opt-in target is for in-tree tests only: do not install it or

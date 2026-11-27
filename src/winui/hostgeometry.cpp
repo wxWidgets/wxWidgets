@@ -59,6 +59,7 @@ unsigned gs_flushSchedules = 0;
 unsigned gs_flushRuns = 0;
 unsigned gs_flushCallbackAttempts = 0;
 unsigned gs_impossibleZOrderOverlaps = 0;
+long long gs_profileFlushCostTicks = 0;
 #ifdef WXWINUI_TEST_SUPPORT
 unsigned gs_bridgeRegionChanges = 0;
 std::function<void (wxWindow *)> gs_testSlotSyncedHook;
@@ -144,6 +145,16 @@ void wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
 #endif // WXWINUI_TEST_SUPPORT
 
 #ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostGeometryTestAccess::RequestSlotSync(wxWindow *window)
+{
+    wxWinUITopLevelHost * const host =
+        window ? wxWinUITopLevelHost::FindSlotOwner(window) : nullptr;
+    if ( host )
+        host->MarkDirty(window);
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
 void wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook(
     std::function<void ()> callback)
 {
@@ -189,6 +200,9 @@ void wxWinUITopLevelHost::SetSlotClipRect(
     slot->m_hasClipRect = true;
     if ( ++slot->m_clipRevision == 0 )
         ++slot->m_clipRevision;
+    // What is visible of the slot changed: the report of native windows
+    // overlapping XAML content, made by the z-order pass, depends on it.
+    m_zOrderDirty = true;
     InvalidateStructure();
     MarkDirty(window);
 }
@@ -207,6 +221,7 @@ void wxWinUITopLevelHost::ClearSlotClip(wxWindow *window)
     slot->m_hasClipRect = false;
     if ( ++slot->m_clipRevision == 0 )
         ++slot->m_clipRevision;
+    m_zOrderDirty = true;
     InvalidateStructure();
     MarkDirty(window);
 }
@@ -233,6 +248,9 @@ void wxWinUITopLevelHost::SetSlotClipHeight(
     slot->m_hasClipRect = true;
     if ( ++slot->m_clipRevision == 0 )
         ++slot->m_clipRevision;
+    // What is visible of the slot changed: the report of native windows
+    // overlapping XAML content, made by the z-order pass, depends on it.
+    m_zOrderDirty = true;
     InvalidateStructure();
     MarkDirty(window);
 }
@@ -326,11 +344,8 @@ void wxWinUITopLevelHost::OnAncestorGeometry(wxEvent& event)
         return;
     }
 
-    // Anything under it may have moved on screen or changed visibility, and
-    // an ancestor is rarely the only thing which moved: the flush is
-    // coalesced, so resync everything rather than guess.
-    MarkSlotsUnderAncestor(ancestor);
-    MarkAllDirty();
+    // Its canvas carries everything below it: nothing else has to move.
+    ApplyWindowGeometry(ancestor, false);
 }
 
 void wxWinUITopLevelHost::OnSlotWindowGeometry(wxEvent& event)
@@ -340,11 +355,8 @@ void wxWinUITopLevelHost::OnSlotWindowGeometry(wxEvent& event)
     wxWindow * const window = wxDynamicCast(event.GetEventObject(), wxWindow);
     if ( window && m_slots.count(window) )
     {
-        wxWinUISlot * const slot = FindSlot(window);
-        if ( slot && ++slot->m_cursorTopologyGeneration == 0 )
-            ++slot->m_cursorTopologyGeneration;
         InvalidateStructure();
-        MarkDirty(window);
+        ApplyWindowGeometry(window, false);
     }
 }
 
@@ -357,8 +369,511 @@ void wxWinUITopLevelHost::OnTLWSize(wxSizeEvent& event)
         if ( slot && ++slot->m_cursorTopologyGeneration == 0 )
             ++slot->m_cursorTopologyGeneration;
     }
+
+    // The children of the TLW keep their place in its client area, and each
+    // of them which the new size moves reports it by itself.
     InvalidateStructure();
-    MarkAllDirty();
+    ApplyWindowGeometry(m_tlw, false);
+}
+
+// ----------------------------------------------------------------------------
+// nested tree: geometry
+// ----------------------------------------------------------------------------
+
+bool wxWinUITopLevelHost::IsTLWVisible() const
+{
+    // IsShownOnScreen() does not make minimization an explicit part of its
+    // contract. The XAML tree must not remain live/hit-testable while its TLW
+    // is hidden or iconic, even if every wx child still has its shown bit.
+    const HWND hwndTLW = GetHwndOf(m_tlw);
+    return hwndTLW && ::IsWindowVisible(hwndTLW) && !::IsIconic(hwndTLW);
+}
+
+bool wxWinUITopLevelHost::ComputeSlotRects(
+    wxWindow *window,
+    bool hasClipRect,
+    const wxWinUIClipRectDIP& clipRectDIP,
+    SlotRects& rects) const
+{
+    const HWND hwnd = GetHwndOf(window);
+    const HWND hwndTLW = GetHwndOf(m_tlw);
+    if ( !hwnd || !hwndTLW )
+        return false;
+
+    // All island geometry is physical-LTR: window rects are physical
+    // already, so anchor them on the physical client origin.  (See
+    // GetClientScreenRect for why ScreenToClient must not be used.)
+    const RECT rcCS = GetClientScreenRect();
+    if ( window == m_tlw )
+    {
+        // The TLW itself can be slotted too (the Window-presentation dialog
+        // shell hosts its whole content this way): its slot simply covers
+        // the client area.
+        RECT rc;
+        ::GetClientRect(hwndTLW, &rc);
+        rects.rect = wxRect(0, 0, rc.right - rc.left, rc.bottom - rc.top);
+        rects.placement = rects.rect;
+    }
+    else
+    {
+        RECT wr;
+        ::GetWindowRect(hwnd, &wr);
+        rects.rect = wxRect(wr.left - rcCS.left, wr.top - rcCS.top,
+                            wr.right - wr.left, wr.bottom - wr.top);
+
+        const wxPoint origin = GetChildrenOriginOnScreen(window->GetParent());
+        rects.placement = wxRect(wr.left - origin.x, wr.top - origin.y,
+                                 rects.rect.width, rects.rect.height);
+    }
+
+    rects.ownVisible = rects.rect;
+    if ( hasClipRect )
+    {
+        const wxRect localLimit = ClipRectDIPToPhysical(
+            clipRectDIP, GetScale(), rects.rect.GetSize());
+        rects.ownVisible.Intersect(wxRect(rects.rect.x + localLimit.x,
+                                          rects.rect.y + localLimit.y,
+                                          localLimit.width,
+                                          localLimit.height));
+    }
+
+    // Every ancestor clips to its client area, like HWND clipping does. In
+    // the XAML tree their canvases do it; this is for hit testing.
+    rects.visible = rects.ownVisible;
+    if ( window != m_tlw )
+    {
+        for ( wxWindow *p = window->GetParent();
+              p && p != m_tlw && !rects.visible.IsEmpty();
+              p = p->GetParent() )
+        {
+            const HWND hp = GetHwndOf(p);
+            if ( !hp )
+                break;
+
+            RECT rc;
+            ::GetClientRect(hp, &rc);
+            ::MapWindowPoints(hp, nullptr, reinterpret_cast<POINT *>(&rc), 2);
+            if ( rc.left > rc.right )
+            {
+                const LONG swap = rc.left;
+                rc.left = rc.right;
+                rc.right = swap;
+            }
+
+            rects.visible.Intersect(
+                wxRect(rc.left - rcCS.left, rc.top - rcCS.top,
+                       rc.right - rc.left, rc.bottom - rc.top));
+        }
+    }
+    return true;
+}
+
+void wxWinUITopLevelHost::RefreshSlotRects(const wxWinUISlot& slot) const
+{
+    // A slot arranged by its parent's XAML takes its rectangle from that
+    // layout: only the full sync can read it.
+    if ( slot.m_isCompositeChild ||
+         slot.m_rectsGeneration == m_structureGeneration )
+    {
+        return;
+    }
+
+    // While the TLW is frozen the XAML tree is left as it was: what is on
+    // screen, and can be pointed at, is the geometry of the last sync.
+    if ( m_tlw && m_tlw->IsFrozen() )
+        return;
+
+    wxWindow * const window = slot.m_window;
+    SlotRects rects;
+    if ( !window ||
+         !ComputeSlotRects(window, slot.m_hasClipRect, slot.m_clipRectDIP,
+                           rects) )
+    {
+        return;
+    }
+
+    slot.m_rectPx = rects.rect;
+    slot.m_visibleRectPx = rects.visible;
+    slot.m_visible = IsTLWVisible() && window->IsShownOnScreen() &&
+                     !rects.visible.IsEmpty();
+    slot.m_rectsGeneration = m_structureGeneration;
+}
+
+const wxRect& wxWinUISlot::GetRectInTLW() const
+{
+    const wxWinUITopLevelHost * const host =
+        m_lifetime ? m_lifetime->GetHost() : nullptr;
+    if ( host )
+        host->RefreshSlotRects(*this);
+    return m_rectPx;
+}
+
+// Writes the client rectangle and the visibility of the window to the canvas
+// standing for it. Returns true if the visibility changed.
+bool wxWinUITopLevelHost::SyncNode(wxWindow *window)
+{
+    const auto it = m_nodes.find(window);
+    if ( it == m_nodes.end() || !it->second.canvas || m_shuttingDown )
+        return false;
+
+    WindowNode& node = it->second;
+    const HWND hwnd = GetHwndOf(window);
+    if ( !hwnd )
+        return false;
+
+    RECT rc;
+    ::GetClientRect(hwnd, &rc);
+    ::MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT *>(&rc), 2);
+    if ( rc.left > rc.right )
+    {
+        const LONG swap = rc.left;
+        rc.left = rc.right;
+        rc.right = swap;
+    }
+
+    const wxPoint origin = GetChildrenOriginOnScreen(window->GetParent());
+    const wxRect rect(rc.left - origin.x, rc.top - origin.y,
+                      rc.right - rc.left, rc.bottom - rc.top);
+    const double scale = GetScale();
+    const bool shown = window->IsShown();
+
+    const bool placed =
+        node.synced && node.scale == scale && node.rectPx == rect;
+    const bool visibilityChanged = !node.synced || node.shown != shown;
+    if ( placed && !visibilityChanged )
+        return false;
+
+    // Children laid out for the former size may not fit the new one, and
+    // nothing reports that for them.
+    const bool resized =
+        !node.synced || node.rectPx.GetSize() != rect.GetSize();
+    const bool clipNow =
+        !node.clipped && resized &&
+        AnyChildOverflows(window, rect.GetSize());
+    if ( clipNow )
+        node.clipped = true;
+    const bool clipped = node.clipped;
+
+    // Collapsing a canvas which holds the keyboard focus can run application
+    // code, which is free to destroy the window and this entry with it: the
+    // entry is brought up to date first and not used again.
+    const auto canvas = node.canvas;
+    const auto clip = node.clip;
+    node.rectPx = rect;
+    node.scale = scale;
+    node.shown = shown;
+    node.synced = true;
+
+    try
+    {
+        using namespace winrt::Microsoft::UI::Xaml;
+        using winrt::Microsoft::UI::Xaml::Controls::Canvas;
+
+        if ( !placed )
+        {
+            Canvas::SetLeft(canvas, rect.x / scale);
+            Canvas::SetTop(canvas, rect.y / scale);
+            canvas.Width(rect.width / scale);
+            canvas.Height(rect.height / scale);
+
+            // Children are clipped to the client area, like child HWNDs,
+            // but only once one of them does not fit: see NoteChildPlacement().
+            clip.Rect(winrt::Windows::Foundation::Rect
+            {
+                0.f, 0.f,
+                float(rect.width / scale), float(rect.height / scale)
+            });
+            if ( clipped && !canvas.Clip() )
+                canvas.Clip(clip);
+        }
+        if ( visibilityChanged )
+        {
+            canvas.Visibility(shown ? Visibility::Visible
+                                    : Visibility::Collapsed);
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("window node geometry", e);
+        const auto again = m_nodes.find(window);
+        if ( again != m_nodes.end() )
+            again->second.synced = false;
+    }
+
+    // This canvas is itself something placed in the one of its parent. The
+    // window is only known to be alive if its entry survived the setters.
+    if ( !m_shuttingDown && m_nodes.count(window) )
+        NoteChildPlacement(window->GetParent(), rect);
+    return visibilityChanged;
+}
+
+namespace
+{
+
+inline bool wxWinUIFitsIn(const wxRect& rect, const wxSize& size)
+{
+    return rect.IsEmpty() ||
+           (rect.x >= 0 && rect.y >= 0 &&
+            rect.x + rect.width <= size.x &&
+            rect.y + rect.height <= size.y);
+}
+
+} // anonymous namespace
+
+bool wxWinUITopLevelHost::AnyChildOverflows(wxWindow *parent,
+                                            const wxSize& size) const
+{
+    // From what was last written for each child: no window is asked.
+    for ( const auto& entry : m_slots )
+    {
+        const wxWinUISlot * const slot = entry.second;
+        if ( slot && slot->m_placementValid &&
+             entry.first->GetParent() == parent &&
+             !wxWinUIFitsIn(slot->m_placementPx, size) )
+        {
+            return true;
+        }
+    }
+    for ( const auto& entry : m_nodes )
+    {
+        if ( entry.second.synced && entry.first->GetParent() == parent &&
+             !wxWinUIFitsIn(entry.second.rectPx, size) )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void wxWinUITopLevelHost::NoteChildPlacement(wxWindow *parent,
+                                             const wxRect& placement)
+{
+    // A canvas standing for a window clips to its client area, like the
+    // window does -- but only from the moment something in it does not fit.
+    // XAML draws outside the bounds of a control (a focus rectangle is three
+    // pixels out), and a control which fills its parent, or touches an edge
+    // of it, must not lose that to a clip it has no use for. What scrolls,
+    // or holds more than it shows, clips from the first overflow on.
+    if ( !parent || parent == m_tlw )
+        return;
+
+    const auto it = m_nodes.find(parent);
+    if ( it == m_nodes.end() || !it->second.canvas || it->second.clipped ||
+         !it->second.synced ||
+         wxWinUIFitsIn(placement, it->second.rectPx.GetSize()) )
+    {
+        return;
+    }
+
+    it->second.clipped = true;
+    try
+    {
+        it->second.canvas.Clip(it->second.clip);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("window node clip", e);
+    }
+}
+
+void wxWinUITopLevelHost::SyncAllNodes()
+{
+    std::vector<wxWindow *> windows;
+    windows.reserve(m_nodes.size());
+    for ( const auto& entry : m_nodes )
+        windows.push_back(entry.first);
+
+    for ( wxWindow *window : windows )
+    {
+        if ( m_shuttingDown )
+            return;
+        SyncNode(window);
+    }
+
+    // The full pass is also where a canvas stops clipping, once everything
+    // in it fits again.
+    for ( wxWindow *window : windows )
+    {
+        const auto it = m_nodes.find(window);
+        if ( it == m_nodes.end() || !it->second.canvas ||
+             !it->second.clipped || !it->second.synced ||
+             AnyChildOverflows(window, it->second.rectPx.GetSize()) )
+        {
+            continue;
+        }
+
+        it->second.clipped = false;
+        try
+        {
+            it->second.canvas.Clip(nullptr);
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("window node clip", e);
+        }
+    }
+}
+
+bool wxWinUITopLevelHost::SyncSlotPlacement(wxWinUISlot& slot)
+{
+    // Anything the last full sync did not settle, or which is in the middle
+    // of changing, goes through the full sync and its guards.
+    if ( slot.m_isCompositeChild || !slot.m_placementValid ||
+         slot.m_contentTransactionInProgress || slot.m_deletePending ||
+         slot.m_poisoned || !slot.m_container || !slot.m_mountCanvas )
+    {
+        return false;
+    }
+
+    wxWindow * const window = slot.m_window;
+    if ( !window || wxGetTopLevelParent(window) != m_tlw )
+        return false;
+
+    SlotRects rects;
+    if ( !ComputeSlotRects(window, slot.m_hasClipRect, slot.m_clipRectDIP,
+                           rects) )
+    {
+        return false;
+    }
+
+    const double scale = GetScale();
+    const bool visible = IsTLWVisible() && window->IsShown() &&
+                         !rects.ownVisible.IsEmpty();
+    const bool rtl = window->GetLayoutDirection() == wxLayout_RightToLeft;
+    if ( scale != slot.m_placementScale ||
+         visible != slot.m_placementVisible ||
+         rtl != slot.m_placementRTL )
+    {
+        return false;
+    }
+
+    if ( rects.placement == slot.m_placementPx )
+        return true;
+
+    // The clip of a slot which has one is relative to its size.
+    const bool resized =
+        rects.placement.GetSize() != slot.m_placementPx.GetSize();
+    if ( resized && slot.m_hasClipRect )
+        return false;
+
+    try
+    {
+        using winrt::Microsoft::UI::Xaml::Controls::Canvas;
+
+        const auto container = slot.m_container;
+        Canvas::SetLeft(container, rects.placement.x / scale);
+        Canvas::SetTop(container, rects.placement.y / scale);
+        if ( resized )
+        {
+            container.Width(rects.placement.width / scale);
+            container.Height(rects.placement.height / scale);
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("slot placement", e);
+        return false;
+    }
+
+    slot.m_placementPx = rects.placement;
+    NoteChildPlacement(window->GetParent(), rects.placement);
+    return true;
+}
+
+void wxWinUITopLevelHost::ApplyWindowGeometry(wxWindow *window,
+                                              bool zOrderMayHaveChanged)
+{
+    if ( m_shuttingDown || !window )
+        return;
+
+    // Nothing is written while the TLW is frozen: thawing it runs the full
+    // pass, see NotifyThaw().
+    if ( m_tlw && m_tlw->IsFrozen() )
+    {
+        m_frozenDirty = true;
+        m_zOrderDirty = true;
+        return;
+    }
+
+    OperationGuard hostOperation(this);
+
+    if ( window == m_tlw )
+    {
+        // Nothing moves in the client area of a TLW which is moved or
+        // resized. Whether it is shown at all is part of every slot.
+        if ( IsTLWVisible() != m_tlwVisibleSynced )
+            MarkAllDirty();
+        else if ( wxWinUISlot * const slot = FindSlot(window) )
+        {
+            if ( !SyncSlotPlacement(*slot) )
+                MarkDirty(window);
+        }
+        ScheduleFlush();
+        return;
+    }
+
+    // See wxWinUIInputNodesEnabled(): a window which is placed has a canvas,
+    // unless a XAML control shows it: its control stands for it.
+    if ( wxWinUIInputNodesEnabled() && !FindSlot(window) )
+    {
+        EnsureInputNodes(window);
+        if ( m_shuttingDown )
+            return;
+    }
+
+    bool known = false;
+    if ( m_nodes.count(window) )
+    {
+        known = true;
+        const bool visibilityChanged = SyncNode(window);
+        if ( m_shuttingDown )
+            return;
+
+        if ( visibilityChanged )
+        {
+            // Being shown or hidden is part of the state of each slot below
+            // (an open tooltip is closed, for one): they get the full sync.
+            MarkSlotsUnderAncestor(window);
+        }
+        else
+        {
+            for ( const auto& entry : m_slots )
+            {
+                wxWinUISlot * const slot = entry.second;
+                if ( !slot || entry.first == window ||
+                     std::find(slot->m_ancestors.begin(),
+                               slot->m_ancestors.end(),
+                               window) == slot->m_ancestors.end() )
+                {
+                    continue;
+                }
+
+                if ( ++slot->m_cursorTopologyGeneration == 0 )
+                    ++slot->m_cursorTopologyGeneration;
+                // Arranged by its parent's XAML, not by a canvas: its
+                // rectangle has to be read again.
+                if ( slot->m_isCompositeChild )
+                    MarkDirty(entry.first);
+            }
+        }
+    }
+
+    if ( wxWinUISlot * const slot = FindSlot(window) )
+    {
+        known = true;
+        if ( ++slot->m_cursorTopologyGeneration == 0 )
+            ++slot->m_cursorTopologyGeneration;
+        if ( !SyncSlotPlacement(*slot) )
+            MarkDirty(window);
+    }
+
+    // A window which is neither is a native surface: where it is decides
+    // whether it overlaps XAML content, which the z-order pass reports.
+    if ( zOrderMayHaveChanged || !known )
+        m_zOrderDirty = true;
+
+    // The scrollbars shown for the windows and the bridge region follow.
+    ScheduleFlush();
 }
 
 void wxWinUITopLevelHost::OnTLWDpiChanged(wxDPIChangedEvent& event)
@@ -502,20 +1017,21 @@ void wxWinUITopLevelHost::NotifyNativeLayoutMutation(
 
     ++gs_profileLayoutNotify;
 
-    // The same pass also diagnoses overlaps that the one composition band
-    // cannot represent. Geometry/visibility changes can create or remove
-    // such an overlap even when USER32's sibling order itself is unchanged.
+    // Anything caching where a window is on screen is stale from here on.
     InvalidateStructure();
-    wxUnusedVar(zOrderMayHaveChanged);
-    wxUnusedVar(mutated);
 
-    // Native scrollbars alter the bridge region and a native ancestor move
-    // changes every descendant slot. The common coalesced pass is both
-    // cheaper and safer than trying to infer the affected descendants here:
-    // narrowing it to the slots under the window which moved left the others
-    // holding stale geometry, i.e. tool bars which stopped drawing and
-    // stopped taking clicks until the next full pass.
-    MarkAllDirty();
+    if ( !mutated )
+    {
+        m_zOrderDirty = true;
+        MarkAllDirty();
+        return;
+    }
+
+    // The XAML tree is nested like the windows: the canvas or the container
+    // of this one window is repositioned now, and what is below it follows.
+    // This is the moment Win32 moved the window, so both trees agree before
+    // either is drawn again.
+    ApplyWindowGeometry(mutated, zOrderMayHaveChanged);
 }
 
 void wxWinUITopLevelHost::ScheduleFlush()
@@ -537,7 +1053,26 @@ void wxWinUITopLevelHost::ScheduleFlush()
 
     m_flushScheduled = true;
     ++gs_flushSchedules;
-    CallAfter(&wxWinUITopLevelHost::FlushSync);
+    CallAfter([this]()
+    {
+        // A synchronous flush (see wxWinUITLWHostFlushAfterResize()) may
+        // already have done the work this callback was queued for.
+        if ( m_flushScheduled )
+            FlushSync();
+        else
+            ++gs_flushCallbackAttempts;
+    });
+}
+
+WXDLLIMPEXP_CORE void wxWinUITLWHostFlushAfterResize(wxWindow *tlw)
+{
+    if ( !tlw )
+        return;
+
+    // Read-only lookup: sizing a window without an island creates nothing.
+    wxWinUITopLevelHost * const host = wxWinUITopLevelHost::FindForTLW(tlw);
+    if ( host )
+        host->FlushSync();
 }
 
 void wxWinUITopLevelHost::FlushSync()
@@ -588,10 +1123,15 @@ void wxWinUITopLevelHost::FlushSync()
         {
             if ( FILE * const f = wxWinUIInputProfileFile() )
             {
+                LARGE_INTEGER frequency;
+                ::QueryPerformanceFrequency(&frequency);
                 fprintf(f, "flush: 50 full slot syncs in %ld ms, "
+                           "cost %.3f ms each, "
                            "%u slots, layoutnotify=%u (suppressed %u) "
                            "markall=%u markone=%u policy=%u relayout=%u\n",
                         now - s_since,
+                        gs_profileFlushCostTicks * 1000.0 /
+                            (double(frequency.QuadPart) * 50),
                         static_cast<unsigned>(m_slots.size()),
                         gs_profileLayoutNotify,
                         gs_profileLayoutSuppressed,
@@ -606,11 +1146,26 @@ void wxWinUITopLevelHost::FlushSync()
                 gs_profileCursorPolicy = 0;
                 fflush(f);
             }
+            gs_profileFlushCostTicks = 0;
             s_runs = 0;
             s_since = now;
         }
     }
     ++m_flushRuns;
+
+    // Time spent in the flush itself, as opposed to the interval between
+    // flushes reported above. Only measured while profiling.
+    struct FlushCostScope
+    {
+        const bool enabled = wxWinUIInputProfileEnabled();
+        const long long started = enabled ? wxWinUIProfileNow() : 0;
+        ~FlushCostScope()
+        {
+            if ( enabled )
+                gs_profileFlushCostTicks += wxWinUIProfileNow() - started;
+        }
+    };
+    const FlushCostScope flushCost;
 
     EnsureInnerSubclass();
     EnsureBridgeOnTop();
@@ -623,6 +1178,7 @@ void wxWinUITopLevelHost::FlushSync()
     // application code handling the resulting wx event is allowed to destroy
     // any slot and mutate m_slots/m_dirty.
     std::vector<std::shared_ptr<wxWinUISlotLifetime>> pending;
+    const bool fullPass = m_allDirty;
     if ( m_allDirty )
     {
         pending.reserve(m_slots.size());
@@ -644,6 +1200,16 @@ void wxWinUITopLevelHost::FlushSync()
     // erased when this one finishes.
     m_allDirty = false;
     m_dirty.clear();
+
+    if ( fullPass )
+    {
+        // Everything is written again, the canvases standing for the windows
+        // included.
+        m_tlwVisibleSynced = IsTLWVisible();
+        SyncAllNodes();
+        if ( m_shuttingDown )
+            return;
+    }
 
     // Snapshot the structural epoch before crossing any slot setter. A
     // setter can synchronously mutate a slot already processed (or outside
@@ -680,13 +1246,27 @@ void wxWinUITopLevelHost::FlushSync()
     }
 
     if ( m_structureGeneration == syncStructureGeneration &&
-         m_structureAppliedGeneration != syncStructureGeneration )
+         (m_structureAppliedGeneration != syncStructureGeneration ||
+          m_zOrderDirty) )
     {
         // Publish only a pass which completed against this exact epoch. A
         // nested FlushSync() is free to publish a NEWER generation; the outer
         // pass must then fail without overwriting it.
-        if ( RecomputeZOrder(syncStructureGeneration) )
+        //
+        // Most epochs are windows which only moved or resized: the order of
+        // the siblings is unchanged, and there is nothing to recompute.
+        if ( !m_zOrderDirty )
+        {
             m_structureAppliedGeneration = syncStructureGeneration;
+        }
+        else
+        {
+            m_zOrderDirty = false;
+            if ( RecomputeZOrder(syncStructureGeneration) )
+                m_structureAppliedGeneration = syncStructureGeneration;
+            else
+                m_zOrderDirty = true;
+        }
         if ( m_shuttingDown )
             return;
     }
@@ -724,6 +1304,25 @@ void wxWinUITopLevelHost::FlushSync()
         // already-selected surface after the sync instead of silently leaving
         // the runtime's default Arrow in force.
         RefreshActivePointerCursor();
+    }
+
+    // XAML answers a change of the cursor of any of its elements, as this
+    // pass may have made, by choosing its own cursor again for the element
+    // under the pointer: the arrow over native space. It may only do so on
+    // its next tick, after everything above: look once more then.
+    if ( m_activeCursorSurface == ActiveCursorSurface::Native &&
+         m_inputPointerSourceAuthoritative && !m_cursorRecheckScheduled )
+    {
+        m_cursorRecheckScheduled = true;
+        CallAfter([this]()
+        {
+            m_cursorRecheckScheduled = false;
+            if ( !m_shuttingDown &&
+                 m_activeCursorSurface == ActiveCursorSurface::Native )
+            {
+                ReassertIslandPointerCursor();
+            }
+        });
     }
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
@@ -1036,87 +1635,63 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     const winrt::com_ptr<wxWinUISlotGrid> slotGrid =
         wxWinUIGetSlotGrid(&slot);
 
-    const HWND hwndTLW = GetHwndOf(m_tlw);
-
-    // Control rect in TLW client coordinates (physical px) -- the island
-    // covers exactly the TLW client area.  The TLW itself can be slotted too
-    // (the Window-presentation dialog shell hosts its whole content this
-    // way): its slot simply covers the client area.
+    // Three rectangles, in physical px. `rect` is the control in the TLW
+    // client area, which the island covers exactly. `placement` is the same
+    // with its position relative to the canvas the container is a child of,
+    // the one standing for the parent window. `ownVis` is what the slot's
+    // own clip leaves of `rect`, and `vis` what the ancestors then leave of
+    // that: their canvases do that clipping in the XAML tree, `vis` only
+    // serves hit testing.
     wxRect rect;
+    wxRect placement;
+    wxRect ownVis;
+    wxRect vis;
+
+    const double scale = GetScale();
+    const unsigned long long rectsGeneration = m_structureGeneration;
     if ( composite )
     {
         if ( !GetCompositeSlotRect(container, rect) )
             return;
-    }
-    else if ( w == m_tlw )
-    {
-        RECT rc;
-        ::GetClientRect(hwndTLW, &rc);
-        rect = wxRect(0, 0, rc.right - rc.left, rc.bottom - rc.top);
+
+        placement = rect;
+        ownVis = rect;
+        if ( hasClipRect )
+        {
+            const wxRect localLimit = ClipRectDIPToPhysical(
+                clipRectDIP, scale, rect.GetSize());
+            ownVis.Intersect(wxRect(rect.x + localLimit.x,
+                                    rect.y + localLimit.y,
+                                    localLimit.width,
+                                    localLimit.height));
+        }
+        vis = ownVis;
     }
     else
     {
-        // All island geometry is physical-LTR: window rects are physical
-        // already, so anchor them on the physical client origin.  (See
-        // GetClientScreenRect for why ScreenToClient must not be used.)
-        const RECT rcCS = GetClientScreenRect();
-        RECT wr;
-        ::GetWindowRect(hwnd, &wr);
-        rect = wxRect(wr.left - rcCS.left, wr.top - rcCS.top,
-                      wr.right - wr.left, wr.bottom - wr.top);
-    }
+        SlotRects rects;
+        if ( !ComputeSlotRects(w, hasClipRect, clipRectDIP, rects) )
+            return;
 
-    // Clip against every ancestor's client area, like HWND clipping does.
-    wxRect vis = rect;
-
-    const double scale = GetScale();
-    if ( hasClipRect )
-    {
-        const wxRect localLimit = ClipRectDIPToPhysical(
-            clipRectDIP, scale, rect.GetSize());
-        const wxRect limit(rect.x + localLimit.x,
-                           rect.y + localLimit.y,
-                           localLimit.width,
-                           localLimit.height);
-        vis.Intersect(limit);
-    }
-    if ( w != m_tlw && !composite )
-    {
-        const RECT rcCS = GetClientScreenRect();
-        for ( wxWindow *p = w->GetParent();
-              p && p != m_tlw && !vis.IsEmpty();
-              p = p->GetParent() )
-        {
-            const HWND hp = GetHwndOf(p);
-            if ( !hp )
-                break;
-
-            RECT rc;
-            ::GetClientRect(hp, &rc);
-            ::MapWindowPoints(hp, nullptr, reinterpret_cast<POINT *>(&rc), 2);
-            if ( rc.left > rc.right )
-            {
-                const LONG swap = rc.left;
-                rc.left = rc.right;
-                rc.right = swap;
-            }
-
-            vis.Intersect(wxRect(rc.left - rcCS.left, rc.top - rcCS.top,
-                                 rc.right - rc.left, rc.bottom - rc.top));
-        }
+        rect = rects.rect;
+        placement = rects.placement;
+        ownVis = rects.ownVisible;
+        vis = rects.visible;
     }
 
     const auto direction =
         w->GetLayoutDirection() == wxLayout_RightToLeft
             ? winrt::Microsoft::UI::Xaml::FlowDirection::RightToLeft
             : winrt::Microsoft::UI::Xaml::FlowDirection::LeftToRight;
-    // IsShownOnScreen() does not make minimization an explicit part of its
-    // contract. The XAML tree must not remain live/hit-testable while its TLW
-    // is hidden or iconic, even if every wx child still has its shown bit.
-    const bool tlwVisible =
-        hwndTLW && ::IsWindowVisible(hwndTLW) && !::IsIconic(hwndTLW);
+    const bool tlwVisible = IsTLWVisible();
     const bool effectiveVisible =
         tlwVisible && w->IsShownOnScreen() && (composite || !vis.IsEmpty());
+    // What the container itself is given. Whether the ancestors are shown,
+    // and what they clip, is carried by their canvases: a slot must not
+    // record it, or showing an ancestor again would leave it collapsed.
+    const bool containerVisible = composite
+        ? effectiveVisible
+        : tlwVisible && w->IsShown() && !ownVis.IsEmpty();
     const bool enabled = w->IsEnabled();
 
 #if wxUSE_TOOLTIPS
@@ -1258,10 +1833,10 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
 
         if ( !composite )
         {
-            Canvas::SetLeft(container, rect.x / scale);
-            Canvas::SetTop(container, rect.y / scale);
-            container.Width(rect.width / scale);
-            container.Height(rect.height / scale);
+            Canvas::SetLeft(container, placement.x / scale);
+            Canvas::SetTop(container, placement.y / scale);
+            container.Width(placement.width / scale);
+            container.Height(placement.height / scale);
         }
         if ( !getCurrentSlot() )
             return;
@@ -1272,8 +1847,8 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
         if ( container.FlowDirection() != direction )
             container.FlowDirection(direction);
 
-        if ( vis == rect ||
-             (vis.IsEmpty() && !(composite && hasClipRect)) )
+        if ( ownVis == rect ||
+             (ownVis.IsEmpty() && !(composite && hasClipRect)) )
         {
             container.Clip(nullptr);
         }
@@ -1282,17 +1857,17 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
             winrt::Microsoft::UI::Xaml::Media::RectangleGeometry geometry;
             geometry.Rect(winrt::Windows::Foundation::Rect
             {
-                float((vis.x - rect.x) / scale),
-                float((vis.y - rect.y) / scale),
-                float(vis.width / scale),
-                float(vis.height / scale)
+                float((ownVis.x - rect.x) / scale),
+                float((ownVis.y - rect.y) / scale),
+                float(ownVis.width / scale),
+                float(ownVis.height / scale)
             });
             container.Clip(geometry);
         }
         if ( !getCurrentSlot() )
             return;
 
-        container.Visibility(effectiveVisible ? Visibility::Visible
+        container.Visibility(containerVisible ? Visibility::Visible
                                               : Visibility::Collapsed);
         if ( !getCurrentSlot() )
             return;
@@ -1641,7 +2216,7 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
                     if ( result ==
                             wxWinUIToolTipSuppressionResult::BudgetExhausted )
                     {
-                        wxLogWarning(
+                        wxLogDebug(
                             "wxWinUI: synchronous tooltip suppression "
                             "replacement budget exhausted");
                         if ( wxWinUISlot * const current = getCurrentSlot() )
@@ -1748,6 +2323,15 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     current->m_rectPx = rect;
     current->m_visibleRectPx = vis;
     current->m_visible = effectiveVisible;
+    current->m_rectsGeneration = rectsGeneration;
+    current->m_placementPx = placement;
+    current->m_placementScale = scale;
+    current->m_placementVisible = containerVisible;
+    current->m_placementRTL =
+        direction == winrt::Microsoft::UI::Xaml::FlowDirection::RightToLeft;
+    current->m_placementValid = !composite;
+    if ( !composite && w != m_tlw )
+        NoteChildPlacement(w->GetParent(), placement);
     current->m_lastEnabled = static_cast<int>(enabled);
 
 #ifdef WXWINUI_TEST_SUPPORT
@@ -1814,6 +2398,7 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
         snapshot.container = slot->GetPresentationRoot();
         snapshot.hwnd = hwnd;
         snapshot.hwndGeneration = generation;
+        RefreshSlotRects(*slot);
         snapshot.visible =
             slot->m_visible && !slot->m_visibleRectPx.IsEmpty();
         if ( snapshot.visible )
@@ -2021,9 +2606,35 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
                 gs_impossibleZOrderOverlaps);
         };
 
-    std::vector<std::size_t> order;
-    order.reserve(slots.size());
+    // The canvases standing for the windows are ordered with the slot
+    // containers: a window with slots below it is stacked among its siblings
+    // as a whole. One counter runs over the whole tree, bottom to top, so
+    // that the numbers are in paint order both inside each canvas, which is
+    // all Canvas.ZIndex compares, and between any two slots.
+    struct NodeOrderSnapshot
+    {
+        wxWindow *window = nullptr;
+        winrt::Microsoft::UI::Xaml::Controls::Canvas canvas{ nullptr };
+    };
+    std::map<HWND, NodeOrderSnapshot> nodeByHwnd;
+    for ( const auto& entry : m_nodes )
+    {
+        const HWND hwnd = GetHwndOf(entry.first);
+        if ( hwnd && entry.second.canvas )
+            nodeByHwnd[hwnd] = { entry.first, entry.second.canvas };
+    }
+
+    struct OrderItem
+    {
+        // Either a slot, by index...
+        std::size_t slot = 0;
+        // ... or the canvas of a window.
+        NodeOrderSnapshot node;
+    };
+    std::vector<OrderItem> order;
+    order.reserve(slots.size() + nodeByHwnd.size());
     std::set<std::size_t> orderedSlots;
+    std::set<HWND> orderedNodes;
     std::set<HWND> visitedHwnds;
 
     const auto appendSlot =
@@ -2033,7 +2644,19 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
             if ( found != slotByHwnd.end() &&
                  orderedSlots.insert(found->second).second )
             {
-                order.push_back(found->second);
+                OrderItem item;
+                item.slot = found->second;
+                order.push_back(item);
+            }
+
+            // Just above its own container, when it has both.
+            const auto node = nodeByHwnd.find(hwnd);
+            if ( node != nodeByHwnd.end() &&
+                 orderedNodes.insert(hwnd).second )
+            {
+                OrderItem item;
+                item.node = node->second;
+                order.push_back(item);
             }
         };
 
@@ -2157,15 +2780,27 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
     {
         if ( orderedSlots.insert(i).second )
         {
-            order.push_back(i);
+            OrderItem item;
+            item.slot = i;
+            order.push_back(item);
             wxWinUIDebugLog(
                 "wxWinUI: slot HWND %p absent from TLW z-order snapshot",
                 static_cast<void *>(slots[i].hwnd));
         }
     }
 
+    for ( const auto& entry : nodeByHwnd )
+    {
+        if ( orderedNodes.insert(entry.first).second )
+        {
+            OrderItem item;
+            item.node = entry.second;
+            order.push_back(item);
+        }
+    }
+
     int z = 0;
-    for ( const std::size_t index : order )
+    for ( const OrderItem& item : order )
     {
         if ( m_shuttingDown ||
              m_structureGeneration != expectedGeneration )
@@ -2173,8 +2808,29 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
             return false;
         }
 
-        const SlotOrderSnapshot& snapshot = slots[index];
         const int desiredZ = ++z;
+        if ( item.node.canvas )
+        {
+            const auto node = m_nodes.find(item.node.window);
+            if ( node == m_nodes.end() ||
+                 node->second.canvas != item.node.canvas )
+            {
+                continue;
+            }
+
+            try
+            {
+                winrt::Microsoft::UI::Xaml::Controls::Canvas::SetZIndex(
+                    item.node.canvas, desiredZ);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException("window node z-order sync", e);
+            }
+            continue;
+        }
+
+        const SlotOrderSnapshot& snapshot = slots[item.slot];
         wxWindow * const window =
             snapshot.state ? snapshot.state->GetWindow() : nullptr;
         wxWinUISlot * const current =
@@ -2260,7 +2916,7 @@ void wxWinUITopLevelHost::EnsureBridgeOnTop()
         const DWORD error = ::GetLastError();
         if ( !m_bridgePinFailureLogged )
         {
-            wxLogWarning("wxWinUI: bridge re-pinning failed (error %lu)",
+            wxLogDebug("wxWinUI: bridge re-pinning failed (error %lu)",
                          error);
             m_bridgePinFailureLogged = true;
         }
@@ -2309,6 +2965,12 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
         return;
     const auto addBarCut = [&](HWND hwnd, LONG objId)
     {
+        // A window whose scrollbars are shown by WinUI has no native band at
+        // all (see WM_NCCALCSIZE in wxWindowMSW::MSWHandleMessage): there is
+        // nothing to expose through the island, whatever state its XAML
+        // scrollbar is in.
+        if ( ::GetPropW(hwnd, L"wxWinUI.ManagedWindowScrollbars") )
+            return;
         if ( m_scrollbarProjection && m_scrollbarProjection->Covers(hwnd, objId) )
             return;
         SCROLLBARINFO sbi = { sizeof(SCROLLBARINFO) };
@@ -2321,6 +2983,22 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
                            sbi.rcScrollBar.top - rcCS.top,
                            sbi.rcScrollBar.right - rcCS.left,
                            sbi.rcScrollBar.bottom - rcCS.top };
+        if ( wxWinUIInputLogEnabled() )
+        {
+            wchar_t title[64] = L"";
+            ::GetWindowTextW(hwnd, title, WXSIZEOF(title));
+            RECT rw = {};
+            ::GetWindowRect(hwnd, &rw);
+            wxWinUIInputLog("bridge CUT %s of %p '%S' window %ld,%ld %ldx%ld: "
+                            "%ld,%ld %ldx%ld state %lx",
+                            objId == OBJID_HSCROLL ? "H" : "V",
+                            static_cast<void *>(hwnd), title,
+                            rw.left - rcCS.left, rw.top - rcCS.top,
+                            rw.right - rw.left, rw.bottom - rw.top,
+                            cut.left, cut.top,
+                            cut.right - cut.left, cut.bottom - cut.top,
+                            static_cast<unsigned long>(sbi.rgstate[0]));
+        }
         cuts.push_back(cut);
     };
 
@@ -2328,6 +3006,14 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
     {
         for ( wxWindow *child : win->GetChildren() )
         {
+            // A frame or a dialog which has this window as parent is not in
+            // it: it has an island of its own, and a scrollbar of one of
+            // its controls (the text of a log window) must not cut a hole
+            // in this one, wherever the other window happens to be on the
+            // screen.
+            if ( child->IsTopLevel() )
+                continue;
+
             const HWND hwnd = GetHwndOf(child);
             if ( hwnd && ::IsWindowVisible(hwnd) )
             {
@@ -2370,7 +3056,7 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
     {
         if ( !m_regionFailureLogged )
         {
-            wxLogWarning("wxWinUI: failed to allocate the bridge window "
+            wxLogDebug("wxWinUI: failed to allocate the bridge window "
                          "region");
             m_regionFailureLogged = true;
         }
@@ -2394,7 +3080,7 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
         {
             if ( !m_regionFailureLogged )
             {
-                wxLogWarning("wxWinUI: failed to allocate a bridge cut-out "
+                wxLogDebug("wxWinUI: failed to allocate a bridge cut-out "
                              "region");
                 m_regionFailureLogged = true;
             }
@@ -2406,7 +3092,7 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
         {
             if ( !m_regionFailureLogged )
             {
-                wxLogWarning("wxWinUI: failed to combine a bridge cut-out "
+                wxLogDebug("wxWinUI: failed to combine a bridge cut-out "
                              "region");
                 m_regionFailureLogged = true;
             }
@@ -2422,7 +3108,7 @@ void wxWinUITopLevelHost::RebuildBridgeRegion()
     {
         if ( !m_regionFailureLogged )
         {
-            wxLogWarning("wxWinUI: SetWindowRgn failed");
+            wxLogDebug("wxWinUI: SetWindowRgn failed");
             m_regionFailureLogged = true;
         }
         return;
@@ -2499,21 +3185,48 @@ wxPoint wxWinUITopLevelHost::ScreenToRootDIP(const wxPoint& screenPt) const
 
 double wxWinUITopLevelHost::GetScale() const
 {
+    // Asked for with every position written to XAML: hundreds of times
+    // while a single message resizes the window, and finding the XamlRoot of
+    // the root canvas walks up its tree each time (a tenth of the samples of
+    // a resize profile). The scale does not change while one message is
+    // being processed.
+    struct Cache
+    {
+        const wxWinUITopLevelHost *host;
+        unsigned long long serial;
+        double scale;
+    };
+    static thread_local Cache s_cache{ nullptr, 0, 0.0 };
+
+    const unsigned long long serial = wxWinUIGetMessagePumpSerial();
+    if ( s_cache.host == this && s_cache.serial == serial &&
+         s_cache.scale > 0 )
+    {
+        return s_cache.scale;
+    }
+
+    double scale = 0;
     try
     {
         const auto xamlRoot = GetXamlRoot();
         if ( xamlRoot )
-        {
-            const double scale = xamlRoot.RasterizationScale();
-            if ( scale > 0 )
-                return scale;
-        }
+            scale = xamlRoot.RasterizationScale();
     }
     catch ( const winrt::hresult_error& )
     {
     }
 
-    return m_tlw ? m_tlw->GetDPIScaleFactor() : 1.0;
+    if ( scale <= 0 )
+        return m_tlw ? m_tlw->GetDPIScaleFactor() : 1.0;
+
+    // Remembered only once the island agrees with the DPI of the window:
+    // while the window is being moved to a monitor of another scale the two
+    // change one after the other, inside a single message of the move loop.
+    if ( m_tlw && std::abs(scale - m_tlw->GetDPIScaleFactor()) < 0.01 )
+        s_cache = Cache{ this, serial, scale };
+    else
+        s_cache = Cache{ nullptr, 0, 0.0 };
+    return scale;
 }
 
 #endif // wxUSE_WINUI3

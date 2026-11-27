@@ -559,7 +559,30 @@ bool wxDialog::Show(bool show)
         InitDialog();
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Over its owner, when the program asked for its dialogs to be shown
+    // that way.
+    if ( show )
+    {
+        // The same room around its buttons as in any other dialog.
+        wxWinUINormalizeDialogCommands(this);
+
+        wxWinUIBeginDialogCard(this);
+
+        // Its content with it, not after it.
+        wxWinUIBeginShowWithContent(this);
+    }
+#endif
+
     wxDialogBase::Show(show);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( !show )
+    {
+        wxWinUIEndShowWithContent(this);
+        wxWinUIEndDialogCard(this);
+    }
+#endif
 
     if ( show )
     {
@@ -576,6 +599,35 @@ bool wxDialog::Show(bool show)
 
     return true;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// A dialog shown over its owner has the band of its title above its client
+// area and margins around it: what the dialog lays out is inside them.
+wxPoint wxDialog::GetClientAreaOrigin() const
+{
+    const wxWinUIDialogCardInsets insets = wxWinUIGetDialogCardInsets(this);
+    return wxPoint(insets.left, insets.top);
+}
+
+void wxDialog::DoGetClientSize(int *width, int *height) const
+{
+    wxDialogBase::DoGetClientSize(width, height);
+    const wxWinUIDialogCardInsets insets = wxWinUIGetDialogCardInsets(this);
+    if ( width )
+        *width = wxMax(0, *width - insets.left - insets.right);
+    if ( height )
+        *height = wxMax(0, *height - insets.top - insets.bottom);
+}
+
+void wxDialog::DoSetClientSize(int width, int height)
+{
+    const wxWinUIDialogCardInsets insets = wxWinUIGetDialogCardInsets(this);
+    wxDialogBase::DoSetClientSize(width + insets.left + insets.right,
+                                  height + insets.top + insets.bottom);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 // show dialog modally
 int wxDialog::ShowModal()

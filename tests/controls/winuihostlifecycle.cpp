@@ -1328,7 +1328,7 @@ TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
     DrainDispatch();
 }
 
-TEST_CASE("HostLifecycle::DegradedLivePeerPoisonsWithoutDetach",
+TEST_CASE("HostLifecycle::DegradedLivePeerStaysAttachedWithoutPoison",
           "[HostLifecycle][popup-gate][poison]")
 {
     wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
@@ -1353,7 +1353,9 @@ TEST_CASE("HostLifecycle::DegradedLivePeerPoisonsWithoutDetach",
 
     REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, false, true));
-    CHECK(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
+    // The degradation is local: this peer stays attached, and the rest of
+    // the process is not condemned for it.
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     CHECK_FALSE(wxWinUITLWHostCanReparentSubtreeNow(child));
     CHECK(wxWinUITopLevelHost::FindSlotOwner(child) == host);
     CHECK(host->FindSlot(child) == slot);
@@ -5697,8 +5699,10 @@ TEST_CASE("HostState::StaticTextAndVerticalGaugeUseSemanticTargets",
     gaugeHost->FlushSync();
     wxWinUISlot * const gaugeSlot = gaugeHost->FindSlot(gauge);
     REQUIRE(gaugeSlot != nullptr);
-    const MUXC::Grid gaugeRoot =
-        gaugeSlot->GetVisualRoot().try_as<MUXC::Grid>();
+    // (A Canvas: a vertical gauge is a bar turned inside it, which a Grid
+    // would clip to its own width before it is turned.)
+    const MUXC::Panel gaugeRoot =
+        gaugeSlot->GetVisualRoot().try_as<MUXC::Panel>();
     const MUXC::ProgressBar gaugeTarget =
         gaugeSlot->GetSemanticTarget().try_as<MUXC::ProgressBar>();
     REQUIRE(gaugeRoot != nullptr);
@@ -8190,6 +8194,7 @@ TEST_CASE("HostLifecycle::DestroyTLWFromButtonCallbackDefersPhysicalShutdown",
         });
 
     automationPeer.Invoke();
+    wxWinUIFlushNotifications();
     observation->invokeReturned = true;
     CHECK(observation->handlerEntered);
     CHECK(observation->destroyRequested);
@@ -8278,6 +8283,7 @@ TEST_CASE("HostLifecycle::PendingTLWSurvivesRetainedButtonCallbackYield",
     // so the nested yield cannot tear down the island under Invoke().
     REQUIRE(frame->Destroy());
     automationPeer.Invoke();
+    wxWinUIFlushNotifications();
 
     CHECK(observation->handlerEntered);
     CHECK(observation->frameAliveAfterNestedYield);
@@ -8362,6 +8368,7 @@ TEST_CASE("HostLifecycle::ModalDialogDestroyWaitsForButtonCallback",
         [automationPeer, observation]()
         {
             automationPeer.Invoke();
+    wxWinUIFlushNotifications();
             observation->invokeReturned = true;
         });
     (void)dialog->ShowModal();
@@ -8451,6 +8458,7 @@ TEST_CASE("HostLifecycle::PopupImmediateDestroyWaitsForButtonCallback",
         });
 
     automationPeer.Invoke();
+    wxWinUIFlushNotifications();
     observation->invokeReturned = true;
     CHECK(observation->destroyRequested);
     CHECK_FALSE(observation->secondDestroy);
@@ -8540,6 +8548,7 @@ TEST_CASE("HostLifecycle::TransientPopupDestroyWaitsForButtonCallback",
         });
 
     automationPeer.Invoke();
+    wxWinUIFlushNotifications();
     CHECK(observation->firstDestroy);
     CHECK_FALSE(observation->secondDestroy);
     CHECK(observation->aliveAfterYield);
@@ -8604,6 +8613,7 @@ TEST_CASE("HostLifecycle::PendingTransientPopupSurvivesRetainedPeerYield",
     REQUIRE(wxPendingDelete.Member(popup));
     CHECK_FALSE(wxTopLevelWindows.Member(popup));
     automationPeer.Invoke();
+    wxWinUIFlushNotifications();
     CHECK(observation->callbackEntered);
     CHECK(observation->aliveAfterYield);
     CHECK(weakPopup.get() != nullptr);
@@ -8725,6 +8735,7 @@ TEST_CASE("HostLifecycle::PendingModalSurvivesOtherRetainedPeerYield",
             (void)modalButton->HandleWindowEvent(retainedEvent);
 
             automationPeer.Invoke();
+    wxWinUIFlushNotifications();
         });
     (void)dialog->ShowModal();
 
@@ -8838,6 +8849,7 @@ TEST_CASE("HostLifecycle::CrossHostButtonCallbackDefersDestinationDestroy",
         });
 
     automationPeer.Invoke();
+    wxWinUIFlushNotifications();
     observation->invokeReturned = true;
     CHECK(observation->handlerEntered);
     CHECK(observation->reparented);
@@ -13710,7 +13722,15 @@ TEST_CASE("HostLifecycle::TopLevelSlotDiagnosesNativeChildOnce",
     wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     native->Move(21, 20);
     host->FlushSync();
-    CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 1);
+    // A window which is not shown by a XAML control has a canvas of its own
+    // (step 3, unless WX_WINUI_INPUT_NODES is 0): what it paints is in the
+    // XAML tree, above the content of its parent, and nothing is impossible
+    // to order any more.
+    wxString inputNodes;
+    const bool hasCanvas =
+        !wxGetEnv("WX_WINUI_INPUT_NODES", &inputNodes) || inputNodes != "0";
+    CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() ==
+          (hasCanvas ? 0u : 1u));
 
     wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     frame->Destroy();

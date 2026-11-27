@@ -7,6 +7,7 @@
 #ifndef _WX_WINUI_DATAVIEWHEADER_H_
 #define _WX_WINUI_DATAVIEWHEADER_H_
 
+#include "wx/winui/private/appearance.h"
 #include <winrt/Microsoft.UI.Input.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -67,17 +68,15 @@ struct InsertionMarker
         // Real themed XAML decoration; it must never intercept drag input.
         grid = X::Markup::XamlReader::Load(LR"(
           <Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                Width="9" Height="36" IsHitTestVisible="False" Visibility="Collapsed">
-            <Border Width="3" CornerRadius="1.5" Background="{ThemeResource AccentFillColorDefaultBrush}"/>
-            <Border Height="3" VerticalAlignment="Top" CornerRadius="1.5" Background="{ThemeResource AccentFillColorDefaultBrush}"/>
-            <Border Height="3" VerticalAlignment="Bottom" CornerRadius="1.5" Background="{ThemeResource AccentFillColorDefaultBrush}"/>
+                Width="2" Height="32" IsHitTestVisible="False" Visibility="Collapsed">
+            <Border CornerRadius="1" Background="{ThemeResource AccentFillColorDefaultBrush}"/>
           </Grid>)").as<C::Grid>();
         X::Automation::AutomationProperties::SetAccessibilityView(grid, A::AccessibilityView::Raw);
         C::Canvas::SetZIndex(grid, 2);
     }
     void Update(double edge, bool visible)
     {
-        C::Canvas::SetLeft(grid, edge - 4.5);
+        C::Canvas::SetLeft(grid, edge - 1);
         grid.Visibility(visible ? X::Visibility::Visible : X::Visibility::Collapsed);
     }
     void Clear() { grid.Visibility(X::Visibility::Collapsed); }
@@ -108,6 +107,10 @@ struct Binding
     double requestedWidth = 0;
     bool dragging = false;
     bool moving = false;
+    // A press on a header becomes a move of its column once the pointer
+    // has travelled this far; until then it may still be a click.
+    double moveTravel = 0;
+    bool moveBegun = false;
     bool automationRequested = false;
     double startLeft = 0;
     double requestedLeft = 0;
@@ -251,20 +254,24 @@ struct Header
           grid(winrt::make<HeaderGrid>(binding)),
           grip(winrt::make<GripGrid>())
     {
-        grid.Height(36);
-        button.Height(36);
-        button.Padding({8, 0, 8, 0});
+        grid.Height(32);
+        button.Height(32);
+        wxWinUIApplyTableHeaderStyle(button);
+        button.Padding({12, 0, 8, 0});
         button.HorizontalContentAlignment(X::HorizontalAlignment::Left);
         button.HorizontalAlignment(X::HorizontalAlignment::Stretch);
         button.VerticalAlignment(X::VerticalAlignment::Stretch);
         grid.Children().Append(button);
-        moveGrip.Width(22);
-        moveGrip.HorizontalAlignment(X::HorizontalAlignment::Left);
+        // It covers the header but for the strip at its end which resizes
+        // the column, and shows the pointer over it as the button under it
+        // would.
+        moveGrip.HorizontalAlignment(X::HorizontalAlignment::Stretch);
+        moveGrip.Margin({0, 0, 8, 0});
         moveThumb.HorizontalAlignment(X::HorizontalAlignment::Stretch);
         moveThumb.VerticalAlignment(X::VerticalAlignment::Stretch);
         moveThumb.IsTabStop(false);
         moveThumb.Template(X::Markup::XamlReader::Load(
-            LR"(<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Thumb"><Grid Background="Transparent"><TextBlock Text="&#x22ee;&#x22ee;" HorizontalAlignment="Center" VerticalAlignment="Center"/></Grid></ControlTemplate>)")
+            LR"(<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" TargetType="Thumb"><Grid Background="Transparent"><Border x:Name="Fill" Opacity="0" Background="{ThemeResource SubtleFillColorSecondaryBrush}"/><VisualStateManager.VisualStateGroups><VisualStateGroup x:Name="CommonStates"><VisualState x:Name="Normal"/><VisualState x:Name="PointerOver"><VisualState.Setters><Setter Target="Fill.Opacity" Value="1"/></VisualState.Setters></VisualState><VisualState x:Name="Pressed"><VisualState.Setters><Setter Target="Fill.Opacity" Value="0.6"/></VisualState.Setters></VisualState><VisualState x:Name="Disabled"/></VisualStateGroup></VisualStateManager.VisualStateGroups></Grid></ControlTemplate>)")
                 .as<C::ControlTemplate>());
         X::Automation::AutomationProperties::SetName(moveThumb, L"Reorder column");
         moveGrip.Children().Append(moveThumb);
@@ -275,7 +282,7 @@ struct Header
         thumb.VerticalAlignment(X::VerticalAlignment::Stretch);
         thumb.IsTabStop(false);
         thumb.Template(X::Markup::XamlReader::Load(
-            LR"(<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Thumb"><Grid Background="Transparent"><Border Width="1" HorizontalAlignment="Center" Background="{ThemeResource ControlStrokeColorDefaultBrush}" Margin="0,8"/></Grid></ControlTemplate>)")
+            LR"(<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Thumb"><Grid Background="Transparent"/></ControlTemplate>)")
                 .as<C::ControlTemplate>());
         grip.Children().Append(thumb);
         grid.Children().Append(grip);
@@ -329,22 +336,39 @@ struct Header
         });
         const auto transform = moveTransform;
         const auto weakGrid = winrt::make_weak(grid);
-        moveThumb.DragStarted([weak, weakGrid](const auto& sender, const auto&)
+        moveThumb.DragStarted([weak](const auto&, const auto&)
         {
-            auto state = weak.lock();
-            if ( !state || !state->StartMoveGesture() )
-            { sender.template as<C::Primitives::Thumb>().CancelDrag(); return; }
-            if ( const auto visual = weakGrid.get() )
+            // Nothing moves yet: a press released where it was made is the
+            // click of the header, see DragCompleted.
+            if ( auto state = weak.lock() )
             {
-                C::Canvas::SetZIndex(visual, 1);
-                visual.Opacity(0.72);
+                state->moveTravel = 0;
+                state->moveBegun = false;
             }
         });
-        moveThumb.DragDelta([weak, transform](const auto& sender, const C::Primitives::DragDeltaEventArgs& args)
+        moveThumb.DragDelta([weak, transform, weakGrid](const auto& sender, const C::Primitives::DragDeltaEventArgs& args)
         {
+            const auto cancel = [&sender]()
+            { sender.template as<C::Primitives::Thumb>().CancelDrag(); };
             auto state = weak.lock();
-            if ( !state || !state->ContinueMoveGesture(args.HorizontalChange()) )
-            { sender.template as<C::Primitives::Thumb>().CancelDrag(); return; }
+            if ( !state ) { cancel(); return; }
+            const double delta = args.HorizontalChange();
+            if ( !state->moveBegun )
+            {
+                if ( std::isfinite(delta) ) state->moveTravel += delta;
+                if ( std::abs(state->moveTravel) < 6 ) return;
+                if ( !state->StartMoveGesture() ) { cancel(); return; }
+                state->moveBegun = true;
+                // The header follows the pointer, seen through, above the
+                // others; the line shows where its column would go.
+                if ( const auto visual = weakGrid.get() )
+                {
+                    C::Canvas::SetZIndex(visual, 1);
+                    visual.Opacity(0.6);
+                }
+                if ( !state->ContinueMoveGesture(state->moveTravel) ) { cancel(); return; }
+            }
+            else if ( !state->ContinueMoveGesture(delta) ) { cancel(); return; }
             transform.X(state->requestedLeft - state->startLeft);
         });
         moveThumb.DragCompleted([weak, transform, weakGrid](const auto&, const C::Primitives::DragCompletedEventArgs& args)
@@ -356,7 +380,24 @@ struct Header
                 visual.Opacity(1);
             }
             auto state = weak.lock();
-            if ( state ) state->EndMoveGesture(args.Canceled());
+            if ( !state ) return;
+            if ( state->moveBegun )
+            {
+                state->moveBegun = false;
+                state->EndMoveGesture(args.Canceled());
+            }
+            else if ( !args.Canceled() && state->Current() && state->click )
+            {
+                // Pressed and released in place: what a click on the
+                // button under this would have done.
+                state->click(false);
+            }
+        });
+        moveThumb.RightTapped([weak](const auto&, const X::Input::RightTappedRoutedEventArgs& args)
+        {
+            if ( auto state = weak.lock() )
+                if ( state->Current() && state->click )
+                { args.Handled(true); state->click(true); }
         });
     }
 

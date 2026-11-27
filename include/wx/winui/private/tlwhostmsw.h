@@ -24,10 +24,31 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 WXDLLIMPEXP_CORE bool
 wxWinUIShouldUseOpaquePaintBuffer(const wxWindow *window);
 
+// The other GDI surfaces over the DWM material, those which let it show
+// through where they draw nothing: their WM_PAINT goes through a buffer too,
+// in which every pixel GDI actually wrote is made opaque. Left as GDI writes
+// them, with a zero alpha, such pixels are only added to the material on an
+// SDR screen and are not shown at all on an HDR one: text drawn by a generic
+// control vanished there.
+WXDLLIMPEXP_CORE bool
+wxWinUIShouldUsePaintedPixelsBuffer(const wxWindow *window);
+
+// Such a window shows the material instead of a background of its own, so
+// text written for that background, black on white typically, can end up
+// unreadable. Called before text is drawn at these device coordinates of hdc
+// in its current text colour: if hdc is the paint buffer of such a window and
+// the text would not stand out from what lies behind it, returns true and
+// the colour to draw with instead (same hue, opposite lightness).
+WXDLLIMPEXP_CORE bool
+wxWinUIAdaptTextColourOverBackdrop(WXHDC hdc, int x, int y,
+                                   WXCOLORREF *colour);
+
 // Non-client scrollbar presentation keeps USER32's geometry/range model.
 // A non-null region is caller-owned and excludes only bands already presented
 // by a ready WinUI peer. Null means use the unchanged native paint path.
 WXDLLIMPEXP_CORE bool wxWinUIWindowScrollbarsProjected(WXHWND hwnd, int orient = 0);
+// The window is being destroyed.
+WXDLLIMPEXP_CORE void wxWinUIWindowScrollbarsForget(wxWindow *window);
 WXDLLIMPEXP_CORE void wxWinUIWindowScrollbarModelChanged(
     wxWindow *window, int orient, bool nativePaint);
 // Complete a range/page write after USER32 has possibly painted the track
@@ -177,6 +198,16 @@ wxWinUITLWHostRetireAccessibilityShellProvider(WXHWND hwnd);
 // would immediately see the bridge as the real hit and create ENTER/EXIT
 // storms. Calls are nestable and confined to the GUI thread.
 WXDLLIMPEXP_CORE void wxWinUIMSWBeginSyntheticMouseDispatch();
+// Around a mouse message sent to a window shown by a XAML control: the
+// focus is XAML's to give when such a control is clicked, and wxMSW does not
+// give it to the window as it does to one which left the click unprocessed.
+WXDLLIMPEXP_CORE void wxWinUIMSWBeginSlotMouseDispatch();
+WXDLLIMPEXP_CORE void wxWinUIMSWEndSlotMouseDispatch();
+// Counts the WM_CONTEXTMENU messages turned into wxEVT_CONTEXT_MENU, and
+// tells whether the last one was processed: the host, which sends the mouse
+// buttons to a control, learns from it what USER32 made of a right button.
+WXDLLIMPEXP_CORE unsigned long long
+wxWinUIMSWGetContextMenuSerial(bool *processed);
 WXDLLIMPEXP_CORE void wxWinUIMSWEndSyntheticMouseDispatch();
 
 // Report an explicit wx capture mutation before calling SetCapture() or
@@ -261,6 +292,180 @@ wxWinUITLWHostShouldPreserveFocusOnActivate(wxWindow *window);
 // End-of-freeze notification (wxTopLevelWindowMSW::DoThaw): run the single
 // catch-up geometry flush the freeze held back.
 WXDLLIMPEXP_CORE void wxWinUITLWHostNotifyThaw(wxWindow *window);
+
+// Called for every message this thread retrieves from its queue, by the
+// WH_GETMESSAGE hook and by the event-loop fallback. New physical input can
+// only arrive through such a retrieval, which lets the pointer router tell
+// the synchronous reflection of a message it is sending from a new sample.
+WXDLLIMPEXP_CORE void wxWinUINoteMessagePumped();
+
+// Diagnostic: with WX_WINUI_FORCE_SCALE set to a scale ("150" or "1.5"), the
+// DPI wx reports for every window and display, which the island is then
+// given too; 0 otherwise. Lets a display scale be tried, by hand or by the
+// tests, without changing the settings of the monitor.
+WXDLLIMPEXP_CORE int wxWinUIGetForcedDPI();
+
+// Paint surfaces (src/winui/paintsurface.cpp): what a window paints goes to
+// a bitmap which XAML shows in its place, instead of to its HWND. Setting the
+// WX_WINUI_PAINT_SURFACES environment variable to 0 turns them off.
+//
+// Begin() is called with the rectangle BeginPaint() reported and returns the
+// DC to paint on, or null when the window paints its HWND as before;
+// BeginDirect() does the same for a wxClientDC, only for a window which
+// already has a surface. Both are closed by End(). OwnsDC() tells a DC of a
+// surface being painted from one of the window.
+class WXDLLIMPEXP_FWD_CORE wxRect;
+WXDLLIMPEXP_CORE bool wxWinUIPaintSurfacesEnabled();
+WXDLLIMPEXP_CORE WXHDC
+wxWinUIPaintSurfaceBegin(wxWindow *window,
+                         int left, int top, int right, int bottom);
+WXDLLIMPEXP_CORE WXHDC wxWinUIPaintSurfaceBeginDirect(wxWindow *window);
+WXDLLIMPEXP_CORE bool wxWinUIPaintSurfaceOwnsDC(wxWindow *window, WXHDC hdc);
+WXDLLIMPEXP_CORE void wxWinUIPaintSurfaceEnd(wxWindow *window);
+// The window was asked to erase its background: the region its next
+// painting covers starts transparent.
+WXDLLIMPEXP_CORE void wxWinUIPaintSurfaceNoteErase(wxWindow *window);
+WXDLLIMPEXP_CORE void
+wxWinUIPaintSurfaceScroll(wxWindow *window,
+                          int dx, int dy, const wxRect *rect);
+// The window is being destroyed.
+WXDLLIMPEXP_CORE void wxWinUIPaintSurfaceForget(wxWindow *window);
+// Makes a rectangle of a surface being painted transparent again, in the
+// coordinates of its DC; false if hdc is not the DC of such a surface.
+WXDLLIMPEXP_CORE bool
+wxWinUIPaintSurfaceClearRect(WXHDC hdc, int x, int y, int width, int height);
+// A window moved, was resized or was shown: what its parent painted where it
+// now is must not show through it.
+WXDLLIMPEXP_CORE void wxWinUIPaintSurfaceNoteChildGeometry(wxWindow *child);
+// Has XAML draw the border of a window which shows nothing of its HWND, and
+// keeps it where the window is. Returns whether it does: the non-client
+// band of the HWND is then left unpainted.
+WXDLLIMPEXP_CORE bool wxWinUIWindowFrameSync(wxWindow *window);
+
+// Gives a window which keeps no border in Win32 the frame of a control all
+// the same: a control whose XAML content fills its window (a tree) counts on
+// its client area being its whole window, and still has a frame in WinUI.
+WXDLLIMPEXP_CORE void wxWinUIRequestWindowFrame(wxWindow *window);
+
+// Whether the window was given such a frame.
+WXDLLIMPEXP_CORE bool wxWinUIWindowHasRequestedFrame(const wxWindow *window);
+
+// The two tones of a dialog of WinUI (ContentDialog): the content area, from
+// the top of the client area down to the given height in pixels, has the
+// lighter tone of a layer and a line under it; what is below, the row of the
+// buttons, keeps the ground of the window. No content tone if the height is
+// not positive.
+WXDLLIMPEXP_CORE void wxWinUISetDialogContentTone(wxWindow *dialog, int height);
+
+// The same room above and under the standard buttons of a dialog, in all
+// dialogs: see dlgcmn.cpp. For a dialog about to be shown.
+WXDLLIMPEXP_CORE void wxWinUINormalizeDialogCommands(wxWindow *dialog);
+
+// A dialog of wx shown over the window it belongs to, when the program
+// asked for that presentation of its dialogs
+// (wxWinUIDialogPresentation::Overlay). It is made of controls of wx, each
+// with its window, which a ContentDialog of XAML cannot hold: it stays a
+// window of its own, without a title bar or a frame, with the corners and
+// the shadow of a ContentDialog, in the middle of its owner and following
+// it, its title in large letters above its content, and a veil over the
+// owner while that one is disabled. The dialog keeps its events, its focus
+// and its modality as they are.
+//
+// Begin is called before the dialog is shown, End after it is hidden; false
+// if the dialog is shown in its own window as usual.
+WXDLLIMPEXP_CORE bool wxWinUIBeginDialogCard(wxWindow *dialog);
+WXDLLIMPEXP_CORE void wxWinUIEndDialogCard(wxWindow *dialog);
+// What a dialog shown that way has around its client area, in pixels: the
+// band of its title above it, and at its sides and under it what brings
+// what the dialog shows to 24 from the edges, as the content of a
+// ContentDialog is, whatever margins the dialog has of its own. All 0 for
+// any other window.
+struct wxWinUIDialogCardInsets
+{
+    int left = 0;
+    int top = 0;
+    int right = 0;
+    int bottom = 0;
+};
+WXDLLIMPEXP_CORE wxWinUIDialogCardInsets
+wxWinUIGetDialogCardInsets(const wxWindow *dialog);
+// Whether a dialog is shown that way over this window, which then keeps
+// the look of the active window.
+WXDLLIMPEXP_CORE bool wxWinUIDialogCardKeepsOwnerActive(const wxWindow *owner);
+// The veil over a top-level window.
+WXDLLIMPEXP_CORE void wxWinUISetWindowSmoke(wxWindow *tlw, bool on);
+
+// A window about to be shown is shown with what it holds, not empty first.
+// The controls of XAML get their templates and their layout when the island
+// first lays itself out, which it does after the window is on screen: a
+// dialog showed its frame, then its content a moment later. Begin makes that
+// first layout happen now, while the window is hidden, and hides the window
+// from the screen (DWM cloak) until the island has drawn it, or a short time
+// has gone by; End shows it whatever happened.
+WXDLLIMPEXP_CORE void wxWinUIBeginShowWithContent(wxWindow *tlw);
+WXDLLIMPEXP_CORE void wxWinUIEndShowWithContent(wxWindow *tlw);
+
+// The pointer was pressed in the island of this top-level window. The
+// transient popup of wx which is open (the list of a wxComboCtrl...) is
+// dismissed unless the press is in it, as it is in wxMSW by a press on any
+// window of wx: the controls of XAML get their pointer from the island, and
+// no window of wx sees that press.
+WXDLLIMPEXP_CORE void wxWinUIDismissPopupOnOutsidePress(wxWindow *pressedTLW);
+
+// wxNumberEntryDialog is the twin of the wxTextEntryDialog of WinUI: its
+// message, and under it a NumberBox with its prompt as header, in the window
+// of the dialog or over its parent as the program asked for its dialogs.
+// Returns wxID_OK with the number in *value, or wxID_CANCEL.
+class WXDLLIMPEXP_FWD_CORE wxDialog;
+WXDLLIMPEXP_CORE int wxWinUIShowNumberEntry(wxDialog *dialog,
+                                            const wxString& message,
+                                            const wxString& prompt,
+                                            long *value,
+                                            long min, long max);
+// The size of the client area of its window, in DIPs.
+WXDLLIMPEXP_CORE wxSize wxWinUIGetNumberEntryClientSize(
+    const wxWindow *dialog, const wxString& message, const wxString& prompt);
+// Whether a window below this top-level one still paints its HWND (an OpenGL
+// canvas does): the island then has to keep off its pixels when it erases.
+WXDLLIMPEXP_CORE bool wxWinUIPaintSurfaceHasHwndPainters(WXHWND root);
+// Start of WM_ERASEBKGND for a window which paints through a surface: the
+// region to erase, taken from the DC of the message, becomes transparent
+// and the DC returned is the one EVT_ERASE_BACKGROUND draws on, closed by
+// End(). Null for a window without a surface.
+WXDLLIMPEXP_CORE WXHDC
+wxWinUIPaintSurfaceBeginErase(wxWindow *window, WXHDC hdcErase);
+// A handler of EVT_ERASE_BACKGROUND drew the background of a window which
+// has no surface: gives it one, so that the next erasing is drawn on it.
+WXDLLIMPEXP_CORE void wxWinUIPaintSurfaceAdopt(wxWindow *window);
+
+// The caret of a window which paints through a surface is an element of its
+// canvas, since its HWND is not what shows. Show() places it, in client
+// coordinates, and returns false for a window which paints its HWND, whose
+// caret is the one of Win32; Hide() returns whether it had such a caret.
+WXDLLIMPEXP_CORE bool
+wxWinUICaretShow(wxWindow *window, int x, int y, int width, int height);
+WXDLLIMPEXP_CORE bool wxWinUICaretHide(wxWindow *window);
+WXDLLIMPEXP_CORE bool wxWinUICaretIsShown(wxWindow *window);
+
+// Diagnostic: with WX_WINUI_FORCE_RTL set to anything but 0, windows which
+// were not given a layout direction are laid out right to left.
+WXDLLIMPEXP_CORE bool wxWinUIIsRightToLeftForced();
+
+// Run now the wx notifications which XAML events have queued (clicks, item
+// activations: see wxWinUIPostNotification()). The event loop does it before
+// dispatching its next message; code which raises such an event itself and
+// needs its effect at once, a test for instance, calls this.
+WXDLLIMPEXP_CORE void wxWinUIFlushNotifications();
+
+// Called for each key press retrieved from the queue: until the first one,
+// focus set by the program shows no keyboard focus rectangle.
+WXDLLIMPEXP_CORE void wxWinUINoteKeyboardInput();
+
+// End of a top-level WM_SIZE (wxWindowMSW::MSWHandleMessage): the children
+// have been laid out, so publish their geometry to the island now instead of
+// waiting for the queued flush. During a live resize this keeps the XAML
+// content attached to the window frame.
+WXDLLIMPEXP_CORE void wxWinUITLWHostFlushAfterResize(wxWindow *tlw);
 
 // WM_ENABLE notification (wxWindowMSW::MSWWindowProc): the effective
 // enabled state of the hosted descendants changed, re-sync the slots.

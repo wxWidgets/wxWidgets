@@ -29,6 +29,10 @@ public:
     static void SetNextSlotSyncedHook(
         std::function<void (wxWindow *)> callback);
     static void SetNextZOrderSetHook(std::function<void ()> callback);
+
+    // Asks for the full sync of the slot of this window at the next flush.
+    // A window which only moves or resizes is repositioned without one.
+    static void RequestSlotSync(wxWindow *window);
 };
 
 #endif // wxUSE_WINUI3

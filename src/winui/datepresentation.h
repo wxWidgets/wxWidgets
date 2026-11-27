@@ -592,7 +592,10 @@ inline MUXC::NumberBox wxWinUICreateDatePart(double minimum,
     box.ValidationMode(
         MUXC::NumberBoxValidationMode::InvalidInputOverwritten);
     box.SpinButtonPlacementMode(
-        MUXC::NumberBoxSpinButtonPlacementMode::Inline);
+        // Compact: the two arrows come up beside the part which has the
+        // focus instead of standing in each of the three, six buttons in a
+        // row for one date. The keys still step the part.
+        MUXC::NumberBoxSpinButtonPlacementMode::Compact);
     WGNF::DecimalFormatter formatter =
         wxWinUICreateDateDecimalFormatter(language);
     formatter.IntegerDigits(integerDigits);

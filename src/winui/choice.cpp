@@ -1015,7 +1015,9 @@ wxSize wxChoice::DoGetBestSize() const
         height = wxMax(height, itemHeight);
     }
 
-    const wxSize chrome = FromDIP(wxSize(48, 14));
+    // The stock ComboBox template: 12 DIPs before the text, a 38 DIP glyph
+    // column after it and a 1 DIP border on each side.
+    const wxSize chrome = FromDIP(wxSize(54, 14));
     const wxSize minimum = FromDIP(wxSize(80, 32));
     return wxSize(wxMax(width + chrome.x, minimum.x),
                   wxMax(height + chrome.y, minimum.y));

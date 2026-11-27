@@ -29,6 +29,7 @@
     #include "wx/sizer.h"
 #endif
 
+#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -58,10 +59,17 @@ public:
     wxFontPreviewer(wxWindow* parent, const wxSize& sz = wxDefaultSize)
         : wxWindow(parent, wxID_ANY, wxDefaultPosition, sz, wxBORDER_SIMPLE)
     {
-        m_text = new wxStaticText(this, wxID_ANY, _("ABCDEFGabcdefg12345"),
-                                 wxDefaultPosition, wxDefaultSize,
-                                 wxST_NO_AUTORESIZE);
+        // Transparent, which has to be said before the window is created:
+        // what this window paints behind the sample (see OnPaint()) shows
+        // under it, where a window otherwise paints nothing under its
+        // children.
+        m_text = new wxStaticText;
+        m_text->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+        m_text->Create(this, wxID_ANY, _("ABCDEFGabcdefg12345"),
+                       wxDefaultPosition, wxDefaultSize,
+                       wxST_NO_AUTORESIZE);
         Bind(wxEVT_SIZE, &wxFontPreviewer::OnSize, this);
+        Bind(wxEVT_PAINT, &wxFontPreviewer::OnPaint, this);
         LayoutText();
     }
 
@@ -83,6 +91,8 @@ public:
         const bool changed = wxWindow::SetForegroundColour(colour);
         if ( alive )
             m_text->SetForegroundColour(colour);
+        if ( alive )
+            Refresh();
         return changed;
     }
 
@@ -106,6 +116,26 @@ private:
     {
         LayoutText();
         event.Skip();
+    }
+
+    // The sample is in the colour chosen, whatever the theme: black, the
+    // one a dialog starts with, cannot be read on the backdrop of a dark
+    // theme, nor white on that of a light one. Then, and only then, the
+    // sample stands on the background of the other theme.
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
+    {
+        wxPaintDC dc(this);
+
+        const wxColour text = GetForegroundColour();
+        const wxColour back = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+        if ( text.IsOk() && back.IsOk() &&
+             fabs(text.GetLuminance() - back.GetLuminance()) < 0.3 )
+        {
+            dc.SetBackground(wxBrush(back.GetLuminance() < 0.5
+                                        ? wxColour(243, 243, 243)
+                                        : wxColour(32, 32, 32)));
+            dc.Clear();
+        }
     }
 
     wxStaticText* m_text = nullptr;

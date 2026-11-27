@@ -13,6 +13,7 @@
 #include "wx/arrstr.h"
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 
 class wxWinUINotebookImpl;
@@ -67,6 +68,13 @@ public:
     // wxWindow override: notebook alignment and presentation styles are
     // live on MSW and must remain live when backed by the shared WinUI tree.
     void SetWindowStyleFlag(long style) override;
+
+    // wxWinUI only: gives the tabs the close button of a TabView. The
+    // notebook does not remove a page itself: the handler, called with the
+    // position of the tab once the click is over, does what closing means
+    // for the program (the tabbed MDI closes the document). An empty handler
+    // takes the buttons away. Tabs at the top only.
+    void WinUISetCloseHandler(std::function<void (size_t)> handler);
 
 protected:
     bool MSWOnEffectiveLayoutDirectionChanged() override;

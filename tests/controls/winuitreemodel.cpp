@@ -1845,6 +1845,9 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         wxWeakRef<wxWindow> lifetime(tree);
         FlushTreeSlots(parent);
         invoking->SetSize(wxSize(223, 121));
+        // Resizing alone repositions the slot at once: ask for the full
+        // sync this test is about.
+        wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
 
         bool slotSynced = false;
         wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
@@ -1885,6 +1888,9 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         wxWeakRef<wxWindow> lifetime(tree);
         FlushTreeSlots(parent);
         invoking->SetSize(wxSize(225, 123));
+        // Resizing alone repositions the slot at once: ask for the full
+        // sync this test is about.
+        wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
 
         bool slotSynced = false;
         wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
@@ -1926,6 +1932,9 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         wxWeakRef<wxWindow> lifetime(tree);
         FlushTreeSlots(parent);
         invoking->SetSize(wxSize(227, 125));
+        // Resizing alone repositions the slot at once: ask for the full
+        // sync this test is about.
+        wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
 
         bool slotSynced = false;
         wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(

@@ -127,6 +127,20 @@ wxWinUIResolveNativeHit(wxWindow *tlw,
                         WXHWND inner,
                         wxWinUINativeHit *hit);
 
+// The same for a caller which already knows, from the XAML tree, the window
+// the point is in (start): only that window, what it holds at the point and
+// its ancestors are looked at, where the function above walks the whole tree
+// of the top-level window. What Win32 says still decides: if the point is
+// not in that window, or a sibling above it covers the point, the whole tree
+// is walked as above.
+WXDLLIMPEXP_CORE wxWinUIHitResolution
+wxWinUIResolveNativeHitFrom(wxWindow *tlw,
+                            WXHWND start,
+                            const POINT& screenPoint,
+                            WXHWND bridge,
+                            WXHWND inner,
+                            wxWinUINativeHit *hit);
+
 // Resolve the deepest native wx window under a screen point while excluding
 // the island bridge/input HWNDs, but without sending WM_NCHITTEST.  This is
 // the WindowFromPoint()/ChildWindowFromPointEx() contract used by

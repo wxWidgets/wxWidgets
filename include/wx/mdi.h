@@ -367,7 +367,13 @@ public:
     // wxUniv always uses the generic MDI implementation and so do the ports
     // without native version (although wxCocoa seems to have one -- but it's
     // probably not functional?)
-    #if defined(__WXUNIVERSAL__)
+    //
+    // wxWinUI uses it too: WinUI has no windows inside a window, its
+    // documents are the tabs of a TabView, which is what the notebook of
+    // the generic implementation is in this port. The frame then has the
+    // WinUI menu bar of any other frame instead of the Win32 one that the
+    // MDI of Windows requires.
+    #if defined(__WXUNIVERSAL__) || defined(__WXWINUI__)
         #define wxUSE_GENERIC_MDI_AS_NATIVE   1
     #else
         #define wxUSE_GENERIC_MDI_AS_NATIVE   0

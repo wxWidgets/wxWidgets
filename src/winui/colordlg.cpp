@@ -483,6 +483,11 @@ int wxColourDialog::ShowModal()
         customHeader.Text(wxWinUIToHString(_("Custom colours")));
 
         MUXC::Expander customExpander;
+        // As wide as the picker above it: at the width of its title alone
+        // it read as a stray button.
+        customExpander.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
+        customExpander.HorizontalContentAlignment(
+            MUX::HorizontalAlignment::Stretch);
         customExpander.Header(customHeader);
         customExpander.Content(customPanel);
         customExpander.IsExpanded(chooseFull);

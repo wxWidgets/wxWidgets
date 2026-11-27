@@ -19,7 +19,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_PROGRESSDLG && wxUSE_THREADS && wxUSE_NATIVE_PROGRESSDLG
+#if wxUSE_PROGRESSDLG && wxUSE_THREADS && wxUSE_NATIVE_PROGRESSDLG &&     !defined(__WXWINUI__)
 
 #include "wx/progdlg.h"
 

@@ -23,6 +23,10 @@
 
 #include "wx/busyinfo.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
+
 // wxStaticText currently supports markup only in wxGTK and wxOSX/Cocoa, so use
 // the generic version for markup support in the other ports.
 #if wxUSE_MARKUP && !(defined(__WXGTK__) || defined(__WXOSX_COCOA__))
@@ -35,12 +39,24 @@
 
 void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A flyout of Windows 11: no frame of its own, the rounded corners and
+    // the thin edge which the system gives a window that asks for them.
+    wxFrame * const infoFrame =
+        new wxFrame(flags.m_parent, wxID_ANY, wxString(),
+                    wxDefaultPosition, wxDefaultSize,
+                    wxBORDER_NONE |
+                    wxFRAME_TOOL_WINDOW |
+                    wxSTAY_ON_TOP);
+    wxWinUIRoundWindowCorners(infoFrame);
+#else
     wxFrame * const infoFrame =
         new wxFrame(flags.m_parent, wxID_ANY, wxString(),
                     wxDefaultPosition, wxDefaultSize,
                     wxSIMPLE_BORDER |
                     wxFRAME_TOOL_WINDOW |
                     wxSTAY_ON_TOP);
+#endif
     m_InfoFrame = infoFrame;
 
     wxPanel* const panel = new wxPanel(infoFrame);

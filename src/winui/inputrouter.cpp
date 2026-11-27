@@ -120,6 +120,12 @@ bool wxWinUIPointInClient(HWND hwnd, const POINT& point)
     return ::PtInRect(&screenClient, point);
 }
 
+bool wxWinUIAnySiblingAboveCovers(HWND parent,
+                                  HWND below,
+                                  const POINT& screenPoint,
+                                  HWND bridge,
+                                  HWND inner);
+
 } // namespace
 
 class wxWinUINativeResolverImpl
@@ -170,7 +176,8 @@ public:
                                         const POINT& screenPoint,
                                         WXHWND bridge,
                                         WXHWND inner,
-                                        wxWinUINativeHit *hit)
+                                        wxWinUINativeHit *hit,
+                                        WXHWND start = nullptr)
     {
         if ( hit )
             *hit = wxWinUINativeHit();
@@ -214,7 +221,8 @@ public:
                 return Unstable();
 
             const SnapshotResult before =
-                Snapshot(currentTLW, screenPoint, bridge, inner, false);
+                Snapshot(currentTLW, screenPoint, bridge, inner, false,
+                         reinterpret_cast<HWND>(start));
             if ( before.opaque )
                 return Unstable();
             if ( before.candidates.empty() )
@@ -248,7 +256,8 @@ public:
                 }
 
                 const SnapshotResult after =
-                    Snapshot(currentTLW, screenPoint, bridge, inner, false);
+                    Snapshot(currentTLW, screenPoint, bridge, inner, false,
+                             reinterpret_cast<HWND>(start));
                 if ( after.opaque )
                     return Unstable();
                 if ( !SameSnapshot(before, after) )
@@ -494,11 +503,83 @@ private:
         return true;
     }
 
+    // The candidates when the caller knows the window the point is in: what
+    // that window holds at the point, the window, then its ancestors. False
+    // if Win32 does not agree that the point is there and nothing above it.
+    static bool CollectFrom(HWND start,
+                            HWND hwndTLW,
+                            wxWindow *tlw,
+                            DWORD threadId,
+                            const POINT& screenPoint,
+                            HWND bridge,
+                            HWND inner,
+                            bool includeDisabled,
+                            Candidates& candidates)
+    {
+        if ( !start || start == hwndTLW || !::IsWindow(start) ||
+             !::IsChild(hwndTLW, start) )
+        {
+            return false;
+        }
+
+        // A window which is hidden or disabled does not get the mouse, nor
+        // does anything below it: the parent of the highest such one does.
+        HWND from = start;
+        for ( HWND w = start; w && w != hwndTLW; w = ::GetParent(w) )
+        {
+            if ( !(::GetWindowLongPtr(w, GWL_STYLE) & WS_VISIBLE) ||
+                 (!includeDisabled && !::IsWindowEnabled(w)) )
+            {
+                from = ::GetParent(w);
+            }
+        }
+        if ( !from || from == hwndTLW ||
+             ::GetWindowThreadProcessId(from, nullptr) != threadId ||
+             !wxWinUIPointInRect(from, screenPoint) )
+        {
+            return false;
+        }
+
+        // The order of the windows in XAML follows that of Win32, which
+        // stays the one that counts.
+        for ( HWND current = from; current != hwndTLW; )
+        {
+            const HWND parent = ::GetParent(current);
+            if ( !parent ||
+                 wxWinUIAnySiblingAboveCovers(parent, current, screenPoint,
+                                              bridge, inner) )
+            {
+                return false;
+            }
+            current = parent;
+        }
+
+        Candidates found;
+        if ( wxWinUIPointInClient(from, screenPoint) &&
+             !CollectChildren(from, tlw, threadId, screenPoint, bridge,
+                              inner, includeDisabled, found) )
+        {
+            return false;
+        }
+
+        for ( HWND w = from; w && w != hwndTLW; w = ::GetParent(w) )
+        {
+            wxWinUINativeTarget target;
+            if ( !BuildTarget(w, tlw, target) )
+                return false;
+            found.push_back(target);
+        }
+
+        candidates = std::move(found);
+        return true;
+    }
+
     static SnapshotResult Snapshot(wxWindow *tlw,
                                    const POINT& screenPoint,
                                    WXHWND bridgeHandle,
                                    WXHWND innerHandle,
-                                   bool includeDisabled)
+                                   bool includeDisabled,
+                                   HWND start = nullptr)
     {
         SnapshotResult result;
         if ( !tlw || tlw->IsBeingDeleted() )
@@ -527,7 +608,14 @@ private:
 
         const HWND bridge = reinterpret_cast<HWND>(bridgeHandle);
         const HWND inner = reinterpret_cast<HWND>(innerHandle);
-        if ( !CollectChildren(hwndTLW, tlw, threadId, screenPoint,
+        if ( start &&
+             CollectFrom(start, hwndTLW, tlw, threadId, screenPoint,
+                         bridge, inner, includeDisabled,
+                         result.candidates) )
+        {
+            // found from the window the caller named
+        }
+        else if ( !CollectChildren(hwndTLW, tlw, threadId, screenPoint,
                               bridge, inner, includeDisabled,
                               result.candidates) )
         {
@@ -895,6 +983,18 @@ wxWinUIResolveNativeHit(wxWindow *tlw,
 {
     return wxWinUINativeResolverImpl::Resolve(
         tlw, screenPoint, bridge, inner, hit);
+}
+
+wxWinUIHitResolution
+wxWinUIResolveNativeHitFrom(wxWindow *tlw,
+                            WXHWND start,
+                            const POINT& screenPoint,
+                            WXHWND bridge,
+                            WXHWND inner,
+                            wxWinUINativeHit *hit)
+{
+    return wxWinUINativeResolverImpl::Resolve(
+        tlw, screenPoint, bridge, inner, hit, start);
 }
 
 wxWinUIHitResolution

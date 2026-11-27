@@ -93,7 +93,8 @@ public:
         ID_SMALL_BUTTON_3,
         ID_SMALL_BUTTON_4,
         ID_SMALL_BUTTON_5,
-        ID_SMALL_BUTTON_6
+        ID_SMALL_BUTTON_6,
+        ID_TAB_VIEW
     };
 
     void OnEnableUpdateUI(wxUpdateUIEvent& evt);
@@ -148,6 +149,7 @@ public:
     void OnPlusMinus(wxRibbonButtonBarEvent& evt);
     void OnChangeLabel(wxRibbonButtonBarEvent& evt);
     void OnTogglePanels(wxCommandEvent& evt);
+    void OnTabView(wxCommandEvent& evt);
     void OnRibbonBarToggled(wxRibbonBarEvent& evt);
     void OnRibbonBarHelpClicked(wxRibbonBarEvent& evt);
 
@@ -174,6 +176,7 @@ protected:
     wxRibbonGallery* m_secondary_gallery;
     wxTextCtrl* m_logwindow = nullptr;
     wxToggleButton* m_togglePanels;
+    wxToggleButton* m_tabView = nullptr;
 
     wxColourData m_colour_data;
     wxColour m_default_primary;
@@ -256,6 +259,7 @@ EVT_MENU(ID_POSITION_TOP, MyFrame::OnPositionTopLabels)
 EVT_MENU(ID_POSITION_TOP_ICONS, MyFrame::OnPositionTopIcons)
 EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
 EVT_TOGGLEBUTTON(ID_TOGGLE_PANELS, MyFrame::OnTogglePanels)
+EVT_TOGGLEBUTTON(ID_TAB_VIEW, MyFrame::OnTabView)
 EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(wxID_ANY, MyFrame::OnExtButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PAGE, MyFrame::OnRemovePage)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PANEL, MyFrame::OnRemovePanel)
@@ -734,18 +738,25 @@ MyFrame::MyFrame()
 
     m_togglePanels = new wxToggleButton(this, ID_TOGGLE_PANELS, "&Toggle panels");
     m_togglePanels->SetValue(true);
+    m_tabView = new wxToggleButton(this, ID_TAB_VIEW, "Tabs as Tab&View");
 
     wxSizer *s = new wxBoxSizer(wxVERTICAL);
 
     s->Add(m_ribbon, wxSizerFlags().Expand());
     s->Add(m_logwindow, wxSizerFlags(1).Expand());
     s->Add(m_togglePanels, wxSizerFlags().Border());
+    s->Add(m_tabView, wxSizerFlags().Border());
 
     SetSizer(s);
 }
 
 void MyFrame::SetBarStyle(long style)
 {
+#ifdef __WXWINUI__
+    // The kind of tabs is chosen by its own button, whatever the position.
+    if ( m_tabView && m_tabView->GetValue() )
+        style |= wxRIBBON_BAR_TAB_VIEW;
+#endif
     m_ribbon->Freeze();
     m_ribbon->SetWindowStyleFlag(style);
     wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(GetSizer());
@@ -1175,6 +1186,13 @@ void MyFrame::OnPositionLeftDropdown(wxRibbonToolBarEvent& evt)
 void MyFrame::OnTogglePanels(wxCommandEvent& WXUNUSED(evt))
 {
     m_ribbon->ShowPanels(m_togglePanels->GetValue());
+}
+
+void MyFrame::OnTabView(wxCommandEvent& WXUNUSED(evt))
+{
+#ifdef __WXWINUI__
+    SetBarStyle(m_ribbon->GetWindowStyleFlag() & ~wxRIBBON_BAR_TAB_VIEW);
+#endif
 }
 
 void MyFrame::OnExtButton(wxRibbonPanelEvent& WXUNUSED(evt))

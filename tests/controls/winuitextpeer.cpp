@@ -1068,11 +1068,16 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
             richPassCount);
     REQUIRE(richCompletionVisible);
     REQUIRE(hasScrollState);
-    REQUIRE((richTrace & RichReflow) != 0);
+    // The stale-extent repair (reflow, then measuring again) runs when
+    // RichEditBox publishes a width change and a document replacement from
+    // different layout generations. A resize now reaches the XAML tree at
+    // once, before the document is replaced, so there may be nothing to
+    // repair: only its consistency is required.
+    if ( (richTrace & RichReflow) != 0 )
+        REQUIRE((richTrace & RichMeasured) != 0);
     REQUIRE((richTrace & RichExactRequested) != 0);
     REQUIRE((richTrace & RichExactAccepted) != 0);
     REQUIRE((richTrace & RichVisible) != 0);
-    REQUIRE((richTrace & RichMeasured) != 0);
     REQUIRE(richPassCount >= 2);
     REQUIRE(richPassCount <= 8);
     REQUIRE(end != wxDefaultPosition);

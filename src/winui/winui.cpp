@@ -2405,6 +2405,12 @@ bool wxWinUIProcessMessageWithCallback(
     if ( !msg )
         return false;
 
+    // Both callers, the WH_GETMESSAGE hook and the event-loop fallback, pass
+    // every message retrieved from the queue through here.
+    wxWinUINoteMessagePumped();
+    if ( msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN )
+        wxWinUINoteKeyboardInput();
+
     // In an entered native resize loop, USER32 must consume its exact
     // captured target's motion/release/cancel packets. Passing them through
     // XAML first can mark them handled and the WH_GETMESSAGE hook then turns

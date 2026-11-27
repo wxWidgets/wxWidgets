@@ -558,7 +558,7 @@ struct wxWinUIGridProjection::Impl : std::enable_shared_from_this<Impl>
             cell.horizontal = cell.kind == GridCellKind::Number || cell.kind == GridCellKind::Float ||
                 cell.kind == GridCellKind::Date || cell.kind == GridCellKind::Enum
                 ? wxALIGN_RIGHT : wxALIGN_LEFT;
-            cell.vertical = wxALIGN_TOP;
+            cell.vertical = wxALIGN_CENTRE;
             attr->GetNonDefaultAlignment(&cell.horizontal, &cell.vertical);
             cell.enabled = owner->IsEnabled() &&
                 (cell.kind != GridCellKind::Bool || (owner->IsEditable() && !attr->IsReadOnly()));
@@ -712,6 +712,10 @@ struct wxWinUIGridProjection::Impl : std::enable_shared_from_this<Impl>
         else
         {
             C::Button button = winrt::make<U::ButtonElement>(automation);
+            // A cell of a table, not a button: flat, square, with the lines
+            // of the grid. The labels show the pointer over them.
+            wxWinUIApplyTableCellStyle(
+                button, pane->kind != GridPaneKind::Cells);
             button.Click(activate);
             button.HorizontalContentAlignment(X::HorizontalAlignment::Stretch);
             button.VerticalContentAlignment(X::VerticalAlignment::Stretch);
@@ -724,7 +728,7 @@ struct wxWinUIGridProjection::Impl : std::enable_shared_from_this<Impl>
             else
             {
                 peer->text = C::TextBlock();
-                peer->text.Margin(X::Thickness{2, 1, 2, 1});
+                peer->text.Margin(X::Thickness{12, 0, 12, 0});
                 button.Content(peer->text);
             }
             peer->control = button;
@@ -797,10 +801,19 @@ struct wxWinUIGridProjection::Impl : std::enable_shared_from_this<Impl>
             peer->control.IsEnabled(cell.enabled);
             peer->control.Background(wxWinUICreateColourBrush(cell.background));
             wxWinUIApplyForeground(peer->control, cell.foreground);
+            // The frame of the current cell has the width the grid gives
+            // it, two pixels unless the program said otherwise.
+            const double frame =
+                std::max(1, owner->GetCellHighlightPenWidth());
             peer->control.BorderThickness(cell.current
-                ? X::Thickness{1, 1, 1, 1} : X::Thickness{0, 0, border, border});
+                ? X::Thickness{frame, frame, frame, frame}
+                : X::Thickness{0, 0, border, border});
             peer->control.BorderBrush(wxWinUICreateColourBrush(cell.current
                 ? highlightColour : gridLineColour));
+            // Rounded, as the frame of the current cell of a WinUI table.
+            const double corner = cell.current ? 4 : 0;
+            if ( peer->control.CornerRadius().TopLeft != corner )
+                peer->control.CornerRadius({corner, corner, corner, corner});
             Check(snapshot);
             if ( peer->text )
             {

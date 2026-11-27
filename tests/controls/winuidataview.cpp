@@ -670,8 +670,11 @@ TEST_CASE("WinUI DataView invalidates custom selection and geometry without repl
     CHECK((renderer->lastState & wxDATAVIEW_CELL_FOCUSED) != 0);
     CHECK(row.Children().GetAt(1) == nativeCell);
     const unsigned rendersBeforeHeight = renderer->renders;
-    REQUIRE(fixture.view->SetRowHeight(48));
-    CHECK(row.Children().GetAt(1).as<X::FrameworkElement>().Height() == 48 / fixture.view->GetDPIScaleFactor());
+    // 48 DIPs: 48 pixels are the default height at 150 %, where asking for
+    // them changes nothing.
+    const int tallRow = fixture.view->FromDIP(48);
+    REQUIRE(fixture.view->SetRowHeight(tallRow));
+    CHECK(row.Children().GetAt(1).as<X::FrameworkElement>().Height() == tallRow / fixture.view->GetDPIScaleFactor());
     // The custom wxDC surface needs fresh pixels for its new height, while
     // the adjacent native cell changes geometry on the same XAML object.
     CHECK(renderer->renders > rendersBeforeHeight);

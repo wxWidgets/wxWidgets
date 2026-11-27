@@ -220,6 +220,17 @@ public:
         }
         catch ( ... ) { wxLogError("Exception in ribbon gallery hover handler"); }
     }
+    // The owner was given another art provider. All this takes from one is
+    // the direction of its flow: an application which gives a gallery an
+    // art provider of its own while one of its items is hovered, as the
+    // ribbon sample does to preview a colour, must not have the whole view
+    // made anew -- and its items animated in again -- at each move of the
+    // pointer.
+    void ArtChanged(bool verticalFlow)
+    {
+        if ( !m_projection || m_projection->horizontal != verticalFlow )
+            Changed();
+    }
     void Changed()
     {
         ++m_revision;
@@ -290,10 +301,26 @@ public:
                 const auto scroll = projection->scroll;
                 const std::weak_ptr<wxRibbonGalleryWinUI> weak = shared_from_this();
                 const auto generation = projection->generation;
-                const auto changed = scroll.ViewChanged([weak, generation](const auto&, const auto&)
+                const auto changed = scroll.ViewChanged([weak, generation](const auto&, const auto& args)
                 {
                     if ( auto self = weak.lock(); self && self->Current(generation) )
                     {
+                        // Where the view comes to rest once the position
+                        // asked of it has been asked is its position: the
+                        // one it was asked for may be out of its range, or
+                        // the user may have scrolled meanwhile. Holding on
+                        // to it took the view back there at the next
+                        // occasion, which undid the scrolling of the user.
+                        if ( !args.IsIntermediate() )
+                        {
+                            const auto projection = self->m_projection;
+                            if ( projection && projection->pendingScroll &&
+                                 projection->scrollRequestIssued )
+                            {
+                                projection->pendingScroll = false;
+                                projection->scrollRequestIssued = false;
+                            }
+                        }
                         self->UpdateScroll();
                         self->ReplayScroll();
                     }
@@ -543,6 +570,11 @@ public:
                 candidate->entries.push_back({item->key, item->GetId(), item->GetBitmapBundle()});
             candidate->root = MUXC::Grid();
             candidate->view = MUXC::GridView();
+            // No entrance animation: a view which has to be made anew (its
+            // items changed, its window was resized) replaces the one which
+            // was there, it does not appear.
+            candidate->view.ItemContainerTransitions(
+                MUX::Media::Animation::TransitionCollection());
             candidate->root.FlowDirection(owner->GetLayoutDirection() == wxLayout_RightToLeft
                 ? MUX::FlowDirection::RightToLeft : MUX::FlowDirection::LeftToRight);
             candidate->view.SelectionMode(MUXC::ListViewSelectionMode::Single);
@@ -615,18 +647,51 @@ public:
                 if ( entry.key == m_selected ) candidate->view.SelectedItem(item);
                 if ( !current() ) return false;
             }
+            // The three buttons of a gallery are one part of it: subtle
+            // buttons in a thin frame of their own, set off from the items.
             MUXC::StackPanel buttons;
             buttons.Orientation(MUXC::Orientation::Vertical);
-            MUXC::Grid::SetColumn(buttons, 1);
-            candidate->root.Children().Append(buttons);
+            MUXC::Border buttonFrame;
+            buttonFrame.BorderThickness(MUX::ThicknessHelper::FromUniformLength(1));
+            buttonFrame.CornerRadius(MUX::CornerRadiusHelper::FromUniformRadius(4));
+            buttonFrame.Margin(MUX::ThicknessHelper::FromLengths(4, 0, 0, 0));
+            buttonFrame.VerticalAlignment(MUX::VerticalAlignment::Center);
+            try
+            {
+                buttonFrame.BorderBrush(
+                    MUX::Application::Current().Resources()
+                        .Lookup(winrt::box_value(L"ControlStrokeColorDefaultBrush"))
+                        .try_as<MUX::Media::Brush>());
+            }
+            catch ( const winrt::hresult_error& )
+            {
+            }
+            buttonFrame.Child(buttons);
+            MUXC::Grid::SetColumn(buttonFrame, 1);
+            candidate->root.Children().Append(buttonFrame);
             const wchar_t* names[] = {L"Gallery scroll up", L"Gallery scroll down", L"Gallery extension"};
             const wchar_t* glyphs[] = {L"\uE70E", L"\uE70D", L"\uE712"};
             for ( size_t i = 0; i < 3; ++i )
             {
-                const auto button = MUXC::Button();
+                const auto button =
+                    wxRibbonWinUICommandDetail::LoadSubtle(L"Button", L"Button")
+                        .as<MUXC::Button>();
                 button.Padding({0, 0, 0, 0}); button.MinWidth(0); button.MinHeight(0);
-                button.Width(24); button.Height(24);
-                MUXC::FontIcon icon; icon.Glyph(glyphs[i]); icon.FontSize(12);
+                button.Width(20); button.Height(22);
+                button.CornerRadius(MUX::CornerRadiusHelper::FromUniformRadius(3));
+                // The two arrows are for the pointer, and no stop of the
+                // Tab key: the keyboard scrolls by moving among the items.
+                // They are disabled and enabled as the view reaches and
+                // leaves its ends, and where the focus has never been (the
+                // flyout of a folded group, until something in it is
+                // clicked) XAML answers a stop of the Tab key which becomes
+                // enabled by bringing the first thing which can have the
+                // focus into view: the first item. The view went back to its
+                // start as soon as it had left it by half a pixel, which is
+                // where the upper arrow is enabled.
+                if ( i < 2 )
+                    button.IsTabStop(false);
+                MUXC::FontIcon icon; icon.Glyph(glyphs[i]); icon.FontSize(9);
                 button.Content(icon);
                 MUXA::AutomationProperties::SetName(button, names[i]);
                 candidate->buttons[i] = button;
@@ -720,8 +785,13 @@ public:
             if ( !current() ) return false;
             owner = Owner();
             candidate->cell = owner->FromDIP(nativeCell);
-            candidate->minimum = owner->FromDIP(wxSize(nativeCell.x + 24, std::max(72, nativeCell.y)));
-            candidate->best = owner->FromDIP(wxSize(nativeCell.x * 3 + 24, std::max(72, nativeCell.y)));
+            // Whole columns and the room of the buttons (20 for a button, 2
+            // for their frame, 4 between it and the items): the sizes asked
+            // of the layout and the room the items are given below must
+            // agree to the pixel, or a column is lost and its room left
+            // empty beside the buttons.
+            candidate->minimum = owner->FromDIP(wxSize(nativeCell.x + 26, std::max(72, nativeCell.y)));
+            candidate->best = owner->FromDIP(wxSize(nativeCell.x * 3 + 26, std::max(72, nativeCell.y)));
             candidate->available = m_observed = owner->GetClientSize();
             wxSize desired = candidate->available;
             if ( nativeComposite )
@@ -748,10 +818,24 @@ public:
                 wxWinUIToHString(panel)).as<MUXC::ItemsPanelTemplate>());
             if ( !current() ) return false;
             const auto dip = Owner()->ToDIP(desired);
-            const double viewportWidth = std::max(1, dip.x - 24);
+            // The buttons, their frame and its margin.
+            const double viewportWidth = std::max(1, dip.x - 26);
             const double viewportHeight = std::max(1, dip.y);
             const double across = std::max(1.0, std::floor(candidate->horizontal
                 ? viewportHeight / nativeCell.y : viewportWidth / nativeCell.x));
+            // The items take the room of whole columns and the buttons come
+            // right after them: what is left over of the width, up to a
+            // column less a pixel, is not put between the two.
+            if ( !candidate->horizontal )
+            {
+                candidate->view.Width(across * nativeCell.x);
+                candidate->view.HorizontalAlignment(MUX::HorizontalAlignment::Left);
+                if ( candidate->root.ColumnDefinitions().Size() == 2 )
+                {
+                    candidate->root.ColumnDefinitions().GetAt(0).Width(
+                        MUX::GridLengthHelper::Auto());
+                }
+            }
             const double bands = std::ceil(static_cast<double>(candidate->entries.size()) / across);
             const double extent = bands * (candidate->horizontal ? nativeCell.x : nativeCell.y);
             candidate->limit = std::max(0.0, extent -

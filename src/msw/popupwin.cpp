@@ -2603,6 +2603,31 @@ void wxPopupTransientWindow::DismissFromOutside()
     }
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+void wxWinUIDismissPopupOnOutsidePress(wxWindow *pressedTLW)
+{
+    wxPopupTransientWindow * const popup =
+        wxDynamicCast(wxCurrentPopupWindow, wxPopupTransientWindow);
+    if ( !popup || !pressedTLW || !popup->IsShown() ||
+         popup->IsDescendant(pressedTLW) )
+    {
+        return;
+    }
+
+    // Not from inside the callback of XAML which reports the press:
+    // dismissing runs the code of the program.
+    const wxWeakRef<wxPopupTransientWindow> weak(popup);
+    popup->CallAfter([weak]()
+    {
+        wxPopupTransientWindow * const live = weak.get();
+        if ( live && live->IsShown() && wxCurrentPopupWindow == live )
+            wxWinUIPopupSidecarAccess::DismissFromOutside(live);
+    });
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 void wxPopupTransientWindow::MSWDismissUnfocusedPopup()
 {
     // When we use wxPU_CONTAINS_CONTROLS, we can react to the popup

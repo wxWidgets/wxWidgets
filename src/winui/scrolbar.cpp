@@ -277,6 +277,11 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
         m_winui->bar.Orientation(
             IsVertical() ? MUXC::Orientation::Vertical
                          : MUXC::Orientation::Horizontal);
+        // A bare ScrollBar draws nothing until a ScrollViewer picks an
+        // indicator mode for it. A wxScrollBar is a control of its own, so it
+        // is always shown, with the pointer-sized track and thumb.
+        m_winui->bar.IndicatorMode(
+            MUXCP::ScrollingIndicatorMode::MouseIndicator);
 
         const std::shared_ptr<wxWinUIScrollBarCallbackState> callbackState =
             m_winui->callbackState;

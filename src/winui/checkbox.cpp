@@ -384,21 +384,19 @@ bool wxCheckBox::MSWOnEffectiveLayoutDirectionChanged()
 
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
-    // Measure the actual WinUI check box (glyph + label + padding) so the size
-    // matches the real rendering rather than a hard-coded guess.
-    if ( m_winui )
-    {
-        const wxSize size = m_winui->host.MeasureContent();
-        if ( size != wxDefaultSize )
-            return size;
-    }
-
-    // Not realised yet: fall back to a guess big enough for the label, which
-    // will be corrected once the content is loaded.
-    wxSize best = wxWindow::FromDIP(wxSize(32, 32), const_cast<wxCheckBox *>(this));
+    // The stock CheckBox template: a 20 DIP glyph, 8 DIPs before the label,
+    // 32 DIPs high. Measuring the CheckBox itself is only right once its
+    // template has been applied, some time after creation: until then the
+    // layout would crop the label. The label text can be measured at once.
+    wxSize best = FromDIP(wxSize(20, 32));
     const wxString text = wxControl::GetLabelText(GetLabel());
     if ( !text.empty() )
-        best.x += GetTextExtent(text).x;
+    {
+        const wxSize label =
+            wxWinUIMeasureText(this, text, m_hasFont ? GetFont() : wxFont());
+        best.x += FromDIP(8 + 4) + label.x;
+        best.y = wxMax(best.y, label.y + FromDIP(11));
+    }
 
     return best;
 }

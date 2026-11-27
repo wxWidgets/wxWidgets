@@ -1069,7 +1069,70 @@ protected:
     wxFont m_tab_active_label_font;
 };
 
-#if defined(__WXMSW__)
+#if defined(__WXWINUI__)
+
+// The art of a ribbon whose containers and commands are shown by WinUI: the
+// metrics which give them room, and the drawing of the little that is not
+// XAML content yet (the tabs and the small buttons of the bar). See
+// src/ribbon/art_winui.cpp.
+class WXDLLIMPEXP_RIBBON wxRibbonWinUIArtProvider : public wxRibbonMSWArtProvider
+{
+public:
+    wxRibbonWinUIArtProvider();
+
+    wxNODISCARD wxRibbonArtProvider* Clone() const override;
+
+    void DrawTabCtrlBackground(wxDC& dc, wxWindow* wnd,
+                               const wxRect& rect) override;
+    void DrawTab(wxDC& dc, wxWindow* wnd,
+                 const wxRibbonPageTabInfo& tab) override;
+    void DrawTabSeparator(wxDC& dc, wxWindow* wnd, const wxRect& rect,
+                          double visibility) override;
+    void DrawPageBackground(wxDC& dc, wxWindow* wnd,
+                            const wxRect& rect) override;
+    void DrawScrollButton(wxDC& dc, wxWindow* wnd, const wxRect& rect,
+                          long style) override;
+    void DrawPanelBackground(wxDC& dc, wxRibbonPanel* wnd,
+                             const wxRect& rect) override;
+    void DrawGalleryBackground(wxDC& dc, wxRibbonGallery* wnd,
+                               const wxRect& rect) override;
+    void DrawMinimisedPanel(wxDC& dc, wxRibbonPanel* wnd, const wxRect& rect,
+                            wxBitmap& bitmap) override;
+    void DrawButtonBarBackground(wxDC& dc, wxWindow* wnd,
+                                 const wxRect& rect) override;
+    void DrawToolBarBackground(wxDC& dc, wxWindow* wnd,
+                               const wxRect& rect) override;
+    void DrawToolGroupBackground(wxDC& dc, wxWindow* wnd,
+                                 const wxRect& rect) override;
+    void DrawToggleButton(wxDC& dc, wxRibbonBar* wnd, const wxRect& rect,
+                          wxRibbonDisplayMode mode) override;
+    void DrawHelpButton(wxDC& dc, wxRibbonBar* wnd,
+                        const wxRect& rect) override;
+
+    void GetBarTabWidth(wxReadOnlyDC& dc, wxWindow* wnd,
+                        const wxString& label, const wxBitmap& bitmap,
+                        int* ideal, int* small_begin_need_separator,
+                        int* small_must_have_separator,
+                        int* minimum) override;
+    int GetTabCtrlHeight(wxReadOnlyDC& dc, wxWindow* wnd,
+                         const wxRibbonPageTabInfoArray& pages) override;
+    wxSize GetScrollButtonMinimumSize(wxReadOnlyDC& dc, wxWindow* wnd,
+                                      long style) override;
+    wxSize GetPanelSize(wxReadOnlyDC& dc, const wxRibbonPanel* wnd,
+                        wxSize client_size, wxPoint* client_offset) override;
+    wxSize GetPanelClientSize(wxReadOnlyDC& dc, const wxRibbonPanel* wnd,
+                              wxSize size, wxPoint* client_offset) override;
+    wxRect GetPanelExtButtonArea(wxReadOnlyDC& dc, const wxRibbonPanel* wnd,
+                                 wxRect rect) override;
+    wxSize GetMinimisedPanelMinimumSize(
+                        wxReadOnlyDC& dc, const wxRibbonPanel* wnd,
+                        wxSize* desired_bitmap_size,
+                        wxDirection* expanded_panel_direction) override;
+};
+
+typedef wxRibbonWinUIArtProvider wxRibbonDefaultArtProvider;
+
+#elif defined(__WXMSW__)
 typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
 #elif defined(__WXOSX_COCOA__) || \
       defined(__WXOSX_IPHONE__)

@@ -27,6 +27,7 @@
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
+#include <winrt/Microsoft.UI.Xaml.Markup.h>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
@@ -84,9 +85,62 @@ MUXCP::RepeatButton wxWinUIMakeArrow(const wchar_t* glyph,
 
     MUXCP::RepeatButton button;
     button.Content(icon);
+    // As the arrows inside a NumberBox: nothing of a button until the
+    // pointer is over it, then a subtle fill.
+    try
+    {
+        static const wchar_t * const keys[][2] =
+        {
+            { L"RepeatButtonBackground", L"SubtleFillColorTransparentBrush" },
+            { L"RepeatButtonBackgroundPointerOver", L"SubtleFillColorSecondaryBrush" },
+            { L"RepeatButtonBackgroundPressed", L"SubtleFillColorTertiaryBrush" },
+            { L"RepeatButtonBackgroundDisabled", L"SubtleFillColorTransparentBrush" },
+            { L"RepeatButtonBorderBrush", L"SubtleFillColorTransparentBrush" },
+            { L"RepeatButtonBorderBrushPointerOver", L"SubtleFillColorTransparentBrush" },
+            { L"RepeatButtonBorderBrushPressed", L"SubtleFillColorTransparentBrush" },
+            { L"RepeatButtonBorderBrushDisabled", L"SubtleFillColorTransparentBrush" },
+            { L"RepeatButtonForeground", L"TextFillColorSecondaryBrush" },
+            { L"RepeatButtonForegroundPointerOver", L"TextFillColorPrimaryBrush" },
+            { L"RepeatButtonForegroundPressed", L"TextFillColorSecondaryBrush" },
+            { L"RepeatButtonForegroundDisabled", L"TextFillColorDisabledBrush" },
+        };
+        std::wstring entries;
+        for ( const auto& key : keys )
+        {
+            entries += L"<StaticResource x:Key='";
+            entries += key[0];
+            entries += L"' ResourceKey='";
+            entries += key[1];
+            entries += L"'/>";
+        }
+        std::wstring markup =
+            L"<ResourceDictionary"
+            L" xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'"
+            L" xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'>"
+            L"<ResourceDictionary.ThemeDictionaries>"
+            L"<ResourceDictionary x:Key='Default'>";
+        markup += entries;
+        markup += L"</ResourceDictionary><ResourceDictionary x:Key='Light'>";
+        markup += entries;
+        markup += L"</ResourceDictionary>"
+                  L"<ResourceDictionary x:Key='HighContrast'/>"
+                  L"</ResourceDictionary.ThemeDictionaries>"
+                  L"</ResourceDictionary>";
+        button.Resources(
+            MUX::Markup::XamlReader::Load(winrt::hstring(markup))
+                .as<MUX::ResourceDictionary>());
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI spin button arrow style", e);
+    }
+    button.BorderThickness(MUX::ThicknessHelper::FromUniformLength(0));
+    button.CornerRadius({ 3, 3, 3, 3 });
+    button.Margin(MUX::ThicknessHelper::FromUniformLength(1));
     button.Padding(MUX::ThicknessHelper::FromUniformLength(0));
     button.MinWidth(0);
-    button.MinHeight(0);
+    // As high as a field less its frame, when the window is high enough.
+    button.MinHeight(30);
     button.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
     button.VerticalAlignment(MUX::VerticalAlignment::Stretch);
     button.HorizontalContentAlignment(MUX::HorizontalAlignment::Center);
@@ -294,33 +348,50 @@ bool wxSpinButton::Create(wxWindow *parent,
                 }
             });
 
+        // The two arrows are side by side whatever they point at, as those
+        // which a NumberBox shows at the end of its field, and the pair is
+        // as high as a field: stacked in that height (as the up-down
+        // control of Win32 is) they were two slivers of 14. The one which
+        // comes first is the one a NumberBox puts first (up), or the one
+        // which points to the start (left).
         const auto star = MUX::GridLengthHelper::FromValueAndType(
             1, MUX::GridUnitType::Star);
-        if ( vertical )
+        MUXC::ColumnDefinition first;
+        MUXC::ColumnDefinition second;
+        first.Width(star);
+        second.Width(star);
+        impl->grid.ColumnDefinitions().Append(first);
+        impl->grid.ColumnDefinitions().Append(second);
+        MUXC::Grid::SetColumn(vertical ? impl->up : impl->down, 0);
+        MUXC::Grid::SetColumn(vertical ? impl->down : impl->up, 1);
+
+        // The ground and the frame of a control, under the two arrows.
+        try
         {
-            MUXC::RowDefinition first;
-            MUXC::RowDefinition second;
-            first.Height(star);
-            second.Height(star);
-            impl->grid.RowDefinitions().Append(first);
-            impl->grid.RowDefinitions().Append(second);
-            MUXC::Grid::SetRow(impl->up, 0);
-            MUXC::Grid::SetRow(impl->down, 1);
+            const MUXC::Border field = MUX::Markup::XamlReader::Load(
+                L"<Border"
+                L" xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'"
+                L" IsHitTestVisible='False' CornerRadius='4' BorderThickness='1'"
+                L" Background='{ThemeResource ControlFillColorDefaultBrush}'"
+                L" BorderBrush='{ThemeResource ControlStrokeColorDefaultBrush}'/>")
+                    .as<MUXC::Border>();
+            MUXC::Grid::SetColumnSpan(field, 2);
+            impl->grid.Children().Append(field);
         }
-        else
+        catch ( const winrt::hresult_error& e )
         {
-            MUXC::ColumnDefinition first;
-            MUXC::ColumnDefinition second;
-            first.Width(star);
-            second.Width(star);
-            impl->grid.ColumnDefinitions().Append(first);
-            impl->grid.ColumnDefinitions().Append(second);
-            MUXC::Grid::SetColumn(impl->down, 0);
-            MUXC::Grid::SetColumn(impl->up, 1);
+            wxWinUILogException("WinUI spin button field", e);
         }
 
         impl->grid.Children().Append(impl->up);
         impl->grid.Children().Append(impl->down);
+
+        // The size of a pair of spin buttons whatever room a sizer gives the
+        // window: stretched, they were two bars across it.
+        impl->grid.Width(64);
+        impl->grid.MaxHeight(32);
+        impl->grid.HorizontalAlignment(MUX::HorizontalAlignment::Left);
+        impl->grid.VerticalAlignment(MUX::VerticalAlignment::Center);
 
         impl->keyDownToken = impl->grid.PreviewKeyDown(
             [state, generation, vertical](
@@ -434,9 +505,8 @@ int wxSpinButton::GetIncrement() const
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return wxWindow::FromDIP(
-        IsVertical() ? wxSize(28, 48) : wxSize(48, 28),
-        const_cast<wxSpinButton*>(this));
+    return wxWindow::FromDIP(wxSize(64, 32),
+                             const_cast<wxSpinButton*>(this));
 }
 
 bool wxSpinButton::Step(int direction)

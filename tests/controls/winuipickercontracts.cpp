@@ -27,6 +27,7 @@
 #include "wx/fontpicker.h"
 #include "wx/frame.h"
 #include "wx/generic/fontdlgg.h"
+#include "wx/listbox.h"
 #include "wx/modalhook.h"
 #include "wx/msw/wrapwin.h"
 #include "wx/panel.h"
@@ -123,32 +124,58 @@ public:
     bool reparentSucceeded = false;
 
 private:
+    // Chooses Arial bold italic, 37 points, the way a user does: the name
+    // and the size are typed, the style is picked in its list and OK checks
+    // the whole. The names of the styles are in the language of the system,
+    // so the style is recognized by the font it gives.
     void ConfigureFont(wxFontDialog *dialog)
     {
-        wxChoice * const family =
+        wxTextCtrl * const family =
             wxDynamicCast(
-                dialog->FindWindow(wxID_FONT_FAMILY), wxChoice);
-        wxChoice * const style =
+                wxWindow::FindWindowByName("fontFamilyText", dialog),
+                wxTextCtrl);
+        wxListBox * const styles =
             wxDynamicCast(
-                dialog->FindWindow(wxID_FONT_STYLE), wxChoice);
-        wxChoice * const weight =
+                wxWindow::FindWindowByName("fontStyleList", dialog),
+                wxListBox);
+        wxTextCtrl * const size =
             wxDynamicCast(
-                dialog->FindWindow(wxID_FONT_WEIGHT), wxChoice);
-        wxChoice * const size =
-            wxDynamicCast(
-                dialog->FindWindow(wxID_FONT_SIZE), wxChoice);
-        if ( !family || !style || !weight || !size )
+                wxWindow::FindWindowByName("fontSizeText", dialog),
+                wxTextCtrl);
+        if ( !family || !styles || !size )
             return;
 
-        family->SetSelection(4);
-        style->SetSelection(1);
-        weight->SetSelection(2);
-        if ( !size->SetStringSelection("37") )
-            return;
+        const auto type = [](wxTextCtrl *text, const wxString& value)
+        {
+            text->SetValue(value);
+            wxCommandEvent typed(wxEVT_TEXT, text->GetId());
+            typed.SetEventObject(text);
+            text->ProcessWindowEvent(typed);
+        };
+        type(family, "Arial");
+        type(size, "37");
 
-        wxCommandEvent changed(wxEVT_CHOICE, wxID_FONT_FAMILY);
-        changed.SetEventObject(family);
-        fontConfigured = dialog->ProcessWindowEvent(changed);
+        for ( unsigned int n = 0; n < styles->GetCount(); ++n )
+        {
+            styles->SetSelection(n);
+            wxCommandEvent picked(wxEVT_LISTBOX, styles->GetId());
+            picked.SetEventObject(styles);
+            picked.SetInt(n);
+            styles->ProcessWindowEvent(picked);
+
+            wxCommandEvent ok(wxEVT_BUTTON, wxID_OK);
+            ok.SetEventObject(dialog);
+            dialog->ProcessWindowEvent(ok);
+
+            const wxFont chosen = dialog->GetFontData().GetChosenFont();
+            if ( chosen.IsOk() &&
+                 chosen.GetWeight() == wxFONTWEIGHT_BOLD &&
+                 chosen.GetStyle() == wxFONTSTYLE_ITALIC )
+            {
+                fontConfigured = true;
+                break;
+            }
+        }
     }
 
     wxDECLARE_NO_COPY_CLASS(PickerModalHook);

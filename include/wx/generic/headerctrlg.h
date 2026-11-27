@@ -202,6 +202,10 @@ private:
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     friend class wxWinUIHeaderProjection;
     std::shared_ptr<wxWinUIHeaderProjection> m_winUIProjection;
+
+    // The column whose button is held down, or -1: the buttons of the
+    // columns are shown by XAML but it is this control which gets the mouse.
+    unsigned int m_winUIPressed;
 #endif
 
     wxDECLARE_EVENT_TABLE();

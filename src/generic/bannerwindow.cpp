@@ -13,6 +13,7 @@
 #if wxUSE_BANNERWINDOW
 
 #include "wx/bannerwindow.h"
+#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -187,8 +188,33 @@ void wxBannerWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                 gradientDir = wxRIGHT;
             }
 
-            dc.GradientFillLinear(GetClientRect(), m_colStart, m_colEnd,
+            wxColour colStart = m_colStart;
+            wxColour colEnd = m_colEnd;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // The gradient nobody chose goes from white to blue, and the
+            // text is in the colour of the theme: white on white in a dark
+            // one, where the title could not be read. It goes from the
+            // background of the theme to its accent colour instead.
+            if ( colStart == *wxWHITE && colEnd == *wxBLUE )
+            {
+                colStart = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+                colEnd = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+            }
+#endif
+            dc.GradientFillLinear(GetClientRect(), colStart, colEnd,
                                   gradientDir);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // Nor can the text of the theme be read on a gradient chosen
+            // for the other one: unless the program gave it a colour, it
+            // takes the one which shows on where it starts.
+            if ( !UseForegroundColour() )
+            {
+                dc.SetTextForeground(colStart.GetLuminance() > 0.5
+                                        ? wxColour(27, 27, 27)
+                                        : *wxWHITE);
+            }
+#endif
         }
 
         // Now draw the text on top of it.

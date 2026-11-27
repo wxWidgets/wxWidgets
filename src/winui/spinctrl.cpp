@@ -155,6 +155,7 @@ MUXC::NumberBox wxWinUICreateNumberBox()
     box.ValidationMode(
         MUXC::NumberBoxValidationMode::InvalidInputOverwritten);
     box.AcceptsExpression(false);
+    box.VerticalAlignment(MUX::VerticalAlignment::Center);
     return box;
 }
 
@@ -1120,10 +1121,17 @@ void wxSpinCtrl::SetSelection(long from, long to)
     ApplySelectionToPeer();
 }
 
+// The inline NumberBox chrome around the digits: the text padding, the clear
+// button shown while the field has focus, and the two spin buttons.
+static const int wxWINUI_SPIN_CHROME_DIPS = 11 + 32 + 76;
+
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return wxWindow::FromDIP(
-        wxSize(110, 32), const_cast<wxSpinCtrl*>(this));
+    const int digits = wxMax(GetTextExtent(FormatValue(m_min)).x,
+                             GetTextExtent(FormatValue(m_max)).x);
+    wxSize best = FromDIP(wxSize(wxWINUI_SPIN_CHROME_DIPS, 32));
+    best.x += digits;
+    return best;
 }
 
 bool wxSpinCtrl::ParseText(const wxString& text, int *value) const
@@ -1902,8 +1910,11 @@ void wxSpinCtrlDouble::SetSelection(long from, long to)
 
 wxSize wxSpinCtrlDouble::DoGetBestSize() const
 {
-    return wxWindow::FromDIP(
-        wxSize(120, 32), const_cast<wxSpinCtrlDouble*>(this));
+    const int digits = wxMax(GetTextExtent(FormatValue(m_min)).x,
+                             GetTextExtent(FormatValue(m_max)).x);
+    wxSize best = FromDIP(wxSize(wxWINUI_SPIN_CHROME_DIPS, 32));
+    best.x += digits;
+    return best;
 }
 
 bool wxSpinCtrlDouble::ParseText(const wxString& text,

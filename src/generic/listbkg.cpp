@@ -240,6 +240,20 @@ void wxListbook::OnSize(wxSizeEvent& event)
     wxListView * const list = GetListView();
     if ( list )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // Where the names of the pages make the single column of a report
+        // list, it is as wide as the longest of them, as the native list of
+        // wxMSW shows them; the list is then that wide (see
+        // wxGenericListCtrl::DoGetBestClientSize()).
+        if ( list->InReportView() && list->GetColumnCount() == 1 &&
+             list->GetItemCount() > 0 )
+        {
+            const int before = list->GetColumnWidth(0);
+            list->SetColumnWidth(0, wxLIST_AUTOSIZE);
+            if ( list->GetColumnWidth(0) != before )
+                list->InvalidateBestSize();
+        }
+#endif
         list->Arrange();
 
         const int sel = GetSelection();

@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cstdint>
 #include <map>
+#include <set>
 #include <utility>
 
 namespace X = winrt::Microsoft::UI::Xaml;
@@ -36,6 +37,12 @@ namespace
 {
 constexpr wchar_t ManagedProperty[] = L"wxWinUI.ManagedWindowScrollbars";
 std::vector<std::weak_ptr<wxWinUIScrollBarProjection>> gs_projections;
+
+// The windows which were given scrollbars through the wx API, the only ones
+// which can carry the property above: a synchronisation looks at these
+// instead of asking every window of the frame for the property, hidden
+// pages included, which was a tenth of what a resize costs.
+std::set<wxWindow *> gs_managedWindows;
 
 struct ScrollbarBootstrap
 {
@@ -98,11 +105,58 @@ bool SameRect(const RECT& a, const RECT& b)
     return ::EqualRect(&a, &b) != FALSE;
 }
 
+wxWinUITopLevelHost::WindowPartKind PartKind(LONG objectId)
+{
+    return objectId == OBJID_VSCROLL
+        ? wxWinUITopLevelHost::WindowPartKind::VerticalScrollBar
+        : wxWinUITopLevelHost::WindowPartKind::HorizontalScrollBar;
+}
+
 bool ClientScreen(HWND hwnd, RECT& rect)
 {
     if ( !::GetClientRect(hwnd, &rect) ) return false;
     ::MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
     if ( rect.left > rect.right ) std::swap(rect.left, rect.right);
+    return !::IsRectEmpty(&rect);
+}
+
+// Where the WinUI scrollbar of a managed window is shown, in screen
+// coordinates: a strip of its client area along the edge, over the content.
+// USER32 reserves no non-client band for these windows (see WM_NCCALCSIZE in
+// wxWindowMSW::MSWHandleMessage), so there is no classic scrollbar which
+// could show underneath; only its model and its style bits are used.
+bool OverlayBarRect(HWND hwnd, LONG objectId, RECT& rect)
+{
+    const LONG_PTR style = ::GetWindowLongPtr(hwnd, GWL_STYLE);
+    const bool vertical = objectId == OBJID_VSCROLL;
+    if ( !(style & (vertical ? WS_VSCROLL : WS_HSCROLL)) ) return false;
+    RECT client{};
+    if ( !ClientScreen(hwnd, client) ) return false;
+    const UINT dpi = ::GetDpiForWindow(hwnd);
+    const int cx = ::GetSystemMetricsForDpi(SM_CXVSCROLL, dpi);
+    const int cy = ::GetSystemMetricsForDpi(SM_CYHSCROLL, dpi);
+    const LONG_PTR exStyle = ::GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+    // Physical side of the vertical bar: left under exactly one of the two
+    // mirroring styles.
+    const bool leftBar = ((exStyle & WS_EX_LEFTSCROLLBAR) != 0) !=
+                         ((exStyle & WS_EX_LAYOUTRTL) != 0);
+    const bool both = (style & WS_VSCROLL) && (style & WS_HSCROLL);
+    rect = client;
+    if ( vertical )
+    {
+        if ( leftBar ) rect.right = std::min(client.right, client.left + cx);
+        else rect.left = std::max(client.left, client.right - cx);
+        if ( both ) rect.bottom = std::max(client.top, client.bottom - cy);
+    }
+    else
+    {
+        rect.top = std::max(client.top, client.bottom - cy);
+        if ( both )
+        {
+            if ( leftBar ) rect.left = std::min(client.right, client.left + cx);
+            else rect.right = std::max(client.left, client.right - cx);
+        }
+    }
     return !::IsRectEmpty(&rect);
 }
 
@@ -193,37 +247,12 @@ void LogScrollbarSurface(HWND owner, HWND bridge, LONG objectId,
     }
 }
 
-// RedrawWindow(nullptr, nullptr, RDW_INVALIDATE | RDW_FRAME) invalidates the
-// entire client as well as the frame. A native scrollbar's backing is only
-// non-client: model updates must never repaint the scrolling content merely
-// to clean a track. Map each physical band to USER32 client coordinates (the
-// two-point RECT mapping also accounts for WS_EX_LAYOUTRTL), then explicitly
-// remove the client, including after a resize has moved an old band into it.
-bool InvalidateScrollbarBands(HWND hwnd, const std::vector<RECT>& bands)
+// The WinUI scrollbar is drawn over the client area and USER32 has no
+// non-client band for these windows: there is no classic backing to repaint
+// or to clean when a bar appears, changes or goes away.
+bool InvalidateScrollbarBands(HWND, const std::vector<RECT>&)
 {
-    HRGN update = ::CreateRectRgn(0, 0, 0, 0);
-    if ( !update ) return false;
-    bool valid = true;
-    for ( RECT band : bands )
-    {
-        ::MapWindowPoints(nullptr, hwnd, reinterpret_cast<POINT*>(&band), 2);
-        HRGN part = ::CreateRectRgnIndirect(&band);
-        if ( !part || ::CombineRgn(update, update, part, RGN_OR) == ERROR )
-            valid = false;
-        if ( part ) ::DeleteObject(part);
-        if ( !valid ) break;
-    }
-    RECT client{};
-    HRGN clientRegion = ::GetClientRect(hwnd, &client)
-        ? ::CreateRectRgnIndirect(&client) : nullptr;
-    if ( !clientRegion || ::CombineRgn(update, update, clientRegion, RGN_DIFF) == ERROR )
-        valid = false;
-    if ( clientRegion ) ::DeleteObject(clientRegion);
-    if ( valid )
-        valid = ::RedrawWindow(hwnd, nullptr, update,
-            RDW_INVALIDATE | RDW_FRAME | RDW_NOCHILDREN) != FALSE;
-    ::DeleteObject(update);
-    return valid;
+    return true;
 }
 
 wxEventType ScrollEvent(P::ScrollEventType type)
@@ -300,9 +329,12 @@ struct wxWinUIScrollBarProjection::Impl : std::enable_shared_from_this<Impl>
         info = {sizeof(SCROLLINFO), SIF_RANGE | SIF_PAGE | SIF_POS};
         bar = {sizeof(SCROLLBARINFO)};
         if ( !::GetScrollInfo(entry->hwnd, vertical ? SB_VERT : SB_HORZ, &info) ||
-             !::GetScrollBarInfo(entry->hwnd, entry->objectId, &bar) ||
-             (bar.rgstate[0] & (STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_OFFSCREEN)) ||
-             ::IsRectEmpty(&bar.rcScrollBar) ) return false;
+             !OverlayBarRect(entry->hwnd, entry->objectId, bar.rcScrollBar) )
+            return false;
+        // The style bit stays set with nothing to scroll only for a bar
+        // which is always shown: present, but disabled.
+        if ( info.nMax - info.nMin + 1 <= static_cast<int>(info.nPage) )
+            bar.rgstate[0] |= STATE_SYSTEM_UNAVAILABLE;
         clipped = bar.rcScrollBar;
         // Do not project through explicit shaped HWND regions. The existing
         // native band cut remains the conservative fallback for these owners.
@@ -450,6 +482,33 @@ struct wxWinUIScrollBarProjection::Impl : std::enable_shared_from_this<Impl>
             const auto self = weak.lock(); const auto item = weakEntry.lock();
             if ( self && item ) self->Notify(item);
         });
+        // A XAML ScrollBar ignores the wheel and the root router leaves alone
+        // what a XAML element owns, so the wheel would be dead over the bar.
+        // Give it to the scrolled window as the ordinary queued message; over
+        // the horizontal bar a vertical wheel scrolls horizontally.
+        entry->peer.PointerWheelChanged([weak, weakEntry](const auto&, const X::Input::PointerRoutedEventArgs& args)
+        {
+            const auto self = weak.lock(); const auto item = weakEntry.lock();
+            if ( !self || !item || !self->Current(item) ) return;
+            try
+            {
+                const auto props = args.GetCurrentPoint(nullptr).Properties();
+                int delta = props.MouseWheelDelta();
+                bool horizontal = props.IsHorizontalMouseWheel();
+                if ( !delta ) return;
+                if ( !horizontal && item->objectId == OBJID_HSCROLL ) { horizontal = true; delta = -delta; }
+                WORD keys = 0;
+                if ( ::GetKeyState(VK_SHIFT) & 0x8000 ) keys |= MK_SHIFT;
+                if ( ::GetKeyState(VK_CONTROL) & 0x8000 ) keys |= MK_CONTROL;
+                POINT screen{};
+                ::GetCursorPos(&screen);
+                args.Handled(true);
+                ::PostMessageW(item->hwnd, horizontal ? WM_MOUSEHWHEEL : WM_MOUSEWHEEL,
+                    MAKEWPARAM(keys, static_cast<WORD>(static_cast<short>(delta))),
+                    MAKELPARAM(screen.x, screen.y));
+            }
+            catch ( const winrt::hresult_error& ) { }
+        });
         return entry;
     }
 
@@ -459,17 +518,17 @@ struct wxWinUIScrollBarProjection::Impl : std::enable_shared_from_this<Impl>
         entry->live = false;
         const bool repaint = std::exchange(entry->painted, false);
         entry->prepared = false;
-        if ( root )
-        {
-            uint32_t index;
-            if ( root.Children().IndexOf(entry->peer, index) ) root.Children().RemoveAt(index);
-        }
+        // The parts of a window which is gone went with it.
+        const auto state = lifetime.lock();
+        auto* const host = state ? state->GetHost() : nullptr;
+        if ( host && entry->owner )
+            host->SetWindowPart(entry->owner.get(), PartKind(entry->objectId), nullptr);
         if ( repaint && entry->owner && GetHwndOf(entry->owner.get()) == entry->hwnd &&
              !InvalidateScrollbarBands(entry->hwnd, {entry->clip}) )
         {
             // The entry is already unpublished: ordinary MSW painting is
             // restored even if allocating/requesting the NC redraw failed.
-            wxLogWarning("wxWinUI: failed to invalidate a retired scrollbar band");
+            wxLogDebug("wxWinUI: failed to invalidate a retired scrollbar band");
         }
     }
 };
@@ -528,6 +587,10 @@ void wxWinUIScrollBarProjection::Sync(const RECT& clientScreen, double scale)
     if ( self->dispatchDepth ) { self->syncDeferred = true; return; }
     self->syncing = true;
     struct Reset { bool& value; ~Reset() { value = false; } } reset{self->syncing};
+    const auto hostState = self->lifetime.lock();
+    auto* const host = hostState ? hostState->GetHost() : nullptr;
+    if ( !host ) return;
+    wxUnusedVar(clientScreen);
     if ( wxWinUIInputLogEnabled() )
     {
         for ( auto it = self->diagnosticRejected.begin(); it != self->diagnosticRejected.end(); )
@@ -535,15 +598,17 @@ void wxWinUIScrollBarProjection::Sync(const RECT& clientScreen, double scale)
             else ++it;
     }
     std::vector<wxWeakRef<wxWindow>> windows;
-    std::function<void(wxWindow*)> collect = [&](wxWindow* parent)
+    wxWindow * const topLevel = self->topLevel.get();
+    for ( wxWindow *window : gs_managedWindows )
     {
-        for ( wxWindow* child : parent->GetChildren() )
+        const HWND hwnd = GetHwndOf(window);
+        if ( window != topLevel && hwnd &&
+             wxGetTopLevelParent(window) == topLevel &&
+             ::GetPropW(hwnd, ManagedProperty) )
         {
-            if ( ::GetPropW(GetHwndOf(child), ManagedProperty) ) windows.emplace_back(child);
-            collect(child);
+            windows.emplace_back(window);
         }
-    };
-    collect(self->topLevel.get());
+    }
     std::map<std::pair<HWND,LONG>, bool> wanted;
     for ( const auto& weak : windows )
     {
@@ -556,11 +621,8 @@ void wxWinUIScrollBarProjection::Sync(const RECT& clientScreen, double scale)
             const LONG_PTR style = ::GetWindowLongPtr(key.first, GWL_STYLE);
             if ( !::IsWindowVisible(key.first) ||
                  !(style & (objectId == OBJID_VSCROLL ? WS_VSCROLL : WS_HSCROLL)) ) continue;
-            SCROLLBARINFO presence{sizeof(SCROLLBARINFO)};
-            const bool hasPresence = ::GetScrollBarInfo(key.first, objectId, &presence) != FALSE;
-            if ( !hasPresence ||
-                 (presence.rgstate[0] & (STATE_SYSTEM_INVISIBLE | STATE_SYSTEM_OFFSCREEN)) ||
-                 ::IsRectEmpty(&presence.rcScrollBar) ) continue;
+            RECT presence{};
+            if ( !OverlayBarRect(key.first, objectId, presence) ) continue;
             auto found = self->entries.find(key);
             if ( found != self->entries.end() && !self->Current(found->second) )
             {
@@ -607,12 +669,12 @@ void wxWinUIScrollBarProjection::Sync(const RECT& clientScreen, double scale)
                 peer.IsEnabled(enabled && !(bar.rgstate[0] & STATE_SYSTEM_UNAVAILABLE));
                 peer.Width((bar.rcScrollBar.right - bar.rcScrollBar.left) / scale);
                 peer.Height((bar.rcScrollBar.bottom - bar.rcScrollBar.top) / scale);
-                C::Canvas::SetLeft(peer, (bar.rcScrollBar.left - clientScreen.left) / scale);
-                C::Canvas::SetTop(peer, (bar.rcScrollBar.top - clientScreen.top) / scale);
-                // Canvas.ZIndex is bounded by WinUI to one million, not
-                // INT_MAX. Keep native non-client bands above ordinary slots
-                // without rejecting the entire publication with E_INVALIDARG.
-                C::Canvas::SetZIndex(peer, 1000000);
+                // In the canvas standing for its window, from the client
+                // origin: the bar moves, is clipped and is hidden with it.
+                RECT ownerClient{};
+                if ( !ClientScreen(key.first, ownerClient) ) continue;
+                C::Canvas::SetLeft(peer, (bar.rcScrollBar.left - ownerClient.left) / scale);
+                C::Canvas::SetTop(peer, (bar.rcScrollBar.top - ownerClient.top) / scale);
                 if ( !SameRect(entry->band, bar.rcScrollBar) || !SameRect(entry->clip, clip) )
                 {
                     X::Media::RectangleGeometry geometry;
@@ -628,11 +690,8 @@ void wxWinUIScrollBarProjection::Sync(const RECT& clientScreen, double scale)
                 {
                     self->entries.emplace(key, entry); // publish callback authority before Loaded
                 }
-                uint32_t nativeIndex;
-                if ( !self->root.Children().IndexOf(peer, nativeIndex) )
-                {
-                    self->root.Children().Append(peer);
-                }
+                if ( !weak ) return;
+                host->SetWindowPart(weak.get(), PartKind(objectId), peer);
                 if ( !self->Current(entry) ) return;
                 SCROLLINFO current{}; SCROLLBARINFO currentBar{}; RECT currentClip{};
                 if ( !self->Read(entry, current, currentBar, currentClip) ||
@@ -878,9 +937,15 @@ void wxWinUIScrollBarProjection::ModelCommitted(HWND hwnd, int orient)
     // committed region path still retries instead of silently losing cleanup.
 }
 
+void wxWinUIWindowScrollbarsForget(wxWindow* owner)
+{
+    gs_managedWindows.erase(owner);
+}
+
 void wxWinUIWindowScrollbarModelChanged(wxWindow* owner, int orient, bool nativePaint)
 {
     if ( !owner || !owner->GetHandle() ) return;
+    if ( !owner->IsBeingDeleted() ) gs_managedWindows.insert(owner);
     const HWND hwnd = GetHwndOf(owner);
     for ( const auto& weak : gs_projections )
         if ( const auto projection = weak.lock() )
@@ -898,90 +963,12 @@ void wxWinUIWindowScrollbarModelCommitted(wxWindow* owner, int orient)
             projection->ModelCommitted(hwnd, orient);
 }
 
-WXHANDLE wxWinUIWindowScrollbarPaintRegion(wxWindow* owner, WXHANDLE updateRegion)
+WXHANDLE wxWinUIWindowScrollbarPaintRegion(wxWindow*, WXHANDLE)
 {
-    if ( !owner ) return nullptr;
-    const HWND hwnd = GetHwndOf(owner);
-    std::vector<RECT> rects;
-    for ( const auto& weak : gs_projections )
-        if ( const auto projection = weak.lock() )
-            if ( projection->GetPaintRects(hwnd, rects) ) break;
-    if ( rects.empty() ) return nullptr;
-    RECT window{};
-    if ( !::GetWindowRect(hwnd, &window) ) return nullptr;
-    HRGN result = ::CreateRectRgnIndirect(&window);
-    if ( !result ) return nullptr;
-    const HRGN requested = static_cast<HRGN>(updateRegion);
-    if ( requested && requested != reinterpret_cast<HRGN>(1) &&
-         ::CombineRgn(result, result, requested, RGN_AND) == ERROR )
-    { ::DeleteObject(result); return nullptr; }
-    HRGN covered = ::CreateRectRgn(0,0,0,0);
-    if ( !covered ) { ::DeleteObject(result); return nullptr; }
-    for ( const RECT& rect : rects )
-    {
-        HRGN part = ::CreateRectRgnIndirect(&rect);
-        if ( !part || ::CombineRgn(covered, covered, part, RGN_OR) == ERROR )
-        { if ( part ) ::DeleteObject(part); ::DeleteObject(covered); ::DeleteObject(result); return nullptr; }
-        ::DeleteObject(part);
-    }
-    if ( ::CombineRgn(result, result, covered, RGN_DIFF) == ERROR )
-    { ::DeleteObject(covered); ::DeleteObject(result); return nullptr; }
-    // WM_NCPAINT can request only one track or a fragment of it. Preserve
-    // that contract for backing cleanup too, rather than clearing every
-    // published track each time a neighbouring border needs repainting.
-    if ( requested && requested != reinterpret_cast<HRGN>(1) &&
-         ::CombineRgn(covered, covered, requested, RGN_AND) == ERROR )
-    { ::DeleteObject(covered); ::DeleteObject(result); return nullptr; }
-    if ( ::OffsetRgn(covered, -window.left, -window.top) == ERROR )
-    { ::DeleteObject(covered); ::DeleteObject(result); return nullptr; }
-    HDC dc = ::GetWindowDC(hwnd);
-    if ( !dc ) { ::DeleteObject(covered); ::DeleteObject(result); return nullptr; }
-    const int saved = ::SaveDC(dc);
-    if ( !saved )
-    { ::DeleteObject(covered); ::ReleaseDC(hwnd,dc); ::DeleteObject(result); return nullptr; }
-    ::SetLayout(dc, 0); // Win32: clearing LAYOUT_RTL selects left-to-right.
-    const bool clipped = ::ExtSelectClipRgn(dc, covered, RGN_AND) != ERROR;
-    ::DeleteObject(covered);
-    const bool material = wxWinUIWindowUsesBackdrop(owner);
-    // A black GDI fill has alpha zero on the redirected surface. It exposes
-    // the existing DWM material; this is backing cleanup, never scrollbar art.
-    wxColour colour = owner->GetBackgroundColour();
-    if ( !colour.IsOk() ) colour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-    HBRUSH brush = ::CreateSolidBrush(material ? RGB(0,0,0) :
-        RGB(colour.Red(),colour.Green(),colour.Blue()));
-    if ( wxWinUIInputLogEnabled() )
-    {
-        wxWinUIInputLog("SCROLLBAR NC backing hwnd=%p material=%d background=%u,%u,%u style=%d bands=%zu clipped=%d",
-            static_cast<void*>(hwnd), material,
-            static_cast<unsigned>(colour.Red()), static_cast<unsigned>(colour.Green()),
-            static_cast<unsigned>(colour.Blue()),
-            static_cast<int>(owner->GetBackgroundStyle()), rects.size(), clipped);
-        RECT dcClip{};
-        const int clipKind = ::GetClipBox(dc, &dcClip);
-        for ( RECT band : rects )
-        {
-            ::OffsetRect(&band, -window.left, -window.top);
-            const COLORREF before = ::GetPixel(dc, band.left + 2, band.top + 2);
-            wxWinUIInputLog(
-                "SCROLLBAR NC DC hwnd=%p clipKind=%d clip=%ld,%ld,%ld,%ld band=%ld,%ld,%ld,%ld visible=%d sample=0x%08lx",
-                static_cast<void*>(hwnd), clipKind, dcClip.left, dcClip.top, dcClip.right, dcClip.bottom,
-                band.left, band.top, band.right, band.bottom,
-                ::RectVisible(dc, &band) != FALSE, static_cast<unsigned long>(before));
-        }
-    }
-    bool ok = clipped && brush != nullptr;
-    if ( brush && clipped )
-    {
-        for ( RECT rect : rects )
-        {
-            ::OffsetRect(&rect, -window.left, -window.top);
-            ok = ::FillRect(dc, &rect, brush) != 0 && ok;
-        }
-    }
-    if ( brush ) ::DeleteObject(brush);
-    ::RestoreDC(dc,saved); ::ReleaseDC(hwnd,dc);
-    if ( !ok ) { ::DeleteObject(result); return nullptr; }
-    return static_cast<WXHANDLE>(result);
+    // Nothing to filter out of a non-client paint: managed windows reserve no
+    // scrollbar band, so USER32 has no classic bar to draw there. Returning
+    // no region makes the caller use the requested one unchanged.
+    return nullptr;
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3

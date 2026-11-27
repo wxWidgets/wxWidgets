@@ -840,7 +840,11 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
 
 void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
 {
-#if wxUSE_STATLINE
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The row of the buttons is under the line of the two tones of a dialog
+    // of WinUI, as in the other dialogs: no other line.
+    (void)mainColumn;
+#elif wxUSE_STATLINE
     mainColumn->Add(
         new wxStaticLine(this, wxID_ANY),
         0, // Vertically unstretchable

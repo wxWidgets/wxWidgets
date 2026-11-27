@@ -124,7 +124,7 @@ public:
         wxColour *colour,
         unsigned *colourCount = nullptr,
         unsigned long long *writeRevision = nullptr);
-    static bool SetTodayForeground(
+    static bool SetTodayBackground(
         wxCalendarCtrl& control,
         const wxColour& colour);
     static bool UseSystemMarkColourFallback(wxCalendarCtrl& control);

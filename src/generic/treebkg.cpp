@@ -148,7 +148,12 @@ wxTreebook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
+#if defined(__WXWINUI__)
+                    // A navigation pane of WinUI has no frame around it.
+                    wxBORDER_NONE |
+#else
                     wxBORDER_THEME |
+#endif
                     wxTR_DEFAULT_STYLE |
                     wxTR_HIDE_ROOT |
                     wxTR_SINGLE

@@ -14,13 +14,19 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/cursor.h"
+    #include "wx/button.h"
     #include "wx/frame.h"
+    #include "wx/panel.h"
     #include "wx/window.h"
     #include "wx/utils.h"
 #endif // WX_PRECOMP
 
+#include "wx/splitter.h"
+
 #include "wx/msw/private.h"
 #include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
+#include "host-cursor-test-access.h"
 #include "host-input-test-access.h"
 
 #include <functional>
@@ -267,6 +273,16 @@ TEST_CASE_METHOD(
         // this remains the same synchronous Move, not new physical motion.
         ++reflected.timestamp;
     }
+    SECTION("non-client reflection lands on a neighbouring pixel")
+    {
+        // The reflected position is converted back from DIPs and can be
+        // rounded differently. It is still the same synchronous Move:
+        // treating it as new input is what recursed until the stack
+        // overflowed when the pointer left a dialog.
+        ++reflected.screenX;
+        --reflected.screenY;
+        ++reflected.timestamp;
+    }
     SECTION("client move")
     {
         m_window->SetHitTest(HTCLIENT);
@@ -356,6 +372,11 @@ TEST_CASE_METHOD(
         [&](UINT, WPARAM, LPARAM)
         {
             ++callbacks;
+            // New physical input reaches the thread through its message
+            // queue: a handler which receives some has retrieved a message.
+            // Without that retrieval the router rightly takes a same-kind
+            // sample for the reflection of the message being sent.
+            wxWinUINoteMessagePumped();
             nestedResult = wxWinUIHostInputTestAccess::RouteRootPointerSample(
                 *m_host, nested);
         });
@@ -388,6 +409,9 @@ TEST_CASE_METHOD(
     m_window->OnNextPointerMessage(
         [&](UINT, WPARAM, LPARAM)
         {
+            // As above: both nested moves are new input retrieved from the
+            // queue by a handler which pumps messages.
+            wxWinUINoteMessagePumped();
             secondResult = wxWinUIHostInputTestAccess::RouteRootPointerSample(
                 *m_host, second);
             // The first SendMessage is still active, but the intervening B
@@ -750,6 +774,152 @@ TEST_CASE_METHOD(
         CHECK(m_window->GetLeftUpCount() == 0);
         CHECK(m_window->GetCancelModeCount() == 1);
     }
+}
+
+namespace
+{
+
+// wxWindowMSW::HandleSetCursor() asks Windows where the pointer is, and in
+// these tests it is not where the routed samples say: repeat what it does
+// with the position of the sample.
+class SashCursorSplitter : public wxSplitterWindow
+{
+public:
+    explicit SashCursorSplitter(wxWindow *parent)
+        : wxSplitterWindow(parent, wxID_ANY)
+    {
+    }
+
+    void SetPointer(const wxPoint& screen) { m_pointer = screen; }
+
+    WXLRESULT MSWWindowProc(WXUINT message,
+                            WXWPARAM wParam,
+                            WXLPARAM lParam) override
+    {
+        if ( message == WM_SETCURSOR && LOWORD(lParam) == HTCLIENT )
+        {
+            const wxPoint client = ScreenToClient(m_pointer);
+            wxSetCursorEvent event(client.x, client.y);
+            event.SetId(GetId());
+            event.SetEventObject(this);
+            const bool processed = HandleWindowEvent(event);
+
+            HCURSOR hcursor = nullptr;
+            if ( processed && event.HasCursor() )
+                hcursor = GetHcursorOf(event.GetCursor());
+            else if ( !processed && GetCursor().IsOk() )
+                hcursor = GetHcursorOf(GetCursor());
+            if ( !hcursor )
+                hcursor = ::LoadCursor(nullptr, IDC_ARROW);
+            ::SetCursor(hcursor);
+            return TRUE;
+        }
+
+        return wxSplitterWindow::MSWWindowProc(message, wParam, lParam);
+    }
+
+private:
+    wxPoint m_pointer;
+};
+
+} // anonymous namespace
+
+// The sash of a splitter is plain native space between two panes: the pointer
+// reaches it through the root route. Its resize cursor is set from the first
+// move over it and has to hold for as long as the pointer stays there.
+TEST_CASE("WinUIRootInput::SplitterSashKeepsItsResizeCursor",
+          "[winui-root-input][winui-cursor]")
+{
+    wxFrame * const frame =
+        new wxFrame(nullptr, wxID_ANY, "sash-cursor",
+                    wxPoint(-20000, -20000), wxSize(520, 360));
+    SashCursorSplitter * const splitter = new SashCursorSplitter(frame);
+    wxPanel * const left = new wxPanel(splitter);
+    wxPanel * const right = new wxPanel(splitter);
+    new wxButton(left, wxID_ANY, "left", wxPoint(10, 10));
+    new wxButton(right, wxID_ANY, "right", wxPoint(10, 10));
+    splitter->SplitVertically(left, right, 200);
+    frame->ShowWithoutActivating();
+    DrainRootInputDispatch();
+
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(frame, true);
+    REQUIRE(host != nullptr);
+    DrainRootInputDispatch();
+
+    unsigned entered = 0, left_ = 0, moved = 0;
+    splitter->Bind(wxEVT_ENTER_WINDOW,
+                   [&](wxMouseEvent& e) { ++entered; e.Skip(); });
+    splitter->Bind(wxEVT_LEAVE_WINDOW,
+                   [&](wxMouseEvent& e) { ++left_; e.Skip(); });
+    splitter->Bind(wxEVT_MOTION,
+                   [&](wxMouseEvent& e) { ++moved; e.Skip(); });
+
+    namespace MUI = winrt::Microsoft::UI::Input;
+
+    // What the island really shows, whoever set it.
+    const auto shownShape = [host]()
+    {
+        const auto system =
+            wxWinUIHostCursorTestAccess::GetIslandCursor(*host)
+                .try_as<MUI::InputSystemCursor>();
+        return system ? system.CursorShape()
+                      : MUI::InputSystemCursorShape::Arrow;
+    };
+
+    const WXHCURSOR resize = wxCursor(wxCURSOR_SIZEWE).GetHCURSOR();
+    const int sashMiddle =
+        splitter->GetSashPosition() + splitter->GetSashSize() / 2;
+
+    wxWinUIPointerSample sample;
+    sample.device = wxWinUIInputDevice::Mouse;
+    sample.kind = wxWinUIInputKind::Move;
+    sample.pointerId = 1;
+    sample.isPrimary = true;
+    sample.timestamp = ::GetTickCount64();
+
+    for ( int step = 0; step != 4; ++step )
+    {
+        const wxPoint screen =
+            splitter->ClientToScreen(wxPoint(sashMiddle, 60 + 3 * step));
+        sample.screenX = screen.x;
+        sample.screenY = screen.y;
+        sample.timestamp += 16;
+        splitter->SetPointer(screen);
+
+        INFO("step " << step);
+        if ( step )
+        {
+            // The root canvas has no cursor of its own, so XAML sets the
+            // arrow before raising each of its pointer events.
+            REQUIRE(wxWinUIHostCursorTestAccess::OverwriteIslandCursor(
+                *host,
+                MUI::InputSystemCursor::Create(
+                    MUI::InputSystemCursorShape::Arrow)));
+        }
+        const wxWinUIRootPointerOutcome outcome =
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample);
+        CHECK(outcome.status == wxWinUIRootPointerStatus::Completed);
+        CHECK(moved == unsigned(step + 1));
+        CHECK(entered == 1);
+        CHECK(left_ == 0);
+        CHECK(splitter->GetCursor().GetHCURSOR() == resize);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
+              resize);
+        CHECK(shownShape() == MUI::InputSystemCursorShape::SizeWestEast);
+
+        // The synchronisation pass which the cursor change schedules must
+        // leave both the window and the pointer where they are.
+        DrainRootInputDispatch();
+        CHECK(entered == 1);
+        CHECK(left_ == 0);
+        CHECK(splitter->GetCursor().GetHCURSOR() == resize);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
+              resize);
+    }
+
+    frame->Destroy();
+    DrainRootInputDispatch();
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3

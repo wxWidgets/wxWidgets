@@ -16,6 +16,7 @@
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/titlebar.h"
+#include "wx/winui/private/appearance.h"
 #include "wx/winui/xamlhost.h"
 #if wxUSE_RICHTOOLTIP
     #include "wx/winui/private/richtooltip.h"
@@ -106,6 +107,123 @@ struct __declspec(uuid("ac6f5065-90c4-46ce-beb7-05e138e54117"))
         HCURSOR cursor,
         winrt::impl::inspectable_abi **result) = 0;
 };
+
+// ----------------------------------------------------------------------------
+// What is on screen at a point: set WX_WINUI_DUMP_AT=<x>,<y>,<file> to have
+// each window write to the file, five seconds after it got its island, the
+// elements of its XAML tree which are under that point of its client area
+// (in pixels), the front one first, with their place, their size and their
+// fill. This tells which element something seen on screen is, instead of
+// guessing it from a capture. No-op when the variable is unset.
+// ----------------------------------------------------------------------------
+
+void wxWinUIArmElementDump(
+    const winrt::Microsoft::UI::Xaml::Controls::Canvas& root)
+{
+    namespace DX = winrt::Microsoft::UI::Xaml;
+
+    wchar_t text[600];
+    const DWORD length = ::GetEnvironmentVariableW(
+        L"WX_WINUI_DUMP_AT", text, WXSIZEOF(text));
+    if ( !length || length >= WXSIZEOF(text) )
+        return;
+
+    double x = 0, y = 0;
+    wchar_t path[512] = L"";
+    if ( swscanf(text, L"%lf,%lf,%511[^\n]", &x, &y, path) != 3 )
+        return;
+
+    try
+    {
+        const std::wstring file(path);
+        DX::DispatcherTimer timer;
+        timer.Interval(std::chrono::seconds(5));
+        timer.Tick([timer, root, x, y, file](const auto&, const auto&)
+        {
+            timer.Stop();
+            FILE * const f = _wfopen(file.c_str(), L"a");
+            if ( !f )
+                return;
+
+            try
+            {
+                const auto xamlRoot = root.XamlRoot();
+                const double scale =
+                    xamlRoot ? xamlRoot.RasterizationScale() : 1.0;
+                const winrt::Windows::Foundation::Point point
+                {
+                    static_cast<float>(x / scale),
+                    static_cast<float>(y / scale)
+                };
+                fprintf(f, "==== pid %lu: elements at %g,%g px (scale %g) ====\n",
+                        ::GetCurrentProcessId(), x, y, scale);
+
+                const auto fill = [](const DX::Media::Brush& brush)
+                {
+                    std::string colour = "-";
+                    if ( !brush )
+                        return colour;
+
+                    if ( const auto solid =
+                            brush.try_as<DX::Media::SolidColorBrush>() )
+                    {
+                        const auto c = solid.Color();
+                        char buffer[16];
+                        snprintf(buffer, sizeof(buffer), "#%02X%02X%02X%02X",
+                                 c.A, c.R, c.G, c.B);
+                        colour = buffer;
+                    }
+                    else
+                    {
+                        colour = "brush";
+                    }
+                    return colour;
+                };
+
+                for ( const auto& hit :
+                        DX::Media::VisualTreeHelper::
+                            FindElementsInHostCoordinates(point, root, true) )
+                {
+                    const auto element = hit.try_as<DX::FrameworkElement>();
+                    if ( !element )
+                        continue;
+
+                    DX::Media::Brush brush{ nullptr };
+                    if ( const auto panel = element.try_as<DX::Controls::Panel>() )
+                        brush = panel.Background();
+                    else if ( const auto border = element.try_as<DX::Controls::Border>() )
+                        brush = border.Background();
+                    else if ( const auto control = element.try_as<DX::Controls::Control>() )
+                        brush = control.Background();
+                    else if ( const auto presenter = element.try_as<DX::Controls::ContentPresenter>() )
+                        brush = presenter.Background();
+
+                    const auto origin = element.TransformToVisual(root)
+                                            .TransformPoint({ 0, 0 });
+                    fprintf(f, "%ls name='%ls' id='%ls' at %.0f,%.0f size %.0fx%.0f px fill %s opacity %g\n",
+                            winrt::get_class_name(element).c_str(),
+                            element.Name().c_str(),
+                            DX::Automation::AutomationProperties::
+                                GetAutomationId(element).c_str(),
+                            origin.X * scale, origin.Y * scale,
+                            element.ActualWidth() * scale,
+                            element.ActualHeight() * scale,
+                            fill(brush).c_str(), element.Opacity());
+                }
+            }
+            catch ( const winrt::hresult_error& )
+            {
+                fprintf(f, "(the tree could not be read)\n");
+            }
+
+            fclose(f);
+        });
+        timer.Start();
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+}
 
 // ----------------------------------------------------------------------------
 // Input black box: set WX_WINUI_INPUT_LOG=<file> to trace the island input
@@ -539,6 +657,22 @@ std::map<const wxWinUISlot *, winrt::com_ptr<wxWinUISlotGrid>> gs_slotGrids;
 std::map<const wxWinUITopLevelHost *,
          winrt::com_ptr<wxWinUIRootCanvas>> gs_rootCanvases;
 
+// The hosts whose root canvas carries the cursor of the native window under
+// the pointer, see SetIslandPointerCursor(); and whether the cursor being
+// set right now is such a cursor.
+std::set<const wxWinUITopLevelHost *> gs_rootCursorMirrors;
+thread_local bool gs_mirroringNativeCursor = false;
+
+template <typename Setter>
+bool wxWinUISetAsNativeMirror(Setter&& setter)
+{
+    const bool previous = gs_mirroringNativeCursor;
+    gs_mirroringNativeCursor = true;
+    const bool set = setter();
+    gs_mirroringNativeCursor = previous;
+    return set;
+}
+
 
 // The visual root and the element carrying the logical wx/UIA identity are a
 // single generation.  Both may be null, otherwise the semantic element must
@@ -835,6 +969,37 @@ void wxWinUIMaybeInjectAutomationNameContentFault(unsigned phaseBit)
 }
 #endif // WXWINUI_TEST_SUPPORT
 
+namespace
+{
+
+// 0: off, 1: on, 2: on and compared with the walk through the whole tree.
+int wxWinUIInputNodesMode()
+{
+    static const int s_mode = []()
+    {
+        wchar_t text[8];
+        const DWORD length = ::GetEnvironmentVariableW(
+            L"WX_WINUI_INPUT_NODES", text, WXSIZEOF(text));
+        if ( length == 1 && text[0] == L'0' )
+            return 0;
+        return length == 1 && text[0] == L'2' ? 2 : 1;
+    }();
+
+    return s_mode;
+}
+
+} // anonymous namespace
+
+bool wxWinUIInputNodesEnabled()
+{
+    return wxWinUIInputNodesMode() != 0;
+}
+
+bool wxWinUIInputNodesCompared()
+{
+    return wxWinUIInputNodesMode() == 2;
+}
+
 void wxWinUIInputLog(const char *fmt, ...)
 {
     FILE * const f = wxWinUIInputLogFile();
@@ -885,7 +1050,7 @@ void wxWinUIRetireSubclass(HWND hwnd,
         // Keep the inactive context alive: USER32 still owns its pointer and
         // WM_NCDESTROY will reclaim it. Dropping it here would turn a benign
         // API failure into a deterministic use-after-free.
-        wxLogWarning("wxWinUI: failed to remove the %s window subclass "
+        wxLogDebug("wxWinUI: failed to remove the %s window subclass "
                      "(the API exposes no extended error); it was safely "
                      "deactivated", description);
     }
@@ -2680,7 +2845,7 @@ wxWinUITopLevelHost::FindSlotOwner(const wxWindow *window)
         {
             if ( found )
             {
-                wxLogError("wxWinUI: duplicate unowned slots detected for "
+                wxLogDebug("wxWinUI: duplicate unowned slots detected for "
                            "window %p", static_cast<const void *>(window));
                 return nullptr;
             }
@@ -2900,6 +3065,12 @@ bool wxWinUITopLevelHost::Initialize()
             ContentSizePolicy::ResizeContentToParentWindow);
         if ( !HasInitializationContext() )
             return false;
+        if ( const int forcedDPI = wxWinUIGetForcedDPI() )
+        {
+            siteBridge.OverrideScale(forcedDPI / 96.0f);
+            if ( !HasInitializationContext() )
+                return false;
+        }
 
         const auto bridgeWindowId = siteBridge.WindowId();
         if ( !HasInitializationContext() )
@@ -3021,6 +3192,8 @@ bool wxWinUITopLevelHost::Initialize()
         if ( !HasInitializationContext() )
             return false;
 
+        wxWinUIArmElementDump(m_root);
+
         const auto xamlRoot = m_root.XamlRoot();
         if ( !xamlRoot )
         {
@@ -3076,7 +3249,7 @@ bool wxWinUITopLevelHost::Initialize()
             return false;
         if ( !m_dropBroker )
         {
-            wxLogError("wxWinUI: unable to create the OLE drop broker; "
+            wxLogDebug("wxWinUI: unable to create the OLE drop broker; "
                        "continuing with XAML hosting and OLE drops disabled");
         }
         else
@@ -3280,7 +3453,7 @@ void wxWinUITopLevelHost::RestartDropBrokerAfterPresentationInvalidation()
     {
         // Native cleanup could not prove that both old identities are gone.
         // Retain this fail-closed broker and never create a concurrent pair.
-        wxLogError(
+        wxLogDebug(
             "wxWinUI: OLE presentation changed during first acquisition "
             "and exact rollback retained native ownership; OLE drops remain "
             "disabled for this host");
@@ -3299,7 +3472,7 @@ void wxWinUITopLevelHost::RestartDropBrokerAfterPresentationInvalidation()
         return;
     if ( !m_dropBroker )
     {
-        wxLogError("wxWinUI: unable to recreate the OLE drop broker after "
+        wxLogDebug("wxWinUI: unable to recreate the OLE drop broker after "
                    "a presentation change; OLE drops remain disabled");
         m_dropBrokerAwaitingPresentation = false;
         return;
@@ -3346,7 +3519,7 @@ void wxWinUITopLevelHost::TryInitializeDropBrokerAfterPresentation()
 
     if ( !result.IsReady() )
     {
-        wxLogError(
+        wxLogDebug(
             "wxWinUI: OLE drop broker visible acquisition failed "
             "(HRESULT 0x%08lx); continuing with XAML hosting and OLE "
             "drops disabled",
@@ -3960,6 +4133,7 @@ void wxWinUITopLevelHost::Shutdown()
     m_dirty.clear();
     ClearDeferredFocusRequest();
     m_pendingNativeInput.clear();
+    m_rootPointerQueue.clear();
     m_nativeInputDispatchScheduled = false;
     m_nativeInputDispatchInFlight = false;
     m_nativeInputDispatchCommitted = false;
@@ -3972,7 +4146,10 @@ void wxWinUITopLevelHost::Shutdown()
 
     // Every per-slot reference was released above; whatever remains (there
     // should be nothing) is dropped without unbinding dead windows.
-    m_ancestorRefs.clear();
+    m_parts.clear();
+    m_interactiveParts = 0;
+    m_nodes.clear();
+    m_retiredCanvases.clear();
 
     wxWinUIRetireSubclass(m_inner, BridgeSubclassProc,
                           wxWINUI_TLW_SUBCLASS_INNER,
@@ -3990,6 +4167,7 @@ void wxWinUITopLevelHost::Shutdown()
     m_inputPointerSource = nullptr;
     m_lastIslandPointerCursor = nullptr;
     m_lastIslandPointerHandle = nullptr;
+    m_islandPointerCursorSet = nullptr;
     m_islandPointerCursorApplied = false;
     m_inputPointerSourceAuthoritative = false;
     m_rootPointerCursorAuthoritative = false;
@@ -4075,6 +4253,7 @@ void wxWinUITopLevelHost::Shutdown()
     else
         m_root = nullptr;
     gs_rootCanvases.erase(this);
+    gs_rootCursorMirrors.erase(this);
     m_scrollbarProjection.reset();
     m_hostLifetime.reset();
 
@@ -4345,6 +4524,27 @@ wxWinUIHostCursorTestAccess::SimulateXamlCursorSelection(
         host.m_inputPointerSource.Cursor(cursor);
         host.ObserveXamlPointerCursor();
         return !host.m_inputPointerSourceAuthoritative;
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return false;
+    }
+}
+
+bool
+wxWinUIHostCursorTestAccess::OverwriteIslandCursor(
+    wxWinUITopLevelHost& host,
+    const winrt::Microsoft::UI::Input::InputCursor& cursor)
+{
+    if ( !host.m_inputPointerSource )
+        return false;
+
+    try
+    {
+        // What XAML does before raising a pointer event on the root canvas:
+        // the property changes and the host is told nothing.
+        host.m_inputPointerSource.Cursor(cursor);
+        return true;
     }
     catch ( const winrt::hresult_error& )
     {
@@ -5299,7 +5499,9 @@ wxWinUITopLevelHost::RegisterSlotInternal(
         }
         else
         {
-            m_root.Children().Append(slot->m_container);
+            // In the canvas standing for the parent of the window, which
+            // BindSlotWindow() made sure exists.
+            MountSlotContainer(*slot);
         }
 
         // Test the same arbitrary-callback boundary deterministically. The
@@ -5521,13 +5723,11 @@ void wxWinUITopLevelHost::DisconnectSlot(wxWinUISlot& slot)
                 wxWinUILogException("composite slot removal", e);
             }
         }
-        else if ( m_root )
+        else
         {
             try
             {
-                uint32_t index = 0;
-                if ( m_root.Children().IndexOf(slot.m_container, index) )
-                    m_root.Children().RemoveAt(index);
+                UnmountSlotContainer(slot);
             }
             catch ( const winrt::hresult_error& e )
             {
@@ -6321,8 +6521,6 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
          !CanMigrateCompositeSubtreeNow(subtree.get()) )
         return false;
     const auto targetState = target->m_hostLifetime;
-    const auto sourceRoot = m_root;
-    const auto targetRoot = target->m_root;
 
     struct Entry
     {
@@ -6391,8 +6589,9 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
             return false;
         if ( !entry.slot->m_isCompositeChild &&
              (!entry.slot->m_container ||
-              !sourceRoot.Children().IndexOf(entry.slot->m_container,
-                                             entry.sourceIndex)) )
+              !entry.slot->m_mountCanvas ||
+              !entry.slot->m_mountCanvas.Children().IndexOf(
+                  entry.slot->m_container, entry.sourceIndex)) )
             return false;
     }
     if ( !current(this) || !CanMigrateCompositeSubtreeNow(subtree.get()) )
@@ -6521,9 +6720,7 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
                  !entry.state->GetWindow() || entry.slot->m_deletePending ||
                  target->FindSlot(entry.state->GetWindow()) != entry.slot )
                 continue;
-            uint32_t index = 0;
-            if ( targetRoot.Children().IndexOf(entry.slot->m_container, index) )
-                targetRoot.Children().RemoveAt(index);
+            target->UnmountSlotContainer(*entry.slot);
             entry.attached = false;
         }
         if ( transferred && sourceState->GetHost() == this && !m_shuttingDown )
@@ -6550,11 +6747,11 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
                  entry.state->GetHost() != this ||
                  !entry.state->GetWindow() || m_shuttingDown )
                 continue;
-            uint32_t index = 0;
-            if ( !sourceRoot.Children().IndexOf(entry.slot->m_container, index) )
-                sourceRoot.Children().InsertAt(
-                    std::min(entry.sourceIndex, sourceRoot.Children().Size()),
-                    entry.slot->m_container);
+            // Back in the canvas of its parent. The canvas may be a new one,
+            // the registry round trip above having released and bound the
+            // ancestors again; the order among siblings is the z-order
+            // pass's to restore.
+            MountSlotContainer(*entry.slot);
             entry.detached = false;
         }
     };
@@ -6566,11 +6763,10 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
         {
             if ( entry.slot->m_isCompositeChild )
                 continue;
-            uint32_t index = 0;
-            if ( !sourceRoot.Children().IndexOf(entry.slot->m_container, index) )
+            if ( !entry.slot->m_mountCanvas )
                 winrt::throw_hresult(E_UNEXPECTED);
             entry.detached = true;
-            sourceRoot.Children().RemoveAt(index);
+            UnmountSlotContainer(*entry.slot);
             if ( !current(this) )
                 winrt::throw_hresult(E_ABORT);
         }
@@ -6593,7 +6789,7 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
             // Set before Append: a synchronous callback can throw after the
             // collection has already accepted this element.
             entry.attached = true;
-            targetRoot.Children().Append(entry.slot->m_container);
+            target->MountSlotContainer(*entry.slot);
 #ifdef WXWINUI_TEST_SUPPORT
             auto attachedHook = std::move(gs_testSlotAttachedHook);
             if ( attachedHook )
@@ -6615,7 +6811,7 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
         // owns the matching wx/USER32 rollback. Rethrowing here would bypass
         // that half of the transaction. Retired destination graphs need the
         // same causal settlement as an HRESULT failure, not an early detach.
-        wxLogWarning("wxWinUI: composite subtree migration callback raised "
+        wxLogDebug("wxWinUI: composite subtree migration callback raised "
                      "a C++ exception; settling the reparent transaction");
     }
     if ( !succeeded )
@@ -6637,12 +6833,10 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
                     {
                         if ( entry.slot->m_isCompositeChild )
                             continue;
-                        uint32_t index = 0;
-                        if ( !targetRoot.Children().IndexOf(
-                                 entry.slot->m_container, index) )
+                        if ( !entry.slot->m_mountCanvas )
                         {
                             entry.attached = true;
-                            targetRoot.Children().Append(entry.slot->m_container);
+                            target->MountSlotContainer(*entry.slot);
                         }
                         if ( !current(target) &&
                              !destinationHasAuthoritativeRetirement() )
@@ -6655,7 +6849,7 @@ bool wxWinUITopLevelHost::MigrateCompositeSubtree(wxWindow *subtreeRoot)
                     // No rollback can relocate B's outstanding physical debt
                     // or recreate a destroyed source host. A native failure
                     // of this terminal publication is not partial success.
-                    wxLogError("wxWinUI: failed to finish the authoritative "
+                    wxLogDebug("wxWinUI: failed to finish the authoritative "
                                "destination composite graph");
                     std::terminate();
                 }
@@ -7267,7 +7461,7 @@ bool wxWinUITopLevelHost::MigrateSlotToCurrentTLW(wxWindow *window)
                  oldState->GetHost() == this &&
                  FindSlot(window) == oldSlot )
             {
-                wxLogWarning("wxWinUI: failed to restore a slot after a "
+                wxLogDebug("wxWinUI: failed to restore a slot after a "
                              "cross-TLW migration failure");
             }
             return false;
@@ -7652,7 +7846,7 @@ bool wxWinUITopLevelHost::MigrateSlotToCurrentTLW(wxWindow *window)
         if ( disconnectResult ==
                  DeferredTransferDisconnectResult::StillActive )
         {
-            wxLogWarning(
+            wxLogDebug(
                 "wxWinUI: a retired migration destination still has an "
                 "active callback; source rollback cannot proceed safely");
             if ( focusMigration && !focusMigration->committed )
@@ -7900,9 +8094,24 @@ bool wxWinUITopLevelHost::HandleReparent(wxWindow *subtreeRoot)
         }
 
         // Same-TLW reparent: keep the direct window subscriptions and logical
-        // focus ownership intact. Only the ancestor chain changed.
-        UnbindSlotAncestors(*slot);
+        // focus ownership intact. Only the ancestor chain changed, and the
+        // container follows the window to the canvas of its new parent. The
+        // new chain is bound before the old one is released, so that the
+        // nodes common to both are kept rather than torn down and rebuilt.
+        std::vector<wxWindow *> formerAncestors;
+        formerAncestors.swap(slot->m_ancestors);
         BindSlotAncestors(*slot);
+        for ( wxWindow *ancestor : formerAncestors )
+            ReleaseAncestorRef(ancestor);
+        try
+        {
+            MountSlotContainer(*slot);
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("slot remount after reparent", e);
+        }
+        m_zOrderDirty = true;
         InvalidateStructure();
         MarkDirty(window);
     }
@@ -7916,6 +8125,13 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
     LRESULT hitTest,
     unsigned long long expectedEpoch)
 {
+    // XAML picks a cursor of its own whenever it processes the pointer over
+    // one of its elements, and the root canvas which stands for all native
+    // space is one of them: over a window showing anything but the arrow,
+    // what this host set is replaced at every move. Both shortcuts below rely
+    // on the island still showing it, so look before taking them.
+    ObserveXamlPointerCursor();
+
     const unsigned long long cursorPolicyGeneration =
         gs_cursorPolicyGeneration;
     const unsigned long long selectionGeneration =
@@ -8131,7 +8347,11 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
 
                     if ( refresh ||
                          !targetIdentity.IsValid() ||
-                         !SetIslandPointerCursor(cursor, sourceHandle) ||
+                         !wxWinUISetAsNativeMirror([&]
+                            {
+                                return SetIslandPointerCursor(
+                                    cursor, sourceHandle);
+                            }) ||
                          !hostState || hostState->GetHost() != this ||
                          m_shuttingDown ||
                          m_cursorSelectionGeneration !=
@@ -8279,8 +8499,11 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
     const wxWinUIProfileScope profileApply(
         wxWinUIProfilePhase::MirrorApply);
     if ( !wxWinUICursorFromHCURSOR(nativeCursor, cursor) ||
-         !SetIslandPointerCursor(
-             cursor, reinterpret_cast<WXHCURSOR>(nativeCursor)) ||
+         !wxWinUISetAsNativeMirror([&]
+            {
+                return SetIslandPointerCursor(
+                    cursor, reinterpret_cast<WXHCURSOR>(nativeCursor));
+            }) ||
          !hostState || hostState->GetHost() != this ||
          m_shuttingDown ||
          m_inputTransitionEpoch != expectedEpoch ||
@@ -8369,6 +8592,44 @@ bool wxWinUITopLevelHost::ResolveEffectivePointerCursor(
     return wxWinUICursorFromHCURSOR(handle, *cursor);
 }
 
+namespace
+{
+
+// A null InputCursor on an InputPointerSource is not "no override": like on
+// its CoreWindow predecessor it hides the pointer, which then stays hidden
+// until something sets another cursor. Over a window disabled by a modal
+// dialog nothing ever does, so the pointer vanished there after leaving the
+// dialog. Whenever the port has no cursor of its own to show, it therefore
+// sets the standard arrow instead of nothing.
+winrt::Microsoft::UI::Input::InputCursor wxWinUIDefaultIslandCursor()
+{
+    return winrt::Microsoft::UI::Input::InputSystemCursor::Create(
+        winrt::Microsoft::UI::Input::InputSystemCursorShape::Arrow);
+}
+
+// Whether two cursors show the same thing: the same object, or two system
+// cursors of the same shape. XAML makes its own object for the arrow it sets
+// over an element without a cursor, which is no change when the island was
+// already showing the arrow.
+bool wxWinUISameIslandCursor(
+    const winrt::Microsoft::UI::Input::InputCursor& first,
+    const winrt::Microsoft::UI::Input::InputCursor& second)
+{
+    namespace MUI = winrt::Microsoft::UI::Input;
+
+    if ( first == second )
+        return true;
+    if ( !first || !second )
+        return false;
+
+    const auto firstSystem = first.try_as<MUI::InputSystemCursor>();
+    const auto secondSystem = second.try_as<MUI::InputSystemCursor>();
+    return firstSystem && secondSystem &&
+           firstSystem.CursorShape() == secondSystem.CursorShape();
+}
+
+} // anonymous namespace
+
 bool wxWinUITopLevelHost::SetIslandPointerCursor(
     const winrt::Microsoft::UI::Input::InputCursor& cursor,
     WXHCURSOR sourceHandle)
@@ -8405,22 +8666,46 @@ bool wxWinUITopLevelHost::SetIslandPointerCursor(
             attemptedSource = source;
             oldSourceOverrideNeedsNeutralizing =
                 m_inputPointerSourceAuthoritative;
-            if ( m_rootPointerCursorAuthoritative )
+            // XAML chooses a cursor by itself whenever it sees fit -- on a
+            // pointer event, when the cursor of any element changes, and
+            // with the pointer at rest too -- from the element under the
+            // pointer and its ancestors. Over native space that element is
+            // the root canvas, which had no cursor: XAML put the arrow back
+            // over a splitter sash, and the cursor blinked between the two.
+            // While the pointer is over a native window, the root canvas is
+            // given the cursor of that window as well, so that what XAML
+            // chooses is what is set here. (Over a control, its own element
+            // carries its cursor.)
+            //
+            // The canvas comes first: XAML answers this change at once with
+            // the cursor it believes is due, and the island is to have the
+            // last word.
+            const auto applied =
+                cursor ? cursor : wxWinUIDefaultIslandCursor();
+            const bool mirrorOnRoot =
+                gs_mirroringNativeCursor ||
+                m_activeCursorSurface == ActiveCursorSurface::Native;
+            const auto rootCanvas = wxWinUIGetRootCanvas(this);
+            if ( mirrorOnRoot )
             {
-                const auto root = gs_rootCanvases.find(this);
-                if ( root == gs_rootCanvases.end() ||
-                     !root->second->SetPointerCursor(nullptr) )
-                {
-                    return false;
-                }
-                if ( !hostState || hostState->GetHost() != this ||
-                     m_shuttingDown ||
-                     m_cursorSelectionGeneration != selectionGeneration )
-                {
-                    return false;
-                }
-                m_rootPointerCursorAuthoritative = false;
+                if ( rootCanvas && rootCanvas->SetPointerCursor(applied) )
+                    gs_rootCursorMirrors.insert(this);
             }
+            else if ( gs_rootCursorMirrors.erase(this) ||
+                      m_rootPointerCursorAuthoritative )
+            {
+                const bool cleared =
+                    rootCanvas && rootCanvas->SetPointerCursor(nullptr);
+                if ( !cleared && m_rootPointerCursorAuthoritative )
+                    return false;
+            }
+            if ( !hostState || hostState->GetHost() != this ||
+                 m_shuttingDown ||
+                 m_cursorSelectionGeneration != selectionGeneration )
+            {
+                return false;
+            }
+            m_rootPointerCursorAuthoritative = false;
 #ifdef WXWINUI_TEST_SUPPORT
             if ( gs_failInputPointerSourceSetAt &&
                  --gs_failInputPointerSourceSetAt == 0 )
@@ -8430,7 +8715,7 @@ bool wxWinUITopLevelHost::SetIslandPointerCursor(
                     L"wxWinUI test: injected InputPointerSource failure");
             }
 #endif // WXWINUI_TEST_SUPPORT
-            source.Cursor(cursor);
+            source.Cursor(applied);
             if ( !hostState || hostState->GetHost() != this ||
                  m_shuttingDown ||
                  m_cursorSelectionGeneration != selectionGeneration )
@@ -8440,6 +8725,7 @@ bool wxWinUITopLevelHost::SetIslandPointerCursor(
             m_inputPointerSource = source;
             m_lastIslandPointerCursor = cursor;
             m_lastIslandPointerHandle = sourceHandle;
+            m_islandPointerCursorSet = applied;
             m_islandPointerCursorApplied = true;
             m_inputPointerSourceAuthoritative = true;
             m_rootPointerCursorAuthoritative = false;
@@ -8467,7 +8753,7 @@ bool wxWinUITopLevelHost::SetIslandPointerCursor(
             {
                 if ( !attemptedSource )
                     return false;
-                attemptedSource.Cursor(nullptr);
+                attemptedSource.Cursor(wxWinUIDefaultIslandCursor());
                 if ( !hostState || hostState->GetHost() != this ||
                      m_shuttingDown ||
                      m_cursorSelectionGeneration != selectionGeneration )
@@ -8528,7 +8814,7 @@ bool wxWinUITopLevelHost::RelinquishIslandPointerCursor()
         if ( m_inputPointerSourceAuthoritative && m_inputPointerSource )
         {
             const auto source = m_inputPointerSource;
-            source.Cursor(nullptr);
+            source.Cursor(wxWinUIDefaultIslandCursor());
             if ( !hostState || hostState->GetHost() != this ||
                  m_shuttingDown ||
                  m_cursorSelectionGeneration != selectionGeneration )
@@ -8537,12 +8823,18 @@ bool wxWinUITopLevelHost::RelinquishIslandPointerCursor()
             }
         }
 
+        // The root canvas may carry the cursor of a native window too, see
+        // SetIslandPointerCursor(): it has none any more. Only when it was
+        // the sole carrier does a failure here leave a wrong cursor showing.
         const auto root = gs_rootCanvases.find(this);
-        if ( m_rootPointerCursorAuthoritative &&
-             (root == gs_rootCanvases.end() ||
-              !root->second->SetPointerCursor(nullptr)) )
+        const bool mirrored = gs_rootCursorMirrors.erase(this) != 0;
+        if ( mirrored || m_rootPointerCursorAuthoritative )
         {
-            return false;
+            const bool rootCleared =
+                root != gs_rootCanvases.end() &&
+                root->second->SetPointerCursor(nullptr);
+            if ( m_rootPointerCursorAuthoritative && !rootCleared )
+                return false;
         }
         if ( !hostState || hostState->GetHost() != this ||
              m_shuttingDown ||
@@ -8559,6 +8851,7 @@ bool wxWinUITopLevelHost::RelinquishIslandPointerCursor()
 
     m_lastIslandPointerCursor = nullptr;
     m_lastIslandPointerHandle = nullptr;
+    m_islandPointerCursorSet = nullptr;
     m_islandPointerCursorApplied = false;
     m_inputPointerSourceAuthoritative = false;
     m_rootPointerCursorAuthoritative = false;
@@ -8897,11 +9190,18 @@ void wxWinUITopLevelHost::ObserveXamlPointerCursor()
     {
         const auto observed = m_inputPointerSource.Cursor();
         if ( m_inputPointerSourceAuthoritative &&
-             observed != m_lastIslandPointerCursor )
+             !wxWinUISameIslandCursor(observed, m_islandPointerCursorSet) )
         {
             // XAML selected the cursor for the new OriginalSource before
             // raising the routed event. Yield ownership instead of clearing
             // its TextBox I-beam/template-part cursor below.
+            if ( wxWinUIInputLogEnabled() )
+            {
+                wxWinUIInputLog("cursor: the island no longer shows ours "
+                                "(handle=%p)",
+                                static_cast<void *>(
+                                    m_lastIslandPointerHandle));
+            }
             m_inputPointerSourceAuthoritative = false;
             m_islandPointerCursorApplied = false;
             if ( ++m_cursorSelectionGeneration == 0 )
@@ -8920,15 +9220,40 @@ void wxWinUITopLevelHost::ObserveXamlPointerCursor()
     }
 }
 
+void wxWinUITopLevelHost::ReassertIslandPointerCursor()
+{
+    if ( m_shuttingDown || !m_inputPointerSourceAuthoritative ||
+         !m_islandPointerCursorApplied )
+    {
+        return;
+    }
+
+    // Keep what is being set again alive: observing can drop the last
+    // reference the host holds.
+    const auto cursor = m_lastIslandPointerCursor;
+    const WXHCURSOR handle = m_lastIslandPointerHandle;
+
+    ObserveXamlPointerCursor();
+    if ( !m_inputPointerSourceAuthoritative && !m_shuttingDown )
+        (void)wxWinUISetAsNativeMirror([&]
+            {
+                return SetIslandPointerCursor(cursor, handle);
+            });
+}
+
 void wxWinUITopLevelHost::ApplyXamlPointerCursor(
     const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args,
     bool emitSetCursorEvent,
     unsigned long long expectedEpoch)
 {
-    const unsigned long long cursorPolicyGeneration =
-        gs_cursorPolicyGeneration;
-    const unsigned long long cursorSelectionGeneration =
-        m_cursorSelectionGeneration;
+    ApplyXamlPointerCursorForSlot(FindXamlPointerCursorSlot(args),
+                                  emitSetCursorEvent, expectedEpoch);
+}
+
+std::shared_ptr<wxWinUISlotLifetime>
+wxWinUITopLevelHost::FindXamlPointerCursorSlot(
+    const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args) const
+{
     try
     {
         using winrt::Microsoft::UI::Xaml::DependencyObject;
@@ -8944,35 +9269,7 @@ void wxWinUITopLevelHost::ApplyXamlPointerCursor(
                 if ( slot && slot->GetPresentationRoot() &&
                      node == slot->GetPresentationRoot() )
                 {
-                    if ( ApplySlotPointerCursor(
-                             slot->m_lifetime, emitSetCursorEvent,
-                             expectedEpoch,
-                             !emitSetCursorEvent) )
-                        return;
-                    if ( m_cursorSelectionGeneration !=
-                            cursorSelectionGeneration )
-                    {
-                        // Slot teardown or another callback selected the
-                        // newly exposed surface while this route was
-                        // unwinding. Preserve that nested winner.
-                        return;
-                    }
-                    if ( !emitSetCursorEvent )
-                    {
-                        // A terminal/capture resync never replaces a valid
-                        // Move verdict with generic policy just because its
-                        // WinRT re-assertion transiently failed.
-                        return;
-                    }
-                    if ( gs_cursorPolicyGeneration !=
-                            cursorPolicyGeneration ||
-                         (expectedEpoch &&
-                          m_inputTransitionEpoch != expectedEpoch) )
-                    {
-                        return;
-                    }
-                    ApplyGenericPointerCursor();
-                    return;
+                    return slot->m_lifetime;
                 }
             }
 
@@ -8983,6 +9280,48 @@ void wxWinUITopLevelHost::ApplyXamlPointerCursor(
     {
         // A re-template can detach the old OriginalSource while the routed
         // event is unwinding. Generic XAML policy is the safe fallback.
+    }
+
+    return nullptr;
+}
+
+void wxWinUITopLevelHost::ApplyXamlPointerCursorForSlot(
+    const std::shared_ptr<wxWinUISlotLifetime>& cursorSlot,
+    bool emitSetCursorEvent,
+    unsigned long long expectedEpoch)
+{
+    const unsigned long long cursorPolicyGeneration =
+        gs_cursorPolicyGeneration;
+    const unsigned long long cursorSelectionGeneration =
+        m_cursorSelectionGeneration;
+
+    if ( cursorSlot )
+    {
+        if ( ApplySlotPointerCursor(
+                 cursorSlot, emitSetCursorEvent, expectedEpoch,
+                 !emitSetCursorEvent) )
+            return;
+        if ( m_cursorSelectionGeneration != cursorSelectionGeneration )
+        {
+            // Slot teardown or another callback selected the newly exposed
+            // surface while this route was unwinding. Preserve that nested
+            // winner.
+            return;
+        }
+        if ( !emitSetCursorEvent )
+        {
+            // A terminal/capture resync never replaces a valid Move verdict
+            // with generic policy just because its WinRT re-assertion
+            // transiently failed.
+            return;
+        }
+        if ( gs_cursorPolicyGeneration != cursorPolicyGeneration ||
+             (expectedEpoch && m_inputTransitionEpoch != expectedEpoch) )
+        {
+            return;
+        }
+        ApplyGenericPointerCursor();
+        return;
     }
 
     if ( emitSetCursorEvent &&
@@ -9062,7 +9401,9 @@ bool wxWinUITopLevelHost::RefreshPointerCursorAtLastPoint(
             VisualTreeHelper::FindElementsInHostCoordinates(point, scope);
         for ( const auto& element : hits )
         {
-            if ( element == m_root )
+            // The full stack includes the canvases standing for windows,
+            // which show nothing: only what is in them counts.
+            if ( IsStructuralElement(element) )
                 continue;
 
             DependencyObject node = element;
@@ -9237,7 +9578,15 @@ void wxWinUITopLevelHost::BindSlotAncestors(wxWinUISlot& slot)
           p = p->GetParent() )
     {
         slot.m_ancestors.push_back(p);
-        AddAncestorRef(p);
+    }
+
+    // From the top down: the canvas standing for a window is mounted in the
+    // one standing for its parent, which has to exist first.
+    for ( auto it = slot.m_ancestors.rbegin();
+          it != slot.m_ancestors.rend();
+          ++it )
+    {
+        AddAncestorRef(*it);
     }
 
     // The effective wxEVT_SET_CURSOR chain is part of the cached verdict.
@@ -9306,25 +9655,70 @@ void wxWinUITopLevelHost::UnbindSlotWindow(wxWinUISlot& slot)
 
 void wxWinUITopLevelHost::AddAncestorRef(wxWindow *ancestor)
 {
-    if ( ++m_ancestorRefs[ancestor] > 1 )
+    // A window which is being destroyed has sent its wxEVT_DESTROY, which is
+    // what takes its canvas away, and will not send another: one made for it
+    // now, while its children go and what they show is put in order one last
+    // time, would outlive it. Without a canvas of its own what is below it
+    // goes in the nearest one above, see GetChildrenCanvas().
+    if ( ancestor->IsBeingDeleted() && m_nodes.find(ancestor) == m_nodes.end() )
         return;
+
+    WindowNode& node = m_nodes[ancestor];
+    if ( ++node.refs > 1 )
+    {
+        // A window reparented inside its TLW keeps its node, and the node
+        // follows it.
+        try
+        {
+            MountNode(ancestor, node);
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("window node remount", e);
+        }
+        return;
+    }
 
     ancestor->Bind(wxEVT_MOVE, &wxWinUITopLevelHost::OnAncestorGeometry, this);
     ancestor->Bind(wxEVT_SIZE, &wxWinUITopLevelHost::OnAncestorGeometry, this);
     ancestor->Bind(wxEVT_SHOW, &wxWinUITopLevelHost::OnAncestorGeometry, this);
     ancestor->Bind(wxEVT_DESTROY, &wxWinUITopLevelHost::OnAncestorDestroy, this);
+
+    try
+    {
+        using namespace winrt::Microsoft::UI::Xaml;
+
+        // No background: a canvas standing for a window shows nothing and
+        // takes no input by itself, the pointer goes through it.
+        node.canvas = Controls::Canvas();
+        node.clip = Media::RectangleGeometry();
+        node.canvas.Visibility(Visibility::Collapsed);
+        MountNode(ancestor, node);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        // Without its canvas the children of this window go to the nearest
+        // canvas above, see GetChildrenCanvas().
+        wxWinUILogException("window node creation", e);
+        node.canvas = nullptr;
+        node.mountCanvas = nullptr;
+    }
+
+    m_zOrderDirty = true;
+    SyncNode(ancestor);
 }
 
 void wxWinUITopLevelHost::ReleaseAncestorRef(wxWindow *ancestor)
 {
-    const auto it = m_ancestorRefs.find(ancestor);
-    if ( it == m_ancestorRefs.end() )
+    const auto it = m_nodes.find(ancestor);
+    if ( it == m_nodes.end() )
         return;     // already dropped by OnAncestorDestroy
 
-    if ( --it->second > 0 )
+    if ( --it->second.refs > 0 )
         return;
 
-    m_ancestorRefs.erase(it);
+    UnmountNode(it->second);
+    m_nodes.erase(it);
 
     ancestor->Unbind(wxEVT_MOVE, &wxWinUITopLevelHost::OnAncestorGeometry, this);
     ancestor->Unbind(wxEVT_SIZE, &wxWinUITopLevelHost::OnAncestorGeometry, this);
@@ -9337,12 +9731,538 @@ void wxWinUITopLevelHost::OnAncestorDestroy(wxWindowDestroyEvent& event)
     event.Skip();
 
     wxWindow * const window = event.GetWindow();
-    if ( window && m_ancestorRefs.erase(window) )
+    m_inputNodes.erase(window);
+
+    // Before the canvas of the window: emptied of its parts, it can leave
+    // the tree for good.
+    if ( window )
+    {
+        for ( const WindowPartKind kind : { WindowPartKind::PaintSurface,
+                                            WindowPartKind::SplitterSash,
+                                            WindowPartKind::Caret,
+                                            WindowPartKind::Frame,
+                                            WindowPartKind::HorizontalScrollBar,
+                                            WindowPartKind::VerticalScrollBar,
+                                            WindowPartKind::Ground,
+                                            WindowPartKind::Smoke } )
+        {
+            RemoveWindowPart(window, kind, false);
+        }
+    }
+
+    const auto it = window ? m_nodes.find(window) : m_nodes.end();
+    if ( it != m_nodes.end() )
     {
         // The window is going away, no point unbinding from it; the slots
         // that referenced it are being destroyed too and their release will
-        // find the entry already gone.
+        // find the entry already gone. Their containers leave the tree with
+        // this canvas, and are taken out of it one by one afterwards.
+        UnmountNode(it->second);
+        m_nodes.erase(it);
     }
+}
+
+// ----------------------------------------------------------------------------
+// window parts: what XAML draws in the canvas of a window, in its place
+// ----------------------------------------------------------------------------
+
+std::vector<wxWindow *>
+wxWinUITopLevelHost::GetNodeChain(wxWindow *window) const
+{
+    std::vector<wxWindow *> chain;
+    for ( wxWindow *p = window; p && p != m_tlw; p = p->GetParent() )
+        chain.push_back(p);
+    return chain;
+}
+
+void wxWinUITopLevelHost::SetWindowPart(
+    wxWindow *window,
+    WindowPartKind kind,
+    const winrt::Microsoft::UI::Xaml::UIElement& element)
+{
+    OperationGuard operation(this);
+    if ( !window )
+        return;
+
+    // The window whose canvas the part goes in: its own, but for its border.
+    wxWindow * const anchor =
+        kind == WindowPartKind::Frame ? window->GetParent() : window;
+
+    const auto existing = m_parts.find({ window, kind });
+    if ( existing != m_parts.end() )
+    {
+        // Still the same element, under the same ancestors: nothing to do.
+        // A window given another parent since takes its part along.
+        if ( existing->second.element == element &&
+             existing->second.chain == GetNodeChain(anchor) )
+        {
+            return;
+        }
+        RemoveWindowPart(window, kind, true);
+    }
+
+    if ( !element || m_shuttingDown || !m_root ||
+         wxGetTopLevelParent(window) != m_tlw )
+    {
+        return;
+    }
+
+    WindowPart part;
+    part.element = element;
+    part.chain = GetNodeChain(anchor);
+
+    // From the top down, see BindSlotAncestors().
+    for ( auto it = part.chain.rbegin(); it != part.chain.rend(); ++it )
+        AddAncestorRef(*it);
+
+    try
+    {
+        using winrt::Microsoft::UI::Xaml::Controls::Canvas;
+
+        part.canvas = GetChildrenCanvas(anchor);
+
+        // The order of the containers of the children and of their canvases
+        // starts at zero and cannot reach the million WinUI allows.
+        Canvas::SetZIndex(
+            element,
+            kind == WindowPartKind::Ground ? -3
+                : kind == WindowPartKind::PaintSurface ? -2
+                : kind == WindowPartKind::SplitterSash ||
+                  kind == WindowPartKind::Caret ||
+                  kind == WindowPartKind::Frame ? -1
+                : 1000000);
+        part.canvas.Children().Append(element);
+        if ( part.canvas == m_root )
+            ++m_rootMounts;
+        if ( IsInteractivePart(kind) )
+            ++m_interactiveParts;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("window part mount", e);
+        for ( wxWindow *w : part.chain )
+            ReleaseAncestorRef(w);
+        return;
+    }
+
+    m_parts.emplace(std::make_pair(window, kind), std::move(part));
+}
+
+void wxWinUITopLevelHost::SetWindowFrame(wxWindow *window,
+                                         const wxRect *screenRect)
+{
+    OperationGuard operation(this);
+    if ( !window )
+        return;
+
+    if ( !screenRect )
+    {
+        SetWindowPart(window, WindowPartKind::Frame, nullptr);
+        return;
+    }
+
+    try
+    {
+        namespace MUX = winrt::Microsoft::UI::Xaml;
+        using MUX::Controls::Canvas;
+
+        auto frame = GetWindowPart(window, WindowPartKind::Frame)
+                        .try_as<MUX::Controls::Border>();
+        if ( !frame )
+        {
+            // The line and the corners of a control, whatever the width
+            // Win32 keeps for the border: one pixel at its outer edge.
+            frame = wxWinUICreateThemeBrushBorder(
+                "ControlStrokeColorDefaultBrush",
+                wxWinUIThemeBrushProperty::BorderBrush);
+            if ( !frame )
+                return;
+            frame.IsHitTestVisible(false);
+            frame.BorderThickness(MUX::ThicknessHelper::FromUniformLength(1));
+            frame.CornerRadius(MUX::CornerRadiusHelper::FromUniformRadius(4));
+        }
+
+        // Mounts it, or mounts it again under the new parent of the window.
+        SetWindowPart(window, WindowPartKind::Frame, frame);
+
+        const double scale = GetScale();
+        if ( scale <= 0 || m_shuttingDown )
+            return;
+
+        const wxPoint origin = GetChildrenOriginOnScreen(window->GetParent());
+        Canvas::SetLeft(frame, (screenRect->x - origin.x) / scale);
+        Canvas::SetTop(frame, (screenRect->y - origin.y) / scale);
+        frame.Width(screenRect->width / scale);
+        frame.Height(screenRect->height / scale);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("window frame", e);
+    }
+}
+
+winrt::Microsoft::UI::Xaml::UIElement
+wxWinUITopLevelHost::GetWindowPart(wxWindow *window,
+                                   WindowPartKind kind) const
+{
+    const auto it = m_parts.find({ window, kind });
+    return it == m_parts.end() ? nullptr : it->second.element;
+}
+
+void wxWinUITopLevelHost::RemoveWindowPart(wxWindow *window,
+                                           WindowPartKind kind,
+                                           bool windowIsAlive)
+{
+    const auto it = m_parts.find({ window, kind });
+    if ( it == m_parts.end() )
+        return;
+
+    const WindowPart part = std::move(it->second);
+    m_parts.erase(it);
+    if ( IsInteractivePart(kind) && m_interactiveParts )
+        --m_interactiveParts;
+
+    try
+    {
+        std::uint32_t index = 0;
+        if ( part.canvas &&
+             part.canvas.Children().IndexOf(part.element, index) )
+        {
+            part.canvas.Children().RemoveAt(index);
+            if ( part.canvas == m_root && m_rootMounts )
+                --m_rootMounts;
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("window part unmount", e);
+    }
+
+    // The canvas of a window being destroyed is dropped by the caller, and
+    // nothing can be unbound from the window any more.
+    for ( wxWindow *w : part.chain )
+    {
+        if ( windowIsAlive || w != window )
+            ReleaseAncestorRef(w);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// nested tree: one canvas per window with slots below it
+// ----------------------------------------------------------------------------
+
+void wxWinUITopLevelHost::EnsureInputNodes(wxWindow *window)
+{
+    if ( m_shuttingDown || !window || window == m_tlw ||
+         wxGetTopLevelParent(window) != m_tlw )
+    {
+        return;
+    }
+
+    // From the top down, so that each canvas is made in the one of its
+    // parent.
+    const std::vector<wxWindow *> chain = GetNodeChain(window);
+    for ( auto it = chain.rbegin(); it != chain.rend(); ++it )
+    {
+        wxWindow * const w = *it;
+        if ( m_inputNodes.count(w) )
+            continue;
+        if ( w->IsBeingDeleted() || w->IsTopLevel() )
+            return;
+
+        m_inputNodes.insert(w);
+        AddAncestorRef(w);
+        if ( m_shuttingDown )
+            return;
+    }
+}
+
+void wxWinUITopLevelHost::ForgetStrayInputNodes()
+{
+    // A window given to another top-level window takes nothing along: the
+    // canvas it had here for the pointer goes.
+    std::vector<wxWindow *> strays;
+    for ( wxWindow *w : m_inputNodes )
+    {
+        if ( wxGetTopLevelParent(w) != m_tlw )
+            strays.push_back(w);
+    }
+    for ( wxWindow *w : strays )
+    {
+        m_inputNodes.erase(w);
+        ReleaseAncestorRef(w);
+    }
+}
+
+wxWindow *wxWinUITopLevelHost::FindInputNodeWindow(
+    const winrt::Microsoft::UI::Xaml::UIElement& element) const
+{
+    if ( !element )
+        return nullptr;
+    if ( element == m_root )
+        return m_tlw;
+
+    const auto canvas =
+        element.try_as<winrt::Microsoft::UI::Xaml::Controls::Canvas>();
+    if ( !canvas )
+        return nullptr;
+    for ( const auto& entry : m_nodes )
+    {
+        if ( entry.second.canvas == canvas )
+            return entry.first;
+    }
+    return nullptr;
+}
+
+winrt::Microsoft::UI::Xaml::Controls::Canvas
+wxWinUITopLevelHost::GetChildrenCanvas(wxWindow *parent) const
+{
+    // The nearest window above which has a canvas: its own parent normally,
+    // further up only if creating a canvas failed.
+    for ( wxWindow *p = parent; p && p != m_tlw; p = p->GetParent() )
+    {
+        const auto it = m_nodes.find(p);
+        if ( it != m_nodes.end() && it->second.canvas )
+            return it->second.canvas;
+    }
+    return m_root;
+}
+
+wxPoint wxWinUITopLevelHost::GetChildrenOriginOnScreen(wxWindow *parent) const
+{
+    // Must name the same window as GetChildrenCanvas().
+    for ( wxWindow *p = parent; p && p != m_tlw; p = p->GetParent() )
+    {
+        const auto it = m_nodes.find(p);
+        if ( it == m_nodes.end() || !it->second.canvas )
+            continue;
+
+        const HWND hwnd = GetHwndOf(p);
+        if ( !hwnd )
+            break;
+
+        // Physical, like every position in the island: under a right-to-left
+        // layout the client rectangle maps to the screen mirrored.
+        RECT rc;
+        ::GetClientRect(hwnd, &rc);
+        ::MapWindowPoints(hwnd, nullptr, reinterpret_cast<POINT *>(&rc), 2);
+        return wxPoint(wxMin(rc.left, rc.right), rc.top);
+    }
+
+    const RECT rcCS = GetClientScreenRect();
+    return wxPoint(rcCS.left, rcCS.top);
+}
+
+bool wxWinUITopLevelHost::IsStructuralElement(
+    const winrt::Microsoft::UI::Xaml::DependencyObject& element) const
+{
+    if ( !element )
+        return false;
+    if ( element == m_root )
+        return true;
+
+    // A part drawn in the place of a window, and what it is made of, a few
+    // elements deep at most: they are the window. The parts which are
+    // controls (scrollbars) are content like any other.
+    if ( m_parts.size() > m_interactiveParts )
+    {
+        auto node = element;
+        for ( int depth = 0; node && depth != 3; ++depth )
+        {
+            for ( const auto& part : m_parts )
+            {
+                if ( !IsInteractivePart(part.first.second) &&
+                     part.second.element == node )
+                {
+                    return true;
+                }
+            }
+            node = winrt::Microsoft::UI::Xaml::Media::VisualTreeHelper::
+                GetParent(node);
+        }
+    }
+
+    const auto canvas =
+        element.try_as<winrt::Microsoft::UI::Xaml::Controls::Canvas>();
+    if ( !canvas )
+        return false;
+    for ( const auto& entry : m_nodes )
+    {
+        if ( entry.second.canvas == canvas )
+            return true;
+    }
+    return std::find(m_retiredCanvases.begin(), m_retiredCanvases.end(),
+                     canvas) != m_retiredCanvases.end();
+}
+
+winrt::Microsoft::UI::Xaml::UIElement
+wxWinUITopLevelHost::GetRootBranch(const wxWinUISlot& slot) const
+{
+    using namespace winrt::Microsoft::UI::Xaml;
+
+    DependencyObject branch = slot.GetPresentationRoot();
+    while ( branch )
+    {
+        const DependencyObject parent =
+            Media::VisualTreeHelper::GetParent(branch);
+        if ( !parent || parent == m_root )
+            break;
+        branch = parent;
+    }
+    return branch.try_as<UIElement>();
+}
+
+void wxWinUITopLevelHost::MoveToCanvas(
+    const winrt::Microsoft::UI::Xaml::UIElement& element,
+    const winrt::Microsoft::UI::Xaml::Controls::Canvas& from,
+    const winrt::Microsoft::UI::Xaml::Controls::Canvas& to)
+{
+    using namespace winrt::Microsoft::UI::Xaml;
+
+    if ( !element || from == to )
+        return;
+
+    // Leaving the tree drops the keyboard focus, even for the instant a move
+    // inside the same tree takes.
+    Controls::Control focused{ nullptr };
+    if ( from && to )
+    {
+        const auto xamlRoot = GetXamlRoot();
+        const auto frameworkElement = element.try_as<FrameworkElement>();
+        if ( xamlRoot && frameworkElement &&
+             wxWinUIFocusIsInside(frameworkElement, xamlRoot) )
+        {
+            focused = Input::FocusManager::GetFocusedElement(xamlRoot)
+                          .try_as<Controls::Control>();
+        }
+    }
+
+    if ( from )
+    {
+        uint32_t index = 0;
+        if ( from.Children().IndexOf(element, index) )
+        {
+            from.Children().RemoveAt(index);
+            if ( from == m_root && m_rootMounts )
+                --m_rootMounts;
+        }
+        PruneRetiredCanvases(from);
+    }
+    if ( to )
+    {
+        to.Children().Append(element);
+        if ( to == m_root )
+            ++m_rootMounts;
+    }
+
+    if ( focused )
+        focused.Focus(wxWinUIProgrammaticFocusState(focused));
+}
+
+void wxWinUITopLevelHost::PruneRetiredCanvases(
+    winrt::Microsoft::UI::Xaml::Controls::Canvas canvas)
+{
+    using namespace winrt::Microsoft::UI::Xaml;
+
+    // Up the tree: taking the last thing out of a retired canvas takes the
+    // canvas out of its own parent, which may have been waiting for it too.
+    while ( canvas && canvas != m_root )
+    {
+        const auto it = std::find(m_retiredCanvases.begin(),
+                                  m_retiredCanvases.end(), canvas);
+        if ( it == m_retiredCanvases.end() || canvas.Children().Size() != 0 )
+            return;
+        m_retiredCanvases.erase(it);
+
+        const auto parent = Media::VisualTreeHelper::GetParent(canvas)
+                                .try_as<Controls::Canvas>();
+        if ( !parent )
+            return;
+
+        uint32_t index = 0;
+        if ( parent.Children().IndexOf(canvas, index) )
+        {
+            parent.Children().RemoveAt(index);
+            if ( parent == m_root && m_rootMounts )
+                --m_rootMounts;
+        }
+        canvas = parent;
+    }
+}
+
+void wxWinUITopLevelHost::MountNode(wxWindow *window, WindowNode& node)
+{
+    if ( !node.canvas )
+        return;
+
+    const auto target = GetChildrenCanvas(window->GetParent());
+    if ( !target || node.mountCanvas == target )
+        return;
+
+    const auto from = node.mountCanvas;
+    node.mountCanvas = target;
+    node.synced = false;
+    m_zOrderDirty = true;
+    MoveToCanvas(node.canvas, from, target);
+}
+
+void wxWinUITopLevelHost::UnmountNode(WindowNode& node)
+{
+    if ( !node.canvas || !node.mountCanvas )
+        return;
+
+    const auto from = node.mountCanvas;
+    node.mountCanvas = nullptr;
+    try
+    {
+        // A canvas which still holds something stays in the tree until that
+        // has been taken out of it. The slots below a window being destroyed
+        // are disconnected after this, and some of them later still, once
+        // the XAML callback they are being destroyed from has returned:
+        // their content must not leave the tree before that either.
+        if ( node.canvas.Children().Size() != 0 )
+        {
+            m_retiredCanvases.push_back(node.canvas);
+            return;
+        }
+
+        MoveToCanvas(node.canvas, from, nullptr);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("window node removal", e);
+    }
+}
+
+void wxWinUITopLevelHost::MountSlotContainer(wxWinUISlot& slot)
+{
+    if ( slot.m_isCompositeChild || !slot.m_container )
+        return;
+
+    wxWindow * const window = slot.m_window;
+    const auto target = window == m_tlw
+        ? m_root
+        : GetChildrenCanvas(window ? window->GetParent() : nullptr);
+    if ( !target || slot.m_mountCanvas == target )
+        return;
+
+    const auto from = slot.m_mountCanvas;
+    slot.m_mountCanvas = target;
+    slot.m_placementValid = false;
+    m_zOrderDirty = true;
+    MoveToCanvas(slot.m_container, from, target);
+}
+
+bool wxWinUITopLevelHost::UnmountSlotContainer(wxWinUISlot& slot)
+{
+    if ( !slot.m_container || !slot.m_mountCanvas )
+        return false;
+
+    const auto from = slot.m_mountCanvas;
+    slot.m_mountCanvas = nullptr;
+    slot.m_placementValid = false;
+    MoveToCanvas(slot.m_container, from, nullptr);
+    return true;
 }
 
 // ============================================================================
@@ -9789,6 +10709,36 @@ bool wxWinUITopLevelHost::BindRootRouter()
             return false;
     }
 
+    // The request for a context menu, when nothing below has answered it.
+    {
+        const auto boxed = winrt::box_value(
+            winrt::Windows::Foundation::TypedEventHandler<
+                UIElement, Input::ContextRequestedEventArgs>(
+                [state](UIElement const&,
+                        Input::ContextRequestedEventArgs const& e)
+                {
+                    wxWinUITopLevelHost * const host = state->GetHost();
+                    if ( host )
+                        host->OnRootContextRequested(e);
+                }));
+        m_rootHandlers.emplace_back(UIElement::ContextRequestedEvent(), boxed);
+        try
+        {
+            m_root.AddHandler(UIElement::ContextRequestedEvent(), boxed,
+                              false /* only what nothing has handled */);
+        }
+        catch ( ... )
+        {
+            m_rootHandlers.pop_back();
+            throw;
+        }
+#ifdef WXWINUI_TEST_SUPPORT
+        ++gs_rootHandlerAdds;
+#endif
+        if ( !HasInitializationContext() )
+            return false;
+    }
+
     // Do not translate XAML DoubleTapped separately. It is raised after the
     // pointer press/release sequence and forwarding it here would produce
     // DOWN, UP, DOWN, UP, DBLCLK instead of Win32's
@@ -9800,8 +10750,11 @@ bool wxWinUITopLevelHost::BindRootRouter()
 wxWinUITopLevelHost::XamlHitResolution
 wxWinUITopLevelHost::PointOverXamlContent(
     const wxPoint& ptClientPx,
-    const winrt::Windows::Foundation::Point *exactRootDips)
+    const winrt::Windows::Foundation::Point *exactRootDips,
+    wxWindow **windowUnder)
 {
+    if ( windowUnder )
+        *windowUnder = nullptr;
     if ( !m_tlw || !m_root || !m_hostLifetime )
         return XamlHitResolution::Unavailable;
 
@@ -9867,8 +10820,27 @@ wxWinUITopLevelHost::PointOverXamlContent(
         {
             if ( !current() )
                 return XamlHitResolution::Unavailable;
-            if ( element != root )
+            if ( element != root && !IsStructuralElement(element) )
                 return XamlHitResolution::Hit;
+        }
+
+        if ( windowUnder )
+        {
+            // The canvas of a window shows nothing and takes no input:
+            // it is found among all the elements at the point, those hit
+            // testing does not see included, the topmost first.
+            const auto all = VisualTreeHelper::FindElementsInHostCoordinates(
+                dip, scope, true);
+            if ( !current() )
+                return XamlHitResolution::Unavailable;
+            for ( const auto& element : all )
+            {
+                if ( wxWindow * const window = FindInputNodeWindow(element) )
+                {
+                    *windowUnder = window;
+                    break;
+                }
+            }
         }
 
         return XamlHitResolution::Miss;
@@ -10525,6 +11497,21 @@ bool wxWinUITopLevelHost::HandleReparentAcrossHosts(wxWindow *subtreeRoot,
     if ( !subtreeRoot )
         return true;
 
+    if ( wxWinUIInputNodesEnabled() )
+    {
+        std::vector<std::shared_ptr<wxWinUIHostLifetime>> states;
+        for ( const auto& kv : gs_tlwHosts )
+        {
+            if ( kv.second && kv.second->m_hostLifetime )
+                states.push_back(kv.second->m_hostLifetime);
+        }
+        for ( const auto& state : states )
+        {
+            if ( wxWinUITopLevelHost * const host = state->GetHost() )
+                host->ForgetStrayInputNodes();
+        }
+    }
+
     wxWeakRef<wxWindow> subtree(subtreeRoot);
 
     // A previous failed migration can truthfully leave a descendant slot in a
@@ -10744,6 +11731,41 @@ void wxWinUITopLevelHost::NotifyCursorPolicyChanged(
     }
 }
 
+WXDLLIMPEXP_CORE int wxWinUIGetForcedDPI()
+{
+    static const int s_dpi = []()
+    {
+        wchar_t text[32];
+        const DWORD length = ::GetEnvironmentVariableW(
+            L"WX_WINUI_FORCE_SCALE", text, WXSIZEOF(text));
+        if ( !length || length >= WXSIZEOF(text) )
+            return 0;
+
+        double scale = wcstod(text, nullptr);
+        if ( scale > 10 )
+            scale /= 100;   // a percentage
+        if ( scale < 0.5 || scale > 5 )
+            return 0;
+
+        return static_cast<int>(std::lround(96 * scale));
+    }();
+
+    return s_dpi;
+}
+
+WXDLLIMPEXP_CORE bool wxWinUIIsRightToLeftForced()
+{
+    static const bool s_forced = []()
+    {
+        wchar_t text[8];
+        const DWORD length = ::GetEnvironmentVariableW(
+            L"WX_WINUI_FORCE_RTL", text, WXSIZEOF(text));
+        return length && length < WXSIZEOF(text) && wcscmp(text, L"0") != 0;
+    }();
+
+    return s_forced;
+}
+
 WXDLLIMPEXP_CORE void wxWinUINotifyGlobalCursorChanged()
 {
     wxWinUITopLevelHost::NotifyCursorPolicyChanged();
@@ -10805,7 +11827,7 @@ void wxWinUITopLevelHost::EnsureInnerSubclass()
             if ( !m_innerSubclassFailureLogged ||
                  m_innerSubclassRetryCount == 3 )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "wxWinUI: inner-island subclass installation failed "
                     "(the API exposes no extended error), attempt %u",
                     m_innerSubclassRetryCount);
@@ -11230,7 +12252,7 @@ wxWinUITopLevelHost::BridgeSubclassProc(HWND hwnd, UINT msg,
             if ( !::RemoveWindowSubclass(hwnd, BridgeSubclassProc,
                                          subclassId) )
             {
-                wxLogWarning("wxWinUI: failed to remove a subclass during "
+                wxLogDebug("wxWinUI: failed to remove a subclass during "
                              "WM_NCDESTROY (error %lu)", ::GetLastError());
             }
 
@@ -11305,7 +12327,7 @@ wxWinUITopLevelHost::ResolveDropSurface(const POINT& screen, wxWindow **seed)
         for ( const auto& hit : hits )
         {
             DependencyObject current = hit;
-            if ( current == m_root )
+            if ( IsStructuralElement(current) )
                 continue;
 
             while ( current )
@@ -11317,6 +12339,7 @@ wxWinUITopLevelHost::ResolveDropSurface(const POINT& screen, wxWindow **seed)
                          current == slot->GetPresentationRoot() )
                     {
                         wxWindow* const window = slot->m_window;
+                        RefreshSlotRects(*slot);
                         if ( !window || window->IsBeingDeleted() ||
                              !slot->m_visible ||
                              !slot->m_visibleRectPx.Contains(
@@ -11578,7 +12601,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
                  slot->m_lifetime != snapshot.lifetime ||
                  slot->GetPresentationRoot() != snapshot.container ||
                  window->IsBeingDeleted() ||
-                 !slot->m_visible ||
+                 (RefreshSlotRects(*slot), !slot->m_visible) ||
                  !slot->m_visibleRectPx.Contains(clientPoint) )
             {
                 return nullptr;
@@ -11610,7 +12633,13 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
         struct SlotState final
         {
             std::size_t index = 0;
+            // Paint order among the slots: one counter runs over the whole
+            // nested tree, see RecomputeZOrder().
             int z = 0;
+            // Order, among the children of the root canvas, of the one this
+            // slot is in: what a branch put directly on the root compares
+            // with.
+            int rootZ = 0;
             bool hitTestVisible = true;
             bool valid = false;
         };
@@ -11619,7 +12648,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
         // callback-bearing WinRT boundary is followed immediately by both the
         // host-generation check and exact lifetime/container revalidation.
         const auto readSlotState =
-            [&current, &resolveSlot, &slotSnapshots](std::size_t index)
+            [&current, &resolveSlot, &slotSnapshots, &root](std::size_t index)
                 -> SlotState
             {
                 SlotState state;
@@ -11661,8 +12690,29 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
                 if ( !resolveSlot(snapshot) )
                     return state;
 
+                int rootZ = z;
+                DependencyObject branch = snapshot.container;
+                for ( ;; )
+                {
+                    const DependencyObject parent =
+                        VisualTreeHelper::GetParent(branch);
+                    if ( !parent || parent == root )
+                        break;
+                    branch = parent;
+                }
+                if ( const auto branchElement = branch.try_as<UIElement>() )
+                {
+                    rootZ = winrt::Microsoft::UI::Xaml::Controls::Canvas::
+                        GetZIndex(branchElement);
+                }
+                if ( !current() )
+                    return state;
+                if ( !resolveSlot(snapshot) )
+                    return state;
+
                 state.index = index;
                 state.z = z;
+                state.rootZ = rootZ;
                 state.hitTestVisible = hitTestVisible;
                 state.valid = true;
                 return state;
@@ -11702,7 +12752,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
         {
             if ( !current() )
                 return nullptr;
-            if ( hit == root )
+            if ( hit == root || IsStructuralElement(hit) )
                 continue;
 
             DependencyObject element = hit;
@@ -11783,7 +12833,7 @@ wxWindow *wxWinUITopLevelHost::ResolveWindowAtScreenPoint(
             if ( freeParent != root )
                 return tlwLifetime.get();
 
-            if ( disabled.valid && disabled.z > freeZ )
+            if ( disabled.valid && disabled.rootZ > freeZ )
             {
                 wxWindow * const window = resolveSlot(
                     slotSnapshots[disabled.index]);
@@ -11887,6 +12937,7 @@ bool wxWinUITopLevelHost::HitTestContent(const POINT& ptScreen)
         for ( const auto& kv : m_slots )
         {
             const wxWinUISlot * const slot = kv.second;
+            RefreshSlotRects(*slot);
             if ( slot->m_visible &&
                  slot->m_visibleRectPx.Contains(pt.x, pt.y) )
             {
@@ -11896,7 +12947,7 @@ bool wxWinUITopLevelHost::HitTestContent(const POINT& ptScreen)
         }
 
         const bool hasFreeContent =
-            root.Children().Size() > m_slots.size();
+            root.Children().Size() > m_rootMounts || m_interactiveParts;
         if ( !current() )
             return false;
         if ( !inSlot && !hasFreeContent )

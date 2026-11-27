@@ -74,26 +74,43 @@ T FindBookElement(const X::DependencyObject& node, const wxString& name = {})
     return nullptr;
 }
 
-C::RadioButton BookRadio(wxToolbook* book, const wxString& name)
+// The button of the page of this name: the tool of a page is a radio tool,
+// which is an AppBarToggleButton whose label is the name.
+C::AppBarToggleButton FindBookTool(const X::DependencyObject& node,
+                                   const wxString& name)
+{
+    if ( !node ) return nullptr;
+    if ( const auto tool = node.try_as<C::AppBarToggleButton>();
+         tool && wxString(tool.Label().c_str()) == name )
+        return tool;
+    const int count = X::Media::VisualTreeHelper::GetChildrenCount(node);
+    for ( int i = 0; i < count; ++i )
+        if ( const auto found = FindBookTool(
+                X::Media::VisualTreeHelper::GetChild(node, i), name) ) return found;
+    return nullptr;
+}
+
+C::AppBarToggleButton BookRadio(wxToolbook* book, const wxString& name)
 {
     auto* const toolbar = book ? book->GetToolBar() : nullptr;
     auto* const host = toolbar ? wxWinUITopLevelHost::FindSlotOwner(toolbar) : nullptr;
     auto* const slot = host ? host->FindSlot(toolbar) : nullptr;
-    return slot ? FindBookElement<C::RadioButton>(slot->GetContent(), name) : nullptr;
+    return slot ? FindBookTool(slot->GetContent(), name) : nullptr;
 }
 
-bool RadioSelected(const C::RadioButton& radio)
+bool RadioSelected(const C::AppBarToggleButton& radio)
 {
     const auto checked = radio ? radio.IsChecked() : nullptr;
     return checked && checked.Value();
 }
 
-A::Provider::ISelectionItemProvider BookSelection(const C::RadioButton& radio)
+// What a screen reader uses to choose the page.
+A::Provider::IToggleProvider BookSelection(const C::AppBarToggleButton& radio)
 {
     const auto peer = radio
         ? A::Peers::FrameworkElementAutomationPeer::CreatePeerForElement(radio) : nullptr;
-    return peer ? peer.GetPattern(A::Peers::PatternInterface::SelectionItem)
-        .try_as<A::Provider::ISelectionItemProvider>() : nullptr;
+    return peer ? peer.GetPattern(A::Peers::PatternInterface::Toggle)
+        .try_as<A::Provider::IToggleProvider>() : nullptr;
 }
 
 wxRect BookNativeScreenRect(wxToolbook* book, const X::FrameworkElement& element)
@@ -111,11 +128,11 @@ wxRect BookNativeScreenRect(wxToolbook* book, const X::FrameworkElement& element
                   static_cast<int>(std::lround(bounds.Height * scale)));
 }
 
-void SelectRetiredBookPeer(const A::Provider::ISelectionItemProvider& provider)
+void SelectRetiredBookPeer(const A::Provider::IToggleProvider& provider)
 {
     try
     {
-        provider.Select();
+        provider.Toggle();
     }
     catch ( const winrt::hresult_error& error )
     {
@@ -275,7 +292,7 @@ TEST_CASE("WinUIToolbook::NativeSelectionVetoAndSilentUpdates",
     auto second = BookRadio(book, "Page 1");
     const auto select = BookSelection(second);
     REQUIRE(select);
-    select.Select();
+    select.Toggle();
     REQUIRE(WaitToolbook([&]() { return changing == 1; }));
     CHECK(changed == 0);
     CHECK(book->GetSelection() == 0);
@@ -285,7 +302,7 @@ TEST_CASE("WinUIToolbook::NativeSelectionVetoAndSilentUpdates",
     CHECK(!book->GetPage(1)->IsShown());
 
     veto = false;
-    select.Select();
+    select.Toggle();
     REQUIRE(WaitToolbook([&]() { return changed == 1; }));
     CHECK(changing == 2);
     CHECK(book->GetSelection() == 1);
@@ -345,7 +362,7 @@ TEST_CASE("WinUIToolbook::NativeProvidersRetireAcrossDeleteAndCallback",
             fixture.book = nullptr;
             delete book;
         });
-    current.Select();
+    current.Toggle();
     REQUIRE(WaitToolbook([&]() { return callbacks == 1; }));
     CHECK(!weak);
     SelectRetiredBookPeer(current);

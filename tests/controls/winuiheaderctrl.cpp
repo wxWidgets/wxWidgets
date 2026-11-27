@@ -18,6 +18,7 @@
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-input-test-access.h"
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
@@ -605,6 +606,197 @@ TEST_CASE("WinUIHeaderCtrl::ReorderHasNativeMarkersAndHonoursEndVeto",
                !HeaderMarkerVisible(fixture, L"wxHeader.ReorderMarker");
     }));
     CHECK(fixture.Button(0) == first);
+}
+
+TEST_CASE("WinUIHeaderCtrl::HeldButtonDragReachesTheHeaderThroughTheHost",
+          "[winui-headerctrl][native-headerctrl][native-header-gestures]")
+{
+    // What a real mouse does, which the tests above do not: the press comes
+    // through the slot of the header, the header takes the capture, the
+    // island is told it lost its own, and the moves and the release come
+    // through the root while the button is held.
+    NativeHeaderFixture fixture(false);
+    auto* const header = fixture.header;
+    fixture.AddColumns();
+    fixture.Show();
+    REQUIRE(WaitHeader([&]() { return HeaderMatches(fixture); }));
+
+    wxWinUITopLevelHost* const host =
+        wxWinUITopLevelHost::FindSlotOwner(header);
+    REQUIRE(host);
+    const HWND bridge = ::FindWindowExW(
+        reinterpret_cast<HWND>(wxGetTopLevelParent(header)->GetHWND()),
+        nullptr, L"Microsoft.UI.Content.DesktopChildSiteBridge", nullptr);
+    REQUIRE(bridge);
+
+    unsigned ends = 0, cancelled = 0;
+    header->Bind(wxEVT_HEADER_END_RESIZE, [&](wxHeaderCtrlEvent& event)
+    {
+        ++ends;
+        event.Skip();
+    });
+    header->Bind(wxEVT_HEADER_DRAGGING_CANCELLED, [&](wxHeaderCtrlEvent&)
+    {
+        ++cancelled;
+    });
+
+    const int oldWidth = header->Column(0).GetWidth();
+    const int step = header->FromDIP(30);
+    const int y = header->GetClientSize().y / 2;
+    const auto at = [&](int x, int dy = 0)
+    {
+        return header->ClientToScreen(wxPoint(x, y + dy));
+    };
+
+    wxWinUIPointerSample sample;
+    sample.kind = wxWinUIInputKind::Press;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = MK_LBUTTON;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = at(oldWidth).x;
+    sample.screenY = at(oldWidth).y;
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, sample));
+    REQUIRE(header->HasCapture());
+    // The same press reaches the root after the slot, as the event of XAML
+    // bubbles: the header has the capture by then.
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    REQUIRE(header->HasCapture());
+
+    // What USER32 tells the window which had the capture.
+    ::SendMessage(bridge, WM_CAPTURECHANGED, 0,
+                  reinterpret_cast<LPARAM>(header->GetHWND()));
+    REQUIRE(header->HasCapture());
+
+    // What XAML makes of it: PointerCaptureLost or PointerCanceled, which
+    // bubbles through the slot of the header then reaches the root.
+    {
+        const wxWinUIInputKind interruption =
+            GENERATE(wxWinUIInputKind::CaptureLost, wxWinUIInputKind::Cancel);
+        wxWinUIPointerSample lost = sample;
+        lost.kind = interruption;
+        lost.button = wxWinUIInputButton::None;
+        ++lost.timestamp;
+        (void)wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, lost);
+        wxWinUIHostInputTestAccess::CancelSlotPointerOwners(*host, lost, false);
+        REQUIRE(header->HasCapture());
+    }
+
+    // Inside the header, the button held.
+    sample.kind = wxWinUIInputKind::Move;
+    sample.button = wxWinUIInputButton::None;
+    ++sample.timestamp;
+    sample.screenX = at(oldWidth + step).x;
+    sample.screenY = at(oldWidth + step).y;
+    (void)wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, sample);
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    CHECK(header->Column(0).GetWidth() == oldWidth + step);
+
+    // Well under it: only the root sees the pointer.
+    ++sample.timestamp;
+    sample.screenX = at(oldWidth + 2 * step, header->FromDIP(60)).x;
+    sample.screenY = at(oldWidth + 2 * step, header->FromDIP(60)).y;
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    CHECK(header->Column(0).GetWidth() == oldWidth + 2 * step);
+    CHECK(header->HasCapture());
+
+    // The button is released there.
+    sample.kind = wxWinUIInputKind::Release;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = 0;
+    ++sample.timestamp;
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    CHECK_FALSE(header->HasCapture());
+    CHECK(ends == 1);
+    CHECK(cancelled == 0);
+    CHECK(header->Column(0).GetWidth() == oldWidth + 2 * step);
+
+    // A move with no button held does not drag anything any more.
+    sample.kind = wxWinUIInputKind::Move;
+    sample.button = wxWinUIInputButton::None;
+    ++sample.timestamp;
+    sample.screenX = at(oldWidth + 4 * step).x;
+    sample.screenY = at(oldWidth + 4 * step).y;
+    (void)wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, sample);
+    CHECK(header->Column(0).GetWidth() == oldWidth + 2 * step);
+}
+
+TEST_CASE("WinUIHeaderCtrl::PlainClickLeavesNoDragBehind",
+          "[winui-headerctrl][native-headerctrl][native-header-gestures]")
+{
+    // A click, with no move: the header takes the mouse when the button goes
+    // down and must give it back when the button is released. Nothing may
+    // follow the pointer afterwards.
+    const bool onSeparator = GENERATE(false, true);
+    CAPTURE(onSeparator);
+    NativeHeaderFixture fixture(false);
+    auto* const header = fixture.header;
+    fixture.AddColumns();
+    fixture.Show();
+    REQUIRE(WaitHeader([&]() { return HeaderMatches(fixture); }));
+
+    wxWinUITopLevelHost* const host =
+        wxWinUITopLevelHost::FindSlotOwner(header);
+    REQUIRE(host);
+    const HWND bridge = ::FindWindowExW(
+        reinterpret_cast<HWND>(wxGetTopLevelParent(header)->GetHWND()),
+        nullptr, L"Microsoft.UI.Content.DesktopChildSiteBridge", nullptr);
+    REQUIRE(bridge);
+
+    unsigned clicks = 0;
+    header->Bind(wxEVT_HEADER_CLICK, [&](wxHeaderCtrlEvent& event)
+    {
+        ++clicks;
+        event.Skip();
+    });
+
+    const int width = header->Column(0).GetWidth();
+    const wxArrayInt order = header->GetColumnsOrder();
+    const int x = onSeparator ? width : header->FromDIP(25);
+    const int y = header->GetClientSize().y / 2;
+    const wxPoint where = header->ClientToScreen(wxPoint(x, y));
+
+    wxWinUIPointerSample sample;
+    sample.kind = wxWinUIInputKind::Press;
+    sample.button = wxWinUIInputButton::Left;
+    sample.buttonMask = MK_LBUTTON;
+    sample.timestamp = ::GetTickCount64();
+    sample.screenX = where.x;
+    sample.screenY = where.y;
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, sample));
+    REQUIRE(header->HasCapture());
+    // The same press reaches the root after the slot, as the event of XAML
+    // bubbles: the header has the capture by then.
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    REQUIRE(header->HasCapture());
+    ::SendMessage(bridge, WM_CAPTURECHANGED, 0,
+                  reinterpret_cast<LPARAM>(header->GetHWND()));
+
+    // Released where it was pressed: the slot of the header sees it, then
+    // the root.
+    sample.kind = wxWinUIInputKind::Release;
+    sample.buttonMask = 0;
+    ++sample.timestamp;
+    (void)wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, sample);
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    CHECK_FALSE(header->HasCapture());
+    CHECK(clicks == (onSeparator ? 0u : 1u));
+
+    // The pointer goes away with no button held.
+    const wxPoint away =
+        header->ClientToScreen(wxPoint(x + header->FromDIP(90), y));
+    sample.kind = wxWinUIInputKind::Move;
+    sample.button = wxWinUIInputButton::None;
+    ++sample.timestamp;
+    sample.screenX = away.x;
+    sample.screenY = away.y;
+    (void)wxWinUIHostInputTestAccess::RouteSlotPointer(*host, header, sample);
+    (void)wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample, true);
+    wxTheApp->ProcessPendingEvents();
+    CHECK_FALSE(header->HasCapture());
+    CHECK(header->Column(0).GetWidth() == width);
+    CHECK(header->GetColumnsOrder() == order);
+    CHECK_FALSE(HeaderMarkerVisible(fixture, L"wxHeader.ReorderGhost"));
+    CHECK(clicks == (onSeparator ? 0u : 1u));
 }
 
 #endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_HEADERCTRL

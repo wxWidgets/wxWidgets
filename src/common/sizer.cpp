@@ -3128,7 +3128,18 @@ void wxStaticBoxSizer::RepositionChildren(const wxSize& minSize)
         }
     }
 
-    wxBoxSizer::RepositionChildren(minSize);
+    {
+        // The items of the box are normally its children, not those of the
+        // window being laid out, whose own deferred repositioning does not
+        // cover them: without this they are moved one by one, each move a
+        // round trip through the window manager, where a single one moves
+        // them all. Items created the old way, as siblings of the box, are
+        // already deferred by the containing window.
+        wxWindow::ChildrenRepositioningGuard
+            repositionGuard(m_hasNonBoxChildren ? nullptr : m_staticBox);
+
+        wxBoxSizer::RepositionChildren(minSize);
+    }
 
     m_position = old_pos;
     m_size = old_size;

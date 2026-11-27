@@ -64,10 +64,16 @@ public:
 
     void SizeColumns()
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+         // The scrollbar is drawn over the contents and takes no room: the
+         // only column is as wide as the rows, and so is the editor of an
+         // item.
+         int w = GetClientSize().x;
+#elif defined(__WXMSW__)
          int w = GetSize().x;
-#ifdef __WXMSW__
          w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this) + 6;
 #else
+         int w = GetSize().x;
          w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this);
 #endif
          if (w < 0) w = 0;
@@ -103,6 +109,35 @@ const wxWindowIDRef wxID_ELB_UP = wxWindow::NewControlId();
 const wxWindowIDRef wxID_ELB_DOWN = wxWindow::NewControlId();
 const wxWindowIDRef wxID_ELB_LISTCTRL = wxWindow::NewControlId();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// The buttons show glyphs of the icon font of Windows instead of the stock
+// bitmaps: they are drawn like the icons of every WinUI control, in the
+// colour of the text of the theme, and dim with the button.
+static wxBitmapButton *
+wxELBMakeButton(wxWindow *parent, wxWindowID id, wxUniChar glyph)
+{
+    wxBitmapButton * const button = new wxBitmapButton(
+        parent, id, wxBitmapBundle(), wxDefaultPosition,
+        // Wide enough for the glyph between the margins a WinUI button
+        // keeps on both sides of its content.
+        parent->FromDIP(wxSize(40, 32)), wxBORDER_NONE);
+
+    // A wxBitmapButton is created as a button without text: this one has
+    // one, the glyph, and no bitmap.
+    button->SetWindowStyleFlag(button->GetWindowStyleFlag() & ~wxBU_NOTEXT);
+
+    wxFont font = button->GetFont();
+    if ( !font.SetFaceName("Segoe Fluent Icons") )
+        font.SetFaceName("Segoe MDL2 Assets");
+    font.Scale(1.15f);
+    button->SetFont(font);
+    button->SetLabel(wxString(glyph));
+    return button;
+}
+
+#endif // __WXWINUI__
+
 wxBEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
     EVT_LIST_ITEM_SELECTED(wxID_ELB_LISTCTRL, wxEditableListBox::OnItemSelected)
     EVT_LIST_END_LABEL_EDIT(wxID_ELB_LISTCTRL, wxEditableListBox::OnEndLabelEdit)
@@ -130,8 +165,15 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // No sunken edges around the parts of a WinUI control.
+    const long borderStyle = wxBORDER_NONE;
+#else
+    const long borderStyle = wxSUNKEN_BORDER;
+#endif
+
     wxPanel *subp = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
+                                borderStyle | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
 
     subsizer->Add(new wxStaticText(subp, wxID_ANY, label),
@@ -141,37 +183,57 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bEdit = wxELBMakeButton(subp, wxID_ELB_EDIT, wxUniChar(0xE70F));
+#else
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
+#endif
         m_bEdit->SetToolTip(_("Edit item"));
         subsizer->Add(m_bEdit, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bNew = wxELBMakeButton(subp, wxID_ELB_NEW, wxUniChar(0xE710));
+#else
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
+#endif
         m_bNew->SetToolTip(_("New item"));
         subsizer->Add(m_bNew, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bDel = wxELBMakeButton(subp, wxID_ELB_DELETE, wxUniChar(0xE74D));
+#else
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
+#endif
         m_bDel->SetToolTip(_("Delete item"));
         subsizer->Add(m_bDel, flagsCentered);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bUp = wxELBMakeButton(subp, wxID_ELB_UP, wxUniChar(0xE74A));
+#else
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
+#endif
         m_bUp->SetToolTip(_("Move up"));
         subsizer->Add(m_bUp, flagsCentered);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bDown = wxELBMakeButton(subp, wxID_ELB_DOWN, wxUniChar(0xE74B));
+#else
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
+#endif
         m_bDown->SetToolTip(_("Move down"));
         subsizer->Add(m_bDown, flagsCentered);
     }
@@ -181,7 +243,14 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     sizer->Add(subp, wxSizerFlags().Expand());
 
-    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The list has the frame of a control of WinUI, a little under the row
+    // of its commands, which are quiet buttons as those of a command bar.
+    sizer->AddSpacer(FromDIP(4));
+    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxBORDER_THEME;
+#else
+    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | borderStyle;
+#endif
     if ( m_style & wxEL_ALLOW_EDIT )
          st |= wxLC_EDIT_LABELS;
     m_listCtrl = new CleverListCtrl(this, wxID_ELB_LISTCTRL,

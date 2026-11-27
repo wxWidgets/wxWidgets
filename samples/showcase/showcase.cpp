@@ -17,6 +17,7 @@
 #include "wx/artprov.h"
 #include "wx/bmpbuttn.h"
 #include "wx/button.h"
+#include "wx/cmdline.h"
 #include "wx/dcmemory.h"
 #include "wx/filedlg.h"
 #include "wx/fontdlg.h"
@@ -214,6 +215,7 @@
 #endif
 
 #include <functional>
+#include <map>
 
 namespace
 {
@@ -289,13 +291,15 @@ private:
     int m_page;
 };
 
-wxBitmapBundle GetArt(wxWindow* win, const wxArtID& id, int sizeDIP = 16)
+wxBitmapBundle GetArt(wxWindow* WXUNUSED(win), const wxArtID& id,
+                      int sizeDIP = 16)
 {
+    // The size of a bundle is the one of its bitmap at 100 %.
     return wxArtProvider::GetBitmapBundle
            (
                id,
                wxART_OTHER,
-               win->FromDIP(wxSize(sizeDIP, sizeDIP))
+               wxSize(sizeDIP, sizeDIP)
            );
 }
 
@@ -326,6 +330,12 @@ class ShowcaseFrame : public wxFrame
 {
 public:
     ShowcaseFrame();
+
+    // Show the page with this index; out-of-range values keep the first one.
+    void SelectPage(int page);
+
+    // Run the action of the button with this label once the frame is shown.
+    void RunAction(const wxString& label);
     ~ShowcaseFrame() override;
 
 private:
@@ -378,6 +388,7 @@ private:
     void ShowTooltipWindows();
     void ShowSplash();
 
+    std::map<wxString, std::function<void()>> m_actions;
     wxNotebook* m_book = nullptr;
     wxTreeCtrl* m_nav = nullptr;
     wxTextCtrl* m_log = nullptr;
@@ -473,6 +484,7 @@ wxButton* ShowcaseFrame::AddActionButton(wxWindow* parent,
                                          const std::function<void()>& action)
 {
     wxButton* button = new wxButton(parent, wxID_ANY, label);
+    m_actions[label] = action;
     button->SetToolTip("Runs " + label);
     button->Bind(wxEVT_BUTTON, [this, label, action](wxCommandEvent&)
     {
@@ -491,6 +503,28 @@ wxStaticText* ShowcaseFrame::AddWrappedText(wxWindow* parent,
     text->Wrap(FromDIP(850));
     sizer->Add(text, 0, wxEXPAND | wxALL, FromDIP(10));
     return text;
+}
+
+void ShowcaseFrame::SelectPage(int page)
+{
+    if ( page <= 0 || page >= static_cast<int>(m_book->GetPageCount()) )
+        return;
+
+    // Selecting the navigation item changes the page, as a click would.
+    wxTreeItemIdValue cookie;
+    wxTreeItemId item = m_nav->GetFirstChild(m_nav->GetRootItem(), cookie);
+    for ( int i = 0; i < page && item.IsOk(); ++i )
+        item = m_nav->GetNextChild(m_nav->GetRootItem(), cookie);
+    if ( item.IsOk() )
+        m_nav->SelectItem(item);
+    m_book->SetSelection(page);
+}
+
+void ShowcaseFrame::RunAction(const wxString& label)
+{
+    const auto it = m_actions.find(label);
+    if ( it != m_actions.end() )
+        CallAfter(it->second);
 }
 
 void ShowcaseFrame::AddPage(wxWindow* page, const wxString& title)
@@ -891,6 +925,18 @@ wxWindow* ShowcaseFrame::CreateTextInputPage()
     m_gauge = new wxGauge(numeric->GetStaticBox(), wxID_ANY, 100);
     m_gauge->SetValue(35);
     numeric->Add(m_gauge, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(8));
+
+    // Vertical gauges: a value and the indeterminate animation.
+    wxBoxSizer* verticalGauges = new wxBoxSizer(wxHORIZONTAL);
+    wxGauge* verticalGauge = new wxGauge(numeric->GetStaticBox(), wxID_ANY, 100,
+        wxDefaultPosition, FromDIP(wxSize(-1, 96)), wxGA_VERTICAL);
+    verticalGauge->SetValue(60);
+    verticalGauges->Add(verticalGauge, 0, wxRIGHT, FromDIP(16));
+    wxGauge* verticalPulse = new wxGauge(numeric->GetStaticBox(), wxID_ANY, 100,
+        wxDefaultPosition, FromDIP(wxSize(-1, 96)), wxGA_VERTICAL);
+    verticalPulse->Pulse();
+    verticalGauges->Add(verticalPulse, 0);
+    numeric->Add(verticalGauges, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(8));
 #endif
 
     return page;
@@ -970,7 +1016,7 @@ wxWindow* ShowcaseFrame::CreateChoicesAndListsPage()
     wxArrayInt order;
     order.Add(0);
     order.Add(1);
-    order.Add(-2);
+    order.Add(~2);
     order.Add(3);
     wxRearrangeCtrl* rearrange = new wxRearrangeCtrl(lists->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, wxDefaultSize, order, rearrangeItems);
@@ -1135,12 +1181,12 @@ wxWindow* ShowcaseFrame::CreatePickerPage()
 #if wxUSE_FILECTRL
     wxFileCtrl* fileCtrl = new wxFileCtrl(fileCtrls->GetStaticBox(), wxID_ANY,
         wxEmptyString, wxEmptyString, "*.*", wxFC_OPEN,
-        wxDefaultPosition, FromDIP(wxSize(-1, 180)));
+        wxDefaultPosition, FromDIP(wxSize(-1, 280)));
     browserGrid->Add(fileCtrl, 1, wxEXPAND);
 #endif
 #if wxUSE_FILEDLG || wxUSE_DIRDLG
     wxGenericDirCtrl* dirCtrl = new wxGenericDirCtrl(fileCtrls->GetStaticBox(), wxID_ANY,
-        wxEmptyString, wxDefaultPosition, FromDIP(wxSize(-1, 180)));
+        wxEmptyString, wxDefaultPosition, FromDIP(wxSize(-1, 280)));
     browserGrid->Add(dirCtrl, 1, wxEXPAND);
 #endif
 
@@ -1301,6 +1347,64 @@ wxWindow* ShowcaseFrame::CreateAdvancedPage()
         "Advanced optional libraries are shown when they are enabled in this build.");
     wxBoxSizer* top = wxDynamicCast(page->GetSizer(), wxBoxSizer);
 
+#if wxUSE_TOOLBAR
+    // Tool bars in a sizer: with icons only, with labels, and standing.
+    wxStaticBoxSizer* cmdGroup = AddGroup(page, top, "wxToolBar");
+    const auto addCommandBar = [this, cmdGroup](long style)
+    {
+        const int first = wxID_HIGHEST + 300;
+        wxToolBar* const bar = new wxToolBar(
+            cmdGroup->GetStaticBox(), wxID_ANY, wxDefaultPosition,
+            wxDefaultSize, style);
+        bar->AddTool(wxID_NEW, "New", GetArt(bar, wxART_NEW), "New document");
+        bar->AddTool(wxID_OPEN, "Open", GetArt(bar, wxART_FILE_OPEN),
+                     "Open a file");
+        bar->AddTool(wxID_SAVE, "Save", GetArt(bar, wxART_FILE_SAVE),
+                     "Save (disabled)");
+        bar->EnableTool(wxID_SAVE, false);
+        bar->AddSeparator();
+        bar->AddCheckTool(first, "Pin", GetArt(bar, wxART_TICK_MARK),
+                          wxNullBitmap, "A tool which stays down");
+        bar->ToggleTool(first, true);
+        bar->AddSeparator();
+        bar->AddRadioTool(first + 1, "List", GetArt(bar, wxART_LIST_VIEW),
+                          wxNullBitmap, "List view");
+        bar->AddRadioTool(first + 2, "Details",
+                          GetArt(bar, wxART_REPORT_VIEW), wxNullBitmap,
+                          "Details view");
+        bar->AddSeparator();
+        bar->AddTool(first + 3, "Paste", GetArt(bar, wxART_PASTE),
+                     "Paste, with a menu", wxITEM_DROPDOWN);
+        wxMenu* const menu = new wxMenu;
+        menu->Append(wxID_ANY, "Paste as text");
+        menu->Append(wxID_ANY, "Paste special...");
+        bar->SetDropdownMenu(first + 3, menu);
+        if ( !(style & wxTB_VERTICAL) )
+        {
+            wxChoice* const zoom = new wxChoice(bar, wxID_ANY);
+            zoom->Append("100 %");
+            zoom->Append("150 %");
+            zoom->Append("200 %");
+            zoom->SetSelection(0);
+            bar->AddControl(zoom, "Zoom");
+            bar->AddStretchableSpace();
+        }
+        bar->AddTool(wxID_FIND, "Find", GetArt(bar, wxART_FIND), "Find");
+        bar->Realize();
+        bar->Bind(wxEVT_TOOL, [this](wxCommandEvent& event)
+            {
+                Log(wxString::Format("Command bar tool %d, checked=%d",
+                                     event.GetId(), event.IsChecked()));
+            });
+        return bar;
+    };
+    cmdGroup->Add(addCommandBar(wxTB_HORIZONTAL), 0,
+                  wxEXPAND | wxLEFT | wxRIGHT | wxTOP, FromDIP(8));
+    cmdGroup->Add(addCommandBar(wxTB_HORIZONTAL | wxTB_TEXT), 0,
+                  wxEXPAND | wxLEFT | wxRIGHT | wxTOP, FromDIP(8));
+    cmdGroup->Add(addCommandBar(wxTB_VERTICAL), 0, wxALL, FromDIP(8));
+#endif
+
 #if wxUSE_AUI
     wxStaticBoxSizer* auiGroup = AddGroup(page, top, "wxAuiNotebook");
     wxAuiNotebook* aui = new wxAuiNotebook(auiGroup->GetStaticBox(), wxID_ANY,
@@ -1406,6 +1510,8 @@ wxWindow* ShowcaseFrame::CreateAdvancedPage()
     wxStyledTextCtrl* stc = new wxStyledTextCtrl(stcGroup->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 150)));
     stc->SetText("int main()\n{\n    return 0;\n}\n");
+    // Give every style the theme colours of the default one.
+    stc->StyleClearAll();
     stc->StyleSetForeground(wxSTC_STYLE_LINENUMBER, wxColour(96, 96, 96));
     stc->SetMarginType(0, wxSTC_MARGIN_NUMBER);
     stc->SetMarginWidth(0, FromDIP(36));
@@ -1812,15 +1918,44 @@ void ShowcaseFrame::ShowSplash()
 class ShowcaseApp : public wxApp
 {
 public:
+    // "--page=N" opens the sample on its N-th page (counting from 0) and
+    // "--action=LABEL" runs the action of the button with this label, which
+    // lets a script look at one page or dialog without clicking through.
+    void OnInitCmdLine(wxCmdLineParser& parser) override
+    {
+        wxApp::OnInitCmdLine(parser);
+        parser.AddOption("p", "page",
+                         "index of the page to show at start-up",
+                         wxCMD_LINE_VAL_NUMBER);
+        parser.AddOption("a", "action",
+                         "label of the action button to run at start-up");
+    }
+
+    bool OnCmdLineParsed(wxCmdLineParser& parser) override
+    {
+        long page = 0;
+        if ( parser.Found("page", &page) )
+            m_initialPage = static_cast<int>(page);
+        parser.Found("action", &m_initialAction);
+        return wxApp::OnCmdLineParsed(parser);
+    }
+
     bool OnInit() override
     {
         if ( !wxApp::OnInit() )
             return false;
 
         ShowcaseFrame* frame = new ShowcaseFrame;
+        frame->SelectPage(m_initialPage);
         frame->Show();
+        if ( !m_initialAction.empty() )
+            frame->RunAction(m_initialAction);
         return true;
     }
+
+private:
+    int m_initialPage = 0;
+    wxString m_initialAction;
 };
 
 wxIMPLEMENT_APP(ShowcaseApp);

@@ -239,7 +239,7 @@ public:
             if ( IsOnUIThread() )
                 m_helper->Release();
             else
-                wxLogError("wxWinUI: leaking a drag-image helper after "
+                wxLogDebug("wxWinUI: leaking a drag-image helper after "
                            "wrong-thread broker destruction");
         }
     }
@@ -1197,7 +1197,7 @@ HRESULT wxWinUIDropBroker::ReleaseExternalLock(
     // second FALSE for the same successful TRUE.
     if ( !wxMSWOleClaimExternalShellUnlock(&registration.operation) )
     {
-        wxLogError("wxWinUI: external OLE lock cleanup had no exact "
+        wxLogDebug("wxWinUI: external OLE lock cleanup had no exact "
                    "one-shot ledger authority; retaining the target "
                    "fail-closed");
         return E_UNEXPECTED;
@@ -1208,7 +1208,7 @@ HRESULT wxWinUIDropBroker::ReleaseExternalLock(
     if ( SUCCEEDED(unlockHr) )
         registration.locked = false;
     else
-        wxLogError("wxWinUI: CoLockObjectExternal unlock failed "
+        wxLogDebug("wxWinUI: CoLockObjectExternal unlock failed "
                    "(HRESULT 0x%08lx); retaining the exact inactive target",
                    static_cast<unsigned long>(unlockHr));
 
@@ -1681,7 +1681,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
 
     if ( !m_state->IsOnUIThread() )
     {
-        wxLogError("wxWinUI: OLE drop broker shutdown requested off its UI "
+        wxLogDebug("wxWinUI: OLE drop broker shutdown requested off its UI "
                    "thread; native registration is retained fail-closed");
         return;
     }
@@ -1742,7 +1742,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
         const bool current = IsRegistrationCurrent(role);
         if ( registration.ownsRegistration && !current )
         {
-            wxLogError("wxWinUI: %s was destroyed while balancing OLE "
+            wxLogDebug("wxWinUI: %s was destroyed while balancing OLE "
                        "drop shutdown; retaining the inactive COM target "
                        "instead of revoking a stale HWND", roleName);
 #ifdef WXWINUI_TEST_SUPPORT
@@ -1790,7 +1790,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
 
             if ( registration.ownsRegistration )
             {
-                wxLogError(
+                wxLogDebug(
                     "wxWinUI: RevokeDragDrop failed for the %s "
                     "(HRESULT 0x%08lx); retaining a fail-closed occupancy "
                     "tombstone",
@@ -1885,7 +1885,7 @@ void wxWinUIDropBroker::Shutdown() noexcept
         else if ( OwnsAnyRegistration() && currentTLW &&
                   !currentTLW->IsBeingDeleted() )
         {
-            wxLogError("wxWinUI: unable to restore shell OLE targets after "
+            wxLogDebug("wxWinUI: unable to restore shell OLE targets after "
                        "host initialization rollback because the TLW broker "
                        "registration could not be revoked");
         }
@@ -1965,7 +1965,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
         // until the top-level itself is destroyed.
         if ( OwnsAnyRegistration() )
         {
-            wxLogError("wxWinUI: unable to restore shell OLE targets after "
+            wxLogDebug("wxWinUI: unable to restore shell OLE targets after "
                        "broker acquisition rollback because an exact dual "
                        "registration is still retained fail-closed");
             return;
@@ -1988,14 +1988,14 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             }
             if ( !rollbackOk )
             {
-                wxLogError("wxWinUI: OLE drop-target migration rollback "
+                wxLogDebug("wxWinUI: OLE drop-target migration rollback "
                            "was incomplete");
             }
 #if wxUSE_EXCEPTIONS
         }
         catch ( ... )
         {
-            wxLogError("wxWinUI: exception while restoring shell OLE "
+            wxLogDebug("wxWinUI: exception while restoring shell OLE "
                        "drop-target registrations");
         }
 #endif
@@ -2012,7 +2012,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
         if ( !CollectBoundTargets(tlw, &targets) ||
              tlwLifetime.get() != tlw || tlw->IsBeingDeleted() )
         {
-            wxLogError("wxWinUI: OLE drop-target topology changed while "
+            wxLogDebug("wxWinUI: OLE drop-target topology changed while "
                        "the TLW registration was being adopted");
             rollback();
             return adoptionFailure;
@@ -2040,7 +2040,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
             if ( wxMSWOleIsShellDropTargetRegistered(
                     item.target, item.hwnd) )
             {
-                wxLogError("wxWinUI: failed to revoke a shell OLE target "
+                wxLogDebug("wxWinUI: failed to revoke a shell OLE target "
                            "while adopting the TLW broker");
                 rollback();
                 return adoptionFailure;
@@ -2140,7 +2140,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
 
         if ( !auditStable )
         {
-            wxLogError("wxWinUI: OLE drop-target topology did not become "
+            wxLogDebug("wxWinUI: OLE drop-target topology did not become "
                        "quiescent before broker activation");
             m_acquiring = false;
             UpdateShellDropCoverage();
@@ -2188,7 +2188,7 @@ wxWinUIDropBroker::InitializeAndAdoptShellDropTargets() noexcept
         UpdateShellDropCoverage();
         Shutdown();
         rollback();
-        wxLogError("wxWinUI: exception while adopting shell OLE "
+        wxLogDebug("wxWinUI: exception while adopting shell OLE "
                    "drop-target registrations");
         return PublishInitResult(adoptionFailure);
     }
@@ -2216,7 +2216,7 @@ void wxWinUIDropBroker::ReconcileShellDropTargets(
          subtreeLifetime.get() != subtreeRoot ||
          subtreeRoot->IsBeingDeleted() )
     {
-        wxLogError("wxWinUI: OLE drop-target topology changed during "
+        wxLogDebug("wxWinUI: OLE drop-target topology changed during "
                    "reparent reconciliation");
         return;
     }
@@ -2251,7 +2251,7 @@ void wxWinUIDropBroker::ReconcileShellDropTargets(
             if ( wxMSWOleIsShellDropTargetRegistered(
                     item.target, item.hwnd) )
             {
-                wxLogError("wxWinUI: shell OLE drop target remains "
+                wxLogDebug("wxWinUI: shell OLE drop target remains "
                            "registered after reparent into an island");
             }
         }
@@ -2260,7 +2260,7 @@ void wxWinUIDropBroker::ReconcileShellDropTargets(
             if ( !item.target->Register(
                     reinterpret_cast<WXHWND>(item.hwnd)) )
             {
-                wxLogError("wxWinUI: failed to restore a shell OLE drop "
+                wxLogDebug("wxWinUI: failed to restore a shell OLE drop "
                            "target after reparent out of an island");
             }
         }
@@ -2269,7 +2269,7 @@ void wxWinUIDropBroker::ReconcileShellDropTargets(
     }
     catch ( ... )
     {
-        wxLogError("wxWinUI: exception while reconciling shell OLE "
+        wxLogDebug("wxWinUI: exception while reconciling shell OLE "
                    "drop-target registrations");
     }
 #endif

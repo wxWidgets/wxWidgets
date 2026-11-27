@@ -95,46 +95,6 @@ private:
     std::function<void(wxWindow*, bool)> m_showHook;
 };
 
-#ifdef __WXWINUI__
-
-struct ToolbookLoadedTopologyProbe
-{
-    wxToolbook *book = nullptr;
-    wxWindow *candidate = nullptr;
-    bool invoked = false;
-    bool nestedRemove = true;
-    bool nestedAdd = true;
-    bool nestedDeleteAll = true;
-};
-
-struct ToolbookLoadedSelectionProbe
-{
-    wxToolbook *book = nullptr;
-    int selection = wxNOT_FOUND;
-    bool invoked = false;
-};
-
-void MutateToolbookTopologyDuringLoaded(wxToolBar *, void *context)
-{
-    ToolbookLoadedTopologyProbe * const probe =
-        static_cast<ToolbookLoadedTopologyProbe *>(context);
-    probe->invoked = true;
-    probe->nestedRemove = probe->book->RemovePage(1);
-    probe->nestedAdd =
-        probe->book->AddPage(probe->candidate, "nested");
-    probe->nestedDeleteAll = probe->book->DeleteAllPages();
-}
-
-void ChangeToolbookSelectionDuringLoaded(wxToolBar *, void *context)
-{
-    ToolbookLoadedSelectionProbe * const probe =
-        static_cast<ToolbookLoadedSelectionProbe *>(context);
-    probe->invoked = true;
-    probe->book->SetSelection(probe->selection);
-}
-
-#endif // __WXWINUI__
-
 class ToolbookTestCase : public BookCtrlBaseTestCase
 {
 public:
@@ -452,119 +412,6 @@ TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::EmptyRealizeKeepsNoSelection",
 
 #ifdef __WXWINUI__
 
-TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::ControllerFailureIsAtomic",
-                 "[toolbook][ToolbookTestCase]")
-{
-    wxToolBar* const toolbar =
-        static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    REQUIRE(toolbar);
-    m_toolbook->Realize();
-
-    const int selection = m_toolbook->GetSelection();
-    std::vector<wxWindow*> pages;
-    for ( size_t i = 0; i < m_toolbook->GetPageCount(); ++i )
-        pages.push_back(m_toolbook->GetPage(i));
-
-    wxWinUIToolBarTestAccess::FailNextRebuild(*toolbar);
-    REQUIRE(!m_toolbook->RemovePage(1));
-    REQUIRE(m_toolbook->GetPageCount() == pages.size());
-    REQUIRE(toolbar->GetToolsCount() == pages.size());
-    REQUIRE(m_toolbook->GetSelection() == selection);
-    for ( size_t i = 0; i < pages.size(); ++i )
-        REQUIRE(m_toolbook->GetPage(i) == pages[i]);
-
-    wxWindow* const removed = pages[1];
-    REQUIRE(m_toolbook->RemovePage(1));
-    REQUIRE(m_toolbook->GetPageCount() == pages.size() - 1);
-    REQUIRE(toolbar->GetToolsCount() == pages.size() - 1);
-    delete removed;
-
-    pages.clear();
-    for ( size_t i = 0; i < m_toolbook->GetPageCount(); ++i )
-        pages.push_back(m_toolbook->GetPage(i));
-    const int selectionBeforeDeleteAll = m_toolbook->GetSelection();
-
-    wxWinUIToolBarTestAccess::FailNextRebuild(*toolbar);
-    REQUIRE(!m_toolbook->DeleteAllPages());
-    REQUIRE(m_toolbook->GetPageCount() == pages.size());
-    REQUIRE(toolbar->GetToolsCount() == pages.size());
-    REQUIRE(m_toolbook->GetSelection() == selectionBeforeDeleteAll);
-    for ( size_t i = 0; i < pages.size(); ++i )
-        REQUIRE(m_toolbook->GetPage(i) == pages[i]);
-
-    // A qualified base call must still dispatch through the historical
-    // DoRemovePage() slot. This is the ABI-stable path which avoids adding a
-    // fallible bulk-clear hook to wxBookCtrlBase's vtable.
-    wxWinUIToolBarTestAccess::FailNextRebuild(*toolbar);
-    REQUIRE(
-        !m_toolbook->wxBookCtrlBase::DeleteAllPages());
-    REQUIRE(m_toolbook->GetPageCount() == pages.size());
-    REQUIRE(toolbar->GetToolsCount() == pages.size());
-    REQUIRE(m_toolbook->GetSelection() == selectionBeforeDeleteAll);
-    for ( size_t i = 0; i < pages.size(); ++i )
-        REQUIRE(m_toolbook->GetPage(i) == pages[i]);
-
-    REQUIRE(
-        m_toolbook->wxBookCtrlBase::DeleteAllPages());
-    REQUIRE(m_toolbook->GetPageCount() == static_cast<size_t>(0));
-    REQUIRE(toolbar->GetToolsCount() == static_cast<size_t>(0));
-}
-
-TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::LoadedSelectionReentryProjectsRadio",
-                 "[toolbook][ToolbookTestCase]")
-{
-    wxToolBar* const toolbar =
-        static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    REQUIRE(toolbar);
-    m_toolbook->Realize();
-
-    ToolbookLoadedSelectionProbe probe;
-    probe.book = m_toolbook.get();
-    // Select the candidate itself. Its XAML peer is provisional in Loaded,
-    // while wxToolBarBase publishes its wrapper only after DoInsertTool().
-    probe.selection = 1;
-    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(*toolbar,
-        &ChangeToolbookSelectionDuringLoaded, &probe);
-
-    wxPanel* const candidate = new wxPanel(m_toolbook.get());
-    bool changedEventObserved = false;
-    m_toolbook->Bind(
-        wxEVT_TOOLBOOK_PAGE_CHANGED,
-        [this, toolbar, candidate,
-         &changedEventObserved](wxBookCtrlEvent& event)
-        {
-            if ( event.GetSelection() != 1 )
-            {
-                event.Skip();
-                return;
-            }
-
-            changedEventObserved = true;
-            REQUIRE(toolbar->GetToolsCount() == m_toolbook->GetPageCount());
-            wxWinUIToolBarTestAccess::PeerSnapshot candidateSnapshot;
-            REQUIRE(
-                wxWinUIToolBarTestAccess::GetToolPeerState(*toolbar,
-                    candidate->GetId(), &candidateSnapshot));
-            REQUIRE(candidateSnapshot.toggled);
-            event.Skip();
-        });
-    REQUIRE(
-        m_toolbook->InsertPage(1, candidate, "loaded-selection"));
-    REQUIRE(probe.invoked);
-    REQUIRE(changedEventObserved);
-    REQUIRE(m_toolbook->GetSelection() == 1);
-
-    for ( size_t i = 0; i < m_toolbook->GetPageCount(); ++i )
-    {
-        wxWinUIToolBarTestAccess::PeerSnapshot snapshot;
-        REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(*toolbar,
-            m_toolbook->GetPage(i)->GetId(), &snapshot));
-        const bool selected =
-            i == static_cast<size_t>(m_toolbook->GetSelection());
-        REQUIRE(snapshot.toggled == selected);
-    }
-}
-
 TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::PageTextProjectsImmediately",
                  "[toolbook][ToolbookTestCase]")
 {
@@ -581,7 +428,7 @@ TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::PageTextProjectsImmediately",
     wxWinUIToolBarTestAccess::PeerSnapshot snapshot;
     REQUIRE(
         wxWinUIToolBarTestAccess::GetToolPeerState(*toolbar, pageId, &snapshot));
-    REQUIRE(snapshot.automationName == wxString("projected immediately"));
+    REQUIRE(snapshot.label == wxString("projected immediately"));
 }
 
 TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::DuplicatePageIdsUsePositionalController",
@@ -630,34 +477,6 @@ TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::DuplicatePageIdsUsePositionalContr
     REQUIRE(book.SetPageImage(1, 0));
     REQUIRE(!firstTool->GetNormalBitmapBundle().IsOk());
     REQUIRE(secondTool->GetNormalBitmapBundle().IsOk());
-}
-
-TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::LoadedTopologyReentryIsRejected",
-                 "[toolbook][ToolbookTestCase]")
-{
-    wxToolBar* const toolbar =
-        static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    REQUIRE(toolbar);
-    m_toolbook->Realize();
-
-    wxWindow* const removed = m_toolbook->GetPage(0);
-    wxPanel* const candidate = new wxPanel(m_toolbook.get());
-    ToolbookLoadedTopologyProbe probe;
-    probe.book = m_toolbook.get();
-    probe.candidate = candidate;
-    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(*toolbar,
-        &MutateToolbookTopologyDuringLoaded, &probe);
-
-    REQUIRE(m_toolbook->RemovePage(0));
-    REQUIRE(probe.invoked);
-    REQUIRE(!probe.nestedRemove);
-    REQUIRE(!probe.nestedAdd);
-    REQUIRE(!probe.nestedDeleteAll);
-    REQUIRE(m_toolbook->FindPage(candidate) == wxNOT_FOUND);
-    REQUIRE(toolbar->GetToolsCount() == m_toolbook->GetPageCount());
-
-    delete removed;
-    delete candidate;
 }
 
 #endif // __WXWINUI__

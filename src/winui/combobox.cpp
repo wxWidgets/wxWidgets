@@ -36,6 +36,7 @@
 #include "wx/weakref.h"
 #include "wx/winui/winui.h"
 #include "keyboard.h"
+#include "wx/winui/private/appearance.h"
 #include "wx/winui/private/textpeer.h"
 
 #include <algorithm>
@@ -1863,7 +1864,9 @@ bool wxComboBox::CreateSimplePeer()
         if ( !m_hint.empty() )
             edit.PlaceholderText(wxWinUIToHString(m_hint));
 
-        MUXC::ListBox list;
+        // With the items of a WinUI list, not the ones of the classic
+        // ListBox this control still is.
+        MUXC::ListBox list = wxWinUICreateStyledListBox();
         list.SelectionMode(MUXC::SelectionMode::Single);
         list.MinHeight(0.0);
         // Before the first constrained realization, neither the intrinsic

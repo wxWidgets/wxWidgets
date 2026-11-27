@@ -106,8 +106,9 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     wxFlexGridSizer *sizer2Col = new wxFlexGridSizer(3);
     sizer2Col->AddGrowableCol(2);
 
-    sizer2Col->Add(new wxStaticText(this, wxID_ANY, _("Search for:"),
-                                    wxDefaultPosition, wxSize(80, wxDefaultCoord)),
+    // No fixed width in pixels: it cuts the text at any scale above 100 %,
+    // and the column is as wide as the wider label anyway.
+    sizer2Col->Add(new wxStaticText(this, wxID_ANY, _("Search for:")),
                                     0,
                                     wxALIGN_CENTRE_VERTICAL | wxALIGN_RIGHT);
 
@@ -118,8 +119,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
 
     if ( style & wxFR_REPLACEDIALOG )
     {
-        sizer2Col->Add(new wxStaticText(this, wxID_ANY, _("Replace with:"),
-                                        wxDefaultPosition, wxSize(80, wxDefaultCoord)),
+        sizer2Col->Add(new wxStaticText(this, wxID_ANY, _("Replace with:")),
                                         0,
                                         wxALIGN_CENTRE_VERTICAL |
                                         wxALIGN_RIGHT | wxTOP, 5);

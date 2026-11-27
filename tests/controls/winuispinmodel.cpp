@@ -729,6 +729,9 @@ TEST_CASE("wxWinUI NumberBox ForceRender never resumes through a dead owner",
             host->FlushSync();
         }
         invoking->SetSize(wxSize(173, 41));
+        // Resizing alone repositions the slot at once: ask for the full
+        // sync this test is about.
+        wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
         bool slotSynced = false;
         wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
@@ -758,6 +761,9 @@ TEST_CASE("wxWinUI NumberBox ForceRender never resumes through a dead owner",
             host->FlushSync();
         }
         invoking->SetSize(wxSize(181, 43));
+        // Resizing alone repositions the slot at once: ask for the full
+        // sync this test is about.
+        wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
         bool slotSynced = false;
         wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)

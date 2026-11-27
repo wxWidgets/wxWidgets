@@ -504,8 +504,39 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
             dlgExStyle |= WS_EX_LAYOUTRTL;
 
-        if ( !MSWCreate(GetMSWClassName(GetWindowStyle()), title.t_str(), pos,
-                        sizeReal, dlgStyle, dlgExStyle) )
+        // A dialog template puts a dialog created without an explicit
+        // position at a fixed offset from its owner's client area and keeps
+        // it on the owner's monitor. A popup window given CW_USEDEFAULT lands
+        // on the screen origin instead, so compute the same position here.
+        wxPoint dlgPos = pos;
+        if ( dlgPos.x == wxDefaultCoord )
+        {
+            const LONG baseUnits = ::GetDialogBaseUnits();
+            POINT origin = { ::MulDiv(34, LOWORD(baseUnits), 4),
+                             ::MulDiv(22, HIWORD(baseUnits), 8) };
+            if ( const HWND owner = (HWND)MSWGetParent() )
+            {
+                if ( !::IsIconic(owner) )
+                    ::ClientToScreen(owner, &origin);
+            }
+
+            MONITORINFO monitor;
+            monitor.cbSize = sizeof(monitor);
+            if ( ::GetMonitorInfo(
+                    ::MonitorFromPoint(origin, MONITOR_DEFAULTTONEAREST),
+                    &monitor) )
+            {
+                const RECT& work = monitor.rcWork;
+                origin.x = wxMax(work.left,
+                    wxMin(origin.x, work.right - sizeReal.x));
+                origin.y = wxMax(work.top,
+                    wxMin(origin.y, work.bottom - sizeReal.y));
+            }
+            dlgPos = wxPoint(origin.x, origin.y);
+        }
+
+        if ( !MSWCreate(GetMSWClassName(GetWindowStyle()), title.t_str(),
+                        dlgPos, sizeReal, dlgStyle, dlgExStyle) )
             return false;
 #else // regular wxMSW: real dialog template
         // we have different dialog templates to allows creation of dialogs

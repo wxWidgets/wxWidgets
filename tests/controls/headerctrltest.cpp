@@ -523,10 +523,13 @@ TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::GenericSortMutationDuringCance
             m_header->DeleteAllColumns();
         });
 
+    // In the middle of the second column: nearer its start, the press is on
+    // the separator at a display scale of 200 % and starts a resizing, which
+    // updating a column does not end.
     wxMouseEvent down(wxEVT_LEFT_DOWN);
     down.SetId(m_header->GetId());
     down.SetEventObject(m_header.get());
-    down.SetPosition(wxPoint(90, 1));
+    down.SetPosition(wxPoint(120, 1));
     m_header->ProcessWindowEvent(down);
     REQUIRE(m_header->HasCapture());
 

@@ -90,6 +90,36 @@ bool wxVListBox::Create(wxWindow *parent,
     // flicker-free drawing requires this
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The item under the pointer is on a subtle fill, as the one of a
+    // WinUI list: see OnDrawBackground().
+    const auto setHover = [this](int item)
+    {
+        if ( item == m_hoverItem )
+            return;
+
+        const int previous = m_hoverItem;
+        m_hoverItem = item;
+        if ( previous != wxNOT_FOUND &&
+             static_cast<size_t>(previous) < GetItemCount() )
+        {
+            RefreshRow(previous);
+        }
+        if ( item != wxNOT_FOUND )
+            RefreshRow(item);
+    };
+    Bind(wxEVT_MOTION, [this, setHover](wxMouseEvent& event)
+    {
+        event.Skip();
+        setHover(VirtualHitTest(event.GetPosition().y));
+    });
+    Bind(wxEVT_LEAVE_WINDOW, [setHover](wxMouseEvent& event)
+    {
+        event.Skip();
+        setHover(wxNOT_FOUND);
+    });
+#endif
+
     return true;
 }
 
@@ -484,7 +514,12 @@ void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
         return;
 
     const bool isSelected = IsSelected(n),
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+               isCurrent = IsCurrent(n) ||
+                           static_cast<int>(n) == m_hoverItem;
+#else
                isCurrent = IsCurrent(n);
+#endif
     if ( isSelected || isCurrent )
     {
         int flags = 0;

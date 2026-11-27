@@ -1963,8 +1963,12 @@ public:
             wxDefaultPosition, wxSize(1240, 320));
         m_frame = wxWeakRef<wxFrame>(frame);
 
+        // The widths at which the groups collapse are in DIPs: so are these.
+        frame->SetSize(frame->FromDIP(wxSize(1240, 320)));
+
         wxWindow * const shell = new wxWindow(
-            frame, wxID_ANY, wxPoint(0, 0), wxSize(1200, 240),
+            frame, wxID_ANY, wxPoint(0, 0),
+            frame->FromDIP(wxSize(1200, 240)),
             wxTAB_TRAVERSAL | wxBORDER_NONE);
         m_shell = wxWeakRef<wxWindow>(shell);
 
@@ -3049,8 +3053,10 @@ TEST_CASE("WinUIRibbon::NativeButtonBarPeersAndEvents",
     CHECK(wxWinUITopLevelHost::FindSlotOwner(bar) ==
           wxWinUITopLevelHost::FindForTLW(fixture.GetFrameA()));
 
+    // A command which only opens a menu is one control, a DropDownButton:
+    // it has no arrow of its own to find.
     for ( const auto name : { L"Normal", L"Toggle", L"Dropdown",
-                             L"Dropdown menu", L"Hybrid", L"Hybrid menu" } )
+                             L"Hybrid", L"Hybrid menu" } )
     {
         INFO(wxString(name));
         const auto command = FindNativeRibbonCommand(bar, name);
@@ -3067,12 +3073,14 @@ TEST_CASE("WinUIRibbon::NativeButtonBarPeersAndEvents",
         CHECK(wxString(peer.GetName().c_str()) == name);
         CHECK(peer.IsEnabled());
     }
-    CHECK(FindNativeRibbonCommand(bar, L"Normal").try_as<MUXC::AppBarButton>());
+    // Each kind of command is the WinUI control made for it.
+    CHECK(FindNativeRibbonCommand(bar, L"Normal").try_as<MUXC::Button>());
     CHECK(FindNativeRibbonCommand(bar, L"Toggle")
-              .try_as<MUXC::AppBarToggleButton>());
-    CHECK(FindNativeRibbonCommand(bar, L"Dropdown").try_as<MUXC::AppBarButton>());
-    CHECK(FindNativeRibbonCommand(bar, L"Hybrid").try_as<MUXC::AppBarButton>());
-    CHECK(FindNativeRibbonCommand(bar, L"Dropdown menu").try_as<MUXC::Button>());
+              .try_as<MUXC::Primitives::ToggleButton>());
+    CHECK(FindNativeRibbonCommand(bar, L"Dropdown")
+              .try_as<MUXC::DropDownButton>());
+    CHECK(FindNativeRibbonCommand(bar, L"Hybrid").try_as<MUXC::SplitButton>());
+    CHECK_FALSE(FindNativeRibbonCommand(bar, L"Dropdown menu"));
     CHECK(FindNativeRibbonCommand(bar, L"Hybrid menu").try_as<MUXC::Button>());
 
     const auto events = RecordNativeRibbonEvents(bar);
@@ -3107,7 +3115,7 @@ TEST_CASE("WinUIRibbon::NativeButtonBarPeersAndEvents",
     invoke(L"Dropdown");
     CheckNativeRibbonEvent(*events, 4, bar, ID_RIBBON_BUTTON_DROPDOWN,
                            wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED);
-    invoke(L"Dropdown menu");
+    invoke(L"Dropdown");
     CheckNativeRibbonEvent(*events, 5, bar, ID_RIBBON_BUTTON_DROPDOWN,
                            wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED);
     invoke(L"Hybrid");
@@ -3225,7 +3233,7 @@ TEST_CASE("WinUIRibbon::NativeButtonBarPopupAndUpdateUIContracts",
     bar->Bind(wxEVT_RIBBONBUTTONBAR_CLICKED, onCommand);
     bar->Bind(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, onCommand);
     const auto dropdown = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
-        FindNativeRibbonCommand(bar, L"Dropdown menu"),
+        FindNativeRibbonCommand(bar, L"Dropdown"),
         MUXAP::PatternInterface::Invoke);
     REQUIRE(dropdown);
     dropdown.Invoke();
@@ -3456,11 +3464,14 @@ TEST_CASE("WinUIRibbon::NativeButtonBarRetiredProviders",
     REQUIRE(fixture.Create(true, 92));
     wxRibbonButtonBar * const bar = fixture.GetButtonBar();
     REQUIRE(bar);
+    // Right after a test which destroyed a control from one of its XAML
+    // callbacks the first command takes a fixed while to load, about 150
+    // rounds here against 7 otherwise: the default budget is too short.
     REQUIRE(DrainUntil([bar]()
     {
         const auto command = FindNativeRibbonCommand(bar, L"Normal");
         return command && command.IsLoaded();
-    }));
+    }, 600));
     const auto events = RecordNativeRibbonEvents(bar);
     const auto retired = FindNativeRibbonCommand(bar, L"Normal");
     const auto retiredInvoke = GetNativeRibbonPattern<MUXAPR::IInvokeProvider>(
@@ -3704,7 +3715,7 @@ TEST_CASE("WinUIRibbon::NativeR2BoundedSharedHostSpike",
     {
         CAPTURE(cycle);
         const unsigned narrowLayoutEvent = state->layoutEvents;
-        shell->SetSize(wxSize(450, 240));
+        shell->SetSize(shell->FromDIP(wxSize(450, 240)));
         host->MarkDirty(shell);
         host->FlushSync();
         REQUIRE(DrainUntil(
@@ -3737,7 +3748,7 @@ TEST_CASE("WinUIRibbon::NativeR2BoundedSharedHostSpike",
         }
 
         const unsigned wideLayoutEvent = state->layoutEvents;
-        shell->SetSize(wxSize(1200, 240));
+        shell->SetSize(shell->FromDIP(wxSize(1200, 240)));
         host->MarkDirty(shell);
         host->FlushSync();
         REQUIRE(DrainUntil(
@@ -3786,7 +3797,7 @@ TEST_CASE("WinUIRibbon::NativeR2BoundedSharedHostSpike",
     // Disconnect() must first retire callbacks/generation, then close/release
     // the transient tree before the common host detaches its exact slot.
     const unsigned terminalLayoutEvent = state->layoutEvents;
-    shell->SetSize(wxSize(450, 240));
+    shell->SetSize(shell->FromDIP(wxSize(450, 240)));
     host->MarkDirty(shell);
     host->FlushSync();
     REQUIRE(DrainUntil(

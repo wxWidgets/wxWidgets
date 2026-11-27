@@ -53,6 +53,30 @@ wxColour wxAuiWinUIBlend(const wxColour& back, const wxColour& over,
 // Corner radius of a command bar tool, in DIPs.
 constexpr int wxAuiWinUICornerRadius = 4;
 
+#ifdef wxHAS_SVG
+// The arrow of a tool with a menu and the button of the tools which do not
+// fit, as a CommandBar shows them: a thin chevron, three dots.
+wxBitmapBundle wxAuiWinUIGlyph(const char *svg, const wxSize& size,
+                               const wxColour& colour)
+{
+    wxString text = wxString::FromAscii(svg);
+    text.Replace("currentColor", colour.GetAsString(wxC2S_HTML_SYNTAX));
+    return wxBitmapBundle::FromSVG(text.ToAscii(), size);
+}
+
+const char * const wxAuiWinUIChevronSvg =
+    "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"8\" height=\"8\">"
+    "<path d=\"M 1 2.75 L 4 5.75 L 7 2.75\" stroke=\"currentColor\""
+    " fill=\"none\" stroke-width=\"1\" stroke-linecap=\"round\""
+    " stroke-linejoin=\"round\"/></svg>";
+
+const char * const wxAuiWinUIMoreSvg =
+    "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\">"
+    "<circle cx=\"3\" cy=\"8\" r=\"1.25\" fill=\"currentColor\"/>"
+    "<circle cx=\"8\" cy=\"8\" r=\"1.25\" fill=\"currentColor\"/>"
+    "<circle cx=\"13\" cy=\"8\" r=\"1.25\" fill=\"currentColor\"/></svg>";
+#endif // wxHAS_SVG
+
 // Length of the accent indicator of a toggled tool, as a fraction of the
 // shorter side of the tool.
 constexpr double wxAuiWinUIIndicatorFraction = 0.55;
@@ -91,6 +115,19 @@ void wxAuiWinUIToolBarArt::UpdateColoursFromSystem()
     m_dividerColour = wxAuiWinUIBlend(m_baseColour, over, m_dark ? 0.16 : 0.13);
 
     m_accentColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+
+#ifdef wxHAS_SVG
+    const wxColour text = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
+    const wxColour faint = wxAuiWinUIBlend(m_baseColour, text, 0.4);
+    m_buttonDropDownBmp =
+        wxAuiWinUIGlyph(wxAuiWinUIChevronSvg, wxSize(8, 8), text);
+    m_disabledButtonDropDownBmp =
+        wxAuiWinUIGlyph(wxAuiWinUIChevronSvg, wxSize(8, 8), faint);
+    m_overflowBmp =
+        wxAuiWinUIGlyph(wxAuiWinUIMoreSvg, wxSize(16, 16), text);
+    m_disabledOverflowBmp =
+        wxAuiWinUIGlyph(wxAuiWinUIMoreSvg, wxSize(16, 16), faint);
+#endif // wxHAS_SVG
 }
 
 void wxAuiWinUIToolBarArt::DrawBackground(wxDC& dc,

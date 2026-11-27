@@ -27,6 +27,10 @@
 
 #include "wx/htmllbox.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/themecolours.h"
+#endif
+
 #include "wx/html/htmlcell.h"
 #include "wx/html/winpars.h"
 #include "wx/weakref.h"
@@ -253,7 +257,16 @@ bool wxHtmlListBox::Create(wxWindow *parent,
                            long style,
                            const wxString& name)
 {
-    return wxVListBox::Create(parent, id, pos, size, style, name);
+    if ( !wxVListBox::Create(parent, id, pos, size, style, name) )
+        return false;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // What an item of a WinUI list has around its content: 12 before it,
+    // and enough above and under a line of text to be 36 high.
+    SetMargins(FromDIP(12), FromDIP(8));
+#endif
+
+    return true;
 }
 
 wxHtmlListBox::~wxHtmlListBox()
@@ -273,6 +286,30 @@ wxHtmlListBox::~wxHtmlListBox()
 // wxHtmlListBox appearance
 // ----------------------------------------------------------------------------
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// A selected item is on the subtle fill the renderer draws, not on the
+// highlight colour: its text keeps its colour and has that fill behind it.
+wxColour
+wxHtmlListBox::GetSelectedTextColour(const wxColour& colFg) const
+{
+    return colFg;
+}
+
+wxColour
+wxHtmlListBox::GetSelectedTextBgColour(const wxColour& WXUNUSED(colBg)) const
+{
+    const wxColour chosen = GetSelectionBackground();
+    if ( chosen.IsOk() )
+        return chosen;
+
+    return wxWinUIBlendOver(
+        wxWinUIGetThemeColour(wxWinUIThemeColour::SubtleFill),
+        GetBackgroundColour());
+}
+
+#else // !WinUI
+
 wxColour
 wxHtmlListBox::GetSelectedTextColour(const wxColour& WXUNUSED(colFg)) const
 {
@@ -284,6 +321,8 @@ wxHtmlListBox::GetSelectedTextBgColour(const wxColour& WXUNUSED(colBg)) const
 {
     return GetSelectionBackground();
 }
+
+#endif // WinUI/!WinUI
 
 // ----------------------------------------------------------------------------
 // wxHtmlListBox items markup
@@ -434,6 +473,18 @@ void wxHtmlListBox::SetItemCount(size_t count)
 void
 wxHtmlListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The selected item and the one under the pointer are those of a WinUI
+    // list, which the renderer draws (a subtle fill with rounded corners,
+    // and a bar in the accent colour for the selection), unless the program
+    // chose a colour for the selection: then its plain rectangle.
+    if ( !GetSelectionBackground().IsOk() )
+    {
+        wxVListBox::OnDrawBackground(dc, rect, n);
+        return;
+    }
+#endif
+
     if ( IsSelected(n) )
     {
         if ( DoDrawSolidBackground

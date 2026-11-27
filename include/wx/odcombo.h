@@ -382,6 +382,21 @@ protected:
     // null popup can be used to indicate default interface
     virtual void DoSetPopupControl(wxComboPopup* popup) override;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+public:
+    // A combo box of this very class, whose items are plain text, opens the
+    // list of the ComboBox of WinUI which is its face, and not a list of wx
+    // made to look like it: see odcombo.cpp. One derived from this class
+    // draws its items itself, which only the list of wx can show.
+    virtual void ShowPopup() override;
+    virtual void HidePopup(bool generateEvent = false) override;
+
+protected:
+    bool WinUIUsesNativeList() const;
+    void WinUIOnNativeListClosed(int chosen);
+    void WinUIOnNativeListKey(wxKeyEvent& event);
+#endif
+
     // clears all allocated client data
     void ClearClientDatas();
 

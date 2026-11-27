@@ -763,7 +763,12 @@ void wxBookCtrlBase::DoSize()
         }
     }
 
-    // resize all pages to fit the new control size
+    // Resize the pages to fit the new control size: those which are shown.
+    // A hidden page is given its size when it is selected (see the
+    // reconciliation of the selection), and laying every hidden page out,
+    // with all its children, at each step of a resize costs several times
+    // what the visible one does: a book of ten pages moved ten times the
+    // windows it needed to.
     const wxRect pageRect = GetPageRect();
     if ( !isControllerCurrent() )
         return;
@@ -782,6 +787,9 @@ void wxBookCtrlBase::DoSize()
                 wxT("Null page in a control that does not allow null pages?") );
             continue;
         }
+
+        if ( !page->IsShown() )
+            continue;
 
         page->SetSize(pageRect);
         if ( !isControllerCurrent() || !pages.IsPageCurrent(this, i) )

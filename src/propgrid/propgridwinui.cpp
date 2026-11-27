@@ -18,6 +18,7 @@
 #include "wx/textctrl.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/appearance.h"
+#include "wx/winui/private/themecolours.h"
 #include "wx/winui/private/tlwhost.h"
 #include "../winui/private.h"
 #if wxUSE_DATEPICKCTRL
@@ -48,6 +49,71 @@ namespace A = X::Automation;
 namespace
 {
 struct InvalidPropertySnapshot {};
+
+// Rounds the corners of a small picture (the colour a colour property shows
+// before its value), as WinUI does for a swatch: outside its corners it shows
+// what is under it.
+wxBitmap wxPGWinUIRoundCorners(const wxBitmap& bitmap, double radius,
+                               double scale,
+                               const wxColour& outline = wxColour(),
+                               double line = 1)
+{
+#if wxUSE_IMAGE
+    wxImage image = bitmap.ConvertToImage();
+    if ( !image.IsOk() )
+        return bitmap;
+    if ( !image.HasAlpha() )
+        image.InitAlpha();
+
+    const int w = image.GetWidth(),
+              h = image.GetHeight();
+    const double strength = outline.IsOk() ? outline.Alpha() / 255.0 : 0;
+    for ( int y = 0; y < h; ++y )
+    {
+        for ( int x = 0; x < w; ++x )
+        {
+            // How far inside the rounded rectangle the middle of the pixel
+            // is: negative outside of it.
+            const double qx = std::fabs(x + 0.5 - w / 2.0) - (w / 2.0 - radius),
+                         qy = std::fabs(y + 0.5 - h / 2.0) - (h / 2.0 - radius);
+            const double inside = radius -
+                std::hypot(std::max(qx, 0.0), std::max(qy, 0.0)) -
+                std::min(std::max(qx, qy), 0.0);
+            const double covered = std::clamp(inside + 0.5, 0.0, 1.0);
+
+            // The outline: the pixels nearest to the edge take its colour.
+            const double edge = strength *
+                std::clamp(line + 0.5 - inside, 0.0, 1.0);
+            if ( edge > 0 )
+            {
+                const auto mix = [edge](unsigned char under, unsigned char over)
+                {
+                    return static_cast<unsigned char>(
+                        std::lround(under * (1 - edge) + over * edge));
+                };
+                image.SetRGB(x, y,
+                    mix(image.GetRed(x, y), outline.Red()),
+                    mix(image.GetGreen(x, y), outline.Green()),
+                    mix(image.GetBlue(x, y), outline.Blue()));
+            }
+
+            if ( covered < 1.0 )
+            {
+                image.SetAlpha(x, y, static_cast<unsigned char>(
+                    image.GetAlpha(x, y) * covered));
+            }
+        }
+    }
+
+    return wxBitmap(image, wxBITMAP_SCREEN_DEPTH, scale);
+#else
+    wxUnusedVar(radius);
+    wxUnusedVar(scale);
+    wxUnusedVar(outline);
+    wxUnusedVar(line);
+    return bitmap;
+#endif
+}
 
 #if wxUSE_DATEPICKCTRL
 // Keep the real CalendarDatePicker and its template. DateTimeFormatter cannot
@@ -427,6 +493,9 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         C::Image image{nullptr};
         C::TextBlock text{nullptr};
         C::Border selection{nullptr};
+        // The outline of the picture a property paints before its value.
+        C::Border frame{nullptr};
+        bool swatch = false;
         C::Grid previewLayout{nullptr};
         C::Control preview{nullptr};
         C::TextBlock previewLabel{nullptr};
@@ -445,6 +514,10 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         bool datePrepared = false;
 #endif
         X::Media::RectangleGeometry clip{nullptr};
+        // The room of the margin and of the indent before the text of the
+        // first cell of a row, which starts at the edge of the grid so that
+        // the line under the row goes all the way; in DIPs.
+        double lead = 0;
         wxString label;
         wxPGCell appearance;
         wxFont font;
@@ -602,19 +675,63 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
     bool Initialize()
     {
         if ( !host.Initialize(owner.get()) || !Alive() ) return false;
-        // Retain the actual WinUI Button template/input/UIA behavior, but use
-        // a subtle row surface instead of the ordinary raised-button fill.
+        // The cells are real Buttons (input, UIA) with the look of the rows
+        // of a WinUI list, of which WinUI.TableView is the model: the line
+        // of the table under each of them, square, and over it a fill with
+        // rounded corners which shows under the pointer and for what is
+        // selected. The fill is inset by the Padding of the Button and has
+        // its CornerRadius: the cells of a row share one rounded fill.
         // ThemeResource expressions stay attached to each native Style, so
         // light/dark/high-contrast transitions are not frozen RGB snapshots.
         const auto styles = X::Markup::XamlReader::Load(LR"xaml(
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
- <Style x:Key="PropertyCell" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+ <Style x:Key="PropertyCell" TargetType="Button">
   <Setter Property="Background" Value="{ThemeResource SubtleFillColorTransparentBrush}" />
   <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}" />
+  <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}" />
   <Setter Property="BorderThickness" Value="0" />
   <Setter Property="Padding" Value="0" />
-  <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
+  <Setter Property="CornerRadius" Value="0" />
+  <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+  <Setter Property="VerticalContentAlignment" Value="Stretch" />
+  <Setter Property="UseSystemFocusVisuals" Value="True" />
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="Button">
+     <Grid Background="Transparent">
+      <Border x:Name="Fill" Margin="{TemplateBinding Padding}"
+              CornerRadius="{TemplateBinding CornerRadius}"
+              Background="{TemplateBinding Background}" />
+      <Border x:Name="Hover" Margin="{TemplateBinding Padding}" Opacity="0"
+              CornerRadius="{TemplateBinding CornerRadius}"
+              Background="{ThemeResource SubtleFillColorSecondaryBrush}" />
+      <ContentPresenter x:Name="ContentPresenter"
+                        Content="{TemplateBinding Content}"
+                        Foreground="{TemplateBinding Foreground}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+      <Border IsHitTestVisible="False"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}" />
+      <VisualStateManager.VisualStateGroups>
+       <VisualStateGroup x:Name="CommonStates">
+        <VisualState x:Name="Normal" />
+        <VisualState x:Name="PointerOver">
+         <VisualState.Setters><Setter Target="Hover.Opacity" Value="1" /></VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="Pressed">
+         <VisualState.Setters><Setter Target="Hover.Opacity" Value="0.6" /></VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="Disabled">
+         <VisualState.Setters><Setter Target="ContentPresenter.Opacity" Value="0.45" /></VisualState.Setters>
+        </VisualState>
+       </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+     </Grid>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
  </Style>
  <Style x:Key="PropertySelectedCell" TargetType="Button" BasedOn="{StaticResource PropertyCell}">
   <Setter Property="Background" Value="{ThemeResource SubtleFillColorSecondaryBrush}" />
@@ -685,8 +802,13 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         auto cell = std::make_shared<Cell>();
         cell->appearance.SetEmptyData();
         cell->button = MakeButton(wxString::Format("wxProperty.Cell.%s.%u", row->name, column));
+        // The lines of the table: under each row, and between the name of a
+        // property and its value.
+        cell->button.BorderThickness({0, 0, column == 0 ? 1.0 : 0.0, 1});
+        cell->frame = wxWinUICreateThemeBrushBorder(
+            "ControlStrongStrokeColorDefaultBrush", wxWinUIThemeBrushProperty::BorderBrush);
         cell->content = C::Grid();
-        cell->content.Padding({6, 0, 6, 0});
+        cell->content.Padding({12, 0, 12, 0});
         for ( unsigned index = 0; index != 2; ++index )
         {
             C::ColumnDefinition definition;
@@ -702,6 +824,18 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         C::Grid::SetColumn(cell->text, 1);
         cell->content.Children().Append(cell->image);
         cell->content.Children().Append(cell->text);
+        if ( cell->frame )
+        {
+            // The outline of the swatch of a colour, over its picture.
+            cell->frame.IsHitTestVisible(false);
+            cell->frame.BorderThickness({1, 1, 1, 1});
+            cell->frame.CornerRadius({4, 4, 4, 4});
+            cell->frame.Opacity(0.5);
+            cell->frame.VerticalAlignment(X::VerticalAlignment::Center);
+            cell->frame.HorizontalAlignment(X::HorizontalAlignment::Left);
+            cell->frame.Visibility(X::Visibility::Collapsed);
+            cell->content.Children().Append(cell->frame);
+        }
         if ( column == 0 )
         {
             cell->selection = X::Markup::XamlReader::Load(LR"xaml(
@@ -827,6 +961,11 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
                 {
                     C::TextBox text;
                     text.IsReadOnly(true);
+                    // As high as its text, which is then in the middle of
+                    // the row like the name of the property: with the room
+                    // of a field around it, it was cut by the line under.
+                    text.Padding({wxPG_WINUI_TEXT_INSET - wxPG_WINUI_VALUE_INSET, 0, 6, 0});
+                    text.BorderThickness({0, 0, 0, 0});
                     cell->preview = text;
                 }
                 else if ( kind == PreviewKind::Choice || kind == PreviewKind::EditableChoice )
@@ -888,6 +1027,9 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
                     control.MinHeight(0);
                     control.HorizontalAlignment(X::HorizontalAlignment::Stretch);
                     control.VerticalAlignment(X::VerticalAlignment::Center);
+                    // The value of a cell, not a field: the editor shows
+                    // for the property being edited only.
+                    wxWinUIApplyTableCellValueStyle(control);
                     A::AutomationProperties::SetAccessibilityView(control, A::Peers::AccessibilityView::Raw);
                     A::AutomationProperties::SetAutomationId(control, wxWinUIToHString(id));
                 };
@@ -899,8 +1041,9 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
                 if ( hasButton )
                 {
                     cell->previewButton = C::Button();
+                    wxWinUIApplySubtleButtonStyle(cell->previewButton);
                     cell->previewButton.Content(winrt::box_value(L"\u2026"));
-                    cell->previewButton.Margin({4, 0, 0, 0});
+                    cell->previewButton.Margin({2, 0, 0, 0});
                     prepare(cell->previewButton, "wxProperty.PreviewButton." + row->name);
                     C::Grid::SetColumn(cell->previewButton, 1);
                     cell->previewLayout.Children().Append(cell->previewButton);
@@ -1146,8 +1289,7 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         }
         else if ( !cell->custom && needsRead )
         {
-            cell->content.Padding({6, 0, 6, 0}); Check(s, property);
-            cell->image.Margin({0, 0, 4, 0}); Check(s, property);
+            cell->image.Margin({0, 0, 8, 0}); Check(s, property);
             wxString label;
             wxPGCell appearance;
             int choice = -1;
@@ -1159,12 +1301,54 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
             const wxBitmapBundle bundle = appearance.GetBitmap();
             wxBitmap bitmap;
             wxSize imageSize;
+            bool swatch = false;
             if ( bundle.IsOk() )
             {
                 imageSize = bundle.GetPreferredLogicalSizeFor(owner.get()); Check(s, property);
                 bitmap = bundle.GetBitmapFor(owner.get()); Check(s, property);
             }
+            else if ( column == 1 && !property->IsValueUnspecified() )
+            {
+                // What the property paints before its value: the colour of a
+                // colour property, without which "Custom" says nothing, the
+                // picture of an image file one. A square as high as the text.
+                const wxSize measured = owner->GetImageSize(property, -1); Check(s, property);
+                if ( measured.x > 0 )
+                {
+                    const int side = owner->FromDIP(16);
+                    imageSize = wxSize(side, side);
+                    wxBitmap painted;
+                    painted.CreateWithLogicalSize(side, side, s.scale);
+                    {
+                        wxMemoryDC dc(painted);
+                        dc.SetBackground(wxBrush(owner->GetCellBackgroundColour()));
+                        dc.Clear();
+                        // Its outline is a XAML one, rounded: see the frame.
+                        dc.SetPen(*wxTRANSPARENT_PEN);
+                        wxPGPaintData paint;
+                        paint.m_parent = owner.get();
+                        paint.m_choiceItem = -1;
+                        paint.m_drawnWidth = side;
+                        paint.m_drawnHeight = side;
+                        property->OnCustomPaint(dc, wxRect(0, 0, side, side), paint);
+                        Check(s, property);
+                    }
+                    bitmap = wxPGWinUIRoundCorners(painted, owner->FromDIP(4), s.scale);
+                    swatch = true;
+                }
+            }
             PublishImage(cell, bitmap, imageSize, s, property);
+            cell->swatch = swatch;
+            if ( cell->frame )
+            {
+                cell->frame.Visibility(swatch ? X::Visibility::Visible : X::Visibility::Collapsed);
+                if ( swatch )
+                {
+                    cell->frame.Width(imageSize.x / s.scale);
+                    cell->frame.Height(imageSize.y / s.scale);
+                }
+                Check(s, property);
+            }
             cell->label = label; cell->appearance = appearance;
         }
         const wxFont font = cell->appearance.GetFont().IsOk() ? cell->appearance.GetFont() :
@@ -1184,6 +1368,53 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
             PresentEditorPreview(row, cell, s, editing);
         cell->text.Visibility(editing || preview ? X::Visibility::Collapsed : X::Visibility::Visible);
         Check(s, property);
+        {
+            // One rounded fill for the row, under the pointer and for the
+            // selected property: rounded at the start of its first cell and
+            // at the end of its last one, a little inside the row.
+            const bool first = column == 0;
+            const bool last = category || column + 1 == s.columns;
+            cell->button.Padding({first ? 2.0 : 0.0, 2, last ? 2.0 : 0.0, 2});
+            cell->button.CornerRadius({first ? 4.0 : 0.0, last ? 4.0 : 0.0,
+                                       last ? 4.0 : 0.0, first ? 4.0 : 0.0});
+            Check(s, property);
+        }
+        if ( !cell->custom )
+        {
+            // The text of a cell starts 12 from its edge, as in the tables
+            // of WinUI. The controls which show a value have that room
+            // inside them already, unless a picture comes first; the name
+            // of a property starts after the margin of the expanders.
+            // The control which shows a value is where its editor comes
+            // (see wxPropertyGrid::TryGetEditorWidgetRect()), and a text
+            // which has no editor starts where the one of a field does.
+            const bool picture = cell->bitmap.IsOk();
+            // The box of a CheckBox is at the very start of the control:
+            // it is put where the texts of the column start.
+            const bool box = preview && cell->preview &&
+                             cell->preview.try_as<C::CheckBox>();
+            const double inset = box ? double(wxPG_WINUI_TEXT_INSET)
+                                     : double(wxPG_WINUI_VALUE_INSET);
+            cell->content.Padding({
+                column == 0 ? cell->lead + 4
+                            : picture ? double(wxPG_WINUI_SWATCH_START)
+                                      : preview ? inset
+                                                : double(wxPG_WINUI_TEXT_INSET),
+                0,
+                preview ? inset : 12.0,
+                0}); Check(s, property);
+            // The text comes 8 after the picture, whatever shows it: a
+            // control keeps room of its own before its text.
+            double own = 0;
+            if ( preview && cell->preview )
+            {
+                own = cell->preview.try_as<C::ComboBox>() ||
+                      cell->preview.try_as<C::CalendarDatePicker>() ? 12.0
+                    : cell->preview.try_as<C::CheckBox>() ? 0.0 : 11.0;
+            }
+            cell->image.Margin({0, 0, wxPG_WINUI_SWATCH_GAP - own, 0});
+            Check(s, property);
+        }
         cell->button.IsEnabled(owner->IsEnabled() && enabled); Check(s, property);
         const auto style = !cell->custom && (selected || category)
                          ? selectedCellStyle : cellStyle;
@@ -1193,7 +1424,8 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         {
             cell->selection.Visibility(selected && !cell->custom
                 ? X::Visibility::Visible : X::Visibility::Collapsed); Check(s, property);
-            cell->text.Margin({4, 0, 0, 0}); Check(s, property);
+            // At the edge of the grid, before the margin of the expanders.
+            cell->selection.Margin({-cell->lead, 0, 0, 0}); Check(s, property);
         }
         cell->content.FlowDirection(s.rtl ? X::FlowDirection::RightToLeft
                                          : X::FlowDirection::LeftToRight); Check(s, property);
@@ -1273,6 +1505,7 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
         if ( !row->expander )
         {
             row->expander = MakeButton("wxProperty.Expand." + row->name);
+            row->expander.CornerRadius({4, 4, 4, 4});
             row->chevron = C::FontIcon();
             row->chevron.FontFamily(X::Media::FontFamily(L"Segoe Fluent Icons"));
             row->chevron.FontSize(12);
@@ -1286,16 +1519,21 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
             });
             canvas.Children().Append(row->expander); Check(s, property);
         }
-        const int extent = owner->GetMarginWidth();
-        const int left = s.rtl ? s.viewport.x - x - extent : x;
+        // A button of 24 in the margin, in the middle of the row, as the
+        // expander of a group in a table of WinUI: where wxPropertyGrid
+        // itself takes the clicks on its expanders.
+        const int extent = owner->m_iconWidth;
+        const int gutter = owner->m_gutterWidth;
+        const int left = s.rtl ? s.viewport.x - x - gutter - extent : x + gutter;
+        const int top = y + std::max(0, (s.height - owner->m_iconHeight) / 2);
         row->chevron.Glyph(property->IsExpanded() ? L"\xE70D" : s.rtl ? L"\xE76B" : L"\xE76C"); Check(s, property);
         row->expander.Width(extent / s.scale); Check(s, property);
-        row->expander.Height(s.height / s.scale); Check(s, property);
+        row->expander.Height(owner->m_iconHeight / s.scale); Check(s, property);
         row->expander.IsEnabled(owner->IsEnabled()); Check(s, property);
         row->expander.Visibility(X::Visibility::Visible); Check(s, property);
         A::AutomationProperties::SetName(row->expander, wxWinUIToHString(property->GetLabel())); Check(s, property);
         C::Canvas::SetLeft(row->expander, left / s.scale); Check(s, property);
-        C::Canvas::SetTop(row->expander, y / s.scale); Check(s, property);
+        C::Canvas::SetTop(row->expander, top / s.scale); Check(s, property);
     }
     void Publish(const Snapshot& s)
     {
@@ -1373,10 +1611,16 @@ struct wxPGWinUIProjection::Impl : std::enable_shared_from_this<Impl>
             {
                 const int width = category ? std::max(0, s.viewport.x + s.scroll.x - owner->GetMarginWidth()) :
                                              s.page->GetColumnWidth(column);
-                const int padding = column == 0 ? indent : 0;
-                const int x = start + padding;
-                const int w = std::max(0, width - padding - 1);
+                // The first cell of a row starts at the edge of the grid,
+                // under the margin of the expanders, so that the line under
+                // the row and the band of a category go all the way across;
+                // its text starts after the margin and the indent.
+                const int margin = column == 0 ? owner->GetMarginWidth() : 0;
+                const int x = start - margin;
+                const int w = std::max(0, width + margin - (category ? 0 : 1));
                 const int left = s.rtl ? s.viewport.x - x - w : x;
+                row->cells[column]->lead =
+                    column == 0 ? (margin + indent) / s.scale : 0;
                 // The row pitch already reserves the native control height.
                 // Subtracting the legacy GDI grid-line pixel here compresses
                 // a 32-DIP editor into 31 DIP and clips its native template.
@@ -1435,6 +1679,36 @@ std::shared_ptr<wxPGWinUIProjection> wxPGWinUIProjection::Create(wxPropertyGrid*
     { wxWinUILogException("property grid native creation", error); return nullptr; }
     return result;
 }
+wxBitmap wxPGWinUIPaintSwatch(wxWindow* window, wxPGProperty* property,
+                              wxPGPaintData& paint, int side)
+{
+    wxCHECK_MSG( window && property && side > 0, wxBitmap(), "invalid swatch" );
+
+    const double scale = window->GetDPIScaleFactor();
+    const wxColour ground = window->GetBackgroundColour();
+    wxBitmap painted;
+    painted.CreateWithLogicalSize(side, side, scale);
+    {
+        wxMemoryDC dc(painted);
+        dc.SetBackground(wxBrush(ground));
+        dc.Clear();
+        // Its outline is drawn below, rounded.
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        paint.m_drawnWidth = side;
+        paint.m_drawnHeight = side;
+        property->OnCustomPaint(dc, wxRect(0, 0, side, side), paint);
+    }
+
+    // The outline of the swatch of the cell: the strong stroke of a control
+    // at half its strength.
+    wxColour outline =
+        wxWinUIGetThemeColour(wxWinUIThemeColour::ControlStrongStroke);
+    outline.Set(outline.Red(), outline.Green(), outline.Blue(),
+                static_cast<unsigned char>(outline.Alpha() / 2));
+    return wxPGWinUIRoundCorners(painted, window->FromDIP(4), scale,
+                                 outline, wxMax(1, window->FromDIP(1)));
+}
+
 void wxPGWinUIProjection::Invalidate(const wxRect* rect) { const auto impl = m_impl; impl->Invalidate(rect); }
 void wxPGWinUIProjection::Update() { const auto impl = m_impl; impl->Synchronize(); }
 bool wxPGWinUIProjection::IsPublished() const { return m_impl->IsPublished(); }

@@ -34,6 +34,7 @@
 #include "wx/textcompleter.h"
 #include "wx/weakref.h"
 #include "keyboard.h"
+#include "wx/winui/private/appearance.h"
 #include "wx/winui/private/textpeer.h"
 #include "wx/winui/private/tlwhost.h"
 
@@ -4284,6 +4285,9 @@ constexpr std::size_t wxWinUIMaxSecurePasswordUndoSnapshots = 100;
 class wxWinUITextCtrlImpl
 {
 public:
+    // Created with wxBORDER_NONE: see wxWinUIApplyChromelessTextBoxStyle().
+    bool chromeless = false;
+
     ~wxWinUITextCtrlImpl()
     {
         Close();
@@ -4893,6 +4897,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( style & wxTE_RICH2 )
         style |= wxTE_RICH;
 
+    // Asked for without a border: the single line field inside another
+    // control, which draws the frame around it.
+    const bool chromeless = (style & wxBORDER_NONE) != 0 &&
+                            !(style & wxTE_MULTILINE);
+
     // The WinUI control draws its own border, so suppress the native one.
     style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
 
@@ -4908,6 +4917,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     m_editable = (style & wxTE_READONLY) == 0;
 
     m_winui.reset(new wxWinUITextCtrlImpl);
+    m_winui->chromeless = chromeless;
     m_winui->callbackState =
         std::make_shared<wxWinUITextCallbackState>(this);
     wxWinUITextCtrlImpl * const createImpl = m_winui.get();
@@ -5240,6 +5250,13 @@ bool wxTextCtrl::Create(wxWindow *parent,
             richEditBox.DisabledFormattingAccelerators(
                 rich ? MUXC::DisabledFormattingAccelerators::None
                      : MUXC::DisabledFormattingAccelerators::All);
+            // No ground of its own under the pointer or with the focus
+            // either: the local values set for the resting state do not
+            // reach the brushes its template takes for the other states,
+            // and the field showed as a lighter box inside the control it
+            // is in.
+            if ( m_winui->chromeless )
+                wxWinUIApplyChromelessTextBoxStyle(richEditBox);
             m_winui->richEditBox = richEditBox;
 
             const std::shared_ptr<wxWinUITextCallbackState> callbackState =
@@ -5386,6 +5403,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
         else
         {
             MUXC::TextBox textBox;
+            if ( m_winui->chromeless )
+                wxWinUIApplyChromelessTextBoxStyle(textBox);
             textBox.AcceptsReturn(multiline);
 
             // Wrap style (only meaningful for multiline).  Note: a TextBox only
@@ -10396,6 +10415,14 @@ wxSize wxTextCtrl::DoGetBestSize() const
     return DoGetSizeFromTextSize(FromDIP(100));
 }
 
+WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // wxHSCROLL (which is wxTE_DONTWRAP) and wxVSCROLL tell the TextBox
+    // whether to wrap and to scroll: not the window.
+    return wxTextCtrlBase::MSWGetStyle(style, exstyle) &
+                ~static_cast<WXDWORD>(WS_HSCROLL | WS_VSCROLL);
+}
+
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     // xlen/ylen describe the requested text box in physical pixels. Derive
@@ -11066,7 +11093,18 @@ void wxTextCtrl::UpdateWinUIAppearance()
         if ( !getLiveOwner() )
             return;
 
-        if ( hasBackground )
+        // A field created without a border has no ground of its own: the
+        // control it is in paints what is seen behind its text, whatever
+        // background colour that control passes down to it.
+        const wxTextCtrl * const groundOwner = getLiveOwner();
+        if ( groundOwner && groundOwner->m_winui &&
+             groundOwner->m_winui->chromeless )
+        {
+            control.Background(wxWinUIBrush(0, 0, 0, 0));
+            control.BorderBrush(wxWinUIBrush(0, 0, 0, 0));
+            control.BorderThickness({ 0, 0, 0, 0 });
+        }
+        else if ( hasBackground )
         {
             control.Background(wxWinUIBrush(
                 background.Red(), background.Green(),

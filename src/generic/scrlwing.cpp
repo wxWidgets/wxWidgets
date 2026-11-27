@@ -209,7 +209,13 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         scrollHelper->OnMotion((wxMouseEvent&)event);
     }
 
-    if ( !current() )
+    // Only if the window or this handler is gone. A window which is being
+    // deleted still gets its events, and wxEVT_DESTROY first of all, which is
+    // sent to it exactly then: stopping here for such a window kept the
+    // event from every scrolled window, from the handlers of the program as
+    // from those of the WinUI host, which went on using the window after it
+    // had been freed (a wxListbook replaced by another book).
+    if ( !handler || !window )
     {
         event.DidntHonourProcessOnlyIn();
         return true;

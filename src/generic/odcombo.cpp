@@ -21,6 +21,12 @@
 #if wxUSE_ODCOMBOBOX
 
 #include "wx/odcombo.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/weakref.h"
+    #include "wx/winui/private/themecolours.h"
+
+    #include <typeinfo>
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -69,12 +75,23 @@ void wxVListBoxComboPopup::Init()
 
 bool wxVListBoxComboPopup::Create(wxWindow* parent)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The window of the popup has the corners and the border of a flyout:
+    // no frame around the list inside it, and the ground of a flyout.
+    const long border = wxBORDER_NONE;
+#else
+    const long border = wxBORDER_SIMPLE;
+#endif
     if ( !wxVListBox::Create(parent,
                              wxID_ANY,
                              wxDefaultPosition,
                              wxDefaultSize,
-                             wxBORDER_SIMPLE | wxLB_INT_HEIGHT | wxWANTS_CHARS) )
+                             border | wxLB_INT_HEIGHT | wxWANTS_CHARS) )
         return false;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    SetBackgroundColour(wxWinUIGetThemeColour(wxWinUIThemeColour::FlyoutFill));
+#endif
 
     m_useFont = m_combo->GetFont();
 
@@ -82,6 +99,11 @@ bool wxVListBoxComboPopup::Create(wxWindow* parent)
 
     // TODO: Move this to SetFont
     m_itemHeight = m_combo->GetCharHeight();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The items of the list of a WinUI ComboBox: 36 high, with 2 above
+    // and under each.
+    m_itemHeight = wxMax(m_itemHeight, m_combo->FromDIP(40));
+#endif
 
     // Bind to the DPI event of the combobox. We get our own once the popup
     // is shown, but this is too late, m_itemHeight is already being used.
@@ -98,6 +120,11 @@ wxVListBoxComboPopup::~wxVListBoxComboPopup()
 void wxVListBoxComboPopup::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_itemHeight = m_combo->GetCharHeight();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The items of the list of a WinUI ComboBox: 36 high, with 2 above
+    // and under each.
+    m_itemHeight = wxMax(m_itemHeight, m_combo->FromDIP(40));
+#endif
 
     event.Skip();
 }
@@ -142,7 +169,12 @@ void wxVListBoxComboPopup::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) co
     // Set correct text colour for selected items
     if ( wxVListBox::GetSelection() == (int) n )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // On the subtle fill of a WinUI list the text keeps its colour.
+        dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
+#else
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
+#endif
         flags |= wxODCB_PAINTING_SELECTED;
     }
     else
@@ -460,6 +492,42 @@ void wxVListBoxComboPopup::OnLeftClick(wxMouseEvent& WXUNUSED(event))
 
 void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The list which is open is the one of the ComboBox of WinUI, see
+    // wxOwnerDrawnComboBox::ShowPopup(): this window is not shown, and may
+    // not even be created. The keys the combo passes on to its list while
+    // it is open are for that one.
+    if ( wxWinUIIsComboFaceListOpen(m_combo) )
+    {
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_UP:
+            case WXK_NUMPAD_UP:
+                wxWinUIMoveComboFaceListSelection(m_combo, -1);
+                break;
+
+            case WXK_DOWN:
+            case WXK_NUMPAD_DOWN:
+                wxWinUIMoveComboFaceListSelection(m_combo, 1);
+                break;
+
+            case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
+                wxWinUICloseComboFaceList(m_combo, true);
+                break;
+
+            case WXK_ESCAPE:
+                wxWinUICloseComboFaceList(m_combo, false);
+                break;
+
+            default:
+                if ( m_combo->IsKeyPopupToggle(event) )
+                    wxWinUICloseComboFaceList(m_combo, false);
+        }
+        return;
+    }
+#endif
+
     // Hide popup if certain key or key combination was pressed
     if ( m_combo->IsKeyPopupToggle(event) )
     {
@@ -487,6 +555,12 @@ void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
 
 void wxVListBoxComboPopup::OnChar(wxKeyEvent& event)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // See OnKey().
+    if ( wxWinUIIsComboFaceListOpen(m_combo) )
+        return;
+#endif
+
     if ( m_combo->GetWindowStyle() & wxCB_READONLY )
     {
         // Process partial completion key codes here, but not the arrow keys as
@@ -949,6 +1023,10 @@ bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
 
 wxOwnerDrawnComboBox::~wxOwnerDrawnComboBox()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWinUIForgetComboFaceList(this);
+#endif
+
     if ( m_popupInterface )
         GetVListBoxComboPopup()->ClearClientDatas();
 }
@@ -1146,13 +1224,29 @@ void wxOwnerDrawnComboBox::OnDrawItem( wxDC& dc,
             dc.SetTextForeground(col);
         }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // Where a WinUI ComboBox has its text: 12 from its edge, a little
+        // above the middle.
+        dc.DrawText( text,
+                     rect.x + FromDIP(12),
+                     (rect.height-dc.GetCharHeight())/2 + rect.y - FromDIP(1) );
+#else
         dc.DrawText( text,
                      rect.x + GetMargins().x,
                      (rect.height-dc.GetCharHeight())/2 + rect.y );
+#endif
     }
     else
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // An item of the list of a WinUI ComboBox: its text 11 inside its
+        // fill, which is 5 from the edge, a little above the middle.
+        dc.DrawText( GetVListBoxComboPopup()->GetString(item),
+                     rect.x + FromDIP(16),
+                     rect.y + (rect.height-dc.GetCharHeight())/2 - FromDIP(1) );
+#else
         dc.DrawText( GetVListBoxComboPopup()->GetString(item), rect.x + 2, rect.y );
+#endif
     }
 }
 
@@ -1178,11 +1272,157 @@ wxSize wxOwnerDrawnComboBox::DoGetBestSize() const
     return GetSizeFromTextSize(odc->GetWidestItemWidth());
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool wxOwnerDrawnComboBox::WinUIUsesNativeList() const
+{
+    // This class itself, with the list it makes by default: nothing of what
+    // it shows is drawn by the program.
+    return typeid(*this) == typeid(wxOwnerDrawnComboBox) &&
+           m_popupInterface &&
+           typeid(*m_popupInterface) == typeid(wxVListBoxComboPopup);
+}
+
+void wxOwnerDrawnComboBox::ShowPopup()
+{
+    if ( !IsPopupWindowState(Visible) && WinUIUsesNativeList() )
+    {
+        EnsurePopupControl();
+        SetFocus();
+
+        const wxWeakRef<wxWindow> weak(this);
+        if ( wxWinUIOpenComboFaceList(
+                this, GetStrings(), GetSelection(),
+                [this, weak](int chosen)
+                {
+                    if ( weak )
+                        WinUIOnNativeListClosed(chosen);
+                }) )
+        {
+            m_popupWinState = Visible;
+            // The arrows, Enter and Escape are for the list while it is
+            // open; the rest goes on to the text field.
+            Bind(wxEVT_CHAR_HOOK,
+                 &wxOwnerDrawnComboBox::WinUIOnNativeListKey, this);
+            Refresh();
+            return;
+        }
+    }
+
+    wxComboCtrl::ShowPopup();
+}
+
+void wxOwnerDrawnComboBox::HidePopup(bool generateEvent)
+{
+    if ( wxWinUIIsComboFaceListOpen(this) )
+    {
+        wxWinUICloseComboFaceList(this, false);
+        return;
+    }
+
+    wxComboCtrl::HidePopup(generateEvent);
+}
+
+void wxOwnerDrawnComboBox::WinUIOnNativeListKey(wxKeyEvent& event)
+{
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_UP:
+        case WXK_NUMPAD_UP:
+            wxWinUIMoveComboFaceListSelection(this, -1);
+            break;
+
+        case WXK_DOWN:
+        case WXK_NUMPAD_DOWN:
+            wxWinUIMoveComboFaceListSelection(this, 1);
+            break;
+
+        case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
+            wxWinUICloseComboFaceList(this, true);
+            break;
+
+        case WXK_ESCAPE:
+            wxWinUICloseComboFaceList(this, false);
+            break;
+
+        default:
+            event.Skip();
+    }
+}
+
+void wxOwnerDrawnComboBox::WinUIOnNativeListClosed(int chosen)
+{
+    Unbind(wxEVT_CHAR_HOOK,
+           &wxOwnerDrawnComboBox::WinUIOnNativeListKey, this);
+
+    m_popupWinState = Hidden;
+    // A press on the control which dismissed the list does not open it
+    // again at once.
+    m_timeCanAcceptClick = ::wxGetLocalTimeMillis() + 150;
+    m_btnState = 0;
+
+    const wxWeakRef<wxWindow> weak(this);
+    if ( chosen >= 0 && chosen < static_cast<int>(GetCount()) )
+    {
+        Select(chosen);
+
+        wxCommandEvent event(wxEVT_COMBOBOX, GetId());
+        event.SetEventObject(this);
+        event.SetInt(chosen);
+        event.SetString(GetString(chosen));
+        if ( HasClientObjectData() )
+            event.SetClientObject(GetClientObject(chosen));
+        else if ( HasClientUntypedData() )
+            event.SetClientData(GetClientData(chosen));
+        HandleWindowEvent(event);
+        if ( !weak )
+            return;
+    }
+
+    Refresh();
+    SetFocus();
+
+    wxCommandEvent closeup(wxEVT_COMBOBOX_CLOSEUP, GetId());
+    closeup.SetEventObject(this);
+    HandleWindowEvent(closeup);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 void wxOwnerDrawnComboBox::OnDrawBackground(wxDC& dc,
                                             const wxRect& rect,
-                                            int WXUNUSED(item),
+                                            int item,
                                             int flags) const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // As in the list of a WinUI ComboBox: the item under the pointer (the
+    // current one of the list of wx) is on a subtle fill with rounded
+    // corners, 5 from the sides of the list; the one which is chosen has
+    // that fill and a short bar in the accent colour. The face of the
+    // control is a ComboBox of WinUI: nothing is drawn behind what it shows.
+    dc.SetTextForeground(wxSystemSettings::GetColour(
+        IsThisEnabled() ? wxSYS_COLOUR_WINDOWTEXT : wxSYS_COLOUR_GRAYTEXT));
+    if ( flags & wxODCB_PAINTING_CONTROL )
+        return;
+
+    const bool chosen = item == GetSelection();
+    const bool current = (flags & wxODCB_PAINTING_SELECTED) != 0;
+    if ( !chosen && !current )
+        return;
+
+    wxWindow * const list = GetVListBoxComboPopup();
+    wxRect inner = rect;
+    inner.Deflate(FromDIP(3), FromDIP(1));
+    wxRendererNative::Get().DrawItemSelectionRect(
+        list ? list : const_cast<wxOwnerDrawnComboBox *>(this), dc, inner,
+        (chosen ? wxCONTROL_SELECTED | wxCONTROL_FOCUSED : 0) |
+        (current ? wxCONTROL_CURRENT : 0));
+    return;
+#else
+    wxUnusedVar(item);
+#endif
+
     // We need only to explicitly draw background for items
     // that should have selected background. Also, call PrepareBackground
     // always when painting the control so that clipping is done properly.

@@ -20,6 +20,11 @@
     #include "ribboncontainerswinui.h"
 #endif
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "ribbonchromewinui.h"
+    #include "wx/weakref.h"
+#endif
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -85,6 +90,38 @@ wxRibbonPageScrollButton::wxRibbonPageScrollButton(wxRibbonPage* sibling,
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     m_sibling = sibling;
     m_flags = (style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) | wxRIBBON_SCROLL_BTN_FOR_PAGE;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    // A real button, XAML content of this window: it lies over the groups
+    // it scrolls, and what is drawn by wx lies under every XAML control --
+    // a drawn arrow would let the pointer through to the commands it covers.
+    const wchar_t *glyph = L"&#xEDDA;";
+    int sections = 1;
+    switch ( m_flags & wxRIBBON_SCROLL_BTN_DIRECTION_MASK )
+    {
+        case wxRIBBON_SCROLL_BTN_LEFT:  glyph = L"&#xEDD9;"; sections = -1; break;
+        case wxRIBBON_SCROLL_BTN_RIGHT: glyph = L"&#xEDDA;"; sections = 1; break;
+        case wxRIBBON_SCROLL_BTN_UP:    glyph = L"&#xEDDB;"; sections = -1; break;
+        case wxRIBBON_SCROLL_BTN_DOWN:  glyph = L"&#xEDDC;"; sections = 1; break;
+    }
+
+    auto chrome = std::make_shared<wxRibbonChromeWinUI>();
+    if ( chrome->Create(this, wxRibbonScrollButtonChromeMarkup(glyph).c_str()) )
+    {
+        m_winuiChrome = chrome;
+
+        using winrt::Microsoft::UI::Xaml::Controls::Button;
+        if ( const auto button = chrome->Find<Button>(L"Scroll") )
+        {
+            const wxWeakRef<wxRibbonPage> page(sibling);
+            button.Click([page, sections](const auto&, const auto&)
+            {
+                if ( wxRibbonPage * const live = page.get() )
+                    live->ScrollSections(sections);
+            });
+        }
+    }
+#endif
 }
 
 wxRibbonPageScrollButton::~wxRibbonPageScrollButton()
@@ -98,6 +135,14 @@ void wxRibbonPageScrollButton::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonPageScrollButton::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
     wxAutoBufferedPaintDC dc(this);
     if(m_art)
     {
@@ -120,6 +165,13 @@ void wxRibbonPageScrollButton::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonPageScrollButton::OnMouseDown(wxMouseEvent& WXUNUSED(evt))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The XAML button takes the press and scrolls; the same press is also
+    // reported here.
+    if ( m_winuiChrome )
+        return;
+#endif
+
     m_flags |= wxRIBBON_SCROLL_BTN_ACTIVE;
     Refresh(false);
 }
@@ -183,6 +235,10 @@ wxRibbonPage::~wxRibbonPage()
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     wxRibbonContainerWinUI::Close(this);
 #endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+        m_winuiChrome->Close();
+#endif
 
     delete[] m_size_calc_array;
     delete m_scroll_left_btn;
@@ -224,6 +280,16 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmapBundle& icon)
 
     if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
         bar->AddPage(this);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    // The strip behind the groups is XAML content of this window.
+    if ( !m_winuiChrome )
+    {
+        auto chrome = std::make_shared<wxRibbonChromeWinUI>();
+        if ( chrome->Create(this, wxRibbonPageChromeMarkup()) )
+            m_winuiChrome = chrome;
+    }
+#endif
 }
 
 void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
@@ -296,6 +362,14 @@ void wxRibbonPage::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
     {
         wxPaintDC dc(this);
         return;

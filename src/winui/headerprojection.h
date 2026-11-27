@@ -21,7 +21,12 @@ public:
     void Update();
     void Close();
     bool IsPublished() const;
-    void ShowMarkers(const wxRect& ghost, int insertionX);
+    // The column which is dragged, shown where the pointer takes it, and
+    // the line where it would be dropped.
+    void ShowMarkers(const wxRect& ghost, int insertionX, unsigned column);
+    // The line of a column edge which is dragged when the program does not
+    // give the column its width before the button is released; -1 hides it.
+    void ShowResizeLine(int x);
     void ClearMarkers();
 private:
     struct Impl;

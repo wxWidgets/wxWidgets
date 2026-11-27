@@ -309,7 +309,9 @@ std::vector<MUXC::Control> wxWinUIGetCompositeParts(wxWindow *window)
     {
         const MUX::DependencyObject child =
             MUXM::VisualTreeHelper::GetChild(content, n);
-        if ( child.try_as<MUXC::NumberBox>() ||
+        if ( child.try_as<MUXC::DatePicker>() ||
+             child.try_as<MUXC::TimePicker>() ||
+             child.try_as<MUXC::NumberBox>() ||
              child.try_as<MUXC::ComboBox>() ||
              child.try_as<MUXC::Button>() )
         {
@@ -340,8 +342,10 @@ void wxWinUICheckCompositeKeyboardAndAutomation(wxWindow *window)
         content.try_as<MUX::FrameworkElement>();
     REQUIRE(root);
 
+    // A date is one DatePicker, with the button which empties it when it
+    // may have none; a time is a TimePicker and the field of its seconds.
     const auto parts = wxWinUIGetCompositeParts(window);
-    REQUIRE(parts.size() >= 3);
+    REQUIRE_FALSE(parts.empty());
     for ( const MUXC::Control& part : parts )
     {
         CHECK_FALSE(MUXA::AutomationProperties::GetName(part).empty());
@@ -369,6 +373,9 @@ void wxWinUICheckCompositeKeyboardAndAutomation(wxWindow *window)
                 .try_as<MUX::DependencyObject>();
         return wxWinUIIsFocusedWithin(focused, parts[0]);
     }, 1000));
+    if ( parts.size() < 2 )
+        return;
+
     const WXWPARAM key = root.FlowDirection() ==
                                  MUX::FlowDirection::RightToLeft
                              ? VK_LEFT
@@ -395,140 +402,6 @@ void wxWinUICheckCompositeKeyboardAndAutomation(wxWindow *window)
         return wxWinUIIsFocusedWithin(focused, parts[1]);
     }, 1000));
 }
-
-#if wxUSE_TIMEPICKCTRL
-
-bool wxWinUIDispatchTimeKey(WXHWND hwnd, WXWPARAM key)
-{
-    if ( !hwnd )
-        return false;
-    MSG down = {};
-    down.hwnd = hwnd;
-    down.message = WM_KEYDOWN;
-    down.wParam = key;
-    down.lParam = 1 |
-        (static_cast<LPARAM>(::MapVirtualKeyW(
-             static_cast<UINT>(key), MAPVK_VK_TO_VSC)) << 16);
-    if ( !wxWinUI3DispatchIslandKeyboard(&down) )
-        return false;
-
-    MSG up = down;
-    up.message = WM_KEYUP;
-    up.lParam |= static_cast<LPARAM>(0xC0000000u);
-    return wxWinUI3DispatchIslandKeyboard(&up);
-}
-
-bool wxWinUIDispatchTimeCharacter(WXHWND hwnd, wchar_t character)
-{
-    if ( !hwnd )
-        return false;
-    MSG message = {};
-    message.hwnd = hwnd;
-    message.message = WM_CHAR;
-    message.wParam = static_cast<WPARAM>(character);
-    message.lParam = 1;
-    return wxWinUI3DispatchIslandKeyboard(&message);
-}
-
-struct wxWinUITimeSpinParts
-{
-    MUXC::NumberBox hour{ nullptr };
-    MUXC::ComboBox period{ nullptr };
-    MUXCP::RepeatButton increment{ nullptr };
-    MUXCP::RepeatButton decrement{ nullptr };
-};
-
-wxWinUITimeSpinParts wxWinUIGetTimeSpinParts(
-    wxTimePickerCtrl *picker)
-{
-    wxWinUITimeSpinParts result;
-    if ( !picker )
-        return result;
-
-    wxYield();
-    if ( wxWinUITopLevelHost * const host =
-             wxWinUITopLevelHost::FindSlotOwner(picker) )
-    {
-        host->FlushSync();
-    }
-
-    int hourColumn = -1;
-    int periodColumn = -1;
-    if ( !wxWinUITimePickerTestAccess::GetTimeFieldOrder(*picker,
-             &hourColumn, nullptr, nullptr, &periodColumn) )
-    {
-        return result;
-    }
-
-    const auto parts = wxWinUIGetCompositeParts(picker);
-    for ( const MUXC::Control& part : parts )
-    {
-        const int column = MUXC::Grid::GetColumn(part);
-        if ( column == hourColumn )
-            result.hour = part.try_as<MUXC::NumberBox>();
-        if ( column == periodColumn )
-            result.period = part.try_as<MUXC::ComboBox>();
-    }
-    if ( !result.hour || !result.period )
-        return result;
-
-    result.hour.ApplyTemplate();
-    result.hour.UpdateLayout();
-    if ( wxWinUITopLevelHost * const host =
-             wxWinUITopLevelHost::FindSlotOwner(picker) )
-    {
-        host->FlushSync();
-    }
-
-    std::vector<MUXCP::RepeatButton> buttons;
-    wxWinUICollectDateElements(result.hour, &buttons);
-    for ( const MUXCP::RepeatButton& button : buttons )
-    {
-        const winrt::hstring name = button.Name();
-        if ( name == L"UpSpinButton" )
-            result.increment = button;
-        else if ( name == L"DownSpinButton" )
-            result.decrement = button;
-    }
-    return result;
-}
-
-MUXC::ControlTemplate wxWinUICreateTimeHourReplacementTemplate()
-{
-    // Use a fresh supported NumberBox template rather than attempting to
-    // reapply the effective theme ControlTemplate object. WinUI owns that
-    // object, and a NumberBox whose local Template was explicitly cleared can
-    // reject reapplication of the theme instance while restoring its internal
-    // TextBox template bindings. The named controls below are the real
-    // NumberBox template contract and produce discoverable UIA peers.
-    return MUXMK::XamlReader::Load(
-        LR"xaml(
-<ControlTemplate
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    TargetType="muxc:NumberBox">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <TextBox x:Name="InputBox" Grid.Column="0" />
-        <RepeatButton x:Name="UpSpinButton"
-                      Grid.Column="1"
-                      Width="32"
-                      Content="+" />
-        <RepeatButton x:Name="DownSpinButton"
-                      Grid.Column="2"
-                      Width="32"
-                      Content="-" />
-    </Grid>
-</ControlTemplate>)xaml")
-        .as<MUXC::ControlTemplate>();
-}
-
-#endif // wxUSE_TIMEPICKCTRL
 
 MUXAPR::IInvokeProvider wxWinUIGetInvokeProvider(
     const MUXCP::ButtonBase& button);
@@ -874,26 +747,6 @@ void wxWinUICheckTransactionalLoadedSizing(
     control.reset();
 }
 
-#if wxUSE_TIMEPICKCTRL
-
-class wxWinUITestTimeLoadedHookScope
-{
-public:
-    wxWinUITestTimeLoadedHookScope(
-        wxWinUITimePickerTestAccess::HourLoadedHook hook,
-        void *data)
-    {
-        wxWinUITimePickerTestAccess::SetHourLoadedHook(hook, data);
-    }
-
-    ~wxWinUITestTimeLoadedHookScope()
-    {
-        wxWinUITimePickerTestAccess::SetHourLoadedHook(nullptr);
-    }
-};
-
-#endif // wxUSE_TIMEPICKCTRL
-
 } // namespace
 
 TEST_CASE("wxWinUI date controls keep application sizing across Loaded roots",
@@ -1211,7 +1064,7 @@ TEST_CASE("wxWinUI DatePicker preserves pre-FILETIME Gregorian dates",
     CHECK(peers.front().MinDate().time_since_epoch().count() < 0);
 }
 
-TEST_CASE("wxWinUI DatePicker language reaches the real spin formatters",
+TEST_CASE("wxWinUI DatePicker language reaches the native picker",
           "[winui-range-date][datepicker][language][peer]")
 {
     wxWindow * const parent = wxTheApp->GetTopWindow();
@@ -1233,51 +1086,17 @@ TEST_CASE("wxWinUI DatePicker language reaches the real spin formatters",
         CHECK(root.Language() == expectedLanguage);
 
         const auto parts = wxWinUIGetCompositeParts(&picker);
-        std::vector<MUXC::NumberBox> numbers;
-        for ( const MUXC::Control& part : parts )
-        {
-            if ( const MUXC::NumberBox number =
-                     part.try_as<MUXC::NumberBox>() )
-            {
-                numbers.push_back(number);
-            }
-        }
-        REQUIRE(numbers.size() == 3);
-        for ( const MUXC::NumberBox& number : numbers )
-        {
-            CHECK(number.Language() == expectedLanguage);
-            REQUIRE(number.NumberFormatter());
-            const bool isYear = number.Maximum() > 100;
-            const unsigned digits = isYear
-                ? ((style & wxDP_SHOWCENTURY) ? 4u : 2u)
-                : 1u;
-            const std::int64_t input = isYear ? 2025 : 12;
-            const std::int64_t formattedInput =
-                isYear && !(style & wxDP_SHOWCENTURY)
-                    ? input % 100
-                    : input;
-            CHECK(number.NumberFormatter().FormatInt(input) ==
-                  wxWinUITestFormatDecimal(
-                      expectedLanguage, digits, formattedInput));
-            if ( isYear && !(style & wxDP_SHOWCENTURY) )
-            {
-                const WGNF::INumberParser parser =
-                    number.NumberFormatter()
-                        .try_as<WGNF::INumberParser>();
-                REQUIRE(parser);
-                const double peerValue = number.Value();
-                REQUIRE(std::isfinite(peerValue));
-                const std::int64_t activeCalendarYear =
-                    static_cast<std::int64_t>(
-                        std::llround(peerValue));
-                const WF::IReference<std::int64_t> parsed =
-                    parser.ParseInt(
-                        number.NumberFormatter().FormatInt(
-                            activeCalendarYear));
-                REQUIRE(parsed);
-                CHECK(parsed.Value() == activeCalendarYear);
-            }
-        }
+        REQUIRE(parts.size() == 1);
+        const MUXC::DatePicker native =
+            parts.front().try_as<MUXC::DatePicker>();
+        REQUIRE(native);
+        CHECK(native.Language() == expectedLanguage);
+        CHECK(wxString(native.YearFormat().c_str()).Contains(
+                  (style & wxDP_SHOWCENTURY) ? "year.full"
+                                             : "year.abbreviated"));
+        const WF::IReference<WF::DateTime> selected =
+            native.SelectedDate();
+        REQUIRE(selected);
     };
 
     wxWinUITestLanguageOverride outer(L"en-US");
@@ -1331,11 +1150,17 @@ TEST_CASE("wxWinUI DatePicker maps century and dropdown styles",
     CHECK(month == static_cast<int>(spinValue.GetMonth()) + 1);
     CHECK(day == spinValue.GetDay());
     wxWinUICheckCompositeKeyboardAndAutomation(&abbreviated);
-    CHECK(wxWinUIDatePickerTestAccess::GetSpinYearText(abbreviated).length() == 2);
+    CHECK(wxWinUIDatePickerTestAccess::UsesNativePicker(abbreviated));
+    CHECK(wxWinUIDatePickerTestAccess::GetPeerYearFormat(abbreviated)
+              .Contains("year.abbreviated"));
+    CHECK_FALSE(wxWinUIDatePickerTestAccess::UsesNativePicker(full));
 
-    // wxDP_DEFAULT follows wxMSW and selects the inline spinner too.
+    // Without wxDP_DROPDOWN the control is the DatePicker of WinUI.
     wxDatePickerCtrl platformDefault(parent, wxID_ANY);
     CHECK_FALSE(wxWinUIDatePickerTestAccess::UsesDropdown(platformDefault));
+    CHECK(wxWinUIDatePickerTestAccess::UsesNativePicker(platformDefault));
+    CHECK(wxWinUIDatePickerTestAccess::GetPeerYearFormat(platformDefault)
+              .Contains("year.full"));
     CHECK(platformDefault.HasFlag(wxDP_SPIN));
 }
 
@@ -1371,33 +1196,20 @@ TEST_CASE("wxWinUI DatePicker user events and ALLOWNONE are exact",
     CHECK_FALSE(picker.GetValue().IsValid());
     CHECK(events.GetCount() == 1);
 
-    // Re-enter a nullable spin value one real NumberBox at a time. Partial
-    // edits stay in the peer and do not fabricate a wx date or event.
-    int partValue = -1;
-    bool blank = false;
-    REQUIRE(wxWinUIDatePickerTestAccess::SetSpinPart(picker, 0, 2024));
-    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinPart(picker,
-        0, &partValue, &blank));
-    CHECK_FALSE(blank);
-    CHECK(partValue == 2024);
-    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinPart(picker,
-        1, nullptr, &blank));
-    CHECK(blank);
-    CHECK_FALSE(picker.GetValue().IsValid());
-    CHECK(events.GetCount() == 1);
-
-    REQUIRE(wxWinUIDatePickerTestAccess::SetSpinPart(picker, 1, 2));
-    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinPart(picker,
-        1, &partValue, &blank));
-    CHECK_FALSE(blank);
-    CHECK(partValue == 2);
-    CHECK_FALSE(picker.GetValue().IsValid());
-    CHECK(events.GetCount() == 1);
-
-    REQUIRE(wxWinUIDatePickerTestAccess::SetSpinPart(picker, 2, 29));
+    // A date chosen in the lists of the DatePicker, after none.
+    REQUIRE(wxWinUIDatePickerTestAccess::SetPeerDate(
+        picker, wxDateTime(29, wxDateTime::Feb, 2024)));
     CHECK(picker.GetValue() ==
           wxDateTime(29, wxDateTime::Feb, 2024));
     CHECK(events.GetCount() == 2);
+    int year = 0;
+    int month = 0;
+    int day = 0;
+    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinFields(picker,
+        &year, &month, &day));
+    CHECK(year == 2024);
+    CHECK(month == 2);
+    CHECK(day == 29);
 
     REQUIRE(wxWinUIDatePickerTestAccess::ClearPeerDate(picker));
     CHECK_FALSE(picker.GetValue().IsValid());
@@ -1504,6 +1316,9 @@ TEST_CASE("wxWinUI DatePicker nested range setter is last writer",
     const wxDateTime nestedMinimum(10, wxDateTime::May, 2024);
     const wxDateTime nestedMaximum(20, wxDateTime::May, 2024);
     picker.SetSize(wxSize(229, 41));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(&picker);
     bool slotSynced = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
@@ -1548,6 +1363,9 @@ TEST_CASE("wxWinUI DatePicker nested value setter is last writer",
     const wxDateTime outer(16, wxDateTime::May, 2024);
     const wxDateTime nested(17, wxDateTime::May, 2024);
     picker.SetSize(wxSize(231, 43));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(&picker);
     bool slotSynced = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
@@ -1594,65 +1412,15 @@ TEST_CASE("wxWinUI TimePicker preserves its second-precision contract",
     REQUIRE(wxWinUITimePickerTestAccess::GetPeerTime(picker, &peerValue));
     CHECK(peerValue == picker.GetValue());
 
-    const wxString localePattern =
-        wxWinUITimePickerTestAccess::GetLocaleTimePattern(picker);
-    CHECK_FALSE(localePattern.empty());
-    int hourOrder = -1;
-    int minuteOrder = -1;
-    int secondOrder = -1;
-    int periodOrder = -1;
-    REQUIRE(wxWinUITimePickerTestAccess::GetTimeFieldOrder(picker,
-        &hourOrder, &minuteOrder, &secondOrder, &periodOrder));
-    CHECK(hourOrder >= 0);
-    CHECK(minuteOrder >= 0);
-    CHECK(secondOrder >= 0);
-    // Preserve the complete WinRT pattern order. Some locales put the period
-    // before the numeric fields, others put it after them.
-    if ( periodOrder >= 0 )
-    {
-        const int secondPatternOrder =
-            localePattern.Find("{second.");
-        const int periodPatternOrder =
-            localePattern.Find("{period.");
-        REQUIRE(secondPatternOrder != wxNOT_FOUND);
-        REQUIRE(periodPatternOrder != wxNOT_FOUND);
-        CHECK((secondOrder < periodOrder) ==
-              (secondPatternOrder < periodPatternOrder));
-
-        const auto parts = wxWinUIGetCompositeParts(&picker);
-        std::vector<MUXC::ComboBox> periodParts;
-        for ( const MUXC::Control& part : parts )
-        {
-            if ( const MUXC::ComboBox period =
-                     part.try_as<MUXC::ComboBox>() )
-            {
-                periodParts.push_back(period);
-            }
-        }
-        REQUIRE(periodParts.size() == 1);
-        const auto items = periodParts.front().Items();
-        REQUIRE(items.Size() == 2);
-
-        WG::Calendar periodCalendar;
-        periodCalendar.ChangeClock(
-            WG::ClockIdentifiers::TwelveHour());
-        periodCalendar.SetToNow();
-        const int firstPeriod =
-            periodCalendar.FirstPeriodInThisDay();
-        const int lastPeriod =
-            periodCalendar.LastPeriodInThisDay();
-        REQUIRE(firstPeriod != lastPeriod);
-        periodCalendar.Period(firstPeriod);
-        const winrt::hstring expectedFirst =
-            periodCalendar.PeriodAsString();
-        periodCalendar.Period(lastPeriod);
-        const winrt::hstring expectedLast =
-            periodCalendar.PeriodAsString();
-        CHECK(winrt::unbox_value<winrt::hstring>(
-                  items.GetAt(0)) == expectedFirst);
-        CHECK(winrt::unbox_value<winrt::hstring>(
-                  items.GetAt(1)) == expectedLast);
-    }
+    // The TimePicker of WinUI for the hours and the minutes, and a field
+    // for the seconds, which it does not have.
+    CHECK(wxWinUITimePickerTestAccess::UsesNativePicker(picker));
+    const auto parts = wxWinUIGetCompositeParts(&picker);
+    REQUIRE(parts.size() == 2);
+    CHECK(parts[0].try_as<MUXC::TimePicker>());
+    const MUXC::NumberBox secondsPart = parts[1].try_as<MUXC::NumberBox>();
+    REQUIRE(secondsPart);
+    CHECK(secondsPart.Value() == 59);
     wxWinUICheckCompositeKeyboardAndAutomation(&picker);
 
     EventCounter events(&picker, wxEVT_TIME_CHANGED);
@@ -1670,7 +1438,7 @@ TEST_CASE("wxWinUI TimePicker preserves its second-precision contract",
     CHECK(events.GetCount() == 0);
 }
 
-TEST_CASE("wxWinUI TimePicker language reaches every real field formatter",
+TEST_CASE("wxWinUI TimePicker language reaches its parts",
           "[winui-range-date][timepicker][language][peer]")
 {
     wxWindow * const parent = wxTheApp->GetTopWindow();
@@ -1689,24 +1457,14 @@ TEST_CASE("wxWinUI TimePicker language reaches every real field formatter",
         CHECK(root.Language() == expectedLanguage);
 
         const auto parts = wxWinUIGetCompositeParts(&picker);
-        std::vector<MUXC::NumberBox> numbers;
+        REQUIRE(parts.size() == 2);
         for ( const MUXC::Control& part : parts )
-        {
             CHECK(part.Language() == expectedLanguage);
-            if ( const MUXC::NumberBox number =
-                     part.try_as<MUXC::NumberBox>() )
-            {
-                numbers.push_back(number);
-            }
-        }
-        REQUIRE(numbers.size() == 3);
-        for ( const MUXC::NumberBox& number : numbers )
-        {
-            REQUIRE(number.NumberFormatter());
-            CHECK(number.NumberFormatter().FormatInt(7) ==
-                  wxWinUITestFormatDecimal(
-                      expectedLanguage, 2, 7));
-        }
+        const MUXC::NumberBox seconds = parts[1].try_as<MUXC::NumberBox>();
+        REQUIRE(seconds);
+        REQUIRE(seconds.NumberFormatter());
+        CHECK(seconds.NumberFormatter().FormatInt(7) ==
+              wxWinUITestFormatDecimal(expectedLanguage, 2, 7));
     };
 
     wxWinUITestLanguageOverride outer(L"en-US");
@@ -1742,7 +1500,7 @@ TEST_CASE("wxWinUI composite physical keyboard navigation",
             .try_as<MUX::FrameworkElement>();
     REQUIRE(root);
     const auto parts = wxWinUIGetCompositeParts(&picker);
-    REQUIRE(parts.size() >= 3);
+    REQUIRE(parts.size() >= 2);
 
     REQUIRE(parts[0].Focus(MUX::FocusState::Keyboard));
     wxYield();
@@ -1762,373 +1520,32 @@ TEST_CASE("wxWinUI composite physical keyboard navigation",
     }, 1000));
 }
 
-TEST_CASE("wxWinUI TimePicker 12-hour spin boundaries are exact",
-          "[winui-range-date][timepicker][12-hour][spin][events]")
+TEST_CASE("wxWinUI TimePicker follows the clock of the language",
+          "[winui-range-date][timepicker][12-hour]")
 {
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
 
-    wxWinUITestLanguageOverride language(L"en-US");
-    wxTimePickerCtrl picker(
-        parent, wxID_ANY,
-        wxDateTime(1, wxDateTime::Jan, 2012, 11, 17, 23));
-    const wxWinUITimeSpinParts spin =
-        wxWinUIGetTimeSpinParts(&picker);
-    REQUIRE(spin.hour);
-    REQUIRE(spin.period);
-    REQUIRE(spin.increment);
-    REQUIRE(spin.decrement);
-    const MUXAPR::IInvokeProvider increment =
-        wxWinUIGetInvokeProvider(spin.increment);
-    const MUXAPR::IInvokeProvider decrement =
-        wxWinUIGetInvokeProvider(spin.decrement);
-    REQUIRE(increment);
-    REQUIRE(decrement);
+    const auto clockOf = [&](const wchar_t *language)
+    {
+        wxWinUITestLanguageOverride scope(language);
+        wxTimePickerCtrl picker(
+            parent, wxID_ANY,
+            wxDateTime(1, wxDateTime::Jan, 2012, 23, 17, 23));
+        const auto parts = wxWinUIGetCompositeParts(&picker);
+        REQUIRE(parts.size() == 2);
+        const MUXC::TimePicker native = parts[0].try_as<MUXC::TimePicker>();
+        REQUIRE(native);
 
-    EventCounter events(&picker, wxEVT_TIME_CHANGED);
-    const auto checkState = [&](int expectedHour,
-                                int displayedHour,
-                                int expectedPeriod,
-                                int expectedEvents)
-    {
-        int hour = -1;
-        int minute = -1;
-        int second = -1;
-        REQUIRE(picker.GetTime(&hour, &minute, &second));
-        CHECK(hour == expectedHour);
-        CHECK(minute == 17);
-        CHECK(second == 23);
-        CHECK(static_cast<int>(std::lround(spin.hour.Value())) ==
-              displayedHour);
-        CHECK(spin.period.SelectedIndex() == expectedPeriod);
-        CHECK(events.GetCount() == expectedEvents);
-    };
-    const auto invokeAndCheck = [&](const MUXAPR::IInvokeProvider& provider,
-                                    int expectedHour,
-                                    int displayedHour,
-                                    int expectedPeriod,
-                                    int expectedEvents)
-    {
-        provider.Invoke();
-        REQUIRE(WaitFor("12-hour NumberBox spin transaction", [&]()
-        {
-            int hour = -1;
-            int minute = -1;
-            int second = -1;
-            return picker.GetTime(&hour, &minute, &second) &&
-                   hour == expectedHour && minute == 17 && second == 23 &&
-                   events.GetCount() == expectedEvents;
-        }, 1000));
-        checkState(expectedHour, displayedHour,
-                   expectedPeriod, expectedEvents);
+        // The same time whatever the clock it is shown with.
+        wxDateTime peer;
+        REQUIRE(wxWinUITimePickerTestAccess::GetPeerTime(picker, &peer));
+        CHECK(peer == picker.GetValue());
+        return native.ClockIdentifier();
     };
 
-    checkState(11, 11, 0, 0);
-
-    // Public programmatic mutations cross both 11/12 boundaries under the
-    // peer guard: they set, rather than toggle, the requested period and do
-    // not emit user events.
-    picker.SetValue(
-        wxDateTime(1, wxDateTime::Jan, 2012, 12, 17, 23));
-    checkState(12, 12, 1, 0);
-    picker.SetValue(
-        wxDateTime(1, wxDateTime::Jan, 2012, 11, 17, 23));
-    checkState(11, 11, 0, 0);
-
-    // A rejected partial programmatic peer edit rolls back under the same
-    // guard and must not toggle AM/PM or publish an event.
-    spin.hour.Value(std::numeric_limits<double>::quiet_NaN());
-    REQUIRE(WaitFor("12-hour invalid peer rollback", [&]()
-    {
-        return std::isfinite(spin.hour.Value()) &&
-               static_cast<int>(std::lround(spin.hour.Value())) == 11;
-    }, 1000));
-    checkState(11, 11, 0, 0);
-
-    // Noon: 11 AM -> 12 PM toggles; 12 -> 1 wraps in PM; the reverse wrap
-    // retains PM; 12 PM -> 11 AM toggles back.
-    invokeAndCheck(increment, 12, 12, 1, 1);
-    invokeAndCheck(increment, 13, 1, 1, 2);
-    invokeAndCheck(decrement, 12, 12, 1, 3);
-    invokeAndCheck(decrement, 11, 11, 0, 4);
-
-    // Midnight exercises the opposite two period boundaries with the same
-    // exact-once event and wrap rules.
-    picker.SetValue(
-        wxDateTime(1, wxDateTime::Jan, 2012, 23, 17, 23));
-    checkState(23, 11, 1, 4);
-    invokeAndCheck(increment, 0, 12, 0, 5);
-    invokeAndCheck(increment, 1, 1, 0, 6);
-    invokeAndCheck(decrement, 0, 12, 0, 7);
-    invokeAndCheck(decrement, 23, 11, 1, 8);
-}
-
-TEST_CASE("wxWinUI TimePicker absolute 12-hour input preserves period",
-          "[winui-range-date][timepicker][12-hour][typing][peer]")
-{
-    wxWindow * const parent = wxTheApp->GetTopWindow();
-    REQUIRE(parent);
-
-    wxWinUITestLanguageOverride language(L"en-US");
-    wxTimePickerCtrl picker(
-        parent, wxID_ANY,
-        wxDateTime(1, wxDateTime::Jan, 2012, 23, 17, 23));
-    const wxWinUITimeSpinParts spin = wxWinUIGetTimeSpinParts(&picker);
-    REQUIRE(spin.hour);
-    REQUIRE(spin.period);
-    CHECK(spin.period.SelectedIndex() == 1);
-
-    std::vector<MUXC::TextBox> inputs;
-    wxWinUICollectDateElements(spin.hour, &inputs);
-    REQUIRE_FALSE(inputs.empty());
-    const MUXC::TextBox input = inputs.front();
-    REQUIRE(input.Focus(MUX::FocusState::Keyboard));
-    wxYield();
-
-    EventCounter events(&picker, wxEVT_TIME_CHANGED);
-    input.SelectAll();
-    REQUIRE(wxWinUIDispatchTimeCharacter(::GetFocus(), L'1'));
-    REQUIRE(wxWinUIDispatchTimeCharacter(::GetFocus(), L'2'));
-    REQUIRE(wxWinUIDispatchTimeKey(::GetFocus(), VK_RETURN));
-    REQUIRE(WaitFor("absolute 12-hour peer commit", [&]()
-    {
-        int hour = -1;
-        int minute = -1;
-        int second = -1;
-        return picker.GetTime(&hour, &minute, &second) &&
-               hour == 12 && minute == 17 && second == 23 &&
-               spin.period.SelectedIndex() == 1 &&
-               events.GetCount() == 1;
-    }, 1000));
-}
-
-TEST_CASE("wxWinUI TimePicker rebinds real hour template spin peers",
-          "[winui-range-date][timepicker][12-hour][template][uia]")
-{
-    wxWindow * const parent = wxTheApp->GetTopWindow();
-    REQUIRE(parent);
-    wxWinUITestLanguageOverride language(L"en-US");
-    wxTimePickerCtrl picker(
-        parent, wxID_ANY,
-        wxDateTime(1, wxDateTime::Jan, 2012, 11, 17, 23));
-
-    wxWinUITimeSpinParts spin = wxWinUIGetTimeSpinParts(&picker);
-    REQUIRE(spin.hour);
-    REQUIRE(spin.increment);
-    REQUIRE(spin.decrement);
-    const MUXC::ControlTemplate originalTemplate = spin.hour.Template();
-    REQUIRE(originalTemplate);
-
-    std::uintptr_t boundIncrement = 0;
-    std::uintptr_t boundDecrement = 0;
-    std::uint64_t bindingGeneration = 0;
-    REQUIRE(wxWinUITimePickerTestAccess::GetHourSpinBinding(picker,
-        &boundIncrement, &boundDecrement, &bindingGeneration));
-    CHECK(boundIncrement == reinterpret_cast<std::uintptr_t>(
-        winrt::get_abi(spin.increment)));
-    CHECK(boundDecrement == reinterpret_cast<std::uintptr_t>(
-        winrt::get_abi(spin.decrement)));
-    const std::uintptr_t retiredIncrementIdentity = boundIncrement;
-    const std::uintptr_t retiredDecrementIdentity = boundDecrement;
-    const std::uint64_t originalGeneration = bindingGeneration;
-    const MUXAPR::IInvokeProvider retiredIncrementProvider =
-        wxWinUIGetInvokeProvider(spin.increment);
-    REQUIRE(retiredIncrementProvider);
-
-    // Remove the actual NumberBox template. LayoutUpdated must revoke the
-    // production Click delegates before any replacement visual is adopted.
-    spin.hour.Template(nullptr);
-    spin.hour.ApplyTemplate();
-    spin.hour.UpdateLayout();
-    REQUIRE(WaitFor("hour template detach", [&]()
-    {
-        boundIncrement = 1;
-        boundDecrement = 1;
-        const bool bound = wxWinUITimePickerTestAccess::GetHourSpinBinding(picker,
-            &boundIncrement, &boundDecrement, &bindingGeneration);
-        return !bound && boundIncrement == 0 && boundDecrement == 0 &&
-               bindingGeneration != originalGeneration;
-    }, 1000));
-
-    // Keeping a COM automation provider alive does not revoke NumberBox's
-    // own template binding: invoking such a stale, unreachable provider can
-    // still mutate NumberBox even though no user or UIA client can discover
-    // it in the live tree. Prove retirement by the actual visual ancestry and
-    // production binding generation, then invoke only the rebound live peer.
-    REQUIRE(WaitFor("retired hour spin visual disconnected", [&]()
-    {
-        return !wxWinUIIsFocusedWithin(spin.increment, spin.hour) &&
-               !wxWinUIIsFocusedWithin(spin.decrement, spin.hour);
-    }, 1000));
-
-    EventCounter events(&picker, wxEVT_TIME_CHANGED);
-    CHECK(events.GetCount() == 0);
-
-    // Apply a fresh valid NumberBox template. This is the supported destructive
-    // retemplate path and materializes new real RepeatButton/UIA peers; trying
-    // to reuse or implicitly reapply WinUI's effective theme template on this
-    // already-detemplated NumberBox fails inside its TextBox template binding.
-    const MUXC::ControlTemplate replacementTemplate =
-        wxWinUICreateTimeHourReplacementTemplate();
-    REQUIRE(replacementTemplate);
-    spin.hour.Template(replacementTemplate);
-    spin.hour.ApplyTemplate();
-    spin.hour.UpdateLayout();
-    REQUIRE(WaitFor("hour template rebind", [&]()
-    {
-        spin = wxWinUIGetTimeSpinParts(&picker);
-        return spin.increment && spin.decrement &&
-               wxWinUITimePickerTestAccess::GetHourSpinBinding(picker,
-                   &boundIncrement, &boundDecrement,
-                   &bindingGeneration);
-    }, 1000));
-    CHECK(bindingGeneration != originalGeneration);
-    CHECK(boundIncrement == reinterpret_cast<std::uintptr_t>(
-        winrt::get_abi(spin.increment)));
-    CHECK(boundDecrement == reinterpret_cast<std::uintptr_t>(
-        winrt::get_abi(spin.decrement)));
-    CHECK(boundIncrement != retiredIncrementIdentity);
-    CHECK(boundDecrement != retiredDecrementIdentity);
-    CHECK(events.GetCount() == 0);
-
-    const MUXAPR::IInvokeProvider reboundIncrement =
-        wxWinUIGetInvokeProvider(spin.increment);
-    const MUXAPR::IInvokeProvider reboundDecrement =
-        wxWinUIGetInvokeProvider(spin.decrement);
-    REQUIRE(reboundIncrement);
-    REQUIRE(reboundDecrement);
-    reboundIncrement.Invoke();
-    REQUIRE(WaitFor("rebound hour UIA transaction", [&]()
-    {
-        int hour = -1;
-        int minute = -1;
-        int second = -1;
-        return picker.GetTime(&hour, &minute, &second) &&
-               hour == 12 && minute == 17 && second == 23 &&
-               events.GetCount() == 1;
-    }, 1000));
-}
-
-TEST_CASE("wxWinUI TimePicker real hour Loaded is destruction-safe",
-          "[winui-range-date][timepicker][loaded][lifetime][reparent]")
-{
-    wxWindow * const parent = wxTheApp->GetTopWindow();
-    REQUIRE(parent);
-    wxWinUITestLanguageOverride language(L"en-US");
-
-    wxFrame destination(nullptr, wxID_ANY, "hour Loaded target");
-    wxPanel targetParent(&destination);
-    destination.SetClientSize(wxSize(420, 180));
-    targetParent.SetSize(destination.GetClientSize());
-    destination.Show();
-    wxYield();
-
-    wxTimePickerCtrl *picker = new wxTimePickerCtrl(
-        parent, wxID_ANY,
-        wxDateTime(1, wxDateTime::Jan, 2012, 11, 17, 23));
-    struct DestructionContext
-    {
-        wxTimePickerCtrl **slot = nullptr;
-        bool loaded = false;
-    } context{&picker, false};
-    wxWinUITestTimeLoadedHookScope hook(
-        [](wxTimePickerCtrl *owner, void *data)
-        {
-            DestructionContext * const context =
-                static_cast<DestructionContext *>(data);
-            context->loaded = true;
-            CHECK((context->slot && *context->slot == owner));
-            wxTimePickerCtrl * const doomed = *context->slot;
-            *context->slot = nullptr;
-            delete doomed;
-        },
-        &context);
-
-    wxTimePickerCtrl * const invoking = picker;
-    invoking->Reparent(&targetParent);
-    REQUIRE(WaitFor("destructive real hour Loaded", [&]()
-    {
-        return context.loaded && picker == nullptr;
-    }, 1000));
-    delete picker;
-}
-
-TEST_CASE("wxWinUI TimePicker spin-boundary callbacks are lifetime-safe",
-          "[winui-range-date][timepicker][12-hour][spin][lifetime][reparent]")
-{
-    wxWindow * const parent = wxTheApp->GetTopWindow();
-    REQUIRE(parent);
-    wxWinUITestLanguageOverride language(L"en-US");
-    const wxDateTime initial(
-        1, wxDateTime::Jan, 2012, 11, 17, 23);
-
-    SECTION("destruction")
-    {
-        wxTimePickerCtrl *picker =
-            new wxTimePickerCtrl(parent, wxID_ANY, initial);
-        const wxWinUITimeSpinParts spin =
-            wxWinUIGetTimeSpinParts(picker);
-        REQUIRE(spin.increment);
-        const MUXAPR::IInvokeProvider increment =
-            wxWinUIGetInvokeProvider(spin.increment);
-        REQUIRE(increment);
-
-        unsigned eventCount = 0;
-        picker->Bind(wxEVT_TIME_CHANGED, [&](wxDateEvent&)
-        {
-            ++eventCount;
-            wxTimePickerCtrl * const doomed = picker;
-            picker = nullptr;
-            delete doomed;
-        });
-        increment.Invoke();
-        REQUIRE(WaitFor("12-hour boundary destruction", [&]()
-        {
-            return picker == nullptr;
-        }, 1000));
-        CHECK(eventCount == 1);
-        delete picker;
-    }
-
-    SECTION("cross top-level reparent")
-    {
-        wxFrame destination(
-            nullptr, wxID_ANY, "time spin reparent target");
-        wxPanel targetParent(&destination);
-        destination.SetClientSize(wxSize(420, 160));
-        targetParent.SetSize(destination.GetClientSize());
-        destination.Show();
-        wxYield();
-
-        wxTimePickerCtrl picker(parent, wxID_ANY, initial);
-        const wxWinUITimeSpinParts spin =
-            wxWinUIGetTimeSpinParts(&picker);
-        REQUIRE(spin.increment);
-        const MUXAPR::IInvokeProvider increment =
-            wxWinUIGetInvokeProvider(spin.increment);
-        REQUIRE(increment);
-
-        unsigned eventCount = 0;
-        bool reparented = false;
-        picker.Bind(wxEVT_TIME_CHANGED, [&](wxDateEvent&)
-        {
-            ++eventCount;
-            reparented = picker.Reparent(&targetParent);
-        });
-        increment.Invoke();
-        REQUIRE(WaitFor("12-hour boundary reparent", [&]()
-        {
-            return reparented && picker.GetParent() == &targetParent;
-        }, 1000));
-        int hour = -1;
-        int minute = -1;
-        int second = -1;
-        REQUIRE(picker.GetTime(&hour, &minute, &second));
-        CHECK(hour == 12);
-        CHECK(minute == 17);
-        CHECK(second == 23);
-        CHECK(eventCount == 1);
-    }
+    CHECK(clockOf(L"en-US") == WG::ClockIdentifiers::TwelveHour());
+    CHECK(clockOf(L"fr-FR") == WG::ClockIdentifiers::TwentyFourHour());
 }
 
 TEST_CASE("wxWinUI TimePicker peer events are exact and lifetime-safe",
@@ -2238,6 +1655,9 @@ TEST_CASE("wxWinUI TimePicker setter stops after destructive ForceRender",
         host->FlushSync();
     }
     invoking->SetSize(wxSize(219, 41));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
     bool slotSynced = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
@@ -2276,6 +1696,9 @@ TEST_CASE("wxWinUI TimePicker nested setter is last writer",
     const wxDateTime nested(
         1, wxDateTime::Jan, 2012, 10, 30, 0);
     picker.SetSize(wxSize(221, 43));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(&picker);
     bool slotSynced = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
@@ -2543,14 +1966,20 @@ TEST_CASE("wxWinUI alternate calendar drives ranges fields and holidays",
     CHECK(peerMaximum >= today);
     REQUIRE(calendar.SetDateRange(peerMinimum, peerMaximum));
 
-    unsigned holidayColourCount = 0;
-    REQUIRE(WaitFor("alternate-calendar absolute holiday emphasis", [&]()
+    // A holiday is emphasised unless it falls on a Saturday or a Sunday:
+    // week-end days are not marked, see wxWinUICalendarImpl.
+    if ( today.GetWeekDay() != wxDateTime::Sat &&
+         today.GetWeekDay() != wxDateTime::Sun )
     {
-        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
-                   today.GetDay(), nullptr,
-                   &holidayColourCount) &&
-               holidayColourCount == 1;
-    }, 1000));
+        unsigned holidayColourCount = 0;
+        REQUIRE(WaitFor("alternate-calendar absolute holiday emphasis", [&]()
+        {
+            return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
+                       today.GetDay(), nullptr,
+                       &holidayColourCount) &&
+                   holidayColourCount == 1;
+        }, 1000));
+    }
 
     // Exercise the actual native envelope at both ends. These are peer dates,
     // not a duplicated Gregorian 1601/9999 oracle, and are particularly
@@ -2785,15 +2214,13 @@ TEST_CASE("wxWinUI Japanese calendar preserves era transitions and bounds",
     picker.SetRange(peerMinimum, peerMaximum);
 
     const auto pickerParts = wxWinUIGetCompositeParts(&picker);
-    std::vector<MUXC::ComboBox> eraParts;
-    for ( const MUXC::Control& part : pickerParts )
-    {
-        if ( const MUXC::ComboBox era = part.try_as<MUXC::ComboBox>() )
-            eraParts.push_back(era);
-    }
-    REQUIRE(eraParts.size() == 1);
-    CHECK(eraParts.front().Language() ==
-          L"ja-JP-u-ca-japanese");
+    REQUIRE(pickerParts.size() == 1);
+    const MUXC::DatePicker nativePicker =
+        pickerParts.front().try_as<MUXC::DatePicker>();
+    REQUIRE(nativePicker);
+    CHECK(nativePicker.Language() == L"ja-JP-u-ca-japanese");
+    CHECK(nativePicker.CalendarIdentifier() ==
+          WG::CalendarIdentifiers::Japanese());
 
     const auto checkCivilDate = [&](const wxDateTime& civil)
     {
@@ -2816,16 +2243,7 @@ TEST_CASE("wxWinUI Japanese calendar preserves era transitions and bounds",
         CHECK(year == model.Year());
         CHECK(month == model.Month());
         CHECK(day == model.Day());
-        CHECK(eraParts.front().SelectedIndex() ==
-              model.Era() - model.FirstEra());
-        const int eraIndex = eraParts.front().SelectedIndex();
-        REQUIRE(eraIndex >= 0);
-        REQUIRE(static_cast<std::uint32_t>(eraIndex) <
-                eraParts.front().Items().Size());
-        CHECK(winrt::unbox_value<winrt::hstring>(
-                  eraParts.front().Items().GetAt(eraIndex)) ==
-              model.EraAsString());
-        return eraParts.front().SelectedIndex();
+        return model.Era();
     };
 
     const int heiseiEra = checkCivilDate(heiseiLast);
@@ -2878,7 +2296,8 @@ TEST_CASE("wxWinUI holiday authority reentrance converges on live state",
     REQUIRE(parent);
 
     const wxDateTime initial(15, wxDateTime::May, 2024);
-    const wxDateTime target(15, wxDateTime::Jun, 2024);
+    // A Monday: a holiday on a week-end day gets no emphasis.
+    const wxDateTime target(17, wxDateTime::Jun, 2024);
 
     SECTION("SetDate")
     {
@@ -4587,7 +4006,7 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     const unsigned long long initialRevision = revision;
 
     const wxColour lightThemeMark(17, 83, 149);
-    REQUIRE(wxWinUICalendarTestAccess::SetTodayForeground(calendar,
+    REQUIRE(wxWinUICalendarTestAccess::SetTodayBackground(calendar,
         lightThemeMark));
     REQUIRE(wxWinUICalendarTestAccess::DeliverThemeChanged(calendar));
     REQUIRE(WaitFor("light CalendarView ActualThemeChanged refresh", [&]()
@@ -4601,7 +4020,7 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     const unsigned long long lightRevision = revision;
 
     const wxColour darkThemeMark(241, 196, 15);
-    REQUIRE(wxWinUICalendarTestAccess::SetTodayForeground(calendar,
+    REQUIRE(wxWinUICalendarTestAccess::SetTodayBackground(calendar,
         darkThemeMark));
     REQUIRE(wxWinUICalendarTestAccess::DeliverThemeChanged(calendar));
     REQUIRE(WaitFor("dark CalendarView ActualThemeChanged refresh", [&]()
@@ -4838,6 +4257,9 @@ TEST_CASE("wxWinUI Calendar setter stops after destructive ForceRender",
         host->FlushSync();
     }
     invoking->SetSize(wxSize(311, 359));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(invoking);
     bool slotSynced = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
@@ -4874,6 +4296,9 @@ TEST_CASE("wxWinUI Calendar nested setter is last writer",
     const wxDateTime outer(16, wxDateTime::May, 2024);
     const wxDateTime nested(17, wxDateTime::May, 2024);
     calendar.SetSize(wxSize(313, 361));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(&calendar);
     bool slotSynced = false;
     bool nestedResult = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
@@ -4913,6 +4338,9 @@ TEST_CASE("wxWinUI Calendar nested range setter is last writer",
     const wxDateTime nestedMinimum(10, wxDateTime::May, 2024);
     const wxDateTime nestedMaximum(20, wxDateTime::May, 2024);
     calendar.SetSize(wxSize(315, 363));
+    // Resizing alone repositions the slot at once: ask for the full
+    // sync this test is about.
+    wxWinUIHostGeometryTestAccess::RequestSlotSync(&calendar);
     bool slotSynced = false;
     bool nestedResult = false;
     wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(

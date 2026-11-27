@@ -36,6 +36,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_COMBOBOX
     #include "wx/combobox.h"
     #include "wx/winui/private/tlwhost.h"
+    #include "propgridwinui.h"
     #include <winrt/Microsoft.UI.Xaml.Controls.h>
     #include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
     #include <winrt/Microsoft.UI.Xaml.Media.h>
@@ -64,7 +65,12 @@
 
 #if defined(__WXMSW__)
     // tested
+  #if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The button of an editor is as high as the editor itself.
+    #define wxPG_NAT_BUTTON_BORDER_Y            0
+  #else
     #define wxPG_NAT_BUTTON_BORDER_Y            1
+  #endif
 
     #define wxPG_CHECKMARK_XADJ                 1
     #define wxPG_CHECKMARK_YADJ                 (-1)
@@ -1222,10 +1228,23 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         {
             wxCoord x, y;
             pCb->GetTextExtent(text, &x, &y);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            rect.width = x + FromDIP(2 * wxPG_WINUI_SWATCH_START);
+            if ( cis.x > 0 )
+            {
+                rect.width +=
+                    FromDIP(wxPG_WINUI_SWATCH_SIDE + wxPG_WINUI_SWATCH_GAP);
+            }
+#else
             rect.width = cis.x + wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2 + 9 + x;
+#endif
         }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        rect.height = FromDIP(wxPG_WINUI_CHOICE_HEIGHT);
+#else
         rect.height = cis.y + 2;
+#endif
         return;
     }
 
@@ -1293,6 +1312,32 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     else if ( itemBitmap.IsOk() && !(flags & wxODCB_PAINTING_CONTROL) )
         useCustomPaintProcedure = false;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( useCustomPaintProcedure && comValIndex < 0 )
+    {
+        // As the cell shows the value while it is not being edited: a
+        // swatch with rounded corners in the middle of the row, at the same
+        // place, and the text after it. A square as high as the row with a
+        // black outline is not what WinUI shows of a colour.
+        const int side = FromDIP(wxPG_WINUI_SWATCH_SIDE);
+        int x = rect.x + FromDIP(wxPG_WINUI_SWATCH_START);
+        if ( flags & wxODCB_PAINTING_CONTROL )
+            x -= FromDIP(wxPG_WINUI_VALUE_INSET);
+
+        const wxBitmap swatch = wxPGWinUIPaintSwatch(
+            const_cast<wxPGComboBox*>(pCb), p, paintdata, side);
+        if ( !transactionIsValid() )
+            return;
+        if ( swatch.IsOk() )
+            dc.DrawBitmap(swatch, x, rect.y + (rect.height - side) / 2, true);
+
+        dc.DrawText(text, x + side + FromDIP(wxPG_WINUI_SWATCH_GAP),
+                    rect.y + (rect.height - dc.GetCharHeight()) / 2 -
+                        FromDIP(1));
+        return;
+    }
+#endif
+
     if ( useCustomPaintProcedure )
     {
         pt.x += wxCC_CUSTOM_IMAGE_MARGIN1;
@@ -1359,6 +1404,11 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     pt.y += (rect.height-m_fontHeight)/2 - 1;
 
     pt.x += 1;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Where a WinUI ComboBox has its text: 12 from its edge.
+    pt.x += FromDIP(12) - wxPG_XBEFORETEXT - 1;
+#endif
 
     dc.DrawText( text, pt.x + wxPG_XBEFORETEXT, pt.y );
 
@@ -1556,8 +1606,10 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
         return weakCombo.get();
 
     // Under OSX default button seems to look fine
-    // so there is no need to change it.
-#ifndef __WXOSX__
+    // so there is no need to change it. Nor under WinUI, where the chevron
+    // is then where the one of a ComboBox is, and where the cell shows it
+    // while the value is not being edited.
+#if !defined(__WXOSX__) && !(defined(__WXWINUI__) && wxUSE_WINUI3)
     cb->SetButtonPosition(si.y,0,wxRIGHT);
     if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
          !gridTransactionIsValid() )
@@ -2053,14 +2105,16 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
     // Use one two units smaller to match size of the combo's dropbutton.
     // (normally a bigger button is used because it looks better)
     int bt_wid = sz.y;
+#if !(defined(__WXWINUI__) && wxUSE_WINUI3)
     bt_wid -= 2;
+#endif
     wxSize bt_sz(bt_wid,bt_wid);
 
     // Position of button.
     wxPoint bt_pos(pos.x+sz.x-bt_sz.x,pos.y);
 #ifdef __WXMAC__
     bt_pos.y -= 1;
-#else
+#elif !(defined(__WXWINUI__) && wxUSE_WINUI3)
     bt_pos.y += 1;
 #endif
 
@@ -2494,6 +2548,10 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
     // must resolve an unspecified property to a concrete boolean value.
     wxCheckBox* cb = new wxCheckBox();
     const wxWeakRef<wxWindow> weakCheckBox(cb);
+    // Its box where the cell shows it while the value is not being edited:
+    // where the texts of the column start.
+    pt.x = pos.x + propGrid->FromDIP(wxPG_WINUI_TEXT_INSET -
+                                     wxPG_WINUI_VALUE_INSET);
     sz.x = wxMax(sz.x, propGrid->FromDIP(32));
     sz.y = wxMax(sz.y, propGrid->FromDIP(32));
     const bool created = cb->Create(propGrid->GetPanel(), wxID_ANY,
@@ -2994,12 +3052,11 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
                                         const wxPoint& offset )
 {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-    // XAML editors already include their native text padding. The legacy
-    // MSW text baseline adjustment shrinks a 32 DIP row below the template's
-    // minimum height and clips its bottom edge. Use the authoritative row
-    // allocation as-is; do not apply HWND edit margins to the XAML peer.
+    // XAML editors already include their native text padding, and the rect
+    // of an editor is already the one of a control of the standard height in
+    // the middle of its row (see TryGetEditorWidgetRect()): there is nothing
+    // to adjust, and no HWND edit margin to apply to the XAML peer.
     wxRect finalPos = ctrl->GetRect();
-    finalPos.height = m_lineHeight;
     finalPos.Offset(offset);
     ctrl->SetSize(finalPos);
 #else
@@ -3091,8 +3148,14 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
     wxWindow* ctrlParent = GetPanel();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The editor of a cell of a table of WinUI is a field with its frame,
+    // lower than its row; the value has none while it is not being edited.
+    wxUnusedVar(hasSpecialSize);
+#else
     if ( !hasSpecialSize )
         tcFlags |= wxBORDER_NONE;
+#endif
 
     wxTextCtrl* tc = new wxTextCtrl();
     const wxWeakRef<wxWindow> weakText(tc);

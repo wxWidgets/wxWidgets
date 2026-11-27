@@ -320,7 +320,7 @@ bool wxRibbonContainerWinUI::Initialize()
         wxRibbonToolkitFailure failure;
         if ( !wxRibbonToolkitRuntime::TryAcquire(m_runtime, &failure) )
         {
-            wxLogWarning("Native Ribbon runtime failed at %s: %s",
+            wxLogDebug("Native Ribbon runtime failed at %s: %s",
                          failure.stage, failure.detail);
             return false;
         }
@@ -1036,7 +1036,7 @@ bool wxRibbonContainerWinUI::OnTabPressed(wxRibbonPage* page,
     catch ( const winrt::hresult_error& e )
         { wxWinUILogException("native ribbon tab activation", e); }
     catch ( ... )
-        { wxLogError("Exception in native ribbon tab activation handler"); }
+        { wxLogDebug("Exception in native ribbon tab activation handler"); }
     return false;
 }
 
@@ -1122,7 +1122,7 @@ void wxRibbonContainerWinUI::OnBarButton(bool toggle)
     catch ( const winrt::hresult_error& e )
         { wxWinUILogException("native ribbon chrome command", e); }
     catch ( ... )
-        { wxLogError("Exception in native ribbon chrome command handler"); }
+        { wxLogDebug("Exception in native ribbon chrome command handler"); }
 }
 
 bool wxRibbonContainerWinUI::Realize(wxRibbonControl* owner)
@@ -1914,7 +1914,7 @@ void wxRibbonContainerWinUI::OnPanelButton(bool popup)
     catch ( const winrt::hresult_error& e )
         { wxWinUILogException("native ribbon panel extension", e); }
     catch ( ... )
-        { wxLogError("Exception in native ribbon panel extension handler"); }
+        { wxLogDebug("Exception in native ribbon panel extension handler"); }
 }
 
 bool wxRibbonContainerWinUI::IsExtensionHovered(const wxRibbonPanel* owner)

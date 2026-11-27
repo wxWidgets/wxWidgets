@@ -97,7 +97,7 @@ void wxWinUIButtonRunCallbackNoexcept(const char *operation,
     {
         try
         {
-            wxLogWarning(
+            wxLogDebug(
                 "wxWinUI: Button %s failed: %s",
                 wxString::FromUTF8(operation),
                 wxString::FromUTF8(e.what()));
@@ -110,7 +110,7 @@ void wxWinUIButtonRunCallbackNoexcept(const char *operation,
     {
         try
         {
-            wxLogWarning(
+            wxLogDebug(
                 "wxWinUI: Button %s failed with an unknown exception.",
                 wxString::FromUTF8(operation));
         }
@@ -864,19 +864,21 @@ bool wxButton::Create(wxWindow *parent,
                 winrt::Windows::Foundation::IInspectable const&,
                 MUX::RoutedEventArgs const&)
             {
-                wxButton * const owner = callbackState->GetOwner();
-                if ( !owner || !owner->m_winui ||
-                     owner->m_winui->callbackState != callbackState ||
-                     owner->m_winui->destroying )
+                // The handler of the command event may open a modal dialog
+                // or destroy the button: it runs once this callback has
+                // returned (see wxWinUIPostNotification()).
+                wxWinUIPostNotification([callbackState]()
                 {
-                    return;
-                }
+                    wxButton * const owner = callbackState->GetOwner();
+                    if ( !owner || !owner->m_winui ||
+                         owner->m_winui->callbackState != callbackState ||
+                         owner->m_winui->destroying )
+                    {
+                        return;
+                    }
 
-                // The command event can destroy owner. Nothing may follow it,
-                // and an application exception must not cross the WinRT ABI.
-                wxWinUIButtonRunCallbackNoexcept(
-                    "click event",
-                    [owner]() { owner->SendClickEvent(); });
+                    owner->SendClickEvent();
+                });
             });
 
         if ( !UpdateWinUIContent(false) )
@@ -2671,9 +2673,22 @@ bool wxButton::UpdateWinUIAppearance(bool forceRender)
 
             if ( border == wxBORDER_NONE )
             {
+                // Asked for without a border, a button is flat in wxMSW: it
+                // shows only its picture or its text. In WinUI that is the
+                // quiet button, which has no ground either until the pointer
+                // is over it. Its resources are given once.
                 MUX::Thickness thickness{};
                 boundary(
-                    [&]() { peer.BorderThickness(thickness); });
+                    [&]()
+                    {
+                        const auto plain = peer.try_as<MUXC::Button>();
+                        if ( plain &&
+                             !plain.Resources().ThemeDictionaries().Size() )
+                        {
+                            wxWinUIApplySubtleButtonStyle(plain);
+                        }
+                        peer.BorderThickness(thickness);
+                    });
             }
             else if ( border )
             {

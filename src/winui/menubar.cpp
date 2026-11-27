@@ -2284,7 +2284,7 @@ private:
                 if ( !owner->m_host.SetContent(bar) )
                 {
                     retireCandidate(state);
-                    wxLogWarning(
+                    wxLogDebug(
                         "WinUI MenuBar content replacement failed.");
                     return finish(false);
                 }
@@ -2344,7 +2344,7 @@ private:
             owner->m_buildPending = false;
             owner->m_buildQuarantined = true;
             owner->m_buildRetryScheduled = false;
-            wxLogWarning(
+            wxLogDebug(
                 "WinUI MenuBar model kept changing during projection; "
                 "quarantining this request until the next external "
                 "mutation.");

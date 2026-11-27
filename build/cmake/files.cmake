@@ -1839,6 +1839,7 @@ set(MSW_HDR
     wx/winui/choice.h
     wx/winui/clrpicker.h
     wx/winui/colordlg.h
+    wx/winui/fontdlg.h
     wx/winui/datectrl.h
     wx/winui/dataview.h
     wx/winui/combobox.h
@@ -1859,6 +1860,7 @@ set(MSW_HDR
     wx/winui/srchctrl.h
     wx/winui/statbmp.h
     wx/winui/statbox.h
+    wx/winui/collpane.h
     wx/winui/statusbar.h
     wx/winui/statline.h
     wx/winui/timectrl.h
@@ -2858,6 +2860,7 @@ set(RIBBON_SRC
     src/ribbon/art_msw.cpp
     src/ribbon/art_aui.cpp
     src/ribbon/art_msw_flat.cpp
+    src/ribbon/art_winui.cpp
     src/ribbon/bar.cpp
     src/ribbon/buttonbar.cpp
     src/ribbon/control.cpp

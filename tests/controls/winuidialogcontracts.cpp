@@ -35,7 +35,9 @@
 #include "wx/dialog.h"
 #include "wx/fdrepdlg.h"
 #include "wx/fontdlg.h"
+#include "wx/generic/fontdlgg.h"
 #include "wx/frame.h"
+#include "wx/listbox.h"
 #include "wx/msgdlg.h"
 #include "wx/modalhook.h"
 #include "wx/panel.h"
@@ -1534,7 +1536,9 @@ TEST_CASE("WinUIDialogContracts::FontPreviewUsesNativeTextWithBackdrop",
                                wxFONTWEIGHT_BOLD, true));
     data.SetColour(*wxRED);
     data.EnableEffects(effects);
-    wxFontDialog dialog(&owner, data);
+    // The generic dialog, by its name: wxFontDialog is the one made after
+    // the dialog of Windows, tested further down.
+    wxGenericFontDialog dialog(&owner, data);
     dialog.SetLayoutDirection(rtl ? wxLayout_RightToLeft : wxLayout_LeftToRight);
     dialog.ShowWithoutActivating();
     const HWND hwnd = GetHwndOf(&dialog);
@@ -1626,7 +1630,117 @@ TEST_CASE("WinUIDialogContracts::FontPreviewUsesNativeTextWithBackdrop",
     owner.Hide();
 }
 
-TEST_CASE("WinUIDialogContracts::FontDialogTransactionalContract",
+TEST_CASE("WinUIDialogContracts::FontDialogShowsAndReturnsFont",
+          "[winui-dialog-contract][winui-standard-dialog]"
+          "[winui-font-dialog]")
+{
+    wxFrame owner(
+        nullptr,
+        wxID_ANY,
+        "font owner",
+        wxPoint(-32000, -32000),
+        wxSize(420, 260));
+    owner.ShowWithoutActivating();
+
+    wxFontData data;
+    const wxFont initial(
+        wxFontInfo(14).FaceName("Arial").Bold().Underlined());
+    REQUIRE(initial.IsOk());
+    data.SetInitialFont(initial);
+    data.SetColour(*wxRED);
+    data.EnableEffects(true);
+
+    // The default constructor must remain a real two-phase constructor.
+    wxFontDialog dialog;
+    CHECK(dialog.GetHandle() == nullptr);
+    REQUIRE(dialog.Create(&owner, data));
+    REQUIRE(dialog.GetHandle() != nullptr);
+    dialog.Move(-32000, -32000);
+
+    const auto find = [&dialog](const char *name)
+    {
+        return wxWindow::FindWindowByName(name, &dialog);
+    };
+    wxTextCtrl * const familyText =
+        wxDynamicCast(find("fontFamilyText"), wxTextCtrl);
+    wxListBox * const familyList =
+        wxDynamicCast(find("fontFamilyList"), wxListBox);
+    wxTextCtrl * const styleText =
+        wxDynamicCast(find("fontStyleText"), wxTextCtrl);
+    wxListBox * const styleList =
+        wxDynamicCast(find("fontStyleList"), wxListBox);
+    wxTextCtrl * const sizeText =
+        wxDynamicCast(find("fontSizeText"), wxTextCtrl);
+    wxListBox * const sizeList =
+        wxDynamicCast(find("fontSizeList"), wxListBox);
+    REQUIRE(familyText);
+    REQUIRE(familyList);
+    REQUIRE(styleText);
+    REQUIRE(styleList);
+    REQUIRE(sizeText);
+    REQUIRE(sizeList);
+    CHECK(dialog.GetAffirmativeId() == wxID_OK);
+    CHECK(dialog.FindWindow(wxID_OK));
+    CHECK(dialog.FindWindow(wxID_CANCEL));
+
+    // The three lists show the initial font. The names of the styles are in
+    // the language of the system: only their agreement is checked.
+    CHECK(familyText->GetValue() == "Arial");
+    CHECK(familyList->GetStringSelection() == "Arial");
+    REQUIRE(styleList->GetSelection() != wxNOT_FOUND);
+    CHECK(styleText->GetValue() == styleList->GetStringSelection());
+    CHECK(sizeText->GetValue() == "14");
+    CHECK(sizeList->GetStringSelection() == "14");
+
+    // A size which is not in the list can be typed.
+    sizeText->SetValue("33");
+    wxCommandEvent typed(wxEVT_TEXT, sizeText->GetId());
+    typed.SetEventObject(sizeText);
+    sizeText->ProcessWindowEvent(typed);
+    CHECK(sizeList->GetSelection() == wxNOT_FOUND);
+
+    // Nothing is stored before OK.
+    CHECK(dialog.GetFontData().GetColour() == *wxRED);
+    CHECK_FALSE(dialog.GetFontData().GetChosenFont().IsOk());
+
+    const wxWeakRef<wxWindow> weakDialog(&dialog);
+    wxTheApp->CallAfter(
+        [weakDialog]()
+        {
+            if ( wxDialog * const live =
+                     wxDynamicCast(weakDialog.get(), wxDialog) )
+            {
+                live->EndModal(wxID_CANCEL);
+            }
+        });
+    CHECK(dialog.ShowModal() == wxID_CANCEL);
+    CHECK_FALSE(dialog.GetFontData().GetChosenFont().IsOk());
+
+    // OK is the button: it is the one which checks what was typed.
+    wxTheApp->CallAfter(
+        [weakDialog]()
+        {
+            if ( wxWindow * const live = weakDialog.get() )
+            {
+                wxCommandEvent ok(wxEVT_BUTTON, wxID_OK);
+                ok.SetEventObject(live);
+                live->ProcessWindowEvent(ok);
+            }
+        });
+    CHECK(dialog.ShowModal() == wxID_OK);
+
+    const wxFont chosen = dialog.GetFontData().GetChosenFont();
+    REQUIRE(chosen.IsOk());
+    CHECK(chosen.GetFaceName() == "Arial");
+    CHECK(chosen.GetPointSize() == 33);
+    CHECK(chosen.GetWeight() == wxFONTWEIGHT_BOLD);
+    CHECK(chosen.GetStyle() == wxFONTSTYLE_NORMAL);
+    CHECK(chosen.GetUnderlined());
+    CHECK(chosen.GetFamily() == wxFONTFAMILY_SWISS);
+    CHECK(dialog.GetFontData().GetColour() == *wxRED);
+}
+
+TEST_CASE("WinUIDialogContracts::GenericFontDialogTransactionalContract",
           "[winui-dialog-contract][winui-standard-dialog]"
           "[winui-font-dialog]")
 {
@@ -1651,7 +1765,7 @@ TEST_CASE("WinUIDialogContracts::FontDialogTransactionalContract",
     data.EnableEffects(true);
 
     // The default constructor must remain a real two-phase constructor.
-    wxFontDialog dialog;
+    wxGenericFontDialog dialog;
     CHECK(dialog.GetHandle() == nullptr);
     REQUIRE(dialog.Create(&owner, data));
     REQUIRE(dialog.GetHandle() != nullptr);
@@ -3267,181 +3381,9 @@ TEST_CASE("WinUIDialogContracts::GenericProgressContractAndReentrance",
     }
 }
 
-TEST_CASE("WinUIDialogContracts::NativeProgressBoundaryAndLifetime",
-          "[winui-beta-dialogs][winui-dialog-aux][winui-progress-dialog]"
-          "[winui-dialog-lifetime]")
-{
-    wxFrame owner(
-        nullptr, wxID_ANY, "native-progress-owner",
-        wxPoint(-32000, -32000), wxSize(360, 220));
-    owner.ShowWithoutActivating();
-
-    TaskDialogHookContext context;
-    ScopedTaskDialogHook hook(context);
-
-    {
-        wxProgressDialog progress(
-            "Native progress",
-            "Starting",
-            100000,
-            &owner,
-            wxPD_CAN_ABORT | wxPD_CAN_SKIP |
-            wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME |
-            wxPD_REMAINING_TIME | wxPD_AUTO_HIDE);
-
-        REQUIRE(context.progressEntered.load());
-        CHECK_FALSE(owner.IsEnabled());
-        CHECK((context.flags & TDF_SHOW_PROGRESS_BAR) != 0);
-        CHECK((context.flags & TDF_CALLBACK_TIMER) != 0);
-        CHECK(context.parent == static_cast<HWND>(wxGetHWND(&owner)));
-        CHECK(progress.GetRange() == 100000);
-        CHECK(progress.GetValue() == 0);
-        CHECK_FALSE(context.expandedInformation.empty());
-
-        for ( int update = 1; update <= 50; ++update )
-        {
-            CHECK(progress.Update(
-                update * 1400,
-                wxString::Format("Native update %d", update)));
-        }
-        CHECK(progress.GetValue() == 70000);
-        CHECK(progress.GetMessage() == "Native update 50");
-        CHECK(progress.Pulse("Native pulse"));
-        CHECK(progress.GetValue() == 70000);
-        CHECK(progress.GetMessage() == "Native pulse");
-
-        context.requestSkip = true;
-        WaitFor(
-            "native progress skip callback",
-            [&context]()
-            {
-                return context.skipDeliveries.load() == 1;
-            });
-        bool skipped = false;
-        CHECK(progress.Update(71000, wxString(), &skipped));
-        CHECK(skipped);
-
-        context.requestCancel = true;
-        WaitFor(
-            "native progress cancel callback",
-            [&context]()
-            {
-                return context.cancelDeliveries.load() == 1;
-            });
-        CHECK_FALSE(progress.Update(72000));
-        CHECK(progress.WasCancelled());
-        progress.Resume();
-        CHECK_FALSE(progress.WasCancelled());
-
-        progress.SetRange(200000);
-        CHECK(progress.GetRange() == 200000);
-        CHECK(progress.Update(150000, "Resumed native"));
-        CHECK(progress.GetValue() == 150000);
-        progress.SetTitle("Updated native title");
-        CHECK(progress.GetTitle() == "Updated native title");
-        progress.Fit();
-        CHECK(progress.Update(200000, "Native done"));
-        CHECK(progress.GetValue() == 200000);
-        WaitFor(
-            "native progress auto-hide teardown",
-            [&context]()
-            {
-                return context.progressExited.load();
-            });
-    }
-    CHECK(owner.IsEnabled());
-
-    SECTION("minimized owner is not used for relative positioning")
-    {
-        owner.Iconize(true);
-        wxYield();
-        context.progressEntered = false;
-        context.progressExited = false;
-        {
-            wxProgressDialog progress(
-                "minimized owner", "progress", 10,
-                &owner, wxPD_AUTO_HIDE);
-            REQUIRE(context.progressEntered.load());
-            CHECK((context.flags & TDF_POSITION_RELATIVE_TO_WINDOW) == 0);
-            CHECK(progress.Update(10));
-        }
-        owner.Iconize(false);
-        wxYield();
-    }
-
-    SECTION("destroying the owner never exposes a wxWindow to the worker")
-    {
-        wxFrame * const transientOwner =
-            new wxFrame(
-                nullptr, wxID_ANY, "native-progress-destroy-owner",
-                wxPoint(-32000, -32000), wxSize(360, 220));
-        transientOwner->ShowWithoutActivating();
-        const wxWeakRef<wxWindow> weakOwner(transientOwner);
-
-        context.progressEntered = false;
-        context.progressExited = false;
-        wxProgressDialog * const progress =
-            new wxProgressDialog(
-                "owner lifetime", "progress", 10,
-                transientOwner,
-                wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
-        REQUIRE(context.progressEntered.load());
-        transientOwner->Destroy();
-        wxYield();
-        CHECK_FALSE(weakOwner.get());
-        CHECK(progress->Update(10));
-        delete progress;
-        CHECK(context.progressExited.load());
-    }
-
-    SECTION("destroying the dialog from its update dispatch is safe")
-    {
-        context.progressEntered = false;
-        context.progressExited = false;
-        wxProgressDialog * const progress =
-            new wxProgressDialog(
-                "callback destroy", "progress", 10,
-                 &owner,
-                 wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
-        REQUIRE(context.progressEntered.load());
-        const wxWeakRef<wxProgressDialog> weakProgress(progress);
-        struct DeleteDuringYieldContext
-        {
-            explicit DeleteDuringYieldContext(wxProgressDialog *dialog)
-                : progress(dialog),
-                  deleted(false)
-            {
-            }
-
-            wxWeakRef<wxProgressDialog> progress;
-            bool deleted;
-        } deleteContext(progress);
-        wxWinUIProgressDialogTestAccess::SetYieldHook(
-            *progress,
-            &deleteContext,
-            [](void *rawContext)
-            {
-                DeleteDuringYieldContext& context =
-                    *static_cast<DeleteDuringYieldContext *>(rawContext);
-                if ( wxProgressDialog * const live = context.progress.get() )
-                {
-                    delete live;
-                    context.deleted = true;
-                }
-            });
-
-        const bool updateResult = progress->Update(1);
-        wxProgressDialog * const remainingProgress = weakProgress.get();
-        const bool exitedFromDispatch = context.progressExited.load();
-        if ( remainingProgress )
-            delete remainingProgress;
-
-        CHECK_FALSE(updateResult);
-        CHECK(deleteContext.deleted);
-        CHECK_FALSE(remainingProgress);
-        CHECK(exitedFromDispatch);
-    }
-}
+// wxProgressDialog is the generic dialog in wxWinUI, made of the controls of
+// the port: the TaskDialog of Win32 it used before, with its own thread, is
+// not built, and what was checked of it here went with it.
 
 TEST_CASE("WinUIDialogContracts::ProgressHundredCycleShutdown",
           "[winui-beta-dialogs][winui-dialog-aux][winui-progress-dialog]"
@@ -3452,31 +3394,17 @@ TEST_CASE("WinUIDialogContracts::ProgressHundredCycleShutdown",
         wxPoint(-32000, -32000), wxSize(360, 220));
     owner.ShowWithoutActivating();
 
-    TaskDialogHookContext context;
-    ScopedTaskDialogHook hook(context);
-
     for ( int cycle = 0; cycle < 100; ++cycle )
     {
-        context.progressEntered = false;
-        context.progressExited = false;
-        context.timerDeliveries = 0;
-
         wxProgressDialog progress(
-            "native cycle",
+            "cycle",
             wxString::Format("cycle %d", cycle),
             1000,
             &owner,
             wxPD_AUTO_HIDE | (cycle % 2 ? wxPD_CAN_ABORT : 0));
-        REQUIRE(context.progressEntered.load());
         CHECK(progress.Update(500, "half"));
         CHECK(progress.GetValue() == 500);
         CHECK(progress.Update(1000, "done"));
-        WaitFor(
-            "native progress cycle exit",
-            [&context]()
-            {
-                return context.progressExited.load();
-            });
     }
 
     for ( int cycle = 0; cycle < 100; ++cycle )

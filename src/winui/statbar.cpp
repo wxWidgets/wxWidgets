@@ -293,7 +293,116 @@ struct wxWinUIStatusBarGripAction final
     std::function<wxStatusBar *()> getCurrentOwner;
     std::function<bool (bool, bool, bool, const POINT&,
                         std::uint32_t, std::uint64_t)> invoke;
+
+    // Direct resize tracking, see wxWinUIStatusBarGripBegin().
+    bool tracking = false;
+    std::uint32_t trackingPointerId = 0;
+    POINT trackingStartCursor{};
+    RECT trackingStartRect{};
 };
+
+// The grip resizes the frame itself while it holds the XAML pointer capture,
+// instead of handing the gesture over to USER32's modal sizing loop. That
+// loop reads Win32 mouse messages, which an island does not produce while it
+// owns the pointer: relaying them made the window follow the mouse only once
+// the button was released, or snap back when the release was mistaken for a
+// cancellation. Following the captured pointer needs no hand-over at all.
+// WM_ENTERSIZEMOVE, WM_SIZING and WM_EXITSIZEMOVE are still sent, so the
+// application observes the same notifications as for a border resize.
+bool wxWinUIStatusBarGripBegin(wxWinUIStatusBarGripAction& action,
+                               std::uint32_t pointerId)
+{
+    const HWND hwnd = action.hwnd;
+    if ( action.tracking || !hwnd || !::IsWindow(hwnd) ||
+         ::IsZoomed(hwnd) || ::IsIconic(hwnd) )
+    {
+        return false;
+    }
+
+    if ( !::GetCursorPos(&action.trackingStartCursor) ||
+         !::GetWindowRect(hwnd, &action.trackingStartRect) )
+    {
+        return false;
+    }
+
+    action.tracking = true;
+    action.trackingPointerId = pointerId;
+    ::SendMessageW(hwnd, WM_ENTERSIZEMOVE, 0, 0);
+    return action.tracking;
+}
+
+void wxWinUIStatusBarGripTrack(wxWinUIStatusBarGripAction& action)
+{
+    const HWND hwnd = action.hwnd;
+    POINT cursor;
+    if ( !action.tracking || !hwnd || !::IsWindow(hwnd) ||
+         !::GetCursorPos(&cursor) )
+    {
+        return;
+    }
+
+    // Always work from the position at the press: reading the cursor now,
+    // rather than accumulating the routed deltas, makes a backlog of moves
+    // collapse into the latest one.
+    const bool leftCorner = action.nativeHitTest == HTBOTTOMLEFT;
+    RECT rect = action.trackingStartRect;
+    if ( leftCorner )
+        rect.left += cursor.x - action.trackingStartCursor.x;
+    else
+        rect.right += cursor.x - action.trackingStartCursor.x;
+    rect.bottom += cursor.y - action.trackingStartCursor.y;
+
+    // Apply the limits an interactive resize would apply.
+    MINMAXINFO limits{};
+    limits.ptMinTrackSize.x = ::GetSystemMetrics(SM_CXMINTRACK);
+    limits.ptMinTrackSize.y = ::GetSystemMetrics(SM_CYMINTRACK);
+    limits.ptMaxTrackSize.x = ::GetSystemMetrics(SM_CXMAXTRACK);
+    limits.ptMaxTrackSize.y = ::GetSystemMetrics(SM_CYMAXTRACK);
+    ::SendMessageW(hwnd, WM_GETMINMAXINFO, 0,
+                   reinterpret_cast<LPARAM>(&limits));
+    if ( !action.tracking || !::IsWindow(hwnd) )
+        return;
+
+    LONG width = rect.right - rect.left;
+    LONG height = rect.bottom - rect.top;
+    if ( width < limits.ptMinTrackSize.x )
+        width = limits.ptMinTrackSize.x;
+    if ( limits.ptMaxTrackSize.x > 0 && width > limits.ptMaxTrackSize.x )
+        width = limits.ptMaxTrackSize.x;
+    if ( height < limits.ptMinTrackSize.y )
+        height = limits.ptMinTrackSize.y;
+    if ( limits.ptMaxTrackSize.y > 0 && height > limits.ptMaxTrackSize.y )
+        height = limits.ptMaxTrackSize.y;
+    if ( leftCorner )
+        rect.left = rect.right - width;
+    else
+        rect.right = rect.left + width;
+    rect.bottom = rect.top + height;
+
+    ::SendMessageW(hwnd, WM_SIZING,
+                   leftCorner ? WMSZ_BOTTOMLEFT : WMSZ_BOTTOMRIGHT,
+                   reinterpret_cast<LPARAM>(&rect));
+    if ( !action.tracking || !::IsWindow(hwnd) )
+        return;
+
+    RECT current;
+    if ( !::GetWindowRect(hwnd, &current) || ::EqualRect(&current, &rect) )
+        return;
+
+    ::SetWindowPos(hwnd, nullptr, rect.left, rect.top,
+                   rect.right - rect.left, rect.bottom - rect.top,
+                   SWP_NOZORDER | SWP_NOACTIVATE);
+}
+
+void wxWinUIStatusBarGripEnd(wxWinUIStatusBarGripAction& action)
+{
+    if ( !action.tracking )
+        return;
+
+    action.tracking = false;
+    if ( action.hwnd && ::IsWindow(action.hwnd) )
+        ::SendMessageW(action.hwnd, WM_EXITSIZEMOVE, 0, 0);
+}
 
 class wxWinUIStatusBarRebuildGuard final
 {
@@ -700,7 +809,7 @@ bool wxStatusBar::RebuildContent()
             callbackState->QuarantineRebuild();
             if ( callbackState->MarkRebuildBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "wxStatusBar WinUI content kept changing during "
                     "realization; quarantining this request until the next "
                     "external model mutation.");
@@ -724,7 +833,7 @@ bool wxStatusBar::RebuildContent()
             // deferred ticket becomes consumable.
             if ( callbackState->MarkRebuildBudgetWarning() )
             {
-                wxLogWarning(
+                wxLogDebug(
                     "wxStatusBar WinUI content kept changing during "
                     "realization; using its one bounded asynchronous replay.");
             }
@@ -1311,12 +1420,13 @@ bool wxStatusBar::RebuildContent()
                     if ( outline )
                     {
                         hasThemeBorder = true;
+                        // No box around a field: a short hairline between
+                        // it and the one before, as the parts of a WinUI
+                        // bar are told apart.
                         MUX::Thickness thickness{};
-                        thickness.Left = 1.0;
-                        thickness.Top = 1.0;
-                        thickness.Right = 1.0;
-                        thickness.Bottom = 1.0;
+                        thickness.Left = i > 0 ? 1.0 : 0.0;
                         outline.BorderThickness(thickness);
+                        outline.Margin({ 0, 6, 0, 6 });
                         outline.IsHitTestVisible(false);
                         cell.Children().InsertAt(0, outline);
                         borderElementCount = 1;
@@ -1413,8 +1523,11 @@ bool wxStatusBar::RebuildContent()
                 glyph.Text(
                     winrt::hstring(
                         rightToLeft ? L"\u22F1" : L"\u22F0"));
+                // The corner still resizes the window, and the pointer
+                // says so over it, but nothing is drawn there: a window of
+                // Windows 11 shows no grip.
                 glyph.FontSize(13.0);
-                glyph.Opacity(0.65);
+                glyph.Opacity(0.0);
                 glyph.IsHitTestVisible(false);
                 glyph.HorizontalAlignment(
                     MUX::HorizontalAlignment::Center);
@@ -1554,17 +1667,26 @@ bool wxStatusBar::RebuildContent()
                                 return;
                             }
 
-                            POINT screenPoint{};
-                            if ( !::GetCursorPos(&screenPoint) )
-                                return;
-
-                            if ( action->invoke &&
-                                 action->invoke(
-                                     true, true, true, screenPoint,
-                                     point.PointerId(), point.Timestamp() / 1000) )
+                            if ( !action->getCurrentOwner ||
+                                 !action->getCurrentOwner() )
                             {
-                                event.Handled(true);
+                                return;
                             }
+
+                            if ( !wxWinUIStatusBarGripBegin(
+                                     *action, point.PointerId()) )
+                            {
+                                return;
+                            }
+
+                            // The capture keeps the moves coming while the
+                            // pointer runs ahead of the window edge.
+                            if ( !element.CapturePointer(event.Pointer()) )
+                            {
+                                wxWinUIStatusBarGripEnd(*action);
+                                return;
+                            }
+                            event.Handled(true);
                         }
                         catch ( const winrt::hresult_error& e )
                         {
@@ -1572,6 +1694,86 @@ bool wxStatusBar::RebuildContent()
                                 "WinUI StatusBar resize input", e);
                         }
                     });
+
+                sizeGrip.PointerMoved(
+                    [weakSizeGripAction](
+                        const WF::IInspectable& sender,
+                        const MUXI::PointerRoutedEventArgs& event)
+                    {
+                        try
+                        {
+                            const auto action =
+                                weakSizeGripAction.lock();
+                            const auto element =
+                                sender.try_as<MUX::UIElement>();
+                            if ( !action || !action->tracking || !element )
+                                return;
+
+                            const auto point =
+                                event.GetCurrentPoint(element);
+                            if ( point.PointerId() !=
+                                     action->trackingPointerId )
+                            {
+                                return;
+                            }
+
+                            event.Handled(true);
+                            if ( !point.Properties().IsLeftButtonPressed() )
+                            {
+                                // The release was not delivered: commit.
+                                wxWinUIStatusBarGripEnd(*action);
+                                element.ReleasePointerCapture(
+                                    event.Pointer());
+                                return;
+                            }
+                            wxWinUIStatusBarGripTrack(*action);
+                        }
+                        catch ( const winrt::hresult_error& e )
+                        {
+                            wxWinUILogException(
+                                "WinUI StatusBar resize input", e);
+                        }
+                    });
+
+                sizeGrip.PointerReleased(
+                    [weakSizeGripAction](
+                        const WF::IInspectable& sender,
+                        const MUXI::PointerRoutedEventArgs& event)
+                    {
+                        try
+                        {
+                            const auto action =
+                                weakSizeGripAction.lock();
+                            const auto element =
+                                sender.try_as<MUX::UIElement>();
+                            if ( !action || !action->tracking || !element )
+                                return;
+
+                            // Releasing the button commits the size reached.
+                            event.Handled(true);
+                            wxWinUIStatusBarGripTrack(*action);
+                            wxWinUIStatusBarGripEnd(*action);
+                            element.ReleasePointerCapture(event.Pointer());
+                        }
+                        catch ( const winrt::hresult_error& e )
+                        {
+                            wxWinUILogException(
+                                "WinUI StatusBar resize input", e);
+                        }
+                    });
+
+                // Losing the capture or the contact ends the gesture where
+                // it stands; nothing is rolled back.
+                const auto endGripTracking =
+                    [weakSizeGripAction](
+                        const WF::IInspectable&,
+                        const MUXI::PointerRoutedEventArgs&)
+                    {
+                        if ( const auto action = weakSizeGripAction.lock() )
+                            wxWinUIStatusBarGripEnd(*action);
+                    };
+                sizeGrip.PointerCaptureLost(endGripTracking);
+                sizeGrip.PointerCanceled(endGripTracking);
 
                 // This is a sibling overlay, never a child of the last field
                 // column. Very narrow or zero-width last panes therefore

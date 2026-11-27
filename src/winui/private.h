@@ -620,4 +620,28 @@ wxWinUIBrush(unsigned char red,
     return winrt::Microsoft::UI::Xaml::Media::SolidColorBrush(color);
 }
 
+// Queue a wx notification raised by a XAML event (a click, the activation
+// of an item) instead of sending it from inside the XAML callback. The
+// application handler may open a modal dialog or destroy the control, and a
+// message loop must not be nested in a XAML delegate nor under the host's own
+// pointer routing. The notification runs from the event loop, in the order
+// queued and before the next message is dispatched; it must look its control
+// up again, as the control may be gone by then.
+void wxWinUIPostNotification(std::function<void()> notification);
+
+// Run the queued notifications now (also declared for the tests in
+// wx/winui/private/tlwhostmsw.h).
+WXDLLIMPEXP_CORE void wxWinUIFlushNotifications();
+
+// The focus state to use when the program, not the user, moves focus to a
+// XAML element: it shows no keyboard focus rectangle before the keyboard has
+// been used (see hostfocus.cpp).
+winrt::Microsoft::UI::Xaml::FocusState wxWinUIProgrammaticFocusState();
+
+// The same for a known target: text entry controls, which show no focus
+// rectangle and need the programmatic state to focus their editor, always
+// get it.
+winrt::Microsoft::UI::Xaml::FocusState wxWinUIProgrammaticFocusState(
+    const winrt::Microsoft::UI::Xaml::Controls::Control& target);
+
 #endif // _WX_WINUI_PRIVATE_H_

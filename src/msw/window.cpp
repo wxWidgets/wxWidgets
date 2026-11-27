@@ -191,6 +191,9 @@ namespace
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+// Monitor of the window at WM_ENTERSIZEMOVE, see WM_EXITSIZEMOVE.
+HMONITOR gs_winuiSizeMoveMonitor = nullptr;
+
 static wxSize wxWinUIGetNativeReparentDPI(wxWindow *window, HWND hwnd);
 
 struct wxWinUIDPIWindowIdentity
@@ -465,6 +468,9 @@ constexpr wchar_t wxWINUI_NATIVE_HWND_GENERATION_PROP[] =
     L"{9D33D600-8D7B-4FA2-A54C-416E0C39B8D3}";
 ULONG_PTR gs_nextNativeHwndGeneration = 0;
 unsigned gs_winuiSyntheticMouseDispatchDepth = 0;
+unsigned gs_winuiSlotMouseDispatchDepth = 0;
+unsigned long long gs_winuiContextMenuSerial = 0;
+bool gs_winuiContextMenuProcessed = false;
 
 constexpr wchar_t wxWINUI_STASHED_OWNER_PROP[] =
     L"wxWidgets.WinUI.StashedOwner."
@@ -734,6 +740,11 @@ void wxWindowMSW::Init()
 wxWindowMSW::~wxWindowMSW()
 {
     SendDestroyEvent();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWinUIPaintSurfaceForget(static_cast<wxWindow *>(this));
+    wxWinUIWindowScrollbarsForget(static_cast<wxWindow *>(this));
+#endif
 
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we did it the other way around, children wouldn't be able
@@ -1560,6 +1571,12 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     }
 
     ::ScrollWindow(GetHwnd(), dx, dy, pr, pr);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // What the window painted is in its surface, not in its HWND: it moves
+    // there too.
+    wxWinUIPaintSurfaceScroll(static_cast<wxWindow *>(this), dx, dy, prect);
+#endif
 }
 
 static bool ScrollVertically(HWND hwnd, int kind, int count)
@@ -2437,8 +2454,25 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // box is not redrawn twice), but sometimes results in redraw problems, so
     // optionally allow the old code to continue to use it provided a special
     // system option is turned on
-    if ( !wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children"))
-            || (flags & wxCLIP_CHILDREN) )
+    bool clipChildren =
+        !wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children"));
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // With paint surfaces no window paints its HWND any more, and a surface
+    // stops at the children of its window by itself: all this style still
+    // does is make Windows work out the clipping regions of the whole
+    // hierarchy each time a window moves, which is half of what a resize
+    // costs (measured: 17.9 ms a step against 9 for the Widgets sample).
+    //
+    // A top-level window keeps it: it has few children, the island among
+    // them, and the windowing layer of the island watches the changes of
+    // its style, which rules out giving it back later (see the handling of
+    // WM_PARENTNOTIFY).
+    if ( wxWinUIPaintSurfacesEnabled() && !IsTopLevel() )
+        clipChildren = false;
+#endif
+
+    if ( clipChildren || (flags & wxCLIP_CHILDREN) )
         style |= WS_CLIPCHILDREN;
 
     // it doesn't seem useful to use WS_CLIPSIBLINGS here as we officially
@@ -4900,6 +4934,11 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return rc;
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+static void wxWinUIEraseOnSurface(wxWindowMSW *window, HDC hdc,
+                                  const RECT& client);
+#endif
+
 bool
 wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                               WXUINT message,
@@ -4999,7 +5038,25 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 }
             }
 #endif
-            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+            {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // A size handler is allowed to destroy this window: decide
+                // now, and only touch it again through a weak reference.
+                wxWeakRef<wxWindow> winuiResizedTLW;
+                if ( IsTopLevel() && wParam != SIZE_MINIMIZED )
+                    winuiResizedTLW = static_cast<wxWindow *>(this);
+#endif
+                processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // The children have been laid out by now. Publish their
+                // geometry to the island before returning to a loop which may
+                // be the system's modal sizing loop, so the XAML content does
+                // not trail the frame by one loop iteration during a live
+                // resize.
+                if ( winuiResizedTLW )
+                    wxWinUITLWHostFlushAfterResize(winuiResizedTLW.get());
+#endif
+            }
             break;
 
         case WM_MOVE:
@@ -5020,6 +5077,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 wxWinUITLWHostNotifyNativeLayout(
                     static_cast<wxWindow *>(this),
                     zOrderMayHaveChanged);
+                wxWinUIPaintSurfaceNoteChildGeometry(
+                    static_cast<wxWindow *>(this));
             }
             break;
 
@@ -5059,6 +5118,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_ENTERSIZEMOVE:
             {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // Remembered to tell a move to another monitor from a plain
+                // move or resize in WM_EXITSIZEMOVE below. Only one window
+                // of this thread can be in a move/size gesture at a time.
+                gs_winuiSizeMoveMonitor =
+                    ::MonitorFromWindow(GetHwnd(), MONITOR_DEFAULTTONULL);
+#endif
                 processed = HandleEnterSizeMove();
             }
             break;
@@ -5075,7 +5141,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 // after the interactive move. Invalidate the per-window
                 // success marker first so a monitor transition is not hidden
                 // by the initial creation-time prime.
-                if ( ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
+                //
+                // The prime resizes the window by one pixel and back, which
+                // shows as a blink: do it only when the monitor did change,
+                // not at the end of every move or resize.
+                const HMONITOR monitorAtExit =
+                    ::MonitorFromWindow(GetHwnd(), MONITOR_DEFAULTTONULL);
+                const bool monitorChanged =
+                    monitorAtExit != gs_winuiSizeMoveMonitor;
+                gs_winuiSizeMoveMonitor = nullptr;
+                if ( monitorChanged &&
+                     ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
                 {
                     wxWinUIInvalidateBackdropPrime(GetHwnd());
                     wxWinUIPrimeBackdrop(GetHwnd());
@@ -5284,7 +5360,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
-                        if ( message == WM_LBUTTONDOWN && win->IsFocusable() )
+                        if ( message == WM_LBUTTONDOWN && win->IsFocusable()
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                             // See wxWinUIMSWBeginSlotMouseDispatch().
+                             && !gs_winuiSlotMouseDispatchDepth
+#endif
+                           )
                             win->SetFocus();
                     }
                 }
@@ -5659,11 +5740,43 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleQueryNewPalette();
             break;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        case WM_PARENTNOTIFY:
+            // The windows of this port are created without WS_CLIPCHILDREN,
+            // see MSWGetStyle(): nothing paints their HWND, which is erased
+            // to nothing. A window which does paint its own -- one which is
+            // not ours (a browser, an ActiveX control) or which owns its DC
+            // (an OpenGL canvas) -- must not be erased by the windows it is
+            // in: each of them is told when it is created, and takes the
+            // style back. Top-level windows never lost it.
+            if ( LOWORD(wParam) == WM_CREATE && !IsTopLevel() &&
+                 wxWinUIPaintSurfacesEnabled() )
+            {
+                const HWND hwndChild = (HWND)lParam;
+                if ( !wxFindWinFromHandle((WXHWND)hwndChild) ||
+                     (::GetClassLongPtr(hwndChild, GCL_STYLE) & CS_OWNDC) )
+                {
+                    wxMSWWinStyleUpdater(GetHwnd()).TurnOn(WS_CLIPCHILDREN);
+                }
+            }
+            break;
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
         case WM_ERASEBKGND:
             {
                 bool eraseForWinUIBackdrop = false;
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+                // What the window painted where its background is erased
+                // goes with it, as it does on a HWND: the region of its
+                // next painting starts empty on its surface.
+                if ( GetBackgroundStyle() != wxBG_STYLE_PAINT &&
+                     GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+                {
+                    wxWinUIPaintSurfaceNoteErase(
+                        static_cast<wxWindow *>(this));
+                }
+
                 eraseForWinUIBackdrop =
                     ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") != nullptr;
 
@@ -5711,13 +5824,22 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // HandleEraseBkgnd(): a paint-owned/transparent surface
                     // must not lose its RGB/alpha to a standalone erase after
                     // its paint handler has completed (e.g. during resize).
+                    //
+                    // This also holds for a window given a background colour
+                    // of its own: the material is kept, and the text drawn on
+                    // it is recoloured where that colour would have been
+                    // needed to read it (see
+                    // wxWinUIAdaptTextColourOverBackdrop()).
                     HDC hdc = (HDC)wParam;
                     RECT rcBackdrop;
                     if ( GetBackgroundStyle() != wxBG_STYLE_PAINT &&
                          GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT &&
                          hdc && ::GetClientRect(GetHwnd(), &rcBackdrop) )
+                    {
                         ::FillRect(hdc, &rcBackdrop,
                                    (HBRUSH)::GetStockObject(BLACK_BRUSH));
+                        wxWinUIEraseOnSurface(this, hdc, rcBackdrop);
+                    }
                     processed = true;
                 }
                 else
@@ -5915,6 +6037,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     win = this;
 
                 processed = win->WXSendContextMenuEvent(pt);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                ++gs_winuiContextMenuSerial;
+                gs_winuiContextMenuProcessed = processed;
+#endif
 
                 if ( !processed )
                 {
@@ -5989,7 +6115,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 #else
             const bool retainPopupActivation = false;
 #endif
-            const WXWPARAM activation = retainPopupActivation ? TRUE : wParam;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // A dialog shown over this window is part of it for the user:
+            // its title bar does not go grey.
+            const bool retainCardActivation =
+                !wParam && wxWinUIDialogCardKeepsOwnerActive(this);
+#else
+            const bool retainCardActivation = false;
+#endif
+            const WXWPARAM activation =
+                retainPopupActivation || retainCardActivation ? TRUE : wParam;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
             if ( !::IsIconic(GetHwnd()) &&
                  wxWinUIWindowScrollbarsProjected(GetHwnd()) )
@@ -6049,6 +6184,24 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // A child window whose scrollbars are shown by WinUI reserves
+                // no room for USER32's own: the two bands stay part of the
+                // client area and the XAML scrollbar is drawn over its edge,
+                // like a ScrollViewer does. USER32 keeps the scroll model and
+                // the WS_HSCROLL/WS_VSCROLL styles, so Win32 code reading
+                // them still works, but it has nowhere left to draw a bar:
+                // the classic scrollbar can no longer show through, however
+                // briefly, during a resize.
+                RECT * const winuiClient = wParam
+                    ? &((NCCALCSIZE_PARAMS *)lParam)->rgrc[0]
+                    : (RECT *)lParam;
+                const RECT winuiWindowRect = *winuiClient;
+                const bool winuiOverlayScrollbars =
+                    !IsTopLevel() &&
+                    ::GetPropW(GetHwnd(),
+                               L"wxWinUI.ManagedWindowScrollbars") != nullptr;
+#endif
                 // The default handling for this message is proper for all
                 // border styles except wxBORDER_THEME.
                 if (DoTranslateBorder(GetBorder()) == wxBORDER_THEME)
@@ -6073,6 +6226,46 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     const auto thickness = MSWGetBorderThickness();
                     InflateRect(rect, -thickness, -thickness);
                 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                if ( winuiOverlayScrollbars )
+                {
+                    if ( !processed )
+                    {
+                        rc.result = MSWDefWindowProc(message, wParam, lParam);
+                        processed = true;
+                    }
+
+                    const LONG style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+                    if ( style & (WS_VSCROLL | WS_HSCROLL) )
+                    {
+                        // The client area this window would have without
+                        // scrollbars: the window minus its borders.
+                        RECT borders = { 0, 0, 0, 0 };
+                        ::AdjustWindowRectEx(
+                            &borders, style & ~(WS_VSCROLL | WS_HSCROLL),
+                            FALSE, ::GetWindowLong(GetHwnd(), GWL_EXSTYLE));
+                        RECT full = winuiWindowRect;
+                        full.left -= borders.left;
+                        full.top -= borders.top;
+                        full.right -= borders.right;
+                        full.bottom -= borders.bottom;
+                        if ( DoTranslateBorder(GetBorder()) == wxBORDER_THEME )
+                        {
+                            const auto thickness = MSWGetBorderThickness();
+                            ::InflateRect(&full, -thickness, -thickness);
+                        }
+
+                        if ( style & WS_VSCROLL )
+                        {
+                            winuiClient->left = full.left;
+                            winuiClient->right = full.right;
+                        }
+                        if ( style & WS_HSCROLL )
+                            winuiClient->bottom = full.bottom;
+                    }
+                }
+#endif
             }
             break;
 
@@ -6119,6 +6312,25 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     default:
                         break;
                 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // The HWND of a window which paints through a surface shows
+                // nothing, and its border is no exception: XAML draws it.
+                // What USER32 would paint of it (the relief of a sunken
+                // border, in the colours of the light theme) is kept out,
+                // like what is drawn here for a themed one.
+                if ( wxWinUIWindowFrameSync(static_cast<wxWindow *>(this)) )
+                {
+                    RECT rcInside;
+                    ::GetWindowRect(m_hWnd, &rcInside);
+                    const auto thickness = MSWGetBorderThickness();
+                    ::InflateRect(&rcInside, -thickness, -thickness);
+                    AutoHRGN inside = ::CreateRectRgnIndirect(&rcInside);
+                    rc.result = paintNativeFrame((WXWPARAM)(HRGN)inside);
+                    processed = true;
+                    drawBorder = false;
+                }
+#endif
 
                 if ( drawBorder )
                 {
@@ -7046,6 +7258,24 @@ wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(WXHWND hwndArg)
     return snapshot;
 }
 #endif // WXWINUI_TEST_SUPPORT
+
+unsigned long long wxWinUIMSWGetContextMenuSerial(bool *processed)
+{
+    if ( processed )
+        *processed = gs_winuiContextMenuProcessed;
+    return gs_winuiContextMenuSerial;
+}
+
+void wxWinUIMSWBeginSlotMouseDispatch()
+{
+    ++gs_winuiSlotMouseDispatchDepth;
+}
+
+void wxWinUIMSWEndSlotMouseDispatch()
+{
+    if ( gs_winuiSlotMouseDispatchDepth )
+        --gs_winuiSlotMouseDispatchDepth;
+}
 
 void wxWinUIMSWBeginSyntheticMouseDispatch()
 {
@@ -8253,6 +8483,11 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 
 wxSize wxGetWindowDPI(HWND hwnd)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( const int forcedDPI = wxWinUIGetForcedDPI() )
+        return wxSize(forcedDPI, forcedDPI);
+#endif
+
     typedef UINT (WINAPI *GetDpiForWindow_t)(HWND hwnd);
     static GetDpiForWindow_t s_pfnGetDpiForWindow = nullptr;
     static bool s_initDone = false;
@@ -8999,6 +9234,65 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
     }
 #endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// Sends EVT_ERASE_BACKGROUND with a DC on the given target; returns whether
+// a handler took it.
+static bool wxWinUISendEraseEvent(wxWindowMSW *window, HDC target)
+{
+    wxDCTemp dc(target, window->GetClientSize());
+    wxDCTempImpl * const impl = static_cast<wxDCTempImpl *>(dc.GetImpl());
+
+    impl->SetHDC(target);
+    impl->SetWindow(static_cast<wxWindow *>(window));
+
+    wxEraseEvent event(window->GetId(), &dc);
+    event.SetEventObject(window);
+    const bool taken = window->HandleWindowEvent(event);
+
+    // must be called manually as ~wxDC doesn't do anything for wxDCTemp
+    impl->SelectOldObjects(target);
+    return taken;
+}
+
+// The background of a window over the material of its top-level window was
+// erased, which is to say made transparent: what a handler of
+// EVT_ERASE_BACKGROUND draws comes over it, on the surface of the window
+// like everything else it paints -- drawn on the HWND it would have no
+// alpha, and would lie under everything XAML shows.
+static void wxWinUIEraseOnSurface(wxWindowMSW *window, HDC hdc,
+                                  const RECT& client)
+{
+    wxWindow * const self = static_cast<wxWindow *>(window);
+    if ( !wxWinUIPaintSurfacesEnabled() || window->IsBeingDeleted() ||
+         ::WindowFromDC(hdc) != GetHwndOf(self) )
+    {
+        return;
+    }
+
+    HDC surfaceDC = (HDC)wxWinUIPaintSurfaceBeginErase(self, hdc);
+    if ( !surfaceDC )
+    {
+        // No surface yet. Most windows have no such handler, and never get
+        // a surface for it: the event is sent with the DC of the window
+        // and, only if a handler took it, sent again on a surface the
+        // window is given for good.
+        if ( !wxWinUISendEraseEvent(window, hdc) )
+            return;
+
+        ::FillRect(hdc, &client, (HBRUSH)::GetStockObject(BLACK_BRUSH));
+        wxWinUIPaintSurfaceAdopt(self);
+        surfaceDC = (HDC)wxWinUIPaintSurfaceBeginErase(self, hdc);
+        if ( !surfaceDC )
+            return;
+    }
+
+    (void)wxWinUISendEraseEvent(window, surfaceDC);
+    wxWinUIPaintSurfaceEnd(self);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
@@ -11545,8 +11839,34 @@ const wxChar *wxGetMessageName(int message)
 
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 {
-    // prepare the DC
     TEXTMETRIC tm;
+
+#if !wxDIALOG_UNIT_COMPATIBILITY
+    {
+        // The metrics of a font do not depend on the window: measure it on
+        // a memory DC kept for the purpose. Getting the DC of the window
+        // makes Windows work out its visible region, and this function is
+        // called several times for each window by every layout (best sizes,
+        // borders of the static boxes...).
+        const wxFont& font(win->GetFont());
+        if ( HFONT hfontWin = GetHfontOf(font) )
+        {
+            static thread_local MemoryHDC s_hdcMeasure;
+            if ( HDC hdcMeasure = s_hdcMeasure )
+            {
+                const HGDIOBJ hfontOld =
+                    ::SelectObject(hdcMeasure, hfontWin);
+                const BOOL measured = ::GetTextMetrics(hdcMeasure, &tm);
+                if ( hfontOld )
+                    (void)::SelectObject(hdcMeasure, hfontOld);
+                if ( measured )
+                    return tm;
+            }
+        }
+    }
+#endif
+
+    // prepare the DC
     HWND hwnd = GetHwndOf(win);
     HDC hdc = ::GetDC(hwnd);
 

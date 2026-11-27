@@ -20,6 +20,7 @@
 #include "host-input-test-access.h"
 #endif
 #include "hostnative.h"
+#include "hostfocus.h"
 #include "hostprofile.h"
 #include "hostresize.h"
 
@@ -38,6 +39,69 @@
 #include <cmath>
 #include <limits>
 #include <utility>
+
+// Number of messages this thread has retrieved from its queue. New physical
+// input can only arrive through such a retrieval, so a pointer event raised
+// while a forwarded message is being sent, with no retrieval in between, is a
+// synchronous reflection of that very message. See
+// wxWinUIForwardedPointerDispatch::IsEcho().
+static thread_local unsigned long long gs_messagePumpSerial = 0;
+
+WXDLLIMPEXP_CORE void wxWinUINoteMessagePumped()
+{
+    ++gs_messagePumpSerial;
+}
+
+unsigned long long wxWinUIGetMessagePumpSerial()
+{
+    return gs_messagePumpSerial;
+}
+
+// True while a slot routes a wheel packet which its XAML control has already
+// used: a CalendarView changing month, a list scrolling its rows. The wx
+// window still gets its wxEVT_MOUSEWHEEL, but the packet must not go on to
+// DefWindowProc(), which hands an unprocessed wheel to the parent window and
+// would scroll the page under the control as well.
+static thread_local bool gs_slotWheelUsedByPeer = false;
+
+// Step 3: a control shown by XAML is sent the mouse messages of Win32 on its
+// HWND, and wxMSW makes the wx events of them as it does for any window,
+// where its slot used to make the wx events itself. An override of
+// MSWWindowProc() sees them, and USER32 makes WM_CONTEXTMENU of a right
+// button. WX_WINUI_INPUT_MESSAGES=0 brings back the events made by the slot.
+bool wxWinUIInputMessagesEnabled()
+{
+    static const bool s_enabled = []()
+    {
+        wchar_t text[8];
+        const DWORD length = ::GetEnvironmentVariableW(
+            L"WX_WINUI_INPUT_MESSAGES", text, WXSIZEOF(text));
+        return !(length == 1 && text[0] == L'0');
+    }();
+
+    return s_enabled;
+}
+
+// Step 3: see wxWinUITopLevelHost::QueuedPointer. 2, everything the pointer
+// does waits for the message loop; 1 (WX_WINUI_INPUT_QUEUE=1), only what it
+// does over a window which is not shown by XAML; 0, nothing.
+static int wxWinUIInputQueueMode()
+{
+    static const int s_mode = []()
+    {
+        wchar_t text[8];
+        const DWORD length = ::GetEnvironmentVariableW(
+            L"WX_WINUI_INPUT_QUEUE", text, WXSIZEOF(text));
+        if ( length == 1 && text[0] == L'0' )
+            return 0;
+        if ( length == 1 && text[0] == L'1' )
+            return 1;
+        return 2;
+    }();
+
+    return s_mode;
+}
+
 
 namespace
 {
@@ -72,7 +136,7 @@ public:
         const std::shared_ptr<wxWinUIHostLifetime>& hostState,
         const wxWinUIInputAction& action, unsigned long long epoch)
         : m_hostState(hostState), m_action(action), m_epoch(epoch),
-          m_previous(ms_current)
+          m_pumpSerial(gs_messagePumpSerial), m_previous(ms_current)
     {
         ms_current = this;
     }
@@ -86,6 +150,34 @@ public:
         const std::shared_ptr<wxWinUIHostLifetime>& hostState,
         const wxWinUIPointerSample& sample, unsigned long long epoch)
     {
+        // First rule: a pointer event of the same kind raised while the
+        // innermost forwarded message is still being sent, with no message
+        // retrieved from the queue since, cannot be new physical input: input
+        // only arrives through the queue. It is the reflection of the message
+        // being sent, whatever became of its coordinates (converted from DIPs
+        // on the way back), timestamp (rebuilt by Microsoft.UI.Input) or
+        // epoch (advanced by a boundary event the reflection itself raises).
+        // Comparing those for exact equality let such reflections through
+        // and recursed without bound when the pointer left a dialog.
+        if ( const auto innermost = ms_current )
+        {
+            const auto& action = innermost->m_action;
+            const auto kind = action.kind == wxWinUIInputKind::DoubleClick
+                ? wxWinUIInputKind::Press : action.kind;
+            if ( innermost->m_pumpSerial == gs_messagePumpSerial &&
+                 innermost->m_hostState == hostState &&
+                 action.device == sample.device &&
+                 action.pointerId == sample.pointerId &&
+                 kind == sample.kind && action.button == sample.button &&
+                 action.modifiers == sample.modifiers &&
+                 action.buttonMask == sample.buttonMask )
+            {
+                return true;
+            }
+        }
+
+        // Second rule, for a handler which pumped messages: the exact packet
+        // of a dispatch still in progress carries no new information either.
         for ( auto dispatch = ms_current; dispatch;
               dispatch = dispatch->m_previous )
         {
@@ -128,12 +220,35 @@ private:
     // In particular, A -> B -> A inside a modal handler must deliver the
     // return to A instead of confusing it with the first dispatch's echo.
     const unsigned long long m_epoch;
+    // Queue retrievals seen when this dispatch started, see IsEcho().
+    const unsigned long long m_pumpSerial;
     const wxWinUIForwardedPointerDispatch * const m_previous;
     wxDECLARE_NO_COPY_CLASS(wxWinUIForwardedPointerDispatch);
 };
 
 thread_local const wxWinUIForwardedPointerDispatch *
     wxWinUIForwardedPointerDispatch::ms_current = nullptr;
+
+// Hard bound on re-entrant root pointer callbacks. A forwarded Win32 message
+// can come back as a XAML pointer event before SendMessage() returns. The
+// echo test above is what normally stops that, but no reflection it fails to
+// recognise may ever recurse until the stack is exhausted. Genuine nesting,
+// i.e. a modal loop started from a mouse handler, is only a few levels deep.
+class wxWinUIRootPointerNesting
+{
+public:
+    wxWinUIRootPointerNesting() { ++ms_depth; }
+    ~wxWinUIRootPointerNesting() { --ms_depth; }
+
+    static bool TooDeep() { return ms_depth > kMaxDepth; }
+
+private:
+    static constexpr unsigned kMaxDepth = 16;
+    static thread_local unsigned ms_depth;
+    wxDECLARE_NO_COPY_CLASS(wxWinUIRootPointerNesting);
+};
+
+thread_local unsigned wxWinUIRootPointerNesting::ms_depth = 0;
 
 void wxWinUISendForwardedPointerMessage(
     const std::shared_ptr<wxWinUIHostLifetime>& hostState,
@@ -961,7 +1076,7 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
         NotifyNativeCaptureMutation();
         if ( !::ReleaseCapture() )
         {
-            wxLogWarning("wxWinUI: failed to release native pointer "
+            wxLogDebug("wxWinUI: failed to release native pointer "
                          "capture from %p", static_cast<void *>(capture));
             return false;
         }
@@ -1246,7 +1361,7 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
             if ( !::ReleaseCapture() )
             {
                 mayQueue = false;
-                wxLogWarning("wxWinUI: failed to release island pointer "
+                wxLogDebug("wxWinUI: failed to release island pointer "
                              "capture from %p",
                              static_cast<void *>(capture));
             }
@@ -1320,7 +1435,7 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
             {
                 ResetRootCursor();
             }
-            wxLogWarning("wxWinUI: suppressed unsafe queued non-client "
+            wxLogDebug("wxWinUI: suppressed unsafe queued non-client "
                          "input");
         }
         return mayQueue && !m_shuttingDown;
@@ -1512,8 +1627,11 @@ bool wxWinUITopLevelHost::ClassifyRootPointer(
     }
 
     const long long xamlStarted = wxWinUIProfileNow();
+    wxWindow *xamlWindow = nullptr;
     const XamlHitResolution xamlHit =
-        PointOverXamlContent(pointClientPx, exactRootDips);
+        PointOverXamlContent(pointClientPx, exactRootDips,
+                             wxWinUIInputNodesEnabled() ? &xamlWindow
+                                                        : nullptr);
     wxWinUIProfileAdd(wxWinUIProfilePhase::XamlHit, xamlStarted);
     if ( m_shuttingDown )
         return false;
@@ -1530,8 +1648,16 @@ bool wxWinUITopLevelHost::ClassifyRootPointer(
     }
 
     const long long nativeStarted = wxWinUIProfileNow();
-    const wxWinUIHitResolution nativeResolution =
-        wxWinUIResolveNativeHitReusing(
+    // The window whose canvas is topmost under the pointer is where the
+    // target is looked for; the top-level window itself, or no canvas found,
+    // leaves the search to the walk through the windows.
+    const bool fromXaml = xamlWindow && xamlWindow != m_tlw &&
+                          !xamlWindow->IsBeingDeleted();
+    const wxWinUIHitResolution nativeResolution = fromXaml
+        ? wxWinUIResolveNativeHitFrom(
+            m_tlw, xamlWindow->GetHWND(), pointScreen, m_bridge, m_inner,
+            nativeHit)
+        : wxWinUIResolveNativeHitReusing(
             m_tlw, pointScreen, m_bridge, m_inner,
             m_lastResolvedHit,
             m_lastResolvedLayoutGeneration == m_structureGeneration &&
@@ -1559,6 +1685,84 @@ bool wxWinUITopLevelHost::ClassifyRootPointer(
         return true;
     }
 
+    if ( !fromXaml && wxWinUIInputNodesEnabled() && wxWinUIInputLogEnabled() )
+    {
+        // No canvas named a window and the walk found one which is not the
+        // top-level window: what keeps the walk from being removed.
+        wxWindow * const walked = nativeHit->GetTarget().GetWindow();
+        if ( walked && walked != m_tlw && walked != m_inputWalkLogged )
+        {
+            m_inputWalkLogged = walked;
+            wxWinUIInputLog(
+                "route WALK found %p %s which no canvas named, pt=(%ld,%ld)",
+                static_cast<void *>(walked),
+                wxString(walked->GetClassInfo()->GetClassName())
+                    .utf8_str().data(),
+                pointScreen.x, pointScreen.y);
+        }
+    }
+
+    if ( wxWinUIInputNodesEnabled() )
+    {
+        // A window which was never moved since it was created has no canvas
+        // yet: the next search starts from it.
+        wxWindow * const found = nativeHit->GetTarget().GetWindow();
+        if ( found && found != m_tlw && !FindSlot(found) &&
+             !m_inputNodes.count(found) )
+        {
+            EnsureInputNodes(found);
+            if ( m_shuttingDown )
+                return false;
+        }
+
+        if ( wxWinUIInputNodesCompared() )
+        {
+            // What the search started from the window XAML names found,
+            // against the walk through the whole tree.
+            wxWinUINativeHit walked;
+            const wxWinUIHitResolution walkedResolution =
+                wxWinUIResolveNativeHit(m_tlw, pointScreen, m_bridge,
+                                        m_inner, &walked);
+            if ( m_shuttingDown )
+                return false;
+            wxWindow * const walkedWindow =
+                walkedResolution == wxWinUIHitResolution::Hit
+                    ? walked.GetTarget().GetWindow() : nullptr;
+            const bool same =
+                walkedResolution == wxWinUIHitResolution::Hit &&
+                walked.GetTarget().GetLeafHwnd() ==
+                    nativeHit->GetTarget().GetLeafHwnd() &&
+                walked.GetHitTest() == nativeHit->GetHitTest();
+            if ( !same &&
+                 (m_inputCompareNative != walkedWindow ||
+                  m_inputCompareXaml != found) )
+            {
+                m_inputCompareNative = walkedWindow;
+                m_inputCompareXaml = found;
+                const wxString walkedClass = walkedWindow
+                    ? wxString(walkedWindow->GetClassInfo()->GetClassName())
+                    : wxString("(none)");
+                const wxString foundClass = found
+                    ? wxString(found->GetClassInfo()->GetClassName())
+                    : wxString("(none)");
+                const wxString startClass = xamlWindow
+                    ? wxString(xamlWindow->GetClassInfo()->GetClassName())
+                    : wxString("(none)");
+                wxWinUIInputLog(
+                    "nodes DISAGREE walk=%p %s ht=%d from-xaml=%p %s ht=%d "
+                    "start=%s pt=(%ld,%ld)",
+                    static_cast<void *>(walkedWindow),
+                    walkedClass.utf8_str().data(),
+                    static_cast<int>(walked.GetHitTest()),
+                    static_cast<void *>(found),
+                    foundClass.utf8_str().data(),
+                    static_cast<int>(nativeHit->GetHitTest()),
+                    startClass.utf8_str().data(),
+                    pointScreen.x, pointScreen.y);
+            }
+        }
+    }
+
     *hasNativeHit = true;
     observation->surface = wxWinUIInputSurface::Native;
     observation->target =
@@ -1583,6 +1787,10 @@ void wxWinUITopLevelHost::OnRootPointerBoundary(
 {
     OperationGuard operation(this);
     if ( m_shuttingDown || !m_tlw )
+        return;
+
+    const wxWinUIRootPointerNesting nesting;
+    if ( wxWinUIRootPointerNesting::TooDeep() )
         return;
 
     try
@@ -1612,6 +1820,30 @@ void wxWinUITopLevelHost::OnRootPointerBoundary(
          sample.isCompatibilityMouse )
     {
         return;
+    }
+
+    // The pointer of a gesture held by a XAML control may leave the island
+    // and come back: the control keeps tracking it through its capture. This
+    // is not a boundary the router has to act on, and acting on it could
+    // cancel that capture. See m_xamlGestureActive.
+    if ( m_xamlGestureActive && sample.pointerId == m_xamlGesturePointerId &&
+         sample.buttonMask )
+    {
+        return;
+    }
+
+    // What waits in the queue is older than this crossing. It goes first --
+    // unless this arrives from inside one of its deliveries, where only
+    // the moves, which the crossing makes pointless, are dropped: a move
+    // delivered after the pointer has left would leave its window hovered.
+    if ( !m_rootPointerQueue.empty() )
+    {
+        if ( m_rootPointerDelivering )
+            DropQueuedRootPointerMoves();
+        else
+            DrainRootPointerQueue();
+        if ( m_shuttingDown || !m_tlw )
+            return;
     }
 
     // Descendant boundaries and unrouteable/duplicate pointer samples are
@@ -1797,6 +2029,13 @@ void wxWinUITopLevelHost::OnRootPointerInterrupted(
     OperationGuard operation(this);
     if ( m_shuttingDown || !m_tlw )
         return;
+
+    const wxWinUIRootPointerNesting nesting;
+    if ( wxWinUIRootPointerNesting::TooDeep() )
+        return;
+
+    // Losing the capture or the contact ends any gesture XAML was holding.
+    m_xamlGestureActive = false;
 
     if ( ++m_inputTransitionEpoch == 0 )
         ++m_inputTransitionEpoch;
@@ -2452,7 +2691,7 @@ void wxWinUITopLevelHost::DispatchPendingNativeInput()
                         m_inputState.CancelActiveGesture(
                             pending.action, cancel);
                     (void)ExecuteInputTransition(cancellation);
-                    wxLogWarning("wxWinUI: modal release table exhausted; "
+                    wxLogDebug("wxWinUI: modal release table exhausted; "
                                  "canceled gesture #%llu",
                                  pending.action.gestureSerial);
                 }
@@ -2843,6 +3082,24 @@ void wxWinUITopLevelHost::PostIslandCancelMode(
     }
 }
 
+// Whether the window of a slot, or a window inside it, has the mouse capture
+// of USER32. Such a window took the mouse itself when a button went down on
+// it, as a header does to drag a column or the edge of one. The island then
+// loses its own capture, which XAML and the bridge report as an interrupted
+// gesture (WM_CAPTURECHANGED, PointerCaptureLost, PointerCanceled, through
+// the slot and through the root): nothing was interrupted, the gesture goes
+// on for that window, which gets the moves and the release of the button.
+// Ending it left the window dragging with no button held: it got nothing
+// until the button was released, then followed the pointer until the next
+// click. A window which loses the capture is told so by Win32 itself.
+static bool wxWinUISlotWindowHoldsCapture(WXHWND slotWindow)
+{
+    const HWND capture = ::GetCapture();
+    const HWND hwnd = reinterpret_cast<HWND>(slotWindow);
+    return capture && hwnd &&
+           (capture == hwnd || ::IsChild(hwnd, capture));
+}
+
 void wxWinUITopLevelHost::OnSlotPointer(
     const std::shared_ptr<wxWinUISlotLifetime>& state,
     const winrt::Microsoft::UI::Xaml::FrameworkElement& container,
@@ -2866,22 +3123,33 @@ void wxWinUITopLevelHost::OnSlotPointer(
         return;
     }
 
-    // A wx handler invoked below may synchronously unregister the slot. Keep
-    // its allocation alive for the state transition, but revalidate the
-    // invalidatable lifetime before every subsequent action.
+    // Keep the allocation of the slot alive while the event is read.
     wxWinUISlot::OperationGuard slotOperation(slot);
-    if ( ++slot->m_inputTransitionEpoch == 0 )
-        ++slot->m_inputTransitionEpoch;
-    const unsigned long long transitionEpoch =
-        slot->m_inputTransitionEpoch;
 
     wxWinUIPointerSample sample;
     sample.kind = kind;
     sample.timestamp = ::GetTickCount64();
 
+    bool wheelUsedByPeer = false;
+    if ( kind == wxWinUIInputKind::Wheel )
+    {
+        try
+        {
+            wheelUsedByPeer = args.Handled();
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+    }
     const bool isInterruption =
         kind == wxWinUIInputKind::Cancel ||
         kind == wxWinUIInputKind::CaptureLost;
+    if ( isInterruption && wxWinUISlotWindowHoldsCapture(slot->m_hwnd) )
+    {
+        if ( wxWinUIInputLogEnabled() )
+            wxWinUIInputLog("slot INTERRUPT kept: window has capture");
+        return;
+    }
 
     bool havePointerIdentity = false;
     try
@@ -3064,6 +3332,71 @@ void wxWinUITopLevelHost::OnSlotPointer(
         return;
     }
 
+    // Step 3: the sample is dealt with from the message loop, as what the
+    // pointer does over the other windows is, see QueuedPointer. Two things
+    // cannot wait. The end of a gesture (canceled, capture lost) undoes its
+    // state now. A right button released is what XAML makes its
+    // ContextRequested of, raised next, which must know by then whether the
+    // program answered wxEVT_CONTEXT_MENU: see OnRootContextRequested().
+    if ( wxWinUIInputQueueMode() == 2 )
+    {
+        const bool now = isInterruption ||
+            (sample.kind == wxWinUIInputKind::Release &&
+             sample.button == wxWinUIInputButton::Right);
+        if ( !now &&
+             QueueSlotPointerSample(state, sample, observation,
+                                    wheelUsedByPeer) )
+        {
+            return;
+        }
+
+        // After what was waiting.
+        if ( !m_rootPointerQueue.empty() )
+        {
+            DrainRootPointerQueue();
+            if ( m_shuttingDown || state->GetHost() != this ||
+                 state->GetWindow() != window || FindSlot(window) != slot )
+            {
+                return;
+            }
+        }
+    }
+
+    ProcessSlotPointerSample(state, sample, observation, wheelUsedByPeer);
+}
+
+void wxWinUITopLevelHost::ProcessSlotPointerSample(
+    const std::shared_ptr<wxWinUISlotLifetime>& state,
+    const wxWinUIPointerSample& sample,
+    const wxWinUIRouteObservation& observation,
+    bool wheelUsedByPeer)
+{
+    OperationGuard hostOperation(this);
+    if ( m_shuttingDown || !state || state->GetHost() != this )
+        return;
+
+    wxWindow * const window = state->GetWindow();
+    wxWinUISlot * const slot = window ? FindSlot(window) : nullptr;
+    if ( !window || !slot || slot->m_lifetime != state )
+        return;
+
+    // A wx handler invoked below may synchronously unregister the slot. Keep
+    // its allocation alive for the state transition, but revalidate the
+    // invalidatable lifetime before every subsequent action.
+    wxWinUISlot::OperationGuard slotOperation(slot);
+    if ( ++slot->m_inputTransitionEpoch == 0 )
+        ++slot->m_inputTransitionEpoch;
+    const unsigned long long transitionEpoch =
+        slot->m_inputTransitionEpoch;
+
+    const bool outerWheelUsedByPeer = gs_slotWheelUsedByPeer;
+    gs_slotWheelUsedByPeer = wheelUsedByPeer;
+    const auto restoreWheelUsedByPeer = wxMakeGuard(
+        [outerWheelUsedByPeer]()
+        {
+            gs_slotWheelUsedByPeer = outerWheelUsedByPeer;
+        });
+
     // The grip accepts its press before it bubbles through this slot's
     // handledEventsToo observer. The host resize transaction already owns
     // this pointer: routing it again would advance the InputSite generation
@@ -3077,6 +3410,13 @@ void wxWinUITopLevelHost::OnSlotPointer(
 
     if ( sample.kind == wxWinUIInputKind::Press &&
          HasSlotPointerOwner(sample) )
+    {
+        return;
+    }
+
+    if ( (sample.kind == wxWinUIInputKind::Cancel ||
+          sample.kind == wxWinUIInputKind::CaptureLost) &&
+         wxWinUISlotWindowHoldsCapture(slot->m_hwnd) )
     {
         return;
     }
@@ -3134,6 +3474,79 @@ void wxWinUITopLevelHost::OnSlotPointer(
     RetryDeferredIslandCancelMode();
 }
 
+void wxWinUITopLevelHost::OnRootContextRequested(
+    const winrt::Microsoft::UI::Xaml::Input::ContextRequestedEventArgs& args)
+{
+    // A right click released, Shift+F10 or the menu key. Over a window
+    // which is not shown by XAML the root router forwards the buttons and
+    // USER32 makes WM_CONTEXTMENU of them, as ever; a control shown by XAML
+    // gets its mouse events from its slot, which makes none: without this
+    // such a control never had wxEVT_CONTEXT_MENU, and a menu bound to it,
+    // or to a parent of it, never opened.
+    OperationGuard hostOperation(this);
+    if ( m_shuttingDown || !args )
+        return;
+
+    try
+    {
+        namespace MUX = winrt::Microsoft::UI::Xaml;
+
+        const wxWinUISlot * const slot = FindSlotForVisual(
+            args.OriginalSource().try_as<MUX::DependencyObject>());
+        if ( !slot || !slot->m_lifetime )
+            return;
+
+        const std::shared_ptr<wxWinUISlotLifetime> state = slot->m_lifetime;
+        wxWindow * const window = state->GetWindow();
+        if ( !window || !window->IsEnabled() )
+            return;
+
+        // Where, in screen coordinates; nowhere when the keyboard asked,
+        // which is how wxMSW says so too.
+        wxPoint position = wxDefaultPosition;
+        winrt::Windows::Foundation::Point point{};
+        if ( args.TryGetPosition(m_root, point) )
+        {
+            // When the control was sent the right button itself (see
+            // wxWinUIInputMessagesEnabled()), USER32 has made its
+            // WM_CONTEXTMENU of it and wxEVT_CONTEXT_MENU has been sent:
+            // not again, but the flyout XAML has for the control still
+            // gives way to a menu of the program.
+            if ( wxWinUIInputMessagesEnabled() &&
+                 m_slotContextMenuWindow == window &&
+                 ::GetTickCount64() - m_slotContextMenuTick < 2000 )
+            {
+                m_slotContextMenuWindow = nullptr;
+                if ( m_slotContextMenuProcessed )
+                    args.Handled(true);
+                return;
+            }
+
+            POINT screen{};
+            bool inside = false;
+            if ( MapRootPointerPointForSlot(*slot, point.X, point.Y,
+                                            &screen, &inside) )
+            {
+                position = wxPoint(screen.x, screen.y);
+            }
+        }
+
+        wxContextMenuEvent event(wxEVT_CONTEXT_MENU, window->GetId(), position);
+        event.SetEventObject(window);
+
+        // The handler may open a menu, which runs a loop of its own, and
+        // may destroy the window: nothing of it is used afterwards. A
+        // request which was answered must not open the flyout XAML has for
+        // some controls (a text box) as well.
+        if ( window->HandleWindowEvent(event) )
+            args.Handled(true);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("context menu request", e);
+    }
+}
+
 bool wxWinUITopLevelHost::MapRootPointerPointForSlot(
     const wxWinUISlot& slot,
     double xDIP,
@@ -3167,6 +3580,7 @@ bool wxWinUITopLevelHost::MapRootPointerPointForSlot(
     // Rounding is part of the Win32 POINT contract only: using that rounded
     // value for containment shifts every edge by half a pixel at fractional
     // rasterization scales.
+    RefreshSlotRects(slot);
     const double left = slot.m_visibleRectPx.GetX();
     const double top = slot.m_visibleRectPx.GetY();
     const double right = left + slot.m_visibleRectPx.GetWidth();
@@ -3240,15 +3654,27 @@ bool wxWinUITopLevelHost::SendSlotMouseEvent(
             action.modifiers | action.buttonMask);
         if ( !slot->m_inputState.CommitBeforeDispatch(action) )
             return false;
-        ::SendMessage(
-            reinterpret_cast<HWND>(hwnd),
-            action.horizontalWheel ? WM_MOUSEHWHEEL : WM_MOUSEWHEEL,
-            MAKEWPARAM(
-                keys,
-                static_cast<WORD>(
-                    static_cast<short>(action.wheelDelta))),
-            MAKELPARAM(static_cast<short>(action.screenX),
-                       static_cast<short>(action.screenY)));
+        const WPARAM wheelWParam = MAKEWPARAM(
+            keys,
+            static_cast<WORD>(static_cast<short>(action.wheelDelta)));
+        const LPARAM wheelLParam = MAKELPARAM(
+            static_cast<short>(action.screenX),
+            static_cast<short>(action.screenY));
+        if ( gs_slotWheelUsedByPeer )
+        {
+            // See gs_slotWheelUsedByPeer: the wx event only.
+            window->HandleMouseWheel(
+                action.horizontalWheel ? wxMOUSE_WHEEL_HORIZONTAL
+                                       : wxMOUSE_WHEEL_VERTICAL,
+                wheelWParam, wheelLParam);
+        }
+        else
+        {
+            ::SendMessage(
+                reinterpret_cast<HWND>(hwnd),
+                action.horizontalWheel ? WM_MOUSEHWHEEL : WM_MOUSEWHEEL,
+                wheelWParam, wheelLParam);
+        }
         return state->GetHost() == this &&
                state->GetWindow() == window &&
                !m_shuttingDown;
@@ -3290,6 +3716,98 @@ bool wxWinUITopLevelHost::SendSlotMouseEvent(
     }
 
     UpdateSlotPointerOwner(state, action);
+
+    if ( wxWinUIInputMessagesEnabled() )
+    {
+        // Entering is what wxMSW makes of the first move, as on any window.
+        if ( type == wxEVT_ENTER_WINDOW )
+            return true;
+
+        // While a button is held on a window which is not shown by XAML (a
+        // splitter whose sash is dragged), that window alone gets the mouse,
+        // as the window which has the capture does in Win32. The control
+        // the pointer passes over must not get a message for the same
+        // position: wxMSW drops a move at the position of the last mouse
+        // message, and the one dropped was that of the window being
+        // dragged, which then moved only when the button was released.
+        if ( type != wxEVT_LEAVE_WINDOW && m_inputState.HasAnyActivePress() )
+            return true;
+
+        const HWND target = reinterpret_cast<HWND>(hwnd);
+        UINT message = 0;
+        WPARAM wParam = 0;
+        LPARAM lParam = 0;
+        if ( type == wxEVT_LEAVE_WINDOW )
+        {
+            message = WM_MOUSELEAVE;
+        }
+        else
+        {
+            POINT point = { action.screenX, action.screenY };
+            ::SetLastError(ERROR_SUCCESS);
+            if ( !::MapWindowPoints(HWND_DESKTOP, target, &point, 1) &&
+                 ::GetLastError() != ERROR_SUCCESS )
+            {
+                return true;
+            }
+
+            const WORD keys = static_cast<WORD>(
+                (action.modifiers & (MK_SHIFT | MK_CONTROL)) |
+                action.buttonMask);
+            wParam = keys;
+            lParam = MAKELPARAM(static_cast<short>(point.x),
+                                static_cast<short>(point.y));
+            if ( type == wxEVT_MOTION )
+            {
+                message = WM_MOUSEMOVE;
+            }
+            else
+            {
+                wxWinUIButtonMessages messages;
+                if ( !wxWinUIGetButtonMessages(action.button, action.kind,
+                                               &messages) )
+                {
+                    return true;
+                }
+                message = messages.client;
+                if ( messages.xButton )
+                    wParam = MAKEWPARAM(keys, messages.xButton);
+            }
+        }
+
+        bool contextProcessed = false;
+        const unsigned long long contextSerial =
+            wxWinUIMSWGetContextMenuSerial(nullptr);
+        {
+            // wxMSW gives the focus to a window whose click nothing has
+            // processed. XAML gave it to what was clicked when the button
+            // went down, and is the one to say: asking for it again would
+            // take it from there to the first element of the control.
+            wxWinUIMSWBeginSlotMouseDispatch();
+            const auto endSlotDispatch = wxMakeGuard(
+                []()
+                {
+                    wxWinUIMSWEndSlotMouseDispatch();
+                });
+            const wxWinUISyntheticMouseDispatch syntheticDispatch;
+            ::SendMessage(target, message, wParam, lParam);
+        }
+
+        // The window may be gone: only its address is kept, to be compared.
+        if ( message == WM_RBUTTONUP &&
+             wxWinUIMSWGetContextMenuSerial(&contextProcessed) !=
+                contextSerial )
+        {
+            m_slotContextMenuWindow = window;
+            m_slotContextMenuProcessed = contextProcessed;
+            m_slotContextMenuTick = ::GetTickCount64();
+        }
+
+        return state->GetHost() == this &&
+               state->GetWindow() == window &&
+               !m_shuttingDown;
+    }
+
     window->HandleWindowEvent(event);
     return state->GetHost() == this &&
            state->GetWindow() == window &&
@@ -3324,6 +3842,7 @@ void wxWinUITopLevelHost::ExecuteSlotInputCleanup(
     const RECT rootScreen = GetClientScreenRect();
     const wxPoint pointInRoot(action.screenX - rootScreen.left,
                               action.screenY - rootScreen.top);
+    RefreshSlotRects(*slot);
     if ( slot->m_visible &&
          slot->m_visibleRectPx.Contains(pointInRoot) )
     {
@@ -3626,6 +4145,13 @@ bool wxWinUITopLevelHost::RouteSlotPointerSample(
         return false;
     }
 
+    if ( (sample.kind == wxWinUIInputKind::Cancel ||
+          sample.kind == wxWinUIInputKind::CaptureLost) &&
+         wxWinUISlotWindowHoldsCapture(slot->m_hwnd) )
+    {
+        return true;
+    }
+
     if ( sample.kind == wxWinUIInputKind::Press )
         AdvanceInputSiteGeneration();
 
@@ -3830,6 +4356,14 @@ void wxWinUITopLevelHost::CancelSlotPointerOwners(
             continue;
         }
 
+        // See wxWinUISlotWindowHoldsCapture().
+        if ( wxWinUISlotWindowHoldsCapture(slot->m_hwnd) )
+        {
+            if ( wxWinUIInputLogEnabled() )
+                wxWinUIInputLog("slot owner kept: window has capture");
+            continue;
+        }
+
         wxWinUISlot::OperationGuard slotOperation(slot);
         if ( ++slot->m_inputTransitionEpoch == 0 )
             ++slot->m_inputTransitionEpoch;
@@ -3863,6 +4397,249 @@ void wxWinUITopLevelHost::CancelSlotPointerOwners(
     RetryDeferredIslandCancelMode();
 }
 
+// ----------------------------------------------------------------------------
+// step 3: pointer samples over native space wait for the message loop
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// On unless WX_WINUI_INPUT_QUEUE is 0, which brings back the delivery from
+// inside the event of XAML.
+bool wxWinUIInputQueueEnabled()
+{
+    return wxWinUIInputQueueMode() != 0;
+}
+
+UINT wxWinUIRootPointerQueueMessageId()
+{
+    static const UINT message = ::RegisterWindowMessageW(
+        L"wxWidgets.WinUI.RootPointerQueue");
+    return message;
+}
+
+} // anonymous namespace
+
+bool wxWinUITopLevelHost::RootPointerQueueMessage(wxWindowMSW *window,
+                                                  WXUINT WXUNUSED(message),
+                                                  WXWPARAM WXUNUSED(wParam),
+                                                  WXLPARAM WXUNUSED(lParam))
+{
+    wxWinUITopLevelHost * const host =
+        FindForTLW(static_cast<wxWindow *>(window));
+    if ( host )
+        host->DrainRootPointerQueue();
+    return true;
+}
+
+bool wxWinUITopLevelHost::QueueRootPointerSample(
+    const wxWinUIPointerSample& sample)
+{
+    QueuedPointer entry;
+    entry.kind = QueuedPointer::Kind::Native;
+    entry.sample = sample;
+    return PushQueuedPointer(std::move(entry));
+}
+
+bool wxWinUITopLevelHost::QueueXamlPointerSample(
+    const wxWinUIPointerSample& sample,
+    const std::shared_ptr<wxWinUISlotLifetime>& cursorSlot,
+    bool ownedByXaml)
+{
+    QueuedPointer entry;
+    entry.kind = QueuedPointer::Kind::Xaml;
+    entry.sample = sample;
+    entry.slot = cursorSlot;
+    entry.ownedByXaml = ownedByXaml;
+    return PushQueuedPointer(std::move(entry));
+}
+
+bool wxWinUITopLevelHost::QueueSlotPointerSample(
+    const std::shared_ptr<wxWinUISlotLifetime>& state,
+    const wxWinUIPointerSample& sample,
+    const wxWinUIRouteObservation& observation,
+    bool wheelUsedByPeer)
+{
+    QueuedPointer entry;
+    entry.kind = QueuedPointer::Kind::Slot;
+    entry.sample = sample;
+    entry.slot = state;
+    entry.observation = observation;
+    entry.wheelUsedByPeer = wheelUsedByPeer;
+    return PushQueuedPointer(std::move(entry));
+}
+
+bool wxWinUITopLevelHost::PushQueuedPointer(QueuedPointer&& entry)
+{
+    const HWND hwnd = m_tlw ? GetHwndOf(m_tlw) : nullptr;
+    const UINT message = wxWinUIRootPointerQueueMessageId();
+    if ( !hwnd || !message || m_shuttingDown )
+        return false;
+
+    static const bool s_registered =
+        wxWindow::MSWRegisterMessageHandler(
+            static_cast<int>(wxWinUIRootPointerQueueMessageId()),
+            &wxWinUITopLevelHost::RootPointerQueueMessage);
+    if ( !s_registered )
+        return false;
+
+    // A pointer reports hundreds of positions a second and a program which
+    // is busy sees none of them until it is done: only the last is of use.
+    // A move over a control waits as two, the one for its slot and the one
+    // for the root, so the last two are looked at.
+    if ( entry.sample.kind == wxWinUIInputKind::Move )
+    {
+        const std::size_t count = m_rootPointerQueue.size();
+        for ( std::size_t back = 1; back <= 2 && back <= count; ++back )
+        {
+            QueuedPointer& other = m_rootPointerQueue[count - back];
+            if ( other.sample.kind != wxWinUIInputKind::Move )
+                break;
+
+            if ( other.kind == entry.kind &&
+                 other.sample.device == entry.sample.device &&
+                 other.sample.pointerId == entry.sample.pointerId &&
+                 (entry.kind != QueuedPointer::Kind::Slot ||
+                  other.slot == entry.slot) )
+            {
+                other = std::move(entry);
+                return true;
+            }
+        }
+    }
+
+    const bool isMove = entry.sample.kind == wxWinUIInputKind::Move;
+    const int kind = static_cast<int>(entry.sample.kind);
+    const int queued = static_cast<int>(entry.kind);
+
+    m_rootPointerQueue.push_back(std::move(entry));
+    if ( !m_rootPointerDrainPosted )
+    {
+        // A posted message, not a pending wx event: whichever loop runs
+        // gets it, the modal loops of Windows included.
+        if ( !::PostMessageW(hwnd, message, 0, 0) )
+        {
+            m_rootPointerQueue.pop_back();
+            return false;
+        }
+        m_rootPointerDrainPosted = true;
+    }
+
+    if ( wxWinUIInputLogEnabled() && !isMove )
+    {
+        wxWinUIInputLog("queue push for=%d kind=%d waiting=%u",
+                        queued, kind,
+                        static_cast<unsigned>(m_rootPointerQueue.size()));
+    }
+    return true;
+}
+
+void wxWinUITopLevelHost::DropQueuedRootPointerMoves()
+{
+    for ( auto it = m_rootPointerQueue.begin();
+          it != m_rootPointerQueue.end(); )
+    {
+        if ( it->sample.kind == wxWinUIInputKind::Move )
+            it = m_rootPointerQueue.erase(it);
+        else
+            ++it;
+    }
+}
+
+void wxWinUITopLevelHost::DrainRootPointerQueue()
+{
+    OperationGuard operation(this);
+    m_rootPointerDrainPosted = false;
+
+    const std::shared_ptr<wxWinUIHostLifetime> hostState = m_hostLifetime;
+    const auto live = [this, &hostState]()
+    {
+        return hostState && hostState->GetHost() == this &&
+               !m_shuttingDown && m_tlw;
+    };
+
+    // Each one is taken out before it is delivered: a handler which runs a
+    // loop of its own has the next ones delivered by that loop, in their
+    // order, like posted messages.
+    while ( live() && !m_rootPointerQueue.empty() )
+    {
+        const QueuedPointer entry = m_rootPointerQueue.front();
+        m_rootPointerQueue.pop_front();
+        const wxWinUIPointerSample& sample = entry.sample;
+
+        if ( wxWinUIInputLogEnabled() &&
+             sample.kind != wxWinUIInputKind::Move )
+        {
+            wxWinUIInputLog("queue deliver for=%d kind=%d left=%u nested=%u",
+                            static_cast<int>(entry.kind),
+                            static_cast<int>(sample.kind),
+                            static_cast<unsigned>(m_rootPointerQueue.size()),
+                            m_rootPointerDelivering);
+        }
+
+        if ( entry.kind == QueuedPointer::Kind::Slot )
+        {
+            // The control may be gone since: ProcessSlotPointerSample()
+            // checks what it is given.
+            ++m_rootPointerDelivering;
+            ProcessSlotPointerSample(entry.slot, sample, entry.observation,
+                                     entry.wheelUsedByPeer);
+            --m_rootPointerDelivering;
+            continue;
+        }
+
+        const bool xaml = entry.kind == QueuedPointer::Kind::Xaml;
+
+        if ( ++m_inputTransitionEpoch == 0 )
+            ++m_inputTransitionEpoch;
+        const unsigned long long eventEpoch = m_inputTransitionEpoch;
+
+        if ( xaml && entry.ownedByXaml &&
+             sample.kind == wxWinUIInputKind::Move )
+        {
+            ObserveXamlPointerCursor();
+        }
+
+        ++m_rootPointerDelivering;
+        const wxWinUIRootPointerOutcome outcome =
+            RouteRootPointerSampleAtEpoch(sample, xaml, eventEpoch);
+        --m_rootPointerDelivering;
+
+        if ( !live() )
+            break;
+
+        if ( xaml && outcome.cancelSource && wxWinUIInputLogEnabled() )
+        {
+            // Too late to keep the event from XAML: it is not queued when
+            // a button is held or the mouse captured, the cases known to
+            // ask for it.
+            wxWinUIInputLog("queue: an event XAML owns was to be canceled, "
+                            "kind=%d", static_cast<int>(sample.kind));
+        }
+
+        if ( xaml && entry.ownedByXaml )
+        {
+            // As in OnRootPointer(), after the route: leaving a window
+            // which is not shown by XAML resets its cursor first.
+            if ( m_inputTransitionEpoch == eventEpoch )
+            {
+                ApplyXamlPointerCursorForSlot(
+                    entry.slot, wxWinUIShouldEmitSetCursor(sample.kind),
+                    eventEpoch);
+            }
+        }
+        else if ( sample.kind != wxWinUIInputKind::Move &&
+                  m_inputTransitionEpoch == eventEpoch &&
+                  m_activeCursorSurface == ActiveCursorSurface::Native )
+        {
+            // As in OnRootPointer(): over native space a press, a release
+            // or a wheel step does not set the cursor of the window again.
+            ReassertIslandPointerCursor();
+        }
+        RetryDeferredIslandCancelMode();
+    }
+}
+
 void wxWinUITopLevelHost::OnRootPointer(
     UINT message,
     const winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs& args)
@@ -3872,6 +4649,17 @@ void wxWinUITopLevelHost::OnRootPointer(
         return;
     const unsigned long long entryEpoch = m_inputTransitionEpoch;
     const std::shared_ptr<wxWinUIHostLifetime> hostState = m_hostLifetime;
+
+    if ( message == WM_LBUTTONDOWN )
+        wxWinUIDismissPopupOnOutsidePress(m_tlw);
+
+    const wxWinUIRootPointerNesting nesting;
+    if ( wxWinUIRootPointerNesting::TooDeep() )
+    {
+        // Swallow the packet: routing it would only deepen the recursion.
+        args.Handled(true);
+        return;
+    }
 
     try
     {
@@ -3893,6 +4681,45 @@ void wxWinUITopLevelHost::OnRootPointer(
         }
         const bool sourceAlreadyHandled =
             args.Handled() || sourceOwnedByXaml;
+
+        // See m_xamlGestureActive: while a control holds a gesture which
+        // started on it, its moves are not routed.
+        {
+            const std::uint32_t pointerId = point.PointerId();
+            const bool anyButtonDown =
+                props.IsLeftButtonPressed() || props.IsRightButtonPressed() ||
+                props.IsMiddleButtonPressed() || props.IsXButton1Pressed() ||
+                props.IsXButton2Pressed();
+            if ( message == WM_LBUTTONDOWN && sourceOwnedByXaml )
+            {
+                m_xamlGestureActive = true;
+                m_xamlGesturePointerId = pointerId;
+            }
+            else if ( m_xamlGestureActive &&
+                      pointerId == m_xamlGesturePointerId )
+            {
+                if ( !anyButtonDown )
+                {
+                    m_xamlGestureActive = false;
+                }
+                else if ( message == WM_MOUSEMOVE )
+                {
+                    // Unless a window took the mouse when the button went
+                    // down on what XAML shows of it (see
+                    // CancelSlotPointerOwners()): the window which has the
+                    // capture gets the moves wherever the pointer is, as in
+                    // Win32, and only this route sees them all.
+                    const HWND capture = ::GetCapture();
+                    const bool capturedByWindow =
+                        capture && capture != m_bridge &&
+                        capture != m_inner &&
+                        !(m_bridge && ::IsChild(m_bridge, capture));
+                    if ( !capturedByWindow )
+                        return;
+                }
+            }
+        }
+
         WORD modifiers = 0;
         WORD buttonMask = 0;
         if ( ::GetKeyState(VK_SHIFT) & 0x8000 )
@@ -3997,6 +4824,61 @@ void wxWinUITopLevelHost::OnRootPointer(
             return;
         }
 
+        if ( wxWinUIInputQueueEnabled() )
+        {
+            if ( !sourceAlreadyHandled )
+            {
+                // Over a window which is not shown by XAML: the message
+                // loop delivers it, see QueueRootPointerSample().
+                if ( QueueRootPointerSample(sample) )
+                {
+                    wxWinUIProfileSample();
+                    return;
+                }
+            }
+            else
+            {
+                // What XAML owns: the root only takes note of it, telling
+                // the window the pointer has left and asking the control
+                // under it for its cursor. That waits for the loop as well,
+                // unless a button is held on a window which is not shown by
+                // XAML or such a window has captured the mouse: the route
+                // may then ask for the event to be kept from XAML, which
+                // only now can do. The capture XAML takes for its own
+                // controls (a button being pressed) is not that.
+                const HWND capture = ::GetCapture();
+                const bool capturedByWindow =
+                    capture && capture != m_bridge && capture != m_inner &&
+                    !(m_bridge && ::IsChild(m_bridge, capture));
+                if ( wxWinUIInputQueueMode() == 2 &&
+                     !m_inputState.HasAnyActivePress() && !capturedByWindow )
+                {
+                    const std::shared_ptr<wxWinUISlotLifetime> cursorSlot =
+                        sourceOwnedByXaml ? FindXamlPointerCursorSlot(args)
+                                          : nullptr;
+                    if ( QueueXamlPointerSample(sample, cursorSlot,
+                                                sourceOwnedByXaml) )
+                    {
+                        wxWinUIProfileSample();
+                        return;
+                    }
+                }
+
+                if ( !m_rootPointerQueue.empty() )
+                {
+                    // Handled here and now, but after what was waiting:
+                    // the window the pointer has just left gets its last
+                    // move before it is told the pointer is gone.
+                    DrainRootPointerQueue();
+                    if ( !hostState || hostState->GetHost() != this ||
+                         m_shuttingDown )
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
         if ( ++m_inputTransitionEpoch == 0 )
             ++m_inputTransitionEpoch;
         const unsigned long long eventEpoch = m_inputTransitionEpoch;
@@ -4032,6 +4914,18 @@ void wxWinUITopLevelHost::OnRootPointer(
                 args,
                 wxWinUIShouldEmitSetCursor(sample.kind),
                 eventEpoch);
+        }
+        else if ( !sourceOwnedByXaml &&
+                  sample.kind != wxWinUIInputKind::Move &&
+                  hostState && hostState->GetHost() == this &&
+                  !m_shuttingDown &&
+                  m_inputTransitionEpoch == eventEpoch &&
+                  m_activeCursorSurface == ActiveCursorSurface::Native )
+        {
+            // Over native space a move sets the cursor of the window again,
+            // a press, a release or a wheel step does not: put back what
+            // XAML replaced with its own while processing this one.
+            ReassertIslandPointerCursor();
         }
         if ( outcome.cancelSource )
             args.Handled(true);
@@ -4152,6 +5046,27 @@ wxWinUITopLevelHost::RouteRootPointerSampleAtEpoch(
         outcome.status = wxWinUIRootPointerStatus::PolicyFiltered;
         outcome.disposition =
             wxWinUIInputDisposition::CompatibilityDuplicate;
+        return outcome;
+    }
+
+    // The press of a button over what XAML shows of a window reaches the
+    // slot of that window first, then this route, as the event bubbles.
+    // If the window took the mouse when it got the press (a header whose
+    // column or edge is dragged), the capture is there by now and the
+    // route below would give the same press to the window which has the
+    // capture, a second time and as its own: the slot was then kept from
+    // sending anything while that press was held (see SendSlotMouseEvent())
+    // and the release of the button, consumed for the slot which owns it,
+    // never reached the window. It went on dragging with no button held,
+    // until the release of a second click balanced the press made here.
+    // The slot owns this press: nothing to route.
+    if ( sample.kind == wxWinUIInputKind::Press && sourceAlreadyHandled &&
+         HasSlotPointerOwner(sample) )
+    {
+        if ( wxWinUIInputLogEnabled() )
+            wxWinUIInputLog("root PRESS owned by a slot: not routed");
+        outcome.status = wxWinUIRootPointerStatus::Completed;
+        outcome.disposition = wxWinUIInputDisposition::Xaml;
         return outcome;
     }
 

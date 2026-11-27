@@ -125,7 +125,9 @@ public:
         const auto visual = wxRibbonWinUIBuildCommand({
             item.kind, item.label, item.bitmap, !item.disabled, item.checked,
             size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 32.0 : 16.0,
-            size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 68.0 :
+            // A large command holds a 32 pixel icon over a label of up to
+            // two lines.
+            size == wxRIBBON_BUTTONBAR_BUTTON_LARGE ? 80.0 :
                 size == wxRIBBON_BUTTONBAR_BUTTON_MEDIUM ? 48.0 : 32.0,
             static_cast<double>(std::max(32, item.textMinWidth)), labelPosition});
         peer->root = visual.root;
@@ -133,7 +135,8 @@ public:
         const std::uint64_t key = item.key;
         if ( item.kind == wxRIBBON_BUTTON_TOGGLE )
         {
-            const auto button = visual.primary.as<MUXC::AppBarToggleButton>();
+            const auto button =
+                visual.primary.as<MUXC::Primitives::ToggleButton>();
             if ( generation )
             {
                 const auto checked = button.Checked(
@@ -148,9 +151,25 @@ public:
                     { button.Checked(checked); button.Unchecked(unchecked); });
             }
         }
+        else if ( const auto split = visual.split )
+        {
+            // The first part of a split button is the action of the
+            // command; its second part is wired below, as the arrow.
+            if ( generation )
+            {
+                const auto click = split.Click(
+                    [weak, key, generation](const auto&, const auto&)
+                    { if ( auto self = weak.lock() )
+                          self->Activate(key, generation, false, -1); });
+                peer->revoke.push_back([split, click]() { split.Click(click); });
+            }
+        }
         else
         {
-            const auto button = visual.primary.as<MUXC::AppBarButton>();
+            // An AppBarButton, or the DropDownButton of a command which
+            // only opens a menu.
+            const auto button =
+                visual.primary.as<MUXC::Primitives::ButtonBase>();
             if ( generation )
             {
                 const bool dropdown = item.kind == wxRIBBON_BUTTON_DROPDOWN;
