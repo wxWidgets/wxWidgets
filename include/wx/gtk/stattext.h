@@ -55,6 +55,24 @@ protected:
     virtual bool DoSetLabelMarkup(const wxString& markup) override;
 #endif // wxUSE_MARKUP
 
+    virtual wxSize GetMinSizeFromKnownDirection(int direction, int size,
+                                                int availableOtherDir) override;
+protected:
+    virtual void DoSetSize(int x, int y, int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) override;
+private:
+    wxSize GTKGetTextSize(int width) const;
+    wxSize GTKGetWrappedSize(int width) const;
+    // reset cache
+    void GTKResetWrapCache() { m_wrapCache[0].width = m_wrapCache[1].width = -1; }
+    // sizes for the last two widths asked for, as sizers alternate between
+    // two widths in one layout pass (row and column)
+    struct WrapCacheEntry { int width = -1; wxSize size; };
+    mutable WrapCacheEntry m_wrapCache[2];
+    mutable int m_wrapCacheNext = 0;
+    // width set by DoSetSize(), -1 before, used for the best size with wxST_WRAP
+    int m_wrapWidth = -1;
+    
 private:
     // Common part of SetLabel() and DoSetLabelMarkup().
     typedef void (wxStaticText::*GTKLabelSetter)(GtkLabel *, const wxString&);
