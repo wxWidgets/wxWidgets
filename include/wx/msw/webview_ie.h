@@ -51,7 +51,7 @@ public:
 
     wxWebViewIE(wxWindow* parent,
            wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
+           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
@@ -64,7 +64,7 @@ public:
 
     bool Create(wxWindow* parent,
            wxWindowID id,
-           const wxString& url = wxWebViewDefaultURLStr,
+           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
@@ -187,7 +187,7 @@ public:
     virtual wxWebView* Create() override { return new wxWebViewIE; }
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
-                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
