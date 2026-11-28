@@ -462,36 +462,35 @@ void wxStyledTextCtrl::AnnotationClearLine(int line) {
 inline std::vector<unsigned char> GetRGBA(const wxBitmap& bmp)
 {
     // Build an RGBA buffer from bmp.
+    if (!bmp.IsOk())
+        return {};
+
     wxImage img = bmp.ConvertToImage();
-    const size_t totalPixels = (size_t)img.GetWidth() * (size_t)img.GetHeight();
-    std::vector<unsigned char> rgba(totalPixels * 4);
+    if (!img.IsOk())
+        return {};
+
+    const int width = img.GetWidth();
+    const int height = img.GetHeight();
+
+    std::vector<unsigned char> rgba(width * height * 4);
+    const unsigned char* rgb = img.GetData();
+    const unsigned char* alpha = img.HasAlpha() ? img.GetAlpha() : nullptr;
+    const bool hasMask = img.HasMask();
+
     size_t curRGBALoc = 0, curDataLoc = 0, curAlphaLoc = 0;
 
-    if (img.HasMask()) {
-        for (int y = 0; y < bmp.GetHeight(); ++y) {
-            for (int x = 0; x < bmp.GetWidth(); ++x) {
-                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-                rgba[curRGBALoc++] = img.IsTransparent(x, y)
-                    ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE;
-            }
-        }
-    }
-    else if (img.HasAlpha()) {
-        for (int i = 0; i < totalPixels; ++i) {
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetAlpha()[curAlphaLoc++];
-        }
-    }
-    else {
-        for (int i = 0; i < totalPixels; ++i) {
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = wxALPHA_OPAQUE;
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            rgba[curRGBALoc++] = rgb[curDataLoc++];
+            rgba[curRGBALoc++] = rgb[curDataLoc++];
+            rgba[curRGBALoc++] = rgb[curDataLoc++];
+
+            if (hasMask)
+                rgba[curRGBALoc++] = img.IsTransparent(x, y) ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE;
+            else if (alpha)
+                rgba[curRGBALoc++] = alpha[curAlphaLoc++];
+            else
+                rgba[curRGBALoc++] = wxALPHA_OPAQUE;
         }
     }
 
