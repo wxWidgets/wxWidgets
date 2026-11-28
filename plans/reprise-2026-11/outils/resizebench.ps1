@@ -164,4 +164,3 @@ $out = [WxResizeBench]::Run($Exe, (Split-Path $Exe), $Steps, $WarmupSeconds)
 if ($ProfileFile) { Remove-Item Env:\WX_WINUI_INPUT_PROFILE }
 "{0}: {1}" -f (Split-Path $Exe -Leaf), $out
 if ($ProfileFile -and (Test-Path -LiteralPath $ProfileFile)) { Select-String -LiteralPath $ProfileFile -Pattern '^flush:' | ForEach-Object { $_.Line } | Select-Object -Last 4 }
-

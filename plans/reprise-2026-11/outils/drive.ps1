@@ -476,4 +476,3 @@ public static class WxDrive
 
 foreach ($pair in $Env) { $name, $value = $pair -split '=', 2; Set-Item -Path "Env:\$name" -Value $value }
 [WxDrive]::Run($Exe, $ExeArgs, (Split-Path $Exe), (Get-Content -LiteralPath $Script), $WarmupSeconds)
-

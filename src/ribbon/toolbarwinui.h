@@ -6,8 +6,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Source-private projection, included after the ToolBar model in toolbar.cpp.
-// The pre-integration checkpoint remains in toolbarwinui-integration.pending.patch
-// as provenance only; the implementation below is the compiled adapter.
 
 #include "ribboncommandwinui.h"
 

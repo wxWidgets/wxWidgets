@@ -108,4 +108,3 @@ public static class WxCapture
 '@
 
 [WxCapture]::Run($Exe, (Split-Path $Exe), $Out, $WarmupSeconds, $Width, $Height)
-
