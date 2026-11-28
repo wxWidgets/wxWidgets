@@ -18,7 +18,6 @@
 #include "wx/artprov.h"
 #include "wx/imaglist.h"
 #include "wx/bookctrl.h"
-#include "wx/platinfo.h"
 #include "wx/weakref.h"
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
@@ -1253,21 +1252,9 @@ TEST_CASE("wxBookCtrlBase::DoSizeStopsAfterPageDestruction",
     CHECK(pageLifetime.get() == nullptr);
 }
 
-// wxGTK, wxOSX and wxQt don't give the book its new size synchronously when
-// it is resized from inside the size event of one of its pages: the pages
-// sized after the nested layout get the old size there (seen in the CI on
-// 2026-11-28). wxWinUI doesn't meet it either, nor wxMSW under Wine. Only
-// wxMSW under Windows does.
-#if defined(__WXMSW__) && !defined(__WXWINUI__)
 TEST_CASE("wxBookCtrlBase::DoSizeNestedLayoutIsLatestWriter",
           "[bookctrl][lifetime][size][reentrancy]")
 {
-    if ( wxIsRunningUnderWine() )
-    {
-        WARN("Skipping the nested book layout test under Wine.");
-        return;
-    }
-
     BookLifetimeHarness* const book = CreateLifetimeBook();
     REQUIRE(book);
 
@@ -1291,13 +1278,21 @@ TEST_CASE("wxBookCtrlBase::DoSizeNestedLayoutIsLatestWriter",
     book->SizePagesForTesting();
 
     REQUIRE(nested);
-    const wxRect latestRect = book->GetPage(0)->GetRect();
+
+    // The outer layout, computed for the old size of the book, must not
+    // overwrite what the nested one did for its latest size.
+    const wxRect latestRect = first->GetRect();
+    CHECK(latestRect.GetWidth() == book->GetClientSize().x);
+
+    // DoSize() only sizes the shown page: the hidden ones get the latest
+    // size when they are selected.
+    CHECK(book->ChangeSelection(1) == 0);
     CHECK(book->GetPage(1)->GetRect() == latestRect);
+    CHECK(book->ChangeSelection(2) == 1);
     CHECK(book->GetPage(2)->GetRect() == latestRect);
 
     delete book;
 }
-#endif // wxMSW, not wxWinUI
 
 TEST_CASE("wxBookCtrlBase::VisibilityReconcileHonoursNestedSelection",
           "[bookctrl][lifetime][reentrancy]")
