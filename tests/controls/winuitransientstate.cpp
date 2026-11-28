@@ -2029,6 +2029,16 @@ TEST_CASE("WinUITransient::OpaqueGdiPaintPreservesMicaAndBlackPixels",
     frame.Show();
     wxYield();
 
+    // Mica needs Windows 11: without a backdrop of the system, as on the
+    // Windows Server 2022 of the CI, the frame isn't marked as showing it,
+    // the first erase of the canvas takes its mark away and it paints its
+    // HWND as usual, with no backdrop pixels to preserve.
+    if ( !wxWinUIWindowUsesBackdrop(&frame) )
+    {
+        WARN("Skipping: no backdrop of the system on this version of Windows.");
+        return;
+    }
+
     const RECT invalid = partial ? RECT{4, 5, 28, 17} : RECT{0, 0, 100, 80};
     const RECT physicalInvalid = rtl
         ? RECT{100 - invalid.right, invalid.top, 100 - invalid.left, invalid.bottom}
