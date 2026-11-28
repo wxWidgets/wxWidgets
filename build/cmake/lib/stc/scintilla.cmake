@@ -153,15 +153,26 @@ wx_add_builtin_library(wxscintilla ${SCINTILLA_SOURCES})
 target_include_directories(wxscintilla PRIVATE
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/include
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/src
-    ${wxTOOLKIT_INCLUDE_DIRS}
 )
 
 target_compile_definitions(wxscintilla PRIVATE
     ${SCINTILLA_DEFINES}
 )
 
-if(WIN32)
+if(WXMSW)
     target_link_libraries(wxscintilla PRIVATE imm32)
+elseif(WXGTK)
+    target_include_directories(wxscintilla PRIVATE
+        ${wxTOOLKIT_INCLUDE_DIRS}
+    )
+elseif(wxOSX_COCOA)
+    target_compile_options(wxscintilla PRIVATE
+        $<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fobjc-arc>
+        -wno-deprecated-declarations
+    )
+    target_include_directories(wxscintilla PRIVATE
+        ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/cocoa
+    )
 endif()
 
 wx_target_enable_precomp(wxscintilla

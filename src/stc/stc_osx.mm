@@ -15,6 +15,8 @@
 #include "wx/stc/stc.h"
 #include "wx/osx/private.h"
 
+#include <objc/runtime.h>
+
 #include "Scintilla.h"
 #import "ScintillaView.h"
 
@@ -101,6 +103,11 @@ public:
         return static_cast<ScintillaView*>(GetWXWidget());
     }
 
+    bool HandleKeyEvent(NSEvent* event)
+    {
+        return DoHandleKeyEvent(event);
+    }
+
     virtual bool HasFocus() const override
     {
         NSView* view = GetWXWidget();
@@ -141,6 +148,113 @@ private:
     wxScintillaNotificationDelegate* m_delegate;
 };
 
+// ----------------------------------------------------------------------------
+// Objective-C runtime hooks for SCIContentView key event forwarding
+// ----------------------------------------------------------------------------
+
+IMP s_origKeyDown = nullptr;
+IMP s_origKeyUp = nullptr;
+IMP s_origFlagsChanged = nullptr;
+
+wxScintillaCocoaImpl* FindScintillaImplFromContentView(NSView* contentView)
+{
+    for (NSView* v = [contentView superview]; v != nil; v = [v superview])
+    {
+        if ([v isKindOfClass:[ScintillaView class]])
+        {
+            return static_cast<wxScintillaCocoaImpl*>(wxWidgetImpl::FindFromWXWidget(v));
+        }
+    }
+    return nullptr;
+}
+
+bool ForwardKeyEventToWX(NSView* self, NSEvent* event)
+{
+    wxScintillaCocoaImpl* impl = FindScintillaImplFromContentView(self);
+    if (!impl)
+        return false;
+
+    // Converts NSEvent* to wxKeyEvent and dispatches wxEVT_KEY_DOWN / wxEVT_CHAR / wxEVT_KEY_UP.
+    // Returns true only if a user handler consumed the event without Skip().
+    return impl->HandleKeyEvent(event);
+}
+
+void wxSCI_keyDown(id self, SEL _cmd, NSEvent* event)
+{
+    if (ForwardKeyEventToWX(static_cast<NSView*>(self), event))
+        return;
+
+    if (s_origKeyDown)
+    {
+        reinterpret_cast<void (*)(id, SEL, NSEvent*)>(s_origKeyDown)(self, _cmd, event);
+    }
+}
+
+void wxSCI_keyUp(id self, SEL _cmd, NSEvent* event)
+{
+    if (ForwardKeyEventToWX(static_cast<NSView*>(self), event))
+        return;
+
+    if (s_origKeyUp)
+    {
+        reinterpret_cast<void (*)(id, SEL, NSEvent*)>(s_origKeyUp)(self, _cmd, event);
+    }
+}
+
+void wxSCI_flagsChanged(id self, SEL _cmd, NSEvent* event)
+{
+    if (ForwardKeyEventToWX(static_cast<NSView*>(self), event))
+        return;
+
+    if (s_origFlagsChanged)
+    {
+        reinterpret_cast<void (*)(id, SEL, NSEvent*)>(s_origFlagsChanged)(self, _cmd, event);
+    }
+}
+
+void HookSCIContentViewKeyEvents()
+{
+    static bool s_hooked = false;
+    if (s_hooked)
+        return;
+    s_hooked = true;
+
+    Class contentViewClass = objc_getClass("SCIContentView");
+    if (!contentViewClass)
+        return;
+
+    Method mKeyDown = class_getInstanceMethod(contentViewClass, @selector(keyDown:));
+    if (mKeyDown)
+    {
+        s_origKeyDown = method_setImplementation(mKeyDown, reinterpret_cast<IMP>(wxSCI_keyDown));
+    }
+
+    Method mKeyUp = class_getInstanceMethod(contentViewClass, @selector(keyUp:));
+    if (mKeyUp)
+    {
+        s_origKeyUp = method_setImplementation(mKeyUp, reinterpret_cast<IMP>(wxSCI_keyUp));
+    }
+
+    Method mFlagsChanged = class_getInstanceMethod(contentViewClass, @selector(flagsChanged:));
+    if (mFlagsChanged)
+    {
+        s_origFlagsChanged = method_setImplementation(mFlagsChanged, reinterpret_cast<IMP>(wxSCI_flagsChanged));
+    }
+    else
+    {
+        // SCIContentView may inherit flagsChanged: from NSResponder rather than implementing it directly
+        Method superMethod = class_getInstanceMethod([NSResponder class], @selector(flagsChanged:));
+        if (superMethod)
+        {
+            s_origFlagsChanged = method_getImplementation(superMethod);
+            class_addMethod(contentViewClass,
+                            @selector(flagsChanged:),
+                            reinterpret_cast<IMP>(wxSCI_flagsChanged),
+                            method_getTypeEncoding(superMethod));
+        }
+    }
+}
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -154,6 +268,8 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
+    HookSCIContentViewKeyEvents();
+
     DontCreatePeer();
 
     style &= ~(wxVSCROLL | wxHSCROLL);
