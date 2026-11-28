@@ -43,6 +43,7 @@
 #include <winrt/Microsoft.UI.Xaml.Input.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.Media.h>
+#include <winrt/Windows.UI.ViewManagement.h>
 #include <winrt/Windows.Globalization.h>
 #include <winrt/Windows.Globalization.NumberFormatting.h>
 
@@ -3476,6 +3477,15 @@ TEST_CASE("wxWinUI Calendar animated native scrolling does not exhaust layout re
     wxWinUICalendarTestAccess::WeekRefreshRecovery before;
     REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(*calendar, &before));
     REQUIRE_FALSE(before.degraded);
+
+    // Without the animations of the system, as on a server, the view goes
+    // to its new place at once: there is no intermediate step to observe.
+    if ( !winrt::Windows::UI::ViewManagement::UISettings().AnimationsEnabled() )
+    {
+        WARN("Skipping the animated calendar scroll: the animations of the "
+             "system are off.");
+        return;
+    }
 
     struct Observations
     {

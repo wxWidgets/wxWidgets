@@ -196,7 +196,10 @@ struct BrowserFixture
         frame->Layout();
         frame->ShowWithoutActivating();
     }
-    TempDir files{"wx-winui-browser-"};
+    // Not in the temporary directory: under Windows it is normally below the
+    // hidden AppData directory, and wxGenericDirCtrl doesn't show the
+    // descendants of a hidden directory unless asked to.
+    TempDir files{wxGetCwd() + wxFILE_SEP_PATH + "wx-winui-browser-"};
     std::unique_ptr<wxFrame> frame;
 };
 
