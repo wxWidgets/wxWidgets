@@ -165,10 +165,10 @@ elseif(WXGTK)
     target_include_directories(wxscintilla PRIVATE
         ${wxTOOLKIT_INCLUDE_DIRS}
     )
-elseif(wxOSX_COCOA)
+elseif(WXOSX_COCOA)
     target_compile_options(wxscintilla PRIVATE
         $<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fobjc-arc>
-        -wno-deprecated-declarations
+        -Wno-deprecated-declarations
     )
     target_include_directories(wxscintilla PRIVATE
         ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/cocoa
