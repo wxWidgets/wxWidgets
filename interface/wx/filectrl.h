@@ -71,7 +71,7 @@ public:
         Constructs the window.
 
         @param parent
-            Parent window, must not be non-null.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param defaultDirectory

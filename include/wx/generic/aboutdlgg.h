@@ -94,6 +94,9 @@ private:
     wxWindow *m_contents = nullptr;
 
     wxSizer *m_sizerText = nullptr;
+
+private:
+    wxDECLARE_CLASS(wxGenericAboutDialog);
 };
 
 // unlike wxAboutBox which can show either the native or generic about dialog,

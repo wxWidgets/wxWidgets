@@ -10,29 +10,7 @@
 #include "wx/mstream.h"
 #include "wx/fileconf.h"
 
-#if wxDEBUG_LEVEL
-
-static void exitAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg);
-
-static volatile wxAssertHandler_t
-    origAssertHandler = wxSetAssertHandler(exitAssertHandler);
-
-static void exitAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg)
-{
-    origAssertHandler(file, line, func, cond, msg);
-
-    exit(1);
-}
-
-#endif // wxDEBUG_LEVEL
+#include "exitassert.cpp"
 
 extern "C" int LLVMFuzzerTestOneInput(const wxUint8 *data, size_t size)
 {

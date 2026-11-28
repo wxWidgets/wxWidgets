@@ -50,7 +50,7 @@ enum wxDragResult
     @see @ref overview_dnd, @ref overview_dataobject, wxDropSource,
          wxTextDropTarget, wxFileDropTarget, wxDataFormat, wxDataObject
 */
-class wxDropTarget
+class wxDropTarget : public wxObject
 {
 public:
     /**
@@ -172,7 +172,7 @@ public:
     @see @ref overview_dnd, @ref overview_dataobject, wxDropTarget,
          wxTextDropTarget, wxFileDropTarget
 */
-class wxDropSource
+class wxDropSource : public wxObject
 {
 public:
     /**

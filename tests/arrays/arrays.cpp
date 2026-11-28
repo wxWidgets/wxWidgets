@@ -355,6 +355,11 @@ TEST_CASE("wxArrayString", "[dynarray]")
     // Same test with std::initializer_list<std::string>
     wxArrayString a9( { std::string("dog"), std::string("human"), std::string("condor"), std::string("thermit"), std::string("alligator") } );
     CHECK( a9.size() == 5 );
+
+    // And with elements of different types.
+    wxArrayString a10{ wxString("dog"), wxT("human") };
+    REQUIRE( a10.size() == 2 );
+    CHECK( a10[1] == "human" );
 }
 
 TEST_CASE("wxArrayString::Vector", "[dynarray][vector]")

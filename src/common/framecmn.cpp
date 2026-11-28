@@ -785,6 +785,35 @@ wxMenuItem *wxFrameBase::FindItemInMenuBar(int menuId) const
     return menuBar ? menuBar->FindItem(menuId) : nullptr;
 }
 
+#if wxUSE_ACCEL
+
+bool
+wxFrameBase::FindAcceleratorForKeyInMenuBar(const wxKeyEvent& event,
+                                            wxAcceleratorEntry& entry) const
+{
+    if ( const wxMenuBar* const menuBar = GetMenuBar() )
+    {
+        if ( wxMenuItem* const item = menuBar->FindItemForAccelKey(event) )
+        {
+            int flags = wxACCEL_NORMAL;
+            if ( event.ControlDown() )
+                flags |= wxACCEL_CTRL;
+            if ( event.ShiftDown() )
+                flags |= wxACCEL_SHIFT;
+            if ( event.AltDown() )
+                flags |= wxACCEL_ALT;
+
+            entry.Set(flags, event.GetKeyCode(), item->GetId(), item);
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+#endif // wxUSE_ACCEL
+
 #endif // wxUSE_MENUBAR
 
 #endif // wxUSE_MENUS

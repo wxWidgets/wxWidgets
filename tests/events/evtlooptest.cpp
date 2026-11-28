@@ -22,6 +22,11 @@
 
 #include <memory>
 
+#if wxUSE_GUI && defined(__WXMSW__)
+    #include "wx/window.h"
+    #include "wx/msw/private.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -188,3 +193,60 @@ TEST_CASE("EventLoop::TestCrossThreadCallAfter", "[evtloop]")
 }
 
 #endif // wxUSE_THREADS
+
+#if wxUSE_GUI && defined(__WXMSW__)
+
+namespace
+{
+
+// Window counting the messages of the given kind it receives.
+class MessageCounterWindow : public wxWindow
+{
+public:
+    MessageCounterWindow(wxWindow* parent, WXUINT msg)
+        : wxWindow(parent, wxID_ANY),
+          m_msg(msg)
+    {
+    }
+
+    virtual WXLRESULT
+    MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam) override
+    {
+        if ( msg == m_msg )
+            m_count++;
+
+        return wxWindow::MSWWindowProc(msg, wParam, lParam);
+    }
+
+    int GetCount() const { return m_count; }
+
+private:
+    const WXUINT m_msg;
+    int m_count = 0;
+};
+
+} // anonymous namespace
+
+TEST_CASE("EventLoop::YieldForKeepsWindow", "[evtloop]")
+{
+    std::unique_ptr<MessageCounterWindow>
+        win(new MessageCounterWindow(wxTheApp->GetTopWindow(), WM_UNDO));
+
+    wxEventLoop loop;
+    wxEventLoopActivator activate(&loop);
+
+    // Process whatever is pending before posting our message.
+    loop.Yield(true);
+
+    // WM_UNDO is one of the messages considered to be user input, so it is
+    // not processed when yielding for the UI events only...
+    REQUIRE( ::PostMessage(GetHwndOf(win.get()), WM_UNDO, 0, 0) );
+    loop.YieldFor(wxEVT_CATEGORY_UI);
+    CHECK( win->GetCount() == 0 );
+
+    // ... but it must still be delivered to its window later.
+    loop.Yield(true);
+    CHECK( win->GetCount() == 1 );
+}
+
+#endif // wxUSE_GUI && __WXMSW__

@@ -107,7 +107,11 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 #endif
 
     m_browser->Create(wxTheApp->GetTopWindow(), wxID_ANY);
-    ENSURE_LOADED;
+
+    // The first load may need to start the browser engine processes, which
+    // can take much longer than the default timeout on slow machines. If its
+    // event arrived late, all the subsequent checks would be off by one.
+    REQUIRE( m_loaded->WaitEvent(10000) );
 
     SECTION("Title")
     {
@@ -197,7 +201,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         ENSURE_LOADED;
 
         CHECK(m_browser->GetBackwardHistory().size() == 1);
-        CHECK(m_browser->GetForwardHistory().size() == 1);
+        REQUIRE(m_browser->GetForwardHistory().size() == 1);
 
         m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
         ENSURE_LOADED;
@@ -237,6 +241,17 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         // without wxYielding a bit because this seems to cause the extension
         // to hang with webkit 2.40.0+.
         YieldForAWhile();
+
+        if ( IsRunningUnderWayland() )
+        {
+            // Waiting 50ms doesn't seem to be enough under Wayland, so wait
+            // for the selection to become available for longer time.
+            if ( !WaitFor("selection",
+                          [this]() { return m_browser->HasSelection(); }) )
+            {
+                return;
+            }
+        }
 #endif // wxUSE_WEBVIEW_WEBKIT2
 
         CHECK(m_browser->HasSelection());

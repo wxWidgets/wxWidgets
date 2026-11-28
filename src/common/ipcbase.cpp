@@ -81,12 +81,15 @@ wxString wxConnectionBase::GetTextFromData(const void* data,
         // TODO: we should handle both wxIPC_UTF16TEXT and wxIPC_UTF32TEXT here
         //       for inter-platform IPC
         case wxIPC_UNICODETEXT:
-            wxASSERT_MSG( !(size % sizeof(wchar_t)), "invalid buffer size" );
-            if ( size )
+            if ( size % sizeof(wchar_t) )
             {
-                size /= sizeof(wchar_t);
-                size--;
+                // This is invalid, don't try reading corrupted data.
+                break;
             }
+
+            size /= sizeof(wchar_t);
+            if ( size )
+                size--;
 
             s = wxString(static_cast<const wchar_t *>(data), size);
             break;

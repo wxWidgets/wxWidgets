@@ -76,6 +76,7 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnSize( wxSizeEvent &event );
     void OnChar( wxKeyEvent &event );
+    void OnScroll(wxScrollWinEvent& event);
 
 private:
     // move the caret to m_xCaret, m_yCaret
@@ -296,6 +297,7 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
     EVT_SIZE(MyCanvas::OnSize)
     EVT_CHAR(MyCanvas::OnChar)
+    EVT_SCROLLWIN(MyCanvas::OnScroll)
 wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
@@ -361,8 +363,9 @@ void MyCanvas::DoMoveCaret()
 {
     wxLogStatus("Caret is at (%d, %d)", m_xCaret, m_yCaret);
 
-    GetCaret()->Move(m_xMargin + m_xCaret * m_widthChar,
-                     m_yMargin + m_yCaret * m_heightChar);
+    GetCaret()->Move(CalcScrolledPosition(
+        wxPoint(m_xMargin + m_xCaret * m_widthChar,
+                m_yMargin + m_yCaret * m_heightChar)));
 }
 
 void MyCanvas::OnSize(wxSizeEvent& event)
@@ -375,15 +378,30 @@ void MyCanvas::OnSize(wxSizeEvent& event)
 void MyCanvas::ChangeSize()
 {
     wxSize size = GetClientSize();
-    m_xChars = (size.x - 2*m_xMargin) / m_widthChar;
-    m_yChars = (size.y - 2*m_yMargin) / m_heightChar;
-    if ( !m_xChars )
-        m_xChars = 1;
-    if ( !m_yChars )
-        m_yChars = 1;
+
+    int xVisible = (size.x - 2*m_xMargin) / m_widthChar;
+    int yVisible = (size.y - 2*m_yMargin) / m_heightChar;
+    if ( !xVisible )
+        xVisible = 1;
+    if ( !yVisible )
+        yVisible = 1;
+
+    m_xChars = xVisible + 10;
+    m_yChars = yVisible + 10;
 
     free(m_text);
     m_text = (wxChar *)calloc(m_xChars * m_yChars, sizeof(wxChar));
+
+    // Make the client area scrollable.
+    SetScrollbars(m_widthChar, m_heightChar, m_xChars, m_yChars);
+
+    if ( m_xCaret >= m_xChars )
+        m_xCaret = m_xChars - 1;
+    if ( m_yCaret >= m_yChars )
+        m_yCaret = m_yChars - 1;
+
+    if ( GetCaret() )
+        DoMoveCaret();
 
 #if wxUSE_STATUSBAR
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
@@ -476,6 +494,7 @@ void MyCanvas::OnChar( wxKeyEvent &event )
                     m_yMargin + m_yCaret * m_heightChar,
                     m_widthChar,
                     m_heightChar);
+                CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
                 RefreshRect(rect, false /* don't erase background */);
 
                 NextChar();
@@ -489,3 +508,10 @@ void MyCanvas::OnChar( wxKeyEvent &event )
     DoMoveCaret();
 }
 
+void MyCanvas::OnScroll(wxScrollWinEvent &event)
+{
+    // Track the new caret position after the scrolling is finished.
+    CallAfter(&MyCanvas::DoMoveCaret);
+
+    event.Skip();
+}

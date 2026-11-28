@@ -4,6 +4,7 @@
 
 <object class="wxDialog" name="uncentered_dialog">
     <title>Uncentered Example</title>
+    <pos>0,0</pos>
     <object class="wxFlexGridSizer">
         <cols>1</cols>
         <rows>0</rows>
@@ -17,7 +18,7 @@
             <object class="wxTextCtrl" name="message_textctrl">
                 <size>500,150</size>
                 <style>wxTE_MULTILINE</style>
-                <value>All of the dialogs in the XRC demo, except for this dialog, center themselves automatically on their parent window, since that is what is most commonly needed. The centering for the other dialogs was done automatically simply by including a     &lt;centered&gt;1&lt;/centered&gt; as a tag directly under the dialog node.\n\nHowever, there may be some times when you don't want autocentering. If you don't want the dialog centered, just don't use the &lt;centered&gt; tag and the dialog will be placed in the default window position (which is at screen coordinate 0,0 in the upper left corner of the screen). This dialog is an example of when centering is turned off.</value>
+                <value>All of the dialogs in the XRC demo, except for this dialog, center themselves automatically on their parent window, since that is what is most commonly needed. The centering for the other dialogs was done automatically simply by including a     &lt;centered&gt;1&lt;/centered&gt; as a tag directly under the dialog node.\n\nHowever, there may be some times when you don't want autocentering. If you don't want the dialog centered, omit the &lt;centered&gt; tag. If you also need a specific location, set it explicitly with a &lt;pos&gt; tag. This dialog uses &lt;pos&gt;0,0&lt;/pos&gt; to appear at screen coordinate 0,0 in the upper left corner of the screen.</value>
             </object>
         </object>
         <object class="sizeritem">

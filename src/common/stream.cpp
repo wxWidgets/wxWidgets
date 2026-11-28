@@ -1385,6 +1385,8 @@ CreateBufferIfNeeded(T& stream, wxStreamBuffer *buffer, size_t bufsize = 1024)
 
 } // anonymous namespace
 
+wxIMPLEMENT_CLASS(wxBufferedInputStream, wxFilterInputStream);
+
 wxBufferedInputStream::wxBufferedInputStream(wxInputStream& stream,
                                              wxStreamBuffer *buffer)
                      : wxFilterInputStream(stream)
@@ -1498,6 +1500,8 @@ void wxBufferedInputStream::SetInputStreamBuffer(wxStreamBuffer *buffer)
 // wxBufferedOutputStream
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxBufferedOutputStream, wxFilterOutputStream);
+
 wxBufferedOutputStream::wxBufferedOutputStream(wxOutputStream& stream,
                                                wxStreamBuffer *buffer)
                       : wxFilterOutputStream(stream)
@@ -1583,6 +1587,8 @@ void wxBufferedOutputStream::SetOutputStreamBuffer(wxStreamBuffer *buffer)
 // ---------------------------------------------------------------------------
 // wxWrapperInputStream implementation
 // ---------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxWrapperInputStream, wxFilterInputStream);
 
 wxWrapperInputStream::wxWrapperInputStream()
 {

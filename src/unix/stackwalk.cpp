@@ -80,6 +80,21 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxStdioPipe);
 };
 
+// The addresses returned by backtrace() are return addresses, i.e. addresses
+// of the instruction following the call, which can belong to another line or
+// even to another function (if the call is the last instruction of the
+// function, which can happen when calling a noreturn function), so return an
+// address inside the call instruction itself to use for looking up the
+// function and source line of the frame.
+//
+// Note that this is wrong for the frame interrupted by a signal, whose address
+// is the address of the instruction being executed, but we can't distinguish
+// it from the other ones when using backtrace().
+inline void* GetCallAddress(void* returnAddress)
+{
+    return static_cast<char*>(returnAddress) - 1;
+}
+
 } // anonymous namespace
 
 // ============================================================================
@@ -355,14 +370,14 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
     // First pass: construct all commands to run.
     for ( size_t i = 0; i < n; ++i )
     {
-        void* const addr = addresses[i];
+        void* const addr = GetCallAddress(addresses[i]);
 
         const ModuleInfo modInfo = GetModuleInfoFromAddr(addr);
 
         // We can't do anything if we failed to find the file name.
         if ( !modInfo.name )
         {
-            arr[i].Set(wxString(), wxString(), syminfo[i], i, 0, addr);
+            arr[i].Set(wxString(), wxString(), syminfo[i], i, 0, addresses[i]);
             continue;
         }
 
@@ -427,7 +442,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
     len = (len <= 0) ? strlen(g_buf) : len;     // in case snprintf() is broken
     for (size_t i=0; i<n; i++)
     {
-        snprintf(&g_buf[len], BUFSIZE - len, " %p", addresses[i]);
+        snprintf(&g_buf[len], BUFSIZE - len, " %p",
+                 GetCallAddress(addresses[i]));
         len = strlen(g_buf);
     }
 

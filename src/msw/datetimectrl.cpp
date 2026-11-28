@@ -29,6 +29,7 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/msw/private.h"
     #include "wx/dcclient.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private/datecontrols.h"

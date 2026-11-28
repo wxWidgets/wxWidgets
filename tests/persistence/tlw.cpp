@@ -23,7 +23,14 @@
 
 #ifdef __WXGTK__
     #include "waitfor.h"
+    #include "wx/gtk/private/backend.h"
 #endif // __WXGTK__
+
+#ifdef __WXMSW__
+    #include "asserthelper.h"
+
+    #include "wx/display.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -35,14 +42,40 @@
 // local helpers
 // ----------------------------------------------------------------------------
 
-// Create the frame used for testing.
-static wxFrame* CreatePersistenceTestFrame()
+namespace
 {
-    wxFrame* const frame = new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "wxTest");
+
+// Create the frame used for testing.
+std::unique_ptr<wxFrame> CreatePersistenceTestFrame()
+{
+    auto frame =
+        make_unique<wxFrame>(wxTheApp->GetTopWindow(), wxID_ANY, "wxTest");
     frame->SetName("frame");
 
     return frame;
 }
+
+void SavePersistenceTestFrame(const wxPoint& pos, const wxSize& size)
+{
+    auto frame = CreatePersistenceTestFrame();
+    frame->SetPosition(pos);
+    frame->SetSize(size);
+
+    CHECK(wxPersistenceManager::Get().Register(frame.get()));
+
+    // Destroy the frame immediately to cause its geometry to be saved.
+}
+
+std::unique_ptr<wxFrame> RestorePersistenceTestFrame()
+{
+    auto frame = CreatePersistenceTestFrame();
+
+    CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame.get()));
+
+    return frame;
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -53,18 +86,13 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     const wxPoint pos(100, 150);
     const wxSize size(450, 350);
 
+    // Wayland doesn't allow clients to position their own top-level windows
+    // at all, unlike X11, so don't check the restored position there.
+    const bool checkPosition = !IsRunningUnderWayland();
+
     // Save the frame geometry.
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
-
-        // Set the geometry before saving.
-        frame->SetPosition(pos);
-        frame->SetSize(size);
-
-        CHECK(wxPersistenceManager::Get().Register(frame));
-
-        // Destroy the frame immediately, i.e. don't use Destroy() here.
-        delete frame;
+        SavePersistenceTestFrame(pos, size);
 
         // Test that the relevant keys have been stored correctly.
         int val = -1;
@@ -91,13 +119,14 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     // Now try recreating the frame using the restored values.
     bool checkIconized = true;
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
+        auto const frame = RestorePersistenceTestFrame();
 
-        // Test that the object was registered and restored.
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
-
-        CHECK(pos.x == frame->GetPosition().x);
-        CHECK(pos.y == frame->GetPosition().y);
+        // Test that the object was restored.
+        if ( checkPosition )
+        {
+            CHECK(pos.x == frame->GetPosition().x);
+            CHECK(pos.y == frame->GetPosition().y);
+        }
         CHECK(size.x == frame->GetSize().GetWidth());
         CHECK(size.y == frame->GetSize().GetHeight());
         CHECK(!frame->IsMaximized());
@@ -111,13 +140,16 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 #ifdef __WXGTK__
         // When using Xvfb, the frame will never get iconized, presumably
         // because there is no WM, so don't even bother waiting or warning.
-        if ( IsRunningUnderXVFB() )
+        //
+        // Also skip this check under Wayland where we use a headless
+        // compositor without WM as well.
+        if ( IsRunningUnderXVFB() || IsRunningUnderWayland() )
         {
             checkIconized = false;
         }
         else
         {
-            if ( !WaitFor("frame to be iconized", [frame]() {
+            if ( !WaitFor("frame to be iconized", [&]() {
                         return frame->IsIconized();
                     }) )
             {
@@ -125,15 +157,11 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
             }
         }
 #endif // __WXGTK__
-
-        delete frame;
     }
 
     // Check geometry after restoring the minimized frame.
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
-
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+        auto const frame = RestorePersistenceTestFrame();
 
         // As above, we need to show the frame for it to be actually iconized.
         frame->Show();
@@ -142,7 +170,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         if ( checkIconized )
         {
 #ifdef __WXGTK__
-            WaitFor("frame to be iconized", [frame]() {
+            WaitFor("frame to be iconized", [&]() {
                 return frame->IsIconized();
             });
 #endif // __WXGTK__
@@ -152,8 +180,11 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
 
         frame->Restore();
 
-        CHECK(pos.x == frame->GetPosition().x);
-        CHECK(pos.y == frame->GetPosition().y);
+        if ( checkPosition )
+        {
+            CHECK(pos.x == frame->GetPosition().x);
+            CHECK(pos.y == frame->GetPosition().y);
+        }
         CHECK(size.x == frame->GetSize().GetWidth());
         CHECK(size.y == frame->GetSize().GetHeight());
 
@@ -161,8 +192,6 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         // for it to be really maximized, it must be shown.
         frame->Maximize();
         frame->Show();
-
-        delete frame;
     }
 
     // Check geometry after restoring the maximized frame.
@@ -171,9 +200,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
     // maximized frame size, and its normal size is lost and can't be restored.
 #ifdef __WXMSW__
     {
-        wxFrame* const frame = CreatePersistenceTestFrame();
-
-        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+        auto const frame = RestorePersistenceTestFrame();
 
         CHECK(frame->IsMaximized());
         CHECK(!frame->IsIconized());
@@ -184,8 +211,175 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         CHECK(pos.y == frame->GetPosition().y);
         CHECK(size.x == frame->GetSize().GetWidth());
         CHECK(size.y == frame->GetSize().GetHeight());
-
-        delete frame;
     }
 #endif // __WXMSW__
 }
+
+// This test is MSW-specific because the generic implementation used elsewhere
+// has its own, different, check for the window being off screen.
+#ifdef __WXMSW__
+
+TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW::OffScreen", "[persist][tlw]")
+{
+    const wxSize size(450, 350);
+
+    // Find a position at which only a small part of the frame is inside a
+    // display: this is what happens when the geometry saved while using a
+    // bigger desktop is restored on a smaller one, e.g. after disconnecting a
+    // monitor or when connecting to the machine remotely.
+    wxPoint pos;
+    const unsigned count = wxDisplay::GetCount();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        pos = wxDisplay(n).GetClientArea().GetBottomRight() - wxPoint(20, 20);
+
+        if ( wxDisplay::GetFromPoint(pos) != wxNOT_FOUND &&
+             wxDisplay::GetFromPoint(pos + size) == wxNOT_FOUND )
+        {
+            // Found a suitable position.
+            break;
+        }
+
+        pos = wxDefaultPosition;
+    }
+
+    if ( pos == wxDefaultPosition )
+    {
+        WARN("Unexpectedly didn't find a suitable position, skipping the test");
+        return;
+    }
+
+    // Simulate the geometry saved by a previous version of the program, which
+    // didn't record whether the window was off screen at all.
+    const auto saveGeometry = [this, size](const wxPoint& posSaved)
+    {
+        wxConfigBase& config = GetConfig();
+
+        config.Write(FRAME_OPTIONS_PREFIX "/x", posSaved.x);
+        config.Write(FRAME_OPTIONS_PREFIX "/y", posSaved.y);
+        config.Write(FRAME_OPTIONS_PREFIX "/w", size.x);
+        config.Write(FRAME_OPTIONS_PREFIX "/h", size.y);
+
+        // The previous versions didn't save this value at all.
+        config.DeleteEntry(FRAME_OPTIONS_PREFIX "/offscreen");
+    };
+
+    // Without this entry the window is assumed to have been fully visible
+    // when its geometry was saved and so has to be moved back on screen.
+    SECTION("Fix up")
+    {
+        saveGeometry(pos);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        // The frame shouldn't have been left almost completely off screen.
+        const wxRect rect = frame->GetScreenRect();
+        CHECK(wxDisplay::GetFromPoint(rect.GetTopLeft()) != wxNOT_FOUND);
+        CHECK(wxDisplay::GetFromPoint(rect.GetBottomRight()) != wxNOT_FOUND);
+
+        // The size should have been preserved.
+        CHECK(size == rect.GetSize());
+    }
+
+    // But if the window had already been off screen when its geometry was
+    // saved, it had been put there on purpose and must be left alone.
+    SECTION("Preserve")
+    {
+        saveGeometry(pos);
+        GetConfig().Write(FRAME_OPTIONS_PREFIX "/offscreen", 1);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        CHECK(wxRect(pos, size) == frame->GetScreenRect());
+    }
+
+    // Even a window which had been deliberately moved off screen must be
+    // moved back if it wouldn't be visible at all, as the user couldn't move
+    // it back in this case.
+    SECTION("Fix up hidden")
+    {
+        const wxRect rectPrimary = wxDisplay().GetClientArea();
+        const wxPoint posHidden =
+            rectPrimary.GetTopLeft() - wxPoint(10000, 10000);
+        REQUIRE(wxDisplay::GetFromRect(wxRect(posHidden, size)) == wxNOT_FOUND);
+
+        saveGeometry(posHidden);
+        GetConfig().Write(FRAME_OPTIONS_PREFIX "/offscreen", 1);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        // The frame should have been moved to the position inside the primary
+        // display closest to its saved one, i.e. its top left corner.
+        CHECK(wxRect(rectPrimary.GetTopLeft(), size) == frame->GetScreenRect());
+    }
+
+    // Check that saving the geometry of a window which is off screen does set
+    // the flag relied upon by the tests above.
+    SECTION("Save")
+    {
+        SavePersistenceTestFrame(pos, size);
+
+        int val = -1;
+        REQUIRE(GetConfig().Read(FRAME_OPTIONS_PREFIX "/offscreen", &val));
+        CHECK(val == 1);
+    }
+}
+
+// Check that the geometry saved at one DPI is rescaled when it is restored at
+// a different one.
+TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW::DPI", "[persist][tlw][dpi]")
+{
+    const wxPoint pos(100, 150);
+
+    // Use a relatively small size, so that the frame still fits on the screen
+    // after being scaled by 2 below.
+    const wxSize size(225, 175);
+
+    SavePersistenceTestFrame(pos, size);
+
+    // The frame size can be greater than the requested one, e.g. because the
+    // system doesn't allow frames narrower than their caption buttons, so
+    // check the restored size against the size which was really saved and not
+    // the one we had asked for.
+    wxSize sizeSaved;
+    REQUIRE(GetConfig().Read(FRAME_OPTIONS_PREFIX "/w", &sizeSaved.x));
+    REQUIRE(GetConfig().Read(FRAME_OPTIONS_PREFIX "/h", &sizeSaved.y));
+
+    const int dpi = wxTheApp->GetTopWindow()->GetDPI().y;
+
+    // All the DPI values used in practice are even, which allows us to use
+    // exact values in the checks below.
+    REQUIRE(dpi % 2 == 0);
+
+    // The DPI must have been saved together with the geometry.
+    int dpiSaved = -1;
+    CHECK(GetConfig().Read(FRAME_OPTIONS_PREFIX "/DPI", &dpiSaved));
+    CHECK(dpiSaved == dpi);
+
+    SECTION("Rescale")
+    {
+        // Pretend that the geometry had been saved at half the current DPI:
+        // in this case the size must be doubled when restoring it, but not the
+        // position, which doesn't depend on the DPI.
+        GetConfig().Write(FRAME_OPTIONS_PREFIX "/DPI", dpi / 2);
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        CHECK(frame->GetSize() == sizeSaved*2);
+        CHECK(frame->GetPosition() == pos);
+    }
+
+    SECTION("Compatibility")
+    {
+        // The geometry saved by the previous versions of the library doesn't
+        // have any DPI associated with it and must be restored as is.
+        GetConfig().DeleteEntry(FRAME_OPTIONS_PREFIX "/DPI");
+
+        auto const frame = RestorePersistenceTestFrame();
+
+        CHECK(frame->GetSize() == sizeSaved);
+        CHECK(frame->GetPosition() == pos);
+    }
+}
+
+#endif // __WXMSW__

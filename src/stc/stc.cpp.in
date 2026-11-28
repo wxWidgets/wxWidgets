@@ -212,6 +212,13 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     // Put Scintilla into unicode (UTF-8) mode
     SetCodePage(wxSTC_CP_UTF8);
 
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // The generic wxSTC backend can display composition itself on these
+    // platforms, so prefer inline input instead of relying on an IM module to
+    // provide a separate pre-edit window.
+    SetIMEInteraction(wxSTC_IME_INLINE);
+#endif
+
     SetInitialSize(size);
 
     // Reduces flicker on GTK+/X11
@@ -613,7 +620,7 @@ wxCharBuffer wxStyledTextCtrl::GetCurLineRaw(int* linePos)
     }
 
     wxCharBuffer buf(len);
-    int pos = SendMsg(SCI_GETCURLINE, len, (sptr_t)buf.data());
+    int pos = SendMsg(SCI_GETCURLINE, len + 1, (sptr_t)buf.data());
     if (linePos)  *linePos = pos;
     return buf;
 }
@@ -933,11 +940,11 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 
     // apparently if we don't do this, Unicode keys pressed after non-char
     // ASCII ones (e.g. Enter, Tab) are not taken into account (patch 1615989)
-    if (m_lastKeyDownConsumed && evt.GetUnicodeKey() > 255)
+    if (m_lastKeyDownConsumed && evt.GetUnicodeChar() > 255)
         m_lastKeyDownConsumed = false;
 
     if (!m_lastKeyDownConsumed && !skip) {
-        wxChar key = evt.GetUnicodeKey();
+        wxUniChar key = evt.GetUnicodeChar();
         bool keyOk = true;
 
         // if the unicode key code is not really a unicode character (it may

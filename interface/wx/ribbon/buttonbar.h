@@ -173,7 +173,7 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
 
@@ -185,7 +185,7 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -196,7 +196,7 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddHybridButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -207,7 +207,7 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddToggleButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -246,10 +246,10 @@ public:
     virtual wxRibbonButtonBarButtonBase* AddButton(
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small = wxNullBitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
-                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle(),
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -264,7 +264,7 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
 
@@ -282,7 +282,7 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -299,7 +299,7 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -316,7 +316,7 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string = wxEmptyString);
 
     /**
@@ -361,10 +361,10 @@ public:
                 size_t pos,
                 int button_id,
                 const wxString& label,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small = wxNullBitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
-                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle(),
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString);
 
@@ -511,10 +511,10 @@ public:
     */
     virtual void SetButtonIcon(
                 int button_id,
-                const wxBitmap& bitmap,
-                const wxBitmap& bitmap_small = wxNullBitmap,
-                const wxBitmap& bitmap_disabled = wxNullBitmap,
-                const wxBitmap& bitmap_small_disabled = wxNullBitmap);
+                const wxBitmapBundle& bitmap,
+                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle());
 
     /**
         Changes the label text of an existing button.
@@ -658,6 +658,41 @@ public:
     */
     bool GetShowToolTipsForDisabled() const;
 
+    /**
+        Assigns the KeyTip used to click the given button.
+
+        Pass an empty string to remove it. The KeyTip is stored upper-cased.
+        Disabled buttons don't show a KeyTip.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetKeyTip(wxWindowID button_id, const wxString& keytip);
+
+    /**
+        Returns the KeyTip of the given button, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip(wxWindowID button_id) const;
+
+    /**
+        Assigns the KeyTip used to open a hybrid button's dropdown menu.
+
+        This is separate from the KeyTip of the button's main click area, set
+        by SetKeyTip(), and has no effect on non-hybrid buttons.
+
+        @since 3.3.4
+    */
+    void SetDropdownKeyTip(wxWindowID button_id, const wxString& keytip);
+
+    /**
+        Returns the dropdown KeyTip of the given button, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetDropdownKeyTip(wxWindowID button_id) const;
 };
 
 /**

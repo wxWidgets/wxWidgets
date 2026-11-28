@@ -25,7 +25,9 @@
     #include "wx/osx/private/datatransfer.h"
 #endif
 
+#include "wx/private/access.h"
 #include "wx/private/bmpbndl.h"
+#include "wx/private/textinput.h"
 
 #include "wx/evtloop.h"
 
@@ -593,7 +595,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     // OS X generates events with key codes in Unicode private use area for
     // unprintable symbols such as cursor arrows (WXK_UP is mapped to U+F700)
     // and function keys (WXK_F2 is U+F705). We don't want to use them as the
-    // result of wxKeyEvent::GetUnicodeKey() however as it's supposed to return
+    // result of wxKeyEvent::GetUnicodeChar() however as it's supposed to return
     // WXK_NONE for "non characters" so explicitly exclude them.
     //
     // We only exclude the private use area inside the Basic Multilingual Plane
@@ -1020,24 +1022,111 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 
 @end // wxNSView
 
-// We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
-// Currently, only insertText:(replacementRange:) is
-// implemented here, and the rest of the methods are stubs.
-// It is hoped that someday IME-related functionality is implemented in
-// wxWidgets and the methods of this protocol are fully working.
+// We need to adopt NSTextInputClient for interpretKeyEvents: to work.
+// Custom controls can opt in to the complete protocol through the private
+// text input client interface;
+// other controls retain the existing insertText: behaviour.
 
 @implementation wxNSView(TextInput)
 
 void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
+static wxTextInputClient* wxOSXGetTextInputClient(NSView* view)
+{
+    wxWidgetCocoaImpl* const impl =
+        static_cast<wxWidgetCocoaImpl*>(
+            wxWidgetImpl::FindFromWXWidget(view));
+    if ( !impl )
+        return nullptr;
+
+    wxWindowMac* const peer = impl->GetWXPeer();
+    wxTextInputClient* const client = wxFindTextInputClient(peer);
+    return client && client->IsTextInputEnabled() ? client : nullptr;
+}
+
+static void wxOSXEndTextInput(NSView* view)
+{
+    wxTextInputClient* const client = wxOSXGetTextInputClient(view);
+    if ( !client || !client->HasMarkedText() )
+        return;
+
+    // Stop the input manager from referring to the old marked range, then
+    // commit the displayed tentative text before focus or selection moves.
+    [[view inputContext] discardMarkedText];
+    client->UnmarkText();
+}
+
+void wxResetTextInput(wxWindow* window)
+{
+    NSView* const view = window->GetHandle();
+    [[view inputContext] discardMarkedText];
+}
+
+void wxSendTextInputAsChars(wxWindow* window, const wxString& text)
+{
+    wxOSX_insertText(window->GetHandle(), @selector(insertText:),
+                     wxCFStringRef(text).AsNSString());
+}
+
+static void wxOSXTextInputEventHandled(NSView* view)
+{
+    wxWidgetCocoaImpl* const impl =
+        static_cast<wxWidgetCocoaImpl*>(
+            wxWidgetImpl::FindFromWXWidget(view));
+    if ( impl )
+        impl->textInputEventHandled();
+}
+
+static NSString* wxOSXGetTextInputString(id value)
+{
+    if ( [value isKindOfClass:[NSString class]] )
+        return static_cast<NSString*>(value);
+    if ( [value isKindOfClass:[NSAttributedString class]] )
+        return [static_cast<NSAttributedString*>(value) string];
+    return @"";
+}
+
+static long wxOSXGetTextInputPosition(NSUInteger position)
+{
+    if ( position == NSNotFound )
+        return wxTextInputClient::NoPosition;
+    if ( position == NSNotFound - 1 )
+        return wxTextInputClient::InvalidPosition;
+
+    return static_cast<long>(position);
+}
+
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
-    wxUnusedVar(replacementRange);
-    wxOSX_insertText(self, @selector(insertText:), aString);
+    NSString* const text = wxOSXGetTextInputString(aString);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client &&
+         client->InsertText(
+             wxStringWithNSString(text),
+             wxOSXGetTextInputPosition(replacementRange.location),
+             static_cast<long>(replacementRange.length)) )
+    {
+        wxOSXTextInputEventHandled(self);
+        return;
+    }
+
+    wxOSX_insertText(self, @selector(insertText:), text);
 }
 
 - (void)doCommandBySelector:(SEL)aSelector
 {
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client && client->HasMarkedText() &&
+         aSelector == @selector(insertNewline:) )
+    {
+        // Some input methods use this command to accept the selected
+        // candidate instead of calling insertText:. Commit the marked text
+        // and consume Enter so it isn't inserted as a newline too.
+        client->UnmarkText();
+        wxOSXTextInputEventHandled(self);
+        return;
+    }
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl)
         impl->doCommandBySelector(aSelector, self, _cmd);
@@ -1045,52 +1134,179 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
-    wxUnusedVar(aString);
-    wxUnusedVar(selectedRange);
-    wxUnusedVar(replacementRange);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client )
+        return;
+
+    if ( client->SetMarkedText(
+            wxStringWithNSString(wxOSXGetTextInputString(aString)),
+            wxOSXGetTextInputPosition(selectedRange.location),
+            static_cast<long>(selectedRange.length),
+            wxOSXGetTextInputPosition(replacementRange.location),
+            static_cast<long>(replacementRange.length)) )
+    {
+        wxOSXTextInputEventHandled(self);
+    }
 }
 
 - (void)unmarkText
 {
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client )
+        client->UnmarkText();
 }
 
 - (NSRange)selectedRange
 {
-    return NSMakeRange(NSNotFound, 0);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    long start, length;
+    if ( !client || !client->GetSelectedTextRange(&start, &length) )
+        return NSMakeRange(NSNotFound, 0);
+
+    if ( length == 0 )
+    {
+        NSTextInputContext* const context =
+            [NSTextInputContext currentInputContext];
+        // Cangjie crashes in malloc when an empty selection is returned with
+        // its actual position, so report no selection for this input method.
+        // Doing this for all input methods prevents the European accented
+        // character chooser from appearing.
+        if ( [[context selectedKeyboardInputSource]
+                isEqualToString:@"com.apple.inputmethod.TCIM.Cangjie"] )
+        {
+            return NSMakeRange(NSNotFound, 0);
+        }
+    }
+
+    return NSMakeRange(static_cast<NSUInteger>(start),
+                       static_cast<NSUInteger>(length));
 }
 
 - (NSRange)markedRange
 {
-    return NSMakeRange(NSNotFound, 0);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    long start, length;
+    if ( !client || !client->GetMarkedTextRange(&start, &length) )
+        return NSMakeRange(NSNotFound, 0);
+
+    return NSMakeRange(static_cast<NSUInteger>(start),
+                       static_cast<NSUInteger>(length));
 }
 
 - (BOOL)hasMarkedText
 {
-    return NO;
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    return client && client->HasMarkedText();
 }
 
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
-    return nil;
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client )
+        return nil;
+
+    wxString text;
+    long start, length;
+    if ( !client->GetTextInRange(
+            static_cast<long>(aRange.location),
+            static_cast<long>(aRange.length),
+            &text, &start, &length) )
+    {
+        return nil;
+    }
+
+    if ( actualRange )
+    {
+        *actualRange = NSMakeRange(static_cast<NSUInteger>(start),
+                                   static_cast<NSUInteger>(length));
+    }
+
+    return [[[NSAttributedString alloc]
+                initWithString:wxCFStringRef(text).AsNSString()]
+                autorelease];
 }
 
 - (NSArray*)validAttributesForMarkedText
 {
-    return nil;
+    return @[];
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client )
+    {
+        wxRect rect;
+        long start, length;
+        if ( !client->GetTextRect(
+                static_cast<long>(aRange.location),
+                static_cast<long>(aRange.length),
+                &rect, &start, &length) )
+        {
+            return NSZeroRect;
+        }
+
+        if ( actualRange )
+        {
+            *actualRange = NSMakeRange(static_cast<NSUInteger>(start),
+                                       static_cast<NSUInteger>(length));
+        }
+
+        const NSRect localRect = wxToNSRect(self, rect);
+        const NSRect windowRect = [self convertRect:localRect toView:nil];
+        return [[self window] convertRectToScreen:windowRect];
+    }
+
+    // We don't support ranges for ordinary windows, but at least return the
+    // position where the text is being input, if the window provides it.
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( wxWindowMac* const win = impl ? impl->GetWXPeer() : nullptr )
+    {
+        const wxRect rect = win->GetInputMethodCursorRect();
+        if ( !rect.IsEmpty() )
+        {
+            // This function must return the rectangle in screen coordinates.
+            const wxRect rectScreen(win->ClientToScreen(rect.GetPosition()),
+                                    rect.GetSize());
+            return wxToNSRect(nil, rectScreen);
+        }
+    }
+
     return NSMakeRect(0, 0, 0, 0);
 }
+
+- (NSTextInputContext *)inputContext
+{
+    // Returning nil from here disables the input method for this view.
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( wxWindowMac* const win = impl ? impl->GetWXPeer() : nullptr )
+    {
+        if ( !win->IsInputMethodEnabled() )
+            return nil;
+    }
+
+    return [super inputContext];
+}
+
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
 {
-    wxUnusedVar(aPoint);
-    return NSNotFound;
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client || ![self window] )
+        return NSNotFound;
+
+    const NSRect screenRect = NSMakeRect(aPoint.x, aPoint.y, 0, 0);
+    const NSRect windowRect = [[self window] convertRectFromScreen:screenRect];
+    const NSPoint localPoint =
+        [self convertPoint:windowRect.origin fromView:nil];
+
+    long position;
+    if ( !client->GetTextPosition(wxFromNSPoint(self, localPoint),
+                                  &position) )
+    {
+        return NSNotFound;
+    }
+
+    return static_cast<NSUInteger>(position);
 }
 
 @end // wxNSView(TextInput)
@@ -1146,7 +1362,17 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
 
     // We shouldn't let disabled windows get mouse events.
     if (impl->GetWXPeer()->IsEnabled())
+    {
+        const int type = [event type];
+        if ( type == NSLeftMouseDown ||
+             type == NSRightMouseDown ||
+             type == NSOtherMouseDown )
+        {
+            wxOSXEndTextInput(self);
+        }
+
         impl->mouseEvent(event, self, _cmd);
+    }
 }
 
 void wxOSX_cursorUpdate(NSView* self, SEL _cmd, NSEvent *event)
@@ -1348,6 +1574,23 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
 #endif // wxUSE_THREADS
 
     return impl->drawRect(&rect, self, _cmd);
+}
+
+BOOL wxOSX_accessibilityPerformShowMenu(NSView* self, SEL _cmd)
+{
+    // Let the application show its own context menu when VoiceOver asks for
+    // it, in the same way as it does when the right mouse button is pressed.
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        wxWindowMac* const wxpeer = impl->GetWXPeer();
+        if ( wxpeer && wxpeer->WXSendContextMenuEvent(wxDefaultPosition) )
+            return YES;
+    }
+
+    wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr)
+        [[self superclass] instanceMethodForSelector:_cmd];
+    return superimpl ? superimpl(self, _cmd) : NO;
 }
 
 void wxOSX_controlAction(NSView* self, SEL _cmd, id sender)
@@ -1626,6 +1869,24 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
     }
     else
     {
+        // We get these events for all the windows under the mouse and not just
+        // the deepest one, but only the window really under the mouse must set
+        // the cursor, as otherwise a parent window would override the cursor of
+        // its children.
+        NSView* const hitView =
+            [[[m_osxView window] contentView] hitTest:[event locationInWindow]];
+        for ( NSView* v = hitView; v != nil; v = [v superview] )
+        {
+            wxWidgetImpl* const impl = wxWidgetImpl::FindFromWXWidget(v);
+            if ( impl )
+            {
+                if ( impl != this )
+                    return false;
+
+                break;
+            }
+        }
+
         wxWindow* cursorTarget = GetWXPeer();
         wxCoord x,y;
         SetupCoordinates(x, y, event);
@@ -1659,11 +1920,31 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     {
         // there are key equivalents that are not command-combos and therefore not handled by cocoa automatically,
         // therefore we call the menubar directly here, exit if the menu is handling the shortcut
-        if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+#if wxUSE_ACCEL
+        // The focused window may want to handle this key itself instead of
+        // letting the menu use it as an accelerator, so ask it first.
+        bool useMenuAccel = true;
+
+        if ( wxWindowMac* const peer = GetWXPeer() )
         {
-            wxLogTrace(TRACE_KEYS, "%s processed as key equivalent by the menu",
-                       wxDumpSelector((SEL)_cmd));
-            return;
+            wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+            SetupKeyEvent(wxevent, event);
+
+            // SetupKeyEvent() may change the event type, so check that this
+            // is really a key press.
+            if ( wxevent.GetEventType() == wxEVT_KEY_DOWN )
+                useMenuAccel = peer->OSXShouldUseMenuAcceleratorForKey(wxevent);
+        }
+
+        if ( useMenuAccel )
+#endif // wxUSE_ACCEL
+        {
+            if ( [[[NSApplication sharedApplication] mainMenu] performKeyEquivalent:event] )
+            {
+                wxLogTrace(TRACE_KEYS, "%s processed as key equivalent by the menu",
+                           wxDumpSelector((SEL)_cmd));
+                return;
+            }
         }
 
         BeginNativeKeyDownEvent(event);
@@ -2360,10 +2641,15 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
     bool result = false;
     if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
-        if ( IsInNativeKeyDown() && [text isEqualToString:[GetLastNativeKeyDownEvent() characters]])
+        if ( IsInNativeKeyDown() &&
+             [text isEqualToString:[GetLastNativeKeyDownEvent() characters]])
         {
             // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
             // (see also: wxWidgetCocoaImpl::DoHandleKeyEvent)
+            // An IME can commit marked text and then insert this character
+            // during the same native key event, in which case the event was
+            // already consumed by the text input client.
+            if ( !WasKeyDownSent() )
             {
                 wxKeyEvent wxevent(wxEVT_KEY_DOWN);
                 SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
@@ -2386,6 +2672,12 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
         wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, text);
     }
+}
+
+void wxWidgetCocoaImpl::textInputEventHandled()
+{
+    if ( IsInNativeKeyDown() && !WasKeyDownSent() )
+        SetKeyDownSent();
 }
 
 bool wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* WXUNUSED(_cmd))
@@ -2451,6 +2743,8 @@ bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 
 bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 {
+    wxOSXEndTextInput(static_cast<NSView*>(slf));
+
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
 
@@ -2726,6 +3020,7 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
         wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlAction:), (IMP) wxOSX_controlAction, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(accessibilityPerformShowMenu), (IMP) wxOSX_accessibilityPerformShowMenu, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlDoubleAction:), (IMP) wxOSX_controlDoubleAction, "v@:@" )
 
 #if wxUSE_DRAG_AND_DROP
@@ -3970,6 +4265,66 @@ void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
     }
 }
 
+NSView* wxWidgetCocoaImpl::GetAccessibleView() const
+{
+    if ( [m_osxView isKindOfClass:[NSScrollView class]] )
+    {
+        NSView* const documentView = [(NSScrollView*)m_osxView documentView];
+        if ( documentView )
+            return documentView;
+    }
+
+    return m_osxView;
+}
+
+void wxWidgetCocoaImpl::SetAccessibilityLabel(const wxString& label)
+{
+    NSView* const view = GetAccessibleView();
+
+    wxCFStringRef cf(label);
+    NSString* const str = label.empty() ? nil : cf.AsNSString();
+
+    // VoiceOver uses the title of the buttons instead of their label.
+    // Notice that we must not set both of them: resetting them both to nil
+    // afterwards results in an empty title instead of the default one.
+    if ( [view isKindOfClass:[NSButton class]] )
+        [view setAccessibilityTitle:str];
+    else
+        [view setAccessibilityLabel:str];
+}
+
+void wxWidgetCocoaImpl::SetAccessibilityTitleElement(wxWidgetImpl* title)
+{
+    // For most controls the accessibility element is not the view itself but
+    // its cell, so link the elements actually used by VoiceOver.
+    [NSAccessibilityUnignoredDescendant(GetAccessibleView()) setAccessibilityTitleUIElement:
+        NSAccessibilityUnignoredDescendant(title->GetWXWidget())];
+}
+
+namespace
+{
+
+bool HasAccessibilityTitleOrLabel(id element)
+{
+    return [[element accessibilityTitle] length] != 0 ||
+            [[element accessibilityLabel] length] != 0;
+}
+
+} // anonymous namespace
+
+bool wxWidgetCocoaImpl::HasAccessibilityTitle() const
+{
+    // Check both the view, as SetAccessibilityLabel() may set the title or
+    // label for it, and the element used by VoiceOver, which is the cell for
+    // most controls, as explained in SetAccessibilityTitleElement() comment.
+    NSView* const view = GetAccessibleView();
+    if ( HasAccessibilityTitleOrLabel(view) )
+        return true;
+
+    id const element = NSAccessibilityUnignoredDescendant(view);
+    return element != view && HasAccessibilityTitleOrLabel(element);
+}
+
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
     WXWidget c =  control ? control : (WXWidget) m_osxView;
@@ -4287,6 +4642,263 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
     }
 }
 
+void
+wxPrivate::SetAccessibleElements(wxWindow* win, const AccessibleElements& elements)
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    // Check if anything has changed since the last call, as replacing the
+    // elements would make VoiceOver lose its position in them.
+    NSArray* const current = [view accessibilityChildren];
+    if ( current.count == elements.size() )
+    {
+        bool changed = false;
+        for ( size_t n = 0; n < elements.size(); ++n )
+        {
+            id const child = current[n];
+            if ( ![child isKindOfClass:[NSAccessibilityElement class]] )
+            {
+                changed = true;
+                break;
+            }
+
+            NSAccessibilityElement* const element = child;
+            const wxString label = wxCFStringRef::AsString([element accessibilityLabel]);
+            const NSRect frame = wxToNSRect(view, elements[n].rect);
+            if ( label != elements[n].label ||
+                    !NSEqualRects([element accessibilityFrameInParentSpace], frame) )
+            {
+                changed = true;
+                break;
+            }
+        }
+
+        if ( !changed )
+            return;
+    }
+
+    if ( elements.empty() )
+    {
+        [view setAccessibilityChildren:nil];
+        return;
+    }
+
+    NSMutableArray* const children =
+        [NSMutableArray arrayWithCapacity:elements.size()];
+
+    for ( const auto& e : elements )
+    {
+        NSAccessibilityElement* const element =
+            [NSAccessibilityElement
+                accessibilityElementWithRole:NSAccessibilityStaticTextRole
+                                       frame:NSZeroRect
+                                       label:wxCFStringRef(e.label).AsNSString()
+                                      parent:view];
+
+        // Use the frame relative to the parent view and not the screen frame
+        // for the element to remain at the correct position if the window
+        // moves.
+        [element setAccessibilityFrameInParentSpace:wxToNSRect(view, e.rect)];
+
+        [children addObject:element];
+    }
+
+    // The container itself must be visible to the accessibility clients for
+    // them to reach its children.
+    [view setAccessibilityRole:NSAccessibilityGroupRole];
+    [view setAccessibilityChildren:children];
+}
+
+// The key of the row elements associated with the view, see
+// wxPrivate::SetAccessibleTable().
+static const char* const wxOSXAccessibilityRowsKey = "wxOSXAXRows";
+
+void
+wxPrivate::SetAccessibleTable(wxWindow* win,
+                              const AccessibleRows& rows,
+                              long WXUNUSED(numRows))
+{
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    // Update the existing elements if their number didn't change, as recreating
+    // them would make VoiceOver forget which row it was on.
+    NSMutableArray* existing =
+        objc_getAssociatedObject(view, wxOSXAccessibilityRowsKey);
+    if ( existing && [existing count] == rows.size() )
+    {
+        size_t n = 0;
+        for ( const auto& row : rows )
+        {
+            id rowElement = [existing objectAtIndex:n++];
+
+            [rowElement setAccessibilityFrame:NSAccessibilityFrameInView(view, wxToNSRect(view, row.rect))];
+            [rowElement setAccessibilityIndex:row.index];
+            [rowElement setAccessibilityRowIndexRange:NSMakeRange(row.index, 1)];
+            [rowElement setAccessibilitySelected:row.selected];
+
+            NSArray* const cells = [rowElement accessibilityChildren];
+            if ( [cells count] != row.cells.size() )
+            {
+                // The number of columns has changed, just start from scratch.
+                existing = nil;
+                break;
+            }
+
+            for ( size_t col = 0; col < row.cells.size(); ++col )
+            {
+                const AccessibleElement& cell = row.cells[col];
+
+                // Note that the string must be kept alive while it is used, as
+                // wxCFStringRef owns it and would release it otherwise.
+                const wxCFStringRef cfValue(cell.label);
+
+                id text = [cells objectAtIndex:col];
+                [text setAccessibilityFrame:NSAccessibilityFrameInView(view, wxToNSRect(view, cell.rect))];
+                [text setAccessibilityValue:cfValue.AsNSString()];
+            }
+        }
+
+        if ( existing )
+        {
+            NSMutableArray* const selected = [NSMutableArray array];
+            size_t sel = 0;
+            for ( const auto& row : rows )
+            {
+                if ( row.selected )
+                    [selected addObject:[existing objectAtIndex:sel]];
+                ++sel;
+            }
+
+            [view setAccessibilitySelectedRows:selected];
+            return;
+        }
+    }
+
+    NSMutableArray* const rowElements =
+        [NSMutableArray arrayWithCapacity:rows.size()];
+
+    for ( const auto& row : rows )
+    {
+        NSAccessibilityElement* const rowElement =
+            [NSAccessibilityElement
+                accessibilityElementWithRole:NSAccessibilityRowRole
+                                       frame:NSAccessibilityFrameInView(view, wxToNSRect(view, row.rect))
+                                       label:nil
+                                      parent:view];
+
+        [rowElement setAccessibilitySubrole:NSAccessibilityTableRowSubrole];
+        [rowElement setAccessibilityEnabled:YES];
+        [rowElement setAccessibilityIndex:row.index];
+        [rowElement setAccessibilityRowIndexRange:NSMakeRange(row.index, 1)];
+        [rowElement setAccessibilitySelected:row.selected];
+
+        NSMutableArray* const cells =
+            [NSMutableArray arrayWithCapacity:row.cells.size()];
+
+        for ( const auto& cell : row.cells )
+        {
+            NSAccessibilityElement* const text =
+                [NSAccessibilityElement
+                    accessibilityElementWithRole:NSAccessibilityStaticTextRole
+                                           frame:NSAccessibilityFrameInView(view, wxToNSRect(view, cell.rect))
+                                           label:nil
+                                          parent:rowElement];
+
+            const wxCFStringRef cfValue(cell.label);
+            [text setAccessibilityValue:cfValue.AsNSString()];
+            [text setAccessibilityEnabled:YES];
+
+            [cells addObject:text];
+        }
+
+        [rowElement setAccessibilityChildren:cells];
+        [rowElements addObject:rowElement];
+    }
+
+    // The columns are exposed too, as VoiceOver uses them to tell which column
+    // a cell is in.
+    NSMutableArray* const columnElements = [NSMutableArray array];
+    if ( !rows.empty() )
+    {
+        const AccessibleRow& first = rows.front();
+        for ( size_t col = 0; col < first.cells.size(); ++col )
+        {
+            wxRect colRect = first.cells[col].rect;
+            colRect.y = 0;
+            colRect.height = win->GetClientSize().y;
+
+            NSAccessibilityElement* const column =
+                [NSAccessibilityElement
+                    accessibilityElementWithRole:NSAccessibilityColumnRole
+                                           frame:NSAccessibilityFrameInView(view, wxToNSRect(view, colRect))
+                                           label:nil
+                                          parent:view];
+
+            [column setAccessibilityColumnIndexRange:NSMakeRange(col, 1)];
+            [columnElements addObject:column];
+        }
+    }
+
+    NSMutableArray* const selectedRows = [NSMutableArray array];
+    size_t n = 0;
+    for ( const auto& row : rows )
+    {
+        if ( row.selected )
+            [selectedRows addObject:[rowElements objectAtIndex:n]];
+        ++n;
+    }
+
+    // The control must be an accessibility element itself, as otherwise it is
+    // ignored and its rows appear directly under the window.
+    [view setAccessibilityElement:YES];
+    [view setAccessibilityRole:NSAccessibilityTableRole];
+    [view setAccessibilityEnabled:YES];
+    [view setAccessibilityChildren:rowElements];
+    [view setAccessibilityRows:rowElements];
+    [view setAccessibilityVisibleRows:rowElements];
+    [view setAccessibilitySelectedRows:selectedRows];
+    [view setAccessibilityColumns:columnElements];
+    [view setAccessibilityVisibleColumns:columnElements];
+
+    objc_setAssociatedObject(view, wxOSXAccessibilityRowsKey, rowElements,
+                             OBJC_ASSOCIATION_RETAIN);
+}
+
+void
+wxPrivate::SetAccessibleCurrentRow(wxWindow* win, long row)
+{
+    if ( row == -1 )
+        return;
+
+    NSView* const view = win->GetHandle();
+    if ( !view )
+        return;
+
+    id focused = nil;
+    for ( id element in [view accessibilityRows] )
+    {
+        if ( (long)[element accessibilityRowIndexRange].location == row )
+        {
+            focused = element;
+            break;
+        }
+    }
+
+    if ( !focused )
+        return;
+
+    [view setAccessibilitySelectedRows:@[focused]];
+
+    NSAccessibilityPostNotification(view,
+                                    NSAccessibilitySelectedRowsChangedNotification);
+    NSAccessibilityPostNotification(
+        focused, NSAccessibilityFocusedUIElementChangedNotification);
+}
+
 void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
 {
     if ( !wxIsBusy() )
@@ -4400,6 +5012,10 @@ void wxWidgetCocoaImpl::ClipsToBounds(bool clip)
     m_osxView.clipsToBounds = clip;
 }
 
+bool wxWidgetCocoaImpl::DoesClipToBounds() const
+{
+    return m_osxView.clipsToBounds;
+}
 
 //
 // Factory methods

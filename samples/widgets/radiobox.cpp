@@ -38,8 +38,6 @@
 
 #include "widgets.h"
 
-#include "icons/radiobox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -175,7 +173,7 @@ IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, "Radio",
 
 RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                                    wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, radio_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::RadioBox)
 {
     // init everything
     m_chkSpecifyRows = nullptr;
@@ -223,7 +221,7 @@ void RadioWidgetsPage::CreateContent()
     btn = new wxButton(sizerleftBox, RadioPage_Update, "&Update");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border());
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     btn = new wxButton(sizerleftBox, RadioPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
@@ -277,11 +275,11 @@ void RadioWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
-                  wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxLEFT)));
+                  wxSizerFlags().Expand().DoubleBorder((wxALL & ~wxLEFT)));
     sizerTop->Add(sizerMiddle,
                   wxSizerFlags(1).Expand().DoubleBorder());
     sizerTop->Add(sizerRight,
-                  wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxRIGHT)));
+                  wxSizerFlags().Expand().DoubleBorder((wxALL & ~wxRIGHT)));
 
     // final initializations
     SetSizer(sizerTop);

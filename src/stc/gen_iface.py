@@ -74,6 +74,19 @@ FUNC_FOR_CMD = 1
 # Should methods and values be generated for the provisional Scintilla items?
 GENERATE_PROVISIONAL_ITEMS = 0
 
+# wxSTC values and methods are generated for these provisional Scintilla
+# values and methods even if GENERATE_PROVISIONAL_ITEMS is 0.
+provisionalValuesToGenerate = set([
+    'SC_BIDIRECTIONAL_DISABLED',
+    'SC_BIDIRECTIONAL_L2R',
+    'SC_BIDIRECTIONAL_R2L',
+])
+
+provisionalMethodsToGenerate = set([
+    'GetBidirectional',
+    'SetBidirectional',
+])
+
 # No wxSTC value will be generated for the following Scintilla values.
 notMappedSciValues = set([
     'SC_TECHNOLOGY_DIRECTWRITERETAIN',
@@ -91,6 +104,7 @@ retTypeMap = {
     'Alpha': 'int',
     'AnnotationVisible': 'int',
     'AutomaticFold': 'int',
+    'Bidirectional': 'int',
     'CaretPolicy': 'int',
     'CaretSticky': 'int',
     'CaretStyle': 'int',
@@ -913,6 +927,19 @@ methodOverrideMap = {
     SendMsg(%s, codePage);'''
     ),
 
+    'SetIMEInteraction' :
+    (0,
+     0,
+     '''void %s(int imeInteraction) {
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Roll the composition back first, while the pre-edit state is still
+    // fully consistent with the current mode.
+    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
+        m_swx->CancelComposition();
+#endif
+    SendMsg(%s, imeInteraction);
+    wxUpdateTextInputClient(this);'''
+    ),
 
     'GrabFocus' : (None, 0, 0),
 
@@ -1416,7 +1443,8 @@ def processMethods(methods):
         retType = retTypeMap.get(retType, retType)
         params = makeParamString(param1, param2)
 
-        if icat=='Provisional' and not GENERATE_PROVISIONAL_ITEMS:
+        if icat=='Provisional' and not GENERATE_PROVISIONAL_ITEMS \
+                and interfName not in provisionalMethodsToGenerate:
             continue
 
         name, theDef, theImp = checkMethodOverride(interfName, number)
@@ -1463,7 +1491,7 @@ def processMethods(methods):
             if docsLong != 0:
                 intrflines.append('')
                 for y in docsLong:
-                    intrflines.append('        ' + y)
+                    intrflines.append(('        ' + y).rstrip())
             intrflines.append('    */')
         else:
             print('warning: ' + name + ' is undocumented.')
@@ -1603,7 +1631,7 @@ def parseVal(line, values, docs, icat):
         docs.append('@deprecated')
 
     if icat=='Provisional':
-        if GENERATE_PROVISIONAL_ITEMS:
+        if GENERATE_PROVISIONAL_ITEMS or name in provisionalValuesToGenerate:
             docs.append('This item is a provisional value and is subject '
                         'to change')
             docs.append('in future versions of wxStyledTextCtrl.')

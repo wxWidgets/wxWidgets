@@ -1135,6 +1135,10 @@ wxGridSelection::GetSelectionShape(const wxRect& renderExtent)
     if ( !m_selectionShape )
     {
         ComputeSelectionShape(renderExtent);
+
+        // We still must have a non-null m_selectionShape to return something.
+        if ( !m_selectionShape )
+            m_selectionShape.reset(new wxSelectionShape);
     }
 
     return *m_selectionShape.get();

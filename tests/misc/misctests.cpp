@@ -23,6 +23,7 @@
 #include "wx/versioninfo.h"
 #include "wx/utils.h"
 
+#include "wx/private/extensionhook.h"
 #include "wx/private/wordwrap.h"
 
 // just some classes using wxRTTI for wxStaticCast() test
@@ -148,6 +149,166 @@ TEST_CASE("RTTI::ClassInfo", "[rtti]")
 #endif // wxUSE_ZIPSTREAM
 }
 
+// ----------------------------------------------------------------------------
+// extension hooks test
+// ----------------------------------------------------------------------------
+
+// Use ids not used by the library itself.
+constexpr wxExtensionHookId TestHookId = static_cast<wxExtensionHookId>(-1);
+constexpr wxExtensionHookId TestHookId2 = static_cast<wxExtensionHookId>(-2);
+
+template <>
+struct wxExtensionHookTraits<TestHookId>
+{
+    struct Data
+    {
+        // Name of the handler which handled the hook.
+        wxString handledBy;
+
+        // If true, HookDerived handler doesn't handle the hook.
+        bool derivedDeclines = false;
+    };
+};
+
+template <>
+struct wxExtensionHookTraits<TestHookId2> : wxExtensionHookTraits<TestHookId>
+{
+};
+
+namespace
+{
+
+using TestHookData = wxExtensionHookTraits<TestHookId>::Data;
+
+class HookBase : public wxObject
+{
+    wxDECLARE_CLASS(HookBase);
+};
+
+class HookDerived : public HookBase
+{
+    wxDECLARE_CLASS(HookDerived);
+};
+
+// This class doesn't have its own class info, as would be typically the case
+// for the classes defined in the application code.
+class HookNoClassInfo : public HookDerived
+{
+};
+
+// And this one overrides the hook function itself.
+class HookOverride : public HookNoClassInfo
+{
+public:
+    virtual bool WXExtensionHook(int id, void* data) override
+    {
+        m_called = true;
+
+        return HookNoClassInfo::WXExtensionHook(id, data);
+    }
+
+    bool m_called = false;
+};
+
+bool HandleBase(HookBase*, TestHookData& data)
+{
+    data.handledBy = "base";
+    return true;
+}
+
+bool HandleDerived(HookDerived*, TestHookData& data)
+{
+    if ( data.derivedDeclines )
+        return false;
+
+    data.handledBy = "derived";
+    return true;
+}
+
+bool HandleBase2(HookBase*, TestHookData& data)
+{
+    data.handledBy = "base2";
+    return true;
+}
+
+} // anonymous namespace
+
+wxIMPLEMENT_CLASS(HookBase, wxObject);
+wxIMPLEMENT_CLASS(HookDerived, HookBase);
+
+wxREGISTER_EXTENSION_HOOK(TestHookId, HookBase, HandleBase);
+wxREGISTER_EXTENSION_HOOK(TestHookId, HookDerived, HandleDerived);
+
+TEST_CASE("wxObject::WXExtensionHook", "[rtti][extensionhook]")
+{
+    TestHookData data;
+
+    SECTION("No handler")
+    {
+        wxObject obj;
+        CHECK( !wxCallExtensionHook<TestHookId>(&obj, data) );
+        CHECK( data.handledBy.empty() );
+    }
+
+    SECTION("Base")
+    {
+        HookBase obj;
+        CHECK( wxCallExtensionHook<TestHookId>(&obj, data) );
+        CHECK( data.handledBy == "base" );
+    }
+
+    SECTION("Derived")
+    {
+        HookDerived obj;
+        CHECK( wxCallExtensionHook<TestHookId>(&obj, data) );
+        CHECK( data.handledBy == "derived" );
+
+        // Base class handler is used if the derived one doesn't handle it.
+        data.handledBy.clear();
+        data.derivedDeclines = true;
+        CHECK( wxCallExtensionHook<TestHookId>(&obj, data) );
+        CHECK( data.handledBy == "base" );
+    }
+
+    SECTION("No class info")
+    {
+        HookNoClassInfo obj;
+        CHECK( wxCallExtensionHook<TestHookId>(&obj, data) );
+        CHECK( data.handledBy == "derived" );
+    }
+
+    SECTION("Override")
+    {
+        HookOverride obj;
+        CHECK( wxCallExtensionHook<TestHookId>(&obj, data) );
+        CHECK( obj.m_called );
+        CHECK( data.handledBy == "derived" );
+    }
+
+    SECTION("Registration")
+    {
+        HookDerived obj;
+        CHECK( !wxCallExtensionHook<TestHookId2>(&obj, data) );
+
+        {
+            wxExtensionHookRegistrar registrar
+            (
+                wxCLASSINFO(HookBase),
+                TestHookId2,
+                &wxExtensionHookTrampoline<TestHookId2, HookBase, HandleBase2>
+            );
+
+            CHECK( wxCallExtensionHook<TestHookId2>(&obj, data) );
+            CHECK( data.handledBy == "base2" );
+        }
+
+        // The handler must have been unregistered now.
+        data.handledBy.clear();
+        CHECK( !wxCallExtensionHook<TestHookId2>(&obj, data) );
+        CHECK( data.handledBy.empty() );
+    }
+}
+
 TEST_CASE("wxObjectDataPtr", "[ptr]")
 {
     struct Foo : wxObjectRefData
@@ -188,20 +349,13 @@ TEST_CASE("wxRound", "[math]")
     // For compatibility reasons, we allow using wxRound() with integer types
     // as well, even if this doesn't really make sense/
 #if WXWIN_COMPATIBILITY_3_0
-    #ifdef __VISUALC__
-        #pragma warning(push)
-        #pragma warning(disable:4996)
-    #endif
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+    wxWARNING_SUPPRESS_DEPRECATED()
 
     CHECK( wxRound(-9) == -9 );
     CHECK( wxRound((size_t)17) == 17 );
     CHECK( wxRound((short)289) == 289 );
 
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
-    #ifdef __VISUALC__
-        #pragma warning(pop)
-    #endif
+    wxWARNING_RESTORE_DEPRECATED()
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 

@@ -501,6 +501,9 @@ protected:
 
     wxString m_wordOrig;
     size_t   m_linepos;
+
+private:
+    wxDECLARE_CLASS(wxHtmlWordWithTabsCell);
 };
 
 
@@ -755,6 +758,9 @@ private:
     wxString m_Href, m_Target;
     const wxMouseEvent *m_Event;
     const wxHtmlCell *m_Cell;
+
+private:
+    wxDECLARE_CLASS(wxHtmlLinkInfo);
 };
 
 

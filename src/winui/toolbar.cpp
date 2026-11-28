@@ -91,42 +91,41 @@ double wxWinUIMeasureToolLabel(const winrt::hstring& label)
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
-// wxWinUIToolBarTool
+// wxToolBarTool
 // ----------------------------------------------------------------------------
 
-class wxWinUIToolBarTool final : public wxToolBarToolBase
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
+wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
+                             int toolid,
+                             const wxString& label,
+                             const wxBitmapBundle& bmpNormal,
+                             const wxBitmapBundle& bmpDisabled,
+                             wxItemKind kind,
+                             wxObject *clientData,
+                             const wxString& shortHelp,
+                             const wxString& longHelp)
+    : wxToolBarToolBase(tbar, toolid, label, bmpNormal, bmpDisabled,
+                        kind, clientData, shortHelp, longHelp)
 {
-public:
-    wxWinUIToolBarTool(wxToolBar *tbar,
-                       int toolid,
-                       const wxString& label,
-                       const wxBitmapBundle& bmpNormal,
-                       const wxBitmapBundle& bmpDisabled,
-                       wxItemKind kind,
-                       wxObject *clientData,
-                       const wxString& shortHelp,
-                       const wxString& longHelp)
-        : wxToolBarToolBase(tbar, toolid, label, bmpNormal, bmpDisabled,
-                            kind, clientData, shortHelp, longHelp)
-    {
-    }
+}
 
-    wxWinUIToolBarTool(wxToolBar *tbar,
-                       wxControl *control,
-                       const wxString& label)
-        : wxToolBarToolBase(tbar, control, label)
-    {
-    }
+wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
+                             wxControl *control,
+                             const wxString& label)
+    : wxToolBarToolBase(tbar, control, label)
+{
+}
 
-    // wxToolbook changes the label of the tool of a page this way.
-    void SetLabel(const wxString& label) override
-    {
-        wxToolBarToolBase::SetLabel(label);
+wxToolBarTool::~wxToolBarTool() = default;
 
-        if ( wxToolBarBase * const tbar = GetToolBar() )
-            static_cast<wxToolBar *>(tbar)->WinUIUpdateLabel(this);
-    }
-};
+void wxToolBarTool::SetLabel(const wxString& label)
+{
+    wxToolBarToolBase::SetLabel(label);
+
+    if ( wxToolBarBase * const tbar = GetToolBar() )
+        static_cast<wxToolBar *>(tbar)->WinUIUpdateLabel(this);
+}
 
 // ----------------------------------------------------------------------------
 // wxWinUIToolBarImpl
@@ -438,14 +437,14 @@ wxToolBar::CreateTool(int toolid,
                       const wxString& shortHelp,
                       const wxString& longHelp)
 {
-    return new wxWinUIToolBarTool(this, toolid, label, bmpNormal, bmpDisabled,
-                                  kind, clientData, shortHelp, longHelp);
+    return new wxToolBarTool(this, toolid, label, bmpNormal, bmpDisabled,
+                             kind, clientData, shortHelp, longHelp);
 }
 
 wxToolBarToolBase *
 wxToolBar::CreateTool(wxControl *control, const wxString& label)
 {
-    return new wxWinUIToolBarTool(this, control, label);
+    return new wxToolBarTool(this, control, label);
 }
 
 // ----------------------------------------------------------------------------

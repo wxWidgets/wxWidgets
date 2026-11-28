@@ -79,6 +79,7 @@
 #include  "wx/filename.h"
 #include  "wx/file.h"
 #include  "wx/filefn.h"
+#include  "wx/private/filename.h"
 
 // there is no distinction between text and binary files under Unix, so define
 // O_BINARY as 0 if the system headers don't do it already
@@ -170,6 +171,7 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
 // open the file
 bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 {
+    m_filename = fileName;
     int flags = O_BINARY;
 
     switch ( mode )
@@ -223,18 +225,19 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 // close
 bool wxFile::Close()
 {
+    bool rc = true;
     if ( IsOpened() ) {
         if ( CheckForError(wxClose(m_fd)) )
         {
-            wxLogSysError(_("can't close file descriptor %d"), m_fd);
-            m_fd = fd_invalid;
-            return false;
+            wxLogSysError(_("can't close file \"%s\" (descriptor %d)"), m_filename, m_fd);
+            rc = false;
         }
-        else
-            m_fd = fd_invalid;
+
+        m_fd = fd_invalid;
+        m_filename.clear();
     }
 
-    return true;
+    return rc;
 }
 
 // ----------------------------------------------------------------------------
@@ -329,7 +332,7 @@ ssize_t wxFile::Read(void *pBuf, size_t nCount)
 
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't read from file descriptor %d"), m_fd);
+        wxLogSysError(_("can't read from file \"%s\" (descriptor %d)"), m_filename, m_fd);
         return wxInvalidOffset;
     }
 
@@ -348,7 +351,8 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't write to file descriptor %d"), m_fd);
+        wxLogSysError(_("can't write to file \"%s\" (descriptor %d)"),
+                      m_filename, m_fd);
         iRc = 0;
     }
 
@@ -387,7 +391,7 @@ bool wxFile::Flush()
     {
         if ( CheckForError(wxFsync(m_fd)) )
         {
-            wxLogSysError(_("can't flush file descriptor %d"), m_fd);
+            wxLogSysError(_("can't flush file \"%s\" (descriptor %d)"), m_filename, m_fd);
             return false;
         }
     }
@@ -429,7 +433,7 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     wxFileOffset iRc = wxSeek(m_fd, ofs, origin);
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
+        wxLogSysError(_("can't seek on file \"%s\" (descriptor %d)"), m_filename, m_fd);
     }
 
     return iRc;
@@ -443,7 +447,8 @@ wxFileOffset wxFile::Tell() const
     wxFileOffset iRc = wxTell(m_fd);
     if ( CheckForError(iRc) )
     {
-        wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
+        wxLogSysError(_("can't get seek position on file \"%s\" (descriptor %d)"),
+                      m_filename, m_fd);
     }
 
     return iRc;
@@ -472,7 +477,8 @@ wxFileOffset wxFile::Length() const
     if ( iRc == wxInvalidOffset )
     {
         // last error was already set by Tell()
-        wxLogSysError(_("can't find length of file on file descriptor %d"), m_fd);
+        wxLogSysError(_("can't find length of file on file \"%s\" (descriptor %d)"),
+                      m_filename, m_fd);
     }
 
     return iRc;
@@ -502,7 +508,8 @@ bool wxFile::Eof() const
 
     if ( iRc == wxInvalidOffset )
     {
-        wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
+        wxLogSysError(_("can't determine if the end of file is reached on %s (descriptor %d)"),
+                      m_filename, m_fd);
     }
 
     return true;
@@ -546,29 +553,7 @@ bool wxTempFile::Open(const wxString& strName)
         return false;
     }
 
-#ifdef __UNIX__
-    // the temp file should have the same permissions as the original one
-    mode_t mode;
-
-    wxStructStat st;
-    if ( wxStat(m_strName, &st) == 0 )
-    {
-        mode = st.st_mode;
-    }
-    else
-    {
-        // file probably didn't exist, just give it the default mode _using_
-        // user's umask (new files creation should respect umask)
-        mode_t mask = umask(0777);
-        mode = 0666 & ~mask;
-        umask(mask);
-    }
-
-    if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
-    {
-        wxLogSysError(_("Failed to set temporary file permissions"));
-    }
-#endif // Unix
+    wxInitTempFile(m_strTemp, m_strName);
 
     return true;
 }
@@ -585,7 +570,19 @@ wxTempFile::~wxTempFile()
 
 bool wxTempFile::Commit()
 {
+    // Ensure that the data really reaches the disk before replacing the old
+    // file with this one: otherwise a crash just after the rename could leave
+    // us with neither the old nor the new contents.
+    const bool flushed = m_file.Flush();
+
     m_file.Close();
+
+    if ( !flushed )
+    {
+        // Don't replace the old file if we're not sure that the new contents
+        // was written successfully.
+        return false;
+    }
 
     if ( !wxRenameFile(m_strTemp, m_strName) ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName);

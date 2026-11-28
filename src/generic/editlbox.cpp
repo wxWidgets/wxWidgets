@@ -71,10 +71,10 @@ public:
          int w = GetClientSize().x;
 #elif defined(__WXMSW__)
          int w = GetSize().x;
-         w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this) + 6;
+         w -= GetScrollbarSize(wxVERTICAL) + 6;
 #else
          int w = GetSize().x;
-         w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this);
+         w -= 2*GetScrollbarSize(wxVERTICAL);
 #endif
          if (w < 0) w = 0;
          SetColumnWidth(0, w);

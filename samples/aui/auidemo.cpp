@@ -228,7 +228,7 @@ private:
 
 
 // -- wxSizeReportCtrl --
-// (a utility control that always reports it's client size)
+// (a utility control that always reports its client size)
 
 class wxSizeReportCtrl : public wxControl
 {
@@ -1875,7 +1875,7 @@ public:
         //
         // This is nice to detect errors in this sample, but note that this
         // might not be the best strategy for a real application, which might
-        // decide to to gracefully ignore unknown nodes instead of failing, or
+        // decide to gracefully ignore unknown nodes instead of failing, or
         // at least save the format version in the XML file to be able to give
         // a better error message.
         for ( wxXmlNode* node = layout->GetChildren(); node; node = node->GetNext() )

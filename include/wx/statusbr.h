@@ -224,6 +224,7 @@ protected:
 #endif // wxUSE_TOOLTIPS
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // internal helpers & data:
 

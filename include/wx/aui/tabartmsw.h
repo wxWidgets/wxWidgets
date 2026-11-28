@@ -82,6 +82,9 @@ private:
     void InitSizes(wxWindow* wnd, wxReadOnlyDC& dc);
 
     bool IsThemed() const;
+
+private:
+    wxDECLARE_CLASS(wxAuiMSWTabArt);
 };
 
 #endif // wxUSE_AUI

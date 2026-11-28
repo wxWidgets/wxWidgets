@@ -167,8 +167,7 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 
     // save any files given on the command line: we'll open them in OnInit()
     // later, after creating the frame
-    for ( size_t i = 0; i != parser.GetParamCount(); ++i )
-        m_filesFromCmdLine.push_back(parser.GetParam(i));
+    m_filesFromCmdLine = parser.GetParams();
 
     return wxApp::OnCmdLineParsed(parser);
 }

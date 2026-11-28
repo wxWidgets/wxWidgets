@@ -36,7 +36,7 @@ public:
 
     // show a message to the user
     template <typename FormatString, typename... Targs>
-    void Printf(FormatString format, Targs... args)
+    void Printf(const FormatString& format, wxFORMAT_ARGS(Targs)... args)
     {
         Output(wxString::Format(format, args...));
     }

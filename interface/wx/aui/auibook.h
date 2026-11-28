@@ -29,7 +29,7 @@ enum wxAuiNotebookOption
         Allow the user to pin tabs by using the pin button.
 
         With this style, the active page shows either a "pin" icon allowing to
-        pin it if it it's currently not pinned or an "unpin" icon if it is
+        pin it if it's currently not pinned or an "unpin" icon if it is
         already pinned. Note that "unpin" icon may be shown even if this style
         is not specified, but ::wxAUI_NB_UNPIN_ON_ALL_PINNED is.
 
@@ -232,7 +232,14 @@ struct wxAuiNotebookPosition
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed. Processes a  @c wxEVT_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        The window list button has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event.
+        A button in the tab control, e.g. the close or the window list button,
+        has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event. Use
+        wxCommandEvent::GetInt() to retrieve the id of the button, which is one
+        of @c wxAUI_BUTTON_XXX constants. Handling this event without skipping
+        it prevents the default action associated with the button, e.g. closing
+        the page for @c wxAUI_BUTTON_CLOSE or showing the list of the pages for
+        @c wxAUI_BUTTON_WINDOWLIST, from taking place, so the handler must call
+        wxEvent::Skip() if this is not desired.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
         Dragging is about to begin. Processes a @c wxEVT_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
@@ -620,7 +627,7 @@ public:
 
         Can be used to pin or lock a tab.
 
-        Tabs are are grouped in 3 subsets (each of which can possibly be
+        Tabs are grouped in 3 subsets (each of which can possibly be
         empty):
 
         - Shown first are locked tabs which are typically used for showing some
@@ -1071,7 +1078,7 @@ class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
     @library{wxaui}
     @category{aui}
 */
-class wxAuiTabArt
+class wxAuiTabArt : public wxObject
 {
 public:
     /**
@@ -1323,7 +1330,14 @@ using wxAuiDefaultTabArt = wxAuiFlatTabArt;
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed. Processes a  @c wxEVT_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        The window list button has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event.
+        A button in the tab control, e.g. the close or the window list button,
+        has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event. Use
+        wxCommandEvent::GetInt() to retrieve the id of the button, which is one
+        of @c wxAUI_BUTTON_XXX constants. Handling this event without skipping
+        it prevents the default action associated with the button, e.g. closing
+        the page for @c wxAUI_BUTTON_CLOSE or showing the list of the pages for
+        @c wxAUI_BUTTON_WINDOWLIST, from taking place, so the handler must call
+        wxEvent::Skip() if this is not desired.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
         Dragging is about to begin. Processes a @c wxEVT_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}

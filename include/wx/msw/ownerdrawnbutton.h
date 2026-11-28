@@ -49,6 +49,14 @@ protected:
     // Return true if the control is currently owner drawn.
     bool MSWIsOwnerDrawn() const;
 
+    // Update the control to reflect its new checked state, which must be one
+    // of BST_UNCHECKED, BST_CHECKED or BST_INDETERMINATE and different from
+    // the current one.
+    //
+    // This should be used instead of just sending BM_SETCHECK to the control
+    // to handle owner-drawn buttons correctly.
+    void MSWSetCheck(int state);
+
     // Draw the button if the message information about which is provided in
     // the given DRAWITEMSTRUCT asks us to do it, otherwise just return false.
     bool MSWDrawButton(WXDRAWITEMSTRUCT *item);

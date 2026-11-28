@@ -630,12 +630,22 @@
  */
 #cmakedefine wxHAVE_WAYLAND_CLIENT 1
 
+/* Use the Wayland viewporter protocol for EGL surface scaling. */
+#cmakedefine wxHAVE_WAYLAND_VIEWPORTER 1
+
 /*
     Use Wayland session-management protocol.
 
     This is defined if GTK is new enough to support it.
  */
 #cmakedefine wxHAVE_WAYLAND_SESSION_MANAGEMENT 1
+
+/*
+    Use Wayland xdg-toplevel-drag protocol.
+
+    This is defined if GTK is new enough to support it.
+ */
+#cmakedefine wxHAVE_WAYLAND_TOPLEVEL_DRAG 1
 
 /*
    Use XTest extension to implement wxUIActionSimulator?

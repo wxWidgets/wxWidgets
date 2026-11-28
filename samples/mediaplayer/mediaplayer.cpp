@@ -145,7 +145,7 @@ public:
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
     // Files specified on the command line, if any.
-    wxVector<wxString> m_params;
+    std::vector<wxString> m_params;
 #endif // wxUSE_CMDLINE_PARSER
 
     virtual bool OnInit() override;
@@ -430,8 +430,7 @@ bool wxMediaPlayerApp::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( !wxApp::OnCmdLineParsed(parser) )
         return false;
 
-    for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
-        m_params.push_back(parser.GetParam(paramNr));
+    m_params = parser.GetParams();
 
     return true;
 }
@@ -1361,7 +1360,7 @@ void wxMediaPlayerFrame::OnVolumeUp(wxCommandEvent& WXUNUSED(event))
 // wxMediaPlayerTimer::Notify
 //
 // 1) Updates media information on the status bar
-// 2) Sets the max/min length of the slider and guage
+// 2) Sets the max/min length of the slider and gauge
 //
 // Note that the reason we continually do this and don't cache it is because
 // some backends such as GStreamer are dynamic change values all the time
@@ -1523,7 +1522,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     //  Where Column one is a character representing the state the file is in:
     //  * - not the current file
-    //  E - Error has occured
+    //  E - Error has occurred
     //  > - Currently Playing
     //  [] - Stopped
     //  || - Paused

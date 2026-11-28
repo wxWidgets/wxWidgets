@@ -739,8 +739,16 @@ bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
     // Make webkit message handler available under common name
     wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
             name, name);
+
+    // AddUserScript() injects the alias into every *future* document load.
     AddUserScript(js);
-    RunScript(js);
+
+    // Inject into the already-loaded document without blocking, as using
+    // RunScript() would have done. This is important because when this view is
+    // off-screen / backgrounded, macOS can throttle its WebContent process so
+    // that it just blocks forever and the main thread hangs (see #27259).
+    [m_webView evaluateJavaScript:wxCFStringRef(js).AsNSString()
+                completionHandler:nil];
     return true;
 }
 
@@ -1022,6 +1030,14 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         if (webKitWindow && webKitWindow->GetEventHandler())
             webKitWindow->GetEventHandler()->ProcessEvent(event);
     }
+}
+
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView
+{
+    // WebKit doesn't tell us why the process terminated, so we can only
+    // use the generic explanation here.
+    if (webKitWindow)
+        webKitWindow->NotifyWebViewFailed(_("The web content process exited unexpectedly."));
 }
 
 wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)

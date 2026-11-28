@@ -515,6 +515,10 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::SetString") );
 
+    // don't do anything if the string doesn't change, see wxChoice::SetString()
+    if ( s == GetString(n) )
+        return;
+
     // remember the state of the item
     bool wasSelected = IsSelected(n);
 
@@ -633,7 +637,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     wListbox += 3*GetCharWidth();
 
     // add room for the scrollbar
-    wListbox += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
+    wListbox += GetScrollbarSize(wxVERTICAL);
 
     // don't make the listbox too tall (limit height to 10 items) but don't
     // make it too small either

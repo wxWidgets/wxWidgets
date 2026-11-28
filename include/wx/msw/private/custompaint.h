@@ -67,7 +67,11 @@ CustomPaint(HWND hwnd, FuncDefPaint defPaint, FuncPostProcess postProcess)
     wxBitmap bmp(size);
     {
         wxMemoryDC mdc(bmp);
-
+        // Set the layout direction of the DC to match the window's one, otherwise the control will be drawn in the wrong direction.
+        if (GetWindowLongPtr(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL)
+        {
+            mdc.SetLayoutDirection(wxLayout_RightToLeft);
+        }
         defPaint(hwnd, (WPARAM)GetHdcOf(mdc));
     }
 

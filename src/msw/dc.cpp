@@ -788,7 +788,7 @@ void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
         color = m_pen.GetColour().GetPixel();
     }
 
-    SetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), color);
+    SetPixelV(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), color);
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(x, y);
@@ -1364,6 +1364,22 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     const COLORREF original =
         adapt ? ::SetTextColor(GetHdc(), adapted) : CLR_INVALID;
 #endif
+
+    if ( text.find('\t') != wxString::npos )
+    {
+        if ( ::TabbedTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
+                             text.c_str(), static_cast<int>(text.length()),
+                             0, nullptr, XLOG2DEV(x)) == 0 )
+        {
+            wxLogLastError(wxT("TabbedTextOut"));
+        }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( adapt && original != CLR_INVALID )
+            ::SetTextColor(GetHdc(), original);
+#endif
+        return;
+    }
 
     if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, nullptr,
                    text.c_str(), text.length(), nullptr) == 0 )

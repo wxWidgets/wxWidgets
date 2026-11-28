@@ -41,8 +41,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/choice.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -181,7 +179,7 @@ IMPLEMENT_WIDGETS_PAGE(ChoiceWidgetsPage, "Choice",
 
 ChoiceWidgetsPage::ChoiceWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, choice_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::Choice)
 {
     // init everything
 
@@ -255,7 +253,7 @@ void ChoiceWidgetsPage::CreateContent()
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
     m_choice = new wxChoice(this, ChoicePage_Choice);
     sizerRight->Add(m_choice, wxSizerFlags().Border().Expand());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerChoice = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

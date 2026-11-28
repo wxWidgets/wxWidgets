@@ -12,6 +12,7 @@
 
 #include <QtCore/QEvent>
 #include <QtGui/QCloseEvent>
+#include <QtGui/QKeyEvent>
 
 #include "wx/log.h"
 #include "wx/window.h"
@@ -366,6 +367,44 @@ protected:
     {
         switch (event->type())
         {
+#if wxUSE_ACCEL
+            case QEvent::ShortcutOverride:
+                // Qt sends this event before using the key for a shortcut,
+                // which allows us to decide whether it should really be used.
+                //
+                // Note that this event is also sent to all the parents of the
+                // focused widget, but we only need to handle it once, in the
+                // window which is going to get the key event.
+                if ( this->hasFocus() )
+                {
+                    if ( wxWindow* const handler = this->GetHandler() )
+                    {
+                        auto* const keyEvent = static_cast<QKeyEvent*>(event);
+
+                        switch ( handler->QtShouldUseAccelerator(keyEvent) )
+                        {
+                            case wxWindow::AcceleratorVerdict::Nothing:
+                                // There is no accelerator defined anyhow.
+                                break;
+
+                            case wxWindow::AcceleratorVerdict::Accel:
+                                // Allow the shortcut to be used and prevent
+                                // the widget itself from claiming this key, as
+                                // e.g. QLineEdit does for Ctrl-C.
+                                event->ignore();
+                                return true;
+
+                            case wxWindow::AcceleratorVerdict::Window:
+                                // Accepting means that we will get the key
+                                // events (and the shortcut won't be used).
+                                event->accept();
+                                return true;
+                        }
+                    }
+                }
+                break;
+#endif // wxUSE_ACCEL
+
             case QEvent::Gesture:
                 return gestureEvent(static_cast<QGestureEvent*>(event), event);
 

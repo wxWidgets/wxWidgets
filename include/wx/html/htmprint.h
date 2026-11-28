@@ -94,6 +94,9 @@ private:
     bool m_ownsCells;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlDCRenderer);
+
+private:
+    wxDECLARE_CLASS(wxHtmlDCRenderer);
 };
 
 
@@ -210,6 +213,9 @@ private:
     static wxVector<wxHtmlFilter*> m_Filters;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlPrintout);
+
+private:
+    wxDECLARE_CLASS(wxHtmlPrintout);
 };
 
 
@@ -318,6 +324,9 @@ private:
     PromptMode m_promptMode;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting);
+
+private:
+    wxDECLARE_CLASS(wxHtmlEasyPrinting);
 };
 
 

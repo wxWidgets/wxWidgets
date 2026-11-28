@@ -37,8 +37,6 @@
 
 #include "widgets.h"
 
-#include "icons/checkbox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -156,7 +154,7 @@ IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, "CheckBox", FAMILY_CTRLS );
 
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, checkbox_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::CheckBox)
 {
 }
 
@@ -214,10 +212,10 @@ void CheckBoxWidgetsPage::CreateContent()
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
     m_checkbox = new wxCheckBox(this, CheckboxPage_Checkbox, "&Check me!");
-    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
+    sizerRight->AddStretchSpacer();
     sizerRight->Add(m_checkbox, wxSizerFlags(1).Centre());
-    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->AddStretchSpacer();
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerCheckbox = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -278,9 +276,9 @@ void CheckBoxWidgetsPage::CreateCheckbox()
 
     NotifyWidgetRecreation(m_checkbox);
 
-    m_sizerCheckbox->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerCheckbox->AddStretchSpacer();
     m_sizerCheckbox->Add(m_checkbox, wxSizerFlags(1).Centre());
-    m_sizerCheckbox->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerCheckbox->AddStretchSpacer();
     m_sizerCheckbox->Layout();
 }
 

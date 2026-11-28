@@ -12,7 +12,7 @@
     </exe>
 
     <wx-data id="data">
-        <files>start.htm</files>
+        <files>virtual.htm</files>
     </wx-data>
 
 </makefile>

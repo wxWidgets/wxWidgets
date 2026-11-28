@@ -24,6 +24,8 @@
 #include "wx/artprov.h"
 #include "wx/renderer.h"
 
+#include "wx/private/bmpbuttn.h"
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
@@ -202,6 +204,30 @@ wxBitmapButtonBase::NewCloseButton(wxWindow* parent,
     button->CreateCloseButton(parent, winid, name);
 
     return button;
+}
+
+void
+wxPrivate::SetCloseButtonBackground(wxBitmapButton* button,
+                                    const wxColour& colBg)
+{
+    wxCHECK_RET( button, wxS("Must have a valid button") );
+
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
+    // The bitmaps created by CreateCloseButton() are filled with the
+    // background colour, so we need to recreate them.
+    wxWindow* const parent = button->GetParent();
+    const wxSize sizeBmp = wxArtProvider::GetDIPSizeHint(wxART_BUTTON);
+
+    button->SetBitmapLabel(GetCloseButtonBitmap(parent, sizeBmp, colBg));
+
+    button->SetBitmapPressed(
+        GetCloseButtonBitmap(parent, sizeBmp, colBg, wxCONTROL_PRESSED));
+
+    button->SetBitmapCurrent(
+        GetCloseButtonBitmap(parent, sizeBmp, colBg, wxCONTROL_CURRENT));
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+    button->SetBackgroundColour(colBg);
 }
 
 #endif // wxUSE_BMPBUTTON

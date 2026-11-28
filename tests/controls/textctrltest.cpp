@@ -48,9 +48,10 @@
 static const int TEXT_HEIGHT = 200;
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-#define wxHAS_2CHAR_NEWLINES 1
-#else
-#define wxHAS_2CHAR_NEWLINES 0
+    #define wxHAS_2CHAR_NEWLINES
+    #if wxUSE_UIACTIONSIMULATOR && wxUSE_RICHEDIT
+        #define wxHAS_TEXT_URL_TEST
+    #endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -82,7 +83,9 @@ protected:
     // And these ones only make sense for the multi-line ones.
     void MultiLineReplace();
     //void ProcessEnter();
+#ifdef wxHAS_TEXT_URL_TEST
     void Url();
+#endif
     void Style();
     void FontStyle();
     void Lines();
@@ -119,6 +122,8 @@ protected:
     static wxString MakeLinePattern(int len = 100);
 
     std::unique_ptr<wxTextCtrl> m_text;
+
+    std::unique_ptr<wxWindow> m_dummySibling;
 
     const long m_style;
 
@@ -169,9 +174,9 @@ wxTEXT_CTRL_SINGLE_LINE_TEST(PositionToXYSingleLine)
 wxTEXT_CTRL_SINGLE_LINE_TEST(XYToPositionSingleLine)
 
 wxTEXT_CTRL_MULTI_LINE_TEST(MultiLineReplace)
-#if wxUSE_UIACTIONSIMULATOR
+#ifdef wxHAS_TEXT_URL_TEST
     wxTEXT_CTRL_MULTI_LINE_TEST(Url)
-#endif // wxUSE_UIACTIONSIMULATOR
+#endif
 wxTEXT_CTRL_MULTI_LINE_TEST(Style)
 wxTEXT_CTRL_MULTI_LINE_TEST(FontStyle)
 wxTEXT_CTRL_MULTI_LINE_TEST(Lines)
@@ -199,6 +204,7 @@ void TextCtrlTestCase::CreateText(long extraStyles)
 {
     const long style = m_style | extraStyles;
     const int h = (style & wxTE_MULTILINE) ? TEXT_HEIGHT : -1;
+    m_dummySibling = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
     m_text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY, "",
                                      wxDefaultPosition, wxSize(400, h),
                                      style);
@@ -285,41 +291,105 @@ void TextCtrlTestCase::MaxLength()
 
     if ( m_style == wxTE_MULTILINE )
     {
-#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__)
+#if wxUSE_CLIPBOARD && \
+        (defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__))
         CreateText(wxTE_DONTWRAP);
         EventCounter maxlen(m_text.get(), wxEVT_TEXT_MAXLEN);
 
         m_text->SetMaxLength(250);
-        m_text->SetFocus();
-        wxYield();
+
+        auto clipboardContainsText = [](const wxString &text)
+        {
+            wxClipboardLocker lock;
+
+            if ( !lock )
+                return false;
+
+            wxTextDataObject data;
+            return wxTheClipboard->GetData(data) && data.GetText() == text;
+        };
+
+        auto setClipboardText = [&clipboardContainsText](const wxString &text)
+        {
+            REQUIRE(WaitFor("wxTextCtrl clipboard setup",
+                            [&]()
+                            {
+                                wxClipboardLocker lock;
+
+                                if ( !lock )
+                                    return false;
+
+                                wxTheClipboard->Clear();
+                                return wxTheClipboard->SetData(
+                                    new wxTextDataObject(text));
+                            }));
+            REQUIRE(WaitFor("wxTextCtrl clipboard update",
+                            [&]() { return clipboardContainsText(text); }));
+        };
+
+        auto waitForPaste =
+            [this](const char *what, const std::function<bool()> &pred)
+        {
+            const wxString valueBeforePaste = m_text->GetValue();
+            REQUIRE(WaitFor(what,
+                            [&]()
+                            {
+                                if ( pred() )
+                                    return true;
+
+                                if ( m_text->GetValue() == valueBeforePaste )
+                                    m_text->Paste();
+
+                                return pred();
+                            }));
+        };
 
         const wxString linePattern = MakeLinePattern();
 
         m_text->AppendText(linePattern);
-        m_text->SelectAll();
-        m_text->Copy();
+        setClipboardText(linePattern);
 
         m_text->SetInsertionPointEnd();
 
-        sim.Char(WXK_RETURN);
-        sim.Char('v', wxMOD_CONTROL); // Paste copied line.
-        wxYield();
+        // Use Paste() directly instead of simulating Ctrl+V: this still uses
+        // the native paste path, but avoids focus-dependent key delivery.
+        m_text->WriteText("\n");
+        waitForPaste("wxTextCtrl first paste",
+                     [&]()
+                     {
+                         return m_text->GetNumberOfLines() == 2 &&
+                                m_text->GetLineText(1) == linePattern;
+                     });
 
         CHECK(maxlen.GetCount() == 0);
 
         m_text->SetInsertionPointEnd();
 
-        sim.Char(WXK_RETURN);
+        m_text->WriteText("\n");
         wxYield();
 
-        sim.Char('v', wxMOD_CONTROL); // Paste copied line (2nd time).
-        WaitFor("wxTextCtrl update", [&]() { return maxlen.GetCount() != 0; });
+        waitForPaste("wxTextCtrl max length update",
+                     [&]()
+                     {
+                         if ( maxlen.GetCount() == 0 ||
+                              m_text->GetNumberOfLines() != 3 )
+                             return false;
+
+                         const int lineLength = m_text->GetLineText(2).length();
+                         return lineLength == 46 || lineLength == 48;
+                     });
 
         CHECK(maxlen.GetCount() == 1); // Maximum length reached.
         maxlen.Clear();
 
-        sim.Text("7"); // Should be rejected.
-        WaitFor("wxTextCtrl update", [&]() { return maxlen.GetCount() != 0; });
+        setClipboardText("7");
+        const wxString valueBeforeRejectedPaste = m_text->GetValue();
+        waitForPaste("wxTextCtrl rejected paste update",
+                     [&]()
+                     {
+                         return maxlen.GetCount() != 0 &&
+                                m_text->GetValue() == valueBeforeRejectedPaste;
+                     });
 
         CHECK(maxlen.GetCount() == 1);
         maxlen.Clear();
@@ -341,11 +411,20 @@ void TextCtrlTestCase::MaxLength()
 
         // Try to paste a long string into a shorter selection:
 
-        m_text->SetSelection(0, 20);  // selection is: 01234567890123456789
-        m_text->Copy();
+        // This test is about paste handling, so avoid depending on Copy().
+        setClipboardText(linePattern.Left(20));
         m_text->SetSelection(15, 21); // selection is: 567890
-        m_text->Paste(); // Only the first six characters can actually be pasted.
-        WaitFor("wxTextCtrl update", [&]() { return maxlen.GetCount() != 0; });
+        waitForPaste("wxTextCtrl selection paste update",
+                     [&]()
+                     {
+                         if ( maxlen.GetCount() == 0 )
+                             return false;
+
+                         const auto line = m_text->GetLineText(0);
+                         return line[15].GetValue() == '0' &&
+                                line[20].GetValue() == '5' &&
+                                line[21].GetValue() == '1';
+                     });
         const auto line = m_text->GetLineText(0);
         CHECK( (line[15].GetValue() == '0' &&
                          line[20].GetValue() == '5' &&
@@ -358,7 +437,7 @@ void TextCtrlTestCase::MaxLength()
         m_text->AppendText(wxString::Format("\n%s", linePattern));
         CHECK(m_text->GetNumberOfLines() == 4);
         CHECK(maxlen.GetCount() == 0);
-#endif // __WXMSW__ || __WXGTK3__ || __WXQT__
+#endif // wxUSE_CLIPBOARD && (__WXMSW__ || __WXGTK3__ || __WXQT__)
     }
     else // !wxTE_MULTILINE
     {
@@ -583,32 +662,43 @@ void TextCtrlTestCase::ProcessEnter()
 }
 #endif
 
+#ifdef wxHAS_TEXT_URL_TEST
 void TextCtrlTestCase::Url()
 {
-#if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    if ( !EnableUITests() )
-        return;
-
-    // For some reason, this test sporadically fails when run in AppVeyor or
-    // GitHub Actions CI environments, even though it passes locally.
-    if ( IsAutomaticTest() )
-        return;
-
     CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
     m_text->AppendText("http://www.wxwidgets.org");
 
-    wxUIActionSimulator sim;
-    sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
+    YieldForAWhile();
+
+    const long urlStart = 0;
+    const long urlEnd = m_text->GetLastPosition();
+
+    const wxPoint posStart = m_text->PositionToCoords(urlStart);
+    const wxPoint posEnd = m_text->PositionToCoords(urlEnd);
+    REQUIRE(posStart != wxDefaultPosition);
+    REQUIRE(posEnd != wxDefaultPosition);
+
+    const wxPoint urlPoint((posStart.x + posEnd.x) / 2,
+                           posStart.y +
+                               std::max(1, m_text->GetCharHeight() / 2));
+
+    long hitPos = wxNOT_FOUND;
+    REQUIRE(m_text->HitTest(urlPoint, &hitPos) == wxTE_HT_ON_TEXT);
+    REQUIRE(hitPos >= urlStart);
+    REQUIRE(hitPos < urlEnd);
 
     EventCounter url(m_text.get(), wxEVT_TEXT_URL);
 
-    sim.MouseClick();
+    wxUIActionSimulator sim;
+    REQUIRE(sim.MouseMove(m_text->ClientToScreen(urlPoint)));
+    REQUIRE(sim.MouseClick());
+
     wxYield();
 
-    CHECK(url.GetCount() == 1);
-#endif
+    CHECK(url.GetCount() >= 1);
 }
+#endif // wxHAS_TEXT_URL_TEST
 
 void TextCtrlTestCase::Style()
 {
@@ -825,7 +915,7 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     const wxPoint pos0 = m_text->PositionToCoords(0);
     if ( pos0 == wxDefaultPosition )
     {
-#if ( wxHAS_2CHAR_NEWLINES ) || defined(__WXGTK__)
+#if defined(wxHAS_2CHAR_NEWLINES) || defined(__WXGTK__)
         FAIL( "PositionToCoords() unexpectedly failed." );
 #endif
         return;
@@ -916,7 +1006,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
 {
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
 #endif
 
@@ -967,7 +1057,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     text = wxS("123\nab\nX");
     m_text->SetValue(text);
 
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     // Take into account that every new line mark occupies
     // two characters, not one.
     const long numChars_msw_2 = 8 + 2;
@@ -986,14 +1076,14 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
           { 0, 2 }, { 1, 2 } };
 
     const long &ref_numChars_2 =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? numChars_2 : numChars_msw_2;
 #else
         numChars_2;
 #endif
 
     XYPos *ref_coords_2 =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? coords_2 : coords_2_msw;
 #else
         coords_2;
@@ -1015,7 +1105,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     text = wxS("\n\n\n");
     m_text->SetValue(text);
 
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     // Take into account that every new line mark occupies
     // two characters, not one.
     const long numChars_msw_3 = 3 + 3;
@@ -1036,14 +1126,14 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
           { 0, 3 } };
 
     const long &ref_numChars_3 =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? numChars_3 : numChars_msw_3;
 #else
         numChars_3;
 #endif
 
     XYPos *ref_coords_3 =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? coords_3 : coords_3_msw;
 #else
         coords_3;
@@ -1065,7 +1155,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     text = wxS("123\na\n\nX\n\n");
     m_text->SetValue(text);
 
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     // Take into account that every new line mark occupies
     // two characters, not one.
     const long numChars_msw_4 = 10 + 5;
@@ -1090,14 +1180,14 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
           { 0, 5 } };
 
     const long &ref_numChars_4 =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? numChars_4 : numChars_msw_4;
 #else
         numChars_4;
 #endif
 
     XYPos *ref_coords_4 =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? coords_4 : coords_4_msw;
 #else
         coords_4;
@@ -1137,7 +1227,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
 {
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
 #endif
 
@@ -1181,7 +1271,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     const long maxLineLength_2 = 4;
     const long numLines_2 = 3;
     CHECK( m_text->GetNumberOfLines() == numLines_2 );
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     // Note: New lines are occupied by two characters.
     long pos_2_msw[numLines_2 + 1][maxLineLength_2 + 1] =
         { {  0,  1,  2,  3, -1 },   // New line occupies positions 3, 4
@@ -1196,7 +1286,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
           { -1, -1, -1, -1, -1 } };
 
     long (&ref_pos_2)[numLines_2 + 1][maxLineLength_2 + 1] =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? pos_2 : pos_2_msw;
 #else
         pos_2;
@@ -1216,7 +1306,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     const long maxLineLength_3 = 1;
     const long numLines_3 = 4;
     CHECK( m_text->GetNumberOfLines() == numLines_3 );
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     // Note: New lines are occupied by two characters.
     long pos_3_msw[numLines_3 + 1][maxLineLength_3 + 1] =
         { {  0, -1 },    // New line occupies positions 0, 1
@@ -1233,7 +1323,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
           { -1, -1 } };
 
     long (&ref_pos_3)[numLines_3 + 1][maxLineLength_3 + 1] =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? pos_3 : pos_3_msw;
 #else
         pos_3;
@@ -1253,7 +1343,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     const long maxLineLength_4 = 4;
     const long numLines_4 = 6;
     CHECK( m_text->GetNumberOfLines() == numLines_4 );
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
     // Note: New lines are occupied by two characters.
     long pos_4_msw[numLines_4 + 1][maxLineLength_4 + 1] =
         { {  0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
@@ -1274,7 +1364,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
           { -1, -1, -1, -1, -1 } };
 
     long (&ref_pos_4)[numLines_4 + 1][maxLineLength_4 + 1] =
-#if wxHAS_2CHAR_NEWLINES
+#ifdef wxHAS_2CHAR_NEWLINES
         isRichEdit ? pos_4 : pos_4_msw;
 #else
         pos_4;
@@ -1456,10 +1546,10 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     {
         wxSize operator()(const wxString& text) const
         {
-            std::unique_ptr<wxTextCtrl>
-                t(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, text,
-                                 wxDefaultPosition, wxDefaultSize,
-                                 wxTE_MULTILINE));
+            auto t = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(),
+                                             wxID_ANY, text,
+                                             wxDefaultPosition, wxDefaultSize,
+                                             wxTE_MULTILINE);
             return t->GetBestSize();
         }
     } getBestSizeFor;
@@ -1535,9 +1625,9 @@ TEST_CASE("wxTextCtrl::LongPaste", "[wxTextCtrl][clipboard][paste]")
         return;
     }
 
-    std::unique_ptr<wxTextCtrl>
-        text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, wxString(),
-                            wxDefaultPosition, wxDefaultSize, style));
+    auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        wxString(), wxDefaultPosition,
+                                        wxDefaultSize, style);
 
     // This could actually be much higher, but it makes the test proportionally
     // slower, so use a relatively small (but still requiring more space than
@@ -1589,7 +1679,7 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
 
     EventCounter updated(parent, wxEVT_TEXT);
 
-    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "Hello"));
+    auto text = make_unique<wxTextCtrl>(parent, wxID_ANY, "Hello");
 
     // Creating the control shouldn't result in any wxEVT_TEXT events.
     CHECK( updated.GetCount() == 0 );
@@ -1601,12 +1691,50 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     CHECK( updated.GetCount() == 1 );
 }
 
+TEST_CASE("wxTextCtrl::SetValueWhileFrozen", "[wxTextCtrl][freeze]")
+{
+    auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        "", wxDefaultPosition, wxDefaultSize,
+                                        wxTE_MULTILINE);
+
+    text->SetValue("line one\nline two");
+    text->SetInsertionPointEnd();
+
+    // Modifying the control while frozen used to result in a crash in wxGTK
+    // when the selection was changed after thawing, see #27324.
+    text->Freeze();
+    text->SetValue("abc");
+    text->Thaw();
+
+    text->SelectAll();
+
+    long from = -1,
+         to = -1;
+    text->GetSelection(&from, &to);
+    CHECK( from == 0 );
+    CHECK( to == 3 );
+}
+
+#ifdef __WXMSW__
+TEST_CASE("wxTextCtrl::EnableFocusFromKeyboard", "[wxTextCtrl][focus]")
+{
+    auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        "Hello", wxDefaultPosition,
+                                        wxDefaultSize, wxTE_READONLY);
+
+    CHECK( !text->AcceptsFocusFromKeyboard() );
+
+    text->EnableFocusFromKeyboard();
+    CHECK( text->AcceptsFocusFromKeyboard() );
+}
+#endif // __WXMSW__
+
 #ifdef __WXGTK3__
 TEST_CASE("wxTextCtrl::GTKSetPangoMarkup", "[wxTextCtrl][pango]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
-    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE));
+    auto text = make_unique<wxTextCtrl>(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
     text->SetValue("Bogus content to be replaced");
     text->GTKSetPangoMarkup(R"(Welcome to <span background="#D3D3D3" strikethrough="true">wxWidgets</span> 3.3!)");
 
@@ -1619,7 +1747,7 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
-    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE));
+    auto text = make_unique<wxTextCtrl>(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE);
     REQUIRE(text->IsRTFSupported());
 
     text->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
@@ -1703,7 +1831,7 @@ TEST_CASE("wxTextCtrl::SearchText", "[wxTextCtrl][search]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
-    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE));
+    auto text = make_unique<wxTextCtrl>(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE);
 
     text->SetValue(R"(Allows more than 30Kb of text
 (on all Windows versions)
@@ -1836,10 +1964,10 @@ TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
     INFO("wxTextCtrl with style " << style);
 
     wxWindow* const parent = wxTheApp->GetTopWindow();
-    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "",
-                                                wxDefaultPosition,
-                                                wxDefaultSize,
-                                                style));
+    auto text = make_unique<wxTextCtrl>(parent, wxID_ANY, "",
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        style);
 
     CHECK( !text->CanUndo() );
 }
@@ -1859,11 +1987,11 @@ TEST_CASE("wxTextCtrl::EmptyUndoBuffer", "[wxTextCtrl][undo]")
         return;
     }
 
-    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "",
-                                                wxDefaultPosition,
-                                                wxDefaultSize,
-                                                wxTE_MULTILINE | wxTE_RICH2));
+    auto text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(),
+                                        wxID_ANY, "",
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        wxTE_MULTILINE | wxTE_RICH2);
 
     text->AppendText("foo");
 

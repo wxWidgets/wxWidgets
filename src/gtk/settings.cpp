@@ -762,7 +762,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
         wxFALLTHROUGH;
 #endif
-    case wxSYS_COLOUR_GRIDLINES:
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
@@ -788,6 +787,32 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_BTNSHADOW:
         sc.AddButton().Border(color);
+        break;
+    case wxSYS_COLOUR_GRIDLINES:
+#if GTK_CHECK_VERSION(3,20,0)
+        if (gtk_check_version(3,20,0) == nullptr)
+        {
+            // Don't use GtkTreeView grid lines colour, which is either almost
+            // the same as the background or fully transparent in the common
+            // themes, but the colour of the lines separating its headers.
+            sc.AddTreeviewHeaderButton(1).Border(color);
+        }
+        else
+#endif
+        {
+            sc.AddButton().Border(color);
+        }
+
+        // This colour is also used as background, e.g. by wxPropertyGrid, so
+        // make it opaque if the theme defines it as translucent.
+        if (color.Alpha() != wxALPHA_OPAQUE)
+        {
+            const wxColour bg = GetColour(wxSYS_COLOUR_WINDOW);
+            const double alpha = color.Alpha() / 255.0;
+            color.Set(wxColour::AlphaBlend(color.Red(), bg.Red(), alpha),
+                      wxColour::AlphaBlend(color.Green(), bg.Green(), alpha),
+                      wxColour::AlphaBlend(color.Blue(), bg.Blue(), alpha));
+        }
         break;
     case wxSYS_COLOUR_CAPTIONTEXT:
 #if GTK_CHECK_VERSION(3,10,0)

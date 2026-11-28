@@ -48,8 +48,10 @@ enum
     current UI locale or wxString::FromCDouble() and wxString::ToCDouble()
     functions for doing it always using period as decimal separator.
 
-    To set the C runtime functions (e.g., @c strtod()) to use the user's locale
-    consistently on all platforms, a wxLocale object should be created and
+    To set the C runtime functions (e.g., @c strtod(), @c sprintf(),
+    @c strftime() to use the user's locale consistently on all platforms,
+    or to have wxDateTime::Format() output localized timestamps, a wxLocale
+    object should be created and
     initialized with @c wxLANGUAGE_DEFAULT. This is not recommended due to
     various side effects, but can be done for applications which rely on these
     functions. (Note that this should be done in conjunction with calling

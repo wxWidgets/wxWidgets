@@ -27,6 +27,8 @@
 // wxFileInputStream
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxFileInputStream, wxInputStream);
+
 wxFileInputStream::wxFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
@@ -111,6 +113,8 @@ bool wxFileInputStream::IsOk() const
 // wxFileOutputStream
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxFileOutputStream, wxOutputStream);
+
 wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
     m_file = new wxFile(fileName, wxFile::write);
@@ -187,6 +191,8 @@ bool wxFileOutputStream::IsOk() const
 // wxTempFileOutputStream
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxTempFileOutputStream, wxOutputStream);
+
 wxTempFileOutputStream::wxTempFileOutputStream(const wxString& fileName)
 {
     m_file = new wxTempFile(fileName);
@@ -213,6 +219,8 @@ size_t wxTempFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 // ----------------------------------------------------------------------------
 // wxTempFFileOutputStream
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxTempFFileOutputStream, wxOutputStream);
 
 wxTempFFileOutputStream::wxTempFFileOutputStream(const wxString& fileName)
 {
@@ -241,6 +249,8 @@ size_t wxTempFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 // wxFileStream
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_ABSTRACT_CLASS2(wxFileStream, wxFileInputStream, wxFileOutputStream);
+
 wxFileStream::wxFileStream(const wxString& fileName)
             : wxFileInputStream(),
               wxFileOutputStream()
@@ -266,6 +276,8 @@ bool wxFileStream::IsOk() const
 // ----------------------------------------------------------------------------
 // wxFFileInputStream
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxFFileInputStream, wxInputStream);
 
 wxFFileInputStream::wxFFileInputStream(const wxString& fileName,
                                        const wxString& mode)
@@ -342,6 +354,8 @@ bool wxFFileInputStream::IsOk() const
 // ----------------------------------------------------------------------------
 // wxFFileOutputStream
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxFFileOutputStream, wxOutputStream);
 
 wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName,
                                          const wxString& mode)
@@ -428,6 +442,8 @@ bool wxFFileOutputStream::IsOk() const
 // ----------------------------------------------------------------------------
 // wxFFileStream
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS2(wxFFileStream, wxFFileInputStream, wxFFileOutputStream);
 
 wxFFileStream::wxFFileStream(const wxString& fileName, const wxString& mode)
              : wxFFileInputStream(),

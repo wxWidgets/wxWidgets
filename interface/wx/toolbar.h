@@ -162,6 +162,53 @@ public:
 };
 
 
+/**
+    @class wxToolBarTool
+
+    The class of the tools used by wxToolBar.
+
+    Tools are usually created by wxToolBar itself, e.g. by wxToolBar::AddTool(),
+    but they can also be created directly and then added to the toolbar using
+    the wxToolBar::AddTool() and wxToolBar::InsertTool() overloads taking a tool
+    pointer. This is mostly useful for language bindings that need to create
+    the tool objects themselves.
+
+    The toolbar takes ownership of the tool if it is added successfully.
+
+    @library{wxcore}
+    @category{miscwnd}
+
+    @since 3.3.5
+*/
+class wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    /**
+        Creates a button or separator tool.
+
+        @a tbar must be the toolbar the tool will be added to. The other
+        parameters have the same meaning as for wxToolBar::CreateTool().
+    */
+    wxToolBarTool(wxToolBar *tbar,
+                  int toolId,
+                  const wxString& label,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
+                  wxItemKind kind,
+                  wxObject *clientData,
+                  const wxString& shortHelp,
+                  const wxString& longHelp);
+
+    /**
+        Creates a tool showing the given control.
+
+        @a tbar must be the toolbar the tool will be added to and must be the
+        parent of @a control.
+    */
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label);
+};
+
+
 
 
 /**

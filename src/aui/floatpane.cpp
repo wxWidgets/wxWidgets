@@ -27,11 +27,59 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/private/tlwdrag.h"
+
 #ifdef __WXMSW__
+#include "wx/msw/wrapwin.h"
 #include "wx/msw/private.h"
 #endif
 
 wxIMPLEMENT_CLASS(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass);
+
+namespace
+{
+
+// Return true if the floating frames shouldn't use any decorations of their
+// own but show the caption of the pane inside them instead.
+bool UseOwnCaption()
+{
+    // Currently we must do it when using Wayland TLW drag protocol as when
+    // dragging the floating frame by our caption we get the notifications
+    // allowing to dock it, while dragging by the standard caption doesn't
+    // generate any events at all and hence the pane can't be docked.
+    //
+    // We might want to use this even in the other cases as our caption may be
+    // preferable to wxMiniFrame one, but for now be conservative and don't
+    // change the behaviour when using X11 or under the other platforms.
+    return wxTLWDragSession::IsAvailable();
+}
+
+// Return the style to use for the floating frame showing the given pane.
+long GetFloatingFrameStyle(long style, const wxAuiPaneInfo& pane)
+{
+    if ( !pane.IsFixed() )
+        style |= wxRESIZE_BORDER;
+
+    if ( UseOwnCaption() )
+    {
+        // The caption shown inside the frame provides the close button and
+        // allows dragging the frame, so we don't need any decorations.
+        style &= ~(wxCAPTION | wxSYSTEM_MENU);
+        style |= wxBORDER_NONE;
+    }
+    else
+    {
+        if ( pane.HasCloseButton() )
+            style |= wxCLOSE_BOX;
+
+        if ( pane.HasMaximizeButton() )
+            style |= wxMAXIMIZE_BOX;
+    }
+
+    return style;
+}
+
+} // anonymous namespace
 
 wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                 wxAuiManager* owner_mgr,
@@ -43,11 +91,7 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                            */)
                 : wxAuiFloatingFrameBaseClass(parent, id, wxEmptyString,
                         pane.floating_pos, pane.floating_size,
-                        style |
-                        (pane.HasCloseButton()?wxCLOSE_BOX:0) |
-                        (pane.HasMaximizeButton()?wxMAXIMIZE_BOX:0) |
-                        (pane.IsFixed()?0:wxRESIZE_BORDER)
-                        )
+                        GetFloatingFrameStyle(style, pane))
     , m_ownerMgr(owner_mgr)
 {
     m_moving = false;
@@ -68,10 +112,19 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 
 wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
-    // if we do not do this, then we can crash...
-    if (m_ownerMgr && m_ownerMgr->m_actionWindow == this)
+    CleanUp();
+}
+
+void wxAuiFloatingFrame::CleanUp()
+{
+    // Ensure that the owner manager doesn't have a dangling pointer to us and
+    // that we don't notify it about anything any more.
+    if (m_ownerMgr)
     {
-        m_ownerMgr->m_actionWindow = nullptr;
+        if (m_ownerMgr->m_actionWindow == this)
+            m_ownerMgr->m_actionWindow = nullptr;
+
+        m_ownerMgr = nullptr;
     }
 
     m_mgr.UnInit();
@@ -86,6 +139,17 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     contained_pane.Dock().Center().Show().
                     CaptionVisible(false).
                     PaneBorder(false);
+
+    if ( UseOwnCaption() )
+    {
+        // Show the caption to allow dragging and closing the pane, but not the
+        // other buttons: only "maximize" would make sense but it doesn't
+        // currently work and it's not really clear if it's useful.
+        contained_pane.CaptionVisible().
+                       MaximizeButton(false).
+                       MinimizeButton(false).
+                       PinButton(false);
+    }
 
     // Carry over the minimum size
     wxSize pane_min_size = pane.window->GetMinSize();
@@ -106,7 +170,10 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     m_mgr.AddPane(m_paneWindow, contained_pane);
     m_mgr.Update();
 
-    if (pane.min_size.IsFullySpecified())
+    const wxSize floatingSize = pane.floating_size;
+    const wxSize floatingClientSize = pane.floating_client_size;
+
+    if ( pane.min_size.IsFullySpecified() )
     {
         // because SetSizeHints() calls Fit() too (which sets the window
         // size to its minimum allowed), we keep the size before calling
@@ -127,8 +194,8 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     // So we must call it first but doing it generates a size event and updates
     // pane.floating_size from inside it so we must also record its original
     // value before doing it.
-    const bool hasFloatingSize = pane.floating_size != wxDefaultSize ||
-                                    pane.floating_client_size != wxDefaultSize;
+    const bool hasFloatingSize = floatingSize != wxDefaultSize ||
+                                     floatingClientSize != wxDefaultSize;
     if (pane.IsFixed())
     {
         SetWindowStyleFlag(GetWindowStyleFlag() & ~wxRESIZE_BORDER);
@@ -137,13 +204,13 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     if ( hasFloatingSize )
     {
         // give floating_client_size precedence over floating_size
-        if (pane.floating_client_size != wxDefaultSize)
+        if (floatingClientSize != wxDefaultSize)
         {
-            SetClientSize(pane.floating_client_size);
+            SetClientSize(floatingClientSize);
         }
         else
         {
-            SetSize(pane.floating_size);
+            SetSize(floatingSize);
         }
     }
     else
@@ -162,8 +229,32 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
                 size.x += gripperSize;
         }
 
+        // The caption shown inside the frame takes space too, so account for
+        // it to avoid making the pane window itself smaller than it should be.
+        if (m_ownerMgr && contained_pane.HasCaption())
+        {
+            size.y += m_ownerMgr->m_art->GetMetricForWindow(wxAUI_DOCKART_CAPTION_SIZE, m_paneWindow);
+        }
+
         SetClientSize(size);
     }
+}
+
+bool wxAuiFloatingFrame::Destroy()
+{
+    // We are not going to be deleted immediately, but can still get events
+    // until then, e.g. macOS may send size events even to the hidden window,
+    // so ensure we reset any dangling pointers to avoid crashes while handling
+    // such events.
+    CleanUp();
+
+    // Delete our sizer to detach the pane window from it and allow adding it
+    // to another one.
+    //
+    // Note that this must be done after m_mgr.UnInit() called from CleanUp().
+    SetSizer(nullptr);
+
+    return wxAuiFloatingFrameBaseClass::Destroy();
 }
 
 wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
@@ -188,6 +279,26 @@ bool wxAuiFloatingFrame::IsTopNavigationDomain(NavigationKind kind) const
     return wxAuiFloatingFrameBaseClass::IsTopNavigationDomain(kind);
 }
 
+bool wxAuiFloatingFrame::DockPane()
+{
+    if ( !m_ownerMgr )
+        return false;
+
+    wxAuiPaneInfo& pane = m_ownerMgr->GetPane(m_paneWindow);
+    if ( !pane.IsOk() || !pane.IsFloating() ||
+            pane.frame != this || !pane.IsDockable() )
+        return false;
+
+    if ( m_ownerMgr->m_hasMaximized )
+        m_ownerMgr->RestoreMaximizedPane();
+
+    pane.Dock();
+    m_ownerMgr->AddPaneToMinDockIfNecessary(pane);
+    m_ownerMgr->Update();
+
+    return true;
+}
+
 void wxAuiFloatingFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if (m_ownerMgr)
@@ -208,6 +319,34 @@ void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
         Destroy();
     }
 }
+
+void wxAuiFloatingFrame::OnLeftDClick(wxMouseEvent& event)
+{
+    if ( !DockPane() )
+        event.Skip();
+}
+
+#ifdef __WXMSW__
+
+bool wxAuiFloatingFrame::MSWHandleMessage(WXLRESULT* result,
+                                          WXUINT message,
+                                          WXWPARAM wParam,
+                                          WXLPARAM lParam)
+{
+    if ( message == WM_NCLBUTTONDBLCLK && wParam == HTCAPTION )
+    {
+        if ( DockPane() )
+        {
+            *result = 0;
+            return true;
+        }
+    }
+
+    return wxAuiFloatingFrameBaseClass::MSWHandleMessage(result, message,
+                                                         wParam, lParam);
+}
+
+#endif // __WXMSW__
 
 void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 {
@@ -378,6 +517,7 @@ wxBEGIN_EVENT_TABLE(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
     EVT_SIZE(wxAuiFloatingFrame::OnSize)
     EVT_MOVE(wxAuiFloatingFrame::OnMoveEvent)
     EVT_MOVING(wxAuiFloatingFrame::OnMoveEvent)
+    EVT_LEFT_DCLICK(wxAuiFloatingFrame::OnLeftDClick)
     EVT_CLOSE(wxAuiFloatingFrame::OnClose)
     EVT_IDLE(wxAuiFloatingFrame::OnIdle)
     EVT_ACTIVATE(wxAuiFloatingFrame::OnActivate)

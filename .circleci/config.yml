@@ -14,6 +14,22 @@ jobs:
           method: blobless
 
       - run:
+          name: Skip if only MSW files changed
+          command: |
+            # Nothing to build or test here if the changes are limited to the
+            # Windows-only code. Be conservative: if anything goes wrong while
+            # determining the changed files, just continue with the build.
+            git fetch --quiet origin master || true
+            base=$(git merge-base origin/master HEAD 2>/dev/null) || exit 0
+            # Nothing to compare with when building master itself.
+            [ "$base" = "$(git rev-parse HEAD)" ] && exit 0
+            if git diff --quiet "$base" HEAD -- ':!include/wx/msw' ':!src/msw'; then
+              echo "Only MSW files changed, skipping the build:"
+              git diff --name-only "$base" HEAD
+              circleci-agent step halt
+            fi
+
+      - run:
           name: Install dependencies
           command: |
             # Do _not_ use the CPU count returned by build/tools/proc_count.sh
@@ -61,6 +77,23 @@ jobs:
           command: |
             cd tests
             WX_TEST_WEBREQUEST_URL="0" ./test
+
+      - run:
+          name: Run GUI tests
+          command: |
+            cat > /usr/local/bin/bwrap \<<'EOF'
+            #!/bin/sh
+            # glycin's loader sandbox needs user namespaces unavailable in this container;
+            # run glycin image loaders unsandboxed, pass everything else to the real bwrap.
+            for a in "$@"; do case "$a" in /usr/libexec/glycin-loaders/*)
+              while [ $# -gt 0 ]; do case "$1" in /usr/libexec/glycin-loaders/*) exec "$@";; esac; shift; done;;
+            esac; done
+            exec /usr/bin/bwrap "$@"
+            EOF
+            chmod +x /usr/local/bin/bwrap
+
+            cd tests
+            wlheadless-run -- ./test_gui
 
       - run:
           name: Show ccache statistics

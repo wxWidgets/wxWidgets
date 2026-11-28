@@ -131,6 +131,8 @@ int SubtractOffset(int pos, int offset)
 // wxHeaderCtrl creation
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxHeaderCtrl, wxControl);
+
 void wxHeaderCtrl::Init()
 {
     m_numColumns = 0;

@@ -278,7 +278,7 @@ public:
     void DrawBackground(HDC hdc, const wxRect& rect, int part, int state = 0);
 
 private:
-    static const int STD_DPI = 96;
+    static const int STD_DPI = -1;
 
     static HTHEME
     DoOpenThemeData(HWND hwnd,

@@ -31,8 +31,8 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" VENDOR="$(VENDOR)" \
 	WX_FLAVOUR="$(WX_FLAVOUR)" WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" \
 	RUNTIME_LIBS="$(RUNTIME_LIBS)"
-WX_RELEASE_NODOT = 33
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)4
+WX_RELEASE_NODOT = 39
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 COMPILER_PREFIX = vc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -369,6 +369,13 @@ WXEXPAT_CFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
+	$(OBJS)\wxexpat_random_arc4random.obj \
+	$(OBJS)\wxexpat_random_arc4random_buf.obj \
+	$(OBJS)\wxexpat_random_dev_urandom.obj \
+	$(OBJS)\wxexpat_random_getentropy.obj \
+	$(OBJS)\wxexpat_random_getrandom.obj \
+	$(OBJS)\wxexpat_random_rand_s.obj \
+	$(OBJS)\wxexpat_xcs.obj \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
 	$(OBJS)\wxexpat_xmltok.obj
@@ -467,6 +474,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexEiffel.obj \
 	$(OBJS)\wxlexilla_LexErlang.obj \
 	$(OBJS)\wxlexilla_LexErrorList.obj \
+	$(OBJS)\wxlexilla_LexEscSeq.obj \
 	$(OBJS)\wxlexilla_LexFSharp.obj \
 	$(OBJS)\wxlexilla_LexFlagship.obj \
 	$(OBJS)\wxlexilla_LexForth.obj \
@@ -566,15 +574,17 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_Lexilla.obj
 WXLUNASVG_CFLAGS = /M$(__RUNTIME_LIBS_145)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\3rdparty\lunasvg\include /I..\..\3rdparty\lunasvg\plutovg\include \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/I..\..\3rdparty\lunasvg\plutovg\source $(__DEBUGINFO) \
+	/Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXLUNASVG_CXXFLAGS = /M$(__RUNTIME_LIBS_145)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\3rdparty\lunasvg\include /I..\..\3rdparty\lunasvg\plutovg\include \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/I..\..\3rdparty\lunasvg\plutovg\source $(__DEBUGINFO) \
+	/Fd$(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
@@ -583,6 +593,7 @@ WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_lunasvg.obj \
 	$(OBJS)\wxlunasvg_graphics.obj \
 	$(OBJS)\wxlunasvg_svgelement.obj \
+	$(OBJS)\wxlunasvg_svgfilterelement.obj \
 	$(OBJS)\wxlunasvg_svggeometryelement.obj \
 	$(OBJS)\wxlunasvg_svglayoutstate.obj \
 	$(OBJS)\wxlunasvg_svgpaintelement.obj \
@@ -598,6 +609,7 @@ WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_plutovg_path.obj \
 	$(OBJS)\wxlunasvg_plutovg_rasterize.obj \
 	$(OBJS)\wxlunasvg_plutovg_surface.obj \
+	$(OBJS)\wxlunasvg_plutovg_filter.obj \
 	$(OBJS)\wxlunasvg_plutovg_ft_math.obj \
 	$(OBJS)\wxlunasvg_plutovg_ft_raster.obj \
 	$(OBJS)\wxlunasvg_plutovg_ft_stroker.obj
@@ -1854,6 +1866,8 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_art_msw.obj \
 	$(OBJS)\ribbondll_art_aui.obj \
 	$(OBJS)\ribbondll_art_msw_flat.obj \
+	$(OBJS)\ribbondll_backstage.obj \
+	$(OBJS)\ribbondll_backstagecontrols.obj \
 	$(OBJS)\ribbondll_bar.obj \
 	$(OBJS)\ribbondll_buttonbar.obj \
 	$(OBJS)\ribbondll_control.obj \
@@ -1883,6 +1897,8 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_art_msw.obj \
 	$(OBJS)\ribbonlib_art_aui.obj \
 	$(OBJS)\ribbonlib_art_msw_flat.obj \
+	$(OBJS)\ribbonlib_backstage.obj \
+	$(OBJS)\ribbonlib_backstagecontrols.obj \
 	$(OBJS)\ribbonlib_bar.obj \
 	$(OBJS)\ribbonlib_buttonbar.obj \
 	$(OBJS)\ribbonlib_control.obj \
@@ -2438,6 +2454,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_art_msw.obj \
 	$(OBJS)\monodll_art_aui.obj \
 	$(OBJS)\monodll_art_msw_flat.obj \
+	$(OBJS)\monodll_backstage.obj \
+	$(OBJS)\monodll_backstagecontrols.obj \
 	$(OBJS)\monodll_bar.obj \
 	$(OBJS)\monodll_ribbon_buttonbar.obj \
 	$(OBJS)\monodll_ribbon_control.obj \
@@ -3310,6 +3328,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_art_msw.obj \
 	$(OBJS)\monolib_art_aui.obj \
 	$(OBJS)\monolib_art_msw_flat.obj \
+	$(OBJS)\monolib_backstage.obj \
+	$(OBJS)\monolib_backstagecontrols.obj \
 	$(OBJS)\monolib_bar.obj \
 	$(OBJS)\monolib_ribbon_buttonbar.obj \
 	$(OBJS)\monolib_ribbon_control.obj \
@@ -6474,7 +6494,7 @@ $(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).lib: $(WXLUNASVG_OBJECTS)
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\monodll_dummy.obj  $(MONODLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxwebp___depname) $(__wxlunasvg___depname) $(__wxscintilla) $(__wxlexilla) $(OBJS)\monodll_version.res $(__wxscintilla_library_link_DEP) $(__wxlexilla_library_link_DEP)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_153)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) /LIBPATH:..\..\3rdparty\webview2\build\native\$(__webview_additional_libdirs_arch_FILENAMES)  $(LDFLAGS) @<<
-	$(MONODLL_OBJECTS) $(MONODLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib    imm32.lib   $(__wxscintilla) $(__wxlexilla) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	$(MONODLL_OBJECTS) $(MONODLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib       $(__wxscintilla) $(__wxlexilla) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 <<
 !endif
 
@@ -6755,7 +6775,7 @@ wxrichtext: $(____wxrichtext_namedll_DEP) $(____wxrichtext_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_STC)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\stcdll_dummy.obj  $(STCDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxwebp___depname) $(__wxlunasvg___depname) $(__wxscintilla) $(__wxlexilla) $(__wxscintilla) $(__wxlexilla) $(OBJS)\stcdll_version.res $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_618)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(STCDLL_OBJECTS) $(STCDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib imm32.lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib
+	$(STCDLL_OBJECTS) $(STCDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib
 <<
 !endif
 
@@ -6815,8 +6835,8 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
-	@echo WXVER_MINOR=3 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=4 >>$(BUILD_CFG_FILE)
+	@echo WXVER_MINOR=9 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=0 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -7681,6 +7701,27 @@ $(OBJS)\wxtiff_tif_zip.obj: ..\..\src\tiff\libtiff\tif_zip.c
 $(OBJS)\wxtiff_tif_zstd.obj: ..\..\src\tiff\libtiff\tif_zstd.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zstd.c
 
+$(OBJS)\wxexpat_random_arc4random.obj: ..\..\src\expat\expat\lib\random_arc4random.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_arc4random.c
+
+$(OBJS)\wxexpat_random_arc4random_buf.obj: ..\..\src\expat\expat\lib\random_arc4random_buf.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_arc4random_buf.c
+
+$(OBJS)\wxexpat_random_dev_urandom.obj: ..\..\src\expat\expat\lib\random_dev_urandom.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_dev_urandom.c
+
+$(OBJS)\wxexpat_random_getentropy.obj: ..\..\src\expat\expat\lib\random_getentropy.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_getentropy.c
+
+$(OBJS)\wxexpat_random_getrandom.obj: ..\..\src\expat\expat\lib\random_getrandom.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_getrandom.c
+
+$(OBJS)\wxexpat_random_rand_s.obj: ..\..\src\expat\expat\lib\random_rand_s.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\random_rand_s.c
+
+$(OBJS)\wxexpat_xcs.obj: ..\..\src\expat\expat\lib\xcs.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xcs.c
+
 $(OBJS)\wxexpat_xmlparse.obj: ..\..\src\expat\expat\lib\xmlparse.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xmlparse.c
 
@@ -7902,6 +7943,9 @@ $(OBJS)\wxlexilla_LexErlang.obj: ..\..\src\stc\lexilla\lexers\LexErlang.cxx
 
 $(OBJS)\wxlexilla_LexErrorList.obj: ..\..\src\stc\lexilla\lexers\LexErrorList.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexErrorList.cxx
+
+$(OBJS)\wxlexilla_LexEscSeq.obj: ..\..\src\stc\lexilla\lexers\LexEscSeq.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexEscSeq.cxx
 
 $(OBJS)\wxlexilla_LexFSharp.obj: ..\..\src\stc\lexilla\lexers\LexFSharp.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexFSharp.cxx
@@ -8203,6 +8247,9 @@ $(OBJS)\wxlunasvg_graphics.obj: ..\..\3rdparty\lunasvg\source\graphics.cpp
 $(OBJS)\wxlunasvg_svgelement.obj: ..\..\3rdparty\lunasvg\source\svgelement.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLUNASVG_CXXFLAGS) ..\..\3rdparty\lunasvg\source\svgelement.cpp
 
+$(OBJS)\wxlunasvg_svgfilterelement.obj: ..\..\3rdparty\lunasvg\source\svgfilterelement.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLUNASVG_CXXFLAGS) ..\..\3rdparty\lunasvg\source\svgfilterelement.cpp
+
 $(OBJS)\wxlunasvg_svggeometryelement.obj: ..\..\3rdparty\lunasvg\source\svggeometryelement.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLUNASVG_CXXFLAGS) ..\..\3rdparty\lunasvg\source\svggeometryelement.cpp
 
@@ -8247,6 +8294,9 @@ $(OBJS)\wxlunasvg_plutovg_rasterize.obj: ..\..\3rdparty\lunasvg\plutovg\source\p
 
 $(OBJS)\wxlunasvg_plutovg_surface.obj: ..\..\3rdparty\lunasvg\plutovg\source\plutovg-surface.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXLUNASVG_CFLAGS) ..\..\3rdparty\lunasvg\plutovg\source\plutovg-surface.c
+
+$(OBJS)\wxlunasvg_plutovg_filter.obj: ..\..\3rdparty\lunasvg\plutovg\source\plutovg-filter.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXLUNASVG_CFLAGS) ..\..\3rdparty\lunasvg\plutovg\source\plutovg-filter.c
 
 $(OBJS)\wxlunasvg_plutovg_ft_math.obj: ..\..\3rdparty\lunasvg\plutovg\source\plutovg-ft-math.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXLUNASVG_CFLAGS) ..\..\3rdparty\lunasvg\plutovg\source\plutovg-ft-math.c
@@ -9378,6 +9428,12 @@ $(OBJS)\monodll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\monodll_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
+
+$(OBJS)\monodll_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\monodll_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
 
 $(OBJS)\monodll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
@@ -12011,6 +12067,12 @@ $(OBJS)\monolib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\monolib_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
+
+$(OBJS)\monolib_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\monolib_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
 
 $(OBJS)\monolib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp
@@ -18705,6 +18767,12 @@ $(OBJS)\ribbondll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\ribbondll_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
 
+$(OBJS)\ribbondll_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\ribbondll_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
+
 $(OBJS)\ribbondll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
@@ -18743,6 +18811,12 @@ $(OBJS)\ribbonlib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\ribbonlib_art_msw_flat.obj: ..\..\src\ribbon\art_msw_flat.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_msw_flat.cpp
+
+$(OBJS)\ribbonlib_backstage.obj: ..\..\src\ribbon\backstage.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\backstage.cpp
+
+$(OBJS)\ribbonlib_backstagecontrols.obj: ..\..\src\ribbon\backstagecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\backstagecontrols.cpp
 
 $(OBJS)\ribbonlib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp

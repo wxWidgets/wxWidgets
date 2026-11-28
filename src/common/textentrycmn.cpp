@@ -439,6 +439,76 @@ wxPoint wxTextEntryBase::DoGetMargins() const
 // ----------------------------------------------------------------------------
 
 /* static */
+bool wxTextEntryBase::IsUsedForEditing(const wxKeyEvent& event)
+{
+    const int key = event.GetKeyCode();
+    const int mods = event.GetModifiers();
+
+    // Alt-Backspace is the standard accelerator for "Undo" but it is also used
+    // by the text controls themselves.
+    if ( mods == wxMOD_ALT )
+        return key == WXK_BACK;
+
+    if ( mods == wxMOD_NONE || mods == wxMOD_SHIFT )
+    {
+        // All the keys producing printable characters are used for entering
+        // text and so can't be used as accelerators when a text control has
+        // focus, unlike the special keys such as Esc, Enter or Tab.
+        if ( key >= WXK_SPACE && key < WXK_START && key != WXK_DELETE )
+            return true;
+
+        switch ( key )
+        {
+            case WXK_BACK:
+            case WXK_DELETE:
+            case WXK_NUMPAD_DELETE:
+            case WXK_HOME:
+            case WXK_NUMPAD_HOME:
+            case WXK_END:
+            case WXK_NUMPAD_END:
+                return true;
+        }
+    }
+
+    if ( mods == wxMOD_CONTROL )
+    {
+        // These are the standard editing commands.
+        switch ( key )
+        {
+            case 'A':
+            case 'C':
+            case 'V':
+            case 'X':
+                return true;
+        }
+    }
+
+    if ( mods == wxMOD_CONTROL || mods == wxMOD_SHIFT )
+    {
+        // These keys are used for moving the cursor or extending the selection
+        // and Ctrl/Shift-Insert/Delete are the traditional copy/paste keys.
+        switch ( key )
+        {
+            case WXK_INSERT:
+            case WXK_NUMPAD_INSERT:
+            case WXK_DELETE:
+            case WXK_NUMPAD_DELETE:
+            case WXK_HOME:
+            case WXK_NUMPAD_HOME:
+            case WXK_END:
+            case WXK_NUMPAD_END:
+            case WXK_LEFT:
+            case WXK_NUMPAD_LEFT:
+            case WXK_RIGHT:
+            case WXK_NUMPAD_RIGHT:
+                return true;
+        }
+    }
+
+    return false;
+}
+
+/* static */
 bool wxTextEntryBase::SendTextUpdatedEvent(wxWindow *win)
 {
     wxCHECK_MSG( win, false, "can't send an event without a window" );

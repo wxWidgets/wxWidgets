@@ -749,13 +749,17 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
     return TRUE;
 }
 
-// Reuse the function defined in src/msw/textentry.cpp.
-extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg);
+#if wxUSE_ACCEL
 
-bool wxSpinCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
+bool
+wxSpinCtrl::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                       int WXUNUSED(command)) const
 {
-    return wxMSWTextEntryShouldPreProcessMessage(msg);
+    // Reserve the keys used for editing the text in our buddy text control.
+    return wxTextEntryBase::IsUsedForEditing(event);
 }
+
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // size calculations

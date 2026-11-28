@@ -14,10 +14,20 @@
 
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
+#include "wx/ribbon/art_internal.h"
+#include "wx/ribbon/panel.h"
+#include "wx/ribbon/buttonbar.h"
+#include "wx/ribbon/toolbar.h"
+#include "wx/ribbon/gallery.h"
+#include "wx/ribbon/backstage.h"
+#include "wx/ribbon/private/backstage.h"
 #include "wx/dcbuffer.h"
+#include "wx/renderer.h"
 #include "wx/app.h"
 #include "wx/vector.h"
 
+#include <algorithm>
+#include <vector>
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     #include "ribboncontainerswinui.h"
 #endif
@@ -38,6 +48,229 @@
 #endif
 
 #include "wx/imaglist.h"
+
+#if wxUSE_ACCESSIBILITY
+
+class wxRibbonBarAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRibbonBarAccessible(wxRibbonBar* bar) : wxWindowAccessible(bar) { }
+
+    wxAccStatus GetChildCount(int* childCount) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        *childCount = static_cast<int>(bar->GetPageCount())
+                    + static_cast<int>(bar->GetFocusableBarButtons().size());
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetChild(int childId, wxAccessible** child) override
+    {
+        if ( childId == wxACC_SELF )
+        {
+            *child = this;
+            return wxACC_OK;
+        }
+
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxWindowAccessible::GetChild(childId, child);
+
+        *child = nullptr;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId == wxACC_SELF )
+        {
+            *role = wxROLE_SYSTEM_PAGETABLIST;
+            return wxACC_OK;
+        }
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *role = wxROLE_SYSTEM_PUSHBUTTON;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long* state) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId == wxACC_SELF )
+        {
+            long st{ 0 };
+            if ( !bar->IsEnabled() )
+                st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+            if ( !bar->IsShownOnScreen() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            if ( bar->IsFocusable() )
+                st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+            if ( bar->HasFocus() )
+                st |= wxACC_STATE_SYSTEM_FOCUSED;
+
+            *state = st;
+            return wxACC_OK;
+        }
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        const wxRibbonBar::BarButton button = GetBarButton(bar, childId);
+        long st{ wxACC_STATE_SYSTEM_FOCUSABLE };
+        if ( bar->HasFocus() && bar->m_focusedButton == button )
+            st |= wxACC_STATE_SYSTEM_FOCUSED;
+        if ( button == wxRibbonBar::BarButton_Toggle && !bar->ArePanelsShown() )
+            st |= wxACC_STATE_SYSTEM_PRESSED;
+
+        *state = st;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetName(int childId, wxString* name) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetName(childId, name);
+
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        const wxRibbonBar::BarButton button = GetBarButton(bar, childId);
+        *name = button == wxRibbonBar::BarButton_Toggle
+            ? (bar->ArePanelsShown() ? _("Minimize the Ribbon") : _("Expand the Ribbon"))
+            : _("Help");
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetLocation(wxRect& rect, int elementId) override
+    {
+        if ( elementId == wxACC_SELF )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( elementId >= 0 && elementId <= static_cast<int>(bar->GetPageCount()) )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        const wxRibbonBar::BarButton button = GetBarButton(bar, elementId);
+        rect = bar->GetBarButtonRect(button);
+        rect.SetPosition(bar->ClientToScreen(rect.GetPosition()));
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = _("Press");
+        return wxACC_OK;
+    }
+
+    wxAccStatus DoDefaultAction(int childId) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId >= 0 && childId <= static_cast<int>(bar->GetPageCount()) )
+            return wxACC_NOT_IMPLEMENTED;
+
+        if ( GetBarButton(bar, childId) == wxRibbonBar::BarButton_Toggle )
+            bar->DoActivateToggleButton();
+        else
+            bar->DoActivateHelpButton();
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetFocus(int* childId, wxAccessible** child) override
+    {
+        wxRibbonBar* bar = wxDynamicCast(GetWindow(), wxRibbonBar);
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        if ( !bar->HasFocus() )
+        {
+            *childId = 0;
+            *child = nullptr;
+            return wxACC_OK;
+        }
+
+        if ( wxRibbonControl* control = bar->m_focusedControl.get() )
+        {
+            *childId = 0;
+            *child = control->GetOrCreateAccessible();
+            return wxACC_OK;
+        }
+
+        if ( bar->m_focusedButton != wxRibbonBar::BarButton_None )
+        {
+            const std::vector<wxRibbonBar::BarButton> buttons = bar->GetFocusableBarButtons();
+            const auto it = std::find(buttons.begin(), buttons.end(), bar->m_focusedButton);
+            if ( it != buttons.end() )
+            {
+                *childId = static_cast<int>(bar->GetPageCount()) +
+                           static_cast<int>(it - buttons.begin()) + 1;
+                *child = nullptr;
+                return wxACC_OK;
+            }
+        }
+
+        wxRibbonPage* page = bar->IsTabRowFocused()
+            ? bar->GetPage(bar->GetActivePage()) : nullptr;
+        if ( page )
+        {
+            *childId = 0;
+            *child = page->GetOrCreateAccessible();
+        }
+        else
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+
+        return wxACC_OK;
+    }
+
+private:
+    static wxRibbonBar::BarButton GetBarButton(wxRibbonBar* bar, int childId)
+    {
+        const std::vector<wxRibbonBar::BarButton> buttons = bar->GetFocusableBarButtons();
+        const size_t index = childId - bar->GetPageCount() - 1;
+        return index < buttons.size() ? buttons[index] : wxRibbonBar::BarButton_None;
+    }
+};
+
+wxAccessible* wxRibbonBar::CreateAccessible()
+{
+    return new wxRibbonBarAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
@@ -66,6 +299,8 @@ wxBEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_LEFT_DCLICK(wxRibbonBar::OnMouseDoubleClick)
   EVT_SIZE(wxRibbonBar::OnSize)
   EVT_KILL_FOCUS(wxRibbonBar::OnKillFocus)
+  EVT_SET_FOCUS(wxRibbonBar::OnSetFocus)
+  EVT_KEY_DOWN(wxRibbonBar::OnKeyDown)
   EVT_DPI_CHANGED(wxRibbonBar::OnDPIChanged)
   EVT_SYS_COLOUR_CHANGED(wxRibbonBar::OnSysColourChanged)
 wxEND_EVENT_TABLE()
@@ -139,6 +374,7 @@ void wxRibbonBar::ShowPanels(wxRibbonDisplayMode mode)
 
         case wxRIBBON_BAR_MINIMIZED:
             m_arePanelsShown = false;
+            ClearPageFocus();
             break;
     }
 
@@ -178,6 +414,16 @@ void wxRibbonBar::SetWindowStyleFlag(long style)
     m_flags = style;
     if(m_art)
         m_art->SetFlags(style);
+
+    // Don't keep the focus on a button which isn't shown any more.
+    if ( (m_focusedButton == BarButton_Help &&
+            !(style & wxRIBBON_BAR_SHOW_HELP_BUTTON)) ||
+         (m_focusedButton == BarButton_Toggle &&
+            !(style & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON)) )
+    {
+        m_focusedButton = BarButton_None;
+        Refresh(false);
+    }
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     if ( wxRibbonContainerWinUI::Native(this) )
         wxRibbonContainerWinUI::Sync(this);
@@ -191,6 +437,7 @@ long wxRibbonBar::GetWindowStyleFlag() const
 
 bool wxRibbonBar::Realize()
 {
+    HideKeyTips();
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     if ( wxRibbonContainerWinUI::Native(this) )
         return wxRibbonContainerWinUI::Realize(this);
@@ -199,9 +446,18 @@ bool wxRibbonBar::Realize()
     bool status = true;
 
     wxInfoDC dcTemp(this);
+
+    // Determine the tab area height first, as the pages are positioned below
+    // it before being realized.
+    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
+
     int sep = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
     size_t numtabs = m_pages.GetCount();
     bool firstVisible = true;
+
+    // These totals would keep their old values below if no tab is shown.
+    m_tabs_total_width_ideal = 0;
+    m_tabs_total_width_minimum = 0;
     size_t i;
     for(i = 0; i < numtabs; ++i)
     {
@@ -238,24 +494,10 @@ bool wxRibbonBar::Realize()
             m_tabs_total_width_minimum += sep + info.minimum_width;
         }
     }
-    const int tabHeightBefore = m_tab_height;
-    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
 
     RecalculateMinSize();
     RecalculateTabSizes();
-
-    // The page lies under the tabs: it follows them when their height
-    // changes without the bar changing size -- another art provider with
-    // other metrics, tabs shown or hidden. It used to keep its place until
-    // the next resize of the bar.
-    // (While pages are being removed the current one may not be among those
-    // left yet.)
-    if ( m_tab_height != tabHeightBefore && m_current_page != wxNOT_FOUND &&
-         static_cast<size_t>(m_current_page) < m_pages.GetCount() )
-    {
-        RepositionPage(m_pages.Item(m_current_page).page);
-    }
-
+    InvalidateBestSize();
     Refresh();
 
     return status;
@@ -402,6 +644,10 @@ void wxRibbonBar::ShowPage(size_t page, bool show)
     if(page >= m_pages.GetCount())
         return;
     m_pages.Item(page).shown = show;
+    HideKeyTips();
+
+    if ( !show && static_cast<int>(page) == m_current_page )
+        ClearPageFocus();
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     if ( wxRibbonContainerWinUI::Native(this) )
         wxRibbonContainerWinUI::Sync(this);
@@ -430,6 +676,11 @@ void wxRibbonBar::DeletePage(size_t n)
 {
     if(n < m_pages.GetCount())
     {
+        HideKeyTips();
+
+        if ( static_cast<int>(n) == m_current_page )
+            ClearPageFocus();
+
         wxRibbonPage *page = m_pages.Item(n).page;
 
         // Schedule page object for destruction and not destroying directly
@@ -476,6 +727,8 @@ void wxRibbonBar::DeletePage(size_t n)
 
 void wxRibbonBar::ClearPages()
 {
+    ClearPageFocus();
+
     size_t i;
     for(i=0; i<m_pages.GetCount(); i++)
     {
@@ -511,6 +764,8 @@ bool wxRibbonBar::SetActivePage(size_t page)
     {
         return false;
     }
+
+    ClearPageFocus();
 
     if(m_current_page != wxNOT_FOUND)
     {
@@ -589,6 +844,7 @@ void wxRibbonBar::SetTabCtrlMargins(int left, int right)
 #endif
 
     RecalculateTabSizes();
+    InvalidateBestSize();
 }
 
 struct PageComparedBySmallWidthAsc
@@ -833,7 +1089,7 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
                          const wxPoint& pos,
                          const wxSize& size,
                          long style)
-    : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
+    : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE | wxWANTS_CHARS)
 {
     CommonInit(style);
 #if defined(WXWINUI_RIBBON_TOOLKIT)
@@ -1212,6 +1468,16 @@ void wxRibbonBar::WinUISyncTabs()
 
 wxRibbonBar::~wxRibbonBar()
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
+    if ( m_keyTipsTopLevelParent != nullptr && !m_keyTipsTopLevelParent->IsBeingDeleted() )
+    {
+        m_keyTipsTopLevelParent->Unbind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+        m_keyTipsTopLevelParent->Unbind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+        m_keyTipsTopLevelParent->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+    }
+    m_keyTipsTopLevelParent = nullptr;
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     wxRibbonContainerWinUI::Close(this);
 #endif
@@ -1234,7 +1500,7 @@ bool wxRibbonBar::Create(wxWindow* parent,
                 const wxSize& size,
                 long style)
 {
-    if(!wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE))
+    if(!wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE | wxWANTS_CHARS))
         return false;
 
     CommonInit(style);
@@ -1334,6 +1600,22 @@ void wxRibbonBar::CommonInit(long style)
         }
     }
 #endif
+    Bind(wxEVT_RIBBONBAR_PAGE_CHANGED, &wxRibbonBar::OnBackstagePageChanged, this);
+    Bind(wxEVT_RIBBONBAR_TOGGLED, &wxRibbonBar::OnBackstageToggled, this);
+
+    if ( m_keyTipsTriggerKeys.empty() )
+        m_keyTipsTriggerKeys.push_back({ WXK_F10, wxMOD_NONE });
+
+    if ( m_keyTipsTopLevelParent == nullptr )
+    {
+        m_keyTipsTopLevelParent = wxGetTopLevelParent(this);
+        if ( m_keyTipsTopLevelParent != nullptr )
+        {
+            m_keyTipsTopLevelParent->Bind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+    }
 }
 
 wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
@@ -1375,6 +1657,8 @@ void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
     }
 
     delete old;
+
+    UpdateBackstageColours();
 }
 
 void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
@@ -1454,7 +1738,10 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             dc.SetClippingRegion(tabs_rect);
         }
         dc.SetClippingRegion(info.rect);
-        m_art->DrawTab(dc, this, info);
+        if ( m_styleBackstageTab && info.page == m_backstagePage.get() )
+            DrawBackstageTab(dc, info);
+        else
+            m_art->DrawTab(dc, this, info);
 
         if(info.rect.width < info.small_begin_need_separator_width)
         {
@@ -1491,6 +1778,21 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             m_art->DrawTabSeparator(dc, this, rect, sep_visibility);
         }
     }
+    if ( m_current_page != wxNOT_FOUND && HasFocus() && !m_focusedControl &&
+         m_focusedButton == BarButton_None )
+    {
+        const wxRibbonPageTabInfo& info = m_pages.Item(m_current_page);
+        if ( info.shown && (!m_tab_scroll_buttons_shown || tabs_rect.Intersects(info.rect)) )
+        {
+            dc.DestroyClippingRegion();
+            if ( m_tab_scroll_buttons_shown )
+                dc.SetClippingRegion(tabs_rect);
+
+            wxRect focusRect{ info.rect };
+            focusRect.Deflate(FromDIP(4), FromDIP(3));
+            wxRendererNative::Get().DrawFocusRect(this, dc, focusRect);
+        }
+    }
     if(m_tab_scroll_buttons_shown)
     {
         if(m_tab_scroll_left_button_rect.GetWidth() != 0)
@@ -1512,6 +1814,24 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     if ( m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON  )
         m_art->DrawToggleButton(dc, this, m_toggle_button_rect, m_ribbon_state);
 
+    if ( m_focusedButton != BarButton_None && HasFocus() )
+    {
+        wxRect rect = GetBarButtonRect(m_focusedButton);
+        rect.Deflate(FromDIP(2));
+        if ( !rect.IsEmpty() )
+        {
+            // The buttons above leave a clipping region set.
+            dc.DestroyClippingRegion();
+            wxRendererNative::Get().DrawFocusRect(this, dc, rect);
+        }
+    }
+
+    if ( m_keyTipsActive )
+    {
+        // The toggle and help buttons leave a clipping region set.
+        dc.DestroyClippingRegion();
+        DrawKeyTipsFor(dc, this, m_art);
+    }
 }
 
 void wxRibbonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -1528,6 +1848,8 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 
 void wxRibbonBar::OnSize(wxSizeEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
 #if defined(WXWINUI_RIBBON_TOOLKIT)
     if ( wxRibbonContainerWinUI::Native(this) )
     {
@@ -1558,21 +1880,10 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
     }
 #endif
 
-    // Recalculate tab sizes for new DPI
-    RecalculateTabSizes();
-
-    // Realize all pages to update their layouts
-    size_t page_count = m_pages.GetCount();
-    for(size_t i = 0; i < page_count; ++i)
-    {
-        m_pages.Item(i).page->Realize();
-    }
-
-    // Reposition current page
-    if(m_current_page != wxNOT_FOUND)
-    {
-        RepositionPage(m_pages.Item(m_current_page).page);
-    }
+    // Everything computed by the art provider depends on the DPI: not only
+    // the pages layout, but also the tab widths, the tab area height and the
+    // minimal size of the bar, so recompute all of them.
+    Realize();
 
     Refresh();
     event.Skip();
@@ -1583,6 +1894,7 @@ void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     event.Skip();
     if ( m_art )
         m_art->UpdateColoursFromSystem();
+    UpdateBackstageColours();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)
@@ -1660,6 +1972,14 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
         return;
     }
 #endif
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
+    if ( IsBackstageTabHit(evt.GetPosition()) )
+    {
+        SetFocus();
+        return;
+    }
 
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
@@ -1718,16 +2038,11 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
         {
             if(m_toggle_button_rect.Contains(position))
             {
-                ShowPanels(ArePanelsShown() ? wxRIBBON_BAR_MINIMIZED : wxRIBBON_BAR_PINNED);
-                wxRibbonBarEvent event(wxEVT_RIBBONBAR_TOGGLED, GetId());
-                event.SetEventObject(this);
-                ProcessWindowEvent(event);
+                DoActivateToggleButton();
             }
             if ( m_help_button_rect.Contains(position) )
             {
-                wxRibbonBarEvent event(wxEVT_RIBBONBAR_HELP_CLICK, GetId());
-                event.SetEventObject(this);
-                ProcessWindowEvent(event);
+                DoActivateHelpButton();
             }
         }
     }
@@ -1827,6 +2142,9 @@ void wxRibbonBar::RefreshTabBar()
 
 void wxRibbonBar::OnMouseMiddleDown(wxMouseEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN);
 }
 
@@ -1837,6 +2155,9 @@ void wxRibbonBar::OnMouseMiddleUp(wxMouseEvent& evt)
 
 void wxRibbonBar::OnMouseRightDown(wxMouseEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_RIGHT_DOWN);
 }
 
@@ -1859,6 +2180,11 @@ void wxRibbonBar::OnMouseDoubleClick(wxMouseEvent& evt)
         return;
     }
 #endif
+    if ( IsBackstageTabHit(evt.GetPosition()) )
+    {
+        SetFocus();
+        return;
+    }
 
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
@@ -1941,6 +2267,17 @@ wxSize wxRibbonBar::DoGetBestSize() const
     {
         best.SetHeight(m_tab_height);
     }
+
+    // The bar must also be wide enough to show all the tabs at their ideal
+    // width, unless they are not shown at all.
+    if ( m_pages.GetCount() > 1 || (m_flags & wxRIBBON_BAR_ALWAYS_SHOW_TABS) )
+    {
+        const int tabs_width = m_tab_margin_left + m_tabs_total_width_ideal +
+                               m_tab_margin_right;
+        if ( best.GetWidth() < tabs_width )
+            best.SetWidth(tabs_width);
+    }
+
     return best;
 }
 
@@ -1986,7 +2323,1339 @@ void wxRibbonBar::OnKillFocus(wxFocusEvent& WXUNUSED(evt))
         return;
     }
 #endif
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
+    ClearPageFocus();
+    m_focusedButton = BarButton_None;
+    RefreshTabBar();
     HideIfExpanded();
+}
+
+void wxRibbonBar::DoActivateToggleButton()
+{
+    ShowPanels(ArePanelsShown() ? wxRIBBON_BAR_MINIMIZED : wxRIBBON_BAR_PINNED);
+    wxRibbonBarEvent event(wxEVT_RIBBONBAR_TOGGLED, GetId());
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
+}
+
+void wxRibbonBar::DoActivateHelpButton()
+{
+    wxRibbonBarEvent event(wxEVT_RIBBONBAR_HELP_CLICK, GetId());
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
+}
+
+wxRect wxRibbonBar::GetBarButtonRect(BarButton button) const
+{
+    switch ( button )
+    {
+        case BarButton_Toggle:
+            return m_toggle_button_rect;
+
+        case BarButton_Help:
+            return m_help_button_rect;
+
+        case BarButton_None:
+            break;
+    }
+    return wxRect();
+}
+
+std::vector<wxRibbonBar::BarButton> wxRibbonBar::GetFocusableBarButtons() const
+{
+    // The rectangles are only known once the bar has been painted.
+    std::vector<BarButton> buttons;
+    if ( (m_flags & wxRIBBON_BAR_SHOW_HELP_BUTTON) &&
+          !m_help_button_rect.IsEmpty() )
+        buttons.push_back(BarButton_Help);
+    if ( (m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON) &&
+          !m_toggle_button_rect.IsEmpty() )
+        buttons.push_back(BarButton_Toggle);
+
+    // Left to right.
+    if ( buttons.size() == 2 &&
+         GetBarButtonRect(buttons[0]).x > GetBarButtonRect(buttons[1]).x )
+    {
+        std::swap(buttons[0], buttons[1]);
+    }
+    return buttons;
+}
+
+bool wxRibbonBar::MoveBarButtonFocus(bool forward)
+{
+    const std::vector<BarButton> buttons = GetFocusableBarButtons();
+
+    if ( m_focusedButton == BarButton_None )
+    {
+        // Coming from the last tab.
+        if ( !forward || buttons.empty() )
+            return false;
+
+        m_focusedButton = buttons.front();
+    }
+    else
+    {
+        size_t pos{ 0 };
+        while ( pos < buttons.size() && buttons[pos] != m_focusedButton )
+            ++pos;
+
+        if ( pos == buttons.size() )
+        {
+            m_focusedButton = BarButton_None;
+        }
+        else if ( forward )
+        {
+            if ( pos + 1 == buttons.size() )
+                return false;
+
+            m_focusedButton = buttons[pos + 1];
+        }
+        else
+        {
+            // Back to the tabs from the first button.
+            m_focusedButton = pos == 0 ? BarButton_None : buttons[pos - 1];
+        }
+    }
+
+    RefreshTabBar();
+    return true;
+}
+
+void wxRibbonBar::OnSetFocus(wxFocusEvent& evt)
+{
+    RefreshTabBar();
+    evt.Skip();
+}
+
+int wxRibbonBar::FindShownPage(int from, int step) const
+{
+    const int count = static_cast<int>(m_pages.GetCount());
+    for ( int i = from + step; i >= 0 && i < count; i += step )
+    {
+        if ( m_pages.Item(i).shown )
+            return i;
+    }
+    return wxNOT_FOUND;
+}
+
+// ----------------------------------------------------------------------------
+// Backstage
+// ----------------------------------------------------------------------------
+
+bool wxRibbonBar::IsFlatArtProvider(const wxRibbonArtProvider* art)
+{
+    return dynamic_cast<const wxRibbonMSWFlatArtProvider*>(art) != nullptr;
+}
+
+void wxRibbonBar::SetBackstagePage(wxRibbonPage* page)
+{
+    if ( page == m_backstagePage.get() )
+        return;
+
+    const bool wasShown = m_backstageShown;
+    if ( wasShown )
+        ShowBackstage(false);
+
+    m_backstagePage = page;
+
+    if ( wasShown )
+        ShowBackstage(true);
+
+    Refresh();
+}
+
+void wxRibbonBar::SetBackstage(wxBackstage* backstage, wxWindow* content)
+{
+    if ( backstage == m_backstage.get() && content == m_backstageContent.get() )
+        return;
+
+    const bool wasShown = m_backstageShown;
+    if ( wasShown )
+        ShowBackstage(false);
+
+    if ( m_backstage.get() != nullptr && m_backstage.get() != backstage )
+    {
+        m_backstage->SetNavBackgroundColour(wxColour());
+        m_backstage->SetHighlightColour(wxColour());
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Flat);
+    }
+
+    m_backstage = backstage;
+    m_backstageContent = content;
+    UpdateBackstageColours();
+
+    // The backstage is never shown until asked for (this also leaves the File
+    // tab if it happens to be the active page).
+    ShowBackstage(wasShown);
+}
+
+void wxRibbonBar::ShowBackstage(bool show)
+{
+    if ( m_backstagePage.get() == nullptr )
+    {
+        // nothing to select, but the backstage can still be dismissed
+        if ( !show )
+            UpdateBackstageViews(false);
+        return;
+    }
+
+    const int backstageTab = GetPageNumber(m_backstagePage.get());
+    if ( show )
+    {
+        if ( GetActivePage() != backstageTab )
+            SetActivePage(m_backstagePage.get());
+    }
+    else if ( GetActivePage() == backstageTab )
+    {
+        for ( size_t i = 0; i < GetPageCount(); ++i )
+        {
+            if ( static_cast<int>(i) != backstageTab )
+            {
+                SetActivePage(i);
+                break;
+            }
+        }
+    }
+    UpdateBackstageViews(show);
+}
+
+void wxRibbonBar::StyleBackstageTab(bool style)
+{
+    m_styleBackstageTab = style;
+    Refresh();
+}
+
+void wxRibbonBar::SetBackstageTabColour(const wxColour& colour)
+{
+    m_backstageTabColour = colour;
+    Refresh();
+}
+
+wxColour wxRibbonBar::GetBackstageTabColour() const
+{
+    return m_backstageTabColour.IsOk() ? m_backstageTabColour
+                                       : wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+}
+
+void wxRibbonBar::UpdateBackstageColours()
+{
+    if ( m_backstage.get() == nullptr || m_art == nullptr )
+        return;
+
+    wxColour primary, secondary;
+    m_art->GetColourScheme(&primary, &secondary, nullptr);
+    if ( primary.IsOk() )
+        m_backstage->SetNavBackgroundColour(primary);
+
+    // glossy highlights only on non-flat interface
+    if ( !IsFlatArtProvider(m_art) && secondary.IsOk() )
+    {
+        m_backstage->SetHighlightColour(secondary);
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Glossy);
+    }
+    else
+    {
+        m_backstage->SetHighlightColour(wxColour());
+        m_backstage->SetHighlightStyle(wxBackstageHighlightStyle::Flat);
+    }
+}
+
+void wxRibbonBar::DrawBackstageTab(wxDC& dc, const wxRibbonPageTabInfo& tab)
+{
+    const wxColour accent = GetBackstageTabColour();
+    const wxColour fill = (tab.hovered && !tab.active) ?
+        wxBackstageHelpers::Blend(accent, *wxWHITE, 0.2) : accent;
+
+    if ( !IsFlatArtProvider(m_art) )
+    {
+        wxBackstageHelpers::DrawGlossyRect(dc, tab.rect, fill);
+    }
+    else
+    {
+        const wxDCPenChanger pc{ dc, *wxTRANSPARENT_PEN };
+        const wxDCBrushChanger bc{ dc, wxBrush{ fill } };
+        dc.DrawRectangle(tab.rect);
+    }
+
+    if ( m_art != nullptr )
+        dc.SetFont(m_art->GetFont(wxRIBBON_ART_TAB_LABEL_FONT));
+
+    dc.SetTextForeground(wxBackstageHelpers::BlackOrWhiteContrast(fill));
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    const wxString label = tab.page != nullptr ? tab.page->GetLabel() : wxString();
+    const wxSize textSize = dc.GetTextExtent(label);
+    dc.DrawText(label,
+                tab.rect.x + (tab.rect.width - textSize.GetWidth()) / 2,
+                tab.rect.y + (tab.rect.height - textSize.GetHeight()) / 2);
+}
+
+bool wxRibbonBar::IsBackstageTabHit(const wxPoint& position)
+{
+    int tabIndex = wxNOT_FOUND;
+    return m_backstageShown &&
+           HitTestTabs(position, &tabIndex) != nullptr &&
+           GetPage(tabIndex) == m_backstagePage.get();
+}
+
+void wxRibbonBar::OnBackstagePageChanged(wxRibbonBarEvent& evt)
+{
+    UpdateBackstageViews(m_backstagePage.get() != nullptr &&
+                         evt.GetPage() == m_backstagePage.get());
+    evt.Skip();
+}
+
+void wxRibbonBar::OnBackstageToggled(wxRibbonBarEvent& evt)
+{
+    if ( !m_backstageShown )
+    {
+        evt.Skip();
+        return;
+    }
+
+    // the ribbon has already toggled by now, so undo that (and swallow the event)
+    ShowPanels(wxRIBBON_BAR_MINIMIZED);
+}
+
+void wxRibbonBar::UpdateBackstageViews(bool showBackstage)
+{
+    if ( showBackstage == m_backstageShown )
+        return;
+    m_backstageShown = showBackstage;
+
+    if ( showBackstage )
+    {
+        // a collapsed ribbon reports itself as expanded until the next click
+        const wxRibbonDisplayMode mode = GetDisplayMode();
+        m_backstageSavedMode = (mode == wxRIBBON_BAR_EXPANDED) ? wxRIBBON_BAR_MINIMIZED : mode;
+
+        ShowPanels(wxRIBBON_BAR_MINIMIZED);
+        if ( m_backstageContent.get() != nullptr )
+            m_backstageContent->Hide();
+        if ( m_backstage.get() != nullptr )
+            m_backstage->Show();
+        GetParent()->Layout();
+        if ( m_backstage.get() != nullptr )
+            m_backstage->SetFocus();
+    }
+    else
+    {
+        if ( m_backstage.get() != nullptr )
+            m_backstage->Hide();
+        if ( m_backstageContent.get() != nullptr )
+            m_backstageContent->Show();
+
+        ShowPanels(m_backstageSavedMode);
+    }
+}
+
+bool wxRibbonBar::DoChangeActivePage(size_t page)
+{
+    if ( page >= m_pages.GetCount() || static_cast<int>(page) == m_current_page )
+        return false;
+
+    wxRibbonBarEvent query(wxEVT_RIBBONBAR_PAGE_CHANGING, GetId(), m_pages.Item(page).page);
+    query.SetEventObject(this);
+    ProcessWindowEvent(query);
+    if ( !query.IsAllowed() )
+        return false;
+
+    // The handler may have removed pages, including this one.
+    if ( !SetActivePage(query.GetPage()) || m_current_page == wxNOT_FOUND )
+        return false;
+
+    wxRibbonBarEvent notification(wxEVT_RIBBONBAR_PAGE_CHANGED, GetId(),
+                                  m_pages.Item(m_current_page).page);
+    notification.SetEventObject(this);
+    ProcessWindowEvent(notification);
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                               m_current_page + 1);
+#endif // wxUSE_ACCESSIBILITY
+
+    return true;
+}
+
+std::vector<wxRibbonControl*> wxRibbonBar::GetFocusableControls() const
+{
+    std::vector<wxRibbonControl*> controls;
+    if ( m_current_page == wxNOT_FOUND || !m_arePanelsShown )
+        return controls;
+
+    wxRibbonPage* page = m_pages.Item(m_current_page).page;
+    for ( wxWindowList::compatibility_iterator node = page->GetChildren().GetFirst();
+          node; node = node->GetNext() )
+    {
+        wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+        if ( panel != nullptr && panel->IsShown() && panel->IsEnabled() )
+            panel->AppendFocusableControls(controls);
+    }
+    return controls;
+}
+
+bool wxRibbonBar::FocusPageItem(bool forward)
+{
+    wxRibbonControl* control = FocusFirstItemIn(GetFocusableControls(), forward);
+    if ( control == nullptr )
+        return false;
+
+    m_focusedControl = control;
+    RefreshTabBar();
+    return true;
+}
+
+bool wxRibbonBar::MoveFocusedItem(bool forward)
+{
+    wxRibbonControl* control = FocusNextItemIn(GetFocusableControls(),
+                                              m_focusedControl.get(), forward);
+    if ( control == nullptr )
+        return false;
+
+    m_focusedControl = control;
+    return true;
+}
+
+void wxRibbonBar::FocusItemOf(wxRibbonControl* control)
+{
+    SetFocus();
+    ClearPageFocus();
+
+    // If the bar is minimised, its page was hidden when the popup took the
+    // focus, so show it again or the focus would end up on invisible items.
+    if ( m_ribbon_state == wxRIBBON_BAR_MINIMIZED )
+    {
+        wxWeakRef<wxRibbonControl> controlRef(control);
+        ShowPanels(wxRIBBON_BAR_EXPANDED);
+        control = controlRef.get();
+    }
+
+    if ( control != nullptr && control->FocusFirstItem() )
+    {
+        m_focusedControl = control;
+        RefreshTabBar();
+    }
+}
+
+void wxRibbonBar::ClearPageFocusIn(wxRibbonControl* control)
+{
+    if ( m_focusedControl.get() == control )
+        ClearPageFocus();
+}
+
+void wxRibbonBar::ClearPageFocus()
+{
+    wxRibbonControl* current = m_focusedControl.get();
+    if ( current == nullptr )
+        return;
+
+    m_focusedControl = nullptr;
+    current->ClearFocusedItem();
+    RefreshTabBar();
+
+#if wxUSE_ACCESSIBILITY
+    if ( m_current_page != wxNOT_FOUND )
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                                   m_current_page + 1);
+    }
+#endif // wxUSE_ACCESSIBILITY
+}
+
+wxWindow* wxRibbonBar::FindFocusableWindow(wxWindow* window, bool forward)
+{
+    if ( window->IsTopLevel() || !window->IsShown() )
+        return nullptr;
+
+    if ( window->CanAcceptFocusFromKeyboard() )
+        return window;
+
+    const wxWindowList& children = window->GetChildren();
+    for ( wxWindowList::compatibility_iterator node =
+              forward ? children.GetFirst() : children.GetLast();
+          node;
+          node = forward ? node->GetNext() : node->GetPrevious() )
+    {
+        if ( wxWindow* found = FindFocusableWindow(node->GetData(), forward) )
+            return found;
+    }
+    return nullptr;
+}
+
+void wxRibbonBar::NavigateOut(int flags)
+{
+    if ( Navigate(flags) )
+        return;
+
+    // The parent didn't do anything, which is the case if it's not a wxPanel
+    // or similar (e.g., a wxFrame). Look for the next (or previous) window
+    // ourselves, but leave Ctrl+Tab to the parent.
+    wxWindow* const parent = GetParent();
+    if ( parent == nullptr || (flags & wxNavigationKeyEvent::WinChange) )
+        return;
+
+    const bool forward = (flags & wxNavigationKeyEvent::IsForward) != 0;
+
+    std::vector<wxWindow*> siblings;
+    size_t pos = 0;
+    for ( wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
+          node; node = node->GetNext() )
+    {
+        if ( node->GetData() == this )
+            pos = siblings.size();
+        siblings.push_back(node->GetData());
+    }
+
+    // Wrap around, like a wxPanel does.
+    const size_t count = siblings.size();
+    for ( size_t n = 1; n < count; ++n )
+    {
+        const size_t i = forward ? (pos + n) % count
+                                 : (pos + count - n) % count;
+        if ( wxWindow* target = FindFocusableWindow(siblings[i], forward) )
+        {
+            target->SetFocus();
+            return;
+        }
+    }
+}
+
+void wxRibbonBar::OnPageKeyDown(wxKeyEvent& evt)
+{
+    const int keyCode = evt.GetKeyCode();
+
+    // Leave accelerators alone.
+    if ( keyCode != WXK_TAB && (evt.GetModifiers() & ~wxMOD_SHIFT) )
+    {
+        evt.Skip();
+        return;
+    }
+
+    // The tab row is the "level above" the items: Esc and Up go back to it.
+    switch ( keyCode )
+    {
+        case WXK_TAB:
+            if ( evt.ControlDown() )
+            {
+                evt.Skip();
+            }
+            else if ( evt.ShiftDown() )
+            {
+                if ( !MoveFocusedItem(false) )
+                    ClearPageFocus();
+            }
+            else if ( !MoveFocusedItem(true) )
+            {
+                // Past the last item: leave the ribbon.
+                ClearPageFocus();
+                NavigateOut(wxNavigationKeyEvent::IsForward);
+            }
+            return;
+
+        case WXK_LEFT:
+            MoveFocusedItem(false);
+            return;
+
+        case WXK_RIGHT:
+            MoveFocusedItem(true);
+            return;
+
+        case WXK_HOME:
+            ClearPageFocus();
+            FocusPageItem(true);
+            return;
+
+        case WXK_END:
+            ClearPageFocus();
+            FocusPageItem(false);
+            return;
+
+        case WXK_UP:
+            // Move up a row in the control, if it has rows, or else go back.
+            if ( wxRibbonControl* current = m_focusedControl.get() )
+            {
+                if ( current->FocusItemInDirection(wxUP) )
+                    return;
+            }
+            ClearPageFocus();
+            return;
+
+        case WXK_ESCAPE:
+            ClearPageFocus();
+            return;
+
+        case WXK_DOWN:
+            if ( wxRibbonControl* current = m_focusedControl.get() )
+            {
+                if ( !current->FocusItemInDirection(wxDOWN) )
+                    current->ActivateFocusedItem(true);
+            }
+            return;
+
+        case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
+        case WXK_SPACE:
+            if ( wxRibbonControl* current = m_focusedControl.get() )
+                current->ActivateFocusedItem();
+            return;
+
+        default:
+            evt.Skip();
+            return;
+    }
+}
+
+void wxRibbonBar::OnKeyDown(wxKeyEvent& evt)
+{
+    if ( m_focusedControl )
+    {
+        OnPageKeyDown(evt);
+        return;
+    }
+
+    // The focused button may have been removed (e.g., by changing the style)
+    // or hidden by the bar becoming too narrow since it got the focus.
+    if ( m_focusedButton != BarButton_None )
+    {
+        const std::vector<BarButton> buttons = GetFocusableBarButtons();
+        if ( std::find(buttons.begin(), buttons.end(), m_focusedButton)
+                == buttons.end() )
+        {
+            m_focusedButton = BarButton_None;
+            RefreshTabBar();
+        }
+    }
+
+    const int keyCode = evt.GetKeyCode();
+
+    // wxWANTS_CHARS also gives us Tab, so navigate away ourselves.
+    if ( keyCode == WXK_TAB )
+    {
+        // The buttons are after everything else.
+        // Tab leaves, Shift+Tab goes back to the tabs.
+        if ( m_focusedButton != BarButton_None && !evt.ControlDown() )
+        {
+            m_focusedButton = BarButton_None;
+            RefreshTabBar();
+            if ( !evt.ShiftDown() )
+                NavigateOut(wxNavigationKeyEvent::IsForward);
+            return;
+        }
+
+        // Tab goes to the page's items first.
+        if ( !evt.ShiftDown() && !evt.ControlDown() && FocusPageItem(true) )
+            return;
+
+        int flags = evt.ShiftDown() ? wxNavigationKeyEvent::IsBackward
+                                    : wxNavigationKeyEvent::IsForward;
+        if ( evt.ControlDown() )
+            flags |= wxNavigationKeyEvent::WinChange;
+        NavigateOut(flags);
+        return;
+    }
+
+    // Leave accelerators alone.
+    if ( evt.GetModifiers() & ~wxMOD_SHIFT )
+    {
+        evt.Skip();
+        return;
+    }
+
+    if ( m_focusedButton != BarButton_None )
+    {
+        switch ( keyCode )
+        {
+            case WXK_LEFT:
+                MoveBarButtonFocus(false);
+                return;
+
+            case WXK_RIGHT:
+                MoveBarButtonFocus(true);
+                return;
+
+            case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
+            case WXK_SPACE:
+                if ( m_focusedButton == BarButton_Toggle )
+                    DoActivateToggleButton();
+                else
+                    DoActivateHelpButton();
+                return;
+
+            case WXK_ESCAPE:
+                m_focusedButton = BarButton_None;
+                RefreshTabBar();
+                return;
+
+            default:
+                evt.Skip();
+                return;
+        }
+    }
+
+    int target = wxNOT_FOUND;
+    switch ( keyCode )
+    {
+        case WXK_LEFT:
+            target = FindShownPage(m_current_page, -1);
+            break;
+
+        case WXK_RIGHT:
+            target = FindShownPage(m_current_page, 1);
+            if ( target == wxNOT_FOUND )
+            {
+                // On the last tab, so go on to the buttons.
+                MoveBarButtonFocus(true);
+                return;
+            }
+            break;
+
+        case WXK_HOME:
+            target = FindShownPage(-1, 1);
+            break;
+
+        case WXK_END:
+            target = FindShownPage(static_cast<int>(m_pages.GetCount()), -1);
+            break;
+
+        case WXK_DOWN:
+        case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
+        case WXK_SPACE:
+            {
+                const bool wasMinimized = (m_ribbon_state == wxRIBBON_BAR_MINIMIZED);
+                if ( wasMinimized )
+                    ShowPanels(wxRIBBON_BAR_EXPANDED);
+                if ( !FocusPageItem(true) && !wasMinimized )
+                    evt.Skip();
+            }
+            return;
+
+        case WXK_ESCAPE:
+            if ( m_ribbon_state == wxRIBBON_BAR_EXPANDED )
+            {
+                HidePanels();
+                return;
+            }
+            evt.Skip();
+            return;
+
+        default:
+            evt.Skip();
+            return;
+    }
+
+    if ( target != wxNOT_FOUND && target != m_current_page &&
+         DoChangeActivePage(static_cast<size_t>(target)) )
+    {
+        // Scroll the new tab into view if the tab bar is scrolled. The
+        // PAGE_CHANGED handler could have removed the pages by now.
+        if ( m_tab_scroll_buttons_shown && m_current_page != wxNOT_FOUND )
+        {
+            const wxRect& rect = m_pages.Item(m_current_page).rect;
+            const int left = m_tab_margin_left + m_tab_scroll_left_button_rect.GetWidth();
+            const int right = GetClientSize().GetWidth() - m_tab_margin_right
+                                - m_tab_scroll_right_button_rect.GetWidth();
+            if ( rect.GetLeft() < left )
+                ScrollTabBar(rect.GetLeft() - left);
+            else if ( rect.GetRight() > right )
+                ScrollTabBar(rect.GetRight() - right);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// KeyTips (keyboard access mode)
+// ----------------------------------------------------------------------------
+
+void wxRibbonBar::SetPageKeyTip(size_t page, const wxString& keytip)
+{
+    if ( page >= m_pages.GetCount() )
+        return;
+    m_pages.Item(page).keytip = keytip.Upper();
+}
+
+void wxRibbonBar::SetPageKeyTip(wxRibbonPage* page, const wxString& keytip)
+{
+    int n = GetPageNumber(page);
+    if ( n != wxNOT_FOUND )
+        SetPageKeyTip((size_t)n, keytip);
+}
+
+void wxRibbonBar::SetToggleButtonKeyTip(const wxString& keytip)
+{
+    m_toggleButtonKeyTip = keytip.Upper();
+}
+
+void wxRibbonBar::SetHelpButtonKeyTip(const wxString& keytip)
+{
+    m_helpButtonKeyTip = keytip.Upper();
+}
+
+void wxRibbonBar::SetKeyTipsTriggerKey(int keyCode, int modifiers)
+{
+    m_keyTipsTriggerKeys.clear();
+    m_keyTipsTriggerKeys.push_back({ keyCode, modifiers });
+}
+
+void wxRibbonBar::AddKeyTipsTriggerKey(int keyCode, int modifiers)
+{
+    m_keyTipsTriggerKeys.push_back({ keyCode, modifiers });
+}
+
+void wxRibbonBar::ClearKeyTipsTriggerKeys()
+{
+    m_keyTipsTriggerKeys.clear();
+}
+
+void wxRibbonBar::RefreshKeyTipTargetWindows()
+{
+    // Refresh each window directly. Refreshing only an ancestor doesn't
+    // reliably repaint child windows.
+    for ( wxWindow* w : m_keyTipsWindows )
+        w->Refresh();
+}
+
+bool wxRibbonBar::ShowKeyTips()
+{
+    if ( m_keyTipsActive )
+        return true;
+
+    if ( !IsShownOnScreen() )
+        return false;
+
+    DoBuildKeyTipTargets();
+    if ( m_keyTipsTargets.empty() )
+    {
+        m_keyTipsWindows.clear();
+        return false;
+    }
+
+    for ( wxWindow* w : m_keyTipsWindows )
+    {
+        if ( w != this )
+            w->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+    }
+
+    m_keyTipsActive = true;
+    m_keyTipsTypedPrefix.clear();
+    RefreshKeyTipTargetWindows();
+    return true;
+}
+
+void wxRibbonBar::HideKeyTips()
+{
+    if ( !m_keyTipsActive )
+        return;
+
+    // Refresh before clearing state, so each window still knows to repaint.
+    RefreshKeyTipTargetWindows();
+    m_keyTipsActive = false;
+    m_keyTipsTypedPrefix.clear();
+    for ( wxWindow* w : m_keyTipsWindows )
+    {
+        if ( w != this && w != nullptr && !w->IsBeingDeleted() )
+            w->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+    }
+    m_keyTipsTargets.clear();
+    m_keyTipsWindows.clear();
+}
+
+void wxRibbonBar::DoBuildKeyTipTargets()
+{
+    m_keyTipsTargets.clear();
+
+    size_t numtabs = m_pages.GetCount();
+    for ( size_t i = 0; i < numtabs; ++i )
+    {
+        wxRibbonPageTabInfo& tab = m_pages.Item(i);
+        if ( !tab.shown || tab.keytip.empty() )
+            continue;
+
+        wxRibbonKeyTipInfo info;
+        info.fullKeyTip = tab.keytip;
+        info.rect = tab.rect;
+        info.window = this;
+        info.kind = wxRibbonKeyTipInfo::Kind::PageTab;
+        info.pageIndex = i;
+        m_keyTipsTargets.push_back(info);
+    }
+
+    if ( (m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON) && !m_toggleButtonKeyTip.empty() )
+    {
+        wxRibbonKeyTipInfo info;
+        info.fullKeyTip = m_toggleButtonKeyTip;
+        info.rect = m_toggle_button_rect;
+        info.window = this;
+        info.kind = wxRibbonKeyTipInfo::Kind::ToggleButton;
+        m_keyTipsTargets.push_back(info);
+    }
+
+    if ( (m_flags & wxRIBBON_BAR_SHOW_HELP_BUTTON) && !m_helpButtonKeyTip.empty() )
+    {
+        wxRibbonKeyTipInfo info;
+        info.fullKeyTip = m_helpButtonKeyTip;
+        info.rect = m_help_button_rect;
+        info.window = this;
+        info.kind = wxRibbonKeyTipInfo::Kind::HelpButton;
+        m_keyTipsTargets.push_back(info);
+    }
+
+    if ( m_current_page != wxNOT_FOUND && m_arePanelsShown )
+    {
+        wxRibbonPage* page = m_pages.Item(m_current_page).page;
+        for ( wxWindowList::compatibility_iterator node = page->GetChildren().GetFirst();
+              node; node = node->GetNext() )
+        {
+            wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+            // Nothing in a disabled panel can be activated.
+            if ( panel == nullptr || !panel->IsShown() || !panel->IsEnabled() )
+                continue;
+
+            if ( panel->IsMinimised() )
+            {
+                wxString keytip = panel->GetKeyTip();
+                if ( !keytip.empty() )
+                {
+                    wxRibbonKeyTipInfo info;
+                    info.fullKeyTip = keytip;
+                    info.rect = wxRect(wxPoint(0, 0), panel->GetSize());
+                    info.window = panel;
+                    info.kind = wxRibbonKeyTipInfo::Kind::MinimisedPanel;
+                    info.panel = panel;
+                    m_keyTipsTargets.push_back(info);
+                }
+                continue;
+            }
+
+            if ( panel->HasExtButton() )
+            {
+                wxString keytip = panel->GetExtButtonKeyTip();
+                if ( !keytip.empty() )
+                {
+                    wxRibbonKeyTipInfo info;
+                    info.fullKeyTip = keytip;
+                    info.rect = panel->GetExtButtonRect();
+                    info.window = panel;
+                    info.kind = wxRibbonKeyTipInfo::Kind::ExtButton;
+                    info.panel = panel;
+                    m_keyTipsTargets.push_back(info);
+                }
+            }
+
+            for ( wxWindowList::compatibility_iterator pnode = panel->GetChildren().GetFirst();
+                  pnode; pnode = pnode->GetNext() )
+            {
+                wxWindow* child = pnode->GetData();
+                if ( !child->IsShown() || !child->IsEnabled() )
+                    continue;
+
+                wxRibbonButtonBar* bb = wxDynamicCast(child, wxRibbonButtonBar);
+                wxRibbonToolBar* tb = wxDynamicCast(child, wxRibbonToolBar);
+                wxRibbonGallery* gallery = wxDynamicCast(child, wxRibbonGallery);
+                if ( bb != nullptr )
+                {
+                    size_t count = bb->GetButtonCount();
+                    for ( size_t b = 0; b < count; ++b )
+                    {
+                        wxRibbonButtonBarButtonBase* button = bb->GetItem(b);
+                        int id = bb->GetItemId(button);
+                        if ( !bb->GetButtonEnabled(id) )
+                            continue;
+                        wxString keytip = bb->GetKeyTip(id);
+                        if ( keytip.empty() )
+                            continue;
+
+                        // Empty if the button isn't in the current layout.
+                        wxRect rect = bb->GetItemRect(id);
+                        if ( rect.IsEmpty() )
+                            continue;
+
+                        wxRibbonKeyTipInfo info;
+                        info.fullKeyTip = keytip;
+                        info.rect = rect;
+                        info.window = bb;
+                        info.kind = wxRibbonKeyTipInfo::Kind::ButtonBarItem;
+                        info.buttonBar = bb;
+                        info.buttonBarItemId = id;
+                        m_keyTipsTargets.push_back(info);
+
+                        wxString dropdownKeytip = bb->GetDropdownKeyTip(id);
+                        wxRect dropdownRect = bb->GetItemDropdownRect(id);
+                        if ( !dropdownKeytip.empty() && !dropdownRect.IsEmpty() )
+                        {
+                            wxRibbonKeyTipInfo dropdownInfo;
+                            dropdownInfo.fullKeyTip = dropdownKeytip;
+                            dropdownInfo.rect = dropdownRect;
+                            dropdownInfo.window = bb;
+                            dropdownInfo.kind = wxRibbonKeyTipInfo::Kind::ButtonBarItem;
+                            dropdownInfo.buttonBar = bb;
+                            dropdownInfo.buttonBarItemId = id;
+                            dropdownInfo.dropdown = true;
+                            m_keyTipsTargets.push_back(dropdownInfo);
+                        }
+                    }
+                }
+                else if ( tb != nullptr )
+                {
+                    size_t count = tb->GetToolCount();
+                    for ( size_t t = 0; t < count; ++t )
+                    {
+                        wxRibbonToolBarToolBase* tool = tb->GetToolByPos(t);
+                        if ( tool == nullptr )
+                            continue; // separator
+                        int id = tb->GetToolId(tool);
+                        if ( !tb->GetToolEnabled(id) )
+                            continue;
+                        wxString keytip = tb->GetKeyTip(id);
+                        if ( keytip.empty() )
+                            continue;
+
+                        wxRect rect = tb->GetToolRect(id);
+                        if ( rect.IsEmpty() )
+                            continue;
+
+                        wxRibbonKeyTipInfo info;
+                        info.fullKeyTip = keytip;
+                        info.rect = rect;
+                        info.window = tb;
+                        info.kind = wxRibbonKeyTipInfo::Kind::ToolBarItem;
+                        info.toolBar = tb;
+                        info.toolBarItemId = id;
+                        m_keyTipsTargets.push_back(info);
+
+                        wxString dropdownKeytip = tb->GetDropdownKeyTip(id);
+                        wxRect dropdownRect = tb->GetToolDropdownRect(id);
+                        if ( !dropdownKeytip.empty() && !dropdownRect.IsEmpty() )
+                        {
+                            wxRibbonKeyTipInfo dropdownInfo;
+                            dropdownInfo.fullKeyTip = dropdownKeytip;
+                            dropdownInfo.rect = dropdownRect;
+                            dropdownInfo.window = tb;
+                            dropdownInfo.kind = wxRibbonKeyTipInfo::Kind::ToolBarItem;
+                            dropdownInfo.toolBar = tb;
+                            dropdownInfo.toolBarItemId = id;
+                            dropdownInfo.dropdown = true;
+                            m_keyTipsTargets.push_back(dropdownInfo);
+                        }
+                    }
+                }
+                else if ( gallery != nullptr )
+                {
+                    wxString keytip = gallery->GetKeyTip();
+                    if ( !keytip.empty() )
+                    {
+                        wxRibbonKeyTipInfo info;
+                        info.fullKeyTip = keytip;
+                        info.rect = wxRect(wxPoint(0, 0), gallery->GetSize());
+                        info.window = gallery;
+                        info.kind = wxRibbonKeyTipInfo::Kind::Gallery;
+                        m_keyTipsTargets.push_back(info);
+                    }
+                }
+            }
+        }
+    }
+
+    for ( auto& target : m_keyTipsTargets )
+        target.remaining = target.fullKeyTip;
+
+    std::vector<wxWindow*> oldWindows;
+    if ( m_keyTipsActive )
+        oldWindows = m_keyTipsWindows;
+
+    std::vector<wxWindow*> newWindows;
+    newWindows.push_back(this);
+    for ( const auto& target : m_keyTipsTargets )
+    {
+        if ( std::find(newWindows.begin(), newWindows.end(), target.window) == newWindows.end() )
+            newWindows.push_back(target.window);
+    }
+
+    if ( m_keyTipsActive )
+    {
+        for ( wxWindow* w : oldWindows )
+        {
+            if ( w != this && std::find(newWindows.begin(), newWindows.end(), w) == newWindows.end()
+                 && w != nullptr && !w->IsBeingDeleted() )
+                w->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+        for ( wxWindow* w : newWindows )
+        {
+            if ( w != this && std::find(oldWindows.begin(), oldWindows.end(), w) == oldWindows.end() )
+                w->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+    }
+    m_keyTipsWindows = std::move(newWindows);
+}
+
+void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
+{
+    switch ( target.kind )
+    {
+        case wxRibbonKeyTipInfo::Kind::PageTab:
+        {
+            wxRibbonPageTabInfo& tab = m_pages.Item(target.pageIndex);
+            if ( m_ribbon_state == wxRIBBON_BAR_MINIMIZED )
+                ShowPanels(wxRIBBON_BAR_EXPANDED);
+            if ( (int)target.pageIndex != m_current_page )
+            {
+                wxRibbonBarEvent query(wxEVT_RIBBONBAR_PAGE_CHANGING, GetId(), tab.page);
+                query.SetEventObject(this);
+                ProcessWindowEvent(query);
+                if ( query.IsAllowed() )
+                {
+                    SetActivePage(query.GetPage());
+
+                    wxRibbonBarEvent notification(wxEVT_RIBBONBAR_PAGE_CHANGED, GetId(),
+                        m_pages.Item(m_current_page).page);
+                    notification.SetEventObject(this);
+                    ProcessWindowEvent(notification);
+                }
+            }
+            // Switching pages isn't a command, so stay in keytip mode and
+            // show the keytips of the page we just moved to.
+            ShowKeyTips();
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::Kind::ToggleButton:
+            DoActivateToggleButton();
+            break;
+
+        case wxRibbonKeyTipInfo::Kind::HelpButton:
+            DoActivateHelpButton();
+            break;
+
+        case wxRibbonKeyTipInfo::Kind::ExtButton:
+        {
+            wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, target.panel->GetId());
+            notification.SetEventObject(target.panel);
+            notification.SetPanel(target.panel);
+            target.panel->ProcessWindowEvent(notification);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::Kind::MinimisedPanel:
+            target.panel->ShowExpanded();
+            break;
+
+        case wxRibbonKeyTipInfo::Kind::ButtonBarItem:
+        {
+            wxRibbonButtonBarButtonBase* button = target.buttonBar->GetItemById(target.buttonBarItemId);
+            if ( button != nullptr )
+                target.buttonBar->ActivateButton(button, target.dropdown);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::Kind::ToolBarItem:
+        {
+            wxRibbonToolBarToolBase* tool = target.toolBar->FindById(target.toolBarItemId);
+            if ( tool != nullptr )
+                target.toolBar->ActivateTool(tool, target.dropdown);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::Kind::Gallery:
+            target.window->SetFocus();
+            break;
+    }
+}
+
+void wxRibbonBar::DrawKeyTipsFor(wxDC& dc,
+                                 wxWindow* window,
+                                 wxRibbonArtProvider* art) const
+{
+    if ( !m_keyTipsActive || art == nullptr )
+        return;
+
+    for ( const auto& target : m_keyTipsTargets )
+    {
+        if ( target.window != window )
+            continue;
+
+        // Fall back to the default badge if the art provider doesn't
+        // implement DrawKeyTip() itself.
+        if ( !art->DrawKeyTip(dc, window, target.rect, target.remaining) )
+        {
+            wxRibbonDrawKeyTip(dc, window, target.rect, target.remaining,
+                               window->GetFont());
+        }
+    }
+}
+
+void wxRibbonBar::OnKeyTipsWindowDestroy(wxWindowDestroyEvent& event)
+{
+    event.Skip();
+    wxWindow* window = event.GetWindow();
+
+    if ( window == m_keyTipsTopLevelParent )
+    {
+        m_keyTipsTopLevelParent = nullptr;
+        if ( m_keyTipsActive )
+            HideKeyTips();
+        return;
+    }
+
+    if ( !m_keyTipsActive )
+        return;
+
+    auto it = std::find(m_keyTipsWindows.begin(), m_keyTipsWindows.end(), window);
+    if ( it != m_keyTipsWindows.end() )
+    {
+        m_keyTipsWindows.erase(it);
+        HideKeyTips();
+    }
+}
+
+bool wxRibbonBar::Reparent(wxWindowBase* newParent)
+{
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
+    wxWindow* oldTLW = m_keyTipsTopLevelParent;
+    bool res = wxRibbonControl::Reparent(newParent);
+    wxWindow* newTLW = wxGetTopLevelParent(this);
+    if ( newTLW != oldTLW )
+    {
+        if ( oldTLW != nullptr && !oldTLW->IsBeingDeleted() )
+        {
+            oldTLW->Unbind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+            oldTLW->Unbind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+            oldTLW->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+        m_keyTipsTopLevelParent = newTLW;
+        if ( m_keyTipsTopLevelParent != nullptr )
+        {
+            m_keyTipsTopLevelParent->Bind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+    }
+    return res;
+}
+
+void wxRibbonBar::OnKeyTipsActivate(wxActivateEvent& event)
+{
+    event.Skip();
+    if ( m_keyTipsActive && !event.GetActive() )
+        HideKeyTips();
+}
+
+bool wxRibbonBar::IsKeyTipsTriggerKey(int keyCode, int modifiers) const
+{
+    for ( const auto& trigger : m_keyTipsTriggerKeys )
+    {
+        if ( keyCode == trigger.keyCode && modifiers == trigger.modifiers )
+            return true;
+    }
+    return false;
+}
+
+void wxRibbonBar::OnKeyTipsCharHook(wxKeyEvent& event)
+{
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The key tips are drawn by the art provider over what it draws of the
+    // ribbon. With the tabs and the commands shown by XAML nothing would
+    // show them: entering their mode would only take the keys away.
+    if ( m_winuiChrome )
+    {
+        event.Skip();
+        return;
+    }
+#endif
+
+    if ( !m_keyTipsActive )
+    {
+        // Only steal the trigger key if there's something to show, so
+        // ribbon bars with no keytips configured stay backward compatible.
+        if ( IsKeyTipsTriggerKey(event.GetKeyCode(), event.GetModifiers()) &&
+             ShowKeyTips() )
+        {
+            return;
+        }
+        event.Skip();
+        return;
+    }
+
+    // KeyTips mode is active.
+    int keycode = event.GetKeyCode();
+
+    if ( keycode == WXK_ESCAPE )
+    {
+        if ( !m_keyTipsTypedPrefix.empty() )
+        {
+            m_keyTipsTypedPrefix.clear();
+            DoBuildKeyTipTargets();
+            RefreshKeyTipTargetWindows();
+        }
+        else
+        {
+            HideKeyTips();
+        }
+        return;
+    }
+
+    if ( IsKeyTipsTriggerKey(keycode, event.GetModifiers()) )
+    {
+        HideKeyTips();
+        return;
+    }
+
+    // Accelerators aren't keytips: leave the mode and let the key through,
+    // otherwise Ctrl+S would fire the "S" keytip and Alt+F4 would be eaten.
+    if ( event.GetModifiers() & ~wxMOD_SHIFT )
+    {
+        HideKeyTips();
+        event.Skip();
+        return;
+    }
+
+    if ( keycode > WXK_SPACE && keycode <= 255 && wxIsalnum((wxChar)keycode) )
+    {
+        wxUniChar ch = wxToupper((wxChar)keycode);
+
+        std::vector<wxRibbonKeyTipInfo> matches;
+        for ( const auto& target : m_keyTipsTargets )
+        {
+            if ( target.remaining.empty() || target.remaining[0] != ch )
+                continue;
+
+            if ( target.window == nullptr || target.window->IsBeingDeleted() )
+                continue;
+            // The window may have been hidden since the targets were built.
+            if ( !target.window->IsShownOnScreen() )
+                continue;
+
+            matches.push_back(target);
+        }
+
+        if ( matches.empty() )
+        {
+            // No match: consume the key, but otherwise do nothing.
+            return;
+        }
+
+        for ( auto& target : matches )
+            target.remaining = target.remaining.Mid(1);
+
+        if ( matches.size() == 1 && matches[0].remaining.empty() )
+        {
+            wxRibbonKeyTipInfo activated = matches[0];
+            HideKeyTips();
+            DoActivateKeyTipTarget(activated);
+        }
+        else
+        {
+            m_keyTipsTargets = matches;
+            m_keyTipsTypedPrefix += ch;
+            RefreshKeyTipTargetWindows();
+        }
+        return;
+    }
+
+    // Any other key: swallow it while keytips are active.
 }
 
 #endif // wxUSE_RIBBON

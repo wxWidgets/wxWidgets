@@ -15,4 +15,13 @@ At the most generic level, this is a combination of a tab control with a
 toolbar. At a more functional level, it is similar to the user interface
 present in recent versions of Microsoft Office.
 
+Since wxWidgets 3.3.4, the ribbon can also be driven from the keyboard using
+key tips, i.e. popup windows showing the key which can be used to activate
+the associated element, commonly used in other programs with ribbon interface,
+improving accessibility for users who cannot rely on a
+mouse. Pressing @c WXK_F10 (customizable, see
+wxRibbonBar::SetKeyTipsTriggerKey()) badges every element which was assigned
+one, and typing its letters activates that element. See
+wxRibbonBar::ShowKeyTips() and wxRibbonBar::SetPageKeyTip().
+
 */

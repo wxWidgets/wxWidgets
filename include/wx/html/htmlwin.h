@@ -580,7 +580,6 @@ public:
         , m_pt(pt)
     {
         m_cell = cell;
-        m_bLinkWasClicked = false;
     }
 
     wxHtmlCell* GetCell() const { return m_cell; }
@@ -594,11 +593,11 @@ public:
     wxNODISCARD virtual wxEvent *Clone() const override { return new wxHtmlCellEvent(*this); }
 
 private:
-    wxHtmlCell *m_cell;
+    wxHtmlCell *m_cell = nullptr;
     wxMouseEvent m_mouseEvent;
     wxPoint m_pt;
 
-    bool m_bLinkWasClicked;
+    bool m_bLinkWasClicked = false;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlCellEvent);
 };

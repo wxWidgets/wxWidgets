@@ -16,14 +16,25 @@
 
 #include <unordered_map>
 
+#if WXWIN_COMPATIBILITY_3_2
+
+// wxShadowObject was never used by wxWidgets itself and doesn't need to be
+// used for preserving ABI compatibility any longer, as wxWithExtraData and
+// extension hooks provide better alternatives for it, so it is deprecated and
+// will be removed in the future.
+
 typedef int (*wxShadowObjectMethod)(void*, void*);
 
 using wxShadowObjectMethods = std::unordered_map<wxString, wxShadowObjectMethod>;
 using wxShadowObjectFields = std::unordered_map<wxString, void*>;
 
+// Note that the class itself can't be marked as deprecated because gcc < 14
+// doesn't allow combining standard attributes with visibility attribute used
+// by WXDLLIMPEXP_BASE, so deprecate its only ctor instead.
 class WXDLLIMPEXP_BASE wxShadowObject
 {
 public:
+    wxDEPRECATED_MSG("Not intended for public use, don't use")
     wxShadowObject() = default;
 
     void AddMethod( const wxString &name, wxShadowObjectMethod method )
@@ -76,6 +87,8 @@ private:
     wxShadowObjectMethods   m_methods;
     wxShadowObjectFields    m_fields;
 };
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 
 // ----------------------------------------------------------------------------

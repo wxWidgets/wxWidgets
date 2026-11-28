@@ -199,10 +199,8 @@ enum wxAuiMinDockOption
     @style{wxAUI_MGR_LIVE_RESIZE}
            When a docked pane is resized, its content is refreshed in live (instead of moving
            the border alone and refreshing the content at the end). Note that
-           this flag is included in wxAUI_MGR_DEFAULT and so needs to be
-           explicitly turned off if you don't need. Also note that it is
-           always enabled in wxGTK3 and wxOSX ports as non-live resizing is not
-           implemented in them.
+           since wxWidgets 3.3.0 this flag is included in wxAUI_MGR_DEFAULT and so needs to be
+           explicitly turned off if you don't need it.
     @style{wxAUI_MGR_DEFAULT}
            Default behaviour, combines ::wxAUI_MGR_ALLOW_FLOATING,
            ::wxAUI_MGR_TRANSPARENT_HINT and ::wxAUI_MGR_LIVE_RESIZE.
@@ -289,7 +287,7 @@ public:
         // window.
         mgr.AddPane(someWindow, wxAuiPaneInfo().Left().MinimizeButton());
 
-        // But so will will this one, as creating a toolbar along the bottom
+        // But so will this one, as creating a toolbar along the bottom
         // side is not allowed.
         mgr.AddPane(otherWindow, wxAuiPaneInfo().Bottom().MinimizeButton());
         @endcode

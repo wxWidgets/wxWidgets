@@ -40,8 +40,6 @@
 
 #include "widgets.h"
 
-#include "icons/text.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -373,7 +371,7 @@ IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, "Text",
 // ----------------------------------------------------------------------------
 
 TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-               : WidgetsPage(book, imaglist, text_xpm)
+               : WidgetsPage(book, imaglist, WidgetsIcon::Text)
 {
     // init everything
 #ifdef __WXMSW__
@@ -426,7 +424,7 @@ void TextWidgetsPage::CreateContent()
                                       1, wxRA_SPECIFY_COLS);
 
     sizerLeft->Add(m_radioTextLines, wxSizerFlags().Expand().Border());
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     m_chkPassword = CreateCheckBoxAndAddToSizer(
                         sizerLeft, "&Password control", TextPage_Password, sizerLeftBox
@@ -448,7 +446,7 @@ void TextWidgetsPage::CreateContent()
                         TextPage_NoVertScrollbar, sizerLeftBox
                     );
     m_chkFilename->Disable(); // not implemented yet
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     static const wxString wrap[] =
     {
@@ -489,7 +487,7 @@ void TextWidgetsPage::CreateContent()
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
     sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border());
 #endif // __WXMSW__
 
@@ -610,7 +608,7 @@ void TextWidgetsPage::CreateContent()
     m_sizerText = new wxStaticBoxSizer(wxHORIZONTAL, this, "&Text:");
     Reset();
     CreateText();
-    m_sizerText->SetMinSize(150, 0);
+    m_sizerText->SetMinSize(FromDIP(150), 0);
 
     // the 3 panes panes compose the upper part of the window
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);

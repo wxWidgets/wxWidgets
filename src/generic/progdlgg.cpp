@@ -118,6 +118,7 @@ void wxWinUIProgressDialogTestAccess::SetYieldHook(
 // wxGenericProgressDialog implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxGenericProgressDialog, wxDialog);
 wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog);
 
 // ----------------------------------------------------------------------------

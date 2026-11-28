@@ -339,6 +339,13 @@ void wxRadioBox::SetString(unsigned int n, const wxString& s)
     wxCHECK_RET( qtButton != nullptr, INVALID_INDEX_MESSAGE );
 
     qtButton->setText( wxQtConvertString( s ));
+
+    // The QGroupBox is managed by Qt's layout system (see wxRadioBox::Create()).
+    // Therefore, we must invalidate it first for InvalidateBestSize() to take effect.
+    GetQGroupBox()->layout()->invalidate();
+    GetQGroupBox()->layout()->activate();
+
+    InvalidateBestSize();
 }
 
 void wxRadioBox::SetSelection(int n)

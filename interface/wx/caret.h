@@ -23,7 +23,7 @@
     @library{wxcore}
     @category{misc}
 */
-class wxCaret
+class wxCaret : public wxObject
 {
 public:
     /**
@@ -58,7 +58,7 @@ public:
 
     ///@{
     /**
-        Get the caret position (in pixels).
+        Get the caret position (in client coordinates).
 
         @beginWxPerlOnly
         In wxPerl there are two methods instead of a single overloaded
@@ -110,7 +110,7 @@ public:
 
     ///@{
     /**
-        Move the caret to given position (in logical coordinates).
+        Move the caret to given position (in client coordinates).
     */
     void Move(int x, int y);
     void Move(const wxPoint& pt);

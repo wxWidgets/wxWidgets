@@ -147,6 +147,9 @@ private:
     wxDECLARE_EVENT_TABLE();
 
     wxDECLARE_NO_COPY_CLASS(wxMouseEventsManager);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxMouseEventsManager);
 };
 
 #endif // _WX_MOUSEMANAGER_H_

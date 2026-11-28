@@ -48,8 +48,8 @@ const size_t wxLZMA_BUF_SIZE = 4096;
 struct wxLZMAStream : lzma_stream
 {
     wxLZMAStream()
+      : lzma_stream(LZMA_STREAM_INIT)
     {
-        memset(this, 0, sizeof(lzma_stream));
     }
 
     ~wxLZMAStream()
@@ -104,6 +104,8 @@ wxLZMAData::~wxLZMAData()
 // ----------------------------------------------------------------------------
 // wxLZMAInputStream: decompression
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxLZMAInputStream, wxFilterInputStream);
 
 void wxLZMAInputStream::Init()
 {
@@ -209,6 +211,8 @@ size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
 // ----------------------------------------------------------------------------
 // wxLZMAOutputStream: compression
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxLZMAOutputStream, wxFilterOutputStream);
 
 void wxLZMAOutputStream::Init(int level)
 {

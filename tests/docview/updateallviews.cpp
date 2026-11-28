@@ -120,7 +120,7 @@ void MyView::OnUpdate(wxView* WXUNUSED(sender), wxObject* hint /*= nullptr*/)
 
 TEST_CASE("wxDocument::UpdateAllViews", "[docview]")
 {
-    const std::unique_ptr<wxDocument> doc(new MyDocument());
+    const auto doc = make_unique<MyDocument>();
     wxView* view50 = nullptr;
     for (int i = 0; i < 100; ++i)
     {

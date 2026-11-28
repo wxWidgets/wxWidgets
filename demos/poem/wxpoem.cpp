@@ -65,7 +65,6 @@ static int      pointSize = 12;                 // Font size
 static const wxChar   *index_filename = nullptr;            // Index filename
 static const wxChar   *data_filename = nullptr;             // Data filename
 static wxChar   error_buf[300];                 // Error message buffer
-static bool     loaded_ok = false;              // Poem loaded ok
 static bool     index_ok = false;               // Index loaded ok
 
 static bool     paging = false;                 // Are we paging?
@@ -399,7 +398,7 @@ void MainWindow::GetIndexLoadPoem(void)
         index_ptr = GetIndex();
 
     if (index_ptr > -1)
-        loaded_ok = LoadPoem(data_filename, -1);
+        LoadPoem(data_filename, -1);
 }
 
 // Find the size of the poem and resize the window accordingly
@@ -486,7 +485,7 @@ void MainWindow::Search(bool ask)
         position = DoSearch();
         if (position > -1)
         {
-            loaded_ok = LoadPoem(data_filename, position);
+            LoadPoem(data_filename, position);
             Resize();
         }
         else

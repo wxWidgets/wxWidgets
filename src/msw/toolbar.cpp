@@ -140,131 +140,108 @@ namespace
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
-// private classes
+// wxToolBarTool
 // ----------------------------------------------------------------------------
 
-class wxToolBarTool : public wxToolBarToolBase
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
+
+wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
+                             int id,
+                             const wxString& label,
+                             const wxBitmapBundle& bmpNormal,
+                             const wxBitmapBundle& bmpDisabled,
+                             wxItemKind kind,
+                             wxObject *clientData,
+                             const wxString& shortHelp,
+                             const wxString& longHelp)
+    : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                        clientData, shortHelp, longHelp)
 {
-public:
-    wxToolBarTool(wxToolBar *tbar,
-                  int id,
-                  const wxString& label,
-                  const wxBitmapBundle& bmpNormal,
-                  const wxBitmapBundle& bmpDisabled,
-                  wxItemKind kind,
-                  wxObject *clientData,
-                  const wxString& shortHelp,
-                  const wxString& longHelp)
-        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
-                            clientData, shortHelp, longHelp)
+}
+
+wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
+                             wxControl *control,
+                             const wxString& label)
+    : wxToolBarToolBase(tbar, control, label)
+{
+    if ( IsControl() && !m_label.empty() )
+    {
+        // Create a control to render the control's label.
+        m_staticText = new wxStaticText(m_tbar, wxID_ANY, m_label);
+    }
+    else // no label
     {
         m_staticText = nullptr;
-        m_toBeDeleted  = false;
     }
 
-    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
-        : wxToolBarToolBase(tbar, control, label)
+    m_toBeDeleted  = false;
+}
+
+wxToolBarTool::~wxToolBarTool()
+{
+    delete m_staticText;
+}
+
+void wxToolBarTool::SetLabel(const wxString& label)
+{
+    wxASSERT_MSG( IsControl() || IsButton(),
+       wxS("Label can be set for control or button tool only") );
+
+    if ( label == m_label )
+        return;
+
+    wxToolBarToolBase::SetLabel(label);
+
+    if ( IsControl() )
     {
-        if ( IsControl() && !m_label.empty() )
+        if ( m_staticText )
         {
-            // Create a control to render the control's label.
-            m_staticText = new wxStaticText(m_tbar, wxID_ANY, m_label);
-        }
-        else // no label
-        {
-            m_staticText = nullptr;
-        }
-
-        m_toBeDeleted  = false;
-    }
-
-    virtual ~wxToolBarTool()
-    {
-        delete m_staticText;
-    }
-
-    virtual void SetLabel(const wxString& label) override
-    {
-        wxASSERT_MSG( IsControl() || IsButton(),
-           wxS("Label can be set for control or button tool only") );
-
-        if ( label == m_label )
-            return;
-
-        wxToolBarToolBase::SetLabel(label);
-
-        if ( IsControl() )
-        {
-            if ( m_staticText )
+            if ( !label.empty() )
             {
-                if ( !label.empty() )
-                {
-                    m_staticText->SetLabel(label);
-                }
-                else
-                {
-                    delete m_staticText;
-                    m_staticText = nullptr;
-                }
+                m_staticText->SetLabel(label);
             }
             else
             {
-                if ( !label.empty() )
-                {
-                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label);
-                }
+                delete m_staticText;
+                m_staticText = nullptr;
             }
         }
-
-        // Because new label can have different length than the old one
-        // so updating button's label with TB_SETBUTTONINFO would require
-        // also manual re-positioning items in the control tools located
-        // to the right in the toolbar and recalculation of stretchable
-        // spacers so it is easier just to recreate the toolbar with
-        // Realize(). Performance penalty should be negligible.
-        m_tbar->Realize();
-    }
-
-    wxStaticText* GetStaticText()
-    {
-        wxASSERT_MSG( IsControl(),
-                      wxT("only makes sense for embedded control tools") );
-
-        return m_staticText;
-    }
-
-    // we need ids for the spacers which we want to modify later on, this
-    // function will allocate a valid/unique id for a spacer if not done yet
-    void AllocSpacerId()
-    {
-        if ( m_id == wxID_SEPARATOR )
-            m_id = wxWindow::NewControlId();
-    }
-
-    // this method is used for controls only and offsets the control by the
-    // given amount (in pixels) in horizontal direction
-    void MoveBy(int offset)
-    {
-        wxControl * const control = GetControl();
-
-        control->Move(control->GetPosition().x + offset, wxDefaultCoord);
-
-        if ( m_staticText )
+        else
         {
-            m_staticText->Move(m_staticText->GetPosition().x + offset,
-                               wxDefaultCoord);
+            if ( !label.empty() )
+            {
+                m_staticText = new wxStaticText(m_tbar, wxID_ANY, label);
+            }
         }
     }
 
-    void ToBeDeleted(bool toBeDeleted = true) { m_toBeDeleted = toBeDeleted; }
-    bool IsToBeDeleted() const { return m_toBeDeleted; }
+    // Because new label can have different length than the old one
+    // so updating button's label with TB_SETBUTTONINFO would require
+    // also manual re-positioning items in the control tools located
+    // to the right in the toolbar and recalculation of stretchable
+    // spacers so it is easier just to recreate the toolbar with
+    // Realize(). Performance penalty should be negligible.
+    m_tbar->Realize();
+}
 
-private:
-    wxStaticText *m_staticText;
-    bool m_toBeDeleted;
+void wxToolBarTool::AllocSpacerId()
+{
+    if ( m_id == wxID_SEPARATOR )
+        m_id = wxWindow::NewControlId();
+}
 
-    wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
-};
+void wxToolBarTool::MoveBy(int offset)
+{
+    wxControl * const control = GetControl();
+
+    control->Move(control->GetPosition().x + offset, wxDefaultCoord);
+
+    if ( m_staticText )
+    {
+        m_staticText->Move(m_staticText->GetPosition().x + offset,
+                           wxDefaultCoord);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -719,9 +696,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxToolBar::MSWSetDarkOrLightMode(SetMode setmode)
+void wxToolBar::MSWSetDarkOrLightMode()
 {
-    wxToolBarBase::MSWSetDarkOrLightMode(setmode);
+    wxToolBarBase::MSWSetDarkOrLightMode();
 
     // Update the separator above the toolbar which is drawn partially in
     // white by default and so looks very ugly in dark mode.
@@ -1735,25 +1712,25 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                           TBCDRF_HILITEHOTTRACK;
 
                 // Draw custom button background when it would be drawn with a
-                // light background by default: this is the case for checked
-                // buttons under Windows 11 (unless they are "hot") and for
-                // selected buttons (which is a state the button is in when
-                // the mouse is pressed over it).
+                // light background otherwise.
                 wxColour customBg;
-                if ( (nmtbcd->nmcd.uItemState &
-                        (CDIS_CHECKED | CDIS_HOT)) == CDIS_CHECKED )
+                // Check if button is in the the fully pressed state.
+                if ( nmtbcd->nmcd.uItemState & CDIS_CHECKED )
                 {
-                    customBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+                    // Draw background lighter, like the Windows 10 Explorer
+                    // "View" tool bar.
+                    customBg = colBg.ChangeLightness(125);
                 }
-                else if ( nmtbcd->nmcd.uItemState == CDIS_SELECTED )
+                // Check if the mouse is over the button or the button is
+                // being pressed.
+                else if ( nmtbcd->nmcd.uItemState & (CDIS_HOT | CDIS_SELECTED) )
                 {
-                    customBg = colBg;
+                    // Draw background slightly lighter.
+                    customBg = colBg.ChangeLightness(110);
                 }
 
                 if ( customBg.IsOk() )
                 {
-                    customBg = customBg.ChangeLightness(110);
-
                     AutoHBRUSH br(wxColourToRGB(customBg));
                     ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
                     *result |= TBCDRF_NOBACKGROUND;
@@ -2430,7 +2407,7 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
                      abs(GetBValue(pixel) - GetBValue(col)) < 10 )
                 {
                     if ( cmap[k].to != pixel )
-                        ::SetPixel(hdcMem, i, j, cmap[k].to);
+                        ::SetPixelV(hdcMem, i, j, cmap[k].to);
                     break;
                 }
             }

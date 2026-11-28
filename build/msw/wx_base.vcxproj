@@ -1286,6 +1286,8 @@
     <ClInclude Include="..\..\include\wx\localedefs.h" />
     <ClInclude Include="..\..\include\wx\uilocale.h" />
     <ClInclude Include="..\..\include\wx\fs_data.h" />
+    <ClInclude Include="..\..\include\wx\stdformat.h" />
+    <ClInclude Include="..\..\include\wx\extradata.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

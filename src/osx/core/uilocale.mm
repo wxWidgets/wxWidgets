@@ -264,7 +264,8 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 wxString
 wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
 {
-    NSDateFormatter* df = [NSDateFormatter new];
+    wxCFRef<NSDateFormatter*> dfRef([NSDateFormatter new]);
+    NSDateFormatter* const df = dfRef.get();
     df.locale = m_nsloc;
 
     NSArray* monthNames = nullptr;
@@ -303,15 +304,14 @@ wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm for
     }
 
     NSString* monthName = [monthNames objectAtIndex:(month)];
-    wxCFStringRef cf(monthName);
-    [df release];
-    return cf.AsString();
+    return wxCFStringRef::AsString(monthName);
 }
 
 wxString
 wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
 {
-    NSDateFormatter* df = [NSDateFormatter new];
+    wxCFRef<NSDateFormatter*> dfRef([NSDateFormatter new]);
+    NSDateFormatter* const df = dfRef.get();
     df.locale = m_nsloc;
 
     NSArray* weekdayNames = nullptr;
@@ -350,9 +350,7 @@ wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFo
     }
 
     NSString* weekdayName = [weekdayNames objectAtIndex:(weekday)];
-    wxCFStringRef cf(weekdayName);
-    [df release];
-    return cf.AsString();
+    return wxCFStringRef::AsString(weekdayName);
 }
 #endif // wxUSE_DATETIME
 

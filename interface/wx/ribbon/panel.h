@@ -163,7 +163,7 @@ public:
     wxRibbonPanel(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxString& label = wxEmptyString,
-                  const wxBitmap& minimised_icon = wxNullBitmap,
+                  const wxBitmapBundle& minimised_icon = wxBitmapBundle(),
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxRIBBON_PANEL_DEFAULT_STYLE);
@@ -176,7 +176,7 @@ public:
     bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
-                const wxBitmap& icon = wxNullBitmap,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
@@ -308,4 +308,43 @@ public:
         @see GetExpandedDummy()
     */
     wxRibbonPanel* GetExpandedPanel();
+
+    /**
+        Assigns the KeyTip used to click this panel's extension button.
+
+        Pass an empty string to remove it. The KeyTip is stored uppercased.
+        Only has an effect if the panel uses @c wxRIBBON_PANEL_EXT_BUTTON.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetExtButtonKeyTip(const wxString& keytip);
+
+    /**
+        Returns the extension button's KeyTip, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetExtButtonKeyTip() const;
+
+    /**
+        Assigns the KeyTip used to expand this panel while it is minimised.
+
+        A minimised panel is a single button, so its children can't be reached
+        by KeyTip until it is expanded. Activating this one expands the panel
+        and leaves keyboard access mode.
+
+        Pass an empty string to remove it. The KeyTip is stored upper-cased.
+
+        @since 3.3.4
+    */
+    void SetKeyTip(const wxString& keytip);
+
+    /**
+        Returns the panel's own KeyTip, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip() const;
 };

@@ -44,8 +44,9 @@
     using wxMsgList = std::list<MSG>;
 #endif // wxUSE_THREADS
 
-// This is defined in src/msw/window.cpp.
+// These are defined in src/msw/window.cpp.
 extern WPARAM wxVKBlockedByKeyboardHook;
+extern bool wxMSWHandleEscapeKey(WXMSG* msg);
 
 // ============================================================================
 // GUI wxEventLoop implementation
@@ -102,6 +103,12 @@ void wxWinUIKeyboardTestAccess::SetBlockedKeyboardKey(WXWPARAM key)
 
 bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 {
+    // Escape is special as wxEVT_CHAR_HOOK is generated for it from here and
+    // not from the keyboard hook, see the comment before this function in
+    // src/msw/window.cpp.
+    if ( wxMSWHandleEscapeKey(msg) )
+        return true;
+
     HWND hwnd = msg->hwnd;
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
     wxWindow *wnd;
@@ -122,23 +129,27 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         return true;
     }
 
-    // allow the window to prevent certain messages from being
-    // translated/processed (this is currently used by wxTextCtrl to always
-    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
+    // allow the window to prevent messages from being not just translated
+    // (this can be done portably by overriding ClaimsKeyBeforeAccelerator())
+    // but also preprocessed by ::IsDialogMessage(), which remains MSW-specific
     if ( !wndThis->MSWShouldPreProcessMessage((WXMSG *)msg) )
     {
         return false;
     }
 
-    // try translations first: the accelerators override everything
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+    // try translations first: the accelerators override everything, unless the
+    // focused window claims this key for itself
+    if ( wndThis->MSWShouldUseAcceleratorForKey((WXMSG *)msg) )
     {
-        if ( wnd->MSWTranslateMessage((WXMSG *)msg))
-            return true;
+        for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
+        {
+            if ( wnd->MSWTranslateMessage((WXMSG *)msg))
+                return true;
 
-        // stop at top navigation domain, i.e. typically a top level window
-        if ( wnd->IsTopNavigationDomain(wxWindow::Navigation_Accel) )
-            break;
+            // stop at top navigation domain, i.e. typically a top level window
+            if ( wnd->IsTopNavigationDomain(wxWindow::Navigation_Accel) )
+                break;
+        }
     }
 
     // now try the other hooks (kbd navigation is handled here)
@@ -445,7 +456,20 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
         {
             // remove the message from the queue to ensure that we don't loop
             // forever here in any case
-            ::GetMessage(&msg, nullptr, 0, 0);
+            //
+            // Notice that we must remove exactly the message we've examined
+            // and not just the first one in the queue, as another message may
+            // have been posted since then and would come before it if it has
+            // higher priority, e.g. a posted message before an input one, and
+            // it could be a message which must be processed immediately, see
+            // the comment above.
+            if ( !::PeekMessage(&msg, msg.hwnd ? msg.hwnd : (HWND)-1,
+                                msg.message, msg.message, PM_REMOVE) )
+            {
+                // This is not supposed to happen, but if it does, we must not
+                // examine the same message again.
+                break;
+            }
 
             // and perhaps save it for processing later
             if ( processLater )
@@ -459,6 +483,12 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     DWORD id = GetCurrentThreadId();
     for ( const auto& m : msgsToProcess )
     {
-        PostThreadMessage(id, m.message, m.wParam, m.lParam);
+        // We must use the same window as for the original message: posting the
+        // messages sent to a window as thread messages would prevent them from
+        // ever being delivered to it.
+        if ( m.hwnd )
+            ::PostMessage(m.hwnd, m.message, m.wParam, m.lParam);
+        else
+            ::PostThreadMessage(id, m.message, m.wParam, m.lParam);
     }
 }

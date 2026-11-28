@@ -52,6 +52,9 @@ protected :
     void Clear() ;
 
     CFDataRef m_pictData ;
+
+private:
+    wxDECLARE_CLASS(wxBitmapDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -85,6 +88,9 @@ public:
 protected:
     // translates the filenames stored into a utf8 encoded char stream
     void GetFileNames(wxCharBuffer &buf) const ;
+
+private:
+    wxDECLARE_CLASS(wxFileDataObject);
 };
 
 #endif // _WX_MAC_DATAOBJ2_H_

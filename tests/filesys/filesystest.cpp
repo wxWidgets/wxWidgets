@@ -27,6 +27,8 @@
 #include "wx/fs_mem.h"
 #include "wx/sstream.h"
 
+#include "testfile.h"
+
 #if wxUSE_FS_ARCHIVE && wxUSE_ZIPSTREAM
     #include "wx/fs_arc.h"
     #include "wx/mstream.h"
@@ -320,6 +322,51 @@ TEST_CASE("wxFileSystem::MemoryFSHandler", "[filesys][memoryfshandler][find]")
     CHECK( fs.FindNext() == "" );
 }
 
+// wxLocalFSHandler::Chroot() is supposed to prevent access to the files
+// outside of the given directory, check that ".." can't be used to escape it.
+TEST_CASE("wxFileSystem::LocalChroot", "[filesys][local][chroot]")
+{
+    TempDir dir("wxfstest");
+    dir.RequireOk();
+
+    const wxString base = dir.GetName() + wxFILE_SEP_PATH;
+    const wxString root = base + "root" + wxFILE_SEP_PATH;
+    REQUIRE( wxFileName::Mkdir(root) );
+    REQUIRE( wxFile().Create(root + "inside.txt") );
+    REQUIRE( wxFile().Create(base + "outside.txt") );
+
+    class AutoChroot
+    {
+    public:
+        explicit AutoChroot(const wxString& root)
+        {
+            wxLocalFSHandler::Chroot(root);
+        }
+
+        ~AutoChroot()
+        {
+            wxLocalFSHandler::Chroot(wxString());
+        }
+    } autoChroot(root);
+
+    wxFileSystem fs;
+
+    std::unique_ptr<wxFSFile> file(fs.OpenFile("file:inside.txt"));
+    CHECK( file.get() );
+
+    file.reset(fs.OpenFile("file:../outside.txt"));
+    CHECK( !file.get() );
+
+    file.reset(fs.OpenFile("file:%2E%2E/outside.txt"));
+    CHECK( !file.get() );
+
+    file.reset(fs.OpenFile("file:sub/../../outside.txt"));
+    CHECK( !file.get() );
+
+    CHECK( fs.FindFirst("file:inside.*") != "" );
+    CHECK( fs.FindFirst("file:../outside.*") == "" );
+}
+
 #if wxUSE_FS_ARCHIVE && wxUSE_ZIPSTREAM
 
 // An archive may contain several entries with the same name. The archive file
@@ -364,7 +411,7 @@ TEST_CASE("wxFileSystem::ArchiveDuplicateNames", "[filesys][fs_arc][zip][find]")
     }
 
     const size_t zipLen = mos.GetSize();
-    std::unique_ptr<unsigned char[]> zipData(new unsigned char[zipLen]);
+    auto zipData = make_unique<unsigned char[]>(zipLen);
     mos.CopyTo(zipData.get(), zipLen);
     wxMemoryFSHandler::AddFile("dup.zip", zipData.get(), zipLen);
 

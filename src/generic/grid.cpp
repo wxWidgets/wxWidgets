@@ -3016,7 +3016,7 @@ void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
-    if ( UsesOverlaySelection() && IsSelection() )
+    if ( UsesOverlaySelection() && IsSelection() && ShouldRefresh() )
     {
         wxRect r; // dummy renderExtent
         wxRect oldSel = m_selection->GetSelectionShape(r).GetBoundingBox();
@@ -3043,6 +3043,8 @@ void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
     m_rowLabelWin->ScrollWindow( 0, dy, rect );
     m_colLabelWin->ScrollWindow( dx, 0, rect );
 
+    // The position of the current cell has changed.
+    UpdateIME();
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     if ( m_winUIProjection )
         m_winUIProjection->SyncViewport();
@@ -3110,8 +3112,38 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
             Refresh(true, &cursor);
     }
 
+    // Update IME state in case the current cell editability changed while we
+    // didn't have focus.
+    if ( event.GetEventType() == wxEVT_SET_FOCUS )
+        m_owner->UpdateIME();
+
     if ( !m_owner->ProcessWindowEvent( event ) )
         event.Skip();
+}
+
+void wxGridWindow::UpdateIMECursorRect()
+{
+    // We don't have any caret, so put the input method windows over the
+    // current cell.
+    const wxGridCellCoords& coords = m_owner->GetGridCursorCoords();
+    if ( coords == wxGridNoCellCoords )
+    {
+        UpdateInputMethodCursorRect(wxRect());
+        return;
+    }
+
+    // The current cell may be in a different grid window when using frozen
+    // rows or columns, so compute its position in this window coordinates.
+    wxGridWindow* const cellWin = m_owner->CellToGridWindow(coords);
+
+    wxRect rect = m_owner->CellToRect(coords);
+    rect.Offset(-m_owner->GetGridWindowOffset(cellWin));
+    rect.SetPosition(m_owner->CalcGridWindowScrolledPosition(rect.GetPosition(),
+                                                             cellWin));
+    if ( cellWin != this )
+        rect.SetPosition(ScreenToClient(cellWin->ClientToScreen(rect.GetPosition())));
+
+    UpdateInputMethodCursorRect(rect);
 }
 
 // Unlike XToCol() and YToRow() these macros always return a valid column/row,
@@ -7319,6 +7351,44 @@ void wxGrid::UpdateColours()
     }
 }
 
+// ----------------------------------------------------------------------------
+// keyboard handling
+// ----------------------------------------------------------------------------
+
+// Enable input method for the grid windows only if the current cell can be
+// edited: otherwise typing just shows the IME windows without doing anything.
+//
+// Also update the IME windows position, as it depends on the current cell.
+void wxGrid::UpdateIME()
+{
+    bool enable = CanEnableCellControl();
+
+    if ( enable )
+    {
+        // Even if the current cell can be edited, its editor may not accept
+        // any text at all, as is the case for the boolean editor, for
+        // example, and showing IME for it would be useless. Check for this.
+        enable = GetCurrentCellEditorPtr()->AcceptsTextInput();
+    }
+
+    wxGridWindow* const allGridWindows[] =
+    {
+        m_gridWin,
+        m_frozenCornerGridWin,
+        m_frozenRowGridWin,
+        m_frozenColGridWin,
+    };
+
+    for ( wxGridWindow* win : allGridWindows )
+    {
+        if ( !win )
+            continue;
+
+        win->EnableInputMethod(enable);
+        win->UpdateIMECursorRect();
+    }
+}
+
 void wxGrid::OnKeyDown( wxKeyEvent& event )
 {
     // propagate the event up and see if it gets processed
@@ -7641,6 +7711,18 @@ void wxGrid::OnChar( wxKeyEvent& event )
             event.Skip();
         }
     }
+    else if ( IsCellEditControlEnabled() )
+    {
+        // We can get here if more than one character is input at once, as it
+        // happens when using IME: the first character starts editing, but the
+        // subsequent ones are still sent to the grid window and not to the
+        // editor, so forward them to it.
+        wxGridCellEditorPtr editor = GetActiveCellEditorPtr();
+        if ( editor->IsAcceptedKey(event) )
+            editor->StartingKey(event);
+        else
+            event.Skip();
+    }
     else
     {
         event.Skip();
@@ -7737,6 +7819,8 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     }
 
     m_currentCellCoords = coords;
+
+    UpdateIME();
 
     RefreshBlock(coords);
 
@@ -9021,6 +9105,8 @@ void wxGrid::EnableEditing( bool edit )
 #if defined(__WXWINUI__) && wxUSE_WINUI3
         InvalidateWinUIProjection();
 #endif
+
+        UpdateIME();
     }
 }
 
@@ -11613,6 +11699,9 @@ void wxGrid::SetReadOnly(int row, int col, bool isReadOnly)
 #if defined(__WXWINUI__) && wxUSE_WINUI3
         InvalidateWinUIProjection();
 #endif
+
+        if ( wxGridCellCoords(row, col) == m_currentCellCoords )
+            UpdateIME();
     }
 }
 
@@ -12447,11 +12536,23 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 
         if ( renderer )
         {
-            extent = column
-                        ? renderer->GetBestWidth(*this, *attr, dc, row, col,
-                                                 GetRowHeight(row))
-                        : renderer->GetBestHeight(*this, *attr, dc, row, col,
-                                                  GetColWidth(col));
+            int availableExtent = 0;
+            if ( column )
+            {
+                for ( int n = 0; n < numRows; n++ )
+                    availableExtent += GetRowHeight(row + n);
+
+                extent = renderer->GetBestWidth(*this, *attr, dc, row, col,
+                                                availableExtent);
+            }
+            else
+            {
+                for ( int n = 0; n < numCols; n++ )
+                    availableExtent += GetColWidth(col + n);
+
+                extent = renderer->GetBestHeight(*this, *attr, dc, row, col,
+                                                 availableExtent);
+            }
             if ( !isCurrent() )
                 return;
 

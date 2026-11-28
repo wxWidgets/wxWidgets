@@ -629,12 +629,22 @@
  */
 #undef wxHAVE_WAYLAND_CLIENT
 
+/* Use the Wayland viewporter protocol for EGL surface scaling. */
+#undef wxHAVE_WAYLAND_VIEWPORTER
+
 /*
     Use Wayland session-management protocol.
 
     This is defined if GTK is new enough to support it.
  */
 #undef wxHAVE_WAYLAND_SESSION_MANAGEMENT
+
+/*
+    Use Wayland xdg-toplevel-drag protocol.
+
+    This is defined if GTK is new enough to support it.
+ */
+#undef wxHAVE_WAYLAND_TOPLEVEL_DRAG
 
 /*
    Use XTest extension to implement wxUIActionSimulator?

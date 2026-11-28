@@ -237,6 +237,12 @@ public:
     wxColour(const wchar_t *colourName) : wxColour(wxString(colourName)) {}
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxColour(const char *colourName) : wxColour(wxString(colourName)) {}
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    wxColour(const char (&colourName)[N])
+        : wxColour(wxString::FromUTF8Unchecked(colourName)) {}
+    template <size_t N>
+    wxColour(char (&colourName)[N]) = delete;
 #endif
     wxColour(bool) = delete;
 

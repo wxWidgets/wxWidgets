@@ -153,6 +153,21 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
 }
 
+#if wxUSE_ACCEL
+
+bool
+wxComboBox::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                       int WXUNUSED(command)) const
+{
+    // We don't need any keys if we're not editing any text at all.
+    if ( IsReadOnly() )
+        return false;
+
+    return IsUsedForEditing(event);
+}
+
+#endif // wxUSE_ACCEL
+
 bool wxComboBox::IsReadOnly() const
 {
     return HasFlag( wxCB_READONLY );

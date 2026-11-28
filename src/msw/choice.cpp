@@ -223,9 +223,9 @@ void wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
         support.themeName = L"CFD";
 }
 
-void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
+void wxChoice::MSWSetDarkOrLightMode()
 {
-    wxChoiceBase::MSWSetDarkOrLightMode(setmode);
+    wxChoiceBase::MSWSetDarkOrLightMode();
 
     // Update scroll bar.
     WinStruct<COMBOBOXINFO> info;
@@ -377,6 +377,11 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
 void wxChoice::SetString(unsigned int n, const wxString& s)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid item index in wxChoice::SetString") );
+
+    // don't do anything if the string doesn't change, deleting and inserting
+    // the item back below is not free and also results in flicker
+    if ( s == GetString(n) )
+        return;
 
     // we have to delete and add back the string as there is no way to change a
     // string in place

@@ -10,13 +10,16 @@
 #ifndef _WX_MSW_PRIVATE_TLWGEOM_H_
 #define _WX_MSW_PRIVATE_TLWGEOM_H_
 
+#include "wx/display.h"
 #include "wx/log.h"
+#include "wx/utils.h"
 
 #include "wx/msw/private.h"
 
 // names for MSW-specific options
 #define wxPERSIST_TLW_MAX_X "xmax"
 #define wxPERSIST_TLW_MAX_Y "ymax"
+#define wxPERSIST_TLW_OFF_SCREEN "offscreen"
 
 class wxTLWGeometry : public wxTLWGeometryBase
 {
@@ -43,6 +46,14 @@ public:
              !store.SaveValue(wxPERSIST_TLW_H, rc.bottom - rc.top) )
             return false;
 
+        // Also save whether the window was partly outside of the desktop, as
+        // this allows us to distinguish between the window having been put
+        // there on purpose and it having ended up there just because the
+        // display configuration has changed when restoring the geometry (see
+        // ApplyTo()).
+        if ( !store.SaveValue(wxPERSIST_TLW_OFF_SCREEN, m_offScreen) )
+            return false;
+
         // Maximized/minimized state.
         UINT show = m_placement.showCmd;
         if ( !store.SaveValue(wxPERSIST_TLW_MAXIMIZED, show == SW_SHOWMAXIMIZED) )
@@ -55,6 +66,10 @@ public:
         const POINT pt = m_placement.ptMaxPosition;
         if ( !store.SaveValue(wxPERSIST_TLW_MAX_X, pt.x) ||
              !store.SaveValue(wxPERSIST_TLW_MAX_Y, pt.y) )
+            return false;
+
+        // Finally save the DPI at which all the values above were taken.
+        if ( !SaveDPI(store) )
             return false;
 
         // We don't currently save the minimized window position, it doesn't
@@ -102,6 +117,10 @@ public:
             m_placement.ptMaxPosition.y = r.y;
         }
 
+        m_offScreen = store.RestoreValue(wxPERSIST_TLW_OFF_SCREEN, &tmp) && tmp;
+
+        RestoreDPI(store);
+
         return true;
     }
 
@@ -145,11 +164,28 @@ public:
             }
         }
 
+        m_offScreen = !IsFullyOnScreen(GetNormalRect());
+
+        SetDPIFrom(tlw);
+
         return true;
     }
 
     virtual bool ApplyTo(wxTopLevelWindow* tlw) override
     {
+        // If the DPI has changed since the geometry was saved, the window size
+        // needs to be adjusted to keep its contents at the same apparent size.
+        RescaleIfNeeded();
+
+        // The saved geometry may not make sense any more, e.g. if the window
+        // had been shown on a monitor which is not connected any longer, and
+        // restoring it as is would leave the window invisible, so adjust it if
+        // this is the case unless the user had deliberately moved it off
+        // screen -- but even then do it if the window wouldn't be visible at
+        // all, as it couldn't be moved back by the user in this case.
+        if ( !m_offScreen || IsFullyOffScreen(GetNormalRect()) )
+            EnsureIsOnScreen();
+
         // There is a subtlety here: if the window is currently hidden,
         // restoring its geometry shouldn't show it, so we must use SW_HIDE as
         // show command, but showing it later should restore it to the correct
@@ -189,7 +225,99 @@ public:
     }
 
 private:
+    // Rescale the normal window size if the DPI of the display where it is
+    // going to be shown is different from the one at which it was saved.
+    void RescaleIfNeeded()
+    {
+        wxRect rect = GetNormalRect();
+
+        // Note that we can't use the current DPI of the window here, as it is
+        // going to be moved to the display containing its saved position,
+        // which may well use a different DPI.
+        const int n = wxDisplay::GetFromRect(rect);
+        const wxSize dpi = n == wxNOT_FOUND
+                            ? wxDisplay().GetPPI()
+                            : wxDisplay(static_cast<unsigned>(n)).GetPPI();
+
+        const wxSize size = RescaleSize(rect.GetSize(), dpi);
+        if ( size == rect.GetSize() )
+            return;
+
+        // Note that the position is deliberately not changed here, see comment
+        // before RescaleSize().
+        rect.SetSize(size);
+
+        wxCopyRectToRECT(rect, m_placement.rcNormalPosition);
+    }
+
+    // Return the normal, i.e. neither maximized nor iconized, window rect.
+    wxRect GetNormalRect() const
+    {
+        return wxRectFromRECT(m_placement.rcNormalPosition);
+    }
+
+    // Return true if the given rectangle is entirely visible.
+    static bool IsFullyOnScreen(const wxRect& rect)
+    {
+        // Checking just the corners is enough for any reasonable display
+        // arrangement.
+        auto const isOnScreen = [](wxPoint const& pt) {
+            return wxDisplay::GetFromPoint(pt) != wxNOT_FOUND;
+        };
+
+        return isOnScreen(rect.GetTopLeft()) &&
+               isOnScreen(rect.GetTopRight()) &&
+               isOnScreen(rect.GetBottomLeft()) &&
+               isOnScreen(rect.GetBottomRight());
+    }
+
+    // Return true if no part of the given rectangle is visible.
+    static bool IsFullyOffScreen(const wxRect& rect)
+    {
+        return wxDisplay::GetFromRect(rect) == wxNOT_FOUND;
+    }
+
+    // Move the window back into the desktop if it wouldn't be entirely inside
+    // it at its saved position.
+    void EnsureIsOnScreen()
+    {
+        wxRect rect = GetNormalRect();
+
+        if ( IsFullyOnScreen(rect) )
+            return;
+
+        // Use the display showing the biggest part of the window or, if it is
+        // entirely outside of the desktop, the primary one -- note that the
+        // latter is not necessarily the display with index 0.
+        const int display = wxDisplay::GetFromRect(rect);
+        const wxRect rectDisplay =
+            display == wxNOT_FOUND
+                ? wxDisplay().GetClientArea()
+                : wxDisplay(static_cast<unsigned>(display)).GetClientArea();
+
+        // The geometry could have been saved when using a bigger monitor, so
+        // the window may need to be shrunk in order to fit into this display.
+        wxSize size = rect.GetSize();
+        size.DecTo(rectDisplay.GetSize());
+        rect.SetSize(size);
+
+        // Move the window just enough for it to become fully visible, but not
+        // more, in order to preserve its saved position as much as possible.
+        const int x = wxClip(rect.x, rectDisplay.x,
+                             rectDisplay.GetRight() - rect.width + 1);
+        const int y = wxClip(rect.y, rectDisplay.y,
+                             rectDisplay.GetBottom() - rect.height + 1);
+        rect.SetPosition(wxPoint(x, y));
+
+        wxCopyRectToRECT(rect, m_placement.rcNormalPosition);
+    }
+
+
     WINDOWPLACEMENT m_placement;
+
+    // True if the window was not entirely inside the visible area when its
+    // geometry was saved.
+    bool m_offScreen = false;
 };
 
 #endif // _WX_MSW_PRIVATE_TLWGEOM_H_

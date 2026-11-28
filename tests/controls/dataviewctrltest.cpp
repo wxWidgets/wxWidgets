@@ -1299,13 +1299,7 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
 {
     CHECK( m_dvc->IsExpanded(m_root) );
     CHECK( !m_dvc->IsExpanded(m_child1) );
-    // No idea why, but the native NSOutlineView isItemExpanded: method returns
-    // true for this item for some reason.
-#ifdef __WXOSX__
-    WARN("Disabled under MacOS: IsExpanded() returns true for grand child");
-#else
     CHECK( !m_dvc->IsExpanded(m_grandchild) );
-#endif
     CHECK( !m_dvc->IsExpanded(m_child2) );
 
     m_dvc->Collapse(m_root);
@@ -1320,6 +1314,19 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_child1) );
     m_dvc->ExpandChildren(m_root);
     CHECK( m_dvc->IsExpanded(m_child1) );
+
+    // Now collapse root while child1 is expanded
+    m_dvc->Collapse(m_root);
+    // also child should report not being expanded as its parent it collapsed
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+
+    // Collapsing the hidden child must work too, i.e. it must still be
+    // collapsed after its parent is expanded again.
+    m_dvc->Collapse(m_child1);
+    m_dvc->Expand(m_root);
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    CHECK( m_dvc->GetItemRect(m_grandchild) == wxRect() );
 }
 
 TEST_CASE_METHOD(DataViewCtrlWithCustomModelTestCase,
@@ -2781,16 +2788,35 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     if ( !EnableUITests() )
         return;
 
-    EventCounter keyEvents(m_dvc.get(), wxEVT_KEY_DOWN);
+    wxUIActionSimulator sim;
+
+#ifdef __WXGTK__
+    wxRect rect;
+    // The native GTK control may not know row cell areas until its pending
+    // layout has run, so wait before using the item rectangle as click target.
+    REQUIRE( WaitFor("wxDataViewCtrl item to be realized", [this, &rect]() {
+        rect = m_dvc->GetItemRect(m_child1);
+        return !rect.IsEmpty();
+    }) );
+#else // !__WXGTK__
+    const wxRect rect = m_dvc->GetItemRect(m_child1);
+    REQUIRE( !rect.IsEmpty() );
+#endif // __WXGTK__/!__WXGTK__
+
+    // Click inside the control first: this mirrors real use and makes the
+    // following simulated key press reach the data view's main window.
+    sim.MouseMove(m_dvc->ClientToScreen(rect.GetPosition() + wxPoint(5, 5)));
+    wxYield();
+    sim.MouseClick();
+    wxYield();
 
     m_dvc->SetFocus();
     wxYield();
 
-    wxUIActionSimulator sim;
-    sim.Char(WXK_DOWN);
-    wxYield();
+    EventCounter keyEvents(m_dvc->GetMainWindow(), wxEVT_KEY_DOWN);
+    REQUIRE( sim.Char(WXK_DOWN) );
 
-    CHECK( keyEvents.GetCount() == 1 );
+    CHECK( keyEvents.WaitEvent() );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

@@ -741,7 +741,13 @@ public:
         { return !m_disableFocusFromKbd && AcceptsFocus(); }
 
         // Disable any input focus from the keyboard
-    void DisableFocusFromKeyboard() { m_disableFocusFromKbd = true; }
+    void DisableFocusFromKeyboard()
+        { m_disableFocusFromKbd = true; m_enableFocusFromKbd = false; }
+
+        // Allow focus from the keyboard even for the windows which don't
+        // accept it by default, e.g. read-only text controls under MSW
+    void EnableFocusFromKeyboard()
+        { m_enableFocusFromKbd = true; m_disableFocusFromKbd = false; }
 
 
         // Can this window be focused right now, in its current state? This
@@ -956,7 +962,8 @@ public:
         { m_acceleratorTable = accel; }
     wxAcceleratorTable *GetAcceleratorTable()
         { return &m_acceleratorTable; }
-
+    const wxAcceleratorTable* GetAcceleratorTable() const
+        { return &m_acceleratorTable; }
 #endif // wxUSE_ACCEL
 
 #if wxUSE_HOTKEY
@@ -1298,6 +1305,27 @@ public:
     wxCaret *GetCaret() const { return m_caret; }
 #endif // wxUSE_CARET
 
+    // input method (IME) support
+    // --------------------------
+
+        // enable or disable input method for this window, it's enabled by
+        // default but can be disabled for windows not accepting text input
+    void EnableInputMethod(bool enable = true);
+    bool IsInputMethodEnabled() const { return m_enableIME; }
+
+        // set the rectangle, in client coordinates, where the text is being
+        // input: the input method windows are positioned near it
+        //
+        // this must be called by the windows accepting text input whenever
+        // this rectangle changes, e.g. because the insertion point moved or
+        // the window was scrolled
+    void UpdateInputMethodCursorRect(const wxRect& rect);
+
+        // return the rectangle set by the function above for this window, or
+        // an empty rectangle, meaning that the input method default position
+        // is used, if it wasn't set for it
+    wxRect GetInputMethodCursorRect() const;
+
         // get the (average) character size for the current font
     virtual int GetCharHeight() const = 0;
     virtual int GetCharWidth() const = 0;
@@ -1414,6 +1442,16 @@ public:
     virtual int GetScrollPos( int orient ) const = 0;
     virtual int GetScrollThumb( int orient ) const = 0;
     virtual int GetScrollRange( int orient ) const = 0;
+
+        // get the view start in pixels
+    virtual void GetViewStartPixels(int* x, int* y) const
+    {
+        if ( x )
+            *x = 0;
+        if ( y )
+            *y = 0;
+    }
+    virtual wxPoint GetViewStartPixels() const { return wxPoint(); }
 
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
@@ -1584,6 +1622,10 @@ public:
 
     // accessibility
     // ----------------------
+
+    // Sets the name used by screen readers for this window.
+    virtual void SetAccessibleName(const wxString& name);
+
 #if wxUSE_ACCESSIBILITY
     // Override to create a specific accessible object.
     virtual wxAccessible* CreateAccessible() { return nullptr; }
@@ -1778,6 +1820,61 @@ protected:
     // implementation of Navigate() and NavigateIn()
     virtual bool DoNavigateIn(int flags);
 
+#if wxUSE_ACCEL
+    // Return true if this window wants the key to be used for its own needs,
+    // even if it's registered as an accelerator for the given command.
+    //
+    // By default returns false meaning that accelerators are used if nothing
+    // special is done.
+    //
+    // Note that this function is not called at all if the application handles
+    // wxEVT_ACCELERATOR_KEY, it only defines the default behaviour.
+    //
+    // This function may be overridden in user-defined classes.
+    virtual bool
+    ClaimsKeyBeforeAccelerator(const wxKeyEvent& WXUNUSED(event),
+                               int WXUNUSED(command)) const
+    {
+        return false;
+    }
+
+    // Find the accelerator corresponding to the given key in this window or
+    // any of its (grand)parents and searching both the accelerator tables and
+    // the accelerators used by the menu bar menus items.
+    //
+    // If the function returns true, "entry" is filled with the found
+    // accelerator, otherwise it's left unchanged.
+    //
+    // "owner" may be null but if it isn't, it is filled with the window owning
+    // the accelerator table or the menu bar containing the accelerator.
+    //
+    // This function is only used by wx internally.
+    bool
+    FindAcceleratorForKey(const wxKeyEvent& event,
+                          wxAcceleratorEntry& entry,
+                          wxWindow** owner) const;
+
+    // Find the accelerator corresponding to the given key in the menu bar of
+    // this window.
+    //
+    // This is used by FindAcceleratorForKey() and simply returns false, it's
+    // overridden in wxFrame to really search the menu bar.
+    virtual bool
+    FindAcceleratorForKeyInMenuBar(const wxKeyEvent& event,
+                                   wxAcceleratorEntry& entry) const;
+
+    // Return true if the given key event should be processed as an accelerator
+    // or false if it should be handled as a normal key press.
+    //
+    // Sends wxEVT_ACCELERATOR_KEY and calls ClaimsKeyBeforeAccelerator() to
+    // decide what to do.
+    //
+    // This function is only used by wx internally.
+    bool ShouldUseAcceleratorForKey(const wxKeyEvent& event,
+                                    int command,
+                                    wxMenuItem* menuItem) const;
+#endif // wxUSE_ACCEL
+
 #if wxUSE_CONSTRAINTS
     // satisfy the constraints for the windows but don't set the window sizes
     void SatisfyConstraints();
@@ -1792,6 +1889,19 @@ protected:
     // really need to enable/disable window and so no additional checks on the
     // widgets state are necessary
     virtual void DoEnable(bool WXUNUSED(enable)) { }
+
+    // can be overridden to be notified when this window becomes enabled or
+    // disabled, possibly implicitly, i.e. because one of its parents did
+    virtual void OnEnabledStateChanged(bool WXUNUSED(enabled)) { }
+
+    // this method should be implemented to really enable or disable input
+    // method for this window, it's only called if the state changes
+    virtual void DoEnableInputMethod(bool WXUNUSED(enable)) { }
+
+    // this method can be implemented to really update the input method
+    // windows position, using GetInputMethodCursorRect(), it's only called if
+    // the input method is enabled
+    virtual void DoUpdateInputMethodCursorRect() { }
 
 
     // the window id - a number which uniquely identifies a window among
@@ -1885,8 +1995,12 @@ protected:
     bool                 m_inheritFgCol:1;
     bool                 m_inheritFont:1;
 
-    // flag disabling accepting focus from keyboard
+    // flags disabling or enabling accepting focus from keyboard
     bool                 m_disableFocusFromKbd:1;
+    bool                 m_enableFocusFromKbd:1;
+
+    // flag controlling the use of IME (enabled by default)
+    bool                 m_enableIME:1;
 
     // window attributes
     long                 m_windowStyle,
@@ -2048,6 +2162,10 @@ private:
     // enabled/disabled
     void NotifyWindowOnEnableChange(bool enabled);
 
+    // call OnEnabledStateChanged() for this window and all its children which
+    // are affected by the change of its state
+    void NotifyEnabledStateChanged(bool enabled);
+
 #if wxUSE_MENUS
     // temporary event handlers used by GetPopupMenuSelectionFromUser()
     void InternalOnPopupMenu(wxCommandEvent& event);
@@ -2074,6 +2192,12 @@ private:
     // number of Freeze() calls minus the number of Thaw() calls: we're frozen
     // (i.e. not being updated) if it is positive
     unsigned int m_freezeCount;
+
+    // The window for which the input method cursor rectangle was set and the
+    // rectangle itself: as only the window having the focus can use it, we
+    // don't need to store it in every window.
+    static const wxWindowBase* ms_imeCursorWindow;
+    static wxRect ms_imeCursorRect;
 
     wxDECLARE_ABSTRACT_CLASS(wxWindowBase);
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);

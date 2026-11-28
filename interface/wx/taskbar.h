@@ -34,7 +34,8 @@ public:
     /**
         Constructor.
     */
-    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon);
+    wxTaskBarIconEvent(wxEventType evtType = wxEVT_NULL,
+                       wxTaskBarIcon *tbIcon = nullptr);
 };
 
 

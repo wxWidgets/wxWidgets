@@ -622,6 +622,8 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
+wxIMPLEMENT_CLASS(wxTarInputStream, wxArchiveInputStream);
+
 // Default cap of 10 MiB; can be changed with SetMaxExtendedHeaderSize().
 size_t wxTarInputStream::sm_maxExtendedHeaderSize = 10 * 1024 * 1024;
 
@@ -885,7 +887,7 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
         wxString::const_iterator p = value.begin();
         while (p != value.end() && *p == ' ')
             ++p;
-        while (isdigit(*p))
+        while (p != value.end() && *p >= '0' && *p <= '9')
             n = n * 10 + (*p++ - '0');
         return n;
     } else {
@@ -1043,6 +1045,8 @@ size_t wxTarInputStream::OnSysRead(void *buffer, size_t size)
 
 /////////////////////////////////////////////////////////////////////////////
 // Output stream
+
+wxIMPLEMENT_CLASS(wxTarOutputStream, wxArchiveOutputStream);
 
 wxTarOutputStream::wxTarOutputStream(wxOutputStream& stream,
                                      wxTarFormat format /*=wxTAR_PAX*/,
@@ -1449,9 +1453,11 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
                 snprintf(buf, sizeof(buf), "%lu", ++length);
         }
 
-        // reallocate m_extendedHdr if it's not big enough
-        if (m_extendedSize < length) {
-            size_t rounded = RoundUpSize(length);
+        // reallocate m_extendedHdr if it's not big enough to hold the
+        // records already added, the new one and the terminating NUL
+        const size_t used = m_extendedHdr ? strlen(m_extendedHdr) : 0;
+        if (m_extendedSize < used + length + 1) {
+            size_t rounded = RoundUpSize(used + length + 1);
             m_extendedSize <<= 1;
             if (rounded > m_extendedSize)
                 m_extendedSize = rounded;

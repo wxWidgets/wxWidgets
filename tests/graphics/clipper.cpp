@@ -676,9 +676,9 @@ TEST_CASE("ClipperTestCase::wxPaintDC", "[clipper][dc][paintdc]")
 #if defined(__WXGTK__)
     // Under wxGTK we need to have two children (at least) because if there
     // is one child its paint area is set to fill the whole parent frame.
-    std::unique_ptr<wxWindow> w0(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    auto w0 = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
 #endif // wxGTK
-    std::unique_ptr<wxWindow> win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY, wxPoint(0, 0)));
+    auto win = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY, wxPoint(0, 0));
     win->SetClientSize(s_dcSize);
 
     // Wait for the first paint event to be sure

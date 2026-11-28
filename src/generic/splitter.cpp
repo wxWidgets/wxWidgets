@@ -144,8 +144,7 @@ void wxSplitterWindow::RedrawIfHotSensitive(bool isHot)
     {
         m_isHot = isHot;
 
-        wxClientDC dc(this);
-        DrawSash(dc);
+        RedrawSash();
     }
     //else: we don't change our appearance, don't redraw to avoid flicker
 }
@@ -381,7 +380,15 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
             // in live mode, the new position is the actual sash position, clear requested position!
             m_requestedSashPosition = INT_MAX;
-            m_needUpdating = true;
+
+            // If we can only draw the sash when repainting, we must update the
+            // panes before this happens as otherwise the sash would be drawn
+            // at its new position, but only in the area not covered by the
+            // panes in their old positions, i.e. only partially.
+            if ( wxClientDC::CanBeUsedForDrawing(this) )
+                m_needUpdating = true;
+            else
+                SizeWindows();
         }
     }
     else if ( event.LeftDClick() && m_windowTwo )
@@ -412,6 +419,10 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
 
 void wxSplitterWindow::OnSize(wxSizeEvent& event)
 {
+    // don't process it if we're being deleted as it doesn't matter any more
+    if ( IsBeingDeleted() )
+        return;
+
     // only process this message if we're not iconized - otherwise iconizing
     // and restoring a window containing the splitter has a funny side effect
     // of changing the splitter position!
@@ -516,6 +527,13 @@ void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
     m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
     m_sashPosition = event.ScaleX(m_sashPosition);
     m_lastSize = event.Scale(m_lastSize);
+
+    // Any saved or pending positions need to be updated too.
+    m_lastSplitPosition = event.Scale(m_lastSplitPosition);
+
+    // But this one should only be scaled if it is really valid.
+    if ( m_requestedSashPosition != INT_MAX )
+        m_requestedSashPosition = event.ScaleX(m_requestedSashPosition);
 #endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
     event.Skip();
@@ -592,6 +610,38 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
                                                                 : wxHORIZONTAL,
                                 m_isHot ? (int)wxCONTROL_CURRENT : 0
                             );
+}
+
+void wxSplitterWindow::RedrawSash()
+{
+    if ( wxClientDC::CanBeUsedForDrawing(this) )
+    {
+        wxClientDC dc(this);
+        DrawSash(dc);
+        return;
+    }
+
+    // We can only draw when handling a paint event, e.g. when using Wayland,
+    // so make sure we get one for the entire sash: only the part of it which
+    // hadn't been covered by the panes before is invalidated when it moves, and
+    // the rest would keep the old contents, which would be visible if the sash
+    // appearance is not uniform.
+    if ( !IsSplit() || IsSashInvisible() )
+        return;
+
+    wxRect rect(GetClientSize());
+    if ( m_splitMode == wxSPLIT_VERTICAL )
+    {
+        rect.x = m_sashPosition;
+        rect.width = GetSashSize();
+    }
+    else // horz
+    {
+        rect.y = m_sashPosition;
+        rect.height = GetSashSize();
+    }
+
+    RefreshRect(rect, false /* don't erase background */);
 }
 
 // Draw the sash tracker (for whilst moving the sash)
@@ -767,8 +817,7 @@ void wxSplitterWindow::SizeWindows()
         GetWindow1()->SetSize(border, border, w1, h1);
     }
 
-    wxClientDC dc(this);
-    DrawSash(dc);
+    RedrawSash();
 }
 
 // Set pane for unsplit window

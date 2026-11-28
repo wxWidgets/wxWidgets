@@ -872,9 +872,12 @@ private:
     {
         const wxMsgTableEntry * const ent = pTable + n;
 
-        // this check could fail for a corrupt message catalog
-        wxULongLong_t ofsString = Swap(ent->ofsString);
-        if ( ofsString + Swap(ent->nLen) > m_data.length())
+        // These checks could fail for a corrupt message catalog: the string
+        // must be inside the data and must be followed by a NUL, which is not
+        // counted in its length, as the callers use it as a C string.
+        const wxULongLong_t ofsString = Swap(ent->ofsString);
+        const wxULongLong_t ofsEnd = ofsString + Swap(ent->nLen);
+        if ( ofsEnd >= m_data.length() || m_data.data()[ofsEnd] != '\0' )
         {
             return nullptr;
         }
@@ -963,19 +966,48 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
 
     // initialize
     m_numStrings  = Swap(pHeader->numStrings);
+
+    // The header gives the offsets of the two string tables and the number of
+    // entries in each of them, but all of these come from the untrusted file
+    // and were not checked at all, so a corrupt catalog could make us read the
+    // table entries (and, via StringAtOfs(), the strings they point at) from
+    // outside the catalog data. Verify that both tables are entirely contained
+    // in the data before using them, doing all the arithmetic in 64 bits so
+    // that neither the multiplication nor the addition involving the 32-bit
+    // header fields can overflow.
+    const wxULongLong_t ofsOrigTable = Swap(pHeader->ofsOrigTable);
+    const wxULongLong_t ofsTransTable = Swap(pHeader->ofsTransTable);
+    const wxULongLong_t tableSize =
+        static_cast<wxULongLong_t>(m_numStrings) * sizeof(wxMsgTableEntry);
+    if ( ofsOrigTable + tableSize > m_data.length() ||
+         ofsTransTable + tableSize > m_data.length() )
+    {
+        wxLogWarning(_("Invalid message catalog."));
+        return false;
+    }
+
     m_pOrigTable  = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
-                    Swap(pHeader->ofsOrigTable));
+                    ofsOrigTable);
     m_pTransTable = reinterpret_cast<const wxMsgTableEntry*>(data.data() +
-                    Swap(pHeader->ofsTransTable));
+                    ofsTransTable);
 
     // now parse catalog's header and try to extract catalog charset and
-    // plural forms formula from it:
+    // plural forms formula from it, if we have at least one string: the header
+    // is stored as the (first) entry with an empty original string, so don't
+    // access it if the catalog is empty, as the table may then be empty too.
 
-    const char* headerData = StringAtOfs(m_pOrigTable, 0);
+    const char* headerData = m_numStrings ? StringAtOfs(m_pOrigTable, 0)
+                                          : nullptr;
     if ( headerData && headerData[0] == '\0' )
     {
-        // Extract the charset:
         const char * const header = StringAtOfs(m_pTransTable, 0);
+        if ( !header )
+        {
+            wxLogWarning(_("Invalid message catalog."));
+            return false;
+        }
+
+        // Extract the charset:
         const char *
             cset = strstr(header, "Content-Type: text/plain; charset=");
         if ( cset )
@@ -1463,6 +1495,8 @@ namespace
 // access.
 using UntranslatedStrings = std::unordered_set<wxString>;
 
+}
+
 /*
     As of October 2025, MinGW still has a long-standing bug in its thread_local
     variables implementation: their memory is de-allocated *before* their
@@ -1481,65 +1515,52 @@ using UntranslatedStrings = std::unordered_set<wxString>;
 #if defined(__MINGW32__) && \
     (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 15)
 
+namespace
+{
+
 class UntranslatedStringHolder
 {
 private:
-    static wxCriticalSection ms_criticalSection;
-    static std::map<wxThreadIdType, UntranslatedStrings> ms_setsMap;
+    DWORD m_flsIndex = ::FlsAlloc(&UntranslatedStringHolder::FlsCleanup);
 
-    // This will be set to point to an element of ms_setsMap.
-    UntranslatedStrings* m_holder = nullptr;
+    static void WINAPI FlsCleanup(PVOID lpFlsData)
+    {
+        delete static_cast<UntranslatedStrings*>(lpFlsData);
+    }
 
 public:
     UntranslatedStringHolder() = default;
 
     const wxString& get(const wxString& str)
     {
-        if ( m_holder == nullptr )
+        static const wxString emptyString;
+
+        if ( m_flsIndex == FLS_OUT_OF_INDEXES )
+            return emptyString;
+
+        UntranslatedStrings*
+            data = static_cast<UntranslatedStrings*>(::FlsGetValue(m_flsIndex));
+
+        if ( data == nullptr )
         {
-            wxCriticalSectionLocker locker(ms_criticalSection);
-            m_holder = &ms_setsMap[wxThread::GetCurrentId()];
+            data = new UntranslatedStrings();
+
+            ::FlsSetValue(m_flsIndex, data);
         }
 
-        return *m_holder->insert(str).first;
+        return *data->insert(str).first;
     }
 
     ~UntranslatedStringHolder()
     {
-        // This code is run after this object memory has been deallocated so we
-        // cannot access any member variables, but we can access global ones.
-        wxCriticalSectionLocker locker(ms_criticalSection);
-        ms_setsMap.erase(wxThread::GetCurrentId());
+        if ( m_flsIndex != FLS_OUT_OF_INDEXES )
+        {
+            ::FlsFree(m_flsIndex);
+        }
     }
 
     wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
 };
-
-wxCriticalSection UntranslatedStringHolder::ms_criticalSection;
-
-std::map<wxThreadIdType, UntranslatedStrings> UntranslatedStringHolder::ms_setsMap;
-
-#else // !__MINGW32__
-
-// When not using MinGW, thread_local variables to work correctly but we still
-// define this class, even if it's trivial, to use the same code below.
-class UntranslatedStringHolder
-{
-private:
-    UntranslatedStrings m_holder;
-
-public:
-    UntranslatedStringHolder() = default;
-
-    const wxString& get(const wxString& str)
-    {
-        return *m_holder.insert(str).first;
-    }
-
-    wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-};
-
-#endif // __MINGW32__/!__MINGW32__
 
 } // Anonymous namespace
 
@@ -1547,10 +1568,23 @@ public:
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-    thread_local UntranslatedStringHolder wxPerThreadStrings;
+    static UntranslatedStringHolder wxPerThreadStrings;
     return wxPerThreadStrings.get(str);
 }
 
+#else // !__MINGW32__
+
+// When not using (old) MinGW, thread_local variables work correctly so just
+// use them directly.
+
+/* static */
+const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
+{
+    thread_local UntranslatedStrings wxPerThreadStrings;
+    return *wxPerThreadStrings.insert(str).first;
+}
+
+#endif // __MINGW32__ // !__MINGW32__
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     const wxString& domain,

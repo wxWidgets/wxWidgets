@@ -86,11 +86,12 @@ jobs:
             runner: ubuntu-26.04
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
             use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK gcc 7 static compatible 3.0
+          - name: Ubuntu 20.04 wxGTK gcc 4.8 static compatible 3.0
             runner: ubuntu-26.04
             container: ubuntu:20.04
-            compiler: g++-7
+            compiler: g++-4.8
             configure_flags: --enable-compat30 --enable-pch --disable-shared
+            allow_extra_warnings: true
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-latest
@@ -187,12 +188,26 @@ jobs:
                   sleep $delay
                 done
               }
+              # g++ 4.8, the oldest compiler we support, is not available in
+              # Ubuntu 20.04, but we can't use 18.04 container in which it is
+              # available because the actions we use don't work there, so get
+              # just the compiler packages from 18.04 repository.
+              if [ "$compiler" = 'g++-4.8' ]; then
+                echo 'deb http://archive.ubuntu.com/ubuntu bionic main universe' > /etc/apt/sources.list.d/bionic.list
+              fi
+
               retry_apt apt-get update -qq
 
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
               #   - xvfb is used for running the GUI tests.
               retry_apt apt-get install -qq coreutils ${compiler_packages} git make pkg-config sudo xvfb
+
+              # Don't install any other packages from the old repository.
+              if [ -f /etc/apt/sources.list.d/bionic.list ]; then
+                rm /etc/apt/sources.list.d/bionic.list
+                retry_apt apt-get update -qq
+              fi
               ;;
 
             '')

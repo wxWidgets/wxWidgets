@@ -40,6 +40,8 @@ public:
     void AddButton(wxWindowID btnid, const wxString& label = wxString()) override;
     void RemoveButton(wxWindowID btnid) override;
 
+    void ShowCloseButton(ShowButton show) override;
+
     size_t GetButtonCount() const override;
     wxWindowID GetButtonId(size_t idx) const override;
     bool HasButtonId(wxWindowID btnid) const override;
@@ -121,6 +123,9 @@ protected:
 
     std::unique_ptr<wxWinUIInfoBarImpl> m_winui;
     wxVector<ButtonInfo> m_buttons;
+
+    // When the close button of the InfoBar is shown, see ShowCloseButton().
+    ShowButton m_showCloseButton = ShowButton::Auto;
 
 private:
     friend class wxWinUIInfoBarTestAccess;

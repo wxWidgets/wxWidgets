@@ -226,6 +226,11 @@ public:
     // find by position
     wxMenuItem* FindItemByPosition(size_t position) const;
 
+#if wxUSE_ACCEL
+    // find the item using the accelerator corresponding to the given key if any
+    wxMenuItem* FindItemForAccelKey(const wxKeyEvent& event) const;
+#endif // wxUSE_ACCEL
+
     // get/set items attributes
     void Enable(int itemid, bool enable);
     bool IsEnabled(int itemid) const;
@@ -509,6 +514,11 @@ public:
 
     // find menu by its caption, return wxNOT_FOUND on failure
     int FindMenu(const wxString& title) const;
+
+#if wxUSE_ACCEL
+    // find the item using the accelerator in all our menus
+    wxMenuItem* FindItemForAccelKey(const wxKeyEvent& event) const;
+#endif // wxUSE_ACCEL
 
     // item access
     // -----------

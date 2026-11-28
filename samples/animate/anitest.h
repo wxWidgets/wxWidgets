@@ -46,7 +46,22 @@ public:
 private:
     void RecreateAnimation(long style);
 
+    // Update the frame controls after the animation changes.
+    void UpdateFrameControls();
+
+    // Update the controls showing the currently selected frame.
+    void UpdateFrameInfo();
+
+    void OnFrameSpin(wxSpinEvent& event);
+
     wxAnimationCtrlBase* m_animationCtrl;
+
+    // Controls used to show the individual animation frames.
+    wxStaticBox* m_frameBox;
+    wxSpinCtrl* m_frameSpin;
+    wxStaticText* m_frameCount;
+    wxStaticText* m_frameDelay;
+    wxStaticBitmap* m_frameBitmap;
 
     wxDECLARE_EVENT_TABLE();
 };

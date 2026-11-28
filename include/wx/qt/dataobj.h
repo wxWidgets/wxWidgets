@@ -30,6 +30,9 @@ public:
 private:
     // Sets object's data from Qt mime data in specific format
     virtual void QtSetDataSingleFormat(const QMimeData &mimeData, const wxDataFormat &format);
+
+private:
+    wxDECLARE_CLASS(wxDataObject);
 };
 
 #endif // _WX_QT_DATAOBJ_H_

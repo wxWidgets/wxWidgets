@@ -277,6 +277,8 @@ static void wxDeleteContext(const void* context)
     delete watcherContext;
 }
 
+wxIMPLEMENT_CLASS(wxFsEventsFileSystemWatcher, wxEvtHandler);
+
 struct wxFsEventsFileSystemWatcher::PrivateData
 {
     // map of path => FSEventStreamRef

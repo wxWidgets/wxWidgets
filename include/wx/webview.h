@@ -209,6 +209,9 @@ public:
         return wxVersionInfo();
     }
     virtual wxWebViewConfiguration CreateConfiguration() = 0;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxWebViewFactory);
 };
 
 using wxStringWebViewFactoryMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewFactory>>;
@@ -365,6 +368,10 @@ public:
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT);
 
+    // Implementation only: send wxEVT_WEBVIEW_FAILED event with the given
+    // user-readable explanation of the problem.
+    void NotifyWebViewFailed(const wxString& explanation);
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
@@ -469,6 +476,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECE
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_PDF_SAVED, wxWebViewEvent);
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FAILED, wxWebViewEvent);
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -518,6 +526,10 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 
 #define EVT_WEBVIEW_PDF_SAVED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_PDF_SAVED, id, \
+                     wxWebViewEventHandler(fn))
+
+#define EVT_WEBVIEW_FAILED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_FAILED, id, \
                      wxWebViewEventHandler(fn))
 
 // old wxEVT_COMMAND_* constants

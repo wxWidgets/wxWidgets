@@ -24,6 +24,10 @@ struct WXDLLIMPEXP_CORE wxPizza
     void put(GtkWidget* widget, int x, int y, int width, int height);
     void scroll(int dx, int dy);
     void get_border(GtkBorder& border);
+#ifdef __WXGTK3__
+    // Get the context to use for both measuring and drawing the themed border.
+    static GtkStyleContext* get_border_style_context();
+#endif
     void size_allocate_child(
         GtkWidget* child, int x, int y, int width, int height, int parent_width = -1);
 

@@ -1436,21 +1436,7 @@ public:
     */
     void SetSizer(wxSizer* sizer);
 
-    /**
-        Set the size of the spacer tracked by this item.
-
-        @deprecated This function does not free the old spacer which may result
-        in memory leaks, use AssignSpacer() which does free it instead.
-    */
-    void SetSpacer(const wxSize& size);
-
     void SetUserData(wxObject* userData);
-
-    /**
-        Set the window to be tracked by this item.
-        @deprecated @todo provide deprecation description
-    */
-    void SetWindow(wxWindow* window);
 
     /**
         Set the show item attribute, which sizers use to determine if the item

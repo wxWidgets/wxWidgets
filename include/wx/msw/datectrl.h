@@ -61,6 +61,7 @@ protected:
 
 private:
     wxDateTime MSWGetControlValue() const;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl);
 };

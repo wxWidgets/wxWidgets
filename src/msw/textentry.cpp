@@ -33,6 +33,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
@@ -444,10 +445,22 @@ public:
         }
 
         m_win->Bind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+
+        wxMSWDarkMode::EnableForAutoComplete();
     }
 
     ~wxTextAutoCompleteData()
     {
+        // This object can be deleted while the window still exists, e.g. when
+        // switching to file names completion, so ensure that our handlers are
+        // not called any longer.
+        m_win->Unbind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
+        if ( m_connectedCharEvent )
+        {
+            m_win->Unbind(wxEVT_AFTER_CHAR,
+                          &wxTextAutoCompleteData::OnAfterChar, this);
+        }
+
         delete m_customCompleter;
         delete m_fixedCompleter;
 
@@ -492,7 +505,8 @@ public:
         {
             // We postpone connecting to this event until we really need to do
             // it (however we don't disconnect from it when we don't need it
-            // any more because we don't have wxUNBIND_OR_DISCONNECT_HACK...).
+            // any more, as OnAfterChar() doesn't do anything then anyhow, and
+            // only do it in our dtor).
             if ( !m_connectedCharEvent )
             {
                 m_connectedCharEvent = true;
@@ -591,41 +605,22 @@ private:
                 if ( m_win->HasFlag(wxTE_PROCESS_TAB) )
                     specialKey = true;
                 break;
-
-            case WXK_ESCAPE:
-                specialKey = true;
-                break;
         }
 
         if ( specialKey )
         {
-            // Check if the drop down is currently open.
+            // Check if the drop down is currently open: if it is, it handles
+            // these keys itself.
             DWORD dwFlags = 0;
-            if ( SUCCEEDED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
-                                                                     nullptr))
-                    && dwFlags == ACDD_VISIBLE )
+            if ( FAILED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
+                                                                  nullptr))
+                    || dwFlags != ACDD_VISIBLE )
             {
-                if ( event.GetKeyCode() == WXK_ESCAPE )
-                {
-                    // We need to dismiss the drop-down manually as Escape
-                    // could be eaten by something else (e.g. EVT_CHAR_HOOK in
-                    // the dialog that this control is found in) otherwise.
-                    ::SendMessage(GetHwndOf(m_win), WM_KEYDOWN, WXK_ESCAPE, 0);
-
-                    // Do not skip the event in this case, we've already handled it.
-                    return;
-                }
-            }
-            else // Drop down is not open.
-            {
-                // In this case we need to handle Return and Tab as both of
+                // But if it isn't, we need to handle Return and Tab as both of
                 // them are simply eaten by the auto completer and never reach
                 // us at all otherwise.
-                if ( event.GetKeyCode() != WXK_ESCAPE )
-                {
-                    m_entry->MSWProcessSpecialKey(event);
-                    return;
-                }
+                m_entry->MSWProcessSpecialKey(event);
+                return;
             }
         }
 
@@ -842,6 +837,10 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 
     // Set it to the special value indicating that we're using SHAutoComplete().
     m_autoCompleteData = wxDUMMY_SHAUTOCOMPLETE_DATA;
+
+    // This uses the same drop-down window as the strings completion, so it
+    // needs to be handled in dark mode too.
+    wxMSWDarkMode::EnableForAutoComplete();
 
     return true;
 }
@@ -1065,6 +1064,13 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
                     wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// wxMSW itself does not need this any more: wxWindow::ClaimsKeyBeforeAccelerator()
+// tells which keys a text control takes before the accelerators. The
+// controls of wxWinUI still ask it from their MSWShouldPreProcessMessage(),
+// with the state of the modifiers of the key being processed.
+
 // This function is also used by wxSpinCtrl, so make it extern to allow reusing
 // it from there.
 extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
@@ -1164,5 +1170,7 @@ bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
 {
     return wxMSWTextEntryShouldPreProcessMessage(msg);
 }
+
+#endif // wxWinUI
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

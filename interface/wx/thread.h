@@ -551,12 +551,6 @@ public:
         the thread.
     */
     wxThread* GetThread() const;
-
-    /**
-        Returns the last type of thread given to the CreateThread() function
-        or to the constructor.
-    */
-    wxThreadKind GetThreadKind() const;
 };
 
 /**

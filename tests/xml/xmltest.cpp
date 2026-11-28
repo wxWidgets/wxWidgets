@@ -19,6 +19,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/xml/xml.h"
+#include "wx/mstream.h"
 #include "wx/sstream.h"
 
 #include <stdarg.h>
@@ -66,7 +67,7 @@ void CheckXml(const wxXmlNode *n, ...)
 
 TEST_CASE("Xml::InsertChild", "[xml]")
 {
-    std::unique_ptr<wxXmlNode> root(new wxXmlNode(wxXML_ELEMENT_NODE, "root"));
+    auto root = make_unique<wxXmlNode>(wxXML_ELEMENT_NODE, "root");
     root->AddChild(new wxXmlNode(wxXML_ELEMENT_NODE, "1"));
     wxXmlNode *two = new wxXmlNode(wxXML_ELEMENT_NODE, "2");
     root->AddChild(two);
@@ -86,7 +87,7 @@ TEST_CASE("Xml::InsertChild", "[xml]")
 
 TEST_CASE("Xml::InsertChildAfter", "[xml]")
 {
-    std::unique_ptr<wxXmlNode> root(new wxXmlNode(wxXML_ELEMENT_NODE, "root"));
+    auto root = make_unique<wxXmlNode>(wxXML_ELEMENT_NODE, "root");
 
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "1"), nullptr);
     CheckXml(root.get(), "1", nullptr);
@@ -232,6 +233,28 @@ TEST_CASE("Xml::PI", "[xml]")
     CHECK( n );
 
     CHECK( n->GetContent() == "index=\"no\" follow=\"no\"" );
+}
+
+TEST_CASE("Xml::UndefinedByte", "[xml]")
+{
+    // 0xA4 is the currency sign in ISO-8859-3, but 0xA5 is not assigned to
+    // any character in this encoding, so the second document is invalid.
+    const char xmlOK[] =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-3\"?>\n"
+        "<root>\xA4</root>\n";
+    const char xmlBad[] =
+        "<?xml version=\"1.0\" encoding=\"ISO-8859-3\"?>\n"
+        "<root>\xA5</root>\n";
+
+    wxXmlDocument doc;
+
+    wxMemoryInputStream misOK(xmlOK, strlen(xmlOK));
+    REQUIRE( doc.Load(misOK) );
+    CHECK( doc.GetRoot()->GetNodeContent() == wxString(wxUniChar(0xA4)) );
+
+    wxMemoryInputStream misBad(xmlBad, strlen(xmlBad));
+    wxLogNull noLog;
+    CHECK( !doc.Load(misBad) );
 }
 
 TEST_CASE("Xml::Escaping", "[xml]")

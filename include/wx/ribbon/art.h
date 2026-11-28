@@ -20,6 +20,7 @@
 #include "wx/pen.h"
 #include "wx/bitmap.h"
 #include "wx/bmpbndl.h"
+#include "wx/extradata.h"
 #include "wx/ribbon/bar.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
@@ -207,7 +208,8 @@ class wxRibbonGalleryItem;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 
-class WXDLLIMPEXP_RIBBON wxRibbonArtProvider
+class WXDLLIMPEXP_RIBBON wxRibbonArtProvider : public wxObject,
+                                               public wxWithExtraData
 {
 public:
     wxRibbonArtProvider();
@@ -327,6 +329,16 @@ public:
                         wxRibbonBar* wnd,
                         const wxRect& rect) = 0;
 
+    // This one is not pure virtual for compatibility with the existing art
+    // providers: it returns false if it is not implemented, in which case a
+    // default key tip badge is drawn by the caller.
+    virtual bool DrawKeyTip(
+                        wxDC& WXUNUSED(dc),
+                        wxWindow* WXUNUSED(wnd),
+                        const wxRect& WXUNUSED(rect),
+                        const wxString& WXUNUSED(keytip))
+                        { return false; }
+
     virtual void GetBarTabWidth(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
@@ -420,6 +432,9 @@ public:
     virtual wxRect GetBarToggleButtonArea(const wxRect& rect)= 0;
 
     virtual wxRect GetRibbonHelpButtonArea(const wxRect& rect) = 0;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxRibbonArtProvider);
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -546,6 +561,12 @@ public:
                         wxRibbonBar* wnd,
                         const wxRect& rect) override;
 
+    bool DrawKeyTip(
+                    wxDC& dc,
+                    wxWindow* wnd,
+                    const wxRect& rect,
+                    const wxString& keytip) override;
+
     void GetBarTabWidth(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
@@ -670,6 +691,9 @@ protected:
                         wxRibbonPanel* wnd,
                         const wxRect& rect,
                         wxRect* preview_rect);
+    // Returns the normal panel extension button bitmap, disabled if the
+    // panel is disabled.
+    wxBitmap GetPanelExtButtonBitmap(wxRibbonPanel* wnd) const;
     void CloneTo(wxRibbonMSWArtProvider* copy) const;
 
     wxBitmap m_cached_tab_separator;
@@ -803,6 +827,9 @@ protected:
     int m_gallery_bitmap_padding_bottom_size;
     int m_toggle_button_offset;
     int m_help_button_offset;
+
+private:
+    wxDECLARE_CLASS(wxRibbonMSWArtProvider);
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWFlatArtProvider : public wxRibbonMSWArtProvider
@@ -905,6 +932,9 @@ protected:
         wxPen& secondary_colour);
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect,
         double visibility);
+
+private:
+    wxDECLARE_CLASS(wxRibbonMSWFlatArtProvider);
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider
@@ -1067,6 +1097,9 @@ protected:
     wxPen m_toolbar_hover_borden_pen;
 
     wxFont m_tab_active_label_font;
+
+private:
+    wxDECLARE_CLASS(wxRibbonAUIArtProvider);
 };
 
 #if defined(__WXWINUI__)

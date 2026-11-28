@@ -61,6 +61,7 @@ public:
 
     // implement base class pure virtuals
     virtual void SetLabel( const wxString& label ) override;
+    virtual void SetAccessibleName(const wxString& name) override;
     virtual wxString GetLabel() const override;
 
     virtual void Raise() override;
@@ -246,6 +247,7 @@ public:
 
     // sets NSView.clipsToBounds property
     void                MacClipsToBounds( bool clip );
+    bool                MacDoesClipToBounds() const;
 
     // returns true if children have to clipped to the content area
     // (e.g., scrolled windows)
@@ -277,6 +279,10 @@ public:
 
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*    GetPeer() const;
+
+    // the peer of this window if it is a label which can be used as the
+    // accessibility title of the next control, or nullptr otherwise
+    virtual wxOSXWidgetImpl* GetLabelPeer() const { return nullptr; }
 
     // optimization to avoid creating a user pane in wxWindow::Create if we already know
     // we will replace it with our own peer
@@ -318,6 +324,18 @@ public:
 
     virtual bool        OSXHandleClicked( double timestampsec );
     virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
+
+#if wxUSE_ACCEL
+    // Return false if the menu accelerator using the key corresponding to the
+    // given event shouldn't be used because this window needs this key for
+    // its own purposes.
+    //
+    // Note that this function only deals with the accelerators of the menu
+    // items, the ones defined by wxAcceleratorTable are checked later, from
+    // OSXHandleKeyEvent() itself.
+    bool                OSXShouldUseMenuAcceleratorForKey( const wxKeyEvent& event );
+#endif // wxUSE_ACCEL
+
     virtual void        OSXSimulateFocusEvents();
 
     bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }

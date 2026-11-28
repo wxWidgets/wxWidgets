@@ -47,6 +47,8 @@ wxDEFINE_EVENT( wxEVT_FIND_CLOSE, wxFindDialogEvent );
 // wxFindReplaceData
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxFindReplaceData, wxObject);
+
 void wxFindReplaceData::Init()
 {
     m_Flags = 0;

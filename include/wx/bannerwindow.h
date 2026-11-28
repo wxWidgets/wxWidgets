@@ -147,6 +147,9 @@ private:
 #endif
 
     wxDECLARE_NO_COPY_CLASS(wxBannerWindow);
+
+private:
+    wxDECLARE_CLASS(wxBannerWindow);
 };
 
 #endif // wxUSE_BANNERWINDOW

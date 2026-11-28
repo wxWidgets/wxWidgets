@@ -124,6 +124,8 @@ bool wxDataFormat::operator!=(const wxDataFormat& format) const
 
 //############################################################################
 
+wxIMPLEMENT_CLASS(wxDataObject, wxObject);
+
 wxDataObject::wxDataObject()
 {
 }
@@ -207,6 +209,8 @@ void wxDataObject::QtSetDataSingleFormat(const QMimeData &mimeData, const wxData
 
 //############################################################################
 
+wxIMPLEMENT_CLASS(wxBitmapDataObject, wxDataObjectSimple);
+
 wxBitmapDataObject::wxBitmapDataObject()
 {
 }
@@ -241,6 +245,8 @@ void wxTextDataObject::QtSetDataSingleFormat(const QMimeData &mimeData, const wx
 }
 
 //#############################################################################
+
+wxIMPLEMENT_CLASS(wxFileDataObject, wxDataObjectSimple);
 
 wxFileDataObject::wxFileDataObject()
 {

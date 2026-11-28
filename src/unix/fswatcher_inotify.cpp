@@ -688,6 +688,8 @@ void wxFSWSourceHandler::OnExceptionWaiting()
 // wxInotifyFileSystemWatcher implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxInotifyFileSystemWatcher, wxEvtHandler);
+
 wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher()
     : wxFileSystemWatcherBase()
 {

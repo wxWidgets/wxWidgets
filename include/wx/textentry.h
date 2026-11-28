@@ -14,6 +14,7 @@
 #include "wx/gdicmn.h"              // for wxPoint
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxTextCompleter;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -183,6 +184,11 @@ public:
     //
     // NB: this is public for wxRichTextCtrl use only right now, do not call it
     static bool SendTextUpdatedEvent(wxWindow *win);
+
+    // Return true if the given event carries one of the keys used for editing
+    // the text and so should be handled by the text entry itself rather than
+    // being used as an accelerator, even if one is defined for it.
+    static bool IsUsedForEditing(const wxKeyEvent& event);
 
     // generate the wxEVT_TEXT event for this window
     bool SendTextUpdatedEvent()

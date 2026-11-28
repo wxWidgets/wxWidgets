@@ -102,7 +102,9 @@ if(MSVC)
     endif()
 
     if(NOT wxBUILD_STRIPPED_RELEASE)
-        set(MSVC_PDB_FLAG " /DEBUG")
+        # /DEBUG turns off these optimizations by default, but they are still
+        # wanted in release builds, as in the makefiles.
+        set(MSVC_PDB_FLAG " /DEBUG /OPT:REF /OPT:ICF")
     endif()
     wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
     wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
@@ -142,6 +144,31 @@ elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}
         wx_string_append(CMAKE_EXE_LINKER_FLAGS "${STATIC_LINKER_FLAGS}")
         wx_string_append(CMAKE_SHARED_LINKER_FLAGS "${STATIC_LINKER_FLAGS}")
     endif()
+
+    if(wxBUILD_SHARED AND wxBUILD_ELF_SYMVER)
+        wx_get_flavour(lib_flavour "_")
+        string(TOUPPER "WXU${lib_flavour}_${wxMAJOR_VERSION}.${wxMINOR_VERSION}" WX_VERSION_TAG)
+        set(wxVERSION_SCRIPT "${wxBINARY_DIR}/version-script")
+        configure_file("${wxSOURCE_DIR}/version-script.in" "${wxVERSION_SCRIPT}" @ONLY)
+
+        include(CheckCXXSourceCompiles)
+        set(CMAKE_REQUIRED_LIBRARIES "-Wl,--version-script,${wxVERSION_SCRIPT}")
+        check_cxx_source_compiles("int main() { return 0; }" wxHAVE_LD_VERSION_SCRIPT)
+        if(wxHAVE_LD_VERSION_SCRIPT)
+            set(LDFLAGS_VERSIONING " ${CMAKE_REQUIRED_LIBRARIES}")
+
+            # The same version script is used for all libraries, so the
+            # symbols listed in it are not all defined in each of them.
+            list(APPEND CMAKE_REQUIRED_LIBRARIES "-Wl,--undefined-version")
+            check_cxx_source_compiles("int main() { return 0; }" wxHAVE_LD_UNDEFINED_VERSION)
+            if(wxHAVE_LD_UNDEFINED_VERSION)
+                wx_string_append(LDFLAGS_VERSIONING " -Wl,--undefined-version")
+            endif()
+
+            wx_string_append(CMAKE_SHARED_LINKER_FLAGS "${LDFLAGS_VERSIONING}")
+        endif()
+        unset(CMAKE_REQUIRED_LIBRARIES)
+    endif()
 endif()
 
 if(NOT wxBUILD_COMPATIBILITY STREQUAL "NONE")
@@ -170,6 +197,13 @@ if(CMAKE_GENERATOR_PLATFORM)
 elseif(CMAKE_VS_PLATFORM_NAME)
     if(NOT CMAKE_VS_PLATFORM_NAME STREQUAL "Win32")
         string(TOLOWER ${CMAKE_VS_PLATFORM_NAME} wxPLATFORM_ARCH)
+    endif()
+elseif(MSVC AND CMAKE_CXX_COMPILER_ARCHITECTURE_ID)
+    # Generators other than Visual Studio don't set the platform, so use the
+    # architecture targeted by the compiler, e.g. ARM64 when using Ninja in
+    # an ARM64 developer command prompt.
+    if(NOT CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "X86")
+        string(TOLOWER ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID} wxPLATFORM_ARCH)
     endif()
 else()
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -264,10 +298,6 @@ endif()
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # Append configuration specific suffix to setup header path
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
-endif()
-
-if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
-    add_compile_options("-DwxDEBUG_LEVEL=${wxBUILD_DEBUG_LEVEL}")
 endif()
 
 # Constants for setup.h creation
@@ -526,23 +556,22 @@ if(wxUSE_GUI)
 
                         wx_generate_wayland_protocol(${wx_protocols_input_dir} pointer-warp-v1)
 
-                        # Check if we have GTK new enough to allow using XDG
-                        # session management protocol: 3.24.53 is the earliest one
-                        # with gdk_wayland_window_get_xdg_toplevel() that we need.
-                        if(GTK3_VERSION VERSION_GREATER_EQUAL 3.24.53)
-                            # We also need wayland-protocols as this protocol
-                            # depends on xdg-shell one.
-                            pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
-                            if(WAYLAND_PROTOCOLS_FOUND)
-                                pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
+                        # We also need wayland-protocols as this protocol
+                        # depends on xdg-shell one.
+                        pkg_check_modules(WAYLAND_PROTOCOLS wayland-protocols)
+                        if(WAYLAND_PROTOCOLS_FOUND)
+                            pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
 
-                                wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
-                                wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
+                            wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-session-management-v1)
+                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell xdg-shell)
+                            wx_generate_wayland_protocol(${wx_protocols_input_dir} xdg-toplevel-drag-v1)
+                            wx_generate_wayland_protocol(${WAYLAND_PROTOCOLS_DIR}/stable/viewporter viewporter)
 
-                                set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
-                            else()
-                                message(WARNING "wayland-protocols not found, xdg-session-management protocol won't be used")
-                            endif()
+                            set(wxHAVE_WAYLAND_SESSION_MANAGEMENT ON)
+                            set(wxHAVE_WAYLAND_TOPLEVEL_DRAG ON)
+                            set(wxHAVE_WAYLAND_VIEWPORTER ON)
+                        else()
+                            message(WARNING "wayland-protocols package not found, Wayland-specific functionality will be disabled")
                         endif()
 
                         set(wxHAVE_WAYLAND_CLIENT ON)
@@ -563,12 +592,13 @@ if(wxUSE_GUI)
     # extra dependencies
     if(wxUSE_OPENGL)
         if(WXOSX_IPHONE)
-            set(OPENGL_FOUND TRUE)
+            set(OpenGL_FOUND TRUE)
             set(OPENGL_INCLUDE_DIR "")
             set(OPENGL_LIBRARIES "-framework OpenGLES" "-framework QuartzCore" "-framework GLKit")
         else()
-            find_package(OpenGL)
-            if(OPENGL_FOUND)
+            find_package(OpenGL COMPONENTS OpenGL)
+            set(OPENGL_LIBRARIES) # reset and only use the OpenGL:: targets
+            if(OpenGL_FOUND)
                 foreach(gltarget OpenGL::GL OpenGL::OpenGL)
                     if(TARGET ${gltarget})
                         set(OPENGL_LIBRARIES ${gltarget} ${OPENGL_LIBRARIES})
@@ -596,10 +626,10 @@ if(wxUSE_GUI)
                 set(wxHAS_GLX 1)
             endif()
             if(WXGTK3 AND APPLE AND (NOT wxHAVE_GDK_X11 OR NOT wxHAVE_GDK_WAYLAND))
-                set(OPENGL_FOUND OFF)
+                set(OpenGL_FOUND OFF)
             endif()
         endif()
-        if(NOT OPENGL_FOUND)
+        if(NOT OpenGL_FOUND)
             message(WARNING "OpenGL not found, wxGLCanvas won't be available")
             wx_option_force_value(wxUSE_OPENGL OFF)
         endif()
@@ -734,8 +764,12 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_SOUND AND wxUSE_LIBSDL AND UNIX AND NOT APPLE)
-        find_package(SDL3)
+        set(SDL3_DIR_OLD "${SDL3_DIR}")
+        find_package(SDL3 QUIET CONFIG)
         if(SDL3_FOUND)
+            if(NOT "${SDL3_DIR_OLD}" STREQUAL "${SDL3_DIR}")
+                message(STATUS "Found SDL3: ${SDL3_LIBRARIES} (found version ${SDL3_VERSION})")
+            endif()
             set(wxUSE_LIBSDL3 ON)
         else()
             find_package(SDL2)
@@ -856,8 +890,10 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_CAIRO AND NOT WXGTK)
-        find_package(Cairo)
-        if(NOT CAIRO_FOUND)
+        # Cairo is loaded dynamically, so only its headers are needed and it
+        # doesn't matter if the library itself is found or not.
+        find_package(Cairo QUIET)
+        if(NOT CAIRO_INCLUDE_DIRS)
             message(WARNING "Cairo not found, Cairo renderer won't be available")
             wx_option_force_value(wxUSE_CAIRO OFF)
         endif()

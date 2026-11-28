@@ -102,6 +102,9 @@ private:
     class wxAddRemoveImpl* m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxAddRemoveCtrl);
+
+private:
+    wxDECLARE_CLASS(wxAddRemoveCtrl);
 };
 
 #endif // wxUSE_ADDREMOVECTRL

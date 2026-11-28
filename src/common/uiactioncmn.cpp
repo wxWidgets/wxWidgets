@@ -60,6 +60,13 @@ bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
     return m_impl->MouseDragDrop(x1, y1, x2, y2, button);
 }
 
+bool wxUIActionSimulator::MouseWheel(int rotation, wxMouseWheelAxis axis)
+{
+    wxCHECK_MSG( rotation != 0, false, "wheel rotation must be non-zero" );
+
+    return m_impl->MouseWheel(rotation, axis);
+}
+
 // ----------------------------------------------------------------------------
 // Methods implemented in wxUIActionSimulatorImpl itself
 // ----------------------------------------------------------------------------

@@ -84,9 +84,12 @@ protected:
     bool MSWUsesStandardAutoComplete() const { return false; }
 #endif //wxUSE_OLE
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
     // Returns false if this message shouldn't be preprocessed, but is always
-    // handled by the EDIT control represented by this object itself.
+    // handled by the text control represented by this object itself: see
+    // its definition for why wxWinUI keeps it.
     bool MSWShouldPreProcessMessage(WXMSG* msg) const;
+#endif // wxWinUI
 
     // Helper for wxTE_PROCESS_ENTER handling: activates the default button in
     // the dialog containing this control if any.

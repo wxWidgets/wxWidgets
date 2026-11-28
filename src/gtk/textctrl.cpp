@@ -31,6 +31,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/object.h"
 #include "wx/gtk/private/threads.h"
 
 #if wxUSE_SPELLCHECK && defined(__WXGTK3__)
@@ -2315,6 +2316,25 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 // freeze/thaw
 // ----------------------------------------------------------------------------
 
+// GtkTextLayout caches the display of a single line but doesn't reset this
+// cache when its buffer changes, so after detaching the buffer in DoFreeze()
+// the cache could keep pointing to a line deleted while the control was
+// frozen, resulting in a crash on the next selection change after DoThaw(),
+// see https://gitlab.gnome.org/GNOME/gtk/-/work_items/8543
+//
+// Work around this by making the layout replace the cache with a line of the
+// buffer currently used by the view: this is safe because the old cached line
+// pointer is only compared with the new one, but never dereferenced.
+static void wxGtkResetTextLayoutCache(GtkTextView* view, GtkTextBuffer* buffer)
+{
+    // Use the cursor line, as this is the line GTK normally caches anyhow.
+    GtkTextIter iter;
+    gtk_text_buffer_get_iter_at_mark(buffer, &iter, gtk_text_buffer_get_insert(buffer));
+
+    GdkRectangle rect;
+    gtk_text_view_get_iter_location(view, &iter, &rect);
+}
+
 void wxTextCtrl::DoFreeze()
 {
     wxCHECK_RET(m_text != nullptr, wxT("invalid text ctrl"));
@@ -2326,10 +2346,14 @@ void wxTextCtrl::DoFreeze()
     if ( HasFlag(wxTE_MULTILINE) )
     {
         // removing buffer dramatically speeds up insertion:
-        GtkTextBuffer* buf_new = gtk_text_buffer_new(nullptr);
+        // (gtk_text_view_set_buffer() adds its own reference to the buffer)
+        wxGtkObject<GtkTextBuffer> buf_new(gtk_text_buffer_new(nullptr));
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
-        // gtk_text_view_set_buffer adds its own reference
-        g_object_unref(buf_new);
+
+        // Ensure that the layout doesn't cache a line of m_buffer, which
+        // could be deleted while we're frozen.
+        wxGtkResetTextLayoutCache(GTK_TEXT_VIEW(m_text), buf_new);
+
         // These marks should be deleted when the buffer is changed,
         // but they are not (in GTK+ up to at least 3.0.1).
         // Otherwise these anonymous marks start to build up in the buffer,
@@ -2352,10 +2376,18 @@ void wxTextCtrl::DoThaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
+        // Keep the temporary buffer alive until the layout cache, which
+        // refers to its line, is reset below.
+        const wxGtkObject<GtkTextBuffer> bufFrozen(
+            GTK_TEXT_BUFFER(g_object_ref(gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_text))))
+        );
+
         // reattach buffer:
         gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
         g_signal_handler_disconnect(m_buffer, sig_id);
+
+        wxGtkResetTextLayoutCache(GTK_TEXT_VIEW(m_text), m_buffer);
 
         if (m_showPositionDefer)
         {

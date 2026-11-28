@@ -42,6 +42,24 @@
 // Common Event Support
 // ----------------------------------------------------------------------------
 
+#if wxOSX_IPHONE_USE_UISCENE
+
+@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
+@end
+
+@implementation SceneDelegate
+
+@synthesize window = _window;
+
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    wxTheApp->OSXSetCurrentUIScene(scene, session, connectionOptions);
+    wxTheApp->OSXCallOnInitOnce();
+}
+
+@end
+
+#endif // wxOSX_IPHONE_USE_UISCENE
+
 @interface wxAppDelegate : UIResponder <UIApplicationDelegate> {
 }
 
@@ -83,7 +101,24 @@
 }
 #endif
 
+#if wxOSX_IPHONE_USE_UISCENE
+
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
+{
+    return (UISceneConfiguration*) wxTheApp->OSXCreateConfigurationForSession(connectingSceneSession, options);
+}
+#endif
+
 @end
+
+#if wxOSX_IPHONE_USE_UISCENE
+WX_UISceneConfiguration wxApp::OSXCreateConfigurationForSession(WX_UISceneSession connectingSceneSession, WX_UISceneConnectionOptions options)
+{
+    UISceneConfiguration *configuration = [[UISceneConfiguration alloc] initWithName:nil sessionRole:connectingSceneSession.role];
+    configuration.delegateClass = SceneDelegate.class;
+    return configuration;
+}
+#endif
 
 bool wxApp::CallOnInit()
 {

@@ -685,17 +685,6 @@ int wxSsize(const C& c)
 #   define wxGCC_ONLY_WARNING_RESTORE(x)
 #endif
 
-/* Specific macros for -Wcast-function-type warning new in gcc 8. */
-#if wxCHECK_GCC_VERSION(8, 0)
-    #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
-        wxGCC_WARNING_SUPPRESS(cast-function-type)
-    #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE() \
-        wxGCC_WARNING_RESTORE(cast-function-type)
-#else
-    #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
-    #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
-#endif
-
 /*
    Macros to suppress and restore clang warning only when it is valid.
 
@@ -717,6 +706,56 @@ int wxSsize(const C& c)
 #else
 #    define wxCLANG_WARNING_SUPPRESS(x)
 #    define wxCLANG_WARNING_RESTORE(x)
+#endif
+
+/*
+    Specific macros for -Wcast-function-type warning new in gcc 8 and also
+    supported by clang, which enables its -Wcast-function-type-mismatch subset
+    by default in some versions (e.g. Apple clang 17).
+ */
+#if wxCHECK_GCC_VERSION(8, 0)
+    #define wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
+        wxGCC_WARNING_SUPPRESS(cast-function-type)
+    #define wxWARNING_RESTORE_CAST_FUNCTION_TYPE() \
+        wxGCC_WARNING_RESTORE(cast-function-type)
+#else
+    #define wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
+        wxCLANG_WARNING_SUPPRESS(cast-function-type)
+    #define wxWARNING_RESTORE_CAST_FUNCTION_TYPE() \
+        wxCLANG_WARNING_RESTORE(cast-function-type)
+#endif
+
+/*
+   Macros to suppress and restore MSVC warnings, taking the warning number.
+
+   They're used in the same way as wx{GCC,CLANG}_WARNING_XXX above but unlike
+   these macros they can take more than one warning number separated by spaces,
+   e.g. wxMSVC_WARNING_SUPPRESS(4456 4702).
+ */
+#ifdef __VISUALC__
+#   define wxMSVC_WARNING_SUPPRESS(x) \
+        __pragma(warning(push)) \
+        __pragma(warning(disable:x))
+#   define wxMSVC_WARNING_RESTORE(x) \
+        __pragma(warning(pop))
+#else
+#   define wxMSVC_WARNING_SUPPRESS(x)
+#   define wxMSVC_WARNING_RESTORE(x)
+#endif
+
+/*
+    Macros to suppress and restore warnings about deprecated functions.
+ */
+#ifdef __VISUALC__
+#   define wxWARNING_SUPPRESS_DEPRECATED() \
+        wxMSVC_WARNING_SUPPRESS(4996)
+#   define wxWARNING_RESTORE_DEPRECATED() \
+        wxMSVC_WARNING_RESTORE(4996)
+#else /* Not MSVC, so either gcc/clang or we can't define it at all */
+#   define wxWARNING_SUPPRESS_DEPRECATED() \
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+#   define wxWARNING_RESTORE_DEPRECATED() \
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
 #endif
 
 /*
@@ -2171,7 +2210,7 @@ enum wxKeyCode
 
     /* These are not compatible with unicode characters.
        If you want to get a unicode character from a key event, use
-       wxKeyEvent::GetUnicodeKey                                    */
+       wxKeyEvent::GetUnicodeChar() */
     WXK_START   = 300,
     WXK_LBUTTON,
     WXK_RBUTTON,
@@ -2819,6 +2858,14 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIPress);
 DECLARE_WXCOCOA_OBJC_CLASS(UIKey);
 DECLARE_WXCOCOA_OBJC_CLASS(EAGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
+
+#if wxOSX_IPHONE_USE_UISCENE
+DECLARE_WXCOCOA_OBJC_CLASS(UIWindowScene);
+DECLARE_WXCOCOA_OBJC_CLASS(UIScene);
+DECLARE_WXCOCOA_OBJC_CLASS(UISceneSession);
+DECLARE_WXCOCOA_OBJC_CLASS(UISceneConfiguration);
+DECLARE_WXCOCOA_OBJC_CLASS(UISceneConnectionOptions);
+#endif
 
 typedef WX_UIWindow WXWindow;
 typedef WX_UIEvent WXEvent;

@@ -287,7 +287,7 @@ void wxVListBoxComboPopup::SendComboBoxEvent( int selection )
 }
 
 // returns true if key was consumed
-bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar )
+bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxUniChar keychar )
 {
     const int itemCount = GetCount();
 
@@ -445,7 +445,7 @@ void wxVListBoxComboPopup::OnComboCharEvent( wxKeyEvent& event )
 {
     // unlike in OnComboKeyEvent, wxEVT_CHAR contains meaningful
     // printable character information, so pass it
-    const wxChar charcode = event.GetUnicodeKey();
+    const wxUniChar charcode = event.GetUnicodeChar();
 
     if ( !HandleKey(event.GetKeyCode(), true, charcode) )
         event.Skip();
@@ -907,7 +907,7 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
     CalcWidths();
 
     // Take scrollbar into account in width calculations
-    int widestWidth = m_widestWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this);
+    int widestWidth = m_widestWidth + GetScrollbarSize(wxVERTICAL);
     return wxSize(minWidth > widestWidth ? minWidth : widestWidth,
                   height+2);
 }

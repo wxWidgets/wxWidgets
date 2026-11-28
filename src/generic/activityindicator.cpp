@@ -64,6 +64,8 @@ public:
         m_frame = 0;
 
         win->Bind(wxEVT_PAINT, &wxActivityIndicatorImpl::OnPaint, this);
+
+        win->SetDoubleBuffered(true);
     }
 
     void Start()

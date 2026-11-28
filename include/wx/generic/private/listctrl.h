@@ -22,6 +22,8 @@
 #include <cstdint>
 #include <memory>
 
+constexpr size_t wxNO_ITEM = static_cast<size_t>(-1);
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -538,7 +540,7 @@ public:
 
     // Make sure that _line_ is the only item highlighted in the control.
     // _oldLine_ is the old focused item.
-    void HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
+    void HighlightOnly( size_t line, size_t oldLine = wxNO_ITEM );
 
     // In multiple selection mode, instead of sending one notification per item
     // (which is too slow if a lot of items are selected) we send only one notification
@@ -579,6 +581,14 @@ public:
     // the methods which are forwarded to wxListLineData itself in list/icon
     // modes but are here because the lines don't store their positions in the
     // report mode
+
+    // Let the screen readers see the shown items: they are drawn by us and so
+    // are invisible to them otherwise.
+    void UpdateAccessibleItems();
+
+    // The item announced to the screen readers by the last call to the
+    // function above or -1 if there was no current item then.
+    long m_lastAccessibleCurrent = -1;
 
     // get the bound rect for the entire line
     wxRect GetLineRect(size_t line) const;
@@ -764,8 +774,14 @@ public:
 
     // change the current (== focused) item, send a notification event
     void ChangeCurrent(size_t current);
-    void ResetCurrent() { ChangeCurrent((size_t)-1); }
-    bool HasCurrent() const { return m_current != (size_t)-1; }
+    void ResetCurrent()
+    {
+        ChangeCurrent(wxNO_ITEM);
+
+        // The anchor doesn't make sense without the current item either.
+        m_anchor = wxNO_ITEM;
+    }
+    bool HasCurrent() const { return m_current != wxNO_ITEM; }
 
     // send out a wxListEvent
     void SendNotify( size_t line,
@@ -796,6 +812,10 @@ public:
     {
         return wxStaticCast(GetParent(), wxGenericListCtrl);
     }
+
+    // Return the position of this window in wxListCtrl coordinates, which are
+    // the ones used in the public API, i.e. take into account the header.
+    wxPoint GetPositionInListCtrl() const;
 
     // get the height of all lines (assuming they all do have the same height)
     wxCoord GetLineHeight() const;
@@ -937,7 +957,7 @@ protected:
     void GetVisibleLinesRange(size_t *from, size_t *to);
 
     // force us to recalculate the range of visible lines
-    void ResetVisibleLinesRange() { m_lineFrom = (size_t)-1; }
+    void ResetVisibleLinesRange() { m_lineFrom = wxNO_ITEM; }
 
     // find the first item starting with the given prefix after the given item
     size_t PrefixFindItem(size_t item, const wxString& prefix) const;

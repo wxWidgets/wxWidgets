@@ -221,13 +221,10 @@ DetachFromFrame(wxMenu* menu, wxFrame* frame)
             gtk_window_remove_accel_group(tlw, menu->m_accel);
     }
 
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while (node)
+    for (auto* menuitem: menu->GetMenuItems())
     {
-        wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
             DetachFromFrame(menuitem->GetSubMenu(), frame);
-        node = node->GetNext();
     }
 
     EnsureNoGrab(menu->m_menu);
@@ -244,19 +241,36 @@ AttachToFrame(wxMenu* menu, wxFrame* frame)
             gtk_window_add_accel_group(tlw, menu->m_accel);
     }
 
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while (node)
+    for (auto* menuitem: menu->GetMenuItems())
     {
-        wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
             AttachToFrame(menuitem->GetSubMenu(), frame);
-        node = node->GetNext();
     }
 
     menu->SetupBitmaps(frame);
 }
 
 } // anonymous namespace
+
+extern "C" {
+// Set layout direction for a GtkMenu or GtkMenuBar,
+// and all of its children and sub-menus
+static void SetLayoutDirAll(GtkWidget* widget, void* data)
+{
+    wxWindow::GTKSetLayout(widget, wxLayoutDirection(GPOINTER_TO_INT(data)));
+
+    if (GTK_IS_CONTAINER(widget))
+    {
+        gtk_container_foreach((GtkContainer*)widget, SetLayoutDirAll, data);
+        if (GTK_IS_MENU_ITEM(widget))
+        {
+            widget = gtk_menu_item_get_submenu((GtkMenuItem*)widget);
+            if (widget)
+                SetLayoutDirAll(widget, data);
+        }
+    }
+}
+}
 
 void wxMenuBar::SetLayoutDirection(wxLayoutDirection dir)
 {
@@ -277,17 +291,7 @@ void wxMenuBar::SetLayoutDirection(wxLayoutDirection dir)
     if ( dir == wxLayout_Default )
         return;
 
-    GTKSetLayout(m_menubar, dir);
-
-    // also set the layout of all menus we already have (new ones will inherit
-    // the current layout)
-    for ( wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxMenu *const menu = node->GetData();
-        menu->SetLayoutDirection(dir);
-    }
+    SetLayoutDirAll(m_menubar, GINT_TO_POINTER(dir));
 }
 
 wxLayoutDirection wxMenuBar::GetLayoutDirection() const
@@ -299,12 +303,9 @@ void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
 
-    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-    while (node)
+    for (auto* menu: m_menus)
     {
-        wxMenu *menu = node->GetData();
         AttachToFrame( menu, frame );
-        node = node->GetNext();
     }
 
     SetLayoutDirection(wxLayout_Default);
@@ -312,12 +313,9 @@ void wxMenuBar::Attach(wxFrame *frame)
 
 void wxMenuBar::Detach()
 {
-    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-    while (node)
+    for (auto* menu: m_menus)
     {
-        wxMenu *menu = node->GetData();
         DetachFromFrame( menu, m_menuBarFrame );
-        node = node->GetNext();
     }
 
     EnsureNoGrab(m_widget);
@@ -420,14 +418,10 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
             return res;
     }
 
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while (node)
+    for (auto* item: menu->GetMenuItems())
     {
-        wxMenuItem *item = node->GetData();
         if (item->IsSubMenu())
             return FindMenuItemRecursive(item->GetSubMenu(), menuString, itemString);
-
-        node = node->GetNext();
     }
 
     return wxNOT_FOUND;
@@ -435,14 +429,11 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
 
 int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemString ) const
 {
-    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-    while (node)
+    for (auto* menu: m_menus)
     {
-        wxMenu *menu = node->GetData();
         int res = FindMenuItemRecursive( menu, menuString, itemString);
         if (res != -1)
             return res;
-        node = node->GetNext();
     }
 
     return wxNOT_FOUND;
@@ -452,16 +443,17 @@ int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemStr
 static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 {
     wxMenuItem* result = menu->FindChildItem(id);
+    if (result)
+        return result;
 
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while ( node && result == nullptr )
+    for (auto* item: menu->GetMenuItems())
     {
-        wxMenuItem *item = node->GetData();
         if (item->IsSubMenu())
         {
             result = FindMenuItemByIdRecursive( item->GetSubMenu(), id );
+            if (result)
+                break;
         }
-        node = node->GetNext();
     }
 
     return result;
@@ -470,12 +462,11 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 {
     wxMenuItem* result = nullptr;
-    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-    while (node && result == nullptr)
+    for (auto* menu: m_menus)
     {
-        wxMenu *menu = node->GetData();
         result = FindMenuItemByIdRecursive( menu, id );
-        node = node->GetNext();
+        if (result)
+            break;
     }
 
     if ( menuForItem )
@@ -897,26 +888,8 @@ wxMenu::~wxMenu()
 
 void wxMenu::SetLayoutDirection(wxLayoutDirection dir)
 {
-    if ( m_owner )
-    {
-        wxWindow::GTKSetLayout(m_owner, dir);
-
-        wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
-        for (; node; node = node->GetNext())
-        {
-            wxMenuItem* item = node->GetData();
-            if (wxMenu* subMenu = item->GetSubMenu())
-                subMenu->SetLayoutDirection(dir);
-            else if (GtkWidget* widget = item->GetMenuItem())
-            {
-                wxWindow::GTKSetLayout(widget, dir);
-                widget = gtk_bin_get_child(GTK_BIN(widget));
-                if (widget)
-                    wxWindow::GTKSetLayout(widget, dir);
-            }
-        }
-    }
-    //else: will be called later by wxMenuBar again
+    if (dir != wxLayout_Default)
+        SetLayoutDirAll(m_menu, GINT_TO_POINTER(dir));
 }
 
 wxLayoutDirection wxMenu::GetLayoutDirection() const
@@ -1114,15 +1087,12 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
 void wxMenu::SetupBitmaps(wxWindow *win)
 {
-    wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
-    while (node)
+    for (auto* menuitem: GetMenuItems())
     {
-        wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
             menuitem->GetSubMenu()->SetupBitmaps(win);
         if (!menuitem->IsSeparator())
             menuitem->SetupBitmaps(win);
-        node = node->GetNext();
     }
 }
 

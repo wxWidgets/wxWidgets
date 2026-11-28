@@ -496,6 +496,8 @@ void wxRadioBox::SetString(unsigned int n, const wxString& label)
     GtkLabel* g_label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(m_buttonsInfo[n].button)));
 
     gtk_label_set_text( g_label, label.utf8_str() );
+
+    InvalidateBestSize();
 }
 
 bool wxRadioBox::Enable( bool enable )

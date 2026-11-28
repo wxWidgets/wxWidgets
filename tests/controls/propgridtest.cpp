@@ -566,8 +566,6 @@ static wxPropertyGridManager* CreateGrid(int style, int extraStyle)
 
     pgManager->Refresh();
     pgManager->Update();
-    // Wait for update to be done
-    YieldForAWhile(100);
 
     return pgManager;
 }
@@ -1976,7 +1974,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 #if defined(__WXGTK__)
     // Under wxGTK we need to have two children (at least) because if there
     // is one child its paint area is set to fill the whole parent frame.
-    std::unique_ptr<wxWindow> win0(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    auto win0 = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
 #endif // wxGTK
     std::unique_ptr<wxPropertyGridManager> pgManager(CreateGrid(-1, -1));
 
@@ -2168,7 +2166,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 wxPGProperty* p = *it;
                 INFO(p->GetLabel().c_str());
                 pgManager->GetGrid()->SelectProperty(p, true);
-                ::wxMilliSleep(150);
                 wxTheApp->GetTopWindow()->Update();
             }
         }
@@ -7172,7 +7169,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             pgManager->SetColumnCount(i);
             pgManager->Refresh();
             pgManager->Update();
-            wxMilliSleep(500);
         }
         SUCCEED();
     }
@@ -7180,27 +7176,51 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     SECTION("WindowStyles")
     {
         // Recreate grid with all possible (single) flags
-        REQUIRE(wxPG_AUTO_SORT == 0x000000010);
-
-        for ( int i = 4; i < 16; i++ )
+        const int styles[] =
         {
-            int flag = 1 << i;
+            wxPG_AUTO_SORT,
+            wxPG_HIDE_CATEGORIES,
+            wxPG_BOLD_MODIFIED,
+            wxPG_SPLITTER_AUTO_CENTER,
+            wxPG_TOOLTIPS,
+            wxPG_HIDE_MARGIN,
+            wxPG_STATIC_SPLITTER,
+            wxPG_LIMITED_EDITING,
+            wxPG_TOOLBAR,
+            wxPG_DESCRIPTION,
+            wxPG_NO_INTERNAL_BORDER,
+        };
+
+        for ( int flag : styles )
+        {
             INFO(wxString::Format("Style: 0x%X", flag).c_str());
             ReplaceGrid(pgManager, flag, -1);
             pgManager->Update();
-            wxMilliSleep(500);
         }
         SUCCEED();
 
-        REQUIRE(wxPG_EX_INIT_NOCAT == 0x00001000);
-
-        for ( int i = 12; i < 27; i++ )
+        const int exStyles[] =
         {
-            int flag = 1 << i;
+            wxPG_EX_INIT_NOCAT,
+            wxPG_EX_NO_FLAT_TOOLBAR,
+            wxPG_EX_MODE_BUTTONS,
+            wxPG_EX_HELP_AS_TOOLTIPS,
+            wxPG_EX_NATIVE_DOUBLE_BUFFERING,
+            wxPG_EX_ALWAYS_ALLOW_FOCUS,
+            wxPG_EX_AUTO_UNSPECIFIED_VALUES,
+            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES,
+            wxPG_EX_HIDE_PAGE_BUTTONS,
+            wxPG_EX_MULTIPLE_SELECTION,
+            wxPG_EX_ENABLE_TLP_TRACKING,
+            wxPG_EX_NO_TOOLBAR_DIVIDER,
+            wxPG_EX_TOOLBAR_SEPARATOR,
+        };
+
+        for ( int flag : exStyles )
+        {
             INFO(wxString::Format("ExStyle: 0x%X", flag).c_str());
             ReplaceGrid(pgManager, -1, flag);
             pgManager->Update();
-            wxMilliSleep(500);
         }
         SUCCEED();
     }

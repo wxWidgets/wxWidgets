@@ -870,7 +870,7 @@ enum wxKeyCode
         This value is returned by wxKeyEvent::GetKeyCode() if there is no
         non-Unicode representation for the pressed key (e.g. a Cyrillic letter
         was entered when not using a Cyrillic locale) and by
-        wxKeyEvent::GetUnicodeKey() if there is no Unicode representation for
+        wxKeyEvent::GetUnicodeChar() if there is no Unicode representation for
         the key (this happens for the special, non printable, keys only, e.g.
         WXK_HOME).
 
@@ -918,7 +918,7 @@ enum wxKeyCode
 
         These are, by design, not compatible with Unicode characters.
         If you want to get a Unicode character from a key event, use
-        wxKeyEvent::GetUnicodeKey() instead.
+        wxKeyEvent::GetUnicodeChar() instead.
     */
     WXK_START   = 300,
     WXK_LBUTTON,
@@ -1873,7 +1873,7 @@ template <typename T> void wxDELETEA(T*& array);
 /**
     Return the size of the container as int.
 
-    This is similar to C++20 std::ssize() but can be used even even when not
+    This is similar to C++20 std::ssize() but can be used even when not
     using C++20 (if you do use it, please use the standard function).
 
     @header{wx/defs.h}

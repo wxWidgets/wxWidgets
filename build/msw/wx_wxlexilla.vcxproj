@@ -829,6 +829,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEiffel.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexErlang.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexErrorList.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEscSeq.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEScript.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexFlagship.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexForth.cxx" />

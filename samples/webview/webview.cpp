@@ -626,6 +626,12 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
             event.Skip();
         });
 
+        m_browser->Bind(wxEVT_WEBVIEW_FAILED, [](wxWebViewEvent& event) {
+            wxLogError("Web view failed while showing \"%s\": %s",
+                       event.GetURL(), event.GetString());
+            event.Skip();
+        });
+
 #ifndef __WXMAC__
         //We register the wxfs:// protocol for testing purposes
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));

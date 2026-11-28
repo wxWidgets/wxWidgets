@@ -2463,12 +2463,12 @@ public:
     /**
         Returns the character pressed, within a @c wxEVT_RICHTEXT_CHARACTER event.
     */
-    wxChar GetCharacter() const;
+    wxUniChar GetCharacter() const;
 
     /**
         Sets the character variable.
     */
-    void SetCharacter(wxChar ch);
+    void SetCharacter(wxUniChar ch);
 
     /**
         Returns the container for which the event is relevant.

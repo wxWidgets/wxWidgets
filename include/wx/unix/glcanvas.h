@@ -87,6 +87,12 @@ public:
 
     void* GetXVisualInfo() const;
 
+    // Return the ID of the X visual the window must use to be compatible with
+    // the chosen configuration, or 0 if it is unknown.
+    //
+    // Should be only called when using X11 (whether with GLX or EGL).
+    unsigned long GetXVisualID() const;
+
 protected:
     wxGLCanvasUnix();
 

@@ -125,7 +125,7 @@ public:
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = "comboBox");
     /**
-        Constructor, creating and showing a owner-drawn combobox.
+        Constructor, creating and showing an owner-drawn combobox.
 
         @param parent
             Parent window. Must not be @NULL.
@@ -159,7 +159,7 @@ public:
                          const wxString& name = "comboBox");
 
     /**
-        Constructor, creating and showing a owner-drawn combobox.
+        Constructor, creating and showing an owner-drawn combobox.
 
         This overload creates a combobox with no initial items. It has been
         added in wxWindow 3.3.1.

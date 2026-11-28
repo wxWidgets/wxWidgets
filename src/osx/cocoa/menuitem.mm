@@ -251,7 +251,16 @@ public :
 
     void SetBitmap( const wxBitmapBundle& bitmap ) override
     {
-        [m_osxMenuItem setImage:wxOSXGetImageFromBundle(bitmap)];
+        WXImage image = wxOSXGetImageFromBundle(bitmap);
+        [m_osxMenuItem setImage:image];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 270000
+        if ( WX_IS_MACOS_AVAILABLE(27, 0) )
+        {
+            [m_osxMenuItem setPreferredImageVisibility:
+             image ? NSMenuItemImageVisibilityVisible
+                   : NSMenuItemImageVisibilityAutomatic];
+        }
+#endif
     }
 
     void Enable( bool enable ) override

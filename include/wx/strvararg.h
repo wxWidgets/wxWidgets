@@ -134,6 +134,31 @@ wxGCC_WARNING_SUPPRESS(ctor-dtor-privacy)
 // wxFormatString
 // ----------------------------------------------------------------------------
 
+#ifdef wxALLOW_UTF8_LITERALS
+namespace wxPrivate
+{
+
+// Helper of wxFormatString ctor from string literal: never returns a null
+// buffer, even if the literal is not valid UTF-8 (which is not supposed to
+// happen and results in an assert failure), to ensure that its m_wchar is
+// always set.
+//
+// Note that this can't be a member of wxFormatString, as this class is
+// exported from the shared library which is never built with
+// wxALLOW_UTF8_LITERALS defined and so wouldn't contain this function, which
+// could result in link errors if the compiler decides not to inline it.
+inline wxScopedWCharBuffer FormatStringFromUTF8Literal(const char* str)
+{
+    wxScopedWCharBuffer buf = wxConvUTF8.cMB2WC(str);
+    wxCHECK_MSG( buf, wxScopedWCharBuffer::CreateNonOwned(L""),
+                 "string literal must be valid UTF-8" );
+
+    return buf;
+}
+
+} // namespace wxPrivate
+#endif // wxALLOW_UTF8_LITERALS
+
 // This class must be used for format string argument of the functions
 // defined using WX_DEFINE_VARARG_FUNC_* macros. It converts the string to
 // char* or wchar_t* for passing to implementation function efficiently (i.e.
@@ -148,6 +173,17 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxFormatString(const char *str)
         : m_char(wxScopedCharBuffer::CreateNonOwned(str)), m_str(nullptr), m_cstr(nullptr) {}
+#elif defined(wxALLOW_UTF8_LITERALS)
+    // String literals use UTF-8 and not the current locale encoding assumed
+    // for m_char, so convert them to wide strings immediately.
+    template <size_t N>
+    wxFormatString(const char (&str)[N])
+        : m_wchar(wxPrivate::FormatStringFromUTF8Literal(str)),
+          m_str(nullptr), m_cstr(nullptr) {}
+
+    // Non-const arrays are not literals, see the same ctor in wxString.
+    template <size_t N>
+    wxFormatString(char (&str)[N]) = delete;
 #endif
     wxFormatString(const wchar_t *str)
         : m_wchar(wxScopedWCharBuffer::CreateNonOwned(str)), m_str(nullptr), m_cstr(nullptr) {}
@@ -211,6 +247,32 @@ public:
     // format specifiers corresponding to the actually given arguments.
     void Validate(const std::vector<int>& argTypes) const;
 
+    // Preprocess the format string for being used with the given arguments:
+    // this validates it, as above, and also replaces the conversion specifiers
+    // using the wxUniChar arguments whose value lies outside of the BMP, as
+    // such a character can't be passed to "%c" at all when wchar_t is 16 bits,
+    // i.e. under MSW, see PreprocessUniCharArgs().
+    //
+    // This must be called before using this object as const char* or const
+    // wchar_t*, i.e. before the format string is converted, and does nothing
+    // at all, without any run-time cost, unless one of the arguments is a
+    // wxUniChar (or wxUniCharRef) with such a value.
+    template <typename... Targs>
+    void Preprocess(Targs&&... args) const;
+
+    // Implementation detail of Preprocess() above, only public because it is
+    // called from the helper function used by it.
+    //
+    // Replace the conversion specifiers corresponding to the arguments whose
+    // value, given by the corresponding element of the "values" array, is
+    // outside of the BMP with the text resulting from formatting them here,
+    // followed by "%.0d" discarding the (zero) argument itself, see
+    // wxArgNormalizer<const wxUniChar&>.
+    //
+    // This simply replaces the format string used by this object, so nothing
+    // else needs to be aware of it.
+    void PreprocessUniCharArgs(const wxUint32* values, size_t numArgs) const;
+
     // returns the type of format specifier for n-th variadic argument (this is
     // not necessarily n-th format specifier if positional specifiers are used);
     // called by wxArgNormalizer<> specializations to get information about
@@ -221,7 +283,8 @@ public:
     // to other InputAsXXX() methods
     wxString InputAsString() const;
 
-#if !wxUSE_UNICODE_WCHAR && !defined wxNO_IMPLICIT_WXSTRING_ENCODING
+    // Note that this is needed even with wxNO_IMPLICIT_WXSTRING_ENCODING.
+#if !wxUSE_UNICODE_WCHAR
     operator const char*() const
         { return const_cast<wxFormatString*>(this)->AsChar(); }
 private:
@@ -232,7 +295,7 @@ private:
     const char* InputAsChar();
     const char* AsChar();
     wxScopedCharBuffer m_convertedChar;
-#endif // !wxUSE_UNICODE_WCHAR && !defined wx_NO_IMPLICIT_WXSTRING_ENCODING
+#endif // !wxUSE_UNICODE_WCHAR
 
 #if !wxUSE_UTF8_LOCALE_ONLY
 public:
@@ -328,6 +391,47 @@ template<>
 struct wxFormatStringArgumentFinder<wxWCharBuffer>
     : public wxFormatStringArgumentFinder<const wxWCharBuffer&> {};
 
+
+// ----------------------------------------------------------------------------
+// Types of the arguments of the variadic functions
+// ----------------------------------------------------------------------------
+
+// The variadic functions taking printf-like format strings take their
+// arguments by value, which makes the string literals decay to pointers and
+// so impossible to distinguish from the other "const char*" strings, so they
+// take them by forwarding reference instead when wxALLOW_UTF8_LITERALS is
+// defined to allow using the literals as arguments too.
+//
+// This is not done by default because it prevents passing bit-fields or
+// static const data members without definition as arguments.
+#ifdef wxALLOW_UTF8_LITERALS
+    #define wxFORMAT_ARGS(Targs) Targs&&
+#else
+    #define wxFORMAT_ARGS(Targs) Targs
+#endif
+
+// This is the type used for selecting wxArgNormalizer and
+// wxFormatStringSpecifier specializations for the argument of the variadic
+// function whose type was deduced as T. It is the same as the type of the
+// argument taken by value, except for the narrow string literals (and other
+// const char arrays) which keep their array type when wxALLOW_UTF8_LITERALS
+// is defined.
+template<typename T>
+struct wxFormatArgTypeHelper
+{
+    typedef typename std::decay<T>::type type;
+};
+
+#ifdef wxALLOW_UTF8_LITERALS
+template<size_t N>
+struct wxFormatArgTypeHelper<const char (&)[N]>
+{
+    typedef const char (&type)[N];
+};
+#endif // wxALLOW_UTF8_LITERALS
+
+template<typename T>
+using wxFormatArgType = typename wxFormatArgTypeHelper<T>::type;
 
 // ----------------------------------------------------------------------------
 // wxArgNormalizer*<T> converters
@@ -446,6 +550,14 @@ wxDISABLED_FORMAT_STRING_SPECIFIER(signed char*)
 wxDISABLED_FORMAT_STRING_SPECIFIER(const char*)
 wxDISABLED_FORMAT_STRING_SPECIFIER(const unsigned char*)
 wxDISABLED_FORMAT_STRING_SPECIFIER(const signed char*)
+
+#ifdef wxALLOW_UTF8_LITERALS
+template<size_t N>
+struct wxFormatStringSpecifier<const char (&)[N]>
+{
+    enum { value = wxFormatString::Arg_String };
+};
+#endif // wxALLOW_UTF8_LITERALS
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 wxFORMAT_STRING_SPECIFIER(wchar_t*, wxFormatString::Arg_String)
 wxFORMAT_STRING_SPECIFIER(const wchar_t*, wxFormatString::Arg_String)
@@ -466,6 +578,88 @@ wxFORMAT_STRING_SPECIFIER(std::nullptr_t, wxFormatString::Arg_Pointer)
 
 #undef wxFORMAT_STRING_SPECIFIER
 #undef wxDISABLED_FORMAT_STRING_SPECIFIER
+
+
+// Return the value of the argument if it is a character outside of the BMP and
+// 0 for all the other arguments, including the characters inside the BMP, for
+// which nothing special needs to be done.
+//
+// This is used to build the array passed to PreprocessUniCharArgs(): note that
+// the overloads for wxUniChar and wxUniCharRef are only chosen for the
+// arguments of exactly these types, everything else uses the template version
+// which is trivially evaluated to 0 at compile-time.
+template<typename T>
+inline wxUint32 wxGetSupplementaryCharValue(const T&) { return 0; }
+
+inline wxUint32 wxGetSupplementaryCharValue(const wxUniChar& ch)
+    { return ch.IsSupplementary() ? ch.GetValue() : 0; }
+
+inline wxUint32 wxGetSupplementaryCharValue(const wxUniCharRef& ch)
+    { return ch.IsSupplementary() ? ch.GetValue() : 0; }
+
+// Helpers used to check, at compile-time, whether any of the arguments is a
+// wxUniChar at all, as nothing needs to be done if this is not the case.
+template<typename T>
+struct wxFormatStringIsUniChar { enum { value = 0 }; };
+
+template<> struct wxFormatStringIsUniChar<wxUniChar> { enum { value = 1 }; };
+template<> struct wxFormatStringIsUniChar<wxUniCharRef> { enum { value = 1 }; };
+
+template<typename... Targs>
+struct wxHasUniCharFormatArgs;
+
+template<>
+struct wxHasUniCharFormatArgs<> { enum { value = 0 }; };
+
+template<typename T, typename... Targs>
+struct wxHasUniCharFormatArgs<T, Targs...>
+{
+    enum
+    {
+        value = wxFormatStringIsUniChar<T>::value
+                    || wxHasUniCharFormatArgs<Targs...>::value
+    };
+};
+
+// This overload is used when none of the arguments is a wxUniChar and is
+// entirely optimized away, as it doesn't do anything at all.
+template<typename... Targs>
+inline void
+wxPreprocessUniCharArgs(const wxFormatString&, std::false_type,
+                        const Targs&...)
+{
+}
+
+template<typename... Targs>
+inline void
+wxPreprocessUniCharArgs(const wxFormatString& format, std::true_type,
+                        const Targs&... args)
+{
+    const wxUint32 values[] = { wxGetSupplementaryCharValue(args)... };
+
+    format.PreprocessUniCharArgs(values, sizeof...(Targs));
+}
+
+// Note that this function has to be defined here, and not inside the class,
+// because it uses the helpers above, which are only declared after it.
+template<typename... Targs>
+void wxFormatString::Preprocess(Targs&&... args) const
+{
+    // Note that the format string must be validated before, and not after,
+    // being modified by the call below.
+    Validate({wxFormatStringSpecifier<wxFormatArgType<Targs>>::value...});
+
+    wxPreprocessUniCharArgs
+    (
+        *this,
+        std::integral_constant
+        <
+            bool,
+            wxHasUniCharFormatArgs<wxFormatArgType<Targs>...>::value
+        >(),
+        args...
+    );
+}
 
 
 // Converts an argument passed to wxPrint etc. into standard form expected,
@@ -714,6 +908,37 @@ private:
     wxArgNormalizer(wxScopedCharBuffer&, const wxFormatString *, unsigned);
     std::string get() const;
 };
+
+#ifdef wxALLOW_UTF8_LITERALS
+// String literals are in UTF-8, see wxFormatArgType.
+#if !wxUSE_UTF8_LOCALE_ONLY
+template<size_t N>
+struct wxArgNormalizerWchar<const char (&)[N]>
+    : public wxArgNormalizerWithBuffer<wchar_t>
+{
+    wxArgNormalizerWchar(const char* s,
+                         const wxFormatString *fmt, unsigned index)
+        : wxArgNormalizerWithBuffer<wchar_t>(wxConvUTF8.cMB2WC(s), fmt, index)
+    {
+        wxASSERT_MSG( m_value, "string literal must be valid UTF-8" );
+    }
+};
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+// This one is only used when the current locale uses UTF-8, so the literal
+// can be used as is.
+template<size_t N>
+struct wxArgNormalizerUtf8<const char (&)[N]>
+    : public wxArgNormalizerWithBuffer<char>
+{
+    wxArgNormalizerUtf8(const char* s,
+                        const wxFormatString *fmt, unsigned index)
+        : wxArgNormalizerWithBuffer<char>(wxScopedCharBuffer::CreateNonOwned(s),
+                                          fmt, index) {}
+};
+#endif // wxUSE_UNICODE_UTF8
+#endif // wxALLOW_UTF8_LITERALS
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 // this macro is used to implement specialization that are exactly same as
@@ -859,12 +1084,23 @@ WX_ARG_NORMALIZER_FORWARD(std::wstring, const std::wstring&);
 
 // versions for wxUniChar, wxUniCharRef:
 // (this is same for UTF-8 and Wchar builds, we just convert to wchar_t)
+//
+// Note that the characters outside of the BMP don't fit into a single wchar_t
+// when it is 16 bits, i.e. under MSW, and there is simply no way to pass such
+// a character to "%c". They are handled by injecting them directly into the
+// format string instead, see wxFormatString::PreprocessUniCharArgs(), and
+// replacing their conversion specifier with "%.0d", which discards the 0
+// passed here without printing anything at all for it. All the other
+// characters are passed normally, i.e. exactly as a wchar_t would be.
 template<>
 struct wxArgNormalizer<const wxUniChar&> : public wxArgNormalizer<wchar_t>
 {
     wxArgNormalizer(const wxUniChar& s,
                     const wxFormatString *fmt, unsigned index)
-        : wxArgNormalizer<wchar_t>(wx_truncate_cast(wchar_t, s.GetValue()), fmt, index) {}
+        : wxArgNormalizer<wchar_t>(s.IsSupplementary()
+                                    ? L'\0'
+                                    : static_cast<wchar_t>(s.GetValue()),
+                                   fmt, index) {}
 };
 
 // for wchar_t, default handler does the right thing
@@ -1134,6 +1370,9 @@ private:
 // Generates code snippet for i-th type in vararg function's template<...>:
 #define _WX_VARARG_TEMPL(i)             typename T##i
 
+// Generates code snippet for the name of the i-th argument alone:
+#define _WX_VARARG_ARG_NAME(i)          a##i
+
 // Generates code snippet for passing i-th argument of vararg function
 // wrapper to its implementation, normalizing it in the process:
 #define _WX_VARARG_PASS_WCHAR(i) \
@@ -1152,6 +1391,12 @@ private:
     _WX_VARARG_FIXED_TYPEDEFS(numfixed, fixed);                               \
     const wxFormatString *fmt =                                               \
             (_WX_VARARG_JOIN(numfixed, _WX_VARARG_FIND_FMT))
+
+// Preprocess the format string found by the macro above, see
+// wxFormatString::Preprocess().
+#define _WX_VARARG_PREPROCESS_FORMAT(N)                                       \
+    if ( fmt )                                                                \
+        fmt->Preprocess(_WX_VARARG_JOIN(N, _WX_VARARG_ARG_NAME))
 
 #if wxUSE_UNICODE_UTF8
     #define _WX_VARARG_DO_CALL_UTF8(return_kw, impl, implUtf8, N, numfixed)   \
@@ -1199,6 +1444,7 @@ private:
                  _WX_VARARG_JOIN(N, _WX_VARARG_ARG))                          \
     {                                                                         \
         _WX_VARARG_FORMAT_STRING(numfixed, fixed);                            \
+        _WX_VARARG_PREPROCESS_FORMAT(N);                                      \
         _WX_VARARG_DO_CALL(return, impl, implUtf8, N, numfixed);              \
     }
 
@@ -1220,6 +1466,7 @@ private:
                  _WX_VARARG_JOIN(N, _WX_VARARG_ARG))                          \
     {                                                                         \
         _WX_VARARG_FORMAT_STRING(numfixed, fixed);                            \
+        _WX_VARARG_PREPROCESS_FORMAT(N);                                      \
         _WX_VARARG_DO_CALL(wxEMPTY_PARAMETER_VALUE,                           \
                            impl, implUtf8, N, numfixed);                      \
     }
@@ -1242,6 +1489,7 @@ private:
                 _WX_VARARG_JOIN(N, _WX_VARARG_ARG))                           \
     {                                                                         \
         _WX_VARARG_FORMAT_STRING(numfixed, fixed);                            \
+        _WX_VARARG_PREPROCESS_FORMAT(N);                                      \
         _WX_VARARG_DO_CALL(wxEMPTY_PARAMETER_VALUE,                           \
                            impl, implUtf8, N, numfixed);                      \
     }

@@ -212,6 +212,13 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     // Put Scintilla into unicode (UTF-8) mode
     SetCodePage(wxSTC_CP_UTF8);
 
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // The generic wxSTC backend can display composition itself on these
+    // platforms, so prefer inline input instead of relying on an IM module to
+    // provide a separate pre-edit window.
+    SetIMEInteraction(wxSTC_IME_INLINE);
+#endif
+
     SetInitialSize(size);
 
     // Reduces flicker on GTK+/X11
@@ -616,9 +623,15 @@ int wxStyledTextCtrl::GetIMEInteraction() const
 }
 
 // Choose to display the IME in a window or inline.
-void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction)
-{
-    SendMsg(SCI_SETIMEINTERACTION, imeInteraction, 0);
+void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction) {
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Roll the composition back first, while the pre-edit state is still
+    // fully consistent with the current mode.
+    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
+        m_swx->CancelComposition();
+#endif
+    SendMsg(SCI_SETIMEINTERACTION, imeInteraction);
+    wxUpdateTextInputClient(this);
 }
 
 // Set the symbol used for a particular marker number,
@@ -5068,6 +5081,18 @@ void wxStyledTextCtrl::SetILexer(void* ilexer) {
          SendMsg(SCI_SETILEXER, 0, (sptr_t)ilexer);
 }
 
+// Retrieve bidirectional text display state.
+int wxStyledTextCtrl::GetBidirectional() const
+{
+    return SendMsg(SCI_GETBIDIRECTIONAL, 0, 0);
+}
+
+// Set bidirectional text display state.
+void wxStyledTextCtrl::SetBidirectional(int bidirectional)
+{
+    SendMsg(SCI_SETBIDIRECTIONAL, bidirectional, 0);
+}
+
 // Divide each styling byte into lexical class bits (default: 5) and indicator
 // bits (default: 3). If a lexer requires more than 32 lexical states, then this
 // is used to expand the possible states.
@@ -5421,7 +5446,7 @@ wxCharBuffer wxStyledTextCtrl::GetCurLineRaw(int* linePos)
     }
 
     wxCharBuffer buf(len);
-    int pos = SendMsg(SCI_GETCURLINE, len, (sptr_t)buf.data());
+    int pos = SendMsg(SCI_GETCURLINE, len + 1, (sptr_t)buf.data());
     if (linePos)  *linePos = pos;
     return buf;
 }
@@ -5741,11 +5766,11 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 
     // apparently if we don't do this, Unicode keys pressed after non-char
     // ASCII ones (e.g. Enter, Tab) are not taken into account (patch 1615989)
-    if (m_lastKeyDownConsumed && evt.GetUnicodeKey() > 255)
+    if (m_lastKeyDownConsumed && evt.GetUnicodeChar() > 255)
         m_lastKeyDownConsumed = false;
 
     if (!m_lastKeyDownConsumed && !skip) {
-        wxChar key = evt.GetUnicodeKey();
+        wxUniChar key = evt.GetUnicodeChar();
         bool keyOk = true;
 
         // if the unicode key code is not really a unicode character (it may
@@ -6121,7 +6146,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLexerVersionInfo()
 {
-    return wxVersionInfo("Lexilla", 5, 4, 6, "Lexilla 5.4.6");
+    return wxVersionInfo("Lexilla", 5, 5, 5, "Lexilla 5.5.5");
 }
 
 

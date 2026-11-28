@@ -238,6 +238,8 @@ int wxGLCanvas::GetSwapInterval() const
     return interval;
 }
 
+wxIMPLEMENT_CLASS(wxGLContext, wxObject);
+
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_glContext )

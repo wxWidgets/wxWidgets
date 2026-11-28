@@ -14,6 +14,7 @@
 
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
+#include "wx/timer.h"
 #include "wx/weakref.h"
 
 #ifdef __WXQT__
@@ -129,14 +130,17 @@ class MyModalDialog : public wxDialog
 public:
     MyModalDialog() : wxDialog (nullptr, wxID_ANY, "Modal Dialog")
     {
-        m_wasModal = false;
         Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );
     }
 
     void OnInit(wxInitDialogEvent& WXUNUSED(event))
     {
         m_wasModal = IsModal();
-        CallAfter( &MyModalDialog::EndModal, wxID_OK );
+
+        if ( m_endModalDuringInit )
+            EndModal(wxID_YES);
+        else
+            CallAfter( &MyModalDialog::EndModal, wxID_OK );
     }
 
     bool WasModal() const
@@ -144,15 +148,82 @@ public:
         return m_wasModal;
     }
 
+    void SetEndModalDuringInit()
+    {
+        m_endModalDuringInit = true;
+    }
+
 private:
-    bool m_wasModal;
+    bool m_wasModal = false;
+    bool m_endModalDuringInit = false;
 };
 
 TEST_CASE("Modal::InitDialog", "[modal]")
 {
     MyModalDialog dlg;
     dlg.ShowModal();
-    CHECK( dlg.WasModal() );
+    CHECK_FALSE( dlg.WasModal() );
+}
+
+TEST_CASE("Modal::EndModalDuringInit", "[modal]")
+{
+    MyModalDialog dlg;
+    dlg.SetEndModalDuringInit();
+
+    int timerCalls = 0;
+
+    wxTimer watchdog;
+    watchdog.Bind(wxEVT_TIMER,
+                    [&dlg, &timerCalls](wxTimerEvent&)
+                    {
+                        ++timerCalls;
+                        dlg.EndModal(wxID_ABORT);
+                    });
+
+    watchdog.StartOnce(1000);
+    const int result = dlg.ShowModal();
+    watchdog.Stop();
+
+    CHECK( result == wxID_YES );
+    CHECK( timerCalls == 0 );       // timer's handler shouldn't be called
+    CHECK_FALSE( dlg.WasModal() );
+    CHECK_FALSE( dlg.IsModal() );
+    CHECK_FALSE( dlg.IsShown() );
+}
+
+TEST_CASE("Modal::ShowModalTwice", "[modal]")
+{
+    wxDialog dlg(nullptr, wxID_ANY, "Modal Dialog");
+
+    int timerCalls = 0;
+
+    wxTimer watchdog;
+    watchdog.Bind(wxEVT_TIMER,
+                    [&dlg, &timerCalls](wxTimerEvent&)
+                    {
+                        ++timerCalls;
+                        dlg.EndModal(timerCalls == 1 ? wxID_OK : wxID_CANCEL);
+                    });
+
+    for ( int i = 0; i < 2; ++i )
+    {
+        watchdog.StartOnce(10);
+        const int result = dlg.ShowModal();
+
+        switch ( timerCalls )
+        {
+            case 1:
+                CHECK( result == wxID_OK );
+                break;
+
+            case 2:
+                CHECK( result == wxID_CANCEL );
+                break;
+
+            default:
+                FAIL("Unexpected number of timer calls");
+        }
+    }
 }
 
 #ifdef __WXQT__

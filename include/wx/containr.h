@@ -77,8 +77,9 @@ public:
     bool AcceptsFocusRecursively() const
         { return AcceptsFocus() || HasAnyChildrenAcceptingFocus(); }
 
-    // We accept focus from keyboard if we accept it at all.
-    bool AcceptsFocusFromKeyboard() const { return AcceptsFocusRecursively(); }
+    // We accept focus from keyboard if we accept it at all, except if we
+    // only have children which can't be focused from keyboard.
+    bool AcceptsFocusFromKeyboard() const;
 
     // Call this when the number of children of the window changes.
     //
@@ -101,6 +102,10 @@ protected:
 
     // return true if we have any children accepting focus
     bool HasAnyFocusableChildren() const;
+
+    // return true if we have at least one child in our client area but none
+    // of them accepts focus from keyboard
+    bool HasOnlyChildrenNotFocusableFromKeyboard() const;
 
     // return true if we have any children that do accept focus right now
     bool HasAnyChildrenAcceptingFocus() const;
@@ -217,6 +222,12 @@ public:
 
     WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocusFromKeyboard() const override
     {
+        // If EnableFocusFromKeyboard() was called, accept focus from keyboard
+        // even if we only have children which don't, as this window probably
+        // handles keyboard input itself.
+        if ( this->m_enableFocusFromKbd )
+            return m_container.AcceptsFocusRecursively();
+
         return m_container.AcceptsFocusFromKeyboard();
     }
 

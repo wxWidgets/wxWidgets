@@ -21,6 +21,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
 
 class wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
 {
@@ -152,59 +154,26 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 
 void wxFrame::SetWindowStyleFlag( long style )
 {
-    wxWindow::SetWindowStyleFlag( style );
+    wxFrameBase::SetWindowStyleFlag( style );
 
-    Qt::WindowFlags qtFlags = Qt::CustomizeWindowHint;
+    auto qtFlags = GetHandle()->windowFlags();
+
+    if ( HasFlag( wxFRAME_NO_TASKBAR ) )
+    {
+        qtFlags |= Qt::Dialog;
+    }
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
         qtFlags |= Qt::Tool;
     }
-    else
-    {
-        qtFlags |= Qt::Window;
-    }
 
-    if ( HasFlag(wxCAPTION) )
+    if ( HasFlag(wxSIMPLE_BORDER) || HasFlag(wxBORDER_NONE) )
     {
-        qtFlags |= Qt::WindowTitleHint;
-    }
-
-    if ( HasFlag(wxSYSTEM_MENU) )
-    {
-        qtFlags |= Qt::WindowSystemMenuHint;
-    }
-
-    if ( HasFlag(wxSTAY_ON_TOP) )
-    {
-        qtFlags |= Qt::WindowStaysOnTopHint;
-    }
-
-    if ( HasFlag(wxMINIMIZE_BOX) )
-    {
-        qtFlags |= Qt::WindowMinimizeButtonHint;
-    }
-
-    if ( HasFlag(wxMAXIMIZE_BOX) )
-    {
-        qtFlags |= Qt::WindowMaximizeButtonHint;
-    }
-
-    if ( HasFlag(wxCLOSE_BOX) )
-    {
-        qtFlags |= Qt::WindowCloseButtonHint;
-    }
-
-    if ( HasFlag(wxNO_BORDER) )
-    {
-        // Note any of the other window decoration hints (e.g.
-        // Qt::WindowCloseButtonHint, Qt::WindowTitleHint) override this style.
-        // It doesn't seem possible to create a QMainWindow with a title bar
-        // but without a resize border.
         qtFlags |= Qt::FramelessWindowHint;
     }
 
-    GetQMainWindow()->setWindowFlags(qtFlags);
+    GetHandle()->setWindowFlags(qtFlags);
 }
 
 void wxFrame::SetWindowModality(wxWindowMode modality)
@@ -263,6 +232,62 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     }
 
     return wxWindow::GetClientAreaOrigin();
+}
+
+// ----------------------------------------------------------------------------
+// wxFrame client size calculations
+// ----------------------------------------------------------------------------
+
+void wxFrame::DoSetClientSize(int width, int height)
+{
+    const bool hasPendingResize =
+        GetHandle()->testAttribute(Qt::WA_PendingResizeEvent);
+
+    auto menubar = GetMenuBar();
+    if ( menubar && menubar->IsShown() )
+    {
+        // QMenuBar doesn't report correct sizes while the parent window has
+        // pending resize. So we use heightForWidth() to get the correct height.
+        if ( hasPendingResize )
+            height += menubar->GetHandle()->heightForWidth(GetSize().x);
+        else
+            height += menubar->GetSize().y;
+    }
+
+#if wxUSE_STATUSBAR
+    auto statbar = GetStatusBar();
+    if ( statbar && statbar->IsShown() )
+    {
+        // QStatusBar doesn't report correct sizes while the parent window has
+        // pending resize. So we use sizeHint().height() to get the correct height.
+        if ( hasPendingResize )
+            height += statbar->GetHandle()->sizeHint().height();
+        else
+            height += statbar->GetSize().y;
+    }
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    auto toolbar = GetToolBar();
+    if ( toolbar && toolbar->IsShown() )
+    {
+        wxSize tbSize;
+
+        // QToolBar doesn't report correct sizes while the parent window has
+        // pending resize. So we use sizeHint() to get the correct size.
+        if ( hasPendingResize )
+            tbSize = wxQtConvertSize(toolbar->GetHandle()->sizeHint());
+        else
+            tbSize = toolbar->GetSize();
+
+        if ( toolbar->IsVertical() )
+            width  += tbSize.x;
+        else
+            height += tbSize.y;
+    }
+#endif // wxUSE_TOOLBAR
+
+    wxFrameBase::DoSetClientSize(width, height);
 }
 
 QMainWindow *wxFrame::GetQMainWindow() const

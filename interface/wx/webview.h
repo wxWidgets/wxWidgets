@@ -1067,6 +1067,22 @@ public:
         retrieve the output file path and wxWebViewEvent::IsError() to check
         whether the save succeeded.
         Only available in wxWidgets 3.3.3 or later.
+    @event{EVT_WEBVIEW_FAILED(id, func)}
+        Process a @c wxEVT_WEBVIEW_FAILED event, generated when the web engine
+        process responsible for showing the contents of the control terminates
+        unexpectedly, e.g. because it crashed or used too much memory. When
+        this happens, the control doesn't show anything any more and the
+        application may want to inform the user about it, using the
+        user-readable explanation of the problem returned by
+        wxWebViewEvent::GetString(), and/or try to show the contents again by
+        calling LoadURL() or SetPage(), which restarts the process.
+        Note that with the Edge backend this event is also generated if the
+        browser process itself exits, in which case the control can't be used
+        any longer and must be recreated.
+        This event is always sent asynchronously, so it is safe to destroy the
+        control from its handler.
+        Not implemented for the IE and Chromium backends.
+        Only available in wxWidgets 3.9.0 or later.
     @endEventTable
 
     @since 2.9.3
@@ -2169,6 +2185,9 @@ public:
         Process a @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event
         only available in wxWidgets 3.3.0 or later. For usage details see
         wxWebView::ClearBrowsingData().
+    @event{EVT_WEBVIEW_FAILED(id, func)}
+        Process a @c wxEVT_WEBVIEW_FAILED event, see wxWebView for its
+        description. Only available in wxWidgets 3.9.0 or later.
     @endEventTable
 
     @since 2.9.3
@@ -2261,3 +2280,4 @@ wxEventType wxEVT_WEBVIEW_SCRIPT_RESULT;
 wxEventType wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED;
 wxEventType wxEVT_WEBVIEW_BROWSING_DATA_CLEARED;
 wxEventType wxEVT_WEBVIEW_PDF_SAVED;
+wxEventType wxEVT_WEBVIEW_FAILED;

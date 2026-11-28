@@ -35,42 +35,6 @@ public:
     wxString GetAllParams() const;
 
     /**
-        Returns beginning position of the text @e between this tag and paired
-        ending tag. See explanation (returned position is marked with '|'):
-        @code
-        bla bla bla <MYTAG> bla bla internal text</MYTAG> bla bla
-                           |
-        @endcode
-
-        @deprecated @todo provide deprecation description
-    */
-    int GetBeginPos() const;
-
-    /**
-        Returns ending position of the text @e between this tag and paired
-        ending tag. See explanation (returned position is marked with '|'):
-        @code
-        bla bla bla <MYTAG> bla bla internal text</MYTAG> bla bla
-                                                 |
-        @endcode
-
-        @deprecated @todo provide deprecation description
-    */
-    int GetEndPos1() const;
-
-    /**
-        Returns ending position 2 of the text @e between this tag and paired
-        ending tag. See explanation (returned position is marked with '|'):
-        @code
-        bla bla bla <MYTAG> bla bla internal text</MYTAG> bla bla
-                                                        |
-        @endcode
-
-        @deprecated @todo provide deprecation description
-    */
-    int GetEndPos2() const;
-
-    /**
         Returns tag's name. The name is always in uppercase and it doesn't contain
         &quot; or '/' characters. (So the name of \<FONT SIZE=+2\> tag is "FONT"
         and name of \</table\> is "TABLE").

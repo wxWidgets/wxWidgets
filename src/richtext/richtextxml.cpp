@@ -963,6 +963,16 @@ bool wxRichTextTable::ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, w
         child = child->GetNext();
     }
 
+    // The rest of the code assumes that every row has m_colCount cells, so
+    // check that the table really contains as many cells as it declares.
+    const int numChildren = (int) GetChildren().GetCount();
+    if (m_rowCount < 0 || m_colCount < 0 ||
+            (m_colCount > 0 && m_rowCount > numChildren / m_colCount))
+    {
+        ClearTable();
+        return false;
+    }
+
     m_cells.Add(wxRichTextObjectPtrArray(), m_rowCount);
     int i, j;
     for (i = 0; i < m_rowCount; i++)
@@ -971,12 +981,14 @@ bool wxRichTextTable::ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, w
         for (j = 0; j < m_colCount; j++)
         {
             int idx = i * m_colCount + j;
-            if (idx < (int) GetChildren().GetCount())
+            wxRichTextCell* cell = wxDynamicCast(GetChildren().Item(idx)->GetData(), wxRichTextCell);
+            if (!cell)
             {
-                wxRichTextCell* cell = wxDynamicCast(GetChildren().Item(idx)->GetData(), wxRichTextCell);
-                if (cell)
-                    colArray.Add(cell);
+                ClearTable();
+                return false;
             }
+
+            colArray.Add(cell);
         }
     }
 

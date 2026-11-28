@@ -41,8 +41,6 @@
 #include "wx/filepicker.h"
 #include "widgets.h"
 
-#include "icons/filepicker.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -154,7 +152,7 @@ IMPLEMENT_WIDGETS_PAGE(FilePickerWidgetsPage, "FilePicker",
 
 FilePickerWidgetsPage::FilePickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, filepicker_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::FilePicker)
 {
 }
 
@@ -188,7 +186,7 @@ void FilePickerWidgetsPage::CreateContent()
                     &m_textInitialDir
                  ), wxSizerFlags().Expand().Border());
 
-    leftSizer->AddSpacer(10);
+    leftSizer->AddSpacer(FromDIP(10));
 
     leftSizer->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  wxSizerFlags().CentreHorizontal().TripleBorder());

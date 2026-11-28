@@ -609,7 +609,7 @@ struct wxXmlParseError
         if (prolog->GetType() == wxXML_PI_NODE && prolog->GetName() == "target")
         {
 
-            // Process Process Instruction (PI) contents.
+            // Process Processing Instruction (PI) contents.
             wxString pi = prolog->GetContent();
 
             ...

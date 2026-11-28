@@ -49,9 +49,9 @@ TEST_CASE("wxWindow::ClientWindowSizeRoundTrip", "[window][client-size]")
 
 TEST_CASE("wxWindow::MinClientSize", "[window][client-size]")
 {
-    std::unique_ptr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY,
-                                         wxDefaultPosition, wxDefaultSize,
-                                         wxBORDER_THEME));
+    auto w = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxBORDER_THEME);
     w->SetSize(wxSize(1,1));
     const wxSize szw = w->GetClientSize();
     CHECK(szw.GetWidth() >= 0);
@@ -60,13 +60,13 @@ TEST_CASE("wxWindow::MinClientSize", "[window][client-size]")
 
 TEST_CASE("wxWindow::SetClientSize", "[window][client-size]")
 {
-#if defined(__WXGTK__) && !defined(__WXGTK3__)
-    // Under wxGTK2 we need to have two children (at least) because if there
+#if defined(__WXGTK__)
+    // Under wxGTK we need to have two children (at least) because if there
     // is exactly one child its size is set to fill the whole parent frame
     // and the window cannot be resized - see wxTopLevelWindowBase::Layout().
-    std::unique_ptr<wxWindow> w0(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
-#endif // wxGTK 2
-    std::unique_ptr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    auto w0 = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
+#endif // wxGTK
+    auto w = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
 
     wxRect reqSize = wxTheApp->GetTopWindow()->GetClientRect();
     reqSize.Deflate(25);
@@ -87,9 +87,6 @@ TEST_CASE("wxWindow::SetClientSize", "[window][client-size]")
 // Check that the client size of a scrolled window accounts for the scrollbars
 // shown in it.
 //
-// All important checks below fails for wxQt currently, so disable the test for
-// it for now.
-#ifndef __WXQT__
 TEST_CASE("wxScrolled::ClientSize", "[window][client-size][scroll]")
 {
     // Check that the borders, if any, are accounted for correctly too.
@@ -99,14 +96,13 @@ TEST_CASE("wxScrolled::ClientSize", "[window][client-size][scroll]")
     // This window is not used for anything, but it must exist to prevent the
     // test frame from resizing the panel created below to fill it entirely,
     // which is what would happen if the panel were its unique child.
-    std::unique_ptr<wxWindow> const
-        sibling(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    auto const sibling =
+        make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
 
     // The scrolled window must be really laid out by its parent for the
     // scrollbars to appear, so use a sizer in a panel of our own instead of
     // just creating it as a child of the test frame.
-    std::unique_ptr<wxWindow> const
-        parent(new wxPanel(wxTheApp->GetTopWindow()));
+    auto const parent = make_unique<wxPanel>(wxTheApp->GetTopWindow());
 
     // Make the panel big enough for the scrollbars to fit inside it.
     parent->SetSize(wxSize(200, 200));
@@ -167,8 +163,8 @@ TEST_CASE("wxScrolled::ClientSize", "[window][client-size][scroll]")
     {
         const wxSize sizeScrollbar
                      (
-                        wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win),
-                        wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win)
+                        win->GetScrollbarSize(wxVERTICAL),
+                        win->GetScrollbarSize(wxHORIZONTAL)
                      );
 
         // Allow for a small tolerance because the scrollbars may be separated
@@ -185,4 +181,3 @@ TEST_CASE("wxScrolled::ClientSize", "[window][client-size][scroll]")
     const wxSize sizeScrolled = sizeVirtual - sizeClient;
     CHECK( win->GetViewStart() == wxPoint(sizeScrolled.x, sizeScrolled.y) );
 }
-#endif // !__WXQT__

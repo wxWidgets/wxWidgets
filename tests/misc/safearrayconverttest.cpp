@@ -16,13 +16,6 @@
 #include "wx/msw/ole/oleutils.h"
 #include "wx/msw/ole/safearray.h"
 
-// need this to be able to compare wxVariant objects in Catch macros
-inline std::ostream& operator<<(std::ostream& ostr, const wxVariant& v)
-{
-    ostr << v.GetString();
-    return ostr;
-}
-
 // ----------------------------------------------------------------------------
 // tests
 // ----------------------------------------------------------------------------

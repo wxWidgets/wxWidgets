@@ -55,6 +55,7 @@ set(TEST_SRC
     net/ipc_test_server.cpp
     net/socket.cpp
     net/webrequest.cpp
+    net/webrequest_local.cpp
     regex/regextest.cpp
     regex/wxregextest.cpp
     scopeguard/scopeguardtest.cpp
@@ -69,6 +70,7 @@ set(TEST_SRC
     strings/crt.cpp
     strings/vsnprintf.cpp
     strings/hexconv.cpp
+    strings/utf8literals.cpp
     streams/datastreamtest.cpp
     streams/ffilestream.cpp
     streams/fileback.cpp
@@ -124,6 +126,14 @@ set(TEST_DATA
 
 # Register test_base through Catch to get one CTest entry per Catch test case
 # instead of the default aggregate executable test.
+# This file defines symbols affecting the wx headers before including them, so
+# it can't use precompiled headers.
+set_source_files_properties(${wxSOURCE_DIR}/tests/strings/utf8literals.cpp
+    PROPERTIES
+        SKIP_PRECOMPILE_HEADERS ON
+        COTIRE_EXCLUDED ON
+    )
+
 wx_add_test(test_base CONSOLE NO_CTEST ${TEST_SRC}
     DATA ${TEST_DATA}
     )

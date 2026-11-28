@@ -491,6 +491,18 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// IME (either inline or windowed mode) full composited string.
 #define wxSTC_CHARACTERSOURCE_IME_RESULT 2
 
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_DISABLED 0
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_L2R 1
+
+/// This item is a provisional value and is subject to change
+/// in future versions of wxStyledTextCtrl.
+#define wxSTC_BIDIRECTIONAL_R2L 2
+
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
 #define wxSTC_LEX_NULL 1
@@ -632,6 +644,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_ZIG 139
 #define wxSTC_LEX_NIX 140
 #define wxSTC_LEX_SINEX 141
+#define wxSTC_LEX_ESCSEQ 142
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1326,6 +1339,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ASM_STRINGEOL 13
 #define wxSTC_ASM_EXTINSTRUCTION 14
 #define wxSTC_ASM_COMMENTDIRECTIVE 15
+#define wxSTC_ASM_STRINGBACKQUOTE 16
 
 /// Lexical states for SCLEX_FORTRAN
 #define wxSTC_F_DEFAULT 0
@@ -2033,6 +2047,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ABL_COMMENT 10
 #define wxSTC_ABL_TASKMARKER 11
 #define wxSTC_ABL_LINECOMMENT 12
+#define wxSTC_ABL_ANNOTATION 13
+#define wxSTC_ABL_TYPEDANNOTATION 14
 
 /// Lexical states for SCLEX_ABAQUS
 #define wxSTC_ABAQUS_DEFAULT 0
@@ -2178,6 +2194,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_PAS_CHARACTER 12
 #define wxSTC_PAS_OPERATOR 13
 #define wxSTC_PAS_ASM 14
+#define wxSTC_PAS_MULTILINESTRING 15
 
 /// Lexical state for SCLEX_SORCUS
 #define wxSTC_SORCUS_DEFAULT 0
@@ -2250,6 +2267,9 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MARKDOWN_CODE 19
 #define wxSTC_MARKDOWN_CODE2 20
 #define wxSTC_MARKDOWN_CODEBK 21
+#define wxSTC_MARKDOWN_FRONT_MARK 22
+#define wxSTC_MARKDOWN_FRONT 23
+#define wxSTC_MARKDOWN_FRONT_KEY 24
 
 /// Lexical state for SCLEX_TXT2TAGS
 #define wxSTC_TXT2TAGS_DEFAULT 0
@@ -2936,6 +2956,172 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_SINEX_BLOCK_END 3
 #define wxSTC_SINEX_DATE 4
 #define wxSTC_SINEX_NUMBER 5
+
+/// Lexical states for SCLEX_ESCSEQ
+#define wxSTC_ESCSEQ_DEFAULT 0
+#define wxSTC_ESCSEQ_BLACK_DEFAULT 1
+#define wxSTC_ESCSEQ_RED_DEFAULT 2
+#define wxSTC_ESCSEQ_GREEN_DEFAULT 3
+#define wxSTC_ESCSEQ_YELLOW_DEFAULT 4
+#define wxSTC_ESCSEQ_BLUE_DEFAULT 5
+#define wxSTC_ESCSEQ_MAGENTA_DEFAULT 6
+#define wxSTC_ESCSEQ_CYAN_DEFAULT 7
+#define wxSTC_ESCSEQ_WHITE_DEFAULT 8
+#define wxSTC_ESCSEQ_DEFAULT_BLACK 9
+#define wxSTC_ESCSEQ_BLACK_BLACK 10
+#define wxSTC_ESCSEQ_RED_BLACK 11
+#define wxSTC_ESCSEQ_GREEN_BLACK 12
+#define wxSTC_ESCSEQ_YELLOW_BLACK 13
+#define wxSTC_ESCSEQ_BLUE_BLACK 14
+#define wxSTC_ESCSEQ_MAGENTA_BLACK 15
+#define wxSTC_ESCSEQ_CYAN_BLACK 16
+#define wxSTC_ESCSEQ_WHITE_BLACK 17
+#define wxSTC_ESCSEQ_DEFAULT_RED 18
+#define wxSTC_ESCSEQ_BLACK_RED 19
+#define wxSTC_ESCSEQ_RED_RED 20
+#define wxSTC_ESCSEQ_GREEN_RED 21
+#define wxSTC_ESCSEQ_YELLOW_RED 22
+#define wxSTC_ESCSEQ_BLUE_RED 23
+#define wxSTC_ESCSEQ_MAGENTA_RED 24
+#define wxSTC_ESCSEQ_CYAN_RED 25
+#define wxSTC_ESCSEQ_WHITE_RED 26
+#define wxSTC_ESCSEQ_DEFAULT_GREEN 27
+#define wxSTC_ESCSEQ_BLACK_GREEN 28
+#define wxSTC_ESCSEQ_RED_GREEN 29
+#define wxSTC_ESCSEQ_GREEN_GREEN 30
+#define wxSTC_ESCSEQ_YELLOW_GREEN 40
+#define wxSTC_ESCSEQ_BLUE_GREEN 41
+#define wxSTC_ESCSEQ_MAGENTA_GREEN 42
+#define wxSTC_ESCSEQ_CYAN_GREEN 43
+#define wxSTC_ESCSEQ_WHITE_GREEN 44
+#define wxSTC_ESCSEQ_DEFAULT_YELLOW 45
+#define wxSTC_ESCSEQ_BLACK_YELLOW 46
+#define wxSTC_ESCSEQ_RED_YELLOW 47
+#define wxSTC_ESCSEQ_GREEN_YELLOW 48
+#define wxSTC_ESCSEQ_YELLOW_YELLOW 49
+#define wxSTC_ESCSEQ_BLUE_YELLOW 50
+#define wxSTC_ESCSEQ_MAGENTA_YELLOW 51
+#define wxSTC_ESCSEQ_CYAN_YELLOW 52
+#define wxSTC_ESCSEQ_WHITE_YELLOW 53
+#define wxSTC_ESCSEQ_DEFAULT_BLUE 54
+#define wxSTC_ESCSEQ_BLACK_BLUE 55
+#define wxSTC_ESCSEQ_RED_BLUE 56
+#define wxSTC_ESCSEQ_GREEN_BLUE 57
+#define wxSTC_ESCSEQ_YELLOW_BLUE 58
+#define wxSTC_ESCSEQ_BLUE_BLUE 59
+#define wxSTC_ESCSEQ_MAGENTA_BLUE 60
+#define wxSTC_ESCSEQ_CYAN_BLUE 61
+#define wxSTC_ESCSEQ_WHITE_BLUE 62
+#define wxSTC_ESCSEQ_DEFAULT_MAGENTA 63
+#define wxSTC_ESCSEQ_BLACK_MAGENTA 64
+#define wxSTC_ESCSEQ_RED_MAGENTA 65
+#define wxSTC_ESCSEQ_GREEN_MAGENTA 66
+#define wxSTC_ESCSEQ_YELLOW_MAGENTA 67
+#define wxSTC_ESCSEQ_BLUE_MAGENTA 68
+#define wxSTC_ESCSEQ_MAGENTA_MAGENTA 69
+#define wxSTC_ESCSEQ_CYAN_MAGENTA 70
+#define wxSTC_ESCSEQ_WHITE_MAGENTA 71
+#define wxSTC_ESCSEQ_DEFAULT_CYAN 72
+#define wxSTC_ESCSEQ_BLACK_CYAN 73
+#define wxSTC_ESCSEQ_RED_CYAN 74
+#define wxSTC_ESCSEQ_GREEN_CYAN 75
+#define wxSTC_ESCSEQ_YELLOW_CYAN 76
+#define wxSTC_ESCSEQ_BLUE_CYAN 77
+#define wxSTC_ESCSEQ_MAGENTA_CYAN 78
+#define wxSTC_ESCSEQ_CYAN_CYAN 79
+#define wxSTC_ESCSEQ_WHITE_CYAN 80
+#define wxSTC_ESCSEQ_DEFAULT_WHITE 81
+#define wxSTC_ESCSEQ_BLACK_WHITE 82
+#define wxSTC_ESCSEQ_RED_WHITE 83
+#define wxSTC_ESCSEQ_GREEN_WHITE 84
+#define wxSTC_ESCSEQ_YELLOW_WHITE 85
+#define wxSTC_ESCSEQ_BLUE_WHITE 86
+#define wxSTC_ESCSEQ_MAGENTA_WHITE 87
+#define wxSTC_ESCSEQ_CYAN_WHITE 88
+#define wxSTC_ESCSEQ_WHITE_WHITE 89
+#define wxSTC_ESCSEQ_BOLD_DEFAULT 90
+#define wxSTC_ESCSEQ_BOLD_BLACK_DEFAULT 91
+#define wxSTC_ESCSEQ_BOLD_RED_DEFAULT 92
+#define wxSTC_ESCSEQ_BOLD_GREEN_DEFAULT 93
+#define wxSTC_ESCSEQ_BOLD_YELLOW_DEFAULT 94
+#define wxSTC_ESCSEQ_BOLD_BLUE_DEFAULT 95
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_DEFAULT 96
+#define wxSTC_ESCSEQ_BOLD_CYAN_DEFAULT 97
+#define wxSTC_ESCSEQ_BOLD_WHITE_DEFAULT 98
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_BLACK 99
+#define wxSTC_ESCSEQ_BOLD_BLACK_BLACK 100
+#define wxSTC_ESCSEQ_BOLD_RED_BLACK 101
+#define wxSTC_ESCSEQ_BOLD_GREEN_BLACK 102
+#define wxSTC_ESCSEQ_BOLD_YELLOW_BLACK 103
+#define wxSTC_ESCSEQ_BOLD_BLUE_BLACK 104
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_BLACK 105
+#define wxSTC_ESCSEQ_BOLD_CYAN_BLACK 106
+#define wxSTC_ESCSEQ_BOLD_WHITE_BLACK 107
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_RED 108
+#define wxSTC_ESCSEQ_BOLD_BLACK_RED 109
+#define wxSTC_ESCSEQ_BOLD_RED_RED 110
+#define wxSTC_ESCSEQ_BOLD_GREEN_RED 111
+#define wxSTC_ESCSEQ_BOLD_YELLOW_RED 112
+#define wxSTC_ESCSEQ_BOLD_BLUE_RED 113
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_RED 114
+#define wxSTC_ESCSEQ_BOLD_CYAN_RED 115
+#define wxSTC_ESCSEQ_BOLD_WHITE_RED 116
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_GREEN 117
+#define wxSTC_ESCSEQ_BOLD_BLACK_GREEN 118
+#define wxSTC_ESCSEQ_BOLD_RED_GREEN 119
+#define wxSTC_ESCSEQ_BOLD_GREEN_GREEN 120
+#define wxSTC_ESCSEQ_BOLD_YELLOW_GREEN 121
+#define wxSTC_ESCSEQ_BOLD_BLUE_GREEN 122
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_GREEN 123
+#define wxSTC_ESCSEQ_BOLD_CYAN_GREEN 124
+#define wxSTC_ESCSEQ_BOLD_WHITE_GREEN 125
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_YELLOW 126
+#define wxSTC_ESCSEQ_BOLD_BLACK_YELLOW 127
+#define wxSTC_ESCSEQ_BOLD_RED_YELLOW 128
+#define wxSTC_ESCSEQ_BOLD_GREEN_YELLOW 129
+#define wxSTC_ESCSEQ_BOLD_YELLOW_YELLOW 130
+#define wxSTC_ESCSEQ_BOLD_BLUE_YELLOW 131
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_YELLOW 132
+#define wxSTC_ESCSEQ_BOLD_CYAN_YELLOW 133
+#define wxSTC_ESCSEQ_BOLD_WHITE_YELLOW 134
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_BLUE 135
+#define wxSTC_ESCSEQ_BOLD_BLACK_BLUE 136
+#define wxSTC_ESCSEQ_BOLD_RED_BLUE 137
+#define wxSTC_ESCSEQ_BOLD_GREEN_BLUE 138
+#define wxSTC_ESCSEQ_BOLD_YELLOW_BLUE 139
+#define wxSTC_ESCSEQ_BOLD_BLUE_BLUE 140
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_BLUE 141
+#define wxSTC_ESCSEQ_BOLD_CYAN_BLUE 142
+#define wxSTC_ESCSEQ_BOLD_WHITE_BLUE 143
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_MAGENTA 144
+#define wxSTC_ESCSEQ_BOLD_BLACK_MAGENTA 145
+#define wxSTC_ESCSEQ_BOLD_RED_MAGENTA 146
+#define wxSTC_ESCSEQ_BOLD_GREEN_MAGENTA 147
+#define wxSTC_ESCSEQ_BOLD_YELLOW_MAGENTA 148
+#define wxSTC_ESCSEQ_BOLD_BLUE_MAGENTA 149
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_MAGENTA 150
+#define wxSTC_ESCSEQ_BOLD_CYAN_MAGENTA 151
+#define wxSTC_ESCSEQ_BOLD_WHITE_MAGENTA 152
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_CYAN 153
+#define wxSTC_ESCSEQ_BOLD_BLACK_CYAN 154
+#define wxSTC_ESCSEQ_BOLD_RED_CYAN 155
+#define wxSTC_ESCSEQ_BOLD_GREEN_CYAN 156
+#define wxSTC_ESCSEQ_BOLD_YELLOW_CYAN 157
+#define wxSTC_ESCSEQ_BOLD_BLUE_CYAN 158
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_CYAN 159
+#define wxSTC_ESCSEQ_BOLD_CYAN_CYAN 160
+#define wxSTC_ESCSEQ_BOLD_WHITE_CYAN 161
+#define wxSTC_ESCSEQ_BOLD_DEFAULT_WHITE 162
+#define wxSTC_ESCSEQ_BOLD_BLACK_WHITE 163
+#define wxSTC_ESCSEQ_BOLD_RED_WHITE 164
+#define wxSTC_ESCSEQ_BOLD_GREEN_WHITE 165
+#define wxSTC_ESCSEQ_BOLD_YELLOW_WHITE 166
+#define wxSTC_ESCSEQ_BOLD_BLUE_WHITE 167
+#define wxSTC_ESCSEQ_BOLD_MAGENTA_WHITE 168
+#define wxSTC_ESCSEQ_BOLD_CYAN_WHITE 169
+#define wxSTC_ESCSEQ_BOLD_WHITE_WHITE 170
+#define wxSTC_ESCSEQ_IDENTIFIER 171
+#define wxSTC_ESCSEQ_UNKNOWN 172
 
 //}}}
 //----------------------------------------------------------------------
@@ -5660,6 +5846,12 @@ public:
     // Set the lexer from an ILexer*.
     void SetILexer(void* ilexer);
 
+    // Retrieve bidirectional text display state.
+    int GetBidirectional() const;
+
+    // Set bidirectional text display state.
+    void SetBidirectional(int bidirectional);
+
     // Divide each styling byte into lexical class bits (default: 5) and indicator
     // bits (default: 3). If a lexer requires more than 32 lexical states, then this
     // is used to expand the possible states.
@@ -6014,29 +6206,26 @@ public:
 
     virtual long XYToPosition(long x, long y) const override
     {
-        long pos = PositionFromLine((int)y);
-        if ( pos == -1 )
+        if ( x < 0 || y < 0 || y >= GetNumberOfLines() )
             return -1;
 
-        if ( x >= LineLength((int)y) )
+        const long pos = PositionFromLine((int)y);
+        if ( x > GetLineEndPosition((int)y) - pos )
             return -1;
 
-        pos += x;
-        return pos;
+        return pos + x;
     }
 
     virtual bool PositionToXY(long pos, long *x, long *y) const override
     {
-        int l = LineFromPosition((int)pos);
-        if ( l == -1 )
+        if ( pos < 0 || pos > GetLastPosition() )
             return false;
 
-        long lx = pos - PositionFromLine(l);
-        if ( lx >= LineLength(l) )
-            return false;
+        const int l = LineFromPosition((int)pos);
 
+        // The position between CR and LF is the same as the one before them.
         if ( x )
-            *x = lx;
+            *x = wxMin((int)pos, GetLineEndPosition(l)) - PositionFromLine(l);
 
         if ( y )
             *y = l;

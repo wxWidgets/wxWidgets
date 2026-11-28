@@ -372,6 +372,9 @@ private:
     wxZipArchiveFormat m_format;
 
     wxDECLARE_NO_COPY_CLASS(wxZipOutputStream);
+
+private:
+    wxDECLARE_CLASS(wxZipOutputStream);
 };
 
 
@@ -453,6 +456,9 @@ private:
                     wxZipInputStream& inputStream);
 
     wxDECLARE_NO_COPY_CLASS(wxZipInputStream);
+
+private:
+    wxDECLARE_CLASS(wxZipInputStream);
 };
 
 

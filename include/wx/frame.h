@@ -212,6 +212,13 @@ protected:
     // override to do something special when the menu bar is attached to the
     // frame
     virtual void AttachMenuBar(wxMenuBar *menubar);
+
+#if wxUSE_ACCEL
+    // search for an accelerator for the given key event in our menus
+    virtual bool
+    FindAcceleratorForKeyInMenuBar(const wxKeyEvent& event,
+                                   wxAcceleratorEntry& entry) const override;
+#endif // wxUSE_ACCEL
 #endif // wxUSE_MENUBAR
 
     // Return true if we should update the menu item state from idle event

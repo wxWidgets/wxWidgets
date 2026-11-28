@@ -64,7 +64,7 @@ public:
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h);
+    MyFrame();
     ~MyFrame();
 
     void BuildDataViewCtrl(wxPanel* parent,
@@ -117,6 +117,9 @@ private:
     void OnDeleteAllTreeItems(wxCommandEvent& event);
     void OnAddTreeItem(wxCommandEvent& event);
     void OnAddTreeContainerItem(wxCommandEvent& event);
+    void OnTreeItemExpand(wxCommandEvent& event);
+    void OnTreeItemCollapse(wxCommandEvent& event);
+    void OnTreeItemIsExpanded(wxCommandEvent& event);
 
     void OnIndexListUseEnglish(wxCommandEvent&) { FillIndexList(Lang_English); }
     void OnIndexListUseFrench(wxCommandEvent&) { FillIndexList(Lang_French); }
@@ -214,6 +217,8 @@ private:
 
     wxTextCtrl* m_log;
     wxLog *m_logOld;
+
+    wxDataViewItem m_cont;
 
 private:
     // Flag used by OnListValueChanged(), see there.
@@ -384,8 +389,7 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    MyFrame *frame =
-        new MyFrame(nullptr, "wxDataViewCtrl sample", 40, 40, 1000, 540);
+    MyFrame *frame = new MyFrame();
 
     frame->Show(true);
     return true;
@@ -469,6 +473,9 @@ enum
     ID_DELETE_ALL_TREE_ITEMS = 401,
     ID_ADD_TREE_ITEM = 402,
     ID_ADD_TREE_CONTAINER_ITEM = 403,
+    ID_TREE_ITEM_IS_EXPANDED = 404,
+    ID_TREE_ITEM_COLLAPSE = 405,
+    ID_TREE_ITEM_EXPAND = 406,
 
     // Index list model page
     ID_INDEX_LIST_USE_ENGLISH = 500,
@@ -524,6 +531,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_ALL_TREE_ITEMS, MyFrame::OnDeleteAllTreeItems )
     EVT_BUTTON( ID_ADD_TREE_ITEM, MyFrame::OnAddTreeItem )
     EVT_BUTTON( ID_ADD_TREE_CONTAINER_ITEM, MyFrame::OnAddTreeContainerItem )
+    EVT_BUTTON( ID_TREE_ITEM_IS_EXPANDED, MyFrame::OnTreeItemIsExpanded )
+    EVT_BUTTON( ID_TREE_ITEM_EXPAND, MyFrame::OnTreeItemExpand )
+    EVT_BUTTON( ID_TREE_ITEM_COLLAPSE, MyFrame::OnTreeItemCollapse )
 
     EVT_BUTTON( ID_INDEX_LIST_USE_ENGLISH, MyFrame::OnIndexListUseEnglish )
     EVT_BUTTON( ID_INDEX_LIST_USE_FRENCH, MyFrame::OnIndexListUseFrench )
@@ -561,8 +571,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
-  wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame():
+  wxFrame(nullptr, wxID_ANY, "wxDataViewCtrl sample")
 {
     m_log = nullptr;
     m_col = nullptr;
@@ -639,7 +649,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     // redirect logs from our event handlers to text control
     m_log = new wxTextCtrl( this, wxID_ANY, wxString(), wxDefaultPosition,
                             wxDefaultSize, wxTE_MULTILINE );
-    m_log->SetMinSize(wxSize(-1, 100));
+    m_log->SetMinSize(wxSize(-1, FromDIP(100)));
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
     wxLogMessage( "This is the log window" );
 
@@ -673,7 +683,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                                    "Change ninth &title"), border);
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
-    m_ctrl[Page_Music]->SetMinSize(wxSize(-1, 200));
+    m_ctrl[Page_Music]->SetMinSize(wxSize(-1, FromDIP(200)));
     firstPanelSz->Add(m_ctrl[Page_Music], wxSizerFlags(1).Expand().Border());
     firstPanelSz->Add(button_sizer);
     firstPanelSz->Add(sizerCurrent);
@@ -732,6 +742,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_ALL_TREE_ITEMS, "Delete All"), doubleBorder );
     button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_ITEM, "Add Item"), doubleBorder );
     button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_CONTAINER_ITEM, "Add Container"), doubleBorder );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_TREE_ITEM_IS_EXPANDED, "IsExpanded"), doubleBorder );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_TREE_ITEM_COLLAPSE, "Collapse"), doubleBorder );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_TREE_ITEM_EXPAND, "Expand"), doubleBorder );
 
     wxSizer *fourthPanelSz = new wxBoxSizer( wxVERTICAL );
     fourthPanelSz->Add(m_ctrl[Page_TreeStore], wxSizerFlags(1).Expand().Border());
@@ -1023,12 +1036,12 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
             tc->AppendItem( root, "Child 2", 0 );
             tc->AppendItem( root, "Child 3, very long, long, long, long", 0 );
 
-            wxDataViewItem cont =
+            m_cont =
                 tc->AppendContainer( root, "Container child", 0 );
-            tc->AppendItem( cont, "Child 4", 0 );
-            tc->AppendItem( cont, "Child 5", 0 );
+            tc->AppendItem( m_cont, "Child 4", 0 );
+            tc->AppendItem( m_cont, "Child 5", 0 );
 
-            tc->Expand(cont);
+            tc->Expand(m_cont);
         }
         break;
 
@@ -1787,8 +1800,8 @@ void MyFrame::OnSorted( wxDataViewEvent &event )
 void MyFrame::OnDataViewChar(wxKeyEvent& event)
 {
     wxString key;
-    if ( event.GetUnicodeKey() != WXK_NONE )
-        key.Printf("\"%c\"", event.GetUnicodeKey());
+    if ( event.GetUnicodeChar() != WXK_NONE )
+        key.Printf("\"%c\"", event.GetUnicodeChar());
     else if ( event.GetKeyCode() != WXK_NONE )
         key.Printf("wxKeyCode(%d)", event.GetKeyCode());
     else
@@ -1919,6 +1932,27 @@ void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))
     wxDataViewItem selected = ctrl->GetSelection();
     if (ctrl->IsContainer(selected))
         ctrl->AppendContainer(selected, "Container", 0 );
+}
+
+void MyFrame::OnTreeItemExpand(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[Page_TreeStore];
+    ctrl->Expand( m_cont );
+}
+
+void MyFrame::OnTreeItemCollapse(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[Page_TreeStore];
+    ctrl->Collapse( m_cont );
+}
+
+void MyFrame::OnTreeItemIsExpanded(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[Page_TreeStore];
+    if (ctrl->IsExpanded( m_cont) )
+        wxLogMessage("Container child is expanded");
+    else
+        wxLogMessage("Container child is not expanded");
 }
 
 void MyFrame::OnMultipleSort( wxCommandEvent &event )

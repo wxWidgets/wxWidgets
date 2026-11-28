@@ -119,6 +119,7 @@ bool wxArtProviderCache::GetIconBundle(const wxString& full_id, wxIconBundle* bm
 void wxArtProviderCache::Clear()
 {
     m_bitmapsHash.clear();
+    m_bitmapsBundlesHash.clear();
     m_iconBundlesHash.clear();
 }
 

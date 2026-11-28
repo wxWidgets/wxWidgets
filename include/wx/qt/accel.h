@@ -50,6 +50,9 @@ public:
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
+    // Find the entry corresponding to the given key event or nullptr.
+    const wxAcceleratorEntry *GetEntry(const wxKeyEvent& event) const;
+
 protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const override;

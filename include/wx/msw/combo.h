@@ -94,6 +94,8 @@ protected:
 
     virtual bool HasTransparentBackground() override { return IsDoubleBuffered(); }
 
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+
 private:
     void Init();
 

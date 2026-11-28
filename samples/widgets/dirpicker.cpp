@@ -41,8 +41,6 @@
 #include "wx/filepicker.h"
 #include "widgets.h"
 
-#include "icons/dirpicker.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -137,7 +135,7 @@ IMPLEMENT_WIDGETS_PAGE(DirPickerWidgetsPage, "DirPicker",
 
 DirPickerWidgetsPage::DirPickerWidgetsPage(WidgetsBookCtrl *book,
                                      wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, dirpicker_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::DirPicker)
 {
 }
 
@@ -163,7 +161,7 @@ void DirPickerWidgetsPage::CreateContent()
                     &m_textInitialDir
                  ), wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(FromDIP(10));
 
     sizerLeft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  wxSizerFlags().CentreHorizontal().TripleBorder());

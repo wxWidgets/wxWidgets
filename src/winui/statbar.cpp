@@ -2429,6 +2429,13 @@ void wxStatusBar::OnSize(wxSizeEvent& event)
 
 void wxStatusBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    // The fixed widths of the fields follow the DPI, as in the other ports
+    // (wxStatusBarBase, which this handler hides).
+    const wxWeakRef<wxStatusBar> weakThis(this);
+    wxStatusBarBase::OnDPIChanged(event);
+    if ( weakThis.get() != this )
+        return;
+
     event.Skip();
     if ( !m_winui || !m_winui->callbackState )
         return;

@@ -832,6 +832,7 @@ public:
 
     bool DoLoad(const wxString& location);
     void FinishLoad();
+    void FinishPlaying();
 
     virtual wxMediaState GetState() override;
 
@@ -1173,6 +1174,26 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
 void wxAMMediaBackend::FinishLoad()
 {
     NotifyMovieLoaded();
+}
+
+//---------------------------------------------------------------------------
+// wxAMMediaBackend::FinishPlaying
+//
+// Called when the end of the media has been reached.
+//
+// Sends the stop event and, unless it is vetoed, rewinds the media and sends
+// the finished event.
+//---------------------------------------------------------------------------
+void wxAMMediaBackend::FinishPlaying()
+{
+    if ( SendStopEvent() )
+    {
+        // Seek to beginning of movie
+        wxAMMediaBackend::SetPosition(0);
+
+        // send the event to our child
+        QueueFinishEvent();
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -1531,17 +1552,19 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             switch (event[1].GetInteger())
             {
             case 0: // stopping
-                if( m_amb->wxAMMediaBackend::GetPosition() ==
+                // IMediaPlayer sends endofstream event when the end of the
+                // media is reached, see below, and comparing the position
+                // with the duration doesn't work for it: at the end of the
+                // media the position is already reset to 0 when we get here,
+                // while when another media is being opened, this event is
+                // sent from inside Open() and both the position and the
+                // duration are 0, so we would wrongly consider that the
+                // media has finished playing and fail to change its position.
+                if( !m_amb->GetMP() &&
+                    m_amb->wxAMMediaBackend::GetPosition() ==
                     m_amb->wxAMMediaBackend::GetDuration() )
                 {
-                    if ( m_amb->SendStopEvent() )
-                    {
-                        // Seek to beginning of movie
-                        m_amb->wxAMMediaBackend::SetPosition(0);
-
-                        // send the event to our child
-                        m_amb->QueueFinishEvent();
-                    }
+                    m_amb->FinishPlaying();
                 }
                 else
                 {
@@ -1562,9 +1585,27 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             event.Skip();
         break;
 
+    case 0x00000bba: // endofstream in IMediaPlayer
+        m_amb->FinishPlaying();
+        break;
+
     case 0x00000032: // opencomplete in IActiveMovie
         if(!m_bLoadEventSent)
         {
+            m_amb->FinishLoad();
+        }
+        break;
+
+    case 0x00000bc0: // newstream in IMediaPlayer
+        // This event is sent when the media has been successfully opened.
+        //
+        // Notice that we can't rely on readystatechange for IMediaPlayer:
+        // for local files and HTTP streams it goes directly from loading to
+        // complete, skipping the interactive state, and it also changes to
+        // complete when opening the media fails, before reporting the error.
+        if(!m_bLoadEventSent)
+        {
+            m_bLoadEventSent = true;
             m_amb->FinishLoad();
         }
         break;
@@ -1580,7 +1621,10 @@ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
             // size of the video (will error) - however on 4
             // it won't play on downloaded things until it is
             // completely downloaded so we use the lesser of two evils...
+            //
+            // IMediaPlayer uses newstream event instead, see above.
             else if(event[0].GetInteger() == 3 &&
+                !m_amb->GetMP() &&
                 !m_bLoadEventSent)
             {
                 m_bLoadEventSent = true;

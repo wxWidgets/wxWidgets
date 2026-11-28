@@ -41,6 +41,8 @@ wxEND_EVENT_TABLE()
 // wxMouseEventsManager implementation
 // ============================================================================
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxMouseEventsManager, wxEvtHandler);
+
 void wxMouseEventsManager::Init()
 {
     m_win = nullptr;
@@ -147,18 +149,8 @@ void wxMouseEventsManager::OnMove(wxMouseEvent& event)
                           "should have detected mouse being released" );
 
             {
-                // it's probably a bad idea to query the system for these
-                // values every time the mouse is moved so cache them on the
-                // assumption that they don't change -- which is wrong, of
-                // course, the user can change them but it doesn't happen often
-                static const int
-                    dragMinX = wxSystemSettings::GetMetric(wxSYS_DRAG_X, m_win);
-                static const int
-                    dragMinY = wxSystemSettings::GetMetric(wxSYS_DRAG_Y, m_win);
-
                 const wxPoint& pos = event.GetPosition();
-                const wxPoint ofs = pos - m_posLast;
-                if ( abs(ofs.x) > dragMinX || abs(ofs.y) > dragMinY )
+                if ( wxSystemSettings::ExceedsDragThreshold(m_posLast, pos, m_win) )
                 {
                     // the mouse left the rectangle inside which its movements
                     // are considered to be too small to constitute a start of

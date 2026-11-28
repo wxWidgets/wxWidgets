@@ -663,6 +663,72 @@ void ListBaseTestCase::HitTest()
 #endif // __WXMSW__
 }
 
+void ListBaseTestCase::HitTestItemRect()
+{
+    wxListCtrl* const list = GetList();
+    list->SetWindowStyle(wxLC_REPORT);
+
+    list->InsertColumn(0, "Column 0");
+    for ( int i = 0; i < 3; ++i )
+        list->InsertItem(i, wxString::Format("Item %d", i));
+
+    // Ensure that the control is laid out, so that the header has its final
+    // size and position.
+    list->SendSizeEvent();
+    wxYield();
+
+    // Points inside the item rectangle, which is in the control coordinates,
+    // must correspond to this item, even if the control has a header.
+    wxRect rect;
+    REQUIRE( list->GetItemRect(1, rect) );
+
+    int flags = 0;
+    CHECK( list->HitTest(rect.GetTopLeft() + wxPoint(5, 1), flags) == 1 );
+    CHECK( list->HitTest(rect.GetBottomLeft() + wxPoint(5, -1), flags) == 1 );
+
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    // Positions of the mouse events and of the mouse pointer converted to the
+    // control coordinates must be consistent with HitTest() too.
+    wxPoint posEvent = wxDefaultPosition;
+    long itemEvent = -2;
+    list->Bind(wxEVT_LEFT_DOWN, [&](wxMouseEvent& event)
+        {
+            posEvent = event.GetPosition();
+
+            int flagsEvent = 0;
+            itemEvent = list->HitTest(posEvent, flagsEvent);
+
+            event.Skip();
+        });
+
+    const wxPoint posClick = rect.GetTopLeft() + wxPoint(5, rect.height / 2);
+
+    auto posMouse = list->ClientToScreen(posClick);
+
+    wxUIActionSimulator sim;
+    sim.MouseMove(posMouse);
+    wxYield();
+
+    // Under wxQt, wxUIActionSimulator doesn't seem to actually move the mouse
+    // pointer, it just uses the position passed to MouseMove() for generating
+    // the mouse events, so we can't use the actual mouse position there.
+#ifndef __WXQT__
+    posMouse = wxGetMousePosition();
+#endif
+
+    CHECK( list->HitTest(list->ScreenToClient(posMouse), flags) == 1 );
+
+    sim.MouseClick();
+    wxYield();
+
+    CHECK( posEvent == posClick );
+    CHECK( itemEvent == 1 );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
 namespace
 {
     //From the sample but fixed so it actually inverts
@@ -695,6 +761,301 @@ void ListBaseTestCase::Sort()
 
     CHECK( list->GetItemText(0) == "Item 1" );
     CHECK( list->GetItemText(1) == "Item 0" );
+}
+
+void ListBaseTestCase::FillList(int count)
+{
+    wxListCtrl* const list = GetList();
+
+    if ( !list->GetColumnCount() )
+        list->InsertColumn(0, "Header");
+
+    if ( list->IsVirtual() )
+    {
+        list->SetItemCount(count);
+        return;
+    }
+    else
+    {
+        for ( int i = 0; i < count; ++i )
+            list->InsertItem(i, wxString::Format("Item %d", i));
+    }
+}
+
+void ListBaseTestCase::ShiftArrowAfterFocus()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Set the current item programmatically, without setting the anchor, and
+    // check that extending the selection uses it as anchor.
+    list->SetItemState(5, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    sim.Char(WXK_UP, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(4) );
+    CHECK( IsSelected(5) );
+
+    // Check that the anchor doesn't survive deleting all items.
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    list->DeleteAllItems();
+    FillList(10);
+    list->SetItemState(2, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(2) );
+    CHECK( IsSelected(3) );
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+void ListBaseTestCase::ShiftArrowAfterDelete()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make the last item current and the selection anchor.
+    list->SetItemState(8, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(9) );
+
+    // Delete the anchor item: this used to leave the anchor pointing beyond
+    // the end of the control.
+    list->DeleteItem(9);
+
+    sim.Char(WXK_UP, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(7) );
+    CHECK( IsSelected(8) );
+
+    // Items can't be inserted into virtual controls.
+    if ( list->IsVirtual() )
+        return;
+
+    // Under wxQt the anchor is not adjusted when inserting items, but moves to
+    // the current item instead, so don't run this part of the test there.
+#ifndef __WXQT__
+    // Inserting an item before the anchor must shift it too.
+    list->InsertItem(0, "New item");
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    // The anchor is now item 9 (previously 8), so only it remains selected.
+    CHECK( list->GetSelectedItemCount() == 1 );
+    CHECK( IsSelected(9) );
+#endif // !__WXQT__
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+void ListBaseTestCase::ShiftArrowAfterCtrl()
+{
+    // This test relies on Ctrl-arrows moving the current item without changing
+    // the anchor, as in wxMSW, but under wxQt they move the anchor too, so it
+    // can't be used there.
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXQT__)
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make item 2 current, selected and the anchor.
+    list->SetItemState(1, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(2) );
+
+    // Move the current item without changing the selection.
+    for ( int i = 0; i < 3; ++i )
+        sim.Char(WXK_DOWN, wxMOD_CONTROL);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+
+    // Extending the selection now must select all the items from the anchor
+    // to the new current item, even though the old current item wasn't
+    // selected.
+    sim.Char(WXK_UP, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 3 );
+    CHECK( IsSelected(2) );
+    CHECK( IsSelected(3) );
+    CHECK( IsSelected(4) );
+
+    // Select an item outside of the current selection without changing the
+    // anchor.
+    list->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+
+    REQUIRE( list->GetSelectedItemCount() == 4 );
+    REQUIRE( IsSelected(0) );
+
+    sim.Char(WXK_UP, wxMOD_CONTROL);
+    wxYield();
+
+    EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
+    EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);
+
+    // Extending the selection must deselect the item outside of the range.
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 3 );
+    CHECK( !IsSelected(0) );
+    CHECK( IsSelected(2) );
+    CHECK( IsSelected(3) );
+    CHECK( IsSelected(4) );
+
+    // No items were selected and a single one was deselected. Note that
+    // virtual controls send a single notification for all deselected items,
+    // but as only one item was deselected, the count is the same for them.
+    CHECK( selected.GetCount() == 0 );
+    CHECK( deselected.GetCount() == 1 );
+#endif // wxUSE_UIACTIONSIMULATOR && !__WXQT__
+}
+
+void ListBaseTestCase::ShiftArrowAfterFocusChange()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make item 2 current, selected and the anchor.
+    list->SetItemState(1, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(2) );
+
+    // Change the current item programmatically: this must make it the new
+    // anchor, i.e. extending the selection must start from it and not from
+    // the previous anchor.
+    list->SetItemState(6, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(6) );
+    CHECK( IsSelected(7) );
+
+    // Moving the current item using Ctrl-arrows after changing it
+    // programmatically must not change the anchor (but under wxQt Ctrl-arrows
+    // do change it, see ShiftArrowAfterCtrl(), so skip this part there).
+#ifndef __WXQT__
+    list->SetItemState(3, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN, wxMOD_CONTROL);
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 3 );
+    CHECK( IsSelected(3) );
+    CHECK( IsSelected(4) );
+    CHECK( IsSelected(5) );
+#endif // !__WXQT__
+#endif // wxUSE_UIACTIONSIMULATOR
+}
+
+void ListBaseTestCase::ShiftArrowAfterRightClick()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
+    wxListCtrl* const list = GetList();
+
+    FillList(10);
+
+    list->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+
+    // Make item 2 current, selected and the anchor.
+    list->SetItemState(1, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(2) );
+
+    // Right clicking an unselected item selects only it and makes it the
+    // anchor.
+    //
+    // Make sure the item is visible first, it might not be when using high
+    // DPI, as the control size is fixed.
+    list->EnsureVisible(5);
+    wxYield();
+
+    wxRect rect;
+    REQUIRE( list->GetItemRect(5, rect) );
+
+    sim.MouseMove(list->ClientToScreen(rect.GetPosition()) + wxPoint(10, 10));
+    wxYield();
+
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    REQUIRE( list->GetSelectedItemCount() == 1 );
+    REQUIRE( IsSelected(5) );
+
+    sim.Char(WXK_DOWN, wxMOD_SHIFT);
+    wxYield();
+
+    CHECK( list->GetSelectedItemCount() == 2 );
+    CHECK( IsSelected(5) );
+    CHECK( IsSelected(6) );
+#endif // wxUSE_UIACTIONSIMULATOR
 }
 
 #endif //wxUSE_LISTCTRL

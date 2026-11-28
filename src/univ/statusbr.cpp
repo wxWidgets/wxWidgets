@@ -68,6 +68,8 @@ bool wxStatusBarUniv::Create(wxWindow *parent,
 
     SetSize(DoGetBestSize());
 
+    Bind(wxEVT_DPI_CHANGED, &wxStatusBar::OnDPIChanged, this);
+
     return true;
 }
 

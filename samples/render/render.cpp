@@ -269,7 +269,7 @@ private:
         }
 
         const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
-        const wxCoord width = 15*GetCharWidth();
+        const wxCoord width = 10 * GetCharWidth();
 
         const wxHeaderSortIconType
             hdrSortIcon = m_useIcon ? wxHDR_SORT_ICON_UP
@@ -287,15 +287,28 @@ private:
         // Note that we need to use GetDefault() explicitly to show the default
         // implementation.
         dc.DrawText("DrawHeaderButton() (default)", x1, y);
-        wxRendererNative::GetDefault().DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, width, heightHdr), m_flags,
+        wxRendererNative& rendererDefault = wxRendererNative::GetDefault();
+        rendererDefault.DrawHeaderButton(this, dc,
+                                  wxRect(x2, y, width, heightHdr), m_flags | wxCONTROL_SPECIAL,
                                   hdrSortIcon, &hdrParams);
+        rendererDefault.DrawHeaderButton(this, dc,
+                                  wxRect(x2 + width, y, width, heightHdr), m_flags,
+                                  wxHDR_SORT_ICON_NONE, &hdrParams);
+        rendererDefault.DrawHeaderButton(this, dc,
+                                  wxRect(x2 + width * 2, y, width, heightHdr), m_flags | wxCONTROL_DIRTY,
+                                  wxHDR_SORT_ICON_NONE, &hdrParams);
         y += lineHeight + heightHdr;
 
         dc.DrawText("DrawHeaderButton() (overridden)", x1, y);
         renderer.DrawHeaderButton(this, dc,
-                                  wxRect(x2, y, width, heightHdr), m_flags,
+                                  wxRect(x2, y, width, heightHdr), m_flags | wxCONTROL_SPECIAL,
                                   hdrSortIcon, &hdrParams);
+        renderer.DrawHeaderButton(this, dc,
+                                  wxRect(x2 + width, y, width, heightHdr), m_flags,
+                                  wxHDR_SORT_ICON_NONE, &hdrParams);
+        renderer.DrawHeaderButton(this, dc,
+                                  wxRect(x2 + width * 2, y, width, heightHdr), m_flags | wxCONTROL_DIRTY,
+                                  wxHDR_SORT_ICON_NONE, &hdrParams);
         y += lineHeight + heightHdr;
 
         dc.DrawText("DrawCheckBox()", x1, y);

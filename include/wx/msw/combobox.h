@@ -99,7 +99,12 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id) override;
     bool MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
-    bool MSWShouldPreProcessMessage(WXMSG *pMsg) override;
+
+#if wxUSE_ACCEL
+    // Reserve the keys used for editing the text in this control.
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const override;
+#endif // wxUSE_ACCEL
 
     // Standard event handling
     void OnCut(wxCommandEvent& event);

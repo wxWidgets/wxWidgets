@@ -607,6 +607,10 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid, long style)
 
 void wxInfoBar::ShowMessage(const wxString& msg, int flags)
 {
+    // A message shown by ShowMessageFor() is not hidden by its timer any
+    // more once another one replaces it.
+    StopDismissTimer();
+
     if ( !m_winui || !m_winui->bar || !m_winui->callbackState )
         return;
 
@@ -695,6 +699,8 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
 
 void wxInfoBar::Dismiss()
 {
+    StopDismissTimer();
+
     if ( !m_winui || !m_winui->bar || !m_winui->callbackState )
         return;
 
@@ -998,6 +1004,17 @@ void wxInfoBar::RemoveButton(wxWindowID btnid)
     wxFAIL_MSG( wxString::Format("button with id %d not found", btnid) );
 }
 
+void wxInfoBar::ShowCloseButton(ShowButton show)
+{
+    if ( m_showCloseButton == show )
+        return;
+
+    // The close button is the one of the InfoBar itself (IsClosable): the
+    // content is projected again to show it or not.
+    m_showCloseButton = show;
+    RebuildContent();
+}
+
 size_t wxInfoBar::GetButtonCount() const
 {
     return m_buttons.size();
@@ -1194,8 +1211,11 @@ void wxInfoBar::RebuildContent(bool externalMutation)
             const bool hasCheckBox = !checkBoxLabel.empty();
             const MUXC::InfoBar bar = impl->bar;
 
-            // Custom buttons replace the built-in close (X) button.
-            bar.IsClosable(!hasButtons);
+            // Custom buttons replace the built-in close (X) button, unless
+            // the program says when it is shown: see ShowCloseButton().
+            bar.IsClosable(m_showCloseButton == ShowButton::Yes ||
+                           (m_showCloseButton == ShowButton::Auto &&
+                            !hasButtons));
             ProjectionState state = stateForRevision(revision);
             if ( state == ProjectionState::Dead )
             {

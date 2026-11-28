@@ -670,7 +670,7 @@ void wxRibbonPage::OnSize(wxSizeEvent& evt)
 
     if (m_art)
     {
-        wxMemoryDC temp_dc;
+        wxInfoDC temp_dc(this);
         wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, new_size);
         Refresh(true, &invalid_rect);
     }
@@ -808,7 +808,24 @@ bool wxRibbonPage::Layout()
     }
     else
     {
-        PopulateSizeCalcArray(&wxWindow::GetSize);
+        const wxSize size = GetSize();
+        const int minor_axis_size = GetMajorAxis() == wxHORIZONTAL
+                                        ? size.GetHeight()
+                                        : size.GetWidth();
+        if ( minor_axis_size != m_size_in_minor_axis_for_layout )
+        {
+            // The panel sizes were chosen for a different size in the minor
+            // axis, e.g. when the page was realized before the ribbon bar got
+            // its final height, and the panels may have been reduced to sizes
+            // that are not needed any more (or are not small enough), so start
+            // from their minimal sizes again, as Realize() does.
+            m_collapse_stack.Clear();
+            PopulateSizeCalcArray(&wxWindow::GetMinSize);
+        }
+        else
+        {
+            PopulateSizeCalcArray(&wxWindow::GetSize);
+        }
         return DoActualLayout();
     }
 }
@@ -820,6 +837,9 @@ bool wxRibbonPage::DoActualLayout()
     int gap;
     int minor_axis_size;
     int available_space;
+    m_size_in_minor_axis_for_layout = major_axis == wxHORIZONTAL
+                                        ? GetSize().GetHeight()
+                                        : GetSize().GetWidth();
     if(major_axis == wxHORIZONTAL)
     {
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
@@ -848,6 +868,14 @@ bool wxRibbonPage::DoActualLayout()
         }
         if(size_index != 0)
             available_space -= gap;
+    }
+    if(m_size_calc_array_size == 0)
+    {
+        // There is nothing to scroll in a page without panels, even if it
+        // is currently too small for the page borders, e.g. because it
+        // doesn't have its real size yet. Layout() doesn't do anything for
+        // such page, so the scroll buttons would remain shown.
+        available_space = wxMax(available_space, 0);
     }
     bool todo_hide_scroll_buttons = false;
     bool todo_show_scroll_buttons = false;
@@ -968,7 +996,7 @@ bool wxRibbonPage::ShowScrollButtons()
 
     if(show_left)
     {
-        wxMemoryDC temp_dc;
+        wxInfoDC temp_dc(this);
         wxSize size;
         long direction;
         if(GetMajorAxis() == wxHORIZONTAL)
@@ -1009,7 +1037,7 @@ bool wxRibbonPage::ShowScrollButtons()
 
     if(show_right)
     {
-        wxMemoryDC temp_dc;
+        wxInfoDC temp_dc(this);
         wxSize size;
         long direction;
         if(GetMajorAxis() == wxHORIZONTAL)
@@ -1448,5 +1476,92 @@ void wxRibbonPage::HideIfExpanded()
     if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
         bar->HideIfExpanded();
 }
+
+#if wxUSE_ACCESSIBILITY
+
+namespace
+{
+
+class wxRibbonPageAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRibbonPageAccessible(wxRibbonPage* page) : wxWindowAccessible(page) { }
+
+    wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *role = wxROLE_SYSTEM_PAGETAB;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long* state) override
+    {
+        wxRibbonPage* page = wxDynamicCast(GetWindow(), wxRibbonPage);
+        if ( page == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        wxRibbonBar* bar = page->GetAncestorRibbonBar();
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        long st{ wxACC_STATE_SYSTEM_SELECTABLE };
+        if ( !page->IsShown() )
+            st |= wxACC_STATE_SYSTEM_INVISIBLE;
+        if ( !bar->IsEnabled() )
+            st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+        if ( bar->IsFocusable() )
+            st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+
+        if ( bar->GetPageNumber(page) == bar->GetActivePage() )
+        {
+            st |= wxACC_STATE_SYSTEM_SELECTED;
+            if ( bar->HasFocus() && bar->IsTabRowFocused() )
+                st |= wxACC_STATE_SYSTEM_FOCUSED;
+        }
+
+        *state = st;
+        return wxACC_OK;
+    }
+
+    // Let assistive technology select the tab, the same as clicking on it.
+    wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = _("Switch");
+        return wxACC_OK;
+    }
+
+    wxAccStatus DoDefaultAction(int childId) override
+    {
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        wxRibbonPage* page = wxDynamicCast(GetWindow(), wxRibbonPage);
+        if ( page == nullptr )
+            return wxACC_FAIL;
+
+        wxRibbonBar* bar = page->GetAncestorRibbonBar();
+        if ( bar == nullptr )
+            return wxACC_FAIL;
+
+        return bar->SetActivePage(page) ? wxACC_OK : wxACC_FAIL;
+    }
+};
+
+} // anonymous namespace
+
+wxAccessible* wxRibbonPage::CreateAccessible()
+{
+    return new wxRibbonPageAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_RIBBON

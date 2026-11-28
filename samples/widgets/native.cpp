@@ -41,8 +41,6 @@
 
 #include "widgets.h"
 
-#include "icons/native.xpm"
-
 // Helper to create a menu to be shown in our button.
 //
 // The menu is supposed to be initially empty, don't call this more than once
@@ -87,7 +85,7 @@ public:
         // When creating the native window, we must specify the valid parent
         // and while we don't have to specify any position if it's going to be
         // laid out by sizers, we do need the size.
-        const wxSize size = FromDIP(wxSize(140, 30));
+        const wxSize size = FromDIP(FromDIP(wxSize(140, 30)));
 
         HWND hwnd = ::CreateWindow
                       (
@@ -276,7 +274,7 @@ private:
 IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, "Native", NATIVE_CTRLS);
 
 NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
-                 : WidgetsPage(book, imaglist, native_xpm)
+                 : WidgetsPage(book, imaglist, WidgetsIcon::Native)
 {
     m_nativeWindow = nullptr;
 }

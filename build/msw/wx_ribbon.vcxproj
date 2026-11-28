@@ -838,6 +838,8 @@
     <ClCompile Include="..\..\src\ribbon\art_msw_flat.cpp" />
     <ClCompile Include="..\..\src\ribbon\art_internal.cpp" />
     <ClCompile Include="..\..\src\ribbon\art_msw.cpp" />
+    <ClCompile Include="..\..\src\ribbon\backstage.cpp" />
+    <ClCompile Include="..\..\src\ribbon\backstagecontrols.cpp" />
     <ClCompile Include="..\..\src\ribbon\bar.cpp" />
     <ClCompile Include="..\..\src\ribbon\buttonbar.cpp" />
     <ClCompile Include="..\..\src\ribbon\control.cpp" />
@@ -898,12 +900,15 @@
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\ribbon\art.h" />
     <ClInclude Include="..\..\include\wx\ribbon\art_internal.h" />
+    <ClInclude Include="..\..\include\wx\ribbon\backstage.h" />
+    <ClInclude Include="..\..\include\wx\ribbon\backstagecontrols.h" />
     <ClInclude Include="..\..\include\wx\ribbon\bar.h" />
     <ClInclude Include="..\..\include\wx\ribbon\buttonbar.h" />
     <ClInclude Include="..\..\include\wx\ribbon\control.h" />
     <ClInclude Include="..\..\include\wx\ribbon\gallery.h" />
     <ClInclude Include="..\..\include\wx\ribbon\page.h" />
     <ClInclude Include="..\..\include\wx\ribbon\panel.h" />
+    <ClInclude Include="..\..\include\wx\ribbon\private\backstage.h" />
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h" />
   </ItemGroup>

@@ -208,6 +208,9 @@ protected:
     void CreateActiveX(REFIID, IUnknown*);
     bool TryCreateActiveX(REFIID, IUnknown*);
     void TearDownActiveX();
+
+private:
+    wxDECLARE_CLASS(wxActiveXContainer);
 };
 
 ///\brief Store native event parameters.
@@ -265,6 +268,9 @@ public:
 
     wxActiveXEventNativeMSW *GetNativeParameters() const
     {   return (wxActiveXEventNativeMSW*)GetClientData(); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxActiveXEvent);
 };
 
 // #define wxACTIVEX_ID    14001

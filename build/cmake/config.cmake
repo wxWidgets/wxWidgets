@@ -10,6 +10,9 @@
 set(wxCONFIG_DIR ${wxOUTPUT_DIR}/wx/config)
 file(MAKE_DIRECTORY ${wxCONFIG_DIR})
 set(TOOLCHAIN_FULLNAME ${wxBUILD_FILE_ID})
+# The wx-config in wxCONFIG_DIR is used by the in-place wx-config and refers
+# to the build tree, so the installed one is written separately.
+set(wxCONFIG_INSTALL_FILE ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/wx-config-install/${TOOLCHAIN_FULLNAME})
 
 macro(wx_configure_script input output)
     # variables used in wx-config-inplace.in
@@ -105,10 +108,16 @@ function(wx_write_config_inplace)
         )
 endfunction()
 
-function(wx_write_config)
-    wx_get_install_dir(include)
-    wx_get_install_platform_dir(library)
-    wx_get_install_platform_dir(runtime)
+function(wx_write_config inplace)
+    if(inplace)
+        set(include_dir "include")
+        file(RELATIVE_PATH library_dir ${wxBINARY_DIR} ${wxOUTPUT_DIR})
+        set(runtime_dir "bin")
+    else()
+        wx_get_install_dir(include)
+        wx_get_install_platform_dir(library)
+        wx_get_install_platform_dir(runtime)
+    endif()
 
     set(prefix ${CMAKE_INSTALL_PREFIX})
     set(exec_prefix "\${prefix}")
@@ -194,6 +203,9 @@ function(wx_write_config)
     if(wxBUILD_LARGEFILE_SUPPORT)
         wx_string_append(WXCONFIG_CPPFLAGS " -D_FILE_OFFSET_BITS=64")
     endif()
+    if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
+        wx_string_append(WXCONFIG_CPPFLAGS " -DwxDEBUG_LEVEL=${wxBUILD_DEBUG_LEVEL}")
+    endif()
     string(STRIP "${WXCONFIG_CPPFLAGS}" WXCONFIG_CPPFLAGS)
     set(WXCONFIG_CXXFLAGS ${WXCONFIG_CFLAGS})
     set(WXCONFIG_LDFLAGS_GUI)
@@ -202,11 +214,19 @@ function(wx_write_config)
     set(LDFLAGS_GL)
     get_filename_component(RESCOMP "${CMAKE_RC_COMPILER}" NAME_WE)
 
-    wx_configure_script(
-        "wx-config.in"
-        "${TOOLCHAIN_FULLNAME}"
-        )
+    if(inplace)
+        wx_configure_script(
+            "wx-config.in"
+            "${TOOLCHAIN_FULLNAME}"
+            )
+    else()
+        configure_file(
+            ${wxSOURCE_DIR}/wx-config.in
+            ${wxCONFIG_INSTALL_FILE}
+            ESCAPE_QUOTES @ONLY NEWLINE_STYLE UNIX)
+    endif()
 endfunction()
 
 wx_write_config_inplace()
-wx_write_config()
+wx_write_config(TRUE)
+wx_write_config(FALSE)

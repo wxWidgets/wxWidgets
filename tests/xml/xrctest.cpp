@@ -227,7 +227,7 @@ static const char *TEST_XRC_FILE = "test.xrc";
 void LoadXrcFrom(const wxString& xrcText)
 {
     wxStringInputStream sis(xrcText);
-    std::unique_ptr<wxXmlDocument> xmlDoc(new wxXmlDocument(sis));
+    auto xmlDoc = make_unique<wxXmlDocument>(sis);
     REQUIRE( xmlDoc->IsOk() );
 
     // Load the xrc we've just created

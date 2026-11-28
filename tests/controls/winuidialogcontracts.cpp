@@ -3558,12 +3558,15 @@ TEST_CASE("WinUIDialogContracts::BusyInfoHundredCycles",
             wxString::Format("updated busy cycle %d", cycle));
     }
 
+    // A hundred frames with their islands are destroyed from idle time: how
+    // long it takes depends on the load of the machine, not on the code.
     WaitFor(
         "busy info hundred-cycle teardown",
         [&baseline]()
         {
             return SnapshotTopLevelWindows().size() == baseline.size();
-        });
+        },
+        10000);
     CHECK(SnapshotTopLevelWindows().size() == baseline.size());
 }
 

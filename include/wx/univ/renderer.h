@@ -482,6 +482,9 @@ public:
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxRenderer);
 };
 
 // ----------------------------------------------------------------------------
@@ -854,6 +857,9 @@ public:
 
 protected:
     wxRenderer *m_renderer;
+
+private:
+    wxDECLARE_CLASS(wxDelegateRenderer);
 };
 
 // ----------------------------------------------------------------------------

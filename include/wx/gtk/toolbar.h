@@ -10,6 +10,7 @@
 #define _WX_GTK_TOOLBAR_H_
 
 typedef struct _GtkTooltips GtkTooltips;
+typedef struct _GtkToolItem GtkToolItem;
 
 // ----------------------------------------------------------------------------
 // wxToolBar
@@ -96,6 +97,46 @@ private:
     GtkTooltips* m_tooltips;
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
+};
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxString& label,
+                  const wxBitmapBundle& bitmap1,
+                  const wxBitmapBundle& bitmap2,
+                  wxItemKind kind,
+                  wxObject *clientData,
+                  const wxString& shortHelpString,
+                  const wxString& longHelpString)
+        : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
+                            clientData, shortHelpString, longHelpString)
+    {
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
+        : wxToolBarToolBase(tbar, control, label)
+    {
+    }
+
+    virtual void SetLabel(const wxString& label) override;
+
+private:
+    void SetImage();
+    void CreateDropDown();
+
+    GtkToolItem* m_item = nullptr;
+
+    friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif

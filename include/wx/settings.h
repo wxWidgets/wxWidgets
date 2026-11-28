@@ -236,6 +236,11 @@ public:
         return GetAppearance().IsDark() ? colForDark : colForLight;
     }
 
+    // check if the two points are far enough to start a drag operation
+    static bool ExceedsDragThreshold(const wxPoint& origin,
+                                     const wxPoint& current,
+                                     const wxWindow* win = nullptr);
+
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
 };

@@ -251,7 +251,7 @@ protected:
     virtual void MSWDrawThemeBorder(WXHDC hdc) override;
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
-    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+    virtual void MSWSetDarkOrLightMode() override;
 
 #if wxUSE_RICHEDIT
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
@@ -324,6 +324,9 @@ private:
     // pasting the entire text on the clipboard.
     void AdjustMaxLengthBeforePaste();
 
+#if wxUSE_RICHEDIT
+    void MSWPaintDarkRichDisabled();
+#endif
 
     wxMenu* m_privateContextMenu;
 

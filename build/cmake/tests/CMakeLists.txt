@@ -8,7 +8,6 @@
 #############################################################################
 
 add_subdirectory(base)
-add_subdirectory(drawing)
 add_subdirectory(gui)
 add_subdirectory(headers)
 if(WIN32)

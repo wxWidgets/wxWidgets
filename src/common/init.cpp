@@ -156,7 +156,7 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
     for ( int i = 0; i < argcIn; i++ )
     {
 #ifdef __DARWIN__
-        wxWCharBuffer buf(wxConvFileName->cMB2WX(argvIn[i]));
+        wxWCharBuffer buf(wxGetFileNameConv().cMB2WX(argvIn[i]));
 #else
         wxWCharBuffer buf(wxConvLocal.cMB2WX(argvIn[i]));
 #endif

@@ -17,6 +17,8 @@
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
+#include "wx/richtext/richtextxml.h"
+#include "wx/mstream.h"
 #include "wx/uiaction.h"
 
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
@@ -29,6 +31,35 @@
 #include "waitfor.h"
 
 #include <memory>
+
+class RefreshCountingRichTextCtrl : public wxRichTextCtrl
+{
+public:
+    RefreshCountingRichTextCtrl(wxWindow *parent)
+        : wxRichTextCtrl(parent, wxID_ANY, "", wxDefaultPosition,
+                         wxSize(400, 200), wxWANTS_CHARS)
+    {
+    }
+
+    void Refresh(bool eraseBackground = true,
+                 const wxRect *rect = nullptr) override
+    {
+        m_refreshCount++;
+        wxRichTextCtrl::Refresh(eraseBackground, rect);
+    }
+
+    int GetRefreshCount() const
+    {
+        return m_refreshCount;
+    }
+
+    void ResetRefreshCount()
+    {
+        m_refreshCount = 0;
+    }
+private:
+    int m_refreshCount = 0;
+};
 
 class RichTextCtrlTestCase
 {
@@ -392,6 +423,104 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::CaretPosition",
     CHECK(m_rich->GetCaretPosition() == 21);
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::LineBreak",
+                 "[richtextctrl]")
+{
+    m_rich->WriteText("one");
+
+    REQUIRE(m_rich->LineBreak());
+
+    m_rich->LayoutContent();
+
+    CHECK(m_rich->GetFocusObject()->GetLineCount() == 2);
+    CHECK(m_rich->GetCaretPosition() == 3);
+    CHECK(m_rich->GetCaretAtLineStart());
+
+    m_rich->MoveLeft();
+
+    CHECK(m_rich->GetCaretPosition() == 2);
+    CHECK(!m_rich->GetCaretAtLineStart());
+
+    m_rich->MoveRight();
+
+    CHECK(m_rich->GetCaretPosition() == 3);
+    CHECK(m_rich->GetCaretAtLineStart());
+
+    m_rich->WriteText("two");
+
+    wxString text;
+    text << "one" << wxRichTextLineBreakChar << "two";
+
+    CHECK(m_rich->GetValue() == text);
+
+    m_rich->MoveToLineStart();
+
+    CHECK(m_rich->GetCaretPosition() == 3);
+    CHECK(m_rich->GetCaretAtLineStart());
+
+    m_rich->MoveToLineEnd();
+
+    CHECK(m_rich->GetCaretPosition() == 6);
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase,
+                 "RichTextCtrl::MoveDownToSingleCharacterLine",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("This line contains several characters.\nX");
+
+    m_rich->SetInsertionPointEnd();
+    const long endOfSingleCharacterLine = m_rich->GetCaretPosition();
+
+    m_rich->SetInsertionPoint(10);
+    REQUIRE(m_rich->MoveDown());
+
+    CHECK(m_rich->GetCaretPosition() == endOfSingleCharacterLine);
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase,
+                 "RichTextCtrl::MoveUpDownThroughEmptyLines",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("Line one\n\nLine three\n\n\nLine six");
+
+    const auto currentLine = [this]()
+    {
+        long x = -1, y = -1;
+        REQUIRE(m_rich->PositionToXY(m_rich->GetInsertionPoint(), &x, &y));
+        return y;
+    };
+
+    m_rich->SetInsertionPoint(4);
+    REQUIRE(currentLine() == 0);
+
+    for ( long line = 1; line <= 5; line++ )
+    {
+        INFO("Moving down to line " << line);
+        REQUIRE(m_rich->MoveDown());
+        CHECK(currentLine() == line);
+    }
+
+    for ( long line = 4; line >= 0; line-- )
+    {
+        INFO("Moving up to line " << line);
+        REQUIRE(m_rich->MoveUp());
+        CHECK(currentLine() == line);
+    }
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase,
+                 "RichTextCtrl::MoveUpToEmptyFirstLine",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("\nLine two");
+
+    m_rich->SetInsertionPointEnd();
+    REQUIRE(m_rich->MoveUp());
+
+    CHECK(m_rich->GetInsertionPoint() == 0);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Selection",
                  "[richtextctrl]")
 {
@@ -571,6 +700,28 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Underline",
     CHECK(!m_rich->IsSelectionUnderlined());
 }
 
+static void CheckTextEffectToggle(wxRichTextCtrl& rich, int effect)
+{
+    CHECK(!rich.DoesSelectionHaveTextEffectFlag(effect));
+
+    rich.ApplyTextEffectToSelection(effect);
+    CHECK(rich.DoesSelectionHaveTextEffectFlag(effect));
+
+    rich.ApplyTextEffectToSelection(effect);
+    CHECK(!rich.DoesSelectionHaveTextEffectFlag(effect));
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextEffect",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("text");
+    m_rich->SetInsertionPointEnd();
+
+    CheckTextEffectToggle(*m_rich, wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
+    CheckTextEffectToggle(*m_rich, wxTEXT_ATTR_EFFECT_SUPERSCRIPT);
+    CheckTextEffectToggle(*m_rich, wxTEXT_ATTR_EFFECT_SUBSCRIPT);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Indent",
                  "[richtextctrl]")
 {
@@ -659,6 +810,27 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextColour",
     CHECK(colour.GetTextColour() == m_rich->GetBasicStyle().GetTextColour());
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::AppendTextStyle",
+                 "[richtextctrl]")
+{
+    m_rich->BeginTextColour(*wxRED);
+    m_rich->WriteText("red");
+    m_rich->EndTextColour();
+
+    m_rich->BeginTextColour(*wxBLUE);
+    m_rich->AppendText("blue");
+    m_rich->EndTextColour();
+
+    wxTextAttr colour;
+    m_rich->GetStyle(1, colour);
+
+    CHECK(colour.GetTextColour() == *wxRED);
+
+    m_rich->GetStyle(5, colour);
+
+    CHECK(colour.GetTextColour() == *wxBLUE);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::NumberedBullet",
                  "[richtextctrl]")
 {
@@ -677,6 +849,16 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::NumberedBullet",
     CHECK(bullet.GetBulletNumber() == 1);
     CHECK(bullet.GetLeftIndent() == 15);
     CHECK(bullet.GetLeftSubIndent() == 20);
+
+    wxRichTextParagraph *firstPara =
+        m_rich->GetFocusObject()->GetParagraphAtPosition(5);
+    wxRichTextAttr nextBullet;
+
+    REQUIRE(m_rich->GetFocusObject()->FindNextParagraphNumber(firstPara,
+                                                              nextBullet));
+    CHECK(nextBullet.HasBulletStyle());
+    CHECK(nextBullet.HasBulletNumber());
+    CHECK(nextBullet.GetBulletNumber() == 2);
 
     m_rich->GetStyle(15, bullet);
 
@@ -742,6 +924,26 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Font", "[richtextctrl]")
     CHECK(fontstyle.GetFont() == font);
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextEffects",
+                 "[richtextctrl]")
+{
+    const int effect = wxTEXT_ATTR_EFFECT_SUPERSCRIPT;
+
+    m_rich->ApplyTextEffectToSelection(effect);
+    CHECK(m_rich->DoesSelectionHaveTextEffectFlag(effect));
+
+    m_rich->WriteText("x");
+
+    m_rich->ApplyTextEffectToSelection(effect);
+    CHECK(!m_rich->DoesSelectionHaveTextEffectFlag(effect));
+
+    m_rich->WriteText("y");
+
+    wxTextAttr style;
+    m_rich->GetStyle(1, style);
+    CHECK((style.GetTextEffects() & effect) == 0);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Delete",
                  "[richtextctrl]")
 {
@@ -765,6 +967,28 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Delete",
     m_rich->Delete(wxRichTextRange(14, 29));
 
     CHECK(m_rich->GetValue() == "long long line");
+}
+
+TEST_CASE("RichTextCtrl::DeleteParagraphEndRefresh", "[richtextctrl]")
+{
+    auto rich =
+        make_unique<RefreshCountingRichTextCtrl>(wxTheApp->GetTopWindow());
+
+    rich->AddParagraph("first paragraph");
+    const wxRichTextRange range = rich->AddParagraph("second paragraph");
+    rich->AddParagraph("third paragraph");
+
+    rich->ResetRefreshCount();
+
+    rich->SetSelection(range.GetStart(), range.GetEnd() + 1);
+    REQUIRE(rich->HasSelection());
+
+    rich->DeleteSelectedContent();
+
+    CHECK(rich->GetRefreshCount() > 0);
+    CHECK(rich->GetValue().Contains("first paragraph"));
+    CHECK(!rich->GetValue().Contains("second paragraph"));
+    CHECK(rich->GetValue().Contains("third paragraph"));
 }
 
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Url", "[richtextctrl]")
@@ -910,6 +1134,42 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Table", "[richtextctrl]")
 
     m_rich->Clear();
     m_rich->SetFocusObject(nullptr);
+}
+
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TableXMLMissingCells",
+                 "[richtextctrl]")
+{
+    // This table claims to have 2*2 cells but contains only one of them.
+    static const char xml[] =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<richtext version=\"1.0.0.0\" xmlns=\"http://www.wxwidgets.org\">"
+        "<paragraphlayout>"
+        "<paragraph>"
+        "<table rows=\"2\" cols=\"2\">"
+        "<cell><paragraphlayout><paragraph><text>x</text></paragraph>"
+        "</paragraphlayout></cell>"
+        "</table>"
+        "</paragraph>"
+        "</paragraphlayout>"
+        "</richtext>";
+
+    wxMemoryInputStream mis(xml, sizeof(xml) - 1);
+    wxRichTextXMLHandler handler;
+    REQUIRE( handler.LoadFile(&m_rich->GetBuffer(), mis) );
+
+    wxRichTextParagraph* const
+        para = wxDynamicCast(m_rich->GetBuffer().GetChild(0), wxRichTextParagraph);
+    REQUIRE( para );
+    wxRichTextTable* const
+        table = wxDynamicCast(para->GetChild(0), wxRichTextTable);
+    REQUIRE( table );
+
+    // The inconsistent table must have been discarded instead of being left
+    // with missing cells that would be accessed when laying it out.
+    CHECK( table->GetRowCount() == 0 );
+    CHECK( table->GetColumnCount() == 0 );
+
+    m_rich->LayoutContent();
 }
 
 #endif //wxUSE_RICHTEXT

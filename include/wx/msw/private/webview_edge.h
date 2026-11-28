@@ -45,6 +45,8 @@ __CRT_UUID_DECL(ICoreWebView2ExecuteScriptCompletedHandler, 0x49511172, 0xcc67, 
 __CRT_UUID_DECL(ICoreWebView2NavigationCompletedEventHandler, 0xd33a35bf, 0x1c49, 0x4f98, 0x93,0xab, 0x00,0x6e,0x05,0x33,0xfe,0x1c);
 __CRT_UUID_DECL(ICoreWebView2NavigationStartingEventHandler, 0x9adbe429, 0xf36d, 0x432b, 0x9d,0xdc, 0xf8,0x88,0x1f,0xbd,0x76,0xe3);
 __CRT_UUID_DECL(ICoreWebView2NewWindowRequestedEventHandler, 0xd4c185fe, 0xc81c, 0x4989, 0x97,0xaf, 0x2d,0x3f,0xa7,0xab,0x56,0x51);
+__CRT_UUID_DECL(ICoreWebView2ProcessFailedEventArgs2, 0x4dab9422,0x46fa,0x4c3e, 0xa5,0xd2,0x41,0xd2,0x07,0x1d,0x36,0x80);
+__CRT_UUID_DECL(ICoreWebView2ProcessFailedEventHandler, 0x79e0aea4,0x990b,0x42d9, 0xaa,0x1d,0x0f,0xcc,0x2e,0x5b,0xc7,0xf1);
 __CRT_UUID_DECL(ICoreWebView2Profile, 0x79110ad3,0xcd5d,0x4373, 0x8b,0xc3,0xc6,0x06,0x58,0xf1,0x7a,0x5f);
 __CRT_UUID_DECL(ICoreWebView2Profile2, 0xfa740d4b,0x5eae,0x4344, 0xa8,0xad,0x74,0xbe,0x31,0x92,0x53,0x97);
 __CRT_UUID_DECL(ICoreWebView2Settings3, 0xfdb5ab74, 0xaf33, 0x4854, 0x84,0xf0,0x0a,0x63,0x1d,0xeb,0x5e,0xba);
@@ -114,6 +116,7 @@ public:
     EventRegistrationToken m_webMessageReceivedToken = { };
     EventRegistrationToken m_webResourceRequestedToken = { };
     EventRegistrationToken m_windowCloseRequestedToken = { };
+    EventRegistrationToken m_processFailedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
@@ -128,6 +131,7 @@ public:
     HRESULT OnWebResourceRequested(ICoreWebView2* sender, ICoreWebView2WebResourceRequestedEventArgs* args);
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
     HRESULT OnWindowCloseRequested(ICoreWebView2* sender, IUnknown* args);
+    HRESULT OnProcessFailed(ICoreWebView2* sender, ICoreWebView2ProcessFailedEventArgs* args);
 
     void EnvironmentAvailable(ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);

@@ -50,6 +50,7 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "CURL";
 
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebRequestEvent, wxEvent);
 
 #ifdef __WXDEBUG__
 static const wxStringCharType* wxNO_IMPL_MSG
@@ -937,7 +938,14 @@ wxString wxWebResponse::GetSuggestedFileName() const
 {
     wxCHECK_IMPL( wxString() );
 
-    return m_impl->GetSuggestedFileName();
+    // The name comes from the server, so ensure that it doesn't contain any
+    // characters not allowed in file names, as it is supposed to be used as
+    // one, but preserve empty name to indicate that there is no suggestion.
+    const wxString name = m_impl->GetSuggestedFileName();
+    if ( name.empty() )
+        return name;
+
+    return wxFileName::MakeValidName(name);
 }
 
 wxString wxWebResponse::AsString() const

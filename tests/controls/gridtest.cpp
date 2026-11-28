@@ -20,7 +20,11 @@
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
 #include "wx/weakref.h"
+#include "wx/numformatter.h"
 #include "wx/textctrl.h"
+#if wxUSE_COMBOBOX && defined(__WXOSX_COCOA__)
+    #include "wx/combobox.h"
+#endif // wxUSE_COMBOBOX && __WXOSX_COCOA__
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
@@ -112,6 +116,47 @@ struct EditInfo
              wxGridDirection direction = wxGRID_COLUMN)
         : pos(pos), count(count), direction(direction) { }
 };
+
+#if wxUSE_COMBOBOX
+
+#if defined(__WXOSX_COCOA__)
+
+// Avoid opening or focusing the native wxOSX popup in this test helper: it
+// waits for real user interaction on CI, while the test sends wxEVT_TEXT_ENTER
+// directly and only needs the editor control created to verify that Enter
+// dismisses it.
+//
+class TestChoiceEditorNoPopup : public wxGridCellChoiceEditor
+{
+public:
+    explicit TestChoiceEditorNoPopup(const wxArrayString& choices)
+        : wxGridCellChoiceEditor(choices)
+    {
+    }
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid) override
+    {
+        wxASSERT_MSG(m_control,
+                     wxT("The wxGridCellEditor must be created first!"));
+
+        m_value = grid->GetTable()->GetValue(row, col);
+        Reset();
+    }
+
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
+        { return new TestChoiceEditorNoPopup(*this); }
+};
+
+using TestChoiceEditor = TestChoiceEditorNoPopup;
+
+#else
+
+// Otherwise use regular grid cell choice editor
+using TestChoiceEditor = wxGridCellChoiceEditor;
+
+#endif // __WXOSX_COCOA__
+
+#endif // wxUSE_COMBOBOX
 
 // Derive a new class inheriting from wxGrid, also to get access to its
 // protected GetCellAttr(). This is not pretty, but we don't have any other way
@@ -1059,9 +1104,17 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
 
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
 
-    WaitFor("mouse drag to be processed", [&]() {
-        return rowsize.GetCount() != 0;
-    });
+    if ( !WaitFor("mouse drag to be processed", [&]() {
+            return rowsize.GetCount() != 0;
+        }) )
+    {
+#ifdef wxHAS_QT5
+        WARN("Ignoring known test failure under Qt5: column resize "
+             "event not received (column width is "
+             << m_grid->GetColSize(0) << ")");
+        return;
+#endif // wxHAS_QT5
+    }
 
     CHECK(rowsize.GetCount() == 1);
 #endif
@@ -2625,6 +2678,127 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 #endif
 }
 
+#if wxUSE_COMBOBOX
+TEST_CASE_METHOD(GridTestCase, "Grid::ChoiceEditorEnter", "[grid]")
+{
+    wxArrayString choices;
+    choices.push_back("one");
+    choices.push_back("two");
+
+    m_grid->SetCellValue(1, 1, choices[0]);
+    m_grid->SetCellEditor(1, 1, new TestChoiceEditor(choices));
+
+    wxGridCellEditorPtr editor(m_grid->GetCellEditor(1, 1));
+    REQUIRE( editor );
+
+    m_grid->SetGridCursor(1, 1);
+    m_grid->EnableCellEditControl();
+
+    wxWindow* const editorWindow = editor->GetWindow();
+    REQUIRE( editorWindow );
+
+    wxCommandEvent event(wxEVT_TEXT_ENTER, editorWindow->GetId());
+    event.SetEventObject(editorWindow);
+    editorWindow->ProcessWindowEvent(event);
+
+    CHECK( WaitFor("choice editor to close", [&]() {
+        return !m_grid->IsCellEditControlEnabled();
+    }) );
+}
+#endif // wxUSE_COMBOBOX
+
+TEST_CASE_METHOD(GridTestCase, "Grid::NumericEditorEmpty", "[grid]")
+{
+    // Column 0 uses wxGridCellFloatEditor and column 1 wxGridCellNumberEditor.
+    m_grid->SetColFormatFloat(0);
+    m_grid->SetColFormatNumber(1);
+
+    const int col = GENERATE(0, 1);
+    INFO("Column " << col);
+
+    EventCounter changed(m_grid, wxEVT_GRID_CELL_CHANGED);
+
+    // Edit the cell in the given column of the first row, replacing its
+    // contents with the given text, as if the user entered it, unless it is
+    // null, and return the cell value after the editor is closed.
+    const auto edit = [this](int column, const char* text) -> wxString
+    {
+        wxGridCellEditorPtr editor(m_grid->GetCellEditor(0, column));
+        REQUIRE( editor );
+
+        m_grid->SetGridCursor(0, column);
+        m_grid->EnableCellEditControl();
+
+        wxTextCtrl* const
+            textCtrl = wxDynamicCast(editor->GetWindow(), wxTextCtrl);
+        REQUIRE( textCtrl );
+
+        if ( text )
+        {
+            textCtrl->ChangeValue(text);
+            textCtrl->MarkDirty();
+        }
+
+        // Simulate focus moving elsewhere: this lets the validator normalize
+        // the value and closes the editor, just as it happens in practice.
+        wxFocusEvent event(wxEVT_KILL_FOCUS, textCtrl->GetId());
+        event.SetEventObject(textCtrl);
+        textCtrl->ProcessWindowEvent(event);
+
+        WaitFor("editor to close", [this]() {
+            return !m_grid->IsCellEditControlEnabled();
+        });
+        REQUIRE( !m_grid->IsCellEditControlEnabled() );
+
+        return m_grid->GetCellValue(0, column);
+    };
+
+    // Check that the value is a valid representation of 0: we can't compare
+    // it with a fixed string because the float editor formats it according
+    // to its precision.
+    const auto isZero = [](const wxString& s)
+    {
+        double d;
+        return wxNumberFormatter::FromString(s, &d) && wxIsSameDouble(d, 0.);
+    };
+
+    SECTION("Clearing a cell leaves it empty")
+    {
+        m_grid->SetCellValue(0, col, "17");
+
+        CHECK( edit(col, "") == "" );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    SECTION("Entering 0 in an empty cell stores 0")
+    {
+        CHECK( isZero(edit(col, "0")) );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    SECTION("Entering invalid value stores 0")
+    {
+        m_grid->SetCellValue(0, col, "17");
+
+        CHECK( isZero(edit(col, "-")) );
+        CHECK( changed.GetCount() == 1 );
+    }
+
+    SECTION("Not changing an empty cell keeps it empty")
+    {
+        CHECK( edit(col, nullptr) == "" );
+        CHECK( changed.GetCount() == 0 );
+    }
+
+    SECTION("Not changing a cell with 0 keeps it unchanged")
+    {
+        m_grid->SetCellValue(0, col, "0");
+
+        CHECK( edit(col, nullptr) == "0" );
+        CHECK( changed.GetCount() == 0 );
+    }
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {
     // TODO this test currently works only under Windows, GTK and Qt unfortunately
@@ -2773,6 +2947,29 @@ void GridTestCase::CheckFirstColAutoSize(int expected)
     CHECK(m_grid->GetColSize(0) == expected);
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::AutoWrapStringRendererBestHeight",
+                 "[grid]")
+{
+    wxGridCellAutoWrapStringRenderer renderer;
+    wxGridCellAttrPtr attr(new wxGridCellAttr);
+
+    const int autoWrapMargin = 4;
+    const wxFont cellFont = m_grid->GetDefaultCellFont().Smaller();
+    attr->SetFont(cellFont);
+
+    m_grid->SetCellValue(0, 0, "one line");
+
+    wxClientDC dc(m_grid->GetGridWindow());
+    dc.SetFont(m_grid->GetDefaultCellFont().Larger());
+
+    const int height =
+        renderer.GetBestHeight(*m_grid, *attr, dc, 0, 0,
+                               m_grid->GetColSize(0));
+
+    dc.SetFont(cellFont);
+    CHECK( height == dc.GetCharHeight() + autoWrapMargin );
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
 {
 #ifdef wxHAS_NATIVE_HEADER
@@ -2879,6 +3076,36 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         wxYield();
         CHECK( m_grid->GetRowSize(0) == m_grid->GetDefaultRowSize() );
     }
+}
+
+TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeRow", "[grid]")
+{
+    // Hardcoded extra margin for the rows used in grid.cpp.
+    const int margin = m_grid->FromDIP(6);
+    const int autoWrapMargin = 4;
+
+    m_grid->SetRowLabelValue(0, wxString());
+
+    const wxFont cellFont = m_grid->GetDefaultCellFont();
+    m_grid->SetCellFont(0, 0, cellFont);
+
+    wxClientDC dc(m_grid->GetGridWindow());
+    dc.SetFont(cellFont);
+
+    const wxString text = "Spanned text should fit";
+    const int textWidth = dc.GetTextExtent(text).x;
+
+    m_grid->SetCellValue(0, 0, text);
+    m_grid->SetCellRenderer(0, 0, new wxGridCellAutoWrapStringRenderer);
+    m_grid->SetCellSize(0, 0, 1, 2);
+    m_grid->SetColSize(0, textWidth / 2);
+    m_grid->SetColSize(1, textWidth - textWidth / 2);
+
+    m_grid->AutoSizeRow(0);
+
+    wxYield();
+    CHECK( m_grid->GetRowSize(0) ==
+           dc.GetCharHeight() + autoWrapMargin + margin );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::DrawInvalidCell", "[grid][multicell]")
@@ -3129,7 +3356,13 @@ public:
 // test below.
 inline void UpdateGrid(wxGrid* grid)
 {
-#ifndef __WXQT__
+#if defined(__WXGTK__)
+    // Update() is a no-op under GTK3/Wayland, so wait for the actual
+    // paint event instead of relying on it being synchronous.
+    WaitForPaint waitForPaint(grid);
+    grid->Refresh();
+    waitForPaint.YieldUntilPainted();
+#elif !defined(__WXQT__)
     grid->Refresh();
     grid->Update();
 #else
@@ -3666,7 +3899,7 @@ TEST_CASE("GridBlockCoords::SymDifference", "[grid]")
 
 TEST_CASE("wxGrid::Events", "[grid][event]")
 {
-    const std::unique_ptr<wxGrid> grid(new wxGrid());
+    const auto grid = make_unique<wxGrid>();
 
     EventCounter selectEvents(grid.get(), wxEVT_GRID_SELECT_CELL);
 

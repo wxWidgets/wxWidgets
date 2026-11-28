@@ -426,6 +426,9 @@ bool wxDataViewModel::ItemDeleted( const wxDataViewItem &parent, const wxDataVie
 
 bool wxDataViewModel::ItemChanged( const wxDataViewItem &item )
 {
+    // The root item is never shown, so it can't change.
+    wxCHECK_MSG( item.IsOk(), false, "changed item must be valid" );
+
     return DispatchDataViewModelNotification(
         this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
@@ -453,6 +456,11 @@ bool wxDataViewModel::ItemsDeleted( const wxDataViewItem &parent, const wxDataVi
 
 bool wxDataViewModel::ItemsChanged( const wxDataViewItemArray &items )
 {
+    for ( const auto& item : items )
+    {
+        wxCHECK_MSG( item.IsOk(), false, "changed items must be valid" );
+    }
+
     return DispatchDataViewModelNotification(
         this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
@@ -462,6 +470,8 @@ bool wxDataViewModel::ItemsChanged( const wxDataViewItemArray &items )
 
 bool wxDataViewModel::ValueChanged( const wxDataViewItem &item, unsigned int col )
 {
+    wxCHECK_MSG( item.IsOk(), false, "item with changed value must be valid" );
+
     return DispatchDataViewModelNotification(
         this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {

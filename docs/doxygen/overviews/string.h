@@ -66,6 +66,32 @@ for ( auto c : s )
     auto, as in the example above.
 
 
+@section overview_string_format Using wxString with std::format() and {fmt}
+
+wxString objects can be used directly with the `{fmt}` library functions such
+as `fmt::format()` or `fmt::print()`, without doing anything special, as long
+as `{fmt}` 10 or later is used. Note that only narrow strings are supported in
+this case and that wxString is always formatted using UTF-8 encoding.
+
+To use them with C++20 `std::format()`, you need to include @c wx/stdformat.h
+header, which defines `std::formatter<>` specializations for wxString for both
+`char` and `wchar_t`, with the former also using UTF-8 encoding. This header
+is not included by default to avoid the overhead of including the standard
+`<format>` header in all files using wxString. When `std::format()` is
+available, i.e. when using C++20 or later and a standard library implementing
+it, this header also defines @c wxHAS_STD_FORMAT symbol, which can be tested to
+check whether wxString can be used with it:
+
+@code
+#include <wx/stdformat.h>
+
+#ifdef wxHAS_STD_FORMAT
+    wxString name = "world";
+    std::string s = std::format("Hello, {:>10}!", name);
+#endif
+@endcode
+
+
 @section overview_string_internal wxString Internal Representation
 
 @note This section can be skipped at first reading and is provided solely for

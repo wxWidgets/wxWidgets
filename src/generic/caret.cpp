@@ -29,10 +29,14 @@
 
 #include "wx/caret.h"
 #include "wx/graphics.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // global variables for this module
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxCaretBase, wxObject);
+wxIMPLEMENT_CLASS(wxCaret, wxCaretBase);
 
 // the blink time (common to all carets for MSW compatibility)
 static int gs_blinkTime = 500;  // in milliseconds
@@ -77,16 +81,8 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 }
 
 // ----------------------------------------------------------------------------
-// initialization and destruction
+// destruction
 // ----------------------------------------------------------------------------
-
-void wxCaret::InitGeneric()
-{
-    m_hasFocus = true;
-    m_blinkedOut = true;
-    m_xOld =
-    m_yOld = -1;
-}
 
 wxCaret::~wxCaret()
 {
@@ -124,9 +120,22 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
+    // Convert position from client to logical coordinates. We will convert
+    // back to client upon every use of the position so that a change in
+    // position due to scrolling is taken into account.
+    wxPoint viewStart = GetWindow()->GetViewStartPixels();
+    m_x += viewStart.x;
+    m_y += viewStart.y;
+
     if (m_overlay.IsNative())
     {
         m_overlay.Reset();
+
+        // Resetting a native overlay clears its contents, so redraw the caret
+        // immediately at its new position if it is currently visible.
+        if ( IsVisible() && !m_blinkedOut )
+            Refresh();
+
         return;
     }
 
@@ -168,6 +177,15 @@ void wxCaret::DoSize()
         m_countVisible = countVisible;
         DoShow();
     }
+}
+
+void wxCaret::DoGetPosition(int* x, int* y) const
+{
+    const wxPoint pt = LogicalToClient();
+    if ( x )
+        *x = pt.x;
+    if ( y )
+        *y = pt.y;
 }
 
 // ----------------------------------------------------------------------------
@@ -214,16 +232,31 @@ void wxCaret::Blink()
 
 void wxCaret::Refresh()
 {
+    const wxPoint pt = LogicalToClient();
+
     wxClientDC dcWin(GetWindow());
-    GetWindow()->PrepareDC(dcWin);
 
     if (m_overlay.IsNative())
     {
-        wxDCOverlay dcOverlay(m_overlay, &dcWin, m_x, m_y, m_width, m_height);
         if (m_blinkedOut)
-            dcOverlay.Clear();
+            m_overlay.Reset();
         else
+        {
+            // Do not draw if the window is not on screen: this is useless and
+            // would result in the first caret drawn not being erased.
+            if ( !GetWindow()->IsShownOnScreen() )
+                return;
+
+            // Figure the part of the caret rectangle within the client area.
+            // This avoids drawing the caret outside the client area.
+            wxRect cr(pt.x, pt.y, m_width, m_height);
+            cr.Intersect(GetWindow()->GetClientSize());
+            if ( cr.IsEmpty() )
+                return;
+
+            wxDCOverlay dcOverlay(m_overlay, &dcWin, cr.x, cr.y, cr.width, cr.height);
             DoDraw(&dcWin, GetWindow());
+        }
 
         return;
     }
@@ -244,10 +277,10 @@ void wxCaret::Refresh()
             wxMemoryDC dcMem(m_bmpUnderCaret);
             // save the part we're going to overdraw
             dcMem.Blit(0, 0, m_width, m_height,
-                       &dcWin, m_x, m_y);
+                       &dcWin, pt.x, pt.y);
 
-            m_xOld = m_x;
-            m_yOld = m_y;
+            m_xOld = pt.x;
+            m_yOld = pt.y;
         }
         //else: we already saved the image below the caret, don't do it any
         //      more
@@ -259,19 +292,27 @@ void wxCaret::Refresh()
 
 void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
 {
+    // Set caret colour black or white depending on background colour.
     wxPen pen(*wxBLACK_PEN);
     wxBrush brush(*wxBLACK_BRUSH);
-    if (win)
+    if ( win && win->UseBackgroundColour() )
     {
-        wxColour backgroundColour(win->GetBackgroundColour());
-        if (backgroundColour.Red() < 100 &&
-            backgroundColour.Green() < 100 &&
-            backgroundColour.Blue() < 100)
+        if ( win->GetBackgroundColour().GetLuminance() < 0.5 )
         {
+            // Custom background is dark, so use white.
             pen = *wxWHITE_PEN;
             brush = *wxWHITE_BRUSH;
         }
     }
+    else if ( wxSystemSettings::GetAppearance().IsDark() )
+    {
+        // Background is default colour and default is dark, so use white.
+        pen = *wxWHITE_PEN;
+        brush = *wxWHITE_BRUSH;
+    }
+
+    const wxPoint pt = LogicalToClient();
+
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsContext* gc = dc->GetGraphicsContext();
 #endif
@@ -292,7 +333,7 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
             // those of the solid rect. This is necessary to avoid drawing
             // outside the solid rect bounds when window content is scaled.
             gc->EnableOffset(false);
-            gc->DrawRectangle(m_x + 0.5, m_y + 0.5, m_width - 1, m_height - 1);
+            gc->DrawRectangle(pt.x + 0.5, pt.y + 0.5, m_width - 1, m_height - 1);
             return;
         }
 #endif
@@ -305,7 +346,13 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
         dc->SetLogicalFunction(wxINVERT);
     }
 
-    dc->DrawRectangle(m_x, m_y, m_width, m_height);
+    dc->DrawRectangle(pt.x, pt.y, m_width, m_height);
+}
+
+wxPoint wxCaret::LogicalToClient() const
+{
+    const wxPoint viewStart = GetWindow()->GetViewStartPixels();
+    return wxPoint(m_x - viewStart.x, m_y - viewStart.y);
 }
 
 #endif // wxUSE_CARET

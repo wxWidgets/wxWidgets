@@ -38,6 +38,8 @@ public:
 
     virtual bool AcceptsFocus() const override { return false; }
 
+    virtual wxOSXWidgetImpl* GetLabelPeer() const override { return GetPeer(); }
+
 protected :
 
     virtual wxString WXGetVisibleLabel() const override;

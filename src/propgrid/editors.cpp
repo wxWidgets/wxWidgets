@@ -3567,6 +3567,8 @@ bool wxPGEditorDialogAdapter::ShowDialog( wxPropertyGrid* propGrid, wxPGProperty
 // wxPGMultiButton
 // -----------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxPGMultiButton, wxWindow);
+
 wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
     : wxWindow( pg->GetPanel(), wxID_ANY, wxPoint(-100,-100), wxSize(0, sz.y + 2*wxPG_BUTTON_BORDER_WIDTH) ),
       m_fullEditorSize(sz), m_buttonsWidth(0)

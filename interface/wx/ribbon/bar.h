@@ -109,6 +109,15 @@ public:
     bool hovered;
     bool highlight;
     bool shown;
+
+    /**
+        The KeyTip assigned to this tab, or an empty string.
+
+        Use wxRibbonBar::SetPageKeyTip() to set it.
+
+        @since 3.3.4
+    */
+    wxString keytip;
 };
 
 /**
@@ -139,21 +148,67 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
     wxRibbonBar as parent), when a page is created, it is automatically added
     to the bar - there is no AddPage equivalent to call.
 
+    A ribbon bar can also show a wxBackstage from a "File" tab
+    (see SetBackstagePage() and SetBackstage()).
+
     After all pages have been created, and all controls and panels placed on
     those pages, Realize() must be called.
+
+    @section ribbonbar_keytips KeyTips
+
+    Since wxWidgets 3.3.4, pressing @c WXK_F10 shows "KeyTips":
+    a badge over every element which has one, listing the letters to type to
+    activate it. Unlike mnemonics, KeyTips are not derived from labels; an
+    element only takes part if it was assigned one explicitly. See
+    SetPageKeyTip(), wxRibbonButtonBar::SetKeyTip() and the other
+    @c SetKeyTip() overloads.
+
+    Multi-character KeyTips are supported; typing the first character narrows
+    the badges down to the elements sharing it. A KeyTip must therefore not be
+    a strict prefix of another visible at the same time, or it could never
+    fire. This is not validated at run time.
+
+    @c WXK_ESCAPE backs out one character, or leaves the mode if nothing was
+    typed. Pressing the trigger key again, clicking the ribbon, or the frame
+    being deactivated also leave it. CTRL and ALT combinations are treated as
+    accelerators: the mode is left and the key passed on, so @c CTRL-S is not
+    consumed by a button with KeyTip @c "S". Activating a page tab is the one
+    case which stays in the mode, showing the new page's KeyTips.
+
+    The trigger key is configurable, see SetKeyTipsTriggerKey(). It is only
+    consumed if there is something to show, so applications using no KeyTips
+    keep their existing @c WXK_F10 handling.
+
+    @section ribbonbar_keyboard Keyboard navigation
+
+    Since wxWidgets 3.3.4, the ribbon can be used with the keyboard. For
+    the best results, put it in a wxPanel (or other window supporting tab
+    navigation) instead of directly in a wxFrame.
+
+    On the tabs, the arrow keys, @c WXK_HOME, and @c WXK_END switch the page,
+    and @c WXK_RETURN, @c WXK_SPACE, or @c WXK_DOWN go into it. In the page,
+    @c WXK_TAB and the arrow keys move between the items of the button bars,
+    tool bars, galleries, and panels. @c WXK_RETURN or @c WXK_SPACE activate
+    the current one, and @c WXK_ESCAPE goes back to the tabs.
+
+    @section ribbonbar_accessibility Screen readers
+
+    Since wxWidgets 3.3.4, the ribbon also reports itself to screen readers
+    (wxUSE_ACCESSIBILITY), following the same keyboard model above: the tabs,
+    pages, and the items within them are all exposed.
 
     @see wxRibbonPage
     @see wxRibbonPanel
 
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
-        Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
+        Defined as `wxRIBBON_BAR_FLOW_HORIZONTAL |
         wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
-        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON | wxRIBBON_BAR_SHOW_HELP_BUTTON.
+        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON | wxRIBBON_BAR_SHOW_HELP_BUTTON`.
     @style{wxRIBBON_BAR_FOLDBAR_STYLE}
-        Defined as wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
+        Defined as `wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
         | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
-        wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS
+        wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS`.
     @style{wxRIBBON_BAR_SHOW_PAGE_LABELS}
         Causes labels to be shown on the tabs in the ribbon bar.
     @style{wxRIBBON_BAR_SHOW_PAGE_ICONS}
@@ -463,6 +518,135 @@ public:
     wxRibbonDisplayMode GetDisplayMode() const;
 
     /**
+        Sets the page that acts as the "File" tab of the backstage.
+
+        The page should not contain any panels. Only one page can be the File
+        tab at a time. (Setting another one turns the previous page back into
+        an ordinary tab.) If the backstage is currently shown, it is shown again
+        from the new tab.
+
+        The File tab is drawn in the system's accent colour (see
+        StyleBackstageTab() and SetBackstageTabColour()).
+
+        @param page
+            The File tab's page, or @NULL to disable the backstage.
+
+        @see SetBackstage(), ShowBackstage()
+
+        @since 3.3.4
+    */
+    void SetBackstagePage(wxRibbonPage* page);
+
+    /**
+        Returns the page that acts as the File tab, or @NULL if there is none.
+
+        @since 3.3.4
+    */
+    wxRibbonPage* GetBackstagePage() const;
+
+    /**
+        Sets the backstage and the application's content that it replaces.
+
+        Both windows should be siblings of the ribbon bar, in the same sizer
+        and occupying the same spot. The backstage's navigation area follows
+        the colours of the ribbon bar's art provider.
+
+        The backstage starts out hidden; call ShowBackstage() to show it.
+
+        Setting another pair puts the previous pair back to normal (a shown
+        backstage is shown again from the new pair).
+
+        @param backstage
+            The backstage to show when the File tab is selected.
+        @param content
+            The window that the backstage replaces, or @NULL if there is
+            nothing to hide.
+
+        @since 3.3.4
+    */
+    void SetBackstage(wxBackstage* backstage, wxWindow* content);
+
+    /**
+        Shows or hides the backstage.
+
+        Showing the backstage selects the File tab, collapses the panels, and
+        swaps the content for the backstage. Hiding it selects the first other
+        tab (if the File tab was selected), restores the display mode that the
+        ribbon had, and brings back the content.
+
+        Selecting the File tab or any other tab with the mouse or keyboard does
+        this automatically. As the ribbon bar does not send a page changed
+        event when a page is selected from code, use this function to show or
+        hide the backstage programmatically.
+
+        While the backstage is shown, the toggle button and double-clicking the
+        File tab do nothing, and no @c wxEVT_RIBBONBAR_TOGGLED event is sent.
+
+        @see IsBackstageShown()
+
+        @since 3.3.4
+    */
+    void ShowBackstage(bool show = true);
+
+    /**
+        Returns @true if the backstage is currently shown.
+
+        @since 3.3.4
+    */
+    bool IsBackstageShown() const;
+
+    /**
+        Sets whether the File tab is drawn in an accent colour.
+
+        If @true (the default), the File tab is filled with the colour given by
+        GetBackstageTabColour() and its label is drawn in a contrasting colour.
+        The fill has a glossy sheen, unless the art provider is
+        wxRibbonMSWFlatArtProvider, in which case it is flat. If @false, the
+        File tab is drawn like any other tab.
+
+        @since 3.3.4
+    */
+    void StyleBackstageTab(bool style = true);
+
+    /**
+        Returns @true if the File tab is drawn in an accent colour.
+
+        @see StyleBackstageTab()
+
+        @since 3.3.4
+    */
+    bool IsBackstageTabStyled() const;
+
+    /**
+        Sets the colour of the File tab when it is styled.
+
+        @param colour
+            The colour, or an invalid colour to use the system's accent colour
+            (the default).
+
+        @since 3.3.4
+    */
+    void SetBackstageTabColour(const wxColour& colour);
+
+    /**
+        Returns the colour of the File tab when it is styled.
+
+        @since 3.3.4
+    */
+    wxColour GetBackstageTabColour() const;
+
+    /**
+        Applies the art provider's colours to the backstage.
+
+        This is done automatically when the backstage or art provider is
+        changed, and when the system colours change. Call it if the art
+        provider's colours were changed afterwards.
+
+        @since 3.3.4
+    */
+    void UpdateBackstageColours();
+
+    /**
         Returns whether the bar contains multiple pages.
 
         The default implementation always returns @c true.
@@ -498,4 +682,116 @@ public:
         Also calls wxRibbonPage::Realize() on each child page.
     */
     virtual bool Realize();
+
+    /**
+        Assigns the KeyTip used to switch to the given page.
+
+        Pass an empty string to remove it. The KeyTip is stored uppercased.
+
+        @see @ref ribbonbar_keytips
+
+        @since 3.3.4
+    */
+    void SetPageKeyTip(size_t page, const wxString& keytip);
+
+    /**
+        @overload
+
+        @since 3.3.4
+    */
+    void SetPageKeyTip(wxRibbonPage* page, const wxString& keytip);
+
+    /**
+        Assigns the KeyTip used to activate the panel toggle button.
+
+        Only has an effect if the bar uses @c wxRIBBON_BAR_SHOW_TOGGLE_BUTTON.
+
+        @since 3.3.4
+    */
+    void SetToggleButtonKeyTip(const wxString& keytip);
+
+    /**
+        Assigns the KeyTip used to activate the help button.
+
+        Only has an effect if the bar uses @c wxRIBBON_BAR_SHOW_HELP_BUTTON.
+
+        @since 3.3.4
+    */
+    void SetHelpButtonKeyTip(const wxString& keytip);
+
+    /**
+        Enters keyboard access mode and shows the KeyTip badges.
+
+        @return @true if the mode was entered, @false if the bar isn't shown on
+            screen or no KeyTips are currently assigned to anything visible.
+
+        @see @ref ribbonbar_keytips
+
+        @since 3.3.4
+    */
+    bool ShowKeyTips();
+
+    /**
+        Leaves keyboard access mode and hides the KeyTip badges.
+
+        Does nothing if the mode isn't active.
+
+        @since 3.3.4
+    */
+    void HideKeyTips();
+
+    /**
+        Returns @true if keyboard access mode is currently active.
+
+        @since 3.3.4
+    */
+    bool AreKeyTipsShown() const;
+
+    /**
+        A key combination which shows the KeyTips.
+
+        @since 3.3.4
+    */
+    struct TriggerKey
+    {
+        /// The key code (e.g., @c WXK_F10).
+        int keyCode;
+
+        /// The modifiers (e.g., @c wxMOD_NONE or @c wxMOD_CONTROL).
+        int modifiers;
+    };
+
+    /**
+        Makes @a keyCode with @a modifiers the only key which shows KeyTips.
+
+        Replaces the default of @c WXK_F10 with no modifiers.
+
+        @see AddKeyTipsTriggerKey()
+
+        @since 3.3.4
+    */
+    void SetKeyTipsTriggerKey(int keyCode, int modifiers = wxMOD_NONE);
+
+    /**
+        Adds another key which shows KeyTips, keeping the existing ones.
+
+        @since 3.3.4
+    */
+    void AddKeyTipsTriggerKey(int keyCode, int modifiers = wxMOD_NONE);
+
+    /**
+        Removes all trigger keys, disabling keyboard access mode.
+
+        It can still be entered programmatically with ShowKeyTips().
+
+        @since 3.3.4
+    */
+    void ClearKeyTipsTriggerKeys();
+
+    /**
+        Returns the keys which show KeyTips.
+
+        @since 3.3.4
+    */
+    const std::vector<TriggerKey>& GetKeyTipsTriggerKeys() const;
 };

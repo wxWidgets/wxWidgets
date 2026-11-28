@@ -46,6 +46,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "wxWebVi
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxWebView, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEvent, wxCommandEvent);
+wxIMPLEMENT_ABSTRACT_CLASS(wxWebViewFactory, wxObject);
 
 wxDEFINE_EVENT( wxEVT_WEBVIEW_CREATED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NAVIGATING, wxWebViewEvent );
@@ -61,6 +62,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_PDF_SAVED, wxWebViewEvent);
+wxDEFINE_EVENT( wxEVT_WEBVIEW_FAILED, wxWebViewEvent);
 
 // wxWebViewConfiguration
 wxWebViewConfiguration::wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl):
@@ -460,6 +462,20 @@ void wxWebView::NotifyWebViewCreated()
     GetEventHandler()->QueueEvent(
         new wxWebViewEvent{*this, wxEVT_WEBVIEW_CREATED}
     );
+}
+
+void wxWebView::NotifyWebViewFailed(const wxString& explanation)
+{
+    // This is called from the native callbacks and the application is likely
+    // to do something drastic in response to this event, e.g. destroy and
+    // recreate the control, which is not safe to do from inside them, so
+    // always queue the event instead of processing it immediately.
+    auto* const event = new wxWebViewEvent(wxEVT_WEBVIEW_FAILED, GetId(),
+                                           GetCurrentURL(), wxString());
+    event->SetEventObject(this);
+    event->SetString(explanation);
+
+    GetEventHandler()->QueueEvent(event);
 }
 
 // static

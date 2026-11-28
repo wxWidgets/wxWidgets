@@ -266,6 +266,9 @@ protected:
     // initialize the book: add all pages to it
     void InitBook();
 
+    // update the images when switching between light and dark appearance
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
     // return the currently selected page (never null)
     WidgetsPage *CurrentPage();
 
@@ -283,6 +286,9 @@ private:
 
     // the book containing the test pages
     WidgetsBookCtrl *m_book;
+
+    // the images used by the book(s)
+    std::vector<wxBitmapBundle> m_images;
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -602,9 +608,9 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     InitBook();
 
     wxMenu* menuTheme = new wxMenu;
-    menuTheme->Append(Theme_System, "&System");
-    menuTheme->Append(Theme_Light, "&Light");
-    menuTheme->Append(Theme_Dark, "&Dark");
+    menuTheme->AppendRadioItem(Theme_System, "&System");
+    menuTheme->AppendRadioItem(Theme_Light, "&Light");
+    menuTheme->AppendRadioItem(Theme_Dark, "&Dark");
     mbar->Append(menuTheme, "T&heme");
 
     // the lower one only has the log listbox and a button to clear it
@@ -614,7 +620,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     m_lboxLog = new wxListBox(sizerDownBox, wxID_ANY);
     sizerDown->Add(m_lboxLog, wxSizerFlags(1).Expand().Border());
-    sizerDown->SetMinSize(100, 150);
+    sizerDown->SetMinSize(FromDIP(wxSize(100, 150)));
 #else
     wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
 #endif // USE_LOG
@@ -624,7 +630,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #if USE_LOG
     btn = new wxButton(sizerDownBox, Widgets_ClearLog, "Clear &log");
     sizerBtns->Add(btn);
-    sizerBtns->AddSpacer(10);
+    sizerBtns->AddSpacer(FromDIP(10));
 #endif // USE_LOG
     btn = new wxButton(sizerDownBox, Widgets_Quit, "E&xit");
     sizerBtns->Add(btn);
@@ -632,8 +638,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     // put everything together
     sizerTop->Add(m_book, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~(wxTOP | wxBOTTOM)));
-    sizerTop->AddSpacer(5);
-    sizerTop->Add(sizerDown, wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxTOP));
+    sizerTop->AddSpacer(FromDIP(5));
+    sizerTop->Add(sizerDown, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxTOP));
 
     m_panel->SetSizer(sizerTop);
 
@@ -654,8 +660,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
-    wxVector<wxBitmapBundle> imageList;
-    imageList.push_back(WidgetsPage::CreateBitmapBundle(sample_xpm));
+    m_images.push_back(WidgetsPage::CreateBitmapBundle(sample_xpm));
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *books[MAX_PAGES];
@@ -698,7 +703,7 @@ void WidgetsFrame::InitBook()
 #else
                                  books[cat]
 #endif
-                                 , imageList);
+                                 , m_images);
             pages[cat].push_back(page);
 
             labels[cat].Add(info->GetLabel());
@@ -723,7 +728,7 @@ void WidgetsFrame::InitBook()
 
     GetMenuBar()->Append(menuPages, "&Page");
 
-    m_book->SetImages(imageList);
+    m_book->SetImages(m_images);
 
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
@@ -731,7 +736,7 @@ void WidgetsFrame::InitBook()
         m_book->AddPage(nullptr,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
-        books[cat]->SetImages(imageList);
+        books[cat]->SetImages(m_images);
 #endif
 
         // now do add them
@@ -753,6 +758,7 @@ void WidgetsFrame::InitBook()
     }
 
     Bind(wxEVT_COMMAND_WIDGETS_PAGE_CHANGED, &WidgetsFrame::OnPageChanged, this);
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &WidgetsFrame::OnSysColourChanged, this);
 
     const bool pageSet = wxPersistentRegisterAndRestore(m_book);
 
@@ -777,6 +783,19 @@ void WidgetsFrame::InitBook()
         m_book->SetSelection(0);
     }
 #endif // USE_TREEBOOK
+}
+
+void WidgetsFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+
+    // The icon bundles return the bitmaps appropriate for the current
+    // appearance, so just set them again to update the image list(s).
+    m_book->SetImages(m_images);
+#if !USE_TREEBOOK
+    for ( size_t n = 0; n < m_book->GetPageCount(); n++ )
+        wxStaticCast(m_book->GetPage(n), WidgetsBookCtrl)->SetImages(m_images);
+#endif // !USE_TREEBOOK
 }
 
 WidgetsPage *WidgetsFrame::CurrentPage()
@@ -1220,7 +1239,7 @@ void WidgetsFrame::DoUseCustomAutoComplete(size_t minLength)
 
                 ~LogCompletions()
                 {
-                    wxLogMessage("Returning %lu possible completions for "
+                    wxLogMessage("Returning %zu possible completions for "
                                  "prefix \"%s\"",
                                  m_res.size(), m_prefix);
                 }
@@ -1462,12 +1481,12 @@ WidgetsPageInfo *WidgetsPage::ms_widgetPages = nullptr;
 
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          wxVector<wxBitmapBundle>& imaglist,
-                         const char *const icon[])
+                         WidgetsIcon icon)
            : wxScrolledWindow(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxCLIP_CHILDREN | wxTAB_TRAVERSAL)
 {
-    imaglist.push_back(CreateBitmapBundle(icon));
+    imaglist.push_back(CreateWidgetsIconBundle(icon));
 }
 
 wxBitmapBundle WidgetsPage::CreateBitmapBundle(const char* const icon[])
@@ -1554,7 +1573,7 @@ wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
     wxTextCtrl *text = new wxTextCtrl(control->GetParent(), id, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 
-    sizerRow->Add(control, wxSizerFlags(0).Border(wxRIGHT).CentreVertical());
+    sizerRow->Add(control, wxSizerFlags().Border(wxRIGHT).CentreVertical());
     sizerRow->Add(text, wxSizerFlags(1).Border(wxLEFT).CentreVertical());
 
     if ( ppText )
@@ -1590,7 +1609,7 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
 {
     wxCheckBox *checkbox = new wxCheckBox(statBoxParent ? statBoxParent: this, id, label);
     sizer->Add(checkbox, wxSizerFlags().HorzBorder());
-    sizer->AddSpacer(2);
+    sizer->AddSpacer(FromDIP(2));
 
     return checkbox;
 }

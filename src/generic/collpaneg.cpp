@@ -32,8 +32,27 @@
 #include "wx/collheaderctrl.h"
 
 // ----------------------------------------------------------------------------
-// constants
+// local classes
 // ----------------------------------------------------------------------------
+
+namespace
+{
+
+// The pane window is just a container for the user-defined controls and
+// shouldn't get focus itself, notably when it's completely empty.
+class wxCollapsiblePanePanel : public wxPanel
+{
+public:
+    explicit wxCollapsiblePanePanel(wxWindow* parent)
+        : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                  wxTAB_TRAVERSAL | wxNO_BORDER,
+                  wxS("wxCollapsiblePanePanel"))
+    {
+        m_container.DisableSelfFocus();
+    }
+};
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -89,8 +108,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 #endif
 
     // do not set sz as our sizers since we handle the pane window without using sizers
-    m_pPane = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                          wxTAB_TRAVERSAL|wxNO_BORDER, wxT("wxCollapsiblePanePane") );
+    m_pPane = new wxCollapsiblePanePanel(this);
 
     // start as collapsed:
     m_pPane->Hide();
@@ -181,6 +199,47 @@ void wxGenericCollapsiblePane::SetLabel(const wxString &label)
 wxString wxGenericCollapsiblePane::GetLabel() const
 {
     return m_pButton->GetLabel();
+}
+
+wxSize wxGenericCollapsiblePane::GetMinSizeFromKnownDirection(int direction, int size,
+                                                              int availableOtherDir)
+{
+    wxSizer* const sizer = m_pPane ? m_pPane->GetSizer() : nullptr;
+
+    // the pane always gets our full width, so only this direction helps
+    if ( !IsExpanded() || !sizer || direction != wxHORIZONTAL || size <= 0 )
+        return wxDefaultSize;
+
+    // subtract the pane's own border, if any
+    const wxSize decor = m_pPane->GetSize() - m_pPane->GetClientSize();
+    wxSize paneMin = sizer->CalcMinSizeFromKnownDirection(direction,
+                                                          size - decor.x,
+                                                          availableOtherDir);
+    if ( paneMin == wxDefaultSize )
+        return wxDefaultSize;
+
+    // get the pane window size, taking into account its min size, as
+    // m_pPane->GetBestSize() used by DoGetBestClientSize() would do
+    paneMin += decor;
+    paneMin.IncTo(m_pPane->GetMinSize());
+
+    // same calculation as in DoGetBestClientSize(), but with the pane size
+    // for this width instead of the one from the last layout
+    wxSize best = m_sz->GetMinSize();
+    best.x = wxMax(best.x, paneMin.x);
+    best.y += GetBorder() + paneMin.y;
+
+    // and then the same as in GetBestSize()
+    best += GetWindowBorderSize();
+    best.IncTo(GetMinSize());
+    best.DecToIfSpecified(GetMaxSize());
+
+    // Cache the best size for this width, as otherwise the sizers calling
+    // CalcMin() after InformFirstDirection(), as wxBoxSizer does, would reset
+    // the min size we return to the best size from the previous layout.
+    CacheBestSize(best);
+
+    return GetEffectiveMinSize();
 }
 
 bool wxGenericCollapsiblePane::Layout()

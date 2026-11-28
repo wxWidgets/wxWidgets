@@ -210,6 +210,9 @@ private:
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxHeaderCtrl);
 };
 
 #endif // _WX_GENERIC_HEADERCTRLG_H_

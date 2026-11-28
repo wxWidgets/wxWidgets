@@ -33,12 +33,21 @@ elseif(wxUSE_NANOSVG)
         get_target_property(svg_incl_dir ${TARGETNAME} INTERFACE_INCLUDE_DIRECTORIES)
         if(svg_incl_dir)
             list(APPEND NANOSVG_INCLUDE_DIRS ${svg_incl_dir})
+
+            # The headers are included as <nanosvg/nanosvg.h>, matching their
+            # installed location, so the parent directory has to be on the
+            # search path as well (it usually, but not always, already is).
+            get_filename_component(svg_incl_parent "${svg_incl_dir}" DIRECTORY)
+            if(svg_incl_parent)
+                list(APPEND NANOSVG_INCLUDE_DIRS ${svg_incl_parent})
+            endif()
         endif()
 
-        get_target_property(svg_lib_d ${TARGETNAME} IMPORTED_LOCATION_DEBUG)
-        get_target_property(svg_lib_r ${TARGETNAME} IMPORTED_LOCATION_RELEASE)
-        get_target_property(svg_lib   ${TARGETNAME} IMPORTED_LOCATION)
-        if(svg_lib_d OR svg_lib_r OR svg_lib)
+        # If the package provides a compiled library (rather than just an
+        # INTERFACE target carrying the headers), link with it instead of
+        # building the NanoSVG implementation into wxWidgets ourselves.
+        get_target_property(svg_target_type ${TARGETNAME} TYPE)
+        if(NOT svg_target_type STREQUAL "INTERFACE_LIBRARY")
             set(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL FALSE)
         endif()
     endforeach()

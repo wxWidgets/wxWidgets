@@ -511,6 +511,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_WebMessageReceived(m_webMessageReceivedToken);
         m_webView->remove_WebResourceRequested(m_webResourceRequestedToken);
         m_webView->remove_WindowCloseRequested(m_windowCloseRequestedToken);
+        m_webView->remove_ProcessFailed(m_processFailedToken);
     }
 }
 
@@ -667,6 +668,7 @@ HRESULT wxWebViewEdgeImpl::HandleNavigationStarting(ICoreWebView2NavigationStart
 void wxWebViewEdgeImpl::SendErrorEventForAPI(const wxString& api, HRESULT errorCode)
 {
     wxLogApiError(api, errorCode);
+    wxUnusedVar(api); // unused with wxDEBUG_LEVEL=0
 
     wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), wxString(), wxString());
     event.SetEventObject(m_ctrl);
@@ -804,6 +806,74 @@ HRESULT wxWebViewEdgeImpl::OnWindowCloseRequested(ICoreWebView2* WXUNUSED(sender
 {
     wxWebViewEvent evt(wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED, m_ctrl->GetId(), m_ctrl->GetCurrentURL(), "");
     m_ctrl->GetEventHandler()->AddPendingEvent(evt);
+    return S_OK;
+}
+
+// Return the explanation of the render process failure for the user.
+static wxString
+GetRenderProcessFailureExplanation(ICoreWebView2ProcessFailedEventArgs* args)
+{
+    wxCOMPtr<ICoreWebView2ProcessFailedEventArgs2> args2;
+    if (SUCCEEDED(args->QueryInterface(IID_PPV_ARGS(&args2))))
+    {
+        COREWEBVIEW2_PROCESS_FAILED_REASON reason;
+        if (SUCCEEDED(args2->get_Reason(&reason)))
+        {
+            switch (reason)
+            {
+                case COREWEBVIEW2_PROCESS_FAILED_REASON_CRASHED:
+                    return _("The web content process crashed.");
+
+                case COREWEBVIEW2_PROCESS_FAILED_REASON_OUT_OF_MEMORY:
+                    return _("The web content process was terminated because "
+                             "it used too much memory.");
+
+                case COREWEBVIEW2_PROCESS_FAILED_REASON_TERMINATED:
+                    return _("The web content process was terminated.");
+
+                case COREWEBVIEW2_PROCESS_FAILED_REASON_LAUNCH_FAILED:
+                    return _("The web content process couldn't be started.");
+
+                default:
+                    // Use the generic message below.
+                    break;
+            }
+        }
+    }
+
+    return _("The web content process exited unexpectedly.");
+}
+
+HRESULT wxWebViewEdgeImpl::OnProcessFailed(ICoreWebView2* WXUNUSED(sender), ICoreWebView2ProcessFailedEventArgs* args)
+{
+    COREWEBVIEW2_PROCESS_FAILED_KIND kind;
+    if (FAILED(args->get_ProcessFailedKind(&kind)))
+        return S_OK;
+
+    // Only notify about the failures which prevent the page from being shown:
+    // the failure of a frame process only affects the frame, the other helper
+    // processes are restarted automatically and unresponsive renderer could
+    // become responsive again, so don't consider it to be a fatal failure.
+    switch (kind)
+    {
+        case COREWEBVIEW2_PROCESS_FAILED_KIND_BROWSER_PROCESS_EXITED:
+        case COREWEBVIEW2_PROCESS_FAILED_KIND_RENDER_PROCESS_EXITED:
+            break;
+
+        default:
+            return S_OK;
+    }
+
+    // The page won't finish loading if it was being loaded.
+    m_isBusy = false;
+
+    m_ctrl->NotifyWebViewFailed(
+        kind == COREWEBVIEW2_PROCESS_FAILED_KIND_BROWSER_PROCESS_EXITED
+            ? wxString(_("The web browser process exited and the web view "
+                         "can't be used any longer."))
+            : GetRenderProcessFailureExplanation(args)
+    );
+
     return S_OK;
 }
 
@@ -1007,6 +1077,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2WindowCloseRequestedEventHandler>(
             this, &wxWebViewEdgeImpl::OnWindowCloseRequested).Get(),
         &m_windowCloseRequestedToken);
+    m_webView->add_ProcessFailed(
+        Callback<ICoreWebView2ProcessFailedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnProcessFailed).Get(),
+        &m_processFailedToken);
 
     // Register handlers
     for (const auto& kv : m_handlers)

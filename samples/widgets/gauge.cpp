@@ -39,7 +39,6 @@
 
 #include "widgets.h"
 #if wxUSE_GAUGE
-#include "icons/gauge.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -176,7 +175,7 @@ IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, "Gauge", FAMILY_CTRLS );
 
 GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
                                    wxVector<wxBitmapBundle>& imaglist)
-                 :WidgetsPage(book, imaglist, gauge_xpm)
+                 :WidgetsPage(book, imaglist, WidgetsIcon::Gauge)
 {
     // init everything
     m_range = 100;
@@ -250,7 +249,7 @@ void GaugeWidgetsPage::CreateContent()
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
     m_gauge = new wxGauge(this, GaugePage_Gauge, m_range);
     sizerRight->Add(m_gauge, wxSizerFlags(1).Centre().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerGauge = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

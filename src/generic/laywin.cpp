@@ -178,6 +178,8 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
 // wxLayoutAlgorithm
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxLayoutAlgorithm, wxObject);
+
 #if wxUSE_MDI_ARCHITECTURE
 
 // Lays out windows for an MDI frame. The MDI client area gets what's left

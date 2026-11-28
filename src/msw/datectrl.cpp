@@ -34,6 +34,8 @@
 #include "wx/dateevt.h"
 #include "wx/uilocale.h"
 #include "wx/msw/private/uilocale.h"
+#include "wx/msw/private/custompaint.h"
+#include "wx/renderer.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 
@@ -230,6 +232,61 @@ bool wxDatePickerCtrl::MSWOnDateTimeChange(const NMDATETIMECHANGE& dtch)
     m_date = dt;
     wxDateEvent event(this, dt, wxEVT_DATE_CHANGED);
     return HandleWindowEvent(event);
+}
+
+WXLRESULT wxDatePickerCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // With wxDP_ALLOWNONE and high DPI, the control draws the check box
+    // stretched too big. In this case, redraw the check box at the proper
+    // size.
+    if ( nMsg == WM_PAINT && HasFlag(wxDP_ALLOWNONE) && GetDPIScaleFactor() > 1.0 )
+    {
+        // Paint the control into a memory DC, specified by wParam.
+        auto defPaint = [this](HWND WXUNUSED(hwnd), WPARAM wParam)
+            {
+                MSWDefWindowProc(WM_PAINT, wParam, 0);
+            };
+        // Redraw the checkbox at the proper size.
+        auto postProcess = [this](const wxBitmap& bmpIn)
+            {
+                wxBitmap bmpOut(bmpIn);
+                wxMemoryDC dc(bmpOut);
+                dc.SetLayoutDirection(GetLayoutDirection());
+
+                // Get the old check box rectangle.
+                WinStruct<DATETIMEPICKERINFO> info;
+                ::SendMessage(m_hWnd, DTM_GETDATETIMEPICKERINFO, 0, (LPARAM)&info);
+                wxRect rcOld = wxRectFromRECT(info.rcCheck);
+                // Check if the rectangle is valid. Apparently, painting
+                // occurs before the layout is finshed.
+                if ( rcOld.width > 0 )
+                {
+                    // Erase the old check box.
+                    auto bg = wxRGBToColour(::GetSysColor(COLOR_WINDOW));
+                    dc.SetBrush(wxBrush(bg));
+                    dc.SetPen(*wxTRANSPARENT_PEN);
+                    dc.DrawRectangle(rcOld);
+
+                    // Locate the new check box in the center of the old.
+                    wxRect rcNew = wxRendererNative::Get().GetCheckBoxSize(this);
+                    rcNew.MakeCenteredIn(rcOld);
+
+                    // Draw the new check box. The native control always draws
+                    // the check box in the hot state.
+                    int flags = wxCONTROL_CURRENT;
+                    if ( MSWGetControlValue().IsValid() )
+                        flags |= wxCONTROL_CHECKED;
+                    if ( !IsEnabled() )
+                        flags |= wxCONTROL_DISABLED;
+                    wxRendererNative::Get().DrawCheckBox(this, dc, rcNew, flags);
+                }
+                return bmpOut;
+            };
+        wxMSWImpl::CustomPaint(m_hWnd, defPaint, postProcess);
+        return 0;
+    }
+
+    return wxDatePickerCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 #endif // wxUSE_DATEPICKCTRL

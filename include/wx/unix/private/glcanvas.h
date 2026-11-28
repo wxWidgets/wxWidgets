@@ -81,6 +81,8 @@ public:
 
     virtual void* GetXVisualInfo() const = 0;
 
+    virtual unsigned long GetXVisualID() const = 0;
+
 protected:
     explicit wxGLCanvasUnixImpl(wxGLCanvasUnix* canvas)
         : m_canvas(canvas)

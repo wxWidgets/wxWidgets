@@ -224,7 +224,7 @@ protected:
 
 wxInputStream *LargeFileTest_wxFile::MakeInStream(const wxString& name) const
 {
-    std::unique_ptr<wxFileInputStream> in(new wxFileInputStream(name));
+    auto in = make_unique<wxFileInputStream>(name);
     CHECK(in->IsOk());
     return in.release();
 }
@@ -256,7 +256,7 @@ protected:
 
 wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const
 {
-    std::unique_ptr<wxFFileInputStream> in(new wxFFileInputStream(name));
+    auto in = make_unique<wxFFileInputStream>(name);
     CHECK(in->IsOk());
     return in.release();
 }

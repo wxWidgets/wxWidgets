@@ -367,6 +367,17 @@
 #undef wxOSX_USE_ICONREF
 #define wxOSX_USE_ICONREF 0
 
+// Starting from iOS 13
+
+#ifndef wxOSX_IPHONE_USE_UISCENE
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 130000
+    #define wxOSX_IPHONE_USE_UISCENE 1
+#else
+    #define wxOSX_IPHONE_USE_UISCENE 0
+#endif
+#endif
+
+
 #endif // wxUSE_GUI
 
 #endif

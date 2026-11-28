@@ -28,6 +28,8 @@
 
 #include "wx/private/colour.h"
 
+wxIMPLEMENT_CLASS(wxRibbonMSWArtProvider, wxRibbonArtProvider);
+
 static const char* const gallery_up_xpm[] = {
   "5 5 2 1",
   "  c None",
@@ -1759,6 +1761,8 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
             dc.SetBrush(m_panel_label_background_brush);
             dc.SetTextForeground(m_panel_label_colour);
         }
+        if ( !wnd->IsEnabled() )
+            dc.SetTextForeground(m_button_bar_label_disabled_colour);
 
         wxRect label_rect(true_rect);
         wxString label = wnd->GetLabel();
@@ -1821,7 +1825,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
 
         if(has_ext_button)
         {
-            if(wnd->IsExtButtonHovered())
+            if(wnd->IsEnabled() && wnd->IsExtButtonHovered())
             {
                 dc.SetPen(m_panel_hover_button_border_pen);
                 dc.SetBrush(m_panel_hover_button_background_brush);
@@ -1829,7 +1833,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
                 dc.DrawBitmap(m_panel_extension_bundle[1].GetBitmapFor(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
             }
             else
-                dc.DrawBitmap(m_panel_extension_bundle[0].GetBitmapFor(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawBitmap(GetPanelExtButtonBitmap(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
         }
     }
 
@@ -2233,7 +2237,10 @@ void wxRibbonMSWArtProvider::DrawMinimisedPanelCommon(
         ypos = true_rect.y + (true_rect.height - label_height) / 2;
     }
 
-    dc.SetTextForeground(m_panel_minimised_label_colour);
+    const wxColour& label_colour = wnd->IsEnabled()
+                                    ? m_panel_minimised_label_colour
+                                    : m_button_bar_label_disabled_colour;
+    dc.SetTextForeground(label_colour);
     dc.DrawText(wnd->GetLabel(), xpos, ypos);
 
 
@@ -2254,10 +2261,18 @@ void wxRibbonMSWArtProvider::DrawMinimisedPanelCommon(
     }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    wxBrush B(m_panel_minimised_label_colour);
+    wxBrush B(label_colour);
     dc.SetBrush(B);
     dc.DrawPolygon(sizeof(arrow_points)/sizeof(wxPoint), arrow_points,
         true_rect.x, true_rect.y);
+}
+
+wxBitmap wxRibbonMSWArtProvider::GetPanelExtButtonBitmap(wxRibbonPanel* wnd) const
+{
+    wxBitmap bitmap = m_panel_extension_bundle[0].GetBitmapFor(wnd);
+    if ( !wnd->IsEnabled() && bitmap.IsOk() )
+        wxBitmap::MakeDisabled(bitmap);
+    return bitmap;
 }
 
 void wxRibbonMSWArtProvider::DrawButtonBarBackground(
@@ -2694,8 +2709,6 @@ wxRibbonMSWArtProvider::DrawToggleButton(wxDC& dc,
                                          const wxRect& rect,
                                          wxRibbonDisplayMode mode)
 {
-    DrawPartialPageBackground(dc, wnd, rect, false);
-
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
@@ -2745,8 +2758,7 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
                                        wxRibbonBar* wnd,
                                        const wxRect& rect)
 {
-    DrawPartialPageBackground(dc, wnd, rect, false);
-
+    // The tab area background has already been drawn by the bar.
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
@@ -2765,6 +2777,16 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
     dc.DrawText(label,
                 rect.GetX() + (20 - sz.GetWidth()) / 2,
                 rect.GetY() + (20 - sz.GetHeight()) / 2);
+}
+
+bool wxRibbonMSWArtProvider::DrawKeyTip(wxDC& dc,
+                                       wxWindow* wnd,
+                                       const wxRect& rect,
+                                       const wxString& keytip)
+{
+    wxRibbonDrawKeyTip(dc, wnd, rect, keytip, m_tab_label_font);
+
+    return true;
 }
 
 void wxRibbonMSWArtProvider::GetBarTabWidth(

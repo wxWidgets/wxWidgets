@@ -19,6 +19,20 @@
 class wxPersistentObject;
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// Name of the entry storing the DPI at which the other, pixel-valued, entries
+// of the same object were saved, used to rescale them if the DPI changes
+// between saving and restoring them.
+//
+// Note that the absence of this entry doesn't mean that the values were saved
+// at the standard DPI, but that they were saved by an older version of the
+// library not storing the DPI at all, in which case they can't be rescaled and
+// must be used as is.
+#define wxPERSIST_DPI "DPI"
+
+// ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
 

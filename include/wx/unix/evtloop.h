@@ -18,7 +18,7 @@
 
 class wxEventLoopSource;
 class wxFDIODispatcher;
-class wxWakeUpPipeMT;
+class wxWakeUpPipe;
 
 class WXDLLIMPEXP_BASE wxConsoleEventLoop
 #ifdef __DARWIN__
@@ -46,7 +46,7 @@ protected:
 private:
     // pipe used for wake up messages: when a child thread wants to wake up
     // the event loop in the main thread it writes to this pipe
-    wxWakeUpPipeMT *m_wakeupPipe;
+    wxWakeUpPipe *m_wakeupPipe;
 
     // the event loop source used to monitor this pipe
     wxEventLoopSource* m_wakeupSource;

@@ -556,6 +556,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( LONG navDir, VARIANT varStart, VARIANT
         }
     }
     wxLogTrace(wxT("access"), navStr);
+    wxUnusedVar(navStr); // unused with wxDEBUG_LEVEL=0
 
     wxAccStatus status = m_pAccessible->Navigate(navDirWX, varStart.lVal, & elementId,
         & elementObject);
@@ -1189,6 +1190,18 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
         return E_INVALIDARG;
     }
 
+    // The name set with wxWindow::SetAccessibleName() takes precedence over
+    // anything else, but only for the object itself and not its children.
+    if ( varID.lVal == CHILDID_SELF )
+    {
+        const wxString& nameOverride = m_pAccessible->GetNameOverride();
+        if ( !nameOverride.empty() )
+        {
+            *pszName = wxBasicString(nameOverride).Detach();
+            return S_OK;
+        }
+    }
+
     wxString name;
 
     wxAccStatus status = m_pAccessible->GetName(varID.lVal, & name);
@@ -1765,6 +1778,8 @@ IAccessible* wxIAccessible::GetChildAccessible(int id)
 // ----------------------------------------------------------------------------
 // wxAccessible implementation
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxAccessible, wxObject);
 
 // ctors
 

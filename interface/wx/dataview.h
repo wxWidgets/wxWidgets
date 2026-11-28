@@ -330,6 +330,8 @@ public:
 
         This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
+
+        @a item must be valid: the invisible root item can't change.
     */
     bool ItemChanged(const wxDataViewItem& item);
 
@@ -350,6 +352,8 @@ public:
 
         This will eventually emit @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
+
+        All @a items must be valid, see ItemChanged().
     */
     bool ItemsChanged(const wxDataViewItemArray& items);
 
@@ -391,6 +395,8 @@ public:
 
         This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
+
+        @a item must be valid, see ItemChanged().
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
@@ -2050,7 +2056,7 @@ public:
     wxDataViewColumn* GetOwner() const;
 
     /**
-        This methods retrieves the value from the renderer in order to
+        This method retrieves the value from the renderer in order to
         transfer the value back to the data model.
 
         Returns @false on failure.
@@ -3970,16 +3976,6 @@ public:
     void SetColumn(int col);
 
     /**
-        For @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK only.
-    */
-    void SetDataViewColumn(wxDataViewColumn* col);
-
-    /**
-        Sets the dataview model associated with this event.
-    */
-    void SetModel(wxDataViewModel* model);
-
-    /**
         Sets the value associated with this event.
     */
     void SetValue(const wxVariant& value);
@@ -4077,7 +4073,6 @@ public:
      */
     wxDataViewItem GetItem() const;
 
-    void SetItem( const wxDataViewItem &item );
     void SetPosition( int x, int y );
     void SetCache(int from, int to);
     wxDataObject *GetDataObject() const;

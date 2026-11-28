@@ -674,14 +674,35 @@ public:
 
     /**
         Returns the value of Nth parameter (as string only).
+
+        @see GetParams()
     */
     wxString GetParam(size_t n = 0) const;
 
     /**
         Returns the number of parameters found. This function makes sense
         mostly if you had used @c wxCMD_LINE_PARAM_MULTIPLE flag.
+
+        @see GetParams()
     */
     size_t GetParamCount() const;
+
+    /**
+        Returns all positional parameters.
+
+        This notable allows to iterate over all parameters in a convenient way:
+
+        @code
+        for ( const auto& param : parser.GetParams() ) {
+            // ... process the parameter ...
+        }
+        @endcode
+
+        @see GetParamCount(), GetParam()
+
+        @since 3.3.5
+    */
+    std::vector<wxString> GetParams() const;
 
     /**
         Returns the collection of arguments

@@ -31,11 +31,28 @@
 
 #include "wx/protocols/pointer-warp-v1-client-protocol.h"
 
-#ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
 wxGCC_WARNING_SUPPRESS(cast-qual)
+
+#ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
 #include "wx/protocols/xdg-session-management-v1-client-protocol.h"
-wxGCC_WARNING_RESTORE()
 #endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
+
+// This one is different from wxHAVE_WAYLAND_XXX because it's always supported
+// and hence there is no need to detect it in the build system.
+//
+// But we only need it when using the toplevel drag protocol, so we define it
+// ourselves, as either 0 or 1.
+#ifdef wxHAVE_WAYLAND_TOPLEVEL_DRAG
+    #include "wx/protocols/xdg-toplevel-drag-v1-client-protocol.h"
+
+    #define wxUSE_WAYLAND_DATA_DEVICE_MANAGER 1
+#endif // wxHAVE_WAYLAND_TOPLEVEL_DRAG
+
+wxGCC_WARNING_RESTORE()
+
+#ifndef wxUSE_WAYLAND_DATA_DEVICE_MANAGER
+    #define wxUSE_WAYLAND_DATA_DEVICE_MANAGER 0
+#endif
 
 namespace wxWayland
 {
@@ -53,6 +70,12 @@ struct wl_deleter;
         } \
     }
 
+#if wxUSE_WAYLAND_DATA_DEVICE_MANAGER
+wxDEFINE_WL_DELETER(wl_data_device, wl_data_device_release);
+wxDEFINE_WL_DELETER(wl_data_device_manager, wl_data_device_manager_destroy);
+wxDEFINE_WL_DELETER(wl_data_offer, wl_data_offer_destroy);
+#endif // wxUSE_WAYLAND_DATA_DEVICE_MANAGER
+wxDEFINE_WL_DELETER(wl_data_source, wl_data_source_destroy);
 wxDEFINE_WL_DELETER(wl_pointer, wl_pointer_release);
 wxDEFINE_WL_DELETER(wl_registry, wl_registry_destroy);
 wxDEFINE_WL_DELETER(wl_seat, wl_seat_release);
@@ -62,6 +85,10 @@ wxDEFINE_WL_DELETER(xdg_session_manager_v1, xdg_session_manager_v1_destroy);
 wxDEFINE_WL_DELETER(xdg_session_v1, xdg_session_v1_destroy);
 wxDEFINE_WL_DELETER(xdg_toplevel_session_v1, xdg_toplevel_session_v1_destroy);
 #endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
+#ifdef wxHAVE_WAYLAND_TOPLEVEL_DRAG
+wxDEFINE_WL_DELETER(xdg_toplevel_drag_manager_v1, xdg_toplevel_drag_manager_v1_destroy);
+wxDEFINE_WL_DELETER(xdg_toplevel_drag_v1, xdg_toplevel_drag_v1_destroy);
+#endif // wxHAVE_WAYLAND_TOPLEVEL_DRAG
 
 template <typename T>
 using wl_unique_ptr = std::unique_ptr<T, wl_deleter<T>>;
@@ -77,21 +104,25 @@ public:
     // name, even though this is not used for anything currently).
     Seat(wl_seat* seat_, uint32_t id_);
 
-    // As Seat is not copyable, make it movable to allow storing it in vector.
-    Seat(Seat&& other) = default;
-    Seat& operator=(Seat&& other) = default;
+    // Seat is neither copyable nor movable: its address is registered as the
+    // user data of the Wayland listeners of the seat and its pointer, so it
+    // must not change during the object lifetime.
+    Seat(const Seat&) = delete;
+    Seat& operator=(const Seat&) = delete;
 
     ~Seat() = default;
 
     void UpdateCapabilities(int capabilities);
 
+    // Return the data device for this seat, creating it on demand, or null if
+    // the data device manager global is not available.
+    wl_data_device* GetDataDevice();
 
-    // Most members are const after they're first set, but can't be really
-    // const because we need to be able to move Seat objects.
-    wl_unique_ptr<wl_seat> seat;
-    uint32_t id;
 
-    int capabilities = 0;
+    // The seat itself and its ID never change.
+    const wl_unique_ptr<wl_seat> seat;
+    const uint32_t id;
+
     wxString name;
 
     // This one can change as pointer can be added/removed dynamically by
@@ -102,6 +133,22 @@ public:
     // which surface it happened for, we just need a valid serial to pass to
     // wp_pointer_warp_v1_warp_pointer().
     uint32_t lastEnterSerial = 0;
+
+#ifdef wxHAVE_WAYLAND_TOPLEVEL_DRAG
+    // Last serial of a "pointer button pressed" event for this seat: this is
+    // the serial of the implicit grab which must be passed to
+    // wl_data_device_start_drag().
+    uint32_t lastButtonSerial = 0;
+
+    // The data device for this seat: only created if it's actually needed,
+    // i.e. if we start a drag using it, see GetDataDevice().
+    wl_unique_ptr<wl_data_device> data_device;
+
+    // The last data offer we were given: we don't use it at all, but it must
+    // be destroyed to avoid memory leaks, so we need to store it as it's not
+    // clear if we can destroy it immediately when it's offered.
+    wl_unique_ptr<wl_data_offer> last_data_offer;
+#endif // wxHAVE_WAYLAND_TOPLEVEL_DRAG
 };
 
 
@@ -122,10 +169,25 @@ struct Globals
     //
     // Of course, the choice of container doesn't matter much in the by far the
     // most typical case when we have just one of them.
-    std::vector<Seat> seats;
+    //
+    // Seats are stored by pointer because their addresses are used as listener
+    // data and must stay stable when other seats are added or removed.
+    std::vector<std::unique_ptr<Seat>> seats;
 
     // Optional pointer to the global pointer warp protocol object.
     wl_unique_ptr<wp_pointer_warp_v1> pointer_warp;
+
+#if wxUSE_WAYLAND_DATA_DEVICE_MANAGER
+    // Optional pointer to the global data device manager object: this one is
+    // always supported, but we only bind it if we need it, i.e. if we can also
+    // use the toplevel drag protocol below.
+    wl_unique_ptr<wl_data_device_manager> data_device_manager;
+#endif // wxUSE_WAYLAND_DATA_DEVICE_MANAGER
+
+#ifdef wxHAVE_WAYLAND_TOPLEVEL_DRAG
+    // Optional pointer to the global toplevel drag protocol object.
+    wl_unique_ptr<xdg_toplevel_drag_manager_v1> toplevel_drag_manager;
+#endif // wxHAVE_WAYLAND_TOPLEVEL_DRAG
 
 #ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
     // Optional pointer to the global session manager protocol object.

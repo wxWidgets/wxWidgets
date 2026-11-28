@@ -59,6 +59,11 @@
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.XamlTypeInfo.h>
 
+
+// Defined in src/msw/window.cpp: wxEVT_CHAR_HOOK for Escape, see
+// wxWinUIRunKeyboardPipelineImpl().
+extern bool wxMSWHandleEscapeKey(WXMSG* msg);
+
 namespace
 {
 
@@ -628,6 +633,18 @@ wxWinUIKeyboardPipelineResult wxWinUIRunKeyboardPipelineImpl(
     if ( !wxWinUI3AllowMessageProcessing(logicalOwner) )
         return wxWinUIKeyboardPipelineResult::WxHandled;
 
+    // wxMSW does not make wxEVT_CHAR_HOOK of Escape in its keyboard hook any
+    // more but in wxGUIEventLoop::PreProcessMessage(), which the keys meant
+    // for an island never reach (see wxWinUI3DispatchIslandKeyboard()): they
+    // are dealt with here. Without this Escape closed no dialog and cancelled
+    // nothing. A key for a window of wx itself still goes through
+    // PreProcessMessage(), which must stay the only one to send the event.
+    if ( !wxGetWindowFromHWND(reinterpret_cast<WXHWND>(msg->hwnd)) &&
+         wxMSWHandleEscapeKey(reinterpret_cast<WXMSG *>(msg)) )
+    {
+        return wxWinUIKeyboardPipelineResult::WxHandled;
+    }
+
     const bool isKeyDown =
         msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN;
     const bool isMnemonic = msg->message == WM_SYSCHAR;
@@ -645,7 +662,15 @@ wxWinUIKeyboardPipelineResult wxWinUIRunKeyboardPipelineImpl(
                 logicalOwner->MSWShouldPreProcessMessage(
                     reinterpret_cast<WXMSG *>(msg)) )
         {
-            wxWindow *window = logicalOwner;
+            // As wxGUIEventLoop::PreProcessMessage(): the window which has
+            // the focus, or the program by wxEVT_ACCELERATOR_KEY, can keep a
+            // key from the accelerators.
+            const bool useAccelerators =
+                !isKeyDown ||
+                logicalOwner->MSWShouldUseAcceleratorForKey(
+                    reinterpret_cast<WXMSG *>(msg));
+
+            wxWindow *window = useAccelerators ? logicalOwner : nullptr;
             while ( window )
             {
                 const bool handled =

@@ -60,6 +60,9 @@ public:
     QMainWindow *GetQMainWindow() const;
 
 protected:
+    // override wxWindow methods to take into account tool/menu/statusbars
+    virtual void DoSetClientSize(int width, int height) override;
+
     virtual wxPoint GetClientAreaOrigin() const override;
 
     virtual QWidget* QtGetParentWidget() const override;

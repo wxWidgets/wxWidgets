@@ -27,6 +27,8 @@
 #include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
 
+#include <functional>
+
 // All animation-related APIs have been deprecated gdk-pixbuf 2.44, suppress
 // the warnings about using them as long as we still do.
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -166,9 +168,104 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
     return data_written;
 }
 
-wxImage wxAnimationGTKImpl::GetFrame(unsigned int WXUNUSED(frame)) const
+namespace
 {
-    return wxNullImage;
+
+// Type of callback for ForEachFrame(): return false to stop iterating, true to
+// continue.
+using FrameCallback = std::function<bool (unsigned int frame,
+                                          GdkPixbufAnimationIter* iter,
+                                          int total_delay_ms)>;
+
+// Execute the given function for each frame of the animation.
+void ForEachFrame(GdkPixbufAnimation* anim, const FrameCallback& func)
+{
+    GTimeVal start_time;
+    g_get_current_time(&start_time);
+    wxGtkObject<GdkPixbufAnimationIter> iter(gdk_pixbuf_animation_get_iter(anim, &start_time));
+
+    int total_delay_ms = 0;
+
+    for (unsigned int frame = 0; ; frame++)
+    {
+        int delay = gdk_pixbuf_animation_iter_get_delay_time(iter);
+        if (delay <= 0)
+            break; // static state or an error
+
+        if (!func(frame, iter, delay))
+            break;
+
+        // Check if we reached the last frame.
+        if (gdk_pixbuf_animation_iter_on_currently_loading_frame(iter))
+            break;
+
+        total_delay_ms += delay;
+
+        GTimeVal next_time = start_time;
+        g_time_val_add(&next_time, total_delay_ms * 1000); // microseconds
+        gdk_pixbuf_animation_iter_advance(iter, &next_time);
+    }
+}
+
+} // anonymous namespace
+
+unsigned int wxAnimationGTKImpl::GetFrameCount() const
+{
+    int frame_count = 0;
+
+    ForEachFrame(m_pixbuf, [&frame_count](unsigned int WXUNUSED(frame),
+                                          GdkPixbufAnimationIter* WXUNUSED(iter),
+                                          int WXUNUSED(delay))
+    {
+        frame_count++;
+        return true;
+    });
+
+    return frame_count;
+}
+
+int wxAnimationGTKImpl::GetDelay(unsigned int frame) const
+{
+    int delay = 0;
+
+    ForEachFrame(m_pixbuf, [&](unsigned int current_frame,
+                               GdkPixbufAnimationIter* WXUNUSED(iter),
+                               int current_delay)
+    {
+        if (current_frame == frame)
+        {
+            delay = current_delay;
+
+            return false;
+        }
+
+        return true;
+    });
+
+    return delay;
+}
+
+wxImage wxAnimationGTKImpl::GetFrame(unsigned int frame) const
+{
+    wxBitmap bmp;
+
+    ForEachFrame(m_pixbuf, [&](unsigned int current_frame,
+                               GdkPixbufAnimationIter* iter,
+                               int WXUNUSED(delay))
+    {
+        if (current_frame == frame)
+        {
+            GdkPixbuf *buf = gdk_pixbuf_animation_iter_get_pixbuf(iter);
+            g_object_ref(buf);
+            bmp = wxBitmap(buf);
+
+            return false;
+        }
+
+        return true;
+    });
+
+    return bmp.ConvertToImage();
 }
 
 wxSize wxAnimationGTKImpl::GetSize() const

@@ -162,19 +162,8 @@ wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
 
     for ( const auto& entry : M_ACCELDATA->m_accels )
     {
-        // is the key the same?
-        if ( event.m_keyCode == entry.GetKeyCode() )
-        {
-            int flags = entry.GetFlags();
-
-            // now check flags
-            if ( (((flags & wxACCEL_CTRL) != 0) == event.ControlDown()) &&
-                 (((flags & wxACCEL_SHIFT) != 0) == event.ShiftDown()) &&
-                 (((flags & wxACCEL_ALT) != 0) == event.AltDown()) )
-            {
-                return &entry;
-            }
-        }
+        if ( entry.MatchesEvent(event) )
+            return &entry;
     }
 
     return nullptr;

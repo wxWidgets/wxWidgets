@@ -169,6 +169,7 @@ protected:
 
 private:
     friend class wxSearchButton;
+    friend class wxSearchTextCtrl;
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // Implement wxMSW-specific pure virtual function by forwarding it to the

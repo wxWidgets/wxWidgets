@@ -135,6 +135,8 @@ STDMETHODIMP wxIDropSource::GiveFeedback(DWORD dwEffect)
 
 // ctors
 
+wxIMPLEMENT_CLASS(wxDropSource, wxObject);
+
 // common part of all ctors
 void wxDropSource::Init()
 {

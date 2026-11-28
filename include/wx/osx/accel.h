@@ -24,6 +24,9 @@ public:
     bool IsOk() const;
 
     int GetCommand( wxKeyEvent &event );
+
+    // Find the entry corresponding to the given key event or nullptr.
+    const wxAcceleratorEntry *GetEntry(const wxKeyEvent& event) const;
 };
 
 #endif

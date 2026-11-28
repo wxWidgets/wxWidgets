@@ -69,21 +69,21 @@ wxCFEventLoopSource::~wxCFEventLoopSource()
 
 #endif // wxUSE_EVENTLOOP_SOURCE
 
-void wxCFEventLoop::OSXCommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info)
+void wxCFEventLoop::OSXCommonModeObserverCallBack(CFRunLoopObserverRef observer, unsigned long activity, void *info)
 {
     wxCFEventLoop * eventloop = static_cast<wxCFEventLoop *>(info);
     if ( eventloop && eventloop->IsRunning() )
         eventloop->CommonModeObserverCallBack(observer, activity);
 }
 
-void wxCFEventLoop::OSXDefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info)
+void wxCFEventLoop::OSXDefaultModeObserverCallBack(CFRunLoopObserverRef observer, unsigned long activity, void *info)
 {
     wxCFEventLoop * eventloop = static_cast<wxCFEventLoop *>(info);
     if ( eventloop && eventloop->IsRunning() )
         eventloop->DefaultModeObserverCallBack(observer, activity);
 }
 
-void wxCFEventLoop::CommonModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer), int activity)
+void wxCFEventLoop::CommonModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer), unsigned long activity)
 {
     if ( activity & kCFRunLoopBeforeTimers )
     {
@@ -116,7 +116,7 @@ void wxCFEventLoop::CommonModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(obs
 
 void
 wxCFEventLoop::DefaultModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer),
-                                           int WXUNUSED(activity))
+                                           unsigned long WXUNUSED(activity))
 {
     /*
     if ( activity & kCFRunLoopBeforeTimers )
@@ -145,11 +145,11 @@ wxCFEventLoop::wxCFEventLoop()
     bzero( &ctxt, sizeof(ctxt) );
     ctxt.info = this;
     m_commonModeRunLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0,
-                                                          (CFRunLoopObserverCallBack) wxCFEventLoop::OSXCommonModeObserverCallBack, &ctxt );
+                                                          wxCFEventLoop::OSXCommonModeObserverCallBack, &ctxt );
     CFRunLoopAddObserver(m_runLoop, m_commonModeRunLoopObserver, kCFRunLoopCommonModes);
 
     m_defaultModeRunLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0,
-                                                           (CFRunLoopObserverCallBack) wxCFEventLoop::OSXDefaultModeObserverCallBack, &ctxt );
+                                                           wxCFEventLoop::OSXDefaultModeObserverCallBack, &ctxt );
     CFRunLoopAddObserver(m_runLoop, m_defaultModeRunLoopObserver, kCFRunLoopDefaultMode);
 }
 

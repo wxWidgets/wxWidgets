@@ -51,6 +51,9 @@ ButtonTestCase::ButtonTestCase()
 
 TEST_CASE_METHOD(ButtonTestCase, "Button::Click", "[button]")
 {
+    if ( !EnableUITests() )
+        return;
+
     //We use the internal class EventCounter which handles connecting and
     //disconnecting the control to the wxTestableFrame
     EventCounter clicked(m_button.get(), wxEVT_BUTTON);
@@ -73,6 +76,9 @@ TEST_CASE_METHOD(ButtonTestCase, "Button::Click", "[button]")
 
 TEST_CASE_METHOD(ButtonTestCase, "Button::Disabled", "[button]")
 {
+    if ( !EnableUITests() )
+        return;
+
     wxUIActionSimulator sim;
 
     // In this test we disable the button and check events are not sent and we

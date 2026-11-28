@@ -264,7 +264,7 @@ wxSize wxListBox::DoGetBestSize() const
         }
 
         // Add room for the scrollbar
-        lbWidth += wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+        lbWidth += GetScrollbarSize( wxVERTICAL );
 
         // And just a bit more
         int cy = 12;
@@ -377,7 +377,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
-        GetListPeer()->ListInsert(startpos+i);
+        GetListPeer()->ListInsert(idx);
 
         OnItemInserted(idx);
     }

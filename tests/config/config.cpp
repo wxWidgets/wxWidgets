@@ -26,6 +26,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/config.h"
+#include "wx/scopeguard.h"
+#include "wx/utils.h"
 
 // Tests using wxColour can only be done when using GUI library and they
 // require template functions that are not supported by some ancient compilers.
@@ -40,6 +42,25 @@
 // --------------------------------------------------------------------------
 // the tests
 // --------------------------------------------------------------------------
+
+TEST_CASE("wxExpandEnvVars", "[config][envvars]")
+{
+    REQUIRE( wxSetEnv("WX_TEST_EXPAND_ENV", "prefix") );
+    wxON_BLOCK_EXIT1( wxUnsetEnv, "WX_TEST_EXPAND_ENV" );
+
+    CHECK( wxExpandEnvVars("$WX_TEST_EXPAND_ENV") == "prefix" );
+    CHECK( wxExpandEnvVars("$(WX_TEST_EXPAND_ENV)") == "prefix" );
+    CHECK( wxExpandEnvVars("${WX_TEST_EXPAND_ENV}") == "prefix" );
+    CHECK( wxExpandEnvVars("$WX_TEST_EXPAND_ENV(WITH_PARENS)") ==
+           "prefix(WITH_PARENS)" );
+
+#ifdef __WINDOWS__
+    REQUIRE( wxSetEnv("WX_TEST_EXPAND_ENV(WITH_PARENS)", "full") );
+    wxON_BLOCK_EXIT1( wxUnsetEnv, "WX_TEST_EXPAND_ENV(WITH_PARENS)" );
+
+    CHECK( wxExpandEnvVars("%WX_TEST_EXPAND_ENV(WITH_PARENS)%") == "full" );
+#endif // __WINDOWS__
+}
 
 TEST_CASE("wxConfig::ReadWriteLocal", "[config]")
 {

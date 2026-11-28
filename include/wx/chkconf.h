@@ -1715,6 +1715,11 @@
 #   endif
 #endif
 
+#if wxUSE_RIBBON && !wxUSE_GRAPHICS_CONTEXT
+#   undef wxUSE_RIBBON
+#   define wxUSE_RIBBON 0
+#endif /* wxUSE_RIBBON */
+
 #if wxUSE_ACTIVITYINDICATOR && !wxUSE_GRAPHICS_CONTEXT
 #   undef wxUSE_ACTIVITYINDICATOR
 #   define wxUSE_ACTIVITYINDICATOR 0

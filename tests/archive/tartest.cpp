@@ -19,6 +19,7 @@
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 
+#include <algorithm>
 #include <memory>
 
 using std::string;
@@ -233,6 +234,84 @@ TEST_CASE("Tar::BadExtendedHeaderRecordLen", "[tar][error]")
     // header; with it the bad record is skipped and the normal entry is read.
     REQUIRE( entry );
     CHECK( entry->GetInternalName() == "a.txt" );
+}
+
+TEST_CASE("Tar::ExtendedHeaderNumber", "[tar]")
+{
+    // A user id that doesn't fit in the octal header field is stored as a
+    // decimal "uid" record in a pax extended header and parsed back by
+    // wxTarInputStream::GetHeaderNumber().
+    wxMemoryOutputStream mos;
+    {
+        wxTarOutputStream tar(mos);
+
+        wxTarEntry* entry = new wxTarEntry("a.txt");
+        entry->SetUserId(4194303);
+        REQUIRE( tar.PutNextEntry(entry) );
+
+        entry = new wxTarEntry("b.txt");
+        entry->SetUserId(4194303);
+        REQUIRE( tar.PutNextEntry(entry) );
+
+        REQUIRE( tar.Close() );
+    }
+
+    const size_t len = mos.GetLength();
+    wxCharBuffer buf(len);
+    mos.CopyTo(buf.data(), len);
+
+    // Replace the trailing digits of the second record with U+10FFFF, which
+    // must stop the parsing and not be passed to the ctype functions.
+    const char* const uid = "uid=4194303\n";
+    char* p = std::search(buf.data(), buf.data() + len, uid, uid + strlen(uid));
+    REQUIRE( p != buf.data() + len );
+    p = std::search(p + 1, buf.data() + len, uid, uid + strlen(uid));
+    REQUIRE( p != buf.data() + len );
+    memcpy(p + 7, "\xf4\x8f\xbf\xbf", 4);
+
+    wxMemoryInputStream mis(buf.data(), len);
+    wxTarInputStream tar(mis);
+
+    std::unique_ptr<wxTarEntry> entry(tar.GetNextEntry());
+    REQUIRE( entry );
+    CHECK( entry->GetUserId() == 4194303 );
+
+    entry.reset(tar.GetNextEntry());
+    REQUIRE( entry );
+    CHECK( entry->GetInternalName() == "b.txt" );
+    CHECK( entry->GetUserId() == 419 );
+}
+
+TEST_CASE("Tar::ExtendedHeaderRecords", "[tar]")
+{
+    // Names and link targets that don't fit in the ustar header fields are
+    // stored as records of a pax extended header, check that several such
+    // records for the same entry are all preserved.
+    const wxString name = wxString('n', 150) + "/" + wxString('m', 300);
+    const wxString link = wxString('l', 200);
+    const wxString user = wxString('u', 50);
+
+    wxMemoryOutputStream mos;
+    {
+        wxTarOutputStream tar(mos);
+
+        wxTarEntry* entry = new wxTarEntry(name);
+        entry->SetTypeFlag(wxTAR_SYMTYPE);
+        entry->SetLinkName(link);
+        entry->SetUserName(user);
+        REQUIRE( tar.PutNextEntry(entry) );
+
+        REQUIRE( tar.Close() );
+    }
+
+    wxMemoryInputStream mis(mos);
+    wxTarInputStream tar(mis);
+
+    std::unique_ptr<wxTarEntry> entry(tar.GetNextEntry());
+    REQUIRE( entry );
+    CHECK( entry->GetName(wxPATH_UNIX) == name );
+    CHECK( entry->GetLinkName() == link );
+    CHECK( entry->GetUserName() == user );
 }
 
 // This can be used to test loading an arbitrary tar file by setting the

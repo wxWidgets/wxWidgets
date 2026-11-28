@@ -163,6 +163,9 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col) override;
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceByIndexRenderer);
 };
 
 // ---------------------------------------------------------

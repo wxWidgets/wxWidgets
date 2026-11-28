@@ -1041,6 +1041,20 @@ extendedDocs = {
         ('The input should be one of the',
         '@link wxStyledTextCtrl::wxSTC_PHASES_ONE wxSTC_PHASES_* @endlink constants.',),
 
+    'GetBidirectional':
+        ('The return value will be one of the',
+        '@link wxStyledTextCtrl::wxSTC_BIDIRECTIONAL_DISABLED wxSTC_BIDIRECTIONAL_* '
+        '@endlink constants.',),
+
+    'SetBidirectional':
+        ('The input should be one of the',
+        '@link wxStyledTextCtrl::wxSTC_BIDIRECTIONAL_DISABLED wxSTC_BIDIRECTIONAL_* '
+        '@endlink constants.',
+        '@remarks',
+        'This method only has any effect with the wxMSW port and when',
+        'technology has been set to wxSTC_TECHNOLOGY_DIRECTWRITE. Only',
+        'wxSTC_BIDIRECTIONAL_L2R is currently supported, see @ref stc_bidi.',),
+
     'GetTechnology':
         ('The return value will be one of the',
         '@link wxStyledTextCtrl::wxSTC_TECHNOLOGY_DEFAULT wxSTC_TECHNOLOGY_* '
@@ -1071,7 +1085,17 @@ extendedDocs = {
 
     'SetIMEInteraction':
         ('The input should be one of the',
-        '@link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink constants.',),
+        '@link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink',
+        'constants.',
+        '@remarks',
+        'Inline IME interaction is used by default under wxGTK and wxOSX.',
+        'The other ports use windowed IME interaction by default.',
+        'Inline interaction also requires undo collection to be enabled,',
+        'windowed interaction is used while it is disabled.',
+        'With inline interaction, the text being composed is shown in the',
+        "control itself and inserted using wxEVT_CHAR events once it's",
+        'confirmed. Programmatically modifying the control contents ends',
+        'the composition in progress, if any.',),
 
     'GetIndentationGuides':
         ('The return value will be one of the',
@@ -1413,7 +1437,10 @@ sinceAnnotations= {
     'ToggleFoldShowText':'3.1.1',
 
     'MarkerDefinePixmap':'3.1.3',
-    'RegisterImage':'3.1.3'
+    'RegisterImage':'3.1.3',
+
+    'GetBidirectional':'3.3.5',
+    'SetBidirectional':'3.3.5'
 }
 
 
@@ -1449,7 +1476,7 @@ def buildDocs(name, docs, icat):
         docsLong = extendedDocs[name]
 
     if icat=='Provisional':
-        note = ('','This method is provisional and is subject to change'
+        note = ('','This method is provisional and is subject to change '
                 'in future versions of wxStyledTextCtrl.',)
         if docsLong==0:
             docsLong = note

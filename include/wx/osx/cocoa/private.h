@@ -50,6 +50,10 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromNSCursor(const WXHCURSOR cursor);
+
+// Returns the colour to use for the separators and the borders: this is
+// NSColor.separatorColor if available.
+wxColour WXDLLIMPEXP_CORE wxOSXGetSeparatorColour();
 void wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
                              long style,
                              wxWindowID winid,
@@ -168,6 +172,9 @@ public :
 
     void                SetFont(const wxFont & font) override;
     void                SetToolTip( wxToolTip* tooltip ) override;
+    void                SetAccessibilityLabel(const wxString& label) override;
+    void                SetAccessibilityTitleElement(wxWidgetImpl* title) override;
+    bool                HasAccessibilityTitle() const override;
 
     void                InstallEventHandler( WXWidget control = nullptr ) override;
     bool                EnableTouchEvents(int eventsMask) override;
@@ -217,6 +224,7 @@ public :
     virtual void                cursorUpdate(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                insertText(NSString* text, WXWidget slf, void* _cmd);
+    void                        textInputEventHandled();
     // Returns true if the event was processed by a user-defined event handler.
     virtual bool                doCommandBySelector(void* sel, WXWidget slf, void* _cmd);
     virtual bool                acceptsFirstResponder(WXWidget slf, void* _cmd);
@@ -235,6 +243,7 @@ public :
     virtual void                controlTextDidChange();
 
     virtual void                ClipsToBounds(bool clip) override;
+    virtual bool                DoesClipToBounds() const override;
 
     virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
     virtual void                UseClippingView() override;
@@ -264,6 +273,14 @@ protected:
 
     // Return the view to apply the font/colour to.
     NSView* GetViewWithText() const;
+
+    // Return the view used for accessibility purposes, which is different
+    // from m_osxView for controls inside a scroll view, e.g. multiline
+    // wxTextCtrl, as VoiceOver reads the document view and not the scroll view.
+    //
+    // Note that the element actually used by VoiceOver may be a descendant
+    // of this view, e.g. its cell.
+    NSView* GetAccessibleView() const;
 
     NSEvent* m_lastKeyDownEvent;
     bool m_lastKeyDownWXSent;

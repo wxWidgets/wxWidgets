@@ -70,6 +70,8 @@ wxFileDialogCustomControlImpl::DoBind(wxEvtHandler* WXUNUSED(handler))
     return false;
 }
 
+wxIMPLEMENT_CLASS(wxFileDialogCustomControl, wxEvtHandler);
+
 bool wxFileDialogCustomControl::OnDynamicBind(wxDynamicEventTableEntry& entry)
 {
     wxUnusedVar(entry); // Needed when debug is disabled.
@@ -98,6 +100,8 @@ wxFileDialogCustomControl::~wxFileDialogCustomControl()
     delete m_impl;
 }
 
+wxIMPLEMENT_CLASS(wxFileDialogButton, wxFileDialogCustomControl);
+
 wxFileDialogButton::wxFileDialogButton(wxFileDialogButtonImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -115,6 +119,8 @@ wxFileDialogButtonImpl* wxFileDialogButton::GetImpl() const
 {
     return static_cast<wxFileDialogButtonImpl*>(m_impl);
 }
+
+wxIMPLEMENT_CLASS(wxFileDialogCheckBox, wxFileDialogCustomControl);
 
 wxFileDialogCheckBox::wxFileDialogCheckBox(wxFileDialogCheckBoxImpl* impl)
     : wxFileDialogCustomControl(impl)
@@ -145,6 +151,9 @@ void wxFileDialogCheckBox::SetValue(bool value)
 }
 
 #if wxUSE_RADIOBTN
+
+wxIMPLEMENT_CLASS(wxFileDialogRadioButton, wxFileDialogCustomControl);
+
 wxFileDialogRadioButton::wxFileDialogRadioButton(wxFileDialogRadioButtonImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -174,6 +183,8 @@ void wxFileDialogRadioButton::SetValue(bool value)
 }
 #endif // wxUSE_RADIOBTN
 
+wxIMPLEMENT_CLASS(wxFileDialogChoice, wxFileDialogCustomControl);
+
 wxFileDialogChoice::wxFileDialogChoice(wxFileDialogChoiceImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -202,6 +213,8 @@ void wxFileDialogChoice::SetSelection(int n)
     GetImpl()->SetSelection(n);
 }
 
+wxIMPLEMENT_CLASS(wxFileDialogTextCtrl, wxFileDialogCustomControl);
+
 wxFileDialogTextCtrl::wxFileDialogTextCtrl(wxFileDialogTextCtrlImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -221,6 +234,8 @@ void wxFileDialogTextCtrl::SetValue(const wxString& value)
 {
     GetImpl()->SetValue(value);
 }
+
+wxIMPLEMENT_CLASS(wxFileDialogStaticText, wxFileDialogCustomControl);
 
 wxFileDialogStaticText::wxFileDialogStaticText(wxFileDialogStaticTextImpl* impl)
     : wxFileDialogCustomControl(impl)

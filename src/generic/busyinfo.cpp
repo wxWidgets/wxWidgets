@@ -27,15 +27,7 @@
     #include "wx/winui/winui.h"
 #endif
 
-// wxStaticText currently supports markup only in wxGTK and wxOSX/Cocoa, so use
-// the generic version for markup support in the other ports.
-#if wxUSE_MARKUP && !(defined(__WXGTK__) || defined(__WXOSX_COCOA__))
-    #include "wx/generic/stattextg.h"
-
-    #define wxStaticTextWithMarkupSupport wxGenericStaticText
-#else
-    #define wxStaticTextWithMarkupSupport wxStaticText
-#endif
+wxIMPLEMENT_CLASS(wxBusyInfo, wxObject);
 
 void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 {
@@ -72,10 +64,10 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     wxControl* title;
     if ( !flags.m_title.empty() )
     {
-        title = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                                  wxDefaultPosition,
-                                                  wxDefaultSize,
-                                                  wxALIGN_CENTRE);
+        title = new wxStaticText(panel, wxID_ANY, wxString(),
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
 
 #ifdef __WXGTK__
@@ -110,10 +102,10 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 
 #if wxUSE_MARKUP
     wxControl * const text =
-        new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                          wxDefaultPosition,
-                                          wxDefaultSize,
-                                          wxALIGN_CENTRE);
+        new wxStaticText(panel, wxID_ANY, wxString(),
+                         wxDefaultPosition,
+                         wxDefaultSize,
+                         wxALIGN_CENTRE);
     m_text = text;
     if ( !flags.m_text.empty() )
         text->SetLabelMarkup(flags.m_text);

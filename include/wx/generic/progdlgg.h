@@ -249,6 +249,9 @@ private:
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);
+
+private:
+    wxDECLARE_CLASS(wxGenericProgressDialog);
 };
 
 #endif // __PROGDLGH_G__

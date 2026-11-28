@@ -58,6 +58,9 @@ protected:
 
 private:
     void Init() { m_pngData = nullptr; m_pngSize = 0; }
+
+private:
+    wxDECLARE_CLASS(wxBitmapDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -88,6 +91,9 @@ public:
     {
         return SetData(len, buf);
     }
+
+private:
+    wxDECLARE_CLASS(wxFileDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -107,6 +113,9 @@ private:
     wxTextDataObject* const m_dobjText;
 
     wxDECLARE_NO_COPY_CLASS(wxURLDataObject);
+
+private:
+    wxDECLARE_CLASS(wxURLDataObject);
 };
 
 

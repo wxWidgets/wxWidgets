@@ -147,6 +147,8 @@ FindClosestEditFirstLine(int editNewInitial,
 // wxStyledTextCtrlMiniMap implementation
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxStyledTextCtrlMiniMap, wxStyledTextCtrl);
+
 bool
 wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
 {

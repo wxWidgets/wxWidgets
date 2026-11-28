@@ -51,4 +51,13 @@ bool wxCreateTempFile(const wxString& prefix,
                       wxString *name);
 #endif
 
+// Set up the newly created temporary file strTemp which is going to replace
+// the existing file strName: this notably copies the attributes of the latter
+// to the former, so that they're preserved when the file is replaced.
+//
+// This is used to implement both wxTempFile and wxTempFFile.
+#if wxUSE_FILE || wxUSE_FFILE
+void wxInitTempFile(const wxString& strTemp, const wxString& strName);
+#endif // wxUSE_FILE || wxUSE_FFILE
+
 #endif // _WX_PRIVATE_FILENAME_H_

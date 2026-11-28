@@ -64,6 +64,7 @@
 #include "wx/graphics.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11
@@ -270,6 +271,13 @@ void wxWindowMac::MacClipsToBounds( bool clip )
         m_peer->ClipsToBounds(clip);
 }
 
+bool wxWindowMac::MacDoesClipToBounds() const
+{
+    if ( m_peer )
+        return m_peer->DoesClipToBounds();
+
+    return true;
+}
 
 void wxWindowMac::MacSetClipChildren()
 {
@@ -445,6 +453,25 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
         MacCreateScrollBars( ) ;
     }
 #endif
+
+    // Controls without their own label are typically preceded by a label
+    // describing them, which screen readers use as their name under MSW, so
+    // do the same here.
+    //
+    // We do it for the native controls only as generic windows are not
+    // accessible anyhow.
+    //
+    // Also note that this function is called from Create() and the window is
+    // not fully initialized yet, and wxStaticText doesn't have its own label
+    // set yet, so we need to explicitly check for GetLabelPeer() to exclude it.
+    wxOSXWidgetImpl* const peer = GetPeer();
+    if ( !peer->IsUserPane() && !GetLabelPeer() )
+    {
+        const wxWindow* const prev = GetPrevSibling();
+        wxOSXWidgetImpl* const labelPeer = prev ? prev->GetLabelPeer() : nullptr;
+        if ( labelPeer && !peer->HasAccessibilityTitle() )
+            peer->SetAccessibilityTitleElement(labelPeer);
+    }
 
 }
 
@@ -919,6 +946,12 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 }
 
 #endif
+
+void wxWindowMac::SetAccessibleName(const wxString& name)
+{
+    if (GetPeer())
+        GetPeer()->SetAccessibilityLabel(name);
+}
 
 void wxWindowMac::MacInvalidateBorders()
 {
@@ -1609,6 +1642,22 @@ void  wxWindowMac::MacPaintGrowBox()
 #endif
 }
 
+#if wxOSX_USE_COCOA_OR_CARBON
+// The width of the border drawn since 10.14, as AppKit draws its own: one
+// point for wxBORDER_SIMPLE and two, for the groove, for the other border
+// styles.
+static int wxOSXGetBorderLineWidth(const wxWindowMac* win)
+{
+    if ( win->HasFlag(wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_DOUBLE) )
+        return 2;
+
+    if ( win->HasFlag(wxBORDER_SIMPLE) )
+        return 1;
+
+    return 0;
+}
+#endif // wxOSX_USE_COCOA_OR_CARBON
+
 void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(rightOrigin) )
 {
     if ( IsTopLevel() )
@@ -1622,30 +1671,69 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
 
 #if wxOSX_USE_COCOA_OR_CARBON
     {
-        CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
-            th+2 ) ;
-
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
 
         if ( GetPeer()->NeedsFrame() )
         {
-            HIThemeFrameDrawInfo info ;
-            memset( &info, 0 , sizeof(info) ) ;
-
-            info.version = 0 ;
-            info.kind = 0 ;
-            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-
-            if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+            if ( WX_IS_MACOS_AVAILABLE(10, 14) )
             {
-                info.kind = kHIThemeFrameTextFieldSquare ;
-                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                // Draw the borders AppKit draws itself, in colours that follow
+                // the appearance: a line in the separator colour, as around a
+                // scroll view with NSBezelBorder, or a groove, as
+                // NSGrooveBorder: a shadow with a highlight inside it at the
+                // top and left and outside it at the bottom and right (the
+                // context is flipped).
+                //
+                // HIThemeDrawFrame() doesn't support dark mode and draws a
+                // white frame in it.
+                const int lineWidth = wxOSXGetBorderLineWidth(this) ;
+                const CGRect frame = CGRectInset( CGRectMake( tx , ty , tw , th ) ,
+                    -lineWidth , -lineWidth ) ;
+
+                CGContextSaveGState( cgContext ) ;
+                if ( lineWidth == 1 )
+                {
+                    CGContextSetStrokeColorWithColor( cgContext ,
+                        wxOSXGetSeparatorColour().GetCGColor() ) ;
+                    CGContextStrokeRectWithWidth( cgContext ,
+                        CGRectInset( frame , 0.5 , 0.5 ) , 1.0 ) ;
+                }
+                else if ( lineWidth == 2 )
+                {
+                    CGContextSetStrokeColorWithColor( cgContext ,
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW).GetCGColor() ) ;
+                    CGContextStrokeRectWithWidth( cgContext ,
+                        CGRectInset( frame , 1.0 , 1.0 ) , 2.0 ) ;
+                    CGContextSetStrokeColorWithColor( cgContext ,
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT).GetCGColor() ) ;
+                    CGContextStrokeRectWithWidth( cgContext ,
+                        CGRectOffset( CGRectInset( frame , 1.0 , 1.0 ) , 0.5 , 0.5 ) , 1.0 ) ;
+                }
+                CGContextRestoreGState( cgContext ) ;
             }
-            else if ( HasFlag(wxSIMPLE_BORDER) )
+            else
             {
-                info.kind = kHIThemeFrameListBox ;
-                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
+                    th+2 ) ;
+
+                HIThemeFrameDrawInfo info ;
+                memset( &info, 0 , sizeof(info) ) ;
+
+                info.version = 0 ;
+                info.kind = 0 ;
+                info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+
+                if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+                {
+                    info.kind = kHIThemeFrameTextFieldSquare ;
+                    HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                }
+                else if ( HasFlag(wxSIMPLE_BORDER) )
+                {
+                    info.kind = kHIThemeFrameListBox ;
+                    HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+                }
             }
         }
     }
@@ -2299,6 +2387,12 @@ long wxWindowMac::MacGetWXBorderSize() const
 
     if ( GetPeer() && GetPeer()->NeedsFrame() )
     {
+#if wxOSX_USE_COCOA_OR_CARBON
+        // Since 10.14 MacPaintBorders() draws a line or a groove this wide.
+        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+            return wxOSXGetBorderLineWidth(this) ;
+#endif
+
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
         {
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -2609,11 +2703,16 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 #if wxUSE_ACCEL
     if (event.GetEventType() == wxEVT_CHAR_HOOK)
     {
-        wxWindow *ancestor = this;
-        while (ancestor)
+        // Check if this key is used by one of the accelerators defined by
+        // wxAcceleratorTable: note that the accelerators of the menu items
+        // are not handled here, they are used by the menu bar itself, see
+        // OSXShouldUseMenuAcceleratorForKey().
+        wxAcceleratorEntry entry;
+        wxWindow* ancestor = nullptr;
+        if ( FindAcceleratorForKey(event, entry, &ancestor) && !entry.GetMenuItem() )
         {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
+            const int command = entry.GetCommand();
+            if ( ShouldUseAcceleratorForKey(event, command, nullptr) )
             {
                 wxEvtHandler * const handler = ancestor->GetEventHandler();
 
@@ -2629,17 +2728,38 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
                 // accelerator.
                 return true;
             }
-
-            if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
-                break;
-
-            ancestor = ancestor->GetParent();
         }
     }
 #endif // wxUSE_ACCEL
 
     return false;
 }
+
+#if wxUSE_ACCEL
+
+bool wxWindowMac::OSXShouldUseMenuAcceleratorForKey( const wxKeyEvent& event )
+{
+    wxAcceleratorEntry entry;
+    if ( !FindAcceleratorForKey(event, entry, nullptr /* don't need owner */) )
+    {
+        // This key is not used by any accelerator at all.
+        return true;
+    }
+
+    wxMenuItem* const item = entry.GetMenuItem();
+    if ( !item )
+    {
+        // This one comes from wxAcceleratorTable and will be dealt with in
+        // OSXHandleKeyEvent() when we get wxEVT_CHAR_HOOK for this key, don't
+        // do anything here (and, in particular, don't send the accelerator
+        // event twice for the same key).
+        return true;
+    }
+
+    return ShouldUseAcceleratorForKey(event, entry.GetCommand(), item);
+}
+
+#endif // wxUSE_ACCEL
 
 wxSize wxWindowMac::GetDPI() const
 {
@@ -2779,6 +2899,11 @@ void wxWidgetImpl::SetDrawingEnabled(bool WXUNUSED(enabled))
 
 void wxWidgetImpl::ClipsToBounds(bool WXUNUSED(clip))
 {
+}
+
+bool wxWidgetImpl::DoesClipToBounds() const
+{
+    return false;
 }
 
 void wxWidgetImpl::AdjustClippingView(wxScrollBar* WXUNUSED(horizontal), wxScrollBar* WXUNUSED(vertical))

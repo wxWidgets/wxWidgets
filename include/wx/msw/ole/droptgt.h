@@ -55,8 +55,10 @@ public:
     // do we accept this kind of data?
     bool MSWIsAcceptedData(IDataObject *pIDataSource) const;
 
-    // give us the data source from IDropTarget::Drop() - this is later used by
-    // GetData() when it's called from inside OnData()
+    // give us the data source from IDropTarget::DragEnter() or Drop() - this
+    // is later used by GetData() when it's called from inside OnData() - or
+    // tell us to release the data source when the operation ends if called
+    // with null pointer
     void MSWSetDataSource(IDataObject *pIDataSource);
 
     // These functions take care of all things necessary to support native drag
@@ -79,10 +81,13 @@ private:
     wxDataFormat MSWGetSupportedFormat(IDataObject *pIDataSource) const;
 
     wxIDropTarget     *m_pIDropTarget; // the pointer to our COM interface
-    IDataObject       *m_pIDataSource; // the pointer to the source data object
+    IDataObject       *m_pIDataSource = nullptr; // the source data object
     wxIDropTargetHelper *m_dropTargetHelper; // the drop target helper
 
     wxDECLARE_NO_COPY_CLASS(wxDropTarget);
+
+private:
+    wxDECLARE_CLASS(wxDropTarget);
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

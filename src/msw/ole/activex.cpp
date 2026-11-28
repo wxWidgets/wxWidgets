@@ -1383,6 +1383,8 @@ const int invalid_entry_marker = 0;
 
 wxVariant wxActiveXEvents::ms_invalidEntryMarker(const_cast<void*>(static_cast<const void*>(&invalid_entry_marker)));
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxActiveXEvent, wxCommandEvent);
+
 size_t wxActiveXEvent::ParamCount() const
 {
     wxActiveXEventNativeMSW *native=GetNativeParameters();
@@ -1449,6 +1451,8 @@ END_OLE_TABLE
 // wxActiveXContainer
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+wxIMPLEMENT_CLASS(wxActiveXContainer, wxWindow);
 
 //---------------------------------------------------------------------------
 // wxActiveXContainer Constructor

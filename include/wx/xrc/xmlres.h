@@ -433,6 +433,9 @@ private:
 
     // singleton instance:
     static wxXmlResource *ms_instance;
+
+private:
+    wxDECLARE_CLASS(wxXmlResource);
 };
 
 
@@ -474,6 +477,12 @@ private:
 #define XRCSIZERITEM(window, id) \
     ((window).GetSizer() ? (window).GetSizer()->GetItemById(XRCID(id)) : nullptr)
 
+
+// Overriding deprecated GetAnimation() in the class declaration below gives a
+// deprecation warning, but it's unavoidable here, so suppress it.
+//
+// Note that it needs to be done here and not inside the class declaration.
+wxWARNING_SUPPRESS_DEPRECATED()
 
 // wxXmlResourceHandlerImpl is the back-end of the wxXmlResourceHander class to
 // really implementing all its functionality. It is defined in the "xrc"
@@ -682,6 +691,7 @@ public:
     void ReportParamError(const wxString& param, const wxString& message) override;
 };
 
+wxWARNING_RESTORE_DEPRECATED()
 
 // Programmer-friendly macros for writing XRC handlers:
 

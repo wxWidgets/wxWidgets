@@ -74,6 +74,9 @@ public:
     wxSize m_size;
 #endif
 
+protected:
+    virtual void GTKOnWidgetCreated() override;
+
 private:
     wxDECLARE_CLASS(wxGLCanvas);
 };

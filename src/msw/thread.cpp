@@ -1182,8 +1182,9 @@ static bool wxSetThreadNameOnAnyMSVC(const char* threadName)
     info.szName = threadName;
     info.dwThreadID = (DWORD)-1;
     info.dwFlags = 0;
-#pragma warning(push)
-#pragma warning(disable: 6320 6322)
+
+    wxMSVC_WARNING_SUPPRESS(6320 6322)
+
     __try
     {
         RaiseException(MS_VC_EXCEPTION, 0,
@@ -1193,7 +1194,9 @@ static bool wxSetThreadNameOnAnyMSVC(const char* threadName)
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
     }
-#pragma warning(pop)
+
+    wxMSVC_WARNING_RESTORE(6320 6322)
+
     return false;
 }
 #endif // MSC_VER

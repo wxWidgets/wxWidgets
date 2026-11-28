@@ -85,6 +85,9 @@ private:
              m_ReplaceWith;
 
     friend class wxFindReplaceDialogBase;
+
+private:
+    wxDECLARE_CLASS(wxFindReplaceData);
 };
 
 // ----------------------------------------------------------------------------

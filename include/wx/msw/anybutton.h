@@ -40,6 +40,12 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const override { return false; }
 
+    // Not under wxWinUI: the button is a XAML Button, whose automation peer
+    // is what screen readers get, and a wxAccessible would take its place.
+#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS && !defined(__WXWINUI__)
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS && !__WXWINUI__
+
 protected:
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const override;

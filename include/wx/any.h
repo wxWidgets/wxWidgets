@@ -503,6 +503,12 @@ WX_ANY_DEFINE_CONVERTIBLE_TYPE_BASE(wxString, wxString, wxAnyConvertString)
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 WX_ANY_DEFINE_CONVERTIBLE_TYPE(const char*, ConstCharPtr,
                                wxAnyConvertString, wxString)
+#elif defined(wxALLOW_UTF8_LITERALS)
+// Narrow strings in unknown encoding can't be stored in wxAny, but we can't
+// use private overloads taking const char* to prevent this from happening as
+// they would be preferred to the overloads taking string literals, so leave
+// this specialization undefined to ensure that they can't be used instead.
+template<> class wxAnyValueTypeImpl<const char*>;
 #endif
 WX_ANY_DEFINE_CONVERTIBLE_TYPE(const wchar_t*, ConstWchar_tPtr,
                                wxAnyConvertString, wxString)
@@ -761,6 +767,12 @@ public:
         m_type = wxAnyValueTypeImpl<const char*>::sm_instance.get();
         wxAnyValueTypeImpl<const char*>::SetValue(value, m_buffer);
     }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    // String literals are stored as wxString.
+    template <size_t N>
+    wxAny(const char (&value)[N]) : wxAny(wxString::FromUTF8Unchecked(value)) {}
+    template <size_t N>
+    wxAny(char (&value)[N]) = delete;
 #endif
     wxAny(const wchar_t* value)
     {
@@ -871,6 +883,14 @@ public:
         Assign(value);
         return *this;
     }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    wxAny& operator=(const char (&value)[N])
+    {
+        return operator=(wxString::FromUTF8Unchecked(value));
+    }
+    template <size_t N>
+    wxAny& operator=(char (&value)[N]) = delete;
 #endif
     wxAny& operator=(const wchar_t* value)
     {
@@ -893,6 +913,18 @@ public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     bool operator==(const char* value) const
         { return (*this) == wxString(value); }
+#elif defined(wxALLOW_UTF8_LITERALS)
+    template <size_t N>
+    bool operator==(const char (&value)[N]) const
+        { return (*this) == wxString::FromUTF8Unchecked(value); }
+    template <size_t N>
+    bool operator==(char (&value)[N]) const = delete;
+
+    // Comparing with pointers must be explicitly disabled, as otherwise they
+    // would compile and use the bool overload. Note that this overload must be
+    // a template to avoid being preferred to the one taking a literal above.
+    template <typename T, wxPrivate::EnableIfCharPtr<T> = 0>
+    bool operator==(T value) const = delete;
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     bool operator==(const wchar_t* value) const
         { return (*this) == wxString(value); }
@@ -1018,14 +1050,13 @@ public:
     }
 #endif
 
-private:
-#ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
-    wxAny(const char*);  // Disabled
-    wxAny& operator=(const char *&value); // Disabled
-    wxAny& operator=(const char value[]); // Disabled
-    wxAny& operator==(const char *value); // Disabled
+#if defined(wxNO_IMPLICIT_WXSTRING_ENCODING) && !defined(wxALLOW_UTF8_LITERALS)
+    wxAny(const char*) = delete;
+    wxAny& operator=(const char *value) = delete;
+    bool operator==(const char *value) const = delete;
 #endif
 
+private:
     // Assignment functions
     void AssignAny(const wxAny& any)
     {

@@ -1189,7 +1189,40 @@ bool wxPopupWindow::Show(bool show)
             }
 #endif
             // and set it as the foreground window so the mouse can be captured
-            ::SetForegroundWindow(hwnd);
+
+            // But if another application is in the foreground, don't take the
+            // foreground away from the other application: usually Windows
+            // would prevent this from working, but it can be configured to
+            // allow it and we shouldn't do it in this case, see #26740.
+            bool canBecomeForeground = false;
+            const HWND hwndForeground = ::GetForegroundWindow();
+            if ( hwndForeground )
+            {
+                DWORD foregroundProcessId = 0;
+                if ( ::GetWindowThreadProcessId(hwndForeground,
+                                                &foregroundProcessId) )
+                {
+                    if ( foregroundProcessId == ::GetCurrentProcessId() )
+                        canBecomeForeground = true;
+                }
+                else
+                {
+                    wxLogLastError(wxT("GetWindowThreadProcessId"));
+                }
+            }
+            else
+            {
+                // Not having any foreground window is not an error and we
+                // consider that if nothing else is in the foreground, this
+                // window can become foreground one it without stealing focus
+                // from another application.
+                canBecomeForeground = true;
+            }
+
+            if ( canBecomeForeground )
+            {
+                ::SetForegroundWindow(hwnd);
+            }
         }
 
         return true;

@@ -208,7 +208,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
 
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:
-            return QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin);
+            return QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent);
 
         case wxSYS_CAPTION_Y:
             return QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);

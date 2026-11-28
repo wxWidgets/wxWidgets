@@ -281,14 +281,14 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
         return;
 
     // We only filter normal, printable characters.
-    int keyCode = event.GetUnicodeKey();
+    const wxUniChar keyCode = event.GetUnicodeChar();
 
     // we don't filter special keys and delete
     if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)
         return;
 
     // Filter out invalid characters
-    if ( IsValidChar(static_cast<wxUniChar>(keyCode)) )
+    if ( IsValidChar(keyCode) )
         return;
 
     if ( !wxValidator::IsSilent() )

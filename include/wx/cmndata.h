@@ -27,6 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 class WXDLLIMPEXP_FWD_CORE wxWindowsPrintDialog;
 class WXDLLIMPEXP_FWD_CORE wxWindowsPageSetupDialog;
 #endif
+class WXDLLIMPEXP_FWD_CORE wxWindowsPrintNativeData;
 
 /*
  * wxPrintData
@@ -93,7 +94,11 @@ public:
 
     void SetPrinterName(const wxString& name) { m_printerName = name; }
     void SetColour(bool colour) { m_colour = colour; }
-    void SetDuplex(wxDuplexMode duplex) { m_duplexMode = duplex; }
+    void SetDuplex(wxDuplexMode duplex)
+    {
+        m_duplexMode = duplex;
+        m_duplexModeValid = true;
+    }
     void SetPaperId(wxPaperSize sizeId) { m_paperId = sizeId; }
     void SetPaperSize(const wxSize& sz) { m_paperSize = sz; }
     void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
@@ -128,6 +133,15 @@ private:
     friend class wxWindowsPrintDialog;
     friend class wxWindowsPageSetupDialog;
 #endif
+    friend class wxWindowsPrintNativeData;
+
+    bool IsDuplexSpecified() const { return m_duplexModeValid; }
+
+    void ResetDuplex()
+    {
+        m_duplexMode = wxDUPLEX_SIMPLEX;
+        m_duplexModeValid = false;
+    }
 
     wxPrintBin      m_bin = wxPRINTBIN_DEFAULT;
     int             m_media = wxPRINTMEDIA_DEFAULT;
@@ -141,6 +155,8 @@ private:
     wxString        m_printerName;
     bool            m_colour = true;
     wxDuplexMode    m_duplexMode = wxDUPLEX_SIMPLEX;
+    // False means leave DM_DUPLEX untouched to preserve the driver default.
+    bool            m_duplexModeValid = false;
     wxPrintQuality  m_printQuality = wxPRINT_QUALITY_HIGH;
 
     // we intentionally don't initialize paper id and size at all, like this

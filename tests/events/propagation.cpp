@@ -187,8 +187,16 @@ public:
         g_str.clear();
 #endif // __WXGTK__ || __WXQT__
 
+#ifdef __WXGTK__
+        // Update() is a no-op under GTK3/Wayland, so wait for the actual
+        // paint event instead of relying on it being synchronous.
+        WaitForPaint waitForPaint(this);
+        Refresh();
+        waitForPaint.YieldUntilPainted();
+#else
         Refresh();
         Update();
+#endif
     }
 
     virtual void OnDraw(wxDC& WXUNUSED(dc)) override

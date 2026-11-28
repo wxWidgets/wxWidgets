@@ -447,29 +447,6 @@ public:
     wxPoint GetViewStart() const;
 
     /**
-        Get the position at which the visible portion of the window starts
-        in pixels.
-
-        This is similar to GetViewStart() but returns the position in pixels
-        and not in scroll units.
-
-        @param x
-            Receives the first visible horizontal position in scroll pixels.
-            May be @NULL if not needed.
-        @param y
-            Receives the first visible vertical position in scroll pixels.
-            May be @NULL if not needed.
-
-        @see SetScrollbars(), Scroll(), GetViewStart()
-
-        @since 3.3.2
-    */
-    void GetViewStartPixels(int* x, int* y) const;
-
-    /// @overload
-    wxPoint GetViewStartPixels() const;
-
-    /**
         Gets the size in device units of the scrollable window area (as
         opposed to the client size, which is the area of the window currently
         visible).

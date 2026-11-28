@@ -24,6 +24,9 @@ public:
 
     wxColourData &GetColourData();
 
+    // Use Qt's standard color dialog instead of the operating system native color dialog.
+    void QtDontUseNativeDialog();
+
 private:
     QColorDialog *GetQColorDialog() const;
 

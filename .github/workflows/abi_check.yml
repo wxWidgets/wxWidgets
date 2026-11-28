@@ -1,0 +1,209 @@
+# CI workflow to check wxWidgets ABI stability.
+name: ABI check
+
+on:
+  push:
+    branches:
+      - 3.4
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+  pull_request:
+    branches:
+      - 3.4
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+  workflow_dispatch:
+    inputs:
+      baseline:
+        type: string
+        description: 'Tag, branch or commit to use as baseline instead of the default one'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+env:
+  # ABI of the current sources is checked against the ABI of this release.
+  #
+  # Note that another baseline (tag, branch or commit) can be used, either by
+  # specifying it when running the workflow manually or by setting
+  # wxABI_BASELINE variable for the repository. The latter is useful for
+  # checking the ABI during the release preparation, by setting it to the
+  # first release candidate tag (and updating it if the ABI is changed
+  # intentionally later), or for testing the workflow itself in a fork, where
+  # manual runs are impossible unless the workflow exists in its default branch.
+  wxABI_DEFAULT_BASELINE: v3.4.0
+
+  # Options used for building both the baseline release and the current
+  # sources, they must be the same for both builds.
+  wxCONFIGURE_FLAGS: --enable-debug
+
+jobs:
+  build:
+    runs-on: ubuntu-26.04
+    name: ABI check
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: 'recursive'
+
+      - name: Check for baseline release
+        id: baseline
+        env:
+          wxABI_BASELINE_INPUT: ${{ inputs.baseline || vars.wxABI_BASELINE }}
+        run: |
+          wxABI_BASELINE=${wxABI_BASELINE_INPUT:-$wxABI_DEFAULT_BASELINE}
+
+          # Resolve the baseline to the commit it refers to, as tags and
+          # branches can be moved, so their names can't be used in the cache
+          # key. Note that the last line output by ls-remote is the commit
+          # itself for both annotated tags (for which it is preceded by the
+          # tag object) and lightweight tags or branches.
+          if echo "$wxABI_BASELINE" | grep -qE '^[0-9a-f]{40}$'; then
+            sha=$wxABI_BASELINE
+          else
+            sha=$(git ls-remote origin \
+                    "refs/heads/$wxABI_BASELINE" \
+                    "refs/tags/$wxABI_BASELINE" \
+                    "refs/tags/$wxABI_BASELINE^{}" | awk 'END { print $1 }')
+          fi
+
+          if [ -n "$sha" ]; then
+            if [ "$wxABI_BASELINE" = "$sha" ]; then
+              echo "::notice::Using $sha as baseline."
+            elif [ "$wxABI_BASELINE" != "$wxABI_DEFAULT_BASELINE" ]; then
+              echo "::notice::Using $wxABI_BASELINE ($sha) as baseline."
+            fi
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "ref=$sha" >> $GITHUB_OUTPUT
+
+            # The ABI descriptions are generated during the build when they
+            # are not cached yet and are regenerated whenever the runner image
+            # changes, to ensure that they're always generated in exactly the
+            # same environment as used for checking them.
+            echo "cache_key=abi-$sha-$ImageOS-$ImageVersion-${{ hashFiles('.github/workflows/abi_check.yml', 'build/elfabi/generate_all.sh') }}" >> $GITHUB_OUTPUT
+          elif [ "$wxABI_BASELINE" != "$wxABI_DEFAULT_BASELINE" ]; then
+            echo "::error::Baseline $wxABI_BASELINE not found, it must be a tag, a branch or a full commit SHA-1."
+            exit 1
+          else
+            echo "::notice::$wxABI_BASELINE doesn't exist yet, nothing to check."
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install CCache
+        if: steps.baseline.outputs.exists == 'true'
+        uses: hendrikmuhs/ccache-action@v1.2.23
+        with:
+          key: ubuntu-26.04-abi
+          # We may need to build both the baseline and the current sources.
+          max-size: 1G
+
+      - name: Set up build environment
+        if: steps.baseline.outputs.exists == 'true'
+        run: |
+          wxPROC_COUNT=`./build/tools/proc_count.sh`
+          echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
+
+          echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
+
+          wxGTK_VERSION=3 ./build/tools/before_install.sh
+          sudo apt-get -q -o=Dpkg::Use-Pty=0 install abigail-tools
+
+      - name: Restore baseline ABI descriptions
+        id: cache
+        if: steps.baseline.outputs.cache_key != ''
+        uses: actions/cache/restore@v6
+        with:
+          path: abi-baseline
+          key: ${{ steps.baseline.outputs.cache_key }}
+
+      - name: Checkout baseline release
+        if: steps.baseline.outputs.exists == 'true' && steps.cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.baseline.outputs.ref }}
+          path: baseline
+          submodules: 'recursive'
+
+      - name: Generate baseline ABI descriptions
+        if: steps.baseline.outputs.exists == 'true' && steps.cache.outputs.cache-hit != 'true'
+        working-directory: baseline
+        run: |
+          ./configure $wxCONFIGURE_FLAGS || rc=$?
+
+          if [ -n "$rc" ]; then
+            echo '*** Configuring baseline failed, contents of config.log follows: ***'
+            echo '--------------------------------------------------------------------'
+            cat config.log
+            echo '--------------------------------------------------------------------'
+            exit $rc
+          fi
+
+          make $wxBUILD_ARGS
+
+          $GITHUB_WORKSPACE/build/elfabi/generate_all.sh $GITHUB_WORKSPACE/abi-baseline
+
+      - name: Save baseline ABI descriptions
+        if: steps.baseline.outputs.cache_key != '' && steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: abi-baseline
+          key: ${{ steps.baseline.outputs.cache_key }}
+
+      - name: Configuring
+        if: steps.baseline.outputs.exists == 'true'
+        run: |
+          ./configure $wxCONFIGURE_FLAGS || rc=$?
+
+          if [ -n "$rc" ]; then
+            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat config.log
+            echo '-----------------------------------------------------------'
+            exit $rc
+          fi
+
+      - name: Building
+        if: steps.baseline.outputs.exists == 'true'
+        run: |
+          make $wxBUILD_ARGS
+
+      - name: Check ABI
+        if: steps.baseline.outputs.exists == 'true'
+        run: |
+          ./build/elfabi/check_all.sh abi-baseline

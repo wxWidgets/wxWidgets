@@ -35,6 +35,7 @@ enum wxNumValidatorStyle
     wxNUM_VAL_NO_TRAILING_ZEROES    = 0x4,
     wxNUM_VAL_SIGN_PLUS             = 0x8,
     wxNUM_VAL_SIGN_SPACE           = 0x10,
+    wxNUM_VAL_ALLOW_BLANK_AS_ZERO  = 0x20,
 };
 
 // ----------------------------------------------------------------------------
@@ -70,6 +71,13 @@ protected:
     bool HasFlag(wxNumValidatorStyle style) const
     {
         return (m_style & style) != 0;
+    }
+
+    // Return true if an empty control is acceptable and corresponds to 0.
+    bool IsBlankAllowed() const
+    {
+        return HasFlag(wxNUM_VAL_ZERO_AS_BLANK) ||
+               HasFlag(wxNUM_VAL_ALLOW_BLANK_AS_ZERO);
     }
 
     // Get the text entry of the associated control. Normally shouldn't ever
@@ -217,7 +225,7 @@ public:
 
             const wxString s(control->GetValue());
             LongestValueType value;
-            if ( s.empty() && BaseValidator::HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+            if ( s.empty() && BaseValidator::IsBlankAllowed() )
                 value = 0;
             else if ( !BaseValidator::FromString(s, &value) )
                 return false;
@@ -244,15 +252,18 @@ protected:
     {
         // If empty value is handled as zero, just return it as is for
         // consistency with TransferFromWindow() and NormalizeValue().
-        if ( s.empty() && BaseValidator::HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        if ( s.empty() && BaseValidator::IsBlankAllowed() )
             return wxString();
 
         LongestValueType value;
         if ( !BaseValidator::FromString(s, &value) )
         {
-            // We don't have any valid number at all, just arbitrarily decide
-            // to return the minimum value.
-            value = static_cast<LongestValueType>(m_min);
+            // We don't have any valid number at all, so use 0 if it's valid
+            // or, if it isn't, the limit of the range closest to it.
+            if ( this->IsInRange(0) )
+                value = 0;
+            else
+                value = static_cast<LongestValueType>(m_min > 0 ? m_min : m_max);
         }
         else if ( !this->IsInRange(value) )
         {

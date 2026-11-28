@@ -42,8 +42,6 @@
 
 #include "widgets.h"
 
-#include "icons/datepick.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -141,7 +139,7 @@ IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, "DatePicker",
 
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                      :WidgetsPage(book, imaglist, datepick_xpm)
+                      :WidgetsPage(book, imaglist, WidgetsIcon::DatePicker)
 {
 }
 
@@ -184,7 +182,7 @@ void DatePickerWidgetsPage::CreateContent()
 
     m_textCur->SetMinSize(m_textCur->GetSizeFromText("9999-99-99"));
 
-    sizerMiddle->AddSpacer(10);
+    sizerMiddle->AddSpacer(FromDIP(10));
 
     sizerMiddle->Add(CreateSizerWithTextAndLabel
                      (
@@ -203,7 +201,7 @@ void DatePickerWidgetsPage::CreateContent()
     sizerMiddle->Add(new wxButton(this, DatePickerPage_SetRange, "Set &range"),
                      wxSizerFlags().Centre().Border());
 
-    sizerMiddle->AddSpacer(10);
+    sizerMiddle->AddSpacer(FromDIP(10));
 
     sizerMiddle->Add(CreateSizerWithTextAndLabel
                      (
@@ -223,9 +221,9 @@ void DatePickerWidgetsPage::CreateContent()
 
     m_datePicker = new wxDatePickerCtrl(this, DatePickerPage_Picker);
 
-    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
+    sizerRight->AddStretchSpacer();
     sizerRight->Add(m_datePicker, wxSizerFlags(1).Centre());
-    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
+    sizerRight->AddStretchSpacer();
     m_sizerDatePicker = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -287,9 +285,9 @@ void DatePickerWidgetsPage::CreateDatePicker()
 
     NotifyWidgetRecreation(m_datePicker);
 
-    m_sizerDatePicker->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerDatePicker->AddStretchSpacer();
     m_sizerDatePicker->Add(m_datePicker, wxSizerFlags(1).Centre());
-    m_sizerDatePicker->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerDatePicker->AddStretchSpacer();
     m_sizerDatePicker->Layout();
 }
 

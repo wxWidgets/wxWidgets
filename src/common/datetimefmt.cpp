@@ -1015,7 +1015,8 @@ wxDateTime::ParseRfc822Date(const wxString& originalDate, wxString::const_iterat
         return false;
 
     // the spec was correct, construct the date from the values we found
-    Set(day, mon, year, hour, min, sec);
+    if ( !SetIfValid(day, mon, year, hour, min, sec, 0 /* ms */) )
+        return false;
 
     // 7. now the interesting part: the timezone
 
@@ -1365,9 +1366,9 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case wxT('r'):       // time as %I:%M:%S %p
                 {
-                    wxDateTime dt;
-                    if ( !dt.ParseFormat(wxString(input, end),
-                                         wxS("%I:%M:%S %p"), &input) )
+                    const wxDateTime
+                        dt = ParseFormatAt(input, end, wxS("%I:%M:%S %p"));
+                    if ( !dt.IsValid() )
                         return false;
 
                     haveHour = haveMin = haveSec = true;
@@ -1654,6 +1655,7 @@ wxDateTime::ParseFormat(const wxString& date,
     }
 
     // format matched, try to construct a date from what we have now
+    bool usingFallbackDate = false;
     Tm tmDef;
     if ( dateDef.IsValid() )
     {
@@ -1669,6 +1671,7 @@ wxDateTime::ParseFormat(const wxString& date,
     {
         // no default and this date is invalid - fall back to Today()
         tmDef = Today().GetTm();
+        usingFallbackDate = true;
     }
 
     Tm tm = tmDef;
@@ -1704,6 +1707,20 @@ wxDateTime::ParseFormat(const wxString& date,
         tm.mon = tm2.mon;
         tm.mday = tm2.mday;
     }
+    else
+    {
+        // The default day can become invalid after replacing the month or
+        // year above. Only adjust the implicit Today() fallback, as an
+        // explicitly provided default date should be preserved or rejected.
+        const wxDateTime_t maxMDay = GetNumberOfDays(tm.mon, tm.year);
+        if ( tm.mday > maxMDay )
+        {
+            if ( !usingFallbackDate )
+                return false;
+
+            tm.mday = maxMDay;
+        }
+    }
 
     // deal with AM/PM
     if ( haveHour && hourIsIn12hFormat && isPM )
@@ -1732,7 +1749,9 @@ wxDateTime::ParseFormat(const wxString& date,
     if ( haveMsec )
         tm.msec = msec;
 
-    Set(tm);
+    if ( !SetIfValid(tm.mday, (Month)tm.mon, tm.year,
+                     tm.hour, tm.min, tm.sec, tm.msec) )
+        return false;
 
     if ( haveTimeZone )
         MakeFromTimezone(timeZone);

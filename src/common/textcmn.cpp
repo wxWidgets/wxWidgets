@@ -130,6 +130,17 @@ wxDEFINE_EVENT( wxEVT_TEXT_MAXLEN, wxCommandEvent );
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl);
 
+#if wxUSE_ACCEL
+
+bool
+wxTextCtrlBase::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                           int WXUNUSED(command)) const
+{
+    return IsUsedForEditing(event);
+}
+
+#endif // wxUSE_ACCEL
+
 // ============================================================================
 // wxTextAttr implementation
 // ============================================================================
@@ -1120,7 +1131,7 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
     bool handled = false;
     // we have a native implementation for Win32 and so don't need this one
 #ifndef __WIN32__
-    wxChar ch = 0;
+    wxUniChar ch = 0;
     int keycode = event.GetKeyCode();
 
     long from, to;
@@ -1218,9 +1229,9 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
             break;
 
         default:
-            if ( event.GetUnicodeKey() )
+            if ( event.GetUnicodeChar() )
             {
-                ch = event.GetUnicodeKey();
+                ch = event.GetUnicodeChar();
             }
             else if ( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
             {

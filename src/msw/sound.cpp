@@ -116,6 +116,8 @@ wxSoundDataFile::wxSoundDataFile(const wxString& filename, bool isResource)
 // wxSound
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxSound, wxObject);
+
 wxSound::wxSound()
 {
     Init();

@@ -209,6 +209,22 @@ public:
     void* GetSymbolAorW(const wxString& name) const;
 
     /**
+        Returns pointer to the symbol exported with the given ordinal.
+
+        Some functions in Windows DLLs are not exported by name at all and
+        can only be retrieved using their ordinal, i.e. a 16-bit number,
+        which this function allows to do.
+
+        Unlike GetSymbol(), this function does not log any errors if the
+        symbol is not found, it just returns @NULL.
+
+        @onlyfor{wxmsw}
+
+        @since 3.3.4
+    */
+    void* GetByOrdinal(int ordinal) const;
+
+    /**
         Returns @true if the symbol with the given @a name is present in the
         dynamic library, @false otherwise. Unlike GetSymbol(), this function
         doesn't log an error message if the symbol is not found.

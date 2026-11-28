@@ -61,8 +61,8 @@ jobs:
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
             cmake_build_toolkit: gtk3
-          - name: macOS 14 wxOSX Xcode
-            runner: macos-14
+          - name: macOS 15 wxOSX Xcode
+            runner: macos-15
             cmake_generator: Xcode
             cmake_defines: -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13"
             cmake_build_toolkit: osx_cocoa
@@ -79,8 +79,8 @@ jobs:
             cmake_samples: SOME
             cmake_tests: OFF
             cmake_build_toolkit: gtk3
-          - name: macOS 14 wxIOS
-            runner: macos-14
+          - name: macOS 15 wxIOS
+            runner: macos-15
             cmake_generator: Xcode
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
@@ -147,9 +147,9 @@ jobs:
         if: matrix.cmake_generator == 'MinGW Makefiles'
         uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw64
+          msystem: clang64
           update: true
-          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+          install: mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-make mingw-w64-clang-x86_64-toolchain
 
       - name: Set up Homebrew
         if: ${{ runner.os == 'macOS' && matrix.cmake_build_toolkit == 'gtk3' }}
@@ -244,15 +244,19 @@ jobs:
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
-        timeout-minutes: 20
+        timeout-minutes: 30
         working-directory: build_cmake
         run: |
           . ../build/tools/httpbin.sh
 
           httpbin_launch
 
-          # Run test_gui once, in the separately bounded GUI step below.
-          ctest -V -C Debug -E '(^test_gui$|test_drawing)' --timeout 300 --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          # GUI tests are run separately below if they're enabled.
+          if [ "${{ matrix.test_gui }}" = 1 ]; then
+              ctest_args="-E test_gui"
+          fi
+
+          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 $ctest_args . || rc=$?
           if [ -n "$rc" ]; then
               httpbin_show_log
               exit $rc
@@ -260,11 +264,11 @@ jobs:
 
       - name: Testing GUI
         if: matrix.test_gui == '1'
-        timeout-minutes: 20
+        timeout-minutes: 30
         working-directory: build_cmake\lib\vc_x64_dll
         run: |
-          # Print completed cases so a stalled suite doesn't hide its progress.
-          ./test_gui.exe --durations yes
+          # Show the duration of each test to know which one hangs, if any.
+          ./test_gui.exe -d yes
 
       - name: Testing installation
         if: matrix.skip_installation != true

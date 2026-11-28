@@ -92,9 +92,9 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxCheckBox::MSWSetDarkOrLightMode(SetMode setmode)
+void wxCheckBox::MSWSetDarkOrLightMode()
 {
-    wxCheckBoxBase::MSWSetDarkOrLightMode(setmode);
+    wxCheckBoxBase::MSWSetDarkOrLightMode();
 
     // Use owner-draw mode if needed for dark mode or custom text colour
     MSWMakeOwnerDrawn(wxMSWDarkMode::IsActive() || m_hasFgCol);
@@ -193,10 +193,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
         return;
 
     m_state = state;
-    if ( !IsOwnerDrawn() )
-        ::SendMessage(GetHwnd(), BM_SETCHECK, (WPARAM) state, 0);
-    else // owner drawn buttons don't react to this message
-        Refresh();
+    MSWSetCheck(state);
 }
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
@@ -250,7 +247,8 @@ int wxCheckBox::MSWGetButtonStyle() const
 void wxCheckBox::MSWOnButtonResetOwnerDrawn()
 {
     // ensure that controls state is consistent with internal state
-    DoSet3StateValue(m_state);
+    ::SendMessage(m_hWnd, BM_SETCHECK, (WPARAM)m_state, 0);
+    Refresh();
 }
 
 int wxCheckBox::MSWGetButtonCheckedFlag() const

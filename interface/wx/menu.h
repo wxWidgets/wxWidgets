@@ -199,25 +199,6 @@ public:
     wxString GetLabel(int id) const;
 
     /**
-        Returns the label of a top-level menu. Note that the returned string does not
-        include the accelerator characters which could have been specified in the menu
-        title string during its construction.
-
-        @param pos
-            Position of the menu on the menu bar, starting from zero.
-
-        @return The menu label, or the empty string if the menu was not found.
-
-        @remarks Use only after the menubar has been associated with a frame.
-
-        @deprecated
-        This function is deprecated in favour of GetMenuLabel() and GetMenuLabelText().
-
-        @see SetLabelTop()
-    */
-    wxString GetLabelTop(size_t pos) const;
-
-    /**
         Returns the menu at @a menuIndex (zero-based).
     */
     wxMenu* GetMenu(size_t menuIndex) const;
@@ -353,23 +334,6 @@ public:
         @see GetLabel()
     */
     void SetLabel(int id, const wxString& label);
-
-    /**
-        Sets the label of a top-level menu.
-
-        @param pos
-            The position of a menu on the menu bar, starting from zero.
-        @param label
-            The menu label.
-
-        @remarks Use only after the menubar has been associated with a frame.
-
-        @deprecated
-        This function has been deprecated in favour of SetMenuLabel().
-
-        @see GetLabelTop()
-    */
-    void SetLabelTop(size_t pos, const wxString& label);
 
     /**
         Sets the label of a top-level menu.
@@ -1053,7 +1017,7 @@ public:
 
         @remarks Notice that you can only call this method directly for the
             popup menus, to change the title of a menu that is part of a menu
-            bar you need to use wxMenuBar::SetLabelTop().
+            bar you need to use wxMenuBar::SetMenuLabel().
 
         @see GetTitle()
     */

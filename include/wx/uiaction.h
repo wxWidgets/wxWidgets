@@ -16,6 +16,7 @@
 
 #if wxUSE_UIACTIONSIMULATOR
 
+#include "wx/event.h"       // for wxMouseWheelAxis
 #include "wx/mousestate.h"  // for wxMOUSE_BTN_XXX constants
 
 class WXDLLIMPEXP_CORE wxUIActionSimulator
@@ -43,6 +44,10 @@ public:
     bool MouseDragDrop(const wxPoint& p1, const wxPoint& p2,
                        int button = wxMOUSE_BTN_LEFT)
     { return MouseDragDrop(p1.x, p1.y, p2.x, p2.y, button); }
+
+    // Rotate the mouse wheel by the given number of notches.
+    bool MouseWheel(int rotation,
+                    wxMouseWheelAxis axis = wxMOUSE_WHEEL_VERTICAL);
 
     // Keyboard simulation
     // -------------------

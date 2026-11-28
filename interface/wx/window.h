@@ -501,9 +501,29 @@ public:
         on it, but it will still be possible to focus it by clicking on it with
         a pointing device.
 
+        @see EnableFocusFromKeyboard()
+
         @since 3.1.4
      */
     void DisableFocusFromKeyboard();
+
+    /**
+        Allow giving focus to this window using the keyboard navigation keys.
+
+        Some windows don't accept focus from keyboard by default, even though
+        they can be focused by clicking on them. Currently this is the case
+        for single line read-only wxTextCtrl under MSW, which is consistent
+        with the native applications behaviour, but makes it impossible for
+        the users relying on the keyboard, e.g. because they use a screen
+        reader, to reach them. Calling this function allows pressing @c TAB
+        to focus such windows too.
+
+        This function undoes the effect of DisableFocusFromKeyboard() and
+        vice versa.
+
+        @since 3.3.4
+     */
+    void EnableFocusFromKeyboard();
 
     /**
      Can this window itself have focus?
@@ -579,6 +599,94 @@ public:
         can be overridden to do something in addition to this in the derived classes.
     */
     virtual void SetFocusFromKbd();
+
+    ///@}
+
+
+    /**
+        @name Input method functions
+
+        Input methods (IMEs) are used for entering text in languages such as
+        Chinese or Japanese, in which a single character is typically composed
+        using several key presses.
+
+        Native controls, such as wxTextCtrl, handle input methods on their own,
+        but custom windows may need to use these functions to indicate whether
+        they accept text input at all and where the IME window should be shown
+        if they do.
+    */
+    ///@{
+
+    /**
+        Enable or disable input method for this window.
+
+        Input method is enabled for all windows by default, but it may be
+        useful to disable it for custom windows which don't accept text input,
+        as otherwise the input method windows may still be shown when the user
+        types in them, even though the text entered in them is ignored.
+
+        Note that input method can be disabled or enabled at any time, e.g. a
+        custom control could enable it only when its current item is
+        editable.
+
+        This function is currently implemented for wxMSW, wxGTK and wxOSX. In
+        wxGTK and wxOSX it doesn't affect native controls which always handle
+        input method themselves.
+
+        @see IsInputMethodEnabled()
+
+        @since 3.3.4
+     */
+    void EnableInputMethod(bool enable = true);
+
+    /**
+        Return @true if input method is enabled for this window.
+
+        Note that this function simply returns @false if EnableInputMethod()
+        was called with @false argument and doesn't check whether the input
+        method is actually used by the window or not.
+
+        @since 3.3.4
+     */
+    bool IsInputMethodEnabled() const;
+
+    /**
+        Set the area where the text is being entered.
+
+        Custom windows accepting text input should call this function to let
+        the input method know where to show its windows, e.g. the one with the
+        text being composed or the list of candidates for it. For a custom
+        text control, @a rect would be the rectangle corresponding to the
+        current insertion point position.
+
+        This function must be called whenever this rectangle changes, e.g.
+        when the insertion point moves or the window is scrolled. Note that
+        it is not sufficient to update the rectangle when a key is pressed
+        because some input methods, e.g. Fcitx under Linux, process the keys
+        before the window receives them.
+
+        This function is currently implemented for wxMSW, wxGTK and wxOSX.
+
+        @param rect
+            The rectangle in client coordinates or an empty rectangle to let
+            the input method use its default position.
+
+        @see GetInputMethodCursorRect()
+
+        @since 3.3.4
+     */
+    void UpdateInputMethodCursorRect(const wxRect& rect);
+
+    /**
+        Return the area where the text is being entered.
+
+        This is the rectangle last passed to UpdateInputMethodCursorRect() for
+        this window or an empty rectangle if it hadn't been called for it or
+        if another window has called it since.
+
+        @since 3.3.4
+     */
+    wxRect GetInputMethodCursorRect() const;
 
     ///@}
 
@@ -788,6 +896,29 @@ public:
         @see SetScrollbar()
     */
     virtual int GetScrollThumb(int orientation) const;
+
+    /**
+        Get the position at which the visible portion of the window starts.
+
+        Returns the logical position of the origin of the window: if it is
+        scrolled, this position will be strictly positive.
+
+        @param x
+            Receives the first visible horizontal position in pixels.
+            May be @NULL if not needed.
+        @param y
+            Receives the first visible vertical position in pixels.
+            May be @NULL if not needed.
+
+        @see wxScrolled
+
+        @since 3.3.5
+    */
+    void GetViewStartPixels(int* x, int* y) const;
+
+    /// @overload
+    wxPoint GetViewStartPixels() const;
+
 
     /**
         Returns @true if this window can have a scroll bar in this orientation.
@@ -1979,7 +2110,7 @@ public:
             Specifies the direction for the centring. May be wxHORIZONTAL, wxVERTICAL
             or wxBOTH.
 
-        @remarks This methods provides for a way to centre top level windows over
+        @remarks This method provides for a way to centre top level windows over
                  their parents instead of the entire screen.  If there
                  is no parent or if the window is not a top level
                  window, then behaviour is the same as Centre().
@@ -3565,9 +3696,20 @@ public:
     void SetWindowVariant(wxWindowVariant variant);
 
     /**
-        Gets the accelerator table for this window. See wxAcceleratorTable.
+        Gets the accelerator table for this window, if any.
+
+        @see SetAcceleratorTable(), wxAcceleratorTable
     */
     wxAcceleratorTable* GetAcceleratorTable();
+
+    /**
+        Gets the accelerator table for this window, if any.
+
+        @see SetAcceleratorTable(), wxAcceleratorTable
+
+        @since 3.3.4
+    */
+    const wxAcceleratorTable* GetAcceleratorTable() const;
 
     /**
         Returns the accessible object for this window, if any.
@@ -3586,6 +3728,25 @@ public:
         See also wxAccessible.
     */
     void SetAccessible(wxAccessible* accessible);
+
+    /**
+        Sets the name used by screen readers for this window.
+
+        By default, screen readers use the label of the window, if it has
+        one, or, for some controls such as wxTextCtrl, the text of the label
+        preceding it. This function allows to give a name to the windows
+        without a label, e.g. buttons showing only a bitmap, or to use a
+        different name than the label.
+
+        Pass an empty string to use the default name again.
+
+        Currently this function is implemented under MSW, where it requires
+        @c wxUSE_ACCESSIBILITY to be enabled, and macOS. Under the other
+        platforms it doesn't do anything.
+
+        @since 3.3.4
+    */
+    virtual void SetAccessibleName(const wxString& name);
 
     /**
         Override to create a specific accessible object.
@@ -4414,6 +4575,35 @@ public:
 
 
 protected:
+    /**
+        May be overridden to handle a key event instead of processing it as an
+        accelerator.
+
+        This function is called for the window having the focus when a key
+        corresponding to an accelerator is pressed and the
+        @c wxEVT_ACCELERATOR_KEY event generated for it was not handled. It can
+        be overridden in order to reserve some keys for the window itself, as
+        done, for example, by the text entry controls for the keys used for
+        editing the text such as @c Del or @c Ctrl-C.
+
+        The default implementation always returns @false, i.e. lets the
+        accelerator be used.
+
+        Note that the application code can always override the decision taken
+        here by handling wxAcceleratorKeyEvent, see its documentation.
+
+        @param event
+            The key event for the key which was pressed.
+        @param command
+            The ID of the command which would be generated by the accelerator.
+        @return
+            @true to handle this key in this window itself or @false to let the
+            accelerator be used.
+
+        @since 3.3.4
+     */
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const;
 
     /**
         Centres the window.
@@ -4513,11 +4703,43 @@ protected:
     virtual int DoGetBestClientWidth(int height) const;
 
     /**
-        Sets the initial window size if none is given (i.e.\ at least one of the
-        components of the size passed to ctor/Create() is wxDefaultCoord).
-        @deprecated Use SetInitialSize() instead.
-    */
-    virtual void SetInitialBestSize(const wxSize& size);
+        Called when the window becomes enabled or disabled.
+
+        This function is called when Enable() changes the state of the window,
+        i.e. unless one of its parents is disabled anyhow, for the window itself
+        and for all its children which are not disabled themselves, as their
+        state changes too. It is also called for the window and its children
+        when Reparent() moves it to a parent with a different state.
+
+        In all these cases it is called after updating the state of the native
+        windows.
+
+        Note that the state of the top level windows is completely ignored by
+        this function, as they are disabled while a modal dialog is shown, but
+        this shouldn't affect the appearance of their children. I.e. this
+        function is never called for the top level windows themselves, enabling
+        or disabling them doesn't result in calling it for their children, and
+        it is called for the children of a disabled top level window when their
+        state changes, even though their IsEnabled() returns @false both before
+        and after the change. Use the @a enabled parameter rather than
+        IsEnabled() to find out the new state of the window.
+
+        Override this function to update the appearance or internal state of a
+        custom window when it becomes enabled or disabled. This is especially
+        useful as Enable() is only called for the window being enabled or
+        disabled and not for its children. The default implementation does
+        nothing.
+
+        Notice that this function may be called even before the window is
+        created, if Enable() is called before Create().
+
+        @param enabled
+            @true if this window and all its parents, except possibly the top
+            level one, are currently enabled, @false otherwise.
+
+        @since 3.3.5
+     */
+    virtual void OnEnabledStateChanged(bool enabled);
 
     /**
         Generate wxWindowDestroyEvent for this window.

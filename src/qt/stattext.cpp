@@ -107,6 +107,36 @@ void wxStaticText::SetLabel(const wxString& label)
     AutoResizeIfNecessary();
 }
 
+#if wxUSE_MARKUP
+
+bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
+{
+    const wxString stripped = RemoveMarkup(markup);
+    if ( stripped.empty() && !markup.empty() )
+        return false;
+
+    if ( !UpdateLabelOrig(stripped) )
+        return false;
+
+    // Tell the QLabel not to call Qt::mightBeRichText() and interpret
+    // the string as a rich text string.
+    GetQLabel()->setTextFormat(Qt::RichText);
+
+    // To prevent QLabel from collapsing multiple spaces when in Qt::RichText
+    // mode, we use the CSS white-space property with pre-wrap option which
+    // preserves spaces and newlines, wraps (naturally) when needed (no need
+    // to convert \n to <br>).
+    auto richText = markup;
+    richText.Prepend("<div style='white-space: pre-wrap;'>");
+    richText.Append("</div>");
+
+    WXSetVisibleLabel(richText);
+
+    return true;
+}
+
+#endif // wxUSE_MARKUP
+
 void wxStaticText::WXSetVisibleLabel(const wxString& label)
 {
     GetQLabel()->setText( wxQtConvertString( label ) );

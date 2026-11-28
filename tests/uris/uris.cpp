@@ -40,6 +40,7 @@
         INFO(DumpURI(u)); \
         CHECK(u.GetServer() == expectedhost); \
         CHECK(u.GetHostType() == expectedtype); \
+        CHECK(u.BuildURI() == uri); \
     wxSTATEMENT_MACRO_END
 
 #define URI_ASSERT_HOST_TESTBAD(uri, ne) \
@@ -272,6 +273,12 @@ TEST_CASE("URI::IPv6", "[uri][ipv6]")
     URI_ASSERT_IPV6_TESTBAD("[::ffff:1.2.3a.4]");
     URI_ASSERT_IPV6_TESTBAD("[::ffff:1.2.3.4:123]");
     URI_ASSERT_IPV6_TESTBAD("[g:0:0:0:0:0:0]");
+
+    URI_ASSERT_HOST_TEST("http://[v1.fe80::a+en1]/path", "v1.fe80::a+en1", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TEST("http://[VF.x]/path", "VF.x", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v.x]/path", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v1]/path", wxURI_IPVFUTURE);
+    URI_ASSERT_HOST_TESTBAD("http://[v1.]/path", wxURI_IPVFUTURE);
 }
 
 TEST_CASE("URI::Host", "[uri]")
@@ -537,11 +544,28 @@ TEST_CASE("URI::FileScheme", "[uri]")
     //file: variety
     URI_ASSERT_PATH_EQUAL( "file:e:/wxcode/script1.xml",
                     "e:/wxcode/script1.xml" );
+
+    // All of them must be rebuilt in their original form.
+    URI_ASSERT_EQUAL( "file://e:/wxcode/script1.xml",
+                      "file://e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:///e:/wxcode/script1.xml",
+                      "file:///e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:/e:/wxcode/script1.xml",
+                      "file:/e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file:e:/wxcode/script1.xml",
+                      "file:e:/wxcode/script1.xml" );
+    URI_ASSERT_EQUAL( "file://server#fragment", "file://server#fragment" );
+    URI_ASSERT_EQUAL( "file:///tmp/a b", "file:///tmp/a%20b" );
 }
 
 #if TEST_URL
 
 #include "wx/url.h"
+
+#if wxUSE_PROTOCOL_HTTP && wxUSE_SOCKETS
+    #include "wx/socket.h"
+    #include "wx/thread.h"
+#endif
 
 TEST_CASE("URI::Compatibility", "[uri]")
 {
@@ -585,7 +609,7 @@ TEST_CASE("URI::Compatibility", "[uri]")
         wxURL urlProblem(pszProblemUrls[i]);
         REQUIRE(urlProblem.GetError() == wxURL_NOERR);
 
-        wxInputStream* is = urlProblem.GetInputStream();
+        std::unique_ptr<wxInputStream> is = urlProblem.GetInputStream();
         REQUIRE(is != nullptr);
 
         wxFile fOut(wxT("test.html"), wxFile::write);
@@ -601,8 +625,6 @@ TEST_CASE("URI::Compatibility", "[uri]")
             buf[n] = 0;
             fOut.Write(buf, n);
         }
-
-        delete is;
     }
 #endif
 }
@@ -647,19 +669,145 @@ TEST_CASE("URI::Normalize", "[uri]")
 #endif
 }
 
-// This is for testing routing through a proxy with wxURL, it's a little niche
-// and requires a specific setup.
-#if 0 && wxUSE_PROTOCOL_HTTP
+#if wxUSE_PROTOCOL_HTTP && wxUSE_SOCKETS
+
+namespace
+{
+
+class URLProxyServerThread : public wxThread
+{
+public:
+    URLProxyServerThread(wxSocketServer& server)
+        : wxThread(wxTHREAD_JOINABLE),
+          m_server(server)
+    {
+        Create();
+        Run();
+    }
+
+    const wxString& GetError() const { return m_error; }
+    const wxString& GetHost() const { return m_host; }
+    const wxString& GetRequestLine() const { return m_requestLine; }
+
+private:
+    virtual void *Entry() override
+    {
+        if ( !m_server.WaitForAccept(5) )
+        {
+            m_error = "Timed out waiting for proxy connection";
+            return nullptr;
+        }
+
+        std::unique_ptr<wxSocketBase> const socket{m_server.Accept(false)};
+        if ( !socket )
+        {
+            m_error = "Failed to accept proxy connection";
+            return nullptr;
+        }
+
+        socket->SetTimeout(5);
+
+        if ( wxProtocol::ReadLine(socket.get(), m_requestLine) != wxPROTO_NOERR )
+        {
+            m_error = "Failed to read proxy request line";
+        }
+        else
+        {
+            for ( ;; )
+            {
+                wxString line;
+                if ( wxProtocol::ReadLine(socket.get(), line) != wxPROTO_NOERR )
+                {
+                    m_error = "Failed to read proxy request headers";
+                    break;
+                }
+
+                if ( line.empty() )
+                    break;
+
+                if ( line.StartsWith("Host:") )
+                    m_host = line.AfterFirst(':').Strip(wxString::both);
+            }
+        }
+
+        static const char response[] =
+            "HTTP/1.0 200 OK\r\n"
+            "Content-Length: 2\r\n"
+            "\r\n"
+            "OK";
+        socket->Write(response, WXSIZEOF(response) - 1);
+
+        return nullptr;
+    }
+
+    wxSocketServer& m_server;
+    wxString m_error;
+    wxString m_host;
+    wxString m_requestLine;
+
+    wxDECLARE_NO_COPY_CLASS(URLProxyServerThread);
+};
+
+void CheckURLProxyHost(const wxString& urlString,
+                       const wxString& hostHeader,
+                       const wxString& expectedRequestLine,
+                       const wxString& expectedHost)
+{
+    wxIPV4address serverAddress;
+    serverAddress.LocalHost();
+    serverAddress.Service(0);
+
+    wxSocketServer server(serverAddress, wxSOCKET_REUSEADDR);
+    REQUIRE( server.IsOk() );
+
+    wxIPV4address proxyAddress;
+    REQUIRE( server.GetLocal(proxyAddress) );
+
+    URLProxyServerThread thread(server);
+
+    wxURL url(urlString);
+
+    wxString proxy;
+    proxy << wxT("127.0.0.1:") << proxyAddress.Service();
+    url.SetProxy(proxy);
+
+    if ( !hostHeader.empty() )
+    {
+        wxHTTP& http = static_cast<wxHTTP&>(url.GetProtocol());
+        http.SetHeader(wxT("Host"), hostHeader);
+    }
+
+    std::unique_ptr<wxInputStream> stream{url.GetInputStream()};
+    const bool streamOk = stream != nullptr;
+
+    CHECK( thread.Wait() == nullptr );
+    REQUIRE( thread.GetError().empty() );
+    REQUIRE( streamOk );
+
+    CHECK( thread.GetRequestLine() == expectedRequestLine );
+    CHECK( thread.GetHost() == expectedHost );
+}
+
+} // anonymous namespace
+
 TEST_CASE("URI::Proxy", "[uri]")
 {
-    wxURL url(wxT("http://www.asite.com/index.html"));
-    url.SetProxy(wxT("pserv:3122"));
-
-    wxURL::SetDefaultProxy(wxT("fol.singnet.com.sg:8080"));
-    wxURL url2(wxT("http://server-name/path/to/file?query_data=value"));
-    wxInputStream *data = url2.GetInputStream();
-    REQUIRE(data != nullptr);
+    CheckURLProxyHost("http://www.asite.com/index.html?query_data=value",
+                      wxString(),
+                      "GET http://www.asite.com/index.html?query_data=value "
+                      "HTTP/1.0",
+                      "www.asite.com");
+    CheckURLProxyHost("http://www.asite.com/index.html?query_data=value",
+                      "explicit.example",
+                      "GET http://www.asite.com/index.html?query_data=value "
+                      "HTTP/1.0",
+                      "explicit.example");
+    CheckURLProxyHost("http://www.asite.com:8080/index.html",
+                      wxString(),
+                      "GET http://www.asite.com:8080/index.html HTTP/1.0",
+                      "www.asite.com:8080");
 }
-#endif // wxUSE_PROTOCOL_HTTP
+
+#endif // wxUSE_PROTOCOL_HTTP && wxUSE_SOCKETS
 
 #endif // TEST_URL

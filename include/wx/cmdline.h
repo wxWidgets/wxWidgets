@@ -340,6 +340,9 @@ public:
     bool Found(const wxString& name, wxDateTime *value) const;
 #endif // wxUSE_DATETIME
 
+    // get all parameters at once
+    std::vector<wxString> GetParams() const;
+
     // gets the number of parameters found
     size_t GetParamCount() const;
 

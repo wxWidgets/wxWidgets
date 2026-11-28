@@ -113,6 +113,9 @@
     <ClCompile Include="misc\guifuncs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="misc\oleautomationobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\headerctrltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -242,6 +245,9 @@
     <ClCompile Include="net\socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\webrequest_local.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="persistence\tlw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -320,6 +326,9 @@
     <ClCompile Include="graphics\svgattributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\svgfiledc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="graphics\coords.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -333,6 +342,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="controls\auitest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\iconbundle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="graphics\imagelist.cpp">

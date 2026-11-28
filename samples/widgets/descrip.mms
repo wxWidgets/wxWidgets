@@ -55,7 +55,7 @@ all :
 OBJS=bmpcombobox.obj,button.obj,checkbox.obj,choice.obj,clrpicker.obj,\
 	combobox.obj,datepick.obj,dirctrl.obj,dirpicker.obj,editlbox.obj,\
 	filectrl.obj,filepicker.obj,fontpicker.obj,gauge.obj,hyperlnk.obj,\
-	itemcontainer.obj,listbox.obj,notebook.obj,odcombobox.obj,\
+	icons.obj,itemcontainer.obj,listbox.obj,notebook.obj,odcombobox.obj,\
 	radiobox.obj,searchctrl.obj,slider.obj,spinbtn.obj,statbmp.obj,\
 	static.obj,textctrl.obj,toggle.obj,widgets.obj
 
@@ -94,6 +94,7 @@ filepicker.obj : filepicker.cpp
 fontpicker.obj : fontpicker.cpp
 gauge.obj : gauge.cpp
 hyperlnk.obj : hyperlnk.cpp
+icons.obj : icons.cpp
 itemcontainer.obj : itemcontainer.cpp
 listbox.obj : listbox.cpp
 notebook.obj : notebook.cpp

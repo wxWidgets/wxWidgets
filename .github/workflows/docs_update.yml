@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Upload
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         working-directory: docs/doxygen
         env:
           DOCS_WEBSITE_KEY: ${{secrets.DOCS_WEBSITE_KEY}}
@@ -73,3 +73,15 @@ jobs:
           echo "$DOCS_WEBSITE_SSH_CONFIG" > "$HOME/.ssh/config"
           rsync --checksum --compress --delete --out-format='%n' --recursive out/html/ wxdocs:public_html/latest/ \
             2> >(grep -v "Warning: Permanently added" 1>&2)
+
+      - name: Purge Cloudflare cache
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ZONE_ID:   ${{ secrets.CF_ZONE_ID }}
+        run: |
+          curl --fail-with-body -sS -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"prefixes":["docs.wxwidgets.org/latest/"]}'

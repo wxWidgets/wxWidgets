@@ -166,6 +166,9 @@ public:
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
     virtual ~wxNumericPropertyValidator() = default;
     virtual bool Validate(wxWindow* parent) override;
+
+private:
+    wxDECLARE_CLASS(wxNumericPropertyValidator);
 };
 
 #endif // wxUSE_VALIDATORS

@@ -82,8 +82,8 @@ TEST_CASE("wxMessageQueue::Receive", "[msgqueue]")
     for ( i = 0; i < threadCount; ++i )
     {
         MyThread *previousThread = i == 0 ? nullptr : threads[i-1].get();
-        std::unique_ptr<MyThread>
-            thread(new MyThread(WaitInfinitlyLong, previousThread, msgCount));
+        auto thread = make_unique<MyThread>(WaitInfinitlyLong, previousThread,
+                                            msgCount);
 
         CHECK( thread->Create() == wxTHREAD_NO_ERROR );
         threads.push_back(std::move(thread));
@@ -118,8 +118,8 @@ TEST_CASE("wxMessageQueue::Receive", "[msgqueue]")
 // should return wxMSGQUEUUE_TIMEOUT.
 TEST_CASE("wxMessageQueue::ReceiveTimeout", "[msgqueue]")
 {
-    std::unique_ptr<MyThread> thread1(new MyThread(WaitWithTimeout, nullptr, 2));
-    std::unique_ptr<MyThread> thread2(new MyThread(WaitWithTimeout, nullptr, 2));
+    auto thread1 = make_unique<MyThread>(WaitWithTimeout, nullptr, 2);
+    auto thread2 = make_unique<MyThread>(WaitWithTimeout, nullptr, 2);
 
     CHECK( thread1->Create() == wxTHREAD_NO_ERROR );
     CHECK( thread2->Create() == wxTHREAD_NO_ERROR );

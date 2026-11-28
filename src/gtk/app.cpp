@@ -29,9 +29,9 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/log.h"
 #include "wx/gtk/private/threads.h"
-#include "wx/gtk/private/wayland.h"
 
 #ifdef __WXGTK3__
+    #include "wx/gtk/private/wayland.h"
     #include "wx/gtk/private/appearance.h"
 #endif
 

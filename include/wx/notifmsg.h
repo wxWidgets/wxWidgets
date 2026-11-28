@@ -183,6 +183,9 @@ private:
     void Init();
 
     wxDECLARE_NO_COPY_CLASS(wxNotificationMessage);
+
+private:
+    wxDECLARE_CLASS(wxNotificationMessage);
 };
 
 #endif // wxUSE_NOTIFICATION_MESSAGE

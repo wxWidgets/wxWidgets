@@ -17,6 +17,8 @@
 #include "wx/ribbon/art.h"
 #include "wx/bmpbndl.h"
 
+#include <unordered_map>
+#include <vector>
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include <memory>
     class wxRibbonToolBarWinUI;
@@ -148,6 +150,7 @@ public:
     virtual wxRibbonButtonKind GetToolKind(int tool_id)const;
     virtual int GetToolPos(int tool_id)const;
     virtual wxRect GetToolRect(int tool_id)const;
+    virtual wxRect GetToolDropdownRect(int tool_id)const;
     virtual bool GetToolState(int tool_id)const;
 
     virtual bool Realize() override;
@@ -166,6 +169,30 @@ public:
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const override;
 
+    // KeyTips (keyboard access mode).
+    void SetKeyTip(wxWindowID tool_id, const wxString& keytip);
+    wxString GetKeyTip(wxWindowID tool_id) const;
+
+    // Assigns a keytip to a hybrid tool's dropdown arrow, separate
+    // from its main click area.
+    void SetDropdownKeyTip(wxWindowID tool_id, const wxString& keytip);
+    wxString GetDropdownKeyTip(wxWindowID tool_id) const;
+
+    // Implementation only: fires a tool's click event for keytip
+    // activation. If dropdown is true, fires the dropdown-clicked event.
+    void ActivateTool(wxRibbonToolBarToolBase* tool, bool dropdown = false);
+
+    // Keyboard navigation.
+    bool HasFocusableItems() const override;
+    bool FocusFirstItem() override;
+    bool FocusLastItem() override;
+    bool FocusNextItem(bool forward) override;
+    void ClearFocusedItem() override;
+    void ActivateFocusedItem(bool dropdown = false) override;
+
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif // wxUSE_ACCESSIBILITY
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     wxSize GetMinSize() const override;
     void SetArtProvider(wxRibbonArtProvider* art) override;
@@ -173,13 +200,18 @@ public:
 
 protected:
     friend class wxRibbonToolBarEvent;
+#if wxUSE_ACCESSIBILITY
+    friend class wxRibbonToolBarAccessible;
+#endif // wxUSE_ACCESSIBILITY
     virtual wxSize DoGetBestSize() const override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    void OnEnabledStateChanged(bool enabled) override;
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void ResetHoverState();
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
@@ -199,12 +231,20 @@ protected:
 
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
 
+    std::vector<wxRibbonToolBarToolBase*> GetEnabledTools() const;
+    void DoFocusTool(wxRibbonToolBarToolBase* tool);
+
     wxArrayRibbonToolBarToolGroup m_groups;
     wxRibbonToolBarToolBase* m_hover_tool = nullptr;
     wxRibbonToolBarToolBase* m_active_tool = nullptr;
+    wxRibbonToolBarToolBase* m_focused_tool = nullptr;
     wxSize* m_sizes = nullptr;
     int m_nrows_min = 0;
     int m_nrows_max = 0;
+    // The KeyTips are always stored in upper case, to allow case-insensitive
+    // matching.
+    std::unordered_map<wxWindowID, wxString> m_keyTips;
+    std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 private:

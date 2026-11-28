@@ -202,7 +202,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     m_Html -> SetRelatedStatusBar(0);
 #endif // wxUSE_STATUSBAR
-    m_Name = "test.htm";
+    m_Name = "printing.htm";
     m_Html -> LoadPage(m_Name);
 
     m_Prn = new wxHtmlEasyPrinting(_("Easy Printing Demo"), this);

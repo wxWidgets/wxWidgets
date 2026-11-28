@@ -14,6 +14,8 @@
 
 #ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
+wxIMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer);
+
 wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode,
                         int align)
@@ -36,6 +38,8 @@ void wxDataViewTextRenderer::SetAlignment( int align )
 }
 
 //==============================================================================
+
+wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 
 wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
                           wxDataViewCellMode mode,
@@ -62,6 +66,8 @@ wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) c
 }
 
 //==============================================================================
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer);
 
 wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &variantType, wxDataViewCellMode mode,
         int align,bool no_init )
@@ -99,6 +105,8 @@ wxDC *wxDataViewCustomRenderer::GetDC()
 
 //==============================================================================
 
+wxIMPLEMENT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer);
+
 wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
                           wxDataViewCellMode mode,
                           int align)
@@ -117,6 +125,8 @@ bool wxDataViewToggleRenderer::GetValue( wxVariant &value ) const
 }
 
 //==============================================================================
+
+wxIMPLEMENT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer);
 
 wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
         const wxString &varianttype, wxDataViewCellMode mode, int align )
@@ -150,6 +160,8 @@ wxSize wxDataViewProgressRenderer::GetSize() const
 }
 
 //==============================================================================
+
+wxIMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer);
 
 wxDataViewIconTextRenderer::wxDataViewIconTextRenderer( const wxString &varianttype,
         wxDataViewCellMode mode, int align )
@@ -195,6 +207,8 @@ bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVa
 
 //==============================================================================
 
+wxIMPLEMENT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer);
+
 wxDataViewDateRenderer::wxDataViewDateRenderer( const wxString &varianttype,
         wxDataViewCellMode mode, int align )
     : wxDataViewCustomRenderer( varianttype, mode, align )
@@ -230,6 +244,8 @@ bool wxDataViewDateRenderer::Activate( wxRect cell, wxDataViewModel *model,
 }
 
 //==============================================================================
+
+wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewCustomRenderer);
 
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices,
         wxDataViewCellMode mode, int alignment )

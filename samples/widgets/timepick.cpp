@@ -39,8 +39,6 @@
 
 #include "widgets.h"
 
-#include "icons/timepick.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -122,7 +120,7 @@ IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, "TimePicker",
 
 TimePickerWidgetsPage::TimePickerWidgetsPage(WidgetsBookCtrl *book,
                                          wxVector<wxBitmapBundle>& imaglist)
-                     : WidgetsPage(book, imaglist, timepick_xpm)
+                     : WidgetsPage(book, imaglist, WidgetsIcon::TimePicker)
 {
 }
 
@@ -156,9 +154,9 @@ void TimePickerWidgetsPage::CreateContent()
 
     m_timePicker = new wxTimePickerCtrl(this, TimePickerPage_Picker);
 
-    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
+    sizerRight->AddStretchSpacer();
     sizerRight->Add(m_timePicker, wxSizerFlags(1).Centre());
-    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
+    sizerRight->AddStretchSpacer();
     m_sizerTimePicker = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -200,9 +198,9 @@ void TimePickerWidgetsPage::CreateTimePicker()
 
     NotifyWidgetRecreation(m_timePicker);
 
-    m_sizerTimePicker->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerTimePicker->AddStretchSpacer();
     m_sizerTimePicker->Add(m_timePicker, wxSizerFlags(1).Centre());
-    m_sizerTimePicker->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerTimePicker->AddStretchSpacer();
     m_sizerTimePicker->Layout();
 }
 

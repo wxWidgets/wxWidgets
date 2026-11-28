@@ -35,6 +35,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/wrapcctl.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/dynlib.h"
 
 // ----------------------------------------------------------------------------
@@ -635,7 +636,10 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
                                wxHeaderSortIconType sortArrow,
                                wxHeaderButtonParams* params)
 {
-    wxUxThemeHandle hTheme(win, L"Explorer::HEADER");
+    // Use DarkMode_DarkTheme if available as it looks better.
+    auto dark = wxMSWDarkMode::HasDarkTheme() ?
+        L"DarkMode_DarkTheme::Header" : L"ItemsView::Header";
+    wxUxThemeHandle hTheme(win, L"HEADER", dark);
     if ( !hTheme )
     {
         return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
@@ -670,7 +674,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                  const wxRect& rect,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW", L"DarkMode_Explorer::TreeView");
     if ( !hTheme )
     {
         m_rendererNative.DrawTreeItemButton(win, dc, rect, flags);
@@ -693,6 +697,25 @@ wxRendererXP::DoDrawXPButton(int kind,
                              const wxRect& rect,
                              int flags)
 {
+    // Check for dark mode and OS is older than Windows 11 22H2, which is when
+    // dark mode support for check boxes and radio buttons appeared.
+    if ( wxMSWDarkMode::IsActive() && !wxCheckOsVersion(10, 0, 22621) )
+    {
+        HDC hdc = GetHdcOf(dc.GetTempHDC());
+        RECT rc;
+        wxCopyRectToRECT(rect, rc);
+        if ( kind == BP_CHECKBOX )
+        {
+            wxMSWDarkMode::DrawCheckBox(hdc, rc, flags);
+            return true;
+        }
+        if ( kind == BP_RADIOBUTTON )
+        {
+            wxMSWDarkMode::DrawRadioButton(hdc, rc, flags);
+            return true;
+        }
+    }
+
     wxUxThemeHandle hTheme(win, L"BUTTON", L"DarkMode_Explorer::Button");
     if ( !hTheme )
         return false;
@@ -779,39 +802,113 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
                                  wxTitleBarButton button,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"WINDOW");
-    if ( !hTheme )
-    {
-        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
-        return;
-    }
-
     int part;
+    wchar_t chr;    // Character in icon font
+    LONG weight = FW_NORMAL;
     switch ( button )
     {
         case wxTITLEBAR_BUTTON_CLOSE:
             part = WP_CLOSEBUTTON;
+            chr = L'\xe8bb';
             break;
 
         case wxTITLEBAR_BUTTON_MAXIMIZE:
             part = WP_MAXBUTTON;
+            chr = L'\xe922';
             break;
 
         case wxTITLEBAR_BUTTON_ICONIZE:
             part = WP_MINBUTTON;
+            chr = L'\xe921';
             break;
 
         case wxTITLEBAR_BUTTON_RESTORE:
             part = WP_RESTOREBUTTON;
+            chr = L'\xe923';
             break;
 
         case wxTITLEBAR_BUTTON_HELP:
             part = WP_HELPBUTTON;
+            chr = L'\xe897';
+            weight = FW_BOLD;
             break;
 
         default:
             wxFAIL_MSG( "unsupported title bar button" );
             return;
+    }
+
+    // If the icon font is available, use it to manually draw the button. Font
+    // "Segoe MDL2 Assets" appeared in Windows 10. Although this font has not
+    // been removed, Microsoft recommends "Segoe Fluent Icons" for Windows 11.
+    const bool isWin10 = wxGetWinVersion() == wxWinVersion_10;
+    const wchar_t* iconFont = isWin10 ? L"Segoe MDL2 Assets" : L"Segoe Fluent Icons";
+    LOGFONT lf = { };
+    wcscpy(lf.lfFaceName, iconFont);
+    // Font height to match Windows 7 proportions.
+    lf.lfHeight = -::MulDiv(rect.GetHeight(), 9, 16);
+    lf.lfWeight = weight;
+    lf.lfCharSet = DEFAULT_CHARSET;
+    AutoHFONT hFont(lf);
+    {
+        // Keep the temporary HDC alive while drawing on it: for wxGCDC, the
+        // HDC is only valid until it's released, which happens when TempHDC
+        // is destroyed. But do release it before calling the functions below
+        // as they acquire it again.
+        wxDC::TempHDC tempHDC = dc.GetTempHDC();
+        HDC hdc = GetHdcOf(tempHDC);
+        SelectInHDC sel(hdc, hFont);
+        // Check whether the font was found (not substituted).
+        wchar_t faceName[LF_FACESIZE];
+        ::GetTextFaceW(hdc, LF_FACESIZE, faceName);
+        if ( wcscmp(faceName, iconFont) == 0 )
+        {
+            // Check for dark mode using wxSystemSettings rather than
+            // wxMSWDarkMode to take into account high contrast modes.
+            const auto isDark = wxSystemSettings::GetAppearance().IsDark();
+            auto textCol = isDark ? 0xffffff : 0;
+            RECT r = ConvertToRECT(dc, rect);
+
+            // Handle states. The hot and pressed states look similar, handle
+            // them the same.
+            if (flags & (wxCONTROL_CURRENT | wxCONTROL_PRESSED) )
+            {
+                if ( button == wxTITLEBAR_BUTTON_CLOSE )
+                {
+                    // Fill background with the observed red colour.
+                    // GetThemeColor() is no use, it fails.
+                    AutoHBRUSH hBrush(isWin10 ? 0x2311e8 : 0x1c2bc4);
+                    ::FillRect(hdc, &r, hBrush);
+                    textCol = 0xffffff;
+                }
+                else
+                {
+                    // Make the background slightly darker for light mode or
+                    // slightly lighter for dark mode.
+                    wxColor bg = dc.GetBackground().GetColour();
+                    if ( bg.IsOk() )
+                    {
+                        bg = bg.ChangeLightness(isDark ? 109 : 95);
+                        AutoHBRUSH hBrush(bg.GetPixel());
+                        ::FillRect(hdc, &r, hBrush);
+                    }
+                }
+            }
+
+            // Draw the character. Set the background mode explicitly as it's
+            // not necessarily transparent for the HDC returned by wxGCDC.
+            ::SetBkMode(hdc, TRANSPARENT);
+            ::SetTextColor(hdc, textCol);
+            ::DrawTextW(hdc, &chr, 1, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            return;
+        }
+    }
+
+    wxUxThemeHandle hTheme(win, L"WINDOW");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
+        return;
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
@@ -854,7 +951,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
     // Do not specify a dark theme as we do in DrawTreeItemButton() because
     // that may give incorrect high DPI behavior, particularly on old Windows
     // versions. The light mode theme gives the correct size.
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW");
     if ( hTheme )
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
@@ -942,6 +1039,34 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
         m_rendererNative.DrawItemSelectionRect(win, dc, rect, flags);
     }
 }
+
+namespace
+{
+
+// Helper acquiring a temporary HDC for the given wxDC and selecting the DC
+// font into it: this is necessary for wxGCDC, as the HDC returned for it
+// doesn't use the DC font by default.
+class TempHDCWithFont
+{
+public:
+    explicit TempHDCWithFont(wxDC& dc)
+        : m_tempHDC(dc.GetTempHDC())
+    {
+        const wxFont& font = dc.GetFont();
+        if ( font.IsOk() )
+            m_selFont.Init(GetHdcOf(m_tempHDC), GetHfontOf(font));
+    }
+
+    WXHDC GetHDC() const { return m_tempHDC.GetHDC(); }
+
+private:
+    wxDC::TempHDC m_tempHDC;
+    SelectInHDC m_selFont;
+
+    wxDECLARE_NO_COPY_CLASS(TempHDCWithFont);
+};
+
+} // anonymous namespace
 
 void wxRendererXP::DrawItemText(wxWindow* win,
                                 wxDC& dc,
@@ -1039,7 +1164,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         something like {0, 0, LONG_MAX, LONG_MAX} ).
         */
         RECT rcExtent;
-        HRESULT hr = ::GetThemeTextExtent(hTheme, dc.GetHDC(),
+        HRESULT hr = ::GetThemeTextExtent(hTheme, GetHdcOf(TempHDCWithFont(dc)),
             LVP_LISTITEM, itemState, text.wchar_str(), -1,
             defTextFlags, nullptr, &rcExtent);
         if ( SUCCEEDED(hr) )
@@ -1131,8 +1256,9 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 break;
         }
 
-        ::DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
-                            drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
+        ::DrawThemeTextEx(hTheme, GetHdcOf(TempHDCWithFont(dc)),
+                          LVP_LISTITEM, itemState,
+                          drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
     }
     else
     {
@@ -1180,7 +1306,15 @@ void wxRendererXP::DrawGauge(wxWindow* win,
     int max,
     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"PROGRESS");
+    // if DarkTheme is not available, draw the gauge fully by ourselves
+    if ( wxMSWDarkMode::IsActive() && !wxMSWDarkMode::HasDarkTheme() )
+    {
+        wxMSWDarkMode::DrawGauge(dc, rect, value, max, flags);
+        return;
+    }
+
+    wxUxThemeHandle hTheme(win, L"PROGRESS", L"DarkMode_DarkTheme::Progress");
+
     if ( !hTheme )
     {
         m_rendererNative.DrawGauge(win, dc, rect, value, max, flags);
@@ -1225,6 +1359,15 @@ void wxRendererXP::DrawGauge(wxWindow* win,
         contentRect,
         flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK
     );
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We get here only when wxMSWDarkMode::HasDarkTheme() returns true
+        // but even the DarkTheme still draws a wrong (too dark) border color
+        // so we need to draw the border ourselves with the correct color.
+        AutoHBRUSH hBrush(wxMSWDarkMode::GetBorderPen().GetColour().GetPixel());
+        ::FrameRect(GetHdcOf(dc.GetTempHDC()), &r, hBrush);
+    }
 }
 
 // ----------------------------------------------------------------------------

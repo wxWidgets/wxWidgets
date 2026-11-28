@@ -544,6 +544,8 @@ wxBEGIN_EVENT_TABLE(wxHeaderCtrlSimple, wxHeaderCtrl)
     EVT_HEADER_RESIZING(wxID_ANY, wxHeaderCtrlSimple::OnHeaderResizing)
 wxEND_EVENT_TABLE()
 
+wxIMPLEMENT_CLASS(wxHeaderCtrlSimple, wxHeaderCtrl);
+
 void wxHeaderCtrlSimple::Init()
 {
     m_sortKey = wxNO_COLUMN;

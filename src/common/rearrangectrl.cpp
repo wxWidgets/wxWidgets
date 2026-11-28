@@ -40,6 +40,8 @@ wxBEGIN_EVENT_TABLE(wxRearrangeList, wxCheckListBox)
     EVT_CHECKLISTBOX(wxID_ANY, wxRearrangeList::OnCheck)
 wxEND_EVENT_TABLE()
 
+wxIMPLEMENT_CLASS(wxRearrangeList, wxCheckListBox);
+
 bool wxRearrangeList::Create(wxWindow *parent,
                              wxWindowID id,
                              const wxPoint& pos,
@@ -241,6 +243,8 @@ wxBEGIN_EVENT_TABLE(wxRearrangeCtrl, wxPanel)
     EVT_BUTTON(wxID_DOWN, wxRearrangeCtrl::OnButton)
 wxEND_EVENT_TABLE()
 
+wxIMPLEMENT_CLASS(wxRearrangeCtrl, wxPanel);
+
 void wxRearrangeCtrl::Init()
 {
     m_list = nullptr;
@@ -316,6 +320,8 @@ enum wxRearrangeDialogSizerPositions
 };
 
 } // anonymous namespace
+
+wxIMPLEMENT_CLASS(wxRearrangeDialog, wxDialog);
 
 bool wxRearrangeDialog::Create(wxWindow *parent,
                                const wxString& message,

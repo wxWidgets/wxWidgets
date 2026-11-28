@@ -590,9 +590,9 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::MSWSetDarkOrLightMode(SetMode setmode)
+void wxListCtrl::MSWSetDarkOrLightMode()
 {
-    wxListCtrlBase::MSWSetDarkOrLightMode(setmode);
+    wxListCtrlBase::MSWSetDarkOrLightMode();
 
     // Update header.
     MSWInitHeader();
@@ -843,7 +843,18 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
         return true;
     }
 
-    if ( !ListView_SetColumnWidth(GetHwnd(), col, width) )
+    // See the comment in OnCustomDraw() for why we need to know about this.
+    const bool autoSize = width == LVSCW_AUTOSIZE ||
+                            width == LVSCW_AUTOSIZE_USEHEADER;
+    if ( autoSize )
+        m_inAutoSize++;
+
+    const bool ok = ListView_SetColumnWidth(GetHwnd(), col, width) != FALSE;
+
+    if ( autoSize )
+        m_inAutoSize--;
+
+    if ( !ok )
         return false;
 
     // Failure to explicitly refresh the control with horizontal rules results
@@ -1687,15 +1698,23 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     // We have to account for the scrollbars ourselves, as the control itself
     // seems to always reserve space for the horizontal scrollbar, even when it
     // is not needed, but does not reserve space for the vertical scrollbar,
-    // even when it is used. This doesn't make any sense, but using this logic
-    // results in correct result, i.e. just enough space, in all cases.
+    // even when it is used in report view. This doesn't make any sense, but
+    // using this logic results in returning big enough space, in all cases.
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
-    if ( !(mswStyle & WS_HSCROLL) )
-        size.y -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+    if ( InReportView() )
+    {
+        if ( !(mswStyle & WS_HSCROLL) )
+            size.y -= GetScrollbarSize(wxHORIZONTAL);
+    }
+    else // In list view the function behaves reasonably.
+    {
+        if ( mswStyle & WS_HSCROLL )
+            size.y += GetScrollbarSize(wxHORIZONTAL);
+    }
 
     if ( mswStyle & WS_VSCROLL )
-        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
+        size.x += GetScrollbarSize(wxVERTICAL);
 
     // This is a dirty hack, but while the size returned by the control does
     // fit its contents, it results in asymmetric horizontal margins around it,
@@ -1987,6 +2006,16 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
     LV_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = (int) point.x;
     hitTestInfo.pt.y = (int) point.y;
+
+    // Firstly, check if the point is even on the list control itself since
+    // ListView_(Sub)ItemHitTest returns the topmost visible item when the
+    // point is over the column header control.
+    if ( ::ChildWindowFromPointEx(GetHwnd(), hitTestInfo.pt, CWP_SKIPINVISIBLE)
+           != GetHwnd() )
+    {
+        flags = wxLIST_HITTEST_NOWHERE;
+        return wxNOT_FOUND;
+    }
 
     long item;
 #ifdef LVM_SUBITEMHITTEST
@@ -3323,7 +3352,11 @@ void DrawGridLines(wxListCtrl* listctrl, int item, int gap = 0)
 // taking into account whether the control is enabled or not.
 wxColour GetEffectiveBackgroundColour(wxListCtrl* listctrl)
 {
-    if ( listctrl->IsEnabled() )
+    // Note that we must use IsThisEnabled() and not IsEnabled() here: the
+    // latter is also false when just a parent is disabled, which notably
+    // happens while a modal dialog is shown, and the items shouldn't appear
+    // disabled then, if only because the native control doesn't do it either.
+    if ( listctrl->IsThisEnabled() )
         return listctrl->GetBackgroundColour();
     else
         return wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
@@ -3452,12 +3485,6 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 
 WXLPARAM HandleItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 {
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        HandleItemPaint(listctrl, pLVCD);
-        return CDRF_SKIPDEFAULT;
-    }
-
     wxItemAttr* attr = listctrl->MSWGetItemColumnAttr(pLVCD->nmcd.dwItemSpec, pLVCD->iSubItem);
 
     pLVCD->clrText = attr && attr->HasTextColour()
@@ -3532,11 +3559,43 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             //
             // for virtual controls, always suppose that we have attributes as
             // there is no way to check for this
-            if ( IsVirtual() || m_hasAnyAttr || wxMSWDarkMode::IsActive() )
+            //
+            // in dark mode we also need to draw all items ourselves, but not
+            // when auto-sizing the columns, see CDDS_ITEMPREPAINT case below
+            if ( IsVirtual() || m_hasAnyAttr ||
+                    (wxMSWDarkMode::IsActive() && !m_inAutoSize) )
                 return CDRF_NOTIFYITEMDRAW;
             break;
 
         case CDDS_ITEMPREPAINT:
+            // In dark mode we draw the items entirely on our own and we must
+            // do it here rather than when handling CDDS_SUBITEM below because
+            // HandleItemPaint() draws the whole row, including all of its
+            // columns, at once: calling it from the subitem handler would
+            // repeat the same drawing once per column, which is not only
+            // wasteful but also results in visible delays when scrolling
+            // lists with many columns.
+            //
+            // Don't do it while auto-sizing a column however: in this case the
+            // native control sends us this notification for every item, but
+            // only to allow us to select a different font for measuring it, so
+            // painting the entire row here would be useless and would make
+            // setting the column width very slow for big controls (see
+            // #24011). Just fall through to the default handling below, which
+            // takes care of the custom fonts, if any, instead.
+            if ( wxMSWDarkMode::IsActive() && InReportView() && !m_inAutoSize )
+            {
+                const int item = nmcd.dwItemSpec;
+
+                // As below, this message can be received with item == 0 even
+                // for an empty control, so check that the item really exists.
+                if ( item >= 0 && item < GetItemCount() )
+                {
+                    HandleItemPaint(this, pLVCD);
+                    return CDRF_SKIPDEFAULT;
+                }
+            }
+
             // set the text foreground and background colour for listview
             // and icon view, these don't get messages for subitems
             pLVCD->clrText = wxColourToRGB(GetForegroundColour());
@@ -3750,6 +3809,24 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             // so just ignore them
             if ( (HWND)wParam == ListView_GetHeader(GetHwnd()) )
                 return 0;
+            break;
+
+        case WM_KEYDOWN:
+        case WM_MOUSEWHEEL:
+        case WM_VSCROLL:
+        case LVM_ENSUREVISIBLE:
+        case LVM_SCROLL:
+            // Scrolling moves the rows drawn as hot by HandleItemPaint()
+            // without repainting them.
+            if ( wxMSWDarkMode::IsActive() && InReportView() )
+            {
+                const long top = GetTopItem();
+                auto const rc =
+                    wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+                if ( GetTopItem() != top )
+                    Refresh();
+                return rc;
+            }
             break;
 
         case WM_SIZE:

@@ -1162,7 +1162,7 @@ void wxPropertyGridManager::SetId( wxWindowID winid )
 wxSize wxPropertyGridManager::DoGetBestSize() const
 {
     // Width: margin=15 + columns=2*40 + scroll bar
-    return wxSize(15+2*40+wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_pPropGrid), 150);
+    return wxSize(15+2*40+m_pPropGrid->GetScrollbarSize(wxVERTICAL), 150);
 }
 
 // -----------------------------------------------------------------------
@@ -1697,6 +1697,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
                  pageObj->GetToolId());
 
             m_pToolbar->Realize();
+            RecalculatePositions(m_width, m_height);
         }
     }
 #else
@@ -1984,6 +1985,8 @@ bool wxPropertyGridManager::RemovePage( int page )
             for ( const DetachedToolbarTool& detached : detachedTools )
                 delete detached.tool;
             detachedTools.clear();
+            if ( toolbar )
+                RecalculatePositions(m_width, m_height);
         };
 
     if ( toolbar )

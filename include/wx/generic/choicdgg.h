@@ -20,7 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxListBoxBase;
 // some constants
 // ----------------------------------------------------------------------------
 
-// These constants are no longer used and only remain here for compatibility.
+// These constants are no longer used as defaults (replaced by wxDefaultCoord)
+// and only remain here for compatibility.
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
 
@@ -230,8 +231,8 @@ WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
@@ -241,8 +242,8 @@ WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
@@ -266,8 +267,8 @@ WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
@@ -277,8 +278,8 @@ WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
@@ -302,8 +303,8 @@ WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT,
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord,
                                         int initialSelection = 0);
 
 WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
@@ -314,8 +315,8 @@ WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT,
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord,
                                         int initialSelection = 0);
 
 WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
@@ -344,8 +345,8 @@ WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT);
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord);
 
 WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         const wxString& message,
@@ -355,7 +356,7 @@ WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT);
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord);
 
 #endif // _WX_GENERIC_CHOICDGG_H_

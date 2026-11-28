@@ -51,6 +51,8 @@ public:
     virtual wxWindowID GetButtonId(size_t idx) const override;
     virtual bool HasButtonId(wxWindowID btnid) const override;
 
+    virtual void ShowCloseButton(ShowButton show) override;
+
     // implementation only
     // -------------------
 
@@ -68,11 +70,17 @@ private:
     GtkWidget *GTKAddButton(wxWindowID btnid,
                             const wxString& label = wxString());
 
+    // create or destroy the default close button if necessary
+    void GTKUpdateCloseButton();
+
 
     // only used when the native implementation is really being used
     class wxInfoBarGTKImpl *m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxInfoBar);
+
+private:
+    wxDECLARE_CLASS(wxInfoBar);
 };
 
 #endif // _WX_GTK_INFOBAR_H_

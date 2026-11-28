@@ -31,12 +31,54 @@
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
+    #include "wx/timer.h"
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
 #include "wx/scopeguard.h"
 #include "wx/valgen.h"
 #include "wx/checkbox.h"
+
+#include "wx/private/bmpbuttn.h"
+#include "wx/private/make_unique.h"
+
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif // __WXMSW__
+
+#if wxUSE_ACCESSIBILITY
+
+class wxInfoBarGenericAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxInfoBarGenericAccessible(wxInfoBarGeneric* win)
+        : wxWindowAccessible(win)
+    {
+    }
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *role = wxROLE_SYSTEM_ALERT;
+        return wxACC_OK;
+    }
+
+    virtual wxAccStatus GetName(int childId, wxString* name) override
+    {
+        wxInfoBarGeneric* const infoBar = static_cast<wxInfoBarGeneric*>(GetWindow());
+        wxCHECK( infoBar, wxACC_FAIL );
+
+        if ( childId != wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *name = infoBar->m_text->GetLabelText();
+        return wxACC_OK;
+    }
+};
+
+#endif // wxUSE_ACCESSIBILITY
 
 #ifdef __WXGTK3__
     #include "wx/gtk/private/wrapgtk.h"
@@ -47,25 +89,13 @@
 
 wxBEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
-    EVT_BUTTON(wxID_CLOSE, wxInfoBarGeneric::OnButton)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-void wxInfoBarGeneric::Init()
-{
-    m_icon = nullptr;
-    m_text = nullptr;
-    m_button = nullptr;
-
-    m_showEffect =
-    m_hideEffect = wxSHOW_EFFECT_MAX;
-
-    // use default effect duration
-    m_effectDuration = 0;
-}
+wxIMPLEMENT_CLASS(wxInfoBarGeneric, wxControl);
 
 bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
 {
@@ -88,9 +118,12 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     m_button = wxBitmapButton::NewCloseButton(this, wxID_CLOSE);
     m_button->SetToolTip(_("Hide this notification message."));
 
-    m_checkbox =
-        new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-            wxDefaultSize, 0, wxGenericValidator(&m_checked));
+    if ( HasFlag(wxINFOBAR_CHECKBOX) )
+    {
+        m_checkbox =
+            new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                wxDefaultSize, 0, wxGenericValidator(&m_checked));
+    }
 
     UpdateColours();
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxInfoBarGeneric::OnSysColourChanged, this);
@@ -98,8 +131,10 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     // center the text inside the sizer with an icon to the left of it and a
     // button at the very right
     //
-    // NB: AddButton() relies on the button being the last control in the sizer
-    //     and being preceded by a spacer
+    // NB: AddButton() and the other functions dealing with the buttons rely on
+    //     the buttons, including the close one if it's shown, being the last
+    //     items in the top level sizer and being preceded by the sizer
+    //     containing all the other controls
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     wxSizer * const defaultControlSizer = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer* const firstRowSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -107,17 +142,22 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     firstRowSizer->Add(m_text, wxSizerFlags{}.Proportion(1).Centre());
     firstRowSizer->AddSpacer(0); // This spacer only exists for compatibility.
 
+    // the second row is always present, even if it's empty, to keep the same
+    // layout structure in all cases
     wxBoxSizer* const secondRowSizer = new wxBoxSizer(wxHORIZONTAL);
-    secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
+    if ( m_checkbox )
+        secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
 
     defaultControlSizer->Add(firstRowSizer, wxSizerFlags{ 1 }.Expand());
     defaultControlSizer->Add(secondRowSizer);
-    defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
+    if ( m_checkbox )
+        defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
 
     sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
-    sizer->Add(m_button, wxSizerFlags{}.Centre().Border());
 
     SetSizer(sizer);
+
+    UpdateCloseButton();
 
     return true;
 }
@@ -141,6 +181,21 @@ bool wxInfoBarGeneric::SetForegroundColour(const wxColor& colour)
 
     if ( m_text )
         m_text->SetForegroundColour(colour);
+
+    if ( m_checkbox )
+        m_checkbox->SetForegroundColour(colour);
+
+    return true;
+}
+
+bool wxInfoBarGeneric::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxInfoBarBase::SetBackgroundColour(colour) )
+        return false;
+
+    // check that we're not called before Create()
+    if ( m_button )
+        UpdateCloseButtonBackground();
 
     return true;
 }
@@ -247,6 +302,9 @@ void wxInfoBarGeneric::DoShow()
 
 void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
 {
+    // cancel the timeout of the previous message, if any
+    StopDismissTimer();
+
     // first update the controls
     const int icon = flags & wxICON_MASK;
     if ( !icon || (icon == wxICON_NONE) )
@@ -277,10 +335,26 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
         // just update the layout to correspond to the new message
         Layout();
     }
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_SYSTEM_ALERT, this,
+                              wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
+
+#if wxUSE_ACCESSIBILITY
+
+wxAccessible* wxInfoBarGeneric::CreateAccessible()
+{
+    return new wxInfoBarGenericAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 void wxInfoBarGeneric::Dismiss()
 {
+    StopDismissTimer();
+
     DoHide();
 }
 
@@ -288,13 +362,6 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 {
     wxSizer * const sizer = GetSizer();
     wxCHECK_RET( sizer, "must be created first" );
-
-    // user-added buttons replace the standard close button so remove it if we
-    // hadn't done it yet
-    if ( sizer->Detach(m_button) )
-    {
-        m_button->Hide();
-    }
 
     wxButton * const button = new wxButton(this, btnid, label);
 
@@ -304,8 +371,10 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 #endif // __WXMAC__
 
     sizer->Add(button, wxSizerFlags().Centre().DoubleBorder());
-    if ( IsShown() )
-        sizer->Layout();
+
+    // user-added buttons replace the standard close button by default and,
+    // even if it remains shown, it must come after them
+    UpdateCloseButton();
 }
 
 size_t wxInfoBarGeneric::GetButtonCount() const
@@ -329,9 +398,9 @@ size_t wxInfoBarGeneric::GetButtonCount() const
         if ( item->IsSpacer() || item->IsSizer() )
             break;
 
-        // if the standard button is shown, there must be no other ones
+        // the standard button is not counted
         if ( item->GetWindow() == m_button )
-            return 0;
+            continue;
 
         ++count;
     }
@@ -363,13 +432,11 @@ wxWindowID wxInfoBarGeneric::GetButtonId(size_t idx) const
 
         if ( foundSpacer )
         {
-            if ( !item->IsSpacer() && !item->IsSizer() )
+            if ( !item->IsSpacer() && !item->IsSizer() &&
+                    item->GetWindow() != m_button )
             {
                 if ( count == idx )
-                {
-                  if ( item->GetWindow() != m_button )
                     return item->GetWindow()->GetId();
-                }
 
                 ++count;
             }
@@ -405,8 +472,9 @@ bool wxInfoBarGeneric::HasButtonId(wxWindowID btnid) const
         if ( item->IsSpacer() || item->IsSizer() )
             return false;
 
-        // check if we found our button
-        if ( item->GetWindow()->GetId() == btnid )
+        // check if we found our button, ignoring the standard one
+        if ( item->GetWindow() != m_button &&
+                item->GetWindow()->GetId() == btnid )
             return true;
     }
 
@@ -437,27 +505,162 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
             return;
         }
 
-        // check if we found our button
-        if ( item->GetWindow()->GetId() == btnid )
+        // check if we found our button, the standard one can't be removed
+        if ( item->GetWindow() != m_button &&
+                item->GetWindow()->GetId() == btnid )
         {
             delete item->GetWindow();
             break;
         }
     }
 
-    // check if there are any custom buttons left
-    if ( sizer->GetChildren().GetLast()->GetData()->IsSpacer() )
-    {
-        // if the last item is the spacer, none are left so restore the
-        // standard close button
-        sizer->Add(m_button, wxSizerFlags().Centre().DoubleBorder());
-        m_button->Show();
-    }
+    // restore the standard close button if it was the last custom one
+    UpdateCloseButton();
 }
+
+void wxInfoBarGeneric::ShowCloseButton(ShowButton show)
+{
+    wxCHECK_RET( GetSizer(), "must be created first" );
+
+    m_showCloseButton = show;
+
+    UpdateCloseButton();
+}
+
+void wxInfoBarGeneric::UpdateCloseButton()
+{
+    wxSizer * const sizer = GetSizer();
+
+    // detach the button in any case to add it back at the end below if needed
+    sizer->Detach(m_button);
+
+    bool show = false;
+    switch ( m_showCloseButton )
+    {
+        case ShowButton::Auto:
+            show = GetButtonCount() == 0;
+            break;
+
+        case ShowButton::Yes:
+            show = true;
+            break;
+
+        case ShowButton::No:
+            break;
+    }
+
+    if ( show )
+        sizer->Add(m_button, wxSizerFlags().Centre().Border());
+
+    m_button->Show(show);
+
+    if ( IsShown() )
+        sizer->Layout();
+}
+
+void wxInfoBarBase::RemoveAllButtons()
+{
+    for ( size_t n = GetButtonCount(); n > 0; --n )
+        RemoveButton(GetButtonId(n - 1));
+}
+
+// ----------------------------------------------------------------------------
+// wxInfoBarBase timeout support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_TIMER
+
+class wxInfoBarDismissTimer : public wxTimer
+{
+public:
+    explicit wxInfoBarDismissTimer(wxInfoBarBase* infoBar)
+        : m_infoBar(infoBar)
+    {
+    }
+
+    // Don't use timer events to avoid interfering with any wxEVT_TIMER
+    // handlers in the classes deriving from wxInfoBar.
+    virtual void Notify() override
+    {
+        m_infoBar->Dismiss();
+    }
+
+private:
+    wxInfoBarBase* const m_infoBar;
+
+    wxDECLARE_NO_COPY_CLASS(wxInfoBarDismissTimer);
+};
+
+namespace
+{
+
+constexpr int MILLISECONDS_PER_SECOND = 1000;
+
+// Return the timeout to use for Timeout_Auto, in seconds.
+int GetDefaultTimeout()
+{
+#ifdef __WXMSW__
+    // Use the value of "Dismiss notifications after this amount of time"
+    // accessibility option if it's available.
+    ULONG duration = 0;
+    if ( ::SystemParametersInfo(SPI_GETMESSAGEDURATION, 0, &duration, 0) )
+    {
+        // Make sure the value is reasonable and won't result in an overflow
+        // when multiplied by MILLISECONDS_PER_SECOND below.
+        if ( duration > 0 && duration <= INT_MAX / MILLISECONDS_PER_SECOND )
+            return static_cast<int>(duration);
+    }
+#endif // __WXMSW__
+
+    // This is the default value of the option above under MSW and seems
+    // reasonable.
+    return 5;
+}
+
+} // anonymous namespace
+
+void
+wxInfoBarBase::ShowMessageFor(const wxString& msg, int timeout, int flags)
+{
+    // This stops the timer if it's running.
+    ShowMessage(msg, flags);
+
+    switch ( timeout )
+    {
+        case Timeout_Never:
+            return;
+
+        case Timeout_Auto:
+            timeout = GetDefaultTimeout();
+            break;
+    }
+
+    wxCHECK_RET( timeout > 0 && timeout <= INT_MAX / MILLISECONDS_PER_SECOND,
+                 wxString::Format("invalid info bar timeout %d", timeout) );
+
+    if ( !m_dismissTimer )
+        m_dismissTimer = std::make_unique<wxInfoBarDismissTimer>(this);
+
+    m_dismissTimer->StartOnce(timeout * MILLISECONDS_PER_SECOND);
+}
+
+void wxInfoBarBase::StopDismissTimer()
+{
+    if ( m_dismissTimer )
+        m_dismissTimer->Stop();
+}
+
+#endif // wxUSE_TIMER
+
+wxInfoBarBase::wxInfoBarBase() = default;
+
+wxInfoBarBase::~wxInfoBarBase() = default;
 
 void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 {
-    DoHide();
+    // Call the virtual function to allow overriding it in the derived classes
+    // and for consistency with the native wxGTK version.
+    Dismiss();
 }
 
 void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
@@ -465,7 +668,7 @@ void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
     wxASSERT_MSG( HasFlag(wxINFOBAR_CHECKBOX),
                   "wxINFOBAR_CHECKBOX style should be set if calling ShowCheckBox()!");
     m_checked = checked;
-    if (m_checkbox != nullptr)
+    if ( m_checkbox )
     {
         m_checkbox->SetLabel(checkBoxText);
         GetSizer()->Show(m_checkbox, !checkBoxText.empty(), true);
@@ -474,9 +677,9 @@ void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
 
 void wxInfoBarGeneric::UpdateColours()
 {
-    // use special, easy to notice, colours
+    // use special, easy to notice, colours for those not set explicitly
     wxColour colBg, colFg;
-    if ( !m_hasBgCol && !m_hasFgCol )
+    if ( !m_hasBgCol || !m_hasFgCol )
     {
         // We want to use the native infobar colours for consistency with the
         // native implementation under GTK, but only do it for 3.24, as both
@@ -505,12 +708,19 @@ void wxInfoBarGeneric::UpdateColours()
         m_backgroundColour = colBg;
 
     if ( !m_hasFgCol )
+    {
         m_text->SetForegroundColour(colFg);
 
-    m_checkbox->SetForegroundColour(
-        wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+        if ( m_checkbox )
+            m_checkbox->SetForegroundColour(colFg);
+    }
 
-    m_button->SetBackgroundColour(GetBackgroundColour());
+    UpdateCloseButtonBackground();
+}
+
+void wxInfoBarGeneric::UpdateCloseButtonBackground()
+{
+    wxPrivate::SetCloseButtonBackground(m_button, GetBackgroundColour());
 }
 
 void wxInfoBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)

@@ -439,8 +439,8 @@ public:
     virtual wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_SOCKET; }
 
 public:
-    wxSocketNotify  m_event;
-    void           *m_clientData;
+    wxSocketNotify  m_event = wxSOCKET_INPUT;
+    void           *m_clientData = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxSocketEvent);
 };

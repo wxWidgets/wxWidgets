@@ -22,6 +22,7 @@
 #if wxUSE_ACCEL
 
 #ifndef WX_PRECOMP
+    #include "wx/event.h"
     #include "wx/window.h"
 #endif
 
@@ -47,8 +48,23 @@ public:
 
     HACCEL GetHACCEL() const { return m_hAccel; }
 
+    // Return the entries of this table, retrieving them from the native table
+    // if they hadn't been stored when it was created.
+    const std::vector<wxAcceleratorEntry>& GetEntries();
+
+    // Called when creating the table from the entries to avoid having to
+    // recreate them from the native table later.
+    void StoreEntries(std::vector<wxAcceleratorEntry> entries)
+    {
+        m_entries = std::move(entries);
+        m_hasEntries = true;
+    }
+
 protected:
     const HACCEL m_hAccel;
+
+    std::vector<wxAcceleratorEntry> m_entries;
+    bool m_hasEntries = false;
 
     wxDECLARE_NO_COPY_CLASS(wxAcceleratorRefData);
 };
@@ -74,6 +90,48 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
     {
         DestroyAcceleratorTable((HACCEL) m_hAccel);
     }
+}
+
+const std::vector<wxAcceleratorEntry>& wxAcceleratorRefData::GetEntries()
+{
+    if ( !m_hasEntries )
+    {
+        // This can happen when the table was created from a resource or from
+        // an existing HACCEL, in which case we need to get the entries from
+        // the native table.
+        m_hasEntries = true;
+
+        const int count = ::CopyAcceleratorTable(m_hAccel, nullptr, 0);
+        if ( count > 0 )
+        {
+            std::vector<ACCEL> accels(count);
+            ::CopyAcceleratorTable(m_hAccel, &accels[0], count);
+
+            for ( const auto& accel : accels )
+            {
+                int flags = wxACCEL_NORMAL;
+                if ( accel.fVirt & FALT )
+                    flags |= wxACCEL_ALT;
+                if ( accel.fVirt & FSHIFT )
+                    flags |= wxACCEL_SHIFT;
+                if ( accel.fVirt & FCONTROL )
+                    flags |= wxACCEL_CTRL;
+
+                const int keyCode = accel.fVirt & FVIRTKEY
+                                        ? wxMSWKeyboard::VKToWX(accel.key)
+                                        : accel.key;
+                if ( keyCode == WXK_NONE )
+                {
+                    // We can't do anything with the keys we don't know.
+                    continue;
+                }
+
+                m_entries.emplace_back(flags, keyCode, accel.cmd);
+            }
+        }
+    }
+
+    return m_entries;
 }
 
 // ----------------------------------------------------------------------------
@@ -121,7 +179,15 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
     const HACCEL hAccel = ::CreateAcceleratorTable(&arr[0], n);
     if ( hAccel )
-        m_refData = new wxAcceleratorRefData(hAccel);
+    {
+        wxAcceleratorRefData* const data = new wxAcceleratorRefData(hAccel);
+        m_refData = data;
+
+        // Also remember the entries themselves as we need them for GetEntry()
+        // and it's simpler and faster to keep them rather than recreate them
+        // from the native table later.
+        data->StoreEntries(std::vector<wxAcceleratorEntry>(entries, entries + n));
+    }
 }
 
 bool wxAcceleratorTable::IsOk() const
@@ -151,6 +217,21 @@ bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
 {
     MSG *msg = (MSG *)wxmsg;
     return IsOk() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
+}
+
+const wxAcceleratorEntry *
+wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
+{
+    if ( !IsOk() )
+        return nullptr;
+
+    for ( const auto& entry : M_ACCELDATA->GetEntries() )
+    {
+        if ( entry.MatchesEvent(event) )
+            return &entry;
+    }
+
+    return nullptr;
 }
 
 #endif // wxUSE_ACCEL

@@ -130,6 +130,9 @@ private:
     bool m_ownedByUser;
 
     wxDECLARE_NO_COPY_CLASS(wxNativeWindow);
+
+private:
+    wxDECLARE_CLASS(wxNativeWindow);
 };
 
 #endif // wxHAS_NATIVE_WINDOW

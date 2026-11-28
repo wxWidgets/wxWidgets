@@ -21,10 +21,8 @@ WXDLLIMPEXP_CORE
 bool IsActive();
 
 // Return true if the system has switched between dark and light modes.
-// Some controls need to take extra actions to switch from light mode to dark
-// mode compared with just creating the window in dark mode. This function
-// helps us do only what is needed, to avoid overwriting user settings such as
-// background and foreground colours.
+// A control might need to take different actions to switch modes compared
+// with just creating the control in dark mode.
 WXDLLIMPEXP_CORE
 bool HasChanged();
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -45,6 +43,10 @@ bool SyncWithWinUITheme(bool dark);
 
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);
+
+// Must be called when using auto-completion in a text control to ensure that
+// its drop-down window uses dark mode when appropriate.
+void EnableForAutoComplete();
 
 // Helper function: call SetWindowTheme() and log a debug error if it fails.
 void SetTheme(HWND hwnd,
@@ -101,6 +103,16 @@ UINT_PTR CALLBACK CommonDialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
 // Return true if the DarkMode_DarkTheme theme is available. This theme was
 // added in Windows 11 25H2 (build 26200).
 bool HasDarkTheme();
+
+// Draw"progress bar in dark mode: this is used when HasDarkTheme() returns
+// false as there is no native support for doing this in this case.
+void DrawGauge(wxDC& dc, const wxRect& rect, int value, int max, int flags);
+
+// Draw a check box.
+void DrawCheckBox(HDC hdc, const RECT& rect, int flags);
+
+// Draw a radio button.
+void DrawRadioButton(HDC hdc, const RECT& rect, int flags);
 
 } // namespace wxMSWDarkMode
 

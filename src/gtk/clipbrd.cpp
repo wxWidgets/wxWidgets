@@ -710,13 +710,35 @@ bool wxClipboard::AddData( wxDataObject *data )
         ++target;
     }
 
-    gtk_selection_add_targets
-    (
-        m_clipboardWidget,
-        GTKGetClipboardAtom(),
-        targets.data(),
-        targets.size()
-    );
+#ifdef wxHAS_GTK_SELECTION_SET_TARGETS
+    if ( gtk_selection_set_targets )
+    {
+        gtk_selection_set_targets
+        (
+            m_clipboardWidget,
+            GTKGetClipboardAtom(),
+            targets.data(),
+            targets.size()
+        );
+    }
+    else
+#endif
+    {
+        // Clear any previously set targets before adding the new ones, otherwise
+        // they will accumulate endlessly.
+        //
+        // Note: do not call Clear() here as it also resets the ownership of the
+        // selection and we don't want to relinquish it here.
+        gtk_selection_clear_targets(m_clipboardWidget, GTKGetClipboardAtom());
+
+        gtk_selection_add_targets
+        (
+            m_clipboardWidget,
+            GTKGetClipboardAtom(),
+            targets.data(),
+            targets.size()
+        );
+    }
 
     if ( !m_idSelectionGetHandler )
     {

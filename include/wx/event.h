@@ -15,6 +15,7 @@
 #include "wx/object.h"
 #include "wx/clntdata.h"
 #include "wx/math.h"
+#include "wx/unichar.h"
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
@@ -25,6 +26,7 @@
 #endif
 
 #include "wx/dynarray.h"
+#include "wx/extradata.h"
 #include "wx/thread.h"
 #include "wx/tracker.h"
 #include "wx/typeinfo.h"
@@ -138,13 +140,11 @@ inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
     // them locally to avoid generating hundreds of them when compiling any
     // code using event table macros.
 
-    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
-    wxCLANG_WARNING_SUPPRESS(cast-function-type)
+    wxWARNING_SUPPRESS_CAST_FUNCTION_TYPE()
 
     return reinterpret_cast<wxEventFunction>(func);
 
-    wxCLANG_WARNING_RESTORE(cast-function-type)
-    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+    wxWARNING_RESTORE_CAST_FUNCTION_TYPE()
 }
 
 // In good old pre-C++17 times we could just static_cast the event handler,
@@ -658,6 +658,7 @@ class WXDLLIMPEXP_FWD_CORE wxMouseEvent;
 class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
 class WXDLLIMPEXP_FWD_CORE wxChildFocusEvent;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxSetCursorEvent;
 class WXDLLIMPEXP_FWD_CORE wxScrollEvent;
@@ -760,6 +761,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_CHAR_HOOK, wxKeyEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_KEY_DOWN, wxKeyEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_KEY_UP, wxKeyEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_ACCELERATOR_KEY, wxAcceleratorKeyEvent);
 #if wxUSE_HOTKEY
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_HOTKEY, wxKeyEvent);
 #endif
@@ -981,7 +983,7 @@ enum wxEventCategory
  *
  */
 
-class WXDLLIMPEXP_BASE wxEvent : public wxObject
+class WXDLLIMPEXP_BASE wxEvent : public wxObject, public wxWithExtraData
 {
 public:
     wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL );
@@ -2309,6 +2311,16 @@ public:
     bool IsKeyInCategory(int category) const;
 
     // get the Unicode character corresponding to this key
+    wxNODISCARD wxUniChar GetUnicodeChar() const
+    {
+#ifdef __WXMSW__
+        return m_unicodeChar;
+#else
+        return m_uniChar;
+#endif
+    }
+
+    // same but limited to the BMP under MSW, prefer using GetUnicodeChar()
     wxChar GetUnicodeKey() const { return m_uniChar; }
 
     // get the raw key code (platform-dependent)
@@ -2363,21 +2375,30 @@ public:
     // example)
     wxKeyEvent& operator=(const wxKeyEvent& evt);
 
+    // Implementation only, don't use.
+#ifdef __WXMSW__
+    void SetUnicodeChar(wxUniChar uc) { m_unicodeChar = uc; }
+#endif // __WXMSW__
+
 public:
     // Do not use these fields directly, they are initialized on demand, so
     // call GetX() and GetY() or GetPosition() instead.
-    wxCoord       m_x, m_y;
+    wxCoord       m_x = wxDefaultCoord;
+    wxCoord       m_y = wxDefaultCoord;
 
-    long          m_keyCode;
+    long          m_keyCode = WXK_NONE;
 
-    // This contains the full Unicode character
-    // in a character events in Unicode mode
-    wxChar        m_uniChar;
+    // Kept for backwards compatibility only, use GetUnicodeChar() instead.
+    //
+    // Contains the Unicode character if it can be represented by a single
+    // wxChar, otherwise -- i.e. for the characters outside of the BMP on
+    // platforms where wxChar is 16 bits, such as MSW -- is WXK_NONE.
+    wxChar        m_uniChar = WXK_NONE;
 
     // these fields contain the platform-specific information about
     // key that was pressed
-    wxUint32      m_rawCode;
-    wxUint32      m_rawFlags;
+    wxUint32      m_rawCode = 0;
+    wxUint32      m_rawFlags = 0;
 
     // Indicates whether the key event is a repeat
     bool          m_isRepeat = false;
@@ -2404,12 +2425,25 @@ private:
         m_rawCode = evt.m_rawCode;
         m_rawFlags = evt.m_rawFlags;
         m_uniChar = evt.m_uniChar;
+#ifdef __WXMSW__
+        m_unicodeChar = evt.m_unicodeChar;
+#endif
         m_isRepeat = evt.m_isRepeat;
     }
 
     // Initialize m_x and m_y using the current mouse cursor position if
     // necessary.
     void InitPositionIfNecessary() const;
+
+    // Under the platforms with 32-bit wxChar this is not necessary and wxMSW
+    // is currently the only platform with 16-bit wxChar implementing support
+    // for this.
+#ifdef __WXMSW__
+    // Contains the full Unicode character for character events.
+    //
+    // Note that the default ctor of wxUniChar initializes it to WXK_NONE.
+    wxUniChar m_unicodeChar;
+#endif
 
     // If this flag is true, the normal key events should still be generated
     // even if wxEVT_CHAR_HOOK had been handled. By default it is false as
@@ -2421,6 +2455,60 @@ private:
     bool m_hasPosition = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxKeyEvent);
+};
+
+// Accelerator key event class
+
+/*
+ wxEVT_ACCELERATOR_KEY
+ */
+
+// Handle this event to change the default logic for determining whether a key
+// should be processed as an accelerator or not: simply handling it prevents
+// the key from being used as an accelerator, while handling it and calling
+// UseAccelerator() forces using it as an accelerator, overriding the window.
+class WXDLLIMPEXP_CORE wxAcceleratorKeyEvent : public wxKeyEvent
+{
+public:
+    wxAcceleratorKeyEvent() = default;
+
+    wxAcceleratorKeyEvent(const wxKeyEvent& event,
+                          int command,
+                          wxMenuItem* menuItem = nullptr)
+        : wxKeyEvent(wxEVT_ACCELERATOR_KEY, event),
+          m_command(command),
+          m_menuItem(menuItem)
+    {
+        // This event is similar to wxEVT_CHAR_HOOK in that it is sent to the
+        // focused window but can be handled by any of its parents.
+        m_propagationLevel = wxEVENT_PROPAGATE_MAX;
+    }
+
+    // Get the ID of the command which would be generated by the accelerator.
+    int GetCommand() const { return m_command; }
+
+    // Get the menu item corresponding to the accelerator, may be null if the
+    // accelerator doesn't come from a menu item but from wxAcceleratorTable.
+    wxMenuItem* GetMenuItem() const { return m_menuItem; }
+
+    // Explicitly request using the accelerator: this is useful for overriding
+    // wxWindow::ClaimsKeyBeforeAccelerator() decision.
+    void UseAccelerator() { m_useAccel = true; }
+
+
+    // Implementation only from now on.
+    bool ShouldUseAccelerator() const { return m_useAccel; }
+
+    wxNODISCARD virtual wxEvent *Clone() const override
+        { return new wxAcceleratorKeyEvent(*this); }
+
+private:
+    int m_command = wxID_NONE;
+    wxMenuItem* m_menuItem = nullptr;
+
+    bool m_useAccel = false;
+
+    wxDECLARE_DYNAMIC_CLASS(wxAcceleratorKeyEvent);
 };
 
 // Size event class
@@ -3468,7 +3556,7 @@ public:
                 Origin origin = Origin_Unknown)
         : wxCommandEvent(type, winid),
           m_pos(pt),
-          m_origin(GuessOrigin(origin))
+          m_origin(origin)
     { }
     wxHelpEvent(const wxHelpEvent& event)
         : wxCommandEvent(event),
@@ -3501,10 +3589,6 @@ protected:
     wxString  m_target;
     wxString  m_link;
     Origin    m_origin;
-
-    // we can try to guess the event origin ourselves, even if none is
-    // specified in the ctor
-    static Origin GuessOrigin(Origin origin);
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHelpEvent);
@@ -3754,6 +3838,7 @@ protected:
 
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
                                     , public wxTrackable
+                                    , public wxWithExtraData
 {
 public:
     wxEvtHandler();
@@ -4329,6 +4414,9 @@ protected:
     wxWindow *m_window;
 
     wxDECLARE_NO_COPY_CLASS(wxEventBlocker);
+
+private:
+    wxDECLARE_CLASS(wxEventBlocker);
 };
 
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);
@@ -4341,6 +4429,7 @@ typedef void (wxEvtHandler::*wxNcPaintEventFunction)(wxNcPaintEvent&);
 typedef void (wxEvtHandler::*wxEraseEventFunction)(wxEraseEvent&);
 typedef void (wxEvtHandler::*wxMouseEventFunction)(wxMouseEvent&);
 typedef void (wxEvtHandler::*wxCharEventFunction)(wxKeyEvent&);
+typedef void (wxEvtHandler::*wxAcceleratorKeyEventFunction)(wxAcceleratorKeyEvent&);
 typedef void (wxEvtHandler::*wxFocusEventFunction)(wxFocusEvent&);
 typedef void (wxEvtHandler::*wxChildFocusEventFunction)(wxChildFocusEvent&);
 typedef void (wxEvtHandler::*wxActivateEventFunction)(wxActivateEvent&);
@@ -4400,6 +4489,8 @@ typedef void (wxEvtHandler::*wxStylusEventFunction)(wxStylusEvent&);
 #define wxCharEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxCharEventFunction, func)
 #define wxKeyEventHandler(func) wxCharEventHandler(func)
+#define wxAcceleratorKeyEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxAcceleratorKeyEventFunction, func)
 #define wxFocusEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxFocusEventFunction, func)
 #define wxChildFocusEventHandler(func) \
@@ -4667,6 +4758,7 @@ typedef void (wxEvtHandler::*wxStylusEventFunction)(wxStylusEvent&);
 #define EVT_HOTKEY(winid, func)  wx__DECLARE_EVT1(wxEVT_HOTKEY, winid, wxCharEventHandler(func))
 #endif
 #define EVT_CHAR_HOOK(func)  wx__DECLARE_EVT0(wxEVT_CHAR_HOOK, wxCharEventHandler(func))
+#define EVT_ACCELERATOR_KEY(func)  wx__DECLARE_EVT0(wxEVT_ACCELERATOR_KEY, wxAcceleratorKeyEventHandler(func))
 #define EVT_MENU_OPEN(func)  wx__DECLARE_EVT0(wxEVT_MENU_OPEN, wxMenuEventHandler(func))
 #define EVT_MENU_CLOSE(func)  wx__DECLARE_EVT0(wxEVT_MENU_CLOSE, wxMenuEventHandler(func))
 #define EVT_MENU_HIGHLIGHT(winid, func)  wx__DECLARE_EVT1(wxEVT_MENU_HIGHLIGHT, winid, wxMenuEventHandler(func))

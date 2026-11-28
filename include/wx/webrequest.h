@@ -546,6 +546,9 @@ private:
     wxString m_dataFile;
     wxMemoryBuffer m_dataBuf;
     wxString m_errorDescription;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxWebRequestEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);

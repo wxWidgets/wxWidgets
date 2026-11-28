@@ -56,6 +56,11 @@ void wxStackFrame::OnGetName()
     {
         wxDbgHelpDLL::LogError(wxT("SymFromAddr"));
     }
+    else
+    {
+        // make the offset relative to the frame address and not GetSymAddr()
+        m_offset += m_symAddrAdjust;
+    }
 }
 
 void wxStackFrame::OnGetLocation()
@@ -289,9 +294,15 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
         // don't show this frame itself in the output
         if ( nLevel >= skip )
         {
+            // only the innermost frame address comes from the context, all the
+            // other ones are return addresses (this is not true for the frame
+            // interrupted by an exception if we're called from an exception
+            // handler and not via WalkFromException(), but we can't detect it)
             wxStackFrame frame(nLevel - skip,
                                wxUIntToPtr(sf.AddrPC.Offset),
-                               sf.AddrFrame.Offset);
+                               sf.AddrFrame.Offset,
+                               nLevel == 0 ? wxStackFrame::AddrKind::Current
+                                           : wxStackFrame::AddrKind::Return);
 
             OnStackFrame(frame);
         }
@@ -323,17 +334,12 @@ void wxStackWalker::WalkFromException(size_t maxDepth)
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#ifdef __VISUALC__
-    #pragma warning(push)
-
-    // "warning C4740: flow in or out of inline asm code suppresses global
-    //  optimization"
-    #pragma warning(disable: 4740)
-
-    // "warning C4748: /GS can not protect parameters and local variables from
-    //  local buffer overrun because optimizations are disabled in function"
-    #pragma warning(disable: 4748)
-#endif
+// "warning C4740: flow in or out of inline asm code suppresses global
+//  optimization"
+//
+// "warning C4748: /GS can not protect parameters and local variables from
+//  local buffer overrun because optimizations are disabled in function"
+wxMSVC_WARNING_SUPPRESS(4740 4748)
 
 void wxStackWalker::Walk(size_t skip, size_t maxDepth)
 {
@@ -377,9 +383,7 @@ void wxStackWalker::Walk(size_t skip, size_t maxDepth)
     WalkFrom(&ctx, skip, maxDepth);
 }
 
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
+wxMSVC_WARNING_RESTORE(4740 4748)
 
 #endif // wxUSE_STACKWALKER
 

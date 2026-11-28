@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/msw/private.h"

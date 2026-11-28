@@ -108,6 +108,28 @@ public:
                        int button = wxMOUSE_BTN_LEFT);
 
     /**
+        Rotate the mouse wheel.
+
+        Simulates rotating the mouse wheel by the given number of notches at
+        the current mouse position, which can be changed using MouseMove().
+
+        The sign of @a rotation follows the same convention as
+        wxMouseEvent::GetWheelRotation(), i.e. positive values correspond to
+        rotating the wheel up (away from the user) for the vertical axis and
+        to the right for the horizontal one.
+
+        @param rotation
+            Non-zero number of wheel notches to rotate the wheel by.
+
+        @param axis
+            The wheel axis, vertical by default.
+
+        @since 3.3.5
+    */
+    bool MouseWheel(int rotation,
+                    wxMouseWheelAxis axis = wxMOUSE_WHEEL_VERTICAL);
+
+    /**
         Press a key.
 
         If you are using modifiers then it needs to be paired with an identical

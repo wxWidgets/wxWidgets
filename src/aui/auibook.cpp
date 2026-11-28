@@ -1207,9 +1207,9 @@ private:
         ctrl->GetBook()->OnTabCancelDrag(ctrl, tabIdx);
     }
 
-    static void TabButton(wxAuiTabCtrl* ctrl, int tabIdx, int button_id)
+    static bool TabButton(wxAuiTabCtrl* ctrl, int tabIdx, int button_id)
     {
-        ctrl->GetBook()->OnTabButton(ctrl, tabIdx, button_id);
+        return ctrl->GetBook()->OnTabButton(ctrl, tabIdx, button_id);
     }
 
     static void TabMiddleDown(wxAuiTabCtrl* ctrl, int tabIdx)
@@ -3794,7 +3794,19 @@ void wxAuiTabCtrl::OnLeftDClick(wxMouseEvent& evt)
 {
     wxPoint pos = evt.GetPosition();
 
-    if (!TabHitTest(pos) && !ButtonHitTest(pos))
+    if ( const wxAuiTabContainerButton* const button = ButtonHitTest(pos) )
+    {
+        if ( !(button->curState & wxAUI_BUTTON_STATE_DISABLED) &&
+             (button->id == wxAUI_BUTTON_LEFT ||
+              button->id == wxAUI_BUTTON_RIGHT) )
+        {
+            OnButton(GetIdxFromWindow(m_clickTab), button->id);
+        }
+
+        return;
+    }
+
+    if ( !TabHitTest(pos) )
     {
         wxAuiTabEventSource::TabBgDClick(this);
     }
@@ -3870,11 +3882,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     }
 
 
-    int drag_x_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_X, this);
-    int drag_y_threshold = wxSystemSettings::GetMetric(wxSYS_DRAG_Y, this);
-
-    if (abs(pos.x - m_clickPt.x) > drag_x_threshold ||
-        abs(pos.y - m_clickPt.y) > drag_y_threshold)
+    if (wxSystemSettings::ExceedsDragThreshold(m_clickPt, pos, this))
     {
         const int idx = GetIdxFromWindow(m_clickTab);
         if ( idx == wxNOT_FOUND ) return;
@@ -3964,6 +3972,22 @@ wxAuiTabCtrl::UpdateButtonStateAndRefresh(wxAuiTabContainerButton& button,
 
 void wxAuiTabCtrl::OnButton(int tabIdx, int button)
 {
+    // Let wxAuiNotebook generate the event for this button click and perform
+    // the default action for the buttons handled at its level, such as closing
+    // or pinning the tab.
+    //
+    // It only returns true the application handled the event without skipping
+    // it, which means that it handled the button completely on its own.
+    const wxWeakRef<wxAuiTabCtrl> weakSelf(this);
+    if (wxAuiTabEventSource::TabButton(this, tabIdx, button))
+        return;
+
+    // Closing a tab can take this control away with it.
+    if ( weakSelf.get() != this || wxWindowIsUnavailableForCallbacks(this) )
+        return;
+
+    // For mostly historical (but also convenience) reasons, some buttons are
+    // handled here instead of in wxAuiNotebook.
     if (button == wxAUI_BUTTON_LEFT || button == wxAUI_BUTTON_RIGHT)
     {
         if (button == wxAUI_BUTTON_LEFT)
@@ -4030,10 +4054,6 @@ void wxAuiTabCtrl::OnButton(int tabIdx, int button)
         {
             wxAuiTabEventSource::TabClicked(this, idx);
         }
-    }
-    else
-    {
-        wxAuiTabEventSource::TabButton(this, tabIdx, button);
     }
 }
 
@@ -4416,8 +4436,11 @@ public:
     wxWindow* const m_tabsOwner;
     const wxWeakRef<wxWindow> m_tabsOwnerLifetime;
     int m_tabCtrlHeight = 0;
+
+    wxDECLARE_CLASS(wxAuiTabFrame);
 };
 
+wxIMPLEMENT_CLASS(wxAuiTabFrame, wxWindow);
 
 const int wxAuiBaseTabCtrlId = 5380;
 
@@ -4462,6 +4485,22 @@ bool IsDummyPane(const wxAuiPaneInfo& pane)
 }
 
 } // anonymous namespace
+
+bool wxAuiNotebook::wxAuiNotebookManager::CanAddPane(
+    wxWindow* window, const wxAuiPaneInfo& paneInfo) const
+{
+    if ( !wxAuiManager::CanAddPane(window, paneInfo) )
+        return false;
+
+    // wxAuiNotebook creates a hidden dummy pane before any real tab frames.
+    if ( IsDummyPane(paneInfo) && m_panes.empty() )
+        return true;
+
+    wxCHECK_MSG(wxDynamicCast(window, wxAuiTabFrame), false,
+                wxT("Can't add non-tab panes to wxAuiNotebook's manager"));
+
+    return true;
+}
 
 void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
 {
@@ -10317,18 +10356,36 @@ void wxAuiNotebook::OnChildFocusNotebook(wxChildFocusEvent& evt)
     }
 
 
-    // find the page containing the focused child
-    wxWindow* win = evt.GetWindow();
-    while ( win )
+    const auto findPageFromWindow = [this](wxWindow* win) -> wxWindow*
     {
-        // pages have the notebook as the parent, so stop when we reach one
-        // (and also stop in the impossible case of no parent at all)
-        wxWindow* const parent = win->GetParent();
-        if ( !parent || parent == this )
-            break;
+        while ( win )
+        {
+            // pages have the notebook as the parent, so stop when we reach one
+            // (and also stop in the impossible case of no parent at all)
+            wxWindow* const parent = win->GetParent();
+            if ( !parent )
+                return nullptr;
 
-        win = parent;
-    }
+            if ( parent == this )
+                return win;
+
+            win = parent;
+        }
+
+        return nullptr;
+    };
+
+    // Prefer the actual current focus: this event can be delayed and refer to a
+    // page whose handler has already selected another page.
+    wxWindow* win = findPageFromWindow(wxWindow::FindFocus());
+
+    // But if we couldn't find the page containing the focus, use the window
+    // that generated the event.
+    if ( !win )
+        win = findPageFromWindow(evt.GetWindow());
+
+    if ( !win )
+        return;
 
     // change the tab selection to this page
     int idx = m_tabs.GetIdxFromWindow(win);
@@ -10413,18 +10470,47 @@ void wxAuiNotebook::OnNavigationKeyNotebook(wxNavigationKeyEvent& event)
     }
 }
 
-void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
+bool wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
 {
+    int selection = tabIdx;
+    if (selection == -1 && button_id == wxAUI_BUTTON_CLOSE)
+    {
+        // if the close button is to the right, use the active
+        // page selection to determine which page to close
+        selection = tabs->GetActivePage();
+    }
+
+    // Notify the application about the button click.
+    {
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BUTTON, m_windowId);
+        e.SetSelection(selection != -1
+            ? m_tabs.GetIdxFromWindow(tabs->GetWindowFromIdx(selection))
+            : wxNOT_FOUND
+        );
+        e.SetInt(button_id);
+        e.SetEventObject(this);
+
+        // Note that if the application handles this event without skipping
+        // it, we don't do anything else, neither here nor in wxAuiTabCtrl:
+        // this is compatible with the previous versions, in which handling
+        // this event prevented our own handler, executed after the application
+        // one, from running at all.
+        const wxWeakRef<wxAuiNotebook> weakSelf(this);
+        const wxWeakRef<wxAuiTabCtrl> weakCtrl(tabs);
+        if (ProcessWindowEvent(e))
+            return true;
+
+        // A handler which skipped the event may have destroyed the notebook
+        // or the tab control: nothing more can be done with them then.
+        if ( weakSelf.get() != this || wxWindowIsUnavailableForCallbacks(this) ||
+             weakCtrl.get() != tabs || wxWindowIsUnavailableForCallbacks(tabs) )
+        {
+            return true;
+        }
+    }
+
     if (button_id == wxAUI_BUTTON_CLOSE)
     {
-        int selection = tabIdx;
-        if (selection == -1)
-        {
-            // if the close button is to the right, use the active
-            // page selection to determine which page to close
-            selection = tabs->GetActivePage();
-        }
-
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
@@ -10434,7 +10520,6 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
-            e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
             const int idx = m_tabs.GetIdxFromWindow(close_wnd);
             e.SetSelection(idx);
             e.SetOldSelection(selection);
@@ -10446,7 +10531,7 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
                  wxWindowIsUnavailableForCallbacks(close_wnd) ||
                  close_wnd->GetParent() != this ||
                  tabs->GetIdxFromWindow(close_wnd) == wxNOT_FOUND || !e.IsAllowed() )
-                return;
+                return false;
 
 
 #if wxUSE_MDI
@@ -10458,13 +10543,14 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
 #endif
             {
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
-                wxCHECK_RET( main_idx != wxNOT_FOUND, wxT("no page to delete?") );
+                wxCHECK_MSG( main_idx != wxNOT_FOUND, false,
+                             wxT("no page to delete?") );
 
-                if ( !DeletePage(main_idx) ) return;
+                if ( !DeletePage(main_idx) ) return false;
             }
 
             if ( weakThis.get() != this || wxWindowIsUnavailableForCallbacks(this) )
-                return;
+                return false;
 
             // notify owner that the tab has been closed
             wxAuiNotebookEvent e2(wxEVT_AUINOTEBOOK_PAGE_CLOSED, m_windowId);
@@ -10475,8 +10561,9 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
     }
     else if (button_id == wxAUI_BUTTON_PIN)
     {
-        // For now we don't send any event, this can be always added later if
-        // necessary.
+        // Note that we don't send any event specific to pinning the tab, the
+        // generic button event above is the only notification for it, but such
+        // event could be always added later if necessary.
         wxWindow* const wnd = tabs->GetWindowFromIdx(tabIdx);
 
         const auto idx = m_tabs.GetIdxFromWindow(wnd);
@@ -10497,11 +10584,13 @@ void wxAuiNotebook::OnTabButton(wxAuiTabCtrl* tabs, int tabIdx, int button_id)
                 break;
         }
 
-        wxCHECK_RET(newKind != wxAuiTabKind::Locked,
+        wxCHECK_MSG(newKind != wxAuiTabKind::Locked, false,
                     "locked pages shouldn't have pin button");
 
         SetPageKind(idx, newKind);
     }
+
+    return false;
 }
 
 

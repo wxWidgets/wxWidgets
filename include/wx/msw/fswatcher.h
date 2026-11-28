@@ -30,6 +30,9 @@ public:
 
 protected:
     bool Init();
+
+private:
+    wxDECLARE_CLASS(wxMSWFileSystemWatcher);
 };
 
 #endif // wxUSE_FSWATCHER

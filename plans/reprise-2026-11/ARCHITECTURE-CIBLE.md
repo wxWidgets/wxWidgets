@@ -2021,3 +2021,57 @@ Reste de ce lot :
   vertical par défaut des cellules est le centre depuis le lot des tables,
   et non le haut comme sous wxMSW. À trancher.
 - L'aperçu de date de la grille de propriétés, comme au lot précédent.
+
+## Fusion de master de wxWidgets (2026-11-28)
+
+`master` (a9375c8aee, 27 novembre) fusionné dans la branche : 841 commits
+depuis la base du 28 août, 58 conflits dans 54 fichiers. Branche de
+sauvegarde de l'état d'avant : `backup/avant-fusion-master-20261128`.
+
+**Méthode.** Chaque conflit a été résolu en lisant les deux côtés et la base
+(`zdiff3`). Puis, au-delà des conflits, revue de ce que l'amont a changé et
+qui touche le port sans conflit textuel : les 23 fichiers de `src/msw` que le
+port ne compile pas (il les remplace par `src/winui`), les commits des
+fichiers partagés où le port a ses crochets (`window.cpp`, `evtloop.cpp`,
+`dialog.cpp`, AUI, listes génériques…) et les fonctions virtuelles ajoutées
+aux en-têtes communs.
+
+**Repris dans le port parce que l'amont a déplacé un comportement :**
+- *Échap* : wxMSW ne fait plus `wxEVT_CHAR_HOOK` d'Échap dans son crochet
+  clavier mais dans `wxGUIEventLoop::PreProcessMessage()`, que les touches
+  d'un îlot ne traversent pas (`wxWinUI3DispatchIslandKeyboard()`). Le
+  pipeline clavier du port appelle `wxMSWHandleEscapeKey()` pour les messages
+  d'un îlot seulement ; sans cela Échap ne fermait plus aucun dialogue.
+- *Accélérateurs* : `ClaimsKeyBeforeAccelerator()` et
+  `wxEVT_ACCELERATOR_KEY` (une fenêtre ou le programme gardent une touche des
+  accélérateurs) passent par `MSWShouldUseAcceleratorForKey()`, appelé aussi
+  par le pipeline du port.
+- `wxTextEntry::MSWShouldPreProcessMessage()`, retirée de wxMSW, est gardée
+  sous wxWinUI : les champs du port l'appellent.
+- `wxInfoBar::ShowCloseButton()` (nouvelle, abstraite) : sur `IsClosable`
+  de l'`InfoBar` ; `ShowMessage()` et `Dismiss()` arrêtent le minuteur de
+  `ShowMessageFor()`.
+- `wxToolBarTool` est public dans tous les ports : la classe d'outil du port
+  l'est devenue (`include/wx/winui/toolbar.h`).
+- `wxGetTextFromUser(…, const wxPoint&, const wxSize&, …)` : surcharge
+  déclarée aussi dans l'en-tête du port.
+- Barre d'état : les largeurs fixes suivent le DPI (le gestionnaire du port
+  appelle celui de la base, qu'il masque).
+- `wxDialog::ShowModal()` remet le code de retour à zéro avant `Show()` ; le
+  port garde les données modales avant `Show()` (carte, voile).
+- `wxPopupWindow` ne prend plus le premier plan à une autre application.
+
+**Pris de l'amont tels quels** : les deux fichiers Qt en conflit (le port n'y
+touche pas), la suppression du test `test_drawing`, les ajouts au ruban
+(info-touches, navigation au clavier, `wxBackstage`), à AUI, aux listes,
+grilles et dataview génériques.
+
+**Laissé de côté, à revoir :**
+- Ruban : sous le chrome XAML du port, les info-touches sont désactivées
+  (elles sont dessinées par l'art du ruban, qui ne dessine plus rien) ; le
+  `wxBackstage` du ruban n'a pas d'onglet dans le `SelectorBar` du port ;
+  la navigation au clavier ajoutée par l'amont n'est pas raccordée aux
+  contrôles XAML.
+- Les correctifs « mode sombre » de wxMSW (curseur, barre d'outils, liste,
+  calendrier…) ne concernent pas le port, qui a ses propres contrôles.
+- La DLL s'appelle maintenant `wxwinui390u_core_…` (version de master).

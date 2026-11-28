@@ -51,6 +51,15 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+
+void wxQtChangeRoleColour(QPalette::ColorRole role,
+                          QWidget* widget,
+                          const wxColour& colour)
+{
+    QPalette palette = widget->palette();
+    palette.setColor(role, colour.GetQColor());
+    widget->setPalette(palette);
+}
 }
 
 extern wxSize wxQtGetBestSize(QWidget* qtWidget)
@@ -64,8 +73,12 @@ extern wxSize wxQtGetBestSize(QWidget* qtWidget)
 
 
 // Base Widget helper (no scrollbar, used by wxWindow)
+// We derive from QFrame instead of QWidget because the former can also be used
+// directly for creating simple placeholder frames without any contents, as the
+// Qt documentation says, and also to be able to apply border styles like
+// wxBORDER_XXX to it.
 
-class wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindowQt >
+class wxQtWidget : public wxQtEventSignalHandler< QFrame, wxWindowQt >
 {
     public:
         wxQtWidget( wxWindowQt *parent, wxWindowQt *handler );
@@ -85,7 +98,7 @@ class wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindowQt >
 };
 
 wxQtWidget::wxQtWidget( wxWindowQt *parent, wxWindowQt *handler )
-    : wxQtEventSignalHandler< QWidget, wxWindowQt >( parent, handler )
+    : wxQtEventSignalHandler< QFrame, wxWindowQt >( parent, handler )
 {
 }
 
@@ -323,7 +336,6 @@ void wxWindowQt::Init()
 
 #if wxUSE_ACCEL
     m_qtShortcutHandler.reset(new wxQtShortcutHandler(this));
-    m_processingShortcut = false;
 #endif
     m_qtWindow = nullptr;
     m_qtContainer = nullptr;
@@ -474,6 +486,8 @@ void wxWindowQt::PostCreation(bool generic)
     else if (m_backgroundStyle != wxBG_STYLE_TRANSPARENT)
         SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
+    QtApplyFrameBorder();
+
 //    // Use custom Qt window flags (allow to turn on or off
 //    // the minimize/maximize/close buttons and title bar)
 //    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
@@ -489,20 +503,16 @@ void wxWindowQt::PostCreation(bool generic)
 //    SetWindowStyleFlag( style );
 //
 
-    // Set the default color so Paint Event default handler clears the DC:
-    wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().window().color()));
-    if ( m_hasFgCol )
+    // Apply the colours set before the window creation, if any: note that we
+    // must not set them to the default colours here, as this would make them
+    // appear as if they were explicitly set, and GetDefaultAttributes() takes
+    // care of returning the default colours anyhow.
+    if ( QWidget* const widget = QtGetParentWidget() )
     {
-        // A colour set before Create() must reach the new native widget,
-        // rather than being replaced by its default palette colour.
-        QWidget* const widget = QtGetParentWidget();
-        QPalette palette = widget->palette();
-        palette.setColor(widget->foregroundRole(), m_foregroundColour.GetQColor());
-        widget->setPalette(palette);
-    }
-    else
-    {
-        wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().windowText().color()));
+        if ( m_backgroundColour.IsOk() )
+            wxQtChangeRoleColour(widget->backgroundRole(), widget, m_backgroundColour);
+        if ( m_foregroundColour.IsOk() )
+            wxQtChangeRoleColour(widget->foregroundRole(), widget, m_foregroundColour);
     }
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
@@ -697,17 +707,13 @@ bool wxWindowQt::SetFont( const wxFont &font )
 {
     // SetFont may be called before Create, so the font is stored
     // by the base class, and set in PostCreation
-    if ( !wxWindowBase::SetFont(font) )
-        return false;
 
-    if ( GetHandle() )
+    if (GetHandle())
     {
-        // wxNullFont resets the explicit font: resolve the default instead
-        // of asking the invalid font for a native handle.
-        GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
+        GetHandle()->setFont( font.GetHandle() );
     }
 
-    return true;
+    return wxWindowBase::SetFont(font);
 }
 
 
@@ -973,101 +979,8 @@ void wxWindowQt::SetWindowStyleFlag( long style )
 //    //   See: http://doc.qt.nokia.com/latest/qwidget.html#events
 //    // wxTAB_TRAVERSAL: reimplement focusNextPrevChild()
 //
-//    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
-//
-//    // For this to work Qt::CustomizeWindowHint must be set (done in Create())
-//    if ( HasFlag( wxCAPTION ) )
-//    {
-//        // Enable caption bar and all buttons. This behavious
-//        // is overwritten by subclasses (wxTopLevelWindow).
-//        qtFlags |= Qt::WindowTitleHint;
-//        qtFlags |= Qt::WindowSystemMenuHint;
-//        qtFlags |= Qt::WindowMinMaxButtonsHint;
-//        qtFlags |= Qt::WindowCloseButtonHint;
-//    }
-//    else
-//    {
-//        // Disable caption bar, include all buttons to be effective
-//        qtFlags &= ~Qt::WindowTitleHint;
-//        qtFlags &= ~Qt::WindowSystemMenuHint;
-//        qtFlags &= ~Qt::WindowMinMaxButtonsHint;
-//        qtFlags &= ~Qt::WindowCloseButtonHint;
-//    }
-//
-//    GetHandle()->setWindowFlags( qtFlags );
-//
-//    // Validate border styles
-//    int numberOfBorderStyles = 0;
-//    if ( HasFlag( wxBORDER_NONE ))
-//        numberOfBorderStyles++;
-//    if ( HasFlag( wxBORDER_STATIC ))
-//        numberOfBorderStyles++;
-//    if ( HasFlag( wxBORDER_SIMPLE ))
-//        numberOfBorderStyles++;
-//    if ( HasFlag( wxBORDER_RAISED ))
-//        numberOfBorderStyles++;
-//    if ( HasFlag( wxBORDER_SUNKEN ))
-//        numberOfBorderStyles++;
-//    if ( HasFlag( wxBORDER_THEME ))
-//        numberOfBorderStyles++;
-//    wxCHECK_RET( numberOfBorderStyles <= 1, "Only one border style can be specified" );
-//
-//    // Borders only supported for QFrame's
-//    QFrame *qtFrame = qobject_cast< QFrame* >( QtGetContainer() );
-//    wxCHECK_RET( numberOfBorderStyles == 0 || qtFrame,
-//                 "Borders not supported for this window type (not QFrame)" );
-//
-//    if ( HasFlag( wxBORDER_NONE ) )
-//    {
-//        qtFrame->setFrameStyle( QFrame::NoFrame );
-//    }
-//    else if ( HasFlag( wxBORDER_STATIC ) )
-//    {
-//        wxMISSING_IMPLEMENTATION( "wxBORDER_STATIC" );
-//    }
-//    else if ( HasFlag( wxBORDER_SIMPLE ) )
-//    {
-//        qtFrame->setFrameStyle( QFrame::Panel );
-//        qtFrame->setFrameShadow( QFrame::Plain );
-//    }
-//    else if ( HasFlag( wxBORDER_RAISED ) )
-//    {
-//        qtFrame->setFrameStyle( QFrame::Panel );
-//        qtFrame->setFrameShadow( QFrame::Raised );
-//    }
-//    else if ( HasFlag( wxBORDER_SUNKEN ) )
-//    {
-//        qtFrame->setFrameStyle( QFrame::Panel );
-//        qtFrame->setFrameShadow( QFrame::Sunken );
-//    }
-//    else if ( HasFlag( wxBORDER_THEME ) )
-//    {
-//        qtFrame->setFrameStyle( QFrame::StyledPanel );
-//        qtFrame->setFrameShadow( QFrame::Plain );
-//    }
 
-    if ( !GetHandle() )
-        return;
-
-    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
-
-    if ( HasFlag( wxFRAME_NO_TASKBAR ) )
-    {
-//        qtFlags &= ~Qt::WindowType_Mask;
-        if ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) ) {
-            qtFlags = Qt::ToolTip | Qt::FramelessWindowHint;
-        }
-        else
-            qtFlags |= Qt::Dialog;
-    }
-    else
-    if ( ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
-         != qtFlags.testFlag( Qt::FramelessWindowHint ) )
-    {
-        qtFlags ^= Qt::FramelessWindowHint;
-    }
-
-    GetHandle()->setWindowFlags( qtFlags );
+    QtApplyFrameBorder();
 }
 
 wxSize wxWindowQt::GetWindowBorderSize() const
@@ -1103,16 +1016,11 @@ void wxWindowQt::SetExtraStyle( long exStyle )
     // update the internal variable
     wxWindowBase::SetExtraStyle(exStyle);
 
-    if (!m_qtWindow)
+    if (!GetHandle())
         return;
 
-    Qt::WindowFlags flags = m_qtWindow->windowFlags();
-
-    if (!(exStyle & wxWS_EX_CONTEXTHELP) != !(flags & Qt::WindowContextHelpButtonHint))
-    {
-        flags ^= Qt::WindowContextHelpButtonHint;
-        m_qtWindow->setWindowFlags(flags);
-    }
+    // Turns on/off Qt::WindowContextHelpButtonHint flag.
+    GetHandle()->setWindowFlag(Qt::WindowContextHelpButtonHint, (exStyle & wxWS_EX_CONTEXTHELP));
 }
 
 
@@ -1423,6 +1331,34 @@ void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
 }
 #endif // wxUSE_ACCEL
 
+void wxWindowQt::QtApplyFrameBorder()
+{
+    // wxBORDER_XXX styles can only be applied if GetHandle() is a QFrame object.
+    if ( auto qtFrame = qobject_cast<QFrame*>(GetHandle()) )
+    {
+        if ( HasFlag(wxBORDER_NONE) )
+        {
+            qtFrame->setFrameStyle(QFrame::NoFrame);
+        }
+        else if ( HasFlag(wxBORDER_SIMPLE) )
+        {
+            qtFrame->setFrameStyle(QFrame::Box | QFrame::Plain);
+        }
+        else if ( HasFlag(wxBORDER_THEME) )
+        {
+            qtFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+        }
+        else if ( HasFlag(wxBORDER_RAISED) )
+        {
+            qtFrame->setFrameStyle(QFrame::Panel | QFrame::Raised);
+        }
+        else if ( HasFlag(wxBORDER_SUNKEN) )
+        {
+            qtFrame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        }
+    }
+}
+
 bool wxWindowQt::SetBackgroundStyle(wxBackgroundStyle style)
 {
     if (!wxWindowBase::SetBackgroundStyle(style))
@@ -1483,30 +1419,15 @@ bool wxWindowQt::SetTransparent(wxByte alpha)
 }
 
 
-namespace
-{
-
-void wxQtChangeRoleColour(QPalette::ColorRole role,
-                          QWidget* widget,
-                          const wxColour& colour)
-{
-    QPalette palette = widget->palette();
-    palette.setColor(role, colour.GetQColor());
-    widget->setPalette(palette);
-}
-
-} // anonymous namespace
-
 bool wxWindowQt::SetBackgroundColour(const wxColour& colour)
 {
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
-    if ( colour.IsOk() )
-    {
-        QWidget *widget = QtGetParentWidget();
+    // Note that this function may be called before the window is created.
+    QWidget *widget = QtGetParentWidget();
+    if ( widget && colour.IsOk() )
         wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
-    }
 
     return true;
 }
@@ -1516,12 +1437,27 @@ bool wxWindowQt::SetForegroundColour(const wxColour& colour)
     if (!wxWindowBase::SetForegroundColour(colour))
         return false;
 
-    // Before Create(), only the base-class state exists. PostCreation()
-    // applies it once the native widget is available.
-    if ( QWidget* const widget = QtGetParentWidget() )
+    // Note that this function may be called before the window is created.
+    QWidget *widget = QtGetParentWidget();
+    if ( widget )
         wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
 
     return true;
+}
+
+wxVisualAttributes wxWindowQt::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = wxWindowBase::GetDefaultAttributes();
+
+    // Use the colours of the native widget, if it already exists.
+    if ( const QWidget* const widget = GetHandle() )
+    {
+        const QPalette& palette = widget->palette();
+        attrs.colFg = wxColour(palette.windowText().color());
+        attrs.colBg = wxColour(palette.window().color());
+    }
+
+    return attrs;
 }
 
 void wxWindowQt::SetDoubleBuffered(bool on)
@@ -1624,7 +1560,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                             break;
                         }
                         // Ensure DC is cleared if handler didn't and Qt will not do it
-                        if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                        if ( !GetHandle()->autoFillBackground() )
                         {
                             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
                                        GetName(), GetBackgroundColour().GetAsString()
@@ -1695,15 +1631,31 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QPoint qPt = event->position().toPoint();
-    wxMouseWheelAxis wheelAxis = event->angleDelta().y() > 0
-                               ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
-    int wheelRotation = wheelAxis == wxMOUSE_WHEEL_VERTICAL
-                      ? (event->angleDelta().y() / 8) : (event->angleDelta().x() / 8);
+
+    // Note that angleDelta() uses the same units as wxMouseEvent, i.e. 1/8 of
+    // degree, so we don't need to scale it, but positive horizontal values
+    // mean scrolling to the left in Qt, while they mean scrolling to the right
+    // in wx, so we do need to negate them.
+    const QPoint angleDelta = event->angleDelta();
+    wxMouseWheelAxis wheelAxis;
+    int wheelRotation;
+    if ( angleDelta.y() != 0 || angleDelta.x() == 0 )
+    {
+        wheelAxis = wxMOUSE_WHEEL_VERTICAL;
+        wheelRotation = angleDelta.y();
+    }
+    else
+    {
+        wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+        wheelRotation = -angleDelta.x();
+    }
 #else
     QPoint qPt = event->pos();
     wxMouseWheelAxis wheelAxis = event->orientation() == Qt::Vertical
                                ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
     int wheelRotation = event->delta();
+    if ( wheelAxis == wxMOUSE_WHEEL_HORIZONTAL )
+        wheelRotation = -wheelRotation;
 #endif
     e.m_synthesized = event->source() != Qt::MouseEventSource::MouseEventNotSynthesized;
     e.SetPosition( wxQtConvertPoint( qPt ) );
@@ -1718,31 +1670,9 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
 }
 
 
-bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
+void wxWindowQt::QtFillKeyEvent( wxKeyEvent& e, const QKeyEvent *event ) const
 {
-    // qt sends keyup and keydown events for autorepeat, but this is not
-    // normal for wx which only sends repeated keydown events
-    // discard repeated keyup events
-    if ( event->isAutoRepeat() && event->type() == QEvent::KeyRelease )
-        return true;
-
-#if wxUSE_ACCEL
-    if ( m_processingShortcut )
-    {
-        /* Enter here when a shortcut isn't handled by Qt.
-         * Return true to avoid Qt-processing of the event
-         * Instead, use the flag to indicate that it wasn't processed */
-        m_processingShortcut = false;
-
-        return true;
-    }
-#endif // wxUSE_ACCEL
-
-    bool handled = false;
-
-    // Build the event
-    wxKeyEvent e( event->type() == QEvent::KeyPress ? wxEVT_KEY_DOWN : wxEVT_KEY_UP );
-    e.SetEventObject(this);
+    e.SetEventObject(const_cast<wxWindowQt*>(this));
     // TODO: m_x, m_y
     e.m_keyCode = wxQtConvertKeyCode( event->key(), event->modifiers() );
 
@@ -1757,32 +1687,50 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 
     // Modifiers
     wxQtFillKeyboardModifiers( event->modifiers(), &e );
+}
+
+#if wxUSE_ACCEL
+
+wxWindowQt::AcceleratorVerdict
+wxWindowQt::QtShouldUseAccelerator ( QKeyEvent *event )
+{
+    wxKeyEvent e( wxEVT_KEY_DOWN );
+    QtFillKeyEvent( e, event );
+
+    wxAcceleratorEntry entry;
+    if ( !FindAcceleratorForKey(e, entry, nullptr) )
+    {
+        // This key is not used by any accelerator anyhow.
+        return AcceleratorVerdict::Nothing;
+    }
+
+    if ( ShouldUseAcceleratorForKey(e, entry.GetCommand(), entry.GetMenuItem()) )
+        return AcceleratorVerdict::Accel;
+
+    return AcceleratorVerdict::Window;
+}
+
+#endif // wxUSE_ACCEL
+
+bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
+{
+    // qt sends keyup and keydown events for autorepeat, but this is not
+    // normal for wx which only sends repeated keydown events
+    // discard repeated keyup events
+    if ( event->isAutoRepeat() && event->type() == QEvent::KeyRelease )
+        return true;
+
+    bool handled = false;
+
+    // Build the event
+    wxKeyEvent e( event->type() == QEvent::KeyPress ? wxEVT_KEY_DOWN : wxEVT_KEY_UP );
+    QtFillKeyEvent( e, event );
 
     handled = ProcessWindowEvent( e );
 
     // On key presses, send the EVT_CHAR event
     if ( !handled && event->type() == QEvent::KeyPress )
     {
-#if wxUSE_ACCEL
-        // Check for accelerators
-        if ( !m_processingShortcut )
-        {
-            /* The call to notify() will try to execute a shortcut. If it fails
-             * it will call keyPressEvent() in our wxQtWidget which calls back
-             * to this function. We use the m_processingShortcut flag to avoid
-             * processing that recursive call and return back to this one. */
-            m_processingShortcut = true;
-
-            QApplication::instance()->notify( GetHandle(), event );
-
-            handled = m_processingShortcut;
-            m_processingShortcut = false;
-
-            if ( handled )
-                return true;
-        }
-#endif // wxUSE_ACCEL
-
         // For compatibility with wxMSW, don't generate wxEVT_CHAR event for
         // the following keys: SHIFT, CONTROL, MENU, CAPITAL, NUMLOCK and SCROLL.
         switch ( event->key() )

@@ -487,9 +487,6 @@ GripperProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
 
 void wxDialog::Init()
 {
-    m_isShown = false;
-    m_modalData = nullptr;
-    m_hGripper = 0;
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -557,6 +554,9 @@ bool wxDialog::Show(bool show)
         // which will change the controls values so do it before showing as
         // otherwise we could have some flicker
         InitDialog();
+
+        // Don't show the dialog if EndModal() has been called from InitDialog()
+        show = GetReturnCode() == 0;
     }
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -694,33 +694,58 @@ int wxDialog::WinUIShowModalWithoutHook()
                 }
             });
 #endif
+
+    // Reset the return code to avoid it being interpreted as an indication that
+    // EndModal() was called from InitDialog() when Show() is called below.
+    // Otherwise, subsequent calls to ShowModal() on the same wxDialog object
+    // would fail to show the dialog again.
+    SetReturnCode(0);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The dialog is modal before it is shown: what shows it in this port
+    // (the card of the in-window presentation, the veil over its owner) is
+    // decided from the owner being disabled, which the modal data does.
     wxDialogModalDataTiedPtr modalData(&m_modalData,
                                        new wxDialogModalData(this));
-#if defined(__WXWINUI__) && wxUSE_WINUI3
+
     // Busy cursors deliberately do not cover an active modal dialog. Update
     // its island at the exact transition instead of waiting for pointer input.
     wxWinUINotifyModalCursorChanged();
-#endif
 
+    Show();
+
+    // EndModal may have been called from InitDialog handler (called from
+    // inside Show()), which then didn't show the dialog: there is no loop to
+    // run, nor to end -- ending a loop which never ran is an error.
+    if ( IsShown() )
+        modalData->RunLoop();
+#else // !wxWinUI
     Show();
 
     // EndModal may have been called from InitDialog handler (called from
     // inside Show()) and hidden the dialog back again
     if ( IsShown() )
+    {
+        wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                           new wxDialogModalData(this));
+
         modalData->RunLoop();
-    else
-        m_modalData->ExitLoop();
+    }
+#endif // wxWinUI/!wxWinUI
 
     return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-    wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
-
     SetReturnCode(retCode);
 
-    Hide();
+    if ( IsShown() )
+    {
+        wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
+
+        Hide();
+    }
 }
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3

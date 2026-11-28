@@ -12,8 +12,6 @@
 
 #include "wx/button.h"      // for wxStdButtonInputHandler
 
-class WXDLLIMPEXP_FWD_CORE wxToolBarTool;
-
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -129,6 +127,63 @@ private:
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
+};
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool: our implementation of wxToolBarToolBase
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxString& label,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
+                  wxItemKind kind,
+                  wxObject *clientData,
+                  const wxString& shortHelp,
+                  const wxString& longHelp)
+        : wxToolBarToolBase(tbar, id, label, bmpNormal, bmpDisabled, kind,
+                            clientData, shortHelp, longHelp)
+    {
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
+        : wxToolBarToolBase(tbar, control, label)
+    {
+    }
+
+private:
+    // is this tool pressed, even temporarily? (this is different from being
+    // permanently toggled which is what IsToggled() returns)
+    bool IsPressed() const
+        { return CanBeToggled() ? IsToggled() != m_isInverted : m_isInverted; }
+
+    // are we temporarily pressed/unpressed?
+    bool IsInverted() const { return m_isInverted; }
+
+    // press the tool temporarily by inverting its toggle state
+    void Invert() { m_isInverted = !m_isInverted; }
+
+    // Set underMouse
+    void SetUnderMouse( bool under = true ) { m_underMouse = under; }
+    bool IsUnderMouse() { return m_underMouse; }
+
+    // the tool position (for controls)
+    wxCoord m_x = wxDefaultCoord;
+    wxCoord m_y = wxDefaultCoord;
+    wxCoord m_width = 0;
+    wxCoord m_height = 0;
+
+    // true if the tool is pressed
+    bool m_isInverted = false;
+
+    // true if the tool is under the mouse
+    bool m_underMouse = false;
+
+    friend class wxToolBar;
 };
 
 #endif // _WX_UNIV_TOOLBAR_H_

@@ -72,7 +72,7 @@ public:
 
     wxWindowMode GetModality() const override;
 
-#if wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA_OR_IPHONE
     virtual void ModalFinishedCallback(void* WXUNUSED(panel), int WXUNUSED(returnCode)) {}
 #endif
 

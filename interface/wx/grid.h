@@ -660,6 +660,21 @@ public:
     virtual void Reset() = 0;
 
     /**
+        Returns @true if the editor accepts text input, i.e.\ if it is a text
+        control or similar.
+
+        This is used to determine whether IME should be enabled for it.
+
+        The default implementation returns @true for compatibility, the derived
+        classes which don't accept text input should override it to return
+        @false to avoid showing IME unnecessarily for the cells using the
+        editor.
+
+        @since 3.4.0
+     */
+    virtual bool AcceptsTextInput() const;
+
+    /**
         Size and position the edit control.
     */
     virtual void SetSize(const wxRect& rect);
@@ -688,6 +703,9 @@ public:
 
        If the key is F2 (special), editing will always start and this
        method will not be called at all (but StartingKey() will)
+
+       Note that this function must not change the editor contents: this should
+       be only done in StartingKey() which will be called later.
     */
     virtual bool IsAcceptedKey(wxKeyEvent& event);
 
@@ -1582,6 +1600,55 @@ public:
                            int horizAlign,
                            int vertAlign,
                            int textOrientation) const;
+
+    /**
+        Flags for DrawHighlighted().
+
+        @since 3.3.0
+     */
+    enum DrawFlags
+    {
+        /// Draw the header as if it was pressed, e.g. while it is being dragged.
+        Draw_Pressed = 1
+    };
+
+    /**
+        Called by the grid to draw a highlighted header cell.
+
+        The grid calls this method instead of DrawBorder() for the header cells
+        it highlights. This happens only if the grid uses the overlay selection
+        (see wxGrid::UsesOverlaySelection()) and the highlighted cells are those
+        of the rows or columns spanned by the selection, if it is a single
+        block, or of the row or column of the current cell if there is no
+        selection. Like DrawBorder(), this method is responsible for drawing the
+        border inside the given @a rect and for adjusting the rectangle to the
+        area inside the border. DrawLabel() is called after it.
+
+        The default implementation of this class does nothing, so a renderer
+        that doesn't override it draws no border for highlighted header cells.
+        The default renderers, e.g. wxGridColumnHeaderRendererDefault, draw the
+        highlighted appearance.
+
+        @param grid
+            The grid whose header cell window is being drawn.
+        @param dc
+            The device context to use for drawing.
+        @param rect
+            Input/output parameter which contains the border rectangle on input
+            and should be updated to contain the area inside the border on
+            function return.
+        @param rowOrCol
+            The index of the row or column being drawn.
+        @param flags
+            Combination of DrawFlags values.
+
+        @since 3.3.0
+     */
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int rowOrCol,
+                                 int flags = 0) const;
 };
 
 /**
@@ -1836,7 +1903,30 @@ public:
     A message object of this class must be sent to the grid using
     wxGrid::ProcessTableMessage() every time the table changes, e.g. rows are
     added/deleted. The messages are just notifications and don't result in any
-    actual changes but just allow the view to react to changes to the model.
+    changes to the table data, but allow the view to react to changes to the
+    model.
+
+    The table must be updated before sending the notification. For example, a
+    custom wxGridTableBase::InsertRows() implementation should first insert the
+    rows into its own data storage and only then notify the grid:
+
+    @code
+    bool MyTable::InsertRows(size_t pos, size_t numRows)
+    {
+        DoInsertRowsInDataModel(pos, numRows);
+
+        if ( GetView() )
+        {
+            GetView()->ProcessTableMessage(
+                this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, pos, numRows);
+        }
+
+        return true;
+    }
+    @endcode
+
+    The same rule applies to the other row and column modification messages:
+    update the table first, then notify the grid.
 */
 class wxGridTableMessage
 {
@@ -1847,14 +1937,14 @@ public:
     wxGridTableMessage();
 
     /**
-        Constructor really initialize the message.
+        Constructor initializes the message.
 
         @param table Pointer to the grid table
         @param id One of wxGridTableRequest enum elements.
-        @param comInt1 For the insert/delete messages, position after which the
+        @param comInt1 For the insert/delete messages, position at which the
             rows or columns are inserted/deleted. For the append messages, the
             number of rows or columns that were appended.
-        @param comInt2 For the insert/deleted messages, number of rows or
+        @param comInt2 For the insert/delete messages, number of rows or
             columns to be inserted/deleted. For the append messages, this
             parameter is not used.
     */
@@ -1881,12 +1971,12 @@ public:
     int GetId() const;
 
     /**
-        Set the position after which the insertion/deletion occur
+        Set the position at which the insertion/deletion occurs.
     */
     void SetCommandInt( int comInt1 );
 
     /**
-        Get the position after which the insertion/deletion occur
+        Get the position at which the insertion/deletion occurs.
     */
     int GetCommandInt() const;
 
@@ -1907,7 +1997,10 @@ public:
     stored in memory.
 
     The number of rows and columns in the table can be specified initially but
-    may also be changed later dynamically.
+    may also be changed later dynamically. Its InsertRows(), AppendRows(),
+    DeleteRows(), InsertCols(), AppendCols(), and DeleteCols() functions update
+    the table storage and also send the appropriate wxGridTableMessage to the
+    associated grid, if any.
  */
 class wxGridStringTable : public wxGridTableBase
 {
@@ -5033,7 +5126,7 @@ public:
         there is a cell at the right and, similarly, Shift-TAB moves the cursor
         to the left in the current row if it's not in the first column.
 
-        What happens if the cursor can't be moved because it it's already at
+        What happens if the cursor can't be moved because it's already at
         the beginning or end of the row can be configured using this function,
         see wxGrid::TabBehaviour documentation for the detailed description.
 
@@ -6301,6 +6394,8 @@ public:
     wxColour GetCellHighlightColour() const;
     int      GetCellHighlightPenWidth() const;
     int      GetCellHighlightROPenWidth() const;
+    wxColour GetGridFrozenBorderColour() const;
+    int      GetGridFrozenBorderPenWidth() const;
 
     void SetCellHighlightColour( const wxColour& );
     void SetCellHighlightPenWidth(int width);

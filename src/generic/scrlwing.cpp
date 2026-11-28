@@ -535,13 +535,13 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 
     if (orient == wxHORIZONTAL)
     {
-        oldPos = GetViewStartPixels().x;
+        DoGetViewStartPixels(&oldPos, nullptr);
         // reset to 0 assuming scrolling by scrollbar or mouse wheel
         m_xScrollPositionPixelOffset = 0;
     }
     else
     {
-        oldPos = GetViewStartPixels().y;
+        DoGetViewStartPixels(nullptr, &oldPos);
         // reset to 0 assuming scrolling by scrollbar or mouse wheel
         m_yScrollPositionPixelOffset = 0;
     }
@@ -1615,29 +1615,55 @@ void wxScrollHelper::DoScroll( int x_pos, int y_pos )
     if ( new_x == m_xScrollPosition && new_y == m_yScrollPosition )
         return; // nothing to do, the position didn't change
 
+    const bool scrollX = m_xScrollPosition != new_x;
+    const bool scrollY = m_yScrollPosition != new_y;
+    const bool scrollWindow =
+        (scrollX && m_xScrollingEnabled) ||
+        (scrollY && m_yScrollingEnabled);
+
     // flush all pending repaints before we change m_{x,y}ScrollPosition, as
     // otherwise invalidated area could be updated incorrectly later when
     // ScrollWindow() makes sure they're repainted before scrolling them
-    m_targetWindow->Update();
+    if ( scrollWindow )
+        m_targetWindow->Update();
+
+    bool needsRefresh = false;
 
     // update the position and scroll the window now:
-    if (m_xScrollPosition != new_x)
+    if ( scrollX )
     {
         int old_x = m_xScrollPosition;
         m_xScrollPosition = new_x;
         m_win->SetScrollPos( wxHORIZONTAL, new_x );
-        m_targetWindow->ScrollWindow( (old_x-new_x)*m_xScrollPixelsPerLine, 0,
-                                      GetScrollRect() );
+        if ( m_xScrollingEnabled )
+        {
+            m_targetWindow->ScrollWindow( (old_x-new_x)*m_xScrollPixelsPerLine, 0,
+                                          GetScrollRect() );
+        }
+        else
+        {
+            needsRefresh = true;
+        }
     }
 
-    if (m_yScrollPosition != new_y)
+    if ( scrollY )
     {
         int old_y = m_yScrollPosition;
         m_yScrollPosition = new_y;
         m_win->SetScrollPos( wxVERTICAL, new_y );
-        m_targetWindow->ScrollWindow( 0, (old_y-new_y)*m_yScrollPixelsPerLine,
-                                      GetScrollRect() );
+        if ( m_yScrollingEnabled )
+        {
+            m_targetWindow->ScrollWindow( 0, (old_y-new_y)*m_yScrollPixelsPerLine,
+                                          GetScrollRect() );
+        }
+        else
+        {
+            needsRefresh = true;
+        }
     }
+
+    if ( needsRefresh )
+        m_targetWindow->Refresh(true, GetScrollRect());
 }
 
 #endif // wxHAS_GENERIC_SCROLLWIN

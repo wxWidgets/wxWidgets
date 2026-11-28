@@ -125,6 +125,12 @@ public:
         necessarily the total width of the control, since a few pixels for the
         border (depending on the controls border style) may be added.
 
+        Notice that currently this function doesn't support markup in the
+        label. If it is called after wxControl::SetLabelMarkup(), the markup is
+        stripped and only the resulting text is wrapped, so any formatting set
+        by SetLabelMarkup() is lost. This limitation may be removed in the
+        future.
+
         @since 2.6.2
     */
     void Wrap(int width);

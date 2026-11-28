@@ -125,6 +125,26 @@ public:
     wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id);
 
     /**
+        Add an item to the gallery with a label.
+
+        The label is not shown in the gallery itself, but it is used as the
+        accessible name of the item, allowing the screen readers to announce it,
+        so it is recommended to specify it for all the items.
+
+        @param bitmap
+            The bitmap to display for the item. Note that all items must
+            have equally sized bitmaps.
+        @param id
+            ID number to associate with the item. Not currently used for
+            anything important.
+        @param label
+            The label of the item.
+
+        @since 3.3.4
+    */
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, const wxString& label);
+
+    /**
         Add an item to the gallery (with simple client data).
         @param bitmap
             The bitmap to display for the item. Note that all items must
@@ -152,6 +172,22 @@ public:
             destroyed.
     */
     wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, wxClientData* clientData);
+
+    /**
+        Set the label of a gallery item.
+
+        See Append() for the description of the label.
+
+        @since 3.3.4
+    */
+    void SetItemLabel(wxRibbonGalleryItem* item, const wxString& label);
+
+    /**
+        Return the label of a gallery item.
+
+        @since 3.3.4
+    */
+    wxString GetItemLabel(const wxRibbonGalleryItem* item) const;
 
     /**
         Set the client object associated with a gallery item.
@@ -206,16 +242,25 @@ public:
 
     /**
         Get the state of the scroll up button.
+
+        Since wxWidgets 3.3.5, this is always @c wxRIBBON_GALLERY_BUTTON_DISABLED
+        if the gallery is disabled.
     */
     wxRibbonGalleryButtonState GetUpButtonState() const;
 
     /**
         Get the state of the scroll down button.
+
+        Since wxWidgets 3.3.5, this is always @c wxRIBBON_GALLERY_BUTTON_DISABLED
+        if the gallery is disabled.
     */
     wxRibbonGalleryButtonState GetDownButtonState() const;
 
     /**
         Get the state of the "extension" button.
+
+        Since wxWidgets 3.3.5, this is always @c wxRIBBON_GALLERY_BUTTON_DISABLED
+        if the gallery is disabled.
     */
     wxRibbonGalleryButtonState GetExtensionButtonState() const;
 
@@ -255,6 +300,28 @@ public:
         Scroll the gallery to ensure that the given item is visible.
     */
     void EnsureVisible(const wxRibbonGalleryItem* item);
+
+    /**
+        Assigns the KeyTip used to reach this gallery.
+
+        The gallery is one KeyTip target as a whole, its items don't get their
+        own. Activating it gives the gallery focus, so that the arrow keys and
+        Enter can then be used to pick an item.
+
+        Pass an empty string to remove it. The KeyTip is stored upper-cased.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetKeyTip(const wxString& keytip);
+
+    /**
+        Returns the KeyTip of this gallery, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip() const;
 };
 
 /**

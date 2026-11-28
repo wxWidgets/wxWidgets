@@ -22,6 +22,9 @@
 
 #include "bombs.h"
 
+#define wxGREY   wxStockGDI::GetColour(wxStockGDI::COLOUR_GREY)
+#define wxBLACK  wxStockGDI::GetColour(wxStockGDI::COLOUR_BLACK)
+
 // Draws the field on the device context dc
 // xc1,yc1 etc. are the (inclusive) limits of the area to be drawn,
 // expressed in cells.
@@ -29,8 +32,9 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 {
     wxString buf;
     wxCoord chw, chh;
+    const bool isDark = wxSystemSettings::GetAppearance().IsDark();
 
-    dc->SetPen(*wxBLACK_PEN);
+    dc->SetPen( isDark ? *wxWHITE_PEN : *wxBLACK_PEN );
 
     int x, y;
     int xMax = this->GetGridSizeInPixels().GetWidth();
@@ -48,22 +52,22 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
         {
             if (m_game->IsMarked(x,y))
             {
-                dc->SetPen(*wxBLACK_PEN);
+                dc->SetPen( isDark ? *wxWHITE_PEN : *wxBLACK_PEN );
 
                 if (m_game->IsFocussed(x, y))
                     dc->SetBrush(*wxMEDIUM_GREY_BRUSH);
                 else
-                    dc->SetBrush(*wxLIGHT_GREY_BRUSH);
+                    dc->SetBrush( isDark ? *wxGREY_BRUSH : *wxLIGHT_GREY_BRUSH );
 
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
                 buf = wxT("M");
                 if (!m_game->IsHidden(x,y) && m_game->IsBomb(x,y))
-                    dc->SetTextForeground(*wxBLUE);
+                    dc->SetTextForeground( isDark ? *wxCYAN : *wxBLUE );
                 else
-                    dc->SetTextForeground(*wxRED);
+                    dc->SetTextForeground( isDark ? *wxCYAN : *wxRED );
 
-                dc->SetTextBackground(*wxLIGHT_GREY);
+                dc->SetTextBackground( isDark ? *wxGREY : *wxLIGHT_GREY );
                 dc->GetTextExtent(buf, &chw, &chh);
                 dc->DrawText( buf,
                     x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
@@ -71,7 +75,7 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 
                 if (!m_game->IsHidden(x,y) && m_game->IsBomb(x,y))
                 {
-                    dc->SetPen(*wxRED_PEN);
+                    dc->SetPen( isDark ? *wxCYAN_PEN : *wxRED_PEN );
                     dc->DrawLine(x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                         (x+1)*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT);
                     dc->DrawLine(x*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT,
@@ -80,31 +84,31 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             }
             else if (m_game->IsHidden(x,y))
             {
-                dc->SetPen(*wxBLACK_PEN);
+                dc->SetPen( isDark ? *wxWHITE_PEN : *wxBLACK_PEN );
                 if (m_game->IsFocussed(x, y))
                     dc->SetBrush(*wxMEDIUM_GREY_BRUSH);
                 else
-                    dc->SetBrush(*wxLIGHT_GREY_BRUSH);
+                    dc->SetBrush( isDark ? *wxGREY_BRUSH : *wxLIGHT_GREY_BRUSH );
 
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
             }
             else if (m_game->IsBomb(x,y))
             {
-                dc->SetPen(*wxBLACK_PEN);
-                dc->SetBrush(*wxRED_BRUSH);
+                dc->SetPen( isDark ? *wxWHITE_PEN : *wxBLACK_PEN );
+                dc->SetBrush( isDark ? *wxCYAN_BRUSH : *wxRED_BRUSH );
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
                 buf = wxT("B");
-                dc->SetTextForeground(*wxBLACK);
-                dc->SetTextBackground(*wxRED);
+                dc->SetTextForeground( *wxBLACK );
+                dc->SetTextBackground( isDark ? *wxCYAN : *wxRED );
                 dc->GetTextExtent(buf, &chw, &chh);
                 dc->DrawText( buf,
                     x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
                     y*m_cellHeight*Y_UNIT + (m_cellHeight*Y_UNIT-chh)/2);
                 if (m_game->IsExploded(x,y))
                 {
-                    dc->SetPen(*wxBLUE_PEN);
+                    dc->SetPen( *wxBLUE_PEN );
                     dc->DrawLine(x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                         (x+1)*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT);
                     dc->DrawLine(x*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT,
@@ -113,13 +117,13 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             }
             else   // Display a digit
             {
-                dc->SetPen(*wxBLACK_PEN);
+                dc->SetPen( isDark ? *wxWHITE_PEN : *wxBLACK_PEN );
                 if (m_game->IsFocussed(x, y))
                     dc->SetBrush(*wxMEDIUM_GREY_BRUSH);
                 else if (m_game->IsSelected(x,y))
-                    dc->SetBrush(*wxWHITE_BRUSH);
+                    dc->SetBrush( isDark ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
                 else
-                    dc->SetBrush(*wxYELLOW_BRUSH);
+                    dc->SetBrush( isDark ? *wxBLUE_BRUSH : *wxYELLOW_BRUSH );
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
 
@@ -132,20 +136,21 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
                     break;
                 case 1:
                     buf = wxT("1");
-                    dc->SetTextForeground(*wxBLUE);
+                    dc->SetTextForeground( isDark ? *wxYELLOW : *wxBLUE );
                     break;
                 default:
                     buf.Printf(wxT("%d"),digit_value);
-                    dc->SetTextForeground(*wxBLACK);
+                    dc->SetTextForeground( isDark ? *wxWHITE : *wxBLACK );
                     break;
+                }
+                dc->GetTextExtent(buf, &chw, &chh);
+                dc->SetTextBackground( isDark ? *wxBLACK : *wxWHITE );
+                dc->DrawText( buf,
+                    x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
+                    y*m_cellHeight*Y_UNIT + (m_cellHeight*Y_UNIT-chh)/2);
             }
-            dc->GetTextExtent(buf, &chw, &chh);
-            dc->SetTextBackground(*wxWHITE);
-            dc->DrawText( buf,
-                x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
-                y*m_cellHeight*Y_UNIT + (m_cellHeight*Y_UNIT-chh)/2);
         }
-    }
+
     dc->SetFont(wxNullFont);
 
     wxString msg;

@@ -42,6 +42,10 @@
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
+#if wxUSE_ACCESSIBILITY
+    #include "wx/access.h"
+#endif // wxUSE_ACCESSIBILITY
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -131,7 +135,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWSetDarkOrLightMode(SetMode::Initial);
+        MSWSetDarkOrLightMode();
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
@@ -179,9 +183,9 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     return true;
 }
 
-void wxControl::MSWSetDarkOrLightMode(SetMode setmode)
+void wxControl::MSWSetDarkOrLightMode()
 {
-    wxControlBase::MSWSetDarkOrLightMode(setmode);
+    wxControlBase::MSWSetDarkOrLightMode();
 
     if ( const int msgTT = MSWGetToolTipMessage() )
     {
@@ -417,6 +421,27 @@ bool wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn() const
         (::GetWindowLong(GetHwndOf(m_win), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
 }
 
+void wxMSWOwnerDrawnButtonBase::MSWSetCheck(int state)
+{
+    if ( !MSWIsOwnerDrawn() )
+    {
+        ::SendMessage(GetHwndOf(m_win), BM_SETCHECK, state, 0);
+        return;
+    }
+
+    // Owner drawn buttons don't react to BM_SETCHECK, so we need to redraw
+    // them ourselves to show the new state.
+    m_win->Refresh();
+
+#if wxUSE_ACCESSIBILITY
+    // Native buttons also notify the accessibility clients, such as screen
+    // readers, about the state change when they get BM_SETCHECK, so we need
+    // to do it ourselves too.
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, m_win,
+                              wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
+}
+
 void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
 {
     wxMSWWinStyleUpdater updateStyle(GetHwndOf(m_win));
@@ -599,11 +624,19 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
     {
         RECT oldLabelRect = rectLabel; // needed if right aligned
 
-        if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel,
+        // If the label is empty, use a space character to avoid a focus
+        // rectangle size 0x0.
+        auto s = label.empty() ? wxString(" ") : label;
+        if ( !::DrawText(hdc, s.t_str(), s.length(), &rectLabel,
                          fmt | DT_CALCRECT) )
         {
             wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
         }
+
+        // For empty label, mimic the native control by extending to the
+        // client width.
+        if ( label.empty() )
+            rectLabel.right = dis->rcItem.right - 1;
 
         if ( isRightAligned )
         {

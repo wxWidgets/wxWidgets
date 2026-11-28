@@ -1330,9 +1330,9 @@ enum wxKeyCategoryFlags
     This event class contains information about key press and release events.
 
     The main information carried by this event is the key being pressed or
-    released. It can be accessed using one of GetUnicodeKey(), GetKeyCode()
+    released. It can be accessed using one of GetUnicodeChar(), GetKeyCode()
     or GetRawKeyCode() functions.
-    For the printable characters, GetUnicodeKey() should be used as it works
+    For the printable characters, GetUnicodeChar() should be used as it works
     for any keys, including non-Latin-1 characters that can be entered when
     using national keyboard layouts. GetKeyCode() should be used to handle
     special characters (such as cursor arrows keys or @c HOME or @c INS and so
@@ -1340,11 +1340,11 @@ enum wxKeyCategoryFlags
     constant. While GetKeyCode() also returns the character code for Latin-1
     keys for compatibility, it doesn't work for Unicode characters in general
     and will return @c WXK_NONE for any non-Latin-1 ones.
-    If both GetUnicodeKey() and GetKeyCode() return @c WXK_NONE then the key
+    If both GetUnicodeChar() and GetKeyCode() return @c WXK_NONE then the key
     has no @c WXK_xxx mapping and GetRawKeyCode() can be used to distinguish
     between keys, but raw key codes are platform specific.
-    For these reasons, it is recommended to always use GetUnicodeKey() and
-    only fall back to GetKeyCode() if GetUnicodeKey() returned @c WXK_NONE,
+    For these reasons, it is recommended to always use GetUnicodeChar() and
+    only fall back to GetKeyCode() if GetUnicodeChar() returned @c WXK_NONE,
     meaning that the event corresponds to a non-printable special keys, then
     optionally check GetRawKeyCode() if GetKeyCode() also returned @c WXK_NONE
     or simply ignore that key.
@@ -1357,7 +1357,7 @@ enum wxKeyCategoryFlags
     value depends on the current state of the Shift key and, for the letters,
     on the state of Caps Lock modifier. For example, if @c A key is pressed
     without Shift being held down, wxKeyEvent of type @c wxEVT_CHAR generated
-    for this key press will return (from either GetKeyCode() or GetUnicodeKey()
+    for this key press will return (from either GetKeyCode() or GetUnicodeChar()
     as their meanings coincide for ASCII characters) key code of 97
     corresponding the ASCII value of @c a. And if the same key is pressed but
     with Shift being held (or Caps Lock being active), then the key could would
@@ -1509,7 +1509,10 @@ enum wxKeyCategoryFlags
         event is not generated when the mouse is captured as it is considered
         that the window which has the capture should receive all the keyboard
         events too without allowing its parent wxTopLevelWindow to interfere
-        with their processing.
+        with their processing.<br/>
+        Note that if the key is used by an accelerator, wxAcceleratorKeyEvent
+        is generated after this event, but before @c wxEVT_KEY_DOWN, and can be
+        used to decide whether the key should trigger the accelerator or not.
     @endEventTable
 
     @see wxKeyboardState
@@ -1539,17 +1542,17 @@ public:
         non-alphanumeric keys or if the user entered a Latin-1 character (this
         includes ASCII and the accented letters found in Western European
         languages but not letters of other alphabets such as e.g. Cyrillic).
-        Otherwise it simply method returns @c WXK_NONE and GetUnicodeKey()
+        Otherwise it simply method returns @c WXK_NONE and GetUnicodeChar()
         should be used to obtain the corresponding Unicode character.
 
-        Using GetUnicodeKey() is in general the right thing to do if you are
+        Using GetUnicodeChar() is in general the right thing to do if you are
         interested in the characters typed by the user, GetKeyCode() should be
-        only used for special keys (for which GetUnicodeKey() returns @c
+        only used for special keys (for which GetUnicodeChar() returns @c
         WXK_NONE). To handle both kinds of keys you might write:
         @code
             void MyHandler::OnChar(wxKeyEvent& event)
             {
-                wxChar uc = event.GetUnicodeKey();
+                wxUniChar uc = event.GetUnicodeChar();
                 if ( uc != WXK_NONE )
                 {
                     // It's a "normal" character. Notice that this includes
@@ -1664,6 +1667,22 @@ public:
         If the key pressed doesn't have any character value (e.g. a cursor key)
         this method will return @c WXK_NONE. In this case you should use
         GetKeyCode() to retrieve the value of the key.
+
+        @since 3.3.4
+    */
+    wxUniChar GetUnicodeChar() const;
+
+    /**
+        Returns the Unicode character corresponding to this key event.
+
+        This function is similar to GetUnicodeChar(), but its return value
+        can't represent characters outside of the Unicode BMP (Basic
+        Multilingual Plane), such as emojis, on the platforms where
+        wxChar is 16 bits and so in wxMSW it returns @c WXK_NONE for such
+        characters.
+
+        Use GetUnicodeChar() to handle such characters correctly under all
+        platforms.
     */
     wxChar GetUnicodeKey() const;
 
@@ -1708,6 +1727,109 @@ public:
         @since 2.9.3
      */
     bool IsNextEventAllowed() const;
+};
+
+
+/**
+    @class wxAcceleratorKeyEvent
+
+    This event allows to change the default logic for determining whether a key
+    press should be processed as an accelerator or not.
+
+    It is generated when a key corresponding to an accelerator defined by the
+    application (either explicitly, in a wxAcceleratorTable associated with the
+    window using wxWindow::SetAcceleratorTable(), or implicitly, by specifying
+    it as part of a label of a wxMenuItem in the wxMenuBar associated with the
+    wxFrame containing this window) is pressed and allows to decide whether the
+    accelerator should be used or whether the key should be handled by the
+    window having the focus as if no accelerators using it were defined.
+
+    By default, the accelerator is used and the window doesn't receive any key
+    events for this key press. If a handler for this event is found and it
+    doesn't do anything and, in particular, doesn't call wxEvent::Skip(), the
+    accelerator is not used and the window having the focus receives the normal
+    key events for this key press. And if the handler calls UseAccelerator(),
+    the accelerator is used even if it wouldn't have been used by default
+    because the focused window would use the key corresponding to it for its
+    own needs, e.g. wxTextCtrl overrides wxWindow::ClaimsKeyBeforeAccelerator()
+    to use `Ctrl-C` for copying the selected text but handling this event and
+    calling UseAccelerator() allows the application to use this key combination
+    for some application-defined functionality:
+
+    @code
+    MyFrame::MyFrame()
+    {
+        // Ensure that pressing Ctrl-C anywhere in this window copies the
+        // selected data, even if the focus is in a text control inside it.
+        Bind(wxEVT_ACCELERATOR_KEY, [](wxAcceleratorKeyEvent& event) {
+            if ( event.GetCommand() == wxID_COPY )
+            {
+                event.UseAccelerator();
+                return;
+            }
+
+            event.Skip();
+        });
+    }
+    @endcode
+
+    Note that this event is only generated for the keys corresponding to the
+    accelerators defined by the application and not for all keys. It is sent to
+    the window having the focus after `wxEVT_CHAR_HOOK`, which still takes
+    priority over everything else, and, similarly to it, is propagated to all
+    the parents of this window, up to the top level one, which allows to handle
+    it in the frame containing the control having the focus.
+
+    @note Under macOS this event is sent before `wxEVT_CHAR_HOOK` and not after
+        it. It is also not generated at all for the key combinations
+        involving the Command key used by the menu items because such keys are
+        handled by the system before the application has any chance to
+        intercept them. This is not usually a problem because the standard
+        macOS shortcuts such as `Cmd-C` are implemented by the menu items
+        acting on the currently focused control anyhow.
+
+    @beginEventTable{wxAcceleratorKeyEvent}
+    @event{EVT_ACCELERATOR_KEY(func)}
+        Process a `wxEVT_ACCELERATOR_KEY` event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.3.4
+
+    @see wxKeyEvent, wxAcceleratorTable, wxWindow::ClaimsKeyBeforeAccelerator()
+*/
+class wxAcceleratorKeyEvent : public wxKeyEvent
+{
+public:
+    /**
+        Return the ID of the command which would be generated by the
+        accelerator.
+
+        For the accelerators coming from a menu item, this is the ID of this
+        item, otherwise it is the one of the corresponding wxAcceleratorEntry.
+     */
+    int GetCommand() const;
+
+    /**
+        Return the menu item using this accelerator.
+
+        This function returns @NULL if the accelerator doesn't come from a menu
+        item but from a wxAcceleratorTable.
+     */
+    wxMenuItem* GetMenuItem() const;
+
+    /**
+        Use the accelerator unconditionally.
+
+        Calling this function makes the accelerator work even for the keys
+        reserved by the focused window, such as the keys used for editing the
+        text in the text entry controls.
+
+        This only has an effect if the event is not skipped by the handler.
+     */
+    void UseAccelerator();
 };
 
 
@@ -4948,11 +5070,6 @@ public:
         hidden.
     */
     bool IsShown() const;
-
-    /**
-        @deprecated This function is deprecated in favour of IsShown().
-    */
-    bool GetShow() const;
 };
 
 

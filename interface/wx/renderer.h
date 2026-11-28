@@ -309,7 +309,7 @@ public:
     @library{wxcore}
     @category{gdi}
 */
-class wxRendererNative
+class wxRendererNative : public wxObject
 {
 public:
     /**

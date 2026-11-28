@@ -59,14 +59,16 @@ protected:
 
     virtual void DoYieldFor(long eventsToProcess) override;
 
-    void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
-    void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
+    void CommonModeObserverCallBack(CFRunLoopObserverRef observer, unsigned long activity);
+    void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, unsigned long activity);
 
     // set to false to avoid idling at unexpected moments - eg when having native message boxes
     void SetProcessIdleEvents(bool process) { m_processIdleEvents = process; }
 
-    static void OSXCommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info);
-    static void OSXDefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity, void *info);
+    // Those are used as CFRunLoopObserverCallBack and so must have the same
+    // signature, in particular use "unsigned long" for CFRunLoopActivity.
+    static void OSXCommonModeObserverCallBack(CFRunLoopObserverRef observer, unsigned long activity, void *info);
+    static void OSXDefaultModeObserverCallBack(CFRunLoopObserverRef observer, unsigned long activity, void *info);
 
     // get the currently executing CFRunLoop
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;

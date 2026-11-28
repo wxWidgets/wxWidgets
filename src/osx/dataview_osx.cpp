@@ -192,7 +192,6 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
 
 bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
 {
-  wxCHECK_MSG(item.IsOk(),             false,"Changed item is invalid.");
   wxCHECK_MSG(GetOwner() != nullptr,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
@@ -262,7 +261,6 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
 
 bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsigned int col)
 {
-  wxCHECK_MSG(item.IsOk(),             false,"Passed item is invalid.");
   wxCHECK_MSG(GetOwner() != nullptr,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {

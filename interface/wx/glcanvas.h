@@ -24,7 +24,7 @@
     // Some values
     cxtAttrs.CoreProfile().OGLVersion(5, 0); // OGL 5.0, whenever available
     cxtAttrs.PlatformDefaults();
-    // Values usually are platform-dependant named (even value assigned!)
+    // Values usually are platform-dependent named (even value assigned!)
     #if defined(__WXMSW__)
         cxtAttrs.AddAttribute(WGL_NEW_CTX_F);
         cxtAttrs.AddAttribBits(WGL_CONTEXT_PROFILE_MASK_ARB, WGL_NEW_BITS);
@@ -127,7 +127,7 @@ public:
     Notice that EndList() must be used as the last attribute. Not adding it will
     likely result in nothing displayed at all.
 
-    @note Not all of platform-dependant available attributes are implemented in
+    @note Not all of platform-dependent available attributes are implemented in
           wxWidgets. You can set other attributes by using AddAttribute() and
           AddAttribBits() functions inherited from the base wxGLAttribsBase class.
           While WGL_/GLX_/NS attributes can be added, PFD_ (for MSW) can not.

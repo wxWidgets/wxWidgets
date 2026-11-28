@@ -101,7 +101,7 @@ protected:
 
 private:
     friend class wxWinUIToolBarImpl;
-    friend class wxWinUIToolBarTool;
+    friend class wxToolBarTool;
     friend class wxWinUIToolBarTestAccess;
 
     // Makes the XAML elements again from the list of the tools: now, or
@@ -128,6 +128,36 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
     wxDECLARE_NO_COPY_CLASS(wxToolBar);
+};
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool: public in all ports, so that a tool can be created outside
+// of wxToolBar::CreateTool() and given to AddTool() or InsertTool().
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxString& label,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
+                  wxItemKind kind,
+                  wxObject *clientData,
+                  const wxString& shortHelp,
+                  const wxString& longHelp);
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label);
+
+    virtual ~wxToolBarTool();
+
+    // wxToolbook changes the label of the tool of a page this way.
+    virtual void SetLabel(const wxString& label) override;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif // wxUSE_TOOLBAR

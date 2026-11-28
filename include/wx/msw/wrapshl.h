@@ -12,20 +12,15 @@
 
 #include "wx/msw/wrapwin.h"
 
-#ifdef __VISUALC__
-    // Disable a warning that we can do nothing about: we get it for
-    // shlobj.h at least from 7.1a Windows kit when using VC14.
-    #pragma warning(push)
+// Disable a warning that we can do nothing about: we get it for
+// shlobj.h at least from 7.1a Windows kit when using VC14.
 
-    // 'typedef ': ignored on left of '' when no variable is declared
-    #pragma warning(disable:4091)
-#endif
+// 'typedef ': ignored on left of '' when no variable is declared
+wxMSVC_WARNING_SUPPRESS(4091)
 
 #include <shlobj.h>
 
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
+wxMSVC_WARNING_RESTORE(4091)
 
 #include "wx/msw/winundef.h"
 

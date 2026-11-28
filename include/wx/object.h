@@ -383,6 +383,14 @@ public:
     // check if this object references the same data as the other one
     bool IsSameAs(const wxObject& o) const { return m_refData == o.m_refData; }
 
+    // This function is used internally by wxWidgets to allow adding the
+    // equivalent of new virtual functions without breaking ABI, see
+    // wx/private/extensionhook.h, and is not part of the public API.
+    //
+    // It returns true if the hook with the given id was handled. If it is
+    // overridden, the base class version must be called for all unknown ids.
+    virtual bool WXExtensionHook(int id, void* data);
+
 #if !wxUSE_EXTENDED_RTTI
     virtual wxClassInfo* GetClassInfo() const;
 

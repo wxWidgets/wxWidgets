@@ -34,15 +34,9 @@ public:
         { return m_pixbuf != nullptr; }
     virtual bool IsCompatibleWith(wxClassInfo* ci) const override;
 
-
-    // unfortunately GdkPixbufAnimation does not expose these info:
-
-    virtual unsigned int GetFrameCount() const override { return 0; }
+    virtual unsigned int GetFrameCount() const override;
     virtual wxImage GetFrame(unsigned int frame) const override;
-
-    // we can retrieve the delay for a frame only after building
-    // a GdkPixbufAnimationIter...
-    virtual int GetDelay(unsigned int WXUNUSED(frame)) const override { return 0; }
+    virtual int GetDelay(unsigned int WXUNUSED(frame)) const override;
     virtual wxSize GetSize() const override;
 
     virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY) override;

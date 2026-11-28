@@ -12,6 +12,8 @@
 class QActionGroup;
 class QToolBar;
 
+class wxQtToolButton;
+
 class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
@@ -69,10 +71,48 @@ protected:
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) override;
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
 
+    virtual void DoSetToolBitmapSize(const wxSize& size) override;
+
 private:
     long GetButtonStyle();
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
+};
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar, int id, const wxString& label, const wxBitmapBundle& bitmap1,
+                  const wxBitmapBundle& bitmap2, wxItemKind kind, wxObject *clientData,
+                  const wxString& shortHelpString, const wxString& longHelpString)
+        : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
+                            clientData, shortHelpString, longHelpString)
+    {
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
+        : wxToolBarToolBase(tbar, control, label)
+    {
+    }
+
+    virtual void SetLabel( const wxString &label ) override;
+    virtual void SetDropdownMenu(wxMenu* menu) override;
+
+private:
+    void SetIcon();
+    void ClearToolTip();
+    void SetToolTip();
+
+    wxQtToolButton* m_qtToolButton = nullptr;
+
+    friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
 };
 
 #endif // _WX_QT_TOOLBAR_H_

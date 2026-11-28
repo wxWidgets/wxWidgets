@@ -26,42 +26,6 @@
 extern bool       g_blockEventsOnDrag;
 
 // ----------------------------------------------------------------------------
-// wxToolBarTool
-// ----------------------------------------------------------------------------
-
-class wxToolBarTool : public wxToolBarToolBase
-{
-public:
-    wxToolBarTool(wxToolBar *tbar,
-                  int id,
-                  const wxString& label,
-                  const wxBitmapBundle& bitmap1,
-                  const wxBitmapBundle& bitmap2,
-                  wxItemKind kind,
-                  wxObject *clientData,
-                  const wxString& shortHelpString,
-                  const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
-                            clientData, shortHelpString, longHelpString)
-    {
-        m_item = nullptr;
-    }
-
-    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
-        : wxToolBarToolBase(tbar, control, label)
-    {
-        m_item = nullptr;
-    }
-
-    void SetImage();
-    void CreateDropDown();
-    void ShowDropdown(GtkToggleButton* button);
-    virtual void SetLabel(const wxString& label) override;
-
-    GtkToolItem* m_item;
-};
-
-// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -203,6 +167,28 @@ wxBitmap BitmapProvider::Get(int scale) const
 }
 } // namespace
 
+static void ShowDropdown(wxToolBarTool* tool, GtkToggleButton* button)
+{
+    wxToolBarBase* toolbar = tool->GetToolBar();
+    wxCommandEvent event(wxEVT_TOOL_DROPDOWN, tool->GetId());
+    if (!toolbar->HandleWindowEvent(event))
+    {
+        wxMenu* menu = tool->GetDropdownMenu();
+        if (menu)
+        {
+            GtkAllocation alloc;
+            gtk_widget_get_allocation(GTK_WIDGET(button), &alloc);
+            int x = alloc.x;
+            int y = alloc.y;
+            if (toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT))
+                x += alloc.width;
+            else
+                y += alloc.height;
+            toolbar->PopupMenu(menu, x, y);
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 // "toggled" from dropdown menu button
 //-----------------------------------------------------------------------------
@@ -212,7 +198,7 @@ static void arrow_toggled(GtkToggleButton* button, wxToolBarTool* tool)
 {
     if (gtk_toggle_button_get_active(button))
     {
-        tool->ShowDropdown(button);
+        ShowDropdown(tool, button);
         gtk_toggle_button_set_active(button, false);
     }
 }
@@ -230,7 +216,7 @@ arrow_button_press_event(GtkToggleButton* button, GdkEventButton* event, wxToolB
     {
         g_signal_handlers_block_by_func(button, (void*)arrow_toggled, tool);
         gtk_toggle_button_set_active(button, true);
-        tool->ShowDropdown(button);
+        ShowDropdown(tool, button);
         gtk_toggle_button_set_active(button, false);
         g_signal_handlers_unblock_by_func(button, (void*)arrow_toggled, tool);
         return true;
@@ -259,6 +245,8 @@ void wxToolBar::AddChildGTK(wxWindowGTK* child)
 // ----------------------------------------------------------------------------
 // wxToolBarTool
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
 
 void wxToolBarTool::SetImage()
 {
@@ -311,28 +299,6 @@ void wxToolBarTool::CreateDropDown()
     g_signal_connect(arrow_button, "toggled", G_CALLBACK(arrow_toggled), this);
     g_signal_connect(arrow_button, "button_press_event",
         G_CALLBACK(arrow_button_press_event), this);
-}
-
-void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
-{
-    wxToolBarBase* toolbar = GetToolBar();
-    wxCommandEvent event(wxEVT_TOOL_DROPDOWN, GetId());
-    if (!toolbar->HandleWindowEvent(event))
-    {
-        wxMenu* menu = GetDropdownMenu();
-        if (menu)
-        {
-            GtkAllocation alloc;
-            gtk_widget_get_allocation(GTK_WIDGET(button), &alloc);
-            int x = alloc.x;
-            int y = alloc.y;
-            if (toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT))
-                x += alloc.width;
-            else
-                y += alloc.height;
-            toolbar->PopupMenu(menu, x, y);
-        }
-    }
 }
 
 void wxToolBarTool::SetLabel(const wxString& label)

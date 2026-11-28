@@ -130,6 +130,173 @@ private:
 #endif
 };
 
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
+
+#ifdef __WXOSX_COCOA__
+
+#if wxOSX_USE_NATIVE_TOOLBAR
+DECLARE_WXCOCOA_OBJC_CLASS(NSToolbarItem);
+#endif
+
+class WXDLLIMPEXP_CORE wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(
+        wxToolBar *tbar,
+        int id,
+        const wxString& label,
+        const wxBitmapBundle& bmpNormal,
+        const wxBitmapBundle& bmpDisabled,
+        wxItemKind kind,
+        wxObject *clientData,
+        const wxString& shortHelp,
+        const wxString& longHelp );
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
+        : wxToolBarToolBase(tbar, control, label)
+    {
+        if (control != nullptr)
+            SetControlHandle( (WXWidget) control->GetHandle() );
+    }
+
+    virtual ~wxToolBarTool()
+    {
+        ClearControl();
+    }
+
+    bool Enable( bool enable ) override;
+
+#if wxOSX_USE_NATIVE_TOOLBAR
+    virtual void SetLabel(const wxString& label) override
+    {
+        wxToolBarToolBase::SetLabel(label);
+        UpdateLabel();
+    }
+
+    virtual bool SetShortHelp(const wxString& help) override
+    {
+        if ( !wxToolBarToolBase::SetShortHelp(help) )
+            return false;
+
+        UpdateLabel();
+
+        return true;
+    }
+
+    WX_NSToolbarItem GetToolbarItemRef() const
+    {
+        return m_toolbarItem;
+    }
+#endif // wxOSX_USE_NATIVE_TOOLBAR
+
+private:
+    WXWidget GetControlHandle()
+    {
+        return (WXWidget) m_controlHandle;
+    }
+
+    void SetControlHandle( WXWidget handle )
+    {
+        m_controlHandle = handle;
+    }
+
+    void SetPosition( const wxPoint& position );
+
+    void ClearControl();
+
+    wxSize GetSize() const;
+
+    wxPoint GetPosition() const
+    {
+        return wxPoint( m_x, m_y );
+    }
+
+    void UpdateImages();
+
+    void UpdateToggleImage( bool toggle );
+
+    void UpdateLabel();
+
+#if wxOSX_USE_NATIVE_TOOLBAR
+    void SetToolbarItemRef( WX_NSToolbarItem ref );
+
+    void SetIndex( long idx )
+    {
+        m_index = idx;
+    }
+
+    long GetIndex() const
+    {
+        return m_index;
+    }
+#endif // wxOSX_USE_NATIVE_TOOLBAR
+
+    WXWidget m_controlHandle = nullptr;
+    wxCoord     m_x;
+    wxCoord     m_y;
+    wxBitmap    m_alternateBitmap;
+
+#if wxOSX_USE_NATIVE_TOOLBAR
+    WX_NSToolbarItem m_toolbarItem = nullptr;
+    // position in its toolbar, -1 means not inserted
+    long m_index = -1;
+#endif
+
+    friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
+};
+
+#elif defined(__WXOSX_IPHONE__)
+
+DECLARE_WXCOCOA_OBJC_CLASS(UIBarButtonItem);
+
+class WXDLLIMPEXP_CORE wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(
+                  wxToolBar *tbar,
+                  int id,
+                  const wxString& label,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
+                  wxItemKind kind,
+                  wxObject *clientData,
+                  const wxString& shortHelp,
+                  const wxString& longHelp );
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label);
+
+    virtual ~wxToolBarTool();
+
+    void MakeStretchable() override;
+
+private:
+    WX_UIBarButtonItem GetUIBarButtonItem() const {return m_toolbarItem;}
+
+    void Init()
+    {
+        m_toolbarItem = nullptr;
+        m_index = -1;
+    }
+
+    void RemoveAssociation();
+
+    WX_UIBarButtonItem m_toolbarItem;
+    // position in its toolbar, -1 means not inserted
+    long m_index;
+
+    friend class wxToolBar;
+
+private:
+    wxDECLARE_CLASS(wxToolBarTool);
+};
+
+#endif // __WXOSX_COCOA__/__WXOSX_IPHONE__
+
 #endif // wxUSE_TOOLBAR
 
 #endif

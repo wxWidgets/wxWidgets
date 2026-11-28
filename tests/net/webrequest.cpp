@@ -694,7 +694,7 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     Create("put");
-    std::unique_ptr<wxInputStream> is(new wxFileInputStream("horse.png"));
+    auto is = make_unique<wxFileInputStream>("horse.png");
     REQUIRE( is->IsOk() );
 
     request.SetData(is.release(), "image/png");
@@ -868,20 +868,6 @@ TEST_CASE_METHOD(RequestFixture,
     request.Cancel();
     RunLoopWithTimeout();
 
-#ifdef __WINDOWS__
-    // This is another weird test failure that happens only on AppVeyor:
-    // sometimes (perhaps because the test machine is too slow?) the request
-    // fails instead of (before?) being cancelled.
-    if ( IsAutomaticTest() )
-    {
-        if ( request.GetState() == wxWebRequest::State_Failed )
-        {
-            WARN("Request unexpectedly failed after cancelling.");
-            return;
-        }
-    }
-#endif // __WINDOWS__
-
     REQUIRE( request.GetState() == wxWebRequest::State_Cancelled );
 }
 
@@ -1033,6 +1019,18 @@ TEST_CASE_METHOD(SyncRequestFixture,
     REQUIRE( Execute("response-headers?freeform=wxWidgets%20works!") );
 
     CHECK( response.GetHeader("freeform") == "wxWidgets works!" );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::SuggestedFileName", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    REQUIRE( Execute("response-headers?Content-Disposition="
+                     "attachment%3B%20filename%3D%22a%3Fb%2A.txt%22") );
+
+    CHECK( response.GetSuggestedFileName() == "a_b_.txt" );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
@@ -1212,7 +1210,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         return;
 
     Create("put");
-    std::unique_ptr<wxInputStream> is(new wxFileInputStream("horse.png"));
+    auto is = make_unique<wxFileInputStream>("horse.png");
     REQUIRE( is->IsOk() );
 
     request.SetData(is.release(), "image/png");

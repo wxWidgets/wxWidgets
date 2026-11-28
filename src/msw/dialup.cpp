@@ -41,6 +41,7 @@
 
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
 wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
+wxIMPLEMENT_DYNAMIC_CLASS(wxDialUpEvent, wxEvent);
 
 // Wine: no wininet.h
 #if !defined(__WINE__)

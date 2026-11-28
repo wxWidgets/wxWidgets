@@ -60,6 +60,7 @@
 #endif
 #include "wx/msw/ole/oleutils.h"
 #include "wx/msw/private/darkmode.h"
+#include "wx/msw/private/imm.h"
 #include "wx/msw/private/timer.h"
 
 #if wxUSE_TOOLTIPS
@@ -496,6 +497,17 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     if ( const int darkMode = wxSystemOptions::GetOptionInt("msw.dark-mode") )
     {
         MSWEnableDarkMode(darkMode > 1 ? DarkMode_Always : DarkMode_Auto);
+    }
+
+    // This can be useful when running on a desktop without text services
+    // support, e.g. one created by CreateDesktop() to run GUI tests without
+    // showing them, as activating the IME, which happens e.g. on each
+    // SetFocus() call, blocks for a couple of seconds there.
+    if ( wxSystemOptions::GetOptionInt("msw.disable-ime") )
+    {
+        const wxIMMFunctions& imm = wxIMMFunctions::Get();
+        if ( imm.IsOk() )
+            imm.DisableIME(static_cast<DWORD>(-1));
     }
 
     callBaseCleanup.Dismiss();

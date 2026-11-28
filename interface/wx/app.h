@@ -1444,6 +1444,8 @@ public:
         - wxTimePickerCtrl, wxDatePickerCtrl and wxCalendarCtrl don't support dark mode
           and use the same (light) background as by default in it.
         - wxPrintDialog on Windows 10 doesn't support dark mode.
+        - MDI applications don't have correct appearance in dark mode, using it
+          for them is not recommended.
 
         @param flags Can be @c wxApp::DarkMode_Always to force dark mode
             regardless of the system mode, @c wxApp::DarkMode_Never to likewise

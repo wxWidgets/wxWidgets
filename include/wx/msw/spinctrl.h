@@ -139,9 +139,11 @@ protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
-    // returns true for special keys like "Ctrl+C" that should be handled
-    // by the text control
-    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) override;
+#if wxUSE_ACCEL
+    // Reserve the keys used for editing the text in the buddy control.
+    virtual bool ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                            int command) const override;
+#endif // wxUSE_ACCEL
 
     // generate spin control update event with the given value
     void SendSpinUpdate(int value);

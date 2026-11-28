@@ -12,7 +12,9 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
-#include "wx/settings.h"        // solely for wxSystemColour
+#if WXWIN_COMPATIBILITY_3_2
+#include "wx/settings.h"        // only for backward compatibility
+#endif // WXWIN_COMPATIBILITY_3_2
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 
@@ -439,6 +441,11 @@ public:
     // dispatched normally
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
 
+    // return false if the accelerators shouldn't be used for this message
+    // because this window prefers to handle this key itself, this is
+    // determined by sending wxEVT_ACCELERATOR_KEY event
+    bool MSWShouldUseAcceleratorForKey(const WXMSG* pMsg);
+
     // return true if the message was preprocessed and shouldn't be dispatched
     virtual bool MSWProcessMessage(WXMSG* pMsg);
 
@@ -662,20 +669,10 @@ protected:
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
 
-    // The reason for calling MSWSetDarkOrLightMode below.
-    enum class SetMode
-    {
-        // Set dark mode for a newly created window.
-        Initial,
-
-        // Set dark mode or light mode for an existing window.
-        Change
-    };
-
     // Configure a window for dark mode settings immediately after creation or
     // upon switching into or out of dark mode. This function is not called
     // unless dark mode was enabled, or is being enabled.
-    virtual void MSWSetDarkOrLightMode(SetMode setmode);
+    virtual void MSWSetDarkOrLightMode();
 
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().
@@ -738,6 +735,7 @@ protected:
     virtual void DoReleaseMouse() override;
 
     virtual void DoEnable(bool enable) override;
+    virtual void DoEnableInputMethod(bool enable) override;
 
     virtual void DoFreeze() override;
     virtual void DoThaw() override;
@@ -786,9 +784,14 @@ protected:
     //
     // The wParam and lParam here must come from WM_CHAR event parameters, i.e.
     // wParam must be a character and not a virtual code.
+    //
+    // Also note that wParam must not be a high surrogate, see the code.
     wxKeyEvent CreateCharEvent(wxEventType evType,
                                WXWPARAM wParam,
                                WXLPARAM lParam) const;
+
+    // Helper for sending wxEVT_AFTER_CHAR.
+    void SendAfterCharEvent(WXWPARAM wParam, WXLPARAM lParam);
 
 
     // default OnEraseBackground() implementation, return true if we did erase

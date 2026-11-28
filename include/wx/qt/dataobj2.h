@@ -22,6 +22,7 @@ public:
 protected:
 
 private:
+    wxDECLARE_CLASS(wxBitmapDataObject);
 };
 
 
@@ -32,6 +33,9 @@ public:
     wxFileDataObject();
 
     void AddFile( const wxString &filename );
+
+private:
+    wxDECLARE_CLASS(wxFileDataObject);
 };
 
 #endif // _WX_QT_DATAOBJ2_H_

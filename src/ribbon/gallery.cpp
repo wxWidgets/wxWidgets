@@ -16,6 +16,7 @@
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
+#include "wx/renderer.h"
 #include "wx/clntdata.h"
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -71,9 +72,20 @@ public:
 #endif
 
     void SetId(int id) {m_id = id;}
-    void SetBitmap(const wxBitmapBundle& bitmap) {m_bitmap = bitmap;}
+    void SetBitmap(const wxBitmapBundle& bitmap)
+    {
+        m_bitmap = bitmap;
+        m_bitmap_disabled = wxBitmapBundle();
+    }
     const wxBitmapBundle& GetBitmapBundle() const {return m_bitmap;}
     wxBitmap GetBitmap(wxWindow* wnd) const {return m_bitmap.GetBitmapFor(wnd);}
+    wxBitmap GetDisabledBitmap(wxWindow* wnd)
+    {
+        // Created only when needed, it caches the bitmaps it makes.
+        if ( !m_bitmap_disabled.IsOk() )
+            m_bitmap_disabled = m_bitmap.MakeDisabled();
+        return m_bitmap_disabled.GetBitmapFor(wnd);
+    }
     void SetIsVisible(bool visible) {m_is_visible = visible;}
     void SetPosition(int x, int y, const wxSize& size)
     {
@@ -81,6 +93,9 @@ public:
     }
     bool IsVisible() const {return m_is_visible;}
     const wxRect& GetPosition() const {return m_position;}
+
+    void SetLabel(const wxString& label) {m_label = label;}
+    const wxString& GetLabel() const {return m_label;}
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     void SetClientObject(wxClientData *data)
@@ -118,6 +133,8 @@ public:
 
 protected:
     wxBitmapBundle m_bitmap;
+    wxBitmapBundle m_bitmap_disabled;
+    wxString m_label;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     std::unique_ptr<wxClientData> m_owned;
     void* m_untyped = nullptr;
@@ -354,6 +371,21 @@ bool wxRibbonGallery::TestButtonHover(const wxRect& rect, wxPoint pos,
 
 void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
+    ResetHoverState();
+}
+
+void wxRibbonGallery::OnEnabledStateChanged(bool enabled)
+{
+    // A disabled window doesn't get the mouse events, so it wouldn't stop
+    // looking hovered when the mouse leaves it.
+    if ( !enabled )
+        ResetHoverState();
+
+    wxRibbonControl::OnEnabledStateChanged(enabled);
+}
+
+void wxRibbonGallery::ResetHoverState()
+{
 #if !defined(__WXWINUI__) || !wxUSE_WINUI3
     m_hovered = false;
     m_active_item = nullptr;
@@ -378,6 +410,8 @@ void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
 {
+    DismissKeyTips();
+
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     evt.Skip();
 #else
@@ -465,30 +499,11 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
             else if(m_mouse_active_rect == &m_extension_button_rect)
             {
                 m_extension_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
-                wxCommandEvent notification(wxEVT_BUTTON,
-                    GetId());
-                notification.SetEventObject(this);
-                ProcessWindowEvent(notification);
+                DoActivateExtensionButton();
             }
             else if(m_active_item != nullptr)
             {
-                if(m_selected_item != m_active_item)
-                {
-                    m_selected_item = m_active_item;
-                    wxRibbonGalleryEvent notification(
-                        wxEVT_RIBBONGALLERY_SELECTED, GetId());
-                    notification.SetEventObject(this);
-                    notification.SetGallery(this);
-                    notification.SetGalleryItem(m_selected_item);
-                    ProcessWindowEvent(notification);
-                }
-
-                wxRibbonGalleryEvent notification(
-                    wxEVT_RIBBONGALLERY_CLICKED, GetId());
-                notification.SetEventObject(this);
-                notification.SetGallery(this);
-                notification.SetGalleryItem(m_selected_item);
-                ProcessWindowEvent(notification);
+                DoActivateItem(m_active_item);
             }
         }
         m_mouse_active_rect = nullptr;
@@ -498,6 +513,36 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
 #endif
 }
 
+void wxRibbonGallery::DoActivateItem(wxRibbonGalleryItem* item)
+{
+    if(m_selected_item != item)
+    {
+        m_selected_item = item;
+        DoNotifySelectionChanged();
+        wxRibbonGalleryEvent notification(
+            wxEVT_RIBBONGALLERY_SELECTED, GetId());
+        notification.SetEventObject(this);
+        notification.SetGallery(this);
+        notification.SetGalleryItem(m_selected_item);
+        ProcessWindowEvent(notification);
+    }
+
+    wxRibbonGalleryEvent notification(
+        wxEVT_RIBBONGALLERY_CLICKED, GetId());
+    notification.SetEventObject(this);
+    notification.SetGallery(this);
+    notification.SetGalleryItem(m_selected_item);
+    ProcessWindowEvent(notification);
+}
+
+void wxRibbonGallery::DoActivateExtensionButton()
+{
+    wxCommandEvent notification(wxEVT_BUTTON,
+        GetId());
+    notification.SetEventObject(this);
+    ProcessWindowEvent(notification);
+}
+
 void wxRibbonGallery::OnMouseDClick(wxMouseEvent& evt)
 {
     // The 2nd click of a double-click should be handled as a click in the
@@ -505,6 +550,207 @@ void wxRibbonGallery::OnMouseDClick(wxMouseEvent& evt)
     // scrolling through the gallery.
     OnMouseDown(evt);
     OnMouseUp(evt);
+}
+
+bool wxRibbonGallery::DoFocusItemFrom(int pos, int step)
+{
+    const int count = static_cast<int>(m_items.Count());
+    for ( int i = pos; i >= 0 && i < count; i += step )
+    {
+        wxRibbonGalleryItem* item = m_items.Item(i);
+        if ( !item->IsVisible() )
+            continue;
+
+        DoClearExtensionFocus();
+        m_focused_item = item;
+
+#if wxUSE_ACCESSIBILITY
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, i + 1);
+#endif // wxUSE_ACCESSIBILITY
+
+        // Scroll the item into view, if needed.
+        if ( m_art != nullptr )
+        {
+            const wxRect& rect = item->GetPosition();
+            if ( m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL )
+            {
+                const int left = rect.GetLeft() - m_scroll_amount;
+                const int right = rect.GetRight() - m_scroll_amount;
+                if ( left < m_client_rect.GetLeft() )
+                    ScrollPixels(left - m_client_rect.GetLeft());
+                else if ( right > m_client_rect.GetRight() )
+                    ScrollPixels(right - m_client_rect.GetRight());
+            }
+            else
+            {
+                const int top = rect.GetTop() - m_scroll_amount;
+                const int bottom = rect.GetBottom() - m_scroll_amount;
+                if ( top < m_client_rect.GetTop() )
+                    ScrollPixels(top - m_client_rect.GetTop());
+                else if ( bottom > m_client_rect.GetBottom() )
+                    ScrollPixels(bottom - m_client_rect.GetBottom());
+            }
+        }
+
+        Refresh(false);
+        return true;
+    }
+    return false;
+}
+
+int wxRibbonGallery::DoGetFocusedItemIndex() const
+{
+    if ( m_focused_item == nullptr )
+        return wxNOT_FOUND;
+
+    const int count = static_cast<int>(m_items.Count());
+    for ( int i = 0; i < count; ++i )
+    {
+        if ( m_items.Item(i) == m_focused_item )
+            return i;
+    }
+    return wxNOT_FOUND;
+}
+
+bool wxRibbonGallery::DoFocusExtensionButton()
+{
+    if ( m_extension_button_rect.IsEmpty() ||
+         m_extension_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED )
+        return false;
+
+    m_focused_item = nullptr;
+    m_extension_focused = true;
+    // The art providers draw the button from its state, so show it as hovered.
+    m_extension_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
+    Refresh(false);
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT,
+                              static_cast<int>(m_items.Count()) + 1);
+#endif // wxUSE_ACCESSIBILITY
+
+    return true;
+}
+
+void wxRibbonGallery::DoClearExtensionFocus()
+{
+    if ( m_extension_focused )
+    {
+        m_extension_focused = false;
+        if ( m_extension_button_state == wxRIBBON_GALLERY_BUTTON_HOVERED )
+            m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+    }
+}
+
+bool wxRibbonGallery::HasFocusableItems() const
+{
+    if ( !m_extension_button_rect.IsEmpty() &&
+         m_extension_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED )
+        return true;
+
+    for ( size_t i = 0; i < m_items.Count(); ++i )
+    {
+        if ( m_items.Item(i)->IsVisible() )
+            return true;
+    }
+    return false;
+}
+
+bool wxRibbonGallery::FocusFirstItem()
+{
+    return DoFocusItemFrom(0, 1) || DoFocusExtensionButton();
+}
+
+bool wxRibbonGallery::FocusLastItem()
+{
+    return DoFocusExtensionButton() ||
+            DoFocusItemFrom(static_cast<int>(m_items.Count()) - 1, -1);
+}
+
+bool wxRibbonGallery::FocusNextItem(bool forward)
+{
+    const int lastItem = static_cast<int>(m_items.Count()) - 1;
+
+    if ( m_extension_focused )
+        return !forward && DoFocusItemFrom(lastItem, -1);
+
+    const int current = DoGetFocusedItemIndex();
+    if ( current == wxNOT_FOUND )
+        return forward ? FocusFirstItem() : FocusLastItem();
+
+    const int step = forward ? 1 : -1;
+    if ( DoFocusItemFrom(current + step, step) )
+        return true;
+
+    // The extension button comes after the last item.
+    return forward && DoFocusExtensionButton();
+}
+
+bool wxRibbonGallery::FocusItemInDirection(wxDirection direction)
+{
+    if ( direction != wxUP && direction != wxDOWN )
+        return false;
+
+    if ( m_extension_focused )
+        return direction == wxUP &&
+                DoFocusItemFrom(static_cast<int>(m_items.Count()) - 1, -1);
+
+    const int current = DoGetFocusedItemIndex();
+    if ( current == wxNOT_FOUND )
+        return false;
+
+    // Find the closest item in the row above or below, in the same column if
+    // there is one there.
+    const wxRect& from = m_items.Item(current)->GetPosition();
+    const int row_y = from.GetTop() +
+        (direction == wxUP ? -m_bitmap_padded_size.GetHeight()
+                           : m_bitmap_padded_size.GetHeight());
+
+    int best{ wxNOT_FOUND };
+    int best_distance{ 0 };
+    for ( int i = 0; i < static_cast<int>(m_items.Count()); ++i )
+    {
+        const wxRibbonGalleryItem* item = m_items.Item(i);
+        if ( !item->IsVisible() || item->GetPosition().GetTop() != row_y )
+            continue;
+
+        int distance = item->GetPosition().GetLeft() - from.GetLeft();
+        if ( distance < 0 )
+            distance = -distance;
+        if ( best == wxNOT_FOUND || distance < best_distance )
+        {
+            best = i;
+            best_distance = distance;
+        }
+    }
+
+    return best != wxNOT_FOUND && DoFocusItemFrom(best, 1);
+}
+
+void wxRibbonGallery::ClearFocusedItem()
+{
+    if ( m_focused_item != nullptr || m_extension_focused )
+    {
+        m_focused_item = nullptr;
+        DoClearExtensionFocus();
+        Refresh(false);
+    }
+}
+
+void wxRibbonGallery::ActivateFocusedItem(bool dropdown)
+{
+    // There is no dropdown, so there is nothing to open.
+    if ( dropdown )
+        return;
+
+    if ( m_extension_focused )
+        DoActivateExtensionButton();
+    else if ( m_focused_item != nullptr )
+        DoActivateItem(m_focused_item);
+    else
+        return;
+
+    Refresh(false);
 }
 
 void wxRibbonGallery::SetItemClientObject(wxRibbonGalleryItem* itm,
@@ -692,11 +938,31 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
             offset_pos.SetLeft(offset_pos.GetLeft() - m_scroll_amount);
         m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
         // Resolve bitmap bundle for current DPI
-        wxBitmap bmp = item->GetBitmap(this);
+        wxBitmap bmp = IsEnabled() ? item->GetBitmap(this)
+                                   : item->GetDisabledBitmap(this);
         if (bmp.IsOk())
             dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
                 offset_pos.GetTop() + padding_top);
+
+        if (item == m_focused_item)
+        {
+            offset_pos.Deflate(FromDIP(2));
+            wxRendererNative::Get().DrawFocusRect(this, dc, offset_pos);
+        }
     }
+
+    dc.DestroyClippingRegion();
+
+    if(m_extension_focused)
+    {
+        wxRect ext_rect{ m_extension_button_rect };
+        ext_rect.Deflate(FromDIP(1));
+        wxRendererNative::Get().DrawFocusRect(this, dc, ext_rect);
+    }
+
+    wxRibbonBar* bar = GetAncestorRibbonBar();
+    if ( bar != nullptr )
+        bar->DrawKeyTipsFor(dc, this, m_art);
 #endif
 }
 
@@ -733,12 +999,8 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
     const auto peer = m_winui;
     return peer ? peer->Append(bitmap, id, nullptr, nullptr, false) : nullptr;
 #else
-    if(m_items.IsEmpty())
-    {
-        m_bitmap_size = bitmap.GetDefaultSize();
-        CalculateMinSize();
-    }
-    else
+    const bool first = m_items.IsEmpty();
+    if(!first)
     {
         wxASSERT(bitmap.GetDefaultSize() == m_bitmap_size);
     }
@@ -747,8 +1009,23 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
     item->SetId(id);
     item->SetBitmap(bitmap);
     m_items.Add(item);
+
+    if(first)
+    {
+        m_bitmap_size = bitmap.GetDefaultSize();
+        CalculateMinSize();
+    }
     return item;
 #endif
+}
+
+wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
+                                             const wxString& label)
+{
+    wxRibbonGalleryItem *item = Append(bitmap, id);
+    if ( item )
+        item->SetLabel(label);
+    return item;
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
@@ -779,6 +1056,21 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int i
 #endif
 }
 
+void wxRibbonGallery::SetItemLabel(wxRibbonGalleryItem* item,
+                                   const wxString& label)
+{
+    wxCHECK_RET( item, "invalid gallery item" );
+
+    item->SetLabel(label);
+}
+
+wxString wxRibbonGallery::GetItemLabel(const wxRibbonGalleryItem* item) const
+{
+    wxCHECK_MSG( item, wxString(), "invalid gallery item" );
+
+    return item->GetLabel();
+}
+
 void wxRibbonGallery::Clear()
 {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -807,6 +1099,8 @@ void wxRibbonGallery::Clear()
     m_selected_item = nullptr;
     m_hovered_item = nullptr;
     m_active_item = nullptr;
+    m_focused_item = nullptr;
+    DoClearExtensionFocus();
 
     // This points either to one of the button rectangles, which are still
     // valid, or to the rectangle of one of the items deleted above.
@@ -832,14 +1126,20 @@ void wxRibbonGallery::CalculateMinSize()
     }
     else
     {
-        m_bitmap_padded_size = m_bitmap_size;
+        // Use the size of the bitmaps drawn in this window, which is not the
+        // default size of the bitmap bundles at DPI scaling other than 100%,
+        // and not necessarily the default size scaled by the DPI scale
+        // factor, e.g. when the bundle contains a single bitmap.
+        m_bitmap_padded_size = m_items.IsEmpty()
+            ? FromDIP(m_bitmap_size)
+            : m_items.Item(0)->GetBitmapBundle().GetPreferredLogicalSizeFor(this);
         m_bitmap_padded_size.IncBy(
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE) +
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE),
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE) +
             m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE));
 
-        wxMemoryDC dc;
+        wxInfoDC dc(this);
         SetMinSize(m_art->GetGallerySize(dc, this, m_bitmap_padded_size));
 
         // The best size is displaying several items
@@ -869,7 +1169,7 @@ bool wxRibbonGallery::Layout()
     if(m_art == nullptr)
         return false;
 
-    wxMemoryDC dc;
+    wxInfoDC dc(this);
     wxPoint origin;
     wxSize client_size = m_art->GetGalleryClientSize(dc, this, GetSize(),
         &origin, &m_scroll_up_button_rect, &m_scroll_down_button_rect,
@@ -960,7 +1260,7 @@ wxSize wxRibbonGallery::DoGetNextSmallerSize(wxOrientation direction,
     if(m_art == nullptr)
         return relative_to;
 
-    wxMemoryDC dc;
+    wxInfoDC dc(const_cast<wxRibbonGallery*>(this));
 
     wxSize client = m_art->GetGalleryClientSize(dc, this, relative_to, nullptr,
         nullptr, nullptr, nullptr);
@@ -1016,7 +1316,7 @@ wxSize wxRibbonGallery::DoGetNextLargerSize(wxOrientation direction,
     if(m_art == nullptr)
         return relative_to;
 
-    wxMemoryDC dc;
+    wxInfoDC dc(const_cast<wxRibbonGallery*>(this));
 
     wxSize client = m_art->GetGalleryClientSize(dc, this, relative_to, nullptr,
         nullptr, nullptr, nullptr);
@@ -1097,9 +1397,29 @@ void wxRibbonGallery::SetSelection(wxRibbonGalleryItem* item)
     if(item != m_selected_item)
     {
         m_selected_item = item;
+        DoNotifySelectionChanged();
         Refresh(false);
     }
 #endif
+}
+
+void wxRibbonGallery::DoNotifySelectionChanged()
+{
+#if wxUSE_ACCESSIBILITY
+    if ( m_selected_item == nullptr )
+        return;
+
+    const int count = static_cast<int>(m_items.Count());
+    for ( int i = 0; i < count; ++i )
+    {
+        if ( m_items.Item(i) == m_selected_item )
+        {
+            wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTION, this,
+                                      wxOBJID_CLIENT, i + 1);
+            break;
+        }
+    }
+#endif // wxUSE_ACCESSIBILITY
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::GetSelection() const
@@ -1135,7 +1455,7 @@ wxRibbonGalleryButtonState wxRibbonGallery::GetUpButtonState() const
     const auto peer = m_winui;
     return peer ? peer->ButtonState(0) : wxRIBBON_GALLERY_BUTTON_DISABLED;
 #else
-    return m_up_button_state;
+    return IsEnabled() ? m_up_button_state : wxRIBBON_GALLERY_BUTTON_DISABLED;
 #endif
 }
 
@@ -1145,7 +1465,7 @@ wxRibbonGalleryButtonState wxRibbonGallery::GetDownButtonState() const
     const auto peer = m_winui;
     return peer ? peer->ButtonState(1) : wxRIBBON_GALLERY_BUTTON_DISABLED;
 #else
-    return m_down_button_state;
+    return IsEnabled() ? m_down_button_state : wxRIBBON_GALLERY_BUTTON_DISABLED;
 #endif
 }
 
@@ -1155,8 +1475,222 @@ wxRibbonGalleryButtonState wxRibbonGallery::GetExtensionButtonState() const
     const auto peer = m_winui;
     return peer ? peer->ButtonState(2) : wxRIBBON_GALLERY_BUTTON_DISABLED;
 #else
-    return m_extension_button_state;
+    return IsEnabled() ? m_extension_button_state : wxRIBBON_GALLERY_BUTTON_DISABLED;
 #endif
 }
+
+#if wxUSE_ACCESSIBILITY
+
+class wxRibbonGalleryAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRibbonGalleryAccessible(wxRibbonGallery* gallery) : wxWindowAccessible(gallery) { }
+
+    wxAccStatus GetChildCount(int* childCount) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        *childCount = static_cast<int>(gallery->GetCount()) + (HasExtensionButton(gallery) ? 1 : 0);
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetChild(int childId, wxAccessible** child) override
+    {
+        *child = (childId == wxACC_SELF) ? this : nullptr;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole* role) override
+    {
+        if ( childId == wxACC_SELF )
+        {
+            *role = wxROLE_SYSTEM_LIST;
+            return wxACC_OK;
+        }
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        *role = static_cast<unsigned>(childId) <= gallery->GetCount()
+            ? wxROLE_SYSTEM_LISTITEM : wxROLE_SYSTEM_PUSHBUTTON;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long* state) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId == wxACC_SELF )
+        {
+            long st{ 0 };
+            if ( !gallery->IsEnabled() )
+                st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+            if ( !gallery->IsShownOnScreen() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            *state = st;
+            return wxACC_OK;
+        }
+
+        wxRibbonBar* ribbonBar = gallery->GetAncestorRibbonBar();
+        const bool barFocused = ribbonBar && ribbonBar->HasFocus();
+
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
+        {
+            wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
+            wxCHECK(item, wxACC_FAIL);
+
+            long st = wxACC_STATE_SYSTEM_SELECTABLE;
+            if ( !item->IsVisible() )
+                st |= wxACC_STATE_SYSTEM_INVISIBLE;
+            else
+                st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+            if ( item == gallery->GetSelection() )
+                st |= wxACC_STATE_SYSTEM_SELECTED;
+            if ( item == gallery->m_focused_item && barFocused )
+                st |= wxACC_STATE_SYSTEM_FOCUSED;
+            *state = st;
+            return wxACC_OK;
+        }
+
+        long st = wxACC_STATE_SYSTEM_FOCUSABLE;
+        if ( gallery->GetExtensionButtonState() == wxRIBBON_GALLERY_BUTTON_DISABLED )
+            st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+        if ( gallery->m_extension_focused && barFocused )
+            st |= wxACC_STATE_SYSTEM_FOCUSED;
+        *state = st;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetName(int childId, wxString* name) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxWindowAccessible::GetName(childId, name);
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
+        {
+            wxRibbonGalleryItem* item = gallery->GetItem(childId - 1);
+            wxCHECK(item, wxACC_FAIL);
+
+            const wxString label = gallery->GetItemLabel(item);
+            if ( label.empty() )
+                return wxACC_NOT_IMPLEMENTED;
+
+            *name = label;
+            return wxACC_OK;
+        }
+
+        *name = _("More");
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetLocation(wxRect& rect, int elementId) override
+    {
+        if ( elementId == wxACC_SELF )
+            return wxWindowAccessible::GetLocation(rect, elementId);
+
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        if ( elementId >= 0 && static_cast<unsigned>(elementId) <= gallery->GetCount() )
+        {
+            wxRibbonGalleryItem* item = gallery->GetItem(elementId - 1);
+            wxCHECK(item, wxACC_FAIL);
+            if ( !item->IsVisible() )
+                return wxACC_FAIL;
+
+            rect = GetOnScreenItemRect(gallery, item);
+        }
+        else
+            rect = gallery->m_extension_button_rect;
+
+        rect.SetPosition(gallery->ClientToScreen(rect.GetPosition()));
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetDefaultAction(int childId, wxString* actionName) override
+    {
+        if ( childId == wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        *actionName = _("Press");
+        return wxACC_OK;
+    }
+
+    wxAccStatus DoDefaultAction(int childId) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        if ( childId == wxACC_SELF )
+            return wxACC_NOT_IMPLEMENTED;
+
+        if ( childId >= 0 && static_cast<unsigned>(childId) <= gallery->GetCount() )
+            gallery->DoActivateItem(gallery->GetItem(childId - 1));
+        else
+            gallery->DoActivateExtensionButton();
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetFocus(int* childId, wxAccessible** child) override
+    {
+        wxRibbonGallery* gallery = wxDynamicCast(GetWindow(), wxRibbonGallery);
+        if ( gallery == nullptr )
+            return wxACC_FAIL;
+
+        const int index = gallery->DoGetFocusedItemIndex();
+        if ( gallery->m_extension_focused )
+        {
+            *childId = static_cast<int>(gallery->GetCount()) + 1;
+            *child = nullptr;
+        }
+        else if ( index != wxNOT_FOUND )
+        {
+            *childId = index + 1;
+            *child = nullptr;
+        }
+        else
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+        return wxACC_OK;
+    }
+
+private:
+    static bool HasExtensionButton(wxRibbonGallery* gallery)
+    {
+        return !gallery->m_extension_button_rect.IsEmpty();
+    }
+
+    static wxRect GetOnScreenItemRect(wxRibbonGallery* gallery, wxRibbonGalleryItem* item)
+    {
+        wxRect rect{ item->GetPosition() };
+        const bool vertical = gallery->m_art &&
+            (gallery->m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL);
+        if ( vertical )
+            rect.SetLeft(rect.GetLeft() - gallery->m_scroll_amount);
+        else
+            rect.SetTop(rect.GetTop() - gallery->m_scroll_amount);
+        return rect;
+    }
+};
+
+wxAccessible* wxRibbonGallery::CreateAccessible()
+{
+    return new wxRibbonGalleryAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_RIBBON

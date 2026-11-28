@@ -33,6 +33,11 @@
 
 wxIMPLEMENT_CLASS(wxURI, wxObject);
 
+// Private flag used in m_fields in addition to wxURIFieldType values: it is set
+// for the file URIs containing "//" which is not followed by the server (this
+// uses a high bit to avoid clashes with any values added to the enum later).
+static constexpr unsigned wxURI_FILE_SLASHES = 0x8000;
+
 // ===========================================================================
 // wxURI implementation
 // ===========================================================================
@@ -223,13 +228,32 @@ wxString wxURI::DoBuildURI(wxString (*funcDecode)(const wxString&)) const
         if (HasUserInfo())
             ret += funcDecode(m_userinfo) + "@";
 
-        if (m_hostType == wxURI_REGNAME)
-            ret += funcDecode(m_server);
-        else
-            ret += m_server;
+        switch ( m_hostType )
+        {
+            case wxURI_REGNAME:
+                ret += funcDecode(m_server);
+                break;
+
+            case wxURI_IPV4ADDRESS:
+                ret += m_server;
+                break;
+
+            case wxURI_IPV6ADDRESS:
+            case wxURI_IPVFUTURE:
+                // IP literals must be enclosed in brackets, which are not
+                // stored in m_server.
+                ret += "[" + m_server + "]";
+                break;
+        }
 
         if (HasPort())
             ret += ":" + m_port;
+    }
+    else if ( m_fields & wxURI_FILE_SLASHES )
+    {
+        // Preserve the slashes not followed by the server in the file URIs,
+        // see ParseAuthority().
+        ret += "//";
     }
 
     ret += funcDecode(m_path);
@@ -428,6 +452,11 @@ const char* wxURI::ParseAuthority(const char* uri)
             uri = uristart;
             m_server.erase();
             m_fields &= ~wxURI_SERVER;
+
+            // But remember that we had them to be able to rebuild the URI
+            // in its original form.
+            if ( leadswithdoubleslash )
+                m_fields |= wxURI_FILE_SLASHES;
         }
     }
     else if(leadswithdoubleslash)
@@ -1053,7 +1082,9 @@ bool wxURI::ParseIPv6address(const char*& uri)
 bool wxURI::ParseIPvFuture(const char*& uri)
 {
     // IPvFuture     = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
-    if (*++uri != 'v' || !IsHex(*++uri))
+    //
+    // Note that "v" is case-insensitive, as all literal strings in ABNF.
+    if ((*uri != 'v' && *uri != 'V') || !IsHex(*++uri))
         return false;
 
     while (IsHex(*++uri))

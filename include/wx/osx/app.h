@@ -159,6 +159,24 @@ public:
 #if wxOSX_USE_IPHONE && wxUSE_MENUBAR
     virtual void         OSXOnBuildMenu(WX_NSObject menuBuilder);
 #endif
+#if wxOSX_USE_IPHONE
+#if wxOSX_IPHONE_USE_UISCENE
+    // UIScene Support
+
+    // override for support of multiple scenes, when this method is first called OnInit has not been invoked yet
+    virtual WX_UISceneConfiguration OSXCreateConfigurationForSession(WX_UISceneSession session, WX_UISceneConnectionOptions options);
+
+    // call from SceneDelegate's willConnectToSession so that toplevel windows know to which scene they belong
+    void OSXSetCurrentUIScene(WX_UIScene scene, WX_UISceneSession session, WX_UISceneConnectionOptions options);
+    WX_UIScene OSXGetCurrentUIScene() const;
+    WX_UISceneSession OSXGetCurrentUISceneSession() const;
+    WX_UISceneConnectionOptions OSXGetCurrentUISceneConnectionOptions() const;
+
+    // As on OnInit must be called only once but from a willConnectToSession callback use this method if you implement
+    // your own SceneDelegate
+    void OSXCallOnInitOnce();
+#endif
+#endif
 private:
     bool                m_onInitResult;
     bool                m_inited;

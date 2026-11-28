@@ -44,8 +44,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/listbox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -247,7 +245,7 @@ IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, "Listbox",
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                                        wxVector<wxBitmapBundle>& imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, listbox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, WidgetsIcon::ListBox)
 {
     // init everything
     m_radioSelMode = nullptr;
@@ -394,7 +392,7 @@ void ListboxWidgetsPage::CreateContent()
                            0, nullptr,
                            wxLB_HSCROLL);
     sizerRight->Add(m_lbox, wxSizerFlags(1).Expand().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerLbox = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

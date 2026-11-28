@@ -263,6 +263,9 @@ public:
 private:
     wxArrayString m_choices;
     wxString      m_data;
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceRenderer);
 };
 
 // ----------------------------------------------------------------------------
@@ -281,6 +284,9 @@ public:
 
 private:
     virtual wxVariant GtkGetValueFromString(const wxString& str) const override;
+
+private:
+    wxDECLARE_CLASS(wxDataViewChoiceByIndexRenderer);
 };
 
 

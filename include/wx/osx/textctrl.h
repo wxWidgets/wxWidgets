@@ -160,6 +160,8 @@ protected:
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen) const override;
 
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags) override;
+
     // flag is set to true when the user edits the controls contents
     bool m_dirty;
 

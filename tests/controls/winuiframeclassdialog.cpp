@@ -316,13 +316,16 @@ TEST_CASE("WinUIFrameDialog::EscapeContract",
     dialog.ProcessWindowEvent(hook);
     REQUIRE(hookEvents == 1);
 
+    // wxMSW makes wxEVT_CHAR_HOOK of Escape in the message loop, not in its
+    // keyboard hook any more, and the keys of an island don't go through the
+    // loop: the pipeline sends it, once, before XAML sees the key.
     XamlStageTrace ignoredTrace;
     ignoredTrace.handles = true;
     MSG ignored = KeyMessage(WM_KEYDOWN, VK_ESCAPE);
     CHECK(RunDialogPipeline(editor, ignored, ignoredTrace) ==
           wxWinUIKeyboardPipelineResult::XamlHandled);
     CHECK(ignoredTrace.calls == 1);
-    CHECK(hookEvents == 1);
+    CHECK(hookEvents == 2);
     CHECK(dialog.IsShown());
 
     dialog.SetEscapeId(wxID_ANY);
@@ -331,7 +334,7 @@ TEST_CASE("WinUIFrameDialog::EscapeContract",
     CHECK(RunDialogPipeline(editor, close, closeTrace) ==
           wxWinUIKeyboardPipelineResult::WxHandled);
     CHECK(closeTrace.calls == 0);
-    CHECK(hookEvents == 1);
+    CHECK(hookEvents == 3);
     CHECK_FALSE(dialog.IsShown());
     CHECK(dialog.validateCalls == 0);
     CHECK(dialog.transferCalls == 0);

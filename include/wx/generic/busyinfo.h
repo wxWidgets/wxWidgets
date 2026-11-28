@@ -55,6 +55,9 @@ private:
     wxWeakRef<wxControl> m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxBusyInfo);
+
+private:
+    wxDECLARE_CLASS(wxBusyInfo);
 };
 
 #endif // wxUSE_BUSYINFO

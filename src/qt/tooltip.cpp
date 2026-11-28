@@ -38,6 +38,8 @@
 
 
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
+
 wxToolTip::wxToolTip(const wxString &tip)
 {
     m_window = nullptr;

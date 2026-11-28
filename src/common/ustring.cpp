@@ -438,7 +438,7 @@ wxScopedCharBuffer wxUString::utf8_str() const
             out[0] = 0xC0 | code;
             out += 2;
         }
-        else if ( code < 0xFFFF )
+        else if ( code <= 0xFFFF )
         {
             out[2] = 0x80 | (code & 0x3F);  code >>= 6;
             out[1] = 0x80 | (code & 0x3F);  code >>= 6;

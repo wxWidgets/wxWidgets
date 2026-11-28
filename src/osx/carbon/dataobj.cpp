@@ -199,7 +199,7 @@ void wxDataFormat::SetId( NativeFormat format )
     }
     else if (  UTTypeConformsTo( (CFStringRef)format,kUTTypeUTF8PlainText ) )
     {
-        m_type = wxDF_UNICODETEXT;
+        m_type = wxDF_TEXT;
     }
     else if ( UTTypeConformsTo( (CFStringRef)format, kUTTypePlainText ) )
     {
@@ -261,6 +261,8 @@ bool wxDataFormat::operator==(const wxDataFormat& format) const
 //-------------------------------------------------------------------------
 // wxDataObject
 //-------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxDataObject, wxObject);
 
 wxDataObject::wxDataObject()
 {
@@ -581,6 +583,8 @@ void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir) 
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxFileDataObject, wxDataObjectSimple);
+
 void wxFileDataObject::GetFileNames( wxCharBuffer &buf ) const
 {
     wxString filenames;
@@ -639,6 +643,8 @@ void wxFileDataObject::AddFile( const wxString& rFilename )
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject
 // ----------------------------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxBitmapDataObject, wxDataObjectSimple);
 
 wxBitmapDataObject::wxBitmapDataObject()
 {

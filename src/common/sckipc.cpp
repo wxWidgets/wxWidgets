@@ -457,7 +457,9 @@ protected:
         if ( !VerifyValidSocket() )
             return false;
 
-        m_socket->Read(reinterpret_cast<char *>(&m_ipcFormat), 1);
+        wxUint8 format = 0;
+        m_socket->Read(&format, 1);
+        m_ipcFormat = static_cast<wxIPCFormat>(format);
 
         return VerifyLastReadCount(1);
     }
@@ -522,7 +524,8 @@ protected:
         if ( !VerifyValidSocket() )
             return false;
 
-        m_socket->Write(reinterpret_cast<char *>(&m_ipcFormat), 1);
+        const wxUint8 format = static_cast<wxUint8>(m_ipcFormat);
+        m_socket->Write(&format, 1);
 
         return VerifyLastWriteCount(1);
     }

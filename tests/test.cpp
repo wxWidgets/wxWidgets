@@ -43,6 +43,7 @@
 
 #ifdef __WXGTK__
     #include <glib.h>
+    #include "wx/gtk/private/backend.h"
 #endif // __WXGTK__
 #endif // wxUSE_GUI
 
@@ -534,6 +535,18 @@ extern bool IsAutomaticTest()
     return s_isAutomatic == 1;
 }
 
+#if wxUSE_GUI
+
+extern bool IsRunningUnderWayland()
+{
+#ifdef __WXGTK3__
+    if ( !wxGTKImpl::IsX11(nullptr) )
+        return true;
+#endif // __WXGTK3__
+
+    return false;
+}
+
 extern bool IsRunningUnderXVFB()
 {
     static int s_isRunningUnderXVFB = -1;
@@ -545,8 +558,6 @@ extern bool IsRunningUnderXVFB()
 
     return s_isRunningUnderXVFB == 1;
 }
-
-#if wxUSE_GUI
 
 bool EnableUITests()
 {
@@ -573,6 +584,20 @@ bool EnableUITests()
 #else // !(__WXMSW__ || __WXGTK__ || __WXQT__)
             s_enabled = 0;
 #endif // (__WXMSW__ || __WXGTK__ || __WXQT__)
+
+#ifdef __WXGTK3__
+            // wxUIActionSimulator injects X11 events, which never reach a
+            // native Wayland client, so disable UI tests by default there
+            // (WX_UI_TESTS=1 above still overrides this).
+            if ( s_enabled == 1 && IsRunningUnderWayland() )
+            {
+                s_enabled = 0;
+                wxFprintf(stderr, wxASCII_STR(
+                    "Disabling UI tests: wxUIActionSimulator doesn't work "
+                    "when running as a native Wayland client (use "
+                    "WX_UI_TESTS=1 to force them anyway).\n"));
+            }
+#endif // __WXGTK3__
         }
     }
 
@@ -740,6 +765,27 @@ bool TestApp::OnInit()
     wxString testLoc;
     if ( wxGetEnv(wxASCII_STR("WX_TEST_LOCALE"), &testLoc) )
         wxSetlocale(LC_ALL, testLoc);
+#if wxUSE_UTF8_LOCALE_ONLY
+    else
+    {
+        // This build supposes that the program always runs in a UTF-8 locale
+        // and non-ASCII characters are not handled correctly if this is not
+        // the case, so ensure that it does.
+        //
+        // Note that only LC_CTYPE matters for this, so don't change the other
+        // categories to avoid affecting the other tests.
+#ifdef __WINDOWS__
+        constexpr const char* const UTF8_LOCALE = ".UTF-8";
+#else
+        constexpr const char* const UTF8_LOCALE = "C.UTF-8";
+#endif
+        if ( !wxSetlocale(LC_CTYPE, UTF8_LOCALE) )
+        {
+            wxFputs(wxASCII_STR("Warning: failed to set UTF-8 locale, "
+                                "some tests may fail.\n"), stderr);
+        }
+    }
+#endif // wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_GUI
     // create a parent window to be used as parent for the GUI controls

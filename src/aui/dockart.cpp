@@ -68,6 +68,8 @@ wxBrush wxAuiWinUIGround(wxWindow *window, const wxBrush& brush)
 
 } // anonymous namespace
 #endif // wxWinUI
+wxIMPLEMENT_ABSTRACT_CLASS(wxAuiDockArt, wxObject);
+wxIMPLEMENT_CLASS(wxAuiDefaultDockArt, wxAuiDockArt);
 
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {

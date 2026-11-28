@@ -1470,8 +1470,8 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent,
                     eventType = wxEVT_RIGHT_DOWN;
                     button = 3;
                 }
-                else if ( xevent->xbutton.button == Button4 ||
-                            xevent->xbutton.button == Button5 )
+                else if ( xevent->xbutton.button >= Button4 &&
+                            xevent->xbutton.button <= 7 )
                 {
                     // this is the same value as used under wxMSW
                     static const int WHEEL_DELTA = 120;
@@ -1483,9 +1483,29 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent,
                     wxevent.m_columnsPerAction = 3;
                     wxevent.m_wheelDelta = WHEEL_DELTA;
 
-                    // Button 4 means mousewheel up, 5 means down
-                    wxevent.m_wheelRotation = button == Button4 ? WHEEL_DELTA
-                                                                : -WHEEL_DELTA;
+                    // Buttons 4 and 5 mean mousewheel up and down, while 6
+                    // and 7 (for which there are no symbolic constants) mean
+                    // left and right.
+                    switch ( button )
+                    {
+                        case Button4:
+                            wxevent.m_wheelRotation = WHEEL_DELTA;
+                            break;
+
+                        case Button5:
+                            wxevent.m_wheelRotation = -WHEEL_DELTA;
+                            break;
+
+                        case 6:
+                            wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+                            wxevent.m_wheelRotation = -WHEEL_DELTA;
+                            break;
+
+                        case 7:
+                            wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+                            wxevent.m_wheelRotation = WHEEL_DELTA;
+                            break;
+                    }
                 }
 
                 // check for a double click

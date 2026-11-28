@@ -29,6 +29,7 @@
 
 #include "wx/filename.h"
 #include "wx/ffile.h"
+#include "wx/private/filename.h"
 
 // ============================================================================
 // implementation of wxFFile
@@ -188,6 +189,29 @@ bool wxFFile::Flush()
     return true;
 }
 
+bool wxFFile::FlushAndSync()
+{
+    if ( !Flush() )
+        return false;
+
+#ifdef HAVE_FSYNC
+    // As in wxFile::Flush(), don't call fsync() for the files for which it
+    // doesn't work, such as pipes.
+    if ( IsOpened() && GetKind() == wxFILE_KIND_DISK )
+    {
+        const int fd = wxGetFileDescriptor(m_fp);
+        if ( fd != -1 && wxFsync(fd) != 0 )
+        {
+            wxLogSysError(_("failed to sync data of the file '%s'"), m_name);
+
+            return false;
+        }
+    }
+#endif // HAVE_FSYNC
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // seeking
 // ----------------------------------------------------------------------------
@@ -326,29 +350,7 @@ bool wxTempFFile::Open(const wxString& strName)
         return false;
     }
 
-#ifdef __UNIX__
-    // the temp file should have the same permissions as the original one
-    mode_t mode;
-
-    wxStructStat st;
-    if ( wxStat(m_strName, &st) == 0 )
-    {
-        mode = st.st_mode;
-    }
-    else
-    {
-        // file probably didn't exist, just give it the default mode _using_
-        // user's umask (new files creation should respect umask)
-        mode_t mask = umask(0777);
-        mode = 0666 & ~mask;
-        umask(mask);
-    }
-
-    if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
-    {
-        wxLogSysError(_("Failed to set temporary file permissions"));
-    }
-#endif // Unix
+    wxInitTempFile(m_strTemp, m_strName);
 
     return true;
 }
@@ -365,14 +367,20 @@ wxTempFFile::~wxTempFFile()
 
 bool wxTempFFile::Commit()
 {
+    // Ensure that the data really reaches the disk, see the comment in
+    // wxTempFile::Commit().
+    const bool flushed = m_file.FlushAndSync();
+
     m_file.Close();
 
-    if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
-        wxLogSysError(_("can't remove file '%s'"), m_strName);
+    if ( !flushed )
+    {
+        // Don't replace the old file if we're not sure that the new contents
+        // was written successfully.
         return false;
     }
 
-    if ( !wxRenameFile(m_strTemp, m_strName)  ) {
+    if ( !wxRenameFile(m_strTemp, m_strName) ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }

@@ -41,6 +41,10 @@ protected:
     virtual wxString WXGetVisibleLabel() const override;
     virtual void WXSetVisibleLabel(const wxString& str) override;
 
+#if wxUSE_MARKUP
+    virtual bool DoSetLabelMarkup(const wxString& markup) override;
+#endif // wxUSE_MARKUP
+
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };
 

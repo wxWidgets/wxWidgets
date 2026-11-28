@@ -44,6 +44,9 @@
             wxLogLastError(wxT(#api)); \
         }
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxCaretBase, wxObject);
+wxIMPLEMENT_CLASS(wxCaret, wxCaretBase);
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -214,6 +217,26 @@ void wxCaret::DoSize()
         MSWCreateCaret();
         OnSetFocus();
     }
+}
+
+void wxCaret::DoGetPosition(int* x, int* y) const
+{
+    POINT pt = { };
+    if ( m_hasCaret )
+    {
+        CALL_CARET_API(GetCaretPos, (&pt));
+    }
+    else
+    {
+        // Return the last position the caret was Move()-d to.
+        pt.x = m_x;
+        pt.y = m_y;
+    }
+
+    if ( x )
+        *x = pt.x;
+    if ( y )
+        *y = pt.y;
 }
 
 #endif

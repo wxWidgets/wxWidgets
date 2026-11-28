@@ -23,6 +23,8 @@
 
 #include "wx/generic/creddlgg.h"
 
+wxIMPLEMENT_CLASS(wxGenericCredentialEntryDialog, wxDialog);
+
 wxGenericCredentialEntryDialog::wxGenericCredentialEntryDialog()
 {
 }

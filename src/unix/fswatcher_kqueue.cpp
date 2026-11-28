@@ -422,6 +422,8 @@ void wxFSWSourceHandler::OnExceptionWaiting()
 // wxKqueueFileSystemWatcher implementation
 // ============================================================================
 
+wxIMPLEMENT_CLASS(wxKqueueFileSystemWatcher, wxEvtHandler);
+
 wxKqueueFileSystemWatcher::wxKqueueFileSystemWatcher()
     : wxFileSystemWatcherBase()
 {

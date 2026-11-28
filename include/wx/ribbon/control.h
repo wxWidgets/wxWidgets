@@ -17,6 +17,7 @@
 #include "wx/control.h"
 #include "wx/dynarray.h"
 
+#include <vector>
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include <memory>
     class wxRibbonContainerWinUI;
@@ -62,12 +63,47 @@ public:
 
     virtual wxRibbonBar* GetAncestorRibbonBar()const;
 
+    // Leaves the ancestor bar's keytip mode, if it is in it.
+    void DismissKeyTips();
+
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
+
+    // Implementation only: keyboard navigation of the items inside a control.
+    //
+    // The keyboard focus always stays on wxRibbonBar, which forwards the keys
+    // to these functions. Note that this is not about the control itself
+    // getting the focus (see wxWindow::CanAcceptFocus()). A control with
+    // items which can be selected with the keyboard returns true from
+    // HasFocusableItems() and overrides the rest.
+    virtual bool HasFocusableItems() const { return false; }
+    // Return false, changing nothing, if there is no such item.
+    virtual bool FocusFirstItem() { return false; }
+    virtual bool FocusLastItem() { return false; }
+    virtual bool FocusNextItem(bool WXUNUSED(forward)) { return false; }
+    // Moves to the item above or below (wxUP or wxDOWN), for controls with
+    // items arranged in rows.
+    virtual bool FocusItemInDirection(wxDirection WXUNUSED(direction)) { return false; }
+    virtual void ClearFocusedItem() { }
+    // Fires the focused item's action (or its dropdown, if there is one).
+    virtual void ActivateFocusedItem(bool WXUNUSED(dropdown) = false) { }
+
+    // Move through 'controls' (the ones with focusable items).
+    // Return the control reached, or null if there is nowhere to go.
+    static wxRibbonControl* FocusFirstItemIn(
+        const std::vector<wxRibbonControl*>& controls, bool forward);
+    static wxRibbonControl* FocusNextItemIn(
+        const std::vector<wxRibbonControl*>& controls,
+        wxRibbonControl* current, bool forward);
 
 protected:
     wxRibbonArtProvider* m_art;
 
+    // Forgets the focused item, moving the keyboard focus of the ribbon bar
+    // back to its tab row if needed, if the control is disabled now and
+    // repaints it, as it looks different when disabled. Overrides must call
+    // the base class version.
+    virtual void OnEnabledStateChanged(bool enabled) override;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     // Keep the public class layout independent of the private experimental
     // build option. The native implementation and its WinRT types stay private.

@@ -127,7 +127,7 @@ bool wxDirData::Read(wxString *filename)
         if ( !de )
             return false;
 
-        de_d_name = wxString(de->d_name, *wxConvFileName);
+        de_d_name = wxString(de->d_name, wxGetFileNameConv());
 
         // don't return "." and ".." unless asked for
         if ( de->d_name[0] == '.' &&

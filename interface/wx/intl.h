@@ -288,7 +288,9 @@ enum wxLocaleForm
         break display of the application menus. Because of this, it is
         recommended to use wxUILocale instead of this class for the
         applications targeting macOS. In general, this class should only be used
-        if requiring C runtime functions (@c strtod) to be localized.
+        if requiring C runtime functions (@c strtod, @c sprintf, @c strftime,
+        etc.) to be localized, or if wxDateTime::Format() is expected to output
+        localized timestamps.
 
     In wxWidgets this class manages current locale. It also initializes and
     activates wxTranslations object that manages message catalogs.

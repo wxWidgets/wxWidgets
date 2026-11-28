@@ -154,7 +154,7 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
     if ( !m_validatorWindow )
         return;
 
-    const int ch = event.GetUnicodeKey();
+    const wxUniChar ch = event.GetUnicodeChar();
     if ( ch == WXK_NONE )
     {
         // It's a character without any Unicode equivalent at all, e.g. cursor

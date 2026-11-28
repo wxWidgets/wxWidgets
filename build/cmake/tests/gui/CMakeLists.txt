@@ -25,10 +25,12 @@ set(TEST_GUI_SRC
     graphics/clipper.cpp
     graphics/clippingbox.cpp
     graphics/svgattributes.cpp
+    graphics/svgfiledc.cpp
     graphics/coords.cpp
     graphics/graphbitmap.cpp
     graphics/graphmatrix.cpp
     graphics/graphpath.cpp
+    graphics/iconbundle.cpp
     graphics/imagelist.cpp
     config/config.cpp
     controls/auitest.cpp
@@ -43,6 +45,7 @@ set(TEST_GUI_SRC
     controls/comboboxtest.cpp
     controls/dataviewctrltest.cpp
     controls/datepickerctrltest.cpp
+    controls/dirctrltest.cpp
     controls/editlboxtest.cpp
     controls/filesystemctrltest.cpp
     controls/frametest.cpp
@@ -186,13 +189,15 @@ set(TEST_GUI_SRC
     misc/guifuncs.cpp
     misc/selstoretest.cpp
     misc/garbage.cpp
+    misc/oleautomationobject.cpp
     misc/safearrayconverttest.cpp
     misc/settings.cpp
     misc/textwrap.cpp
-    # This one is intentionally duplicated here (it is also part of
-    # non-GUI test) as sockets behave differently in console and GUI
-    # applications.
+    # These ones are intentionally duplicated here (they are also part of
+    # non-GUI test) as sockets and web requests behave differently in
+    # console and GUI applications.
     net/socket.cpp
+    net/webrequest_local.cpp
     persistence/tlw.cpp
     persistence/dataview.cpp
     rowheightcache/rowheightcachetest.cpp
@@ -646,6 +651,13 @@ if(WXWINUI AND wxUSE_WINUI3 AND wxUSE_WEBVIEW AND wxUSE_WEBVIEW_EDGE)
         "${wxWINUI3_WEBVIEW2_PACKAGE_DIR}/build/native/include"
         )
 endif()
+
+# wxUIActionSimulator uses global input state, so this test must not run
+# concurrently with other CTest processes.
+if(TEST test_gui)
+    set_tests_properties(test_gui PROPERTIES RUN_SERIAL TRUE)
+endif()
+
 if(wxUSE_AUI)
     wx_exe_link_libraries(test_gui wxaui)
 endif()

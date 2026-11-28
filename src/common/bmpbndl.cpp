@@ -202,6 +202,58 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplSet);
 };
 
+// Bundle implementation wrapping another bundle and returning disabled
+// versions of its bitmaps, generated on demand.
+class wxBitmapBundleImplDisabled : public wxBitmapBundleImpl
+{
+public:
+    explicit wxBitmapBundleImplDisabled(const wxBitmapBundle& src)
+        : m_src(src)
+    {
+    }
+
+    virtual wxSize GetDefaultSize() const override
+    {
+        return m_src.GetDefaultSize();
+    }
+
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+    {
+        return m_src.GetPreferredBitmapSizeAtScale(scale);
+    }
+
+    virtual wxBitmap GetBitmap(const wxSize& size) override
+    {
+        for ( size_t n = 0; n < m_cache.size(); ++n )
+        {
+            if ( m_cache[n].size == size )
+                return m_cache[n].bitmap;
+        }
+
+        wxBitmap bitmap = m_src.GetBitmap(size);
+        wxBitmap::MakeDisabled(bitmap);
+
+        Entry entry;
+        entry.size = size;
+        entry.bitmap = bitmap;
+        m_cache.push_back(entry);
+
+        return bitmap;
+    }
+
+private:
+    struct Entry
+    {
+        wxSize size;
+        wxBitmap bitmap;
+    };
+
+    wxBitmapBundle m_src;
+    wxVector<Entry> m_cache;
+
+    wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplDisabled);
+};
+
 } // anonymous namespace
 
 // ============================================================================
@@ -449,6 +501,14 @@ wxBitmapBundle wxBitmapBundle::FromBitmaps(const wxVector<wxBitmap>& bitmaps)
 wxBitmapBundle wxBitmapBundle::FromImpl(wxBitmapBundleImpl* impl)
 {
     return wxBitmapBundle(impl);
+}
+
+wxBitmapBundle wxBitmapBundle::MakeDisabled() const
+{
+    if ( !IsOk() )
+        return wxBitmapBundle();
+
+    return wxBitmapBundle(new wxBitmapBundleImplDisabled(*this));
 }
 
 /* static */

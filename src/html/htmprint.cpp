@@ -65,6 +65,8 @@
 //--------------------------------------------------------------------------------
 
 
+wxIMPLEMENT_CLASS(wxHtmlDCRenderer, wxObject);
+
 wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
 {
     m_DC = nullptr;
@@ -222,6 +224,8 @@ int wxHtmlDCRenderer::GetTotalHeight() const
 // wxHtmlPrintout
 //--------------------------------------------------------------------------------
 
+
+wxIMPLEMENT_CLASS(wxHtmlPrintout, wxPrintout);
 
 wxVector<wxHtmlFilter*> wxHtmlPrintout::m_Filters;
 
@@ -639,6 +643,8 @@ void wxHtmlPrintout::SetStandardFonts(int size,
 // wxHtmlEasyPrinting
 //----------------------------------------------------------------------------
 
+
+wxIMPLEMENT_CLASS(wxHtmlEasyPrinting, wxObject);
 
 wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWindow)
 {

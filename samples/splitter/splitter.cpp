@@ -60,6 +60,7 @@ enum
     SPLIT_LOCKSASH,
     SPLIT_DCLICK,
     SPLIT_REPLACE,
+    SPLIT_NESTED,
     SPLIT_INVISIBLE
 };
 
@@ -111,6 +112,7 @@ public:
     void OnSetGravity(wxCommandEvent& event);
     void OnLockSash(wxCommandEvent& event);
     void OnReplace(wxCommandEvent &event);
+    void OnAddNested(wxCommandEvent &event);
     void OnToggleInvisible(wxCommandEvent &event);
     void OnToggleDClick(wxCommandEvent &event);
 
@@ -121,6 +123,7 @@ public:
     void OnUpdateUIVertical(wxUpdateUIEvent& event);
     void OnUpdateUIUnsplit(wxUpdateUIEvent& event);
     void OnUpdateUIInvisible(wxUpdateUIEvent& event);
+    void OnUpdateUINested(wxUpdateUIEvent& event);
 
     bool AllowDClick() const { return m_allowDClick; }
 
@@ -218,6 +221,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_LOCKSASH, MyFrame::OnLockSash)
     EVT_MENU(SPLIT_DCLICK, MyFrame::OnToggleDClick)
     EVT_MENU(SPLIT_REPLACE, MyFrame::OnReplace)
+    EVT_MENU(SPLIT_NESTED, MyFrame::OnAddNested)
     EVT_MENU(SPLIT_INVISIBLE, MyFrame::OnToggleInvisible)
 
     EVT_MENU(SPLIT_QUIT, MyFrame::OnQuit)
@@ -226,6 +230,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(SPLIT_HORIZONTAL, MyFrame::OnUpdateUIHorizontal)
     EVT_UPDATE_UI(SPLIT_UNSPLIT, MyFrame::OnUpdateUIUnsplit)
     EVT_UPDATE_UI(SPLIT_INVISIBLE, MyFrame::OnUpdateUIInvisible)
+    EVT_UPDATE_UI(SPLIT_NESTED, MyFrame::OnUpdateUINested)
 wxEND_EVENT_TABLE()
 
 // My frame constructor
@@ -294,6 +299,9 @@ MyFrame::MyFrame()
     splitMenu->Append(SPLIT_REPLACE,
                       "&Replace right window",
                       "Replace right window");
+    splitMenu->Append(SPLIT_NESTED,
+                      "Add &nested splitter\tCtrl-N",
+                      "Split the right window using a nested splitter");
     splitMenu->AppendSeparator();
 
     splitMenu->Append(SPLIT_QUIT, "E&xit\tAlt-X", "Exit");
@@ -503,6 +511,47 @@ void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::OnAddNested(wxCommandEvent& WXUNUSED(event) )
+{
+    // Each new splitter is created in place of the first pane of the innermost
+    // existing one, so using this command repeatedly exercises having a nested
+    // splitter both as the second and as the first pane of its parent.
+    wxWindow* pane = m_right;
+    while ( auto* const splitter = wxDynamicCast(pane, wxSplitterWindow) )
+        pane = splitter->GetWindow1();
+
+    auto* const parent = wxStaticCast(pane->GetParent(), wxSplitterWindow);
+
+    auto* const nested = new wxSplitterWindow(parent, wxID_ANY,
+                                              wxDefaultPosition, wxDefaultSize,
+                                              m_splitter->GetWindowStyle());
+
+    // Don't let the events from this splitter reach MySplitterWindow, which
+    // would take them for its own and could change the position of this sash
+    // to the position of its own locked one.
+    nested->SetExtraStyle(nested->GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
+    parent->ReplaceWindow(pane, nested);
+    pane->Reparent(nested);
+
+    auto* const canvas = new MyCanvas(nested, false);
+    canvas->SetBackgroundColour(*wxYELLOW);
+
+    // Use the direction perpendicular to the parent one, as this is the case
+    // in which the sashes of the 2 splitters touch each other.
+    if ( parent->GetSplitMode() == wxSPLIT_VERTICAL )
+        nested->SplitHorizontally(pane, canvas);
+    else
+        nested->SplitVertically(pane, canvas);
+
+    if ( parent == m_splitter )
+        m_right = nested;
+
+#if wxUSE_STATUSBAR
+    SetStatusText("Nested splitter added", 1);
+#endif // wxUSE_STATUSBAR
+}
+
 void MyFrame::OnToggleInvisible(wxCommandEvent& WXUNUSED(event) )
 {
     m_splitter->SetSashInvisible(!m_splitter->IsSashInvisible());
@@ -529,6 +578,12 @@ void MyFrame::OnUpdateUIUnsplit(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateUIInvisible(wxUpdateUIEvent& event)
 {
     event.Check( m_splitter->IsSashInvisible() );
+}
+
+void MyFrame::OnUpdateUINested(wxUpdateUIEvent& event)
+{
+    // We need the right window to be shown in order to split it.
+    event.Enable( m_splitter->IsSplit() && !m_replacewindow );
 }
 
 // ----------------------------------------------------------------------------

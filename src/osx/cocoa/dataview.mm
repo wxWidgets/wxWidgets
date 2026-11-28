@@ -34,6 +34,8 @@
 #include "wx/stopwatch.h"
 #include "wx/dcgraph.h"
 
+#include <vector>
+
 #if wxUSE_MARKUP
     #include "wx/osx/cocoa/private/markuptoattr.h"
 #endif // wxUSE_MARKUP
@@ -1682,6 +1684,55 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 //
+// drawing
+//
+-(void) drawRow:(NSInteger)row clipRect:(NSRect)clipRect
+{
+    // Draw the background colours of the item here, before its cells are
+    // drawn, rather than letting the cells do it: a cell can only fill its own
+    // frame, which leaves the spacing between the cells (17 points wide since
+    // macOS 11) in the default colour, and not all cells can do it anyhow.
+    //
+    // As in the generic implementation, the colour fills the entire width of
+    // the column, including the indentation of the expander column, and is
+    // not used for the selected rows.
+    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+    wxDataViewModel* const model = dvc->GetModel();
+
+    if ( model && !dvc->IsDeleting() && ![self isRowSelected:row] )
+    {
+        const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:row]);
+        const NSRect rowRect = [self rectOfRow:row];
+
+        NSArray* const columns = [self tableColumns];
+        const NSUInteger noOfColumns = [columns count];
+        for ( NSUInteger n = 0; n < noOfColumns; ++n )
+        {
+            NSTableColumn* const tableColumn = [columns objectAtIndex:n];
+            if ( [tableColumn isHidden] )
+                continue;
+
+            wxDataViewColumn* const
+                col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+
+            wxDataViewItemAttr attr;
+            if ( !model->GetAttr(item, col->GetModelColumn(), attr) ||
+                    !attr.HasBackgroundColour() )
+                continue;
+
+            const NSRect rect = NSIntersectionRect(rowRect, [self rectOfColumn:n]);
+            if ( NSIntersectsRect(rect, clipRect) )
+            {
+                [attr.GetBackgroundColour().OSXGetWXColor() set];
+                NSRectFillUsingOperation(rect, NSCompositeSourceOver);
+            }
+        }
+    }
+
+    [super drawRow:row clipRect:clipRect];
+}
+
+//
 // delegate methods
 //
 -(void) outlineView:(NSOutlineView*)outlineView didClickTableColumn:(NSTableColumn*)tableColumn
@@ -1735,6 +1786,9 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    if ( implementation->IsChangingHiddenItem() )
+        return YES;
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSING, dvc, wxDataViewItemFromItem(item));
@@ -1746,6 +1800,9 @@ outlineView:(NSOutlineView*)outlineView
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
     wxUnusedVar(outlineView);
+
+    if ( implementation->IsChangingHiddenItem() )
+        return YES;
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
@@ -1819,6 +1876,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineViewItemDidCollapse:(NSNotification*)notification
 {
+    if ( implementation->IsChangingHiddenItem() )
+        return;
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     const wxDataViewItem item = wxDataViewItemFromItem(
@@ -1831,6 +1891,9 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) outlineViewItemDidExpand:(NSNotification*)notification
 {
+    if ( implementation->IsChangingHiddenItem() )
+        return;
+
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     const wxDataViewItem item = wxDataViewItemFromItem(
@@ -2307,27 +2370,87 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 //
 // item related methods (inherited from wxDataViewWidgetImpl)
 //
+void wxCocoaDataViewControl::ReloadChildren(const wxDataViewItem& parent)
+{
+    if ( !parent.IsOk() )
+    {
+        [m_OutlineView reloadData];
+        return;
+    }
+
+    // A parent not in the buffer has never been shown, so neither it nor its
+    // children need to be reloaded, and we must check for this explicitly as
+    // reloadItem:nil reloads the entire control because nil corresponds to
+    // the root item, just as in Update() below.
+    wxPointerObject* const nsParent = [m_DataSource getDataViewItemFromBuffer:parent];
+    if ( nsParent )
+        [m_OutlineView reloadItem:nsParent reloadChildren:YES];
+}
+
 bool wxCocoaDataViewControl::Add(const wxDataViewItem& parent, const wxDataViewItem& WXUNUSED(item))
 {
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
+    ReloadChildren(parent);
     return true;
 }
 
 bool wxCocoaDataViewControl::Add(const wxDataViewItem& parent, const wxDataViewItemArray& WXUNUSED(items))
 {
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
+    ReloadChildren(parent);
     return true;
 }
 
 void wxCocoaDataViewControl::Collapse(const wxDataViewItem& item)
 {
-    [m_OutlineView collapseItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    wxPointerObject* const nsItem = [m_DataSource getDataViewItemFromBuffer:item];
+
+    // Items not in the buffer have never been shown and so can't be expanded.
+    if ( !nsItem )
+        return;
+
+    // NSOutlineView ignores collapseItem: for the items hidden because one of
+    // their ancestors is collapsed, but remembers their expanded state and
+    // restores it when the ancestor is expanded again. So the only way to
+    // collapse such items is to temporarily expand all their ancestors.
+    //
+    // Start by collecting all the ancestors, from the top level one down.
+    std::vector<wxPointerObject*> ancestors;
+    wxDataViewModel* const model = GetDataViewCtrl()->GetModel();
+    for ( wxDataViewItem parent = model->GetParent(item);
+          parent.IsOk();
+          parent = model->GetParent(parent) )
+    {
+        wxPointerObject* const nsParent = [m_DataSource getDataViewItemFromBuffer:parent];
+        if ( !nsParent )
+            return;
+
+        ancestors.insert(ancestors.begin(), nsParent);
+    }
+
+    // Note that we can only check whether the ancestor is expanded after
+    // expanding its own parent, as isItemExpanded: returns NO for the hidden
+    // items, even if they will be shown as expanded later.
+    std::vector<wxPointerObject*> expanded;
+    for ( wxPointerObject* const ancestor : ancestors )
+    {
+        if ( [m_OutlineView isItemExpanded:ancestor] )
+            continue;
+
+        // Don't send any events when collapsing a hidden item, for
+        // consistency with the generic and GTK versions.
+        m_changingHiddenItem = true;
+
+        [m_OutlineView expandItem:ancestor expandChildren:NO];
+        expanded.push_back(ancestor);
+    }
+
+    [m_OutlineView collapseItem:nsItem];
+
+    // Restore the original state, children expanded state is preserved by
+    // collapseItem: (which doesn't collapse the children by default).
+    for ( auto it = expanded.rbegin(); it != expanded.rend(); ++it )
+        [m_OutlineView collapseItem:*it];
+
+    m_changingHiddenItem = false;
 }
 
 void wxCocoaDataViewControl::EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn *columnPtr)
@@ -2373,18 +2496,17 @@ wxDataViewItem wxCocoaDataViewControl::GetTopItem() const
 
 wxRect wxCocoaDataViewControl::GetRectangle(const wxDataViewItem& item, const wxDataViewColumn *columnPtr)
 {
+    // For hidden items, i.e. items not shown because their parent is
+    // collapsed, there is no row and we're supposed to just return an empty
+    // rectangle.
+    const auto row = [m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    if ( row == -1 )
+        return wxRect();
+
     NSView* const parent = [m_osxView superview];
 
     wxRect r = wxFromNSRect(parent, [m_OutlineView frameOfCellAtColumn:GetColumnPosition(columnPtr)
-            row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]]);
-
-    // For hidden items, i.e. items not shown because their parent is
-    // collapsed, the native method returns rectangles with negative width, but
-    // we're supposed to just return an empty rectangle in this case. To be on
-    // the safe side, also check for the height as well, even if it seems to be
-    // always 0 in this case.
-    if ( r.width < 0 || r.height < 0 )
-        return wxRect();
+            row:row]);
 
     // Also adjust the vertical coordinates to use physical window coordinates
     // instead of the logical ones returned by frameOfCellAtColumn:row:
@@ -2404,7 +2526,11 @@ wxRect wxCocoaDataViewControl::GetRectangle(const wxDataViewItem& item, const wx
 
 bool wxCocoaDataViewControl::IsExpanded(const wxDataViewItem& item) const
 {
-    return [m_OutlineView isItemExpanded:[m_DataSource getDataViewItemFromBuffer:item]];
+    // Items not in the buffer have never been shown and so can't be expanded,
+    // and we must check for this explicitly as isItemExpanded:nil returns YES
+    // because nil corresponds to the (always expanded) root item.
+    wxPointerObject* const nsItem = [m_DataSource getDataViewItemFromBuffer:item];
+    return nsItem && [m_OutlineView isItemExpanded:nsItem];
 }
 
 bool wxCocoaDataViewControl::Reload()
@@ -2418,10 +2544,7 @@ bool wxCocoaDataViewControl::Reload()
 
 bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent)
 {
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
+    ReloadChildren(parent);
     return true;
 }
 
@@ -2434,14 +2557,19 @@ bool wxCocoaDataViewControl::Update(const wxDataViewColumn *columnPtr)
 
 bool wxCocoaDataViewControl::Update(const wxDataViewItem& WXUNUSED(parent), const wxDataViewItem& item)
 {
-    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
+    // Items not in the buffer have never been shown, so there is nothing to
+    // reload for them, and we must check for this explicitly as reloadItem:nil
+    // reloads the entire control because nil corresponds to the root item.
+    wxPointerObject* const nsItem = [m_DataSource getDataViewItemFromBuffer:item];
+    if ( nsItem )
+        [m_OutlineView reloadItem:nsItem];
     return true;
 }
 
-bool wxCocoaDataViewControl::Update(const wxDataViewItem& WXUNUSED(parent), const wxDataViewItemArray& items)
+bool wxCocoaDataViewControl::Update(const wxDataViewItem& parent, const wxDataViewItemArray& items)
 {
     for (size_t i=0; i<items.GetCount(); ++i)
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:items[i]]];
+        Update(parent, items[i]);
     return true;
 }
 
@@ -2685,7 +2813,6 @@ void wxDataViewRendererNativeData::Init()
 {
     m_origFont = nullptr;
     m_origTextColour = nullptr;
-    m_origBackgroundColour = nullptr;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
     m_hasCustomFont = false;
 
@@ -2844,13 +2971,15 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
     wxDataViewRendererNativeData * const data = GetNativeData();
     NSCell * const cell = data->GetItemCell();
 
-    // set the font, background and text colour to use: we need to do it if we
-    // had ever changed them before, even if this item itself doesn't have any
-    // special attributes as otherwise it would reuse the attributes from the
-    // previous cell rendered using the same renderer
+    // set the font and text colour to use: we need to do it if we had ever
+    // changed them before, even if this item itself doesn't have any special
+    // attributes as otherwise it would reuse the attributes from the previous
+    // cell rendered using the same renderer
+    //
+    // notice that the background colour is not set here, as it is drawn by
+    // wxCocoaOutlineView itself, see its drawRow:clipRect:
     NSFont *font = nullptr;
     NSColor *colText = nullptr;
-    NSColor *colBack = nullptr;
 
     if ( attr.HasFont() )
     {
@@ -2875,7 +3004,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         //else: can't change font if the cell doesn't have any
     }
 
-    // We don't apply the text or background colours if the cell is selected.
+    // We don't apply the text colour if the cell is selected.
     if ( [cell backgroundStyle] == NSBackgroundStyleLight )
     {
         if ( attr.HasColour() )
@@ -2895,19 +3024,6 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
                 colText = attr.GetColour().OSXGetWXColor();
             }
         }
-
-        if ( attr.HasBackgroundColour() )
-        {
-            // Use the same logic as the text colour check above
-            if ( [cell respondsToSelector:@selector(setBackgroundColor:)] &&
-                    [cell respondsToSelector:@selector(backgroundColor)] )
-            {
-                if ( !data->GetOriginalBackgroundColour() )
-                    data->SaveOriginalBackgroundColour([(id)cell backgroundColor]);
-
-                colBack = attr.GetBackgroundColour().OSXGetWXColor();
-            }
-        }
     }
 
 
@@ -2925,26 +3041,19 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         if ( colText )
             [(id)cell setTextColor:colText];
     }
-
-    if ( [cell respondsToSelector:@selector(setDrawsBackground:)] )
-    {
-        if ( !colBack )
-            colBack = data->GetOriginalBackgroundColour();
-
-        if ( colBack )
-        {
-            [(id)cell setDrawsBackground:true];
-            [(id)cell setBackgroundColor:colBack];
-        }
-        else
-        {
-            [(id)cell setDrawsBackground:false];
-        }
-    }
 }
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
+    // The cells of a disabled control must be shown as disabled too, as in the
+    // generic implementation: this function is called with the state of the
+    // item in the model before showing each cell, so without this check they
+    // would look enabled.
+    const wxDataViewColumn* const column = GetOwner();
+    const wxDataViewCtrl* const dvc = column ? column->GetOwner() : nullptr;
+    if ( dvc && !dvc->IsEnabled() )
+        enabled = false;
+
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
@@ -3181,6 +3290,8 @@ wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewRenderer);
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDataViewChoiceByIndexRenderer, wxDataViewChoiceRenderer);
+
 wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer(const wxArrayString& choices,
                                                                  wxDataViewCellMode mode,
                                                                  int alignment)
@@ -3382,6 +3493,35 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_CORE)
 
 wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
 
+// Cell used by wxDataViewCheckIconTextRenderer: unlike in a plain NSButtonCell,
+// which tracks the mouse in its title as well as in its image, only clicking
+// on the checkbox itself toggles it, while clicking on the text selects the
+// item, as in the generic implementation.
+@interface wxCheckIconTextCell : NSButtonCell
+{
+}
+
+@end
+
+@implementation wxCheckIconTextCell
+
+-(NSUInteger) hitTestForEvent:(NSEvent*)event inRect:(NSRect)cellFrame ofView:(NSView*)controlView
+{
+    // Consider that the clicks a few points away from the checkbox are still
+    // meant for it.
+    const CGFloat margin = 3;
+
+    const NSRect boxRect = [self imageRectForBounds:cellFrame];
+    const NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
+
+    if ( point.x >= NSMinX(boxRect) - margin && point.x <= NSMaxX(boxRect) + margin )
+        return [super hitTestForEvent:event inRect:cellFrame ofView:controlView];
+
+    return NSCellHitContentArea;
+}
+
+@end
+
 wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
     (
         wxDataViewCellMode mode,
@@ -3393,7 +3533,7 @@ wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
 
     NSButtonCell* cell;
 
-    cell = [[NSButtonCell alloc] init];
+    cell = [[wxCheckIconTextCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(GetAlignment())];
     [cell setButtonType: NSSwitchButton];
     [cell setImagePosition:NSImageLeft];

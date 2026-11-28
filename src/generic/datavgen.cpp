@@ -19,11 +19,11 @@
 
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
-        #include "wx/app.h"          // GetRegisteredClassName()
         #include "wx/msw/private.h"
         #include "wx/msw/wrapwin.h"
         #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #endif
+    #include "wx/app.h"
     #include "wx/sizer.h"
     #include "wx/log.h"
     #include "wx/dcclient.h"
@@ -1307,6 +1307,13 @@ public:
     bool IsExpanded( unsigned int row ) const;
     bool HasChildren( unsigned int row ) const;
 
+    // Return true if the item has a collapsed ancestor
+    bool HasCollapsedAncestor( const wxDataViewItem & item );
+
+    // Collapse the item which is not shown because it has a collapsed
+    // ancestor, so that it remains collapsed when it becomes visible again.
+    void CollapseHiddenItem( const wxDataViewItem & item );
+
 #if wxUSE_DRAG_AND_DROP
     enum DropHint
     {
@@ -2458,6 +2465,10 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_count = -1;
     m_underMouse = nullptr;
 
+    // Disable IME for this window: it accepts focus but doesn't accept text
+    // input, only in-place text controls created when editing do.
+    EnableInputMethod(false);
+
     UpdateDisplay();
 }
 
@@ -2794,8 +2805,8 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
     bitmap.CreateWithLogicalSize( width, height, GetDPIScaleFactor() );
     wxMemoryDC dc( bitmap );
     dc.SetFont( GetFont() );
-    dc.SetPen( *wxBLACK_PEN );
-    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.SetPen( GetOwner()->GetForegroundColour() );
+    dc.SetBrush( GetOwner()->GetBackgroundColour() );
     dc.DrawRectangle( 0,0,width,height );
 
     wxDataViewModel *model = m_owner->GetModel();
@@ -5188,6 +5199,44 @@ wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
     return result;
 }
 
+
+bool wxDataViewMainWindow::HasCollapsedAncestor( const wxDataViewItem & item )
+{
+    if (!item.IsOk())
+        return false;
+
+    wxDataViewItem current = item;
+    while (current.IsOk())
+    {
+      current = GetModel()->GetParent( current );
+      if (!current.IsOk())
+          break;
+
+      const auto result = FindNode( current );
+      if (result.m_node == nullptr)
+          return false;
+      if (!result.m_node->IsOpen())
+          return true;
+    }
+
+    return false;
+}
+
+void wxDataViewMainWindow::CollapseHiddenItem( const wxDataViewItem & item )
+{
+    wxDataViewTreeNode* const node = FindNode( item ).m_node;
+    if ( node && node->IsOpen() )
+    {
+        // Note: don't send the events for the hidden item, for consistency
+        //       with the native GTK version and what we used to do.
+
+        node->ToggleOpen(this);
+
+        // Also note that there are no rows to update, as ToggleOpen() doesn't
+        // propagate the subtree count change beyond the collapsed ancestor.
+    }
+}
+
 void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item,
                                     wxDataViewColumn* &column )
 {
@@ -6382,6 +6431,10 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // that would make the editor close anyhow, but we do need to do it for
         // the other ones and it does no harm to do it for the left one too.
         FinishEditing();
+
+        // Discard any deferred selection from a previous click whose button-up
+        // event didn't reach us, e.g. after drag-and-drop.
+        m_lineSelectSingleOnUp = (unsigned int)-1;
     }
 
     // Handle right clicking here, before everything else as context menu
@@ -6415,6 +6468,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             m_dragCount = 3;
         else if (m_dragCount != 3)
             return;
+
+        m_lineSelectSingleOnUp = (unsigned int)-1;
 
         if (event.LeftIsDown())
         {
@@ -6592,15 +6647,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         m_lastOnSame = false;
         m_lineSelectSingleOnUp = (unsigned int)-1;
     }
-    else if(!event.LeftUp())
-    {
-        // This is necessary, because after a DnD operation in
-        // from and to ourself, the up event is swallowed by the
-        // DnD code. So on next non-up event (which means here and
-        // now) m_lineSelectSingleOnUp should be reset.
-        m_lineSelectSingleOnUp = (unsigned int)-1;
-    }
-
     if (event.RightDown())
     {
         m_lineBeforeLastClicked = m_lineLastClicked;
@@ -8403,6 +8449,14 @@ void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren 
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
+    if (m_clientArea->HasCollapsedAncestor(item))
+    {
+        // We need to change the item state so that it remains collapsed if its
+        // collapsed ancestor is expanded later.
+        m_clientArea->CollapseHiddenItem(item);
+        return;
+    }
+
     int row =
         m_clientArea->GetRowByItem(item, Walk_ExpandedOnly);
     if (row != -1)
@@ -8411,6 +8465,9 @@ void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
 {
+    if (m_clientArea->HasCollapsedAncestor(item))
+        return false;
+
     int row =
         m_clientArea->GetRowByItem(item, Walk_ExpandedOnly);
     if (row != -1)

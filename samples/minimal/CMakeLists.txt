@@ -33,7 +33,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Request the required wxWidgets libs
-find_package(wxWidgets 3.3 COMPONENTS core base REQUIRED CONFIG)
+find_package(wxWidgets 3.9 COMPONENTS core base REQUIRED CONFIG)
 
 # Define a variable containing a list of source files for the project
 set(SRC_FILES

@@ -50,18 +50,31 @@ public:
 
     wxAuiManager& GetAuiManager()  { return m_mgr; }
 
+    // Override to prevent leaving dangling pointers.
+    virtual bool Destroy() override;
+
 protected:
     virtual void OnMoveStart();
     virtual void OnMoving(const wxRect& windowRect, wxDirection dir);
     virtual void OnMoveFinished();
 
 private:
+    void CleanUp();
+    bool DockPane();
     void OnSize(wxSizeEvent& event);
     void OnClose(wxCloseEvent& event);
     void OnMoveEvent(wxMoveEvent& event);
+    void OnLeftDClick(wxMouseEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnActivate(wxActivateEvent& event);
     static bool isMouseDown();
+
+#ifdef __WXMSW__
+    virtual bool MSWHandleMessage(WXLRESULT* result,
+                                  WXUINT message,
+                                  WXWPARAM wParam,
+                                  WXLPARAM lParam) override;
+#endif
 
 private:
     wxWindow* m_paneWindow;    // pane window being managed

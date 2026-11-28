@@ -25,35 +25,6 @@
 #include "wx/qt/private/winevent.h"
 
 
-class wxQtToolButton;
-class wxToolBarTool : public wxToolBarToolBase
-{
-public:
-    wxToolBarTool(wxToolBar *tbar, int id, const wxString& label, const wxBitmapBundle& bitmap1,
-                  const wxBitmapBundle& bitmap2, wxItemKind kind, wxObject *clientData,
-                  const wxString& shortHelpString, const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
-                            clientData, shortHelpString, longHelpString)
-    {
-        m_qtToolButton = nullptr;
-    }
-
-    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
-        : wxToolBarToolBase(tbar, control, label)
-    {
-        m_qtToolButton = nullptr;
-    }
-
-    virtual void SetLabel( const wxString &label ) override;
-    virtual void SetDropdownMenu(wxMenu* menu) override;
-
-    void SetIcon();
-    void ClearToolTip();
-    void SetToolTip();
-
-    wxQtToolButton* m_qtToolButton;
-};
-
 class wxQtToolButton : public QToolButton, public wxQtSignalHandler
 {
 
@@ -103,6 +74,8 @@ void wxQtToolButton::enterEvent( wxQtEnterEvent *WXUNUSED(event) )
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);
+
+wxIMPLEMENT_CLASS(wxToolBarTool, wxToolBarToolBase);
 
 void wxToolBarTool::SetLabel( const wxString &label )
 {
@@ -409,6 +382,13 @@ long wxToolBar::GetButtonStyle()
             return Qt::ToolButtonIconOnly;
     }
     return Qt::ToolButtonTextOnly;
+}
+
+void wxToolBar::DoSetToolBitmapSize(const wxSize& size)
+{
+    wxToolBarBase::DoSetToolBitmapSize(size);
+
+    GetQToolBar()->setIconSize( wxQtConvertSize(size) );
 }
 
 #endif // wxUSE_TOOLBAR

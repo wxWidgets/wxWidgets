@@ -20,6 +20,7 @@
 
 #if wxUSE_EPOLL_DISPATCHER
 
+#include "wx/private/make_unique.h"
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
 #include "wx/stopwatch.h"

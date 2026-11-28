@@ -502,6 +502,8 @@ private:
     long    m_data;
     long    m_min,m_max;
     friend class wxWinUIDataViewImpl;
+
+private:
     wxDECLARE_CLASS(wxDataViewSpinRenderer);
 };
 
@@ -536,6 +538,8 @@ public:
 private:
     wxArrayString m_choices;
     wxString      m_data;
+
+private:
     wxDECLARE_CLASS(wxDataViewChoiceRenderer);
 };
 
@@ -597,6 +601,8 @@ private:
     wxString FormatDate() const;
 
     wxDateTime    m_date;
+
+private:
     wxDECLARE_CLASS(wxDataViewDateRenderer);
 };
 #else // !wxUSE_DATEPICKCTRL

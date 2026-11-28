@@ -268,6 +268,17 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     return size;
 }
 
+void wxTextCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    wxTextCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
+    wxWindow* parent = GetParent();
+    if ( parent && parent->MacIsUserPane() && GetPosition().y == 0 )
+    {
+        if ( parent->MacDoesClipToBounds() )
+            parent->MacClipsToBounds(false);
+    }
+}
+
 bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 {
     return GetTextPeer()->GetStyle(position, style);

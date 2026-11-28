@@ -240,36 +240,36 @@ wxGCC_ONLY_WARNING_SUPPRESS(format-nonliteral)
 wxGCC_ONLY_WARNING_SUPPRESS(format-security)
 
 template <typename... Targs>
-int wxPrintf(const wxFormatString& format, Targs... args)
+int wxPrintf(const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
         if ( wxLocaleIsUtf8 )
     #endif
-            return wxCRT_PrintfA(format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+            return wxCRT_PrintfA(format, wxArgNormalizerUtf8<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // wxUSE_UNICODE_UTF8
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-    return wxCRT_PrintfW(format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+    return wxCRT_PrintfW(format, wxArgNormalizerWchar<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 
 template <typename... Targs>
-int wxFprintf(FILE* fp, const wxFormatString& format, Targs... args)
+int wxFprintf(FILE* fp, const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
         if ( wxLocaleIsUtf8 )
     #endif
-            return wxCRT_FprintfA(fp, format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+            return wxCRT_FprintfA(fp, format, wxArgNormalizerUtf8<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // wxUSE_UNICODE_UTF8
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-    return wxCRT_FprintfW(fp, format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+    return wxCRT_FprintfW(fp, format, wxArgNormalizerWchar<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 
@@ -323,19 +323,19 @@ int WXDLLIMPEXP_BASE wxDoSprintfUtf8(wchar_t *str, const char *format, ...);
 #endif
 
 template <typename CharType, typename... Targs>
-int wxSprintf(CharType* str, const wxFormatString& format, Targs... args)
+int wxSprintf(CharType* str, const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
         if ( wxLocaleIsUtf8 )
     #endif
-            return wxDoSprintfUtf8(str, format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+            return wxDoSprintfUtf8(str, format, wxArgNormalizerUtf8<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // wxUSE_UNICODE_UTF8
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-    return wxDoSprintfWchar(str, format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+    return wxDoSprintfWchar(str, format, wxArgNormalizerWchar<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 
@@ -352,19 +352,19 @@ int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *for
 #endif
 
 template <typename CharType, typename... Targs>
-int wxSnprintf(CharType* str, size_t size, const wxFormatString& format, Targs... args)
+int wxSnprintf(CharType* str, size_t size, const wxFormatString& format, wxFORMAT_ARGS(Targs)... args)
 {
-    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+    format.Preprocess(args...);
 
 #if wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
         if ( wxLocaleIsUtf8 )
     #endif
-            return wxDoSnprintfUtf8(str, size, format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+            return wxDoSnprintfUtf8(str, size, format, wxArgNormalizerUtf8<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // wxUSE_UNICODE_UTF8
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-    return wxDoSnprintfWchar(str, size, format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+    return wxDoSnprintfWchar(str, size, format, wxArgNormalizerWchar<wxFormatArgType<Targs>>{args, nullptr, 0}.get()...);
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 

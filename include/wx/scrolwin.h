@@ -211,16 +211,6 @@ public:
         return pt;
     }
 
-    // Get the view start in pixels
-    void GetViewStartPixels(int *x, int *y) const { DoGetViewStartPixels(x, y); }
-
-    wxPoint GetViewStartPixels() const
-    {
-        wxPoint pt;
-        DoGetViewStartPixels(&pt.x, &pt.y);
-        return pt;
-    }
-
     // Set the scale factor, used in PrepareDC
     void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
     double GetScaleX() const { return m_scaleX; }
@@ -429,6 +419,14 @@ private:
 // methods to corresponding wxScrollHelper methods
 #define WX_FORWARD_TO_SCROLL_HELPER()                                         \
 public:                                                                       \
+    virtual void GetViewStartPixels(int* x, int* y) const override            \
+        { DoGetViewStartPixels(x, y); }                                       \
+    virtual wxPoint GetViewStartPixels() const override                       \
+    {                                                                         \
+        wxPoint pt;                                                           \
+        DoGetViewStartPixels(&pt.x, &pt.y);                                   \
+        return pt;                                                            \
+    }                                                                         \
     virtual void PrepareReadOnlyDC(wxReadOnlyDC& dc) override { DoPrepareReadOnlyDC(dc); }          \
     virtual void PrepareDC(wxDC& dc) override { DoPrepareDC(dc); }          \
     void PrepareDC(wxReadOnlyDC& dc) { DoPrepareReadOnlyDC(dc); }           \

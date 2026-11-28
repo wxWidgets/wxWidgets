@@ -145,7 +145,7 @@ bool wxSpinButton::Create(wxWindow *parent,
     SetInitialSize(size);
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWSetDarkOrLightMode(SetMode::Initial);
+        MSWSetDarkOrLightMode();
 
     return true;
 }

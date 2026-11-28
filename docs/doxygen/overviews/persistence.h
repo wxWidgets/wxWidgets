@@ -137,6 +137,13 @@ support for your custom class @c MyWidget you just need to:
 -# Define wxCreatePersistentObject() overload taking `MyWidget*` and
    returning a new `MyPersistentWidget` object.
 
+If any of the saved values is a size or a position in pixels, use
+wxPersistentWindow::SaveCoord() and wxPersistentWindow::RestoreCoord()
+instead of the generic functions: they also store the DPI at which the value
+was saved and rescale it if it changes before the value is restored, which is
+important for the applications which may be used with different DPI values,
+e.g. when a display is replaced or its scaling factor is changed.
+
 If you want to add persistence support for a class not deriving from wxWindow,
 you need to derive `MyPersistentWidget` directly from wxPersistentObject and
 so implement its pure virtual wxPersistentObject::GetName() method too.

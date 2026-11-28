@@ -4650,6 +4650,8 @@ wxMSWOleDropTargetAccess::GetCOMInterface(wxDropTarget* target) noexcept
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
+wxIMPLEMENT_CLASS(wxDropTarget, wxObject);
+
 wxDropTarget::wxDropTarget(wxDataObject *dataObj)
             : wxDropTargetBase(dataObj),
               m_pIDropTarget(nullptr),
@@ -5011,6 +5013,8 @@ bool wxDropTarget::GetData()
 
         hr = dataObject->SetData(&fmtMemory, &stm, TRUE);
         if ( SUCCEEDED(hr) ) {
+            m_dataObject->MSWSetDataSource(m_pIDataSource, format);
+
             rc = true;
         }
         else {
@@ -5032,6 +5036,11 @@ bool wxDropTarget::GetData()
 void wxDropTarget::MSWSetDataSource(IDataObject *pIDataSource)
 {
     m_pIDataSource = pIDataSource;
+
+    // when the drag and drop operation ends, the data object must stop using
+    // the data source too
+    if ( !pIDataSource && m_dataObject )
+        m_dataObject->MSWReleaseDataSource();
 }
 
 // determine if we accept data of this type

@@ -163,6 +163,10 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
                               textRenderer, TRUE );
     gtk_cell_layout_add_attribute( GTK_CELL_LAYOUT(m_widget),
                                    textRenderer, "text", 1);
+#ifdef __WXGTK3__
+    // See wxChoice::Create().
+    g_object_set(G_OBJECT(textRenderer), "ellipsize", PANGO_ELLIPSIZE_END, nullptr);
+#endif
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()

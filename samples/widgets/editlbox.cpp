@@ -43,8 +43,6 @@
 #include "itemcontainer.h"
 #include "widgets.h"
 
-#include "icons/listbox.xpm"
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -116,7 +114,7 @@ IMPLEMENT_WIDGETS_PAGE(EditableListboxWidgetsPage, "EditableListbox", GENERIC_CT
 
 EditableListboxWidgetsPage::EditableListboxWidgetsPage(WidgetsBookCtrl *book,
                                                        wxVector<wxBitmapBundle>& imaglist)
-                  : WidgetsPage(book, imaglist, listbox_xpm)
+                  : WidgetsPage(book, imaglist, WidgetsIcon::ListBox)
 {
 
 }
@@ -147,7 +145,7 @@ void EditableListboxWidgetsPage::CreateContent()
                                     _("Match these wildcards:"),
                                     wxDefaultPosition, wxDefaultSize, 0);
     sizerRight->Add(m_lbox, wxSizerFlags(1).Expand().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerLbox = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

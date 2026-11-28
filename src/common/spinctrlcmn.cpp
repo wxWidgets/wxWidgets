@@ -25,6 +25,7 @@
 #include "wx/spinctrl.h"
 
 #include "wx/private/spinctrl.h"
+#include "wx/textentry.h"
 
 #include <math.h>
 
@@ -154,5 +155,16 @@ unsigned wxSpinCtrlImpl::DetermineDigits(double inc)
         return 0;
     }
 }
+
+#if wxUSE_ACCEL
+
+bool
+wxSpinCtrlBase::ClaimsKeyBeforeAccelerator(const wxKeyEvent& event,
+                                           int WXUNUSED(command)) const
+{
+    return wxTextEntryBase::IsUsedForEditing(event);
+}
+
+#endif // wxUSE_ACCEL
 
 #endif // wxUSE_SPINCTRL

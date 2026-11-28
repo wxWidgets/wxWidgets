@@ -24,8 +24,17 @@ Instructions:
    reports: `for l in $old/*.abi; do abidiff $l -new $new/$(basename $l); done`.
 1. If everything is good, update the ABI files in `$old` with the `$new` ones.
 
-See also `build/elfabi/check_all.sh` which checks the ABI of the newly built
-libraries and is simpler to use if there is no need to update the ABI files.
+Note that this is done automatically by `abi_check.yml` CI workflow, which
+builds the first stable release of the branch, generates its ABI descriptions
+using `build/elfabi/generate_all.sh` and checks the newly built libraries
+against them using `build/elfabi/check_all.sh`, so normally it's enough to
+check its results.
+
+Before the first stable release of the branch, set `wxABI_BASELINE` variable
+in the repository settings to the tag of the first release candidate to check
+for ABI changes during the release preparation. If the ABI is changed
+intentionally, update this variable to the commit making the change, and
+delete it after making the stable release.
 
 ### Checking under MSW systems.
 

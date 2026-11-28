@@ -396,6 +396,13 @@ public :
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
+    virtual void        SetAccessibilityLabel(const wxString& WXUNUSED(label)) { }
+    virtual void        SetAccessibilityTitleElement(wxWidgetImpl* WXUNUSED(title)) { }
+
+    // return true if the native control already has its own accessibility
+    // title or label, e.g. because it's a button with a non-empty label
+    virtual bool        HasAccessibilityTitle() const { return false; }
+
     // is the clicked event sent AFTER the state already changed, so no additional
     // state changing logic is required from the outside
     virtual bool        ButtonClickDidStateChange() = 0;
@@ -405,6 +412,7 @@ public :
     virtual bool        EnableTouchEvents(int eventsMask) = 0;
 
     virtual void        ClipsToBounds(bool clip);
+    virtual bool        DoesClipToBounds() const;
 
     // scrolling views need a clip subview that acts as parent for native children
     // (except for the scollbars) which are children of the view itself
@@ -1117,6 +1125,11 @@ public:
     wxNSObjRef( const wxNSObjRef& otherRef )
         : m_ptr(wxMacCocoaRetain(otherRef.m_ptr))
     {
+    }
+
+    ~wxNSObjRef()
+    {
+        wxMacCocoaRelease(m_ptr);
     }
 
     wxNSObjRef& operator=( const wxNSObjRef& otherRef )

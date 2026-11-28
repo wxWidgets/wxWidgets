@@ -1714,9 +1714,16 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
     wxCommandEvent evt2(event);
     evt2.SetId(GetId());
     evt2.SetEventObject(this);
-    HandleWindowEvent(evt2);
 
+    // Stop propagating the original event in any case, parent window will get
+    // evt2 and we don't want to send both to it.
     event.StopPropagation();
+
+    // But still allow the original event to be processed by this control
+    // itself if the application didn't handle it, e.g. to allow using "Enter"
+    // to close the dialog containing this control.
+    if ( !HandleWindowEvent(evt2) )
+        event.Skip();
 }
 
 // call if cursor is on button area or mouse is captured for the button

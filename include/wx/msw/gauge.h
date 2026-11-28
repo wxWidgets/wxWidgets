@@ -62,7 +62,7 @@ protected:
     virtual wxSize DoGetBestSize() const override;
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
-    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+    virtual void MSWSetDarkOrLightMode() override;
 
 private:
     // returns true if the control is currently in indeterminate (a.k.a.

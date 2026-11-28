@@ -653,6 +653,8 @@ set(BASE_CMN_HDR
     wx/localedefs.h
     wx/uilocale.h
     wx/fs_data.h
+    wx/stdformat.h
+    wx/extradata.h
 )
 
 set(NET_UNIX_SRC
@@ -2175,6 +2177,7 @@ set(OSX_SHARED_HDR
     wx/osx/appprogress.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/osx/hyperlink.h
 )
 
 set(OSX_COCOA_SRC
@@ -2235,6 +2238,7 @@ set(OSX_COCOA_SRC
     src/osx/core/display.cpp
     src/osx/cocoa/renderer.mm
     src/osx/cocoa/power.mm
+    src/osx/cocoa/hyperlink.mm
 )
 
 set(OSX_COCOA_HDR
@@ -2861,6 +2865,8 @@ set(RIBBON_SRC
     src/ribbon/art_aui.cpp
     src/ribbon/art_msw_flat.cpp
     src/ribbon/art_winui.cpp
+    src/ribbon/backstage.cpp
+    src/ribbon/backstagecontrols.cpp
     src/ribbon/bar.cpp
     src/ribbon/buttonbar.cpp
     src/ribbon/control.cpp
@@ -2874,12 +2880,15 @@ set(RIBBON_SRC
 set(RIBBON_HDR
     wx/ribbon/art.h
     wx/ribbon/art_internal.h
+    wx/ribbon/backstage.h
+    wx/ribbon/backstagecontrols.h
     wx/ribbon/bar.h
     wx/ribbon/buttonbar.h
     wx/ribbon/control.h
     wx/ribbon/gallery.h
     wx/ribbon/page.h
     wx/ribbon/panel.h
+    wx/ribbon/private/backstage.h
     wx/ribbon/toolbar.h
     wx/xrc/xh_ribbon.h
 )

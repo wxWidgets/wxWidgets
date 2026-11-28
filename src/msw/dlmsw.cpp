@@ -198,6 +198,11 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
                                    );
 }
 
+void *wxDynamicLibrary::GetByOrdinal(int ordinal) const
+{
+    return (void *)::GetProcAddress(m_handle, MAKEINTRESOURCEA(ordinal));
+}
+
 // ----------------------------------------------------------------------------
 // enumerating loaded DLLs
 // ----------------------------------------------------------------------------

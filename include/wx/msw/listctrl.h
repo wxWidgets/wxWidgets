@@ -401,7 +401,7 @@ protected:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
-    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+    virtual void MSWSetDarkOrLightMode() override;
 
     virtual int MSWGetToolTipMessage() const override;
 
@@ -481,6 +481,9 @@ private:
     // another WM_SIZE to be generated.
     int m_inResize = 0;
 
+    // Non-zero while the native control is auto-sizing a column, which it does
+    // by sending NM_CUSTOMDRAW notifications for all of its items.
+    int m_inAutoSize = 0;
 
     wxDECLARE_DYNAMIC_CLASS(wxListCtrl);
     wxDECLARE_EVENT_TABLE();

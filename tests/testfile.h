@@ -12,6 +12,7 @@
 #include "wx/file.h"
 #include "wx/filefn.h"
 #include "wx/filename.h"
+#include "wx/log.h"
 
 #include <ostream>
 
@@ -80,12 +81,24 @@ class TempDir
 public:
     explicit TempDir(const wxString& prefix = wxT("wxtest"))
     {
-        m_name = wxFileName::CreateTempFileName(prefix);
-        if ( !m_name.empty() )
+        // Capture the error message, if any, to show it in RequireOk(), as
+        // the errors are not shown by the test logger by default.
+        wxLogBuffer logBuf;
+        wxLog* const logOld = wxLog::SetActiveTarget(&logBuf);
+
+        m_name = wxFileName::CreateTempDirName(prefix);
+
+        if ( m_name.empty() )
         {
-            if ( !wxRemoveFile(m_name) || !wxMkdir(m_name) )
-                m_name.clear();
+            m_error = logBuf.GetBuffer();
+            m_error.Trim();
         }
+
+        // Prevent the buffer contents from being shown when the old target is
+        // restored, as this flushes the current one.
+        logBuf.Clear();
+
+        wxLog::SetActiveTarget(logOld);
     }
 
     ~TempDir() { Remove(); }
@@ -95,7 +108,20 @@ public:
         return !m_name.empty();
     }
 
+    void RequireOk() const
+    {
+        if ( !IsOk() )
+        {
+            const wxString msg =
+                m_error.empty() ? wxString("TempDir creation failed") : m_error;
+            UNSCOPED_INFO(msg);
+        }
+
+        REQUIRE(IsOk());
+    }
+
     const wxString& GetName() const { return m_name; }
+    const wxString& GetError() const { return m_error; }
 
     bool Remove()
     {
@@ -113,6 +139,7 @@ public:
 
 private:
     wxString m_name;
+    wxString m_error;
 
     wxDECLARE_NO_COPY_CLASS(TempDir);
 };

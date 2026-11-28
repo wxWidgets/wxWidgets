@@ -51,9 +51,15 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data )
             QColorDialog::setCustomColor(i, m_data.GetCustomColour(i).GetQColor());
     }
 
-    static_cast<QColorDialog*>(m_qtWindow)->setCurrentColor(m_data.GetColour().GetQColor());
+    GetQColorDialog()->setCurrentColor(m_data.GetColour().GetQColor());
+    GetQColorDialog()->setOption(QColorDialog::ShowAlphaChannel, m_data.GetChooseAlpha());
 
     return wxTopLevelWindow::Create( parent, wxID_ANY, "");
+}
+
+void wxColourDialog::QtDontUseNativeDialog()
+{
+    GetQColorDialog()->setOption(QColorDialog::DontUseNativeDialog, true);
 }
 
 wxColourData &wxColourDialog::GetColourData()
@@ -62,6 +68,7 @@ wxColourData &wxColourDialog::GetColourData()
         m_data.SetCustomColour(i, GetQColorDialog()->customColor(i));
 
     m_data.SetColour(GetQColorDialog()->currentColor());
+    m_data.SetChooseAlpha(GetQColorDialog()->testOption(QColorDialog::ShowAlphaChannel));
 
     return m_data;
 }

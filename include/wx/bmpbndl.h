@@ -19,6 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_BASE wxVariant;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_BASE wxInputStream;
 
 // ----------------------------------------------------------------------------
 // wxBitmapBundle provides 1 or more versions of a bitmap, all bundled together
@@ -93,6 +94,11 @@ public:
     // Load SVG image from the given file (must be a local file, not an URL).
     wxNODISCARD static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
 
+#if wxUSE_STREAMS
+    // Load SVG image from the given input stream.
+    wxNODISCARD static wxBitmapBundle FromSVG(wxInputStream& stream, const wxSize& sizeDef);
+#endif // wxUSE_STREAMS
+
     // Create from SVG image stored as an application resource.
     // On Windows, name must be a resource with RT_RCDATA type.
     // On MacOS, name must be a file with an extension "svg" placed in the
@@ -111,6 +117,11 @@ public:
 
     // Create from existing implementation
     wxNODISCARD static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
+
+    // Return a bundle providing disabled ("greyed out") versions of the bitmaps.
+    // The bitmaps are converted on demand, so SVG and any other
+    // scales provided by this bundle are preserved.
+    wxNODISCARD wxBitmapBundle MakeDisabled() const;
 
     // Check if bitmap bundle is non-empty.
     wxNODISCARD bool IsOk() const { return m_impl.get() != nullptr; }
