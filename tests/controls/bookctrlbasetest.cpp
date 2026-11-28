@@ -18,6 +18,7 @@
 #include "wx/artprov.h"
 #include "wx/imaglist.h"
 #include "wx/bookctrl.h"
+#include "wx/platinfo.h"
 #include "wx/weakref.h"
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
@@ -1255,11 +1256,18 @@ TEST_CASE("wxBookCtrlBase::DoSizeStopsAfterPageDestruction",
 // wxGTK, wxOSX and wxQt don't give the book its new size synchronously when
 // it is resized from inside the size event of one of its pages: the pages
 // sized after the nested layout get the old size there (seen in the CI on
-// 2026-11-28). wxWinUI doesn't meet it either. Only wxMSW does.
+// 2026-11-28). wxWinUI doesn't meet it either, nor wxMSW under Wine. Only
+// wxMSW under Windows does.
 #if defined(__WXMSW__) && !defined(__WXWINUI__)
 TEST_CASE("wxBookCtrlBase::DoSizeNestedLayoutIsLatestWriter",
           "[bookctrl][lifetime][size][reentrancy]")
 {
+    if ( wxIsRunningUnderWine() )
+    {
+        WARN("Skipping the nested book layout test under Wine.");
+        return;
+    }
+
     BookLifetimeHarness* const book = CreateLifetimeBook();
     REQUIRE(book);
 
