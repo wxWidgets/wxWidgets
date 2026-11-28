@@ -91,6 +91,11 @@ protected:
     void OnSize(wxSizeEvent& event);
 
 private:
+    // Removes the page from the common model only. A static member, and not a
+    // qualified call in the lambdas which use it: g++ 4.8 refuses calling a
+    // protected member of the base class this way from a lambda.
+    static wxWindow *DoRemoveCommonPage(wxListbook *book, size_t page);
+
     // this should be called when we need to be relaid out
     void UpdateSize();
 

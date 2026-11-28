@@ -31,7 +31,9 @@
 #include "wx/aui/serializer.h"
 #include "wx/weakref.h"
 
-#include "aui-notebook-test-access.h"
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
+    #include "aui-notebook-test-access.h"
+#endif
 
 #include "asserthelper.h"
 #include "waitfor.h"
@@ -927,6 +929,7 @@ class wxAuiNotebookTestPeer final : public wxAuiNotebook
 public:
     using wxAuiNotebook::wxAuiNotebook;
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
     void EndDrag(wxAuiTabCtrl* const source,
                  const int sourceIndex,
                  wxAuiTabCtrl* const destination,
@@ -937,6 +940,7 @@ public:
                                          destination, destinationIndex,
                                          createNewPane);
     }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
     wxBitmapBundle GetCanonicalBitmap(size_t page) const
     {
@@ -960,10 +964,12 @@ public:
         return CalculateTabCtrlHeight();
     }
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
     void ClickWindowListForTesting(wxAuiTabCtrl* const tabs)
     {
         wxAuiNotebookTestAccess::ClickWindowList(tabs);
     }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 };
 
 // ----------------------------------------------------------------------------
@@ -1617,6 +1623,7 @@ TEST_CASE("wxAuiNotebook split repairs a sibling page in another pane",
     CHECK_FALSE(survivorLifetime);
 }
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
 TEST_CASE("wxAuiNotebook end drag moves a tab to an existing pane",
           "[aui][drag][split][transaction]")
 {
@@ -1651,7 +1658,9 @@ TEST_CASE("wxAuiNotebook end drag moves a tab to an existing pane",
 
     delete book;
 }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
 TEST_CASE("wxAuiNotebook end drag creates and commits a new pane",
           "[aui][drag][split][transaction]")
 {
@@ -1682,7 +1691,9 @@ TEST_CASE("wxAuiNotebook end drag creates and commits a new pane",
 
     delete book;
 }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
 TEST_CASE("wxAuiNotebook external drag locally rolls back a damaged source",
           "[aui][drag][lifetime][reentrancy][transaction]")
 {
@@ -1746,7 +1757,9 @@ TEST_CASE("wxAuiNotebook external drag locally rolls back a damaged source",
     delete destinationBook;
     delete sourceBook;
 }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
 TEST_CASE("wxAuiNotebook external drag rejects a reparented destination",
           "[aui][drag][ownership][reentrancy][transaction]")
 {
@@ -1807,7 +1820,9 @@ TEST_CASE("wxAuiNotebook external drag rejects a reparented destination",
     delete newOwner;
     CHECK_FALSE(destinationTabsLifetime);
 }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
 TEST_CASE("wxAuiNotebook external drag rejects a destroy-scheduled destination",
           "[aui][drag][lifetime][transaction]")
 {
@@ -1854,6 +1869,7 @@ TEST_CASE("wxAuiNotebook external drag rejects a destroy-scheduled destination",
     CHECK_FALSE(destinationTabsLifetime);
     delete sourceBook;
 }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
 TEST_CASE("wxAuiNotebook unsplits three panes with exact display order",
           "[aui][split][transaction]")
@@ -3355,6 +3371,7 @@ TEST_CASE("wxAuiTabCtrl window-list button validates the selected projection",
             event.Skip();
         });
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
     SECTION("stable returned page is selected")
     {
         book->ClickWindowListForTesting(tabs.front());
@@ -3366,7 +3383,9 @@ TEST_CASE("wxAuiTabCtrl window-list button validates the selected projection",
         CHECK(changingEvents == 1);
         CHECK(changedEvents == 1);
     }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
     SECTION("provider destroys the returned live page")
     {
         state->callback = [second](const wxAuiNotebookPageArray&)
@@ -3383,7 +3402,9 @@ TEST_CASE("wxAuiTabCtrl window-list button validates the selected projection",
         CHECK(changingEvents == 0);
         CHECK(changedEvents == 0);
     }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
+#ifdef WXAUI_NOTEBOOK_TEST_SUPPORT
     SECTION("provider mutates the returned menu payload")
     {
         state->callback = [](const wxAuiNotebookPageArray& pages)
@@ -3403,6 +3424,7 @@ TEST_CASE("wxAuiTabCtrl window-list button validates the selected projection",
         CHECK(changingEvents == 0);
         CHECK(changedEvents == 0);
     }
+#endif // WXAUI_NOTEBOOK_TEST_SUPPORT
 
     delete book;
 }

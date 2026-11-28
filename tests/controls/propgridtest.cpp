@@ -33,7 +33,9 @@
 #endif
 #include "wx/weakref.h"
 
-#include "property-grid-test-access.h"
+#ifdef WXPROPGRID_TEST_SUPPORT
+    #include "property-grid-test-access.h"
+#endif
 
 #ifdef __WXMSW__
 #include "wx/msw/wrapwin.h"
@@ -60,6 +62,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_PROPGRID,
                          wxPropertyGridEvent);
 
 #if wxUSE_TOOLBAR
+#ifdef WXPROPGRID_TEST_SUPPORT
 class ToolbarRemovalFailureReset final
 {
 public:
@@ -73,9 +76,11 @@ public:
         wxPropertyGridTestAccess::ResetToolbarRemovalFailures();
     }
 };
+#endif // WXPROPGRID_TEST_SUPPORT
 #endif
 
 #ifdef __WXMSW__
+#ifdef WXPROPGRID_TEST_SUPPORT
 static bool IsMessageOnlyWindow(HWND target)
 {
     HWND child = nullptr;
@@ -87,7 +92,9 @@ static bool IsMessageOnlyWindow(HWND target)
 
     return false;
 }
+#endif // WXPROPGRID_TEST_SUPPORT
 
+#ifdef WXPROPGRID_TEST_SUPPORT
 static HWND FindPropertyGridEditorParkingHost()
 {
     HWND child = nullptr;
@@ -105,7 +112,9 @@ static HWND FindPropertyGridEditorParkingHost()
 
     return nullptr;
 }
+#endif // WXPROPGRID_TEST_SUPPORT
 
+#ifdef WXPROPGRID_TEST_SUPPORT
 static bool HaveEqualWindowDpiContexts(HWND first, HWND second)
 {
     typedef WXDPI_AWARENESS_CONTEXT
@@ -130,7 +139,9 @@ static bool HaveEqualWindowDpiContexts(HWND first, HWND second)
     return contextsEqual(getWindowContext(first),
                          getWindowContext(second)) != FALSE;
 }
+#endif // WXPROPGRID_TEST_SUPPORT
 
+#ifdef WXPROPGRID_TEST_SUPPORT
 class EditorParkingFailureReset final
 {
 public:
@@ -144,6 +155,7 @@ public:
         wxPropertyGridTestAccess::ResetEditorParkingFailures();
     }
 };
+#endif // WXPROPGRID_TEST_SUPPORT
 #endif
 
 // Prepare RNG
@@ -605,11 +617,13 @@ static void SendPropertyGridKeyEvent(wxPropertyGrid* grid,
 }
 
 #if wxUSE_HEADERCTRL
+#ifdef WXPROPGRID_TEST_SUPPORT
 static bool ProcessPropertyGridHeaderEvent(wxPropertyGridManager* manager,
                                            wxHeaderCtrlEvent& event)
 {
     return wxPropertyGridTestAccess::ProcessHeaderResizeEvent(manager, event);
 }
+#endif // WXPROPGRID_TEST_SUPPORT
 #endif
 
 class ReentrantPropertyGrid : public wxPropertyGrid
@@ -3784,6 +3798,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     }
 
 #if wxUSE_TOOLBAR
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("Remove_last_page_rolls_back_each_toolbar_failure")
     {
         ToolbarRemovalFailureReset resetToolbarFailures;
@@ -3863,6 +3878,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( nativeToolCount() == toolbar->GetToolsCount() );
 #endif
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 #endif
 
     SECTION("SetFont_aborts_if_selection_callback_switches_page")
@@ -5158,6 +5174,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     }
 
 #if wxUSE_HEADERCTRL
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("Header_resize_success_balances_transaction")
     {
         pgManager->ShowHeader();
@@ -5207,7 +5224,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( pg->GetSplitterPosition() != oldSplitter );
         CHECK( pg->GetState() == pgManager->GetCurrentPage()->GetStatePtr() );
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("Header_resize_page_switch_balances_transaction")
     {
         pgManager->ShowHeader();
@@ -5253,7 +5272,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( pgManager->GetGrid()->GetState() ==
                pgManager->GetPage(1)->GetStatePtr() );
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("Header_resize_veto_with_topology_change_has_no_end")
     {
         pgManager->ShowHeader();
@@ -5290,7 +5311,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( endEvents == 0 );
         CHECK( pgManager->GetGrid()->GetColumnCount() == 3 );
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("Header_nested_begin_is_rejected_without_end")
     {
         pgManager->ShowHeader();
@@ -5335,6 +5358,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( nestedDispatched );
         CHECK_FALSE( nestedAllowed );
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 #endif
 
     SECTION("Splitter_keyboard_transaction")
@@ -6136,6 +6160,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     }
 
 #ifdef __WXMSW__
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("CreateControls_destroying_grid_defers_unassigned_editor")
     {
         const unsigned int batchesBefore =
@@ -6182,6 +6207,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( wxPropertyGridTestAccess::GetEditorParkingHostCount() ==
                hostsBefore );
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 
     SECTION("Ordinary_editor_teardown_restores_grid_focus")
     {
@@ -6340,6 +6366,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         delete pg;
     }
 
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("Double_parking_failure_with_live_grid_destroys_editor")
     {
         EditorParkingFailureReset resetParkingFailures;
@@ -6383,6 +6410,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                hostsBefore );
         delete pg;
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 
     SECTION("Boolean_choice_teardown_unlinks_owned_handler_once")
     {
@@ -6493,6 +6521,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 #endif
 
 #ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+#ifdef WXPROPGRID_TEST_SUPPORT
     SECTION("DPI_editor_resize_may_destroy_grid")
     {
 #ifdef __WXMSW__
@@ -6792,6 +6821,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         WARN("MSW-only deferred native editor parking test");
 #endif
     }
+#endif // WXPROPGRID_TEST_SUPPORT
 #endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
     SECTION("RTL_hit_test_uses_backend_coordinate_mapping")

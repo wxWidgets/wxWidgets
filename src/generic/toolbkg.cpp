@@ -517,6 +517,12 @@ void wxToolbook::OnIdle(wxIdleEvent& event)
 // adding/removing the pages
 // ----------------------------------------------------------------------------
 
+/* static */
+wxWindow *wxToolbook::DoRemoveCommonPage(wxToolbook *book, size_t page)
+{
+    return book->wxBookCtrlBase::DoRemovePage(page);
+}
+
 bool wxToolbook::InsertPage(size_t n,
                        wxWindow *page,
                        const wxString& text,
@@ -708,7 +714,7 @@ bool wxToolbook::InsertPage(size_t n,
                 current->m_selection = selectionBefore;
             current->m_needsRealizing = needsRealizingBefore;
             wxWindow* const rolledBack =
-                current->wxBookCtrlBase::DoRemovePage(n);
+                DoRemoveCommonPage(current, n);
             if ( rolledBack == page && weakPage.get() == page )
                 return false;
         }

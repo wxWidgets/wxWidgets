@@ -223,6 +223,12 @@ void wxChoicebook::MakeChangedEvent(wxBookCtrlEvent &event)
 // adding/removing the pages
 // ----------------------------------------------------------------------------
 
+/* static */
+wxWindow *wxChoicebook::DoRemoveCommonPage(wxChoicebook *book, size_t page)
+{
+    return book->wxBookCtrlBase::DoRemovePage(page);
+}
+
 bool
 wxChoicebook::InsertPage(size_t n,
                          wxWindow *page,
@@ -332,7 +338,7 @@ wxChoicebook::InsertPage(size_t n,
             if ( book->m_selection == shiftedSelection )
                 book->m_selection = selectionBefore;
             wxWindow* const rolledBack =
-                book->wxBookCtrlBase::DoRemovePage(n);
+                DoRemoveCommonPage(book, n);
             if ( rolledBack == page && weakPage.get() == page )
                 return false;
         }

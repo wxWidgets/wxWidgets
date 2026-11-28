@@ -9,6 +9,7 @@
 #define _WX_WINUI_COLLPANE_H_
 
 #include "wx/containr.h"
+#include "wx/generic/collpaneg.h"
 
 #include <memory>
 

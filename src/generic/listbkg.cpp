@@ -452,6 +452,12 @@ void wxListbook::MakeChangedEvent(wxBookCtrlEvent &event)
 // adding/removing the pages
 // ----------------------------------------------------------------------------
 
+/* static */
+wxWindow *wxListbook::DoRemoveCommonPage(wxListbook *book, size_t page)
+{
+    return book->wxBookCtrlBase::DoRemovePage(page);
+}
+
 bool
 wxListbook::InsertPage(size_t n,
                        wxWindow *page,
@@ -557,7 +563,7 @@ wxListbook::InsertPage(size_t n,
             if ( book->m_selection == shiftedSelection )
                 book->m_selection = selectionBefore;
             wxWindow* const rolledBack =
-                book->wxBookCtrlBase::DoRemovePage(n);
+                DoRemoveCommonPage(book, n);
             if ( rolledBack == page && weakPage.get() == page )
                 return false;
         }

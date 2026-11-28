@@ -816,7 +816,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             const wxRect rr(wxPoint(xOld - ICON_OFFSET_X + MARGIN_AROUND_CHECKBOX,
                                    rect.y + yOffset), cbSize);
             wxRendererNative::Get().DrawCheckBox(m_owner, *dc, rr,
-                                                checked ? wxCONTROL_CHECKED : 0);
+                                                checked ? int(wxCONTROL_CHECKED) : 0);
             const int checkWidth = cbSize.GetWidth() + 2 * MARGIN_AROUND_CHECKBOX;
             xOld += checkWidth;
             width -= checkWidth;

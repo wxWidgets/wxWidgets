@@ -5997,7 +5997,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     {
                         ::FillRect(hdc, &rcBackdrop,
                                    (HBRUSH)::GetStockObject(BLACK_BRUSH));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
                         wxWinUIEraseOnSurface(this, hdc, rcBackdrop);
+#endif
                     }
                     processed = true;
                 }

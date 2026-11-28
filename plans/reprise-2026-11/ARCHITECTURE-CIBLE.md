@@ -1206,7 +1206,7 @@ de l'hôte, `[winui-ribbon]`, `[winui-font-dialog]`,
 `[winui-file-browsers]`, `[winui-filectrl]`, `[winui-listmodel]` passent, et
 les démos démarrent sans plantage. `[winui-listctrl]` : 26 sur 27 ; le test
 qui échoue (`winuilistctrl.cpp:1388`, `HitTest` en droite-à-gauche) échoue
-de la même façon sur les binaires figés du 22 (`F:\wxbevue-snap`) : c'est
+de la même façon sur les binaires figés du 22 (`F:\wxb\revue-snap`) : c'est
 le défaut « wxListCtrl de droite à gauche à 150 % » déjà connu.
 
 ### Étape 5, premier lot : tables et listes au style WinUI (23 novembre)
