@@ -134,8 +134,14 @@ TEST_CASE("wxWinUI projected scrollbar reveals its native thumb on content activ
     movement.pt = {screen.x, screen.y};
     // Invoke the production observation hook, not SendInput/DispatchMessage.
     // It must neither consume nor manufacture any wx/native pointer event.
-    wxWinUIWindowScrollbarsObserveMessage(movement);
-    CHECK(fixture.bar.IndicatorMode() == Mode::MouseIndicator);
+    // The projection takes the bar as ready in the synchronization which its
+    // Loaded schedules, a little after it: observe the movement again until
+    // then, as the moves of a real mouse would come again.
+    CHECK(WaitIndicator([&]
+    {
+        wxWinUIWindowScrollbarsObserveMessage(movement);
+        return fixture.bar.IndicatorMode() == Mode::MouseIndicator;
+    }));
     REQUIRE(WaitIndicator([&] { return !!VisibleIndicatorThumb(fixture.bar); }));
     const auto identity = winrt::get_abi(fixture.bar);
     if ( autoHide ) REQUIRE(WaitIndicator([&] { return fixture.bar.IndicatorMode() == Mode::None; }));

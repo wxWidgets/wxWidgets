@@ -73,7 +73,11 @@ struct NativeSizingAdmission final
                           std::function<bool()> validate)
         : target(window), lifetime(owner), ticket(requestTicket), latest(press),
           current(std::move(validate)), previous(gs_nativeSizingAdmission)
-    { gs_nativeSizingAdmission = this; }
+    {
+        // USER32 tracks from the press until a motion is delivered.
+        deliveredPoint = {press.screenX, press.screenY};
+        gs_nativeSizingAdmission = this;
+    }
     ~NativeSizingAdmission() { gs_nativeSizingAdmission = previous; }
 
     HWND target;
@@ -178,8 +182,14 @@ bool wxWinUIMessageBelongsToNativeSizing(MSG& message)
         if ( ::GetCapture() != scope->target || !scope->current() )
             return true;
         const auto& sample = scope->latest;
-        const POINT screen{sample.screenX, sample.screenY};
-        if ( !scope->releasePending && scope->motionDelivered && scope->deliveredPoint.x == screen.x &&
+        const bool release = scope->releasePending;
+        // The release ends the tracking where USER32 has tracked it: at the
+        // last delivered motion, or at the press. The USER32 of Windows 10,
+        // and of Windows Server 2022, follows the position of WM_LBUTTONUP
+        // before ending: it would apply the late undelivered motion after all.
+        const POINT screen = release ? scope->deliveredPoint
+                                     : POINT{sample.screenX, sample.screenY};
+        if ( !release && scope->motionDelivered && scope->deliveredPoint.x == screen.x &&
              scope->deliveredPoint.y == screen.y )
             return true;
         POINT client = screen;
@@ -191,7 +201,6 @@ bool wxWinUIMessageBelongsToNativeSizing(MSG& message)
              client.y < (std::numeric_limits<short>::min)() ||
              client.y > (std::numeric_limits<short>::max)() )
             return true;
-        const bool release = scope->releasePending;
         scope->releasePending = false;
         message.message = release ? WM_LBUTTONUP : WM_MOUSEMOVE;
         message.wParam = sample.modifiers | sample.buttonMask;
