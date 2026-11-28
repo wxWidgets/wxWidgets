@@ -293,8 +293,13 @@ TEST_CASE("WinUIAui::MakeTabVisibleUsesNativeScrollViewport",
     // Showing a tab is not a selection command.
     CHECK(fixture.book->GetSelection() == 0);
     // A completed reveal must not keep pulling back an explicit native scroll.
+    const auto lastOrigin = lastPeer.TransformToVisual(scroll).TransformPoint({0, 0});
+    INFO("revealed: lastLeft=" << lastOrigin.X << " lastRight="
+         << lastOrigin.X + lastPeer.ActualWidth() << " scrollWidth=" << scroll.ActualWidth());
     REQUIRE(scroll.ChangeView(0.0, nullptr, nullptr, true));
-    REQUIRE(WaitAui([&] { return scroll.HorizontalOffset() <= 1; }));
+    const bool backToStart = WaitAui([&] { return scroll.HorizontalOffset() <= 1; });
+    INFO("after the explicit scroll: offset=" << scroll.HorizontalOffset());
+    REQUIRE(backToStart);
     settled.Start();
     REQUIRE(WaitAui([&] { return settled.Time() >= 100; }));
     CHECK(scroll.HorizontalOffset() <= 1);

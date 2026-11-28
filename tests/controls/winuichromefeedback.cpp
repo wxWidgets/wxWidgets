@@ -1223,6 +1223,23 @@ TEST_CASE("wxWinUI grip queued movement expires on release or foreign capture",
     frame.Show();
     REQUIRE(WaitFor("native sizing cancelled motion grip ready", [&]
     { return wxWinUIStatusBarTestAccess::HasSizeGrip(*status); }));
+    // The sizing loop of USER32 follows the real cursor, wherever the pointer
+    // samples of the test are: put the grip under it, for the loop to find no
+    // movement of its own to apply. The cursor of the CI machine stays in the
+    // middle of its screen. On a desktop without a cursor nothing moves.
+    POINT cursor{};
+    if ( ::GetCursorPos(&cursor) )
+    {
+        const wxPoint grip = status->GetScreenRect().GetBottomRight() -
+                             status->FromDIP(wxPoint(8, 8));
+        frame.Move(frame.GetPosition() + wxPoint(cursor.x, cursor.y) - grip);
+        REQUIRE(WaitFor("native sizing cancelled motion grip under the cursor", [&]
+        {
+            const wxPoint moved = status->GetScreenRect().GetBottomRight() -
+                                  status->FromDIP(wxPoint(8, 8));
+            return moved == wxPoint(cursor.x, cursor.y);
+        }));
+    }
     auto* const host = wxWinUITopLevelHost::ForWindow(&frame, false);
     REQUIRE(host);
     REQUIRE(frame.ArmWatchdog());

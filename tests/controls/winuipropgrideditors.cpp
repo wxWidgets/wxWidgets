@@ -129,12 +129,21 @@ struct EditorFixture
 A::Provider::ISelectionItemProvider ChoiceProvider(wxComboBox* editor,
                                                   const C::ComboBox& combo, int index)
 {
+    // As a user does it: the list opens from the focused control. The list
+    // of a control without the focus may be dismissed at once.
+    editor->SetFocus();
     editor->Popup();
-    REQUIRE(WaitEditor([&]
+    const bool loaded = WaitEditor([&]
     {
         const auto item = combo.ContainerFromIndex(index).try_as<C::ComboBoxItem>();
         return item && item.IsLoaded();
-    }));
+    });
+    INFO("open=" << combo.IsDropDownOpen()
+         << " focus=" << int(combo.FocusState())
+         << " items=" << combo.Items().Size()
+         << " popups=" << X::Media::VisualTreeHelper::GetOpenPopupsForXamlRoot(
+                              combo.XamlRoot()).Size());
+    REQUIRE(loaded);
     // Selection is provided by the parent's item-data peer, not the
     // ComboBoxItem's visual/container peer (as for ListView in the UIA tests).
     const auto comboPeer = A::Peers::FrameworkElementAutomationPeer::CreatePeerForElement(combo);
