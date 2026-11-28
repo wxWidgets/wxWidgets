@@ -387,9 +387,18 @@ if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
                 "${contract_filter}"
             WORKING_DIRECTORY
                 "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        if(contract STREQUAL "opaque-gdi")
+            # These contracts are those of the windows painting their HWND,
+            # which the paint surfaces replace by default: run them with the
+            # surfaces off, the HWND painting they test being still the path
+            # of WX_WINUI_PAINT_SURFACES=0.
+            set(contract_environment "WX_UI_TESTS=0;WX_WINUI_PAINT_SURFACES=0")
+        else()
+            set(contract_environment "WX_UI_TESTS=0")
+        endif()
         set_tests_properties(wx_winui_${contract_name} PROPERTIES
             LABELS "winui-${contract}"
-            ENVIRONMENT "WX_UI_TESTS=0"
+            ENVIRONMENT "${contract_environment}"
             RUN_SERIAL TRUE
             TIMEOUT 300)
     endforeach()

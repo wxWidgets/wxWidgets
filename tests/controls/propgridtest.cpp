@@ -4499,9 +4499,16 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
     SECTION("SetSplitterPosition")
     {
-        const int trySplitterPos = wxTheApp->GetTopWindow()->FromDIP(60);
         int style = wxPG_AUTO_SORT;  // wxPG_SPLITTER_AUTO_CENTER;
         ReplaceGrid(pgManager, style, -1);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The margin holds an expander button of 24 DIPs, as in a WinUI tree:
+        // 60 would leave the first column narrower than its minimal width.
+        const int trySplitterPos = pgManager->GetGrid()->GetMarginWidth() +
+                                   wxTheApp->GetTopWindow()->FromDIP(60);
+#else
+        const int trySplitterPos = wxTheApp->GetTopWindow()->FromDIP(60);
+#endif
 
         pgManager->SetSplitterPosition(trySplitterPos);
 

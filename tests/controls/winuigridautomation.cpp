@@ -16,6 +16,7 @@
 #include "wx/textctrl.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include <winrt/Microsoft.UI.Text.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
@@ -24,6 +25,7 @@
 #include <UIAutomation.h>
 #include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace
@@ -73,12 +75,29 @@ A::AutomationPeer GridItemPeer(const A::AutomationPeer& grid, const P::IRawEleme
     return grid.as<A::IAutomationPeerProtected>().PeerFromProvider(provider);
 }
 
-C::TextBox GridEditorTextBox(const X::DependencyObject& node)
+// The native field of a text editor: wxTextCtrl uses a RichEditBox, and a
+// TextBox only for a password.
+C::Control GridEditorField(const X::DependencyObject& node)
 {
+    if ( const auto rich = node.try_as<C::RichEditBox>() ) return rich;
     if ( const auto text = node.try_as<C::TextBox>() ) return text;
     for ( int n = 0; n < X::Media::VisualTreeHelper::GetChildrenCount(node); ++n )
-        if ( const auto text = GridEditorTextBox(X::Media::VisualTreeHelper::GetChild(node, n)) ) return text;
+        if ( const auto field = GridEditorField(X::Media::VisualTreeHelper::GetChild(node, n)) ) return field;
     return nullptr;
+}
+
+winrt::hstring GridEditorFieldText(const C::Control& field)
+{
+    if ( const auto text = field.try_as<C::TextBox>() ) return text.Text();
+    winrt::hstring value;
+    field.as<C::RichEditBox>().Document().GetText(
+        winrt::Microsoft::UI::Text::TextGetOptions::None, value);
+    // The document always ends with a paragraph mark.
+    std::wstring plain(value.c_str());
+    while ( !plain.empty() && (plain.back() == L'\r' ||
+                               plain.back() == L'\n') )
+        plain.pop_back();
+    return winrt::hstring(plain);
 }
 
 template<typename Action> void CheckGridUnavailable(Action action)
@@ -372,21 +391,36 @@ TEST_CASE("WinUIGrid::UIAValueUsesVisibleStandardEditorsAndPublicCommitEvents",
     CHECK(peer.IsOffscreen());
     std::vector<wxString> events;
     wxWeakRef<wxWindow> editorWindow;
-    C::TextBox nativeEditor{nullptr};
+    C::Control nativeEditor{nullptr};
+    // What the slot of the editor held, when no text field was found there.
+    wxString editorContent;
     fixture.grid->Bind(wxEVT_GRID_EDITOR_SHOWN, [&](wxGridEvent& event)
         { events.push_back("shown"); event.Skip(); });
+    // No REQUIRE in the handlers: they run below the native automation call,
+    // which an exception must not cross.
     fixture.grid->Bind(wxEVT_GRID_EDITOR_CREATED, [&](wxGridEditorCreatedEvent& event)
     {
         events.push_back("created");
+        event.Skip();
         editorWindow = event.GetWindow();
-        REQUIRE(editorWindow);
+        if ( !editorWindow )
+            return;
         CHECK(editorWindow->GetParent() == fixture.grid->GetGridWindow());
         auto* const host = wxWinUITopLevelHost::FindSlotOwner(editorWindow.get());
         auto* const slot = host ? host->FindSlot(editorWindow.get()) : nullptr;
-        REQUIRE(slot);
-        nativeEditor = GridEditorTextBox(slot->GetContent());
-        REQUIRE(nativeEditor);
-        event.Skip();
+        if ( !slot )
+        {
+            editorContent = "no slot";
+            return;
+        }
+        const auto content = slot->GetContent();
+        nativeEditor = content ? GridEditorField(content) : nullptr;
+        if ( !nativeEditor )
+        {
+            editorContent = content
+                ? wxString(winrt::get_class_name(content).c_str())
+                : wxString("no content");
+        }
     });
     fixture.grid->Bind(wxEVT_GRID_EDITOR_HIDDEN, [&](wxGridEvent& event)
         { events.push_back("hidden"); event.Skip(); });
@@ -397,8 +431,11 @@ TEST_CASE("WinUIGrid::UIAValueUsesVisibleStandardEditorsAndPublicCommitEvents",
     const winrt::hstring input = kind == 1 ? L"42" : kind == 2 ? L"1.25" : L"native value";
     value.SetValue(input);
     CHECK(events == std::vector<wxString>{"shown", "created", "hidden", "changing", "changed"});
+    REQUIRE(editorWindow);
+    INFO("editor content: " << editorContent);
+    REQUIRE(nativeEditor);
     CHECK(value.Value() == input);
-    CHECK(nativeEditor.Text() == input);
+    CHECK(GridEditorFieldText(nativeEditor) == input);
     CHECK(fixture.grid->GetGridCursorRow() == 88);
     CHECK(fixture.grid->GetGridCursorCol() == 2);
     CHECK_FALSE(fixture.grid->IsCellEditControlEnabled());

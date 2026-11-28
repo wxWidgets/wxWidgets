@@ -514,7 +514,13 @@ void ListBaseTestCase::Visible()
 
     CHECK(list->EnsureVisible(count + 9));
     CHECK(list->IsVisible(count + 9));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The list scrolls by pixels: the last item ends at the bottom and the
+    // line above the first whole one may still show in part.
+    CHECK(!list->IsVisible(8));
+#else
     CHECK(!list->IsVisible(9));
+#endif
 
     CHECK(list->GetTopItem() != 0);
 

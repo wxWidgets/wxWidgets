@@ -31,6 +31,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/utils.h"
 #include "wx/window.h"
+#include "wx/winui/winui.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "opaque-paint-test-access.h"
@@ -770,6 +771,14 @@ TEST_CASE("WinUIBridgePaint::AuiNotebookOwnsItsDockBackground",
     wxWinUIOpaquePaintTestAccess::SetObserver(observer, &observation);
     wxAuiDockArt * const dockArt = book.GetAuiManager().GetArtProvider();
     REQUIRE(dockArt);
+    // Where the backdrop of the system shows, the dock art paints its ground
+    // black, which the system replaces by its material (see
+    // wxAuiWinUIGround() in dockart.cpp): the empty notebook shows it all.
+    const bool backdrop = wxWinUIWindowUsesBackdrop(&book);
+    const auto groundOf = [&](const wxColour& colour)
+    {
+        return empty && backdrop ? *wxBLACK : colour;
+    };
     for ( const bool partial : {false, true} )
     {
         CAPTURE(partial);
@@ -796,9 +805,10 @@ TEST_CASE("WinUIBridgePaint::AuiNotebookOwnsItsDockBackground",
         REQUIRE(observation.valid);
         CHECK(observation.bounds == physicalInvalid);
         CHECK(observation.opaque);
-        CHECK(observation.centre.rgbRed == colour.Red());
-        CHECK(observation.centre.rgbGreen == colour.Green());
-        CHECK(observation.centre.rgbBlue == colour.Blue());
+        const wxColour ground = groundOf(colour);
+        CHECK(observation.centre.rgbRed == ground.Red());
+        CHECK(observation.centre.rgbGreen == ground.Green());
+        CHECK(observation.centre.rgbBlue == ground.Blue());
         CHECK(observation.centre.rgbReserved == 255);
     }
 
@@ -825,9 +835,10 @@ TEST_CASE("WinUIBridgePaint::AuiNotebookOwnsItsDockBackground",
     CHECK(observation.opaque);
     if ( empty )
     {
-        CHECK(observation.centre.rgbRed == resizeColour.Red());
-        CHECK(observation.centre.rgbGreen == resizeColour.Green());
-        CHECK(observation.centre.rgbBlue == resizeColour.Blue());
+        const wxColour ground = groundOf(resizeColour);
+        CHECK(observation.centre.rgbRed == ground.Red());
+        CHECK(observation.centre.rgbGreen == ground.Green());
+        CHECK(observation.centre.rgbBlue == ground.Blue());
         CHECK(observation.centre.rgbReserved == 255);
     }
     CHECK(wxWinUIShouldUseOpaquePaintBuffer(&book));
