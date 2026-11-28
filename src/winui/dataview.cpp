@@ -3261,7 +3261,29 @@ void wxDataViewCtrl::Collapse(const wxDataViewItem& item)
     state->VisibleStructureChanged(Key(item), false);
     if ( state->owner ) state->Send(wxEVT_DATAVIEW_ITEM_COLLAPSED, Key(item));
 }
-bool wxDataViewCtrl::IsExpanded(const wxDataViewItem& item) const { return m_winui->expanded.count(Key(item)) != 0; }
+bool wxDataViewCtrl::IsExpanded(const wxDataViewItem& item) const
+{
+    const auto state = m_winui;
+    if ( !state->expanded.count(Key(item)) )
+        return false;
+
+    // An item below a collapsed parent isn't shown expanded, as in the
+    // generic control: it is only remembered as expanded, to be shown so
+    // again with its parent.
+    const wxDataViewModel* const model = GetModel();
+    if ( !model )
+        return true;
+
+    const auto stamp = state->generation;
+    for ( wxDataViewItem parent = model->GetParent(item);
+          parent.IsOk();
+          parent = model->GetParent(parent) )
+    {
+        if ( !state->Alive(stamp) || !state->expanded.count(Key(parent)) )
+            return false;
+    }
+    return state->Alive(stamp);
+}
 void wxDataViewCtrl::DoSetExpanderColumn() { m_winui->ModelChanged(); }
 void wxDataViewCtrl::DoSetIndent() { m_winui->ModelChanged(); }
 bool wxDataViewCtrl::SetRowHeight(int height)

@@ -28,7 +28,6 @@
     #ifndef wxHAS_GENERIC_HEADERCTRL
         #include "wx/msw/private.h"
         #include "wx/msw/wrapcctl.h"
-        #include "testableframe.h"
     #endif
 #endif
 

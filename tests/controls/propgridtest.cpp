@@ -6824,6 +6824,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 #endif // WXPROPGRID_TEST_SUPPORT
 #endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
+    // GTK 2 doesn't mirror a window laid out from right to left.
+#if !defined(__WXGTK__) || defined(__WXGTK3__)
     SECTION("RTL_hit_test_uses_backend_coordinate_mapping")
     {
         wxPropertyGrid* const pg = pgManager->GetGrid();
@@ -6871,6 +6873,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 #endif
         CHECK( pg->HitTest(wxPoint(logicalX, y)).GetColumn() == 0 );
     }
+#endif // !GTK 2
 
     SECTION("HideProperty")
     {

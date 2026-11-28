@@ -40,7 +40,10 @@ public:
     ScopedFilesystemTree()
     {
         static unsigned long s_generation = 0;
-        m_tempRoot = wxFileName::GetTempDir();
+        // Not in the temporary directory: under Windows it is normally below
+        // the hidden AppData directory, and wxGenericDirCtrl doesn't show the
+        // descendants of a hidden directory unless asked to.
+        m_tempRoot = wxGetCwd();
         m_path = m_tempRoot + wxFILE_SEP_PATH +
                  wxString::Format("wx-filesystemctrl-%lu-%lu",
                                   static_cast<unsigned long>(wxGetProcessId()),

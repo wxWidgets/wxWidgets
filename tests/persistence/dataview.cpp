@@ -218,7 +218,13 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC::DPI",
         GTKWaitRealized(list);
 
         CHECK(list->GetColumn(0)->GetWidth() == 75);
+#ifdef __WXWINUI__
+        // The last column fills the control, and wxWinUI reports the width
+        // it is shown with.
+        CHECK(list->GetColumn(1)->GetWidth() >= 125);
+#else
         CHECK(list->GetColumn(1)->GetWidth() == 125);
+#endif
 
         delete list->GetParent();
     }

@@ -1050,46 +1050,6 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         }
     }
 
-    // An explicit default/current path must remain reachable even when one of
-    // its ancestors is hidden (the Windows user temp directory commonly sits
-    // below the hidden AppData directory). Keep just the next required
-    // directory visible; unrelated hidden siblings remain excluded.
-    if ( !m_showHidden && !m_defaultPath.empty() )
-    {
-        wxString parentPrefix(dirName);
-        if ( !wxEndsWithPathSeparator(parentPrefix) )
-            parentPrefix += wxFILE_SEP_PATH;
-
-        wxString targetPath(m_defaultPath);
-        targetPath.Replace("/", wxString(wxFILE_SEP_PATH));
-        targetPath.Replace("\\", wxString(wxFILE_SEP_PATH));
-#if defined(__WINDOWS__)
-        // Match the names returned by directory enumeration even when the
-        // caller supplied an 8.3 alias for a hidden ancestor's parent.
-        targetPath = wxDirCtrlGetLongPath(targetPath);
-#endif
-
-        wxString comparableParent(parentPrefix);
-        wxString comparableTarget(targetPath);
-#if defined(__WINDOWS__)
-        comparableParent.MakeLower();
-        comparableTarget.MakeLower();
-#endif
-        if ( comparableTarget.StartsWith(comparableParent) )
-        {
-            const wxString remainder =
-                targetPath.Mid(parentPrefix.length());
-            const wxString requiredChild =
-                remainder.BeforeFirst(wxFILE_SEP_PATH);
-            if ( !requiredChild.empty() &&
-                 dirs.Index(requiredChild) == wxNOT_FOUND &&
-                 wxDirExists(wxDirCtrlGetNativePath(
-                                 parentPrefix + requiredChild)) )
-            {
-                dirs.Add(requiredChild);
-            }
-        }
-    }
     dirs.Sort(wxCmpNatural);
 
     // Now do the filenames -- but only if we're allowed to
