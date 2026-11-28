@@ -898,6 +898,11 @@ if(wxUSE_GUI)
             wx_option_force_value(wxUSE_DETECT_SM OFF)
         endif()
     endif()
+
+    if(wxUSE_STC AND NOT WXOSX_COCOA AND NOT WXMSW AND NOT WXGTK)
+        message(WARNING "Unsupported platform for wxStyledTextCtrl")
+        wx_option_force_value(wxUSE_STC OFF)
+    endif()
 endif(wxUSE_GUI)
 
 # test if precompiled headers are supported using the cotire test project

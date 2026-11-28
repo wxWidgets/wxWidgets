@@ -10,13 +10,17 @@
 include(../../source_groups.cmake)
 set(SCINTILLA_SRC_DIR src/stc/scintilla)
 
-wx_add_builtin_library(wxscintilla
-    ${SCINTILLA_SRC_DIR}/include/Compat.h
+set(SCINTILLA_DEFINES)
+
+set(SCINTILLA_SOURCES
     ${SCINTILLA_SRC_DIR}/include/ILexer.h
     ${SCINTILLA_SRC_DIR}/include/ILoader.h
-    ${SCINTILLA_SRC_DIR}/include/Platform.h
     ${SCINTILLA_SRC_DIR}/include/Sci_Position.h
     ${SCINTILLA_SRC_DIR}/include/Scintilla.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaCall.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaMessages.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaStructures.h
+    ${SCINTILLA_SRC_DIR}/include/ScintillaTypes.h
     ${SCINTILLA_SRC_DIR}/include/ScintillaWidget.h
     ${SCINTILLA_SRC_DIR}/src/AutoComplete.cxx
     ${SCINTILLA_SRC_DIR}/src/AutoComplete.h
@@ -28,16 +32,19 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/CaseFolder.h
     ${SCINTILLA_SRC_DIR}/src/CellBuffer.cxx
     ${SCINTILLA_SRC_DIR}/src/CellBuffer.h
+    ${SCINTILLA_SRC_DIR}/src/ChangeHistory.cxx
+    ${SCINTILLA_SRC_DIR}/src/ChangeHistory.h
+    ${SCINTILLA_SRC_DIR}/src/CharacterCategoryMap.cxx
+    ${SCINTILLA_SRC_DIR}/src/CharacterCategoryMap.h
+    ${SCINTILLA_SRC_DIR}/src/CharacterType.cxx
+    ${SCINTILLA_SRC_DIR}/src/CharacterType.h
     ${SCINTILLA_SRC_DIR}/src/CharClassify.cxx
     ${SCINTILLA_SRC_DIR}/src/CharClassify.h
-    ${SCINTILLA_SRC_DIR}/src/CharacterCategory.cxx
-    ${SCINTILLA_SRC_DIR}/src/CharacterCategory.h
-    ${SCINTILLA_SRC_DIR}/src/CharacterSet.cxx
-    ${SCINTILLA_SRC_DIR}/src/CharacterSet.h
     ${SCINTILLA_SRC_DIR}/src/ContractionState.cxx
     ${SCINTILLA_SRC_DIR}/src/ContractionState.h
     ${SCINTILLA_SRC_DIR}/src/DBCS.cxx
     ${SCINTILLA_SRC_DIR}/src/DBCS.h
+    ${SCINTILLA_SRC_DIR}/src/Debugging.h
     ${SCINTILLA_SRC_DIR}/src/Decoration.cxx
     ${SCINTILLA_SRC_DIR}/src/Decoration.h
     ${SCINTILLA_SRC_DIR}/src/Document.cxx
@@ -49,10 +56,10 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/Editor.cxx
     ${SCINTILLA_SRC_DIR}/src/Editor.h
     ${SCINTILLA_SRC_DIR}/src/ElapsedPeriod.h
-    ${SCINTILLA_SRC_DIR}/src/FontQuality.h
+    ${SCINTILLA_SRC_DIR}/src/Geometry.cxx
+    ${SCINTILLA_SRC_DIR}/src/Geometry.h
     ${SCINTILLA_SRC_DIR}/src/Indicator.cxx
     ${SCINTILLA_SRC_DIR}/src/Indicator.h
-    ${SCINTILLA_SRC_DIR}/src/IntegerRectangle.h
     ${SCINTILLA_SRC_DIR}/src/KeyMap.cxx
     ${SCINTILLA_SRC_DIR}/src/KeyMap.h
     ${SCINTILLA_SRC_DIR}/src/LineMarker.cxx
@@ -62,6 +69,7 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/Partitioning.h
     ${SCINTILLA_SRC_DIR}/src/PerLine.cxx
     ${SCINTILLA_SRC_DIR}/src/PerLine.h
+    ${SCINTILLA_SRC_DIR}/src/Platform.h
     ${SCINTILLA_SRC_DIR}/src/Position.h
     ${SCINTILLA_SRC_DIR}/src/PositionCache.cxx
     ${SCINTILLA_SRC_DIR}/src/PositionCache.h
@@ -69,6 +77,7 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/RESearch.h
     ${SCINTILLA_SRC_DIR}/src/RunStyles.cxx
     ${SCINTILLA_SRC_DIR}/src/RunStyles.h
+    ${SCINTILLA_SRC_DIR}/src/RunThreads.h
     ${SCINTILLA_SRC_DIR}/src/ScintillaBase.cxx
     ${SCINTILLA_SRC_DIR}/src/ScintillaBase.h
     ${SCINTILLA_SRC_DIR}/src/Selection.cxx
@@ -77,6 +86,8 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/SplitVector.h
     ${SCINTILLA_SRC_DIR}/src/Style.cxx
     ${SCINTILLA_SRC_DIR}/src/Style.h
+    ${SCINTILLA_SRC_DIR}/src/UndoHistory.cxx
+    ${SCINTILLA_SRC_DIR}/src/UndoHistory.h
     ${SCINTILLA_SRC_DIR}/src/UniConversion.cxx
     ${SCINTILLA_SRC_DIR}/src/UniConversion.h
     ${SCINTILLA_SRC_DIR}/src/UniqueString.cxx
@@ -86,15 +97,83 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/XPM.cxx
     ${SCINTILLA_SRC_DIR}/src/XPM.h
 )
+if(WXMSW)
+    set(SCINTILLA_SOURCES
+        ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/win32/HanjaDic.cxx
+        ${SCINTILLA_SRC_DIR}/win32/HanjaDic.h
+        ${SCINTILLA_SRC_DIR}/win32/ListBox.cxx
+        ${SCINTILLA_SRC_DIR}/win32/ListBox.h
+        ${SCINTILLA_SRC_DIR}/win32/PlatWin.cxx
+        ${SCINTILLA_SRC_DIR}/win32/PlatWin.h
+        ${SCINTILLA_SRC_DIR}/win32/ScintillaDLL.cxx
+        ${SCINTILLA_SRC_DIR}/win32/ScintillaWin.cxx
+        ${SCINTILLA_SRC_DIR}/win32/ScintillaWin.h
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceD2D.cxx
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceD2D.h
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceGDI.cxx
+        ${SCINTILLA_SRC_DIR}/win32/SurfaceGDI.h
+        ${SCINTILLA_SRC_DIR}/win32/WinTypes.h
+    )
+elseif(WXGTK)
+    set(SCINTILLA_DEFINES GTK)
+    set(SCINTILLA_SOURCES
+        ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/gtk/Converter.h
+        ${SCINTILLA_SRC_DIR}/gtk/PlatGTK.cxx
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.cxx
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.h
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.cxx
+        ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.h
+        ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.c
+        ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.h
+        ${SCINTILLA_SRC_DIR}/gtk/Wrappers.h
+    )
+elseif(WXOSX_COCOA)
+    set(SCINTILLA_SOURCES
+        ${SCINTILLA_SOURCES}
+        ${SCINTILLA_SRC_DIR}/cocoa/DictionaryForCF.h
+        ${SCINTILLA_SRC_DIR}/cocoa/InfoBar.h
+        ${SCINTILLA_SRC_DIR}/cocoa/InfoBar.mm
+        ${SCINTILLA_SRC_DIR}/cocoa/InfoBarCommunicator.h
+        ${SCINTILLA_SRC_DIR}/cocoa/PlatCocoa.h
+        ${SCINTILLA_SRC_DIR}/cocoa/PlatCocoa.mm
+        ${SCINTILLA_SRC_DIR}/cocoa/QuartzTextLayout.h
+        ${SCINTILLA_SRC_DIR}/cocoa/QuartzTextStyle.h
+        ${SCINTILLA_SRC_DIR}/cocoa/QuartzTextStyleAttribute.h
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaCocoa.h
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaCocoa.mm
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaView.h
+        ${SCINTILLA_SRC_DIR}/cocoa/ScintillaView.mm
+    )
+endif()
+
+wx_add_builtin_library(wxscintilla ${SCINTILLA_SOURCES})
 
 target_include_directories(wxscintilla PRIVATE
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/include
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/src
 )
 
-target_compile_definitions(wxscintilla PUBLIC
-    __WX__
+target_compile_definitions(wxscintilla PRIVATE
+    ${SCINTILLA_DEFINES}
 )
+
+if(WXMSW)
+    target_link_libraries(wxscintilla PRIVATE imm32)
+elseif(WXGTK)
+    target_include_directories(wxscintilla PRIVATE
+        ${wxTOOLKIT_INCLUDE_DIRS}
+    )
+elseif(WXOSX_COCOA)
+    target_compile_options(wxscintilla PRIVATE
+        $<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fobjc-arc>
+        -Wno-deprecated-declarations
+    )
+    target_include_directories(wxscintilla PRIVATE
+        ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/cocoa
+    )
+endif()
 
 wx_target_enable_precomp(wxscintilla
     "${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/include/Scintilla.h"

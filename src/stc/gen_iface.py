@@ -39,7 +39,6 @@ valPrefixes = [('SCI_', ''),
                ('SC_',  ''),
                ('SCN_', None),  # just toss these out...
                ('SCEN_', None),
-               ('SC_EFF', None),
                ('SCE_', ''),
                ('SCLEX_', 'LEX_'),
                ('SCK_', 'KEY_'),
@@ -103,6 +102,7 @@ retTypeMap = {
     'Accessibility': 'int',
     'Alpha': 'int',
     'AnnotationVisible': 'int',
+    'AutoCompleteOption': 'int',
     'AutomaticFold': 'int',
     'Bidirectional': 'int',
     'CaretPolicy': 'int',
@@ -110,11 +110,14 @@ retTypeMap = {
     'CaretStyle': 'int',
     'CaseInsensitiveBehaviour': 'int',
     'CaseVisible': 'int',
+    'ChangeHistoryOption': 'int',
     'CharacterSet': 'int',
     'colour': 'wxColour',
+    'colouralpha': 'wxColour',
     'CursorShape': 'int',
     'DocumentOption': 'int',
     'EdgeVisualStyle': 'int',
+    'Element': 'int',
     'EndOfLine': 'int',
     'EOLAnnotationVisible': 'int',
     'FindOption': 'int',
@@ -123,32 +126,40 @@ retTypeMap = {
     'FoldFlag': 'int',
     'FoldLevel': 'int',
     'FontQuality': 'int',
+    'FontStretch': 'int',
     'FontWeight': 'int',
     'IdleStyling': 'int',
     'IMEInteraction': 'int',
     'IndentView': 'int',
     'IndicatorStyle': 'int',
     'IndicFlag': 'int',
+    'Layer': 'int',
     'line': 'int',
     'LineCache': 'int',
+    'LineCharacterIndexType': 'int',
     'LineEndType': 'int',
     'MarginOption': 'int',
     'MarginType': 'int',
+    'MarkerSymbol': 'int',
     'ModificationFlags': 'int',
     'MultiAutoComplete': 'int',
     'MultiPaste': 'int',
     'Ordering': 'int',
     'PhasesDraw': 'int',
+    'pixels': 'int',
     'PopUp': 'int',
     'position': 'int',
     'PrintOption': 'int',
+    'RepresentationAppearance': 'int',
     'SelectionMode': 'int',
     'Status': 'int',
     'string': 'wxString',
+    'Supports': 'int',
     'TabDrawMode': 'int',
     'Technology': 'int',
     'TypeProperty': 'int',
     'UndoFlags': 'int',
+    'UndoSelectionHistoryOption': 'int',
     'VirtualSpace': 'int',
     'VisiblePolicy': 'int',
     'WhiteSpace': 'int',
@@ -232,6 +243,24 @@ methodOverrideMap = {
         return buf;'''
     ),
 
+    'GetStyledTextFull' :
+    (0,
+     'wxMemoryBuffer %s(wxInt64 startPos, wxInt64 endPos);',
+     '''wxMemoryBuffer %s(wxInt64 startPos, wxInt64 endPos) {
+        wxMemoryBuffer buf;
+        if (endPos < startPos) {
+            wxSwap(startPos, endPos);
+        }
+        wxInt64 len = endPos - startPos;
+        if (!len) return buf;
+        Sci_TextRangeFull tr;
+        tr.lpstrText = (char*)buf.GetWriteBuf(len*2+1);
+        tr.chrg.cpMin = startPos;
+        tr.chrg.cpMax = endPos;
+        len = SendMsg(%s, 0, (sptr_t)&tr);
+        buf.UngetWriteBuf(len);
+        return buf;'''
+    ),
 
     'PositionFromPoint' :
     (0,
@@ -261,6 +290,9 @@ methodOverrideMap = {
     'MarkerSetFore' : ('MarkerSetForeground', 0, 0),
     'MarkerSetBack' : ('MarkerSetBackground', 0, 0),
     'MarkerSetBackSelected' : ('MarkerSetBackgroundSelected', 0,0),
+    'MarkerSetForeTranslucent' : ('MarkerSetForegroundTranslucent', 0,0),
+    'MarkerSetBackTranslucent' : ('MarkerSetBackgroundTranslucent', 0,0),
+    'MarkerSetBackSelectedTranslucent' : ('MarkerSetBackgroundSelectedTranslucent', 0,0),
 
     'MarkerSymbolDefined' : ('GetMarkerSymbolDefined', 0, 0),
 
@@ -305,6 +337,18 @@ methodOverrideMap = {
             m_mirrorCtrl->MarkerDefinePixmap(markerNumber, xpmData);
 
         SendMsg(%s, markerNumber, (sptr_t)xpmData);'''
+    ),
+
+    # This one is defined manually because we need to save the value
+    # and apply it to the new mirror ctrl in SetMirrorCtrl.
+    'SetFoldFlags':
+    (0, 0,
+     '''void %s(int flags) {
+        m_foldFlags = flags;
+        SendMsg(%s, flags, 0);
+
+        if ( m_mirrorCtrl )
+            m_mirrorCtrl->SetFoldFlags(flags);'''
     ),
 
     'GetMargins' : ('GetMarginCount', 0, 0),
@@ -506,6 +550,19 @@ methodOverrideMap = {
         SendMsg(%s, style, encoding+1);'''
     ),
 
+    'StyleGetInvisibleRepresentation' :
+    (0,
+     'wxString %s(int style) const;',
+     '''wxString %s(int style) const {
+         const int msg = %s;
+         long len = SendMsg(msg, style, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
+         return wxString::FromUTF8(buf);'''
+    ),
+
     'AssignCmdKey' :
     ('CmdKeyAssign',
      'void %s(int key, int modifiers, int cmd);',
@@ -541,6 +598,18 @@ methodOverrideMap = {
         SendMsg(%s, length, (sptr_t)styleBytes);'''
     ),
 
+    'GetUndoActionText' :
+    (0,
+     'wxString %s(int action) const;',
+     '''wxString %s(int action) const {
+         const int msg = %s;
+         long len = SendMsg(msg, action, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, action, (sptr_t)buf.data());
+         return wxString::FromUTF8(buf);'''
+    ),
 
     'IndicSetAlpha' : ('IndicatorSetAlpha', 0, 0),
     'IndicGetAlpha' : ('IndicatorGetAlpha', 0, 0),
@@ -579,7 +648,8 @@ methodOverrideMap = {
     'AutoCSetIgnoreCase' : ('AutoCompSetIgnoreCase', 0, 0),
     'AutoCGetIgnoreCase' : ('AutoCompGetIgnoreCase', 0, 0),
     'AutoCSetAutoHide' : ('AutoCompSetAutoHide', 0, 0),
-    'AutoCGetAutoHide' : ('AutoCompGetAutoHide', 0, 0),
+    'AutoCSetOptions' : ('AutoCompSetOptions', 0, 0),
+    'AutoCGetOptions' : ('AutoCompGetOptions', 0, 0),
     'AutoCSetDropRestOfWord' : ('AutoCompSetDropRestOfWord', 0,0),
     'AutoCGetDropRestOfWord' : ('AutoCompGetDropRestOfWord', 0,0),
     'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0),
@@ -604,12 +674,29 @@ methodOverrideMap = {
     'AutoCGetMaxWidth'      : ('AutoCompGetMaxWidth', 0, 0),
     'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0),
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0),
+    'AutoCSetStyle'         : ('AutoCompSetStyle', 0, 0),
+    'AutoCGetStyle'         : ('AutoCompGetStyle', 0, 0),
+    'AutoCSetImageScale'    : ('AutoCompSetImageScale', 0, 0),
+    'AutoCGetImageScale'    : ('AutoCompGetImageScale', 0, 0),
     'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0),
     'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0),
     'AutoCSetMulti'         : ('AutoCompSetMulti', 0, 0),
     'AutoCGetMulti'         : ('AutoCompGetMulti', 0, 0),
     'AutoCSetOrder'         : ('AutoCompSetOrder', 0, 0),
     'AutoCGetOrder'         : ('AutoCompGetOrder', 0, 0),
+
+    'GetCopySeparator' :
+    (0,
+    'wxString %s() const;',
+     '''wxString %s() const {
+         const int msg = %s;
+         long len = SendMsg(msg, 0, 0);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return wxString::FromUTF8(buf);'''
+    ),
 
     'RegisterImage' :
     (0,
@@ -640,6 +727,23 @@ methodOverrideMap = {
             ft.lpstrText = buf;
 
             int pos = SendMsg(%s, flags, (sptr_t)&ft);
+            if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
+            return pos;'''
+    ),
+
+    'FindTextFull' :
+    (0,
+     '''wxInt64 %s(wxInt64 minPos, wxInt64 maxPos, const wxString& text, int flags=0,
+                 wxInt64* findEnd=nullptr);''',
+     '''wxInt64 %s(wxInt64 minPos, wxInt64 maxPos, const wxString& text,
+                               int flags, wxInt64* findEnd) {
+            Sci_TextToFindFull ft;
+            ft.chrg.cpMin = minPos;
+            ft.chrg.cpMax = maxPos;
+            const wxScopedCharBuffer buf = text.utf8_str();
+            ft.lpstrText = buf;
+
+            wxInt64 pos = SendMsg(%s, flags, (sptr_t)&ft);
             if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
             return pos;'''
     ),
@@ -681,6 +785,55 @@ methodOverrideMap = {
              return SendMsg(%s, doDraw, (sptr_t)&fr);'''
     ),
 
+    'FormatRangeFull' :
+    (0,
+     '''wxInt64 %s(bool    doDraw,
+               wxInt64 startPos,
+               wxInt64 endPos,
+               wxDC*   draw,
+               wxDC*   target,
+               wxRect  renderRect,
+               wxRect  pageRect);''',
+     ''' wxInt64 %s(bool    doDraw,
+                wxInt64 startPos,
+                wxInt64 endPos,
+                wxDC*   draw,
+                wxDC*   target,
+                wxRect  renderRect,
+                wxRect  pageRect) {
+             Sci_RangeToFormatFull fr;
+
+             if (endPos < startPos) {
+                 wxSwap(startPos, endPos);
+             }
+             fr.hdc = draw;
+             fr.hdcTarget = target;
+             fr.rc.top = renderRect.GetTop();
+             fr.rc.left = renderRect.GetLeft();
+             fr.rc.right = renderRect.GetRight();
+             fr.rc.bottom = renderRect.GetBottom();
+             fr.rcPage.top = pageRect.GetTop();
+             fr.rcPage.left = pageRect.GetLeft();
+             fr.rcPage.right = pageRect.GetRight();
+             fr.rcPage.bottom = pageRect.GetBottom();
+             fr.chrg.cpMin = startPos;
+             fr.chrg.cpMax = endPos;
+
+             return SendMsg(%s, doDraw, (sptr_t)&fr);'''
+    ),
+
+    'GetSelectionSerialized' :
+    (0,
+    'wxString %s() const;',
+     '''wxString %s() const {
+         const int msg = %s;
+         long len = SendMsg(msg, 0, 0);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return wxString::FromUTF8(buf);'''
+    ),
 
     'GetLine' :
     (0,
@@ -732,6 +885,26 @@ methodOverrideMap = {
          return wxString::FromUTF8(buf);'''
     ),
 
+    'GetTextRangeFull' :
+    (0,
+     'wxString %s(wxInt64 startPos, wxInt64 endPos);',
+     '''wxString %s(wxInt64 startPos, wxInt64 endPos) {
+         if (endPos < startPos) {
+             wxSwap(startPos, endPos);
+         }
+         wxInt64 len = endPos - startPos;
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         Sci_TextRangeFull tr;
+         tr.lpstrText = buf.data();
+         tr.chrg.cpMin = startPos;
+         tr.chrg.cpMax = endPos;
+         tr.lpstrText[0] = '\\0'; // initialize with 0 in case the range is invalid
+         SendMsg(%s, 0, (sptr_t)&tr);
+         return wxString::FromUTF8(buf);'''
+    ),
+
     'PointXFromPosition' :
     ('PointFromPosition',
      'wxPoint %s(int pos);',
@@ -761,6 +934,13 @@ methodOverrideMap = {
     ),
 
     'GetDirectFunction' :
+    (0,
+     'void* %s() const;',
+     '''void* %s() const {
+         return (void*)SendMsg(%s);'''
+    ),
+
+    'GetDirectStatusFunction' :
     (0,
      'void* %s() const;',
      '''void* %s() const {
@@ -927,16 +1107,23 @@ methodOverrideMap = {
     SendMsg(%s, codePage);'''
     ),
 
+    'GetFontLocale' :
+    (0,
+    'wxString %s() const;',
+     '''wxString %s() const {
+         const int msg = %s;
+         long len = SendMsg(msg, 0, 0);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return wxString::FromUTF8(buf);'''
+    ),
+
     'SetIMEInteraction' :
     (0,
      0,
      '''void %s(int imeInteraction) {
-#ifdef wxHAS_TEXT_INPUT_CLIENT
-    // Roll the composition back first, while the pre-edit state is still
-    // fully consistent with the current mode.
-    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
-        m_swx->CancelComposition();
-#endif
     SendMsg(%s, imeInteraction);
     wxUpdateTextInputClient(this);'''
     ),
@@ -1237,6 +1424,7 @@ methodOverrideMap = {
 
 # List of methods that should be mirrored to m_mirrorCtrl if it is non-null.
 mirroringNeeded = (
+    # Commented out are the ones overridden above.
     'SetFoldLevel',
     'SetFoldExpanded',
     'ToggleFold',
@@ -1244,9 +1432,9 @@ mirroringNeeded = (
     'FoldLine',
     'FoldChildren',
     'FoldAll',
-    'SetFoldFlags',
+    # SetFoldFlags
 
-    # Marker-related methods: commented out are the ones overridden above.
+    # Marker-related methods
     # MarkerAdd
     'MarkerAddSet',
     # MarkerDefine
@@ -1255,9 +1443,12 @@ mirroringNeeded = (
     'MarkerDeleteAll',
     'MarkerEnableHighlight',
     'MarkerSetAlpha',
+    'MarkerSetForeground',
     'MarkerSetBackground',
     'MarkerSetBackgroundSelected',
-    'MarkerSetForeground',
+    'MarkerSetForegroundTranslucent',
+    'MarkerSetBackgroundTranslucent',
+    'MarkerSetBackgroundSelectedTranslucent',
 )
 
 # all Scintilla getters are transformed into const member of wxSTC class but
@@ -1309,7 +1500,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
             continue
 
         op = line[:4]
-        if line[:2] == '# ':   # a doc string
+        if line[:1] == '#':   # a doc string
             curDocStrings.append(line[2:])
 
         elif op == 'val ':
@@ -1598,6 +1789,8 @@ def makeArgString(param):
     if typ == 'string':
         return '(sptr_t)(const char*)%s.utf8_str()' % name
     if typ == 'colour':
+        return 'wxColourAsLong(%s)' % name
+    if typ == 'colouralpha':
         return 'wxColourAsLong(%s)' % name
 
     return name

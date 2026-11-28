@@ -16,7 +16,11 @@ include(scintilla.cmake)
 include(lexilla.cmake)
 
 wx_append_sources(STC_FILES STC_CMN)
-if(WXOSX_COCOA)
+if(WXMSW)
+    wx_append_sources(STC_FILES STC_MSW)
+elseif(WXGTK)
+    wx_append_sources(STC_FILES STC_GTK)
+elseif(WXOSX_COCOA)
     wx_append_sources(STC_FILES STC_OSX_COCOA)
 endif()
 

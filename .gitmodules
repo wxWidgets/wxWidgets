@@ -32,12 +32,12 @@
 	branch = wx
 [submodule "src/stc/scintilla"]
 	path = src/stc/scintilla
-	url = https://github.com/wxWidgets/scintilla.git
-	branch = wx
+	url = https://github.com/MaartenBent/scintilla.git
+	branch = wx-scintilla-v5.6.9
 [submodule "src/stc/lexilla"]
 	path = src/stc/lexilla
-	url = https://github.com/wxWidgets/lexilla.git
-	branch = wx
+	url = https://github.com/MaartenBent/lexilla.git
+	branch = wx-lexilla-v5.5.5-restored
 [submodule "3rdparty/libwebp"]
 	path = 3rdparty/libwebp
 	url = https://github.com/wxWidgets/libwebp.git

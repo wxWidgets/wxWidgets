@@ -286,9 +286,11 @@ wxBEGIN_EVENT_TABLE (AppFrame, wxFrame)
 wxEND_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
-        : wxFrame (nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(750,550))
+        : wxFrame (nullptr, wxID_ANY, title)
 {
     SetIcon(wxICON(sample));
+
+    SetSize(FromDIP(wxSize(750, 550)));
 
     // initialize important variables
     m_edit = nullptr;
