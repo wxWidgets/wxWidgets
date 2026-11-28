@@ -141,6 +141,16 @@ inline char* wxTmemset(char* szOut, char cIn, size_t len)
 WXDLLIMPEXP_BASE char* wxSetlocale(int category, const char *locale);
 inline char* wxSetlocale(int category, const wxScopedCharBuffer& locale)
     { return wxSetlocale(category, locale.data()); }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+// Implementation detail of the WinUI port, not for use by applications: while
+// the WinUI runtime is in use, LC_NUMERIC has to stay "C" because the runtime
+// formats the numbers of its own XAML markup with it and terminates the
+// process when the result can't be parsed back. The port turns this on when it
+// initializes the runtime, so console applications, and applications not using
+// WinUI at all, keep the standard behaviour.
+WXDLLIMPEXP_BASE void wxKeepCNumericLocale(bool keep);
+#endif // __WXWINUI__ && wxUSE_WINUI3
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 inline char* wxSetlocale(int category, const wxString& locale)
     { return wxSetlocale(category, locale.mb_str()); }

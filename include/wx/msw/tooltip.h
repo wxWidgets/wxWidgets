@@ -37,9 +37,27 @@ public:
     void SetWindow(wxWindow *win);
     wxWindow *GetWindow() const { return m_window; }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Snapshot taken when the logical wxToolTip is constructed. The public
+    // SetMaxWidth() contract applies only to subsequently-created tooltips,
+    // even when their XAML peer is materialized or replaced much later.
+    int GetWinUIMaxWidthAtCreation() const { return m_winuiMaxWidthAtCreation; }
+
+    // Monotonic logical-object identity used by WinUI ownership transactions.
+    // Pointer equality alone is insufficient when a virtual SetToolTip()
+    // boundary destroys an object and an allocator reuses the same address.
+    unsigned long long GetWinUIIdentity() const { return m_winuiIdentity; }
+#endif
+
     // controlling tooltip behaviour: globally change tooltip parameters
         // enable or disable the tooltips globally
     static void Enable(bool flag);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // WinUI ToolTipService owns automatic pointer, focus and long-press
+        // activation, but exposes neither timing properties nor a cancellable
+        // opening event. The three timing setters below therefore continue to
+        // configure native HWND tooltips only; XAML slots use system timing.
+#endif
         // set the delay after which the tooltip appears
     static void SetDelay(long milliseconds);
         // set the delay after which the tooltip disappears or how long the
@@ -96,7 +114,8 @@ private:
     // to be used in wxModule for deleting tooltip ctrl window when exiting mainloop
     static void DeleteToolTipCtrl();
 
-    // new tooltip maximum width, defaults to min(display width, 400)
+    // Requested maximum width for subsequently-created tooltips. Zero keeps
+    // the public/system-default sentinel; native effective width is local.
     static int ms_maxWidth;
 
     // remove this tooltip from the tooltip control
@@ -108,6 +127,14 @@ private:
     wxString  m_text;           // tooltip text
     wxWindow* m_window;         // main window we're associated with
     wxToolTipOtherWindows *m_others; // other windows associated with it or nullptr
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A WinUI-hosted window renders its tooltip in XAML.  Keep the logical
+    // association, but never register this object with the native TTM_* host.
+    // The remembered flag also makes destruction safe after the slot is gone.
+    bool m_isWinUIHost = false;
+    int m_winuiMaxWidthAtCreation = 0;
+    unsigned long long m_winuiIdentity = 0;
+#endif
     wxRect    m_rect;           // the rect of the window for which this tooltip is shown
                                 // (or a rect with width/height == 0 to show it for the entire window)
     unsigned int m_id;          // the id of this tooltip (ignored when m_rect width/height is 0)

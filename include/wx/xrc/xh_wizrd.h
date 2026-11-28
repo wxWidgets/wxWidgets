@@ -23,10 +23,13 @@ class WXDLLIMPEXP_XRC wxWizardXmlHandler : public wxXmlResourceHandler
 
 public:
     wxWizardXmlHandler();
+    virtual ~wxWizardXmlHandler();
     virtual wxObject *DoCreateResource() override;
     virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
+    // Keep the historical class layout intact. Weak identities and nested-load
+    // generations live in an implementation-only sidecar in xh_wizrd.cpp.
     wxWizard *m_wizard;
     wxWizardPageSimple *m_lastSimplePage;
 };

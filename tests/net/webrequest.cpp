@@ -177,13 +177,15 @@ protected:
 
         // There may, or not, be a space after it.
         // And the value may be returned in an array.
-        while ( wxIsspace(response[pos]) ||
-                response[pos] == '"' ||
-                response[pos] == '[' )
+        while ( pos < response.size() &&
+                (wxIsspace(response[pos]) ||
+                 response[pos] == '"' ||
+                 response[pos] == '[') )
         {
             ++pos;
         }
 
+        REQUIRE( pos + value.size() <= response.size() );
         wxString actualValue = response.substr(pos, value.size());
         REQUIRE( actualValue == value );
     }

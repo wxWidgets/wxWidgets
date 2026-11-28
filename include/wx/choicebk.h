@@ -95,6 +95,11 @@ protected:
     void OnChoiceSelected(wxCommandEvent& event);
 
 private:
+    // Removes the page from the common model only. A static member, and not a
+    // qualified call in the lambdas which use it: g++ 4.8 refuses calling a
+    // protected member of the base class this way from a lambda.
+    static wxWindow *DoRemoveCommonPage(wxChoicebook *book, size_t page);
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxChoicebook);
 };

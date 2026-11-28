@@ -65,6 +65,9 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/fontdlgg.h"
     #define wxFontDialog wxGenericFontDialog
+#elif defined(__WXWINUI__)
+    // The font dialog of Windows, made of WinUI controls.
+    #include "wx/winui/fontdlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/fontdlg.h"
 #elif defined(__WXGTK__)

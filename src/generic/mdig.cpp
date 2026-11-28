@@ -40,8 +40,11 @@ enum MDI_MENU_ID
 {
     wxWINDOWCLOSE = 4001,
     wxWINDOWCLOSEALL,
-    wxWINDOWNEXT,
-    wxWINDOWPREV
+
+    // The standard identifiers: a program which has items or accelerators
+    // of its own for them, as with the MDI of Windows, finds them here too.
+    wxWINDOWNEXT = wxID_MDI_WINDOW_NEXT,
+    wxWINDOWPREV = wxID_MDI_WINDOW_PREV
 };
 
 //-----------------------------------------------------------------------------
@@ -66,6 +69,22 @@ void wxGenericMDIParentFrame::Init()
 
 wxGenericMDIParentFrame::~wxGenericMDIParentFrame()
 {
+    // Destroy the children while the notebook which holds them is whole:
+    // each of them takes its page out of it, which cannot be done from the
+    // destructor of the notebook itself. This is what happens when the
+    // frame is destroyed without having been closed first.
+    if ( wxGenericMDIClientWindow * const client = GetGenericClientWindow() )
+    {
+        wxBookCtrlBase * const book = client->GetBookCtrl();
+        while ( book && book->GetPageCount() )
+        {
+            const size_t before = book->GetPageCount();
+            delete client->GetChild(0);
+            if ( book->GetPageCount() >= before )
+                break;
+        }
+    }
+
     // Make sure the client window is destructed before the menu bars are!
     wxDELETE(m_clientWindow);
 
@@ -143,6 +162,11 @@ bool wxGenericMDIParentFrame::CloseAll()
 #if wxUSE_MENUS
 void wxGenericMDIParentFrame::SetWindowMenu(wxMenu* pMenu)
 {
+    // Programs set the standard menu again after changing its items: there
+    // is then nothing to replace, and above all nothing to delete.
+    if ( pMenu == m_windowMenu )
+        return;
+
     // Replace the window menu from the currently loaded menu bar.
     wxMenuBar *pMenuBar = GetMenuBar();
 
@@ -186,7 +210,16 @@ void wxGenericMDIParentFrame::WXSetChildMenuBar(wxGenericMDIChildFrame *pChild)
     else
     {
         if (pChild->GetMenuBar() == nullptr)
+        {
+            // A child which has no menu bar shows the one of the frame, not
+            // the one of the child which was active before it.
+            if ( m_pMyMenuBar )
+            {
+                SetMenuBar(m_pMyMenuBar);
+                m_pMyMenuBar = nullptr;
+            }
             return;
+        }
 
         // Do we need to save the current bar?
         if (m_pMyMenuBar == nullptr)
@@ -549,6 +582,17 @@ wxGenericMDIClientWindow::CreateGenericClient(wxWindow *parent)
                     &wxGenericMDIClientWindow::OnPageChanged,
                     this
                 );
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A document is closed by the button of its tab, as in the tabbed
+    // windows of Windows 11: the child may refuse, as when its own close
+    // button was the one of a window.
+    m_notebook->WinUISetCloseHandler([this](size_t pos)
+    {
+        if ( pos < GetBookCtrl()->GetPageCount() )
+            GetChild(pos)->Close();
+    });
+#endif
 
     // now that we have a notebook to resize, hook up OnSize() too
     Bind(wxEVT_SIZE, &wxGenericMDIClientWindow::OnSize, this);

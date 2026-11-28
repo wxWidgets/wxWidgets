@@ -41,6 +41,9 @@ enum wxRibbonBarOption
     wxRIBBON_BAR_ALWAYS_SHOW_TABS = 1 << 5,
     wxRIBBON_BAR_SHOW_TOGGLE_BUTTON = 1 << 6,
     wxRIBBON_BAR_SHOW_HELP_BUTTON = 1 << 7,
+    // wxWinUI: show the tabs of the pages with a TabView, the tabs of a
+    // document area, rather than with a SelectorBar. Ignored elsewhere.
+    wxRIBBON_BAR_TAB_VIEW = 1 << 8,
 
     wxRIBBON_BAR_DEFAULT_STYLE =  wxRIBBON_BAR_FLOW_HORIZONTAL
                                 | wxRIBBON_BAR_SHOW_PAGE_LABELS
@@ -255,6 +258,16 @@ protected:
     void CommonInit(long style);
     void AddPage(wxRibbonPage *page);
     void RecalculateTabSizes();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The tabs and the small buttons of the bar are XAML content of its
+    // window (a SelectorBar and buttons, see src/ribbon/bar.cpp): this
+    // brings them up to date, and these are what they do when used.
+    void WinUISyncTabs();
+    void WinUIChooseTab(size_t index);
+    void WinUIToggle();
+    void WinUIHelp();
+#endif
     void RecalculateMinSize();
     void ScrollTabBar(int npixels);
     void RefreshTabBar();

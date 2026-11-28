@@ -16,6 +16,21 @@
 #if wxUSE_SASH
 
 #include "wx/sashwin.h"
+#include "wx/weakref.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/themecolours.h"
+
+// The hairline of the theme, as it shows over the ground of a window: the
+// background colour of the sash window itself is not what is under it.
+static wxColour wxWinUISashLineColour()
+{
+    const wxColour base = wxWinUIGetThemeColour(wxWinUIThemeColour::BaseFill);
+    return wxWinUIBlendOver(
+        wxWinUIGetThemeColour(wxWinUIThemeColour::Divider),
+        wxColour(base.Red(), base.Green(), base.Blue()));
+}
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
@@ -88,6 +103,119 @@ void wxSashWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     DrawSashes(dc);
 }
 
+// Tells the program where the sash of the given edge was dragged to: x and y
+// are relative to the sash window.
+static void
+wxSashSendDragged(wxSashWindow *win, wxSashEdgePosition edge, int x, int y)
+{
+    int w, h;
+    win->GetSize(&w, &h);
+    int xp, yp;
+    win->GetPosition(&xp, &yp);
+
+    wxRect dragRect;
+    wxSashDragStatus status = wxSASH_STATUS_OK;
+
+    // the new height and width of the window - if -1, it didn't change
+    int newHeight = wxDefaultCoord,
+        newWidth = wxDefaultCoord;
+
+    // NB: x and y may be negative and they're relative to the sash window
+    //     upper left corner, while xp and yp are expressed in the parent
+    //     window system of coordinates, so adjust them! After this
+    //     adjustment, all coordinates are relative to the parent window.
+    y += yp;
+    x += xp;
+
+    switch (edge)
+    {
+        case wxSASH_TOP:
+            if ( y > yp + h )
+            {
+                // top sash shouldn't get below the bottom one
+                status = wxSASH_STATUS_OUT_OF_RANGE;
+            }
+            else
+            {
+                newHeight = h - (y - yp);
+            }
+            break;
+
+        case wxSASH_BOTTOM:
+            if ( y < yp )
+            {
+                // bottom sash shouldn't get above the top one
+                status = wxSASH_STATUS_OUT_OF_RANGE;
+            }
+            else
+            {
+                newHeight = y - yp;
+            }
+            break;
+
+        case wxSASH_LEFT:
+            if ( x > xp + w )
+            {
+                // left sash shouldn't get beyond the right one
+                status = wxSASH_STATUS_OUT_OF_RANGE;
+            }
+            else
+            {
+                newWidth = w - (x - xp);
+            }
+            break;
+
+        case wxSASH_RIGHT:
+            if ( x < xp )
+            {
+                // and the right sash, finally, shouldn't be beyond the
+                // left one
+                status = wxSASH_STATUS_OUT_OF_RANGE;
+            }
+            else
+            {
+                newWidth = x - xp;
+            }
+            break;
+
+        case wxSASH_NONE:
+            // can this happen at all?
+            break;
+    }
+
+    if ( newHeight == wxDefaultCoord )
+    {
+        // didn't change
+        newHeight = h;
+    }
+    else
+    {
+        // make sure it's in win->GetMinimumSizeY()..win->GetMaximumSizeY() range
+        newHeight = wxMax(newHeight, win->GetMinimumSizeY());
+        newHeight = wxMin(newHeight, win->GetMaximumSizeY());
+    }
+
+    if ( newWidth == wxDefaultCoord )
+    {
+        // didn't change
+        newWidth = w;
+    }
+    else
+    {
+        // make sure it's in win->GetMinimumSizeY()..win->GetMaximumSizeY() range
+        newWidth = wxMax(newWidth, win->GetMinimumSizeX());
+        newWidth = wxMin(newWidth, win->GetMaximumSizeX());
+    }
+
+    dragRect = wxRect(x, y, newWidth, newHeight);
+
+    wxSashEvent eventSash(win->GetId(), edge);
+    eventSash.SetEventObject(win);
+    eventSash.SetDragStatus(status);
+    eventSash.SetDragRect(dragRect);
+    win->GetEventHandler()->ProcessEvent(eventSash);
+}
+
 void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 {
     wxCoord x = 0, y = 0;
@@ -158,118 +286,15 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
             ReleaseMouse();
         m_mouseCaptured = false;
 
+#if !(defined(__WXWINUI__) && wxUSE_WINUI3)
         // Erase old tracker
         DrawSashTracker(m_draggingEdge, m_oldX, m_oldY);
-
-        int w, h;
-        GetSize(&w, &h);
-        int xp, yp;
-        GetPosition(&xp, &yp);
+#endif
 
         wxSashEdgePosition edge = m_draggingEdge;
         m_draggingEdge = wxSASH_NONE;
 
-        wxRect dragRect;
-        wxSashDragStatus status = wxSASH_STATUS_OK;
-
-        // the new height and width of the window - if -1, it didn't change
-        int newHeight = wxDefaultCoord,
-            newWidth = wxDefaultCoord;
-
-        // NB: x and y may be negative and they're relative to the sash window
-        //     upper left corner, while xp and yp are expressed in the parent
-        //     window system of coordinates, so adjust them! After this
-        //     adjustment, all coordinates are relative to the parent window.
-        y += yp;
-        x += xp;
-
-        switch (edge)
-        {
-            case wxSASH_TOP:
-                if ( y > yp + h )
-                {
-                    // top sash shouldn't get below the bottom one
-                    status = wxSASH_STATUS_OUT_OF_RANGE;
-                }
-                else
-                {
-                    newHeight = h - (y - yp);
-                }
-                break;
-
-            case wxSASH_BOTTOM:
-                if ( y < yp )
-                {
-                    // bottom sash shouldn't get above the top one
-                    status = wxSASH_STATUS_OUT_OF_RANGE;
-                }
-                else
-                {
-                    newHeight = y - yp;
-                }
-                break;
-
-            case wxSASH_LEFT:
-                if ( x > xp + w )
-                {
-                    // left sash shouldn't get beyond the right one
-                    status = wxSASH_STATUS_OUT_OF_RANGE;
-                }
-                else
-                {
-                    newWidth = w - (x - xp);
-                }
-                break;
-
-            case wxSASH_RIGHT:
-                if ( x < xp )
-                {
-                    // and the right sash, finally, shouldn't be beyond the
-                    // left one
-                    status = wxSASH_STATUS_OUT_OF_RANGE;
-                }
-                else
-                {
-                    newWidth = x - xp;
-                }
-                break;
-
-            case wxSASH_NONE:
-                // can this happen at all?
-                break;
-        }
-
-        if ( newHeight == wxDefaultCoord )
-        {
-            // didn't change
-            newHeight = h;
-        }
-        else
-        {
-            // make sure it's in m_minimumPaneSizeY..m_maximumPaneSizeY range
-            newHeight = wxMax(newHeight, m_minimumPaneSizeY);
-            newHeight = wxMin(newHeight, m_maximumPaneSizeY);
-        }
-
-        if ( newWidth == wxDefaultCoord )
-        {
-            // didn't change
-            newWidth = w;
-        }
-        else
-        {
-            // make sure it's in m_minimumPaneSizeY..m_maximumPaneSizeY range
-            newWidth = wxMax(newWidth, m_minimumPaneSizeX);
-            newWidth = wxMin(newWidth, m_maximumPaneSizeX);
-        }
-
-        dragRect = wxRect(x, y, newWidth, newHeight);
-
-        wxSashEvent eventSash(GetId(), edge);
-        eventSash.SetEventObject(this);
-        eventSash.SetDragStatus(status);
-        eventSash.SetDragRect(dragRect);
-        GetEventHandler()->ProcessEvent(eventSash);
+        wxSashSendDragged(this, edge, x, y);
     }
     else if ( event.LeftUp() )
     {
@@ -326,6 +351,25 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
             m_currentCursor = m_sashCursorNS;
         }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The line which Win32 draws over the screen while a sash is
+        // dragged, the zones taking their size when the button is released,
+        // cannot be drawn over what XAML shows, and is not what a window of
+        // WinUI does: the zones follow the pointer.
+        m_dragMode = wxSASH_DRAG_DRAGGING;
+        if ( x != m_oldX || y != m_oldY )
+        {
+            const wxWeakRef<wxWindow> alive(this);
+            wxSashSendDragged(this, m_draggingEdge, x, y);
+            if ( !alive )
+                return;
+
+            // The window was moved or sized: where the pointer is in it now.
+            const wxPoint now = ScreenToClient(wxGetMousePosition());
+            x = now.x;
+            y = now.y;
+        }
+#else // !WinUI
         if (m_dragMode == wxSASH_DRAG_LEFT_DOWN)
         {
             m_dragMode = wxSASH_DRAG_DRAGGING;
@@ -342,6 +386,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 DrawSashTracker(m_draggingEdge, x, y);
             }
         }
+#endif // WinUI/!WinUI
         m_oldX = x;
         m_oldY = y;
     }
@@ -420,6 +465,19 @@ void wxSashWindow::DrawBorders(wxDC& dc)
     int w, h;
     GetClientSize(&w, &h);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // WinUI has no relief: the zones of a window are flat, and the one which
+    // asks for a frame has the hairline of the theme.
+    if ( GetWindowStyleFlag() & wxSW_BORDER )
+    {
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.SetPen(wxPen(wxWinUISashLineColour()));
+        dc.DrawRectangle(0, 0, w, h);
+        dc.SetPen(wxNullPen);
+        dc.SetBrush(wxNullBrush);
+    }
+    return;
+#else // !WinUI
     wxPen mediumShadowPen(m_mediumShadowColour, 1, wxPENSTYLE_SOLID);
     wxPen darkShadowPen(m_darkShadowColour, 1, wxPENSTYLE_SOLID);
     wxPen lightShadowPen(m_lightShadowColour, 1, wxPENSTYLE_SOLID);
@@ -453,6 +511,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
 
     dc.SetPen(wxNullPen);
     dc.SetBrush(wxNullBrush);
+#endif // WinUI/!WinUI
 }
 
 void wxSashWindow::DrawSashes(wxDC& dc)
@@ -469,6 +528,37 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
     int w, h;
     GetClientSize(&w, &h);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // What separates two zones in WinUI: a hairline, here in the middle of
+    // the room of the sash, with nothing raised around it.
+    const int margin = GetEdgeMargin(edge);
+    dc.SetPen(wxPen(wxWinUISashLineColour()));
+    switch ( edge )
+    {
+        case wxSASH_LEFT:
+            dc.DrawLine(margin / 2, 0, margin / 2, h);
+            break;
+
+        case wxSASH_RIGHT:
+            dc.DrawLine(w - margin + margin / 2, 0,
+                        w - margin + margin / 2, h);
+            break;
+
+        case wxSASH_TOP:
+            dc.DrawLine(0, margin / 2, w, margin / 2);
+            break;
+
+        case wxSASH_BOTTOM:
+            dc.DrawLine(0, h - margin + margin / 2,
+                        w, h - margin + margin / 2);
+            break;
+
+        default:
+            break;
+    }
+    dc.SetPen(wxNullPen);
+    return;
+#else // !WinUI
     wxPen facePen(m_faceColour, 1, wxPENSTYLE_SOLID);
     wxBrush faceBrush(m_faceColour, wxBRUSHSTYLE_SOLID);
     wxPen mediumShadowPen(m_mediumShadowColour, 1, wxPENSTYLE_SOLID);
@@ -535,6 +625,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
 
     dc.SetPen(wxNullPen);
     dc.SetBrush(wxNullBrush);
+#endif // WinUI/!WinUI
 }
 
 // Draw the sash tracker (for whilst moving the sash)

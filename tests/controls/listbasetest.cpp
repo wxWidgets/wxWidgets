@@ -37,9 +37,9 @@ void ListBaseTestCase::ColumnsOrder()
     // first set up some columns
     static const int NUM_COLS = 3;
 
-    list->InsertColumn(0, "Column 0");
-    list->InsertColumn(1, "Column 1");
-    list->InsertColumn(2, "Column 2");
+    REQUIRE( list->InsertColumn(0, "Column 0") == 0 );
+    REQUIRE( list->InsertColumn(1, "Column 1") == 1 );
+    REQUIRE( list->InsertColumn(2, "Column 2") == 2 );
 
     // and a couple of test items too
     list->InsertItem(0, "Item 0");
@@ -51,6 +51,7 @@ void ListBaseTestCase::ColumnsOrder()
 
     // check that the order is natural in the beginning
     const wxArrayInt orderOrig = list->GetColumnsOrder();
+    REQUIRE( orderOrig.size() == NUM_COLS );
     for ( n = 0; n < NUM_COLS; n++ )
         CHECK( orderOrig[n]  == n );
 
@@ -60,10 +61,11 @@ void ListBaseTestCase::ColumnsOrder()
     order[0] = 2;
     order[1] = 0;
     order[2] = 1;
-    list->SetColumnsOrder(order);
+    REQUIRE( list->SetColumnsOrder(order) );
 
     // check that we get back the same order as we set
     const wxArrayInt orderNew = list->GetColumnsOrder();
+    REQUIRE( orderNew.size() == NUM_COLS );
     for ( n = 0; n < NUM_COLS; n++ )
         CHECK( orderNew[n]  == order[n] );
 
@@ -90,6 +92,15 @@ void ListBaseTestCase::ColumnsOrder()
     li.SetColumn(2);
     CHECK( list->GetItem(li) );
     CHECK( li.GetText()  == "second in second" );
+
+    // Setting the same permutation is harmless, and restoring the original
+    // order must not permute the logical data a second time.
+    REQUIRE( list->SetColumnsOrder(order) );
+    CHECK( list->GetColumnsOrder() == order );
+    REQUIRE( list->SetColumnsOrder(orderOrig) );
+    CHECK( list->GetColumnsOrder() == orderOrig );
+    CHECK( list->GetItemText(0, 1) == "first in first" );
+    CHECK( list->GetItemText(1, 2) == "second in second" );
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
 }
 
@@ -503,8 +514,22 @@ void ListBaseTestCase::Visible()
 
     CHECK(list->EnsureVisible(count + 9));
     CHECK(list->IsVisible(count + 9));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The list scrolls by pixels: the last item ends at the bottom and the
+    // line above the first whole one may still show in part.
+    CHECK(!list->IsVisible(8));
+#else
     CHECK(!list->IsVisible(9));
+#endif
 
+    CHECK(list->GetTopItem() != 0);
+
+    CHECK(list->EnsureVisible(0));
+    CHECK(list->IsVisible(0));
+    CHECK(list->GetTopItem() == 0);
+
+    CHECK(list->EnsureVisible(count + 9));
+    CHECK(list->IsVisible(count + 9));
     CHECK(list->GetTopItem() != 0);
 }
 
@@ -610,6 +635,16 @@ void ListBaseTestCase::HitTest()
     wxRect rectSubItem0, rectIcon;
     list->GetSubItemRect(0, 0, rectSubItem0); // column 0
     list->GetItemRect(0, rectIcon, wxLIST_RECT_ICON); // icon
+    wxRect rectSubItemIcon;
+    list->GetSubItemRect(0, 0, rectSubItemIcon, wxLIST_RECT_ICON);
+    CHECK(rectIcon == rectSubItemIcon);
+    CHECK(rectSubItem0.Contains(rectIcon));
+
+    wxRect rectLabel;
+    list->GetItemRect(0, rectLabel, wxLIST_RECT_LABEL);
+    CHECK(rectLabel.GetLeft() > rectIcon.GetLeft());
+    CHECK(!rectLabel.Intersects(rectIcon));
+
     int y = rectSubItem0.GetTop() + (rectSubItem0.GetBottom() -
             rectSubItem0.GetTop()) / 2;
     int flags = 0;
@@ -617,19 +652,19 @@ void ListBaseTestCase::HitTest()
     // state icon (checkbox)
     int xCheckBox = rectSubItem0.GetLeft() + (rectIcon.GetLeft() -
                     rectSubItem0.GetLeft()) / 2;
-    list->HitTest(wxPoint(xCheckBox, y), flags);
+    CHECK(list->HitTest(wxPoint(xCheckBox, y), flags) == 0);
     CHECK( flags == wxLIST_HITTEST_ONITEMSTATEICON );
 
     // icon
     int xIcon = rectIcon.GetLeft() + (rectIcon.GetRight() - rectIcon.GetLeft()) / 2;
-    list->HitTest(wxPoint(xIcon, y), flags);
+    CHECK(list->HitTest(wxPoint(xIcon, y), flags) == 0);
     CHECK( flags == wxLIST_HITTEST_ONITEMICON );
 
     // label, beyond column 0
     wxRect rectItem;
     list->GetItemRect(0, rectItem); // entire item
     int xHit = rectSubItem0.GetRight() + (rectItem.GetRight() - rectSubItem0.GetRight()) / 2;
-    list->HitTest(wxPoint(xHit, y), flags);
+    CHECK(list->HitTest(wxPoint(xHit, y), flags) == 0);
     CHECK( flags == wxLIST_HITTEST_ONITEMLABEL );
 #endif // __WXMSW__
 }

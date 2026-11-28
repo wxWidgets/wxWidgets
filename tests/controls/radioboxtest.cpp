@@ -153,6 +153,11 @@ TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::ToolTip", "[radiobox][tooltip]")
 
     CHECK( m_radio->GetItemToolTip(1)->GetTip() == "Item 1 help" );
 
+    m_radio->SetItemToolTip(1, "Updated item 1 help");
+
+    CHECK( m_radio->GetItemToolTip(1)->GetTip() ==
+           "Updated item 1 help" );
+
     m_radio->SetItemToolTip(1, "");
 
     //However if we set a blank tip this does count as a tooltip

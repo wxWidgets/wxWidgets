@@ -29,6 +29,19 @@
 
 const char wxGaugeNameStr[] = "gauge";
 
+namespace
+{
+
+// wxGauge deliberately accepts a zero range, but the application progress
+// bridge requires a strictly positive maximum. Keep the public gauge model
+// unchanged and normalize only the value sent to this secondary peer.
+int wxGaugeAppProgressRange(int range)
+{
+    return range > 0 ? range : 1;
+}
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -108,7 +121,8 @@ void wxGaugeBase::InitProgressIndicatorIfNeeded()
         if ( topParent != nullptr )
         {
             m_appProgressIndicator =
-                new wxAppProgressIndicator(topParent, GetRange());
+                new wxAppProgressIndicator(
+                    topParent, wxGaugeAppProgressRange(GetRange()));
         }
     }
 }
@@ -152,7 +166,8 @@ void wxGaugeBase::SetRange(int range)
     m_rangeMax = range;
 
     if ( m_appProgressIndicator )
-        m_appProgressIndicator->SetRange(m_rangeMax);
+        m_appProgressIndicator->SetRange(
+            wxGaugeAppProgressRange(m_rangeMax));
 }
 
 int wxGaugeBase::GetRange() const

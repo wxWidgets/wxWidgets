@@ -461,7 +461,7 @@ static inline bool NeedsOwnerDrawnForImageLayout(wxDirection dir, int margH, int
     return (dir == wxRIGHT && margH != 0) || (dir == wxBOTTOM && margV != 0);
 }
 
-#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS && !defined(__WXWINUI__)
 
 class wxAnyButtonAccessible : public wxWindowAccessible
 {
@@ -491,7 +491,7 @@ public:
     }
 };
 
-#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS && !__WXWINUI__
 
 } // anonymous namespace
 
@@ -1620,13 +1620,13 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     return true;
 }
 
-#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+#if wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS && !defined(__WXWINUI__)
 
 wxAccessible* wxAnyButton::CreateAccessible()
 {
     return new wxAnyButtonAccessible(this);
 }
 
-#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS
+#endif // wxUSE_ACCESSIBILITY && wxUSE_TOOLTIPS && !__WXWINUI__
 
 #endif // wxHAS_ANY_BUTTON

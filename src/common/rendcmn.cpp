@@ -49,7 +49,10 @@ public:
             // only try to create the renderer once
             m_initialized = true;
 
-            DoInit();
+            // An explicit Set() before the first Get() already supplied the
+            // renderer. Lazy traits initialization must not replace/delete it.
+            if ( !get() )
+                DoInit();
         }
 
         return get() != nullptr;

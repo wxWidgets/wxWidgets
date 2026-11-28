@@ -19,6 +19,7 @@
 #include "wx/timer.h"
 #include "wx/settings.h"
 
+#include <cstdint>
 #include <memory>
 
 constexpr size_t wxNO_ITEM = static_cast<size_t>(-1);
@@ -317,6 +318,9 @@ private:
 
 class wxListHeaderWindow : public wxWindow
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIListProjection;
+#endif
 protected:
     wxListMainWindow  *m_owner;
     const wxCursor    *m_currentCursor;
@@ -348,12 +352,21 @@ public:
                  const wxString &name = wxT("wxlistctrlcolumntitles") );
 
     virtual ~wxListHeaderWindow();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+#endif
 
-    // We never need focus as we don't have any keyboard interface.
+    // The WinUI projection has real focusable header Buttons. The generic
+    // painted header has no keyboard interface and remains non-focusable.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    bool AcceptsFocus() const override;
+#else
     virtual bool AcceptsFocus() const override { return false; }
+#endif
 
     void DrawCurrent();
     void AdjustDC( wxDC& dc );
+    void OnColumnOrderChanged();
 
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
@@ -430,9 +443,12 @@ public:
     // NB: text must be a valid object but not Create()d yet
     wxListTextCtrlWrapper(wxListMainWindow *owner,
                           wxTextCtrl *text,
-                          size_t itemEdit);
+                          size_t itemEdit, const wxString& value);
+    bool CreateControl(const wxRect& labelRect);
 
     wxTextCtrl *GetText() const { return m_text; }
+    size_t GetItemEdited() const { return m_itemEdited; }
+    void UpdatePosition();
 
     // Check if the given key event should stop editing and return true if it
     // does or false otherwise.
@@ -448,7 +464,11 @@ public:
         End_Destroy     // the entire control is being destroyed.
     };
 
-    void EndEdit(EndReason reason);
+    // Private result used by automation; public EndEditLabel still reports
+    // whether an editor existed, including when acceptance was vetoed.
+    bool EndEdit(EndReason reason);
+    void InvalidateFrom(size_t first) { if ( m_itemEdited >= first ) m_itemValid = false; }
+    bool IsItemValid() const { return m_itemValid; }
 
 protected:
     void OnChar( wxKeyEvent &event );
@@ -464,6 +484,9 @@ private:
     wxString            m_startValue;
     size_t              m_itemEdited;
     bool                m_aboutToFinish;
+    bool                m_finished;
+    bool                m_handlerInstalled = false;
+    bool                m_itemValid = true;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -474,6 +497,9 @@ private:
 
 class wxListMainWindow : public wxWindow
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIListProjection;
+#endif
 public:
     wxListMainWindow();
     wxListMainWindow( wxWindow *parent,
@@ -482,6 +508,10 @@ public:
                       const wxSize& size );
 
     virtual ~wxListMainWindow();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+    void ScrollWindow(int dx, int dy, const wxRect* rect = nullptr) override;
+#endif
 
     // called by the main control when its mode changes
     void SetReportView(bool inReportView);
@@ -502,7 +532,9 @@ public:
     bool HasHeader() const
         { return InReportView() && !HasFlag(wxLC_NO_HEADER); }
 
-    void HighlightAll( bool on );
+    // Return false if a synchronous notification destroyed this window or
+    // changed the item topology, making all caller-held indices stale.
+    bool HighlightAll( bool on );
 
     // all these functions only do something if the line is currently visible
 
@@ -524,7 +556,7 @@ public:
     // more efficient for virtual list controls!
     //
     // NB: unlike HighlightLine() this one does refresh the lines on screen
-    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
+    bool HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
                          SendEvent sendEvent = SendEvent_Normal );
 
     // toggle the line state and refresh it
@@ -597,13 +629,31 @@ public:
         return m_textctrlWrapper ? m_textctrlWrapper->GetText() : nullptr;
     }
 
+    // The item whose label is being edited in place, or -1.
+    long GetEditedItem() const
+    {
+        return m_textctrlWrapper
+            ? static_cast<long>(m_textctrlWrapper->GetItemEdited())
+            : -1;
+    }
+
     void ResetTextControl(wxTextCtrl *text)
     {
-        delete text;
+        // A destroy handler can delete the owner or start another edit. Drop
+        // the old logical editor before entering this callback boundary.
         m_textctrlWrapper = nullptr;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The label of the item is shown again, whether it changed or not.
+        Refresh();
+#endif
+        delete text;
     }
 
     void OnRenameTimer();
+    bool GetLabelEditItem(size_t item, wxListItem& info) const;
+    bool GetLabelEditRect(size_t item, const wxListItem& info, wxRect& rect) const;
+    void InvalidateLabelEditFrom(size_t first)
+        { if ( m_textctrlWrapper ) m_textctrlWrapper->InvalidateFrom(first); }
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
     void OnRenameCancelled(size_t itemEdit);
 
@@ -643,16 +693,21 @@ public:
     void GetColumn( int col, wxListItem &item ) const;
     int GetColumnWidth( int col ) const;
     int GetColumnCount() const { return m_columns.size(); }
+    int GetColumnOrder(int col) const;
+    int GetColumnIndexFromOrder(int order) const;
+    const wxArrayInt& GetColumnsOrder() const { return m_columnsOrder; }
+    bool SetColumnsOrder(const wxArrayInt& orders);
+    int GetColumnStart(int col) const;
 
     // returns the sum of the heights of all columns
     int GetHeaderWidth() const;
 
     int GetCountPerPage() const;
 
-    void SetItem( wxListItem &item );
+    bool SetItem( wxListItem &item );
     void GetItem( wxListItem &item ) const;
-    void SetItemState( long item, long state, long stateMask );
-    void SetItemStateAll( long state, long stateMask );
+    bool SetItemState( long item, long state, long stateMask );
+    bool SetItemStateAll( long state, long stateMask );
     int GetItemState( long item, long stateMask ) const;
     bool GetItemRect( long item, wxRect &rect ) const
     {
@@ -699,8 +754,8 @@ public:
     void RecalculatePositionsAndRefresh();
 
     long GetNextItem( long item, int geometry, int state ) const;
-    void DeleteItem( long index );
-    void DeleteAllItems();
+    bool DeleteItem( long index );
+    bool DeleteAllItems();
     void DeleteColumn( int col );
     void DeleteEverything();
     void EnsureVisible( long index );
@@ -708,10 +763,10 @@ public:
     long FindItem( long start, wxUIntPtr data);
     long FindItem( const wxPoint& pt );
     long HitTest( int x, int y, int &flags ) const;
-    void InsertItem( wxListItem &item );
+    bool InsertItem( wxListItem &item );
     long InsertColumn( long col, const wxListItem &item );
     int GetItemWidthWithImage(wxListItem * item);
-    void SortItems( wxListCtrlCompare fn, wxIntPtr data );
+    bool SortItems( wxListCtrlCompare fn, wxIntPtr data );
 
     size_t GetItemCount() const;
     bool IsEmpty() const { return GetItemCount() == 0; }
@@ -798,8 +853,16 @@ protected:
     // virtual list control we only ever use m_lines[0])
     std::vector<wxListLineData> m_lines;
 
+    // Incremented for every item topology mutation. Synchronous list events
+    // may re-enter and mutate the same control, so callers use this to avoid
+    // continuing an outer operation with stale indices after the callback.
+    std::uint64_t m_structureRevision;
+
     // the list of column objects
     std::vector<wxListHeaderData> m_columns;
+    // Visual positions map to logical column indices. Item values, widths,
+    // and event payloads always continue to use the logical indices.
+    wxArrayInt m_columnsOrder;
 
     // currently focused item or -1
     size_t               m_current;
@@ -927,8 +990,12 @@ private:
     // without generating unnecessary wxEVT_LIST_ITEM_{DE}SELECTED events.
     void ExtendSelection(size_t oldCurrent, size_t newCurrent);
 
-    // delete all items but don't refresh: called from dtor
-    void DoDeleteAllItems();
+    // Delete all items without refreshing. Ordinary destruction preserves the
+    // documented notification, but must not send a second one if destruction
+    // was requested from the deletion notification already in progress.
+    // Return false if an event handler destroyed this window.
+    bool DoDeleteAllItems(bool notify = true);
+    bool m_deleteAllNotificationActive = false;
 
     // Compute the minimal width needed to fully display the column header.
     int ComputeMinHeaderWidth(const wxListHeaderData* header) const;
@@ -943,6 +1010,29 @@ private:
 
     // the total header width or 0 if not calculated yet
     wxCoord m_headerWidth;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+public:
+    // In report view the list scrolls by pixels, as a list of WinUI does,
+    // and not line by line: the unit of its vertical bar is one pixel. The
+    // keyboard still goes from an item to the next one.
+    //
+    // Scrolls by that many lines: at once, or in a few steps of a timer.
+    void WinUIScrollByLines(int lines, bool animate);
+    // What a turn of the wheel does, in report view.
+    void WinUIOnWheel(wxMouseEvent& event);
+
+private:
+    void WinUIScrollBy(int pixels, bool animate);
+    void WinUIScrollStep();
+    void WinUIStopScrolling();
+
+    // what of the turns of the wheel has not made a pixel yet
+    int m_winuiWheelRest = 0;
+    // where the scroll under way is going, -1 if there is none
+    int m_winuiScrollTarget = -1;
+    wxTimer m_winuiScrollTimer;
+#endif
 
     // the first and last lines being shown on screen right now (inclusive),
     // both may be -1 if they must be calculated so never access them directly:

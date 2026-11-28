@@ -23,6 +23,10 @@
 #include <vector>
 
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
+#ifdef __WXMSW__
+class WXDLLIMPEXP_FWD_CORE wxWindowsPrintDialog;
+class WXDLLIMPEXP_FWD_CORE wxWindowsPageSetupDialog;
+#endif
 class WXDLLIMPEXP_FWD_CORE wxWindowsPrintNativeData;
 
 /*
@@ -120,6 +124,15 @@ public:
     wxPrintNativeDataBase *GetNativeData() const { return m_nativeData.get(); }
 
 private:
+#ifdef __WXMSW__
+    // Native print dialogs copy wxPrintData by value, but its platform data is
+    // reference-counted. Give their private implementations a way to detach
+    // that state before a modal transaction so Cancel can never mutate the
+    // caller's DEVMODE/DEVNAMES handles.
+    bool MSWUnshareNativeData();
+    friend class wxWindowsPrintDialog;
+    friend class wxWindowsPageSetupDialog;
+#endif
     friend class wxWindowsPrintNativeData;
 
     bool IsDuplexSpecified() const { return m_duplexModeValid; }

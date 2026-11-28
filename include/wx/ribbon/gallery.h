@@ -17,6 +17,11 @@
 #include "wx/ribbon/control.h"
 #include "wx/bmpbndl.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonGalleryWinUI;
+#endif
+
 class wxRibbonGalleryItem;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonGalleryItem*, wxArrayRibbonGalleryItem, class WXDLLIMPEXP_RIBBON);
@@ -91,6 +96,10 @@ public:
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
 #endif // wxUSE_ACCESSIBILITY
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxSize GetMinSize() const override;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
+#endif
 
 protected:
 #if wxUSE_ACCESSIBILITY
@@ -157,6 +166,14 @@ protected:
 
     // Always stored in upper case, to allow case-insensitive matching.
     wxString m_keyTip;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+private:
+    friend class wxRibbonGalleryWinUI;
+    bool InitializeWinUI();
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    std::shared_ptr<wxRibbonGalleryWinUI> m_winui;
+#endif
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonGallery);

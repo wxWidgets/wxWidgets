@@ -26,6 +26,10 @@
 #include "wx/compositebookctrl.h"
 
 #include <vector>
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxAuiTabCtrlWinUI;
+#endif
 
 class wxAuiBookSerializer;
 class wxAuiBookDeserializer;
@@ -307,6 +311,15 @@ protected:
 
     wxAuiTabArt* m_art;
 
+    // wxAuiNotebook owns the canonical and per-tab containers as one
+    // transaction and must be able to erase a dead page identity before an
+    // art-provider callback can observe it.
+    friend class wxAuiNotebook;
+    friend class wxAuiTabCtrl;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxAuiTabCtrlWinUI;
+#endif
+
     // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
 
@@ -348,11 +361,18 @@ class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
                                      public wxAuiTabContainer
 {
 public:
-    // This constructor is only used internally by the library, applications
-    // never create objects of this type.
+    // Keep all construction entry points public for source compatibility,
+    // even though wxAuiNotebook is their normal caller.
+    wxAuiTabCtrl();
     wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id);
+    bool Create(wxAuiNotebook* parent, wxWindowID id);
 
     ~wxAuiTabCtrl();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+    void Update() override;
+#endif
 
     bool IsDragging() const { return m_isDragging; }
 
@@ -406,6 +426,10 @@ protected:
     void SetHoverTab(wxWindow* wnd);
 
 private:
+    // Non-installed test adapter. Friendship does not change this class's
+    // layout or vtable and avoids exposing a test method in the public API.
+    friend class wxAuiNotebookTestAccess;
+
     // Reset dragging-related fields above to their initial values.
     void DoEndDragging();
 
@@ -445,6 +469,12 @@ private:
     }
 
     void OnButton(int tabIdx, int button);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxAuiTabContainer;
+    void InitWinUIProjection();
+    std::shared_ptr<wxAuiTabCtrlWinUI> m_winui;
+#endif
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiTabCtrl);
@@ -676,6 +706,7 @@ protected:
     void OnTabBeginDrag(wxAuiTabCtrl* ctrl, int tabIdx);
     void OnTabDragMotion(wxAuiTabCtrl* ctrl, int tabIdx);
     void OnTabEndDrag(wxAuiTabCtrl* ctrl, int tabIdx);
+
     void OnTabCancelDrag(wxAuiTabCtrl* ctrl, int tabIdx);
     bool OnTabButton(wxAuiTabCtrl* ctrl, int tabIdx, int button_id);
     void OnTabMiddleDown(wxAuiTabCtrl* ctrl, int tabIdx);
@@ -721,6 +752,10 @@ protected:
     unsigned int m_flags;
 
 private:
+    // Non-installed test adapter. Friendship does not change this class's
+    // layout or vtable and avoids exposing a test method in the public API.
+    friend class wxAuiNotebookTestAccess;
+
     // Create a new tab frame, containing a new wxAuiTabCtrl.
     wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
 

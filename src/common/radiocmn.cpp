@@ -261,9 +261,18 @@ void wxRadioBoxBase::SetItemToolTip(unsigned int item, const wxString& text)
     {
         if ( tooltip )
         {
-            // just change the existing tooltip text, don't change the tooltip
-            tooltip->SetTip(text);
-            changed = false;
+            // The item tooltip object is storage owned by wxRadioBoxBase; most
+            // ports project a copy of its text to a child native/XAML peer.
+            // Notify the port when that text changes, not only when the
+            // storage pointer itself is created or destroyed.
+            if ( tooltip->GetTip() == text )
+            {
+                changed = false;
+            }
+            else
+            {
+                tooltip->SetTip(text);
+            }
         }
         else // no tooltip yet
         {

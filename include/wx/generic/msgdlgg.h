@@ -24,6 +24,11 @@ public:
     virtual int ShowModal() override;
 
 protected:
+    // Show the already configured generic dialog without installing another
+    // modal hook. Derived native adapters use this only after their own
+    // bounded native attempt, keeping one hook pair per public ShowModal().
+    int DoShowModal();
+
     // Creates a message dialog taking any options that have been set after
     // object creation into account such as custom labels.
     void DoCreateMsgdialog();

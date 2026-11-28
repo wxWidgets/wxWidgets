@@ -76,6 +76,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/spinbutt.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/spinbutt.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/spinbutt.h"
 #elif defined(__WXGTK__)

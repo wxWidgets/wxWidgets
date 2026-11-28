@@ -101,9 +101,19 @@ void wxRichTextFormattingDialog::Init()
 
 wxRichTextFormattingDialog::~wxRichTextFormattingDialog()
 {
-    int sel = GetBookCtrl()->GetSelection();
-    if (sel != -1 && sel < (int) m_pageIds.GetCount())
-        sm_lastPage = m_pageIds[sel];
+    // The ordinary getter intentionally rejects a dialog once its owner starts
+    // DestroyChildren(). Use the destruction-only weak sidecar accessor so the
+    // current selection (including a silent ChangeSelection()) is still saved
+    // without ever dereferencing the historical raw book address.
+    if ( wxBookCtrlBase* const liveBook = GetBookCtrlForDestruction() )
+    {
+        const int sel = liveBook->GetSelection();
+        if ( sel >= 0 &&
+             sel < static_cast<int>(m_pageIds.GetCount()) )
+        {
+            sm_lastPage = m_pageIds[sel];
+        }
+    }
 
     delete m_styleDefinition;
 }

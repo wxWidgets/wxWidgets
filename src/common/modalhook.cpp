@@ -22,10 +22,87 @@
 #include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dialog.h"
+    #include "wx/event.h"
 #endif // WX_PRECOMP
+
+#include "wx/weakref.h"
 
 wxModalDialogHook::Hooks wxModalDialogHook::ms_hooks;
 int wxModalDialogHook::ms_countOpen = 0;
+
+// Keep the modal-hook exit notification tied to the dialog lifetime rather
+// than blindly retaining its raw address until ShowModal() unwinds. WinUI
+// presenters run a nested event loop in which application code can legally
+// Destroy() the source dialog.
+class wxModalDialogHookExitGuard::Impl final : public wxEvtHandler
+{
+public:
+    explicit Impl(wxDialog *dialog)
+        : m_dialog(dialog),
+          m_identity(dialog)
+    {
+        if ( dialog )
+        {
+            dialog->Bind(
+                wxEVT_DESTROY,
+                &wxModalDialogHookExitGuard::Impl::OnDestroy,
+                this);
+        }
+    }
+
+    ~Impl() override
+    {
+        Finish(false);
+    }
+
+private:
+    void Finish(bool fromDestroy)
+    {
+        if ( m_finished )
+            return;
+
+        wxDialog * const dialog = m_dialog.get();
+        m_finished = true;
+
+        if ( dialog && !fromDestroy )
+        {
+            dialog->Unbind(
+                wxEVT_DESTROY,
+                &wxModalDialogHookExitGuard::Impl::OnDestroy,
+                this);
+        }
+
+        // Mark the transaction complete before invoking user hooks: Exit()
+        // itself may destroy the dialog and synchronously re-enter OnDestroy.
+        // During wxEVT_DESTROY the object is still alive, so its pointer is
+        // valid for the established hook contract.
+        wxModalDialogHook::CallExit(dialog);
+    }
+
+    void OnDestroy(wxWindowDestroyEvent& event)
+    {
+        event.Skip();
+        if ( event.GetWindow() != m_identity )
+            return;
+
+        Finish(true);
+    }
+
+    wxWeakRef<wxDialog> m_dialog;
+    wxDialog * const m_identity;
+    bool m_finished = false;
+};
+
+wxModalDialogHookExitGuard::wxModalDialogHookExitGuard(wxDialog *dialog)
+    : m_impl(new Impl(dialog))
+{
+}
+
+wxModalDialogHookExitGuard::~wxModalDialogHookExitGuard()
+{
+    delete m_impl;
+}
 
 // ============================================================================
 // wxModalDialogHook implementation

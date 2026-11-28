@@ -24,7 +24,7 @@
 #include "wx/systhemectrl.h"
 #include "wx/withimages.h"
 
-#if !defined(__WXMSW__) && !defined(__WXQT__) || defined(__WXUNIVERSAL__)
+#if (!defined(__WXMSW__) && !defined(__WXQT__)) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_TREECTRL
 #endif
 
@@ -466,6 +466,8 @@ private:
 
 #ifdef wxHAS_GENERIC_TREECTRL
     #include "wx/generic/treectlg.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/treectrl.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/treectrl.h"
 #elif defined(__WXQT__)

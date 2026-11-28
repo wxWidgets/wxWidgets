@@ -27,6 +27,16 @@
 
 #include "wx/dcbuffer.h"
 #include "wx/renderer.h"
+#include "wx/weakref.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "../winui/headerprojection.h"
+#include "wx/winui/private/tlwhostmsw.h"
+#endif
+
+#include <cstdint>
+#include <limits>
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -36,6 +46,80 @@ namespace
 {
 
 const unsigned COL_NONE = (unsigned)-1;
+
+// Keep mutation generations outside wxHeaderCtrl: this class is exported and
+// adding a data member to it would change the ABI of all generic ports.
+using HeaderRevisions =
+    std::unordered_map<const wxHeaderCtrl*, std::uint64_t>;
+
+HeaderRevisions& GetHeaderRevisions()
+{
+    static HeaderRevisions revisions;
+    return revisions;
+}
+
+void RegisterHeader(const wxHeaderCtrl* header)
+{
+    const bool inserted = GetHeaderRevisions().emplace(header, 0).second;
+    wxUnusedVar(inserted);
+    wxASSERT_MSG( inserted, "header registered twice" );
+}
+
+void UnregisterHeader(const wxHeaderCtrl* header)
+{
+    const size_t erased = GetHeaderRevisions().erase(header);
+    wxUnusedVar(erased);
+    wxASSERT_MSG( erased == 1, "unregistered header" );
+}
+
+std::uint64_t GetHeaderRevision(const wxHeaderCtrl* header)
+{
+    const HeaderRevisions& revisions = GetHeaderRevisions();
+    const HeaderRevisions::const_iterator it = revisions.find(header);
+    wxASSERT_MSG( it != revisions.end(), "unregistered header" );
+    return it == revisions.end() ? 0 : it->second;
+}
+
+void BumpHeaderRevision(const wxHeaderCtrl* header)
+{
+    HeaderRevisions& revisions = GetHeaderRevisions();
+    const HeaderRevisions::iterator it = revisions.find(header);
+    wxASSERT_MSG( it != revisions.end(), "unregistered header" );
+    if ( it != revisions.end() )
+        ++it->second;
+}
+
+int AddColumnWidth(int pos, int width)
+{
+    wxASSERT_MSG( width >= 0, "column width must be non-negative" );
+
+    const int max = std::numeric_limits<int>::max();
+    return pos > max - width ? max : pos + width;
+}
+
+int AddOffset(int pos, int offset)
+{
+    const long long sum =
+        static_cast<long long>(pos) + offset;
+    if ( sum > std::numeric_limits<int>::max() )
+        return std::numeric_limits<int>::max();
+    if ( sum < std::numeric_limits<int>::min() )
+        return std::numeric_limits<int>::min();
+
+    return static_cast<int>(sum);
+}
+
+int SubtractOffset(int pos, int offset)
+{
+    const long long difference =
+        static_cast<long long>(pos) - offset;
+    if ( difference > std::numeric_limits<int>::max() )
+        return std::numeric_limits<int>::max();
+    if ( difference < std::numeric_limits<int>::min() )
+        return std::numeric_limits<int>::min();
+
+    return static_cast<int>(difference);
+}
 
 } // anonymous namespace
 
@@ -58,6 +142,11 @@ void wxHeaderCtrl::Init()
     m_dragOffset = 0;
     m_scrollOffset = 0;
     m_wasSeparatorDClick = false;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winUIPressed = COL_NONE;
+#endif
+
+    RegisterHeader(this);
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -67,6 +156,16 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // On its own, a header is the header row of a table of WinUI, in the
+    // frame of a control, which XAML draws around the window: Win32 keeps no
+    // border, the buttons of the columns fill the window and are where the
+    // control itself finds its columns. The controls which have a header
+    // inside them ask for no border.
+    const bool framed = (style & wxBORDER_MASK) != wxBORDER_NONE;
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+#endif
+
     if ( !wxHeaderCtrlBase::Create(parent, id, pos, size,
                                    style, wxDefaultValidator, name) )
         return false;
@@ -75,12 +174,53 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     // we paint the entire window area in our OnPaint()
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( framed )
+        wxWinUIRequestWindowFrame(this);
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    auto projection = wxWinUIHeaderProjection::Create(this);
+    if ( !weakThis || !projection )
+        return false;
+    m_winUIProjection = std::move(projection);
+#endif
+
     return true;
 }
 
 wxHeaderCtrl::~wxHeaderCtrl()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection ) m_winUIProjection->Close();
+    m_winUIProjection.reset();
+#endif
+    UnregisterHeader(this);
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void wxHeaderCtrl::Refresh(bool eraseBackground, const wxRect* rect)
+{
+    if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+    wxHeaderCtrlBase::Refresh(eraseBackground, rect);
+}
+
+void wxHeaderCtrl::Update()
+{
+    const auto projection = m_winUIProjection;
+    const wxWeakRef<wxWindow> weakThis(this);
+    if ( projection ) projection->Update();
+    if ( weakThis ) wxHeaderCtrlBase::Update();
+}
+
+bool wxHeaderCtrl::SetFont(const wxFont& font)
+{
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool changed = wxHeaderCtrlBase::SetFont(font);
+    if ( weakThis && changed && m_winUIProjection )
+        m_winUIProjection->Invalidate();
+    return changed;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl columns manipulation
@@ -88,18 +228,28 @@ wxHeaderCtrl::~wxHeaderCtrl()
 
 void wxHeaderCtrl::DoSetCount(unsigned int count)
 {
+    const unsigned int countOld = m_numColumns;
+    const unsigned int cancelled = AbortDraggingForColumnMutation();
+
     // update the column indices order array before changing m_numColumns
     DoResizeColumnIndices(m_colIndices, count);
 
     m_numColumns = count;
+    BumpHeaderRevision(this);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection ) m_winUIProjection->Invalidate(true);
+#endif
 
     // don't leave the column index invalid, this would cause a crash later if
     // it is used from OnMouse()
-    if ( m_hover >= count )
+    if ( count != countOld || m_hover >= count )
         m_hover = COL_NONE;
 
     InvalidateBestSize();
     Refresh();
+
+    if ( cancelled != COL_NONE )
+        NotifyDraggingCancelled(cancelled);
 }
 
 unsigned int wxHeaderCtrl::DoGetCount() const
@@ -109,12 +259,27 @@ unsigned int wxHeaderCtrl::DoGetCount() const
 
 void wxHeaderCtrl::DoUpdate(unsigned int idx)
 {
+    // A program which gets wxEVT_HEADER_RESIZING gives the column its new
+    // width and calls UpdateColumn(), as wxGrid and wxPropertyGridManager
+    // do: this is the resizing itself, not a change of the columns which
+    // would end it. Ending it here stopped the drag at the first move of
+    // the mouse.
+    unsigned int cancelled = COL_NONE;
+    if ( !IsResizing() )
+    {
+        cancelled = AbortDraggingForColumnMutation();
+        BumpHeaderRevision(this);
+    }
+
     InvalidateBestSize();
 
     // we need to refresh not only this column but also the ones after it in
     // case it was shown or hidden or its width changed -- it would be nice to
     // avoid doing this unnecessary by storing the old column width (TODO)
     RefreshColsAfter(idx);
+
+    if ( cancelled != COL_NONE )
+        NotifyDraggingCancelled(cancelled);
 }
 
 // ----------------------------------------------------------------------------
@@ -123,10 +288,26 @@ void wxHeaderCtrl::DoUpdate(unsigned int idx)
 
 void wxHeaderCtrl::DoScrollHorz(int dx)
 {
-    m_scrollOffset += dx;
+    if ( !dx )
+        return;
+
+    const unsigned int cancelled = AbortDraggingForColumnMutation();
+    BumpHeaderRevision(this);
+    const int scrollOffsetOld = m_scrollOffset;
+    m_scrollOffset = AddOffset(m_scrollOffset, dx);
+    const int dxEffective =
+        SubtractOffset(m_scrollOffset, scrollOffsetOld);
 
     // don't call our own version which calls this function!
-    wxControl::ScrollWindow(dx, 0);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection )
+        m_winUIProjection->Invalidate();
+    else
+#endif
+        wxControl::ScrollWindow(dxEffective, 0);
+
+    if ( cancelled != COL_NONE )
+        NotifyDraggingCancelled(cancelled);
 }
 
 // ----------------------------------------------------------------------------
@@ -138,11 +319,31 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
     wxWindow *win = GetParent();
     int height = wxRendererNative::Get().GetHeaderButtonHeight( win );
 
+    int width = 0;
+    const unsigned int count = GetColumnCount();
+    for ( unsigned int pos = 0; pos < count; ++pos )
+    {
+        const wxHeaderColumn& col = GetColumn(m_colIndices[pos]);
+        if ( col.IsShown() )
+            width = AddColumnWidth(width, GetEffectiveColumnWidth(col));
+    }
+
     // the vertical size is rather arbitrary but it looks better if we leave
     // some space around the text
-    return wxSize(IsEmpty() ? wxHeaderCtrlBase::DoGetBestSize().x
-                            : GetColEnd(GetColumnCount() - 1),
+    return wxSize(IsEmpty() ? wxHeaderCtrlBase::DoGetBestSize().x : width,
                   height); // (7*GetCharHeight())/4);
+}
+
+int wxHeaderCtrl::GetEffectiveColumnWidth(const wxHeaderColumn& col) const
+{
+    int width = col.GetWidth();
+    if ( width < 0 )
+    {
+        width =
+            const_cast<wxHeaderCtrl*>(this)->GetColumnTitleWidth(col);
+    }
+
+    return wxMax(width, 0);
 }
 
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
@@ -156,7 +357,7 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
 
         const wxHeaderColumn& col = GetColumn(i);
         if ( col.IsShown() )
-            pos += col.GetWidth();
+            pos = AddColumnWidth(pos, GetEffectiveColumnWidth(col));
     }
 
     return pos;
@@ -166,13 +367,14 @@ int wxHeaderCtrl::GetColEnd(unsigned int idx) const
 {
     int x = GetColStart(idx);
 
-    return x + GetColumn(idx).GetWidth();
+    return AddColumnWidth(x, GetEffectiveColumnWidth(GetColumn(idx)));
 }
 
 unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) const
 {
     int pos = 0;
-    int xLogical = xPhysical - m_scrollOffset;
+    const long long xLogical =
+        static_cast<long long>(xPhysical) - m_scrollOffset;
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
@@ -181,14 +383,17 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) c
         if ( col.IsHidden() )
             continue;
 
-        pos += col.GetWidth();
+        pos = AddColumnWidth(pos, GetEffectiveColumnWidth(col));
 
         // TODO: don't hardcode sensitivity
         const int separatorClickMargin = FromDIP(8);
 
         // if the column is resizable, check if we're approximatively over the
         // line separating it from the next column
-        if ( col.IsResizeable() && abs(xLogical - pos) < separatorClickMargin )
+        const long long distance = xLogical - pos;
+        if ( col.IsResizeable() &&
+                distance > -separatorClickMargin &&
+                distance < separatorClickMargin )
         {
             if ( onSeparator )
                 *onSeparator = true;
@@ -233,8 +438,8 @@ unsigned int wxHeaderCtrl::FindColumnClosestToPoint(int xPhysical) const
 void wxHeaderCtrl::RefreshCol(unsigned int idx)
 {
     wxRect rect = GetClientRect();
-    rect.x += GetColStart(idx);
-    rect.width = GetColumn(idx).GetWidth();
+    rect.x = AddOffset(rect.x, GetColStart(idx));
+    rect.width = GetEffectiveColumnWidth(GetColumn(idx));
 
     RefreshRect(rect);
 }
@@ -251,8 +456,8 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
     const int ofs = GetColStart(idx);
     if ( ofs >= rect.width )
         return;
-    rect.x += ofs;
-    rect.width -= ofs;
+    rect.x = AddOffset(rect.x, ofs);
+    rect.width = SubtractOffset(rect.width, ofs);
 
     RefreshRect(rect);
 }
@@ -273,6 +478,13 @@ bool wxHeaderCtrl::IsReordering() const
 
 void wxHeaderCtrl::ClearMarkers()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection && m_winUIProjection->IsPublished() )
+    {
+        m_winUIProjection->ClearMarkers();
+        return;
+    }
+#endif
     wxOverlayDC dc(m_overlay, this);
     dc.Clear();
 }
@@ -285,6 +497,20 @@ void wxHeaderCtrl::EndDragging()
         ClearMarkers();
         m_overlay.Reset();
     }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    else if ( IsResizing() && m_winUIProjection &&
+              m_winUIProjection->IsPublished() )
+    {
+        // The line of the edge, see StartOrContinueResizing().
+        m_winUIProjection->ClearMarkers();
+    }
+
+    if ( m_winUIPressed != COL_NONE )
+    {
+        m_winUIPressed = COL_NONE;
+        if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+    }
+#endif
 
     // don't use the special dragging cursor any more
     SetCursor(wxNullCursor);
@@ -295,17 +521,41 @@ void wxHeaderCtrl::CancelDragging()
     wxASSERT_MSG( IsDragging(),
                   "shouldn't be called if we're not dragging anything" );
 
+    const unsigned int col = AbortDraggingForColumnMutation();
+    if ( col != COL_NONE )
+        NotifyDraggingCancelled(col);
+}
+
+unsigned int wxHeaderCtrl::AbortDraggingForColumnMutation()
+{
+    if ( !IsDragging() )
+        return COL_NONE;
+
+    const unsigned int col =
+        IsResizing() ? m_colBeingResized : m_colBeingReordered;
+
+    // Clear the visual state while IsReordering() still identifies it, but
+    // clear both logical states before releasing capture: capture loss can be
+    // delivered synchronously and must not start a second cancellation.
     EndDragging();
+    m_colBeingResized = COL_NONE;
+    m_colBeingReordered = COL_NONE;
 
-    unsigned int& col = IsResizing() ? m_colBeingResized : m_colBeingReordered;
+    if ( HasCapture() )
+        ReleaseMouse();
 
+    return col;
+}
+
+void wxHeaderCtrl::NotifyDraggingCancelled(unsigned int col)
+{
     wxHeaderCtrlEvent event(wxEVT_HEADER_DRAGGING_CANCELLED, GetId());
     event.SetEventObject(this);
     event.SetColumn(col);
 
+    // This callback is deliberately the last operation of every caller: the
+    // event handler is allowed to destroy this control.
     GetEventHandler()->ProcessEvent(event);
-
-    col = COL_NONE;
 }
 
 int wxHeaderCtrl::ConstrainByMinWidth(unsigned int col, int& xPhysical)
@@ -314,16 +564,24 @@ int wxHeaderCtrl::ConstrainByMinWidth(unsigned int col, int& xPhysical)
 
     // notice that GetMinWidth() returns 0 if there is no minimal width so it
     // still makes sense to use it even in this case
-    const int xMinEnd = xStart + GetColumn(col).GetMinWidth();
+    const int xMinEnd =
+        AddColumnWidth(xStart, wxMax(GetColumn(col).GetMinWidth(), 0));
 
     if ( xPhysical < xMinEnd )
         xPhysical = xMinEnd;
 
-    return xPhysical - xStart;
+    const long long width =
+        static_cast<long long>(xPhysical) - xStart;
+    return width > std::numeric_limits<int>::max()
+               ? std::numeric_limits<int>::max()
+               : static_cast<int>(wxMax(width, 0LL));
 }
 
 void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const bool continuing = IsResizing();
+#endif
     wxHeaderCtrlEvent event(IsResizing() ? wxEVT_HEADER_RESIZING
                                          : wxEVT_HEADER_BEGIN_RESIZE,
                             GetId());
@@ -332,14 +590,27 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
 
     event.SetWidth(ConstrainByMinWidth(col, xPhysical));
 
-    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+    const wxWeakRef<wxWindow> weakThis(this);
+    const std::uint64_t revision = GetHeaderRevision(this);
+    const bool processed = GetEventHandler()->ProcessEvent(event);
+    if ( weakThis.get() != this )
+        return;
+
+    if ( revision != GetHeaderRevision(this) )
+    {
+        if ( IsDragging() )
+            CancelDragging();
+        return;
+    }
+
+    if ( processed && !event.IsAllowed() )
     {
         if ( IsResizing() )
         {
-            ReleaseMouse();
             CancelDragging();
         }
         //else: nothing to do -- we just don't start to resize
+        return;
     }
     else // go ahead with resizing
     {
@@ -352,6 +623,19 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
         //else: we had already done the above when we started
 
     }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A program which gives the column its width only when the button is
+    // released shows nothing while the edge is dragged: a line follows the
+    // pointer then, as the one of the header of Win32 does. With the width
+    // given at each move the edge of the column itself is what follows.
+    if ( continuing && IsResizing() && m_winUIProjection &&
+         m_winUIProjection->IsPublished() && col < GetColumnCount() )
+    {
+        m_winUIProjection->ShowResizeLine(
+            GetColEnd(col) == xPhysical ? -1 : xPhysical);
+    }
+#endif
+    InvalidateBestSize();
     RefreshColsAfter(col);
 }
 
@@ -359,22 +643,36 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 {
     wxASSERT_MSG( IsResizing(), "shouldn't be called if we're not resizing" );
 
-    EndDragging();
+    const unsigned int col = m_colBeingResized;
+    const int width = ConstrainByMinWidth(col, xPhysical);
 
-    ReleaseMouse();
+    EndDragging();
+    m_colBeingResized = COL_NONE;
+
+    if ( HasCapture() )
+        ReleaseMouse();
 
     wxHeaderCtrlEvent event(wxEVT_HEADER_END_RESIZE, GetId());
     event.SetEventObject(this);
-    event.SetColumn(m_colBeingResized);
-    event.SetWidth(ConstrainByMinWidth(m_colBeingResized, xPhysical));
+    event.SetColumn(col);
+    event.SetWidth(width);
 
     GetEventHandler()->ProcessEvent(event);
-
-    m_colBeingResized = COL_NONE;
 }
 
 void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection && m_winUIProjection->IsPublished() )
+    {
+        const wxRect ghost(SubtractOffset(xPhysical, m_dragOffset), 0,
+            GetEffectiveColumnWidth(GetColumn(m_colBeingReordered)), GetClientSize().y);
+        const unsigned int col = FindColumnClosestToPoint(xPhysical);
+        m_winUIProjection->ShowMarkers(
+            ghost, col == COL_NONE ? -1 : GetColEnd(col), m_colBeingReordered);
+        return;
+    }
+#endif
     wxOverlayDC dc(m_overlay, this);
     dc.Clear();
 
@@ -382,10 +680,12 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     // draw the phantom position of the column being dragged
-    int x = xPhysical - m_dragOffset;
+    const int x = SubtractOffset(xPhysical, m_dragOffset);
     int y = GetClientSize().y;
     dc.DrawRectangle(x, 0,
-                     GetColumn(m_colBeingReordered).GetWidth(), y);
+                     GetEffectiveColumnWidth(
+                         GetColumn(m_colBeingReordered)),
+                     y);
 
     // and also a hint indicating where it is going to be inserted if it's
     // dropped now
@@ -406,13 +706,22 @@ void wxHeaderCtrl::StartReordering(unsigned int col, int xPhysical)
     event.SetEventObject(this);
     event.SetColumn(col);
 
-    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+    const wxWeakRef<wxWindow> weakThis(this);
+    const std::uint64_t revision = GetHeaderRevision(this);
+    const bool processed = GetEventHandler()->ProcessEvent(event);
+    if ( weakThis.get() != this )
+        return;
+
+    if ( revision != GetHeaderRevision(this) )
+        return;
+
+    if ( processed && !event.IsAllowed() )
     {
         // don't start dragging it, nothing to do otherwise
         return;
     }
 
-    m_dragOffset = xPhysical - GetColStart(col);
+    m_dragOffset = SubtractOffset(xPhysical, GetColStart(col));
 
     m_colBeingReordered = col;
     SetCursor(wxCursor(wxCURSOR_HAND));
@@ -427,28 +736,26 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
 {
     wxASSERT_MSG( IsReordering(), "shouldn't be called if we're not reordering" );
 
+    const unsigned int colOld = m_colBeingReordered;
+    const unsigned int colNew = FindColumnClosestToPoint(xPhysical);
+    const bool wasDragged =
+        SubtractOffset(xPhysical, GetColStart(colOld)) != m_dragOffset;
+
     EndDragging();
-
-    ReleaseMouse();
-
-    const int colOld = m_colBeingReordered;
-    const unsigned colNew = FindColumnClosestToPoint(xPhysical);
-
     m_colBeingReordered = COL_NONE;
 
+    if ( HasCapture() )
+        ReleaseMouse();
+
     // mouse drag must be longer than min distance m_dragOffset
-    if ( xPhysical - GetColStart(colOld) == m_dragOffset )
-    {
+    if ( !wasDragged )
         return false;
-    }
 
     // cannot proceed without a valid column index
     if ( colNew == COL_NONE )
-    {
         return false;
-    }
 
-    if ( static_cast<int>(colNew) != colOld )
+    if ( colNew != colOld )
     {
         wxHeaderCtrlEvent event(wxEVT_HEADER_END_REORDER, GetId());
         event.SetEventObject(this);
@@ -457,7 +764,12 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
         const unsigned pos = GetColumnPos(colNew);
         event.SetNewOrder(pos);
 
+        const wxWeakRef<wxWindow> weakThis(this);
+        const std::uint64_t revision = GetHeaderRevision(this);
         const bool processed = GetEventHandler()->ProcessEvent(event);
+        if ( weakThis.get() != this ||
+                revision != GetHeaderRevision(this) )
+            return true;
 
         if ( !processed )
         {
@@ -468,6 +780,9 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
             // As the event wasn't processed, call the virtual function
             // callback.
             UpdateColumnsOrder(order);
+            if ( weakThis.get() != this ||
+                    revision != GetHeaderRevision(this) )
+                return true;
 
             // update columns order
             SetColumnsOrder(order);
@@ -490,8 +805,20 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
 
 void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
 {
+    if ( m_colIndices == order )
+    {
+        Refresh();
+        return;
+    }
+
+    const unsigned int cancelled = AbortDraggingForColumnMutation();
     m_colIndices = order;
+    m_hover = COL_NONE;
+    BumpHeaderRevision(this);
     Refresh();
+
+    if ( cancelled != COL_NONE )
+        NotifyDraggingCancelled(cancelled);
 }
 
 wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
@@ -501,9 +828,21 @@ wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
 
 void wxHeaderCtrl::DoMoveCol(unsigned int idx, unsigned int pos)
 {
-    MoveColumnInOrderArray(m_colIndices, idx, pos);
+    const int posOld = m_colIndices.Index(idx);
+    if ( posOld == static_cast<int>(pos) )
+    {
+        Refresh();
+        return;
+    }
 
+    const unsigned int cancelled = AbortDraggingForColumnMutation();
+    MoveColumnInOrderArray(m_colIndices, idx, pos);
+    m_hover = COL_NONE;
+    BumpHeaderRevision(this);
     Refresh();
+
+    if ( cancelled != COL_NONE )
+        NotifyDraggingCancelled(cancelled);
 }
 
 // ----------------------------------------------------------------------------
@@ -522,6 +861,13 @@ wxEND_EVENT_TABLE()
 
 void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winUIProjection && m_winUIProjection->IsPublished() )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
     int w, h;
     GetClientSize(&w, &h);
 
@@ -536,12 +882,13 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         if ( col.IsHidden() )
             continue;
 
-        const int colWidth = col.GetWidth();
-        if ( xpos + colWidth < 0 )
+        const int colWidth = GetEffectiveColumnWidth(col);
+        const int colEnd = AddColumnWidth(xpos, colWidth);
+        if ( colEnd < 0 )
         {
             // This column is not shown on screen because it is to the left of
             // the shown area, don't bother drawing it.
-            xpos += colWidth;
+            xpos = colEnd;
             continue;
         }
 
@@ -576,7 +923,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelAlignment = col.GetAlignment();
 
 #ifdef __WXGTK__
-        if (i == m_numColumns - 1 && xpos + colWidth >= w)
+        if (i == m_numColumns - 1 && colEnd >= w)
         {
             state |= wxCONTROL_DIRTY;
         }
@@ -592,7 +939,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                                     &params
                                 );
 
-        xpos += colWidth;
+        xpos = colEnd;
         if ( xpos > w )
         {
             // Next column and all the others are beyond the right border of
@@ -622,7 +969,6 @@ void wxHeaderCtrl::OnKeyDown(wxKeyEvent& event)
     {
         if ( IsDragging() )
         {
-            ReleaseMouse();
             CancelDragging();
 
             return;
@@ -644,6 +990,32 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
     // account for the control displacement
     const int xPhysical = mevent.GetX();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The button of a column is not held down any more.
+    if ( m_winUIPressed != COL_NONE &&
+         (mevent.LeftUp() || (mevent.Leaving() && !IsDragging())) )
+    {
+        m_winUIPressed = COL_NONE;
+        if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+    }
+
+    // A column or its edge is dragged with the left button held. A move
+    // with no button held means the button was released and this window was
+    // not told: the mouse comes through XAML, not from USER32 which would
+    // never keep the release of a button from the window which has the
+    // capture. End the drag where the pointer is instead of following it
+    // until the next click.
+    if ( IsDragging() && mevent.GetEventType() == wxEVT_MOTION &&
+         !mevent.LeftIsDown() )
+    {
+        if ( IsResizing() )
+            EndResizing(xPhysical);
+        else
+            EndReordering(xPhysical);
+        return;
+    }
+#endif
 
     // first deal with the [continuation of any] dragging operations in
     // progress
@@ -712,9 +1084,18 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
             wxASSERT_MSG( !IsResizing(), "reentering column resize mode?" );
             StartOrContinueResizing(col, xPhysical);
         }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( !onSeparator )
+        {
+            // The button of the column shows that it is held down.
+            m_winUIPressed = col;
+            if ( m_winUIProjection ) m_winUIProjection->Invalidate();
+        }
+#endif
         // on column itself - both header and column must have the appropriate
         // flags to allow dragging the column
-        else if ( HasFlag(wxHD_ALLOW_REORDER) && GetColumn(col).IsReorderable() )
+        if ( !onSeparator &&
+             HasFlag(wxHD_ALLOW_REORDER) && GetColumn(col).IsReorderable() )
         {
 
             // start dragging the column

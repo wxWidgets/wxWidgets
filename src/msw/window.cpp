@@ -63,6 +63,10 @@
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
+    #include "wx/msw/private/dropfiles.h"
+    #if wxUSE_OLE
+        #include "wx/msw/private/dropsession.h"
+    #endif
 #endif
 
 #if wxUSE_ACCESSIBILITY
@@ -82,9 +86,38 @@
 #include "wx/msw/private/paint.h"
 #include "wx/msw/private/power.h"
 #include "wx/msw/private/winstyle.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/shelltheme.h"
+    #include "wx/winui/private/transient.h"
+    #include "../winui/transientops.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "owner-backdrop-test-access.h"
+#endif
+    #include "wx/winui/private/tlwhostmsw.h"
+    #ifdef WXWINUI_TEST_SUPPORT
+        #include "msw-window-test-access.h"
+    #endif // WXWINUI_TEST_SUPPORT
+    #include "wx/weakref.h"
+#endif
 #include "wx/msw/dcclient.h"
 #include "wx/msw/seh.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/weakref.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+    #define wxMSWWinUITooltipLog(...) wxWinUIDebugLog(__VA_ARGS__)
+#else
+    #define wxMSWWinUITooltipLog(...) ((void)0)
+#endif
 #include "wx/private/textmeasure.h"
+
+#include <algorithm>
+#include <deque>
+#include <memory>
+#include <unordered_set>
+#include <vector>
 #include "wx/private/rescale.h"
 
 #if wxUSE_TOOLTIPS
@@ -156,6 +189,243 @@ WPARAM wxVKBlockedByKeyboardHook = 0;
 namespace
 {
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// Monitor of the window at WM_ENTERSIZEMOVE, see WM_EXITSIZEMOVE.
+HMONITOR gs_winuiSizeMoveMonitor = nullptr;
+
+static wxSize wxWinUIGetNativeReparentDPI(wxWindow *window, HWND hwnd);
+
+struct wxWinUIDPIWindowIdentity
+{
+    wxWeakRef<wxWindow> window;
+    WXHWND hwnd = nullptr;
+    unsigned long long hwndGeneration = 0;
+};
+
+bool wxWinUIDPIIdentityIsCurrent(
+    const wxWinUIDPIWindowIdentity& identity)
+{
+    wxWindow * const window = identity.window.get();
+    return window &&
+           !window->IsBeingDeleted() &&
+           identity.hwnd &&
+           identity.hwndGeneration &&
+           window->GetHWND() == identity.hwnd &&
+           wxWinUIMSWGetHwndGeneration(window, identity.hwnd) ==
+               identity.hwndGeneration;
+}
+
+enum class wxWinUIDPITraversalPhase
+{
+    Begin,
+    End
+};
+
+struct wxWinUIDPITraversalAction
+{
+    wxWinUIDPIWindowIdentity identity;
+    wxWinUIDPITraversalPhase phase = wxWinUIDPITraversalPhase::Begin;
+};
+
+void wxWinUICaptureDPITraversal(
+    wxWindow *window,
+    std::vector<wxWinUIDPITraversalAction>& actions,
+    std::unordered_set<wxWindow *>& visited,
+    WXHWND physicalRoot = nullptr)
+{
+    if ( !window || !visited.insert(window).second )
+        return;
+
+    wxWinUIDPIWindowIdentity identity;
+    identity.window = window;
+    identity.hwnd = window->GetHWND();
+    identity.hwndGeneration =
+        wxWinUIMSWGetHwndGeneration(window, identity.hwnd);
+    if ( !wxWinUIDPIIdentityIsCurrent(identity) )
+        return;
+
+    if ( !physicalRoot )
+    {
+        physicalRoot = identity.hwnd;
+    }
+    else if ( identity.hwnd != physicalRoot &&
+              !::IsChild(
+                  reinterpret_cast<HWND>(physicalRoot),
+                  reinterpret_cast<HWND>(identity.hwnd)) )
+    {
+        // wxWindowBase::Reparent() updates the logical child lists before
+        // USER32 moves the HWND. A nested reparent must not apply its DPI to
+        // such a merely-logical child: it has not crossed that nested native
+        // boundary yet.
+        return;
+    }
+
+    // The historic MSW contract prepares a parent before its descendants and
+    // publishes the parent's event after them. Encode both phases now so no
+    // callback can change which windows, or which order, belong to this
+    // physical DPI boundary.
+    actions.push_back(
+        {identity, wxWinUIDPITraversalPhase::Begin});
+
+    // Reading the wx child list is non-reentrant, but take weak snapshots at
+    // every level so later callbacks cannot invalidate an active iterator.
+    std::vector<wxWeakRef<wxWindow>> children;
+    children.reserve(window->GetChildren().GetCount());
+    for ( wxWindowList::compatibility_iterator node =
+              window->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow * const child = node->GetData();
+        if ( child && !child->IsTopLevel() )
+            children.emplace_back(child);
+    }
+
+    for ( const auto& weakChild : children )
+    {
+        wxWindow * const child = weakChild.get();
+        if ( child )
+        {
+            wxWinUICaptureDPITraversal(
+                child, actions, visited, physicalRoot);
+        }
+    }
+
+    actions.push_back(
+        {std::move(identity), wxWinUIDPITraversalPhase::End});
+}
+
+bool wxWinUIApplyDPITraversal(
+    const std::vector<wxWinUIDPITraversalAction>& actions,
+    const wxSize& oldDPI,
+    const wxSize& newDPI,
+    const wxWinUIDPIWindowIdentity *rootIdentity = nullptr)
+{
+    std::unordered_set<unsigned long long> begun;
+    bool rootProcessed = false;
+
+    for ( const auto& action : actions )
+    {
+        const auto& identity = action.identity;
+        if ( action.phase == wxWinUIDPITraversalPhase::Begin )
+        {
+            if ( !wxWinUIDPIIdentityIsCurrent(identity) ||
+                 !begun.insert(identity.hwndGeneration).second )
+            {
+                continue;
+            }
+
+            if ( !identity.window.get()->MSWBeginDPIChange(
+                    oldDPI, newDPI) )
+            {
+                begun.erase(identity.hwndGeneration);
+            }
+            continue;
+        }
+
+        if ( !begun.erase(identity.hwndGeneration) ||
+             !wxWinUIDPIIdentityIsCurrent(identity) )
+        {
+            continue;
+        }
+
+        const bool isRoot =
+            rootIdentity &&
+            identity.hwnd == rootIdentity->hwnd &&
+            identity.hwndGeneration == rootIdentity->hwndGeneration;
+        const bool processed =
+            identity.window.get()->MSWEndDPIChange(oldDPI, newDPI);
+        if ( isRoot )
+            rootProcessed = processed;
+    }
+
+    return rootProcessed;
+}
+
+struct wxWinUIReparentDPIRequest
+{
+    wxWinUIReparentDPIRequest(wxWindow *window_,
+                              WXHWND hwnd_,
+                              unsigned long long hwndGeneration_)
+        : window(window_),
+          hwnd(hwnd_),
+          hwndGeneration(hwndGeneration_)
+    {
+    }
+
+    wxWeakRef<wxWindow> window;
+    WXHWND hwnd = nullptr;
+    unsigned long long hwndGeneration = 0;
+    wxSize oldDPI;
+    wxSize newDPI;
+    std::vector<wxWinUIDPITraversalAction> traversal;
+    bool ready = false;
+    bool cancelled = false;
+};
+
+std::deque<std::shared_ptr<wxWinUIReparentDPIRequest>>
+    gs_winuiReparentDPIRequests;
+unsigned gs_winuiReparentDPINesting = 0;
+bool gs_winuiReparentDPIDispatching = false;
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIMSWWindowTestAccess::ReparentDPIQuery gs_winuiReparentDPIQueryForTest = nullptr;
+bool gs_winuiFailNextSetParentForTest = false;
+wxWinUIMSWWindowTestAccess::WindowCallback gs_winuiAfterSetParentForTest = nullptr;
+wxWinUIMSWWindowTestAccess::WindowCallback
+    gs_winuiAfterEnsureControlParentStyleForTest = nullptr;
+wxWinUIMSWWindowTestAccess::WindowCallback
+    gs_winuiAfterMSWHandleDepublishedForTest = nullptr;
+wxWinUIMSWWindowTestAccess::WindowCallback
+    gs_winuiAfterLayoutDirectionNativeWriteForTest = nullptr;
+#endif // WXWINUI_TEST_SUPPORT
+
+// Reparent can be called recursively from wxEVT_DPI_CHANGED itself. Queue the
+// transitions in physical-parent order and drain them only after the outer
+// native-parent/WinUI-slot transaction has completed: A->B must finish before
+// the nested B->C transition begins, and no callback may recurse through the
+// same child-list iterator.
+void wxWinUIDrainReparentDPIRequests()
+{
+    if ( gs_winuiReparentDPINesting ||
+         gs_winuiReparentDPIDispatching )
+    {
+        return;
+    }
+
+    gs_winuiReparentDPIDispatching = true;
+    wxScopeGuard dispatchGuard = wxMakeGuard([]()
+    {
+        gs_winuiReparentDPIDispatching = false;
+    });
+    wxUnusedVar(dispatchGuard);
+
+    while ( !gs_winuiReparentDPIRequests.empty() )
+    {
+        const auto request = gs_winuiReparentDPIRequests.front();
+        if ( !request->ready )
+        {
+            wxFAIL_MSG("unfinished wxWinUI reparent DPI transaction");
+            break;
+        }
+        gs_winuiReparentDPIRequests.pop_front();
+
+        if ( request->cancelled ||
+             request->oldDPI == request->newDPI )
+        {
+            continue;
+        }
+
+        // This is the immutable program captured immediately before the
+        // native boundary. Membership is never recomputed from the topology
+        // callbacks may have changed after crossing it.
+        wxWinUIApplyDPITraversal(
+            request->traversal, request->oldDPI, request->newDPI);
+    }
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
 bool gs_hasStdCmap = false;
@@ -177,6 +447,60 @@ MSWMessageHandlers gs_messageHandlers;
 // hash containing all our windows, it uses HWND keys and wxWindow* values
 using WindowHandles = std::unordered_map<HWND, wxWindow*>;
 WindowHandles gs_windowHandles;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+// A HWND value alone is not an identity: USER32 can recycle it immediately
+// after destroy. Keep a monotonically increasing generation beside the exact
+// wxWindow/HWND association so the WinUI input router can safely revalidate a
+// target across synchronous application callbacks.
+using WindowHandleGenerations =
+    std::unordered_map<HWND, unsigned long long>;
+WindowHandleGenerations gs_windowHandleGenerations;
+unsigned long long gs_nextWindowHandleGeneration = 0;
+
+// Unlike gs_windowHandles, this identity also covers implementation HWNDs
+// owned by a wx control (edit buddies, standard-class internals...). A window
+// property belongs to the native window object, not to its recyclable numeric
+// HWND value, so it disappears with that object and a reused handle gets a new
+// generation.
+constexpr wchar_t wxWINUI_NATIVE_HWND_GENERATION_PROP[] =
+    L"wxWidgets.WinUI.NativeHwndGeneration."
+    L"{9D33D600-8D7B-4FA2-A54C-416E0C39B8D3}";
+ULONG_PTR gs_nextNativeHwndGeneration = 0;
+unsigned gs_winuiSyntheticMouseDispatchDepth = 0;
+unsigned gs_winuiSlotMouseDispatchDepth = 0;
+unsigned long long gs_winuiContextMenuSerial = 0;
+bool gs_winuiContextMenuProcessed = false;
+
+constexpr wchar_t wxWINUI_STASHED_OWNER_PROP[] =
+    L"wxWidgets.WinUI.StashedOwner."
+    L"{32117897-FD59-4E46-88AD-C7B707EC7D2B}";
+
+enum class wxWinUIOwnerPhase
+{
+    Detaching,
+    Detached,
+    Restoring
+};
+
+struct wxWinUIOwnerTransaction
+{
+    unsigned long long generation = 0;
+    HWND originalOwner = nullptr;
+    unsigned long long originalOwnerGeneration = 0;
+    unsigned long long epoch = 0;
+    wxWinUIOwnerPhase phase = wxWinUIOwnerPhase::Detaching;
+};
+
+using wxWinUIOwnerTransactions =
+    std::unordered_map<HWND, wxWinUIOwnerTransaction>;
+wxWinUIOwnerTransactions gs_winuiOwnerTransactions;
+unsigned long long gs_nextWinUIOwnerEpoch = 0;
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIOwnerNativeOps gs_winuiOwnerTestOps;
+bool gs_hasWinUIOwnerTestOps = false;
+#endif // WXWINUI_TEST_SUPPORT
+#endif
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
@@ -417,6 +741,15 @@ void wxWindowMSW::Init()
 
     m_hWnd = 0;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winuiLayoutDirectionRequest = wxLayout_Default;
+    m_winuiDesiredLayoutDirection = wxLayout_Default;
+    m_winuiProjectedLayoutDirection = wxLayout_Default;
+    m_winuiLayoutDirectionRevision = 1;
+    m_winuiLayoutProjectionActive = false;
+    m_winuiLayoutProjectionQuarantined = false;
+#endif
+
     m_xThumbSize = 0;
     m_yThumbSize = 0;
 
@@ -432,6 +765,11 @@ void wxWindowMSW::Init()
 wxWindowMSW::~wxWindowMSW()
 {
     SendDestroyEvent();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWinUIPaintSurfaceForget(static_cast<wxWindow *>(this));
+    wxWinUIWindowScrollbarsForget(static_cast<wxWindow *>(this));
+#endif
 
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we did it the other way around, children wouldn't be able
@@ -540,6 +878,15 @@ void wxWindowMSW::SetId(wxWindowID winid)
 
 void wxWindowMSW::SetFocus()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A hosted slot is a logical focus request: the shared host validates the
+    // live wx/XAML candidate before moving native authority into the island.
+    // Real shell WM_SETFOCUS messages from dialog/native navigation retain
+    // their ordinary wx event path and hand off afterwards.
+    if ( wxWinUITLWHostSetFocus(this) )
+        return;
+#endif
+
     HWND hWnd = (HWND)MSWGetFocusHWND();
     wxCHECK_RET( hWnd, wxT("can't set focus to invalid window") );
 
@@ -585,6 +932,16 @@ wxWindow *wxWindowBase::DoFindFocus()
     HWND hWnd = ::GetFocus();
     if ( hWnd )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // When the native focus sits inside a per-TLW island bridge, it
+        // belongs to the wx control owning the focused slot: the plain
+        // parent-chain walk below would wrongly resolve it to the top-level
+        // window itself.
+        wxWindow * const islandFocus = wxWinUITLWHostResolveFocus((WXHWND)hWnd);
+        if ( islandFocus )
+            return islandFocus;
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
         return wxGetWindowFromHWND((WXHWND)hWnd);
     }
 
@@ -760,12 +1117,18 @@ void wxWindowMSW::DoCaptureMouse()
     HWND hWnd = GetHwnd();
     if ( hWnd )
     {
+#if wxUSE_WINUI3
+        wxWinUITLWHostNotifyCaptureMutation(this);
+#endif
         ::SetCapture(hWnd);
     }
 }
 
 void wxWindowMSW::DoReleaseMouse()
 {
+#if wxUSE_WINUI3
+    wxWinUITLWHostNotifyCaptureMutation(this);
+#endif
     if ( !::ReleaseCapture() )
     {
         wxLogLastError(wxT("ReleaseCapture"));
@@ -815,6 +1178,12 @@ void wxWindowMSW::WXUpdateCursor()
 {
     // Call the base class version to update m_cursor.
     wxWindowBase::WXUpdateCursor();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // XAML islands draw their own cursor and ignore ::SetCursor(), so reflect
+    // the per-window cursor onto the island through XAML as well.
+    wxWinUISetWindowCursor(static_cast<wxWindow *>(this), m_cursor);
+#endif
 
     // don't "overwrite" busy cursor
     if ( wxIsBusy() )
@@ -1074,7 +1443,29 @@ void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
         info.fMask |= SIF_DISABLENOSCROLL;
     }
 
-    ::SetScrollInfo(hWnd, WXOrientToSB(orient), &info, refresh);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A projected track is painted by WinUI. Updating USER32's authoritative
+    // value must not also draw its opaque non-client scrollbar underneath.
+    const wxWeakRef<wxWindow> alive(this);
+    const auto hwndGeneration = wxWinUIMSWGetHwndGeneration(this, hWnd);
+    const bool nativeRefresh = refresh && !wxWinUIWindowScrollbarsProjected(hWnd, orient);
+    // The themed USER32 scrollbar can still draw directly for SIF_POS even
+    // with fRedraw=FALSE. Finish this native mutation with the same bounded
+    // backing cleanup used by range/page updates, before exposing its return.
+    wxWinUIWindowScrollbarModelChanged(
+        static_cast<wxWindow*>(this), orient, true);
+#else
+    const bool nativeRefresh = refresh;
+#endif
+    ::SetScrollInfo(hWnd, WXOrientToSB(orient), &info, nativeRefresh);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( alive.get() != this || IsBeingDeleted() || GetHwnd() != hWnd ||
+         !hwndGeneration ||
+         wxWinUIMSWGetHwndGeneration(this, hWnd) != hwndGeneration )
+        return;
+    wxWinUIWindowScrollbarModelCommitted(static_cast<wxWindow*>(this), orient);
+    wxWinUITLWHostNotifyNativeLayout(static_cast<wxWindow*>(this), false);
+#endif
 }
 
 // New function that will replace some of the above.
@@ -1125,6 +1516,18 @@ void wxWindowMSW::SetScrollbar(int orient,
     if ( !hwnd )
         return;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Mark only windows whose scrollbar model uses the public wx API. Native
+    // controls' internal USER32 scrollbars retain their original semantics.
+    ::SetPropW(hwnd, L"wxWinUI.ManagedWindowScrollbars", reinterpret_cast<HANDLE>(1));
+    const bool nativeRefresh = refresh && !wxWinUIWindowScrollbarsProjected(hwnd, orient);
+    // Range/page changes and EnableScrollBar may draw USER32's non-client
+    // surface even when SetScrollInfo itself is asked not to repaint.
+    wxWinUIWindowScrollbarModelChanged(static_cast<wxWindow*>(this), orient, true);
+#else
+    const bool nativeRefresh = refresh;
+#endif
+
     WinStruct<SCROLLINFO> info;
     if ( range != -1 )
     {
@@ -1151,7 +1554,27 @@ void wxWindowMSW::SetScrollbar(int orient,
         info.fMask |= SIF_DISABLENOSCROLL;
     }
 
-    ::SetScrollInfo(hwnd, WXOrientToSB(orient), &info, refresh);
+    ::SetScrollInfo(hwnd, WXOrientToSB(orient), &info, nativeRefresh);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Scrollbar presence/extent is part of the shared bridge HRGN. There is
+    // no dependable wx geometry event for SetScrollInfo(), so nudge an
+    // existing host explicitly. The model notification above may separately
+    // queue weak bootstrap work, but this lookup never creates one on the
+    // native scrollbar setter's stack.
+    //
+    // This is deliberately unconditional: comparing the SCROLLINFO before and
+    // after only sees the range, page and position, and a call which changes
+    // none of them can still make the bar appear or disappear -- and with it
+    // the region through which the island is visible at all.
+    wxWinUITLWHostNotifyNativeLayout(
+        static_cast<wxWindow *>(this), false);
+
+    // Enabling/disabling a USER32 track may draw directly despite the
+    // SetScrollInfo redraw flag. Do not leave those pixels below a transparent
+    // XAML track until the queued geometry flush; finish its NC backing now.
+    wxWinUIWindowScrollbarModelCommitted(static_cast<wxWindow*>(this), orient);
+#endif
 }
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
@@ -1173,6 +1596,12 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     }
 
     ::ScrollWindow(GetHwnd(), dx, dy, pr, pr);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // What the window painted is in its surface, not in its HWND: it moves
+    // there too.
+    wxWinUIPaintSurfaceScroll(static_cast<wxWindow *>(this), dx, dy, prect);
+#endif
 }
 
 static bool ScrollVertically(HWND hwnd, int kind, int count)
@@ -1221,6 +1650,29 @@ bool wxWindowMSW::ScrollPages(int pages)
 
 void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxCHECK_RET(dir == wxLayout_Default ||
+                    dir == wxLayout_LeftToRight ||
+                    dir == wxLayout_RightToLeft,
+                "invalid layout direction");
+
+    m_winuiLayoutDirectionRequest = dir;
+    if ( !GetHWND() )
+    {
+        // Preserve requests made between the default constructor and
+        // Create(). MSWCreate() publishes the resolved value in the initial
+        // extended style, before USER32 can expose the HWND or a WinUI peer
+        // exists.
+        m_winuiDesiredLayoutDirection =
+            MSWResolveRequestedLayoutDirection();
+        return;
+    }
+
+    if ( !m_winuiLayoutProjectionActive )
+        m_winuiLayoutProjectionQuarantined = false;
+    MSWRequestLayoutDirectionProjection(
+        MSWResolveRequestedLayoutDirection());
+#else
     if ( wxUpdateLayoutDirection(GetHwnd(), dir) )
     {
         // Update layout: whether we have children or are drawing something, we
@@ -1228,7 +1680,258 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
         SendSizeEvent();
         Refresh();
     }
+#endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+wxLayoutDirection wxWindowMSW::MSWResolveRequestedLayoutDirection() const
+{
+    if ( m_winuiLayoutDirectionRequest != wxLayout_Default )
+        return m_winuiLayoutDirectionRequest;
+
+    wxLayoutDirection direction =
+        wxApp::MSWGetDefaultLayout(GetParent());
+    if ( direction == wxLayout_Default )
+        direction = wxLayout_LeftToRight;
+    return direction;
+}
+
+void wxWindowMSW::MSWRefreshInheritedLayoutDirection()
+{
+    if ( m_winuiLayoutDirectionRequest != wxLayout_Default ||
+         !GetHWND() )
+    {
+        return;
+    }
+
+    if ( !m_winuiLayoutProjectionActive )
+        m_winuiLayoutProjectionQuarantined = false;
+    MSWRequestLayoutDirectionProjection(
+        MSWResolveRequestedLayoutDirection());
+}
+
+void wxWindowMSW::MSWRequestLayoutDirectionProjection(
+    wxLayoutDirection effectiveDirection)
+{
+    wxASSERT(effectiveDirection == wxLayout_LeftToRight ||
+             effectiveDirection == wxLayout_RightToLeft);
+
+    if ( m_winuiDesiredLayoutDirection != effectiveDirection )
+    {
+        m_winuiDesiredLayoutDirection = effectiveDirection;
+        if ( ++m_winuiLayoutDirectionRevision == 0 )
+            ++m_winuiLayoutDirectionRevision;
+    }
+
+    if ( m_winuiLayoutProjectionActive ||
+         m_winuiLayoutProjectionQuarantined )
+    {
+        return;
+    }
+
+    const wxWeakRef<wxWindow> alive(this);
+    const WXHWND hwnd = GetHWND();
+    const unsigned long long hwndGeneration =
+        wxWinUIMSWGetHwndGeneration(this, hwnd);
+    if ( !hwnd || !hwndGeneration )
+        return;
+
+    const auto getCurrentWindow =
+        [alive, this, hwnd, hwndGeneration]() -> wxWindow *
+        {
+            wxWindow * const live = alive.get();
+            return live == this &&
+                           !live->IsBeingDeleted() &&
+                           live->GetHWND() == hwnd &&
+                           wxWinUIMSWGetHwndGeneration(
+                               live, hwnd) == hwndGeneration
+                       ? live
+                       : nullptr;
+        };
+
+    m_winuiLayoutProjectionActive = true;
+    wxScopeGuard projectionGuard = wxMakeGuard([alive, this]()
+    {
+        if ( wxWindow * const live = alive.get();
+             live == this )
+        {
+            live->m_winuiLayoutProjectionActive = false;
+        }
+    });
+    wxUnusedVar(projectionGuard);
+
+    constexpr unsigned MaxProjectionPasses = 32;
+    for ( unsigned pass = 0; pass < MaxProjectionPasses; ++pass )
+    {
+        wxWindow * const passOwner = getCurrentWindow();
+        if ( !passOwner )
+            return;
+
+        const unsigned long long revision =
+            passOwner->m_winuiLayoutDirectionRevision;
+        const wxLayoutDirection desired =
+            passOwner->m_winuiDesiredLayoutDirection;
+        const bool projectionChanged =
+            passOwner->m_winuiProjectedLayoutDirection != desired;
+
+        // Snapshot inherited direct children before the first native/XAML
+        // boundary. A child moved or made explicit by a callback is filtered
+        // again immediately before its own transaction.
+        std::vector<wxWeakRef<wxWindow>> inheritedChildren;
+        inheritedChildren.reserve(
+            passOwner->GetChildren().GetCount());
+        for ( wxWindowList::compatibility_iterator node =
+                  passOwner->GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxWindow * const child = node->GetData();
+            if ( !child->IsBeingDeleted() &&
+                 child->m_winuiLayoutDirectionRequest ==
+                     wxLayout_Default )
+            {
+                inheritedChildren.emplace_back(child);
+            }
+        }
+
+        const bool nativeChanged =
+            wxUpdateLayoutDirection(hwnd, desired);
+        bool localPeerProjectionFailed = false;
+
+#ifdef WXWINUI_TEST_SUPPORT
+        // Simulate reentrance from inside SetWindowLongPtr's synchronous
+        // style notifications. Clear the one-shot seam before invoking it.
+        if ( gs_winuiAfterLayoutDirectionNativeWriteForTest )
+        {
+            const auto callback =
+                gs_winuiAfterLayoutDirectionNativeWriteForTest;
+            gs_winuiAfterLayoutDirectionNativeWriteForTest = nullptr;
+            if ( wxWindow * const live = getCurrentWindow() )
+                callback(live);
+        }
+#endif // WXWINUI_TEST_SUPPORT
+
+        wxWindow * live = getCurrentWindow();
+        if ( !live )
+            return;
+        if ( live->m_winuiLayoutDirectionRevision != revision )
+            continue;
+
+        const bool nativeIsRTL =
+            (::GetWindowLongPtr(
+                 reinterpret_cast<HWND>(hwnd), GWL_EXSTYLE) &
+             WS_EX_LAYOUTRTL) != 0;
+        const bool desiredIsRTL =
+            desired == wxLayout_RightToLeft;
+        if ( nativeIsRTL != desiredIsRTL )
+        {
+            // SetWindowLongPtr can fail without changing the HWND association,
+            // and WM_STYLECHANGING may rewrite STYLESTRUCT synchronously.
+            // Never publish slot/peer success for a style that USER32 did not
+            // actually retain.
+            continue;
+        }
+
+        if ( nativeChanged || projectionChanged )
+        {
+            // wx geometry, the shared slot and local peer hooks all belong to
+            // the same revision. Every one is allowed to destroy the window
+            // or publish a newer direction, in which case this pass retires.
+            live->SendSizeEvent();
+            live = getCurrentWindow();
+            if ( !live )
+                return;
+            if ( live->m_winuiLayoutDirectionRevision != revision )
+                continue;
+
+            live->Refresh();
+            live = getCurrentWindow();
+            if ( !live )
+                return;
+            if ( live->m_winuiLayoutDirectionRevision != revision )
+                continue;
+
+            const bool peerProjected =
+                live->MSWOnEffectiveLayoutDirectionChanged();
+            live = getCurrentWindow();
+            if ( !live )
+                return;
+            if ( live->m_winuiLayoutDirectionRevision != revision )
+                continue;
+            if ( !peerProjected )
+            {
+                // Native/shared state is already coherent. Keep the previous
+                // local-peer commit marker and let the next external request
+                // retry, rather than spinning synchronously on a transient
+                // XAML failure. Inherited children must still receive this
+                // revision: their native/peer projections are independent
+                // and stopping here would split the subtree's direction.
+                localPeerProjectionFailed = true;
+            }
+        }
+
+        bool restart = false;
+        for ( const wxWeakRef<wxWindow>& childIdentity :
+              inheritedChildren )
+        {
+            live = getCurrentWindow();
+            if ( !live )
+                return;
+            if ( live->m_winuiLayoutDirectionRevision != revision )
+            {
+                restart = true;
+                break;
+            }
+
+            wxWindow * const child = childIdentity.get();
+            if ( !child || child->IsBeingDeleted() ||
+                 child->GetParent() != live ||
+                 child->m_winuiLayoutDirectionRequest !=
+                     wxLayout_Default )
+            {
+                continue;
+            }
+
+            child->MSWRefreshInheritedLayoutDirection();
+            live = getCurrentWindow();
+            if ( !live )
+                return;
+            if ( live->m_winuiLayoutDirectionRevision != revision )
+            {
+                restart = true;
+                break;
+            }
+        }
+        if ( restart )
+            continue;
+
+        live = getCurrentWindow();
+        if ( !live )
+            return;
+        if ( live->m_winuiLayoutDirectionRevision != revision )
+            continue;
+
+        if ( localPeerProjectionFailed )
+        {
+            live->m_winuiLayoutProjectionQuarantined = true;
+            return;
+        }
+
+        live->m_winuiProjectedLayoutDirection = desired;
+        live->m_winuiLayoutProjectionQuarantined = false;
+        return;
+    }
+
+    if ( wxWindow * const live = getCurrentWindow() )
+    {
+        // A handler which changes direction on every size/style notification
+        // must not create an unbounded synchronous or CallAfter loop. The
+        // latest model remains recorded and the next external request retries
+        // with a fresh bounded transaction.
+        live->m_winuiLayoutProjectionQuarantined = true;
+    }
+}
+#endif
 
 wxLayoutDirection wxWindowMSW::GetLayoutDirection() const
 {
@@ -1345,27 +2048,110 @@ void wxWindowMSW::DoEnableInputMethod(bool enable)
 
 void wxWindowMSW::SubclassWin(WXHWND hWnd)
 {
-    wxASSERT_MSG( !m_oldWndProc, wxT("subclassing window twice?") );
+    wxWindowMSW * const identity = this;
+    const wxWeakRef<wxWindowMSW> lifetime(identity);
+    const HWND hwnd = (HWND)hWnd;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const unsigned long long nativeGeneration =
+        wxWinUIMSWGetNativeHwndGeneration(hwnd);
+#endif
+    const auto getCurrentNativeWindow = [&]() -> wxWindowMSW *
+    {
+        wxWindowMSW * const live = lifetime.get();
+        if ( live != identity ||
+             wxWindowIsUnavailableForCallbacks(live) ||
+             !hwnd || !::IsWindow(hwnd) )
+        {
+            return nullptr;
+        }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( !nativeGeneration ||
+             wxWinUIMSWGetNativeHwndGeneration(hwnd) != nativeGeneration )
+        {
+            return nullptr;
+        }
+#endif
+        return identity;
+    };
+    const auto getCurrentAssociatedWindow = [&]() -> wxWindowMSW *
+    {
+        wxWindowMSW * const live = getCurrentNativeWindow();
+        return live && (HWND)live->GetHWND() == hwnd &&
+                       wxFindWinFromHandle(hwnd) == live
+            ? live
+            : nullptr;
+    };
 
-    HWND hwnd = (HWND)hWnd;
-    wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in SubclassWin") );
+    wxWindowMSW *live = getCurrentNativeWindow();
+    if ( !live )
+        return;
 
-    SetHWND(hWnd);
+    wxASSERT_MSG( !live->m_oldWndProc,
+                  wxT("subclassing window twice?") );
+    live = getCurrentNativeWindow();
+    if ( !live )
+        return;
 
-    wxAssociateWinWithHandle(hwnd, this);
+    live->SetHWND(hWnd);
 
-    m_oldWndProc = wxGetWindowProc((HWND)hWnd);
+    wxAssociateWinWithHandle(hwnd, live);
+    live = getCurrentAssociatedWindow();
+    if ( !live )
+        return;
+
+    live->m_oldWndProc = wxGetWindowProc(hwnd);
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-    if ( !wxCheckWindowWndProc(hWnd) )
+    const bool isOwnWindowClass = wxCheckWindowWndProc(hWnd);
+    live = getCurrentAssociatedWindow();
+    if ( !live )
+        return;
+
+    if ( !isOwnWindowClass )
     {
         wxSetWindowProc(hwnd, wxWndProc);
+        live = getCurrentAssociatedWindow();
+        if ( !live )
+            return;
 
         // If the window didn't use our window proc during its creation, the
         // code in HandleCreate() hasn't been executed, so do it here.
-        if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
-            EnsureParentHasControlParentStyle(GetParent());
+        const bool hasControlParent =
+            wxHasWindowExStyle(live, WS_EX_CONTROLPARENT);
+        live = getCurrentAssociatedWindow();
+        if ( !live )
+            return;
+        if ( hasControlParent )
+        {
+            wxWindow *parent = live->GetParent();
+            if ( !parent )
+            {
+                const HWND nativeParent = ::GetParent(hwnd);
+                parent = nativeParent
+                    ? wxFindWinFromHandle(nativeParent)
+                    : nullptr;
+            }
+            EnsureParentHasControlParentStyle(parent);
+            live = getCurrentAssociatedWindow();
+            if ( !live )
+                return;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
+            if ( gs_winuiAfterEnsureControlParentStyleForTest )
+            {
+                const auto callback =
+                    gs_winuiAfterEnsureControlParentStyleForTest;
+                gs_winuiAfterEnsureControlParentStyleForTest = nullptr;
+                callback(live);
+                live = getCurrentAssociatedWindow();
+                if ( !live )
+                    return;
+            }
+#endif // WXWINUI_TEST_SUPPORT
+#endif
+        }
     }
     else
     {
@@ -1373,7 +2159,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
         // implement IsOfStandardClass() method which returns true for the
         // standard controls and false for the wxWidgets own windows as it can
         // simply check m_oldWndProc
-        m_oldWndProc = nullptr;
+        live->m_oldWndProc = nullptr;
     }
 
     // Input method may have been disabled before the window was created.
@@ -1381,40 +2167,216 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
         DoEnableInputMethod(false);
 
     // we're officially created now, send the event
-    wxWindowCreateEvent event((wxWindow *)this);
-    (void)HandleWindowEvent(event);
+    live = getCurrentAssociatedWindow();
+    if ( !live )
+        return;
+    wxWindowCreateEvent event(live->AsWindow());
+    (void)live->HandleWindowEvent(event);
+    // A dynamically-bound handler or global filter may destroy an adopted
+    // window from wxEVT_CREATE. Nothing below is allowed to read its members
+    // in that case; callers revalidate their own logical/native identity.
+    live = getCurrentAssociatedWindow();
+    if ( !live )
+        return;
+
+#if wxUSE_DRAG_AND_DROP && wxUSE_OLE
+    // Some native controls recreate their HWND while retaining the logical
+    // wxDropTarget (ComboBox and rich TextCtrl are real examples). Rebind a
+    // target that was detached from the previous handle; the RichEdit
+    // sentinel was never entered in this registry and is deliberately left
+    // alone.
+    wxDropTarget * const dropTarget = live->m_dropTarget;
+    const wxMSWOleDropTargetLease dropTargetLifetime =
+        wxMSWOleHasDropTargetState(dropTarget)
+            ? wxMSWOleAcquireDropTarget(dropTarget)
+            : wxMSWOleDropTargetLease();
+    if ( dropTarget && dropTargetLifetime.IsCurrent() )
+    {
+        wxMSWOleBindDropTarget(live->AsWindow(), dropTarget, hwnd);
+        live = getCurrentAssociatedWindow();
+        if ( !live || live->m_dropTarget != dropTarget ||
+             !dropTargetLifetime.IsCurrent() )
+        {
+            return;
+        }
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        const bool brokerOwnsRegistration =
+            wxWinUITLWHostOwnsOleDropRegistration(live);
+#else
+        const bool brokerOwnsRegistration = false;
+#endif
+        live = getCurrentAssociatedWindow();
+        if ( !live || live->m_dropTarget != dropTarget ||
+             !dropTargetLifetime.IsCurrent() )
+        {
+            return;
+        }
+        if ( !brokerOwnsRegistration &&
+             !wxMSWOleIsShellDropTargetRegistered(dropTarget, hwnd) )
+        {
+            dropTarget->Register(hwnd);
+            live = getCurrentAssociatedWindow();
+            if ( !live )
+                return;
+        }
+    }
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_DRAG_AND_DROP
+    // A recreated native handle does not retain WS_EX_ACCEPTFILES. Recompute
+    // the per-island aggregate after the new HWND association is complete.
+    wxWinUITLWHostNotifyDragAcceptFiles(live);
+#endif
 }
 
 void wxWindowMSW::UnsubclassWin()
 {
-    HWND hwnd = DoDetachHWND();
+    const wxWeakRef<wxWindowMSW> lifetime(this);
+    const HWND hwnd = GetHwnd();
+    const WXWNDPROC oldWndProc = m_oldWndProc;
 
-    if ( hwnd )
+    // Never leave a restorable procedure published in an object that can be
+    // destroyed from the UIA/DnD boundaries in DoDetachHWND(). Restore the
+    // local snapshot first and make every later step independent from this.
+    m_oldWndProc = nullptr;
+
+    if ( hwnd && oldWndProc )
     {
-        wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in UnsubclassWin") );
+        if ( ::IsWindow(hwnd) && !wxCheckWindowWndProc((WXHWND)hwnd) )
+            wxSetWindowProc(hwnd, oldWndProc);
 
-        if ( m_oldWndProc )
+        // Being scheduled for destruction is normal for this path: the
+        // surviving object must still lose its HWND/map binding. Only an
+        // actual lifetime change makes the final detach unsafe.
+        if ( lifetime.get() != this )
         {
-            if ( !wxCheckWindowWndProc((WXHWND)hwnd) )
-            {
-                wxSetWindowProc(hwnd, m_oldWndProc);
-            }
-
-            m_oldWndProc = nullptr;
+            return;
         }
     }
+
+    // This call is the final use of the object in this function.
+    (void)DoDetachHWND();
 }
 
 WXHWND wxWindowMSW::DoDetachHWND()
 {
-    wxRemoveHandleAssociation(this);
+    wxWindowMSW * const identity = this;
+    const wxWeakRef<wxWindowMSW> lifetime(identity);
+    const HWND hwnd = GetHwnd();
 
-    // Restore old Window proc
-    HWND hwnd = GetHwnd();
-    if ( hwnd )
+#if wxUSE_DRAG_AND_DROP && wxUSE_OLE
+    // Capture the physical identity before Unbind(), handle-map removal or a
+    // callback can detach/recycle the numeric HWND.
+    const wxMSWOleShellHwndIdentity oldShellIdentity =
+        wxMSWOleCaptureShellHwndIdentity(
+            reinterpret_cast<WXHWND>(hwnd));
+    wxDropTarget * const dropTarget = m_dropTarget;
+    const wxMSWOleDropTargetLease dropTargetLifetime =
+        wxMSWOleHasDropTargetState(dropTarget)
+            ? wxMSWOleAcquireDropTarget(dropTarget)
+            : wxMSWOleDropTargetLease();
+    const bool revokeShellRegistration =
+        hwnd && dropTargetLifetime.IsCurrent() &&
+        wxMSWOleIsShellDropTargetRegistered(dropTarget, hwnd);
+    if ( dropTarget && hwnd && dropTargetLifetime.IsCurrent() )
     {
-        SetHWND(0);
+        // Depublish the logical binding before any external callback. The
+        // target itself stays owned exactly as before and can be rebound by a
+        // later AssociateHandle() when both lifetimes survive.
+        wxMSWOleUnbindDropTarget(identity->AsWindow(), dropTarget);
     }
+#endif
+
+    // Remove every object-discovery route before crossing UIA or OLE.
+    wxRemoveHandleAssociation(identity);
+    if ( hwnd )
+        identity->SetHWND(0);
+
+#if wxUSE_DRAG_AND_DROP && wxUSE_OLE
+    // Revoke before UIA: a lease does not own wxDropTarget, so this guarantees
+    // that the physical shell registration is handled while the exact target
+    // is still available. Revoke() pins its COM wrapper across callbacks.
+    if ( revokeShellRegistration )
+    {
+        if ( wxDropTarget * const liveTarget =
+                 dropTargetLifetime.GetIfCurrent() )
+        {
+            liveTarget->Revoke(hwnd);
+        }
+    }
+
+    // Revoke() may have left a globally retained, exact-identity tombstone.
+    // Clean that owner before a re-entrant AssociateHandle() target is allowed
+    // to retry on its new HWND.
+    const bool oldOwnerClean =
+        wxMSWOleCleanupShellHwndOwner(oldShellIdentity);
+
+    if ( oldOwnerClean && lifetime.get() == identity &&
+         !identity->IsBeingDeleted() &&
+         identity->m_dropTarget == dropTarget &&
+         dropTargetLifetime.GetIfCurrent() == dropTarget )
+    {
+        const WXHWND reboundHwnd = identity->GetHWND();
+        const wxMSWOleShellHwndIdentity reboundIdentity =
+            wxMSWOleCaptureShellHwndIdentity(reboundHwnd);
+        wxMSWOleDropTargetBinding binding;
+        if ( reboundHwnd && reboundIdentity.generation &&
+             wxMSWOleLookupDropTarget(identity->AsWindow(), &binding) ==
+                 wxMSWOleDropTargetLookup::Found &&
+             binding.GetTargetIfCurrent() == dropTarget &&
+             binding.GetOwnerIfCurrent() == identity->AsWindow() &&
+             binding.GetOwnerHwndIfCurrent() == reboundHwnd )
+        {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            const bool brokerOwnsRegistration =
+                wxWinUITLWHostOwnsOleDropRegistration(identity);
+#else
+            const bool brokerOwnsRegistration = false;
+#endif
+            if ( lifetime.get() == identity &&
+                 !identity->IsBeingDeleted() &&
+                 identity->m_dropTarget == dropTarget &&
+                 dropTargetLifetime.GetIfCurrent() == dropTarget &&
+                 binding.IsCurrent() &&
+                 binding.GetOwnerHwndIfCurrent() == reboundHwnd &&
+                 wxMSWOleGetShellHwndGeneration(reboundHwnd) ==
+                     reboundIdentity.generation &&
+                 !brokerOwnsRegistration &&
+                 !wxMSWOleIsShellDropTargetRegistered(
+                     dropTarget, reboundHwnd) )
+            {
+                // Unique retry: Register() owns all later revalidation and the
+                // global reservation prevents any cross-HWND ambiguity.
+                dropTarget->Register(reboundHwnd);
+            }
+        }
+    }
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWindow * const liveAfterDropRevoke = lifetime.get()
+        ? lifetime.get()->AsWindow()
+        : nullptr;
+    if ( wxWeakWindowIsAvailableForCallbacks(lifetime, identity) &&
+         gs_winuiAfterMSWHandleDepublishedForTest )
+    {
+        const auto callback =
+            gs_winuiAfterMSWHandleDepublishedForTest;
+        gs_winuiAfterMSWHandleDepublishedForTest = nullptr;
+        callback(liveAfterDropRevoke);
+    }
+#endif // WXWINUI_TEST_SUPPORT
+
+    // UIA is keyed only by the HWND snapshot. It can dispatch arbitrary COM
+    // code, but the wx object is already undiscoverable and is never touched
+    // again by this function.
+    wxWinUITLWHostRetireAccessibilityShellProvider(hwnd);
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_DRAG_AND_DROP
+    wxWinUITLWHostNotifyDragAcceptFiles(nullptr);
+#endif
 
     return hwnd;
 }
@@ -1440,17 +2402,18 @@ void wxWindowMSW::DissociateHandle()
     // Unlike in UnsubclassWin() we don't assume that the old HWND was valid,
     // it could have been already destroyed, but if it is valid, we can just
     // forward to it.
-    if ( ::IsWindow(GetHwnd()) )
+    const HWND hwnd = GetHwnd();
+    if ( ::IsWindow(hwnd) )
     {
         UnsubclassWin();
     }
     else // Otherwise just forget about the old HWND.
     {
-        DoDetachHWND();
-
         // We shouldn't try to restore it later as it corresponded to a HWND
         // which doesn't exist any longer.
         m_oldWndProc = nullptr;
+        // This call is the final use of the object in this function.
+        (void)DoDetachHWND();
     }
 }
 
@@ -1611,8 +2574,25 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // box is not redrawn twice), but sometimes results in redraw problems, so
     // optionally allow the old code to continue to use it provided a special
     // system option is turned on
-    if ( !wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children"))
-            || (flags & wxCLIP_CHILDREN) )
+    bool clipChildren =
+        !wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children"));
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // With paint surfaces no window paints its HWND any more, and a surface
+    // stops at the children of its window by itself: all this style still
+    // does is make Windows work out the clipping regions of the whole
+    // hierarchy each time a window moves, which is half of what a resize
+    // costs (measured: 17.9 ms a step against 9 for the Widgets sample).
+    //
+    // A top-level window keeps it: it has few children, the island among
+    // them, and the windowing layer of the island watches the changes of
+    // its style, which rules out giving it back later (see the handling of
+    // WM_PARENTNOTIFY).
+    if ( wxWinUIPaintSurfacesEnabled() && !IsTopLevel() )
+        clipChildren = false;
+#endif
+
+    if ( clipChildren || (flags & wxCLIP_CHILDREN) )
         style |= WS_CLIPCHILDREN;
 
     // it doesn't seem useful to use WS_CLIPSIBLINGS here as we officially
@@ -1726,20 +2706,584 @@ bool wxWindowMSW::IsMouseInWindow() const
 // Set this window to be the child of 'parent'.
 bool wxWindowMSW::Reparent(wxWindowBase *parent)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Capture the object/native identities before the first operation which
+    // can dispatch application code. The subtree itself is deliberately not
+    // frozen yet: children created by the logical base-reparent or DPI query
+    // still cross the upcoming native SetParent boundary and must participate.
+    const wxWeakRef<wxWindow> reparentWindow(this);
+    wxWindow * const oldParent = GetParent();
+    const wxWeakRef<wxWindow> oldParentIdentity(oldParent);
+    const WXHWND oldParentHwnd =
+        oldParent ? oldParent->GetHWND() : nullptr;
+    const unsigned long long oldParentHwndGeneration =
+        oldParent
+            ? wxWinUIMSWGetHwndGeneration(oldParent, oldParentHwnd)
+            : 0;
+    wxWindow * const requestedParent =
+        static_cast<wxWindow *>(parent);
+    const wxWeakRef<wxWindow> requestedParentIdentity(requestedParent);
+    const WXHWND requestedParentHwnd =
+        requestedParent ? requestedParent->GetHWND() : nullptr;
+    const unsigned long long requestedParentHwndGeneration =
+        requestedParent
+            ? wxWinUIMSWGetHwndGeneration(
+                  requestedParent, requestedParentHwnd)
+            : 0;
+    wxWindow * const oldTLW = wxGetTopLevelParent(this);
+    const wxWeakRef<wxWindow> oldTLWIdentity(oldTLW);
+    wxWindow * const requestedTLW =
+        requestedParent ? wxGetTopLevelParent(requestedParent) : nullptr;
+    const bool crossesTopLevel = requestedTLW != oldTLW;
+    const WXHWND reparentHwnd = GetHWND();
+    const unsigned long long reparentHwndGeneration =
+        wxWinUIMSWGetHwndGeneration(this, reparentHwnd);
+    const HWND oldNativeParent =
+        reparentHwnd
+            ? ::GetParent(reinterpret_cast<HWND>(reparentHwnd))
+            : nullptr;
+    const auto reparentIdentityIsCurrent = [&]()
+    {
+        wxWindow * const live = reparentWindow.get();
+        return live == this &&
+               !live->IsBeingDeleted() &&
+               reparentHwnd &&
+               reparentHwndGeneration &&
+               live->GetHWND() == reparentHwnd &&
+               wxWinUIMSWGetHwndGeneration(
+                   live, reparentHwnd) == reparentHwndGeneration;
+    };
+    const auto requestedParentIsCurrent = [&]()
+    {
+        if ( !requestedParent )
+            return true;
+
+        wxWindow * const live = requestedParentIdentity.get();
+        if ( live != requestedParent ||
+             wxWinUITLWHostIsDestroyScheduled(live) ||
+             !requestedParentHwnd ||
+             !requestedParentHwndGeneration ||
+             live->GetHWND() != requestedParentHwnd ||
+             wxWinUIMSWGetHwndGeneration(
+                 live, requestedParentHwnd) !=
+                     requestedParentHwndGeneration )
+        {
+            return false;
+        }
+
+        // The requested parent itself may legitimately move to another TLW
+        // re-entrantly before our physical boundary. Follow that current TLW
+        // while still refusing a parent anywhere inside a dying hierarchy.
+        wxWindow * const liveTLW = wxGetTopLevelParent(live);
+        if ( !liveTLW ||
+             wxWinUITLWHostIsDestroyScheduled(liveTLW) )
+        {
+            return false;
+        }
+        const WXHWND liveTLWHwnd = liveTLW->GetHWND();
+        return liveTLWHwnd &&
+               wxWinUIMSWGetHwndGeneration(
+                   liveTLW, liveTLWHwnd) != 0;
+    };
+    const auto oldParentIsCurrent = [&]()
+    {
+        if ( !oldParent )
+            return oldNativeParent == nullptr;
+
+        wxWindow * const live = oldParentIdentity.get();
+        if ( live != oldParent ||
+             wxWinUITLWHostIsDestroyScheduled(live) )
+        {
+            return false;
+        }
+        wxWindow * const liveTLW = wxGetTopLevelParent(live);
+        if ( !liveTLW ||
+             wxWinUITLWHostIsDestroyScheduled(liveTLW) )
+        {
+            return false;
+        }
+        const WXHWND liveTLWHwnd = liveTLW->GetHWND();
+        return liveTLWHwnd &&
+               wxWinUIMSWGetHwndGeneration(
+                   liveTLW, liveTLWHwnd) != 0 &&
+               oldParentHwnd &&
+               oldParentHwndGeneration &&
+               live->GetHWND() == oldParentHwnd &&
+               wxWinUIMSWGetHwndGeneration(
+                   live, oldParentHwnd) == oldParentHwndGeneration &&
+               reinterpret_cast<HWND>(oldParentHwnd) ==
+                   oldNativeParent;
+    };
+    const auto reconcileLogicalParentToNative = [&]()
+    {
+        if ( !reparentIdentityIsCurrent() )
+            return false;
+
+        const HWND nativeParent =
+            ::GetParent(reinterpret_cast<HWND>(reparentHwnd));
+        wxWindow * const nativeParentWindow =
+            nativeParent ? wxFindWinFromHandle(nativeParent) : nullptr;
+        if ( nativeParent && !nativeParentWindow )
+        {
+            wxLogWarning("wxWinUI: cannot reconcile a re-entrant native "
+                         "parent not owned by wx");
+            return false;
+        }
+
+        if ( GetParent() == nativeParentWindow )
+            return true;
+        return wxWindowBase::Reparent(nativeParentWindow);
+    };
+
+    if ( !reparentIdentityIsCurrent() ||
+         !requestedParentIsCurrent() )
+        return false;
+
+    // Exact popup retirement is part of the old XamlRoot's physical
+    // topology. Refuse before wxWindowBase::Reparent() mutates either logical
+    // child list; the caller can close the popup and retry after its causal
+    // tail. This scan includes every slotted descendant and partial owner.
+    if ( crossesTopLevel &&
+         !wxWinUITLWHostCanReparentSubtreeNow(this) )
+        return false;
+
+    const wxSize oldDPI =
+        wxWinUIGetNativeReparentDPI(this, GetHwndOf(this));
+    if ( !reparentIdentityIsCurrent() ||
+         !requestedParentIsCurrent() ||
+         GetParent() != oldParent ||
+         ::GetParent(reinterpret_cast<HWND>(reparentHwnd)) !=
+             oldNativeParent )
+    {
+        // A test seam or native query callback completed another reparent.
+        // Its native topology is authoritative; never overwrite only the wx
+        // side with the stale parent captured by this outer call.
+        reconcileLogicalParentToNative();
+        return false;
+    }
+
     if ( !wxWindowBase::Reparent(parent) )
         return false;
 
-    HWND hWndChild = GetHwnd();
-    HWND hWndParent = GetParent() ? GetWinHwnd(GetParent()) : (HWND)0;
+    if ( !reparentIdentityIsCurrent() )
+        return true;
 
-    ::SetParent(hWndChild, hWndParent);
+    // If a nested call already changed the HWND while the base transaction
+    // was running, that physical operation wins. Reconcile the wx child list
+    // to it instead of doing a one-sided rollback or applying the stale outer
+    // SetParent afterwards.
+    if ( ::GetParent(reinterpret_cast<HWND>(reparentHwnd)) !=
+             oldNativeParent )
+    {
+        reconcileLogicalParentToNative();
+        return false;
+    }
+
+    // A destroyed/superseded requested parent cannot be passed to USER32.
+    // Native topology is still the original one, so an exact logical rollback
+    // is safe here.
+    if ( !requestedParentIsCurrent() ||
+         GetParent() != requestedParent )
+    {
+        wxWindow * const restoredParent = oldParentIdentity.get();
+        if ( !oldParent || restoredParent == oldParent )
+            wxWindowBase::Reparent(restoredParent);
+        return false;
+    }
+
+    const HWND hWndChild =
+        reinterpret_cast<HWND>(reparentHwnd);
+    const HWND hWndParent =
+        reinterpret_cast<HWND>(requestedParentHwnd);
+    const auto rollbackNativeAndLogicalParent = [&]()
+    {
+        if ( !reparentIdentityIsCurrent() )
+            return false;
+
+        // A nested reparent is authoritative. Never overwrite it with the
+        // source captured by this now-stale outer transaction.
+        if ( GetParent() != requestedParent ||
+             ::GetParent(hWndChild) != hWndParent )
+        {
+            return reconcileLogicalParentToNative();
+        }
+
+        wxWindow * const restoredParent = oldParentIdentity.get();
+        const bool canRestoreOldParent =
+            oldParentIsCurrent() &&
+            (!oldParent || restoredParent == oldParent);
+        const HWND restoredNativeParent =
+            canRestoreOldParent ? oldNativeParent : nullptr;
+        wxWindow * const restoredLogicalParent =
+            canRestoreOldParent ? restoredParent : nullptr;
+
+        ::SetLastError(ERROR_SUCCESS);
+        const HWND previous =
+            ::SetParent(hWndChild, restoredNativeParent);
+        const DWORD error = ::GetLastError();
+        if ( !previous && error != ERROR_SUCCESS )
+        {
+            wxLogError("wxWinUI: failed to restore the native parent "
+                       "after the destination became invalid (error %lu)",
+                       static_cast<unsigned long>(error));
+            reconcileLogicalParentToNative();
+            return false;
+        }
+
+        if ( !reparentIdentityIsCurrent() )
+            return false;
+        if ( ::GetParent(hWndChild) != restoredNativeParent )
+            return reconcileLogicalParentToNative();
+
+        if ( GetParent() != restoredLogicalParent &&
+             !wxWindowBase::Reparent(restoredLogicalParent) )
+        {
+            wxLogError("wxWinUI: failed to restore the logical parent "
+                       "after the destination became invalid");
+            reconcileLogicalParentToNative();
+            return false;
+        }
+
+        return reparentIdentityIsCurrent() &&
+               GetParent() == restoredLogicalParent &&
+               ::GetParent(hWndChild) == restoredNativeParent;
+    };
+
+    // Capture B's DPI before SetParent(). If that USER32 boundary re-enters
+    // B->C, the outer request remains A->B and the nested request remains
+    // B->C instead of both reporting A/C-derived values.
+    const wxSize newDPI =
+        wxWinUIGetNativeReparentDPI(this,
+                                    hWndParent ? hWndParent : hWndChild);
+    if ( !reparentIdentityIsCurrent() ||
+         !requestedParentIsCurrent() ||
+         GetParent() != requestedParent ||
+         ::GetParent(hWndChild) != oldNativeParent )
+    {
+        reconcileLogicalParentToNative();
+        return false;
+    }
+
+    // Freeze the exact subtree at the last callback-free point before the
+    // native boundary. A child added up to here crosses A->B and belongs to
+    // this request; one added by later host migration does not. Conversely,
+    // a participant moved elsewhere by synchronous SetParent callbacks still
+    // crossed A->B and must not be filtered out afterwards.
+    std::vector<wxWinUIDPITraversalAction> dpiTraversal;
+    std::unordered_set<wxWindow *> capturedWindows;
+    wxWinUICaptureDPITraversal(
+        this, dpiTraversal, capturedWindows);
+    if ( !reparentIdentityIsCurrent() ||
+         !requestedParentIsCurrent() ||
+         GetParent() != requestedParent ||
+         ::GetParent(hWndChild) != oldNativeParent ||
+         dpiTraversal.empty() )
+    {
+        reconcileLogicalParentToNative();
+        return false;
+    }
+
+    // Native operations from this point are serialized in their physical
+    // order. A reparent raised by SetParent() or a later DPI event appends
+    // behind this exact A->B request and cannot recursively drain it.
+    const auto dpiRequest =
+        std::make_shared<wxWinUIReparentDPIRequest>(
+            this, reparentHwnd, reparentHwndGeneration);
+    dpiRequest->oldDPI = oldDPI;
+    dpiRequest->newDPI = newDPI;
+    dpiRequest->traversal = std::move(dpiTraversal);
+    gs_winuiReparentDPIRequests.push_back(dpiRequest);
+    ++gs_winuiReparentDPINesting;
+    wxScopeGuard dpiTransactionGuard = wxMakeGuard([dpiRequest]()
+    {
+        if ( !dpiRequest->ready )
+        {
+            dpiRequest->cancelled = true;
+            dpiRequest->ready = true;
+        }
+
+        wxASSERT_MSG(gs_winuiReparentDPINesting != 0,
+                     "unbalanced wxWinUI reparent DPI transaction");
+        --gs_winuiReparentDPINesting;
+        wxWinUIDrainReparentDPIRequests();
+    });
+    wxUnusedVar(dpiTransactionGuard);
+
+    // Preserve a focused XAML descendant before USER32 changes the shell's
+    // native parent. SetParent() and lazy destination-island creation can
+    // synchronously deactivate the source XamlRoot; preparing only from the
+    // later host notification would observe the logical loss too late.
+    // The token is process-opaque and weak-safe: successful migration
+    // consumes it, while every failed/stale exit restores or terminates only
+    // this exact preparation.
+    wxWindow * const preparedDestinationTLW =
+        wxGetTopLevelParent(this);
+    const unsigned long long preparedFocusReparent =
+        wxWinUITLWHostPrepareFocusReparent(
+            this, oldTLWIdentity.get(), preparedDestinationTLW);
+    wxScopeGuard preparedFocusGuard = wxMakeGuard(
+        [preparedFocusReparent]()
+        {
+            wxWinUITLWHostCancelPreparedFocusReparent(
+                preparedFocusReparent);
+        });
+    wxUnusedVar(preparedFocusGuard);
+
+    // Parking focus is itself a synchronous USER32/XAML boundary. A nested
+    // reparent or destruction wins; never apply the stale outer SetParent.
+    if ( !reparentIdentityIsCurrent() ||
+         !requestedParentIsCurrent() ||
+         !preparedDestinationTLW ||
+         wxGetTopLevelParent(this) != preparedDestinationTLW ||
+         GetParent() != requestedParent ||
+         ::GetParent(hWndChild) != oldNativeParent )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        reconcileLogicalParentToNative();
+        return false;
+    }
+
+    // Focus parking is callback-bearing and can synchronously open a Combo
+    // popup. This is the last check before USER32 changes native topology.
+    if ( crossesTopLevel &&
+         !wxWinUITLWHostCanReparentSubtreeNow(this) )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        wxWindow * const restoredParent = oldParentIdentity.get();
+        if ( (!oldParent || restoredParent == oldParent) &&
+             GetParent() == requestedParent )
+        {
+            wxWindowBase::Reparent(restoredParent);
+        }
+        return false;
+    }
+
+    ::SetLastError(ERROR_SUCCESS);
+    HWND previousNativeParent = nullptr;
+    DWORD setParentError = ERROR_SUCCESS;
+    wxWinUITLWHostSetPreparedFocusReparentNativeBoundary(
+        preparedFocusReparent, true);
+    wxScopeGuard preparedNativeBoundaryGuard = wxMakeGuard(
+        [preparedFocusReparent]()
+        {
+            wxWinUITLWHostSetPreparedFocusReparentNativeBoundary(
+                preparedFocusReparent, false);
+        });
+    wxUnusedVar(preparedNativeBoundaryGuard);
+#ifdef WXWINUI_TEST_SUPPORT
+    if ( gs_winuiFailNextSetParentForTest )
+    {
+        gs_winuiFailNextSetParentForTest = false;
+        setParentError = ERROR_ACCESS_DENIED;
+    }
+    else
+#endif // WXWINUI_TEST_SUPPORT
+    {
+        previousNativeParent = ::SetParent(hWndChild, hWndParent);
+        setParentError = ::GetLastError();
+    }
+    wxWinUITLWHostSetPreparedFocusReparentNativeBoundary(
+        preparedFocusReparent, false);
+
+    if ( !previousNativeParent && setParentError != ERROR_SUCCESS )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+
+        // USER32 kept the old native topology. Put the wx child list back in
+        // the same state without re-entering this virtual Reparent() method,
+        // but only while no nested physical operation superseded it.
+        wxWindow * const restoredParent = oldParentIdentity.get();
+        if ( reparentIdentityIsCurrent() &&
+             ::GetParent(hWndChild) == oldNativeParent &&
+             GetParent() == requestedParent &&
+             (!oldParent || restoredParent == oldParent) )
+        {
+            if ( !wxWindowBase::Reparent(restoredParent) )
+            {
+                wxLogError("wxWinUI: failed to restore the logical parent "
+                           "after SetParent() failed (error %lu)",
+                           static_cast<unsigned long>(setParentError));
+            }
+        }
+        else
+        {
+            reconcileLogicalParentToNative();
+        }
+        return false;
+    }
+
+#ifdef WXWINUI_TEST_SUPPORT
+    // Test-only one-shot seam at the actual synchronous USER32 boundary. It
+    // is cleared before invocation so a nested Reparent() cannot consume it
+    // twice. Production always takes the null branch.
+    if ( gs_winuiAfterSetParentForTest )
+    {
+        const auto callback = gs_winuiAfterSetParentForTest;
+        gs_winuiAfterSetParentForTest = nullptr;
+        callback(this);
+    }
+#endif // WXWINUI_TEST_SUPPORT
+
+    // SetParent messages and the one-shot seam are synchronous application
+    // boundaries too. If they opened a popup, undo this exact A->B native and
+    // logical move before any host notification can detach the old carrier.
+    if ( reparentIdentityIsCurrent() &&
+         GetParent() == requestedParent &&
+         ::GetParent(hWndChild) == hWndParent &&
+         crossesTopLevel &&
+         !wxWinUITLWHostCanReparentSubtreeNow(this) )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        wxWinUITLWHostSetPreparedFocusReparentNativeBoundary(
+            preparedFocusReparent, false);
+        rollbackNativeAndLogicalParent();
+        return false;
+    }
+
+    // SetParent() is a synchronous USER32 boundary. If it destroyed or
+    // rebound the HWND, neither a slot migration nor a DPI callback may touch
+    // the stale C++ object. The wx/native topology already changed, so simply
+    // retire this request and let destruction own the remaining cleanup.
+    wxWindow * const liveAfterSetParent = dpiRequest->window.get();
+    if ( liveAfterSetParent != this || IsBeingDeleted() ||
+         GetHWND() != reparentHwnd ||
+         wxWinUIMSWGetHwndGeneration(this, reparentHwnd) !=
+             reparentHwndGeneration )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        return true;
+    }
+
+    if ( !requestedParentIsCurrent() &&
+         GetParent() == requestedParent &&
+         ::GetParent(hWndChild) == hWndParent )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        rollbackNativeAndLogicalParent();
+        return false;
+    }
+
+    dpiRequest->cancelled =
+        !reparentHwnd || !reparentHwndGeneration;
+    dpiRequest->ready = true;
+
+    // A nested SetParent callback may already have completed B->C. The A->B
+    // DPI request above is still real and stays ahead of it, but only the
+    // nested operation may own the final host/topology notifications.
+    if ( GetParent() != requestedParent ||
+         ::GetParent(hWndChild) != hWndParent )
+    {
+        reconcileLogicalParentToNative();
+        return true;
+    }
 
     if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         EnsureParentHasControlParentStyle(GetParent());
     }
 
+    // Propagating WS_EX_CONTROLPARENT can also enter user/subclass code.
+    // Revalidate once more at the final point before host migration detaches
+    // the old XamlRoot carrier.
+    if ( reparentIdentityIsCurrent() &&
+         GetParent() == requestedParent &&
+         ::GetParent(hWndChild) == hWndParent &&
+         crossesTopLevel &&
+         !wxWinUITLWHostCanReparentSubtreeNow(this) )
+    {
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        wxWinUITLWHostSetPreparedFocusReparentNativeBoundary(
+            preparedFocusReparent, false);
+        rollbackNativeAndLogicalParent();
+        return false;
+    }
+
+    if ( !reparentIdentityIsCurrent() )
+        return true;
+    if ( GetParent() != requestedParent ||
+         ::GetParent(hWndChild) != hWndParent )
+    {
+        reconcileLogicalParentToNative();
+        return true;
+    }
+    if ( !requestedParentIsCurrent() )
+    {
+        dpiRequest->cancelled = true;
+        rollbackNativeAndLogicalParent();
+        return false;
+    }
+
+    // The old island otherwise discovers this only from its next deferred
+    // geometry flush.  The old TLW is allowed to die before that callback, so
+    // migrate this window and all slotted descendants now.
+    const wxWeakRef<wxWindow> migrationDestinationTLW(
+        wxGetTopLevelParent(this));
+    const bool hostMigrationSucceeded =
+        wxWinUITLWHostNotifyReparent(this, oldTLWIdentity.get());
+    if ( !reparentIdentityIsCurrent() )
+        return true;
+    if ( !hostMigrationSucceeded )
+    {
+        // A composite tree cannot remain split across XamlRoots. Its host
+        // transaction restores the native visual graph before returning
+        // false; now restore only this exact USER32/wx transaction as well.
+        // An application callback which reparented again is authoritative.
+        if ( GetParent() != requestedParent ||
+             ::GetParent(hWndChild) != hWndParent )
+        {
+            reconcileLogicalParentToNative();
+            return true;
+        }
+
+        dpiRequest->cancelled = true;
+        dpiRequest->ready = true;
+        if ( rollbackNativeAndLogicalParent() )
+        {
+            // Another independent slot/cohort may have migrated before the
+            // failing one. Reconcile it with the restored wx topology too,
+            // while the exact original/destination lifetimes are still weak.
+            (void)wxWinUITLWHostNotifyReparent(
+                this, migrationDestinationTLW.get());
+        }
+        return false;
+    }
+#if wxUSE_DRAG_AND_DROP && wxUSE_OLE
+    wxWinUITLWHostNotifyOleDropTopology(this);
+    if ( !reparentIdentityIsCurrent() )
+        return true;
+#endif
+#if wxUSE_DRAG_AND_DROP
+    wxWinUITLWHostNotifyDragAcceptFiles(this);
+    if ( !reparentIdentityIsCurrent() )
+        return true;
+#endif
+
+    // SetParent() does not update WS_EX_LAYOUTRTL on child HWNDs which were
+    // already created. Re-evaluate only inherited direction as the terminal
+    // operation: the virtual control hook may dispatch through XAML, so no
+    // member may be inspected after it returns.
+    MSWRefreshInheritedLayoutDirection();
     return true;
+#else
+    if ( !wxWindowBase::Reparent(parent) )
+        return false;
+
+    HWND hWndChild = GetHwnd();
+    HWND hWndParent = GetParent() ? GetWinHwnd(GetParent()) : (HWND)0;
+    ::SetParent(hWndChild, hWndParent);
+
+    if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
+        EnsureParentHasControlParentStyle(GetParent());
+
+    return true;
+#endif
 }
 
 void wxWindowMSW::MSWDisableComposited()
@@ -1852,19 +3396,386 @@ static inline void AdjustStaticBoxZOrder(wxWindow * WXUNUSED(parent))
 
 #endif // wxUSE_STATBOX/!wxUSE_STATBOX
 
+namespace
+{
+
+// OLE registration calls and application-owned target destructors are
+// callback boundaries. Keep a per-thread transaction stack off the public
+// wxWindow ABI so nested SetDropTarget() calls can follow an exact
+// latest-writer rule.
+class wxMSWDropTargetSlotTransaction final
+{
+public:
+    wxMSWDropTargetSlotTransaction(wxWindowMSW* window, bool terminal)
+        : m_window(window),
+          m_terminal(terminal),
+          m_previous(ms_current)
+    {
+        for ( wxMSWDropTargetSlotTransaction* active = m_previous;
+              active;
+              active = active->m_previous )
+        {
+            if ( active->m_window == window )
+            {
+                if ( active->m_terminal || active->m_terminalObserved )
+                    m_blockedByTerminal = true;
+            }
+        }
+        ms_current = this;
+        if ( m_terminal )
+            SupersedeOuterTransactions();
+    }
+
+    ~wxMSWDropTargetSlotTransaction()
+    {
+        wxASSERT(ms_current == this);
+        ms_current = m_previous;
+    }
+
+    bool IsSuperseded() const { return m_superseded; }
+    bool IsBlockedByTerminal() const { return m_blockedByTerminal; }
+    bool IsTerminalObserved() const { return m_terminalObserved; }
+
+    bool OwnsTailReconciliation() const
+    {
+        if ( !m_superseded || m_terminalObserved || m_blockedByTerminal )
+            return false;
+
+        // Only the outermost same-window transaction can run the tail. This
+        // lets a whole nested replacement chain unwind past the native call
+        // which originally owned the HWND before making one final attempt.
+        for ( const wxMSWDropTargetSlotTransaction* active = m_previous;
+              active;
+              active = active->m_previous )
+        {
+            if ( active->m_window == m_window )
+                return false;
+        }
+
+        return true;
+    }
+
+    void SupersedeOuterTransactions()
+    {
+        for ( wxMSWDropTargetSlotTransaction* active = m_previous;
+              active;
+              active = active->m_previous )
+        {
+            if ( active->m_window == m_window )
+            {
+                active->m_superseded = true;
+                if ( m_terminal )
+                    active->m_terminalObserved = true;
+            }
+        }
+    }
+
+private:
+    wxWindowMSW* const m_window;
+    const bool m_terminal;
+    wxMSWDropTargetSlotTransaction* const m_previous;
+    bool m_superseded = false;
+    bool m_blockedByTerminal = false;
+    bool m_terminalObserved = false;
+
+    static thread_local wxMSWDropTargetSlotTransaction* ms_current;
+};
+
+thread_local wxMSWDropTargetSlotTransaction*
+    wxMSWDropTargetSlotTransaction::ms_current = nullptr;
+
+// Never allow an object already inside its exact Revoke/delete transaction to
+// be re-adopted from that callback stack. This also prevents a derived target
+// destructor from manufacturing a new lease for its own dying address.
+class wxMSWDropTargetRetirement final
+{
+public:
+    explicit wxMSWDropTargetRetirement(wxDropTarget* target)
+        : m_target(target), m_previous(ms_current)
+    {
+        ms_current = this;
+    }
+
+    ~wxMSWDropTargetRetirement()
+    {
+        wxASSERT(ms_current == this);
+        ms_current = m_previous;
+    }
+
+    static bool Contains(const wxDropTarget* target)
+    {
+        for ( const wxMSWDropTargetRetirement* active = ms_current;
+              active;
+              active = active->m_previous )
+        {
+            if ( active->m_target == target )
+                return true;
+        }
+        return false;
+    }
+
+private:
+    wxDropTarget* const m_target;
+    wxMSWDropTargetRetirement* const m_previous;
+
+    static thread_local wxMSWDropTargetRetirement* ms_current;
+};
+
+thread_local wxMSWDropTargetRetirement*
+    wxMSWDropTargetRetirement::ms_current = nullptr;
+
+} // anonymous namespace
+
 void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 {
-    if ( m_dropTarget != 0 ) {
-        m_dropTarget->Revoke(m_hWnd);
-        delete m_dropTarget;
+    // Ignore an attempt to resurrect the exact object whose Revoke() or
+    // destructor is already on this thread's stack.
+    if ( pDropTarget && wxMSWDropTargetRetirement::Contains(pDropTarget) )
+        return;
+
+    wxMSWDropTargetSlotTransaction transaction(this, false);
+    const wxWeakRef<wxWindowMSW> windowLifetime(this);
+
+#if wxUSE_OLE
+    // RevokeDragDrop() can pump a nested SetDropTarget(). Its RegisterDragDrop()
+    // then sees the old native receiver and loses with ALREADYREGISTERED, after
+    // which the outer revoke succeeds. Reconcile the final latest writer once,
+    // after the entire same-window replacement chain has unwound.
+    wxScopeGuard tailReconciliation = wxMakeGuard([&]()
+    {
+        if ( !transaction.OwnsTailReconciliation() )
+            return;
+
+        wxWindowMSW* const liveWindow = windowLifetime.get();
+        if ( liveWindow != this || liveWindow->IsBeingDeleted() )
+            return;
+
+        wxDropTarget* const latestTarget = m_dropTarget;
+        const WXHWND latestHwnd = m_hWnd;
+        if ( !latestTarget || !latestHwnd ||
+             wxMSWDropTargetRetirement::Contains(latestTarget) )
+        {
+            return;
+        }
+
+        const wxMSWOleDropTargetLease latestLifetime =
+            wxMSWOleAcquireDropTarget(latestTarget);
+        const DWORD ownerThread = ::GetCurrentThreadId();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        const unsigned long long associationGeneration =
+            wxWinUIMSWGetHwndGeneration(this, latestHwnd);
+        const unsigned long long nativeGeneration =
+            wxWinUIMSWGetNativeHwndGeneration(latestHwnd);
+#endif
+
+        const auto isExactLatestWriter = [&]()
+        {
+            wxWindow* const live = windowLifetime.get()
+                ? windowLifetime.get()->AsWindow()
+                : nullptr;
+            if ( live != this || live->IsBeingDeleted() ||
+                 transaction.IsTerminalObserved() ||
+                 m_dropTarget != latestTarget || m_hWnd != latestHwnd ||
+                 latestLifetime.GetIfCurrent() != latestTarget ||
+                 ::GetCurrentThreadId() != ownerThread )
+            {
+                return false;
+            }
+
+            const HWND hwnd = reinterpret_cast<HWND>(latestHwnd);
+            if ( !::IsWindow(hwnd) ||
+                 ::GetWindowThreadProcessId(hwnd, nullptr) != ownerThread )
+            {
+                return false;
+            }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( !associationGeneration || !nativeGeneration ||
+                 wxWinUIMSWGetHwndGeneration(this, latestHwnd) !=
+                     associationGeneration ||
+                 wxWinUIMSWGetNativeHwndGeneration(latestHwnd) !=
+                     nativeGeneration )
+            {
+                return false;
+            }
+#endif
+            return true;
+        };
+
+        if ( !isExactLatestWriter() )
+            return;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        const bool brokerOwnsRegistration =
+            wxWinUITLWHostOwnsOleDropRegistration(this);
+#else
+        const bool brokerOwnsRegistration = false;
+#endif
+        if ( !isExactLatestWriter() )
+            return;
+
+        const bool targetIsRegistered =
+            wxMSWOleIsShellDropTargetRegistered(latestTarget, latestHwnd);
+        if ( !isExactLatestWriter() )
+            return;
+
+        if ( !brokerOwnsRegistration && !targetIsRegistered )
+        {
+            latestTarget->Register(latestHwnd);
+
+            // Register() is the final callback boundary. Revalidate for the
+            // terminal latch, but deliberately never chase another nested
+            // writer from this unique tail attempt.
+            (void)isExactLatestWriter();
+        }
+    });
+    wxUnusedVar(tailReconciliation);
+#endif // wxUSE_OLE
+
+    if ( transaction.IsBlockedByTerminal() )
+    {
+        // HandleDestroy() is the terminal writer. It owns every candidate
+        // offered re-entrantly while the native window is being torn down.
+        if ( pDropTarget )
+        {
+            const WXHWND rejectedHwnd = m_hWnd;
+            wxMSWDropTargetRetirement retirement(pDropTarget);
+#if wxUSE_OLE
+            const wxMSWOleDropTargetLease lifetime =
+                wxMSWOleAcquireDropTarget(pDropTarget);
+            wxMSWOleUnbindDropTarget(AsWindow(), pDropTarget);
+            if ( lifetime.GetIfCurrent() == pDropTarget &&
+                 wxMSWOleIsShellDropTargetRegistered(
+                     pDropTarget, rejectedHwnd) )
+            {
+                pDropTarget->Revoke(rejectedHwnd);
+            }
+            if ( lifetime.GetIfCurrent() == pDropTarget )
+            {
+                wxMSWOleInvalidateDropTarget(pDropTarget);
+                delete pDropTarget;
+            }
+#else
+            pDropTarget->Revoke(rejectedHwnd);
+            delete pDropTarget;
+#endif
+        }
+        return;
+    }
+
+    // An equal non-null value is a true no-op and lets an outer publication
+    // finish Bind/Register. Equal null is different: an outer transaction may
+    // have unpublished its old value temporarily, so the nested explicit
+    // choice of no target is the latest writer.
+    if ( m_dropTarget == pDropTarget )
+    {
+        if ( !pDropTarget )
+            transaction.SupersedeOuterTransactions();
+        return;
+    }
+
+    transaction.SupersedeOuterTransactions();
+
+#if wxUSE_OLE
+    const wxMSWOleDropTargetLease candidateLifetime =
+        wxMSWOleAcquireDropTarget(pDropTarget);
+#endif
+
+    wxDropTarget* const oldTarget = m_dropTarget;
+    const WXHWND oldHwnd = m_hWnd;
+#if wxUSE_OLE
+    const wxMSWOleDropTargetLease oldLifetime =
+        wxMSWOleAcquireDropTarget(oldTarget);
+#endif
+
+    // Depublish before Unbind/Revoke/delete. A nested writer sees an empty
+    // slot and can never recursively destroy oldTarget through this window.
+    m_dropTarget = nullptr;
+
+    if ( oldTarget )
+    {
+        wxMSWDropTargetRetirement retirement(oldTarget);
+#if wxUSE_OLE
+        wxMSWOleUnbindDropTarget(AsWindow(), oldTarget);
+        if ( oldLifetime.GetIfCurrent() == oldTarget &&
+             wxMSWOleIsShellDropTargetRegistered(oldTarget, oldHwnd) )
+        {
+            oldTarget->Revoke(oldHwnd);
+        }
+        if ( oldLifetime.GetIfCurrent() == oldTarget )
+        {
+            wxMSWOleInvalidateDropTarget(oldTarget);
+            delete oldTarget;
+        }
+#else
+        oldTarget->Revoke(oldHwnd);
+        delete oldTarget;
+#endif
+    }
+
+    const bool windowIsCurrent = windowLifetime.get() == this;
+    if ( !windowIsCurrent || transaction.IsSuperseded() )
+    {
+        // The nested call owns the current slot. Dispose only this outer
+        // call's candidate when it wasn't adopted by that latest writer. A
+        // destroyed window cannot have adopted this still-unpublished value.
+        if ( pDropTarget &&
+             (!windowIsCurrent || m_dropTarget != pDropTarget) &&
+             !wxMSWDropTargetRetirement::Contains(pDropTarget) )
+        {
+            wxMSWDropTargetRetirement retirement(pDropTarget);
+#if wxUSE_OLE
+            if ( candidateLifetime.GetIfCurrent() == pDropTarget )
+            {
+                if ( windowIsCurrent )
+                    wxMSWOleUnbindDropTarget(AsWindow(), pDropTarget);
+                if ( wxMSWOleIsShellDropTargetRegistered(
+                         pDropTarget, oldHwnd) )
+                {
+                    pDropTarget->Revoke(oldHwnd);
+                }
+            }
+            if ( candidateLifetime.GetIfCurrent() == pDropTarget )
+            {
+                wxMSWOleInvalidateDropTarget(pDropTarget);
+                delete pDropTarget;
+            }
+#else
+            pDropTarget->Revoke(oldHwnd);
+            delete pDropTarget;
+#endif
+        }
+        return;
     }
 
     m_dropTarget = pDropTarget;
-    if ( m_dropTarget != 0 )
-    {
-        AdjustStaticBoxZOrder(GetParent());
-        m_dropTarget->Register(m_hWnd);
-    }
+    if ( !pDropTarget )
+        return;
+
+    AdjustStaticBoxZOrder(GetParent());
+    if ( windowLifetime.get() != this || transaction.IsSuperseded() ||
+         m_dropTarget != pDropTarget )
+        return;
+
+#if wxUSE_OLE
+    wxMSWOleBindDropTarget(AsWindow(), pDropTarget, m_hWnd);
+    if ( windowLifetime.get() != this || transaction.IsSuperseded() ||
+         m_dropTarget != pDropTarget )
+        return;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const bool brokerOwnsRegistration =
+        wxWinUITLWHostOwnsOleDropRegistration(this);
+#else
+    const bool brokerOwnsRegistration = false;
+#endif
+    if ( windowLifetime.get() != this || transaction.IsSuperseded() ||
+         m_dropTarget != pDropTarget )
+        return;
+    if ( !brokerOwnsRegistration )
+        pDropTarget->Register(m_hWnd);
+#else
+    pDropTarget->Register(m_hWnd);
+#endif
 }
 
 // old-style file manager drag&drop support: we retain the old-style
@@ -1876,6 +3787,9 @@ void wxWindowMSW::DragAcceptFiles(bool accept)
     {
         AdjustStaticBoxZOrder(GetParent());
         ::DragAcceptFiles(hWnd, (BOOL)accept);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        wxWinUITLWHostNotifyDragAcceptFiles(this);
+#endif
     }
 }
 #endif // wxUSE_DRAG_AND_DROP
@@ -1888,10 +3802,49 @@ void wxWindowMSW::DragAcceptFiles(bool accept)
 
 void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 {
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip enter this=%p hwnd=%p tooltip=%p",
+                         static_cast<void *>(this),
+                         reinterpret_cast<void *>(GetHWND()),
+                         static_cast<void *>(tooltip));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUIIsHostWindow(static_cast<wxWindow *>(this)) )
+    {
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip WinUI host before base this=%p",
+                             static_cast<void *>(this));
+        wxWindowBase::DoSetToolTip(tooltip);
+        if ( m_tooltip )
+            m_tooltip->SetWindow(static_cast<wxWindow *>(this));
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip WinUI host leave this=%p stored=%p",
+                             static_cast<void *>(this),
+                             static_cast<void *>(m_tooltip));
+
+        // A tooltip change produces no geometry event: tell the shared
+        // island host so its slot sync picks the new value up now.
+        wxWinUITLWHostNotifySlotState(static_cast<wxWindow *>(this));
+        return;
+    }
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip before base this=%p",
+                         static_cast<void *>(this));
     wxWindowBase::DoSetToolTip(tooltip);
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip after base this=%p stored=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(m_tooltip));
 
     if ( m_tooltip )
+    {
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip before SetWindow this=%p tooltip=%p",
+                             static_cast<void *>(this),
+                             static_cast<void *>(m_tooltip));
         m_tooltip->SetWindow((wxWindow *)this);
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip after SetWindow this=%p tooltip=%p",
+                             static_cast<void *>(this),
+                             static_cast<void *>(m_tooltip));
+    }
+
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip leave this=%p",
+                         static_cast<void *>(this));
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -2479,8 +4432,19 @@ static void wxYieldForCommandsOnly()
     }
 }
 
+#if wxUSE_WINUI3
+// Implemented in src/winui/menubar.cpp: shows the menu as a WinUI MenuFlyout,
+// returning false if the classic Win32 menu should be used instead.
+extern bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y);
+#endif // wxUSE_WINUI3
+
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+#if wxUSE_WINUI3
+    if ( wxWinUIPopupMenu(this, menu, x, y) )
+        return true;
+#endif // wxUSE_WINUI3
+
     wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
@@ -3123,6 +5087,11 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return rc;
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+static void wxWinUIEraseOnSurface(wxWindowMSW *window, HDC hdc,
+                                  const RECT& client);
+#endif
+
 bool
 wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                               WXUINT message,
@@ -3193,12 +5162,94 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_SIZE:
-            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( IsTopLevel() )
+            {
+                if ( wParam == SIZE_MINIMIZED )
+                {
+                    // An actively detached modeless/nested transient would
+                    // not follow a minimized owner. Reattach this window and
+                    // its full transient tree before USER32 applies the owner
+                    // state transition.
+                    if ( wxWinUITransientOwnerActivation(
+                             GetHwnd(), false) )
+                    {
+                        wxWinUIInvalidateBackdropPrime(GetHwnd());
+                    }
+                    wxWinUITransientOwnerRestoreDependents(
+                        GetHwnd(), false);
+                }
+                else if ( (wParam == SIZE_RESTORED ||
+                           wParam == SIZE_MAXIMIZED) &&
+                          ::GetPropW(
+                              GetHwnd(),
+                              L"wxWinUIBackdropTransparent") )
+                {
+                    // A prime invalidated for minimize is retried only once
+                    // the restored/maximized window has meaningful geometry.
+                    wxWinUIPrimeBackdrop(GetHwnd());
+                }
+            }
+#endif
+            {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // A size handler is allowed to destroy this window: decide
+                // now, and only touch it again through a weak reference.
+                wxWeakRef<wxWindow> winuiResizedTLW;
+                if ( IsTopLevel() && wParam != SIZE_MINIMIZED )
+                    winuiResizedTLW = static_cast<wxWindow *>(this);
+#endif
+                processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // The children have been laid out by now. Publish their
+                // geometry to the island before returning to a loop which may
+                // be the system's modal sizing loop, so the XAML content does
+                // not trail the frame by one loop iteration during a live
+                // resize.
+                if ( winuiResizedTLW )
+                    wxWinUITLWHostFlushAfterResize(winuiResizedTLW.get());
+#endif
+            }
             break;
 
         case WM_MOVE:
             processed = HandleMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             break;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        case WM_WINDOWPOSCHANGED:
+            {
+                // USER32 is the authority for child sibling order. This
+                // catches direct SetWindowPos() as well as Raise()/Lower(),
+                // while the common bridge helper remains a no-op for windows
+                // whose TLW has no existing island.
+                const WINDOWPOS * const pos =
+                    reinterpret_cast<const WINDOWPOS *>(lParam);
+                const bool zOrderMayHaveChanged =
+                    pos && !(pos->flags & SWP_NOZORDER);
+                wxWinUITLWHostNotifyNativeLayout(
+                    static_cast<wxWindow *>(this),
+                    zOrderMayHaveChanged);
+                wxWinUIPaintSurfaceNoteChildGeometry(
+                    static_cast<wxWindow *>(this));
+            }
+            break;
+
+        case WM_ENABLE:
+            // Only the window EnableWindow() was called on gets this
+            // message, never its children -- but their EFFECTIVE enabled
+            // state just changed with it: let the shared island host
+            // re-evaluate its slots.  The message itself stays unprocessed
+            // so the default handling is untouched.
+            wxWinUITLWHostNotifyEnable(static_cast<wxWindow *>(this));
+            break;
+
+        case WM_SETTEXT:
+            // The window label feeds the slot's UIA name: re-sync it.  The
+            // message stays unprocessed (DefWindowProc stores the text).
+            wxWinUITLWHostNotifySlotState(static_cast<wxWindow *>(this));
+            break;
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
         case WM_MOVING:
             {
@@ -3220,6 +5271,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_ENTERSIZEMOVE:
             {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // Remembered to tell a move to another monitor from a plain
+                // move or resize in WM_EXITSIZEMOVE below. Only one window
+                // of this thread can be in a move/size gesture at a time.
+                gs_winuiSizeMoveMonitor =
+                    ::MonitorFromWindow(GetHwnd(), MONITOR_DEFAULTTONULL);
+#endif
                 processed = HandleEnterSizeMove();
             }
             break;
@@ -3227,6 +5285,31 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_EXITSIZEMOVE:
             {
                 processed = HandleExitSizeMove();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // Dragging the window onto a different monitor (e.g. HDR <->
+                // SDR) requires priming the DWM Mica backdrop there with a real
+                // size change, otherwise it renders as an opaque rectangle until
+                // the user resizes manually.  wxWinUIPrimeBackdrop() does this
+                // after the interactive move. Invalidate the per-window
+                // success marker first so a monitor transition is not hidden
+                // by the initial creation-time prime.
+                //
+                // The prime resizes the window by one pixel and back, which
+                // shows as a blink: do it only when the monitor did change,
+                // not at the end of every move or resize.
+                const HMONITOR monitorAtExit =
+                    ::MonitorFromWindow(GetHwnd(), MONITOR_DEFAULTTONULL);
+                const bool monitorChanged =
+                    monitorAtExit != gs_winuiSizeMoveMonitor;
+                gs_winuiSizeMoveMonitor = nullptr;
+                if ( monitorChanged &&
+                     ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
+                {
+                    wxWinUIInvalidateBackdropPrime(GetHwnd());
+                    wxWinUIPrimeBackdrop(GetHwnd());
+                }
+#endif
             }
             break;
 
@@ -3259,6 +5342,43 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 WXHWND hwnd;
                 UnpackActivate(wParam, lParam, &state, &minimized, &hwnd);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // An OWNED island-hosting top-level window pays a massive
+                // per-step tax in the interactive move/size loop (XAML
+                // composition throttled from 165Hz to ~45Hz while dragging,
+                // WM_WINDOWPOSCHANGED going from 0.2ms to 6-80ms per step,
+                // WM_GETICON storms) and its boundary hover transitions
+                // degrade too.  Ablation proved the ownership LINK itself is
+                // the cause: the collapse follows ANY owner -- even a bare
+                // invisible one -- and only the unowned window is fluid.
+                //
+                // The link is only ever NEEDED while the window is inactive:
+                // that is when the parent could be raised above it.  While
+                // ACTIVE the window is naturally on top, so drop the owner
+                // for exactly that span and restore it on deactivation --
+                // dialogs drag/resize/hover at full rate, and the
+                // stay-above-parent guarantee is intact whenever it can
+                // matter.
+                if ( IsTopLevel() &&
+                        ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
+                {
+                    const bool ownerChanged =
+                        wxWinUITransientOwnerActivation(
+                            GetHwnd(),
+                            state != WA_INACTIVE && !minimized);
+
+                    // Changing the owner makes DWM rebuild the window frame,
+                    // which silently drops the composed backdrop: without
+                    // re-priming, the dialog paints an opaque background
+                    // until the user happens to resize it.
+                    if ( ownerChanged )
+                    {
+                        wxWinUIInvalidateBackdropPrime(GetHwnd());
+                        wxWinUIPrimeBackdrop(GetHwnd());
+                    }
+                }
+#endif // WinUI
+
                 processed = HandleActivate(state, minimized != 0, (WXHWND)hwnd);
             }
             break;
@@ -3276,6 +5396,14 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_PAINT:
+            // N.B. windows marked as transparent to the WinUI backdrop are
+            // *not* special-cased here.  Discarding WM_PAINT for them would
+            // also discard the wxEVT_PAINT of everything drawing itself with
+            // wx -- the generic wxDataViewCtrl, wxGrid, wxBannerWindow or any
+            // user window with an EVT_PAINT handler -- which then rendered as
+            // an empty rectangle.  The transparency comes from the black fill
+            // done in WM_ERASEBKGND below, and a window with nothing to paint
+            // simply leaves that fill untouched.
             if ( wParam )
             {
                 wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
@@ -3302,6 +5430,27 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_SHOWWINDOW:
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( IsTopLevel() )
+            {
+                if ( !wParam )
+                {
+                    if ( wxWinUITransientOwnerActivation(
+                             GetHwnd(), false) )
+                    {
+                        wxWinUIInvalidateBackdropPrime(GetHwnd());
+                    }
+                    wxWinUITransientOwnerRestoreDependents(
+                        GetHwnd(), false);
+                }
+                else if ( ::GetPropW(
+                              GetHwnd(),
+                              L"wxWinUIBackdropTransparent") )
+                {
+                    wxWinUIPrimeBackdrop(GetHwnd());
+                }
+            }
+#endif
             processed = HandleShow(wParam != 0, (int)lParam);
             break;
 
@@ -3364,7 +5513,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
-                        if ( message == WM_LBUTTONDOWN && win->IsFocusable() )
+                        if ( message == WM_LBUTTONDOWN && win->IsFocusable()
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                             // See wxWinUIMSWBeginSlotMouseDispatch().
+                             && !gs_winuiSlotMouseDispatchDepth
+#endif
+                           )
                             win->SetFocus();
                     }
                 }
@@ -3690,6 +5844,14 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_SYSCOLORCHANGE:
             // the return value for this message is ignored
             processed = HandleSysColorChange();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // Windows sends this message to each TLW. Re-resolve the complete
+            // native shell policy after wx handlers have observed the new
+            // palette; child messages must not redundantly reapply the same
+            // DWM transaction.
+            if ( IsTopLevel() )
+                wxWinUIApplyWindowBackdrop(this);
+#endif
             break;
 
         case WM_DISPLAYCHANGE:
@@ -3701,6 +5863,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_CAPTURECHANGED:
+#if wxUSE_WINUI3
+            wxWinUITLWHostNotifyCaptureMutation(this);
+#endif
             processed = HandleCaptureChanged((WXHWND)lParam);
             break;
 
@@ -3720,22 +5885,137 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             else
                 processed = HandleSettingChange(wParam, lParam);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // SPI_SETHIGHCONTRAST and theme broadcasts are not perfectly
+            // uniform across supported Windows releases. Every TLW-level
+            // WM_SETTINGCHANGE is cheap enough to treat as an appearance
+            // invalidation, while propagated child messages remain no-ops.
+            if ( IsTopLevel() )
+                wxWinUIApplyWindowBackdrop(this);
+#endif
             break;
 
         case WM_QUERYNEWPALETTE:
             processed = HandleQueryNewPalette();
             break;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        case WM_PARENTNOTIFY:
+            // The windows of this port are created without WS_CLIPCHILDREN,
+            // see MSWGetStyle(): nothing paints their HWND, which is erased
+            // to nothing. A window which does paint its own -- one which is
+            // not ours (a browser, an ActiveX control) or which owns its DC
+            // (an OpenGL canvas) -- must not be erased by the windows it is
+            // in: each of them is told when it is created, and takes the
+            // style back. Top-level windows never lost it.
+            if ( LOWORD(wParam) == WM_CREATE && !IsTopLevel() &&
+                 wxWinUIPaintSurfacesEnabled() )
+            {
+                const HWND hwndChild = (HWND)lParam;
+                if ( !wxFindWinFromHandle((WXHWND)hwndChild) ||
+                     (::GetClassLongPtr(hwndChild, GCL_STYLE) & CS_OWNDC) )
+                {
+                    wxMSWWinStyleUpdater(GetHwnd()).TurnOn(WS_CLIPCHILDREN);
+                }
+            }
+            break;
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
         case WM_ERASEBKGND:
             {
-#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
-                // check if an override was configured for this window
-                EraseBgHooks::const_iterator it = gs_eraseBgHooks.find(this);
-                if ( it != gs_eraseBgHooks.end() )
-                    processed = it->second->MSWEraseBgHook((WXHDC)wParam);
+                bool eraseForWinUIBackdrop = false;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // What the window painted where its background is erased
+                // goes with it, as it does on a HWND: the region of its
+                // next painting starts empty on its surface.
+                if ( GetBackgroundStyle() != wxBG_STYLE_PAINT &&
+                     GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+                {
+                    wxWinUIPaintSurfaceNoteErase(
+                        static_cast<wxWindow *>(this));
+                }
+
+                eraseForWinUIBackdrop =
+                    ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") != nullptr;
+
+                if ( !eraseForWinUIBackdrop )
+                {
+                    // The recursive marking runs when the backdrop is applied
+                    // to the top-level window, so windows created later (lazy
+                    // notebook pages and their controls...) would miss it and
+                    // erase with the default (light) brush.  Inherit the mark
+                    // from the ancestor chain on first erase instead: the TLW
+                    // itself is always marked, so this converges in one pass.
+                    //
+                    // The walk MUST stop at the first non-child window:
+                    // ::GetParent() returns the OWNER for owned top-level
+                    // windows, and a dialog deliberately left unmarked (it
+                    // has no composed backdrop, its children use the solid
+                    // themed background) must not re-inherit the mark from
+                    // its owner frame.
+                    for ( HWND ancestor = GetHwnd(); ancestor; )
+                    {
+                        if ( !(::GetWindowLongPtr(ancestor, GWL_STYLE) & WS_CHILD) )
+                            break;
+
+                        ancestor = ::GetParent(ancestor);
+                        if ( !ancestor )
+                            break;
+
+                        if ( ::GetPropW(ancestor, L"wxWinUIBackdropTransparent") )
+                        {
+                            ::SetPropW(GetHwnd(), L"wxWinUIBackdropTransparent",
+                                       reinterpret_cast<HANDLE>(1));
+                            eraseForWinUIBackdrop = true;
+                            break;
+                        }
+                    }
+                }
+#endif
+
+                if ( eraseForWinUIBackdrop )
+                {
+                    // Fill the client with black so that, combined with the
+                    // DWM system backdrop and a frame extended over the whole
+                    // client area, the zero-alpha background reveals the
+                    // material. Respect the same background ownership as
+                    // HandleEraseBkgnd(): a paint-owned/transparent surface
+                    // must not lose its RGB/alpha to a standalone erase after
+                    // its paint handler has completed (e.g. during resize).
+                    //
+                    // This also holds for a window given a background colour
+                    // of its own: the material is kept, and the text drawn on
+                    // it is recoloured where that colour would have been
+                    // needed to read it (see
+                    // wxWinUIAdaptTextColourOverBackdrop()).
+                    HDC hdc = (HDC)wParam;
+                    RECT rcBackdrop;
+                    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT &&
+                         GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT &&
+                         hdc && ::GetClientRect(GetHwnd(), &rcBackdrop) )
+                    {
+                        ::FillRect(hdc, &rcBackdrop,
+                                   (HBRUSH)::GetStockObject(BLACK_BRUSH));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                        wxWinUIEraseOnSurface(this, hdc, rcBackdrop);
+#endif
+                    }
+                    processed = true;
+                }
                 else
-#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                {
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                    // check if an override was configured for this window
+                    EraseBgHooks::const_iterator it = gs_eraseBgHooks.find(this);
+                    if ( it != gs_eraseBgHooks.end() )
+                        processed = it->second->MSWEraseBgHook((WXHDC)wParam);
+                    else
+                        processed = HandleEraseBkgnd((WXHDC)wParam);
+#else
                     processed = HandleEraseBkgnd((WXHDC)wParam);
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                }
             }
 
             if ( processed )
@@ -3789,17 +6069,56 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-#if wxUSE_ACCESSIBILITY
+#if wxUSE_ACCESSIBILITY || (defined(__WXWINUI__) && wxUSE_WINUI3)
         case WM_GETOBJECT:
             {
-                //WPARAM dwFlags = (WPARAM) (DWORD) wParam;
-                DWORD dwObjId = lParam;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                const bool isWinUIShell =
+                    wxWinUITLWHostIsInvisibleAccessibilityShell(this);
+#else
+                const bool isWinUIShell = false;
+#endif
 
-                if (dwObjId == (DWORD)OBJID_CLIENT && GetOrCreateAccessible())
+#if wxUSE_ACCESSIBILITY
+                // Call the virtual factory before suppressing anything:
+                // controls with a lazily-created custom wxAccessible remain
+                // authoritative even when their visual peer is slotted.
+                wxAccessible *accessible =
+                    isWinUIShell ? GetOrCreateAccessible() : nullptr;
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#if wxUSE_ACCESSIBILITY
+                const bool hasWxAccessible = accessible != nullptr;
+#else
+                const bool hasWxAccessible = false;
+#endif
+                if ( isWinUIShell &&
+                     wxWinUITLWHostHandleShellGetObject(
+                         this, wParam, lParam,
+                         hasWxAccessible, &rc.result) )
                 {
                     processed = true;
-                    rc.result = LresultFromObject(IID_IAccessible, wParam, (IUnknown*) GetAccessible()->GetIAccessible());
+                    break;
                 }
+#endif
+
+#if wxUSE_ACCESSIBILITY
+                const LONG objectId = static_cast<LONG>(lParam);
+                if ( objectId == static_cast<LONG>(OBJID_CLIENT) )
+                {
+                    if ( !accessible )
+                        accessible = GetOrCreateAccessible();
+                    if ( accessible )
+                    {
+                        processed = true;
+                        rc.result = LresultFromObject(
+                            IID_IAccessible,
+                            wParam,
+                            (IUnknown*) accessible->GetIAccessible());
+                    }
+                }
+#endif
                 break;
             }
 #endif
@@ -3889,6 +6208,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     win = this;
 
                 processed = win->WXSendContextMenuEvent(pt);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                ++gs_winuiContextMenuSerial;
+                gs_winuiContextMenuProcessed = processed;
+#endif
 
                 if ( !processed )
                 {
@@ -3954,7 +6277,64 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_NCACTIVATE:
+        {
 #if wxUSE_POPUPWIN
+            const bool retainPopupActivation = !wParam &&
+                wxCurrentPopupWindow &&
+                wxCurrentPopupWindow->MSWGetOwner() == this;
+#else
+            const bool retainPopupActivation = false;
+#endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // A dialog shown over this window is part of it for the user:
+            // its title bar does not go grey.
+            const bool retainCardActivation =
+                !wParam && wxWinUIDialogCardKeepsOwnerActive(this);
+#else
+            const bool retainCardActivation = false;
+#endif
+            const WXWPARAM activation =
+                retainPopupActivation || retainCardActivation ? TRUE : wParam;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( !::IsIconic(GetHwnd()) &&
+                 wxWinUIWindowScrollbarsProjected(GetHwnd()) )
+            {
+                const wxWeakRef<wxWindow> alive(this);
+                const WXHWND hwnd = GetHWND();
+                const auto generation = wxWinUIMSWGetHwndGeneration(this, hwnd);
+                // DefWindowProc(WM_NCACTIVATE) draws USER32 scrollbars directly,
+                // without passing through WM_NCPAINT. Preserve its activation
+                // state/result but suppress that drawing with the documented
+                // -1 lParam. Some themed USER32 versions still draw the
+                // scrollbar even with -1, so close that native drawing
+                // transaction synchronously below, before returning.
+                rc.result = MSWDefWindowProc(message, activation, -1);
+                processed = true;
+                if ( alive.get() == this &&
+                     !IsBeingDeleted() && GetHWND() == hwnd && generation &&
+                     wxWinUIMSWGetHwndGeneration(this, hwnd) == generation )
+                {
+                    if ( lParam == -1 )
+                    {
+                        // The caller suppressed NC repaint. Clean only the
+                        // already projected bands; do not synthesize a paint
+                        // message or redraw any other frame/client pixels.
+                        AutoHRGN filtered = static_cast<HRGN>(
+                            wxWinUIWindowScrollbarPaintRegion(
+                                static_cast<wxWindow*>(this),
+                                reinterpret_cast<WXHANDLE>(1)));
+                        wxUnusedVar(filtered);
+                    }
+                    else
+                    {
+                        // No client invalidation or style mutation. The normal
+                        // NC handler paints any unprojected border/track.
+                        MSWWindowProc(WM_NCPAINT, 1, 0);
+                    }
+                }
+                break;
+            }
+#endif
             // When we're losing activation to our own popup window, we want to
             // retain the "active" appearance of the title bar, as dropping
             // down a combobox popup shouldn't deactivate the window containing
@@ -3962,14 +6342,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // draw the window as active seems to be the only way of achieving
             // this (thanks to Barmak Shemirani for suggesting it at
             // https://stackoverflow.com/a/52808753/15275).
-            if ( !wParam &&
-                    wxCurrentPopupWindow &&
-                        wxCurrentPopupWindow->MSWGetOwner() == this )
+            if ( retainPopupActivation )
             {
-                rc.result = MSWDefWindowProc(message, TRUE, lParam);
+                rc.result = MSWDefWindowProc(message, activation, lParam);
                 processed = true;
             }
-#endif
 
 #ifndef __WXUNIVERSAL__
             // If top level window, paint the scroll bar corner. We need this
@@ -3987,10 +6364,29 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
 #endif
             break;
+        }
 
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // A child window whose scrollbars are shown by WinUI reserves
+                // no room for USER32's own: the two bands stay part of the
+                // client area and the XAML scrollbar is drawn over its edge,
+                // like a ScrollViewer does. USER32 keeps the scroll model and
+                // the WS_HSCROLL/WS_VSCROLL styles, so Win32 code reading
+                // them still works, but it has nowhere left to draw a bar:
+                // the classic scrollbar can no longer show through, however
+                // briefly, during a resize.
+                RECT * const winuiClient = wParam
+                    ? &((NCCALCSIZE_PARAMS *)lParam)->rgrc[0]
+                    : (RECT *)lParam;
+                const RECT winuiWindowRect = *winuiClient;
+                const bool winuiOverlayScrollbars =
+                    !IsTopLevel() &&
+                    ::GetPropW(GetHwnd(),
+                               L"wxWinUI.ManagedWindowScrollbars") != nullptr;
+#endif
                 // The default handling for this message is proper for all
                 // border styles except wxBORDER_THEME.
                 if (DoTranslateBorder(GetBorder()) == wxBORDER_THEME)
@@ -4015,11 +6411,61 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     const auto thickness = MSWGetBorderThickness();
                     InflateRect(rect, -thickness, -thickness);
                 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                if ( winuiOverlayScrollbars )
+                {
+                    if ( !processed )
+                    {
+                        rc.result = MSWDefWindowProc(message, wParam, lParam);
+                        processed = true;
+                    }
+
+                    const LONG style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+                    if ( style & (WS_VSCROLL | WS_HSCROLL) )
+                    {
+                        // The client area this window would have without
+                        // scrollbars: the window minus its borders.
+                        RECT borders = { 0, 0, 0, 0 };
+                        ::AdjustWindowRectEx(
+                            &borders, style & ~(WS_VSCROLL | WS_HSCROLL),
+                            FALSE, ::GetWindowLong(GetHwnd(), GWL_EXSTYLE));
+                        RECT full = winuiWindowRect;
+                        full.left -= borders.left;
+                        full.top -= borders.top;
+                        full.right -= borders.right;
+                        full.bottom -= borders.bottom;
+                        if ( DoTranslateBorder(GetBorder()) == wxBORDER_THEME )
+                        {
+                            const auto thickness = MSWGetBorderThickness();
+                            ::InflateRect(&full, -thickness, -thickness);
+                        }
+
+                        if ( style & WS_VSCROLL )
+                        {
+                            winuiClient->left = full.left;
+                            winuiClient->right = full.right;
+                        }
+                        if ( style & WS_HSCROLL )
+                            winuiClient->bottom = full.bottom;
+                    }
+                }
+#endif
             }
             break;
 
         case WM_NCPAINT:
             {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                const auto paintNativeFrame = [&](WXWPARAM region)
+                {
+                    AutoHRGN filtered = static_cast<HRGN>(wxWinUIWindowScrollbarPaintRegion(
+                        static_cast<wxWindow*>(this), reinterpret_cast<WXHANDLE>(region)));
+                    return MSWDefWindowProc(message,
+                        filtered ? reinterpret_cast<WXWPARAM>(static_cast<HRGN>(filtered)) : region,
+                        lParam);
+                };
+#endif
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
                 wxBorder rawBorder = GetBorder();
@@ -4052,6 +6498,25 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         break;
                 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // The HWND of a window which paints through a surface shows
+                // nothing, and its border is no exception: XAML draws it.
+                // What USER32 would paint of it (the relief of a sunken
+                // border, in the colours of the light theme) is kept out,
+                // like what is drawn here for a themed one.
+                if ( wxWinUIWindowFrameSync(static_cast<wxWindow *>(this)) )
+                {
+                    RECT rcInside;
+                    ::GetWindowRect(m_hWnd, &rcInside);
+                    const auto thickness = MSWGetBorderThickness();
+                    ::InflateRect(&rcInside, -thickness, -thickness);
+                    AutoHRGN inside = ::CreateRectRgnIndirect(&rcInside);
+                    rc.result = paintNativeFrame((WXWPARAM)(HRGN)inside);
+                    processed = true;
+                    drawBorder = false;
+                }
+#endif
+
                 if ( drawBorder )
                 {
                     // Have the window draw its scrollbars, if any. To avoid flicker,
@@ -4063,7 +6528,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     const auto thickness = MSWGetBorderThickness();
                     ::InflateRect(&rcClip, -thickness, -thickness);
                     AutoHRGN cliprgn = ::CreateRectRgnIndirect(&rcClip);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                    rc.result = paintNativeFrame((WXWPARAM)(HRGN)cliprgn);
+#else
                     rc.result = MSWDefWindowProc(message, (WXWPARAM)(HRGN)cliprgn, lParam);
+#endif
                     processed = true;
 
                     wxWindowDC dc((wxWindow *)this);
@@ -4102,14 +6571,28 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         // MSWDefWindowProc() may have been already called above.
                         if ( !processed )
                         {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                            rc.result = paintNativeFrame(wParam);
+#else
                             rc.result = MSWDefWindowProc(message, wParam, lParam);
+#endif
                             processed = true;
                         }
 
-                        wxMSWImpl::PaintScrollBarCorner(this);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                        if ( !wxWinUIWindowScrollbarsProjected(GetHwnd(), wxBOTH) )
+#endif
+                            wxMSWImpl::PaintScrollBarCorner(this);
                     }
                 }
 #endif // !__WXUNIVERSAL__
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                if ( !processed && wxWinUIWindowScrollbarsProjected(GetHwnd()) )
+                {
+                    rc.result = paintNativeFrame(wParam);
+                    processed = true;
+                }
+#endif
             }
             break;
 
@@ -4170,6 +6653,24 @@ void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
 
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // USER32 can draw a scrollbar while changing window geometry, without a
+    // WM_NCPAINT boundary. Keep the already-published paint owner through this
+    // transaction, even though its XAML geometry is updated asynchronously.
+    // The final cleanup below re-reads the live native bands, not old screen
+    // rectangles which may have become client content after a move/resize.
+    const bool scrollbarGeometryChange =
+        (message == WM_SIZE || message == WM_MOVE ||
+         message == WM_WINDOWPOSCHANGED) &&
+        !::IsIconic(GetHwnd()) &&
+        wxWinUIWindowScrollbarsProjected(GetHwnd());
+    const wxWeakRef<wxWindow> scrollbarOwner(
+        scrollbarGeometryChange ? static_cast<wxWindow*>(this) : nullptr);
+    const WXHWND scrollbarHwnd = scrollbarGeometryChange ? GetHWND() : nullptr;
+    const auto scrollbarGeneration = scrollbarGeometryChange
+        ? wxWinUIMSWGetHwndGeneration(this, scrollbarHwnd) : 0;
+#endif
+
     WXLRESULT result;
     if ( !MSWHandleMessage(&result, message, wParam, lParam) )
     {
@@ -4179,6 +6680,20 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #endif // wxDEBUG_LEVEL >= 2
         result = MSWDefWindowProc(message, wParam, lParam);
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( scrollbarGeometryChange && scrollbarOwner.get() == this &&
+         !IsBeingDeleted() && GetHWND() == scrollbarHwnd && scrollbarGeneration &&
+         wxWinUIMSWGetHwndGeneration(this, scrollbarHwnd) == scrollbarGeneration )
+    {
+        // No client invalidation, forced layout, style change or synthetic
+        // frame paint. Retirement/reparenting/hidden bands fail closed in the
+        // projection helper, which validates the committed HWND incarnation.
+        AutoHRGN filtered = static_cast<HRGN>(wxWinUIWindowScrollbarPaintRegion(
+            static_cast<wxWindow*>(this), reinterpret_cast<WXHANDLE>(1)));
+        wxUnusedVar(filtered);
+    }
+#endif
 
     return result;
 }
@@ -4219,13 +6734,748 @@ void wxAssociateWinWithHandle(HWND hwnd, wxWindowMSW *win)
     }
 #endif // wxDEBUG_LEVEL
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const WindowHandles::const_iterator existing = gs_windowHandles.find(hwnd);
+    const bool isNewAssociation =
+        existing == gs_windowHandles.end() || existing->second != win;
+    if ( isNewAssociation ||
+         gs_windowHandleGenerations.find(hwnd) ==
+            gs_windowHandleGenerations.end() )
+    {
+        // Zero is reserved for "not this association".
+        if ( ++gs_nextWindowHandleGeneration == 0 )
+            ++gs_nextWindowHandleGeneration;
+        gs_windowHandleGenerations[hwnd] =
+            gs_nextWindowHandleGeneration;
+    }
+#endif
+
     gs_windowHandles[hwnd] = (wxWindow *)win;
 }
 
 void wxRemoveHandleAssociation(wxWindowMSW *win)
 {
-    gs_windowHandles.erase(GetHwndOf(win));
+    const HWND hwnd = GetHwndOf(win);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const WindowHandles::const_iterator existing = gs_windowHandles.find(hwnd);
+    if ( existing != gs_windowHandles.end() && existing->second == win )
+        gs_windowHandleGenerations.erase(hwnd);
+#endif
+    gs_windowHandles.erase(hwnd);
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+unsigned long long
+wxWinUIMSWGetHwndGeneration(wxWindow *window, WXHWND handle)
+{
+    const HWND hwnd = reinterpret_cast<HWND>(handle);
+    if ( !window || !hwnd )
+        return 0;
+
+    const WindowHandles::const_iterator association =
+        gs_windowHandles.find(hwnd);
+    if ( association == gs_windowHandles.end() ||
+         association->second != window )
+    {
+        return 0;
+    }
+
+    const WindowHandleGenerations::const_iterator generation =
+        gs_windowHandleGenerations.find(hwnd);
+    return generation == gs_windowHandleGenerations.end()
+        ? 0
+        : generation->second;
+}
+
+unsigned long long
+wxWinUIMSWGetNativeHwndGeneration(WXHWND handle)
+{
+    const HWND hwnd = reinterpret_cast<HWND>(handle);
+    if ( !hwnd || !::IsWindow(hwnd) )
+        return 0;
+
+    ULONG_PTR generation = reinterpret_cast<ULONG_PTR>(
+        ::GetPropW(hwnd, wxWINUI_NATIVE_HWND_GENERATION_PROP));
+    if ( generation )
+        return static_cast<unsigned long long>(generation);
+
+    // Zero is reserved for "not a live identity". ULONG_PTR is sufficient:
+    // wrapping would require exhausting the process address-sized counter
+    // during a single process lifetime, and zero is explicitly skipped.
+    if ( ++gs_nextNativeHwndGeneration == 0 )
+        ++gs_nextNativeHwndGeneration;
+    generation = gs_nextNativeHwndGeneration;
+
+    if ( !::SetPropW(hwnd, wxWINUI_NATIVE_HWND_GENERATION_PROP,
+                     reinterpret_cast<HANDLE>(generation)) )
+    {
+        return 0;
+    }
+
+    // Verify after the API boundary: instrumentation/subclass code may have
+    // destroyed the window synchronously.
+    if ( !::IsWindow(hwnd) ||
+         reinterpret_cast<ULONG_PTR>(
+             ::GetPropW(hwnd, wxWINUI_NATIVE_HWND_GENERATION_PROP)) !=
+             generation )
+    {
+        return 0;
+    }
+
+    return static_cast<unsigned long long>(generation);
+}
+
+namespace
+{
+
+unsigned long long
+wxWinUIOwnerGetGenerationNative(void *, WXHWND hwnd)
+{
+    return wxWinUIMSWGetNativeHwndGeneration(hwnd);
+}
+
+bool wxWinUIOwnerIsWindowNative(void *, WXHWND hwnd)
+{
+    return ::IsWindow(reinterpret_cast<HWND>(hwnd)) != FALSE;
+}
+
+bool
+wxWinUIOwnerGetNative(void *, WXHWND hwndArg, WXHWND *ownerOut)
+{
+    if ( !ownerOut )
+        return false;
+
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    if ( !::IsWindow(hwnd) )
+        return false;
+
+    ::SetLastError(ERROR_SUCCESS);
+    const LONG_PTR owner = ::GetWindowLongPtr(hwnd, GWLP_HWNDPARENT);
+    if ( !owner && ::GetLastError() != ERROR_SUCCESS )
+        return false;
+
+    *ownerOut = reinterpret_cast<WXHWND>(owner);
+    return ::IsWindow(hwnd) != FALSE;
+}
+
+bool
+wxWinUIOwnerSetNative(void *,
+                      WXHWND hwndArg,
+                      WXHWND ownerArg,
+                      WXHWND *previousOut)
+{
+    if ( !previousOut )
+        return false;
+
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    const HWND owner = reinterpret_cast<HWND>(ownerArg);
+    if ( !::IsWindow(hwnd) )
+        return false;
+
+    ::SetLastError(ERROR_SUCCESS);
+    const LONG_PTR previous = ::SetWindowLongPtr(
+        hwnd, GWLP_HWNDPARENT, reinterpret_cast<LONG_PTR>(owner));
+    const DWORD error = ::GetLastError();
+    *previousOut = reinterpret_cast<WXHWND>(previous);
+    if ( !previous && error != ERROR_SUCCESS )
+        return false;
+
+    WXHWND observed = nullptr;
+    return wxWinUIOwnerGetNative(nullptr, hwndArg, &observed) &&
+           observed == ownerArg;
+}
+
+bool
+wxWinUIOwnerSetMarkerNative(void *,
+                            WXHWND hwndArg,
+                            WXHWND ownerArg)
+{
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    const HWND owner = reinterpret_cast<HWND>(ownerArg);
+    return hwnd && owner &&
+           ::SetPropW(hwnd, wxWINUI_STASHED_OWNER_PROP, owner) &&
+           ::GetPropW(hwnd, wxWINUI_STASHED_OWNER_PROP) == owner;
+}
+
+bool
+wxWinUIOwnerGetMarkerNative(void *,
+                            WXHWND hwndArg,
+                            WXHWND *ownerOut)
+{
+    if ( !ownerOut )
+        return false;
+
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    if ( !::IsWindow(hwnd) )
+        return false;
+
+    *ownerOut = reinterpret_cast<WXHWND>(
+        ::GetPropW(hwnd, wxWINUI_STASHED_OWNER_PROP));
+    return ::IsWindow(hwnd) != FALSE;
+}
+
+bool wxWinUIOwnerClearMarkerNative(void *, WXHWND hwndArg)
+{
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    if ( !::IsWindow(hwnd) )
+        return false;
+
+    ::RemovePropW(hwnd, wxWINUI_STASHED_OWNER_PROP);
+    return ::IsWindow(hwnd) &&
+           !::GetPropW(hwnd, wxWINUI_STASHED_OWNER_PROP);
+}
+
+const wxWinUIOwnerNativeOps& wxWinUIGetOwnerOps()
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    if ( gs_hasWinUIOwnerTestOps )
+        return gs_winuiOwnerTestOps;
+#endif // WXWINUI_TEST_SUPPORT
+
+    static const wxWinUIOwnerNativeOps operations =
+    {
+        nullptr,
+        wxWinUIOwnerGetGenerationNative,
+        wxWinUIOwnerIsWindowNative,
+        wxWinUIOwnerGetNative,
+        wxWinUIOwnerSetNative,
+        wxWinUIOwnerSetMarkerNative,
+        wxWinUIOwnerGetMarkerNative,
+        wxWinUIOwnerClearMarkerNative
+    };
+    return operations;
+}
+
+bool wxWinUIOwnerOpsAreComplete(const wxWinUIOwnerNativeOps& operations)
+{
+    return operations.getGeneration && operations.isWindow &&
+           operations.getOwner && operations.setOwner &&
+           operations.setOwnerMarker && operations.getOwnerMarker &&
+           operations.clearOwnerMarker;
+}
+
+bool
+wxWinUIOwnerIdentityIsCurrent(const wxWinUIOwnerNativeOps& operations,
+                              HWND hwnd,
+                              unsigned long long generation)
+{
+    return generation != 0 &&
+           operations.isWindow(operations.context, hwnd) &&
+           operations.getGeneration(operations.context, hwnd) == generation;
+}
+
+void
+wxWinUIEraseOwnerTransaction(HWND hwnd, unsigned long long epoch)
+{
+    const wxWinUIOwnerTransactions::const_iterator transaction =
+        gs_winuiOwnerTransactions.find(hwnd);
+    if ( transaction != gs_winuiOwnerTransactions.end() &&
+         transaction->second.epoch == epoch )
+    {
+        gs_winuiOwnerTransactions.erase(transaction);
+    }
+}
+
+} // anonymous namespace
+
+bool wxWinUITransientOwnerActivation(WXHWND hwndArg, bool active)
+{
+    const wxWinUIOwnerNativeOps& operations = wxWinUIGetOwnerOps();
+    if ( !wxWinUIOwnerOpsAreComplete(operations) )
+        return false;
+
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    const unsigned long long generation =
+        operations.getGeneration(operations.context, hwndArg);
+    if ( !hwnd || !generation ||
+         !operations.isWindow(operations.context, hwndArg) )
+    {
+        return false;
+    }
+
+    wxWinUIOwnerTransactions::iterator existing =
+        gs_winuiOwnerTransactions.find(hwnd);
+    if ( existing != gs_winuiOwnerTransactions.end() &&
+         existing->second.generation != generation )
+    {
+        // A recycled numeric handle must never inherit the old transaction or
+        // cause us to remove properties from the new native window.
+        gs_winuiOwnerTransactions.erase(existing);
+        existing = gs_winuiOwnerTransactions.end();
+    }
+
+    if ( active )
+    {
+        // Detaching/Restoring are published before their USER32 boundary, so
+        // a nested WM_ACTIVATE cannot start a second transaction.
+        if ( existing != gs_winuiOwnerTransactions.end() )
+            return false;
+
+        WXHWND staleMarker = nullptr;
+        if ( !operations.getOwnerMarker(
+                 operations.context, hwndArg, &staleMarker) )
+        {
+            return false;
+        }
+        if ( staleMarker &&
+             !operations.clearOwnerMarker(operations.context, hwndArg) )
+        {
+            return false;
+        }
+
+        WXHWND ownerArg = nullptr;
+        if ( !operations.getOwner(operations.context, hwndArg, &ownerArg) ||
+             !ownerArg )
+        {
+            return false;
+        }
+
+        const unsigned long long ownerGeneration =
+            operations.getGeneration(operations.context, ownerArg);
+        if ( !ownerGeneration ||
+             !operations.isWindow(operations.context, ownerArg) )
+        {
+            return false;
+        }
+
+        if ( ++gs_nextWinUIOwnerEpoch == 0 )
+            ++gs_nextWinUIOwnerEpoch;
+
+        wxWinUIOwnerTransaction transaction;
+        transaction.generation = generation;
+        transaction.originalOwner = reinterpret_cast<HWND>(ownerArg);
+        transaction.originalOwnerGeneration = ownerGeneration;
+        transaction.epoch = gs_nextWinUIOwnerEpoch;
+        transaction.phase = wxWinUIOwnerPhase::Detaching;
+        const unsigned long long epoch = transaction.epoch;
+        gs_winuiOwnerTransactions[hwnd] = transaction;
+
+        const auto failDetach =
+            [&operations, hwnd, hwndArg, generation, epoch, ownerArg]()
+                -> bool
+            {
+                const wxWinUIOwnerTransactions::iterator currentTransaction =
+                    gs_winuiOwnerTransactions.find(hwnd);
+                if ( currentTransaction == gs_winuiOwnerTransactions.end() ||
+                     currentTransaction->second.epoch != epoch ||
+                     currentTransaction->second.generation != generation )
+                {
+                    return false;
+                }
+
+                if ( !wxWinUIOwnerIdentityIsCurrent(
+                         operations, hwnd, generation) )
+                {
+                    // Same numeric handle, different native lifetime: discard
+                    // bookkeeping only and never touch the replacement.
+                    gs_winuiOwnerTransactions.erase(currentTransaction);
+                    return false;
+                }
+
+                currentTransaction->second.phase =
+                    wxWinUIOwnerPhase::Restoring;
+
+                // Roll back only the null owner installed by this exact
+                // attempt. A nested/external owner always wins.
+                WXHWND observed = nullptr;
+                if ( !operations.getOwner(
+                         operations.context, hwndArg, &observed) )
+                {
+                    currentTransaction->second.phase =
+                        wxWinUIOwnerPhase::Detached;
+                    return true;
+                }
+
+                if ( !observed )
+                {
+                    if ( operations.isWindow(
+                             operations.context, ownerArg) &&
+                         operations.getGeneration(
+                             operations.context, ownerArg) ==
+                            currentTransaction->second
+                                .originalOwnerGeneration )
+                    {
+                        WXHWND previous = nullptr;
+                        (void)operations.setOwner(
+                            operations.context,
+                            hwndArg,
+                            ownerArg,
+                            &previous);
+                    }
+
+                    const wxWinUIOwnerTransactions::iterator afterRollback =
+                        gs_winuiOwnerTransactions.find(hwnd);
+                    if ( afterRollback == gs_winuiOwnerTransactions.end() ||
+                         afterRollback->second.epoch != epoch )
+                    {
+                        return false;
+                    }
+
+                    WXHWND afterOwner = nullptr;
+                    if ( wxWinUIOwnerIdentityIsCurrent(
+                             operations, hwnd, generation) &&
+                         operations.getOwner(
+                             operations.context,
+                             hwndArg,
+                             &afterOwner) &&
+                         !afterOwner )
+                    {
+                        // USER32 left the link detached and even the rollback
+                        // failed. Preserve a truthful Detached transaction so
+                        // the next inactive/minimize/destroy path gets the
+                        // single remaining restore opportunity.
+                        afterRollback->second.phase =
+                            wxWinUIOwnerPhase::Detached;
+                        return true;
+                    }
+                }
+
+                const wxWinUIOwnerTransactions::const_iterator afterRestore =
+                    gs_winuiOwnerTransactions.find(hwnd);
+                if ( afterRestore != gs_winuiOwnerTransactions.end() &&
+                     afterRestore->second.epoch == epoch )
+                {
+                    if ( wxWinUIOwnerIdentityIsCurrent(
+                             operations, hwnd, generation) )
+                    {
+                        (void)operations.clearOwnerMarker(
+                            operations.context, hwndArg);
+                    }
+                    wxWinUIEraseOwnerTransaction(hwnd, epoch);
+                }
+                return false;
+            };
+
+        if ( !operations.setOwnerMarker(
+                 operations.context, hwndArg, ownerArg) )
+        {
+            return failDetach();
+        }
+
+        WXHWND marker = nullptr;
+        WXHWND observedOwner = nullptr;
+        if ( !wxWinUIOwnerIdentityIsCurrent(
+                 operations, hwnd, generation) ||
+             !operations.getOwnerMarker(
+                 operations.context, hwndArg, &marker) ||
+             marker != ownerArg ||
+             !operations.getOwner(
+                 operations.context, hwndArg, &observedOwner) ||
+             observedOwner != ownerArg )
+        {
+            return failDetach();
+        }
+
+        WXHWND previousOwner = nullptr;
+        const bool detached = operations.setOwner(
+            operations.context, hwndArg, nullptr, &previousOwner);
+
+        observedOwner = reinterpret_cast<WXHWND>(1);
+        const wxWinUIOwnerTransactions::iterator afterCall =
+            gs_winuiOwnerTransactions.find(hwnd);
+        if ( !detached || previousOwner != ownerArg ||
+             afterCall == gs_winuiOwnerTransactions.end() ||
+             afterCall->second.epoch != epoch ||
+             !wxWinUIOwnerIdentityIsCurrent(
+                 operations, hwnd, generation) ||
+             !operations.getOwner(
+                 operations.context, hwndArg, &observedOwner) ||
+             observedOwner )
+        {
+            return failDetach();
+        }
+
+        afterCall->second.phase = wxWinUIOwnerPhase::Detached;
+        return true;
+    }
+
+    if ( existing == gs_winuiOwnerTransactions.end() ||
+         existing->second.phase != wxWinUIOwnerPhase::Detached )
+    {
+        return false;
+    }
+
+    // Publish Restoring before any native operation. The transaction remains
+    // visible to nested activation callbacks but can no longer be consumed a
+    // second time.
+    existing->second.phase = wxWinUIOwnerPhase::Restoring;
+    const wxWinUIOwnerTransaction transaction = existing->second;
+
+    const bool markerCleared =
+        operations.clearOwnerMarker(operations.context, hwndArg);
+
+    bool restored = false;
+    bool retryRestore = false;
+    WXHWND currentOwner = nullptr;
+    if ( wxWinUIOwnerIdentityIsCurrent(
+             operations, hwnd, transaction.generation) &&
+         operations.getOwner(
+             operations.context, hwndArg, &currentOwner) &&
+         !currentOwner &&
+         operations.isWindow(
+             operations.context, transaction.originalOwner) &&
+         operations.getGeneration(
+             operations.context, transaction.originalOwner) ==
+                transaction.originalOwnerGeneration )
+    {
+        WXHWND previousOwner = reinterpret_cast<WXHWND>(1);
+        const bool callSucceeded = operations.setOwner(
+            operations.context,
+            hwndArg,
+            transaction.originalOwner,
+            &previousOwner);
+
+        const wxWinUIOwnerTransactions::iterator afterCall =
+            gs_winuiOwnerTransactions.find(hwnd);
+        if ( afterCall == gs_winuiOwnerTransactions.end() ||
+             afterCall->second.epoch != transaction.epoch ||
+             afterCall->second.generation != transaction.generation )
+        {
+            // A nested destroy/replacement consumed this epoch. Never touch
+            // whatever transaction may now own the numeric HWND.
+            return false;
+        }
+
+        WXHWND observedOwner = nullptr;
+        if ( wxWinUIOwnerIdentityIsCurrent(
+                 operations, hwnd, transaction.generation) &&
+             operations.getOwner(
+                 operations.context, hwndArg, &observedOwner) )
+        {
+            // USER32 state is authoritative even if the native wrapper
+            // reported an ambiguous failure after changing the owner.
+            restored = observedOwner == transaction.originalOwner;
+
+            if ( !restored && !observedOwner &&
+                 operations.isWindow(
+                     operations.context, transaction.originalOwner) &&
+                 operations.getGeneration(
+                     operations.context, transaction.originalOwner) ==
+                        transaction.originalOwnerGeneration )
+            {
+                // The restore did not happen, but both identities and the
+                // detached state are still exact. Keep one truthful retry
+                // opportunity instead of permanently orphaning the dialog.
+                retryRestore = true;
+            }
+        }
+
+        wxUnusedVar(callSucceeded);
+        wxUnusedVar(previousOwner);
+    }
+
+    if ( retryRestore )
+    {
+        const wxWinUIOwnerTransactions::iterator retry =
+            gs_winuiOwnerTransactions.find(hwnd);
+        if ( retry != gs_winuiOwnerTransactions.end() &&
+             retry->second.epoch == transaction.epoch &&
+             retry->second.generation == transaction.generation )
+        {
+            retry->second.phase = wxWinUIOwnerPhase::Detached;
+            if ( markerCleared &&
+                 !operations.setOwnerMarker(
+                     operations.context,
+                     hwndArg,
+                     transaction.originalOwner) )
+            {
+                wxLogTrace(
+                    "winui",
+                    "Failed to restore WinUI transient owner marker for %p",
+                    hwnd);
+            }
+        }
+        return false;
+    }
+
+    // Consume only a completed restore or a terminal state (external owner,
+    // stale identity, unreadable state). Repeated inactive notifications
+    // must never overwrite a newer external owner.
+    wxWinUIEraseOwnerTransaction(hwnd, transaction.epoch);
+    if ( !markerCleared )
+    {
+        wxLogTrace("winui",
+                   "Failed to clear WinUI transient owner marker for %p",
+                   hwnd);
+    }
+    return restored;
+}
+
+void wxWinUITransientWindowDestroyed(WXHWND hwndArg)
+{
+    const wxWinUIOwnerNativeOps& operations = wxWinUIGetOwnerOps();
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    const wxWinUIOwnerTransactions::const_iterator transaction =
+        gs_winuiOwnerTransactions.find(hwnd);
+    if ( transaction != gs_winuiOwnerTransactions.end() )
+    {
+        const unsigned long long epoch = transaction->second.epoch;
+        if ( wxWinUIOwnerOpsAreComplete(operations) &&
+             wxWinUIOwnerIdentityIsCurrent(
+                 operations, hwnd, transaction->second.generation) )
+        {
+            // Destruction consumes the owner transaction. Restoring an owner
+            // on a dying HWND can regroup an unrelated nested transient.
+            (void)operations.clearOwnerMarker(
+                operations.context, hwndArg);
+        }
+        wxWinUIEraseOwnerTransaction(hwnd, epoch);
+    }
+}
+
+void
+wxWinUITransientOwnerRestoreDependents(WXHWND ownerArg, bool primeNow)
+{
+    const wxWinUIOwnerNativeOps& operations = wxWinUIGetOwnerOps();
+    if ( !wxWinUIOwnerOpsAreComplete(operations) )
+        return;
+
+    const unsigned long long ownerGeneration =
+        operations.getGeneration(operations.context, ownerArg);
+    if ( !ownerGeneration ||
+         !operations.isWindow(operations.context, ownerArg) )
+    {
+        return;
+    }
+
+    // Snapshot one owner level at a time because each restore erases its own
+    // entry and SetWindowLongPtr may dispatch nested activation/destruction.
+    // A nested detached dialog is itself an owner, so walk the full transient
+    // tree before minimize/hide tears down grouping.
+    std::vector<HWND> ownerFrontier;
+    ownerFrontier.push_back(reinterpret_cast<HWND>(ownerArg));
+    for ( std::size_t ownerIndex = 0;
+          ownerIndex < ownerFrontier.size();
+          ++ownerIndex )
+    {
+        const HWND currentOwner = ownerFrontier[ownerIndex];
+        const unsigned long long currentOwnerGeneration =
+            operations.getGeneration(operations.context, currentOwner);
+        if ( !currentOwnerGeneration ||
+             !operations.isWindow(operations.context, currentOwner) )
+        {
+            continue;
+        }
+
+        std::vector<HWND> dependents;
+        for ( const auto& item : gs_winuiOwnerTransactions )
+        {
+            const wxWinUIOwnerTransaction& transaction = item.second;
+            if ( transaction.phase == wxWinUIOwnerPhase::Detached &&
+                 transaction.originalOwner == currentOwner &&
+                 transaction.originalOwnerGeneration ==
+                    currentOwnerGeneration )
+            {
+                dependents.push_back(item.first);
+            }
+        }
+
+        for ( const HWND dependent : dependents )
+        {
+            if ( std::find(ownerFrontier.begin(),
+                           ownerFrontier.end(),
+                           dependent) == ownerFrontier.end() )
+            {
+                ownerFrontier.push_back(dependent);
+            }
+
+            const bool restored =
+                wxWinUITransientOwnerActivation(dependent, false);
+            if ( restored &&
+#ifdef WXWINUI_TEST_SUPPORT
+                 !gs_hasWinUIOwnerTestOps &&
+#endif // WXWINUI_TEST_SUPPORT
+                 ::IsWindow(dependent) &&
+                 ::GetPropW(dependent, L"wxWinUIBackdropTransparent") )
+            {
+                wxWinUIInvalidateBackdropPrime(dependent);
+                if ( primeNow )
+                    wxWinUIPrimeBackdrop(dependent);
+            }
+        }
+    }
+}
+
+#ifdef WXWINUI_TEST_SUPPORT
+void
+wxWinUIOwnerBackdropTestAccess::SetOwnerNativeOps(
+    const wxWinUIOwnerNativeOps& operations)
+{
+    wxCHECK_RET(wxWinUIOwnerOpsAreComplete(operations),
+                "incomplete WinUI owner operation table");
+
+    // A test seam transition is a hard lifetime boundary. Existing fake
+    // transactions are retired with the old table and cannot leak into the
+    // next model.
+    gs_winuiOwnerTransactions.clear();
+    gs_winuiOwnerTestOps = operations;
+    gs_hasWinUIOwnerTestOps = true;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIOwnerBackdropTestAccess::ResetOwnerNativeOps()
+{
+    gs_winuiOwnerTransactions.clear();
+    gs_winuiOwnerTestOps = wxWinUIOwnerNativeOps();
+    gs_hasWinUIOwnerTestOps = false;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUITransientSnapshot
+wxWinUIOwnerBackdropTestAccess::GetOwnerSnapshot(WXHWND hwndArg)
+{
+    wxWinUITransientSnapshot snapshot;
+    snapshot.transactionCount = gs_winuiOwnerTransactions.size();
+
+    const HWND hwnd = reinterpret_cast<HWND>(hwndArg);
+    const wxWinUIOwnerTransactions::const_iterator transaction =
+        gs_winuiOwnerTransactions.find(hwnd);
+    if ( transaction != gs_winuiOwnerTransactions.end() )
+    {
+        snapshot.inFlight =
+            transaction->second.phase != wxWinUIOwnerPhase::Detached;
+        snapshot.generation = transaction->second.generation;
+        snapshot.epoch = transaction->second.epoch;
+    }
+    return snapshot;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+unsigned long long wxWinUIMSWGetContextMenuSerial(bool *processed)
+{
+    if ( processed )
+        *processed = gs_winuiContextMenuProcessed;
+    return gs_winuiContextMenuSerial;
+}
+
+void wxWinUIMSWBeginSlotMouseDispatch()
+{
+    ++gs_winuiSlotMouseDispatchDepth;
+}
+
+void wxWinUIMSWEndSlotMouseDispatch()
+{
+    if ( gs_winuiSlotMouseDispatchDepth )
+        --gs_winuiSlotMouseDispatchDepth;
+}
+
+void wxWinUIMSWBeginSyntheticMouseDispatch()
+{
+    ++gs_winuiSyntheticMouseDispatchDepth;
+}
+
+void wxWinUIMSWEndSyntheticMouseDispatch()
+{
+    wxASSERT_MSG(gs_winuiSyntheticMouseDispatchDepth != 0,
+                 "unbalanced synthetic WinUI mouse dispatch");
+    if ( gs_winuiSyntheticMouseDispatchDepth )
+        --gs_winuiSyntheticMouseDispatchDepth;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 // ----------------------------------------------------------------------------
 // various MSW speciic class dependent functions
@@ -4302,6 +7552,23 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // controlId is menu handle for the top level windows, so set it to 0
     // unless we're creating a child window
     int controlId = style & WS_CHILD ? GetId() : 0;
+
+    // Publish a pre-Create layout-direction request atomically with HWND
+    // creation. Calling the virtual peer hook here would be too early for
+    // controls whose WinUI implementation is constructed after MSWCreate();
+    // their normal initial content projection reads this native style.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const wxLayoutDirection initialLayoutDirection =
+        MSWResolveRequestedLayoutDirection();
+    if ( initialLayoutDirection == wxLayout_RightToLeft )
+        extendedStyle |= WS_EX_LAYOUTRTL;
+    else
+        extendedStyle &= ~WS_EX_LAYOUTRTL;
+
+    m_winuiDesiredLayoutDirection = initialLayoutDirection;
+    m_winuiProjectedLayoutDirection = initialLayoutDirection;
+    m_winuiLayoutProjectionQuarantined = false;
+#endif
 
     // do create the window
     wxWindowCreationHook hook(this);
@@ -4642,14 +7909,83 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs,
 
 bool wxWindowMSW::HandleDestroy()
 {
+#if wxUSE_DRAG_AND_DROP && wxUSE_OLE
+    // Capture before any WinUI/UIA callback can remove the association or let
+    // USER32 recycle the numeric value.
+    const wxMSWOleShellHwndIdentity retiringShellIdentity =
+        wxMSWOleCaptureShellHwndIdentity(GetHWND());
+#endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Microsoft UIA's server-provider contract requires an explicit null
+    // provider return during WM_DESTROY. Do it before any logical/native
+    // identity below can be detached or made observable as a new generation.
+    wxWinUITLWHostRetireAccessibilityShellProvider(GetHWND());
+
+    // Native shell fallback provenance is tracked for every marked descendant,
+    // not just the TLW application epoch.
+    wxWinUIShellThemeWindowDestroyed(GetHwnd());
+
+    // Retire detached-owner and backdrop-prime epochs while this exact native
+    // identity is still observable. Never restore an owner on a dying HWND.
+    if ( IsTopLevel() )
+    {
+        wxWinUITransientOwnerRestoreDependents(GetHwnd(), false);
+        wxWinUITransientWindowDestroyed(GetHwnd());
+        wxWinUIBackdropWindowDestroyed(GetHwnd());
+    }
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_DRAG_AND_DROP
+    // IsBeingDeleted() makes the aggregate scan ignore this receiver even
+    // while its native HWND still carries WS_EX_ACCEPTFILES.
+    wxWinUITLWHostNotifyDragAcceptFiles(this);
+#endif
+
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
-    if ( m_dropTarget != nullptr )
-    {
-        m_dropTarget->Revoke(m_hWnd);
+    wxMSWDropTargetSlotTransaction terminalDropTargetTransaction(this, true);
+    wxDropTarget* const oldTarget = m_dropTarget;
+    const WXHWND oldHwnd = m_hWnd;
+#if wxUSE_OLE
+    const wxMSWOleDropTargetLease oldLifetime =
+        wxMSWOleAcquireDropTarget(oldTarget);
+#endif
 
-        wxDELETE(m_dropTarget);
+    // Terminal-wins: nested SetDropTarget() calls see an empty slot and are
+    // rejected by the transaction guard instead of replacing the identity
+    // which this stale outer frame would otherwise delete.
+    m_dropTarget = nullptr;
+#if wxUSE_OLE
+    // This exact owner is now terminal. Retire before Unbind/Revoke so an
+    // in-flight operation can only latch retireRequested, never recapture a
+    // recycled HWND later.
+    wxMSWOleRetireShellHwnd(retiringShellIdentity);
+#endif
+    if ( oldTarget )
+    {
+        wxMSWDropTargetRetirement retirement(oldTarget);
+#if wxUSE_OLE
+        wxMSWOleUnbindDropTarget(AsWindow(), oldTarget);
+        if ( oldLifetime.GetIfCurrent() == oldTarget &&
+             wxMSWOleIsShellDropTargetRegistered(oldTarget, oldHwnd) )
+        {
+            oldTarget->Revoke(oldHwnd);
+        }
+        if ( oldLifetime.GetIfCurrent() == oldTarget )
+        {
+            wxMSWOleInvalidateDropTarget(oldTarget);
+            delete oldTarget;
+        }
+#else
+        oldTarget->Revoke(oldHwnd);
+        delete oldTarget;
+#endif
     }
+#if wxUSE_OLE
+    // Consume a tombstone produced by a callback pumped from the ordinary
+    // target cleanup above; the operation is idempotent and generation-bound.
+    wxMSWOleRetireShellHwnd(retiringShellIdentity);
+#endif
 #endif // wxUSE_DRAG_AND_DROP
 
     // WM_DESTROY handled
@@ -4719,6 +8055,124 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
         return false;
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Focus handlers are arbitrary re-entrancy boundaries. Keep both native
+    // associations generation-bound so the post-event island hand-off cannot
+    // touch a destroyed/recreated shell or a stale counterpart.
+    const wxWeakRef<wxWindow> self(this);
+    wxWindow *previousWindow =
+        wxWinUITLWHostResolveFocusCounterpart(hwnd);
+    if ( !previousWindow )
+        previousWindow = wxFindWinFromHandle(hwnd);
+    const wxWeakRef<wxWindow> previous(previousWindow);
+    const unsigned long long previousNativeGeneration =
+        wxWinUIMSWGetNativeHwndGeneration(hwnd);
+    const unsigned long long previousAssociationGeneration =
+        previousWindow
+            ? wxWinUIMSWGetHwndGeneration(previousWindow, hwnd)
+            : 0;
+    const WXHWND shell = GetHWND();
+    const unsigned long long shellGeneration =
+        wxWinUIMSWGetHwndGeneration(this, shell);
+    const auto getLiveSelf = [&]() -> wxWindowMSW *
+    {
+        wxWindowMSW * const live =
+            wxDynamicCast(self.get(), wxWindowMSW);
+        return live && shell && shellGeneration &&
+                       wxWinUIMSWGetHwndGeneration(live, shell) ==
+                           shellGeneration &&
+                       wxFindWinFromHandle(static_cast<HWND>(shell)) == live
+                 ? live
+                 : nullptr;
+    };
+    const auto getExactPrevious = [&]() -> wxWindow *
+    {
+        wxWindow * const live = previous.get();
+        if ( !live )
+            return nullptr;
+        if ( hwnd && previousNativeGeneration &&
+             wxWinUIMSWGetNativeHwndGeneration(hwnd) !=
+                previousNativeGeneration )
+        {
+            return nullptr;
+        }
+        if ( previousAssociationGeneration &&
+             wxWinUIMSWGetHwndGeneration(live, hwnd) !=
+                previousAssociationGeneration )
+        {
+            return nullptr;
+        }
+        return live;
+    };
+    const auto shellStillOwnsFocus = [&](wxWindowMSW *expectedOwner)
+    {
+        const HWND focus = ::GetFocus();
+        const HWND shellHwnd = static_cast<HWND>(shell);
+        return focus && shellHwnd &&
+               (focus == shellHwnd ||
+                wxGetWindowFromHWND(
+                    reinterpret_cast<WXHWND>(focus)) == expectedOwner);
+    };
+
+    wxWindowMSW *live = getLiveSelf();
+    if ( !live || !shellStillOwnsFocus(live) )
+        return false;
+
+    if ( wxWinUITLWHostConsumeMigrationShellFocus(
+             live, shell, shellGeneration) )
+    {
+        return false;
+    }
+
+    live = getLiveSelf();
+    if ( !live || !shellStillOwnsFocus(live) )
+        return false;
+
+    if ( wxWinUITLWHostConsumeNativeFocusRollback(
+             live, shell, shellGeneration) )
+    {
+        return false;
+    }
+
+    live = getLiveSelf();
+    if ( !live || !shellStillOwnsFocus(live) )
+        return false;
+
+    // Notify the parent keeping track of focus for keyboard navigation first.
+    // A CHILD handler may redirect native focus; in that case this
+    // WM_SETFOCUS is obsolete and must not publish a stale SET event.
+    wxChildFocusEvent eventFocus(live);
+    (void)live->HandleWindowEvent(eventFocus);
+    live = getLiveSelf();
+    if ( !live || !shellStillOwnsFocus(live) )
+        return false;
+
+#if wxUSE_CARET
+    // Deal with caret
+    if ( live->m_caret )
+    {
+        live->m_caret->OnSetFocus();
+    }
+#endif // wxUSE_CARET
+
+    live = getLiveSelf();
+    if ( !live || !shellStillOwnsFocus(live) )
+        return false;
+
+    wxFocusEvent event(wxEVT_SET_FOCUS, live->GetId());
+    event.SetEventObject(live);
+    event.SetWindow(getExactPrevious());
+
+    const bool handled = live->HandleWindowEvent(event);
+    live = getLiveSelf();
+    if ( live && shellStillOwnsFocus(live) )
+    {
+        wxWinUITLWHostAfterNativeSetFocus(
+            live, shell, shellGeneration, getExactPrevious());
+    }
+
+    return handled;
+#else
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow *)this);
@@ -4735,10 +8189,21 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);
 
-    // wxFindWinFromHandle() may return nullptr, it is ok
+    // An island bridge has no direct wxWindow association. During a
+    // native-to-slot transfer resolve it to the exact logical target; outside
+    // WinUI this helper is not compiled and the ordinary HWND lookup remains.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWindow *counterpart =
+        wxWinUITLWHostResolveFocusCounterpart(hwnd);
+    if ( !counterpart )
+        counterpart = wxFindWinFromHandle(hwnd);
+    event.SetWindow(counterpart);
+#else
     event.SetWindow(wxFindWinFromHandle(hwnd));
+#endif
 
     return HandleWindowEvent(event);
+#endif
 }
 
 bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
@@ -4750,12 +8215,25 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
         return false;
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Native dialog/navigation may focus a slotted shell HWND and then hand it
+    // to the shared island after its logical SET_FOCUS was delivered. That
+    // implementation-only shell -> island transfer is not a logical loss.
+    if ( wxWinUITLWHostShouldSuppressNativeKillFocus(this, hwnd) )
+        return false;
+#endif
+
     if ( ContainsHWND(hwnd) )
     {
         // If the focus switches to another HWND which is part of the same
         // wxWindow, we must not generate a wxEVT_KILL_FOCUS.
         return false;
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUITLWHostNoteMigrationShellFocusDeparture(this, hwnd) )
+        return false;
+#endif
 
 #if wxUSE_CARET
     // Deal with caret
@@ -4769,7 +8247,15 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
     event.SetEventObject(this);
 
     // wxFindWinFromHandle() may return nullptr, it is ok
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWindow *counterpart =
+        wxWinUITLWHostResolveFocusCounterpart(hwnd);
+    if ( !counterpart )
+        counterpart = wxFindWinFromHandle(hwnd);
+    event.SetWindow(counterpart);
+#else
     event.SetWindow(wxFindWinFromHandle(hwnd));
+#endif
 
     return HandleWindowEvent(event);
 }
@@ -4808,9 +8294,42 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
     return HandleWindowEvent(event);
 }
 
+#if wxUSE_DRAG_AND_DROP
+
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-    HDROP hFilesInfo = (HDROP) wParam;
+    return wxMSWDispatchDropFiles(AsWindow(), wParam);
+}
+
+bool wxMSWDispatchDropFiles(wxWindow* target,
+                            WXWPARAM drop,
+                            const wxPoint* clientPoint)
+{
+    HDROP hFilesInfo = reinterpret_cast<HDROP>(drop);
+    if ( !hFilesInfo )
+        return false;
+
+    class DropFinishGuard
+    {
+    public:
+        explicit DropFinishGuard(HDROP handle) : m_handle(handle) {}
+        ~DropFinishGuard() { Finish(); }
+
+        void Finish()
+        {
+            if ( m_handle )
+            {
+                ::DragFinish(m_handle);
+                m_handle = nullptr;
+            }
+        }
+
+    private:
+        HDROP m_handle;
+    } finish(hFilesInfo);
+
+    if ( !target )
+        return false;
 
     // Get the total number of files dropped
     UINT gwFilesDropped = ::DragQueryFile
@@ -4821,7 +8340,7 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
                                 (UINT)0
                             );
 
-    wxString *files = new wxString[gwFilesDropped];
+    std::unique_ptr<wxString[]> files(new wxString[gwFilesDropped]);
     for ( UINT wIndex = 0; wIndex < gwFilesDropped; wIndex++ )
     {
         // first get the needed buffer length (+1 for terminating NUL)
@@ -4832,18 +8351,36 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
                         wxStringBuffer(files[wIndex], len), len);
     }
 
-    wxDropFilesEvent event(wxEVT_DROP_FILES, gwFilesDropped, files);
-    event.SetEventObject(this);
+    wxDropFilesEvent event(wxEVT_DROP_FILES, gwFilesDropped, files.release());
+    event.SetEventObject(target);
 
-    POINT dropPoint;
-    DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
-    event.m_pos.x = dropPoint.x;
-    event.m_pos.y = dropPoint.y;
+    if ( clientPoint )
+    {
+        event.m_pos = *clientPoint;
+    }
+    else
+    {
+        POINT dropPoint = { 0, 0 };
+        ::DragQueryPoint(hFilesInfo, &dropPoint);
+        event.m_pos.x = dropPoint.x;
+        event.m_pos.y = dropPoint.y;
+    }
 
-    DragFinish(hFilesInfo);
+    // The event owns a copy of every path. Release the shell allocation
+    // before application code is allowed to destroy/reparent the receiver.
+    finish.Finish();
 
-    return HandleWindowEvent(event);
+    return target->HandleWindowEvent(event);
 }
+
+#else // !wxUSE_DRAG_AND_DROP
+
+bool wxWindowMSW::HandleDropFiles(WXWPARAM WXUNUSED(wParam))
+{
+    return false;
+}
+
+#endif // wxUSE_DRAG_AND_DROP/!wxUSE_DRAG_AND_DROP
 
 
 bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
@@ -5131,6 +8668,11 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 
 wxSize wxGetWindowDPI(HWND hwnd)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( const int forcedDPI = wxWinUIGetForcedDPI() )
+        return wxSize(forcedDPI, forcedDPI);
+#endif
+
     typedef UINT (WINAPI *GetDpiForWindow_t)(HWND hwnd);
     static GetDpiForWindow_t s_pfnGetDpiForWindow = nullptr;
     static bool s_initDone = false;
@@ -5150,6 +8692,79 @@ wxSize wxGetWindowDPI(HWND hwnd)
 
     return wxSize();
 }
+
+namespace
+{
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+static wxSize wxWinUIGetNativeReparentDPI(wxWindow *window, HWND hwnd)
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    if ( gs_winuiReparentDPIQueryForTest )
+        return gs_winuiReparentDPIQueryForTest(window);
+#else
+    wxUnusedVar(window);
+#endif // WXWINUI_TEST_SUPPORT
+
+    wxSize dpi = wxGetWindowDPI(hwnd);
+    if ( (!dpi.x || !dpi.y) && hwnd )
+        dpi = wxGetDPIofHDC(ClientHDC(hwnd));
+    return dpi;
+}
+#endif
+
+} // anonymous namespace
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetReparentDPIQuery(
+    wxWinUIMSWWindowTestAccess::ReparentDPIQuery query)
+{
+    gs_winuiReparentDPIQueryForTest = query;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::FailNextSetParent()
+{
+    gs_winuiFailNextSetParentForTest = true;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterSetParent(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
+{
+    gs_winuiAfterSetParentForTest = callback;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterEnsureControlParentStyle(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
+{
+    gs_winuiAfterEnsureControlParentStyleForTest = callback;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterHandleDepublished(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
+{
+    gs_winuiAfterMSWHandleDepublishedForTest = callback;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIMSWWindowTestAccess::SetAfterLayoutDirectionNativeWrite(
+    wxWinUIMSWWindowTestAccess::WindowCallback callback)
+{
+    gs_winuiAfterLayoutDirectionNativeWriteForTest = callback;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 /*extern*/
 int wxGetSystemMetrics(int nIndex, const wxWindow* window)
@@ -5279,8 +8894,79 @@ void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 }
 
 bool
-wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
+wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI,
+                                  const wxSize& newDPI)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Capture one immutable DFS program for the whole transition. Begin
+    // actions prepare each parent before its descendants, while End actions
+    // publish child events before the parent event exactly as ordinary MSW
+    // always has. Later callbacks cannot add or rediscover participants.
+    std::vector<wxWinUIDPITraversalAction> actions;
+    std::unordered_set<wxWindow *> capturedWindows;
+    wxWinUICaptureDPITraversal(
+        this, actions, capturedWindows);
+    if ( actions.empty() )
+        return false;
+
+    const wxWinUIDPIWindowIdentity rootIdentity =
+        actions.front().identity;
+    return wxWinUIApplyDPITraversal(
+        actions, oldDPI, newDPI, &rootIdentity);
+#else
+    // Keep the established MSW implementation and, in particular, its exact
+    // prepare-parent / recurse-children / event-parent ordering.
+    m_minHeight = wxRescaleCoord(m_minHeight).From(oldDPI).To(newDPI);
+    m_minWidth = wxRescaleCoord(m_minWidth).From(oldDPI).To(newDPI);
+    m_maxHeight = wxRescaleCoord(m_maxHeight).From(oldDPI).To(newDPI);
+    m_maxWidth = wxRescaleCoord(m_maxWidth).From(oldDPI).To(newDPI);
+
+    InvalidateBestSize();
+
+    WXUpdateCursor();
+
+    MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( wxSizer* const sizer = GetSizer() )
+        sizer->UpdateOnDPIChange(oldDPI, newDPI);
+
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *childWin = node->GetData();
+        if ( childWin && !childWin->IsTopLevel() )
+            childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
+    }
+
+    wxDPIChangedEvent event(oldDPI, newDPI);
+    event.SetEventObject(this);
+
+    MSWBeforeDPIChangedEvent(event);
+
+    return HandleWindowEvent(event);
+#endif
+}
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool
+wxWindowMSW::MSWBeginDPIChange(
+    const wxSize& oldDPI,
+    const wxSize& newDPI)
+{
+    wxWinUIDPIWindowIdentity identity;
+    identity.window = this;
+    identity.hwnd = GetHWND();
+    identity.hwndGeneration =
+        wxWinUIMSWGetHwndGeneration(this, identity.hwnd);
+    const auto selfIsCurrent = [&]()
+    {
+        return wxWinUIDPIIdentityIsCurrent(identity);
+    };
+    if ( !selfIsCurrent() )
+        return false;
+
     // update min and max size if necessary
     m_minHeight = wxRescaleCoord(m_minHeight).From(oldDPI).To(newDPI);
     m_minWidth = wxRescaleCoord(m_minWidth).From(oldDPI).To(newDPI);
@@ -5291,31 +8977,39 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 
     // update cursor size
     WXUpdateCursor();
+    if ( !selfIsCurrent() )
+        return false;
 
     // update font if necessary
     MSWUpdateFontOnDPIChange(newDPI);
+    if ( !selfIsCurrent() )
+        return false;
 
     // update sizers
     if ( wxSizer* const sizer = GetSizer() )
         sizer->UpdateOnDPIChange(oldDPI, newDPI);
+    if ( !selfIsCurrent() )
+        return false;
 
-    // update children
-    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
+    return true;
+}
+
+bool
+wxWindowMSW::MSWEndDPIChange(
+    const wxSize& oldDPI,
+    const wxSize& newDPI)
+{
+    wxWinUIDPIWindowIdentity identity;
+    identity.window = this;
+    identity.hwnd = GetHWND();
+    identity.hwndGeneration =
+        wxWinUIMSWGetHwndGeneration(this, identity.hwnd);
+    const auto selfIsCurrent = [&]()
     {
-        wxWindow *childWin = node->GetData();
-        // Update all children, except other top-level windows.
-        // These could be on a different monitor and will get their own
-        // dpi-changed event.
-        if ( childWin && !childWin->IsTopLevel() )
-        {
-            // We ignore the child return value here because we don't do
-            // anything differently depending on whether the event was
-            // processed or not anyhow here.
-            childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
-        }
-    }
+        return wxWinUIDPIIdentityIsCurrent(identity);
+    };
+    if ( !selfIsCurrent() )
+        return false;
 
     wxDPIChangedEvent event(oldDPI, newDPI);
     event.SetEventObject(this);
@@ -5323,9 +9017,16 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     // Another hook to give the derived window a chance to update itself after
     // updating all the children, but before the user-defined event handler.
     MSWBeforeDPIChangedEvent(event);
+    if ( !selfIsCurrent() )
+        return false;
 
+    // HandleWindowEvent() is the final callback boundary. Return its scalar
+    // directly: a handler may destroy this window, so there must be no member
+    // access after it unwinds.
     return HandleWindowEvent(event);
 }
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 // ---------------------------------------------------------------------------
 // colours and palettes
@@ -5718,6 +9419,65 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
     }
 #endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// Sends EVT_ERASE_BACKGROUND with a DC on the given target; returns whether
+// a handler took it.
+static bool wxWinUISendEraseEvent(wxWindowMSW *window, HDC target)
+{
+    wxDCTemp dc(target, window->GetClientSize());
+    wxDCTempImpl * const impl = static_cast<wxDCTempImpl *>(dc.GetImpl());
+
+    impl->SetHDC(target);
+    impl->SetWindow(static_cast<wxWindow *>(window));
+
+    wxEraseEvent event(window->GetId(), &dc);
+    event.SetEventObject(window);
+    const bool taken = window->HandleWindowEvent(event);
+
+    // must be called manually as ~wxDC doesn't do anything for wxDCTemp
+    impl->SelectOldObjects(target);
+    return taken;
+}
+
+// The background of a window over the material of its top-level window was
+// erased, which is to say made transparent: what a handler of
+// EVT_ERASE_BACKGROUND draws comes over it, on the surface of the window
+// like everything else it paints -- drawn on the HWND it would have no
+// alpha, and would lie under everything XAML shows.
+static void wxWinUIEraseOnSurface(wxWindowMSW *window, HDC hdc,
+                                  const RECT& client)
+{
+    wxWindow * const self = static_cast<wxWindow *>(window);
+    if ( !wxWinUIPaintSurfacesEnabled() || window->IsBeingDeleted() ||
+         ::WindowFromDC(hdc) != GetHwndOf(self) )
+    {
+        return;
+    }
+
+    HDC surfaceDC = (HDC)wxWinUIPaintSurfaceBeginErase(self, hdc);
+    if ( !surfaceDC )
+    {
+        // No surface yet. Most windows have no such handler, and never get
+        // a surface for it: the event is sent with the DC of the window
+        // and, only if a handler took it, sent again on a surface the
+        // window is given for good.
+        if ( !wxWinUISendEraseEvent(window, hdc) )
+            return;
+
+        ::FillRect(hdc, &client, (HBRUSH)::GetStockObject(BLACK_BRUSH));
+        wxWinUIPaintSurfaceAdopt(self);
+        surfaceDC = (HDC)wxWinUIPaintSurfaceBeginErase(self, hdc);
+        if ( !surfaceDC )
+            return;
+    }
+
+    (void)wxWinUISendEraseEvent(window, surfaceDC);
+    wxWinUIPaintSurfaceEnd(self);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
@@ -6198,7 +9958,7 @@ bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
     }
     else
     {
-#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
         // the text ctrl which is logically part of wxSpinCtrl sends WM_COMMAND
         // notifications to its parent which we want to reflect back to
         // wxSpinCtrl
@@ -6319,7 +10079,11 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
                 s_initDone = true;
             }
 
-            if ( s_pfn_TrackMouseEvent )
+            if ( s_pfn_TrackMouseEvent
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                 && !gs_winuiSyntheticMouseDispatchDepth
+#endif
+               )
             {
                 WinStruct<TRACKMOUSEEVENT> trackinfo;
 
@@ -7689,7 +11453,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 
     // spin control text buddy window should be mapped to spin ctrl
     // itself so try it too
-#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     if ( !win )
     {
         win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
@@ -8366,8 +12130,34 @@ const wxChar *wxGetMessageName(int message)
 
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 {
-    // prepare the DC
     TEXTMETRIC tm;
+
+#if !wxDIALOG_UNIT_COMPATIBILITY
+    {
+        // The metrics of a font do not depend on the window: measure it on
+        // a memory DC kept for the purpose. Getting the DC of the window
+        // makes Windows work out its visible region, and this function is
+        // called several times for each window by every layout (best sizes,
+        // borders of the static boxes...).
+        const wxFont& font(win->GetFont());
+        if ( HFONT hfontWin = GetHfontOf(font) )
+        {
+            static thread_local MemoryHDC s_hdcMeasure;
+            if ( HDC hdcMeasure = s_hdcMeasure )
+            {
+                const HGDIOBJ hfontOld =
+                    ::SelectObject(hdcMeasure, hfontWin);
+                const BOOL measured = ::GetTextMetrics(hdcMeasure, &tm);
+                if ( hfontOld )
+                    (void)::SelectObject(hdcMeasure, hfontOld);
+                if ( measured )
+                    return tm;
+            }
+        }
+    }
+#endif
+
+    // prepare the DC
     HWND hwnd = GetHwndOf(win);
     HDC hdc = ::GetDC(hwnd);
 
@@ -8428,6 +12218,15 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
             hWnd = child;
         }
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWindow * const window =
+             wxWinUITLWHostResolveWindowAtPoint(
+                 reinterpret_cast<WXHWND>(hWnd), pt) )
+    {
+        return window;
+    }
+#endif
 
     return wxGetWindowFromHWND((WXHWND)hWnd);
 }

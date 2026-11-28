@@ -54,6 +54,10 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
 #include "wx/msw/ole/oleutils.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/imm.h"
@@ -940,6 +944,13 @@ wxLayoutDirection wxApp::MSWGetDefaultLayout(wxWindow* parent)
 
     if ( parent )
         dir = parent->GetLayoutDirection();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Diagnostic: every window is laid out right to left, as it is under a
+    // right-to-left language, whatever the language of the program.
+    if ( dir == wxLayout_Default && wxWinUIIsRightToLeftForced() )
+        dir = wxLayout_RightToLeft;
+#endif
 
     if ( dir == wxLayout_Default )
     {

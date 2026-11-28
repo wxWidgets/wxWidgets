@@ -14,6 +14,8 @@
 #include "wx/dialog.h"
 #include "wx/weakref.h"
 
+#include <cstdint>
+
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 class WXDLLIMPEXP_FWD_CORE wxGauge;
@@ -108,6 +110,20 @@ protected:
     // Create a new event loop if there is no currently running one.
     void EnsureActiveEventLoopExists();
 
+    // Run one of the API-required progress-dialog yields without recursively
+    // yielding if an update is re-entered. Returns false if this dialog was
+    // destroyed while dispatching.
+    bool YieldForEvents(long categories);
+
+    // A nested update supersedes the outer update that dispatched it. These
+    // helpers prevent the older value/message from being written afterwards.
+    std::uint64_t BeginUpdateCycle() { return ++m_updateGeneration; }
+    bool IsCurrentUpdateCycle(std::uint64_t generation) const
+        { return generation == m_updateGeneration; }
+
+    void SetCurrentValue(int value) { m_publicValue = value; }
+    int GetCurrentValue() const { return m_publicValue; }
+
     // callback for optional abort button
     void OnCancel(wxCommandEvent&);
 
@@ -137,6 +153,8 @@ protected:
 
     // the maximum value
     int m_maximum;
+    int m_publicMaximum;
+    int m_publicValue;
 
 #if defined(__WXMSW__)
     // the factor we use to always keep the value in 16 bit range as the native
@@ -169,7 +187,7 @@ private:
     bool DoBeforeUpdate(bool *skip);
 
     // common part of Update() and Pulse()
-    void DoAfterUpdate();
+    bool DoAfterUpdate();
 
     // shortcuts for enabling buttons
     void EnableClose();
@@ -219,11 +237,15 @@ private:
 
     // for wxPD_APP_MODAL case
     wxWindowDisabler *m_winDisabler;
+    bool m_parentDisabledByUs;
+    bool m_otherWindowsDisabled;
 
     // Temporary event loop created by the dialog itself if there is no
     // currently active loop when it is created.
     wxEventLoop *m_tempEventLoop;
 
+    bool m_insideYield;
+    std::uint64_t m_updateGeneration;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGenericProgressDialog);

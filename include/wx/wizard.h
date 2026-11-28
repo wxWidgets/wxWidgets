@@ -122,6 +122,7 @@ class WXDLLIMPEXP_CORE wxWizardPageSimple : public wxWizardPage
 {
 public:
     wxWizardPageSimple() { Init(); }
+    virtual ~wxWizardPageSimple();
 
     // ctor takes the previous and next pages
     wxWizardPageSimple(wxWizard *parent,
@@ -137,14 +138,14 @@ public:
                 wxWizardPage *next = nullptr,
                 const wxBitmapBundle& bitmap = wxBitmapBundle())
     {
-        m_prev = prev;
-        m_next = next;
+        SetPrev(prev);
+        SetNext(next);
         return wxWizardPage::Create(parent, bitmap);
     }
 
     // the pointers may be also set later - but before starting the wizard
-    void SetPrev(wxWizardPage *prev) { m_prev = prev; }
-    void SetNext(wxWizardPage *next) { m_next = next; }
+    void SetPrev(wxWizardPage *prev);
+    void SetNext(wxWizardPage *next);
 
     // Convenience functions to make the pages follow each other without having
     // to call their SetPrev() or SetNext() explicitly.
@@ -170,10 +171,7 @@ public:
 
 private:
     // common part of ctors:
-    void Init()
-    {
-        m_prev = m_next = nullptr;
-    }
+    void Init();
 
     // pointers are private, the derived classes shouldn't mess with them -
     // just derive from wxWizardPage directly to implement different behaviour

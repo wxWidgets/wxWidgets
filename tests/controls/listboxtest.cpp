@@ -18,6 +18,7 @@
 
 #include "itemcontainertest.h"
 #include "testableframe.h"
+#include "waitfor.h"
 #include "wx/uiaction.h"
 
 #include <memory>
@@ -74,9 +75,14 @@ TEST_CASE_METHOD(ListBoxTestCase, "ListBox::Sort", "[listbox]")
     wxLISTBOX_TEST_OWNERDRAWN();
 
 #ifndef __WXOSX__
+    long style = wxLB_SORT;
+#ifdef __WXMSW__
+    if ( ownerDrawn )
+        style |= wxLB_OWNERDRAW;
+#endif
     m_list = make_unique<wxListBox>(wxTheApp->GetTopWindow(), wxID_ANY,
-                                    wxDefaultPosition, wxDefaultSize, 0,
-                                    nullptr, wxLB_SORT);
+                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                            style);
 
     wxArrayString testitems;
     testitems.Add("aaa");
@@ -115,9 +121,14 @@ TEST_CASE_METHOD(ListBoxTestCase, "ListBox::MultipleSelect", "[listbox]")
 {
     wxLISTBOX_TEST_OWNERDRAWN();
 
+    long style = wxLB_MULTIPLE;
+#ifdef __WXMSW__
+    if ( ownerDrawn )
+        style |= wxLB_OWNERDRAW;
+#endif
     m_list = make_unique<wxListBox>(wxTheApp->GetTopWindow(), wxID_ANY,
-                                    wxDefaultPosition, wxDefaultSize, 0,
-                                    nullptr, wxLB_MULTIPLE);
+                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                            style);
 
     wxArrayString testitems;
     testitems.Add("item 0");
@@ -161,6 +172,9 @@ TEST_CASE_METHOD(ListBoxTestCase, "ListBox::MultipleSelect", "[listbox]")
     CHECK(selected.Count() == 0);
 }
 
+#ifndef __WXWINUI__
+// WinUI physical input is explicitly opt-in; deterministic peer input tests
+// live in winuilistmodel.cpp, as before the Catch2 fixture migration.
 TEST_CASE_METHOD(ListBoxTestCase, "ListBox::ClickEvents", "[listbox]")
 {
 #if wxUSE_UIACTIONSIMULATOR
@@ -250,6 +264,8 @@ TEST_CASE_METHOD(ListBoxTestCase, "ListBox::ClickNotOnItem", "[listbox]")
 #endif
 }
 
+#endif // !__WXWINUI__
+
 TEST_CASE_METHOD(ListBoxTestCase, "ListBox::HitTest", "[listbox]")
 {
     wxLISTBOX_TEST_OWNERDRAWN();
@@ -276,7 +292,18 @@ TEST_CASE_METHOD(ListBoxTestCase, "ListBox::HitTest", "[listbox]")
         p = wxPoint(10, 10);
     }
 #endif
-    CHECK( m_list->HitTest(p) == 0 );
+
+#ifdef __WXWINUI__
+    // Appending to a XAML ItemsControl updates the item model immediately,
+    // but its visual containers are realized on the dispatcher. This is the
+    // same realization boundary handled above for wxGTK: wait for the public
+    // hit-test result instead of making HitTest() pump a nested event loop.
+    WaitFor("wxListBox item realization", [this, p]() {
+        return m_list->HitTest(p) == 0;
+    }, 1000);
+#endif
+
+    REQUIRE( (m_list->HitTest(p)) == (0) );
 
     CHECK( m_list->HitTest(290, 190) == wxNOT_FOUND );
 }

@@ -20,6 +20,9 @@
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxDC;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxWinUIBannerTestAccess;
+#endif
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxBannerWindowNameStr[];
 
@@ -95,6 +98,10 @@ private:
     // Fully invalidates the window.
     void OnSize(wxSizeEvent& event);
 
+    // Invalidate bitmap-derived colours and logical best size after a monitor
+    // DPI transition.
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // Redraws the window using either m_bitmap or m_title/m_message.
     void OnPaint(wxPaintEvent& event);
 
@@ -134,6 +141,10 @@ private:
              m_colEnd;
 
     wxDECLARE_EVENT_TABLE();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIBannerTestAccess;
+#endif
 
     wxDECLARE_NO_COPY_CLASS(wxBannerWindow);
 

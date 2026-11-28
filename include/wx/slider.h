@@ -124,6 +124,8 @@ private:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/slider.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/slider.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/slider.h"
 #elif defined(__WXGTK__)

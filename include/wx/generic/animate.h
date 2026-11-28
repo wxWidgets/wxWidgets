@@ -13,6 +13,11 @@
 
 #include "wx/bmpbndl.h"
 
+#include <cstdint>
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxWinUIGenericAnimationTestAccess;
+#endif
 
 // ----------------------------------------------------------------------------
 // wxGenericAnimationCtrl
@@ -71,6 +76,7 @@ public:     // event handlers
     void OnPaint(wxPaintEvent& event);
     void OnTimer(wxTimerEvent& event);
     void OnSize(wxSizeEvent& event);
+    void OnShow(wxShowEvent& event);
 
 public:     // extended API specific to this implementation of wxAnimateCtrl
 
@@ -103,21 +109,16 @@ protected:      // internal utilities
     void DisposeToBackground(wxDC& dc);
     void DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz);
 
-    void IncrementalUpdateBackingStore();
+    bool IncrementalUpdateBackingStore();
     bool RebuildBackingStoreUpToFrame(unsigned int);
     void DrawFrame(wxDC &dc, unsigned int);
 
     virtual void DisplayStaticImage() override;
     virtual wxSize DoGetBestSize() const override;
 
-    // This function can be used as event handler for wxEVT_DPI_CHANGED event
-    // and simply calls UpdateStaticImage() to refresh the m_bmpStaticReal when it happens.
-    void WXHandleDPIChanged(wxDPIChangedEvent& event)
-    {
-        UpdateStaticImage();
-
-        event.Skip();
-    }
+    // Re-select the best animation bundle member and rebuild DPI-sensitive
+    // backing storage when the window moves between displays.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event);
 
     // Helpers to safely access methods in the wxAnimationGenericImpl that are
     // specific to the generic implementation
@@ -140,12 +141,54 @@ protected:
                                       // on the screen
 
 private:
+    static wxAnimation SelectAnimationForScale(const wxAnimations& animations,
+                                               double scale)
+    {
+        if ( animations.empty() )
+            return wxNullAnimation;
+
+        const wxSize wantedSize = animations[0].GetSize() * scale;
+        wxAnimation selected;
+        for ( const wxAnimation& animation : animations )
+        {
+            selected = animation;
+            if ( selected.GetSize().IsAtLeast(wantedSize) )
+                break;
+        }
+        return selected;
+    }
+
+    // Stop any outstanding timer and advance its event identity. A queued
+    // event from an earlier Play()/Stop() generation can then be rejected by
+    // OnTimer() without relying on timing.
+    void InvalidateFrameSchedule();
+
+    // Consume m_needToShowNextFrame and arm the current frame delay. This is
+    // separate from painting so a visible resume can guarantee progress even
+    // on ports which don't synchronously deliver a paint after Show().
+    bool ScheduleNextFrame();
+
+    // Publish a rebuilt frame and resume exactly one schedule. Returns false
+    // only when an extension callback destroyed the control.
+    bool ResumeFrameSchedule(std::uint64_t generation);
+
     // True if we need to show the next frame after painting the current one.
     bool m_needToShowNextFrame = false;
+
+    // A hidden or temporarily zero-sized control keeps the public playing
+    // state, but consumes no timer or decoder work until it is renderable.
+    bool m_pausedForHidden = false;
+
+    std::uint64_t m_timerGeneration = 0;
+    int m_activeTimerId = wxID_ANY;
 
     typedef wxAnimationCtrlBase base_type;
     wxDECLARE_DYNAMIC_CLASS(wxGenericAnimationCtrl);
     wxDECLARE_EVENT_TABLE();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIGenericAnimationTestAccess;
+#endif
 };
 
 #endif // _WX_GENERIC_ANIMATEH__

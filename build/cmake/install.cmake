@@ -78,6 +78,51 @@ endif()
 wx_get_install_dir(library)
 set(wx_cmake_dir "${library_dir}/cmake/wxWidgets-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
 
+if(WXWINUI AND wxUSE_WINUI3)
+    set(wx_winui_cmake_dir "${wx_cmake_dir}/${wxPLATFORM_LIB_DIR}")
+    set(wx_winui_package_dir "${wx_winui_cmake_dir}/winui")
+    set(wx_winui_runtime_dir "${wx_winui_package_dir}/runtime")
+    set(wx_winui_config "${wxBINARY_DIR}/winui/install/wxWinUIConfig.cmake")
+    configure_file(
+        "${wxSOURCE_DIR}/build/cmake/wxWinUIConfig.cmake.in"
+        "${wx_winui_config}"
+        @ONLY)
+
+    install(FILES "${wx_winui_config}"
+        DESTINATION "${wx_winui_cmake_dir}")
+    install(FILES "${wxWINUI3_INSTALL_DEPLOY_SCRIPT}"
+        DESTINATION "${wx_winui_package_dir}")
+
+    # Preserve the executable-relative layout used by the deployment script.
+    list(LENGTH wxWINUI3_RUNTIME_PAYLOAD_SRC wx_winui_payload_count)
+    math(EXPR wx_winui_payload_last "${wx_winui_payload_count} - 1")
+    foreach(wx_winui_payload_index RANGE ${wx_winui_payload_last})
+        list(GET wxWINUI3_RUNTIME_PAYLOAD_SRC
+            ${wx_winui_payload_index} wx_winui_payload_src)
+        list(GET wxWINUI3_RUNTIME_PAYLOAD_DST
+            ${wx_winui_payload_index} wx_winui_payload_dst)
+        get_filename_component(wx_winui_payload_dst_dir
+            "${wx_winui_payload_dst}" DIRECTORY)
+        set(wx_winui_payload_install_dir "${wx_winui_runtime_dir}")
+        if(wx_winui_payload_dst_dir)
+            string(APPEND wx_winui_payload_install_dir
+                "/${wx_winui_payload_dst_dir}")
+        endif()
+        install(FILES "${wx_winui_payload_src}"
+            DESTINATION "${wx_winui_payload_install_dir}")
+    endforeach()
+
+    # A shared wxWidgets DLL consumes the Windows App SDK import libraries
+    # privately. Static consumers need them transitively, so package the two
+    # pinned artifacts and let wxWinUIConfig.cmake expose relocatable targets.
+    if(NOT wxBUILD_SHARED)
+        install(FILES
+            "${wxWINUI3_BOOTSTRAP_LIB}"
+            "${wxWINUI3_DISPATCHING_LIB}"
+            DESTINATION "${wx_winui_package_dir}/lib")
+    endif()
+endif()
+
 install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "${wx_cmake_dir}/${wxPLATFORM_LIB_DIR}")
 
 # find_package config file

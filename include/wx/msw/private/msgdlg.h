@@ -71,6 +71,14 @@ namespace wxMSWMessageDialog
     // doesn't provide a manifest specifying that it wants to use v6.
     TaskDialogIndirect_t GetTaskDialogIndirectFunc();
 
+    // Invoke TaskDialogIndirect(). This is intentionally separate from
+    // GetTaskDialogIndirectFunc() so WinUI can keep the native invocation at
+    // a single internal boundary.
+    HRESULT InvokeTaskDialogIndirect(const TASKDIALOGCONFIG *config,
+                                     int *button,
+                                     int *radio,
+                                     BOOL *verification);
+
     // Return true if the task dialog is available, but we don't actually need
     // to show it yet (if we do, then GetTaskDialogIndirectFunc() should be
     // used directly).

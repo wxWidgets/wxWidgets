@@ -16,6 +16,15 @@
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    #include "ribboncontainerswinui.h"
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "ribbonchromewinui.h"
+    #include "wx/weakref.h"
+#endif
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -81,6 +90,38 @@ wxRibbonPageScrollButton::wxRibbonPageScrollButton(wxRibbonPage* sibling,
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     m_sibling = sibling;
     m_flags = (style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) | wxRIBBON_SCROLL_BTN_FOR_PAGE;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    // A real button, XAML content of this window: it lies over the groups
+    // it scrolls, and what is drawn by wx lies under every XAML control --
+    // a drawn arrow would let the pointer through to the commands it covers.
+    const wchar_t *glyph = L"&#xEDDA;";
+    int sections = 1;
+    switch ( m_flags & wxRIBBON_SCROLL_BTN_DIRECTION_MASK )
+    {
+        case wxRIBBON_SCROLL_BTN_LEFT:  glyph = L"&#xEDD9;"; sections = -1; break;
+        case wxRIBBON_SCROLL_BTN_RIGHT: glyph = L"&#xEDDA;"; sections = 1; break;
+        case wxRIBBON_SCROLL_BTN_UP:    glyph = L"&#xEDDB;"; sections = -1; break;
+        case wxRIBBON_SCROLL_BTN_DOWN:  glyph = L"&#xEDDC;"; sections = 1; break;
+    }
+
+    auto chrome = std::make_shared<wxRibbonChromeWinUI>();
+    if ( chrome->Create(this, wxRibbonScrollButtonChromeMarkup(glyph).c_str()) )
+    {
+        m_winuiChrome = chrome;
+
+        using winrt::Microsoft::UI::Xaml::Controls::Button;
+        if ( const auto button = chrome->Find<Button>(L"Scroll") )
+        {
+            const wxWeakRef<wxRibbonPage> page(sibling);
+            button.Click([page, sections](const auto&, const auto&)
+            {
+                if ( wxRibbonPage * const live = page.get() )
+                    live->ScrollSections(sections);
+            });
+        }
+    }
+#endif
 }
 
 wxRibbonPageScrollButton::~wxRibbonPageScrollButton()
@@ -94,6 +135,14 @@ void wxRibbonPageScrollButton::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonPageScrollButton::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
     wxAutoBufferedPaintDC dc(this);
     if(m_art)
     {
@@ -116,6 +165,13 @@ void wxRibbonPageScrollButton::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonPageScrollButton::OnMouseDown(wxMouseEvent& WXUNUSED(evt))
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The XAML button takes the press and scrolls; the same press is also
+    // reported here.
+    if ( m_winuiChrome )
+        return;
+#endif
+
     m_flags |= wxRIBBON_SCROLL_BTN_ACTIVE;
     Refresh(false);
 }
@@ -168,10 +224,22 @@ wxRibbonPage::wxRibbonPage(wxRibbonBar* parent,
     : wxRibbonControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE)
 {
     CommonInit(label, icon);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxCHECK_RET(wxRibbonContainerWinUI::Create(this),
+                "Failed to create native Toolkit Ribbon page");
+#endif
 }
 
 wxRibbonPage::~wxRibbonPage()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxRibbonContainerWinUI::Close(this);
+#endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+        m_winuiChrome->Close();
+#endif
+
     delete[] m_size_calc_array;
     delete m_scroll_left_btn;
     delete m_scroll_right_btn;
@@ -188,7 +256,11 @@ bool wxRibbonPage::Create(wxRibbonBar* parent,
 
     CommonInit(label, icon);
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    return wxRibbonContainerWinUI::Create(this);
+#else
     return true;
+#endif
 }
 
 void wxRibbonPage::CommonInit(const wxString& label, const wxBitmapBundle& icon)
@@ -208,6 +280,16 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmapBundle& icon)
 
     if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
         bar->AddPage(this);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    // The strip behind the groups is XAML content of this window.
+    if ( !m_winuiChrome )
+    {
+        auto chrome = std::make_shared<wxRibbonChromeWinUI>();
+        if ( chrome->Create(this, wxRibbonPageChromeMarkup()) )
+            m_winuiChrome = chrome;
+    }
+#endif
 }
 
 void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
@@ -278,6 +360,22 @@ void wxRibbonPage::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonPage::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
     // No foreground painting done by the page itself, but a paint DC
     // must be created anyway.
     wxAutoBufferedPaintDC dc(this);
@@ -300,11 +398,19 @@ wxOrientation wxRibbonPage::GetMajorAxis() const
 
 bool wxRibbonPage::ScrollLines(int lines)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::ScrollPage(this, double(lines) * 8);
+#endif
     return ScrollPixels(lines * 8);
 }
 
 bool wxRibbonPage::ScrollPixels(int pixels)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::ScrollPage(this, pixels);
+#endif
     if(pixels < 0)
     {
         if(m_scroll_amount == 0)
@@ -346,6 +452,10 @@ bool wxRibbonPage::ScrollPixels(int pixels)
 
 bool wxRibbonPage::ScrollSections(int sections)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::ScrollPageSections(this, sections);
+#endif
     // Currently the only valid values are -1 and 1 for scrolling left and
     // right, respectively.
     const bool scrollForward = sections >= 1;
@@ -506,6 +616,14 @@ void wxRibbonPage::SetSizeWithScrollButtonAdjustment(int x, int y, int width, in
 
 void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxRibbonControl::DoSetSize(x, y, width, height, sizeFlags);
+        return;
+    }
+#endif
+
     // When a resize triggers the scroll buttons to become visible, the page is resized.
     // This resize from within a resize event can cause (MSW) wxWidgets some confusion,
     // and report the 1st size to the 2nd size event. Hence the most recent size is
@@ -539,6 +657,15 @@ void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxRibbonPage::OnSize(wxSizeEvent& evt)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        evt.Skip();
+        wxRibbonContainerWinUI::Sync(this);
+        return;
+    }
+#endif
+
     wxSize new_size = evt.GetSize();
 
     if (m_art)
@@ -604,10 +731,19 @@ void wxRibbonPage::RemoveChild(wxWindowBase *child)
 
     // ... and then proceed as normal
     wxRibbonControl::RemoveChild(child);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 bool wxRibbonPage::Realize()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Realize(this);
+#endif
+
     bool status = true;
 
     m_collapse_stack.Clear();
@@ -661,6 +797,11 @@ void wxRibbonPage::PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) cons
 
 bool wxRibbonPage::Layout()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Realize(this);
+#endif
+
     if(GetChildren().GetCount() == 0)
     {
         return true;
@@ -814,6 +955,15 @@ bool wxRibbonPage::DoActualLayout()
 
 bool wxRibbonPage::Show(bool show)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        const bool changed = wxRibbonControl::Show(show);
+        wxRibbonContainerWinUI::Sync(this);
+        return changed;
+    }
+#endif
+
     if(m_scroll_left_btn)
         m_scroll_left_btn->Show(show);
     if(m_scroll_right_btn)
@@ -1251,6 +1401,11 @@ wxSize wxRibbonPage::GetMinSize() const
 
 wxSize wxRibbonPage::DoGetBestSize() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::BestSize(const_cast<wxRibbonPage*>(this));
+#endif
+
     wxSize best(0, 0);
     size_t count = 0;
 

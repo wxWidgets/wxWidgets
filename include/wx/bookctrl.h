@@ -158,30 +158,16 @@ public:
     virtual bool DeletePage(size_t n);
 
     // remove one page from the notebook, without deleting it
-    virtual bool RemovePage(size_t n)
-    {
-        DoInvalidateBestSize();
-        return DoRemovePage(n) != nullptr;
-    }
+    virtual bool RemovePage(size_t n);
 
     // remove all pages and delete them
-    virtual bool DeleteAllPages()
-    {
-        m_selection = wxNOT_FOUND;
-        DoInvalidateBestSize();
-        WX_CLEAR_ARRAY(m_pages);
-        return true;
-    }
+    virtual bool DeleteAllPages();
 
     // adds a new page to the control
     virtual bool AddPage(wxWindow *page,
                          const wxString& text,
                          bool bSelect = false,
-                         int imageId = NO_IMAGE)
-    {
-        DoInvalidateBestSize();
-        return InsertPage(GetPageCount(), page, text, bSelect, imageId);
-    }
+                         int imageId = NO_IMAGE);
 
     // the same as AddPage(), but adds the page at the specified position
     virtual bool InsertPage(size_t n,
@@ -238,6 +224,23 @@ public:
     }
 
 protected:
+    enum class InsertPageResult
+    {
+        Failed,
+        Inserted,
+        OwnershipConsumed
+    };
+
+    // Insert only into the common page model and distinguish a direct commit
+    // from a nested writer which consumed the candidate while a synchronous
+    // boundary was running. Derived composite controls must continue their
+    // controller commit only for Inserted.
+    InsertPageResult DoInsertPageIntoModel(size_t nPage,
+                                           wxWindow* page,
+                                           const wxString& text,
+                                           bool bSelect,
+                                           int imageId);
+
     // flags for DoSetSelection()
     enum
     {
@@ -290,6 +293,11 @@ protected:
     // from DoSetSelection(), to show/hide pages differently.
     virtual void DoShowPage(wxWindow* page, bool show) { page->Show(show); }
 
+    // Reconcile every page with the currently committed selection. This is
+    // used after a synchronous callback supersedes an outer insertion or
+    // selection request, so stale callers never leave two pages visible.
+    bool DoReconcilePageVisibility();
+
 
     // Should we accept null page pointers in Add/InsertPage()?
     //
@@ -312,6 +320,11 @@ protected:
     // DoSetSelectionAfterRemoval() can be used for this.
     virtual wxWindow *DoRemovePage(size_t page) = 0;
 
+    // Atomically erase a contiguous range from the common page model without
+    // invoking any callback-capable layout operation. Composite controls use
+    // this to publish all parallel index models first, then invalidate once.
+    void DoErasePageRange(size_t first, size_t count);
+
     // our best size is the size which fits all our pages
     virtual wxSize DoGetBestSize() const override;
 
@@ -330,6 +343,18 @@ protected:
     // called instead of just InvalidateBestSize() whenever pages are added or
     // removed as this also affects the controller
     void DoInvalidateBestSize();
+
+    // Same-book topology writers are rejected while the common model is
+    // deleting all of its pages. Derived controller implementations use this
+    // before mutating their parallel model.
+    bool IsDeletingAllPages() const;
+
+    // Return true only while DeleteAllPages() is making its one authorized
+    // call to the existing DoRemovePage() virtual slot. Derived implementations
+    // that reject ordinary writers while IsDeletingAllPages() is true use this
+    // to admit that call without adding another virtual hook (and hence
+    // without changing the public vtable).
+    bool IsPerformingDeleteAllPageRemoval() const;
 
 #if wxUSE_HELP
     // Show the help for the corresponding page

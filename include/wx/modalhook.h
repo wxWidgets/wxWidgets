@@ -89,21 +89,15 @@ private:
 
 // Helper object used by WX_MODAL_DIALOG_HOOK below to ensure that CallExit()
 // is called on scope exit.
-class wxModalDialogHookExitGuard
+class WXDLLIMPEXP_CORE wxModalDialogHookExitGuard
 {
 public:
-    explicit wxModalDialogHookExitGuard(wxDialog* dialog)
-        : m_dialog(dialog)
-    {
-    }
-
-    ~wxModalDialogHookExitGuard()
-    {
-        wxModalDialogHook::CallExit(m_dialog);
-    }
+    explicit wxModalDialogHookExitGuard(wxDialog* dialog);
+    ~wxModalDialogHookExitGuard();
 
 private:
-    wxDialog* const m_dialog;
+    class Impl;
+    Impl* const m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxModalDialogHookExitGuard);
 };

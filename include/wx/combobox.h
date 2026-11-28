@@ -70,6 +70,8 @@ public:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/combobox.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/combobox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/combobox.h"
 #elif defined(__WXGTK__)

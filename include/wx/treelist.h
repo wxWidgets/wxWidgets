@@ -24,6 +24,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_CORE wxDataViewEvent;
+class WXDLLIMPEXP_FWD_CORE wxDataViewRenderer;
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxTreeListCtrlNameStr[];
 
@@ -404,6 +405,7 @@ private:
                        int width,
                        wxAlignment align,
                        int flags);
+    wxDataViewRenderer* CreateColumnRenderer(unsigned int pos) const;
 
     // Common part of {Append,Insert,Prepend}Item().
     wxTreeListItem DoInsertItem(wxTreeListItem parent,

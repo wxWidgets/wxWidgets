@@ -1,0 +1,709 @@
+# Plan 107: Split host responsibilities behind private ownership boundaries
+
+- Status: LOCAL COMPLETE / REMOTE PENDING — 107A–F implemented and shipping-qualified; physical integration remains in 109/110
+- Planned at: f6ae07e1ade037e570b99df5369edd070b728a48, refreshed 2026-08-31
+- Priority: P1
+- Effort: L (split into independently verified commits)
+- Implementation risk: HIGH
+- Depends on: 102, 104, 106 characterization coverage
+
+## Context and workspace
+
+Work in F:\\wxwinui-pr26890-feedback on codex/pr26890-feedback. C:\\wxWidgets-master is dirty and is out of scope. Existing generated build trees are F:\\wxwinui-pr26890-feedback-build (shared) and F:\\wxwinui-pr26890-feedback-build-static; packages are under F:\\wxwinui-maintainer-integration-packages. Use apply_patch for source edits, wx coding style, and preserve generation/reentrancy checks. Tests use Catch2 TEST_CASE and focused tags; follow adjacent existing cases. Public wx class names and one toolkit-selected ABI remain as in ADR 0004.
+
+The user explicitly requested planning AND implementation. This is not permission to weaken tests, hide unimplemented features, fabricate physical sign-off, or rewrite published Git history. Make bounded implementation commits after verification; no mass opportunistic cleanup.
+
+## Drift check and current state
+
+Run git diff --stat f6ae07e1ad..HEAD -- <in-scope paths> and git status --short first. Reconcile relevant intervening changes, especially the ControlHost test-support extraction in 106, instead of overwriting them. Read each target before editing.
+
+wxWinUITopLevelHost owns slots, lifetime, geometry, input, capture, focus, keyboard, UIA, tooltips, OLE, appearance and transients. The audits identify coupled authorities, not merely a line-count target.
+
+This refresh incorporates the user's request for the architectural foundation
+needed to continue component work. It is not an additional general audit, a
+promise of universal parity, or authorization to rewrite the rendering model.
+ADR 0003 keeps one XAML island per TLW and coalesced geometry publication; an
+arbitrary `XAML A > HWND N > XAML B` interleaving needs a separately approved
+composition design/prototype. ADR 0004 keeps toolkit-neutral public wx names
+and separate toolkit-selected ABIs. No new public backend namespace/factory
+is introduced by this plan.
+
+Concrete boundaries verified in the current source:
+
+- `src/winui/tlwhost.cpp`, `DispatchNativeResize()`: a wake encountered while
+  `gs_winuiOperationDepth` is nonzero goes into `gs_deferredNativeResizeWakes`.
+  Only the global operation tail rearms it. The final contact check precedes
+  the real `SendMessageW(hwnd, WM_NCLBUTTONDOWN, ...)`; a posted request is not
+  evidence of `WM_ENTERSIZEMOVE`.
+- `wxWinUIVisualCoordinates::Snapshot` records content, native HWND and
+  structure generations plus `syncEpoch`; `SyncSlot()` commits `m_rectPx`
+  only after setters and revalidation. These are distinct identities.
+- `FocusMigration::windowIdentity` in `include/wx/winui/private/tlwhost.h` is
+  a comparison key, never a dereferenceable owner. `FocusRequest` additionally
+  carries an `intentGeneration`; HWND equality alone is insufficient.
+- `src/winui/gauge.cpp` and `src/winui/scrolbar.cpp` share the exact owner
+  retirement sequence below. ScrollBar's mutation depth is an extra, local
+  policy, not part of that common sequence:
+
+  ```cpp
+  m_owner.store(nullptr, std::memory_order_release);
+  m_generation.fetch_add(1, std::memory_order_acq_rel);
+  ```
+
+- `wxWinUISlot::EndOperation()` can schedule physical disconnect and delete
+  the slot; `wxWinUITopLevelHost::EndOperation()` only unwinds its operation.
+  Similar RAII spelling does not justify merging these semantics.
+- `src/winui/srchctrl.cpp`, `ResolvePeerPartsOnce()` invalidates the old edit
+  generation before token revocation. In `src/winui/combobox.cpp`, the layout
+  callback is deliberately passive and calls `QueueEditPartResolutionAtLayoutEdge()`.
+  Template realization belongs to its deferred continuation.
+- `RestartDropBrokerAfterPresentationInvalidation()` originally called
+  `m_dropBroker->GetSnapshotForTest()` in production. The first 107F boundary
+  below now uses `HasNativeOwnership()` and still refuses a new broker when
+  `ownsRegistration || locked`; this rollback decision is production policy.
+
+## Scope
+
+Shared scope: `src/winui/tlwhost.cpp`, `include/wx/winui/private/tlwhost.h`,
+`build/cmake/lib/core/CMakeLists.txt`, and the focused existing tests named
+below. Each sublot adds only its stated private module/consumers. Proposed
+module names are not claims that those files already exist. Do not modify
+all six sublots in a single commit.
+
+Existing authorities must be reused: `inputstate.cpp`, `inputrouter.cpp`,
+`dropbroker.cpp`, `appearance.cpp` and the host registry are not replaced by
+parallel services. Keep the public declaration surface stable while moving
+implementation; moving declarations out of installed headers belongs to 106.
+
+Out of scope: other worktrees, frozen beta snapshots, unrelated backend refactors, user files, new public PRs and unrequested physical input.
+
+## Steps
+
+Execution order: **107A -> 107C -> 107D**; **107B -> 107E** is independent
+once its 106 control seams are qualified; **107F** follows the corresponding
+106 host seams. A sublot needs its own characterization baseline, not blanket
+completion of every component or every physical campaign.
+
+### 107A — Host authorities and native sizing transaction
+
+Native extraction implemented on 2026-08-31 after `33ae89a111`:
+`hostresize.cpp` now owns validation, posting, deferred dispatch, cancellation,
+shutdown and the USER32 subclass transaction. The host still owns the request,
+registry, global operation tail and native lifetime. The two non-installed
+headers share the existing weak subclass context and the request state; no
+second capture, teardown or deferred-wake authority is introduced.
+
+The four real native-loop cases are unchanged. The exact baseline passes
+**219 assertions / 7 cases** before and after in both DLL/static builds.
+The new pure progress case adds **14 / 1**, separately checking idempotent
+entry/exit; it does not replace USER32 integration. The 107F host **70/4**,
+broker **206/3**, presentation **15/1** and observation **372/1** groups also
+pass, along with smoke/Supported **2/2** in each linkage. `test_gui` and
+`minimal` compile with `/warnaserror`, without test retries. Evidence is
+`audit107a-on-*` in the two existing build trees. Shipping OFF/install/restore
+is reserved for the combined architecture batch. UIA/tooltip extraction and
+physical held-drag qualification remain open.
+
+Tooltip policy extraction follows `eb36c450a5`: `hosttooltip.cpp` owns the
+existing observer/revocation/retry, restoration and policy methods. Its
+non-installed header shares the exact bounded suppression template with
+`SyncSlot()` without adding type erasure, another registry, cache or lifetime
+owner. Slot/host declarations and the managed registry in `ctrlhost.cpp` stay
+unchanged; the original content-fault mask has only a phase-specific forwarder.
+Ten moved function bodies are identical after expanding that forwarder.
+The **550 assertions / 22 unchanged cases** pass before/after in DLL and static,
+as do native **219/7**, progress **14/1**, coordinate **259/6** and gates **2/2**.
+These are real XAML ownership/reentrancy cases, not a newly invented pure
+state machine. The first wildcard selection matched only four ancillary cases;
+it is retained as incomplete evidence, superseded by an explicit 22-name list
+in `audit107a-tooltip-before-exact.log`. No failing case was excluded. Builds
+and runtime logs are `audit107a-tooltip-on-*`; shipping remains the combined
+batch below. UIA policy and remaining host test-surface separation stay open.
+
+UIA ownership/observer extraction after `b38af994be` (2026-08-31):
+`hostuia.cpp` now owns the existing Name/style observer and retry, authored
+style lookup, semantic restoration/publication, accessibility authority and
+generation-qualified HWND shell provider. `hostuia.h` is intracore and not
+installed. The slot, lifetime, provider identity and public class layout stay
+unchanged; the fault forwarder consumes the original host mask, not a new
+one. The extraction verifier checks 16 exact source regions and unchanged
+remaining host code (only blank-line grouping is normalized).
+
+The unchanged 18-case UIA selection passes **576 assertions** before and after
+in both DLL and static builds, including real XAML Name/binding/style
+ownership, reentrant migration and real USER32/UIA shell retirement. Both
+`test_gui`/`minimal` builds pass `/warnaserror`; runtime smoke/Supported pass
+**2/2** in each linkage. Logs are `audit107a-uia-before.log` and
+`audit107a-uia-on-*` in the two existing build trees; extraction script/proof
+are under `F:\wxwinui-pr26890-audit107-foundation`. No physical input was run.
+The Name/HelpText transaction within `SyncSlot()` is deliberately unchanged
+for the geometry move and still needs its own UIA projection boundary.
+The residual projection is now extracted after `7d6d65963f`: the complete
+754-line HelpText/Name policy runs in `hostuia.cpp` through a synchronous,
+non-owning stack transaction. The existing snapshots are not copied, their
+getter order is unchanged, and the shared mutable Name revision still guards
+every later geometry publication. The 16 outer early returns propagate to
+the same SyncSlot return; its existing exception boundary remains the owner.
+The ten nested lambda bodies and the re-expanded SyncSlot compare exactly.
+Only private non-virtual declarations are added to the source host header;
+no data member or public callable API is added.
+
+Both shared/static `test_gui` and `minimal` builds pass `/warnaserror`, then
+retain **576 assertions / 18 UIA cases**, **550 / 22 tooltip cases**,
+**327 / 14 geometry cases**, and smoke/Supported **2/2**. Logs are
+`audit107a-projection-on-{build,uia,tooltips,geometry,gates}.log` in the
+existing build trees. No failed build or runtime retry occurred for this
+projection sublot. Source reconstruction and context-field proof are in
+`F:\wxwinui-pr26890-audit107-geometry\uia-projection`.
+
+Combined OFF/install/restore and new remote CI remain pending for this lot;
+the preceding batch's shipping evidence does not cover this new code.
+
+Move `NativeResizeRequest`, validation, posting, dispatch, cancellation and
+termination to `src/winui/hostresize.cpp` with a private header only if needed.
+The host remains the authority for registry, TLW/island ownership and shutdown;
+the transaction keeps the ticket, weak grip, native target generation and
+real USER32 entry/exit state. Preserve foreign capture, deferred wake ownership,
+weak subclass contexts and final contact validation. No second teardown owner,
+new public data member, or include-of-cpp split.
+
+Then extract UIA/tooltip policy implementations to separate private modules,
+one commit each, using their existing authority and lifetime contracts. OLE
+and appearance already have modules: only the host's orchestration boundary
+should remain here, not a duplicated implementation.
+
+Prerequisites: native characterization from 102, runtime ownership from 104,
+and the corresponding 106 test seam boundary. Keep the four real native-loop
+tests in `tests/controls/winuichromefeedback.cpp`; add a pure transition test
+for pending/entered/finished without replacing USER32 with a successful mock.
+
+Baseline filter:
+`[winui-native-resize],HostLifecycle::RegisterUnregisterLoop,HostLifecycle::DestroyTLWWithSlots,HostLifecycle::ShutdownRestoresRetainedContentState`.
+
+### 107B — Minimal peer owner/generation primitive
+
+Implementation evidence (2026-08-31): the first four-file extraction follows
+the ControlHost source set committed as `c05fa04f05`. Gauge aliases the new
+private `wxWinUIPeerLifetime<wxGauge>`; ScrollBar inherits only the matching
+owner/generation protocol and retains its own mutation depth/guard. The helper
+allocates nothing, exports no API, introduces no virtual methods, and does not
+include WinRT. Its contract explicitly does not pin the owner or permit
+cross-thread wx access.
+
+Both original six-case baselines pass **332 assertions**. Both ON builds
+then pass the same **332/6**, the three new pure tests **21/3**, and runtime
+smoke/Supported **2/2**, with `/warnaserror`. New cases cover stale generation,
+callbacks after invalidation/owner retirement, and distinct replacement state
+for the same owner address. Existing control callbacks, their invalidation
+before revocation and all old test bodies remain unchanged; this does not
+qualify concurrent wx object access or physical input.
+
+Exact four-path hashes and candidate/source verification are under
+`F:\wxwinui-pr26890-audit107-peer-lifetime`; runtime/build logs are
+`audit107b-*` in each build tree. Both shipping OFF builds and fresh installs
+pass with `/warnaserror`. The private lifetime helper is absent from installed
+headers and shared DLL exports; the preceding control/ControlHost/runtime
+test-surface absence checks still pass. Fresh four-TU installed toolkit
+consumers pass CTest **1/1** per linkage. One normal installed runtime process
+completes **50 epochs** per linkage; this does not repeat the eleven-scenario
+fault/renderer matrix from 106.
+
+Both build trees are restored to `wxBUILD_TESTS=ALL`; `test_gui` and `minimal`
+rebuild and rerun the unchanged **332/6**, new **21/3**, and smoke/Supported
+**2/2** successfully. No 107B build or test failure/retry occurred. Installed
+shipping core SHA256 values are:
+
+- shared: `6ECE1B80FF82055C96BF455AE34CA8C39334F478209CB8612E061445A0D670FF`
+- static: `8E006FC53F3250205EE4B1D057232053A8B5604654A3EC1ECA2E9FC3DCB10374`
+
+This closes only 107B's local implementation/qualification. Remote CI for
+this new source, physical input and 107A/C-F remain separate requirements;
+the host itself is not decomposed by this small extraction.
+
+Add `src/winui/peerlifetime.h` for the common owner/generation nucleus of
+Gauge and ScrollBar only. Preserve generation initialization, memory ordering
+and invalidation-before-revocation. Keep ScrollBar's mutation guard, event
+silencing and each control's rollback local. Do not unify host/slot
+`OperationGuard`, and do not migrate a third consumer without proving the
+same contract first.
+
+Scope adds `src/winui/gauge.cpp`, `src/winui/scrolbar.cpp`,
+`tests/controls/winuirangedate.cpp`, `tests/controls/winuirangeevents.cpp`.
+Add pure stale-generation/invalidation tests tagged `[winui-peer-lifetime]`;
+keep real late-callback, destruction and Loaded cases unchanged.
+
+Baseline filter: `wxWinUI Gauge*,wxWinUI ScrollBar*`. Count new primitive
+assertions separately from the unchanged baseline. Risk is medium; a new
+retirement policy is explicitly not part of this extraction.
+
+### 107C — Coordinate units and atomic geometry publication
+
+First extraction implemented after `57334989e2` on 2026-08-31:
+`visualcoordinates.cpp` owns the existing Snapshot and coordinate methods,
+with one shared subtree predicate and one finite-point predicate declared in
+a non-installed intracore header. All 23 moved bodies are unchanged, including
+the two-attempt bound, fractional arithmetic, final publication checks and
+independent host/slot operation guards. Host/slot declarations, the tooltip
+extraction and all six characterization cases remain unchanged.
+
+The exact coordinate baseline passes **259 assertions / 6 cases** before and
+after, DLL and static. Native **219/7**, progress **14/1**, tooltip **550/22**,
+template **887/4** plus native invalidation **28/1**, and smoke/Supported
+**2/2** also pass, with `/warnaserror` builds of `test_gui` and `minimal`.
+Shared post-extraction logs use `audit107foundation-on-*`; static uses
+`audit107c-on-*`. No runtime failure or test change was needed. Shipping is
+qualified separately for the frozen combined source. Projection/coalescing
+in `hostgeometry.cpp` is still pending; this extraction is not all of 107C
+and does not qualify physical monitor/DPI transitions.
+
+Projection/coalescing extraction after `a038f53764` (2026-08-31):
+`hostgeometry.cpp` owns dirty scheduling, clipping, native geometry/visibility
+notifications, slot projection and z-order publication. The 38 moved
+definitions retain their bodies: 37 exact, and `SyncSlot` exact after expanding
+three narrow adapters for the existing visual map/cursor authority. Private
+`hostvisual.h` shares the unchanged implementation types; passive `com_ptr`
+copies preserve the original pin across reentrant setters. The maps,
+`MarkAllHostsDirty`, `SynchronizeAllHosts`, lifetime and content transactions
+remain in the host. No installed declaration or class layout changes.
+
+The common `hostprofile.h` prerequisite exposes only the existing profiling
+scope/functions/counters inside the core; all seven counter definitions stay
+unique in the host. The log-enabled query likewise retains one implementation.
+No timer, rendering subscription, new observation state or retry is added.
+
+Both DLL/static `/warnaserror` builds pass. Before/after geometry retains
+**327 assertions / 14 cases** (the original six plus eight z-order/visibility/
+destruction cases). The unchanged input/focus selection passes **1205 / 31**,
+UIA passes **576 / 18**, and smoke/Supported passes **2/2** per linkage. The
+input candidate's initial lexical list omitted two cases selected by its tags;
+both actually ran, and no test was excluded to match the old count. Logs:
+`audit107c-geometry-before.log`, `audit107d-input-before.log` and
+`audit107c-geometry-on-*` in the two existing build trees. The three new module
+files match the reviewed candidate exactly after newline normalization;
+mechanical proof is under `F:\wxwinui-pr26890-audit107-geometry`.
+The UIA transaction still inside `SyncSlot` is the next 107A boundary;
+combined OFF/install/restore and physical DPI qualification remain separate.
+
+Extract `wxWinUIVisualCoordinates` implementation to
+`src/winui/visualcoordinates.cpp`, then projection/coalescing to
+`src/winui/hostgeometry.cpp`. Keep a single converter, fractional coordinates
+until the final rounding boundary, and explicit client/screen-pixel versus
+visual-DIP semantics. Use private types/names to remove demonstrated unit
+ambiguity, not a mechanical type rewrite across every control.
+
+Preserve `m_syncEpoch`, structure/content/native generations, frozen dirty
+state, and publication of geometry caches only after successful XAML setters
+and exact-owner revalidation. A nested flush must not observe an intermediate
+`SetContent()` transaction. Depends on 107A's ownership boundaries.
+
+Baseline filter:
+`HostLifecycle::FractionalCoordinateArithmetic,HostLifecycle::SlotPointerCoordinatesRTL,HostLifecycle::FreezeThawCoalescedFlush,HostLifecycle::ReentrantSlotSyncDefersNewStructureEpoch,HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe,HostState::ContentSwapFlushSeesOnlyPublishedModel`.
+
+These tests cover arithmetic and real slot projection, not physical
+cross-monitor movement. Generalized synchronous flushes, mirrors or a second
+island require a separate design decision, not a refactor exception.
+
+### 107D — Input policy versus focus/capture/native adapters
+
+Focus extraction implemented after `6a8e0e7503`: 27 member bodies move to
+`hostfocus.cpp`, together with the unique migration map and its native-focus
+resolver. The private query declaration is not installed. Reparent binding,
+registry scans and physical slot migration stay in the host; no public class
+layout, event ordering or existing test assertion changes.
+
+The initial shared/static build caught the native-focus resolver left behind
+in the old translation unit. Its exact static body now accompanies all seven
+users in `hostfocus.cpp`; this is not a second focus authority. Failed logs
+remain `audit107d1-focus-on-build.log`, corrected builds
+`audit107d1-focus-on-build-helperfix.log` in the two existing build trees.
+Both corrected builds pass `/warnaserror`. Identical before/after private-
+desktop tests pass **132 assertions / 14 focus cases**, **1205 / 31 input
+cases**, **327 / 14 geometry cases**, and smoke/Supported **2/2** in each
+linkage. Logs are `audit107d1-focus-before.log` and
+`audit107d1-focus-on-{focus,input,geometry,gates}.log` (the earlier input and
+geometry baselines belong to 107C). No physical input was used and no runtime
+failure was retried. Input extraction and the new combined OFF/install/
+consumer qualification remain pending at this focus-only checkpoint.
+
+Input extraction subsequently implemented after `0b75f296d8`: the existing
+54 routing/dispatch bodies and contact-snapshot accessor move to
+`hostinput.cpp`, with three stateless intracore declarations in
+`hostinput.h`. Capture, cancellation, posted non-client dispatch, native
+resize contact identity, cursor policy and generation guards remain exact.
+The native-focus resolver stays solely in `hostfocus.cpp`; the external D2
+candidate's redundant move of that helper was not applied. The first compile
+caught the missing `hostresize.h` include for the existing shared request;
+failed logs remain `audit107d2-input-on-build.log`, fixed builds are
+`audit107d2-input-on-build-includefix.log` and pass `/warnaserror`.
+
+Both linkages retain **1205/31 input**, **132/14 focus**, **219/7 native
+resize**, **14/1 pure resize progress**, **327/14 geometry** and
+smoke/Supported **2/2**. Logs: `audit107d2-input-on-{input,focus,native,
+progress,geometry,gates}.log`. All are private-desktop/non-global-input
+checks; no runtime failure was retried. Public declarations/layout and test
+assertions are unchanged. Removal of the moved test accessor belongs to
+106, and this batch's OFF/install/consumer cycle is still pending.
+
+Extract host adapters to `src/winui/hostfocus.cpp` and
+`src/winui/hostinput.cpp`, after 107A/C. Reuse the existing pure
+`wxWinUIInputState` and router. Keep USER32 capture, XAML gesture ownership,
+logical wx focus and generation-qualified native authority distinct.
+Maintain the MSW bridge signatures and compile guards; this lot does not
+authorize a second event state machine or a synthetic replacement for a
+native notification.
+
+In particular, carry `FocusMigration`'s weak window and comparison identity,
+transport authority generation and source/destination intent generations
+through reparenting. An implementation move must not emit a second wx focus
+pair. Keep tests in `winuiinputstate.cpp`, `winuiinputrouter.cpp` and
+`winuihostlifecycle.cpp`.
+
+Baseline filter:
+`[winui-input-state],[winui-input-router],HostLifecycle::FocusedReparentAcrossTLW,HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach,HostLifecycle::FocusedReparentHonoursNativeRedirect,HostLifecycle::FocusedReparentHonoursGettingFocusRedirect`.
+
+### 107E — Template identity/invalidation foundation
+
+Implemented and characterized on 2026-08-31 after `92c69b478c`: the two
+local contracts remain explicit instead of introducing an empty common
+resolver. Search owns three independently invalidated parts and two bounded
+synchronous passes. Combo owns editor/choice/text generations, exact root
+identities, replay state and a weak Low-priority continuation. Sharing that
+policy would change its passive layout contract rather than simplify it.
+
+A new test uses a real, already-Loaded ComboBox in its own XamlRoot, changes
+that root's RequestedTheme, and observes the production ActualThemeChanged
+invalidation and deferred replay. It requires a new cache generation without
+another Loaded event, synchronous realization, text event or model change.
+The only accessor added is a passive weak native-peer getter in non-installed
+test support; no production control algorithm or public layout changes.
+The unchanged four-case baseline passes **887 assertions / 4 cases** and the
+new native case **28 / 1**, DLL and static, with smoke/Supported **2/2**.
+The initial build exposed a GetCurrentTime macro collision and a missing
+Foundation event projection. Forward declarations in the private test header
+and the existing WinRT include boundary in the test fix both; original logs
+remain `audit107e-on-build.log`, corrected builds `*-build-headerfix.log`.
+No runtime failure was retried. Shipping checks remain part of the combined
+batch. Search's native post-Loaded template replacement is still a component
+qualification item in 108, not claimed by its detached characterization cases.
+
+First compare SearchCtrl and ComboBox's real resolution contracts. If their
+identity/invalidation core is equivalent, add `src/winui/templatecontract.h`
+for a typed part result and resolved/missing/superseded identity, using only
+`src/winui/srchctrl.cpp` and `src/winui/combobox.cpp` as initial consumers.
+Otherwise retain two explicit local contracts; do not force a shared helper.
+
+Neither the common result nor its cache may prolong a retired peer/XamlRoot.
+Detach tokens on part replacement and revalidate after callback-bearing
+operations. Search's bounded passes and Combo's passive layout/deferred
+continuation remain separate policies. Versioned part inventories, fallbacks
+and feature implementation stay in 108; support claims stay in 111.
+
+Depends on 107B's lifetime vocabulary. Tests remain in `winuitextpeer.cpp`
+and `winuicombomodel.cpp`; add a genuine post-Loaded cache invalidation case,
+not just the existing detached/injected template fixture.
+
+Baseline filter:
+`wxWinUI SearchCtrl template actions,wxWinUI SearchCtrl survives destruction from query Click,wxWinUI ComboBox LayoutUpdated realization is deferred,wxWinUI ComboBox callbacks are destruction-safe`.
+
+Do not widen to the ComboBox model/template-generations case that launches
+an external UIA helper. If reliable identity cannot be defined without
+changing retry policy, report that constraint and retain local resolvers.
+
+### 107F — Production decisions, passive observation and fault injection
+
+First production boundary implemented (2026-08-31, after `00fe7a3b21`):
+`RestartDropBrokerAfterPresentationInvalidation()` now calls
+`HasNativeOwnership()` on the broker's authoritative registration/lock state,
+preserving exactly `ownsRegistration || locked`. It no longer requests a test
+snapshot or native identity refresh to make that rollback decision.
+`IsReady()` uses `m_initResult.status`, the same value copied by the sole
+`PublishInitResult()` writer into diagnostics, and retains its UI-thread,
+active-state, complete-pair and current-context checks.
+
+The new `[winui-broker-observation]` case covers a ready pair, clean shutdown,
+failed revocation retaining only registration, and failed unlock retaining
+only the lock. Repeated production queries must not change native-call logs,
+the shell mutation epoch, host flush scheduling/runs, or broker counters.
+It adds **372 assertions / 1 case**, distinct from the unchanged host **70/4**,
+ownership **206/3**, and real-island presentation rollback **15/1** baselines.
+Both shared/static Release builds of `test_gui` and `minimal` pass with
+`/warnaserror`; all these cases and smoke/Supported **2/2** pass in each
+linkage, without retries. Logs use `audit107f-*` in the two existing build
+trees, with unchanged binaries captured first as `audit107foundation-before-*`
+(static presentation: `audit107f-before-presentation.log`). Shipping qualification
+will be recorded against the combined architecture source after the separately
+tested implementation commits; this entry alone does not claim an OFF build.
+
+The broker's remaining installed testing declarations and the broader passive
+observation/fault separation remain in 106/107F. In particular, the diagnostic
+snapshot still revalidates native HWND identities for qualification: this
+small change does not relabel every observer as side-effect-free.
+
+After the relevant 106 extraction, replace the production use of the broker's
+test snapshot with a narrow, non-mutating production ownership predicate in
+`src/winui/dropbroker.cpp` and its existing private declaration. Preserve the
+exact fail-closed `ownsRegistration || locked` meaning. Observation snapshots
+must not schedule work; hooks/faults stay in non-installed test support.
+
+Keep real counters, generation guards and opt-in production profiling. Add
+no Rendering subscription, timer or `ForceRender()` merely to observe state.
+Characterize repeated observation without changing mutation counters, queued
+work or subscription ownership. This verifies the architecture boundary;
+it is not a duplicate of 106's migration or 111's capability manifest.
+
+Baseline filter:
+`HostLifecycle::FreezeThawCoalescedFlush,HostLifecycle::ReentrantSlotSyncDefersNewStructureEpoch,HostState::ContentSwapFlushSeesOnlyPublishedModel,HostState::LoadedNotificationIsContentTransactional`.
+Add the existing broker acquisition/rollback cases after reviewing their
+non-input paths; do not run physical OLE as part of an automatic refactor.
+
+## Combined shipping qualification, 2026-08-31
+
+Source frozen at **`e2014c053b46cbf564524edf35bde903bfeeaf33`**, following five
+separate implementation commits. Both existing build trees complete
+**ON -> OFF -> fresh install/consumer -> ALL restored**. No fresh wxWidgets
+build tree is introduced. The source proof covers 21 changed or directly
+coupled source/header/test paths and matches before and after each cycle.
+
+- Both OFF core/minimal builds and restored test_gui/minimal builds pass
+  `/warnaserror`. Both caches end at `wxBUILD_TESTS=ALL`.
+- The 28 migrated control headers, retired ControlHost/runtime test symbols,
+  private support/CMake exports and new implementation-only headers pass the
+  existing shipping checks. Intracore coordinate predicates and native progress
+  state are not DLL-exported. This does not claim that every remaining 106 host
+  test seam has been removed.
+- Fresh four-TU installed consumers compile and pass CTest **1/1** in both
+  linkages. One normal installed runtime process per linkage completes its
+  50-epoch/apartment-ownership checks; this is not the separate fault matrix,
+  physical-input campaign, WER-settling scan or 60-minute soak.
+- After restoring ALL, ten focused groups retain their exact counts in both
+  linkages: native **219/7**, progress **14/1**, coordinates **259/6**, templates
+  **887/4**, native Combo invalidation **28/1**, host publication **70/4**,
+  broker ownership **206/3**, presentation rollback **15/1**, passive ownership
+  queries **372/1**, and tooltip **550/22**. Groups deliberately overlap; these
+  are not a unique-case total. Smoke/Supported passes **2/2** in each linkage.
+
+Evidence recipe and frozen hashes:
+`F:\wxwinui-pr26890-audit107-foundation\{source-proof.json,verify-source.cjs,run-shipping.ps1,verify-shipping.ps1,run-runtime.ps1,test-groups.json}`.
+Logs: `audit107foundation-*` under each existing build tree. Fresh installations
+are `F:\wxwinui-pr26890-audit107foundation-install-{shared,static}`.
+Installed OFF core SHA256 values:
+
+- DLL: `10329C3E0A3733DC5C134FA2A97754D0EF1D3B2440F452B5C6369FCD05B9BDAE`.
+- Static: `DA42E5AD173F7AAEF5EB7CD27CA763CE19FAEE3A5A1743240065257E207B1E69`.
+
+No shipping/runtime failure was retried. The earlier template include failure
+and incomplete tooltip wildcard selection are documented in their sublots.
+New remote CI is separate from these local results.
+
+| Sublot | Qualified boundary | Still open |
+| --- | --- | --- |
+| 107A | Native resize, tooltip, UIA ownership and Name/HelpText projection modules | Physical resize/UIA qualification remains in 109 |
+| 107B | Gauge/ScrollBar owner/generation primitive; no unjustified third consumer | Remote CI pending |
+| 107C | Fractional coordinates plus geometry projection/coalescing/clipping/Z-order | Physical cross-monitor DPI remains in 109 |
+| 107D | Focus migration and input/capture/native-dispatch adapters | Physical input remains in 109 |
+| 107E | Explicit local Search/Combo contracts; real Combo post-Loaded invalidation | Native Search/template inventory remains component work in 108 |
+| 107F | Production broker predicate, private test boundary, passive record and explicit native validation | Physical OLE remains in 109 |
+
+The original table described the frozen `e2014c053b46` batch. It is reconciled
+below with the later UIA/107A, geometry/107C, focus/input/107D and broker
+boundary work. Plans 108–112 are not closed by these refactors; physical
+integration, performance and exhaustive component parity retain their own
+evidence requirements.
+
+## 107F broker test boundary extraction, 2026-08-31
+
+The source-private broker no longer exposes its injected fourth factory
+argument, two test getters or diagnostic/native-operation records. The real
+operation table moves into its existing TU-local State; ownership counters,
+registration generations, two COM adapters and rollback order remain intact.
+Only the test-enabled factory can replace the table. The test-boundary flag
+has no OFF storage; the source-header class has no conditional layout.
+`dropbrokerstate.h` is intracore, while `drop-broker-test-access.h` is private
+test support. Neither is installed; `dropbroker.h` was already uninstalled.
+
+Historical snapshot consumers now explicitly call `ValidateNativeIdentity`,
+including physical pre-injection/final registration gates. The native lookup
+still precedes the snapshot mutex, with State pinned across reentrance. The
+separate passive stored-record getter is the next additive step; this extraction
+does not substitute cached identity for qualification.
+
+Both shared/static `/warnaserror` builds of `test_gui`, `minimal` and
+`winuispike` pass. The existing ownership group remains **206 assertions / 3
+cases**, and observation/presentation/churn remains **430 / 3** in both
+linkages, exactly as before extraction. Smoke/Supported V0 pass **2/2**.
+Logs: `audit107f-broker-a-on-{build,ownership,observation,gates}.log` under
+the two existing build directories. All runs use private desktops with
+`WX_UI_TESTS=0`; no physical OLE delivery is qualified.
+
+Four `/W4 /WX` MSVC x64 compile-only objects confirm equal ON/OFF and
+shared/static source-class size/alignment: host **6000/8**, slot **1224/8**,
+broker **304/8**. The broker was 344/8 before this unconditional source-private
+storage move; this is not a claim of historical binary compatibility. Inputs
+and actual include paths are verified in the existing `host-layout/broker`
+proof directory. OFF library/installation/export and consumer checks remain
+pending for the combined batch.
+
+### Additive passive record observation
+
+`ReadSnapshot()` now copies stored facts under the existing snapshot mutex
+and reads the active atomic only. It does not perform native identity lookups,
+create HWND cookies, call COM or schedule work. `ValidateNativeIdentity()`
+retains the explicit native checks before obtaining that stored copy. All
+historical consumers, including physical qualification, retain validation.
+
+The new `WinUI OLE broker separates passive records from native validation`
+case destroys its own offscreen bridge and performs 32 passive reads, checking
+unchanged native-operation, mutation and host-scheduling counts. Explicit
+validation then rejects the destroyed bridge while the passive record remains
+cached. It passes **210 assertions / 1 case** in shared and static. The two
+existing groups still pass **206/3 + 430/3** after the addition. Both test_gui
+builds pass `/warnaserror`; logs are `audit107f-broker-b-on-build.log` and
+`audit106-broker-b-{ownership,observation,passive}.log`. These tests do not
+provide physical OLE or shipping qualification.
+
+### Shipping direct-call follow-up, 2026-09-01
+
+The earlier extraction deliberately left one real operation table in the
+TU-local State. That final table is now gone from shipping too. Its callback
+record lives only in `drop-broker-test-access.h` under test support;
+`dropbrokerstate.h` is deleted. Production performs direct OLE calls at the
+same four protocol boundaries, while test-enabled builds can still copy a
+complete fake record for reentrancy and rollback coverage. The neutral
+`IsOperationContextCurrent()` helper compiles to the real context check in OFF
+builds and admits a synthetic boundary only with test support.
+
+Shared/static ON builds pass the complete non-physical broker group
+**1912/33**, five fresh-process consumers (**340/1**, **165/1**, **82/1**,
+**41/1**, **51/1**) and smoke/Supported V0 **2/2**. Both OFF builds pass
+`wxcore`/`minimal` with warnings as errors; shared exports and static symbols
+contain none of the callback record, wrapper, table-getter or test-access
+names. Both caches are restored to ALL and repeat the same results. These are
+private-desktop, non-input results, not physical OLE delivery evidence.
+
+### TLW lifecycle observation follow-up, 2026-09-01
+
+The host coordination API no longer carries ten static methods used only by
+tests. They move to the existing non-installed observation adapter, and their
+669 consumers retain the same assertions. Lifetime, handler, subclass, Loaded
+hook and pending-retirement telemetry is absent from OFF builds; constructors
+for the two shared lifetime records are out of line to keep one definition in
+all translation units. Real registries, subscriptions, gates, retirements and
+shutdown transitions are unchanged, as are the production flush/z-order
+diagnostics.
+
+Shared/static `[HostLifecycle]` remains **23818 assertions / 108 cases** before
+and after. OFF `wxcore`/`minimal` builds pass with warnings as errors and expose
+none of the old getters, private adapter or counter storage; restored ALL builds
+repeat the group and smoke/Supported V0 **2/2**. This closes a test-surface
+cleanup around the existing host modules, not a new physical lifecycle claim.
+
+### Appearance and STC test-boundary follow-up, 2026-09-01
+
+Two additional observation seams are now isolated without changing host or
+control behaviour. Appearance snapshots and their XAML/UIA capture helpers
+move from the production appearance contract into the non-installed test
+adapter. The STC caret-timer oracle likewise moves out of `wxMSWTimerImpl`,
+`ScintillaWX` and the exported free-function surface into a per-source,
+test-enabled adapter; the two class layouts remain unchanged.
+
+Shared/static Release builds pass with warnings as errors. Appearance/chrome
+remains **2263 assertions / 67 cases**, and full STC remains **2328/11**.
+OFF builds of `wxcore`, `wxstc` and `minimal` expose none of the removed or new
+test names; restored ALL builds repeat both groups and smoke/Supported V0
+**2/2**. This is test-surface cleanup supporting 107's module boundaries, not
+a new component-parity or physical-input claim.
+
+## Local completion reconciliation (2026-09-01)
+
+- The six named architecture boundaries are implemented: resize, tooltip and
+  UIA policy/projection (107A); the two-consumer lifetime nucleus (107B);
+  coordinates and atomic geometry publication (107C); focus and input adapters
+  (107D); the explicit decision to retain distinct Search/Combo contracts
+  (107E); and the production/passive/native broker split (107F).
+- `git diff --name-only 8a03edb793..46c0c56542` is empty for the complete
+  architecture path set: `tlwhost.*`, every extracted `host*.{cpp,h}` module,
+  `visualcoordinates.*`, `peerlifetime.h`, and the broker implementation/state
+  headers. The coupled shipping-v6 campaign at `8a03edb793` therefore covers
+  these exact sources in shared and static OFF builds, fresh installs and
+  consumers, restored-ALL builds, private scenarios and smoke/Supported V0.
+  This is source-identity evidence, not a fabricated rerun at the later SHA.
+- The active shared/static trees at `46c0c56542` are restored to
+  `wxBUILD_TESTS=ALL`; `test_gui`, `minimal` and `winuispike` build with
+  warnings as errors and runtime smoke/Supported V0 pass **2/2** in each
+  linkage. Remote CI for the unpublished HEAD remains pending.
+- A possible future `hostcursor.cpp` would move roughly 1300 tightly coupled
+  lines, COM cursor ownership and geometry adapters. It is not a missing small
+  107A–F extraction and is not smuggled into this completion commit. If wanted,
+  it needs its own bounded design and baseline. Physical resize/input/OLE/DPI
+  and performance remain in 109/110.
+
+## Verification and test plan
+
+Before and after each extraction run the identical host lifecycle/state/input/slot tests plus Supported V0 in both linkages. Build installed consumers and compare expected public exports. Every new module needs a pure state test and a real-island integration test.
+
+Use the exact sublot filter above as `$auditFilter107`, with no automatic
+physical input. These commands use the existing Release build/dependency
+configuration; a fresh configure must preserve its pinned Windows App SDK.
+
+```powershell
+$env:WX_UI_TESTS = '0'
+foreach ($auditLinkage in @('shared', 'static')) {
+    $auditBuild107 = if ($auditLinkage -eq 'shared') { 'F:\wxwinui-pr26890-feedback-build' } else { 'F:\wxwinui-pr26890-feedback-build-static' }
+    $auditBin107 = Join-Path $auditBuild107 $(if ($auditLinkage -eq 'shared') { 'lib\vc_x64_dll' } else { 'lib\vc_x64_lib' })
+    & 'C:\Strawberry\c\bin\cmake.exe' --build $auditBuild107 --config Release --target test_gui minimal --parallel 4 -- /warnaserror
+    if ($LASTEXITCODE) { throw 'Build failed' }
+    Push-Location $auditBin107
+    try {
+        & "$auditBuild107\winui\test-tools\Release\wx_winui_desktop_test_runner.exe" --timeout-ms=180000 -- "$auditBin107\test_gui.exe" $auditFilter107 --durations yes
+        if ($LASTEXITCODE) { throw 'Focused tests failed' }
+    } finally { Pop-Location }
+    & 'C:\Strawberry\c\bin\ctest.exe' --test-dir $auditBuild107 -C Release --output-on-failure --no-tests=error -R '^(wx_winui_runtime_smoke|wx_winui_supported_beta)$'
+    if ($LASTEXITCODE) { throw 'Smoke/Supported failed' }
+}
+git diff --check
+```
+
+Expected: both builds exit 0, unchanged baseline cases still execute/pass,
+new tests pass separately, and each CTest invocation reports **2/2**. Archive
+unique before/after logs, not just console summaries. `WX_UI_TESTS=0` is not a
+universal guard: inspect any newly selected case for global input first.
+
+For installed verification reuse the shipping/restore sequence of 106 with
+fresh per-sublot prefixes: configure `-DwxBUILD_TESTS=OFF`, rebuild the affected
+libraries and `minimal`, `cmake --install <build> --config Release --prefix
+<fresh-prefix>`, then configure `tests/winui/toolkit-contract` in a fresh
+consumer directory with `-G "Visual Studio 17 2022" -A x64`,
+`-DCMAKE_PREFIX_PATH=<fresh-prefix>`, `-DwxWidgets_USE_STATIC=ON` (static) or
+`OFF` (shared), and `-DWX_EXPECT_TOOLKIT=winui`. Build target
+`wx_toolkit_contract` with `/warnaserror` and run its Release CTest: **1/1**.
+Compare shipping exports/header surfaces against the baseline; preserve
+already removed test APIs as absent. Restore `-DwxBUILD_TESTS=ALL`, rebuild
+and repeat the same focused tests and 2/2 gates. A failed OFF build is not
+permission to leave the shared build cache OFF or to ship test support.
+
+For every commit, git diff --check must exit 0. Record exact commands, exit status, assertion counts when applicable, build path, source SHA and whether a result is local, remote, simulated, native or physical. A missing/unavailable tool is a recorded coverage gap, not a PASS.
+
+## Done criteria
+
+Each named authority has a focused module and ownership contract; host coordinates rather than reimplementing all domains; no lost guards, public ABI growth or artificial file-size-only split.
+
+- Each sublot has a separate reviewed implementation commit and recorded
+  local/remote verification status. A plan refresh alone is not implemented.
+- Each move retains the existing callback/rollback/retirement ordering;
+  behavioral corrections are distinct commits with their own reproduction.
+- The owner/generation and template nuclei have two concrete consumers, or
+  the evidence-based decision not to share them is recorded explicitly.
+- No `.cpp` includes, parallel brokers/routers, conditional exported-class
+  layout, public namespace rewrite, or unapproved composition redesign.
+- Plans 108/109/110/111 retain their actual component, physical, performance
+  and documentation work. Foundation completion does not mark them DONE.
+
+All criteria are required before DONE. An implementation can be LOCAL PASS / REMOTE PENDING or PHYSICAL PENDING without being completed. Update the index with evidence and unresolved gates.
+
+## Stop conditions
+
+If two consumers have materially different rollback/retirement semantics, do not force them into a generic abstraction. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
+
+## Maintenance
+
+Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

@@ -16,7 +16,9 @@
 
 #include "wx/colourdata.h"
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__) && !defined(__WXUNIVERSAL__)
+    #include "wx/winui/colordlg.h"
+#elif defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/colordlg.h"
 #elif defined(__WXMAC__) && !defined(__WXUNIVERSAL__)
     #include "wx/osx/colordlg.h"

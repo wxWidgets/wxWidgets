@@ -396,26 +396,34 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
         ComputeSelectionShape();
     }
 
+    // A range event is allowed to replace the grid table, which also replaces
+    // this selection object while keeping the grid itself alive.  Keep using a
+    // stable grid pointer and, after every callback, verify both lifetimes
+    // before touching any selection state again.
+    wxGrid* const grid = m_grid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
     count = refreshBlocks.size();
     for ( n = 0; n < count; n++ )
     {
         const wxGridBlockCoords& refBlock = refreshBlocks[n];
 
-        if ( !m_grid->UsesOverlaySelection() && !m_grid->GetBatchCount() )
+        if ( !grid->UsesOverlaySelection() && !grid->GetBatchCount() )
         {
-            m_grid->RefreshBlock(refBlock.GetTopLeft(), refBlock.GetBottomRight());
+            grid->RefreshBlock(refBlock.GetTopLeft(), refBlock.GetBottomRight());
         }
 
         if ( eventType != wxEVT_NULL )
         {
-            wxGridRangeSelectEvent gridEvt(m_grid->GetId(),
+            wxGridRangeSelectEvent gridEvt(grid->GetId(),
                                            eventType,
-                                           m_grid,
+                                           grid,
                                            refBlock.GetTopLeft(),
                                            refBlock.GetBottomRight(),
                                            false,
                                            kbd);
-            m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+            grid->GetEventHandler()->ProcessEvent(gridEvt);
+            if ( !weakGrid || grid->m_selection != this )
+                return;
         }
     }
 }

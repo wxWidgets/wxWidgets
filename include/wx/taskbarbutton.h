@@ -42,8 +42,7 @@ enum wxTaskBarButtonState
 class WXDLLIMPEXP_CORE wxThumbBarButton : public wxObject
 {
 public:
-    wxThumbBarButton() : m_taskBarButtonParent(nullptr)
-    { }
+    wxThumbBarButton() = default;
 
     wxThumbBarButton(int id,
                      const wxIcon& icon,
@@ -90,15 +89,18 @@ public:
 private:
     bool UpdateParentTaskBarButton();
 
-    int m_id;
+    // Keep the two-phase construction state deterministic. In particular,
+    // querying or destroying a default-constructed button must never read the
+    // indeterminate scalar values which used to live here.
+    int m_id { wxID_ANY };
     wxIcon m_icon;
     wxString m_tooltip;
-    bool m_enable;
-    bool m_dismissOnClick;
-    bool m_hasBackground;
-    bool m_shown;
-    bool m_interactive;
-    wxTaskBarButton *m_taskBarButtonParent;
+    bool m_enable { true };
+    bool m_dismissOnClick { false };
+    bool m_hasBackground { true };
+    bool m_shown { true };
+    bool m_interactive { true };
+    wxTaskBarButton *m_taskBarButtonParent { nullptr };
 
     wxDECLARE_DYNAMIC_CLASS(wxThumbBarButton);
 };

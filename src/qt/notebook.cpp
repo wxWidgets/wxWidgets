@@ -11,12 +11,14 @@
 #if wxUSE_NOTEBOOK
 
 #include "wx/notebook.h"
+#include "wx/weakref.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTabBar>
+#include <QtCore/QPointer>
 
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {
@@ -33,6 +35,11 @@ wxQtTabWidget::wxQtTabWidget( wxWindow *parent, wxNotebook *handler )
 
 void wxQtTabWidget::currentChanged(int index)
 {
+    // Qt emits -1 when the final tab is removed. There is no new page to
+    // select or veto; DoRemovePage() will publish the resulting empty state.
+    if ( index == wxNOT_FOUND )
+        return;
+
     wxNotebook *handler = GetHandler();
     if ( handler )
     {
@@ -214,10 +221,17 @@ int wxNotebook::SetSelection(size_t page)
     wxCHECK_MSG(page < GetPageCount(), wxNOT_FOUND, "invalid notebook index");
 
     int selOld = GetSelection();
+    const wxWeakRef<wxNotebook> self(this);
+    const QPointer<QTabWidget> tabWidget(GetQTabWidget());
 
     // change the QTabWidget selected page:
-    GetQTabWidget()->setCurrentIndex( page );
-    m_selection = page;
+    tabWidget->setCurrentIndex( page );
+
+    // currentChanged() may have restored the old tab after a veto, or a
+    // callback may have selected another tab. Publish the actual selection,
+    // not the request which initiated this synchronous signal.
+    if ( self && tabWidget )
+        m_selection = tabWidget->currentIndex();
 
     return selOld;
 }
@@ -233,12 +247,20 @@ int wxNotebook::ChangeSelection(size_t nPage)
 
 wxWindow *wxNotebook::DoRemovePage(size_t page)
 {
-    QWidget *qtWidget = GetQTabWidget()->widget( page );
-    GetQTabWidget()->removeTab( page );
-    wxNotebookBase::DoRemovePage(page);
-    m_images.erase( m_images.begin() + page );
+    const wxWeakRef<wxNotebook> self(this);
+    const QPointer<QTabWidget> tabWidget(GetQTabWidget());
+    tabWidget->removeTab( page );
+    if ( !self || !tabWidget )
+        return nullptr;
 
-    return QtRetrieveWindowPointer( qtWidget );
+    wxWindow* const removed = wxNotebookBase::DoRemovePage(page);
+    if ( !removed || !self || !tabWidget )
+        return nullptr;
+
+    m_images.erase( m_images.begin() + page );
+    m_selection = tabWidget->currentIndex();
+
+    return removed;
 }
 
 #endif // wxUSE_NOTEBOOK

@@ -21,6 +21,7 @@
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
 #include "wx/choice.h"
+#include "wx/weakref.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -151,8 +152,9 @@ public:
 
     virtual wxTreeItemId GetRootId() { return m_rootId; }
 
-    virtual wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; }
-    virtual wxDirFilterListCtrl* GetFilterListCtrl() const { return m_filterListCtrl; }
+    virtual wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl.get(); }
+    virtual wxDirFilterListCtrl* GetFilterListCtrl() const
+        { return m_filterListCtrl.get(); }
 
     virtual void UnselectAll();
 
@@ -196,17 +198,21 @@ protected:
 
 private:
     void PopulateNode(wxTreeItemId node);
+    wxTreeItemId FindItem(const wxString& path);
     wxDirItemData* GetItemData(wxTreeItemId itemId);
 
-    bool            m_showHidden;
+    bool            m_showHidden = false;
     wxTreeItemId    m_rootId;
     wxString        m_defaultPath; // Starting path
-    long            m_styleEx; // Extended style
+    long            m_styleEx = 0; // Extended style
     wxString        m_filter;  // Wildcards in same format as per wxFileDialog
-    int             m_currentFilter; // The current filter index
+    int             m_currentFilter = 0; // The current filter index
     wxString        m_currentFilterStr; // Current filter string
-    wxTreeCtrl*     m_treeCtrl;
-    wxDirFilterListCtrl* m_filterListCtrl;
+    // Both child controls are publicly reachable and can be reparented or
+    // destroyed independently. Keep revocable references so that a later
+    // refresh/filter change never dereferences a former child.
+    wxWeakRef<wxTreeCtrl> m_treeCtrl;
+    wxWeakRef<wxDirFilterListCtrl> m_filterListCtrl;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -256,7 +262,9 @@ public:
     void OnSelFilter(wxCommandEvent& event);
 
 protected:
-    wxGenericDirCtrl*    m_dirCtrl;
+    // A filter control can legally outlive its original parent after
+    // Reparent(). The association must become null when the dir control dies.
+    wxWeakRef<wxGenericDirCtrl> m_dirCtrl;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxDirFilterListCtrl);

@@ -12,6 +12,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
+#include "wx/arrstr.h"
 
 // We want to use IFileDialog if either wxDirDialog or wxFileDialog are used.
 //

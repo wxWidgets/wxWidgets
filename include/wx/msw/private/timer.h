@@ -15,6 +15,10 @@
 #include "wx/private/timer.h"
 #include "wx/msw/wrapwin.h"     // for WPARAM
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxMSWTimerTestAccess;
+#endif
+
 class WXDLLIMPEXP_BASE wxMSWTimerImpl : public wxTimerImpl
 {
 public:
@@ -29,6 +33,10 @@ protected:
     // this must be 64 bit under Win64 as WPARAM (storing timer ids) is 64 bit
     // there and so the ids may possibly not fit in 32 bits
     WPARAM m_id;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxMSWTimerTestAccess;
+#endif
 };
 
 #endif // wxUSE_TIMER

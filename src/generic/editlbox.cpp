@@ -22,6 +22,17 @@
 #include "wx/sizer.h"
 #include "wx/listctrl.h"
 #include "wx/artprov.h"
+#include "wx/weakref.h"
+
+namespace
+{
+bool IsEditableListCurrent(const wxWeakRef<wxEditableListBox>& owner,
+                           const wxWeakRef<wxListCtrl>& list)
+{
+    return owner && list && !owner->IsBeingDeleted() && !list->IsBeingDeleted() &&
+           owner->GetListCtrl() == list.get() && list->GetParent() == owner.get();
+}
+}
 
 // ============================================================================
 // implementation
@@ -53,10 +64,16 @@ public:
 
     void SizeColumns()
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+         // The scrollbar is drawn over the contents and takes no room: the
+         // only column is as wide as the rows, and so is the editor of an
+         // item.
+         int w = GetClientSize().x;
+#elif defined(__WXMSW__)
          int w = GetSize().x;
-#ifdef __WXMSW__
          w -= GetScrollbarSize(wxVERTICAL) + 6;
 #else
+         int w = GetSize().x;
          w -= 2*GetScrollbarSize(wxVERTICAL);
 #endif
          if (w < 0) w = 0;
@@ -92,6 +109,35 @@ const wxWindowIDRef wxID_ELB_UP = wxWindow::NewControlId();
 const wxWindowIDRef wxID_ELB_DOWN = wxWindow::NewControlId();
 const wxWindowIDRef wxID_ELB_LISTCTRL = wxWindow::NewControlId();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// The buttons show glyphs of the icon font of Windows instead of the stock
+// bitmaps: they are drawn like the icons of every WinUI control, in the
+// colour of the text of the theme, and dim with the button.
+static wxBitmapButton *
+wxELBMakeButton(wxWindow *parent, wxWindowID id, wxUniChar glyph)
+{
+    wxBitmapButton * const button = new wxBitmapButton(
+        parent, id, wxBitmapBundle(), wxDefaultPosition,
+        // Wide enough for the glyph between the margins a WinUI button
+        // keeps on both sides of its content.
+        parent->FromDIP(wxSize(40, 32)), wxBORDER_NONE);
+
+    // A wxBitmapButton is created as a button without text: this one has
+    // one, the glyph, and no bitmap.
+    button->SetWindowStyleFlag(button->GetWindowStyleFlag() & ~wxBU_NOTEXT);
+
+    wxFont font = button->GetFont();
+    if ( !font.SetFaceName("Segoe Fluent Icons") )
+        font.SetFaceName("Segoe MDL2 Assets");
+    font.Scale(1.15f);
+    button->SetFont(font);
+    button->SetLabel(wxString(glyph));
+    return button;
+}
+
+#endif // __WXWINUI__
+
 wxBEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
     EVT_LIST_ITEM_SELECTED(wxID_ELB_LISTCTRL, wxEditableListBox::OnItemSelected)
     EVT_LIST_END_LABEL_EDIT(wxID_ELB_LISTCTRL, wxEditableListBox::OnEndLabelEdit)
@@ -119,8 +165,15 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // No sunken edges around the parts of a WinUI control.
+    const long borderStyle = wxBORDER_NONE;
+#else
+    const long borderStyle = wxSUNKEN_BORDER;
+#endif
+
     wxPanel *subp = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
+                                borderStyle | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
 
     subsizer->Add(new wxStaticText(subp, wxID_ANY, label),
@@ -130,37 +183,57 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bEdit = wxELBMakeButton(subp, wxID_ELB_EDIT, wxUniChar(0xE70F));
+#else
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
+#endif
         m_bEdit->SetToolTip(_("Edit item"));
         subsizer->Add(m_bEdit, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bNew = wxELBMakeButton(subp, wxID_ELB_NEW, wxUniChar(0xE710));
+#else
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
+#endif
         m_bNew->SetToolTip(_("New item"));
         subsizer->Add(m_bNew, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bDel = wxELBMakeButton(subp, wxID_ELB_DELETE, wxUniChar(0xE74D));
+#else
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
+#endif
         m_bDel->SetToolTip(_("Delete item"));
         subsizer->Add(m_bDel, flagsCentered);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bUp = wxELBMakeButton(subp, wxID_ELB_UP, wxUniChar(0xE74A));
+#else
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
+#endif
         m_bUp->SetToolTip(_("Move up"));
         subsizer->Add(m_bUp, flagsCentered);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        m_bDown = wxELBMakeButton(subp, wxID_ELB_DOWN, wxUniChar(0xE74B));
+#else
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
+#endif
         m_bDown->SetToolTip(_("Move down"));
         subsizer->Add(m_bDown, flagsCentered);
     }
@@ -170,7 +243,14 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     sizer->Add(subp, wxSizerFlags().Expand());
 
-    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The list has the frame of a control of WinUI, a little under the row
+    // of its commands, which are quiet buttons as those of a command bar.
+    sizer->AddSpacer(FromDIP(4));
+    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxBORDER_THEME;
+#else
+    long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | borderStyle;
+#endif
     if ( m_style & wxEL_ALLOW_EDIT )
          st |= wxLC_EDIT_LABELS;
     m_listCtrl = new CleverListCtrl(this, wxID_ELB_LISTCTRL,
@@ -188,14 +268,24 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
 void wxEditableListBox::SetStrings(const wxArrayString& strings)
 {
-    m_listCtrl->DeleteAllItems();
+    const wxWeakRef<wxEditableListBox> owner(this);
+    const wxWeakRef<wxListCtrl> list(m_listCtrl);
+    if ( !IsEditableListCurrent(owner, list) || !list->DeleteAllItems() ||
+         !IsEditableListCurrent(owner, list) )
+        return;
     size_t i;
 
     for (i = 0; i < strings.GetCount(); i++)
-        m_listCtrl->InsertItem(i, strings[i]);
+    {
+        const long inserted = list->InsertItem(i, strings[i]);
+        if ( !IsEditableListCurrent(owner, list) || inserted == -1 )
+            return;
+    }
 
-    m_listCtrl->InsertItem(strings.GetCount(), wxEmptyString);
-    m_listCtrl->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    const long inserted = list->InsertItem(strings.GetCount(), wxEmptyString);
+    if ( !IsEditableListCurrent(owner, list) || inserted == -1 )
+        return;
+    list->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void wxEditableListBox::GetStrings(wxArrayString& strings) const
@@ -223,9 +313,17 @@ void wxEditableListBox::OnItemSelected(wxListEvent& event)
 
 void wxEditableListBox::OnNewItem(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->SetItemState(m_listCtrl->GetItemCount()-1,
-                             wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-    m_listCtrl->EditLabel(m_selection);
+    const wxWeakRef<wxEditableListBox> owner(this);
+    const wxWeakRef<wxListCtrl> list(m_listCtrl);
+    if ( !IsEditableListCurrent(owner, list) || list->GetItemCount() == 0 )
+        return;
+    list->SetItemState(list->GetItemCount()-1,
+                       wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    // Selection handlers may destroy either the composite or its list.
+    if ( !IsEditableListCurrent(owner, list) ||
+         m_selection < 0 || m_selection >= list->GetItemCount() )
+        return;
+    list->EditLabel(m_selection);
 }
 
 void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
@@ -233,24 +331,36 @@ void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
     if ( event.GetIndex() == m_listCtrl->GetItemCount()-1 &&
          !event.GetText().empty() )
     {
+        const wxWeakRef<wxEditableListBox> owner(this);
+        const wxWeakRef<wxListCtrl> list(m_listCtrl);
         // The user edited last (empty) line, i.e. added new entry. We have to
         // add new empty line here so that adding one more line is still
         // possible:
-        m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), wxEmptyString);
+        const long inserted = list->InsertItem(list->GetItemCount(), wxEmptyString);
+        if ( !IsEditableListCurrent(owner, list) || inserted == -1 )
+            return;
 
         // Simulate a wxEVT_LIST_ITEM_SELECTED event for the new item,
         // so that the buttons are enabled/disabled properly
-        wxListEvent selectionEvent(wxEVT_LIST_ITEM_SELECTED, m_listCtrl->GetId());
+        wxListEvent selectionEvent(wxEVT_LIST_ITEM_SELECTED, list->GetId());
+        selectionEvent.SetEventObject(list.get());
         selectionEvent.m_itemIndex = event.GetIndex();
-        m_listCtrl->GetEventHandler()->ProcessEvent(selectionEvent);
+        list->GetEventHandler()->ProcessEvent(selectionEvent);
     }
 }
 
 void wxEditableListBox::OnDelItem(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->DeleteItem(m_selection);
-    m_listCtrl->SetItemState(m_selection,
-                             wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    const wxWeakRef<wxEditableListBox> owner(this);
+    const wxWeakRef<wxListCtrl> list(m_listCtrl);
+    if ( !IsEditableListCurrent(owner, list) || m_selection < 0 ||
+         m_selection >= list->GetItemCount()-1 )
+        return;
+    if ( !list->DeleteItem(m_selection) || !IsEditableListCurrent(owner, list) ||
+         m_selection < 0 || list->GetItemCount() == 0 )
+        return;
+    list->SetItemState(wxMin(m_selection, list->GetItemCount()-1),
+                       wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void wxEditableListBox::OnEditItem(wxCommandEvent& WXUNUSED(event))

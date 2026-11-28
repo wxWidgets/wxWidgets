@@ -29,7 +29,10 @@
 
 #include "wx/generic/progdlgg.h"
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+// wxWinUI uses the generic dialog: it is made of the WinUI controls of the
+// port, while the native one is the TaskDialog of Win32, with its classic
+// progress bar and buttons.
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     // The native implementation requires the use of threads and still has some
     // problems, so it can be explicitly disabled.
     #if wxUSE_THREADS && wxUSE_NATIVE_PROGRESSDLG

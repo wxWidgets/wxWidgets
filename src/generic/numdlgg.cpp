@@ -44,6 +44,14 @@
 // this is where wxGetNumberFromUser() is declared
 #include "wx/numdlg.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/modalhook.h"
+    #include "wx/scopeguard.h"
+    #include "wx/weakref.h"
+    #include "wx/winui/winui.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 #if !wxUSE_SPINCTRL
     // wxTextCtrl will do instead of wxSpinCtrl if we don't have it
     #define wxSpinCtrl wxTextCtrl
@@ -83,7 +91,17 @@ bool wxNumberEntryDialog::Create(wxWindow *parent,
     m_value = value;
     m_max = max;
     m_min = min;
-
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // As the wxTextEntryDialog of WinUI, of which this dialog is the twin:
+    // it has no controls of wx. What it shows is made of XAML when it is
+    // shown, in its window or over its parent: see ShowModal().
+    m_winuiMessage = message;
+    m_winuiPrompt = prompt;
+    m_spinctrl = nullptr;
+    SetClientSize(FromDIP(
+        wxWinUIGetNumberEntryClientSize(this, message, prompt)));
+    Centre( wxBOTH );
+#else // !WinUI
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 #if wxUSE_STATTEXT
     // 1) text message
@@ -127,9 +145,36 @@ bool wxNumberEntryDialog::Create(wxWindow *parent,
 
     m_spinctrl->SetSelection(-1, -1);
     m_spinctrl->SetFocus();
+#endif // WinUI/!WinUI
 
     return true;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+int wxNumberEntryDialog::ShowModal()
+{
+    // As wxTextEntryDialog::ShowModal() of WinUI.
+    const wxWeakRef<wxDialog> self(this);
+    WinUIBeginExternalModalLifetime();
+    wxScopeGuard lifetime = wxMakeGuard(
+        [self]()
+        {
+            if ( wxDialog * const live = self.get() )
+                live->WinUIEndExternalModalLifetime();
+        });
+    wxUnusedVar(lifetime);
+
+    WX_HOOK_MODAL_DIALOG();
+    WinUIArmExternalModalLifetime();
+    if ( IsBeingDeleted() )
+        return wxID_CANCEL;
+
+    return wxWinUIShowNumberEntry(
+        this, m_winuiMessage, m_winuiPrompt, &m_value, m_min, m_max);
+}
+
+#endif // __WXWINUI__
 
 void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {

@@ -34,6 +34,10 @@
 #include "wx/display.h"
 
 #include "wx/msw/private.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
 #include "wx/msw/missing.h" // IDC_HAND
 
 #include "wx/private/rescale.h"
@@ -380,8 +384,23 @@ const wxCursor *wxGetGlobalCursor()
 void wxSetCursor(const wxCursorBundle& cursors)
 {
     const wxCursor& cursor = cursors.GetCursorForMainWindow();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const bool changed =
+        cursor.IsOk() != gs_globalCursor.IsOk() ||
+        (cursor.IsOk() &&
+         GetHcursorOf(cursor) != GetHcursorOf(gs_globalCursor));
+#endif
+
     if ( cursor.IsOk() )
         ::SetCursor(GetHcursorOf(cursor));
 
     gs_globalCursor = cursor;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A wxEVT_SET_CURSOR handler is allowed to call wxSetCursor(). Do not
+    // recursively invalidate the island when the effective global handle did
+    // not change: that would make every bounded refresh replay stale forever.
+    if ( changed )
+        wxWinUINotifyGlobalCursorChanged();
+#endif
 }

@@ -1,0 +1,1014 @@
+# Plan 106: Move testing facilities out of installed public control APIs
+
+- Status: IN PROGRESS (28 control headers and multiple host/runtime seam families qualified; remaining helper/component surfaces and shipping proof open)
+- Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
+- Priority: P1
+- Effort: L (split into independently verified commits)
+- Implementation risk: HIGH
+- Depends on: 101; 105 contract; proceed control-by-control
+
+## Context and workspace
+
+Work in F:\\wxwinui-pr26890-feedback on codex/pr26890-feedback. C:\\wxWidgets-master is dirty and is out of scope. Existing generated build trees are F:\\wxwinui-pr26890-feedback-build (shared) and F:\\wxwinui-pr26890-feedback-build-static; packages are under F:\\wxwinui-maintainer-integration-packages. Use apply_patch for source edits, wx coding style, and preserve generation/reentrancy checks. Tests use Catch2 TEST_CASE and focused tags; follow adjacent existing cases. Public wx class names and one toolkit-selected ABI remain as in ADR 0004.
+
+The user explicitly requested planning AND implementation. This is not permission to weaken tests, hide unimplemented features, fabricate physical sign-off, or rewrite published Git history. Make bounded implementation commits after verification; no mass opportunistic cleanup.
+
+## Drift check and current state
+
+Run git diff --stat c5cf4677b9..HEAD -- <in-scope paths> and git status --short first. Reconcile relevant intervening changes instead of overwriting them. Read each target before editing.
+
+Many exported classes expose WinUI*ForTesting methods and snapshots. ComboBox includes an environment-driven external UIA helper. The status-bar hook demonstrates why observing a callback does not qualify USER32 behaviour.
+
+## Scope
+
+include/wx/winui control headers; corresponding src/winui files; private accessors and non-installed test-support target; tests/controls/winui*; CMake installation/export lists
+
+Out of scope: other worktrees, frozen beta snapshots, unrelated backend refactors, user files, new public PRs and unrequested physical input.
+
+## Steps
+
+1. Inventory public test methods, layout fields, Release exports, helper subprocess code and consumers; distinguish production lifetime services from test-only APIs.
+2. Move state to existing stable PIMPLs and access through narrow private friend accessors; put test operations/helper launchers in a non-installed test-support target.
+3. Keep library/test object layout identical; do not hide layout-changing members behind a test-only macro applied to only one target.
+4. Migrate consumers by family with characterization tests retained. Replace success-substitution hooks with observers or dependency-level fault injection preserving semantics.
+5. Verify installed headers and release exports contain no accidental ForTesting surface.
+
+## Verification and test plan
+
+Use rg 'ForTesting|HookForTesting' against installed public headers and inspect DLL exports with dumpbin; both must have no accidental test API after migration. Build an external installed consumer without test support, plus the internal suite with test support, in shared/static.
+
+For every commit, git diff --check must exit 0. Record exact commands, exit status, assertion counts when applicable, build path, source SHA and whether a result is local, remote, simulated, native or physical. A missing/unavailable tool is a recorded coverage gap, not a PASS.
+
+## Done criteria
+
+No test-only methods/fields in installed exported controls; helper subprocesses are test binaries only; no test/production layout mismatch; equivalent real-path regression coverage preserved.
+
+All criteria are required before DONE. An implementation can be LOCAL PASS / REMOTE PENDING or PHYSICAL PENDING without being completed. Update the index with evidence and unresolved gates.
+
+## Stop conditions
+
+Do not delete a lifetime/retirement service used by production merely because its name resembles a test helper. Reclassify and privatize it deliberately. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
+
+## Implementation boundary
+
+- Begin with the Button/BitmapToggle family and its existing shared bitmap/lifetime tests, then migrate the other families without dropping their characterization coverage.
+- Public controls gain only an unconditional private friend declaration; test entry points move to a non-installed support header/target. Do not put any data member or virtual method behind a test-build macro.
+- Compile private access implementations only for explicitly test-enabled builds, adjacent to the owning implementation so opaque PIMPL definitions do not leak into application headers. Shipping builds (`wxBUILD_TESTS=OFF`) must contain neither these access exports nor the corresponding helper operations. A test-enabled Release binary is an instrumented test build, not the shipping export baseline.
+- Limit the opt-in compiler definition to migrated control translation units. Verify an OFF build and an ON build have the same public class layout and production behaviour, with private support available only to in-tree test consumers. Do not rename a public test method and call that API removal.
+
+## Button/BitmapToggle migration evidence
+
+- Removed the seven public operations from the two installed control headers. Their real peer operations now live behind a private friend accessor declared only in `tests/winui/test-support/button-test-access.h`. No data member or virtual method is conditional on the test build.
+- The non-installed `wx_winui_test_support` interface is available only with GUI tests enabled. Only `button.cpp` and `tglbtn.cpp` receive its implementation definition; no test target is retained in the static library's installed link interface.
+- Baseline and migrated real-island runs use exactly `[winui-appearance],[winui-html],WinUIDialogContracts::*`: **5328 assertions / 68 cases** pass in both shared and static Release. Logs `audit106-button-baseline.log` and `audit106-button-migrated.log` in each build directory. These are non-input tests (`WX_UI_TESTS=0`), not physical interaction qualification.
+- The installed consumer adds seven compile-time checks rejecting the old public call expressions. MSW shared/static both pass compilation with `/warnaserror` and the compile CTest (`audit106-api-absence*` in the 105 consumer directories).
+- Four compile-only COFF probes (shared/static, test definition present/absent) give identical `sizeof/alignof`: Button **872/8**, BitmapToggle **784/8** on MSVC x64. Inputs, object files, symbol/raw-data inspection and values are retained in `F:\wxwinui-pr26890-audit106-layout-proof`. This checks size/alignment, not a full historical ABI or vtable comparison.
+- Shared shipping proof: reconfigure `wxBUILD_TESTS=OFF`, rebuild `wxcore`/`minimal` with `/warnaserror`, then install to `F:\wxwinui-pr26890-audit106-install-shared`. The core DLL exports no `wxWinUIButtonTestAccess` or old Button/BitmapToggle test methods; neither private header nor support target is installed. The fresh 106 installed consumer compiles and its CTest passes. Logs `audit106-shipping-*` and `audit106-consumer-*` in the shared build tree.
+- Static shipping proof also passes: OFF configure/build/install, absent private/old test symbols in the archive, no installed support header/target, and a fresh installed consumer compiling four translation units with `/warnaserror` plus CTest 1/1. Prefix: `F:\wxwinui-pr26890-audit106-install-static`; logs `audit106-static-off-*`, `audit106-static-shipping-*` and `audit106-static-consumer-*` in the static build tree.
+- Both trees were restored to `wxBUILD_TESTS=ALL` and rebuilt. Shared and static again pass the same 5328/68 cases (`audit106-restored-button.log`, `audit106-static-restored-pilot.log`); shared smoke/Supported V0 also pass after restoration. Static full PropertyGrid passes 1208/2 in the final run (`audit106-static-restored-propgrid.log`); its earlier smoke/Supported V0 gate passed 1660/92. ON/OFF/ON archive inspection confirms that the seven explicit private static entry points return only with test support.
+- The full lot remains OPEN: the other 26 control headers and private host/helper facilities still need migration. Button coverage is not evidence that the ComboBox external helper or all public test APIs have been removed. Next bounded families: StaticText/StaticBitmap/StaticBox and Gauge/ScrollBar/SpinButton.
+
+## Next family baseline
+
+- StaticText/StaticBitmap/StaticBox keep their 12 existing appearance cases inside the already recorded 5328/68 suite.
+- Gauge/ScrollBar/SpinButton: the ten exact prefix-matched cases pass 377 assertions on shared; the related `XRC::WinUI 008c range and date controls` case passes 105 assertions. Static executes the combined filter and passes 482 assertions / 11 cases. Logs `audit106-range-baseline.log` (both trees) and `audit106-range-xrc-baseline.log` (shared).
+- Migrate only these six controls and their consumers next. The ScrollBar action enum remains an unconditional production implementation type; moving it private must preserve the two named native mapping functions without introducing duplicated numeric enums.
+
+### Six-control migration checks
+
+- Removed 18 public test operations from StaticText/StaticBitmap/StaticBox and Gauge/ScrollBar/SpinButton. Their non-installed accessors retain the existing peer operations and lifetime checks. ScrollBar's production action enum is now private and unconditional; its two native mapping functions keep their original bodies inside the private implementation.
+- Shared Release compilation of `test_gui` and `minimal` passes with `/warnaserror`. The unchanged appearance/dialog group passes 5328 assertions / 68 cases, and the range/XRC group passes 482 / 11 (`audit106-family2-on-appearance.log`, `audit106-family2-on-range.log`). Full PropertyGrid passes 1215 / 2, and smoke/Supported V0 pass 2/2 CTests. These runs set `WX_UI_TESTS=0` and do not qualify physical input.
+- Four MSVC x64 COFF probes (shared/static, test definition ON/OFF) compile with `/W4 /WX` and give identical size/alignment: StaticText 840/8, StaticBitmap 720/8, StaticBox 736/8, Gauge 720/8, ScrollBar 704/8 and SpinButton 704/8. Logs, objects and unchanged input-header hashes are in `F:\wxwinui-pr26890-audit106-layout-proof\family2`. This is a size/alignment check, not a complete ABI proof.
+- The installed consumer now rejects all 18 old operations and public access to the ScrollBar enum. Against the preceding pilot installation, it fails at exactly those 19 assertions, proving the new checks detect the old public surface. Both MSW installed-consumer builds and compile CTests still pass. Fresh WinUI shipping consumers and the full ON/OFF/ON proof remain pending at this entry.
+- Subsequent shipping checks pass in both linkages: OFF configure, `wxcore`/`minimal` build with `/warnaserror`, fresh install, and four-translation-unit installed consumer plus compile CTest 1/1. Prefixes are `F:\wxwinui-pr26890-audit106-family2-install-{shared,static}`; consumers use corresponding `family2-consumer-*` directories. No Button/Static/Range accessor or old test method from the eight migrated controls remains in the shipping DLL/archive; no private support header, target or compile definition is installed. Shared DLL SHA256: `195A1168352F0BBFC11A29A7D8DAABD5613A265C7FF7F5E53BE6586A89EF377E`; static archive: `DBBBC8C6D7B67A4A41C73E8094BAD9A20BE05018D5BB99E9464B25325E3E77E9`.
+- Both build trees are restored to `wxBUILD_TESTS=ALL`, rebuilt, and the three private accessor families reappear only in these test-enabled libraries. Shared repeats the combined **5810 assertions / 79 cases**; static repeats the same **5328/68 + 482/11**, plus full PropertyGrid **1210/2**. Restored smoke and Supported V0 CTests pass in both linkages. Logs are `audit106-family2-*` in each build tree. An initial shared verification used the wrong installed DLL directory and an initial static CTest launcher lacked an absolute executable path; both diagnostic failures are retained, and the corrected checks pass without product changes.
+- This completes the six-control sublot on top of 87841e7932, not plan 106 as a whole. Twenty other public control headers and the private host/helper facilities still need migration. The saved OFF installations remain separate from the restored in-tree test builds.
+
+## RadioBox and feedback/picker family baseline
+
+- Next bounded family: RadioBox, ActivityIndicator, Hyperlink and the ColourPicker's `wxWinUIColourButton`. There are 29 public test methods and three public peer-write hook aliases; the unused CopyURL test wrapper is removed while the actual production clipboard operation is preserved. No public layout member or virtual method becomes conditional.
+- Both unchanged test-enabled binaries pass the same **6075 assertions / 95 cases** before this migration: appearance/HTML/dialogs 5328/68, the RadioBox stale-content UIA case 47/1, and Activity/Hyperlink/ColourPicker 700/26. Logs: `audit106-family3-baseline-{appearance,radiobox-uia,feedback-picker}.log` in each WinUI build tree. Runs use private desktops with `WX_UI_TESTS=0`; no global input or browser launch occurs.
+- The installed consumer now detects all 29 old public methods independently of their parameter typedefs, plus three consumer-only sentinel aliases to reject the old global hook typedefs. Against each saved family-2 shipping install, compilation fails at exactly 29 method assertions and three alias conflicts, with no unrelated compiler diagnostic. Both existing MSW installed consumers still compile with `/warnaserror`. Positive shipping installation and equivalent post-migration runtime coverage remain pending.
+- Both MSW compile CTests also pass. Four MSVC x64 COFF probes with `/W4 /WX` check the actual included public headers and identical size/alignment in shared/static, test support ON/OFF: RadioBox **888/8**, ActivityIndicator **696/8**, HyperlinkCtrl **848/8**, ColourButton **728/8**. The eight values match and all fourteen probe input hashes remain unchanged; evidence is in `F:\wxwinui-pr26890-audit106-layout-proof\family3`. This does not assert complete ABI compatibility.
+- Migration and ON/OFF/ON qualification now pass in both Release linkages, with `/warnaserror` builds of `wxcore`/`minimal` and `test_gui`. The same **6075 assertions / 95 cases** pass before migration, after migration and after restoring test support. Runtime smoke and Supported V0 pass 2/2 in both ON stages (Supported V0: 1660/92). Logs: `audit106-family3-*` in each WinUI build tree. The migrated consumer translation units also compile/link under MSW Debug and GTK3/GCC 11.4 (`audit106-family3-crossplatform-build.log`); no GTK GUI run is claimed.
+- Shipping OFF installations are retained separately at `F:\wxwinui-pr26890-audit106-family3-install-{shared,static}`. All twelve migrated public headers and the core DLL/archive are free of their old test operations; no private test header, target or compile definition is installed. Fresh four-translation-unit consumers build with `/warnaserror` and pass their compile CTest 1/1. Core SHA256: shared `24D15FCBA1DCA0ABCBC137EBAD887D6FD4ED5DCCD90B1158B1CFCB20BB67CE5A`, static `D39A7F23E23762F6815095AFDEF6682F4B888F6DDFF661C25D30E7C192C96691`.
+- The 155 migrated consumer calls retain their existing assertions and real peer operations. One-shot hooks still follow actual peer writes; production generation, retirement and quarantine logic remains present in OFF builds. The ColourButton closed-event helper is still a final wx-event seam, not evidence of native FlyoutClosed delivery. Sixteen other public control headers and the private host/helper facilities remain open; the next bounded family is InfoBar and StatusBar.
+
+## InfoBar and StatusBar baseline
+
+- The next family removes six InfoBar methods and thirteen StatusBar methods, plus five public hook/snapshot types. StatusBar's obsolete resize preflight setter is removed with its dormant slot/callout; the typed grip action, owner/capture/generation validation and actual host native-resize request remain unchanged. The twelve remaining StatusBar operations and all six InfoBar operations move to private accessors. No public data member or virtual method is conditional.
+- Both unchanged binaries pass InfoBar **108 assertions / 12 cases** and StatusBar/mixed teardown/XRC **1132/19**, including the four non-physical native resize tests. Logs: `audit106-family4-baseline-{infobar,statusbar}.log`. These use `WX_UI_TESTS=0` and private desktops; they do not sign off held physical mouse dragging.
+- Installed-consumer negative controls against the saved family-3 shipping prefixes fail at exactly **19 old method assertions and five type conflicts**, with no unrelated diagnostics. Ordinary MSW shared/static consumers still build with `/warnaserror` and pass their compile CTests. Logs: `audit106-family4-negative-api-build.log` in the family-3 consumer directories and `audit106-family4-{api-build,ctest}.log` in the two 105 MSW consumer directories.
+- Four MSVC x64 `/W4 /WX` COFF probes give identical size/alignment with test support ON/OFF in both linkages: InfoBar **784/8**, StatusBar **736/8**. The actual include paths are verified and probe input hashes stay unchanged. Evidence: `F:\wxwinui-pr26890-audit106-layout-proof\family4`. Post-migration runtime and shipping verification are pending; the family is not yet qualified.
+- The two controls now pass the complete shared/static ON/OFF/ON cycle: `/warnaserror` builds, unchanged **1240 assertions / 31 cases** after migration and after restoring test support, plus runtime smoke and Supported V0 2/2 (1660/92). Logs: `audit106-family4-*` in the two WinUI build trees. The 32 InfoBar and 81 StatusBar consumer calls keep their original assertions; real peer writes and native resize ownership checks remain in production builds.
+- Fresh OFF installations at `F:\wxwinui-pr26890-audit106-family4-install-{shared,static}` contain none of the fourteen controls' old test methods/types, private accessor symbols, support headers or targets. Both fresh four-translation-unit consumers build with `/warnaserror` and pass their compile CTest 1/1. Core SHA256: shared `8CE2B80AB31233F0F129A039E920B39ED1C503B7B93C4EB8C56A94BF82F10647`, static `6B6857D3BF19217FBBAC396F206A9AEF3897727F32670102E80F194D47E627AD`. Both in-tree builds are restored to `wxBUILD_TESTS=ALL`; private accessors return only in the test-enabled builds.
+- The additional full Wizard/PropertySheet cross-check passes **1447/2** separately in each linkage; it is recorded in 101, not added to the family baseline count. Fourteen other public control headers and private host/helper facilities remain open. Neither this sublot nor its four native USER32 regression cases qualifies a physical held mouse drag.
+
+## List/tree, range/date, choice/combo and text family
+
+- The next structural sublot covers twelve public headers and thirteen classes: ListBox, TreeCtrl, DatePicker, TimePicker, Calendar, Slider, SpinCtrl/Double, Choice, ComboBox, TextCtrl, SearchCtrl and TextEntryDialog. It removes **201 public methods and 34 public types**. Slider's semantic-input and geometry types remain unconditional private production types; TextCtrl's Enter/Tab handlers remain in the production path. No public class member changes size or becomes test-conditional.
+- The ComboBox external UIA helper launcher moves to non-installed test support, compiled only when `wxBUILD_TESTS=ALL`; its ownership, PID validation, protocol and timeout checks are preserved. The CMake source is appended before library creation, including the monolithic source-collection path. Moving this helper is not external UIA qualification.
+- Before migration, both Release linkages have identical non-input baselines: Choice/Combo **975 assertions / 11 cases PASS**; text/dialog identity **626/14 PASS**; List/Tree **392223/392226 assertions, 33/36 cases PASS**; range/date/spin **3000/3002 assertions, 68/70 cases PASS**; text peers **854/855 assertions, 27/28 cases PASS**. The six failing cases remain OPEN, not expected-success substitutions. Logs in each build tree: `audit106-combo-choice-baseline.log`, `audit106-text-baseline-dialog.log`, `audit106-family5-list-tree-baseline.log`, `audit106-family5-baseline.log`, `audit106-text-baseline-textpeer.log`.
+- Source comparison preserves existing assertions, method bodies and production exception/rollback paths. Generic `treectrltest.cpp` consumers are migrated too. Compilation exposed missing member qualifications and argument separators from the mechanical relocation; these diagnostics are retained in `audit106-family5-on-build*.log` and corrected before runtime acceptance.
+- Four MSVC x64 `/W4 /WX` COFF probes give equal size/alignment with test support ON/OFF in both linkages: ListBox **856/8**, TreeCtrl **848/8**, DatePicker **712/8**, TimePicker **696/8**, Calendar **720/8**, Slider **760/8**, SpinCtrl **776/8**, SpinCtrlDouble **792/8**, Choice **744/8**, ComboBox **904/8**, TextCtrl **1664/8**, SearchCtrl **880/8**, TextEntryDialog **1176/8**. Actual include paths and unchanged input hashes are checked. This is not a complete ABI proof.
+- Negative compile probes against both saved family-4 shipping installations detect exactly the **201 methods and 34 types**, without unrelated compiler diagnostics. Both ordinary MSW installed-consumer builds and compile CTests still pass. Evidence lives in `F:\wxwinui-pr26890-audit106-layout-proof\family5`; positive shipping OFF and post-migration runtime verification are still pending at this entry.
+- Post-migration shared/static builds pass with `/warnaserror`; the five runtime groups produce the same **397699/397704 assertions, 154/159 cases passing** in each linkage. Choice/Combo, dialogs, range/date and text retain their exact baseline totals. The owner-bitmap CheckListBox case now passes and contributes twenty additional assertions; the other CheckListBox focus case, TreeCtrl focus, two DatePicker focus cases and TextCtrl read-only case still fail. The count-comparison wrapper deliberately rejects this variation for inspection; it is not retried until green. The original six cases remain tracked, since a timing-sensitive pass does not resolve a defect. Smoke/Supported V0 pass separately, 2/2 in each linkage.
+- Private pre-Create hook storage in TextCtrl/SearchCtrl is currently retained unconditionally to avoid mixing layout changes into this API relocation. These slots, the remaining Notebook/Toolbar public APIs and the private host/helper surface remain part of the unfinished 106 cleanup. Removing public methods is not a claim that every test-only field has already left installed headers.
+- Shipping OFF builds of `wxcore`/`minimal` pass in both linkages after correcting one too-broad Slider guard: object identity is required by the production visual-cache key and remains unconditional. The failed diagnostic is retained. Fresh installations contain no migrated accessor exports, old public test method exports, private support headers/targets or external UIA launcher string. Prefixes: `F:\wxwinui-pr26890-audit106-family5-install-{shared,static}`. Core SHA256: shared **71688038934936CA9858DF52D312875D3E9D51818FFE59ECAA0350932F353131**, static **25E7A351DB02C89F503B5444DB8ABA2A6FC2B4BCBBAD7D54EEE1BD8D49053121**.
+- The header scan records two retained private ComboBox continuation parameter names, rather than misreporting them as public methods. Both owning methods are independently asserted inaccessible by the installed consumer; their private forced-transition cleanup remains open. Both fresh four-translation-unit consumers build with `/warnaserror` and pass their compile CTest 1/1. Evidence: `audit106-family5-shipping-verification-retry.log` and `audit106-family5-consumer-*` in each build tree. No previously installed source/header was rewritten to make this check pass.
+- Next public family is prepared, not implemented: Notebook **41 methods / 8 types**, Toolbar **26 methods / 2 types**, with 567 call sites in four consumers. Preserve Notebook's real retirement ledger and Toolbar's Loaded/rollback transactions. Public API removal does not authorize removing production host lifetime services called by the test wrappers.
+- Both trees are restored to `wxBUILD_TESTS=ALL`, rebuilt with `/warnaserror`, and the five exact runtime groups are replayed once. Static returns to the original **397678/397684 assertions, 153/159 cases** because the first CheckListBox case fails again. Shared gives **397698/397704 assertions, 153/159 cases**: its range group additionally fails `Calendar coalesces week layout waves across recycling` at the unchanged budget check **11 <= 10**. This newly observed Calendar failure was absent from the initial baseline and remains OPEN; it must not be counted as preserved baseline equivalence. No assertion is disabled or retried to obtain a green count. Restored smoke/Supported V0 pass 2/2 in both linkages. Logs: `audit106-family5-restored-*`. Shipping/API checks are verified, but full runtime equivalence is not green; component failures, private storage/parameters and remaining Notebook/Toolbar/host helpers keep the full plan OPEN.
+
+## Follow-up observation fixes
+
+- Plan 108 corrects two test oracles after the structural migration, in a separate commit rather than changing its baseline retrospectively. The TextCtrl fixture now waits for the actual asynchronous read-only rollback and requires no wx text event; the complete group passes **859/28** in both linkages. The Calendar coalescing fixture reads a passive projected-row snapshot instead of creating refresh requests through its own poll. Its original `+6` budget passes inside both **3009-assertion / 70-case** range groups; the two DatePicker focus cases still fail, so those groups remain **3007/3009, 68/70**, not PASS. Exact logs and implementation boundaries are in 108.
+- The previous restored-run summary is corrected to retain the newly observed shared Calendar failure in the historical evidence. No baseline log, installed artifact or original failing diagnostic was rewritten. These observation repairs do not qualify physical input or close the remaining activation/focus defects.
+
+## Notebook and Toolbar private interfaces
+
+- The sublot starts from published `c0f1d55a06`. Both unchanged Release binaries pass the same exact **3558 assertions / 66 cases** across the private Notebook/Toolbar tests, four generic Toolbook consumers and two XRC inventories. Logs: `audit106-family6-baseline.log` in both build trees, private desktops with `WX_UI_TESTS=0`.
+- The relocation covers **67 public methods and 10 types**, plus 567 consumer call sites. All existing assertions remain. Notebook's real two-turn retirement queue, shared framework ledger and callback generations remain production code; Toolbar's SetContent transaction, rollback, last-writer convergence and owner checks remain active without test support. Existing private runtime retirement testing services are a separate host cleanup, not deleted lifetime services.
+- Both MSW installed consumers compile the 77 new absence checks with `/warnaserror` and pass their compile CTest 1/1 (`audit106-family6-{build,ctest}.log` in the two plan-105 MSW consumers). Negative probes against the saved family-5 WinUI installations reject exactly **67 methods and 10 types per linkage**, with no unrelated diagnostics and no input changes.
+- Four MSVC x64 `/W4 /WX` probes check actual public include paths and identical sizes/alignments with test support ON/OFF in both linkages: Notebook **872/8**, Toolbar **752/8**. Headers, setup files and probe inputs remain unchanged during measurement. Evidence: `F:\wxwinui-pr26890-audit106-layout-proof\family6\negative-run.log` and `layout-values.log`. Size/alignment equality is not a complete ABI proof; post-migration runtime and shipping verification remain pending.
+- The four changed consumer translation units also compile and link into `test_gui` on MSW Debug, Qt 5.15.2 Debug and GTK3/GCC 11.4. MSVC builds use `/warnaserror`; GTK finishes all 18 build actions without a warning/error. Logs: `audit106-family6-cross-build.log` in `F:\wxwinui-pr26890-{msw,qt,gtk}-audit-build`. These are compile-only cross-platform results, not GUI or physical qualification.
+- The first post-migration shared/static `test_gui` and `minimal` builds pass with `/warnaserror`. Both exact runtime groups retain **3558 assertions / 66 cases PASS**, and both smoke/Supported V0 gates pass 2/2. Logs: `audit106-family6-on-{build,runtime,ctest}.log` in the two WinUI build trees. The shared test-enabled DLL exports all 67 expected private accessor methods (`audit106-family6-on-symbols.log`); shipping OFF builds must now prove their absence. No test assertion or callback seam was replaced with an unconditional success.
+- Reproducible source comparisons retain all 41 Notebook and 26 Toolbar accessor bodies after the explicit owner/type adapters, all 567 consumer calls and their original assertions. Notebook's production ON stream retains 39511 tokens; Toolbar's four affected production method bodies also match. Scripts and input hashes are retained in the external layout-proof directory (`family6/verify-notebook-migration.mjs`, `notebook-migration-proof.json`, and `family6-toolbar-migration-verify-off-hardened.log`). These structural checks complement, not replace, compilation and runtime tests.
+- The first shipping OFF build fails in both linkages: Toolbar's `Automation::Peers` include/alias was incorrectly hidden even though production uses its accessibility enums, and the final overflow test callback was left unguarded. The include/alias are unconditional again; the callback and its test-only `changed` tracker are guarded. No production mutation or owner reacquisition is removed. Initial failed build/configuration logs are retained as `*-attempt1.log`; both configurations restored to ALL after failure. The corrected OFF rerun remains pending. Four independent negative mutations now make the external structural verifier fail for these missing guards/dependencies.
+- The corrected shared/static OFF builds and fresh installations now pass, with `/warnaserror`, no old control test methods/private accessor symbols and no installed test-support header or target. Both fresh four-translation-unit consumers pass compilation and CTest 1/1. Prefixes: `F:\wxwinui-pr26890-audit106-family6-install-{shared,static}`. Shared core SHA256: `DF7772097EA2CD76FD43BA9240416BB8ACF1588DAF40CF4F5A4D80AC29EFC944`; static: `C9513548253BD5069D4E8C2E3C9E575E6BF1ACF3A9ACC0A7EE8A39E22BD007FC`. These checks cover 28 public headers but explicitly retain the two private ComboBox parameter names for the next sublot.
+- Both in-tree configurations are restored to ALL and rebuilt with `/warnaserror`. Each again passes **3558 assertions / 66 cases**, plus smoke/Supported V0 2/2. Logs: `audit106-family6-{shipping-wrapper,restored-build,restored-runtime,restored-ctest}.log` in each WinUI build tree. This completes the Notebook/Toolbar sublot locally; it does not close 106's remaining Text/Search seam storage and runtime/host facilities, broader component failures, or physical qualification.
+
+## Remaining control seam storage
+
+- Before changing TextCtrl/SearchCtrl/ComboBox storage, both final family-6 binaries pass the same **859 assertions / 28 text cases** and **975 / 11 safe ComboBox/Choice cases**. Logs: `audit106-family7-baseline-{text,combo}.log` in each build tree. The ComboBox filter is the exact saved non-input allowlist, not the broader tag that launches an external UIA client. No external-process UIA result is claimed here.
+- The next bounded change removes nine TextCtrl and two SearchCtrl test-only storage slots from the installed classes, without adding replacement public storage or conditional public layout. Pre-Create hooks must retain C++ object lifetime across failed peer creation/retry; test-only state belongs outside the exported control, not in an eagerly allocated production peer. The two password fail-closed diagnostics are production state and remain. This intentionally changes the pre-release Text/Search layout equally in shipping and test-enabled builds; it must not be described as historical ABI preservation.
+- ComboBox's two private force-transition parameters must also disappear from the installed declaration and shipping path while preserving the real queued callback, coalescing and lifetime checks. Four current/new size-alignment probes, unchanged characterization tests and dedicated lifetime boundaries will qualify this sublot before publication.
+- Four added cases characterize rejected parent validation/retry, pre-Create/default queries, late peer-kind requests, exact-address reuse, destructor reentry, callback rearming and pre-Create password scrub faults. They were compiled and run against the unchanged family-6 implementation first. The initial shared characterization fails three assertions: two new clipboard oracles incorrectly equated a plain RichEditBox with the rich AllFormats policy, and undrained new fixtures changed an existing lifetime baseline. The fixtures now request `wxTE_RICH2` explicitly for those comparisons and drain after their controls are destroyed; no previous assertion is weakened. The failed log remains `audit106-family7-characterization-text.log`.
+- Corrected pre-migration characterization passes in both linkages: **932 assertions / 32 text cases** and **981 / 11 safe ComboBox/Choice cases**, total **1913/43**. Shared logs use `characterization-corrected-{build,text}` and `characterization-combo`; static uses `characterization-{build,text,combo}`, all prefixed `audit106-family7-`. The ComboBox case adds a later genuine passive edge and checks that no test force survives into it.
+- The applied implementation keeps Text/Search test state in TU-local, test-only registries with weak owner identity; destruction removes it before peer teardown and prevents rearming during that teardown. Callback/context pairs are taken before invocation, and existing owner/generation checks remain. ComboBox's scoped one-shot request is consumed before XAML getters and captured by its existing deferred ticket. No replacement field is added to the installed control classes. Four MSVC x64 `/W4 /WX` layout probes now show TextCtrl **1608/8** (previously 1664/8), SearchCtrl **864/8** (880/8) and ComboBox **904/8** (unchanged), identically in both linkages with test support ON/OFF. Evidence: `family7/{baseline,migrated}` in the external layout-proof directory, with input hashes and actual include paths. Post-migration runtime and shipping rebuilds remain pending.
+- Both post-migration Release builds pass with `/warnaserror`, then retain the exact **932/32 Text/Search + 981/11 ComboBox/Choice** characterization totals. Smoke and Supported V0 also pass 2/2 in each linkage. Logs: `audit106-family7-on-{build,text,combo,ctest}.log`. The independent source projection verifies all pre-existing Text/Combo assertion macros and production OFF token streams after the explicitly enumerated removal of test-only seams; proof: `family7/final-migration-proof.json`, SHA256 `F9969D42931D8E0A3C6381F23CC3BBEFE004325C099F923A8ECF2B37A91A71C3`.
+- Shipping OFF now passes in both linkages after rebuilding **all 16 installed wx libraries and six samples** (minimal, widgets, dataview, showcase, dialogs, winuispike), not only core after the public layout change. Fresh installations pass the 28-header scan without the former ComboBox parameter exception, symbol/launcher absence checks, retained production password diagnostics and four-translation-unit consumer compilation/CTest 1/1. Prefixes: `F:\wxwinui-pr26890-audit106-family7-install-{shared,static}`. Core SHA256: shared `737C4803766CB8193D64934BF4C0A7C8407216C624EBF041AD1F32772439EB6E`; static `E47A91654002276F32B82BCCE18BBE2283B935466CC076CA03288DF6B10F26B4`.
+- Both configurations are restored to ALL and rebuilt with `/warnaserror`; the exact Text/Search and safe ComboBox/Choice groups again pass **1913/43**, with smoke/Supported V0 2/2 per linkage. No shipping or restored qualification was retried to obtain a pass. Logs: `audit106-family7-{off-*,shipping-verification,consumer-*,restored-*}.log`. This completes the control-storage sublot locally; runtime/host testing facilities keep the full plan 106 open.
+- Coverage remains explicit: the new rejected-Create case fails at the native parent check before HWND allocation, not midway through XAML initialization. The existing Loaded-destruction case still tests owner death after hook consumption. Immediate registry-size accounting is not directly instrumented; exact-address tests check observable stale-hook/fault isolation. None of these tests supplies physical input or external UIA qualification.
+
+## Framework-retirement test adapters
+
+- The next runtime sublot starts from published `0f6879e608`. The four unchanged Notebook shutdown/retirement cases pass **161 executed assertions / 4 cases** in both linkages, with private desktops and `WX_UI_TESTS=0`. Their 122 lexical assertion sites and test/helper source remain unchanged; these two counts are deliberately distinguished. Logs: `audit106-family8-baseline.log` in each build tree.
+- The applied five-file change moves ten runtime adapters and two snapshot/hook types out of the shared implementation header into non-installed test support. Only simulation, fault injection and test observation are compiled out of shipping. The real retirement ledger, queue generations, four native shutdown subscriptions, rundown/quarantine decisions, XAML deferral and terminal graph-release order remain production responsibilities. The implementation-local class has no conditional data; no macro-dependent shared class layout is introduced. The installed bootstrap fault-profile contract and keyboard/ControlHost helpers are separate unfinished sublots.
+- Source projections and five negative canaries were prepared before application in `F:\wxwinui-pr26890-audit106-layout-proof\framework-retirement-extraction-report.json`; they are structural evidence, not proof that compilation or runtime qualification has completed. Post-application ON/OFF/install/runtime qualification is in progress.
+- The applied five-file source set matches the prepared patch exactly (with CRLF/LF normalization only), including the new support header; the existing Notebook test SHA256 remains `43650724985154616541417192E760C41E337702FED4C5C831F817D90FA4E415`. Both ON builds pass `/warnaserror`, the unchanged **161/4** retirement group, and smoke/Supported V0 **2/2**. Reproducible source verification and execution scripts are in `F:\wxwinui-pr26890-audit106-layout-proof\family8`; source comparison does not replace the runtime results.
+- Shared OFF/install/restore qualification passes without retry: core/minimal build, strict symbols and 28 installed-header checks, a fresh four-TU toolkit consumer, and the existing real installed runtime consumer with **11 subprocess launches**. Its before-bootstrap recovery, two 50-epoch renderer modes and six quarantine fault profiles remain exercised; fault hooks outside this sublot are deliberately still present. Shared shipping core SHA256: `C5A94B363F7F6C3BFACF2F6368E1BA09A50CA4BDF90F9030635471ECAD2BAC03`. The ALL rebuild then passes **161/4** again and smoke/Supported V0 **2/2**. Static OFF/install/restore qualification remains in progress at this entry.
+- Static subsequently completes the same OFF/install/restore sequence with no retry: strict symbol/header checks, four-TU toolkit consumer, the unchanged real runtime consumer with **11 subprocesses**, restored `/warnaserror` build, **161/4** retirement assertions and smoke/Supported V0 **2/2**. Static shipping core SHA256: `53A0DED6F1366A0C668E8D41EB74C8679D147C68E9CF8E1BAF1F9939CB9894A6`. Both build caches are restored to ALL, and the final source proof still matches the prepared five-file change exactly. Logs: `audit106-family8-*` in each build tree; installed prefixes and consumers are fresh `audit106-family8-*` directories on F:.
+- This completes the framework-retirement adapter sublot locally, not all runtime/host instrumentation. The independent Qt modal correction is already published as `2947664462`; this qualified WinUI sublot is committed separately and is not immediately pushed, to let that CI execution finish. No physical input, external UIA or global beta-readiness claim follows from these checks.
+
+## ControlHost probe and Loaded-hook storage (2026-08-31)
+
+- Baseline at `f6ae07e1ad`: the exact 22 ControlHost/Loaded cases pass
+  **440 assertions**, and the preserved 11-case Choice/ComboBox allowlist
+  passes **981 assertions**, in both shared/static private desktops.
+  Logs: `audit106-family9-before-*` in the two existing build trees.
+- Nine probe operations move from the source-private `tlwhost.h` surface to
+  `tests/winui/test-support/control-host-test-access.h`. The two intra-core
+  Loaded adapters are not DLL exports. Test-only hook storage leaves the
+  shared ControlHost class unconditionally and is owned by a test-build-only
+  C++-instance registry. Destruction unpublishes that identity before callable
+  teardown; Loaded takes its one-shot hook before the real callback boundary.
+  No conditional class layout or replacement production test storage is added.
+- The former `GetContentForTesting()` getter is a real production dependency
+  of Choice. It is renamed `GetContent()`, not removed or compiled out. Native
+  subscriptions, latching, slot publication, rollback and callback invalidation
+  remain unchanged. Other TLW/slot, MSW bridge, keyboard and bootstrap test
+  facilities are still separate unfinished work.
+- The first ON builds exposed C4002: the new adapter header loaded WinRT
+  before the existing Windows macro cleanup in Text/Search. It now forward
+  declares `UIElement`, with no premature projection include. Failed
+  `audit106-family9-on-build.log` files are retained; corrected builds use
+  distinct `audit106-family9-on-build-corrected.log` files. The corrected
+  shared/static builds pass `/warnaserror`, **1421/33** unchanged focused
+  assertions/cases and smoke/Supported V0 **2/2** per linkage.
+- Reviewed-source verification preserves the twelve-path candidate after
+  CRLF/LF normalization and the explicitly recorded header inclusion fix.
+  No existing test body/assertion changed. The shared ControlHost definition
+  remains identical with test support ON/OFF. Its private size reduction is
+  not a historical ABI-preservation claim; including translation units are
+  rebuilt. Candidate, source hashes and execution/inspection scripts are in
+  `F:\wxwinui-pr26890-audit106-layout-proof\family9` and the adjacent
+  `control-host-extraction.*` evidence.
+- Shared shipping OFF build/install passes: **28** public control headers,
+  **11** ControlHost marker checks, the already-removed runtime/control APIs,
+  and no installed test-support target/header or old UIA launcher. Fresh
+  four-TU toolkit consumer CTest passes **1/1**; the unchanged installed runtime
+  consumer's normal profile completes **50 epochs**. This repeats one normal
+  process, not family8's eleven fault/renderer subprocesses or WER-settling scan.
+  Shared shipping core SHA256:
+  `BABC36BDD467A8218B7CDA266BE70B89D2D889B36915F3D2BF6194A5E992E2F9`.
+  Static shipping and restored ALL qualification remain in progress at this
+  entry; source/test success alone does not close those gates.
+- Final shared/static OFF/install/restore qualification now passes. Static
+  shipping core SHA256:
+  `FF8E8FD194026E4F1DBD0A8EC901FC666F361AAF2DB8759C99E291BC2F2FA7CA`.
+  It passes the same 28-header/11-marker scan, fresh four-TU consumer **1/1**
+  and single normal 50-epoch runtime process. Both caches are restored to ALL;
+  both rebuilt test binaries again pass **440/22 + 981/11**, plus the two
+  smoke/Supported gates. Final normalized source checks pass. Evidence uses
+  unique `audit106-family9-*` logs, fresh `audit106-family9-install-*` prefixes
+  and consumer directories on F:. This completes this ControlHost sublot
+  locally, not the remaining host/keyboard/bootstrap facilities or physical
+  qualification. The first failed ON builds remain part of the record.
+
+## Host observation and input adapters (2026-08-31)
+
+- The geometry/UIA and input/focus/resize accessors now live in five
+  non-installed `tests/winui/test-support/host-*-test-access.h` headers.
+  The owning translation units opt in only for `wxBUILD_TESTS=ALL`.
+  Shared host/slot classes have unconditional friend declarations, with no
+  macro-dependent data layout. Native resize requests, transaction ownership,
+  contact validation and terminal cleanup remain production responsibilities.
+- Test-only resize snapshots leave the host class unconditionally. A test-build
+  registry uses weak lifetime-control-block identity and is erased on native
+  resize shutdown. Reading an untouched host returns a default snapshot without
+  inserting an entry. The real resize state machine is neither replaced nor
+  selected by this observation. Shipping builds have no registry or injected
+  contact-reader/post-failure state.
+- Flush scheduling and impossible-z-order counts remain passive production
+  diagnostics, used by `winuispike`. The sample compares the impossible-z-order
+  count before/after its operation instead of resetting host state; its expected
+  delta remains one. The synthetic root-pointer campaign uses private test
+  access when built with ALL. Without it, `--input-scenarios` is explicitly
+  unavailable (exit 30), not silently successful. The normal demo, diagnostics,
+  composition scenarios and real scroll-latency code remain available.
+- The combined consumer proof covers all **22** changed test source files and
+  **409** migrated calls (200 geometry/UIA, 209 input/focus/resize). Inverting
+  only the declared adapters/includes gives the same **312221** C++ tokens;
+  assertion expressions, comments and preprocessing directive streams are
+  unchanged. Evidence is in the existing
+  `F:\wxwinui-pr26890-audit107-geometry\uia-projection\test-access\combined-host-check`.
+  This is source equivalence, not a
+  runtime count or coverage for the separate sample changes.
+- Both shared/static test binaries pass the unchanged focused groups:
+  input **1205/31**, focus **132/14**, native resize/lifecycle **219/7**,
+  resize progress **14/1**, UIA **576/18**, tooltips **550/22**, geometry
+  **327/14**, root-input **101/5** and observation callbacks **27/3**
+  (executed assertions/cases). Some groups overlap; these are not a unique-case
+  aggregate. Runtime smoke and Supported V0 pass **2/2** per linkage.
+  Logs: `audit106-host-on-*.log` in the two existing build trees. Runs use
+  private desktops and `WX_UI_TESTS=0`; no physical input is qualified.
+- Four MSVC x64 `/W4 /WX` compile-only probes give identical ON/OFF and
+  shared/static size/alignment: host **6000/8**, slot **1224/8**, broker
+  **344/8** (broker not yet migrated). The actual source/setup include paths
+  and unchanged input hashes are checked. Evidence is retained under
+  `F:\wxwinui-pr26890-audit107-foundation\host-layout\host-adapters-bigobj`.
+  This is not a historical ABI or vtable proof. The initial COFF decoder
+  rejected a valid BIGOBJ; its failure is retained, and the corrected decoder
+  reads the SDK's BIGOBJ section table layout explicitly.
+- Installation scope correction: `tlwhost.h`, `dropbroker.h`, `nativeresize.h`
+  and `inputtest.h` are source-private headers and were already absent from the
+  install manifest. Of these host-related bridge headers, `tlwhostmsw.h` is
+  installed. Negative source-header canaries must include the source headers;
+  failing to find an uninstalled header proves nothing about its API. Shipping
+  checks must separately verify maintained header absence and removed DLL/archive
+  test symbols. New OFF/install/consumer qualification remains pending.
+- The first host ON builds compiled `test_gui` and `minimal` but failed on
+  four forgotten `winuispike` consumers. `audit106-host-on-build.log` preserves
+  that failure. Corrected builds use `audit106-host-on-build-samplefix.log`;
+  both corrected builds now pass `test_gui`, `minimal` and `winuispike` with
+  `/warnaserror`. One private-desktop synthetic campaign per linkage passes
+  all **9 scenarios**, exit 0, with `window_activated=false`; JSON and logs are
+  `audit106-host-on-sample-input.*`. This is not a 100-iteration campaign or
+  evidence about held physical mouse input. OFF CLI rejection remains pending.
+  The remaining slot/content, broker, keyboard, bootstrap and MSW test seams
+  keep plan 106 open.
+
+## Keyboard pipeline test boundary (2026-08-31)
+
+- Eight deterministic keyboard adapters move from the mixed source-private
+  `inputtest.h` to `keyboard-test-access.h`. The real pipeline types and three
+  existing event-loop helpers live in intracore `src/winui/keyboard.h`.
+  Shipping has no fallback-forcing/modifier-override state or exported test
+  adapter. The neutral intracore modifier query returns false without test
+  support, preserving callers' native modifier reads and AltGr policy.
+- Production HWND resolution, removed-message semantics, IME veto consumption,
+  accelerator-before-XAML order and fallback behaviour remain unchanged.
+  The veto key is real event-loop state and is not removed: only its injected
+  setter is test-only. Core adds the existing private definition to
+  `src/msw/evtloop.cpp` only for WinUI/ALL, not to ordinary MSW or every source.
+- Before migration, both linkages pass exactly **417 assertions / 16 keyboard
+  cases**, **58/5** dialog cases, **4/1** keyboard-focus exclusion and **49/1**
+  RichText logical keyboard routing. Logs: `audit106-keyboard-baseline-*.log`.
+  These 23 exact cases use private desktops and no physical keyboard input;
+  physical Ctrl+T and external UIA/clipboard campaigns are not selected.
+- Candidate proof is in the existing `audit107-foundation/keyboard-separation`
+  evidence directory: seven producer and five consumer token streams are
+  unchanged after declared accessor/type/include substitutions. Source proof
+  does not replace compiler/runtime or shipping qualification.
+- Both shared/static Release builds now pass `test_gui`, `minimal` and
+  `winuispike` with `/warnaserror`; ordinary MSW Debug `test_gui` also builds.
+  The unchanged four groups repeat **417/16 + 58/5 + 4/1 + 49/1** in each
+  linkage, and runtime smoke/Supported V0 pass **2/2**. Logs are
+  `audit106-keyboard-on-*.log`, `audit106-keyboard-msw-window-on-build.log`
+  and `audit106-keyboard-msw-window-on-gates.log` in the existing WinUI trees;
+  the MSW log is `audit106-keyboard-msw-window-cross-build.log` in its existing
+  audit tree. No physical input or MSW GUI runtime is claimed. The coordinated
+  build also contains the separately tracked MSW-window adapter sublot.
+  Fresh shipping OFF/install qualification remains pending.
+
+## MSW window transaction adapters (2026-08-31)
+
+- Six test operations and five aliases leave the installed `tlwhostmsw.h`
+  header. Their narrow replacement is the non-installed
+  `msw-window-test-access.h`; only WinUI/ALL opts `src/msw/window.cpp` in.
+  Ordinary MSW does not acquire test instrumentation. Real native-parent,
+  DPI, style publication, HWND detach/UIA retirement and RTL transactions
+  retain their existing guards and ordering. Injected failure/callback slots
+  are absent from shipping, with consume-before-call semantics retained ON.
+- Shared/static baselines and post-migration private-desktop runs pass the
+  same **178 assertions / 5 cases**: reentrant SetParent popup rollback,
+  ordered DPI transitions, reentrant RTL and two ActiveX destruction paths.
+  Logs: `audit106-msw-window-{baseline,on}.log`. The coordinated Release
+  builds pass `test_gui`, `minimal`, `winuispike` with `/warnaserror`, ordinary
+  MSW Debug `test_gui` builds, and both WinUI smoke/Supported V0 gates pass
+  **2/2**. See the keyboard section for the exact shared build/gate log names.
+  Physical DPI moves/input, MSW GUI runtime and fresh shipping installation
+  checks are not supplied by these local results.
+
+## Slot/content lifecycle test boundary (2026-08-31)
+
+- Eighteen observations/adapters (14 Slot, four host) and eleven fault/callback
+  setters move from source-private `tlwhost.h` to non-installed
+  `host-content-test-access.h`. Existing test-only globals and callouts now
+  require per-source test support; TLW and tooltip opt in alongside UIA.
+  The real content-fault mask still has one authority, with the same ON phase
+  consumption. Production Loaded state, registration counters, rollback,
+  generation checks, callback guards and pointer-source writes remain intact.
+  The per-host flush counter is retained unconditionally as `m_flushRuns`.
+- Candidate proofs cover 106 observer calls and 143 fault calls plus 33 type/
+  mask references. Complete producer ON/OFF token projections and unchanged
+  consumer assertion sites are recorded under
+  `F:\wxwinui-pr26890-audit107-input-foundation\test-access\content-lifecycle`.
+  Integration reconciles only neighbouring keyboard/MSW CMake/include edits,
+  trims new trailing whitespace and moves the Loaded-observer comment with
+  its private getter. No test oracle is changed.
+- Before migration, the existing binaries pass **142/5** content publication/
+  Loaded/rollback assertions/cases and **18/2** host-init titlebar destruction
+  cases in both linkages. The migrated tree then builds `test_gui`, `minimal`
+  and `winuispike` with warnings as errors for shared and static WinUI. The same
+  **142/5** and **18/2** groups pass after migration, as do both runtime gates
+  (**2/2**) in each linkage. Evidence is recorded in
+  `audit106-lifecycle-transient-on-build.log`,
+  `audit106-lifecycle-on-content.log`,
+  `audit106-lifecycle-on-content-titlebar.log` and
+  `audit106-lifecycle-on-gates.log` under the two active build trees. These are
+  private-desktop, non-input tests. Fresh shipping OFF installation and symbol
+  verification remain pending.
+
+## Transient-window test boundaries (2026-08-31)
+
+- Non-owned windows, popup capture, the transient-dialog registry, owner/
+  backdrop probes and generic tip-window creation now expose their test
+  controls through non-installed support headers. Their former source-private
+  test declarations no longer enlarge the production-facing host headers.
+  Per-translation-unit test support is enabled only for the producers that
+  implement those controls.
+- Production ownership, popup capture loops, retirement generations, modal
+  registry transitions, allocation rollback, native owner validation and tip
+  identity/backlinks retain their original authorities and ordering. The real
+  owner/backdrop operation tables move intact to `src/winui/transientops.h`;
+  the injectable allocation point remains an intra-core, non-installed detail.
+  No test fixture assertion or control-flow oracle is removed.
+- Shared and static post-migration runs pass the non-owned **94/5**, popup
+  **125/8**, transient registry **55/5**, transient popup **183/3**, owner/
+  backdrop core **184/7**, shell **89/5**, native **2732/3**, and tip-window
+  **564/2** assertion/case groups. The same combined tree builds `test_gui`,
+  `minimal` and `winuispike` with warnings as errors and passes both runtime
+  gates (**2/2**) in each linkage. Logs use the
+  `audit106-lifecycle-on-{transient*,owner-backdrop*,tip}.log` family plus the
+  build and gate logs named above. Fresh shipping OFF verification remains
+  pending.
+
+## Runtime bootstrap fault boundary (2026-08-31)
+
+- Runtime fault parsing, the private fault enum, fault-only parameters and
+  injected branches in `winui.cpp` now compile only with
+  `WXWINUI_TEST_SUPPORT`. A shipping build keeps the real COM, Windows App SDK,
+  DispatcherQueue, application, XAML-manager and retirement-hook sequence, but
+  does not inspect or consume the test environment variables.
+- The installed runtime consumer requires an explicit `ON` or `OFF` oracle.
+  `ON` requires all seven injected failures; `OFF` requires the same profiles
+  to remain inert and their environment to survive startup and cleanup. Each
+  mode also runs the opposite before-bootstrap oracle and requires its exact
+  failure diagnostic. WinUI test CI selects `ON`; the shipping documentation
+  selects `OFF`.
+- The current test-support tree builds and passes both runtime gates in shared
+  and static configurations. A fresh installed 12-child campaign in both `ON`
+  and `OFF` modes, including shipping symbol/header inspection, is still
+  required before closing this boundary.
+
+## Host observation and policy test boundaries (2026-08-31)
+
+- Three tail observations, eight cursor adapters, nine Tooltip-policy
+  adapters and nine TitleBar adapters move from source-private host headers to
+  four non-installed test-support classes. The test-only Tooltip and TitleBar
+  enums/records move with their adapters. Their owning translation units opt in
+  explicitly where needed; no class data member, virtual function or
+  conditional production layout is added.
+- Production keeps the physical/TLW retirement atomics and ledger, borrowed
+  drop-broker ownership, native/XAML cursor properties and verdict caches,
+  Tooltip registry/replay/shutdown state and budgets, TitleBar policy map,
+  native/AppWindow identity checks, geometry and real teardown counter. The
+  migrated fixtures preserve all assertion sites and their original native
+  calls; the TitleBar snapshot deliberately remains a guarded native/XAML
+  observation rather than a passive surrogate.
+- `test_gui`, `minimal` and `winuispike` build with warnings as errors for
+  shared and static WinUI, and wxMSW `test_gui` also compiles. Post-migration
+  runs in both WinUI linkages pass cursor **175/7**, tail-host **58/5**,
+  tail-broker **44/3**, TitleBar **734/7** and Tooltip policy **81/4**
+  assertions/cases, followed by both runtime gates (**2/2**). Evidence is in
+  the `audit106-host-policy-on-*.log` files in each active build tree. These
+  are private-desktop, non-input checks; source canaries and fresh shipping OFF
+  symbol/install verification remain pending.
+
+## Coordinate, disconnect and appearance test boundaries (2026-09-01)
+
+- The visual-coordinate round-trip helper leaves the production coordinate
+  class and is exposed only by the non-installed
+  `visual-coordinate-test-access.h`. The production logical/physical/client/
+  screen transforms and their scale source are unchanged; no conditional data
+  member or virtual function is introduced.
+- Six synthetic physical-disconnect gate operations plus the Reset and Poison
+  injectors move to `physical-disconnect-test-access.h`. The real disconnect
+  gate, composite gate, poison authority and passive poison query remain
+  production facilities used by ControlHost, Choice and ComboBox. All **52**
+  consumer calls are migrated without changing their assertion sites.
+- The High Contrast enum, override storage and setter move to
+  `appearance-test-access.h`. A build without test support contains only the
+  real `SystemParametersInfo(SPI_GETHIGHCONTRAST)` query, preserves the
+  conservative `true` result on query failure and tests the unchanged
+  `HCF_HIGHCONTRASTON` flag. Appearance snapshots and capture logic remain
+  production code.
+- Before migration, both linkages pass coordinate arithmetic **125/1**,
+  physical-disconnect/ComboBox **163/13** and High Contrast/theme policy
+  **295/13** assertions/cases. After migration, one combined private-desktop
+  run adds the detached-correlation retirement case and passes **590/28** in
+  both shared and static builds. Both linkages build `test_gui`, `minimal` and
+  `winuispike` with warnings as errors; ordinary wxMSW Debug `test_gui` also
+  builds, and runtime smoke/Supported V0 pass **2/2** per linkage. Logs are
+  `audit106-coordinate-baseline.log`,
+  `audit106-physical-gate-baseline.log`,
+  `audit106-appearance-high-contrast-baseline.log` and the
+  `audit106-coordinate-physical-appearance-on-{build,tests,gates}.log` files
+  in the active build trees; the wxMSW build log is
+  `audit106-coordinate-physical-appearance-cross-build.log`.
+- These are deterministic non-input tests with `WX_UI_TESTS=0`; they do not
+  qualify physical input. Fresh shipping OFF/ON source, symbol, install and
+  installed-consumer proof remains pending and keeps plan 106 open.
+
+## Auxiliary, shell and notification test boundaries (2026-09-01)
+
+- TaskBarIcon native-call replacement, popup hooks, snapshots and helper
+  adapters; TextPeer callback live-count observation; shell-theme native-op
+  replacement; Splash constructor hooks/fault/count; AppNotification native
+  replacement, dispatch hook and broker snapshot; and RichToolTip fault,
+  hook, backend override and diagnostics now live in six non-installed
+  `tests/winui/test-support/*-test-access.h` headers. Only their producer
+  translation units opt in when `wxBUILD_TESTS=ALL`.
+- Shipping code keeps TaskBarIcon desired/applied generations and Explorer
+  restart reconciliation, TextPeer callback generations, the real shell/DWM
+  theme operations, Splash runtime ownership and rollback, the Windows App
+  SDK notification manager/finalization/lease ledgers, and both RichToolTip
+  presentation backends with their ownership, timer, reparent and close
+  protocol. No public class layout or virtual surface is conditional.
+- Before migration, both linkages pass TaskBarIcon **4411/18**, TextPeer and
+  its extra comma-named ComboBox case **1484/9 + 17/1**, shell theme
+  **198/12**, Splash **247/1**, AppNotification **637/19** and RichToolTip
+  **277/22** assertions/cases. Candidate source projections and mutation
+  canaries are retained under the corresponding
+  `F:\wxwinui-pr26890-audit107-foundation\*-test-access` evidence folders.
+- After migration, shared and static Release build `test_gui`, `minimal` and
+  `winuispike` with warnings as errors, and ordinary wxMSW Debug builds
+  `test_gui` the same way. Each WinUI linkage repeats all **7271 assertions /
+  82 cases**, followed by runtime smoke and Supported V0 **2/2**. Logs are
+  `audit106-helper-surfaces-on-{build,tests,gates}.log` in both active WinUI
+  build trees and `audit106-helper-surfaces-cross-build.log` in the wxMSW
+  audit tree.
+- All runtime checks use private desktops with `WX_UI_TESTS=0`; they neither
+  inject nor qualify physical input. A fresh shipping OFF install, symbol/
+  source canaries and restored-ALL rerun are still required, so plan 106
+  remains open.
+- The first frozen shipping-OFF compile exposed two warnings-as-errors in
+  `richtooltip.cpp`: once the Supported V0 generic fallback became
+  unconditional, the following test-selectable TeachingTip branch was
+  unreachable. The complete native-selection branch is now compiled only
+  with `WXWINUI_TEST_SUPPORT`; the shipping generic fallback and the real
+  backend methods remain production code. Focused shipping-OFF `wxcore`
+  builds pass `/warnaserror` in both linkages. After restoring
+  `wxBUILD_TESTS=ALL`, shared and static each rebuild `test_gui`, `minimal`
+  and `winuispike` with warnings as errors, pass RichToolTip **277/22** on a
+  private desktop, and pass runtime smoke plus Supported V0 **2/2**. The full
+  fresh install/symbol/consumer campaign is still required before closure.
+- The restored-ALL private scenario campaign also exposed an environmental
+  dependency in `run-input-scenarios.ps1`: Windows PowerShell 5.1 launched on
+  the isolated desktop can resolve the PowerShell 7 Utility module first, so
+  the `Get-FileHash` cmdlet is unavailable. All eight file hashes now use one
+  local .NET `SHA256` stream helper, matching the script's existing text-hash
+  implementation and avoiding module autoload entirely. The exact isolated
+  Windows PowerShell path passes one bounded iteration: **1/1** run, **9/9**
+  scenarios, no timeout or orphan process, with the executable and summary
+  hashes independently reproduced outside the private desktop. This remains
+  a non-input qualification helper change; a fresh coupled shipping campaign
+  is still required on the resulting commit.
+- The coupled v6 campaign subsequently passes on clean commit
+  `8a03edb793f4f074577e13c7dfcd77c4c38b5eac` in both shared and static
+  linkages. Each shipping-OFF half builds **16 libraries, 6 samples and
+  wxrc** with warnings as errors, installs to a fresh prefix, passes the
+  private symbol/header scan, installed four-TU compile contract **1/1**,
+  installed runtime campaign **1/1** with twelve child launches, source
+  canary, and the expected `winuispike` exit 30 without a result file. Each
+  restored-ALL half rebuilds and reinstalls, passes the installed runtime ON
+  campaign, one private **9-scenario** sample run, and runtime smoke plus
+  Supported V0 **2/2**. The final source proof revalidates the clean HEAD and
+  all **101** pinned hashes after each phase. Preserved evidence is under
+  `F:\wxwinui-pr26890-audit107-foundation\shipping-host-runtime-v6`.
+
+## ComboBox popup diagnostic boundary (2026-09-01)
+
+- The three exact-popup diagnostic enums, passive snapshot and two exported
+  recorder functions leave the installed `wx/winui/private/itemmodel.h`.
+  They now live behind `WXWINUI_TEST_SUPPORT` in the non-installed
+  `combo-popup-test-access.h`; shipping builds do not allocate or update the
+  recorder. The real popup resolution, fail-close and retirement protocol is
+  unchanged.
+- Shared and static Release each build `test_gui`, `minimal` and `winuispike`
+  with warnings as errors. On private desktops with `WX_UI_TESTS=0`, the
+  immediate popup idempotence case passes **8/1** and the ComboBox local-key
+  routing case passes **16/1** in each linkage; runtime smoke and Supported V0
+  then pass **2/2** per linkage.
+- A focused `wxBUILD_TESTS=OFF` rebuild of `wxcore` passes `/warnaserror` in
+  both linkages. The installed header contains none of the former diagnostic
+  names, the shared DLL exports none of them or the new access class, and the
+  static library contains no matching symbol. Both active build trees are
+  restored to `wxBUILD_TESTS=ALL` and the same builds and runtime gates pass
+  again.
+
+## Menu projection and popup test boundary (2026-09-01)
+
+- The private-but-exported `menutest.h` surface is removed. Its seventeen
+  menu projection, automation, fault-injection and popup operations, together
+  with the snapshot and flow-direction types, now live in the non-installed
+  `menu-test-access.h` class. Only `menubar.cpp` opts in when
+  `WXWINUI_TEST_SUPPORT` is enabled.
+- Shipping retains the real projection/sentinel lifecycle, build quarantine
+  budgets and epochs, UIA reconciliation, dispatcher drain, timeout/watchdog,
+  modal popup loop and command routing. The three one-shot fault injectors,
+  the forced bitmap-scale storage and all diagnostic resolver methods compile
+  only in test-enabled builds; the production bitmap helper has no dormant
+  forced-scale branch.
+- Shared and static Release each rebuild `test_gui`, `minimal` and
+  `winuispike` with warnings as errors. On private desktops with
+  `WX_UI_TESTS=0`, the complete `[WinUIMenu]` group passes **312 assertions /
+  17 cases** and the STC common-broker context-menu case passes **41/1** in
+  each linkage. Runtime smoke and Supported V0 then pass **2/2** per linkage.
+  These checks inject no physical input.
+- Focused `wxBUILD_TESTS=OFF` builds of `wxcore` pass `/warnaserror` in both
+  linkages. `dumpbin` finds no former menu-test export/type, new access-class
+  symbol, fault-injector storage or forced-scale storage in either the shared
+  DLL or static archive. The trees are restored to `wxBUILD_TESTS=ALL`, the
+  three targets rebuild, and the same focused tests and runtime gates pass
+  again.
+
+## Choice/ComboBox implementation-state boundary (2026-09-01)
+
+- `wxWinUIChoiceImpl` leaves the 52-consumer `src/winui/private.h` umbrella
+  and now lives in the source-private `src/winui/choiceimpl.h`, included only
+  by `choice.cpp` and `combobox.cpp`. This keeps the real popup, edit-part,
+  text-selection, autocomplete, template and layout state shared by the two
+  implementation units without making every WinUI translation unit depend on
+  the control's internal layout.
+- Popup-reopen counters, retired-edit observation, three range-order hooks and
+  all passive ComboBox diagnostics are present only with
+  `WXWINUI_TEST_SUPPORT`. Shipping keeps the actual popup generation and
+  retirement protocol, physical-disconnect gate, range projection/finalizer,
+  edit-part tokens, selection tickets, autocomplete generations and real
+  template/layout replay. The shipping path no longer reads the XAML list
+  height solely to populate a diagnostic field.
+- Shared and static `wxBUILD_TESTS=OFF` `wxcore` builds pass with warnings as
+  errors. `dumpbin` finds no Choice/ComboBox test-access type, automation test
+  state, reopen counter, range hook, retired-edit field or diagnostic symbol
+  in either the shared DLL or static archive. Both trees are restored to
+  `wxBUILD_TESTS=ALL` and rebuild `test_gui`, `minimal` and `winuispike` with
+  warnings as errors.
+- On private desktops with `WX_UI_TESTS=0`, eleven exact fresh-process cases
+  cover Loaded/LayoutUpdated realization, template generations, destruction,
+  popup reopen, selection snapshots, the real XAML editor, SIMPLE layout,
+  theme retirement, host/DPI/theme transitions and local-key routing. They
+  pass **1299 assertions / 11 cases** in each linkage; runtime smoke and
+  Supported V0 then pass **2/2** per linkage. These checks inject no physical
+  input.
+- A single-process aggregate `[winui-combo]` run remains order-dependent: some
+  later controls lose realization after earlier cases. It is not reported as
+  passing or retried. The fresh-process results above establish this bounded
+  implementation-state migration; aggregate test-fixture isolation remains a
+  separate open test-suite defect and keeps the wider plan open.
+
+## InputRouter diagnostic boundary (2026-09-01)
+
+- The four resolution counters and their exported getter/reset functions leave
+  `wx/winui/private/inputrouter.h`. They now live behind the non-installed
+  `input-router-test-access.h`, and `inputrouter.cpp` opts in only when
+  `WXWINUI_TEST_SUPPORT` is enabled. Shipping builds contain neither the four
+  atomics nor their six passive increment sites.
+- The native resolver is otherwise unchanged: the shared thread-local
+  reentrance guard, three-attempt budget, topology and generation snapshots,
+  restart rules and all fail-closed `Unstable` paths remain production code.
+  The 23 test references move to the private adapter without changing an
+  assertion or substituting a successful result.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. On private desktops with `WX_UI_TESTS=0`, the complete
+  `[winui-input-router]` group passes **229 assertions / 20 cases** in each
+  linkage, followed by runtime smoke and Supported V0 **2/2**.
+- Reusing the same two build trees, focused `wxBUILD_TESTS=OFF` builds of
+  `wxcore` and `minimal` pass with warnings as errors. `dumpbin` reports zero
+  match for the former counter type/functions or the new test-access class in
+  both the shared DLL exports and static archive symbols. The source-private
+  header contains none of the former names; the four atomics and all six
+  increment sites are lexically guarded by the same test-only definition,
+  while the new adapter remains under `tests/winui/test-support`.
+- Both trees are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat the exact
+  **229/20** group plus both runtime gates **2/2**. No new build directory,
+  physical input or global interaction was used. This closes the InputRouter
+  sublot locally; InputState, the TLW lifecycle ledger and deeper DropBroker
+  test storage still keep plan 106 open.
+
+## InputState observation boundary (2026-09-01)
+
+- The test-only `CountActions()`, `IsStormGuardArmed()` and
+  `GetStormInterventionCount()` observers leave the source-private
+  `inputstate.h` contract. They now live behind the non-installed
+  `input-state-test-access.h`, and `inputstate.cpp` opts in only when
+  `WXWINUI_TEST_SUPPORT` is enabled.
+- Production behaviour is unchanged: `HasAction()`, `ArmStormGuard()`,
+  `DisarmStormGuard()`, the transition data, the storm budget and every state
+  decision remain in shipping code. All 25 test observations use the private
+  adapter without changing an assertion or exposing mutable state.
+- Before and after the extraction, the exact `[winui-input-state]` group passes
+  **734 assertions / 7 cases** in each linkage. Shared and static Release also
+  build `test_gui` and `minimal` with warnings as errors, followed on private
+  desktops with `WX_UI_TESTS=0` by runtime smoke and Supported V0 **2/2** per
+  linkage.
+- Reusing the same two build trees, focused `wxBUILD_TESTS=OFF` builds of
+  `wxcore` and `minimal` pass with warnings as errors. `dumpbin` reports zero
+  match for the removed observer methods or the new test-access class in the
+  shared DLL and static archive. The source-private header contains none of
+  the former declarations.
+- Both trees are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat the exact
+  **734/7** group plus both runtime gates **2/2**. No new build directory,
+  physical input or global interaction was used. This closes the InputState
+  sublot locally; the TLW lifecycle ledger and deeper DropBroker test storage
+  still keep plan 106 open.
+
+## Host diagnostic-counter boundary (2026-09-01)
+
+- The per-slot cursor-set count leaves `wxWinUITopLevelHost` and moves to the
+  existing non-installed `wxWinUIHostCursorTestAccess`. Its storage, recorder
+  declaration/definition and the single hot-path call now compile only with
+  `WXWINUI_TEST_SUPPORT`; shipping cursor projection contains no no-op test
+  call. The four existing observations keep their assertions unchanged.
+- The already-private live ContentLoaded-observer getter keeps its contract,
+  while its counter and constructor/destructor accounting also compile only
+  in test-enabled builds. Real Loaded subscriptions, weak lifetime state,
+  cursor policy generations, setters and reconciliation remain production
+  code. No class member, object layout or virtual table changes.
+- Before migration and after the initial test-enabled build, the three exact
+  cursor/Loaded cases pass **121 assertions / 3 cases** in each linkage.
+  Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors, followed by runtime smoke and Supported V0 **2/2** per linkage.
+- Reusing the same two build trees, `wxBUILD_TESTS=OFF` builds of `wxcore` and
+  `minimal` pass with warnings as errors. `dumpbin` reports zero match for the
+  old getter, new test accessor, cursor recorder and both counter symbols in
+  the shipping shared DLL and static archive.
+- Both caches are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat the
+  exact **121/3** cases plus both runtime gates **2/2**. No new build
+  directory, physical input or global interaction was used. The larger TLW
+  lifecycle-observation family and DropBroker snapshot storage remain separate
+  open sublots of plan 106.
+
+## DropBroker snapshot boundary (2026-09-01)
+
+- The registration and aggregate snapshot records leave the source-private
+  `dropbrokerstate.h` contract and now live in the non-installed
+  `drop-broker-test-access.h`. Snapshot initialization, mutex/storage, passive
+  copies, native-identity validation, COM callback counters and every
+  lock/register/revoke/unlock mutation compile only with
+  `WXWINUI_TEST_SUPPORT`.
+- Shipping retains the native-operation table and the exact production
+  protocol: `CoLockObjectExternal`, `RegisterDragDrop` and `RevokeDragDrop`
+  calls, the two bridge/TLW adapter identities, operation ledger, generations,
+  ownership flags, coverage token, activation, rollback and fail-closed
+  shutdown order are unchanged. The aggregate refresh is TU-local test code,
+  so shipping no longer performs HWND/generation queries solely for telemetry.
+- Before and after extraction, `[winui-drop-broker]~[physical]` passes the same
+  **1912 assertions / 33 cases** in shared and static Release. Five consumers
+  also pass in fresh processes in each linkage: GLCanvas **340/1**,
+  NativeWindow **165/1**, RichText **82/1**, STC **41/1** and TreeCtrl **51/1**.
+  The RichText baseline exposed a stale one-registration oracle; separate
+  commit `d92d15b04a` corrects it to the production bridge+TLW contract and
+  asserts both role-specific counters and HWNDs rather than weakening the
+  broker check.
+- Focused `wxBUILD_TESTS=OFF` builds of `wxcore` and `minimal` pass with
+  warnings as errors in both linkages. `dumpbin` reports zero match in the
+  shipping shared exports and static symbols for the two snapshot types,
+  mutator/aggregate helpers, read/native-validation methods and new test-access
+  class.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; `test_gui` and `minimal`
+  rebuild with warnings as errors, then repeat **1912/33**, all five
+  fresh-process consumers and runtime smoke plus Supported V0 **2/2** per
+  linkage on private desktops with `WX_UI_TESTS=0`. No physical input or
+  global interaction was used. The TLW lifecycle ledger and native-operation
+  injection boundary remain separate open sublots of plan 106.
+
+## DropBroker native-operation injection boundary (2026-09-01)
+
+- The replaceable OLE operation record now exists only in the non-installed
+  `drop-broker-test-access.h`. The unconditional table and its source-private
+  `dropbrokerstate.h` carrier are removed. A shipping broker calls
+  `CoLockObjectExternal`, `RegisterDragDrop` and `RevokeDragDrop` directly;
+  only `WXWINUI_TEST_SUPPORT` retains a copied callback record and the
+  synthetic-context exception used by the existing transaction tests.
+- The four callback-bearing boundaries retain their exact ledger order:
+  claim/unlock/complete, lock/note, arm/register/complete and
+  arm/revoke/complete. `RoClearError()` still runs only after the real
+  `RegisterDragDrop()` succeeds, never after an injected operation. Bridge/TLW
+  acquisition, inverse shutdown order, generations, coverage, rollback and
+  fail-closed ownership are unchanged.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. `[winui-drop-broker]~[physical]` remains **1912 assertions / 33
+  cases** in each linkage. The fresh-process GLCanvas **340/1**, NativeWindow
+  **165/1**, RichText **82/1**, STC **41/1** and TreeCtrl **51/1** consumers
+  also remain unchanged.
+- Reusing the same build trees with `wxBUILD_TESTS=OFF`, `wxcore` and `minimal`
+  build with warnings as errors in both linkages. `dumpbin` reports zero match
+  in the shipping shared exports and static symbols for the old/new operation
+  record names, test accessor, table getter, native wrapper functions and any
+  test-shaped `CreateBroker` signature.
+- Both caches are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat
+  **1912/33**, all five fresh-process consumers and runtime smoke plus
+  Supported V0 **2/2** per linkage on private desktops with `WX_UI_TESTS=0`.
+  No physical input or global interaction was used. The remaining TLW
+  lifecycle-observation family is a separate sublot.
+
+## TLW lifecycle-observation boundary (2026-09-01)
+
+- Ten lifecycle observers leave `wxWinUITopLevelHost` and move to the existing
+  non-installed `wxWinUIHostObservationTestAccess`. Their **669** call sites in
+  **19** test translation units keep the same assertions. The host header no
+  longer declares live-host/slot/lifetime, handler-balance, subclass-context or
+  Loaded-hook counters.
+- `wxWinUIHostLifetime` and `wxWinUISlotLifetime` construction/destruction move
+  out of line so test support cannot create differing inline definitions across
+  translation units. Their counts, the slot/root handler balances, subclass and
+  Loaded-hook counts, plus pending terminal/gate telemetry are stored and
+  updated only with `WXWINUI_TEST_SUPPORT`.
+- The real host/slot registries, handler subscriptions and revocations,
+  subclass ownership, Loaded state, disconnect gates, terminal retirements,
+  source/root graph, generations and shutdown order are unchanged. Flush
+  scheduling and impossible-z-order counts remain deliberate passive
+  production diagnostics because `winuispike` consumes them.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. Before and after the extraction, the complete `[HostLifecycle]`
+  group passes exactly **23818 assertions / 108 cases** in each linkage; the
+  known WebView2 focus warning is unchanged and is not counted as a failure.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. Shared exports and static symbols have zero match for the
+  ten old host getters, the private observation accessor and all ten test-only
+  storage families. Source checks also confirm zero old consumer calls and
+  balanced guards around every targeted write.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; the same **23818/108** group,
+  coupled DropBroker **1912/33**, its five fresh-process consumers and runtime
+  smoke plus Supported V0 **2/2** all pass again in both linkages. Runs use
+  private desktops with `WX_UI_TESTS=0`; no physical input is claimed. Other
+  helper/component surfaces and their fresh installed-consumer proof keep plan
+  106 in progress.
+
+## Appearance observation boundary (2026-09-01)
+
+- `wxWinUIAppearanceSnapshot` and both `wxWinUICaptureAppearance()` overloads
+  leave the production `appearance.h` contract. The record and capture entry
+  points now live in the non-installed `appearance-test-access.h`; their local
+  DependencyProperty/UIA helpers and implementations compile only with
+  `WXWINUI_TEST_SUPPORT`.
+- Seven test-only consumers use the private adapter: the direct appearance
+  contract plus ActivityIndicator, Hyperlink, RadioBox, StatusBar, StaticBox
+  and StaticText observations. Font/colour/application, High Contrast, theme
+  brush and accessibility projection code used by real controls is unchanged.
+- Shared and static Release build `test_gui` and `minimal` with warnings as
+  errors. `[winui-appearance],[winui-chrome-feedback]` passes exactly **2263
+  assertions / 67 cases** in each linkage; the broader coupled run with STC
+  passes **4591/78**.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore`, `wxstc` and `minimal`
+  with warnings as errors. Shared DLL exports and static-library symbols have
+  zero match for the old capture functions, snapshot and new private adapter.
+- Both caches are restored to `wxBUILD_TESTS=ALL`, rebuilt, and repeat
+  **2263/67** plus runtime smoke and Supported V0 **2/2** in each linkage.
+  These are private-desktop, non-physical results.
+
+## STC native-timer observation boundary (2026-09-01)
+
+- `wxMSWTimerImpl::GetNativeIdForTesting()`,
+  `ScintillaWX::GetCaretTimerIdForTesting()` and the exported free
+  `wxSTCGetCaretTimerIdForTesting()` leave production headers and sources.
+  The one required USER32 timer identity is now reached through the
+  non-installed `stc-timer-test-access.h` only in test-enabled WinUI builds.
+- The `wxMSWTimerImpl` and `ScintillaWX` definitions gain only friend
+  declarations: no data member, layout or virtual-table change. CMake applies
+  `WXWINUI_TEST_SUPPORT` and the private include directory to
+  `ScintillaWX.cpp` per source, including the parent monolithic directory,
+  instead of instrumenting all of wxstc.
+- Before and after extraction, the complete `[winui-stc]` group passes exactly
+  **2328 assertions / 11 cases** in shared and static Release. This includes
+  `NativeCaretTimerIdentityIsKilledOnImmediateDestroy` at **27/1**; the timer
+  start/stop/destruction path and assertions are unchanged.
+- The same `wxBUILD_TESTS=OFF` builds pass for `wxcore`, `wxstc` and `minimal`.
+  Shared DLL exports and static-library symbols have zero match for all three
+  removed seams or either new private test-access class. Restored `ALL` builds
+  repeat **2328/11** and runtime smoke plus Supported V0 **2/2** per linkage.
+
+## Generic feedback observation boundary (2026-09-01)
+
+- The Banner bitmap-background oracle and seven generic-animation timer,
+  frame, visibility and preferred-size helpers leave the public
+  `wx/bannerwindow.h` and `wx/generic/animate.h` APIs. Tests reach the same
+  state through the non-installed `generic-feedback-test-access.h` adapter.
+- Both production classes gain only friend declarations: no data member,
+  object-layout, virtual-table or exported-function change. The adapter is
+  rejected unless `WXWINUI_TEST_SUPPORT` is enabled and contains inline-only
+  forwarding code, so it creates no separate shipping ABI.
+- Before and after extraction, `WinUIGenericFeedback::*` passes exactly
+  **7563 assertions / 3 cases** in shared and static Release; `test_gui` and
+  `minimal` build with warnings as errors in both linkages.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. Shared DLL exports and static-library symbols have zero
+  match for the eight removed methods or either new private accessor class.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; the same **7563/3** group
+  and runtime smoke plus Supported V0 **2/2** pass again in each linkage with
+  `WX_UI_TESTS=0`. No physical input or global interaction was used.
+
+## Native dialog invocation boundary (2026-09-01)
+
+- The IFileDialog Show substitution, owner-close counter and
+  TaskDialogIndirect substitution leave the installed MSW private headers.
+  Their records and entry points now live only in the non-installed
+  `native-dialog-test-access.h` and compile into wxcore only when
+  `WXWINUI_TEST_SUPPORT` is enabled.
+- Production keeps the real IFileDialog owner-destruction guard and direct
+  shell/TaskDialog invocation. Only the counter increment and final-call
+  substitutions are conditional; dialog configuration, nested ownership,
+  result translation and close ordering are unchanged.
+- The first post-extraction replay deliberately exposed that the picker cases
+  also consume `wxUSE_IFILEOPENDIALOG` from the production private header: it
+  ran **2067/9** instead of the **2413/12** baseline. Restoring that required
+  feature-contract include, without restoring any test declarations, returns
+  the exact shared/static suite to **2413 assertions / 12 cases**.
+- With `wxBUILD_TESTS=OFF`, shared and static `wxcore` plus `minimal` build
+  with warnings as errors. The installed source headers contain zero targeted
+  test declaration, and `dumpbin` reports zero shared export or static symbol
+  for the hook records, setters, resetters, counter or test storage.
+- Both caches are restored to `wxBUILD_TESTS=ALL`; `test_gui` and `minimal`
+  rebuild with warnings as errors, then repeat **2413/12** and runtime smoke
+  plus Supported V0 **2/2** in each linkage with `WX_UI_TESTS=0`. No physical
+  input or visible native shell was used.
+
+## Generic progress-dialog yield boundary (2026-09-01)
+
+- The public `WinUIYieldHookForTesting` typedef and
+  `WinUISetYieldHookForTesting()` method leave `wxGenericProgressDialog`, as do
+  the two test-only pointer fields that stored the callback and its context.
+  Tests install the same one-shot callback through the non-installed
+  `progress-dialog-test-access.h` adapter.
+- In test-enabled WinUI builds, callback state is held in a source-local
+  registry keyed by the dialog. Taking a hook erases it before invocation, so
+  nested updates retain the previous one-shot/reentrance contract. `Init()` and
+  destruction also erase any stale entry; no callback state or registry is
+  compiled into shipping builds.
+- This intentionally reduces the pre-release WinUI progress-dialog layout by
+  two pointers in both test-enabled and shipping configurations. It is not
+  claimed as historical ABI preservation; all affected binaries and consumers
+  are rebuilt, and no configuration-dependent class layout is introduced.
+- Before and after extraction, `[winui-progress-dialog]` passes exactly **1010
+  assertions / 3 cases** in shared and static Release. The cases retain the
+  destruction-during-yield, owner-destruction and reentrant-update boundaries.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. The installed headers and shared/static symbol tables
+  contain zero match for the former public seam, the replacement adapter or
+  its registry. Both caches are restored to `wxBUILD_TESTS=ALL`; the exact
+  **1010/3** replay and runtime smoke plus Supported V0 **2/2** pass again in
+  each linkage with `WX_UI_TESTS=0`.
+
+## MSW taskbar-button backend boundary (2026-09-01)
+
+- The native-backend factory typedef/setter, implementation snapshot method,
+  snapshot record and exported snapshot function leave the installed MSW
+  taskbar-button headers. The same deterministic backend and state observation
+  are available only through the non-installed
+  `taskbar-button-test-access.h` adapter.
+- A dedicated `WXMSW_TASKBARBUTTON_TEST_SUPPORT` definition is applied only to
+  `src/msw/taskbarbutton.cpp` and `test_gui` when CMake builds all tests. This
+  preserves ordinary wxMSW and wxWinUI characterization without enabling the
+  broader WinUI test-support surface for wxMSW. Shipping calls the COM backend
+  directly and contains no replacement factory or snapshot implementation.
+- `wxTaskBarButtonImpl` gains only a friend declaration. No data member,
+  virtual function, size or vtable changes; the removed functions were
+  pre-release PR test exports rather than supported wxTaskBarButton API.
+- Before and after extraction, `[winui-beta-taskbarbutton]` passes exactly
+  **605 assertions / 18 cases** in shared and static Release, covering shell
+  retries, generation rebinding, callback destruction and progress/thumb state
+  convergence. An ordinary wxMSW shared Debug rebuild with warnings as errors
+  also executes the dedicated support path and passes the same **605/18**.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. The installed headers contain none of the former test
+  declarations, and shared exports/static symbols contain zero former or new
+  taskbar-button test seam. Both caches are restored to
+  `wxBUILD_TESTS=ALL`; the exact **605/18** replay and runtime smoke plus
+  Supported V0 **2/2** pass again in each linkage with `WX_UI_TESTS=0`.
+
+## WinUI printing native-call boundary (2026-09-01)
+
+- The two native-operation records and six printing test functions leave the
+  installed `wx/msw/private.h` header. They now live only in the non-installed
+  `printing-test-access.h` adapter and are compiled for test-enabled WinUI
+  builds in `printdlg.cpp`, `dcprint.cpp` and `printwin.cpp`.
+- Production still builds the real `PRINTDLGEX`/`PAGESETUPDLG`, printer DC and
+  abort loop, then invokes the Win32 APIs directly. The dialog-shown guard used
+  by `window.cpp`, native handle ownership, conversion, cancellation and error
+  sequencing remain production code. Test callbacks are still copied before
+  invocation, preserving nested/reentrant replacement behaviour.
+- A separate oracle correction first made page-setup expectations follow the
+  same `LOCALE_IMEASURE` contract and fallback as production. It keeps the
+  expected/opposite unit bits and all four conversions checked. `[page-setup]`
+  then passes **49 assertions / 2 cases** in both linkages instead of the six
+  locale-dependent failures; no printing seam assertion was removed.
+- Before and after extraction, the complete `[winui-printing]` group passes
+  exactly **1323 assertions / 7 cases** in shared and static Release, including
+  common dialogs, page setup, printer loop, print preview and cancellation.
+- With `wxBUILD_TESTS=OFF`, both linkages build `wxcore` and `minimal` with
+  warnings as errors. Shared exports, static symbols and the installed private
+  header contain zero match for the operation tables, six functions or the new
+  adapter. Both caches are restored to `wxBUILD_TESTS=ALL`; the exact
+  **1323/7** replay and runtime smoke plus Supported V0 **2/2** pass again in
+  each linkage with `WX_UI_TESTS=0`.
+
+## wxAUI notebook interaction boundary (2026-09-01)
+
+- The exported `wxAuiNotebook::OnTabEndDragForTesting()` method and the two
+  `wxAuiNotebookTestPeer` friend declarations leave the installed AUI header.
+  Tests perform the same end-drag and window-list interactions through the
+  non-installed `aui-notebook-test-access.h` adapter.
+- A dedicated `WXAUI_NOTEBOOK_TEST_SUPPORT` definition is applied only to
+  `src/aui/auibook.cpp` and `test_gui` when CMake builds all tests. The source
+  property is applied in both the AUI library and parent monolithic source
+  collection paths. Shipping uses the direct mouse position, hit-test, drop
+  index and hint-rectangle paths and contains no test override storage.
+- `wxAuiNotebook` gains only an adapter friend declaration: no data member,
+  virtual function, object size or vtable changes. Drag completion, cancel,
+  capture and event sequencing remain production code.
+- Before and after extraction, WinUI shared/static Release and ordinary wxMSW
+  shared Debug pass exactly **74 assertions / 5 `[aui][drag]` cases** plus
+  **31 assertions / 1 window-list projection case**.
+- With `wxBUILD_TESTS=OFF`, all three AUI artefacts build with warnings as
+  errors and contain zero former method, adapter, override or support symbol;
+  the installed header contains none of the removed test declarations. All
+  three caches are restored to `wxBUILD_TESTS=ALL`; the same focused tests pass
+  again, and runtime smoke plus Supported V0 pass **2/2** in each WinUI
+  linkage with `WX_UI_TESTS=0`.
+
+## PropertyGrid manager and editor-parking boundary (2026-09-01)
+
+- The toolbar-removal failure pair, header-resize dispatcher and six MSW
+  editor-parking functions leave the installed PropertyGrid private header.
+  Tests use one non-installed `property-grid-test-access.h` adapter, compiled
+  only into `manager.cpp`, MSW/WinUI `propgrid.cpp` and `test_gui` when
+  `wxBUILD_TESTS=ALL`. The same source properties cover component and
+  monolithic builds.
+- Production retains the complete toolbar detach/rollback transaction, header
+  BEGIN/RESIZING/END state machine, editor snapshots, callback epochs,
+  quarantine paths and host/batch lifetime counters. Only the artificial
+  toolbar failure state and two one-shot `SetParent()` failure flags are absent
+  from shipping. The real `TrySetParent()` no longer accepts a test parameter.
+- Before and after the manager/header extraction, WinUI shared/static preserve
+  **62 assertions / 2 toolbar cases** and **30 / 2 header cases**; ordinary
+  wxMSW shared Debug preserves **66/2** and **30/2** respectively. The parking
+  replay passes **43/2** for unassigned-editor deferral, **41/2** for double
+  failure and **201/2** for the three DPI parking routes in every configuration.
+- The complete serialized `[propgrid]` replay passes with **1227 assertions / 2
+  cases** shared, **1217/2** static and **1169/2** wxMSW Debug. These totals may
+  vary slightly with native paint callbacks; the bounded seam sections above
+  are the stable comparison. One initial concurrent static DPI run observed
+  the shared process's live message-only host; the isolated rerun passes
+  **201/2**, so final whole-suite evidence is intentionally serialized.
+- With `wxBUILD_TESTS=OFF`, all three `wxpropgrid` artefacts build with warnings
+  as errors. Shared exports, static symbols and installed headers contain zero
+  former function, replacement adapter, failure state or one-shot flag. All
+  caches are restored to `wxBUILD_TESTS=ALL`; focused and full tests pass again,
+  followed by runtime smoke plus Supported V0 **2/2** in each WinUI linkage
+  with `WX_UI_TESTS=0`. This closes Plan 106 locally; remote CI remains pending.
+
+## Maintenance
+
+Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

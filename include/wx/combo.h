@@ -866,7 +866,7 @@ private:
 
 #if defined(__WXUNIVERSAL__)
     // No native universal (but it must still be first in the list)
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) && !defined(__WXWINUI__)
     #include "wx/msw/combo.h"
 #endif
 

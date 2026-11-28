@@ -50,6 +50,24 @@
 #include "wx/private/aui.h"
 #include "wx/private/colour.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+    #include "wx/winui/private/themecolours.h"
+
+namespace
+{
+
+// The ground of a window which shows the backdrop of the system is painted
+// black, which the system replaces by its material: see
+// wxWinUIWindowUsesBackdrop(). Any other window has the colour given.
+wxBrush wxAuiWinUIGround(wxWindow *window, const wxBrush& brush)
+{
+    return window && wxWinUIWindowUsesBackdrop(window) ? *wxBLACK_BRUSH
+                                                       : brush;
+}
+
+} // anonymous namespace
+#endif // wxWinUI
 wxIMPLEMENT_ABSTRACT_CLASS(wxAuiDockArt, wxObject);
 wxIMPLEMENT_CLASS(wxAuiDefaultDockArt, wxAuiDockArt);
 
@@ -241,6 +259,16 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_gripperSize  = 9;
     m_gradientType = wxAUI_GRADIENT_VERTICAL;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The measures of WinUI: the title of a pane is in the text of the
+    // other controls, flat, in a strip a little lower than a control of 32,
+    // with buttons of the size of the small buttons of a title.
+    m_captionFont = *wxNORMAL_FONT;
+    m_captionSize = 28;
+    m_buttonSize = 24;
+    m_gradientType = wxAUI_GRADIENT_NONE;
+#endif
+
     InitBitmaps();
 }
 
@@ -385,6 +413,43 @@ wxAuiDefaultDockArt::InitBitmaps ()
 
 void wxAuiDefaultDockArt::UpdateColoursFromSystem()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The colours XAML gives its own controls, as they show over the ground
+    // of a window: no gradient, and nothing in the accent colour but the
+    // mark of the active pane.
+    const wxColour ground =
+        wxWinUIGetThemeColour(wxWinUIThemeColour::BaseFill);
+    if ( ground.IsOk() )
+    {
+        const wxColour base(ground.Red(), ground.Green(), ground.Blue());
+        const auto over = [&base](wxWinUIThemeColour which)
+        {
+            return wxWinUIBlendOver(wxWinUIGetThemeColour(which), base);
+        };
+
+        m_baseColour = base;
+        m_activeCaptionColour =
+        m_activeCaptionGradientColour = over(wxWinUIThemeColour::SubtleFill);
+        m_inactiveCaptionColour =
+        m_inactiveCaptionGradientColour = base;
+        m_activeCaptionTextColour = over(wxWinUIThemeColour::TextPrimary);
+        m_inactiveCaptionTextColour = over(wxWinUIThemeColour::TextSecondary);
+
+        m_sashBrush =
+        m_backgroundBrush =
+        m_gripperBrush = wxBrush(base);
+
+        m_borderPen = wxPen(over(wxWinUIThemeColour::Divider));
+        const int width = wxWindow::FromDIP(1, nullptr);
+        m_gripperPen1 =
+        m_gripperPen2 =
+        m_gripperPen3 = wxPen(over(wxWinUIThemeColour::TextDisabled), width);
+
+        InitBitmaps();
+        return;
+    }
+#endif // wxWinUI
+
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     // the baseColour is too pale to use as our base colour,
@@ -592,6 +657,11 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     );
 #endif // !__WXGTK3__
 
+#elif defined(__WXWINUI__) && wxUSE_WINUI3
+    wxUnusedVar(orientation);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxAuiWinUIGround(window, m_sashBrush));
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 #else
     wxUnusedVar(window);
     wxUnusedVar(orientation);
@@ -602,9 +672,16 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
 }
 
 
-void wxAuiDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *WXUNUSED(window), int, const wxRect& rect)
+void wxAuiDefaultDockArt::DrawBackground(wxDC& dc, wxWindow *window, int, const wxRect& rect)
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    dc.SetBrush(wxAuiWinUIGround(window, m_backgroundBrush));
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+    return;
+#else
+    wxUnusedVar(window);
+#endif
 #ifdef __WXMAC__
     // we have to clear first, otherwise we are drawing a light striped pattern
     // over an already darker striped background
@@ -719,13 +796,47 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetFont(m_captionFont);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The title of a pane as WinUI shows what is selected among its peers:
+    // the active one over a subtle fill, with a bar in the accent colour at
+    // its start; the others on the ground of the window. The text starts
+    // where the text of a WinUI list does.
+    const bool active = (pane.state & wxAuiPaneInfo::optionActive) != 0;
+    dc.SetBrush(active ? wxBrush(m_activeCaptionColour)
+                       : wxAuiWinUIGround(window,
+                                          wxBrush(m_inactiveCaptionColour)));
+    dc.DrawRectangle(rect);
+    if ( active )
+    {
+        const int barWidth = window->FromDIP(3);
+        const int barHeight = wxMin(window->FromDIP(16), rect.height - 2);
+        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
+        dc.DrawRoundedRectangle(rect.x + window->FromDIP(3),
+                                rect.y + (rect.height - barHeight) / 2,
+                                barWidth, barHeight, barWidth / 2.0);
+    }
+
+    int caption_offset = window->FromDIP(9);
+#else // !wxWinUI
     DrawCaptionBackground(dc, rect,
                           (pane.state & wxAuiPaneInfo::optionActive)?true:false);
 
     int caption_offset = 0;
+#endif // wxWinUI/!wxWinUI
     if ( pane.icon.IsOk() )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // After the mark of the active pane, not over it.
+        {
+            const wxBitmap& bmp = pane.icon.GetBitmapFor(window);
+            dc.DrawBitmap(bmp,
+                          rect.x + window->FromDIP(3) + caption_offset,
+                          rect.y + (rect.height - bmp.GetLogicalHeight()) / 2,
+                          true);
+        }
+#else
         DrawIcon(dc, window, rect, pane);
+#endif
 
         const wxBitmap& icon = pane.icon.GetBitmapFor(window);
         caption_offset += icon.GetLogicalWidth() + window->FromDIP(3);
@@ -798,9 +909,45 @@ void wxAuiDefaultDockArt::DrawGripper(wxDC& dc,
                                    wxAuiPaneInfo& pane)
 {
     dc.SetPen(*wxTRANSPARENT_PEN);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Two rows of small dots, as the grippers of WinUI, with no relief.
+    dc.SetBrush(wxAuiWinUIGround(window, m_gripperBrush));
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+
+    {
+        const int dot = wxMax(1, window->FromDIP(2));
+        const int step = window->FromDIP(5);
+        const int inset = window->FromDIP(6);
+        dc.SetBrush(wxBrush(m_gripperPen1.GetColour()));
+        if ( !pane.HasGripperTop() )
+        {
+            const int x = rect.x + (rect.width - dot - step) / 2;
+            for ( int y = rect.y + inset;
+                  y + dot <= rect.GetBottom() - inset + 1;
+                  y += step )
+            {
+                dc.DrawRectangle(x, y, dot, dot);
+                dc.DrawRectangle(x + step, y, dot, dot);
+            }
+        }
+        else
+        {
+            const int y = rect.y + (rect.height - dot - step) / 2;
+            for ( int x = rect.x + inset;
+                  x + dot <= rect.GetRight() - inset + 1;
+                  x += step )
+            {
+                dc.DrawRectangle(x, y, dot, dot);
+                dc.DrawRectangle(x, y + step, dot, dot);
+            }
+        }
+    }
+    return;
+#else // !wxWinUI
     dc.SetBrush(m_gripperBrush);
 
     dc.DrawRectangle(rect.x, rect.y, rect.width,rect.height);
+#endif // wxWinUI/!wxWinUI
 
     if (!pane.HasGripperTop())
     {
@@ -913,6 +1060,34 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
     const auto& bb = GetPaneButtonBitmap(button, pane);
     const wxBitmap& bmp = bb.GetBitmapFor(window);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A button of a title in WinUI: the glyph alone, in the middle of a
+    // rounded square which shows under the pointer and when pressed.
+    if ( button_state == wxAUI_BUTTON_STATE_HOVER ||
+         button_state == wxAUI_BUTTON_STATE_PRESSED )
+    {
+        const wxColour under =
+            (pane.state & wxAuiPaneInfo::optionActive) ? m_activeCaptionColour
+                                                       : m_inactiveCaptionColour;
+        const int side = wxMin(_rect.width, _rect.height) - window->FromDIP(4);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(wxWinUIBlendOver(
+            wxWinUIGetThemeColour(
+                button_state == wxAUI_BUTTON_STATE_PRESSED
+                    ? wxWinUIThemeColour::SubtleFillPressed
+                    : wxWinUIThemeColour::SubtleFill),
+            under)));
+        dc.DrawRoundedRectangle(_rect.x + (_rect.width - side) / 2,
+                                _rect.y + (_rect.height - side) / 2,
+                                side, side, window->FromDIP(4));
+    }
+
+    dc.DrawBitmap(bmp,
+                  _rect.x + (_rect.width - bmp.GetLogicalWidth()) / 2,
+                  _rect.y + (_rect.height - bmp.GetLogicalHeight()) / 2,
+                  true);
+    return;
+#else // !wxWinUI
     wxRect rect = _rect;
 
     rect.y = rect.y + (rect.height/2) - (bmp.GetLogicalHeight()/2);
@@ -947,6 +1122,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
 
     // draw the button itself
     dc.DrawBitmap(bmp, rect.x, rect.y, true);
+#endif // wxWinUI/!wxWinUI
 }
 
 

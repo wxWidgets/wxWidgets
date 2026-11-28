@@ -62,7 +62,7 @@ public:
     // -------------------------------
 
     // is the wizard running?
-    bool IsRunning() const { return m_page != nullptr; }
+    bool IsRunning() const { return GetCurrentPage() != nullptr; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return false without changing the page if
@@ -108,8 +108,12 @@ protected:
     void OnCancel(wxCommandEvent& event);
     void OnBackOrNext(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
-
     void OnWizEvent(wxWizardEvent& event);
+
+    // Publish the current page through the ABI-stable raw member while keeping
+    // its lifetime identity in the implementation-only state associated with
+    // this wizard.
+    bool SetCurrentPage(wxWizardPage* page);
 
     void AddBitmapRow(wxBoxSizer *mainColumn);
     void AddStaticLine(wxBoxSizer *mainColumn);

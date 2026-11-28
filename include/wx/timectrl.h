@@ -94,7 +94,11 @@ public:
 // by native wxTimePickerCtrl implementations.
 typedef wxTimePickerCtrlCommonBase<wxDateTimePickerCtrl> wxTimePickerCtrlBase;
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__)
+    #include "wx/winui/timectrl.h"
+
+    #define wxHAS_NATIVE_TIMEPICKERCTRL
+#elif defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/timectrl.h"
 
     #define wxHAS_NATIVE_TIMEPICKERCTRL

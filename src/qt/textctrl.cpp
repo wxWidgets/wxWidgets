@@ -1006,7 +1006,7 @@ void wxTextCtrl::EmptyUndoBuffer()
 
 bool wxTextCtrl::IsEditable() const
 {
-    return HasFlag(wxTE_READONLY);
+    return !HasFlag(wxTE_READONLY);
 }
 
 void wxTextCtrl::SetEditable(bool editable)

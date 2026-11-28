@@ -29,6 +29,7 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
     XRC_ADD_STYLE(wxGA_HORIZONTAL);
     XRC_ADD_STYLE(wxGA_VERTICAL);
     XRC_ADD_STYLE(wxGA_SMOOTH);   // windows only
+    XRC_ADD_STYLE(wxGA_PROGRESS); // Windows taskbar progress bridge
     AddWindowStyles();
 }
 

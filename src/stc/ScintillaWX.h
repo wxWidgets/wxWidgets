@@ -16,6 +16,7 @@
 #ifndef __ScintillaWX_h__
 #define __ScintillaWX_h__
 #include "wx/defs.h"
+#include "wx/weakref.h"
 
 //----------------------------------------------------------------------
 
@@ -86,9 +87,13 @@ using namespace Scintilla;
 
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 class wxSTCTimer;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxSTCTimerTestAccess;
+#endif
 class SurfaceData;
 
 //----------------------------------------------------------------------
@@ -179,6 +184,10 @@ public:
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
     void DoOnIdle(wxIdleEvent& evt);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void DoReconcileTopLevelParent();
+#endif
+
 #if wxUSE_DRAG_AND_DROP
     bool DoDropText(long x, long y, const wxString& data);
     wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult def);
@@ -268,6 +277,11 @@ private:
     int                 wheelHRotation;
     SurfaceData*        m_surfaceData;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWeakRef<wxWindow> m_topLevelParent;
+    std::shared_ptr<bool> m_isReconcilingTopLevelParent;
+#endif
+
 #ifdef wxHAS_TEXT_INPUT_CLIENT
     bool                m_compositionActive = false;
     Sci::Position       m_compositionStart = 0;
@@ -323,6 +337,9 @@ private:
 
     friend class wxSTCCallTip;
     friend class wxSTCTimer; // To get access to TickReason declaration
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxSTCTimerTestAccess;
+#endif
 };
 
 //----------------------------------------------------------------------

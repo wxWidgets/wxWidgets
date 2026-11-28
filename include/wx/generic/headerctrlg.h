@@ -14,6 +14,11 @@
 #include "wx/vector.h"
 #include "wx/overlay.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include <memory>
+class wxWinUIHeaderProjection;
+#endif
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl
 // ----------------------------------------------------------------------------
@@ -46,6 +51,12 @@ public:
                 const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
 
     virtual ~wxHeaderCtrl();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr) override;
+    void Update() override;
+    bool SetFont(const wxFont& font) override;
+#endif
 
 protected:
     virtual wxSize DoGetBestSize() const override;
@@ -82,6 +93,10 @@ private:
     // and the end position
     int GetColEnd(unsigned int idx) const;
 
+    // Return the non-negative width used consistently by layout, painting and
+    // hit testing, resolving the special default/auto width values if needed.
+    int GetEffectiveColumnWidth(const wxHeaderColumn& col) const;
+
     // refresh the given column [only]; idx must be valid
     void RefreshCol(unsigned int idx);
 
@@ -117,6 +132,12 @@ private:
     // cancel the drag operation currently in progress and generate an event
     // about it
     void CancelDragging();
+
+    // Stop a gesture before mutating column geometry. The first function
+    // leaves the control in a coherent state without invoking user code; the
+    // second one sends the cancellation event after the mutation is complete.
+    unsigned int AbortDraggingForColumnMutation();
+    void NotifyDraggingCancelled(unsigned int col);
 
     // start (if m_colBeingResized is -1) or continue resizing the column
     //
@@ -177,6 +198,15 @@ private:
     wxArrayInt m_colIndices;
 
     bool m_wasSeparatorDClick;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIHeaderProjection;
+    std::shared_ptr<wxWinUIHeaderProjection> m_winUIProjection;
+
+    // The column whose button is held down, or -1: the buttons of the
+    // columns are shown by XAML but it is this control which gets the mouse.
+    unsigned int m_winUIPressed;
+#endif
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);

@@ -22,6 +22,7 @@ wxColourPickerCtrlXmlHandler::wxColourPickerCtrlXmlHandler() : wxXmlResourceHand
 {
     XRC_ADD_STYLE(wxCLRP_USE_TEXTCTRL);
     XRC_ADD_STYLE(wxCLRP_SHOW_LABEL);
+    XRC_ADD_STYLE(wxCLRP_SHOW_ALPHA);
     XRC_ADD_STYLE(wxCLRP_DEFAULT_STYLE);
     AddWindowStyles();
 }

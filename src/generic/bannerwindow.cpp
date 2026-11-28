@@ -13,6 +13,7 @@
 #if wxUSE_BANNERWINDOW
 
 #include "wx/bannerwindow.h"
+#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -35,6 +36,7 @@ const char wxBannerWindowNameStr[] = "bannerwindow";
 
 wxBEGIN_EVENT_TABLE(wxBannerWindow, wxWindow)
     EVT_SIZE(wxBannerWindow::OnSize)
+    EVT_DPI_CHANGED(wxBannerWindow::OnDPIChanged)
     EVT_PAINT(wxBannerWindow::OnPaint)
 wxEND_EVENT_TABLE()
 
@@ -57,14 +59,12 @@ wxBannerWindow::Create(wxWindow* parent,
                        long style,
                        const wxString& name)
 {
+    wxCHECK_MSG(dir == wxLEFT || dir == wxRIGHT ||
+                    dir == wxTOP || dir == wxBOTTOM,
+                false, wxS("Invalid banner direction"));
+
     if ( !wxWindow::Create(parent, winid, pos, size, style, name) )
         return false;
-
-    wxASSERT_MSG
-    (
-        dir == wxLEFT || dir == wxRIGHT || dir == wxTOP || dir == wxBOTTOM,
-        wxS("Invalid banner direction")
-    );
 
     m_direction = dir;
 
@@ -88,6 +88,11 @@ void wxBannerWindow::SetText(const wxString& title, const wxString& message)
 {
     m_title = title;
     m_message = message;
+
+    // wxBannerWindow is custom-painted, so publish its visible text through
+    // the ordinary wxWindow name/label path used by accessibility backends.
+    SetLabel(title.empty() ? message :
+             message.empty() ? title : title + "\n" + message);
 
     InvalidateBestSize();
 
@@ -130,7 +135,7 @@ wxSize wxBannerWindow::DoGetBestClientSize() const
         if ( m_direction == wxLEFT || m_direction == wxRIGHT )
             wxSwap(sizeWin.x, sizeWin.y);
 
-        sizeWin += 2*wxSize(MARGIN_X, MARGIN_Y);
+        sizeWin += 2*FromDIP(wxSize(MARGIN_X, MARGIN_Y));
 
         return sizeWin;
     }
@@ -140,6 +145,14 @@ void wxBannerWindow::OnSize(wxSizeEvent& event)
 {
     Refresh();
 
+    event.Skip();
+}
+
+void wxBannerWindow::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    m_colBitmapBg = wxColour();
+    InvalidateBestSize();
+    Refresh();
     event.Skip();
 }
 
@@ -177,14 +190,40 @@ void wxBannerWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                 gradientDir = wxRIGHT;
             }
 
-            dc.GradientFillLinear(GetClientRect(), m_colStart, m_colEnd,
+            wxColour colStart = m_colStart;
+            wxColour colEnd = m_colEnd;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // The gradient nobody chose goes from white to blue, and the
+            // text is in the colour of the theme: white on white in a dark
+            // one, where the title could not be read. It goes from the
+            // background of the theme to its accent colour instead.
+            if ( colStart == *wxWHITE && colEnd == *wxBLUE )
+            {
+                colStart = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+                colEnd = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+            }
+#endif
+            dc.GradientFillLinear(GetClientRect(), colStart, colEnd,
                                   gradientDir);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // Nor can the text of the theme be read on a gradient chosen
+            // for the other one: unless the program gave it a colour, it
+            // takes the one which shows on where it starts.
+            if ( !UseForegroundColour() )
+            {
+                dc.SetTextForeground(colStart.GetLuminance() > 0.5
+                                        ? wxColour(27, 27, 27)
+                                        : *wxWHITE);
+            }
+#endif
         }
 
         // Now draw the text on top of it.
         dc.SetFont(GetTitleFont());
 
-        wxPoint pos(MARGIN_X, MARGIN_Y);
+        const wxSize margin = FromDIP(wxSize(MARGIN_X, MARGIN_Y));
+        wxPoint pos(margin.x, margin.y);
         DrawBannerTextLine(dc, m_title, pos);
         pos.y += dc.GetTextExtent(m_title).y;
 
@@ -209,7 +248,13 @@ wxColour wxBannerWindow::GetBitmapBg()
 
     // Determine the colour to use to extend the bitmap. It's the colour of the
     // bitmap pixels at the edge closest to the area where it can be extended.
-    wxImage image(m_bitmapBundle.GetBitmapFor(this).ConvertToImage());
+    const wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
+    if ( !bitmap.IsOk() )
+        return GetBackgroundColour();
+
+    wxImage image(bitmap.ConvertToImage());
+    if ( !image.IsOk() || image.GetWidth() <= 0 || image.GetHeight() <= 0 )
+        return GetBackgroundColour();
 
     // The point we get the colour from. The choice is arbitrary and in general
     // the bitmap should have the same colour on the entire edge of this point
@@ -256,13 +301,22 @@ wxColour wxBannerWindow::GetBitmapBg()
 
 void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
 {
-    // We may need to fill the part of the background not covered by the bitmap
-    // with the solid colour extending the bitmap, this rectangle will hold the
-    // area to be filled (which could be empty if the bitmap is big enough).
-    wxRect rectSolid;
-
     const wxSize size = GetClientSize();
     const wxBitmap currentBitmap = m_bitmapBundle.GetBitmapFor(this);
+    if ( !currentBitmap.IsOk() )
+    {
+        dc.SetBackground(wxBrush(GetBackgroundColour()));
+        dc.Clear();
+        return;
+    }
+
+    // Fill the entire client area first. The historical code filled just the
+    // strip in the banner's extension direction and could therefore leave an
+    // unpainted perpendicular strip whenever both client dimensions exceeded
+    // the bitmap dimensions.
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(GetBitmapBg());
+    dc.DrawRectangle(0, 0, size.x, size.y);
 
     switch ( m_direction )
     {
@@ -271,42 +325,26 @@ void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
             // Draw the bitmap at the origin, its rightmost could be truncated,
             // as it's meant to be.
             dc.DrawBitmap(currentBitmap, 0, 0);
-
-            rectSolid.x = currentBitmap.GetLogicalWidth();
-            rectSolid.width = size.x - rectSolid.x;
-            rectSolid.height = size.y;
             break;
 
         case wxLEFT:
             // The top most part of the bitmap may be truncated but its bottom
             // must be always visible so intentionally draw it possibly partly
             // outside of the window.
-            rectSolid.width = size.x;
-            rectSolid.height = size.y - currentBitmap.GetLogicalHeight();
-            dc.DrawBitmap(currentBitmap, 0, rectSolid.height);
+            dc.DrawBitmap(currentBitmap, 0,
+                          size.y - currentBitmap.GetLogicalHeight());
             break;
 
         case wxRIGHT:
             // Draw the bitmap at the origin, possibly truncating its
             // bottommost part.
             dc.DrawBitmap(currentBitmap, 0, 0);
-
-            rectSolid.y = currentBitmap.GetLogicalHeight();
-            rectSolid.height = size.y - rectSolid.y;
-            rectSolid.width = size.x;
             break;
 
         // This case is there only to prevent g++ warnings about not handling
         // some enum elements in the switch, it can't really happen.
         case wxALL:
             wxFAIL_MSG( wxS("Unreachable") );
-    }
-
-    if ( rectSolid.width > 0 && rectSolid.height > 0 )
-    {
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(GetBitmapBg());
-        dc.DrawRectangle(rectSolid);
     }
 }
 

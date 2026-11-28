@@ -285,7 +285,8 @@ OwnerDrawnFrame::OwnerDrawnFrame()
             aszChoices          // array of strings
         );
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && \
+        !defined(__WXWINUI__)
     unsigned int ui;
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 )
     {
@@ -313,7 +314,8 @@ OwnerDrawnFrame::OwnerDrawnFrame()
             wxLB_OWNERDRAW       // owner-drawn
         );
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && \
+        !defined(__WXWINUI__)
 
     struct { unsigned char r, g, b; } aColors[] =
         {

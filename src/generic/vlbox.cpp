@@ -32,6 +32,7 @@
 #include "wx/dcbuffer.h"
 #include "wx/selstore.h"
 #include "wx/renderer.h"
+#include "wx/weakref.h"
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -89,6 +90,36 @@ bool wxVListBox::Create(wxWindow *parent,
     // flicker-free drawing requires this
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The item under the pointer is on a subtle fill, as the one of a
+    // WinUI list: see OnDrawBackground().
+    const auto setHover = [this](int item)
+    {
+        if ( item == m_hoverItem )
+            return;
+
+        const int previous = m_hoverItem;
+        m_hoverItem = item;
+        if ( previous != wxNOT_FOUND &&
+             static_cast<size_t>(previous) < GetItemCount() )
+        {
+            RefreshRow(previous);
+        }
+        if ( item != wxNOT_FOUND )
+            RefreshRow(item);
+    };
+    Bind(wxEVT_MOTION, [this, setHover](wxMouseEvent& event)
+    {
+        event.Skip();
+        setHover(VirtualHitTest(event.GetPosition().y));
+    });
+    Bind(wxEVT_LEAVE_WINDOW, [setHover](wxMouseEvent& event)
+    {
+        event.Skip();
+        setHover(wxNOT_FOUND);
+    });
+#endif
+
     return true;
 }
 
@@ -129,11 +160,16 @@ bool wxVListBox::Select(size_t item, bool select)
     wxCHECK_MSG( item < GetItemCount(), false,
                  wxT("Select(): invalid item index") );
 
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(this);
+
     bool changed = m_selStore->SelectItem(item, select);
     if ( changed )
     {
         // selection really changed
         RefreshRow(item);
+        if ( !weakThis || GetItemCount() != itemCount )
+            return changed;
     }
 
     DoSetCurrent(item);
@@ -157,12 +193,17 @@ bool wxVListBox::SelectRange(size_t from, size_t to)
     wxCHECK_MSG( to < GetItemCount(), false,
                     wxT("SelectRange(): invalid item index") );
 
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(this);
+
     wxArrayInt changed;
     if ( !m_selStore->SelectRange(from, to, true, &changed) )
     {
         // too many items have changed, we didn't record them in changed array
         // so we have no choice but to refresh everything between from and to
         RefreshRows(from, to);
+        if ( !weakThis || GetItemCount() != itemCount )
+            return true;
     }
     else // we've got the indices of the changed items
     {
@@ -177,6 +218,8 @@ bool wxVListBox::SelectRange(size_t from, size_t to)
         for ( size_t n = 0; n < count; n++ )
         {
             RefreshRow(changed[n]);
+            if ( !weakThis || GetItemCount() != itemCount )
+                return true;
         }
     }
 
@@ -218,8 +261,18 @@ bool wxVListBox::DoSetCurrent(int current)
         return false;
     }
 
+    const size_t itemCount = GetItemCount();
+    const int oldCurrent = m_current;
+    const wxWeakRef<wxWindow> weakThis(this);
+
     if ( m_current != wxNOT_FOUND )
+    {
         RefreshRow(m_current);
+        if ( !weakThis ||
+             GetItemCount() != itemCount ||
+             m_current != oldCurrent )
+            return false;
+    }
 
     m_current = current;
 
@@ -230,6 +283,10 @@ bool wxVListBox::DoSetCurrent(int current)
         if ( !IsVisible(m_current) )
         {
             ScrollToRow(m_current);
+            if ( !weakThis ||
+                 GetItemCount() != itemCount ||
+                 m_current != current )
+                return false;
         }
         else // line is at least partly visible
         {
@@ -238,8 +295,16 @@ bool wxVListBox::DoSetCurrent(int current)
             // BUT scrolling down when m_current is first visible makes it
             // completely hidden, so that is even worse
             while ( (size_t)m_current + 1 == GetVisibleRowsEnd() &&
-                    (size_t)m_current != GetVisibleRowsBegin() &&
-                    ScrollToRow(GetVisibleBegin() + 1) ) ;
+                    (size_t)m_current != GetVisibleRowsBegin() )
+            {
+                if ( !ScrollToRow(GetVisibleBegin() + 1) )
+                    break;
+
+                if ( !weakThis ||
+                     GetItemCount() != itemCount ||
+                     m_current != current )
+                    return false;
+            }
 
             // but in any case refresh it as even if it was only partly visible
             // before we need to redraw it entirely as its background changed
@@ -261,8 +326,18 @@ void wxVListBox::SendSelectedEvent()
     wxASSERT_MSG( m_current != wxNOT_FOUND,
                     wxT("SendSelectedEvent() shouldn't be called") );
 
+    const size_t itemCount = GetItemCount();
+    const int current = m_current;
     wxCommandEvent event(wxEVT_LISTBOX, GetId());
-    InitEvent(event, m_current);
+    const wxWeakRef<wxWindow> weakThis(this);
+    InitEvent(event, current);
+    if ( !weakThis ||
+         GetItemCount() != itemCount ||
+         m_current != current ||
+         current < 0 ||
+         static_cast<size_t>(current) >= itemCount )
+        return;
+
     (void)GetEventHandler()->ProcessEvent(event);
 }
 
@@ -274,10 +349,16 @@ void wxVListBox::SetSelection(int selection)
 
     if ( HasMultipleSelection() )
     {
+        const size_t itemCount = GetItemCount();
+        const wxWeakRef<wxWindow> weakThis(this);
         if (selection != wxNOT_FOUND)
             Select(selection);
         else
             DeselectAll();
+
+        if ( !weakThis || GetItemCount() != itemCount )
+            return;
+
         m_anchor = selection;
     }
 
@@ -313,11 +394,21 @@ int wxVListBox::GetNextSelected(unsigned long& cookie) const
 
 void wxVListBox::RefreshSelected()
 {
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(this);
+
     // only refresh those items which are currently visible and selected:
-    for ( size_t n = GetVisibleBegin(), end = GetVisibleEnd(); n < end; n++ )
+    for ( size_t n = GetVisibleBegin(),
+                 end = wxMin(GetVisibleEnd(), itemCount);
+          n < end;
+          n++ )
     {
         if ( IsSelected(n) )
+        {
             RefreshRow(n);
+            if ( !weakThis || GetItemCount() != itemCount )
+                return;
+        }
     }
 }
 
@@ -325,8 +416,12 @@ wxRect wxVListBox::GetItemRect(size_t n) const
 {
     wxRect itemrect;
 
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(
+        const_cast<wxVListBox *>(this));
+
     // check that this item is visible
-    const size_t lineMax = GetVisibleEnd();
+    const size_t lineMax = wxMin(GetVisibleEnd(), itemCount);
     if ( n >= lineMax )
         return itemrect;
     size_t line = GetVisibleBegin();
@@ -337,6 +432,8 @@ wxRect wxVListBox::GetItemRect(size_t n) const
     {
         itemrect.y += itemrect.height;
         itemrect.height = OnGetRowHeight(line);
+        if ( !weakThis || GetItemCount() != itemCount )
+            return wxRect();
 
         line++;
     }
@@ -417,7 +514,12 @@ void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
         return;
 
     const bool isSelected = IsSelected(n),
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+               isCurrent = IsCurrent(n) ||
+                           static_cast<int>(n) == m_hoverItem;
+#else
                isCurrent = IsCurrent(n);
+#endif
     if ( isSelected || isCurrent )
     {
         int flags = 0;
@@ -507,6 +609,19 @@ void wxVListBox::OnSize(wxSizeEvent& event)
 
 void wxVListBox::DoHandleItemClick(int item, int flags)
 {
+    if ( item < 0 || static_cast<size_t>(item) >= GetItemCount() )
+        return;
+
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(this);
+    const auto canContinue = [this, &weakThis, itemCount, item]()
+    {
+        return weakThis.get() == this &&
+               GetItemCount() == itemCount &&
+               item >= 0 &&
+               static_cast<size_t>(item) < itemCount;
+    };
+
     // has anything worth telling the client code about happened?
     bool notify = false;
 
@@ -531,9 +646,13 @@ void wxVListBox::DoHandleItemClick(int item, int flags)
                 // must be selected
                 if ( DeselectAll() )
                     notify = true;
+                if ( !canContinue() )
+                    return;
 
                 if ( SelectRange(m_anchor, item) )
                     notify = true;
+                if ( !canContinue() )
+                    return;
             }
             //else: treat it as ordinary click/keypress
         }
@@ -548,6 +667,8 @@ void wxVListBox::DoHandleItemClick(int item, int flags)
                 if ( !(flags & ItemClick_Kbd) )
                 {
                     Toggle(item);
+                    if ( !canContinue() )
+                        return;
 
                     // the status of the item has definitely changed
                     notify = true;
@@ -562,9 +683,13 @@ void wxVListBox::DoHandleItemClick(int item, int flags)
             // make the clicked item the only selection
             if ( DeselectAll() )
                 notify = true;
+            if ( !canContinue() )
+                return;
 
             if ( Select(item) )
                 notify = true;
+            if ( !canContinue() )
+                return;
         }
     }
 
@@ -577,6 +702,8 @@ void wxVListBox::DoHandleItemClick(int item, int flags)
             notify = true;
         }
     }
+    if ( !canContinue() || m_current != item )
+        return;
 
     if ( notify )
     {
@@ -594,6 +721,8 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 {
     // flags for DoHandleItemClick()
     int flags = ItemClick_Kbd;
+    const size_t rowCount = GetRowCount();
+    const wxWeakRef<wxWindow> weakThis(this);
 
     int current;
     switch ( event.GetKeyCode() )
@@ -629,11 +758,14 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
         case WXK_PAGEDOWN:
         case WXK_NUMPAD_PAGEDOWN:
         {
-            if ( !GetRowCount() )
+            if ( !rowCount )
                 return;
 
             size_t oldBegin = GetVisibleBegin();
             PageDown();
+            if ( !weakThis || GetRowCount() != rowCount )
+                return;
+
             if (GetVisibleBegin() > oldBegin)
             {
                 current = GetVisibleBegin();
@@ -647,12 +779,14 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
         case WXK_PAGEUP:
         case WXK_NUMPAD_PAGEUP:
-            if ( !GetRowCount() )
+            if ( !rowCount )
                 return;
 
             if ( m_current == (int)GetVisibleBegin() )
             {
                 PageUp();
+                if ( !weakThis || GetRowCount() != rowCount )
+                    return;
             }
 
             current = GetVisibleBegin();
@@ -686,6 +820,15 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
     if ( event.ControlDown() )
         flags |= ItemClick_Ctrl;
 
+    // Navigation keys must be harmless for an empty virtual model. In
+    // particular Home used to publish item 0 even though it didn't exist,
+    // which could make wxSimpleHtmlListBox::InitEvent() index an empty array.
+    if ( !rowCount )
+        return;
+
+    if ( current < 0 || static_cast<size_t>(current) >= GetRowCount() )
+        return;
+
     DoHandleItemClick(current, flags);
 }
 
@@ -695,9 +838,14 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
 void wxVListBox::OnLeftDown(wxMouseEvent& event)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
     SetFocus();
+    if ( weakThis.get() != this )
+        return;
 
     int item = VirtualHitTest(event.GetPosition().y);
+    if ( weakThis.get() != this )
+        return;
 
     if ( item != wxNOT_FOUND )
     {
@@ -714,7 +862,11 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 
 void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
     int item = VirtualHitTest(eventMouse.GetPosition().y);
+    if ( !weakThis )
+        return;
+
     if ( item != wxNOT_FOUND )
     {
 

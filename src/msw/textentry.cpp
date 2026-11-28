@@ -40,6 +40,9 @@
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/wrapwin.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "../winui/keyboard.h"
+#endif
 #include <shlwapi.h>
 
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
@@ -1060,5 +1063,114 @@ bool wxTextEntry::ClickDefaultButtonIfPossible()
                 wxWindow::MSWClickButtonIfPossible(
                     wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// wxMSW itself does not need this any more: wxWindow::ClaimsKeyBeforeAccelerator()
+// tells which keys a text control takes before the accelerators. The
+// controls of wxWinUI still ask it from their MSWShouldPreProcessMessage(),
+// with the state of the modifiers of the key being processed.
+
+// This function is also used by wxSpinCtrl, so make it extern to allow reusing
+// it from there.
+extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
+{
+    // check for our special keys here: if we don't do it and the parent frame
+    // uses them as accelerators, they wouldn't work at all, so we disable
+    // usual preprocessing for them
+    if ( msg->message == WM_KEYDOWN )
+    {
+        const WPARAM vkey = msg->wParam;
+        if ( HIWORD(msg->lParam) & KF_ALTDOWN )
+        {
+            // Alt-Backspace is accelerator for "Undo"
+            if ( vkey == VK_BACK )
+                return false;
+        }
+        else // no Alt
+        {
+            // we want to process some Ctrl-foo and Shift-bar but no key
+            // combinations without either Ctrl or Shift nor with both of them
+            // pressed
+            int ctrl;
+            int shift;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            wxWinUIKeyboardModifiers modifiers;
+            if ( wxWinUIGetKeyboardModifiersOverride(&modifiers) )
+            {
+                ctrl = modifiers.controlDown;
+                shift = modifiers.shiftDown;
+            }
+            else
+#endif
+            {
+                ctrl = wxIsCtrlDown();
+                shift = wxIsShiftDown();
+            }
+            switch ( ctrl + shift )
+            {
+                default:
+                    wxFAIL_MSG( wxT("how many modifiers have we got?") );
+                    wxFALLTHROUGH;
+
+                case 0:
+                    switch ( vkey )
+                    {
+                        case VK_DELETE:
+                        case VK_HOME:
+                        case VK_END:
+                            return false;
+                    }
+                    break;
+
+                case 1:
+                    // either Ctrl or Shift pressed
+                    if ( ctrl )
+                    {
+                        switch ( vkey )
+                        {
+                            case 'A':
+                            case 'C':
+                            case 'V':
+                            case 'X':
+                            case VK_INSERT:
+                            case VK_DELETE:
+                            case VK_HOME:
+                            case VK_END:
+                            case VK_LEFT:
+                            case VK_RIGHT:
+                                return false;
+                        }
+                    }
+                    else // Shift is pressed
+                    {
+                        switch ( vkey )
+                        {
+                            case VK_INSERT:
+                            case VK_DELETE:
+                            case VK_HOME:
+                            case VK_END:
+                            case VK_LEFT:
+                            case VK_RIGHT:
+                                return false;
+                        }
+                    }
+                    break;
+
+                case 2:
+                    break;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool wxTextEntry::MSWShouldPreProcessMessage(WXMSG* msg) const
+{
+    return wxMSWTextEntryShouldPreProcessMessage(msg);
+}
+
+#endif // wxWinUI
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

@@ -31,6 +31,10 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
 #include "wx/msw/private/darkmode.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/themecolours.h"
+#endif
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/registry.h"
 
@@ -98,6 +102,77 @@ void wxSystemSettingsModule::OnExit()
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const wxSystemColour requestedIndex = index;
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // What is selected is in the accent colour of WinUI, the one of its own
+    // controls beside, and its text in the colour WinUI writes over it: not
+    // the highlight colour of classic Windows, a different blue. High
+    // contrast keeps the palette of the system.
+    if ( !wxMSWImpl::IsHighContrast() )
+    {
+        switch ( index )
+        {
+            case wxSYS_COLOUR_HIGHLIGHT:
+            case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
+            case wxSYS_COLOUR_MENUHILIGHT:
+            case wxSYS_COLOUR_HOTLIGHT:
+                {
+                    const wxColour accent =
+                        wxWinUIGetThemeColour(wxWinUIThemeColour::Accent);
+                    if ( accent.IsOk() )
+                    {
+                        return wxColour(accent.Red(), accent.Green(),
+                                        accent.Blue());
+                    }
+                }
+                break;
+
+            case wxSYS_COLOUR_WINDOW:
+            case wxSYS_COLOUR_LISTBOX:
+                {
+                    // The ground of a content area (a list, a table, a
+                    // tree which wx paints or frames): the card of WinUI,
+                    // a little lighter than what is around it in the dark
+                    // theme, not the darker well of classic Windows.
+                    const wxColour base = wxWinUIGetThemeColour(
+                        wxWinUIThemeColour::BaseFill);
+                    const wxColour card = wxWinUIGetThemeColour(
+                        wxWinUIThemeColour::CardFill);
+                    if ( base.IsOk() && card.IsOk() )
+                    {
+                        return wxWinUIBlendOver(
+                            card, wxColour(base.Red(), base.Green(),
+                                           base.Blue()));
+                    }
+                }
+                break;
+
+            case wxSYS_COLOUR_HIGHLIGHTTEXT:
+            case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
+                {
+                    const wxColour text = wxWinUIGetThemeColour(
+                        wxWinUIThemeColour::TextOnAccent);
+                    if ( text.IsOk() )
+                    {
+                        // Never the exact black which is the colour key of
+                        // the windows above the backdrop.
+                        if ( !text.Red() && !text.Green() && !text.Blue() )
+                            return wxColour(1, 1, 1);
+                        return wxColour(text.Red(), text.Green(),
+                                        text.Blue());
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+#endif
+
     // As GetSysColor() doesn't support dark mode, check for it before using it.
     if ( wxMSWDarkMode::IsActive() )
     {
@@ -124,7 +199,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     else if ( index == wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT)
     {
         // there is no standard colour with this index, map to another one
-        index = wxSYS_COLOUR_LISTBOXTEXT;
+        index = wxSYS_COLOUR_HIGHLIGHTTEXT;
     }
     else if ( index == wxSYS_COLOUR_LISTBOX )
     {
@@ -149,6 +224,42 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
     wxColour ret = wxRGBToColour(colSys);
     wxASSERT(ret.IsOk());
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Opaque GDI children hosted above Mica use exact black as their
+    // composition colour key. Avoid returning that key for the standard text
+    // roles in the light theme, otherwise generic controls can paint text that
+    // is subsequently made transparent by DWM. High contrast remains entirely
+    // controlled by the system palette.
+    bool isTextColour = false;
+    switch ( requestedIndex )
+    {
+        case wxSYS_COLOUR_WINDOWTEXT:
+        case wxSYS_COLOUR_LISTBOXTEXT:
+        case wxSYS_COLOUR_BTNTEXT:
+        case wxSYS_COLOUR_CAPTIONTEXT:
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        case wxSYS_COLOUR_MENUTEXT:
+        case wxSYS_COLOUR_INFOTEXT:
+        case wxSYS_COLOUR_GRAYTEXT:
+        case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
+            isTextColour = true;
+            break;
+
+        default:
+            break;
+    }
+
+    if ( isTextColour && !wxMSWImpl::IsHighContrast() &&
+         ret.Red() == 0 && ret.Green() == 0 && ret.Blue() == 0 )
+    {
+        // Fluent TextFillColorPrimary in the light theme, kept opaque and
+        // intentionally distinct from the backdrop colour key.
+        ret = wxColour(27, 27, 27);
+    }
+#endif
+
     return ret;
 }
 
@@ -199,8 +310,27 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
             const wxWindow* win = wxApp::GetMainTopWindow();
-            const wxNativeFontInfo
-                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
+            LOGFONT lf = wxMSWImpl::GetNonClientMetrics(win).lfMessageFont;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            // XAML controls draw their text with the WinUI body font: 14
+            // DIPs where the message font has 12, in Segoe UI Variable where
+            // that family exists (Windows 11). Use the same font on the wx
+            // side, so that text extents, and the controls which still draw
+            // themselves with GDI, agree with the XAML ones.
+            lf.lfHeight = ::MulDiv(lf.lfHeight, 14, 12);
+#if wxUSE_FONTENUM
+            if ( wxStrcmp(lf.lfFaceName, wxS("Segoe UI")) == 0 &&
+                 wxFontEnumerator::IsValidFacename(
+                    wxS("Segoe UI Variable Text")) )
+            {
+                wxStrlcpy(lf.lfFaceName, wxS("Segoe UI Variable Text"),
+                          WXSIZEOF(lf.lfFaceName));
+            }
+#endif // wxUSE_FONTENUM
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
+            const wxNativeFontInfo info(lf, win);
 
             gs_fontDefault = new wxFont(info);
         }

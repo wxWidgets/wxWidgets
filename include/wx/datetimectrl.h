@@ -41,7 +41,7 @@ public:
     virtual void SetNullText(const wxString& WXUNUSED(text)) { }
 };
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     #include "wx/msw/datetimectrl.h"
 #elif defined(__WXOSX_COCOA__) && !defined(__WXUNIVERSAL__)
     #include "wx/osx/datetimectrl.h"

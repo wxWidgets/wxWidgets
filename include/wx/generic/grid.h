@@ -118,6 +118,10 @@ class WXDLLIMPEXP_FWD_CORE wxDatePickerCtrl;
 using wxGridFixedIndicesSet = std::unordered_set<int>;
 
 class wxGridOperations;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxWinUIGridProjection;
+#endif
 class wxGridRowOperations;
 class wxGridColumnOperations;
 class wxGridDirectionOperations;
@@ -1787,6 +1791,9 @@ public:
     int      GetBatchCount() const { return m_batchCount; }
 
     virtual void Refresh(bool eraseb = true, const wxRect* rect = nullptr) override;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void Update() override;
+#endif
 
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are
@@ -2430,8 +2437,20 @@ public:
     wxColour GetSelectionBackground() const;
     wxColour GetSelectionForeground() const;
 
-    void SetSelectionBackground(const wxColour& c) { m_selectionBackground = c; }
-    void SetSelectionForeground(const wxColour& c) { m_selectionForeground = c; }
+    void SetSelectionBackground(const wxColour& c)
+    {
+        m_selectionBackground = c;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
+    }
+    void SetSelectionForeground(const wxColour& c)
+    {
+        m_selectionForeground = c;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        InvalidateWinUIProjection();
+#endif
+    }
 
 
     // Methods for a registry for mapping data types to Renderers/Editors
@@ -2843,6 +2862,7 @@ protected:
     void CalcDimensions();
     void CalcWindowSizes();
     bool Redimension( const wxGridTableMessage& );
+    bool DoRedimension( const wxGridTableMessage& );
 
 
     enum EventResult
@@ -2909,6 +2929,11 @@ protected:
     friend class wxGridHeaderColumn;
     friend class wxGridHeaderCtrl;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIGridProjection;
+    friend class wxGridSubwindow;
+#endif
+
 #if wxUSE_ACCESSIBILITY
     friend class wxGridAccessible;
     friend class wxGridCellAccessible;
@@ -2918,6 +2943,14 @@ private:
     // This is called from both Create() and OnDPIChanged() to (re)initialize
     // the values in pixels, which depend on the current DPI.
     void InitPixelFields();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Native visuals project the existing table, geometry and selection;
+    // their implementation and lifetime machinery stay out of the public API.
+    std::shared_ptr<wxWinUIGridProjection> m_winUIProjection;
+    bool CanUpdateWinUIProjection() const;
+    void InvalidateWinUIProjection();
+#endif
 
     // Event handler for DPI change event recomputes pixel values and relays
     // out the grid.
@@ -2958,6 +2991,15 @@ private:
     // Redimension() helper: update m_currentCellCoords if necessary after a
     // grid size change
     void UpdateCurrentCellOnRedim();
+    void RemapCurrentCellOnRedim(wxGridDirection direction,
+                                 int pos,
+                                 int count);
+
+    // Rebuild cumulative geometry in visual order. These are deliberately
+    // implementation-only helpers: row/column identities and frozen areas
+    // remain owned by wxGrid rather than by the shared order primitive.
+    void RecalculateRowBottoms();
+    void RecalculateColumnRights();
 
     // update the sorting indicator shown in the specified column (whose index
     // must be valid)
@@ -3063,9 +3105,9 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeRowOrCol(int col, int size);
+    bool DoStartResizeRowOrCol(int line, const wxGridOperations& oper);
     void DoStartMoveRowOrCol(int col);
-    void DoStartResizeLabel(int size);
+    bool DoStartResizeLabel(const wxGridOperations& oper);
 
     // These functions should only be called when actually resizing/moving,
     // i.e. m_dragRowOrCol, m_dragMoveCol, m_dragLabel, respectively, are valid.
@@ -3086,9 +3128,16 @@ private:
     wxPoint GetPositionForResizeEvent(int width) const;
 
     // functions called by wxGridHeaderCtrl while resizing m_dragRowOrCol
-    void DoHeaderStartDragResizeCol(int col);
+    bool DoHeaderStartDragResizeCol(int col);
     void DoHeaderDragResizeCol(int width);
     void DoHeaderEndDragResizeCol(int width);
+    void DoHeaderCancelDragCol(int col);
+
+    // Source-side revisions prevent a default header action from overwriting
+    // a structural change performed by its public callback without adding
+    // fields to this exported class.
+    unsigned long long GetColumnMutationRevision() const;
+    unsigned long long GetRowMutationRevision() const;
 
     // process a TAB keypress
     void DoGridProcessTab(wxKeyboardState& kbdState);
@@ -3167,7 +3216,8 @@ private:
     // SetColumnCount() and Set- or ResetColumnsOrder() as necessary on the
     // native wxHeaderCtrl being used. Note that the first one already calls
     // the second one, so it's never necessary to call both of them.
-    void SetNativeHeaderColCount();
+    bool SetNativeHeaderColCount();
+    bool SetNativeHeaderColCountOrFallback();
     void SetNativeHeaderColOrder();
 
     // Return the editor which should be used for the current cell.

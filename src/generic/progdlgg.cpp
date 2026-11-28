@@ -39,6 +39,12 @@
 #include "wx/progdlg.h"
 #include "wx/evtloop.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    #include "progress-dialog-test-access.h"
+    #include <mutex>
+    #include <unordered_map>
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -57,6 +63,56 @@ wxBEGIN_EVENT_TABLE(wxGenericProgressDialog, wxDialog)
 
     EVT_CLOSE(wxGenericProgressDialog::OnClose)
 wxEND_EVENT_TABLE()
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+
+namespace
+{
+
+struct wxWinUIProgressYieldHookState
+{
+    void *context = nullptr;
+    wxWinUIProgressDialogTestAccess::YieldHook hook = nullptr;
+};
+
+std::mutex gs_progressYieldHookMutex;
+std::unordered_map<wxGenericProgressDialog *, wxWinUIProgressYieldHookState>
+    gs_progressYieldHooks;
+
+void ForgetProgressYieldHook(wxGenericProgressDialog *dialog)
+{
+    const std::lock_guard<std::mutex> lock(gs_progressYieldHookMutex);
+    gs_progressYieldHooks.erase(dialog);
+}
+
+wxWinUIProgressYieldHookState
+TakeProgressYieldHook(wxGenericProgressDialog *dialog)
+{
+    const std::lock_guard<std::mutex> lock(gs_progressYieldHookMutex);
+    const auto it = gs_progressYieldHooks.find(dialog);
+    if ( it == gs_progressYieldHooks.end() )
+        return {};
+
+    const wxWinUIProgressYieldHookState state = it->second;
+    gs_progressYieldHooks.erase(it);
+    return state;
+}
+
+} // anonymous namespace
+
+void wxWinUIProgressDialogTestAccess::SetYieldHook(
+    wxGenericProgressDialog& dialog,
+    void *context,
+    YieldHook hook)
+{
+    const std::lock_guard<std::mutex> lock(gs_progressYieldHookMutex);
+    if ( hook )
+        gs_progressYieldHooks[&dialog] = { context, hook };
+    else
+        gs_progressYieldHooks.erase(&dialog);
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
 
 // ============================================================================
 // wxGenericProgressDialog implementation
@@ -88,6 +144,12 @@ void wxGenericProgressDialog::Init()
 
     m_state = Uncancelable;
     m_maximum = 0;
+    m_publicMaximum = 0;
+    m_publicValue = 0;
+
+#if defined(__WXMSW__)
+    m_factor = 1;
+#endif // __WXMSW__
 
     m_timeStart = wxGetCurrentTime();
     m_timeStop = (unsigned long)-1;
@@ -105,7 +167,15 @@ void wxGenericProgressDialog::Init()
     m_delay = 3;
 
     m_winDisabler = nullptr;
+    m_parentDisabledByUs = false;
+    m_otherWindowsDisabled = false;
     m_tempEventLoop = nullptr;
+    m_insideYield = false;
+    m_updateGeneration = 0;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    ForgetProgressYieldHook(this);
+#endif
 
     SetWindowStyle(wxDEFAULT_DIALOG_STYLE);
 }
@@ -147,6 +217,9 @@ bool wxGenericProgressDialog::Create( const wxString& title,
                                       wxWindow *parent,
                                       int style )
 {
+    wxCHECK_MSG( maximum > 0, false,
+                 "progress dialog range must be positive" );
+
     SetTopParent(parent);
 
     m_pdStyle = style;
@@ -394,10 +467,19 @@ wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
 bool
 wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
+    const std::uint64_t generation = BeginUpdateCycle();
+
     if ( !DoBeforeUpdate(skip) )
         return false;
 
+    if ( !IsCurrentUpdateCycle(generation) )
+        return m_state != Canceled;
+
     wxCHECK_MSG( m_gauge, false, "dialog should be fully created" );
+
+    wxASSERT_MSG( value >= 0 && value <= m_publicMaximum,
+                  wxT("invalid progress value") );
+    SetCurrentValue(value);
 
 #ifdef __WXMSW__
     value /= m_factor;
@@ -455,12 +537,23 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
             // allow the window to repaint:
             // NOTE: since we yield only for UI events with this call, there
             //       should be no side-effects
-            wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
+            if ( !YieldForEvents(wxEVT_CATEGORY_UI) )
+                return false;
+
+            if ( !IsCurrentUpdateCycle(generation) )
+                return m_state != Canceled;
 
             // NOTE: this call results in a new event loop being created
             //       and to a call to ProcessPendingEvents() (which may generate
             //       unwanted re-entrancies).
+            const wxWeakRef<wxWindow> weakThis(this);
             (void)ShowModal();
+
+            if ( !weakThis.get() )
+                return false;
+
+            if ( !IsCurrentUpdateCycle(generation) )
+                return m_state != Canceled;
         }
         else // auto hide
         {
@@ -474,7 +567,8 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
     }
     else // not at maximum yet
     {
-        DoAfterUpdate();
+        if ( !DoAfterUpdate() )
+            return false;
     }
 
     // update the display in case yielding above didn't do it
@@ -485,8 +579,13 @@ wxGenericProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
 bool wxGenericProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
+    const std::uint64_t generation = BeginUpdateCycle();
+
     if ( !DoBeforeUpdate(skip) )
         return false;
+
+    if ( !IsCurrentUpdateCycle(generation) )
+        return m_state != Canceled;
 
     wxCHECK_MSG( m_gauge, false, "dialog should be fully created" );
 
@@ -504,7 +603,8 @@ bool wxGenericProgressDialog::Pulse(const wxString& newmsg, bool *skip)
         SetTimeLabel((unsigned long)-1, m_remaining);
     }
 
-    DoAfterUpdate();
+    if ( !DoAfterUpdate() )
+        return false;
 
     return m_state != Canceled;
 }
@@ -515,7 +615,11 @@ bool wxGenericProgressDialog::DoBeforeUpdate(bool *skip)
     // also to process the clicks on the cancel and skip buttons
     // NOTE: using YieldFor() this call shouldn't give re-entrancy problems
     //       for event handlers not interested to UI/user-input events.
-    wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT);
+    if ( !YieldForEvents(
+             wxEVT_CATEGORY_UI | wxEVT_CATEGORY_USER_INPUT) )
+    {
+        return false;
+    }
 
     Update();
 
@@ -529,12 +633,44 @@ bool wxGenericProgressDialog::DoBeforeUpdate(bool *skip)
     return m_state != Canceled;
 }
 
-void wxGenericProgressDialog::DoAfterUpdate()
+bool wxGenericProgressDialog::DoAfterUpdate()
 {
     // allow the window to repaint:
     // NOTE: since we yield only for UI events with this call, there
     //       should be no side-effects
-    wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
+    return YieldForEvents(wxEVT_CATEGORY_UI);
+}
+
+bool wxGenericProgressDialog::YieldForEvents(long categories)
+{
+    if ( m_insideYield )
+        return true;
+
+    wxEventLoopBase * const eventLoop = wxEventLoopBase::GetActive();
+    if ( !eventLoop )
+        return false;
+
+    m_insideYield = true;
+    const wxWeakRef<wxWindow> weakThis(this);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    const wxWinUIProgressYieldHookState hookState =
+        TakeProgressYieldHook(this);
+    if ( hookState.hook )
+        hookState.hook(hookState.context);
+
+    if ( !weakThis.get() )
+        return false;
+#endif // __WXWINUI__ && wxUSE_WINUI3 && WXWINUI_TEST_SUPPORT
+
+    eventLoop->YieldFor(categories);
+
+    wxWindow * const live = weakThis.get();
+    if ( !live )
+        return false;
+
+    static_cast<wxGenericProgressDialog *>(live)->m_insideYield = false;
+    return true;
 }
 
 void wxGenericProgressDialog::Resume()
@@ -553,7 +689,9 @@ bool wxGenericProgressDialog::Show( bool show )
     // reenable other windows before hiding this one because otherwise
     // Windows wouldn't give the focus back to the window which had
     // been previously focused because it would still be disabled
-    if(!show)
+    if ( show )
+        DisableOtherWindows();
+    else
         ReenableOtherWindows();
 
     return wxDialog::Show(show);
@@ -563,16 +701,18 @@ int wxGenericProgressDialog::GetValue() const
 {
     wxCHECK_MSG( m_gauge, -1, "dialog should be fully created" );
 
-    return m_gauge->GetValue();
+    return m_publicValue;
 }
 
 int wxGenericProgressDialog::GetRange() const
 {
-    return m_maximum;
+    return m_publicMaximum;
 }
 
 wxString wxGenericProgressDialog::GetMessage() const
 {
+    wxCHECK_MSG( m_msg, wxString(), "dialog should be fully created" );
+
     return m_msg->GetLabel();
 }
 
@@ -582,13 +722,13 @@ void wxGenericProgressDialog::SetRange(int maximum)
 
     wxCHECK_RET( maximum > 0, "Invalid range" );
 
-    m_gauge->SetRange(maximum);
-
     SetMaximum(maximum);
+    m_gauge->SetRange(m_maximum);
 }
 
 void wxGenericProgressDialog::SetMaximum(int maximum)
 {
+    m_publicMaximum = maximum;
     m_maximum = maximum;
 
 #if defined(__WXMSW__)
@@ -695,6 +835,10 @@ void wxGenericProgressDialog::OnClose(wxCloseEvent& event)
 
 wxGenericProgressDialog::~wxGenericProgressDialog()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && defined(WXWINUI_TEST_SUPPORT)
+    ForgetProgressYieldHook(this);
+#endif
+
     // normally this should have been already done, but just in case
     ReenableOtherWindows();
 
@@ -722,28 +866,43 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
 
 void wxGenericProgressDialog::DisableOtherWindows()
 {
+    if ( m_otherWindowsDisabled )
+        return;
+
+    m_otherWindowsDisabled = true;
+
     if ( HasPDFlag(wxPD_APP_MODAL) )
     {
         m_winDisabler = new wxWindowDisabler(this);
     }
     else
     {
-        if ( m_parentTop )
+        if ( m_parentTop && m_parentTop->IsEnabled() )
+        {
             m_parentTop->Disable();
+            m_parentDisabledByUs = true;
+        }
         m_winDisabler = nullptr;
     }
 }
 
 void wxGenericProgressDialog::ReenableOtherWindows()
 {
+    if ( !m_otherWindowsDisabled )
+        return;
+
+    m_otherWindowsDisabled = false;
+
     if ( HasPDFlag(wxPD_APP_MODAL) )
     {
         wxDELETE(m_winDisabler);
     }
     else
     {
-        if ( m_parentTop )
+        if ( m_parentDisabledByUs && m_parentTop )
             m_parentTop->Enable();
+
+        m_parentDisabledByUs = false;
     }
 }
 
@@ -802,10 +961,9 @@ void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
             Fit();
         }
 
-        // allow the window to repaint:
-        // NOTE: since we yield only for UI events with this call, there
-        //       should be no side-effects
-        wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
+        // The caller performs the single bounded UI yield after completing
+        // the entire update. Yielding here used to allow destruction between
+        // changing the label and accessing the remaining dialog controls.
     }
 }
 

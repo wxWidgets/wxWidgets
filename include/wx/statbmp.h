@@ -63,6 +63,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/statbmp.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/statbmp.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statbmp.h"
 #elif defined(__WXGTK__)

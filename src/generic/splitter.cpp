@@ -38,6 +38,10 @@
 
 #include "wx/generic/private/drawresize.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
+
 #include <stdlib.h>
 
 wxDEFINE_EVENT( wxEVT_SPLITTER_SASH_POS_CHANGED, wxSplitterEvent );
@@ -407,7 +411,7 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
     SetCursor(* wxSTANDARD_CURSOR);
 
     // Erase sash tracker
-    if ( HasFlag(wxSP_LIVE_UPDATE) )
+    if ( !HasFlag(wxSP_LIVE_UPDATE) )
     {
         m_overlay.Reset();
     }
@@ -586,13 +590,15 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
                                 GetClientRect()
                             );
 
-    // don't draw sash if we're not split
-    if ( m_sashPosition == 0 || !m_windowTwo )
+    // don't draw sash if we're not split, nor if we're configured to not
+    // show it
+    if ( m_sashPosition == 0 || !m_windowTwo || IsSashInvisible() )
+    {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        wxWinUIHideSplitterSash(this);
+#endif
         return;
-
-    // nor if we're configured to not show it
-    if ( IsSashInvisible() )
-        return;
+    }
 
     wxRendererNative::Get().DrawSplitterSash
                             (

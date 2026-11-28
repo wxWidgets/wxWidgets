@@ -866,7 +866,28 @@ bool wxToolBar::Realize()
     wxToolBarToolsList::compatibility_iterator node;
     int bitmapId = 0;
 
+    // A text toolbar can contain buttons with no image, including toolbook
+    // pages added with NO_IMAGE. Don't allocate image slots for these buttons:
+    // the native I_IMAGENONE value represents them without a placeholder.
+    const auto isTextOnly = [this](const wxToolBarToolBase* tool)
+    {
+        return HasFlag(wxTB_TEXT) && !tool->GetNormalBitmapBundle().IsOk();
+    };
+    bool hasBitmapTools = false;
     if ( !HasFlag(wxTB_NOICONS) )
+    {
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarToolBase* const tool = node->GetData();
+            if ( tool->IsButton() && !isTextOnly(tool) )
+            {
+                hasBitmapTools = true;
+                break;
+            }
+        }
+    }
+
+    if ( hasBitmapTools )
     {
         // if we already have a bitmap, we'll replace the existing one --
         // otherwise we'll install a new one
@@ -951,6 +972,9 @@ bool wxToolBar::Realize()
             wxToolBarToolBase *tool = node->GetData();
             if ( tool->IsButton() )
             {
+                if ( isTextOnly(tool) )
+                    continue;
+
                 wxBitmap bmp = tool->GetNormalBitmap(sizeBitmap);
 
                 if ( bmp.IsOk() )
@@ -1170,8 +1194,9 @@ bool wxToolBar::Realize()
                 break;
 
             case wxTOOL_STYLE_BUTTON:
-                if ( !HasFlag(wxTB_NOICONS) )
-                    button.iBitmap = bitmapId;
+                button.iBitmap = I_IMAGENONE;
+                if ( !HasFlag(wxTB_NOICONS) && !isTextOnly(tool) )
+                    button.iBitmap = bitmapId++;
 
                 if ( HasFlag(wxTB_TEXT) )
                 {
@@ -1255,7 +1280,6 @@ bool wxToolBar::Realize()
                     button.fsStyle |= TBSTYLE_AUTOSIZE;
                 }
 
-                bitmapId++;
                 break;
         }
 

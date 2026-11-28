@@ -72,8 +72,8 @@ public:
                             const wxString& text,
                             bool bSelect = false,
                             int imageId = NO_IMAGE) override;
-    virtual int SetSelection(size_t n) override { return DoSetSelection(n, SetSelection_SendEvent); }
-    virtual int ChangeSelection(size_t n) override { return DoSetSelection(n); }
+    virtual int SetSelection(size_t n) override;
+    virtual int ChangeSelection(size_t n) override;
 
     virtual bool DeleteAllPages() override;
     virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
@@ -109,6 +109,11 @@ protected:
     bool m_needsRealizing;
 
 private:
+    // Removes the page from the common model only. A static member, and not a
+    // qualified call in the lambdas which use it: g++ 4.8 refuses calling a
+    // protected member of the base class this way from a lambda.
+    static wxWindow *DoRemoveCommonPage(wxToolbook *book, size_t page);
+
     // common part of all constructors
     void Init();
 

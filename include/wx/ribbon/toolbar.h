@@ -19,6 +19,10 @@
 
 #include <unordered_map>
 #include <vector>
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonToolBarWinUI;
+#endif
 
 class wxRibbonToolBarToolBase;
 class wxRibbonToolBarToolGroup;
@@ -189,6 +193,10 @@ public:
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
 #endif // wxUSE_ACCESSIBILITY
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxSize GetMinSize() const override;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
+#endif
 
 protected:
     friend class wxRibbonToolBarEvent;
@@ -237,6 +245,15 @@ protected:
     // matching.
     std::unordered_map<wxWindowID, wxString> m_keyTips;
     std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+private:
+    friend class wxRibbonToolBarWinUI;
+    bool InitializeWinUI();
+    void SyncWinUI();
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    std::shared_ptr<wxRibbonToolBarWinUI> m_winui;
+#endif
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonToolBar);

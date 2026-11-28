@@ -22,6 +22,7 @@
 
 
 #include "wx/scrolwin.h"
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -186,16 +187,38 @@ void wxAutoScrollTimer::Notify()
 bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
+    // A forwarded handler can destroy its window, the scroll helper and this
+    // pushed handler. Keep the continuation state outside these objects, as
+    // wxVarScrollHelperEvtHandler already does for the same dispatch contract.
+    wxScrollHelperBase* const scrollHelper = m_scrollHelper;
+    const wxWeakRef<wxWindow> window(scrollHelper->m_win);
+    const wxWeakRef<wxEvtHandler> handler(this);
+    const auto current = [&]()
+    {
+        return handler && window && !window->IsBeingDeleted();
+    };
 
     // always process these mouse events ourselves, even if the user code handles
     // them as well, as we need to autoscroll
     if ( evType == wxEVT_LEFT_DOWN )
     {
-        m_scrollHelper->OnLeftDown((wxMouseEvent&)event);
+        scrollHelper->OnLeftDown((wxMouseEvent&)event);
     }
     else if ( evType == wxEVT_MOTION )
     {
-        m_scrollHelper->OnMotion((wxMouseEvent&)event);
+        scrollHelper->OnMotion((wxMouseEvent&)event);
+    }
+
+    // Only if the window or this handler is gone. A window which is being
+    // deleted still gets its events, and wxEVT_DESTROY first of all, which is
+    // sent to it exactly then: stopping here for such a window kept the
+    // event from every scrolled window, from the handlers of the program as
+    // from those of the WinUI host, which went on using the window after it
+    // had been freed (a wxListbook replaced by another book).
+    if ( !handler || !window )
+    {
+        event.DidntHonourProcessOnlyIn();
+        return true;
     }
 
     // Pass it on to the real handler: notice that we must not call
@@ -205,6 +228,11 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // execute the handler defined in the window we're associated with right
     // now, without waiting until TryAfter() is called from wxEvtHandler.
     bool processed = m_nextHandler->ProcessEvent(event);
+    if ( !current() )
+    {
+        event.DidntHonourProcessOnlyIn();
+        return processed;
+    }
 
     // always process the size events ourselves, even if the user code handles
     // them as well, as we need to AdjustScrollbars()
@@ -215,7 +243,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     //     after this one
     if ( evType == wxEVT_SIZE )
     {
-        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+        scrollHelper->HandleOnSize((wxSizeEvent &)event);
         return true;
     }
 
@@ -233,7 +261,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 #endif // !__WXUNIVERSAL__
             evType == wxEVT_PAINT )
     {
-        m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
+        scrollHelper->HandleOnPaint((wxPaintEvent &)event);
         return true;
     }
 
@@ -244,7 +272,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 
     if ( evType == wxEVT_CHILD_FOCUS )
     {
-        m_scrollHelper->HandleOnChildFocus((wxChildFocusEvent &)event);
+        scrollHelper->HandleOnChildFocus((wxChildFocusEvent &)event);
         return true;
     }
 
@@ -263,7 +291,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
          evType == wxEVT_SCROLLWIN_THUMBTRACK ||
          evType == wxEVT_SCROLLWIN_THUMBRELEASE )
     {
-        m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
+        scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
         if ( !event.GetSkipped() )
         {
             // it makes sense to indicate that we processed the message as we
@@ -280,14 +308,14 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 #ifndef __WXGTK__
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
-        m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+        scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
         return true;
     }
 #endif
 #endif // wxUSE_MOUSEWHEEL
     else if ( evType == wxEVT_CHAR )
     {
-        m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
+        scrollHelper->HandleOnChar((wxKeyEvent &)event);
         if ( !event.GetSkipped() )
         {
             processed = true;

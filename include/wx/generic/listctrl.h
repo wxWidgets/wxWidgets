@@ -14,6 +14,16 @@
 #include "wx/scrolwin.h"
 #include "wx/textctrl.h"
 
+// The generic control supports programmatic column ordering in report mode.
+#ifndef wxHAS_LISTCTRL_COLUMN_ORDER
+    #define wxHAS_LISTCTRL_COLUMN_ORDER
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include <memory>
+class wxWinUIListProjection;
+#endif
+
 #if wxUSE_DRAG_AND_DROP
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 #endif
@@ -222,6 +232,11 @@ protected:
 
     // it calls our OnGetXXX() functions
     friend class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxListHeaderWindow;
+    friend class wxWinUIListProjection;
+    std::shared_ptr<wxWinUIListProjection> m_winUIProjection;
+#endif
 
     virtual wxBorder GetDefaultBorder() const override;
 
@@ -245,7 +260,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxGenericListCtrl);
 };
 
-#if !(defined(__WXMSW__) || defined(__WXQT__)) || defined(__WXUNIVERSAL__ )
+#if !(defined(__WXMSW__) || defined(__WXQT__)) || defined(__WXUNIVERSAL__ ) || defined(__WXWINUI__)
 /*
  * wxListCtrl has to be a real class or we have problems with
  * the run-time information.
@@ -269,6 +284,6 @@ public:
     }
 
 };
-#endif // !__WXMSW__ || __WXUNIVERSAL__
+#endif // !__WXMSW__ || __WXUNIVERSAL__ || __WXWINUI__
 
 #endif // _WX_GENERIC_LISTCTRL_H_

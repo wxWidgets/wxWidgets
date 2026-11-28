@@ -42,7 +42,9 @@
 #include "wx/display.h"
 #include "wx/graphics.h"
 #include "wx/popupwin.h"
+#include "wx/scopeguard.h"
 #include "wx/textwrapper.h"
+#include "wx/weakref.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/uxtheme.h"
@@ -669,6 +671,12 @@ void wxRichToolTipGenericImpl::SetTitleFont(const wxFont& font)
 
 void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
 {
+    ShowForPopup(win, rect);
+}
+
+wxWindow*
+wxRichToolTipGenericImpl::ShowForPopup(wxWindow* win, const wxRect* rect)
+{
     DismissCurrentRichToolTipPopup();
 
     wxRichToolTipPopup* const popup = new wxRichToolTipPopup
@@ -681,12 +689,32 @@ void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
                                             m_titleFont
                                           );
     gs_currentRichToolTipPopup = popup;
+    wxWeakRef<wxWindow> weakPopup(popup);
+    wxScopeGuard cleanup = wxMakeGuard(
+        [&weakPopup]()
+        {
+            if ( wxWindow * const livePopup = weakPopup.get() )
+            {
+                if ( !livePopup->IsBeingDeleted() )
+                    livePopup->Destroy();
+            }
+        });
 
     popup->SetBackgroundColours(m_colStart, m_colEnd);
 
     popup->SetPosition(rect);
     // show or start the timer to delay showing the popup
     popup->SetTimeoutAndShow( m_timeout, m_delay );
+
+    // Show() is a synchronous application callback boundary on ports using a
+    // native popup window. The popup can therefore be destroyed before this
+    // call returns; never publish its stale raw pointer to a managed wrapper.
+    wxWindow * const livePopup = weakPopup.get();
+    if ( !livePopup || livePopup->IsBeingDeleted() )
+        return nullptr;
+
+    cleanup.Dismiss();
+    return livePopup;
 }
 
 // Currently only wxMSW provides a native implementation.

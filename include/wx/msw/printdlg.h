@@ -16,6 +16,7 @@
 #include "wx/cmndata.h"
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
+#include "wx/weakref.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WinPrinter;
@@ -43,6 +44,10 @@ public:
     void SetDevNames(void* data) { m_devNames = data; }
 
 private:
+    // Used only to detach the native state of a wxPrintData transaction.
+    wxWindowsPrintNativeData(const wxWindowsPrintNativeData& other);
+    friend class wxPrintData;
+
     void* m_devMode;
     void* m_devNames;
 
@@ -73,16 +78,18 @@ public:
 
 private:
     wxPrintDialogData m_printDialogData;
-    wxPrinterDC*      m_printerDC;
-    bool              m_destroyDC;
-    wxWindow*         m_dialogParent;
+    wxPrinterDC*      m_printerDC = nullptr;
+    bool              m_destroyDC = true;
+    wxWeakRef<wxWindow> m_dialogParent;
 
 private:
     bool ConvertToNative( wxPrintDialogData &data );
     bool ConvertFromNative( wxPrintDialogData &data );
+    void ResetNativeState();
 
     // holds MSW handle
-    void*             m_printDlg;
+    void*             m_printDlg = nullptr;
+    bool              m_nativeDataIndependent = true;
 
 private:
     wxDECLARE_CLASS(wxWindowsPrintDialog);
@@ -108,11 +115,14 @@ public:
     virtual wxPageSetupDialogData& GetPageSetupDialogData() override { return m_pageSetupData; }
 
 private:
+    void ResetNativeState();
+
     wxPageSetupDialogData   m_pageSetupData;
-    wxWindow*               m_dialogParent;
+    wxWeakRef<wxWindow>     m_dialogParent;
 
     // holds MSW handle
-    void*                   m_pageDlg;
+    void*                   m_pageDlg = nullptr;
+    bool                    m_nativeDataIndependent = true;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPageSetupDialog);

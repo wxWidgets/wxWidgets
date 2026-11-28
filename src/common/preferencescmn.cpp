@@ -50,23 +50,59 @@ wxPreferencesEditor::wxPreferencesEditor(const wxString& title)
 
 wxPreferencesEditor::~wxPreferencesEditor()
 {
-    delete m_impl;
+    m_impl->OwnerDestroyed();
 }
 
 void wxPreferencesEditor::AddPage(wxPreferencesPage* page)
 {
     wxCHECK_RET( page, "can't set null page" );
-    m_impl->AddPage(page);
+    m_impl->CallAddPage(page);
 }
 
 void wxPreferencesEditor::Show(wxWindow* parent)
 {
-    m_impl->Show(parent);
+    m_impl->CallShow(parent);
 }
 
 void wxPreferencesEditor::Dismiss()
 {
-    m_impl->Dismiss();
+    m_impl->CallDismiss();
+}
+
+void wxPreferencesEditorImpl::CallAddPage(wxPreferencesPage* page)
+{
+    CallRef keepAlive(this);
+
+    if ( m_ownerAlive )
+        AddPage(page);
+}
+
+void wxPreferencesEditorImpl::CallShow(wxWindow* parent)
+{
+    CallRef keepAlive(this);
+
+    if ( m_ownerAlive )
+        Show(parent);
+}
+
+void wxPreferencesEditorImpl::CallDismiss()
+{
+    CallRef keepAlive(this);
+    Dismiss();
+}
+
+void wxPreferencesEditorImpl::OwnerDestroyed()
+{
+    m_ownerAlive = false;
+
+    // Keep this object alive across the hook even when the owner holds its
+    // final reference. Generic modal implementations use it to end their
+    // nested event loop, while native lazy implementations need no hook.
+    {
+        CallRef keepAlive(this);
+        OnOwnerDestroyed();
+    }
+    Release();
 }
 
 #endif // wxUSE_PREFERENCES_EDITOR

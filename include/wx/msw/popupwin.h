@@ -26,8 +26,14 @@ public:
 
     virtual ~wxPopupWindow();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    virtual bool Destroy() override;
+#endif
     virtual void SetFocus() override;
     virtual bool Show(bool show = true) override;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    virtual bool Reparent(wxWindowBase *newParent) override;
+#endif
 
     // return the style to be used for the popup windows
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const override;
@@ -47,6 +53,12 @@ public:
 
 private:
     wxWindow* m_owner;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // WinUI-only state is held in a cpp sidecar to preserve this exported
+    // class's historical size and vtable.
+    friend class wxWinUIPopupSidecarAccess;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow);
 };

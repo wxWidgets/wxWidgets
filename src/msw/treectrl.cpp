@@ -2015,21 +2015,25 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
         if ( IsTreeEventAllowed(changingEvent) )
         {
-            TempSetter set(m_changingSelection);
+            {
+                TempSetter set(m_changingSelection);
 
-            if ( !TreeView_SelectItem(GetHwnd(), HITEM(itemNew)) )
-            {
-                wxLogLastError(wxT("TreeView_SelectItem"));
-            }
-            else // ok
-            {
+                if ( !TreeView_SelectItem(GetHwnd(), HITEM(itemNew)) )
+                {
+                    wxLogLastError(wxT("TreeView_SelectItem"));
+                    return;
+                }
+
                 ::SetFocus(GetHwnd(), HITEM(item));
-
-                wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED,
-                                         this, itemNew);
-                changedEvent.SetOldItem(itemOld);
-                (void)HandleTreeEvent(changedEvent);
             }
+
+            // Suppress only the native notifications above: an application
+            // handler may change the selection again, e.g. when a book
+            // controller restores its selection after a page-change veto.
+            wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED,
+                                     this, itemNew);
+            changedEvent.SetOldItem(itemOld);
+            (void)HandleTreeEvent(changedEvent);
         }
         //else: program vetoed the change
     }

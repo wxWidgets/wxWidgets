@@ -152,6 +152,8 @@ private:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobox.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/radiobox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/radiobox.h"
 #elif defined(__WXGTK__)

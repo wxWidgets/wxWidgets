@@ -41,6 +41,7 @@
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+#include "wx/weakref.h"
 
 #include "wx/msw/wrapshl.h"
 #include "wx/msw/wrapcdlg.h"
@@ -65,6 +66,7 @@
 #endif // wxUSE_IFILEOPENDIALOG
 
 #include <memory>
+#include <vector>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -193,15 +195,22 @@ public:
     // The file dialog scope must be greater than that of this object.
     FileDialogEventsRegistrar(wxMSWImpl::wxIFileDialog& fileDialog,
                               IFileDialogEvents& eventsHandler)
-        : m_fileDialog(fileDialog)
+        : m_fileDialog(fileDialog),
+          m_cookie(0)
     {
         HRESULT hr = m_fileDialog->Advise(&eventsHandler, &m_cookie);
         if ( FAILED(hr) )
+        {
+            m_cookie = 0;
             wxLogApiError(wxS("IFileDialog::Advise"), hr);
+        }
     }
 
     ~FileDialogEventsRegistrar()
     {
+        if ( !m_cookie )
+            return;
+
         HRESULT hr = m_fileDialog->Unadvise(m_cookie);
         if ( FAILED(hr) )
             wxLogApiError(wxS("IFileDialog::Unadvise"), hr);
@@ -717,6 +726,15 @@ public:
     // if it doesn't have a virtual dtor, so pacify it by adding one.
     virtual ~wxFileDialogMSWData() { }
 
+#if wxUSE_IFILEOPENDIALOG
+    void PrepareForShow()
+    {
+        // OnTypeChange() doubles as the native "initialization complete"
+        // notification and must do so for every physical dialog instance.
+        m_typeAlreadyChanged = false;
+    }
+#endif
+
     // Hook function used by the common dialogs: it's a member of this class
     // just to allow it to call the private functions of wxFileDialog.
     static UINT_PTR APIENTRY
@@ -1057,7 +1075,10 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
-    files = m_fileNames;
+    files.Empty();
+    files.Alloc(m_fileNames.size());
+    for ( const wxString& fileName : m_fileNames )
+        files.Add(wxFileName(fileName).GetFullName());
 }
 
 void wxFileDialog::DoGetPosition(int *x, int *y) const
@@ -1255,6 +1276,7 @@ int wxFileDialog::ShowModal()
 
     WX_HOOK_MODAL_DIALOG();
 
+    const wxWeakRef<wxWindow> requestedParent(m_parent);
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
     const WXHWND hWndParent = wxGetHWND(parent);
 
@@ -1284,20 +1306,30 @@ int wxFileDialog::ShowModal()
     {
         const int rc = ShowIFileDialog(hWndParent);
         if ( rc != wxID_NONE )
+        {
+            if ( m_parent && !requestedParent.get() )
+                m_parent = nullptr;
             return rc;
+        }
         //else: Failed to use IFileDialog, fall back to the traditional one.
     }
 #endif // wxUSE_IFILEOPENDIALOG
 
-    return ShowCommFileDialog(hWndParent);
+    const int rc = ShowCommFileDialog(hWndParent);
+    if ( m_parent && !requestedParent.get() )
+        m_parent = nullptr;
+    return rc;
 }
 
 int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
 {
-    static wxChar fileNameBuffer [ wxMAXPATH ];           // the file-name
+    // Keep the result buffer per invocation. Customize hooks may legitimately
+    // open a nested file dialog; a static buffer makes the inner invocation
+    // overwrite the outer result and is also unsafe across GUI threads.
+    std::vector<wxChar> fileNameBuffer(wxMAXPATH);
     wxChar        titleBuffer    [ wxMAXFILE+1+wxMAXEXT ];  // the file-name, without path
 
-    *fileNameBuffer = wxT('\0');
+    fileNameBuffer[0] = wxT('\0');
     *titleBuffer    = wxT('\0');
 
     long msw_flags = OFN_HIDEREADONLY;
@@ -1439,6 +1471,11 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     size_t items = wxParseCommonDialogsFilter(m_wildCard, wildDescriptions, wildFilters);
 
     wxASSERT_MSG( items > 0 , wxT("empty wildcard list") );
+    const int effectiveFilterIndex =
+        m_filterIndex >= 0 &&
+        static_cast<size_t>(m_filterIndex) < items
+            ? m_filterIndex
+            : 0;
 
     wxString filterBuffer;
 
@@ -1458,14 +1495,15 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     }
 
     of.lpstrFilter  = filterBuffer.t_str();
-    of.nFilterIndex = m_filterIndex + 1;
-    m_currentlySelectedFilterIndex = m_filterIndex;
+    of.nFilterIndex = effectiveFilterIndex + 1;
+    m_currentlySelectedFilterIndex = effectiveFilterIndex;
 
     //=== Setting defaultFileName >>=========================================
 
-    wxStrlcpy(fileNameBuffer, m_fileName.c_str(), WXSIZEOF(fileNameBuffer));
+    wxStrlcpy(fileNameBuffer.data(), m_fileName.c_str(),
+              fileNameBuffer.size());
 
-    of.lpstrFile = fileNameBuffer;  // holds returned filename
+    of.lpstrFile = fileNameBuffer.data();  // holds returned filename
     of.nMaxFile  = wxMAXPATH;
 
     // we must set the default extension because otherwise Windows would check
@@ -1514,13 +1552,17 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
 
-    DrainMouseMessages();
+    const auto cleanupAfterNativeDialog =
+        [this, msw_flags]()
+        {
+            DrainMouseMessages();
 
-    // When using a hook, our HWND was set from MSWOnInitDialogHook() called
-    // above, but it's not valid any longer once the dialog was destroyed, so
-    // reset it now.
-    if ( msw_flags & OFN_ENABLEHOOK )
-        SetHWND(0);
+            // A hook temporarily associates the native child HWND with this
+            // wx object. It is invalid as soon as each native attempt ends.
+            if ( msw_flags & OFN_ENABLEHOOK )
+                SetHWND(0);
+        };
+    cleanupAfterNativeDialog();
 
     if ( !success &&
             errCode == FNERR_INVALIDFILENAME &&
@@ -1530,6 +1572,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
         // now
         of.lpstrFile[0] = wxT('\0');
         success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+        cleanupAfterNativeDialog();
     }
 
     if ( !success )
@@ -1550,7 +1593,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
          ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
        )
     {
-        m_dir = fileNameBuffer;
+        m_dir = fileNameBuffer.data();
         i = of.nFileOffset;
         m_fileName = &fileNameBuffer[i];
         m_fileNames.Add(m_fileName);
@@ -1584,14 +1627,16 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
             for( int j = 0; j < maxFilter; j++ )           // get extension
                 extension = extension + wxStrlen( extension ) + 1;
 
-            m_fileName = AppendExtension(fileNameBuffer, extension);
-            wxStrlcpy(fileNameBuffer, m_fileName.c_str(), WXSIZEOF(fileNameBuffer));
+            m_fileName =
+                AppendExtension(fileNameBuffer.data(), extension);
+            wxStrlcpy(fileNameBuffer.data(), m_fileName.c_str(),
+                      fileNameBuffer.size());
         }
 
-        m_path = fileNameBuffer;
-        m_fileName = wxFileNameFromPath(fileNameBuffer);
+        m_path = fileNameBuffer.data();
+        m_fileName = wxFileNameFromPath(fileNameBuffer.data());
         m_fileNames.Add(m_fileName);
-        m_dir = wxPathOnly(fileNameBuffer);
+        m_dir = wxPathOnly(fileNameBuffer.data());
     }
 
     return wxID_OK;
@@ -1612,6 +1657,7 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
 
     // Register our event handler with the dialog.
     wxFileDialogMSWData& data = MSWData();
+    data.PrepareForShow();
 
     FileDialogEventsRegistrar registerEvents(fileDialog, data);
 
@@ -1633,6 +1679,12 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
                                                        wildFilters);
     if ( nWildcards )
     {
+        const int effectiveFilterIndex =
+            m_filterIndex >= 0 &&
+            static_cast<UINT>(m_filterIndex) < nWildcards
+                ? m_filterIndex
+                : 0;
+
         wxVector<COMDLG_FILTERSPEC> filterSpecs(nWildcards);
         for ( UINT n = 0; n < nWildcards; ++n )
         {
@@ -1644,7 +1696,7 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
         if ( FAILED(hr) )
             wxLogApiError(wxS("IFileDialog::SetFileTypes"), hr);
 
-        hr = fileDialog->SetFileTypeIndex(m_filterIndex + 1);
+        hr = fileDialog->SetFileTypeIndex(effectiveFilterIndex + 1);
         if ( FAILED(hr) )
             wxLogApiError(wxS("IFileDialog::SetFileTypeIndex"), hr);
 
@@ -1654,7 +1706,8 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
         // function, but won't do anything at all without it, so find the first
         // extension associated with the selected filter and use it here.
         wxString defExt =
-            wildFilters[m_filterIndex].BeforeFirst(';').AfterFirst('.');
+            wildFilters[effectiveFilterIndex].
+                BeforeFirst(';').AfterFirst('.');
         if ( !defExt.empty() && defExt != wxS("*") )
         {
             hr = fileDialog->SetDefaultExtension(defExt.wc_str());

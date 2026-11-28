@@ -88,6 +88,8 @@ public:
         Create(parent, id, title, pos, sz, style, name);
     }
 
+    virtual ~wxPropertySheetDialog();
+
     bool Create(wxWindow* parent, wxWindowID id,
                        const wxString& title,
                        const wxPoint& pos = wxDefaultPosition,
@@ -95,11 +97,11 @@ public:
                        long style = wxDEFAULT_DIALOG_STYLE,
                        const wxString& name = wxASCII_STR(wxDialogNameStr));
 
-//// Accessors
+    //// Accessors
 
     // Set and get the notebook
-    void SetBookCtrl(wxBookCtrlBase* book) { m_bookCtrl = book; }
-    wxBookCtrlBase* GetBookCtrl() const { return m_bookCtrl; }
+    void SetBookCtrl(wxBookCtrlBase* book);
+    wxBookCtrlBase* GetBookCtrl() const;
 
     // Override function in base
     virtual wxWindow* GetContentWindow() const override;
@@ -144,6 +146,11 @@ private:
     void Init();
 
 protected:
+    // Return the exact sidecar-tracked book to derived destructors only. Unlike
+    // GetBookCtrl(), this permits the dialog itself to be in teardown, but
+    // still rejects an expired, reparented or independently deleting book.
+    wxBookCtrlBase* GetBookCtrlForDestruction() const;
+
     wxBookCtrlBase* m_bookCtrl;
     wxSizer*        m_innerSizer; // sizer for extra space
     long            m_sheetStyle;

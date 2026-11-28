@@ -20,6 +20,20 @@
 #include "wx/display.h"
 #include "wx/sizer.h"
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    #include "ribboncontainerswinui.h"
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "ribbonchromewinui.h"
+    #include "ribboncommandwinui.h"
+    #include "wx/weakref.h"
+    #include <winrt/Microsoft.UI.Xaml.Media.Imaging.h>
+    #include <limits>
+    #include <dwmapi.h>
+    #pragma comment(lib, "dwmapi.lib")
+#endif
+
 #ifndef WX_PRECOMP
 #include "wx/frame.h"
 #endif
@@ -64,10 +78,173 @@ wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
     : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(label, minimised_icon, style);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxCHECK_RET(wxRibbonContainerWinUI::Create(this),
+                "Failed to create native Toolkit Ribbon panel");
+#endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// Brings the XAML content of a group up to date with what wxRibbon knows of
+// it: called from its paint handler, which every change of its state leads
+// to as it used to redraw the group.
+static void wxRibbonPanelSyncChrome(wxRibbonPanel *panel,
+                                    wxRibbonChromeWinUI& chrome)
+{
+    namespace X = winrt::Microsoft::UI::Xaml;
+    namespace C = X::Controls;
+
+    try
+    {
+        const wxString label = panel->GetLabel();
+        if ( label != chrome.label )
+        {
+            if ( const auto text = chrome.Find<C::TextBlock>(L"Label") )
+                text.Text(wxWinUIToHString(label));
+            chrome.label = label;
+        }
+
+        const bool folded = panel->IsMinimised();
+        const bool launcher = !folded && panel->HasExtButton();
+        const wxRibbonArtProvider * const art = panel->GetArtProvider();
+        const bool stacked =
+            art && (art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL);
+        // The group a folded one was unfolded into, see ShowExpanded().
+        const bool card = panel->GetExpandedDummy() != nullptr;
+        const int state = (folded ? 1 : 0) |
+                          (launcher ? 4 : 0) |
+                          (launcher && panel->IsExtButtonHovered() ? 8 : 0) |
+                          (stacked ? 16 : 0) |
+                          (card ? 32 : 0);
+        if ( state == chrome.state )
+            return;
+        chrome.state = state;
+
+        if ( const auto border = chrome.Find<C::Border>(L"Card") )
+        {
+            border.Visibility(card ? X::Visibility::Visible
+                                   : X::Visibility::Collapsed);
+        }
+
+        // The divider is between this group and the next one: at its
+        // trailing edge in a ribbon whose groups are side by side, under it
+        // in one whose groups are stacked.
+        if ( const auto divider = chrome.Find<C::Border>(L"Divider") )
+        {
+            divider.Visibility(card ? X::Visibility::Collapsed
+                                    : X::Visibility::Visible);
+
+            const double none = std::numeric_limits<double>::quiet_NaN();
+            if ( stacked )
+            {
+                divider.HorizontalAlignment(X::HorizontalAlignment::Stretch);
+                divider.VerticalAlignment(X::VerticalAlignment::Bottom);
+                divider.Width(none);
+                divider.Height(1);
+                divider.Margin(X::ThicknessHelper::FromLengths(12, 0, 12, 0));
+            }
+            else
+            {
+                divider.HorizontalAlignment(X::HorizontalAlignment::Right);
+                divider.VerticalAlignment(X::VerticalAlignment::Stretch);
+                divider.Width(1);
+                divider.Height(none);
+                divider.Margin(X::ThicknessHelper::FromLengths(0, 4, 0, 4));
+            }
+        }
+
+        if ( const auto grid = chrome.Find<C::Grid>(L"Folded") )
+        {
+            grid.Visibility(folded ? X::Visibility::Visible
+                                   : X::Visibility::Collapsed);
+
+            // The button of a folded group: a subtle button holding the
+            // icon of the group over a small chevron, like the folded
+            // group of the ribbon of the Toolkit. It, not the group around
+            // it, answers the pointer and unfolds the group.
+            if ( folded && grid.Children().Size() == 0 )
+            {
+                const auto button =
+                    wxRibbonWinUICommandDetail::LoadSubtle(L"Button", L"Button")
+                        .as<C::Button>();
+                button.HorizontalAlignment(X::HorizontalAlignment::Center);
+                button.VerticalAlignment(X::VerticalAlignment::Center);
+                button.MinWidth(40);
+                button.Padding(X::ThicknessHelper::FromLengths(8, 6, 8, 5));
+                X::Automation::AutomationProperties::SetName(
+                    button, wxWinUIToHString(panel->GetLabel()));
+
+                C::StackPanel content;
+                content.HorizontalAlignment(X::HorizontalAlignment::Center);
+                const wxBitmap icon = panel->GetMinimisedIcon();
+                if ( icon.IsOk() )
+                {
+                    C::Image image;
+                    image.Source(wxWinUIWriteableBitmapFromBitmap(icon));
+                    image.Width(16);
+                    image.Height(16);
+                    image.Margin(X::ThicknessHelper::FromLengths(0, 0, 0, 4));
+                    content.Children().Append(image);
+                }
+                C::FontIcon chevron;
+                chevron.Glyph(L"\uE70D");
+                chevron.FontSize(8);
+                content.Children().Append(chevron);
+                button.Content(content);
+
+                const wxWeakRef<wxRibbonPanel> weak(panel);
+                button.Click([weak](const auto&, const auto&)
+                {
+                    wxRibbonPanel * const live = weak.get();
+                    if ( !live )
+                        return;
+
+                    // Not from inside the event of the button: unfolding
+                    // moves the children of the group to another window.
+                    live->CallAfter([weak]()
+                    {
+                        wxRibbonPanel * const group = weak.get();
+                        if ( !group || !group->IsMinimised() )
+                            return;
+                        if ( group->GetExpandedPanel() )
+                            group->HideExpanded();
+                        else
+                            group->ShowExpanded();
+                    });
+                });
+
+                grid.Children().Append(button);
+            }
+        }
+
+        if ( const auto button = chrome.Find<C::Border>(L"Launcher") )
+        {
+            button.Visibility(launcher ? X::Visibility::Visible
+                                       : X::Visibility::Collapsed);
+            button.Background((state & 8)
+                ? wxRibbonChromeBrush(L"SubtleFillColorSecondaryBrush")
+                : nullptr);
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("ribbon group chrome", e);
+    }
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 wxRibbonPanel::~wxRibbonPanel()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    wxRibbonContainerWinUI::Close(this);
+#endif
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+        m_winuiChrome->Close();
+#endif
+
     if(m_expanded_panel)
     {
         m_expanded_panel->m_expanded_dummy = nullptr;
@@ -90,8 +267,40 @@ bool wxRibbonPanel::Create(wxWindow* parent,
 
     CommonInit(label, icon, style);
 
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    return wxRibbonContainerWinUI::Create(this);
+#else
     return true;
+#endif
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+bool wxRibbonPanel::Enable(bool enable)
+{
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    const wxWeakRef<wxRibbonPanel> alive(this);
+#endif
+    const bool changed = wxRibbonControl::Enable(enable);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( changed && alive && !alive->IsBeingDeleted() )
+        wxRibbonContainerWinUI::Sync(alive.get());
+#endif
+    return changed;
+}
+
+bool wxRibbonPanel::Show(bool show)
+{
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    const wxWeakRef<wxRibbonPanel> alive(this);
+#endif
+    const bool changed = wxRibbonControl::Show(show);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( changed && alive && !alive->IsBeingDeleted() )
+        wxRibbonContainerWinUI::Sync(alive.get());
+#endif
+    return changed;
+}
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 void wxRibbonPanel::SetArtProvider(wxRibbonArtProvider* art)
 {
@@ -139,10 +348,28 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmapBundle& icon
     SetAutoLayout(true);
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetMinSize(wxSize(20, 20));
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    // The label, the divider and the folded form of the group are XAML
+    // content of this window; if that cannot be, the art provider draws.
+    if ( !m_winuiChrome )
+    {
+        auto chrome = std::make_shared<wxRibbonChromeWinUI>();
+        if ( chrome->Create(this, wxRibbonPanelChromeMarkup()) )
+        {
+            m_winuiChrome = chrome;
+            wxRibbonPanelSyncChrome(this, *chrome);
+        }
+    }
+#endif
 }
 
 bool wxRibbonPanel::IsMinimised() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+        return wxRibbonContainerWinUI::IsMinimised(this);
+#endif
     return m_minimised;
 }
 
@@ -153,6 +380,10 @@ bool wxRibbonPanel::IsHovered() const
 
 bool wxRibbonPanel::IsExtButtonHovered() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::IsExtensionHovered(this);
+#endif
     return m_ext_button_hovered;
 }
 
@@ -252,6 +483,10 @@ void wxRibbonPanel::RemoveChild(wxWindowBase *child)
     child->Unbind(wxEVT_LEAVE_WINDOW, &wxRibbonPanel::OnMouseLeaveChild, this);
 
     wxRibbonControl::RemoveChild(child);
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        wxRibbonContainerWinUI::Sync(this);
+#endif
 }
 
 bool wxRibbonPanel::HasExtButton()const
@@ -265,6 +500,15 @@ bool wxRibbonPanel::HasExtButton()const
 
 void wxRibbonPanel::OnSize(wxSizeEvent& evt)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        evt.Skip();
+        wxRibbonContainerWinUI::Sync(this);
+        return;
+    }
+#endif
+
     if(GetAutoLayout())
         Layout();
 
@@ -286,6 +530,16 @@ void wxRibbonPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        // The native group owns its presentation state. A shell resize must
+        // not run the generic minimisation policy and hide its child controls.
+        wxRibbonControl::DoSetSize(x, y, width, height, sizeFlags);
+        return;
+    }
+#endif
+
     // At least on MSW, changing the size of a window will cause GetSize() to
     // report the new size, but a size event may not be handled immediately.
     // If this minimised check was performed in the OnSize handler, then
@@ -295,6 +549,13 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
 
     bool minimised = (m_flags & wxRIBBON_PANEL_NO_AUTO_MINIMISE) == 0 &&
         IsMinimised(wxSize(width, height)); // check if would be at this size
+
+    // The group a folded one is unfolded into shows its children whatever
+    // its size: given one which is too small -- and the size of a group
+    // with a sizer, worked out while its children were hidden, is -- it
+    // would fold in turn, hide them again and show nothing.
+    if ( m_expanded_dummy )
+        minimised = false;
     if(minimised != m_minimised)
     {
         m_minimised = minimised;
@@ -344,6 +605,23 @@ void wxRibbonPanel::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+    {
+        wxPaintDC dc(this);
+        return;
+    }
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_winuiChrome )
+    {
+        wxPaintDC dc(this);
+        wxRibbonPanelSyncChrome(this, *m_winuiChrome);
+        return;
+    }
+#endif
+
     wxAutoBufferedPaintDC dc(this);
 
     if(m_art != nullptr)
@@ -671,6 +949,24 @@ wxSize wxRibbonPanel::GetPanelSizerMinSize() const
     // Uses m_smallest_unminimised_size in preference to GetSizer()->CalcMin()
     // to eliminate flicker.
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The children of a group are WinUI controls here, whose sizes are
+    // known once they are built: after Realize(), which is when the size
+    // used below was remembered, and it was then too small for good. A
+    // group folded and unfolded again came back at that size, and stayed
+    // there. So whenever the children are shown the sizer is asked, and its
+    // answer remembered for when they are hidden (a sizer leaves hidden
+    // windows out).
+    if ( IsShown() && !m_minimised && m_expanded_panel == nullptr && m_art )
+    {
+        const wxSize live = GetSizer()->CalcMin();
+        wxInfoDC dcLive(const_cast<wxRibbonPanel*>(this));
+        const_cast<wxRibbonPanel*>(this)->m_smallest_unminimised_size =
+            m_art->GetPanelSize(dcLive, this, live, nullptr);
+        return live;
+    }
+#endif
+
     // Check if is visible and not previously calculated
     if(IsShown() && !m_smallest_unminimised_size.IsFullySpecified())
     {
@@ -686,6 +982,16 @@ wxSize wxRibbonPanel::GetPanelSizerMinSize() const
 
 wxSize wxRibbonPanel::GetPanelSizerBestSize() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // See GetPanelSizerMinSize(): the sizer of a folded group, whose
+    // children are hidden, cannot be asked.
+    if ( m_minimised && m_expanded_panel == nullptr &&
+         m_smallest_unminimised_size.IsFullySpecified() )
+    {
+        return m_smallest_unminimised_size;
+    }
+#endif
+
     wxSize size = GetPanelSizerMinSize();
     // TODO allow panel to increase its size beyond minimum size
     // by steps similarly to ribbon control panels (preferred for aesthetics)
@@ -695,6 +1001,11 @@ wxSize wxRibbonPanel::GetPanelSizerBestSize() const
 
 wxSize wxRibbonPanel::DoGetBestSize() const
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::BestSize(const_cast<wxRibbonPanel*>(this));
+#endif
+
     // Ask sizer if present
     if( GetSizer())
     {
@@ -714,6 +1025,11 @@ wxSize wxRibbonPanel::DoGetBestSize() const
 
 bool wxRibbonPanel::Realize()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Realize(this);
+#endif
+
     bool status = true;
 
     for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
@@ -804,7 +1120,12 @@ bool wxRibbonPanel::Realize()
 
 bool wxRibbonPanel::Layout()
 {
-    if(IsMinimised())
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if ( wxRibbonContainerWinUI::Native(this) )
+        return wxRibbonContainerWinUI::Layout(this);
+#endif
+
+    if(IsMinimised() || m_art == nullptr)
     {
         // Children are all invisible when minimised
         return true;
@@ -836,6 +1157,13 @@ bool wxRibbonPanel::Layout()
 void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
 {
     DismissKeyTips();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A folded group is unfolded by its button, a XAML control which takes
+    // the press itself -- the same press is also reported here -- and not
+    // by a click anywhere else in the room the group has.
+    if ( m_winuiChrome && IsMinimised() )
+        return;
+#endif
 
     if(IsMinimised())
     {
@@ -1026,6 +1354,10 @@ wxRibbonPanel* wxRibbonPanel::GetExpandedPanel()
 
 bool wxRibbonPanel::ShowExpanded()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+        return wxRibbonContainerWinUI::ShowExpanded(this);
+#endif
     if(!IsMinimised())
     {
         return false;
@@ -1058,6 +1390,44 @@ bool wxRibbonPanel::ShowExpanded()
     m_expanded_panel->m_extButtonKeyTip = m_extButtonKeyTip;
     m_expanded_panel->m_keyTip = m_keyTip;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && !defined(WXWINUI_RIBBON_TOOLKIT)
+    {
+        // The window of the unfolded group is its flyout: it has the round
+        // corners of one, which also give it its shadow, and it goes when it
+        // is no longer the active window -- not, as elsewhere, as soon as
+        // the focus leaves the group or one of its children: the controls
+        // of the group are XAML controls, the focus moves among them and to
+        // their own popups while the group is in use.
+        const int corners = 2;      // DWMWCP_ROUND
+        ::DwmSetWindowAttribute(GetHwndOf(container),
+                                33 /* DWMWA_WINDOW_CORNER_PREFERENCE */,
+                                &corners, sizeof(corners));
+
+        const wxWeakRef<wxRibbonPanel> weak(this);
+        const wxWeakRef<wxWindow> window(container);
+        container->Bind(wxEVT_ACTIVATE, [weak, window](wxActivateEvent& event)
+        {
+            event.Skip();
+            wxRibbonPanel * const panel = weak.get();
+            if ( event.GetActive() || !panel )
+                return;
+
+            // Later, and only if this window is still the one the group is
+            // unfolded in: the click which deactivates it may be the one
+            // which folds the group, and unfolds it again.
+            panel->CallAfter([weak, window]()
+            {
+                wxRibbonPanel * const folded = weak.get();
+                if ( folded && window && folded->m_expanded_panel &&
+                     folded->m_expanded_panel->GetParent() == window.get() )
+                {
+                    folded->HideExpanded();
+                }
+            });
+        });
+    }
+#endif
+
     // Move all children to the new panel.
     // Conceptually it might be simpler to reparent this entire panel to the
     // container and create a new panel to sit in its place while expanded.
@@ -1083,6 +1453,26 @@ bool wxRibbonPanel::ShowExpanded()
 
     m_expanded_panel->Realize();
     Refresh();
+
+    // The size above was asked of a folded group, whose children are
+    // hidden: a sizer leaves hidden windows out, and gives a group which
+    // has one too little room. The unfolded group, which has the children
+    // now, and shown, knows better.
+    {
+        m_expanded_panel->InvalidateBestSize();
+        const wxSize real = (GetFlags() & wxRIBBON_PANEL_FLEXIBLE)
+            ? m_expanded_panel->GetBestSizeForParentSize(wxSize(400, 1000))
+            : m_expanded_panel->GetBestSize();
+        if ( real.x > 0 && real.y > 0 && real != size )
+        {
+            size = real;
+            pos = GetExpandedPosition(wxRect(GetScreenPosition(), GetSize()),
+                size, m_preferred_expand_direction).GetTopLeft();
+            container->SetSize(pos.x, pos.y, size.x, size.y);
+            m_expanded_panel->SetSize(0, 0, size.x, size.y);
+        }
+    }
+
     container->SetMinClientSize(size);
     container->Show();
     m_expanded_panel->SetFocus();
@@ -1130,6 +1520,22 @@ static bool IsAncestorOf(wxWindow *ancestor, wxWindow *window)
 
 void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // See ShowExpanded(): the window of an unfolded group goes when it is
+    // deactivated.
+    if ( m_winuiChrome )
+    {
+        evt.Skip();
+        return;
+    }
+#endif
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+    {
+        evt.Skip();
+        return;
+    }
+#endif
     if(m_expanded_dummy)
     {
         wxWindow *receiver = evt.GetWindow();
@@ -1148,6 +1554,22 @@ void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
 
 void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // See ShowExpanded(): the window of an unfolded group goes when it is
+    // deactivated.
+    if ( m_winuiChrome )
+    {
+        evt.Skip();
+        return;
+    }
+#endif
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+    {
+        evt.Skip();
+        return;
+    }
+#endif
     if(m_child_with_focus == nullptr)
         return; // Should never happen, but a check can't hurt
 
@@ -1178,6 +1600,10 @@ void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
 
 bool wxRibbonPanel::HideExpanded()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this))
+        return wxRibbonContainerWinUI::HideExpanded(this);
+#endif
     if(m_expanded_dummy == nullptr)
     {
         if(m_expanded_panel)
@@ -1342,6 +1768,13 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
 
 void wxRibbonPanel::HideIfExpanded()
 {
+#if defined(WXWINUI_RIBBON_TOOLKIT)
+    if (wxRibbonContainerWinUI::Native(this) && m_expanded_dummy)
+    {
+        m_expanded_dummy->HideIfExpanded();
+        return;
+    }
+#endif
     wxRibbonPage* const containingPage = wxDynamicCast(m_parent, wxRibbonPage);
     if (containingPage)
         containingPage->HideIfExpanded();

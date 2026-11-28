@@ -16,7 +16,17 @@
 
 #include "wx/textctrl.h"
 
-#if (!defined(__WXMAC__) && !defined(__WXGTK__)) || defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__)
+    // native version backed by a WinUI AutoSuggestBox
+    #define wxUSE_NATIVE_SEARCH_CONTROL 1
+
+    class WXDLLIMPEXP_CORE wxWinUISearchCtrlBaseBaseClass
+        : public wxControl, public wxTextEntry
+    {
+    };
+
+    #define wxSearchCtrlBaseBaseClass wxWinUISearchCtrlBaseBaseClass
+#elif (!defined(__WXMAC__) && !defined(__WXGTK__)) || defined(__WXUNIVERSAL__)
     // no native version, use the generic one
     #define wxUSE_NATIVE_SEARCH_CONTROL 0
 
@@ -94,7 +104,9 @@ private:
 
 // include the platform-dependent class implementation
 #if wxUSE_NATIVE_SEARCH_CONTROL
-    #if defined(__WXMAC__)
+    #if defined(__WXWINUI__)
+        #include "wx/winui/srchctrl.h"
+    #elif defined(__WXMAC__)
         #include "wx/osx/srchctrl.h"
     #elif defined(__WXGTK__)
         #include "wx/gtk/srchctrl.h"

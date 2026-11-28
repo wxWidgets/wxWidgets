@@ -150,6 +150,49 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 #define wxDEFINE_WGL_FUNC(name) \
     name##_t name = wxGLContext::GetProcAddress<name##_t>(#name)
 
+namespace
+{
+
+// WGL context discovery is an implementation detail and must not change the
+// caller's thread-current (HDC, HGLRC) pair. Keep this guard independent from
+// wxGLContext so it can also protect the static pixel-format probe.
+class wxWGLCurrentContextGuard final
+{
+public:
+    wxWGLCurrentContextGuard()
+        : m_dc(::wglGetCurrentDC()),
+          m_context(::wglGetCurrentContext())
+    {
+    }
+
+    ~wxWGLCurrentContextGuard()
+    {
+        if ( !m_restored )
+            (void)Restore();
+    }
+
+    bool Restore()
+    {
+        if ( m_restored )
+            return true;
+
+        m_restored = true;
+        if ( m_dc && m_context )
+            return ::wglMakeCurrent(m_dc, m_context) != FALSE;
+
+        return ::wglMakeCurrent(nullptr, nullptr) != FALSE;
+    }
+
+private:
+    HDC m_dc;
+    HGLRC m_context;
+    bool m_restored = false;
+
+    wxDECLARE_NO_COPY_CLASS(wxWGLCurrentContextGuard);
+};
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // libraries
 // ----------------------------------------------------------------------------
@@ -547,16 +590,28 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     // We need to create a temporary context to get the pointer to
     // wglCreateContextAttribsARB function
+    wxWGLCurrentContextGuard restoreCurrent;
     HGLRC tempContext = wglCreateContext(win->GetHDC());
     wxCHECK_RET( tempContext, "wglCreateContext failed!" );
 
-    wglMakeCurrent(win->GetHDC(), tempContext);
+    if ( !wglMakeCurrent(win->GetHDC(), tempContext) )
+    {
+        wxLogLastError("wglMakeCurrent temporary context");
+        wglDeleteContext(tempContext);
+        return;
+    }
 
     typedef HGLRC(WINAPI * wglCreateContextAttribsARB_t)
         (HDC hDC, HGLRC hShareContext, const int *attribList);
 
     wxDEFINE_WGL_FUNC(wglCreateContextAttribsARB);
-    wglMakeCurrent(win->GetHDC(), nullptr);
+    if ( !restoreCurrent.Restore() )
+    {
+        wxLogLastError("restoring WGL context after context discovery");
+        (void)::wglMakeCurrent(nullptr, nullptr);
+        wglDeleteContext(tempContext);
+        return;
+    }
     wglDeleteContext(tempContext);
 
     // The preferred way is using wglCreateContextAttribsARB, even for old context
@@ -703,7 +758,14 @@ bool wxGLCanvas::CreateWindow(wxWindow *parent,
        books that contain the wgl function descriptions.
      */
     WXDWORD exStyle = 0;
-    DWORD msflags = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+    DWORD msflags = WS_CHILD | WS_VISIBLE |
+                    WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The WinUI mixed-tree keyboard router enumerates native children using
+    // the dialog-manager contract. Opt this focusable hybrid surface into
+    // that traversal without changing classic wxMSW behaviour.
+    msflags |= WS_TABSTOP;
+#endif
     msflags |= MSWGetStyle(style, &exStyle);
 
     if ( !MSWCreate(wxApp::GetRegisteredClassName(wxT("wxGLCanvas"), -1, CS_OWNDC),
@@ -1080,6 +1142,7 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
     //
     // Having this dummy window allows also calling IsDisplaySupported()
     // without creating a wxGLCanvas.
+    wxWGLCurrentContextGuard restoreCurrent;
     wxGLdummyWin* dummyWin = new wxGLdummyWin();
     HDC dummyHDC = dummyWin->hdc;
     if ( !dummyHDC )
@@ -1100,7 +1163,13 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
         return 0;
     }
 
-    ::wglMakeCurrent(dummyHDC, dumctx);
+    if ( !::wglMakeCurrent(dummyHDC, dumctx) )
+    {
+        wxLogLastError("wglMakeCurrent dummy context");
+        ::wglDeleteContext(dumctx);
+        dummyWin->Destroy();
+        return 0;
+    }
 
     typedef BOOL (WINAPI * wglChoosePixelFormatARB_t)
                  (HDC hdc,
@@ -1119,7 +1188,11 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
     {
         wxLogLastError("wglChoosePixelFormatARB unavailable");
         // Delete the dummy objects
-        ::wglMakeCurrent(nullptr, nullptr);
+        if ( !restoreCurrent.Restore() )
+        {
+            wxLogLastError("restoring WGL context after pixel probe");
+            (void)::wglMakeCurrent(nullptr, nullptr);
+        }
         ::wglDeleteContext(dumctx);
         dummyWin->Destroy();
         return 0;
@@ -1174,7 +1247,12 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
     }
 
     // Delete the dummy objects
-    ::wglMakeCurrent(nullptr, nullptr);
+    if ( !restoreCurrent.Restore() )
+    {
+        wxLogLastError("restoring WGL context after pixel probe");
+        (void)::wglMakeCurrent(nullptr, nullptr);
+        pixelFormat = 0;
+    }
     ::wglDeleteContext(dumctx);
     dummyWin->Destroy();
 

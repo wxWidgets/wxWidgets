@@ -22,11 +22,17 @@
 
 #include "wx/combo.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/themecolours.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/combobox.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
+    #include "wx/dcclient.h"
     #include "wx/textctrl.h"
 #endif
 
@@ -116,7 +122,11 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
     long border = style & wxBORDER_MASK;
     int tcBorder = wxNO_BORDER;
 
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The whole face is painted in OnPaintEvent(), as the ComboBox of WinUI
+    // looks: no border of a window around it, none around its text.
+    border = wxBORDER_NONE;
+#elif defined(__WXUNIVERSAL__)
     if ( !border )
         border = wxBORDER_SIMPLE;
 #elif defined(__WXMSW__)
@@ -176,6 +186,36 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
     // Create textctrl, if necessary
     CreateTextCtrl( tcBorder );
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The face follows the pointer and the focus: see OnPaintEvent().
+    const auto repaint = [this](wxMouseEvent& event)
+    {
+        event.Skip();
+        Refresh();
+    };
+    Bind(wxEVT_ENTER_WINDOW, repaint);
+    Bind(wxEVT_LEAVE_WINDOW, repaint);
+    if ( m_text )
+    {
+        m_text->Bind(wxEVT_ENTER_WINDOW, repaint);
+        m_text->Bind(wxEVT_LEAVE_WINDOW, repaint);
+    }
+    Bind(wxEVT_SET_FOCUS, [this](wxFocusEvent& event)
+    {
+        event.Skip();
+        // From the keyboard unless a button of the mouse is down.
+        wxWinUISetComboBoxFaceKeyFocus(
+            this, !wxGetMouseState().LeftIsDown());
+        Refresh();
+    });
+    Bind(wxEVT_KILL_FOCUS, [this](wxFocusEvent& event)
+    {
+        event.Skip();
+        wxWinUISetComboBoxFaceKeyFocus(this, false);
+        Refresh();
+    });
+#endif
+
     // Set background style for double-buffering, when needed
     // (cannot use when system draws background automatically)
     if ( !HasTransparentBackground() )
@@ -209,7 +249,13 @@ void wxGenericComboCtrl::OnResize()
 {
 
     // Recalculates button and textctrl areas
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The room of the chevron of a WinUI ComboBox, whose middle is 20 from
+    // the end of the control (a glyph of 12, 14 from the edge).
+    CalculateAreas(FromDIP(40));
+#else
     CalculateAreas(DEFAULT_DROPBUTTON_WIDTH);
+#endif
 
 #if 0
     // Move separate button control, if any, to correct position
@@ -224,11 +270,61 @@ void wxGenericComboCtrl::OnResize()
 #endif
 
     // Move textctrl, if any, accordingly
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A little lower than the middle: the line of a WinUI field sits there,
+    // as the text of the ComboBox beside does.
+    PositionTextCtrl( 0, FromDIP(3) );
+#else
     PositionTextCtrl( TEXTCTRLXADJUST );
+#endif
 }
 
 void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    {
+        wxPaintDC dc(this);
+
+        // The face is a ComboBox of WinUI, under what is painted here and
+        // under the text field, which has no frame of its own: nothing of
+        // it is painted, it is told the state this control is in.
+        const wxSize client = GetClientSize();
+        wxWinUIPaintSurfaceClearRect(dc.GetHDC(), 0, 0, client.x, client.y);
+
+        int face = 0;
+        if ( m_text )
+            face |= wxWINUI_COMBO_FACE_EDITABLE;
+        if ( !IsThisEnabled() )
+            face |= wxWINUI_COMBO_FACE_DISABLED;
+        const wxPoint pointer = ScreenToClient(wxGetMousePosition());
+        if ( wxRect(client).Contains(pointer) && !IsPopupShown() )
+        {
+            face |= wxWINUI_COMBO_FACE_HOVER;
+            if ( m_btnArea.Contains(pointer) )
+                face |= wxWINUI_COMBO_FACE_BUTTON_HOVER;
+        }
+        if ( m_btnState & wxCONTROL_PRESSED )
+            face |= wxWINUI_COMBO_FACE_PRESSED;
+        if ( m_text && m_text->HasFocus() )
+            face |= wxWINUI_COMBO_FACE_TEXT_FOCUS;
+        wxWinUISetComboBoxFace(this, face);
+
+        if ( !m_text || m_widthCustomPaint )
+        {
+            wxRect tcRect = m_tcArea;
+            if ( m_text )
+                tcRect.width = m_widthCustomPaint;
+
+            dc.SetClippingRegion(tcRect);
+            if ( m_popupInterface )
+                m_popupInterface->PaintComboControl(dc, tcRect);
+            else
+                wxComboPopup::DefaultPaintComboControl(this, dc, tcRect);
+        }
+        return;
+    }
+#endif
+
     // Determine wxDC to use based on need to double-buffer or
     // use system-generated transparent background portions
     wxDC* dcPtr;
@@ -448,6 +544,13 @@ bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 wxTextWidgetImpl * wxGenericComboCtrl::GetTextPeer() const
 {
     return m_text ? m_text->GetTextPeer() : nullptr;
+}
+#endif
+
+#if defined(__WXWINUI__)
+WXHWND wxGenericComboCtrl::GetEditHWND() const
+{
+    return m_text ? m_text->GetHWND() : GetHWND();
 }
 #endif
 

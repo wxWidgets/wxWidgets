@@ -428,9 +428,16 @@ void wxNativeFontInfo::Init()
     // DEFAULT_QUALITY but some fonts (e.g. "Terminal 6pt") are not available
     // then so we allow to set a global option to choose between quality and
     // wider font selection
+#if defined(__WXWINUI__)
+    // As XAML antialiases its text: in grey. With ClearType the thin glyphs
+    // drawn by wx (the chevron of a combo box) had coloured fringes, orange
+    // over a dark ground, beside those of the WinUI controls.
+    lf.lfQuality = ANTIALIASED_QUALITY;
+#else
     lf.lfQuality = wxSystemOptions::GetOptionInt("msw.font.no-proof-quality")
                     ? DEFAULT_QUALITY
                     : PROOF_QUALITY;
+#endif
 
     pointSize = 0;
 }

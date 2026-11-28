@@ -33,6 +33,15 @@ public:
     virtual void StartPage() override;
     virtual void EndPage() override;
 
+    bool WasLastStartDocCancelled() const
+        { return m_lastStartDocWasCancelled; }
+    bool WasLastEndDocSuccessful() const
+        { return m_lastEndDocSuccessful; }
+    bool WasLastStartPageSuccessful() const
+        { return m_lastStartPageSuccessful; }
+    bool WasLastEndPageSuccessful() const
+        { return m_lastEndPageSuccessful; }
+
     virtual wxRect GetPaperRect() const override;
 
     virtual wxSize FromDIP(const wxSize& sz) const override;
@@ -59,6 +68,10 @@ protected:
     void Init();
 
     wxPrintData m_printData;
+    bool m_lastStartDocWasCancelled = false;
+    bool m_lastEndDocSuccessful = true;
+    bool m_lastStartPageSuccessful = true;
+    bool m_lastEndPageSuccessful = true;
 
 private:
     wxDECLARE_CLASS(wxPrinterDCImpl);

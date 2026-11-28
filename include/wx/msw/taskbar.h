@@ -56,6 +56,9 @@ public:
 
 protected:
     friend class wxTaskBarIconWindow;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUITaskBarIconSidecarAccess;
+#endif
 
     long WindowProc(unsigned int msg, unsigned int wParam, long lParam);
     void RegisterWindowMessages();
@@ -74,6 +77,13 @@ protected:
     wxString             m_strTooltip;
 
 private:
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The hidden frame is a TLW and can therefore be destroyed independently
+    // of this object during application shutdown. Keep the raw compatibility
+    // member synchronized with its actual lifetime.
+    void MSWOnTaskBarIconWindowDestroyed(wxTaskBarIconWindow *window);
+#endif
+
     enum Operation
     {
         Operation_Add,

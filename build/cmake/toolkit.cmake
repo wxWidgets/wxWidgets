@@ -20,7 +20,7 @@ endif()
 
 if(WIN32)
     set(wxDEFAULT_TOOLKIT msw)
-    set(wxTOOLKIT_OPTIONS msw gtk2 gtk3 qt)
+    set(wxTOOLKIT_OPTIONS msw winui gtk2 gtk3 qt)
     set(wxPLATFORM WIN32)
 elseif(APPLE AND IPHONE)
     set(wxDEFAULT_TOOLKIT osx_iphone)
@@ -50,11 +50,30 @@ if(wxBUILD_TOOLKIT MATCHES "^gtk*")
     set(WXGTK ON)
 elseif(wxBUILD_TOOLKIT MATCHES "^osx*")
     set(WXOSX ON)
+elseif(wxBUILD_TOOLKIT MATCHES "winui")
+    # wxWinUI is an experimental layer on top of the wxMSW port for now.
+    set(WXWINUI ON)
+    set(WXMSW ON)
 elseif(wxBUILD_TOOLKIT MATCHES "qt")
     set(WXQT ON)
 endif()
 
-set(wxTOOLKIT_DEFINITIONS __WX${wxBUILD_TOOLKIT_UPPER}__)
+if(WXWINUI)
+    set(wxTOOLKIT_DEFINITIONS __WXWINUI__ __WXMSW__)
+
+    # C++/WinRT reaches <experimental/coroutine> for its coroutine support,
+    # which the MSVC standard library of Visual Studio 2026 refuses to compile
+    # without this: it is a static assertion, not a warning, so the build stops
+    # in the generated projection headers before any of our code is seen.
+    # C++/WinRT is a build requirement of this port, so the port carries the
+    # acknowledgement rather than asking everyone who builds it to pass a flag.
+    if(MSVC)
+        list(APPEND wxTOOLKIT_DEFINITIONS
+             _SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+    endif()
+else()
+    set(wxTOOLKIT_DEFINITIONS __WX${wxBUILD_TOOLKIT_UPPER}__)
+endif()
 
 if(NOT wxUSE_GUI)
     set(wxBUILD_TOOLKIT "base")

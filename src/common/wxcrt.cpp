@@ -115,13 +115,61 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #endif
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+namespace
+{
+
+// See wxKeepCNumericLocale() below.
+bool gs_keepCNumericLocale = false;
+
+} // anonymous namespace
+
+void wxKeepCNumericLocale(bool keep)
+{
+    gs_keepCNumericLocale = keep;
+    if ( keep )
+        setlocale(LC_NUMERIC, "C");
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 char* wxSetlocale(int category, const char *locale)
 {
     char *rv = setlocale(category, locale);
+    bool queryEffectiveLocale = false;
     if ( locale != nullptr /* setting locale, not querying */ &&
          rv /* call was successful */ )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The WinUI runtime builds XAML markup fragments (the path data of the
+        // geometries in its own control templates, for example) by formatting
+        // numbers with the C locale of the process. With a decimal comma the
+        // resulting text doesn't parse, and because this happens inside XAML's
+        // own layout pass the failure is fatal: the process is terminated with
+        // a stowed exception before anything can catch it.
+        //
+        // So once the WinUI runtime is in use LC_NUMERIC has to stay "C", in
+        // the same way GTK+ requires it and wxGTK prevents GTK+ from changing
+        // it. Applications not using the runtime are not affected.
+        if ( gs_keepCNumericLocale &&
+             (category == LC_ALL || category == LC_NUMERIC) )
+        {
+            // setlocale() returns an internal buffer which a subsequent call
+            // may overwrite. Return the effective locale after restoring the
+            // invariant, not the requested value nor a stale pointer to it.
+            rv = setlocale(LC_NUMERIC, "C");
+            queryEffectiveLocale = rv != nullptr;
+        }
+#endif // __WXWINUI__
+
         wxUpdateLocaleIsUtf8();
+
+        // wxUpdateLocaleIsUtf8() can itself query the CRT locale. Make this
+        // the final setlocale() call so the returned pointer remains valid
+        // according to the CRT contract until the application's next call.
+        if ( queryEffectiveLocale )
+            rv = setlocale(category, nullptr);
     }
     return rv;
 }

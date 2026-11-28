@@ -53,6 +53,12 @@ public:
 
     long GetValue() const { return m_value; }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Shown over its parent, as a ContentDialog, when the program asked for
+    // that presentation of its dialogs (wxWinUISetDialogPresentation()).
+    int ShowModal() override;
+#endif
+
     // implementation only
     void OnOK(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
@@ -66,6 +72,11 @@ protected:
 #endif // wxUSE_SPINCTRL
 
     long m_value, m_min, m_max;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxString m_winuiMessage;
+    wxString m_winuiPrompt;
+#endif
 
 private:
     wxDECLARE_EVENT_TABLE();

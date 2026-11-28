@@ -65,6 +65,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/statbox.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/statbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statbox.h"
 #elif defined(__WXGTK__)

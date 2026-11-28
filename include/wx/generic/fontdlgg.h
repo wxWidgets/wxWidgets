@@ -39,9 +39,17 @@ class WXDLLIMPEXP_CORE wxGenericFontDialog : public wxFontDialogBase
 public:
     wxGenericFontDialog() { Init(); }
     wxGenericFontDialog(wxWindow *parent)
-        : wxFontDialogBase(parent) { Init(); }
+        : wxFontDialogBase(parent)
+    {
+        Init();
+        (void)Create(parent);
+    }
     wxGenericFontDialog(wxWindow *parent, const wxFontData& data)
-        : wxFontDialogBase(parent, data) { Init(); }
+        : wxFontDialogBase(parent, data)
+    {
+        Init();
+        (void)Create(parent);
+    }
     virtual ~wxGenericFontDialog();
 
     virtual int ShowModal() override;
@@ -70,6 +78,7 @@ private:
     void DoChangeFont();
 
     wxFont m_dialogFont;
+    wxColour m_dialogColour;
 
     wxChoice *m_familyChoice;
     wxChoice *m_styleChoice;

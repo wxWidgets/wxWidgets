@@ -98,6 +98,9 @@ public:
     // is selected (or the next page if no parent).
     virtual bool DeletePage(size_t pos) override;
 
+    // Removes the page and ALL its children without deleting the root page.
+    virtual bool RemovePage(size_t pos) override;
+
 
     // Tree operations
     // ---------------
@@ -150,6 +153,8 @@ protected:
     wxVector<wxTreeItemId> m_treeIds;
 
 private:
+    bool DoRemovePageAndReport(size_t pos, wxTreebookPage** removedPage);
+
     // The real implementations of page insertion functions
     // ------------------------------------------------------
     // All DoInsert/Add(Sub)Page functions add the page into :

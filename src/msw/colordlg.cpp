@@ -21,6 +21,8 @@
 
 #if wxUSE_COLOURDLG
 
+#ifndef __WXWINUI__
+
 #include "wx/colordlg.h"
 #include "wx/modalhook.h"
 
@@ -355,5 +357,7 @@ void wxColourDialog::MSWCheckIfCurrentChanged(WXCOLORREF currentCol)
     wxColourDialogEvent event(wxEVT_COLOUR_CHANGED, this, wxRGBToColour(currentCol));
     ProcessWindowEvent(event);
 }
+
+#endif // !__WXWINUI__
 
 #endif // wxUSE_COLOURDLG

@@ -39,8 +39,20 @@ class WXDLLIMPEXP_BASE wxTrackable
 public:
     void AddNode(wxTrackerNode *prn)
     {
+        // The node is deliberately linked into the tracked object and removes
+        // itself again from its destructor. GCC 12 can nevertheless diagnose
+        // storing a pointer to a stack-allocated wxWeakRef node here as an
+        // escaped dangling pointer.
+#if wxCHECK_GCC_VERSION(12,1)
+        wxGCC_ONLY_WARNING_SUPPRESS(dangling-pointer)
+#endif
+
         prn->m_nxt = m_first;
         m_first = prn;
+
+#if wxCHECK_GCC_VERSION(12,1)
+        wxGCC_ONLY_WARNING_RESTORE(dangling-pointer)
+#endif
     }
 
     void RemoveNode(wxTrackerNode *prn)

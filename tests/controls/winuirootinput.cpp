@@ -1,0 +1,925 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        tests/controls/winuirootinput.cpp
+// Purpose:     adapter-level tests of the WinUI root pointer router
+// Author:      wxWidgets development team
+// Created:     2026-07-23
+// Copyright:   (c) wxWidgets development team
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
+
+#include "testprec.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/cursor.h"
+    #include "wx/button.h"
+    #include "wx/frame.h"
+    #include "wx/panel.h"
+    #include "wx/window.h"
+    #include "wx/utils.h"
+#endif // WX_PRECOMP
+
+#include "wx/splitter.h"
+
+#include "wx/msw/private.h"
+#include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
+#include "host-cursor-test-access.h"
+#include "host-input-test-access.h"
+
+#include <functional>
+#include <memory>
+#include <utility>
+
+namespace
+{
+
+void DrainRootInputDispatch(int rounds = 8)
+{
+    for ( int i = 0; i != rounds; ++i )
+    {
+        wxYield();
+        wxMilliSleep(2);
+    }
+}
+
+class RootRouteWindow : public wxWindow
+{
+public:
+    RootRouteWindow(wxWindow *parent,
+                    const wxPoint& pos,
+                    const wxSize& size)
+        : wxWindow(parent, wxID_ANY, pos, size)
+    {
+    }
+
+    void SetHitTest(LRESULT hitTest) { m_hitTest = hitTest; }
+    void OnNextSetCursor(std::function<void ()> callback)
+        { m_setCursorCallback = std::move(callback); }
+    void OnNextCancelMode(std::function<void ()> callback)
+        { m_cancelModeCallback = std::move(callback); }
+    void OnNextPointerMessage(std::function<void (UINT, WPARAM, LPARAM)> callback)
+        { m_pointerCallback = std::move(callback); }
+    void ClearSetCursorCallback() { m_setCursorCallback = nullptr; }
+    void ClearCancelModeCallback() { m_cancelModeCallback = nullptr; }
+    void ClearPointerCallback() { m_pointerCallback = nullptr; }
+    bool HasSetCursorCallback() const
+        { return static_cast<bool>(m_setCursorCallback); }
+    bool HasCancelModeCallback() const
+        { return static_cast<bool>(m_cancelModeCallback); }
+    void CaptureOnButtonDown(bool enable = true)
+        { m_captureOnButtonDown = enable; }
+
+    unsigned GetMoveCount() const { return m_moveCount; }
+    unsigned GetWheelCount() const { return m_wheelCount; }
+    unsigned GetLeaveCount() const { return m_leaveCount; }
+    unsigned GetSetCursorCount() const { return m_setCursorCount; }
+    unsigned GetCancelModeCount() const { return m_cancelModeCount; }
+    unsigned GetLeftDownCount() const { return m_leftDownCount; }
+    unsigned GetRightDownCount() const { return m_rightDownCount; }
+    unsigned GetMiddleDownCount() const { return m_middleDownCount; }
+    unsigned GetLeftUpCount() const { return m_leftUpCount; }
+    unsigned GetMiddleUpCount() const { return m_middleUpCount; }
+
+    WXLRESULT MSWWindowProc(WXUINT message,
+                            WXWPARAM wParam,
+                            WXLPARAM lParam) override
+    {
+        switch ( message )
+        {
+            case WM_NCHITTEST:
+                return m_hitTest;
+
+            case WM_SETCURSOR:
+            {
+                ++m_setCursorCount;
+                std::function<void ()> callback =
+                    std::move(m_setCursorCallback);
+                m_setCursorCallback = nullptr;
+                if ( callback )
+                    callback();
+                break;
+            }
+
+            case WM_MOUSEMOVE:
+            case WM_NCMOUSEMOVE:
+                ++m_moveCount;
+                CallPointerCallback(message, wParam, lParam);
+                break;
+
+            case WM_MOUSEWHEEL:
+            case WM_MOUSEHWHEEL:
+                ++m_wheelCount;
+                CallPointerCallback(message, wParam, lParam);
+                break;
+
+            case WM_MOUSELEAVE:
+            case WM_NCMOUSELEAVE:
+                ++m_leaveCount;
+                break;
+
+            case WM_LBUTTONDOWN:
+                ++m_leftDownCount;
+                if ( m_captureOnButtonDown )
+                    ::SetCapture(GetHwndOf(this));
+                return 0;
+
+            case WM_RBUTTONDOWN:
+                ++m_rightDownCount;
+                if ( m_captureOnButtonDown )
+                    ::SetCapture(GetHwndOf(this));
+                return 0;
+
+            case WM_MBUTTONDOWN:
+                ++m_middleDownCount;
+                if ( m_captureOnButtonDown )
+                    ::SetCapture(GetHwndOf(this));
+                return 0;
+
+            case WM_LBUTTONUP:
+                ++m_leftUpCount;
+                if ( ::GetCapture() == GetHwndOf(this) )
+                    ::ReleaseCapture();
+                return 0;
+
+            case WM_MBUTTONUP:
+                ++m_middleUpCount;
+                if ( ::GetCapture() == GetHwndOf(this) )
+                    ::ReleaseCapture();
+                return 0;
+
+            case WM_CANCELMODE:
+            {
+                ++m_cancelModeCount;
+                std::function<void ()> callback =
+                    std::move(m_cancelModeCallback);
+                m_cancelModeCallback = nullptr;
+                if ( callback )
+                    callback();
+                // Do not let DefWindowProc release capture established by a
+                // nested replacement gesture: the host owns that decision.
+                return 0;
+            }
+        }
+
+        return wxWindow::MSWWindowProc(message, wParam, lParam);
+    }
+
+private:
+    void CallPointerCallback(UINT message, WPARAM wParam, LPARAM lParam)
+    {
+        // A single reflection is enough to detect a missing guard without
+        // reproducing the user's unbounded stack overflow in the test runner.
+        const auto callback = std::move(m_pointerCallback);
+        m_pointerCallback = nullptr;
+        if ( callback )
+            callback(message, wParam, lParam);
+    }
+
+    LRESULT m_hitTest = HTCLIENT;
+    std::function<void ()> m_setCursorCallback;
+    std::function<void ()> m_cancelModeCallback;
+    std::function<void (UINT, WPARAM, LPARAM)> m_pointerCallback;
+    bool m_captureOnButtonDown = false;
+    unsigned m_moveCount = 0;
+    unsigned m_wheelCount = 0;
+    unsigned m_leaveCount = 0;
+    unsigned m_setCursorCount = 0;
+    unsigned m_cancelModeCount = 0;
+    unsigned m_leftDownCount = 0;
+    unsigned m_rightDownCount = 0;
+    unsigned m_middleDownCount = 0;
+    unsigned m_leftUpCount = 0;
+    unsigned m_middleUpCount = 0;
+};
+
+class WinUIRootInputFixture
+{
+public:
+    WinUIRootInputFixture()
+    {
+        m_frame = new wxFrame(nullptr, wxID_ANY, "root-input-test",
+                              wxPoint(-20000, -20000),
+                              wxSize(420, 320));
+        m_frame->SetClientSize(380, 280);
+        m_window = new RootRouteWindow(
+            m_frame, wxPoint(40, 40), wxSize(220, 160));
+        m_window->Show();
+        // Keep the real HWND/XamlRoot visible but outside every monitor and
+        // never activate it: these adapter tests must not race the user's
+        // physical pointer or steal foreground focus.
+        m_frame->ShowWithoutActivating();
+        DrainRootInputDispatch();
+
+        m_host = wxWinUITopLevelHost::ForWindow(m_frame, true);
+        REQUIRE(m_host != nullptr);
+        DrainRootInputDispatch();
+    }
+
+    ~WinUIRootInputFixture()
+    {
+        if ( m_window )
+        {
+            m_window->ClearSetCursorCallback();
+            m_window->ClearCancelModeCallback();
+            m_window->ClearPointerCallback();
+        }
+        if ( m_frame )
+        {
+            m_frame->Destroy();
+            DrainRootInputDispatch();
+        }
+    }
+
+    wxWinUIPointerSample Sample() const
+    {
+        RECT rect;
+        REQUIRE(::GetWindowRect(GetHwndOf(m_window), &rect) != 0);
+
+        wxWinUIPointerSample sample;
+        sample.device = wxWinUIInputDevice::Mouse;
+        sample.kind = wxWinUIInputKind::Move;
+        sample.pointerId = 1;
+        sample.isPrimary = true;
+        sample.screenX = (rect.left + rect.right) / 2;
+        sample.screenY = (rect.top + rect.bottom) / 2;
+        sample.timestamp = ::GetTickCount64();
+        return sample;
+    }
+
+protected:
+    wxFrame *m_frame = nullptr;
+    RootRouteWindow *m_window = nullptr;
+    wxWinUITopLevelHost *m_host = nullptr;
+};
+
+} // anonymous namespace
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::ForwardedPointerEchoDoesNotReenterTheRoute",
+    "[winui-root-input][native-pointer-echo]")
+{
+    wxWinUIPointerSample sample = Sample();
+    wxWinUIPointerSample reflected = sample;
+    UINT expectedMessage = WM_NCMOUSEMOVE;
+    m_window->SetHitTest(HTBORDER);
+    SECTION("non-client border move from the message-dialog crash") { }
+    SECTION("non-client reflection reconstructs its timestamp")
+    {
+        // The dump contains equal positions separated by one millisecond:
+        // this remains the same synchronous Move, not new physical motion.
+        ++reflected.timestamp;
+    }
+    SECTION("non-client reflection lands on a neighbouring pixel")
+    {
+        // The reflected position is converted back from DIPs and can be
+        // rounded differently. It is still the same synchronous Move:
+        // treating it as new input is what recursed until the stack
+        // overflowed when the pointer left a dialog.
+        ++reflected.screenX;
+        --reflected.screenY;
+        ++reflected.timestamp;
+    }
+    SECTION("client move")
+    {
+        m_window->SetHitTest(HTCLIENT);
+        expectedMessage = WM_MOUSEMOVE;
+    }
+    SECTION("vertical wheel")
+    {
+        sample.kind = wxWinUIInputKind::Wheel;
+        sample.wheelDelta = WHEEL_DELTA;
+        expectedMessage = WM_MOUSEWHEEL;
+    }
+    SECTION("horizontal wheel")
+    {
+        sample.kind = wxWinUIInputKind::Wheel;
+        sample.wheelDelta = -WHEEL_DELTA;
+        sample.horizontalWheel = true;
+        expectedMessage = WM_MOUSEHWHEEL;
+    }
+
+    wxWinUIRootPointerOutcome echo;
+    unsigned callbacks = 0;
+    m_window->OnNextPointerMessage(
+        [&](UINT message, WPARAM wParam, LPARAM lParam)
+        {
+            ++callbacks;
+            CHECK(message == expectedMessage);
+            if ( message == WM_NCMOUSEMOVE )
+            {
+                CHECK(wParam == HTBORDER);
+                CHECK(static_cast<short>(LOWORD(lParam)) == sample.screenX);
+                CHECK(static_cast<short>(HIWORD(lParam)) == sample.screenY);
+            }
+            // This is the exact normalized packet re-emitted synchronously
+            // by Microsoft.UI.Input while the native SendMessage is active.
+            reflected.kind = sample.kind;
+            reflected.wheelDelta = sample.wheelDelta;
+            reflected.horizontalWheel = sample.horizontalWheel;
+            echo = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *m_host, reflected);
+        });
+
+    const auto outer = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *m_host, sample);
+    REQUIRE(callbacks == 1);
+    CHECK(outer.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(outer.disposition == wxWinUIInputDisposition::Routed);
+    CHECK(echo.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(echo.cancelSource);
+    CHECK(echo.preparedActionCount == 0);
+    CHECK(m_window->GetMoveCount() ==
+          (sample.kind == wxWinUIInputKind::Move ? 1u : 0u));
+    CHECK(m_window->GetWheelCount() ==
+          (sample.kind == wxWinUIInputKind::Wheel ? 1u : 0u));
+
+    // No timestamp-based debounce persists after SendMessage returns. The
+    // same coordinates/packet may be delivered normally outside that scope.
+    const auto later = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *m_host, sample);
+    CHECK(later.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(m_window->GetMoveCount() ==
+          (sample.kind == wxWinUIInputKind::Move ? 2u : 0u));
+    CHECK(m_window->GetWheelCount() ==
+          (sample.kind == wxWinUIInputKind::Wheel ? 2u : 0u));
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::NewInputInsideForwardedMessageStillSupersedes",
+    "[winui-root-input][native-pointer-echo]")
+{
+    m_window->SetHitTest(HTBORDER);
+    wxWinUIPointerSample outer = Sample();
+    wxWinUIPointerSample nested = outer;
+    SECTION("a later wheel packet at the same position")
+    {
+        outer.kind = nested.kind = wxWinUIInputKind::Wheel;
+        outer.wheelDelta = nested.wheelDelta = WHEEL_DELTA;
+        ++nested.timestamp;
+    }
+    SECTION("a different position at the same timestamp") { ++nested.screenX; }
+    SECTION("a different pointer") { ++nested.pointerId; }
+    SECTION("different modifier state") { nested.modifiers = MK_SHIFT; }
+
+    wxWinUIRootPointerOutcome nestedResult;
+    unsigned callbacks = 0;
+    m_window->OnNextPointerMessage(
+        [&](UINT, WPARAM, LPARAM)
+        {
+            ++callbacks;
+            // New physical input reaches the thread through its message
+            // queue: a handler which receives some has retrieved a message.
+            // Without that retrieval the router rightly takes a same-kind
+            // sample for the reflection of the message being sent.
+            wxWinUINoteMessagePumped();
+            nestedResult = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *m_host, nested);
+        });
+    const auto result = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *m_host, outer);
+    REQUIRE(callbacks == 1);
+    CHECK(nestedResult.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(nestedResult.preparedActionCount != 0);
+    CHECK(result.status == wxWinUIRootPointerStatus::Superseded);
+    CHECK(m_window->GetMoveCount() ==
+          (outer.kind == wxWinUIInputKind::Move ? 2u : 0u));
+    CHECK(m_window->GetWheelCount() ==
+          (outer.kind == wxWinUIInputKind::Wheel ? 2u : 0u));
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::NestedMovementCanReturnToTheOriginalPosition",
+    "[winui-root-input][native-pointer-echo]")
+{
+    m_window->SetHitTest(HTBORDER);
+    const auto first = Sample();
+    auto second = first;
+    ++second.screenX;
+    ++second.timestamp;
+    auto returned = first;
+    returned.timestamp += 2;
+    wxWinUIRootPointerOutcome secondResult;
+    wxWinUIRootPointerOutcome returnedResult;
+    m_window->OnNextPointerMessage(
+        [&](UINT, WPARAM, LPARAM)
+        {
+            // As above: both nested moves are new input retrieved from the
+            // queue by a handler which pumps messages.
+            wxWinUINoteMessagePumped();
+            secondResult = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *m_host, second);
+            // The first SendMessage is still active, but the intervening B
+            // transition retired its echo qualification. Returning to A is
+            // now a real new transition, not a reflection of the old Move.
+            returnedResult = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *m_host, returned);
+        });
+    const auto firstResult = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *m_host, first);
+    CHECK(secondResult.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(returnedResult.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(secondResult.preparedActionCount != 0);
+    CHECK(returnedResult.preparedActionCount != 0);
+    CHECK(firstResult.status == wxWinUIRootPointerStatus::Superseded);
+    CHECK(m_window->GetMoveCount() == 3);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::ForwardedMessageAllowsNewCaptureAndBalancedRelease",
+    "[winui-root-input][native-pointer-echo]")
+{
+    const auto outer = Sample();
+    wxWinUIPointerSample press = outer;
+    press.kind = wxWinUIInputKind::Press;
+    press.button = wxWinUIInputButton::Left;
+    press.buttonMask = MK_LBUTTON;
+    ++press.timestamp;
+    m_window->CaptureOnButtonDown();
+    wxWinUIRootPointerOutcome down;
+    m_window->OnNextPointerMessage(
+        [&](UINT, WPARAM, LPARAM)
+        {
+            down = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *m_host, press);
+        });
+    const auto result = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *m_host, outer);
+    REQUIRE(down.status == wxWinUIRootPointerStatus::Completed);
+    REQUIRE(down.pointerDispatch.gestureSerial != 0);
+    CHECK(result.status == wxWinUIRootPointerStatus::Superseded);
+    CHECK(m_window->GetLeftDownCount() == 1);
+    CHECK(::GetCapture() == GetHwndOf(m_window));
+
+    wxWinUIPointerSample release = press;
+    release.kind = wxWinUIInputKind::Release;
+    release.buttonMask = 0;
+    ++release.timestamp;
+    const auto up = wxWinUIHostInputTestAccess::RouteRootPointerSample(
+        *m_host, release);
+    CHECK(up.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(up.pointerDispatch.balancesPress);
+    CHECK(up.pointerDispatch.gestureSerial == down.pointerDispatch.gestureSerial);
+    CHECK(m_window->GetLeftUpCount() == 1);
+    CHECK(::GetCapture() == nullptr);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::RefreshFailureRollsBackUnpublishedHover",
+    "[winui-root-input]")
+{
+    wxWinUIPointerSample sample = Sample();
+    m_window->OnNextSetCursor(
+        [this]()
+        {
+            // MirrorNativeCursor() is callback-bearing. Change only the hit
+            // zone while keeping the same live HWND and geometry so the
+            // post-callback refresh, not identity validation, rejects it.
+            m_window->SetHitTest(HTVSCROLL);
+        });
+
+    const wxWinUIRootPointerOutcome rejected =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
+    CHECK_FALSE(m_window->HasSetCursorCallback());
+    CHECK(rejected.status == wxWinUIRootPointerStatus::FailedClosed);
+    CHECK(rejected.disposition == wxWinUIInputDisposition::Routed);
+    CHECK(rejected.preparedActionCount == 2);
+    CHECK(rejected.cancelSource);
+    CHECK(m_window->GetSetCursorCount() == 1);
+    CHECK(m_window->GetMoveCount() == 0);
+    CHECK(m_window->GetLeaveCount() == 0);
+
+    // The failed dispatch must have rolled back both semantic and native
+    // hover prefixes. A clean sample enters and publishes exactly once.
+    m_window->SetHitTest(HTCLIENT);
+    ++sample.timestamp;
+    const wxWinUIRootPointerOutcome delivered =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
+    CHECK(delivered.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(delivered.disposition == wxWinUIInputDisposition::Routed);
+    CHECK(delivered.preparedActionCount == 2);
+    CHECK(m_window->GetMoveCount() == 1);
+    CHECK(m_window->GetLeaveCount() == 0);
+
+    // Moving to XAML retires the published native hover exactly once.
+    ++sample.timestamp;
+    const wxWinUIRootPointerOutcome xaml =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample, true);
+    CHECK(xaml.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(xaml.disposition == wxWinUIInputDisposition::Xaml);
+    CHECK(xaml.preparedActionCount == 1);
+    CHECK(m_window->GetMoveCount() == 1);
+    CHECK(m_window->GetLeaveCount() == 1);
+
+    ++sample.timestamp;
+    const wxWinUIRootPointerOutcome repeatedXaml =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample, true);
+    CHECK(repeatedXaml.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(repeatedXaml.preparedActionCount == 0);
+    CHECK(m_window->GetLeaveCount() == 1);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::SetCursorReentranceSupersedesOuter",
+    "[winui-root-input]")
+{
+    wxWinUIPointerSample outer = Sample();
+    struct ReentryState
+    {
+        wxWinUIPointerSample sample;
+        wxWinUIRootPointerOutcome outcome;
+        bool called = false;
+    };
+    const std::shared_ptr<ReentryState> reentry =
+        std::make_shared<ReentryState>();
+    reentry->sample = outer;
+    ++reentry->sample.timestamp;
+
+    m_window->OnNextSetCursor(
+        [this, reentry]()
+        {
+            reentry->called = true;
+            reentry->outcome =
+                wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                    *m_host, reentry->sample, true);
+        });
+
+    const wxWinUIRootPointerOutcome outerOutcome =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, outer);
+    CHECK_FALSE(m_window->HasSetCursorCallback());
+    REQUIRE(reentry->called);
+    CHECK(reentry->outcome.status ==
+          wxWinUIRootPointerStatus::Completed);
+    CHECK(reentry->outcome.disposition ==
+          wxWinUIInputDisposition::Xaml);
+    CHECK(outerOutcome.status == wxWinUIRootPointerStatus::Superseded);
+    CHECK(outerOutcome.disposition == wxWinUIInputDisposition::Routed);
+    CHECK(outerOutcome.cancelSource);
+    CHECK(m_window->GetMoveCount() == 0);
+    CHECK(m_window->GetLeaveCount() == 0);
+
+    // The nested transition won and the stale outer dispatch stayed silent.
+    // A later authoritative native sample can establish hover normally.
+    outer.timestamp += 2;
+    const wxWinUIRootPointerOutcome recovered =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, outer);
+    CHECK(recovered.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(recovered.disposition == wxWinUIInputDisposition::Routed);
+    CHECK(recovered.preparedActionCount == 2);
+    CHECK(m_window->GetMoveCount() == 1);
+    CHECK(m_window->GetLeaveCount() == 0);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::DynamicSetCursorHandlerInvalidatesNegativeVerdict",
+    "[winui-root-input]")
+{
+    wxWinUIPointerSample sample = Sample();
+    const wxWinUIRootPointerOutcome initial =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
+    REQUIRE(initial.status == wxWinUIRootPointerStatus::Completed);
+
+    const unsigned setCursorBefore = m_window->GetSetCursorCount();
+    const unsigned movesBefore = m_window->GetMoveCount();
+    bool handlerCalled = false;
+    m_window->Bind(
+        wxEVT_SET_CURSOR,
+        [&handlerCalled](wxSetCursorEvent& event)
+        {
+            handlerCalled = true;
+            event.SetCursor(wxCursor(wxCURSOR_HAND));
+        });
+
+    ++sample.screenX;
+    ++sample.timestamp;
+    const wxWinUIRootPointerOutcome afterBind =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
+
+    CHECK(afterBind.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(handlerCalled);
+    CHECK(m_window->GetSetCursorCount() == setCursorBefore + 1);
+    CHECK(m_window->GetMoveCount() == movesBefore + 1);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::ModalBoundaryCancelsEveryButtonBeforeReentry",
+    "[winui-root-input]")
+{
+    m_window->CaptureOnButtonDown();
+
+    wxWinUIPointerSample left = Sample();
+    left.kind = wxWinUIInputKind::Press;
+    left.button = wxWinUIInputButton::Left;
+    left.buttonMask = MK_LBUTTON;
+    const wxWinUIRootPointerOutcome leftDown =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, left);
+    REQUIRE(leftDown.status == wxWinUIRootPointerStatus::Completed);
+    REQUIRE(leftDown.pointerDispatch.gestureSerial != 0);
+    REQUIRE(leftDown.pointerDispatch.button ==
+            wxWinUIInputButton::Left);
+    CHECK(m_window->GetLeftDownCount() == 1);
+    CHECK(::GetCapture() == GetHwndOf(m_window));
+
+    wxWinUIPointerSample right = left;
+    ++right.timestamp;
+    right.button = wxWinUIInputButton::Right;
+    right.buttonMask = MK_LBUTTON | MK_RBUTTON;
+    const wxWinUIRootPointerOutcome rightDown =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, right);
+    REQUIRE(rightDown.status == wxWinUIRootPointerStatus::Completed);
+    REQUIRE(rightDown.pointerDispatch.gestureSerial != 0);
+    REQUIRE(rightDown.pointerDispatch.button ==
+            wxWinUIInputButton::Right);
+    CHECK(m_window->GetRightDownCount() == 1);
+
+    // These are the exact committed actions returned by the production
+    // state machine, including their serials; no synthetic PressState is
+    // fabricated by this test.
+    REQUIRE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(
+        *m_host, leftDown.pointerDispatch));
+    REQUIRE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(
+        *m_host, rightDown.pointerDispatch));
+    REQUIRE(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*m_host) == 2);
+
+    struct CancelReentryState
+    {
+        wxWinUIPointerSample press;
+        wxWinUIRootPointerOutcome outcome;
+        bool called = false;
+    };
+    const std::shared_ptr<CancelReentryState> reentry =
+        std::make_shared<CancelReentryState>();
+    reentry->press = left;
+    reentry->press.timestamp = right.timestamp + 1;
+    reentry->press.button = wxWinUIInputButton::Middle;
+    reentry->press.buttonMask = MK_MBUTTON;
+
+    // The first old WM_CANCELMODE starts an independent middle-button
+    // gesture. (The exact old left button remains tombstoned until this
+    // callback returns and is intentionally not reusable yet.) The outer
+    // executor must emergency-acknowledge the second old tombstone without
+    // releasing or canceling this nested capture/press.
+    m_window->OnNextCancelMode(
+        [this, reentry]()
+        {
+            reentry->called = true;
+            reentry->outcome =
+                wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, reentry->press);
+        });
+
+    wxWinUIPointerSample leave = right;
+    ++leave.timestamp;
+    leave.button = wxWinUIInputButton::None;
+    const bool boundaryCompleted =
+        wxWinUIHostInputTestAccess::RouteRootPointerBoundary(*m_host, false, leave);
+    CHECK_FALSE(boundaryCompleted);
+    CHECK_FALSE(m_window->HasCancelModeCallback());
+    REQUIRE(reentry->called);
+    CHECK(reentry->outcome.status ==
+          wxWinUIRootPointerStatus::Completed);
+    CHECK(reentry->outcome.pointerDispatch.gestureSerial != 0);
+    CHECK(reentry->outcome.pointerDispatch.gestureSerial !=
+          leftDown.pointerDispatch.gestureSerial);
+    CHECK(m_window->GetMiddleDownCount() == 1);
+    CHECK(m_window->GetCancelModeCount() == 2);
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*m_host) == 0);
+    CHECK(::GetCapture() == GetHwndOf(m_window));
+
+    wxWinUIPointerSample release = reentry->press;
+    ++release.timestamp;
+    release.kind = wxWinUIInputKind::Release;
+    release.buttonMask = 0;
+    const wxWinUIRootPointerOutcome released =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, release);
+    CHECK(released.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(released.pointerDispatch.balancesPress);
+    CHECK(released.pointerDispatch.gestureSerial ==
+          reentry->outcome.pointerDispatch.gestureSerial);
+    CHECK(m_window->GetMiddleUpCount() == 1);
+    CHECK(m_window->GetLeftUpCount() == 0);
+    CHECK(m_window->GetCancelModeCount() == 2);
+    CHECK(::GetCapture() == nullptr);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::CaptureLossAndReleaseOutside",
+    "[winui-root-input]")
+{
+    m_window->CaptureOnButtonDown();
+
+    wxWinUIPointerSample press = Sample();
+    press.kind = wxWinUIInputKind::Press;
+    press.button = wxWinUIInputButton::Left;
+    press.buttonMask = MK_LBUTTON;
+    const wxWinUIRootPointerOutcome down =
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, press);
+    REQUIRE(down.status == wxWinUIRootPointerStatus::Completed);
+    REQUIRE(down.pointerDispatch.gestureSerial != 0);
+    REQUIRE(::GetCapture() == GetHwndOf(m_window));
+
+    SECTION("release outside remains balanced through capture")
+    {
+        RECT frameRect;
+        REQUIRE(::GetWindowRect(GetHwndOf(m_frame), &frameRect) != 0);
+
+        wxWinUIPointerSample release = press;
+        ++release.timestamp;
+        release.kind = wxWinUIInputKind::Release;
+        release.buttonMask = 0;
+        release.screenX = frameRect.right + 40;
+        release.screenY = frameRect.bottom + 40;
+        const wxWinUIRootPointerOutcome outcome =
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, release);
+        CHECK(outcome.status == wxWinUIRootPointerStatus::Completed);
+        CHECK(outcome.pointerDispatch.balancesPress);
+        CHECK(outcome.pointerDispatch.gestureSerial ==
+              down.pointerDispatch.gestureSerial);
+        CHECK(m_window->GetLeftUpCount() == 1);
+        CHECK(m_window->GetCancelModeCount() == 0);
+        CHECK(::GetCapture() == nullptr);
+    }
+
+    SECTION("lost native capture cancels the exact press once")
+    {
+        REQUIRE(::ReleaseCapture() != 0);
+
+        wxWinUIPointerSample lost = press;
+        ++lost.timestamp;
+        lost.kind = wxWinUIInputKind::CaptureLost;
+        lost.button = wxWinUIInputButton::None;
+        lost.buttonMask = 0;
+        wxWinUIHostInputTestAccess::HandleRootPointerInterrupted(*m_host, true, lost);
+        CHECK(m_window->GetCancelModeCount() == 1);
+        CHECK(::GetCapture() == nullptr);
+
+        wxWinUIPointerSample lateRelease = lost;
+        ++lateRelease.timestamp;
+        lateRelease.kind = wxWinUIInputKind::Release;
+        lateRelease.button = wxWinUIInputButton::Left;
+        const wxWinUIRootPointerOutcome outcome =
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, lateRelease);
+        CHECK(outcome.status == wxWinUIRootPointerStatus::Completed);
+        CHECK_FALSE(outcome.pointerDispatch.balancesPress);
+        CHECK(m_window->GetLeftUpCount() == 0);
+        CHECK(m_window->GetCancelModeCount() == 1);
+    }
+}
+
+namespace
+{
+
+// wxWindowMSW::HandleSetCursor() asks Windows where the pointer is, and in
+// these tests it is not where the routed samples say: repeat what it does
+// with the position of the sample.
+class SashCursorSplitter : public wxSplitterWindow
+{
+public:
+    explicit SashCursorSplitter(wxWindow *parent)
+        : wxSplitterWindow(parent, wxID_ANY)
+    {
+    }
+
+    void SetPointer(const wxPoint& screen) { m_pointer = screen; }
+
+    WXLRESULT MSWWindowProc(WXUINT message,
+                            WXWPARAM wParam,
+                            WXLPARAM lParam) override
+    {
+        if ( message == WM_SETCURSOR && LOWORD(lParam) == HTCLIENT )
+        {
+            const wxPoint client = ScreenToClient(m_pointer);
+            wxSetCursorEvent event(client.x, client.y);
+            event.SetId(GetId());
+            event.SetEventObject(this);
+            const bool processed = HandleWindowEvent(event);
+
+            HCURSOR hcursor = nullptr;
+            if ( processed && event.HasCursor() )
+                hcursor = GetHcursorOf(event.GetCursor());
+            else if ( !processed && GetCursor().IsOk() )
+                hcursor = GetHcursorOf(GetCursor());
+            if ( !hcursor )
+                hcursor = ::LoadCursor(nullptr, IDC_ARROW);
+            ::SetCursor(hcursor);
+            return TRUE;
+        }
+
+        return wxSplitterWindow::MSWWindowProc(message, wParam, lParam);
+    }
+
+private:
+    wxPoint m_pointer;
+};
+
+} // anonymous namespace
+
+// The sash of a splitter is plain native space between two panes: the pointer
+// reaches it through the root route. Its resize cursor is set from the first
+// move over it and has to hold for as long as the pointer stays there.
+TEST_CASE("WinUIRootInput::SplitterSashKeepsItsResizeCursor",
+          "[winui-root-input][winui-cursor]")
+{
+    wxFrame * const frame =
+        new wxFrame(nullptr, wxID_ANY, "sash-cursor",
+                    wxPoint(-20000, -20000), wxSize(520, 360));
+    SashCursorSplitter * const splitter = new SashCursorSplitter(frame);
+    wxPanel * const left = new wxPanel(splitter);
+    wxPanel * const right = new wxPanel(splitter);
+    new wxButton(left, wxID_ANY, "left", wxPoint(10, 10));
+    new wxButton(right, wxID_ANY, "right", wxPoint(10, 10));
+    splitter->SplitVertically(left, right, 200);
+    frame->ShowWithoutActivating();
+    DrainRootInputDispatch();
+
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(frame, true);
+    REQUIRE(host != nullptr);
+    DrainRootInputDispatch();
+
+    unsigned entered = 0, left_ = 0, moved = 0;
+    splitter->Bind(wxEVT_ENTER_WINDOW,
+                   [&](wxMouseEvent& e) { ++entered; e.Skip(); });
+    splitter->Bind(wxEVT_LEAVE_WINDOW,
+                   [&](wxMouseEvent& e) { ++left_; e.Skip(); });
+    splitter->Bind(wxEVT_MOTION,
+                   [&](wxMouseEvent& e) { ++moved; e.Skip(); });
+
+    namespace MUI = winrt::Microsoft::UI::Input;
+
+    // What the island really shows, whoever set it.
+    const auto shownShape = [host]()
+    {
+        const auto system =
+            wxWinUIHostCursorTestAccess::GetIslandCursor(*host)
+                .try_as<MUI::InputSystemCursor>();
+        return system ? system.CursorShape()
+                      : MUI::InputSystemCursorShape::Arrow;
+    };
+
+    const WXHCURSOR resize = wxCursor(wxCURSOR_SIZEWE).GetHCURSOR();
+    const int sashMiddle =
+        splitter->GetSashPosition() + splitter->GetSashSize() / 2;
+
+    wxWinUIPointerSample sample;
+    sample.device = wxWinUIInputDevice::Mouse;
+    sample.kind = wxWinUIInputKind::Move;
+    sample.pointerId = 1;
+    sample.isPrimary = true;
+    sample.timestamp = ::GetTickCount64();
+
+    for ( int step = 0; step != 4; ++step )
+    {
+        const wxPoint screen =
+            splitter->ClientToScreen(wxPoint(sashMiddle, 60 + 3 * step));
+        sample.screenX = screen.x;
+        sample.screenY = screen.y;
+        sample.timestamp += 16;
+        splitter->SetPointer(screen);
+
+        INFO("step " << step);
+        if ( step )
+        {
+            // The root canvas has no cursor of its own, so XAML sets the
+            // arrow before raising each of its pointer events.
+            REQUIRE(wxWinUIHostCursorTestAccess::OverwriteIslandCursor(
+                *host,
+                MUI::InputSystemCursor::Create(
+                    MUI::InputSystemCursorShape::Arrow)));
+        }
+        const wxWinUIRootPointerOutcome outcome =
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(*host, sample);
+        CHECK(outcome.status == wxWinUIRootPointerStatus::Completed);
+        CHECK(moved == unsigned(step + 1));
+        CHECK(entered == 1);
+        CHECK(left_ == 0);
+        CHECK(splitter->GetCursor().GetHCURSOR() == resize);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
+              resize);
+        CHECK(shownShape() == MUI::InputSystemCursorShape::SizeWestEast);
+
+        // The synchronisation pass which the cursor change schedules must
+        // leave both the window and the pointer where they are.
+        DrainRootInputDispatch();
+        CHECK(entered == 1);
+        CHECK(left_ == 0);
+        CHECK(splitter->GetCursor().GetHCURSOR() == resize);
+        CHECK(wxWinUIHostCursorTestAccess::GetIslandCursorHandle(*host) ==
+              resize);
+    }
+
+    frame->Destroy();
+    DrainRootInputDispatch();
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3

@@ -18,6 +18,10 @@
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include <memory>
+    class wxRibbonButtonBarWinUI;
+#endif
 #include <unordered_map>
 
 class wxRibbonButtonBar;
@@ -262,6 +266,14 @@ private:
     // matching.
     std::unordered_map<wxWindowID, wxString> m_keyTips;
     std::unordered_map<wxWindowID, wxString> m_dropdownKeyTips;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxRibbonButtonBarWinUI;
+    bool InitializeWinUI();
+    void SyncWinUI();
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    std::shared_ptr<wxRibbonButtonBarWinUI> m_winui;
+#endif
 
 
 #ifndef SWIG

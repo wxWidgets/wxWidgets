@@ -222,7 +222,9 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxTE_RICH2 | // a hack to get rid of vert scrollbar
                             wxDEFAULT_CONTROL_BORDER
                             );
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXWINUI__)
+    // Not in wxWinUI: the tip is in the font of the other WinUI controls,
+    // not in Arial.
     m_text->SetFont(wxFont(12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 #endif
 

@@ -29,6 +29,7 @@
 
 #include "wx/fontenum.h"
 #include "wx/tokenzr.h"
+#include "wx/weakref.h"
 
 // ============================================================================
 // implementation
@@ -46,6 +47,51 @@ const char wxFontPickerWidgetNameStr[] = "fontpickerwidget";
 wxDEFINE_EVENT(wxEVT_FONTPICKER_CHANGED, wxFontPickerEvent);
 wxIMPLEMENT_DYNAMIC_CLASS(wxFontPickerCtrl, wxPickerBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxFontPickerEvent, wxCommandEvent);
+
+#ifdef __WXWINUI__
+namespace
+{
+
+void RefitFontPickerGrowOnly(wxFontPickerCtrl *picker)
+{
+    const wxWeakRef<wxFontPickerCtrl> weakPicker(picker);
+    if ( wxControl * const button = picker->GetPickerCtrl() )
+        button->InvalidateBestSize();
+    picker->InvalidateBestSize();
+
+    const wxSize desired = picker->GetBestSize();
+    picker = weakPicker.get();
+    if ( !picker )
+        return;
+
+    wxSize minimum = picker->GetMinSize();
+    if ( minimum.x < 0 )
+        minimum.x = 0;
+    if ( minimum.y < 0 )
+        minimum.y = 0;
+    minimum.IncTo(desired);
+    picker->SetMinSize(minimum);
+
+    wxSize grown = picker->GetSize();
+    grown.IncTo(desired);
+    if ( grown != picker->GetSize() )
+        picker->SetSize(grown);
+
+    // A realized WinUI button can gain width when its font description or
+    // label font changes. Invalidate the complete composite and let its owner
+    // consume the monotonic minimum immediately; no timer or private layout
+    // loop is introduced here.
+    picker = weakPicker.get();
+    if ( picker )
+    {
+        wxWindow * const parent = picker->GetParent();
+        if ( parent && parent->GetSizer() )
+            parent->Layout();
+    }
+}
+
+} // anonymous namespace
+#endif // __WXWINUI__
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl
@@ -114,8 +160,19 @@ wxFont wxFontPickerCtrl::String2Font(const wxString &s)
 
 void wxFontPickerCtrl::SetSelectedFont(const wxFont &f)
 {
+    const wxWeakRef<wxFontPickerCtrl> weakThis(this);
     GetPickerWidget()->SetSelectedFont(f);
-    UpdateTextCtrlFromPicker();
+    wxFontPickerCtrl *live = weakThis.get();
+    if ( !live )
+        return;
+
+    live->UpdateTextCtrlFromPicker();
+#ifdef __WXWINUI__
+    live = weakThis.get();
+    if ( !live )
+        return;
+    RefitFontPickerGrowOnly(live);
+#endif
 }
 
 void wxFontPickerCtrl::UpdatePickerFromTextCtrl()
@@ -132,11 +189,22 @@ void wxFontPickerCtrl::UpdatePickerFromTextCtrl()
 
     if (GetPickerWidget()->GetSelectedFont() != f)
     {
+        const wxWeakRef<wxFontPickerCtrl> weakThis(this);
         GetPickerWidget()->SetSelectedFont(f);
+        wxFontPickerCtrl *live = weakThis.get();
+        if ( !live )
+            return;
+
+#ifdef __WXWINUI__
+        RefitFontPickerGrowOnly(live);
+        live = weakThis.get();
+        if ( !live )
+            return;
+#endif
 
         // fire an event
-        wxFontPickerEvent event(this, GetId(), f);
-        GetEventHandler()->ProcessEvent(event);
+        wxFontPickerEvent event(live, live->GetId(), f);
+        live->GetEventHandler()->ProcessEvent(event);
     }
 }
 
@@ -168,12 +236,22 @@ void wxFontPickerCtrl::SetMaxPointSize(unsigned int max)
 
 void wxFontPickerCtrl::OnFontChange(wxFontPickerEvent &ev)
 {
+    const wxWeakRef<wxFontPickerCtrl> weakThis(this);
     UpdateTextCtrlFromPicker();
+    wxFontPickerCtrl *live = weakThis.get();
+    if ( !live )
+        return;
 
     // the wxFontPickerWidget sent us a colour-change notification.
     // forward this event to our parent
-    wxFontPickerEvent event(this, GetId(), ev.GetFont());
-    GetEventHandler()->ProcessEvent(event);
+#ifdef __WXWINUI__
+    RefitFontPickerGrowOnly(live);
+    live = weakThis.get();
+    if ( !live )
+        return;
+#endif
+    wxFontPickerEvent event(live, live->GetId(), ev.GetFont());
+    live->GetEventHandler()->ProcessEvent(event);
 }
 
 #endif  // wxUSE_FONTPICKERCTRL

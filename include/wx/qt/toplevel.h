@@ -31,6 +31,7 @@ public:
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual bool Show(bool show = true) override;
+    virtual void ShowWithoutActivating() override;
     virtual void Maximize(bool maximize = true) override;
     virtual void Restore() override;
     virtual void Iconize(bool iconize = true) override;

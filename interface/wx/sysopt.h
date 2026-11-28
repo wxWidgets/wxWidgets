@@ -108,6 +108,21 @@
     @endFlagTable
 
 
+    @section sysopt_winui WinUI
+
+    @beginFlagTable
+    @flag{winui.backdrop}
+        If set to 0, use a solid themed client background instead of the DWM
+        Mica backdrop and full-client frame extension. This does not disable
+        native WinUI controls or change the desktop HDR settings. By default
+        the backdrop is requested when supported; High Contrast always disables
+        it, even if this option is 1. Set this option before creating windows.
+        To update an existing top-level window after changing the option, call
+        wxWinUIApplyWindowBackdrop() for that window. Available only with the
+        wxWinUI port and wxUSE_WINUI3 enabled.
+    @endFlagTable
+
+
     @section sysopt_gtk GTK+
 
     @beginFlagTable

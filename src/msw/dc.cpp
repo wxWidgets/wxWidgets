@@ -47,6 +47,10 @@
 #include <string.h>
 
 #include "wx/msw/private/dc.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
 #include "wx/private/textmeasure.h"
 
 #ifdef _MSC_VER
@@ -1351,6 +1355,16 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
 void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Text meant for a background which the port does not paint, to keep the
+    // material visible, is drawn in a colour which can be read on it.
+    WXCOLORREF adapted = 0;
+    const bool adapt = wxWinUIAdaptTextColourOverBackdrop(
+        GetHdc(), XLOG2DEV(x), YLOG2DEV(y), &adapted);
+    const COLORREF original =
+        adapt ? ::SetTextColor(GetHdc(), adapted) : CLR_INVALID;
+#endif
+
     if ( text.find('\t') != wxString::npos )
     {
         if ( ::TabbedTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
@@ -1360,6 +1374,10 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
             wxLogLastError(wxT("TabbedTextOut"));
         }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( adapt && original != CLR_INVALID )
+            ::SetTextColor(GetHdc(), original);
+#endif
         return;
     }
 
@@ -1368,6 +1386,11 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     {
         wxLogLastError(wxT("TextOut"));
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( adapt && original != CLR_INVALID )
+        ::SetTextColor(GetHdc(), original);
+#endif
 }
 
 void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,

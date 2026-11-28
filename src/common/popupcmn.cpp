@@ -31,6 +31,10 @@
 
 #include "wx/display.h"
 #include "wx/recguard.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/transient.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/renderer.h"
@@ -211,6 +215,57 @@ bool wxPopupTransientWindowBase::Destroy()
     // The popup window can be deleted at any moment, even while some events
     // are still being processed for it, so delay its real destruction until
     // the next idle time when we're sure that it's safe to really destroy it.
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUITLWHostIsDestroyScheduled(this) )
+    {
+        wxFAIL_MSG(wxS("Shouldn't destroy the popup twice."));
+        return false;
+    }
+
+    if ( !wxWinUIPopupPrepareForDestroy(this) )
+        return true;
+#endif
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto mustDestroyImmediately =
+        [this]()
+        {
+            wxWindow * const parent = GetParent();
+            bool parentDestroyScheduled =
+                parent && parent->IsBeingDeleted();
+            parentDestroyScheduled =
+                parentDestroyScheduled ||
+                (parent && wxWinUITLWHostIsDestroyScheduled(parent));
+            return parentDestroyScheduled || !GetHandle();
+        };
+
+    // Keep the safety contract for applications deriving directly from this
+    // public base instead of the concrete wxPopupTransientWindow class.
+    const wxWinUIDestroyDeferralResult deferred =
+        wxWinUITLWHostDeferPopupDestroy(
+            this,
+            mustDestroyImmediately()
+                ? wxWinUIPopupDestroySemantics::Immediate
+                : wxWinUIPopupDestroySemantics::PendingDelete);
+    if ( deferred == wxWinUIDestroyDeferralResult::AlreadyDeferred )
+    {
+        // A nested Destroy() from one of WinUIPrepareForDestroy()'s arbitrary
+        // callbacks owns the already queued request. The outer request has
+        // succeeded too; this is not a second public call made afterwards.
+        return true;
+    }
+    if ( deferred == wxWinUIDestroyDeferralResult::Deferred )
+        return true;
+
+    // Match wxTopLevelWindowBase: delaying a child of an owner already being
+    // destroyed would leave a dangling pointer in wxPendingDelete when the
+    // owner's DestroyChildren() deletes it synchronously.
+    // Re-read after every arbitrary callback and immediately before queuing:
+    // a parent that entered destruction must own synchronous child teardown.
+    if ( mustDestroyImmediately() )
+        return wxNonOwnedWindow::Destroy();
+#endif
 
     wxCHECK_MSG( !wxPendingDelete.Member(this), false,
                  wxS("Shouldn't destroy the popup twice.") );

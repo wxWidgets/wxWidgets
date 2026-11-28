@@ -26,6 +26,7 @@
 class WXDLLIMPEXP_FWD_CORE wxToolBarBase;
 class WXDLLIMPEXP_FWD_CORE wxToolBarToolBase;
 class WXDLLIMPEXP_FWD_CORE wxImage;
+class wxToolbook;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -165,7 +166,9 @@ public:
     {
         if ( m_toolStyle == wxTOOL_STYLE_CONTROL )
         {
-            return (wxObject*)m_control->GetClientData();
+            return m_control
+                ? static_cast<wxObject*>(m_control->GetClientData())
+                : nullptr;
         }
         else
         {
@@ -191,7 +194,8 @@ public:
     {
         if ( m_toolStyle == wxTOOL_STYLE_CONTROL )
         {
-            m_control->SetClientData(clientData);
+            if ( m_control )
+                m_control->SetClientData(clientData);
         }
         else
         {
@@ -211,6 +215,18 @@ public:
 #endif
 
 protected:
+    // Some ports cross synchronous native callbacks while a control tool is
+    // still only a candidate. If application code destroys that control, the
+    // port must neutralize the borrowed pointer before the common failure path
+    // destroys the tool object. This does not transfer or destroy ownership:
+    // it is only valid after the control lifetime has already ended.
+    void ForgetDestroyedControl()
+    {
+        wxASSERT_MSG(IsControl(),
+                     wxT("only control tools own a control pointer"));
+        m_control = nullptr;
+    }
+
     // common part of all ctors
     void Init(wxToolBarBase *tbar,
               wxToolBarToolStyle style,
@@ -599,6 +615,20 @@ protected:
     // called when the tool is toggled
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) = 0;
 
+    // Toggle the exact positional controller item. Composite books keep a
+    // parallel positional model and must not resolve this operation through a
+    // possibly duplicated application ID.
+    void DoToggleToolByPos(size_t pos, bool toggle);
+    void DoEnableToolByPos(size_t pos, bool enable);
+
+    // Preserve positional identity for parallel controllers such as
+    // wxToolbook. Ports which can update an exact native item should override
+    // this instead of resolving the operation through a potentially duplicate
+    // application ID.
+    virtual void DoSetToolNormalBitmapByPos(
+        size_t pos,
+        const wxBitmapBundle& bitmap);
+
     // called when the tools "can be toggled" flag changes
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) = 0;
 
@@ -618,6 +648,15 @@ protected:
 
     // make the size of the buttons big enough to fit the largest bitmap size
     void AdjustToolBitmapSize();
+
+    // The requested size is distinct from the currently effective one: it is
+    // retained in DIPs and re-applied by AdjustToolBitmapSize() after a DPI
+    // change. Ports with transactional native peers need to restore both
+    // values when publishing a new peer fails.
+    wxSize GetRequestedToolBitmapSizeInDIPs() const
+        { return m_requestedBitmapSize; }
+    void SetRequestedToolBitmapSizeInDIPs(const wxSize& size)
+        { m_requestedBitmapSize = size; }
 
     // calls InsertTool() and deletes the tool if inserting it failed
     wxToolBarToolBase *DoInsertNewTool(size_t pos, wxToolBarToolBase *tool)
@@ -655,6 +694,8 @@ protected:
     wxCoord m_defaultWidth, m_defaultHeight;
 
 private:
+    friend class wxToolbook;
+
     // the size of the bitmaps requested by the application by calling
     // SetToolBitmapSize() expressed in DIPs because we want to keep using the
     // same value even if the DPI changes

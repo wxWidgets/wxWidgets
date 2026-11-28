@@ -109,6 +109,10 @@ typedef void (wxEvtHandler::*wxCollapsiblePaneEventFunction)(wxCollapsiblePaneEv
 
 #if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/collpane.h"
+#elif defined(__WXWINUI__) && !defined(__WXUNIVERSAL__)
+    // The generic control stays available under its own name: this header
+    // includes it.
+    #include "wx/winui/collpane.h"
 #else
     #include "wx/generic/collpaneg.h"
 

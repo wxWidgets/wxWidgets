@@ -30,6 +30,10 @@
 
 #include "wx/msw/private.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
+
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
@@ -111,6 +115,9 @@ void wxCaret::OnKillFocus()
     {
         m_hasCaret = false;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        (void)wxWinUICaretHide(GetWindow());
+#endif
         CALL_CARET_API(DestroyCaret, ());
     }
 }
@@ -137,6 +144,18 @@ void wxCaret::DoShow()
 
     if ( m_hasCaret )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The caret of Win32 is drawn on the HWND, which a window painting
+        // through a surface does not show: that one has a caret of its own.
+        // The caret of Win32 still exists, hidden, and still follows the
+        // position: input methods and accessibility tools read it.
+        const wxPoint pt = GetWindow()->GetClientAreaOrigin();
+        if ( wxWinUICaretShow(GetWindow(), m_x + pt.x, m_y + pt.y,
+                              m_width, m_height) )
+        {
+            return;
+        }
+#endif
         CALL_CARET_API(ShowCaret, (GetWinHwnd(GetWindow())));
     }
     //else: will be shown when we get the focus
@@ -146,6 +165,10 @@ void wxCaret::DoHide()
 {
     if ( m_hasCaret )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( wxWinUICaretHide(GetWindow()) )
+            return;
+#endif
         CALL_CARET_API(HideCaret, (GetWinHwnd(GetWindow())));
     }
 }
@@ -165,6 +188,14 @@ void wxCaret::DoMove()
         // client ones
         wxPoint pt = GetWindow()->GetClientAreaOrigin();
         CALL_CARET_API(SetCaretPos, (m_x + pt.x, m_y + pt.y));
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        if ( wxWinUICaretIsShown(GetWindow()) )
+        {
+            (void)wxWinUICaretShow(GetWindow(), m_x + pt.x, m_y + pt.y,
+                                   m_width, m_height);
+        }
+#endif
     }
     //else: we don't have caret right now, nothing to do (this does happen)
 }
@@ -179,6 +210,9 @@ void wxCaret::DoSize()
     if ( m_hasCaret )
     {
         m_hasCaret = false;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        (void)wxWinUICaretHide(GetWindow());
+#endif
         CALL_CARET_API(DestroyCaret, ());
         MSWCreateCaret();
         OnSetFocus();

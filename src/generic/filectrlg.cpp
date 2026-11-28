@@ -29,6 +29,7 @@
 #include "wx/dir.h"
 #include "wx/tokenzr.h"
 #include "wx/imaglist.h"
+#include "wx/weakref.h"
 
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
@@ -333,19 +334,32 @@ void wxFileData::MakeItem( wxListItem &item )
 {
     item.m_text = m_fileName;
     item.ClearAttributes();
+#if !defined(__WXWINUI__)
+    // Pure red and blue are unreadable on a dark background.
     if (IsExe())
-        item.SetTextColour(*wxRED);
+    {
+        item.SetTextColour(wxSystemSettings::SelectLightDark(
+            *wxRED, wxColour(0xff, 0x8a, 0x80)));
+    }
     if (IsDir())
-        item.SetTextColour(*wxBLUE);
+    {
+        item.SetTextColour(wxSystemSettings::SelectLightDark(
+            *wxBLUE, wxColour(0x82, 0xb1, 0xff)));
+    }
+#endif
+    // In wxWinUI all the names are in the text colour of the theme: a list
+    // of files of Windows 11 tells its items by their icons.
 
     item.m_image = m_image;
 
+#if !defined(__WXWINUI__)
     if (IsLink())
     {
         wxColour dg = wxTheColourDatabase->Find( wxT("MEDIUM GREY") );
         if ( dg.IsOk() )
             item.SetTextColour(dg);
     }
+#endif
     item.m_data = wxPtrToUInt(this);
 }
 
@@ -417,15 +431,28 @@ void wxFileListCtrl::ChangeToReportMode()
     wxString txt = dt.FormatDate() + wxT("22") + dt.Format(wxT("%I:%M:%S %p"));
     GetTextExtent(txt, &w, nullptr);
 
+#if defined(__WXWINUI__)
+    // The columns of a table of WinUI: room for the padding of the cells,
+    // and a name column wide enough for the names of files.
+    const int pad = FromDIP(24);
+    InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 2*w );
+    InsertColumn( 1, _("Size"), wxLIST_FORMAT_RIGHT, w/2 + pad );
+    InsertColumn( 2, _("Type"), wxLIST_FORMAT_LEFT, w/2 + pad );
+    InsertColumn( 3, _("Modified"), wxLIST_FORMAT_LEFT, w + pad );
+#else
     InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, w );
     InsertColumn( 1, _("Size"), wxLIST_FORMAT_RIGHT, w/2 );
     InsertColumn( 2, _("Type"), wxLIST_FORMAT_LEFT, w/2 );
     InsertColumn( 3, _("Modified"), wxLIST_FORMAT_LEFT, w );
+#endif
 #if defined(__UNIX__)
     GetTextExtent(wxT("Permissions 2"), &w, nullptr);
     InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, w );
 #elif defined(__WIN32__)
     GetTextExtent(wxT("Attributes 2"), &w, nullptr);
+#if defined(__WXWINUI__)
+    w += pad;
+#endif
     InsertColumn( 4, _("Attributes"), wxLIST_FORMAT_LEFT, w );
 #endif
 
@@ -453,9 +480,17 @@ long wxFileListCtrl::Add( wxFileData *fd, wxListItem &item )
     long my_style = GetWindowStyleFlag();
     if (my_style & wxLC_REPORT)
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         ret = InsertItem( item );
+        if ( weakThis.get() != this || IsBeingDeleted() || ret == -1 )
+            return ret;
+
         for (int i = 1; i < wxFileData::FileList_Max; i++)
+        {
             SetItem( item.m_itemId, i, fd->GetEntry((wxFileData::fileListFieldType)i) );
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return ret;
+        }
     }
     else if ((my_style & wxLC_LIST) || (my_style & wxLC_SMALL_ICON))
     {
@@ -483,17 +518,73 @@ void wxFileListCtrl::UpdateItem(const wxListItem &item)
 
 void wxFileListCtrl::UpdateFiles()
 {
+    if ( m_updatingFiles )
+    {
+        m_updateFilesPending = true;
+        return;
+    }
+
+    m_updatingFiles = true;
+    const wxWeakRef<wxWindow> weakThis(this);
+
+    // One replay is sufficient: it starts after every mutation requested by
+    // the first pass. Requests published by the replay itself are redundant
+    // with the state it is already building and must not create an event loop.
+    for ( int pass = 0; pass < 2; ++pass )
+    {
+        m_updateFilesPending = false;
+        if ( !DoUpdateFiles() )
+        {
+            if ( weakThis.get() == this && !IsBeingDeleted() )
+                m_updatingFiles = false;
+            return;
+        }
+
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+        if ( !m_updateFilesPending )
+            break;
+    }
+
+    m_updateFilesPending = false;
+    m_updatingFiles = false;
+}
+
+bool wxFileListCtrl::DoUpdateFiles()
+{
     // don't do anything before ShowModal() call which sets m_dirName
     if ( m_dirName == wxT("*") )
-        return;
+        return true;
 
     wxBusyCursor bcur; // this may take a while...
 
+    const wxWeakRef<wxWindow> weakThis(this);
     DeleteAllItems();
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return false;
 
     wxListItem item;
     item.m_itemId = 0;
     item.m_col = 0;
+
+    const auto addItem =
+        [this, &weakThis, &item](wxFileData* data)
+        {
+            const long result = Add(data, item);
+            // InsertItem() publishes a raw list event. If that callback
+            // destroys the list, its destructor has already released data
+            // from the committed row; inspecting the return value and
+            // deleting it here would double-free the same wxFileData.
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return false;
+
+            if ( result == -1 )
+                delete data;
+            else
+                item.m_itemId++;
+
+            return true;
+        };
 
 #if defined(__WINDOWS__) || defined(__WXMAC__)
     if ( IsTopMostDir(m_dirName) )
@@ -517,10 +608,8 @@ void wxFileListCtrl::UpdateFiles()
             //     descriptions as otherwise it's pretty confusing to the user
             wxFileData *fd = new wxFileData(paths[n], paths[n],
                                             wxFileData::is_drive, icons[n]);
-            if (Add(fd, item) != -1)
-                item.m_itemId++;
-            else
-                delete fd;
+            if ( !addItem(fd) )
+                return false;
         }
     }
     else
@@ -534,10 +623,8 @@ void wxFileListCtrl::UpdateFiles()
             if (p.empty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
-            if (Add(fd, item) != -1)
-                item.m_itemId++;
-            else
-                delete fd;
+            if ( !addItem(fd) )
+                return false;
         }
 
         wxString dirname(m_dirName);
@@ -568,16 +655,16 @@ void wxFileListCtrl::UpdateFiles()
             while (cont)
             {
                 wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_dir, wxFileIconsTable::folder);
-                if (Add(fd, item) != -1)
-                    item.m_itemId++;
-                else
-                    delete fd;
+                if ( !addItem(fd) )
+                    return false;
 
                 cont = dir.GetNext(&f);
             }
 
-            // Tokenize the wildcard string, so we can handle more than 1
-            // search pattern in a wildcard.
+            // Tokenize the wildcard string, so we can handle more than one
+            // search pattern. A file may match several patterns, but it must
+            // only have one row in the control.
+            wxArrayString filesAdded;
             wxStringTokenizer tokenWild(m_wild, wxT(";"));
             while ( tokenWild.HasMoreTokens() )
             {
@@ -585,11 +672,16 @@ void wxFileListCtrl::UpdateFiles()
                                         wxDIR_FILES | hiddenFlag);
                 while (cont)
                 {
+                    if ( filesAdded.Index(f) != wxNOT_FOUND )
+                    {
+                        cont = dir.GetNext(&f);
+                        continue;
+                    }
+                    filesAdded.Add(f);
+
                     wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_file, wxFileIconsTable::file);
-                    if (Add(fd, item) != -1)
-                        item.m_itemId++;
-                    else
-                        delete fd;
+                    if ( !addItem(fd) )
+                        return false;
 
                     cont = dir.GetNext(&f);
                 }
@@ -598,6 +690,7 @@ void wxFileListCtrl::UpdateFiles()
     }
 
     SortItems(m_sort_field, m_sort_forward);
+    return weakThis.get() == this && !IsBeingDeleted();
 }
 
 void wxFileListCtrl::SetWild( const wxString &wild )
@@ -615,7 +708,7 @@ void wxFileListCtrl::MakeDir()
     wxString path( m_dirName );
     path += wxFILE_SEP_PATH;
     path += new_name;
-    if (wxFileExists(path))
+    if (wxFileExists(path) || wxDirExists(path))
     {
         // try NewName0, NewName1 etc.
         int i = 0;
@@ -629,7 +722,7 @@ void wxFileListCtrl::MakeDir()
             path += wxFILE_SEP_PATH;
             path += new_name;
             i++;
-        } while (wxFileExists(path));
+        } while (wxFileExists(path) || wxDirExists(path));
     }
 
     wxLogNull log;
@@ -644,11 +737,17 @@ void wxFileListCtrl::MakeDir()
     wxListItem item;
     item.m_itemId = 0;
     item.m_col = 0;
+    const wxWeakRef<wxWindow> weakThis(this);
     long itemid = Add( fd, item );
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
 
     if (itemid != -1)
     {
         SortItems(m_sort_field, m_sort_forward);
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+
         itemid = FindItem( 0, wxPtrToUInt(fd) );
         EnsureVisible( itemid );
         EditLabel( itemid );
@@ -661,6 +760,7 @@ void wxFileListCtrl::GoToParentDir()
 {
     if (!IsTopMostDir(m_dirName))
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         size_t len = m_dirName.length();
         if (wxEndsWithPathSeparator(m_dirName))
             m_dirName.Remove( len-1, 1 );
@@ -677,6 +777,9 @@ void wxFileListCtrl::GoToParentDir()
             m_dirName = wxT("/");
 #endif
         UpdateFiles();
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+
         long id = FindItem( 0, fname );
         if (id != wxNOT_FOUND)
         {
@@ -696,10 +799,15 @@ void wxFileListCtrl::GoToDir( const wxString &dir )
 {
     if (!wxDirExists(dir)) return;
 
+    const wxWeakRef<wxWindow> weakThis(this);
     m_dirName = dir;
     UpdateFiles();
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
 
     SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
 
     EnsureVisible( 0 );
 }
@@ -761,20 +869,26 @@ void wxFileListCtrl::OnListEndLabelEdit( wxListEvent &event )
 
     wxLogNull log;
 
-    if (wxFileExists(new_name))
+    if (wxFileExists(new_name) || wxDirExists(new_name))
     {
         wxMessageDialog dialog(this, _("File name exists already."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();
         event.Veto();
+        return;
     }
 
     if (wxRenameFile(fd->GetFilePath(),new_name))
     {
         fd->SetNewName( new_name, event.GetLabel() );
 
+        const wxWeakRef<wxWindow> weakThis(this);
         SetItemState( event.GetItem(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
 
         UpdateItem( event.GetItem() );
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
         EnsureVisible( event.GetItem() );
     }
     else
@@ -902,11 +1016,14 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_MULTIPLE ) ),
                   wxT( "wxFC_MULTIPLE can't be used with wxFC_SAVE" ) );
 
-    wxNavigationEnabled<wxControl>::Create( parent, id,
-                                            pos, size,
-                                            wxTAB_TRAVERSAL,
-                                            wxDefaultValidator,
-                                            name );
+    if ( !wxNavigationEnabled<wxControl>::Create( parent, id,
+                                                   pos, size,
+                                                   wxTAB_TRAVERSAL,
+                                                   wxDefaultValidator,
+                                                   name ) )
+    {
+        return false;
+    }
 
     m_dir = defaultDirectory;
 
@@ -1025,7 +1142,7 @@ wxString wxGenericFileCtrl::GetDirectory() const
 {
     // don't check for wxFC_MULTIPLE here, this one is probably safe to call in
     // any case as it can be always taken to mean "current directory"
-    return DoGetFileName().GetPath();
+    return m_list->GetDir();
 }
 
 wxFileName wxGenericFileCtrl::DoGetFileName() const
@@ -1043,9 +1160,13 @@ wxFileName wxGenericFileCtrl::DoGetFileName() const
         // ... if anything is selected in the list
         if ( item.m_itemId != wxNOT_FOUND )
         {
+            item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_DATA;
             m_list->GetItem(item);
 
-            fn.Assign(m_list->GetDir(), item.m_text);
+            const wxFileData* const data =
+                reinterpret_cast<const wxFileData*>(item.m_data);
+            if ( data && !data->IsDir() && !data->IsDrive() )
+                fn.Assign(m_list->GetDir(), item.m_text);
         }
     }
     else // user entered the value
@@ -1084,7 +1205,7 @@ wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
     filenames.reserve(numSel);
 
     wxListItem item;
-    item.m_mask = wxLIST_MASK_TEXT;
+    item.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_DATA;
     item.m_itemId = -1;
     for ( ;; )
     {
@@ -1096,6 +1217,11 @@ wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
 
         m_list->GetItem(item);
 
+        const wxFileData* const data =
+            reinterpret_cast<const wxFileData*>(item.m_data);
+        if ( !data || data->IsDir() || data->IsDrive() )
+            continue;
+
         const wxFileName fn(dir, item.m_text);
         filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
     }
@@ -1103,10 +1229,15 @@ wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
 
 bool wxGenericFileCtrl::SetDirectory( const wxString& dir )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool wasIgnoringChanges = m_ignoreChanges;
     m_ignoreChanges = true;
     m_list->GoToDir( dir );
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return false;
+    m_text->ChangeValue(wxString());
     UpdateControls();
-    m_ignoreChanges = false;
+    m_ignoreChanges = wasIgnoringChanges;
 
     return wxFileName( dir ).SameAs( m_list->GetDir() );
 }
@@ -1118,6 +1249,40 @@ bool wxGenericFileCtrl::SetFilename( const wxString& name )
     wxCHECK_MSG( dir.empty(), false,
                  wxS( "can't specify directory component to SetFilename" ) );
 
+    long item = wxNOT_FOUND;
+    if ( !name.empty() )
+    {
+        for ( long current = m_list->GetNextItem(-1, wxLIST_NEXT_ALL);
+              current != wxNOT_FOUND;
+              current = m_list->GetNextItem(current, wxLIST_NEXT_ALL) )
+        {
+            const wxString itemName = m_list->GetItemText(current);
+#ifdef __WINDOWS__
+            const bool sameName = itemName.CmpNoCase(name) == 0;
+#else
+            const bool sameName = itemName == name;
+#endif
+            if ( !sameName )
+                continue;
+
+            const wxFileData* const data =
+                reinterpret_cast<const wxFileData*>(
+                    m_list->GetItemData(current));
+            if ( data && !data->IsDir() && !data->IsDrive() )
+            {
+                item = current;
+                break;
+            }
+        }
+    }
+
+    // Save controls accept a new name. Open controls must select a file that
+    // is actually present in the current filtered view.
+    if ( !name.empty() && item == wxNOT_FOUND && !(m_style & wxFC_SAVE) )
+        return false;
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool wasSuppressingSelection = m_noSelChgEvent;
     m_noSelChgEvent = true;
 
     m_text->ChangeValue( name );
@@ -1137,32 +1302,47 @@ bool wxGenericFileCtrl::SetFilename( const wxString& name )
                     break;
 
                 m_list->SetItemState( itemIndex, 0, wxLIST_STATE_SELECTED );
+                if ( weakThis.get() != this || IsBeingDeleted() )
+                    return false;
             }
         }
     }
 
-    // Select new filename if it's in the list
-    long item = m_list->FindItem(wxNOT_FOUND, name);
-
     if ( item != wxNOT_FOUND )
     {
         m_list->SetItemState( item, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return false;
         m_list->EnsureVisible( item );
     }
 
-    m_noSelChgEvent = false;
+    m_noSelChgEvent = wasSuppressingSelection;
 
     return true;
 }
 
 void wxGenericFileCtrl::DoSetFilterIndex( int filterindex )
 {
+    if ( filterindex < 0 ||
+         filterindex >= static_cast<int>(m_choice->GetCount()) )
+    {
+        return;
+    }
+
     wxClientData *pcd = m_choice->GetClientObject( filterindex );
     if ( !pcd )
         return;
 
-    const wxString& str = ((static_cast<wxStringClientData *>(pcd))->GetData());
-    m_list->SetWild( str );
+    // SetWild() rebuilds the list and can publish raw list events. A handler
+    // may replace the wildcard (and hence clear this choice's client data)
+    // recursively, so never retain a reference into the choice across it.
+    const wxString str =
+        (static_cast<wxStringClientData *>(pcd))->GetData();
+    const unsigned long generation = ++m_filterChangeGeneration;
+
+    // Publish the logical filter state before rebuilding the rows. Raw list
+    // observers invoked by SetWild() must not see the new wxChoice selection
+    // paired with the previous filter index/extension.
     m_filterIndex = filterindex;
     if ( str.Left( 2 ) == wxT( "*." ) )
     {
@@ -1175,26 +1355,37 @@ void wxGenericFileCtrl::DoSetFilterIndex( int filterindex )
         m_filterExtension.clear();
     }
 
-    wxGenerateFilterChangedEvent( this, this );
+    const wxWeakRef<wxWindow> weakThis(this);
+    m_list->SetWild( str );
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
+    if ( generation != m_filterChangeGeneration )
+        return;
+
+    if ( !m_ignoreChanges )
+        wxGenerateFilterChangedEvent( this, this );
 }
 
 void wxGenericFileCtrl::SetWildcard( const wxString& wildCard )
 {
+    wxString normalizedWildcard;
     if ( wildCard.empty() || wildCard == wxFileSelectorDefaultWildcardStr )
     {
-        m_wildCard = wxString::Format( _( "All files (%s)|%s" ),
-                                       wxFileSelectorDefaultWildcardStr,
-                                       wxFileSelectorDefaultWildcardStr );
+        normalizedWildcard =
+            wxString::Format( _( "All files (%s)|%s" ),
+                              wxFileSelectorDefaultWildcardStr,
+                              wxFileSelectorDefaultWildcardStr );
     }
     else
-        m_wildCard = wildCard;
+        normalizedWildcard = wildCard;
 
     wxArrayString wildDescriptions, wildFilters;
-    const size_t count = wxParseCommonDialogsFilter( m_wildCard,
-                         wildDescriptions,
-                         wildFilters );
+    const size_t count = wxParseCommonDialogsFilter( normalizedWildcard,
+                          wildDescriptions,
+                          wildFilters );
     wxCHECK_RET( count, wxT( "wxFileDialog: bad wildcard string" ) );
 
+    m_wildCard = normalizedWildcard;
     m_choice->Clear();
 
     for ( size_t n = 0; n < count; n++ )
@@ -1207,6 +1398,12 @@ void wxGenericFileCtrl::SetWildcard( const wxString& wildCard )
 
 void wxGenericFileCtrl::SetFilterIndex( int filterindex )
 {
+    if ( filterindex < 0 ||
+         filterindex >= static_cast<int>(m_choice->GetCount()) )
+    {
+        return;
+    }
+
     m_choice->SetSelection( filterindex );
 
     DoSetFilterIndex( filterindex );
@@ -1259,6 +1456,7 @@ void wxGenericFileCtrl::OnSelected( wxListEvent &event )
     if ( m_inSelected )
         return;
 
+    const wxWeakRef<wxWindow> weakThis(this);
     m_inSelected = true;
     const wxString filename( event.m_item.m_text );
 
@@ -1282,14 +1480,22 @@ void wxGenericFileCtrl::OnSelected( wxListEvent &event )
 
     m_ignoreChanges = true;
     m_text->SetValue( filename );
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
 
     if ( m_list->GetSelectedItemCount() > 1 )
     {
         m_text->Clear();
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
     }
 
     if ( !m_noSelChgEvent )
+    {
         wxGenerateSelectionChangedEvent( this, this );
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+    }
 
     m_ignoreChanges = false;
     m_inSelected = false;
@@ -1300,6 +1506,7 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
     if ( m_ignoreChanges )
         return;
 
+    const wxWeakRef<wxWindow> weakThis(this);
     wxString filename( fn );
     if ( filename.empty() )
     {
@@ -1307,7 +1514,8 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
     }
     if ( filename == wxT( "." ) ) return;
 
-    wxString dir = m_list->GetDir();
+    const wxString originalDirectory = m_list->GetDir();
+    wxString dir = originalDirectory;
 
     // "some/place/" means they want to chdir not try to load "place"
     const bool want_dir = filename.Last() == wxFILE_SEP_PATH;
@@ -1318,10 +1526,18 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
     {
         m_ignoreChanges = true;
         m_list->GoToParentDir();
-
-        wxGenerateFolderChangedEvent( this, this );
-
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+        m_text->ChangeValue(wxString());
         UpdateControls();
+
+        if ( m_list->GetDir() != originalDirectory )
+        {
+            wxGenerateFolderChangedEvent( this, this );
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
+        }
+
         m_ignoreChanges = false;
         return;
     }
@@ -1331,10 +1547,18 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
     {
         m_ignoreChanges = true;
         m_list->GoToHomeDir();
-
-        wxGenerateFolderChangedEvent( this, this );
-
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+        m_text->ChangeValue(wxString());
         UpdateControls();
+
+        if ( m_list->GetDir() != originalDirectory )
+        {
+            wxGenerateFolderChangedEvent( this, this );
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
+        }
+
         m_ignoreChanges = false;
         return;
     }
@@ -1373,9 +1597,17 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
     {
         m_ignoreChanges = true;
         m_list->GoToDir( filename );
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+        m_text->ChangeValue(wxString());
         UpdateControls();
 
-        wxGenerateFolderChangedEvent( this, this );
+        if ( m_list->GetDir() != originalDirectory )
+        {
+            wxGenerateFolderChangedEvent( this, this );
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
+        }
 
         m_ignoreChanges = false;
         return;
@@ -1412,18 +1644,17 @@ bool wxGenericFileCtrl::SetPath( const wxString& path )
     if ( !dir.empty() && !wxFileName::DirExists(dir) )
         return false;
 
-    m_dir = dir;
-    m_fileName = fn;
+    wxString fileName = fn;
     if ( !ext.empty() || path.Last() == '.' )
     {
-        m_fileName += wxT( "." );
-        m_fileName += ext;
+        fileName += wxT( "." );
+        fileName += ext;
     }
 
-    SetDirectory( m_dir );
-    SetFilename( m_fileName );
+    if ( !dir.empty() && !SetDirectory(dir) )
+        return false;
 
-    return true;
+    return SetFilename(fileName);
 }
 
 void wxGenericFileCtrl::GetPaths( wxArrayString& paths ) const
@@ -1444,14 +1675,46 @@ void wxGenericFileCtrl::UpdateControls()
 
 void wxGenericFileCtrl::GoToParentDir()
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool wasIgnoringChanges = m_ignoreChanges;
+    const wxString previousDirectory = m_list->GetDir();
+    m_ignoreChanges = true;
     m_list->GoToParentDir();
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
+    m_text->ChangeValue(wxString());
     UpdateControls();
+
+    if ( m_list->GetDir() != previousDirectory )
+    {
+        wxGenerateFolderChangedEvent(this, this);
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+    }
+
+    m_ignoreChanges = wasIgnoringChanges;
 }
 
 void wxGenericFileCtrl::GoToHomeDir()
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool wasIgnoringChanges = m_ignoreChanges;
+    const wxString previousDirectory = m_list->GetDir();
+    m_ignoreChanges = true;
     m_list->GoToHomeDir();
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
+    m_text->ChangeValue(wxString());
     UpdateControls();
+
+    if ( m_list->GetDir() != previousDirectory )
+    {
+        wxGenerateFolderChangedEvent(this, this);
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+    }
+
+    m_ignoreChanges = wasIgnoringChanges;
 }
 
 #endif // wxUSE_FILECTRL

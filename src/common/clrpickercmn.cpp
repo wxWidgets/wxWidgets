@@ -22,6 +22,7 @@
 #if wxUSE_COLOURPICKERCTRL
 
 #include "wx/clrpicker.h"
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -68,14 +69,20 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
 
     m_picker->Bind(wxEVT_COLOURPICKER_CHANGED,
             &wxColourPickerCtrl::OnColourChange, this);
+    m_picker->Bind(wxEVT_COLOURPICKER_CURRENT_CHANGED,
+            &wxColourPickerCtrl::OnColourChange, this);
+    m_picker->Bind(wxEVT_COLOURPICKER_DIALOG_CANCELLED,
+            &wxColourPickerCtrl::OnColourChange, this);
 
     return true;
 }
 
 void wxColourPickerCtrl::SetColour(const wxColour &col)
 {
+    const wxWeakRef<wxColourPickerCtrl> weakThis(this);
     M_PICKER->SetColour(col);
-    UpdateTextCtrlFromPicker();
+    if ( wxColourPickerCtrl * const live = weakThis.get() )
+        live->UpdateTextCtrlFromPicker();
 }
 
 bool wxColourPickerCtrl::SetColour(const wxString &text)
@@ -83,8 +90,11 @@ bool wxColourPickerCtrl::SetColour(const wxString &text)
     wxColour col(text);     // smart wxString->wxColour conversion
     if ( !col.IsOk() )
         return false;
+
+    const wxWeakRef<wxColourPickerCtrl> weakThis(this);
     M_PICKER->SetColour(col);
-    UpdateTextCtrlFromPicker();
+    if ( wxColourPickerCtrl * const live = weakThis.get() )
+        live->UpdateTextCtrlFromPicker();
 
     return true;
 }
@@ -100,11 +110,18 @@ void wxColourPickerCtrl::UpdatePickerFromTextCtrl()
 
     if (M_PICKER->GetColour() != col)
     {
+        const wxWeakRef<wxColourPickerCtrl> weakThis(this);
         M_PICKER->SetColour(col);
+        wxColourPickerCtrl * const live = weakThis.get();
+        if ( !live )
+            return;
 
         // fire an event
-        wxColourPickerEvent event(this, GetId(), col);
-        GetEventHandler()->ProcessEvent(event);
+        wxColourPickerEvent event(live, live->GetId(), col);
+
+        // Application handlers may synchronously destroy the picker, so this
+        // notification must remain the final operation in this method.
+        live->GetEventHandler()->ProcessEvent(event);
     }
 }
 
@@ -126,9 +143,33 @@ void wxColourPickerCtrl::UpdateTextCtrlFromPicker()
 
 void wxColourPickerCtrl::OnColourChange(wxColourPickerEvent &ev)
 {
+    const wxWeakRef<wxColourPickerCtrl> weakThis(this);
     UpdateTextCtrlFromPicker();
+    wxColourPickerCtrl * const live = weakThis.get();
+    if ( !live )
+    {
+        // Do not propagate the implementation event after the public
+        // composite disappeared: its child identity is never application API.
+        return;
+    }
 
-    ev.Skip();
+    // Some native/generic picker widgets already construct the event with the
+    // public composite as its source. Preserve this established path without
+    // manufacturing a duplicate notification.
+    if ( ev.GetEventObject() == live && ev.GetId() == live->GetId() )
+    {
+        ev.Skip();
+        return;
+    }
+
+    // The WinUI pair is a real child control with wxID_ANY. Never expose this
+    // implementation detail to applications: all picker event variants use
+    // the public control object and ID.
+    wxColourPickerEvent event(
+        live, live->GetId(), ev.GetColour(), ev.GetEventType());
+
+    // User handlers may synchronously destroy the picker.
+    live->GetEventHandler()->ProcessEvent(event);
 }
 
 #endif  // wxUSE_COLOURPICKERCTRL

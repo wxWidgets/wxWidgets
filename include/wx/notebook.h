@@ -184,6 +184,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTEBOOK_PAGE_CHANGING, wxBook
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/notebook.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/notebook.h"
 #elif defined(__WXMSW__)
     #include  "wx/msw/notebook.h"
 #elif defined(__WXGTK__)

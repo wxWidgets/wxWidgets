@@ -333,6 +333,15 @@ public:
     virtual wxString GetStringSelection() const override;
 
     /**
+        Searches for text in the current editing object and returns its
+        half-open range in that object's position space.
+
+        Embedded non-text objects delimit searchable text and are never
+        crossed by a match.
+    */
+    virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override;
+
+    /**
         Gets the current filename associated with the control.
     */
     wxString GetFilename() const { return m_filename; }

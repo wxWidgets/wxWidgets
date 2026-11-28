@@ -30,6 +30,9 @@
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #include "wx/msw/wrapwin.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
 #include <shlwapi.h>
 
 // ============================================================================
@@ -62,6 +65,9 @@ void wxBeginBusyCursor(const wxCursor *cursor)
     {
         gs_wxBusyCursor = (HCURSOR)cursor->GetHCURSOR();
         gs_wxBusyCursorOld = ::SetCursor(gs_wxBusyCursor);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        wxWinUINotifyGlobalCursorChanged();
+#endif
     }
     //else: nothing to do, already set
 }
@@ -76,6 +82,9 @@ void wxEndBusyCursor()
     {
         ::SetCursor(gs_wxBusyCursorOld);
         gs_wxBusyCursorOld = 0;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        wxWinUINotifyGlobalCursorChanged();
+#endif
     }
 }
 
