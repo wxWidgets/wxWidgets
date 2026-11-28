@@ -1884,10 +1884,13 @@ référence à cette échelle, donc antérieurs : `[winui-listctrl]`
 
 Reste de ce lot :
 - **Grille de propriétés** : l'aperçu passif d'une date sans
-  `wxDP_DROPDOWN` (`PropertyDateSpinPreview`, `propgridwinui.cpp`) montre
-  encore trois `NumberBox`, alors que l'éditeur actif est maintenant un
-  `DatePicker`. Le test `DateSpinPreviewHasRealCalendarFieldsAndStableGeometry`
-  échoue pour cette raison.
+  `wxDP_DROPDOWN` (`PropertyDateSpinPreview`, `propgridwinui.cpp`) montrait
+  encore trois `NumberBox`, alors que l'éditeur actif est un `DatePicker`.
+  Fait le 28 novembre : l'aperçu est un `DatePicker` passif réglé comme
+  l'éditeur (calendrier, format de l'année, marges du gabarit, largeur
+  minimale du bouton, années des listes), avec son bouton « Clear » ; un
+  format d'affichage exact reste montré par une `NumberBox` passive. Vu en
+  test seulement, pas à l'écran.
 - Non vus à l'écran, seulement en capture hors écran ou pas du tout : les
   coins, l'ombre et le voile des dialogues intégrés, le survol des combos
   et des listes, la fluidité du défilement, l'effet du masquage à

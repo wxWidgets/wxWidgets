@@ -230,22 +230,21 @@ private:
 // particular DeleteProperty() must defer reclamation across a value getter or
 // custom renderer which dispatches a nested event loop.
 #if wxUSE_DATEPICKCTRL
-// Passive counterpart of datectrl.cpp's real wxDP_SPIN composition. The
-// controls contain the same calendar components, but no handlers publish wx
-// events: selecting this cell creates the sole authoritative wx editor.
+// Passive counterpart of the wxDP_SPIN face of datectrl.cpp: the DatePicker
+// of WinUI, set as the active editor sets it, and its Clear button. No
+// handler publishes wx events: selecting this cell creates the sole
+// authoritative wx editor.
 struct PropertyDateSpinPreview
 {
     C::ContentControl root{nullptr};
-    C::Grid layout{nullptr}, fields{nullptr};
-    C::NumberBox year{nullptr}, month{nullptr}, day{nullptr}, formatted{nullptr};
-    C::ComboBox era{nullptr};
+    C::Grid layout{nullptr};
+    C::DatePicker picker{nullptr};
+    C::NumberBox formatted{nullptr};
     C::Button clear{nullptr};
-    std::vector<C::TextBlock> literals;
-    winrt::hstring calendarIdentifier;
-    wxDateTime minimum, maximum, shownValue;
+    winrt::Windows::Foundation::DateTime defaultMinimum{}, defaultMaximum{};
+    wxDateTime shownValue;
     wxFont shownFont;
     wxString shownLabel;
-    int firstEra = 0, lastEra = 0;
     bool showCentury = false, valuePrepared = false, formattedPrepared = false;
 
     static void Prepare(const C::Control& part, const wxString& id)
@@ -257,119 +256,65 @@ struct PropertyDateSpinPreview
         A::AutomationProperties::SetAutomationId(part, wxWinUIToHString(id));
     }
 
+    // The button of a DatePicker, which is what is seen of it.
+    static C::Button FindButton(const X::DependencyObject& node)
+    {
+        if ( !node ) return nullptr;
+        if ( const auto button = node.try_as<C::Button>(); button && button.Name() == L"FlyoutButton" )
+            return button;
+        for ( int n = 0; n < X::Media::VisualTreeHelper::GetChildrenCount(node); ++n )
+            if ( const auto found = FindButton(X::Media::VisualTreeHelper::GetChild(node, n)) )
+                return found;
+        return nullptr;
+    }
+
     PropertyDateSpinPreview(const wxString& name, long style)
     {
         namespace D = wxWinUIDatePresentation;
-        namespace WG = winrt::Windows::Globalization;
-        namespace WF = winrt::Windows::Foundation;
-        // Match the active DatePicker's default calendar and locale policy.
-        // This unmounted control only resolves native defaults, never replaces
-        // the visible SPIN peer or supplies a hidden model/event authority.
+        // Match the calendar of the active editor, which takes the default
+        // one of a CalendarDatePicker.
         const C::CalendarDatePicker defaults;
-        calendarIdentifier = defaults.CalendarIdentifier();
-        WF::DateTime lower{}, upper{};
-        if ( !D::wxWinUIResolveCalendarEnvelope(calendarIdentifier, &lower, &upper) )
-            throw winrt::hresult_error(E_INVALIDARG, L"PropertyGrid spin calendar envelope");
-        minimum = D::wxWinUIFromDateTime(lower);
-        maximum = D::wxWinUIFromDateTime(upper);
         showCentury = (style & wxDP_SHOWCENTURY) != 0;
-        const wxString pattern = D::wxWinUIGetLocaleShortDatePattern(showCentury, {});
-        WG::Calendar calendar;
-        calendar.ChangeCalendarSystem(calendarIdentifier);
-        firstEra = calendar.FirstEra();
-        lastEra = calendar.LastEra();
 
         root = C::ContentControl();
         root.HorizontalContentAlignment(X::HorizontalAlignment::Stretch);
         root.VerticalContentAlignment(X::VerticalAlignment::Center);
-        fields = C::Grid();
         layout = C::Grid();
         C::ColumnDefinition valueColumn, clearColumn;
         valueColumn.Width({1, X::GridUnitType::Star});
+        // The widest a DatePicker is in its style, as for the editor.
+        valueColumn.MaxWidth(456);
         clearColumn.Width({1, X::GridUnitType::Auto});
         layout.ColumnDefinitions().Append(valueColumn);
         layout.ColumnDefinitions().Append(clearColumn);
         const wxString prefix = "wxProperty.DateSpin." + name + ".";
-        day = D::wxWinUICreateDatePart(1, 31, 64, 1, {});
-        month = D::wxWinUICreateDatePart(1, 13, 64, 1, {});
-        year = D::wxWinUICreateDatePart(1, 9999, 88, showCentury ? 4 : 2, {});
-        Prepare(day, prefix + "Day");
-        Prepare(month, prefix + "Month");
-        Prepare(year, prefix + "Year");
-        A::AutomationProperties::SetName(day, wxWinUIToHString(_("Day")));
-        A::AutomationProperties::SetName(month, wxWinUIToHString(_("Month")));
-        A::AutomationProperties::SetName(year, wxWinUIToHString(_("Year")));
-        if ( !showCentury )
-            year.NumberFormatter(winrt::make<D::wxWinUITwoDigitYearFormatter>(
-                D::wxWinUIResolveTwoDigitYearMaximum(calendarIdentifier, {},
-                    firstEra, lastEra, lower, upper), winrt::hstring()));
 
-        if ( firstEra != lastEra || pattern.Find("{era.") != wxNOT_FOUND )
+        picker = C::DatePicker();
+        picker.CalendarIdentifier(defaults.CalendarIdentifier());
+        picker.YearFormat(showCentury ? L"{year.full}" : L"{year.abbreviated}");
+        picker.HorizontalAlignment(X::HorizontalAlignment::Stretch);
+        // The same room above and below its text as the editor, which sets
+        // it to stand as high as the fields of a form.
+        picker.Resources().Insert(winrt::box_value(L"DatePickerHostPadding"),
+                                  winrt::box_value(X::Thickness{0, 5, 0, 6}));
+        picker.Resources().Insert(winrt::box_value(L"DatePickerHostMonthPadding"),
+                                  winrt::box_value(X::Thickness{9, 5, 0, 6}));
+        Prepare(picker, prefix + "Picker");
+        A::AutomationProperties::SetName(picker, wxWinUIToHString(_("Date")));
+        defaultMinimum = picker.MinYear();
+        defaultMaximum = picker.MaxYear();
+        // The least width of its button, as the editor sets it.
+        picker.Loaded([](const winrt::Windows::Foundation::IInspectable& sender,
+                                       const X::RoutedEventArgs&)
         {
-            era = C::ComboBox();
-            era.MinWidth(72);
-            era.Margin({2, 0, 2, 0});
-            Prepare(era, prefix + "Era");
-            A::AutomationProperties::SetName(era, wxWinUIToHString(_("Era")));
-            for ( int eraValue = firstEra; eraValue <= lastEra; ++eraValue )
-            {
-                WF::DateTime anchor{};
-                winrt::hstring label;
-                if ( D::wxWinUIFindCalendarEraAnchor(calendarIdentifier, eraValue,
-                                                     lower, upper, &anchor) )
-                {
-                    calendar.SetDateTime(anchor);
-                    label = calendar.EraAsString();
-                }
-                if ( label.empty() ) label = wxWinUIToHString(wxString::Format("%d", eraValue));
-                era.Items().Append(winrt::box_value(label));
-            }
-        }
+            if ( const auto button = FindButton(sender.try_as<X::DependencyObject>()) )
+                button.MinWidth(232);
+        });
 
-        auto tokens = D::wxWinUIParseDatePattern(pattern);
-        if ( era && std::none_of(tokens.begin(), tokens.end(), [](const auto& token)
-             { return token.kind == D::wxWinUIDateLayoutKind::Era; }) )
-        {
-            tokens.insert(tokens.begin(), {D::wxWinUIDateLayoutKind::Literal, " "});
-            tokens.insert(tokens.begin(), {D::wxWinUIDateLayoutKind::Era, wxString()});
-        }
-        int column = 0;
-        for ( const auto& token : tokens )
-        {
-            C::ColumnDefinition definition;
-            definition.Width(X::GridLengthHelper::Auto());
-            fields.ColumnDefinitions().Append(definition);
-            X::FrameworkElement element{nullptr};
-            switch ( token.kind )
-            {
-                case D::wxWinUIDateLayoutKind::Day: element = day; break;
-                case D::wxWinUIDateLayoutKind::Month: element = month; break;
-                case D::wxWinUIDateLayoutKind::Year: element = year; break;
-                case D::wxWinUIDateLayoutKind::Era: element = era; break;
-                case D::wxWinUIDateLayoutKind::Literal:
-                {
-                    C::TextBlock text;
-                    text.Text(wxWinUIToHString(token.text));
-                    text.Margin({2, 0, 2, 0});
-                    text.VerticalAlignment(X::VerticalAlignment::Center);
-                    A::AutomationProperties::SetAccessibilityView(text, A::Peers::AccessibilityView::Raw);
-                    literals.push_back(text);
-                    element = text;
-                    break;
-                }
-            }
-            if ( element )
-            {
-                C::Grid::SetColumn(element, column);
-                fields.Children().Append(element);
-            }
-            ++column;
-        }
         // An arbitrary wx display format may include names, time and literal
-        // text which cannot be split between three native numeric fields.
-        // Use another real, passive NumberBox for that exact display instead
-        // of covering spin buttons with an overlay or replacing them by text.
-        // Its numeric anchor is the year component, never an editable date.
+        // text which the DatePicker can't show. Use a real, passive
+        // NumberBox for that exact display. Its numeric anchor is the year,
+        // never an editable date.
         formatted = D::wxWinUICreateDatePart(1, 9999, 0, 1, {});
         Prepare(formatted, prefix + "Formatted");
         formatted.HorizontalAlignment(X::HorizontalAlignment::Stretch);
@@ -381,10 +326,39 @@ struct PropertyDateSpinPreview
         Prepare(clear, prefix + "Clear");
         clear.Visibility((style & wxDP_ALLOWNONE) ? X::Visibility::Visible : X::Visibility::Collapsed);
         C::Grid::SetColumn(clear, 1);
-        layout.Children().Append(fields);
+        layout.Children().Append(picker);
         layout.Children().Append(formatted);
         layout.Children().Append(clear);
         root.Content(layout);
+    }
+
+    // The years of the lists of the DatePicker are its default ones, and
+    // always the year of the date, as for the editor.
+    void ShowDate(const wxDateTime& civil, const std::function<void()>& check)
+    {
+        namespace D = wxWinUIDatePresentation;
+        using WFDateTime = winrt::Windows::Foundation::DateTime;
+        WFDateTime date{};
+        const bool hasDate = civil.IsValid() && D::wxWinUIToDateTime(civil, &date);
+        WFDateTime first = defaultMinimum, last = defaultMaximum;
+        if ( hasDate )
+        {
+            if ( date < first ) first = date;
+            if ( date > last ) last = date;
+        }
+        // Widen the lists first, so that neither the old nor the new date is
+        // ever out of them, then narrow them once the date is set.
+        const WFDateTime currentFirst = picker.MinYear(); check();
+        const WFDateTime currentLast = picker.MaxYear(); check();
+        picker.MaxYear(std::max(currentLast, last)); check();
+        picker.MinYear(std::min(currentFirst, first)); check();
+        if ( hasDate )
+            picker.SelectedDate(winrt::box_value(date).as<winrt::Windows::Foundation::IReference<WFDateTime>>());
+        else
+            picker.SelectedDate(nullptr);
+        check();
+        picker.MinYear(first); check();
+        picker.MaxYear(last); check();
     }
 
     void Present(const wxDateTime& value, const wxString& label, bool exactFormat,
@@ -395,40 +369,23 @@ struct PropertyDateSpinPreview
         const bool century = (style & wxDP_SHOWCENTURY) != 0;
         if ( century != showCentury )
         {
-            if ( century )
-            {
-                auto formatter = D::wxWinUICreateDateDecimalFormatter({});
-                formatter.IntegerDigits(4);
-                formatter.FractionDigits(0);
-                year.NumberFormatter(formatter);
-            }
-            else
-            {
-                winrt::Windows::Foundation::DateTime lower{}, upper{};
-                if ( !D::wxWinUIToDateTime(minimum, &lower) || !D::wxWinUIToDateTime(maximum, &upper) )
-                    throw winrt::hresult_error(E_INVALIDARG, L"PropertyGrid spin year interval");
-                year.NumberFormatter(winrt::make<D::wxWinUITwoDigitYearFormatter>(
-                    D::wxWinUIResolveTwoDigitYearMaximum(calendarIdentifier, {},
-                        firstEra, lastEra, lower, upper), winrt::hstring()));
-            }
-            check();
+            picker.YearFormat(century ? L"{year.full}" : L"{year.abbreviated}"); check();
             showCentury = century;
         }
         const bool changed = !valuePrepared || !D::wxWinUISameCivilDate(shownValue, civil);
         if ( changed )
         {
-            if ( !D::wxWinUIApplyDateParts(era, year, month, day, firstEra,
-                     calendarIdentifier, civil, minimum, maximum, check) )
-                throw winrt::hresult_error(E_INVALIDARG, L"PropertyGrid spin civil components");
-            check();
+            ShowDate(civil, check);
             shownValue = civil;
             valuePrepared = true;
         }
         if ( exactFormat && (!formattedPrepared || changed || shownLabel != label) )
         {
-            const double numericYear = year.Value();
-            const wxVariant numericSnapshot = std::isfinite(numericYear)
-                ? wxVariant(static_cast<long>(numericYear)) : wxVariant();
+            const double numericYear = civil.IsValid()
+                ? static_cast<double>(civil.GetYear())
+                : std::numeric_limits<double>::quiet_NaN();
+            const wxVariant numericSnapshot = civil.IsValid()
+                ? wxVariant(static_cast<long>(civil.GetYear())) : wxVariant();
             formatted.NumberFormatter(winrt::make<PropertyNumberFormatter>(label, numericYear, numericSnapshot)); check();
             formatted.Value(numericYear); check();
             formatted.PlaceholderText(civil.IsValid() ? winrt::hstring() : wxWinUIToHString(label)); check();
@@ -436,16 +393,14 @@ struct PropertyDateSpinPreview
             formattedPrepared = true;
         }
         if ( !exactFormat ) formattedPrepared = false;
-        fields.Visibility(exactFormat ? X::Visibility::Collapsed : X::Visibility::Visible); check();
+        picker.Visibility(exactFormat ? X::Visibility::Collapsed : X::Visibility::Visible); check();
         formatted.Visibility(exactFormat ? X::Visibility::Visible : X::Visibility::Collapsed); check();
         clear.Visibility((style & wxDP_ALLOWNONE) ? X::Visibility::Visible : X::Visibility::Collapsed); check();
         if ( shownFont != font )
         {
-            for ( const C::Control& part : {year.as<C::Control>(), month.as<C::Control>(),
-                                           day.as<C::Control>(), formatted.as<C::Control>(), clear.as<C::Control>()} )
+            for ( const C::Control& part : {picker.as<C::Control>(), formatted.as<C::Control>(),
+                                           clear.as<C::Control>()} )
             { wxWinUIApplyFont(part, font); check(); }
-            if ( era ) { wxWinUIApplyFont(era, font); check(); }
-            for ( const auto& literal : literals ) { wxWinUIApplyFont(literal, font); check(); }
             shownFont = font;
         }
     }

@@ -286,40 +286,29 @@ T DateSpinPart(const C::ContentControl& root, const wxString& name, const wxStri
         winrt::hstring(("wxProperty.DateSpin." + name + "." + part).wc_str()));
 }
 
+// Independent native calendar oracle, not the production shared helpers.
+bool SameCivilDate(const winrt::Windows::Foundation::IReference<winrt::Windows::Foundation::DateTime>& value,
+                   const wxDateTime& expected)
+{
+    if ( !expected.IsValid() ) return !value;
+    if ( !value ) return false;
+    namespace G = winrt::Windows::Globalization;
+    G::Calendar calendar;
+    calendar.ChangeCalendarSystem(G::CalendarIdentifiers::Gregorian());
+    calendar.SetDateTime(value.Value());
+    return calendar.Year() == expected.GetYear() &&
+           calendar.Month() == expected.GetMonth() + 1 &&
+           calendar.Day() == expected.GetDay();
+}
+
+// The preview of a date without wxDP_DROPDOWN is a passive DatePicker, as
+// the active editor is.
 bool DateSpinMatches(const C::ContentControl& root, const wxString& name,
                      const wxDateTime& value)
 {
     if ( !PreviewVisible(root) ) return false;
-    const auto day = DateSpinPart(root, name, "Day");
-    const auto month = DateSpinPart(root, name, "Month");
-    const auto year = DateSpinPart(root, name, "Year");
-    if ( !PreviewVisible(day) || !PreviewVisible(month) || !PreviewVisible(year) ) return false;
-    if ( !value.IsValid() )
-        return std::isnan(day.Value()) && std::isnan(month.Value()) && std::isnan(year.Value());
-    // Independent native calendar oracle, not the production shared helpers.
-    namespace G = winrt::Windows::Globalization;
-    G::Calendar calendar;
-    calendar.ChangeCalendarSystem(G::CalendarIdentifiers::Gregorian());
-    calendar.Day(1);
-    calendar.Month(1);
-    calendar.Year(value.GetYear());
-    calendar.Month(value.GetMonth() + 1);
-    calendar.Day(value.GetDay());
-    const C::CalendarDatePicker defaults;
-    calendar.ChangeCalendarSystem(defaults.CalendarIdentifier());
-    return day.Value() == calendar.Day() && month.Value() == calendar.Month() &&
-           year.Value() == calendar.Year();
-}
-
-C::NumberBox FindDateEditorPart(const X::DependencyObject& node, double value)
-{
-    if ( !node ) return nullptr;
-    if ( const auto number = node.try_as<C::NumberBox>(); number && number.Value() == value )
-        return number;
-    for ( int n = 0; n < X::Media::VisualTreeHelper::GetChildrenCount(node); ++n )
-        if ( const auto part = FindDateEditorPart(X::Media::VisualTreeHelper::GetChild(node, n), value) )
-            return part;
-    return nullptr;
+    const auto picker = DateSpinPart<C::DatePicker>(root, name, "Picker");
+    return PreviewVisible(picker) && SameCivilDate(picker.SelectedDate(), value);
 }
 #endif
 }
@@ -956,47 +945,34 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPreviewHasRealCalendarFieldsAndStableGeome
         return DateSpinMatches(root, "date", initial);
     }));
     CheckPresentationOnly(root);
-    const auto day = DateSpinPart(root, "date", "Day");
-    const auto month = DateSpinPart(root, "date", "Month");
-    const auto year = DateSpinPart(root, "date", "Year");
+    const auto picker = DateSpinPart<C::DatePicker>(root, "date", "Picker");
     const auto clear = DateSpinPart<C::Button>(root, "date", "Clear");
+    CheckPresentationOnly(picker);
+    CHECK(picker.YearFormat() == L"{year.full}");
     const auto cell = FindPreviewPart<C::Button>(WindowContent(grid), L"wxProperty.Cell.date.1");
     REQUIRE(cell);
     CHECK(cell.ActualHeight() == Approx(grid->GetRowHeight() / grid->GetDPIScaleFactor()));
     const auto cellBounds = PreviewScreenRect(grid, cell);
-    for ( const auto& number : {day, month, year} )
-    {
-        CheckPresentationOnly(number);
-        CHECK(number.SpinButtonPlacementMode() == C::NumberBoxSpinButtonPlacementMode::Compact);
-        REQUIRE(FindPreviewPart<C::TextBox>(number));
-        CHECK(number.ActualHeight() >= 32);
-        const auto bounds = PreviewScreenRect(grid, number);
-        CHECK(bounds.GetTop() >= cellBounds.GetTop());
-        CHECK(bounds.GetBottom() <= cellBounds.GetBottom());
-    }
+    const auto bounds = PreviewScreenRect(grid, picker);
+    CHECK(bounds.GetTop() >= cellBounds.GetTop());
+    CHECK(bounds.GetBottom() <= cellBounds.GetBottom());
     CHECK(PreviewVisible(clear));
     CHECK_FALSE(FindPreviewPart<C::CalendarDatePicker>(root));
-    const double dayX = PreviewScreenRect(grid, day).GetX();
-    const double monthX = PreviewScreenRect(grid, month).GetX();
-    const double yearX = PreviewScreenRect(grid, year).GetX();
-    // Compare the actual field order to the real wxDP_SPIN editor on this
-    // locale/RTL layout, without assuming one particular date convention.
+    // The preview is the face of the real wxDP_SPIN editor: the same native
+    // control, with the same calendar and parts, on this locale/RTL layout.
     REQUIRE(grid->SelectProperty(property));
-    C::NumberBox activeDay{nullptr}, activeMonth{nullptr}, activeYear{nullptr};
+    C::DatePicker active{nullptr};
     REQUIRE(WaitPreview([&]()
     {
-        const auto editorRoot = WindowContent(grid->GetEditorControl());
-        activeDay = FindDateEditorPart(editorRoot, day.Value());
-        activeMonth = FindDateEditorPart(editorRoot, month.Value());
-        activeYear = FindDateEditorPart(editorRoot, year.Value());
-        return PreviewVisible(activeDay) && PreviewVisible(activeMonth) && PreviewVisible(activeYear);
+        active = FindPreviewPart<C::DatePicker>(WindowContent(grid->GetEditorControl()));
+        return PreviewVisible(active) && !PreviewVisible(root);
     }));
     auto* const editor = wxDynamicCast(grid->GetEditorControl(), wxDatePickerCtrl);
     REQUIRE(editor);
     CHECK(editor->HasFlag(wxDP_SPIN));
-    CHECK((dayX < monthX) == (PreviewScreenRect(grid, activeDay).GetX() < PreviewScreenRect(grid, activeMonth).GetX()));
-    CHECK((monthX < yearX) == (PreviewScreenRect(grid, activeMonth).GetX() < PreviewScreenRect(grid, activeYear).GetX()));
-    CHECK_FALSE(PreviewVisible(root));
+    CHECK(active.CalendarIdentifier() == picker.CalendarIdentifier());
+    CHECK(active.YearFormat() == picker.YearFormat());
+    CHECK(SameCivilDate(active.SelectedDate(), initial));
     REQUIRE(grid->ClearSelection());
     REQUIRE(WaitPreview([&]() { return DateSpinMatches(root, "date", initial); }));
     const wxDateTime ancient(9, wxDateTime::Sep, 64, 3, 14, 15);
@@ -1007,21 +983,18 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPreviewHasRealCalendarFieldsAndStableGeome
     fixture.frame->SetClientSize(860, 580);
     REQUIRE(WaitPreview([&]() { return DateSpinMatches(root, "date", ancient); }));
     CHECK(Preview<C::ContentControl>(grid, "date") == root);
-    CHECK(DateSpinPart(root, "date", "Day") == day);
-    CHECK(DateSpinPart(root, "date", "Month") == month);
-    CHECK(DateSpinPart(root, "date", "Year") == year);
+    CHECK(DateSpinPart<C::DatePicker>(root, "date", "Picker") == picker);
     grid->SetPropertyAttribute(property, wxPG_DATE_PICKER_STYLE, wxDP_SPIN | wxDP_ALLOWNONE);
     REQUIRE(WaitPreview([&]()
     {
-        const auto text = FindPreviewPart<C::TextBox>(year);
-        return text && text.IsLoaded() && text.Text().size() == 2;
+        return picker.YearFormat() == L"{year.abbreviated}" && PreviewVisible(clear);
     }));
     grid->SetPropertyAttribute(property, wxPG_DATE_PICKER_STYLE, wxDP_SPIN | wxDP_SHOWCENTURY);
     REQUIRE(WaitPreview([&]()
     {
-        const auto text = FindPreviewPart<C::TextBox>(year);
-        return text && text.IsLoaded() && text.Text().size() >= 4 && !PreviewVisible(clear);
+        return picker.YearFormat() == L"{year.full}" && !PreviewVisible(clear);
     }));
+    CHECK(DateSpinPart<C::DatePicker>(root, "date", "Picker") == picker);
     CHECK(changed == 0);
 }
 
@@ -1052,7 +1025,7 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPreviewPreservesExactFormatsAndEditorState
     CheckPresentationOnly(formatted);
     CHECK(formatted.SpinButtonPlacementMode() == C::NumberBoxSpinButtonPlacementMode::Compact);
     CHECK(wxString(formatted.Text().c_str()).Contains("03:14"));
-    CHECK_FALSE(PreviewVisible(DateSpinPart(root, "date", "Day")));
+    CHECK_FALSE(PreviewVisible(DateSpinPart<C::DatePicker>(root, "date", "Picker")));
     CHECK_FALSE(Preview<C::Control>(grid, "noeditor"));
     CHECK_FALSE(Preview<C::Control>(grid, "customdate"));
     grid->SetPropertyReadOnly(property);
@@ -1070,7 +1043,7 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPreviewPreservesExactFormatsAndEditorState
     REQUIRE(grid->SelectProperty(property));
     REQUIRE(WaitPreview([&]()
     {
-        const auto native = FindPreviewPart<C::NumberBox>(WindowContent(grid->GetEditorControl()));
+        const auto native = FindPreviewPart<C::DatePicker>(WindowContent(grid->GetEditorControl()));
         return PreviewVisible(native) && !PreviewVisible(root);
     }));
     auto* const editor = wxDynamicCast(grid->GetEditorControl(), wxDatePickerCtrl);
@@ -1123,10 +1096,10 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPublicationCanRetirePropertyPageOrOwner",
         root = Preview<C::ContentControl>(grid, "date");
         return DateSpinMatches(root, "date", initial);
     }));
-    const auto year = DateSpinPart(root, "date", "Year");
+    const auto picker = DateSpinPart<C::DatePicker>(root, "date", "Picker");
     bool armed = true;
     unsigned calls = 0;
-    const auto token = year.RegisterPropertyChangedCallback(C::NumberBox::ValueProperty(),
+    const auto token = picker.RegisterPropertyChangedCallback(C::DatePicker::SelectedDateProperty(),
         [&](const X::DependencyObject&, const X::DependencyProperty&)
         {
             if ( !armed ) return;
@@ -1141,9 +1114,9 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPublicationCanRetirePropertyPageOrOwner",
             }
         });
     const auto unhook = wxMakeGuard([&]()
-        { year.UnregisterPropertyChangedCallback(C::NumberBox::ValueProperty(), token); });
+        { picker.UnregisterPropertyChangedCallback(C::DatePicker::SelectedDateProperty(), token); });
     grid->SetPropertyValue(property, replacementValue);
-    REQUIRE(WaitPreview([&]() { return calls == 1 && !root.IsLoaded() && !year.IsLoaded(); }));
+    REQUIRE(WaitPreview([&]() { return calls == 1 && !root.IsLoaded() && !picker.IsLoaded(); }));
     if ( action == 2 ) CHECK_FALSE(weakGrid);
     else
     {
@@ -1157,7 +1130,8 @@ TEST_CASE("WinUIPropertyGrid::DateSpinPublicationCanRetirePropertyPageOrOwner",
             return DateSpinMatches(current, "date", initial);
         }));
         CHECK(current != root);
-        year.Value(2030);
+        // A retained peer of a retired preview is only a snapshot.
+        picker.SelectedDate(nullptr);
         CHECK(replacement->GetValue().GetDateTime() == initial);
         CHECK(DateSpinMatches(current, "date", initial));
     }
